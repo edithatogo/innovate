@@ -33,3 +33,9 @@ class NumPyBackend:
 
     def zeros(self, shape: Sequence[int]) -> np.ndarray:
         return np.zeros(shape)
+
+    def max(self, x: np.ndarray) -> float:
+        return np.max(x)
+
+    def median(self, x: np.ndarray) -> float:
+        return np.median(x)
