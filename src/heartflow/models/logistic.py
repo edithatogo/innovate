@@ -65,6 +65,13 @@ class LogisticModel(DiffusionModel):
             return {}
         return {"L": self._L, "k": self._k, "x0": self._x0}
 
+    def predict_adoption_rate(self, t: Sequence[float]) -> Sequence[float]:
+        if self._L is None or self._k is None or self._x0 is None:
+            raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
+        t_arr = B.array(t)
+        exp_term = B.exp(-self._k * (t_arr - self._x0))
+        return (self._L * self._k * exp_term) / ((1 + exp_term) ** 2)
+
     def _get_fitted_params_as_array(self):
         if self._L is None or self._k is None or self._x0 is None:
             raise RuntimeError("Model has not been fitted yet. Parameters are not set.")

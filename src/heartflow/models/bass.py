@@ -72,3 +72,10 @@ class BassModel(DiffusionModel):
         if self._p is None or self._q is None or self._m is None:
             return {}
         return {"p": self._p, "q": self._q, "m": self._m}
+
+    def predict_adoption_rate(self, t: Sequence[float]) -> Sequence[float]:
+        if self._p is None or self._q is None or self._m is None:
+            raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
+        t_arr = B.array(t)
+        N = self.predict(t_arr)
+        return self._bass_ode(N, t_arr, self._p, self._q, self._m)

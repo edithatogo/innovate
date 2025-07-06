@@ -64,3 +64,10 @@ class GompertzModel(DiffusionModel):
         if self._a is None or self._b is None or self._c is None:
             return {}
         return {"a": self._a, "b": self._b, "c": self._c}
+
+    def predict_adoption_rate(self, t: Sequence[float]) -> Sequence[float]:
+        if self._a is None or self._b is None or self._c is None:
+            raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
+        t_arr = B.array(t)
+        exp_term_c = B.exp(-self._c * t_arr)
+        return self._a * self._b * self._c * B.exp(-self._b * exp_term_c - self._c * t_arr)

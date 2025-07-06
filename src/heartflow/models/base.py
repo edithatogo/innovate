@@ -27,3 +27,8 @@ class DiffusionModel(ABC):
     def params_(self) -> Dict[str, float]:
         """Returns a dictionary of fitted model parameters."""
         pass
+
+    @abstractmethod
+    def predict_adoption_rate(self, t: Sequence[float]) -> Sequence[float]:
+        """Predicts the rate of adoption (new adoptions per unit of time)."""
+        pass
