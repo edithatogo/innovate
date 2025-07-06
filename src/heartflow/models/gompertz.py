@@ -11,6 +11,7 @@ class GompertzModel(DiffusionModel):
         self._b: float = None
         self._c: float = None
 
+    @B.jit
     def _gompertz_cumulative(self, t, a, b, c):
         """The closed-form solution for cumulative adoptions in the Gompertz model."""
         return a * B.exp(-b * B.exp(-c * t))

@@ -15,6 +15,7 @@ class BassModel(DiffusionModel):
         """The differential equation for the Bass model."""
         return (p + q * (N / m)) * (m - N)
 
+    @B.jit
     def _bass_cumulative(self, t, p, q, m):
         """The closed-form solution for cumulative adoptions in the Bass model."""
         exp_term = B.exp(-(p + q) * t)

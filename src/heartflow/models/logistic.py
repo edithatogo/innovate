@@ -11,6 +11,7 @@ class LogisticModel(DiffusionModel):
         self._k: float = None
         self._x0: float = None
 
+    @B.jit
     def _logistic_cumulative(self, t, L, k, x0):
         """The closed-form solution for cumulative adoptions in the Logistic model."""
         return L / (1 + B.exp(-k * (t - x0)))

@@ -39,3 +39,6 @@ class NumPyBackend:
 
     def median(self, x: np.ndarray) -> float:
         return np.median(x)
+
+    def jit(self, f):
+        return f

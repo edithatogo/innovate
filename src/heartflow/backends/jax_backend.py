@@ -34,3 +34,7 @@ class JaxBackend:
 
     def where(self, condition: jnp.ndarray, x: jnp.ndarray, y: jnp.ndarray) -> jnp.ndarray:
         return jnp.where(condition, x, y)
+
+    def jit(self, f):
+        from jax import jit
+        return jit(f)
