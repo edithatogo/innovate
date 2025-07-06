@@ -8,6 +8,7 @@ class BatchedFitter:
     def __init__(self, model: DiffusionModel, fitter):
         self.model = model
         self.fitter = fitter
+        self.fitted_params = None
 
     def fit(self, t_batched: Sequence[Sequence[float]], y_batched: Sequence[Sequence[float]]):
         """
@@ -24,9 +25,9 @@ class BatchedFitter:
         for t, y in zip(t_batched, y_batched):
             model_instance = type(self.model)()
             self.fitter.fit(model_instance, t, y)
-            params_list.append(model_instance._get_fitted_params_as_array())
+            params_list.append(list(model_instance.params_.values()))
         
-        self.fitted_params = B.stack(params_list)
+        self.fitted_params = B.array(params_list)
         return self.fitted_params
 
     def predict(self, t_batched: Sequence[Sequence[float]]):
@@ -41,8 +42,14 @@ class BatchedFitter:
 
         def predict_single(params, t):
             model_instance = type(self.model)()
-            model_instance._L, model_instance._k, model_instance._x0 = params[0], params[1], params[2]
-            return model_instance.predict(t)
+            # This is a bit of a hack, we should make this more generic
+            if model_instance.__class__.__name__ == "LogisticModel":
+                return model_instance._logistic_cumulative(t, params[0], params[1], params[2])
+            elif model_instance.__class__.__name__ == "BassModel":
+                return model_instance._bass_cumulative(t, params[0], params[1], params[2])
+            elif model_instance.__class__.__name__ == "GompertzModel":
+                return model_instance._gompertz_cumulative(t, params[0], params[1], params[2])
+
 
         vmap_predict = B.vmap(predict_single)
         return vmap_predict(self.fitted_params, B.array(t_batched))

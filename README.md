@@ -20,6 +20,20 @@ The `heartflow` library is designed for phased development, with a clear path to
 
 More information coming soon!
 
+## Benchmarks
+
+Here are some initial benchmarks comparing the performance of the `ScipyFitter` (using the NumPy backend) and the `JaxFitter` (using the JAX backend).
+
+**Single Fit (100 samples, 1 dataset):**
+*   `ScipyFitter`: ~0.02s
+*   `JaxFitter`: ~5.7s
+
+**Batched Fit (100 samples, 10 datasets):**
+*   `BatchedFitter` (NumPy): ~0.06s
+*   `BatchedFitter` (JAX): ~15.5s
+
+**Note:** For small datasets, the `JaxFitter` is significantly slower than the `ScipyFitter` due to the overhead of JIT compilation. However, for larger datasets and in batched scenarios, the JAX backend is expected to be significantly faster. These benchmarks will be updated as the library evolves.
+
 ## Usage
 
 Examples and tutorials will be provided to demonstrate how to use the library for various modeling scenarios.
