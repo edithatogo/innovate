@@ -38,3 +38,7 @@ class JaxBackend:
     def jit(self, f):
         from jax import jit
         return jit(f)
+
+    def vmap(self, f):
+        from jax import vmap
+        return vmap(f)

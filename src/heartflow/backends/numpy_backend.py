@@ -42,3 +42,8 @@ class NumPyBackend:
 
     def jit(self, f):
         return f
+
+    def vmap(self, f):
+        def mapped_f(params, t_batched):
+            return np.array([f(p, t) for p, t in zip(params, t_batched)])
+        return mapped_f
