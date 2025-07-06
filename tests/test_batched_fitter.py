@@ -44,3 +44,31 @@ def test_batched_fitter_predict(synthetic_batched_data):
     
     assert predictions is not None
     assert predictions.shape == (2, 50)
+
+def test_batched_fitter_jax(synthetic_batched_data):
+    from heartflow.backend import use_backend, current_backend
+    from heartflow.fitters.jax_fitter import JaxFitter
+    original_backend = current_backend
+    use_backend("jax")
+
+    t_batched, y_batched = synthetic_batched_data
+    
+    model = LogisticModel()
+    fitter = JaxFitter()
+    batched_fitter = BatchedFitter(model, fitter)
+    
+    fitted_params = batched_fitter.fit(t_batched, y_batched)
+    
+    assert fitted_params is not None
+    assert fitted_params.shape == (2, 3)
+    
+    # Check that the fitted parameters are close to the true parameters
+    assert np.allclose(fitted_params[0], [1.0, 1.5, 10.0], atol=0.2)
+    assert np.allclose(fitted_params[1], [1.5, 0.5, 15.0], atol=0.2)
+
+    predictions = batched_fitter.predict(t_batched)
+    
+    assert predictions is not None
+    assert predictions.shape == (2, 50)
+
+    use_backend(original_backend.__class__.__name__.lower().replace('backend', ''))

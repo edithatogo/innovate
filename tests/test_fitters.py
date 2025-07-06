@@ -51,6 +51,10 @@ def test_bootstrap_fitter(synthetic_logistic_data):
     assert ses["L"] >= 0
 
 def test_jax_fitter(synthetic_logistic_data):
+    from heartflow.backend import use_backend, current_backend
+    original_backend = current_backend
+    use_backend("jax")
+
     t, y = synthetic_logistic_data
     model = LogisticModel()
     jax_fitter = JaxFitter()
@@ -60,4 +64,6 @@ def test_jax_fitter(synthetic_logistic_data):
     assert len(model.params_) == 3 # L, k, x0
     # Allow a larger tolerance for JAX fitting
     assert np.allclose(list(model.params_.values()), [1.0, 1.5, 10.0], atol=0.2)
+    
+    use_backend(original_backend.__class__.__name__.lower().replace('backend', ''))
 
