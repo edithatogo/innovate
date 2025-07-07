@@ -1,4 +1,4 @@
-# Contributing to Heartflow
+# Contributing to Innovate
 
 We welcome contributions from the community! Whether you're fixing a bug, adding a new feature, or improving documentation, your help is greatly appreciated.
 
@@ -7,8 +7,8 @@ We welcome contributions from the community! Whether you're fixing a bug, adding
 1.  Fork the repository on GitHub.
 2.  Clone your fork locally:
     ```bash
-    git clone https://github.com/your-username/heartflow.git
-    cd heartflow
+    git clone https://github.com/your-username/innovate.git
+    cd innovate
     ```
 3.  Install the project in development mode:
     ```bash
@@ -39,4 +39,4 @@ We welcome contributions from the community! Whether you're fixing a bug, adding
 3.  Open a pull request from your branch to the `main` branch of the original repository.
 4.  In the pull request description, please provide details about the changes you've made.
 
-Thank you for contributing to Heartflow!
+Thank you for contributing to Innovate!

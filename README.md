@@ -1,4 +1,4 @@
-# heartflow
+# innovate
 
 A Python library for simplifying innovation/policy diffusion modelling.
 
@@ -14,7 +14,7 @@ This library aims to provide a flexible and robust framework for modeling the di
 
 ## Roadmap
 
-The `heartflow` library is designed for phased development, with a clear path towards advanced features and XLA-accelerated performance. See the [roadmap.md](roadmap.md) for detailed plans.
+The `innovate` library is designed for phased development, with a clear path towards advanced features and XLA-accelerated performance. See the [roadmap.md](roadmap.md) for detailed plans.
 
 ## Installation
 
@@ -37,3 +37,7 @@ Here are some initial benchmarks comparing the performance of the `ScipyFitter` 
 ## Usage
 
 Examples and tutorials will be provided to demonstrate how to use the library for various modeling scenarios.
+
+## License
+
+This project is licensed under the Apache 2.0 License.

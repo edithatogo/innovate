@@ -4,11 +4,11 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
-from heartflow.models.logistic import LogisticModel
-from heartflow.fitters.scipy_fitter import ScipyFitter
-from heartflow.fitters.jax_fitter import JaxFitter
-from heartflow.fitters.batched_fitter import BatchedFitter
-from heartflow.backend import use_backend
+from innovate.models.logistic import LogisticModel
+from innovate.fitters.scipy_fitter import ScipyFitter
+from innovate.fitters.jax_fitter import JaxFitter
+from innovate.fitters.batched_fitter import BatchedFitter
+from innovate.backend import use_backend
 
 def generate_data(n_samples, n_datasets):
     t = np.linspace(0, 20, n_samples)

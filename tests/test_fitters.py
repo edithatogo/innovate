@@ -1,8 +1,8 @@
 import pytest
-from heartflow.fitters.scipy_fitter import ScipyFitter
-from heartflow.fitters.bootstrap_fitter import BootstrapFitter
-from heartflow.fitters.jax_fitter import JaxFitter
-from heartflow.models.logistic import LogisticModel
+from innovate.fitters.scipy_fitter import ScipyFitter
+from innovate.fitters.bootstrap_fitter import BootstrapFitter
+from innovate.fitters.jax_fitter import JaxFitter
+from innovate.models.logistic import LogisticModel
 import numpy as np
 
 @pytest.fixture
@@ -51,7 +51,7 @@ def test_bootstrap_fitter(synthetic_logistic_data):
     assert ses["L"] >= 0
 
 def test_jax_fitter(synthetic_logistic_data):
-    from heartflow.backend import use_backend, current_backend
+    from innovate.backend import use_backend, current_backend
     original_backend = current_backend
     use_backend("jax")
 

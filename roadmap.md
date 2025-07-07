@@ -1,6 +1,6 @@
 # Roadmap
 
-This document outlines the planned development and future directions for the `heartflow` library, guiding its evolution from an MVP to a full-featured, XLA-ready innovation-diffusion toolkit.
+This document outlines the planned development and future directions for the `innovate` library, guiding its evolution from an MVP to a full-featured, XLA-ready innovation-diffusion toolkit.
 
 ## Phase 1 – MVP & Core Architecture (Weeks 1–4)
 
@@ -13,7 +13,7 @@ This document outlines the planned development and future directions for the `he
 
 2.  **Project Structure**
     ```
-    heartflow/
+    innovate/
     ├── diffusion_lib/
     │   ├── __init__.py
     │   ├── backend.py               # abstraction layer (default = NumPyBackend)

@@ -21,22 +21,26 @@ class BassModel(DiffusionModel):
         exp_term = B.exp(-(p + q) * t)
         return m * (1 - exp_term) / (1 + (q / p) * exp_term)
 
-    def fit(self, t: Sequence[float], y: Sequence[float]) -> Self:
+    def fit(self, t: Sequence[float], y: Sequence[float], p0: Sequence[float] | None = None) -> Self:
         from scipy.optimize import curve_fit
 
         t_arr = np.array(t)
         y_arr = np.array(y)
 
-        # Initial guesses for p, q, m
-        # p: coefficient of innovation (external influence)
-        # q: coefficient of imitation (internal influence)
-        # m: ultimate market potential
-        # These initial guesses are crucial for successful fitting.
-        # A common heuristic for m is the maximum observed value or slightly higher.
-        # For p and q, small positive values are typical.
-        initial_m = np.max(y_arr) * 1.1 # Slightly above max observed
-        initial_p = 0.001
-        initial_q = 0.1
+        if p0 is None:
+            # Initial guesses for p, q, m
+            # p: coefficient of innovation (external influence)
+            # q: coefficient of imitation (internal influence)
+            # m: ultimate market potential
+            # These initial guesses are crucial for successful fitting.
+            # A common heuristic for m is the maximum observed value or slightly higher.
+            # For p and q, small positive values are typical.
+            initial_m = np.max(y_arr) * 1.1 # Slightly above max observed
+            initial_p = 0.001
+            initial_q = 0.1
+            p0_to_use = [initial_p, initial_q, initial_m]
+        else:
+            p0_to_use = p0
 
         # Bounds for parameters (p, q, m)
         # p, q must be > 0. m must be > max(y)
@@ -44,7 +48,7 @@ class BassModel(DiffusionModel):
 
         try:
             params, _ = curve_fit(self._bass_cumulative, t_arr, y_arr, 
-                                  p0=[initial_p, initial_q, initial_m], 
+                                  p0=p0_to_use, 
                                   bounds=bounds,
                                   maxfev=5000)
             self._p, self._q, self._m = params

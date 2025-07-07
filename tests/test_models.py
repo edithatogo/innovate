@@ -1,11 +1,11 @@
 import pytest
 import numpy as np
 import pandas as pd
-from heartflow.models.bass import BassModel
-from heartflow.models.gompertz import GompertzModel
-from heartflow.models.logistic import LogisticModel
-from heartflow.models.competition import MultiProductDiffusionModel
-from heartflow.fitters.scipy_fitter import ScipyFitter
+from innovate.models.bass import BassModel
+from innovate.models.gompertz import GompertzModel
+from innovate.models.logistic import LogisticModel
+from innovate.models.competition import MultiProductDiffusionModel
+from innovate.fitters.scipy_fitter import ScipyFitter
 
 # Fixture for common test data
 @pytest.fixture

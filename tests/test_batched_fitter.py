@@ -1,8 +1,8 @@
 import pytest
 import numpy as np
-from heartflow.fitters.batched_fitter import BatchedFitter
-from heartflow.fitters.scipy_fitter import ScipyFitter
-from heartflow.models.logistic import LogisticModel
+from innovate.fitters.batched_fitter import BatchedFitter
+from innovate.fitters.scipy_fitter import ScipyFitter
+from innovate.models.logistic import LogisticModel
 
 @pytest.fixture
 def synthetic_batched_data():
@@ -46,8 +46,8 @@ def test_batched_fitter_predict(synthetic_batched_data):
     assert predictions.shape == (2, 50)
 
 def test_batched_fitter_jax(synthetic_batched_data):
-    from heartflow.backend import use_backend, current_backend
-    from heartflow.fitters.jax_fitter import JaxFitter
+    from innovate.backend import use_backend, current_backend
+    from innovate.fitters.jax_fitter import JaxFitter
     original_backend = current_backend
     use_backend("jax")
 

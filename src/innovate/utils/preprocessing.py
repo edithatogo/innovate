@@ -47,3 +47,36 @@ def apply_stl_decomposition(data: pd.Series, period: int = None, robust: bool = 
 def cumulative_sum(data: Sequence[float]) -> np.ndarray:
     """Calculates the cumulative sum of a sequence."""
     return np.cumsum(data)
+
+def apply_rolling_average(data: pd.Series, window: int) -> pd.Series:
+    """
+    Applies a rolling average to a time series.
+
+    Args:
+        data: A pandas Series.
+        window: The size of the rolling window.
+
+    Returns:
+        A pandas Series with the rolling average applied.
+    """
+    return data.rolling(window=window).mean()
+
+def apply_sarima(data: pd.Series, order: Tuple[int, int, int], seasonal_order: Tuple[int, int, int, int]) -> pd.Series:
+    """
+    Fits a SARIMA model to a time series and returns the fitted values.
+
+    Args:
+        data: A pandas Series.
+        order: The (p,d,q) order of the model for the number of AR parameters,
+            differences, and MA parameters.
+        seasonal_order: The (P,D,Q,s) seasonal order of the model.
+
+    Returns:
+        A pandas Series with the fitted values from the SARIMA model.
+    """
+    from statsmodels.tsa.statespace.sarimax import SARIMAX
+    
+    model = SARIMAX(data, order=order, seasonal_order=seasonal_order)
+    results = model.fit(disp=False)
+    return results.fittedvalues
+

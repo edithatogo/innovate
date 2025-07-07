@@ -1,5 +1,5 @@
 [project]
-name = "heartflow"
+name = "innovate"
 version = "0.1.0"
 description = "A Python library for simplifying innovation/policy diffusion modelling."
 authors = [
@@ -9,10 +9,11 @@ dependencies = [
     "numpy",
     "scipy",
     "pandas",
+    "statsmodels"
 ]
 requires-python = ">=3.8"
 readme = "README.md"
-license = { text = "MIT" }
+license = "Apache-2.0"
 
 [build-system]
 requires = ["setuptools>=61.0"]

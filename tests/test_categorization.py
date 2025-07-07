@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
-from heartflow.models.logistic import LogisticModel
-from heartflow.utils.categorization import categorize_adopters
+from innovate.models.logistic import LogisticModel
+from innovate.utils.categorization import categorize_adopters
 
 def test_categorize_adopters():
     model = LogisticModel()
