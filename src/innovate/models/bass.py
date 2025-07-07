@@ -7,64 +7,41 @@ class BassModel(DiffusionModel):
     """Implementation of the Bass Diffusion Model."""
 
     def __init__(self):
-        self._p: float = None
-        self._q: float = None
-        self._m: float = None
+        self._params: Dict[str, float] = {}
 
-    def _bass_ode(self, N, t, p, q, m):
-        """The differential equation for the Bass model."""
-        return (p + q * (N / m)) * (m - N)
+    @property
+    def param_names(self) -> Sequence[str]:
+        return ["p", "q", "m"]
 
-    @B.jit
-    def _bass_cumulative(self, t, p, q, m):
+    def initial_guesses(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, float]:
+        return {
+            "p": 0.001,
+            "q": 0.1,
+            "m": np.max(y) * 1.1,
+        }
+
+    def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
+        return {
+            "p": (1e-6, 0.1),
+            "q": (1e-6, 1.0),
+            "m": (np.max(y), np.inf),
+        }
+
+    @staticmethod
+    def cumulative_adoption(t, p, q, m):
+        from ..backend import current_backend as B
         """The closed-form solution for cumulative adoptions in the Bass model."""
         exp_term = B.exp(-(p + q) * t)
         return m * (1 - exp_term) / (1 + (q / p) * exp_term)
 
-    def fit(self, t: Sequence[float], y: Sequence[float], p0: Sequence[float] | None = None) -> Self:
-        from scipy.optimize import curve_fit
-
-        t_arr = np.array(t)
-        y_arr = np.array(y)
-
-        if p0 is None:
-            # Initial guesses for p, q, m
-            # p: coefficient of innovation (external influence)
-            # q: coefficient of imitation (internal influence)
-            # m: ultimate market potential
-            # These initial guesses are crucial for successful fitting.
-            # A common heuristic for m is the maximum observed value or slightly higher.
-            # For p and q, small positive values are typical.
-            initial_m = np.max(y_arr) * 1.1 # Slightly above max observed
-            initial_p = 0.001
-            initial_q = 0.1
-            p0_to_use = [initial_p, initial_q, initial_m]
-        else:
-            p0_to_use = p0
-
-        # Bounds for parameters (p, q, m)
-        # p, q must be > 0. m must be > max(y)
-        bounds = ([1e-6, 1e-6, np.max(y_arr)], [0.1, 1.0, np.inf])
-
-        try:
-            params, _ = curve_fit(self._bass_cumulative, t_arr, y_arr, 
-                                  p0=p0_to_use, 
-                                  bounds=bounds,
-                                  maxfev=5000)
-            self._p, self._q, self._m = params
-        except RuntimeError as e:
-            raise RuntimeError(f"BassModel fitting failed: {e}. Try different initial guesses or check data.")
-
-        return self
-
     def predict(self, t: Sequence[float]) -> Sequence[float]:
-        if self._p is None or self._q is None or self._m is None:
+        if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         t_arr = B.array(t)
-        return self._bass_cumulative(t_arr, self._p, self._q, self._m)
+        return self.cumulative_adoption(t_arr, **self._params)
 
     def score(self, t: Sequence[float], y: Sequence[float]) -> float:
-        if self._p is None or self._q is None or self._m is None:
+        if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t)
         ss_res = B.sum((B.array(y) - y_pred) ** 2)
@@ -73,13 +50,16 @@ class BassModel(DiffusionModel):
 
     @property
     def params_(self) -> Dict[str, float]:
-        if self._p is None or self._q is None or self._m is None:
-            return {}
-        return {"p": self._p, "q": self._q, "m": self._m}
+        return self._params
+
+    @params_.setter
+    def params_(self, value: Dict[str, float]):
+        self._params = value
 
     def predict_adoption_rate(self, t: Sequence[float]) -> Sequence[float]:
-        if self._p is None or self._q is None or self._m is None:
+        if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         t_arr = B.array(t)
         N = self.predict(t_arr)
-        return self._bass_ode(N, t_arr, self._p, self._q, self._m)
+        p, q, m = self._params["p"], self._params["q"], self._params["m"]
+        return (p + q * (N / m)) * (m - N)

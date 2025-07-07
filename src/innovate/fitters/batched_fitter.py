@@ -24,7 +24,9 @@ class BatchedFitter:
         params_list = []
         for t, y in zip(t_batched, y_batched):
             model_instance = type(self.model)()
-            self.fitter.fit(model_instance, t, y)
+            p0 = list(model_instance.initial_guesses(t, y).values())
+            bounds = list(zip(*model_instance.bounds(t, y).values()))
+            self.fitter.fit(model_instance, t, y, p0=p0, bounds=bounds)
             params_list.append(list(model_instance.params_.values()))
         
         self.fitted_params = B.array(params_list)
@@ -42,13 +44,9 @@ class BatchedFitter:
 
         def predict_single(params, t):
             model_instance = type(self.model)()
-            # This is a bit of a hack, we should make this more generic
-            if model_instance.__class__.__name__ == "LogisticModel":
-                return model_instance._logistic_cumulative(t, params[0], params[1], params[2])
-            elif model_instance.__class__.__name__ == "BassModel":
-                return model_instance._bass_cumulative(t, params[0], params[1], params[2])
-            elif model_instance.__class__.__name__ == "GompertzModel":
-                return model_instance._gompertz_cumulative(t, params[0], params[1], params[2])
+            param_dict = dict(zip(model_instance.param_names, params))
+            model_instance.params_ = param_dict
+            return model_instance.predict(t)
 
 
         vmap_predict = B.vmap(predict_single)

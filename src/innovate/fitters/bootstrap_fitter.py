@@ -5,11 +5,12 @@ from ..models.base import DiffusionModel
 class BootstrapFitter:
     """A fitter class that uses bootstrapping to estimate parameter uncertainty."""
 
-    def __init__(self, n_bootstraps: int = 100):
+    def __init__(self, fitter: Any, n_bootstraps: int = 100):
+        self.fitter = fitter
         self.n_bootstraps = n_bootstraps
         self.bootstrapped_params: List[Dict[str, float]] = []
 
-    def fit(self, model: DiffusionModel, t: Sequence[float], y: Sequence[float]) -> None:
+    def fit(self, model: DiffusionModel, t: Sequence[float], y: Sequence[float], **kwargs) -> None:
         t_arr = np.array(t)
         y_arr = np.array(y)
         n_samples = len(t_arr)
@@ -25,7 +26,7 @@ class BootstrapFitter:
             boot_model = type(model)()
             
             try:
-                boot_model.fit(t_resampled, y_resampled)
+                boot_model.fit(self.fitter, t_resampled, y_resampled, **kwargs)
                 self.bootstrapped_params.append(boot_model.params_)
             except RuntimeError as e:
                 # Handle cases where fitting might fail for a resampled dataset

@@ -7,52 +7,40 @@ class GompertzModel(DiffusionModel):
     """Implementation of the Gompertz Diffusion Model."""
 
     def __init__(self):
-        self._a: float = None
-        self._b: float = None
-        self._c: float = None
+        self._params: Dict[str, float] = {}
 
-    @B.jit
-    def _gompertz_cumulative(self, t, a, b, c):
+    @property
+    def param_names(self) -> Sequence[str]:
+        return ["a", "b", "c"]
+
+    def initial_guesses(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, float]:
+        return {
+            "a": np.max(y) * 1.1,
+            "b": 1.0,
+            "c": 0.1,
+        }
+
+    def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
+        return {
+            "a": (np.max(y), np.inf),
+            "b": (1e-6, np.inf),
+            "c": (1e-6, np.inf),
+        }
+
+    @staticmethod
+    def cumulative_adoption(t, a, b, c):
+        from ..backend import current_backend as B
         """The closed-form solution for cumulative adoptions in the Gompertz model."""
         return a * B.exp(-b * B.exp(-c * t))
 
-    def fit(self, t: Sequence[float], y: Sequence[float]) -> Self:
-        from scipy.optimize import curve_fit
-
-        t_arr = np.array(t)
-        y_arr = np.array(y)
-
-        # Initial guesses for a, b, c
-        # a: upper asymptote (ultimate market potential)
-        # b: displacement on the x-axis (related to inflection point)
-        # c: growth rate
-        initial_a = np.max(y_arr) * 1.1
-        initial_b = 1.0
-        initial_c = 0.1
-
-        # Bounds for parameters (a, b, c)
-        # a must be > max(y), b and c must be > 0
-        bounds = ([np.max(y_arr), 1e-6, 1e-6], [np.inf, np.inf, np.inf])
-
-        try:
-            params, _ = curve_fit(self._gompertz_cumulative, t_arr, y_arr, 
-                                  p0=[initial_a, initial_b, initial_c], 
-                                  bounds=bounds,
-                                  maxfev=5000)
-            self._a, self._b, self._c = params
-        except RuntimeError as e:
-            raise RuntimeError(f"GompertzModel fitting failed: {e}. Try different initial guesses or check data.")
-
-        return self
-
     def predict(self, t: Sequence[float]) -> Sequence[float]:
-        if self._a is None or self._b is None or self._c is None:
+        if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         t_arr = B.array(t)
-        return self._gompertz_cumulative(t_arr, self._a, self._b, self._c)
+        return self.cumulative_adoption(t_arr, **self._params)
 
     def score(self, t: Sequence[float], y: Sequence[float]) -> float:
-        if self._a is None or self._b is None or self._c is None:
+        if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t)
         ss_res = B.sum((B.array(y) - y_pred) ** 2)
@@ -61,13 +49,16 @@ class GompertzModel(DiffusionModel):
 
     @property
     def params_(self) -> Dict[str, float]:
-        if self._a is None or self._b is None or self._c is None:
-            return {}
-        return {"a": self._a, "b": self._b, "c": self._c}
+        return self._params
+
+    @params_.setter
+    def params_(self, value: Dict[str, float]):
+        self._params = value
 
     def predict_adoption_rate(self, t: Sequence[float]) -> Sequence[float]:
-        if self._a is None or self._b is None or self._c is None:
+        if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         t_arr = B.array(t)
-        exp_term_c = B.exp(-self._c * t_arr)
-        return self._a * self._b * self._c * B.exp(-self._b * exp_term_c - self._c * t_arr)
+        a, b, c = self._params["a"], self._params["b"], self._params["c"]
+        exp_term_c = B.exp(-c * t_arr)
+        return a * b * c * B.exp(-b * exp_term_c - c * t_arr)
