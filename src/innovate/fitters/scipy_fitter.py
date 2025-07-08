@@ -28,17 +28,24 @@ class ScipyFitter:
         t_arr = np.array(t)
         y_arr = np.array(y)
 
-        if not hasattr(model, 'cumulative_adoption'):
-            raise AttributeError("Model must have a 'cumulative_adoption' method.")
+        # The function to be fitted is the model's predict method.
+        # We need a wrapper because curve_fit expects a function where the first
+        # argument is the independent variable (t) and the following arguments
+        # are the parameters to be fitted.
+        def fit_function(t, *params):
+            # Create a temporary dictionary of parameters for the predict method
+            param_dict = dict(zip(model.param_names, params))
+            model.params_ = param_dict
+            return model.predict(t)
 
         try:
-            params, _ = curve_fit(model.cumulative_adoption, t_arr, y_arr, 
-                                  p0=p0, 
-                                  bounds=bounds,
-                                  maxfev=kwargs.get('maxfev', 5000),
-                                  **kwargs)
-            model.params_ = dict(zip(model.param_names, params))
+            # Use the public predict method for fitting
+            popt, _ = curve_fit(fit_function, t_arr, y_arr, p0=p0, bounds=bounds, **kwargs)
+            # Store the optimized parameters back into the model
+            model.params_ = dict(zip(model.param_names, popt))
+        except ValueError as e:
+            raise RuntimeError(f"Fitting failed due to invalid parameters or data: {e}")
         except RuntimeError as e:
-            raise RuntimeError(f"Fitting failed: {e}. Try different initial guesses or check data.")
+            raise RuntimeError(f"Fitting failed: {e}")
 
         return self
