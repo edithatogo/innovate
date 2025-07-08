@@ -1,149 +1,78 @@
 # Roadmap
 
-This document outlines the planned development and future directions for the `innovate` library, guiding its evolution from an MVP to a full-featured, XLA-ready innovation-diffusion toolkit.
+This document outlines the planned development for the `innovate` library. The vision is to create a comprehensive, modular, and extensible Python toolkit for modeling the complex dynamics of innovation, competition, and policy diffusion.
 
-## Phase 1 – MVP & Core Architecture (Weeks 1–4)
+## Core Philosophy
 
-**Goal**: Establish the foundational structure and implement core, closed-form diffusion models with basic fitting capabilities.
+The library will be built around a modular architecture, allowing users to combine different models and components to simulate real-world scenarios. It will be grounded in established diffusion theory while providing pathways to advanced techniques like Agent-Based Modeling (ABM).
 
-1.  **Define Scope & Core API**
-    *   **Models**: Gompertz, Logistic, Bass (closed-form solutions).
-    *   **Estimator Interface**: Implement `fit(t, y)`, `predict(t)`, `score(t, y)`, and `params_` methods.
-    *   **Data I/O**: Accept NumPy arrays and pandas Series/DataFrame (with datetime index).
+## Modular Architecture
 
-2.  **Project Structure**
-    ```
-    innovate/
-    ├── diffusion_lib/
-    │   ├── __init__.py
-    │   ├── backend.py               # abstraction layer (default = NumPyBackend)
-    │   ├── backends/
-    │   │   ├── numpy_backend.py
-    │   │   └── jax_backend.py       # stub for Phase 2
-    │   ├── models/
-    │   │   ├── base.py              # DiffusionModel ABC
-    │   │   ├── bass.py
-    │   │   ├── gompertz.py
-    │   │   └── logistic.py
-    │   │   └── competition.py       # MultiProductDiffusionModel
-    │   ├── fitters/
-    │   │   ├── scipy_fitter.py
-    │   │   └── jax_fitter.py        # stub for Phase 2
-    │   ├── utils/
-    │   │   ├── preprocessing.py
-    │   │   └── metrics.py
-    │   └── plots.py                 # matplotlib defaults
-    ├── examples/
-    │   └── basic_usage.ipynb
-    ├── tests/
-    │   ├── test_models.py
-    │   └── test_fitters.py
-    ├── pyproject.toml
-    ├── README.md
-    └── CONTRIBUTING.md
-    ```
+The library will be organized into the following core modules:
 
-3.  **Core Dependencies**
-    *   **Runtime**: `numpy`, `pandas`, `scipy` (for nonlinear-LS fitting & ODE if needed).
-    *   **Dev & Testing**: `pytest`, `black`, `flake8`.
-    *   **Documentation**: `sphinx` (for docs), `mkdocs` or `pdoc`.
+*   `innovate.diffuse`: The foundational module for modeling the adoption of a single innovation.
+*   `innovate.compete`: For modeling market share dynamics between two or more competing innovations.
+*   `innovate.substitute`: For modeling the replacement of an old technology with a new one.
+*   `innovate.hype`: For modeling the Hype Cycle and the influence of public perception and sentiment on adoption.
+*   `innovate.fail`: For analyzing the mechanisms and conditions that lead to failed diffusion.
+*   `innovate.adopt`: For classifying and analyzing different adopter archetypes (e.g., Rogers' categories).
 
-4.  **Deliverables**
-    *   Basic `fit`/`predict` for each closed-form model.
-    *   Automated tests covering edge cases (zero growth, saturated markets, tiny datasets).
-    *   Example notebook showing usage on a demo dataset.
-    *   Initial implementation of `MultiProductDiffusionModel` for generic competition/substitution.
+---
 
-## Phase 2 – Backend Abstraction & XLA Enablement (Weeks 5–8)
+## Phase 1: Foundational Refactoring & Core Diffusion
 
-**Goal**: Introduce a flexible backend abstraction to enable high-performance computation with JAX/XLA.
+**Goal**: Establish the new modular architecture and solidify the core diffusion models.
 
-1.  **Finalize the Backend Protocol**
-    *   Define a `Backend` Protocol in `backend.py` exposing necessary operations (`exp`, `power`, `ode_solve`, etc.).
+1.  **Restructure Project**: Reorganize the existing codebase into the new modular structure, with the current functionality moving into `innovate.diffuse`.
+2.  **Solidify `innovate.diffuse`**:
+    *   Ensure core models (Bass, Gompertz, Logistic) are robust.
+    *   Refine the `fit`/`predict` API.
+    *   Improve documentation and add examples for this core module.
+3.  **Develop `innovate.adopt`**:
+    *   Implement algorithms to classify adopters from diffusion data based on Rogers' innovation adoption lifecycle (Innovators, Early Adopters, etc.).
 
-2.  **Implement JAX Backend**
-    *   Create `jax_backend.py` using `jax.numpy` and `diffrax` for ODE solving.
-    *   Wire up `jax_fitter.py` using `jaxopt` for MLE.
+## Phase 2: Modeling Competition and Market Dynamics
 
-3.  **JIT & Vectorization**
-    *   Decorate core model functions with `@jax.jit`.
-    *   Add `vmap`-based batched fitting for segment/hierarchical use cases.
+**Goal**: Introduce models that capture the interaction between multiple innovations.
 
-4.  **Deliverables**
-    *   A backend switch mechanism (e.g., `from diffusion_lib.backends import use_backend; use_backend("jax")`).
-    *   Benchmarks in `README.md` comparing SciPy vs. JAX on a medium-sized dataset.
+1.  **Develop `innovate.compete`**:
+    *   Implement competitive diffusion models (e.g., Lotka-Volterra).
+    *   Add functionality to model multiple interacting S-curves to simulate disruptive innovation scenarios.
+2.  **Develop `innovate.substitute`**:
+    *   Implement models specifically for technology substitution (e.g., Fisher-Pry).
+3.  **Develop `innovate.fail`**:
+    *   Create models and analysis tools to understand the conditions for failed adoption, incorporating concepts from competitive and substitution models.
 
-## Phase 3 – Advanced Features & Ecosystem (Weeks 9–14)
+## Phase 3: Modeling Hype and Sentiment
 
-**Goal**: Expand the library's capabilities with uncertainty quantification, network extensions, and improved visualization.
+**Goal**: Integrate the dynamics of public perception and hype into the diffusion process.
 
-1.  **Uncertainty Quantification**
-    *   Bootstrap wrapper in `fitters/bootstrap_fitter.py`.
-    *   Bayesian option via `NumPyro` or `TensorFlow Probability`.
+1.  **Develop `innovate.hype`**:
+    *   Implement a mathematical representation of the Hype Cycle (e.g., as a composite function of an S-curve and a hype/attention curve).
+    *   Introduce a modified Bass model where parameters (`p`, `q`) can be influenced by a time-varying "hype" or "sentiment" function.
+    *   Explore the use of Delay Differential Equations (DDEs) to model the time lags between expectations, performance, and adoption.
 
-2.  **Network & Agent-Based Extensions**
-    *   Optional module `diffusion_lib.networks`.
-    *   Simple `simulate_on_graph(G, model, init_seeds, steps)` using `networkx`.
+## Phase 4: Ecosystem, Policy, and Future Directions
 
-3.  **Forecasting & Scenario Analysis**
-    *   Forecast intervals via bootstrap or posterior samples.
-    *   Utilities for "what-if" parameter sweeps.
+**Goal**: Broaden the library's scope to include more complex real-world factors.
 
-4.  **Visualization & Reporting**
-    *   Extend `plots.py` with: Data vs. fit curves, Tornado plots for sensitivity.
-    *   Optional `Plotly`/`Panel` dashboard template.
+1.  **Ecosystem & Complementary Goods**: Develop models where the adoption of one product is dependent on another (e.g., smartphones and apps).
+2.  **Policy & Regulatory Impact**: Add features to simulate the effect of policy interventions (subsidies, mandates) on diffusion rates.
+3.  **Path Dependence & Lock-in**: Explore models that demonstrate how early events can lead to long-term market dominance.
+4.  **Enhanced Visualization**: Create advanced plotting functions for comparing scenarios, visualizing networks, and animating diffusion processes.
 
-5.  **Packaging & Distribution**
-    *   Enable extras in `pyproject.toml` (e.g., `jax = ["jax[cpu]", "jaxopt", "diffrax"]`, `bayes = ["numpyro", "arviz"]`, `network = ["networkx"]`).
-    *   Publish v0.1 to PyPI; add CI/CD (GitHub Actions) for linting, tests, and automated doc builds.
+## Phase 5: Advanced Modeling with Agent-Based Models (ABM)
 
-## Phase 4 (6–9 months): Competition & Substitution Models
+**Goal**: Introduce a powerful new paradigm for bottom-up, emergent modeling.
 
-**Goal**: Introduce more sophisticated models for competing innovations and market share dynamics.
+1.  **Integrate ABM Framework**:
+    *   Integrate a library like `Mesa` to serve as the foundation for agent-based simulations.
+2.  **Develop Pre-configured ABM Scenarios**:
+    *   **Competitive Diffusion**: An ABM for Betamax vs. VHS style competition.
+    *   **Hype Cycle**: An ABM with sentiment dynamics to generate emergent hype cycles.
+    *   **Disruptive Innovation**: An ABM with incumbent and disruptor firms and heterogeneous customers.
+    *   **Policy Diffusion**: An ABM where agents are jurisdictions adopting policies based on network influence.
+3.  **Expose ABM Components**: Allow users to define custom agent behaviors, network topologies, and interaction rules.
 
-*   **Multi-Product Bass & Substitution**: Integrate choice-based models (e.g., Norton–Bass) capturing new adopters and cannibalization. Allow `p` and `q` parameters to depend on relative market shares.
-*   **Game-Theoretic Diffusion**: Models where entities choose adoption timing in response to others; compute Nash Equilibria.
-*   **Market Share Dynamics**: Lotka–Volterra & Replicator Models for competing technologies/policies. Combine diffusion curves with discrete choice models.
-
-## Phase 5 (9–12 months): Heterogeneity & Segmentation
-
-**Goal**: Account for diverse adopter behaviors and external influences on diffusion.
-
-*   **Latent-Class & Hierarchical Models**: Finite-Mixture Bass to infer adopter segments; Bayesian Hierarchies to pool information across segments/jurisdictions.
-*   **Covariate-Driven Parameterization**: Let `p`, `q`, `m` be functions of covariates (e.g., GDP per capita, public awareness) via GLMs or GAMs.
-*   **Time-Varying Parameters**: Incorporate piecewise or smoothly evolving `p(t)`/`q(t)` to capture policy shocks or media campaigns.
-
-## Phase 6 (12–18 months): Network & Spatial Extensions
-
-**Goal**: Model diffusion over complex social and geographical structures.
-
-*   **Spatial Diffusion**: Gravity & Spatial-Lag Models; GIS Integration (import shapefiles, map diffusion rates).
-*   **Policy Networks**: Model diffusion over directed graphs of influence (e.g., regulatory bodies). Support Watts/Strogatz thresholds for policy cascades.
-*   **Agent-Based Simulation Module**: Plug-in where agents interact via network ties and use their own diffusion curves.
-
-## Phase 7 (18–24 months): Causal & Impact Assessment
-
-**Goal**: Enable rigorous causal inference and counterfactual analysis of diffusion processes.
-
-*   **Event-History & Duration Models**: Implement Cox/Aalen models to estimate hazard of policy adoption.
-*   **Synthetic Control & DiD Interfaces**: Facilitate integration with causal inference methods to quantify intervention impact.
-*   **Counterfactual Scenarios**: Utilities to generate counterfactual adoption trajectories under different baselines.
-
-## Phase 8 (24+ months): Ecosystem & Domain Plugins
-
-**Goal**: Broaden the library's applicability and foster community contributions.
-
-*   **Data Connectors**: Pre-built loaders for public policy indicators (OECD, World Bank).
-*   **Domain-Specific Modules**: Health Policy (immunization), Energy Tech (renewables), Technology Standards (5G).
-*   **Interactive Dashboards & Reporting**: GIS maps, Sankey diagrams, live scenario sliders.
-*   **Community Extensions & Plugin API**: Define an interface for external researchers to contribute models, fitters, or visualizations.
-
-## Cross-Cutting Enablers
-
-*   **Versioning**: Follow Semantic Versioning.
-*   **Documentation**: Comprehensive user guide and auto-generated API reference.
-*   **Testing**: 80%+ coverage on core modules; performance tests.
-*   **Quality**: Pre-commit hooks (`black`, `flake8`, `isort`); code reviews.
-*   **R/Julia Interoperability**: Explore `reticulate`/`PyCall.jl` for R/Julia usability, potentially with thin wrapper packages.
-
-This phased plan balances rapid delivery of a usable library with a clear migration path to GPU/TPU-accelerated, XLA-powered performance—while keeping the API stable and the user base growing.
+---
+This roadmap provides a clear path forward, balancing the implementation of core, requested features with a vision for a sophisticated and versatile modeling tool.

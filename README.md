@@ -1,42 +1,45 @@
 # innovate
 
-A Python library for simplifying innovation/policy diffusion modelling.
+A Python library for simplifying innovation and policy diffusion modeling.
 
-This library aims to provide a flexible and robust framework for modeling the diffusion of innovations and policies across various domains, from advanced health technologies (its origin in genetic and genomic testing) to marketing, economics, and policy research.
+This library provides a flexible and robust framework for modeling the complex dynamics of how innovations, technologies, and policies spread over time. It is designed for researchers and practitioners in economics, marketing, public policy, and technology forecasting.
 
-## Core Features (Initial Release)
+## Core Philosophy
 
-*   **Diffusion Models**: Implementations of classic S-curve models like Gompertz, Logistic, and Bass (closed-form solutions).
-*   **Generic Competition-Diffusion Framework**: A flexible structure to model multi-product or multi-policy diffusion, allowing for intrinsic adoption rates, market sizes, and interaction matrices (within- and cross-imitation).
-*   **Data Handling**: Pandas-friendly API for time-series data with datetime indices.
-*   **Estimation**: Initial fitting capabilities using tried-and-true libraries like SciPy for nonlinear least squares.
-*   **Seasonality & Dispersion Handling**: Practical strategies for dealing with noisy, seasonal, or over-dispersed raw adoption data, including two-stage decomposition (e.g., using STL) and options for more integrated fitting approaches.
+`innovate` is built on a modular architecture, allowing users to combine different models and components to simulate real-world scenarios. The library supports everything from classic S-curve models to advanced agent-based simulations.
+
+## Key Features
+
+*   **Modular Design**: A suite of focused modules for specific modeling tasks:
+    *   `innovate.diffuse`: For foundational single-innovation adoption curves (Bass, Gompertz, Logistic).
+    *   `innovate.substitute`: For modeling technology replacement and generational products (Fisher-Pry, Norton-Bass).
+    *   `innovate.compete`: For analyzing market share dynamics between competing innovations.
+    *   `innovate.hype`: For simulating the Gartner Hype Cycle and the impact of public sentiment.
+    *   `innovate.fail`: For understanding the mechanisms of failed adoption.
+    *   `innovate.adopt`: For classifying adopter types based on their adoption timing.
+*   **Efficient Data Handling**: Uses pandas with an Apache Arrow backend for high-performance data manipulation.
+*   **Extensible**: Designed with clear base classes to make it easy to add new custom models.
+*   **Computationally Aware**: Leverages vectorized NumPy operations for efficiency, with a backend abstraction that will support future acceleration (e.g., with JAX).
 
 ## Roadmap
 
-The `innovate` library is designed for phased development, with a clear path towards advanced features and XLA-accelerated performance. See the [roadmap.md](roadmap.md) for detailed plans.
+The `innovate` library is under active development. For detailed plans on upcoming features, including the Agent-Based Modeling (ABM) framework and advanced policy analysis tools, please see our [Roadmap](roadmap.md).
 
 ## Installation
 
-More information coming soon!
+```bash
+pip install innovate
+```
+*(Note: The package is not yet available on PyPI under this name, but will be in the future).*
 
-## Benchmarks
-
-Here are some initial benchmarks comparing the performance of the `ScipyFitter` (using the NumPy backend) and the `JaxFitter` (using the JAX backend).
-
-**Single Fit (100 samples, 1 dataset):**
-*   `ScipyFitter`: ~0.02s
-*   `JaxFitter`: ~5.7s
-
-**Batched Fit (100 samples, 10 datasets):**
-*   `BatchedFitter` (NumPy): ~0.06s
-*   `BatchedFitter` (JAX): ~15.5s
-
-**Note:** For small datasets, the `JaxFitter` is significantly slower than the `ScipyFitter` due to the overhead of JIT compilation. However, for larger datasets and in batched scenarios, the JAX backend is expected to be significantly faster. These benchmarks will be updated as the library evolves.
+You will also need to install `pyarrow`:
+```bash
+pip install pyarrow
+```
 
 ## Usage
 
-Examples and tutorials will be provided to demonstrate how to use the library for various modeling scenarios.
+Examples and tutorials will be provided in the `examples/` directory to demonstrate how to use the library for various modeling scenarios.
 
 ## License
 

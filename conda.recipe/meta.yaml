@@ -1,0 +1,29 @@
+package:
+  name: innovate
+  version: "0.1.1"
+
+source:
+  path: ..
+
+build:
+  noarch: python
+  script: "{{ PYTHON }} -m pip install . --no-deps -vv"
+
+requirements:
+  host:
+    - python >=3.8
+    - pip
+    - setuptools
+    - wheel
+  run:
+    - python >=3.8
+    - numpy
+    - scipy
+    - pandas
+    - statsmodels
+
+about:
+  home: https://github.com/edithatogo/innovate
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: "A Python library for simplifying innovation/policy diffusion modelling."
