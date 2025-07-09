@@ -28,7 +28,7 @@ def test_policy_intervention_basic():
         return 1.1 if t > 10 else 1.0
 
     def q_effect(t):
-        return 0.95 if t > 10 else 1.0
+        return 1.05 if t > 10 else 1.0
 
     # 4. Call apply_time_varying_params and get the predict_with_policy callable
     predict_with_policy = policy_handler.apply_time_varying_params(

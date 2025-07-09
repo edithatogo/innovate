@@ -13,7 +13,9 @@ dependencies = [
     "pyarrow",
     "jitcdde",
     "mesa",
-    "networkx"
+    "networkx",
+    "ruptures",
+    "pymannkendall"
 ]
 requires-python = ">=3.8"
 readme = "README.md"

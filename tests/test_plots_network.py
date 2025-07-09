@@ -1,5 +1,7 @@
 import pytest
 import networkx as nx
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend
 from innovate.plots.network import plot_network_diffusion
 import matplotlib.pyplot as plt
 import os
