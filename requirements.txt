@@ -1,0 +1,10 @@
+numpy
+scipy
+pandas
+statsmodels
+pyarrow
+jitcdde
+mesa
+networkx
+sphinx
+matplotlib

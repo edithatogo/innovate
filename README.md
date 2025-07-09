@@ -21,6 +21,25 @@ This library provides a flexible and robust framework for modeling the complex d
 *   **Extensible**: Designed with clear base classes to make it easy to add new custom models.
 *   **Computationally Aware**: Leverages vectorized NumPy operations for efficiency, with a backend abstraction that will support future acceleration (e.g., with JAX).
 
+## Innovate in the Ecosystem
+
+`innovate` is designed to fill a unique gap in the Python ecosystem. While some libraries offer diffusion models and others provide generic agent-based modeling (ABM) frameworks, `innovate` is the first to integrate both under a unified, domain-specific toolkit for innovation dynamics.
+
+| Feature                       | `innovate`                               | `PyDiM` / `bassmodeldiffusion`      | `Mesa` / `AgentPy` / `BPTK-Py`        |
+| ----------------------------- | ---------------------------------------- | ----------------------------------- | ------------------------------------- |
+| **Core Diffusion Models**     | ✅ (Bass, Gompertz, Logistic)            | ✅ (Primarily Bass)                 | ❌ (Not its focus)                    |
+| **Competition Models**        | ✅ (Lotka-Volterra)                      | ❌                                  | ✅ (Via custom ABM)                   |
+| **Substitution Models**       | ✅ (Fisher-Pry)                          | ❌                                  | ✅ (Via custom ABM)                   |
+| **Hype Cycle Modeling**       | ✅ (Composite & DDE models)              | ❌                                  | ✅ (Via custom ABM)                   |
+| **Agent-Based Modeling**      | ✅ (Integrated with `mesa`)              | ❌                                  | ✅ (Core functionality)               |
+| **Pre-configured ABM Scenarios**| ✅ (Competition, Hype, Disruption)       | ❌                                  | ❌ (Requires manual implementation)   |
+| **System Dynamics**           | ❌                                       | ❌                                  | ✅ (BPTK-Py only)                     |
+| **Unified Framework**         | ✅ (Diffusion + Competition + ABM)       | ❌ (Focused on diffusion)           | ❌ (Focused on ABM/SD)                |
+| **Parameter Fitting**         | ✅                                       | ✅                                  | ❌ (Not a primary feature)            |
+| **Visualization**             | ✅                                       | ✅                                  | ✅ (Network/Grid plots)               |
+
+This integrated approach means you can start with high-level diffusion models and seamlessly transition to complex, bottom-up agent-based simulations without changing frameworks.
+
 ## Roadmap
 
 The `innovate` library is under active development. For detailed plans on upcoming features, including the Agent-Based Modeling (ABM) framework and advanced policy analysis tools, please see our [Roadmap](roadmap.md).

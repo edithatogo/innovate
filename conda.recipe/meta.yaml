@@ -7,7 +7,7 @@ source:
 
 build:
   noarch: python
-  script: "{{ PYTHON }} -m pip install . --no-deps -vv"
+  script: bash build.sh
 
 requirements:
   host:
@@ -21,6 +21,12 @@ requirements:
     - scipy
     - pandas
     - statsmodels
+    - pyarrow
+    - mesa
+    - networkx
+    - pip
+  run_constrained:
+    - jitcdde
 
 about:
   home: https://github.com/edithatogo/innovate

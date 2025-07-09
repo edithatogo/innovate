@@ -4,7 +4,7 @@ import pytest
 import numpy as np
 import pandas as pd
 from innovate.substitute.fisher_pry import FisherPryModel
-from innovate.fitters.scipy_fitter import ScipyFitter
+from innovate.diffuse.fitters.scipy_fitter import ScipyFitter
 
 @pytest.fixture
 def fisher_pry_data():

@@ -10,7 +10,10 @@ dependencies = [
     "scipy",
     "pandas",
     "statsmodels",
-    "pyarrow"
+    "pyarrow",
+    "jitcdde",
+    "mesa",
+    "networkx"
 ]
 requires-python = ">=3.8"
 readme = "README.md"

@@ -1,7 +1,7 @@
 # src/innovate/substitute/fisher_pry.py
 
-from ..models.base import DiffusionModel
-from ..backend import current_backend as B
+from innovate.base.base import DiffusionModel
+from innovate.backend import current_backend as B
 from typing import Sequence, Dict
 import numpy as np
 
@@ -64,7 +64,7 @@ class FisherPryModel(DiffusionModel):
     @staticmethod
     def _predict_logistic(t, alpha, t0):
         """The core logistic function for market share prediction."""
-        from ..backend import current_backend as B
+        from innovate.backend import current_backend as B
         return 1 / (1 + B.exp(-alpha * (t - t0)))
 
     def predict(self, t: Sequence[float]) -> Sequence[float]:

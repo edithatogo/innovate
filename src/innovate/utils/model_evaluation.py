@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from typing import Dict, Any, List, Sequence, Tuple
-from ..models.base import DiffusionModel
+from innovate.base.base import DiffusionModel
 from .metrics import calculate_mse, calculate_rmse, calculate_mae, calculate_r_squared, calculate_mape, calculate_smape
 
 def compare_models(
