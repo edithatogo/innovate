@@ -60,6 +60,19 @@ pip install pyarrow
 
 Examples and tutorials will be provided in the `examples/` directory to demonstrate how to use the library for various modeling scenarios.
 
+## Example Plots
+
+Here is a sample of the kinds of visualizations you can generate with `innovate`.
+
+| Bass Diffusion | Lotka-Volterra Competition |
+| :---: | :---: |
+| ![Bass Diffusion Curve](docs/images/bass_diffusion.png) | ![Lotka-Volterra Competition](docs/images/lotka_volterra_competition.png) |
+
+| Hype Cycle | Reduction Analysis |
+| :---: | :---: |
+| ![Hype Cycle](docs/images/hype_cycle.png) | ![Reduction Analysis](docs/images/reduction_analysis.png) |
+
+
 ## License
 
 This project is licensed under the Apache 2.0 License.
