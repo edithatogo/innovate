@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
-from innovate.diffuse.fitters.batched_fitter import BatchedFitter
-from innovate.diffuse.fitters.scipy_fitter import ScipyFitter
+from innovate.fitters.batched_fitter import BatchedFitter
+from innovate.fitters.scipy_fitter import ScipyFitter
 from innovate.diffuse.logistic import LogisticModel
 
 @pytest.fixture
@@ -47,7 +47,7 @@ def test_batched_fitter_predict(synthetic_batched_data):
 
 def test_batched_fitter_jax(synthetic_batched_data):
     from innovate.backend import use_backend, current_backend
-    from innovate.diffuse.fitters.jax_fitter import JaxFitter
+    from innovate.fitters.jax_fitter import JaxFitter
     original_backend = current_backend
     use_backend("jax")
 

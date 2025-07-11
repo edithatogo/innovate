@@ -5,9 +5,9 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
 from innovate.diffuse.logistic import LogisticModel
-from innovate.diffuse.fitters.scipy_fitter import ScipyFitter
-from innovate.diffuse.fitters.jax_fitter import JaxFitter
-from innovate.diffuse.fitters.batched_fitter import BatchedFitter
+from innovate.fitters.scipy_fitter import ScipyFitter
+from innovate.fitters.jax_fitter import JaxFitter
+from innovate.fitters.batched_fitter import BatchedFitter
 from innovate.backend import use_backend
 
 def generate_data(n_samples, n_datasets):

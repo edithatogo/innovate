@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Sequence, TypeVar, Any
+from typing import Dict, Sequence, TypeVar, Any, Callable
 
 # Define a type variable for the class itself, for type hinting Self
 Self = TypeVar('Self')
@@ -56,3 +56,10 @@ class DiffusionModel(ABC):
     def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
         """Returns bounds for the model parameters."""
         pass
+    
+    @staticmethod
+    @abstractmethod
+    def differential_equation(y, t, p):
+        """Returns the differential equation for the model."""
+        pass
+

@@ -5,7 +5,7 @@ from innovate.diffuse.bass import BassModel
 from innovate.diffuse.gompertz import GompertzModel
 from innovate.diffuse.logistic import LogisticModel
 from innovate.compete.competition import MultiProductDiffusionModel
-from innovate.diffuse.fitters.scipy_fitter import ScipyFitter
+from innovate.fitters.scipy_fitter import ScipyFitter
 
 # Fixture for common test data
 @pytest.fixture

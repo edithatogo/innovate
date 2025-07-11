@@ -48,3 +48,29 @@ def calculate_smape(y_true: Sequence[float], y_pred: Sequence[float]) -> float:
     if not np.any(non_zero_mask):
         return 0.0 if np.all(y_true_arr == y_pred_arr) else np.nan
     return np.mean(numerator[non_zero_mask] / denominator[non_zero_mask]) * 100
+
+def calculate_rss(y_true: Sequence[float], y_pred: Sequence[float]) -> float:
+    """Calculates the Residual Sum of Squares (RSS)."""
+    return np.sum((np.array(y_true) - np.array(y_pred)) ** 2)
+
+def calculate_aic(n_params: int, n_samples: int, rss: float) -> float:
+    """
+    Calculates the Akaike Information Criterion (AIC).
+
+    Assumes errors are normally distributed.
+    """
+    if n_samples == 0 or rss <= 0:
+        return np.nan
+    log_likelihood = -n_samples / 2 * np.log(2 * np.pi) - n_samples / 2 * np.log(rss / n_samples) - n_samples / 2
+    return 2 * n_params - 2 * log_likelihood
+
+def calculate_bic(n_params: int, n_samples: int, rss: float) -> float:
+    """
+    Calculates the Bayesian Information Criterion (BIC).
+
+    Assumes errors are normally distributed.
+    """
+    if n_samples == 0 or rss <= 0:
+        return np.nan
+    log_likelihood = -n_samples / 2 * np.log(2 * np.pi) - n_samples / 2 * np.log(rss / n_samples) - n_samples / 2
+    return n_params * np.log(n_samples) - 2 * log_likelihood

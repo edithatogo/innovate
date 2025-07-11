@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from innovate.diffuse.bass import BassModel
-from innovate.diffuse.fitters.scipy_fitter import ScipyFitter
+from innovate.fitters.scipy_fitter import ScipyFitter
 from innovate.policy.intervention import PolicyIntervention
 
 def run_policy_intervention_example():

@@ -63,3 +63,4 @@ def plot_multi_product_diffusion(df_pred: pd.DataFrame, df_obs: Optional[pd.Data
     if save_path:
         plt.savefig(save_path)
     plt.show()
+from .diagnostics import plot_residuals

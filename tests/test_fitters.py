@@ -1,7 +1,7 @@
 import pytest
-from innovate.diffuse.fitters.scipy_fitter import ScipyFitter
-from innovate.diffuse.fitters.bootstrap_fitter import BootstrapFitter
-from innovate.diffuse.fitters.jax_fitter import JaxFitter
+from innovate.fitters.scipy_fitter import ScipyFitter
+from innovate.fitters.bootstrap_fitter import BootstrapFitter
+from innovate.fitters.jax_fitter import JaxFitter
 from innovate.diffuse.logistic import LogisticModel
 import numpy as np
 

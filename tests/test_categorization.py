@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 from innovate.diffuse.logistic import LogisticModel
 from innovate.adopt.categorization import categorize_adopters
-from innovate.diffuse.fitters.scipy_fitter import ScipyFitter
+from innovate.fitters.scipy_fitter import ScipyFitter
 
 def test_categorize_adopters():
     model = LogisticModel()

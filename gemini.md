@@ -10,6 +10,9 @@ This file provides project-specific instructions for the Gemini agent.
 *   **API Consistency**: New models should inherit from the appropriate base class (`DiffusionModel` or `MultiProductDiffusionModel`) to maintain a consistent API.
 *   **Testing**: All new features must be accompanied by unit tests.
 
+## Rate Limiting
+*   To stay within the free tier, do not make excessive API calls. Where possible, use batch-friendly APIs and cache results.
+
 ## File Structure
 
 *   Core library code resides in `src/innovate/`.

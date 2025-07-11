@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 from innovate.diffuse.bass import BassModel
-from innovate.diffuse.fitters.scipy_fitter import ScipyFitter
+from innovate.fitters.scipy_fitter import ScipyFitter
 from innovate.policy.intervention import PolicyIntervention
 
 def test_policy_intervention_basic():

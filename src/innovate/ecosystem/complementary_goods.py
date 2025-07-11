@@ -84,7 +84,26 @@ class ComplementaryGoodsModel(DiffusionModel):
         return self
 
     def initial_guesses(self, t: Sequence[float], y: np.ndarray) -> Dict[str, float]:
-        return {"k1": 0.1, "k2": 0.1, "c1": 0.01, "c2": 0.01}
+        # A simple heuristic for initial guesses
+        if len(t) < 2:
+            return {"k1": 0.1, "k2": 0.1, "c1": 0.01, "c2": 0.01}
+
+        # Use the first few data points to estimate initial growth
+        num_initial_points = min(5, len(t))
+        t_initial = t[:num_initial_points]
+        y_initial = y[:num_initial_points]
+
+        # Estimate k1 and k2 from the initial exponential growth
+        # y(t) ~= y(0) * exp(k*t) => k ~= log(y(t)/y(0)) / t
+        with np.errstate(divide='ignore', invalid='ignore'):
+            k1_est = np.nanmean(np.log(y_initial[1:, 0] / y_initial[0, 0]) / t_initial[1:])
+            k2_est = np.nanmean(np.log(y_initial[1:, 1] / y_initial[0, 1]) / t_initial[1:])
+
+        k1 = k1_est if np.isfinite(k1_est) and k1_est > 0 else 0.1
+        k2 = k2_est if np.isfinite(k2_est) and k2_est > 0 else 0.1
+
+        # For c1 and c2, we can start with small positive values
+        return {"k1": k1, "k2": k2, "c1": 0.01, "c2": 0.01}
 
     def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
         return {
