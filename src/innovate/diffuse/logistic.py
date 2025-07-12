@@ -65,7 +65,19 @@ class LogisticModel(DiffusionModel):
         return sol.y.flatten()
 
     def differential_equation(self, t, y, params, covariates, t_eval):
-        """The differential equation for the Logistic model."""
+        """
+        Defines the time derivative for the logistic growth model, incorporating covariate effects by adjusting parameters at each time point.
+        
+        Parameters:
+            t (float): Current time.
+            y (array-like): Current value(s) of the dependent variable.
+            params (array-like): Model parameters, including base and covariate coefficients.
+            covariates (dict): Optional mapping of covariate names to their values over time.
+            t_eval (array-like): Time points corresponding to covariate values.
+        
+        Returns:
+            float: The computed derivative at time t, or zero if the carrying capacity is non-positive.
+        """
         
         L_base = params[0]
         k_base = params[1]
@@ -89,6 +101,20 @@ class LogisticModel(DiffusionModel):
         return B.switch(B.gt(L_t, 0), k_t * y[0] * (1 - y[0] / L_t), 0)
 
     def score(self, t: Sequence[float], y: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> float:
+        """
+        Compute the coefficient of determination (R²) between observed values and model predictions.
+        
+        Parameters:
+            t (Sequence[float]): Time points at which observations were made.
+            y (Sequence[float]): Observed values corresponding to time points in `t`.
+            covariates (Dict[str, Sequence[float]], optional): Covariate values for each time point.
+        
+        Returns:
+            float: The R² score indicating the proportion of variance in `y` explained by the model predictions.
+        
+        Raises:
+            RuntimeError: If the model parameters have not been set.
+        """
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t, covariates)
