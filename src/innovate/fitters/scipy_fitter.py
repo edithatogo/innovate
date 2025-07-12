@@ -26,12 +26,30 @@ class ScipyFitter:
         Raises:
             RuntimeError: If fitting fails.
         """
-        # Check for MultiProductDiffusionModel and raise NotImplementedError
-        if isinstance(model, MultiProductDiffusionModel):
-            raise NotImplementedError("Fitting MultiProductDiffusionModel with ScipyFitter is not yet implemented")
-        
         t_arr = np.array(t)
-        y_arr = np.array(y).flatten()
+        y_arr = np.array(y)
+
+        # Check for MultiProductDiffusionModel and handle accordingly
+        if isinstance(model, MultiProductDiffusionModel):
+            y_arr = y_arr.flatten()
+            # Create a dummy xdata of the same length as the flattened y_arr
+            x_dummy = np.arange(len(y_arr))
+            
+            def fit_function(x_dummy_ignored, *params):
+                param_dict = dict(zip(model.param_names, params))
+                model.params_ = param_dict
+                # The real t_arr is captured from the outer scope
+                return model.predict(t_arr, covariates).flatten()
+            
+            # Use the dummy xdata for the curve_fit call
+            x_fit = x_dummy
+        else:
+            y_arr = y_arr.flatten()
+            def fit_function(t, *params):
+                param_dict = dict(zip(model.param_names, params))
+                model.params_ = param_dict
+                return model.predict(t, covariates).flatten()
+            x_fit = t_arr
 
         # Determine initial guesses if not provided
         if p0 is None:
@@ -43,13 +61,8 @@ class ScipyFitter:
             upper_bounds = [b[1] for b in model.bounds(t, y).values()]
             bounds = (lower_bounds, upper_bounds)
 
-        def fit_function(t, *params):
-            param_dict = dict(zip(model.param_names, params))
-            model.params_ = param_dict
-            return model.predict(t, covariates).flatten()
-
         try:
-            popt, _ = curve_fit(fit_function, t_arr, y_arr, p0=p0, bounds=bounds, **kwargs)
+            popt, _ = curve_fit(fit_function, x_fit, y_arr, p0=p0, bounds=bounds, **kwargs)
             model.params_ = dict(zip(model.param_names, popt))
         except ValueError as e:
             raise RuntimeError(f"Fitting failed due to invalid parameters or data: {e}")

@@ -72,6 +72,18 @@ Here is a sample of the kinds of visualizations you can generate with `innovate`
 | :---: | :---: |
 | ![Hype Cycle](docs/images/hype_cycle.png) | ![Reduction Analysis](docs/images/reduction_analysis.png) |
 
+| Gompertz Diffusion | Logistic Diffusion |
+| :---: | :---: |
+| ![Gompertz Diffusion Curve](docs/images/gompertz_diffusion.png) | ![Logistic Diffusion Curve](docs/images/logistic_diffusion.png) |
+
+| Fisher-Pry Substitution | Norton-Bass Substitution |
+| :---: | :---: |
+| ![Fisher-Pry Substitution](docs/images/fisher_pry_substitution.png) | ![Norton-Bass Substitution](docs/images/norton_bass_substitution.png) |
+
+| Multi-Product Diffusion |
+| :---: |
+| ![Multi-Product Diffusion](docs/images/multi_product_diffusion.png) |
+
 
 ## License
 

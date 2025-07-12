@@ -21,7 +21,8 @@ print("Generating Bass Diffusion plot...")
 bass_model = BassModel()
 t = np.linspace(0, 20, 100)
 p, q, m = 0.03, 0.38, 1000
-y_bass = bass_model.cumulative_adoption(t, p, q, m)
+bass_model.params_ = {'p': p, 'q': q, 'm': m}
+y_bass = bass_model.predict(t)
 
 plt.figure(figsize=(8, 5))
 plt.plot(t, y_bass, label=f'p={p}, q={q}, m={m}')
@@ -103,6 +104,103 @@ plt.grid(True, linestyle='--', alpha=0.6)
 plt.legend()
 plt.tight_layout()
 plt.savefig(os.path.join(SAVE_DIR, "reduction_analysis.png"))
+plt.close()
+
+# --- 5. Gompertz Diffusion Curve ---
+print("Generating Gompertz Diffusion plot...")
+from innovate.diffuse.gompertz import GompertzModel
+gompertz_model = GompertzModel()
+gompertz_model.params_ = {"a": 1000, "b": 0.1, "c": 0.1}
+t_gompertz = np.linspace(0, 50, 100)
+y_gompertz = gompertz_model.predict(t_gompertz)
+
+plt.figure(figsize=(8, 5))
+plt.plot(t_gompertz, y_gompertz, label=f'a=1000, b=0.1, c=0.1')
+plt.title("Gompertz Diffusion Model")
+plt.xlabel("Time")
+plt.ylabel("Cumulative Adopters")
+plt.grid(True, linestyle='--', alpha=0.6)
+plt.legend()
+plt.tight_layout()
+plt.savefig(os.path.join(SAVE_DIR, "gompertz_diffusion.png"))
+plt.close()
+
+# --- 6. Logistic Diffusion Curve ---
+print("Generating Logistic Diffusion plot...")
+from innovate.diffuse.logistic import LogisticModel
+logistic_model = LogisticModel()
+logistic_model.params_ = {"L": 1000, "k": 0.2, "x0": 25}
+t_logistic = np.linspace(0, 50, 100)
+y_logistic = logistic_model.predict(t_logistic)
+
+plt.figure(figsize=(8, 5))
+plt.plot(t_logistic, y_logistic, label=f'L=1000, k=0.2, x0=25')
+plt.title("Logistic Diffusion Model")
+plt.xlabel("Time")
+plt.ylabel("Cumulative Adopters")
+plt.grid(True, linestyle='--', alpha=0.6)
+plt.legend()
+plt.tight_layout()
+plt.savefig(os.path.join(SAVE_DIR, "logistic_diffusion.png"))
+plt.close()
+
+# --- 7. Fisher-Pry Substitution ---
+print("Generating Fisher-Pry Substitution plot...")
+from innovate.substitute.fisher_pry import FisherPryModel
+fisher_pry_model = FisherPryModel()
+fisher_pry_model.params_ = {"alpha": 0.1, "t0": 0}
+t_fisher_pry = np.linspace(-20, 20, 100)
+y_fisher_pry = fisher_pry_model.predict(t_fisher_pry)
+
+plt.figure(figsize=(8, 5))
+plt.plot(t_fisher_pry, y_fisher_pry, label=f'alpha=0.1, beta=0.2')
+plt.title("Fisher-Pry Substitution Model")
+plt.xlabel("Time")
+plt.ylabel("Market Share of New Technology")
+plt.grid(True, linestyle='--', alpha=0.6)
+plt.legend()
+plt.tight_layout()
+plt.savefig(os.path.join(SAVE_DIR, "fisher_pry_substitution.png"))
+plt.close()
+
+# --- 8. Norton-Bass Substitution ---
+print("Generating Norton-Bass Substitution plot...")
+from innovate.substitute.norton_bass import NortonBassModel
+norton_bass_model = NortonBassModel(n_generations=2)
+norton_bass_model.params_ = {"p1": 0.03, "q1": 0.2, "m1": 1000, "p2": 0.02, "q2": 0.3, "m2": 1500}
+t_norton_bass = np.linspace(0, 50, 100)
+y_norton_bass = norton_bass_model.predict(t_norton_bass)
+
+plt.figure(figsize=(8, 5))
+plt.plot(t_norton_bass, y_norton_bass[:, 0], label='Generation 1')
+plt.plot(t_norton_bass, y_norton_bass[:, 1], label='Generation 2')
+plt.title("Norton-Bass Substitution Model")
+plt.xlabel("Time")
+plt.ylabel("Cumulative Adopters")
+plt.grid(True, linestyle='--', alpha=0.6)
+plt.legend()
+plt.tight_layout()
+plt.savefig(os.path.join(SAVE_DIR, "norton_bass_substitution.png"))
+plt.close()
+
+# --- 9. Multi-Product Diffusion ---
+print("Generating Multi-Product Diffusion plot...")
+from innovate.compete.multi_product import MultiProductDiffusionModel
+multi_product_model = MultiProductDiffusionModel(n_products=2)
+multi_product_model.params_ = {"p1": 0.03, "p2": 0.02, "q1": 0.1, "q2": 0.15, "m1": 1000, "m2": 1200, "alpha_1_2": 0.5, "alpha_2_1": 0.3}
+t_multi_product = np.linspace(0, 50, 100)
+y_multi_product = multi_product_model.predict(t_multi_product)
+
+plt.figure(figsize=(8, 5))
+plt.plot(t_multi_product, y_multi_product[:, 0], label='Product 1')
+plt.plot(t_multi_product, y_multi_product[:, 1], label='Product 2')
+plt.title("Multi-Product Diffusion Model")
+plt.xlabel("Time")
+plt.ylabel("Cumulative Adopters")
+plt.grid(True, linestyle='--', alpha=0.6)
+plt.legend()
+plt.tight_layout()
+plt.savefig(os.path.join(SAVE_DIR, "multi_product_diffusion.png"))
 plt.close()
 
 print("All plots generated successfully.")

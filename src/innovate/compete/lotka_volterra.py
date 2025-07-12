@@ -103,6 +103,33 @@ class LotkaVolterraModel(DiffusionModel):
             bounds[f"beta_beta2_{cov}"] = (-np.inf, np.inf)
         return bounds
 
+    def differential_equation(self, y, t, params, covariates, t_eval):
+        y1, y2 = y
+        
+        alpha1_base = params[0]
+        beta1_base = params[1]
+        alpha2_base = params[2]
+        beta2_base = params[3]
+
+        alpha1_t = alpha1_base
+        beta1_t = beta1_base
+        alpha2_t = alpha2_base
+        beta2_t = beta2_base
+
+        if covariates:
+            param_idx = 4
+            for cov_name, cov_values in covariates.items():
+                cov_val_t = np.interp(t, t_eval, cov_values)
+                alpha1_t += params[param_idx] * cov_val_t
+                beta1_t += params[param_idx+1] * cov_val_t
+                alpha2_t += params[param_idx+2] * cov_val_t
+                beta2_t += params[param_idx+3] * cov_val_t
+                param_idx += 4
+
+        dy1_dt = alpha1_t * y1 * (1 - y1) - beta1_t * y1 * y2
+        dy2_dt = alpha2_t * y2 * (1 - y2) - beta2_t * y1 * y2
+        return [dy1_dt, dy2_dt]
+
     def predict(self, t: Sequence[float], y0: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> np.ndarray:
         """
         Predicts the market share of both technologies over time.
@@ -123,36 +150,9 @@ class LotkaVolterraModel(DiffusionModel):
         
         from scipy.integrate import odeint
 
-        def system(y, t, params, covariates, t_eval):
-            y1, y2 = y
-            
-            alpha1_base = params[0]
-            beta1_base = params[1]
-            alpha2_base = params[2]
-            beta2_base = params[3]
-
-            alpha1_t = alpha1_base
-            beta1_t = beta1_base
-            alpha2_t = alpha2_base
-            beta2_t = beta2_base
-
-            if covariates:
-                param_idx = 4
-                for cov_name, cov_values in covariates.items():
-                    cov_val_t = np.interp(t, t_eval, cov_values)
-                    alpha1_t += params[param_idx] * cov_val_t
-                    beta1_t += params[param_idx+1] * cov_val_t
-                    alpha2_t += params[param_idx+2] * cov_val_t
-                    beta2_t += params[param_idx+3] * cov_val_t
-                    param_idx += 4
-
-            dy1_dt = alpha1_t * y1 * (1 - y1) - beta1_t * y1 * y2
-            dy2_dt = alpha2_t * y2 * (1 - y2) - beta2_t * y1 * y2
-            return [dy1_dt, dy2_dt]
-
         params = [self._params[name] for name in self.param_names]
         solution = odeint(
-            system,
+            self.differential_equation,
             y0,
             t,
             args=(params, covariates, t),

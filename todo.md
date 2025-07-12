@@ -41,10 +41,10 @@ This file tracks the concrete tasks required to execute the project roadmap.
     -   [x] LogisticModel
     -   [x] LotkaVolterraModel
     -   [x] NortonBassModel
-    -   [ ] MultiProductDiffusionModel
+        - [x] MultiProductDiffusionModel
 
 ## Phase 5 & 6: High-Performance & Causal Inference (Future)
--   [ ] Implement a JAX/XLA backend for high-performance computing.
--   [ ] Integrate with network science libraries like `NDlib`.
--   [ ] Add tools for counterfactual analysis.
+-   [x] Implement a JAX/XLA backend for high-performance computing.
+-   [x] Integrate with network science libraries like `NDlib`.
+-   [x] Add tools for counterfactual analysis.
 

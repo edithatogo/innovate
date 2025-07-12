@@ -17,6 +17,9 @@ class NumPyBackend:
     def where(self, condition, x, y):
         return np.where(condition, x, y)
 
+    def log(self, x):
+        return np.log(x)
+
     def solve_ode(self, f, y0: Sequence[float], t: Sequence[float]) -> np.ndarray:
         # scipy.integrate.odeint expects y0 as a 1D array and t as a 1D array
         # The function f should take (y, t, *args) as arguments

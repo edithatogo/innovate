@@ -26,6 +26,9 @@ class BayesianFitter:
         
         ode_func = self.model.differential_equation
 
+        def ode_func_wrapper(y, t, p):
+            return ode_func(t, y, p, covariates=None, t_eval=t)
+
         with pm.Model() as bayesian_model:
             # Define priors for the model parameters
             priors = self._define_priors(t, y)
@@ -35,7 +38,7 @@ class BayesianFitter:
 
             # ODE solver
             ode_solution = pm.ode.DifferentialEquation(
-                func=ode_func,
+                func=ode_func_wrapper,
                 times=t,
                 n_states=1,
                 n_theta=len(param_list),
