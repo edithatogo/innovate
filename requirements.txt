@@ -9,4 +9,3 @@ networkx
 sphinx
 matplotlib
 pymc
-sunode
