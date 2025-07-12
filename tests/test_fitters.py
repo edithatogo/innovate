@@ -2,7 +2,7 @@ import pytest
 from innovate.fitters.scipy_fitter import ScipyFitter
 from innovate.fitters.bootstrap_fitter import BootstrapFitter
 from innovate.fitters.jax_fitter import JaxFitter
-from innovate.models.logistic import LogisticModel
+from innovate.diffuse.logistic import LogisticModel
 import numpy as np
 
 @pytest.fixture
@@ -26,7 +26,8 @@ def test_scipy_fitter(synthetic_logistic_data):
 def test_bootstrap_fitter(synthetic_logistic_data):
     t, y = synthetic_logistic_data
     model = LogisticModel()
-    bootstrap_fitter = BootstrapFitter(n_bootstraps=10) # Use a small number for quick testing
+    base_fitter = ScipyFitter() # Instantiate a base fitter
+    bootstrap_fitter = BootstrapFitter(base_fitter, n_bootstraps=10) # Pass the base fitter
     bootstrap_fitter.fit(model, t, y)
 
     assert len(bootstrap_fitter.bootstrapped_params) > 0

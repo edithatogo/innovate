@@ -1,8 +1,54 @@
 import pandas as pd
 import numpy as np
 from typing import Dict, Any, List, Sequence, Tuple
-from ..models.base import DiffusionModel
-from .metrics import calculate_mse, calculate_rmse, calculate_mae, calculate_r_squared, calculate_mape, calculate_smape
+from innovate.base.base import DiffusionModel
+from .metrics import (
+    calculate_mse, 
+    calculate_rmse, 
+    calculate_mae, 
+    calculate_r_squared, 
+    calculate_mape, 
+    calculate_smape,
+    calculate_rss,
+    calculate_aic,
+    calculate_bic
+)
+
+def get_fit_metrics(model: DiffusionModel, t: Sequence[float], y: Sequence[float]) -> Dict[str, float]:
+    """
+    Calculates various goodness-of-fit metrics for a model.
+
+    Args:
+        model: The fitted diffusion model.
+        t: The time points.
+        y: The true cumulative adoption values.
+
+    Returns:
+        A dictionary containing the calculated metrics.
+    """
+    if not model.params_:
+        raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
+
+    y_pred = model.predict(t)
+    
+    n_samples = len(y)
+    # Add 1 to n_params for the variance of the residuals
+    n_params = len(model.param_names) + 1
+    
+    rss = calculate_rss(y, y_pred)
+
+    metrics = {
+        'MSE': calculate_mse(y, y_pred),
+        'RMSE': calculate_rmse(y, y_pred),
+        'MAE': calculate_mae(y, y_pred),
+        'R-squared': calculate_r_squared(y, y_pred),
+        'MAPE': calculate_mape(y, y_pred),
+        'SMAPE': calculate_smape(y, y_pred),
+        'RSS': rss,
+        'AIC': calculate_aic(n_params, n_samples, rss),
+        'BIC': calculate_bic(n_params, n_samples, rss),
+    }
+    return metrics
 
 def compare_models(
     models: Dict[str, DiffusionModel],
@@ -28,25 +74,11 @@ def compare_models(
             continue
         
         try:
-            y_pred = model.predict(t_true)
-            
-            mse = calculate_mse(y_true, y_pred)
-            rmse = calculate_rmse(y_true, y_pred)
-            mae = calculate_mae(y_true, y_pred)
-            r_squared = calculate_r_squared(y_true, y_pred)
-            mape = calculate_mape(y_true, y_pred)
-            smape = calculate_smape(y_true, y_pred)
+            metrics = get_fit_metrics(model, t_true, y_true)
+            metrics['Parameters'] = model.params_
+            metrics['Model'] = name
+            results.append(metrics)
 
-            results.append({
-                'Model': name,
-                'MSE': mse,
-                'RMSE': rmse,
-                'MAE': mae,
-                'R-squared': r_squared,
-                'MAPE': mape,
-                'SMAPE': smape,
-                'Parameters': model.params_
-            })
         except Exception as e:
             print(f"Error evaluating model '{name}': {e}. Skipping.")
             continue

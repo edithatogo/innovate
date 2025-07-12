@@ -2,7 +2,7 @@ import jax
 import jax.numpy as jnp
 from jaxopt import LBFGS
 from typing import Sequence, Dict
-from ..models.base import DiffusionModel
+from innovate.base.base import DiffusionModel
 from innovate.backend import use_backend, current_backend
 
 class JaxFitter:

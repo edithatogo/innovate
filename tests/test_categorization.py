@@ -1,15 +1,20 @@
 import pytest
 import numpy as np
-from innovate.models.logistic import LogisticModel
-from innovate.utils.categorization import categorize_adopters
+from innovate.diffuse.logistic import LogisticModel
+from innovate.adopt.categorization import categorize_adopters
+from innovate.fitters.scipy_fitter import ScipyFitter
 
 def test_categorize_adopters():
     model = LogisticModel()
-    model._L = 1000
-    model._k = 0.5
-    model._x0 = 10
+    # Generate some dummy data for fitting, as categorize_adopters needs a fitted model
+    t_dummy = np.linspace(0, 20, 100)
+    # Use the true parameters to generate data for fitting
+    y_dummy = model.cumulative_adoption(t_dummy, L=1000, k=0.5, x0=10) 
+    
+    fitter = ScipyFitter()
+    fitter.fit(model, t_dummy, y_dummy) # Fit the model
 
-    t = np.linspace(0, 20, 100)
+    t = np.linspace(0, 20, 100) # Use the original t for categorization
     
     categorization_df = categorize_adopters(model, t)
     

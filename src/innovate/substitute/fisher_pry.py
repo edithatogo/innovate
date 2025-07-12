@@ -1,7 +1,7 @@
 # src/innovate/substitute/fisher_pry.py
 
-from ..models.base import DiffusionModel
-from ..backend import current_backend as B
+from innovate.base.base import DiffusionModel
+from innovate.backend import current_backend as B
 from typing import Sequence, Dict
 import numpy as np
 
@@ -61,11 +61,9 @@ class FisherPryModel(DiffusionModel):
             "t0": (t_min - t_range, t_max + t_range),
         }
 
-    @staticmethod
-    def _predict_logistic(t, alpha, t0):
-        """The core logistic function for market share prediction."""
-        from ..backend import current_backend as B
-        return 1 / (1 + B.exp(-alpha * (t - t0)))
+    def differential_equation(self, y, t, alpha, t0):
+        """The differential equation for the Fisher-Pry model."""
+        return alpha * y * (1 - y)
 
     def predict(self, t: Sequence[float]) -> Sequence[float]:
         """
@@ -79,8 +77,22 @@ class FisherPryModel(DiffusionModel):
         """
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
+        
+        from scipy.integrate import solve_ivp
+
         t_arr = B.array(t)
-        return self._predict_logistic(t_arr, **self._params)
+        y0 = 1 / (1 + B.exp(-self._params['alpha'] * (t_arr[0] - self._params['t0'])))
+
+        fun = lambda t, y: self.differential_equation(y, t, **self._params)
+
+        sol = solve_ivp(
+            fun,
+            (t_arr[0], t_arr[-1]),
+            [y0],
+            t_eval=t_arr,
+            method='LSODA',
+        )
+        return sol.y.flatten()
 
     def score(self, t: Sequence[float], y: Sequence[float]) -> float:
         """
@@ -111,10 +123,8 @@ class FisherPryModel(DiffusionModel):
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         t_arr = B.array(t)
-        alpha, t0 = self._params["alpha"], self._params["t0"]
-        
-        logistic_val = self._predict_logistic(t_arr, alpha, t0)
-        return alpha * logistic_val * (1 - logistic_val)
+        y_pred = self.predict(t_arr)
+        return self.differential_equation(y_pred, t_arr, **self._params)
 
     def fit(self, fitter, t: Sequence[float], y: Sequence[float], **kwargs):
         """

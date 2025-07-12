@@ -1,6 +1,6 @@
 from typing import Sequence, Dict, List, Any
 import numpy as np
-from ..models.base import DiffusionModel
+from innovate.base.base import DiffusionModel
 
 class BootstrapFitter:
     """A fitter class that uses bootstrapping to estimate parameter uncertainty."""

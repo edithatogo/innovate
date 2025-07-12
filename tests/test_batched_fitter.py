@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 from innovate.fitters.batched_fitter import BatchedFitter
 from innovate.fitters.scipy_fitter import ScipyFitter
-from innovate.models.logistic import LogisticModel
+from innovate.diffuse.logistic import LogisticModel
 
 @pytest.fixture
 def synthetic_batched_data():

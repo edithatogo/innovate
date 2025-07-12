@@ -1,10 +1,10 @@
 import pytest
 import numpy as np
 import pandas as pd
-from innovate.models.bass import BassModel
-from innovate.models.gompertz import GompertzModel
-from innovate.models.logistic import LogisticModel
-from innovate.models.competition import MultiProductDiffusionModel
+from innovate.diffuse.bass import BassModel
+from innovate.diffuse.gompertz import GompertzModel
+from innovate.diffuse.logistic import LogisticModel
+from innovate.compete.competition import MultiProductDiffusionModel
 from innovate.fitters.scipy_fitter import ScipyFitter
 
 # Fixture for common test data
@@ -35,7 +35,8 @@ def synthetic_data():
 def test_bass_model_fit_predict(synthetic_data):
     t, y = synthetic_data
     model = BassModel()
-    model.fit(t, y)
+    fitter = ScipyFitter()
+    fitter.fit(model, t, y)
 
     assert model.params_ is not None
     assert all(param in model.params_ for param in ["p", "q", "m"])
@@ -49,7 +50,8 @@ def test_bass_model_fit_predict(synthetic_data):
 def test_bass_model_score(synthetic_data):
     t, y = synthetic_data
     model = BassModel()
-    model.fit(t, y)
+    fitter = ScipyFitter()
+    fitter.fit(model, t, y)
     score = model.score(t, y)
     assert isinstance(score, float)
     assert 0.0 <= score <= 1.0 # R^2 can be negative, but for good fits, it should be positive
@@ -58,7 +60,8 @@ def test_bass_model_score(synthetic_data):
 def test_gompertz_model_fit_predict(synthetic_data):
     t, y = synthetic_data
     model = GompertzModel()
-    model.fit(t, y)
+    fitter = ScipyFitter()
+    fitter.fit(model, t, y)
 
     assert model.params_ is not None
     assert all(param in model.params_ for param in ["a", "b", "c"])
@@ -72,7 +75,8 @@ def test_gompertz_model_fit_predict(synthetic_data):
 def test_gompertz_model_score(synthetic_data):
     t, y = synthetic_data
     model = GompertzModel()
-    model.fit(t, y)
+    fitter = ScipyFitter()
+    fitter.fit(model, t, y)
     score = model.score(t, y)
     assert isinstance(score, float)
     assert 0.0 <= score <= 1.0
@@ -81,7 +85,8 @@ def test_gompertz_model_score(synthetic_data):
 def test_logistic_model_fit_predict(synthetic_data):
     t, y = synthetic_data
     model = LogisticModel()
-    model.fit(t, y)
+    fitter = ScipyFitter()
+    fitter.fit(model, t, y)
 
     assert model.params_ is not None
     assert all(param in model.params_ for param in ["L", "k", "x0"])
@@ -95,7 +100,8 @@ def test_logistic_model_fit_predict(synthetic_data):
 def test_logistic_model_score(synthetic_data):
     t, y = synthetic_data
     model = LogisticModel()
-    model.fit(t, y)
+    fitter = ScipyFitter()
+    fitter.fit(model, t, y)
     score = model.score(t, y)
     assert isinstance(score, float)
     assert 0.0 <= score <= 1.0
@@ -157,9 +163,8 @@ def test_scipy_fitter_single_model(synthetic_data):
     # The ScipyFitter for Phase 1 just calls the model's fit method
     fitter.fit(model, t, y)
 
-    assert fitter.params_ is not None
-    assert all(param in fitter.params_ for param in ["p", "q", "m"])
-    assert model.params_ == fitter.params_ # Ensure model's internal params are set
+    assert model.params_ is not None
+    assert all(param in model.params_ for param in ["p", "q", "m"])
 
 def test_scipy_fitter_multi_product_model_not_implemented():
     fitter = ScipyFitter()

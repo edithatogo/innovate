@@ -1,20 +1,26 @@
+import jax
 import jax.numpy as jnp
-from diffrax import diffeqsolve, ODETerm, Tsit5
-from typing import Sequence
+from diffrax import diffeqsolve, ODETerm, Dopri5, SaveAt
+from typing import Sequence, Callable
 
 class JaxBackend:
-    def array(self, data: Sequence[float]) -> jnp.ndarray:
+    def array(self, data):
         return jnp.asarray(data)
 
-    def exp(self, x: jnp.ndarray) -> jnp.ndarray:
-        return jnp.exp(x)
+    exp = jnp.exp
+    power = jnp.power
+    sum = jnp.sum
+    mean = jnp.mean
+    where = jnp.where
 
-    def power(self, base: jnp.ndarray, exp: jnp.ndarray) -> jnp.ndarray:
-        return jnp.power(base, exp)
+    def log(self, x):
+        return jnp.log(x)
 
-    def solve_ode(self, f, y0: Sequence[float], t: Sequence[float]) -> jnp.ndarray:
+    def solve_ode(self, f: Callable, y0: Sequence[float], t: Sequence[float]) -> jnp.ndarray:
         term = ODETerm(f)
-        sol = diffeqsolve(term, Tsit5(), t[0], t[-1], t, y0)
+        solver = Dopri5()
+        saveat = SaveAt(ts=t)
+        sol = diffeqsolve(term, solver, t0=t[0], t1=t[-1], dt0=t[1] - t[0], y0=y0, saveat=saveat)
         return sol.ys
 
     def stack(self, arrays: Sequence[jnp.ndarray]) -> jnp.ndarray:
@@ -26,19 +32,14 @@ class JaxBackend:
     def zeros(self, shape: Sequence[int]) -> jnp.ndarray:
         return jnp.zeros(shape)
 
-    def sum(self, x: jnp.ndarray) -> float:
-        return jnp.sum(x)
+    def max(self, x: jnp.ndarray) -> float:
+        return jnp.max(x)
 
-    def mean(self, x: jnp.ndarray) -> float:
-        return jnp.mean(x)
+    def median(self, x: jnp.ndarray) -> float:
+        return jnp.median(x)
 
-    def where(self, condition: jnp.ndarray, x: jnp.ndarray, y: jnp.ndarray) -> jnp.ndarray:
-        return jnp.where(condition, x, y)
+    def jit(self, f: Callable) -> Callable:
+        return jax.jit(f)
 
-    def jit(self, f):
-        from jax import jit
-        return jit(f)
-
-    def vmap(self, f):
-        from jax import vmap
-        return vmap(f)
+    def vmap(self, f: Callable) -> Callable:
+        return jax.vmap(f)

@@ -13,6 +13,9 @@ While traditional diffusion models (like Bass or Gompertz) are excellent for und
 3.  **Emergent Phenomena**: Understand how complex patterns like the Hype Cycle, market-share battles, and technology lock-in emerge from simple individual behaviors.
 4.  **"What If" Analysis**: Create a virtual sandbox to test the impact of different strategies, policies, and external shocks.
 
+## Rate Limiting
+- To stay within the free tier, do not make excessive API calls. Where possible, use batch-friendly APIs and cache results.
+
 ## Planned Agent Types
 
 The library will include pre-configured agents for common scenarios:

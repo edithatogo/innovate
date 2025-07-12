@@ -4,75 +4,92 @@ This document outlines the planned development for the `innovate` library. The v
 
 ## Core Philosophy
 
-The library will be built around a modular architecture, allowing users to combine different models and components to simulate real-world scenarios. It will be grounded in established diffusion theory while providing pathways to advanced techniques like Agent-Based Modeling (ABM).
-
-## Modular Architecture
-
-The library will be organized into the following core modules:
-
-*   `innovate.diffuse`: The foundational module for modeling the adoption of a single innovation.
-*   `innovate.compete`: For modeling market share dynamics between two or more competing innovations.
-*   `innovate.substitute`: For modeling the replacement of an old technology with a new one.
-*   `innovate.hype`: For modeling the Hype Cycle and the influence of public perception and sentiment on adoption.
-*   `innovate.fail`: For analyzing the mechanisms and conditions that lead to failed diffusion.
-*   `innovate.adopt`: For classifying and analyzing different adopter archetypes (e.g., Rogers' categories).
+The library will be built around a modular, backend-agnostic architecture. It will provide a simple, intuitive API for common models while allowing for progressive enhancement with high-performance backends (like JAX) and advanced statistical techniques. The core principle is to make robust, reproducible modeling accessible.
 
 ---
 
-## Phase 1: Foundational Refactoring & Core Diffusion
+## Phase 1: Core Models & MVP (Complete)
 
-**Goal**: Establish the new modular architecture and solidify the core diffusion models.
+**Goal**: Establish the core diffusion models and a `scikit-learn`-style API.
+-   **Models**: Bass, Gompertz, Logistic, Lotka-Volterra, Fisher-Pry.
+-   **API**: A consistent `fit/predict/score` interface.
+-   **Backend**: A default backend using NumPy and SciPy.
 
-1.  **Restructure Project**: Reorganize the existing codebase into the new modular structure, with the current functionality moving into `innovate.diffuse`.
-2.  **Solidify `innovate.diffuse`**:
-    *   Ensure core models (Bass, Gompertz, Logistic) are robust.
-    *   Refine the `fit`/`predict` API.
-    *   Improve documentation and add examples for this core module.
-3.  **Develop `innovate.adopt`**:
-    *   Implement algorithms to classify adopters from diffusion data based on Rogers' innovation adoption lifecycle (Innovators, Early Adopters, etc.).
+## Phase 2: Hype, Policy & ABM (Complete)
 
-## Phase 2: Modeling Competition and Market Dynamics
+**Goal**: Broaden the scope to include sentiment dynamics, policy interventions, and agent-based modeling.
+-   **Hype Models**: Hype Cycle and DDE-based models.
+-   **Policy Module**: Tools to simulate the impact of external shocks.
+-   **ABM Framework**: Integration with `Mesa` for bottom-up simulations.
 
-**Goal**: Introduce models that capture the interaction between multiple innovations.
+## Phase 3: Advanced Fitting & Preprocessing (Current Focus)
 
-1.  **Develop `innovate.compete`**:
-    *   Implement competitive diffusion models (e.g., Lotka-Volterra).
-    *   Add functionality to model multiple interacting S-curves to simulate disruptive innovation scenarios.
-2.  **Develop `innovate.substitute`**:
-    *   Implement models specifically for technology substitution (e.g., Fisher-Pry).
-3.  **Develop `innovate.fail`**:
-    *   Create models and analysis tools to understand the conditions for failed adoption, incorporating concepts from competitive and substitution models.
+**Goal**: Dramatically improve the robustness and accuracy of model fitting and prepare the library for real-world, noisy data.
+1.  **Unified Fitting Framework**:
+    *   Centralize all fitters into a single `innovate.fitters` module.
+    *   Implement a `BayesianFitter` using `PyMC` for robust parameter estimation and uncertainty quantification.
+    *   Introduce global optimization strategies (e.g., Differential Evolution) to find better starting parameters and avoid local minima.
+2.  **Data Preprocessing Module**:
+    *   Create an `innovate.preprocess` module.
+    *   Implement robust time-series decomposition methods (e.g., **STL**) to separate trend from seasonality and noise.
+    *   Provide a clear pipeline: `preprocess -> fit_on_trend`.
+3.  **Model Selection & Diagnostics**:
+    *   Add tools for model comparison (AIC, BIC).
+    *   Implement robust residual analysis (e.g., plotting autocorrelation) to diagnose model misspecification.
 
-## Phase 3: Modeling Hype and Sentiment
+## Phase 4: Advanced Diffusion-Competition Models
 
-**Goal**: Integrate the dynamics of public perception and hype into the diffusion process.
+**Goal**: Move beyond simple competition to model more complex market dynamics.
+1.  **Generational Substitution Models**:
+    *   Implement the **Norton-Bass Model** to explicitly handle the diffusion and substitution of successive product generations.
+2.  **Generalized Competition Framework**:
+    *   Create a generic `MultiProductDiffusionModel` that can handle an arbitrary number of competing products with a flexible interaction matrix (`Q`). This will serve as a foundation for many competition scenarios.
+3.  **Covariate-Driven Models**:
+    *   Enhance the core models to allow parameters (`p`, `q`, `m`) to be functions of external variables (e.g., price, advertising spend, policy changes).
 
-1.  **Develop `innovate.hype`**:
-    *   Implement a mathematical representation of the Hype Cycle (e.g., as a composite function of an S-curve and a hype/attention curve).
-    *   Introduce a modified Bass model where parameters (`p`, `q`) can be influenced by a time-varying "hype" or "sentiment" function.
-    *   Explore the use of Delay Differential Equations (DDEs) to model the time lags between expectations, performance, and adoption.
+## Phase 5: High-Performance Backend & Network Science
 
-## Phase 4: Ecosystem, Policy, and Future Directions
+**Goal**: Enable large-scale simulation and more complex network structures.
+1.  **JAX/XLA Backend**:
+    *   Implement a full `JaxBackend` using `JAX` and high-performance ODE solvers like `Diffrax`.
+    *   Ensure the backend can be switched easily by the user.
+    *   Provide JIT compilation (`@jax.jit`) and vectorization (`vmap`) for significant performance gains.
+2.  **Network Diffusion Enhancements**:
+    *   Integrate more deeply with libraries like `NDlib` (Network Diffusion Library).
+    *   Implement spatial diffusion models that account for geographic distance (gravity models).
 
-**Goal**: Broaden the library's scope to include more complex real-world factors.
+## Phase 6: Heterogeneity & Segmentation
 
-1.  **Ecosystem & Complementary Goods**: Develop models where the adoption of one product is dependent on another (e.g., smartphones and apps).
-2.  **Policy & Regulatory Impact**: Add features to simulate the effect of policy interventions (subsidies, mandates) on diffusion rates.
-3.  **Path Dependence & Lock-in**: Explore models that demonstrate how early events can lead to long-term market dominance.
-4.  **Enhanced Visualization**: Create advanced plotting functions for comparing scenarios, visualizing networks, and animating diffusion processes.
+**Goal**: Model adoption behavior across different population segments.
+1.  **Latent-Class & Hierarchical Models**:
+    *   Implement finite-mixture models (e.g., `MixtureBassModel`) to automatically infer adopter segments.
+    *   Develop Bayesian hierarchical models to pool information across segments or jurisdictions.
+2.  **Covariate-Driven Parameterization**:
+    *   Allow model parameters (`p`, `q`, `m`) to be functions of covariates (e.g., GDP per capita, public awareness indices) via GLMs or GAMs.
+3.  **Time-Varying Parameters**:
+    *   Incorporate piecewise or smoothly evolving parameters (`p(t)`, `q(t)`) to capture policy shocks or media campaigns.
 
-## Phase 5: Advanced Modeling with Agent-Based Models (ABM)
+## Phase 7: Causal & Impact Assessment
 
-**Goal**: Introduce a powerful new paradigm for bottom-up, emergent modeling.
+**Goal**: Bridge the gap between simulation and formal causal impact assessment.
+1.  **Event History & Duration Models**:
+    *   Integrate survival analysis models (e.g., from the `lifelines` library) to model the "hazard" of policy adoption.
+2.  **Counterfactual Analysis**:
+    *   Develop tools to simulate "what-if" scenarios and compare them to baseline forecasts, facilitating counterfactual reasoning.
+3.  **Integration with Causal Inference Libraries**:
+    *   Provide interfaces to libraries like `CausalImpact`, `EconML`, and `DoWhy` to facilitate the use of diffusion models in causal inference pipelines.
 
-1.  **Integrate ABM Framework**:
-    *   Integrate a library like `Mesa` to serve as the foundation for agent-based simulations.
-2.  **Develop Pre-configured ABM Scenarios**:
-    *   **Competitive Diffusion**: An ABM for Betamax vs. VHS style competition.
-    *   **Hype Cycle**: An ABM with sentiment dynamics to generate emergent hype cycles.
-    *   **Disruptive Innovation**: An ABM with incumbent and disruptor firms and heterogeneous customers.
-    *   **Policy Diffusion**: An ABM where agents are jurisdictions adopting policies based on network influence.
-3.  **Expose ABM Components**: Allow users to define custom agent behaviors, network topologies, and interaction rules.
+## Phase 8: Ecosystem & Domain Plugins
+
+**Goal**: Make the library a central tool for innovation diffusion research.
+1.  **Data Connectors**:
+    *   Provide pre-built loaders for common datasets (e.g., OECD, World Bank, UN policy indicators).
+2.  **Domain-Specific Modules**:
+    *   Develop modules for specific domains like health policy, energy tech, and technology standards.
+3.  **Interactive Dashboards & Reporting**:
+    *   Create templates for interactive dashboards using `Panel` or `Streamlit`.
+4.  **Community Extensions & Plugin API**:
+    *   Define a plugin interface to allow researchers to contribute new models, fitters, and visualizations.
 
 ---
 This roadmap provides a clear path forward, balancing the implementation of core, requested features with a vision for a sophisticated and versatile modeling tool.

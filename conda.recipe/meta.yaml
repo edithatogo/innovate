@@ -1,13 +1,13 @@
 package:
   name: innovate
-  version: "0.1.1"
+  version: "0.2.1"
 
 source:
   path: ..
 
 build:
   noarch: python
-  script: "{{ PYTHON }} -m pip install . --no-deps -vv"
+  script: bash build.sh
 
 requirements:
   host:
@@ -21,6 +21,12 @@ requirements:
     - scipy
     - pandas
     - statsmodels
+    - pyarrow
+    - mesa
+    - networkx
+    - pip
+  run_constrained:
+    - jitcdde
 
 about:
   home: https://github.com/edithatogo/innovate

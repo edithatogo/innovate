@@ -1,6 +1,6 @@
 from typing import Sequence, List
-from ..models.base import DiffusionModel
-from ..backend import current_backend as B
+from innovate.base.base import DiffusionModel
+from innovate.backend import current_backend as B
 
 class BatchedFitter:
     """A fitter class for fitting a model to multiple datasets in a batch."""

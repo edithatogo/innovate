@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
-from typing import Sequence, Tuple
+from typing import Sequence, Tuple, Dict
+from innovate.base.base import DiffusionModel
 
 def estimate_bass_mom(t: Sequence[float], y: Sequence[float]) -> Tuple[float, float, float]:
     """
@@ -91,3 +92,37 @@ def estimate_bass_mom(t: Sequence[float], y: Sequence[float]) -> Tuple[float, fl
         raise ValueError(f"Estimated p ({p}) or q ({q}) is not positive. Bass MoM estimation failed. Data might not fit Bass model assumptions well.")
 
     return p, q, m
+
+class MoMFitter:
+    """
+    Fitter for the Bass Diffusion Model using the Method of Moments (MoM).
+    This fitter is specifically designed for the BassModel.
+    """
+    def __init__(self):
+        self._params: Dict[str, float] = {}
+
+    def fit(self, model: DiffusionModel, t: Sequence[float], y: Sequence[float]) -> DiffusionModel:
+        """
+        Fits the BassModel using the Method of Moments.
+
+        Args:
+            model: An instance of BassModel.
+            t: Time points.
+            y: Cumulative adoption data.
+
+        Returns:
+            The fitted BassModel instance.
+        """
+        # Ensure the model is a BassModel instance
+        from innovate.diffuse.bass import BassModel # Import here to avoid circular dependency
+        if not isinstance(model, BassModel):
+            raise TypeError("MoMFitter can only fit BassModel instances.")
+
+        p, q, m = estimate_bass_mom(t, y)
+        model.params_ = {"p": p, "q": q, "m": m}
+        self._params = model.params_ # Store fitted parameters internally
+        return model
+
+    @property
+    def params_(self) -> Dict[str, float]:
+        return self._params
