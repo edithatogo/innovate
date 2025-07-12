@@ -58,14 +58,38 @@ The library will be built around a modular, backend-agnostic architecture. It wi
     *   Integrate more deeply with libraries like `NDlib` (Network Diffusion Library).
     *   Implement spatial diffusion models that account for geographic distance (gravity models).
 
-## Phase 6: Causal Inference & Econometric Models
+## Phase 6: Heterogeneity & Segmentation
+
+**Goal**: Model adoption behavior across different population segments.
+1.  **Latent-Class & Hierarchical Models**:
+    *   Implement finite-mixture models (e.g., `MixtureBassModel`) to automatically infer adopter segments.
+    *   Develop Bayesian hierarchical models to pool information across segments or jurisdictions.
+2.  **Covariate-Driven Parameterization**:
+    *   Allow model parameters (`p`, `q`, `m`) to be functions of covariates (e.g., GDP per capita, public awareness indices) via GLMs or GAMs.
+3.  **Time-Varying Parameters**:
+    *   Incorporate piecewise or smoothly evolving parameters (`p(t)`, `q(t)`) to capture policy shocks or media campaigns.
+
+## Phase 7: Causal & Impact Assessment
 
 **Goal**: Bridge the gap between simulation and formal causal impact assessment.
 1.  **Event History & Duration Models**:
-    *   Integrate survival analysis models (e.g., from the `lifelines` library) to model the "hazard" of adoption.
+    *   Integrate survival analysis models (e.g., from the `lifelines` library) to model the "hazard" of policy adoption.
 2.  **Counterfactual Analysis**:
     *   Develop tools to simulate "what-if" scenarios and compare them to baseline forecasts, facilitating counterfactual reasoning.
-    .
+3.  **Integration with Causal Inference Libraries**:
+    *   Provide interfaces to libraries like `CausalImpact`, `EconML`, and `DoWhy` to facilitate the use of diffusion models in causal inference pipelines.
+
+## Phase 8: Ecosystem & Domain Plugins
+
+**Goal**: Make the library a central tool for innovation diffusion research.
+1.  **Data Connectors**:
+    *   Provide pre-built loaders for common datasets (e.g., OECD, World Bank, UN policy indicators).
+2.  **Domain-Specific Modules**:
+    *   Develop modules for specific domains like health policy, energy tech, and technology standards.
+3.  **Interactive Dashboards & Reporting**:
+    *   Create templates for interactive dashboards using `Panel` or `Streamlit`.
+4.  **Community Extensions & Plugin API**:
+    *   Define a plugin interface to allow researchers to contribute new models, fitters, and visualizations.
 
 ---
 This roadmap provides a clear path forward, balancing the implementation of core, requested features with a vision for a sophisticated and versatile modeling tool.

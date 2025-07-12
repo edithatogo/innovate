@@ -86,7 +86,7 @@ class LogisticModel(DiffusionModel):
                 x0_t += params[param_idx+2] * cov_val_t
                 param_idx += 3
 
-        return k_t * y[0] * (1 - y[0] / L_t) if L_t > 0 else 0
+        return B.switch(B.gt(L_t, 0), k_t * y[0] * (1 - y[0] / L_t), 0)
 
     def score(self, t: Sequence[float], y: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> float:
         if not self._params:
