@@ -1,4 +1,5 @@
-from mesa import Model, AgentSet
+from mesa import Model
+from mesa.agent import AgentSet
 from mesa.space import MultiGrid
 from .agent import InnovationAgent
 
@@ -10,10 +11,11 @@ class InnovationModel(Model):
         self.grid = MultiGrid(width, height, True)
         self.running = True  # For visualization/interactive mode
 
+        self.agents = AgentSet(self)
         # Create agents
-        self.agents = AgentSet(self, InnovationAgent)
         for i in range(self.num_agents):
-            agent = self.agents.create_agent(unique_id=i)
+            agent = InnovationAgent(i, self)
+            self.agents.add(agent)
             # Add the agent to a random grid cell
             x = self.random.randrange(self.grid.width)
             y = self.random.randrange(self.grid.height)

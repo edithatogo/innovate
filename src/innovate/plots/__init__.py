@@ -7,7 +7,9 @@ from .network import plot_network_diffusion
 def plot_diffusion_curve(t: Sequence[float], y_obs: Sequence[float], y_pred: Sequence[float], 
                          title: str = "Diffusion Curve", xlabel: str = "Time", 
                          ylabel: str = "Cumulative Adoptions", save_path: Optional[str] = None):
-    """Plots observed and predicted diffusion curves.
+    """:no-index:
+
+    Plots observed and predicted diffusion curves.
 
     Args:
         t: Time points.
@@ -34,7 +36,9 @@ def plot_multi_product_diffusion(df_pred: pd.DataFrame, df_obs: Optional[pd.Data
                                  title: str = "Multi-Product Diffusion Curves", 
                                  xlabel: str = "Time", ylabel: str = "Cumulative Adoptions",
                                  save_path: Optional[str] = None):
-    """Plots observed and predicted diffusion curves for multiple products.
+    """:no-index:
+
+    Plots observed and predicted diffusion curves for multiple products.
 
     Args:
         df_pred: DataFrame of predicted cumulative adoptions (index is time, columns are product names).

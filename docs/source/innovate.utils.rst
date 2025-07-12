@@ -4,13 +4,13 @@ innovate.utils package
 Submodules
 ----------
 
-innovate.utils.categorization module
-------------------------------------
+innovate.adopt.categorization
+===============================
 
-.. automodule:: innovate.utils.categorization
+.. automodule:: innovate.adopt.categorization
    :members:
-   :show-inheritance:
    :undoc-members:
+   :show-inheritance:
 
 innovate.utils.metrics module
 -----------------------------
