@@ -22,8 +22,8 @@ This file tracks the concrete tasks required to execute the project roadmap.
     -   [x] Implement robust residual analysis plots (e.g., ACF plots).
 -   [x] **Model Selection**
     -   [x] Add AIC/BIC calculation to the model evaluation utilities.
--   [ ] **Documentation**
-    -   [ ] Create a comprehensive tutorial for the `BayesianFitter`.
+-   [x] **Documentation**
+    -   [x] Create a comprehensive tutorial for the `BayesianFitter`.
     -   [x] Write a guide on handling seasonal data using the new preprocessing tools.
 
 ## Phase 4: Advanced Diffusion-Competition Models (Future)
