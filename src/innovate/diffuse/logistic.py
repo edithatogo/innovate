@@ -69,6 +69,16 @@ class LogisticModel(DiffusionModel):
         Defines the logistic differential equation with optional covariate effects.
         
         At each time point `t`, computes the rate of change for the logistic model, adjusting the parameters `L`, `k`, and `x0` by the influence of covariates if provided. Returns zero if the carrying capacity parameter `L_t` is not positive.
+
+        Parameters:
+            t (float): Current time.
+            y (array-like): Current value(s) of the dependent variable.
+            params (array-like): Model parameters, including base and covariate coefficients.
+            covariates (dict): Optional mapping of covariate names to their values over time.
+            t_eval (array-like): Time points corresponding to covariate values.
+        
+        Returns:
+            float: The computed derivative at time t, or zero if the carrying capacity is non-positive.
         """
         
         L_base = params[0]
@@ -94,15 +104,19 @@ class LogisticModel(DiffusionModel):
 
     def score(self, t: Sequence[float], y: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> float:
         """
-        Compute the coefficient of determination (R²) between observed and predicted values for the logistic model.
+
+        Compute the coefficient of determination (R²) between observed values and model predictions.
         
         Parameters:
             t (Sequence[float]): Time points at which observations were made.
-            y (Sequence[float]): Observed values corresponding to time points t.
+            y (Sequence[float]): Observed values corresponding to time points in `t`.
             covariates (Dict[str, Sequence[float]], optional): Covariate values for each time point.
         
         Returns:
-            float: The R² score indicating the proportion of variance explained by the model predictions.
+            float: The R² score indicating the proportion of variance in `y` explained by the model predictions.
+        
+        Raises:
+            RuntimeError: If the model parameters have not been set.
         """
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")

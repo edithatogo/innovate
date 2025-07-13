@@ -4,8 +4,7 @@ class InnovationAgent(Agent):
     """An agent in the innovation diffusion model."""
 
     def __init__(self, unique_id, model):
-        self.unique_id = unique_id
-        self.model = model
+        super().__init__(unique_id, model)
         # Add agent-specific attributes here, e.g.,
         self.adopted = False
         self.awareness = 0.0 # 0.0 to 1.0
