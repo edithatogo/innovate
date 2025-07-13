@@ -36,9 +36,21 @@ This file tracks the concrete tasks required to execute the project roadmap.
     -   [ ] Implement concrete classes for the core growth models, contagion models (SIR, SIS, SEIR), and competition models (Lotka-Volterra, MarketShareAttraction, ReplicatorDynamics).
 
 ## Phase 5: Advanced Diffusion-Competition Models (Future)
--   [ ] **Implement the Norton-Bass model for generational substitution.**
+-   [x] **Implement the Norton-Bass model for generational substitution.**
+    -   [x] Create the `NortonBassModel` class structure in `src/innovate/substitute/norton_bass.py`.
+    -   [x] Implement the `differential_equation` method.
+    -   [x] Implement the `predict` method.
+    -   [x] Implement the `initial_guesses` and `bounds` methods.
+    -   [x] Implement the `fit` method.
+    -   [x] Write unit tests for the `NortonBassModel`.
 -   [ ] Design and implement the generic `MultiProductDiffusionModel`.
 -   [ ] Add support for time-varying covariates to core models.
+    -   [ ] BassModel
+    -   [ ] GompertzModel
+    -   [ ] LogisticModel
+    -   [ ] LotkaVolterraModel
+    -   [ ] NortonBassModel
+    -   [ ] MultiProductDiffusionModel
 
 ## Phase 6: High-Performance Backend & Network Science (Future)
 -   [ ] **JAX/XLA Backend**
@@ -58,7 +70,7 @@ This file tracks the concrete tasks required to execute the project roadmap.
 -   [ ] **Time-Varying Parameters**
     -   [ ] Incorporate piecewise or smoothly evolving parameters to capture policy shocks or media campaigns.
 
-## Phase 8: Causal & Impact Assessment (Future)
+## Phase 7: Causal & Impact Assessment (Future)
 -   [ ] **Event History & Duration Models**
     -   [ ] Integrate survival analysis models (e.g., from the `lifelines` library) to model the "hazard" of policy adoption.
 -   [ ] **Counterfactual Analysis**
@@ -66,7 +78,8 @@ This file tracks the concrete tasks required to execute the project roadmap.
 -   [ ] **Integration with Causal Inference Libraries**
     -   [ ] Provide interfaces to libraries like `CausalImpact`, `EconML`, and `DoWhy` to facilitate the use of diffusion models in causal inference pipelines.
 
-## Phase 9: Ecosystem & Domain Plugins (Future)
+
+## Phase 8: Ecosystem & Domain Plugins (Future)
 -   [ ] **Data Connectors**
     -   [ ] Provide pre-built loaders for common datasets (e.g., OECD, World Bank, UN policy indicators).
 -   [ ] **Domain-Specific Modules**
@@ -77,4 +90,3 @@ This file tracks the concrete tasks required to execute the project roadmap.
     -   [ ] Define a plugin interface to allow researchers to contribute new models, fitters, and visualizations.
 -   [ ] **Organizational Learning & Ecosystem Dynamics**
     -   [ ] Implement models for knowledge accumulation, absorptive capacity, and co-evolutionary dynamics.
-

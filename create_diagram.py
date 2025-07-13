@@ -14,4 +14,4 @@ dot.node('I', 'causal')
 
 dot.edges(['AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI'])
 
-dot.render('docs/images/conceptual_framework.gv', view=True)
+dot.render('docs/images/conceptual_framework.gv')
