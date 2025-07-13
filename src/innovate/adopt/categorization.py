@@ -4,7 +4,8 @@ from innovate.base.base import DiffusionModel
 from typing import Sequence
 
 def categorize_adopters(model: DiffusionModel, t: Sequence[float]) -> pd.DataFrame:
-    """
+    """:no-index:
+
     Categorizes adopters based on the fitted diffusion model.
 
     Args:

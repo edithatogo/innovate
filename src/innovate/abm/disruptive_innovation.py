@@ -1,5 +1,6 @@
 
-from mesa import Model, AgentSet
+from mesa import Model
+from mesa.agent import AgentSet
 from mesa.space import MultiGrid
 from mesa.datacollection import DataCollector
 from .agent import InnovationAgent

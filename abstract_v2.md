@@ -1,0 +1,9 @@
+# Abstract v2
+
+**Background:** The diffusion of innovations is a complex process that is influenced by a wide range of factors. Mathematical models of diffusion are a valuable tool for understanding and predicting the spread of innovations, but they are often difficult to implement and use. The `innovate` library is designed to address these challenges by providing a flexible and robust framework for modeling the complex dynamics of how innovations, technologies, and policies spread over time.
+
+**Methods:** The `innovate` library is a Python package that provides a suite of focused modules for specific modeling tasks. The library includes a range of diffusion models, including the Bass, Gompertz, and Logistic models, as well as models for technology substitution (Fisher-Pry, Norton-Bass), competition (Lotka-Volterra, Multi-Product Diffusion), and the Gartner Hype Cycle. The library also includes tools for agent-based modeling, network-based diffusion, and counterfactual analysis. The library is designed to be easy to use and extensible, and it can be used to model a wide range of real-world scenarios.
+
+**Results:** The `innovate` library has been used to model a variety of real-world scenarios, including the diffusion of new medical technologies, the adoption of new agricultural practices, and the spread of new public health policies. The library has also been used to conduct counterfactual analysis to assess the potential impact of different policy interventions.
+
+**Conclusions:** The `innovate` library is a powerful and flexible tool for modeling the diffusion of innovations. Future work will focus on expanding the library to include additional models and features, as well as on developing a graphical user interface to make the library more accessible to non-technical users.

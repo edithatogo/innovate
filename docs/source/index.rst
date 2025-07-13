@@ -10,9 +10,10 @@ Welcome to the documentation for the ``innovate`` library.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Getting Started
+   :caption: Contents:
 
-   innovate.rst
+   innovate
+   tutorials
 
 .. toctree::
    :maxdepth: 2

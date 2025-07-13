@@ -1,5 +1,6 @@
 
-from mesa import Model, AgentSet
+from mesa import Model
+from mesa.agent import AgentSet
 from mesa.space import MultiGrid
 from mesa.datacollection import DataCollector
 from .agent import InnovationAgent
@@ -62,7 +63,7 @@ class CompetitiveDiffusionModel(Model):
 
         # Data collector
         self.datacollector = DataCollector(
-            model_reporters={"AdoptionCounts": lambda m: [a.adopted_innovation for a in m.agents].count(i) for i in range(m.num_innovations)}
+            model_reporters={"AdoptionCounts": lambda m: [sum(1 for a in m.agents if a.adopted_innovation == i) for i in range(m.num_innovations)]}
         )
 
     def step(self):

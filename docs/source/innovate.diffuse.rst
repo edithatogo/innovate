@@ -10,7 +10,6 @@ Submodules
    innovate.diffuse.bass
    innovate.diffuse.gompertz
    innovate.diffuse.logistic
-   innovate.diffuse.fitters
 
 Module contents
 ---------------
