@@ -1,4 +1,5 @@
 from innovate.base.base import DiffusionModel, Self
+from innovate.backend import current_backend as B
 from innovate.dynamics.growth.skewed import SkewedGrowth
 from typing import Sequence, Dict
 import numpy as np
