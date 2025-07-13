@@ -1,4 +1,3 @@
-
 import networkx as nx
 import ndlib.models.epidemics as ep
 from mesa import Model
@@ -9,6 +8,19 @@ class NDlibModel(Model):
     An innovation diffusion model using ndlib for network-based simulations.
     """
     def __init__(self, num_agents, graph: nx.Graph = None, model_name: str = "ic"):
+        """
+        Initialize the NDlibModel with a specified number of agents, network graph, and diffusion model type.
+        
+        Creates a network-based innovation diffusion simulation by assigning agents to nodes in the provided or generated graph and initializing the chosen NDlib diffusion model. The initial state marks node 0 as 'Infected' (adopted). Supported diffusion models are Independent Cascades ("ic"), Linear Threshold ("lt"), SIR ("sir"), and SIS ("sis").
+        
+        Parameters:
+            num_agents (int): Number of agents (nodes) in the simulation.
+            graph (nx.Graph, optional): NetworkX graph to use for the simulation. If None, an Erdős-Rényi random graph is generated.
+            model_name (str, optional): Name of the diffusion model to use ("ic", "lt", "sir", or "sis"). Defaults to "ic".
+        
+        Raises:
+            ValueError: If an unsupported model_name is provided.
+        """
         self.num_agents = num_agents
         self.running = True
 
