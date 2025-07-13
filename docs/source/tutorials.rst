@@ -11,3 +11,4 @@ Tutorials
    tutorials/jax_backend
    tutorials/ndlib_integration
    tutorials/counterfactual_analysis
+   tutorials/bayesian_fitter_tutorial
