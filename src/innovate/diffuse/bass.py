@@ -1,4 +1,5 @@
 from innovate.base.base import DiffusionModel, Self
+from innovate.backend import current_backend as B
 from innovate.dynamics.growth.dual_influence import DualInfluenceGrowth
 from typing import Sequence, Dict
 import numpy as np
