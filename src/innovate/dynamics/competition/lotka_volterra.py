@@ -13,6 +13,14 @@ class LotkaVolterraCompetition(CompetitiveInteraction):
         Equations:
         dN1/dt = r1 * N1 * (1 - (N1 + alpha12 * N2) / K1)
         dN2/dt = r2 * N2 * (1 - (N2 + alpha21 * N1) / K2)
+        Compute the instantaneous rates of change for two competing species using the Lotka-Volterra competition model.
+        
+        Parameters:
+        	N1 (float): Current population of species 1.
+        	N2 (float): Current population of species 2.
+        
+        Returns:
+        	tuple: A pair (dN1dt, dN2dt) representing the rates of change of species 1 and species 2 populations, respectively.
         """
         N1 = params.get("N1")
         N2 = params.get("N2")
@@ -30,6 +38,14 @@ class LotkaVolterraCompetition(CompetitiveInteraction):
     def predict_states(self, time_points, **params):
         """
         Predicts the states of the competing entities over time.
+        
+        Predicts the population trajectories of two competing species over specified time points using the Lotka-Volterra competition model.
+        
+        Parameters:
+            time_points (array-like): Sequence of time points at which to evaluate the populations.
+        
+        Returns:
+            ndarray: Array of shape (len(time_points), 2) containing the predicted populations of both species at each time point.
         """
         from scipy.integrate import solve_ivp
 
@@ -50,6 +66,8 @@ class LotkaVolterraCompetition(CompetitiveInteraction):
     def get_parameters_schema(self):
         """
         Returns the schema for the model's parameters.
+
+        Return a dictionary describing the schema for all model parameters, including their types, default values, and descriptions for the Lotka-Volterra competition model.
         """
         return {
             "growth_rate_1": {

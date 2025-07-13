@@ -15,6 +15,17 @@ class SIRModel(ContagionSpread):
         dS/dt = -beta * S * I
         dI/dt = beta * S * I - gamma * I
         dR/dt = gamma * I
+
+        Compute the instantaneous rates of change for susceptible, infectious, and recovered populations using the SIR model.
+        
+        Parameters:
+        	S (float): Current number of susceptible individuals.
+        	I (float): Current number of infectious individuals.
+        	transmission_rate (float, optional): Rate at which the disease spreads (default 0.1).
+        	recovery_rate (float, optional): Rate at which infectious individuals recover (default 0.01).
+        
+        Returns:
+        	tuple: The rates of change (dS/dt, dI/dt, dR/dt) for susceptible, infectious, and recovered populations.
         """
         S = params.get("S")
         I = params.get("I")
@@ -29,6 +40,15 @@ class SIRModel(ContagionSpread):
     def predict_states(self, time_points, **params):
         """
         Predicts the states of the population over time.
+
+        Simulate the evolution of susceptible, infectious, and recovered populations over specified time points using the SIR model.
+        
+        Parameters:
+            time_points (array-like): Sequence of time points at which to compute the population states.
+            **params: Optional model parameters, including initial conditions (`S0`, `I0`, `R0`) and rates.
+        
+        Returns:
+            ndarray: Array of shape (len(time_points), 3) containing the simulated S, I, and R values at each time point.
         """
         from scipy.integrate import solve_ivp
 
@@ -50,6 +70,8 @@ class SIRModel(ContagionSpread):
     def get_parameters_schema(self):
         """
         Returns the schema for the model's parameters.
+
+        Return a dictionary describing the parameter schema for the SIR model, including types, default values, and descriptions for each parameter.
         """
         return {
             "transmission_rate": {
