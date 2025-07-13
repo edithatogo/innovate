@@ -10,12 +10,24 @@ class BassModel(DiffusionModel):
     """
 
     def __init__(self, covariates: Sequence[str] = None):
+        """
+        Initialize the BassModel with optional covariates and a DualInfluenceGrowth dynamics model.
+        
+        Parameters:
+            covariates (Sequence[str], optional): List of covariate names to include in the model. Defaults to an empty list if not provided.
+        """
         self._params: Dict[str, float] = {}
         self.covariates = covariates if covariates else []
         self.growth_model = DualInfluenceGrowth()
 
     @property
     def param_names(self) -> Sequence[str]:
+        """
+        Return the list of parameter names for the Bass model, including base parameters and covariate-related coefficients.
+        
+        Returns:
+            names (Sequence[str]): List of parameter names, with covariate effects included if applicable.
+        """
         names = ["p", "q", "m"]
         for cov in self.covariates:
             names.extend([f"beta_p_{cov}", f"beta_q_{cov}", f"beta_m_{cov}"])
@@ -34,6 +46,16 @@ class BassModel(DiffusionModel):
         return guesses
 
     def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
+        """
+        Return parameter bounds for the Bass model, including covariate effects.
+        
+        Parameters:
+            t (Sequence[float]): Sequence of time points.
+            y (Sequence[float]): Observed cumulative adoption values.
+        
+        Returns:
+            Dict[str, tuple]: Dictionary mapping parameter names to (lower, upper) bounds. Base parameters "p", "q", and "m" have fixed bounds; covariate-related parameters are unbounded.
+        """
         bounds = {
             "p": (1e-6, 0.1),
             "q": (1e-6, 1.0),
@@ -46,6 +68,19 @@ class BassModel(DiffusionModel):
         return bounds
 
     def predict(self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> Sequence[float]:
+        """
+        Predicts cumulative adoption over time using the Bass diffusion model.
+        
+        Parameters:
+            t (Sequence[float]): Sequence of time points at which to predict cumulative adoption.
+            covariates (Dict[str, Sequence[float]], optional): Optional time series of covariate values affecting model parameters.
+        
+        Returns:
+            Sequence[float]: Predicted cumulative adoption at each time point in `t`.
+        
+        Raises:
+            RuntimeError: If the model parameters have not been set (i.e., the model is not fitted).
+        """
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         
@@ -67,7 +102,21 @@ class BassModel(DiffusionModel):
         return sol.y.flatten()
 
     def differential_equation(self, t, y, params, covariates, t_eval):
-        """The differential equation for the Bass model."""
+        """
+        Defines the Bass model's differential equation, incorporating covariate effects if provided.
+        
+        At each time point, adjusts the innovation, imitation, and market size parameters by linearly combining base values with covariate contributions, then computes the instantaneous growth rate using the underlying DualInfluenceGrowth model.
+        
+        Parameters:
+            t: Current time point.
+            y: Current cumulative adoption value.
+            params: Sequence of model parameters, including base and covariate coefficients.
+            covariates: Optional dictionary mapping covariate names to their time series values.
+            t_eval: Sequence of time points for covariate interpolation.
+        
+        Returns:
+            The instantaneous adoption rate at time t.
+        """
         p_base = params[0]
         q_base = params[1]
         m_base = params[2]
@@ -89,6 +138,15 @@ class BassModel(DiffusionModel):
         return self.growth_model.compute_growth_rate(y, m_t, innovation_coeff=p_t, imitation_coeff=q_t)
 
     def score(self, t: Sequence[float], y: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> float:
+        """
+        Compute the coefficient of determination (R²) between observed and predicted values.
+        
+        Parameters:
+        	y (Sequence[float]): Observed cumulative adoption values.
+        
+        Returns:
+        	float: R² score indicating the proportion of variance explained by the model predictions.
+        """
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t, covariates)
