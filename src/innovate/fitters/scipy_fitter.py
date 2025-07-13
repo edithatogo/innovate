@@ -7,7 +7,7 @@ from innovate.compete.competition import MultiProductDiffusionModel # Import the
 class ScipyFitter:
     """A fitter class that uses SciPy's curve_fit for model estimation."""
 
-    def fit(self, model: DiffusionModel, t: Sequence[float], y: Sequence[float], p0: Sequence[float] = None, bounds: tuple = None, covariates: Dict[str, Sequence[float]] = None, **kwargs) -> Self:
+    def fit(self, model: DiffusionModel, t: Sequence[float], y: Sequence[float], p0: Sequence[float] = None, bounds: tuple = None, covariates: Dict[str, Sequence[float]] = None, t_eval: Sequence[float] = None, **kwargs) -> Self:
         """
         Fits a DiffusionModel instance using scipy.optimize.curve_fit.
 
@@ -48,7 +48,7 @@ class ScipyFitter:
             def fit_function(t, *params):
                 param_dict = dict(zip(model.param_names, params))
                 model.params_ = param_dict
-                return model.predict(t, covariates).flatten()
+                return model.predict(t, covariates, t_eval=t_eval).flatten()
             x_fit = t_arr
 
         # Determine initial guesses if not provided

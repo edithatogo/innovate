@@ -17,6 +17,9 @@ class NumPyBackend:
     def where(self, condition, x, y):
         return np.where(condition, x, y)
 
+    def diff(self, a, n=1, axis=-1):
+        return np.diff(a, n=n, axis=axis)
+
     def log(self, x):
         return np.log(x)
 

@@ -45,26 +45,26 @@ class BassModel(DiffusionModel):
             bounds[f"beta_m_{cov}"] = (-np.inf, np.inf)
         return bounds
 
-    def predict(self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> Sequence[float]:
+    def predict(self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None, t_eval: Sequence[float] = None) -> Sequence[float]:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         
         y0 = 1e-6
         
-        # This is a simplification. The predict method should use the growth model's
-        # predict_cumulative method, which will require some refactoring of how parameters
-        # are handled. For now, we will leave the old implementation.
         from scipy.integrate import solve_ivp
         params = [self._params[name] for name in self.param_names]
-        fun = lambda t, y: self.differential_equation(t, y, params, covariates, t)
+        if t_eval is None:
+            t_eval = t
+        fun = lambda t, y: self.differential_equation(t, y, params, covariates, t_eval=t_eval)
         sol = solve_ivp(
             fun,
             (t[0], t[-1]),
             [y0],
             t_eval=t,
             method='LSODA',
+            dense_output=True,
         )
-        return sol.y.flatten()
+        return sol.sol(t).flatten()
 
     def differential_equation(self, t, y, params, covariates, t_eval):
         """The differential equation for the Bass model."""
@@ -79,6 +79,14 @@ class BassModel(DiffusionModel):
         if covariates:
             param_idx = 3
             for cov_name, cov_values in covariates.items():
+                t = np.array(t)
+                if t.ndim == 0:
+                    t = np.array([t])
+
+                t_eval = np.array(t_eval)
+                if t_eval.ndim == 0:
+                    t_eval = np.array([t_eval])
+
                 cov_val_t = np.interp(t, t_eval, cov_values)
                 
                 p_t += params[param_idx] * cov_val_t
@@ -92,8 +100,8 @@ class BassModel(DiffusionModel):
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t, covariates)
-        ss_res = B.sum((B.array(y) - y_pred) ** 2)
-        ss_tot = B.sum((B.array(y) - B.mean(B.array(y))) ** 2)
+        ss_res = np.sum((np.array(y) - y_pred) ** 2)
+        ss_tot = np.sum((np.array(y) - np.mean(np.array(y))) ** 2)
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
     @property

@@ -27,6 +27,13 @@ class SkewedGrowth(GrowthCurve):
 
         y_pred = self.predict_cumulative(t, current_adopters, total_potential, **params)
 
+        if y_pred.ndim == 0:
+            y_pred = B.array([y_pred])
+
+        t = B.array(t)
+        if t.ndim == 0:
+            t = B.array([t])
+
         # Calculate the rate as the difference between consecutive points
         rate = B.diff(y_pred) / B.diff(t)
 
