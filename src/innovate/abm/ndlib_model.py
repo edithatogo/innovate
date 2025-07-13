@@ -4,11 +4,11 @@ import ndlib.models.epidemics as ep
 from mesa import Model
 from .agent import InnovationAgent
 
-class NDlibModel(Model):
+class NdlibInnovationModel(Model):
     """
     An innovation diffusion model using ndlib for network-based simulations.
     """
-    def __init__(self, num_agents, graph: nx.Graph = None, model_name: str = "ic"):
+    def __init__(self, num_agents, graph: nx.Graph = None):
         self.num_agents = num_agents
         self.running = True
 
@@ -24,16 +24,7 @@ class NDlibModel(Model):
             self.graph.nodes[i]['agent'] = agent
 
         # Initialize the ndlib diffusion model
-        if model_name == "ic":
-            self.diffusion_model = ep.IndependentCascadesModel(self.graph)
-        elif model_name == "lt":
-            self.diffusion_model = ep.ThresholdModel(self.graph)
-        elif model_name == "sir":
-            self.diffusion_model = ep.SIRModel(self.graph)
-        elif model_name == "sis":
-            self.diffusion_model = ep.SISModel(self.graph)
-        else:
-            raise ValueError(f"Unknown model name: {model_name}")
+        self.diffusion_model = ep.IndependentCascadesModel(self.graph)
 
         # Set up the initial state of the diffusion model
         # For example, infect a single node to start the cascade

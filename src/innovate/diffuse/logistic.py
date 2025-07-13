@@ -1,18 +1,14 @@
 from innovate.base.base import DiffusionModel, Self
-from innovate.dynamics.growth.symmetric import SymmetricGrowth
+from innovate.backend import current_backend as B
 from typing import Sequence, Dict
 import numpy as np
 
 class LogisticModel(DiffusionModel):
-    """
-    Implementation of the Logistic Diffusion Model.
-    This is a wrapper around the SymmetricGrowth dynamics model.
-    """
+    """Implementation of the Logistic Diffusion Model."""
 
     def __init__(self, covariates: Sequence[str] = None):
         self._params: Dict[str, float] = {}
         self.covariates = covariates if covariates else []
-        self.growth_model = SymmetricGrowth()
 
     @property
     def param_names(self) -> Sequence[str]:
@@ -45,61 +41,59 @@ class LogisticModel(DiffusionModel):
             bounds[f"beta_x0_{cov}"] = (-np.inf, np.inf)
         return bounds
 
-    def predict(self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None, t_eval: Sequence[float] = None) -> Sequence[float]:
+    def predict(self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> Sequence[float]:
+        from scipy.integrate import solve_ivp
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         
-        y0 = 1e-6
+        t_arr = B.array(t)
         
-        from scipy.integrate import solve_ivp
+        y0 = np.zeros(1)
+        y0[0] = 1e-6
+
         params = [self._params[name] for name in self.param_names]
-        if t_eval is None:
-            t_eval = t
-        fun = lambda t, y: self.differential_equation(t, y, params, covariates, t_eval=t_eval)
+
+        fun = lambda t, y: self.differential_equation(t, y, params, covariates, t_arr)
+
         sol = solve_ivp(
             fun,
-            (t[0], t[-1]),
-            [y0],
-            t_eval=t,
+            (t_arr[0], t_arr[-1]),
+            y0,
+            t_eval=t_arr,
             method='LSODA',
-            dense_output=True,
         )
-        return sol.sol(t).flatten()
-
+        return sol.y.flatten()
 
     def differential_equation(self, t, y, params, covariates, t_eval):
         """The differential equation for the Logistic model."""
+
         L_base = params[0]
         k_base = params[1]
+        x0_base = params[2]
 
         L_t = L_base
         k_t = k_base
+        x0_t = x0_base
         
         if covariates:
             param_idx = 3
             for cov_name, cov_values in covariates.items():
-                t = np.array(t)
-                if t.ndim == 0:
-                    t = np.array([t])
-
-                t_eval = np.array(t_eval)
-                if t_eval.ndim == 0:
-                    t_eval = np.array([t_eval])
-
+                # Interpolate covariate values at time t
                 cov_val_t = np.interp(t, t_eval, cov_values)
                 
                 L_t += params[param_idx] * cov_val_t
                 k_t += params[param_idx+1] * cov_val_t
+                x0_t += params[param_idx+2] * cov_val_t
                 param_idx += 3
 
-        return self.growth_model.compute_growth_rate(y, L_t, growth_rate=k_t)
+        return k_t * y[0] * (1 - y[0] / L_t) if L_t > 0 else 0
 
     def score(self, t: Sequence[float], y: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> float:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t, covariates)
-        ss_res = np.sum((np.array(y) - y_pred) ** 2)
-        ss_tot = np.sum((np.array(y) - np.mean(np.array(y))) ** 2)
+        ss_res = B.sum((B.array(y) - y_pred) ** 2)
+        ss_tot = B.sum((B.array(y) - B.mean(B.array(y))) ** 2)
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
     @property
