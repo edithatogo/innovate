@@ -101,7 +101,13 @@ The library will be built around a modular, backend-agnostic architecture. It wi
 4.  **Community Extensions & Plugin API**:
     *   Define a plugin interface to allow researchers to contribute new models, fitters, and visualizations.
 5.  **Organizational Learning & Ecosystem Dynamics**:
-    *   Implement models for knowledge accumulation, absorptive capacity, and co-evolutionary dynamics.
+    *   Implement `innovate.organizational_capability` module with `KnowledgeAccumulation` and `AbsorptiveCapacity` models.
+    *   Implement `innovate.ecosystems` module with `CoEvolution` and `PlatformMultiSidedGrowth` models.
+6.  **Advanced Forecasting & Policy Analysis**:
+    *   Implement `innovate.forecasting_utilities` module with `EnsembleForecaster` and `GrowthModelSelector`.
+    *   Implement `innovate.policy_tools` module with `PolicyInterventionSimulator` and `PunctuatedEquilibrium` models.
+7.  **Product Adoption**:
+    *   Implement `innovate.product_adoption` module with `ChurnRetention` and `AttributeBasedChoice` models.
 
 ---
 This roadmap provides a clear path forward, balancing the implementation of core, requested features with a vision for a sophisticated and versatile modeling tool.

@@ -15,7 +15,7 @@ for i in range(100):
 model_intervention = InnovationModel(num_agents, width, height)
 # Vaccinate 50% of the population
 for agent in model_intervention.agents:
-    if agent.model.random.random() < 0.5:
+    if agent.random.random() < 0.5:
         agent.adopted = True
 for i in range(100):
     model_intervention.step()
