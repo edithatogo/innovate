@@ -9,6 +9,8 @@ class MarketShareAttraction(CompetitiveInteraction):
 
     def compute_interaction_rates(self, **params):
         """
+        Calculates the instantaneous interaction rates.
+
         This method is not implemented because the market share attraction model does not use instantaneous interaction rates.
         """
         # This model is not based on differential equations, so this method is not applicable.
@@ -16,6 +18,8 @@ class MarketShareAttraction(CompetitiveInteraction):
 
     def predict_states(self, time_points, **params):
         """
+        Predicts the states of the competing entities over time.
+
         Predicts the market share distribution of competing entities based on their relative attractiveness.
         
         Parameters:
@@ -45,6 +49,8 @@ class MarketShareAttraction(CompetitiveInteraction):
 
     def get_parameters_schema(self):
         """
+        Returns the schema for the model's parameters.
+
         Return a schema describing the expected parameters for the market share attraction model.
         
         Returns:

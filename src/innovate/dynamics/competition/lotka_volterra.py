@@ -8,6 +8,11 @@ class LotkaVolterraCompetition(CompetitiveInteraction):
 
     def compute_interaction_rates(self, **params):
         """
+        Calculates the instantaneous interaction rates.
+
+        Equations:
+        dN1/dt = r1 * N1 * (1 - (N1 + alpha12 * N2) / K1)
+        dN2/dt = r2 * N2 * (1 - (N2 + alpha21 * N1) / K2)
         Compute the instantaneous rates of change for two competing species using the Lotka-Volterra competition model.
         
         Parameters:
@@ -32,6 +37,8 @@ class LotkaVolterraCompetition(CompetitiveInteraction):
 
     def predict_states(self, time_points, **params):
         """
+        Predicts the states of the competing entities over time.
+        
         Predicts the population trajectories of two competing species over specified time points using the Lotka-Volterra competition model.
         
         Parameters:
@@ -58,6 +65,8 @@ class LotkaVolterraCompetition(CompetitiveInteraction):
 
     def get_parameters_schema(self):
         """
+        Returns the schema for the model's parameters.
+
         Return a dictionary describing the schema for all model parameters, including their types, default values, and descriptions for the Lotka-Volterra competition model.
         """
         return {

@@ -9,6 +9,12 @@ class HypeCycleBehavior(SystemBehavior):
 
     def compute_behavior_rates(self, **params):
         """
+        Calculates the instantaneous behavior rates.
+
+        Equations:
+        dE/dt = alpha1 * Innovation_Trigger + alpha2 * M * E - alpha3 * E + alpha4 * (E - M) * E
+        dM/dt = beta1 * R&D_Investment(E) + beta2 * M - beta3 * M
+
         Compute the instantaneous rates of change for expectation and maturity stocks based on model parameters.
         
         Calculates the derivatives dE/dt and dM/dt using coupled differential equations, incorporating effects from innovation triggers, interaction coefficients, and R&D investment as a function of expectation.
@@ -42,6 +48,8 @@ class HypeCycleBehavior(SystemBehavior):
 
     def predict_states(self, time_points, **params):
         """
+        Predicts the states of the system over time.
+
         Simulate the evolution of expectation and maturity states over specified time points.
         
         Parameters:
@@ -68,6 +76,8 @@ class HypeCycleBehavior(SystemBehavior):
 
     def get_parameters_schema(self):
         """
+        Returns the schema for the model's parameters.
+
         Return a dictionary schema describing all model parameters, including their types and default values.
         
         Returns:

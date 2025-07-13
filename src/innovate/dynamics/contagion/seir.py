@@ -9,6 +9,14 @@ class SEIRModel(ContagionSpread):
 
     def compute_spread_rate(self, **params):
         """
+        Calculates the instantaneous spread rate.
+
+        Equations:
+        dS/dt = -beta * S * I
+        dE/dt = beta * S * I - alpha * E
+        dI/dt = alpha * E - gamma * I
+        dR/dt = gamma * I
+
         Compute the instantaneous rates of change for each SEIR compartment based on current state values and model parameters.
         
         Parameters:
@@ -37,6 +45,8 @@ class SEIRModel(ContagionSpread):
 
     def predict_states(self, time_points, **params):
         """
+        Predicts the states of the population over time.
+
         Simulates the SEIR model over specified time points and returns the predicted population states.
         
         Parameters:
@@ -65,6 +75,8 @@ class SEIRModel(ContagionSpread):
 
     def get_parameters_schema(self):
         """
+        Returns the schema for the model's parameters.
+
         Return a dictionary describing the schema for SEIR model parameters, including types, default values, and descriptions for each parameter.
         
         Returns:

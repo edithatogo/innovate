@@ -15,6 +15,10 @@ class DualInfluenceGrowth(GrowthCurve):
 
     def compute_growth_rate(self, current_adopters, total_potential, **params):
         """
+        Calculates the instantaneous growth rate.
+
+        Equation: dN/dt = (p + q * (N/M)) * (M - N)
+
         Compute the instantaneous growth rate of adopters based on the Bass diffusion model.
         
         The growth rate is calculated as dN/dt = (p + q * (N/M)) * (M - N), where:
@@ -38,6 +42,8 @@ class DualInfluenceGrowth(GrowthCurve):
 
     def predict_cumulative(self, time_points, initial_adopters, total_potential, **params):
         """
+        Predicts cumulative adopters over time.
+
         Predicts the cumulative number of adopters at specified time points using the Bass diffusion model.
         
         Parameters:
@@ -67,6 +73,8 @@ class DualInfluenceGrowth(GrowthCurve):
 
     def get_parameters_schema(self):
         """
+        Returns the schema for the model's parameters.
+
         Return a schema describing the model parameters for innovation and imitation coefficients.
         
         Returns:

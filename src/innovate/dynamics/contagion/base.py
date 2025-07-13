@@ -8,6 +8,7 @@ class ContagionSpread(ABC):
 
     @abstractmethod
     def compute_spread_rate(self, **params):
+        """Calculates the instantaneous spread rate."""
         """
         Calculate the instantaneous rate at which contagion spreads based on provided model parameters.
         
@@ -21,6 +22,7 @@ class ContagionSpread(ABC):
 
     @abstractmethod
     def predict_states(self, time_points, **params):
+        """Predicts the states of the population over time."""
         """
         Predict the states of the population at specified time points using the given model parameters.
         
@@ -35,7 +37,8 @@ class ContagionSpread(ABC):
 
     @abstractmethod
     def get_parameters_schema(self):
-        """
+        """Returns the schema for the model's parameters.
+        
         Return the schema describing the parameters required by the contagion spread model.
         
         Returns:

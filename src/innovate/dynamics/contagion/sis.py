@@ -9,6 +9,12 @@ class SISModel(ContagionSpread):
 
     def compute_spread_rate(self, **params):
         """
+        Calculates the instantaneous spread rate.
+
+        Equations:
+        dS/dt = -beta * S * I + gamma * I
+        dI/dt = beta * S * I - gamma * I
+
         Compute the instantaneous rates of change for susceptible and infectious populations in the SIS model.
         
         Parameters:
@@ -31,6 +37,8 @@ class SISModel(ContagionSpread):
 
     def predict_states(self, time_points, **params):
         """
+        Predicts the states of the population over time.
+
         Simulate and return the evolution of susceptible and infectious populations over specified time points using the SIS model.
         
         Parameters:
@@ -59,6 +67,8 @@ class SISModel(ContagionSpread):
 
     def get_parameters_schema(self):
         """
+        Returns the schema for the model's parameters.
+
         Return a dictionary describing the schema for the SIS model parameters, including types, default values, and descriptions.
         """
         return {

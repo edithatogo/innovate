@@ -14,6 +14,10 @@ class SymmetricGrowth(GrowthCurve):
 
     def compute_growth_rate(self, current_adopters, total_potential, **params):
         """
+        Calculates the instantaneous growth rate.
+
+        Equation: dN/dt = r * N * (1 - N/K)
+
         Calculate the instantaneous growth rate for symmetric (logistic) growth.
         
         Parameters:
@@ -30,6 +34,8 @@ class SymmetricGrowth(GrowthCurve):
 
     def predict_cumulative(self, time_points, initial_adopters, total_potential, **params):
         """
+        Predicts cumulative adopters over time.
+
         Predicts the cumulative number of adopters at specified time points using the logistic growth model.
         
         Parameters:
@@ -58,6 +64,8 @@ class SymmetricGrowth(GrowthCurve):
 
     def get_parameters_schema(self):
         """
+        Returns the schema for the model's parameters.
+
         Return a dictionary describing the schema for the model's parameters, including type, default value, and description for each parameter.
         """
         return {

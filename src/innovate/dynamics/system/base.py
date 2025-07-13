@@ -9,6 +9,8 @@ class SystemBehavior(ABC):
     @abstractmethod
     def compute_behavior_rates(self, **params):
         """
+        Calculates the instantaneous behavior rates.
+
         Calculate the instantaneous rates of system behavior based on provided parameters.
         
         Parameters:
@@ -22,6 +24,8 @@ class SystemBehavior(ABC):
     @abstractmethod
     def predict_states(self, time_points, **params):
         """
+        Predicts the states of the system over time.
+
         Predict the system's states at specified time points using provided parameters.
         
         Parameters:
@@ -36,6 +40,8 @@ class SystemBehavior(ABC):
     @abstractmethod
     def get_parameters_schema(self):
         """
+        Returns the schema for the model's parameters.
+        
         Return the schema describing the parameters required by the model.
         
         Returns:

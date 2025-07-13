@@ -9,6 +9,13 @@ class SIRModel(ContagionSpread):
 
     def compute_spread_rate(self, **params):
         """
+        Calculates the instantaneous spread rate.
+
+        Equations:
+        dS/dt = -beta * S * I
+        dI/dt = beta * S * I - gamma * I
+        dR/dt = gamma * I
+
         Compute the instantaneous rates of change for susceptible, infectious, and recovered populations using the SIR model.
         
         Parameters:
@@ -32,6 +39,8 @@ class SIRModel(ContagionSpread):
 
     def predict_states(self, time_points, **params):
         """
+        Predicts the states of the population over time.
+
         Simulate the evolution of susceptible, infectious, and recovered populations over specified time points using the SIR model.
         
         Parameters:
@@ -60,6 +69,8 @@ class SIRModel(ContagionSpread):
 
     def get_parameters_schema(self):
         """
+        Returns the schema for the model's parameters.
+
         Return a dictionary describing the parameter schema for the SIR model, including types, default values, and descriptions for each parameter.
         """
         return {

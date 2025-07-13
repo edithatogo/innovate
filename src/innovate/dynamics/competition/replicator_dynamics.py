@@ -8,6 +8,10 @@ class ReplicatorDynamics(CompetitiveInteraction):
 
     def compute_interaction_rates(self, **params):
         """
+        Calculates the instantaneous interaction rates.
+
+        Equation: dxi/dt = xi * (Ui(x) - U_bar(x))
+
         Compute the instantaneous rate of change of strategy proportions using the replicator dynamics equation.
         
         Parameters:
@@ -28,6 +32,8 @@ class ReplicatorDynamics(CompetitiveInteraction):
 
     def predict_states(self, time_points, **params):
         """
+        Predicts the states of the competing entities over time.
+
         Predicts the evolution of strategy proportions over specified time points using replicator dynamics.
         
         Parameters:
@@ -59,6 +65,8 @@ class ReplicatorDynamics(CompetitiveInteraction):
 
     def get_parameters_schema(self):
         """
+        Returns the schema for the model's parameters.
+
         Return a dictionary describing the expected parameters for the replicator dynamics model, including initial strategy proportions and the payoff matrix.
         """
         return {

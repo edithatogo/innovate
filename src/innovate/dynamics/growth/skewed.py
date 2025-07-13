@@ -61,8 +61,14 @@ class SkewedGrowth(GrowthCurve):
 
     def predict_cumulative(self, time_points, initial_adopters, total_potential, **params):
         """
-        Predict the cumulative number of adopters at specified time points using the Gompertz growth model.
+        Predicts cumulative adopters over time.
+        """
+        Equation: N(t) = K * exp(-b * exp(-c*t))
+
+    def predict_cumulative(self, time_points, initial_adopters, total_potential, **params):
         
+        Predict the cumulative number of adopters at specified time points using the Gompertz growth model.
+         """
         Parameters:
             time_points: Sequence of time values at which to predict cumulative adoption.
             initial_adopters: Initial number of adopters (not used in the Gompertz calculation but included for interface consistency).
@@ -82,10 +88,14 @@ class SkewedGrowth(GrowthCurve):
 
     def get_parameters_schema(self):
         """
+
+        Returns the schema for the model's parameters.
+
         Return a dictionary describing the schema for the Gompertz model parameters `shape_b` and `shape_c`.
         
         Returns:
             dict: Parameter schema including type, default value, and description for each model parameter.
+
         """
         return {
             "shape_b": {

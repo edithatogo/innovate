@@ -9,6 +9,8 @@ class GrowthCurve(ABC):
     @abstractmethod
     def compute_growth_rate(self, current_adopters, total_potential, **params):
         """
+        Calculates the instantaneous growth rate.
+
         Calculate the instantaneous growth rate based on the current number of adopters, total potential adopters, and additional model parameters.
         
         Parameters:
@@ -24,6 +26,8 @@ class GrowthCurve(ABC):
     @abstractmethod
     def predict_cumulative(self, time_points, initial_adopters, total_potential, **params):
         """
+        Predicts cumulative adopters over time.
+
         Predict the cumulative number of adopters at specified time points.
         
         Parameters:
@@ -39,7 +43,10 @@ class GrowthCurve(ABC):
 
     @abstractmethod
     def get_parameters_schema(self):
+
         """
+        Returns the schema for the model's parameters.
+
         Return the schema describing the parameters required by the growth curve model.
         
         Returns:
