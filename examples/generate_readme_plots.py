@@ -153,7 +153,7 @@ t_fisher_pry = np.linspace(-20, 20, 100)
 y_fisher_pry = fisher_pry_model.predict(t_fisher_pry)
 
 plt.figure(figsize=(8, 5))
-plt.plot(t_fisher_pry, y_fisher_pry, label=f'alpha=0.1, t0=0')
+plt.plot(t_fisher_pry, y_fisher_pry, label=f'alpha=0.1, beta=0.2')
 plt.title("Fisher-Pry Substitution Model")
 plt.xlabel("Time")
 plt.ylabel("Market Share of New Technology")
