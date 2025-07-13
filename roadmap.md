@@ -37,7 +37,17 @@ The library will be built around a modular, backend-agnostic architecture. It wi
     *   Add tools for model comparison (AIC, BIC).
     *   Implement robust residual analysis (e.g., plotting autocorrelation) to diagnose model misspecification.
 
-## Phase 4: Advanced Diffusion-Competition Models
+## Phase 4: Functional Core & System Dynamics
+
+**Goal**: Refactor the core models to use functional names and introduce a system dynamics module.
+1.  **Functional Naming**:
+    *   Refactor the core diffusion models (`Bass`, `Gompertz`, `Logistic`) to use functional names (`DualInfluenceGrowth`, `SkewedGrowth`, `SymmetricGrowth`).
+2.  **System Dynamics Module (`innovate.dynamics`)**:
+    *   Create a new `innovate.dynamics` module to house the core dynamic behaviors.
+    *   Implement `GrowthCurve`, `ContagionSpread`, `CompetitiveInteraction`, and `SystemBehavior` abstract base classes.
+    *   Implement concrete classes for the core growth models, contagion models (SIR, SIS, SEIR), and competition models (Lotka-Volterra, MarketShareAttraction, ReplicatorDynamics).
+
+## Phase 5: Advanced Diffusion-Competition Models
 
 **Goal**: Move beyond simple competition to model more complex market dynamics.
 1.  **Generational Substitution Models**:
@@ -45,9 +55,9 @@ The library will be built around a modular, backend-agnostic architecture. It wi
 2.  **Generalized Competition Framework**:
     *   Create a generic `MultiProductDiffusionModel` that can handle an arbitrary number of competing products with a flexible interaction matrix (`Q`). This will serve as a foundation for many competition scenarios.
 3.  **Covariate-Driven Models**:
-    *   Enhance the core models to allow parameters (`p`, `q`, `m`) to be functions of external variables (e.g., price, advertising spend, policy changes).
+    *   Enhance the core models to allow parameters to be functions of external variables (e.g., price, advertising spend, policy changes).
 
-## Phase 5: High-Performance Backend & Network Science
+## Phase 6: High-Performance Backend & Network Science
 
 **Goal**: Enable large-scale simulation and more complex network structures.
 1.  **JAX/XLA Backend**:
@@ -58,18 +68,18 @@ The library will be built around a modular, backend-agnostic architecture. It wi
     *   Integrate more deeply with libraries like `NDlib` (Network Diffusion Library).
     *   Implement spatial diffusion models that account for geographic distance (gravity models).
 
-## Phase 6: Heterogeneity & Segmentation
+## Phase 7: Heterogeneity & Segmentation
 
 **Goal**: Model adoption behavior across different population segments.
 1.  **Latent-Class & Hierarchical Models**:
-    *   Implement finite-mixture models (e.g., `MixtureBassModel`) to automatically infer adopter segments.
+    *   Implement finite-mixture models to automatically infer adopter segments.
     *   Develop Bayesian hierarchical models to pool information across segments or jurisdictions.
 2.  **Covariate-Driven Parameterization**:
-    *   Allow model parameters (`p`, `q`, `m`) to be functions of covariates (e.g., GDP per capita, public awareness indices) via GLMs or GAMs.
+    *   Allow model parameters to be functions of covariates (e.g., GDP per capita, public awareness indices) via GLMs or GAMs.
 3.  **Time-Varying Parameters**:
-    *   Incorporate piecewise or smoothly evolving parameters (`p(t)`, `q(t)`) to capture policy shocks or media campaigns.
+    *   Incorporate piecewise or smoothly evolving parameters to capture policy shocks or media campaigns.
 
-## Phase 7: Causal & Impact Assessment
+## Phase 8: Causal & Impact Assessment
 
 **Goal**: Bridge the gap between simulation and formal causal impact assessment.
 1.  **Event History & Duration Models**:
@@ -79,7 +89,7 @@ The library will be built around a modular, backend-agnostic architecture. It wi
 3.  **Integration with Causal Inference Libraries**:
     *   Provide interfaces to libraries like `CausalImpact`, `EconML`, and `DoWhy` to facilitate the use of diffusion models in causal inference pipelines.
 
-## Phase 8: Ecosystem & Domain Plugins
+## Phase 9: Ecosystem & Domain Plugins
 
 **Goal**: Make the library a central tool for innovation diffusion research.
 1.  **Data Connectors**:
@@ -90,6 +100,8 @@ The library will be built around a modular, backend-agnostic architecture. It wi
     *   Create templates for interactive dashboards using `Panel` or `Streamlit`.
 4.  **Community Extensions & Plugin API**:
     *   Define a plugin interface to allow researchers to contribute new models, fitters, and visualizations.
+5.  **Organizational Learning & Ecosystem Dynamics**:
+    *   Implement models for knowledge accumulation, absorptive capacity, and co-evolutionary dynamics.
 
 ---
 This roadmap provides a clear path forward, balancing the implementation of core, requested features with a vision for a sophisticated and versatile modeling tool.

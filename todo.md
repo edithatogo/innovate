@@ -27,7 +27,15 @@ This file tracks the concrete tasks required to execute the project roadmap.
     -   [x] Create a comprehensive tutorial for the `BayesianFitter`.
     -   [x] Write a guide on handling seasonal data using the new preprocessing tools.
 
-## Phase 4: Advanced Diffusion-Competition Models (Future)
+## Phase 4: Functional Core & System Dynamics (Future)
+-   [ ] **Functional Naming**
+    -   [ ] Refactor the core diffusion models (`Bass`, `Gompertz`, `Logistic`) to use functional names (`DualInfluenceGrowth`, `SkewedGrowth`, `SymmetricGrowth`).
+-   [ ] **System Dynamics Module (`innovate.dynamics`)**
+    -   [ ] Create a new `innovate.dynamics` module to house the core dynamic behaviors.
+    -   [ ] Implement `GrowthCurve`, `ContagionSpread`, `CompetitiveInteraction`, and `SystemBehavior` abstract base classes.
+    -   [ ] Implement concrete classes for the core growth models, contagion models (SIR, SIS, SEIR), and competition models (Lotka-Volterra, MarketShareAttraction, ReplicatorDynamics).
+
+## Phase 5: Advanced Diffusion-Competition Models (Future)
 -   [x] **Implement the Norton-Bass model for generational substitution.**
     -   [x] Create the `NortonBassModel` class structure in `src/innovate/substitute/norton_bass.py`.
     -   [x] Implement the `differential_equation` method.
@@ -44,7 +52,7 @@ This file tracks the concrete tasks required to execute the project roadmap.
     -   [ ] NortonBassModel
     -   [ ] MultiProductDiffusionModel
 
-## Phase 5: High-Performance Backend & Network Science (Future)
+## Phase 6: High-Performance Backend & Network Science (Future)
 -   [ ] **JAX/XLA Backend**
     -   [ ] Implement a full `JaxBackend` using `JAX` and high-performance ODE solvers like `Diffrax`.
     -   [ ] Ensure the backend can be switched easily by the user.
@@ -53,14 +61,14 @@ This file tracks the concrete tasks required to execute the project roadmap.
     -   [ ] Integrate more deeply with libraries like `NDlib` (Network Diffusion Library).
     -   [ ] Implement spatial diffusion models that account for geographic distance (gravity models).
 
-## Phase 6: Heterogeneity & Segmentation (Future)
+## Phase 7: Heterogeneity & Segmentation (Future)
 -   [ ] **Latent-Class & Hierarchical Models**
-    -   [ ] Implement finite-mixture models (e.g., `MixtureBassModel`) to automatically infer adopter segments.
+    -   [ ] Implement finite-mixture models to automatically infer adopter segments.
     -   [ ] Develop Bayesian hierarchical models to pool information across segments or jurisdictions.
 -   [ ] **Covariate-Driven Parameterization**
-    -   [ ] Allow model parameters (`p`, `q`, `m`) to be functions of covariates (e.g., GDP per capita, public awareness indices) via GLMs or GAMs.
+    -   [ ] Allow model parameters to be functions of covariates (e.g., GDP per capita, public awareness indices) via GLMs or GAMs.
 -   [ ] **Time-Varying Parameters**
-    -   [ ] Incorporate piecewise or smoothly evolving parameters (`p(t)`, `q(t)`) to capture policy shocks or media campaigns.
+    -   [ ] Incorporate piecewise or smoothly evolving parameters to capture policy shocks or media campaigns.
 
 ## Phase 7: Causal & Impact Assessment (Future)
 -   [ ] **Event History & Duration Models**
@@ -69,6 +77,7 @@ This file tracks the concrete tasks required to execute the project roadmap.
     -   [ ] Develop tools to simulate "what-if" scenarios and compare them to baseline forecasts, facilitating counterfactual reasoning.
 -   [ ] **Integration with Causal Inference Libraries**
     -   [ ] Provide interfaces to libraries like `CausalImpact`, `EconML`, and `DoWhy` to facilitate the use of diffusion models in causal inference pipelines.
+
 
 ## Phase 8: Ecosystem & Domain Plugins (Future)
 -   [ ] **Data Connectors**
@@ -79,4 +88,5 @@ This file tracks the concrete tasks required to execute the project roadmap.
     -   [ ] Create templates for interactive dashboards using `Panel` or `Streamlit`.
 -   [ ] **Community Extensions & Plugin API**
     -   [ ] Define a plugin interface to allow researchers to contribute new models, fitters, and visualizations.
-
+-   [ ] **Organizational Learning & Ecosystem Dynamics**
+    -   [ ] Implement models for knowledge accumulation, absorptive capacity, and co-evolutionary dynamics.
