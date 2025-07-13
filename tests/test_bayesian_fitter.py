@@ -22,3 +22,25 @@ def test_bayesian_fitter(synthetic_logistic_data):
     assert len(model.params_) == 3 # L, k, x0
     # Allow a larger tolerance for Bayesian fitting
     assert np.allclose(list(model.params_.values()), [1.0, 1.5, 10.0], atol=0.5)
+
+    # Test get_parameter_estimates
+    estimates = fitter.get_parameter_estimates()
+    assert isinstance(estimates, dict)
+    assert len(estimates) == 3
+    assert "L" in estimates
+    assert "k" in estimates
+    assert "x0" in estimates
+
+    # Test get_confidence_intervals
+    intervals = fitter.get_confidence_intervals()
+    assert isinstance(intervals, dict)
+    assert len(intervals) == 3
+    assert "L" in intervals
+    assert "k" in intervals
+    assert "x0" in intervals
+    assert isinstance(intervals["L"], tuple)
+    assert len(intervals["L"]) == 2
+
+    # Test get_summary
+    summary = fitter.get_summary()
+    assert summary is not None
