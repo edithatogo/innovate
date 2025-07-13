@@ -66,8 +66,10 @@ class LogisticModel(DiffusionModel):
 
     def differential_equation(self, t, y, params, covariates, t_eval):
         """
-        Defines the time derivative for the logistic growth model, incorporating covariate effects by adjusting parameters at each time point.
+        Defines the logistic differential equation with optional covariate effects.
         
+        At each time point `t`, computes the rate of change for the logistic model, adjusting the parameters `L`, `k`, and `x0` by the influence of covariates if provided. Returns zero if the carrying capacity parameter `L_t` is not positive.
+
         Parameters:
             t (float): Current time.
             y (array-like): Current value(s) of the dependent variable.
@@ -102,6 +104,7 @@ class LogisticModel(DiffusionModel):
 
     def score(self, t: Sequence[float], y: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> float:
         """
+
         Compute the coefficient of determination (R²) between observed values and model predictions.
         
         Parameters:
