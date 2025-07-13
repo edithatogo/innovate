@@ -1,14 +1,18 @@
 from innovate.base.base import DiffusionModel, Self
-from innovate.backend import current_backend as B
+from innovate.dynamics.growth.skewed import SkewedGrowth
 from typing import Sequence, Dict
 import numpy as np
 
 class GompertzModel(DiffusionModel):
-    """Implementation of the Gompertz Diffusion Model."""
+    """
+    Implementation of the Gompertz Diffusion Model.
+    This is a wrapper around the SkewedGrowth dynamics model.
+    """
 
     def __init__(self, covariates: Sequence[str] = None):
         self._params: Dict[str, float] = {}
         self.covariates = covariates if covariates else []
+        self.growth_model = SkewedGrowth()
 
     @property
     def param_names(self) -> Sequence[str]:
@@ -42,31 +46,27 @@ class GompertzModel(DiffusionModel):
         return bounds
 
     def predict(self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> Sequence[float]:
-        from scipy.integrate import solve_ivp
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         
-        t_arr = B.array(t)
-        
-        y0 = np.zeros(1)
-        y0[0] = 1e-6
-
+        # This is a simplification. The predict method should use the growth model's
+        # predict_cumulative method, which will require some refactoring of how parameters
+        # are handled. For now, we will leave the old implementation.
+        from scipy.integrate import solve_ivp
         params = [self._params[name] for name in self.param_names]
-        
-        fun = lambda t, y: self.differential_equation(t, y, params, covariates, t_arr)
-
+        fun = lambda t, y: self.differential_equation(t, y, params, covariates, t)
+        y0 = [1e-6]
         sol = solve_ivp(
             fun,
-            (t_arr[0], t_arr[-1]),
+            (t[0], t[-1]),
             y0,
-            t_eval=t_arr,
+            t_eval=t,
             method='LSODA',
         )
         return sol.y.flatten()
 
     def differential_equation(self, t, y, params, covariates, t_eval):
         """The differential equation for the Gompertz model."""
-        
         a_base = params[0]
         b_base = params[1]
         c_base = params[2]
@@ -78,7 +78,6 @@ class GompertzModel(DiffusionModel):
         if covariates:
             param_idx = 3
             for cov_name, cov_values in covariates.items():
-                # Interpolate covariate values at time t
                 cov_val_t = np.interp(t, t_eval, cov_values)
                 
                 a_t += params[param_idx] * cov_val_t
@@ -86,7 +85,7 @@ class GompertzModel(DiffusionModel):
                 c_t += params[param_idx+2] * cov_val_t
                 param_idx += 3
 
-        return c_t * y[0] * (B.log(a_t) - B.log(y[0])) if a_t > 0 and y[0] > 0 else 0
+        return self.growth_model.compute_growth_rate(y, a_t, t=t, shape_b=b_t, shape_c=c_t)
 
     def score(self, t: Sequence[float], y: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> float:
         if not self._params:
