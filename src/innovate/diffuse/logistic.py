@@ -65,7 +65,11 @@ class LogisticModel(DiffusionModel):
         return sol.y.flatten()
 
     def differential_equation(self, t, y, params, covariates, t_eval):
-        """The differential equation for the Logistic model."""
+        """
+        Defines the logistic differential equation with optional covariate effects.
+        
+        At each time point `t`, computes the rate of change for the logistic model, adjusting the parameters `L`, `k`, and `x0` by the influence of covariates if provided. Returns zero if the carrying capacity parameter `L_t` is not positive.
+        """
         
         L_base = params[0]
         k_base = params[1]
@@ -89,6 +93,17 @@ class LogisticModel(DiffusionModel):
         return B.switch(B.gt(L_t, 0), k_t * y[0] * (1 - y[0] / L_t), 0)
 
     def score(self, t: Sequence[float], y: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> float:
+        """
+        Compute the coefficient of determination (R²) between observed and predicted values for the logistic model.
+        
+        Parameters:
+            t (Sequence[float]): Time points at which observations were made.
+            y (Sequence[float]): Observed values corresponding to time points t.
+            covariates (Dict[str, Sequence[float]], optional): Covariate values for each time point.
+        
+        Returns:
+            float: The R² score indicating the proportion of variance explained by the model predictions.
+        """
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t, covariates)
