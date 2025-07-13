@@ -55,3 +55,21 @@ def plot_residuals(
 
     plt.tight_layout(rect=[0, 0, 1, 0.96])
     plt.show()
+
+def plot_acf_only(data: np.ndarray, title: str = "Autocorrelation Function", lags: int = 30):
+    """
+    Plots the Autocorrelation Function (ACF) of a time series.
+
+    Parameters
+    ----------
+    data : np.ndarray
+        The time series data.
+    title : str, optional
+        The title for the plot, by default "Autocorrelation Function".
+    lags : int, optional
+        The number of lags to show in the ACF plot, by default 30.
+    """
+    fig, ax = plt.subplots(1, 1, figsize=(10, 4))
+    plot_acf(data, ax=ax, lags=lags)
+    ax.set_title(title)
+    plt.show()
