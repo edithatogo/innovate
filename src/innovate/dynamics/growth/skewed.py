@@ -15,23 +15,18 @@ class SkewedGrowth(GrowthCurve):
 
     def compute_growth_rate(self, current_adopters, total_potential, **params):
         """
-        Calculates the instantaneous growth rate.
+        Calculates the instantaneous growth rate using the Gompertz differential equation.
+
+        Equation: dN/dt = c * N * (ln(K) - ln(N))
         """
-        # The differential form of the Gompertz model is more complex
-        # and less intuitive than the cumulative form. For simplicity,
-        # we will use the cumulative form to calculate the rate.
-        # This is not ideal, but it is a reasonable approximation.
-        t = params.get("t")
-        if t is None:
-            raise ValueError("SkewedGrowth requires time points to be provided as a parameter.")
+        c = params.get("shape_c", 0.1)
+        K = total_potential
+        N = current_adopters
 
-        y_pred = self.predict_cumulative(t, current_adopters, total_potential, **params)
-
-        # Calculate the rate as the difference between consecutive points
-        rate = B.diff(y_pred) / B.diff(t)
-
-        # Return the last calculated rate for the current time point
-        return rate[-1] if len(rate) > 0 else 0
+        if K <= 0 or N <= 0:
+            return 0
+        
+        return c * N * (B.log(K) - B.log(N))
 
 
     def predict_cumulative(self, time_points, initial_adopters, total_potential, **params):
