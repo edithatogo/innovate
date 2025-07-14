@@ -74,6 +74,7 @@ def main():
     covariates = {"price": np.linspace(10, 5, 100)}
     bass_model_cov = BassModel(covariates=list(covariates.keys()))
     fitter.fit(bass_model_cov, t, np.sin(t), covariates=covariates)
+    y_bass_cov = bass_model_cov.predict(t, covariates=covariates)
 
     # Create the fitters
     scipy_fitter = ScipyFitter()
@@ -86,8 +87,8 @@ def main():
         for backend in ["numpy", "jax"]:
             results.append(run_fit_benchmark(model, t, y, backend, scipy_fitter))
 
-    results.append(run_fit_benchmark(bass_model_cov, t, y_bass, "numpy", scipy_fitter, covariates=covariates))
-    results.append(run_fit_benchmark(bass_model_cov, t, y_bass, "jax", scipy_fitter, covariates=covariates))
+    results.append(run_fit_benchmark(bass_model_cov, t, y_bass_cov, "numpy", scipy_fitter, covariates=covariates))
+    results.append(run_fit_benchmark(bass_model_cov, t, y_bass_cov, "jax", scipy_fitter, covariates=covariates))
 
     # Predict benchmarks
     for model in [bass_model, gompertz_model, logistic_model]:
