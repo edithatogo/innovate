@@ -18,6 +18,8 @@ jobs:
         poetry install --with dev
     - name: Run tests
       run: poetry run pytest
+      env:
+        PYTHONPATH: src
     - name: Run ruff
       run: poetry run ruff check .
     - name: Run black

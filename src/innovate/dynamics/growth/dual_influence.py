@@ -18,6 +18,21 @@ class DualInfluenceGrowth(GrowthCurve):
         Calculates the instantaneous growth rate.
 
         Equation: dN/dt = (p + q * (N/M)) * (M - N)
+
+        Compute the instantaneous growth rate of adopters based on the Bass diffusion model.
+        
+        The growth rate is calculated as dN/dt = (p + q * (N/M)) * (M - N), where:
+        - p: innovation coefficient (external influence)
+        - q: imitation coefficient (internal influence)
+        - N: current number of adopters
+        - M: total potential adopters
+        
+        Parameters:
+        	current_adopters (float): Current number of adopters.
+        	total_potential (float): Total potential number of adopters.
+        
+        Returns:
+        	float: The instantaneous growth rate. Returns 0 if total potential is not positive.
         """
         p = params.get("innovation_coeff", 0.001)
         q = params.get("imitation_coeff", 0.1)
@@ -28,6 +43,16 @@ class DualInfluenceGrowth(GrowthCurve):
     def predict_cumulative(self, time_points, initial_adopters, total_potential, **params):
         """
         Predicts cumulative adopters over time.
+
+        Predicts the cumulative number of adopters at specified time points using the Bass diffusion model.
+        
+        Parameters:
+            time_points (array-like): Sequence of time points at which to predict cumulative adoption.
+            initial_adopters (float): Number of adopters at the initial time point.
+            total_potential (float): Total potential number of adopters.
+        
+        Returns:
+            numpy.ndarray: Flattened array of cumulative adopters at each specified time point.
         """
         from scipy.integrate import solve_ivp
 
@@ -49,6 +74,11 @@ class DualInfluenceGrowth(GrowthCurve):
     def get_parameters_schema(self):
         """
         Returns the schema for the model's parameters.
+
+        Return a schema describing the model parameters for innovation and imitation coefficients.
+        
+        Returns:
+            dict: A dictionary specifying the type, default value, and description for each model parameter.
         """
         return {
             "innovation_coeff": {
