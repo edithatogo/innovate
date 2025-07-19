@@ -5,12 +5,31 @@ from innovate.diffuse import BassModel, GompertzModel, LogisticModel
 from innovate.fitters import ScipyFitter
 from innovate.backend import use_backend
 
-def run_fit_benchmark(model, t, y, backend, fitter):
+def run_fit_benchmark(model, t, y, backend, fitter, covariates=None):
     """Runs a fit benchmark for a given model, backend, and fitter."""
-    use_backend(backend)
+    try:
+        use_backend(backend)
+    except Exception as e:
+        return {
+            "model": model.__class__.__name__,
+            "backend": backend,
+            "fitter": fitter.__class__.__name__,
+            "task": "fit",
+            "time": None,
+            "error": str(e)
+        }
 
     # Time the fitting process
-    fit_time = timeit.timeit(lambda: fitter.fit(model, t, y), number=10)
+    try:
+        if covariates:
+            fit_time = timeit.timeit(lambda: fitter.fit(model, t, y, covariates=covariates), number=10)
+        else:
+            fit_time = timeit.timeit(lambda: fitter.fit(model, t, y), number=10)
+    except Exception as e:
+        fit_time = None
+        error = str(e)
+    else:
+        error = None
 
     return {
         "model": model.__class__.__name__,
@@ -18,14 +37,18 @@ def run_fit_benchmark(model, t, y, backend, fitter):
         "fitter": fitter.__class__.__name__,
         "task": "fit",
         "time": fit_time,
+        "error": error
     }
 
-def run_predict_benchmark(model, t, backend):
+def run_predict_benchmark(model, t, backend, covariates=None):
     """Runs a predict benchmark for a given model and backend."""
     use_backend(backend)
 
     # Time the prediction process
-    predict_time = timeit.timeit(lambda: model.predict(t), number=100)
+    if covariates:
+        predict_time = timeit.timeit(lambda: model.predict(t, covariates=covariates), number=100)
+    else:
+        predict_time = timeit.timeit(lambda: model.predict(t), number=100)
 
     return {
         "model": model.__class__.__name__,
@@ -35,12 +58,15 @@ def run_predict_benchmark(model, t, backend):
         "time": predict_time,
     }
 
-def run_simulation_benchmark(model, t, backend, n_sims):
+def run_simulation_benchmark(model, t, backend, n_sims, covariates=None):
     """Runs a simulation benchmark for a given model and backend."""
     use_backend(backend)
 
     # Time the simulation process
-    sim_time = timeit.timeit(lambda: [model.predict(t) for _ in range(n_sims)], number=1)
+    if covariates:
+        sim_time = timeit.timeit(lambda: [model.predict(t, covariates=covariates) for _ in range(n_sims)], number=1)
+    else:
+        sim_time = timeit.timeit(lambda: [model.predict(t) for _ in range(n_sims)], number=1)
 
     return {
         "model": model.__class__.__name__,
@@ -99,25 +125,17 @@ def main():
     # Fit benchmarks
     for model, y, covs, _ in models_to_benchmark:
         for backend in backends:
-            # Need to fit the model first before benchmarking prediction/simulation
-            fitter = ScipyFitter()
-            if covs:
-                fitter.fit(model, t, y, covariates=covs)
-            else:
-                fitter.fit(model, t, y)
-            results.append(run_fit_benchmark(model, t, y, backend, scipy_fitter))
+            # Fit the model first before benchmarking
+            local_fitter = ScipyFitter()
+            local_fitter.fit(model, t, y)
+            results.append(run_fit_benchmark(model, t, y, backend, local_fitter, covariates=covs))
 
     # Predict and Simulate benchmarks
     for model, _, covs, _ in models_to_benchmark:
         for backend in backends:
-            if covs:
-                results.append(run_predict_benchmark(model, t, backend, covariates=covs))
-                for n_sims in [10, 100, 1000]:
-                    results.append(run_simulation_benchmark(model, t, backend, n_sims, covariates=covs))
-            else:
-                results.append(run_predict_benchmark(model, t, backend))
-                for n_sims in [10, 100, 1000]:
-                    results.append(run_simulation_benchmark(model, t, backend, n_sims))
+            results.append(run_predict_benchmark(model, t, backend, covariates=covs))
+            for n_sims in [10, 100, 1000]:
+                results.append(run_simulation_benchmark(model, t, backend, n_sims, covariates=covs))
 
     # Print the results
     df = pd.DataFrame(results)

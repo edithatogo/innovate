@@ -34,3 +34,8 @@ addopts = "--import-mode=importlib"
 
 [project.optional-dependencies]
 jax = ["jax", "jaxopt", "diffrax"]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.2"
+ruff = "^0.4.4"
+black = "^24.4.2"
