@@ -28,16 +28,16 @@ class FisherPryModel(DiffusionModel):
         - t0 is estimated as the time at which the market share is closest to 50%.
         - alpha is estimated from a linearization of the logistic function.
         """
-        y_arr = np.array(y)
-        t_arr = np.array(t)
+        y_arr = B.array(y)
+        t_arr = B.array(t)
 
         # Estimate t0 as the time when market share is closest to 0.5
-        t0_guess = t_arr[np.argmin(np.abs(y_arr - 0.5))]
+        t0_guess = t_arr[B.argmin(B.abs(y_arr - 0.5))]
 
         # Linearize the logistic equation: log(y / (1 - y)) = alpha * (t - t0)
         # To avoid division by zero or log of zero, we clip y
-        y_clipped = np.clip(y_arr, 1e-6, 1 - 1e-6)
-        linearized_y = np.log(y_clipped / (1 - y_clipped))
+        y_clipped = B.clip(y_arr, 1e-6, 1 - 1e-6)
+        linearized_y = B.log(y_clipped / (1 - y_clipped))
 
         # Perform a linear regression to find the slope (alpha)
         try:
@@ -54,7 +54,7 @@ class FisherPryModel(DiffusionModel):
 
     def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
         """Returns bounds for the model parameters."""
-        t_min, t_max = np.min(t), np.max(t)
+        t_min, t_max = B.min(t), B.max(t)
         t_range = t_max - t_min
         return {
             "alpha": (0, np.inf),

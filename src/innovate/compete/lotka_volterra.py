@@ -36,25 +36,25 @@ class LotkaVolterraModel(DiffusionModel):
         Provides initial guesses for the model parameters by performing a
         linear regression on the linearized Lotka-Volterra equations.
         """
-        y = np.array(y)
-        t = np.array(t)
-        dt = np.gradient(t)
+        y = B.array(y)
+        t = B.array(t)
+        dt = B.gradient(t)
         
         # Avoid division by zero for y1 and y2
-        y1 = np.clip(y[:, 0], 1e-6, 1)
-        y2 = np.clip(y[:, 1], 1e-6, 1)
+        y1 = B.clip(y[:, 0], 1e-6, 1)
+        y2 = B.clip(y[:, 1], 1e-6, 1)
 
         # Estimate derivatives
-        dy1_dt = np.gradient(y1, dt, edge_order=2)
-        dy2_dt = np.gradient(y2, dt, edge_order=2)
+        dy1_dt = B.gradient(y1, dt, edge_order=2)
+        dy2_dt = B.gradient(y2, dt, edge_order=2)
 
         # Linearize the equations:
         # dy1/dt / y1 = alpha1 - alpha1*y1 - beta1*y2
         # dy2/dt / y2 = alpha2 - alpha2*y2 - beta2*y1
         
         # Prepare for linear regression for tech 1
-        X1 = np.vstack([-y1, -y2]).T
-        Y1 = dy1_dt / y1 - np.mean(-y1) # Centering the response variable
+        X1 = B.vstack([-y1, -y2]).T
+        Y1 = dy1_dt / y1 - B.mean(-y1) # Centering the response variable
         
         try:
             # Fit alpha1 and beta1
@@ -64,8 +64,8 @@ class LotkaVolterraModel(DiffusionModel):
             alpha1_guess, beta1_guess = 0.1, 0.01
 
         # Prepare for linear regression for tech 2
-        X2 = np.vstack([-y2, -y1]).T
-        Y2 = dy2_dt / y2 - np.mean(-y2) # Centering the response variable
+        X2 = B.vstack([-y2, -y1]).T
+        Y2 = dy2_dt / y2 - B.mean(-y2) # Centering the response variable
 
         try:
             # Fit alpha2 and beta2
@@ -175,7 +175,7 @@ class LotkaVolterraModel(DiffusionModel):
         """
         from scipy.optimize import minimize
 
-        y = np.array(y)
+        y = B.array(y)
         if y.ndim != 2 or y.shape[1] != 2:
             raise ValueError("`y` must be a 2D array with two columns.")
 
@@ -184,7 +184,7 @@ class LotkaVolterraModel(DiffusionModel):
         def objective(params, t, y, covariates):
             self.params_ = dict(zip(self.param_names, params))
             y_pred = self.predict(t, y0, covariates)
-            return np.sum((y - y_pred) ** 2)
+            return B.sum((y - y_pred) ** 2)
 
         initial_params = list(self.initial_guesses(t, y).values())
         param_bounds = list(self.bounds(t, y).values())
@@ -228,12 +228,12 @@ class LotkaVolterraModel(DiffusionModel):
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
-        y = np.array(y)
+        y = B.array(y)
         y0 = y[0, :]
         y_pred = self.predict(t, y0, covariates)
 
-        ss_res = np.sum((y - y_pred) ** 2)
-        ss_tot = np.sum((y - np.mean(y, axis=0)) ** 2)
+        ss_res = B.sum((y - y_pred) ** 2)
+        ss_tot = B.sum((y - B.mean(y, axis=0)) ** 2)
         
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
@@ -282,4 +282,4 @@ class LotkaVolterraModel(DiffusionModel):
             dy2_dt = alpha2_t * y2 * (1 - y2) - beta2_t * y1 * y2
             rates.append([dy1_dt, dy2_dt])
 
-        return np.array(rates)
+        return B.array(rates)

@@ -36,6 +36,9 @@ class SkewedGrowth(GrowthCurve):
         K = total_potential
         N = current_adopters
 
+        if N <= 0 or N >= K:
+            return 0.0
+
         if K <= 0 or N <= 0:
             return 0
         

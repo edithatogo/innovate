@@ -1,4 +1,5 @@
 from ..base import DiffusionModel
+from innovate.backend import current_backend as B
 import numpy as np
 from typing import Sequence, Dict
 
@@ -26,7 +27,7 @@ class NortonBassModel(DiffusionModel):
 
     def initial_guesses(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, float]:
         guesses = {}
-        max_y = np.max(y)
+        max_y = B.max(y)
         for i in range(self.n_generations):
             guesses[f"p{i+1}"] = 0.001
             guesses[f"q{i+1}"] = 0.1
@@ -41,7 +42,7 @@ class NortonBassModel(DiffusionModel):
 
     def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
         bounds = {}
-        max_y = np.max(y)
+        max_y = B.max(y)
         for i in range(self.n_generations):
             bounds[f"p{i+1}"] = (1e-6, 0.1)
             bounds[f"q{i+1}"] = (1e-6, 1.0)
@@ -67,7 +68,7 @@ class NortonBassModel(DiffusionModel):
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
-        y0 = np.zeros(self.n_generations)
+        y0 = B.zeros(self.n_generations)
         
         # Set a small initial value for the first generation to kickstart the diffusion
         y0[0] = 1e-6
@@ -94,9 +95,9 @@ class NortonBassModel(DiffusionModel):
         q_base = params[self.n_generations:2*self.n_generations]
         m_base = params[2*self.n_generations:3*self.n_generations]
 
-        p_t = np.array(p_base)
-        q_t = np.array(q_base)
-        m_t = np.array(m_base)
+        p_t = B.array(p_base)
+        q_t = B.array(q_base)
+        m_t = B.array(m_base)
 
         if covariates:
             param_idx = 3 * self.n_generations
@@ -108,15 +109,15 @@ class NortonBassModel(DiffusionModel):
                     m_t[i] += params[param_idx+2] * cov_val_t
                     param_idx += 3
         
-        dydt = np.zeros_like(y)
+        dydt = B.zeros_like(y)
 
         for i in range(self.n_generations):
             # Cannibalization term
             cannibalization = 0
             if i < self.n_generations - 1:
                 # Ensure y is treated as a 1D array for summation
-                y_flat = np.ravel(y)
-                cannibalization = np.sum(y_flat[i+1:])
+                y_flat = B.ravel(y)
+                cannibalization = B.sum(y_flat[i+1:])
 
             # Bass diffusion equation for each generation
             dydt[i] = (p_t[i] + q_t[i] * y[i] / m_t[i]) * (m_t[i] - y[i] - cannibalization) if m_t[i] > 0 else 0
@@ -133,8 +134,8 @@ class NortonBassModel(DiffusionModel):
         if len(y.shape) == 1:
             y = y.reshape(-1, 1)
 
-        ss_res = np.sum((y - y_pred) ** 2)
-        ss_tot = np.sum((y - np.mean(y, axis=0)) ** 2)
+        ss_res = B.sum((y - y_pred) ** 2)
+        ss_tot = B.sum((y - B.mean(y, axis=0)) ** 2)
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
     def predict_adoption_rate(self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> Sequence[float]:
@@ -144,5 +145,5 @@ class NortonBassModel(DiffusionModel):
         y_pred = self.predict(t, covariates)
         params = [self._params[name] for name in self.param_names]
         
-        rates = np.array([self.differential_equation(ti, yi, params, covariates, t) for ti, yi in zip(t, y_pred)])
+        rates = B.array([self.differential_equation(ti, yi, params, covariates, t) for ti, yi in zip(t, y_pred)])
         return rates

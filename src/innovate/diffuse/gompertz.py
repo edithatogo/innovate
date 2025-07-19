@@ -176,3 +176,7 @@ class GompertzModel(DiffusionModel):
         
         rates = np.array([self.differential_equation(ti, yi, params, covariates, t) for ti, yi in zip(t, y_pred)])
         return rates
+
+    def cumulative_adoption(self, t: Sequence[float], *params) -> Sequence[float]:
+        self.params_ = dict(zip(self.param_names, params))
+        return self.predict(t)

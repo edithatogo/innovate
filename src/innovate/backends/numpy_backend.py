@@ -53,3 +53,48 @@ class NumPyBackend:
         def mapped_f(params, t_batched):
             return np.array([f(p, t) for p, t in zip(params, t_batched)])
         return mapped_f
+    
+    def zeros_like(self, x):
+        return np.zeros_like(x)
+
+    def ravel(self, x):
+        return np.ravel(x)
+
+    def argmin(self, x):
+        return np.argmin(x)
+
+    def abs(self, x):
+        return np.abs(x)
+
+    def gradient(self, x, *args, **kwargs):
+        return np.gradient(x, *args, **kwargs)
+
+    def clip(self, x, a_min, a_max):
+        return np.clip(x, a_min, a_max)
+
+    def min(self, x):
+        return np.min(x)
+    
+    def copy(self, x):
+        return np.copy(x)
+
+    def vstack(self, x):
+        return np.vstack(x)
+
+    def polyfit(self, x, y, deg):
+        return np.polyfit(x, y, deg)
+
+    def lstsq(self, x, y, rcond):
+        return np.linalg.lstsq(x, y, rcond=rcond)
+
+    def nanmean(self, x):
+        return np.nanmean(x)
+
+    def isfinite(self, x):
+        return np.isfinite(x)
+
+    def errstate(self, **kwargs):
+        return np.errstate(**kwargs)
+
+    def sqrt(self, x):
+        return np.sqrt(x)
