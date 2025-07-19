@@ -6,6 +6,8 @@ from innovate.diffuse.gompertz import GompertzModel
 from innovate.diffuse.logistic import LogisticModel
 from innovate.compete.competition import MultiProductDiffusionModel
 from innovate.fitters.scipy_fitter import ScipyFitter
+from innovate.models.mixture import MixtureModel
+from innovate.models.hierarchical import HierarchicalModel
 
 # Fixture for common test data
 @pytest.fixture

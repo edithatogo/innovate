@@ -56,41 +56,68 @@ def main():
     # Create some synthetic data
     t = np.linspace(0, 50, 100)
 
-    # Simple diffusion models
-    bass_model = BassModel()
-    gompertz_model = GompertzModel()
-    logistic_model = LogisticModel()
+    # --- Bass Model ---
+    true_bass = BassModel()
+    true_bass.params_ = {"p": 0.03, "q": 0.38, "m": 1000}
+    y_bass = true_bass.predict(t) + np.random.normal(0, 10, len(t)) # add some noise
+    bass_model = BassModel() # This is the model instance to be used in benchmarks
 
-    y_bass = bass_model.predict(t)
-    y_gompertz = gompertz_model.predict(t)
-    y_logistic = logistic_model.predict(t)
+    # --- Gompertz Model ---
+    true_gompertz = GompertzModel()
+    true_gompertz.params_ = {"a": 1000, "b": 5, "c": 0.1}
+    y_gompertz = true_gompertz.predict(t) + np.random.normal(0, 10, len(t))
+    gompertz_model = GompertzModel()
+
+    # --- Logistic Model ---
+    true_logistic = LogisticModel()
+    true_logistic.params_ = {"L": 1000, "k": 0.1, "x0": 25}
+    y_logistic = true_logistic.predict(t) + np.random.normal(0, 10, len(t))
+    logistic_model = LogisticModel()
 
     # Complex diffusion model with covariates
     covariates = {"price": np.linspace(10, 5, 100)}
     bass_model_cov = BassModel(covariates=list(covariates.keys()))
-    y_bass_cov = bass_model_cov.predict(t, covariates)
+    true_bass_cov = BassModel(covariates=list(covariates.keys()))
+    true_bass_cov.params_ = {"p": 0.03, "q": 0.38, "m": 1000, "beta_p_price": 0.01, "beta_q_price": -0.02, "beta_m_price": 10}
+    y_bass_cov = true_bass_cov.predict(t, covariates=covariates) + np.random.normal(0, 10, len(t))
+
 
     # Create the fitters
     scipy_fitter = ScipyFitter()
 
     # Run the benchmarks
     results = []
+    backends = ["numpy", "jax"]
+
+    models_to_benchmark = [
+        (bass_model, y_bass, None, "BassModel"),
+        (gompertz_model, y_gompertz, None, "GompertzModel"),
+        (logistic_model, y_logistic, None, "LogisticModel"),
+        (bass_model_cov, y_bass_cov, covariates, "BassModel (Cov)"),
+    ]
 
     # Fit benchmarks
-    for model, y in [(bass_model, y_bass), (gompertz_model, y_gompertz), (logistic_model, y_logistic), (bass_model_cov, y_bass_cov)]:
-        for backend in ["numpy", "jax"]:
+    for model, y, covs, _ in models_to_benchmark:
+        for backend in backends:
+            # Need to fit the model first before benchmarking prediction/simulation
+            fitter = ScipyFitter()
+            if covs:
+                fitter.fit(model, t, y, covariates=covs)
+            else:
+                fitter.fit(model, t, y)
             results.append(run_fit_benchmark(model, t, y, backend, scipy_fitter))
 
-    # Predict benchmarks
-    for model in [bass_model, gompertz_model, logistic_model, bass_model_cov]:
-        for backend in ["numpy", "jax"]:
-            results.append(run_predict_benchmark(model, t, backend))
-
-    # Simulation benchmarks
-    for model in [bass_model, gompertz_model, logistic_model, bass_model_cov]:
-        for backend in ["numpy", "jax"]:
-            for n_sims in [10, 100, 1000]:
-                results.append(run_simulation_benchmark(model, t, backend, n_sims))
+    # Predict and Simulate benchmarks
+    for model, _, covs, _ in models_to_benchmark:
+        for backend in backends:
+            if covs:
+                results.append(run_predict_benchmark(model, t, backend, covariates=covs))
+                for n_sims in [10, 100, 1000]:
+                    results.append(run_simulation_benchmark(model, t, backend, n_sims, covariates=covs))
+            else:
+                results.append(run_predict_benchmark(model, t, backend))
+                for n_sims in [10, 100, 1000]:
+                    results.append(run_simulation_benchmark(model, t, backend, n_sims))
 
     # Print the results
     df = pd.DataFrame(results)

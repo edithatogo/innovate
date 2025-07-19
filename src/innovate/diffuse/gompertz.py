@@ -155,8 +155,8 @@ class GompertzModel(DiffusionModel):
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t, covariates)
-        ss_res = np.sum((np.array(y) - y_pred) ** 2)
-        ss_tot = np.sum((np.array(y) - np.mean(np.array(y))) ** 2)
+        ss_res = B.sum((B.array(y) - y_pred) ** 2)
+        ss_tot = B.sum((B.array(y) - B.mean(B.array(y))) ** 2)
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
     @property
