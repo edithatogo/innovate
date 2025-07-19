@@ -1,0 +1,14 @@
+from innovate.base.base import DiffusionModel
+
+class PlatformMultiSidedGrowthModel(DiffusionModel):
+    def __init__(self):
+        self._params = {}
+
+    def fit(self, t, y):
+        pass
+
+    def predict(self, t, covariates=None):
+        pass
+
+    def differential_equation(self, t, y, p):
+        pass

@@ -53,7 +53,7 @@ class LockInModel(DiffusionModel):
             "m": (max_y, np.inf),
         }
 
-    def _rhs(self, y_current: Sequence[float], t_current: float, alpha1, alpha2, beta1, beta2, gamma1, gamma2, m) -> Sequence[float]:
+    def differential_equation(self, y_current: Sequence[float], t_current: float, alpha1, alpha2, beta1, beta2, gamma1, gamma2, m) -> Sequence[float]:
         n1, n2 = y_current
 
         # Ensure populations are non-negative and do not exceed market potential
@@ -70,7 +70,7 @@ class LockInModel(DiffusionModel):
         if not self._params:
             raise RuntimeError("Model parameters have not been set.")
 
-        sol = odeint(self._rhs, y0, t, args=tuple(self._params.values()))
+        sol = odeint(self.differential_equation, y0, t, args=tuple(self._params.values()))
         return np.maximum(0, sol) # Ensure non-negative predictions
 
     def fit(self, t: Sequence[float], y: np.ndarray, **kwargs):
@@ -134,5 +134,5 @@ class LockInModel(DiffusionModel):
         rates = np.diff(cumulative_predictions, axis=0)
         # The first rate can be approximated as the first cumulative value if starting from 0
         # Or, more accurately, by evaluating the RHS at t[0] with y0
-        initial_rates = self._rhs(y0, t[0], *self._params.values())
+        initial_rates = self.differential_equation(y0, t[0], *self._params.values())
         return np.vstack([initial_rates, rates])

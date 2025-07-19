@@ -50,4 +50,5 @@ class BatchedFitter:
 
 
         vmap_predict = B.vmap(predict_single)
-        return vmap_predict(self.fitted_params, B.array(t_batched))
+        predictions = vmap_predict(self.fitted_params, B.array(t_batched))
+        return predictions.reshape(predictions.shape[0], -1)

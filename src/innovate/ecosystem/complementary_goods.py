@@ -23,6 +23,18 @@ class ComplementaryGoodsModel(DiffusionModel):
             "c2",  # Influence of good 1 on good 2
         ]
 
+    def differential_equation(self, y, t):
+        y1, y2 = y
+        k1, k2, c1, c2 = (
+            self._params["k1"],
+            self._params["k2"],
+            self._params["c1"],
+            self._params["c2"],
+        )
+        dy1_dt = k1 * y1 * (1 - y1) + c1 * y1 * y2
+        dy2_dt = k2 * y2 * (1 - y2) + c2 * y1 * y2
+        return [dy1_dt, dy2_dt]
+
     def predict(self, t: Sequence[float], y0: Sequence[float]) -> np.ndarray:
         """
         Predicts the adoption of both goods over time.
@@ -32,20 +44,7 @@ class ComplementaryGoodsModel(DiffusionModel):
 
         from scipy.integrate import odeint
 
-        k1, k2, c1, c2 = (
-            self._params["k1"],
-            self._params["k2"],
-            self._params["c1"],
-            self._params["c2"],
-        )
-
-        def system(y, t):
-            y1, y2 = y
-            dy1_dt = k1 * y1 * (1 - y1) + c1 * y1 * y2
-            dy2_dt = k2 * y2 * (1 - y2) + c2 * y1 * y2
-            return [dy1_dt, dy2_dt]
-
-        solution = odeint(system, y0, t)
+        solution = odeint(self.differential_equation, y0, t)
         return solution
 
     def fit(self, t: Sequence[float], y: np.ndarray, **kwargs):

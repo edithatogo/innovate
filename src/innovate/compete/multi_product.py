@@ -1,4 +1,4 @@
-
+from innovate.backend import current_backend as B
 import numpy as np
 from ..base import DiffusionModel
 from typing import Sequence, Dict
@@ -14,9 +14,9 @@ class MultiProductDiffusionModel(DiffusionModel):
         self._params: Dict[str, float] = {}
         self.covariates = covariates if covariates else []
 
-        self.p = np.array(p) if p is not None else None
-        self.Q = np.array(Q) if Q is not None else None
-        self.m = np.array(m) if m is not None else None
+        self.p = B.array(p) if p is not None else None
+        self.Q = B.array(Q) if Q is not None else None
+        self.m = B.array(m) if m is not None else None
         self.names = names
 
         if self.p is not None and self.Q is not None and self.m is not None:
@@ -57,7 +57,7 @@ class MultiProductDiffusionModel(DiffusionModel):
 
     def initial_guesses(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, float]:
         guesses = {}
-        max_y = np.max(y)
+        max_y = B.max(y)
         
         # Initial guesses for p, q, m
         for i in range(self.n_products):
@@ -86,7 +86,7 @@ class MultiProductDiffusionModel(DiffusionModel):
 
     def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
         bounds = {}
-        max_y = np.max(y)
+        max_y = B.max(y)
         
         # Bounds for p, q, m
         for i in range(self.n_products):
@@ -116,9 +116,9 @@ class MultiProductDiffusionModel(DiffusionModel):
     def predict(self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> Sequence[float]:
         from scipy.integrate import solve_ivp
         
-        t_arr = np.array(t)
+        t_arr = B.array(t)
         
-        y0 = np.zeros(self.n_products)
+        y0 = B.zeros(self.n_products)
         y0[0] = 1e-6
 
         if self.p is not None and self.Q is not None and self.m is not None:
@@ -174,11 +174,11 @@ class MultiProductDiffusionModel(DiffusionModel):
         num_alpha_params = n_products * (n_products - 1)
 
         # Extract base parameters
-        p_base = np.array(all_params_flat[:n_products])
-        q_base = np.array(all_params_flat[n_products:2*n_products])
-        m_base = np.array(all_params_flat[2*n_products:3*n_products])
+        p_base = B.array(all_params_flat[:n_products])
+        q_base = B.array(all_params_flat[n_products:2*n_products])
+        m_base = B.array(all_params_flat[2*n_products:3*n_products])
         
-        alpha_base_flat = np.array(all_params_flat[3*n_products : 3*n_products + num_alpha_params])
+        alpha_base_flat = B.array(all_params_flat[3*n_products : 3*n_products + num_alpha_params])
         
         # Initialize time-varying parameters with base values
         p_t = np.copy(p_base)
@@ -213,7 +213,7 @@ class MultiProductDiffusionModel(DiffusionModel):
                 param_idx_offset = alpha_beta_start_idx_for_cov + num_alpha_params # Update offset for next covariate
 
         # Reshape alpha_t_flat back to matrix
-        alpha_t = np.zeros((n_products, n_products))
+        alpha_t = B.zeros((n_products, n_products))
         alpha_idx = 0
         for i in range(n_products):
             for j in range(n_products):
@@ -221,7 +221,7 @@ class MultiProductDiffusionModel(DiffusionModel):
                     alpha_t[i, j] = alpha_t_flat[alpha_idx]
                     alpha_idx += 1
 
-        dydt = np.zeros_like(y)
+        dydt = B.zeros_like(y)
         for i in range(n_products):
             interaction_term = sum(alpha_t[i, j] * y[j] for j in range(n_products) if i != j)
             dydt[i] = (p_t[i] + q_t[i] * y[i] / m_t[i]) * (m_t[i] - y[i] - interaction_term) if m_t[i] > 0 else 0
@@ -236,8 +236,8 @@ class MultiProductDiffusionModel(DiffusionModel):
         if len(y.shape) == 1:
             y = y.reshape(-1, 1)
 
-        ss_res = np.sum((y - y_pred) ** 2)
-        ss_tot = np.sum((y - np.mean(y, axis=0)) ** 2)
+        ss_res = B.sum((y - y_pred) ** 2)
+        ss_tot = B.sum((y - B.mean(y, axis=0)) ** 2)
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
     def predict_adoption_rate(self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> Sequence[float]:
@@ -247,7 +247,7 @@ class MultiProductDiffusionModel(DiffusionModel):
         y_pred = self.predict(t, covariates)
         params = [self._params[name] for name in self.param_names]
         
-        rates = np.array([self.differential_equation(ti, yi, params, covariates, t) for ti, yi in zip(t, y_pred)])
+        rates = B.array([self.differential_equation(ti, yi, params, covariates, t) for ti, yi in zip(t, y_pred)])
         return rates
 
     @property

@@ -99,8 +99,9 @@ class BassModel(DiffusionModel):
             [y0],
             t_eval=t,
             method='LSODA',
+            dense_output=True,
         )
-        return sol.y.flatten()
+        return sol.sol(t).flatten()
 
     def differential_equation(self, t, y, params, covariates, t_eval):
         """
@@ -152,7 +153,7 @@ class BassModel(DiffusionModel):
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t, covariates)
         ss_res = B.sum((B.array(y) - y_pred) ** 2)
-        ss_tot = B.sum((B.array(y) - B.mean(B.array(y))) ** 2)
+        ss_tot = B.sum((B.array(y) - B.mean(y)) ** 2)
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
     @property
@@ -172,3 +173,7 @@ class BassModel(DiffusionModel):
         
         rates = np.array([self.differential_equation(ti, yi, params, covariates, t) for ti, yi in zip(t, y_pred)])
         return rates
+
+    def cumulative_adoption(self, t: Sequence[float], *params) -> Sequence[float]:
+        self.params_ = dict(zip(self.param_names, params))
+        return self.predict(t)

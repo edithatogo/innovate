@@ -6,6 +6,8 @@ from innovate.diffuse.gompertz import GompertzModel
 from innovate.diffuse.logistic import LogisticModel
 from innovate.compete.competition import MultiProductDiffusionModel
 from innovate.fitters.scipy_fitter import ScipyFitter
+from innovate.models.mixture import MixtureModel
+from innovate.models.hierarchical import HierarchicalModel
 
 # Fixture for common test data
 @pytest.fixture
@@ -180,3 +182,42 @@ def test_scipy_fitter_multi_product_model_not_implemented():
     
     with pytest.raises(NotImplementedError, match="Fitting MultiProductDiffusionModel with ScipyFitter is not yet implemented"):
         fitter.fit(model, time_points, data)
+
+def test_mixture_model():
+    t = np.linspace(0, 50, 100)
+    models = [BassModel(), BassModel()]
+    weights = [0.5, 0.5]
+    model = MixtureModel(models, weights)
+
+    # Set some dummy parameters
+    model.params_ = {
+        "model_0_p": 0.001,
+        "model_0_q": 0.1,
+        "model_0_m": 1000,
+        "model_1_p": 0.002,
+        "model_1_q": 0.2,
+        "model_1_m": 2000,
+    }
+
+    y = model.predict(t)
+    assert len(y) == 100
+
+def test_hierarchical_model():
+    t = np.linspace(0, 50, 100)
+    model = HierarchicalModel(BassModel(), ["group1", "group2"])
+
+    # Set some dummy parameters
+    model.params_ = {
+        "global_p": 0.001,
+        "global_q": 0.1,
+        "global_m": 1000,
+        "group1_p": 0.002,
+        "group1_q": 0.2,
+        "group1_m": 2000,
+        "group2_p": 0.003,
+        "group2_q": 0.3,
+        "group2_m": 3000,
+    }
+
+    y = model.predict(t)
+    assert len(y) == 100

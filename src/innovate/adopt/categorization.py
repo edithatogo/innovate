@@ -1,4 +1,4 @@
-import numpy as np
+from innovate.backend import current_backend as B
 import pandas as pd
 from innovate.base.base import DiffusionModel
 from typing import Sequence
@@ -18,8 +18,8 @@ def categorize_adopters(model: DiffusionModel, t: Sequence[float]) -> pd.DataFra
     adoption_rate = model.predict_adoption_rate(t)
     
     # Calculate mean and standard deviation of the adoption rate
-    mean_adoption_time = np.sum(t * adoption_rate) / np.sum(adoption_rate)
-    std_dev_adoption_time = np.sqrt(np.sum(((t - mean_adoption_time) ** 2) * adoption_rate) / np.sum(adoption_rate))
+    mean_adoption_time = B.sum(t * adoption_rate) / B.sum(adoption_rate)
+    std_dev_adoption_time = B.sqrt(B.sum(((t - mean_adoption_time) ** 2) * adoption_rate) / B.sum(adoption_rate))
     
     # Define category boundaries
     innovators_end = mean_adoption_time - 2 * std_dev_adoption_time

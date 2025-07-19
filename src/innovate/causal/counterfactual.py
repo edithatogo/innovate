@@ -1,5 +1,4 @@
-
-import numpy as np
+from innovate.backend import current_backend as B
 from typing import Sequence, Dict, Any
 from ..base import DiffusionModel
 

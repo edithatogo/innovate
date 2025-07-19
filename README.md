@@ -85,6 +85,37 @@ Here is a sample of the kinds of visualizations you can generate with `innovate`
 | ![Multi-Product Diffusion](docs/images/multi_product_diffusion.png) |
 
 
+## Backend Performance
+
+The `innovate` library supports both NumPy and JAX backends. The JAX backend can provide a significant performance benefit for fitting complex models, especially those with a large number of parameters. However, the performance benefit is less significant for simple models.
+
+The following table shows the results of a benchmarking script that compares the performance of the NumPy and JAX backends for a variety of tasks:
+
+| Model | Backend | Task | Time (s) |
+|---|---|---|---|
+| BassModel | numpy | fit | 1.53 |
+| BassModel | jax | fit | 1.39 |
+| GompertzModel | numpy | fit | 0.03 |
+| GompertzModel | jax | fit | 0.03 |
+| LogisticModel | numpy | fit | 0.05 |
+| LogisticModel | jax | fit | 0.05 |
+| BassModel | numpy | predict | 0.06 |
+| BassModel | jax | predict | 0.06 |
+| GompertzModel | numpy | predict | 0.06 |
+| GompertzModel | jax | predict | 0.06 |
+| LogisticModel | numpy | predict | 0.10 |
+| LogisticModel | jax | predict | 0.10 |
+| BassModel | numpy | simulate_1000 | 0.64 |
+| BassModel | jax | simulate_1000 | 0.62 |
+| GompertzModel | numpy | simulate_1000 | 0.61 |
+| GompertzModel | jax | simulate_1000 | 0.61 |
+| LogisticModel | numpy | simulate_1000 | 1.06 |
+| LogisticModel | jax | simulate_1000 | 1.08 |
+
+As you can see, the JAX backend is slightly faster than the NumPy backend for fitting the `BassModel`. However, the performance is about the same for the other models and tasks.
+
+We are continuing to investigate opportunities for optimization, including the use of `pyarrow` and other high-performance libraries.
+
 ## License
 
 This project is licensed under the Apache 2.0 License.

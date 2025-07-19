@@ -7,7 +7,7 @@ from innovate.compete.competition import MultiProductDiffusionModel # Import the
 class ScipyFitter:
     """A fitter class that uses SciPy's curve_fit for model estimation."""
 
-    def fit(self, model: DiffusionModel, t: Sequence[float], y: Sequence[float], p0: Sequence[float] = None, bounds: tuple = None, covariates: Dict[str, Sequence[float]] = None, **kwargs) -> Self:
+    def fit(self, model: DiffusionModel, t: Sequence[float], y: Sequence[float], p0: Sequence[float] = None, bounds: tuple = None, **kwargs) -> Self:
         """
         Fits a DiffusionModel instance using scipy.optimize.curve_fit.
 
@@ -17,7 +17,6 @@ class ScipyFitter:
             y: Observed adoption data (dependent variable).
             p0: Initial guesses for the parameters. If None, model.initial_guesses() is used.
             bounds: Bounds for the parameters. If None, model.bounds() is used.
-            covariates: A dictionary of covariate names and their values.
             kwargs: Additional keyword arguments to pass to scipy.optimize.curve_fit.
 
         Returns:
@@ -39,7 +38,7 @@ class ScipyFitter:
                 param_dict = dict(zip(model.param_names, params))
                 model.params_ = param_dict
                 # The real t_arr is captured from the outer scope
-                return model.predict(t_arr, covariates).flatten()
+                return model.predict(t_arr).flatten()
             
             # Use the dummy xdata for the curve_fit call
             x_fit = x_dummy
@@ -48,7 +47,7 @@ class ScipyFitter:
             def fit_function(t, *params):
                 param_dict = dict(zip(model.param_names, params))
                 model.params_ = param_dict
-                return model.predict(t, covariates).flatten()
+                return model.predict(t).flatten()
             x_fit = t_arr
 
         # Determine initial guesses if not provided
