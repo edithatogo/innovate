@@ -23,9 +23,9 @@ class SkewedGrowth(GrowthCurve):
         N = current_adopters[0] if hasattr(current_adopters, '__len__') else current_adopters
         c = params.get("shape_c", 0.1)
 
-        if K <= 0 or N <= 0 or N >= K:
-            return 0.0
-        
+        if K <= 0 or N <= 0:
+            return 0
+
         # The 'b' parameter is part of the integrated form, not the differential equation.
         # The rate is determined by the ceiling K, current level N, and growth rate c.
         return c * N * (B.log(K) - B.log(N))

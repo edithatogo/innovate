@@ -10,5 +10,5 @@ class CoEvolutionModel(DiffusionModel):
     def predict(self, t, covariates=None):
         pass
 
-    def differential_equation(self, t, y, p):
+    def differential_equation(self, y, t, p):
         pass
