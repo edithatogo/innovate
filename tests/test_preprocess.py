@@ -31,3 +31,25 @@ def test_stl_decomposition_no_datetime_index():
     series = pd.Series(np.random.rand(100))
     with pytest.raises(TypeError, match="The input series must have a DatetimeIndex."):
         stl_decomposition(series, period=12)
+
+from innovate.preprocess import rolling_average, sarima_fit
+
+@pytest.fixture
+def simple_series():
+    dates = pd.date_range(start='2020-01-01', periods=50, freq='M')
+    return pd.Series(np.arange(50), index=dates)
+
+
+def test_rolling_average(simple_series):
+    ra = rolling_average(simple_series, window=5)
+    assert len(ra) == len(simple_series)
+    # first window-1 values should be NaN
+    assert ra.isna().sum() == 4
+
+
+def test_sarima_fit(simple_series):
+    order = (1, 1, 0)
+    seasonal_order = (0, 0, 0, 0)
+    fitted = sarima_fit(simple_series, order=order, seasonal_order=seasonal_order)
+    assert len(fitted) == len(simple_series)
+

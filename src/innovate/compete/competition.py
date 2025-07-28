@@ -84,6 +84,18 @@ class MultiProductDiffusionModel(DiffusionModel):
         df = pd.DataFrame(sol, index=t, columns=self.names)
         return df
 
+    @staticmethod
+    def differential_equation(y, t, params):
+        """Differential equations for the multi-product model."""
+        p, Q, m = params
+        y_arr = B.array(y)
+        adoption_share = B.where(m != 0, y_arr / m, B.zeros(len(y_arr)))
+        adoption_share = B.where(adoption_share > 1.0, 1.0, adoption_share)
+        imitation = B.matmul(Q, adoption_share)
+        force = p + imitation
+        remaining_potential = B.where(m - y_arr < 0, 0, m - y_arr)
+        return force * remaining_potential
+
     def score(self, t: Sequence[float], y: pd.DataFrame) -> float:
         if not self.params_ and (self.p is None or self.Q is None or self.m is None):
             raise RuntimeError("Model has not been fitted or initialized with parameters yet. Call .fit() or initialize with p, Q, m.")

@@ -13,6 +13,8 @@ from .metrics import (
 from .model_evaluation import (
     compare_models,
     find_best_model,
+    model_aic,
+    model_bic,
 )
 
 from .preprocessing import (
