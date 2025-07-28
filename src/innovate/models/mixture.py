@@ -90,40 +90,6 @@ class MixtureModel(DiffusionModel):
         return rates
 
     @staticmethod
-    def differential_equation(y, t, p):
-        raise NotImplementedError("MixtureModel does not implement a differential equation")
-
-    @staticmethod
-    def differential_equation(y, t, p):
-        raise NotImplementedError
-
-    def predict_adoption_rate(self, t: Sequence[float]) -> Sequence[float]:
-        raise NotImplementedError
-
-    @staticmethod
     def differential_equation(t, y, params, covariates, t_eval):
-        raise NotImplementedError
-
-    @property
-    def param_names(self) -> Sequence[str]:
-        names = []
-        for idx, model in enumerate(self.models):
-            for p in model.param_names:
-                names.append(f"model_{idx}_{p}")
-        return names
-
-    def initial_guesses(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, float]:
-        guesses = {}
-        for idx, model in enumerate(self.models):
-            sub_guesses = model.initial_guesses(t, y)
-            for k, v in sub_guesses.items():
-                guesses[f"model_{idx}_{k}"] = v
-        return guesses
-
-    def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
-        bnds = {}
-        for idx, model in enumerate(self.models):
-            sub_bounds = model.bounds(t, y)
-            for k, v in sub_bounds.items():
-                bnds[f"model_{idx}_{k}"] = v
-        return bnds
+        """MixtureModel does not define its own dynamics."""
+        raise NotImplementedError("MixtureModel does not implement a differential equation")

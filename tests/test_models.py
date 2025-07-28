@@ -185,18 +185,18 @@ def test_scipy_fitter_multi_product_model_not_implemented():
 
 def test_mixture_model():
     t = np.linspace(0, 50, 100)
-    models = [BassModel(), BassModel()]
+    models = [LogisticModel(), LogisticModel()]
     weights = [0.5, 0.5]
     model = MixtureModel(models, weights)
 
     # Set some dummy parameters
     model.params_ = {
-        "model_0_p": 0.001,
-        "model_0_q": 0.1,
-        "model_0_m": 1000,
-        "model_1_p": 0.002,
-        "model_1_q": 0.2,
-        "model_1_m": 2000,
+        "model_0_L": 100.0,
+        "model_0_k": 0.1,
+        "model_0_x0": 10.0,
+        "model_1_L": 200.0,
+        "model_1_k": 0.2,
+        "model_1_x0": 15.0,
     }
 
     y = model.predict(t)
@@ -204,22 +204,36 @@ def test_mixture_model():
 
 def test_mixture_model_weighting():
     t = np.linspace(1, 4, 4)
-    models = [BassModel(), BassModel()]
+    models = [LogisticModel(), LogisticModel()]
     weights = [0.6, 0.4]
     model = MixtureModel(models, weights)
     model.params_ = {
-        "model_0_p": 0.01,
-        "model_0_q": 0.1,
-        "model_0_m": 100,
-        "model_1_p": 0.02,
-        "model_1_q": 0.2,
-        "model_1_m": 200,
+        "model_0_L": 50.0,
+        "model_0_k": 0.1,
+        "model_0_x0": 5.0,
+        "model_1_L": 150.0,
+        "model_1_k": 0.2,
+        "model_1_x0": 8.0,
     }
     # compute expected weighted average
-    m1 = BassModel(); m1.params_ = {"p":0.01, "q":0.1, "m":100}
-    m2 = BassModel(); m2.params_ = {"p":0.02, "q":0.2, "m":200}
+    m1 = LogisticModel(); m1.params_ = {"L":50.0, "k":0.1, "x0":5.0}
+    m2 = LogisticModel(); m2.params_ = {"L":150.0, "k":0.2, "x0":8.0}
     expected = 0.6 * m1.predict(t) + 0.4 * m2.predict(t)
     np.testing.assert_allclose(model.predict(t), expected)
+
+def test_mixture_model_api():
+    models = [LogisticModel(), LogisticModel()]
+    weights = [0.5, 0.5]
+    model = MixtureModel(models, weights)
+
+    names = [f"model_{i}_{p}" for i, m in enumerate(models) for p in m.param_names]
+    assert model.param_names == names
+
+    guesses = model.initial_guesses([0, 1], [0, 1])
+    assert set(guesses.keys()) == set(names)
+
+    bounds = model.bounds([0, 1], [0, 1])
+    assert set(bounds.keys()) == set(names)
 
 def test_hierarchical_model():
     t = np.linspace(0, 50, 100)
