@@ -136,7 +136,7 @@ pip install -r requirements.txt
 After installing the requirements, you can run `pytest`. The full recommended
 command is documented in
 [docs/testing_strategy.rst](docs/testing_strategy.rst).
-## Branching Strategy
 
-This repository uses `work` as the primary development branch. Existing branches can be rebased or merged onto `work`.
+## Branching Strategy
+This repository now uses `work` as the primary development branch. Existing branches can be rebased or merged onto `work`.
 

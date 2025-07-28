@@ -8,7 +8,7 @@ This document outlines the development protocol for the `innovate` library. The 
 
 ### 2.1. Git and GitHub
 
-All code and documentation for the `innovate` library will be managed using Git and hosted on GitHub. The `main` branch will be protected and will always represent the latest stable release. All new development will be done on feature branches.
+All code and documentation for the `innovate` library will be managed using Git and hosted on GitHub. The `work` branch will be protected and will always represent the latest stable release. All new development will be done on feature branches.
 
 ### 2.2. Branching Strategy
 
@@ -25,7 +25,7 @@ Commit messages will follow the [Conventional Commits](https://www.conventionalc
 
 ### 2.4. Pull Requests
 
-All changes to the `main` branch will be made through pull requests (PRs). Each PR must be reviewed and approved by at least one other developer before it can be merged. All PRs must include a clear description of the changes and a link to the relevant issue in the issue tracker.
+All changes to the `work` branch will be made through pull requests (PRs). Each PR must be reviewed and approved by at least one other developer before it can be merged. All PRs must include a clear description of the changes and a link to the relevant issue in the issue tracker.
 
 ## 3. Testing
 
@@ -49,7 +49,7 @@ Code coverage will be measured using the `coverage.py` tool. The goal is to main
 
 ### 4.1. Sphinx
 
-All documentation will be written in reStructuredText and built using Sphinx. The documentation will be hosted on Read the Docs and will be updated automatically on every commit to the `main` branch. The documentation build process will be as follows:
+All documentation will be written in reStructuredText and built using Sphinx. The documentation will be hosted on Read the Docs and will be updated automatically on every commit to the `work` branch. The documentation build process will be as follows:
 
 1.  The documentation will be built automatically on every commit to a feature branch and on every PR.
 2.  The documentation build must pass before a PR can be merged.
@@ -70,7 +70,7 @@ The `innovate` library will follow the [Semantic Versioning](https://semver.org/
 
 ### 5.2. Release Process
 
-When a new version of the library is ready to be released, a release branch will be created from the `main` branch. The version number will be updated in the `pyproject.toml` and `conda.recipe/meta.yaml` files, and the `CHANGELOG.md` will be updated with the changes in the new release. The release branch will then be merged into the `main` branch, and a new release will be created on GitHub. The package will then be uploaded to PyPI and TestPyPI.
+When a new version of the library is ready to be released, a release branch will be created from the `work` branch. The version number will be updated in the `pyproject.toml` and `conda.recipe/meta.yaml` files, and the `CHANGELOG.md` will be updated with the changes in the new release. The release branch will then be merged into the `work` branch, and a new release will be created on GitHub. The package will then be uploaded to PyPI and TestPyPI.
 
 ### 5.3. Rollbacks
 
