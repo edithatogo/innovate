@@ -1,5 +1,6 @@
 import networkx as nx
 import ndlib.models.epidemics as ep
+import ndlib.models.ModelConfig as mc
 from mesa import Model
 from .agent import InnovationAgent
 
@@ -47,11 +48,11 @@ class NDlibModel(Model):
         else:
             raise ValueError(f"Unknown model name: {model_name}")
 
-        # Set up the initial state of the diffusion model
-        # For example, infect a single node to start the cascade
-        self.diffusion_model.set_initial_status({
-            'Infected': [0] # Start with agent 0 as 'Infected' (adopted)
-        })
+        # Set up the initial state of the diffusion model using a
+        # Configuration object. Infect a single node to start the cascade.
+        config = mc.Configuration()
+        config.add_model_initial_configuration('Infected', [0])
+        self.diffusion_model.set_initial_status(config)
 
     def step(self):
         """
