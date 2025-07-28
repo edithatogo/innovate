@@ -2,8 +2,6 @@ from innovate.backends.numpy_backend import NumPyBackend
 
 try:
     from innovate.backends.jax_backend import JaxBackend  # type: ignore
-try:
-    from innovate.backends.jax_backend import JaxBackend
 except Exception:  # pragma: no cover - optional dependency may be missing
     JaxBackend = None
 

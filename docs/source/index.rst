@@ -38,3 +38,9 @@ Welcome to the documentation for the ``innovate`` library.
    innovate.fitters.rst
    innovate.base.rst
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Development
+
+   ../testing_strategy
+
