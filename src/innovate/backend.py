@@ -2,10 +2,10 @@
 
 from innovate.backends.numpy_backend import NumPyBackend
 
+# JAX and diffrax are optional dependencies
 try:
-    # JAX and diffrax are optional dependencies
     from innovate.backends.jax_backend import JaxBackend  # type: ignore
-except Exception:  # pragma: no cover - optional dependency may be missing
+except ImportError:  # pragma: no cover - optional dependency may be missing
     JaxBackend = None
 
 current_backend = NumPyBackend()
@@ -23,8 +23,6 @@ def use_backend(backend: str):
         current_backend = NumPyBackend()
     else:
         raise ValueError(f"Unknown backend: {backend}")
-
-
 
 # Initialize with the NumPy backend by default
 use_backend("numpy")
