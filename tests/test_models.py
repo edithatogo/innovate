@@ -235,7 +235,7 @@ def test_mixture_model_api():
     bounds = model.bounds([0, 1], [0, 1])
     assert set(bounds.keys()) == set(names)
 
-def test_hierarchical_model():
+def test_hierarchical_model(monkeypatch):
     t = np.linspace(0, 50, 100)
     model = HierarchicalModel(BassModel(), ["group1", "group2"])
 
