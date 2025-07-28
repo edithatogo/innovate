@@ -1,5 +1,5 @@
 from innovate.base.base import DiffusionModel, Self
-from innovate.backend import current_backend as B
+from innovate import backend
 from innovate.dynamics.growth.symmetric import SymmetricGrowth
 from typing import Sequence, Dict
 import numpy as np
@@ -92,14 +92,14 @@ class LogisticModel(DiffusionModel):
         if covariates:
             param_idx = 3
             for cov_name, cov_values in covariates.items():
-                cov_val_t = np.interp(t, t, cov_values)
+                cov_val_t = backend.current_backend.interp(t, t, cov_values)
                 
                 L += self._params[f"beta_L_{cov_name}"] * cov_val_t
                 k += self._params[f"beta_k_{cov_name}"] * cov_val_t
                 x0 += self._params[f"beta_x0_{cov_name}"] * cov_val_t
 
-        t_arr = B.array(t)
-        return L / (1 + B.exp(-k * (t_arr - x0)))
+        t_arr = backend.current_backend.array(t)
+        return L / (1 + backend.current_backend.exp(-k * (t_arr - x0)))
 
     @staticmethod
     def differential_equation(t, y, params, covariates, t_eval):
@@ -110,7 +110,7 @@ class LogisticModel(DiffusionModel):
         if covariates:
             param_idx = 3
             for cov_name, cov_values in covariates.items():
-                cov_val_t = np.interp(t, t_eval, cov_values)
+                cov_val_t = backend.current_backend.interp(t, t_eval, cov_values)
                 L += params[param_idx] * cov_val_t
                 k += params[param_idx+1] * cov_val_t
                 x0 += params[param_idx+2] * cov_val_t
@@ -135,8 +135,8 @@ class LogisticModel(DiffusionModel):
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t, covariates)
-        ss_res = B.sum((B.array(y) - y_pred) ** 2)
-        ss_tot = B.sum((B.array(y) - B.mean(y)) ** 2)
+        ss_res = backend.current_backend.sum((backend.current_backend.array(y) - y_pred) ** 2)
+        ss_tot = backend.current_backend.sum((backend.current_backend.array(y) - backend.current_backend.mean(y)) ** 2)
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
     @property
@@ -159,15 +159,20 @@ class LogisticModel(DiffusionModel):
         k = self._params["k"]
         if covariates:
             for cov_name, cov_values in covariates.items():
-                cov_val_t = np.interp(t, t, cov_values)
+                cov_val_t = backend.current_backend.interp(t, t, cov_values)
                 L += self._params[f"beta_L_{cov_name}"] * cov_val_t
                 k += self._params[f"beta_k_{cov_name}"] * cov_val_t
 
         return k * y_pred * (1 - y_pred / L)
 
 
-    def cumulative_adoption(self, t: Sequence[float], *params) -> Sequence[float]:
-        self.params_ = dict(zip(self.param_names, params))
+    def cumulative_adoption(
+        self, t: Sequence[float], *params, **param_kwargs
+    ) -> Sequence[float]:
+        if param_kwargs:
+            self.params_ = param_kwargs
+        else:
+            self.params_ = dict(zip(self.param_names, params))
         return self.predict(t)
 
     def differential_equation(self, t, y, params, covariates, t_eval):
@@ -176,7 +181,7 @@ class LogisticModel(DiffusionModel):
         if covariates:
             param_idx = 3
             for cov_name, cov_values in covariates.items():
-                cov_val_t = np.interp(t, t_eval, cov_values)
+                cov_val_t = backend.current_backend.interp(t, t_eval, cov_values)
                 L += params[param_idx] * cov_val_t
                 k += params[param_idx + 1] * cov_val_t
                 x0 += params[param_idx + 2] * cov_val_t

@@ -56,12 +56,12 @@ class PolicyIntervention:
         def predict_with_policy(t_eval: Sequence[float]) -> Sequence[float]:
             predictions = []
             for t_val in t_eval:
-                # Find the closest policy parameters for t_val
-                # This is a very basic interpolation/selection
                 idx = np.argmin(np.abs(np.array(t_points) - t_val))
-                temp_model = self.model.__class__() # Create a new instance of the same model type
-                temp_model.params_ = modified_params_at_t_points[idx]
-                predictions.append(temp_model.predict([t_val])[0]) # Predict for single time point
+                params = modified_params_at_t_points[idx]
+                p, q, m = params["p"], params["q"], params["m"]
+                expo = np.exp(-(p + q) * t_val)
+                pred = m * (1 - expo) / (1 + (q / p) * expo)
+                predictions.append(pred)
             return np.array(predictions)
 
         return predict_with_policy
