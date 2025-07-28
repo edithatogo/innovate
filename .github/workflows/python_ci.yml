@@ -16,10 +16,20 @@ jobs:
         python -m pip install --upgrade pip
         pip install poetry
         poetry install --with dev
-    - name: Run tests
-      run: poetry run pytest
+        pip install coverage
+    - name: Run tests with coverage
+      run: |
+        poetry run coverage run -m pytest
+        poetry run coverage xml
       env:
         PYTHONPATH: src
+    - name: Check coverage threshold
+      run: poetry run coverage report --fail-under=90
+    - name: Upload coverage report
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: coverage.xml
     - name: Run ruff
       run: poetry run ruff check .
     - name: Run black
