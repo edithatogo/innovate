@@ -9,6 +9,7 @@ from innovate.fitters.scipy_fitter import ScipyFitter
 from innovate.models.mixture import MixtureModel
 from innovate.models.hierarchical import HierarchicalModel
 
+
 # Fixture for common test data
 @pytest.fixture
 def synthetic_data():
@@ -23,7 +24,7 @@ def synthetic_data():
         return m * (1 - exp_term) / (1 + (q / p) * exp_term)
 
     cumulative_adoptions = _bass_cumulative_true(time_points, true_p, true_q, true_m)
-    
+
     # Add some noise and ensure non-negativity and cumulativity
     np.random.seed(42)
     noise = np.random.normal(0, 10, len(time_points))
@@ -32,6 +33,7 @@ def synthetic_data():
     observed_adoptions = np.maximum.accumulate(observed_adoptions)
 
     return time_points, observed_adoptions
+
 
 # Test BassModel
 def test_bass_model_fit_predict(synthetic_data):
@@ -47,7 +49,10 @@ def test_bass_model_fit_predict(synthetic_data):
     predictions = model.predict(t)
     assert len(predictions) == len(t)
     assert np.all(predictions >= 0)
-    assert np.all(np.diff(predictions) >= -1e-6) # Ensure non-decreasing (allowing for small numerical errors)
+    assert np.all(
+        np.diff(predictions) >= -1e-6
+    )  # Ensure non-decreasing (allowing for small numerical errors)
+
 
 def test_bass_model_score(synthetic_data):
     t, y = synthetic_data
@@ -56,7 +61,10 @@ def test_bass_model_score(synthetic_data):
     fitter.fit(model, t, y)
     score = model.score(t, y)
     assert isinstance(score, float)
-    assert 0.0 <= score <= 1.0 # R^2 can be negative, but for good fits, it should be positive
+    assert (
+        0.0 <= score <= 1.0
+    )  # R^2 can be negative, but for good fits, it should be positive
+
 
 # Test GompertzModel
 def test_gompertz_model_fit_predict(synthetic_data):
@@ -74,6 +82,7 @@ def test_gompertz_model_fit_predict(synthetic_data):
     assert np.all(predictions >= 0)
     assert np.all(np.diff(predictions) >= -1e-6)
 
+
 def test_gompertz_model_score(synthetic_data):
     t, y = synthetic_data
     model = GompertzModel()
@@ -82,6 +91,7 @@ def test_gompertz_model_score(synthetic_data):
     score = model.score(t, y)
     assert isinstance(score, float)
     assert 0.0 <= score <= 1.0
+
 
 # Test LogisticModel
 def test_logistic_model_fit_predict(synthetic_data):
@@ -99,6 +109,7 @@ def test_logistic_model_fit_predict(synthetic_data):
     assert np.all(predictions >= 0)
     assert np.all(np.diff(predictions) >= -1e-6)
 
+
 def test_logistic_model_score(synthetic_data):
     t, y = synthetic_data
     model = LogisticModel()
@@ -108,17 +119,17 @@ def test_logistic_model_score(synthetic_data):
     assert isinstance(score, float)
     assert 0.0 <= score <= 1.0
 
+
 # Test MultiProductDiffusionModel
 def test_multi_product_model_predict():
     p_vals = [0.02, 0.015]
-    Q_matrix = [
-        [0.3, 0.05],
-        [0.03, 0.25]
-    ]
+    Q_matrix = [[0.3, 0.05], [0.03, 0.25]]
     m_vals = [1000, 800]
     product_names = ["ProdA", "ProdB"]
 
-    model = MultiProductDiffusionModel(p=p_vals, Q=Q_matrix, m=m_vals, names=product_names)
+    model = MultiProductDiffusionModel(
+        p=p_vals, Q=Q_matrix, m=m_vals, names=product_names
+    )
     time_horizon = np.arange(1, 101)
     predictions_df = model.predict(time_horizon)
 
@@ -130,16 +141,16 @@ def test_multi_product_model_predict():
     for col in product_names:
         assert np.all(np.diff(predictions_df[col].values) >= -1e-6)
 
+
 def test_multi_product_model_score():
     p_vals = [0.02, 0.015]
-    Q_matrix = [
-        [0.3, 0.05],
-        [0.03, 0.25]
-    ]
+    Q_matrix = [[0.3, 0.05], [0.03, 0.25]]
     m_vals = [1000, 800]
     product_names = ["ProdA", "ProdB"]
 
-    model = MultiProductDiffusionModel(p=p_vals, Q=Q_matrix, m=m_vals, names=product_names)
+    model = MultiProductDiffusionModel(
+        p=p_vals, Q=Q_matrix, m=m_vals, names=product_names
+    )
     time_horizon = np.arange(1, 101)
     predictions_df = model.predict(time_horizon)
 
@@ -154,34 +165,37 @@ def test_multi_product_model_score():
     assert isinstance(score, float)
     # R^2 can be negative if the model is worse than a horizontal line
     # For a model predicting its own slightly noisy version, it should be high
-    assert score > 0.5 # Expect a reasonably good score
+    assert score > 0.5  # Expect a reasonably good score
+
 
 # Test ScipyFitter
 def test_scipy_fitter_single_model(synthetic_data):
     t, y = synthetic_data
     fitter = ScipyFitter()
     model = BassModel()
-    
+
     # The ScipyFitter for Phase 1 just calls the model's fit method
     fitter.fit(model, t, y)
 
     assert model.params_ is not None
     assert all(param in model.params_ for param in ["p", "q", "m"])
 
+
 def test_scipy_fitter_multi_product_model_not_implemented():
     fitter = ScipyFitter()
     p_vals = [0.02, 0.015]
-    Q_matrix = [
-        [0.3, 0.05],
-        [0.03, 0.25]
-    ]
+    Q_matrix = [[0.3, 0.05], [0.03, 0.25]]
     m_vals = [1000, 800]
     model = MultiProductDiffusionModel(p=p_vals, Q=Q_matrix, m=m_vals)
     time_points = np.arange(1, 10)
     data = pd.DataFrame(np.random.rand(len(time_points), 2) * 100, columns=model.names)
-    
-    with pytest.raises(NotImplementedError, match="Fitting MultiProductDiffusionModel with ScipyFitter is not yet implemented"):
+
+    with pytest.raises(
+        NotImplementedError,
+        match="Fitting MultiProductDiffusionModel with ScipyFitter is not yet implemented",
+    ):
         fitter.fit(model, time_points, data)
+
 
 def test_mixture_model():
     t = np.linspace(0, 50, 100)
@@ -202,6 +216,7 @@ def test_mixture_model():
     y = model.predict(t)
     assert len(y) == 100
 
+
 def test_mixture_model_weighting():
     t = np.linspace(1, 4, 4)
     models = [LogisticModel(), LogisticModel()]
@@ -216,10 +231,13 @@ def test_mixture_model_weighting():
         "model_1_x0": 8.0,
     }
     # compute expected weighted average
-    m1 = LogisticModel(); m1.params_ = {"L":50.0, "k":0.1, "x0":5.0}
-    m2 = LogisticModel(); m2.params_ = {"L":150.0, "k":0.2, "x0":8.0}
+    m1 = LogisticModel()
+    m1.params_ = {"L": 50.0, "k": 0.1, "x0": 5.0}
+    m2 = LogisticModel()
+    m2.params_ = {"L": 150.0, "k": 0.2, "x0": 8.0}
     expected = 0.6 * m1.predict(t) + 0.4 * m2.predict(t)
     np.testing.assert_allclose(model.predict(t), expected)
+
 
 def test_mixture_model_api():
     models = [LogisticModel(), LogisticModel()]
@@ -235,7 +253,8 @@ def test_mixture_model_api():
     bounds = model.bounds([0, 1], [0, 1])
     assert set(bounds.keys()) == set(names)
 
-def test_hierarchical_model():
+
+def test_hierarchical_model(monkeypatch):
     t = np.linspace(0, 50, 100)
     model = HierarchicalModel(BassModel(), ["group1", "group2"])
 
@@ -264,6 +283,7 @@ def test_hierarchical_model():
     y = model.predict(t)
     assert len(y) == 100
 
+
 def test_hierarchical_model_interface():
     base = BassModel()
     model = HierarchicalModel(base, ["g1", "g2"])
@@ -280,6 +300,7 @@ def test_hierarchical_model_interface():
     for p in base.param_names:
         assert guesses[f"g1_{p}"] == 0.0
 
+
 def test_hierarchical_model_group_behavior(monkeypatch):
     t = np.linspace(1, 3, 3)
     base = BassModel()
@@ -295,6 +316,7 @@ def test_hierarchical_model_group_behavior(monkeypatch):
         "g2_q": -0.03,
         "g2_m": -5,
     }
+
     # manual computation using analytic Bass solution
     def _bass_cumulative_true(t, p, q, m):
         exp_term = np.exp(-(p + q) * t)
