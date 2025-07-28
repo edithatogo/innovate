@@ -70,8 +70,16 @@ class LockInModel(DiffusionModel):
         if not self._params:
             raise RuntimeError("Model parameters have not been set.")
 
-        sol = odeint(self.differential_equation, y0, t, args=tuple(self._params.values()))
-        return np.maximum(0, sol) # Ensure non-negative predictions
+        sol = odeint(
+            self.differential_equation,
+            y0,
+            t,
+            args=tuple(self._params.values()),
+        )
+        sol = np.maximum(0, sol)
+        m = self._params.get("m", np.inf)
+        sol = np.minimum(sol, m)
+        return sol
 
     def fit(self, t: Sequence[float], y: np.ndarray, **kwargs):
         from scipy.optimize import minimize

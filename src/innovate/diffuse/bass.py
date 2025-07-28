@@ -1,5 +1,5 @@
 from innovate.base.base import DiffusionModel, Self
-from innovate.backend import current_backend as B
+from innovate import backend
 from innovate.dynamics.growth.dual_influence import DualInfluenceGrowth
 from typing import Sequence, Dict
 import numpy as np
@@ -131,7 +131,7 @@ class BassModel(DiffusionModel):
         if covariates:
             param_idx = 3
             for cov_name, cov_values in covariates.items():
-                cov_val_t = np.interp(t, t_eval, cov_values)
+                cov_val_t = backend.current_backend.interp(t, t_eval, cov_values)
                 
                 p_t += params[param_idx] * cov_val_t
                 q_t += params[param_idx+1] * cov_val_t
@@ -139,7 +139,13 @@ class BassModel(DiffusionModel):
                 param_idx += 3
 
         rate = (p_t + q_t * (y / m_t)) * (m_t - y)
-        return pt.switch(m_t > 0, rate, 0.0)
+        try:
+            import pytensor.tensor as pt  # type: ignore
+            if isinstance(m_t, pt.TensorVariable):  # pragma: no cover - depends on pytensor
+                return pt.switch(m_t > 0, rate, 0.0)
+        except Exception:
+            pass
+        return backend.current_backend.where(m_t > 0, rate, 0.0)
 
     def score(self, t: Sequence[float], y: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> float:
         """
@@ -154,8 +160,8 @@ class BassModel(DiffusionModel):
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t, covariates)
-        ss_res = B.sum((B.array(y) - y_pred) ** 2)
-        ss_tot = B.sum((B.array(y) - B.mean(y)) ** 2)
+        ss_res = backend.current_backend.sum((backend.current_backend.array(y) - y_pred) ** 2)
+        ss_tot = backend.current_backend.sum((backend.current_backend.array(y) - backend.current_backend.mean(y)) ** 2)
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
     @property

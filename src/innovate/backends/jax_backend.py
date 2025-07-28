@@ -7,11 +7,20 @@ class JaxBackend:
     def array(self, data):
         return jnp.asarray(data)
 
-    exp = jnp.exp
-    power = jnp.power
-    sum = jnp.sum
-    mean = jnp.mean
-    where = jnp.where
+    def exp(self, x):
+        return jnp.exp(x)
+
+    def power(self, x, y):
+        return jnp.power(x, y)
+
+    def sum(self, a, axis=None, dtype=None, keepdims=False):
+        return jnp.sum(a, axis=axis, dtype=dtype, keepdims=keepdims)
+
+    def mean(self, a, axis=None, dtype=None, keepdims=False):
+        return jnp.mean(a, axis=axis, dtype=dtype, keepdims=keepdims)
+
+    def where(self, condition, x, y):
+        return jnp.where(condition, x, y)
 
     def log(self, x):
         return jnp.log(x)
@@ -37,6 +46,9 @@ class JaxBackend:
 
     def median(self, x: jnp.ndarray) -> float:
         return jnp.median(x)
+
+    def interp(self, x, xp, fp):
+        return jnp.interp(x, xp, fp)
 
     def jit(self, f: Callable) -> Callable:
         return jax.jit(f)

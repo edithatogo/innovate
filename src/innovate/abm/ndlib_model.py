@@ -22,6 +22,7 @@ class NDlibModel(Model):
         Raises:
             ValueError: If an unsupported model_name is provided.
         """
+        super().__init__()
         self.num_agents = num_agents
         self.running = True
 
