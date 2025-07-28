@@ -9,7 +9,8 @@ def plot_residuals(
     t: np.ndarray,
     y: np.ndarray,
     title: str = "Residual Analysis",
-    lags: int = 30
+    lags: int = 30,
+    acf_only: bool = False,
 ):
     """
     Plots the residuals of a fitted model, along with their ACF and PACF plots.
@@ -35,7 +36,8 @@ def plot_residuals(
     residuals = y - predictions
 
     # Create figure
-    fig, axes = plt.subplots(3, 1, figsize=(10, 12))
+    n_rows = 2 if acf_only else 3
+    fig, axes = plt.subplots(n_rows, 1, figsize=(10, 4 * n_rows))
     fig.suptitle(title, fontsize=16)
 
     # Plot residuals
@@ -49,9 +51,10 @@ def plot_residuals(
     plot_acf(residuals, ax=axes[1], lags=lags)
     axes[1].set_title("Autocorrelation Function (ACF)")
 
-    # Plot PACF
-    plot_pacf(residuals, ax=axes[2], lags=lags)
-    axes[2].set_title("Partial Autocorrelation Function (PACF)")
+    if not acf_only:
+        # Plot PACF
+        plot_pacf(residuals, ax=axes[2], lags=lags)
+        axes[2].set_title("Partial Autocorrelation Function (PACF)")
 
     plt.tight_layout(rect=[0, 0, 1, 0.96])
     plt.show()
