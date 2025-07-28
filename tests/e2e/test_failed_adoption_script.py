@@ -7,4 +7,4 @@ def test_failed_adoption_script():
     # Ensure dataframe has expected shape
     assert df.shape == (50, 3)
     # Product B should be identified as failed (index 1)
-    assert 1 in failed
+    assert failed == [1]
