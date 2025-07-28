@@ -7,6 +7,7 @@ from innovate.fitters.bayesian_fitter import BayesianFitter
 
 @pytest.fixture
 def synthetic_bass_data():
+    np.random.seed(0)
     t = np.linspace(0, 20, 100)
     p, q, m = 0.03, 0.38, 1.0
     y = m * (1 - np.exp(-(p + q) * t)) / (1 + (q / p) * np.exp(-(p + q) * t))
@@ -16,7 +17,7 @@ def synthetic_bass_data():
 def test_bayesian_fitter(synthetic_bass_data):
     t, y = synthetic_bass_data
     model = BassModel()
-    fitter = BayesianFitter(model, draws=10, tune=10, chains=1, cores=1)
+    fitter = BayesianFitter(model, draws=20, tune=20, chains=1, cores=1)
     fitter.fit(t, y)
 
     assert model.params_ is not None
