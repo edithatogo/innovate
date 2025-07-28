@@ -107,6 +107,7 @@ class HierarchicalModel(DiffusionModel):
         rates = np.diff(B.array(cumulative), n=1)
         return np.concatenate([[rates[0]], rates])
 
+
     def score(self, t: Sequence[float], y: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> float:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
@@ -115,6 +116,44 @@ class HierarchicalModel(DiffusionModel):
         ss_tot = B.sum((B.array(y) - B.mean(B.array(y))) ** 2)
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
+    @property
+    def params_(self) -> Dict[str, float]:
+        return self._params
+
+    @params_.setter
+    def params_(self, value: Dict[str, float]):
+        self._params = value
+
+    def predict_adoption_rate(self, t: Sequence[float]) -> Sequence[float]:
+        raise NotImplementedError
+
     @staticmethod
-    def differential_equation(y, t, p):
-        raise NotImplementedError("HierarchicalModel does not implement a differential equation")
+    def differential_equation(t, y, params, covariates, t_eval):
+        raise NotImplementedError
+
+    @property
+    def param_names(self) -> Sequence[str]:
+        names = []
+        for base in self.model.param_names:
+            names.append(f"global_{base}")
+            for g in self.groups:
+                names.append(f"{g}_{base}")
+        return names
+
+    def initial_guesses(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, float]:
+        guesses = {}
+        base_guesses = self.model.initial_guesses(t, y)
+        for name, val in base_guesses.items():
+            guesses[f"global_{name}"] = val
+            for g in self.groups:
+                guesses[f"{g}_{name}"] = 0.0
+        return guesses
+
+    def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
+        bnds = {}
+        base_bounds = self.model.bounds(t, y)
+        for name, val in base_bounds.items():
+            bnds[f"global_{name}"] = val
+            for g in self.groups:
+                bnds[f"{g}_{name}"] = val
+        return bnds

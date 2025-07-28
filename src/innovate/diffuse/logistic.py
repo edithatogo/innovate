@@ -101,6 +101,22 @@ class LogisticModel(DiffusionModel):
         t_arr = B.array(t)
         return L / (1 + B.exp(-k * (t_arr - x0)))
 
+    @staticmethod
+    def differential_equation(t, y, params, covariates, t_eval):
+        """Time derivative of the logistic model with optional covariates."""
+        L = params[0]
+        k = params[1]
+        x0 = params[2]
+        if covariates:
+            param_idx = 3
+            for cov_name, cov_values in covariates.items():
+                cov_val_t = np.interp(t, t_eval, cov_values)
+                L += params[param_idx] * cov_val_t
+                k += params[param_idx+1] * cov_val_t
+                x0 += params[param_idx+2] * cov_val_t
+                param_idx += 3
+        return k * y * (1 - y / L)
+
     def score(self, t: Sequence[float], y: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> float:
         """
         Compute the coefficient of determination (R²) between observed values and model predictions.
@@ -154,6 +170,16 @@ class LogisticModel(DiffusionModel):
         self.params_ = dict(zip(self.param_names, params))
         return self.predict(t)
 
-    @staticmethod
-    def differential_equation(t, y, params, covariates=None, t_eval=None):
-        raise NotImplementedError("Differential equation not implemented for LogisticModel")
+    def differential_equation(self, t, y, params, covariates, t_eval):
+        """Differential equation for the logistic model."""
+        L, k, x0 = params[0], params[1], params[2]
+        if covariates:
+            param_idx = 3
+            for cov_name, cov_values in covariates.items():
+                cov_val_t = np.interp(t, t_eval, cov_values)
+                L += params[param_idx] * cov_val_t
+                k += params[param_idx + 1] * cov_val_t
+                x0 += params[param_idx + 2] * cov_val_t
+                param_idx += 3
+
+        return k * y[0] * (1 - y[0] / L)

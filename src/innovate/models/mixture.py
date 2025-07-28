@@ -50,21 +50,22 @@ class MixtureModel(DiffusionModel):
                 self._params[f"model_{i}_{pn}"] = val
         return self
 
+
     def predict(self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> Sequence[float]:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
-
-        preds = B.zeros(len(t))
-        for i, model in enumerate(self.models):
-            params = {pn: self._params[f"model_{i}_{pn}"] for pn in model.param_names}
-            model.params_ = params
-            pred = B.array(model.predict(t, covariates))
-            preds += self.weights[i] * pred
-        return preds
+        preds: List[B.array] = []
+        for idx, model in enumerate(self.models):
+            param_prefix = f"model_{idx}_"
+            params = {key[len(param_prefix):]: val for key, val in self._params.items() if key.startswith(param_prefix)}
+            m = type(model)()  # assume default constructor works
+            m.params_ = params
+            preds.append(B.array(m.predict(t)))
+        stacked = B.stack(preds)
+        weighted = B.matmul(self.weights, stacked)
+        return weighted
 
     def score(self, t: Sequence[float], y: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> float:
-        if not self._params:
-            raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t, covariates)
         ss_res = B.sum((B.array(y) - y_pred) ** 2)
         ss_tot = B.sum((B.array(y) - B.mean(B.array(y))) ** 2)
@@ -91,3 +92,38 @@ class MixtureModel(DiffusionModel):
     @staticmethod
     def differential_equation(y, t, p):
         raise NotImplementedError("MixtureModel does not implement a differential equation")
+
+    @staticmethod
+    def differential_equation(y, t, p):
+        raise NotImplementedError
+
+    def predict_adoption_rate(self, t: Sequence[float]) -> Sequence[float]:
+        raise NotImplementedError
+
+    @staticmethod
+    def differential_equation(t, y, params, covariates, t_eval):
+        raise NotImplementedError
+
+    @property
+    def param_names(self) -> Sequence[str]:
+        names = []
+        for idx, model in enumerate(self.models):
+            for p in model.param_names:
+                names.append(f"model_{idx}_{p}")
+        return names
+
+    def initial_guesses(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, float]:
+        guesses = {}
+        for idx, model in enumerate(self.models):
+            sub_guesses = model.initial_guesses(t, y)
+            for k, v in sub_guesses.items():
+                guesses[f"model_{idx}_{k}"] = v
+        return guesses
+
+    def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
+        bnds = {}
+        for idx, model in enumerate(self.models):
+            sub_bounds = model.bounds(t, y)
+            for k, v in sub_bounds.items():
+                bnds[f"model_{idx}_{k}"] = v
+        return bnds

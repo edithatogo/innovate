@@ -52,7 +52,8 @@ Now, we create an instance of the ``LogisticModel`` to be fitted and an instance
 
     # 2. Create a new model instance and the fitter
     model_to_fit = LogisticModel()
-    fitter = BayesianFitter(model=model_to_fit, draws=2000, tune=1000, chains=4)
+    # Reduce chains/cores on memory constrained systems
+    fitter = BayesianFitter(model=model_to_fit, draws=2000, tune=1000, chains=1, cores=1)
 
     # 3. Fit the model to the data
     fitter.fit(t, y)
