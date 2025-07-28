@@ -3,16 +3,38 @@ import numpy as np
 from typing import Dict, Any, List, Sequence, Tuple
 from innovate.base.base import DiffusionModel
 from .metrics import (
-    calculate_mse, 
-    calculate_rmse, 
-    calculate_mae, 
-    calculate_r_squared, 
-    calculate_mape, 
+    calculate_mse,
+    calculate_rmse,
+    calculate_mae,
+    calculate_r_squared,
+    calculate_mape,
     calculate_smape,
     calculate_rss,
     calculate_aic,
     calculate_bic
 )
+
+
+def model_aic(model: DiffusionModel, t: Sequence[float], y: Sequence[float]) -> float:
+    """Return the Akaike Information Criterion for a fitted model."""
+    if not model.params_:
+        raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
+    y_pred = model.predict(t)
+    rss = calculate_rss(y, y_pred)
+    n_samples = len(y)
+    n_params = len(model.param_names) + 1
+    return calculate_aic(n_params, n_samples, rss)
+
+
+def model_bic(model: DiffusionModel, t: Sequence[float], y: Sequence[float]) -> float:
+    """Return the Bayesian Information Criterion for a fitted model."""
+    if not model.params_:
+        raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
+    y_pred = model.predict(t)
+    rss = calculate_rss(y, y_pred)
+    n_samples = len(y)
+    n_params = len(model.param_names) + 1
+    return calculate_bic(n_params, n_samples, rss)
 
 def get_fit_metrics(model: DiffusionModel, t: Sequence[float], y: Sequence[float]) -> Dict[str, float]:
     """
