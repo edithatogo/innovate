@@ -9,6 +9,7 @@ current_backend = NumPyBackend()
 def use_backend(backend: str):
     global current_backend
     if backend == "jax":
+        from innovate.backends.jax_backend import JaxBackend
         if JaxBackend is None:
             raise ImportError("JAX backend is not available")
         current_backend = JaxBackend()
