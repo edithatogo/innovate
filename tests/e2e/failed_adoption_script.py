@@ -32,7 +32,7 @@ def run_failed_adoption_example():
     # Identify failed products based on market share threshold
     market_share = predictions_df.values / m_vals
     failure_threshold = 0.1
-    failed = [i for i, shares in enumerate(market_share.T) if shares.max() < failure_threshold]
+    failed = list(np.where(market_share.max(axis=0) < failure_threshold)[0])
     return predictions_df, failed
 
 if __name__ == "__main__":
