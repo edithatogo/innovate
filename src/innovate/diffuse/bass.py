@@ -3,6 +3,7 @@ from innovate.backend import current_backend as B
 from innovate.dynamics.growth.dual_influence import DualInfluenceGrowth
 from typing import Sequence, Dict
 import numpy as np
+import pytensor.tensor as pt
 
 class BassModel(DiffusionModel):
     """
@@ -137,7 +138,8 @@ class BassModel(DiffusionModel):
                 m_t += params[param_idx+2] * cov_val_t
                 param_idx += 3
 
-        return self.growth_model.compute_growth_rate(y, m_t, innovation_coeff=p_t, imitation_coeff=q_t)
+        rate = (p_t + q_t * (y / m_t)) * (m_t - y)
+        return pt.switch(m_t > 0, rate, 0)
 
     def score(self, t: Sequence[float], y: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> float:
         """

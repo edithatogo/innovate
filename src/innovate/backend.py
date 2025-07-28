@@ -1,11 +1,11 @@
 from innovate.backends.numpy_backend import NumPyBackend
-from innovate.backends.jax_backend import JaxBackend
 
 current_backend = NumPyBackend()
 
 def use_backend(backend: str):
     global current_backend
     if backend == "jax":
+        from innovate.backends.jax_backend import JaxBackend
         current_backend = JaxBackend()
     elif backend == "numpy":
         current_backend = NumPyBackend()

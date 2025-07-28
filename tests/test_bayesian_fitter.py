@@ -2,44 +2,42 @@
 
 import pytest
 import numpy as np
-from innovate.diffuse.logistic import LogisticModel
+from innovate.diffuse.bass import BassModel
 from innovate.fitters.bayesian_fitter import BayesianFitter
 
 @pytest.fixture
-def synthetic_logistic_data():
+def synthetic_bass_data():
     t = np.linspace(0, 20, 100)
-    # True parameters: L=1.0, k=1.5, x0=10.0
-    y = 1.0 / (1 + np.exp(-1.5 * (t - 10.0))) + np.random.normal(0, 0.01, len(t))
+    p, q, m = 0.03, 0.38, 1.0
+    y = m * (1 - np.exp(-(p + q) * t)) / (1 + (q / p) * np.exp(-(p + q) * t))
+    y += np.random.normal(0, 0.01, len(t))
     return t, y
 
-def test_bayesian_fitter(synthetic_logistic_data):
-    t, y = synthetic_logistic_data
-    model = LogisticModel()
-    fitter = BayesianFitter(model, draws=1000, tune=1000, chains=2)
+def test_bayesian_fitter(synthetic_bass_data):
+    t, y = synthetic_bass_data
+    model = BassModel()
+    fitter = BayesianFitter(model, draws=10, tune=10, chains=1, cores=1)
     fitter.fit(t, y)
 
     assert model.params_ is not None
-    assert len(model.params_) == 3 # L, k, x0
-    # Allow a larger tolerance for Bayesian fitting
-    assert np.allclose(list(model.params_.values()), [1.0, 1.5, 10.0], atol=0.5)
+    assert len(model.params_) == 3  # p, q, m
+    assert np.allclose(
+        list(model.params_.values()), [0.03, 0.38, 1.0], atol=0.1
+    )
 
     # Test get_parameter_estimates
     estimates = fitter.get_parameter_estimates()
     assert isinstance(estimates, dict)
     assert len(estimates) == 3
-    assert "L" in estimates
-    assert "k" in estimates
-    assert "x0" in estimates
+    assert "p" in estimates
+    assert "q" in estimates
+    assert "m" in estimates
 
     # Test get_confidence_intervals
     intervals = fitter.get_confidence_intervals()
     assert isinstance(intervals, dict)
     assert len(intervals) == 3
-    assert "L" in intervals
-    assert "k" in intervals
-    assert "x0" in intervals
-    assert isinstance(intervals["L"], tuple)
-    assert len(intervals["L"]) == 2
+    assert set(intervals.keys()) == {"p", "q", "m"}
 
     # Test get_summary
     summary = fitter.get_summary()

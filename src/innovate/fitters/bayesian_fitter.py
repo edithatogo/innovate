@@ -3,7 +3,7 @@
 import pymc as pm
 import numpy as np
 import pytensor.tensor as pt
-from typing import Sequence, Dict
+from typing import Sequence, Dict, Optional
 from innovate.base.base import DiffusionModel
 
 class BayesianFitter:
@@ -12,11 +12,12 @@ class BayesianFitter:
     model parameters.
     """
 
-    def __init__(self, model: DiffusionModel, draws: int = 2000, tune: int = 1000, chains: int = 4):
+    def __init__(self, model: DiffusionModel, draws: int = 2000, tune: int = 1000, chains: int = 2, cores: Optional[int] = None):
         self.model = model
         self.draws = draws
         self.tune = tune
         self.chains = chains
+        self.cores = 1 if cores is None else cores
         self.trace = None
 
     def fit(self, t: Sequence[float], y: np.ndarray, **kwargs):
@@ -53,7 +54,9 @@ class BayesianFitter:
             likelihood = pm.Normal("likelihood", mu=mu[:, 0], sigma=sigma, observed=y)
 
             # Sample from the posterior
-            self.trace = pm.sample(self.draws, tune=self.tune, chains=self.chains, **kwargs)
+            sample_kwargs = {"chains": self.chains, "cores": self.cores, "progressbar": False}
+            sample_kwargs.update(kwargs)
+            self.trace = pm.sample(self.draws, tune=self.tune, **sample_kwargs)
 
         # Set the model parameters to the mean of the posterior
         self.model.params_ = self.get_parameter_estimates()

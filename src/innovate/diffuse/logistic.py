@@ -153,3 +153,17 @@ class LogisticModel(DiffusionModel):
     def cumulative_adoption(self, t: Sequence[float], *params) -> Sequence[float]:
         self.params_ = dict(zip(self.param_names, params))
         return self.predict(t)
+
+    def differential_equation(self, t, y, params, covariates, t_eval):
+        """Differential equation for the logistic model."""
+        L, k, x0 = params[0], params[1], params[2]
+        if covariates:
+            param_idx = 3
+            for cov_name, cov_values in covariates.items():
+                cov_val_t = np.interp(t, t_eval, cov_values)
+                L += params[param_idx] * cov_val_t
+                k += params[param_idx + 1] * cov_val_t
+                x0 += params[param_idx + 2] * cov_val_t
+                param_idx += 3
+
+        return k * y[0] * (1 - y[0] / L)
