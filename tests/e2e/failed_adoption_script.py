@@ -4,6 +4,16 @@ import pandas as pd
 # Simplified version of the failed adoption example
 
 def run_failed_adoption_example():
+    """Runs a simplified simulation of product adoption to identify failed products.
+
+    A product is considered to have failed if its market share never exceeds
+    a predefined threshold.
+
+    Returns:
+        tuple: A tuple containing:
+            - pd.DataFrame: Adoption predictions over time.
+            - list: Indices of products identified as failed.
+    """
     # Adoption parameters for three products
     # Use a much smaller adoption rate for Product B so it fails
     p_vals = np.array([0.03, 0.002, 0.04])
