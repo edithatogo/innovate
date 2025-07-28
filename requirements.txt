@@ -9,3 +9,8 @@ networkx
 sphinx
 matplotlib
 pymc
+ruptures
+pymannkendall
+jax
+jaxopt
+diffrax
