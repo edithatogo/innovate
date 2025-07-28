@@ -1,63 +1,55 @@
-from typing import Sequence, List, Dict
-import numpy as np
 from innovate.base.base import DiffusionModel
-from innovate.utils.metrics import calculate_r_squared
+from typing import Sequence, Dict, List
+from innovate.backend import current_backend as B
 
 class MixtureModel(DiffusionModel):
-    def __init__(self, models: List[DiffusionModel], weights: Sequence[float]):
-        self.models = models
-        self.weights = weights
+    """Combine predictions from multiple submodels using fixed weights."""
+
+    def __init__(self, models: Sequence[DiffusionModel], weights: Sequence[float]):
+        if len(models) != len(weights):
+            raise ValueError("models and weights must have the same length")
+        self.models = list(models)
+        weights_arr = B.array(weights)
+        self.weights = weights_arr / B.sum(weights_arr)
         self._params: Dict[str, float] = {}
 
+    # ------------------------------------------------------------------
+    # DiffusionModel API
+    # ------------------------------------------------------------------
     @property
     def param_names(self) -> Sequence[str]:
-        names = []
-        for idx, model in enumerate(self.models):
+        names: List[str] = []
+        for i, model in enumerate(self.models):
             for pname in model.param_names:
-                names.append(f"model_{idx}_{pname}")
+                names.append(f"model_{i}_{pname}")
         return names
 
     def initial_guesses(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, float]:
-        guesses = {}
-        for idx, model in enumerate(self.models):
-            for name, val in model.initial_guesses(t, y).items():
-                guesses[f"model_{idx}_{name}"] = val
+        guesses: Dict[str, float] = {}
+        for i, model in enumerate(self.models):
+            for pn, val in model.initial_guesses(t, y).items():
+                guesses[f"model_{i}_{pn}"] = val
         return guesses
 
     def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
-        bounds = {}
-        for idx, model in enumerate(self.models):
-            for name, bnd in model.bounds(t, y).items():
-                bounds[f"model_{idx}_{name}"] = bnd
+        bounds: Dict[str, tuple] = {}
+        for i, model in enumerate(self.models):
+            for pn, val in model.bounds(t, y).items():
+                bounds[f"model_{i}_{pn}"] = val
         return bounds
 
-    def predict(self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> Sequence[float]:
-        preds = np.zeros_like(t, dtype=float)
-        for w, m in zip(self.weights, self.models):
-            preds += w * m.predict(t)
-        return preds
-
-    def score(self, t: Sequence[float], y: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> float:
-        y_pred = self.predict(t, covariates)
-        return calculate_r_squared(y, y_pred)
-
-from innovate.base.base import DiffusionModel
-from innovate.backend import current_backend as B
-from typing import Sequence, Dict, List
-
-class MixtureModel(DiffusionModel):
-    """Combine multiple diffusion models using weighted averaging."""
-    def __init__(self, models: Sequence[DiffusionModel], weights: Sequence[float] = None):
-        self.models = list(models)
-        if weights is None:
-            weights = [1.0 / len(self.models)] * len(self.models)
-        if len(weights) != len(self.models):
-            raise ValueError("Length of weights must match number of models")
-        self.weights = B.array(weights)
-        self._params: Dict[str, float] = {}
-
     def fit(self, t: Sequence[float], y: Sequence[float]):
-        raise NotImplementedError
+        """Fit each submodel independently to the data using ScipyFitter."""
+        from innovate.fitters.scipy_fitter import ScipyFitter
+
+        self._params = {}
+        fitter = ScipyFitter()
+        for i, model in enumerate(self.models):
+            fitter.fit(model, t, y)
+            for pn, val in model.params_.items():
+                self._params[f"model_{i}_{pn}"] = val
+        return self
+
 
     def predict(self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> Sequence[float]:
         if not self._params:
@@ -88,7 +80,18 @@ class MixtureModel(DiffusionModel):
         self._params = value
 
     def predict_adoption_rate(self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> Sequence[float]:
-        raise NotImplementedError
+        if not self._params:
+            raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
+        y_pred = self.predict(t, covariates)
+        import numpy as np
+
+        rates = np.diff(B.array(y_pred), n=1)
+        rates = np.concatenate([[rates[0]], rates])
+        return rates
+
+    @staticmethod
+    def differential_equation(y, t, p):
+        raise NotImplementedError("MixtureModel does not implement a differential equation")
 
     @staticmethod
     def differential_equation(y, t, p):

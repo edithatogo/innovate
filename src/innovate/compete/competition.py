@@ -137,3 +137,7 @@ class MultiProductDiffusionModel(DiffusionModel):
 
     def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
         return {}
+
+    @staticmethod
+    def differential_equation(t, y, params):
+        raise NotImplementedError("Differential equation not implemented for MultiProductDiffusionModel")
