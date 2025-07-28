@@ -202,6 +202,25 @@ def test_mixture_model():
     y = model.predict(t)
     assert len(y) == 100
 
+def test_mixture_model_weighting():
+    t = np.linspace(1, 4, 4)
+    models = [BassModel(), BassModel()]
+    weights = [0.6, 0.4]
+    model = MixtureModel(models, weights)
+    model.params_ = {
+        "model_0_p": 0.01,
+        "model_0_q": 0.1,
+        "model_0_m": 100,
+        "model_1_p": 0.02,
+        "model_1_q": 0.2,
+        "model_1_m": 200,
+    }
+    # compute expected weighted average
+    m1 = BassModel(); m1.params_ = {"p":0.01, "q":0.1, "m":100}
+    m2 = BassModel(); m2.params_ = {"p":0.02, "q":0.2, "m":200}
+    expected = 0.6 * m1.predict(t) + 0.4 * m2.predict(t)
+    np.testing.assert_allclose(model.predict(t), expected)
+
 def test_hierarchical_model():
     t = np.linspace(0, 50, 100)
     model = HierarchicalModel(BassModel(), ["group1", "group2"])
@@ -221,3 +240,24 @@ def test_hierarchical_model():
 
     y = model.predict(t)
     assert len(y) == 100
+
+def test_hierarchical_model_group_behavior():
+    t = np.linspace(1, 3, 3)
+    base = BassModel()
+    model = HierarchicalModel(base, ["g1", "g2"])
+    model.params_ = {
+        "global_p": 0.01,
+        "global_q": 0.1,
+        "global_m": 100,
+        "g1_p": 0.005,
+        "g1_q": 0.02,
+        "g1_m": 10,
+        "g2_p": -0.002,
+        "g2_q": -0.03,
+        "g2_m": -5,
+    }
+    # manual computation
+    m1 = BassModel(); m1.params_ = {"p":0.015,"q":0.12,"m":110}
+    m2 = BassModel(); m2.params_ = {"p":0.008,"q":0.07,"m":95}
+    expected = m1.predict(t) + m2.predict(t)
+    np.testing.assert_allclose(model.predict(t), expected)
