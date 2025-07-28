@@ -96,6 +96,63 @@ class MultiProductDiffusionModel(DiffusionModel):
         remaining_potential = B.where(m - y_arr < 0, 0, m - y_arr)
         return force * remaining_potential
 
+    def fit(self, t: Sequence[float], y: Sequence[Sequence[float]], **kwargs) -> Self:
+        """Fit model parameters by minimizing squared prediction error."""
+        from scipy.optimize import minimize
+
+        y_arr = np.array(y)
+        if y_arr.ndim != 2 or y_arr.shape[1] != self.N:
+            raise ValueError("Observed data must be a 2D array with N columns")
+
+        t_arr = np.array(t)
+
+        def flatten(p_vec, Q_mat, m_vec):
+            return np.concatenate([p_vec, Q_mat.flatten(), m_vec])
+
+        def unflatten(params):
+            p_end = self.N
+            Q_end = p_end + self.N * self.N
+            p_vec = np.array(params[:p_end])
+            Q_mat = np.array(params[p_end:Q_end]).reshape(self.N, self.N)
+            m_vec = np.array(params[Q_end:Q_end + self.N])
+            return p_vec, Q_mat, m_vec
+
+        guesses = self.initial_guesses(t_arr, y_arr)
+        p0 = np.array(guesses.get("p", self.p))
+        Q0 = np.array(guesses.get("Q", self.Q))
+        m0 = np.array(guesses.get("m", self.m))
+        x0 = flatten(p0, Q0, m0)
+
+        bounds_dict = self.bounds(t_arr, y_arr)
+
+        def _default_bounds(size, lb=0.0):
+            return [(lb, None)] * size
+
+        b_p = bounds_dict.get("p", _default_bounds(self.N))
+        b_Q = bounds_dict.get("Q", [(None, None)] * (self.N * self.N))
+        b_m = bounds_dict.get("m", _default_bounds(self.N))
+        bounds = b_p + b_Q + b_m
+
+        def objective(params):
+            p_vec, Q_mat, m_vec = unflatten(params)
+            self.p = B.array(p_vec)
+            self.Q = B.array(Q_mat)
+            self.m = B.array(m_vec)
+            pred = self.predict(t_arr).values
+            return np.sum((y_arr - pred) ** 2)
+
+        result = minimize(objective, x0, bounds=bounds, method="L-BFGS-B", **kwargs)
+
+        if not result.success:
+            raise RuntimeError(f"Fitting failed: {result.message}")
+
+        opt_p, opt_Q, opt_m = unflatten(result.x)
+        self.p = B.array(opt_p)
+        self.Q = B.array(opt_Q)
+        self.m = B.array(opt_m)
+        self._params = {"p": opt_p.tolist(), "Q": opt_Q.tolist(), "m": opt_m.tolist()}
+        return self
+
     def score(self, t: Sequence[float], y: pd.DataFrame) -> float:
         if not self.params_ and (self.p is None or self.Q is None or self.m is None):
             raise RuntimeError("Model has not been fitted or initialized with parameters yet. Call .fit() or initialize with p, Q, m.")
