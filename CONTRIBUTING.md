@@ -36,7 +36,7 @@ We welcome contributions from the community! Whether you're fixing a bug, adding
     ```bash
     git push origin my-feature-branch
     ```
-3.  Open a pull request from your branch to the `main` branch of the original repository.
+3.  Open a pull request from your branch to the `work` branch of the original repository.
 4.  In the pull request description, please provide details about the changes you've made.
 
 Thank you for contributing to Innovate!
