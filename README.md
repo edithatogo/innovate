@@ -119,6 +119,11 @@ We are continuing to investigate opportunities for optimization, including the u
 ## License
 
 This project is licensed under the Apache 2.0 License.
+
+## Testing
+
+See the [Testing Strategy](docs/testing_strategy.rst) document for details on
+how to run the test suite and how different tests are categorized.
 ## Branching Strategy
 
 This repository now uses `main` as the primary development branch. Existing branches can be rebased or merged onto `main`.
