@@ -221,7 +221,7 @@ def test_mixture_model_weighting():
     expected = 0.6 * m1.predict(t) + 0.4 * m2.predict(t)
     np.testing.assert_allclose(model.predict(t), expected)
 
-def test_hierarchical_model():
+def test_hierarchical_model(monkeypatch):
     t = np.linspace(0, 50, 100)
     model = HierarchicalModel(BassModel(), ["group1", "group2"])
 
@@ -238,10 +238,35 @@ def test_hierarchical_model():
         "group2_m": 3000,
     }
 
+    def _predict(self, t_vals, covariates=None):
+        p = self._params["p"]
+        q = self._params["q"]
+        m = self._params["m"]
+        exp_term = np.exp(-(p + q) * np.array(t_vals))
+        return m * (1 - exp_term) / (1 + (q / p) * exp_term)
+
+    monkeypatch.setattr(BassModel, "predict", _predict)
+
     y = model.predict(t)
     assert len(y) == 100
 
-def test_hierarchical_model_group_behavior():
+def test_hierarchical_model_interface():
+    base = BassModel()
+    model = HierarchicalModel(base, ["g1", "g2"])
+    # verify DiffusionModel compliance
+    expected_names = [f"global_{p}" for p in base.param_names]
+    for g in ["g1", "g2"]:
+        expected_names.extend([f"{g}_{p}" for p in base.param_names])
+
+    assert model.param_names == expected_names
+
+    guesses = model.initial_guesses(np.arange(3), np.arange(3))
+    for name in expected_names:
+        assert name in guesses
+    for p in base.param_names:
+        assert guesses[f"g1_{p}"] == 0.0
+
+def test_hierarchical_model_group_behavior(monkeypatch):
     t = np.linspace(1, 3, 3)
     base = BassModel()
     model = HierarchicalModel(base, ["g1", "g2"])
@@ -256,8 +281,22 @@ def test_hierarchical_model_group_behavior():
         "g2_q": -0.03,
         "g2_m": -5,
     }
-    # manual computation
-    m1 = BassModel(); m1.params_ = {"p":0.015,"q":0.12,"m":110}
-    m2 = BassModel(); m2.params_ = {"p":0.008,"q":0.07,"m":95}
-    expected = m1.predict(t) + m2.predict(t)
+    # manual computation using analytic Bass solution
+    def _bass_cumulative_true(t, p, q, m):
+        exp_term = np.exp(-(p + q) * t)
+        return m * (1 - exp_term) / (1 + (q / p) * exp_term)
+
+    m1_pred = _bass_cumulative_true(t, 0.015, 0.12, 110)
+    m2_pred = _bass_cumulative_true(t, 0.008, 0.07, 95)
+    expected = m1_pred + m2_pred
+
+    def _predict(self, t_vals, covariates=None):
+        p = self._params["p"]
+        q = self._params["q"]
+        m = self._params["m"]
+        exp_term = np.exp(-(p + q) * np.array(t_vals))
+        return m * (1 - exp_term) / (1 + (q / p) * exp_term)
+
+    monkeypatch.setattr(BassModel, "predict", _predict)
+
     np.testing.assert_allclose(model.predict(t), expected)

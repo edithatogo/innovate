@@ -124,7 +124,19 @@ This project is licensed under the Apache 2.0 License.
 
 See the [Testing Strategy](docs/testing_strategy.rst) document for details on
 how to run the test suite and how different tests are categorized.
-## Branching Strategy
 
+### Setup
+
+Install the project dependencies before running the tests:
+
+```bash
+pip install -r requirements.txt
+```
+
+After installing the requirements, you can run `pytest`. The full recommended
+command is documented in
+[docs/testing_strategy.rst](docs/testing_strategy.rst).
+
+## Branching Strategy
 This repository now uses `work` as the primary development branch. Existing branches can be rebased or merged onto `work`.
 
