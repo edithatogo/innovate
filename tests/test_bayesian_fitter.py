@@ -18,7 +18,7 @@ def test_bayesian_fitter(synthetic_bass_data):
     t, y = synthetic_bass_data
     model = BassModel()
     fitter = BayesianFitter(model, draws=20, tune=20, chains=1, cores=1)
-    fitter.fit(t, y)
+    fitter.fit(t, y, target_accept=0.9)
 
     assert model.params_ is not None
     assert len(model.params_) == 3  # p, q, m
