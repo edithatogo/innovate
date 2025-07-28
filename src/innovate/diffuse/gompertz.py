@@ -101,7 +101,8 @@ class GompertzModel(DiffusionModel):
             method='LSODA',
             dense_output=True,
         )
-        return sol.sol(t).flatten()
+        y_pred = sol.sol(t).flatten()
+        return np.maximum.accumulate(y_pred)
 
     def differential_equation(self, t, y, params, covariates, t_eval):
         """

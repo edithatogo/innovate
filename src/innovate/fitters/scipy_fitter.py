@@ -30,18 +30,9 @@ class ScipyFitter:
 
         # Check for MultiProductDiffusionModel and handle accordingly
         if isinstance(model, MultiProductDiffusionModel):
-            y_arr = y_arr.flatten()
-            # Create a dummy xdata of the same length as the flattened y_arr
-            x_dummy = np.arange(len(y_arr))
-            
-            def fit_function(x_dummy_ignored, *params):
-                param_dict = dict(zip(model.param_names, params))
-                model.params_ = param_dict
-                # The real t_arr is captured from the outer scope
-                return model.predict(t_arr).flatten()
-            
-            # Use the dummy xdata for the curve_fit call
-            x_fit = x_dummy
+            raise NotImplementedError(
+                "Fitting MultiProductDiffusionModel with ScipyFitter is not yet implemented"
+            )
         else:
             y_arr = y_arr.flatten()
             def fit_function(t, *params):

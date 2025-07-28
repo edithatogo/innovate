@@ -153,3 +153,7 @@ class LogisticModel(DiffusionModel):
     def cumulative_adoption(self, t: Sequence[float], *params) -> Sequence[float]:
         self.params_ = dict(zip(self.param_names, params))
         return self.predict(t)
+
+    @staticmethod
+    def differential_equation(t, y, params, covariates=None, t_eval=None):
+        raise NotImplementedError("Differential equation not implemented for LogisticModel")
