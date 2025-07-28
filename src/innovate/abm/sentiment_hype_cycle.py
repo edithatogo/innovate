@@ -22,7 +22,7 @@ class SentimentHypeAgent(InnovationAgent):
         if self.adopted:
             return
 
-        neighbors = self.model.grid.get_neighbors(self.pos, include_center=False)
+        neighbors = self.model.grid.get_neighbors(self.pos, moore=True, include_center=False)
         if not neighbors:
             return
 
@@ -39,6 +39,7 @@ class SentimentHypeModel(Model):
     A model for a sentiment-driven hype cycle.
     """
     def __init__(self, num_agents, width, height, adoption_threshold, sentiment_threshold):
+        super().__init__()
         self.num_agents = num_agents
         self.adoption_threshold = adoption_threshold
         self.sentiment_threshold = sentiment_threshold
@@ -46,9 +47,8 @@ class SentimentHypeModel(Model):
         self.running = True
 
         # Create agents
-        self.agents = AgentSet(self, SentimentHypeAgent)
         for i in range(self.num_agents):
-            agent = self.agents.create_agent(unique_id=i)
+            agent = SentimentHypeAgent(unique_id=i, model=self)
             x = self.random.randrange(self.grid.width)
             y = self.random.randrange(self.grid.height)
             self.grid.place_agent(agent, (x, y))
@@ -68,7 +68,7 @@ class SentimentHypeModel(Model):
         Run one step of the model.
         """
         self.datacollector.collect(self)
-        self.agents.step()
+        self.agents.do("step")
 
     def run_model(self, n_steps):
         """

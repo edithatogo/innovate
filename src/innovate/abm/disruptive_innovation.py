@@ -33,6 +33,7 @@ class DisruptiveInnovationModel(Model):
     A model for disruptive innovation.
     """
     def __init__(self, num_agents, width, height, initial_disruptive_performance, disruptive_performance_improvement):
+        super().__init__()
         self.num_agents = num_agents
         self.grid = MultiGrid(width, height, True)
         self.running = True
@@ -44,9 +45,8 @@ class DisruptiveInnovationModel(Model):
         self.disruptive_performance_improvement = disruptive_performance_improvement
 
         # Create agents
-        self.agents = AgentSet(self, DisruptiveInnovationAgent)
         for i in range(self.num_agents):
-            agent = self.agents.create_agent(unique_id=i)
+            agent = DisruptiveInnovationAgent(unique_id=i, model=self)
             x = self.random.randrange(self.grid.width)
             y = self.random.randrange(self.grid.height)
             self.grid.place_agent(agent, (x, y))
@@ -64,7 +64,7 @@ class DisruptiveInnovationModel(Model):
         """
         self.disruptive_performance += self.disruptive_performance_improvement
         self.datacollector.collect(self)
-        self.agents.step()
+        self.agents.do("step")
 
     def run_model(self, n_steps):
         """

@@ -23,7 +23,7 @@ class CompetitiveDiffusionAgent(InnovationAgent):
             return  # Already adopted
 
         # Get neighbors
-        neighbors = self.model.grid.get_neighbors(self.pos, include_center=False)
+        neighbors = self.model.grid.get_neighbors(self.pos, moore=True, include_center=False)
         if not neighbors:
             return
 
@@ -43,15 +43,15 @@ class CompetitiveDiffusionModel(Model):
     A model for competitive diffusion of multiple innovations.
     """
     def __init__(self, num_agents, width, height, num_innovations):
+        super().__init__()
         self.num_agents = num_agents
         self.num_innovations = num_innovations
         self.grid = MultiGrid(width, height, True)
         self.running = True
 
         # Create agents
-        self.agents = AgentSet(self, CompetitiveDiffusionAgent, {"num_innovations": num_innovations})
         for i in range(self.num_agents):
-            agent = self.agents.create_agent(unique_id=i)
+            agent = CompetitiveDiffusionAgent(unique_id=i, model=self, num_innovations=num_innovations)
             x = self.random.randrange(self.grid.width)
             y = self.random.randrange(self.grid.height)
             self.grid.place_agent(agent, (x, y))
@@ -61,17 +61,22 @@ class CompetitiveDiffusionModel(Model):
             agent = self.random.choice(list(self.agents))
             agent.adopted_innovation = i
 
-        # Data collector
-        self.datacollector = DataCollector(
-            model_reporters={"AdoptionCounts": lambda m: [a.adopted_innovation for a in m.agents].count(i) for i in range(m.num_innovations)}
-        )
+        # Data collector - track count of adopters for each innovation
+        def adoption_counts(m):
+            counts = [0] * m.num_innovations
+            for a in m.agents:
+                if a.adopted_innovation != -1:
+                    counts[a.adopted_innovation] += 1
+            return counts
+
+        self.datacollector = DataCollector(model_reporters={"AdoptionCounts": adoption_counts})
 
     def step(self):
         """
         Run one step of the model.
         """
         self.datacollector.collect(self)
-        self.agents.step()
+        self.agents.do("step")
 
     def run_model(self, n_steps):
         """

@@ -139,7 +139,7 @@ class BassModel(DiffusionModel):
                 param_idx += 3
 
         rate = (p_t + q_t * (y / m_t)) * (m_t - y)
-        return pt.switch(m_t > 0, rate, 0)
+        return rate if m_t > 0 else 0.0
 
     def score(self, t: Sequence[float], y: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> float:
         """

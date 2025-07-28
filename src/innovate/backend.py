@@ -21,5 +21,6 @@ def use_backend(backend: str):
     else:
         raise ValueError(f"Unknown backend: {backend}")
 
+
 # Initialize with NumPy backend by default
 use_backend("numpy")
