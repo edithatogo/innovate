@@ -1,5 +1,7 @@
 from innovate.base.base import DiffusionModel
+from ..base import DiffusionModel
 from typing import Sequence, Dict, List
+from innovate.backend import current_backend as B
 from innovate.backend import current_backend as B
 
 class HierarchicalModel(DiffusionModel):
