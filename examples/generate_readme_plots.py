@@ -231,4 +231,35 @@ plt.tight_layout()
 plt.savefig(os.path.join(SAVE_DIR, "multi_product_diffusion.png"))
 plt.close()
 
+# --- 10. Adoption Curve ---
+print("Generating Adoption Curve plot...")
+# Use the Bass model results from before
+adoption_rate = np.diff(y_bass, prepend=0)
+
+fig, ax1 = plt.subplots(figsize=(8, 5))
+
+# Plot Cumulative Adopters
+ax1.plot(t, y_bass, "b-", label="Cumulative Adopters")
+ax1.set_xlabel("Time")
+ax1.set_ylabel("Cumulative Adopters", color="b")
+ax1.tick_params("y", colors="b")
+ax1.grid(True, linestyle="--", alpha=0.6)
+
+# Plot Adoption Rate on a secondary y-axis
+ax2 = ax1.twinx()
+ax2.plot(t, adoption_rate, "r-", label="Adoption Rate")
+ax2.set_ylabel("Adopters per Period", color="r")
+ax2.tick_params("y", colors="r")
+
+# Add a title and legend
+plt.title("Adoption Curve from Bass Model")
+fig.tight_layout()
+# Combine legends
+lines, labels = ax1.get_legend_handles_labels()
+lines2, labels2 = ax2.get_legend_handles_labels()
+ax2.legend(lines + lines2, labels + labels2, loc="upper left")
+plt.savefig(os.path.join(SAVE_DIR, "adoption_curve.png"))
+plt.close()
+
+
 print("All plots generated successfully.")
