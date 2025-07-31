@@ -22,12 +22,12 @@ The library will be built around a modular, backend-agnostic architecture. It wi
 -   **Policy Module**: Tools to simulate the impact of external shocks.
 -   **ABM Framework**: Integration with `Mesa` for bottom-up simulations.
 
-## Phase 3: Advanced Fitting & Preprocessing (Current Focus)
+## Phase 3: Advanced Fitting & Preprocessing (Complete)
 
 **Goal**: Dramatically improve the robustness and accuracy of model fitting and prepare the library for real-world, noisy data.
 1.  **Unified Fitting Framework**:
     *   Centralize all fitters into a single `innovate.fitters` module.
-    *   Implement a `BayesianFitter` using `PyMC` for robust parameter estimation and uncertainty quantification.
+    *   Implement a `BayesianFitter` for robust parameter estimation and uncertainty quantification. *(Decision: This will be implemented using `numpyro` to align with the existing JAX backend and resolve stability issues). (Note: This is currently **BLOCKED** due to persistent segmentation fault issues with the underlying Bayesian inference libraries. See `bayesian_fitter_issue.md` for details. Work will proceed on non-Bayesian alternatives like Expectation-Maximization for mixture models.)*
     *   Introduce global optimization strategies (e.g., Differential Evolution) to find better starting parameters and avoid local minima.
 2.  **Data Preprocessing Module**:
     *   Create an `innovate.preprocess` module.
@@ -37,7 +37,7 @@ The library will be built around a modular, backend-agnostic architecture. It wi
     *   Add tools for model comparison (AIC, BIC).
     *   Implement robust residual analysis (e.g., plotting autocorrelation) to diagnose model misspecification.
 
-## Phase 4: Functional Core & System Dynamics
+## Phase 4: Functional Core & System Dynamics (Complete)
 
 **Goal**: Refactor the core models to use functional names and introduce a system dynamics module.
 1.  **Functional Naming**:
@@ -47,7 +47,7 @@ The library will be built around a modular, backend-agnostic architecture. It wi
     *   Implement `GrowthCurve`, `ContagionSpread`, `CompetitiveInteraction`, and `SystemBehavior` abstract base classes.
     *   Implement concrete classes for the core growth models, contagion models (SIR, SIS, SEIR), and competition models (Lotka-Volterra, MarketShareAttraction, ReplicatorDynamics).
 
-## Phase 5: Advanced Diffusion-Competition Models
+## Phase 5: Advanced Diffusion-Competition Models (Complete)
 
 **Goal**: Move beyond simple competition to model more complex market dynamics.
 1.  **Generational Substitution Models**:
@@ -57,7 +57,7 @@ The library will be built around a modular, backend-agnostic architecture. It wi
 3.  **Covariate-Driven Models**:
     *   Enhance the core models to allow parameters to be functions of external variables (e.g., price, advertising spend, policy changes).
 
-## Phase 6: High-Performance Backend & Network Science
+## Phase 6: High-Performance Backend & Network Science (Complete)
 
 **Goal**: Enable large-scale simulation and more complex network structures.
 1.  **JAX/XLA Backend**:
@@ -66,9 +66,9 @@ The library will be built around a modular, backend-agnostic architecture. It wi
     *   Provide JIT compilation (`@jax.jit`) and vectorization (`vmap`) for significant performance gains.
 2.  **Network Diffusion Enhancements**:
     *   Integrate more deeply with libraries like `NDlib` (Network Diffusion Library).
-    *   Implement spatial diffusion models that account for geographic distance (gravity models).
+    -   Implement spatial diffusion models that account for geographic distance (gravity models).
 
-## Phase 7: Heterogeneity & Segmentation
+## Phase 7: Heterogeneity & Segmentation (Current Focus)
 
 **Goal**: Model adoption behavior across different population segments.
 1.  **Latent-Class & Hierarchical Models**:
@@ -78,6 +78,12 @@ The library will be built around a modular, backend-agnostic architecture. It wi
     *   Allow model parameters to be functions of covariates (e.g., GDP per capita, public awareness indices) via GLMs or GAMs.
 3.  **Time-Varying Parameters**:
     *   Incorporate piecewise or smoothly evolving parameters to capture policy shocks or media campaigns.
+
+---
+
+## Future Roadmap
+
+The following phases are planned for future releases and are not part of the current development cycle.
 
 ## Phase 8: Causal & Impact Assessment
 

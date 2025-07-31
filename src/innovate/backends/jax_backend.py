@@ -1,7 +1,7 @@
 import jax
 import jax.numpy as jnp
-from diffrax import diffeqsolve, ODETerm, Dopri5, SaveAt
 from typing import Sequence, Callable
+from jax.experimental.ode import odeint as jax_odeint
 
 class JaxBackend:
     def array(self, data):
@@ -25,12 +25,11 @@ class JaxBackend:
     def log(self, x):
         return jnp.log(x)
 
-    def solve_ode(self, f: Callable, y0: Sequence[float], t: Sequence[float]) -> jnp.ndarray:
-        term = ODETerm(f)
-        solver = Dopri5()
-        saveat = SaveAt(ts=t)
-        sol = diffeqsolve(term, solver, t0=t[0], t1=t[-1], dt0=t[1] - t[0], y0=y0, saveat=saveat)
-        return sol.ys
+    def solve_ode(self, f: Callable, y0: Sequence[float], t: Sequence[float], args=None) -> jnp.ndarray:
+        if args is None:
+            return jax_odeint(f, y0, t, rtol=1e-6, atol=1e-5, mxstep=1000)
+        else:
+            return jax_odeint(f, y0, t, args, rtol=1e-6, atol=1e-5, mxstep=1000)
 
     def stack(self, arrays: Sequence[jnp.ndarray]) -> jnp.ndarray:
         return jnp.stack(arrays)
@@ -55,3 +54,4 @@ class JaxBackend:
 
     def vmap(self, f: Callable) -> Callable:
         return jax.vmap(f)
+

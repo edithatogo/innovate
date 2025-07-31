@@ -5,7 +5,7 @@ import numpy as np
 from innovate.substitute.composite import CompositeDiffusionModel
 from innovate.diffuse.logistic import LogisticModel
 from innovate.diffuse.bass import BassModel
-from innovate.fitters.bayesian_fitter import BayesianFitter
+from innovate.fitters.numpyro_fitter import NumpyroFitter
 
 @pytest.fixture
 def synthetic_composite_data():
@@ -37,8 +37,8 @@ def test_composite_model(synthetic_composite_data):
     models = [LogisticModel(), BassModel()]
     model = CompositeDiffusionModel(models=models)
     
-    fitter = BayesianFitter(model, draws=1000, tune=1000, chains=1)
-    fitter.fit(t, y)
+    fitter = NumpyroFitter(model, num_warmup=500, num_samples=500, num_chains=1)
+    fitter.fit(t, y, covariates=None)
 
     # Check if the estimated parameters are reasonably close to the true parameters
     for param, true_value in true_params.items():

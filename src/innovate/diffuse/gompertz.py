@@ -10,7 +10,7 @@ class GompertzModel(DiffusionModel):
     This is a wrapper around the SkewedGrowth dynamics model.
     """
 
-    def __init__(self, covariates: Sequence[str] = None):
+    def __init__(self, covariates: Sequence[str] = None, t_event: float = None):
         """
         Initialize a Gompertz diffusion model with optional covariates.
         
@@ -18,6 +18,7 @@ class GompertzModel(DiffusionModel):
         """
         self._params: Dict[str, float] = {}
         self.covariates = covariates if covariates else []
+        self.t_event = t_event
         self.growth_model = SkewedGrowth()
 
     @property
@@ -29,6 +30,8 @@ class GompertzModel(DiffusionModel):
             Sequence[str]: List of parameter names for the model, with additional parameters for each covariate in the form 'beta_a_{cov}', 'beta_b_{cov}', and 'beta_c_{cov}'.
         """
         names = ["a", "b", "c"]
+        if self.t_event is not None:
+            names.extend(["a_post", "b_post", "c_post"])
         for cov in self.covariates:
             names.extend([f"beta_a_{cov}", f"beta_b_{cov}", f"beta_c_{cov}"])
         return names
@@ -39,6 +42,12 @@ class GompertzModel(DiffusionModel):
             "b": 1.0,
             "c": 0.1,
         }
+        if self.t_event is not None:
+            guesses.update({
+                "a_post": np.max(y) * 1.1,
+                "b_post": 1.0,
+                "c_post": 0.1,
+            })
         for cov in self.covariates:
             guesses[f"beta_a_{cov}"] = 0.0
             guesses[f"beta_b_{cov}"] = 0.0
@@ -63,6 +72,12 @@ class GompertzModel(DiffusionModel):
             "b": (1e-6, np.inf),
             "c": (1e-6, np.inf),
         }
+        if self.t_event is not None:
+            bounds.update({
+                "a_post": (np.max(y), np.inf),
+                "b_post": (1e-6, np.inf),
+                "c_post": (1e-6, np.inf),
+            })
         for cov in self.covariates:
             bounds[f"beta_a_{cov}"] = (-np.inf, np.inf)
             bounds[f"beta_b_{cov}"] = (-np.inf, np.inf)
@@ -118,16 +133,23 @@ class GompertzModel(DiffusionModel):
         Returns:
             float: The instantaneous growth rate at time t.
         """
-        a_base = params[0]
-        b_base = params[1]
-        c_base = params[2]
+        if self.t_event is not None and t >= self.t_event:
+            a_base = params[3]
+            b_base = params[4]
+            c_base = params[5]
+            param_idx_offset = 3
+        else:
+            a_base = params[0]
+            b_base = params[1]
+            c_base = params[2]
+            param_idx_offset = 0
 
         a_t = a_base
         b_t = b_base
         c_t = c_base
         
         if covariates:
-            param_idx = 3
+            param_idx = 3 + param_idx_offset
             for cov_name, cov_values in covariates.items():
                 cov_val_t = np.interp(t, t_eval, cov_values)
                 

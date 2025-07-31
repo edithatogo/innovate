@@ -18,8 +18,21 @@ This library provides a flexible and robust framework for modeling the complex d
     *   `innovate.fail`: For understanding the mechanisms of failed adoption.
     *   `innovate.adopt`: For classifying adopter types based on their adoption timing.
 *   **Efficient Data Handling**: Uses pandas with an Apache Arrow backend for high-performance data manipulation.
+*   **Advanced Parameterization**:
+    *   **Covariate-Driven Parameters**: Allow model parameters (like `p`, `q`, and `m` in the Bass model) to be functions of external variables (e.g., price, advertising).
+    *   **Time-Varying Parameters**: Model structural breaks and policy impacts by allowing parameters to change at a specified time.
+    *   **Mixture Models**: Automatically identify and model distinct adopter segments from your data using the Expectation-Maximization algorithm.
 *   **Extensible**: Designed with clear base classes to make it easy to add new custom models.
 *   **Computationally Aware**: Leverages vectorized NumPy operations for efficiency, with a backend abstraction that will support future acceleration (e.g., with JAX).
+
+## Model Feature Matrix
+
+| Feature | Bass | Gompertz | Logistic | Lotka-Volterra | Fisher-Pry | Norton-Bass |
+|---|---|---|---|---|---|---|
+| **Core Diffusion** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Covariates** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| **Time-Varying Params** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| **Mixture Model** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
 
 ## Innovate in the Ecosystem
 
@@ -31,6 +44,7 @@ This library provides a flexible and robust framework for modeling the complex d
 | **Competition Models**        | ✅ (Lotka-Volterra)                      | ❌                                  | ✅ (Via custom ABM)                   |
 | **Substitution Models**       | ✅ (Fisher-Pry)                          | ❌                                  | ✅ (Via custom ABM)                   |
 | **Hype Cycle Modeling**       | ✅ (Composite & DDE models)              | ❌                                  | ✅ (Via custom ABM)                   |
+| **Advanced Parameterization** | ✅ (Covariates, Time-Varying, Mixtures)  | ❌                                  | ❌ (Requires manual implementation)   |
 | **Agent-Based Modeling**      | ✅ (Integrated with `mesa`)              | ❌                                  | ✅ (Core functionality)               |
 | **Pre-configured ABM Scenarios**| ✅ (Competition, Hype, Disruption)       | ❌                                  | ❌ (Requires manual implementation)   |
 | **System Dynamics**           | ❌                                       | ❌                                  | ✅ (BPTK-Py only)                     |
@@ -42,7 +56,7 @@ This integrated approach means you can start with high-level diffusion models an
 
 ## Roadmap
 
-The `innovate` library is under active development. For detailed plans on upcoming features, including the Agent-Based Modeling (ABM) framework and advanced policy analysis tools, please see our [Roadmap](roadmap.md).
+The `innovate` library is under active development. For detailed plans on upcoming features, including the Agent-Based Modeling (ABM) framework and advanced policy analysis tools, please see our [Roadmap](documents/roadmap.md).
 
 ## Installation
 

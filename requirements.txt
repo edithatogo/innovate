@@ -12,7 +12,10 @@ pymc
 ruptures
 pymannkendall
 jax
+jaxlib
 jaxopt
 diffrax
 ndlib
 sympy
+numpyro
+arviz

@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2025-07-30
+
+### Added
+- Implemented a `BayesianFitter` using `PyMC` for robust parameter estimation.
+- Added model selection tools for AIC/BIC.
+- Added residual analysis plots (ACF/PACF) to `innovate.plots.diagnostics`.
+- Implemented a `MultiProductDiffusionModel` for generalized competition scenarios.
+- Added support for covariate-driven parameters to all core models.
+
+### Changed
+- **Refactored the core of the library into a new `innovate.dynamics` module.**
+    - Renamed core diffusion models to have functional names (e.g., `BassModel` is now `DualInfluenceGrowth`).
+    - Introduced abstract base classes for `GrowthCurve`, `ContagionSpread`, and `CompetitiveInteraction`.
+    - Implemented a full suite of contagion models (SIR, SIS, SEIR) and competition models (Lotka-Volterra, Market Share Attraction, Replicator Dynamics).
+- Updated the JAX backend to use `diffrax` for high-performance ODE solving.
+
 ## [0.2.1] - 2025-07-12
 
 ### Added
