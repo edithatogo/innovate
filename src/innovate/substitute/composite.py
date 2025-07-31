@@ -139,26 +139,12 @@ class CompositeDiffusionModel(DiffusionModel):
         """
         Defines the composite diffusion model's differential equations.
         """
-
-        is_pytensor = any(
-            isinstance(p, pt.TensorVariable)
-            for p in (params.values() if isinstance(params, dict) else params)
+        dydt = B.zeros_like(y)
+        param_list = (
+            [params[name] for name in self.param_names]
+            if isinstance(params, dict)
+            else params
         )
-
-        if is_pytensor:
-            dydt = pt.zeros_like(y)
-            param_list = (
-                params
-                if isinstance(params, list)
-                else [params[name] for name in self.param_names]
-            )
-        else:
-            dydt = B.zeros_like(y)
-            param_list = (
-                [params[name] for name in self.param_names]
-                if isinstance(params, dict)
-                else params
-            )
 
         param_idx = 0
         model_params_list = []
@@ -169,19 +155,13 @@ class CompositeDiffusionModel(DiffusionModel):
 
         alpha_params = param_list[param_idx:]
 
-        if is_pytensor:
-            alpha = pt.zeros((self.n_models, self.n_models))
-        else:
-            alpha = B.zeros((self.n_models, self.n_models))
+        alpha = B.zeros((self.n_models, self.n_models))
 
         alpha_idx = 0
         for i in range(self.n_models):
             for j in range(self.n_models):
                 if i != j:
-                    if is_pytensor:
-                        alpha = pt.set_subtensor(alpha[i, j], alpha_params[alpha_idx])
-                    else:
-                        alpha[i, j] = alpha_params[alpha_idx]
+                    alpha[i, j] = alpha_params[alpha_idx]
                     alpha_idx += 1
 
         for i, model in enumerate(self.models):
@@ -202,10 +182,7 @@ class CompositeDiffusionModel(DiffusionModel):
                 alpha[i, j] * y[j] for j in range(self.n_models) if i != j
             )
 
-            if is_pytensor:
-                dydt = pt.set_subtensor(dydt[i], growth_rate - interaction_effect)
-            else:
-                dydt[i] = growth_rate - interaction_effect
+            dydt[i] = growth_rate - interaction_effect
 
         return dydt
 
