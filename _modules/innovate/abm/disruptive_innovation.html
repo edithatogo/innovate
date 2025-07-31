@@ -31,12 +31,11 @@
           <div class="body" role="main">
             
   <h1>Source code for innovate.abm.disruptive_innovation</h1><div class="highlight"><pre>
-<span></span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">mesa</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">mesa.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">AgentSet</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mesa</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">mesa.space</span><span class="w"> </span><span class="kn">import</span> <span class="n">MultiGrid</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">mesa.datacollection</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataCollector</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">InnovationAgent</span>
+
 
 <div class="viewcode-block" id="DisruptiveInnovationAgent">
 <a class="viewcode-back" href="../../../innovate.abm.html#innovate.abm.DisruptiveInnovationAgent">[docs]</a>
@@ -45,6 +44,7 @@
 <span class="sd">    An agent in a disruptive innovation model.</span>
 <span class="sd">    The agent can choose between an incumbent and a disruptive product.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unique_id</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">unique_id</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">choice</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># &#39;incumbent&#39; or &#39;disruptive&#39;</span>
@@ -57,12 +57,14 @@
 <span class="sd">        The agent&#39;s choice is based on the perceived value of each product.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">incumbent_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">incumbent_performance</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">incumbent_price</span>
-        <span class="n">disruptive_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">disruptive_performance</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">disruptive_price</span>
+        <span class="n">disruptive_value</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">disruptive_performance</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">disruptive_price</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">disruptive_value</span> <span class="o">&gt;</span> <span class="n">incumbent_value</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">choice</span> <span class="o">=</span> <span class="s1">&#39;disruptive&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">choice</span> <span class="o">=</span> <span class="s2">&quot;disruptive&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">choice</span> <span class="o">=</span> <span class="s1">&#39;incumbent&#39;</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">choice</span> <span class="o">=</span> <span class="s2">&quot;incumbent&quot;</span></div>
 </div>
 
 
@@ -73,7 +75,15 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A model for disruptive innovation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">initial_disruptive_performance</span><span class="p">,</span> <span class="n">disruptive_performance_improvement</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">num_agents</span><span class="p">,</span>
+        <span class="n">width</span><span class="p">,</span>
+        <span class="n">height</span><span class="p">,</span>
+        <span class="n">initial_disruptive_performance</span><span class="p">,</span>
+        <span class="n">disruptive_performance_improvement</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_agents</span> <span class="o">=</span> <span class="n">num_agents</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">MultiGrid</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
@@ -94,8 +104,12 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">datacollector</span> <span class="o">=</span> <span class="n">DataCollector</span><span class="p">(</span>
             <span class="n">model_reporters</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;IncumbentAdopters&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="nb">sum</span><span class="p">([</span><span class="mi">1</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">agents</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">choice</span> <span class="o">==</span> <span class="s1">&#39;incumbent&#39;</span><span class="p">]),</span>
-                <span class="s2">&quot;DisruptiveAdopters&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="nb">sum</span><span class="p">([</span><span class="mi">1</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">agents</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">choice</span> <span class="o">==</span> <span class="s1">&#39;disruptive&#39;</span><span class="p">]),</span>
+                <span class="s2">&quot;IncumbentAdopters&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span>
+                    <span class="p">[</span><span class="mi">1</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">agents</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">choice</span> <span class="o">==</span> <span class="s2">&quot;incumbent&quot;</span><span class="p">]</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;DisruptiveAdopters&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span>
+                    <span class="p">[</span><span class="mi">1</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">agents</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">choice</span> <span class="o">==</span> <span class="s2">&quot;disruptive&quot;</span><span class="p">]</span>
+                <span class="p">),</span>
             <span class="p">}</span>
         <span class="p">)</span>
 

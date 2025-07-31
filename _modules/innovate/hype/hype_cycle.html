@@ -36,6 +36,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Dict</span>
 
+
 <div class="viewcode-block" id="HypeCycleModel">
 <a class="viewcode-back" href="../../../innovate.hype.hype_cycle.html#innovate.hype.hype_cycle.HypeCycleModel">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">HypeCycleModel</span><span class="p">:</span>
@@ -52,14 +53,14 @@
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">param_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="k">return</span> <span class="p">[</span>
-            <span class="s2">&quot;k&quot;</span><span class="p">,</span>      <span class="c1"># Growth rate of the logistic curve</span>
-            <span class="s2">&quot;t0&quot;</span><span class="p">,</span>     <span class="c1"># Midpoint of the logistic curve</span>
-            <span class="s2">&quot;a_hype&quot;</span><span class="p">,</span> <span class="c1"># Amplitude of the hype</span>
-            <span class="s2">&quot;t_hype&quot;</span><span class="p">,</span> <span class="c1"># Time of the peak of the hype</span>
-            <span class="s2">&quot;w_hype&quot;</span><span class="p">,</span> <span class="c1"># Width of the hype</span>
-            <span class="s2">&quot;a_d&quot;</span><span class="p">,</span>    <span class="c1"># Amplitude of the disillusionment</span>
-            <span class="s2">&quot;t_d&quot;</span><span class="p">,</span>    <span class="c1"># Time of the trough of disillusionment</span>
-            <span class="s2">&quot;w_d&quot;</span><span class="p">,</span>    <span class="c1"># Width of the disillusionment</span>
+            <span class="s2">&quot;k&quot;</span><span class="p">,</span>  <span class="c1"># Growth rate of the logistic curve</span>
+            <span class="s2">&quot;t0&quot;</span><span class="p">,</span>  <span class="c1"># Midpoint of the logistic curve</span>
+            <span class="s2">&quot;a_hype&quot;</span><span class="p">,</span>  <span class="c1"># Amplitude of the hype</span>
+            <span class="s2">&quot;t_hype&quot;</span><span class="p">,</span>  <span class="c1"># Time of the peak of the hype</span>
+            <span class="s2">&quot;w_hype&quot;</span><span class="p">,</span>  <span class="c1"># Width of the hype</span>
+            <span class="s2">&quot;a_d&quot;</span><span class="p">,</span>  <span class="c1"># Amplitude of the disillusionment</span>
+            <span class="s2">&quot;t_d&quot;</span><span class="p">,</span>  <span class="c1"># Time of the trough of disillusionment</span>
+            <span class="s2">&quot;w_d&quot;</span><span class="p">,</span>  <span class="c1"># Width of the disillusionment</span>
         <span class="p">]</span>
 
 <div class="viewcode-block" id="HypeCycleModel.predict">
@@ -90,9 +91,9 @@
         <span class="n">maturity</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)))</span>
 
         <span class="c1"># Hype function (a combination of two Gaussians)</span>
-        <span class="n">hype</span> <span class="o">=</span> <span class="n">a_hype</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">t</span> <span class="o">-</span> <span class="n">t_hype</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">w_hype</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
-        <span class="n">disillusionment</span> <span class="o">=</span> <span class="n">a_d</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">t</span> <span class="o">-</span> <span class="n">t_d</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">w_d</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
-        
+        <span class="n">hype</span> <span class="o">=</span> <span class="n">a_hype</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">t</span> <span class="o">-</span> <span class="n">t_hype</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">w_hype</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">disillusionment</span> <span class="o">=</span> <span class="n">a_d</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">t</span> <span class="o">-</span> <span class="n">t_d</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">w_d</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
         <span class="n">visibility</span> <span class="o">=</span> <span class="n">maturity</span> <span class="o">+</span> <span class="n">hype</span> <span class="o">-</span> <span class="n">disillusionment</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">visibility</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span></div>
 

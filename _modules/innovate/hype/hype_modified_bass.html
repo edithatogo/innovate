@@ -38,6 +38,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">innovate.diffuse.bass</span><span class="w"> </span><span class="kn">import</span> <span class="n">BassModel</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.hype_cycle</span><span class="w"> </span><span class="kn">import</span> <span class="n">HypeCycleModel</span>
 
+
 <div class="viewcode-block" id="HypeModifiedBassModel">
 <a class="viewcode-back" href="../../../innovate.hype.hype_modified_bass.html#innovate.hype.hype_modified_bass.HypeModifiedBassModel">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">HypeModifiedBassModel</span><span class="p">:</span>
@@ -61,7 +62,9 @@
 <span class="sd">        p and q.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">bass_model</span><span class="o">.</span><span class="n">params_</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">hype_model</span><span class="o">.</span><span class="n">params_</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Both the Bass and Hype models must have parameters set.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;Both the Bass and Hype models must have parameters set.&quot;</span>
+            <span class="p">)</span>
 
         <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.integrate</span><span class="w"> </span><span class="kn">import</span> <span class="n">odeint</span>
 
@@ -77,13 +80,14 @@
         <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">y0</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)):</span>
-            <span class="n">dt</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="c1"># Hype influences p and q</span>
-            <span class="n">p_t</span> <span class="o">=</span> <span class="n">p_base</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">hype_visibility</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">q_t</span> <span class="o">=</span> <span class="n">q_base</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">hype_visibility</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-            
+            <span class="n">p_t</span> <span class="o">=</span> <span class="n">p_base</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">hype_visibility</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">q_t</span> <span class="o">=</span> <span class="n">q_base</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">hype_visibility</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+
             <span class="c1"># Solve for the next step</span>
-            <span class="n">y_step</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">bass_differential</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">p_t</span><span class="p">,</span> <span class="n">q_t</span><span class="p">))</span>
+            <span class="n">y_step</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span>
+                <span class="n">bass_differential</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">p_t</span><span class="p">,</span> <span class="n">q_t</span><span class="p">)</span>
+            <span class="p">)</span>
             <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_step</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">y</span></div>

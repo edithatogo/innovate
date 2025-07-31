@@ -38,6 +38,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Dict</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
+
 <div class="viewcode-block" id="FisherPryModel">
 <a class="viewcode-back" href="../../../innovate.substitute.fisher_pry.html#innovate.substitute.fisher_pry.FisherPryModel">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">FisherPryModel</span><span class="p">(</span><span class="n">DiffusionModel</span><span class="p">):</span>
@@ -59,7 +60,9 @@
 
 <div class="viewcode-block" id="FisherPryModel.initial_guesses">
 <a class="viewcode-back" href="../../../innovate.substitute.fisher_pry.html#innovate.substitute.fisher_pry.FisherPryModel.initial_guesses">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">initial_guesses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initial_guesses</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Provides initial guesses for the model parameters.</span>
 <span class="sd">        - t0 is estimated as the time at which the market share is closest to 50%.</span>
@@ -69,7 +72,9 @@
         <span class="n">t_arr</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
 
         <span class="c1"># Estimate t0 as the time when market share is closest to 0.5</span>
-        <span class="n">t0_guess</span> <span class="o">=</span> <span class="n">t_arr</span><span class="p">[</span><span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y_arr</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">))]</span>
+        <span class="n">t0_guess</span> <span class="o">=</span> <span class="n">t_arr</span><span class="p">[</span>
+            <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y_arr</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">))</span>
+        <span class="p">]</span>
 
         <span class="c1"># Linearize the logistic equation: log(y / (1 - y)) = alpha * (t - t0)</span>
         <span class="c1"># To avoid division by zero or log of zero, we clip y</span>
@@ -80,9 +85,9 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="c1"># Using polyfit for a simple linear regression</span>
             <span class="n">slope</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">t_arr</span><span class="p">,</span> <span class="n">linearized_y</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="n">alpha_guess</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">slope</span><span class="p">)</span> <span class="c1"># Ensure alpha is non-negative</span>
+            <span class="n">alpha_guess</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">slope</span><span class="p">)</span>  <span class="c1"># Ensure alpha is non-negative</span>
         <span class="k">except</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">LinAlgError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
-            <span class="n">alpha_guess</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="c1"># Fallback value</span>
+            <span class="n">alpha_guess</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># Fallback value</span>
 
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">alpha_guess</span><span class="p">,</span>
@@ -123,10 +128,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Model has not been fitted yet. Call .fit() first.&quot;</span><span class="p">)</span>
-        
+
         <span class="n">t_arr</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-        <span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">]</span>
-        <span class="n">t0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s1">&#39;t0&#39;</span><span class="p">]</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">]</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;t0&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">alpha</span> <span class="o">*</span> <span class="p">(</span><span class="n">t_arr</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)))</span></div>
 
 
@@ -139,8 +144,16 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Model has not been fitted yet. Call .fit() first.&quot;</span><span class="p">)</span>
         <span class="n">y_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-        <span class="n">ss_res</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">ss_tot</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">ss_res</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="p">)</span>
+        <span class="n">ss_tot</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+                <span class="o">-</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+            <span class="p">)</span>
+            <span class="o">**</span> <span class="mi">2</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">ss_res</span> <span class="o">/</span> <span class="n">ss_tot</span><span class="p">)</span> <span class="k">if</span> <span class="n">ss_tot</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span></div>
 
 

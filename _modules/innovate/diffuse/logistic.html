@@ -31,11 +31,12 @@
           <div class="body" role="main">
             
   <h1>Source code for innovate.diffuse.logistic</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">innovate.base.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">DiffusionModel</span><span class="p">,</span> <span class="n">Self</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">innovate.base.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">DiffusionModel</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">innovate</span><span class="w"> </span><span class="kn">import</span> <span class="n">backend</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">innovate.dynamics.growth.symmetric</span><span class="w"> </span><span class="kn">import</span> <span class="n">SymmetricGrowth</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Dict</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
 
 <div class="viewcode-block" id="LogisticModel">
 <a class="viewcode-back" href="../../../innovate.diffuse.logistic.html#innovate.diffuse.logistic.LogisticModel">[docs]</a>
@@ -48,7 +49,7 @@
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">covariates</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">t_event</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize a LogisticModel with optional covariates and an internal SymmetricGrowth dynamics model.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters:</span>
 <span class="sd">            covariates (Sequence[str], optional): List of covariate names to include in the model. Defaults to an empty list.</span>
 <span class="sd">            t_event (float, optional): The time of a structural break or event.</span>
@@ -62,7 +63,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">param_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the list of parameter names for the logistic model, including base parameters and covariate-specific coefficients.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns:</span>
 <span class="sd">            names (Sequence[str]): List of parameter names, with covariate effects prefixed by &#39;beta_L_&#39;, &#39;beta_k_&#39;, and &#39;beta_x0_&#39; for each covariate.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -75,18 +76,22 @@
 
 <div class="viewcode-block" id="LogisticModel.initial_guesses">
 <a class="viewcode-back" href="../../../innovate.diffuse.logistic.html#innovate.diffuse.logistic.LogisticModel.initial_guesses">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">initial_guesses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initial_guesses</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
         <span class="n">guesses</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.1</span><span class="p">,</span>
             <span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
             <span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">t</span><span class="p">),</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_event</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">guesses</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
-                <span class="s2">&quot;L_post&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.1</span><span class="p">,</span>
-                <span class="s2">&quot;k_post&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
-                <span class="s2">&quot;x0_post&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">t</span><span class="p">),</span>
-            <span class="p">})</span>
+            <span class="n">guesses</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;L_post&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.1</span><span class="p">,</span>
+                    <span class="s2">&quot;k_post&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+                    <span class="s2">&quot;x0_post&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">t</span><span class="p">),</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
         <span class="k">for</span> <span class="n">cov</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">covariates</span><span class="p">:</span>
             <span class="n">guesses</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;beta_L_</span><span class="si">{</span><span class="n">cov</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
             <span class="n">guesses</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;beta_k_</span><span class="si">{</span><span class="n">cov</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
@@ -99,11 +104,11 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return parameter bounds for the logistic model, including covariate effects.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters:</span>
 <span class="sd">            t (Sequence[float]): Time points of the observations.</span>
 <span class="sd">            y (Sequence[float]): Observed values corresponding to each time point.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns:</span>
 <span class="sd">            Dict[str, tuple]: Dictionary mapping parameter names to their (lower, upper) bounds.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -113,11 +118,13 @@
             <span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_event</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">bounds</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
-                <span class="s2">&quot;L_post&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),</span>
-                <span class="s2">&quot;k_post&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),</span>
-                <span class="s2">&quot;x0_post&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),</span>
-            <span class="p">})</span>
+            <span class="n">bounds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;L_post&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),</span>
+                    <span class="s2">&quot;k_post&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),</span>
+                    <span class="s2">&quot;x0_post&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
         <span class="k">for</span> <span class="n">cov</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">covariates</span><span class="p">:</span>
             <span class="n">bounds</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;beta_L_</span><span class="si">{</span><span class="n">cov</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
             <span class="n">bounds</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;beta_k_</span><span class="si">{</span><span class="n">cov</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
@@ -127,17 +134,19 @@
 
 <div class="viewcode-block" id="LogisticModel.predict">
 <a class="viewcode-back" href="../../../innovate.diffuse.logistic.html#innovate.diffuse.logistic.LogisticModel.predict">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">covariates</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">covariates</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Predicts the cumulative values of the logistic diffusion process at specified time points.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters:</span>
 <span class="sd">            t (Sequence[float]): Time points at which to compute predictions.</span>
 <span class="sd">            covariates (Dict[str, Sequence[float]], optional): Covariate values for each time point.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns:</span>
 <span class="sd">            Sequence[float]: Predicted cumulative values of the logistic model at each time point.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Raises:</span>
 <span class="sd">            RuntimeError: If the model parameters have not been set (i.e., the model is not fitted).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -145,36 +154,39 @@
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Model has not been fitted yet. Call .fit() first.&quot;</span><span class="p">)</span>
 
         <span class="n">t_arr</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-        
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_event</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">pre_event_mask</span> <span class="o">=</span> <span class="n">t_arr</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_event</span>
             <span class="n">post_event_mask</span> <span class="o">=</span> <span class="o">~</span><span class="n">pre_event_mask</span>
-            
+
             <span class="n">y_pred</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">t_arr</span><span class="p">)</span>
-            
+
             <span class="k">if</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">pre_event_mask</span><span class="p">):</span>
                 <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;L&quot;</span><span class="p">]</span>
                 <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;k&quot;</span><span class="p">]</span>
                 <span class="n">x0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">]</span>
-                <span class="n">y_pred</span><span class="p">[</span><span class="n">pre_event_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">L</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">t_arr</span><span class="p">[</span><span class="n">pre_event_mask</span><span class="p">]</span> <span class="o">-</span> <span class="n">x0</span><span class="p">)))</span>
+                <span class="n">y_pred</span><span class="p">[</span><span class="n">pre_event_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">L</span> <span class="o">/</span> <span class="p">(</span>
+                    <span class="mi">1</span> <span class="o">+</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">t_arr</span><span class="p">[</span><span class="n">pre_event_mask</span><span class="p">]</span> <span class="o">-</span> <span class="n">x0</span><span class="p">))</span>
+                <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">post_event_mask</span><span class="p">):</span>
                 <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;L_post&quot;</span><span class="p">]</span>
                 <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;k_post&quot;</span><span class="p">]</span>
                 <span class="n">x0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;x0_post&quot;</span><span class="p">]</span>
-                <span class="n">y_pred</span><span class="p">[</span><span class="n">post_event_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">L</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">t_arr</span><span class="p">[</span><span class="n">post_event_mask</span><span class="p">]</span> <span class="o">-</span> <span class="n">x0</span><span class="p">)))</span>
-            
+                <span class="n">y_pred</span><span class="p">[</span><span class="n">post_event_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">L</span> <span class="o">/</span> <span class="p">(</span>
+                    <span class="mi">1</span> <span class="o">+</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">t_arr</span><span class="p">[</span><span class="n">post_event_mask</span><span class="p">]</span> <span class="o">-</span> <span class="n">x0</span><span class="p">))</span>
+                <span class="p">)</span>
+
             <span class="k">return</span> <span class="n">y_pred</span>
 
         <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;L&quot;</span><span class="p">]</span>
         <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;k&quot;</span><span class="p">]</span>
         <span class="n">x0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">]</span>
-        
+
         <span class="k">if</span> <span class="n">covariates</span><span class="p">:</span>
-            <span class="n">param_idx</span> <span class="o">=</span> <span class="mi">3</span>
             <span class="k">for</span> <span class="n">cov_name</span><span class="p">,</span> <span class="n">cov_values</span> <span class="ow">in</span> <span class="n">covariates</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">cov_val_t</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">cov_values</span><span class="p">)</span>
-                
+
                 <span class="n">L</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;beta_L_</span><span class="si">{</span><span class="n">cov_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">cov_val_t</span>
                 <span class="n">k</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;beta_k_</span><span class="si">{</span><span class="n">cov_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">cov_val_t</span>
                 <span class="n">x0</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;beta_x0_</span><span class="si">{</span><span class="n">cov_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">cov_val_t</span>
@@ -184,26 +196,35 @@
 
 <div class="viewcode-block" id="LogisticModel.score">
 <a class="viewcode-back" href="../../../innovate.diffuse.logistic.html#innovate.diffuse.logistic.LogisticModel.score">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">covariates</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">score</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">y</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">covariates</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute the coefficient of determination (R²) between observed values and model predictions.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters:</span>
 <span class="sd">            t (Sequence[float]): Time points at which observations were made.</span>
 <span class="sd">            y (Sequence[float]): Observed values corresponding to time points.</span>
 <span class="sd">            covariates (Dict[str, Sequence[float]], optional): Covariate values for each time point.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns:</span>
 <span class="sd">            float: The R² score indicating the proportion of variance explained by the model predictions.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Raises:</span>
 <span class="sd">            RuntimeError: If the model has not been fitted.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Model has not been fitted yet. Call .fit() first.&quot;</span><span class="p">)</span>
         <span class="n">y_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">covariates</span><span class="p">)</span>
-        <span class="n">ss_res</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">ss_tot</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">ss_res</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="p">)</span>
+        <span class="n">ss_tot</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">backend</span><span class="o">.</span><span class="n">current_backend</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">ss_res</span> <span class="o">/</span> <span class="n">ss_tot</span><span class="p">)</span> <span class="k">if</span> <span class="n">ss_tot</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span></div>
 
 
@@ -217,12 +238,14 @@
 
 <div class="viewcode-block" id="LogisticModel.predict_adoption_rate">
 <a class="viewcode-back" href="../../../innovate.diffuse.logistic.html#innovate.diffuse.logistic.LogisticModel.predict_adoption_rate">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">predict_adoption_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">covariates</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict_adoption_rate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">covariates</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Model has not been fitted yet. Call .fit() first.&quot;</span><span class="p">)</span>
-        
+
         <span class="n">y_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">covariates</span><span class="p">)</span>
-        
+
         <span class="c1"># The adoption rate is the derivative of the cumulative adoption</span>
         <span class="c1"># For the logistic function, the derivative is: k * y * (1 - y/L)</span>
         <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;L&quot;</span><span class="p">]</span>
@@ -234,7 +257,6 @@
                 <span class="n">k</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;beta_k_</span><span class="si">{</span><span class="n">cov_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">cov_val_t</span>
 
         <span class="k">return</span> <span class="n">k</span> <span class="o">*</span> <span class="n">y_pred</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y_pred</span> <span class="o">/</span> <span class="n">L</span><span class="p">)</span></div>
-
 
 
 <div class="viewcode-block" id="LogisticModel.cumulative_adoption">

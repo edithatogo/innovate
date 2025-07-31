@@ -31,12 +31,11 @@
           <div class="body" role="main">
             
   <h1>Source code for innovate.abm.competitive_diffusion</h1><div class="highlight"><pre>
-<span></span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">mesa</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">mesa.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">AgentSet</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mesa</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">mesa.space</span><span class="w"> </span><span class="kn">import</span> <span class="n">MultiGrid</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">mesa.datacollection</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataCollector</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">InnovationAgent</span>
+
 
 <div class="viewcode-block" id="CompetitiveDiffusionAgent">
 <a class="viewcode-back" href="../../../innovate.abm.html#innovate.abm.CompetitiveDiffusionAgent">[docs]</a>
@@ -45,6 +44,7 @@
 <span class="sd">    An agent in a competitive diffusion model.</span>
 <span class="sd">    The agent can adopt one of several competing innovations.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unique_id</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">num_innovations</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">unique_id</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">adopted_innovation</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># -1 means no adoption, 0, 1, ... for innovations</span>
@@ -60,12 +60,16 @@
             <span class="k">return</span>  <span class="c1"># Already adopted</span>
 
         <span class="c1"># Get neighbors</span>
-        <span class="n">neighbors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">moore</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">include_center</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">neighbors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">moore</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">include_center</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">neighbors</span><span class="p">:</span>
             <span class="k">return</span>
 
         <span class="c1"># Check neighbors&#39; adoptions</span>
-        <span class="n">adoptions</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">adopted_innovation</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">neighbors</span> <span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">adopted_innovation</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">adoptions</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">n</span><span class="o">.</span><span class="n">adopted_innovation</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">neighbors</span> <span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">adopted_innovation</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">adoptions</span><span class="p">:</span>
             <span class="k">return</span>
 
@@ -83,6 +87,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A model for competitive diffusion of multiple innovations.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">num_innovations</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_agents</span> <span class="o">=</span> <span class="n">num_agents</span>
@@ -92,7 +97,9 @@
 
         <span class="c1"># Create agents</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_agents</span><span class="p">):</span>
-            <span class="n">agent</span> <span class="o">=</span> <span class="n">CompetitiveDiffusionAgent</span><span class="p">(</span><span class="n">unique_id</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_innovations</span><span class="o">=</span><span class="n">num_innovations</span><span class="p">)</span>
+            <span class="n">agent</span> <span class="o">=</span> <span class="n">CompetitiveDiffusionAgent</span><span class="p">(</span>
+                <span class="n">unique_id</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_innovations</span><span class="o">=</span><span class="n">num_innovations</span>
+            <span class="p">)</span>
             <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
             <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">place_agent</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
@@ -110,7 +117,9 @@
                     <span class="n">counts</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">adopted_innovation</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">return</span> <span class="n">counts</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">datacollector</span> <span class="o">=</span> <span class="n">DataCollector</span><span class="p">(</span><span class="n">model_reporters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;AdoptionCounts&quot;</span><span class="p">:</span> <span class="n">adoption_counts</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datacollector</span> <span class="o">=</span> <span class="n">DataCollector</span><span class="p">(</span>
+            <span class="n">model_reporters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;AdoptionCounts&quot;</span><span class="p">:</span> <span class="n">adoption_counts</span><span class="p">}</span>
+        <span class="p">)</span>
 
 <div class="viewcode-block" id="CompetitiveDiffusionModel.step">
 <a class="viewcode-back" href="../../../innovate.abm.html#innovate.abm.CompetitiveDiffusionModel.step">[docs]</a>

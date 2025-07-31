@@ -36,6 +36,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">innovate.base.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">DiffusionModel</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span>
 
+
 <div class="viewcode-block" id="categorize_adopters">
 <a class="viewcode-back" href="../../../innovate.utils.html#innovate.adopt.categorization.categorize_adopters">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">categorize_adopters</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">DiffusionModel</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
@@ -51,17 +52,19 @@
 <span class="sd">        A pandas DataFrame with the adopter categories for each time point.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">adoption_rate</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_adoption_rate</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-    
+
     <span class="c1"># Calculate mean and standard deviation of the adoption rate</span>
     <span class="n">mean_adoption_time</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="n">adoption_rate</span><span class="p">)</span> <span class="o">/</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">adoption_rate</span><span class="p">)</span>
-    <span class="n">std_dev_adoption_time</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">(((</span><span class="n">t</span> <span class="o">-</span> <span class="n">mean_adoption_time</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">adoption_rate</span><span class="p">)</span> <span class="o">/</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">adoption_rate</span><span class="p">))</span>
-    
+    <span class="n">std_dev_adoption_time</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+        <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">(((</span><span class="n">t</span> <span class="o">-</span> <span class="n">mean_adoption_time</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">adoption_rate</span><span class="p">)</span> <span class="o">/</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">adoption_rate</span><span class="p">)</span>
+    <span class="p">)</span>
+
     <span class="c1"># Define category boundaries</span>
     <span class="n">innovators_end</span> <span class="o">=</span> <span class="n">mean_adoption_time</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">std_dev_adoption_time</span>
     <span class="n">early_adopters_end</span> <span class="o">=</span> <span class="n">mean_adoption_time</span> <span class="o">-</span> <span class="n">std_dev_adoption_time</span>
     <span class="n">early_majority_end</span> <span class="o">=</span> <span class="n">mean_adoption_time</span>
     <span class="n">late_majority_end</span> <span class="o">=</span> <span class="n">mean_adoption_time</span> <span class="o">+</span> <span class="n">std_dev_adoption_time</span>
-    
+
     <span class="c1"># Categorize each time point</span>
     <span class="n">categories</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">time_point</span> <span class="ow">in</span> <span class="n">t</span><span class="p">:</span>
@@ -75,8 +78,10 @@
             <span class="n">categories</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Late Majority&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">categories</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Laggards&quot;</span><span class="p">)</span>
-            
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">t</span><span class="p">,</span> <span class="s2">&quot;adoption_rate&quot;</span><span class="p">:</span> <span class="n">adoption_rate</span><span class="p">,</span> <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="n">categories</span><span class="p">})</span></div>
+
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">t</span><span class="p">,</span> <span class="s2">&quot;adoption_rate&quot;</span><span class="p">:</span> <span class="n">adoption_rate</span><span class="p">,</span> <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="n">categories</span><span class="p">}</span>
+    <span class="p">)</span></div>
 
 </pre></div>
 

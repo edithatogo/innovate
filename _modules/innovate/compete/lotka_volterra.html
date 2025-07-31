@@ -38,6 +38,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Dict</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
+
 <div class="viewcode-block" id="LotkaVolterraModel">
 <a class="viewcode-back" href="../../../innovate.compete.lotka_volterra.html#innovate.compete.lotka_volterra.LotkaVolterraModel">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">LotkaVolterraModel</span><span class="p">(</span><span class="n">DiffusionModel</span><span class="p">):</span>
@@ -63,7 +64,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;alpha1&quot;</span><span class="p">,</span> <span class="s2">&quot;beta1&quot;</span><span class="p">,</span> <span class="s2">&quot;alpha2&quot;</span><span class="p">,</span> <span class="s2">&quot;beta2&quot;</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">cov</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">covariates</span><span class="p">:</span>
-            <span class="n">names</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;beta_alpha1_</span><span class="si">{</span><span class="n">cov</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;beta_beta1_</span><span class="si">{</span><span class="n">cov</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;beta_alpha2_</span><span class="si">{</span><span class="n">cov</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;beta_beta2_</span><span class="si">{</span><span class="n">cov</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">])</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="sa">f</span><span class="s2">&quot;beta_alpha1_</span><span class="si">{</span><span class="n">cov</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;beta_beta1_</span><span class="si">{</span><span class="n">cov</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;beta_alpha2_</span><span class="si">{</span><span class="n">cov</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;beta_beta2_</span><span class="si">{</span><span class="n">cov</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="n">names</span>
 
 <div class="viewcode-block" id="LotkaVolterraModel.initial_guesses">
@@ -76,7 +84,7 @@
         <span class="n">y</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
         <span class="n">dt</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-        
+
         <span class="c1"># Avoid division by zero for y1 and y2</span>
         <span class="n">y1</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">y2</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">y</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -88,11 +96,11 @@
         <span class="c1"># Linearize the equations:</span>
         <span class="c1"># dy1/dt / y1 = alpha1 - alpha1*y1 - beta1*y2</span>
         <span class="c1"># dy2/dt / y2 = alpha2 - alpha2*y2 - beta2*y1</span>
-        
+
         <span class="c1"># Prepare for linear regression for tech 1</span>
         <span class="n">X1</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="o">-</span><span class="n">y1</span><span class="p">,</span> <span class="o">-</span><span class="n">y2</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
-        <span class="n">Y1</span> <span class="o">=</span> <span class="n">dy1_dt</span> <span class="o">/</span> <span class="n">y1</span> <span class="o">-</span> <span class="n">B</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="o">-</span><span class="n">y1</span><span class="p">)</span> <span class="c1"># Centering the response variable</span>
-        
+        <span class="n">Y1</span> <span class="o">=</span> <span class="n">dy1_dt</span> <span class="o">/</span> <span class="n">y1</span> <span class="o">-</span> <span class="n">B</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="o">-</span><span class="n">y1</span><span class="p">)</span>  <span class="c1"># Centering the response variable</span>
+
         <span class="k">try</span><span class="p">:</span>
             <span class="c1"># Fit alpha1 and beta1</span>
             <span class="n">params1</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">Y1</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
@@ -102,7 +110,7 @@
 
         <span class="c1"># Prepare for linear regression for tech 2</span>
         <span class="n">X2</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="o">-</span><span class="n">y2</span><span class="p">,</span> <span class="o">-</span><span class="n">y1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
-        <span class="n">Y2</span> <span class="o">=</span> <span class="n">dy2_dt</span> <span class="o">/</span> <span class="n">y2</span> <span class="o">-</span> <span class="n">B</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="o">-</span><span class="n">y2</span><span class="p">)</span> <span class="c1"># Centering the response variable</span>
+        <span class="n">Y2</span> <span class="o">=</span> <span class="n">dy2_dt</span> <span class="o">/</span> <span class="n">y2</span> <span class="o">-</span> <span class="n">B</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="o">-</span><span class="n">y2</span><span class="p">)</span>  <span class="c1"># Centering the response variable</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="c1"># Fit alpha2 and beta2</span>
@@ -148,7 +156,7 @@
 <a class="viewcode-back" href="../../../innovate.compete.lotka_volterra.html#innovate.compete.lotka_volterra.LotkaVolterraModel.differential_equation">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">differential_equation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">covariates</span><span class="p">,</span> <span class="n">t_eval</span><span class="p">):</span>
         <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">y</span>
-        
+
         <span class="n">alpha1_base</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">beta1_base</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">alpha2_base</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
@@ -164,9 +172,9 @@
             <span class="k">for</span> <span class="n">cov_name</span><span class="p">,</span> <span class="n">cov_values</span> <span class="ow">in</span> <span class="n">covariates</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">cov_val_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">t_eval</span><span class="p">,</span> <span class="n">cov_values</span><span class="p">)</span>
                 <span class="n">alpha1_t</span> <span class="o">+=</span> <span class="n">params</span><span class="p">[</span><span class="n">param_idx</span><span class="p">]</span> <span class="o">*</span> <span class="n">cov_val_t</span>
-                <span class="n">beta1_t</span> <span class="o">+=</span> <span class="n">params</span><span class="p">[</span><span class="n">param_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">cov_val_t</span>
-                <span class="n">alpha2_t</span> <span class="o">+=</span> <span class="n">params</span><span class="p">[</span><span class="n">param_idx</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">cov_val_t</span>
-                <span class="n">beta2_t</span> <span class="o">+=</span> <span class="n">params</span><span class="p">[</span><span class="n">param_idx</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">cov_val_t</span>
+                <span class="n">beta1_t</span> <span class="o">+=</span> <span class="n">params</span><span class="p">[</span><span class="n">param_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">cov_val_t</span>
+                <span class="n">alpha2_t</span> <span class="o">+=</span> <span class="n">params</span><span class="p">[</span><span class="n">param_idx</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">cov_val_t</span>
+                <span class="n">beta2_t</span> <span class="o">+=</span> <span class="n">params</span><span class="p">[</span><span class="n">param_idx</span> <span class="o">+</span> <span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">cov_val_t</span>
                 <span class="n">param_idx</span> <span class="o">+=</span> <span class="mi">4</span>
 
         <span class="n">dy1_dt</span> <span class="o">=</span> <span class="n">alpha1_t</span> <span class="o">*</span> <span class="n">y1</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span> <span class="o">-</span> <span class="n">beta1_t</span> <span class="o">*</span> <span class="n">y1</span> <span class="o">*</span> <span class="n">y2</span>
@@ -176,7 +184,12 @@
 
 <div class="viewcode-block" id="LotkaVolterraModel.predict">
 <a class="viewcode-back" href="../../../innovate.compete.lotka_volterra.html#innovate.compete.lotka_volterra.LotkaVolterraModel.predict">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">y0</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">covariates</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">y0</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">covariates</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Predicts the market share of both technologies over time.</span>
 
@@ -193,7 +206,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Model has not been fitted yet. Call .fit() first.&quot;</span><span class="p">)</span>
-        
+
         <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.integrate</span><span class="w"> </span><span class="kn">import</span> <span class="n">odeint</span>
 
         <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_names</span><span class="p">]</span>
@@ -208,7 +221,13 @@
 
 <div class="viewcode-block" id="LotkaVolterraModel.fit">
 <a class="viewcode-back" href="../../../innovate.compete.lotka_volterra.html#innovate.compete.lotka_volterra.LotkaVolterraModel.fit">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">covariates</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">covariates</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fits the Lotka-Volterra model to the data.</span>
 
@@ -243,8 +262,8 @@
             <span class="n">initial_params</span><span class="p">,</span>
             <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">covariates</span><span class="p">),</span>
             <span class="n">bounds</span><span class="o">=</span><span class="n">param_bounds</span><span class="p">,</span>
-            <span class="n">method</span><span class="o">=</span><span class="s1">&#39;L-BFGS-B&#39;</span><span class="p">,</span>
-            <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;maxiter&#39;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">},</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;L-BFGS-B&quot;</span><span class="p">,</span>
+            <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;maxiter&quot;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">},</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -265,7 +284,12 @@
 
 <div class="viewcode-block" id="LotkaVolterraModel.score">
 <a class="viewcode-back" href="../../../innovate.compete.lotka_volterra.html#innovate.compete.lotka_volterra.LotkaVolterraModel.score">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">covariates</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">score</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">covariates</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates the R^2 score for the model fit.</span>
 
@@ -286,13 +310,18 @@
 
         <span class="n">ss_res</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
         <span class="n">ss_tot</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">B</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
-        
+
         <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">ss_res</span> <span class="o">/</span> <span class="n">ss_tot</span><span class="p">)</span> <span class="k">if</span> <span class="n">ss_tot</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span></div>
 
 
 <div class="viewcode-block" id="LotkaVolterraModel.predict_adoption_rate">
 <a class="viewcode-back" href="../../../innovate.compete.lotka_volterra.html#innovate.compete.lotka_volterra.LotkaVolterraModel.predict_adoption_rate">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">predict_adoption_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">y0</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">covariates</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict_adoption_rate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">y0</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">covariates</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Predicts the rate of change of market share for both technologies.</span>
 
@@ -309,7 +338,7 @@
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Model has not been fitted yet. Call .fit() first.&quot;</span><span class="p">)</span>
 
         <span class="n">y_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">covariates</span><span class="p">)</span>
-        
+
         <span class="n">alpha1_base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;alpha1&quot;</span><span class="p">]</span>
         <span class="n">beta1_base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;beta1&quot;</span><span class="p">]</span>
         <span class="n">alpha2_base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;alpha2&quot;</span><span class="p">]</span>
@@ -331,7 +360,7 @@
                     <span class="n">alpha2_t</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;beta_alpha2_</span><span class="si">{</span><span class="n">cov_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">cov_val_t</span>
                     <span class="n">beta2_t</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;beta_beta2_</span><span class="si">{</span><span class="n">cov_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">cov_val_t</span>
                     <span class="n">param_idx</span> <span class="o">+=</span> <span class="mi">4</span>
-            
+
             <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">y_pred</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="n">dy1_dt</span> <span class="o">=</span> <span class="n">alpha1_t</span> <span class="o">*</span> <span class="n">y1</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span> <span class="o">-</span> <span class="n">beta1_t</span> <span class="o">*</span> <span class="n">y1</span> <span class="o">*</span> <span class="n">y2</span>
             <span class="n">dy2_dt</span> <span class="o">=</span> <span class="n">alpha2_t</span> <span class="o">*</span> <span class="n">y2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y2</span><span class="p">)</span> <span class="o">-</span> <span class="n">beta2_t</span> <span class="o">*</span> <span class="n">y1</span> <span class="o">*</span> <span class="n">y2</span>

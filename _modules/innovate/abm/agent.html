@@ -33,6 +33,7 @@
   <h1>Source code for innovate.abm.agent</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mesa</span><span class="w"> </span><span class="kn">import</span> <span class="n">Agent</span>
 
+
 <div class="viewcode-block" id="InnovationAgent">
 <a class="viewcode-back" href="../../../innovate.abm.html#innovate.abm.InnovationAgent">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">InnovationAgent</span><span class="p">(</span><span class="n">Agent</span><span class="p">):</span>
@@ -43,9 +44,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">unique_id</span> <span class="o">=</span> <span class="n">unique_id</span>
         <span class="c1"># Add agent-specific attributes here, e.g.,</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">adopted</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">awareness</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="c1"># 0.0 to 1.0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">influence</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="c1"># How much this agent influences others</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">susceptibility</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="c1"># How susceptible this agent is to influence</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">awareness</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># 0.0 to 1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">influence</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># How much this agent influences others</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">susceptibility</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># How susceptible this agent is to influence</span>
 
 <div class="viewcode-block" id="InnovationAgent.step">
 <a class="viewcode-back" href="../../../innovate.abm.html#innovate.abm.InnovationAgent.step">[docs]</a>

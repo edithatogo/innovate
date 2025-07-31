@@ -36,9 +36,12 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">innovate.base.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">DiffusionModel</span>
 
+
 <div class="viewcode-block" id="estimate_bass_mom">
 <a class="viewcode-back" href="../../../innovate.fitters.html#innovate.fitters.mom_fitter.estimate_bass_mom">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">estimate_bass_mom</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">estimate_bass_mom</span><span class="p">(</span>
+    <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates the parameters (p, q, m) of the Bass Diffusion Model using the Method of Moments.</span>
 <span class="sd">    This implementation uses a linear regression approach based on incremental adoptions.</span>
@@ -51,7 +54,9 @@
 <span class="sd">        A tuple (p, q, m) representing the estimated parameters.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input sequences t and y must have the same length and at least 3 data points.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Input sequences t and y must have the same length and at least 3 data points.&quot;</span>
+        <span class="p">)</span>
 
     <span class="c1"># Convert to pandas Series for easier manipulation</span>
     <span class="n">y_series</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
@@ -66,28 +71,33 @@
 
     <span class="c1"># Prepare data for linear regression: x_t = a + b * y_{t-1} + c * y_{t-1}^2</span>
     <span class="c1"># We need to exclude the first point where lagged_cumulative_adoptions is 0, as it&#39;s not a true lagged value.</span>
-    <span class="n">data_for_reg</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-        <span class="s1">&#39;x_t&#39;</span><span class="p">:</span> <span class="n">incremental_adoptions</span><span class="p">,</span>
-        <span class="s1">&#39;y_t_minus_1&#39;</span><span class="p">:</span> <span class="n">lagged_cumulative_adoptions</span>
-    <span class="p">})</span>
+    <span class="n">data_for_reg</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="p">{</span><span class="s2">&quot;x_t&quot;</span><span class="p">:</span> <span class="n">incremental_adoptions</span><span class="p">,</span> <span class="s2">&quot;y_t_minus_1&quot;</span><span class="p">:</span> <span class="n">lagged_cumulative_adoptions</span><span class="p">}</span>
+    <span class="p">)</span>
 
     <span class="c1"># Remove the first row as y_t_minus_1 is 0 (or NaN if using dropna)</span>
     <span class="n">data_for_reg</span> <span class="o">=</span> <span class="n">data_for_reg</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_for_reg</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not enough valid data points for Bass MoM estimation after preprocessing.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Not enough valid data points for Bass MoM estimation after preprocessing.&quot;</span>
+        <span class="p">)</span>
 
-    <span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-        <span class="s1">&#39;intercept&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-        <span class="s1">&#39;y_t_minus_1&#39;</span><span class="p">:</span> <span class="n">data_for_reg</span><span class="p">[</span><span class="s1">&#39;y_t_minus_1&#39;</span><span class="p">],</span>
-        <span class="s1">&#39;y_t_minus_1_sq&#39;</span><span class="p">:</span> <span class="n">data_for_reg</span><span class="p">[</span><span class="s1">&#39;y_t_minus_1&#39;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span>
-    <span class="p">})</span>
-    <span class="n">y_reg</span> <span class="o">=</span> <span class="n">data_for_reg</span><span class="p">[</span><span class="s1">&#39;x_t&#39;</span><span class="p">]</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;intercept&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;y_t_minus_1&quot;</span><span class="p">:</span> <span class="n">data_for_reg</span><span class="p">[</span><span class="s2">&quot;y_t_minus_1&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;y_t_minus_1_sq&quot;</span><span class="p">:</span> <span class="n">data_for_reg</span><span class="p">[</span><span class="s2">&quot;y_t_minus_1&quot;</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">y_reg</span> <span class="o">=</span> <span class="n">data_for_reg</span><span class="p">[</span><span class="s2">&quot;x_t&quot;</span><span class="p">]</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y_reg</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">except</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">LinAlgError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Linear regression for Bass MoM failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">. Check data for collinearity or insufficient variation.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Linear regression for Bass MoM failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">. Check data for collinearity or insufficient variation.&quot;</span>
+        <span class="p">)</span>
 
     <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">beta</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">beta</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">beta</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
 
@@ -103,7 +113,9 @@
     <span class="n">discriminant</span> <span class="o">=</span> <span class="n">b</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="n">c</span>
 
     <span class="k">if</span> <span class="n">discriminant</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Discriminant is negative, no real solution for m. Bass MoM estimation failed. Data might not fit Bass model assumptions well.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Discriminant is negative, no real solution for m. Bass MoM estimation failed. Data might not fit Bass model assumptions well.&quot;</span>
+        <span class="p">)</span>
 
     <span class="n">m1</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">b</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">discriminant</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">c</span><span class="p">)</span>
     <span class="n">m2</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">b</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">discriminant</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">c</span><span class="p">)</span>
@@ -113,8 +125,10 @@
     <span class="n">m_candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">[</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">]</span> <span class="k">if</span> <span class="n">val</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">val</span> <span class="o">&gt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">y</span><span class="p">)]</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">m_candidates</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No valid positive market potential (m) found that is greater than or equal to max observed adoption. Bass MoM estimation failed.&quot;</span><span class="p">)</span>
-    
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;No valid positive market potential (m) found that is greater than or equal to max observed adoption. Bass MoM estimation failed.&quot;</span>
+        <span class="p">)</span>
+
     <span class="c1"># If there are two valid candidates, typically the larger one is chosen for m.</span>
     <span class="n">m</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">m_candidates</span><span class="p">)</span>
 
@@ -124,9 +138,12 @@
 
     <span class="c1"># Ensure p and q are positive, as per Bass model assumptions</span>
     <span class="k">if</span> <span class="n">p</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">q</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated p (</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">) or q (</span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2">) is not positive. Bass MoM estimation failed. Data might not fit Bass model assumptions well.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Estimated p (</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">) or q (</span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2">) is not positive. Bass MoM estimation failed. Data might not fit Bass model assumptions well.&quot;</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span></div>
+
 
 
 <div class="viewcode-block" id="MoMFitter">
@@ -136,12 +153,15 @@
 <span class="sd">    Fitter for the Bass Diffusion Model using the Method of Moments (MoM).</span>
 <span class="sd">    This fitter is specifically designed for the BassModel.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
 <div class="viewcode-block" id="MoMFitter.fit">
 <a class="viewcode-back" href="../../../innovate.fitters.html#innovate.fitters.mom_fitter.MoMFitter.fit">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">DiffusionModel</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DiffusionModel</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">DiffusionModel</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DiffusionModel</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fits the BassModel using the Method of Moments.</span>
 
@@ -154,13 +174,16 @@
 <span class="sd">            The fitted BassModel instance.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Ensure the model is a BassModel instance</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">innovate.diffuse.bass</span><span class="w"> </span><span class="kn">import</span> <span class="n">BassModel</span> <span class="c1"># Import here to avoid circular dependency</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">innovate.diffuse.bass</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+            <span class="n">BassModel</span><span class="p">,</span>
+        <span class="p">)</span>  <span class="c1"># Import here to avoid circular dependency</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">BassModel</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;MoMFitter can only fit BassModel instances.&quot;</span><span class="p">)</span>
 
         <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">estimate_bass_mom</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
         <span class="n">model</span><span class="o">.</span><span class="n">params_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="n">p</span><span class="p">,</span> <span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="n">q</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">:</span> <span class="n">m</span><span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">params_</span> <span class="c1"># Store fitted parameters internally</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">params_</span>  <span class="c1"># Store fitted parameters internally</span>
         <span class="k">return</span> <span class="n">model</span></div>
 
 
