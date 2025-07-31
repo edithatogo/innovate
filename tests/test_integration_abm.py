@@ -14,8 +14,8 @@ def test_ndlib_innovation_model_simulation():
     model = NdlibInnovationModel(num_agents=5, graph=graph)
     config = mc.Configuration()
     for edge in graph.edges():
-        config.add_edge_configuration('threshold', edge, 1.0)
-    config.add_model_initial_configuration('Infected', [0])
+        config.add_edge_configuration("threshold", edge, 1.0)
+    config.add_model_initial_configuration("Infected", [0])
     model.diffusion_model.set_initial_status(config)
 
     adoption_counts = []
@@ -28,14 +28,14 @@ def test_ndlib_innovation_model_simulation():
 
 
 def test_stl_fit_and_score_pipeline():
-    dates = pd.date_range(start='2020-01-01', periods=24, freq='M')
+    dates = pd.date_range(start="2020-01-01", periods=24, freq="M")
     true_model = LogisticModel()
     true_model.params_ = {"L": 100.0, "k": 1.5, "x0": 10.0}
     y = true_model.predict(np.arange(1, 25))
     series = pd.Series(y + np.random.normal(0, 5, len(y)), index=dates)
 
     decomposed = stl_decomposition(series, period=12)
-    trend = decomposed['trend']
+    trend = decomposed["trend"]
     t = np.arange(1, len(trend) + 1)
 
     model = LogisticModel()
@@ -43,4 +43,4 @@ def test_stl_fit_and_score_pipeline():
     fitter.fit(model, t, trend.values)
 
     metrics = get_fit_metrics(model, t, trend.values)
-    assert 'RMSE' in metrics and metrics['RMSE'] >= 0
+    assert "RMSE" in metrics and metrics["RMSE"] >= 0

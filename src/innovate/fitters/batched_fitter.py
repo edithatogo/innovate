@@ -1,6 +1,7 @@
-from typing import Sequence, List
+from typing import Sequence
 from innovate.base.base import DiffusionModel
 from innovate.backend import current_backend as B
+
 
 class BatchedFitter:
     """A fitter class for fitting a model to multiple datasets in a batch."""
@@ -10,7 +11,9 @@ class BatchedFitter:
         self.fitter = fitter
         self.fitted_params = None
 
-    def fit(self, t_batched: Sequence[Sequence[float]], y_batched: Sequence[Sequence[float]]):
+    def fit(
+        self, t_batched: Sequence[Sequence[float]], y_batched: Sequence[Sequence[float]]
+    ):
         """
         Fits the model to a batch of datasets.
 
@@ -19,7 +22,9 @@ class BatchedFitter:
             y_batched: A sequence of adoption sequences.
         """
         if len(t_batched) != len(y_batched):
-            raise ValueError("The number of time sequences and adoption sequences must be the same.")
+            raise ValueError(
+                "The number of time sequences and adoption sequences must be the same."
+            )
 
         params_list = []
         for t, y in zip(t_batched, y_batched):
@@ -28,7 +33,7 @@ class BatchedFitter:
             bounds = list(zip(*model_instance.bounds(t, y).values()))
             self.fitter.fit(model_instance, t, y, p0=p0, bounds=bounds)
             params_list.append(list(model_instance.params_.values()))
-        
+
         self.fitted_params = B.array(params_list)
         return self.fitted_params
 
@@ -47,7 +52,6 @@ class BatchedFitter:
             param_dict = dict(zip(model_instance.param_names, params))
             model_instance.params_ = param_dict
             return model_instance.predict(t)
-
 
         vmap_predict = B.vmap(predict_single)
         predictions = vmap_predict(self.fitted_params, B.array(t_batched))

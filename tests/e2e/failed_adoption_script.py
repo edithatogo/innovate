@@ -3,6 +3,7 @@ import pandas as pd
 
 # Simplified version of the failed adoption example
 
+
 def run_failed_adoption_example():
     """Runs a simplified simulation of product adoption to identify failed products.
 
@@ -34,6 +35,7 @@ def run_failed_adoption_example():
     failure_threshold = 0.1
     failed = list(np.where(market_share.max(axis=0) < failure_threshold)[0])
     return predictions_df, failed
+
 
 if __name__ == "__main__":
     df, failed = run_failed_adoption_example()

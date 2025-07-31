@@ -3,6 +3,7 @@
 import numpy as np
 from typing import List
 
+
 def analyze_failure(
     predictions: np.ndarray,
     failure_threshold: float = 0.1,
@@ -34,7 +35,7 @@ def analyze_failure(
 
     if time_horizon == -1:
         time_horizon = predictions.shape[0]
-    
+
     if not (0 < time_horizon <= predictions.shape[0]):
         raise ValueError("Invalid `time_horizon`.")
 
@@ -42,5 +43,5 @@ def analyze_failure(
     for i in range(predictions.shape[1]):
         if np.max(predictions[:time_horizon, i]) < failure_threshold:
             failed_indices.append(i)
-            
+
     return failed_indices

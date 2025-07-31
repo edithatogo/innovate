@@ -46,3 +46,12 @@ testpaths = [
 [project.optional-dependencies]
 jax = ["jax>=0.4.20", "jaxlib>=0.4.20", "numpyro>=0.13.2", "scipy>=1.9", "numpy<3", "diffrax", "jaxopt"]
 dev = ["pytest", "ruff", "pre-commit", "mypy", "bandit"]
+
+[tool.ruff]
+exclude = ["*.ipynb"]
+
+[tool.ruff.lint.per-file-ignores]
+"src/innovate/dynamics/contagion.py" = ["E741"]
+"src/innovate/dynamics/contagion/seir.py" = ["E741"]
+"src/innovate/dynamics/contagion/sir.py" = ["E741"]
+"src/innovate/dynamics/contagion/sis.py" = ["E741"]

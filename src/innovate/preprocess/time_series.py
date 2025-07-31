@@ -22,4 +22,3 @@ def sarima_fit(
 ) -> pd.Series:
     """Fit a SARIMA model and return the fitted values."""
     return apply_sarima(series, order=order, seasonal_order=seasonal_order)
-

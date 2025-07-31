@@ -1,15 +1,15 @@
-
 from mesa import Model
-from mesa.agent import AgentSet
 from mesa.space import MultiGrid
 from mesa.datacollection import DataCollector
 from .agent import InnovationAgent
+
 
 class DisruptiveInnovationAgent(InnovationAgent):
     """
     An agent in a disruptive innovation model.
     The agent can choose between an incumbent and a disruptive product.
     """
+
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
         self.choice = None  # 'incumbent' or 'disruptive'
@@ -20,19 +20,29 @@ class DisruptiveInnovationAgent(InnovationAgent):
         The agent's choice is based on the perceived value of each product.
         """
         incumbent_value = self.model.incumbent_performance - self.model.incumbent_price
-        disruptive_value = self.model.disruptive_performance - self.model.disruptive_price
+        disruptive_value = (
+            self.model.disruptive_performance - self.model.disruptive_price
+        )
 
         if disruptive_value > incumbent_value:
-            self.choice = 'disruptive'
+            self.choice = "disruptive"
         else:
-            self.choice = 'incumbent'
+            self.choice = "incumbent"
 
 
 class DisruptiveInnovationModel(Model):
     """
     A model for disruptive innovation.
     """
-    def __init__(self, num_agents, width, height, initial_disruptive_performance, disruptive_performance_improvement):
+
+    def __init__(
+        self,
+        num_agents,
+        width,
+        height,
+        initial_disruptive_performance,
+        disruptive_performance_improvement,
+    ):
         super().__init__()
         self.num_agents = num_agents
         self.grid = MultiGrid(width, height, True)
@@ -53,8 +63,12 @@ class DisruptiveInnovationModel(Model):
 
         self.datacollector = DataCollector(
             model_reporters={
-                "IncumbentAdopters": lambda m: sum([1 for a in m.agents if a.choice == 'incumbent']),
-                "DisruptiveAdopters": lambda m: sum([1 for a in m.agents if a.choice == 'disruptive']),
+                "IncumbentAdopters": lambda m: sum(
+                    [1 for a in m.agents if a.choice == "incumbent"]
+                ),
+                "DisruptiveAdopters": lambda m: sum(
+                    [1 for a in m.agents if a.choice == "disruptive"]
+                ),
             }
         )
 

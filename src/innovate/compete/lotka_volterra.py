@@ -5,6 +5,7 @@ from innovate.backend import current_backend as B
 from typing import Sequence, Dict
 import numpy as np
 
+
 class LotkaVolterraModel(DiffusionModel):
     """
     Implementation of the Lotka-Volterra model for competitive diffusion.
@@ -28,7 +29,14 @@ class LotkaVolterraModel(DiffusionModel):
         """
         names = ["alpha1", "beta1", "alpha2", "beta2"]
         for cov in self.covariates:
-            names.extend([f"beta_alpha1_{cov}", f"beta_beta1_{cov}", f"beta_alpha2_{cov}", f"beta_beta2_{cov}"])
+            names.extend(
+                [
+                    f"beta_alpha1_{cov}",
+                    f"beta_beta1_{cov}",
+                    f"beta_alpha2_{cov}",
+                    f"beta_beta2_{cov}",
+                ]
+            )
         return names
 
     def initial_guesses(self, t: Sequence[float], y: np.ndarray) -> Dict[str, float]:
@@ -39,7 +47,7 @@ class LotkaVolterraModel(DiffusionModel):
         y = B.array(y)
         t = B.array(t)
         dt = B.gradient(t)
-        
+
         # Avoid division by zero for y1 and y2
         y1 = B.clip(y[:, 0], 1e-6, 1)
         y2 = B.clip(y[:, 1], 1e-6, 1)
@@ -51,11 +59,11 @@ class LotkaVolterraModel(DiffusionModel):
         # Linearize the equations:
         # dy1/dt / y1 = alpha1 - alpha1*y1 - beta1*y2
         # dy2/dt / y2 = alpha2 - alpha2*y2 - beta2*y1
-        
+
         # Prepare for linear regression for tech 1
         X1 = B.vstack([-y1, -y2]).T
-        Y1 = dy1_dt / y1 - B.mean(-y1) # Centering the response variable
-        
+        Y1 = dy1_dt / y1 - B.mean(-y1)  # Centering the response variable
+
         try:
             # Fit alpha1 and beta1
             params1, _, _, _ = np.linalg.lstsq(X1, Y1, rcond=None)
@@ -65,7 +73,7 @@ class LotkaVolterraModel(DiffusionModel):
 
         # Prepare for linear regression for tech 2
         X2 = B.vstack([-y2, -y1]).T
-        Y2 = dy2_dt / y2 - B.mean(-y2) # Centering the response variable
+        Y2 = dy2_dt / y2 - B.mean(-y2)  # Centering the response variable
 
         try:
             # Fit alpha2 and beta2
@@ -105,7 +113,7 @@ class LotkaVolterraModel(DiffusionModel):
 
     def differential_equation(self, y, t, params, covariates, t_eval):
         y1, y2 = y
-        
+
         alpha1_base = params[0]
         beta1_base = params[1]
         alpha2_base = params[2]
@@ -121,16 +129,21 @@ class LotkaVolterraModel(DiffusionModel):
             for cov_name, cov_values in covariates.items():
                 cov_val_t = np.interp(t, t_eval, cov_values)
                 alpha1_t += params[param_idx] * cov_val_t
-                beta1_t += params[param_idx+1] * cov_val_t
-                alpha2_t += params[param_idx+2] * cov_val_t
-                beta2_t += params[param_idx+3] * cov_val_t
+                beta1_t += params[param_idx + 1] * cov_val_t
+                alpha2_t += params[param_idx + 2] * cov_val_t
+                beta2_t += params[param_idx + 3] * cov_val_t
                 param_idx += 4
 
         dy1_dt = alpha1_t * y1 * (1 - y1) - beta1_t * y1 * y2
         dy2_dt = alpha2_t * y2 * (1 - y2) - beta2_t * y1 * y2
         return [dy1_dt, dy2_dt]
 
-    def predict(self, t: Sequence[float], y0: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> np.ndarray:
+    def predict(
+        self,
+        t: Sequence[float],
+        y0: Sequence[float],
+        covariates: Dict[str, Sequence[float]] = None,
+    ) -> np.ndarray:
         """
         Predicts the market share of both technologies over time.
 
@@ -147,7 +160,7 @@ class LotkaVolterraModel(DiffusionModel):
         """
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
-        
+
         from scipy.integrate import odeint
 
         params = [self._params[name] for name in self.param_names]
@@ -159,7 +172,13 @@ class LotkaVolterraModel(DiffusionModel):
         )
         return solution
 
-    def fit(self, t: Sequence[float], y: np.ndarray, covariates: Dict[str, Sequence[float]] = None, **kwargs):
+    def fit(
+        self,
+        t: Sequence[float],
+        y: np.ndarray,
+        covariates: Dict[str, Sequence[float]] = None,
+        **kwargs,
+    ):
         """
         Fits the Lotka-Volterra model to the data.
 
@@ -194,8 +213,8 @@ class LotkaVolterraModel(DiffusionModel):
             initial_params,
             args=(t, y, covariates),
             bounds=param_bounds,
-            method='L-BFGS-B',
-            options={'maxiter': 10000},
+            method="L-BFGS-B",
+            options={"maxiter": 10000},
             **kwargs,
         )
 
@@ -213,7 +232,12 @@ class LotkaVolterraModel(DiffusionModel):
     def params_(self, value: Dict[str, float]):
         self._params = value
 
-    def score(self, t: Sequence[float], y: np.ndarray, covariates: Dict[str, Sequence[float]] = None) -> float:
+    def score(
+        self,
+        t: Sequence[float],
+        y: np.ndarray,
+        covariates: Dict[str, Sequence[float]] = None,
+    ) -> float:
         """
         Calculates the R^2 score for the model fit.
 
@@ -234,10 +258,15 @@ class LotkaVolterraModel(DiffusionModel):
 
         ss_res = B.sum((y - y_pred) ** 2)
         ss_tot = B.sum((y - B.mean(y, axis=0)) ** 2)
-        
+
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
-    def predict_adoption_rate(self, t: Sequence[float], y0: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> np.ndarray:
+    def predict_adoption_rate(
+        self,
+        t: Sequence[float],
+        y0: Sequence[float],
+        covariates: Dict[str, Sequence[float]] = None,
+    ) -> np.ndarray:
         """
         Predicts the rate of change of market share for both technologies.
 
@@ -254,7 +283,7 @@ class LotkaVolterraModel(DiffusionModel):
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
         y_pred = self.predict(t, y0, covariates)
-        
+
         alpha1_base = self._params["alpha1"]
         beta1_base = self._params["beta1"]
         alpha2_base = self._params["alpha2"]
@@ -276,7 +305,7 @@ class LotkaVolterraModel(DiffusionModel):
                     alpha2_t += self._params[f"beta_alpha2_{cov_name}"] * cov_val_t
                     beta2_t += self._params[f"beta_beta2_{cov_name}"] * cov_val_t
                     param_idx += 4
-            
+
             y1, y2 = y_pred[i]
             dy1_dt = alpha1_t * y1 * (1 - y1) - beta1_t * y1 * y2
             dy2_dt = alpha2_t * y2 * (1 - y2) - beta2_t * y1 * y2

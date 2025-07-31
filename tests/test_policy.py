@@ -4,6 +4,7 @@ from innovate.diffuse.bass import BassModel
 from innovate.fitters.scipy_fitter import ScipyFitter
 from innovate.policy.intervention import PolicyIntervention
 
+
 def test_policy_intervention_basic():
     # 1. Create a BassModel instance and fit it with dummy data
     model = BassModel()
@@ -32,9 +33,7 @@ def test_policy_intervention_basic():
 
     # 4. Call apply_time_varying_params and get the predict_with_policy callable
     predict_with_policy = policy_handler.apply_time_varying_params(
-        t_points=t_data,
-        p_effect=p_effect,
-        q_effect=q_effect
+        t_points=t_data, p_effect=p_effect, q_effect=q_effect
     )
 
     # 5. Make predictions with the policy
@@ -44,22 +43,33 @@ def test_policy_intervention_basic():
     # (indicating the policy had an effect)
     # We expect differences, especially after t=10
     assert not np.allclose(original_predictions, policy_predictions, atol=1e-2)
-    
+
     # More specific check: predictions after policy application should be higher/lower as expected
     # For p increase and q decrease, adoption should generally be higher.
-    assert np.all(policy_predictions[t_data > 10] > original_predictions[t_data > 10] - 1e-6)
+    assert np.all(
+        policy_predictions[t_data > 10] > original_predictions[t_data > 10] - 1e-6
+    )
+
 
 def test_policy_intervention_type_error():
     # Test that it raises TypeError for non-BassModel (or other unsupported models)
     from innovate.compete.competition import MultiProductDiffusionModel
-    model = MultiProductDiffusionModel(p=[0.1], Q=[[0.1]], m=[100]) # Dummy init
+
+    model = MultiProductDiffusionModel(p=[0.1], Q=[[0.1]], m=[100])  # Dummy init
     policy_handler = PolicyIntervention(model)
-    with pytest.raises(TypeError, match="This policy intervention is currently only supported for BassModel."):
+    with pytest.raises(
+        TypeError,
+        match="This policy intervention is currently only supported for BassModel.",
+    ):
         policy_handler.apply_time_varying_params(t_points=np.arange(10))
+
 
 def test_policy_intervention_runtime_error_no_params():
     # Test that it raises RuntimeError if model has no parameters set
     model = BassModel()
     policy_handler = PolicyIntervention(model)
-    with pytest.raises(RuntimeError, match="Model must be fitted or have initial parameters set before applying policy."):
+    with pytest.raises(
+        RuntimeError,
+        match="Model must be fitted or have initial parameters set before applying policy.",
+    ):
         policy_handler.apply_time_varying_params(t_points=np.arange(10))

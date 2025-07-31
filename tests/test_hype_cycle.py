@@ -4,6 +4,7 @@ import pytest
 import numpy as np
 from innovate.hype.hype_cycle import HypeCycleModel
 
+
 @pytest.fixture
 def hype_cycle_params():
     """Parameters for a typical Hype Cycle."""
@@ -18,19 +19,21 @@ def hype_cycle_params():
         "w_d": 15,
     }
 
+
 def test_hype_cycle_model_init():
     """Test initialization of the HypeCycleModel."""
     model = HypeCycleModel()
     assert model.param_names is not None
 
+
 def test_hype_cycle_model_predict(hype_cycle_params):
     """Test the predict method of the HypeCycleModel."""
     model = HypeCycleModel()
     model.params_ = hype_cycle_params
-    
+
     t = np.arange(0, 100, 1)
     visibility = model.predict(t)
-    
+
     assert isinstance(visibility, np.ndarray)
     assert visibility.shape == (len(t),)
     assert np.all(visibility >= 0)
@@ -44,6 +47,7 @@ def test_hype_cycle_model_predict(hype_cycle_params):
 
     assert peak_time < trough_time
     assert visibility[peak_time] > visibility[trough_time]
+
 
 def test_predict_without_params():
     """Test that predict raises an error if params are not set."""
