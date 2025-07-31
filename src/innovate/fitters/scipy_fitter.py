@@ -1,4 +1,5 @@
-from typing import Sequence, Dict, Callable, Any, Self
+from typing import Sequence, Dict, Callable, Any
+from typing_extensions import Self
 import numpy as np
 from scipy.optimize import curve_fit
 from innovate.base.base import DiffusionModel
@@ -7,7 +8,7 @@ from innovate.compete.competition import MultiProductDiffusionModel # Import the
 class ScipyFitter:
     """A fitter class that uses SciPy's curve_fit for model estimation."""
 
-    def fit(self, model: DiffusionModel, t: Sequence[float], y: Sequence[float], p0: Sequence[float] = None, bounds: tuple = None, **kwargs) -> Self:
+    def fit(self, model: DiffusionModel, t: Sequence[float], y: Sequence[float], p0: Sequence[float] = None, bounds: tuple = None, weights: Sequence[float] = None, **kwargs) -> Self:
         """
         Fits a DiffusionModel instance using scipy.optimize.curve_fit.
 
@@ -17,6 +18,7 @@ class ScipyFitter:
             y: Observed adoption data (dependent variable).
             p0: Initial guesses for the parameters. If None, model.initial_guesses() is used.
             bounds: Bounds for the parameters. If None, model.bounds() is used.
+            weights: Weights for the observed data points.
             kwargs: Additional keyword arguments to pass to scipy.optimize.curve_fit.
 
         Returns:
@@ -27,6 +29,7 @@ class ScipyFitter:
         """
         t_arr = np.array(t)
         y_arr = np.array(y)
+        sigma = 1.0 / np.sqrt(weights) if weights is not None else None
 
         # Check for MultiProductDiffusionModel and handle accordingly
         if isinstance(model, MultiProductDiffusionModel):
@@ -52,7 +55,7 @@ class ScipyFitter:
             bounds = (lower_bounds, upper_bounds)
 
         try:
-            popt, _ = curve_fit(fit_function, x_fit, y_arr, p0=p0, bounds=bounds, **kwargs)
+            popt, _ = curve_fit(fit_function, x_fit, y_arr, p0=p0, bounds=bounds, sigma=sigma, absolute_sigma=True, **kwargs)
             model.params_ = dict(zip(model.param_names, popt))
         except ValueError as e:
             raise RuntimeError(f"Fitting failed due to invalid parameters or data: {e}")

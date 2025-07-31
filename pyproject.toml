@@ -15,7 +15,10 @@ dependencies = [
     "mesa",
     "networkx",
     "ruptures",
-    "pymannkendall"
+    "pymannkendall",
+    "typing_extensions",
+    "pytensor",
+    "ndlib"
 ]
 requires-python = ">=3.8"
 readme = "README.md"
@@ -29,10 +32,17 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 
 [tool.pytest.ini_options]
-pythonpath = ["src"]
-addopts = "--import-mode=importlib"
-markers = ["e2e: end-to-end tests"]
+pythonpath = [
+  "src",
+  "fitters",
+]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+    "integration",
+]
 
 [project.optional-dependencies]
-jax = ["jax", "jaxopt", "diffrax", "numpyro"]
+jax = ["jax>=0.4.20", "jaxlib>=0.4.20", "numpyro>=0.13.2", "scipy>=1.9", "numpy<2", "diffrax", "jaxopt"]
 dev = ["pytest", "ruff", "black"]

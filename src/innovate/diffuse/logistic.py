@@ -10,15 +10,17 @@ class LogisticModel(DiffusionModel):
     This is a wrapper around the SymmetricGrowth dynamics model.
     """
 
-    def __init__(self, covariates: Sequence[str] = None):
+    def __init__(self, covariates: Sequence[str] = None, t_event: float = None):
         """
         Initialize a LogisticModel with optional covariates and an internal SymmetricGrowth dynamics model.
         
         Parameters:
             covariates (Sequence[str], optional): List of covariate names to include in the model. Defaults to an empty list.
+            t_event (float, optional): The time of a structural break or event.
         """
         self._params: Dict[str, float] = {}
         self.covariates = covariates if covariates else []
+        self.t_event = t_event
         self.growth_model = SymmetricGrowth()
 
     @property
@@ -30,6 +32,8 @@ class LogisticModel(DiffusionModel):
             names (Sequence[str]): List of parameter names, with covariate effects prefixed by 'beta_L_', 'beta_k_', and 'beta_x0_' for each covariate.
         """
         names = ["L", "k", "x0"]
+        if self.t_event is not None:
+            names.extend(["L_post", "k_post", "x0_post"])
         for cov in self.covariates:
             names.extend([f"beta_L_{cov}", f"beta_k_{cov}", f"beta_x0_{cov}"])
         return names
@@ -40,6 +44,12 @@ class LogisticModel(DiffusionModel):
             "k": 0.1,
             "x0": np.median(t),
         }
+        if self.t_event is not None:
+            guesses.update({
+                "L_post": np.max(y) * 1.1,
+                "k_post": 0.1,
+                "x0_post": np.median(t),
+            })
         for cov in self.covariates:
             guesses[f"beta_L_{cov}"] = 0.0
             guesses[f"beta_k_{cov}"] = 0.0
@@ -62,6 +72,12 @@ class LogisticModel(DiffusionModel):
             "k": (1e-6, np.inf),
             "x0": (-np.inf, np.inf),
         }
+        if self.t_event is not None:
+            bounds.update({
+                "L_post": (np.max(y), np.inf),
+                "k_post": (1e-6, np.inf),
+                "x0_post": (-np.inf, np.inf),
+            })
         for cov in self.covariates:
             bounds[f"beta_L_{cov}"] = (-np.inf, np.inf)
             bounds[f"beta_k_{cov}"] = (-np.inf, np.inf)
@@ -85,6 +101,28 @@ class LogisticModel(DiffusionModel):
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
+        t_arr = backend.current_backend.array(t)
+        
+        if self.t_event is not None:
+            pre_event_mask = t_arr < self.t_event
+            post_event_mask = ~pre_event_mask
+            
+            y_pred = backend.current_backend.zeros_like(t_arr)
+            
+            if backend.current_backend.any(pre_event_mask):
+                L = self._params["L"]
+                k = self._params["k"]
+                x0 = self._params["x0"]
+                y_pred[pre_event_mask] = L / (1 + backend.current_backend.exp(-k * (t_arr[pre_event_mask] - x0)))
+
+            if backend.current_backend.any(post_event_mask):
+                L = self._params["L_post"]
+                k = self._params["k_post"]
+                x0 = self._params["x0_post"]
+                y_pred[post_event_mask] = L / (1 + backend.current_backend.exp(-k * (t_arr[post_event_mask] - x0)))
+            
+            return y_pred
+
         L = self._params["L"]
         k = self._params["k"]
         x0 = self._params["x0"]
@@ -98,7 +136,6 @@ class LogisticModel(DiffusionModel):
                 k += self._params[f"beta_k_{cov_name}"] * cov_val_t
                 x0 += self._params[f"beta_x0_{cov_name}"] * cov_val_t
 
-        t_arr = backend.current_backend.array(t)
         return L / (1 + backend.current_backend.exp(-k * (t_arr - x0)))
 
     def score(self, t: Sequence[float], y: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> float:
@@ -161,9 +198,15 @@ class LogisticModel(DiffusionModel):
 
     def differential_equation(self, t, y, params, covariates, t_eval):
         """Differential equation for the logistic model."""
-        L, k, x0 = params[0], params[1], params[2]
+        if self.t_event is not None and t >= self.t_event:
+            L, k, x0 = params[3], params[4], params[5]
+            param_idx_offset = 3
+        else:
+            L, k, x0 = params[0], params[1], params[2]
+            param_idx_offset = 0
+
         if covariates:
-            param_idx = 3
+            param_idx = 3 + param_idx_offset
             for cov_name, cov_values in covariates.items():
                 cov_val_t = backend.current_backend.interp(t, t_eval, cov_values)
                 L += params[param_idx] * cov_val_t

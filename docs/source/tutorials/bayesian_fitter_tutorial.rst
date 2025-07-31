@@ -4,7 +4,7 @@
 Bayesian Fitting for Diffusion Models
 ==================================
 
-This tutorial provides a guide to using the ``BayesianFitter`` in the ``innovate`` library. Bayesian methods offer a powerful way to estimate the parameters of diffusion models, providing not just point estimates but entire posterior distributions that quantify uncertainty.
+This tutorial provides a guide to using the ``NumpyroFitter`` in the ``innovate`` library. Bayesian methods offer a powerful way to estimate the parameters of diffusion models, providing not just point estimates but entire posterior distributions that quantify uncertainty.
 
 Introduction to Bayesian Fitting
 --------------------------------
@@ -15,7 +15,7 @@ Traditional fitting methods, like those based on least squares, provide a single
 - **Regularization**: Priors naturally regularize the model, preventing overfitting and leading to more stable estimates, especially with noisy or sparse data.
 - **Flexibility**: The Bayesian framework is highly flexible, allowing for the incorporation of prior knowledge and the construction of complex hierarchical models.
 
-The ``innovate`` library's ``BayesianFitter`` uses the powerful ``PyMC`` library under the hood to perform Markov Chain Monte Carlo (MCMC) sampling.
+The ``innovate`` library's ``NumpyroFitter`` uses the powerful ``PyMC`` library under the hood to perform Markov Chain Monte Carlo (MCMC) sampling.
 
 A Simple Example: Fitting a Logistic Model
 ------------------------------------------
@@ -31,11 +31,11 @@ First, we'll create a ``LogisticModel``, set its parameters, and generate some n
 
     import numpy as np
     from innovate.diffuse import LogisticModel
-    from innovate.fitters import BayesianFitter
+    from innovate.fitters import NumpyroFitter
 
     # 1. Define the true model and generate data
     true_model = LogisticModel()
-    true_model.set_params(L=1000, k=0.1, x0=50)
+    true_model.params_ = {"L": 1000, "k": 0.1, "x0": 50}
 
     t = np.linspace(0, 100, 50)
     true_adoptions = true_model.predict(t)
@@ -43,17 +43,17 @@ First, we'll create a ``LogisticModel``, set its parameters, and generate some n
     y = true_adoptions + noise
     y[y < 0] = 0 # Ensure non-negative adoptions
 
-2. Fit the Model with ``BayesianFitter``
+2. Fit the Model with ``NumpyroFitter``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Now, we create an instance of the ``LogisticModel`` to be fitted and an instance of the ``BayesianFitter``. Then, we call the ``fit`` method.
+Now, we create an instance of the ``LogisticModel`` to be fitted and an instance of the ``NumpyroFitter``. Then, we call the ``fit`` method.
 
 .. code-block:: python
 
     # 2. Create a new model instance and the fitter
     model_to_fit = LogisticModel()
-    # Reduce chains/cores on memory constrained systems
-    fitter = BayesianFitter(model=model_to_fit, draws=2000, tune=1000, chains=1, cores=1)
+    # Reduce chains/samples on memory constrained systems
+    fitter = NumpyroFitter(model=model_to_fit, num_warmup=1000, num_samples=2000, num_chains=1)
 
     # 3. Fit the model to the data
     fitter.fit(t, y)
@@ -85,36 +85,34 @@ We can also compute credible intervals to understand the uncertainty in our esti
 .. code-block:: python
 
     # Get 95% credible intervals
-    credible_intervals = fitter.get_confidence_intervals(alpha=0.05)
+    credible_intervals = fitter.get_confidence_intervals(prob=0.95)
     print("\n95% Credible Intervals:")
     print(credible_intervals)
 
 Visualizing the Posterior
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-For a deeper understanding, we can use libraries like ``ArviZ`` to plot the posterior distributions and diagnostic plots. The ``fitter.trace`` object is a ``pymc.backends.base.MultiTrace`` object that can be used with ``ArviZ``.
+For a deeper understanding, we can use libraries like ``ArviZ`` to plot the posterior distributions and diagnostic plots. The ``fitter.mcmc`` object is a ``numpyro.infer.MCMC`` object that can be used with ``ArviZ``.
 
 .. code-block:: python
 
     import arviz as az
 
     # Plot the posterior distributions
-    az.plot_posterior(fitter.trace)
+    az.plot_posterior(fitter.mcmc)
 
 Full Summary Statistics
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-The ``get_summary`` method provides a comprehensive summary of the posterior, including the mean, standard deviation, credible intervals, and diagnostic statistics like ``r_hat`` (which should be close to 1.0 to indicate convergence).
+The ``get_summary`` method provides a comprehensive summary of the posterior, including the mean, standard deviation, credible intervals, and diagnostic statistics like ``n_eff`` (effective sample size) and ``r_hat`` (which should be close to 1.0 to indicate convergence).
 
 .. code-block:: python
 
     # Get a full summary of the posterior
-    summary = fitter.get_summary()
-    print("\nFull Posterior Summary:")
-    print(summary)
+    fitter.get_summary()
 
 
 Conclusion
 ----------
 
-The ``BayesianFitter`` provides a robust and powerful alternative for fitting diffusion models in the ``innovate`` library. By leveraging Bayesian inference, you can gain deeper insights into parameter uncertainty, leading to more reliable and informative models. This is especially valuable when dealing with the noisy, real-world data often encountered in innovation diffusion studies.
+The ``NumpyroFitter`` provides a robust and powerful alternative for fitting diffusion models in the ``innovate`` library. By leveraging Bayesian inference, you can gain deeper insights into parameter uncertainty, leading to more reliable and informative models. This is especially valuable when dealing with the noisy, real-world data often encountered in innovation diffusion studies.

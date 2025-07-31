@@ -11,15 +11,17 @@ class BassModel(DiffusionModel):
     This is a wrapper around the DualInfluenceGrowth dynamics model.
     """
 
-    def __init__(self, covariates: Sequence[str] = None):
+    def __init__(self, covariates: Sequence[str] = None, t_event: float = None):
         """
-        Initialize the BassModel with optional covariates and a DualInfluenceGrowth dynamics model.
+        Initialize the BassModel with optional covariates, a time event, and a DualInfluenceGrowth dynamics model.
         
         Parameters:
             covariates (Sequence[str], optional): List of covariate names to include in the model. Defaults to an empty list if not provided.
+            t_event (float, optional): The time of a structural break or event. If provided, the model will fit separate parameters for the periods before and after this time.
         """
         self._params: Dict[str, float] = {}
         self.covariates = covariates if covariates else []
+        self.t_event = t_event
         self.growth_model = DualInfluenceGrowth()
 
     @property
@@ -31,6 +33,8 @@ class BassModel(DiffusionModel):
             names (Sequence[str]): List of parameter names, with covariate effects included if applicable.
         """
         names = ["p", "q", "m"]
+        if self.t_event is not None:
+            names.extend(["p_post", "q_post", "m_post"])
         for cov in self.covariates:
             names.extend([f"beta_p_{cov}", f"beta_q_{cov}", f"beta_m_{cov}"])
         return names
@@ -41,6 +45,12 @@ class BassModel(DiffusionModel):
             "q": 0.1,
             "m": np.max(y) * 1.1,
         }
+        if self.t_event is not None:
+            guesses.update({
+                "p_post": 0.001,
+                "q_post": 0.1,
+                "m_post": np.max(y) * 1.1,
+            })
         for cov in self.covariates:
             guesses[f"beta_p_{cov}"] = 0.0
             guesses[f"beta_q_{cov}"] = 0.0
@@ -63,6 +73,12 @@ class BassModel(DiffusionModel):
             "q": (1e-6, 1.0),
             "m": (np.max(y), np.inf),
         }
+        if self.t_event is not None:
+            bounds.update({
+                "p_post": (1e-6, 0.1),
+                "q_post": (1e-6, 1.0),
+                "m_post": (np.max(y), np.inf),
+            })
         for cov in self.covariates:
             bounds[f"beta_p_{cov}"] = (-np.inf, np.inf)
             bounds[f"beta_q_{cov}"] = (-np.inf, np.inf)
@@ -120,16 +136,23 @@ class BassModel(DiffusionModel):
         Returns:
             The instantaneous adoption rate at time t.
         """
-        p_base = params[0]
-        q_base = params[1]
-        m_base = params[2]
+        if self.t_event is not None and t >= self.t_event:
+            p_base = params[3]
+            q_base = params[4]
+            m_base = params[5]
+            param_idx_offset = 3
+        else:
+            p_base = params[0]
+            q_base = params[1]
+            m_base = params[2]
+            param_idx_offset = 0
 
         p_t = p_base
         q_t = q_base
         m_t = m_base
         
         if covariates:
-            param_idx = 3
+            param_idx = 3 + param_idx_offset
             for cov_name, cov_values in covariates.items():
                 cov_val_t = backend.current_backend.interp(t, t_eval, cov_values)
                 

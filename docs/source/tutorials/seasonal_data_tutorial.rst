@@ -33,7 +33,7 @@ First, we'll generate some synthetic data with a clear seasonal pattern.
     import matplotlib.pyplot as plt
     from statsmodels.tsa.seasonal import seasonal_decompose
     from innovate.diffuse import LogisticModel
-    from innovate.fitters import BayesianFitter
+    from innovate.fitters import NumpyroFitter
 
     # Generate a time series with a seasonal component
     t_seasonal = np.linspace(0, 100, 500)
@@ -85,7 +85,7 @@ Now, we can fit our diffusion model to the extracted trend component. This allow
     y_trend = trend[~np.isnan(trend)]
     
     model_for_trend = LogisticModel()
-    fitter_for_trend = BayesianFitter(model=model_for_trend, draws=2000, tune=1000, chains=4)
+    fitter_for_trend = NumpyroFitter(model=model_for_trend, num_warmup=1000, num_samples=2000, num_chains=1)
     fitter_for_trend.fit(t_trend, y_trend)
 
     # Get the parameter estimates for the trend

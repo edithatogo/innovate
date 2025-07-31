@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
-from typing import Sequence, Tuple
+from typing import Sequence, Tuple, Union
 from statsmodels.tsa.seasonal import STL
 
-def ensure_datetime_index(data: pd.Series | pd.DataFrame) -> pd.Series | pd.DataFrame:
+def ensure_datetime_index(data: Union[pd.Series, pd.DataFrame]) -> Union[pd.Series, pd.DataFrame]:
     """Ensures a pandas Series or DataFrame has a datetime index."""
     if not isinstance(data.index, pd.DatetimeIndex):
         try:
@@ -12,7 +12,7 @@ def ensure_datetime_index(data: pd.Series | pd.DataFrame) -> pd.Series | pd.Data
             raise ValueError(f"Could not convert index to DatetimeIndex: {e}")
     return data
 
-def aggregate_time_series(data: pd.Series | pd.DataFrame, freq: str) -> pd.Series | pd.DataFrame:
+def aggregate_time_series(data: Union[pd.Series, pd.DataFrame], freq: str) -> Union[pd.Series, pd.DataFrame]:
     """Aggregates time series data to a specified frequency (e.g., 'D', 'W', 'M')."""
     data = ensure_datetime_index(data)
     return data.resample(freq).sum()
