@@ -115,5 +115,62 @@ The following phases are planned for future releases and are not part of the cur
 7.  **Product Adoption**:
     *   Implement `innovate.product_adoption` module with `ChurnRetention` and `AttributeBasedChoice` models.
 
+## Phase 10: Advanced Hype Cycle Modeling
+
+**Goal**: Implement more sophisticated and empirically-grounded models of the Gartner Hype Cycle.
+1.  **Superposition Model**:
+    *   Implement a hype cycle model based on the superposition of a hype curve (e.g., Gaussian) and an adoption curve (e.g., Logistic or Gompertz).
+2.  **Awareness-Knowledge Model**:
+    *   Implement a hype cycle model based on the difference between two logistic curves representing "market awareness" and "knowledge acquisition".
+3.  **Differential Equation Model**:
+    *   Investigate and potentially implement a differential equation-based model for the Gartner Hype Cycle to capture the underlying system dynamics.
+
+## Phase 11: Advanced Substitution and Competition Models
+
+**Goal**: Broaden the scope of substitution and competition modeling.
+1.  **Sharif-Kabir Model**:
+    *   Implement the Sharif-Kabir model to generalize substitution patterns beyond the symmetric logistic curve.
+2.  **Lanchester Models**:
+    *   Implement Lanchester's Linear and Square Laws for modeling market share attrition based on competitive effort. The `LanchesterModel` will take initial market shares and effectiveness parameters (`alpha`, `beta`) as input, and simulate the system over time, with an option to select between the linear and square laws.
+
+## Phase 12: Stochastic and Game Theory Models
+
+**Goal**: Introduce stochastic modeling and game theory frameworks.
+1.  **Stochastic Diffusion Models (SDEs)**:
+    *   Reframe core diffusion models as Stochastic Differential Equations (e.g., adding a Wiener process to the Bass model).
+    *   Enable probabilistic forecasting and risk analysis by simulating a distribution of future adoption paths.
+2.  **Game Theory Models**:
+    *   Implement foundational game theory models for strategic analysis, including Cournot (quantity competition), Bertrand (price competition), and Stackelberg (leader-follower dynamics).
+3.  **Advanced Agent-Based Models**:
+    *   Implement a `ThresholdModel` as a standard agent type within the ABM framework. This agent adopts based on the fraction of its neighbors who have already adopted, governed by an individual threshold parameter. This will allow for modeling bandwagon effects and social contagion.
+
+## Phase 13: Econometric and Time-Series Models
+
+**Goal**: Integrate traditional econometric models for forecasting and analysis.
+1.  **Time-Series Model Integration**:
+    *   Provide wrappers or integration for standard time-series models like ARIMA for short-term forecasting.
+2.  **Volatility Modeling**:
+    *   Implement GARCH models to analyze and forecast the volatility of adoption rates, enabling better risk and supply chain management.
+
+## Phase 14: Advanced Systems Dynamics Constructs
+
+**Goal**: Implement complex, multi-feedback systems dynamics models.
+1.  **Multi-Stage Diffusion Models**:
+    *   Model the adoption process as a series of stages (e.g., Awareness, Trial, Adoption) with distinct stocks and flows.
+2.  **Competitive Strategy Models**:
+    *   Develop integrated models that capture the feedback loops between R&D spending, product quality, marketing, market share, and profits.
+3.  **Product Portfolio and Lifecycle Models**:
+    *   Simulate the dynamics of a firm's entire product portfolio, including R&D pipelines, new product launches, and obsolescence. This will be implemented as a `ProductLifecycleModel` that takes a fitted diffusion model as input and combines it with financial parameters (price, cost, marketing spend) to forecast revenue, profit, and ROI over the product's lifecycle.
+4.  **Business and Industry Cycle Models**:
+    *   Implement models to simulate and analyze the boom-and-bust cycles inherent in many industries (e.g., semiconductors, real estate).
+
+## Phase 15: Economic and Financial Dynamics
+
+**Goal**: Integrate economic principles directly into the diffusion process.
+1.  **Cost-Benefit Diffusion Models**:
+    *   Implement an `EconomicDiffusionModel` where the adoption rate is a function of the perceived net benefit. This will allow for modeling how changes in price, product utility, and other costs dynamically influence the diffusion process.
+2.  **Dynamic Parameter Models**:
+    *   Create a `DynamicBassModel` (and similar models for other diffusion curves) where the innovation and imitation parameters (`p` and `q`) can be arbitrary functions of time or external variables (e.g., advertising spend). This will provide a flexible way to model the impact of marketing and policy drivers.
+
 ---
 This roadmap provides a clear path forward, balancing the implementation of core, requested features with a vision for a sophisticated and versatile modeling tool.

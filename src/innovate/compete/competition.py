@@ -44,7 +44,9 @@ class MultiProductDiffusionModel(DiffusionModel):
 
         # Avoid division by zero if m_j is zero, though m should be positive
         # Handle cases where y_j might exceed m_j slightly due to numerical issues
-        adoption_share = B.where(self.m != 0, y_arr / self.m, B.zeros_like(y_arr))
+        adoption_share = B.where(
+            self.m.flatten() != 0, y_arr / self.m.flatten(), B.zeros_like(y_arr)
+        )
         adoption_share = B.where(
             adoption_share > 1.0, 1.0, adoption_share
         )  # Cap at 1.0
@@ -101,7 +103,9 @@ class MultiProductDiffusionModel(DiffusionModel):
         """Differential equations for the multi-product model."""
         p, Q, m = params
         y_arr = B.array(y)
-        adoption_share = B.where(m != 0, y_arr / m, B.zeros(len(y_arr)))
+        adoption_share = B.where(
+            m.flatten() != 0, y_arr / m.flatten(), B.zeros_like(y_arr)
+        )
         adoption_share = B.where(adoption_share > 1.0, 1.0, adoption_share)
         imitation = B.matmul(Q, adoption_share)
         force = p + imitation

@@ -1,6 +1,11 @@
 import timeit
 import numpy as np
+import pandas as pd
 from innovate.backend import use_backend
+from innovate.diffuse.bass import BassModel
+from innovate.diffuse.gompertz import GompertzModel
+from innovate.diffuse.logistic import LogisticModel
+from innovate.fitters.scipy_fitter import ScipyFitter
 
 
 def run_fit_benchmark(model, t, y, backend, fitter, covariates=None):
@@ -75,45 +80,78 @@ def run_simulation_benchmark(model, t, backend, n_sims, covariates=None):
     }
 
 
-def generate_synthetic_data(model, t, params, covariates=None, noise_std=10):
+def generate_synthetic_data(model, t, params, covariates=None, noise_std=0.05):
     """Generates synthetic data from a model with known parameters and adds noise."""
     model.params_ = params
-    y = model.predict(t, covariates=covariates) + np.random.normal(0, noise_std, len(t))
-    return y
+    y_true = model.predict(t, covariates=covariates)
+    noise = np.random.normal(0, noise_std * np.max(y_true), len(t))
+    y_noisy = y_true + noise
+    return np.maximum(0, y_noisy)  # ensure non-negative
 
 
 def main():
     """Runs the benchmarks and prints the results."""
+    t = np.linspace(0, 50, 100)
+    results = []
+    backends = ["numpy", "jax"]
+    fitter = ScipyFitter()
 
-    # Create some synthetic data
+    # --- Model Configurations ---
+    models_to_benchmark = [
+        (BassModel(), {"p": 0.03, "q": 0.38, "m": 1000}, None, "Bass"),
+        (GompertzModel(), {"a": 1000, "b": 5, "c": 0.1}, None, "Gompertz"),
+        (LogisticModel(), {"L": 1000, "k": 0.1, "x0": 25}, None, "Logistic"),
+    ]
 
-    # Define models and their corresponding data/covariates
+    # Add model with covariates
+    covariates = {"price": np.linspace(10, 5, 100)}
+    bass_model_cov = BassModel(covariates=list(covariates.keys()))
+    bass_cov_params = {
+        "p": 0.03,
+        "q": 0.38,
+        "m": 1000,
+        "beta_p_price": -0.001,
+        "beta_q_price": 0.01,
+        "beta_m_price": 10,
+    }
+    models_to_benchmark.append(
+        (bass_model_cov, bass_cov_params, covariates, "Bass (Covariates)")
+    )
 
-    # Create the fitters
+    print("Running benchmarks...")
 
-    # # Run the benchmarks
-    # print("Running benchmarks...")
-    # results = benchmark_fitters(fitters, datasets)
-    # backends = ["numpy", "jax"]
+    for model, params, covs, name in models_to_benchmark:
+        print(f"Benchmarking {name}...")
+        y = generate_synthetic_data(model, t, params, covariates=covs)
 
-    # for model, params, covs, name in models_to_benchmark:
-    #     y = generate_synthetic_data(model, t, params, covariates=covs)
-    #     for backend in backends:
-    #         # Fit the model first before benchmarking
-    #         fitter = ScipyFitter()
-    #         fitter.fit(model, t, y, covariates=covs)
-    #         results.append(
-    #             run_fit_benchmark(model, t, y, backend, fitter, covariates=covs)
-    #         )
-    #         results.append(run_predict_benchmark(model, t, backend, covariates=covs))
-    #         for n_sims in [10, 100, 1000]:
-    #             results.append(
-    #                 run_simulation_benchmark(model, t, backend, n_sims, covariates=covs)
-    #             )
+        for backend in backends:
+            try:
+                use_backend(backend)
+                # Fit the model first before benchmarking predict/simulate
+                fitter.fit(model, t, y, covariates=covs)
 
-    # # Print the results
-    # df = pd.DataFrame(results)
-    # print(df)
+                # Run benchmarks
+                results.append(
+                    run_fit_benchmark(model, t, y, backend, fitter, covariates=covs)
+                )
+                results.append(
+                    run_predict_benchmark(model, t, backend, covariates=covs)
+                )
+                for n_sims in [10, 100, 1000]:
+                    results.append(
+                        run_simulation_benchmark(
+                            model, t, backend, n_sims, covariates=covs
+                        )
+                    )
+            except Exception as e:
+                print(f"  Error benchmarking {name} with {backend} backend: {e}")
+
+    # Print the results
+    df = pd.DataFrame(results)
+    print("\n--- Benchmark Results ---")
+    print(df)
+df.to_csv("benchmark_results.csv", index=False)
+print("\nResults saved to benchmark_results.csv")
 
 
 if __name__ == "__main__":
