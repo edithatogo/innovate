@@ -94,9 +94,9 @@ Here is a sample of the kinds of visualizations you can generate with `innovate`
 | :---: | :---: |
 | ![Fisher-Pry Substitution](docs/images/fisher_pry_substitution.png) | ![Norton-Bass Substitution](docs/images/norton_bass_substitution.png) |
 
-| Multi-Product Diffusion |
-| :---: |
-| ![Multi-Product Diffusion](docs/images/multi_product_diffusion.png) |
+| Multi-Product Diffusion | Adoption Curve |
+| :---: | :---: |
+| ![Multi-Product Diffusion](docs/images/multi_product_diffusion.png) | ![Adoption Curve](docs/images/adoption_curve.png) |
 
 
 ## Backend Performance
