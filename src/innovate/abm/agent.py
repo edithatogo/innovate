@@ -1,5 +1,6 @@
 from mesa import Agent
 
+
 class InnovationAgent(Agent):
     """An agent in the innovation diffusion model."""
 
@@ -8,9 +9,9 @@ class InnovationAgent(Agent):
         self.unique_id = unique_id
         # Add agent-specific attributes here, e.g.,
         self.adopted = False
-        self.awareness = 0.0 # 0.0 to 1.0
-        self.influence = 0.0 # How much this agent influences others
-        self.susceptibility = 0.0 # How susceptible this agent is to influence
+        self.awareness = 0.0  # 0.0 to 1.0
+        self.influence = 0.0  # How much this agent influences others
+        self.susceptibility = 0.0  # How susceptible this agent is to influence
 
     def step(self):
         """Agent's behavior at each step."""

@@ -3,6 +3,7 @@ import jax.numpy as jnp
 from typing import Sequence, Callable
 from jax.experimental.ode import odeint as jax_odeint
 
+
 class JaxBackend:
     def array(self, data):
         return jnp.asarray(data)
@@ -25,7 +26,9 @@ class JaxBackend:
     def log(self, x):
         return jnp.log(x)
 
-    def solve_ode(self, f: Callable, y0: Sequence[float], t: Sequence[float], args=None) -> jnp.ndarray:
+    def solve_ode(
+        self, f: Callable, y0: Sequence[float], t: Sequence[float], args=None
+    ) -> jnp.ndarray:
         if args is None:
             return jax_odeint(f, y0, t, rtol=1e-6, atol=1e-5, mxstep=1000)
         else:
@@ -54,4 +57,3 @@ class JaxBackend:
 
     def vmap(self, f: Callable) -> Callable:
         return jax.vmap(f)
-

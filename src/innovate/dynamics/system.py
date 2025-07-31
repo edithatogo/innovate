@@ -1,7 +1,7 @@
 # src/innovate/dynamics/system.py
 
 from abc import ABC, abstractmethod
-from typing import Sequence
+
 
 class SystemBehavior(ABC):
     """

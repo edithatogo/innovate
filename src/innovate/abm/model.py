@@ -1,7 +1,7 @@
 from mesa import Model
-from mesa.agent import AgentSet
 from mesa.space import MultiGrid
 from .agent import InnovationAgent
+
 
 class InnovationModel(Model):
     """A model for innovation diffusion."""

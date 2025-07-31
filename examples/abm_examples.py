@@ -1,10 +1,10 @@
-
 import matplotlib.pyplot as plt
 from innovate.abm import (
     CompetitiveDiffusionModel,
     SentimentHypeModel,
     DisruptiveInnovationModel,
 )
+
 
 def plot_results(df, title):
     """Helper function to plot model results."""
@@ -13,6 +13,7 @@ def plot_results(df, title):
     plt.xlabel("Step")
     plt.ylabel("Number of Adopters")
     plt.show()
+
 
 # 1. Competitive Diffusion Example
 print("Running Competitive Diffusion Model...")

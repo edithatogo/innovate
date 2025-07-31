@@ -1,5 +1,5 @@
 from .base import SystemBehavior
-from innovate.backend import current_backend as B
+
 
 class HypeCycleBehavior(SystemBehavior):
     """
@@ -16,9 +16,9 @@ class HypeCycleBehavior(SystemBehavior):
         dM/dt = beta1 * R&D_Investment(E) + beta2 * M - beta3 * M
 
         Compute the instantaneous rates of change for expectation and maturity stocks based on model parameters.
-        
+
         Calculates the derivatives dE/dt and dM/dt using coupled differential equations, incorporating effects from innovation triggers, interaction coefficients, and R&D investment as a function of expectation.
-        
+
         Returns:
             dEdt (float): Rate of change of expectation.
             dMdt (float): Rate of change of maturity.
@@ -41,7 +41,12 @@ class HypeCycleBehavior(SystemBehavior):
         # R&D investment is a function of expectations
         rd_investment = params.get("rd_investment_factor", 0.1) * E
 
-        dEdt = alpha1 * innovation_trigger + alpha2 * M * E - alpha3 * E + alpha4 * (E - M) * E
+        dEdt = (
+            alpha1 * innovation_trigger
+            + alpha2 * M * E
+            - alpha3 * E
+            + alpha4 * (E - M) * E
+        )
         dMdt = beta1 * rd_investment + beta2 * M - beta3 * M
 
         return dEdt, dMdt
@@ -51,10 +56,10 @@ class HypeCycleBehavior(SystemBehavior):
         Predicts the states of the system over time.
 
         Simulate the evolution of expectation and maturity states over specified time points.
-        
+
         Parameters:
             time_points (array-like): Sequence of time points at which to evaluate the system states.
-        
+
         Returns:
             ndarray: Array of shape (len(time_points), 2) containing the predicted expectation and maturity values at each time point.
         """
@@ -63,14 +68,15 @@ class HypeCycleBehavior(SystemBehavior):
         E0 = params.get("E0", 1)
         M0 = params.get("M0", 1)
 
-        fun = lambda t, y: self.compute_behavior_rates(E=y[0], M=y[1], **params)
+        def ode_func(t, y):
+            return self.compute_behavior_rates(E=y[0], M=y[1], **params)
 
         sol = solve_ivp(
-            fun,
+            ode_func,
             (time_points[0], time_points[-1]),
             [E0, M0],
             t_eval=time_points,
-            method='LSODA',
+            method="LSODA",
         )
         return sol.y.T
 
@@ -79,7 +85,7 @@ class HypeCycleBehavior(SystemBehavior):
         Returns the schema for the model's parameters.
 
         Return a dictionary schema describing all model parameters, including their types and default values.
-        
+
         Returns:
             dict: A mapping of parameter names to their type and default value for the hype cycle model.
         """
@@ -94,5 +100,5 @@ class HypeCycleBehavior(SystemBehavior):
             "beta3": {"type": "float", "default": 0.01},
             "rd_investment_factor": {"type": "float", "default": 0.1},
             "E0": {"type": "float", "default": 1},
-            "M0": {"type": "float", "default": 1}
+            "M0": {"type": "float", "default": 1},
         }

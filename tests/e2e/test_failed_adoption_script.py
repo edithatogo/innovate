@@ -1,6 +1,7 @@
 import pytest
 from .failed_adoption_script import run_failed_adoption_example
 
+
 @pytest.mark.e2e
 def test_failed_adoption_script():
     """Tests the failed adoption script to ensure it correctly identifies

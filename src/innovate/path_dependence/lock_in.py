@@ -3,6 +3,7 @@ from typing import Sequence, Dict
 from innovate.base.base import DiffusionModel
 from scipy.integrate import odeint
 
+
 class LockInModel(DiffusionModel):
     """
     A simple model demonstrating path dependence and lock-in effects
@@ -21,11 +22,11 @@ class LockInModel(DiffusionModel):
         return [
             "alpha1",  # Intrinsic growth rate of Tech 1
             "alpha2",  # Intrinsic growth rate of Tech 2
-            "beta1",   # Network effect strength for Tech 1
-            "beta2",   # Network effect strength for Tech 2
+            "beta1",  # Network effect strength for Tech 1
+            "beta2",  # Network effect strength for Tech 2
             "gamma1",  # Negative influence of Tech 2 on Tech 1
             "gamma2",  # Negative influence of Tech 1 on Tech 2
-            "m",       # Total market potential (assumed shared)
+            "m",  # Total market potential (assumed shared)
         ]
 
     def initial_guesses(self, t: Sequence[float], y: np.ndarray) -> Dict[str, float]:
@@ -53,7 +54,18 @@ class LockInModel(DiffusionModel):
             "m": (max_y, np.inf),
         }
 
-    def differential_equation(self, y_current: Sequence[float], t_current: float, alpha1, alpha2, beta1, beta2, gamma1, gamma2, m) -> Sequence[float]:
+    def differential_equation(
+        self,
+        y_current: Sequence[float],
+        t_current: float,
+        alpha1,
+        alpha2,
+        beta1,
+        beta2,
+        gamma1,
+        gamma2,
+        m,
+    ) -> Sequence[float]:
         n1, n2 = y_current
 
         # Ensure populations are non-negative and do not exceed market potential
@@ -61,9 +73,17 @@ class LockInModel(DiffusionModel):
         n2 = max(0, min(n2, m))
 
         # Simple logistic-like growth with network effects and competition
-        dn1_dt = alpha1 * n1 * (1 - (n1 + n2) / m) + beta1 * n1 * (n1 / m) - gamma1 * n1 * (n2 / m)
-        dn2_dt = alpha2 * n2 * (1 - (n1 + n2) / m) + beta2 * n2 * (n2 / m) - gamma2 * n2 * (n1 / m)
-        
+        dn1_dt = (
+            alpha1 * n1 * (1 - (n1 + n2) / m)
+            + beta1 * n1 * (n1 / m)
+            - gamma1 * n1 * (n2 / m)
+        )
+        dn2_dt = (
+            alpha2 * n2 * (1 - (n1 + n2) / m)
+            + beta2 * n2 * (n2 / m)
+            - gamma2 * n2 * (n1 / m)
+        )
+
         return [dn1_dt, dn2_dt]
 
     def predict(self, t: Sequence[float], y0: Sequence[float]) -> np.ndarray:
@@ -86,7 +106,9 @@ class LockInModel(DiffusionModel):
 
         y = np.array(y)
         if y.ndim != 2 or y.shape[1] != 2:
-            raise ValueError("`y` must be a 2D array with two columns (for two technologies).")
+            raise ValueError(
+                "`y` must be a 2D array with two columns (for two technologies)."
+            )
 
         y0 = y[0, :]
 
@@ -103,7 +125,7 @@ class LockInModel(DiffusionModel):
             initial_params,
             args=(t, y),
             bounds=param_bounds,
-            method='L-BFGS-B',
+            method="L-BFGS-B",
             **kwargs,
         )
 
@@ -129,10 +151,12 @@ class LockInModel(DiffusionModel):
         ss_tot = np.sum((y - np.mean(y, axis=0)) ** 2)
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
-    def predict_adoption_rate(self, t: Sequence[float], y0: Sequence[float]) -> np.ndarray:
+    def predict_adoption_rate(
+        self, t: Sequence[float], y0: Sequence[float]
+    ) -> np.ndarray:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet.")
-        
+
         # To get adoption rates, we need to calculate the derivative at each point
         # This is more complex for ODEs. For simplicity, we can approximate it
         # by taking the difference between cumulative predictions.

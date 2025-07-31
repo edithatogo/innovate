@@ -6,6 +6,7 @@ import numpy as np
 import pytensor.tensor as pt
 from innovate.backend import current_backend as B
 
+
 class CompositeDiffusionModel(DiffusionModel):
     """
     A generic model for the diffusion of multiple, potentially interacting products.
@@ -23,13 +24,15 @@ class CompositeDiffusionModel(DiffusionModel):
         self.models = models
         self.n_models = len(models)
         self._params: Dict[str, float] = {}
-        
+
         if alpha is None:
             # Default to no interaction
             self.alpha = np.zeros((self.n_models, self.n_models))
         else:
             if alpha.shape != (self.n_models, self.n_models):
-                raise ValueError("Interaction matrix alpha must have shape (n_models, n_models).")
+                raise ValueError(
+                    "Interaction matrix alpha must have shape (n_models, n_models)."
+                )
             self.alpha = alpha
 
     @property
@@ -38,7 +41,7 @@ class CompositeDiffusionModel(DiffusionModel):
         for i, model in enumerate(self.models):
             for param_name in model.param_names:
                 names.append(f"{param_name}_{i+1}")
-        
+
         # Add interaction parameters
         for i in range(self.n_models):
             for j in range(self.n_models):
@@ -46,7 +49,9 @@ class CompositeDiffusionModel(DiffusionModel):
                     names.append(f"alpha_{i+1}_{j+1}")
         return names
 
-    def initial_guesses(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, float]:
+    def initial_guesses(
+        self, t: Sequence[float], y: Sequence[float]
+    ) -> Dict[str, float]:
         guesses = {}
         for i, model in enumerate(self.models):
             # Use the i-th column of y for the i-th model
@@ -60,7 +65,7 @@ class CompositeDiffusionModel(DiffusionModel):
 
             for param_name, value in model_guesses.items():
                 guesses[f"{param_name}_{i+1}"] = value
-        
+
         # Initial guesses for interaction parameters
         for i in range(self.n_models):
             for j in range(self.n_models):
@@ -81,7 +86,7 @@ class CompositeDiffusionModel(DiffusionModel):
 
             for param_name, value in model_bounds.items():
                 bounds[f"{param_name}_{i+1}"] = value
-        
+
         # Bounds for interaction parameters
         for i in range(self.n_models):
             for j in range(self.n_models):
@@ -98,32 +103,32 @@ class CompositeDiffusionModel(DiffusionModel):
 
         y0 = np.zeros(len(self.models))
         from scipy.integrate import solve_ivp
-        
+
         # Compile the differential equation if the parameters are pytensor variables
-        if any(isinstance(p, pt.TensorVariable) for p in self._params.values()):
-            t_sym = pt.scalar('t')
-            y_sym = pt.vector('y')
-            params_sym = [pt.scalar(name) for name in self.param_names]
-            
-            dydt = self.differential_equation(t_sym, y_sym, params_sym)
-            
-            fun = pt.function(
-                [t_sym, y_sym] + params_sym,
-                dydt,
-                on_unused_input='ignore'
-            )
-            
-            param_values = [self._params[name] for name in self.param_names]
-            fun = lambda t, y: fun(t, y, *param_values)
-        else:
-            fun = lambda t, y: self.differential_equation(t, y, self._params)
+        # if any(isinstance(p, pt.TensorVariable) for p in self._params.values()):
+        #     t_sym = pt.scalar("t")
+        #     y_sym = pt.vector("y")
+        #     params_sym = [pt.scalar(name) for name in self.param_names]
+
+        #     dydt = self.differential_equation(t_sym, y_sym, params_sym)
+
+        #     def fun_with_params(t, y):
+        #         return fun(t, y, *param_values)
+
+        #     fun = fun_with_params
+        # else:
+
+        def ode_func(t, y):
+            return self.differential_equation(t, y, self._params)
+
+        fun = ode_func
 
         sol = solve_ivp(
             fun,
             (t[0], t[-1]),
             y0,
             t_eval=t,
-            method='BDF',
+            method="BDF",
             dense_output=True,
             rtol=1e-6,
             atol=1e-6,
@@ -134,26 +139,36 @@ class CompositeDiffusionModel(DiffusionModel):
         """
         Defines the composite diffusion model's differential equations.
         """
-        
-        is_pytensor = any(isinstance(p, pt.TensorVariable) for p in (params.values() if isinstance(params, dict) else params))
+
+        is_pytensor = any(
+            isinstance(p, pt.TensorVariable)
+            for p in (params.values() if isinstance(params, dict) else params)
+        )
 
         if is_pytensor:
             dydt = pt.zeros_like(y)
-            param_list = params if isinstance(params, list) else [params[name] for name in self.param_names]
+            param_list = (
+                params
+                if isinstance(params, list)
+                else [params[name] for name in self.param_names]
+            )
         else:
             dydt = B.zeros_like(y)
-            param_list = [params[name] for name in self.param_names] if isinstance(params, dict) else params
-
+            param_list = (
+                [params[name] for name in self.param_names]
+                if isinstance(params, dict)
+                else params
+            )
 
         param_idx = 0
         model_params_list = []
         for model in self.models:
             num_params = len(model.param_names)
-            model_params_list.append(param_list[param_idx:param_idx + num_params])
+            model_params_list.append(param_list[param_idx : param_idx + num_params])
             param_idx += num_params
-            
+
         alpha_params = param_list[param_idx:]
-        
+
         if is_pytensor:
             alpha = pt.zeros((self.n_models, self.n_models))
         else:
@@ -171,14 +186,22 @@ class CompositeDiffusionModel(DiffusionModel):
 
         for i, model in enumerate(self.models):
             model_params = model_params_list[i]
-            
+
             # The differential_equation of the individual models is not directly used.
             # Instead, we call the differential_equation of the growth model.
-            growth_rate = model.differential_equation(t, pt.as_tensor_variable(y[i:i+1]), model_params, None, t, is_pytensor=is_pytensor)
-            
+            growth_rate = model.differential_equation(
+                t,
+                y[i : i + 1],
+                model_params,
+                None,
+                t,
+            )
+
             # Add interaction effects
-            interaction_effect = sum(alpha[i, j] * y[j] for j in range(self.n_models) if i != j)
-            
+            interaction_effect = sum(
+                alpha[i, j] * y[j] for j in range(self.n_models) if i != j
+            )
+
             if is_pytensor:
                 dydt = pt.set_subtensor(dydt[i], growth_rate - interaction_effect)
             else:
@@ -190,8 +213,8 @@ class CompositeDiffusionModel(DiffusionModel):
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t)
-        ss_res = np.sum((y - y_pred)**2)
-        ss_tot = np.sum((y - np.mean(y, axis=0))**2)
+        ss_res = np.sum((y - y_pred) ** 2)
+        ss_tot = np.sum((y - np.mean(y, axis=0)) ** 2)
         return 1 - ss_res / ss_tot if ss_tot > 0 else 0.0
 
     @property
@@ -205,7 +228,12 @@ class CompositeDiffusionModel(DiffusionModel):
     def predict_adoption_rate(self, t: Sequence[float]) -> Sequence[float]:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
-        
+
         y_pred = self.predict(t)
-        rates = np.array([self.differential_equation(ti, yi, self._params) for ti, yi in zip(t, y_pred)])
+        rates = np.array(
+            [
+                self.differential_equation(ti, yi, self._params)
+                for ti, yi in zip(t, y_pred)
+            ]
+        )
         return rates

@@ -2,13 +2,14 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from typing import Dict, Sequence, Union
 
+
 def plot_scenario_comparison(
     predictions: Dict[str, Union[pd.DataFrame, Sequence[float]]],
     title: str = "Scenario Comparison",
     xlabel: str = "Time",
     ylabel: str = "Cumulative Adoptions",
     cumulative: bool = True,
-    **kwargs
+    **kwargs,
 ):
     """
     Plots multiple diffusion scenarios on a single graph for comparison.
@@ -31,14 +32,18 @@ def plot_scenario_comparison(
             # Handle multi-product DataFrame
             time_points = data.index
             for col in data.columns:
-                plt.plot(time_points, data[col], label=f'{scenario_name}: {col}', **kwargs)
+                plt.plot(
+                    time_points, data[col], label=f"{scenario_name}: {col}", **kwargs
+                )
         elif isinstance(data, Sequence):
             # Handle single-product sequence (assumes time is 0 to len(data)-1 or provided separately)
             # For simplicity, assume time is implicit 0 to len-1 if not a DataFrame
             time_points = range(len(data))
             plt.plot(time_points, data, label=scenario_name, **kwargs)
         else:
-            raise TypeError("Prediction data must be a pandas DataFrame or a sequence of floats.")
+            raise TypeError(
+                "Prediction data must be a pandas DataFrame or a sequence of floats."
+            )
 
     plt.title(title)
     plt.xlabel(xlabel)

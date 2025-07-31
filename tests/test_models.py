@@ -229,6 +229,8 @@ def test_mixture_model_weighting():
         "model_1_L": 150.0,
         "model_1_k": 0.2,
         "model_1_x0": 8.0,
+        "weight_0": 0.6,
+        "weight_1": 0.4,
     }
     # compute expected weighted average
     m1 = LogisticModel()
@@ -245,6 +247,7 @@ def test_mixture_model_api():
     model = MixtureModel(models, weights)
 
     names = [f"model_{i}_{p}" for i, m in enumerate(models) for p in m.param_names]
+    names.extend([f"weight_{i}" for i in range(len(models))])
     assert model.param_names == names
 
     guesses = model.initial_guesses([0, 1], [0, 1])
@@ -252,6 +255,7 @@ def test_mixture_model_api():
 
     bounds = model.bounds([0, 1], [0, 1])
     assert set(bounds.keys()) == set(names)
+
 
 def test_hierarchical_model(monkeypatch):
     t = np.linspace(0, 50, 100)

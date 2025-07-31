@@ -5,6 +5,7 @@ from typing import Sequence
 from innovate.diffuse.bass import BassModel
 from .hype_cycle import HypeCycleModel
 
+
 class HypeModifiedBassModel:
     """
     A modified Bass model where the adoption parameters (p and q) are
@@ -24,7 +25,9 @@ class HypeModifiedBassModel:
         p and q.
         """
         if not self.bass_model.params_ or not self.hype_model.params_:
-            raise RuntimeError("Both the Bass and Hype models must have parameters set.")
+            raise RuntimeError(
+                "Both the Bass and Hype models must have parameters set."
+            )
 
         from scipy.integrate import odeint
 
@@ -40,13 +43,14 @@ class HypeModifiedBassModel:
         y[0] = y0
 
         for i in range(1, len(t)):
-            dt = t[i] - t[i-1]
             # Hype influences p and q
-            p_t = p_base * (1 + hype_visibility[i-1])
-            q_t = q_base * (1 + hype_visibility[i-1])
-            
+            p_t = p_base * (1 + hype_visibility[i - 1])
+            q_t = q_base * (1 + hype_visibility[i - 1])
+
             # Solve for the next step
-            y_step = odeint(bass_differential, y[i-1], [t[i-1], t[i]], args=(p_t, q_t))
+            y_step = odeint(
+                bass_differential, y[i - 1], [t[i - 1], t[i]], args=(p_t, q_t)
+            )
             y[i] = y_step[1]
 
         return y

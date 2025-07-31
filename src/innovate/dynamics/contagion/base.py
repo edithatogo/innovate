@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Sequence, TypeVar, Any
+from typing import TypeVar
 
-Self = TypeVar('Self')
+Self = TypeVar("Self")
+
 
 class ContagionSpread(ABC):
     """Abstract base class for all contagion spread models."""
@@ -38,9 +39,9 @@ class ContagionSpread(ABC):
     @abstractmethod
     def get_parameters_schema(self):
         """Returns the schema for the model's parameters.
-        
+
         Return the schema describing the parameters required by the contagion spread model.
-        
+
         Returns:
             dict: A schema detailing the expected parameters for the model.
         """

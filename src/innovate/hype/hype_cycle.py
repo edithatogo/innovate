@@ -3,6 +3,7 @@
 import numpy as np
 from typing import Sequence, Dict
 
+
 class HypeCycleModel:
     """
     A model for generating a Hype Cycle curve.
@@ -17,14 +18,14 @@ class HypeCycleModel:
     @property
     def param_names(self) -> Sequence[str]:
         return [
-            "k",      # Growth rate of the logistic curve
-            "t0",     # Midpoint of the logistic curve
-            "a_hype", # Amplitude of the hype
-            "t_hype", # Time of the peak of the hype
-            "w_hype", # Width of the hype
-            "a_d",    # Amplitude of the disillusionment
-            "t_d",    # Time of the trough of disillusionment
-            "w_d",    # Width of the disillusionment
+            "k",  # Growth rate of the logistic curve
+            "t0",  # Midpoint of the logistic curve
+            "a_hype",  # Amplitude of the hype
+            "t_hype",  # Time of the peak of the hype
+            "w_hype",  # Width of the hype
+            "a_d",  # Amplitude of the disillusionment
+            "t_d",  # Time of the trough of disillusionment
+            "w_d",  # Width of the disillusionment
         ]
 
     def predict(self, t: Sequence[float]) -> np.ndarray:
@@ -53,9 +54,9 @@ class HypeCycleModel:
         maturity = 0.5 / (1 + np.exp(-k * (t - t0)))
 
         # Hype function (a combination of two Gaussians)
-        hype = a_hype * np.exp(-((t - t_hype) ** 2) / (2 * w_hype ** 2))
-        disillusionment = a_d * np.exp(-((t - t_d) ** 2) / (2 * w_d ** 2))
-        
+        hype = a_hype * np.exp(-((t - t_hype) ** 2) / (2 * w_hype**2))
+        disillusionment = a_d * np.exp(-((t - t_d) ** 2) / (2 * w_d**2))
+
         visibility = maturity + hype - disillusionment
         return np.clip(visibility, 0, np.inf)
 

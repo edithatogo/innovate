@@ -2,18 +2,39 @@ import numpy as np
 from scipy.integrate import odeint
 from typing import Sequence
 
+
 class NumPyBackend:
     def array(self, data):
         return np.asarray(data)
-    
+
     exp = np.exp
     power = np.power
-    def sum(self, a, axis=None, dtype=None, out=None, keepdims=False, initial=None, where=True):
-        return np.sum(a, axis=axis, dtype=dtype, out=out, keepdims=keepdims, initial=initial, where=where)
+
+    def sum(
+        self,
+        a,
+        axis=None,
+        dtype=None,
+        out=None,
+        keepdims=False,
+        initial=None,
+        where=True,
+    ):
+        return np.sum(
+            a,
+            axis=axis,
+            dtype=dtype,
+            out=out,
+            keepdims=keepdims,
+            initial=initial,
+            where=where,
+        )
 
     def mean(self, a, axis=None, dtype=None, out=None, keepdims=False, *, where=True):
-        return np.mean(a, axis=axis, dtype=dtype, out=out, keepdims=keepdims, where=where)
-    
+        return np.mean(
+            a, axis=axis, dtype=dtype, out=out, keepdims=keepdims, where=where
+        )
+
     def where(self, condition, x, y):
         return np.where(condition, x, y)
 
@@ -40,6 +61,9 @@ class NumPyBackend:
     def zeros(self, shape: Sequence[int]) -> np.ndarray:
         return np.zeros(shape)
 
+    def ones(self, shape: Sequence[int]) -> np.ndarray:
+        return np.ones(shape)
+
     def max(self, x: np.ndarray) -> float:
         return np.max(x)
 
@@ -55,8 +79,9 @@ class NumPyBackend:
     def vmap(self, f):
         def mapped_f(params, t_batched):
             return np.array([f(p, t) for p, t in zip(params, t_batched)])
+
         return mapped_f
-    
+
     def zeros_like(self, x):
         return np.zeros_like(x)
 
@@ -77,7 +102,7 @@ class NumPyBackend:
 
     def min(self, x):
         return np.min(x)
-    
+
     def copy(self, x):
         return np.copy(x)
 

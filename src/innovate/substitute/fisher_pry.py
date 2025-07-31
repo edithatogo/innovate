@@ -5,6 +5,7 @@ from innovate import backend
 from typing import Sequence, Dict
 import numpy as np
 
+
 class FisherPryModel(DiffusionModel):
     """
     Implementation of the Fisher-Pry model for technology substitution.
@@ -22,7 +23,9 @@ class FisherPryModel(DiffusionModel):
         """Returns the names of the model parameters: alpha and t0."""
         return ["alpha", "t0"]
 
-    def initial_guesses(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, float]:
+    def initial_guesses(
+        self, t: Sequence[float], y: Sequence[float]
+    ) -> Dict[str, float]:
         """
         Provides initial guesses for the model parameters.
         - t0 is estimated as the time at which the market share is closest to 50%.
@@ -32,7 +35,9 @@ class FisherPryModel(DiffusionModel):
         t_arr = backend.current_backend.array(t)
 
         # Estimate t0 as the time when market share is closest to 0.5
-        t0_guess = t_arr[backend.current_backend.argmin(backend.current_backend.abs(y_arr - 0.5))]
+        t0_guess = t_arr[
+            backend.current_backend.argmin(backend.current_backend.abs(y_arr - 0.5))
+        ]
 
         # Linearize the logistic equation: log(y / (1 - y)) = alpha * (t - t0)
         # To avoid division by zero or log of zero, we clip y
@@ -43,9 +48,9 @@ class FisherPryModel(DiffusionModel):
         try:
             # Using polyfit for a simple linear regression
             slope, _ = np.polyfit(t_arr, linearized_y, 1)
-            alpha_guess = max(0, slope) # Ensure alpha is non-negative
+            alpha_guess = max(0, slope)  # Ensure alpha is non-negative
         except (np.linalg.LinAlgError, ValueError):
-            alpha_guess = 0.5 # Fallback value
+            alpha_guess = 0.5  # Fallback value
 
         return {
             "alpha": alpha_guess,
@@ -77,10 +82,10 @@ class FisherPryModel(DiffusionModel):
         """
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
-        
+
         t_arr = backend.current_backend.array(t)
-        alpha = self._params['alpha']
-        t0 = self._params['t0']
+        alpha = self._params["alpha"]
+        t0 = self._params["t0"]
         return 1 / (1 + backend.current_backend.exp(-alpha * (t_arr - t0)))
 
     def score(self, t: Sequence[float], y: Sequence[float]) -> float:
@@ -90,8 +95,16 @@ class FisherPryModel(DiffusionModel):
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t)
-        ss_res = backend.current_backend.sum((backend.current_backend.array(y) - y_pred) ** 2)
-        ss_tot = backend.current_backend.sum((backend.current_backend.array(y) - backend.current_backend.mean(backend.current_backend.array(y))) ** 2)
+        ss_res = backend.current_backend.sum(
+            (backend.current_backend.array(y) - y_pred) ** 2
+        )
+        ss_tot = backend.current_backend.sum(
+            (
+                backend.current_backend.array(y)
+                - backend.current_backend.mean(backend.current_backend.array(y))
+            )
+            ** 2
+        )
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
     @property

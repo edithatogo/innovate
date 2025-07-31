@@ -1,8 +1,8 @@
 # src/innovate/dynamics/base.py
 
 from abc import ABC, abstractmethod
-from typing import Sequence
 import numpy as np
+
 
 class GrowthCurve(ABC):
     """
@@ -15,6 +15,7 @@ class GrowthCurve(ABC):
         Calculates the instantaneous growth rate.
         """
         pass
+
 
 class ContagionSpread(ABC):
     """
