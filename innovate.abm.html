@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>innovate.abm &#8212; innovate  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="innovate.plots package" href="innovate.plots.html" />
+    <link rel="prev" title="innovate.policy.intervention module" href="innovate.policy.intervention.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="innovate-abm">
+<h1>innovate.abm<a class="headerlink" href="#innovate-abm" title="Link to this heading">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">innovate.abm</span></code> module provides a framework for creating Agent-Based Models (ABMs) of innovation diffusion. It is built on top of the <cite>mesa</cite> library.</p>
+<dl class="py class" id="module-innovate.abm">
+<dt class="sig sig-object py" id="innovate.abm.CompetitiveDiffusionAgent">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">innovate.abm.</span></span><span class="sig-name descname"><span class="pre">CompetitiveDiffusionAgent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unique_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_innovations</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/abm/competitive_diffusion.html#CompetitiveDiffusionAgent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.abm.CompetitiveDiffusionAgent" title="Link to this definition">¶</a></dt>
+<dd><p>An agent in a competitive diffusion model.
+The agent can adopt one of several competing innovations.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="innovate.abm.CompetitiveDiffusionAgent.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/abm/competitive_diffusion.html#CompetitiveDiffusionAgent.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.abm.CompetitiveDiffusionAgent.step" title="Link to this definition">¶</a></dt>
+<dd><p>The agent’s step function.
+The agent’s decision to adopt is based on its neighbors’ adoptions.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="innovate.abm.CompetitiveDiffusionModel">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">innovate.abm.</span></span><span class="sig-name descname"><span class="pre">CompetitiveDiffusionModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_agents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_innovations</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/abm/competitive_diffusion.html#CompetitiveDiffusionModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.abm.CompetitiveDiffusionModel" title="Link to this definition">¶</a></dt>
+<dd><p>A model for competitive diffusion of multiple innovations.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="innovate.abm.CompetitiveDiffusionModel.run_model">
+<span class="sig-name descname"><span class="pre">run_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_steps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/abm/competitive_diffusion.html#CompetitiveDiffusionModel.run_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.abm.CompetitiveDiffusionModel.run_model" title="Link to this definition">¶</a></dt>
+<dd><p>Run the model for a specified number of steps.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="innovate.abm.CompetitiveDiffusionModel.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/abm/competitive_diffusion.html#CompetitiveDiffusionModel.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.abm.CompetitiveDiffusionModel.step" title="Link to this definition">¶</a></dt>
+<dd><p>Run one step of the model.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="innovate.abm.DisruptiveInnovationAgent">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">innovate.abm.</span></span><span class="sig-name descname"><span class="pre">DisruptiveInnovationAgent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unique_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/abm/disruptive_innovation.html#DisruptiveInnovationAgent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.abm.DisruptiveInnovationAgent" title="Link to this definition">¶</a></dt>
+<dd><p>An agent in a disruptive innovation model.
+The agent can choose between an incumbent and a disruptive product.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="innovate.abm.DisruptiveInnovationAgent.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/abm/disruptive_innovation.html#DisruptiveInnovationAgent.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.abm.DisruptiveInnovationAgent.step" title="Link to this definition">¶</a></dt>
+<dd><p>The agent’s step function.
+The agent’s choice is based on the perceived value of each product.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="innovate.abm.DisruptiveInnovationModel">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">innovate.abm.</span></span><span class="sig-name descname"><span class="pre">DisruptiveInnovationModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_agents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_disruptive_performance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disruptive_performance_improvement</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/abm/disruptive_innovation.html#DisruptiveInnovationModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.abm.DisruptiveInnovationModel" title="Link to this definition">¶</a></dt>
+<dd><p>A model for disruptive innovation.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="innovate.abm.DisruptiveInnovationModel.run_model">
+<span class="sig-name descname"><span class="pre">run_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_steps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/abm/disruptive_innovation.html#DisruptiveInnovationModel.run_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.abm.DisruptiveInnovationModel.run_model" title="Link to this definition">¶</a></dt>
+<dd><p>Run the model for a specified number of steps.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="innovate.abm.DisruptiveInnovationModel.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/abm/disruptive_innovation.html#DisruptiveInnovationModel.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.abm.DisruptiveInnovationModel.step" title="Link to this definition">¶</a></dt>
+<dd><p>Run one step of the model.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="innovate.abm.InnovationAgent">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">innovate.abm.</span></span><span class="sig-name descname"><span class="pre">InnovationAgent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unique_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/abm/agent.html#InnovationAgent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.abm.InnovationAgent" title="Link to this definition">¶</a></dt>
+<dd><p>An agent in the innovation diffusion model.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="innovate.abm.InnovationAgent.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/abm/agent.html#InnovationAgent.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.abm.InnovationAgent.step" title="Link to this definition">¶</a></dt>
+<dd><p>Agent’s behavior at each step.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="innovate.abm.InnovationModel">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">innovate.abm.</span></span><span class="sig-name descname"><span class="pre">InnovationModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_agents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/abm/model.html#InnovationModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.abm.InnovationModel" title="Link to this definition">¶</a></dt>
+<dd><p>A model for innovation diffusion.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="innovate.abm.InnovationModel.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/abm/model.html#InnovationModel.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.abm.InnovationModel.step" title="Link to this definition">¶</a></dt>
+<dd><p>Run one step of the model.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="innovate.abm.SentimentHypeAgent">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">innovate.abm.</span></span><span class="sig-name descname"><span class="pre">SentimentHypeAgent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unique_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/abm/sentiment_hype_cycle.html#SentimentHypeAgent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.abm.SentimentHypeAgent" title="Link to this definition">¶</a></dt>
+<dd><p>An agent in a sentiment-driven hype cycle model.
+The agent’s adoption decision is influenced by sentiment.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="innovate.abm.SentimentHypeAgent.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/abm/sentiment_hype_cycle.html#SentimentHypeAgent.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.abm.SentimentHypeAgent.step" title="Link to this definition">¶</a></dt>
+<dd><p>The agent’s step function.
+The agent’s decision to adopt is based on its neighbors’ adoptions and sentiment.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="innovate.abm.SentimentHypeModel">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">innovate.abm.</span></span><span class="sig-name descname"><span class="pre">SentimentHypeModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_agents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adoption_threshold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sentiment_threshold</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/abm/sentiment_hype_cycle.html#SentimentHypeModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.abm.SentimentHypeModel" title="Link to this definition">¶</a></dt>
+<dd><p>A model for a sentiment-driven hype cycle.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="innovate.abm.SentimentHypeModel.run_model">
+<span class="sig-name descname"><span class="pre">run_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_steps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/abm/sentiment_hype_cycle.html#SentimentHypeModel.run_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.abm.SentimentHypeModel.run_model" title="Link to this definition">¶</a></dt>
+<dd><p>Run the model for a specified number of steps.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="innovate.abm.SentimentHypeModel.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/abm/sentiment_hype_cycle.html#SentimentHypeModel.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.abm.SentimentHypeModel.step" title="Link to this definition">¶</a></dt>
+<dd><p>Run one step of the model.</p>
+</dd></dl>
+
+</dd></dl>
+
+<section id="pre-configured-scenarios">
+<h2>Pre-configured Scenarios<a class="headerlink" href="#pre-configured-scenarios" title="Link to this heading">¶</a></h2>
+<p>The module includes three pre-configured ABM scenarios that can be used to model different aspects of innovation diffusion.</p>
+<section id="competitive-diffusion">
+<h3>Competitive Diffusion<a class="headerlink" href="#competitive-diffusion" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">CompetitiveDiffusionModel</span></code> simulates a scenario where multiple innovations are competing for adoption in a population of agents. The agents’ adoption decisions are based on the choices of their neighbors.</p>
+</section>
+<section id="sentiment-driven-hype-cycle">
+<h3>Sentiment-Driven Hype Cycle<a class="headerlink" href="#sentiment-driven-hype-cycle" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">SentimentHypeModel</span></code> models the impact of sentiment on the adoption of an innovation. Agents’ decisions are influenced by both the adoption status and the sentiment of their neighbors.</p>
+</section>
+<section id="disruptive-innovation">
+<h3>Disruptive Innovation<a class="headerlink" href="#disruptive-innovation" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">DisruptiveInnovationModel</span></code> simulates the competition between an established incumbent product and a new disruptive one. The disruptive innovation starts with lower performance but improves over time.</p>
+</section>
+</section>
+<section id="example-usage">
+<h2>Example Usage<a class="headerlink" href="#example-usage" title="Link to this heading">¶</a></h2>
+<p>The following example demonstrates how to use the pre-configured ABM scenarios.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">innovate.abm</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CompetitiveDiffusionModel</span><span class="p">,</span>
+    <span class="n">SentimentHypeModel</span><span class="p">,</span>
+    <span class="n">DisruptiveInnovationModel</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_results</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper function to plot model results.&quot;&quot;&quot;</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Step&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Number of Adopters&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># 1. Competitive Diffusion Example</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running Competitive Diffusion Model...&quot;</span><span class="p">)</span>
+<span class="n">competitive_model</span> <span class="o">=</span> <span class="n">CompetitiveDiffusionModel</span><span class="p">(</span>
+    <span class="n">num_agents</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">num_innovations</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">competitive_results</span> <span class="o">=</span> <span class="n">competitive_model</span><span class="o">.</span><span class="n">run_model</span><span class="p">(</span><span class="n">n_steps</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">plot_results</span><span class="p">(</span><span class="n">competitive_results</span><span class="p">,</span> <span class="s2">&quot;Competitive Diffusion&quot;</span><span class="p">)</span>
+
+<span class="c1"># 2. Sentiment-Driven Hype Cycle Example</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running Sentiment-Driven Hype Cycle Model...&quot;</span><span class="p">)</span>
+<span class="n">sentiment_model</span> <span class="o">=</span> <span class="n">SentimentHypeModel</span><span class="p">(</span>
+    <span class="n">num_agents</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">adoption_threshold</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">sentiment_threshold</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">sentiment_results</span> <span class="o">=</span> <span class="n">sentiment_model</span><span class="o">.</span><span class="n">run_model</span><span class="p">(</span><span class="n">n_steps</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">plot_results</span><span class="p">(</span><span class="n">sentiment_results</span><span class="p">,</span> <span class="s2">&quot;Sentiment-Driven Hype Cycle&quot;</span><span class="p">)</span>
+
+<span class="c1"># 3. Disruptive Innovation Example</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running Disruptive Innovation Model...&quot;</span><span class="p">)</span>
+<span class="n">disruptive_model</span> <span class="o">=</span> <span class="n">DisruptiveInnovationModel</span><span class="p">(</span>
+    <span class="n">num_agents</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">initial_disruptive_performance</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">disruptive_performance_improvement</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">disruptive_results</span> <span class="o">=</span> <span class="n">disruptive_model</span><span class="o">.</span><span class="n">run_model</span><span class="p">(</span><span class="n">n_steps</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">plot_results</span><span class="p">(</span><span class="n">disruptive_results</span><span class="p">,</span> <span class="s2">&quot;Disruptive Innovation&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">innovate</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="innovate.html">innovate package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Modules</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="innovate.diffuse.html">innovate.diffuse package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.compete.html">innovate.compete package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.substitute.html">innovate.substitute package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.hype.html">innovate.hype package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.fail.html">innovate.fail package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.adopt.html">innovate.adopt package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.path_dependence.html">innovate.path_dependence package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.policy.html">innovate.policy package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">innovate.abm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#innovate.abm.CompetitiveDiffusionAgent"><code class="docutils literal notranslate"><span class="pre">CompetitiveDiffusionAgent</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#innovate.abm.CompetitiveDiffusionModel"><code class="docutils literal notranslate"><span class="pre">CompetitiveDiffusionModel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#innovate.abm.DisruptiveInnovationAgent"><code class="docutils literal notranslate"><span class="pre">DisruptiveInnovationAgent</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#innovate.abm.DisruptiveInnovationModel"><code class="docutils literal notranslate"><span class="pre">DisruptiveInnovationModel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#innovate.abm.InnovationAgent"><code class="docutils literal notranslate"><span class="pre">InnovationAgent</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#innovate.abm.InnovationModel"><code class="docutils literal notranslate"><span class="pre">InnovationModel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#innovate.abm.SentimentHypeAgent"><code class="docutils literal notranslate"><span class="pre">SentimentHypeAgent</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#innovate.abm.SentimentHypeModel"><code class="docutils literal notranslate"><span class="pre">SentimentHypeModel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pre-configured-scenarios">Pre-configured Scenarios</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-usage">Example Usage</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="innovate.plots.html">innovate.plots package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.utils.html">innovate.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.utils.html#module-innovate.adopt.categorization">innovate.adopt.categorization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.fitters.html">innovate.fitters package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.base.html">innovate.base package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="innovate.policy.intervention.html" title="previous chapter">innovate.policy.intervention module</a></li>
+      <li>Next: <a href="innovate.plots.html" title="next chapter">innovate.plots package</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Doughnut.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/innovate.abm.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

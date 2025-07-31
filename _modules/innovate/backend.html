@@ -31,75 +31,36 @@
           <div class="body" role="main">
             
   <h1>Source code for innovate.backend</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Dict</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span></span><span class="sd">&quot;&quot;&quot;Backend selection for the :mod:`innovate` library.&quot;&quot;&quot;</span>
 
-<span class="c1"># Define a type alias for array-like objects</span>
-<span class="n">ArrayLike</span> <span class="o">=</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">innovate.backends.numpy_backend</span><span class="w"> </span><span class="kn">import</span> <span class="n">NumPyBackend</span>
 
-<div class="viewcode-block" id="Backend">
-<a class="viewcode-back" href="../../innovate.html#innovate.backend.Backend">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Backend</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
-<div class="viewcode-block" id="Backend.array">
-<a class="viewcode-back" href="../../innovate.html#innovate.backend.Backend.array">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">array</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span><span class="p">:</span> <span class="o">...</span></div>
+<span class="c1"># JAX and diffrax are optional dependencies</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">innovate.backends.jax_backend</span><span class="w"> </span><span class="kn">import</span> <span class="n">JaxBackend</span>  <span class="c1"># type: ignore</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>  <span class="c1"># pragma: no cover - optional dependency may be missing</span>
+    <span class="n">JaxBackend</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="Backend.exp">
-<a class="viewcode-back" href="../../innovate.html#innovate.backend.Backend.exp">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">exp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span><span class="p">:</span> <span class="o">...</span></div>
+<span class="n">current_backend</span> <span class="o">=</span> <span class="n">NumPyBackend</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Backend.power">
-<a class="viewcode-back" href="../../innovate.html#innovate.backend.Backend.power">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">exp</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span><span class="p">:</span> <span class="o">...</span></div>
-
-<div class="viewcode-block" id="Backend.solve_ode">
-<a class="viewcode-back" href="../../innovate.html#innovate.backend.Backend.solve_ode">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">solve_ode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">y0</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span><span class="p">:</span> <span class="o">...</span></div>
-
-<div class="viewcode-block" id="Backend.stack">
-<a class="viewcode-back" href="../../innovate.html#innovate.backend.Backend.stack">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">stack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arrays</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span><span class="p">:</span> <span class="o">...</span></div>
-
-<div class="viewcode-block" id="Backend.matmul">
-<a class="viewcode-back" href="../../innovate.html#innovate.backend.Backend.matmul">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">matmul</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span><span class="p">:</span> <span class="o">...</span></div>
-
-<div class="viewcode-block" id="Backend.zeros">
-<a class="viewcode-back" href="../../innovate.html#innovate.backend.Backend.zeros">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">zeros</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span><span class="p">:</span> <span class="o">...</span></div>
-
-<div class="viewcode-block" id="Backend.sum">
-<a class="viewcode-back" href="../../innovate.html#innovate.backend.Backend.sum">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span> <span class="o">...</span></div>
-
-<div class="viewcode-block" id="Backend.mean">
-<a class="viewcode-back" href="../../innovate.html#innovate.backend.Backend.mean">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span> <span class="o">...</span></div>
-
-<div class="viewcode-block" id="Backend.where">
-<a class="viewcode-back" href="../../innovate.html#innovate.backend.Backend.where">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">where</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">condition</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span><span class="p">:</span> <span class="o">...</span></div>
-</div>
-
-
-<span class="c1"># Default backend (will be set to NumPyBackend initially)</span>
-<span class="n">current_backend</span><span class="p">:</span> <span class="n">Backend</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="use_backend">
 <a class="viewcode-back" href="../../innovate.html#innovate.backend.use_backend">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">use_backend</span><span class="p">(</span><span class="n">backend_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">use_backend</span><span class="p">(</span><span class="n">backend</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
     <span class="k">global</span> <span class="n">current_backend</span>
-    <span class="k">if</span> <span class="n">backend_name</span> <span class="o">==</span> <span class="s2">&quot;numpy&quot;</span><span class="p">:</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">.backends.numpy_backend</span><span class="w"> </span><span class="kn">import</span> <span class="n">NumPyBackend</span>
-        <span class="n">current_backend</span> <span class="o">=</span> <span class="n">NumPyBackend</span><span class="p">()</span>
-    <span class="k">elif</span> <span class="n">backend_name</span> <span class="o">==</span> <span class="s2">&quot;jax&quot;</span><span class="p">:</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">.backends.jax_backend</span><span class="w"> </span><span class="kn">import</span> <span class="n">JaxBackend</span>
+    <span class="k">if</span> <span class="n">backend</span> <span class="o">==</span> <span class="s2">&quot;jax&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">JaxBackend</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                <span class="s2">&quot;JAX backend is not available. Install jax and diffrax to use it.&quot;</span>
+            <span class="p">)</span>
         <span class="n">current_backend</span> <span class="o">=</span> <span class="n">JaxBackend</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">backend</span> <span class="o">==</span> <span class="s2">&quot;numpy&quot;</span><span class="p">:</span>
+        <span class="n">current_backend</span> <span class="o">=</span> <span class="n">NumPyBackend</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown backend: </span><span class="si">{</span><span class="n">backend_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown backend: </span><span class="si">{</span><span class="n">backend</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
-<span class="c1"># Initialize with NumPy backend by default</span>
+<span class="c1"># Initialize with the NumPy backend by default</span>
 <span class="n">use_backend</span><span class="p">(</span><span class="s2">&quot;numpy&quot;</span><span class="p">)</span>
 </pre></div>
 
@@ -130,8 +91,28 @@
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">innovate</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">innovate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../innovate.html">innovate package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../innovate.diffuse.html">innovate.diffuse package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../innovate.compete.html">innovate.compete package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../innovate.substitute.html">innovate.substitute package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../innovate.hype.html">innovate.hype package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../innovate.fail.html">innovate.fail package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../innovate.adopt.html">innovate.adopt package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../innovate.path_dependence.html">innovate.path_dependence package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../innovate.policy.html">innovate.policy package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../innovate.abm.html">innovate.abm</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../innovate.plots.html">innovate.plots package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../innovate.utils.html">innovate.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../innovate.utils.html#module-innovate.adopt.categorization">innovate.adopt.categorization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../innovate.fitters.html">innovate.fitters package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../innovate.base.html">innovate.base package</a></li>
 </ul>
 
 <div class="relations">

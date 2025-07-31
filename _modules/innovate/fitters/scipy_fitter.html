@@ -31,10 +31,12 @@
           <div class="body" role="main">
             
   <h1>Source code for innovate.fitters.scipy_fitter</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Self</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">curve_fit</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..models.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">DiffusionModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">innovate.base.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">DiffusionModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">innovate.compete.competition</span><span class="w"> </span><span class="kn">import</span> <span class="n">MultiProductDiffusionModel</span> <span class="c1"># Import the model</span>
 
 <div class="viewcode-block" id="ScipyFitter">
 <a class="viewcode-back" href="../../../innovate.fitters.html#innovate.fitters.scipy_fitter.ScipyFitter">[docs]</a>
@@ -43,7 +45,7 @@
 
 <div class="viewcode-block" id="ScipyFitter.fit">
 <a class="viewcode-back" href="../../../innovate.fitters.html#innovate.fitters.scipy_fitter.ScipyFitter.fit">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">DiffusionModel</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">p0</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">bounds</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">DiffusionModel</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">p0</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">bounds</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fits a DiffusionModel instance using scipy.optimize.curve_fit.</span>
 
@@ -51,8 +53,9 @@
 <span class="sd">            model: An instance of a DiffusionModel (e.g., BassModel, GompertzModel, LogisticModel).</span>
 <span class="sd">            t: Time points (independent variable).</span>
 <span class="sd">            y: Observed adoption data (dependent variable).</span>
-<span class="sd">            p0: Initial guesses for the parameters.</span>
-<span class="sd">            bounds: Bounds for the parameters.</span>
+<span class="sd">            p0: Initial guesses for the parameters. If None, model.initial_guesses() is used.</span>
+<span class="sd">            bounds: Bounds for the parameters. If None, model.bounds() is used.</span>
+<span class="sd">            weights: Weights for the observed data points.</span>
 <span class="sd">            kwargs: Additional keyword arguments to pass to scipy.optimize.curve_fit.</span>
 
 <span class="sd">        Returns:</span>
@@ -61,22 +64,40 @@
 <span class="sd">        Raises:</span>
 <span class="sd">            RuntimeError: If fitting fails.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        
         <span class="n">t_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
         <span class="n">y_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;cumulative_adoption&#39;</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;Model must have a &#39;cumulative_adoption&#39; method.&quot;</span><span class="p">)</span>
+        <span class="c1"># Check for MultiProductDiffusionModel and handle accordingly</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">MultiProductDiffusionModel</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                <span class="s2">&quot;Fitting MultiProductDiffusionModel with ScipyFitter is not yet implemented&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">y_arr</span> <span class="o">=</span> <span class="n">y_arr</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">fit_function</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">params</span><span class="p">):</span>
+                <span class="n">param_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">param_names</span><span class="p">,</span> <span class="n">params</span><span class="p">))</span>
+                <span class="n">model</span><span class="o">.</span><span class="n">params_</span> <span class="o">=</span> <span class="n">param_dict</span>
+                <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="n">x_fit</span> <span class="o">=</span> <span class="n">t_arr</span>
+
+        <span class="c1"># Determine initial guesses if not provided</span>
+        <span class="k">if</span> <span class="n">p0</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">p0</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">initial_guesses</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            
+        <span class="c1"># Determine bounds if not provided</span>
+        <span class="k">if</span> <span class="n">bounds</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lower_bounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">bounds</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+            <span class="n">upper_bounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">bounds</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+            <span class="n">bounds</span> <span class="o">=</span> <span class="p">(</span><span class="n">lower_bounds</span><span class="p">,</span> <span class="n">upper_bounds</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">cumulative_adoption</span><span class="p">,</span> <span class="n">t_arr</span><span class="p">,</span> <span class="n">y_arr</span><span class="p">,</span> 
-                                  <span class="n">p0</span><span class="o">=</span><span class="n">p0</span><span class="p">,</span> 
-                                  <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
-                                  <span class="n">maxfev</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;maxfev&#39;</span><span class="p">,</span> <span class="mi">5000</span><span class="p">),</span>
-                                  <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="n">model</span><span class="o">.</span><span class="n">params_</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">param_names</span><span class="p">,</span> <span class="n">params</span><span class="p">))</span>
+            <span class="n">popt</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">fit_function</span><span class="p">,</span> <span class="n">x_fit</span><span class="p">,</span> <span class="n">y_arr</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">p0</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">absolute_sigma</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">params_</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">param_names</span><span class="p">,</span> <span class="n">popt</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fitting failed due to invalid parameters or data: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fitting failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">. Try different initial guesses or check data.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fitting failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span></div>
 </div>
@@ -110,8 +131,28 @@
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">innovate</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">innovate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.html">innovate package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.diffuse.html">innovate.diffuse package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.compete.html">innovate.compete package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.substitute.html">innovate.substitute package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.hype.html">innovate.hype package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.fail.html">innovate.fail package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.adopt.html">innovate.adopt package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.path_dependence.html">innovate.path_dependence package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.policy.html">innovate.policy package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.abm.html">innovate.abm</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.plots.html">innovate.plots package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.utils.html">innovate.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.utils.html#module-innovate.adopt.categorization">innovate.adopt.categorization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.fitters.html">innovate.fitters package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.base.html">innovate.base package</a></li>
 </ul>
 
 <div class="relations">

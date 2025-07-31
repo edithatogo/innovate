@@ -33,12 +33,12 @@
   <h1>Source code for innovate.utils.preprocessing</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.tsa.seasonal</span><span class="w"> </span><span class="kn">import</span> <span class="n">STL</span>
 
 <div class="viewcode-block" id="ensure_datetime_index">
 <a class="viewcode-back" href="../../../innovate.utils.html#innovate.utils.preprocessing.ensure_datetime_index">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">ensure_datetime_index</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ensure_datetime_index</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Ensures a pandas Series or DataFrame has a datetime index.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
@@ -50,7 +50,7 @@
 
 <div class="viewcode-block" id="aggregate_time_series">
 <a class="viewcode-back" href="../../../innovate.utils.html#innovate.utils.preprocessing.aggregate_time_series">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">aggregate_time_series</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">freq</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">aggregate_time_series</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span> <span class="n">freq</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Aggregates time series data to a specified frequency (e.g., &#39;D&#39;, &#39;W&#39;, &#39;M&#39;).&quot;&quot;&quot;</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">ensure_datetime_index</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
@@ -160,8 +160,28 @@
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">innovate</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">innovate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.html">innovate package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.diffuse.html">innovate.diffuse package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.compete.html">innovate.compete package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.substitute.html">innovate.substitute package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.hype.html">innovate.hype package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.fail.html">innovate.fail package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.adopt.html">innovate.adopt package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.path_dependence.html">innovate.path_dependence package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.policy.html">innovate.policy package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.abm.html">innovate.abm</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.plots.html">innovate.plots package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.utils.html">innovate.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.utils.html#module-innovate.adopt.categorization">innovate.adopt.categorization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.fitters.html">innovate.fitters package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.base.html">innovate.base package</a></li>
 </ul>
 
 <div class="relations">

@@ -14,6 +14,7 @@
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorials" href="tutorials.html" />
     <link rel="prev" title="innovate.fitters package" href="innovate.fitters.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -37,12 +38,17 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
 </section>
-<section id="module-innovate.utils.categorization">
-<span id="innovate-utils-categorization-module"></span><h2>innovate.utils.categorization module<a class="headerlink" href="#module-innovate.utils.categorization" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-innovate.adopt.categorization">
+<span id="innovate-adopt-categorization"></span><h1>innovate.adopt.categorization<a class="headerlink" href="#module-innovate.adopt.categorization" title="Link to this heading">¶</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="innovate.utils.categorization.categorize_adopters">
-<span class="sig-prename descclassname"><span class="pre">innovate.utils.categorization.</span></span><span class="sig-name descname"><span class="pre">categorize_adopters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DiffusionModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/innovate/utils/categorization.html#categorize_adopters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.utils.categorization.categorize_adopters" title="Link to this definition">¶</a></dt>
-<dd><p>Categorizes adopters based on the fitted diffusion model.</p>
+<dt class="sig sig-object py" id="innovate.adopt.categorization.categorize_adopters">
+<span class="sig-prename descclassname"><span class="pre">innovate.adopt.categorization.</span></span><span class="sig-name descname"><span class="pre">categorize_adopters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="innovate.base.base.html#innovate.base.base.DiffusionModel" title="innovate.base.base.DiffusionModel"><span class="pre">DiffusionModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/innovate/adopt/categorization.html#categorize_adopters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.adopt.categorization.categorize_adopters" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">No-index<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p>Categorizes adopters based on the fitted diffusion model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -56,9 +62,22 @@
 </dl>
 </dd></dl>
 
-</section>
 <section id="module-innovate.utils.metrics">
 <span id="innovate-utils-metrics-module"></span><h2>innovate.utils.metrics module<a class="headerlink" href="#module-innovate.utils.metrics" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="innovate.utils.metrics.calculate_aic">
+<span class="sig-prename descclassname"><span class="pre">innovate.utils.metrics.</span></span><span class="sig-name descname"><span class="pre">calculate_aic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/innovate/utils/metrics.html#calculate_aic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.utils.metrics.calculate_aic" title="Link to this definition">¶</a></dt>
+<dd><p>Calculates the Akaike Information Criterion (AIC).</p>
+<p>Assumes errors are normally distributed.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="innovate.utils.metrics.calculate_bic">
+<span class="sig-prename descclassname"><span class="pre">innovate.utils.metrics.</span></span><span class="sig-name descname"><span class="pre">calculate_bic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/innovate/utils/metrics.html#calculate_bic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.utils.metrics.calculate_bic" title="Link to this definition">¶</a></dt>
+<dd><p>Calculates the Bayesian Information Criterion (BIC).</p>
+<p>Assumes errors are normally distributed.</p>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="innovate.utils.metrics.calculate_mae">
 <span class="sig-prename descclassname"><span class="pre">innovate.utils.metrics.</span></span><span class="sig-name descname"><span class="pre">calculate_mae</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/innovate/utils/metrics.html#calculate_mae"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.utils.metrics.calculate_mae" title="Link to this definition">¶</a></dt>
@@ -90,6 +109,12 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="innovate.utils.metrics.calculate_rss">
+<span class="sig-prename descclassname"><span class="pre">innovate.utils.metrics.</span></span><span class="sig-name descname"><span class="pre">calculate_rss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/innovate/utils/metrics.html#calculate_rss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.utils.metrics.calculate_rss" title="Link to this definition">¶</a></dt>
+<dd><p>Calculates the Residual Sum of Squares (RSS).</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="innovate.utils.metrics.calculate_smape">
 <span class="sig-prename descclassname"><span class="pre">innovate.utils.metrics.</span></span><span class="sig-name descname"><span class="pre">calculate_smape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/innovate/utils/metrics.html#calculate_smape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.utils.metrics.calculate_smape" title="Link to this definition">¶</a></dt>
 <dd><p>Calculates the Symmetric Mean Absolute Percentage Error (SMAPE).</p>
@@ -100,7 +125,7 @@
 <span id="innovate-utils-model-evaluation-module"></span><h2>innovate.utils.model_evaluation module<a class="headerlink" href="#module-innovate.utils.model_evaluation" title="Link to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="innovate.utils.model_evaluation.compare_models">
-<span class="sig-prename descclassname"><span class="pre">innovate.utils.model_evaluation.</span></span><span class="sig-name descname"><span class="pre">compare_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">models</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DiffusionModel</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_true</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_true</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/innovate/utils/model_evaluation.html#compare_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.utils.model_evaluation.compare_models" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">innovate.utils.model_evaluation.</span></span><span class="sig-name descname"><span class="pre">compare_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">models</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="innovate.base.base.html#innovate.base.base.DiffusionModel" title="innovate.base.base.DiffusionModel"><span class="pre">DiffusionModel</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_true</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_true</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/innovate/utils/model_evaluation.html#compare_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.utils.model_evaluation.compare_models" title="Link to this definition">¶</a></dt>
 <dd><p>Compares multiple diffusion models based on various goodness-of-fit metrics.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -115,6 +140,12 @@ fitted DiffusionModel instances.</p></li>
 <dd class="field-even"><p>A pandas DataFrame containing the comparison metrics for each model.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="innovate.utils.model_evaluation.compute_residuals">
+<span class="sig-prename descclassname"><span class="pre">innovate.utils.model_evaluation.</span></span><span class="sig-name descname"><span class="pre">compute_residuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="innovate.base.base.html#innovate.base.base.DiffusionModel" title="innovate.base.base.DiffusionModel"><span class="pre">DiffusionModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/innovate/utils/model_evaluation.html#compute_residuals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.utils.model_evaluation.compute_residuals" title="Link to this definition">¶</a></dt>
+<dd><p>Return the residuals for a fitted model.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -134,6 +165,48 @@ If False, the best model has the maximum value.</p></li>
 <dd class="field-even"><p>A tuple containing the name of the best model and its full results row.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="innovate.utils.model_evaluation.get_fit_metrics">
+<span class="sig-prename descclassname"><span class="pre">innovate.utils.model_evaluation.</span></span><span class="sig-name descname"><span class="pre">get_fit_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="innovate.base.base.html#innovate.base.base.DiffusionModel" title="innovate.base.base.DiffusionModel"><span class="pre">DiffusionModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/innovate/utils/model_evaluation.html#get_fit_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.utils.model_evaluation.get_fit_metrics" title="Link to this definition">¶</a></dt>
+<dd><p>Calculates various goodness-of-fit metrics for a model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – The fitted diffusion model.</p></li>
+<li><p><strong>t</strong> – The time points.</p></li>
+<li><p><strong>y</strong> – The true cumulative adoption values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing the calculated metrics.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="innovate.utils.model_evaluation.model_aic">
+<span class="sig-prename descclassname"><span class="pre">innovate.utils.model_evaluation.</span></span><span class="sig-name descname"><span class="pre">model_aic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="innovate.base.base.html#innovate.base.base.DiffusionModel" title="innovate.base.base.DiffusionModel"><span class="pre">DiffusionModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/innovate/utils/model_evaluation.html#model_aic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.utils.model_evaluation.model_aic" title="Link to this definition">¶</a></dt>
+<dd><p>Return the Akaike Information Criterion for a fitted model.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="innovate.utils.model_evaluation.model_bic">
+<span class="sig-prename descclassname"><span class="pre">innovate.utils.model_evaluation.</span></span><span class="sig-name descname"><span class="pre">model_bic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="innovate.base.base.html#innovate.base.base.DiffusionModel" title="innovate.base.base.DiffusionModel"><span class="pre">DiffusionModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/innovate/utils/model_evaluation.html#model_bic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.utils.model_evaluation.model_bic" title="Link to this definition">¶</a></dt>
+<dd><p>Return the Bayesian Information Criterion for a fitted model.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="innovate.utils.model_evaluation.residual_acf">
+<span class="sig-prename descclassname"><span class="pre">innovate.utils.model_evaluation.</span></span><span class="sig-name descname"><span class="pre">residual_acf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="innovate.base.base.html#innovate.base.base.DiffusionModel" title="innovate.base.base.DiffusionModel"><span class="pre">DiffusionModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nlags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">40</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/innovate/utils/model_evaluation.html#residual_acf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.utils.model_evaluation.residual_acf" title="Link to this definition">¶</a></dt>
+<dd><p>Return the autocorrelation function of model residuals.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="innovate.utils.model_evaluation.residual_pacf">
+<span class="sig-prename descclassname"><span class="pre">innovate.utils.model_evaluation.</span></span><span class="sig-name descname"><span class="pre">residual_pacf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="innovate.base.base.html#innovate.base.base.DiffusionModel" title="innovate.base.base.DiffusionModel"><span class="pre">DiffusionModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nlags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">40</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/innovate/utils/model_evaluation.html#residual_pacf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.utils.model_evaluation.residual_pacf" title="Link to this definition">¶</a></dt>
+<dd><p>Return the partial autocorrelation function of model residuals.</p>
 </dd></dl>
 
 </section>
@@ -245,24 +318,54 @@ differences, and MA parameters.</p></li>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">innovate</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="innovate.html">innovate package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="innovate.html">innovate package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="innovate.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="innovate.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="innovate.html#module-innovate.backend">innovate.backend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="innovate.html#innovate-plots-module">innovate.plots module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="innovate.html#module-innovate">Module contents</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">innovate</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="innovate.html">innovate package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="innovate.diffuse.html">innovate.diffuse package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.compete.html">innovate.compete package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.substitute.html">innovate.substitute package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.hype.html">innovate.hype package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.fail.html">innovate.fail package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.adopt.html">innovate.adopt package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.path_dependence.html">innovate.path_dependence package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.policy.html">innovate.policy package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.abm.html">innovate.abm</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="innovate.plots.html">innovate.plots package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">innovate.utils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="#module-innovate.adopt.categorization">innovate.adopt.categorization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#innovate.adopt.categorization.categorize_adopters"><code class="docutils literal notranslate"><span class="pre">categorize_adopters()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-innovate.utils.metrics">innovate.utils.metrics module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-innovate.utils.model_evaluation">innovate.utils.model_evaluation module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-innovate.utils.preprocessing">innovate.utils.preprocessing module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-innovate.utils">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.fitters.html">innovate.fitters package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.base.html">innovate.base package</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-  <li><a href="modules.html">innovate</a><ul>
   <li><a href="innovate.html">innovate package</a><ul>
       <li>Previous: <a href="innovate.fitters.html" title="previous chapter">innovate.fitters package</a></li>
-  </ul></li>
+      <li>Next: <a href="tutorials.html" title="next chapter">Tutorials</a></li>
   </ul></li>
   </ul></li>
 </ul>

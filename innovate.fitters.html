@@ -42,7 +42,7 @@
 <span id="innovate-fitters-batched-fitter-module"></span><h2>innovate.fitters.batched_fitter module<a class="headerlink" href="#module-innovate.fitters.batched_fitter" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="innovate.fitters.batched_fitter.BatchedFitter">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">innovate.fitters.batched_fitter.</span></span><span class="sig-name descname"><span class="pre">BatchedFitter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DiffusionModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fitter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/fitters/batched_fitter.html#BatchedFitter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.fitters.batched_fitter.BatchedFitter" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">innovate.fitters.batched_fitter.</span></span><span class="sig-name descname"><span class="pre">BatchedFitter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="innovate.base.base.html#innovate.base.base.DiffusionModel" title="innovate.base.base.DiffusionModel"><span class="pre">DiffusionModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">fitter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/innovate/fitters/batched_fitter.html#BatchedFitter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.fitters.batched_fitter.BatchedFitter" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A fitter class for fitting a model to multiple datasets in a batch.</p>
 <dl class="py method">
@@ -82,7 +82,7 @@
 <p>A fitter class that uses bootstrapping to estimate parameter uncertainty.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="innovate.fitters.bootstrap_fitter.BootstrapFitter.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DiffusionModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/innovate/fitters/bootstrap_fitter.html#BootstrapFitter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.fitters.bootstrap_fitter.BootstrapFitter.fit" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="innovate.base.base.html#innovate.base.base.DiffusionModel" title="innovate.base.base.DiffusionModel"><span class="pre">DiffusionModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/innovate/fitters/bootstrap_fitter.html#BootstrapFitter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.fitters.bootstrap_fitter.BootstrapFitter.fit" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -106,23 +106,42 @@
 </dd></dl>
 
 </section>
-<section id="module-innovate.fitters.jax_fitter">
-<span id="innovate-fitters-jax-fitter-module"></span><h2>innovate.fitters.jax_fitter module<a class="headerlink" href="#module-innovate.fitters.jax_fitter" title="Link to this heading">¶</a></h2>
+<section id="innovate-fitters-jax-fitter-module">
+<h2>innovate.fitters.jax_fitter module<a class="headerlink" href="#innovate-fitters-jax-fitter-module" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-innovate.fitters.mom_fitter">
+<span id="innovate-fitters-mom-fitter-module"></span><h2>innovate.fitters.mom_fitter module<a class="headerlink" href="#module-innovate.fitters.mom_fitter" title="Link to this heading">¶</a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="innovate.fitters.jax_fitter.JaxFitter">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">innovate.fitters.jax_fitter.</span></span><span class="sig-name descname"><span class="pre">JaxFitter</span></span><a class="reference internal" href="_modules/innovate/fitters/jax_fitter.html#JaxFitter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.fitters.jax_fitter.JaxFitter" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="innovate.fitters.mom_fitter.MoMFitter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">innovate.fitters.mom_fitter.</span></span><span class="sig-name descname"><span class="pre">MoMFitter</span></span><a class="reference internal" href="_modules/innovate/fitters/mom_fitter.html#MoMFitter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.fitters.mom_fitter.MoMFitter" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A fitter class that will use JAX for model estimation (Phase 2).</p>
+<p>Fitter for the Bass Diffusion Model using the Method of Moments (MoM).
+This fitter is specifically designed for the BassModel.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="innovate.fitters.jax_fitter.JaxFitter.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DiffusionModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/innovate/fitters/jax_fitter.html#JaxFitter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.fitters.jax_fitter.JaxFitter.fit" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="innovate.fitters.mom_fitter.MoMFitter.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="innovate.base.base.html#innovate.base.base.DiffusionModel" title="innovate.base.base.DiffusionModel"><span class="pre">DiffusionModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="innovate.base.base.html#innovate.base.base.DiffusionModel" title="innovate.base.base.DiffusionModel"><span class="pre">DiffusionModel</span></a></span></span><a class="reference internal" href="_modules/innovate/fitters/mom_fitter.html#MoMFitter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.fitters.mom_fitter.MoMFitter.fit" title="Link to this definition">¶</a></dt>
+<dd><p>Fits the BassModel using the Method of Moments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – An instance of BassModel.</p></li>
+<li><p><strong>t</strong> – Time points.</p></li>
+<li><p><strong>y</strong> – Cumulative adoption data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted BassModel instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="innovate.fitters.mom_fitter.MoMFitter.params_">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">params_</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#innovate.fitters.mom_fitter.MoMFitter.params_" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-</section>
-<section id="module-innovate.fitters.mom_fitter">
-<span id="innovate-fitters-mom-fitter-module"></span><h2>innovate.fitters.mom_fitter module<a class="headerlink" href="#module-innovate.fitters.mom_fitter" title="Link to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="innovate.fitters.mom_fitter.estimate_bass_mom">
 <span class="sig-prename descclassname"><span class="pre">innovate.fitters.mom_fitter.</span></span><span class="sig-name descname"><span class="pre">estimate_bass_mom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/innovate/fitters/mom_fitter.html#estimate_bass_mom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.fitters.mom_fitter.estimate_bass_mom" title="Link to this definition">¶</a></dt>
@@ -151,7 +170,7 @@ This implementation uses a linear regression approach based on incremental adopt
 <p>A fitter class that uses SciPy’s curve_fit for model estimation.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="innovate.fitters.scipy_fitter.ScipyFitter.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DiffusionModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="reference internal" href="_modules/innovate/fitters/scipy_fitter.html#ScipyFitter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.fitters.scipy_fitter.ScipyFitter.fit" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="innovate.base.base.html#innovate.base.base.DiffusionModel" title="innovate.base.base.DiffusionModel"><span class="pre">DiffusionModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="reference internal" href="_modules/innovate/fitters/scipy_fitter.html#ScipyFitter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#innovate.fitters.scipy_fitter.ScipyFitter.fit" title="Link to this definition">¶</a></dt>
 <dd><p>Fits a DiffusionModel instance using scipy.optimize.curve_fit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -159,8 +178,9 @@ This implementation uses a linear regression approach based on incremental adopt
 <li><p><strong>model</strong> – An instance of a DiffusionModel (e.g., BassModel, GompertzModel, LogisticModel).</p></li>
 <li><p><strong>t</strong> – Time points (independent variable).</p></li>
 <li><p><strong>y</strong> – Observed adoption data (dependent variable).</p></li>
-<li><p><strong>p0</strong> – Initial guesses for the parameters.</p></li>
-<li><p><strong>bounds</strong> – Bounds for the parameters.</p></li>
+<li><p><strong>p0</strong> – Initial guesses for the parameters. If None, model.initial_guesses() is used.</p></li>
+<li><p><strong>bounds</strong> – Bounds for the parameters. If None, model.bounds() is used.</p></li>
+<li><p><strong>weights</strong> – Weights for the observed data points.</p></li>
 <li><p><strong>kwargs</strong> – Additional keyword arguments to pass to scipy.optimize.curve_fit.</p></li>
 </ul>
 </dd>
@@ -209,25 +229,53 @@ This implementation uses a linear regression approach based on incremental adopt
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">innovate</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="innovate.html">innovate package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="innovate.html">innovate package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="innovate.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="innovate.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="innovate.html#module-innovate.backend">innovate.backend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="innovate.html#innovate-plots-module">innovate.plots module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="innovate.html#module-innovate">Module contents</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">innovate</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="innovate.html">innovate package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="innovate.diffuse.html">innovate.diffuse package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.compete.html">innovate.compete package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.substitute.html">innovate.substitute package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.hype.html">innovate.hype package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.fail.html">innovate.fail package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.adopt.html">innovate.adopt package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.path_dependence.html">innovate.path_dependence package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.policy.html">innovate.policy package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.abm.html">innovate.abm</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="innovate.plots.html">innovate.plots package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.utils.html">innovate.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.utils.html#module-innovate.adopt.categorization">innovate.adopt.categorization</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">innovate.fitters package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-innovate.fitters.batched_fitter">innovate.fitters.batched_fitter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-innovate.fitters.bootstrap_fitter">innovate.fitters.bootstrap_fitter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#innovate-fitters-jax-fitter-module">innovate.fitters.jax_fitter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-innovate.fitters.mom_fitter">innovate.fitters.mom_fitter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-innovate.fitters.scipy_fitter">innovate.fitters.scipy_fitter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-innovate.fitters">Module contents</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="innovate.base.html">innovate.base package</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-  <li><a href="modules.html">innovate</a><ul>
   <li><a href="innovate.html">innovate package</a><ul>
       <li>Previous: <a href="innovate.html" title="previous chapter">innovate package</a></li>
       <li>Next: <a href="innovate.utils.html" title="next chapter">innovate.utils package</a></li>
-  </ul></li>
   </ul></li>
   </ul></li>
 </ul>

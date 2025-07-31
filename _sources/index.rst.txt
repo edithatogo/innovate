@@ -6,16 +6,41 @@
 innovate documentation
 ======================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
-
+Welcome to the documentation for the ``innovate`` library.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   modules
+   innovate
+   tutorials
 
-   modules
+.. toctree::
+   :maxdepth: 2
+   :caption: Core Modules
+
+   innovate.diffuse.rst
+   innovate.compete.rst
+   innovate.substitute.rst
+   innovate.hype.rst
+   innovate.fail.rst
+   innovate.adopt.rst
+   innovate.path_dependence.rst
+   innovate.policy.rst
+   innovate.abm.rst
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Utilities
+
+   innovate.plots.rst
+   innovate.utils.rst
+   innovate.fitters.rst
+   innovate.base.rst
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Development
+
+   ../testing_strategy
 

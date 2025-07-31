@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>NDlib Integration for Network-Based Diffusion &#8212; innovate  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Counterfactual Analysis" href="counterfactual_analysis.html" />
+    <link rel="prev" title="JAX Backend for High-Performance Computing" href="jax_backend.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="ndlib-integration-for-network-based-diffusion">
+<span id="tutorial-ndlib-integration"></span><h1>NDlib Integration for Network-Based Diffusion<a class="headerlink" href="#ndlib-integration-for-network-based-diffusion" title="Link to this heading">¶</a></h1>
+<p>This tutorial demonstrates how to use the <cite>NdlibInnovationModel</cite> to simulate diffusion on a network.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">innovate.abm.ndlib_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">NdlibInnovationModel</span>
+
+<span class="c1"># Create a networkx graph</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">erdos_renyi_graph</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="c1"># Initialize the model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">NdlibInnovationModel</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">)</span>
+
+<span class="c1"># Run the simulation for 10 steps</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+<span class="c1"># Get the status of the nodes</span>
+<span class="n">status</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">diffusion_model</span><span class="o">.</span><span class="n">status</span>
+
+<span class="c1"># Count the number of adopted agents</span>
+<span class="n">adopted_agents</span> <span class="o">=</span> <span class="p">[</span><span class="n">agent</span> <span class="k">for</span> <span class="n">agent</span><span class="p">,</span> <span class="n">status</span> <span class="ow">in</span> <span class="n">status</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;Infected&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of adopted agents: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">adopted_agents</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">innovate</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../innovate.html">innovate package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="norton_bass.html">Norton-Bass Model for Generational Substitution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi_product.html">Multi-Product Diffusion Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax_backend.html">JAX Backend for High-Performance Computing</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">NDlib Integration for Network-Based Diffusion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="counterfactual_analysis.html">Counterfactual Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bayesian_fitter_tutorial.html">Bayesian Fitting for Diffusion Models</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../innovate.diffuse.html">innovate.diffuse package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../innovate.compete.html">innovate.compete package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../innovate.substitute.html">innovate.substitute package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../innovate.hype.html">innovate.hype package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../innovate.fail.html">innovate.fail package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../innovate.adopt.html">innovate.adopt package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../innovate.path_dependence.html">innovate.path_dependence package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../innovate.policy.html">innovate.policy package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../innovate.abm.html">innovate.abm</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../innovate.plots.html">innovate.plots package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../innovate.utils.html">innovate.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../innovate.utils.html#module-innovate.adopt.categorization">innovate.adopt.categorization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../innovate.fitters.html">innovate.fitters package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../innovate.base.html">innovate.base package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../tutorials.html">Tutorials</a><ul>
+      <li>Previous: <a href="jax_backend.html" title="previous chapter">JAX Backend for High-Performance Computing</a></li>
+      <li>Next: <a href="counterfactual_analysis.html" title="next chapter">Counterfactual Analysis</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Doughnut.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/tutorials/ndlib_integration.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

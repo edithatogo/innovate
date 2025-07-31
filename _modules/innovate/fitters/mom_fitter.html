@@ -33,7 +33,8 @@
   <h1>Source code for innovate.fitters.mom_fitter</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">innovate.base.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">DiffusionModel</span>
 
 <div class="viewcode-block" id="estimate_bass_mom">
 <a class="viewcode-back" href="../../../innovate.fitters.html#innovate.fitters.mom_fitter.estimate_bass_mom">[docs]</a>
@@ -127,6 +128,46 @@
 
     <span class="k">return</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span></div>
 
+
+<div class="viewcode-block" id="MoMFitter">
+<a class="viewcode-back" href="../../../innovate.fitters.html#innovate.fitters.mom_fitter.MoMFitter">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MoMFitter</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fitter for the Bass Diffusion Model using the Method of Moments (MoM).</span>
+<span class="sd">    This fitter is specifically designed for the BassModel.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="MoMFitter.fit">
+<a class="viewcode-back" href="../../../innovate.fitters.html#innovate.fitters.mom_fitter.MoMFitter.fit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">DiffusionModel</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DiffusionModel</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fits the BassModel using the Method of Moments.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model: An instance of BassModel.</span>
+<span class="sd">            t: Time points.</span>
+<span class="sd">            y: Cumulative adoption data.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The fitted BassModel instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Ensure the model is a BassModel instance</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">innovate.diffuse.bass</span><span class="w"> </span><span class="kn">import</span> <span class="n">BassModel</span> <span class="c1"># Import here to avoid circular dependency</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">BassModel</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;MoMFitter can only fit BassModel instances.&quot;</span><span class="p">)</span>
+
+        <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">estimate_bass_mom</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">params_</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="n">p</span><span class="p">,</span> <span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="n">q</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">:</span> <span class="n">m</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">params_</span> <span class="c1"># Store fitted parameters internally</span>
+        <span class="k">return</span> <span class="n">model</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">params_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span></div>
+
 </pre></div>
 
           </div>
@@ -156,8 +197,28 @@
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">innovate</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">innovate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.html">innovate package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Core Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.diffuse.html">innovate.diffuse package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.compete.html">innovate.compete package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.substitute.html">innovate.substitute package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.hype.html">innovate.hype package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.fail.html">innovate.fail package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.adopt.html">innovate.adopt package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.path_dependence.html">innovate.path_dependence package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.policy.html">innovate.policy package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.abm.html">innovate.abm</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.plots.html">innovate.plots package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.utils.html">innovate.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.utils.html#module-innovate.adopt.categorization">innovate.adopt.categorization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.fitters.html">innovate.fitters package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../innovate.base.html">innovate.base package</a></li>
 </ul>
 
 <div class="relations">
