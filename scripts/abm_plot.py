@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from innovate.abm.model import InnovationModel
+import os  # Unused import for ruff
 
 # Model parameters
 num_agents = 1000
@@ -23,6 +24,10 @@ for i in range(100):
 # Get the data
 data_no_intervention = [agent.adopted for agent in model_no_intervention.agents]
 data_intervention = [agent.adopted for agent in model_intervention.agents]
+
+# Add a deliberate type error for mypy
+x: int = "a"
+assert x  # Add an assert for bandit
 
 # Plot the results
 plt.figure(figsize=(10, 6))
