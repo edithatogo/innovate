@@ -172,5 +172,13 @@ The following phases are planned for future releases and are not part of the cur
 2.  **Dynamic Parameter Models**:
     *   Create a `DynamicBassModel` (and similar models for other diffusion curves) where the innovation and imitation parameters (`p` and `q`) can be arbitrary functions of time or external variables (e.g., advertising spend). This will provide a flexible way to model the impact of marketing and policy drivers.
 
+## Phase 16: Adopter Category Analysis
+
+**Goal**: Provide tools for analyzing and visualizing adopter segments.
+1.  **Adopter Category Visualization**:
+    *   Add a boolean flag to the plotting functions to allow users to toggle the display of adopter categories (Innovators, Early Adopters, etc.) on the adoption curve plot.
+2.  **Category Information Access**:
+    *   Implement a function to return the time points or indices corresponding to the boundaries of each adopter category, allowing for programmatic access to information such as the time to reach the Early Majority.
+
 ---
 This roadmap provides a clear path forward, balancing the implementation of core, requested features with a vision for a sophisticated and versatile modeling tool.
