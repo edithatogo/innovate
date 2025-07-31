@@ -241,14 +241,12 @@ peak_time_idx = np.argmax(adoption_rate)
 peak_time = t[peak_time_idx]
 
 # Approximate standard deviation assuming the curve is roughly normal
-# This is a simplification for visualization purposes
 cumulative_adoption = y_bass / m
-# Find time to 16% and 84% adoption
 t_16 = t[np.argmin(np.abs(cumulative_adoption - 0.16))]
 t_84 = t[np.argmin(np.abs(cumulative_adoption - 0.84))]
 std_dev_approx = (t_84 - t_16) / 2
 
-# Define category boundaries based on standard deviations from the peak
+# Define category boundaries
 innovators_end = peak_time - 2 * std_dev_approx
 early_adopters_end = peak_time - 1 * std_dev_approx
 early_majority_end = peak_time
@@ -256,19 +254,22 @@ late_majority_end = peak_time + 1 * std_dev_approx
 
 fig, ax1 = plt.subplots(figsize=(10, 6))
 
-# Plot Cumulative Adopters
-ax1.plot(t, y_bass, "k--", label="Cumulative Adopters", alpha=0.7)
+# Plot Cumulative Adopters on the primary y-axis
+color = "tab:blue"
 ax1.set_xlabel("Time")
-ax1.set_ylabel("Cumulative Adopters")
+ax1.set_ylabel("Cumulative Adopters", color=color)
+ax1.plot(t, y_bass, color=color, linestyle="--", label="Cumulative Adopters")
+ax1.tick_params(axis="y", labelcolor=color)
 ax1.grid(True, linestyle="--", alpha=0.3)
-ax1.set_ylim(0, m * 1.1)
 
-# Plot Adoption Rate on the same y-axis for shading
-ax2 = ax1
-ax2.plot(t, adoption_rate, "k-", label="Adoption Rate")
-ax2.set_ylabel("Adopters per Period")
+# Create a secondary y-axis for the adoption rate
+ax2 = ax1.twinx()
+color = "tab:red"
+ax2.set_ylabel("Adopters per Period", color=color)
+ax2.plot(t, adoption_rate, color=color, label="Adoption Rate")
+ax2.tick_params(axis="y", labelcolor=color)
 
-# Shade the adopter categories
+# Shade the adopter categories on the secondary axis
 ax2.fill_between(
     t,
     adoption_rate,
@@ -310,19 +311,17 @@ ax2.fill_between(
     label="Laggards (16%)",
 )
 
-# Add a title and legend
+# Add a title and combined legend
 plt.title("Adoption Curve with Adopter Categories")
 fig.tight_layout()
-# Create a single legend for all plots
-handles, labels = [], []
-for ax in [ax1, ax2]:
-    for h, l in zip(*ax.get_legend_handles_labels()):
-        handles.append(h)
-        labels.append(l)
-# Remove duplicate labels
+
+# Combine legends from both axes
+lines, labels = ax1.get_legend_handles_labels()
+lines2, labels2 = ax2.get_legend_handles_labels()
+# Use a dictionary to remove duplicate labels from the fill_between plots
 from collections import OrderedDict
-by_label = OrderedDict(zip(labels, handles))
-plt.legend(by_label.values(), by_label.keys(), loc="upper left")
+unique_labels = OrderedDict(zip(labels2, lines2))
+ax2.legend(lines + list(unique_labels.values()), labels + list(unique_labels.keys()), loc="upper left")
 
 plt.savefig(os.path.join(SAVE_DIR, "adoption_curve.png"))
 plt.close()
