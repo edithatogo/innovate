@@ -11,5 +11,6 @@ class PlatformMultiSidedGrowthModel(DiffusionModel):
     def predict(self, t, covariates=None):
         pass
 
-    def differential_equation(self, t, y, p):
+    @staticmethod
+    def differential_equation(t, y, p):
         pass
