@@ -1,17 +1,27 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Sequence, TypeVar, Any, Callable
+from typing import Dict, Sequence, TypeVar, Any
 
 # Define a type variable for the class itself, for type hinting Self
-Self = TypeVar('Self')
+Self = TypeVar("Self")
+
 
 class DiffusionModel(ABC):
     """Abstract base class for all diffusion models."""
 
-    def fit(self, fitter: Any, t: Sequence[float], y: Sequence[float], **kwargs) -> Self:
+    def fit(
+        self, fitter: Any, t: Sequence[float], y: Sequence[float], **kwargs
+    ) -> Self:
         """Fits the diffusion model to the given time and adoption data."""
         p0 = self.initial_guesses(t, y)
         bounds = self.bounds(t, y)
-        fitter.fit(self, t, y, p0=list(p0.values()), bounds=list(zip(*bounds.values())), **kwargs)
+        fitter.fit(
+            self,
+            t,
+            y,
+            p0=list(p0.values()),
+            bounds=list(zip(*bounds.values())),
+            **kwargs,
+        )
         return self
 
     @abstractmethod
@@ -48,7 +58,9 @@ class DiffusionModel(ABC):
         pass
 
     @abstractmethod
-    def initial_guesses(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, float]:
+    def initial_guesses(
+        self, t: Sequence[float], y: Sequence[float]
+    ) -> Dict[str, float]:
         """Returns initial guesses for the model parameters."""
         pass
 
@@ -56,10 +68,9 @@ class DiffusionModel(ABC):
     def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
         """Returns bounds for the model parameters."""
         pass
-    
+
     @staticmethod
     @abstractmethod
     def differential_equation(y, t, p):
         """Returns the differential equation for the model."""
         pass
-

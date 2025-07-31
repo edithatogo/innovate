@@ -7,6 +7,7 @@ from innovate.diffuse.logistic import LogisticModel
 from innovate.fitters.scipy_fitter import ScipyFitter
 from innovate.plots.diagnostics import plot_residuals
 
+
 @pytest.fixture
 def fitted_logistic_model():
     """
@@ -14,12 +15,13 @@ def fitted_logistic_model():
     """
     t = np.linspace(0, 20, 100)
     y = 1.0 / (1 + np.exp(-1.5 * (t - 10.0))) + np.random.normal(0, 0.01, len(t))
-    
+
     model = LogisticModel()
     fitter = ScipyFitter()
     fitter.fit(model, t, y)
-    
+
     return model, t, y
+
 
 def test_plot_residuals_runs_without_error(fitted_logistic_model):
     """
@@ -32,6 +34,7 @@ def test_plot_residuals_runs_without_error(fitted_logistic_model):
         plt.close()
     except Exception as e:
         pytest.fail(f"plot_residuals raised an exception: {e}")
+
 
 def test_plot_residuals_raises_error_for_unfitted_model():
     """

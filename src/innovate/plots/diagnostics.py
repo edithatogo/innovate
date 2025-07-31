@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 import numpy as np
 
+
 def plot_residuals(
     model,
     t: np.ndarray,
@@ -12,9 +13,9 @@ def plot_residuals(
     lags: int = 30,
     acf_only: bool = False,
     figsize: tuple = (10, None),
-    color_residuals: str = 'C0',
-    color_acf: str = 'C1',
-    color_pacf: str = 'C2',
+    color_residuals: str = "C0",
+    color_acf: str = "C1",
+    color_pacf: str = "C2",
     show: bool = True,
 ):
     """
@@ -45,7 +46,7 @@ def plot_residuals(
     show : bool, optional
         If True, the plot will be shown, by default True. Otherwise, the figure and axes objects will be returned.
     """
-    if not hasattr(model, 'params_') or not model.params_:
+    if not hasattr(model, "params_") or not model.params_:
         raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
     # Calculate residuals
@@ -56,13 +57,13 @@ def plot_residuals(
     n_rows = 2 if acf_only else 3
     if figsize[1] is None:
         figsize = (figsize[0], 4 * n_rows)
-        
+
     fig, axes = plt.subplots(n_rows, 1, figsize=figsize)
     fig.suptitle(title, fontsize=16)
 
     # Plot residuals
     axes[0].plot(t, residuals, color=color_residuals)
-    axes[0].axhline(0, linestyle='--', color='k', alpha=0.7)
+    axes[0].axhline(0, linestyle="--", color="k", alpha=0.7)
     axes[0].set_title("Residuals")
     axes[0].set_xlabel("Time")
     axes[0].set_ylabel("Residual")
@@ -77,13 +78,16 @@ def plot_residuals(
         axes[2].set_title("Partial Autocorrelation Function (PACF)")
 
     plt.tight_layout(rect=[0, 0, 1, 0.96])
-    
+
     if show:
         plt.show()
     else:
         return fig, axes
 
-def plot_acf_only(data: np.ndarray, title: str = "Autocorrelation Function", lags: int = 30):
+
+def plot_acf_only(
+    data: np.ndarray, title: str = "Autocorrelation Function", lags: int = 30
+):
     """
     Plots the Autocorrelation Function (ACF) of a time series.
 
@@ -102,7 +106,9 @@ def plot_acf_only(data: np.ndarray, title: str = "Autocorrelation Function", lag
     plt.show()
 
 
-def plot_pacf_only(data: np.ndarray, title: str = "Partial Autocorrelation Function", lags: int = 30):
+def plot_pacf_only(
+    data: np.ndarray, title: str = "Partial Autocorrelation Function", lags: int = 30
+):
     """
     Plots the Partial Autocorrelation Function (PACF) of a time series.
 

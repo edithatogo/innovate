@@ -3,6 +3,7 @@
 import pandas as pd
 from statsmodels.tsa.seasonal import STL
 
+
 def stl_decomposition(series: pd.Series, period: int, **kwargs):
     """
     Decomposes a time series into trend, seasonal, and residual components
@@ -27,9 +28,11 @@ def stl_decomposition(series: pd.Series, period: int, **kwargs):
 
     stl = STL(series, period=period, **kwargs)
     result = stl.fit()
-    
-    return pd.DataFrame({
-        'trend': result.trend,
-        'seasonal': result.seasonal,
-        'residual': result.resid,
-    })
+
+    return pd.DataFrame(
+        {
+            "trend": result.trend,
+            "seasonal": result.seasonal,
+            "residual": result.resid,
+        }
+    )

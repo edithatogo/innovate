@@ -4,6 +4,7 @@ import numpy as np
 from typing import Sequence, Dict
 from innovate.base.base import DiffusionModel
 
+
 class ComplementaryGoodsModel(DiffusionModel):
     """
     A model for the diffusion of two complementary goods, where the
@@ -72,7 +73,7 @@ class ComplementaryGoodsModel(DiffusionModel):
             initial_params,
             args=(t, y),
             bounds=param_bounds,
-            method='L-BFGS-B',
+            method="L-BFGS-B",
             **kwargs,
         )
 
@@ -94,9 +95,13 @@ class ComplementaryGoodsModel(DiffusionModel):
 
         # Estimate k1 and k2 from the initial exponential growth
         # y(t) ~= y(0) * exp(k*t) => k ~= log(y(t)/y(0)) / t
-        with np.errstate(divide='ignore', invalid='ignore'):
-            k1_est = np.nanmean(np.log(y_initial[1:, 0] / y_initial[0, 0]) / t_initial[1:])
-            k2_est = np.nanmean(np.log(y_initial[1:, 1] / y_initial[0, 1]) / t_initial[1:])
+        with np.errstate(divide="ignore", invalid="ignore"):
+            k1_est = np.nanmean(
+                np.log(y_initial[1:, 0] / y_initial[0, 0]) / t_initial[1:]
+            )
+            k2_est = np.nanmean(
+                np.log(y_initial[1:, 1] / y_initial[0, 1]) / t_initial[1:]
+            )
 
         k1 = k1_est if np.isfinite(k1_est) and k1_est > 0 else 0.1
         k2 = k2_est if np.isfinite(k2_est) and k2_est > 0 else 0.1
@@ -128,7 +133,9 @@ class ComplementaryGoodsModel(DiffusionModel):
         ss_tot = np.sum((y - np.mean(y, axis=0)) ** 2)
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
-    def predict_adoption_rate(self, t: Sequence[float], y0: Sequence[float]) -> np.ndarray:
+    def predict_adoption_rate(
+        self, t: Sequence[float], y0: Sequence[float]
+    ) -> np.ndarray:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet.")
         y_pred = self.predict(t, y0)
@@ -138,6 +145,10 @@ class ComplementaryGoodsModel(DiffusionModel):
             self._params["c1"],
             self._params["c2"],
         )
-        dy1_dt = k1 * y_pred[:, 0] * (1 - y_pred[:, 0]) + c1 * y_pred[:, 0] * y_pred[:, 1]
-        dy2_dt = k2 * y_pred[:, 1] * (1 - y_pred[:, 1]) + c2 * y_pred[:, 0] * y_pred[:, 1]
+        dy1_dt = (
+            k1 * y_pred[:, 0] * (1 - y_pred[:, 0]) + c1 * y_pred[:, 0] * y_pred[:, 1]
+        )
+        dy2_dt = (
+            k2 * y_pred[:, 1] * (1 - y_pred[:, 1]) + c2 * y_pred[:, 0] * y_pred[:, 1]
+        )
         return np.vstack([dy1_dt, dy2_dt]).T

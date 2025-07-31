@@ -1,10 +1,11 @@
 # src/innovate/models/mixture.py
 
 from innovate.base.base import DiffusionModel
-from typing import Sequence, Dict, List, Type
+from typing import Sequence, Dict, List
 from innovate.backend import current_backend as B
 from innovate.fitters.scipy_fitter import ScipyFitter
 import numpy as np
+
 
 class MixtureModel(DiffusionModel):
     """
@@ -26,10 +27,14 @@ class MixtureModel(DiffusionModel):
         The tolerance for convergence of the log-likelihood (default is 1e-6).
     """
 
-    def __init__(self, model_classes: Sequence[Type[DiffusionModel]], max_iter: int = 100, tol: float = 1e-6):
-        self.model_classes = model_classes
-        self.num_components = len(model_classes)
-        self.models = [cls() for cls in model_classes]
+    def __init__(
+        self,
+        models: Sequence[DiffusionModel],
+        max_iter: int = 100,
+        tol: float = 1e-6,
+    ):
+        self.models = models
+        self.num_components = len(models)
         self.weights = B.ones(self.num_components) / self.num_components
         self.max_iter = max_iter
         self.tol = tol
@@ -59,8 +64,7 @@ class MixtureModel(DiffusionModel):
         """
         t_arr = B.array(t)
         y_arr = B.array(y)
-        n_samples = len(y_arr)
-        
+
         # --- Initialization ---
         # Initialize model parameters by fitting each model to the whole dataset
         fitter = ScipyFitter()
@@ -73,8 +77,10 @@ class MixtureModel(DiffusionModel):
             # --- E-step: Calculate responsibilities ---
             component_preds = B.stack([B.array(m.predict(t_arr)) for m in self.models])
             # Add a small epsilon to avoid log(0)
-            weighted_preds = B.log(component_preds + 1e-9) + B.log(self.weights[:, None])
-            
+            weighted_preds = B.log(component_preds + 1e-9) + B.log(
+                self.weights[:, None]
+            )
+
             # Responsibilities (gamma_nk)
             log_responsibilities = weighted_preds - B.logsumexp(weighted_preds, axis=0)
             responsibilities = B.exp(log_responsibilities)
@@ -85,7 +91,7 @@ class MixtureModel(DiffusionModel):
 
             # Update model parameters with a weighted fit
             for k in range(self.num_components):
-                w = responsibilities[k, :] + 1e-9 # Add epsilon to avoid zero weights
+                w = responsibilities[k, :] + 1e-9  # Add epsilon to avoid zero weights
                 try:
                     fitter.fit(self.models[k], t_arr, y_arr, weights=w)
                 except RuntimeError:
@@ -110,16 +116,18 @@ class MixtureModel(DiffusionModel):
         for i, w in enumerate(self.weights):
             self._params[f"weight_{i}"] = w
 
-    def predict(self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> Sequence[float]:
+    def predict(
+        self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None
+    ) -> Sequence[float]:
         """
         Makes predictions using the fitted mixture model.
         """
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
-        
+
         t_arr = B.array(t)
         component_preds = B.stack([B.array(m.predict(t_arr)) for m in self.models])
-        
+
         # Weighted average of the component predictions
         y_pred = B.sum(component_preds * self.weights[:, None], axis=0)
         return y_pred
@@ -133,14 +141,23 @@ class MixtureModel(DiffusionModel):
         """Sets the model parameters and updates the internal models."""
         self._params = value
         # Update weights
-        self.weights = B.array([value.get(f"weight_{i}", 0) for i in range(self.num_components)])
+        self.weights = B.array(
+            [value.get(f"weight_{i}", 0) for i in range(self.num_components)]
+        )
         # Update submodel parameters
         for i, model in enumerate(self.models):
             prefix = f"model_{i}_"
-            model_params = {k[len(prefix)]:] v for k, v in value.items() if k.startswith(prefix)}
+            model_params = {
+                k[len(prefix) :]: v for k, v in value.items() if k.startswith(prefix)
+            }
             model.params_ = model_params
 
-    def score(self, t: Sequence[float], y: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> float:
+    def score(
+        self,
+        t: Sequence[float],
+        y: Sequence[float],
+        covariates: Dict[str, Sequence[float]] = None,
+    ) -> float:
         """
         Calculates the R-squared score for the model.
         """
@@ -151,3 +168,41 @@ class MixtureModel(DiffusionModel):
 
     def __repr__(self):
         return f"MixtureModel(models={self.model_classes}, weights={self.weights})"
+
+    def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
+        bounds = {}
+        for i, model in enumerate(self.models):
+            model_bounds = model.bounds(t, y)
+            for param_name, value in model_bounds.items():
+                bounds[f"model_{i}_{param_name}"] = value
+        for i in range(self.num_components):
+            bounds[f"weight_{i}"] = (0, 1)
+        return bounds
+
+    def differential_equation(self, y, t, p):
+        pass
+
+    def initial_guesses(
+        self, t: Sequence[float], y: Sequence[float]
+    ) -> Dict[str, float]:
+        guesses = {}
+        for i, model in enumerate(self.models):
+            model_guesses = model.initial_guesses(t, y)
+            for param_name, value in model_guesses.items():
+                guesses[f"model_{i}_{param_name}"] = value
+        for i in range(self.num_components):
+            guesses[f"weight_{i}"] = 1 / self.num_components
+        return guesses
+
+    def predict_adoption_rate(self, t: Sequence[float]) -> Sequence[float]:
+        if not self._params:
+            raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
+
+        t_arr = B.array(t)
+        component_rates = B.stack(
+            [B.array(m.predict_adoption_rate(t_arr)) for m in self.models]
+        )
+
+        # Weighted average of the component predictions
+        y_rate = B.sum(component_rates * self.weights[:, None], axis=0)
+        return y_rate

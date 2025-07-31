@@ -26,8 +26,8 @@ data_intervention = [agent.adopted for agent in model_intervention.agents]
 
 # Plot the results
 plt.figure(figsize=(10, 6))
-plt.hist(data_no_intervention, bins=2, label='No Intervention', alpha=0.5)
-plt.hist(data_intervention, bins=2, label='Intervention', alpha=0.5)
+plt.hist(data_no_intervention, bins=2, label="No Intervention", alpha=0.5)
+plt.hist(data_intervention, bins=2, label="Intervention", alpha=0.5)
 plt.title("Agent-Based Model of a Public Health Intervention")
 plt.xlabel("Adopted")
 plt.ylabel("Number of Agents")

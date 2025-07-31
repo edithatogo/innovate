@@ -1,8 +1,7 @@
 from innovate.base.base import DiffusionModel
-from ..base import DiffusionModel
 from typing import Sequence, Dict, List
 from innovate.backend import current_backend as B
-from innovate.backend import current_backend as B
+
 
 class HierarchicalModel(DiffusionModel):
     """Simple hierarchical wrapper to combine group-level models."""
@@ -23,7 +22,9 @@ class HierarchicalModel(DiffusionModel):
                 names.append(f"{g}_{p}")
         return names
 
-    def initial_guesses(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, float]:
+    def initial_guesses(
+        self, t: Sequence[float], y: Sequence[float]
+    ) -> Dict[str, float]:
         """Return starting values for global and group-level parameters."""
         guesses: Dict[str, float] = {}
         base = self.template.initial_guesses(t, y)
@@ -80,7 +81,9 @@ class HierarchicalModel(DiffusionModel):
         self._params = params
         return self
 
-    def predict(self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None):
+    def predict(
+        self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None
+    ):
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
@@ -104,14 +107,21 @@ class HierarchicalModel(DiffusionModel):
     def params_(self, value: Dict[str, float]):
         self._params = value
 
-    def predict_adoption_rate(self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None):
+    def predict_adoption_rate(
+        self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None
+    ):
         import numpy as np
+
         cumulative = self.predict(t, covariates)
         rates = np.diff(B.array(cumulative), n=1)
         return np.concatenate([[rates[0]], rates])
 
-
-    def score(self, t: Sequence[float], y: Sequence[float], covariates: Dict[str, Sequence[float]] = None) -> float:
+    def score(
+        self,
+        t: Sequence[float],
+        y: Sequence[float],
+        covariates: Dict[str, Sequence[float]] = None,
+    ) -> float:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t, covariates)
@@ -123,4 +133,3 @@ class HierarchicalModel(DiffusionModel):
     def differential_equation(t, y, params, covariates, t_eval):
         """HierarchicalModel has no direct differential equation."""
         raise NotImplementedError
-

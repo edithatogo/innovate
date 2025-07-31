@@ -1,15 +1,15 @@
-
 from mesa import Model
-from mesa.agent import AgentSet
 from mesa.space import MultiGrid
 from mesa.datacollection import DataCollector
 from .agent import InnovationAgent
+
 
 class CompetitiveDiffusionAgent(InnovationAgent):
     """
     An agent in a competitive diffusion model.
     The agent can adopt one of several competing innovations.
     """
+
     def __init__(self, unique_id, model, num_innovations):
         super().__init__(unique_id, model)
         self.adopted_innovation = -1  # -1 means no adoption, 0, 1, ... for innovations
@@ -23,12 +23,16 @@ class CompetitiveDiffusionAgent(InnovationAgent):
             return  # Already adopted
 
         # Get neighbors
-        neighbors = self.model.grid.get_neighbors(self.pos, moore=True, include_center=False)
+        neighbors = self.model.grid.get_neighbors(
+            self.pos, moore=True, include_center=False
+        )
         if not neighbors:
             return
 
         # Check neighbors' adoptions
-        adoptions = [n.adopted_innovation for n in neighbors if n.adopted_innovation != -1]
+        adoptions = [
+            n.adopted_innovation for n in neighbors if n.adopted_innovation != -1
+        ]
         if not adoptions:
             return
 
@@ -42,6 +46,7 @@ class CompetitiveDiffusionModel(Model):
     """
     A model for competitive diffusion of multiple innovations.
     """
+
     def __init__(self, num_agents, width, height, num_innovations):
         super().__init__()
         self.num_agents = num_agents
@@ -51,7 +56,9 @@ class CompetitiveDiffusionModel(Model):
 
         # Create agents
         for i in range(self.num_agents):
-            agent = CompetitiveDiffusionAgent(unique_id=i, model=self, num_innovations=num_innovations)
+            agent = CompetitiveDiffusionAgent(
+                unique_id=i, model=self, num_innovations=num_innovations
+            )
             x = self.random.randrange(self.grid.width)
             y = self.random.randrange(self.grid.height)
             self.grid.place_agent(agent, (x, y))
@@ -69,7 +76,9 @@ class CompetitiveDiffusionModel(Model):
                     counts[a.adopted_innovation] += 1
             return counts
 
-        self.datacollector = DataCollector(model_reporters={"AdoptionCounts": adoption_counts})
+        self.datacollector = DataCollector(
+            model_reporters={"AdoptionCounts": adoption_counts}
+        )
 
     def step(self):
         """

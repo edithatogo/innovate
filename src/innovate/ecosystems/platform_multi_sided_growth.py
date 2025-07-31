@@ -1,5 +1,6 @@
 from innovate.base.base import DiffusionModel
 
+
 class PlatformMultiSidedGrowthModel(DiffusionModel):
     def __init__(self):
         self._params = {}

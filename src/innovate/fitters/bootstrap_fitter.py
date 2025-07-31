@@ -2,6 +2,7 @@ from typing import Sequence, Dict, List, Any
 import numpy as np
 from innovate.base.base import DiffusionModel
 
+
 class BootstrapFitter:
     """A fitter class that uses bootstrapping to estimate parameter uncertainty."""
 
@@ -10,7 +11,9 @@ class BootstrapFitter:
         self.n_bootstraps = n_bootstraps
         self.bootstrapped_params: List[Dict[str, float]] = []
 
-    def fit(self, model: DiffusionModel, t: Sequence[float], y: Sequence[float], **kwargs) -> None:
+    def fit(
+        self, model: DiffusionModel, t: Sequence[float], y: Sequence[float], **kwargs
+    ) -> None:
         t_arr = np.array(t)
         y_arr = np.array(y)
         n_samples = len(t_arr)
@@ -24,7 +27,7 @@ class BootstrapFitter:
             # Create a new model instance for each bootstrap iteration
             # This is important to avoid parameter contamination between iterations
             boot_model = type(model)()
-            
+
             try:
                 boot_model.fit(self.fitter, t_resampled, y_resampled, **kwargs)
                 self.bootstrapped_params.append(boot_model.params_)
@@ -47,7 +50,9 @@ class BootstrapFitter:
                 estimates[name].append(value)
         return estimates
 
-    def get_confidence_intervals(self, alpha: float = 0.05) -> Dict[str, Dict[str, float]]:
+    def get_confidence_intervals(
+        self, alpha: float = 0.05
+    ) -> Dict[str, Dict[str, float]]:
         """Returns confidence intervals for each parameter."""
         estimates = self.get_parameter_estimates()
         cis = {}
