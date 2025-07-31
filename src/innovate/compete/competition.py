@@ -104,7 +104,7 @@ class MultiProductDiffusionModel(DiffusionModel):
         p, Q, m = params
         y_arr = B.array(y)
         adoption_share = B.where(
-            self.m.flatten() != 0, y_arr / self.m.flatten(), B.zeros_like(y_arr)
+            m.flatten() != 0, y_arr / m.flatten(), B.zeros_like(y_arr)
         )
         adoption_share = B.where(adoption_share > 1.0, 1.0, adoption_share)
         imitation = B.matmul(Q, adoption_share)

@@ -3,7 +3,7 @@
 from innovate.base.base import DiffusionModel
 from typing import Sequence, Dict, List
 import numpy as np
-import pytensor.tensor as pt
+
 from innovate.backend import current_backend as B
 
 
