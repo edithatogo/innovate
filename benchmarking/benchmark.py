@@ -150,8 +150,8 @@ def main():
     df = pd.DataFrame(results)
     print("\n--- Benchmark Results ---")
     print(df)
-    df.to_csv("benchmark_results.txt", index=False)
-    print("\nResults saved to benchmark_results.txt")
+df.to_csv("benchmark_results.csv", index=False)
+print("\nResults saved to benchmark_results.csv")
 
 
 if __name__ == "__main__":
