@@ -231,33 +231,98 @@ plt.tight_layout()
 plt.savefig(os.path.join(SAVE_DIR, "multi_product_diffusion.png"))
 plt.close()
 
-# --- 10. Adoption Curve ---
-print("Generating Adoption Curve plot...")
+# --- 10. Adoption Curve with Categories ---
+print("Generating Adoption Curve plot with categories...")
 # Use the Bass model results from before
 adoption_rate = np.diff(y_bass, prepend=0)
 
-fig, ax1 = plt.subplots(figsize=(8, 5))
+# Find the peak adoption time (mean) and standard deviation
+peak_time_idx = np.argmax(adoption_rate)
+peak_time = t[peak_time_idx]
 
-# Plot Cumulative Adopters
-ax1.plot(t, y_bass, "b-", label="Cumulative Adopters")
+# Approximate standard deviation assuming the curve is roughly normal
+cumulative_adoption = y_bass / m
+t_16 = t[np.argmin(np.abs(cumulative_adoption - 0.16))]
+t_84 = t[np.argmin(np.abs(cumulative_adoption - 0.84))]
+std_dev_approx = (t_84 - t_16) / 2
+
+# Define category boundaries
+innovators_end = peak_time - 2 * std_dev_approx
+early_adopters_end = peak_time - 1 * std_dev_approx
+early_majority_end = peak_time
+late_majority_end = peak_time + 1 * std_dev_approx
+
+fig, ax1 = plt.subplots(figsize=(10, 6))
+
+# Plot Cumulative Adopters on the primary y-axis
+color = "tab:blue"
 ax1.set_xlabel("Time")
-ax1.set_ylabel("Cumulative Adopters", color="b")
-ax1.tick_params("y", colors="b")
-ax1.grid(True, linestyle="--", alpha=0.6)
+ax1.set_ylabel("Cumulative Adopters", color=color)
+ax1.plot(t, y_bass, color=color, linestyle="--", label="Cumulative Adopters")
+ax1.tick_params(axis="y", labelcolor=color)
+ax1.grid(True, linestyle="--", alpha=0.3)
 
-# Plot Adoption Rate on a secondary y-axis
+# Create a secondary y-axis for the adoption rate
 ax2 = ax1.twinx()
-ax2.plot(t, adoption_rate, "r-", label="Adoption Rate")
-ax2.set_ylabel("Adopters per Period", color="r")
-ax2.tick_params("y", colors="r")
+color = "tab:red"
+ax2.set_ylabel("Adopters per Period", color=color)
+ax2.plot(t, adoption_rate, color=color, label="Adoption Rate")
+ax2.tick_params(axis="y", labelcolor=color)
 
-# Add a title and legend
-plt.title("Adoption Curve from Bass Model")
+# Shade the adopter categories on the secondary axis
+ax2.fill_between(
+    t,
+    adoption_rate,
+    where=(t <= innovators_end),
+    color="skyblue",
+    alpha=0.6,
+    label="Innovators (2.5%)",
+)
+ax2.fill_between(
+    t,
+    adoption_rate,
+    where=(t > innovators_end) & (t <= early_adopters_end),
+    color="lightgreen",
+    alpha=0.6,
+    label="Early Adopters (13.5%)",
+)
+ax2.fill_between(
+    t,
+    adoption_rate,
+    where=(t > early_adopters_end) & (t <= early_majority_end),
+    color="gold",
+    alpha=0.6,
+    label="Early Majority (34%)",
+)
+ax2.fill_between(
+    t,
+    adoption_rate,
+    where=(t > early_majority_end) & (t <= late_majority_end),
+    color="lightcoral",
+    alpha=0.6,
+    label="Late Majority (34%)",
+)
+ax2.fill_between(
+    t,
+    adoption_rate,
+    where=(t > late_majority_end),
+    color="plum",
+    alpha=0.6,
+    label="Laggards (16%)",
+)
+
+# Add a title and combined legend
+plt.title("Adoption Curve with Adopter Categories")
 fig.tight_layout()
-# Combine legends
+
+# Combine legends from both axes
 lines, labels = ax1.get_legend_handles_labels()
 lines2, labels2 = ax2.get_legend_handles_labels()
-ax2.legend(lines + lines2, labels + labels2, loc="upper left")
+# Use a dictionary to remove duplicate labels from the fill_between plots
+from collections import OrderedDict
+unique_labels = OrderedDict(zip(labels2, lines2))
+ax2.legend(lines + list(unique_labels.values()), labels + list(unique_labels.keys()), loc="upper left")
+
 plt.savefig(os.path.join(SAVE_DIR, "adoption_curve.png"))
 plt.close()
 
