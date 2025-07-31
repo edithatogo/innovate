@@ -44,5 +44,5 @@ testpaths = [
 ]
 
 [project.optional-dependencies]
-jax = ["jax>=0.4.20", "jaxlib>=0.4.20", "numpyro>=0.13.2", "scipy>=1.9", "numpy<2", "diffrax", "jaxopt"]
+jax = ["jax>=0.4.20", "jaxlib>=0.4.20", "numpyro>=0.13.2", "scipy>=1.9", "numpy<3", "diffrax", "jaxopt"]
 dev = ["pytest", "ruff", "pre-commit", "mypy", "bandit"]
