@@ -1,7 +1,7 @@
 from innovate.base.base import DiffusionModel
 from innovate import backend
 from innovate.dynamics.growth.symmetric import SymmetricGrowth
-from typing import Sequence, Dict
+from typing import Sequence, Dict, Optional
 import numpy as np
 
 
@@ -11,7 +11,11 @@ class LogisticModel(DiffusionModel):
     This is a wrapper around the SymmetricGrowth dynamics model.
     """
 
-    def __init__(self, covariates: Sequence[str] = None, t_event: float = None):
+    def __init__(
+        self,
+        covariates: Optional[Sequence[str]] = None,
+        t_event: Optional[float] = None,
+    ):
         """
         Initialize a LogisticModel with optional covariates and an internal SymmetricGrowth dynamics model.
 
@@ -92,7 +96,9 @@ class LogisticModel(DiffusionModel):
         return bounds
 
     def predict(
-        self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None
+        self,
+        t: Sequence[float],
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> Sequence[float]:
         """
         Predicts the cumulative values of the logistic diffusion process at specified time points.
@@ -154,7 +160,7 @@ class LogisticModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-        covariates: Dict[str, Sequence[float]] = None,
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> float:
         """
         Compute the coefficient of determination (R²) between observed values and model predictions.
@@ -190,7 +196,9 @@ class LogisticModel(DiffusionModel):
         self._params = value
 
     def predict_adoption_rate(
-        self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None
+        self,
+        t: Sequence[float],
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> Sequence[float]:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")

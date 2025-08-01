@@ -1,7 +1,7 @@
 """
 Tests for the BlackJaxFitter.
 """
-from scipy import stats
+from jax.scipy import stats
 import jax.numpy as jnp
 import pytest
 
@@ -19,7 +19,8 @@ def test_blackjax_fitter():
 
     # Generate some synthetic data
     t = jnp.arange(20)
-    y = model.predict(t, p=0.03, q=0.38, m=1000)
+    model.params_ = {"p": 0.03, "q": 0.38, "m": 1000}
+    y = model.predict(t)
 
     def log_probability_fn(params):
         p = params["p"]
@@ -34,7 +35,8 @@ def test_blackjax_fitter():
         )
 
         # Likelihood
-        y_pred = model.predict(t, **params)
+        model.params_ = params
+        y_pred = model.predict(t)
         log_likelihood = jnp.sum(stats.norm.logpdf(y, y_pred, 1.0))
 
         return log_prior + log_likelihood

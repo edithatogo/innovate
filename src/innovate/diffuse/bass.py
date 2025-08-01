@@ -110,27 +110,23 @@ class BassModel(DiffusionModel):
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
+        from innovate.backends.jax_backend import JaxBackend
+
+        backend.current_backend = JaxBackend()
+
         y0 = 1e-6
 
         # This is a simplification. The predict method should use the growth model's
         # predict_cumulative method, which will require some refactoring of how parameters
         # are handled. For now, we will leave the old implementation.
-        from scipy.integrate import solve_ivp
 
         params = [self._params[name] for name in self.param_names]
 
-        def ode_func(t, y):
-            return self.differential_equation(t, y, params, covariates, t)
+        def ode_func(t, y, args):
+            return self.differential_equation(t, y, args, covariates, t)
 
-        sol = solve_ivp(
-            ode_func,
-            (t[0], t[-1]),
-            [y0],
-            t_eval=t,
-            method="LSODA",
-            dense_output=True,
-        )
-        return sol.sol(t).flatten()
+        sol = backend.current_backend.solve_ode(ode_func, y0, t, tuple(params))
+        return sol.flatten()
 
     def differential_equation(self, t, y, params, covariates, t_eval):
         """

@@ -1,31 +1,30 @@
-"""
-This script generates a gallery of example plots to be used in the README.md.
-"""
+"""Generate a gallery of example plots to be used in the README.md."""
 
-import numpy as np
-import matplotlib
-
-matplotlib.use("Agg")  # Use non-interactive backend
-import matplotlib.pyplot as plt
-import os
 from collections import OrderedDict
+from pathlib import Path
 
-from innovate.diffuse.bass import BassModel
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
+
 from innovate.compete.lotka_volterra import LotkaVolterraModel
-from innovate.hype.hype_cycle import HypeCycleModel
-from innovate.reduce.analysis import identify_reducing_series, smooth_series
+from innovate.compete.multi_product import MultiProductDiffusionModel
+from innovate.diffuse.bass import BassModel
 from innovate.diffuse.gompertz import GompertzModel
 from innovate.diffuse.logistic import LogisticModel
+from innovate.hype.hype_cycle import HypeCycleModel
+from innovate.reduce.analysis import identify_reducing_series, smooth_series
 from innovate.substitute.fisher_pry import FisherPryModel
 from innovate.substitute.norton_bass import NortonBassModel
-from innovate.compete.multi_product import MultiProductDiffusionModel
+
+mpl.use("Agg")  # Use non-interactive backend
+
 
 # --- Configuration ---
-SAVE_DIR = "docs/images"
-os.makedirs(SAVE_DIR, exist_ok=True)
+SAVE_DIR = Path("docs/images")
+SAVE_DIR.mkdir(exist_ok=True)
 
 # --- 1. Bass Diffusion Curve ---
-print("Generating Bass Diffusion plot...")
 bass_model = BassModel()
 t = np.linspace(0, 20, 100)
 p, q, m = 0.03, 0.38, 1000
@@ -40,11 +39,10 @@ plt.ylabel("Cumulative Adopters")
 plt.grid(True, linestyle="--", alpha=0.6)
 plt.legend()
 plt.tight_layout()
-plt.savefig(os.path.join(SAVE_DIR, "bass_diffusion.png"))
+plt.savefig(SAVE_DIR / "bass_diffusion.png")
 plt.close()
 
 # --- 2. Lotka-Volterra Competition ---
-print("Generating Lotka-Volterra Competition plot...")
 lv_model = LotkaVolterraModel()
 lv_model.params_ = {"alpha1": 0.6, "beta1": 0.1, "alpha2": 0.4, "beta2": 0.1}
 t_lv = np.arange(0, 40, 1)
@@ -60,11 +58,10 @@ plt.ylabel("Market Share")
 plt.grid(True, linestyle="--", alpha=0.6)
 plt.legend()
 plt.tight_layout()
-plt.savefig(os.path.join(SAVE_DIR, "lotka_volterra_competition.png"))
+plt.savefig(SAVE_DIR / "lotka_volterra_competition.png")
 plt.close()
 
 # --- 3. Hype Cycle ---
-print("Generating Hype Cycle plot...")
 hype_model = HypeCycleModel()
 # These parameters are for demonstration and create a classic hype shape
 hype_model.params_ = {
@@ -88,16 +85,16 @@ plt.ylabel("Expectations / Visibility")
 plt.grid(True, linestyle="--", alpha=0.6)
 plt.ylim(0, 1.2)
 plt.tight_layout()
-plt.savefig(os.path.join(SAVE_DIR, "hype_cycle.png"))
+plt.savefig(SAVE_DIR / "hype_cycle.png")
 plt.close()
 
 # --- 4. Reduction Analysis ---
-print("Generating Reduction Analysis plot...")
 # Create a synthetic series that rises and then falls
 t_reduce = np.arange(50)
+rng = np.random.default_rng(42)
 reducing_series = np.concatenate(
-    [np.linspace(10, 80, 25), np.linspace(80, 30, 25)]
-) + np.random.normal(0, 5, 50)
+    [np.linspace(10, 80, 25), np.linspace(80, 30, 25)],
+) + rng.normal(0, 5, 50)
 
 # Run the analysis
 analysis_df = identify_reducing_series([reducing_series])
@@ -121,11 +118,10 @@ plt.ylabel("Utilisation")
 plt.grid(True, linestyle="--", alpha=0.6)
 plt.legend()
 plt.tight_layout()
-plt.savefig(os.path.join(SAVE_DIR, "reduction_analysis.png"))
+plt.savefig(SAVE_DIR / "reduction_analysis.png")
 plt.close()
 
 # --- 5. Gompertz Diffusion Curve ---
-print("Generating Gompertz Diffusion plot...")
 gompertz_model = GompertzModel()
 gompertz_model.params_ = {"a": 1000, "b": 0.1, "c": 0.1}
 t_gompertz = np.linspace(0, 50, 100)
@@ -139,11 +135,10 @@ plt.ylabel("Cumulative Adopters")
 plt.grid(True, linestyle="--", alpha=0.6)
 plt.legend()
 plt.tight_layout()
-plt.savefig(os.path.join(SAVE_DIR, "gompertz_diffusion.png"))
+plt.savefig(SAVE_DIR / "gompertz_diffusion.png")
 plt.close()
 
 # --- 6. Logistic Diffusion Curve ---
-print("Generating Logistic Diffusion plot...")
 logistic_model = LogisticModel()
 logistic_model.params_ = {"L": 1000, "k": 0.2, "x0": 25}
 t_logistic = np.linspace(0, 50, 100)
@@ -157,11 +152,10 @@ plt.ylabel("Cumulative Adopters")
 plt.grid(True, linestyle="--", alpha=0.6)
 plt.legend()
 plt.tight_layout()
-plt.savefig(os.path.join(SAVE_DIR, "logistic_diffusion.png"))
+plt.savefig(SAVE_DIR / "logistic_diffusion.png")
 plt.close()
 
 # --- 7. Fisher-Pry Substitution ---
-print("Generating Fisher-Pry Substitution plot...")
 fisher_pry_model = FisherPryModel()
 fisher_pry_model.params_ = {"alpha": 0.1, "t0": 0}
 t_fisher_pry = np.linspace(-20, 20, 100)
@@ -175,11 +169,10 @@ plt.ylabel("Market Share of New Technology")
 plt.grid(True, linestyle="--", alpha=0.6)
 plt.legend()
 plt.tight_layout()
-plt.savefig(os.path.join(SAVE_DIR, "fisher_pry_substitution.png"))
+plt.savefig(SAVE_DIR / "fisher_pry_substitution.png")
 plt.close()
 
 # --- 8. Norton-Bass Substitution ---
-print("Generating Norton-Bass Substitution plot...")
 norton_bass_model = NortonBassModel(n_generations=2)
 norton_bass_model.params_ = {
     "p1": 0.03,
@@ -201,11 +194,10 @@ plt.ylabel("Cumulative Adopters")
 plt.grid(True, linestyle="--", alpha=0.6)
 plt.legend()
 plt.tight_layout()
-plt.savefig(os.path.join(SAVE_DIR, "norton_bass_substitution.png"))
+plt.savefig(SAVE_DIR / "norton_bass_substitution.png")
 plt.close()
 
 # --- 9. Multi-Product Diffusion ---
-print("Generating Multi-Product Diffusion plot...")
 multi_product_model = MultiProductDiffusionModel(n_products=2)
 multi_product_model.params_ = {
     "p1": 0.03,
@@ -229,11 +221,10 @@ plt.ylabel("Cumulative Adopters")
 plt.grid(True, linestyle="--", alpha=0.6)
 plt.legend()
 plt.tight_layout()
-plt.savefig(os.path.join(SAVE_DIR, "multi_product_diffusion.png"))
+plt.savefig(SAVE_DIR / "multi_product_diffusion.png")
 plt.close()
 
 # --- 10. Adoption Curve with Categories ---
-print("Generating Adoption Curve plot with categories...")
 # Use the Bass model results from before
 adoption_rate = np.diff(y_bass, prepend=0)
 
@@ -327,8 +318,5 @@ ax2.legend(
     loc="upper left",
 )
 
-plt.savefig(os.path.join(SAVE_DIR, "adoption_curve.png"))
+plt.savefig(SAVE_DIR / "adoption_curve.png")
 plt.close()
-
-
-print("All plots generated successfully.")

@@ -7,7 +7,6 @@ import arviz as az
 import jax
 import jax.numpy as jnp
 import blackjax
-from innovate.base.base import DiffusionModel
 
 
 class BlackJaxFitter:

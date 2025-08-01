@@ -1,13 +1,16 @@
+"""Examples of agent-based models."""
 import matplotlib.pyplot as plt
+import pandas as pd
+
 from innovate.abm import (
     CompetitiveDiffusionModel,
-    SentimentHypeModel,
     DisruptiveInnovationModel,
+    SentimentHypeModel,
 )
 
 
-def plot_results(df, title):
-    """Helper function to plot model results."""
+def plot_results(df: pd.DataFrame, title: str) -> None:
+    """Plot model results."""
     df.plot()
     plt.title(title)
     plt.xlabel("Step")
@@ -16,7 +19,6 @@ def plot_results(df, title):
 
 
 # 1. Competitive Diffusion Example
-print("Running Competitive Diffusion Model...")
 competitive_model = CompetitiveDiffusionModel(
     num_agents=100,
     width=10,
@@ -27,7 +29,6 @@ competitive_results = competitive_model.run_model(n_steps=50)
 plot_results(competitive_results, "Competitive Diffusion")
 
 # 2. Sentiment-Driven Hype Cycle Example
-print("Running Sentiment-Driven Hype Cycle Model...")
 sentiment_model = SentimentHypeModel(
     num_agents=100,
     width=10,
@@ -39,7 +40,6 @@ sentiment_results = sentiment_model.run_model(n_steps=50)
 plot_results(sentiment_results, "Sentiment-Driven Hype Cycle")
 
 # 3. Disruptive Innovation Example
-print("Running Disruptive Innovation Model...")
 disruptive_model = DisruptiveInnovationModel(
     num_agents=100,
     width=10,

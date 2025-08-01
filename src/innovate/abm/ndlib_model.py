@@ -3,6 +3,7 @@ import ndlib.models.epidemics as ep
 import ndlib.models.ModelConfig as mc
 from mesa import Model
 from .agent import InnovationAgent
+from typing import Optional
 
 
 class NDlibModel(Model):
@@ -10,7 +11,9 @@ class NDlibModel(Model):
     An innovation diffusion model using ndlib for network-based simulations.
     """
 
-    def __init__(self, num_agents, graph: nx.Graph = None, model_name: str = "ic"):
+    def __init__(
+        self, num_agents, graph: Optional[nx.Graph] = None, model_name: str = "ic"
+    ):
         """
         Initialize the NDlibModel with a specified number of agents, network graph, and diffusion model type.
 

@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from typing import Sequence, Tuple, Union
+from typing import Sequence, Tuple, Union, Optional
 from statsmodels.tsa.seasonal import STL
 
 
@@ -25,7 +25,7 @@ def aggregate_time_series(
 
 
 def apply_stl_decomposition(
-    data: pd.Series, period: int = None, robust: bool = True
+    data: pd.Series, period: Optional[int] = None, robust: bool = True
 ) -> Tuple[pd.Series, pd.Series, pd.Series]:
     """Applies Seasonal-Trend decomposition using Loess (STL) to a time series.
 

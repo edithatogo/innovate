@@ -1,7 +1,7 @@
 # src/innovate/substitute/composite.py
 
 from innovate.base.base import DiffusionModel
-from typing import Sequence, Dict, List
+from typing import Sequence, Dict, List, Optional
 import numpy as np
 
 from innovate.backend import current_backend as B
@@ -14,7 +14,9 @@ class CompositeDiffusionModel(DiffusionModel):
     that defines how the adoption of one product affects the adoption of others.
     """
 
-    def __init__(self, models: List[DiffusionModel], alpha: np.ndarray = None):
+    def __init__(
+        self, models: List[DiffusionModel], alpha: Optional[np.ndarray] = None
+    ):
         """
         Initializes the CompositeDiffusionModel.
         Parameters:

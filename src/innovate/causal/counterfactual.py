@@ -1,5 +1,6 @@
-from typing import Sequence, Dict, Any
+from typing import Sequence, Dict, Any, Optional
 from ..base import DiffusionModel
+import numpy as np
 
 
 class CounterfactualAnalysis:
@@ -7,29 +8,31 @@ class CounterfactualAnalysis:
     A class for conducting counterfactual analysis on fitted diffusion models.
     """
 
-    def __init__(self, model: DiffusionModel):
+    def __init__(self, model: "DiffusionModel"):
         if not model.params_:
             raise ValueError(
                 "The model must be fitted before conducting counterfactual analysis."
             )
         self.model = model
-        self.baseline_forecast = None
-        self.counterfactual_forecasts = {}
+        self.baseline_forecast: Optional[Sequence[float]] = None
+        self.counterfactual_forecasts: Dict[str, Sequence[float]] = {}
 
     def run_baseline(
-        self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None
+        self,
+        t: Sequence[float],
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ):
         """
         Generate the baseline forecast using the original fitted model.
         """
-        self.baseline_forecast = self.model.predict(t, covariates)
+        self.baseline_forecast = self.model.predict(t)
 
     def run_counterfactual(
         self,
         scenario_name: str,
         t: Sequence[float],
-        counterfactual_params: Dict[str, Any] = None,
-        counterfactual_covariates: Dict[str, Sequence[float]] = None,
+        counterfactual_params: Optional[Dict[str, Any]] = None,
+        counterfactual_covariates: Optional[Dict[str, Sequence[float]]] = None,
     ):
         """
         Generate a forecast for a given counterfactual scenario.
@@ -47,15 +50,8 @@ class CounterfactualAnalysis:
                 else:
                     raise ValueError(f"Parameter '{param}' not found in the model.")
 
-        # Use counterfactual covariates if provided, otherwise use original
-        covariates_to_use = (
-            counterfactual_covariates
-            if counterfactual_covariates is not None
-            else self.model.covariates
-        )
-
         # Generate the counterfactual forecast
-        forecast = counterfactual_model.predict(t, covariates_to_use)
+        forecast = counterfactual_model.predict(t)
         self.counterfactual_forecasts[scenario_name] = forecast
 
     def compare_scenarios(self, scenario_name: str):
@@ -69,8 +65,8 @@ class CounterfactualAnalysis:
         if scenario_name not in self.counterfactual_forecasts:
             raise ValueError(f"Counterfactual scenario '{scenario_name}' not found.")
 
-        baseline = self.baseline_forecast
-        counterfactual = self.counterfactual_forecasts[scenario_name]
+        baseline = np.array(self.baseline_forecast)
+        counterfactual = np.array(self.counterfactual_forecasts[scenario_name])
 
         # Calculate the difference and percentage difference
         difference = counterfactual - baseline

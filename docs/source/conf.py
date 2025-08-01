@@ -1,18 +1,16 @@
-import os
+"""Configuration file for the Sphinx documentation builder."""
 import sys
+from pathlib import Path
 
-sys.path.insert(0, os.path.abspath("../../src"))
+# sys.path.insert(0, os.path.abspath("../../src"))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-# Configuration file for the Sphinx documentation builder.
-#
-# For the full list of built-in configuration values, see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "innovate"
-copyright = "2025, Doughnut"
+copyright_notice = "2025, Doughnut"
 author = "Doughnut"
 
 # -- General configuration ---------------------------------------------------

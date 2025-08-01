@@ -1,7 +1,7 @@
 from ..base import DiffusionModel
 from innovate.backend import current_backend as B
 import numpy as np
-from typing import Sequence, Dict
+from typing import Sequence, Dict, Optional
 
 
 class NortonBassModel(DiffusionModel):
@@ -9,7 +9,9 @@ class NortonBassModel(DiffusionModel):
     Norton-Bass Model for successive generations of technologies.
     """
 
-    def __init__(self, n_generations: int = 1, covariates: Sequence[str] = None):
+    def __init__(
+        self, n_generations: int = 1, covariates: Optional[Sequence[str]] = None
+    ):
         if n_generations < 1:
             raise ValueError("Number of generations must be at least 1.")
         self.n_generations = n_generations
@@ -70,7 +72,9 @@ class NortonBassModel(DiffusionModel):
         self._params = value
 
     def predict(
-        self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None
+        self,
+        t: Sequence[float],
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> Sequence[float]:
         from scipy.integrate import solve_ivp
 
@@ -142,7 +146,7 @@ class NortonBassModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-        covariates: Dict[str, Sequence[float]] = None,
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> float:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
@@ -158,7 +162,9 @@ class NortonBassModel(DiffusionModel):
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
     def predict_adoption_rate(
-        self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None
+        self,
+        t: Sequence[float],
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> Sequence[float]:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
