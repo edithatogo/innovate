@@ -2,8 +2,7 @@ from .base import GrowthCurve
 
 
 class SymmetricGrowth(GrowthCurve):
-    """
-    Models symmetric S-shaped growth where the rate of adoption is proportional
+    """Models symmetric S-shaped growth where the rate of adoption is proportional
     to both the number of adopters and the remaining potential adopters. The
     inflection point is at 50% of the market potential. This is often referred
     to as the Logistic growth model.
@@ -13,18 +12,19 @@ class SymmetricGrowth(GrowthCurve):
     """
 
     def compute_growth_rate(self, current_adopters, total_potential, **params):
-        """
-        Calculates the instantaneous growth rate.
+        """Calculates the instantaneous growth rate.
 
         Equation: dN/dt = r * N * (1 - N/K)
 
         Calculate the instantaneous growth rate for symmetric (logistic) growth.
 
-        Parameters:
+        Parameters
+        ----------
                 current_adopters (float): The current number of adopters.
                 total_potential (float): The total potential number of adopters.
 
-        Returns:
+        Returns
+        -------
                 float: The rate of change in adopters at the current state, or 0 if total potential is zero or negative.
         """
         r = params.get("growth_rate", 0.1)
@@ -33,19 +33,24 @@ class SymmetricGrowth(GrowthCurve):
         return r * N * (1 - N / K) if K > 0 else 0
 
     def predict_cumulative(
-        self, time_points, initial_adopters, total_potential, **params
+        self,
+        time_points,
+        initial_adopters,
+        total_potential,
+        **params,
     ):
-        """
-        Predicts cumulative adopters over time.
+        """Predicts cumulative adopters over time.
 
         Predicts the cumulative number of adopters at specified time points using the logistic growth model.
 
-        Parameters:
+        Parameters
+        ----------
             time_points (array-like): Sequence of time points at which to predict cumulative adopters.
             initial_adopters (float): Initial number of adopters at the start of the prediction period.
             total_potential (float): Total potential number of adopters (carrying capacity).
 
-        Returns:
+        Returns
+        -------
             numpy.ndarray: Array of predicted cumulative adopters corresponding to each time point.
         """
         from scipy.integrate import solve_ivp
@@ -66,8 +71,7 @@ class SymmetricGrowth(GrowthCurve):
         return sol.y.flatten()
 
     def get_parameters_schema(self):
-        """
-        Returns the schema for the model's parameters.
+        """Returns the schema for the model's parameters.
 
         Return a dictionary describing the schema for the model's parameters, including type, default value, and description for each parameter.
         """
@@ -76,5 +80,5 @@ class SymmetricGrowth(GrowthCurve):
                 "type": "float",
                 "default": 0.1,
                 "description": "The intrinsic growth rate.",
-            }
+            },
         }

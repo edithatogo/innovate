@@ -2,8 +2,7 @@ from .base import GrowthCurve
 
 
 class DualInfluenceGrowth(GrowthCurve):
-    """
-    Models growth driven by two distinct forces: external influence (innovators)
+    """Models growth driven by two distinct forces: external influence (innovators)
     and internal influence (imitators). The shape of the S-curve can be symmetric
     or asymmetric depending on the relative strength of these two forces. This is
     often referred to as the Bass model.
@@ -14,8 +13,7 @@ class DualInfluenceGrowth(GrowthCurve):
     """
 
     def compute_growth_rate(self, current_adopters, total_potential, **params):
-        """
-        Calculates the instantaneous growth rate.
+        """Calculates the instantaneous growth rate.
 
         Equation: dN/dt = (p + q * (N/M)) * (M - N)
 
@@ -27,11 +25,13 @@ class DualInfluenceGrowth(GrowthCurve):
         - N: current number of adopters
         - M: total potential adopters
 
-        Parameters:
+        Parameters
+        ----------
                 current_adopters (float): Current number of adopters.
                 total_potential (float): Total potential number of adopters.
 
-        Returns:
+        Returns
+        -------
                 float: The instantaneous growth rate. Returns 0 if total potential is not positive.
         """
         p = params.get("innovation_coeff", 0.001)
@@ -41,19 +41,24 @@ class DualInfluenceGrowth(GrowthCurve):
         return (p + q * (N / M)) * (M - N) if M > 0 else 0
 
     def predict_cumulative(
-        self, time_points, initial_adopters, total_potential, **params
+        self,
+        time_points,
+        initial_adopters,
+        total_potential,
+        **params,
     ):
-        """
-        Predicts cumulative adopters over time.
+        """Predicts cumulative adopters over time.
 
         Predicts the cumulative number of adopters at specified time points using the Bass diffusion model.
 
-        Parameters:
+        Parameters
+        ----------
             time_points (array-like): Sequence of time points at which to predict cumulative adoption.
             initial_adopters (float): Number of adopters at the initial time point.
             total_potential (float): Total potential number of adopters.
 
-        Returns:
+        Returns
+        -------
             numpy.ndarray: Flattened array of cumulative adopters at each specified time point.
         """
         from scipy.integrate import solve_ivp
@@ -75,12 +80,12 @@ class DualInfluenceGrowth(GrowthCurve):
         return sol.y.flatten()
 
     def get_parameters_schema(self):
-        """
-        Returns the schema for the model's parameters.
+        """Returns the schema for the model's parameters.
 
         Return a schema describing the model parameters for innovation and imitation coefficients.
 
-        Returns:
+        Returns
+        -------
             dict: A dictionary specifying the type, default value, and description for each model parameter.
         """
         return {

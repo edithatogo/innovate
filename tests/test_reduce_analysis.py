@@ -1,8 +1,8 @@
-"""
-Tests for the reduction analysis module.
+"""Tests for the reduction analysis module.
 """
 
 import unittest
+
 import numpy as np
 import pandas as pd
 from innovate.reduce.analysis import identify_reducing_series
@@ -10,9 +10,7 @@ from innovate.reduce.analysis import identify_reducing_series
 
 class TestReduceAnalysis(unittest.TestCase):
     def test_identify_reducing_series_smoke_test(self):
-        """
-        A simple smoke test to ensure the main function runs without errors.
-        """
+        """A simple smoke test to ensure the main function runs without errors."""
         # A series that clearly rises and then falls
         reducing_series = np.array([1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1])
         # A series that only rises

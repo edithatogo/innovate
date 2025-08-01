@@ -1,5 +1,6 @@
-import numpy as np
 from typing import Sequence
+
+import numpy as np
 
 
 def calculate_mse(y_true: Sequence[float], y_pred: Sequence[float]) -> float:
@@ -28,8 +29,8 @@ def calculate_mape(y_true: Sequence[float], y_pred: Sequence[float]) -> float:
         np.mean(
             np.abs(
                 (y_true_arr[non_zero_mask] - y_pred_arr[non_zero_mask])
-                / y_true_arr[non_zero_mask]
-            )
+                / y_true_arr[non_zero_mask],
+            ),
         )
         * 100
     )
@@ -70,8 +71,7 @@ def calculate_rss(y_true: Sequence[float], y_pred: Sequence[float]) -> float:
 
 
 def calculate_aic(n_params: int, n_samples: int, rss: float) -> float:
-    """
-    Calculates the Akaike Information Criterion (AIC).
+    """Calculates the Akaike Information Criterion (AIC).
 
     Assumes errors are normally distributed.
     """
@@ -86,8 +86,7 @@ def calculate_aic(n_params: int, n_samples: int, rss: float) -> float:
 
 
 def calculate_bic(n_params: int, n_samples: int, rss: float) -> float:
-    """
-    Calculates the Bayesian Information Criterion (BIC).
+    """Calculates the Bayesian Information Criterion (BIC).
 
     Assumes errors are normally distributed.
     """

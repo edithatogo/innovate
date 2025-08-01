@@ -1,13 +1,13 @@
 # src/innovate/ecosystem/complementary_goods.py
 
+from typing import Dict, Sequence
+
 import numpy as np
-from typing import Sequence, Dict
 from innovate.base.base import DiffusionModel
 
 
 class ComplementaryGoodsModel(DiffusionModel):
-    """
-    A model for the diffusion of two complementary goods, where the
+    """A model for the diffusion of two complementary goods, where the
     adoption of each good is positively influenced by the adoption of the
     other.
     """
@@ -37,9 +37,7 @@ class ComplementaryGoodsModel(DiffusionModel):
         return [dy1_dt, dy2_dt]
 
     def predict(self, t: Sequence[float], y0: Sequence[float]) -> np.ndarray:
-        """
-        Predicts the adoption of both goods over time.
-        """
+        """Predicts the adoption of both goods over time."""
         if not self._params:
             raise RuntimeError("Model parameters have not been set.")
 
@@ -49,9 +47,7 @@ class ComplementaryGoodsModel(DiffusionModel):
         return solution
 
     def fit(self, t: Sequence[float], y: np.ndarray, **kwargs):
-        """
-        Fits the model to the data.
-        """
+        """Fits the model to the data."""
         from scipy.optimize import minimize
 
         y = np.array(y)
@@ -97,10 +93,10 @@ class ComplementaryGoodsModel(DiffusionModel):
         # y(t) ~= y(0) * exp(k*t) => k ~= log(y(t)/y(0)) / t
         with np.errstate(divide="ignore", invalid="ignore"):
             k1_est = np.nanmean(
-                np.log(y_initial[1:, 0] / y_initial[0, 0]) / t_initial[1:]
+                np.log(y_initial[1:, 0] / y_initial[0, 0]) / t_initial[1:],
             )
             k2_est = np.nanmean(
-                np.log(y_initial[1:, 1] / y_initial[0, 1]) / t_initial[1:]
+                np.log(y_initial[1:, 1] / y_initial[0, 1]) / t_initial[1:],
             )
 
         k1 = k1_est if np.isfinite(k1_est) and k1_est > 0 else 0.1
@@ -134,7 +130,9 @@ class ComplementaryGoodsModel(DiffusionModel):
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
     def predict_adoption_rate(
-        self, t: Sequence[float], y0: Sequence[float]
+        self,
+        t: Sequence[float],
+        y0: Sequence[float],
     ) -> np.ndarray:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet.")

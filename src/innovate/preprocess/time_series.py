@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 import pandas as pd
-from typing import Tuple
 
 from innovate.utils.preprocessing import apply_rolling_average, apply_sarima
 
@@ -17,8 +16,8 @@ def rolling_average(series: pd.Series, window: int) -> pd.Series:
 
 def sarima_fit(
     series: pd.Series,
-    order: Tuple[int, int, int],
-    seasonal_order: Tuple[int, int, int, int],
+    order: tuple[int, int, int],
+    seasonal_order: tuple[int, int, int, int],
 ) -> pd.Series:
     """Fit a SARIMA model and return the fitted values."""
     return apply_sarima(series, order=order, seasonal_order=seasonal_order)

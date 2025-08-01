@@ -1,14 +1,15 @@
 # src/innovate/compete/lotka_volterra.py
 
-from innovate.base.base import DiffusionModel
-from innovate.backend import current_backend as B
-from typing import Sequence, Dict
+from typing import Dict, Sequence
+
 import numpy as np
+
+from innovate.backend import current_backend as B
+from innovate.base.base import DiffusionModel
 
 
 class LotkaVolterraModel(DiffusionModel):
-    """
-    Implementation of the Lotka-Volterra model for competitive diffusion.
+    """Implementation of the Lotka-Volterra model for competitive diffusion.
 
     This model describes the interaction between two competing technologies or
     products, where the adoption of each is influenced by the other.
@@ -20,8 +21,7 @@ class LotkaVolterraModel(DiffusionModel):
 
     @property
     def param_names(self) -> Sequence[str]:
-        """
-        Returns the names of the model parameters:
+        """Returns the names of the model parameters:
         - alpha1: Growth rate of technology 1
         - beta1: Competition parameter from technology 2 to 1
         - alpha2: Growth rate of technology 2
@@ -35,13 +35,12 @@ class LotkaVolterraModel(DiffusionModel):
                     f"beta_beta1_{cov}",
                     f"beta_alpha2_{cov}",
                     f"beta_beta2_{cov}",
-                ]
+                ],
             )
         return names
 
     def initial_guesses(self, t: Sequence[float], y: np.ndarray) -> Dict[str, float]:
-        """
-        Provides initial guesses for the model parameters by performing a
+        """Provides initial guesses for the model parameters by performing a
         linear regression on the linearized Lotka-Volterra equations.
         """
         y = B.array(y)
@@ -144,17 +143,18 @@ class LotkaVolterraModel(DiffusionModel):
         y0: Sequence[float],
         covariates: Dict[str, Sequence[float]] = None,
     ) -> np.ndarray:
-        """
-        Predicts the market share of both technologies over time.
+        """Predicts the market share of both technologies over time.
 
         This requires solving a system of ordinary differential equations (ODEs).
 
         Args:
+        ----
             t: A sequence of time points.
             y0: The initial market shares for the two technologies [y1_0, y2_0].
             covariates: A dictionary of covariate names and their values.
 
         Returns:
+        -------
             An array where each row corresponds to a time point and columns
             correspond to the market share of each technology.
         """
@@ -179,13 +179,13 @@ class LotkaVolterraModel(DiffusionModel):
         covariates: Dict[str, Sequence[float]] = None,
         **kwargs,
     ):
-        """
-        Fits the Lotka-Volterra model to the data.
+        """Fits the Lotka-Volterra model to the data.
 
         This implementation uses `scipy.optimize.minimize` to find the best
         parameters by minimizing the sum of squared errors.
 
         Args:
+        ----
             t: A sequence of time points.
             y: A 2D array of observed data, where y[:, 0] is the data for the
                first technology and y[:, 1] is for the second.
@@ -238,15 +238,16 @@ class LotkaVolterraModel(DiffusionModel):
         y: np.ndarray,
         covariates: Dict[str, Sequence[float]] = None,
     ) -> float:
-        """
-        Calculates the R^2 score for the model fit.
+        """Calculates the R^2 score for the model fit.
 
         Args:
+        ----
             t: A sequence of time points.
             y: A 2D array of observed data.
             covariates: A dictionary of covariate names and their values.
 
         Returns:
+        -------
             The R^2 score.
         """
         if not self._params:
@@ -267,15 +268,16 @@ class LotkaVolterraModel(DiffusionModel):
         y0: Sequence[float],
         covariates: Dict[str, Sequence[float]] = None,
     ) -> np.ndarray:
-        """
-        Predicts the rate of change of market share for both technologies.
+        """Predicts the rate of change of market share for both technologies.
 
         Args:
+        ----
             t: A sequence of time points.
             y0: The initial market shares for the two technologies [y1_0, y2_0].
             covariates: A dictionary of covariate names and their values.
 
         Returns:
+        -------
             An array containing the adoption rates for each technology at each
             time point.
         """

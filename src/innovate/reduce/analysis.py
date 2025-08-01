@@ -1,23 +1,23 @@
-"""
-Analysis functions for identifying reducing time series trends.
+"""Analysis functions for identifying reducing time series trends.
 """
 
 import numpy as np
 import pandas as pd
-import statsmodels.api as sm
-import ruptures as rpt
 import pymannkendall as mk
+import ruptures as rpt
+import statsmodels.api as sm
 
 
 def smooth_series(series, fraction=0.1):
-    """
-    Smooths a time series using LOESS.
+    """Smooths a time series using LOESS.
 
     Args:
+    ----
         series (np.array): The time series data.
         fraction (float): The fraction of data used when estimating each y-value.
 
     Returns:
+    -------
         np.array: The smoothed time series.
     """
     if series is None or len(series) == 0:
@@ -28,19 +28,20 @@ def smooth_series(series, fraction=0.1):
 
 
 def find_changepoint(series, model="l2", search_method=rpt.Pelt, penalty_value=3):
-    """
-    Finds the most likely single changepoint in a time series.
+    """Finds the most likely single changepoint in a time series.
 
     This is useful for identifying the "peak" or the point where the
     trend begins to change.
 
     Args:
+    ----
         series (np.array): The time series data.
         model (str): The model to use for changepoint detection (e.g., "l1", "l2").
         search_method (class): The ruptures search method to use (e.g., Pelt, Binseg).
         penalty_value (int): The penalty value for the Pelt search method.
 
     Returns:
+    -------
         int: The index of the most likely changepoint. Returns -1 if no changepoint is found.
     """
     if series is None or len(series) < 2:
@@ -63,14 +64,15 @@ def find_changepoint(series, model="l2", search_method=rpt.Pelt, penalty_value=3
 
 
 def verify_trend_decline(series):
-    """
-    Verifies if a time series has a statistically significant decreasing trend
+    """Verifies if a time series has a statistically significant decreasing trend
     using the Mann-Kendall test.
 
     Args:
+    ----
         series (np.array): The time series data, typically the post-changepoint segment.
 
     Returns:
+    -------
         tuple: A tuple containing the trend result ('decreasing', 'increasing', 'no trend')
                and the p-value.
     """
@@ -87,8 +89,7 @@ def identify_reducing_series(
     search_method=rpt.Binseg,
     penalty_value=3,
 ):
-    """
-    Analyzes a list of time series to identify those with a reducing trend.
+    """Analyzes a list of time series to identify those with a reducing trend.
 
     This function acts as a pipeline:
     1. Smooths each series.
@@ -96,6 +97,7 @@ def identify_reducing_series(
     3. Performs a Mann-Kendall test on the post-changepoint data.
 
     Args:
+    ----
         time_series_list (list of np.array): A list of time series to analyze.
         smooth_frac (float): The fraction for the LOESS smoother.
         changepoint_model (str): The model for changepoint detection.
@@ -103,6 +105,7 @@ def identify_reducing_series(
         penalty_value (int): The penalty value for the Pelt search method (if used).
 
     Returns:
+    -------
         pd.DataFrame: A DataFrame summarizing the analysis for each time series,
                       with columns for changepoint index, trend result, and p-value.
     """
@@ -119,7 +122,7 @@ def identify_reducing_series(
                     "trend": "no trend",
                     "p_value": 1.0,
                     "post_peak_slope": 0.0,
-                }
+                },
             )
             continue
 
@@ -152,7 +155,7 @@ def identify_reducing_series(
                 "trend": trend,
                 "p_value": p_value,
                 "post_peak_slope": slope,
-            }
+            },
         )
 
     return pd.DataFrame(results)

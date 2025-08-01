@@ -1,15 +1,13 @@
 # tests/test_metrics.py
 
-import pytest
 import numpy as np
-from innovate.utils.metrics import calculate_rss, calculate_aic, calculate_bic
+import pytest
+from innovate.utils.metrics import calculate_aic, calculate_bic, calculate_rss
 
 
-@pytest.fixture
+@pytest.fixture()
 def sample_data():
-    """
-    Provides sample data for testing metrics.
-    """
+    """Provides sample data for testing metrics."""
     y_true = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
     y_pred = np.array([1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 9.5])
     # RSS = 0.5^2 * 9 + (-0.5)^2 = 0.25 * 9 + 0.25 = 2.25 + 0.25 = 2.5
@@ -17,18 +15,14 @@ def sample_data():
 
 
 def test_calculate_rss(sample_data):
-    """
-    Tests the calculate_rss function.
-    """
+    """Tests the calculate_rss function."""
     y_true, y_pred = sample_data
     rss = calculate_rss(y_true, y_pred)
     assert np.isclose(rss, 2.5)
 
 
 def test_calculate_aic(sample_data):
-    """
-    Tests the calculate_aic function.
-    """
+    """Tests the calculate_aic function."""
     y_true, y_pred = sample_data
     n_params = 2  # 1 for slope, 1 for variance of residuals
     n_samples = len(y_true)
@@ -49,9 +43,7 @@ def test_calculate_aic(sample_data):
 
 
 def test_calculate_bic(sample_data):
-    """
-    Tests the calculate_bic function.
-    """
+    """Tests the calculate_bic function."""
     y_true, y_pred = sample_data
     n_params = 2  # 1 for slope, 1 for variance of residuals
     n_samples = len(y_true)

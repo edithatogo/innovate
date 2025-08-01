@@ -1,15 +1,15 @@
 # src/innovate/models/mixture.py
 
-from innovate.base.base import DiffusionModel
-from typing import Sequence, Dict, List
-from innovate.backend import current_backend as B
-from innovate.fitters.scipy_fitter import ScipyFitter
+from typing import Dict, List, Sequence
+
 import numpy as np
+from innovate.backend import current_backend as B
+from innovate.base.base import DiffusionModel
+from innovate.fitters.scipy_fitter import ScipyFitter
 
 
 class MixtureModel(DiffusionModel):
-    """
-    A latent-class mixture model for diffusion dynamics.
+    """A latent-class mixture model for diffusion dynamics.
 
     This model identifies distinct adopter segments from the data by fitting
     multiple diffusion submodels simultaneously. It uses the Expectation-
@@ -65,8 +65,7 @@ class MixtureModel(DiffusionModel):
         return names
 
     def fit(self, t: Sequence[float], y: Sequence[float]):
-        """
-        Fits the mixture model to the data using Expectation-Maximization.
+        """Fits the mixture model to the data using Expectation-Maximization.
 
         Parameters
         ----------
@@ -91,7 +90,7 @@ class MixtureModel(DiffusionModel):
             component_preds = B.stack([B.array(m.predict(t_arr)) for m in self.models])
             # Add a small epsilon to avoid log(0)
             weighted_preds = B.log(component_preds + 1e-9) + B.log(
-                self.weights[:, None]
+                self.weights[:, None],
             )
 
             # Responsibilities (gamma_nk)
@@ -130,11 +129,11 @@ class MixtureModel(DiffusionModel):
             self._params[f"weight_{i}"] = w
 
     def predict(
-        self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None
+        self,
+        t: Sequence[float],
+        covariates: Dict[str, Sequence[float]] = None,
     ) -> Sequence[float]:
-        """
-        Makes predictions using the fitted mixture model.
-        """
+        """Makes predictions using the fitted mixture model."""
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
@@ -155,7 +154,7 @@ class MixtureModel(DiffusionModel):
         self._params = value
         # Update weights
         self.weights = B.array(
-            [value.get(f"weight_{i}", 0) for i in range(self.num_components)]
+            [value.get(f"weight_{i}", 0) for i in range(self.num_components)],
         )
         # Update submodel parameters
         for i, model in enumerate(self.models):
@@ -171,9 +170,7 @@ class MixtureModel(DiffusionModel):
         y: Sequence[float],
         covariates: Dict[str, Sequence[float]] = None,
     ) -> float:
-        """
-        Calculates the R-squared score for the model.
-        """
+        """Calculates the R-squared score for the model."""
         y_pred = self.predict(t, covariates)
         ss_res = B.sum((B.array(y) - y_pred) ** 2)
         ss_tot = B.sum((B.array(y) - B.mean(B.array(y))) ** 2)
@@ -196,7 +193,9 @@ class MixtureModel(DiffusionModel):
         pass
 
     def initial_guesses(
-        self, t: Sequence[float], y: Sequence[float]
+        self,
+        t: Sequence[float],
+        y: Sequence[float],
     ) -> Dict[str, float]:
         guesses = {}
         for i, model in enumerate(self.models):
@@ -213,7 +212,7 @@ class MixtureModel(DiffusionModel):
 
         t_arr = B.array(t)
         component_rates = B.stack(
-            [B.array(m.predict_adoption_rate(t_arr)) for m in self.models]
+            [B.array(m.predict_adoption_rate(t_arr)) for m in self.models],
         )
 
         # Weighted average of the component predictions

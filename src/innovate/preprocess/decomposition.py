@@ -5,8 +5,7 @@ from statsmodels.tsa.seasonal import STL
 
 
 def stl_decomposition(series: pd.Series, period: int, **kwargs):
-    """
-    Decomposes a time series into trend, seasonal, and residual components
+    """Decomposes a time series into trend, seasonal, and residual components
     using STL (Seasonal and Trend decomposition using Loess).
 
     Parameters
@@ -34,5 +33,5 @@ def stl_decomposition(series: pd.Series, period: int, **kwargs):
             "trend": result.trend,
             "seasonal": result.seasonal,
             "residual": result.resid,
-        }
+        },
     )

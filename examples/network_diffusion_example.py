@@ -1,7 +1,6 @@
 """Example of a network diffusion model."""
 import networkx as nx
 import numpy as np
-
 from innovate.plots.network import plot_network_diffusion
 
 

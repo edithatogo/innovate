@@ -1,6 +1,7 @@
-from innovate.base.base import DiffusionModel
-from typing import Sequence, Dict, List
+from typing import Dict, List, Sequence
+
 from innovate.backend import current_backend as B
+from innovate.base.base import DiffusionModel
 
 
 class HierarchicalModel(DiffusionModel):
@@ -23,7 +24,9 @@ class HierarchicalModel(DiffusionModel):
         return names
 
     def initial_guesses(
-        self, t: Sequence[float], y: Sequence[float]
+        self,
+        t: Sequence[float],
+        y: Sequence[float],
     ) -> Dict[str, float]:
         """Return starting values for global and group-level parameters."""
         guesses: Dict[str, float] = {}
@@ -82,7 +85,9 @@ class HierarchicalModel(DiffusionModel):
         return self
 
     def predict(
-        self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None
+        self,
+        t: Sequence[float],
+        covariates: Dict[str, Sequence[float]] = None,
     ):
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
@@ -108,7 +113,9 @@ class HierarchicalModel(DiffusionModel):
         self._params = value
 
     def predict_adoption_rate(
-        self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None
+        self,
+        t: Sequence[float],
+        covariates: Dict[str, Sequence[float]] = None,
     ):
         import numpy as np
 

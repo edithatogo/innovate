@@ -1,7 +1,7 @@
 # tests/test_failure_analysis.py
 
-import pytest
 import numpy as np
+import pytest
 from innovate.fail.analysis import analyze_failure
 
 
@@ -12,7 +12,7 @@ def test_analyze_failure_no_failures():
             [0.1, 0.2, 0.3],
             [0.2, 0.4, 0.6],
             [0.3, 0.6, 0.9],
-        ]
+        ],
     )
     failed = analyze_failure(predictions, failure_threshold=0.2)
     assert failed == []
@@ -25,7 +25,7 @@ def test_analyze_failure_one_failure():
             [0.01, 0.2, 0.3],
             [0.02, 0.4, 0.6],
             [0.03, 0.6, 0.9],
-        ]
+        ],
     )
     failed = analyze_failure(predictions, failure_threshold=0.1)
     assert failed == [0]
@@ -38,7 +38,7 @@ def test_analyze_failure_multiple_failures():
             [0.01, 0.05, 0.3],
             [0.02, 0.06, 0.6],
             [0.03, 0.07, 0.9],
-        ]
+        ],
     )
     failed = analyze_failure(predictions, failure_threshold=0.1)
     assert failed == [0, 1]
@@ -51,7 +51,7 @@ def test_analyze_failure_with_time_horizon():
             [0.01, 0.2, 0.3],
             [0.02, 0.4, 0.6],
             [0.15, 0.6, 0.9],  # Tech 0 crosses threshold at t=2
-        ]
+        ],
     )
     # Fails within the first 2 time steps
     failed = analyze_failure(predictions, failure_threshold=0.1, time_horizon=2)

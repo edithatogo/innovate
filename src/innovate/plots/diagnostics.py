@@ -1,8 +1,8 @@
 # src/innovate/plots/diagnostics.py
 
 import matplotlib.pyplot as plt
-from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 import numpy as np
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 
 
 def plot_residuals(
@@ -18,8 +18,7 @@ def plot_residuals(
     color_pacf: str = "C2",
     show: bool = True,
 ):
-    """
-    Plots the residuals of a fitted model, along with their ACF and PACF plots.
+    """Plots the residuals of a fitted model, along with their ACF and PACF plots.
 
     Parameters
     ----------
@@ -86,10 +85,11 @@ def plot_residuals(
 
 
 def plot_acf_only(
-    data: np.ndarray, title: str = "Autocorrelation Function", lags: int = 30
+    data: np.ndarray,
+    title: str = "Autocorrelation Function",
+    lags: int = 30,
 ):
-    """
-    Plots the Autocorrelation Function (ACF) of a time series.
+    """Plots the Autocorrelation Function (ACF) of a time series.
 
     Parameters
     ----------
@@ -107,10 +107,11 @@ def plot_acf_only(
 
 
 def plot_pacf_only(
-    data: np.ndarray, title: str = "Partial Autocorrelation Function", lags: int = 30
+    data: np.ndarray,
+    title: str = "Partial Autocorrelation Function",
+    lags: int = 30,
 ):
-    """
-    Plots the Partial Autocorrelation Function (PACF) of a time series.
+    """Plots the Partial Autocorrelation Function (PACF) of a time series.
 
     Parameters
     ----------

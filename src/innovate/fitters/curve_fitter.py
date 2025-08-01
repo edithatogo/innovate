@@ -2,13 +2,12 @@
 
 import numpy as np
 from scipy.optimize import curve_fit
+
 from innovate.base.base import DiffusionModel
 
 
 class CurveFitter:
-    """
-    A fitter that uses scipy.optimize.curve_fit to estimate model parameters.
-    """
+    """A fitter that uses scipy.optimize.curve_fit to estimate model parameters."""
 
     def __init__(self, model: DiffusionModel):
         self.model = model
@@ -22,9 +21,7 @@ class CurveFitter:
         bounds: tuple,
         **kwargs,
     ):
-        """
-        Fits the model to the data using curve_fit.
-        """
+        """Fits the model to the data using curve_fit."""
 
         def func(t, *params):
             # The model's differential_equation is not directly used by curve_fit.

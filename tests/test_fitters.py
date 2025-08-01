@@ -1,12 +1,12 @@
+import numpy as np
 import pytest
-from innovate.fitters.scipy_fitter import ScipyFitter
+from innovate.diffuse.logistic import LogisticModel
 from innovate.fitters.bootstrap_fitter import BootstrapFitter
 from innovate.fitters.jax_fitter import JaxFitter
-from innovate.diffuse.logistic import LogisticModel
-import numpy as np
+from innovate.fitters.scipy_fitter import ScipyFitter
 
 
-@pytest.fixture
+@pytest.fixture()
 def synthetic_logistic_data():
     t = np.linspace(0, 20, 100)
     # True parameters: L=1.0, k=1.5, x0=10.0
@@ -31,7 +31,8 @@ def test_bootstrap_fitter(synthetic_logistic_data):
     model = LogisticModel()
     base_fitter = ScipyFitter()  # Instantiate a base fitter
     bootstrap_fitter = BootstrapFitter(
-        base_fitter, n_bootstraps=10
+        base_fitter,
+        n_bootstraps=10,
     )  # Pass the base fitter
     bootstrap_fitter.fit(model, t, y)
 
@@ -58,7 +59,7 @@ def test_bootstrap_fitter(synthetic_logistic_data):
 
 
 def test_jax_fitter(synthetic_logistic_data):
-    from innovate.backend import use_backend, current_backend
+    from innovate.backend import current_backend, use_backend
 
     original_backend = current_backend
     use_backend("jax")

@@ -10,7 +10,8 @@ def run_failed_adoption_example():
     A product is considered to have failed if its market share never exceeds
     a predefined threshold.
 
-    Returns:
+    Returns
+    -------
         tuple: A tuple containing:
             - pd.DataFrame: Adoption predictions over time.
             - list: Indices of products identified as failed.

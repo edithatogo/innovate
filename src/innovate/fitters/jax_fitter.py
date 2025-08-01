@@ -1,16 +1,22 @@
+from typing import Dict, Sequence
+
 import jax
 import jax.numpy as jnp
 from jaxopt import LBFGS
-from typing import Sequence, Dict
+
+from innovate.backend import current_backend, use_backend
 from innovate.base.base import DiffusionModel
-from innovate.backend import use_backend, current_backend
 
 
 class JaxFitter:
     """A fitter class that will use JAX for model estimation (Phase 2)."""
 
     def fit(
-        self, model: DiffusionModel, t: Sequence[float], y: Sequence[float], **kwargs
+        self,
+        model: DiffusionModel,
+        t: Sequence[float],
+        y: Sequence[float],
+        **kwargs,
     ) -> Dict[str, float]:
         t_arr = jnp.asarray(t)
         y_arr = jnp.asarray(y)
@@ -32,7 +38,7 @@ class JaxFitter:
         model.params_ = dict(zip(model.param_names, sol.params))
 
         use_backend(
-            original_backend.__class__.__name__.lower().replace("backend", "")
+            original_backend.__class__.__name__.lower().replace("backend", ""),
         )  # Restore original backend
 
         return model.params_

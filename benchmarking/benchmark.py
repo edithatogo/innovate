@@ -4,7 +4,6 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
-
 from innovate.backend import use_backend
 from innovate.diffuse.bass import BassModel
 from innovate.diffuse.gompertz import GompertzModel

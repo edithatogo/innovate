@@ -1,6 +1,6 @@
 import numpy as np
-from innovate.diffuse.logistic import LogisticModel
 from innovate.adopt.categorization import categorize_adopters
+from innovate.diffuse.logistic import LogisticModel
 from innovate.fitters.scipy_fitter import ScipyFitter
 
 

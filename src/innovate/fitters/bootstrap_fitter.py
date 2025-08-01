@@ -1,5 +1,7 @@
-from typing import Sequence, Dict, List, Any
+from typing import Any, Dict, List, Sequence
+
 import numpy as np
+
 from innovate.base.base import DiffusionModel
 
 
@@ -12,7 +14,11 @@ class BootstrapFitter:
         self.bootstrapped_params: List[Dict[str, float]] = []
 
     def fit(
-        self, model: DiffusionModel, t: Sequence[float], y: Sequence[float], **kwargs
+        self,
+        model: DiffusionModel,
+        t: Sequence[float],
+        y: Sequence[float],
+        **kwargs,
     ) -> None:
         t_arr = np.array(t)
         y_arr = np.array(y)
@@ -51,7 +57,8 @@ class BootstrapFitter:
         return estimates
 
     def get_confidence_intervals(
-        self, alpha: float = 0.05
+        self,
+        alpha: float = 0.05,
     ) -> Dict[str, Dict[str, float]]:
         """Returns confidence intervals for each parameter."""
         estimates = self.get_parameter_estimates()

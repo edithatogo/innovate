@@ -1,9 +1,9 @@
-import pytest
 import numpy as np
+import pytest
 from innovate.path_dependence.lock_in import LockInModel
 
 
-@pytest.fixture
+@pytest.fixture()
 def lock_in_data():
     """Generate synthetic data for the LockInModel."""
     true_params = {
@@ -48,7 +48,7 @@ def test_lock_in_model_predict(lock_in_data):
     assert predictions.shape == (len(t), 2)
     assert np.all(predictions >= 0)
     assert np.all(
-        predictions <= true_params["m"] + 1e-6
+        predictions <= true_params["m"] + 1e-6,
     )  # Allow slight overshoot due to numerical integration
 
 

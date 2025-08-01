@@ -1,19 +1,15 @@
+"""Tests for the BlackJaxFitter.
 """
-Tests for the BlackJaxFitter.
-"""
-from jax.scipy import stats
 import jax.numpy as jnp
 import pytest
-
 from innovate.diffuse.bass import BassModel
 from innovate.fitters.blackjax_fitter import BlackJaxFitter
+from jax.scipy import stats
 
 
-@pytest.mark.fitter
+@pytest.mark.fitter()
 def test_blackjax_fitter():
-    """
-    Tests the BlackJaxFitter with the BassModel.
-    """
+    """Tests the BlackJaxFitter with the BassModel."""
     model = BassModel()
     fitter = BlackJaxFitter(model)
 

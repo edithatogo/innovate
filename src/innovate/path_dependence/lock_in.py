@@ -1,12 +1,13 @@
+from typing import Dict, Sequence
+
 import numpy as np
-from typing import Sequence, Dict
-from innovate.base.base import DiffusionModel
 from scipy.integrate import odeint
+
+from innovate.base.base import DiffusionModel
 
 
 class LockInModel(DiffusionModel):
-    """
-    A simple model demonstrating path dependence and lock-in effects
+    """A simple model demonstrating path dependence and lock-in effects
     between two competing technologies.
 
     The model simulates two technologies where the growth rate of each
@@ -107,7 +108,7 @@ class LockInModel(DiffusionModel):
         y = np.array(y)
         if y.ndim != 2 or y.shape[1] != 2:
             raise ValueError(
-                "`y` must be a 2D array with two columns (for two technologies)."
+                "`y` must be a 2D array with two columns (for two technologies).",
             )
 
         y0 = y[0, :]
@@ -152,7 +153,9 @@ class LockInModel(DiffusionModel):
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
     def predict_adoption_rate(
-        self, t: Sequence[float], y0: Sequence[float]
+        self,
+        t: Sequence[float],
+        y0: Sequence[float],
     ) -> np.ndarray:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet.")

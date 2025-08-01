@@ -1,13 +1,13 @@
 # tests/test_delayed_hype_bass.py
 
-import pytest
 import numpy as np
-from innovate.hype.delayed_hype_bass import DelayedHypeBassModel
+import pytest
 from innovate.diffuse.bass import BassModel
+from innovate.hype.delayed_hype_bass import DelayedHypeBassModel
 from innovate.hype.hype_cycle import HypeCycleModel
 
 
-@pytest.fixture
+@pytest.fixture()
 def fitted_bass_model():
     """A fitted Bass model."""
     model = BassModel()
@@ -15,7 +15,7 @@ def fitted_bass_model():
     return model
 
 
-@pytest.fixture
+@pytest.fixture()
 def hype_cycle_model():
     """A Hype Cycle model with typical parameters."""
     model = HypeCycleModel()
@@ -35,7 +35,9 @@ def hype_cycle_model():
 def test_delayed_hype_bass_init(fitted_bass_model, hype_cycle_model):
     """Test initialization of the DelayedHypeBassModel."""
     model = DelayedHypeBassModel(
-        bass_model=fitted_bass_model, hype_model=hype_cycle_model, delay=5.0
+        bass_model=fitted_bass_model,
+        hype_model=hype_cycle_model,
+        delay=5.0,
     )
     assert model.bass_model is not None
     assert model.hype_model is not None
@@ -45,7 +47,9 @@ def test_delayed_hype_bass_init(fitted_bass_model, hype_cycle_model):
 def test_delayed_hype_bass_predict(fitted_bass_model, hype_cycle_model):
     """Test the predict method of the DelayedHypeBassModel."""
     model = DelayedHypeBassModel(
-        bass_model=fitted_bass_model, hype_model=hype_cycle_model, delay=5.0
+        bass_model=fitted_bass_model,
+        hype_model=hype_cycle_model,
+        delay=5.0,
     )
 
     t = np.arange(0, 100, 1)
@@ -66,7 +70,9 @@ def test_predict_without_params(fitted_bass_model, hype_cycle_model):
     bass_model = fitted_bass_model
     hype_model_no_params = HypeCycleModel()
     model = DelayedHypeBassModel(
-        bass_model=bass_model, hype_model=hype_model_no_params, delay=5.0
+        bass_model=bass_model,
+        hype_model=hype_model_no_params,
+        delay=5.0,
     )
     with pytest.raises(RuntimeError):
         model.predict(np.arange(10), 0.01)
@@ -75,7 +81,9 @@ def test_predict_without_params(fitted_bass_model, hype_cycle_model):
     bass_model_no_params = BassModel()
     hype_model = hype_cycle_model
     model = DelayedHypeBassModel(
-        bass_model=bass_model_no_params, hype_model=hype_model, delay=5.0
+        bass_model=bass_model_no_params,
+        hype_model=hype_model,
+        delay=5.0,
     )
     with pytest.raises(RuntimeError):
         model.predict(np.arange(10), 0.01)

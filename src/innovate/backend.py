@@ -16,7 +16,7 @@ def use_backend(backend: str):
     if backend == "jax":
         if JaxBackend is None:
             raise ImportError(
-                "JAX backend is not available. Install jax and diffrax to use it."
+                "JAX backend is not available. Install jax and diffrax to use it.",
             )
         current_backend = JaxBackend()
     elif backend == "numpy":

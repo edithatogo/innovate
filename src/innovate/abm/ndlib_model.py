@@ -1,30 +1,34 @@
-import networkx as nx
+from typing import Optional
+
 import ndlib.models.epidemics as ep
 import ndlib.models.ModelConfig as mc
+import networkx as nx
 from mesa import Model
+
 from .agent import InnovationAgent
-from typing import Optional
 
 
 class NDlibModel(Model):
-    """
-    An innovation diffusion model using ndlib for network-based simulations.
-    """
+    """An innovation diffusion model using ndlib for network-based simulations."""
 
     def __init__(
-        self, num_agents, graph: Optional[nx.Graph] = None, model_name: str = "ic"
+        self,
+        num_agents,
+        graph: Optional[nx.Graph] = None,
+        model_name: str = "ic",
     ):
-        """
-        Initialize the NDlibModel with a specified number of agents, network graph, and diffusion model type.
+        """Initialize the NDlibModel with a specified number of agents, network graph, and diffusion model type.
 
         Creates a network-based innovation diffusion simulation by assigning agents to nodes in the provided or generated graph and initializing the chosen NDlib diffusion model. The initial state marks node 0 as 'Infected' (adopted). Supported diffusion models are Independent Cascades ("ic"), Linear Threshold ("lt"), SIR ("sir"), and SIS ("sis").
 
-        Parameters:
+        Parameters
+        ----------
             num_agents (int): Number of agents (nodes) in the simulation.
             graph (nx.Graph, optional): NetworkX graph to use for the simulation. If None, an Erdős-Rényi random graph is generated.
             model_name (str, optional): Name of the diffusion model to use ("ic", "lt", "sir", or "sis"). Defaults to "ic".
 
-        Raises:
+        Raises
+        ------
             ValueError: If an unsupported model_name is provided.
         """
         super().__init__()
@@ -61,9 +65,7 @@ class NDlibModel(Model):
         self.diffusion_model.set_initial_status(config)
 
     def step(self):
-        """
-        Run one step of the diffusion model.
-        """
+        """Run one step of the diffusion model."""
         self.diffusion_model.iteration()
 
         # Update the state of the Mesa agents based on the ndlib model

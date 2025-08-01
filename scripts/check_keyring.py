@@ -9,12 +9,12 @@ def check_creds(service, username):
         password = keyring.get_password(service, username)
         if password:
             print(
-                f"SUCCESS: Found stored token for service='{service}', username='{username}'"
+                f"SUCCESS: Found stored token for service='{service}', username='{username}'",
             )
             return True
     except keyring.errors.NoKeyringError:
         print(
-            "CRITICAL: No system keyring backend found. This is not the source of the issue."
+            "CRITICAL: No system keyring backend found. This is not the source of the issue.",
         )
         return True  # Stop checking
     except Exception as e:

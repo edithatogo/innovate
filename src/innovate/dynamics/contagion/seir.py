@@ -2,14 +2,12 @@ from .base import ContagionSpread
 
 
 class SEIRModel(ContagionSpread):
-    """
-    Models the spread of a contagion through a population with Susceptible,
+    """Models the spread of a contagion through a population with Susceptible,
     Exposed, Infectious, and Recovered states.
     """
 
     def compute_spread_rate(self, **params):
-        """
-        Calculates the instantaneous spread rate.
+        """Calculates the instantaneous spread rate.
 
         Equations:
         dS/dt = -beta * S * I
@@ -19,7 +17,8 @@ class SEIRModel(ContagionSpread):
 
         Compute the instantaneous rates of change for each SEIR compartment based on current state values and model parameters.
 
-        Parameters:
+        Parameters
+        ----------
                 S (float): Current number of susceptible individuals.
                 E (float): Current number of exposed individuals.
                 I (float): Current number of infectious individuals.
@@ -27,7 +26,8 @@ class SEIRModel(ContagionSpread):
                 incubation_rate (float, optional): Rate at which exposed individuals become infectious (default 0.1).
                 recovery_rate (float, optional): Rate at which infectious individuals recover (default 0.01).
 
-        Returns:
+        Returns
+        -------
                 tuple: Derivatives (dS/dt, dE/dt, dI/dt, dR/dt) representing the rates of change for susceptible, exposed, infectious, and recovered compartments.
         """
         S = params.get("S")
@@ -44,15 +44,16 @@ class SEIRModel(ContagionSpread):
         return dSdt, dEdt, dIdt, dRdt
 
     def predict_states(self, time_points, **params):
-        """
-        Predicts the states of the population over time.
+        """Predicts the states of the population over time.
 
         Simulates the SEIR model over specified time points and returns the predicted population states.
 
-        Parameters:
+        Parameters
+        ----------
             time_points (array-like): Sequence of time points at which to compute the states.
 
-        Returns:
+        Returns
+        -------
             ndarray: Array of shape (len(time_points), 4) containing the predicted values for Susceptible, Exposed, Infectious, and Recovered populations at each time point.
         """
         from scipy.integrate import solve_ivp
@@ -75,12 +76,12 @@ class SEIRModel(ContagionSpread):
         return sol.y.T
 
     def get_parameters_schema(self):
-        """
-        Returns the schema for the model's parameters.
+        """Returns the schema for the model's parameters.
 
         Return a dictionary describing the schema for SEIR model parameters, including types, default values, and descriptions for each parameter.
 
-        Returns:
+        Returns
+        -------
             dict: A mapping of parameter names to their type, default value, and description.
         """
         return {

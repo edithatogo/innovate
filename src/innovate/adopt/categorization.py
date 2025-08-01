@@ -1,7 +1,9 @@
-from innovate.backend import current_backend as B
-import pandas as pd
-from innovate.base.base import DiffusionModel
 from typing import Sequence
+
+import pandas as pd
+
+from innovate.backend import current_backend as B
+from innovate.base.base import DiffusionModel
 
 
 def categorize_adopters(model: DiffusionModel, t: Sequence[float]) -> pd.DataFrame:
@@ -10,10 +12,12 @@ def categorize_adopters(model: DiffusionModel, t: Sequence[float]) -> pd.DataFra
     Categorizes adopters based on the fitted diffusion model.
 
     Args:
+    ----
         model: A fitted diffusion model.
         t: A sequence of time points.
 
     Returns:
+    -------
         A pandas DataFrame with the adopter categories for each time point.
     """
     adoption_rate = model.predict_adoption_rate(t)
@@ -21,7 +25,7 @@ def categorize_adopters(model: DiffusionModel, t: Sequence[float]) -> pd.DataFra
     # Calculate mean and standard deviation of the adoption rate
     mean_adoption_time = B.sum(t * adoption_rate) / B.sum(adoption_rate)
     std_dev_adoption_time = B.sqrt(
-        B.sum(((t - mean_adoption_time) ** 2) * adoption_rate) / B.sum(adoption_rate)
+        B.sum(((t - mean_adoption_time) ** 2) * adoption_rate) / B.sum(adoption_rate),
     )
 
     # Define category boundaries
@@ -45,5 +49,5 @@ def categorize_adopters(model: DiffusionModel, t: Sequence[float]) -> pd.DataFra
             categories.append("Laggards")
 
     return pd.DataFrame(
-        {"time": t, "adoption_rate": adoption_rate, "category": categories}
+        {"time": t, "adoption_rate": adoption_rate, "category": categories},
     )

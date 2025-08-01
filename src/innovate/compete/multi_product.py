@@ -1,13 +1,14 @@
-from innovate.backend import current_backend as B
+from typing import Dict, Sequence
+
 import numpy as np
+
+from innovate.backend import current_backend as B
+
 from ..base import DiffusionModel
-from typing import Sequence, Dict
 
 
 class MultiProductDiffusionModel(DiffusionModel):
-    """
-    A generalized model for the diffusion of multiple competing products.
-    """
+    """A generalized model for the diffusion of multiple competing products."""
 
     def __init__(
         self,
@@ -36,7 +37,7 @@ class MultiProductDiffusionModel(DiffusionModel):
                 and len(self.m) == self.n_products
             ):
                 raise ValueError(
-                    "Dimensions of p, Q, and m must be consistent with n_products."
+                    "Dimensions of p, Q, and m must be consistent with n_products.",
                 )
 
         if self.names is not None and len(self.names) != self.n_products:
@@ -70,7 +71,9 @@ class MultiProductDiffusionModel(DiffusionModel):
         return names
 
     def initial_guesses(
-        self, t: Sequence[float], y: Sequence[float]
+        self,
+        t: Sequence[float],
+        y: Sequence[float],
     ) -> Dict[str, float]:
         guesses = {}
         max_y = B.max(y)
@@ -130,7 +133,9 @@ class MultiProductDiffusionModel(DiffusionModel):
         return bounds
 
     def predict(
-        self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None
+        self,
+        t: Sequence[float],
+        covariates: Dict[str, Sequence[float]] = None,
     ) -> Sequence[float]:
         from scipy.integrate import solve_ivp
 
@@ -157,21 +162,22 @@ class MultiProductDiffusionModel(DiffusionModel):
                 for cov in self.covariates:
                     for i in range(self.n_products):
                         params_for_ode.append(
-                            self._params.get(f"beta_p{i+1}_{cov}", 0.0)
+                            self._params.get(f"beta_p{i+1}_{cov}", 0.0),
                         )
                         params_for_ode.append(
-                            self._params.get(f"beta_q{i+1}_{cov}", 0.0)
+                            self._params.get(f"beta_q{i+1}_{cov}", 0.0),
                         )
                         params_for_ode.append(
-                            self._params.get(f"beta_m{i+1}_{cov}", 0.0)
+                            self._params.get(f"beta_m{i+1}_{cov}", 0.0),
                         )
                     for i in range(self.n_products):
                         for j in range(self.n_products):
                             if i != j:
                                 params_for_ode.append(
                                     self._params.get(
-                                        f"beta_alpha_{i+1}_{j+1}_{cov}", 0.0
-                                    )
+                                        f"beta_alpha_{i+1}_{j+1}_{cov}",
+                                        0.0,
+                                    ),
                                 )
 
         elif self._params:
@@ -179,12 +185,16 @@ class MultiProductDiffusionModel(DiffusionModel):
             params_for_ode = [self._params[name] for name in self.param_names]
         else:
             raise RuntimeError(
-                "Model parameters (p, Q, m) are not set, and model has not been fitted yet. Call .fit() or set parameters directly."
+                "Model parameters (p, Q, m) are not set, and model has not been fitted yet. Call .fit() or set parameters directly.",
             )
 
         def ode_func(t_val, y_val):
             return self.differential_equation(
-                t_val, y_val, params_for_ode, covariates, t_arr
+                t_val,
+                y_val,
+                params_for_ode,
+                covariates,
+                t_arr,
             )
 
         sol = solve_ivp(
@@ -212,7 +222,7 @@ class MultiProductDiffusionModel(DiffusionModel):
         m_base = B.array(all_params_flat[2 * n_products : 3 * n_products])
 
         alpha_base_flat = B.array(
-            all_params_flat[3 * n_products : 3 * n_products + num_alpha_params]
+            all_params_flat[3 * n_products : 3 * n_products + num_alpha_params],
         )
 
         # Initialize time-varying parameters with base values
@@ -295,7 +305,9 @@ class MultiProductDiffusionModel(DiffusionModel):
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
     def predict_adoption_rate(
-        self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None
+        self,
+        t: Sequence[float],
+        covariates: Dict[str, Sequence[float]] = None,
     ) -> Sequence[float]:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
@@ -307,7 +319,7 @@ class MultiProductDiffusionModel(DiffusionModel):
             [
                 self.differential_equation(ti, yi, params, covariates, t)
                 for ti, yi in zip(t, y_pred)
-            ]
+            ],
         )
         return rates
 

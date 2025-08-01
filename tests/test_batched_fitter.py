@@ -1,11 +1,11 @@
-import pytest
 import numpy as np
+import pytest
+from innovate.diffuse.logistic import LogisticModel
 from innovate.fitters.batched_fitter import BatchedFitter
 from innovate.fitters.scipy_fitter import ScipyFitter
-from innovate.diffuse.logistic import LogisticModel
 
 
-@pytest.fixture
+@pytest.fixture()
 def synthetic_batched_data():
     # Create two different logistic curves
     t1 = np.linspace(0, 20, 50)
@@ -50,7 +50,7 @@ def test_batched_fitter_predict(synthetic_batched_data):
 
 
 def test_batched_fitter_jax(synthetic_batched_data):
-    from innovate.backend import use_backend, current_backend
+    from innovate.backend import current_backend, use_backend
     from innovate.fitters.jax_fitter import JaxFitter
 
     original_backend = current_backend

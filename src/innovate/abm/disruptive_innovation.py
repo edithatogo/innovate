@@ -1,12 +1,12 @@
 from mesa import Model
-from mesa.space import MultiGrid
 from mesa.datacollection import DataCollector
+from mesa.space import MultiGrid
+
 from .agent import InnovationAgent
 
 
 class DisruptiveInnovationAgent(InnovationAgent):
-    """
-    An agent in a disruptive innovation model.
+    """An agent in a disruptive innovation model.
     The agent can choose between an incumbent and a disruptive product.
     """
 
@@ -15,8 +15,7 @@ class DisruptiveInnovationAgent(InnovationAgent):
         self.choice = None  # 'incumbent' or 'disruptive'
 
     def step(self):
-        """
-        The agent's step function.
+        """The agent's step function.
         The agent's choice is based on the perceived value of each product.
         """
         incumbent_value = self.model.incumbent_performance - self.model.incumbent_price
@@ -31,9 +30,7 @@ class DisruptiveInnovationAgent(InnovationAgent):
 
 
 class DisruptiveInnovationModel(Model):
-    """
-    A model for disruptive innovation.
-    """
+    """A model for disruptive innovation."""
 
     def __init__(
         self,
@@ -64,26 +61,22 @@ class DisruptiveInnovationModel(Model):
         self.datacollector = DataCollector(
             model_reporters={
                 "IncumbentAdopters": lambda m: sum(
-                    [1 for a in m.agents if a.choice == "incumbent"]
+                    [1 for a in m.agents if a.choice == "incumbent"],
                 ),
                 "DisruptiveAdopters": lambda m: sum(
-                    [1 for a in m.agents if a.choice == "disruptive"]
+                    [1 for a in m.agents if a.choice == "disruptive"],
                 ),
-            }
+            },
         )
 
     def step(self):
-        """
-        Run one step of the model.
-        """
+        """Run one step of the model."""
         self.disruptive_performance += self.disruptive_performance_improvement
         self.datacollector.collect(self)
         self.agents.do("step")
 
     def run_model(self, n_steps):
-        """
-        Run the model for a specified number of steps.
-        """
+        """Run the model for a specified number of steps."""
         for _ in range(n_steps):
             self.step()
         return self.datacollector.get_model_vars_dataframe()

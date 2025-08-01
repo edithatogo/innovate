@@ -1,16 +1,18 @@
-from ..base import DiffusionModel
-from innovate.backend import current_backend as B
+from typing import Dict, Optional, Sequence
+
 import numpy as np
-from typing import Sequence, Dict, Optional
+from innovate.backend import current_backend as B
+
+from ..base import DiffusionModel
 
 
 class NortonBassModel(DiffusionModel):
-    """
-    Norton-Bass Model for successive generations of technologies.
-    """
+    """Norton-Bass Model for successive generations of technologies."""
 
     def __init__(
-        self, n_generations: int = 1, covariates: Optional[Sequence[str]] = None
+        self,
+        n_generations: int = 1,
+        covariates: Optional[Sequence[str]] = None,
     ):
         if n_generations < 1:
             raise ValueError("Number of generations must be at least 1.")
@@ -27,12 +29,14 @@ class NortonBassModel(DiffusionModel):
         for cov in self.covariates:
             for i in range(self.n_generations):
                 names.extend(
-                    [f"beta_p{i+1}_{cov}", f"beta_q{i+1}_{cov}", f"beta_m{i+1}_{cov}"]
+                    [f"beta_p{i+1}_{cov}", f"beta_q{i+1}_{cov}", f"beta_m{i+1}_{cov}"],
                 )
         return names
 
     def initial_guesses(
-        self, t: Sequence[float], y: Sequence[float]
+        self,
+        t: Sequence[float],
+        y: Sequence[float],
     ) -> Dict[str, float]:
         guesses = {}
         max_y = B.max(y)
@@ -101,10 +105,7 @@ class NortonBassModel(DiffusionModel):
         return sol.y.T
 
     def differential_equation(self, t, y, params, covariates, t_eval):
-        """
-        System of differential equations for the Norton-Bass model.
-        """
-
+        """System of differential equations for the Norton-Bass model."""
         p_base = params[: self.n_generations]
         q_base = params[self.n_generations : 2 * self.n_generations]
         m_base = params[2 * self.n_generations : 3 * self.n_generations]
@@ -176,6 +177,6 @@ class NortonBassModel(DiffusionModel):
             [
                 self.differential_equation(ti, yi, params, covariates, t)
                 for ti, yi in zip(t, y_pred)
-            ]
+            ],
         )
         return rates

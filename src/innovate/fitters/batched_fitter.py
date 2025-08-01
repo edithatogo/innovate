@@ -1,6 +1,7 @@
 from typing import Sequence
-from innovate.base.base import DiffusionModel
+
 from innovate.backend import current_backend as B
+from innovate.base.base import DiffusionModel
 
 
 class BatchedFitter:
@@ -12,18 +13,20 @@ class BatchedFitter:
         self.fitted_params = None
 
     def fit(
-        self, t_batched: Sequence[Sequence[float]], y_batched: Sequence[Sequence[float]]
+        self,
+        t_batched: Sequence[Sequence[float]],
+        y_batched: Sequence[Sequence[float]],
     ):
-        """
-        Fits the model to a batch of datasets.
+        """Fits the model to a batch of datasets.
 
         Args:
+        ----
             t_batched: A sequence of time sequences.
             y_batched: A sequence of adoption sequences.
         """
         if len(t_batched) != len(y_batched):
             raise ValueError(
-                "The number of time sequences and adoption sequences must be the same."
+                "The number of time sequences and adoption sequences must be the same.",
             )
 
         params_list = []
@@ -38,10 +41,10 @@ class BatchedFitter:
         return self.fitted_params
 
     def predict(self, t_batched: Sequence[Sequence[float]]):
-        """
-        Makes predictions for a batch of datasets.
+        """Makes predictions for a batch of datasets.
 
         Args:
+        ----
             t_batched: A sequence of time sequences.
         """
         if self.fitted_params is None:

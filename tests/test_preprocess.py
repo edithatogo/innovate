@@ -1,18 +1,18 @@
 # tests/test_preprocess.py
 
-import pytest
-import pandas as pd
 import numpy as np
-from innovate.preprocess import stl_decomposition, rolling_average, sarima_fit
+import pandas as pd
+import pytest
+from innovate.preprocess import rolling_average, sarima_fit, stl_decomposition
 
 
-@pytest.fixture
+@pytest.fixture()
 def seasonal_time_series():
     """Generate a synthetic time series with a clear seasonal pattern."""
     dates = pd.date_range(start="2020-01-01", periods=120, freq="M")
     trend = np.linspace(10, 100, 120)
     seasonal = 10 * np.sin(
-        np.linspace(0, 10 * 2 * np.pi, 120)
+        np.linspace(0, 10 * 2 * np.pi, 120),
     )  # 10 years of monthly data
     noise = np.random.normal(0, 1, 120)
     return pd.Series(trend + seasonal + noise, index=dates)
@@ -31,7 +31,9 @@ def test_stl_decomposition(seasonal_time_series):
         decomposed["trend"] + decomposed["seasonal"] + decomposed["residual"]
     )
     pd.testing.assert_series_equal(
-        seasonal_time_series, reconstructed, check_names=False
+        seasonal_time_series,
+        reconstructed,
+        check_names=False,
     )
 
 
@@ -42,7 +44,7 @@ def test_stl_decomposition_no_datetime_index():
         stl_decomposition(series, period=12)
 
 
-@pytest.fixture
+@pytest.fixture()
 def simple_series():
     dates = pd.date_range(start="2020-01-01", periods=50, freq="M")
     return pd.Series(np.arange(50), index=dates)

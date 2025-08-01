@@ -1,17 +1,17 @@
-import pytest
 import numpy as np
 import pandas as pd
+import pytest
+from innovate.compete.competition import MultiProductDiffusionModel
 from innovate.diffuse.bass import BassModel
 from innovate.diffuse.gompertz import GompertzModel
 from innovate.diffuse.logistic import LogisticModel
-from innovate.compete.competition import MultiProductDiffusionModel
 from innovate.fitters.scipy_fitter import ScipyFitter
-from innovate.models.mixture import MixtureModel
 from innovate.models.hierarchical import HierarchicalModel
+from innovate.models.mixture import MixtureModel
 
 
 # Fixture for common test data
-@pytest.fixture
+@pytest.fixture()
 def synthetic_data():
     time_points = np.arange(1, 51)
     # True parameters for Bass model
@@ -50,7 +50,7 @@ def test_bass_model_fit_predict(synthetic_data):
     assert len(predictions) == len(t)
     assert np.all(predictions >= 0)
     assert np.all(
-        np.diff(predictions) >= -1e-6
+        np.diff(predictions) >= -1e-6,
     )  # Ensure non-decreasing (allowing for small numerical errors)
 
 
@@ -128,7 +128,10 @@ def test_multi_product_model_predict():
     product_names = ["ProdA", "ProdB"]
 
     model = MultiProductDiffusionModel(
-        p=p_vals, Q=Q_matrix, m=m_vals, names=product_names
+        p=p_vals,
+        Q=Q_matrix,
+        m=m_vals,
+        names=product_names,
     )
     time_horizon = np.arange(1, 101)
     predictions_df = model.predict(time_horizon)
@@ -149,7 +152,10 @@ def test_multi_product_model_score():
     product_names = ["ProdA", "ProdB"]
 
     model = MultiProductDiffusionModel(
-        p=p_vals, Q=Q_matrix, m=m_vals, names=product_names
+        p=p_vals,
+        Q=Q_matrix,
+        m=m_vals,
+        names=product_names,
     )
     time_horizon = np.arange(1, 101)
     predictions_df = model.predict(time_horizon)

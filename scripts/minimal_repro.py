@@ -1,9 +1,10 @@
 # minimal_repro.py
 
+from typing import Dict, Sequence
+
 import numpy as np
 import pymc as pm
 import pytensor.tensor as pt
-from typing import Sequence, Dict
 
 
 class BassModel:
@@ -14,7 +15,9 @@ class BassModel:
         return ["p", "q", "m"]
 
     def initial_guesses(
-        self, t: Sequence[float], y: Sequence[float]
+        self,
+        t: Sequence[float],
+        y: Sequence[float],
     ) -> Dict[str, float]:
         return {"p": 0.001, "q": 0.1, "m": np.max(y) * 1.1}
 
@@ -30,7 +33,11 @@ class BayesianFitter:
     """A minimal implementation of the BayesianFitter."""
 
     def __init__(
-        self, model: BassModel, draws: int = 2000, tune: int = 1000, chains: int = 1
+        self,
+        model: BassModel,
+        draws: int = 2000,
+        tune: int = 1000,
+        chains: int = 1,
     ):
         self.model = model
         self.draws = draws
@@ -61,13 +68,18 @@ class BayesianFitter:
             pm.Normal("likelihood", mu=mu[:, 0], sigma=sigma, observed=y)
 
             self.trace = pm.sample(
-                self.draws, tune=self.tune, chains=self.chains, **kwargs
+                self.draws,
+                tune=self.tune,
+                chains=self.chains,
+                **kwargs,
             )
 
         return self
 
     def _define_priors(
-        self, t: Sequence[float], y: np.ndarray
+        self,
+        t: Sequence[float],
+        y: np.ndarray,
     ) -> Dict[str, pm.Distribution]:
         priors = {}
         initial_guesses = self.model.initial_guesses(t, y)
@@ -81,7 +93,9 @@ class BayesianFitter:
 
             if np.isinf(lower) and np.isinf(upper):
                 priors[param_name] = pm.Normal(
-                    param_name, mu=initial_guesses[param_name], sigma=1.0
+                    param_name,
+                    mu=initial_guesses[param_name],
+                    sigma=1.0,
                 )
             elif np.isinf(upper):
                 priors[param_name] = pm.HalfNormal(param_name, sigma=1.0)

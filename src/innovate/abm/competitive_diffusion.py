@@ -1,12 +1,12 @@
 from mesa import Model
-from mesa.space import MultiGrid
 from mesa.datacollection import DataCollector
+from mesa.space import MultiGrid
+
 from .agent import InnovationAgent
 
 
 class CompetitiveDiffusionAgent(InnovationAgent):
-    """
-    An agent in a competitive diffusion model.
+    """An agent in a competitive diffusion model.
     The agent can adopt one of several competing innovations.
     """
 
@@ -15,8 +15,7 @@ class CompetitiveDiffusionAgent(InnovationAgent):
         self.adopted_innovation = -1  # -1 means no adoption, 0, 1, ... for innovations
 
     def step(self):
-        """
-        The agent's step function.
+        """The agent's step function.
         The agent's decision to adopt is based on its neighbors' adoptions.
         """
         if self.adopted_innovation != -1:
@@ -24,7 +23,9 @@ class CompetitiveDiffusionAgent(InnovationAgent):
 
         # Get neighbors
         neighbors = self.model.grid.get_neighbors(
-            self.pos, moore=True, include_center=False
+            self.pos,
+            moore=True,
+            include_center=False,
         )
         if not neighbors:
             return
@@ -43,9 +44,7 @@ class CompetitiveDiffusionAgent(InnovationAgent):
 
 
 class CompetitiveDiffusionModel(Model):
-    """
-    A model for competitive diffusion of multiple innovations.
-    """
+    """A model for competitive diffusion of multiple innovations."""
 
     def __init__(self, num_agents, width, height, num_innovations):
         super().__init__()
@@ -57,7 +56,9 @@ class CompetitiveDiffusionModel(Model):
         # Create agents
         for i in range(self.num_agents):
             agent = CompetitiveDiffusionAgent(
-                unique_id=i, model=self, num_innovations=num_innovations
+                unique_id=i,
+                model=self,
+                num_innovations=num_innovations,
             )
             x = self.random.randrange(self.grid.width)
             y = self.random.randrange(self.grid.height)
@@ -77,20 +78,16 @@ class CompetitiveDiffusionModel(Model):
             return counts
 
         self.datacollector = DataCollector(
-            model_reporters={"AdoptionCounts": adoption_counts}
+            model_reporters={"AdoptionCounts": adoption_counts},
         )
 
     def step(self):
-        """
-        Run one step of the model.
-        """
+        """Run one step of the model."""
         self.datacollector.collect(self)
         self.agents.do("step")
 
     def run_model(self, n_steps):
-        """
-        Run the model for a specified number of steps.
-        """
+        """Run the model for a specified number of steps."""
         for _ in range(n_steps):
             self.step()
         return self.datacollector.get_model_vars_dataframe()

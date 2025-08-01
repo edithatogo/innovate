@@ -1,8 +1,8 @@
 from .agent import InnovationAgent
-from .model import InnovationModel
 from .competitive_diffusion import CompetitiveDiffusionAgent, CompetitiveDiffusionModel
-from .sentiment_hype_cycle import SentimentHypeAgent, SentimentHypeModel
 from .disruptive_innovation import DisruptiveInnovationAgent, DisruptiveInnovationModel
+from .model import InnovationModel
+from .sentiment_hype_cycle import SentimentHypeAgent, SentimentHypeModel
 
 __all__ = [
     "InnovationAgent",

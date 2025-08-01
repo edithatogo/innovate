@@ -1,7 +1,8 @@
+from typing import Callable, Sequence
+
 import jax
 import jax.numpy as jnp
-from typing import Sequence, Callable
-from diffrax import diffeqsolve, ODETerm, Dopri5, SaveAt
+from diffrax import Dopri5, ODETerm, SaveAt, diffeqsolve
 
 
 class JaxBackend:
@@ -33,7 +34,11 @@ class JaxBackend:
         return jnp.log(x)
 
     def solve_ode(
-        self, f: Callable, y0: Sequence[float], t: Sequence[float], args=None
+        self,
+        f: Callable,
+        y0: Sequence[float],
+        t: Sequence[float],
+        args=None,
     ) -> jnp.ndarray:
         term = ODETerm(f)
         solver = Dopri5()
@@ -41,7 +46,14 @@ class JaxBackend:
         t1 = t[-1]
         saveat = SaveAt(ts=t)
         sol = diffeqsolve(
-            term, solver, t0, t1, dt0=0.1, y0=y0, saveat=saveat, args=args
+            term,
+            solver,
+            t0,
+            t1,
+            dt0=0.1,
+            y0=y0,
+            saveat=saveat,
+            args=args,
         )
         return sol.ys
 

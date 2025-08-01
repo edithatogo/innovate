@@ -1,14 +1,12 @@
-import pytest
 import numpy as np
+import pytest
 from innovate.compete.multi_product import MultiProductDiffusionModel
 from innovate.fitters.scipy_fitter import ScipyFitter
 
 
-@pytest.fixture
+@pytest.fixture()
 def synthetic_multi_product_data():
-    """
-    Generate synthetic data for two competing products.
-    """
+    """Generate synthetic data for two competing products."""
     t = np.linspace(0, 50, 100)
 
     # True parameters for two products
@@ -32,9 +30,7 @@ def synthetic_multi_product_data():
 
 
 def test_multi_product_model_fit(synthetic_multi_product_data):
-    """
-    Test the fitting of the MultiProductDiffusionModel.
-    """
+    """Test the fitting of the MultiProductDiffusionModel."""
     t, y, true_params = synthetic_multi_product_data
 
     # Initialize the model for 2 products

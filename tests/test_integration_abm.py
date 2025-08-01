@@ -1,11 +1,11 @@
+import ndlib.models.ModelConfig as mc
+import networkx as nx
 import numpy as np
 import pandas as pd
-import networkx as nx
-import ndlib.models.ModelConfig as mc
 from innovate.abm.ndlib_model import NDlibModel as NdlibInnovationModel
-from innovate.preprocess import stl_decomposition
-from innovate.fitters.scipy_fitter import ScipyFitter
 from innovate.diffuse.logistic import LogisticModel
+from innovate.fitters.scipy_fitter import ScipyFitter
+from innovate.preprocess import stl_decomposition
 from innovate.utils.model_evaluation import get_fit_metrics
 
 

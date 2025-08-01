@@ -1,14 +1,14 @@
 # tests/test_competition.py
 
-import pytest
 import numpy as np
 import pandas as pd
+import pytest
 from innovate.compete.competition import MultiProductDiffusionModel
-from innovate.substitute.fisher_pry import FisherPryModel
 from innovate.diffuse.bass import BassModel
+from innovate.substitute.fisher_pry import FisherPryModel
 
 
-@pytest.fixture
+@pytest.fixture()
 def fitted_bass_model():
     """A fitted Bass model."""
     model = BassModel()
@@ -16,7 +16,7 @@ def fitted_bass_model():
     return model
 
 
-@pytest.fixture
+@pytest.fixture()
 def fitted_fisher_pry_model():
     """A fitted Fisher-Pry model."""
     model = FisherPryModel()
@@ -31,7 +31,10 @@ def test_competition_model_init():
     m_vals = [1000, 800]
     product_names = ["ProdA", "ProdB"]
     model = MultiProductDiffusionModel(
-        p=p_vals, Q=Q_matrix, m=m_vals, names=product_names
+        p=p_vals,
+        Q=Q_matrix,
+        m=m_vals,
+        names=product_names,
     )
     assert len(model.p) == 2
     assert model.Q.shape == (2, 2)
@@ -65,7 +68,10 @@ def test_multi_product_model_fit_basic():
     init_Q = [[0.1, 0.01], [0.01, 0.1]]
     init_m = [1200, 1000]
     model = MultiProductDiffusionModel(
-        p=init_p, Q=init_Q, m=init_m, names=["ProdA", "ProdB"]
+        p=init_p,
+        Q=init_Q,
+        m=init_m,
+        names=["ProdA", "ProdB"],
     )
     model.fit(t, y_obs)
 
@@ -89,7 +95,10 @@ def test_multi_product_model_predict_basic():
     product_names = ["ProdA", "ProdB"]
 
     model = MultiProductDiffusionModel(
-        p=p_vals, Q=Q_matrix, m=m_vals, names=product_names
+        p=p_vals,
+        Q=Q_matrix,
+        m=m_vals,
+        names=product_names,
     )
 
     t = np.arange(1, 101)  # Use a longer time horizon for more meaningful prediction

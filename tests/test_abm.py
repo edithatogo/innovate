@@ -1,8 +1,8 @@
 import pandas as pd
-from innovate.abm.model import InnovationModel
-from innovate.abm.disruptive_innovation import DisruptiveInnovationModel
-from innovate.abm.sentiment_hype_cycle import SentimentHypeModel
 from innovate.abm.competitive_diffusion import CompetitiveDiffusionModel
+from innovate.abm.disruptive_innovation import DisruptiveInnovationModel
+from innovate.abm.model import InnovationModel
+from innovate.abm.sentiment_hype_cycle import SentimentHypeModel
 
 
 def test_innovation_model_basic():

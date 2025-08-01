@@ -1,14 +1,15 @@
 # src/innovate/hype/hype_modified_bass.py
 
-import numpy as np
 from typing import Sequence
+
+import numpy as np
 from innovate.diffuse.bass import BassModel
+
 from .hype_cycle import HypeCycleModel
 
 
 class HypeModifiedBassModel:
-    """
-    A modified Bass model where the adoption parameters (p and q) are
+    """A modified Bass model where the adoption parameters (p and q) are
     influenced by a time-varying hype function.
     """
 
@@ -17,8 +18,7 @@ class HypeModifiedBassModel:
         self.hype_model = hype_model
 
     def predict(self, t: Sequence[float], y0: float) -> np.ndarray:
-        """
-        Predicts the cumulative adoption over time, with hype-modified
+        """Predicts the cumulative adoption over time, with hype-modified
         parameters.
 
         This requires solving the Bass differential equation with time-varying
@@ -26,7 +26,7 @@ class HypeModifiedBassModel:
         """
         if not self.bass_model.params_ or not self.hype_model.params_:
             raise RuntimeError(
-                "Both the Bass and Hype models must have parameters set."
+                "Both the Bass and Hype models must have parameters set.",
             )
 
         from scipy.integrate import odeint
@@ -49,7 +49,10 @@ class HypeModifiedBassModel:
 
             # Solve for the next step
             y_step = odeint(
-                bass_differential, y[i - 1], [t[i - 1], t[i]], args=(p_t, q_t)
+                bass_differential,
+                y[i - 1],
+                [t[i - 1], t[i]],
+                args=(p_t, q_t),
             )
             y[i] = y_step[1]
 

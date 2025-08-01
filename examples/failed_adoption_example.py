@@ -1,6 +1,5 @@
 """Example of a multi-product diffusion model with a failing product."""
 import numpy as np
-
 from innovate.compete.competition import MultiProductDiffusionModel
 
 

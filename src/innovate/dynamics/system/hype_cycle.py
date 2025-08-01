@@ -2,14 +2,12 @@ from .base import SystemBehavior
 
 
 class HypeCycleBehavior(SystemBehavior):
-    """
-    Models the rise and fall of expectations through coupled expectation and
+    """Models the rise and fall of expectations through coupled expectation and
     maturity stocks.
     """
 
     def compute_behavior_rates(self, **params):
-        """
-        Calculates the instantaneous behavior rates.
+        """Calculates the instantaneous behavior rates.
 
         Equations:
         dE/dt = alpha1 * Innovation_Trigger + alpha2 * M * E - alpha3 * E + alpha4 * (E - M) * E
@@ -19,7 +17,8 @@ class HypeCycleBehavior(SystemBehavior):
 
         Calculates the derivatives dE/dt and dM/dt using coupled differential equations, incorporating effects from innovation triggers, interaction coefficients, and R&D investment as a function of expectation.
 
-        Returns:
+        Returns
+        -------
             dEdt (float): Rate of change of expectation.
             dMdt (float): Rate of change of maturity.
         """
@@ -52,15 +51,16 @@ class HypeCycleBehavior(SystemBehavior):
         return dEdt, dMdt
 
     def predict_states(self, time_points, **params):
-        """
-        Predicts the states of the system over time.
+        """Predicts the states of the system over time.
 
         Simulate the evolution of expectation and maturity states over specified time points.
 
-        Parameters:
+        Parameters
+        ----------
             time_points (array-like): Sequence of time points at which to evaluate the system states.
 
-        Returns:
+        Returns
+        -------
             ndarray: Array of shape (len(time_points), 2) containing the predicted expectation and maturity values at each time point.
         """
         from scipy.integrate import solve_ivp
@@ -81,12 +81,12 @@ class HypeCycleBehavior(SystemBehavior):
         return sol.y.T
 
     def get_parameters_schema(self):
-        """
-        Returns the schema for the model's parameters.
+        """Returns the schema for the model's parameters.
 
         Return a dictionary schema describing all model parameters, including their types and default values.
 
-        Returns:
+        Returns
+        -------
             dict: A mapping of parameter names to their type and default value for the hype cycle model.
         """
         return {

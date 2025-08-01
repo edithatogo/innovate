@@ -1,5 +1,6 @@
 from mesa import Model
 from mesa.space import MultiGrid
+
 from .agent import InnovationAgent
 
 

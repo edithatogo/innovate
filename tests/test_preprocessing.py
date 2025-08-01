@@ -1,10 +1,10 @@
-import pytest
-import pandas as pd
 import numpy as np
+import pandas as pd
+import pytest
 from innovate.utils.preprocessing import apply_rolling_average, apply_sarima
 
 
-@pytest.fixture
+@pytest.fixture()
 def synthetic_time_series_data():
     dates = pd.date_range(start="2020-01-01", periods=120, freq="M")
     data = pd.Series(np.linspace(10, 1000, 120), index=dates)

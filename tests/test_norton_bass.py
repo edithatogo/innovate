@@ -1,14 +1,12 @@
-import pytest
 import numpy as np
-from innovate.substitute.norton_bass import NortonBassModel
+import pytest
 from innovate.fitters.scipy_fitter import ScipyFitter
+from innovate.substitute.norton_bass import NortonBassModel
 
 
-@pytest.fixture
+@pytest.fixture()
 def synthetic_norton_bass_data():
-    """
-    Generate synthetic data for two generations of a technology using the model itself.
-    """
+    """Generate synthetic data for two generations of a technology using the model itself."""
     t = np.linspace(0, 50, 100)
 
     # True parameters for two generations
@@ -23,9 +21,7 @@ def synthetic_norton_bass_data():
 
 
 def test_norton_bass_model_fit(synthetic_norton_bass_data):
-    """
-    Test the fitting of the NortonBassModel.
-    """
+    """Test the fitting of the NortonBassModel."""
     t, y, true_params = synthetic_norton_bass_data
 
     # Initialize the model for 2 generations

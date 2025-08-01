@@ -1,12 +1,12 @@
 from mesa import Model
-from mesa.space import MultiGrid
 from mesa.datacollection import DataCollector
+from mesa.space import MultiGrid
+
 from .agent import InnovationAgent
 
 
 class SentimentHypeAgent(InnovationAgent):
-    """
-    An agent in a sentiment-driven hype cycle model.
+    """An agent in a sentiment-driven hype cycle model.
     The agent's adoption decision is influenced by sentiment.
     """
 
@@ -15,15 +15,16 @@ class SentimentHypeAgent(InnovationAgent):
         self.sentiment = 0  # -1 for negative, 0 for neutral, 1 for positive
 
     def step(self):
-        """
-        The agent's step function.
+        """The agent's step function.
         The agent's decision to adopt is based on its neighbors' adoptions and sentiment.
         """
         if self.adopted:
             return
 
         neighbors = self.model.grid.get_neighbors(
-            self.pos, moore=True, include_center=False
+            self.pos,
+            moore=True,
+            include_center=False,
         )
         if not neighbors:
             return
@@ -40,12 +41,15 @@ class SentimentHypeAgent(InnovationAgent):
 
 
 class SentimentHypeModel(Model):
-    """
-    A model for a sentiment-driven hype cycle.
-    """
+    """A model for a sentiment-driven hype cycle."""
 
     def __init__(
-        self, num_agents, width, height, adoption_threshold, sentiment_threshold
+        self,
+        num_agents,
+        width,
+        height,
+        adoption_threshold,
+        sentiment_threshold,
     ):
         super().__init__()
         self.num_agents = num_agents
@@ -69,21 +73,17 @@ class SentimentHypeModel(Model):
 
         self.datacollector = DataCollector(
             model_reporters={
-                "Adopters": lambda m: sum([1 for a in m.agents if a.adopted])
-            }
+                "Adopters": lambda m: sum([1 for a in m.agents if a.adopted]),
+            },
         )
 
     def step(self):
-        """
-        Run one step of the model.
-        """
+        """Run one step of the model."""
         self.datacollector.collect(self)
         self.agents.do("step")
 
     def run_model(self, n_steps):
-        """
-        Run the model for a specified number of steps.
-        """
+        """Run the model for a specified number of steps."""
         for _ in range(n_steps):
             self.step()
         return self.datacollector.get_model_vars_dataframe()

@@ -1,13 +1,13 @@
 # tests/test_fisher_pry.py
 
-import pytest
 import numpy as np
 import pandas as pd
-from innovate.substitute.fisher_pry import FisherPryModel
+import pytest
 from innovate.fitters.scipy_fitter import ScipyFitter
+from innovate.substitute.fisher_pry import FisherPryModel
 
 
-@pytest.fixture
+@pytest.fixture()
 def fisher_pry_data():
     """Generate synthetic data for a Fisher-Pry model."""
     alpha = 0.5
@@ -121,8 +121,7 @@ def test_fit_with_pandas_arrow(fisher_pry_data):
 
 
 def test_fit_non_logistic_data():
-    """
-    Test fitting with non-logistic data.
+    """Test fitting with non-logistic data.
     It should either complete with finite parameters or raise a RuntimeError.
     """
     t = np.arange(20)

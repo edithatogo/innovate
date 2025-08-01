@@ -1,6 +1,7 @@
+from typing import Any, Dict, List, Optional
+
 import matplotlib.pyplot as plt
 import networkx as nx
-from typing import List, Dict, Any, Optional
 
 
 def plot_network_diffusion(
@@ -12,10 +13,10 @@ def plot_network_diffusion(
     snapshot_interval: int = 1,
     save_path_prefix: Optional[str] = None,
 ):
-    """
-    Plots snapshots of a network diffusion process over time.
+    """Plots snapshots of a network diffusion process over time.
 
     Args:
+    ----
         graph: The networkx graph representing the network.
         node_states_over_time: A list of dictionaries, where each dictionary
                                represents the state of nodes at a given time step.
@@ -42,7 +43,11 @@ def plot_network_diffusion(
             ]
 
             nx.draw_networkx_nodes(
-                graph, pos, node_color=colors, node_size=200, alpha=0.9
+                graph,
+                pos,
+                node_color=colors,
+                node_size=200,
+                alpha=0.9,
             )
             nx.draw_networkx_edges(graph, pos, alpha=0.3)
             nx.draw_networkx_labels(graph, pos, font_size=8, font_color="black")

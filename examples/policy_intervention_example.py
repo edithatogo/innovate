@@ -1,5 +1,5 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from innovate.diffuse.bass import BassModel
 from innovate.fitters.scipy_fitter import ScipyFitter
 from innovate.policy.intervention import PolicyIntervention
@@ -49,7 +49,9 @@ def run_policy_intervention_example():
 
     # 5. Apply the time-varying parameters and get the prediction callable
     predict_with_policy = policy_handler.apply_time_varying_params(
-        t_points=t_data, p_effect=p_boost_effect, q_effect=q_boost_effect
+        t_points=t_data,
+        p_effect=p_boost_effect,
+        q_effect=q_boost_effect,
     )
 
     # 6. Predict with the policy

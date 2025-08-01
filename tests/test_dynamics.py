@@ -1,6 +1,6 @@
-import pytest
 import numpy as np
-from innovate.dynamics.growth import SymmetricGrowth, SkewedGrowth, DualInfluenceGrowth
+import pytest
+from innovate.dynamics.growth import DualInfluenceGrowth, SkewedGrowth, SymmetricGrowth
 
 
 def test_symmetric_growth():

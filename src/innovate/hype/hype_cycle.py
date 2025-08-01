@@ -1,12 +1,12 @@
 # src/innovate/hype/hype_cycle.py
 
+from typing import Dict, Sequence
+
 import numpy as np
-from typing import Sequence, Dict
 
 
 class HypeCycleModel:
-    """
-    A model for generating a Hype Cycle curve.
+    """A model for generating a Hype Cycle curve.
 
     This model combines a logistic growth curve for the underlying technology
     maturity with a hype function to model the visibility of the technology.
@@ -29,13 +29,14 @@ class HypeCycleModel:
         ]
 
     def predict(self, t: Sequence[float]) -> np.ndarray:
-        """
-        Generates the Hype Cycle curve.
+        """Generates the Hype Cycle curve.
 
         Args:
+        ----
             t: A sequence of time points.
 
         Returns:
+        -------
             The visibility of the technology at each time point.
         """
         if not self._params:

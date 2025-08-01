@@ -1,7 +1,9 @@
 from typing import Sequence
-from typing_extensions import Self
+
 import numpy as np
 from scipy.optimize import curve_fit
+from typing_extensions import Self
+
 from innovate.base.base import DiffusionModel
 from innovate.compete.competition import MultiProductDiffusionModel  # Import the model
 
@@ -19,10 +21,10 @@ class ScipyFitter:
         weights: Sequence[float] = None,
         **kwargs,
     ) -> Self:
-        """
-        Fits a DiffusionModel instance using scipy.optimize.curve_fit.
+        """Fits a DiffusionModel instance using scipy.optimize.curve_fit.
 
         Args:
+        ----
             model: An instance of a DiffusionModel (e.g., BassModel, GompertzModel, LogisticModel).
             t: Time points (independent variable).
             y: Observed adoption data (dependent variable).
@@ -32,9 +34,11 @@ class ScipyFitter:
             kwargs: Additional keyword arguments to pass to scipy.optimize.curve_fit.
 
         Returns:
+        -------
             The fitter instance.
 
         Raises:
+        ------
             RuntimeError: If fitting fails.
         """
         t_arr = np.array(t)
@@ -44,7 +48,7 @@ class ScipyFitter:
         # Check for MultiProductDiffusionModel and handle accordingly
         if isinstance(model, MultiProductDiffusionModel):
             raise NotImplementedError(
-                "Fitting MultiProductDiffusionModel with ScipyFitter is not yet implemented"
+                "Fitting MultiProductDiffusionModel with ScipyFitter is not yet implemented",
             )
         else:
             y_arr = y_arr.flatten()

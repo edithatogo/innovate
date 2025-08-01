@@ -1,7 +1,8 @@
+from typing import Sequence
+
 import numpy as np
 from scipy.integrate import odeint
 from scipy.special import logsumexp
-from typing import Sequence
 
 
 class NumPyBackend:
@@ -33,7 +34,12 @@ class NumPyBackend:
 
     def mean(self, a, axis=None, dtype=None, out=None, keepdims=False, *, where=True):
         return np.mean(
-            a, axis=axis, dtype=dtype, out=out, keepdims=keepdims, where=where
+            a,
+            axis=axis,
+            dtype=dtype,
+            out=out,
+            keepdims=keepdims,
+            where=where,
         )
 
     def where(self, condition, x, y):

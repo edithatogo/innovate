@@ -1,17 +1,17 @@
-from typing import Sequence, Dict, Any, Optional
-from ..base import DiffusionModel
+from typing import Any, Dict, Optional, Sequence
+
 import numpy as np
+
+from ..base import DiffusionModel
 
 
 class CounterfactualAnalysis:
-    """
-    A class for conducting counterfactual analysis on fitted diffusion models.
-    """
+    """A class for conducting counterfactual analysis on fitted diffusion models."""
 
     def __init__(self, model: "DiffusionModel"):
         if not model.params_:
             raise ValueError(
-                "The model must be fitted before conducting counterfactual analysis."
+                "The model must be fitted before conducting counterfactual analysis.",
             )
         self.model = model
         self.baseline_forecast: Optional[Sequence[float]] = None
@@ -22,9 +22,7 @@ class CounterfactualAnalysis:
         t: Sequence[float],
         covariates: Optional[Dict[str, Sequence[float]]] = None,
     ):
-        """
-        Generate the baseline forecast using the original fitted model.
-        """
+        """Generate the baseline forecast using the original fitted model."""
         self.baseline_forecast = self.model.predict(t)
 
     def run_counterfactual(
@@ -34,9 +32,7 @@ class CounterfactualAnalysis:
         counterfactual_params: Optional[Dict[str, Any]] = None,
         counterfactual_covariates: Optional[Dict[str, Sequence[float]]] = None,
     ):
-        """
-        Generate a forecast for a given counterfactual scenario.
-        """
+        """Generate a forecast for a given counterfactual scenario."""
         # Create a deep copy of the model to avoid modifying the original
         import copy
 
@@ -55,12 +51,10 @@ class CounterfactualAnalysis:
         self.counterfactual_forecasts[scenario_name] = forecast
 
     def compare_scenarios(self, scenario_name: str):
-        """
-        Compare a counterfactual scenario to the baseline forecast.
-        """
+        """Compare a counterfactual scenario to the baseline forecast."""
         if self.baseline_forecast is None:
             raise RuntimeError(
-                "Baseline forecast has not been run. Call .run_baseline() first."
+                "Baseline forecast has not been run. Call .run_baseline() first.",
             )
         if scenario_name not in self.counterfactual_forecasts:
             raise ValueError(f"Counterfactual scenario '{scenario_name}' not found.")

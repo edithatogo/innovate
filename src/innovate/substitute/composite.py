@@ -1,25 +1,27 @@
 # src/innovate/substitute/composite.py
 
-from innovate.base.base import DiffusionModel
-from typing import Sequence, Dict, List, Optional
-import numpy as np
+from typing import Dict, List, Optional, Sequence
 
+import numpy as np
 from innovate.backend import current_backend as B
+from innovate.base.base import DiffusionModel
 
 
 class CompositeDiffusionModel(DiffusionModel):
-    """
-    A generic model for the diffusion of multiple, potentially interacting products.
+    """A generic model for the diffusion of multiple, potentially interacting products.
     This model is composed of multiple individual diffusion models and an interaction matrix
     that defines how the adoption of one product affects the adoption of others.
     """
 
     def __init__(
-        self, models: List[DiffusionModel], alpha: Optional[np.ndarray] = None
+        self,
+        models: List[DiffusionModel],
+        alpha: Optional[np.ndarray] = None,
     ):
-        """
-        Initializes the CompositeDiffusionModel.
-        Parameters:
+        """Initializes the CompositeDiffusionModel.
+
+        Parameters
+        ----------
             models: A list of individual diffusion models.
             alpha: An interaction matrix where alpha[i, j] represents the effect of model j on model i.
         """
@@ -33,7 +35,7 @@ class CompositeDiffusionModel(DiffusionModel):
         else:
             if alpha.shape != (self.n_models, self.n_models):
                 raise ValueError(
-                    "Interaction matrix alpha must have shape (n_models, n_models)."
+                    "Interaction matrix alpha must have shape (n_models, n_models).",
                 )
             self.alpha = alpha
 
@@ -52,7 +54,9 @@ class CompositeDiffusionModel(DiffusionModel):
         return names
 
     def initial_guesses(
-        self, t: Sequence[float], y: Sequence[float]
+        self,
+        t: Sequence[float],
+        y: Sequence[float],
     ) -> Dict[str, float]:
         guesses = {}
         for i, model in enumerate(self.models):
@@ -97,9 +101,7 @@ class CompositeDiffusionModel(DiffusionModel):
         return bounds
 
     def predict(self, t: Sequence[float]) -> Sequence[float]:
-        """
-        Predicts the cumulative adoption for each product.
-        """
+        """Predicts the cumulative adoption for each product."""
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
@@ -138,9 +140,7 @@ class CompositeDiffusionModel(DiffusionModel):
         return sol.sol(t).T
 
     def differential_equation(self, t, y, params):
-        """
-        Defines the composite diffusion model's differential equations.
-        """
+        """Defines the composite diffusion model's differential equations."""
         dydt = B.zeros_like(y)
         param_list = (
             [params[name] for name in self.param_names]
@@ -213,6 +213,6 @@ class CompositeDiffusionModel(DiffusionModel):
             [
                 self.differential_equation(ti, yi, self._params)
                 for ti, yi in zip(t, y_pred)
-            ]
+            ],
         )
         return rates

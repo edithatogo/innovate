@@ -1,7 +1,8 @@
 # src/innovate/fail/analysis.py
 
-import numpy as np
 from typing import List
+
+import numpy as np
 
 
 def analyze_failure(
@@ -9,13 +10,13 @@ def analyze_failure(
     failure_threshold: float = 0.1,
     time_horizon: int = -1,
 ) -> List[int]:
-    """
-    Analyzes the results of a competition model to identify failed technologies.
+    """Analyzes the results of a competition model to identify failed technologies.
 
     A technology is considered to have failed if its market share does not
     exceed the failure_threshold within the given time_horizon.
 
     Args:
+    ----
         predictions: A 2D array of market share predictions from a
                      CompetitionModel.
         failure_threshold: The market share threshold for a technology to be
@@ -25,6 +26,7 @@ def analyze_failure(
                       considered.
 
     Returns:
+    -------
         A list of indices of the technologies that have failed.
     """
     if predictions.ndim != 2:

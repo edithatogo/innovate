@@ -1,17 +1,15 @@
-"""
-A Bayesian fitter that uses the BlackJAX library for MCMC sampling.
+"""A Bayesian fitter that uses the BlackJAX library for MCMC sampling.
 """
 from typing import Any, Callable, Dict, Tuple
 
 import arviz as az
+import blackjax
 import jax
 import jax.numpy as jnp
-import blackjax
 
 
 class BlackJaxFitter:
-    """
-    A fitter that uses BlackJAX for Bayesian parameter estimation.
+    """A fitter that uses BlackJAX for Bayesian parameter estimation.
 
     This fitter provides a flexible way to perform Bayesian inference by
     leveraging the high-performance samplers in BlackJAX. It is designed
@@ -26,10 +24,10 @@ class BlackJaxFitter:
         num_warmup: int = 1000,
         num_samples: int = 1000,
     ):
-        """
-        Initializes the BlackJaxFitter.
+        """Initializes the BlackJaxFitter.
 
         Args:
+        ----
             model: The model to fit.
             num_chains: The number of chains to run.
             num_warmup: The number of warmup steps for the sampler.
@@ -49,10 +47,10 @@ class BlackJaxFitter:
         initial_params: Dict[str, float],
         **kwargs: Any,
     ) -> None:
-        """
-        Fits the model to the data using a BlackJAX sampler.
+        """Fits the model to the data using a BlackJAX sampler.
 
         Args:
+        ----
             y: The observed data.
             log_probability_fn: A function that takes a dictionary of
                 parameters and returns the log-probability of the model.
@@ -78,7 +76,9 @@ class BlackJaxFitter:
             # Adapt step size and mass matrix
             adapt = blackjax.window_adaptation(blackjax.nuts, log_probability_fn)
             (last_state, parameters), _ = adapt.run(
-                chain_rng_key, initial_params, self.num_warmup
+                chain_rng_key,
+                initial_params,
+                self.num_warmup,
             )
 
             # Sample from the posterior

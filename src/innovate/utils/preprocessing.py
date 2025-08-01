@@ -1,6 +1,7 @@
-import pandas as pd
+from typing import Optional, Sequence, Tuple, Union
+
 import numpy as np
-from typing import Sequence, Tuple, Union, Optional
+import pandas as pd
 from statsmodels.tsa.seasonal import STL
 
 
@@ -17,7 +18,8 @@ def ensure_datetime_index(
 
 
 def aggregate_time_series(
-    data: Union[pd.Series, pd.DataFrame], freq: str
+    data: Union[pd.Series, pd.DataFrame],
+    freq: str,
 ) -> Union[pd.Series, pd.DataFrame]:
     """Aggregates time series data to a specified frequency (e.g., 'D', 'W', 'M')."""
     data = ensure_datetime_index(data)
@@ -25,16 +27,20 @@ def aggregate_time_series(
 
 
 def apply_stl_decomposition(
-    data: pd.Series, period: Optional[int] = None, robust: bool = True
+    data: pd.Series,
+    period: Optional[int] = None,
+    robust: bool = True,
 ) -> Tuple[pd.Series, pd.Series, pd.Series]:
     """Applies Seasonal-Trend decomposition using Loess (STL) to a time series.
 
     Args:
+    ----
         data: A pandas Series with a DatetimeIndex.
         period: Period of the seasonality. If None, it will try to infer.
         robust: Whether to use robust fitting (less sensitive to outliers).
 
     Returns:
+    -------
         A tuple of (trend, seasonal, residuals) as pandas Series.
     """
     data = ensure_datetime_index(data)
@@ -45,7 +51,7 @@ def apply_stl_decomposition(
             period = 12  # Assume monthly seasonality if data is long enough
         else:
             raise ValueError(
-                "Period must be specified for STL decomposition if data length is too short for inference."
+                "Period must be specified for STL decomposition if data length is too short for inference.",
             )
 
     try:
@@ -62,14 +68,15 @@ def cumulative_sum(data: Sequence[float]) -> np.ndarray:
 
 
 def apply_rolling_average(data: pd.Series, window: int) -> pd.Series:
-    """
-    Applies a rolling average to a time series.
+    """Applies a rolling average to a time series.
 
     Args:
+    ----
         data: A pandas Series.
         window: The size of the rolling window.
 
     Returns:
+    -------
         A pandas Series with the rolling average applied.
     """
     return data.rolling(window=window).mean()
@@ -80,16 +87,17 @@ def apply_sarima(
     order: Tuple[int, int, int],
     seasonal_order: Tuple[int, int, int, int],
 ) -> pd.Series:
-    """
-    Fits a SARIMA model to a time series and returns the fitted values.
+    """Fits a SARIMA model to a time series and returns the fitted values.
 
     Args:
+    ----
         data: A pandas Series.
         order: The (p,d,q) order of the model for the number of AR parameters,
             differences, and MA parameters.
         seasonal_order: The (P,D,Q,s) seasonal order of the model.
 
     Returns:
+    -------
         A pandas Series with the fitted values from the SARIMA model.
     """
     from statsmodels.tsa.statespace.sarimax import SARIMAX

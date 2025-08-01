@@ -1,21 +1,22 @@
-from innovate.base.base import DiffusionModel
-from innovate import backend
-from innovate.dynamics.growth.dual_influence import DualInfluenceGrowth
-from typing import Sequence, Dict
+from typing import Dict, Sequence
+
 import numpy as np
+
+from innovate import backend
+from innovate.base.base import DiffusionModel
+from innovate.dynamics.growth.dual_influence import DualInfluenceGrowth
 
 
 class BassModel(DiffusionModel):
-    """
-    Implementation of the Bass Diffusion Model.
+    """Implementation of the Bass Diffusion Model.
     This is a wrapper around the DualInfluenceGrowth dynamics model.
     """
 
     def __init__(self, covariates: Sequence[str] = None, t_event: float = None):
-        """
-        Initialize the BassModel with optional covariates, a time event, and a DualInfluenceGrowth dynamics model.
+        """Initialize the BassModel with optional covariates, a time event, and a DualInfluenceGrowth dynamics model.
 
-        Parameters:
+        Parameters
+        ----------
             covariates (Sequence[str], optional): List of covariate names to include in the model. Defaults to an empty list if not provided.
             t_event (float, optional): The time of a structural break or event. If provided, the model will fit separate parameters for the periods before and after this time.
         """
@@ -26,10 +27,10 @@ class BassModel(DiffusionModel):
 
     @property
     def param_names(self) -> Sequence[str]:
-        """
-        Return the list of parameter names for the Bass model, including base parameters and covariate-related coefficients.
+        """Return the list of parameter names for the Bass model, including base parameters and covariate-related coefficients.
 
-        Returns:
+        Returns
+        -------
             names (Sequence[str]): List of parameter names, with covariate effects included if applicable.
         """
         names = ["p", "q", "m"]
@@ -40,7 +41,9 @@ class BassModel(DiffusionModel):
         return names
 
     def initial_guesses(
-        self, t: Sequence[float], y: Sequence[float]
+        self,
+        t: Sequence[float],
+        y: Sequence[float],
     ) -> Dict[str, float]:
         guesses = {
             "p": 0.001,
@@ -53,7 +56,7 @@ class BassModel(DiffusionModel):
                     "p_post": 0.001,
                     "q_post": 0.1,
                     "m_post": np.max(y) * 1.1,
-                }
+                },
             )
         for cov in self.covariates:
             guesses[f"beta_p_{cov}"] = 0.0
@@ -62,14 +65,15 @@ class BassModel(DiffusionModel):
         return guesses
 
     def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
-        """
-        Return parameter bounds for the Bass model, including covariate effects.
+        """Return parameter bounds for the Bass model, including covariate effects.
 
-        Parameters:
+        Parameters
+        ----------
             t (Sequence[float]): Sequence of time points.
             y (Sequence[float]): Observed cumulative adoption values.
 
-        Returns:
+        Returns
+        -------
             Dict[str, tuple]: Dictionary mapping parameter names to (lower, upper) bounds. Base parameters "p", "q", and "m" have fixed bounds; covariate-related parameters are unbounded.
         """
         bounds = {
@@ -83,7 +87,7 @@ class BassModel(DiffusionModel):
                     "p_post": (1e-6, 0.1),
                     "q_post": (1e-6, 1.0),
                     "m_post": (np.max(y), np.inf),
-                }
+                },
             )
         for cov in self.covariates:
             bounds[f"beta_p_{cov}"] = (-np.inf, np.inf)
@@ -92,19 +96,23 @@ class BassModel(DiffusionModel):
         return bounds
 
     def predict(
-        self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None
+        self,
+        t: Sequence[float],
+        covariates: Dict[str, Sequence[float]] = None,
     ) -> Sequence[float]:
-        """
-        Predicts cumulative adoption over time using the Bass diffusion model.
+        """Predicts cumulative adoption over time using the Bass diffusion model.
 
-        Parameters:
+        Parameters
+        ----------
             t (Sequence[float]): Sequence of time points at which to predict cumulative adoption.
             covariates (Dict[str, Sequence[float]], optional): Optional time series of covariate values affecting model parameters.
 
-        Returns:
+        Returns
+        -------
             Sequence[float]: Predicted cumulative adoption at each time point in `t`.
 
-        Raises:
+        Raises
+        ------
             RuntimeError: If the model parameters have not been set (i.e., the model is not fitted).
         """
         if not self._params:
@@ -129,19 +137,20 @@ class BassModel(DiffusionModel):
         return sol.flatten()
 
     def differential_equation(self, t, y, params, covariates, t_eval):
-        """
-        Defines the Bass model's differential equation, incorporating covariate effects if provided.
+        """Defines the Bass model's differential equation, incorporating covariate effects if provided.
 
         At each time point, adjusts the innovation, imitation, and market size parameters by linearly combining base values with covariate contributions, then computes the instantaneous growth rate using the underlying DualInfluenceGrowth model.
 
-        Parameters:
+        Parameters
+        ----------
             t: Current time point.
             y: Current cumulative adoption value.
             params: Sequence of model parameters, including base and covariate coefficients.
             covariates: Optional dictionary mapping covariate names to their time series values.
             t_eval: Sequence of time points for covariate interpolation.
 
-        Returns:
+        Returns
+        -------
             The instantaneous adoption rate at time t.
         """
         if self.t_event is not None and t >= self.t_event:
@@ -174,7 +183,8 @@ class BassModel(DiffusionModel):
             import pytensor.tensor as pt  # type: ignore
 
             if isinstance(
-                m_t, pt.TensorVariable
+                m_t,
+                pt.TensorVariable,
             ):  # pragma: no cover - depends on pytensor
                 return pt.switch(m_t > 0, rate, 0.0)
         except Exception:
@@ -187,23 +197,24 @@ class BassModel(DiffusionModel):
         y: Sequence[float],
         covariates: Dict[str, Sequence[float]] = None,
     ) -> float:
-        """
-        Compute the coefficient of determination (R²) between observed and predicted values.
+        """Compute the coefficient of determination (R²) between observed and predicted values.
 
-        Parameters:
+        Parameters
+        ----------
                 y (Sequence[float]): Observed cumulative adoption values.
 
-        Returns:
+        Returns
+        -------
                 float: R² score indicating the proportion of variance explained by the model predictions.
         """
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t, covariates)
         ss_res = backend.current_backend.sum(
-            (backend.current_backend.array(y) - y_pred) ** 2
+            (backend.current_backend.array(y) - y_pred) ** 2,
         )
         ss_tot = backend.current_backend.sum(
-            (backend.current_backend.array(y) - backend.current_backend.mean(y)) ** 2
+            (backend.current_backend.array(y) - backend.current_backend.mean(y)) ** 2,
         )
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
@@ -216,7 +227,9 @@ class BassModel(DiffusionModel):
         self._params = value
 
     def predict_adoption_rate(
-        self, t: Sequence[float], covariates: Dict[str, Sequence[float]] = None
+        self,
+        t: Sequence[float],
+        covariates: Dict[str, Sequence[float]] = None,
     ) -> Sequence[float]:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
@@ -228,7 +241,7 @@ class BassModel(DiffusionModel):
             [
                 self.differential_equation(ti, yi, params, covariates, t)
                 for ti, yi in zip(t, y_pred)
-            ]
+            ],
         )
         return rates
 

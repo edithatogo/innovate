@@ -1,7 +1,6 @@
 """Examples of agent-based models."""
 import matplotlib.pyplot as plt
 import pandas as pd
-
 from innovate.abm import (
     CompetitiveDiffusionModel,
     DisruptiveInnovationModel,

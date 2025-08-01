@@ -1,11 +1,10 @@
-from .base import ContagionSpread
 import numpy as np
+
+from .base import ContagionSpread
 
 
 class SIR(ContagionSpread):
-    """
-    Implements the Susceptible-Infected-Recovered (SIR) model.
-    """
+    """Implements the Susceptible-Infected-Recovered (SIR) model."""
 
     def __init__(self, beta: float = 0.2, gamma: float = 0.1):
         self.beta = beta
@@ -20,9 +19,7 @@ class SIR(ContagionSpread):
 
 
 class SIS(ContagionSpread):
-    """
-    Implements the Susceptible-Infected-Susceptible (SIS) model.
-    """
+    """Implements the Susceptible-Infected-Susceptible (SIS) model."""
 
     def __init__(self, beta: float = 0.2, gamma: float = 0.1):
         self.beta = beta
@@ -36,9 +33,7 @@ class SIS(ContagionSpread):
 
 
 class SEIR(ContagionSpread):
-    """
-    Implements the Susceptible-Exposed-Infected-Recovered (SEIR) model.
-    """
+    """Implements the Susceptible-Exposed-Infected-Recovered (SEIR) model."""
 
     def __init__(self, beta: float = 0.2, sigma: float = 0.5, gamma: float = 0.1):
         self.beta = beta

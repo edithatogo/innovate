@@ -1,14 +1,14 @@
 # src/innovate/substitute/fisher_pry.py
 
-from innovate.base.base import DiffusionModel
-from innovate import backend
-from typing import Sequence, Dict
+from typing import Dict, Sequence
+
 import numpy as np
+from innovate import backend
+from innovate.base.base import DiffusionModel
 
 
 class FisherPryModel(DiffusionModel):
-    """
-    Implementation of the Fisher-Pry model for technology substitution.
+    """Implementation of the Fisher-Pry model for technology substitution.
 
     This model assumes that the substitution of a new technology for an old one
     follows a logistic growth curve. The model tracks the market share
@@ -24,10 +24,11 @@ class FisherPryModel(DiffusionModel):
         return ["alpha", "t0"]
 
     def initial_guesses(
-        self, t: Sequence[float], y: Sequence[float]
+        self,
+        t: Sequence[float],
+        y: Sequence[float],
     ) -> Dict[str, float]:
-        """
-        Provides initial guesses for the model parameters.
+        """Provides initial guesses for the model parameters.
         - t0 is estimated as the time at which the market share is closest to 50%.
         - alpha is estimated from a linearization of the logistic function.
         """
@@ -71,13 +72,14 @@ class FisherPryModel(DiffusionModel):
         return alpha * y * (1 - y)
 
     def predict(self, t: Sequence[float]) -> Sequence[float]:
-        """
-        Predicts the market share fraction of the new technology.
+        """Predicts the market share fraction of the new technology.
 
         Args:
+        ----
             t: A sequence of time points.
 
         Returns:
+        -------
             A sequence of predicted market share fractions (between 0 and 1).
         """
         if not self._params:
@@ -89,21 +91,19 @@ class FisherPryModel(DiffusionModel):
         return 1 / (1 + backend.current_backend.exp(-alpha * (t_arr - t0)))
 
     def score(self, t: Sequence[float], y: Sequence[float]) -> float:
-        """
-        Calculates the R^2 score for the model fit.
-        """
+        """Calculates the R^2 score for the model fit."""
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t)
         ss_res = backend.current_backend.sum(
-            (backend.current_backend.array(y) - y_pred) ** 2
+            (backend.current_backend.array(y) - y_pred) ** 2,
         )
         ss_tot = backend.current_backend.sum(
             (
                 backend.current_backend.array(y)
                 - backend.current_backend.mean(backend.current_backend.array(y))
             )
-            ** 2
+            ** 2,
         )
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
@@ -116,8 +116,7 @@ class FisherPryModel(DiffusionModel):
         self._params = value
 
     def predict_adoption_rate(self, t: Sequence[float]) -> Sequence[float]:
-        """
-        Predicts the rate of change of market share.
+        """Predicts the rate of change of market share.
 
         This is the derivative of the logistic function, representing the
         speed of substitution.
@@ -129,8 +128,7 @@ class FisherPryModel(DiffusionModel):
         return self.differential_equation(y_pred, t_arr, **self._params)
 
     def fit(self, fitter, t: Sequence[float], y: Sequence[float], **kwargs):
-        """
-        Fits the Fisher-Pry model to the data.
+        """Fits the Fisher-Pry model to the data.
 
         Note: The input `y` for the Fisher-Pry model should be the market
         share fraction (between 0 and 1) of the new technology.

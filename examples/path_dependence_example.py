@@ -1,5 +1,5 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from innovate.path_dependence.lock_in import LockInModel
 
 
@@ -40,10 +40,14 @@ def run_path_dependence_example():
     # Scenario 1 Plot
     axes[0].plot(t, predictions_s1[:, 0], label="Technology 1", color="blue")
     axes[0].plot(
-        t, predictions_s1[:, 1], label="Technology 2", color="red", linestyle="--"
+        t,
+        predictions_s1[:, 1],
+        label="Technology 2",
+        color="red",
+        linestyle="--",
     )
     axes[0].set_title(
-        f"Scenario 1: Initial (Tech 1={y0_scenario1[0]}, Tech 2={y0_scenario1[1]})"
+        f"Scenario 1: Initial (Tech 1={y0_scenario1[0]}, Tech 2={y0_scenario1[1]})",
     )
     axes[0].set_xlabel("Time")
     axes[0].set_ylabel("Cumulative Adoptions")
@@ -53,10 +57,14 @@ def run_path_dependence_example():
     # Scenario 2 Plot
     axes[1].plot(t, predictions_s2[:, 0], label="Technology 1", color="blue")
     axes[1].plot(
-        t, predictions_s2[:, 1], label="Technology 2", color="red", linestyle="--"
+        t,
+        predictions_s2[:, 1],
+        label="Technology 2",
+        color="red",
+        linestyle="--",
     )
     axes[1].set_title(
-        f"Scenario 2: Initial (Tech 1={y0_scenario2[0]}, Tech 2={y0_scenario2[1]})"
+        f"Scenario 2: Initial (Tech 1={y0_scenario2[0]}, Tech 2={y0_scenario2[1]})",
     )
     axes[1].set_xlabel("Time")
     axes[1].legend()
@@ -65,10 +73,14 @@ def run_path_dependence_example():
     # Scenario 3 Plot
     axes[2].plot(t, predictions_s3[:, 0], label="Technology 1", color="blue")
     axes[2].plot(
-        t, predictions_s3[:, 1], label="Technology 2", color="red", linestyle="--"
+        t,
+        predictions_s3[:, 1],
+        label="Technology 2",
+        color="red",
+        linestyle="--",
     )
     axes[2].set_title(
-        f"Scenario 3: Initial (Tech 1={y0_scenario3[0]}, Tech 2={y0_scenario3[1]})"
+        f"Scenario 3: Initial (Tech 1={y0_scenario3[0]}, Tech 2={y0_scenario3[1]})",
     )
     axes[2].set_xlabel("Time")
     axes[2].legend()

@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
-from innovate.models.mixture import MixtureModel
 from innovate.diffuse.logistic import LogisticModel
+from innovate.models.mixture import MixtureModel
 
 
 def test_mixture_model_predict():
@@ -34,7 +34,7 @@ def test_mixture_model_predict():
 
     # Check that the predictions are the weighted sum of the individual model predictions
     expected_predictions = 0.4 * np.array(model1.predict(t)) + 0.6 * np.array(
-        model2.predict(t)
+        model2.predict(t),
     )
 
     predictions = mixture.predict(t)

@@ -1,11 +1,12 @@
-import pytest
-import networkx as nx
 import matplotlib
+import networkx as nx
+import pytest
 
 matplotlib.use("Agg")  # Use non-interactive backend
-from innovate.plots.network import plot_network_diffusion
-import matplotlib.pyplot as plt
 import os
+
+import matplotlib.pyplot as plt
+from innovate.plots.network import plot_network_diffusion
 
 
 def test_plot_network_diffusion_basic(tmp_path):
@@ -56,7 +57,9 @@ def test_plot_network_diffusion_no_save():
     node_states = [{1: False, 2: False, 3: False}, {1: True, 2: False, 3: False}]
     try:
         plot_network_diffusion(
-            graph=G, node_states_over_time=node_states, snapshot_interval=1
+            graph=G,
+            node_states_over_time=node_states,
+            snapshot_interval=1,
         )
     except Exception as e:
         pytest.fail(f"plot_network_diffusion (no save) raised an exception: {e}")

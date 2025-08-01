@@ -2,14 +2,12 @@ from .base import ContagionSpread
 
 
 class SISModel(ContagionSpread):
-    """
-    Models the spread of a contagion through a population with Susceptible
+    """Models the spread of a contagion through a population with Susceptible
     and Infectious states, where recovered individuals can become susceptible again.
     """
 
     def compute_spread_rate(self, **params):
-        """
-        Calculates the instantaneous spread rate.
+        """Calculates the instantaneous spread rate.
 
         Equations:
         dS/dt = -beta * S * I + gamma * I
@@ -17,13 +15,15 @@ class SISModel(ContagionSpread):
 
         Compute the instantaneous rates of change for susceptible and infectious populations in the SIS model.
 
-        Parameters:
+        Parameters
+        ----------
                 S (float): Current number of susceptible individuals.
                 I (float): Current number of infectious individuals.
                 transmission_rate (float, optional): Probability of transmission per contact (default 0.1).
                 recovery_rate (float, optional): Rate at which infectious individuals become susceptible again (default 0.01).
 
-        Returns:
+        Returns
+        -------
                 tuple: A pair (dSdt, dIdt) representing the rates of change for susceptible and infectious populations, respectively.
         """
         S = params.get("S")
@@ -36,17 +36,18 @@ class SISModel(ContagionSpread):
         return dSdt, dIdt
 
     def predict_states(self, time_points, **params):
-        """
-        Predicts the states of the population over time.
+        """Predicts the states of the population over time.
 
         Simulate and return the evolution of susceptible and infectious populations over specified time points using the SIS model.
 
-        Parameters:
+        Parameters
+        ----------
             time_points (array-like): Sequence of time points at which to compute the population states.
             S0 (float, optional): Initial number of susceptible individuals. Defaults to 999 if not provided in params.
             I0 (float, optional): Initial number of infectious individuals. Defaults to 1 if not provided in params.
 
-        Returns:
+        Returns
+        -------
             ndarray: Array of shape (len(time_points), 2), where each row contains the susceptible and infectious counts at a given time point.
         """
         from scipy.integrate import solve_ivp
@@ -67,8 +68,7 @@ class SISModel(ContagionSpread):
         return sol.y.T
 
     def get_parameters_schema(self):
-        """
-        Returns the schema for the model's parameters.
+        """Returns the schema for the model's parameters.
 
         Return a dictionary describing the schema for the SIS model parameters, including types, default values, and descriptions.
         """

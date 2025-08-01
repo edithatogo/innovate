@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import List, Tuple
 
 import numpy as np
-
 from innovate.backend import use_backend
 from innovate.diffuse.logistic import LogisticModel
 from innovate.fitters.batched_fitter import BatchedFitter

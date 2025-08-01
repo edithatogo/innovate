@@ -1,13 +1,14 @@
-from innovate.base.base import DiffusionModel
-from innovate import backend
-from innovate.dynamics.growth.symmetric import SymmetricGrowth
-from typing import Sequence, Dict, Optional
+from typing import Dict, Optional, Sequence
+
 import numpy as np
+
+from innovate import backend
+from innovate.base.base import DiffusionModel
+from innovate.dynamics.growth.symmetric import SymmetricGrowth
 
 
 class LogisticModel(DiffusionModel):
-    """
-    Implementation of the Logistic Diffusion Model.
+    """Implementation of the Logistic Diffusion Model.
     This is a wrapper around the SymmetricGrowth dynamics model.
     """
 
@@ -16,10 +17,10 @@ class LogisticModel(DiffusionModel):
         covariates: Optional[Sequence[str]] = None,
         t_event: Optional[float] = None,
     ):
-        """
-        Initialize a LogisticModel with optional covariates and an internal SymmetricGrowth dynamics model.
+        """Initialize a LogisticModel with optional covariates and an internal SymmetricGrowth dynamics model.
 
-        Parameters:
+        Parameters
+        ----------
             covariates (Sequence[str], optional): List of covariate names to include in the model. Defaults to an empty list.
             t_event (float, optional): The time of a structural break or event.
         """
@@ -30,10 +31,10 @@ class LogisticModel(DiffusionModel):
 
     @property
     def param_names(self) -> Sequence[str]:
-        """
-        Return the list of parameter names for the logistic model, including base parameters and covariate-specific coefficients.
+        """Return the list of parameter names for the logistic model, including base parameters and covariate-specific coefficients.
 
-        Returns:
+        Returns
+        -------
             names (Sequence[str]): List of parameter names, with covariate effects prefixed by 'beta_L_', 'beta_k_', and 'beta_x0_' for each covariate.
         """
         names = ["L", "k", "x0"]
@@ -44,7 +45,9 @@ class LogisticModel(DiffusionModel):
         return names
 
     def initial_guesses(
-        self, t: Sequence[float], y: Sequence[float]
+        self,
+        t: Sequence[float],
+        y: Sequence[float],
     ) -> Dict[str, float]:
         guesses = {
             "L": np.max(y) * 1.1,
@@ -57,7 +60,7 @@ class LogisticModel(DiffusionModel):
                     "L_post": np.max(y) * 1.1,
                     "k_post": 0.1,
                     "x0_post": np.median(t),
-                }
+                },
             )
         for cov in self.covariates:
             guesses[f"beta_L_{cov}"] = 0.0
@@ -66,14 +69,15 @@ class LogisticModel(DiffusionModel):
         return guesses
 
     def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
-        """
-        Return parameter bounds for the logistic model, including covariate effects.
+        """Return parameter bounds for the logistic model, including covariate effects.
 
-        Parameters:
+        Parameters
+        ----------
             t (Sequence[float]): Time points of the observations.
             y (Sequence[float]): Observed values corresponding to each time point.
 
-        Returns:
+        Returns
+        -------
             Dict[str, tuple]: Dictionary mapping parameter names to their (lower, upper) bounds.
         """
         bounds = {
@@ -87,7 +91,7 @@ class LogisticModel(DiffusionModel):
                     "L_post": (np.max(y), np.inf),
                     "k_post": (1e-6, np.inf),
                     "x0_post": (-np.inf, np.inf),
-                }
+                },
             )
         for cov in self.covariates:
             bounds[f"beta_L_{cov}"] = (-np.inf, np.inf)
@@ -100,17 +104,19 @@ class LogisticModel(DiffusionModel):
         t: Sequence[float],
         covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> Sequence[float]:
-        """
-        Predicts the cumulative values of the logistic diffusion process at specified time points.
+        """Predicts the cumulative values of the logistic diffusion process at specified time points.
 
-        Parameters:
+        Parameters
+        ----------
             t (Sequence[float]): Time points at which to compute predictions.
             covariates (Dict[str, Sequence[float]], optional): Covariate values for each time point.
 
-        Returns:
+        Returns
+        -------
             Sequence[float]: Predicted cumulative values of the logistic model at each time point.
 
-        Raises:
+        Raises
+        ------
             RuntimeError: If the model parameters have not been set (i.e., the model is not fitted).
         """
         if not self._params:
@@ -162,28 +168,30 @@ class LogisticModel(DiffusionModel):
         y: Sequence[float],
         covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> float:
-        """
-        Compute the coefficient of determination (R²) between observed values and model predictions.
+        """Compute the coefficient of determination (R²) between observed values and model predictions.
 
-        Parameters:
+        Parameters
+        ----------
             t (Sequence[float]): Time points at which observations were made.
             y (Sequence[float]): Observed values corresponding to time points.
             covariates (Dict[str, Sequence[float]], optional): Covariate values for each time point.
 
-        Returns:
+        Returns
+        -------
             float: The R² score indicating the proportion of variance explained by the model predictions.
 
-        Raises:
+        Raises
+        ------
             RuntimeError: If the model has not been fitted.
         """
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t, covariates)
         ss_res = backend.current_backend.sum(
-            (backend.current_backend.array(y) - y_pred) ** 2
+            (backend.current_backend.array(y) - y_pred) ** 2,
         )
         ss_tot = backend.current_backend.sum(
-            (backend.current_backend.array(y) - backend.current_backend.mean(y)) ** 2
+            (backend.current_backend.array(y) - backend.current_backend.mean(y)) ** 2,
         )
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
@@ -218,7 +226,10 @@ class LogisticModel(DiffusionModel):
         return k * y_pred * (1 - y_pred / L)
 
     def cumulative_adoption(
-        self, t: Sequence[float], *params, **param_kwargs
+        self,
+        t: Sequence[float],
+        *params,
+        **param_kwargs,
     ) -> Sequence[float]:
         if param_kwargs:
             self.params_ = param_kwargs

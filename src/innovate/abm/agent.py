@@ -16,4 +16,3 @@ class InnovationAgent(Agent):
     def step(self):
         """Agent's behavior at each step."""
         # Implement agent's decision-making process here
-        pass

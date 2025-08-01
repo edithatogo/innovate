@@ -1,16 +1,18 @@
 # src/innovate/hype/delayed_hype_bass.py
 
-import numpy as np
 from typing import Sequence
+
+import numpy as np
 from innovate.diffuse.bass import BassModel
-from .hype_cycle import HypeCycleModel
-from jitcdde import jitcdde, y, t as time
+from jitcdde import jitcdde, y
+from jitcdde import t as time
 from symengine import exp
+
+from .hype_cycle import HypeCycleModel
 
 
 class DelayedHypeBassModel:
-    """
-    A modified Bass model with a time-delayed hype influence, implemented
+    """A modified Bass model with a time-delayed hype influence, implemented
     using Delay Differential Equations (DDEs).
     """
 
@@ -20,12 +22,10 @@ class DelayedHypeBassModel:
         self.delay = delay
 
     def predict(self, t_eval: Sequence[float], y0: float) -> np.ndarray:
-        """
-        Predicts the cumulative adoption over time using a DDE solver.
-        """
+        """Predicts the cumulative adoption over time using a DDE solver."""
         if not self.bass_model.params_ or not self.hype_model.params_:
             raise RuntimeError(
-                "Both the Bass and Hype models must have parameters set."
+                "Both the Bass and Hype models must have parameters set.",
             )
 
         p_base = self.bass_model.params_["p"]
@@ -57,7 +57,7 @@ class DelayedHypeBassModel:
             + (q_base * (1 + visibility.subs(time, time - self.delay)))
             * y(0)
             / m
-            * (m - y(0))
+            * (m - y(0)),
         ]
 
         DDE = jitcdde(f)

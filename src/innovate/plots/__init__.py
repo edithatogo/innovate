@@ -1,6 +1,7 @@
+from typing import Optional, Sequence
+
 import matplotlib.pyplot as plt
 import pandas as pd
-from typing import Sequence, Optional
 
 
 def plot_diffusion_curve(
@@ -17,6 +18,7 @@ def plot_diffusion_curve(
     Plots observed and predicted diffusion curves.
 
     Args:
+    ----
         t: Time points.
         y_obs: Observed cumulative adoptions.
         y_pred: Predicted cumulative adoptions.
@@ -51,6 +53,7 @@ def plot_multi_product_diffusion(
     Plots observed and predicted diffusion curves for multiple products.
 
     Args:
+    ----
         df_pred: DataFrame of predicted cumulative adoptions (index is time, columns are product names).
         df_obs: Optional DataFrame of observed cumulative adoptions.
         title: Plot title.
@@ -63,7 +66,11 @@ def plot_multi_product_diffusion(
     # Plot predicted curves
     for col in df_pred.columns:
         plt.plot(
-            df_pred.index, df_pred[col], "-", label=f"Predicted {col}", linewidth=2
+            df_pred.index,
+            df_pred[col],
+            "-",
+            label=f"Predicted {col}",
+            linewidth=2,
         )
 
     # Plot observed data if provided

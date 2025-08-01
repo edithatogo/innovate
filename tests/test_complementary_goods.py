@@ -1,11 +1,11 @@
 # tests/test_complementary_goods.py
 
-import pytest
 import numpy as np
+import pytest
 from innovate.ecosystem.complementary_goods import ComplementaryGoodsModel
 
 
-@pytest.fixture
+@pytest.fixture()
 def complementary_goods_data():
     """Generate synthetic data for the ComplementaryGoodsModel."""
     true_params = {"k1": 0.3, "k2": 0.2, "c1": 0.1, "c2": 0.15}

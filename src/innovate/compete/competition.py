@@ -1,8 +1,10 @@
-from innovate.base.base import DiffusionModel, Self
-from innovate.backend import current_backend as B
-from typing import Sequence, Dict, List, Union
-import pandas as pd
+from typing import Dict, List, Sequence, Union
+
 import numpy as np
+import pandas as pd
+
+from innovate.backend import current_backend as B
+from innovate.base.base import DiffusionModel, Self
 
 
 class MultiProductDiffusionModel(DiffusionModel):
@@ -45,10 +47,14 @@ class MultiProductDiffusionModel(DiffusionModel):
         # Avoid division by zero if m_j is zero, though m should be positive
         # Handle cases where y_j might exceed m_j slightly due to numerical issues
         adoption_share = B.where(
-            self.m.flatten() != 0, y_arr / self.m.flatten(), B.zeros_like(y_arr)
+            self.m.flatten() != 0,
+            y_arr / self.m.flatten(),
+            B.zeros_like(y_arr),
         )
         adoption_share = B.where(
-            adoption_share > 1.0, 1.0, adoption_share
+            adoption_share > 1.0,
+            1.0,
+            adoption_share,
         )  # Cap at 1.0
 
         imitation = B.matmul(self.Q, adoption_share)  # shape (N,)
@@ -63,7 +69,7 @@ class MultiProductDiffusionModel(DiffusionModel):
         # Ensure parameters are set (either by init or by a fitter)
         if not self.params_ and (self.p is None or self.Q is None or self.m is None):
             raise RuntimeError(
-                "Model parameters are not set. Call .fit() or initialize with p, Q, m."
+                "Model parameters are not set. Call .fit() or initialize with p, Q, m.",
             )
 
         # If fit was called, use the stored parameters. Otherwise, use initial ones.
@@ -104,7 +110,9 @@ class MultiProductDiffusionModel(DiffusionModel):
         p, Q, m = params
         y_arr = B.array(y)
         adoption_share = B.where(
-            m.flatten() != 0, y_arr / m.flatten(), B.zeros_like(y_arr)
+            m.flatten() != 0,
+            y_arr / m.flatten(),
+            B.zeros_like(y_arr),
         )
         adoption_share = B.where(adoption_share > 1.0, 1.0, adoption_share)
         imitation = B.matmul(Q, adoption_share)
@@ -172,7 +180,7 @@ class MultiProductDiffusionModel(DiffusionModel):
     def score(self, t: Sequence[float], y: pd.DataFrame) -> float:
         if not self.params_ and (self.p is None or self.Q is None or self.m is None):
             raise RuntimeError(
-                "Model has not been fitted or initialized with parameters yet. Call .fit() or initialize with p, Q, m."
+                "Model has not been fitted or initialized with parameters yet. Call .fit() or initialize with p, Q, m.",
             )
 
         y_pred_df = self.predict(t)
@@ -180,7 +188,7 @@ class MultiProductDiffusionModel(DiffusionModel):
         # Ensure y contains all product names and is in the correct order
         if not all(name in y.columns for name in self.names):
             raise ValueError(
-                f"Observed data DataFrame must contain columns for all products: {self.names}"
+                f"Observed data DataFrame must contain columns for all products: {self.names}",
             )
 
         y_obs_aligned = y[list(self.names)].values.flatten()
@@ -210,7 +218,9 @@ class MultiProductDiffusionModel(DiffusionModel):
         return ["p", "Q", "m"]
 
     def initial_guesses(
-        self, t: Sequence[float], y: Sequence[float]
+        self,
+        t: Sequence[float],
+        y: Sequence[float],
     ) -> Dict[str, float]:
         return {}
 
