@@ -12,17 +12,21 @@ def test_mixture_model_predict():
     # Create a mixture model
     mixture = MixtureModel(models=[model1, model2], weights=[0.4, 0.6])
 
+    # Fit the model on dummy data to enable prediction
+    mixture.fit(np.linspace(0, 1, 2), np.zeros(2))
+
     # Set parameters for the individual models
     model1.params_ = {"L": 1000, "k": 0.1, "x0": 20}
     model2.params_ = {"L": 2000, "k": 0.05, "x0": 30}
     params = {
-        "L_1": 1000,
-        "k_1": 0.1,
-        "x0_1": 20,
-        "L_2": 2000,
-        "k_2": 0.05,
-        "x0_2": 30,
-        "weight_1": 0.4,
+        "model_0_L": 1000,
+        "model_0_k": 0.1,
+        "model_0_x0": 20,
+        "model_1_L": 2000,
+        "model_1_k": 0.05,
+        "model_1_x0": 30,
+        "weight_0": 0.4,
+        "weight_1": 0.6,
     }
     mixture.params_ = params
 

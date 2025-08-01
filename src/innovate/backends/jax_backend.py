@@ -23,6 +23,12 @@ class JaxBackend:
     def where(self, condition, x, y):
         return jnp.where(condition, x, y)
 
+    def abs(self, x):
+        return jnp.abs(x)
+
+    def argmin(self, x):
+        return jnp.argmin(x)
+
     def log(self, x):
         return jnp.log(x)
 

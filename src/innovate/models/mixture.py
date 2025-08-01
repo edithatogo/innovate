@@ -30,12 +30,25 @@ class MixtureModel(DiffusionModel):
     def __init__(
         self,
         models: Sequence[DiffusionModel],
+        weights: Sequence[float] = None,
         max_iter: int = 100,
         tol: float = 1e-6,
     ):
+        if not models:
+            raise ValueError("At least one model is required.")
+
         self.models = models
         self.num_components = len(models)
-        self.weights = B.ones(self.num_components) / self.num_components
+
+        if weights is not None:
+            if len(weights) != self.num_components:
+                raise ValueError("Number of weights must match number of models.")
+            if not np.isclose(sum(weights), 1.0):
+                raise ValueError("Weights must sum to 1.")
+            self.weights = B.array(weights)
+        else:
+            self.weights = B.ones(self.num_components) / self.num_components
+
         self.max_iter = max_iter
         self.tol = tol
         self._params: Dict[str, float] = {}

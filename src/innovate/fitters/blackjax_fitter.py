@@ -7,7 +7,7 @@ import arviz as az
 import jax
 import jax.numpy as jnp
 import blackjax
-from innovate.base.base import BaseModel
+from innovate.base.base import DiffusionModel
 
 
 class BlackJaxFitter:
@@ -22,7 +22,7 @@ class BlackJaxFitter:
 
     def __init__(
         self,
-        model: BaseModel,
+        model: Any,
         num_chains: int = 4,
         num_warmup: int = 1000,
         num_samples: int = 1000,

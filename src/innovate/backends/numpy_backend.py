@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.integrate import odeint
+from scipy.special import logsumexp
 from typing import Sequence
 
 
@@ -43,6 +44,9 @@ class NumPyBackend:
 
     def log(self, x):
         return np.log(x)
+
+    def logsumexp(self, x, axis=None):
+        return logsumexp(x, axis=axis)
 
     def solve_ode(self, f, y0: Sequence[float], t: Sequence[float]) -> np.ndarray:
         # scipy.integrate.odeint expects y0 as a 1D array and t as a 1D array
