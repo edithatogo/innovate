@@ -8,6 +8,7 @@ import matplotlib
 matplotlib.use("Agg")  # Use non-interactive backend
 import matplotlib.pyplot as plt
 import os
+from collections import OrderedDict
 
 from innovate.diffuse.bass import BassModel
 from innovate.compete.lotka_volterra import LotkaVolterraModel
@@ -319,9 +320,12 @@ fig.tight_layout()
 lines, labels = ax1.get_legend_handles_labels()
 lines2, labels2 = ax2.get_legend_handles_labels()
 # Use a dictionary to remove duplicate labels from the fill_between plots
-from collections import OrderedDict
 unique_labels = OrderedDict(zip(labels2, lines2))
-ax2.legend(lines + list(unique_labels.values()), labels + list(unique_labels.keys()), loc="upper left")
+ax2.legend(
+    lines + list(unique_labels.values()),
+    labels + list(unique_labels.keys()),
+    loc="upper left",
+)
 
 plt.savefig(os.path.join(SAVE_DIR, "adoption_curve.png"))
 plt.close()
