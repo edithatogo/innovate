@@ -55,3 +55,6 @@ exclude = ["*.ipynb"]
 "src/innovate/dynamics/contagion/seir.py" = ["E741"]
 "src/innovate/dynamics/contagion/sir.py" = ["E741"]
 "src/innovate/dynamics/contagion/sis.py" = ["E741"]
+
+[tool.mypy]
+ignore_missing_imports = true

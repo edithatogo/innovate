@@ -1,18 +1,15 @@
-# src/innovate/ecosystem/complementary_goods.py
-
-from typing import Dict, Sequence
+from typing import Any, Dict, Sequence
 
 import numpy as np
-from innovate.base.base import DiffusionModel
 
 
-class ComplementaryGoodsModel(DiffusionModel):
+class ComplementaryGoodsModel:
     """A model for the diffusion of two complementary goods, where the
     adoption of each good is positively influenced by the adoption of the
     other.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._params: Dict[str, float] = {}
 
     @property
@@ -24,29 +21,30 @@ class ComplementaryGoodsModel(DiffusionModel):
             "c2",  # Influence of good 1 on good 2
         ]
 
-    def differential_equation(self, y, t):
+    def differential_equation(
+        self, y: np.ndarray, t: float, *params: float
+    ) -> Sequence[float]:
         y1, y2 = y
-        k1, k2, c1, c2 = (
-            self._params["k1"],
-            self._params["k2"],
-            self._params["c1"],
-            self._params["c2"],
-        )
+        k1, k2, c1, c2 = params
         dy1_dt = k1 * y1 * (1 - y1) + c1 * y1 * y2
         dy2_dt = k2 * y2 * (1 - y2) + c2 * y1 * y2
         return [dy1_dt, dy2_dt]
 
-    def predict(self, t: Sequence[float], y0: Sequence[float]) -> np.ndarray:
+    def predict(self, t: Sequence[float], y0: np.ndarray) -> np.ndarray:
         """Predicts the adoption of both goods over time."""
         if not self._params:
             raise RuntimeError("Model parameters have not been set.")
 
         from scipy.integrate import odeint
 
-        solution = odeint(self.differential_equation, y0, t)
+        solution = odeint(
+            self.differential_equation, y0, t, args=tuple(self._params.values())
+        )
         return solution
 
-    def fit(self, t: Sequence[float], y: np.ndarray, **kwargs):
+    def fit(
+        self, t: Sequence[float], y: np.ndarray, **kwargs: Any
+    ) -> "ComplementaryGoodsModel":
         """Fits the model to the data."""
         from scipy.optimize import minimize
 
@@ -56,10 +54,10 @@ class ComplementaryGoodsModel(DiffusionModel):
 
         y0 = y[0, :]
 
-        def objective(params, t, y):
+        def objective(params: np.ndarray, t: Sequence[float], y: np.ndarray) -> float:
             self.params_ = dict(zip(self.param_names, params))
             y_pred = self.predict(t, y0)
-            return np.sum((y - y_pred) ** 2)
+            return float(np.sum((y - y_pred) ** 2))
 
         initial_params = list(self.initial_guesses(t, y).values())
         param_bounds = list(self.bounds(t, y).values())
@@ -86,7 +84,7 @@ class ComplementaryGoodsModel(DiffusionModel):
 
         # Use the first few data points to estimate initial growth
         num_initial_points = min(5, len(t))
-        t_initial = t[:num_initial_points]
+        t_initial = np.array(t[:num_initial_points])
         y_initial = y[:num_initial_points]
 
         # Estimate k1 and k2 from the initial exponential growth
@@ -105,7 +103,9 @@ class ComplementaryGoodsModel(DiffusionModel):
         # For c1 and c2, we can start with small positive values
         return {"k1": k1, "k2": k2, "c1": 0.01, "c2": 0.01}
 
-    def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
+    def bounds(
+        self, t: Sequence[float], y: np.ndarray
+    ) -> Dict[str, tuple[float, float]]:
         return {
             "k1": (0, np.inf),
             "k2": (0, np.inf),
@@ -118,7 +118,7 @@ class ComplementaryGoodsModel(DiffusionModel):
         return self._params
 
     @params_.setter
-    def params_(self, value: Dict[str, float]):
+    def params_(self, value: Dict[str, float]) -> None:
         self._params = value
 
     def score(self, t: Sequence[float], y: np.ndarray) -> float:
@@ -132,7 +132,7 @@ class ComplementaryGoodsModel(DiffusionModel):
     def predict_adoption_rate(
         self,
         t: Sequence[float],
-        y0: Sequence[float],
+        y0: np.ndarray,
     ) -> np.ndarray:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet.")

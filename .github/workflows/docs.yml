@@ -4,32 +4,85 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
+  # Allow manual triggering
+  workflow_dispatch:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch full history for proper versioning
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.11'
+          cache: 'pip'
 
-      - name: Install dependencies
+      - name: Install system dependencies
         run: |
-          pip install .[dev]
-          pip install sphinx
+          sudo apt-get update
+          sudo apt-get install -y pandoc
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[dev]
+          pip install sphinx sphinx-rtd-theme myst-parser
+          pip install nbsphinx jupyter
+          pip install sphinx-autobuild sphinx-copybutton
 
       - name: Build documentation
-        run: sphinx-build docs/source docs/build/html
+        run: |
+          cd docs
+          make clean
+          sphinx-build -b html source build/html -W --keep-going
+
+      - name: Upload documentation artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation
+          path: docs/build/html/
+          retention-days: 7
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Download documentation artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: documentation
+          path: docs-html
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs-html
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/build/html
+        id: deployment
+        uses: actions/deploy-pages@v4

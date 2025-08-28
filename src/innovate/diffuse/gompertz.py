@@ -1,4 +1,4 @@
-from typing import Dict, Sequence
+from typing import Dict, Optional, Sequence
 
 import numpy as np
 
@@ -12,7 +12,11 @@ class GompertzModel(DiffusionModel):
     This is a wrapper around the SkewedGrowth dynamics model.
     """
 
-    def __init__(self, covariates: Sequence[str] = None, t_event: float = None):
+    def __init__(
+        self,
+        covariates: Optional[Sequence[str]] = None,
+        t_event: Optional[float] = None,
+    ):
         """Initialize a Gompertz diffusion model with optional covariates.
 
         Creates an empty parameter dictionary, stores the provided covariate names, and instantiates a SkewedGrowth dynamics model for growth rate computation.
@@ -97,7 +101,7 @@ class GompertzModel(DiffusionModel):
     def predict(
         self,
         t: Sequence[float],
-        covariates: Dict[str, Sequence[float]] = None,
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> Sequence[float]:
         """Predicts cumulative adoption values at specified times using the fitted Gompertz diffusion model.
 
@@ -191,7 +195,7 @@ class GompertzModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-        covariates: Dict[str, Sequence[float]] = None,
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> float:
         """Compute the coefficient of determination (R²) between observed data and model predictions.
 
@@ -227,7 +231,7 @@ class GompertzModel(DiffusionModel):
     def predict_adoption_rate(
         self,
         t: Sequence[float],
-        covariates: Dict[str, Sequence[float]] = None,
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> Sequence[float]:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")

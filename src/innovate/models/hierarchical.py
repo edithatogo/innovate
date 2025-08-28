@@ -1,4 +1,4 @@
-from typing import Dict, List, Sequence
+from typing import Dict, List, Optional, Sequence
 
 from innovate.backend import current_backend as B
 from innovate.base.base import DiffusionModel
@@ -87,7 +87,7 @@ class HierarchicalModel(DiffusionModel):
     def predict(
         self,
         t: Sequence[float],
-        covariates: Dict[str, Sequence[float]] = None,
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ):
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
@@ -115,7 +115,7 @@ class HierarchicalModel(DiffusionModel):
     def predict_adoption_rate(
         self,
         t: Sequence[float],
-        covariates: Dict[str, Sequence[float]] = None,
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ):
         import numpy as np
 
@@ -127,7 +127,7 @@ class HierarchicalModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-        covariates: Dict[str, Sequence[float]] = None,
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> float:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")

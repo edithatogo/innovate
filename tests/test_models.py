@@ -187,20 +187,37 @@ def test_scipy_fitter_single_model(synthetic_data):
     assert all(param in model.params_ for param in ["p", "q", "m"])
 
 
-def test_scipy_fitter_multi_product_model_not_implemented():
+def test_scipy_fitter_multi_product_model_working():
+    """Test that ScipyFitter now works with MultiProductDiffusionModel."""
     fitter = ScipyFitter()
     p_vals = [0.02, 0.015]
     Q_matrix = [[0.3, 0.05], [0.03, 0.25]]
     m_vals = [1000, 800]
     model = MultiProductDiffusionModel(p=p_vals, Q=Q_matrix, m=m_vals)
-    time_points = np.arange(1, 10)
-    data = pd.DataFrame(np.random.rand(len(time_points), 2) * 100, columns=model.names)
-
-    with pytest.raises(
-        NotImplementedError,
-        match="Fitting MultiProductDiffusionModel with ScipyFitter is not yet implemented",
-    ):
-        fitter.fit(model, time_points, data)
+    
+    # Generate synthetic data for fitting
+    time_points = np.arange(1, 20)
+    # Create synthetic multi-product data
+    true_model = MultiProductDiffusionModel(p=p_vals, Q=Q_matrix, m=m_vals)
+    clean_data = true_model.predict(time_points)
+    
+    # Add small amount of noise
+    np.random.seed(42)
+    noisy_data = clean_data + np.random.normal(0, 10, clean_data.shape)
+    noisy_data = np.maximum(0, noisy_data)  # Ensure non-negative
+    
+    # Test that fitting works without raising NotImplementedError
+    try:
+        fitter.fit(model, time_points, noisy_data.values)
+        # If we get here, the fitting worked
+        assert model.params_ is not None
+        assert 'p' in model.params_
+        assert 'Q' in model.params_
+        assert 'm' in model.params_
+        print("✅ ScipyFitter with MultiProductDiffusionModel works correctly")
+    except Exception as e:
+        # Any other exception is a real error
+        raise AssertionError(f"ScipyFitter.fit() with MultiProductDiffusionModel failed: {e}")
 
 
 def test_mixture_model():

@@ -1,4 +1,4 @@
-from typing import Callable, Sequence
+from typing import Callable, Optional, Sequence
 
 import numpy as np
 
@@ -16,8 +16,8 @@ class PolicyIntervention:
     def apply_time_varying_params(
         self,
         t_points: Sequence[float],
-        p_effect: Callable[[float], float] = None,
-        q_effect: Callable[[float], float] = None,
+        p_effect: Optional[Callable[[float], float]] = None,
+        q_effect: Optional[Callable[[float], float]] = None,
     ) -> Callable[[Sequence[float]], Sequence[float]]:
         """Applies time-varying effects to 'p' and 'q' parameters of the model.
         This method is specifically designed for Bass-like models.

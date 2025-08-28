@@ -1,0 +1,94 @@
+/* Custom CSS for innovate documentation */
+
+/* Improve code block styling */
+.highlight {
+    background: #f8f9fa !important;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+/* Enhance admonition styles */
+.admonition {
+    margin: 20px 0;
+    padding: 15px;
+    border-left: 4px solid #007acc;
+    background-color: #f0f7ff;
+}
+
+.admonition.note {
+    border-left-color: #007acc;
+    background-color: #e7f3ff;
+}
+
+.admonition.warning {
+    border-left-color: #ff9800;
+    background-color: #fff3e0;
+}
+
+.admonition.tip {
+    border-left-color: #4caf50;
+    background-color: #e8f5e8;
+}
+
+/* Improve table styling */
+.wy-table-responsive table td, .wy-table-responsive table th {
+    white-space: normal;
+}
+
+/* Better spacing for parameter lists */
+.field-list {
+    margin-bottom: 20px;
+}
+
+.field-list > dt {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Enhance navigation */
+.wy-nav-content-wrap {
+    background: white;
+}
+
+/* Code signature styling */
+.sig-name {
+    font-weight: bold;
+    color: #d73a49;
+}
+
+.sig-param {
+    font-style: italic;
+}
+
+/* Improve readability of long signatures */
+.highlight .bp {
+    color: #999;
+}
+
+.highlight .nf {
+    color: #6f42c1;
+    font-weight: bold;
+}
+
+/* Custom styling for method/class documentation */
+.py.class .sig-name,
+.py.method .sig-name,
+.py.function .sig-name {
+    color: #e36209;
+}
+
+/* Improve spacing in content */
+.section {
+    margin-bottom: 30px;
+}
+
+/* Style for examples */
+.doctest {
+    background: #f6f8fa;
+    border: 1px solid #d1d5da;
+    border-radius: 3px;
+    padding: 10px;
+    margin: 10px 0;
+}

@@ -1,4 +1,4 @@
-from typing import Dict, Sequence
+from typing import Dict, Optional, Sequence
 
 import numpy as np
 
@@ -12,7 +12,11 @@ class BassModel(DiffusionModel):
     This is a wrapper around the DualInfluenceGrowth dynamics model.
     """
 
-    def __init__(self, covariates: Sequence[str] = None, t_event: float = None):
+    def __init__(
+        self,
+        covariates: Optional[Sequence[str]] = None,
+        t_event: Optional[float] = None,
+    ):
         """Initialize the BassModel with optional covariates, a time event, and a DualInfluenceGrowth dynamics model.
 
         Parameters
@@ -98,7 +102,7 @@ class BassModel(DiffusionModel):
     def predict(
         self,
         t: Sequence[float],
-        covariates: Dict[str, Sequence[float]] = None,
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> Sequence[float]:
         """Predicts cumulative adoption over time using the Bass diffusion model.
 
@@ -195,7 +199,7 @@ class BassModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-        covariates: Dict[str, Sequence[float]] = None,
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> float:
         """Compute the coefficient of determination (R²) between observed and predicted values.
 
@@ -229,7 +233,7 @@ class BassModel(DiffusionModel):
     def predict_adoption_rate(
         self,
         t: Sequence[float],
-        covariates: Dict[str, Sequence[float]] = None,
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> Sequence[float]:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")

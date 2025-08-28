@@ -2,7 +2,8 @@
 
 from typing import Dict, Sequence
 
-import numpy as np
+from numpy import ndarray
+from numpy import array, clip, exp, inf
 
 
 class HypeCycleModel:
@@ -28,7 +29,7 @@ class HypeCycleModel:
             "w_d",  # Width of the disillusionment
         ]
 
-    def predict(self, t: Sequence[float]) -> np.ndarray:
+    def predict(self, t: ndarray) -> ndarray:
         """Generates the Hype Cycle curve.
 
         Args:
@@ -42,24 +43,26 @@ class HypeCycleModel:
         if not self._params:
             raise RuntimeError("Model parameters have not been set.")
 
-        k = self._params["k"]
-        t0 = self._params["t0"]
-        a_hype = self._params["a_hype"]
-        t_hype = self._params["t_hype"]
-        w_hype = self._params["w_hype"]
-        a_d = self._params["a_d"]
-        t_d = self._params["t_d"]
-        w_d = self._params["w_d"]
+        k: float = self._params["k"]
+        t0: float = self._params["t0"]
+        a_hype: float = self._params["a_hype"]
+        t_hype: float = self._params["t_hype"]
+        w_hype: float = self._params["w_hype"]
+        a_d: float = self._params["a_d"]
+        t_d: float = self._params["t_d"]
+        w_d: float = self._params["w_d"]
+
+        t_arr: ndarray = array(t)
 
         # Logistic curve for technology maturity, scaled to have less impact
-        maturity = 0.5 / (1 + np.exp(-k * (t - t0)))
+        maturity: ndarray = 0.5 / (1 + exp(-k * (t_arr - t0)))
 
         # Hype function (a combination of two Gaussians)
-        hype = a_hype * np.exp(-((t - t_hype) ** 2) / (2 * w_hype**2))
-        disillusionment = a_d * np.exp(-((t - t_d) ** 2) / (2 * w_d**2))
+        hype: ndarray = a_hype * exp(-((t_arr - t_hype) ** 2) / (2 * w_hype**2))
+        disillusionment: ndarray = a_d * exp(-((t_arr - t_d) ** 2) / (2 * w_d**2))
 
-        visibility = maturity + hype - disillusionment
-        return np.clip(visibility, 0, np.inf)
+        visibility: ndarray = maturity + hype - disillusionment
+        return clip(visibility, 0, inf)
 
     @property
     def params_(self) -> Dict[str, float]:

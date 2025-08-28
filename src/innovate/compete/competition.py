@@ -1,4 +1,4 @@
-from typing import Dict, List, Sequence, Union
+from typing import Dict, List, Optional, Sequence, Union
 
 import numpy as np
 import pandas as pd
@@ -17,7 +17,7 @@ class MultiProductDiffusionModel(DiffusionModel):
             Sequence[float]
         ],  # N x N matrix: interaction matrix (within- and cross-imitation)
         m: Sequence[float],  # length N: ultimate market potentials
-        names: Sequence[str] = None,
+        names: Optional[Sequence[str]] = None,
     ):
         self.p = B.array(p)
         self.Q = B.array(Q)
@@ -210,8 +210,62 @@ class MultiProductDiffusionModel(DiffusionModel):
     def params_(self, value: Dict[str, float]):
         self._params = value
 
-    def predict_adoption_rate(self, t: Sequence[float]) -> Sequence[float]:
-        raise NotImplementedError
+    def predict_adoption_rate(self, t: Sequence[float]) -> pd.DataFrame:
+        """
+        Predict the rate of new adoptions per time period for each product.
+        
+        This method calculates the derivative of cumulative adoptions, representing
+        the instantaneous adoption rate for each product in the multi-product system.
+        
+        Parameters
+        ----------
+        t : Sequence[float]
+            Time points at which to predict adoption rates
+            
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame with adoption rates for each product at each time point.
+            Columns correspond to product names, rows to time points.
+            
+        Raises
+        ------
+        RuntimeError
+            If model parameters are not set (model not fitted or initialized)
+        """
+        if not self.params_ and (self.p is None or self.Q is None or self.m is None):
+            raise RuntimeError(
+                "Model parameters are not set. Call .fit() or initialize with p, Q, m."
+            )
+            
+        # Get cumulative predictions
+        cumulative_df = self.predict(t)
+        
+        # Calculate adoption rates using numerical differentiation
+        t_arr = B.array(t)
+        
+        # For the first point, use the differential equation directly
+        adoption_rates = []
+        
+        for i, time_point in enumerate(t_arr):
+            if i == 0:
+                # For the first point, evaluate the differential equation at t=0
+                y_current = cumulative_df.iloc[0].values
+            else:
+                y_current = cumulative_df.iloc[i].values
+                
+            # Use the differential equation to get instantaneous rates
+            rate = self._rhs(y_current, time_point)
+            adoption_rates.append(rate)
+            
+        # Convert to DataFrame with same structure as predict output
+        rates_df = pd.DataFrame(
+            adoption_rates, 
+            index=t, 
+            columns=self.names
+        )
+        
+        return rates_df
 
     @property
     def param_names(self) -> Sequence[str]:

@@ -1,6 +1,6 @@
 # src/innovate/models/mixture.py
 
-from typing import Dict, List, Sequence
+from typing import Dict, List, Optional, Sequence
 
 import numpy as np
 from innovate.backend import current_backend as B
@@ -30,7 +30,7 @@ class MixtureModel(DiffusionModel):
     def __init__(
         self,
         models: Sequence[DiffusionModel],
-        weights: Sequence[float] = None,
+        weights: Optional[Sequence[float]] = None,
         max_iter: int = 100,
         tol: float = 1e-6,
     ):
@@ -131,7 +131,7 @@ class MixtureModel(DiffusionModel):
     def predict(
         self,
         t: Sequence[float],
-        covariates: Dict[str, Sequence[float]] = None,
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> Sequence[float]:
         """Makes predictions using the fitted mixture model."""
         if not self._params:
@@ -168,7 +168,7 @@ class MixtureModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-        covariates: Dict[str, Sequence[float]] = None,
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> float:
         """Calculates the R-squared score for the model."""
         y_pred = self.predict(t, covariates)

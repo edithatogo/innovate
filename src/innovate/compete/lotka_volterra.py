@@ -1,6 +1,6 @@
 # src/innovate/compete/lotka_volterra.py
 
-from typing import Dict, Sequence
+from typing import Dict, Optional, Sequence
 
 import numpy as np
 
@@ -15,7 +15,7 @@ class LotkaVolterraModel(DiffusionModel):
     products, where the adoption of each is influenced by the other.
     """
 
-    def __init__(self, covariates: Sequence[str] = None):
+    def __init__(self, covariates: Optional[Sequence[str]] = None):
         self._params: Dict[str, float] = {}
         self.covariates = covariates if covariates else []
 
@@ -141,7 +141,7 @@ class LotkaVolterraModel(DiffusionModel):
         self,
         t: Sequence[float],
         y0: Sequence[float],
-        covariates: Dict[str, Sequence[float]] = None,
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> np.ndarray:
         """Predicts the market share of both technologies over time.
 
@@ -176,7 +176,7 @@ class LotkaVolterraModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: np.ndarray,
-        covariates: Dict[str, Sequence[float]] = None,
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
         **kwargs,
     ):
         """Fits the Lotka-Volterra model to the data.
@@ -236,7 +236,7 @@ class LotkaVolterraModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: np.ndarray,
-        covariates: Dict[str, Sequence[float]] = None,
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> float:
         """Calculates the R^2 score for the model fit.
 
@@ -266,7 +266,7 @@ class LotkaVolterraModel(DiffusionModel):
         self,
         t: Sequence[float],
         y0: Sequence[float],
-        covariates: Dict[str, Sequence[float]] = None,
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> np.ndarray:
         """Predicts the rate of change of market share for both technologies.
 

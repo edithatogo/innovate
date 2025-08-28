@@ -1,12 +1,10 @@
-from typing import Dict, Sequence
+from typing import Any, Dict, Sequence
 
 import numpy as np
 from scipy.integrate import odeint
 
-from innovate.base.base import DiffusionModel
 
-
-class LockInModel(DiffusionModel):
+class LockInModel:
     """A simple model demonstrating path dependence and lock-in effects
     between two competing technologies.
 
@@ -15,7 +13,7 @@ class LockInModel(DiffusionModel):
     and negatively by the competitor's.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._params: Dict[str, float] = {}
 
     @property
@@ -43,7 +41,9 @@ class LockInModel(DiffusionModel):
             "m": max_y * 1.5 if max_y > 0 else 1000.0,
         }
 
-    def bounds(self, t: Sequence[float], y: np.ndarray) -> Dict[str, tuple]:
+    def bounds(
+        self, t: Sequence[float], y: np.ndarray
+    ) -> Dict[str, tuple[float, float]]:
         max_y = np.max(y)
         return {
             "alpha1": (0, np.inf),
@@ -52,21 +52,14 @@ class LockInModel(DiffusionModel):
             "beta2": (0, np.inf),
             "gamma1": (0, np.inf),
             "gamma2": (0, np.inf),
-            "m": (max_y, np.inf),
+            "m": (float(max_y), np.inf),
         }
 
+    @staticmethod
     def differential_equation(
-        self,
-        y_current: Sequence[float],
-        t_current: float,
-        alpha1,
-        alpha2,
-        beta1,
-        beta2,
-        gamma1,
-        gamma2,
-        m,
+        y_current: np.ndarray, t_current: float, *params: float
     ) -> Sequence[float]:
+        alpha1, alpha2, beta1, beta2, gamma1, gamma2, m = params
         n1, n2 = y_current
 
         # Ensure populations are non-negative and do not exceed market potential
@@ -87,7 +80,7 @@ class LockInModel(DiffusionModel):
 
         return [dn1_dt, dn2_dt]
 
-    def predict(self, t: Sequence[float], y0: Sequence[float]) -> np.ndarray:
+    def predict(self, t: Sequence[float], y0: np.ndarray) -> np.ndarray:
         if not self._params:
             raise RuntimeError("Model parameters have not been set.")
 
@@ -102,7 +95,7 @@ class LockInModel(DiffusionModel):
         sol = np.minimum(sol, m)
         return sol
 
-    def fit(self, t: Sequence[float], y: np.ndarray, **kwargs):
+    def fit(self, t: Sequence[float], y: np.ndarray, **kwargs: Any) -> "LockInModel":
         from scipy.optimize import minimize
 
         y = np.array(y)
@@ -113,10 +106,12 @@ class LockInModel(DiffusionModel):
 
         y0 = y[0, :]
 
-        def objective(params, t, y_obs):
+        def objective(
+            params: np.ndarray, t: Sequence[float], y_obs: np.ndarray
+        ) -> float:
             self.params_ = dict(zip(self.param_names, params))
             y_pred = self.predict(t, y0)
-            return np.sum((y_obs - y_pred) ** 2)
+            return float(np.sum((y_obs - y_pred) ** 2))
 
         initial_params = list(self.initial_guesses(t, y).values())
         param_bounds = list(self.bounds(t, y).values())
@@ -141,7 +136,7 @@ class LockInModel(DiffusionModel):
         return self._params
 
     @params_.setter
-    def params_(self, value: Dict[str, float]):
+    def params_(self, value: Dict[str, float]) -> None:
         self._params = value
 
     def score(self, t: Sequence[float], y: np.ndarray) -> float:
@@ -155,19 +150,12 @@ class LockInModel(DiffusionModel):
     def predict_adoption_rate(
         self,
         t: Sequence[float],
-        y0: Sequence[float],
+        y0: np.ndarray,
     ) -> np.ndarray:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet.")
 
-        # To get adoption rates, we need to calculate the derivative at each point
-        # This is more complex for ODEs. For simplicity, we can approximate it
-        # by taking the difference between cumulative predictions.
         cumulative_predictions = self.predict(t, y0)
-        # Calculate the difference between consecutive cumulative values
-        # Pad with initial y0 for the first step's rate
         rates = np.diff(cumulative_predictions, axis=0)
-        # The first rate can be approximated as the first cumulative value if starting from 0
-        # Or, more accurately, by evaluating the RHS at t[0] with y0
         initial_rates = self.differential_equation(y0, t[0], *self._params.values())
         return np.vstack([initial_rates, rates])

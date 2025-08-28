@@ -35,7 +35,9 @@ class BootstrapFitter:
             boot_model = type(model)()
 
             try:
-                boot_model.fit(self.fitter, t_resampled, y_resampled, **kwargs)
+                boot_model.fit(
+                    self.fitter, t_resampled.tolist(), y_resampled.tolist(), **kwargs
+                )
                 self.bootstrapped_params.append(boot_model.params_)
             except RuntimeError as e:
                 # Handle cases where fitting might fail for a resampled dataset
@@ -49,7 +51,7 @@ class BootstrapFitter:
 
         # Assuming all models have the same parameter names
         param_names = self.bootstrapped_params[0].keys()
-        estimates = {name: [] for name in param_names}
+        estimates: Dict[str, List[float]] = {name: [] for name in param_names}
 
         for params_dict in self.bootstrapped_params:
             for name, value in params_dict.items():

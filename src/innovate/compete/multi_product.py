@@ -1,4 +1,4 @@
-from typing import Dict, Sequence
+from typing import Dict, Optional, Sequence
 
 import numpy as np
 
@@ -13,11 +13,11 @@ class MultiProductDiffusionModel(DiffusionModel):
     def __init__(
         self,
         n_products: int,
-        p: Sequence[float] = None,
-        Q: Sequence[Sequence[float]] = None,
-        m: Sequence[float] = None,
-        names: Sequence[str] = None,
-        covariates: Sequence[str] = None,
+        p: Optional[Sequence[float]] = None,
+        Q: Optional[Sequence[Sequence[float]]] = None,
+        m: Optional[Sequence[float]] = None,
+        names: Optional[Sequence[str]] = None,
+        covariates: Optional[Sequence[str]] = None,
     ):
         if n_products < 1:
             raise ValueError("Number of products must be at least 1.")
@@ -135,7 +135,7 @@ class MultiProductDiffusionModel(DiffusionModel):
     def predict(
         self,
         t: Sequence[float],
-        covariates: Dict[str, Sequence[float]] = None,
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> Sequence[float]:
         from scipy.integrate import solve_ivp
 
@@ -291,7 +291,7 @@ class MultiProductDiffusionModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-        covariates: Dict[str, Sequence[float]] = None,
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> float:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
@@ -307,7 +307,7 @@ class MultiProductDiffusionModel(DiffusionModel):
     def predict_adoption_rate(
         self,
         t: Sequence[float],
-        covariates: Dict[str, Sequence[float]] = None,
+        covariates: Optional[Dict[str, Sequence[float]]] = None,
     ) -> Sequence[float]:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")

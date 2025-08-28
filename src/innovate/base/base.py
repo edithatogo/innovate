@@ -2,31 +2,11 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict, Sequence, TypeVar
 
 # Define a type variable for the class itself, for type hinting Self
-Self = TypeVar("Self")
+Self = TypeVar("Self", bound="DiffusionModel")
 
 
 class DiffusionModel(ABC):
     """Abstract base class for all diffusion models."""
-
-    def fit(
-        self,
-        fitter: Any,
-        t: Sequence[float],
-        y: Sequence[float],
-        **kwargs,
-    ) -> Self:
-        """Fits the diffusion model to the given time and adoption data."""
-        p0 = self.initial_guesses(t, y)
-        bounds = self.bounds(t, y)
-        fitter.fit(
-            self,
-            t,
-            y,
-            p0=list(p0.values()),
-            bounds=list(zip(*bounds.values())),
-            **kwargs,
-        )
-        return self
 
     @abstractmethod
     def predict(self, t: Sequence[float]) -> Sequence[float]:
@@ -71,3 +51,22 @@ class DiffusionModel(ABC):
     @abstractmethod
     def differential_equation(y, t, p):
         """Returns the differential equation for the model."""
+
+    def fit(
+        self: Self,
+        fitter: Any,
+        t: Sequence[float],
+        y: Sequence[float],
+        **kwargs,
+    ) -> Self:
+        """Fits the diffusion model to the given time and adoption data."""
+        p0 = self.initial_guesses(t, y)
+        bounds = self.bounds(t, y)
+        return fitter.fit(
+            self,
+            t,
+            y,
+            p0=list(p0.values()),
+            bounds=list(zip(*bounds.values())),
+            **kwargs,
+        )
