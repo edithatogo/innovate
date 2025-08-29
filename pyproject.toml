@@ -24,6 +24,10 @@ requires-python = ">=3.8"
 readme = "README.md"
 license = "Apache-2.0"
 
+[project.urls]
+Homepage = "https://github.com/edithatogo/innovate"
+Documentation = "https://edithatogo.github.io/innovate"
+
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
