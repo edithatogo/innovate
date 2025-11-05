@@ -158,3 +158,18 @@ class NumPyBackend:
 
     def sqrt(self, x: np.ndarray) -> np.ndarray:
         return np.sqrt(x)
+
+    def exp(self, x: Union[np.ndarray, Sequence]) -> np.ndarray:
+        return np.exp(x)
+
+    def any(self, a: np.ndarray, axis: Optional[Union[int, tuple]] = None) -> Union[bool, np.ndarray]:
+        return np.any(a, axis=axis)
+
+    def all(self, a: np.ndarray, axis: Optional[Union[int, tuple]] = None) -> Union[bool, np.ndarray]:
+        return np.all(a, axis=axis)
+
+    def squeeze(self, a: np.ndarray, axis: Optional[Union[int, tuple]] = None) -> np.ndarray:
+        return np.squeeze(a, axis=axis)
+
+    def repeat(self, a: np.ndarray, repeats: Union[int, Sequence], axis: Optional[int] = None) -> np.ndarray:
+        return np.repeat(a, repeats, axis=axis)
