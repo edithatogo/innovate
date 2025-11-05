@@ -1,0 +1,21 @@
+{
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "**/node_modules",
+    "**/__pycache__",
+    "src/innovate/ecosystem/**"
+  ],
+  "defineConstant": {
+    "DEBUG": true
+  },
+  "pythonVersion": "3.8",
+  "pythonPlatform": "All",
+  "typeCheckingMode": "basic",
+  "reportMissingImports": "error",
+  "reportMissingTypeStubs": "none",
+  "reportPrivateUsage": "none",
+  "reportTypeCommentUsage": "none",
+  "useLibraryCodeForTypes": true
+}

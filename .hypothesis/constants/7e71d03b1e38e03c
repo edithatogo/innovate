@@ -1,0 +1,4 @@
+# file: /home/doughnut/github/innovate/src/innovate/reduce/analysis.py
+# hypothesis_version: 6.135.24
+
+[0.0, 0.1, 1.0, 'changepoint_index', 'l2', 'no trend', 'p_value', 'post_peak_slope', 'series_index', 'trend']

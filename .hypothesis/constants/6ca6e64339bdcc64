@@ -1,0 +1,4 @@
+# file: /home/doughnut/github/innovate/src/innovate/plots/diagnostics.py
+# hypothesis_version: 6.135.24
+
+[0.7, 0.96, '--', 'C0', 'C1', 'C2', 'Residual', 'Residual Analysis', 'Residuals', 'Time', 'k', 'params_']

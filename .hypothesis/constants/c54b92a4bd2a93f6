@@ -1,0 +1,4 @@
+# file: /home/doughnut/github/innovate/src/innovate/preprocess/__init__.py
+# hypothesis_version: 6.135.24
+
+['rolling_average', 'sarima_fit', 'stl_decomposition']

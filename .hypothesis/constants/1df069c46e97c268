@@ -1,0 +1,4 @@
+# file: /home/doughnut/github/innovate/src/innovate/utils/model_validation.py
+# hypothesis_version: 6.135.24
+
+[-1e-10, 0.0, 1e-10, 0.5, 1.0, 10.0, 'L', 'No action needed', 'a', 'b', 'c', 'inf', 'is_valid', 'issues', 'k', 'm', 'm_post', 'monotonic_check', 'p', 'p_post', 'q', 'q_post', 'recommended_action', 'x0']

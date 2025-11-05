@@ -1,0 +1,4 @@
+# file: /home/doughnut/github/innovate/src/innovate/diffuse/gompertz.py
+# hypothesis_version: 6.135.24
+
+[0.0, 1e-06, 0.1, 1.0, 1.1, 'LSODA', 'a', 'a_post', 'b', 'b_post', 'c', 'c_post']

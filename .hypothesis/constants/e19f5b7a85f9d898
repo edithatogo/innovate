@@ -1,0 +1,4 @@
+# file: /home/doughnut/github/innovate/src/innovate/fitters/__init__.py
+# hypothesis_version: 6.135.24
+
+['BatchedFitter', 'BayesianFitter', 'BlackJaxFitter', 'BootstrapFitter', 'CurveFitter', 'JaxFitter', 'MoMFitter', 'ScipyFitter']

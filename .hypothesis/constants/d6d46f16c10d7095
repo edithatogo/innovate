@@ -1,0 +1,4 @@
+# file: /home/doughnut/github/innovate/src/innovate/plots/network.py
+# hypothesis_version: 6.135.24
+
+[0.3, 0.9, 200, 'Network Diffusion', 'black', 'gray', 'off', 'red', 'skyblue']

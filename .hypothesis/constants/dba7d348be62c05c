@@ -1,0 +1,4 @@
+# file: /home/doughnut/github/innovate/src/innovate/fitters/blackjax_fitter.py
+# hypothesis_version: 6.135.24
+
+[0.95, 1000, 'hdi_2.5%', 'hdi_97.5%']

@@ -1,0 +1,4 @@
+# file: /home/doughnut/github/innovate/src/innovate/path_dependence/lock_in.py
+# hypothesis_version: 6.135.24
+
+[0.0, 0.001, 0.01, 0.1, 1.5, 1000.0, 'L-BFGS-B', 'LockInModel', 'alpha1', 'alpha2', 'beta1', 'beta2', 'gamma1', 'gamma2', 'm']
