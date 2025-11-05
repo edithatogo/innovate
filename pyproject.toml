@@ -52,7 +52,7 @@ markers = [
 
 [project.optional-dependencies]
 jax = ["jax>=0.4.20", "jaxlib>=0.4.20", "numpyro>=0.13.2", "scipy>=1.9", "numpy<3", "diffrax", "jaxopt", "blackjax", "arviz"]
-dev = ["pytest", "pytest-xdist", "pytest-benchmark", "pytest-profiling", "ruff", "pre-commit", "mypy", "pyright", "ty", "bandit", "pandera", "pydantic", "hypothesis", "nbqa", "nbstripout", "sphinx", "sphinx-rtd-theme", "sphinx-autodoc-typehints", "safety", "pylint", "vulture", "unimport"]
+dev = ["pytest", "pytest-xdist", "pytest-benchmark", "pytest-profiling", "syrupy", "ruff", "pre-commit", "mypy", "pyright", "ty", "bandit", "pandera", "pydantic", "hypothesis", "nbqa", "nbstripout", "sphinx", "sphinx-rtd-theme", "sphinx-autodoc-typehints", "safety", "pylint", "vulture", "unimport", "mutmut", "lizard"]
 
 [tool.ruff]
 exclude = ["*.ipynb"]

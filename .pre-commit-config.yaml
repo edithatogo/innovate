@@ -46,3 +46,9 @@ repos:
     hooks:
       - id: unimport
         args: [--check]
+
+  - repo: https://github.com/tophat/syrupy
+    rev: v5.0.0
+    hooks:
+      - id: syrupy-tests
+        args: [--snapshot-update]

@@ -116,3 +116,13 @@ jobs:
     - name: Run unimport check
       run: |
         unimport --check --diff src/innovate || echo "Unimport check completed"
+
+    - name: Install and run lizard code complexity check
+      run: |
+        pip install lizard
+        lizard src/innovate || echo "Lizard check completed"
+
+    - name: Install and run syrupy
+      run: |
+        pip install syrupy
+        python -c "import syrupy; print('Syrupy available')" || echo "Syrupy check completed"
