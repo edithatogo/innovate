@@ -41,15 +41,18 @@ pythonpath = [
   "fitters",
 ]
 minversion = "6.0"
-addopts = "-ra -q"
+addopts = "-ra -q -n auto"
 testpaths = [
     "tests",
     "integration",
 ]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
 
 [project.optional-dependencies]
 jax = ["jax>=0.4.20", "jaxlib>=0.4.20", "numpyro>=0.13.2", "scipy>=1.9", "numpy<3", "diffrax", "jaxopt", "blackjax", "arviz"]
-dev = ["pytest", "ruff", "pre-commit", "mypy", "bandit"]
+dev = ["pytest", "pytest-xdist", "pytest-benchmark", "pytest-profiling", "ruff", "pre-commit", "mypy", "pyright", "ty", "bandit", "pandera", "pydantic", "hypothesis", "nbqa", "nbstripout", "sphinx", "sphinx-rtd-theme", "sphinx-autodoc-typehints", "safety", "pylint", "vulture", "unimport"]
 
 [tool.ruff]
 exclude = ["*.ipynb"]
@@ -61,4 +64,42 @@ exclude = ["*.ipynb"]
 "src/innovate/dynamics/contagion/sis.py" = ["E741"]
 
 [tool.mypy]
+# Basic strictness settings
+python_version = "3.9"  # Minimum for pytensor compatibility
+warn_return_any = true
+warn_unused_configs = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unreachable = true
+
+# Type checking strictness
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+
+# Additional strictness (applied carefully)
+disallow_any_unimported = false
+disallow_subclassing_any = false
+disallow_any_generics = false
+enable_error_code = ["ignore-without-code", "redundant-self", "truthy-iterable"]
+
+# Ignore missing imports for external libraries
 ignore_missing_imports = true
+
+# Additional settings
+show_error_codes = true
+show_error_context = true
+pretty = true
+
+# Per-module settings to handle external libraries that cause issues
+[[tool.mypy.overrides]]
+module = ["pytensor.*", "diffrax.*", "jax.*", "jaxlib.*", "numpyro.*", "arviz.*", "blackjax.*"]
+ignore_errors = true
+
+[tool.mutmut]
+paths_to_mutate = ["src/innovate/"]
+backup = false
+runner = "JAX_PLATFORM_NAME=cpu python -m pytest"
+tests_dir = "tests/"
+
