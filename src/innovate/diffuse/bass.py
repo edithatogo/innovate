@@ -2,9 +2,19 @@ from typing import Dict, Optional, Sequence
 
 import numpy as np
 
+import numpy as np
+
 from innovate import backend
 from innovate.base.base import DiffusionModel
 from innovate.dynamics.growth.dual_influence import DualInfluenceGrowth
+from innovate.utils.validation import (
+    validate_sequence_numeric,
+    validate_positive_numeric_sequence,
+    validate_float,
+    validate_covariates,
+    validate_time_series,
+    validate_covariates_dict
+)
 
 
 class BassModel(DiffusionModel):
@@ -25,8 +35,11 @@ class BassModel(DiffusionModel):
             t_event (float, optional): The time of a structural break or event. If provided, the model will fit separate parameters for the periods before and after this time.
         """
         self._params: Dict[str, float] = {}
-        self.covariates = covariates if covariates else []
-        self.t_event = t_event
+        self.covariates = validate_covariates(covariates)
+        if t_event is not None:
+            self.t_event = validate_float(t_event, "t_event")
+        else:
+            self.t_event = t_event
         self.growth_model = DualInfluenceGrowth()
 
     @property
@@ -49,17 +62,20 @@ class BassModel(DiffusionModel):
         t: Sequence[float],
         y: Sequence[float],
     ) -> Dict[str, float]:
+        # Validate inputs
+        t_arr, y_arr = validate_time_series(t, y, "t", "y")
+        
         guesses = {
             "p": 0.001,
             "q": 0.1,
-            "m": np.max(y) * 1.1,
+            "m": np.max(y_arr) * 1.1,
         }
         if self.t_event is not None:
             guesses.update(
                 {
                     "p_post": 0.001,
                     "q_post": 0.1,
-                    "m_post": np.max(y) * 1.1,
+                    "m_post": np.max(y_arr) * 1.1,
                 },
             )
         for cov in self.covariates:
@@ -80,17 +96,20 @@ class BassModel(DiffusionModel):
         -------
             Dict[str, tuple]: Dictionary mapping parameter names to (lower, upper) bounds. Base parameters "p", "q", and "m" have fixed bounds; covariate-related parameters are unbounded.
         """
+        # Validate inputs
+        t_arr, y_arr = validate_time_series(t, y, "t", "y")
+        
         bounds = {
             "p": (1e-6, 0.1),
             "q": (1e-6, 1.0),
-            "m": (np.max(y), np.inf),
+            "m": (np.max(y_arr), np.inf),
         }
         if self.t_event is not None:
             bounds.update(
                 {
                     "p_post": (1e-6, 0.1),
                     "q_post": (1e-6, 1.0),
-                    "m_post": (np.max(y), np.inf),
+                    "m_post": (np.max(y_arr), np.inf),
                 },
             )
         for cov in self.covariates:
@@ -103,7 +122,7 @@ class BassModel(DiffusionModel):
         self,
         t: Sequence[float],
         covariates: Optional[Dict[str, Sequence[float]]] = None,
-    ) -> Sequence[float]:
+    ) -> np.ndarray:
         """Predicts cumulative adoption over time using the Bass diffusion model.
 
         Parameters
@@ -119,28 +138,60 @@ class BassModel(DiffusionModel):
         ------
             RuntimeError: If the model parameters have not been set (i.e., the model is not fitted).
         """
+        # Validate inputs
+        t_arr = validate_sequence_numeric(t, "t")
+        if len(t_arr) == 0:
+            raise ValueError("Parameter 't' cannot be empty")
+        
+        # Validate that all time values are non-negative (reasonable for diffusion models)
+        if np.any(t_arr < 0):
+            raise ValueError("Time values (t) must be non-negative")
+        
+        # Validate model is fitted
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
-        from innovate.backends.jax_backend import JaxBackend
-
-        backend.current_backend = JaxBackend()
+        # Validate covariates if provided
+        validated_covariates = validate_covariates_dict(covariates, self.covariates, len(t_arr)) if covariates is not None else None
 
         y0 = 1e-6
 
         # This is a simplification. The predict method should use the growth model's
         # predict_cumulative method, which will require some refactoring of how parameters
         # are handled. For now, we will leave the old implementation.
+        # Note: Using the currently configured backend instead of forcing JAX
+
+        # Validate that required parameters are present
+        required_params = self.param_names
+        missing_params = set(required_params) - set(self._params.keys())
+        if missing_params:
+            raise ValueError(f"Missing required parameters in model: {missing_params}")
 
         params = [self._params[name] for name in self.param_names]
 
-        def ode_func(t, y, args):
-            return self.differential_equation(t, y, args, covariates, t)
+        # Validate parameter values
+        for i, (param_name, param_val) in enumerate(zip(required_params, params)):
+            if not np.isfinite(param_val):
+                raise ValueError(f"Parameter '{param_name}' must be finite, got {param_val}")
 
-        sol = backend.current_backend.solve_ode(ode_func, y0, t, tuple(params))
+        def ode_func(t, y, args):
+            return self.differential_equation(t, y, args, validated_covariates, t)
+
+        # Handle different backend method signatures
+        from innovate.backends.jax_backend import JaxBackend
+        if isinstance(backend.current_backend, JaxBackend):
+            # JAX backend expects 4 parameters: func, y0, t, args
+            sol = backend.current_backend.solve_ode(ode_func, y0, t_arr, tuple(params))
+        else:
+            # NumPy backend expects 3 parameters: func, y0, t (parameters must be in closure)
+            # Modify the function to not require additional args
+            def ode_func_numpy(t_val, y_val):
+                return self.differential_equation(t_val, y_val, tuple(params), validated_covariates, t_val)
+            
+            sol = backend.current_backend.solve_ode(ode_func_numpy, y0, t_arr)
         return sol.flatten()
 
-    def differential_equation(self, t, y, params, covariates, t_eval):
+    def differential_equation(self, t: float, y: float, params: Sequence[float], covariates: Optional[Dict[str, Sequence[float]]], t_eval: Sequence[float]) -> float:
         """Defines the Bass model's differential equation, incorporating covariate effects if provided.
 
         At each time point, adjusts the innovation, imitation, and market size parameters by linearly combining base values with covariate contributions, then computes the instantaneous growth rate using the underlying DualInfluenceGrowth model.
@@ -205,20 +256,36 @@ class BassModel(DiffusionModel):
 
         Parameters
         ----------
-                y (Sequence[float]): Observed cumulative adoption values.
+            t (Sequence[float]): Sequence of time points.
+            y (Sequence[float]): Observed cumulative adoption values.
+            covariates (Dict[str, Sequence[float]], optional): Optional time series of covariate values affecting model parameters.
 
         Returns
         -------
                 float: R² score indicating the proportion of variance explained by the model predictions.
         """
+        # Validate inputs
+        t_arr, y_arr = validate_time_series(t, y, "t", "y")
+        
+        # Validate model is fitted
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
-        y_pred = self.predict(t, covariates)
+        
+        # Validate covariates if provided
+        validated_covariates = validate_covariates_dict(covariates, self.covariates, len(t_arr)) if covariates is not None else None
+        
+        y_pred = self.predict(t_arr, validated_covariates)
+        
+        # Validate that y_pred is finite
+        y_pred = np.asarray(y_pred)
+        if not np.all(np.isfinite(y_pred)):
+            raise ValueError("Prediction resulted in non-finite values")
+        
         ss_res = backend.current_backend.sum(
-            (backend.current_backend.array(y) - y_pred) ** 2,
+            (backend.current_backend.array(y_arr) - y_pred) ** 2,
         )
         ss_tot = backend.current_backend.sum(
-            (backend.current_backend.array(y) - backend.current_backend.mean(y)) ** 2,
+            (backend.current_backend.array(y_arr) - backend.current_backend.mean(y_arr)) ** 2,
         )
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
@@ -234,21 +301,49 @@ class BassModel(DiffusionModel):
         self,
         t: Sequence[float],
         covariates: Optional[Dict[str, Sequence[float]]] = None,
-    ) -> Sequence[float]:
+    ) -> np.ndarray:
+        # Validate inputs
+        t_arr = validate_sequence_numeric(t, "t")
+        if len(t_arr) == 0:
+            raise ValueError("Parameter 't' cannot be empty")
+        
+        # Validate that all time values are non-negative
+        if np.any(t_arr < 0):
+            raise ValueError("Time values (t) must be non-negative")
+        
+        # Validate model is fitted
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
-
-        y_pred = self.predict(t, covariates)
+        
+        # Validate covariates if provided
+        validated_covariates = validate_covariates_dict(covariates, self.covariates, len(t_arr)) if covariates is not None else None
+        
+        y_pred = self.predict(t_arr, validated_covariates)
+        
+        # Validate that y_pred is finite
+        y_pred = np.asarray(y_pred)
+        if not np.all(np.isfinite(y_pred)):
+            raise ValueError("Prediction resulted in non-finite values")
+        
         params = [self._params[name] for name in self.param_names]
+
+        # Validate parameter values
+        for param_name, param_val in zip(self.param_names, params):
+            if not np.isfinite(param_val):
+                raise ValueError(f"Parameter '{param_name}' must be finite, got {param_val}")
 
         rates = np.array(
             [
-                self.differential_equation(ti, yi, params, covariates, t)
-                for ti, yi in zip(t, y_pred)
+                self.differential_equation(ti, yi, params, validated_covariates, t_arr)
+                for ti, yi in zip(t_arr, y_pred)
             ],
         )
+        
+        if not np.all(np.isfinite(rates)):
+            raise ValueError("Derivative calculation resulted in non-finite values")
+        
         return rates
 
-    def cumulative_adoption(self, t: Sequence[float], *params) -> Sequence[float]:
+    def cumulative_adoption(self, t: Sequence[float], *params) -> np.ndarray:
         self.params_ = dict(zip(self.param_names, params))
         return self.predict(t)

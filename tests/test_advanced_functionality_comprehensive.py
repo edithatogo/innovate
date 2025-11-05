@@ -183,9 +183,9 @@ class TestCounterfactualAnalysis:
         
         counterfactual_params = {"p": 0.04, "q": 0.25}  # Different parameters
         self.analysis.run_counterfactual(
+            "higher_p_lower_q",
             self.time_horizon,
             counterfactual_params,
-            "higher_p_lower_q"
         )
         
         assert "higher_p_lower_q" in self.analysis.counterfactual_forecasts
@@ -200,9 +200,9 @@ class TestCounterfactualAnalysis:
         
         with pytest.raises(ValueError, match="Parameter 'invalid_param' not found"):
             self.analysis.run_counterfactual(
+                "invalid_scenario",
                 self.time_horizon,
                 invalid_params,
-                "invalid_scenario"
             )
     
     def test_compare_scenarios(self):
@@ -211,9 +211,9 @@ class TestCounterfactualAnalysis:
         
         counterfactual_params = {"m": 1500}  # Larger market potential
         self.analysis.run_counterfactual(
+            "larger_market",
             self.time_horizon,
             counterfactual_params,
-            "larger_market"
         )
         
         comparison = self.analysis.compare_scenarios("larger_market")
@@ -492,9 +492,9 @@ class TestAdvancedModelInteractions:
         counterfactual = CounterfactualAnalysis(bass)
         counterfactual.run_baseline(np.arange(1, 11))
         counterfactual.run_counterfactual(
+            "higher_innovation",
             np.arange(1, 11),
             {"p": 0.03},  # Higher innovation parameter
-            "higher_innovation"
         )
         
         comparison = counterfactual.compare_scenarios("higher_innovation")

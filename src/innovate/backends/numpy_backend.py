@@ -1,65 +1,87 @@
-from typing import Sequence
+from typing import Any, Optional, Sequence, Union, TYPE_CHECKING
 
 import numpy as np
 from scipy.integrate import odeint
 from scipy.special import logsumexp
 
+if TYPE_CHECKING:
+    import numpy.typing as npt
+    ArrayLike = npt.ArrayLike
+    NDArray = npt.NDArray
+
 
 class NumPyBackend:
-    def array(self, data):
+    def array(self, data: Any) -> np.ndarray:
         return np.asarray(data)
-
-    exp = np.exp
-    power = np.power
 
     def sum(
         self,
-        a,
-        axis=None,
-        dtype=None,
-        out=None,
-        keepdims=False,
-        initial=None,
-        where=True,
-    ):
-        return np.sum(
-            a,
-            axis=axis,
-            dtype=dtype,
-            out=out,
-            keepdims=keepdims,
-            initial=initial,
-            where=where,
-        )
+        a: Union[np.ndarray, Sequence],
+        axis: Optional[Union[int, tuple]] = None,
+        dtype: Optional[type] = None,
+        out: Optional[np.ndarray] = None,
+        keepdims: bool = False,
+        initial: Optional[float] = None,
+        where: Optional[np.ndarray] = None,
+    ) -> Union[np.ndarray, float]:
+        kwargs = {
+            'axis': axis,
+            'dtype': dtype,
+            'out': out,
+            'keepdims': keepdims,
+        }
+        if initial is not None:
+            kwargs['initial'] = initial
+        if where is not None:
+            kwargs['where'] = where
+        return np.sum(a, **kwargs)
 
-    def mean(self, a, axis=None, dtype=None, out=None, keepdims=False, *, where=True):
-        return np.mean(
-            a,
-            axis=axis,
-            dtype=dtype,
-            out=out,
-            keepdims=keepdims,
-            where=where,
-        )
+    def mean(
+        self,
+        a: Union[np.ndarray, Sequence],
+        axis: Optional[Union[int, tuple]] = None,
+        dtype: Optional[type] = None,
+        out: Optional[np.ndarray] = None,
+        keepdims: bool = False,
+        *,
+        where: Optional[np.ndarray] = None
+    ) -> float:
+        kwargs = {
+            'axis': axis,
+            'dtype': dtype,
+            'out': out,
+            'keepdims': keepdims,
+        }
+        if where is not None:
+            kwargs['where'] = where
+        result = np.mean(a, **kwargs)
+        return float(result)
 
-    def where(self, condition, x, y):
+    def where(self, condition: np.ndarray, x: Any, y: Any) -> np.ndarray:
         return np.where(condition, x, y)
 
-    def diff(self, a, n=1, axis=-1):
+    def diff(self, a: np.ndarray, n: int = 1, axis: int = -1) -> np.ndarray:
         return np.diff(a, n=n, axis=axis)
 
-    def log(self, x):
+    def log(self, x: np.ndarray) -> np.ndarray:
         return np.log(x)
 
-    def logsumexp(self, x, axis=None):
+    def logsumexp(self, x: np.ndarray, axis: Optional[int] = None) -> np.ndarray:
         return logsumexp(x, axis=axis)
 
-    def solve_ode(self, f, y0: Sequence[float], t: Sequence[float]) -> np.ndarray:
+    def solve_ode(
+        self,
+        f: Any,
+        y0: Union[Sequence, np.ndarray],
+        t: Union[Sequence, np.ndarray]
+    ) -> np.ndarray:
         # scipy.integrate.odeint expects y0 as a 1D array and t as a 1D array
         # The function f should take (y, t, *args) as arguments
         # We need to adapt the signature of f if it expects (t, y, *args)
         # For now, assuming f takes (y, t) as per common scipy usage
-        sol = odeint(f, y0, t)
+        y0_array = np.asarray(y0)
+        t_array = np.asarray(t)
+        sol = odeint(f, y0_array, t_array)
         return sol
 
     def stack(self, arrays: Sequence[np.ndarray]) -> np.ndarray:
@@ -68,71 +90,71 @@ class NumPyBackend:
     def matmul(self, a: np.ndarray, b: np.ndarray) -> np.ndarray:
         return np.matmul(a, b)
 
-    def zeros(self, shape: Sequence[int]) -> np.ndarray:
+    def zeros(self, shape: Union[int, Sequence[int]]) -> np.ndarray:
         return np.zeros(shape)
 
-    def ones(self, shape: Sequence[int]) -> np.ndarray:
+    def ones(self, shape: Union[int, Sequence[int]]) -> np.ndarray:
         return np.ones(shape)
 
-    def max(self, x: np.ndarray) -> float:
-        return np.max(x)
+    def max(self, x: Union[np.ndarray, Sequence]) -> float:
+        return float(np.max(x))
 
-    def median(self, x: np.ndarray) -> float:
-        return np.median(x)
+    def median(self, x: Union[np.ndarray, Sequence]) -> float:
+        return float(np.median(x))
 
-    def interp(self, x, xp, fp):
+    def interp(self, x: np.ndarray, xp: np.ndarray, fp: np.ndarray) -> np.ndarray:
         return np.interp(x, xp, fp)
 
-    def jit(self, f):
+    def jit(self, f: Any) -> Any:
         return f
 
-    def vmap(self, f):
+    def vmap(self, f: Any) -> Any:
         def mapped_f(params, t_batched):
             return np.array([f(p, t) for p, t in zip(params, t_batched)])
 
         return mapped_f
 
-    def zeros_like(self, x):
+    def zeros_like(self, x: np.ndarray) -> np.ndarray:
         return np.zeros_like(x)
 
-    def ravel(self, x):
+    def ravel(self, x: np.ndarray) -> np.ndarray:
         return np.ravel(x)
 
-    def argmin(self, x):
-        return np.argmin(x)
+    def argmin(self, x: np.ndarray) -> int:
+        return int(np.argmin(x))
 
-    def abs(self, x):
+    def abs(self, x: np.ndarray) -> np.ndarray:
         return np.abs(x)
 
-    def gradient(self, x, *args, **kwargs):
+    def gradient(self, x: Union[np.ndarray, Sequence], *args: Any, **kwargs: Any) -> np.ndarray:
         return np.gradient(x, *args, **kwargs)
 
-    def clip(self, x, a_min, a_max):
+    def clip(self, x: np.ndarray, a_min: Any, a_max: Any) -> np.ndarray:
         return np.clip(x, a_min, a_max)
 
-    def min(self, x):
-        return np.min(x)
+    def min(self, x: Union[np.ndarray, Sequence]) -> float:
+        return float(np.min(x))
 
-    def copy(self, x):
+    def copy(self, x: np.ndarray) -> np.ndarray:
         return np.copy(x)
 
-    def vstack(self, x):
+    def vstack(self, x: Sequence[np.ndarray]) -> np.ndarray:
         return np.vstack(x)
 
-    def polyfit(self, x, y, deg):
+    def polyfit(self, x: np.ndarray, y: np.ndarray, deg: int) -> np.ndarray:
         return np.polyfit(x, y, deg)
 
-    def lstsq(self, x, y, rcond):
+    def lstsq(self, x: np.ndarray, y: np.ndarray, rcond: Optional[float]) -> tuple:
         return np.linalg.lstsq(x, y, rcond=rcond)
 
-    def nanmean(self, x):
-        return np.nanmean(x)
+    def nanmean(self, x: np.ndarray) -> float:
+        return float(np.nanmean(x))
 
-    def isfinite(self, x):
+    def isfinite(self, x: np.ndarray) -> np.ndarray:
         return np.isfinite(x)
 
-    def errstate(self, **kwargs):
+    def errstate(self, **kwargs: Any) -> Any:
         return np.errstate(**kwargs)
 
-    def sqrt(self, x):
+    def sqrt(self, x: np.ndarray) -> np.ndarray:
         return np.sqrt(x)
