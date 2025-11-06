@@ -173,3 +173,15 @@ class NumPyBackend:
 
     def repeat(self, a: np.ndarray, repeats: Union[int, Sequence], axis: Optional[int] = None) -> np.ndarray:
         return np.repeat(a, repeats, axis=axis)
+
+    def ones_like(self, a: Union[np.ndarray, Sequence], dtype: Optional[type] = None, subok: bool = True, shape: Optional[Union[int, Sequence]] = None) -> np.ndarray:
+        return np.ones_like(a, dtype=dtype, subok=subok, shape=shape)
+
+    def zeros_like(self, a: Union[np.ndarray, Sequence], dtype: Optional[type] = None, subok: bool = True, shape: Optional[Union[int, Sequence]] = None) -> np.ndarray:
+        return np.zeros_like(a, dtype=dtype, subok=subok, shape=shape)
+
+    def empty_like(self, a: Union[np.ndarray, Sequence], dtype: Optional[type] = None, subok: bool = True, shape: Optional[Union[int, Sequence]] = None) -> np.ndarray:
+        return np.empty_like(a, dtype=dtype, subok=subok, shape=shape)
+
+    def full_like(self, a: Union[np.ndarray, Sequence], fill_value: Union[int, float], dtype: Optional[type] = None, subok: bool = True, shape: Optional[Union[int, Sequence]] = None) -> np.ndarray:
+        return np.full_like(a, fill_value, dtype=dtype, subok=subok, shape=shape)

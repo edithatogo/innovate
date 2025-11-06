@@ -259,7 +259,7 @@ class TestComplementaryGoodsModel:
         t = [1, 2, 3]
         y0 = np.array([0.1, 0.1])
         
-        with pytest.raises(RuntimeError, match="has not been fitted yet"):
+        with pytest.raises(RuntimeError, match="Model parameters have not been set"):
             model.predict(t, y0)
     
     def test_complementary_goods_predict_fitted(self):
@@ -320,7 +320,7 @@ class TestLockInModel:
         """Test LockInModel initialization."""
         model = LockInModel()
         
-        expected_params = ["alpha", "beta", "gamma", "delta", "m"]
+        expected_params = ["alpha1", "alpha2", "beta1", "beta2", "gamma1", "gamma2", "m"]
         assert model.param_names == expected_params
         assert model.params_ == {}
     
@@ -330,7 +330,7 @@ class TestLockInModel:
         
         y = [0.3, 0.2]  # Current adoption levels
         t = 5.0
-        params = [0.5, 0.3, 0.2, 0.4, 1.0]  # alpha, beta, gamma, delta, m
+        params = [0.5, 0.6, 0.3, 0.4, 0.2, 0.3, 1.0]  # alpha1, alpha2, beta1, beta2, gamma1, gamma2, m
         
         dydt = model.differential_equation(y, t, *params)
         
@@ -344,13 +344,18 @@ class TestLockInModel:
         t = [1, 2, 3]
         y0 = [0.1, 0.05]
         
-        with pytest.raises(RuntimeError, match="has not been fitted yet"):
+        with pytest.raises(RuntimeError, match="Model parameters have not been set"):
             model.predict(t, y0)
     
     def test_lock_in_predict_fitted(self):
         """Test prediction with fitted model."""
         model = LockInModel()
-        model.params_ = {"alpha": 0.5, "beta": 0.3, "gamma": 0.2, "delta": 0.4, "m": 1.0}
+        model.params_ = {
+            "alpha1": 0.5, "alpha2": 0.6,
+            "beta1": 0.3, "beta2": 0.4, 
+            "gamma1": 0.2, "gamma2": 0.3,
+            "m": 1.0
+        }
         
         t = np.linspace(0, 10, 11)
         y0 = [0.1, 0.05]
