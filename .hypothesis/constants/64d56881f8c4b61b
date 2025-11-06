@@ -1,0 +1,4 @@
+# file: /home/doughnut/github/innovate/src/innovate/dynamics/competition/replicator_dynamics.py
+# hypothesis_version: 6.135.24
+
+['LSODA', 'default', 'description', 'list', 'payoff_matrix', 'type', 'x', 'x0']

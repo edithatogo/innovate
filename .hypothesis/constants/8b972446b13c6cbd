@@ -1,0 +1,4 @@
+# file: /home/doughnut/github/innovate/src/innovate/diffuse/logistic.py
+# hypothesis_version: 6.135.24
+
+[0.0, 1e-06, 0.1, 1.1, 'L', 'L_post', 'k', 'k_post', 'x0', 'x0_post']

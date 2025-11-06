@@ -5,3 +5,11 @@ __pycache__/
 .venv/
 .env/
 build/
+# AI working files
+*.ai/
+*.tmp/
+*.temp/
+ai_*.txt
+*_ai.txt
+simulated_*.txt
+review_*.txt

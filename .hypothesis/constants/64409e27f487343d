@@ -1,0 +1,4 @@
+# file: /home/doughnut/github/innovate/src/innovate/dynamics/growth/symmetric.py
+# hypothesis_version: 6.135.24
+
+[0.1, 'LSODA', 'default', 'description', 'float', 'growth_rate', 'type']

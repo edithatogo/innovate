@@ -1,0 +1,4 @@
+# file: /home/doughnut/github/innovate/src/innovate/fitters/bayesian_fitter.py
+# hypothesis_version: 6.135.24
+
+[-1000000.0, -0.5, 0.0, 0.01, 0.1, 0.5, 0.8, 0.95, 2.5, 97.5, 1000000.0, 100, 1000, '2.5%', '97.5%', 'BayesianFitter', 'chain', 'draw', 'final_state', 'initial_guesses', 'm', 'mean', 'median', 'n_eff', 'p', 'param_names', 'params_', 'q', 'samples', 'std']

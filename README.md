@@ -27,12 +27,23 @@ This library provides a flexible and robust framework for modeling the complex d
 
 ## Model Feature Matrix
 
-| Feature | Bass | Gompertz | Logistic | Lotka-Volterra | Fisher-Pry | Norton-Bass |
-|---|---|---|---|---|---|---|
-| **Core Diffusion** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Covariates** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
-| **Time-Varying Params** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
-| **Mixture Model** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| Feature | Bass | Gompertz | Logistic | Fisher-Pry | Norton-Bass |
+|---|---|---|---|---|---|
+| **Core Diffusion** | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Covariates** | ✅ | ✅ | ✅ | ❌ | ❌ |
+| **Time-Varying Params** | ✅ | ✅ | ✅ | ❌ | ❌ |
+| **Mixture Model** | ✅ | ✅ | ✅ | ❌ | ❌ |
+
+## Available Models by Category
+
+### Diffusion Models
+* `innovate.diffuse`: Bass, Gompertz, Logistic models
+* `innovate.substitute`: Fisher-Pry, Norton-Bass substitution models
+
+### Competition & Dynamics Models  
+* `innovate.compete`: Multi-product diffusion with competition effects
+* `innovate.dynamics.competition`: Lotka-Volterra, Market Share Attraction, Replicator Dynamics
+* `innovate.dynamics.contagion`: SIR, SIS, SEIR models
 
 ## Innovate in the Ecosystem
 
@@ -72,7 +83,12 @@ pip install pyarrow
 
 ## Usage
 
-Examples and tutorials will be provided in the `examples/` directory to demonstrate how to use the library for various modeling scenarios.
+Examples and tutorials are provided in the `examples/` directory to demonstrate how to use the library for various modeling scenarios.
+
+Key examples include:
+- `basic_usage_example.py`: Basic Bass model fitting
+- `basic_usage_example.ipynb`: Comprehensive Jupyter notebook with multiple examples
+- Additional examples in the `examples/` directory for specific use cases
 
 ## Example Plots
 

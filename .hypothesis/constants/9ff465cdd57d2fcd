@@ -1,0 +1,4 @@
+# file: /home/doughnut/github/innovate/src/innovate/utils/model_evaluation.py
+# hypothesis_version: 6.135.24
+
+['AIC', 'BIC', 'MAE', 'MAPE', 'MSE', 'Model', 'Parameters', 'R-squared', 'RMSE', 'RSS', 'SMAPE', 'predict']

@@ -1,0 +1,4 @@
+# file: /home/doughnut/github/innovate/src/innovate/plots/__init__.py
+# hypothesis_version: 6.135.24
+
+[0.6, '-', 'Cumulative Adoptions', 'Diffusion Curve', 'Observed', 'Predicted', 'Time', 'o']

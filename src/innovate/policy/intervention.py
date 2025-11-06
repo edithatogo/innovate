@@ -74,7 +74,11 @@ class PolicyIntervention:
                 params = modified_params_at_t_points[idx]
                 p, q, m = params["p"], params["q"], params["m"]
                 expo = np.exp(-(p + q) * t_val)
-                pred = m * (1 - expo) / (1 + (q / p) * expo)
+                # Avoid division by zero when p is 0
+                if p == 0:
+                    pred = m * (1 - np.exp(-q * t_val))
+                else:
+                    pred = m * (1 - expo) / (1 + (q / p) * expo)
                 predictions.append(pred)
             return np.array(predictions)
 
