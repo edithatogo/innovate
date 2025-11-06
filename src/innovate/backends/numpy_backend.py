@@ -34,7 +34,13 @@ class NumPyBackend:
             kwargs['initial'] = initial
         if where is not None:
             kwargs['where'] = where
-        return np.sum(a, **kwargs)
+        result = np.sum(a, **kwargs)
+        
+        # Return float if scalar (when axis is None), otherwise return array
+        if axis is None and not keepdims:
+            return float(result)
+        else:
+            return result
 
     def mean(
         self,
@@ -45,7 +51,7 @@ class NumPyBackend:
         keepdims: bool = False,
         *,
         where: Optional[np.ndarray] = None
-    ) -> float:
+    ) -> Union[float, np.ndarray]:
         kwargs = {
             'axis': axis,
             'dtype': dtype,
@@ -55,7 +61,11 @@ class NumPyBackend:
         if where is not None:
             kwargs['where'] = where
         result = np.mean(a, **kwargs)
-        return float(result)
+        # Return float if scalar (when axis is None), otherwise return array
+        if axis is None and not keepdims:
+            return float(result)
+        else:
+            return np.asarray(result)
 
     def where(self, condition: np.ndarray, x: Any, y: Any) -> np.ndarray:
         return np.where(condition, x, y)
@@ -96,11 +106,11 @@ class NumPyBackend:
     def ones(self, shape: Union[int, Sequence[int]]) -> np.ndarray:
         return np.ones(shape)
 
-    def max(self, x: Union[np.ndarray, Sequence]) -> float:
-        return float(np.max(x))
+    def max(self, x: Union[np.ndarray, Sequence], axis: Optional[Union[int, tuple]] = None) -> Union[float, np.ndarray]:
+        return np.max(x, axis=axis)
 
-    def median(self, x: Union[np.ndarray, Sequence]) -> float:
-        return float(np.median(x))
+    def median(self, x: Union[np.ndarray, Sequence], axis: Optional[Union[int, tuple]] = None) -> Union[float, np.ndarray]:
+        return np.median(x, axis=axis)
 
     def interp(self, x: np.ndarray, xp: np.ndarray, fp: np.ndarray) -> np.ndarray:
         return np.interp(x, xp, fp)
@@ -132,8 +142,8 @@ class NumPyBackend:
     def clip(self, x: np.ndarray, a_min: Any, a_max: Any) -> np.ndarray:
         return np.clip(x, a_min, a_max)
 
-    def min(self, x: Union[np.ndarray, Sequence]) -> float:
-        return float(np.min(x))
+    def min(self, x: Union[np.ndarray, Sequence], axis: Optional[Union[int, tuple]] = None) -> Union[float, np.ndarray]:
+        return np.min(x, axis=axis)
 
     def copy(self, x: np.ndarray) -> np.ndarray:
         return np.copy(x)
@@ -173,6 +183,9 @@ class NumPyBackend:
 
     def repeat(self, a: np.ndarray, repeats: Union[int, Sequence], axis: Optional[int] = None) -> np.ndarray:
         return np.repeat(a, repeats, axis=axis)
+
+    def power(self, x: Union[np.ndarray, Sequence], y: Union[float, np.ndarray]) -> np.ndarray:
+        return np.power(x, y)
 
     def ones_like(self, a: Union[np.ndarray, Sequence], dtype: Optional[type] = None, subok: bool = True, shape: Optional[Union[int, Sequence]] = None) -> np.ndarray:
         return np.ones_like(a, dtype=dtype, subok=subok, shape=shape)

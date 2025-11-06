@@ -1,4 +1,4 @@
-from typing import Callable, Sequence
+from typing import Any, Callable, Optional, Sequence, Union
 
 import jax
 import jax.numpy as jnp
@@ -15,11 +15,21 @@ class JaxBackend:
     def power(self, x, y):
         return jnp.power(x, y)
 
-    def sum(self, a, axis=None, dtype=None, keepdims=False):
-        return jnp.sum(a, axis=axis, dtype=dtype, keepdims=keepdims)
+    def sum(self, a, axis=None, dtype=None, keepdims=False) -> Union[float, jnp.ndarray]:
+        result = jnp.sum(a, axis=axis, dtype=dtype, keepdims=keepdims)
+        # Return float if scalar (when axis is None), otherwise return array
+        if axis is None and not keepdims:
+            return float(result)
+        else:
+            return result
 
-    def mean(self, a, axis=None, dtype=None, keepdims=False):
-        return jnp.mean(a, axis=axis, dtype=dtype, keepdims=keepdims)
+    def mean(self, a, axis=None, dtype=None, keepdims=False) -> Union[float, jnp.ndarray]:
+        result = jnp.mean(a, axis=axis, dtype=dtype, keepdims=keepdims)
+        # Return float if scalar (when axis is None), otherwise return array
+        if axis is None and not keepdims:
+            return float(result)
+        else:
+            return result
 
     def where(self, condition, x, y):
         return jnp.where(condition, x, y)
@@ -66,11 +76,11 @@ class JaxBackend:
     def zeros(self, shape: Sequence[int]) -> jnp.ndarray:
         return jnp.zeros(shape)
 
-    def max(self, x: jnp.ndarray) -> float:
-        return jnp.max(x)
+    def max(self, x: jnp.ndarray, axis: Optional[Union[int, tuple]] = None) -> Union[float, jnp.ndarray]:
+        return jnp.max(x, axis=axis)
 
-    def median(self, x: jnp.ndarray) -> float:
-        return jnp.median(x)
+    def median(self, x: jnp.ndarray, axis: Optional[Union[int, tuple]] = None) -> Union[float, jnp.ndarray]:
+        return jnp.median(x, axis=axis)
 
     def interp(self, x, xp, fp):
         return jnp.interp(x, xp, fp)
