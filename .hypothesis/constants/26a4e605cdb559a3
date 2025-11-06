@@ -1,4 +1,0 @@
-# file: /home/doughnut/github/innovate/src/innovate/dynamics/contagion/sis.py
-# hypothesis_version: 6.135.24
-
-[0.01, 0.1, 999, 'I', 'I0', 'LSODA', 'S', 'S0', 'default', 'description', 'float', 'recovery_rate', 'transmission_rate', 'type']

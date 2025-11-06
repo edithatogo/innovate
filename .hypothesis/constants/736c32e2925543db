@@ -1,4 +1,0 @@
-# file: /home/doughnut/github/innovate/src/innovate/abm/ndlib_model.py
-# hypothesis_version: 6.135.24
-
-[0.1, 'Infected', 'agent', 'ic', 'lt', 'sir', 'sis']

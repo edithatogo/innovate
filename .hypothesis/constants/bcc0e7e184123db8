@@ -1,4 +1,0 @@
-# file: /home/doughnut/github/innovate/src/innovate/dynamics/growth/__init__.py
-# hypothesis_version: 6.135.24
-
-['DualInfluenceGrowth', 'GrowthCurve', 'SkewedGrowth', 'SymmetricGrowth']

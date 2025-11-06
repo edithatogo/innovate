@@ -1,4 +1,0 @@
-# file: /home/doughnut/github/innovate/src/innovate/compete/lotka_volterra.py
-# hypothesis_version: 6.135.24
-
-[0.0, 1e-06, 0.01, 0.1, 10000, 'L-BFGS-B', 'alpha1', 'alpha2', 'beta1', 'beta2', 'maxiter']

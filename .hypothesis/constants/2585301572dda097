@@ -1,4 +1,0 @@
-# file: /home/doughnut/github/innovate/src/innovate/dynamics/growth/skewed.py
-# hypothesis_version: 6.135.24
-
-[0.1, 1.0, 'Shape parameter b.', 'Shape parameter c.', '__len__', 'default', 'description', 'float', 'shape_b', 'shape_c', 'type']

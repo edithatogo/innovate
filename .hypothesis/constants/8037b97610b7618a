@@ -1,4 +1,0 @@
-# file: /home/doughnut/github/innovate/src/innovate/abm/disruptive_innovation.py
-# hypothesis_version: 6.135.24
-
-[0.2, 0.5, 1.0, 'DisruptiveAdopters', 'IncumbentAdopters', 'disruptive', 'incumbent', 'step']

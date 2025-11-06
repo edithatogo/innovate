@@ -1,4 +1,0 @@
-# file: /home/doughnut/github/innovate/src/innovate/backend.py
-# hypothesis_version: 6.135.24
-
-['jax', 'numpy']

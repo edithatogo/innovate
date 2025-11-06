@@ -1,4 +1,0 @@
-# file: /home/doughnut/github/innovate/src/innovate/utils/optimization_guide.py
-# hypothesis_version: 6.135.24
-
-[1e-06, 1.0, 10.0, '__main__', 'm', 'p', 'param_count', 'param_names', 'q']
