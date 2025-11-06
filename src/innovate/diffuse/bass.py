@@ -185,8 +185,8 @@ class BassModel(DiffusionModel):
         else:
             # NumPy backend expects 3 parameters: func, y0, t (parameters must be in closure)
             # Modify the function to not require additional args
-            def ode_func_numpy(t_val, y_val):
-                return self.differential_equation(t_val, y_val, tuple(params), validated_covariates, t_val)
+            def ode_func_numpy(y_val, t_val):
+                return self.differential_equation(t_val, y_val, tuple(params), validated_covariates, t_arr)
             
             sol = backend.current_backend.solve_ode(ode_func_numpy, y0, t_arr)
         return sol.flatten()
