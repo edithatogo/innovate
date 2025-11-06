@@ -75,9 +75,9 @@ class PolicyIntervention:
                 p, q, m = params["p"], params["q"], params["m"]
                 
                 # Handle edge case when p is zero to avoid division by zero
-                if p == 0:
-                    # When p=0, use limit form or return 0 if both p and q are 0
-                    if q == 0:
+                if np.isclose(p, 0):
+                    # When p≈0, use limit form or return 0 if both p and q are ≈0
+                    if np.isclose(q, 0):
                         pred = 0.0
                     else:
                         # L'Hôpital's rule: lim(p->0) of Bass model formula
