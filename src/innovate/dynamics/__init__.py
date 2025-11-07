@@ -1,0 +1,1 @@
+"""Dynamics models for innovation diffusion."""

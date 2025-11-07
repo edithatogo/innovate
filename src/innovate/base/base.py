@@ -10,7 +10,25 @@ class DiffusionModel(ABC):
 
     @abstractmethod
     def predict(self, t: Sequence[float]) -> Sequence[float]:
-        """Predicts adoption levels for given time points."""
+        """Predicts adoption levels for given time points.
+        
+        Parameters
+        ----------
+        t : Sequence[float]
+            Sequence of time points for prediction
+        
+        Returns
+        -------
+        Sequence[float]
+            Predicted adoption levels at each time point
+            
+        Raises
+        ------
+        RuntimeError
+            If model is not fitted (params_ is empty)
+        ValueError
+            If time points are invalid (e.g., negative, non-numeric)
+        """
 
     @abstractmethod
     def score(self, t: Sequence[float], y: Sequence[float]) -> float:
@@ -49,7 +67,7 @@ class DiffusionModel(ABC):
 
     @staticmethod
     @abstractmethod
-    def differential_equation(y, t, p):
+    def differential_equation(y: float, t: float, p: Sequence[float]) -> float:
         """Returns the differential equation for the model."""
 
     def fit(

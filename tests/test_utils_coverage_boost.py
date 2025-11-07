@@ -119,7 +119,7 @@ class TestUtilsModelEvaluation:
         metrics = get_fit_metrics(self.model, self.t, self.y)
         
         assert isinstance(metrics, dict)
-        expected_metrics = ['mse', 'rmse', 'mae', 'r2', 'mape']
+        expected_metrics = ['MSE', 'RMSE', 'MAE', 'R-squared', 'MAPE']
         for metric in expected_metrics:
             assert metric in metrics
             assert isinstance(metrics[metric], (int, float))
@@ -132,13 +132,13 @@ class TestUtilsModelEvaluation:
         metrics = get_fit_metrics(self.model, self.t, y_perfect)
         
         # MSE and RMSE should be very close to 0
-        assert metrics['mse'] < 1e-10
-        assert metrics['rmse'] < 1e-5
-        assert metrics['mae'] < 1e-10
+        assert metrics['MSE'] < 1e-10
+        assert metrics['RMSE'] < 1e-5
+        assert metrics['MAE'] < 1e-10
         # R² should be very close to 1
-        assert metrics['r2'] > 0.999
+        assert metrics['R-squared'] > 0.999
         # MAPE should be very small
-        assert metrics['mape'] < 0.01
+        assert metrics['MAPE'] < 0.01
     
     def test_get_fit_metrics_poor_fit(self):
         """Test metrics with deliberately poor fit."""
@@ -149,9 +149,9 @@ class TestUtilsModelEvaluation:
         metrics = get_fit_metrics(poor_model, self.t, self.y)
         
         # Should have poor metrics
-        assert metrics['mse'] > 1000  # High error
-        assert metrics['r2'] < 0.5   # Poor fit
-        assert metrics['mape'] > 50  # High percentage error
+        assert metrics['MSE'] > 1000  # High error
+        assert metrics['R-squared'] < 0.5   # Poor fit
+        assert metrics['MAPE'] > 50  # High percentage error
     
     def test_model_aic_basic(self):
         """Test AIC calculation."""
@@ -199,10 +199,10 @@ class TestUtilsModelEvaluation:
         metrics = get_fit_metrics(self.model, self.t, y_constant)
         
         # R² should handle zero variance case
-        assert 'r2' in metrics
+        assert 'R-squared' in metrics
         # Other metrics should still be calculable
-        assert np.isfinite(metrics['mse'])
-        assert np.isfinite(metrics['mae'])
+        assert np.isfinite(metrics['MSE'])
+        assert np.isfinite(metrics['MAE'])
     
     def test_metrics_with_negative_values(self):
         """Test metrics with negative observed values."""
@@ -213,11 +213,11 @@ class TestUtilsModelEvaluation:
         metrics = get_fit_metrics(self.model, self.t, y_with_negatives)
         
         # Should still calculate basic metrics
-        assert np.isfinite(metrics['mse'])
-        assert np.isfinite(metrics['mae'])
-        assert np.isfinite(metrics['r2'])
+        assert np.isfinite(metrics['MSE'])
+        assert np.isfinite(metrics['MAE'])
+        assert np.isfinite(metrics['R-squared'])
         # MAPE might be affected by negative values, but should not crash
-        assert 'mape' in metrics
+        assert 'MAPE' in metrics
 
 
 class TestUtilsPreprocessing:
