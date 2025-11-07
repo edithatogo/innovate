@@ -78,6 +78,18 @@ class PolicyIntervention:
                 if p == 0:
                     pred = m * (1 - np.exp(-q * t_val))
                 else:
+                
+                # Handle edge case when p is zero to avoid division by zero
+                if np.isclose(p, 0):
+                    # When p≈0, use limit form or return 0 if both p and q are ≈0
+                    if np.isclose(q, 0):
+                        pred = 0.0
+                    else:
+                        # L'Hôpital's rule: lim(p->0) of Bass model formula
+                        expo = np.exp(-q * t_val)
+                        pred = m * (1 - expo)
+                else:
+                    expo = np.exp(-(p + q) * t_val)
                     pred = m * (1 - expo) / (1 + (q / p) * expo)
                 predictions.append(pred)
             return np.array(predictions)

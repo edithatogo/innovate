@@ -209,6 +209,9 @@ class NumPyBackend:
     def zeros_like(self, x: np.ndarray) -> np.ndarray:
         return np.zeros_like(x)
 
+    def ones_like(self, x: np.ndarray) -> np.ndarray:
+        return np.ones_like(x)
+
     def ravel(self, x: np.ndarray) -> np.ndarray:
         return np.ravel(x)
 

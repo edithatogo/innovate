@@ -157,3 +157,51 @@ class JaxBackend:
 
     def vmap(self, f: Callable) -> Callable:
         return jax.vmap(f)
+
+    def clip(self, x, a_min, a_max):
+        return jnp.clip(x, a_min, a_max)
+
+    def ones(self, shape: Sequence[int]) -> jnp.ndarray:
+        return jnp.ones(shape)
+
+    def zeros_like(self, x):
+        return jnp.zeros_like(x)
+
+    def ones_like(self, x):
+        return jnp.ones_like(x)
+
+    def ravel(self, x):
+        return jnp.ravel(x)
+
+    def gradient(self, x, *args, **kwargs):
+        return jnp.gradient(x, *args, **kwargs)
+
+    def min(self, x):
+        return jnp.min(x)
+
+    def copy(self, x):
+        return jnp.copy(x)
+
+    def diff(self, a, n=1, axis=-1):
+        return jnp.diff(a, n=n, axis=axis)
+
+    def sqrt(self, x):
+        return jnp.sqrt(x)
+
+    def vstack(self, x):
+        return jnp.vstack(x)
+
+    def logsumexp(self, x, axis=None):
+        return jax.scipy.special.logsumexp(x, axis=axis)
+
+    def polyfit(self, x, y, deg):
+        return jnp.polyfit(x, y, deg)
+
+    def lstsq(self, x, y, rcond):
+        return jnp.linalg.lstsq(x, y, rcond=rcond)
+
+    def nanmean(self, x):
+        return jnp.nanmean(x)
+
+    def isfinite(self, x):
+        return jnp.isfinite(x)
