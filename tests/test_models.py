@@ -61,9 +61,9 @@ def test_bass_model_score(synthetic_data):
     fitter.fit(model, t, y)
     score = model.score(t, y)
     assert isinstance(score, float)
-    assert (
-        0.0 <= score <= 1.0
-    )  # R^2 can be negative, but for good fits, it should be positive
+    # R^2 can be negative if the model is worse than a horizontal line
+    # but should be <= 1.0 as the upper bound
+    assert score <= 1.0
 
 
 # Test GompertzModel

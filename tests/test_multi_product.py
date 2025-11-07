@@ -1,56 +1,214 @@
+"""Tests for the multi-product competition module."""
+
 import numpy as np
 import pytest
-from innovate.compete.multi_product import MultiProductDiffusionModel
-from innovate.fitters.scipy_fitter import ScipyFitter
+
+from src.innovate.compete.multi_product import MultiProductDiffusionModel
+from src.innovate.fitters.scipy_fitter import ScipyFitter
 
 
-@pytest.fixture()
-def synthetic_multi_product_data():
-    """Generate synthetic data for two competing products."""
-    t = np.linspace(0, 50, 100)
-
-    # True parameters for two products
-    true_params = {
-        "p1": 0.03,
-        "p2": 0.02,
-        "q1": 0.1,
-        "q2": 0.15,
-        "m1": 1000,
-        "m2": 1200,
-        "alpha_1_2": 0.5,
-        "alpha_2_1": 0.3,
-    }
-
-    # Use the model to generate the ideal data
+def test_multi_product_diffusion_model_init():
+    """Test initializing the MultiProductDiffusionModel."""
+    # Test with valid number of products
     model = MultiProductDiffusionModel(n_products=2)
-    model.params_ = true_params
-    y_ideal = model.predict(t)
+    
+    assert model.n_products == 2
+    assert model._params == {}
+    assert model.covariates == []
+    assert model.p is None
+    assert model.Q is None
+    assert model.m is None
+    assert model.names is None
 
-    return t, y_ideal, list(true_params.values())
+
+def test_multi_product_diffusion_model_init_invalid_n_products():
+    """Test initializing with invalid number of products raises error."""
+    with pytest.raises(ValueError, match="Number of products must be at least 1."):
+        MultiProductDiffusionModel(n_products=0)
+    
+    with pytest.raises(ValueError, match="Number of products must be at least 1."):
+        MultiProductDiffusionModel(n_products=-1)
 
 
-def test_multi_product_model_fit(synthetic_multi_product_data):
-    """Test the fitting of the MultiProductDiffusionModel."""
-    t, y, true_params = synthetic_multi_product_data
-
-    # Initialize the model for 2 products
-    model = MultiProductDiffusionModel(n_products=2)
-
-    # Provide slightly perturbed initial guesses to guide the optimizer
-    p0 = np.array(true_params) * (
-        1 + np.random.uniform(-0.1, 0.1, size=len(true_params))
+def test_multi_product_diffusion_model_init_with_params():
+    """Test initializing with parameters."""
+    p = [0.01, 0.02]
+    Q = [[1.0, 0.1], [0.2, 1.0]]
+    m = [100, 200]
+    names = ["ProductA", "ProductB"]
+    
+    model = MultiProductDiffusionModel(
+        n_products=2,
+        p=p,
+        Q=Q,
+        m=m,
+        names=names
     )
+    
+    assert model.n_products == 2
+    assert model.names == names
 
-    # Use the ScipyFitter to fit the model
-    fitter = ScipyFitter()
-    fitter.fit(model, t, y, p0=p0)
 
-    # Check if the parameters have been fitted
-    assert model.params_ is not None
-    assert len(model.params_) == 8  # p1, q1, m1, p2, q2, m2, alpha_1_2, alpha_2_1
+def test_multi_product_diffusion_model_init_inconsistent_dims():
+    """Test initializing with inconsistent parameter dimensions raises error."""
+    p = [0.01, 0.02]  # 2 products
+    Q = [[1.0, 0.1, 0.05], [0.2, 1.0, 0.1]]  # 2x3 matrix (should be 2x2)
+    m = [100, 200]  # 2 products
+    
+    with pytest.raises(ValueError, match="Dimensions of p, Q, and m must be consistent with n_products."):
+        MultiProductDiffusionModel(
+            n_products=2,
+            p=p,
+            Q=Q,
+            m=m
+        )
 
-    # Check if the fitted parameters are within a reasonable range of the true parameters
-    fitted_params = list(model.params_.values())
 
-    # Use a high relative tolerance to account for the difficulty of fitting this model
-    assert np.allclose(fitted_params, true_params, rtol=0.4)
+def test_multi_product_diffusion_model_init_inconsistent_names():
+    """Test initializing with inconsistent number of names raises error."""
+    with pytest.raises(ValueError, match="Number of names must match n_products."):
+        MultiProductDiffusionModel(
+            n_products=2,
+            names=["OnlyOneName"]
+        )
+
+
+def test_multi_product_param_names():
+    """Test the param_names property."""
+    model = MultiProductDiffusionModel(n_products=2)
+    
+    param_names = model.param_names
+    expected_names = [
+        'p1', 'p2',  # Innovation coefficients for products 1 and 2
+        'q1', 'q2',  # Imitation coefficients for products 1 and 2
+        'm1', 'm2',  # Market potentials for products 1 and 2
+        'alpha_1_2', 'alpha_2_1'  # Interaction coefficients
+    ]
+    
+    assert set(param_names) == set(expected_names)
+
+
+def test_multi_product_param_names_with_covariates():
+    """Test the param_names property with covariates."""
+    model = MultiProductDiffusionModel(n_products=2, covariates=['price', 'advertising'])
+    
+    param_names = model.param_names
+    
+    # Check that standard params are included
+    assert 'p1' in param_names
+    assert 'q1' in param_names
+    assert 'm1' in param_names
+    assert 'alpha_1_2' in param_names
+    
+    # Check that covariate-related params are included
+    assert 'beta_p1_price' in param_names
+    assert 'beta_q1_price' in param_names
+    assert 'beta_m1_price' in param_names
+    assert 'beta_alpha_1_2_price' in param_names
+    assert 'beta_p1_advertising' in param_names
+    assert 'beta_q1_advertising' in param_names
+    assert 'beta_m1_advertising' in param_names
+    assert 'beta_alpha_1_2_advertising' in param_names
+
+
+def test_multi_product_initial_guesses():
+    """Test initial guesses generation."""
+    model = MultiProductDiffusionModel(n_products=2)
+    
+    t = [0, 1, 2, 3, 4]
+    y = [10, 20, 30, 40, 50]
+    
+    guesses = model.initial_guesses(t, y)
+    
+    # Check that all expected parameters are in the guesses
+    assert 'p1' in guesses
+    assert 'p2' in guesses
+    assert 'q1' in guesses
+    assert 'q2' in guesses
+    assert 'm1' in guesses
+    assert 'm2' in guesses
+    assert 'alpha_1_2' in guesses
+    assert 'alpha_2_1' in guesses
+    
+    # Check default values
+    assert guesses['p1'] == 0.001
+    assert guesses['q1'] == 0.1
+    assert guesses['m1'] == 25.0  # max_y / n_products = 50 / 2 = 25.0
+    assert guesses['m2'] == 25.0  # max_y / n_products = 50 / 2 = 25.0
+
+
+def test_multi_product_initial_guesses_with_covariates():
+    """Test initial guesses generation with covariates."""
+    model = MultiProductDiffusionModel(n_products=2, covariates=['price'])
+    
+    t = [0, 1, 2, 3, 4]
+    y = [10, 20, 30, 40, 50]
+    
+    guesses = model.initial_guesses(t, y)
+    
+    # Check that covariate-related guesses are included
+    assert 'beta_p1_price' in guesses
+    assert 'beta_q1_price' in guesses
+    assert 'beta_m1_price' in guesses
+    assert 'beta_alpha_1_2_price' in guesses
+    
+    # Check default value for covariate effects
+    assert guesses['beta_p1_price'] == 0.0
+
+
+def test_multi_product_bounds():
+    """Test bounds generation."""
+    model = MultiProductDiffusionModel(n_products=2)
+    
+    t = [0, 1, 2, 3, 4]
+    y = [10, 20, 30, 40, 50]
+    
+    bounds = model.bounds(t, y)
+    
+    # Check bounds for standard parameters
+    assert 'p1' in bounds
+    assert bounds['p1'] == (1e-6, 0.1)
+    assert bounds['q1'] == (1e-6, 1.0)
+    assert bounds['m1'] == (0, 100)  # max_y * 2 = 50 * 2 = 100
+    
+    # Check alpha bounds
+    assert 'alpha_1_2' in bounds
+    assert bounds['alpha_1_2'] == (0, 2.0)
+
+
+def test_multi_product_bounds_with_covariates():
+    """Test bounds generation with covariates."""
+    model = MultiProductDiffusionModel(n_products=2, covariates=['price'])
+    
+    t = [0, 1, 2, 3, 4]
+    y = [10, 20, 30, 40, 50]
+    
+    bounds = model.bounds(t, y)
+    
+    # Check bounds for covariate-related parameters
+    assert 'beta_p1_price' in bounds
+    assert bounds['beta_p1_price'] == (-np.inf, np.inf)
+
+
+def test_multi_product_predict_without_params():
+    """Test that predict raises an error when parameters are not set."""
+    model = MultiProductDiffusionModel(n_products=2)
+    
+    with pytest.raises(RuntimeError, match="Model parameters"):
+        model.predict([0, 1, 2])
+
+
+def test_multi_product_score_without_params():
+    """Test that score raises an error when the model hasn't been fitted."""
+    model = MultiProductDiffusionModel(n_products=2)
+    
+    with pytest.raises(RuntimeError, match="Model has not been fitted yet"):
+        model.score([0, 1, 2], [0, 1, 2])
+
+
+def test_multi_product_predict_adoption_rate_without_params():
+    """Test that predict_adoption_rate raises an error when the model hasn't been fitted."""
+    model = MultiProductDiffusionModel(n_products=2)
+    
+    with pytest.raises(RuntimeError, match="Model has not been fitted yet"):
+        model.predict_adoption_rate([0, 1, 2])

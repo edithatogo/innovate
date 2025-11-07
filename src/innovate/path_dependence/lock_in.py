@@ -82,7 +82,7 @@ class LockInModel:
 
     def predict(self, t: Sequence[float], y0: np.ndarray) -> np.ndarray:
         if not self._params:
-            raise RuntimeError("Model parameters have not been set.")
+            raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
         sol = odeint(
             self.differential_equation,

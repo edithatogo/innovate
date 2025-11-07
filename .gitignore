@@ -5,3 +5,21 @@ __pycache__/
 .venv/
 .env/
 build/
+.hypothesis/
+# AI working files
+*.ai/
+*.tmp/
+*.temp/
+ai_*.txt
+*_ai.txt
+simulated_*.txt
+review_*.txt
+# Test files in root directory
+temp_test.py
+comprehensive_coverage_test.py
+mutation_testing.py
+simple_demo.py
+test_innovate_components.py
+test_numpy_backend_full_coverage.py
+enable_faulthandler.py
+mutmut_config.py

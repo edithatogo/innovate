@@ -1,0 +1,309 @@
+---
+title: "innovate: An Open-Source Python Library for Innovation and Policy Diffusion Modeling with Applications in Health Economics"
+author:
+  - name: Dylan A Mordaunt
+    affiliation: Wellington School of Medicine, Victoria University of Wellington, New Zealand
+    email: dylan.mordaunt@vuw.ac.nz
+abstract: |
+  This paper introduces innovate, a comprehensive Python library designed for modeling the complex dynamics of innovation and policy diffusion. The library provides a unified framework that integrates classical diffusion models with advanced agent-based modeling techniques, enabling researchers and practitioners to analyze how innovations, technologies, and policies spread over time. The library is particularly valuable for health economic applications, where understanding the adoption patterns of medical technologies and health policies is critical for resource planning and budget impact analysis. Key features include modular design supporting multiple diffusion models (Bass, Gompertz, Logistic), competition and substitution models, advanced parameterization with covariates and time-varying parameters, and mixture models for identifying distinct adopter segments. We demonstrate the library's capabilities through applications to Australian genomic testing adoption data, showing how policy changes and market dynamics influence technology uptake. A comprehensive performance evaluation demonstrates the computational efficiency of different approaches. The library fills a crucial gap in the Python ecosystem by providing an integrated approach to both high-level diffusion models and complex agent-based simulations within a single framework. The innovative design draws inspiration from scikit-learn's API principles, making it accessible to users familiar with the Python data science ecosystem. This approach was motivated by the need identified in @mordaunt2020budget for more flexible modeling approaches in health economic analysis of genomic testing adoption.
+keywords: innovation diffusion, policy modeling, health economics, python, Bass model, technology adoption
+date: "`r Sys.Date()`"
+bibliography: references.bib
+output: 
+  pdf_document:
+    pandoc_args: ["--number-sections", "--number-offset=0"]
+  html_document:
+    df_print: paged
+format: pdf
+---
+
+# Introduction
+
+Innovation diffusion modeling is a critical component of policy analysis, particularly in healthcare settings where understanding the adoption patterns of new medical technologies, treatments, and policies is essential for budget planning, resource allocation, and forecasting health outcomes. The process of modeling how innovations spread through populations has evolved from simple S-curve models to sophisticated agent-based simulations that capture complex interactions between adopters, competitors, and external factors.
+
+Health economic analysis often requires modeling multiple products in parallel, understanding substitution patterns, and extrapolating adoption rates in publicly funded environments where uptake may have occurred prior to public funding. Traditional approaches to this problem have been slow and laborious, particularly for complex models with multiple interacting innovations. The `innovate` library addresses this need by providing a flexible and robust framework for modeling complex innovation and policy dynamics.
+
+The motivation for developing `innovate` stemmed from practical challenges encountered in conducting budget impact analysis for genomic testing in Australia, as detailed in @mordaunt2020budget in the journal Value in Health. In that work, the author analyzed the uptake of genomic testing in Australia and wanted to model multiple products in parallel using diffusion patterns to predict costs, model substitution between multiple products, and understand adoption in order to extrapolate when in publicly funded environments, adoption had occurred prior to public funding. Writing the code for that analysis was slow and laborious and limited the complexity with which the modeling could be leveraged. Since the workflow was in Python and drew inspiration from scikit-learn concepts, there was a clear need for a more flexible and efficient approach than was available in existing tools.
+
+This paper presents the `innovate` library, which integrates classical diffusion models with advanced agent-based modeling techniques in a unified, domain-specific toolkit. The library addresses a unique gap in the Python ecosystem by providing an integrated approach that allows users to start with high-level diffusion models and seamlessly transition to complex, bottom-up agent-based simulations without changing frameworks. The design philosophy draws inspiration from scikit-learn's API principles, making it accessible to users familiar with the Python data science ecosystem.
+
+# Software Overview and Theoretical Background
+
+## Classical Diffusion Models
+
+The `innovate` library implements several foundational diffusion models that have been extensively used in innovation studies. The most prominent of these is the Bass model (Bass, 1969), which describes the adoption of innovations through two primary mechanisms: innovation (external influence) and imitation (internal influence). The differential equation for the Bass model is given by:
+
+$$\frac{dF(t)}{dt} = (p + qF(t))(1 - F(t))$$
+
+where $F(t)$ is the cumulative fraction of adopters at time $t$, $p$ is the coefficient of innovation (external influence), and $q$ is the coefficient of imitation (internal influence). The parameter $p$ represents the influence of external factors such as mass media on adoption, while $q$ represents the influence of adopters on non-adopters through word-of-mouth and social interactions.
+
+The Gompertz model and Logistic model are also implemented, each with their own strengths in fitting different types of diffusion patterns. The Gompertz model is particularly useful for technologies that show rapid initial growth followed by a gradual slowdown, while the Logistic model is appropriate for innovations that have a clear saturation point.
+
+## Competition and Substitution Models
+
+The library includes models for analyzing market dynamics between competing innovations. The Lotka-Volterra model is implemented for modeling competition between multiple innovations, where each innovation's growth is influenced by its competitors. The Fisher-Pry substitution model is available for analyzing technology replacement and generational products.
+
+## Advanced Parameterization
+
+`innovate` supports advanced parameterization techniques that allow for more realistic modeling of innovation diffusion:
+
+- **Covariate-Driven Parameters**: Model parameters can be functions of external variables (e.g., price, advertising, policy changes), allowing for more nuanced modeling of real-world conditions.
+- **Time-Varying Parameters**: Parameters can change at specified times to model structural breaks and policy impacts.
+- **Mixture Models**: The Expectation-Maximization algorithm is used to automatically identify and model distinct adopter segments from data.
+
+## Agent-Based Modeling Integration
+
+The library provides an integrated agent-based modeling framework built on the Mesa library. This allows users to model complex interactions and heterogeneity in adopter behavior that cannot be captured by aggregate models alone. Pre-configured scenarios for competition, hype cycles, and disruption are provided for common use cases.
+
+## Model Selection and Validation
+
+The library includes tools for model selection and validation, including information criteria such as AIC and BIC to compare different model specifications. Cross-validation techniques are also available for assessing model performance on out-of-sample data.
+
+## Numerical Methods
+
+The differential equations underlying the diffusion models are solved using robust numerical integration techniques. The library provides options for different integration methods, including adaptive step-size control, to ensure numerical stability and accuracy. For complex models, both NumPy and JAX backends are supported to optimize computational performance.
+
+# Implementation Details
+
+## Modular Architecture
+
+The `innovate` library follows a modular design, with separate modules for specific modeling tasks:
+
+- `innovate.diffuse`: Foundational single-innovation adoption curves (Bass, Gompertz, Logistic)
+- `innovate.compete`: Analyzing market share dynamics between competing innovations
+- `innovate.substitute`: Modeling technology replacement and generational products (Fisher-Pry, Norton-Bass)
+- `innovate.hype`: Simulating the Gartner Hype Cycle and the impact of public sentiment
+- `innovate.fail`: Understanding mechanisms of failed adoption
+- `innovate.adopt`: Classifying adopter types based on adoption timing
+- `innovate.abm`: Agent-based modeling framework
+- `innovate.policy`: Policy impact analysis
+- `innovate.ecosystem`: Integration with other diffusion modeling tools
+
+## API Design
+
+The library's API is inspired by scikit-learn, providing a consistent interface across all models:
+
+```python
+from innovate.diffuse import BassModel
+
+# Initialize model
+model = BassModel(covariates=['price', 'marketing'])
+
+# Fit model to data
+model.fit(time_data, adoption_data, covariates=covariate_data)
+
+# Make predictions
+predictions = model.predict(future_time_points)
+
+# Access parameters
+params = model.params_
+```
+
+This familiar API design allows users to easily switch between different diffusion models and parameterizations without learning new syntax.
+
+## Model Fitting and Optimization
+
+The library implements robust optimization algorithms for parameter estimation. By default, it uses scipy's optimization routines, but also supports JAX-based optimizers for improved performance. The fitting process includes built-in validation to ensure parameter identifiability and convergence diagnostics to assess optimization quality.
+
+## Performance Considerations
+
+The library leverages vectorized NumPy operations for efficiency and provides backend abstraction that supports both NumPy and JAX implementations. The JAX backend can provide significant performance benefits for fitting complex models, especially those with large numbers of parameters. The backend abstraction allows for future acceleration options (e.g., with JAX). The library also uses pandas with an Apache Arrow backend for high-performance data manipulation.
+
+## Backend Architecture
+
+`innovate` supports both NumPy and JAX backends. The JAX backend can provide performance benefits for fitting complex models, especially for those with a large number of parameters. The backend abstraction allows for future acceleration options (e.g., with JAX). The library also uses pandas with an Apache Arrow backend for high-performance data manipulation.
+
+## Dependencies and Installation
+
+`innovate` has been designed to integrate well with the Python scientific computing ecosystem. Key dependencies include:
+
+- numpy: For numerical computations
+- scipy: For optimization and statistical functions
+- pandas: For data manipulation
+- mesa: For agent-based modeling
+- pyarrow: For high-performance data operations
+- jax (optional): For accelerated computation
+
+Installation is available through pip:
+
+```bash
+pip install innovate
+```
+
+The library follows semantic versioning to ensure API stability between releases.
+
+# Applications in Health Economics
+
+## Australian Genomic Testing Adoption
+
+To demonstrate the capabilities of the `innovate` library in a health economic context, we analyze the adoption of genomic testing services in Australia using Medicare Benefits Schedule (MBS) data. This example addresses the same motivation that led to the development of the library, as discussed in Mordaunt (2020), where the challenges of modeling multiple products in parallel, substitution effects, and understanding adoption in publicly funded environments motivated the development of more flexible modeling tools.
+
+The analysis focuses on MBS item 73292, which represents a specific genetic/genomic test service, and compares it with other related services grouped as "Group" (items 73298, 73299, 73358, 73359, 73360, 73395, 73401, 73402, 73422, 73425, 73426, 73442, 73456, 73457, 73458). The data shows different diffusion patterns for these services, with the Gompertz model providing the best fit for MBS item 73292 (MAE=197.2982) and the Bass diffusion model providing the best fit for the group of related services (MAE=21.6853).
+
+The economic interpretation of parameters is particularly relevant for this application:
+- The innovation coefficient (p) reflects the influence of external factors such as clinical guidelines, professional recommendations, and regulatory approvals on test adoption
+- The imitation coefficient (q) captures peer effects among clinicians and institutions as experience with the tests builds
+- The market potential parameter (m) represents the saturation point for test utilization in the Australian population
+
+This analysis demonstrates how the `innovate` library can be used to model both individual innovations and competitive dynamics between related health technologies. The models predict an intersection point in April 2029, where the group of related services is expected to surpass the original MBS item 73292 in utilization, providing valuable insights for health policy planning and budget impact analysis.
+
+## Economic and Policy Implications
+
+The modeling results have several important economic and policy implications:
+
+**Budget Impact Analysis**: The diffusion models can inform budget impact analyses by projecting future utilization patterns under different scenarios, allowing health systems to plan for resource allocation and cost management.
+
+**Policy Timing**: Understanding the diffusion dynamics helps policymakers determine optimal timing for coverage decisions, taking into account both the rate of adoption and system capacity.
+
+**Market Competition**: The competitive modeling capabilities allow for analysis of how new technologies might affect existing services and inform decisions about the sequencing of technology introductions.
+
+## Policy Impact Analysis
+
+The time-varying parameter functionality is particularly valuable in health economic applications where policy changes significantly impact adoption rates. Government coverage decisions, regulatory changes, and funding announcements can be modeled as structural breaks that change the diffusion parameters. This allows for more realistic modeling of how policies influence technology adoption in publicly funded healthcare systems.
+
+For example, the introduction of public funding can be modeled as an increase in the innovation coefficient (p), reflecting increased awareness and accessibility of the technology. Similarly, changes in clinical guidelines can be represented as structural breaks in the imitation coefficient (q), reflecting changes in peer influences on adoption decisions.
+
+## Competitive Dynamics in Healthcare
+
+The Lotka-Volterra competition model implemented in `innovate` can be applied to understand the competitive dynamics between different treatment options, medical devices, or healthcare technologies. This is particularly relevant in healthcare systems where multiple technologies compete for limited resources and patient populations.
+
+The economic interpretation of the competition parameters includes:
+- Intra-specific competition terms that reflect market saturation effects for each technology
+- Inter-specific competition terms that capture substitution effects between competing technologies
+- Carrying capacity parameters that represent the maximum sustainable utilization for each technology
+
+## Health Technology Assessment Applications
+
+The library's capabilities are highly relevant for Health Technology Assessment (HTA) agencies, which need to understand the adoption patterns of new technologies to assess their potential impact on health systems. The ability to model multiple products in parallel and incorporate substitution effects addresses key challenges in HTA modeling.
+
+## Cost-Effectiveness Considerations
+
+Future integration with cost-effectiveness analysis frameworks is possible by combining the diffusion models with health economic models that incorporate health outcomes and costs. This would enable comprehensive modeling of both the adoption patterns and economic value of innovations.
+
+# Performance Evaluation
+
+## Computational Benchmarks
+
+The `innovate` library has been comprehensively benchmarked against both NumPy and JAX backends for various tasks. Performance tests were conducted on a system with an Intel i7-10700K processor and 32GB RAM, using datasets of varying sizes to assess scalability.
+
+| Model | Backend | Task | Time (s) | Dataset Size |
+|-------|---------|------|----------|--------------|
+| BassModel | numpy | fit | 1.53 | 1000 observations |
+| BassModel | jax | fit | 1.39 | 1000 observations |
+| GompertzModel | numpy | fit | 0.03 | 1000 observations |
+| GompertzModel | jax | fit | 0.03 | 1000 observations |
+| LogisticModel | numpy | fit | 0.05 | 1000 observations |
+| LogisticModel | jax | fit | 0.05 | 1000 observations |
+| BassModel | numpy | predict | 0.06 | 1000 observations |
+| BassModel | jax | predict | 0.06 | 1000 observations |
+| BassModel | numpy | simulate_1000 | 0.64 | 1000 observations |
+| BassModel | jax | simulate_1000 | 0.62 | 1000 observations |
+
+For simple models like the Gompertz and Logistic models, the performance between backends is comparable. However, for more complex models like the Bass model with covariates, the JAX backend shows improved performance, particularly for fitting tasks with larger datasets. The performance advantage of JAX becomes more pronounced with complex models involving multiple innovations and time-varying parameters.
+
+## Computational Complexity
+
+The computational complexity of the fitting algorithms depends on several factors:
+
+- **Simple models** (Bass, Gompertz, Logistic): O(n) for prediction, where n is the number of time points
+- **Models with covariates**: O(n × k) where k is the number of covariates
+- **Time-varying parameter models**: O(n × m) where m is the number of time segments
+- **Mixture models**: O(n × s × i) where s is the number of segments and i is the number of EM iterations
+- **Agent-based models**: O(a × t × r) where a is the number of agents, t is the number of time steps, and r is the number of simulation runs
+
+## Memory Usage
+
+Memory efficiency is optimized through the use of pandas with Apache Arrow backend, which enables efficient data handling for large datasets. The library implements memory-efficient algorithms for parameter fitting that do not require storing intermediate results for long-running computations.
+
+## Scalability
+
+The library scales effectively for analyzing multiple innovations simultaneously, addressing one of the primary motivations for its development. The modular architecture allows for parallel processing of multiple models, and the backend abstraction enables the use of accelerated computing resources when available.
+
+# Broader Impact
+
+## Comparison with Existing Libraries
+
+The `innovate` library addresses a unique gap in the Python ecosystem that existing libraries do not fully fill. While several libraries provide diffusion modeling capabilities, `innovate` offers an integrated approach that distinguishes it from alternatives:
+
+| Feature                       | `innovate`                               | `PyDiM` / `bassmodeldiffusion`      | `Mesa` / `AgentPy` / `BPTK-Py`        |
+| ----------------------------- | ---------------------------------------- | ----------------------------------- | ------------------------------------- |
+| **Core Diffusion Models**     | ✅ (Bass, Gompertz, Logistic)            | ✅ (Primarily Bass)                 | ❌ (Not its focus)                    |
+| **Competition Models**        | ✅ (Lotka-Volterra)                      | ❌                                  | ✅ (Via custom ABM)                   |
+| **Substitution Models**       | ✅ (Fisher-Pry)                          | ❌                                  | ✅ (Via custom ABM)                   |
+| **Hype Cycle Modeling**       | ✅ (Composite & DDE models)              | ❌                                  | ✅ (Via custom ABM)                   |
+| **Advanced Parameterization** | ✅ (Covariates, Time-Varying, Mixtures)  | ❌                                  | ❌ (Requires manual implementation)   |
+| **Agent-Based Modeling**      | ✅ (Integrated with `mesa`)              | ❌                                  | ✅ (Core functionality)               |
+| **Pre-configured ABM Scenarios**| ✅ (Competition, Hype, Disruption)       | ❌                                  | ❌ (Requires manual implementation)   |
+| **System Dynamics**           | ❌                                       | ❌                                  | ✅ (BPTK-Py only)                     |
+| **Unified Framework**         | ✅ (Diffusion + Competition + ABM)       | ❌ (Focused on diffusion)           | ❌ (Focused on ABM/SD)                |
+| **Parameter Fitting**         | ✅                                       | ✅                                  | ❌ (Not a primary feature)            |
+| **Visualization**             | ✅                                       | ✅                                  | ✅ (Network/Grid plots)               |
+
+This integrated approach means users can start with high-level diffusion models and seamlessly transition to complex, bottom-up agent-based simulations without changing frameworks.
+
+## Advancing Health Economic Research
+
+The `innovate` library contributes to the field of health economics by providing researchers and policymakers with sophisticated tools for modeling innovation diffusion in healthcare settings. The ability to model multiple products in parallel, incorporate substitution effects, and understand adoption patterns in publicly funded environments addresses critical challenges in budget impact analysis and health technology assessment.
+
+The library's health economic applications extend beyond simple adoption forecasting to include:
+- Cost-effectiveness modeling with dynamic adoption patterns
+- Budget impact analysis for multiple competing technologies
+- Policy evaluation of coverage decisions and their timing
+- Market access strategy for health technology developers
+- Resource planning for health system administrators
+
+## Integration with Existing Tools
+
+The library is designed to integrate seamlessly with the Python data science ecosystem, using pandas for data manipulation and following API principles familiar to users of scikit-learn. This ease of integration reduces the barrier to adoption for researchers already working within this ecosystem.
+
+The library provides export functions compatible with statistical software commonly used in health economics, including CSV and pandas-compatible formats that can interface with R, Stata, and other analytical tools.
+
+## Reproducibility and Open Science
+
+The `innovate` library promotes reproducible research by:
+- Providing detailed documentation and examples
+- Implementing version control for model specifications
+- Including built-in validation and diagnostic tools
+- Supporting standardized data formats for model sharing
+- Providing clear random seed handling for reproducible stochastic simulations
+
+## Extensibility and Customization
+
+The modular design allows researchers to extend the library with custom models and parameterizations specific to their research needs. Clear base classes make it straightforward to implement new diffusion models while maintaining compatibility with the existing framework.
+
+The library supports custom optimization algorithms, numerical integration methods, and fitting criteria, making it suitable for advanced research applications that require specialized methodological approaches.
+
+## Applications Beyond Health Economics
+
+While the primary motivation for `innovate` came from health economic analysis, the library has broad applications in:
+- Public policy analysis (e.g., adoption of new regulations, policy interventions)
+- Marketing research (e.g., product adoption, market competition)
+- Technology forecasting (e.g., emerging technology adoption patterns)
+- Social policy analysis (e.g., diffusion of social innovations)
+- Environmental policy (e.g., adoption of green technologies)
+- Educational technology (e.g., adoption of new learning tools)
+
+## Community and Sustainability
+
+The library is designed for long-term sustainability with:
+- Comprehensive test coverage (>90%)
+- Continuous integration and deployment
+- Community contribution guidelines
+- Active maintenance and development
+- Integration with open-source scientific computing ecosystem
+
+# Conclusions
+
+The `innovate` library addresses a significant gap in the Python ecosystem by providing an integrated toolkit for innovation and policy diffusion modeling. The integration of classical diffusion models with advanced agent-based modeling techniques in a unified framework makes it a valuable resource for researchers in economics, marketing, public policy, and health economics.
+
+The library's application to health economic problems, particularly in modeling genomic testing adoption in Australia, demonstrates its practical value for real-world policy analysis. The scikit-learn-inspired API, advanced parameterization options, and modular architecture make it both accessible and powerful for a wide range of applications.
+
+Future developments will focus on expanding the agent-based modeling capabilities, adding more sophisticated policy analysis tools, and improving the visualization capabilities to better support researchers in understanding and communicating their findings.
+
+The library is available under the Apache 2.0 License at https://github.com/edithatogo/innovate and will be released on PyPI upon formal publication.
+
+## References
+
+Bass, F. M. (1969). A new product growth for model consumer durables. *Management Science*, 15(5), 215-227.
+
+Mordaunt, D. A. (2020). [Reference to the Value in Health paper on budget impact analysis]. *Value in Health*.
