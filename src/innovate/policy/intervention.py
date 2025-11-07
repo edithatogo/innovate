@@ -73,6 +73,11 @@ class PolicyIntervention:
                 idx = np.argmin(np.abs(np.array(t_points) - t_val))
                 params = modified_params_at_t_points[idx]
                 p, q, m = params["p"], params["q"], params["m"]
+                expo = np.exp(-(p + q) * t_val)
+                # Avoid division by zero when p is 0
+                if p == 0:
+                    pred = m * (1 - np.exp(-q * t_val))
+                else:
                 
                 # Handle edge case when p is zero to avoid division by zero
                 if np.isclose(p, 0):
