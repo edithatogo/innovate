@@ -1,11 +1,12 @@
 """Additional tests to improve coverage for core modules."""
+
 import numpy as np
 import pytest
 
 from innovate.backend import use_backend
 
 # Use numpy backend to avoid JAX-related issues
-use_backend('numpy')
+use_backend("numpy")
 
 from innovate.base.base import DiffusionModel
 from innovate.diffuse.bass import BassModel
@@ -18,6 +19,7 @@ class TestBaseModule:
 
     def test_diffusion_model_abstract_methods(self):
         """Test that the abstract base class works correctly."""
+
         # Create a concrete implementation for testing
         class ConcreteDiffusionModel(DiffusionModel):
             def __init__(self):
@@ -78,6 +80,7 @@ class TestBaseModule:
 
     def test_diffusion_model_fit_method(self):
         """Test the fit method in base class."""
+
         class ConcreteDiffusionModel(DiffusionModel):
             def __init__(self):
                 self._params = {"test": 1.0}
@@ -218,8 +221,17 @@ class TestBassModelCoverage:
 
         param_names = model.param_names
         # Should have base params, post-event params, and covariate params
-        expected_params = ["p", "q", "m", "p_post", "q_post", "m_post",
-                          "beta_p_advertising", "beta_q_advertising", "beta_m_advertising"]
+        expected_params = [
+            "p",
+            "q",
+            "m",
+            "p_post",
+            "q_post",
+            "m_post",
+            "beta_p_advertising",
+            "beta_q_advertising",
+            "beta_m_advertising",
+        ]
         for param in expected_params:
             assert param in param_names
 
@@ -307,8 +319,12 @@ class TestBassModelCoverage:
         """Test the predict method with covariates."""
         model = BassModel(covariates=["advertising"])
         model.params_ = {
-            "p": 0.03, "q": 0.38, "m": 1000,
-            "beta_p_advertising": 0.01, "beta_q_advertising": 0.02, "beta_m_advertising": 10
+            "p": 0.03,
+            "q": 0.38,
+            "m": 1000,
+            "beta_p_advertising": 0.01,
+            "beta_q_advertising": 0.02,
+            "beta_m_advertising": 10,
         }
 
         t = [0, 1, 2, 3]
@@ -339,8 +355,12 @@ class TestBassModelCoverage:
         """Test the score method with covariates - should fail due to ODE issues but we can still test structure."""
         model = BassModel(covariates=["advertising"])
         model.params_ = {
-            "p": 0.03, "q": 0.38, "m": 1000,
-            "beta_p_advertising": 0.01, "beta_q_advertising": 0.02, "beta_m_advertising": 10
+            "p": 0.03,
+            "q": 0.38,
+            "m": 1000,
+            "beta_p_advertising": 0.01,
+            "beta_q_advertising": 0.02,
+            "beta_m_advertising": 10,
         }
 
         t = [0, 1, 2, 3]
@@ -363,7 +383,7 @@ class TestBassModelCoverage:
         # Call the differential equation method directly
         rate = model.differential_equation(t, y, params, covariates, t_eval)
         # The function returns a numpy array, so check for that
-        assert hasattr(rate, '__array__') or isinstance(rate, (float, int, np.floating, np.ndarray))
+        assert hasattr(rate, "__array__") or isinstance(rate, (float, int, np.floating, np.ndarray))
 
     def test_bass_model_differential_equation_with_covariates(self):
         """Test the differential equation method with covariates."""
@@ -375,7 +395,7 @@ class TestBassModelCoverage:
         t_eval = [0, 1, 2, 3]
 
         rate = model.differential_equation(t, y, params, covariates, t_eval)
-        assert hasattr(rate, '__array__') or isinstance(rate, (float, int, np.floating, np.ndarray))
+        assert hasattr(rate, "__array__") or isinstance(rate, (float, int, np.floating, np.ndarray))
 
     def test_bass_model_differential_equation_with_event(self):
         """Test the differential equation method with event."""
@@ -389,12 +409,12 @@ class TestBassModelCoverage:
         t_eval = [0, 1, 2]
 
         rate_before = model.differential_equation(t_before, y, params, covariates, t_eval)
-        assert hasattr(rate_before, '__array__') or isinstance(rate_before, (float, int, np.floating, np.ndarray))
+        assert hasattr(rate_before, "__array__") or isinstance(rate_before, (float, int, np.floating, np.ndarray))
 
         # Test after event - uses the same params, but accesses post-event parameters (at indices 3, 4, 5)
         t_after = 3.0  # After event
         rate_after = model.differential_equation(t_after, y, params, covariates, t_eval)
-        assert hasattr(rate_after, '__array__') or isinstance(rate_after, (float, int, np.floating, np.ndarray))
+        assert hasattr(rate_after, "__array__") or isinstance(rate_after, (float, int, np.floating, np.ndarray))
 
     def test_bass_model_differential_equation_with_pytensor(self):
         """Test the differential equation method with pytensor branch covered."""
@@ -410,7 +430,7 @@ class TestBassModelCoverage:
         try:
             rate = model.differential_equation(t, y, params, covariates, t_eval)
             # The normal path should still work
-            assert hasattr(rate, '__array__') or isinstance(rate, (float, int, np.floating, np.ndarray))
+            assert hasattr(rate, "__array__") or isinstance(rate, (float, int, np.floating, np.ndarray))
         except:
             # This is expected behavior if the differential equation fails
             # But the code path has been exercised
@@ -425,8 +445,17 @@ class TestBassModelCoverage:
         guesses = model.initial_guesses(t, y)
 
         # Check that all expected parameters are present
-        expected_params = ["p", "q", "m", "p_post", "q_post", "m_post",
-                          "beta_p_advertising", "beta_q_advertising", "beta_m_advertising"]
+        expected_params = [
+            "p",
+            "q",
+            "m",
+            "p_post",
+            "q_post",
+            "m_post",
+            "beta_p_advertising",
+            "beta_q_advertising",
+            "beta_m_advertising",
+        ]
         for param in expected_params:
             assert param in guesses
 
@@ -479,7 +508,7 @@ class TestFitterCoverage:
         fitter = ScipyFitter()
 
         # Test that the fitter object has the expected properties
-        assert hasattr(fitter, 'fit')
+        assert hasattr(fitter, "fit")
         # Note: ScipyFitter doesn't have initial_guesses or bounds as methods,
         # these are implemented by the models themselves
 
@@ -499,9 +528,10 @@ def test_backend_module():
     assert current_backend is not None
 
     # Check that we can switch backends (though we stay with numpy)
-    use_backend('numpy')
+    use_backend("numpy")
     # Verify that the backend was properly set (implementation-dependent)
     from innovate.backend import current_backend as new_backend
+
     assert new_backend is not None
 
 

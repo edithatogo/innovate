@@ -90,13 +90,13 @@ class TestCriticalEdgeCases:
     def test_preprocessing_edge_cases(self):
         """Test preprocessing functions with edge cases."""
         # Test datetime conversion failure
-        invalid_series = pd.Series([1, 2, 3], index=['invalid', 'datetime', 'strings'])
+        invalid_series = pd.Series([1, 2, 3], index=["invalid", "datetime", "strings"])
 
         with pytest.raises(ValueError, match="Could not convert index to DatetimeIndex"):
             ensure_datetime_index(invalid_series)
 
         # Test with already valid datetime index
-        valid_series = pd.Series([1, 2, 3], index=pd.date_range('2020-01-01', periods=3))
+        valid_series = pd.Series([1, 2, 3], index=pd.date_range("2020-01-01", periods=3))
         result = ensure_datetime_index(valid_series)
         assert isinstance(result.index, pd.DatetimeIndex)
 
@@ -111,6 +111,7 @@ class TestCriticalEdgeCases:
 
         # Test with unsupported model type
         from innovate.compete.competition import MultiProductDiffusionModel
+
         multiproduct = MultiProductDiffusionModel(p=[0.02], Q=[[0.1]], m=[1000])
 
         with pytest.raises(TypeError, match="currently only supported for BassModel"):
@@ -153,11 +154,7 @@ class TestCriticalEdgeCases:
         model = BassModel()
 
         # Parameters at machine precision limits
-        model.params_ = {
-            "p": np.finfo(float).eps,
-            "q": np.finfo(float).eps,
-            "m": 1.0
-        }
+        model.params_ = {"p": np.finfo(float).eps, "q": np.finfo(float).eps, "m": 1.0}
 
         t = [1, 2, 3]
         result = model.predict(t)

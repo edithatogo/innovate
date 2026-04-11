@@ -1,4 +1,5 @@
 """Tests for the optimization utilities."""
+
 from innovate.diffuse.bass import BassModel
 from innovate.diffuse.logistic import LogisticModel
 from src.innovate.utils.optimization_guide import (

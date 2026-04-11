@@ -1,4 +1,5 @@
 """Comprehensive tests for MixtureModel to improve coverage to >90%."""
+
 import numpy as np
 import pytest
 
@@ -118,9 +119,14 @@ class TestMixtureModelComprehensive:
 
         # Set some parameters manually to avoid needing to fit
         model._params = {
-            "model_0_p": 0.03, "model_0_q": 0.38, "model_0_m": 1000,
-            "model_1_L": 1000, "model_1_k": 0.2, "model_1_x0": 10,
-            "weight_0": 0.5, "weight_1": 0.5
+            "model_0_p": 0.03,
+            "model_0_q": 0.38,
+            "model_0_m": 1000,
+            "model_1_L": 1000,
+            "model_1_k": 0.2,
+            "model_1_x0": 10,
+            "weight_0": 0.5,
+            "weight_1": 0.5,
         }
 
         # Set the internal model parameters too
@@ -152,9 +158,14 @@ class TestMixtureModelComprehensive:
 
         # Set some parameters manually to avoid needing to fit
         model._params = {
-            "model_0_p": 0.03, "model_0_q": 0.38, "model_0_m": 1000,
-            "model_1_L": 1000, "model_1_k": 0.2, "model_1_x0": 10,
-            "weight_0": 0.5, "weight_1": 0.5
+            "model_0_p": 0.03,
+            "model_0_q": 0.38,
+            "model_0_m": 1000,
+            "model_1_L": 1000,
+            "model_1_k": 0.2,
+            "model_1_x0": 10,
+            "weight_0": 0.5,
+            "weight_1": 0.5,
         }
 
         # Set the internal model parameters too
@@ -179,9 +190,14 @@ class TestMixtureModelComprehensive:
 
         # Test setter and getter
         params = {
-            "model_0_p": 0.03, "model_0_q": 0.38, "model_0_m": 1000,
-            "model_1_L": 1000, "model_1_k": 0.2, "model_1_x0": 10,
-            "weight_0": 0.4, "weight_1": 0.6
+            "model_0_p": 0.03,
+            "model_0_q": 0.38,
+            "model_0_m": 1000,
+            "model_1_L": 1000,
+            "model_1_k": 0.2,
+            "model_1_x0": 10,
+            "weight_0": 0.4,
+            "weight_1": 0.6,
         }
         model.params_ = params
         assert model.params_ == params
@@ -209,9 +225,14 @@ class TestMixtureModelComprehensive:
 
         # Check that main params were updated
         expected_params = {
-            "model_0_p": 0.05, "model_0_q": 0.4, "model_0_m": 1500,
-            "model_1_L": 1500, "model_1_k": 0.3, "model_1_x0": 15,
-            "weight_0": 0.3, "weight_1": 0.7
+            "model_0_p": 0.05,
+            "model_0_q": 0.4,
+            "model_0_m": 1500,
+            "model_1_L": 1500,
+            "model_1_k": 0.3,
+            "model_1_x0": 15,
+            "weight_0": 0.3,
+            "weight_1": 0.7,
         }
         assert model.params_ == expected_params
 
@@ -223,15 +244,32 @@ class TestMixtureModelComprehensive:
 
         # Set parameters
         model._params = {
-            "model_0_p": 0.03, "model_0_q": 0.38, "model_0_m": 1000,
-            "model_1_L": 1000, "model_1_k": 0.2, "model_1_x0": 10,
-            "weight_0": 0.5, "weight_1": 0.5
+            "model_0_p": 0.03,
+            "model_0_q": 0.38,
+            "model_0_m": 1000,
+            "model_1_L": 1000,
+            "model_1_k": 0.2,
+            "model_1_x0": 10,
+            "weight_0": 0.5,
+            "weight_1": 0.5,
         }
 
-        bass_model.params_ = {"p": 0.03, "q": 0.38, "m": 1000,
-                             "beta_p_advertising": 0.001, "beta_q_advertising": 0.002, "beta_m_advertising": 1.0}
-        logistic_model.params_ = {"L": 1000, "k": 0.2, "x0": 10,
-                                 "beta_L_advertising": 1.0, "beta_k_advertising": 0.002, "beta_x0_advertising": 0.1}
+        bass_model.params_ = {
+            "p": 0.03,
+            "q": 0.38,
+            "m": 1000,
+            "beta_p_advertising": 0.001,
+            "beta_q_advertising": 0.002,
+            "beta_m_advertising": 1.0,
+        }
+        logistic_model.params_ = {
+            "L": 1000,
+            "k": 0.2,
+            "x0": 10,
+            "beta_L_advertising": 1.0,
+            "beta_k_advertising": 0.002,
+            "beta_x0_advertising": 0.1,
+        }
 
         t = [0, 1, 2]
         covariates = {"advertising": [0.1, 0.2, 0.3]}

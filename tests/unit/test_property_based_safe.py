@@ -1,4 +1,5 @@
 """Safe property-based tests for the innovate library that avoid problematic ODE operations."""
+
 import numpy as np
 import pytest
 from hypothesis import HealthCheck, given, settings
@@ -7,7 +8,7 @@ from hypothesis import strategies as st
 from innovate.backend import use_backend
 
 # Ensure we use the numpy backend to avoid JAX compatibility issues
-use_backend('numpy')
+use_backend("numpy")
 
 from innovate.compete.competition import MultiProductDiffusionModel
 from innovate.diffuse.bass import BassModel
@@ -71,9 +72,9 @@ def test_logistic_model_bounds(a_value):
 @given(st.integers(min_value=2, max_value=3))  # Limit to 2-3 products to reduce complexity
 def test_multi_product_predictions_shape(num_products):
     """Test that multi-product models produce predictions with correct shape"""
-    p_vals = [0.02 + i*0.001 for i in range(num_products)]
+    p_vals = [0.02 + i * 0.001 for i in range(num_products)]
     Q_matrix = [[0.1 if i == j else 0.05 for j in range(num_products)] for i in range(num_products)]
-    m_vals = [1000 + i*100 for i in range(num_products)]
+    m_vals = [1000 + i * 100 for i in range(num_products)]
     product_names = [f"Product_{i}" for i in range(num_products)]
 
     # Create the model
@@ -122,8 +123,8 @@ def test_logistic_finite_values():
 @settings(max_examples=10)
 @given(
     st.floats(min_value=0.001, max_value=0.05),  # p parameter
-    st.floats(min_value=0.01, max_value=0.2),   # q parameter
-    st.floats(min_value=100, max_value=2000)    # m parameter
+    st.floats(min_value=0.01, max_value=0.2),  # q parameter
+    st.floats(min_value=100, max_value=2000),  # m parameter
 )
 def test_bass_model_parameters(p, q, m):
     """Test Bass model parameter properties"""

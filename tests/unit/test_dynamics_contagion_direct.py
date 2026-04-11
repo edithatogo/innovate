@@ -1,9 +1,10 @@
 """Tests for the main dynamics contagion module (not the subdirectory) to improve coverage to >90%."""
+
 import os
 import sys
 
 # Add the src directory to sys.path so we can import modules properly
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 # Now import the contagion models properly
 from innovate.dynamics.contagion import SEIRModel as SEIR
@@ -20,9 +21,9 @@ class TestSIR:
         # SIRModel doesn't have direct access to beta and gamma like the test expects
         # So we just test that it initializes without error and has necessary methods
         assert model is not None
-        assert hasattr(model, 'compute_spread_rate')
-        assert hasattr(model, 'predict_states')
-        assert hasattr(model, 'get_parameters_schema')
+        assert hasattr(model, "compute_spread_rate")
+        assert hasattr(model, "predict_states")
+        assert hasattr(model, "get_parameters_schema")
 
     def test_sir_compute_spread_rate_default(self):
         """Test the compute_spread_rate method with default parameters."""
@@ -63,9 +64,9 @@ class TestSIS:
         """Test SIS initialization - SISModel doesn't take parameters in constructor."""
         model = SIS()
         assert model is not None
-        assert hasattr(model, 'compute_spread_rate')
-        assert hasattr(model, 'predict_states')
-        assert hasattr(model, 'get_parameters_schema')
+        assert hasattr(model, "compute_spread_rate")
+        assert hasattr(model, "predict_states")
+        assert hasattr(model, "get_parameters_schema")
 
     def test_sis_compute_spread_rate_default(self):
         """Test the compute_spread_rate method with default parameters."""
@@ -100,9 +101,9 @@ class TestSEIR:
         """Test SEIR initialization - SEIRModel doesn't take parameters in constructor."""
         model = SEIR()
         assert model is not None
-        assert hasattr(model, 'compute_spread_rate')
-        assert hasattr(model, 'predict_states')
-        assert hasattr(model, 'get_parameters_schema')
+        assert hasattr(model, "compute_spread_rate")
+        assert hasattr(model, "predict_states")
+        assert hasattr(model, "get_parameters_schema")
 
     def test_seir_compute_spread_rate_default(self):
         """Test the compute_spread_rate method with default parameters."""
@@ -126,7 +127,9 @@ class TestSEIR:
     def test_seir_compute_spread_rate_custom_params(self):
         """Test the compute_spread_rate method with custom parameters."""
         model = SEIR()
-        result = model.compute_spread_rate(S=700.0, E=150.0, I=100.0, transmission_rate=0.08, incubation_rate=0.15, recovery_rate=0.05)
+        result = model.compute_spread_rate(
+            S=700.0, E=150.0, I=100.0, transmission_rate=0.08, incubation_rate=0.15, recovery_rate=0.05
+        )
         # dSdt = -beta*S*I = -0.08*700*100 = -5600
         # dEdt = beta*S*I - alpha*E = 0.08*700*100 - 0.15*150 = 5600 - 22.5 = 5577.5
         # dIdt = alpha*E - gamma*I = 0.15*150 - 0.05*100 = 22.5 - 5 = 17.5

@@ -1,6 +1,6 @@
 """Comprehensive edge case tests to increase test coverage.
 
-This test module focuses on error handling, boundary conditions, 
+This test module focuses on error handling, boundary conditions,
 and edge cases that are typically not covered in happy path testing.
 """
 
@@ -30,7 +30,7 @@ class TestEdgeCasesErrorHandling:
             BassModel(),
             LogisticModel(),
             GompertzModel(),
-            MultiProductDiffusionModel(p=[0.02, 0.03], Q=[[0.1, 0.05], [0.03, 0.1]], m=[1000, 800])
+            MultiProductDiffusionModel(p=[0.02, 0.03], Q=[[0.1, 0.05], [0.03, 0.1]], m=[1000, 800]),
         ]
 
         t = [1, 2, 3, 4, 5]
@@ -41,11 +41,7 @@ class TestEdgeCasesErrorHandling:
 
     def test_unfitted_model_score(self):
         """Test that models raise RuntimeError when score is called before fitting."""
-        models = [
-            BassModel(),
-            LogisticModel(),
-            GompertzModel()
-        ]
+        models = [BassModel(), LogisticModel(), GompertzModel()]
 
         t = [1, 2, 3, 4, 5]
         y = [10, 20, 30, 40, 50]
@@ -60,13 +56,13 @@ class TestEdgeCasesErrorHandling:
             BassModel(),
             LogisticModel(),
             GompertzModel(),
-            MultiProductDiffusionModel(p=[0.02, 0.03], Q=[[0.1, 0.05], [0.03, 0.1]], m=[1000, 800])
+            MultiProductDiffusionModel(p=[0.02, 0.03], Q=[[0.1, 0.05], [0.03, 0.1]], m=[1000, 800]),
         ]
 
         t = [1, 2, 3, 4, 5]
 
         for model in models:
-            if hasattr(model, 'predict_adoption_rate'):
+            if hasattr(model, "predict_adoption_rate"):
                 with pytest.raises(RuntimeError, match="has not been fitted|parameters are not set"):
                     model.predict_adoption_rate(t)
 
@@ -140,7 +136,7 @@ class TestEdgeCasesErrorHandling:
             MultiProductDiffusionModel(
                 p=[0.02, 0.03],  # 2 products
                 Q=[[0.1, 0.02, 0.01], [0.02, 0.1, 0.01], [0.01, 0.02, 0.1]],  # 3x3 matrix
-                m=[1000, 800]  # 2 products
+                m=[1000, 800],  # 2 products
             )
 
         # Empty inputs
@@ -153,7 +149,7 @@ class TestEdgeCasesErrorHandling:
         model = MultiProductDiffusionModel(
             p=[0.02, 0.03],
             Q=[[0, 0], [0, 0]],  # All zeros
-            m=[1000, 800]
+            m=[1000, 800],
         )
 
         t = [1, 2, 3]
@@ -212,22 +208,20 @@ class TestEdgeCasesErrorHandling:
             pass
 
         # Test with string index that can't be converted
-        invalid_series = pd.Series([1, 2, 3], index=['a', 'b', 'c'])
+        invalid_series = pd.Series([1, 2, 3], index=["a", "b", "c"])
         with pytest.raises(ValueError):
             ensure_datetime_index(invalid_series)
 
     def test_stl_decomposition_edge_cases(self):
         """Test STL decomposition with problematic data."""
         # Too short series
-        short_series = pd.Series([1, 2, 3],
-                                index=pd.date_range('2020-01-01', periods=3, freq='M'))
+        short_series = pd.Series([1, 2, 3], index=pd.date_range("2020-01-01", periods=3, freq="M"))
 
         with pytest.raises(ValueError, match="Period must be specified"):
             apply_stl_decomposition(short_series, period=None)
 
         # Series with all same values (no variation)
-        flat_series = pd.Series([10] * 50,
-                               index=pd.date_range('2020-01-01', periods=50, freq='M'))
+        flat_series = pd.Series([10] * 50, index=pd.date_range("2020-01-01", periods=50, freq="M"))
 
         try:
             trend, seasonal, resid = apply_stl_decomposition(flat_series, period=12)
@@ -270,9 +264,7 @@ class TestEdgeCasesErrorHandling:
     def test_policy_intervention_edge_cases(self):
         """Test policy intervention with edge cases."""
         # Test with unsupported model type
-        multiproduct_model = MultiProductDiffusionModel(
-            p=[0.02], Q=[[0.1]], m=[1000]
-        )
+        multiproduct_model = MultiProductDiffusionModel(p=[0.02], Q=[[0.1]], m=[1000])
 
         with pytest.raises(TypeError, match="currently only supported for BassModel"):
             PolicyIntervention(multiproduct_model)

@@ -1,4 +1,5 @@
 """Comprehensive tests for Lotka-Volterra model to improve coverage to >90%."""
+
 import numpy as np
 import pytest
 
@@ -125,6 +126,7 @@ class TestLotkaVolterraModelComprehensive:
             class MockResult:
                 success = False
                 message = "Mocked failure message"
+
             return MockResult()
 
         monkeypatch.setattr("scipy.optimize.minimize", mock_minimize)
@@ -145,7 +147,7 @@ class TestLotkaVolterraModelComprehensive:
             "beta_alpha1_advertising": 0.001,
             "beta_beta1_advertising": 0.0001,
             "beta_alpha2_advertising": 0.001,
-            "beta_beta2_advertising": 0.0001
+            "beta_beta2_advertising": 0.0001,
         }
 
         y = [0.2, 0.3]  # Current state [y1, y2]
@@ -187,7 +189,7 @@ class TestLotkaVolterraModelComprehensive:
             "beta_alpha1_advertising": 0.001,
             "beta_beta1_advertising": 0.0001,
             "beta_alpha2_advertising": 0.001,
-            "beta_beta2_advertising": 0.0001
+            "beta_beta2_advertising": 0.0001,
         }
 
         t = np.arange(0, 5, 1)
@@ -211,7 +213,7 @@ class TestLotkaVolterraModelComprehensive:
             "beta_alpha1_advertising": 0.001,
             "beta_beta1_advertising": 0.0001,
             "beta_alpha2_advertising": 0.001,
-            "beta_beta2_advertising": 0.0001
+            "beta_beta2_advertising": 0.0001,
         }
 
         t = np.arange(5)
@@ -234,7 +236,7 @@ class TestLotkaVolterraModelComprehensive:
             "beta_alpha1_advertising": 0.001,
             "beta_beta1_advertising": 0.0001,
             "beta_alpha2_advertising": 0.001,
-            "beta_beta2_advertising": 0.0001
+            "beta_beta2_advertising": 0.0001,
         }
 
         t = np.arange(5)
@@ -272,11 +274,18 @@ def test_lotka_volterra_comprehensive_integration():
     # Check param names include all expected parameters
     param_names = model.param_names
     expected_names = [
-        "alpha1", "beta1", "alpha2", "beta2",
-        "beta_alpha1_advertising", "beta_beta1_advertising",
-        "beta_alpha2_advertising", "beta_beta2_advertising",
-        "beta_alpha1_price", "beta_beta1_price",
-        "beta_alpha2_price", "beta_beta2_price"
+        "alpha1",
+        "beta1",
+        "alpha2",
+        "beta2",
+        "beta_alpha1_advertising",
+        "beta_beta1_advertising",
+        "beta_alpha2_advertising",
+        "beta_beta2_advertising",
+        "beta_alpha1_price",
+        "beta_beta1_price",
+        "beta_alpha2_price",
+        "beta_beta2_price",
     ]
 
     for name in expected_names:

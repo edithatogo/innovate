@@ -29,9 +29,7 @@ def test_norton_bass_model_fit(synthetic_norton_bass_data):
     model = NortonBassModel(n_generations=2)
 
     # Provide slightly perturbed initial guesses to guide the optimizer
-    p0 = np.array(true_params) * (
-        1 + np.random.uniform(-0.1, 0.1, size=len(true_params))
-    )
+    p0 = np.array(true_params) * (1 + np.random.uniform(-0.1, 0.1, size=len(true_params)))
 
     # Use the ScipyFitter to fit the model
     fitter = ScipyFitter()

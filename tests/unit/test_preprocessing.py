@@ -1,6 +1,5 @@
 """Tests for the preprocess module."""
 
-
 import numpy as np
 import pandas as pd
 import pytest
@@ -23,7 +22,7 @@ class TestSTLDecomposition:
     def test_stl_decomposition_with_datetime_index(self):
         """Test STL decomposition with a proper datetime index."""
         # Create a time series with a datetime index
-        dates = pd.date_range(start='2020-01-01', periods=100, freq='D')
+        dates = pd.date_range(start="2020-01-01", periods=100, freq="D")
         data = pd.Series(np.random.randn(100), index=dates)
 
         # Add some trend and seasonality
@@ -35,7 +34,7 @@ class TestSTLDecomposition:
 
         # Check that result is a DataFrame with the expected columns
         assert isinstance(result, pd.DataFrame)
-        assert list(result.columns) == ['trend', 'seasonal', 'residual']
+        assert list(result.columns) == ["trend", "seasonal", "residual"]
         assert len(result) == len(data)
 
     def test_stl_decomposition_invalid_index_type(self):
@@ -82,7 +81,7 @@ class TestSARIMAFit:
     def test_sarima_fit_basic(self):
         """Test SARIMA fit with basic parameters."""
         # Create a simple time series
-        dates = pd.date_range(start='2020-01-01', periods=50, freq='D')
+        dates = pd.date_range(start="2020-01-01", periods=50, freq="D")
         np.random.seed(42)  # For reproducible results
         series = pd.Series(np.random.randn(50), index=dates)
 
@@ -103,7 +102,7 @@ class TestEnsureDatetimeIndex:
 
     def test_ensure_datetime_index_with_datetime_index(self):
         """Test function with data that already has a datetime index."""
-        dates = pd.date_range(start='2020-01-01', periods=5)
+        dates = pd.date_range(start="2020-01-01", periods=5)
         data = pd.Series([1, 2, 3, 4, 5], index=dates)
 
         result = ensure_datetime_index(data)
@@ -112,8 +111,7 @@ class TestEnsureDatetimeIndex:
 
     def test_ensure_datetime_index_with_string_index(self):
         """Test function converting string index to datetime index."""
-        data = pd.Series([1, 2, 3, 4, 5],
-                         index=['2020-01-01', '2020-01-02', '2020-01-03', '2020-01-04', '2020-01-05'])
+        data = pd.Series([1, 2, 3, 4, 5], index=["2020-01-01", "2020-01-02", "2020-01-03", "2020-01-04", "2020-01-05"])
 
         result = ensure_datetime_index(data)
         assert isinstance(result.index, pd.DatetimeIndex)
@@ -128,15 +126,15 @@ class TestEnsureDatetimeIndex:
 
     def test_ensure_datetime_index_with_invalid_strings(self):
         """Test function with strings that can't be converted to dates."""
-        data = pd.Series([1, 2, 3], index=['not_a_date', 'also_not', 'invalid'])
+        data = pd.Series([1, 2, 3], index=["not_a_date", "also_not", "invalid"])
 
         with pytest.raises(ValueError, match="Could not convert index to DatetimeIndex"):
             ensure_datetime_index(data)
 
     def test_ensure_datetime_index_dataframe(self):
         """Test function with DataFrame as input."""
-        dates = pd.date_range(start='2020-01-01', periods=3)
-        df = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]}, index=dates)
+        dates = pd.date_range(start="2020-01-01", periods=3)
+        df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]}, index=dates)
 
         # Already has datetime index
         result = ensure_datetime_index(df)
@@ -149,10 +147,10 @@ class TestAggregateTimeSeries:
 
     def test_aggregate_time_series_daily_to_weekly(self):
         """Test aggregation from daily to weekly frequency."""
-        dates = pd.date_range(start='2020-01-01', periods=14, freq='D')  # Two weeks
+        dates = pd.date_range(start="2020-01-01", periods=14, freq="D")  # Two weeks
         series = pd.Series([1] * 14, index=dates)
 
-        result = aggregate_time_series(series, 'W')  # Weekly aggregation
+        result = aggregate_time_series(series, "W")  # Weekly aggregation
 
         # Should have 2 aggregated weeks
         assert len(result) == 2
@@ -161,10 +159,9 @@ class TestAggregateTimeSeries:
 
     def test_aggregate_time_series_with_datetime_conversion(self):
         """Test aggregation after datetime index conversion."""
-        series = pd.Series([1, 2, 3, 4],
-                          index=['2020-01-01', '2020-01-02', '2020-01-08', '2020-01-09'])  # 8 days
+        series = pd.Series([1, 2, 3, 4], index=["2020-01-01", "2020-01-02", "2020-01-08", "2020-01-09"])  # 8 days
 
-        result = aggregate_time_series(series, 'W')  # Weekly aggregation
+        result = aggregate_time_series(series, "W")  # Weekly aggregation
 
         # Should aggregate the first week and second week
         assert len(result) >= 1  # At least one week
@@ -176,7 +173,7 @@ class TestApplySTLDecomposition:
 
     def test_apply_stl_decomposition_basic(self):
         """Test STL decomposition with basic parameters."""
-        dates = pd.date_range(start='2020-01-01', periods=50, freq='D')
+        dates = pd.date_range(start="2020-01-01", periods=50, freq="D")
         # Create data with trend and seasonality
         trend = np.linspace(0, 10, 50)
         seasonal = 2 * np.sin(2 * np.pi * np.arange(50) / 7)  # Weekly seasonality
@@ -199,7 +196,7 @@ class TestApplySTLDecomposition:
 
     def test_apply_stl_decomposition_infer_period(self):
         """Test STL decomposition with period inference."""
-        dates = pd.date_range(start='2020-01-01', periods=30, freq='D')
+        dates = pd.date_range(start="2020-01-01", periods=30, freq="D")
         data = pd.Series(np.random.randn(30) + np.linspace(0, 5, 30), index=dates)
 
         # With 30 days of data, it should infer a period (default to 12 for monthly)
@@ -211,7 +208,7 @@ class TestApplySTLDecomposition:
 
     def test_apply_stl_decomposition_short_data_no_period(self):
         """Test STL decomposition with short data and no period raises error."""
-        dates = pd.date_range(start='2020-01-01', periods=5, freq='D')
+        dates = pd.date_range(start="2020-01-01", periods=5, freq="D")
         data = pd.Series(np.random.randn(5), index=dates)
 
         with pytest.raises(ValueError, match="Period must be specified"):
@@ -283,7 +280,7 @@ class TestApplySARIMA:
 
     def test_apply_sarima_basic(self):
         """Test SARIMA with basic parameters."""
-        dates = pd.date_range(start='2020-01-01', periods=30, freq='D')
+        dates = pd.date_range(start="2020-01-01", periods=30, freq="D")
         np.random.seed(42)
         series = pd.Series(np.random.randn(30), index=dates)
 

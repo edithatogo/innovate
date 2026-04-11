@@ -1,8 +1,9 @@
 """Additional tests to increase coverage in core modules."""
+
 from innovate.backend import use_backend
 
 # Use numpy backend to avoid JAX-related issues
-use_backend('numpy')
+use_backend("numpy")
 
 from innovate.diffuse.bass import BassModel
 from innovate.diffuse.logistic import LogisticModel
@@ -79,7 +80,7 @@ def test_scipy_fitter_comprehensive():
     model.params_ = {"p": 0.03, "q": 0.38, "m": 1000}
 
     # Test direct method calls that don't trigger fitting
-    assert hasattr(fitter, 'fit')
+    assert hasattr(fitter, "fit")
     assert callable(fitter.fit)
 
 
@@ -92,11 +93,12 @@ def test_base_diffusion_model():
     # Test the fit method signature without actually fitting
     # This will call the base class implementation
     from innovate.fitters.scipy_fitter import ScipyFitter
+
     fitter = ScipyFitter()
 
     # We can't actually call fit without triggering ODE solving,
     # but we can verify the model has the method
-    assert hasattr(model, 'fit')
+    assert hasattr(model, "fit")
     assert callable(model.fit)
 
 
@@ -122,7 +124,7 @@ def test_model_methods_without_computation():
     logistic = LogisticModel()
 
     # Test that all required methods exist
-    required_methods = ['predict', 'score', 'param_names', 'params_', 'bounds', 'initial_guesses']
+    required_methods = ["predict", "score", "param_names", "params_", "bounds", "initial_guesses"]
 
     for method in required_methods:
         assert hasattr(bass, method)

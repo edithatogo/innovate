@@ -11,7 +11,7 @@ from src.innovate.fitters.curve_fitter import CurveFitter
 def test_curve_fitter_init():
     """Test initializing the CurveFitter."""
     mock_model = Mock(spec=DiffusionModel)
-    mock_model.param_names = ['m', 'p', 'q']
+    mock_model.param_names = ["m", "p", "q"]
 
     fitter = CurveFitter(mock_model)
 
@@ -22,19 +22,19 @@ def test_curve_fitter_fit():
     """Test the fit method of CurveFitter."""
     # Create a mock model with the required attributes
     mock_model = Mock(spec=DiffusionModel)
-    mock_model.param_names = ['m', 'p', 'q']
+    mock_model.param_names = ["m", "p", "q"]
 
     # Create a simple model class for testing
     class SimpleTestModel(DiffusionModel):
         def __init__(self):
             super().__init__()
-            self.param_names = ['a', 'b']
+            self.param_names = ["a", "b"]
             self.params_ = {}
 
         def predict(self, t):
             # Simple linear model for testing: y = a*t + b
-            a = self.params_.get('a', 1)
-            b = self.params_.get('b', 0)
+            a = self.params_.get("a", 1)
+            b = self.params_.get("b", 0)
             return a * np.array(t) + b
 
         def differential_equation(self, t, y):
@@ -57,7 +57,7 @@ def test_curve_fitter_fit():
     # a simpler approach to ensure the basic functionality exists
 
     # For now, let's just ensure the method exists and can be called with basic parameters
-    assert hasattr(fitter, 'fit')
+    assert hasattr(fitter, "fit")
     assert callable(fitter.fit)
 
 
@@ -65,7 +65,7 @@ def test_curve_fitter_fit_with_mock_model():
     """Test the fit method with a mock model to check basic functionality."""
     # Create mock model
     mock_model = Mock(spec=DiffusionModel)
-    mock_model.param_names = ['m', 'p', 'q']
+    mock_model.param_names = ["m", "p", "q"]
     mock_model.predict = Mock(return_value=np.array([1, 2, 3]))
 
     fitter = CurveFitter(mock_model)
@@ -77,7 +77,7 @@ def test_curve_fitter_fit_with_mock_model():
     bounds = ([0, 0, 0], [10, 10, 10])
 
     # Check that the method exists and has the expected signature
-    assert hasattr(fitter, 'fit')
+    assert hasattr(fitter, "fit")
     assert callable(fitter.fit)
 
     # The actual functionality might be complex to test without a full implementation,

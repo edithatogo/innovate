@@ -1,10 +1,11 @@
 """Tests for models that don't directly trigger ODE solvers but test more functionality."""
+
 import pytest
 
 from innovate.backend import use_backend
 
 # Use numpy backend to avoid JAX-related issues
-use_backend('numpy')
+use_backend("numpy")
 
 from innovate.compete.competition import MultiProductDiffusionModel
 from innovate.diffuse.bass import BassModel
@@ -133,12 +134,7 @@ def test_multiproduct_model_structure():
     m_vals = [1000, 1500]
     names = ["ProductA", "ProductB"]
 
-    model = MultiProductDiffusionModel(
-        p=p_vals,
-        Q=Q_matrix,
-        m=m_vals,
-        names=names
-    )
+    model = MultiProductDiffusionModel(p=p_vals, Q=Q_matrix, m=m_vals, names=names)
 
     # Test that properties are correctly set
     assert len(model.p) == 2
@@ -157,7 +153,7 @@ def test_scipy_fitter_functionality():
     fitter = ScipyFitter()
 
     # Test that it has the expected interface
-    assert hasattr(fitter, 'fit')
+    assert hasattr(fitter, "fit")
     assert callable(fitter.fit)
 
     # Test with a model without actually fitting to avoid ODE
@@ -165,7 +161,7 @@ def test_scipy_fitter_functionality():
     model.params_ = {"p": 0.03, "q": 0.38, "m": 1000}
 
     # The fitter should have the interface even if we don't call fit()
-    assert hasattr(fitter, 'fit')
+    assert hasattr(fitter, "fit")
 
 
 def test_error_handling():

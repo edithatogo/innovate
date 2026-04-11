@@ -22,7 +22,7 @@ def test_use_backend_numpy():
     assert backend.current_backend.__class__.__name__ == "NumPyBackend"
 
 
-@patch('src.innovate.backend.JaxBackend', None)
+@patch("src.innovate.backend.JaxBackend", None)
 def test_use_backend_jax_import_error():
     """Test that using JAX backend raises ImportError when it's not available."""
     with pytest.raises(ImportError, match="JAX backend is not available. Install jax and diffrax to use it."):
@@ -35,7 +35,7 @@ def test_use_backend_unknown():
         backend.use_backend("unknown_backend")
 
 
-@patch('src.innovate.backend.JaxBackend', create=True)
+@patch("src.innovate.backend.JaxBackend", create=True)
 def test_use_backend_jax_success(mock_jax_backend_class):
     """Test switching to JAX backend when it's available."""
     # Mock the JAX backend instance

@@ -1,11 +1,12 @@
 """Edge case testing for the Innovate library."""
+
 import numpy as np
 import pytest
 
 from innovate.backend import use_backend
 
 # Use numpy backend to avoid JAX-related issues
-use_backend('numpy')
+use_backend("numpy")
 
 from innovate.diffuse.bass import BassModel
 from innovate.diffuse.gompertz import GompertzModel
@@ -83,8 +84,12 @@ class TestEdgeCases:
         """Test Bass model with extreme covariate values."""
         model = BassModel(covariates=["advertising"])
         model.params_ = {
-            "p": 0.03, "q": 0.38, "m": 1000,
-            "beta_p_advertising": 0.1, "beta_q_advertising": 0.1, "beta_m_advertising": 10
+            "p": 0.03,
+            "q": 0.38,
+            "m": 1000,
+            "beta_p_advertising": 0.1,
+            "beta_q_advertising": 0.1,
+            "beta_m_advertising": 10,
         }
 
         t = [0, 1, 2, 3]
@@ -160,28 +165,20 @@ class TestEdgeCases:
     def test_parameter_boundary_edge_cases(self):
         """Test parameter validation at boundaries."""
         # Test Bass parameter validation
-        validation_result = validate_bass_parameters({
-            "p": -0.01, "q": 0.38, "m": 1000
-        })
+        validation_result = validate_bass_parameters({"p": -0.01, "q": 0.38, "m": 1000})
         assert not validation_result["is_valid"]
         assert "positive number" in str(validation_result["issues"])
 
-        validation_result = validate_bass_parameters({
-            "p": 0.03, "q": -0.38, "m": 1000
-        })
+        validation_result = validate_bass_parameters({"p": 0.03, "q": -0.38, "m": 1000})
         assert not validation_result["is_valid"]
         assert "positive number" in str(validation_result["issues"])
 
-        validation_result = validate_bass_parameters({
-            "p": 0.03, "q": 0.38, "m": -1000
-        })
+        validation_result = validate_bass_parameters({"p": 0.03, "q": 0.38, "m": -1000})
         assert not validation_result["is_valid"]
         assert "positive number" in str(validation_result["issues"])
 
         # Valid parameters should pass
-        validation_result = validate_bass_parameters({
-            "p": 0.03, "q": 0.38, "m": 1000
-        })
+        validation_result = validate_bass_parameters({"p": 0.03, "q": 0.38, "m": 1000})
         assert validation_result["is_valid"]
 
     def test_prediction_validation(self):
@@ -192,7 +189,9 @@ class TestEdgeCases:
         t = np.array([0, 1, 2, 3])
         y_pred = np.array([10, 50, 200, 500])  # Reasonable predictions
 
-        validation_result = validate_model_predictions(model, t, y_pred, max_growth_ratio=10.0)  # Higher threshold for this test
+        validation_result = validate_model_predictions(
+            model, t, y_pred, max_growth_ratio=10.0
+        )  # Higher threshold for this test
         assert validation_result["is_valid"]
 
         # Test with non-finite values
@@ -225,7 +224,7 @@ class TestNumericalStability:
         problematic_params = [
             {"p": 0.01, "q": 100, "m": 1e-10},  # Very small m
             {"p": 100, "q": 0.01, "m": 1e-10},  # Very small m, large p
-            {"p": 1e-10, "q": 1e-10, "m": 1e10}, # Very large m
+            {"p": 1e-10, "q": 1e-10, "m": 1e10},  # Very large m
         ]
 
         t = np.linspace(0, 10, 20)

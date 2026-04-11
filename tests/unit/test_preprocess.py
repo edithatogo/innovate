@@ -28,9 +28,7 @@ def test_stl_decomposition(seasonal_time_series):
     assert not decomposed.isnull().values.any()
 
     # Check if the sum of components is close to the original series
-    reconstructed = (
-        decomposed["trend"] + decomposed["seasonal"] + decomposed["residual"]
-    )
+    reconstructed = decomposed["trend"] + decomposed["seasonal"] + decomposed["residual"]
     pd.testing.assert_series_equal(
         seasonal_time_series,
         reconstructed,

@@ -1,5 +1,5 @@
-"""Tests for the BlackJaxFitter.
-"""
+"""Tests for the BlackJaxFitter."""
+
 import jax.numpy as jnp
 import pytest
 from jax.scipy import stats
@@ -25,11 +25,7 @@ def test_blackjax_fitter():
         m = params["m"]
 
         # Priors
-        log_prior = (
-            stats.uniform.logpdf(p, 0, 1)
-            + stats.uniform.logpdf(q, 0, 1)
-            + stats.norm.logpdf(m, 1000, 200)
-        )
+        log_prior = stats.uniform.logpdf(p, 0, 1) + stats.uniform.logpdf(q, 0, 1) + stats.norm.logpdf(m, 1000, 200)
 
         # Likelihood
         model.params_ = params

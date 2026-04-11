@@ -1,6 +1,5 @@
 """Comprehensive tests for policy interventions and advanced model functionality."""
 
-
 import numpy as np
 import pytest
 
@@ -55,11 +54,7 @@ class TestPolicyInterventionComprehensive:
         def p_multiplier(t):
             return 2.0 if t >= 5 else 1.0
 
-        predict_func = policy.apply_time_varying_params(
-            t_points=self.time_points,
-            p_effect=p_multiplier,
-            q_effect=None
-        )
+        predict_func = policy.apply_time_varying_params(t_points=self.time_points, p_effect=p_multiplier, q_effect=None)
 
         predictions = predict_func(self.time_points)
         assert len(predictions) == len(self.time_points)
@@ -77,11 +72,7 @@ class TestPolicyInterventionComprehensive:
         def q_multiplier(t):
             return 1.5 if t >= 3 else 1.0
 
-        predict_func = policy.apply_time_varying_params(
-            t_points=self.time_points,
-            p_effect=None,
-            q_effect=q_multiplier
-        )
+        predict_func = policy.apply_time_varying_params(t_points=self.time_points, p_effect=None, q_effect=q_multiplier)
 
         predictions = predict_func(self.time_points)
         assert len(predictions) == len(self.time_points)
@@ -98,9 +89,7 @@ class TestPolicyInterventionComprehensive:
             return 0.8 if t >= 6 else 1.0
 
         predict_func = policy.apply_time_varying_params(
-            t_points=self.time_points,
-            p_effect=p_multiplier,
-            q_effect=q_multiplier
+            t_points=self.time_points, p_effect=p_multiplier, q_effect=q_multiplier
         )
 
         predictions = predict_func(self.time_points)
@@ -121,9 +110,7 @@ class TestPolicyInterventionComprehensive:
             return 0.01 if t >= 3 else 1.0
 
         predict_func = policy.apply_time_varying_params(
-            t_points=self.time_points,
-            p_effect=extreme_p,
-            q_effect=extreme_q
+            t_points=self.time_points, p_effect=extreme_p, q_effect=extreme_q
         )
 
         predictions = predict_func(self.time_points)
@@ -139,9 +126,7 @@ class TestPolicyInterventionComprehensive:
             return 0.0
 
         predict_func = policy.apply_time_varying_params(
-            t_points=self.time_points,
-            p_effect=zero_effect,
-            q_effect=zero_effect
+            t_points=self.time_points, p_effect=zero_effect, q_effect=zero_effect
         )
 
         predictions = predict_func(self.time_points)
@@ -350,10 +335,13 @@ class TestLockInModel:
         """Test prediction with fitted model."""
         model = LockInModel()
         model.params_ = {
-            "alpha1": 0.5, "alpha2": 0.6,
-            "beta1": 0.3, "beta2": 0.4,
-            "gamma1": 0.2, "gamma2": 0.3,
-            "m": 1.0
+            "alpha1": 0.5,
+            "alpha2": 0.6,
+            "beta1": 0.3,
+            "beta2": 0.4,
+            "gamma1": 0.2,
+            "gamma2": 0.3,
+            "m": 1.0,
         }
 
         t = np.linspace(0, 10, 11)
@@ -484,13 +472,11 @@ class TestAdvancedModelInteractions:
 
         # Apply policy intervention
         policy = PolicyIntervention(bass)
+
         def policy_effect(t):
             return 1.5 if t >= 5 else 1.0
 
-        policy_predictor = policy.apply_time_varying_params(
-            t_points=np.arange(1, 11),
-            p_effect=policy_effect
-        )
+        policy_predictor = policy.apply_time_varying_params(t_points=np.arange(1, 11), p_effect=policy_effect)
 
         # Run counterfactual analysis
         counterfactual = CounterfactualAnalysis(bass)
@@ -510,10 +496,7 @@ class TestAdvancedModelInteractions:
 
     def test_parameter_sensitivity_analysis(self):
         """Test parameter sensitivity across different models."""
-        models = [
-            (BassModel(), {"p": 0.02, "q": 0.3, "m": 1000}),
-            (FisherPryModel(), {"alpha": 0.2, "t0": 10.0})
-        ]
+        models = [(BassModel(), {"p": 0.02, "q": 0.3, "m": 1000}), (FisherPryModel(), {"alpha": 0.2, "t0": 10.0})]
 
         t = np.arange(1, 21)
         sensitivity_results = {}
@@ -552,7 +535,7 @@ class TestAdvancedModelInteractions:
         noisy_params = {
             "p": bass.params_["p"] * (1 + np.random.normal(0, 0.1)),
             "q": bass.params_["q"] * (1 + np.random.normal(0, 0.1)),
-            "m": bass.params_["m"] * (1 + np.random.normal(0, 0.1))
+            "m": bass.params_["m"] * (1 + np.random.normal(0, 0.1)),
         }
 
         # Ensure parameters remain positive
@@ -595,7 +578,7 @@ class TestAdvancedModelInteractions:
 
         # Validate on test set
         test_predictions = fitted_model.predict(t_test)
-        test_rmse = np.sqrt(np.mean((y_test - test_predictions)**2))
+        test_rmse = np.sqrt(np.mean((y_test - test_predictions) ** 2))
 
         # Performance should be reasonable
         assert test_rmse < np.std(y_test)  # Better than just predicting mean

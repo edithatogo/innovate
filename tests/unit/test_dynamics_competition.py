@@ -1,4 +1,5 @@
 """Comprehensive tests for dynamics competition module to improve coverage to >90%."""
+
 import pytest
 
 from innovate.dynamics.competition import CompetitiveInteraction, MarketShareAttraction, ReplicatorDynamics
@@ -61,7 +62,9 @@ class TestLotkaVolterra:
     def test_lotka_volterra_compute_interaction_rates_with_params(self):
         """Test compute_interaction_rates with custom parameters."""
         model = LotkaVolterra()
-        result = model.compute_interaction_rates(N1=10, N2=20, growth_rate_1=0.2, growth_rate_2=0.3, competition_coeff_12=0.5, competition_coeff_21=0.8)
+        result = model.compute_interaction_rates(
+            N1=10, N2=20, growth_rate_1=0.2, growth_rate_2=0.3, competition_coeff_12=0.5, competition_coeff_21=0.8
+        )
         # Expected: r1*N1*(1-(N1+alpha12*N2)/K1), r2*N2*(1-(N2+alpha21*N1)/K2)
         expected_dN1dt = 0.2 * 10 * (1 - (10 + 0.5 * 20) / 1000)  # growth_rate_1*N1*(1-(N1+competition_coeff_12*N2)/K1)
         expected_dN2dt = 0.3 * 20 * (1 - (20 + 0.8 * 10) / 1000)  # growth_rate_2*N2*(1-(N2+competition_coeff_21*N1)/K2)
@@ -100,7 +103,7 @@ class TestMarketShareAttraction:
         model = MarketShareAttraction()
         # This model has a special implementation that indicates the method is not applicable
         # The test ensures the abstract method is implemented (even if just to indicate non-applicability)
-        assert hasattr(model, 'compute_interaction_rates')
+        assert hasattr(model, "compute_interaction_rates")
 
 
 class TestReplicatorDynamics:
@@ -122,19 +125,19 @@ def test_dynamics_competition_comprehensive():
     """Integration test for all dynamics competition functionality."""
     # Test all three models can be instantiated and have required methods
     lotka = LotkaVolterra()
-    assert hasattr(lotka, 'compute_interaction_rates')
-    assert hasattr(lotka, 'predict_states')
-    assert hasattr(lotka, 'get_parameters_schema')
+    assert hasattr(lotka, "compute_interaction_rates")
+    assert hasattr(lotka, "predict_states")
+    assert hasattr(lotka, "get_parameters_schema")
 
     msa = MarketShareAttraction()
-    assert hasattr(msa, 'compute_interaction_rates')
-    assert hasattr(msa, 'predict_states')
-    assert hasattr(msa, 'get_parameters_schema')
+    assert hasattr(msa, "compute_interaction_rates")
+    assert hasattr(msa, "predict_states")
+    assert hasattr(msa, "get_parameters_schema")
 
     replicator = ReplicatorDynamics()
-    assert hasattr(replicator, 'compute_interaction_rates')
-    assert hasattr(replicator, 'predict_states')
-    assert hasattr(replicator, 'get_parameters_schema')
+    assert hasattr(replicator, "compute_interaction_rates")
+    assert hasattr(replicator, "predict_states")
+    assert hasattr(replicator, "get_parameters_schema")
 
 
 if __name__ == "__main__":

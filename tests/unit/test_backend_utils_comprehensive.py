@@ -107,7 +107,7 @@ class TestBackendFunctionality:
         with pytest.raises(ValueError):
             use_backend("")
 
-    @patch('innovate.backends.jax_backend.JaxBackend', None)
+    @patch("innovate.backends.jax_backend.JaxBackend", None)
     def test_jax_backend_unavailable(self):
         """Test behavior when JAX backend is not available."""
         # Temporarily set JaxBackend to None
@@ -131,7 +131,7 @@ class TestMetricsComprehensive:
         y_pred = [1.1, 1.9, 3.1, 3.9, 5.1]
 
         mse = calculate_mse(y_true, y_pred)
-        expected = np.mean([(1-1.1)**2, (2-1.9)**2, (3-3.1)**2, (4-3.9)**2, (5-5.1)**2])
+        expected = np.mean([(1 - 1.1) ** 2, (2 - 1.9) ** 2, (3 - 3.1) ** 2, (4 - 3.9) ** 2, (5 - 5.1) ** 2])
         assert np.isclose(mse, expected)
 
         # Perfect predictions
@@ -208,12 +208,14 @@ class TestMetricsComprehensive:
         smape = calculate_smape(y_true, y_pred)
 
         # Manual calculation
-        expected = np.mean([
-            abs(3-2) / ((abs(2) + abs(3))/2) * 100,
-            abs(3-4) / ((abs(4) + abs(3))/2) * 100,
-            abs(7-6) / ((abs(6) + abs(7))/2) * 100,
-            abs(7-8) / ((abs(8) + abs(7))/2) * 100
-        ])
+        expected = np.mean(
+            [
+                abs(3 - 2) / ((abs(2) + abs(3)) / 2) * 100,
+                abs(3 - 4) / ((abs(4) + abs(3)) / 2) * 100,
+                abs(7 - 6) / ((abs(6) + abs(7)) / 2) * 100,
+                abs(7 - 8) / ((abs(8) + abs(7)) / 2) * 100,
+            ]
+        )
         assert np.isclose(smape, expected)
 
         # Test with zeros
@@ -228,7 +230,7 @@ class TestMetricsComprehensive:
         y_pred = [1.1, 1.9, 3.1, 3.9, 5.1]
 
         rss = calculate_rss(y_true, y_pred)
-        expected = sum([(1-1.1)**2, (2-1.9)**2, (3-3.1)**2, (4-3.9)**2, (5-5.1)**2])
+        expected = sum([(1 - 1.1) ** 2, (2 - 1.9) ** 2, (3 - 3.1) ** 2, (4 - 3.9) ** 2, (5 - 5.1) ** 2])
         assert np.isclose(rss, expected)
 
     def test_aic_bic_calculation(self):
@@ -276,40 +278,40 @@ class TestPreprocessingFunctions:
         assert isinstance(result.index, pd.DatetimeIndex)
 
         # String index that can be converted
-        dates_string = pd.Series([1, 2, 3], index=['2020-01-01', '2020-01-02', '2020-01-03'])
+        dates_string = pd.Series([1, 2, 3], index=["2020-01-01", "2020-01-02", "2020-01-03"])
         result = ensure_datetime_index(dates_string)
         assert isinstance(result.index, pd.DatetimeIndex)
 
         # Already datetime index
-        dates_dt = pd.Series([1, 2, 3], index=pd.date_range('2020-01-01', periods=3))
+        dates_dt = pd.Series([1, 2, 3], index=pd.date_range("2020-01-01", periods=3))
         result = ensure_datetime_index(dates_dt)
         assert isinstance(result.index, pd.DatetimeIndex)
 
     def test_ensure_datetime_index_failure(self):
         """Test datetime index conversion failure."""
         # Non-convertible index
-        invalid_series = pd.Series([1, 2, 3], index=['a', 'b', 'c'])
+        invalid_series = pd.Series([1, 2, 3], index=["a", "b", "c"])
 
         with pytest.raises(ValueError, match="Could not convert index to DatetimeIndex"):
             ensure_datetime_index(invalid_series)
 
     def test_aggregate_time_series(self):
         """Test time series aggregation."""
-        dates = pd.date_range('2020-01-01', periods=10, freq='D')
+        dates = pd.date_range("2020-01-01", periods=10, freq="D")
         data = pd.Series(range(10), index=dates)
 
         # Aggregate to weekly
-        weekly = aggregate_time_series(data, 'W')
+        weekly = aggregate_time_series(data, "W")
         assert len(weekly) <= len(data)
 
         # Aggregate to monthly
-        monthly = aggregate_time_series(data, 'M')
+        monthly = aggregate_time_series(data, "M")
         assert len(monthly) <= len(data)
 
     def test_apply_stl_decomposition_success(self):
         """Test successful STL decomposition."""
         # Create seasonal data
-        dates = pd.date_range('2020-01-01', periods=48, freq='M')
+        dates = pd.date_range("2020-01-01", periods=48, freq="M")
         trend = np.linspace(100, 200, 48)
         seasonal = 10 * np.sin(2 * np.pi * np.arange(48) / 12)
         data = pd.Series(trend + seasonal, index=dates)
@@ -327,7 +329,7 @@ class TestPreprocessingFunctions:
     def test_apply_stl_decomposition_auto_period(self):
         """Test STL decomposition with automatic period detection."""
         # Long enough series for auto-detection
-        dates = pd.date_range('2020-01-01', periods=50, freq='M')
+        dates = pd.date_range("2020-01-01", periods=50, freq="M")
         data = pd.Series(np.random.randn(50), index=dates)
 
         # Should default to period=12 for long series
@@ -336,7 +338,7 @@ class TestPreprocessingFunctions:
 
     def test_apply_stl_decomposition_too_short(self):
         """Test STL decomposition with too short series."""
-        dates = pd.date_range('2020-01-01', periods=5, freq='M')
+        dates = pd.date_range("2020-01-01", periods=5, freq="M")
         data = pd.Series(np.random.randn(5), index=dates)
 
         with pytest.raises(ValueError, match="Period must be specified"):
@@ -344,7 +346,7 @@ class TestPreprocessingFunctions:
 
     def test_apply_rolling_average(self):
         """Test rolling average calculation."""
-        dates = pd.date_range('2020-01-01', periods=10, freq='D')
+        dates = pd.date_range("2020-01-01", periods=10, freq="D")
         data = pd.Series(range(10), index=dates)
 
         # 3-point rolling average
@@ -358,7 +360,7 @@ class TestPreprocessingFunctions:
 
     def test_apply_sarima(self):
         """Test SARIMA fitting."""
-        dates = pd.date_range('2020-01-01', periods=50, freq='M')
+        dates = pd.date_range("2020-01-01", periods=50, freq="M")
         # Create data with trend and seasonality
         trend = np.linspace(100, 150, 50)
         seasonal = 5 * np.sin(2 * np.pi * np.arange(50) / 12)
@@ -386,18 +388,15 @@ class TestPreprocessingFunctions:
 
     def test_preprocessing_with_dataframes(self):
         """Test preprocessing functions with DataFrames."""
-        dates = pd.date_range('2020-01-01', periods=10, freq='D')
-        df = pd.DataFrame({
-            'col1': range(10),
-            'col2': range(10, 20)
-        }, index=dates)
+        dates = pd.date_range("2020-01-01", periods=10, freq="D")
+        df = pd.DataFrame({"col1": range(10), "col2": range(10, 20)}, index=dates)
 
         # Test ensure_datetime_index with DataFrame
         result_df = ensure_datetime_index(df)
         assert isinstance(result_df.index, pd.DatetimeIndex)
 
         # Test aggregation with DataFrame
-        weekly_df = aggregate_time_series(df, 'W')
+        weekly_df = aggregate_time_series(df, "W")
         assert isinstance(weekly_df, pd.DataFrame)
         assert len(weekly_df) <= len(df)
 
@@ -490,28 +489,27 @@ class TestModelEvaluationUtilities:
     def test_find_best_model(self):
         """Test finding best model from comparison."""
         # Mock comparison DataFrame
-        comparison_df = pd.DataFrame({
-            'RMSE': [10.0, 15.0, 8.0],
-            'R_squared': [0.8, 0.7, 0.85],
-            'AIC': [100, 120, 95]
-        }, index=['Model_A', 'Model_B', 'Model_C'])
+        comparison_df = pd.DataFrame(
+            {"RMSE": [10.0, 15.0, 8.0], "R_squared": [0.8, 0.7, 0.85], "AIC": [100, 120, 95]},
+            index=["Model_A", "Model_B", "Model_C"],
+        )
 
         # Best by RMSE (minimize)
-        best_name, best_row = find_best_model(comparison_df, metric='RMSE', minimize=True)
-        assert best_name == 'Model_C'
-        assert best_row['RMSE'] == 8.0
+        best_name, best_row = find_best_model(comparison_df, metric="RMSE", minimize=True)
+        assert best_name == "Model_C"
+        assert best_row["RMSE"] == 8.0
 
         # Best by R² (maximize)
-        best_name, best_row = find_best_model(comparison_df, metric='R_squared', minimize=False)
-        assert best_name == 'Model_C'
-        assert best_row['R_squared'] == 0.85
+        best_name, best_row = find_best_model(comparison_df, metric="R_squared", minimize=False)
+        assert best_name == "Model_C"
+        assert best_row["R_squared"] == 0.85
 
     def test_find_best_model_invalid_metric(self):
         """Test find_best_model with invalid metric."""
-        comparison_df = pd.DataFrame({'RMSE': [10, 15, 8]}, index=['A', 'B', 'C'])
+        comparison_df = pd.DataFrame({"RMSE": [10, 15, 8]}, index=["A", "B", "C"])
 
         with pytest.raises(ValueError, match="Metric 'InvalidMetric' not found"):
-            find_best_model(comparison_df, metric='InvalidMetric')
+            find_best_model(comparison_df, metric="InvalidMetric")
 
     def test_model_evaluation_edge_cases(self):
         """Test model evaluation with edge cases."""

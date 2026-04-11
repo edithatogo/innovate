@@ -1,11 +1,12 @@
 """Input validation tests for the innovate library."""
+
 import numpy as np
 import pytest
 
 from innovate.backend import use_backend
 
 # Use numpy backend to avoid JAX-related issues
-use_backend('numpy')
+use_backend("numpy")
 
 from innovate.diffuse.bass import BassModel
 

@@ -30,11 +30,7 @@ def test_calculate_aic(sample_data):
     rss = calculate_rss(y_true, y_pred)
 
     # Manual calculation for verification
-    log_likelihood = (
-        -n_samples / 2 * np.log(2 * np.pi)
-        - n_samples / 2 * np.log(rss / n_samples)
-        - n_samples / 2
-    )
+    log_likelihood = -n_samples / 2 * np.log(2 * np.pi) - n_samples / 2 * np.log(rss / n_samples) - n_samples / 2
     expected_aic = 2 * n_params - 2 * log_likelihood
 
     aic = calculate_aic(n_params, n_samples, rss)
@@ -51,11 +47,7 @@ def test_calculate_bic(sample_data):
     rss = calculate_rss(y_true, y_pred)
 
     # Manual calculation for verification
-    log_likelihood = (
-        -n_samples / 2 * np.log(2 * np.pi)
-        - n_samples / 2 * np.log(rss / n_samples)
-        - n_samples / 2
-    )
+    log_likelihood = -n_samples / 2 * np.log(2 * np.pi) - n_samples / 2 * np.log(rss / n_samples) - n_samples / 2
     expected_bic = n_params * np.log(n_samples) - 2 * log_likelihood
 
     bic = calculate_bic(n_params, n_samples, rss)

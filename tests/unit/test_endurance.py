@@ -3,6 +3,7 @@ These tests are designed to run for extended periods to ensure stability.
 NOTE: Due to known segmentation fault issues with the ODE solvers in the library,
 these tests are currently limited to basic operations that don't trigger the problematic code paths.
 """
+
 import gc
 import os
 import time
@@ -19,7 +20,7 @@ def test_basic_endurance_operation():
     while time.time() - start_time < duration:
         # Minimal computation that should be safe
         x = iteration_count * 0.1
-        y = x ** 2
+        y = x**2
         assert y >= 0
         iteration_count += 1
 

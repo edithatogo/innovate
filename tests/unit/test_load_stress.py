@@ -1,4 +1,5 @@
 """Load and stress tests for the innovate library."""
+
 import time
 
 import numpy as np
@@ -6,7 +7,7 @@ import numpy as np
 from innovate.backend import use_backend
 
 # Use numpy backend to avoid JAX-related issues
-use_backend('numpy')
+use_backend("numpy")
 
 from innovate.diffuse.bass import BassModel
 
@@ -98,9 +99,9 @@ def test_parameter_boundary_conditions():
     """Test models with extreme parameter values to check for stability."""
     extreme_params = [
         {"p": 0.001, "q": 0.001, "m": 1000000},  # Very slow adoption, large market
-        {"p": 0.9, "q": 0.9, "m": 10},           # Very fast adoption, small market
-        {"p": 0.5, "q": 0.0001, "m": 50000},     # High innovation, low imitation
-        {"p": 0.0001, "q": 0.5, "m": 50000},     # Low innovation, high imitation
+        {"p": 0.9, "q": 0.9, "m": 10},  # Very fast adoption, small market
+        {"p": 0.5, "q": 0.0001, "m": 50000},  # High innovation, low imitation
+        {"p": 0.0001, "q": 0.5, "m": 50000},  # Low innovation, high imitation
     ]
 
     for params in extreme_params:

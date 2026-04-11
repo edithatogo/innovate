@@ -212,9 +212,9 @@ def test_scipy_fitter_multi_product_model_working():
         fitter.fit(model, time_points, noisy_data.values)
         # If we get here, the fitting worked
         assert model.params_ is not None
-        assert 'p' in model.params_
-        assert 'Q' in model.params_
-        assert 'm' in model.params_
+        assert "p" in model.params_
+        assert "Q" in model.params_
+        assert "m" in model.params_
         print("✅ ScipyFitter with MultiProductDiffusionModel works correctly")
     except Exception as e:
         # Any other exception is a real error

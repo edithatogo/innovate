@@ -3,6 +3,7 @@
 These tests use Hypothesis to generate a wide range of inputs and verify
 mathematical invariants and properties across those inputs.
 """
+
 import numpy as np
 from hypothesis import HealthCheck, given, settings
 from hypothesis import strategies as st
@@ -15,7 +16,7 @@ from innovate.diffuse.logistic import LogisticModel
 from innovate.fitters.scipy_fitter import ScipyFitter
 
 # Ensure we use the numpy backend to avoid JAX compatibility issues
-use_backend('numpy')
+use_backend("numpy")
 
 
 @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], max_examples=20)
@@ -43,8 +44,8 @@ def test_cumulative_predictions_non_decreasing(time_series):
 @settings(max_examples=10)
 @given(
     st.floats(min_value=0.001, max_value=0.2),  # p parameter
-    st.floats(min_value=0.01, max_value=0.5),   # q parameter
-    st.floats(min_value=100, max_value=5000)    # m parameter
+    st.floats(min_value=0.01, max_value=0.5),  # q parameter
+    st.floats(min_value=100, max_value=5000),  # m parameter
 )
 def test_bass_model_parameters_valid(p, q, m):
     """Test that Bass model parameters remain in valid ranges after fitting"""
@@ -80,7 +81,7 @@ def test_bass_model_parameters_valid(p, q, m):
 @settings(max_examples=10)
 @given(
     st.lists(st.floats(min_value=0.1, max_value=20), min_size=5, max_size=15),
-    st.lists(st.floats(min_value=1, max_value=500), min_size=5, max_size=15)
+    st.lists(st.floats(min_value=1, max_value=500), min_size=5, max_size=15),
 )
 def test_model_predictions_shape_consistency(t_list, y_list):
     """Test that model predictions have the same shape as input time series"""
@@ -148,7 +149,7 @@ def test_logistic_model_bounds(a_value):
 @given(
     st.floats(min_value=0.1, max_value=2.0),  # a parameter in Gompertz
     st.floats(min_value=0.5, max_value=3.0),  # b parameter in Gompertz
-    st.floats(min_value=0.01, max_value=0.2)  # c parameter in Gompertz
+    st.floats(min_value=0.01, max_value=0.2),  # c parameter in Gompertz
 )
 def test_gompertz_model_positive(a, b, c):
     """Test that Gompertz model produces positive predictions"""
@@ -167,9 +168,9 @@ def test_gompertz_model_positive(a, b, c):
 @given(st.integers(min_value=2, max_value=3))  # Limit to 2-3 products to reduce complexity
 def test_multi_product_predictions_shape(num_products):
     """Test that multi-product models produce predictions with correct shape"""
-    p_vals = [0.02 + i*0.001 for i in range(num_products)]
+    p_vals = [0.02 + i * 0.001 for i in range(num_products)]
     Q_matrix = [[0.1 if i == j else 0.05 for j in range(num_products)] for i in range(num_products)]
-    m_vals = [1000 + i*100 for i in range(num_products)]
+    m_vals = [1000 + i * 100 for i in range(num_products)]
     product_names = [f"Product_{i}" for i in range(num_products)]
 
     model = MultiProductDiffusionModel(
@@ -190,8 +191,8 @@ def test_multi_product_predictions_shape(num_products):
 @settings(max_examples=10)
 @given(
     st.floats(min_value=0.001, max_value=0.05),  # p parameter
-    st.floats(min_value=0.01, max_value=0.2),   # q parameter
-    st.floats(min_value=100, max_value=2000)    # m parameter
+    st.floats(min_value=0.01, max_value=0.2),  # q parameter
+    st.floats(min_value=100, max_value=2000),  # m parameter
 )
 def test_bass_model_monotonicity(p, q, m):
     """Test that Bass model predictions are monotonically increasing (with tolerance)"""

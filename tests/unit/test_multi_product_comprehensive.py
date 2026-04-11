@@ -1,4 +1,5 @@
 """Comprehensive tests for MultiProductDiffusionModel to improve coverage to >90%."""
+
 import numpy as np
 
 from innovate.compete.multi_product import MultiProductDiffusionModel
@@ -15,14 +16,7 @@ class TestMultiProductDiffusionModelComprehensive:
         names = ["ProductA", "ProductB"]
         covariates = ["advertising", "price"]
 
-        model = MultiProductDiffusionModel(
-            n_products=2,
-            p=p,
-            Q=Q,
-            m=m,
-            names=names,
-            covariates=covariates
-        )
+        model = MultiProductDiffusionModel(n_products=2, p=p, Q=Q, m=m, names=names, covariates=covariates)
 
         assert model.n_products == 2
         assert model.names == names
@@ -33,10 +27,14 @@ class TestMultiProductDiffusionModelComprehensive:
         """Test the differential_equation method."""
         model = MultiProductDiffusionModel(n_products=2)
         model.params_ = {
-            "p1": 0.01, "p2": 0.02,
-            "q1": 0.1, "q2": 0.2,
-            "m1": 100, "m2": 200,
-            "alpha_1_2": 0.05, "alpha_2_1": 0.03
+            "p1": 0.01,
+            "p2": 0.02,
+            "q1": 0.1,
+            "q2": 0.2,
+            "m1": 100,
+            "m2": 200,
+            "alpha_1_2": 0.05,
+            "alpha_2_1": 0.03,
         }
 
         # Parameters as they would be passed to the ODE solver
@@ -54,15 +52,16 @@ class TestMultiProductDiffusionModelComprehensive:
 
     def test_differential_equation_with_covariates(self):
         """Test the differential_equation method with covariates."""
-        model = MultiProductDiffusionModel(
-            n_products=2,
-            covariates=["advertising"]
-        )
+        model = MultiProductDiffusionModel(n_products=2, covariates=["advertising"])
         model.params_ = {
-            "p1": 0.01, "p2": 0.02,
-            "q1": 0.1, "q2": 0.2,
-            "m1": 100, "m2": 200,
-            "alpha_1_2": 0.05, "alpha_2_1": 0.03,
+            "p1": 0.01,
+            "p2": 0.02,
+            "q1": 0.1,
+            "q2": 0.2,
+            "m1": 100,
+            "m2": 200,
+            "alpha_1_2": 0.05,
+            "alpha_2_1": 0.03,
             "beta_p1_advertising": 0.001,
             "beta_q1_advertising": 0.002,
             "beta_m1_advertising": 1.0,
@@ -70,17 +69,27 @@ class TestMultiProductDiffusionModelComprehensive:
             "beta_q2_advertising": 0.002,
             "beta_m2_advertising": 1.0,
             "beta_alpha_1_2_advertising": 0.001,
-            "beta_alpha_2_1_advertising": 0.001
+            "beta_alpha_2_1_advertising": 0.001,
         }
 
         # Create the param array that includes both base params and covariate params
         params = [
-            0.01, 0.02,  # p values
-            0.1, 0.2,    # q values
-            100, 200,    # m values
-            0.05, 0.03,  # alpha values
-            0.001, 0.002, 1.0, 0.001,  # p, q, m, p covariate betas for product 1
-            0.002, 1.0, 0.001, 0.001  # q, m, alpha_1_2, alpha_2_1 covariate betas
+            0.01,
+            0.02,  # p values
+            0.1,
+            0.2,  # q values
+            100,
+            200,  # m values
+            0.05,
+            0.03,  # alpha values
+            0.001,
+            0.002,
+            1.0,
+            0.001,  # p, q, m, p covariate betas for product 1
+            0.002,
+            1.0,
+            0.001,
+            0.001,  # q, m, alpha_1_2, alpha_2_1 covariate betas
         ]
 
         t = 1.0
@@ -113,10 +122,14 @@ class TestMultiProductDiffusionModelComprehensive:
         """Test the predict method with fitted parameters."""
         model = MultiProductDiffusionModel(n_products=2)
         model.params_ = {
-            "p1": 0.01, "p2": 0.02,
-            "q1": 0.1, "q2": 0.2,
-            "m1": 100, "m2": 200,
-            "alpha_1_2": 0.05, "alpha_2_1": 0.03
+            "p1": 0.01,
+            "p2": 0.02,
+            "q1": 0.1,
+            "q2": 0.2,
+            "m1": 100,
+            "m2": 200,
+            "alpha_1_2": 0.05,
+            "alpha_2_1": 0.03,
         }
 
         t = [0, 1, 2]
@@ -127,15 +140,16 @@ class TestMultiProductDiffusionModelComprehensive:
 
     def test_predict_with_covariates(self):
         """Test the predict method with covariates."""
-        model = MultiProductDiffusionModel(
-            n_products=2,
-            covariates=["advertising"]
-        )
+        model = MultiProductDiffusionModel(n_products=2, covariates=["advertising"])
         model.params_ = {
-            "p1": 0.01, "p2": 0.02,
-            "q1": 0.1, "q2": 0.2,
-            "m1": 100, "m2": 200,
-            "alpha_1_2": 0.05, "alpha_2_1": 0.03,
+            "p1": 0.01,
+            "p2": 0.02,
+            "q1": 0.1,
+            "q2": 0.2,
+            "m1": 100,
+            "m2": 200,
+            "alpha_1_2": 0.05,
+            "alpha_2_1": 0.03,
             "beta_p1_advertising": 0.001,
             "beta_q1_advertising": 0.002,
             "beta_m1_advertising": 1.0,
@@ -143,7 +157,7 @@ class TestMultiProductDiffusionModelComprehensive:
             "beta_q2_advertising": 0.002,
             "beta_m2_advertising": 1.0,
             "beta_alpha_1_2_advertising": 0.001,
-            "beta_alpha_2_1_advertising": 0.001
+            "beta_alpha_2_1_advertising": 0.001,
         }
 
         t = [0, 1, 2]
@@ -156,10 +170,14 @@ class TestMultiProductDiffusionModelComprehensive:
         """Test the score method."""
         model = MultiProductDiffusionModel(n_products=2)
         model.params_ = {
-            "p1": 0.01, "p2": 0.02,
-            "q1": 0.1, "q2": 0.2,
-            "m1": 100, "m2": 200,
-            "alpha_1_2": 0.05, "alpha_2_1": 0.03
+            "p1": 0.01,
+            "p2": 0.02,
+            "q1": 0.1,
+            "q2": 0.2,
+            "m1": 100,
+            "m2": 200,
+            "alpha_1_2": 0.05,
+            "alpha_2_1": 0.03,
         }
 
         t = [0, 1, 2, 3]
@@ -173,15 +191,16 @@ class TestMultiProductDiffusionModelComprehensive:
 
     def test_score_with_covariates(self):
         """Test the score method with covariates."""
-        model = MultiProductDiffusionModel(
-            n_products=2,
-            covariates=["advertising"]
-        )
+        model = MultiProductDiffusionModel(n_products=2, covariates=["advertising"])
         model.params_ = {
-            "p1": 0.01, "p2": 0.02,
-            "q1": 0.1, "q2": 0.2,
-            "m1": 100, "m2": 200,
-            "alpha_1_2": 0.05, "alpha_2_1": 0.03,
+            "p1": 0.01,
+            "p2": 0.02,
+            "q1": 0.1,
+            "q2": 0.2,
+            "m1": 100,
+            "m2": 200,
+            "alpha_1_2": 0.05,
+            "alpha_2_1": 0.03,
             "beta_p1_advertising": 0.001,
             "beta_q1_advertising": 0.002,
             "beta_m1_advertising": 1.0,
@@ -189,7 +208,7 @@ class TestMultiProductDiffusionModelComprehensive:
             "beta_q2_advertising": 0.002,
             "beta_m2_advertising": 1.0,
             "beta_alpha_1_2_advertising": 0.001,
-            "beta_alpha_2_1_advertising": 0.001
+            "beta_alpha_2_1_advertising": 0.001,
         }
 
         t = [0, 1, 2, 3]
@@ -205,10 +224,14 @@ class TestMultiProductDiffusionModelComprehensive:
         """Test the predict_adoption_rate method."""
         model = MultiProductDiffusionModel(n_products=2)
         model.params_ = {
-            "p1": 0.01, "p2": 0.02,
-            "q1": 0.1, "q2": 0.2,
-            "m1": 100, "m2": 200,
-            "alpha_1_2": 0.05, "alpha_2_1": 0.03
+            "p1": 0.01,
+            "p2": 0.02,
+            "q1": 0.1,
+            "q2": 0.2,
+            "m1": 100,
+            "m2": 200,
+            "alpha_1_2": 0.05,
+            "alpha_2_1": 0.03,
         }
 
         t = [0, 1, 2]
@@ -218,15 +241,16 @@ class TestMultiProductDiffusionModelComprehensive:
 
     def test_predict_adoption_rate_with_covariates(self):
         """Test the predict_adoption_rate method with covariates."""
-        model = MultiProductDiffusionModel(
-            n_products=2,
-            covariates=["advertising"]
-        )
+        model = MultiProductDiffusionModel(n_products=2, covariates=["advertising"])
         model.params_ = {
-            "p1": 0.01, "p2": 0.02,
-            "q1": 0.1, "q2": 0.2,
-            "m1": 100, "m2": 200,
-            "alpha_1_2": 0.05, "alpha_2_1": 0.03,
+            "p1": 0.01,
+            "p2": 0.02,
+            "q1": 0.1,
+            "q2": 0.2,
+            "m1": 100,
+            "m2": 200,
+            "alpha_1_2": 0.05,
+            "alpha_2_1": 0.03,
             "beta_p1_advertising": 0.001,
             "beta_q1_advertising": 0.002,
             "beta_m1_advertising": 1.0,
@@ -234,7 +258,7 @@ class TestMultiProductDiffusionModelComprehensive:
             "beta_q2_advertising": 0.002,
             "beta_m2_advertising": 1.0,
             "beta_alpha_1_2_advertising": 0.001,
-            "beta_alpha_2_1_advertising": 0.001
+            "beta_alpha_2_1_advertising": 0.001,
         }
 
         t = [0, 1, 2]
@@ -252,20 +276,28 @@ class TestMultiProductDiffusionModelComprehensive:
 
         # Test setter and getter
         params = {
-            "p1": 0.01, "p2": 0.02,
-            "q1": 0.1, "q2": 0.2,
-            "m1": 100, "m2": 200,
-            "alpha_1_2": 0.05, "alpha_2_1": 0.03
+            "p1": 0.01,
+            "p2": 0.02,
+            "q1": 0.1,
+            "q2": 0.2,
+            "m1": 100,
+            "m2": 200,
+            "alpha_1_2": 0.05,
+            "alpha_2_1": 0.03,
         }
         model.params_ = params
         assert model.params_ == params
 
         # Test with different parameter values
         new_params = {
-            "p1": 0.03, "p2": 0.04,
-            "q1": 0.3, "q2": 0.4,
-            "m1": 300, "m2": 400,
-            "alpha_1_2": 0.15, "alpha_2_1": 0.13
+            "p1": 0.03,
+            "p2": 0.04,
+            "q1": 0.3,
+            "q2": 0.4,
+            "m1": 300,
+            "m2": 400,
+            "alpha_1_2": 0.15,
+            "alpha_2_1": 0.13,
         }
         model.params_ = new_params
         assert model.params_ == new_params
@@ -289,10 +321,7 @@ class TestMultiProductDiffusionModelComprehensive:
 def test_multi_product_comprehensive_integration():
     """Integration test for all MultiProductDiffusionModel functionality."""
     # Create model with multiple products and covariates
-    model = MultiProductDiffusionModel(
-        n_products=3,
-        covariates=["advertising", "price"]
-    )
+    model = MultiProductDiffusionModel(n_products=3, covariates=["advertising", "price"])
 
     # Check param names include all expected parameters
     param_names = model.param_names
@@ -303,11 +332,7 @@ def test_multi_product_comprehensive_integration():
         assert name in param_names
 
     # Alpha parameters: alpha_i_j for i != j (interactions between different products)
-    expected_alpha = [
-        "alpha_1_2", "alpha_1_3",
-        "alpha_2_1", "alpha_2_3",
-        "alpha_3_1", "alpha_3_2"
-    ]
+    expected_alpha = ["alpha_1_2", "alpha_1_3", "alpha_2_1", "alpha_2_3", "alpha_3_1", "alpha_3_2"]
     for name in expected_alpha:
         assert name in param_names
 

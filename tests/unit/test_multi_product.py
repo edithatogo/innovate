@@ -36,13 +36,7 @@ def test_multi_product_diffusion_model_init_with_params():
     m = [100, 200]
     names = ["ProductA", "ProductB"]
 
-    model = MultiProductDiffusionModel(
-        n_products=2,
-        p=p,
-        Q=Q,
-        m=m,
-        names=names
-    )
+    model = MultiProductDiffusionModel(n_products=2, p=p, Q=Q, m=m, names=names)
 
     assert model.n_products == 2
     assert model.names == names
@@ -55,21 +49,13 @@ def test_multi_product_diffusion_model_init_inconsistent_dims():
     m = [100, 200]  # 2 products
 
     with pytest.raises(ValueError, match="Dimensions of p, Q, and m must be consistent with n_products."):
-        MultiProductDiffusionModel(
-            n_products=2,
-            p=p,
-            Q=Q,
-            m=m
-        )
+        MultiProductDiffusionModel(n_products=2, p=p, Q=Q, m=m)
 
 
 def test_multi_product_diffusion_model_init_inconsistent_names():
     """Test initializing with inconsistent number of names raises error."""
     with pytest.raises(ValueError, match="Number of names must match n_products."):
-        MultiProductDiffusionModel(
-            n_products=2,
-            names=["OnlyOneName"]
-        )
+        MultiProductDiffusionModel(n_products=2, names=["OnlyOneName"])
 
 
 def test_multi_product_param_names():
@@ -78,10 +64,14 @@ def test_multi_product_param_names():
 
     param_names = model.param_names
     expected_names = [
-        'p1', 'p2',  # Innovation coefficients for products 1 and 2
-        'q1', 'q2',  # Imitation coefficients for products 1 and 2
-        'm1', 'm2',  # Market potentials for products 1 and 2
-        'alpha_1_2', 'alpha_2_1'  # Interaction coefficients
+        "p1",
+        "p2",  # Innovation coefficients for products 1 and 2
+        "q1",
+        "q2",  # Imitation coefficients for products 1 and 2
+        "m1",
+        "m2",  # Market potentials for products 1 and 2
+        "alpha_1_2",
+        "alpha_2_1",  # Interaction coefficients
     ]
 
     assert set(param_names) == set(expected_names)
@@ -89,25 +79,25 @@ def test_multi_product_param_names():
 
 def test_multi_product_param_names_with_covariates():
     """Test the param_names property with covariates."""
-    model = MultiProductDiffusionModel(n_products=2, covariates=['price', 'advertising'])
+    model = MultiProductDiffusionModel(n_products=2, covariates=["price", "advertising"])
 
     param_names = model.param_names
 
     # Check that standard params are included
-    assert 'p1' in param_names
-    assert 'q1' in param_names
-    assert 'm1' in param_names
-    assert 'alpha_1_2' in param_names
+    assert "p1" in param_names
+    assert "q1" in param_names
+    assert "m1" in param_names
+    assert "alpha_1_2" in param_names
 
     # Check that covariate-related params are included
-    assert 'beta_p1_price' in param_names
-    assert 'beta_q1_price' in param_names
-    assert 'beta_m1_price' in param_names
-    assert 'beta_alpha_1_2_price' in param_names
-    assert 'beta_p1_advertising' in param_names
-    assert 'beta_q1_advertising' in param_names
-    assert 'beta_m1_advertising' in param_names
-    assert 'beta_alpha_1_2_advertising' in param_names
+    assert "beta_p1_price" in param_names
+    assert "beta_q1_price" in param_names
+    assert "beta_m1_price" in param_names
+    assert "beta_alpha_1_2_price" in param_names
+    assert "beta_p1_advertising" in param_names
+    assert "beta_q1_advertising" in param_names
+    assert "beta_m1_advertising" in param_names
+    assert "beta_alpha_1_2_advertising" in param_names
 
 
 def test_multi_product_initial_guesses():
@@ -120,25 +110,25 @@ def test_multi_product_initial_guesses():
     guesses = model.initial_guesses(t, y)
 
     # Check that all expected parameters are in the guesses
-    assert 'p1' in guesses
-    assert 'p2' in guesses
-    assert 'q1' in guesses
-    assert 'q2' in guesses
-    assert 'm1' in guesses
-    assert 'm2' in guesses
-    assert 'alpha_1_2' in guesses
-    assert 'alpha_2_1' in guesses
+    assert "p1" in guesses
+    assert "p2" in guesses
+    assert "q1" in guesses
+    assert "q2" in guesses
+    assert "m1" in guesses
+    assert "m2" in guesses
+    assert "alpha_1_2" in guesses
+    assert "alpha_2_1" in guesses
 
     # Check default values
-    assert guesses['p1'] == 0.001
-    assert guesses['q1'] == 0.1
-    assert guesses['m1'] == 25.0  # max_y / n_products = 50 / 2 = 25.0
-    assert guesses['m2'] == 25.0  # max_y / n_products = 50 / 2 = 25.0
+    assert guesses["p1"] == 0.001
+    assert guesses["q1"] == 0.1
+    assert guesses["m1"] == 25.0  # max_y / n_products = 50 / 2 = 25.0
+    assert guesses["m2"] == 25.0  # max_y / n_products = 50 / 2 = 25.0
 
 
 def test_multi_product_initial_guesses_with_covariates():
     """Test initial guesses generation with covariates."""
-    model = MultiProductDiffusionModel(n_products=2, covariates=['price'])
+    model = MultiProductDiffusionModel(n_products=2, covariates=["price"])
 
     t = [0, 1, 2, 3, 4]
     y = [10, 20, 30, 40, 50]
@@ -146,13 +136,13 @@ def test_multi_product_initial_guesses_with_covariates():
     guesses = model.initial_guesses(t, y)
 
     # Check that covariate-related guesses are included
-    assert 'beta_p1_price' in guesses
-    assert 'beta_q1_price' in guesses
-    assert 'beta_m1_price' in guesses
-    assert 'beta_alpha_1_2_price' in guesses
+    assert "beta_p1_price" in guesses
+    assert "beta_q1_price" in guesses
+    assert "beta_m1_price" in guesses
+    assert "beta_alpha_1_2_price" in guesses
 
     # Check default value for covariate effects
-    assert guesses['beta_p1_price'] == 0.0
+    assert guesses["beta_p1_price"] == 0.0
 
 
 def test_multi_product_bounds():
@@ -165,19 +155,19 @@ def test_multi_product_bounds():
     bounds = model.bounds(t, y)
 
     # Check bounds for standard parameters
-    assert 'p1' in bounds
-    assert bounds['p1'] == (1e-6, 0.1)
-    assert bounds['q1'] == (1e-6, 1.0)
-    assert bounds['m1'] == (0, 100)  # max_y * 2 = 50 * 2 = 100
+    assert "p1" in bounds
+    assert bounds["p1"] == (1e-6, 0.1)
+    assert bounds["q1"] == (1e-6, 1.0)
+    assert bounds["m1"] == (0, 100)  # max_y * 2 = 50 * 2 = 100
 
     # Check alpha bounds
-    assert 'alpha_1_2' in bounds
-    assert bounds['alpha_1_2'] == (0, 2.0)
+    assert "alpha_1_2" in bounds
+    assert bounds["alpha_1_2"] == (0, 2.0)
 
 
 def test_multi_product_bounds_with_covariates():
     """Test bounds generation with covariates."""
-    model = MultiProductDiffusionModel(n_products=2, covariates=['price'])
+    model = MultiProductDiffusionModel(n_products=2, covariates=["price"])
 
     t = [0, 1, 2, 3, 4]
     y = [10, 20, 30, 40, 50]
@@ -185,8 +175,8 @@ def test_multi_product_bounds_with_covariates():
     bounds = model.bounds(t, y)
 
     # Check bounds for covariate-related parameters
-    assert 'beta_p1_price' in bounds
-    assert bounds['beta_p1_price'] == (-np.inf, np.inf)
+    assert "beta_p1_price" in bounds
+    assert bounds["beta_p1_price"] == (-np.inf, np.inf)
 
 
 def test_multi_product_predict_without_params():

@@ -1,17 +1,19 @@
 """Performance tests for the innovate library that avoid problematic ODE operations."""
+
 import time
 
 import numpy as np
 
 from innovate.backend import use_backend
 
-use_backend('numpy')  # Use numpy backend for consistency
+use_backend("numpy")  # Use numpy backend for consistency
 
 from innovate.diffuse.bass import BassModel
 
 
 def test_model_creation_performance(benchmark):
     """Test performance of model instantiation."""
+
     def create_bass_model():
         return BassModel()
 
@@ -69,6 +71,7 @@ def test_array_operations_performance(benchmark):
 
 def test_multiple_model_creation_performance(benchmark):
     """Test performance when creating multiple models."""
+
     def create_multiple_models():
         models = []
         for i in range(10):
@@ -105,10 +108,12 @@ def test_memory_usage_stability():
 
 def test_backend_switching_performance(benchmark):
     """Test the performance of backend switching functionality."""
+
     def switch_backends():
         from innovate.backend import use_backend
-        use_backend('numpy')
-        use_backend('numpy')  # Should be fast if already set
+
+        use_backend("numpy")
+        use_backend("numpy")  # Should be fast if already set
 
     benchmark(switch_backends)
 

@@ -1,11 +1,12 @@
 """Comprehensive tests for Bass model to improve coverage to >90%."""
+
 import numpy as np
 import pytest
 
 from innovate.backend import use_backend
 
 # Use numpy backend to avoid JAX-related issues in tests
-use_backend('numpy')
+use_backend("numpy")
 
 from innovate.diffuse.bass import BassModel
 
@@ -284,23 +285,27 @@ class TestBassModelComprehensive:
         # Calculate expected result manually: (p + q*(y/m)) * (m - y)
         p, q, m = params
         expected = (p + q * (y / m)) * (m - y)
-        assert isinstance(result, (int, float, np.number)) or (hasattr(result, 'shape') and result.shape == ())
+        assert isinstance(result, (int, float, np.number)) or (hasattr(result, "shape") and result.shape == ())
 
     def test_differential_equation_with_event(self):
         """Test differential equation method when t_event is used."""
         model = BassModel(t_event=2.0)
         params = (0.03, 0.38, 1000, 0.04, 0.40, 1100)  # p, q, m, p_post, q_post, m_post
         t_before = 1.0  # Before event
-        t_after = 3.0   # After event
+        t_after = 3.0  # After event
         y = 50.0
 
         # Test before event time
         result_before = model.differential_equation(t_before, y, params, None, [1, 2, 3])
-        assert isinstance(result_before, (int, float, np.number)) or (hasattr(result_before, 'shape') and result_before.shape == ())
+        assert isinstance(result_before, (int, float, np.number)) or (
+            hasattr(result_before, "shape") and result_before.shape == ()
+        )
 
         # Test after event time
         result_after = model.differential_equation(t_after, y, params, None, [1, 2, 3])
-        assert isinstance(result_after, (int, float, np.number)) or (hasattr(result_after, 'shape') and result_after.shape == ())
+        assert isinstance(result_after, (int, float, np.number)) or (
+            hasattr(result_after, "shape") and result_after.shape == ()
+        )
 
     def test_differential_equation_with_covariates(self):
         """Test differential equation with covariates."""
@@ -313,7 +318,7 @@ class TestBassModelComprehensive:
         t_eval = [0, 1, 2, 3]
 
         result = model.differential_equation(t, y, params, covariates, t_eval)
-        assert isinstance(result, (int, float, np.number)) or (hasattr(result, 'shape') and result.shape == ())
+        assert isinstance(result, (int, float, np.number)) or (hasattr(result, "shape") and result.shape == ())
 
     def test_predict_adoption_rate_method(self):
         """Test predict_adoption_rate method."""
@@ -381,9 +386,20 @@ def test_bass_model_comprehensive_integration():
 
     # Check param names include all expected parameters
     param_names = model.param_names
-    expected_names = ["p", "q", "m", "p_post", "q_post", "m_post",
-                      "beta_p_advertising", "beta_q_advertising", "beta_m_advertising",
-                      "beta_p_price", "beta_q_price", "beta_m_price"]
+    expected_names = [
+        "p",
+        "q",
+        "m",
+        "p_post",
+        "q_post",
+        "m_post",
+        "beta_p_advertising",
+        "beta_q_advertising",
+        "beta_m_advertising",
+        "beta_p_price",
+        "beta_q_price",
+        "beta_m_price",
+    ]
 
     for name in expected_names:
         assert name in param_names
