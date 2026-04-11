@@ -179,106 +179,29 @@ wheels = [
 name = "arviz"
 version = "0.23.4"
 source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version == '3.11.*' and sys_platform == 'win32'",
-    "python_full_version == '3.11.*' and sys_platform == 'emscripten'",
-    "python_full_version == '3.11.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-    "python_full_version < '3.11'",
-]
 dependencies = [
-    { name = "h5netcdf", marker = "python_full_version < '3.12'" },
-    { name = "h5py", marker = "python_full_version < '3.12'" },
-    { name = "matplotlib", marker = "python_full_version < '3.12'" },
+    { name = "h5netcdf" },
+    { name = "h5py" },
+    { name = "matplotlib" },
     { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "numpy", version = "2.4.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
-    { name = "packaging", marker = "python_full_version < '3.12'" },
+    { name = "numpy", version = "2.4.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "packaging" },
     { name = "pandas", version = "2.3.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "pandas", version = "3.0.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
-    { name = "platformdirs", marker = "python_full_version < '3.12'" },
+    { name = "pandas", version = "3.0.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "platformdirs" },
     { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
-    { name = "setuptools", marker = "python_full_version < '3.12'" },
-    { name = "typing-extensions", marker = "python_full_version < '3.12'" },
+    { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "setuptools" },
+    { name = "typing-extensions" },
     { name = "xarray", version = "2025.6.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "xarray", version = "2026.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
+    { name = "xarray", version = "2026.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "xarray-einstats", version = "0.8.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "xarray-einstats", version = "0.9.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
+    { name = "xarray-einstats", version = "0.10.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/f3/c9/9c853633715f972eecc20995763c6e3005a3afcdcf47e39d20cd1c2889cd/arviz-0.23.4.tar.gz", hash = "sha256:611be826995066036c9443ea98d11486c279ef3da3b6cdc5c0816fab434115b9", size = 1592968, upload-time = "2026-02-04T17:57:53.664Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/44/1f/227f9cb7edcd3e14ab05928f3db00e9d595c0f269c87bf35f565ce44941b/arviz-0.23.4-py3-none-any.whl", hash = "sha256:c46c7faf8a06abadc9b5b64000584062ecbc20c2298e2bd6dfba04bb01a684ca", size = 1673773, upload-time = "2026-02-04T17:57:51.778Z" },
-]
-
-[[package]]
-name = "arviz"
-version = "1.0.0"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version >= '3.14' and sys_platform == 'win32'",
-    "python_full_version >= '3.14' and sys_platform == 'emscripten'",
-    "python_full_version >= '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-    "python_full_version == '3.13.*' and sys_platform == 'win32'",
-    "python_full_version == '3.12.*' and sys_platform == 'win32'",
-    "python_full_version == '3.13.*' and sys_platform == 'emscripten'",
-    "python_full_version == '3.12.*' and sys_platform == 'emscripten'",
-    "python_full_version == '3.13.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-    "python_full_version == '3.12.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-]
-dependencies = [
-    { name = "arviz-base", marker = "python_full_version >= '3.12'" },
-    { name = "arviz-plots", marker = "python_full_version >= '3.12'" },
-    { name = "arviz-stats", extra = ["xarray"], marker = "python_full_version >= '3.12'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/5b/e1/398fcbc5b043245fe7d704346b42385b886956a99fcb09964b41aada4267/arviz-1.0.0.tar.gz", hash = "sha256:9bc978e8b590d5ee88fe024c4fa10e214dc42c31329e645b2ad998419cbe7ff6", size = 8272, upload-time = "2026-03-02T14:58:48.996Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/30/dc/b1dcb62745f58f800d4073c9ad914a5cf882fe1d8f20793eae0a1d54bbac/arviz-1.0.0-py3-none-any.whl", hash = "sha256:8caf30516bb7e13c237d266e3d37c59531898a93db9e89c1f1bb9320699e97dd", size = 8445, upload-time = "2026-03-02T14:58:47.7Z" },
-]
-
-[[package]]
-name = "arviz-base"
-version = "1.0.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "numpy", version = "2.4.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-    { name = "typing-extensions", marker = "python_full_version >= '3.12'" },
-    { name = "xarray", version = "2026.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/17/9b/84b06b529b1b397c50f8ff2e5af5af7a09eef24c6ee5334e08e2cf12ef96/arviz_base-1.0.0.tar.gz", hash = "sha256:6b9796043b4e394056fd8a1ab51c8d4d3e88dcf8f2b698a46b660ff4346c8841", size = 1403207, upload-time = "2026-03-02T07:36:17.604Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/35/69/6624d40ec780a30d187e9224e1c2bf51eebe0e61ebd2c7dee06dd4464a24/arviz_base-1.0.0-py3-none-any.whl", hash = "sha256:77c93e3503166517da8155d580ec9615e9b7b89ab7890f8d9ab72c78a9b6c9e6", size = 1420656, upload-time = "2026-03-02T07:36:15.588Z" },
-]
-
-[[package]]
-name = "arviz-plots"
-version = "1.0.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "arviz-base", marker = "python_full_version >= '3.12'" },
-    { name = "arviz-stats", extra = ["xarray"], marker = "python_full_version >= '3.12'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/12/af/113e16c1c7990badc433d694008ffb6d235265d9da15c22bff1ca485d4b3/arviz_plots-1.0.0.tar.gz", hash = "sha256:e8bb70824b50f09f7c527dac4519aef1b72cb0a9eadcd4da25b80c22a4bcef71", size = 143729, upload-time = "2026-03-02T10:03:36.015Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/aa/ff/9e1914853bd6df5f7ddf7a1cc261baeae87992bd46c9b40d0300b499d18d/arviz_plots-1.0.0-py3-none-any.whl", hash = "sha256:b086a603be6d880f6b446beae4d2111c7c3dc2ce2e65481cd88097f474694dde", size = 225351, upload-time = "2026-03-02T10:03:34.437Z" },
-]
-
-[[package]]
-name = "arviz-stats"
-version = "1.0.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "numpy", version = "2.4.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-    { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/5b/09/df9f50fd79ca7a990564bfb45902ad79b5d87ed7deb6ae0f90d3844c5408/arviz_stats-1.0.0.tar.gz", hash = "sha256:056228574bbc1e9045fd41da168d62fe4167097fd886056b8085a40799142e53", size = 144731, upload-time = "2026-03-02T08:06:52.294Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/b2/3f/7f0df19fc24f375b2e28e594893a1869314b868a6791046f1a56b5ca78a1/arviz_stats-1.0.0-py3-none-any.whl", hash = "sha256:3b2e5e8c8714827497e82eb1ab8064a16a7fb1a8f733edf325bff2c81ec4a400", size = 171588, upload-time = "2026-03-02T08:06:50.685Z" },
-]
-
-[package.optional-dependencies]
-xarray = [
-    { name = "arviz-base", marker = "python_full_version >= '3.12'" },
-    { name = "xarray", version = "2026.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-    { name = "xarray-einstats", version = "0.10.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
 ]
 
 [[package]]
@@ -400,7 +323,7 @@ name = "beniget"
 version = "0.4.2.post1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "gast", marker = "python_full_version >= '3.11'" },
+    { name = "gast", marker = "python_full_version >= '3.11' and sys_platform != 'emscripten' and sys_platform != 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/2e/27/5bb01af8f2860d431b98d0721b96ff2cea979106cae3f2d093ec74f6400c/beniget-0.4.2.post1.tar.gz", hash = "sha256:a0258537e65e7e14ec33a86802f865a667f949bb6c73646d55e42f7c45a052ae", size = 32274, upload-time = "2024-06-28T10:20:05.708Z" }
 wheels = [
@@ -1478,8 +1401,8 @@ version = "1.8.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "numpy", version = "2.4.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
-    { name = "packaging", marker = "python_full_version < '3.12'" },
+    { name = "numpy", version = "2.4.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "packaging" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/ef/03/92d6cc02c0055158167255980461155d6e17f1c4143c03f8bcc18d3e3f3a/h5netcdf-1.8.1.tar.gz", hash = "sha256:9b396a4cc346050fc1a4df8523bc1853681ec3544e0449027ae397cb953c7a16", size = 78679, upload-time = "2026-01-23T07:35:31.233Z" }
 wheels = [
@@ -1492,7 +1415,7 @@ version = "3.16.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "numpy", version = "2.4.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
+    { name = "numpy", version = "2.4.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/db/33/acd0ce6863b6c0d7735007df01815403f5589a21ff8c2e1ee2587a38f548/h5py-3.16.0.tar.gz", hash = "sha256:a0dbaad796840ccaa67a4c144a0d0c8080073c34c76d5a6941d6818678ef2738", size = 446526, upload-time = "2026-03-06T13:49:08.07Z" }
 wheels = [
@@ -1719,8 +1642,7 @@ dependencies = [
 
 [package.optional-dependencies]
 jax = [
-    { name = "arviz", version = "0.23.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "arviz", version = "1.0.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "arviz" },
     { name = "blackjax", version = "1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "blackjax", version = "1.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "diffrax", version = "0.7.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
@@ -1771,7 +1693,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "arviz", marker = "extra == 'jax'", specifier = ">=0.17" },
+    { name = "arviz", marker = "extra == 'jax'", specifier = ">=0.17,<1.0" },
     { name = "blackjax", marker = "extra == 'jax'", specifier = ">=1.0" },
     { name = "diffrax", marker = "extra == 'jax'", specifier = ">=0.5" },
     { name = "jax", marker = "extra == 'jax'", specifier = ">=0.4.20" },
@@ -2770,16 +2692,16 @@ version = "3.10.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "contourpy", version = "1.3.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "contourpy", version = "1.3.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
-    { name = "cycler", marker = "python_full_version < '3.12'" },
-    { name = "fonttools", marker = "python_full_version < '3.12'" },
-    { name = "kiwisolver", marker = "python_full_version < '3.12'" },
+    { name = "contourpy", version = "1.3.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "cycler" },
+    { name = "fonttools" },
+    { name = "kiwisolver" },
     { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "numpy", version = "2.4.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
-    { name = "packaging", marker = "python_full_version < '3.12'" },
-    { name = "pillow", marker = "python_full_version < '3.12'" },
-    { name = "pyparsing", marker = "python_full_version < '3.12'" },
-    { name = "python-dateutil", marker = "python_full_version < '3.12'" },
+    { name = "numpy", version = "2.4.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "packaging" },
+    { name = "pillow" },
+    { name = "pyparsing" },
+    { name = "python-dateutil" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/8a/76/d3c6e3a13fe484ebe7718d14e269c9569c4eb0020a968a327acb3b9a8fe6/matplotlib-3.10.8.tar.gz", hash = "sha256:2299372c19d56bcd35cf05a2738308758d32b9eaed2371898d8f5bd33f084aa3", size = 34806269, upload-time = "2025-12-10T22:56:51.155Z" }
 wheels = [
@@ -4535,11 +4457,11 @@ name = "pythran"
 version = "0.18.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "beniget", marker = "python_full_version >= '3.11'" },
-    { name = "gast", marker = "python_full_version >= '3.11'" },
-    { name = "numpy", version = "2.4.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
-    { name = "ply", marker = "python_full_version >= '3.11'" },
-    { name = "setuptools", marker = "python_full_version >= '3.11'" },
+    { name = "beniget", marker = "python_full_version >= '3.11' and sys_platform != 'emscripten' and sys_platform != 'win32'" },
+    { name = "gast", marker = "python_full_version >= '3.11' and sys_platform != 'emscripten' and sys_platform != 'win32'" },
+    { name = "numpy", version = "2.4.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11' and sys_platform != 'emscripten' and sys_platform != 'win32'" },
+    { name = "ply", marker = "python_full_version >= '3.11' and sys_platform != 'emscripten' and sys_platform != 'win32'" },
+    { name = "setuptools", marker = "python_full_version >= '3.11' and sys_platform != 'emscripten' and sys_platform != 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/d4/84/17c4c44a24f5ec709991e603e601bf316d09c4fe915fbe348c689dede998/pythran-0.18.1.tar.gz", hash = "sha256:8803ed948bf841a11bbbb10472a8ff6ea24ebd70e67c3f77b77be3db900eccfe", size = 2406997, upload-time = "2025-11-15T15:36:54.097Z" }
 wheels = [
