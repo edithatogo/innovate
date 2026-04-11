@@ -1,11 +1,11 @@
-from typing import Dict, Sequence, Union
+from collections.abc import Sequence
 
 import matplotlib.pyplot as plt
 import pandas as pd
 
 
 def plot_scenario_comparison(
-    predictions: Dict[str, Union[pd.DataFrame, Sequence[float]]],
+    predictions: dict[str, pd.DataFrame | Sequence[float]],
     title: str = "Scenario Comparison",
     xlabel: str = "Time",
     ylabel: str = "Cumulative Adoptions",

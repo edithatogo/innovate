@@ -3,14 +3,15 @@
 These tests use Hypothesis to generate a wide range of inputs and verify
 mathematical invariants and properties across those inputs.
 """
-from hypothesis import given, strategies as st, settings, HealthCheck
 import numpy as np
-import pytest
+from hypothesis import HealthCheck, given, settings
+from hypothesis import strategies as st
+
 from innovate.backend import use_backend
+from innovate.compete.competition import MultiProductDiffusionModel
 from innovate.diffuse.bass import BassModel
 from innovate.diffuse.gompertz import GompertzModel
 from innovate.diffuse.logistic import LogisticModel
-from innovate.compete.competition import MultiProductDiffusionModel
 from innovate.fitters.scipy_fitter import ScipyFitter
 
 # Ensure we use the numpy backend to avoid JAX compatibility issues
@@ -27,7 +28,7 @@ def test_cumulative_predictions_non_decreasing(time_series):
     if len(t) < 3:
         # Skip if we have too few unique time points
         return
-        
+
     model = BassModel()
     # Set valid parameters
     model.params_ = {"p": 0.03, "q": 0.38, "m": 1000}
@@ -48,28 +49,28 @@ def test_cumulative_predictions_non_decreasing(time_series):
 def test_bass_model_parameters_valid(p, q, m):
     """Test that Bass model parameters remain in valid ranges after fitting"""
     t = np.linspace(0, 30, 50)  # Smaller range to reduce computation
-    
+
     # Generate synthetic data with known parameters
     exp_term = np.exp(-(p + q) * t)
     y_true = m * (1 - exp_term) / (1 + (q / p) * exp_term)
-    
+
     # Add some noise
     np.random.seed(42)
     noise = np.random.normal(0, m * 0.05, len(t))
     y_noisy = np.abs(y_true + noise)  # Ensure non-negative
-    
+
     model = BassModel()
     fitter = ScipyFitter()
-    
+
     # Fit the model
     fitter.fit(model, t, y_noisy)
-    
+
     # Validate that fitted parameters are reasonable
     assert model.params_ is not None
     assert "p" in model.params_
     assert "q" in model.params_
     assert "m" in model.params_
-    
+
     # Check that parameters are positive (with small tolerance for numerical errors)
     assert model.params_["p"] >= 0
     assert model.params_["q"] >= 0
@@ -86,37 +87,37 @@ def test_model_predictions_shape_consistency(t_list, y_list):
     if len(t_list) != len(y_list):
         # This can happen with hypothesis generation, just return
         return
-        
+
     t = np.array(t_list)
     y = np.array(y_list)
-    
+
     # Ensure t is sorted and has unique values to avoid issues
     sorted_indices = np.argsort(t)
     t = t[sorted_indices]
     y = y[sorted_indices]
-    
+
     # Remove duplicates to make time series strictly increasing
     unique_t, unique_indices = np.unique(t, return_index=True)
     y = y[unique_indices]
-    
+
     if len(unique_t) < 3:
         # Need at least 3 points for meaningful fitting
         return
-        
+
     models = [BassModel(), GompertzModel(), LogisticModel()]
-    
+
     for model in models:
         try:
             fitter = ScipyFitter()
             # Fit the model
             fitter.fit(model, unique_t, y)
-            
+
             # Make predictions
             predictions = model.predict(unique_t)
-            
+
             # Check that prediction shape matches input
             assert len(predictions) == len(unique_t)
-            
+
             # For cumulative models, check non-decreasing property (with tolerance for numerical errors)
             if isinstance(model, (BassModel, GompertzModel)):
                 diffs = np.diff(predictions)
@@ -137,7 +138,7 @@ def test_logistic_model_bounds(a_value):
     model = LogisticModel()
     # Set parameters, using a_value as L
     model.params_ = {"L": a_value, "k": 0.1, "x0": 10}
-    
+
     predictions = model.predict(t)
     # Logistic function should not exceed L parameter (with small tolerance for numerical errors)
     assert np.all(predictions <= a_value * 1.1)  # Small tolerance
@@ -154,7 +155,7 @@ def test_gompertz_model_positive(a, b, c):
     t = np.linspace(0, 20, 50)  # Reduced range
     model = GompertzModel()
     model.params_ = {"a": a, "b": b, "c": c}
-    
+
     predictions = model.predict(t)
     # Gompertz model should produce mostly positive values (with small tolerance for numerical errors)
     negative_values = np.sum(predictions < -1e-10)
@@ -170,17 +171,17 @@ def test_multi_product_predictions_shape(num_products):
     Q_matrix = [[0.1 if i == j else 0.05 for j in range(num_products)] for i in range(num_products)]
     m_vals = [1000 + i*100 for i in range(num_products)]
     product_names = [f"Product_{i}" for i in range(num_products)]
-    
+
     model = MultiProductDiffusionModel(
         p=p_vals,
         Q=Q_matrix,
         m=m_vals,
         names=product_names,
     )
-    
+
     time_horizon = np.arange(1, 11)  # Shorter time horizon (10 time points)
     predictions = model.predict(time_horizon)
-    
+
     # Check that predictions have the correct shape
     assert predictions.shape == (len(time_horizon), num_products)
     assert list(predictions.columns) == product_names
@@ -189,7 +190,7 @@ def test_multi_product_predictions_shape(num_products):
 @settings(max_examples=10)
 @given(
     st.floats(min_value=0.001, max_value=0.05),  # p parameter
-    st.floats(min_value=0.01, max_value=0.2),   # q parameter 
+    st.floats(min_value=0.01, max_value=0.2),   # q parameter
     st.floats(min_value=100, max_value=2000)    # m parameter
 )
 def test_bass_model_monotonicity(p, q, m):
@@ -197,7 +198,7 @@ def test_bass_model_monotonicity(p, q, m):
     t = np.linspace(0, 30, 50)  # Reduced range
     model = BassModel()
     model.params_ = {"p": p, "q": q, "m": m}
-    
+
     predictions = model.predict(t)
     # Check that predictions are generally increasing (allowing for small numerical errors)
     diffs = np.diff(predictions)
@@ -216,10 +217,10 @@ def test_bass_model_saturation(external_factor):
     p = 0.01 * external_factor
     q = 0.05 / external_factor
     m = 1000
-    
+
     model = BassModel()
     model.params_ = {"p": p, "q": q, "m": m}
-    
+
     predictions = model.predict(t)
     # At long time, should approach m (market saturation)
     final_value = predictions[-1]
@@ -234,7 +235,7 @@ def test_bass_model_finite_values():
     t = np.linspace(0, 50, 100)
     model = BassModel()
     model.params_ = {"p": 0.03, "q": 0.38, "m": 1000}
-    
+
     predictions = model.predict(t)
     # All predictions should be finite (not NaN or infinity)
     assert np.all(np.isfinite(predictions))
@@ -247,7 +248,7 @@ def test_gompertz_finite_values():
     t = np.linspace(0, 50, 100)
     model = GompertzModel()
     model.params_ = {"a": 1000, "b": 5, "c": 0.1}
-    
+
     predictions = model.predict(t)
     # All predictions should be finite (not NaN or infinity)
     assert np.all(np.isfinite(predictions))
@@ -260,7 +261,7 @@ def test_logistic_finite_values():
     t = np.linspace(0, 50, 100)
     model = LogisticModel()
     model.params_ = {"L": 1000, "k": 0.1, "x0": 25}
-    
+
     predictions = model.predict(t)
     # All predictions should be finite (not NaN or infinity)
     assert np.all(np.isfinite(predictions))

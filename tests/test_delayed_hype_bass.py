@@ -2,12 +2,13 @@
 
 import numpy as np
 import pytest
+
 from innovate.diffuse.bass import BassModel
 from innovate.hype.delayed_hype_bass import DelayedHypeBassModel
 from innovate.hype.hype_cycle import HypeCycleModel
 
 
-@pytest.fixture()
+@pytest.fixture
 def fitted_bass_model():
     """A fitted Bass model."""
     model = BassModel()
@@ -15,7 +16,7 @@ def fitted_bass_model():
     return model
 
 
-@pytest.fixture()
+@pytest.fixture
 def hype_cycle_model():
     """A Hype Cycle model with typical parameters."""
     model = HypeCycleModel()

@@ -1,5 +1,6 @@
 import numpy as np
 import pytest
+
 from innovate.diffuse.logistic import LogisticModel
 from innovate.models.mixture import MixtureModel
 

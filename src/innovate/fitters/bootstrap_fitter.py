@@ -1,4 +1,5 @@
-from typing import Any, Dict, List, Sequence
+from collections.abc import Sequence
+from typing import Any
 
 import numpy as np
 
@@ -11,7 +12,7 @@ class BootstrapFitter:
     def __init__(self, fitter: Any, n_bootstraps: int = 100):
         self.fitter = fitter
         self.n_bootstraps = n_bootstraps
-        self.bootstrapped_params: List[Dict[str, float]] = []
+        self.bootstrapped_params: list[dict[str, float]] = []
 
     def fit(
         self,
@@ -44,14 +45,14 @@ class BootstrapFitter:
                 print(f"Warning: Fitting failed for a bootstrap sample: {e}")
                 continue
 
-    def get_parameter_estimates(self) -> Dict[str, List[float]]:
+    def get_parameter_estimates(self) -> dict[str, list[float]]:
         """Returns a dictionary of parameter names to lists of bootstrapped values."""
         if not self.bootstrapped_params:
             return {}
 
         # Assuming all models have the same parameter names
         param_names = self.bootstrapped_params[0].keys()
-        estimates: Dict[str, List[float]] = {name: [] for name in param_names}
+        estimates: dict[str, list[float]] = {name: [] for name in param_names}
 
         for params_dict in self.bootstrapped_params:
             for name, value in params_dict.items():
@@ -61,7 +62,7 @@ class BootstrapFitter:
     def get_confidence_intervals(
         self,
         alpha: float = 0.05,
-    ) -> Dict[str, Dict[str, float]]:
+    ) -> dict[str, dict[str, float]]:
         """Returns confidence intervals for each parameter."""
         estimates = self.get_parameter_estimates()
         cis = {}
@@ -72,7 +73,7 @@ class BootstrapFitter:
                 cis[name] = {"lower": float(lower), "upper": float(upper)}
         return cis
 
-    def get_standard_errors(self) -> Dict[str, float]:
+    def get_standard_errors(self) -> dict[str, float]:
         """Returns standard errors for each parameter."""
         estimates = self.get_parameter_estimates()
         ses = {}

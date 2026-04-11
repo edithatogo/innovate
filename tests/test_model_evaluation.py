@@ -1,4 +1,5 @@
 import numpy as np
+
 from innovate.diffuse.bass import BassModel
 from innovate.utils.metrics import calculate_aic, calculate_bic, calculate_rss
 from innovate.utils.model_evaluation import model_aic, model_bic

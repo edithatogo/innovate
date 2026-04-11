@@ -1,4 +1,5 @@
-from typing import Any, Dict, Optional, Sequence
+from collections.abc import Sequence
+from typing import Any
 
 import numpy as np
 
@@ -14,13 +15,13 @@ class CounterfactualAnalysis:
                 "The model must be fitted before conducting counterfactual analysis.",
             )
         self.model = model
-        self.baseline_forecast: Optional[Sequence[float]] = None
-        self.counterfactual_forecasts: Dict[str, Sequence[float]] = {}
+        self.baseline_forecast: Sequence[float] | None = None
+        self.counterfactual_forecasts: dict[str, Sequence[float]] = {}
 
     def run_baseline(
         self,
         t: Sequence[float],
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ):
         """Generate the baseline forecast using the original fitted model."""
         self.baseline_forecast = self.model.predict(t)
@@ -29,8 +30,8 @@ class CounterfactualAnalysis:
         self,
         scenario_name: str,
         t: Sequence[float],
-        counterfactual_params: Optional[Dict[str, Any]] = None,
-        counterfactual_covariates: Optional[Dict[str, Sequence[float]]] = None,
+        counterfactual_params: dict[str, Any] | None = None,
+        counterfactual_covariates: dict[str, Sequence[float]] | None = None,
     ):
         """Generate a forecast for a given counterfactual scenario."""
         # Create a deep copy of the model to avoid modifying the original

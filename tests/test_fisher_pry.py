@@ -3,11 +3,12 @@
 import numpy as np
 import pandas as pd
 import pytest
+
 from innovate.fitters.scipy_fitter import ScipyFitter
 from innovate.substitute.fisher_pry import FisherPryModel
 
 
-@pytest.fixture()
+@pytest.fixture
 def fisher_pry_data():
     """Generate synthetic data for a Fisher-Pry model."""
     alpha = 0.5

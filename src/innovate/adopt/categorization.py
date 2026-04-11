@@ -1,4 +1,4 @@
-from typing import Sequence
+from collections.abc import Sequence
 
 import pandas as pd
 
@@ -16,7 +16,7 @@ def categorize_adopters(model: DiffusionModel, t: Sequence[float]) -> pd.DataFra
         model: A fitted diffusion model.
         t: A sequence of time points.
 
-    Returns:
+    Returns
     -------
         A pandas DataFrame with the adopter categories for each time point.
     """

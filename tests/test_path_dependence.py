@@ -1,9 +1,10 @@
 import numpy as np
 import pytest
+
 from innovate.path_dependence.lock_in import LockInModel
 
 
-@pytest.fixture()
+@pytest.fixture
 def lock_in_data():
     """Generate synthetic data for the LockInModel."""
     true_params = {

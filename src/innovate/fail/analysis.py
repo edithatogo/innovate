@@ -1,6 +1,5 @@
 # src/innovate/fail/analysis.py
 
-from typing import List
 
 import numpy as np
 
@@ -9,7 +8,7 @@ def analyze_failure(
     predictions: np.ndarray,
     failure_threshold: float = 0.1,
     time_horizon: int = -1,
-) -> List[int]:
+) -> list[int]:
     """Analyzes the results of a competition model to identify failed technologies.
 
     A technology is considered to have failed if its market share does not
@@ -25,7 +24,7 @@ def analyze_failure(
                       failure condition. If -1, the entire time series is
                       considered.
 
-    Returns:
+    Returns
     -------
         A list of indices of the technologies that have failed.
     """

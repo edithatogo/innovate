@@ -1,7 +1,8 @@
 """Tests for the backend selection module."""
 
-import pytest
 from unittest.mock import patch
+
+import pytest
 
 from src.innovate import backend
 
@@ -16,7 +17,7 @@ def test_use_backend_numpy():
     """Test switching to NumPy backend."""
     # Switch to NumPy backend
     backend.use_backend("numpy")
-    
+
     # Verify the backend is set to NumPy
     assert backend.current_backend.__class__.__name__ == "NumPyBackend"
 
@@ -40,15 +41,15 @@ def test_use_backend_jax_success(mock_jax_backend_class):
     # Mock the JAX backend instance
     mock_jax_instance = mock_jax_backend_class.return_value
     mock_jax_backend_class.return_value.__class__.__name__ = "JaxBackendMock"
-    
+
     # Temporarily replace the module-level JaxBackend with our mock
     original_jax_backend = backend.JaxBackend
     backend.JaxBackend = mock_jax_backend_class
-    
+
     try:
         # Switch to JAX backend
         backend.use_backend("jax")
-        
+
         # The verification would depend on how the JaxBackend is implemented
         # Since we can't actually import it without the dependencies, we just check
         # that the use_backend function accepts the "jax" parameter without error

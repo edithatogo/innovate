@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+
 from innovate.abm.model import InnovationModel
 
 # Model parameters

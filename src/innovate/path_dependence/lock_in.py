@@ -1,4 +1,5 @@
-from typing import Any, Dict, Sequence
+from collections.abc import Sequence
+from typing import Any
 
 import numpy as np
 from scipy.integrate import odeint
@@ -14,7 +15,7 @@ class LockInModel:
     """
 
     def __init__(self) -> None:
-        self._params: Dict[str, float] = {}
+        self._params: dict[str, float] = {}
 
     @property
     def param_names(self) -> Sequence[str]:
@@ -28,7 +29,7 @@ class LockInModel:
             "m",  # Total market potential (assumed shared)
         ]
 
-    def initial_guesses(self, t: Sequence[float], y: np.ndarray) -> Dict[str, float]:
+    def initial_guesses(self, t: Sequence[float], y: np.ndarray) -> dict[str, float]:
         # y is expected to be a 2D array: [adoptions_tech1, adoptions_tech2]
         max_y = np.max(y)
         return {
@@ -43,7 +44,7 @@ class LockInModel:
 
     def bounds(
         self, t: Sequence[float], y: np.ndarray
-    ) -> Dict[str, tuple[float, float]]:
+    ) -> dict[str, tuple[float, float]]:
         max_y = np.max(y)
         return {
             "alpha1": (0, np.inf),
@@ -132,11 +133,11 @@ class LockInModel:
         return self
 
     @property
-    def params_(self) -> Dict[str, float]:
+    def params_(self) -> dict[str, float]:
         return self._params
 
     @params_.setter
-    def params_(self, value: Dict[str, float]) -> None:
+    def params_(self, value: dict[str, float]) -> None:
         self._params = value
 
     def score(self, t: Sequence[float], y: np.ndarray) -> float:

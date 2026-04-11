@@ -1,4 +1,5 @@
 import numpy as np
+
 from innovate.diffuse.logistic import LogisticModel
 from innovate.fitters.scipy_fitter import ScipyFitter
 from innovate.utils.model_evaluation import (

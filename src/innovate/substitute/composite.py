@@ -1,8 +1,9 @@
 # src/innovate/substitute/composite.py
 
-from typing import Dict, List, Optional, Sequence
+from collections.abc import Sequence
 
 import numpy as np
+
 from innovate.backend import current_backend as B
 from innovate.base.base import DiffusionModel
 
@@ -15,8 +16,8 @@ class CompositeDiffusionModel(DiffusionModel):
 
     def __init__(
         self,
-        models: List[DiffusionModel],
-        alpha: Optional[np.ndarray] = None,
+        models: list[DiffusionModel],
+        alpha: np.ndarray | None = None,
     ):
         """Initializes the CompositeDiffusionModel.
 
@@ -27,7 +28,7 @@ class CompositeDiffusionModel(DiffusionModel):
         """
         self.models = models
         self.n_models = len(models)
-        self._params: Dict[str, float] = {}
+        self._params: dict[str, float] = {}
 
         if alpha is None:
             # Default to no interaction
@@ -57,7 +58,7 @@ class CompositeDiffusionModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         guesses = {}
         for i, model in enumerate(self.models):
             # Use the i-th column of y for the i-th model
@@ -79,7 +80,7 @@ class CompositeDiffusionModel(DiffusionModel):
                     guesses[f"alpha_{i+1}_{j+1}"] = 0.0
         return guesses
 
-    def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
+    def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
         bounds = {}
         for i, model in enumerate(self.models):
             y_model = y[:, i] if len(y.shape) > 1 else y
@@ -197,11 +198,11 @@ class CompositeDiffusionModel(DiffusionModel):
         return 1 - ss_res / ss_tot if ss_tot > 0 else 0.0
 
     @property
-    def params_(self) -> Dict[str, float]:
+    def params_(self) -> dict[str, float]:
         return self._params
 
     @params_.setter
-    def params_(self, value: Dict[str, float]):
+    def params_(self, value: dict[str, float]):
         self._params = value
 
     def predict_adoption_rate(self, t: Sequence[float]) -> Sequence[float]:

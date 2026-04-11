@@ -1,5 +1,6 @@
 import numpy as np
 import pytest
+
 from innovate.dynamics.growth import DualInfluenceGrowth, SkewedGrowth, SymmetricGrowth
 
 

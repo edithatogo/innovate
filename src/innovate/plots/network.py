@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -6,12 +6,12 @@ import networkx as nx
 
 def plot_network_diffusion(
     graph: nx.Graph,
-    node_states_over_time: List[Dict[Any, Any]],
+    node_states_over_time: list[dict[Any, Any]],
     title: str = "Network Diffusion",
-    node_color_map: Dict[Any, str] = {False: "skyblue", True: "red"},
-    pos: Optional[Dict[Any, Any]] = None,
+    node_color_map: dict[Any, str] = {False: "skyblue", True: "red"},
+    pos: dict[Any, Any] | None = None,
     snapshot_interval: int = 1,
-    save_path_prefix: Optional[str] = None,
+    save_path_prefix: str | None = None,
 ):
     """Plots snapshots of a network diffusion process over time.
 

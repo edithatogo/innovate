@@ -1,10 +1,10 @@
 """Fitters module for parameter estimation."""
 
-from .scipy_fitter import ScipyFitter
-from .bootstrap_fitter import BootstrapFitter
-from .mom_fitter import MoMFitter
 from .batched_fitter import BatchedFitter
+from .bootstrap_fitter import BootstrapFitter
 from .curve_fitter import CurveFitter
+from .mom_fitter import MoMFitter
+from .scipy_fitter import ScipyFitter
 
 # Optional fitters — only imported when their dependencies are available
 try:
@@ -23,12 +23,12 @@ except ImportError:
     JaxFitter = None  # type: ignore[misc,assignment]
 
 __all__ = [
-    "ScipyFitter",
+    "BatchedFitter",
     "BayesianFitter",
     "BlackJaxFitter",
     "BootstrapFitter",
-    "MoMFitter",
-    "JaxFitter",
-    "BatchedFitter",
     "CurveFitter",
+    "JaxFitter",
+    "MoMFitter",
+    "ScipyFitter",
 ]

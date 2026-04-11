@@ -2,12 +2,13 @@
 
 import numpy as np
 import pytest
+
 from innovate.diffuse.bass import BassModel
 from innovate.diffuse.logistic import LogisticModel
 from innovate.substitute.composite import CompositeDiffusionModel
 
 
-@pytest.fixture()
+@pytest.fixture
 def synthetic_composite_data():
     """Generate synthetic data for a composite diffusion model."""
     t = np.linspace(0, 50, 100)

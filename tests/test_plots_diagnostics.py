@@ -3,12 +3,13 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pytest
+
 from innovate.diffuse.logistic import LogisticModel
 from innovate.fitters.scipy_fitter import ScipyFitter
 from innovate.plots.diagnostics import plot_residuals
 
 
-@pytest.fixture()
+@pytest.fixture
 def fitted_logistic_model():
     """Provides a fitted LogisticModel for testing."""
     t = np.linspace(0, 20, 100)

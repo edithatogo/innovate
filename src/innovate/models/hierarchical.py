@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Sequence
+from collections.abc import Sequence
 
 from innovate.backend import current_backend as B
 from innovate.base.base import DiffusionModel
@@ -10,14 +10,14 @@ class HierarchicalModel(DiffusionModel):
     def __init__(self, model: DiffusionModel, groups: Sequence[str]):
         self.template = model
         self.groups = list(groups)
-        self._params: Dict[str, float] = {}
+        self._params: dict[str, float] = {}
 
     # ------------------------------------------------------------------
     # DiffusionModel API helpers
     # ------------------------------------------------------------------
     @property
     def param_names(self) -> Sequence[str]:
-        names: List[str] = [f"global_{p}" for p in self.template.param_names]
+        names: list[str] = [f"global_{p}" for p in self.template.param_names]
         for g in self.groups:
             for p in self.template.param_names:
                 names.append(f"{g}_{p}")
@@ -27,9 +27,9 @@ class HierarchicalModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         """Return starting values for global and group-level parameters."""
-        guesses: Dict[str, float] = {}
+        guesses: dict[str, float] = {}
         base = self.template.initial_guesses(t, y)
         for p, v in base.items():
             guesses[f"global_{p}"] = v
@@ -37,8 +37,8 @@ class HierarchicalModel(DiffusionModel):
                 guesses[f"{g}_{p}"] = 0.0
         return guesses
 
-    def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
-        bounds: Dict[str, tuple] = {}
+    def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
+        bounds: dict[str, tuple] = {}
         base = self.template.bounds(t, y)
         for p, bnd in base.items():
             bounds[f"global_{p}"] = bnd
@@ -61,7 +61,7 @@ class HierarchicalModel(DiffusionModel):
         from innovate.fitters.scipy_fitter import ScipyFitter
 
         fitter = ScipyFitter()
-        params: Dict[str, float] = {}
+        params: dict[str, float] = {}
 
         if isinstance(y, dict):
             for g in self.groups:
@@ -87,7 +87,7 @@ class HierarchicalModel(DiffusionModel):
     def predict(
         self,
         t: Sequence[float],
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ):
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
@@ -105,17 +105,17 @@ class HierarchicalModel(DiffusionModel):
         return total
 
     @property
-    def params_(self) -> Dict[str, float]:
+    def params_(self) -> dict[str, float]:
         return self._params
 
     @params_.setter
-    def params_(self, value: Dict[str, float]):
+    def params_(self, value: dict[str, float]):
         self._params = value
 
     def predict_adoption_rate(
         self,
         t: Sequence[float],
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ):
         import numpy as np
 
@@ -127,7 +127,7 @@ class HierarchicalModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ) -> float:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")

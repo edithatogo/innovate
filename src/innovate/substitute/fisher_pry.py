@@ -1,8 +1,9 @@
 # src/innovate/substitute/fisher_pry.py
 
-from typing import Dict, Sequence
+from collections.abc import Sequence
 
 import numpy as np
+
 from innovate import backend
 from innovate.base.base import DiffusionModel
 
@@ -16,7 +17,7 @@ class FisherPryModel(DiffusionModel):
     """
 
     def __init__(self):
-        self._params: Dict[str, float] = {}
+        self._params: dict[str, float] = {}
 
     @property
     def param_names(self) -> Sequence[str]:
@@ -27,7 +28,7 @@ class FisherPryModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         """Provides initial guesses for the model parameters.
         - t0 is estimated as the time at which the market share is closest to 50%.
         - alpha is estimated from a linearization of the logistic function.
@@ -58,7 +59,7 @@ class FisherPryModel(DiffusionModel):
             "t0": t0_guess,
         }
 
-    def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
+    def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
         """Returns bounds for the model parameters."""
         t_min, t_max = backend.current_backend.min(t), backend.current_backend.max(t)
         t_range = t_max - t_min
@@ -78,7 +79,7 @@ class FisherPryModel(DiffusionModel):
         ----
             t: A sequence of time points.
 
-        Returns:
+        Returns
         -------
             A sequence of predicted market share fractions (between 0 and 1).
         """
@@ -108,11 +109,11 @@ class FisherPryModel(DiffusionModel):
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
     @property
-    def params_(self) -> Dict[str, float]:
+    def params_(self) -> dict[str, float]:
         return self._params
 
     @params_.setter
-    def params_(self, value: Dict[str, float]):
+    def params_(self, value: dict[str, float]):
         self._params = value
 
     def predict_adoption_rate(self, t: Sequence[float]) -> Sequence[float]:

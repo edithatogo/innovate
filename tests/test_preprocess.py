@@ -3,10 +3,11 @@
 import numpy as np
 import pandas as pd
 import pytest
+
 from innovate.preprocess import rolling_average, sarima_fit, stl_decomposition
 
 
-@pytest.fixture()
+@pytest.fixture
 def seasonal_time_series():
     """Generate a synthetic time series with a clear seasonal pattern."""
     dates = pd.date_range(start="2020-01-01", periods=120, freq="M")
@@ -44,7 +45,7 @@ def test_stl_decomposition_no_datetime_index():
         stl_decomposition(series, period=12)
 
 
-@pytest.fixture()
+@pytest.fixture
 def simple_series():
     dates = pd.date_range(start="2020-01-01", periods=50, freq="M")
     return pd.Series(np.arange(50), index=dates)

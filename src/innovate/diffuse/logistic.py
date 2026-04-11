@@ -1,4 +1,4 @@
-from typing import Dict, Optional, Sequence
+from collections.abc import Sequence
 
 import numpy as np
 
@@ -14,8 +14,8 @@ class LogisticModel(DiffusionModel):
 
     def __init__(
         self,
-        covariates: Optional[Sequence[str]] = None,
-        t_event: Optional[float] = None,
+        covariates: Sequence[str] | None = None,
+        t_event: float | None = None,
     ):
         """Initialize a LogisticModel with optional covariates and an internal SymmetricGrowth dynamics model.
 
@@ -24,8 +24,8 @@ class LogisticModel(DiffusionModel):
             covariates (Sequence[str], optional): List of covariate names to include in the model. Defaults to an empty list.
             t_event (float, optional): The time of a structural break or event.
         """
-        self._params: Dict[str, float] = {}
-        self.covariates = covariates if covariates else []
+        self._params: dict[str, float] = {}
+        self.covariates = covariates or []
         self.t_event = t_event
         self.growth_model = SymmetricGrowth()
 
@@ -48,7 +48,7 @@ class LogisticModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         guesses = {
             "L": np.max(y) * 1.1,
             "k": 0.1,
@@ -68,7 +68,7 @@ class LogisticModel(DiffusionModel):
             guesses[f"beta_x0_{cov}"] = 0.0
         return guesses
 
-    def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
+    def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
         """Return parameter bounds for the logistic model, including covariate effects.
 
         Parameters
@@ -102,7 +102,7 @@ class LogisticModel(DiffusionModel):
     def predict(
         self,
         t: Sequence[float],
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ) -> Sequence[float]:
         """Predicts the cumulative values of the logistic diffusion process at specified time points.
 
@@ -166,7 +166,7 @@ class LogisticModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ) -> float:
         """Compute the coefficient of determination (R²) between observed values and model predictions.
 
@@ -196,17 +196,17 @@ class LogisticModel(DiffusionModel):
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
     @property
-    def params_(self) -> Dict[str, float]:
+    def params_(self) -> dict[str, float]:
         return self._params
 
     @params_.setter
-    def params_(self, value: Dict[str, float]):
+    def params_(self, value: dict[str, float]):
         self._params = value
 
     def predict_adoption_rate(
         self,
         t: Sequence[float],
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ) -> Sequence[float]:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")

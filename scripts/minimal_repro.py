@@ -1,6 +1,6 @@
 # minimal_repro.py
 
-from typing import Dict, Sequence
+from collections.abc import Sequence
 
 import numpy as np
 import pymc as pm
@@ -18,10 +18,10 @@ class BassModel:
         self,
         t: Sequence[float],
         y: Sequence[float],
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         return {"p": 0.001, "q": 0.1, "m": np.max(y) * 1.1}
 
-    def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
+    def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
         return {"p": (1e-6, 0.1), "q": (1e-6, 1.0), "m": (np.max(y), np.inf)}
 
     def differential_equation(self, t, y, params, covariates, t_eval):
@@ -80,7 +80,7 @@ class BayesianFitter:
         self,
         t: Sequence[float],
         y: np.ndarray,
-    ) -> Dict[str, pm.Distribution]:
+    ) -> dict[str, pm.Distribution]:
         priors = {}
         initial_guesses = self.model.initial_guesses(t, y)
         bounds = self.model.bounds(t, y)

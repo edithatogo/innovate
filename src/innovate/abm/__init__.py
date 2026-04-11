@@ -5,12 +5,12 @@ from .model import InnovationModel
 from .sentiment_hype_cycle import SentimentHypeAgent, SentimentHypeModel
 
 __all__ = [
-    "InnovationAgent",
-    "InnovationModel",
     "CompetitiveDiffusionAgent",
     "CompetitiveDiffusionModel",
-    "SentimentHypeAgent",
-    "SentimentHypeModel",
     "DisruptiveInnovationAgent",
     "DisruptiveInnovationModel",
+    "InnovationAgent",
+    "InnovationModel",
+    "SentimentHypeAgent",
+    "SentimentHypeModel",
 ]

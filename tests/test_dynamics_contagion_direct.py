@@ -1,19 +1,19 @@
 """Tests for the main dynamics contagion module (not the subdirectory) to improve coverage to >90%."""
-import pytest
-import numpy as np
-import sys
 import os
+import sys
 
 # Add the src directory to sys.path so we can import modules properly
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 # Now import the contagion models properly
-from innovate.dynamics.contagion import ContagionSpread, SIRModel as SIR, SISModel as SIS, SEIRModel as SEIR
+from innovate.dynamics.contagion import SEIRModel as SEIR
+from innovate.dynamics.contagion import SIRModel as SIR
+from innovate.dynamics.contagion import SISModel as SIS
 
 
 class TestSIR:
     """Test the SIR class from the main contagion module."""
-    
+
     def test_sir_initialization(self):
         """Test SIR initialization - SIRModel doesn't take parameters in constructor."""
         model = SIR()
@@ -23,7 +23,7 @@ class TestSIR:
         assert hasattr(model, 'compute_spread_rate')
         assert hasattr(model, 'predict_states')
         assert hasattr(model, 'get_parameters_schema')
-    
+
     def test_sir_compute_spread_rate_default(self):
         """Test the compute_spread_rate method with default parameters."""
         model = SIR()
@@ -39,7 +39,7 @@ class TestSIR:
         assert abs(result[0] - expected_dSdt) < 0.1
         assert abs(result[1] - expected_dIdt) < 0.1
         assert abs(result[2] - expected_dRdt) < 0.1
-    
+
     def test_sir_compute_spread_rate_custom_params(self):
         """Test the compute_spread_rate method with custom parameters."""
         model = SIR()
@@ -58,7 +58,7 @@ class TestSIR:
 
 class TestSIS:
     """Test the SIS class from the main contagion module."""
-    
+
     def test_sis_initialization(self):
         """Test SIS initialization - SISModel doesn't take parameters in constructor."""
         model = SIS()
@@ -66,7 +66,7 @@ class TestSIS:
         assert hasattr(model, 'compute_spread_rate')
         assert hasattr(model, 'predict_states')
         assert hasattr(model, 'get_parameters_schema')
-    
+
     def test_sis_compute_spread_rate_default(self):
         """Test the compute_spread_rate method with default parameters."""
         model = SIS()
@@ -79,7 +79,7 @@ class TestSIS:
         assert len(result) == 2
         assert abs(result[0] - expected_dSdt) < 0.1
         assert abs(result[1] - expected_dIdt) < 0.1
-    
+
     def test_sis_compute_spread_rate_custom_params(self):
         """Test the compute_spread_rate method with custom parameters."""
         model = SIS()
@@ -95,7 +95,7 @@ class TestSIS:
 
 class TestSEIR:
     """Test the SEIR class from the main contagion module."""
-    
+
     def test_seir_initialization(self):
         """Test SEIR initialization - SEIRModel doesn't take parameters in constructor."""
         model = SEIR()
@@ -103,7 +103,7 @@ class TestSEIR:
         assert hasattr(model, 'compute_spread_rate')
         assert hasattr(model, 'predict_states')
         assert hasattr(model, 'get_parameters_schema')
-    
+
     def test_seir_compute_spread_rate_default(self):
         """Test the compute_spread_rate method with default parameters."""
         model = SEIR()
@@ -122,7 +122,7 @@ class TestSEIR:
         assert abs(result[1] - expected_dEdt) < 0.1
         assert abs(result[2] - expected_dIdt) < 0.1
         assert abs(result[3] - expected_dRdt) < 0.1
-    
+
     def test_seir_compute_spread_rate_custom_params(self):
         """Test the compute_spread_rate method with custom parameters."""
         model = SEIR()
@@ -145,17 +145,17 @@ class TestSEIR:
 def test_contagion_comprehensive():
     """Integration test for all dynamics contagion functionality."""
     # Test all three models with various parameter combinations
-    
+
     # SIR model
     sir = SIR()
     result_sir = sir.compute_spread_rate(S=900, I=100)
     assert len(result_sir) == 3
-    
+
     # SIS model
     sis = SIS()
     result_sis = sis.compute_spread_rate(S=800, I=200)
     assert len(result_sis) == 2
-    
+
     # SEIR model
     seir = SEIR()
     result_seir = seir.compute_spread_rate(S=700, E=150, I=100)
@@ -167,37 +167,37 @@ if __name__ == "__main__":
     test_instance_sir = TestSIR()
     test_instance_sis = TestSIS()
     test_instance_seir = TestSEIR()
-    
+
     print("Running dynamics contagion comprehensive tests...")
-    
+
     test_instance_sir.test_sir_initialization()
     print("✓ SIR initialization test passed")
-    
+
     test_instance_sir.test_sir_compute_spread_rate_default()
     print("✓ SIR compute spread rate default test passed")
-    
+
     test_instance_sir.test_sir_compute_spread_rate_custom_params()
     print("✓ SIR compute spread rate custom params test passed")
-    
+
     test_instance_sis.test_sis_initialization()
     print("✓ SIS initialization test passed")
-    
+
     test_instance_sis.test_sis_compute_spread_rate_default()
     print("✓ SIS compute spread rate default test passed")
-    
+
     test_instance_sis.test_sis_compute_spread_rate_custom_params()
     print("✓ SIS compute spread rate custom params test passed")
-    
+
     test_instance_seir.test_seir_initialization()
     print("✓ SEIR initialization test passed")
-    
+
     test_instance_seir.test_seir_compute_spread_rate_default()
     print("✓ SEIR compute spread rate default test passed")
-    
+
     test_instance_seir.test_seir_compute_spread_rate_custom_params()
     print("✓ SEIR compute spread rate custom params test passed")
-    
+
     test_contagion_comprehensive()
     print("✓ Integration test passed")
-    
+
     print("\nAll comprehensive dynamics contagion tests passed! 🎉")

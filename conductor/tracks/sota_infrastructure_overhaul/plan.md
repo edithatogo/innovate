@@ -12,19 +12,19 @@
     - [x] Pin Python minimum to 3.10 (3.8/3.9 are EOL)
     - [x] Organize dependencies with clear comments
     - [x] Add tool configurations for all SOTA tools
-- [~] Task: Generate uv.lock and verify
-    - [ ] Run `uv lock` to generate lockfile
-    - [ ] Run `uv sync` to verify all dependencies resolve correctly
-    - [ ] Verify `uv run pytest` works with uv-managed environment
-- [ ] Task: Update all documentation references
-    - [ ] Update README.md installation instructions for uv
-    - [ ] Update CONTRIBUTING.md development setup for uv
-    - [ ] Update Dockerfile to use uv
-- [ ] Task: Conductor - Automated Review 'Phase 1' (Protocol in workflow.md)
+- [x] Task: Generate uv.lock and verify `dd9c657`
+    - [x] Run `uv lock` to generate lockfile `dd9c657`
+    - [x] Run `uv sync` to verify all dependencies resolve correctly `dd9c657`
+    - [x] Verify `uv run pytest` works with uv-managed environment `dd9c657`
+- [x] Task: Update all documentation references `dd9c657`
+    - [x] Update README.md installation instructions for uv `dd9c657`
+    - [x] Update CONTRIBUTING.md development setup for uv `dd9c657`
+    - [x] Update Dockerfile to use uv `dd9c657`
+- [x] Task: Conductor - Automated Review 'Phase 1' (Protocol in workflow.md) `dd9c657`
 
 ## Phase 2: Ruff Consolidation (Replace Black, isort, flake8, Pylint, vulture, unimport)
 
-- [ ] Task: Configure Ruff as the single linting/formatting tool
+- [~] Task: Configure Ruff as the single linting/formatting tool
     - [ ] Update `[tool.ruff]` section in pyproject.toml with comprehensive rules
     - [ ] Enable: F (pyflakes), E/W (pycodestyle), I (isort), B (bugbear), SIM (simplify), UP (pyupgrade), RUF (ruff-specific), C90 (mccabe), N (naming), D (docstyle)
     - [ ] Configure Ruff format to replace Black

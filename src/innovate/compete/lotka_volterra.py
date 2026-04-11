@@ -1,6 +1,6 @@
 # src/innovate/compete/lotka_volterra.py
 
-from typing import Dict, Optional, Sequence
+from collections.abc import Sequence
 
 import numpy as np
 
@@ -15,9 +15,9 @@ class LotkaVolterraModel(DiffusionModel):
     products, where the adoption of each is influenced by the other.
     """
 
-    def __init__(self, covariates: Optional[Sequence[str]] = None):
-        self._params: Dict[str, float] = {}
-        self.covariates = covariates if covariates else []
+    def __init__(self, covariates: Sequence[str] | None = None):
+        self._params: dict[str, float] = {}
+        self.covariates = covariates or []
 
     @property
     def param_names(self) -> Sequence[str]:
@@ -39,7 +39,7 @@ class LotkaVolterraModel(DiffusionModel):
             )
         return names
 
-    def initial_guesses(self, t: Sequence[float], y: np.ndarray) -> Dict[str, float]:
+    def initial_guesses(self, t: Sequence[float], y: np.ndarray) -> dict[str, float]:
         """Provides initial guesses for the model parameters by performing a
         linear regression on the linearized Lotka-Volterra equations.
         """
@@ -95,7 +95,7 @@ class LotkaVolterraModel(DiffusionModel):
             guesses[f"beta_beta2_{cov}"] = 0.0
         return guesses
 
-    def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
+    def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
         """Returns bounds for the model parameters."""
         bounds = {
             "alpha1": (0, np.inf),
@@ -141,7 +141,7 @@ class LotkaVolterraModel(DiffusionModel):
         self,
         t: Sequence[float],
         y0: Sequence[float],
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ) -> np.ndarray:
         """Predicts the market share of both technologies over time.
 
@@ -153,7 +153,7 @@ class LotkaVolterraModel(DiffusionModel):
             y0: The initial market shares for the two technologies [y1_0, y2_0].
             covariates: A dictionary of covariate names and their values.
 
-        Returns:
+        Returns
         -------
             An array where each row corresponds to a time point and columns
             correspond to the market share of each technology.
@@ -176,7 +176,7 @@ class LotkaVolterraModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: np.ndarray,
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
         **kwargs,
     ):
         """Fits the Lotka-Volterra model to the data.
@@ -225,18 +225,18 @@ class LotkaVolterraModel(DiffusionModel):
         return self
 
     @property
-    def params_(self) -> Dict[str, float]:
+    def params_(self) -> dict[str, float]:
         return self._params
 
     @params_.setter
-    def params_(self, value: Dict[str, float]):
+    def params_(self, value: dict[str, float]):
         self._params = value
 
     def score(
         self,
         t: Sequence[float],
         y: np.ndarray,
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ) -> float:
         """Calculates the R^2 score for the model fit.
 
@@ -246,7 +246,7 @@ class LotkaVolterraModel(DiffusionModel):
             y: A 2D array of observed data.
             covariates: A dictionary of covariate names and their values.
 
-        Returns:
+        Returns
         -------
             The R^2 score.
         """
@@ -266,7 +266,7 @@ class LotkaVolterraModel(DiffusionModel):
         self,
         t: Sequence[float],
         y0: Sequence[float],
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ) -> np.ndarray:
         """Predicts the rate of change of market share for both technologies.
 
@@ -276,7 +276,7 @@ class LotkaVolterraModel(DiffusionModel):
             y0: The initial market shares for the two technologies [y1_0, y2_0].
             covariates: A dictionary of covariate names and their values.
 
-        Returns:
+        Returns
         -------
             An array containing the adoption rates for each technology at each
             time point.

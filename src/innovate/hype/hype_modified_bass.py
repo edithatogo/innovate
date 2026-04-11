@@ -1,8 +1,9 @@
 # src/innovate/hype/hype_modified_bass.py
 
-from typing import Sequence
+from collections.abc import Sequence
 
 import numpy as np
+
 from innovate.diffuse.bass import BassModel
 
 from .hype_cycle import HypeCycleModel

@@ -1,4 +1,5 @@
-from typing import Any, Dict, Sequence
+from collections.abc import Sequence
+from typing import Any
 
 import numpy as np
 
@@ -10,7 +11,7 @@ class ComplementaryGoodsModel:
     """
 
     def __init__(self) -> None:
-        self._params: Dict[str, float] = {}
+        self._params: dict[str, float] = {}
 
     @property
     def param_names(self) -> Sequence[str]:
@@ -77,7 +78,7 @@ class ComplementaryGoodsModel:
         self.params_ = dict(zip(self.param_names, result.x))
         return self
 
-    def initial_guesses(self, t: Sequence[float], y: np.ndarray) -> Dict[str, float]:
+    def initial_guesses(self, t: Sequence[float], y: np.ndarray) -> dict[str, float]:
         # A simple heuristic for initial guesses
         if len(t) < 2:
             return {"k1": 0.1, "k2": 0.1, "c1": 0.01, "c2": 0.01}
@@ -105,7 +106,7 @@ class ComplementaryGoodsModel:
 
     def bounds(
         self, t: Sequence[float], y: np.ndarray
-    ) -> Dict[str, tuple[float, float]]:
+    ) -> dict[str, tuple[float, float]]:
         return {
             "k1": (0, np.inf),
             "k2": (0, np.inf),
@@ -114,11 +115,11 @@ class ComplementaryGoodsModel:
         }
 
     @property
-    def params_(self) -> Dict[str, float]:
+    def params_(self) -> dict[str, float]:
         return self._params
 
     @params_.setter
-    def params_(self, value: Dict[str, float]) -> None:
+    def params_(self, value: dict[str, float]) -> None:
         self._params = value
 
     def score(self, t: Sequence[float], y: np.ndarray) -> float:

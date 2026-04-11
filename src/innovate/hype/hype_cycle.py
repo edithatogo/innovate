@@ -1,9 +1,8 @@
 # src/innovate/hype/hype_cycle.py
 
-from typing import Dict, Sequence
+from collections.abc import Sequence
 
-from numpy import ndarray
-from numpy import array, clip, exp, inf
+from numpy import array, clip, exp, inf, ndarray
 
 
 class HypeCycleModel:
@@ -14,7 +13,7 @@ class HypeCycleModel:
     """
 
     def __init__(self):
-        self._params: Dict[str, float] = {}
+        self._params: dict[str, float] = {}
 
     @property
     def param_names(self) -> Sequence[str]:
@@ -36,7 +35,7 @@ class HypeCycleModel:
         ----
             t: A sequence of time points.
 
-        Returns:
+        Returns
         -------
             The visibility of the technology at each time point.
         """
@@ -65,9 +64,9 @@ class HypeCycleModel:
         return clip(visibility, 0, inf)
 
     @property
-    def params_(self) -> Dict[str, float]:
+    def params_(self) -> dict[str, float]:
         return self._params
 
     @params_.setter
-    def params_(self, value: Dict[str, float]):
+    def params_(self, value: dict[str, float]):
         self._params = value

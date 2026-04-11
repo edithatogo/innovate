@@ -1,4 +1,4 @@
-from typing import Optional, Sequence
+from collections.abc import Sequence
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -11,7 +11,7 @@ def plot_diffusion_curve(
     title: str = "Diffusion Curve",
     xlabel: str = "Time",
     ylabel: str = "Cumulative Adoptions",
-    save_path: Optional[str] = None,
+    save_path: str | None = None,
 ):
     """:no-index:
 
@@ -42,11 +42,11 @@ def plot_diffusion_curve(
 
 def plot_multi_product_diffusion(
     df_pred: pd.DataFrame,
-    df_obs: Optional[pd.DataFrame] = None,
+    df_obs: pd.DataFrame | None = None,
     title: str = "Multi-Product Diffusion Curves",
     xlabel: str = "Time",
     ylabel: str = "Cumulative Adoptions",
-    save_path: Optional[str] = None,
+    save_path: str | None = None,
 ):
     """:no-index:
 

@@ -1,4 +1,4 @@
-from typing import Optional, Sequence, Tuple, Union
+from collections.abc import Sequence
 
 import numpy as np
 import pandas as pd
@@ -6,8 +6,8 @@ from statsmodels.tsa.seasonal import STL
 
 
 def ensure_datetime_index(
-    data: Union[pd.Series, pd.DataFrame],
-) -> Union[pd.Series, pd.DataFrame]:
+    data: pd.Series | pd.DataFrame,
+) -> pd.Series | pd.DataFrame:
     """Ensures a pandas Series or DataFrame has a datetime index."""
     if not isinstance(data.index, pd.DatetimeIndex):
         try:
@@ -18,9 +18,9 @@ def ensure_datetime_index(
 
 
 def aggregate_time_series(
-    data: Union[pd.Series, pd.DataFrame],
+    data: pd.Series | pd.DataFrame,
     freq: str,
-) -> Union[pd.Series, pd.DataFrame]:
+) -> pd.Series | pd.DataFrame:
     """Aggregates time series data to a specified frequency (e.g., 'D', 'W', 'M')."""
     data = ensure_datetime_index(data)
     return data.resample(freq).sum()
@@ -28,9 +28,9 @@ def aggregate_time_series(
 
 def apply_stl_decomposition(
     data: pd.Series,
-    period: Optional[int] = None,
+    period: int | None = None,
     robust: bool = True,
-) -> Tuple[pd.Series, pd.Series, pd.Series]:
+) -> tuple[pd.Series, pd.Series, pd.Series]:
     """Applies Seasonal-Trend decomposition using Loess (STL) to a time series.
 
     Args:
@@ -39,7 +39,7 @@ def apply_stl_decomposition(
         period: Period of the seasonality. If None, it will try to infer.
         robust: Whether to use robust fitting (less sensitive to outliers).
 
-    Returns:
+    Returns
     -------
         A tuple of (trend, seasonal, residuals) as pandas Series.
     """
@@ -75,7 +75,7 @@ def apply_rolling_average(data: pd.Series, window: int) -> pd.Series:
         data: A pandas Series.
         window: The size of the rolling window.
 
-    Returns:
+    Returns
     -------
         A pandas Series with the rolling average applied.
     """
@@ -84,8 +84,8 @@ def apply_rolling_average(data: pd.Series, window: int) -> pd.Series:
 
 def apply_sarima(
     data: pd.Series,
-    order: Tuple[int, int, int],
-    seasonal_order: Tuple[int, int, int, int],
+    order: tuple[int, int, int],
+    seasonal_order: tuple[int, int, int, int],
 ) -> pd.Series:
     """Fits a SARIMA model to a time series and returns the fitted values.
 
@@ -96,7 +96,7 @@ def apply_sarima(
             differences, and MA parameters.
         seasonal_order: The (P,D,Q,s) seasonal order of the model.
 
-    Returns:
+    Returns
     -------
         A pandas Series with the fitted values from the SARIMA model.
     """

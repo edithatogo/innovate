@@ -1,4 +1,4 @@
-from typing import Any, Callable, Optional, Sequence, Union
+from collections.abc import Callable, Sequence
 
 import jax
 import jax.numpy as jnp
@@ -12,7 +12,8 @@ class JaxBackend:
         Args:
             data: Input data of any type convertable to array.
             
-        Returns:
+        Returns
+        -------
             A JAX array representation of the input data.
         """
         return jnp.asarray(data)
@@ -23,7 +24,8 @@ class JaxBackend:
         Args:
             x: Input array or sequence.
             
-        Returns:
+        Returns
+        -------
             Element-wise exponential of the input array.
         """
         return jnp.exp(x)
@@ -35,12 +37,13 @@ class JaxBackend:
             x: Base array or scalar.
             y: Exponent array or scalar.
             
-        Returns:
+        Returns
+        -------
             Array with elements of x raised to the corresponding powers of y.
         """
         return jnp.power(x, y)
 
-    def sum(self, a, axis=None, dtype=None, keepdims=False) -> Union[float, jnp.ndarray]:
+    def sum(self, a, axis=None, dtype=None, keepdims=False) -> float | jnp.ndarray:
         """Sum of array elements over a given axis.
         
         Args:
@@ -49,17 +52,17 @@ class JaxBackend:
             dtype: Type of the returned array and of the accumulator.
             keepdims: Whether to keep reduced dimensions.
             
-        Returns:
+        Returns
+        -------
             Sum of elements, float if scalar, array if axis specified.
         """
         result = jnp.sum(a, axis=axis, dtype=dtype, keepdims=keepdims)
         # Return float if scalar (when axis is None), otherwise return array
         if axis is None and not keepdims:
             return float(result)
-        else:
-            return result
+        return result
 
-    def mean(self, a, axis=None, dtype=None, keepdims=False) -> Union[float, jnp.ndarray]:
+    def mean(self, a, axis=None, dtype=None, keepdims=False) -> float | jnp.ndarray:
         """Compute the arithmetic mean along the specified axis.
         
         Args:
@@ -69,15 +72,15 @@ class JaxBackend:
             dtype: Type to use in computing the mean.
             keepdims: Whether to keep reduced dimensions.
             
-        Returns:
+        Returns
+        -------
             The mean of the elements, float if scalar, array if axis specified.
         """
         result = jnp.mean(a, axis=axis, dtype=dtype, keepdims=keepdims)
         # Return float if scalar (when axis is None), otherwise return array
         if axis is None and not keepdims:
             return float(result)
-        else:
-            return result
+        return result
 
     def where(self, condition, x, y):
         return jnp.where(condition, x, y)
@@ -124,19 +127,20 @@ class JaxBackend:
     def zeros(self, shape: Sequence[int]) -> jnp.ndarray:
         return jnp.zeros(shape)
 
-    def max(self, x: jnp.ndarray, axis: Optional[Union[int, tuple]] = None) -> Union[float, jnp.ndarray]:
+    def max(self, x: jnp.ndarray, axis: int | tuple | None = None) -> float | jnp.ndarray:
         """Return the maximum of an array or maximum along an axis.
         
         Args:
             x: Input array.
             axis: Axis along which to operate. If None, the flattened array is used.
             
-        Returns:
+        Returns
+        -------
             Maximum of the array elements, float if scalar, array if axis specified.
         """
         return jnp.max(x, axis=axis)
 
-    def median(self, x: jnp.ndarray, axis: Optional[Union[int, tuple]] = None) -> Union[float, jnp.ndarray]:
+    def median(self, x: jnp.ndarray, axis: int | tuple | None = None) -> float | jnp.ndarray:
         """Compute the median along the specified axis.
         
         Args:
@@ -144,7 +148,8 @@ class JaxBackend:
             axis: Axis or axes along which the medians are computed.
                   None (default) computes the median of the flattened array.
                   
-        Returns:
+        Returns
+        -------
             Median of the array elements, float if scalar, array if axis specified.
         """
         return jnp.median(x, axis=axis)

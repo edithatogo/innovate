@@ -16,7 +16,7 @@ def smooth_series(series, fraction=0.1):
         series (np.array): The time series data.
         fraction (float): The fraction of data used when estimating each y-value.
 
-    Returns:
+    Returns
     -------
         np.array: The smoothed time series.
     """
@@ -40,7 +40,7 @@ def find_changepoint(series, model="l2", search_method=rpt.Pelt, penalty_value=3
         search_method (class): The ruptures search method to use (e.g., Pelt, Binseg).
         penalty_value (int): The penalty value for the Pelt search method.
 
-    Returns:
+    Returns
     -------
         int: The index of the most likely changepoint. Returns -1 if no changepoint is found.
     """
@@ -71,7 +71,7 @@ def verify_trend_decline(series):
     ----
         series (np.array): The time series data, typically the post-changepoint segment.
 
-    Returns:
+    Returns
     -------
         tuple: A tuple containing the trend result ('decreasing', 'increasing', 'no trend')
                and the p-value.
@@ -104,7 +104,7 @@ def identify_reducing_series(
         search_method (class): The ruptures search method to use.
         penalty_value (int): The penalty value for the Pelt search method (if used).
 
-    Returns:
+    Returns
     -------
         pd.DataFrame: A DataFrame summarizing the analysis for each time series,
                       with columns for changepoint index, trend result, and p-value.

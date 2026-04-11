@@ -3,9 +3,10 @@ Optimization guide and performance utilities for the innovate library.
 This file contains suggestions for optimizing the library's performance
 and stability while avoiding segmentation faults.
 """
-import numpy as np
 import warnings
-from typing import Dict, Any
+from typing import Any
+
+import numpy as np
 
 # Optimization suggestions for the library
 
@@ -69,48 +70,48 @@ def suggest_safe_alternatives():
     pass
 
 # Additional utility functions for performance analysis
-def benchmark_model_performance(model_class, params: Dict[str, Any], t_data, y_data=None):
+def benchmark_model_performance(model_class, params: dict[str, Any], t_data, y_data=None):
     """
     Utility function to benchmark model performance without triggering ODE solvers.
     This function can be used to evaluate different model implementations.
     """
     import time
-    
+
     model = model_class()
     model.params_ = params
-    
+
     start_time = time.time()
     # Only perform operations that don't trigger ODE solving
     param_names = model.param_names
     required_params = [p for p in param_names if p in params]
     end_time = time.time()
-    
+
     setup_time = end_time - start_time
-    
+
     return {
         "param_validation_time": setup_time,
         "param_count": len(required_params),
         "param_names": required_params
     }
 
-def validate_parameters_safely(model_class, params: Dict[str, Any]):
+def validate_parameters_safely(model_class, params: dict[str, Any]):
     """
     Safely validate parameters without triggering model computations.
     """
     model = model_class()
-    
+
     # Set parameters
     model.params_ = params
-    
+
     # Validate parameter properties without computation
     for param_name, param_value in params.items():
         if not isinstance(param_value, (int, float, np.number)):
             raise TypeError(f"Parameter {param_name} must be numeric, got {type(param_value)}")
-        
+
         if param_name in ['p', 'q', 'm'] and param_value < 0:
             # These typically represent adoption rates or market size
             warnings.warn(f"Parameter {param_name} is negative: {param_value}")
-    
+
     return True
 
 def suggest_parameter_bounds_safely(model_class, y_data):
@@ -119,22 +120,22 @@ def suggest_parameter_bounds_safely(model_class, y_data):
     """
     if len(y_data) == 0:
         return {}
-    
+
     max_y = max(y_data)
     min_y = min(y_data)
-    
+
     suggested_bounds = {
         'm': (max_y, 10 * max_y),  # Market potential bounds
-        'p': (1e-6, 1.0),          # Innovation coefficient bounds  
+        'p': (1e-6, 1.0),          # Innovation coefficient bounds
         'q': (1e-6, 10.0)          # Imitation coefficient bounds
     }
-    
+
     return suggested_bounds
 
 if __name__ == "__main__":
     print("Innovate library optimization guide")
     print("This module contains suggestions and utilities for optimizing the library")
     print("- Performance optimizations")
-    print("- Numerical stability improvements") 
+    print("- Numerical stability improvements")
     print("- Memory efficiency strategies")
     print("- Safe alternatives to problematic operations")

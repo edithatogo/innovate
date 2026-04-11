@@ -2,9 +2,9 @@
 import sys
 import timeit
 from pathlib import Path
-from typing import List, Tuple
 
 import numpy as np
+
 from innovate.backend import use_backend
 from innovate.diffuse.logistic import LogisticModel
 from innovate.fitters.batched_fitter import BatchedFitter
@@ -17,7 +17,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 def generate_data(
     n_samples: int,
     n_datasets: int,
-) -> Tuple[List[np.ndarray], List[np.ndarray]]:
+) -> tuple[list[np.ndarray], list[np.ndarray]]:
     """Generate synthetic data for benchmarking."""
     t = np.linspace(0, 20, n_samples)
 

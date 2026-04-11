@@ -1,4 +1,4 @@
-from typing import Sequence, Union
+from collections.abc import Sequence
 
 import numpy as np
 

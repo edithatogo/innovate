@@ -1,6 +1,7 @@
 """A Bayesian fitter that uses the BlackJAX library for MCMC sampling.
 """
-from typing import Any, Callable, Dict, Tuple
+from collections.abc import Callable
+from typing import Any
 
 import arviz as az
 import blackjax
@@ -44,7 +45,7 @@ class BlackJaxFitter:
         self,
         y: jnp.ndarray,
         log_probability_fn: Callable,
-        initial_params: Dict[str, float],
+        initial_params: dict[str, float],
         **kwargs: Any,
     ) -> None:
         """Fits the model to the data using a BlackJAX sampler.
@@ -88,7 +89,7 @@ class BlackJaxFitter:
 
         self.states = all_states
 
-    def get_parameter_estimates(self) -> Dict[str, float]:
+    def get_parameter_estimates(self) -> dict[str, float]:
         """Returns the mean of the posterior samples for each parameter."""
         if self.states is None:
             raise RuntimeError("The model has not been fitted yet.")
@@ -123,7 +124,7 @@ class BlackJaxFitter:
 
         return az.from_dict(posterior_samples)
 
-    def get_confidence_intervals(self) -> Dict[str, Tuple[float, float]]:
+    def get_confidence_intervals(self) -> dict[str, tuple[float, float]]:
         """Returns the 95% confidence intervals for the parameters."""
         if self.states is None:
             raise RuntimeError("The model has not been fitted yet.")

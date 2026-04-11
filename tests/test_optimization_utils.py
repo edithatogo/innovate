@@ -1,12 +1,11 @@
 """Tests for the optimization utilities."""
-import numpy as np
-from src.innovate.utils.optimization_guide import (
-    benchmark_model_performance,
-    validate_parameters_safely,
-    suggest_parameter_bounds_safely
-)
 from innovate.diffuse.bass import BassModel
 from innovate.diffuse.logistic import LogisticModel
+from src.innovate.utils.optimization_guide import (
+    benchmark_model_performance,
+    suggest_parameter_bounds_safely,
+    validate_parameters_safely,
+)
 
 
 def test_optimization_utilities():
@@ -14,22 +13,22 @@ def test_optimization_utilities():
     # Test benchmarking
     params = {"p": 0.03, "q": 0.38, "m": 1000}
     t_data = [0, 1, 2, 3, 4]
-    
+
     results = benchmark_model_performance(BassModel, params, t_data)
     assert "param_validation_time" in results
     assert "param_count" in results
     assert results["param_count"] == 3  # p, q, m
-    
+
     # Test parameter validation
     valid = validate_parameters_safely(BassModel, params)
     assert valid is True
-    
+
     # Test bounds suggestion
     y_data = [10, 20, 30, 40, 50]
     bounds = suggest_parameter_bounds_safely(BassModel, y_data)
     assert "m" in bounds
     assert bounds["m"][0] > 0
-    
+
     # Test with logistic model
     logistic_params = {"L": 1000, "k": 0.2, "x0": 10}
     results_logistic = benchmark_model_performance(LogisticModel, logistic_params, t_data)
@@ -49,7 +48,7 @@ def test_bounds_suggestion():
     # Test with empty data
     empty_bounds = suggest_parameter_bounds_safely(BassModel, [])
     assert empty_bounds == {}
-    
+
     # Test with single value
     single_bounds = suggest_parameter_bounds_safely(BassModel, [50])
     assert "m" in single_bounds
@@ -58,14 +57,14 @@ def test_bounds_suggestion():
 
 if __name__ == "__main__":
     print("Testing optimization utilities...")
-    
+
     test_optimization_utilities()
     print("✓ Basic optimization utilities test passed")
-    
+
     test_parameter_validation_edge_cases()
     print("✓ Parameter validation edge cases test passed")
-    
+
     test_bounds_suggestion()
     print("✓ Bounds suggestion test passed")
-    
+
     print("All optimization utility tests passed!")

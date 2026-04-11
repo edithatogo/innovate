@@ -1,4 +1,4 @@
-from typing import Dict, Optional, Sequence
+from collections.abc import Sequence
 
 import numpy as np
 
@@ -14,15 +14,15 @@ class GompertzModel(DiffusionModel):
 
     def __init__(
         self,
-        covariates: Optional[Sequence[str]] = None,
-        t_event: Optional[float] = None,
+        covariates: Sequence[str] | None = None,
+        t_event: float | None = None,
     ):
         """Initialize a Gompertz diffusion model with optional covariates.
 
         Creates an empty parameter dictionary, stores the provided covariate names, and instantiates a SkewedGrowth dynamics model for growth rate computation.
         """
-        self._params: Dict[str, float] = {}
-        self.covariates = covariates if covariates else []
+        self._params: dict[str, float] = {}
+        self.covariates = covariates or []
         self.t_event = t_event
         self.growth_model = SkewedGrowth()
 
@@ -45,7 +45,7 @@ class GompertzModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         guesses = {
             "a": np.max(y) * 1.1,
             "b": 1.0,
@@ -65,7 +65,7 @@ class GompertzModel(DiffusionModel):
             guesses[f"beta_c_{cov}"] = 0.0
         return guesses
 
-    def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
+    def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
         """Return parameter bounds for the Gompertz model based on observed data and covariates.
 
         The bounds ensure that the main parameters are constrained to meaningful ranges, while covariate effect parameters are unbounded.
@@ -101,7 +101,7 @@ class GompertzModel(DiffusionModel):
     def predict(
         self,
         t: Sequence[float],
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ) -> Sequence[float]:
         """Predicts cumulative adoption values at specified times using the fitted Gompertz diffusion model.
 
@@ -195,7 +195,7 @@ class GompertzModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ) -> float:
         """Compute the coefficient of determination (R²) between observed data and model predictions.
 
@@ -221,17 +221,17 @@ class GompertzModel(DiffusionModel):
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
     @property
-    def params_(self) -> Dict[str, float]:
+    def params_(self) -> dict[str, float]:
         return self._params
 
     @params_.setter
-    def params_(self, value: Dict[str, float]):
+    def params_(self, value: dict[str, float]):
         self._params = value
 
     def predict_adoption_rate(
         self,
         t: Sequence[float],
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ) -> Sequence[float]:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")

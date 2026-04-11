@@ -1,4 +1,3 @@
-from typing import Optional
 
 import ndlib.models.epidemics as ep
 import ndlib.models.ModelConfig as mc
@@ -14,7 +13,7 @@ class NDlibModel(Model):
     def __init__(
         self,
         num_agents,
-        graph: Optional[nx.Graph] = None,
+        graph: nx.Graph | None = None,
         model_name: str = "ic",
     ):
         """Initialize the NDlibModel with a specified number of agents, network graph, and diffusion model type.

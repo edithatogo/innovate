@@ -2,10 +2,11 @@
 
 import numpy as np
 import pytest
+
 from innovate.hype.hype_cycle import HypeCycleModel
 
 
-@pytest.fixture()
+@pytest.fixture
 def hype_cycle_params():
     """Parameters for a typical Hype Cycle."""
     return {

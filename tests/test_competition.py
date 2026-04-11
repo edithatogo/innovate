@@ -3,12 +3,13 @@
 import numpy as np
 import pandas as pd
 import pytest
+
 from innovate.compete.competition import MultiProductDiffusionModel
 from innovate.diffuse.bass import BassModel
 from innovate.substitute.fisher_pry import FisherPryModel
 
 
-@pytest.fixture()
+@pytest.fixture
 def fitted_bass_model():
     """A fitted Bass model."""
     model = BassModel()
@@ -16,7 +17,7 @@ def fitted_bass_model():
     return model
 
 
-@pytest.fixture()
+@pytest.fixture
 def fitted_fisher_pry_model():
     """A fitted Fisher-Pry model."""
     model = FisherPryModel()

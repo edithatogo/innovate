@@ -1,12 +1,13 @@
 # src/innovate/hype/delayed_hype_bass.py
 
-from typing import Sequence
+from collections.abc import Sequence
 
 import numpy as np
-from innovate.diffuse.bass import BassModel
 from jitcdde import jitcdde, y
 from jitcdde import t as time
 from symengine import exp
+
+from innovate.diffuse.bass import BassModel
 
 from .hype_cycle import HypeCycleModel
 

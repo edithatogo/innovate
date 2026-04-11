@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import pytest
+
 from innovate.compete.competition import MultiProductDiffusionModel
 from innovate.diffuse.bass import BassModel
 from innovate.diffuse.gompertz import GompertzModel
@@ -11,7 +12,7 @@ from innovate.models.mixture import MixtureModel
 
 
 # Fixture for common test data
-@pytest.fixture()
+@pytest.fixture
 def synthetic_data():
     time_points = np.arange(1, 51)
     # True parameters for Bass model
@@ -194,18 +195,18 @@ def test_scipy_fitter_multi_product_model_working():
     Q_matrix = [[0.3, 0.05], [0.03, 0.25]]
     m_vals = [1000, 800]
     model = MultiProductDiffusionModel(p=p_vals, Q=Q_matrix, m=m_vals)
-    
+
     # Generate synthetic data for fitting
     time_points = np.arange(1, 20)
     # Create synthetic multi-product data
     true_model = MultiProductDiffusionModel(p=p_vals, Q=Q_matrix, m=m_vals)
     clean_data = true_model.predict(time_points)
-    
+
     # Add small amount of noise
     np.random.seed(42)
     noisy_data = clean_data + np.random.normal(0, 10, clean_data.shape)
     noisy_data = np.maximum(0, noisy_data)  # Ensure non-negative
-    
+
     # Test that fitting works without raising NotImplementedError
     try:
         fitter.fit(model, time_points, noisy_data.values)

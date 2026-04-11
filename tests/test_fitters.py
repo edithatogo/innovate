@@ -1,12 +1,13 @@
 import numpy as np
 import pytest
+
 from innovate.diffuse.logistic import LogisticModel
 from innovate.fitters.bootstrap_fitter import BootstrapFitter
 from innovate.fitters.jax_fitter import JaxFitter
 from innovate.fitters.scipy_fitter import ScipyFitter
 
 
-@pytest.fixture()
+@pytest.fixture
 def synthetic_logistic_data():
     t = np.linspace(0, 20, 100)
     # True parameters: L=1.0, k=1.5, x0=10.0

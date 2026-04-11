@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Sequence, Union
+from collections.abc import Sequence
 
 import numpy as np
 import pandas as pd
@@ -17,7 +17,7 @@ class MultiProductDiffusionModel(DiffusionModel):
             Sequence[float]
         ],  # N x N matrix: interaction matrix (within- and cross-imitation)
         m: Sequence[float],  # length N: ultimate market potentials
-        names: Optional[Sequence[str]] = None,
+        names: Sequence[str] | None = None,
     ):
         self.p = B.array(p)
         self.Q = B.array(Q)
@@ -34,7 +34,7 @@ class MultiProductDiffusionModel(DiffusionModel):
         if names and len(names) != self.N:
             raise ValueError("Length of names must match the number of products (N).")
 
-        self._params: Dict[str, float] = {}
+        self._params: dict[str, float] = {}
 
     def _rhs(self, y: Sequence[float], t: float) -> Sequence[float]:
         """The right-hand side of the ODE system for N products."""
@@ -199,15 +199,14 @@ class MultiProductDiffusionModel(DiffusionModel):
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
     @property
-    def params_(self) -> Dict[str, Union[float, List[float], List[List[float]]]]:
+    def params_(self) -> dict[str, float | list[float] | list[list[float]]]:
         # Return the parameters that were either initialized or fitted
         if self._params:
             return self._params
-        else:
-            return {"p": self.p.tolist(), "Q": self.Q.tolist(), "m": self.m.tolist()}
+        return {"p": self.p.tolist(), "Q": self.Q.tolist(), "m": self.m.tolist()}
 
     @params_.setter
-    def params_(self, value: Dict[str, float]):
+    def params_(self, value: dict[str, float]):
         self._params = value
 
     def predict_adoption_rate(self, t: Sequence[float]) -> pd.DataFrame:
@@ -237,34 +236,34 @@ class MultiProductDiffusionModel(DiffusionModel):
             raise RuntimeError(
                 "Model parameters are not set. Call .fit() or initialize with p, Q, m."
             )
-            
+
         # Get cumulative predictions
         cumulative_df = self.predict(t)
-        
+
         # Calculate adoption rates using numerical differentiation
         t_arr = B.array(t)
-        
+
         # For the first point, use the differential equation directly
         adoption_rates = []
-        
+
         for i, time_point in enumerate(t_arr):
             if i == 0:
                 # For the first point, evaluate the differential equation at t=0
                 y_current = cumulative_df.iloc[0].values
             else:
                 y_current = cumulative_df.iloc[i].values
-                
+
             # Use the differential equation to get instantaneous rates
             rate = self._rhs(y_current, time_point)
             adoption_rates.append(rate)
-            
+
         # Convert to DataFrame with same structure as predict output
         rates_df = pd.DataFrame(
-            adoption_rates, 
-            index=t, 
+            adoption_rates,
+            index=t,
             columns=self.names
         )
-        
+
         return rates_df
 
     @property
@@ -275,8 +274,8 @@ class MultiProductDiffusionModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         return {}
 
-    def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
+    def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
         return {}

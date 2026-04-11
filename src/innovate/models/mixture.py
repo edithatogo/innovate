@@ -1,8 +1,9 @@
 # src/innovate/models/mixture.py
 
-from typing import Dict, List, Optional, Sequence
+from collections.abc import Sequence
 
 import numpy as np
+
 from innovate.backend import current_backend as B
 from innovate.base.base import DiffusionModel
 from innovate.fitters.scipy_fitter import ScipyFitter
@@ -30,7 +31,7 @@ class MixtureModel(DiffusionModel):
     def __init__(
         self,
         models: Sequence[DiffusionModel],
-        weights: Optional[Sequence[float]] = None,
+        weights: Sequence[float] | None = None,
         max_iter: int = 100,
         tol: float = 1e-6,
     ):
@@ -51,12 +52,12 @@ class MixtureModel(DiffusionModel):
 
         self.max_iter = max_iter
         self.tol = tol
-        self._params: Dict[str, float] = {}
+        self._params: dict[str, float] = {}
 
     @property
     def param_names(self) -> Sequence[str]:
         """The names of the model parameters."""
-        names: List[str] = []
+        names: list[str] = []
         for i, model in enumerate(self.models):
             for pname in model.param_names:
                 names.append(f"model_{i}_{pname}")
@@ -131,7 +132,7 @@ class MixtureModel(DiffusionModel):
     def predict(
         self,
         t: Sequence[float],
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ) -> Sequence[float]:
         """Makes predictions using the fitted mixture model."""
         if not self._params:
@@ -145,11 +146,11 @@ class MixtureModel(DiffusionModel):
         return y_pred
 
     @property
-    def params_(self) -> Dict[str, float]:
+    def params_(self) -> dict[str, float]:
         return self._params
 
     @params_.setter
-    def params_(self, value: Dict[str, float]):
+    def params_(self, value: dict[str, float]):
         """Sets the model parameters and updates the internal models."""
         self._params = value
         # Update weights
@@ -168,7 +169,7 @@ class MixtureModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ) -> float:
         """Calculates the R-squared score for the model."""
         y_pred = self.predict(t, covariates)
@@ -179,7 +180,7 @@ class MixtureModel(DiffusionModel):
     def __repr__(self):
         return f"MixtureModel(models={self.model_classes}, weights={self.weights})"
 
-    def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
+    def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
         bounds = {}
         for i, model in enumerate(self.models):
             model_bounds = model.bounds(t, y)
@@ -196,7 +197,7 @@ class MixtureModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         guesses = {}
         for i, model in enumerate(self.models):
             model_guesses = model.initial_guesses(t, y)

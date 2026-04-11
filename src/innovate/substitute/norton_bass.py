@@ -1,6 +1,7 @@
-from typing import Dict, Optional, Sequence
+from collections.abc import Sequence
 
 import numpy as np
+
 from innovate.backend import current_backend as B
 
 from ..base import DiffusionModel
@@ -12,13 +13,13 @@ class NortonBassModel(DiffusionModel):
     def __init__(
         self,
         n_generations: int = 1,
-        covariates: Optional[Sequence[str]] = None,
+        covariates: Sequence[str] | None = None,
     ):
         if n_generations < 1:
             raise ValueError("Number of generations must be at least 1.")
         self.n_generations = n_generations
-        self._params: Dict[str, float] = {}
-        self.covariates = covariates if covariates else []
+        self._params: dict[str, float] = {}
+        self.covariates = covariates or []
 
     @property
     def param_names(self) -> Sequence[str]:
@@ -37,7 +38,7 @@ class NortonBassModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         guesses = {}
         max_y = B.max(y)
         for i in range(self.n_generations):
@@ -52,7 +53,7 @@ class NortonBassModel(DiffusionModel):
                 guesses[f"beta_m{i+1}_{cov}"] = 0.0
         return guesses
 
-    def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
+    def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
         bounds = {}
         max_y = B.max(y)
         for i in range(self.n_generations):
@@ -68,17 +69,17 @@ class NortonBassModel(DiffusionModel):
         return bounds
 
     @property
-    def params_(self) -> Dict[str, float]:
+    def params_(self) -> dict[str, float]:
         return self._params
 
     @params_.setter
-    def params_(self, value: Dict[str, float]):
+    def params_(self, value: dict[str, float]):
         self._params = value
 
     def predict(
         self,
         t: Sequence[float],
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ) -> Sequence[float]:
         from scipy.integrate import solve_ivp
 
@@ -147,7 +148,7 @@ class NortonBassModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ) -> float:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
@@ -165,7 +166,7 @@ class NortonBassModel(DiffusionModel):
     def predict_adoption_rate(
         self,
         t: Sequence[float],
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ) -> Sequence[float]:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")

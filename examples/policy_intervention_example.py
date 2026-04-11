@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+
 from innovate.diffuse.bass import BassModel
 from innovate.fitters.scipy_fitter import ScipyFitter
 from innovate.policy.intervention import PolicyIntervention

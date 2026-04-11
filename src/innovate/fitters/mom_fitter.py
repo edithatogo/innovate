@@ -1,4 +1,4 @@
-from typing import Dict, Sequence, Tuple
+from collections.abc import Sequence
 
 import numpy as np
 import pandas as pd
@@ -9,7 +9,7 @@ from innovate.base.base import DiffusionModel
 def estimate_bass_mom(
     t: Sequence[float],
     y: Sequence[float],
-) -> Tuple[float, float, float]:
+) -> tuple[float, float, float]:
     """Estimates the parameters (p, q, m) of the Bass Diffusion Model using the Method of Moments.
     This implementation uses a linear regression approach based on incremental adoptions.
 
@@ -18,7 +18,7 @@ def estimate_bass_mom(
         t: A sequence of time points.
         y: A sequence of cumulative adoptions corresponding to the time points.
 
-    Returns:
+    Returns
     -------
         A tuple (p, q, m) representing the estimated parameters.
     """
@@ -120,7 +120,7 @@ class MoMFitter:
     """
 
     def __init__(self):
-        self._params: Dict[str, float] = {}
+        self._params: dict[str, float] = {}
 
     def fit(
         self,
@@ -136,7 +136,7 @@ class MoMFitter:
             t: Time points.
             y: Cumulative adoption data.
 
-        Returns:
+        Returns
         -------
             The fitted BassModel instance.
         """
@@ -154,5 +154,5 @@ class MoMFitter:
         return model
 
     @property
-    def params_(self) -> Dict[str, float]:
+    def params_(self) -> dict[str, float]:
         return self._params

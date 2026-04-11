@@ -1,4 +1,4 @@
-from typing import Optional, Sequence
+from collections.abc import Sequence
 
 import numpy as np
 from scipy.optimize import curve_fit
@@ -16,9 +16,9 @@ class ScipyFitter:
         model: DiffusionModel,
         t: Sequence[float],
         y: Sequence[float],
-        p0: Optional[Sequence[float]] = None,
-        bounds: Optional[tuple] = None,
-        weights: Optional[Sequence[float]] = None,
+        p0: Sequence[float] | None = None,
+        bounds: tuple | None = None,
+        weights: Sequence[float] | None = None,
         **kwargs,
     ) -> Self:
         """Fits a DiffusionModel instance using scipy.optimize.curve_fit.
@@ -33,11 +33,11 @@ class ScipyFitter:
             weights: Weights for the observed data points.
             kwargs: Additional keyword arguments to pass to scipy.optimize.curve_fit.
 
-        Returns:
+        Returns
         -------
             The fitter instance.
 
-        Raises:
+        Raises
         ------
             RuntimeError: If fitting fails.
         """
@@ -59,18 +59,18 @@ class ScipyFitter:
                     "Weights parameter will be ignored.",
                     UserWarning
                 )
-            
+
             # Convert bounds format if provided
             if bounds is not None:
                 # Convert from curve_fit format to minimize format if needed
-                # This is a simplified conversion - full conversion would require 
+                # This is a simplified conversion - full conversion would require
                 # understanding the parameter structure
                 kwargs['bounds'] = bounds
-                
+
             # Use the model's built-in fitting method
             model.fit(t, y, **kwargs)
             return self
-        
+
         # Handle regular DiffusionModel instances with curve_fit
         y_arr = y_arr.flatten()
 

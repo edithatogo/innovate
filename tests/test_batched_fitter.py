@@ -1,11 +1,12 @@
 import numpy as np
 import pytest
+
 from innovate.diffuse.logistic import LogisticModel
 from innovate.fitters.batched_fitter import BatchedFitter
 from innovate.fitters.scipy_fitter import ScipyFitter
 
 
-@pytest.fixture()
+@pytest.fixture
 def synthetic_batched_data():
     # Create two different logistic curves
     t1 = np.linspace(0, 20, 50)

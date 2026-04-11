@@ -2,12 +2,13 @@
 """
 import jax.numpy as jnp
 import pytest
-from innovate.diffuse.bass import BassModel
-from innovate.fitters.blackjax_fitter import BlackJaxFitter
 from jax.scipy import stats
 
+from innovate.diffuse.bass import BassModel
+from innovate.fitters.blackjax_fitter import BlackJaxFitter
 
-@pytest.mark.fitter()
+
+@pytest.mark.fitter
 def test_blackjax_fitter():
     """Tests the BlackJaxFitter with the BassModel."""
     model = BassModel()

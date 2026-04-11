@@ -1,9 +1,10 @@
 """Benchmarks for the innovate library."""
 import timeit
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import numpy as np
 import pandas as pd
+
 from innovate.backend import use_backend
 from innovate.diffuse.bass import BassModel
 from innovate.diffuse.gompertz import GompertzModel
@@ -17,8 +18,8 @@ def run_fit_benchmark(
     y: np.ndarray,
     backend: str,
     fitter: Any,
-    covariates: Optional[Dict[str, np.ndarray]] = None,
-) -> Dict[str, Any]:
+    covariates: dict[str, np.ndarray] | None = None,
+) -> dict[str, Any]:
     """Run a fit benchmark for a given model, backend, and fitter."""
     try:
         use_backend(backend)
@@ -58,8 +59,8 @@ def run_predict_benchmark(
     model: Any,
     t: np.ndarray,
     backend: str,
-    covariates: Optional[Dict[str, np.ndarray]] = None,
-) -> Dict[str, Any]:
+    covariates: dict[str, np.ndarray] | None = None,
+) -> dict[str, Any]:
     """Run a predict benchmark for a given model and backend."""
     use_backend(backend)
 
@@ -83,8 +84,8 @@ def run_simulation_benchmark(
     t: np.ndarray,
     backend: str,
     n_sims: int,
-    covariates: Optional[Dict[str, np.ndarray]] = None,
-) -> Dict[str, Any]:
+    covariates: dict[str, np.ndarray] | None = None,
+) -> dict[str, Any]:
     """Run a simulation benchmark for a given model and backend."""
     use_backend(backend)
 
@@ -106,8 +107,8 @@ def run_simulation_benchmark(
 def generate_synthetic_data(
     model: Any,
     t: np.ndarray,
-    params: Dict[str, float],
-    covariates: Optional[Dict[str, np.ndarray]] = None,
+    params: dict[str, float],
+    covariates: dict[str, np.ndarray] | None = None,
     noise_std: float = 0.05,
 ) -> np.ndarray:
     """Generate synthetic data from a model with known parameters and adds noise."""
@@ -122,13 +123,13 @@ def generate_synthetic_data(
 def main() -> None:
     """Run the benchmarks and prints the results."""
     t = np.linspace(0, 50, 100)
-    results: List[Dict[str, Any]] = []
+    results: list[dict[str, Any]] = []
     backends = ["numpy", "jax"]
     fitter = ScipyFitter()
 
     # --- Model Configurations ---
-    models_to_benchmark: List[
-        Tuple[Any, Dict[str, float], Optional[Dict[str, np.ndarray]], str]
+    models_to_benchmark: list[
+        tuple[Any, dict[str, float], dict[str, np.ndarray] | None, str]
     ] = [
         (BassModel(), {"p": 0.03, "q": 0.38, "m": 1000}, None, "Bass"),
         (GompertzModel(), {"a": 1000, "b": 5, "c": 0.1}, None, "Gompertz"),

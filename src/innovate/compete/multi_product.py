@@ -1,4 +1,4 @@
-from typing import Dict, Optional, Sequence
+from collections.abc import Sequence
 
 import numpy as np
 
@@ -13,17 +13,17 @@ class MultiProductDiffusionModel(DiffusionModel):
     def __init__(
         self,
         n_products: int,
-        p: Optional[Sequence[float]] = None,
-        Q: Optional[Sequence[Sequence[float]]] = None,
-        m: Optional[Sequence[float]] = None,
-        names: Optional[Sequence[str]] = None,
-        covariates: Optional[Sequence[str]] = None,
+        p: Sequence[float] | None = None,
+        Q: Sequence[Sequence[float]] | None = None,
+        m: Sequence[float] | None = None,
+        names: Sequence[str] | None = None,
+        covariates: Sequence[str] | None = None,
     ):
         if n_products < 1:
             raise ValueError("Number of products must be at least 1.")
         self.n_products = n_products
-        self._params: Dict[str, float] = {}
-        self.covariates = covariates if covariates else []
+        self._params: dict[str, float] = {}
+        self.covariates = covariates or []
 
         self.p = B.array(p) if p is not None else None
         self.Q = B.array(Q) if Q is not None else None
@@ -74,7 +74,7 @@ class MultiProductDiffusionModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         guesses = {}
         max_y = B.max(y)
 
@@ -103,7 +103,7 @@ class MultiProductDiffusionModel(DiffusionModel):
                         guesses[f"beta_alpha_{i+1}_{j+1}_{cov}"] = 0.0
         return guesses
 
-    def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
+    def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
         bounds = {}
         max_y = B.max(y)
 
@@ -135,7 +135,7 @@ class MultiProductDiffusionModel(DiffusionModel):
     def predict(
         self,
         t: Sequence[float],
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ) -> Sequence[float]:
         from scipy.integrate import solve_ivp
 
@@ -291,7 +291,7 @@ class MultiProductDiffusionModel(DiffusionModel):
         self,
         t: Sequence[float],
         y: Sequence[float],
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ) -> float:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
@@ -307,7 +307,7 @@ class MultiProductDiffusionModel(DiffusionModel):
     def predict_adoption_rate(
         self,
         t: Sequence[float],
-        covariates: Optional[Dict[str, Sequence[float]]] = None,
+        covariates: dict[str, Sequence[float]] | None = None,
     ) -> Sequence[float]:
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
@@ -324,9 +324,9 @@ class MultiProductDiffusionModel(DiffusionModel):
         return rates
 
     @property
-    def params_(self) -> Dict[str, float]:
+    def params_(self) -> dict[str, float]:
         return self._params
 
     @params_.setter
-    def params_(self, value: Dict[str, float]):
+    def params_(self, value: dict[str, float]):
         self._params = value

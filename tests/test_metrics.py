@@ -2,10 +2,11 @@
 
 import numpy as np
 import pytest
+
 from innovate.utils.metrics import calculate_aic, calculate_bic, calculate_rss
 
 
-@pytest.fixture()
+@pytest.fixture
 def sample_data():
     """Provides sample data for testing metrics."""
     y_true = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])

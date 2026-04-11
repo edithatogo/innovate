@@ -2,6 +2,7 @@
 
 import numpy as np
 import pytest
+
 from innovate.compete.lotka_volterra import LotkaVolterraModel
 
 
@@ -56,7 +57,7 @@ def test_lotka_volterra_predict():
     assert predictions[-1, 1] > y0[1]
 
 
-@pytest.fixture()
+@pytest.fixture
 def lotka_volterra_data():
     """Generate synthetic data for the Lotka-Volterra model."""
     true_params = {"alpha1": 0.5, "beta1": 0.1, "alpha2": 0.4, "beta2": 0.1}

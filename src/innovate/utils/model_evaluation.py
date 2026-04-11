@@ -1,4 +1,5 @@
-from typing import Any, Dict, Sequence, Tuple
+from collections.abc import Sequence
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -45,7 +46,7 @@ def get_fit_metrics(
     model: DiffusionModel,
     t: Sequence[float],
     y: Sequence[float],
-) -> Dict[str, float]:
+) -> dict[str, float]:
     """Calculates various goodness-of-fit metrics for a model.
 
     Args:
@@ -54,7 +55,7 @@ def get_fit_metrics(
         t: The time points.
         y: The true cumulative adoption values.
 
-    Returns:
+    Returns
     -------
         A dictionary containing the calculated metrics.
     """
@@ -84,7 +85,7 @@ def get_fit_metrics(
 
 
 def compare_models(
-    models: Dict[str, DiffusionModel],
+    models: dict[str, DiffusionModel],
     t_true: Sequence[float],
     y_true: Sequence[float],
 ) -> pd.DataFrame:
@@ -97,7 +98,7 @@ def compare_models(
         t_true: The true time points.
         y_true: The true cumulative adoption values.
 
-    Returns:
+    Returns
     -------
         A pandas DataFrame containing the comparison metrics for each model.
     """
@@ -126,7 +127,7 @@ def find_best_model(
     comparison_df: pd.DataFrame,
     metric: str = "RMSE",
     minimize: bool = True,
-) -> Tuple[str, Dict[str, Any]]:
+) -> tuple[str, dict[str, Any]]:
     """Identifies the best performing model from a comparison DataFrame.
 
     Args:
@@ -136,7 +137,7 @@ def find_best_model(
         minimize: If True, the best model has the minimum value for the metric.
                   If False, the best model has the maximum value.
 
-    Returns:
+    Returns
     -------
         A tuple containing the name of the best model and its full results row.
     """

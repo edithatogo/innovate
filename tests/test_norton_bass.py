@@ -1,10 +1,11 @@
 import numpy as np
 import pytest
+
 from innovate.fitters.scipy_fitter import ScipyFitter
 from innovate.substitute.norton_bass import NortonBassModel
 
 
-@pytest.fixture()
+@pytest.fixture
 def synthetic_norton_bass_data():
     """Generate synthetic data for two generations of a technology using the model itself."""
     t = np.linspace(0, 50, 100)

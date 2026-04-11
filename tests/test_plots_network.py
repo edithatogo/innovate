@@ -6,6 +6,7 @@ matplotlib.use("Agg")  # Use non-interactive backend
 import os
 
 import matplotlib.pyplot as plt
+
 from innovate.plots.network import plot_network_diffusion
 
 

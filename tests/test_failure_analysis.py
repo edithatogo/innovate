@@ -2,6 +2,7 @@
 
 import numpy as np
 import pytest
+
 from innovate.fail.analysis import analyze_failure
 
 

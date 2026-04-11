@@ -1,5 +1,6 @@
 import numpy as np
 import pytest
+
 from innovate.diffuse.bass import BassModel
 from innovate.fitters.scipy_fitter import ScipyFitter
 from innovate.policy.intervention import PolicyIntervention

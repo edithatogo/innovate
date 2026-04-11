@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Sequence, TypeVar
+from collections.abc import Sequence
+from typing import Any, TypeVar
 
 # Define a type variable for the class itself, for type hinting Self
 Self = TypeVar("Self", bound="DiffusionModel")
@@ -36,12 +37,12 @@ class DiffusionModel(ABC):
 
     @property
     @abstractmethod
-    def params_(self) -> Dict[str, float]:
+    def params_(self) -> dict[str, float]:
         """Returns a dictionary of fitted model parameters."""
 
     @params_.setter
     @abstractmethod
-    def params_(self, value: Dict[str, float]):
+    def params_(self, value: dict[str, float]):
         """Sets the model parameters."""
 
     @abstractmethod
@@ -58,11 +59,11 @@ class DiffusionModel(ABC):
         self,
         t: Sequence[float],
         y: Sequence[float],
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         """Returns initial guesses for the model parameters."""
 
     @abstractmethod
-    def bounds(self, t: Sequence[float], y: Sequence[float]) -> Dict[str, tuple]:
+    def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
         """Returns bounds for the model parameters."""
 
     @staticmethod

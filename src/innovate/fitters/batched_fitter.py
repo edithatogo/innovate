@@ -1,4 +1,4 @@
-from typing import Sequence
+from collections.abc import Sequence
 
 from innovate.backend import current_backend as B
 from innovate.base.base import DiffusionModel

@@ -1,4 +1,4 @@
-from typing import Dict, Sequence
+from collections.abc import Sequence
 
 import jax
 import jax.numpy as jnp
@@ -17,7 +17,7 @@ class JaxFitter:
         t: Sequence[float],
         y: Sequence[float],
         **kwargs,
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         t_arr = jnp.asarray(t)
         y_arr = jnp.asarray(y)
 
