@@ -3,7 +3,7 @@ Targeted tests for specific modules to boost coverage in under-tested areas.
 
 This test file focuses on:
 - Ecosystem models
-- Dynamics models  
+- Dynamics models
 - Fitter edge cases
 - Path dependence models
 - Adoption categorization
@@ -32,14 +32,14 @@ class TestFitterCoverage:
         fitter.fit(model, t, y)
 
         assert model.params_ is not None
-        assert 'p' in model.params_
-        assert 'q' in model.params_
-        assert 'm' in model.params_
+        assert "p" in model.params_
+        assert "q" in model.params_
+        assert "m" in model.params_
 
         # All parameters should be positive and finite
-        assert model.params_['p'] > 0
-        assert model.params_['q'] > 0
-        assert model.params_['m'] > 0
+        assert model.params_["p"] > 0
+        assert model.params_["q"] > 0
+        assert model.params_["m"] > 0
         assert all(np.isfinite(v) for v in model.params_.values())
 
     def test_scipy_fitter_convergence_issues(self):
@@ -89,14 +89,14 @@ class TestFitterCoverage:
 
         # Should have fitted parameters
         assert model.params_ is not None
-        assert 'p' in model.params_
-        assert 'q' in model.params_
-        assert 'm' in model.params_
+        assert "p" in model.params_
+        assert "q" in model.params_
+        assert "m" in model.params_
 
         # Parameters should be positive
-        assert model.params_['p'] > 0
-        assert model.params_['q'] > 0
-        assert model.params_['m'] > 0
+        assert model.params_["p"] > 0
+        assert model.params_["q"] > 0
+        assert model.params_["m"] > 0
 
     def test_bootstrap_fitter_confidence_intervals(self):
         """Test BootstrapFitter confidence interval functionality."""
@@ -109,11 +109,11 @@ class TestFitterCoverage:
         fitter.fit(model, t, y)
 
         # Test confidence intervals if method exists
-        if hasattr(fitter, 'get_confidence_intervals'):
+        if hasattr(fitter, "get_confidence_intervals"):
             try:
                 intervals = fitter.get_confidence_intervals()
                 assert isinstance(intervals, dict)
-                for param in ['p', 'q', 'm']:
+                for param in ["p", "q", "m"]:
                     if param in intervals:
                         lower, upper = intervals[param]
                         assert lower <= upper
@@ -162,7 +162,7 @@ class TestAdoptionCategorization:
                 categories = categorize_adopters(adoption_curve, t)
                 assert isinstance(categories, dict)
                 # Should have standard adoption categories
-                expected_categories = ['innovators', 'early_adopters', 'early_majority', 'late_majority', 'laggards']
+                expected_categories = ["innovators", "early_adopters", "early_majority", "late_majority", "laggards"]
                 for cat in expected_categories:
                     if cat in categories:
                         assert isinstance(categories[cat], (int, float, np.number))
@@ -182,6 +182,7 @@ class TestEcosystemModels:
         """Test that ecosystem models can be imported."""
         try:
             from innovate.ecosystem import EcosystemModel
+
             # If import succeeds, test basic functionality
             try:
                 model = EcosystemModel()
@@ -224,7 +225,7 @@ class TestPathDependenceModels:
                 assert model is not None
 
                 # Test with parameters if needed
-                if hasattr(model, 'set_params'):
+                if hasattr(model, "set_params"):
                     model.set_params(switching_cost=0.1, network_effect=0.2)
 
             except (TypeError, NotImplementedError):
@@ -243,10 +244,10 @@ class TestPathDependenceModels:
                 model = PathDependenceModel()
 
                 # Test basic functionality
-                if hasattr(model, 'predict'):
+                if hasattr(model, "predict"):
                     t = [1, 2, 3, 4, 5]
                     # Might need parameters
-                    if not hasattr(model, 'params_') or model.params_ is None:
+                    if not hasattr(model, "params_") or model.params_ is None:
                         model.params_ = {"strength": 0.5, "threshold": 0.1}
 
                     try:
@@ -277,13 +278,8 @@ class TestHypeModels:
                 assert model is not None
 
                 # Test with basic parameters
-                if hasattr(model, 'params_'):
-                    model.params_ = {
-                        "peak_time": 5.0,
-                        "trough_time": 10.0,
-                        "plateau_time": 15.0,
-                        "max_hype": 100.0
-                    }
+                if hasattr(model, "params_"):
+                    model.params_ = {"peak_time": 5.0, "trough_time": 10.0, "plateau_time": 15.0, "max_hype": 100.0}
 
                     t = np.linspace(1, 20, 50)
                     try:
@@ -314,14 +310,8 @@ class TestHypeModels:
                 model = DelayedHypeBassModel()
 
                 # Test with parameters
-                if hasattr(model, 'params_'):
-                    model.params_ = {
-                        "p": 0.02,
-                        "q": 0.3,
-                        "m": 1000,
-                        "hype_delay": 3.0,
-                        "hype_strength": 0.5
-                    }
+                if hasattr(model, "params_"):
+                    model.params_ = {"p": 0.02, "q": 0.3, "m": 1000, "hype_delay": 3.0, "hype_strength": 0.5}
 
                     t = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
                     try:
@@ -353,7 +343,7 @@ class TestFailureAnalysis:
                 assert analyzer is not None
 
                 # Test with sample data
-                if hasattr(analyzer, 'analyze_failure'):
+                if hasattr(analyzer, "analyze_failure"):
                     # Create sample failure data
                     t = np.array([1, 2, 3, 4, 5])
                     adoption = np.array([10, 15, 12, 8, 5])  # Declining adoption
@@ -402,9 +392,9 @@ class TestSubstituteModels:
             assert model is not None
 
             # Test with basic parameters
-            if hasattr(model, 'params_') or hasattr(model, 'set_params'):
+            if hasattr(model, "params_") or hasattr(model, "set_params"):
                 # Set parameters for substitution
-                if hasattr(model, 'set_params'):
+                if hasattr(model, "set_params"):
                     model.set_params(a=0.1, b=2.0)
                 else:
                     model.params_ = {"a": 0.1, "b": 2.0}

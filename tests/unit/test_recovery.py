@@ -1,11 +1,12 @@
 """Recovery tests for the innovate library."""
+
 import numpy as np
 import pytest
 
 from innovate.backend import use_backend
 
 # Use numpy backend to avoid JAX-related issues
-use_backend('numpy')
+use_backend("numpy")
 
 from innovate.diffuse.bass import BassModel
 
@@ -46,9 +47,9 @@ def test_extreme_parameter_handling():
 
     # Use extreme values to test for stability
     extreme_params = {
-        "p": 1e-10,   # Very small
-        "q": 1e10,    # Very large
-        "m": 1e15     # Very large market size
+        "p": 1e-10,  # Very small
+        "q": 1e10,  # Very large
+        "m": 1e15,  # Very large market size
     }
 
     model.params_ = extreme_params

@@ -1,5 +1,4 @@
-"""Tests for the reduction analysis module.
-"""
+"""Tests for the reduction analysis module."""
 
 import unittest
 
