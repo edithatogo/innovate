@@ -4,8 +4,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: SOTA Infrastructure Overhaul**
-  *Link: [./tracks/sota_infrastructure_overhaul/](./tracks/sota_infrastructure_overhaul/)*
+- [x] **Track: SOTA Infrastructure Overhaul** *(Completed)*
+  *Link: [./archive/sota_infrastructure_overhaul_20260411/](./archive/sota_infrastructure_overhaul_20260411/)*
 
 - [ ] **Track: Strengthen testing infrastructure and core model coverage**
   *Link: [./tracks/strengthen_testing_coverage/](./tracks/strengthen_testing_coverage/)*
