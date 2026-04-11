@@ -23,3 +23,6 @@ test_innovate_components.py
 test_numpy_backend_full_coverage.py
 enable_faulthandler.py
 mutmut_config.py
+# Mutation testing output
+mutants/
+.mutmut-cache
