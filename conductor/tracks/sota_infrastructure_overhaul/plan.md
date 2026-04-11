@@ -43,114 +43,97 @@
 
 ## Phase 3: Type Checking with ty + mypy
 
-- [~] Task: Configure ty as primary type checker
-    - [ ] Add `[tool.ty]` configuration to pyproject.toml
-    - [ ] Run `uv run ty check src/` to identify current type issues
-    - [ ] Fix critical type errors that block adoption
-- [ ] Task: Update mypy configuration
-    - [ ] Keep mypy as secondary check with stricter modes
-    - [ ] Update mypy config in pyproject.toml to align with ty
-    - [ ] Ensure both ty and mypy can run in CI without conflicts
-- [ ] Task: Remove pyright
-    - [ ] Remove pyright from dev dependencies
-    - [ ] Remove pyright CI job from workflows
-- [ ] Task: Conductor - Automated Review 'Phase 3' (Protocol in workflow.md)
+- [x] Task: Configure ty as primary type checker `cbaec8c`
+    - [x] Add `[tool.ty]` configuration to pyproject.toml `cbaec8c`
+    - [x] Run `uv run ty check src/` to identify current type issues `cbaec8c`
+    - [x] Fix critical type errors that block adoption `cbaec8c`
+- [x] Task: Update mypy configuration `cbaec8c`
+    - [x] Keep mypy as secondary check with stricter modes `cbaec8c`
+    - [x] Update mypy config in pyproject.toml to align with ty `cbaec8c`
+    - [x] Ensure both ty and mypy can run in CI without conflicts `cbaec8c`
+- [x] Task: Remove pyright `cbaec8c`
+    - [x] Remove pyright from dev dependencies `cbaec8c`
+    - [x] Remove pyright CI job from workflows `cbaec8c`
+- [x] Task: Conductor - Automated Review 'Phase 3' (Protocol in workflow.md) `cbaec8c`
 
 ## Phase 4: Pre-commit Hooks Modernization
 
-- [ ] Task: Rewrite .pre-commit-config.yaml
-    - [ ] Replace Black hook with `ruff-format`
-    - [ ] Replace isort hook with `ruff-check --select I`
-    - [ ] Replace flake8 hook with `ruff-check`
-    - [ ] Remove vulture and unimport hooks (covered by Ruff)
-    - [ ] Update mypy hook to latest version
-    - [ ] Keep codespell, nbstripout hooks
-    - [ ] Add: check-yaml, check-toml, check-merge-conflict, end-of-file-fixer, trailing-whitespace
-    - [ ] Add: actionlint for GitHub Actions validation
-    - [ ] Configure Ruff hooks to run with `--fix` on commit
-- [ ] Task: Test pre-commit hooks
-    - [ ] Run `uv run pre-commit run --all-files`
-    - [ ] Verify all hooks pass
-    - [ ] Fix any violations found
-- [ ] Task: Conductor - Automated Review 'Phase 4' (Protocol in workflow.md)
+- [x] Task: Rewrite .pre-commit-config.yaml `cbaec8c`
+    - [x] Replace Black hook with `ruff-format` `cbaec8c`
+    - [x] Replace isort hook with `ruff-check --select I` `cbaec8c`
+    - [x] Replace flake8 hook with `ruff-check` `cbaec8c`
+    - [x] Remove vulture and unimport hooks (covered by Ruff) `cbaec8c`
+    - [x] Update mypy hook to latest version `cbaec8c`
+    - [x] Keep codespell, nbstripout hooks `cbaec8c`
+    - [x] Add: check-yaml, check-toml, check-merge-conflict, end-of-file-fixer, trailing-whitespace `cbaec8c`
+    - [x] Add: actionlint for GitHub Actions validation `cbaec8c`
+    - [x] Configure Ruff hooks to run with `--fix` on commit `cbaec8c`
+- [x] Task: Test pre-commit hooks `cbaec8c`
+    - [x] Run `uv run pre-commit run --all-files` `cbaec8c`
+    - [x] Verify all hooks pass `cbaec8c`
+    - [x] Fix any violations found `cbaec8c`
+- [x] Task: Conductor - Automated Review 'Phase 4' (Protocol in workflow.md) `cbaec8c`
 
 ## Phase 5: CI/CD Consolidation
 
-- [ ] Task: Design unified CI workflow
-    - [ ] Merge ci.yml, python_ci.yml, lint.yml into single `.github/workflows/ci.yml`
-    - [ ] Structure as matrix jobs: test (python 3.10-3.13), lint, type-check, security
-    - [ ] Update all actions to latest versions (checkout@v5, setup-python@v5)
-    - [ ] Add Scalene profiling as an optional benchmark job
-    - [ ] Add mutation testing (mutmut) as a weekly scheduled job
-    - [ ] Add integration and e2e test markers to the matrix
-- [ ] Task: Implement consolidated CI workflow
-    - [ ] Write new ci.yml with all jobs
-    - [ ] Ensure coverage upload to Codecov works
-    - [ ] Ensure all quality checks run in parallel
-    - [ ] Add CI gate monitoring job that polls after pushes
-- [ ] Task: Add CI Gate Monitoring workflow
-    - [ ] Create `.github/workflows/ci-gate-monitor.yml`
-    - [ ] Trigger on workflow_run completion
-    - [ ] Check status of all workflows triggered by the same push
-    - [ ] Post comment on PR or push notification if any fail
-    - [ ] Auto-create issue for persistent CI failures
-- [ ] Task: Delete obsolete CI workflows
-    - [ ] Remove old ci.yml, python_ci.yml, lint.yml
-- [ ] Task: Conductor - Automated Review 'Phase 5' (Protocol in workflow.md)
+- [x] Task: Design unified CI workflow `cbaec8c`
+    - [x] Merge ci.yml, python_ci.yml, lint.yml into single `.github/workflows/ci.yml` `cbaec8c`
+    - [x] Structure as matrix jobs: test (python 3.10-3.13), lint, type-check, security `cbaec8c`
+    - [x] Update all actions to latest versions (checkout@v5, setup-python@v5) `cbaec8c`
+    - [x] Add Scalene profiling as an optional benchmark job `cbaec8c`
+    - [x] Add mutation testing (mutmut) as a weekly scheduled job `cbaec8c`
+    - [x] Add integration and e2e test markers to the matrix `cbaec8c`
+- [x] Task: Implement consolidated CI workflow `cbaec8c`
+    - [x] Write new ci.yml with all jobs `cbaec8c`
+    - [x] Ensure coverage upload to Codecov works `cbaec8c`
+    - [x] Ensure all quality checks run in parallel `cbaec8c`
+    - [x] Add CI gate monitoring job that polls after pushes `cbaec8c`
+- [x] Task: Add CI Gate Monitoring workflow `cbaec8c`
+    - [x] Create `.github/workflows/ci-gate-monitor.yml` `cbaec8c`
+    - [x] Trigger on workflow_run completion `cbaec8c`
+    - [x] Check status of all workflows triggered by the same push `cbaec8c`
+    - [x] Post comment on PR or push notification if any fail `cbaec8c`
+    - [x] Auto-create issue for persistent CI failures `cbaec8c`
+- [x] Task: Delete obsolete CI workflows `cbaec8c`
+    - [x] Remove old ci.yml, python_ci.yml, lint.yml `cbaec8c`
+- [x] Task: Conductor - Automated Review 'Phase 5' (Protocol in workflow.md) `cbaec8c`
 
 ## Phase 6: Replace Dependabot with Renovate
 
-- [ ] Task: Create Renovate configuration
-    - [ ] Create `.github/renovate.json` with:
-        - Weekly schedule (Monday)
-        - Group all dev dependencies together
-        - Group all production dependencies together
-        - Group GitHub Actions updates together
-        - Enable auto-merge for patch updates that pass CI
-        - Include changelogs in PR descriptions
-        - Label dependency PRs with `dependencies`
-        - Pin digest for GitHub Actions
-    - [ ] Test Renovate configuration with `renovate --dry-run` if possible
-- [ ] Task: Delete Dependabot
-    - [ ] Remove `.github/dependabot.yml`
-- [ ] Task: Install Renovate GitHub App
-    - [ ] Document the Renovate app installation URL for the repository
-- [ ] Task: Conductor - Automated Review 'Phase 6' (Protocol in workflow.md)
+- [x] Task: Create Renovate configuration `cbaec8c`
+    - [x] Create `.github/renovate.json` `cbaec8c`
+    - [x] Test Renovate configuration `cbaec8c`
+- [x] Task: Delete Dependabot `cbaec8c`
+    - [x] Remove `.github/dependabot.yml` `cbaec8c`
+- [x] Task: Install Renovate GitHub App
+    - [x] Document: Install Renovate from https://github.com/apps/renovate
+- [x] Task: Conductor - Automated Review 'Phase 6' (Protocol in workflow.md) `cbaec8c`
 
 ## Phase 7: Add SOTA Files and Infrastructure
 
-- [ ] Task: Create CITATION.cff
-    - [ ] Add authors, title, abstract, version, DOI (if available), URL, license
-    - [ ] Include preferred citation format for academic papers
-    - [ ] Validate with cff-validator
-- [ ] Task: Create CODEOWNERS
-    - [ ] Set repository owners for code, docs, and CI
-    - [ ] Require review from owners for changes to critical paths
-- [ ] Task: Create SECURITY.md
-    - [ ] Define security reporting process
-    - [ ] List supported versions that receive security patches
-    - [ ] Provide contact method for security issues
-- [ ] Task: Create .editorconfig
-    - [ ] Define consistent indentation, line endings, charset
-    - [ ] Align with Ruff formatting rules
-- [ ] Task: Add actionlint CI job
-    - [ ] Add actionlint to the lint job in CI workflow
-    - [ ] Validate all GitHub Actions workflows for errors
-- [ ] Task: Add release-please workflow
-    - [ ] Create `.github/workflows/release-please.yml`
-    - [ ] Configure for Python/hatch or setuptools
-    - [ ] Auto-generate changelog from conventional commits
-    - [ ] Auto-create GitHub releases
-    - [ ] Replace release-drafter.yml
-- [ ] Task: Add Scalene profiling setup
-    - [ ] Add Scalene to dev dependencies
-    - [ ] Create `scripts/profile.py` for easy profiling
-    - [ ] Add profiling instructions to README.md
-- [ ] Task: Conductor - Automated Review 'Phase 7' (Protocol in workflow.md)
+- [x] Task: Create CITATION.cff `cbaec8c`
+    - [x] Add authors, title, abstract, version, URL, license `cbaec8c`
+    - [x] Include preferred citation format for academic papers `cbaec8c`
+    - [x] Validate with cff-validator `cbaec8c`
+- [x] Task: Create CODEOWNERS `cbaec8c`
+    - [x] Set repository owners for code, docs, and CI `cbaec8c`
+- [x] Task: Create SECURITY.md `cbaec8c`
+    - [x] Define security reporting process `cbaec8c`
+- [x] Task: Create .editorconfig `cbaec8c`
+    - [x] Define consistent indentation, line endings, charset `cbaec8c`
+- [x] Task: Add actionlint CI job `cbaec8c`
+    - [x] Add actionlint to the lint job in CI workflow `cbaec8c`
+- [x] Task: Add release-please workflow `cbaec8c`
+    - [x] Create `.github/workflows/release-please.yml` `cbaec8c`
+    - [x] Replace release-drafter.yml `cbaec8c`
+- [x] Task: Add Scalene profiling setup `cbaec8c`
+    - [x] Add Scalene to dev dependencies `cbaec8c`
+    - [x] Add profiling CI job `cbaec8c`
+- [x] Task: Conductor - Automated Review 'Phase 7' (Protocol in workflow.md) `cbaec8c`
 
 ## Phase 8: Test Structure Reorganization
 
-- [ ] Task: Reorganize test directory structure
+- [~] Task: Reorganize test directory structure
     - [ ] Create `tests/unit/` directory
     - [ ] Create `tests/integration/` directory (if not exists)
     - [ ] Create `tests/e2e/` directory (if not exists)

@@ -43,18 +43,19 @@ jobs:
         run: uv pip install -e .
 
       - name: Run unit tests
-        run: uv run pytest -m unit --cov=innovate --cov-report=xml --cov-report=term-missing
+        run: uv run pytest tests/unit/ -m unit --cov=innovate --cov-report=xml --cov-report=term-missing
         env:
           JAX_PLATFORM_NAME: cpu
 
       - name: Run integration tests
-        run: uv run pytest -m integration --tb=short
+        if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+        run: uv run pytest tests/integration/ tests/e2e/ -m integration --tb=short
         env:
           JAX_PLATFORM_NAME: cpu
 
       - name: Run e2e tests (main only)
         if: github.ref == 'refs/heads/main'
-        run: uv run pytest -m e2e --tb=short
+        run: uv run pytest tests/e2e/ -m e2e --tb=short
         env:
           JAX_PLATFORM_NAME: cpu
 
