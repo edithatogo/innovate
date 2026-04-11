@@ -32,23 +32,23 @@ class TestBackendFunctionality:
         assert backend is not None
         # Should have a name attribute or be identifiable
         backend_name = str(type(backend).__name__)
-        assert 'Backend' in backend_name
+        assert "Backend" in backend_name
 
     def test_use_backend_numpy(self):
         """Test switching to numpy backend."""
         original_backend = current_backend
 
-        use_backend('numpy')
-        assert 'NumPy' in str(type(current_backend).__name__)
+        use_backend("numpy")
+        assert "NumPy" in str(type(current_backend).__name__)
 
         # Restore original backend
-        if 'Jax' in str(type(original_backend).__name__):
+        if "Jax" in str(type(original_backend).__name__):
             try:
-                use_backend('jax')
+                use_backend("jax")
             except ImportError:
                 pass  # JAX not available
         else:
-            use_backend('numpy')
+            use_backend("numpy")
 
     def test_use_backend_invalid(self):
         """Test that invalid backend raises ValueError."""
@@ -61,23 +61,23 @@ class TestBackendFunctionality:
 
         # Test that backend names are case sensitive
         with pytest.raises(ValueError, match="Unknown backend"):
-            use_backend('NUMPY')
+            use_backend("NUMPY")
 
         # Restore original backend
-        if 'Jax' in str(type(original_backend).__name__):
+        if "Jax" in str(type(original_backend).__name__):
             try:
-                use_backend('jax')
+                use_backend("jax")
             except ImportError:
                 pass
         else:
-            use_backend('numpy')
+            use_backend("numpy")
 
     def test_backend_switching_preserves_functionality(self):
         """Test that backend switching preserves model functionality."""
         original_backend = current_backend
 
         # Test with numpy backend
-        use_backend('numpy')
+        use_backend("numpy")
         model = BassModel()
         model.params_ = {"p": 0.02, "q": 0.3, "m": 1000}
 
@@ -86,7 +86,7 @@ class TestBackendFunctionality:
 
         # Try JAX backend if available
         try:
-            use_backend('jax')
+            use_backend("jax")
             predictions_jax = model.predict(t)
 
             # Results should be very similar (allowing for numerical differences)
@@ -96,13 +96,13 @@ class TestBackendFunctionality:
             pass
 
         # Restore original backend
-        if 'Jax' in str(type(original_backend).__name__):
+        if "Jax" in str(type(original_backend).__name__):
             try:
-                use_backend('jax')
+                use_backend("jax")
             except ImportError:
                 pass
         else:
-            use_backend('numpy')
+            use_backend("numpy")
 
 
 class TestUtilsModelEvaluation:
@@ -120,7 +120,7 @@ class TestUtilsModelEvaluation:
         metrics = get_fit_metrics(self.model, self.t, self.y)
 
         assert isinstance(metrics, dict)
-        expected_metrics = ['MSE', 'RMSE', 'MAE', 'R-squared', 'MAPE']
+        expected_metrics = ["MSE", "RMSE", "MAE", "R-squared", "MAPE"]
         for metric in expected_metrics:
             assert metric in metrics
             assert isinstance(metrics[metric], (int, float))
@@ -133,13 +133,13 @@ class TestUtilsModelEvaluation:
         metrics = get_fit_metrics(self.model, self.t, y_perfect)
 
         # MSE and RMSE should be very close to 0
-        assert metrics['MSE'] < 1e-10
-        assert metrics['RMSE'] < 1e-5
-        assert metrics['MAE'] < 1e-10
+        assert metrics["MSE"] < 1e-10
+        assert metrics["RMSE"] < 1e-5
+        assert metrics["MAE"] < 1e-10
         # R² should be very close to 1
-        assert metrics['R-squared'] > 0.999
+        assert metrics["R-squared"] > 0.999
         # MAPE should be very small
-        assert metrics['MAPE'] < 0.01
+        assert metrics["MAPE"] < 0.01
 
     def test_get_fit_metrics_poor_fit(self):
         """Test metrics with deliberately poor fit."""
@@ -150,9 +150,9 @@ class TestUtilsModelEvaluation:
         metrics = get_fit_metrics(poor_model, self.t, self.y)
 
         # Should have poor metrics
-        assert metrics['MSE'] > 1000  # High error
-        assert metrics['R-squared'] < 0.5   # Poor fit
-        assert metrics['MAPE'] > 50  # High percentage error
+        assert metrics["MSE"] > 1000  # High error
+        assert metrics["R-squared"] < 0.5  # Poor fit
+        assert metrics["MAPE"] > 50  # High percentage error
 
     def test_model_aic_basic(self):
         """Test AIC calculation."""
@@ -200,10 +200,10 @@ class TestUtilsModelEvaluation:
         metrics = get_fit_metrics(self.model, self.t, y_constant)
 
         # R² should handle zero variance case
-        assert 'R-squared' in metrics
+        assert "R-squared" in metrics
         # Other metrics should still be calculable
-        assert np.isfinite(metrics['MSE'])
-        assert np.isfinite(metrics['MAE'])
+        assert np.isfinite(metrics["MSE"])
+        assert np.isfinite(metrics["MAE"])
 
     def test_metrics_with_negative_values(self):
         """Test metrics with negative observed values."""
@@ -214,11 +214,11 @@ class TestUtilsModelEvaluation:
         metrics = get_fit_metrics(self.model, self.t, y_with_negatives)
 
         # Should still calculate basic metrics
-        assert np.isfinite(metrics['MSE'])
-        assert np.isfinite(metrics['MAE'])
-        assert np.isfinite(metrics['R-squared'])
+        assert np.isfinite(metrics["MSE"])
+        assert np.isfinite(metrics["MAE"])
+        assert np.isfinite(metrics["R-squared"])
         # MAPE might be affected by negative values, but should not crash
-        assert 'MAPE' in metrics
+        assert "MAPE" in metrics
 
 
 class TestUtilsPreprocessing:
@@ -226,7 +226,7 @@ class TestUtilsPreprocessing:
 
     def test_ensure_datetime_index_with_datetime(self):
         """Test ensure_datetime_index with already datetime index."""
-        dates = pd.date_range('2020-01-01', periods=5, freq='D')
+        dates = pd.date_range("2020-01-01", periods=5, freq="D")
         series = pd.Series([1, 2, 3, 4, 5], index=dates)
 
         result = ensure_datetime_index(series)
@@ -236,14 +236,14 @@ class TestUtilsPreprocessing:
 
     def test_ensure_datetime_index_with_string_dates(self):
         """Test ensure_datetime_index with string date index."""
-        string_dates = ['2020-01-01', '2020-01-02', '2020-01-03']
+        string_dates = ["2020-01-01", "2020-01-02", "2020-01-03"]
         series = pd.Series([1, 2, 3], index=string_dates)
 
         result = ensure_datetime_index(series)
 
         assert isinstance(result.index, pd.DatetimeIndex)
         assert len(result) == len(series)
-        assert result.index[0] == pd.Timestamp('2020-01-01')
+        assert result.index[0] == pd.Timestamp("2020-01-01")
 
     def test_ensure_datetime_index_with_numeric_dates(self):
         """Test ensure_datetime_index with numeric index (timestamps)."""
@@ -260,7 +260,7 @@ class TestUtilsPreprocessing:
 
     def test_ensure_datetime_index_invalid_strings(self):
         """Test ensure_datetime_index with invalid date strings."""
-        invalid_dates = ['not-a-date', 'also-invalid', 'nope']
+        invalid_dates = ["not-a-date", "also-invalid", "nope"]
         series = pd.Series([1, 2, 3], index=invalid_dates)
 
         with pytest.raises(ValueError):
@@ -268,7 +268,7 @@ class TestUtilsPreprocessing:
 
     def test_ensure_datetime_index_mixed_types(self):
         """Test ensure_datetime_index with mixed index types."""
-        mixed_index = [1, '2020-01-02', 'invalid']
+        mixed_index = [1, "2020-01-02", "invalid"]
         series = pd.Series([1, 2, 3], index=mixed_index)
 
         with pytest.raises(ValueError):
@@ -374,12 +374,13 @@ class TestEdgeCasesAndErrorHandling:
 
         # Mock predict to return inf values
         original_predict = model.predict
+
         def mock_predict(t):
             result = original_predict(t)
             result[0] = np.inf  # Inject inf value
             return result
 
-        with patch.object(model, 'predict', side_effect=mock_predict):
+        with patch.object(model, "predict", side_effect=mock_predict):
             t = [1, 2, 3, 4, 5]
             y = [10, 20, 30, 40, 50]
 
@@ -387,7 +388,7 @@ class TestEdgeCasesAndErrorHandling:
             try:
                 metrics = get_fit_metrics(model, t, y)
                 # Should either exclude inf values or return inf metrics
-                assert 'mse' in metrics
+                assert "mse" in metrics
             except (ValueError, RuntimeError):
                 # Raising error for inf values is also acceptable
                 pass
@@ -403,7 +404,7 @@ class TestEdgeCasesAndErrorHandling:
         try:
             metrics = get_fit_metrics(model, t, y)
             # Should handle NaN appropriately
-            assert 'mse' in metrics
+            assert "mse" in metrics
         except (ValueError, RuntimeError):
             # Raising error for NaN is also acceptable
             pass
@@ -421,10 +422,10 @@ class TestEdgeCasesAndErrorHandling:
 
         # Switch backend (if possible)
         try:
-            if 'NumPy' in str(type(original_backend).__name__):
-                use_backend('jax')
+            if "NumPy" in str(type(original_backend).__name__):
+                use_backend("jax")
             else:
-                use_backend('numpy')
+                use_backend("numpy")
         except (ValueError, ImportError):
             pass
 
@@ -435,13 +436,13 @@ class TestEdgeCasesAndErrorHandling:
         np.testing.assert_allclose(predictions1, predictions2, rtol=1e-6)
 
         # Restore original backend
-        if 'Jax' in str(type(original_backend).__name__):
+        if "Jax" in str(type(original_backend).__name__):
             try:
-                use_backend('jax')
+                use_backend("jax")
             except ImportError:
                 pass
         else:
-            use_backend('numpy')
+            use_backend("numpy")
 
     def test_empty_input_handling(self):
         """Test handling of empty inputs."""

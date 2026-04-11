@@ -1,4 +1,5 @@
 """Tests for validation utilities."""
+
 import numpy as np
 import pytest
 
@@ -178,6 +179,7 @@ class TestValidateCovariates:
 
     def test_covariates_not_iterable(self):
         """Test when covariates object doesn't have __iter__ method."""
+
         class NotIterable:
             def __getitem__(self, index):
                 if index == 0:
