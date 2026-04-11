@@ -70,10 +70,8 @@ dev = [
   "pytest-cov>=4.1",
   "syrupy>=4.6",
   "hypothesis>=6.96",
-  # Visualization (needed for test suite)
-  "matplotlib>=3.7",
   # Mutation testing
-  "mutmut>=2.4,<3.0",
+  "mutmut>=2.4",
   # Performance profiling
   "scalene>=1.5",
   # Linting & formatting (Ruff replaces Black, isort, flake8, pylint, vulture, unimport)
@@ -312,8 +310,7 @@ ignore_errors = true
 [tool.mutmut]
 paths_to_mutate = ["src/innovate/"]
 backup = false
-runner = "python -m pytest"
-tests_dir = "tests"
+runner = "JAX_PLATFORM_NAME=cpu python -m pytest"
 
 # ---------------------------------------------------------------------------
 # bandit — security scanning

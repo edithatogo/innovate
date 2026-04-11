@@ -1,0 +1,17 @@
+{
+    "exit_code_by_key": {
+        "innovate.preprocess.time_series.x_rolling_average__mutmut_1": null,
+        "innovate.preprocess.time_series.x_rolling_average__mutmut_2": null,
+        "innovate.preprocess.time_series.x_rolling_average__mutmut_3": null,
+        "innovate.preprocess.time_series.x_rolling_average__mutmut_4": null,
+        "innovate.preprocess.time_series.x_sarima_fit__mutmut_1": null,
+        "innovate.preprocess.time_series.x_sarima_fit__mutmut_2": null,
+        "innovate.preprocess.time_series.x_sarima_fit__mutmut_3": null,
+        "innovate.preprocess.time_series.x_sarima_fit__mutmut_4": null,
+        "innovate.preprocess.time_series.x_sarima_fit__mutmut_5": null,
+        "innovate.preprocess.time_series.x_sarima_fit__mutmut_6": null
+    },
+    "durations_by_key": {},
+    "type_check_error_by_key": {},
+    "estimated_durations_by_key": {}
+}

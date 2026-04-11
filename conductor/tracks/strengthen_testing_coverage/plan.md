@@ -96,7 +96,7 @@
 
 - [~] Task: Configure and run mutation testing with mutmut
     - [x] Set up mutmut configuration for all core modules (in pyproject.toml) `cbaec8c`
-    - [ ] Run initial mutation testing pass (pre-existing code quality issue)
+    - [~] Run initial mutation testing pass
     - [ ] Identify surviving mutants
     - [ ] Write additional tests to kill surviving mutants
     - [ ] Target: >70% mutation score
