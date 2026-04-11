@@ -2,17 +2,17 @@
 
 ## Phase 1: Dependency Migration to uv
 
-- [ ] Task: Analyze current dependency structure
-    - [ ] Review pyproject.toml dependencies and optional-dependencies
-    - [ ] Review requirements.txt for any missing dependencies
-    - [ ] Identify version constraints that need updating
-- [ ] Task: Rewrite pyproject.toml for uv
-    - [ ] Convert to uv-compatible format with proper dependency groups
-    - [ ] Add uv-specific settings (override files, constraint files)
-    - [ ] Pin Python minimum to 3.10 (3.8/3.9 are EOL)
-    - [ ] Organize dependencies with clear comments
-    - [ ] Add tool configurations for all SOTA tools
-- [ ] Task: Generate uv.lock and verify
+- [x] Task: Analyze current dependency structure `f61e0b9`
+    - [x] Review pyproject.toml dependencies and optional-dependencies `f61e0b9`
+    - [x] Review requirements.txt for any missing dependencies `f61e0b9`
+    - [x] Identify version constraints that need updating `f61e0b9`
+- [x] Task: Rewrite pyproject.toml for uv
+    - [x] Convert to uv-compatible format with proper dependency groups
+    - [x] Add uv-specific settings (override files, constraint files)
+    - [x] Pin Python minimum to 3.10 (3.8/3.9 are EOL)
+    - [x] Organize dependencies with clear comments
+    - [x] Add tool configurations for all SOTA tools
+- [~] Task: Generate uv.lock and verify
     - [ ] Run `uv lock` to generate lockfile
     - [ ] Run `uv sync` to verify all dependencies resolve correctly
     - [ ] Verify `uv run pytest` works with uv-managed environment

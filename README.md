@@ -71,6 +71,22 @@ The `innovate` library is under active development. For detailed plans on upcomi
 
 ## Installation
 
+### Using uv (Recommended)
+
+```bash
+# Clone and install with uv
+git clone https://github.com/edithatogo/innovate.git
+cd innovate
+uv sync
+```
+
+For development with all tooling:
+```bash
+uv sync --all-extras
+```
+
+### Using pip
+
 ```bash
 pip install innovate
 ```

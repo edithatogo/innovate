@@ -78,7 +78,8 @@ class PolicyIntervention:
                 if p == 0:
                     pred = m * (1 - np.exp(-q * t_val))
                 else:
-                
+                    pred = m * (1 - expo) / (1 + (q / p) * expo)
+
                 # Handle edge case when p is zero to avoid division by zero
                 if np.isclose(p, 0):
                     # When p≈0, use limit form or return 0 if both p and q are ≈0

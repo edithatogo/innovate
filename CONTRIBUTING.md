@@ -26,10 +26,8 @@ This project and everyone participating in it is governed by our [Code of Conduc
 
 1. Fork the repository
 2. Clone your fork: `git clone https://github.com/yourusername/innovate.git`
-3. Create a virtual environment: `python -m venv venv && source venv/bin/activate`
-4. Install dependencies: `pip install -r requirements.txt`
-5. Install in development mode: `pip install -e .`
-6. Install pre-commit hooks: `pre-commit install`
+3. Install dependencies with uv: `uv sync --all-extras`
+4. Install pre-commit hooks: `uv run pre-commit install`
 
 #### Pull Request Process
 
@@ -65,26 +63,31 @@ This project and everyone participating in it is governed by our [Code of Conduc
 ### Testing
 Run all tests with:
 ```bash
-pytest
+uv run pytest
 ```
 
 Run tests with coverage:
 ```bash
-pytest --cov=innovate --cov-report=html
+uv run pytest --cov=innovate --cov-report=html
+```
+
+Run unit tests only (fast feedback):
+```bash
+uv run pytest -m unit
 ```
 
 ### Linting and Formatting
-The project uses pre-commit hooks to enforce code quality. Ensure you've installed them:
+The project uses Ruff for all linting and formatting, enforced via pre-commit hooks:
 ```bash
-pre-commit install
+uv run ruff check .        # Lint
+uv run ruff format .       # Format
+uv run ruff check . --fix  # Auto-fix
 ```
 
-Manual formatting and linting:
+Type checking:
 ```bash
-black .
-isort .
-flake8
-mypy src/
+uv run ty check src/       # Primary type checker
+uv run mypy src/           # Secondary (strict mode)
 ```
 
 ## Project Structure

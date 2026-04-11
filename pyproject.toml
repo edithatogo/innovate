@@ -1,33 +1,111 @@
+# innovate — A Python library for simplifying innovation/policy diffusion modelling.
+# Managed by uv. See https://github.com/astral-sh/uv
+
 [project]
 name = "innovate"
 version = "0.5.0"
 description = "A Python library for simplifying innovation/policy diffusion modelling."
-authors = [
-    { name = "Dylan A Mordaunt", email = "dylan.mordaunt@vuw.ac.nz" }
-]
-dependencies = [
-    "numpy",
-    "scipy",
-    "pandas",
-    "statsmodels",
-    "pyarrow",
-    "jitcdde",
-    "mesa",
-    "networkx",
-    "ruptures",
-    "pymannkendall",
-    "typing_extensions",
-    "pytensor",
-    "ndlib"
-]
-requires-python = ">=3.8"
-readme = "README.md"
+requires-python = ">=3.10"
 license = "Apache-2.0"
+readme = "README.md"
+authors = [
+  { name = "Dylan A Mordaunt", email = "dylan.mordaunt@vuw.ac.nz" },
+]
+
+# ---------------------------------------------------------------------------
+# Core runtime dependencies
+# ---------------------------------------------------------------------------
+dependencies = [
+  # Numerical / scientific
+  "numpy>=1.24",
+  "scipy>=1.10",
+  # Data handling
+  "pandas>=2.0",
+  "pyarrow>=14.0",
+  # Statistics / econometrics
+  "statsmodels>=0.14",
+  # Agent-based modeling & networks
+  "mesa>=2.0",
+  "networkx>=3.0",
+  "ndlib>=5.1",
+  # Differential equations
+  "jitcdde>=1.8",
+  # Change-point / trend detection
+  "ruptures>=1.1",
+  "pymannkendall>=1.4",
+  # Symbolic / tensor computation
+  "pytensor>=2.18",
+  # Compatibility
+  "typing-extensions>=4.7",
+]
 
 [project.urls]
 Homepage = "https://github.com/edithatogo/innovate"
 Documentation = "https://edithatogo.github.io/innovate"
 
+# ---------------------------------------------------------------------------
+# Optional dependency groups
+# ---------------------------------------------------------------------------
+[project.optional-dependencies]
+# JAX / Bayesian high-performance backend
+jax = [
+  "jax>=0.4.20",
+  "jaxlib>=0.4.20",
+  "numpyro>=0.13.2",
+  "diffrax>=0.5",
+  "blackjax>=1.0",
+  "arviz>=0.17",
+  "jaxopt>=0.8",
+]
+
+[dependency-groups]
+# ---------------------------------------------------------------------------
+# Development, testing, linting, and documentation tools
+# ---------------------------------------------------------------------------
+dev = [
+  # Testing
+  "pytest>=7.4",
+  "pytest-xdist>=3.5",
+  "pytest-benchmark>=4.0",
+  "pytest-cov>=4.1",
+  "syrupy>=4.6",
+  "hypothesis>=6.96",
+  # Mutation testing
+  "mutmut>=2.4",
+  # Performance profiling
+  "scalene>=1.5",
+  # Linting & formatting (Ruff replaces Black, isort, flake8, pylint, vulture, unimport)
+  "ruff>=0.4.0",
+  # Type checking
+  "ty>=0.0.1a8",
+  "mypy>=1.8",
+  # Security
+  "bandit>=1.7",
+  "safety>=3.0",
+  # Pre-commit
+  "pre-commit>=3.6",
+  # Documentation
+  "sphinx>=7.2",
+  "sphinx-rtd-theme>=2.0",
+  "sphinx-autodoc-typehints>=1.25",
+  "myst-parser>=2.0",
+  # Notebook quality
+  "nbqa>=1.7",
+  "nbstripout>=0.7",
+  # Schema / data validation
+  "pandera>=0.18",
+  "pydantic>=2.5",
+  # Code complexity
+  "lizard>=1.17",
+  # Conventional commits
+  "commitizen>=3.13",
+  # pyproject.toml formatting
+  "pyproject-fmt>=1.7",
+]
+
+# ---------------------------------------------------------------------------
+# Build system
+# ---------------------------------------------------------------------------
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
@@ -35,71 +113,205 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+# ===========================================================================
+# Tool configurations
+# ===========================================================================
+
+# ---------------------------------------------------------------------------
+# pytest — three-tier test structure
+# ---------------------------------------------------------------------------
 [tool.pytest.ini_options]
-pythonpath = [
-  "src",
-  "fitters",
-]
-minversion = "6.0"
-addopts = "-ra -q -n auto"
-testpaths = [
-    "tests",
-    "integration",
-]
+pythonpath = ["src"]
+minversion = "7.0"
+addopts = "-ra -q --tb=short"
+testpaths = ["tests"]
 markers = [
-    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+  "unit: Unit tests (individual functions/classes)",
+  "integration: Integration tests (cross-module interactions)",
+  "e2e: End-to-end tests (complete user workflows)",
+  "slow: Marks tests as slow (deselect with '-m \"not slow\"')",
 ]
 
-[project.optional-dependencies]
-jax = ["jax>=0.4.20", "jaxlib>=0.4.20", "numpyro>=0.13.2", "scipy>=1.9", "numpy<3", "diffrax", "jaxopt", "blackjax", "arviz"]
-dev = ["pytest", "pytest-xdist", "pytest-benchmark", "pytest-profiling", "syrupy", "ruff", "pre-commit", "mypy", "pyright", "ty", "bandit", "pandera", "pydantic", "hypothesis", "nbqa", "nbstripout", "sphinx", "sphinx-rtd-theme", "sphinx-autodoc-typehints", "safety", "pylint", "vulture", "unimport", "mutmut", "lizard"]
-
+# ---------------------------------------------------------------------------
+# Ruff — single tool replaces Black, isort, flake8, pylint, vulture, unimport
+# ---------------------------------------------------------------------------
 [tool.ruff]
-exclude = ["*.ipynb"]
+target-version = "py310"
+exclude = [
+  ".bzr",
+  ".direnv",
+  ".eggs",
+  ".git",
+  ".hg",
+  ".mypy_cache",
+  ".nox",
+  ".pants.d",
+  ".pytype",
+  ".ruff_cache",
+  ".svn",
+  ".tox",
+  ".venv",
+  "__pypackages__",
+  "_build",
+  "build",
+  "dist",
+  "node_modules",
+  "*.egg-info",
+  "*.ipynb",
+]
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+  "F",     # pyflakes
+  "E",     # pycodestyle errors
+  "W",     # pycodestyle warnings
+  "I",     # isort
+  "UP",    # pyupgrade
+  "B",     # flake8-bugbear
+  "SIM",   # flake8-simplify
+  "C4",    # flake8-comprehensions
+  "C90",   # mccabe complexity
+  "N",     # pep8-naming
+  "D",     # pydocstyle
+  "RUF",   # ruff-specific rules
+  "TID",   # flake8-tidy-imports
+  "PT",    # flake8-pytest-style
+  "RET",   # flake8-return
+  "SLF",   # flake8-self
+  "ARG",   # flake8-unused-arguments
+  "PTH",   # flake8-use-pathlib
+  "PL",    # pylint rules (via ruff)
+  "TRY",   # tryceratops
+  "FBT",   # flake8-boolean-trap
+  "PERF",  # perflint
+  "FURB",  # refurb
+]
+ignore = [
+  "D100",   # Missing docstring in public module
+  "D104",   # Missing docstring in public package
+  "D203",   # 1 blank line required before class docstring (conflicts with D211)
+  "D213",   # Multi-line docstring summary should start at second line
+  "PLR0913", # Too many arguments
+  "PLR2004", # Magic value comparison
+  "TRY003", # Avoid specifying long messages outside exception class
+  "FBT001", # Boolean positional arg in function definition
+  "FBT002", # Boolean default positional arg in function definition
+  "RET504", # Unnecessary assignment before return
+  "SIM108", # Use ternary operator
+]
 
 [tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["D", "PLR2004", "SLF001", "S101"]
 "src/innovate/dynamics/contagion.py" = ["E741"]
 "src/innovate/dynamics/contagion/seir.py" = ["E741"]
 "src/innovate/dynamics/contagion/sir.py" = ["E741"]
 "src/innovate/dynamics/contagion/sis.py" = ["E741"]
 
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.lint.isort]
+known-first-party = ["innovate"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+# ---------------------------------------------------------------------------
+# ty — primary type checker (Astral)
+# ---------------------------------------------------------------------------
+[tool.ty]
+src = ["src"]
+
+# ---------------------------------------------------------------------------
+# mypy — secondary type checker (strict mode)
+# ---------------------------------------------------------------------------
 [tool.mypy]
-# Basic strictness settings
-python_version = "3.9"  # Minimum for pytensor compatibility
+python_version = "3.10"
 warn_return_any = true
 warn_unused_configs = true
 warn_unused_ignores = true
 warn_redundant_casts = true
 warn_unreachable = true
-
-# Type checking strictness
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
 check_untyped_defs = true
 disallow_untyped_decorators = true
-
-# Additional strictness (applied carefully)
 disallow_any_unimported = false
 disallow_subclassing_any = false
 disallow_any_generics = false
 enable_error_code = ["ignore-without-code", "redundant-self", "truthy-iterable"]
-
-# Ignore missing imports for external libraries
 ignore_missing_imports = true
-
-# Additional settings
 show_error_codes = true
 show_error_context = true
 pretty = true
 
-# Per-module settings to handle external libraries that cause issues
 [[tool.mypy.overrides]]
-module = ["pytensor.*", "diffrax.*", "jax.*", "jaxlib.*", "numpyro.*", "arviz.*", "blackjax.*"]
+module = [
+  "pytensor.*",
+  "diffrax.*",
+  "jax.*",
+  "jaxlib.*",
+  "numpyro.*",
+  "arviz.*",
+  "blackjax.*",
+  "jitcdde.*",
+  "ndlib.*",
+  "mesa.*",
+  "ruptures.*",
+  "pymannkendall.*",
+]
 ignore_errors = true
 
+# ---------------------------------------------------------------------------
+# mutmut — mutation testing
+# ---------------------------------------------------------------------------
 [tool.mutmut]
 paths_to_mutate = ["src/innovate/"]
 backup = false
 runner = "JAX_PLATFORM_NAME=cpu python -m pytest"
 tests_dir = "tests/"
 
+# ---------------------------------------------------------------------------
+# bandit — security scanning
+# ---------------------------------------------------------------------------
+[tool.bandit]
+exclude_dirs = ["tests", ".venv", "build", "dist"]
+skips = ["B101"]  # assert_used
+
+# ---------------------------------------------------------------------------
+# commitizen — conventional commits
+# ---------------------------------------------------------------------------
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.5.0"
+tag_format = "v$version"
+changelog_file = "CHANGELOG.md"
+update_changelog_on_bump = true
+
+# ---------------------------------------------------------------------------
+# pyproject-fmt — auto-format pyproject.toml
+# ---------------------------------------------------------------------------
+[tool.pyproject-fmt]
+max_supported_python = "3.13"
+
+# ---------------------------------------------------------------------------
+# coverage — measurement
+# ---------------------------------------------------------------------------
+[tool.coverage.run]
+source = ["src/innovate"]
+branch = true
+omit = ["tests/**", "**/__init__.py"]
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true
+skip_empty = true
+exclude_lines = [
+  "pragma: no cover",
+  "if TYPE_CHECKING:",
+  "raise NotImplementedError",
+]
