@@ -7,11 +7,11 @@
     - [x] Review requirements.txt for any missing dependencies `f61e0b9`
     - [x] Identify version constraints that need updating `f61e0b9`
 - [x] Task: Rewrite pyproject.toml for uv
-    - [x] Convert to uv-compatible format with proper dependency groups
-    - [x] Add uv-specific settings (override files, constraint files)
-    - [x] Pin Python minimum to 3.10 (3.8/3.9 are EOL)
-    - [x] Organize dependencies with clear comments
-    - [x] Add tool configurations for all SOTA tools
+    - [x] Convert to uv-compatible format with proper dependency groups `dd9c657`
+    - [x] Add uv-specific settings (override files, constraint files) `dd9c657`
+    - [x] Pin Python minimum to 3.10 (3.8/3.9 are EOL) `dd9c657`
+    - [x] Organize dependencies with clear comments `dd9c657`
+    - [x] Add tool configurations for all SOTA tools `dd9c657`
 - [x] Task: Generate uv.lock and verify `dd9c657`
     - [x] Run `uv lock` to generate lockfile `dd9c657`
     - [x] Run `uv sync` to verify all dependencies resolve correctly `dd9c657`
@@ -24,26 +24,26 @@
 
 ## Phase 2: Ruff Consolidation (Replace Black, isort, flake8, Pylint, vulture, unimport)
 
-- [~] Task: Configure Ruff as the single linting/formatting tool
-    - [ ] Update `[tool.ruff]` section in pyproject.toml with comprehensive rules
-    - [ ] Enable: F (pyflakes), E/W (pycodestyle), I (isort), B (bugbear), SIM (simplify), UP (pyupgrade), RUF (ruff-specific), C90 (mccabe), N (naming), D (docstyle)
-    - [ ] Configure Ruff format to replace Black
-    - [ ] Add per-file ignores for legacy code that can't be immediately fixed
-    - [ ] Configure Ruff to detect unused imports/variables (replaces vulture + unimport)
-- [ ] Task: Remove legacy linting tools
-    - [ ] Remove Black, isort, flake8, Pylint, vulture, unimport from dev dependencies
-    - [ ] Remove their configurations from pyproject.toml
-    - [ ] Update all CI workflow references to use Ruff
-- [ ] Task: Run Ruff and fix violations
-    - [ ] Run `uv run ruff check . --fix` to auto-fix what's possible
-    - [ ] Manually review and fix remaining violations
-    - [ ] Run `uv run ruff format .` to format all code
-    - [ ] Verify no linting errors remain
-- [ ] Task: Conductor - Automated Review 'Phase 2' (Protocol in workflow.md)
+- [x] Task: Configure Ruff as the single linting/formatting tool `1b6f694`
+    - [x] Update `[tool.ruff]` section in pyproject.toml with comprehensive rules `1b6f694`
+    - [x] Enable: F (pyflakes), E/W (pycodestyle), I (isort), B (bugbear), SIM (simplify), UP (pyupgrade), RUF (ruff-specific), C90 (mccabe), N (naming), D (docstyle) `1b6f694`
+    - [x] Configure Ruff format to replace Black `1b6f694`
+    - [x] Add per-file ignores for legacy code that can't be immediately fixed `1b6f694`
+    - [x] Configure Ruff to detect unused imports/variables (replaces vulture + unimport) `1b6f694`
+- [x] Task: Remove legacy linting tools `1b6f694`
+    - [x] Remove Black, isort, flake8, Pylint, vulture, unimport from dev dependencies `1b6f694`
+    - [x] Remove their configurations from pyproject.toml `1b6f694`
+    - [x] Update all CI workflow references to use Ruff `1b6f694`
+- [x] Task: Run Ruff and fix violations `1b6f694`
+    - [x] Run `uv run ruff check . --fix` to auto-fix what's possible `1b6f694`
+    - [x] Manually review and fix remaining violations `1b6f694`
+    - [x] Run `uv run ruff format .` to format all code `1b6f694`
+    - [x] Verify no linting errors remain `1b6f694`
+- [x] Task: Conductor - Automated Review 'Phase 2' (Protocol in workflow.md) `1b6f694`
 
 ## Phase 3: Type Checking with ty + mypy
 
-- [ ] Task: Configure ty as primary type checker
+- [~] Task: Configure ty as primary type checker
     - [ ] Add `[tool.ty]` configuration to pyproject.toml
     - [ ] Run `uv run ty check src/` to identify current type issues
     - [ ] Fix critical type errors that block adoption
@@ -91,9 +91,9 @@
 - [ ] Task: Add CI Gate Monitoring workflow
     - [ ] Create `.github/workflows/ci-gate-monitor.yml`
     - [ ] Trigger on workflow_run completion
-    -   [ ] Check status of all workflows triggered by the same push
-    -   [ ] Post comment on PR or push notification if any fail
-    -   [ ] Auto-create issue for persistent CI failures
+    - [ ] Check status of all workflows triggered by the same push
+    - [ ] Post comment on PR or push notification if any fail
+    - [ ] Auto-create issue for persistent CI failures
 - [ ] Task: Delete obsolete CI workflows
     - [ ] Remove old ci.yml, python_ci.yml, lint.yml
 - [ ] Task: Conductor - Automated Review 'Phase 5' (Protocol in workflow.md)

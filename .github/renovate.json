@@ -1,0 +1,55 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits"
+  ],
+  "schedule": ["every Monday"],
+  "prHourlyLimit": 5,
+  "prConcurrentLimit": 10,
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "description": "Group all dev dependencies together",
+      "matchDepTypes": ["dev"],
+      "groupName": "dev dependencies",
+      "groupSlug": "dev-deps"
+    },
+    {
+      "description": "Group all production dependencies together",
+      "matchDepTypes": ["dependencies"],
+      "groupName": "production dependencies",
+      "groupSlug": "prod-deps"
+    },
+    {
+      "description": "Group GitHub Actions updates together",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions",
+      "groupSlug": "github-actions",
+      "pinDigests": true
+    },
+    {
+      "description": "Auto-merge patch updates that pass CI",
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "description": "Auto-merge minor updates for dev dependencies",
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchDepTypes": ["dev"],
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "description": "Include changelogs in PR descriptions",
+      "matchUpdateTypes": ["major", "minor", "patch"],
+      "changelogUrl": "https://github.com/{{depName}}"
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["security"]
+  }
+}

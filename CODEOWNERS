@@ -1,0 +1,23 @@
+# CODEOWNERS
+# These owners will be requested for review when someone opens a pull request.
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything in the repo
+* @edithatogo
+
+# Core source code
+/src/ @edithatogo
+
+# Tests
+/tests/ @edithatogo
+
+# CI/CD workflows
+/.github/workflows/ @edithatogo
+
+# Documentation
+/docs/ @edithatogo
+/README.md @edithatogo
+/CONTRIBUTING.md @edithatogo
+
+# Conductor configuration
+/conductor/ @edithatogo

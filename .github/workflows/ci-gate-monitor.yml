@@ -1,0 +1,73 @@
+name: CI Gate Monitor
+
+on:
+  workflow_run:
+    workflows: ["CI", "Release Please"]
+    types: [completed]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  monitor:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for existing failure issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const run = context.payload.workflow_run;
+            const branch = run.head_branch || run.head_branch;
+
+            // Search for existing open issues about this failure
+            const issues = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              labels: ['ci-failure'],
+              state: 'open'
+            });
+
+            const existingIssue = issues.data.find(issue =>
+              issue.title.includes(`CI failed on ${branch}`)
+            );
+
+            if (existingIssue) {
+              // Add a comment to the existing issue
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: existingIssue.number,
+                body: `**CI Failure Detected Again**\n\n- Workflow: ${run.name}\n- Branch: ${branch}\n- Run: ${run.html_url}\n- Conclusion: ${run.conclusion}\n\n@${run.head_commit?.author?.username || 'maintainer'} — please investigate.`
+              });
+              core.info(`Updated existing issue #${existingIssue.number}`);
+            } else {
+              // Create a new issue
+              const { data: issue } = await github.rest.issues.create({
+                owner,
+                repo,
+                title: `🚨 CI failed on ${branch}`,
+                body: `## CI Failure Report\n\n- **Workflow:** ${run.name}\n- **Branch:** ${branch}\n- **Run URL:** ${run.html_url}\n- **Conclusion:** ${run.conclusion}\n- **Triggered by:** ${run.event}\n\n### Next Steps\n1. Check the [workflow run logs](${run.html_url})\n2. Identify the failing job\n3. Fix the issue and push a new commit\n\ncc: @${run.head_commit?.author?.username || 'maintainer'}`,
+                labels: ['ci-failure', 'bug']
+              });
+              core.info(`Created issue #${issue.number}`);
+            }
+
+      - name: Post PR comment if applicable
+        if: ${{ github.event.workflow_run.pull_requests[0] }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const pr = context.payload.workflow_run.pull_requests[0];
+            const run = context.payload.workflow_run;
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: pr.number,
+              body: `⚠️ **CI Check Failed**\n\nThe \`${run.name}\` workflow has failed.\n\n[View run logs](${run.html_url})\n\nPlease investigate and fix the failure.`
+            });

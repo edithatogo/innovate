@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "innovate: A Python library for simplifying innovation and policy diffusion modelling"
+abstract: >
+  innovate is a comprehensive, modular Python library for modeling the diffusion,
+  substitution, competition, and dynamics of innovations, technologies, and policies
+  over time. It provides a flexible framework for researchers and practitioners in
+  economics, marketing, public policy, and technology forecasting, supporting
+  everything from classic S-curve models to advanced agent-based simulations.
+authors:
+  - family-names: Mordaunt
+    given-names: Dylan A.
+    email: dylan.mordaunt@vuw.ac.nz
+    affiliation: "Victoria University of Wellington"
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+version: 0.5.0
+license: Apache-2.0
+repository-code: "https://github.com/edithatogo/innovate"
+url: "https://github.com/edithatogo/innovate"
+keywords:
+  - "innovation diffusion"
+  - "policy diffusion"
+  - "Bass model"
+  - "technology adoption"
+  - "agent-based modeling"
+  - "competition modeling"
+  - "substitution modeling"
+  - "hype cycle"
+  - "python"
