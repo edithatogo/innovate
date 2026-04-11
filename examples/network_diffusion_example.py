@@ -1,4 +1,5 @@
 """Example of a network diffusion model."""
+
 import networkx as nx
 import numpy as np
 
@@ -32,12 +33,8 @@ def run_network_diffusion_example() -> None:
         for node in g.nodes():
             if not current_states[node]:  # If not yet adopted
                 # Check if any adopted neighbors exist
-                adopted_neighbors = [
-                    n for n in g.neighbors(node) if current_states.get(n, False)
-                ]
-                if (
-                    adopted_neighbors
-                ):  # Simple rule: adopt if at least one neighbor adopted
+                adopted_neighbors = [n for n in g.neighbors(node) if current_states.get(n, False)]
+                if adopted_neighbors:  # Simple rule: adopt if at least one neighbor adopted
                     newly_adopted_this_step.add(node)
 
         # Update states for the next step

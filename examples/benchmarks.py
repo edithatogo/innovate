@@ -1,4 +1,5 @@
 """Benchmarks for the innovate library."""
+
 import sys
 import timeit
 from pathlib import Path

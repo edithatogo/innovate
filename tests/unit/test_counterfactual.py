@@ -1,6 +1,5 @@
 """Tests for the counterfactual analysis module."""
 
-
 import pytest
 
 from src.innovate.causal.counterfactual import CounterfactualAnalysis
@@ -58,7 +57,7 @@ class TestCounterfactualAnalysis:
         analysis.run_counterfactual(
             scenario_name="higher_p",
             t=t,
-            counterfactual_params={"p": 0.05}  # Higher innovation coefficient
+            counterfactual_params={"p": 0.05},  # Higher innovation coefficient
         )
 
         assert "higher_p" in analysis.counterfactual_forecasts
@@ -74,11 +73,7 @@ class TestCounterfactualAnalysis:
         t = [1, 2, 3, 4, 5]
 
         with pytest.raises(ValueError, match="Parameter 'invalid_param' not found"):
-            analysis.run_counterfactual(
-                scenario_name="invalid",
-                t=t,
-                counterfactual_params={"invalid_param": 0.05}
-            )
+            analysis.run_counterfactual(scenario_name="invalid", t=t, counterfactual_params={"invalid_param": 0.05})
 
     def test_compare_scenarios_before_baseline_raises_error(self):
         """Test that comparing scenarios without running baseline raises error."""
@@ -119,11 +114,7 @@ class TestCounterfactualAnalysis:
         analysis.run_baseline(t)
 
         # Run counterfactual
-        analysis.run_counterfactual(
-            scenario_name="test_scenario",
-            t=t,
-            counterfactual_params={"p": 0.05}
-        )
+        analysis.run_counterfactual(scenario_name="test_scenario", t=t, counterfactual_params={"p": 0.05})
 
         # Compare scenarios
         results = analysis.compare_scenarios("test_scenario")
@@ -151,11 +142,7 @@ class TestCounterfactualAnalysis:
         analysis.run_baseline(t)
 
         # Run counterfactual with different parameters
-        analysis.run_counterfactual(
-            scenario_name="test_scenario",
-            t=t,
-            counterfactual_params={"p": 0.05}
-        )
+        analysis.run_counterfactual(scenario_name="test_scenario", t=t, counterfactual_params={"p": 0.05})
 
         # Compare scenarios - this should handle division by zero scenarios
         results = analysis.compare_scenarios("test_scenario")

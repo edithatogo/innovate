@@ -149,7 +149,9 @@ class BassModel(DiffusionModel):
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
         # Validate covariates if provided
-        validated_covariates = validate_covariates_dict(covariates, self.covariates, len(t_arr)) if covariates is not None else None
+        validated_covariates = (
+            validate_covariates_dict(covariates, self.covariates, len(t_arr)) if covariates is not None else None
+        )
 
         y0 = 1e-6
 
@@ -176,6 +178,7 @@ class BassModel(DiffusionModel):
 
         # Handle different backend method signatures
         from innovate.backends.jax_backend import JaxBackend
+
         if isinstance(backend.current_backend, JaxBackend):
             # JAX backend expects 4 parameters: func, y0, t, args
             sol = backend.current_backend.solve_ode(ode_func, y0, t_arr, tuple(params))
@@ -188,7 +191,14 @@ class BassModel(DiffusionModel):
             sol = backend.current_backend.solve_ode(ode_func_numpy, y0, t_arr)
         return sol.flatten()
 
-    def differential_equation(self, t: float, y: float, params: Sequence[float], covariates: dict[str, Sequence[float]] | None, t_eval: Sequence[float]) -> float:
+    def differential_equation(
+        self,
+        t: float,
+        y: float,
+        params: Sequence[float],
+        covariates: dict[str, Sequence[float]] | None,
+        t_eval: Sequence[float],
+    ) -> float:
         """Defines the Bass model's differential equation, incorporating covariate effects if provided.
 
         At each time point, adjusts the innovation, imitation, and market size parameters by linearly combining base values with covariate contributions, then computes the instantaneous growth rate using the underlying DualInfluenceGrowth model.
@@ -269,7 +279,9 @@ class BassModel(DiffusionModel):
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
         # Validate covariates if provided
-        validated_covariates = validate_covariates_dict(covariates, self.covariates, len(t_arr)) if covariates is not None else None
+        validated_covariates = (
+            validate_covariates_dict(covariates, self.covariates, len(t_arr)) if covariates is not None else None
+        )
 
         y_pred = self.predict(t_arr, validated_covariates)
 
@@ -313,7 +325,9 @@ class BassModel(DiffusionModel):
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
         # Validate covariates if provided
-        validated_covariates = validate_covariates_dict(covariates, self.covariates, len(t_arr)) if covariates is not None else None
+        validated_covariates = (
+            validate_covariates_dict(covariates, self.covariates, len(t_arr)) if covariates is not None else None
+        )
 
         y_pred = self.predict(t_arr, validated_covariates)
 
@@ -330,10 +344,7 @@ class BassModel(DiffusionModel):
                 raise ValueError(f"Parameter '{param_name}' must be finite, got {param_val}")
 
         rates = np.array(
-            [
-                self.differential_equation(ti, yi, params, validated_covariates, t_arr)
-                for ti, yi in zip(t_arr, y_pred)
-            ],
+            [self.differential_equation(ti, yi, params, validated_covariates, t_arr) for ti, yi in zip(t_arr, y_pred)],
         )
 
         if not np.all(np.isfinite(rates)):

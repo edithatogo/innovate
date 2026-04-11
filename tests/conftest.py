@@ -1,4 +1,5 @@
 """Configuration for pytest with faulthandler enabled to catch segmentation faults."""
+
 import faulthandler
 
 # Enable faulthandler to get Python tracebacks from segmentation faults

@@ -240,10 +240,7 @@ class GompertzModel(DiffusionModel):
         params = [self._params[name] for name in self.param_names]
 
         rates = np.array(
-            [
-                self.differential_equation(ti, yi, params, covariates, t)
-                for ti, yi in zip(t, y_pred)
-            ],
+            [self.differential_equation(ti, yi, params, covariates, t) for ti, yi in zip(t, y_pred)],
         )
         return rates
 

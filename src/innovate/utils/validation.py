@@ -1,4 +1,5 @@
 """Validation utilities for the Innovate library."""
+
 import numbers
 from collections.abc import Sequence
 
@@ -10,7 +11,7 @@ def validate_sequence_numeric(sequence: Sequence, param_name: str, allow_empty: 
     if sequence is None:
         raise ValueError(f"Parameter '{param_name}' cannot be None")
 
-    if not hasattr(sequence, '__iter__') or isinstance(sequence, str):
+    if not hasattr(sequence, "__iter__") or isinstance(sequence, str):
         raise TypeError(f"Parameter '{param_name}' must be a sequence, got {type(sequence)}")
 
     if not allow_empty and len(sequence) == 0:
@@ -37,7 +38,9 @@ def validate_positive_numeric_sequence(sequence: Sequence, param_name: str) -> n
     return arr
 
 
-def validate_float(value: float | int, param_name: str, min_val: float | None = None, max_val: float | None = None) -> float:
+def validate_float(
+    value: float | int, param_name: str, min_val: float | None = None, max_val: float | None = None
+) -> float:
     """Validate that a value is a float within optional bounds."""
     if not isinstance(value, (numbers.Real, np.number)):
         raise TypeError(f"Parameter '{param_name}' must be numeric, got {type(value)}")
@@ -70,7 +73,7 @@ def validate_covariates(covariates: Sequence[str] | None, param_name: str = "cov
     if isinstance(covariates, str):
         raise TypeError(f"Parameter '{param_name}' must be a sequence of strings, not a string")
 
-    if not hasattr(covariates, '__iter__'):
+    if not hasattr(covariates, "__iter__"):
         raise TypeError(f"Parameter '{param_name}' must be a sequence of strings, got {type(covariates)}")
 
     result = []
@@ -88,7 +91,9 @@ def validate_time_series(t: Sequence, y: Sequence, param_name_t: str = "t", para
     y_arr = validate_positive_numeric_sequence(y, param_name_y)
 
     if len(t_arr) != len(y_arr):
-        raise ValueError(f"Length of '{param_name_t}' ({len(t_arr)}) must match length of '{param_name_y}' ({len(y_arr)})")
+        raise ValueError(
+            f"Length of '{param_name_t}' ({len(t_arr)}) must match length of '{param_name_y}' ({len(y_arr)})"
+        )
 
     if len(t_arr) < 2:
         raise ValueError(f"'{param_name_t}' and '{param_name_y}' must have at least 2 points for fitting")
@@ -100,7 +105,9 @@ def validate_time_series(t: Sequence, y: Sequence, param_name_t: str = "t", para
     return t_arr, y_arr
 
 
-def validate_covariates_dict(covariates_dict: dict[str, Sequence] | None, expected_covariates: Sequence[str], t_length: int) -> dict[str, np.ndarray] | None:
+def validate_covariates_dict(
+    covariates_dict: dict[str, Sequence] | None, expected_covariates: Sequence[str], t_length: int
+) -> dict[str, np.ndarray] | None:
     """Validate covariates dictionary."""
     if covariates_dict is None:
         return None
@@ -119,7 +126,9 @@ def validate_covariates_dict(covariates_dict: dict[str, Sequence] | None, expect
         cov_arr = validate_sequence_numeric(cov_values, f"covariate '{cov_name}'")
 
         if len(cov_arr) != t_length:
-            raise ValueError(f"Covariate '{cov_name}' length ({len(cov_arr)}) must match time series length ({t_length})")
+            raise ValueError(
+                f"Covariate '{cov_name}' length ({len(cov_arr)}) must match time series length ({t_length})"
+            )
 
         result[cov_name] = cov_arr
 

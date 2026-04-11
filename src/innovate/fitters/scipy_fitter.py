@@ -54,10 +54,10 @@ class ScipyFitter:
                 # Note: MultiProductDiffusionModel.fit() doesn't support weights parameter
                 # This is a limitation we acknowledge
                 import warnings
+
                 warnings.warn(
-                    "MultiProductDiffusionModel does not support sample weights. "
-                    "Weights parameter will be ignored.",
-                    UserWarning
+                    "MultiProductDiffusionModel does not support sample weights. Weights parameter will be ignored.",
+                    UserWarning,
                 )
 
             # Convert bounds format if provided
@@ -65,7 +65,7 @@ class ScipyFitter:
                 # Convert from curve_fit format to minimize format if needed
                 # This is a simplified conversion - full conversion would require
                 # understanding the parameter structure
-                kwargs['bounds'] = bounds
+                kwargs["bounds"] = bounds
 
             # Use the model's built-in fitting method
             model.fit(t, y, **kwargs)

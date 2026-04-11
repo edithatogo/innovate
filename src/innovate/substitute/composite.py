@@ -45,13 +45,13 @@ class CompositeDiffusionModel(DiffusionModel):
         names = []
         for i, model in enumerate(self.models):
             for param_name in model.param_names:
-                names.append(f"{param_name}_{i+1}")
+                names.append(f"{param_name}_{i + 1}")
 
         # Add interaction parameters
         for i in range(self.n_models):
             for j in range(self.n_models):
                 if i != j:
-                    names.append(f"alpha_{i+1}_{j+1}")
+                    names.append(f"alpha_{i + 1}_{j + 1}")
         return names
 
     def initial_guesses(
@@ -71,13 +71,13 @@ class CompositeDiffusionModel(DiffusionModel):
                 model_guesses["L"] = np.max(y_model) * 1.1
 
             for param_name, value in model_guesses.items():
-                guesses[f"{param_name}_{i+1}"] = value
+                guesses[f"{param_name}_{i + 1}"] = value
 
         # Initial guesses for interaction parameters
         for i in range(self.n_models):
             for j in range(self.n_models):
                 if i != j:
-                    guesses[f"alpha_{i+1}_{j+1}"] = 0.0
+                    guesses[f"alpha_{i + 1}_{j + 1}"] = 0.0
         return guesses
 
     def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
@@ -92,13 +92,13 @@ class CompositeDiffusionModel(DiffusionModel):
                 model_bounds["L"] = (np.max(y_model), np.inf)
 
             for param_name, value in model_bounds.items():
-                bounds[f"{param_name}_{i+1}"] = value
+                bounds[f"{param_name}_{i + 1}"] = value
 
         # Bounds for interaction parameters
         for i in range(self.n_models):
             for j in range(self.n_models):
                 if i != j:
-                    bounds[f"alpha_{i+1}_{j+1}"] = (-np.inf, np.inf)
+                    bounds[f"alpha_{i + 1}_{j + 1}"] = (-np.inf, np.inf)
         return bounds
 
     def predict(self, t: Sequence[float]) -> Sequence[float]:
@@ -143,11 +143,7 @@ class CompositeDiffusionModel(DiffusionModel):
     def differential_equation(self, t, y, params):
         """Defines the composite diffusion model's differential equations."""
         dydt = B.zeros_like(y)
-        param_list = (
-            [params[name] for name in self.param_names]
-            if isinstance(params, dict)
-            else params
-        )
+        param_list = [params[name] for name in self.param_names] if isinstance(params, dict) else params
 
         param_idx = 0
         model_params_list = []
@@ -181,9 +177,7 @@ class CompositeDiffusionModel(DiffusionModel):
             )
 
             # Add interaction effects
-            interaction_effect = sum(
-                alpha[i, j] * y[j] for j in range(self.n_models) if i != j
-            )
+            interaction_effect = sum(alpha[i, j] * y[j] for j in range(self.n_models) if i != j)
 
             dydt[i] = growth_rate - interaction_effect
 
@@ -211,9 +205,6 @@ class CompositeDiffusionModel(DiffusionModel):
 
         y_pred = self.predict(t)
         rates = np.array(
-            [
-                self.differential_equation(ti, yi, self._params)
-                for ti, yi in zip(t, y_pred)
-            ],
+            [self.differential_equation(ti, yi, self._params) for ti, yi in zip(t, y_pred)],
         )
         return rates

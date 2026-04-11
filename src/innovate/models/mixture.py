@@ -160,9 +160,7 @@ class MixtureModel(DiffusionModel):
         # Update submodel parameters
         for i, model in enumerate(self.models):
             prefix = f"model_{i}_"
-            model_params = {
-                k[len(prefix) :]: v for k, v in value.items() if k.startswith(prefix)
-            }
+            model_params = {k[len(prefix) :]: v for k, v in value.items() if k.startswith(prefix)}
             model.params_ = model_params
 
     def score(

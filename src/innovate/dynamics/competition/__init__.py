@@ -1,4 +1,5 @@
 """Competition dynamics models."""
+
 from .base import CompetitiveInteraction as CompetitiveInteraction
 from .lotka_volterra import LotkaVolterraCompetition
 from .market_share_attraction import MarketShareAttraction as MarketShareAttraction

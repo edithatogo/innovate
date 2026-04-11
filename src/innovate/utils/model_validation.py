@@ -1,4 +1,5 @@
 """Model validation for the Innovate library."""
+
 from typing import Any
 
 import numpy as np
@@ -9,14 +10,14 @@ from .validation import validate_float
 def validate_bass_parameters(params: dict[str, float], t_event: float | None = None) -> dict[str, Any]:
     """
     Validate Bass model parameters to ensure they result in reasonable behavior.
-    
+
     Parameters
     ----------
     params : Dict[str, float]
         Dictionary of model parameters
     t_event : Optional[float]
         Time of structural break, if any
-    
+
     Returns
     -------
     Dict[str, Any]
@@ -71,7 +72,9 @@ def validate_bass_parameters(params: dict[str, float], t_event: float | None = N
         try:
             p_post = validate_float(params["p_post"], "p_post", min_val=0.0, max_val=1.0)
             if p_post < 0:
-                issues.append(f"Parameter 'p_post' (post-event innovation coefficient) should be non-negative, got {p_post}")
+                issues.append(
+                    f"Parameter 'p_post' (post-event innovation coefficient) should be non-negative, got {p_post}"
+                )
                 is_valid = False
         except (ValueError, TypeError):
             issues.append(f"Parameter 'p_post' must be a positive number, got {params['p_post']}")
@@ -81,7 +84,9 @@ def validate_bass_parameters(params: dict[str, float], t_event: float | None = N
         try:
             q_post = validate_float(params["q_post"], "q_post", min_val=0.0, max_val=10.0)
             if q_post < 0:
-                issues.append(f"Parameter 'q_post' (post-event imitation coefficient) should be non-negative, got {q_post}")
+                issues.append(
+                    f"Parameter 'q_post' (post-event imitation coefficient) should be non-negative, got {q_post}"
+                )
                 is_valid = False
         except (ValueError, TypeError):
             issues.append(f"Parameter 'q_post' must be a positive number, got {params['q_post']}")
@@ -103,26 +108,26 @@ def validate_bass_parameters(params: dict[str, float], t_event: float | None = N
         q_val = params["q"]
 
         # The ratio p/q affects the timing of the peak adoption rate
-        ratio = p_val / q_val if q_val > 0 else float('inf')
+        ratio = p_val / q_val if q_val > 0 else float("inf")
         if ratio > 1:  # p > q is unusual but mathematically valid
             issues.append(f"Unusual parameter values: p ({p_val}) > q ({q_val}), typically q > p")
 
     return {
         "is_valid": is_valid,
         "issues": issues,
-        "recommended_action": "Adjust parameters to meet validation criteria" if not is_valid else "No action needed"
+        "recommended_action": "Adjust parameters to meet validation criteria" if not is_valid else "No action needed",
     }
 
 
 def validate_logistic_parameters(params: dict[str, float]) -> dict[str, Any]:
     """
     Validate Logistic model parameters to ensure they result in reasonable behavior.
-    
+
     Parameters
     ----------
     params : Dict[str, float]
         Dictionary of model parameters
-    
+
     Returns
     -------
     Dict[str, Any]
@@ -168,19 +173,19 @@ def validate_logistic_parameters(params: dict[str, float]) -> dict[str, Any]:
     return {
         "is_valid": is_valid,
         "issues": issues,
-        "recommended_action": "Adjust parameters to meet validation criteria" if not is_valid else "No action needed"
+        "recommended_action": "Adjust parameters to meet validation criteria" if not is_valid else "No action needed",
     }
 
 
 def validate_gompertz_parameters(params: dict[str, float]) -> dict[str, Any]:
     """
     Validate Gompertz model parameters to ensure they result in reasonable behavior.
-    
+
     Parameters
     ----------
     params : Dict[str, float]
         Dictionary of model parameters
-    
+
     Returns
     -------
     Dict[str, Any]
@@ -229,19 +234,16 @@ def validate_gompertz_parameters(params: dict[str, float]) -> dict[str, Any]:
     return {
         "is_valid": is_valid,
         "issues": issues,
-        "recommended_action": "Adjust parameters to meet validation criteria" if not is_valid else "No action needed"
+        "recommended_action": "Adjust parameters to meet validation criteria" if not is_valid else "No action needed",
     }
 
 
 def validate_model_predictions(
-    model,
-    t_pred: np.ndarray,
-    y_pred: np.ndarray,
-    max_growth_ratio: float = 0.5
+    model, t_pred: np.ndarray, y_pred: np.ndarray, max_growth_ratio: float = 0.5
 ) -> dict[str, Any]:
     """
     Validate that model predictions are reasonable.
-    
+
     Parameters
     ----------
     model : DiffusionModel
@@ -252,7 +254,7 @@ def validate_model_predictions(
         Predicted values
     max_growth_ratio : float
         Maximum allowed ratio of growth between consecutive points relative to current level
-    
+
     Returns
     -------
     Dict[str, Any]
@@ -285,18 +287,22 @@ def validate_model_predictions(
             max_idx = np.argmax(rel_growth)
             issues.append(
                 f"Unusually high growth rate detected: {rel_growth[max_idx]:.3f} "
-                f"between t={t_pred[max_idx]} and t={t_pred[max_idx+1]}"
+                f"between t={t_pred[max_idx]} and t={t_pred[max_idx + 1]}"
             )
             is_valid = False
 
     # Check if predictions are monotonically increasing (for cumulative models)
-    if hasattr(model, 'monotonic_check') and model.monotonic_check:
+    if hasattr(model, "monotonic_check") and model.monotonic_check:
         if not np.all(np.diff(y_pred) >= -1e-10):  # Allow small numerical errors
-            issues.append("Model predictions are not monotonically increasing (cumulative models should generally increase)")
+            issues.append(
+                "Model predictions are not monotonically increasing (cumulative models should generally increase)"
+            )
             is_valid = False
 
     return {
         "is_valid": is_valid,
         "issues": issues,
-        "recommended_action": "Adjust model parameters or check for numerical issues" if not is_valid else "No action needed"
+        "recommended_action": "Adjust model parameters or check for numerical issues"
+        if not is_valid
+        else "No action needed",
     }

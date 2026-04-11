@@ -37,10 +37,7 @@ def plot_network_diffusion(
             plt.figure(figsize=(10, 8))
 
             # Get colors for nodes based on their current state
-            colors = [
-                node_color_map.get(current_states.get(node, False), "gray")
-                for node in graph.nodes()
-            ]
+            colors = [node_color_map.get(current_states.get(node, False), "gray") for node in graph.nodes()]
 
             nx.draw_networkx_nodes(
                 graph,

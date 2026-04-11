@@ -12,17 +12,17 @@ class DiffusionModel(ABC):
     @abstractmethod
     def predict(self, t: Sequence[float]) -> Sequence[float]:
         """Predicts adoption levels for given time points.
-        
+
         Parameters
         ----------
         t : Sequence[float]
             Sequence of time points for prediction
-        
+
         Returns
         -------
         Sequence[float]
             Predicted adoption levels at each time point
-            
+
         Raises
         ------
         RuntimeError

@@ -13,9 +13,7 @@ class MultiProductDiffusionModel(DiffusionModel):
     def __init__(
         self,
         p: Sequence[float],  # length N: intrinsic adoption rates
-        Q: Sequence[
-            Sequence[float]
-        ],  # N x N matrix: interaction matrix (within- and cross-imitation)
+        Q: Sequence[Sequence[float]],  # N x N matrix: interaction matrix (within- and cross-imitation)
         m: Sequence[float],  # length N: ultimate market potentials
         names: Sequence[str] | None = None,
     ):
@@ -23,13 +21,9 @@ class MultiProductDiffusionModel(DiffusionModel):
         self.Q = B.array(Q)
         self.m = B.array(m)
         self.N = len(p)
-        self.names = names or [f"Prod{i+1}" for i in range(self.N)]
+        self.names = names or [f"Prod{i + 1}" for i in range(self.N)]
 
-        if not (
-            len(self.p) == self.N
-            and self.Q.shape == (self.N, self.N)
-            and len(self.m) == self.N
-        ):
+        if not (len(self.p) == self.N and self.Q.shape == (self.N, self.N) and len(self.m) == self.N):
             raise ValueError("Dimensions of p, Q, and m must be consistent.")
         if names and len(names) != self.N:
             raise ValueError("Length of names must match the number of products (N).")
@@ -212,30 +206,28 @@ class MultiProductDiffusionModel(DiffusionModel):
     def predict_adoption_rate(self, t: Sequence[float]) -> pd.DataFrame:
         """
         Predict the rate of new adoptions per time period for each product.
-        
+
         This method calculates the derivative of cumulative adoptions, representing
         the instantaneous adoption rate for each product in the multi-product system.
-        
+
         Parameters
         ----------
         t : Sequence[float]
             Time points at which to predict adoption rates
-            
+
         Returns
         -------
         pd.DataFrame
             DataFrame with adoption rates for each product at each time point.
             Columns correspond to product names, rows to time points.
-            
+
         Raises
         ------
         RuntimeError
             If model parameters are not set (model not fitted or initialized)
         """
         if not self.params_ and (self.p is None or self.Q is None or self.m is None):
-            raise RuntimeError(
-                "Model parameters are not set. Call .fit() or initialize with p, Q, m."
-            )
+            raise RuntimeError("Model parameters are not set. Call .fit() or initialize with p, Q, m.")
 
         # Get cumulative predictions
         cumulative_df = self.predict(t)
@@ -258,11 +250,7 @@ class MultiProductDiffusionModel(DiffusionModel):
             adoption_rates.append(rate)
 
         # Convert to DataFrame with same structure as predict output
-        rates_df = pd.DataFrame(
-            adoption_rates,
-            index=t,
-            columns=self.names
-        )
+        rates_df = pd.DataFrame(adoption_rates, index=t, columns=self.names)
 
         return rates_df
 

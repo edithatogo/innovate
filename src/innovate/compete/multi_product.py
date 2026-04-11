@@ -49,25 +49,25 @@ class MultiProductDiffusionModel(DiffusionModel):
         # Add p, q, m parameters for each product
         for prefix in ["p", "q", "m"]:
             for i in range(self.n_products):
-                names.append(f"{prefix}{i+1}")
+                names.append(f"{prefix}{i + 1}")
 
         # Add alpha (interaction) parameters
         for i in range(self.n_products):
             for j in range(self.n_products):
                 if i != j:
-                    names.append(f"alpha_{i+1}_{j+1}")
+                    names.append(f"alpha_{i + 1}_{j + 1}")
 
         # Add covariate-related beta parameters
         for cov in self.covariates:
             # Betas for p, q, m
             for prefix in ["p", "q", "m"]:
                 for i in range(self.n_products):
-                    names.append(f"beta_{prefix}{i+1}_{cov}")
+                    names.append(f"beta_{prefix}{i + 1}_{cov}")
             # Betas for alpha
             for i in range(self.n_products):
                 for j in range(self.n_products):
                     if i != j:
-                        names.append(f"beta_alpha_{i+1}_{j+1}_{cov}")
+                        names.append(f"beta_alpha_{i + 1}_{j + 1}_{cov}")
         return names
 
     def initial_guesses(
@@ -80,27 +80,27 @@ class MultiProductDiffusionModel(DiffusionModel):
 
         # Initial guesses for p, q, m
         for i in range(self.n_products):
-            guesses[f"p{i+1}"] = 0.001
+            guesses[f"p{i + 1}"] = 0.001
         for i in range(self.n_products):
-            guesses[f"q{i+1}"] = 0.1
+            guesses[f"q{i + 1}"] = 0.1
         for i in range(self.n_products):
-            guesses[f"m{i+1}"] = max_y / self.n_products
+            guesses[f"m{i + 1}"] = max_y / self.n_products
 
         # Initial guesses for alpha
         for i in range(self.n_products):
             for j in range(self.n_products):
                 if i != j:
-                    guesses[f"alpha_{i+1}_{j+1}"] = 1.0
+                    guesses[f"alpha_{i + 1}_{j + 1}"] = 1.0
 
         # Initial guesses for betas
         for cov in self.covariates:
             for prefix in ["p", "q", "m"]:
                 for i in range(self.n_products):
-                    guesses[f"beta_{prefix}{i+1}_{cov}"] = 0.0
+                    guesses[f"beta_{prefix}{i + 1}_{cov}"] = 0.0
             for i in range(self.n_products):
                 for j in range(self.n_products):
                     if i != j:
-                        guesses[f"beta_alpha_{i+1}_{j+1}_{cov}"] = 0.0
+                        guesses[f"beta_alpha_{i + 1}_{j + 1}_{cov}"] = 0.0
         return guesses
 
     def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
@@ -109,27 +109,27 @@ class MultiProductDiffusionModel(DiffusionModel):
 
         # Bounds for p, q, m
         for i in range(self.n_products):
-            bounds[f"p{i+1}"] = (1e-6, 0.1)
+            bounds[f"p{i + 1}"] = (1e-6, 0.1)
         for i in range(self.n_products):
-            bounds[f"q{i+1}"] = (1e-6, 1.0)
+            bounds[f"q{i + 1}"] = (1e-6, 1.0)
         for i in range(self.n_products):
-            bounds[f"m{i+1}"] = (0, max_y * 2)
+            bounds[f"m{i + 1}"] = (0, max_y * 2)
 
         # Bounds for alpha
         for i in range(self.n_products):
             for j in range(self.n_products):
                 if i != j:
-                    bounds[f"alpha_{i+1}_{j+1}"] = (0, 2.0)
+                    bounds[f"alpha_{i + 1}_{j + 1}"] = (0, 2.0)
 
         # Bounds for betas
         for cov in self.covariates:
             for prefix in ["p", "q", "m"]:
                 for i in range(self.n_products):
-                    bounds[f"beta_{prefix}{i+1}_{cov}"] = (-np.inf, np.inf)
+                    bounds[f"beta_{prefix}{i + 1}_{cov}"] = (-np.inf, np.inf)
             for i in range(self.n_products):
                 for j in range(self.n_products):
                     if i != j:
-                        bounds[f"beta_alpha_{i+1}_{j+1}_{cov}"] = (-np.inf, np.inf)
+                        bounds[f"beta_alpha_{i + 1}_{j + 1}_{cov}"] = (-np.inf, np.inf)
         return bounds
 
     def predict(
@@ -162,20 +162,20 @@ class MultiProductDiffusionModel(DiffusionModel):
                 for cov in self.covariates:
                     for i in range(self.n_products):
                         params_for_ode.append(
-                            self._params.get(f"beta_p{i+1}_{cov}", 0.0),
+                            self._params.get(f"beta_p{i + 1}_{cov}", 0.0),
                         )
                         params_for_ode.append(
-                            self._params.get(f"beta_q{i+1}_{cov}", 0.0),
+                            self._params.get(f"beta_q{i + 1}_{cov}", 0.0),
                         )
                         params_for_ode.append(
-                            self._params.get(f"beta_m{i+1}_{cov}", 0.0),
+                            self._params.get(f"beta_m{i + 1}_{cov}", 0.0),
                         )
                     for i in range(self.n_products):
                         for j in range(self.n_products):
                             if i != j:
                                 params_for_ode.append(
                                     self._params.get(
-                                        f"beta_alpha_{i+1}_{j+1}_{cov}",
+                                        f"beta_alpha_{i + 1}_{j + 1}_{cov}",
                                         0.0,
                                     ),
                                 )
@@ -254,16 +254,10 @@ class MultiProductDiffusionModel(DiffusionModel):
                     for j in range(n_products):
                         if i != j:
                             alpha_t_flat[current_alpha_beta_idx] += (
-                                all_params_flat[
-                                    alpha_beta_start_idx_for_cov
-                                    + current_alpha_beta_idx
-                                ]
-                                * cov_val_t
+                                all_params_flat[alpha_beta_start_idx_for_cov + current_alpha_beta_idx] * cov_val_t
                             )
                             current_alpha_beta_idx += 1
-                param_idx_offset = (
-                    alpha_beta_start_idx_for_cov + num_alpha_params
-                )  # Update offset for next covariate
+                param_idx_offset = alpha_beta_start_idx_for_cov + num_alpha_params  # Update offset for next covariate
 
         # Reshape alpha_t_flat back to matrix
         alpha_t = B.zeros((n_products, n_products))
@@ -276,14 +270,8 @@ class MultiProductDiffusionModel(DiffusionModel):
 
         dydt = B.zeros_like(y)
         for i in range(n_products):
-            interaction_term = sum(
-                alpha_t[i, j] * y[j] for j in range(n_products) if i != j
-            )
-            dydt[i] = (
-                (p_t[i] + q_t[i] * y[i] / m_t[i]) * (m_t[i] - y[i] - interaction_term)
-                if m_t[i] > 0
-                else 0
-            )
+            interaction_term = sum(alpha_t[i, j] * y[j] for j in range(n_products) if i != j)
+            dydt[i] = (p_t[i] + q_t[i] * y[i] / m_t[i]) * (m_t[i] - y[i] - interaction_term) if m_t[i] > 0 else 0
 
         return dydt
 
@@ -316,10 +304,7 @@ class MultiProductDiffusionModel(DiffusionModel):
         params = [self._params[name] for name in self.param_names]
 
         rates = B.array(
-            [
-                self.differential_equation(ti, yi, params, covariates, t)
-                for ti, yi in zip(t, y_pred)
-            ],
+            [self.differential_equation(ti, yi, params, covariates, t) for ti, yi in zip(t, y_pred)],
         )
         return rates
 

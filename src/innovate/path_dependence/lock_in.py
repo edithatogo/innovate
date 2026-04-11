@@ -42,9 +42,7 @@ class LockInModel:
             "m": max_y * 1.5 if max_y > 0 else 1000.0,
         }
 
-    def bounds(
-        self, t: Sequence[float], y: np.ndarray
-    ) -> dict[str, tuple[float, float]]:
+    def bounds(self, t: Sequence[float], y: np.ndarray) -> dict[str, tuple[float, float]]:
         max_y = np.max(y)
         return {
             "alpha1": (0, np.inf),
@@ -57,9 +55,7 @@ class LockInModel:
         }
 
     @staticmethod
-    def differential_equation(
-        y_current: np.ndarray, t_current: float, *params: float
-    ) -> Sequence[float]:
+    def differential_equation(y_current: np.ndarray, t_current: float, *params: float) -> Sequence[float]:
         alpha1, alpha2, beta1, beta2, gamma1, gamma2, m = params
         n1, n2 = y_current
 
@@ -68,16 +64,8 @@ class LockInModel:
         n2 = max(0, min(n2, m))
 
         # Simple logistic-like growth with network effects and competition
-        dn1_dt = (
-            alpha1 * n1 * (1 - (n1 + n2) / m)
-            + beta1 * n1 * (n1 / m)
-            - gamma1 * n1 * (n2 / m)
-        )
-        dn2_dt = (
-            alpha2 * n2 * (1 - (n1 + n2) / m)
-            + beta2 * n2 * (n2 / m)
-            - gamma2 * n2 * (n1 / m)
-        )
+        dn1_dt = alpha1 * n1 * (1 - (n1 + n2) / m) + beta1 * n1 * (n1 / m) - gamma1 * n1 * (n2 / m)
+        dn2_dt = alpha2 * n2 * (1 - (n1 + n2) / m) + beta2 * n2 * (n2 / m) - gamma2 * n2 * (n1 / m)
 
         return [dn1_dt, dn2_dt]
 
@@ -107,9 +95,7 @@ class LockInModel:
 
         y0 = y[0, :]
 
-        def objective(
-            params: np.ndarray, t: Sequence[float], y_obs: np.ndarray
-        ) -> float:
+        def objective(params: np.ndarray, t: Sequence[float], y_obs: np.ndarray) -> float:
             self.params_ = dict(zip(self.param_names, params))
             y_pred = self.predict(t, y0)
             return float(np.sum((y_obs - y_pred) ** 2))

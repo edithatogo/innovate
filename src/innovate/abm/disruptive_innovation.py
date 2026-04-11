@@ -19,9 +19,7 @@ class DisruptiveInnovationAgent(InnovationAgent):
         The agent's choice is based on the perceived value of each product.
         """
         incumbent_value = self.model.incumbent_performance - self.model.incumbent_price
-        disruptive_value = (
-            self.model.disruptive_performance - self.model.disruptive_price
-        )
+        disruptive_value = self.model.disruptive_performance - self.model.disruptive_price
 
         if disruptive_value > incumbent_value:
             self.choice = "disruptive"

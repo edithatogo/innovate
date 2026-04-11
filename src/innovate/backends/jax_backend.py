@@ -8,10 +8,10 @@ from diffrax import Dopri5, ODETerm, SaveAt, diffeqsolve
 class JaxBackend:
     def array(self, data):
         """Convert input data to a JAX array.
-        
+
         Args:
             data: Input data of any type convertable to array.
-            
+
         Returns
         -------
             A JAX array representation of the input data.
@@ -20,10 +20,10 @@ class JaxBackend:
 
     def exp(self, x):
         """Calculate the exponential of all elements in the input array.
-        
+
         Args:
             x: Input array or sequence.
-            
+
         Returns
         -------
             Element-wise exponential of the input array.
@@ -32,11 +32,11 @@ class JaxBackend:
 
     def power(self, x, y):
         """First array elements raised to powers from second array.
-        
+
         Args:
             x: Base array or scalar.
             y: Exponent array or scalar.
-            
+
         Returns
         -------
             Array with elements of x raised to the corresponding powers of y.
@@ -45,13 +45,13 @@ class JaxBackend:
 
     def sum(self, a, axis=None, dtype=None, keepdims=False) -> float | jnp.ndarray:
         """Sum of array elements over a given axis.
-        
+
         Args:
             a: Elements to sum.
             axis: Axis or axes along which to sum. None sums all elements.
             dtype: Type of the returned array and of the accumulator.
             keepdims: Whether to keep reduced dimensions.
-            
+
         Returns
         -------
             Sum of elements, float if scalar, array if axis specified.
@@ -64,14 +64,14 @@ class JaxBackend:
 
     def mean(self, a, axis=None, dtype=None, keepdims=False) -> float | jnp.ndarray:
         """Compute the arithmetic mean along the specified axis.
-        
+
         Args:
             a: Array containing numbers whose mean is desired.
-            axis: Axis or axes along which the means are computed. 
+            axis: Axis or axes along which the means are computed.
                   None (default) computes the mean of the flattened array.
             dtype: Type to use in computing the mean.
             keepdims: Whether to keep reduced dimensions.
-            
+
         Returns
         -------
             The mean of the elements, float if scalar, array if axis specified.
@@ -129,11 +129,11 @@ class JaxBackend:
 
     def max(self, x: jnp.ndarray, axis: int | tuple | None = None) -> float | jnp.ndarray:
         """Return the maximum of an array or maximum along an axis.
-        
+
         Args:
             x: Input array.
             axis: Axis along which to operate. If None, the flattened array is used.
-            
+
         Returns
         -------
             Maximum of the array elements, float if scalar, array if axis specified.
@@ -142,12 +142,12 @@ class JaxBackend:
 
     def median(self, x: jnp.ndarray, axis: int | tuple | None = None) -> float | jnp.ndarray:
         """Compute the median along the specified axis.
-        
+
         Args:
             x: Input array containing numbers.
             axis: Axis or axes along which the medians are computed.
                   None (default) computes the median of the flattened array.
-                  
+
         Returns
         -------
             Median of the array elements, float if scalar, array if axis specified.

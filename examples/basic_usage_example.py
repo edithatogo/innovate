@@ -27,8 +27,10 @@ def main():
     t_data = np.linspace(0, 10, 50)
 
     # Generate cumulative adoption using the Bass model equation
-    cumulative_adoption = true_m * (1 - np.exp(-(true_p + true_q) * t_data)) / (
-        1 + (true_q / true_p) * np.exp(-(true_p + true_q) * t_data)
+    cumulative_adoption = (
+        true_m
+        * (1 - np.exp(-(true_p + true_q) * t_data))
+        / (1 + (true_q / true_p) * np.exp(-(true_p + true_q) * t_data))
     )
 
     # Add some noise to make it more realistic
@@ -63,11 +65,11 @@ def main():
     # Plot results
     print("\n4. Plotting results...")
     plt.figure(figsize=(10, 6))
-    plt.plot(t_data, noisy_adoption, 'bo', label='Observed Data', markersize=6)
-    plt.plot(t_pred, predictions, 'r-', label='Bass Model Fit', linewidth=2)
-    plt.xlabel('Time')
-    plt.ylabel('Cumulative Adoption')
-    plt.title('Bass Model: Fitting Innovation Diffusion Data')
+    plt.plot(t_data, noisy_adoption, "bo", label="Observed Data", markersize=6)
+    plt.plot(t_pred, predictions, "r-", label="Bass Model Fit", linewidth=2)
+    plt.xlabel("Time")
+    plt.ylabel("Cumulative Adoption")
+    plt.title("Bass Model: Fitting Innovation Diffusion Data")
     plt.legend()
     plt.grid(True, alpha=0.3)
     plt.show()
@@ -77,10 +79,10 @@ def main():
     adoption_rates = fitted_model.predict_adoption_rate(t_pred)
 
     plt.figure(figsize=(10, 6))
-    plt.plot(t_pred, adoption_rates, 'g-', label='Adoption Rate', linewidth=2)
-    plt.xlabel('Time')
-    plt.ylabel('Adoption Rate')
-    plt.title('Rate of New Adoptions Over Time')
+    plt.plot(t_pred, adoption_rates, "g-", label="Adoption Rate", linewidth=2)
+    plt.xlabel("Time")
+    plt.ylabel("Adoption Rate")
+    plt.title("Rate of New Adoptions Over Time")
     plt.legend()
     plt.grid(True, alpha=0.3)
     plt.show()

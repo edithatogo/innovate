@@ -134,17 +134,13 @@ class LogisticModel(DiffusionModel):
                 L = self._params["L"]
                 k = self._params["k"]
                 x0 = self._params["x0"]
-                y_pred[pre_event_mask] = L / (
-                    1 + backend.current_backend.exp(-k * (t_arr[pre_event_mask] - x0))
-                )
+                y_pred[pre_event_mask] = L / (1 + backend.current_backend.exp(-k * (t_arr[pre_event_mask] - x0)))
 
             if backend.current_backend.any(post_event_mask):
                 L = self._params["L_post"]
                 k = self._params["k_post"]
                 x0 = self._params["x0_post"]
-                y_pred[post_event_mask] = L / (
-                    1 + backend.current_backend.exp(-k * (t_arr[post_event_mask] - x0))
-                )
+                y_pred[post_event_mask] = L / (1 + backend.current_backend.exp(-k * (t_arr[post_event_mask] - x0)))
 
             return y_pred
 

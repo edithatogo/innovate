@@ -1,4 +1,5 @@
 """Configuration file for the Sphinx documentation builder."""
+
 import sys
 from pathlib import Path
 
@@ -49,7 +50,7 @@ html_theme_options = {
     "sticky_navigation": True,
     "navigation_depth": 4,
     "includehidden": True,
-    "titles_only": False
+    "titles_only": False,
 }
 
 # -- Extension configuration -------------------------------------------------
@@ -73,7 +74,7 @@ autodoc_default_options = {
     "member-order": "bysource",
     "special-members": "__init__",
     "undoc-members": True,
-    "exclude-members": "__weakref__"
+    "exclude-members": "__weakref__",
 }
 
 # Autosummary settings

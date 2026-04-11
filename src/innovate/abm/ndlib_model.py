@@ -1,4 +1,3 @@
-
 import ndlib.models.epidemics as ep
 import ndlib.models.ModelConfig as mc
 import networkx as nx

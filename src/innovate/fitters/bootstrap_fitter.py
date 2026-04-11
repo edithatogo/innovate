@@ -36,9 +36,7 @@ class BootstrapFitter:
             boot_model = type(model)()
 
             try:
-                boot_model.fit(
-                    self.fitter, t_resampled.tolist(), y_resampled.tolist(), **kwargs
-                )
+                boot_model.fit(self.fitter, t_resampled.tolist(), y_resampled.tolist(), **kwargs)
                 self.bootstrapped_params.append(boot_model.params_)
             except RuntimeError as e:
                 # Handle cases where fitting might fail for a resampled dataset

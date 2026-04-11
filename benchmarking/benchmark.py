@@ -1,4 +1,5 @@
 """Benchmarks for the innovate library."""
+
 import timeit
 from typing import Any
 
@@ -128,9 +129,7 @@ def main() -> None:
     fitter = ScipyFitter()
 
     # --- Model Configurations ---
-    models_to_benchmark: list[
-        tuple[Any, dict[str, float], dict[str, np.ndarray] | None, str]
-    ] = [
+    models_to_benchmark: list[tuple[Any, dict[str, float], dict[str, np.ndarray] | None, str]] = [
         (BassModel(), {"p": 0.03, "q": 0.38, "m": 1000}, None, "Bass"),
         (GompertzModel(), {"a": 1000, "b": 5, "c": 0.1}, None, "Gompertz"),
         (LogisticModel(), {"L": 1000, "k": 0.1, "x0": 25}, None, "Logistic"),

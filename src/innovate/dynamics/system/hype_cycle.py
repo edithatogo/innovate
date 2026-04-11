@@ -40,12 +40,7 @@ class HypeCycleBehavior(SystemBehavior):
         # R&D investment is a function of expectations
         rd_investment = params.get("rd_investment_factor", 0.1) * E
 
-        dEdt = (
-            alpha1 * innovation_trigger
-            + alpha2 * M * E
-            - alpha3 * E
-            + alpha4 * (E - M) * E
-        )
+        dEdt = alpha1 * innovation_trigger + alpha2 * M * E - alpha3 * E + alpha4 * (E - M) * E
         dMdt = beta1 * rd_investment + beta2 * M - beta3 * M
 
         return dEdt, dMdt

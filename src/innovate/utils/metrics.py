@@ -30,8 +30,7 @@ def calculate_mape(y_true: Sequence[float], y_pred: Sequence[float]) -> float:
     result = (
         np.mean(
             np.abs(
-                (y_true_arr[non_zero_mask] - y_pred_arr[non_zero_mask])
-                / y_true_arr[non_zero_mask],
+                (y_true_arr[non_zero_mask] - y_pred_arr[non_zero_mask]) / y_true_arr[non_zero_mask],
             ),
         )
         * 100
@@ -86,11 +85,7 @@ def calculate_aic(n_params: int, n_samples: int, rss: float) -> float:
     """
     if n_samples == 0 or rss <= 0:
         return float(np.nan)
-    log_likelihood = (
-        -n_samples / 2 * np.log(2 * np.pi)
-        - n_samples / 2 * np.log(rss / n_samples)
-        - n_samples / 2
-    )
+    log_likelihood = -n_samples / 2 * np.log(2 * np.pi) - n_samples / 2 * np.log(rss / n_samples) - n_samples / 2
     return float(2 * n_params - 2 * log_likelihood)
 
 
@@ -101,9 +96,5 @@ def calculate_bic(n_params: int, n_samples: int, rss: float) -> float:
     """
     if n_samples == 0 or rss <= 0:
         return float(np.nan)
-    log_likelihood = (
-        -n_samples / 2 * np.log(2 * np.pi)
-        - n_samples / 2 * np.log(rss / n_samples)
-        - n_samples / 2
-    )
+    log_likelihood = -n_samples / 2 * np.log(2 * np.pi) - n_samples / 2 * np.log(rss / n_samples) - n_samples / 2
     return float(n_params * np.log(n_samples) - 2 * log_likelihood)

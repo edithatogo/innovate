@@ -57,7 +57,5 @@ class ReplicatorDynamics(CompetitiveInteraction):
         """Calculates the instantaneous interaction rate for the replicator dynamics model."""
         fitness1 = params.get("fitness1", 0.1)
         fitness2 = params.get("fitness2", 0.1)
-        average_fitness = (fitness1 * population1 + fitness2 * population2) / (
-            population1 + population2
-        )
+        average_fitness = (fitness1 * population1 + fitness2 * population2) / (population1 + population2)
         return population1 * (fitness1 - average_fitness)

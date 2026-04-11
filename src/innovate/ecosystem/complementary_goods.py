@@ -22,9 +22,7 @@ class ComplementaryGoodsModel:
             "c2",  # Influence of good 1 on good 2
         ]
 
-    def differential_equation(
-        self, y: np.ndarray, t: float, *params: float
-    ) -> Sequence[float]:
+    def differential_equation(self, y: np.ndarray, t: float, *params: float) -> Sequence[float]:
         y1, y2 = y
         k1, k2, c1, c2 = params
         dy1_dt = k1 * y1 * (1 - y1) + c1 * y1 * y2
@@ -38,14 +36,10 @@ class ComplementaryGoodsModel:
 
         from scipy.integrate import odeint
 
-        solution = odeint(
-            self.differential_equation, y0, t, args=tuple(self._params.values())
-        )
+        solution = odeint(self.differential_equation, y0, t, args=tuple(self._params.values()))
         return solution
 
-    def fit(
-        self, t: Sequence[float], y: np.ndarray, **kwargs: Any
-    ) -> "ComplementaryGoodsModel":
+    def fit(self, t: Sequence[float], y: np.ndarray, **kwargs: Any) -> "ComplementaryGoodsModel":
         """Fits the model to the data."""
         from scipy.optimize import minimize
 
@@ -104,9 +98,7 @@ class ComplementaryGoodsModel:
         # For c1 and c2, we can start with small positive values
         return {"k1": k1, "k2": k2, "c1": 0.01, "c2": 0.01}
 
-    def bounds(
-        self, t: Sequence[float], y: np.ndarray
-    ) -> dict[str, tuple[float, float]]:
+    def bounds(self, t: Sequence[float], y: np.ndarray) -> dict[str, tuple[float, float]]:
         return {
             "k1": (0, np.inf),
             "k2": (0, np.inf),
@@ -144,10 +136,6 @@ class ComplementaryGoodsModel:
             self._params["c1"],
             self._params["c2"],
         )
-        dy1_dt = (
-            k1 * y_pred[:, 0] * (1 - y_pred[:, 0]) + c1 * y_pred[:, 0] * y_pred[:, 1]
-        )
-        dy2_dt = (
-            k2 * y_pred[:, 1] * (1 - y_pred[:, 1]) + c2 * y_pred[:, 0] * y_pred[:, 1]
-        )
+        dy1_dt = k1 * y_pred[:, 0] * (1 - y_pred[:, 0]) + c1 * y_pred[:, 0] * y_pred[:, 1]
+        dy2_dt = k2 * y_pred[:, 1] * (1 - y_pred[:, 1]) + c2 * y_pred[:, 0] * y_pred[:, 1]
         return np.vstack([dy1_dt, dy2_dt]).T

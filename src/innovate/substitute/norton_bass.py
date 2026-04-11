@@ -25,12 +25,12 @@ class NortonBassModel(DiffusionModel):
     def param_names(self) -> Sequence[str]:
         names = []
         for i in range(self.n_generations):
-            names.extend([f"p{i+1}", f"q{i+1}", f"m{i+1}"])
+            names.extend([f"p{i + 1}", f"q{i + 1}", f"m{i + 1}"])
 
         for cov in self.covariates:
             for i in range(self.n_generations):
                 names.extend(
-                    [f"beta_p{i+1}_{cov}", f"beta_q{i+1}_{cov}", f"beta_m{i+1}_{cov}"],
+                    [f"beta_p{i + 1}_{cov}", f"beta_q{i + 1}_{cov}", f"beta_m{i + 1}_{cov}"],
                 )
         return names
 
@@ -42,30 +42,30 @@ class NortonBassModel(DiffusionModel):
         guesses = {}
         max_y = B.max(y)
         for i in range(self.n_generations):
-            guesses[f"p{i+1}"] = 0.001
-            guesses[f"q{i+1}"] = 0.1
-            guesses[f"m{i+1}"] = max_y / self.n_generations
+            guesses[f"p{i + 1}"] = 0.001
+            guesses[f"q{i + 1}"] = 0.1
+            guesses[f"m{i + 1}"] = max_y / self.n_generations
 
         for cov in self.covariates:
             for i in range(self.n_generations):
-                guesses[f"beta_p{i+1}_{cov}"] = 0.0
-                guesses[f"beta_q{i+1}_{cov}"] = 0.0
-                guesses[f"beta_m{i+1}_{cov}"] = 0.0
+                guesses[f"beta_p{i + 1}_{cov}"] = 0.0
+                guesses[f"beta_q{i + 1}_{cov}"] = 0.0
+                guesses[f"beta_m{i + 1}_{cov}"] = 0.0
         return guesses
 
     def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
         bounds = {}
         max_y = B.max(y)
         for i in range(self.n_generations):
-            bounds[f"p{i+1}"] = (1e-6, 0.1)
-            bounds[f"q{i+1}"] = (1e-6, 1.0)
-            bounds[f"m{i+1}"] = (0, max_y * 2)
+            bounds[f"p{i + 1}"] = (1e-6, 0.1)
+            bounds[f"q{i + 1}"] = (1e-6, 1.0)
+            bounds[f"m{i + 1}"] = (0, max_y * 2)
 
         for cov in self.covariates:
             for i in range(self.n_generations):
-                bounds[f"beta_p{i+1}_{cov}"] = (-np.inf, np.inf)
-                bounds[f"beta_q{i+1}_{cov}"] = (-np.inf, np.inf)
-                bounds[f"beta_m{i+1}_{cov}"] = (-np.inf, np.inf)
+                bounds[f"beta_p{i + 1}_{cov}"] = (-np.inf, np.inf)
+                bounds[f"beta_q{i + 1}_{cov}"] = (-np.inf, np.inf)
+                bounds[f"beta_m{i + 1}_{cov}"] = (-np.inf, np.inf)
         return bounds
 
     @property
@@ -136,11 +136,7 @@ class NortonBassModel(DiffusionModel):
                 cannibalization = B.sum(y_flat[i + 1 :])
 
             # Bass diffusion equation for each generation
-            dydt[i] = (
-                (p_t[i] + q_t[i] * y[i] / m_t[i]) * (m_t[i] - y[i] - cannibalization)
-                if m_t[i] > 0
-                else 0
-            )
+            dydt[i] = (p_t[i] + q_t[i] * y[i] / m_t[i]) * (m_t[i] - y[i] - cannibalization) if m_t[i] > 0 else 0
 
         return dydt
 
@@ -175,9 +171,6 @@ class NortonBassModel(DiffusionModel):
         params = [self._params[name] for name in self.param_names]
 
         rates = B.array(
-            [
-                self.differential_equation(ti, yi, params, covariates, t)
-                for ti, yi in zip(t, y_pred)
-            ],
+            [self.differential_equation(ti, yi, params, covariates, t) for ti, yi in zip(t, y_pred)],
         )
         return rates

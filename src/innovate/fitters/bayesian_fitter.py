@@ -1,7 +1,7 @@
 """
 A robust Bayesian fitter using BlackJAX for MCMC sampling.
 
-This implementation replaces the problematic PyMC-based BayesianFitter 
+This implementation replaces the problematic PyMC-based BayesianFitter
 that suffered from segmentation faults. BlackJAX provides a more stable
 JAX-based alternative for Bayesian inference.
 """
@@ -21,16 +21,16 @@ from jax import random
 class BayesianFitter:
     """
     A Bayesian fitter using BlackJAX for robust parameter estimation.
-    
+
     This fitter uses Hamiltonian Monte Carlo (HMC) via the NUTS sampler
     to perform Bayesian inference on diffusion model parameters. It provides
     uncertainty quantification and robust parameter estimates.
-    
+
     Parameters
     ----------
     num_chains : int, default=4
         Number of MCMC chains to run in parallel
-    num_warmup : int, default=1000  
+    num_warmup : int, default=1000
         Number of warmup/burn-in steps per chain
     num_samples : int, default=1000
         Number of samples to draw per chain after warmup
@@ -67,26 +67,22 @@ class BayesianFitter:
         self.data_ = None
 
     def fit(
-        self,
-        model: Any,
-        t: np.ndarray | list | Sequence,
-        y: np.ndarray | list | Sequence,
-        **kwargs
-    ) -> 'BayesianFitter':
+        self, model: Any, t: np.ndarray | list | Sequence, y: np.ndarray | list | Sequence, **kwargs
+    ) -> "BayesianFitter":
         """
         Fit the model using Bayesian inference.
-        
+
         Parameters
         ----------
         model : Model
             The diffusion model to fit (e.g., BassModel, LogisticModel)
         t : array-like
             Time points
-        y : array-like  
+        y : array-like
             Observed adoption/cumulative values
         **kwargs
             Additional arguments (currently unused)
-            
+
         Returns
         -------
         self : BayesianFitter
@@ -114,12 +110,7 @@ class BayesianFitter:
 
         return self
 
-    def _create_log_probability_function(
-        self,
-        model: Any,
-        t: jnp.ndarray,
-        y: jnp.ndarray
-    ) -> Callable:
+    def _create_log_probability_function(self, model: Any, t: jnp.ndarray, y: jnp.ndarray) -> Callable:
         """Create log probability function for the model."""
 
         def log_prob(params_dict: dict[str, float]) -> float:
@@ -135,10 +126,7 @@ class BayesianFitter:
 
                 # Compute log likelihood (assuming Gaussian noise)
                 sigma = jnp.maximum(0.01, jnp.std(y) * 0.1)  # Minimum noise level
-                log_likelihood = jnp.sum(
-                    -0.5 * ((y - predictions) / sigma) ** 2
-                    - 0.5 * jnp.log(2 * jnp.pi * sigma**2)
-                )
+                log_likelihood = jnp.sum(-0.5 * ((y - predictions) / sigma) ** 2 - 0.5 * jnp.log(2 * jnp.pi * sigma**2))
 
                 return log_prior + log_likelihood
 
@@ -147,13 +135,7 @@ class BayesianFitter:
 
         return log_prob
 
-    def _compute_log_prior(
-        self,
-        params_dict: dict[str, float],
-        model: Any,
-        t: jnp.ndarray,
-        y: jnp.ndarray
-    ) -> float:
+    def _compute_log_prior(self, params_dict: dict[str, float], model: Any, t: jnp.ndarray, y: jnp.ndarray) -> float:
         """Compute log prior probability based on parameter bounds."""
         try:
             bounds = model.bounds(t, y)
@@ -182,15 +164,10 @@ class BayesianFitter:
         except Exception:
             return -jnp.inf
 
-    def _model_predict(
-        self,
-        model: Any,
-        t: jnp.ndarray,
-        params_dict: dict[str, float]
-    ) -> jnp.ndarray:
+    def _model_predict(self, model: Any, t: jnp.ndarray, params_dict: dict[str, float]) -> jnp.ndarray:
         """Make predictions with the model using given parameters."""
         # Temporarily set parameters
-        original_params = getattr(model, 'params_', None)
+        original_params = getattr(model, "params_", None)
         model.params_ = params_dict
 
         try:
@@ -202,25 +179,16 @@ class BayesianFitter:
             # Restore original parameters
             model.params_ = original_params
 
-    def _get_initial_parameters(
-        self,
-        model: Any,
-        t: np.ndarray | list,
-        y: np.ndarray | list
-    ) -> dict[str, float]:
+    def _get_initial_parameters(self, model: Any, t: np.ndarray | list, y: np.ndarray | list) -> dict[str, float]:
         """Get initial parameter values for MCMC."""
-        if hasattr(model, 'initial_guesses'):
+        if hasattr(model, "initial_guesses"):
             return model.initial_guesses(t, y)
 
         # Fallback for models without initial_guesses
-        param_names = getattr(model, 'param_names', ['p', 'q', 'm'])
+        param_names = getattr(model, "param_names", ["p", "q", "m"])
         return dict.fromkeys(param_names, 0.1)
 
-    def _run_mcmc(
-        self,
-        log_prob_fn: Callable,
-        initial_params: dict[str, float]
-    ) -> None:
+    def _run_mcmc(self, log_prob_fn: Callable, initial_params: dict[str, float]) -> None:
         """Run MCMC sampling using BlackJAX."""
         rng_key = random.PRNGKey(self.random_seed)
 
@@ -241,11 +209,7 @@ class BayesianFitter:
                 target_acceptance_rate=self.target_accept_rate,
             )
 
-            (state, parameters), _ = warmup.run(
-                rng_key,
-                initial_position,
-                num_steps=self.num_warmup
-            )
+            (state, parameters), _ = warmup.run(rng_key, initial_position, num_steps=self.num_warmup)
 
             # Sampling phase
             sampler = blackjax.nuts(log_prob_array, **parameters)
@@ -261,34 +225,26 @@ class BayesianFitter:
                 chain_key = random.fold_in(rng_key, chain_id)
                 sample_keys = random.split(chain_key, self.num_samples)
 
-                (final_state, _), chain_samples = jax.lax.scan(
-                    one_step,
-                    (state, None),
-                    sample_keys
-                )
+                (final_state, _), chain_samples = jax.lax.scan(one_step, (state, None), sample_keys)
                 all_samples.append(chain_samples)
 
             # Store results
             samples_array = jnp.stack(all_samples)  # Shape: (num_chains, num_samples, num_params)
 
             # Convert back to parameter dictionaries
-            self.posterior_samples_ = {
-                param_names[i]: samples_array[:, :, i]
-                for i in range(len(param_names))
-            }
+            self.posterior_samples_ = {param_names[i]: samples_array[:, :, i] for i in range(len(param_names))}
 
             self.mcmc_results_ = {
-                'samples': samples_array,
-                'param_names': param_names,
-                'final_state': final_state,
+                "samples": samples_array,
+                "param_names": param_names,
+                "final_state": final_state,
             }
 
         except Exception as e:
             warnings.warn(f"MCMC sampling failed: {e!s}. Using point estimates.", UserWarning)
             # Fallback to point estimates
             self.posterior_samples_ = {
-                name: jnp.full((self.num_chains, self.num_samples), value)
-                for name, value in initial_params.items()
+                name: jnp.full((self.num_chains, self.num_samples), value) for name, value in initial_params.items()
             }
 
     def get_parameter_estimates(self) -> dict[str, float]:
@@ -296,15 +252,9 @@ class BayesianFitter:
         if self.posterior_samples_ is None:
             raise RuntimeError("Model has not been fitted yet.")
 
-        return {
-            param: float(jnp.mean(samples))
-            for param, samples in self.posterior_samples_.items()
-        }
+        return {param: float(jnp.mean(samples)) for param, samples in self.posterior_samples_.items()}
 
-    def get_confidence_intervals(
-        self,
-        credible_mass: float = 0.95
-    ) -> dict[str, tuple[float, float]]:
+    def get_confidence_intervals(self, credible_mass: float = 0.95) -> dict[str, tuple[float, float]]:
         """Get credible intervals for parameters."""
         if self.posterior_samples_ is None:
             raise RuntimeError("Model has not been fitted yet.")
@@ -331,12 +281,12 @@ class BayesianFitter:
         for param, samples in self.posterior_samples_.items():
             flat_samples = samples.flatten()
             summary[param] = {
-                'mean': float(jnp.mean(flat_samples)),
-                'std': float(jnp.std(flat_samples)),
-                'median': float(jnp.median(flat_samples)),
-                '2.5%': float(jnp.percentile(flat_samples, 2.5)),
-                '97.5%': float(jnp.percentile(flat_samples, 97.5)),
-                'n_eff': float(len(flat_samples)),  # Simplified
+                "mean": float(jnp.mean(flat_samples)),
+                "std": float(jnp.std(flat_samples)),
+                "median": float(jnp.median(flat_samples)),
+                "2.5%": float(jnp.percentile(flat_samples, 2.5)),
+                "97.5%": float(jnp.percentile(flat_samples, 97.5)),
+                "n_eff": float(len(flat_samples)),  # Simplified
             }
 
         return summary
@@ -360,6 +310,5 @@ class BayesianFitter:
     def _to_inference_data(self) -> az.InferenceData:
         """Convert samples to arviz InferenceData format."""
         return az.from_dict(
-            posterior=self.posterior_samples_,
-            coords={'chain': range(self.num_chains), 'draw': range(self.num_samples)}
+            posterior=self.posterior_samples_, coords={"chain": range(self.num_chains), "draw": range(self.num_samples)}
         )

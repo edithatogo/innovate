@@ -20,11 +20,7 @@ class SkewedGrowth(GrowthCurve):
         Equation: dN/dt = c * N * (log(K) - log(N))
         """
         K = total_potential
-        N = (
-            current_adopters[0]
-            if hasattr(current_adopters, "__len__")
-            else current_adopters
-        )
+        N = current_adopters[0] if hasattr(current_adopters, "__len__") else current_adopters
         c = params.get("shape_c", 0.1)
 
         if K <= 0 or N <= 0:

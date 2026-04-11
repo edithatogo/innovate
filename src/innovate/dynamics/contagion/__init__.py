@@ -1,4 +1,5 @@
 """Contagion dynamics models."""
+
 from .base import ContagionSpread as ContagionSpread
 from .seir import SEIRModel
 from .sir import SIRModel

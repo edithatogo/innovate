@@ -1,5 +1,4 @@
-"""Analysis functions for identifying reducing time series trends.
-"""
+"""Analysis functions for identifying reducing time series trends."""
 
 import numpy as np
 import pandas as pd

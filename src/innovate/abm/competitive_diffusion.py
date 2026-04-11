@@ -31,9 +31,7 @@ class CompetitiveDiffusionAgent(InnovationAgent):
             return
 
         # Check neighbors' adoptions
-        adoptions = [
-            n.adopted_innovation for n in neighbors if n.adopted_innovation != -1
-        ]
+        adoptions = [n.adopted_innovation for n in neighbors if n.adopted_innovation != -1]
         if not adoptions:
             return
 

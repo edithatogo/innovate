@@ -37,9 +37,7 @@ class FisherPryModel(DiffusionModel):
         t_arr = backend.current_backend.array(t)
 
         # Estimate t0 as the time when market share is closest to 0.5
-        t0_guess = t_arr[
-            backend.current_backend.argmin(backend.current_backend.abs(y_arr - 0.5))
-        ]
+        t0_guess = t_arr[backend.current_backend.argmin(backend.current_backend.abs(y_arr - 0.5))]
 
         # Linearize the logistic equation: log(y / (1 - y)) = alpha * (t - t0)
         # To avoid division by zero or log of zero, we clip y
@@ -100,11 +98,7 @@ class FisherPryModel(DiffusionModel):
             (backend.current_backend.array(y) - y_pred) ** 2,
         )
         ss_tot = backend.current_backend.sum(
-            (
-                backend.current_backend.array(y)
-                - backend.current_backend.mean(backend.current_backend.array(y))
-            )
-            ** 2,
+            (backend.current_backend.array(y) - backend.current_backend.mean(backend.current_backend.array(y))) ** 2,
         )
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 

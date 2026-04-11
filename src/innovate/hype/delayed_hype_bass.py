@@ -55,10 +55,7 @@ class DelayedHypeBassModel:
         # Define the DDE system
         f = [
             (p_base * (1 + visibility.subs(time, time - self.delay))) * (m - y(0))
-            + (q_base * (1 + visibility.subs(time, time - self.delay)))
-            * y(0)
-            / m
-            * (m - y(0)),
+            + (q_base * (1 + visibility.subs(time, time - self.delay))) * y(0) / m * (m - y(0)),
         ]
 
         DDE = jitcdde(f)

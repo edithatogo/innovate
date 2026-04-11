@@ -1,5 +1,5 @@
-"""A Bayesian fitter that uses the BlackJAX library for MCMC sampling.
-"""
+"""A Bayesian fitter that uses the BlackJAX library for MCMC sampling."""
+
 from collections.abc import Callable
 from typing import Any
 
@@ -102,14 +102,9 @@ class BlackJaxFitter:
         # For now, assuming the positions are dictionaries of parameters.
 
         # Flatten the list of dictionaries
-        param_samples = {
-            param: jnp.concatenate([p[param] for p in positions])
-            for param in positions[0]
-        }
+        param_samples = {param: jnp.concatenate([p[param] for p in positions]) for param in positions[0]}
 
-        estimates = {
-            param: float(jnp.mean(samples)) for param, samples in param_samples.items()
-        }
+        estimates = {param: float(jnp.mean(samples)) for param, samples in param_samples.items()}
         return estimates
 
     def _get_inference_data(self):
@@ -118,8 +113,7 @@ class BlackJaxFitter:
 
         # Assuming states is a list of states, one for each chain
         posterior_samples = {
-            param: jnp.stack([chain.position[param] for chain in self.states])
-            for param in self.states[0].position
+            param: jnp.stack([chain.position[param] for chain in self.states]) for param in self.states[0].position
         }
 
         return az.from_dict(posterior_samples)
