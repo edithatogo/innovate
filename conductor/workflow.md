@@ -8,6 +8,8 @@
 4. **High Code Coverage:** Aim for >80% code coverage for all modules
 5. **User Experience First:** Every decision should prioritize user experience
 6. **Non-Interactive & CI-Aware:** Prefer non-interactive commands. Use `CI=true` for watch-mode tools (tests, linters) to ensure single execution.
+7. **Automated Review:** At the end of every phase, automatically run the `conductor:review` skill, apply fixes, and progress without manual intervention.
+8. **CI Gate Enforcement:** After every push to the remote, automatically monitor GitHub Actions runs and address all failures until they pass.
 
 ## Task Workflow
 
@@ -54,7 +56,6 @@ All tasks follow a strict lifecycle:
    - **Step 9.2: Draft Note Content:** Create a detailed summary for the completed task. This should include the task name, a summary of changes, a list of all created/modified files, and the core "why" for the change.
    - **Step 9.3: Attach Note:** Use the `git notes` command to attach the summary to the commit.
      ```bash
-     # The note content from the previous step is passed via the -m flag.
      git notes add -m "<note content>" <commit_hash>
      ```
 
@@ -70,58 +71,52 @@ All tasks follow a strict lifecycle:
 
 **Trigger:** This protocol is executed immediately after a task is completed that also concludes a phase in `plan.md`.
 
-1.  **Announce Protocol Start:** Inform the user that the phase is complete and the verification and checkpointing protocol has begun.
+**IMPORTANT:** This entire protocol runs AUTONOMOUSLY. Do NOT ask the user for manual verification. The `conductor:review` skill replaces all manual review steps.
+
+1.  **Announce Protocol Start:** Inform the user that the phase is complete and the automated verification and checkpointing protocol has begun.
 
 2.  **Ensure Test Coverage for Phase Changes:**
-    -   **Step 2.1: Determine Phase Scope:** To identify the files changed in this phase, you must first find the starting point. Read `plan.md` to find the Git commit SHA of the *previous* phase's checkpoint. If no previous checkpoint exists, the scope is all changes since the first commit.
+    -   **Step 2.1: Determine Phase Scope:** Read `plan.md` to find the Git commit SHA of the *previous* phase's checkpoint. If no previous checkpoint exists, the scope is all changes since the first commit.
     -   **Step 2.2: List Changed Files:** Execute `git diff --name-only <previous_checkpoint_sha> HEAD` to get a precise list of all files modified during this phase.
-    -   **Step 2.3: Verify and Create Tests:** For each file in the list:
-        -   **CRITICAL:** First, check its extension. Exclude non-code files (e.g., `.json`, `.md`, `.yaml`).
-        -   For each remaining code file, verify a corresponding test file exists.
-        -   If a test file is missing, you **must** create one. Before writing the test, **first, analyze other test files in the repository to determine the correct naming convention and testing style.** The new tests **must** validate the functionality described in this phase's tasks (`plan.md`).
+    -   **Step 2.3: Verify and Create Tests:** For each code file in the list (excluding non-code files like `.json`, `.md`, `.yaml`):
+        -   Verify a corresponding test file exists.
+        -   If a test file is missing, analyze other test files in the repository to determine the correct naming convention and testing style, then create one that validates the functionality described in this phase's tasks.
 
 3.  **Execute Automated Tests with Proactive Debugging:**
-    -   Before execution, you **must** announce the exact shell command you will use to run the tests.
-    -   **Example Announcement:** "I will now run the automated test suite to verify the phase. **Command:** `CI=true npm test`"
+    -   Announce the exact shell command you will use to run the tests.
     -   Execute the announced command.
-    -   If tests fail, you **must** inform the user and begin debugging. You may attempt to propose a fix a **maximum of two times**. If the tests still fail after your second proposed fix, you **must stop**, report the persistent failure, and ask the user for guidance.
+    -   If tests fail, begin debugging. You may attempt to propose a fix a **maximum of two times**. If the tests still fail after your second proposed fix, you **must stop**, report the persistent failure, and ask the user for guidance.
 
-4.  **Propose a Detailed, Actionable Manual Verification Plan:**
-    -   **CRITICAL:** To generate the plan, first analyze `product.md`, `product-guidelines.md`, and `plan.md` to determine the user-facing goals of the completed phase.
-    -   You **must** generate a step-by-step plan that walks the user through the verification process, including any necessary commands and specific, expected outcomes.
-    -   The plan you present to the user **must** follow this format:
+4.  **Run `conductor:review` Skill (Automated):**
+    -   **CRITICAL:** Invoke the `conductor:review` skill for the current phase/track.
+    -   Review the output findings from the review.
+    -   **Auto-Apply Fixes:** For every finding with a suggested fix, automatically apply the fix using file editing tools.
+    -   After applying all fixes, run the test suite again to confirm everything still passes.
+    -   Commit any review-fix changes with message: `fix(conductor): Apply review suggestions for phase '<phase_name>'`.
 
-        **For a Frontend Change:**
-        ```
-        The automated tests have passed. For manual verification, please follow these steps:
-
-        **Manual Verification Steps:**
-        1.  **Start the development server with the command:** `npm run dev`
-        2.  **Open your browser to:** `http://localhost:3000`
-        3.  **Confirm that you see:** The new user profile page, with the user's name and email displayed correctly.
-        ```
-
-        **For a Backend Change:**
-        ```
-        The automated tests have passed. For manual verification, please follow these steps:
-
-        **Manual Verification Steps:**
-        1.  **Ensure the server is running.**
-        2.  **Execute the following command in your terminal:** `curl -X POST http://localhost:8080/api/v1/users -d '{"name": "test"}'`
-        3.  **Confirm that you receive:** A JSON response with a status of `201 Created`.
-        ```
-
-5.  **Await Explicit User Feedback:**
-    -   After presenting the detailed plan, ask the user for confirmation: "**Does this meet your expectations? Please confirm with yes or provide feedback on what needs to be changed.**"
-    -   **PAUSE** and await the user's response. Do not proceed without an explicit yes or confirmation.
+5.  **Push to Remote and Monitor CI Gate:**
+    -   Push all accumulated changes to the remote repository.
+    -   **CI Gate Monitoring:** After the push, poll the GitHub Actions API to check the status of all workflow runs triggered by the push.
+    -   **If all CI checks pass:** Proceed to step 6.
+    -   **If any CI checks fail:**
+        -   Fetch the failure logs from the failed workflow runs.
+        -   Analyze the failure output to identify the root cause.
+        -   Apply fixes locally to address the CI failures.
+        -   Commit the fixes with message: `fix(ci): Address CI failures in <failing_check_name>`.
+        -   Push the fixes to the remote.
+        -   **Repeat** the CI gate monitoring loop until all checks pass.
+        -   If failures persist after 3 fix attempts, report the issue to the user with the failure logs and await guidance.
 
 6.  **Create Checkpoint Commit:**
     -   Stage all changes. If no changes occurred in this step, proceed with an empty commit.
     -   Perform the commit with a clear and concise message (e.g., `conductor(checkpoint): Checkpoint end of Phase X`).
 
 7.  **Attach Auditable Verification Report using Git Notes:**
-    -   **Step 7.1: Draft Note Content:** Create a detailed verification report including the automated test command, the manual verification steps, and the user's confirmation.
-    -   **Step 7.2: Attach Note:** Use the `git notes` command and the full commit hash from the previous step to attach the full report to the checkpoint commit.
+    -   **Step 7.1: Draft Note Content:** Create a detailed verification report including:
+        - Automated test command and results
+        - `conductor:review` findings and applied fixes
+        - CI gate monitoring results (all checks passed / failures addressed)
+    -   **Step 7.2: Attach Note:** Use the `git notes` command and the full commit hash from the checkpoint commit to attach the full report.
 
 8.  **Get and Record Phase Checkpoint SHA:**
     -   **Step 8.1: Get Commit Hash:** Obtain the hash of the *just-created checkpoint commit* (`git log -1 --format="%H"`).
@@ -132,7 +127,38 @@ All tasks follow a strict lifecycle:
     - **Action:** Stage the modified `plan.md` file.
     - **Action:** Commit this change with a descriptive message following the format `conductor(plan): Mark phase '<PHASE NAME>' as complete`.
 
-10.  **Announce Completion:** Inform the user that the phase is complete and the checkpoint has been created, with the detailed verification report attached as a git note.
+10. **Auto-Progress to Next Phase:**
+    -   Announce that the phase is complete, all review fixes have been applied, CI gates have passed, and the checkpoint has been created.
+    -   Automatically proceed to the next phase in `plan.md`.
+
+### Track Completion Protocol
+
+**Trigger:** This protocol is executed when ALL phases in `plan.md` are marked as complete.
+
+1.  **Announce Track Completion:** Inform the user that all phases of the track have been completed.
+
+2.  **Run Final `conductor:review` on Entire Track:**
+    -   Invoke the `conductor:review` skill for the **entire track** (all commits from the track).
+    -   Review the output findings.
+    -   **Auto-Apply Fixes:** For every finding, automatically apply the suggested fix.
+    -   Run the full test suite to confirm all tests pass.
+    -   Commit any changes with message: `fix(conductor): Apply final review suggestions for track '<track_name>'`.
+
+3.  **Push and Monitor CI Gate:**
+    -   Push all final changes to the remote.
+    -   Monitor GitHub Actions workflow runs as described in the Phase Completion protocol.
+    -   Address any CI failures iteratively until all checks pass.
+
+4.  **Archive the Track:**
+    -   Move the track's folder from `conductor/tracks/<track_id>/` to `conductor/archive/<track_id>/`.
+    -   Update `conductor/tracks.md` to mark the track as completed and update the link to point to the archive.
+    -   Commit with message: `chore(conductor): Archive track '<track_name>'`.
+
+5.  **Auto-Progress to Next Track:**
+    -   Read `conductor/tracks.md` to find the next track marked as `[ ]` (new/in-progress).
+    -   If a next track exists, announce: "Proceeding to next track: '<next_track_name>'."
+    -   Begin implementation of the next track following the same workflow.
+    -   If no next track exists, announce: "All tracks complete. Project is up to date."
 
 ### Quality Gates
 
@@ -144,60 +170,88 @@ Before marking any task complete, verify:
 - [ ] All public functions/methods are documented (e.g., docstrings, JSDoc, GoDoc)
 - [ ] Type safety is enforced (e.g., type hints, TypeScript types, Go types)
 - [ ] No linting or static analysis errors (using the project's configured tools)
-- [ ] Works correctly on mobile (if applicable)
 - [ ] Documentation updated if needed
 - [ ] No security vulnerabilities introduced
 
 ## Development Commands
 
-**AI AGENT INSTRUCTION: This section should be adapted to the project's specific language, framework, and build tools.**
-
 ### Setup
 ```bash
-# Example: Commands to set up the development environment (e.g., install dependencies, configure database)
-# e.g., for a Node.js project: npm install
-# e.g., for a Go project: go mod tidy
+uv sync
 ```
 
 ### Daily Development
 ```bash
-# Example: Commands for common daily tasks (e.g., start dev server, run tests, lint, format)
-# e.g., for a Node.js project: npm run dev, npm test, npm run lint
-# e.g., for a Go project: go run main.go, go test ./..., go fmt ./...
+uv run pytest                    # Run all tests
+uv run pytest -m unit            # Run unit tests only (fast feedback)
+uv run ruff check .              # Lint
+uv run ruff format .             # Format
+uv run ty check src/             # Type check
+uv run scalene src/innovate/     # Profile performance
 ```
 
 ### Before Committing
 ```bash
-# Example: Commands to run all pre-commit checks (e.g., format, lint, type check, run tests)
-# e.g., for a Node.js project: npm run check
-# e.g., for a Go project: make check (if a Makefile exists)
+uv run ruff check . && uv run ruff format --check . && uv run ty check src/ && uv run pytest
 ```
 
 ## Testing Requirements
 
+### Test Structure
+The test suite is organized into three tiers:
+- **Unit Tests** (`tests/unit/`): Test individual functions/classes in isolation. Marked with `@pytest.mark.unit`.
+- **Integration Tests** (`tests/integration/`): Test interactions between modules. Marked with `@pytest.mark.integration`.
+- **End-to-End Tests** (`tests/e2e/`): Test complete user workflows from start to finish. Marked with `@pytest.mark.e2e`.
+
 ### Unit Testing
 - Every module must have corresponding tests.
-- Use appropriate test setup/teardown mechanisms (e.g., fixtures, beforeEach/afterEach).
+- Use appropriate test setup/teardown mechanisms (e.g., fixtures).
 - Mock external dependencies.
 - Test both success and failure cases.
 
 ### Integration Testing
-- Test complete user flows
-- Verify database transactions
-- Test authentication and authorization
-- Check form submissions
+- Test cross-module interactions.
+- Verify data flows correctly between modules.
+- Test complete modeling pipelines (e.g., data → fit → predict → plot).
 
-### Mobile Testing
-- Test on actual iPhone when possible
-- Use Safari developer tools
-- Test touch interactions
-- Verify responsive layouts
-- Check performance on 3G/4G
+### End-to-End Testing
+- Test real-world usage scenarios.
+- Validate the full user experience from import to output.
+- Ensure examples and documentation code works.
+
+### Property-Based Testing
+- Use `hypothesis` for testing mathematical invariants and edge cases.
+- Define custom strategies for adoption curves, parameter sets, and time series data.
+
+### Mutation Testing
+- Run `mutmut` periodically (weekly CI job) to assess test quality.
+- Target: >70% mutation score.
+- Write additional tests to kill surviving mutants.
+
+### Coverage Measurement
+- Run coverage on every CI execution: `pytest --cov=innovate --cov-report=xml --cov-report=term-missing`
+- Target: >80% overall, >90% for core modules (diffuse, substitute, compete, fitters).
+- Measure both line and branch coverage.
+
+### Performance Profiling
+- Use **Scalene** for CPU, memory, and GPU profiling: `scalene src/innovate/ --cli`
+- Use `pytest-benchmark` for microbenchmarks tracked in CI.
+- Profile critical paths before and after optimization changes.
 
 ## Code Review Process
 
-### Self-Review Checklist
-Before requesting review:
+### Automated Review via `conductor:review`
+All code review is performed automatically by the `conductor:review` skill. The skill:
+- Checks implementation against `plan.md` and `spec.md`
+- Validates style compliance against `code_styleguides/*.md`
+- Runs the test suite and analyzes results
+- Identifies bugs, security issues, and code quality problems
+- **Automatically applies fixes** for all identified issues
+
+No manual code review by the user is required unless the automated review fails repeatedly.
+
+### Self-Review Checklist (for the AI agent, before committing)
+Before committing any changes:
 
 1. **Functionality**
    - Feature works as specified
@@ -205,10 +259,9 @@ Before requesting review:
    - Error messages are user-friendly
 
 2. **Code Quality**
-   - Follows style guide
+   - Follows style guide (ruff)
    - DRY principle applied
    - Clear variable/function names
-   - Appropriate comments
 
 3. **Testing**
    - Unit tests comprehensive
@@ -218,19 +271,12 @@ Before requesting review:
 4. **Security**
    - No hardcoded secrets
    - Input validation present
-   - SQL injection prevented
-   - XSS protection in place
+   - No vulnerabilities introduced (bandit)
 
 5. **Performance**
    - Database queries optimized
-   - Images optimized
-   - Caching implemented where needed
-
-6. **Mobile Experience**
-   - Touch targets adequate (44x44px)
-   - Text readable without zooming
-   - Performance acceptable on mobile
-   - Interactions feel native
+   - Vectorized operations used (NumPy/JAX)
+   - No unnecessary allocations
 
 ## Commit Guidelines
 
@@ -251,13 +297,16 @@ Before requesting review:
 - `refactor`: Code change that neither fixes a bug nor adds a feature
 - `test`: Adding missing tests
 - `chore`: Maintenance tasks
+- `ci`: CI/CD changes
+- `perf`: Performance improvements
 
 ### Examples
 ```bash
-git commit -m "feat(auth): Add remember me functionality"
-git commit -m "fix(posts): Correct excerpt generation for short posts"
-git commit -m "test(comments): Add tests for emoji reaction limits"
-git commit -m "style(mobile): Improve button touch targets"
+git commit -m "feat(diffuse): Add covariate-driven Bass model fitting"
+git commit -m "fix(compete): Correct equilibrium calculation in Lotka-Volterra"
+git commit -m "test(fitters): Add property-based tests for curve fitting"
+git commit -m "ci: Consolidate workflows into single pipeline"
+git commit -m "perf(substitute): Vectorize Fisher-Pry prediction with JAX"
 ```
 
 ## Definition of Done
@@ -267,12 +316,25 @@ A task is complete when:
 1. All code implemented to specification
 2. Unit tests written and passing
 3. Code coverage meets project requirements
-4. Documentation complete (if applicable)
-5. Code passes all configured linting and static analysis checks
-6. Works beautifully on mobile (if applicable)
-7. Implementation notes added to `plan.md`
-8. Changes committed with proper message
-9. Git note with task summary attached to the commit
+4. Code passes all configured linting and static analysis checks
+5. Implementation notes added to `plan.md`
+6. Changes committed with proper message
+7. Git note with task summary attached to the commit
+
+A phase is complete when:
+
+1. All tasks in the phase are done
+2. `conductor:review` has been run and all fixes applied
+3. All CI checks pass on the remote
+4. Checkpoint commit created with verification report attached as git note
+
+A track is complete when:
+
+1. All phases are complete
+2. Final `conductor:review` on the entire track has been run and all fixes applied
+3. All CI checks pass on the remote
+4. Track has been archived
+5. Next track has been identified and begun (if applicable)
 
 ## Emergency Procedures
 
@@ -280,23 +342,15 @@ A task is complete when:
 1. Create hotfix branch from main
 2. Write failing test for bug
 3. Implement minimal fix
-4. Test thoroughly including mobile
-5. Deploy immediately
+4. Test thoroughly
+5. Push and monitor CI gate
 6. Document in plan.md
-
-### Data Loss
-1. Stop all write operations
-2. Restore from latest backup
-3. Verify data integrity
-4. Document incident
-5. Update backup procedures
 
 ### Security Breach
 1. Rotate all secrets immediately
 2. Review access logs
 3. Patch vulnerability
-4. Notify affected users (if any)
-5. Document and update security procedures
+4. Document and update security procedures
 
 ## Deployment Workflow
 
@@ -304,30 +358,22 @@ A task is complete when:
 - [ ] All tests passing
 - [ ] Coverage >80%
 - [ ] No linting errors
-- [ ] Mobile testing complete
 - [ ] Environment variables configured
-- [ ] Database migrations ready
 - [ ] Backup created
 
 ### Deployment Steps
 1. Merge feature branch to main
 2. Tag release with version
 3. Push to deployment service
-4. Run database migrations
+4. Run database migrations (if applicable)
 5. Verify deployment
 6. Test critical paths
 7. Monitor for errors
-
-### Post-Deployment
-1. Monitor analytics
-2. Check error logs
-3. Gather user feedback
-4. Plan next iteration
 
 ## Continuous Improvement
 
 - Review workflow weekly
 - Update based on pain points
 - Document lessons learned
-- Optimize for user happiness
+- Optimize for automation and minimal maintenance
 - Keep things simple and maintainable

@@ -3,13 +3,14 @@
 ## Phase 1: Coverage Analysis and Gap Identification
 
 - [ ] Task: Run baseline coverage analysis for all core modules
-    - [ ] Execute `pytest --cov=src/innovate/diffuse --cov=src/innovate/substitute --cov=src/innovate/compete --cov=src/innovate/hype --cov=src/innovate/fail --cov=src/innovate/adopt --cov=src/innovate/fitters --cov=src/innovate/base --cov-report=term-missing`
+    - [ ] Execute `uv run pytest --cov=src/innovate/diffuse --cov=src/innovate/substitute --cov=src/innovate/compete --cov=src/innovate/hype --cov=src/innovate/fail --cov=src/innovate/adopt --cov=src/innovate/fitters --cov=src/innovate/base --cov-report=term-missing`
     - [ ] Document coverage gaps (uncovered lines, branches) for each module
     - [ ] Identify critical missing test scenarios (edge cases, error paths)
 - [ ] Task: Review existing test files for quality and completeness
     - [ ] Analyze test patterns and conventions used across the test suite
     - [ ] Identify tests that need updating vs. tests that need creation
     - [ ] Document the testing conventions (naming, fixtures, parametrization)
+- [ ] Task: Conductor - Automated Review 'Phase 1' (Protocol in workflow.md)
 
 ## Phase 2: Diffusion Model Test Strengthening
 
@@ -30,7 +31,7 @@
     - [ ] Test covariate and time-varying parameters
     - [ ] Test mixture model fitting
     - [ ] Test edge cases and error handling
-- [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
+- [ ] Task: Conductor - Automated Review 'Phase 2' (Protocol in workflow.md)
 
 ## Phase 3: Substitution and Competition Model Test Strengthening
 
@@ -49,7 +50,7 @@
     - [ ] Test Replicator Dynamics model
     - [ ] Test edge cases: single competitor, zero growth, equilibrium states
     - [ ] Test error handling
-- [ ] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
+- [ ] Task: Conductor - Automated Review 'Phase 3' (Protocol in workflow.md)
 
 ## Phase 4: Remaining Core Model Test Strengthening
 
@@ -71,7 +72,7 @@
     - [ ] Test optimization routines
     - [ ] Test batched fitting
     - [ ] Test error handling and convergence failures
-- [ ] Task: Conductor - User Manual Verification 'Phase 4' (Protocol in workflow.md)
+- [ ] Task: Conductor - Automated Review 'Phase 4' (Protocol in workflow.md)
 
 ## Phase 5: Property-Based Testing Infrastructure
 
@@ -89,7 +90,7 @@
 - [ ] Task: Write property-based tests for competition models
     - [ ] Test competitive exclusion principles
     - [ ] Test equilibrium stability properties
-- [ ] Task: Conductor - User Manual Verification 'Phase 5' (Protocol in workflow.md)
+- [ ] Task: Conductor - Automated Review 'Phase 5' (Protocol in workflow.md)
 
 ## Phase 6: Mutation Testing and Integration Tests
 
@@ -108,16 +109,16 @@
     - [ ] Execute full test suite with coverage
     - [ ] Verify all modules meet >90% coverage threshold
     - [ ] Document any remaining gaps with justification
-- [ ] Task: Conductor - User Manual Verification 'Phase 6' (Protocol in workflow.md)
+- [ ] Task: Conductor - Automated Review 'Phase 6' (Protocol in workflow.md)
 
 ## Phase 7: Quality Gate and Documentation
 
 - [ ] Task: Run complete quality gate verification
-    - [ ] All tests pass (`pytest`)
+    - [ ] All tests pass (`uv run pytest`)
     - [ ] Coverage >80% overall, >90% for core modules
-    - [ ] No linting errors (`ruff check`)
-    - [ ] Type checking passes (`mypy src/`)
-    - [ ] Security scanning passes (`bandit`)
+    - [ ] No linting errors (`uv run ruff check .`)
+    - [ ] Type checking passes (`uv run ty check src/`)
+    - [ ] Security scanning passes (`uv run bandit -r src/innovate`)
 - [ ] Task: Update test documentation
     - [ ] Document new test patterns and conventions
     - [ ] Document Hypothesis strategies and usage
@@ -126,3 +127,4 @@
     - [ ] Review all changes for code quality
     - [ ] Ensure no debug code or temporary files remain
     - [ ] Verify all git notes and plan updates are complete
+- [ ] Task: Conductor - Automated Review 'Phase 7' (Protocol in workflow.md)

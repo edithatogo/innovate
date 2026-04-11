@@ -1,7 +1,12 @@
 # Technology Stack
 
 ## Language
-- **Python** (>=3.8)
+- **Python** (>=3.10) — *3.8/3.9 dropped (EOL)*
+
+## Package Manager & Build
+- **uv** — Blazing-fast Python package manager and resolver (replaces pip)
+- **setuptools** (>=61.0) — Package building and distribution (managed by uv)
+- **uv.lock** — Locked dependency versions for reproducible builds
 
 ## Core Libraries
 - **NumPy** — Numerical computing and vectorized operations
@@ -28,6 +33,14 @@
 - **ruptures** — Change-point detection
 - **pymannkendall** — Mann-Kendall trend tests
 
+## Linting & Formatting
+- **Ruff** — Ultra-fast linter and formatter (replaces Black, isort, flake8, Pylint, vulture, unimport)
+  - Rules: F (pyflakes), E/W (pycodestyle), I (isort), B (bugbear), SIM (simplify), UP (pyupgrade), RUF (ruff-specific), C90 (mccabe), N (naming)
+
+## Type Checking
+- **ty** — Primary type checker (fastest, by Astral)
+- **MyPy** — Secondary type checker (strict mode)
+
 ## Testing
 - **pytest** — Primary test framework
 - **pytest-xdist** — Parallel test execution
@@ -36,21 +49,31 @@
 - **mutmut** — Mutation testing
 - **syrupy** — Snapshot testing
 
-## Code Quality & Linting
-- **Ruff** — Fast Python linter and formatter
-- **MyPy** — Static type checking
-- **Pyright** — Static type checker (Microsoft)
-- **Bandit** — Security linting
-- **Pylint** — Additional code quality checks
-- **pre-commit** — Git hook management
+## Performance Profiling
+- **Scalene** — CPU, memory, and GPU profiler with per-line attribution
+
+## Security
+- **Bandit** — Security linting for Python code
+- **safety** — Dependency vulnerability scanning
 
 ## Documentation
 - **Sphinx** — Documentation generator
 - **sphinx-rtd-theme** — Read the Docs theme
 - **sphinx-autodoc-typehints** — Type hint integration in docs
+- **MyST-Parser** — Markdown support for Sphinx
+- **intersphinx** — Cross-referencing with NumPy, SciPy, Pandas, Mesa docs
 
-## Build System
-- **setuptools** (>=61.0) — Package building and distribution
+## Pre-commit & Git Hooks
+- **pre-commit** — Git hook management framework
+- **actionlint** — GitHub Actions workflow linter
 
 ## CI/CD
 - **GitHub Actions** — Automated testing, linting, and deployment
+- **Renovate** — Automated dependency updates (replaces Dependabot)
+- **release-please** — Conventional-commit-driven releases and changelogs
+- **Codecov** — Coverage reporting and PR comments
+
+## Code Quality & Maintenance
+- **commitizen** — Conventional commits enforcement + changelog generation
+- **pyproject-fmt** — Auto-format pyproject.toml
+- **codespell** — Spell checking for code and docs

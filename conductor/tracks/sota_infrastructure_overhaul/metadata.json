@@ -1,0 +1,8 @@
+{
+  "track_id": "sota_infrastructure_overhaul_20260411",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-04-11T12:30:00Z",
+  "updated_at": "2026-04-11T12:30:00Z",
+  "description": "SOTA Infrastructure Overhaul — migrate to uv, replace Dependabot with Renovate, consolidate all linting under Ruff, use ty for type checking, modernize pre-commit, consolidate CI, add Scalene profiling, CITATION.cff, CODEOWNERS, SECURITY.md, release-please, and formalize unit/integration/e2e test structure"
+}
