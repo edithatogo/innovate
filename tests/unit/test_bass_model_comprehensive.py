@@ -10,6 +10,13 @@ use_backend("numpy")
 
 from innovate.diffuse.bass import BassModel
 
+# Check if JAX is available
+jax_available = True
+try:
+    import jax  # noqa: F401
+except ImportError:
+    jax_available = False
+
 
 class TestBassModelComprehensive:
     """Comprehensive tests for Bass model to ensure >90% coverage."""
@@ -334,6 +341,7 @@ class TestBassModelComprehensive:
             model._params = {}
             model.predict_adoption_rate(t)
 
+    @pytest.mark.skipif(not jax_available, reason="JAX is not installed")
     def test_cumulative_adoption_method(self):
         """Test cumulative_adoption method."""
         model = BassModel()
@@ -348,6 +356,7 @@ class TestBassModelComprehensive:
         assert model._params["q"] == 0.38
         assert model._params["m"] == 1000
 
+    @pytest.mark.skipif(not jax_available, reason="JAX is not installed")
     def test_score_method_fitted_model(self):
         """Test score method with fitted model."""
         model = BassModel()
