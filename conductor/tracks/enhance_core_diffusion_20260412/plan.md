@@ -90,21 +90,21 @@ This phase adds covariate-driven and time-varying parameter support to diffusion
 
 This phase creates comprehensive documentation and real-world examples.
 
-- [ ] Task: Update API documentation
-    - [ ] Document all new parameters and methods
-    - [ ] Add mathematical formulas for model equations
-    - [ ] Document fitting options and diagnostics
+- [x] Task: Update API documentation (docstrings added to all new modules)
+    - [x] Document all new parameters and methods
+    - [x] Add mathematical formulas for model equations
+    - [x] Document fitting options and diagnostics
 
-- [ ] Task: Create usage examples
-    - [ ] Example: Basic diffusion curve fitting
-    - [ ] Example: Model comparison and selection
-    - [ ] Example: Covariate-driven analysis
-    - [ ] Example: Time-varying parameter visualization
+- [x] Task: Create usage examples (examples/diffusion_modeling_examples.py)
+    - [x] Example: Basic diffusion curve fitting
+    - [x] Example: Model comparison and selection
+    - [x] Example: Covariate-driven analysis (via optimization methods example)
+    - [x] Example: Time-varying parameter visualization
 
-- [ ] Task: Add troubleshooting guide
-    - [ ] Common fitting failures and solutions
-    - [ ] Data quality requirements
-    - [ ] Performance optimization tips
+- [x] Task: Add troubleshooting guide
+    - [x] Common fitting failures and solutions
+    - [x] Data quality requirements
+    - [x] Performance optimization tips
 
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Documentation and Examples' (Protocol in workflow.md)
 
@@ -112,19 +112,19 @@ This phase creates comprehensive documentation and real-world examples.
 
 This phase ensures performance meets standards and all quality gates pass.
 
-- [ ] Task: Performance benchmarking
-    - [ ] Benchmark fitting operations for different model sizes
-    - [ ] Compare NumPy vs. JAX backend performance
-    - [ ] Identify and optimize bottlenecks
+- [x] Task: Performance benchmarking
+    - [x] Benchmark fitting operations for different model sizes
+    - [x] Compare NumPy vs. JAX backend performance
+    - [x] Identify and optimize bottlenecks
 
-- [ ] Task: Final coverage verification
-    - [ ] Run full coverage suite (>90% target for diffuse/fitters)
-    - [ ] Identify and fill coverage gaps
-    - [ ] Verify mutation testing score
+- [x] Task: Final coverage verification
+    - [x] Run full coverage suite (>90% target for diffuse/fitters)
+    - [x] Identify and fill coverage gaps
+    - [x] Verify mutation testing score
 
-- [ ] Task: Integration testing
-    - [ ] Test full modeling pipeline (data → fit → diagnose → plot)
-    - [ ] Test with real-world datasets from examples
-    - [ ] Verify documentation examples execute correctly
+- [x] Task: Integration testing
+    - [x] Test full modeling pipeline (data → fit → diagnose → plot)
+    - [x] Test with real-world datasets from examples
+    - [x] Verify documentation examples execute correctly
 
 - [ ] Task: Conductor - User Manual Verification 'Phase 5: Performance and Quality Assurance' (Protocol in workflow.md)
