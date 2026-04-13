@@ -11,4 +11,4 @@ This file tracks all major tracks for the project. Each track has its own detail
   *Link: [./tracks/strengthen_testing_coverage/](./tracks/strengthen_testing_coverage/)*
 
 - [x] **Track: Enhance Core Diffusion Models with Advanced Features** *(Completed)*
-  *Link: [./tracks/enhance_core_diffusion_20260412/](./tracks/enhance_core_diffusion_20260412/)*
+  *Link: [./archive/enhance_core_diffusion_20260412/](./archive/enhance_core_diffusion_20260412/)*
