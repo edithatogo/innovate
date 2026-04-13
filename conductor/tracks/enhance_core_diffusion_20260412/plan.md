@@ -4,11 +4,11 @@
 
 This phase establishes comprehensive test coverage for the existing diffusion models before adding new features.
 
-- [ ] Task: Write unit tests for existing Bass model implementation
-    - [ ] Test Bass model initialization with default parameters
-    - [ ] Test Bass model predict method with various time ranges
-    - [ ] Test Bass model edge cases (zero parameters, negative time)
-    - [ ] Test Bass model cumulative vs. non-cumulative outputs
+- [~] Task: Write unit tests for existing Bass model implementation (85 tests pass, 2 skipped for JAX)
+    - [x] Test Bass model initialization with default parameters
+    - [x] Test Bass model predict method with various time ranges
+    - [x] Test Bass model edge cases (zero parameters, negative time)
+    - [x] Test Bass model cumulative vs. non-cumulative outputs
 
 - [ ] Task: Write unit tests for Gompertz model implementation
     - [ ] Test Gompertz model initialization
