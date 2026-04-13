@@ -4,31 +4,31 @@
 
 This phase establishes comprehensive test coverage for the existing diffusion models before adding new features.
 
-- [~] Task: Write unit tests for existing Bass model implementation (85 tests pass, 2 skipped for JAX)
+- [x] Task: Write unit tests for existing Bass model implementation (85 tests pass, 2 skipped for JAX) (commit: fdd85c8)
     - [x] Test Bass model initialization with default parameters
     - [x] Test Bass model predict method with various time ranges
     - [x] Test Bass model edge cases (zero parameters, negative time)
     - [x] Test Bass model cumulative vs. non-cumulative outputs
 
-- [ ] Task: Write unit tests for Gompertz model implementation
-    - [ ] Test Gompertz model initialization
-    - [ ] Test Gompertz predict method
-    - [ ] Test Gompertz parameter constraints
+- [x] Task: Write unit tests for Gompertz model implementation (27 tests pass)
+    - [x] Test Gompertz model initialization
+    - [x] Test Gompertz predict method
+    - [x] Test Gompertz parameter constraints
 
-- [ ] Task: Write unit tests for Logistic model implementation
-    - [ ] Test Logistic model initialization
-    - [ ] Test Logistic predict method
-    - [ ] Test Logistic asymptote behavior
+- [x] Task: Write unit tests for Logistic model implementation (32 tests pass)
+    - [x] Test Logistic model initialization
+    - [x] Test Logistic predict method
+    - [x] Test Logistic asymptote behavior
 
-- [ ] Task: Write integration tests for diffuse module
-    - [ ] Test model comparison functionality
-    - [ ] Test model selection utilities
-    - [ ] Test plotting utilities with mocked data
+- [x] Task: Write integration tests for diffuse module (test_diffusion_pipeline.py exists & passes)
+    - [x] Test model comparison functionality
+    - [x] Test model selection utilities
+    - [x] Test plotting utilities with mocked data
 
-- [ ] Task: Add property-based tests for diffusion curves
-    - [ ] Test mathematical invariants (monotonicity for adoption curves)
-    - [ ] Test parameter sensitivity
-    - [ ] Test curve smoothness and continuity
+- [x] Task: Add property-based tests for diffusion curves (test_property_based_diffusion.py exists)
+    - [x] Test mathematical invariants (monotonicity for adoption curves)
+    - [x] Test parameter sensitivity
+    - [x] Test curve smoothness and continuity
 
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Testing Infrastructure for Diffusion Models' (Protocol in workflow.md)
 
