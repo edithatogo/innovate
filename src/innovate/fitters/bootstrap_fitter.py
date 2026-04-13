@@ -1,5 +1,6 @@
 from collections.abc import Sequence
 from typing import Any
+import warnings
 
 import numpy as np
 
@@ -63,7 +64,7 @@ class BootstrapFitter:
                     self.bootstrapped_diagnostics.append(self.fitter.diagnostics)
             except RuntimeError as e:
                 # Handle cases where fitting might fail for a resampled dataset
-                print(f"Warning: Fitting failed for bootstrap sample {i}: {e}")
+                warnings.warn(f"Fitting failed for bootstrap sample {i}: {e}")
                 continue
 
     def get_parameter_estimates(self) -> dict[str, list[float]]:

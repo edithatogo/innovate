@@ -1,5 +1,6 @@
 from collections.abc import Sequence
 from dataclasses import dataclass, field
+import warnings
 from typing import Literal
 
 import numpy as np
@@ -212,7 +213,8 @@ class ScipyFitter:
             try:
                 y_pred = model.predict(t_arr).flatten()
                 return np.sum((y_arr - y_pred) ** 2)
-            except Exception:
+            except Exception as e:
+                warnings.warn(f"Objective evaluation failed during Nelder-Mead optimization: {e}")
                 return 1e10
 
         result = minimize(
@@ -240,7 +242,8 @@ class ScipyFitter:
             try:
                 y_pred = model.predict(t_arr).flatten()
                 return np.sum((y_arr - y_pred) ** 2)
-            except Exception:
+            except Exception as e:
+                warnings.warn(f"Objective evaluation failed during L-BFGS-B optimization: {e}")
                 return 1e10
 
         lb, ub = bounds
@@ -272,7 +275,8 @@ class ScipyFitter:
             try:
                 y_pred = model.predict(t_arr).flatten()
                 return np.sum((y_arr - y_pred) ** 2)
-            except Exception:
+            except Exception as e:
+                warnings.warn(f"Objective evaluation failed during differential evolution: {e}")
                 return 1e10
 
         lb, ub = bounds
