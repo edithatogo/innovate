@@ -64,7 +64,7 @@ class BootstrapFitter:
                     self.bootstrapped_diagnostics.append(self.fitter.diagnostics)
             except RuntimeError as e:
                 # Handle cases where fitting might fail for a resampled dataset
-                warnings.warn(stacklevel=2, f"Fitting failed for bootstrap sample {i}: {e}")
+                warnings.warn(f"Fitting failed for bootstrap sample {i}: {e}", stacklevel=2)
                 continue
 
     def get_parameter_estimates(self) -> dict[str, list[float]]:

@@ -216,7 +216,7 @@ class ScipyFitter:
                 y_pred = model.predict(t_arr).flatten()
                 return np.sum((y_arr - y_pred) ** 2)
             except Exception as e:
-                warnings.warn(stacklevel=2, f"Objective evaluation failed during Nelder-Mead optimization: {e}")
+                warnings.warn(f"Objective evaluation failed during Nelder-Mead optimization: {e}", stacklevel=2)
                 return 1e10
 
         result = minimize(
@@ -246,7 +246,7 @@ class ScipyFitter:
                 y_pred = model.predict(t_arr).flatten()
                 return np.sum((y_arr - y_pred) ** 2)
             except Exception as e:
-                warnings.warn(stacklevel=2, f"Objective evaluation failed during L-BFGS-B optimization: {e}")
+                warnings.warn(f"Objective evaluation failed during L-BFGS-B optimization: {e}", stacklevel=2)
                 return 1e10
 
         lb, ub = bounds
@@ -280,11 +280,16 @@ class ScipyFitter:
                 y_pred = model.predict(t_arr).flatten()
                 return np.sum((y_arr - y_pred) ** 2)
             except Exception as e:
-                warnings.warn(stacklevel=2, f"Objective evaluation failed during differential evolution: {e}")
+                warnings.warn(f"Objective evaluation failed during differential evolution: {e}", stacklevel=2)
                 return 1e10
 
         lb, ub = bounds
-        bounds_list = list(zip(lb, ub))
+        # Differential evolution requires finite bounds
+        LARGE_BOUND = 1e6
+        bounds_list = [
+            (max(-LARGE_BOUND, lo), min(LARGE_BOUND, hi))
+            for lo, hi in zip(lb, ub)
+        ]
 
         result = differential_evolution(
             objective,
@@ -296,7 +301,7 @@ class ScipyFitter:
         )
         return result.x, "converged" if result.success else "failed", result.message
 
-    def fit(
+    def fit(  # noqa: PLR0912
         self,
         model: DiffusionModel,
         t: Sequence[float],
@@ -346,9 +351,10 @@ class ScipyFitter:
             if weights is not None:
                 import warnings
 
-                warnings.warn(stacklevel=2, 
+                warnings.warn(
                     "MultiProductDiffusionModel does not support sample weights. Weights parameter will be ignored.",
                     UserWarning,
+                    stacklevel=2,
                 )
             if bounds is not None:
                 kwargs["bounds"] = bounds

@@ -54,7 +54,7 @@ class ResidualAnalysis:
         return "\n".join(lines)
 
 
-def analyze_residuals(
+def analyze_residuals(  # noqa: PLR0912
     residuals: np.ndarray,
     fitted_values: np.ndarray | None = None,
 ) -> ResidualAnalysis:

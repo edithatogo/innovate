@@ -159,7 +159,7 @@ class BayesianFitter:
                     if jnp.isfinite(upper) and jnp.isfinite(lower):
                         log_prior -= jnp.log(upper - lower)
 
-            return log_prior
+            return log_prior  # noqa: TRY300
 
         except Exception:
             return -jnp.inf
@@ -241,7 +241,7 @@ class BayesianFitter:
             }
 
         except Exception as e:
-            warnings.warn(f"MCMC sampling failed: {e!s}. Using point estimates.", UserWarning)
+            warnings.warn(f"MCMC sampling failed: {e!s}. Using point estimates.", UserWarning, stacklevel=2)
             # Fallback to point estimates
             self.posterior_samples_ = {
                 name: jnp.full((self.num_chains, self.num_samples), value) for name, value in initial_params.items()
