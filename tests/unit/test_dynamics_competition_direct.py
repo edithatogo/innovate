@@ -1,20 +1,19 @@
 """Tests for the main dynamics competition module (not the subdirectory) to improve coverage to >90%."""
 
 import importlib.util
-import os
 import sys
+from pathlib import Path
 
 import pytest
 
 # Add the src directory to the path to allow importing the main competition.py file
-# __file__ is this test file's actual path; tests/unit/ -> ../.. -> project root
-TEST_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(TEST_DIR, "..", ".."))
-SRC_DIR = os.path.join(PROJECT_ROOT, "src")
-sys.path.insert(0, SRC_DIR)
+TEST_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = TEST_DIR.parent.parent
+SRC_DIR = PROJECT_ROOT / "src"
+sys.path.insert(0, str(SRC_DIR))
 
 # Import the main competition.py module (not the competition/ directory) directly
-competition_path = os.path.join(PROJECT_ROOT, "src", "innovate", "dynamics", "competition.py")
+competition_path = PROJECT_ROOT / "src" / "innovate" / "dynamics" / "competition.py"
 
 spec = importlib.util.spec_from_file_location("competition_main", competition_path)
 competition_module = importlib.util.module_from_spec(spec)

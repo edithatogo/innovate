@@ -9,9 +9,9 @@ import pytest
 from innovate import backend
 from innovate.backend import current_backend, use_backend
 from innovate.backends.numpy_backend import NumPyBackend
-from innovate.utils.metrics import *
-from innovate.utils.model_evaluation import *
-from innovate.utils.preprocessing import *
+from innovate.utils.metrics import *  # noqa: F403
+from innovate.utils.model_evaluation import *  # noqa: F403
+from innovate.utils.preprocessing import *  # noqa: F403
 
 # Check JAX availability
 jax_available = True

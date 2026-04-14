@@ -87,7 +87,7 @@ def example_model_comparison():
                 "bic": fitter.diagnostics.bic,
             }
             print(f"{name}: R²={fitter.diagnostics.r_squared:.4f}, AIC={fitter.diagnostics.aic:.2f}")
-        except RuntimeError as e:
+        except RuntimeError as e:  # noqa: PERF203
             print(f"{name}: Fitting failed - {e}")
 
     # Select best model by AIC
