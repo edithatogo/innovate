@@ -1,6 +1,6 @@
+import warnings
 from collections.abc import Sequence
 from dataclasses import dataclass, field
-import warnings
 from typing import Literal
 
 import numpy as np
@@ -216,7 +216,7 @@ class ScipyFitter:
                 y_pred = model.predict(t_arr).flatten()
                 return np.sum((y_arr - y_pred) ** 2)
             except Exception as e:
-                warnings.warn(f"Objective evaluation failed during Nelder-Mead optimization: {e}")
+                warnings.warn(stacklevel=2, f"Objective evaluation failed during Nelder-Mead optimization: {e}")
                 return 1e10
 
         result = minimize(
@@ -246,7 +246,7 @@ class ScipyFitter:
                 y_pred = model.predict(t_arr).flatten()
                 return np.sum((y_arr - y_pred) ** 2)
             except Exception as e:
-                warnings.warn(f"Objective evaluation failed during L-BFGS-B optimization: {e}")
+                warnings.warn(stacklevel=2, f"Objective evaluation failed during L-BFGS-B optimization: {e}")
                 return 1e10
 
         lb, ub = bounds
@@ -280,7 +280,7 @@ class ScipyFitter:
                 y_pred = model.predict(t_arr).flatten()
                 return np.sum((y_arr - y_pred) ** 2)
             except Exception as e:
-                warnings.warn(f"Objective evaluation failed during differential evolution: {e}")
+                warnings.warn(stacklevel=2, f"Objective evaluation failed during differential evolution: {e}")
                 return 1e10
 
         lb, ub = bounds
@@ -317,10 +317,12 @@ class ScipyFitter:
             weights: Weights for the observed data points.
             kwargs: Additional keyword arguments passed to the optimizer.
 
-        Returns:
+        Returns
+        -------
             The fitter instance.
 
-        Raises:
+        Raises
+        ------
             RuntimeError: If fitting fails.
             ValueError: If inputs are invalid.
         """
@@ -344,7 +346,7 @@ class ScipyFitter:
             if weights is not None:
                 import warnings
 
-                warnings.warn(
+                warnings.warn(stacklevel=2, 
                     "MultiProductDiffusionModel does not support sample weights. Weights parameter will be ignored.",
                     UserWarning,
                 )

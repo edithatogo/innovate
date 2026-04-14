@@ -45,7 +45,7 @@ class ResidualAnalysis:
             f"Max |Residual|:    {self.max_abs_residual:.6f}",
             f"Durbin-Watson:     {self.durbin_watson:.4f}",
             f"Shapiro-Wilk p:    {self.shapiro_wilk_p:.6f}",
-            f"Normality (α=0.05): {'Yes' if self.is_normally_distributed() else 'No'}",
+            f"Normality (alpha=0.05): {'Yes' if self.is_normally_distributed() else 'No'}",
             f"Autocorrelation:   {'Yes' if self.has_autocorrelation() else 'No'}",
         ]
         if self.breusch_pagan_p is not None:
@@ -65,7 +65,8 @@ def analyze_residuals(
         fitted_values: Array of fitted/predicted values. If None, heteroscedasticity
                       test is skipped.
 
-    Returns:
+    Returns
+    -------
         ResidualAnalysis object with diagnostic statistics.
     """
     residuals = np.asarray(residuals, dtype=float)

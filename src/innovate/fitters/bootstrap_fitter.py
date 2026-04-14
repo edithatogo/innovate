@@ -1,6 +1,6 @@
+import warnings
 from collections.abc import Sequence
 from typing import Any
-import warnings
 
 import numpy as np
 
@@ -64,7 +64,7 @@ class BootstrapFitter:
                     self.bootstrapped_diagnostics.append(self.fitter.diagnostics)
             except RuntimeError as e:
                 # Handle cases where fitting might fail for a resampled dataset
-                warnings.warn(f"Fitting failed for bootstrap sample {i}: {e}")
+                warnings.warn(stacklevel=2, f"Fitting failed for bootstrap sample {i}: {e}")
                 continue
 
     def get_parameter_estimates(self) -> dict[str, list[float]]:
@@ -89,7 +89,8 @@ class BootstrapFitter:
         Args:
             alpha: Significance level (default 0.05 for 95% CI).
 
-        Returns:
+        Returns
+        -------
             Dictionary mapping parameter names to dicts with 'lower', 'upper', and 'median' keys.
         """
         estimates = self.get_parameter_estimates()
@@ -152,7 +153,7 @@ class BootstrapFitter:
             "-" * 60,
         ]
 
-        for name in cis.keys():
+        for name in cis:
             median = cis[name]["median"]
             se = ses.get(name, 0.0)
             lower = cis[name]["lower"]
