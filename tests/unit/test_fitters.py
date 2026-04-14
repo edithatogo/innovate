@@ -3,8 +3,16 @@ import pytest
 
 from innovate.diffuse.logistic import LogisticModel
 from innovate.fitters.bootstrap_fitter import BootstrapFitter
-from innovate.fitters.jax_fitter import JaxFitter
 from innovate.fitters.scipy_fitter import ScipyFitter
+
+# Check JAX availability
+jax_available = True
+try:
+    import jax  # noqa: F401
+    from innovate.fitters.jax_fitter import JaxFitter
+except ImportError:
+    jax_available = False
+    JaxFitter = None  # type: ignore
 
 
 @pytest.fixture
@@ -59,6 +67,7 @@ def test_bootstrap_fitter(synthetic_logistic_data):
     assert ses["L"] >= 0
 
 
+@pytest.mark.skipif(not jax_available, reason="JAX is not installed")
 def test_jax_fitter(synthetic_logistic_data):
     from innovate.backend import current_backend, use_backend
 

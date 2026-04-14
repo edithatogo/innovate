@@ -177,9 +177,13 @@ class BassModel(DiffusionModel):
             return self.differential_equation(t, y, args, validated_covariates, t)
 
         # Handle different backend method signatures
-        from innovate.backends.jax_backend import JaxBackend
+        try:
+            from innovate.backends.jax_backend import JaxBackend
+            is_jax = isinstance(backend.current_backend, JaxBackend)
+        except (ImportError, ModuleNotFoundError):
+            is_jax = False
 
-        if isinstance(backend.current_backend, JaxBackend):
+        if is_jax:
             # JAX backend expects 4 parameters: func, y0, t, args
             sol = backend.current_backend.solve_ode(ode_func, y0, t_arr, tuple(params))
         else:

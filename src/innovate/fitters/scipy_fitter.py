@@ -179,6 +179,7 @@ class ScipyFitter:
         y_arr: np.ndarray,
         p0: list[float],
         bounds: tuple,
+        sigma=None,
         **kwargs,
     ) -> tuple[np.ndarray, str, str]:
         """Fit using scipy.optimize.least_squares with robust loss."""
@@ -204,6 +205,7 @@ class ScipyFitter:
         y_arr: np.ndarray,
         p0: list[float],
         bounds: tuple,
+        sigma=None,
         **kwargs,
     ) -> tuple[np.ndarray, str, str]:
         """Fit using Nelder-Mead simplex method."""
@@ -233,6 +235,7 @@ class ScipyFitter:
         y_arr: np.ndarray,
         p0: list[float],
         bounds: tuple,
+        sigma=None,
         **kwargs,
     ) -> tuple[np.ndarray, str, str]:
         """Fit using L-BFGS-B optimizer."""
@@ -266,6 +269,7 @@ class ScipyFitter:
         y_arr: np.ndarray,
         p0: list[float],
         bounds: tuple,
+        sigma=None,
         **kwargs,
     ) -> tuple[np.ndarray, str, str]:
         """Fit using differential evolution (global optimization)."""
@@ -388,7 +392,7 @@ class ScipyFitter:
 
         try:
             popt, status, message = fit_methods[method](
-                self, model, t_arr, y_arr, p0, bounds, sigma, **kwargs
+                model, t_arr, y_arr, p0, bounds, sigma, **kwargs
             )
             model.params_ = dict(zip(model.param_names, popt))
         except Exception as e:

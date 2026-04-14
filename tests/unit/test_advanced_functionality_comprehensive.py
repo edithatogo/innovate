@@ -328,7 +328,7 @@ class TestLockInModel:
         t = [1, 2, 3]
         y0 = [0.1, 0.05]
 
-        with pytest.raises(RuntimeError, match="Model parameters have not been set"):
+        with pytest.raises(RuntimeError, match="Model has not been fitted"):
             model.predict(t, y0)
 
     def test_lock_in_predict_fitted(self):

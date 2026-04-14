@@ -7,12 +7,16 @@ import sys
 import pytest
 
 # Add the src directory to the path to allow importing the main competition.py file
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+# __file__ is this test file's actual path; tests/unit/ -> ../.. -> project root
+TEST_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.abspath(os.path.join(TEST_DIR, "..", ".."))
+SRC_DIR = os.path.join(PROJECT_ROOT, "src")
+sys.path.insert(0, SRC_DIR)
 
 # Import the main competition.py module (not the competition/ directory) directly
-spec = importlib.util.spec_from_file_location(
-    "competition_main", os.path.join(os.path.dirname(__file__), "..", "src", "innovate", "dynamics", "competition.py")
-)
+competition_path = os.path.join(PROJECT_ROOT, "src", "innovate", "dynamics", "competition.py")
+
+spec = importlib.util.spec_from_file_location("competition_main", competition_path)
 competition_module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(competition_module)
 
