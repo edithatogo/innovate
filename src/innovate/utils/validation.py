@@ -20,10 +20,11 @@ def validate_sequence_numeric(sequence: Sequence, param_name: str, allow_empty: 
     # Convert to numpy array to validate numeric content
     try:
         arr = np.asarray(sequence)
-        if not np.issubdtype(arr.dtype, np.number):
-            raise TypeError(f"Parameter '{param_name}' must contain numeric values")
     except (TypeError, ValueError) as e:
-        raise TypeError(f"Parameter '{param_name}' values must be numeric: {e}")
+        raise TypeError(f"Parameter '{param_name}' values must be numeric: {e}") from e
+
+    if not np.issubdtype(arr.dtype, np.number):
+        raise TypeError(f"Parameter '{param_name}' must contain numeric values")
 
     return arr
 

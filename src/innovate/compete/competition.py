@@ -13,18 +13,18 @@ class MultiProductDiffusionModel(DiffusionModel):
     def __init__(
         self,
         p: Sequence[float],  # length N: intrinsic adoption rates
-        Q: Sequence[Sequence[float]],  # N x N matrix: interaction matrix (within- and cross-imitation)
+        q_mat: Sequence[Sequence[float]],  # N x N matrix: interaction matrix (within- and cross-imitation)
         m: Sequence[float],  # length N: ultimate market potentials
         names: Sequence[str] | None = None,
     ):
         self.p = B.array(p)
-        self.Q = B.array(Q)
+        self.q_mat = B.array(q_mat)
         self.m = B.array(m)
         self.N = len(p)
         self.names = names or [f"Prod{i + 1}" for i in range(self.N)]
 
-        if not (len(self.p) == self.N and self.Q.shape == (self.N, self.N) and len(self.m) == self.N):
-            raise ValueError("Dimensions of p, Q, and m must be consistent.")
+        if not (len(self.p) == self.N and self.q_mat.shape == (self.N, self.N) and len(self.m) == self.N):
+            raise ValueError("Dimensions of p, q_mat, and m must be consistent.")
         if names and len(names) != self.N:
             raise ValueError("Length of names must match the number of products (N).")
 
@@ -124,16 +124,16 @@ class MultiProductDiffusionModel(DiffusionModel):
 
         t_arr = np.array(t)
 
-        def flatten(p_vec, Q_mat, m_vec):
-            return np.concatenate([p_vec, Q_mat.flatten(), m_vec])
+        def flatten(p_vec, q_mat, m_vec):
+            return np.concatenate([p_vec, q_mat.flatten(), m_vec])
 
         def unflatten(params):
             p_end = self.N
             Q_end = p_end + self.N * self.N
             p_vec = np.array(params[:p_end])
-            Q_mat = np.array(params[p_end:Q_end]).reshape(self.N, self.N)
+            q_mat = np.array(params[p_end:Q_end]).reshape(self.N, self.N)
             m_vec = np.array(params[Q_end : Q_end + self.N])
-            return p_vec, Q_mat, m_vec
+            return p_vec, q_mat, m_vec
 
         guesses = self.initial_guesses(t_arr, y_arr)
         p0 = np.array(guesses.get("p", self.p))
@@ -152,9 +152,9 @@ class MultiProductDiffusionModel(DiffusionModel):
         bounds = b_p + b_Q + b_m
 
         def objective(params):
-            p_vec, Q_mat, m_vec = unflatten(params)
+            p_vec, q_mat, m_vec = unflatten(params)
             self.p = B.array(p_vec)
-            self.Q = B.array(Q_mat)
+            self.q_mat = B.array(q_mat)
             self.m = B.array(m_vec)
             pred = self.predict(t_arr).values
             return np.sum((y_arr - pred) ** 2)
@@ -166,7 +166,7 @@ class MultiProductDiffusionModel(DiffusionModel):
 
         opt_p, opt_Q, opt_m = unflatten(result.x)
         self.p = B.array(opt_p)
-        self.Q = B.array(opt_Q)
+        self.q_mat = B.array(opt_Q)
         self.m = B.array(opt_m)
         self._params = {"p": opt_p.tolist(), "Q": opt_Q.tolist(), "m": opt_m.tolist()}
         return self

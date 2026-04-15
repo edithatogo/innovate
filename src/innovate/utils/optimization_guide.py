@@ -100,9 +100,7 @@ def benchmark_model_performance(model_class, params: dict[str, Any], t_data, y_d
 
 
 def validate_parameters_safely(model_class, params: dict[str, Any]):
-    """
-    Safely validate parameters without triggering model computations.
-    """
+    """Safely validate parameters without triggering model computations."""
     model = model_class()
 
     # Set parameters
@@ -115,15 +113,13 @@ def validate_parameters_safely(model_class, params: dict[str, Any]):
 
         if param_name in ["p", "q", "m"] and param_value < 0:
             # These typically represent adoption rates or market size
-            warnings.warn(f"Parameter {param_name} is negative: {param_value}")
+            warnings.warn(f"Parameter {param_name} is negative: {param_value}", stacklevel=2)
 
     return True
 
 
 def suggest_parameter_bounds_safely(model_class, y_data):
-    """
-    Suggest reasonable parameter bounds based on data without triggering fitting.
-    """
+    """Suggest reasonable parameter bounds based on data without triggering fitting."""
     if len(y_data) == 0:
         return {}
 

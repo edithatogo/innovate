@@ -3,8 +3,7 @@ from collections.abc import Sequence
 import numpy as np
 
 from innovate.backend import current_backend as B
-
-from ..base import DiffusionModel
+from innovate.base import DiffusionModel
 
 
 class NortonBassModel(DiffusionModel):

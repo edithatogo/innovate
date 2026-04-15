@@ -57,7 +57,7 @@ def apply_stl_decomposition(
     try:
         stl = STL(data, period=period, robust=robust)
         res = stl.fit()
-        return res.trend, res.seasonal, res.resid
+        return res.trend, res.seasonal, res.resid  # noqa: TRY300
     except Exception as e:
         raise RuntimeError(f"STL decomposition failed: {e}")
 

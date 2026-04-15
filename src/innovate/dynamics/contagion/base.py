@@ -14,10 +14,10 @@ class ContagionSpread(ABC):
         Calculate the instantaneous rate at which contagion spreads based on provided model parameters.
 
         Parameters:
-        	params: Arbitrary keyword arguments representing model-specific parameters required to compute the spread rate.
+            params: Arbitrary keyword arguments representing model-specific parameters required to compute the spread rate.
 
         Returns:
-        	The computed spread rate, as defined by the specific contagion model.
+            The computed spread rate, as defined by the specific contagion model.
         """
 
     @abstractmethod

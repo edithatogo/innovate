@@ -3,7 +3,7 @@ from typing import Any
 
 import numpy as np
 
-from ..base import DiffusionModel
+from innovate.base import DiffusionModel
 
 
 class CounterfactualAnalysis:

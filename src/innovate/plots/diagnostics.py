@@ -82,6 +82,7 @@ def plot_residuals(
         plt.show()
     else:
         return fig, axes
+    return None
 
 
 def plot_acf_only(

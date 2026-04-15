@@ -8,7 +8,7 @@ def plot_network_diffusion(
     graph: nx.Graph,
     node_states_over_time: list[dict[Any, Any]],
     title: str = "Network Diffusion",
-    node_color_map: dict[Any, str] = {False: "skyblue", True: "red"},
+    node_color_map: dict[Any, str] | None = None,
     pos: dict[Any, Any] | None = None,
     snapshot_interval: int = 1,
     save_path_prefix: str | None = None,
@@ -29,6 +29,8 @@ def plot_network_diffusion(
         save_path_prefix: Optional. If provided, plots will be saved as
                           '<save_path_prefix>_step_<step_number>.png'.
     """
+    if node_color_map is None:
+        node_color_map = {False: "skyblue", True: "red"}
     if not pos:
         pos = nx.spring_layout(graph, seed=42)  # For reproducible layout
 

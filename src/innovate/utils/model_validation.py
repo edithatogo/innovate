@@ -7,7 +7,9 @@ import numpy as np
 from .validation import validate_float
 
 
-def validate_bass_parameters(params: dict[str, float], t_event: float | None = None) -> dict[str, Any]:
+def validate_bass_parameters(  # noqa: PLR0912, PLR0915
+    params: dict[str, float], t_event: float | None = None
+) -> dict[str, Any]:
     """
     Validate Bass model parameters to ensure they result in reasonable behavior.
 
@@ -292,12 +294,11 @@ def validate_model_predictions(
             is_valid = False
 
     # Check if predictions are monotonically increasing (for cumulative models)
-    if hasattr(model, "monotonic_check") and model.monotonic_check:
-        if not np.all(np.diff(y_pred) >= -1e-10):  # Allow small numerical errors
-            issues.append(
-                "Model predictions are not monotonically increasing (cumulative models should generally increase)"
-            )
-            is_valid = False
+    if hasattr(model, "monotonic_check") and model.monotonic_check and not np.all(np.diff(y_pred) >= -1e-10):  # Allow small numerical errors
+        issues.append(
+            "Model predictions are not monotonically increasing (cumulative models should generally increase)"
+        )
+        is_valid = False
 
     return {
         "is_valid": is_valid,

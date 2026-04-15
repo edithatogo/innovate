@@ -212,9 +212,6 @@ class NumPyBackend:
     def zeros_like(self, x: np.ndarray) -> np.ndarray:
         return np.zeros_like(x)
 
-    def ones_like(self, x: np.ndarray) -> np.ndarray:
-        return np.ones_like(x)
-
     def ravel(self, x: np.ndarray) -> np.ndarray:
         return np.ravel(x)
 
@@ -349,48 +346,6 @@ class NumPyBackend:
             Array with elements of x raised to the corresponding powers of y.
         """
         return np.power(x, y)
-
-    def ones_like(
-        self,
-        a: np.ndarray | Sequence,
-        dtype: type | None = None,
-        subok: bool = True,
-        shape: int | Sequence | None = None,
-    ) -> np.ndarray:
-        """Return an array of ones with the same shape and type as a given array.
-
-        Args:
-            a: Input array to model the shape and type of the output.
-            dtype: Overrides the data type of the result.
-            subok: If True, subclasses will be passed through.
-            shape: Overrides the shape of the result.
-
-        Returns
-        -------
-            Array of ones with same shape and type as input array.
-        """
-        return np.ones_like(a, dtype=dtype, subok=subok, shape=shape)
-
-    def zeros_like(
-        self,
-        a: np.ndarray | Sequence,
-        dtype: type | None = None,
-        subok: bool = True,
-        shape: int | Sequence | None = None,
-    ) -> np.ndarray:
-        """Return an array of zeros with the same shape and type as a given array.
-
-        Args:
-            a: Input array to model the shape and type of the output.
-            dtype: Overrides the data type of the result.
-            subok: If True, subclasses will be passed through.
-            shape: Overrides the shape of the result.
-
-        Returns
-        -------
-            Array of zeros with same shape and type as input array.
-        """
-        return np.zeros_like(a, dtype=dtype, subok=subok, shape=shape)
 
     def empty_like(
         self,

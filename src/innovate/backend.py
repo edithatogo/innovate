@@ -12,7 +12,7 @@ current_backend = NumPyBackend()
 
 
 def use_backend(backend: str):
-    global current_backend
+    global current_backend  # noqa: PLW0603
     if backend == "jax":
         if JaxBackend is None:
             raise ImportError(

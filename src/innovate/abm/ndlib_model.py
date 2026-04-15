@@ -1,5 +1,5 @@
 import ndlib.models.epidemics as ep
-import ndlib.models.ModelConfig as mc
+import ndlib.models.ModelConfig as mc  # noqa: N813
 import networkx as nx
 from mesa import Model
 

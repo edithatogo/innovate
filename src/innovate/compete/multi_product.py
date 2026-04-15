@@ -3,8 +3,7 @@ from collections.abc import Sequence
 import numpy as np
 
 from innovate.backend import current_backend as B
-
-from ..base import DiffusionModel
+from innovate.base import DiffusionModel
 
 
 class MultiProductDiffusionModel(DiffusionModel):
@@ -14,7 +13,7 @@ class MultiProductDiffusionModel(DiffusionModel):
         self,
         n_products: int,
         p: Sequence[float] | None = None,
-        Q: Sequence[Sequence[float]] | None = None,
+        q_mat: Sequence[Sequence[float]] | None = None,
         m: Sequence[float] | None = None,
         names: Sequence[str] | None = None,
         covariates: Sequence[str] | None = None,
@@ -26,19 +25,18 @@ class MultiProductDiffusionModel(DiffusionModel):
         self.covariates = covariates or []
 
         self.p = B.array(p) if p is not None else None
-        self.Q = B.array(Q) if Q is not None else None
+        self.q_mat = B.array(q_mat) if q_mat is not None else None
         self.m = B.array(m) if m is not None else None
         self.names = names
 
-        if self.p is not None and self.Q is not None and self.m is not None:
-            if not (
-                len(self.p) == self.n_products
-                and self.Q.shape == (self.n_products, self.n_products)
-                and len(self.m) == self.n_products
-            ):
-                raise ValueError(
-                    "Dimensions of p, Q, and m must be consistent with n_products.",
-                )
+        if self.p is not None and self.q_mat is not None and self.m is not None and not (
+            len(self.p) == self.n_products
+            and self.q_mat.shape == (self.n_products, self.n_products)
+            and len(self.m) == self.n_products
+        ):
+            raise ValueError(
+                "Dimensions of p, q_mat, and m must be consistent with n_products.",
+            )
 
         if self.names is not None and len(self.names) != self.n_products:
             raise ValueError("Number of names must match n_products.")
@@ -144,7 +142,7 @@ class MultiProductDiffusionModel(DiffusionModel):
         y0 = B.zeros(self.n_products)
         y0[0] = 1e-6
 
-        if self.p is not None and self.Q is not None and self.m is not None:
+        if self.p is not None and self.q_mat is not None and self.m is not None:
             # Use pre-defined parameters if available (for direct simulation)
             p_vals = self.p
             q_vals = self.Q.diagonal()
