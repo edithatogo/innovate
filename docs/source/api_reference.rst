@@ -5,6 +5,21 @@ This section provides detailed API documentation for all modules in the innovate
 
 .. currentmodule:: innovate
 
+Stable public imports
+---------------------
+
+The recommended user-facing API is the package-level surface:
+
+.. code-block:: python
+
+   from innovate import BassModel, GompertzModel, LogisticModel, ScipyFitter
+   from innovate.compete import MultiProductDiffusionModel, LotkaVolterraModel
+   from innovate.substitute import CompositeDiffusionModel, FisherPryModel, NortonBassModel
+   from innovate.ecosystem import ComplementaryGoodsModel
+   from innovate.backends import use_backend
+
+Legacy deep-module imports remain importable for compatibility, but should not be preferred in new examples.
+
 Core Diffusion Models
 ---------------------
 

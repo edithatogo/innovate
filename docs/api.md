@@ -2,6 +2,20 @@
 
 This section provides detailed information about the Innovate library's API.
 
+## Stable Entry Points
+
+Prefer the following canonical imports in user-facing code:
+
+```python
+from innovate import BassModel, GompertzModel, LogisticModel, ScipyFitter
+from innovate.compete import MultiProductDiffusionModel, LotkaVolterraModel
+from innovate.substitute import CompositeDiffusionModel, FisherPryModel, NortonBassModel
+from innovate.ecosystem import ComplementaryGoodsModel
+from innovate.backends import use_backend
+```
+
+Deep-module imports remain available where needed for compatibility and internal organization.
+
 ## Core Modules
 
 ### Diffusion Models (`innovate.diffuse`)
@@ -68,11 +82,11 @@ This section provides detailed information about the Innovate library's API.
    :show-inheritance:
 ```
 
-### Backend Management (`innovate.backend`)
+### Backend Management (`innovate.backends`)
 
 #### Backend Management
 ```{eval-rst}
-.. automodule:: innovate.backend
+.. automodule:: innovate.backends
    :members:
    :undoc-members:
    :show-inheritance:

@@ -7,8 +7,7 @@ This guide will help you get started with the Innovate library quickly.
 The Innovate library follows a familiar API pattern similar to scikit-learn. Here's how to use it:
 
 ```python
-from innovate.diffuse.bass import BassModel
-from innovate.fitters.scipy_fitter import ScipyFitter
+from innovate import BassModel, ScipyFitter
 
 # Your time and adoption data
 t = [0, 1, 2, 3, 4, 5]  # time points
@@ -39,8 +38,7 @@ print("Model R² score:", score)
 The library includes several diffusion models:
 
 ```python
-from innovate.diffuse.logistic import LogisticModel
-from innovate.diffuse.gompertz import GompertzModel
+from innovate import GompertzModel, LogisticModel
 
 # Logistic model
 logistic_model = LogisticModel()
@@ -56,8 +54,7 @@ gompertz_model = GompertzModel()
 You can include external variables (covariates) that affect model parameters:
 
 ```python
-from innovate.diffuse.bass import BassModel
-from innovate.fitters.scipy_fitter import ScipyFitter
+from innovate import BassModel, ScipyFitter
 
 # Model with covariates (e.g., marketing spend, price)
 model = BassModel(covariates=["marketing_spend", "price"])
@@ -88,7 +85,7 @@ predictions = fitted_model.predict(future_t, covariates=future_covariates)
 The library supports both NumPy and JAX for computations:
 
 ```python
-from innovate.backend import use_backend
+from innovate.backends import use_backend
 
 # Switch to JAX backend for GPU acceleration (if available)
 use_backend('jax')
@@ -102,10 +99,7 @@ use_backend('numpy')
 Compare different models to find the best fit for your data:
 
 ```python
-from innovate.diffuse.bass import BassModel
-from innovate.diffuse.logistic import LogisticModel
-from innovate.diffuse.gompertz import GompertzModel
-from innovate.fitters.scipy_fitter import ScipyFitter
+from innovate import BassModel, GompertzModel, LogisticModel, ScipyFitter
 
 models = {
     "Bass": BassModel(),
@@ -130,3 +124,5 @@ print(f"Best model: {best_model_name} with R² = {model_scores[best_model_name]:
 ```
 
 This quickstart guide covers the basic functionality of the Innovate library. For more advanced features, see the API documentation or tutorials.
+
+For compatibility, older imports like `innovate.backend` and deep module imports such as `innovate.diffuse.bass` continue to work. New examples should prefer the package-level imports shown above.

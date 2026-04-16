@@ -1,17 +1,27 @@
 """Backend selection for the :mod:`innovate` library."""
 
+from __future__ import annotations
+
+from typing import Any
+
 from innovate.backends.numpy_backend import NumPyBackend
 
-# JAX and diffrax are optional dependencies
-try:
-    from innovate.backends.jax_backend import JaxBackend  # type: ignore
-except ImportError:  # pragma: no cover - optional dependency may be missing
-    JaxBackend = None
+
+def _load_jax_backend() -> type[Any] | None:
+    """Load the optional JAX backend class when the extra is installed."""
+    try:
+        from innovate.backends.jax_backend import JaxBackend
+    except ImportError:  # pragma: no cover - optional dependency may be missing
+        return None
+    return JaxBackend
+
+
+JaxBackend = _load_jax_backend()
 
 current_backend = NumPyBackend()
 
 
-def use_backend(backend: str):
+def use_backend(backend: str) -> None:
     global current_backend  # noqa: PLW0603
     if backend == "jax":
         if JaxBackend is None:

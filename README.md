@@ -67,7 +67,17 @@ This integrated approach means you can start with high-level diffusion models an
 
 ## Roadmap
 
-The `innovate` library is under active development. For detailed plans on upcoming features, including the Agent-Based Modeling (ABM) framework and advanced policy analysis tools, please see our [Roadmap](documents/roadmap.md).
+The `innovate` library is under active development. For the broader product roadmap, see [Roadmap](documents/roadmap.md). For the architecture direction that governs portability, bindings, and backend evolution, see [Architecture Principles](docs/architecture_principles.md), [Architecture Modernization Roadmap](docs/architecture_modernization_roadmap.md), and the [ADR index](docs/adr/index.md).
+
+## Codex Automation
+
+This repository vendors the Conductor skills that define its autonomous implementation workflow under [`.codex/skills`](.codex/skills/README.md). If you are using Codex locally, sync the repo-managed copies into your active Codex home with:
+
+```bash
+uv run python scripts/sync_codex_skills.py
+```
+
+The sync step installs the project-owned versions of `conductor`, `conductor-setup`, `conductor-status`, `conductor-revert`, `conductor-newtrack`, `conductor-implement`, and `conductor-review`, which keeps the Conductor workflow portable across machines and consistent with this repository's documented automation contract.
 
 ## Installation
 
@@ -100,6 +110,19 @@ pip install pyarrow
 ## Usage
 
 Examples and tutorials are provided in the `examples/` directory to demonstrate how to use the library for various modeling scenarios.
+
+### Canonical Imports
+
+For new code, prefer the stable package-level imports:
+
+```python
+from innovate import BassModel, LogisticModel, GompertzModel, ScipyFitter
+from innovate.compete import MultiProductDiffusionModel, LotkaVolterraModel
+from innovate.substitute import FisherPryModel, NortonBassModel
+from innovate.backends import use_backend
+```
+
+Legacy imports such as `innovate.backend` and `innovate.compete.competition` remain importable for compatibility, but the package-level imports above are the intended public surface.
 
 Key examples include:
 - `basic_usage_example.py`: Basic Bass model fitting
@@ -185,4 +208,3 @@ command is documented in
 
 ## Branching Strategy
 This repository now uses `work` as the primary development branch. Existing branches can be rebased or merged onto `work`.
-

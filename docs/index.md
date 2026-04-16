@@ -13,6 +13,9 @@ quickstart
 api
 tutorials
 mathematical_background
+architecture_principles
+architecture_modernization_roadmap
+adr/index
 contributing
 ```
 
@@ -48,8 +51,7 @@ pip install -e ".[dev]"
 ## Example Usage
 
 ```python
-from innovate.diffuse.bass import BassModel
-from innovate.fitters.scipy_fitter import ScipyFitter
+from innovate import BassModel, ScipyFitter
 import numpy as np
 
 # Sample data
@@ -65,6 +67,19 @@ fitted_model = model.fit(fitter, t_data, y_data)
 predictions = fitted_model.predict([6, 7, 8])
 print(fitted_model.params_)  # View fitted parameters
 ```
+
+## Canonical Public API
+
+For new code, prefer the stable package-level imports:
+
+```python
+from innovate import BassModel, GompertzModel, LogisticModel, ScipyFitter
+from innovate.compete import MultiProductDiffusionModel, LotkaVolterraModel
+from innovate.substitute import FisherPryModel, NortonBassModel
+from innovate.backends import use_backend
+```
+
+Compatibility imports such as `innovate.backend` and `innovate.compete.competition` are still supported, but they are no longer the recommended entry points for examples and user documentation.
 
 ## Support and Community
 
