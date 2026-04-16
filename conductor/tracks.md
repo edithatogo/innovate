@@ -25,8 +25,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Optional Backends and Dependency Stabilization**
-  *Link: [./tracks/optional_backends_stabilization_20260415/](./tracks/optional_backends_stabilization_20260415/)*
+- [x] **Track: Optional Backends and Dependency Stabilization** *(Completed)*
+  *Link: [./archive/optional_backends_stabilization_20260415/](./archive/optional_backends_stabilization_20260415/)*
 
 ---
 
