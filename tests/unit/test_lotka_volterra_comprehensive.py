@@ -95,9 +95,14 @@ class TestLotkaVolterraEdgeCases:
         """Test predict with covariates."""
         model = LotkaVolterraModel(covariates=["x1"])
         model.params_ = {
-            "alpha1": 0.5, "beta1": 0.3, "alpha2": 0.4, "beta2": 0.2,
-            "beta_alpha1_x1": 0.0, "beta_beta1_x1": 0.0,
-            "beta_alpha2_x1": 0.0, "beta_beta2_x1": 0.0,
+            "alpha1": 0.5,
+            "beta1": 0.3,
+            "alpha2": 0.4,
+            "beta2": 0.2,
+            "beta_alpha1_x1": 0.0,
+            "beta_beta1_x1": 0.0,
+            "beta_alpha2_x1": 0.0,
+            "beta_beta2_x1": 0.0,
         }
         t = np.linspace(0.1, 5, 10)
         try:

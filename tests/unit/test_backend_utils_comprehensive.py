@@ -114,6 +114,7 @@ class TestBackendFunctionality:
         with pytest.raises(ValueError):
             use_backend("")
 
+    @pytest.mark.optional_backend
     @pytest.mark.skipif(not jax_available, reason="JAX backend required for this test")
     @patch("innovate.backends.jax_backend.JaxBackend", None)
     def test_jax_backend_unavailable(self):
@@ -475,7 +476,7 @@ class TestModelEvaluationUtilities:
         # Generate data and fit multiple models
         t = np.linspace(1, 20, 30)
         y_true = 100 / (1 + np.exp(-0.3 * (t - 10)))
-        y_noisy = y_true + np.random.normal(0, 3, len(t))
+        y_noisy = np.maximum(0, y_true + np.random.normal(0, 3, len(t)))
 
         # Fit Bass model
         bass = BassModel()

@@ -11,60 +11,72 @@ class TestAnalyzeFailureComprehensive:
 
     def test_no_failures_all_above_threshold(self):
         """Test when no technologies fail."""
-        predictions = np.array([
-            [0.15, 0.20],
-            [0.25, 0.30],
-            [0.35, 0.40],
-        ])
+        predictions = np.array(
+            [
+                [0.15, 0.20],
+                [0.25, 0.30],
+                [0.35, 0.40],
+            ]
+        )
         failed = analyze_failure(predictions, failure_threshold=0.1)
         assert failed == []
 
     def test_all_fail_all_below_threshold(self):
         """Test when all technologies fail."""
-        predictions = np.array([
-            [0.01, 0.02],
-            [0.03, 0.04],
-            [0.05, 0.06],
-        ])
+        predictions = np.array(
+            [
+                [0.01, 0.02],
+                [0.03, 0.04],
+                [0.05, 0.06],
+            ]
+        )
         failed = analyze_failure(predictions, failure_threshold=0.1)
         assert failed == [0, 1]
 
     def test_partial_failures_some_above_some_below(self):
         """Test when some technologies fail."""
-        predictions = np.array([
-            [0.15, 0.01, 0.05],
-            [0.25, 0.02, 0.08],
-            [0.35, 0.03, 0.09],
-        ])
+        predictions = np.array(
+            [
+                [0.15, 0.01, 0.05],
+                [0.25, 0.02, 0.08],
+                [0.35, 0.03, 0.09],
+            ]
+        )
         failed = analyze_failure(predictions, failure_threshold=0.1)
         assert failed == [1, 2]
 
     def test_custom_threshold_high(self):
         """Test with high failure threshold."""
-        predictions = np.array([
-            [0.05, 0.25],
-            [0.08, 0.35],
-        ])
+        predictions = np.array(
+            [
+                [0.05, 0.25],
+                [0.08, 0.35],
+            ]
+        )
         failed = analyze_failure(predictions, failure_threshold=0.2)
         assert failed == [0]
 
     def test_custom_time_horizon_early_cutoff(self):
         """Test with custom time horizon that cuts off early."""
-        predictions = np.array([
-            [0.01, 0.02],
-            [0.02, 0.03],
-            [0.15, 0.20],
-        ])
+        predictions = np.array(
+            [
+                [0.01, 0.02],
+                [0.02, 0.03],
+                [0.15, 0.20],
+            ]
+        )
         failed = analyze_failure(predictions, failure_threshold=0.1, time_horizon=2)
         assert failed == [0, 1]
 
     def test_full_time_horizon_negative_one(self):
         """Test with time_horizon=-1 (full series)."""
-        predictions = np.array([
-            [0.01, 0.02],
-            [0.05, 0.10],
-            [0.09, 0.20],
-        ])
+        predictions = np.array(
+            [
+                [0.01, 0.02],
+                [0.05, 0.10],
+                [0.09, 0.20],
+            ]
+        )
         failed = analyze_failure(predictions, failure_threshold=0.1, time_horizon=-1)
         assert failed == [0]
 
@@ -123,21 +135,25 @@ class TestAnalyzeFailureComprehensive:
 
     def test_many_technologies_mixed_results(self):
         """Test with many technologies having mixed results."""
-        predictions = np.array([
-            [0.20, 0.01, 0.15, 0.03],
-            [0.30, 0.02, 0.25, 0.05],
-            [0.40, 0.03, 0.35, 0.08],
-        ])
+        predictions = np.array(
+            [
+                [0.20, 0.01, 0.15, 0.03],
+                [0.30, 0.02, 0.25, 0.05],
+                [0.40, 0.03, 0.35, 0.08],
+            ]
+        )
         failed = analyze_failure(predictions, failure_threshold=0.1)
         assert failed == [1, 3]
 
     def test_exact_threshold_boundary(self):
         """Test behavior when max exactly equals threshold."""
-        predictions = np.array([
-            [0.05, 0.10],
-            [0.08, 0.10],
-            [0.10, 0.10],
-        ])
+        predictions = np.array(
+            [
+                [0.05, 0.10],
+                [0.08, 0.10],
+                [0.10, 0.10],
+            ]
+        )
         # max of first column is 0.10, which is NOT < 0.10
         failed = analyze_failure(predictions, failure_threshold=0.1)
         assert failed == []

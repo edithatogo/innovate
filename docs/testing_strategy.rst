@@ -38,3 +38,23 @@ integration tests and ``@pytest.mark.e2e`` for end-to-end tests. Markers
 allow selective running, for example ``pytest -m unit`` runs only unit
 tests.
 
+Optional backend tests
+----------------------
+
+The project keeps optional backend coverage separate from the base suite.
+Use the ``optional_backend`` marker for tests that require JAX, BlackJAX,
+ArviZ, or related accelerator dependencies.
+
+Recommended local commands::
+
+    # Base install, no accelerator extras
+    uv sync
+    pytest -m "not optional_backend" --cov=innovate --cov-report=term-missing
+
+    # Optional accelerator stack
+    uv sync --extra jax --extra bayesian
+    pytest -m optional_backend --cov=innovate --cov-report=term-missing
+
+The base suite should pass without JAX or Bayesian extras installed. The
+optional-backend suite should only be run in environments that explicitly
+install the corresponding extras.

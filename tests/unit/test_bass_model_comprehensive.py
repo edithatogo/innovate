@@ -336,11 +336,11 @@ class TestBassModelComprehensive:
 
         # Since we can't actually solve the ODE to get predictions without triggering full computation,
         # we can test the error handling part of the method first
+        model._params = {}
         with pytest.raises(RuntimeError, match="Model has not been fitted yet"):
-            # Reset params to empty to test error
-            model._params = {}
             model.predict_adoption_rate(t)
 
+    @pytest.mark.optional_backend
     @pytest.mark.skipif(not jax_available, reason="JAX is not installed")
     def test_cumulative_adoption_method(self):
         """Test cumulative_adoption method."""
@@ -356,6 +356,7 @@ class TestBassModelComprehensive:
         assert model._params["q"] == 0.38
         assert model._params["m"] == 1000
 
+    @pytest.mark.optional_backend
     @pytest.mark.skipif(not jax_available, reason="JAX is not installed")
     def test_score_method_fitted_model(self):
         """Test score method with fitted model."""

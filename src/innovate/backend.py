@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from innovate.backends.numpy_backend import NumPyBackend
+from innovate.capabilities import get_backend_capability
 
 
 def _load_jax_backend() -> type[Any] | None:
@@ -24,9 +25,10 @@ current_backend = NumPyBackend()
 def use_backend(backend: str) -> None:
     global current_backend  # noqa: PLW0603
     if backend == "jax":
-        if JaxBackend is None:
+        capability = get_backend_capability("jax")
+        if JaxBackend is None or not capability.available:
             raise ImportError(
-                "JAX backend is not available. Install jax and diffrax to use it.",
+                "JAX backend is not available. Install innovate[jax] to enable it.",
             )
         current_backend = JaxBackend()
     elif backend == "numpy":

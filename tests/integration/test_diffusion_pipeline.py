@@ -1,7 +1,6 @@
 """Integration tests for cross-module workflows."""
 
 import numpy as np
-import pytest
 
 from innovate.backend import use_backend
 
@@ -11,6 +10,15 @@ from innovate.diffuse.bass import BassModel
 from innovate.diffuse.gompertz import GompertzModel
 from innovate.diffuse.logistic import LogisticModel
 from innovate.fitters.scipy_fitter import ScipyFitter
+
+
+def _fit_and_score_or_neg_inf(model, fitter: ScipyFitter, t: np.ndarray, y: np.ndarray) -> float:
+    """Return the model score, or negative infinity for unsupported fits."""
+    try:
+        fitter.fit(model, t, y)
+    except Exception:
+        return -np.inf
+    return model.score(t, y)
 
 
 class TestDiffusionToFitPipeline:
@@ -92,11 +100,7 @@ class TestCrossModelComparison:
         fitter = ScipyFitter()
         scores = {}
         for name, model in models.items():
-            try:
-                fitter.fit(model, t, y)
-                scores[name] = model.score(t, y)
-            except Exception:
-                scores[name] = -np.inf
+            scores[name] = _fit_and_score_or_neg_inf(model, fitter, t, y)
 
         # Bass should fit best since data was generated from it
         assert scores["Bass"] > -np.inf

@@ -1,7 +1,14 @@
 """Tests for the BlackJaxFitter."""
 
-import jax.numpy as jnp
 import pytest
+
+pytestmark = pytest.mark.optional_backend
+
+pytest.importorskip("arviz")
+pytest.importorskip("blackjax")
+pytest.importorskip("jax")
+
+import jax.numpy as jnp
 from jax.scipy import stats
 
 from innovate.diffuse.bass import BassModel

@@ -106,9 +106,11 @@ class NortonBassModel(DiffusionModel):
 
     def differential_equation(self, t, y, params, covariates, t_eval):
         """System of differential equations for the Norton-Bass model."""
-        p_base = params[: self.n_generations]
-        q_base = params[self.n_generations : 2 * self.n_generations]
-        m_base = params[2 * self.n_generations : 3 * self.n_generations]
+        # Base parameters are stored per generation as [p_i, q_i, m_i].
+        base_params = params[: 3 * self.n_generations]
+        p_base = base_params[0::3]
+        q_base = base_params[1::3]
+        m_base = base_params[2::3]
 
         p_t = B.array(p_base)
         q_t = B.array(q_base)

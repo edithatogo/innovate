@@ -20,7 +20,7 @@ from innovate.diffuse.logistic import LogisticModel
 def test_bass_model_property_basic(time_series):
     """Test basic properties of Bass model without calling ODE solver"""
     # Filter out duplicate times and sort
-    unique_times = sorted(list(set(time_series)))
+    unique_times = sorted(set(time_series))
     if len(unique_times) < 3:
         # Skip if we don't have enough unique time points
         return

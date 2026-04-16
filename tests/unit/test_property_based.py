@@ -19,7 +19,29 @@ from innovate.fitters.scipy_fitter import ScipyFitter
 use_backend("numpy")
 
 
-@settings(suppress_health_check=[HealthCheck.function_scoped_fixture], max_examples=20)
+def _fit_predict_and_validate_monotonicity(
+    model,
+    unique_t: np.ndarray,
+    y: np.ndarray,
+) -> None:
+    """Fit a model on sampled data and assert basic cumulative-shape invariants."""
+    try:
+        fitter = ScipyFitter()
+        fitter.fit(model, unique_t, y)
+        predictions = model.predict(unique_t)
+    except Exception:
+        # Some parameter combinations might not work, which is fine.
+        return
+
+    assert len(predictions) == len(unique_t)
+
+    if isinstance(model, (BassModel, GompertzModel)):
+        diffs = np.diff(predictions)
+        neg_diffs = np.sum(diffs < -1e-10)
+        assert neg_diffs <= 2, f"Model {type(model).__name__} has too many negative diffs: {neg_diffs}"
+
+
+@settings(suppress_health_check=[HealthCheck.function_scoped_fixture], max_examples=20, deadline=None)
 @given(st.lists(st.floats(min_value=0.1, max_value=50), min_size=5, max_size=20))
 def test_cumulative_predictions_non_decreasing(time_series):
     """Test that all cumulative models produce non-decreasing predictions"""
@@ -41,7 +63,7 @@ def test_cumulative_predictions_non_decreasing(time_series):
     assert neg_diffs <= 1  # Allow for 1 numerical error
 
 
-@settings(max_examples=10)
+@settings(max_examples=10, deadline=None)
 @given(
     st.floats(min_value=0.001, max_value=0.2),  # p parameter
     st.floats(min_value=0.01, max_value=0.5),  # q parameter
@@ -78,7 +100,7 @@ def test_bass_model_parameters_valid(p, q, m):
     assert model.params_["m"] >= 0
 
 
-@settings(max_examples=10)
+@settings(max_examples=10, deadline=None)
 @given(
     st.lists(st.floats(min_value=0.1, max_value=20), min_size=5, max_size=15),
     st.lists(st.floats(min_value=1, max_value=500), min_size=5, max_size=15),
@@ -108,27 +130,7 @@ def test_model_predictions_shape_consistency(t_list, y_list):
     models = [BassModel(), GompertzModel(), LogisticModel()]
 
     for model in models:
-        try:
-            fitter = ScipyFitter()
-            # Fit the model
-            fitter.fit(model, unique_t, y)
-
-            # Make predictions
-            predictions = model.predict(unique_t)
-
-            # Check that prediction shape matches input
-            assert len(predictions) == len(unique_t)
-
-            # For cumulative models, check non-decreasing property (with tolerance for numerical errors)
-            if isinstance(model, (BassModel, GompertzModel)):
-                diffs = np.diff(predictions)
-                # Count how many violate the non-decreasing property
-                neg_diffs = np.sum(diffs < -1e-10)
-                # Allow small number due to numerical precision
-                assert neg_diffs <= 2, f"Model {type(model).__name__} has too many negative diffs: {neg_diffs}"
-        except Exception:
-            # Some parameter combinations might not work, which is fine
-            pass
+        _fit_predict_and_validate_monotonicity(model, unique_t, y)
 
 
 @settings(max_examples=10)

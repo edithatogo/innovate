@@ -1,5 +1,6 @@
 """Tests for the backend selection module."""
 
+from types import SimpleNamespace
 from unittest.mock import patch
 
 import pytest
@@ -25,7 +26,7 @@ def test_use_backend_numpy():
 @patch("src.innovate.backend.JaxBackend", None)
 def test_use_backend_jax_import_error():
     """Test that using JAX backend raises ImportError when it's not available."""
-    with pytest.raises(ImportError, match="JAX backend is not available. Install jax and diffrax to use it."):
+    with pytest.raises(ImportError, match="JAX backend is not available. Install innovate\\[jax\\] to enable it."):
         backend.use_backend("jax")
 
 
@@ -35,26 +36,13 @@ def test_use_backend_unknown():
         backend.use_backend("unknown_backend")
 
 
-@patch("src.innovate.backend.JaxBackend", create=True)
-def test_use_backend_jax_success(mock_jax_backend_class):
+class FakeJaxBackend:
+    """Test double for the optional JAX backend."""
+
+
+@patch("src.innovate.backend.JaxBackend", FakeJaxBackend)
+def test_use_backend_jax_success():
     """Test switching to JAX backend when it's available."""
-    # Mock the JAX backend instance
-    mock_jax_instance = mock_jax_backend_class.return_value
-    mock_jax_backend_class.return_value.__class__.__name__ = "JaxBackendMock"
-
-    # Temporarily replace the module-level JaxBackend with our mock
-    original_jax_backend = backend.JaxBackend
-    backend.JaxBackend = mock_jax_backend_class
-
-    try:
-        # Switch to JAX backend
+    with patch.object(backend, "get_backend_capability", return_value=SimpleNamespace(available=True)):
         backend.use_backend("jax")
-
-        # The verification would depend on how the JaxBackend is implemented
-        # Since we can't actually import it without the dependencies, we just check
-        # that the use_backend function accepts the "jax" parameter without error
-        # when JaxBackend is available
-        pass
-    finally:
-        # Restore the original JaxBackend
-        backend.JaxBackend = original_jax_backend
+        assert backend.current_backend.__class__.__name__ == "FakeJaxBackend"

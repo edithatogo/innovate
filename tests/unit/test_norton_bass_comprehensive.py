@@ -66,8 +66,12 @@ class TestNortonBassModelComprehensive:
         """Test basic prediction."""
         model = NortonBassModel(n_generations=2)
         model.params_ = {
-            "p1": 0.03, "q1": 0.38, "m1": 100.0,
-            "p2": 0.05, "q2": 0.25, "m2": 80.0,
+            "p1": 0.03,
+            "q1": 0.38,
+            "m1": 100.0,
+            "p2": 0.05,
+            "q2": 0.25,
+            "m2": 80.0,
         }
         t = np.linspace(0, 10, 20)
         try:
@@ -115,8 +119,12 @@ class TestNortonBassModelEdgeCases:
         """Test predict with zero parameters."""
         model = NortonBassModel(n_generations=2)
         model.params_ = {
-            "p1": 0.0, "q1": 0.0, "m1": 100.0,
-            "p2": 0.0, "q2": 0.0, "m2": 80.0,
+            "p1": 0.0,
+            "q1": 0.0,
+            "m1": 100.0,
+            "p2": 0.0,
+            "q2": 0.0,
+            "m2": 80.0,
         }
         t = np.array([1.0, 2.0, 3.0])
         try:

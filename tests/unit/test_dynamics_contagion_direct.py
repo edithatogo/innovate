@@ -1,15 +1,13 @@
 """Tests for the main dynamics contagion module (not the subdirectory) to improve coverage to >90%."""
 
-import os
 import sys
+from pathlib import Path
 
-# Add the src directory to sys.path so we can import modules properly
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+# Add the src directory to sys.path so we can import modules properly.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 
-# Now import the contagion models properly
-from innovate.dynamics.contagion import SEIRModel as SEIR
-from innovate.dynamics.contagion import SIRModel as SIR
-from innovate.dynamics.contagion import SISModel as SIS
+# Now import the contagion models properly.
+from innovate.dynamics.contagion import SEIRModel, SIRModel, SISModel
 
 
 class TestSIR:
@@ -17,7 +15,7 @@ class TestSIR:
 
     def test_sir_initialization(self):
         """Test SIR initialization - SIRModel doesn't take parameters in constructor."""
-        model = SIR()
+        model = SIRModel()
         # SIRModel doesn't have direct access to beta and gamma like the test expects
         # So we just test that it initializes without error and has necessary methods
         assert model is not None
@@ -27,7 +25,7 @@ class TestSIR:
 
     def test_sir_compute_spread_rate_default(self):
         """Test the compute_spread_rate method with default parameters."""
-        model = SIR()
+        model = SIRModel()
         result = model.compute_spread_rate(S=990.0, I=10.0)
         # Default transmission_rate=0.1, recovery_rate=0.01
         # dSdt = -beta*S*I = -0.1*990*10 = -990
@@ -43,7 +41,7 @@ class TestSIR:
 
     def test_sir_compute_spread_rate_custom_params(self):
         """Test the compute_spread_rate method with custom parameters."""
-        model = SIR()
+        model = SIRModel()
         result = model.compute_spread_rate(S=800.0, I=150.0, transmission_rate=0.15, recovery_rate=0.05)
         # dSdt = -beta*S*I = -0.15*800*150 = -18000
         # dIdt = beta*S*I - gamma*I = 0.15*800*150 - 0.05*150 = 18000 - 7.5 = 17992.5
@@ -62,7 +60,7 @@ class TestSIS:
 
     def test_sis_initialization(self):
         """Test SIS initialization - SISModel doesn't take parameters in constructor."""
-        model = SIS()
+        model = SISModel()
         assert model is not None
         assert hasattr(model, "compute_spread_rate")
         assert hasattr(model, "predict_states")
@@ -70,7 +68,7 @@ class TestSIS:
 
     def test_sis_compute_spread_rate_default(self):
         """Test the compute_spread_rate method with default parameters."""
-        model = SIS()
+        model = SISModel()
         result = model.compute_spread_rate(S=990.0, I=10.0)
         # Default transmission_rate=0.1, recovery_rate=0.01
         # dSdt = -beta*S*I + gamma*I = -0.1*990*10 + 0.01*10 = -990 + 0.1 = -989.9
@@ -83,7 +81,7 @@ class TestSIS:
 
     def test_sis_compute_spread_rate_custom_params(self):
         """Test the compute_spread_rate method with custom parameters."""
-        model = SIS()
+        model = SISModel()
         result = model.compute_spread_rate(S=800.0, I=200.0, transmission_rate=0.12, recovery_rate=0.08)
         # dSdt = -beta*S*I + gamma*I = -0.12*800*200 + 0.08*200 = -19200 + 16 = -19184
         # dIdt = beta*S*I - gamma*I = 0.12*800*200 - 0.08*200 = 19200 - 16 = 19184
@@ -99,7 +97,7 @@ class TestSEIR:
 
     def test_seir_initialization(self):
         """Test SEIR initialization - SEIRModel doesn't take parameters in constructor."""
-        model = SEIR()
+        model = SEIRModel()
         assert model is not None
         assert hasattr(model, "compute_spread_rate")
         assert hasattr(model, "predict_states")
@@ -107,7 +105,7 @@ class TestSEIR:
 
     def test_seir_compute_spread_rate_default(self):
         """Test the compute_spread_rate method with default parameters."""
-        model = SEIR()
+        model = SEIRModel()
         result = model.compute_spread_rate(S=980.0, E=10.0, I=5.0)
         # Default transmission_rate=0.1, incubation_rate=0.1, recovery_rate=0.01
         # dSdt = -beta*S*I = -0.1*980*5 = -490
@@ -126,7 +124,7 @@ class TestSEIR:
 
     def test_seir_compute_spread_rate_custom_params(self):
         """Test the compute_spread_rate method with custom parameters."""
-        model = SEIR()
+        model = SEIRModel()
         result = model.compute_spread_rate(
             S=700.0, E=150.0, I=100.0, transmission_rate=0.08, incubation_rate=0.15, recovery_rate=0.05
         )
@@ -150,17 +148,17 @@ def test_contagion_comprehensive():
     # Test all three models with various parameter combinations
 
     # SIR model
-    sir = SIR()
+    sir = SIRModel()
     result_sir = sir.compute_spread_rate(S=900, I=100)
     assert len(result_sir) == 3
 
     # SIS model
-    sis = SIS()
+    sis = SISModel()
     result_sis = sis.compute_spread_rate(S=800, I=200)
     assert len(result_sis) == 2
 
     # SEIR model
-    seir = SEIR()
+    seir = SEIRModel()
     result_seir = seir.compute_spread_rate(S=700, E=150, I=100)
     assert len(result_seir) == 4
 

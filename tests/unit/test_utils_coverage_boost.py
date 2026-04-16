@@ -310,8 +310,8 @@ class TestPreprocessTimeSeriesModule:
 
         result = rolling_average(data, window)
 
-        # Should be identical to original data
-        pd.testing.assert_series_equal(result, data)
+        expected = data.rolling(window=window).mean()
+        pd.testing.assert_series_equal(result, expected)
 
     def test_sarima_fit_basic(self):
         """Test basic SARIMA fitting functionality."""
@@ -388,7 +388,7 @@ class TestEdgeCasesAndErrorHandling:
             try:
                 metrics = get_fit_metrics(model, t, y)
                 # Should either exclude inf values or return inf metrics
-                assert "mse" in metrics
+                assert "MSE" in metrics
             except (ValueError, RuntimeError):
                 # Raising error for inf values is also acceptable
                 pass
@@ -404,7 +404,7 @@ class TestEdgeCasesAndErrorHandling:
         try:
             metrics = get_fit_metrics(model, t, y)
             # Should handle NaN appropriately
-            assert "mse" in metrics
+            assert "MSE" in metrics
         except (ValueError, RuntimeError):
             # Raising error for NaN is also acceptable
             pass

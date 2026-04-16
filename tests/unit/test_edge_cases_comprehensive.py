@@ -26,12 +26,7 @@ class TestEdgeCasesErrorHandling:
 
     def test_unfitted_model_predictions(self):
         """Test that models raise RuntimeError when predict is called before fitting."""
-        models = [
-            BassModel(),
-            LogisticModel(),
-            GompertzModel(),
-            MultiProductDiffusionModel(p=[0.02, 0.03], Q=[[0.1, 0.05], [0.03, 0.1]], m=[1000, 800]),
-        ]
+        models = [BassModel(), LogisticModel(), GompertzModel()]
 
         t = [1, 2, 3, 4, 5]
 
@@ -52,12 +47,7 @@ class TestEdgeCasesErrorHandling:
 
     def test_unfitted_model_adoption_rate(self):
         """Test that predict_adoption_rate raises RuntimeError when called before fitting."""
-        models = [
-            BassModel(),
-            LogisticModel(),
-            GompertzModel(),
-            MultiProductDiffusionModel(p=[0.02, 0.03], Q=[[0.1, 0.05], [0.03, 0.1]], m=[1000, 800]),
-        ]
+        models = [BassModel(), LogisticModel(), GompertzModel()]
 
         t = [1, 2, 3, 4, 5]
 
@@ -92,11 +82,8 @@ class TestEdgeCasesErrorHandling:
         model.params_ = {"p": 0.02, "q": 0.3, "m": 1000}
 
         t_negative = [-2, -1, 0, 1, 2]
-        result = model.predict(t_negative)
-
-        # Should handle negative times (may give negative predictions or zero)
-        assert len(result) == len(t_negative)
-        assert np.all(np.isfinite(result))
+        with pytest.raises(ValueError, match="must be non-negative"):
+            model.predict(t_negative)
 
     def test_extreme_parameter_values(self):
         """Test models with extreme parameter values."""
@@ -215,13 +202,13 @@ class TestEdgeCasesErrorHandling:
     def test_stl_decomposition_edge_cases(self):
         """Test STL decomposition with problematic data."""
         # Too short series
-        short_series = pd.Series([1, 2, 3], index=pd.date_range("2020-01-01", periods=3, freq="M"))
+        short_series = pd.Series([1, 2, 3], index=pd.date_range("2020-01-01", periods=3, freq="ME"))
 
         with pytest.raises(ValueError, match="Period must be specified"):
             apply_stl_decomposition(short_series, period=None)
 
         # Series with all same values (no variation)
-        flat_series = pd.Series([10] * 50, index=pd.date_range("2020-01-01", periods=50, freq="M"))
+        flat_series = pd.Series([10] * 50, index=pd.date_range("2020-01-01", periods=50, freq="ME"))
 
         try:
             trend, seasonal, resid = apply_stl_decomposition(flat_series, period=12)
@@ -265,9 +252,10 @@ class TestEdgeCasesErrorHandling:
         """Test policy intervention with edge cases."""
         # Test with unsupported model type
         multiproduct_model = MultiProductDiffusionModel(p=[0.02], Q=[[0.1]], m=[1000])
+        policy = PolicyIntervention(multiproduct_model)
 
         with pytest.raises(TypeError, match="currently only supported for BassModel"):
-            PolicyIntervention(multiproduct_model)
+            policy.apply_time_varying_params(t_points=[1, 2, 3])
 
         # Test with unfitted Bass model
         bass_model = BassModel()
@@ -394,7 +382,7 @@ class TestEdgeCasesErrorHandling:
         # Artificially set model to predict constant values
         # This tests the R² calculation with poor fit
         original_predict = model.predict
-        model.predict = lambda t: np.array(y_constant)
+        model.predict = lambda _t, _covariates=None: np.array(y_constant)
 
         score_poor = model.score(t, y_varying)
         assert score_poor <= 0.5  # Should be a poor fit

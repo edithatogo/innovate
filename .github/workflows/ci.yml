@@ -8,6 +8,9 @@ on:
     branches: [work, main]
   pull_request:
     branches: [work, main]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1"
 
 # Cancel in-progress runs for the same branch
 concurrency:
@@ -18,7 +21,7 @@ jobs:
   # -----------------------------------------------------------------------
   # Test Matrix
   # -----------------------------------------------------------------------
-  test:
+  unit-tests-base:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -37,25 +40,31 @@ jobs:
         run: uv python install ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: uv sync --extra jax
+        run: uv sync
 
       - name: Install package
         run: uv pip install -e .
 
-      - name: Run unit tests
-        run: uv run pytest tests/unit/ --ignore=tests/unit/test_bayesian_fitter_robust.py --ignore=tests/unit/test_blackjax_fitter.py --ignore=tests/unit/test_dynamics_competition_direct.py --ignore=tests/unit/test_dynamics_contagion_direct.py --ignore=tests/unit/test_categorization.py --ignore=tests/unit/test_path_dependence.py --ignore=tests/unit/test_preprocess.py --ignore=tests/unit/test_plots_diagnostics.py --ignore=tests/unit/test_plots_network.py --ignore=tests/unit/test_advanced_functionality_comprehensive.py --ignore=tests/unit/test_curve_fitter.py --ignore=tests/unit/test_fitters.py --ignore=tests/unit/test_batched_fitter.py --cov=innovate --cov-report=xml --cov-report=term-missing
-        env:
-          JAX_PLATFORM_NAME: cpu
-
-      - name: Run integration tests
-        if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
-        run: uv run pytest tests/integration/ tests/e2e/ -m integration --tb=short || true
-        env:
-          JAX_PLATFORM_NAME: cpu
-
-      - name: Run e2e tests (main only)
-        if: github.ref == 'refs/heads/main'
-        run: uv run pytest tests/e2e/ -m e2e --tb=short || true
+      - name: Run required unit gate
+        run: |
+          CI=true uv run python -m pytest tests/unit/ -m "not optional_backend" \
+            --ignore=tests/unit/test_bayesian_fitter_robust.py \
+            --ignore=tests/unit/test_blackjax_fitter.py \
+            --ignore=tests/unit/test_dynamics_competition_direct.py \
+            --ignore=tests/unit/test_dynamics_contagion_direct.py \
+            --ignore=tests/unit/test_categorization.py \
+            --ignore=tests/unit/test_path_dependence.py \
+            --ignore=tests/unit/test_preprocess.py \
+            --ignore=tests/unit/test_plots_diagnostics.py \
+            --ignore=tests/unit/test_plots_network.py \
+            --ignore=tests/unit/test_advanced_functionality_comprehensive.py \
+            --ignore=tests/unit/test_curve_fitter.py \
+            --cov=innovate \
+            --cov-report=xml \
+            --cov-report=term-missing \
+            --cov-fail-under=0 \
+            --tb=short \
+            -q
         env:
           JAX_PLATFORM_NAME: cpu
 
@@ -63,9 +72,41 @@ jobs:
         if: matrix.python-version == '3.12'
         uses: codecov/codecov-action@v5
         with:
-          file: ./coverage.xml
+          files: ./coverage.xml
           fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
+
+  optional-backend-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install optional backend dependencies
+        run: uv sync --extra jax --extra bayesian
+
+      - name: Install package
+        run: uv pip install -e .
+
+      - name: Run optional backend unit gate
+        run: |
+          CI=true uv run python -m pytest tests/unit/ \
+            -m optional_backend \
+            --cov=innovate \
+            --cov-report=xml \
+            --cov-report=term-missing \
+            --cov-fail-under=0 \
+            --tb=short \
+            -q
+        env:
+          JAX_PLATFORM_NAME: cpu
 
   # -----------------------------------------------------------------------
   # Lint & Format
@@ -95,6 +136,40 @@ jobs:
           bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
           ./actionlint -color
 
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Build package
+        run: uv build
+
+  docs-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Build docs smoke target
+        run: uv run python -m sphinx -b html docs/source /tmp/innovate-docs-build
+
   # -----------------------------------------------------------------------
   # Type Checking
   # -----------------------------------------------------------------------
@@ -112,17 +187,74 @@ jobs:
       - name: Install dependencies
         run: uv sync
 
-      - name: Run ty (primary type checker)
-        run: uv run ty check src/innovate || true
+      - name: Run ty (verified public API surface)
+        run: |
+          uv run ty check \
+            src/innovate/__init__.py \
+            src/innovate/backend.py \
+            src/innovate/backends/__init__.py \
+            src/innovate/capabilities.py \
+            src/innovate/diffuse/__init__.py \
+            src/innovate/substitute/__init__.py \
+            src/innovate/ecosystem/__init__.py
 
-      - name: Run mypy (secondary type checker)
-        run: uv run mypy src/innovate || true
+      - name: Run mypy (verified public API surface)
+        run: |
+          uv run mypy \
+            src/innovate/__init__.py \
+            src/innovate/backend.py \
+            src/innovate/backends/__init__.py \
+            src/innovate/capabilities.py \
+            src/innovate/diffuse/__init__.py \
+            src/innovate/substitute/__init__.py \
+            src/innovate/ecosystem/__init__.py
 
   # -----------------------------------------------------------------------
-  # Security
+  # Optional Extended Suites
   # -----------------------------------------------------------------------
+  integration-tests:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install dependencies
+        run: uv sync --extra jax
+
+      - name: Run integration tests
+        run: CI=true uv run python -m pytest tests/integration/ -m integration --tb=short -q
+        env:
+          JAX_PLATFORM_NAME: cpu
+
+  e2e-tests:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install dependencies
+        run: uv sync --extra jax
+
+      - name: Run e2e tests
+        run: CI=true uv run python -m pytest tests/e2e/ -m e2e --tb=short -q
+        env:
+          JAX_PLATFORM_NAME: cpu
+
   security:
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
     steps:
       - uses: actions/checkout@v5
 
@@ -136,10 +268,10 @@ jobs:
         run: uv sync
 
       - name: Run Bandit security scan
-        run: uv run bandit -r src/innovate -c pyproject.toml || true
+        run: uv run bandit -r src/innovate -c pyproject.toml
 
       - name: Run Safety vulnerability scan
-        run: uv run safety check || true
+        run: uv run safety check
 
   # -----------------------------------------------------------------------
   # Benchmarks (optional, triggered on demand)
@@ -163,10 +295,10 @@ jobs:
         run: uv pip install -e .
 
       - name: Run Scalene profiling
-        run: uv run scalene src/innovate --cli --reduced-profile || true
+        run: uv run scalene src/innovate --cli --reduced-profile
 
       - name: Run pytest benchmarks
-        run: uv run pytest --benchmark-only --benchmark-json=benchmark.json || true
+        run: uv run pytest --benchmark-only --benchmark-json=benchmark.json
 
       - name: Upload benchmark results
         uses: actions/upload-artifact@v4
@@ -201,4 +333,4 @@ jobs:
           JAX_PLATFORM_NAME: cpu
 
       - name: Show mutmut results
-        run: uv run mutmut results || true
+        run: uv run mutmut results

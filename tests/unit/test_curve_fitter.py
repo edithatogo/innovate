@@ -20,14 +20,10 @@ def test_curve_fitter_init():
 
 def test_curve_fitter_fit():
     """Test the fit method of CurveFitter."""
-    # Create a mock model with the required attributes
-    mock_model = Mock(spec=DiffusionModel)
-    mock_model.param_names = ["m", "p", "q"]
 
-    # Create a simple model class for testing
-    class SimpleTestModel(DiffusionModel):
+    # Create a simple model class for testing without relying on DiffusionModel ABC internals.
+    class SimpleTestModel:
         def __init__(self):
-            super().__init__()
             self.param_names = ["a", "b"]
             self.params_ = {}
 

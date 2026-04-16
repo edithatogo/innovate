@@ -137,6 +137,7 @@ class TestLogisticModelFitPredict:
         t, y = self._make_data()
         model = LogisticModel()
         from innovate.fitters.scipy_fitter import ScipyFitter
+
         fitter = ScipyFitter()
         fitter.fit(model, t, y)
         preds = model.predict(t)
@@ -152,8 +153,12 @@ class TestLogisticModelFitPredict:
 
         model = LogisticModel(t_event=5.0)
         model.params_ = {
-            "L": 100.0, "k": 0.8, "x0": 3.0,
-            "L_post": 150.0, "k_post": 0.5, "x0_post": 6.0,
+            "L": 100.0,
+            "k": 0.8,
+            "x0": 3.0,
+            "L_post": 150.0,
+            "k_post": 0.5,
+            "x0_post": 6.0,
         }
         preds = model.predict(t)
         assert len(preds) == len(t)
@@ -165,8 +170,12 @@ class TestLogisticModelFitPredict:
         t = np.array([1.0, 2.0, 3.0, 4.0])
         model = LogisticModel(t_event=5.0)
         model.params_ = {
-            "L": 100.0, "k": 0.8, "x0": 2.0,
-            "L_post": 150.0, "k_post": 0.5, "x0_post": 6.0,
+            "L": 100.0,
+            "k": 0.8,
+            "x0": 2.0,
+            "L_post": 150.0,
+            "k_post": 0.5,
+            "x0_post": 6.0,
         }
         preds = model.predict(t)
         assert len(preds) == 4
@@ -177,8 +186,12 @@ class TestLogisticModelFitPredict:
         t = np.array([6.0, 7.0, 8.0, 9.0])
         model = LogisticModel(t_event=5.0)
         model.params_ = {
-            "L": 100.0, "k": 0.8, "x0": 2.0,
-            "L_post": 150.0, "k_post": 0.5, "x0_post": 7.0,
+            "L": 100.0,
+            "k": 0.8,
+            "x0": 2.0,
+            "L_post": 150.0,
+            "k_post": 0.5,
+            "x0_post": 7.0,
         }
         preds = model.predict(t)
         assert len(preds) == 4

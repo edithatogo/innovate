@@ -1,6 +1,5 @@
 """Tests for hype models - delayed_hype_bass and hype_modified_bass."""
 
-import numpy as np
 import pytest
 
 from innovate.backend import use_backend

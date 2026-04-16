@@ -55,6 +55,6 @@ class HypeModifiedBassModel:
                 [t[i - 1], t[i]],
                 args=(p_t, q_t),
             )
-            y[i] = y_step[1]
+            y[i] = float(y_step[1, 0])
 
         return y

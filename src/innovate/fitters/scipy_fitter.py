@@ -286,10 +286,7 @@ class ScipyFitter:
         lb, ub = bounds
         # Differential evolution requires finite bounds
         LARGE_BOUND = 1e6
-        bounds_list = [
-            (max(-LARGE_BOUND, lo), min(LARGE_BOUND, hi))
-            for lo, hi in zip(lb, ub)
-        ]
+        bounds_list = [(max(-LARGE_BOUND, lo), min(LARGE_BOUND, hi)) for lo, hi in zip(lb, ub)]
 
         result = differential_evolution(
             objective,
@@ -394,22 +391,16 @@ class ScipyFitter:
         }
 
         if method not in fit_methods:
-            raise ValueError(
-                f"Unknown method '{method}'. Choose from: {list(fit_methods.keys())} or 'auto'"
-            )
+            raise ValueError(f"Unknown method '{method}'. Choose from: {list(fit_methods.keys())} or 'auto'")
 
         try:
-            popt, status, message = fit_methods[method](
-                model, t_arr, y_arr, p0, bounds, sigma, **kwargs
-            )
+            popt, status, message = fit_methods[method](model, t_arr, y_arr, p0, bounds, sigma, **kwargs)
             model.params_ = dict(zip(model.param_names, popt))
         except Exception as e:
             raise RuntimeError(f"Fitting failed with method '{method}': {e}")
 
         # Compute and store diagnostics
         if self.store_diagnostics:
-            self.diagnostics = self._compute_diagnostics(
-                model, t_arr, y_arr, method, status, message
-            )
+            self.diagnostics = self._compute_diagnostics(model, t_arr, y_arr, method, status, message)
 
         return self

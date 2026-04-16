@@ -9,6 +9,7 @@ from innovate.utils.validation import (
     validate_covariates,
     validate_covariates_dict,
     validate_float,
+    validate_positive_numeric_sequence,
     validate_sequence_numeric,
     validate_time_series,
 )
@@ -59,8 +60,13 @@ class BassModel(DiffusionModel):
         t: Sequence[float],
         y: Sequence[float],
     ) -> dict[str, float]:
-        # Validate inputs
-        t_arr, y_arr = validate_time_series(t, y, "t", "y")
+        # Allow singleton series here so callers can inspect defaults before fitting.
+        t_arr = validate_sequence_numeric(t, "t")
+        y_arr = validate_positive_numeric_sequence(y, "y")
+        if len(t_arr) != len(y_arr):
+            raise ValueError("Length of 't' must match length of 'y'")
+        if len(t_arr) > 1 and not np.all(np.diff(t_arr) >= 0):
+            raise ValueError("'t' values must be non-decreasing")
 
         guesses = {
             "p": 0.001,
@@ -93,8 +99,13 @@ class BassModel(DiffusionModel):
         -------
             Dict[str, tuple]: Dictionary mapping parameter names to (lower, upper) bounds. Base parameters "p", "q", and "m" have fixed bounds; covariate-related parameters are unbounded.
         """
-        # Validate inputs
-        t_arr, y_arr = validate_time_series(t, y, "t", "y")
+        # Allow singleton series here so callers can inspect parameter domains before fitting.
+        t_arr = validate_sequence_numeric(t, "t")
+        y_arr = validate_positive_numeric_sequence(y, "y")
+        if len(t_arr) != len(y_arr):
+            raise ValueError("Length of 't' must match length of 'y'")
+        if len(t_arr) > 1 and not np.all(np.diff(t_arr) >= 0):
+            raise ValueError("'t' values must be non-decreasing")
 
         bounds = {
             "p": (1e-6, 0.1),
@@ -153,7 +164,7 @@ class BassModel(DiffusionModel):
             validate_covariates_dict(covariates, self.covariates, len(t_arr)) if covariates is not None else None
         )
 
-        y0 = 1e-6
+        y0 = 0.0
 
         # This is a simplification. The predict method should use the growth model's
         # predict_cumulative method, which will require some refactoring of how parameters
@@ -179,6 +190,7 @@ class BassModel(DiffusionModel):
         # Handle different backend method signatures
         try:
             from innovate.backends.jax_backend import JaxBackend
+
             is_jax = isinstance(backend.current_backend, JaxBackend)
         except (ImportError, ModuleNotFoundError):
             is_jax = False
@@ -244,17 +256,20 @@ class BassModel(DiffusionModel):
                 m_t += params[param_idx + 2] * cov_val_t
                 param_idx += 3
 
+        if np.isscalar(m_t) and float(m_t) <= 0:
+            return 0.0
+
         rate = (p_t + q_t * (y / m_t)) * (m_t - y)
         try:
             import pytensor.tensor as pt  # type: ignore
+        except ImportError:  # pragma: no cover - optional dependency
+            pt = None
 
-            if isinstance(
-                m_t,
-                pt.TensorVariable,
-            ):  # pragma: no cover - depends on pytensor
-                return pt.switch(m_t > 0, rate, 0.0)
-        except Exception:
-            pass
+        if pt is not None and isinstance(
+            m_t,
+            pt.TensorVariable,
+        ):  # pragma: no cover - depends on pytensor
+            return pt.switch(m_t > 0, rate, 0.0)
         return backend.current_backend.where(m_t > 0, rate, 0.0)
 
     def score(

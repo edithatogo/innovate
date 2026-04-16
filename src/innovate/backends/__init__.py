@@ -5,6 +5,8 @@ from __future__ import annotations
 from importlib import import_module
 from typing import Any
 
+from innovate.capabilities import get_backend_capability, get_backend_registry
+
 from .numpy_backend import NumPyBackend
 
 
@@ -19,7 +21,14 @@ def _load_jax_backend() -> type[Any] | None:
 
 JaxBackend = _load_jax_backend()
 
-__all__ = ["JaxBackend", "NumPyBackend", "current_backend", "use_backend"]
+__all__ = [
+    "JaxBackend",
+    "NumPyBackend",
+    "current_backend",
+    "get_backend_capability",
+    "get_backend_registry",
+    "use_backend",
+]
 
 
 def __getattr__(name: str) -> Any:

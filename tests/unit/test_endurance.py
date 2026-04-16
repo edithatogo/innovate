@@ -35,7 +35,7 @@ def test_memory_stability_basic():
 
     # Do minimal work
     for i in range(10):
-        _ = [j for j in range(100)]
+        _ = list(range(100))
 
     gc.collect()
     time.sleep(0.01)  # Very brief pause

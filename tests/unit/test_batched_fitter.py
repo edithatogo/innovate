@@ -50,7 +50,10 @@ def test_batched_fitter_predict(synthetic_batched_data):
     assert predictions.shape == (2, 50)
 
 
+@pytest.mark.optional_backend
 def test_batched_fitter_jax(synthetic_batched_data):
+    pytest.importorskip("jax")
+
     from innovate.backend import current_backend, use_backend
     from innovate.fitters.jax_fitter import JaxFitter
 

@@ -94,6 +94,10 @@ use_backend('jax')
 use_backend('numpy')
 ```
 
+Install `innovate[jax]` when you want the accelerator backend, and
+`innovate[bayesian]` when you want the Bayesian/BlackJAX path. The base
+install remains NumPy/SciPy-only for portability.
+
 ## Model Comparison
 
 Compare different models to find the best fit for your data:

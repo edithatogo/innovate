@@ -23,6 +23,14 @@ def aggregate_time_series(
 ) -> pd.Series | pd.DataFrame:
     """Aggregates time series data to a specified frequency (e.g., 'D', 'W', 'M')."""
     data = ensure_datetime_index(data)
+    if freq == "W":
+        # Treat weekly aggregation as contiguous 7-day windows from the first
+        # observation rather than pandas' calendar week buckets.
+        start = data.index.min()
+        week_buckets = ((data.index - start) // pd.Timedelta(days=7)).astype(int)
+        aggregated = data.groupby(week_buckets).sum()
+        aggregated.index = start + pd.to_timedelta(aggregated.index * 7, unit="D")
+        return aggregated
     return data.resample(freq).sum()
 
 

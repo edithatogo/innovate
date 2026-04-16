@@ -515,7 +515,14 @@ class TestAdvancedModelInteractions:
                 modified_prediction = model.predict(t)
 
                 # Calculate sensitivity (percentage change in output / percentage change in input)
-                relative_change = np.mean(np.abs(modified_prediction - baseline) / baseline)
+                non_zero_mask = baseline != 0
+                relative_change = (
+                    np.mean(
+                        np.abs(modified_prediction[non_zero_mask] - baseline[non_zero_mask]) / baseline[non_zero_mask],
+                    )
+                    if np.any(non_zero_mask)
+                    else 0.0
+                )
                 sensitivity_results[f"{model.__class__.__name__}_{param_name}"] = relative_change
 
                 # Restore original parameters
@@ -551,7 +558,8 @@ class TestAdvancedModelInteractions:
         noisy_pred = noisy_bass.predict(t)
 
         # Error should be bounded
-        relative_error = np.abs(noisy_pred - clean_pred) / clean_pred
+        non_zero_mask = clean_pred != 0
+        relative_error = np.abs(noisy_pred[non_zero_mask] - clean_pred[non_zero_mask]) / clean_pred[non_zero_mask]
         assert np.all(relative_error < 1.0)  # Error shouldn't exceed 100%
 
     def test_model_validation_pipeline(self):

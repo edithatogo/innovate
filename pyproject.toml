@@ -30,6 +30,7 @@ dependencies = [
   "ndlib>=5.1",
   # Differential equations
   "jitcdde>=1.8",
+  "sympy>=1.12",
   # Change-point / trend detection
   "ruptures>=1.1",
   "pymannkendall>=1.4",
@@ -115,24 +116,22 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.packages.find]
 where = ["src"]
 
-# ===========================================================================
-# Tool configurations
-# ===========================================================================
-
-# ---------------------------------------------------------------------------
-# pytest — three-tier test structure
-# ---------------------------------------------------------------------------
 [tool.pytest.ini_options]
-pythonpath = ["src"]
 minversion = "7.0"
 addopts = "-ra -q --tb=short"
 testpaths = ["tests"]
 markers = [
-  "unit: Unit tests (individual functions/classes)",
-  "integration: Integration tests (cross-module interactions)",
-  "e2e: End-to-end tests (complete user workflows)",
-  "slow: Marks tests as slow (deselect with '-m \"not slow\"')",
+  "unit: marks tests as unit tests",
+  "integration: marks tests as integration tests",
+  "e2e: marks tests as end-to-end",
+  "fitter: marks tests as fitter tests",
+  "slow: marks tests as slow",
+  "optional_backend: marks tests that require optional backend dependencies",
 ]
+
+# ===========================================================================
+# Tool configurations
+# ===========================================================================
 
 # ---------------------------------------------------------------------------
 # Ruff — single tool replaces Black, isort, flake8, pylint, vulture, unimport
@@ -263,8 +262,8 @@ line-ending = "auto"
 # ---------------------------------------------------------------------------
 # ty — primary type checker (Astral)
 # ---------------------------------------------------------------------------
-[tool.ty]
-src = ["src"]
+[tool.ty.environment]
+root = ["./src"]
 
 # ---------------------------------------------------------------------------
 # mypy — secondary type checker (strict mode)

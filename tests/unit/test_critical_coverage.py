@@ -81,11 +81,10 @@ class TestCriticalEdgeCases:
             # Either empty result or error is acceptable
             pass
 
-        # Negative times
+        # Negative times should be rejected
         t_negative = [-2, -1, 0, 1, 2]
-        result = model.predict(t_negative)
-        assert len(result) == len(t_negative)
-        assert np.all(np.isfinite(result))
+        with pytest.raises(ValueError, match="must be non-negative"):
+            model.predict(t_negative)
 
     def test_preprocessing_edge_cases(self):
         """Test preprocessing functions with edge cases."""
@@ -113,9 +112,10 @@ class TestCriticalEdgeCases:
         from innovate.compete.competition import MultiProductDiffusionModel
 
         multiproduct = MultiProductDiffusionModel(p=[0.02], Q=[[0.1]], m=[1000])
+        policy = PolicyIntervention(multiproduct)
 
         with pytest.raises(TypeError, match="currently only supported for BassModel"):
-            PolicyIntervention(multiproduct)
+            policy.apply_time_varying_params(t_points=[1, 2, 3])
 
     def test_backend_error_handling(self):
         """Test backend switching error handling."""

@@ -8,7 +8,17 @@ from typing import Any
 
 from . import backend
 from .base import DiffusionModel
-from .capabilities import ModelCapability, get_model_capability, get_model_registry
+from .capabilities import (
+    BackendCapability,
+    FitterCapability,
+    ModelCapability,
+    get_backend_capability,
+    get_backend_registry,
+    get_fitter_capability,
+    get_fitter_registry,
+    get_model_capability,
+    get_model_registry,
+)
 
 try:
     __version__ = version("innovate")
@@ -39,9 +49,14 @@ _LAZY_EXPORTS: dict[str, tuple[str, str | None]] = {
     "JaxFitter": ("innovate.fitters", "JaxFitter"),
     "MoMFitter": ("innovate.fitters", "MoMFitter"),
     "ScipyFitter": ("innovate.fitters", "ScipyFitter"),
+    "get_backend_capability": ("innovate.capabilities", "get_backend_capability"),
+    "get_backend_registry": ("innovate.capabilities", "get_backend_registry"),
+    "get_fitter_capability": ("innovate.capabilities", "get_fitter_capability"),
+    "get_fitter_registry": ("innovate.capabilities", "get_fitter_registry"),
 }
 
 __all__ = [
+    "BackendCapability",
     "BassModel",
     "BatchedFitter",
     "BayesianFitter",
@@ -52,6 +67,7 @@ __all__ = [
     "CurveFitter",
     "DiffusionModel",
     "FisherPryModel",
+    "FitterCapability",
     "GompertzModel",
     "JaxFitter",
     "LogisticModel",
@@ -68,6 +84,10 @@ __all__ = [
     "diffuse",
     "ecosystem",
     "fitters",
+    "get_backend_capability",
+    "get_backend_registry",
+    "get_fitter_capability",
+    "get_fitter_registry",
     "get_model_capability",
     "get_model_registry",
     "substitute",

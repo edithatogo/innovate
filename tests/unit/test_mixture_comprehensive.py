@@ -305,7 +305,7 @@ class TestMixtureModelComprehensive:
             # If no error, that means the method exists and doesn't crash
             assert True
         except Exception:
-            assert False  # Should not raise an exception
+            raise AssertionError()  # Should not raise an exception
 
 
 def test_mixture_model_comprehensive_integration():

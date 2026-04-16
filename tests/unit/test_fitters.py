@@ -9,6 +9,7 @@ from innovate.fitters.scipy_fitter import ScipyFitter
 jax_available = True
 try:
     import jax  # noqa: F401
+
     from innovate.fitters.jax_fitter import JaxFitter
 except ImportError:
     jax_available = False
@@ -67,6 +68,7 @@ def test_bootstrap_fitter(synthetic_logistic_data):
     assert ses["L"] >= 0
 
 
+@pytest.mark.optional_backend
 @pytest.mark.skipif(not jax_available, reason="JAX is not installed")
 def test_jax_fitter(synthetic_logistic_data):
     from innovate.backend import current_backend, use_backend

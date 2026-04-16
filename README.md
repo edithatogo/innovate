@@ -17,7 +17,7 @@ This library provides a flexible and robust framework for modeling the complex d
     *   `innovate.hype`: For simulating the Gartner Hype Cycle and the impact of public sentiment.
     *   `innovate.fail`: For understanding the mechanisms of failed adoption.
     *   `innovate.adopt`: For classifying adopter types based on their adoption timing.
-*   **Efficient Data Handling**: Uses pandas with an Apache Arrow backend for high-performance data manipulation.
+*   **Efficient Data Handling**: Uses pandas as the primary user-facing DataFrame API, with PyArrow as the columnar infrastructure layer. Polars may be used selectively for ETL-heavy paths, but it is not the contract surface.
 *   **Advanced Parameterization**:
     *   **Covariate-Driven Parameters**: Allow model parameters (like `p`, `q`, and `m` in the Bass model) to be functions of external variables (e.g., price, advertising).
     *   **Time-Varying Parameters**: Model structural breaks and policy impacts by allowing parameters to change at a specified time.
@@ -92,7 +92,15 @@ uv sync
 
 For development with all tooling:
 ```bash
-uv sync --all-extras
+uv sync --extra jax --extra bayesian
+```
+
+The optional backend extras are intentionally split:
+
+```bash
+uv sync
+uv sync --extra jax
+uv sync --extra bayesian
 ```
 
 ### Using pip
@@ -102,10 +110,7 @@ pip install innovate
 ```
 *(Note: The package is not yet available on PyPI under this name, but will be in the future).*
 
-You will also need to install `pyarrow`:
-```bash
-pip install pyarrow
-```
+`pyarrow` is part of the base install. Install the optional extras only when you need the accelerator or Bayesian paths.
 
 ## Usage
 
@@ -156,7 +161,15 @@ Here is a sample of the kinds of visualizations you can generate with `innovate`
 
 ## Backend Performance
 
-The `innovate` library supports both NumPy and JAX backends. The JAX backend can provide a significant performance benefit for fitting complex models, especially those with a large number of parameters. However, the performance benefit is less significant for simple models.
+The `innovate` library supports both NumPy and JAX backends. NumPy/SciPy is the reference runtime; JAX is an optional accelerator that can improve fitting for more demanding workloads. Bayesian fitters are also optional and require the dedicated `bayesian` extra.
+
+To install the accelerator and Bayesian stacks:
+
+```bash
+uv sync --extra jax --extra bayesian
+```
+
+Use `uv sync --extra jax` when you only want the accelerator path, and `uv sync --extra bayesian` when you only want the Bayesian path.
 
 The following table shows the results of a benchmarking script that compares the performance of the NumPy and JAX backends for a variety of tasks:
 
@@ -183,7 +196,7 @@ The following table shows the results of a benchmarking script that compares the
 
 As you can see, the JAX backend is slightly faster than the NumPy backend for fitting the `BassModel`. However, the performance is about the same for the other models and tasks.
 
-We are continuing to investigate opportunities for optimization, including the use of `pyarrow` and other high-performance libraries.
+We are continuing to investigate opportunities for optimization, including the selective use of `pyarrow`-backed interchange and narrow Polars ingestion workflows where they materially reduce cost without changing the public API.
 
 ## License
 
@@ -202,8 +215,8 @@ Install the project dependencies before running the tests:
 pip install -r requirements.txt
 ```
 
-After installing the requirements, you can run `pytest`. The full recommended
-command is documented in
+After installing the requirements, you can run `pytest`. The recommended base
+and optional-backend commands are documented in
 [docs/testing_strategy.rst](docs/testing_strategy.rst).
 
 ## Branching Strategy

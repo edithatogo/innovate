@@ -4,20 +4,18 @@ Tests mathematical invariants that must hold for all valid inputs.
 """
 
 import numpy as np
-import pytest
-from hypothesis import given, settings, strategies as st
+from hypothesis import given, settings
+from hypothesis import strategies as st
 
 from innovate.backend import use_backend
 
 use_backend("numpy")
 
-from innovate.diffuse.bass import BassModel
 from innovate.diffuse.gompertz import GompertzModel
-from innovate.diffuse.logistic import LogisticModel
 from innovate.substitute.fisher_pry import FisherPryModel
 
-
 # --- Property-Based Tests for Bass Model ---
+
 
 class TestBassModelProperties:
     """Property-based tests for Bass model invariants.
@@ -26,10 +24,12 @@ class TestBassModelProperties:
     non-physical results for certain parameter combinations. Property-based
     tests are limited to initial_guesses validation.
     """
+
     pass  # Core invariant tests are in test_bass_model_comprehensive.py
 
 
 # --- Property-Based Tests for Gompertz Model ---
+
 
 class TestGompertzModelProperties:
     """Property-based tests for Gompertz model invariants."""
@@ -55,6 +55,7 @@ class TestGompertzModelProperties:
 
 
 # --- Property-Based Tests for Fisher-Pry Model ---
+
 
 class TestFisherPryProperties:
     """Property-based tests for Fisher-Pry substitution model."""

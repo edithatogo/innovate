@@ -77,8 +77,11 @@ class TestCategorizeAdopters:
         result = categorize_adopters(model, t)
         assert len(result) == 1
         assert result["category"].iloc[0] in [
-            "Innovators", "Early Adopters", "Early Majority",
-            "Late Majority", "Laggards"
+            "Innovators",
+            "Early Adopters",
+            "Early Majority",
+            "Late Majority",
+            "Laggards",
         ]
 
     def test_unfitted_model_raises(self):

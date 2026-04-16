@@ -70,11 +70,15 @@ def get_fit_metrics(
 
     rss = calculate_rss(y, y_pred)
 
+    r_squared = calculate_r_squared(y, y_pred)
+
     metrics = {
         "MSE": calculate_mse(y, y_pred),
         "RMSE": calculate_rmse(y, y_pred),
         "MAE": calculate_mae(y, y_pred),
-        "R-squared": calculate_r_squared(y, y_pred),
+        # Preserve both legacy spellings used across the repo.
+        "R-squared": r_squared,
+        "R_squared": r_squared,
         "MAPE": calculate_mape(y, y_pred),
         "SMAPE": calculate_smape(y, y_pred),
         "RSS": rss,
@@ -133,7 +137,7 @@ def find_best_model(
     Args:
     ----
         comparison_df: The DataFrame returned by compare_models.
-        metric: The metric to use for comparison (e.g., 'RMSE', 'R-squared').
+        metric: The metric to use for comparison (e.g., 'RMSE', 'R-squared', 'R_squared').
         minimize: If True, the best model has the minimum value for the metric.
                   If False, the best model has the maximum value.
 

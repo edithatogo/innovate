@@ -8,6 +8,12 @@ avoids the segmentation fault issues of the previous PyMC implementation.
 import numpy as np
 import pytest
 
+pytestmark = pytest.mark.optional_backend
+
+pytest.importorskip("arviz")
+pytest.importorskip("blackjax")
+pytest.importorskip("jax")
+
 from innovate.diffuse.bass import BassModel
 from innovate.diffuse.logistic import LogisticModel
 from innovate.fitters.bayesian_fitter import BayesianFitter

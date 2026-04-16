@@ -1,19 +1,18 @@
 """Property-based tests for competition and substitution models using Hypothesis."""
 
 import numpy as np
-import pytest
-from hypothesis import given, settings, strategies as st
+from hypothesis import given, settings
+from hypothesis import strategies as st
 
 from innovate.backend import use_backend
 
 use_backend("numpy")
 
 from innovate.compete.lotka_volterra import LotkaVolterraModel
-from innovate.diffuse.bass import BassModel
 from innovate.substitute.fisher_pry import FisherPryModel
 
-
 # --- Property-Based Tests for Competition Models ---
+
 
 class TestLotkaVolterraProperties:
     """Property-based tests for Lotka-Volterra competition model."""
@@ -41,13 +40,14 @@ class TestLotkaVolterraProperties:
 
 # --- Property-Based Tests for Substitution Models ---
 
+
 class TestFisherPryPropertiesExtended:
     """Extended property-based tests for Fisher-Pry model."""
 
     @given(
         st.floats(min_value=0.1, max_value=2.0),  # alpha
         st.floats(min_value=3.0, max_value=12.0),  # t0
-        st.floats(min_value=0.5, max_value=1.0),  # fraction threshold
+        st.floats(min_value=0.5, max_value=0.99),  # fraction threshold
     )
     @settings(max_examples=15)
     def test_substitution_fraction_crosses_threshold(self, alpha, t0, threshold):
@@ -57,8 +57,7 @@ class TestFisherPryPropertiesExtended:
         # At time much greater than t0, fraction should approach 1
         t_far = t0 + 20.0 / alpha
         frac = model.predict([t_far])
-        assert frac[0] > threshold or frac[0] < 0.01, \
-            f"Substitution fraction {frac[0]} unexpected at t={t_far}"
+        assert frac[0] > threshold or frac[0] < 0.01, f"Substitution fraction {frac[0]} unexpected at t={t_far}"
 
     @given(
         st.floats(min_value=0.1, max_value=2.0),  # alpha

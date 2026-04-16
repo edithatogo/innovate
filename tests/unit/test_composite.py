@@ -91,9 +91,14 @@ class TestCompositeDiffusionModelPredict:
         comp = CompositeDiffusionModel(models)
         t = np.linspace(0.1, 5.0, 10)
         comp._params = {
-            "p_1": 0.03, "q_1": 0.38, "m_1": 100.0,
-            "p_2": 0.05, "q_2": 0.25, "m_2": 80.0,
-            "alpha_1_2": 0.0, "alpha_2_1": 0.0,
+            "p_1": 0.03,
+            "q_1": 0.38,
+            "m_1": 100.0,
+            "p_2": 0.05,
+            "q_2": 0.25,
+            "m_2": 80.0,
+            "alpha_1_2": 0.0,
+            "alpha_2_1": 0.0,
         }
         # The ODE-based predict may have shape issues - test that it at least runs
         try:

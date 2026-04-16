@@ -10,7 +10,13 @@ from innovate.base.base import DiffusionModel
 class BootstrapFitter:
     """A fitter class that uses bootstrapping to estimate parameter uncertainty."""
 
-    def __init__(self, fitter: Any, n_bootstraps: int = 100, seed: int | None = None):
+    def __init__(
+        self,
+        fitter: Any | None = None,
+        n_bootstraps: int = 100,
+        seed: int | None = None,
+        n_bootstrap: int | None = None,
+    ):
         """Initialize the BootstrapFitter.
 
         Args:
@@ -18,6 +24,13 @@ class BootstrapFitter:
             n_bootstraps: Number of bootstrap samples to generate.
             seed: Random seed for reproducibility.
         """
+        if fitter is None:
+            from innovate.fitters.scipy_fitter import ScipyFitter
+
+            fitter = ScipyFitter()
+        if n_bootstrap is not None:
+            n_bootstraps = n_bootstrap
+
         self.fitter = fitter
         self.n_bootstraps = n_bootstraps
         self.seed = seed
@@ -52,6 +65,9 @@ class BootstrapFitter:
             indices = rng.choice(n_samples, n_samples, replace=True)
             t_resampled = t_arr[indices]
             y_resampled = y_arr[indices]
+            order = np.argsort(t_resampled, kind="stable")
+            t_resampled = t_resampled[order]
+            y_resampled = y_resampled[order]
 
             # Create a new model instance for each bootstrap iteration
             boot_model = type(model)()
@@ -60,12 +76,16 @@ class BootstrapFitter:
                 self.fitter.fit(boot_model, t_resampled.tolist(), y_resampled.tolist(), **kwargs)
                 self.bootstrapped_params.append(boot_model.params_.copy())
                 # Store diagnostics if available
-                if hasattr(self.fitter, 'diagnostics') and self.fitter.diagnostics is not None:
+                if hasattr(self.fitter, "diagnostics") and self.fitter.diagnostics is not None:
                     self.bootstrapped_diagnostics.append(self.fitter.diagnostics)
             except RuntimeError as e:
                 # Handle cases where fitting might fail for a resampled dataset
                 warnings.warn(f"Fitting failed for bootstrap sample {i}: {e}", stacklevel=2)
                 continue
+
+        if self.bootstrapped_params:
+            estimates = self.get_parameter_estimates()
+            model.params_ = {name: float(np.median(values)) for name, values in estimates.items() if values}
 
     def get_parameter_estimates(self) -> dict[str, list[float]]:
         """Returns a dictionary of parameter names to lists of bootstrapped values."""

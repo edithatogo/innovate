@@ -10,7 +10,7 @@ from innovate.preprocess import rolling_average, sarima_fit, stl_decomposition
 @pytest.fixture
 def seasonal_time_series():
     """Generate a synthetic time series with a clear seasonal pattern."""
-    dates = pd.date_range(start="2020-01-01", periods=120, freq="M")
+    dates = pd.date_range(start="2020-01-01", periods=120, freq="ME")
     trend = np.linspace(10, 100, 120)
     seasonal = 10 * np.sin(
         np.linspace(0, 10 * 2 * np.pi, 120),
@@ -45,7 +45,7 @@ def test_stl_decomposition_no_datetime_index():
 
 @pytest.fixture
 def simple_series():
-    dates = pd.date_range(start="2020-01-01", periods=50, freq="M")
+    dates = pd.date_range(start="2020-01-01", periods=50, freq="ME")
     return pd.Series(np.arange(50), index=dates)
 
 

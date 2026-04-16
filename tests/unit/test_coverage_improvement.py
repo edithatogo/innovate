@@ -352,7 +352,7 @@ class TestBassModelCoverage:
         assert isinstance(score, (float, int, np.floating))
 
     def test_bass_model_score_with_covariates(self):
-        """Test the score method with covariates - should fail due to ODE issues but we can still test structure."""
+        """Test the score method with covariates."""
         model = BassModel(covariates=["advertising"])
         model.params_ = {
             "p": 0.03,
@@ -367,9 +367,8 @@ class TestBassModelCoverage:
         y = [10, 50, 100, 200]
         covariates = {"advertising": [50, 60, 70, 80]}
 
-        # This will likely fail due to ODE solving issues, which we can handle
-        with pytest.raises(ValueError):
-            model.score(t, y, covariates)
+        score = model.score(t, y, covariates)
+        assert isinstance(score, (float, int, np.floating))
 
     def test_bass_model_differential_equation_method(self):
         """Test the differential equation method directly."""
@@ -431,7 +430,7 @@ class TestBassModelCoverage:
             rate = model.differential_equation(t, y, params, covariates, t_eval)
             # The normal path should still work
             assert hasattr(rate, "__array__") or isinstance(rate, (float, int, np.floating, np.ndarray))
-        except:
+        except Exception:
             # This is expected behavior if the differential equation fails
             # But the code path has been exercised
             pass

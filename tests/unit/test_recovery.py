@@ -162,7 +162,7 @@ def test_error_message_clarity():
     model.params_ = {}
     try:
         model.predict([1, 2, 3])
-        assert False, "Expected an exception"  # Should not reach here
+        raise AssertionError("Expected an exception")  # Should not reach here
     except RuntimeError as e:
         error_msg = str(e)
         # Check that the error message is helpful

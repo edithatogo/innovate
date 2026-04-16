@@ -294,7 +294,9 @@ def validate_model_predictions(
             is_valid = False
 
     # Check if predictions are monotonically increasing (for cumulative models)
-    if hasattr(model, "monotonic_check") and model.monotonic_check and not np.all(np.diff(y_pred) >= -1e-10):  # Allow small numerical errors
+    if (
+        hasattr(model, "monotonic_check") and model.monotonic_check and not np.all(np.diff(y_pred) >= -1e-10)
+    ):  # Allow small numerical errors
         issues.append(
             "Model predictions are not monotonically increasing (cumulative models should generally increase)"
         )

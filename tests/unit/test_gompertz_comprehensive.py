@@ -115,8 +115,12 @@ class TestGompertzModelFitPredict:
         t = np.linspace(0, 10, 50)
         model = GompertzModel(t_event=5.0)
         model.params_ = {
-            "a": 100.0, "b": 2.0, "c": 0.3,
-            "a_post": 150.0, "b_post": 1.5, "c_post": 0.4,
+            "a": 100.0,
+            "b": 2.0,
+            "c": 0.3,
+            "a_post": 150.0,
+            "b_post": 1.5,
+            "c_post": 0.4,
         }
         preds = model.predict(t)
         assert len(preds) == 50
@@ -127,8 +131,12 @@ class TestGompertzModelFitPredict:
         t = np.array([1.0, 2.0, 3.0, 4.0])
         model = GompertzModel(t_event=5.0)
         model.params_ = {
-            "a": 100.0, "b": 2.0, "c": 0.3,
-            "a_post": 150.0, "b_post": 1.5, "c_post": 0.4,
+            "a": 100.0,
+            "b": 2.0,
+            "c": 0.3,
+            "a_post": 150.0,
+            "b_post": 1.5,
+            "c_post": 0.4,
         }
         preds = model.predict(t)
         assert len(preds) == 4
@@ -139,8 +147,12 @@ class TestGompertzModelFitPredict:
         t = np.array([6.0, 7.0, 8.0, 9.0])
         model = GompertzModel(t_event=5.0)
         model.params_ = {
-            "a": 100.0, "b": 2.0, "c": 0.3,
-            "a_post": 150.0, "b_post": 1.5, "c_post": 0.4,
+            "a": 100.0,
+            "b": 2.0,
+            "c": 0.3,
+            "a_post": 150.0,
+            "b_post": 1.5,
+            "c_post": 0.4,
         }
         preds = model.predict(t)
         assert len(preds) == 4
