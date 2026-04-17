@@ -1,0 +1,25 @@
+Task: Define stability tiers for the codebase
+
+Summary:
+- Added `innovate.stability` with normalized stability tiers and lifecycle guidance.
+- Added `innovate.plugins` with a validated `ExtensionManifest` and in-memory registry.
+- Exposed stability and plugin helpers from the canonical public API.
+- Added tests for tier normalization, manifest validation, registration, and documentation presence.
+- Updated docs to describe stable, provisional, and internal surfaces and to note release-governance guidance.
+- Fixed eager backend import in `innovate.__init__` by making `backend` lazy, restoring import isolation for optional dependencies.
+
+Files:
+- src/innovate/__init__.py
+- src/innovate/capabilities.py
+- src/innovate/plugins.py
+- src/innovate/stability.py
+- tests/unit/test_plugin_api_stability.py
+- tests/unit/test_plugin_api_docs.py
+- docs/source/innovate.plugins.rst
+- docs/source/innovate.stability.rst
+- docs/source/tutorials/plugin_api_stability.rst
+- docs/source/index.rst
+- docs/source/innovate.rst
+- docs/source/tutorials.rst
+- docs/architecture_principles.md
+- docs/continued_improvement_guide.md
