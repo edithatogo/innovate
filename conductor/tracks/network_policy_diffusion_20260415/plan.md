@@ -6,7 +6,7 @@
     - [x] Specify accepted adjacency, edge-list, and event-timing data shapes
     - [x] Define canonical validation rules and error handling
     - [x] Write failing tests for the input contracts
-- [ ] Task: Add shared fixtures for spillover and timing scenarios
+- [x] Task: Add shared fixtures for spillover and timing scenarios [226f638]
     - [ ] Create representative synthetic network datasets
     - [ ] Create representative policy-adoption timing datasets
     - [ ] Confirm the new tests fail before implementation
