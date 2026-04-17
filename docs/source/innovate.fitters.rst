@@ -20,6 +20,14 @@ innovate.fitters.bootstrap\_fitter module
    :show-inheritance:
    :undoc-members:
 
+innovate.fitters.diagnostics\_contract module
+---------------------------------------------
+
+.. automodule:: innovate.fitters.diagnostics_contract
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 innovate.fitters.jax\_fitter module
 -----------------------------------
 

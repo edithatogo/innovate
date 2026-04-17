@@ -6,6 +6,7 @@ import pandas as pd
 from statsmodels.tsa.stattools import acf, pacf
 
 from innovate.base.base import DiffusionModel
+from innovate.fitters.diagnostics_contract import build_diagnostics_contract
 
 from .metrics import (
     calculate_aic,
@@ -115,14 +116,25 @@ def compare_models(
             continue
 
         try:
-            metrics = get_fit_metrics(model, t_true, y_true)
+            contract = build_diagnostics_contract(model, t_true, y_true, model_name=name)
+            if contract.support_level == "unsupported":
+                metrics = {}
+            else:
+                metrics = contract.metrics or get_fit_metrics(model, t_true, y_true)
             metrics["Parameters"] = model.params_
             metrics["Model"] = name
+            metrics["Diagnostics Support"] = contract.support_level
+            metrics["Uncertainty Report Type"] = contract.uncertainty.report_type
+            metrics["Uncertainty Provenance"] = contract.uncertainty.provenance
+            metrics["Warning Count"] = len(contract.warnings)
             results.append(metrics)
 
         except Exception as e:
             print(f"Error evaluating model '{name}': {e}. Skipping.")
             continue
+
+    if not results:
+        return pd.DataFrame()
 
     return pd.DataFrame(results).set_index("Model")
 

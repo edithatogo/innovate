@@ -30,8 +30,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Diagnostics, Uncertainty, and Model Comparison**
-  *Link: [./tracks/diagnostics_uncertainty_20260415/](./tracks/diagnostics_uncertainty_20260415/)*
+- [x] **Track: Diagnostics, Uncertainty, and Model Comparison** *(Completed)*
+  *Link: [./archive/diagnostics_uncertainty_20260415/](./archive/diagnostics_uncertainty_20260415/)*
 
 ---
 

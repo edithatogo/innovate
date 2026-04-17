@@ -17,6 +17,8 @@ import jax.numpy as jnp
 import numpy as np
 from jax import random
 
+from innovate.fitters.diagnostics_contract import DiagnosticsContract, DiagnosticsWarning, UncertaintySummary, build_diagnostics_contract
+
 
 class BayesianFitter:
     """
@@ -272,6 +274,29 @@ class BayesianFitter:
 
         return intervals
 
+    def get_uncertainty_summary(self, credible_mass: float = 0.95) -> UncertaintySummary:
+        """Return the posterior uncertainty summary in the shared contract format."""
+        if self.posterior_samples_ is None:
+            return UncertaintySummary.unsupported("No posterior samples available.", provenance="bayesian")
+
+        intervals = self.get_confidence_intervals(credible_mass)
+        summary = self.get_summary()
+        lower = {name: bounds[0] for name, bounds in intervals.items()}
+        upper = {name: bounds[1] for name, bounds in intervals.items()}
+        median = {name: stats["median"] for name, stats in summary.items()}
+        samples = {
+            name: np.asarray(values).reshape(-1)
+            for name, values in self.posterior_samples_.items()
+        }
+        return UncertaintySummary.posterior_summary(
+            lower=lower,
+            upper=upper,
+            median=median,
+            level=credible_mass,
+            samples=samples,
+            note=f"{self.num_chains} chains x {self.num_samples} samples",
+        )
+
     def get_summary(self) -> dict[str, dict[str, float]]:
         """Get summary statistics for all parameters."""
         if self.posterior_samples_ is None:
@@ -311,4 +336,34 @@ class BayesianFitter:
         """Convert samples to arviz InferenceData format."""
         return az.from_dict(
             posterior=self.posterior_samples_, coords={"chain": range(self.num_chains), "draw": range(self.num_samples)}
+        )
+
+    def get_diagnostics_contract(
+        self,
+        model: Any,
+        t: np.ndarray | list | Sequence,
+        y: np.ndarray | list | Sequence,
+        *,
+        credible_mass: float = 0.95,
+        model_name: str = "",
+    ) -> DiagnosticsContract:
+        """Return a shared diagnostics contract for the Bayesian fit."""
+        uncertainty = self.get_uncertainty_summary(credible_mass)
+        warnings_list: list[DiagnosticsWarning] = []
+        if uncertainty.support_level == "unsupported":
+            warnings_list.append(
+                DiagnosticsWarning(
+                    code="bayesian_unavailable",
+                    message=uncertainty.note or "No posterior samples were generated.",
+                ),
+            )
+
+        return build_diagnostics_contract(
+            model,
+            t,
+            y,
+            provenance="bayesian",
+            uncertainty=uncertainty,
+            warnings=warnings_list,
+            model_name=model_name,
         )

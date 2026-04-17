@@ -5,6 +5,7 @@ from typing import Any
 import numpy as np
 
 from innovate.base.base import DiffusionModel
+from innovate.fitters.diagnostics_contract import DiagnosticsContract, DiagnosticsWarning, UncertaintySummary, build_diagnostics_contract
 
 
 class BootstrapFitter:
@@ -123,6 +124,23 @@ class BootstrapFitter:
                 cis[name] = {"lower": lower, "upper": upper, "median": median}
         return cis
 
+    def get_uncertainty_summary(self, alpha: float = 0.05) -> UncertaintySummary:
+        """Return the bootstrap uncertainty summary in the shared contract format."""
+        if not self.bootstrapped_params:
+            return UncertaintySummary.unsupported("No bootstrap results available.", provenance="bootstrap")
+
+        cis = self.get_confidence_intervals(alpha)
+        lower = {name: values["lower"] for name, values in cis.items()}
+        upper = {name: values["upper"] for name, values in cis.items()}
+        median = {name: values["median"] for name, values in cis.items()}
+        return UncertaintySummary.bootstrap_interval(
+            lower=lower,
+            upper=upper,
+            median=median,
+            level=1 - alpha,
+            note=f"{len(self.bootstrapped_params)} successful bootstrap samples",
+        )
+
     def get_standard_errors(self) -> dict[str, float]:
         """Returns standard errors for each parameter."""
         estimates = self.get_parameter_estimates()
@@ -153,6 +171,36 @@ class BootstrapFitter:
                 correlation[name_i][name_j] = float(corr_matrix[i, j])
 
         return correlation
+
+    def get_diagnostics_contract(
+        self,
+        model: DiffusionModel,
+        t: Sequence[float],
+        y: Sequence[float],
+        *,
+        alpha: float = 0.05,
+        model_name: str = "",
+    ) -> DiagnosticsContract:
+        """Return a shared diagnostics contract for the bootstrapped model."""
+        uncertainty = self.get_uncertainty_summary(alpha)
+        warnings_list: list[DiagnosticsWarning] = []
+        if uncertainty.support_level == "unsupported":
+            warnings_list.append(
+                DiagnosticsWarning(
+                    code="bootstrap_unavailable",
+                    message=uncertainty.note or "No bootstrap results were generated.",
+                ),
+            )
+
+        return build_diagnostics_contract(
+            model,
+            t,
+            y,
+            provenance="bootstrap",
+            uncertainty=uncertainty,
+            warnings=warnings_list,
+            model_name=model_name,
+        )
 
     def summary(self, alpha: float = 0.05) -> str:
         """Return a formatted summary of bootstrap results."""

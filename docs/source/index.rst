@@ -54,7 +54,16 @@ Welcome to **innovate**, a comprehensive Python library for modeling innovation 
    innovate.plots.rst
    innovate.utils.rst
    innovate.fitters.rst
+   innovate.fitters.diagnostics_contract.rst
    innovate.base.rst
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Architecture & Roadmap
+
+   ../architecture_principles
+   ../architecture_modernization_roadmap
+   ../adr/index
 
 .. toctree::
    :maxdepth: 1
@@ -69,8 +78,7 @@ Basic Bass Model
 
 .. code-block:: python
 
-   from innovate.diffuse import BassModel
-   from innovate.fitters import ScipyFitter
+   from innovate import BassModel, ScipyFitter
    
    # Fit Bass model to adoption data
    model = BassModel()
@@ -111,6 +119,16 @@ Policy Analysis
    baseline = model.predict(time_points)
    with_policy = policy.apply_interventions(time_points)
 
+Canonical imports
+~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   from innovate import BassModel, GompertzModel, LogisticModel, ScipyFitter
+   from innovate.compete import MultiProductDiffusionModel, LotkaVolterraModel
+   from innovate.substitute import FisherPryModel, NortonBassModel
+   from innovate.backends import use_backend
+
 🎯 **Use Cases**
 
 * **Technology Adoption**: Model smartphone, EV, or renewable energy adoption
@@ -144,4 +162,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

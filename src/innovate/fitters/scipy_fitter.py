@@ -9,6 +9,8 @@ from typing_extensions import Self
 
 from innovate.base.base import DiffusionModel
 from innovate.compete.competition import MultiProductDiffusionModel
+from innovate.fitters.diagnostics_contract import DiagnosticsWarning, UncertaintySummary
+from innovate.fitters.residual_analysis import analyze_residuals
 
 
 @dataclass
@@ -27,6 +29,11 @@ class FitDiagnostics:
     optimization_method: str = ""
     convergence_status: str = ""
     message: str = ""
+    residual_analysis: object | None = None
+    uncertainty: UncertaintySummary = field(default_factory=UncertaintySummary.point_estimate)
+    warnings: list[DiagnosticsWarning] = field(default_factory=list)
+    support_level: str = "supported"
+    provenance: str = "deterministic"
 
     def summary(self) -> str:
         """Return a formatted summary of fit diagnostics."""
@@ -42,10 +49,38 @@ class FitDiagnostics:
             f"Parameters:      {self.n_parameters}",
             f"Method:          {self.optimization_method}",
             f"Convergence:     {self.convergence_status}",
+            f"Support level:   {self.support_level}",
+            f"Uncertainty:     {self.uncertainty.report_type}",
         ]
+        if self.warnings:
+            lines.append(f"Warnings:        {len(self.warnings)}")
         if self.message:
             lines.append(f"Message:         {self.message}")
         return "\n".join(lines)
+
+    def to_dict(self) -> dict[str, object]:
+        """Serialize fit diagnostics into a structured mapping."""
+        return {
+            "r_squared": self.r_squared,
+            "rmse": self.rmse,
+            "mae": self.mae,
+            "aic": self.aic,
+            "bic": self.bic,
+            "residuals": self.residuals.tolist(),
+            "fitted_params": self.fitted_params,
+            "n_observations": self.n_observations,
+            "n_parameters": self.n_parameters,
+            "optimization_method": self.optimization_method,
+            "convergence_status": self.convergence_status,
+            "message": self.message,
+            "residual_analysis": None
+            if self.residual_analysis is None
+            else getattr(self.residual_analysis, "to_dict", lambda: self.residual_analysis)(),
+            "uncertainty": self.uncertainty.to_dict(),
+            "warnings": [warning.to_dict() for warning in self.warnings],
+            "support_level": self.support_level,
+            "provenance": self.provenance,
+        }
 
 
 OptimizationMethod = Literal["curve_fit", "least_squares", "nelder_mead", "lbfgsb", "differential_evolution", "auto"]
@@ -118,6 +153,16 @@ class ScipyFitter:
         r_squared = 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
         rmse = np.sqrt(ss_res / n) if n > 0 else 0.0
         mae = np.mean(np.abs(residuals)) if n > 0 else 0.0
+        residual_analysis = analyze_residuals(residuals, fitted_values=y_pred) if n > 1 else None
+
+        warnings_list: list[DiagnosticsWarning] = []
+        if convergence_status != "converged":
+            warnings_list.append(
+                DiagnosticsWarning(
+                    code="optimizer_convergence",
+                    message=message or "Optimization did not converge cleanly.",
+                ),
+            )
 
         # AIC and BIC (assuming Gaussian errors)
         if ss_res > 0 and n > k:
@@ -141,6 +186,11 @@ class ScipyFitter:
             optimization_method=method,
             convergence_status=convergence_status,
             message=message,
+            residual_analysis=residual_analysis,
+            uncertainty=UncertaintySummary.point_estimate(),
+            warnings=warnings_list,
+            support_level="supported" if convergence_status == "converged" else "partial",
+            provenance="deterministic",
         )
 
     def _fit_curve_fit(

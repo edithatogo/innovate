@@ -8,6 +8,7 @@ Submodules
    :maxdepth: 4
 
    innovate.plots.comparison
+   innovate.plots.diagnostics
    innovate.plots.network
 
 Module contents

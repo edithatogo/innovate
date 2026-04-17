@@ -17,6 +17,7 @@ pytest.importorskip("jax")
 from innovate.diffuse.bass import BassModel
 from innovate.diffuse.logistic import LogisticModel
 from innovate.fitters.bayesian_fitter import BayesianFitter
+from innovate.fitters.diagnostics_contract import DiagnosticsContract
 
 
 class TestBayesianFitterRobust:
@@ -122,6 +123,19 @@ class TestBayesianFitterRobust:
 
         with pytest.raises(RuntimeError, match="Model has not been fitted"):
             fitter.get_summary()
+
+    def test_diagnostics_contract_reports_explicit_unsupported_uncertainty(self):
+        """Test that the Bayesian contract exposes explicit unsupported uncertainty before fitting."""
+        model = BassModel()
+        fitter = BayesianFitter(num_chains=1, num_warmup=10, num_samples=10)
+
+        contract = fitter.get_diagnostics_contract(model, [1.0, 2.0], [1.0, 2.0])
+
+        assert isinstance(contract, DiagnosticsContract)
+        assert contract.support_level == "unsupported"
+        assert contract.uncertainty.report_type == "unsupported"
+        assert contract.uncertainty.provenance == "bayesian"
+        assert any(w.code == "bayesian_unavailable" for w in contract.warnings)
 
     def test_noisy_data_robustness(self):
         """Test robustness with very noisy data."""
