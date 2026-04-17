@@ -1,6 +1,6 @@
 # Implementation Plan: Advanced Diffusion Inference
 
-## Phase 1: Shared Advanced-Model Foundations
+## Phase 1: Shared Advanced-Model Foundations [checkpoint: 1aeffb5]
 
 - [x] Task: Define the advanced-model contract [d91f2db]
     - [x] Specify canonical interfaces for fit, predict, simulate, and summarize
