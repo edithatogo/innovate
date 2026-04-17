@@ -1,6 +1,6 @@
 # Implementation Plan: Plugin API and Stability Tiers
 
-## Phase 1: Policy and Contracts
+## Phase 1: Policy and Contracts [checkpoint: 76b63df]
 
 - [x] Task: Define stability tiers for the codebase [9c1920b]
     - [x] Classify canonical public, provisional, and internal surfaces
