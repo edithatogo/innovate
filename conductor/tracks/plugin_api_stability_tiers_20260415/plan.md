@@ -14,14 +14,14 @@
 
 ## Phase 2: Minimal Extension Infrastructure
 
-- [ ] Task: Implement extension registration scaffolding
-    - [ ] Add a canonical registration or discovery module
-    - [ ] Validate plugin manifests or registry entries
-    - [ ] Make the extension tests pass
-- [ ] Task: Integrate stability metadata into the public API
-    - [ ] Expose tier information in docs or capability metadata
-    - [ ] Ensure deprecated or experimental surfaces are clearly labeled
-    - [ ] Verify compatibility with canonical package topology
+- [x] Task: Implement extension registration scaffolding [9c1920b]
+    - [x] Add a canonical registration or discovery module
+    - [x] Validate plugin manifests or registry entries
+    - [x] Make the extension tests pass
+- [x] Task: Integrate stability metadata into the public API [9c1920b]
+    - [x] Expose tier information in docs or capability metadata
+    - [x] Ensure deprecated or experimental surfaces are clearly labeled
+    - [x] Verify compatibility with canonical package topology
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Minimal Extension Infrastructure' (Protocol in workflow.md)
 
 ## Phase 3: Documentation and Governance
