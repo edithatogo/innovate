@@ -45,8 +45,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Benchmark Corpus and Model Cards**
-  *Link: [./tracks/benchmark_corpus_modelcards_20260415/](./tracks/benchmark_corpus_modelcards_20260415/)*
+- [x] **Track: Benchmark Corpus and Model Cards**
+  *Link: [./archive/benchmark_corpus_modelcards_20260415/](./archive/benchmark_corpus_modelcards_20260415/)*
 
 ---
 

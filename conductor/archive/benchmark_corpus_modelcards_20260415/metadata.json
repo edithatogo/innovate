@@ -1,0 +1,8 @@
+{
+  "track_id": "benchmark_corpus_modelcards_20260415",
+  "type": "chore",
+  "status": "new",
+  "created_at": "2026-04-15T08:04:45Z",
+  "updated_at": "2026-04-15T08:04:45Z",
+  "description": "Build a reproducible benchmark corpus, evaluation harness, and model cards for scientific comparison"
+}
