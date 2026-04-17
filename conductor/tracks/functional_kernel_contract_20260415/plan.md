@@ -27,7 +27,7 @@
 
 ## Phase 3: Versioning and Documentation
 
-- [ ] Task: Add schema versioning and compatibility checks
+- [~] Task: Add schema versioning and compatibility checks
     - [ ] Implement version markers and compatibility validation
     - [ ] Add tests for backward-compatible request handling where supported
     - [ ] Document migration expectations for future revisions

@@ -10,6 +10,8 @@ def test_kernel_contract_exposes_versioned_operations() -> None:
     """The kernel surface should publish a stable, versioned operation list."""
     from innovate import kernel
 
+    assert kernel.KERNEL_SCHEMA_MAJOR_VERSION == 1
+    assert kernel.KERNEL_SCHEMA_MINOR_VERSION == 0
     assert kernel.KERNEL_SCHEMA_VERSION == "1.0"
     assert kernel.KERNEL_OPERATIONS == (
         "discover_models",
@@ -26,6 +28,7 @@ def test_kernel_contract_exposes_versioned_operations() -> None:
         payload={"constraints": {"family": "diffusion"}},
     )
 
+    assert kernel._is_schema_version_compatible("1.0")
     assert request.to_dict() == {
         "schema_version": "1.0",
         "operation": "discover_models",
@@ -132,6 +135,9 @@ def test_kernel_contract_validates_kernel_version_and_payload_shapes() -> None:
 
     with pytest.raises(ValueError, match="Unsupported kernel schema version"):
         kernel._validate_schema_version("2.0")
+
+    with pytest.raises(ValueError, match="Unsupported kernel schema version"):
+        kernel._validate_schema_version("1.1")
 
     with pytest.raises(ValueError, match="non-empty string"):
         kernel.KernelError(code="", message="missing code")
@@ -266,3 +272,14 @@ def test_kernel_contract_rejects_blank_schema_versions() -> None:
 
     with pytest.raises(ValueError, match="non-empty string"):
         kernel._validate_schema_version("")
+
+
+def test_kernel_contract_schema_version_compatibility_helper() -> None:
+    """Compatibility helpers should distinguish supported and unsupported schema pairs."""
+    from innovate import kernel
+
+    assert kernel._is_schema_version_compatible("1.0", "1.0")
+    assert kernel._is_schema_version_compatible("1.0", "1.2")
+    assert not kernel._is_schema_version_compatible("1.2", "1.0")
+    assert not kernel._is_schema_version_compatible("2.0", "1.0")
+    assert not kernel._is_schema_version_compatible("1", "1.0")

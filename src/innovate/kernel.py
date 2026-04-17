@@ -28,7 +28,9 @@ KernelJSONValue: TypeAlias = (
     | list["KernelJSONValue"]
 )
 
-KERNEL_SCHEMA_VERSION = "1.0"
+KERNEL_SCHEMA_MAJOR_VERSION = 1
+KERNEL_SCHEMA_MINOR_VERSION = 0
+KERNEL_SCHEMA_VERSION = f"{KERNEL_SCHEMA_MAJOR_VERSION}.{KERNEL_SCHEMA_MINOR_VERSION}"
 KERNEL_OPERATIONS = (
     "discover_models",
     "fit_model",
@@ -62,15 +64,37 @@ class KernelErrorCode(str, Enum):
     INTERNAL_ERROR = "internal_error"
 
 
-def _validate_schema_version(schema_version: str) -> str:
+def _parse_schema_version(schema_version: str) -> tuple[int, int]:
     if not isinstance(schema_version, str) or not schema_version.strip():
         raise ValueError("Kernel schema version must be a non-empty string")
 
     parts = schema_version.split(".")
     if len(parts) != 2 or not all(part.isdigit() for part in parts):
         raise ValueError("Kernel schema version must use major.minor notation")
-    if int(parts[0]) != 1:
+    return int(parts[0]), int(parts[1])
+
+
+def _is_schema_version_compatible(schema_version: str, supported_version: str = KERNEL_SCHEMA_VERSION) -> bool:
+    """Return whether a kernel schema version is compatible with a supported version."""
+    try:
+        request_major, request_minor = _parse_schema_version(schema_version)
+        supported_major, supported_minor = _parse_schema_version(supported_version)
+    except ValueError:
+        return False
+
+    return request_major == supported_major and request_minor <= supported_minor
+
+
+def _validate_schema_version(schema_version: str) -> str:
+    request_major, request_minor = _parse_schema_version(schema_version)
+    supported_major, supported_minor = _parse_schema_version(KERNEL_SCHEMA_VERSION)
+    if request_major != supported_major:
         raise ValueError(f"Unsupported kernel schema version: {schema_version}")
+    if request_minor > supported_minor:
+        raise ValueError(
+            f"Unsupported kernel schema version: {schema_version}. "
+            f"Supported version is {KERNEL_SCHEMA_VERSION}",
+        )
     return schema_version
 
 
