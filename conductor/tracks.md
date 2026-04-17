@@ -50,8 +50,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Plugin API and Stability Tiers**
-  *Link: [./tracks/plugin_api_stability_tiers_20260415/](./tracks/plugin_api_stability_tiers_20260415/)*
+- [x] **Track: Plugin API and Stability Tiers** *(Completed)*
+  *Link: [./archive/plugin_api_stability_tiers_20260415/](./archive/plugin_api_stability_tiers_20260415/)*
 
 ---
 
