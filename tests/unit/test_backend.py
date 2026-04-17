@@ -40,6 +40,7 @@ class FakeJaxBackend:
     """Test double for the optional JAX backend."""
 
 
+@pytest.mark.skipif(backend.JaxBackend is None, reason="JAX backend is not installed")
 @patch("src.innovate.backend.JaxBackend", FakeJaxBackend)
 def test_use_backend_jax_success():
     """Test switching to JAX backend when it's available."""

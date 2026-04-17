@@ -143,6 +143,8 @@ class LockInModel:
             raise RuntimeError("Model has not been fitted yet.")
 
         cumulative_predictions = self.predict(t, y0)
-        rates = np.diff(cumulative_predictions, axis=0)
+        # Numerical integration can introduce tiny negative steps near saturation.
+        rates = np.maximum(0, np.diff(cumulative_predictions, axis=0))
         initial_rates = self.differential_equation(y0, t[0], *self._params.values())
+        initial_rates = np.maximum(0, initial_rates)
         return np.vstack([initial_rates, rates])
