@@ -2,16 +2,16 @@
 
 ## Phase 1: Contract Definition
 
-- [x] Task: Define the kernel surface
+- [x] Task: Define the kernel surface [01c7feb]
     - [x] Specify canonical kernel operations for discovery, fit, predict, simulate, and diagnostics
     - [x] Define versioned request and response schemas
     - [x] Ensure the contract is Array API-friendly at the numerical boundary
     - [x] Write failing contract-validation tests
-- [x] Task: Define serialization and error semantics
+- [x] Task: Define serialization and error semantics [01c7feb]
     - [x] Specify canonical scalar, array, metadata, and Arrow-compatible tabular encoding rules
     - [x] Define stable error codes and payloads
     - [x] Confirm the contract tests fail in the red phase
-- [x] Task: Conductor - User Manual Verification 'Phase 1: Contract Definition' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Contract Definition' (Protocol in workflow.md) [01c7feb]
 
 ## Phase 2: Core Model Adapters
 
