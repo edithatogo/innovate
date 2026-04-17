@@ -19,6 +19,36 @@ override the launcher.
 
 The R layer intentionally avoids duplicating any model logic.
 
+## API surface
+
+The exported surface is intentionally small and maps directly to the kernel bridge:
+
+- `kernel_schema_version()`
+- `kernel_request()`
+- `kernel_call()`
+- `kernel_response_to_r()`
+- `kernel_discover_models()`
+- `kernel_fit_model()`
+- `kernel_predict_model()`
+- `kernel_simulate_model()`
+- `kernel_summarize_model()`
+- `kernel_diagnose_model()`
+- `kernel_extract_diagnostics()`
+
+Use `kernel_extract_diagnostics()` to read the diagnostics envelope from fit and summary
+responses without depending on the Python response shape.
+
+## Backend expectations
+
+The bindings are a thin adapter over the Python kernel bridge, so the runtime expects:
+
+- a checkout with the Python `src` tree available relative to the repository root
+- `uv run python` as the default launcher
+- `INNOVATE_PYTHON_COMMAND` only when you need to override the launcher explicitly
+
+The package does not reimplement model logic in R. It forwards requests, translates responses,
+and preserves the kernel diagnostics payload for downstream inspection.
+
 ## Example workflow
 
 ```r
