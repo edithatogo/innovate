@@ -18,10 +18,10 @@
     - [x] Add discovery, fit, predict, and summarize wrappers
     - [x] Add error mapping and structured result conversion
     - [x] Make the wrapper tests pass
-- [ ] Task: Add diagnostics and example workflows
-    - [ ] Expose stable diagnostics surfaces through idiomatic R helpers
-    - [ ] Add at least one end-to-end example
-    - [ ] Validate parity with the kernel contract
+- [x] Task: Add diagnostics and example workflows [c2f857c]
+    - [x] Expose stable diagnostics surfaces through idiomatic R helpers
+    - [x] Add at least one end-to-end example
+    - [x] Validate parity with the kernel contract
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Stable Operation Wrappers' (Protocol in workflow.md)
 
 ## Phase 3: Packaging and User Guidance
