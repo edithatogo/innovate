@@ -24,7 +24,7 @@
     - [x] Validate parity with the kernel contract
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Stable Operation Wrappers' (Protocol in workflow.md) [96ba636]
 
-## Phase 3: Packaging and User Guidance
+## Phase 3: Packaging and User Guidance [checkpoint: a45cbcf]
 
 - [x] Task: Harden the R package for users and CI [d15dbfb]
     - [x] Add packaging guidance and installation notes
@@ -34,4 +34,4 @@
     - [x] Add user-facing docs and API guidance
     - [x] Document backend expectations and support boundaries
     - [x] Verify all acceptance criteria are satisfied
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Packaging and User Guidance' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Packaging and User Guidance' (Protocol in workflow.md) [a45cbcf]
