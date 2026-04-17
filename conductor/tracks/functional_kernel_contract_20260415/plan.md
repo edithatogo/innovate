@@ -13,17 +13,17 @@
     - [x] Confirm the contract tests fail in the red phase
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Contract Definition' (Protocol in workflow.md) [01c7feb]
 
-## Phase 2: Core Model Adapters
+## Phase 2: Core Model Adapters [checkpoint: e3ec496]
 
-- [ ] Task: Implement kernel adapters for stable models
-    - [ ] Add adapters for the stable diffusion, substitution, and competition families
-    - [ ] Ensure adapter outputs match the documented schemas
-    - [ ] Make the adapter tests pass
-- [ ] Task: Implement model discovery and capability exposure
-    - [ ] Wire the kernel to the canonical capability registry
-    - [ ] Return machine-readable model metadata
-    - [ ] Verify deterministic behavior for stable model discovery
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Core Model Adapters' (Protocol in workflow.md)
+- [x] Task: Implement kernel adapters for stable models
+    - [x] Add adapters for the stable diffusion, substitution, and competition families
+    - [x] Ensure adapter outputs match the documented schemas
+    - [x] Make the adapter tests pass
+- [x] Task: Implement model discovery and capability exposure
+    - [x] Wire the kernel to the canonical capability registry
+    - [x] Return machine-readable model metadata
+    - [x] Verify deterministic behavior for stable model discovery
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Core Model Adapters' (Protocol in workflow.md)
 
 ## Phase 3: Versioning and Documentation
 
