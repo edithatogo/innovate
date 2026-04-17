@@ -1,16 +1,16 @@
 # Implementation Plan: Network and Policy Diffusion
 
-## Phase 1: Data Contracts and Red-Phase Tests
+## Phase 1: Data Contracts and Red-Phase Tests [checkpoint: c330b84]
 
 - [x] Task: Define network and policy input contracts [3d622f3]
     - [x] Specify accepted adjacency, edge-list, and event-timing data shapes
     - [x] Define canonical validation rules and error handling
     - [x] Write failing tests for the input contracts
 - [x] Task: Add shared fixtures for spillover and timing scenarios [226f638]
-    - [ ] Create representative synthetic network datasets
-    - [ ] Create representative policy-adoption timing datasets
-    - [ ] Confirm the new tests fail before implementation
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Data Contracts and Red-Phase Tests' (Protocol in workflow.md)
+    - [x] Create representative synthetic network datasets
+    - [x] Create representative policy-adoption timing datasets
+    - [x] Confirm the new tests fail before implementation
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Data Contracts and Red-Phase Tests' (Protocol in workflow.md) [c330b84]
 
 ## Phase 2: Implement Core Models
 
