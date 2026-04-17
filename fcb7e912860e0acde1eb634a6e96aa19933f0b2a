@@ -1,0 +1,17 @@
+Task: Implement R wrappers for stable kernel operations
+
+Summary:
+- Added normalized R helpers for discovery, fit, predict, simulate, summarize, and diagnostics dispatch.
+- Converted kernel discovery responses into an R data frame with a stable schema_version column.
+- Mapped kernel envelopes into R-native values and conditions, including structured error handling.
+- Extended the R test harness and wrapper tests to cover the new contract.
+
+Files changed:
+- bindings/r/R/kernel_bridge.R
+- bindings/r/NAMESPACE
+- bindings/r/tests/run.R
+- bindings/r/tests/test-contract.R
+- bindings/r/tests/test-wrappers.R
+
+Why:
+- The R layer needs to remain a thin adapter over the functional kernel while presenting idiomatic, testable results to R callers.
