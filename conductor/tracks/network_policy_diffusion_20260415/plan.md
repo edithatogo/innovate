@@ -2,10 +2,10 @@
 
 ## Phase 1: Data Contracts and Red-Phase Tests
 
-- [~] Task: Define network and policy input contracts
-    - [ ] Specify accepted adjacency, edge-list, and event-timing data shapes
-    - [ ] Define canonical validation rules and error handling
-    - [ ] Write failing tests for the input contracts
+- [x] Task: Define network and policy input contracts [3d622f3]
+    - [x] Specify accepted adjacency, edge-list, and event-timing data shapes
+    - [x] Define canonical validation rules and error handling
+    - [x] Write failing tests for the input contracts
 - [ ] Task: Add shared fixtures for spillover and timing scenarios
     - [ ] Create representative synthetic network datasets
     - [ ] Create representative policy-adoption timing datasets
