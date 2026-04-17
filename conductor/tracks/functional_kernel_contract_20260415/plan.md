@@ -25,14 +25,14 @@
     - [x] Verify deterministic behavior for stable model discovery
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Core Model Adapters' (Protocol in workflow.md)
 
-## Phase 3: Versioning and Documentation
+## Phase 3: Versioning and Documentation [checkpoint: 00652ef]
 
-- [~] Task: Add schema versioning and compatibility checks
-    - [ ] Implement version markers and compatibility validation
-    - [ ] Add tests for backward-compatible request handling where supported
-    - [ ] Document migration expectations for future revisions
-- [ ] Task: Document kernel usage and boundaries
-    - [ ] Add guidance for binding authors and advanced users
-    - [ ] Explain how the kernel complements the OO Python API and Arrow interchange layer
-    - [ ] Verify all acceptance criteria are satisfied
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Versioning and Documentation' (Protocol in workflow.md)
+- [x] Task: Add schema versioning and compatibility checks
+    - [x] Implement version markers and compatibility validation
+    - [x] Add tests for backward-compatible request handling where supported
+    - [x] Document migration expectations for future revisions
+- [x] Task: Document kernel usage and boundaries
+    - [x] Add guidance for binding authors and advanced users
+    - [x] Explain how the kernel complements the OO Python API and Arrow interchange layer
+    - [x] Verify all acceptance criteria are satisfied
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Versioning and Documentation' (Protocol in workflow.md)
