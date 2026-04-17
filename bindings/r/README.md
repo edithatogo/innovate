@@ -53,3 +53,13 @@ prediction <- kernel_predict_model(
   )
 )
 ```
+
+## Installation
+
+The bindings are intentionally light-weight and can be installed from the repository checkout
+with standard R tooling:
+
+```r
+install.packages("devtools")
+devtools::install_local("bindings/r")
+```
