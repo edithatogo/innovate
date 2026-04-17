@@ -6,10 +6,10 @@
     - [x] Classify canonical public, provisional, and internal surfaces
     - [x] Define promotion and deprecation rules for each tier
     - [x] Write failing tests or checks for stability metadata coverage
-- [ ] Task: Define extension contracts
-    - [ ] Specify plugin or extension manifests
-    - [ ] Identify extension points for models, diagnostics, or data providers
-    - [ ] Confirm red-phase failure for contract validation tests
+- [x] Task: Define extension contracts [9c1920b]
+    - [x] Specify plugin or extension manifests
+    - [x] Identify extension points for models, diagnostics, or data providers
+    - [x] Confirm red-phase failure for contract validation tests
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Policy and Contracts' (Protocol in workflow.md)
 
 ## Phase 2: Minimal Extension Infrastructure
