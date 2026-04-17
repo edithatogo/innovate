@@ -12,3 +12,5 @@ Tutorials
    tutorials/ndlib_integration
    tutorials/counterfactual_analysis
    tutorials/bayesian_fitter_tutorial
+   tutorials/diagnostics_contract
+   tutorials/advanced_diffusion_inference

@@ -41,6 +41,17 @@ Competition & Market Dynamics
    compete.competition
    compete.lotka_volterra
 
+Advanced Diffusion Models
+-------------------------
+
+.. autosummary::
+   :toctree: _autosummary
+   :template: autosummary/module.rst
+
+   models.advanced
+   models.hierarchical
+   models.mixture
+
 Technology Substitution
 -----------------------
 
