@@ -1,0 +1,16 @@
+Phase 3 checkpoint: Versioning and Documentation
+
+Changes:
+- Added schema version constants and compatibility helpers in src/innovate/kernel.py.
+- Tightened schema version validation to reject unsupported major versions and newer unsupported minor versions.
+- Added contract tests covering version constants, compatibility helpers, and invalid schema versions in tests/unit/test_kernel_contract.py.
+- Documented versioning, compatibility, and kernel boundary guidance in docs/source/tutorials/functional_kernel_contract.rst.
+
+Validation:
+- uv run pytest tests/unit/test_kernel_contract.py tests/unit/test_kernel_adapters.py -q
+- uv run ruff check src/innovate/kernel.py tests/unit/test_kernel_contract.py
+- uv run sphinx-build -b dummy docs/source /tmp/innovate-sphinx-check -q
+- git diff --check -- src/innovate/kernel.py tests/unit/test_kernel_contract.py docs/source/tutorials/functional_kernel_contract.rst conductor/tracks/functional_kernel_contract_20260415/plan.md
+
+Review:
+- conductor-review found no unresolved findings for the phase diff.
