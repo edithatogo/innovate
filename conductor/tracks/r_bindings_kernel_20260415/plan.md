@@ -1,6 +1,6 @@
 # Implementation Plan: R Bindings over the Functional Kernel
 
-## Phase 1: Binding Architecture and Red-Phase Tests
+## Phase 1: Binding Architecture and Red-Phase Tests [checkpoint: 5892b39]
 
 - [x] Task: Define the R binding architecture [e13f763]
     - [ ] Choose the R package layout and invocation path into the kernel
@@ -10,7 +10,7 @@
     - [ ] Add package metadata and development scaffolding
     - [ ] Add test harness support for contract validation
     - [ ] Confirm the new R binding tests fail in the red phase
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Binding Architecture and Red-Phase Tests' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Binding Architecture and Red-Phase Tests' (Protocol in workflow.md)
 
 ## Phase 2: Stable Operation Wrappers
 
