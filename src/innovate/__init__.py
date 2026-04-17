@@ -6,7 +6,6 @@ from importlib import import_module
 from importlib.metadata import PackageNotFoundError, version
 from typing import Any
 
-from . import backend
 from .base import DiffusionModel
 from .capabilities import (
     BackendCapability,
@@ -19,6 +18,8 @@ from .capabilities import (
     get_model_capability,
     get_model_registry,
 )
+from .plugins import ExtensionManifest, get_registered_extensions, register_extension
+from .stability import StabilityTier, describe_stability_tier, normalize_stability_tier
 
 try:
     __version__ = version("innovate")
@@ -26,6 +27,7 @@ except PackageNotFoundError:  # pragma: no cover - local source tree without ins
     __version__ = "0.0.0"
 
 _LAZY_EXPORTS: dict[str, tuple[str, str | None]] = {
+    "backend": ("innovate.backend", None),
     "backends": ("innovate.backends", None),
     "benchmarks": ("innovate.benchmarks", None),
     "compete": ("innovate.compete", None),
@@ -99,6 +101,7 @@ __all__ = [
     "CompositeDiffusionModel",
     "CurveFitter",
     "DiffusionModel",
+    "ExtensionManifest",
     "FisherPryModel",
     "FitterCapability",
     "GompertzModel",
@@ -119,11 +122,13 @@ __all__ = [
     "PolicyTimingInputs",
     "RegimeSwitchingDiffusionModel",
     "ScipyFitter",
+    "StabilityTier",
     "__version__",
     "backend",
     "backends",
     "benchmarks",
     "compete",
+    "describe_stability_tier",
     "diffuse",
     "ecosystem",
     "fitters",
@@ -135,10 +140,13 @@ __all__ = [
     "get_model_capability",
     "get_model_card",
     "get_model_registry",
+    "get_registered_extensions",
     "list_benchmark_cases",
     "list_benchmark_jobs",
     "list_model_cards",
     "models",
+    "normalize_stability_tier",
+    "register_extension",
     "run_stable_benchmark_suite",
     "substitute",
 ]

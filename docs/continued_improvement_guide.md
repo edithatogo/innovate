@@ -111,6 +111,7 @@ operations, especially those involving ODE solving. Here are strategies to addre
 - Create automated release pipelines
 - Implement comprehensive testing before releases
 - Maintain detailed changelogs
+- Record the stability tier for every new surface in release notes so users can distinguish stable, provisional, and internal-only APIs
 
 7. Future Development Priorities
 -------------------------------

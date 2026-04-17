@@ -7,6 +7,8 @@ from importlib.util import find_spec
 from types import MappingProxyType
 from typing import Mapping
 
+from .stability import StabilityTier, normalize_stability_tier
+
 
 @dataclass(frozen=True, slots=True)
 class ModelCapability:
@@ -23,6 +25,11 @@ class ModelCapability:
     supports_simulation: bool = False
     supports_summarize: bool = False
 
+    @property
+    def stability_tier(self) -> StabilityTier:
+        """Return the normalized stability tier for the model capability."""
+        return normalize_stability_tier(self.stability)
+
 
 @dataclass(frozen=True, slots=True)
 class BackendCapability:
@@ -33,6 +40,11 @@ class BackendCapability:
     stability: str = "stable"
     optional_dependencies: tuple[str, ...] = ()
     available: bool = True
+
+    @property
+    def stability_tier(self) -> StabilityTier:
+        """Return the normalized stability tier for the backend capability."""
+        return normalize_stability_tier(self.stability)
 
 
 @dataclass(frozen=True, slots=True)
@@ -46,6 +58,11 @@ class FitterCapability:
     stability: str = "stable"
     optional_dependencies: tuple[str, ...] = ()
     available: bool = True
+
+    @property
+    def stability_tier(self) -> StabilityTier:
+        """Return the normalized stability tier for the fitter capability."""
+        return normalize_stability_tier(self.stability)
 
 
 def _module_available(module_name: str) -> bool:

@@ -11,6 +11,8 @@ Subpackages
    innovate.models
    innovate.fitters
    innovate.utils
+   innovate.plugins
+   innovate.stability
 
 Submodules
 ----------
