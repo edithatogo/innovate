@@ -10,7 +10,7 @@
     - [x] Specify plugin or extension manifests
     - [x] Identify extension points for models, diagnostics, or data providers
     - [x] Confirm red-phase failure for contract validation tests
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Policy and Contracts' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Policy and Contracts' (Protocol in workflow.md) [e25f0e5]
 
 ## Phase 2: Minimal Extension Infrastructure
 
