@@ -12,7 +12,7 @@
     - [x] Confirm red-phase failure for contract validation tests
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Policy and Contracts' (Protocol in workflow.md) [e25f0e5]
 
-## Phase 2: Minimal Extension Infrastructure
+## Phase 2: Minimal Extension Infrastructure [checkpoint: 53e5c87]
 
 - [x] Task: Implement extension registration scaffolding [9c1920b]
     - [x] Add a canonical registration or discovery module
@@ -22,7 +22,7 @@
     - [x] Expose tier information in docs or capability metadata
     - [x] Ensure deprecated or experimental surfaces are clearly labeled
     - [x] Verify compatibility with canonical package topology
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Minimal Extension Infrastructure' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Minimal Extension Infrastructure' (Protocol in workflow.md) [53e5c87]
 
 ## Phase 3: Documentation and Governance
 
