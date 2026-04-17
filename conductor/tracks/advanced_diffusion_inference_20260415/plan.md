@@ -14,24 +14,24 @@
 
 ## Phase 2: Hierarchical and Latent-Process Models
 
-- [ ] Task: Implement hierarchical diffusion support
-    - [ ] Add grouped or partially pooled parameter handling
-    - [ ] Expose posterior or uncertainty summaries
-    - [ ] Make the hierarchical tests pass
-- [ ] Task: Implement a latent-process diffusion workflow
-    - [ ] Add a state-space or equivalent latent-process model
-    - [ ] Expose forecasting outputs with uncertainty
-    - [ ] Make the latent-process tests pass
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Hierarchical and Latent-Process Models' (Protocol in workflow.md)
+- [x] Task: Implement hierarchical diffusion support [d91f2db]
+    - [x] Add grouped or partially pooled parameter handling
+    - [x] Expose posterior or uncertainty summaries
+    - [x] Make the hierarchical tests pass
+- [x] Task: Implement a latent-process diffusion workflow [d91f2db]
+    - [x] Add a state-space or equivalent latent-process model
+    - [x] Expose forecasting outputs with uncertainty
+    - [x] Make the latent-process tests pass
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Hierarchical and Latent-Process Models' (Protocol in workflow.md) [d91f2db]
 
 ## Phase 3: Structural Breaks and Documentation
 
-- [ ] Task: Implement change-point or regime-switching diffusion support
-    - [ ] Add a structural-break model variant
-    - [ ] Add tests for break detection or regime transitions
-    - [ ] Validate comparisons against simpler baselines
-- [ ] Task: Document advanced model usage
-    - [ ] Add examples for hierarchical and change-point analysis
-    - [ ] Document backend and installation requirements
-    - [ ] Verify all acceptance criteria are satisfied
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Structural Breaks and Documentation' (Protocol in workflow.md)
+- [x] Task: Implement change-point or regime-switching diffusion support [d91f2db]
+    - [x] Add a structural-break model variant
+    - [x] Add tests for break detection or regime transitions
+    - [x] Validate comparisons against simpler baselines
+- [x] Task: Document advanced model usage [609f3ea]
+    - [x] Add examples for hierarchical and change-point analysis
+    - [x] Document backend and installation requirements
+    - [x] Verify all acceptance criteria are satisfied
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Structural Breaks and Documentation' (Protocol in workflow.md) [609f3ea]
