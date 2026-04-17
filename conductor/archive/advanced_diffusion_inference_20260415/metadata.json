@@ -1,0 +1,8 @@
+{
+  "track_id": "advanced_diffusion_inference_20260415",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-04-15T08:04:45Z",
+  "updated_at": "2026-04-15T08:04:45Z",
+  "description": "Add hierarchical, state-space, and change-point diffusion methods suitable for modern research workflows"
+}

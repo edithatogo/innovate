@@ -35,8 +35,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Advanced Diffusion Inference**
-  *Link: [./tracks/advanced_diffusion_inference_20260415/](./tracks/advanced_diffusion_inference_20260415/)*
+- [x] **Track: Advanced Diffusion Inference** *(Completed)*
+  *Link: [./archive/advanced_diffusion_inference_20260415/](./archive/advanced_diffusion_inference_20260415/)*
 
 ---
 
