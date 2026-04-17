@@ -213,9 +213,11 @@ def build_diagnostics_contract(
     y_arr = np.asarray(y, dtype=float)
     y_pred = np.asarray(model.predict(t_arr), dtype=float)
     residuals = y_arr - y_pred
+    residuals_flat = residuals.reshape(-1)
+    y_pred_flat = y_pred.reshape(-1)
 
     try:
-        residual_analysis = analyze_residuals(residuals, fitted_values=y_pred)
+        residual_analysis = analyze_residuals(residuals_flat, fitted_values=y_pred_flat)
     except Exception as exc:  # pragma: no cover - defensive fallback
         warning_list.append(
             DiagnosticsWarning(
@@ -234,7 +236,7 @@ def build_diagnostics_contract(
     metrics = get_fit_metrics(model, t_arr, y_arr)
     return DiagnosticsContract(
         metrics=metrics,
-        residuals=residuals,
+        residuals=residuals_flat,
         residual_analysis=residual_analysis,
         warnings=warning_list,
         uncertainty=contract_uncertainty,

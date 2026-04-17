@@ -46,7 +46,11 @@ _LAZY_EXPORTS: dict[str, tuple[str, str | None]] = {
     "AdvancedDiffusionModel": ("innovate.models", "AdvancedDiffusionModel"),
     "AdvancedModelSummary": ("innovate.models", "AdvancedModelSummary"),
     "BenchmarkCase": ("innovate.benchmarks", "BenchmarkCase"),
+    "BenchmarkJob": ("innovate.benchmarks", "BenchmarkJob"),
     "BenchmarkFamily": ("innovate.benchmarks", "BenchmarkFamily"),
+    "BenchmarkRun": ("innovate.benchmarks", "BenchmarkRun"),
+    "BenchmarkRunner": ("innovate.benchmarks", "BenchmarkRunner"),
+    "BenchmarkSuiteResult": ("innovate.benchmarks", "BenchmarkSuiteResult"),
     "ModelCard": ("innovate.benchmarks", "ModelCard"),
     "HierarchicalModel": ("innovate.models", "HierarchicalModel"),
     "NetworkDiffusionInputs": ("innovate.models", "NetworkDiffusionInputs"),
@@ -67,11 +71,13 @@ _LAZY_EXPORTS: dict[str, tuple[str, str | None]] = {
     "get_backend_capability": ("innovate.capabilities", "get_backend_capability"),
     "get_backend_registry": ("innovate.capabilities", "get_backend_registry"),
     "get_benchmark_case": ("innovate.benchmarks", "get_benchmark_case"),
+    "list_benchmark_jobs": ("innovate.benchmarks", "list_benchmark_jobs"),
     "get_fitter_capability": ("innovate.capabilities", "get_fitter_capability"),
     "get_fitter_registry": ("innovate.capabilities", "get_fitter_registry"),
     "get_model_card": ("innovate.benchmarks", "get_model_card"),
     "list_benchmark_cases": ("innovate.benchmarks", "list_benchmark_cases"),
     "list_model_cards": ("innovate.benchmarks", "list_model_cards"),
+    "run_stable_benchmark_suite": ("innovate.benchmarks", "run_stable_benchmark_suite"),
 }
 
 __all__ = [
@@ -83,6 +89,10 @@ __all__ = [
     "BayesianFitter",
     "BenchmarkCase",
     "BenchmarkFamily",
+    "BenchmarkJob",
+    "BenchmarkRun",
+    "BenchmarkRunner",
+    "BenchmarkSuiteResult",
     "BlackJaxFitter",
     "BootstrapFitter",
     "ComplementaryGoodsModel",
@@ -126,8 +136,10 @@ __all__ = [
     "get_model_card",
     "get_model_registry",
     "list_benchmark_cases",
+    "list_benchmark_jobs",
     "list_model_cards",
     "models",
+    "run_stable_benchmark_suite",
     "substitute",
 ]
 

@@ -35,6 +35,9 @@ def test_top_level_exports_resolve_to_canonical_classes():
     assert innovate.ScipyFitter is ScipyFitter
     assert innovate.BenchmarkCase is BenchmarkCase
     assert innovate.BenchmarkFamily is BenchmarkFamily
+    assert innovate.BenchmarkJob is benchmarks.BenchmarkJob
+    assert innovate.BenchmarkRunner is benchmarks.BenchmarkRunner
+    assert innovate.BenchmarkSuiteResult is benchmarks.BenchmarkSuiteResult
     assert innovate.ModelCard is ModelCard
 
 
@@ -51,6 +54,9 @@ def test_canonical_subpackages_export_stable_models():
     assert innovate.ecosystem.ComplementaryGoodsModel is ComplementaryGoodsModel
     assert benchmarks.BenchmarkCase is BenchmarkCase
     assert benchmarks.BenchmarkFamily is BenchmarkFamily
+    assert benchmarks.BenchmarkJob is innovate.BenchmarkJob
+    assert benchmarks.BenchmarkRunner is innovate.BenchmarkRunner
+    assert benchmarks.BenchmarkSuiteResult is innovate.BenchmarkSuiteResult
     assert benchmarks.ModelCard is ModelCard
 
 

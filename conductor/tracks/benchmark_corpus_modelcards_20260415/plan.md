@@ -14,14 +14,14 @@
 
 ## Phase 2: Evaluation Harness
 
-- [ ] Task: Implement the benchmark runner
-    - [ ] Add a canonical interface for running a model on a benchmark case
-    - [ ] Save standardized metrics and diagnostic outputs
-    - [ ] Make the harness tests pass
-- [ ] Task: Integrate stable model families
-    - [ ] Add runners for core diffusion, substitution, and competition models
-    - [ ] Verify reproducible outputs for smoke-test scenarios
-    - [ ] Add coverage for benchmark artifact generation
+- [x] Task: Implement the benchmark runner
+    - [x] Add a canonical interface for running a model on a benchmark case
+    - [x] Save standardized metrics and diagnostic outputs
+    - [x] Make the harness tests pass
+- [x] Task: Integrate stable model families
+    - [x] Add runners for core diffusion, substitution, and competition models
+    - [x] Verify reproducible outputs for smoke-test scenarios
+    - [x] Add coverage for benchmark artifact generation
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Evaluation Harness' (Protocol in workflow.md)
 
 ## Phase 3: Reporting and Documentation

@@ -41,6 +41,16 @@ def test_benchmark_case_metadata_is_complete_and_reproducible() -> None:
     assert case.metadata["family"] == "diffusion"
 
 
+def test_competition_benchmark_case_is_multivariate() -> None:
+    """Competition cases should preserve multivariate observations."""
+    case = get_benchmark_case("lotka_volterra_competition_smoke")
+
+    assert case.family is BenchmarkFamily.COMPETITION
+    assert case.observed.ndim == 2
+    assert case.observed.shape[1] == 2
+    assert case.canonical_model_key == "multi_product"
+
+
 def test_unknown_benchmark_case_raises_key_error() -> None:
     """Unknown benchmark identifiers should fail loudly."""
     with pytest.raises(KeyError, match="Unknown benchmark case"):

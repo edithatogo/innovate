@@ -45,7 +45,10 @@ class BenchmarkCase:
         observed = np.asarray(self.observed, dtype=float)
         if time.ndim != 1:
             raise ValueError("Benchmark time must be one-dimensional.")
-        if observed.ndim != 1:
+        if self.family is BenchmarkFamily.COMPETITION:
+            if observed.ndim != 2:
+                raise ValueError("Competition benchmark observed data must be two-dimensional.")
+        elif observed.ndim != 1:
             raise ValueError("Benchmark observed data must be one-dimensional.")
         if len(time) != len(observed):
             raise ValueError("Benchmark time and observed arrays must have the same length.")
@@ -137,11 +140,13 @@ def _fisher_pry_smoke_case() -> BenchmarkCase:
 
 def _lotka_volterra_smoke_case() -> BenchmarkCase:
     time = np.arange(0, 12, dtype=float)
-    observed = 1.0 / (1.0 + np.exp(-0.65 * (time - 5.0)))
+    product_one = 700.0 / (1.0 + np.exp(-0.65 * (time - 5.0)))
+    product_two = 300.0 / (1.0 + np.exp(-0.45 * (time - 6.5)))
+    observed = np.column_stack([product_one, product_two])
     return BenchmarkCase(
         case_id="lotka_volterra_competition_smoke",
         family=BenchmarkFamily.COMPETITION,
-        canonical_model_key="lotka_volterra",
+        canonical_model_key="multi_product",
         dataset_version="2026.04",
         description="Synthetic competition curve that captures a focal-share transition.",
         source="synthetic",
