@@ -1,0 +1,8 @@
+{
+  "track_id": "r_bindings_kernel_20260415",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-04-15T08:04:45Z",
+  "updated_at": "2026-04-15T08:04:45Z",
+  "description": "Expose the core API to R through the functional kernel with stable data interchange and packaging"
+}

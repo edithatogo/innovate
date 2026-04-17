@@ -60,7 +60,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: R Bindings over the Functional Kernel**
+- [~] **Track: R Bindings over the Functional Kernel**
   *Link: [./tracks/r_bindings_kernel_20260415/](./tracks/r_bindings_kernel_20260415/)*
 
 ---

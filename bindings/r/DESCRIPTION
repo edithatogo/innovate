@@ -1,0 +1,12 @@
+Package: innovate
+Title: R Bindings over the Functional Kernel
+Version: 0.0.1
+Authors@R: c(
+    person("Innovate", role = c("aut", "cre"))
+  )
+Description: Thin R bindings for the innovate functional kernel.
+License: Apache-2.0
+Encoding: UTF-8
+LazyData: true
+Imports:
+    jsonlite
