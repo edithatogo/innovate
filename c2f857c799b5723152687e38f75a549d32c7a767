@@ -1,0 +1,16 @@
+Task: Add diagnostics and example workflows
+
+Summary:
+- Added kernel_extract_diagnostics() to expose stable diagnostics in an idiomatic R helper.
+- Added an end-to-end R workflow example in the package README.
+- Added diagnostics-focused R coverage that exercises fit, extract diagnostics, diagnose, and the stable uncertainty summary.
+
+Files changed:
+- bindings/r/R/kernel_bridge.R
+- bindings/r/NAMESPACE
+- bindings/r/README.md
+- bindings/r/tests/run.R
+- bindings/r/tests/test-diagnostics.R
+
+Why:
+- The R bindings need a small, ergonomic diagnostics surface and a concrete example workflow that mirrors the kernel contract.
