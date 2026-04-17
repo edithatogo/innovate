@@ -24,7 +24,7 @@
     - [x] Verify compatibility with canonical package topology
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Minimal Extension Infrastructure' (Protocol in workflow.md) [53e5c87]
 
-## Phase 3: Documentation and Governance
+## Phase 3: Documentation and Governance [checkpoint: ffc9194]
 
 - [x] Task: Document plugin and stability guidance [9c1920b]
     - [x] Add lifecycle and compatibility guidance for extension authors
@@ -34,4 +34,4 @@
     - [x] Verify acceptance criteria against code and docs
     - [x] Confirm extension contracts align with the kernel roadmap
     - [x] Prepare follow-up notes for future plugin work
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Documentation and Governance' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Documentation and Governance' (Protocol in workflow.md) [ffc9194]
