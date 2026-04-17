@@ -1,0 +1,15 @@
+Task: Harden the R package for users and CI
+
+Summary:
+- Added a runnable end-to-end example script under bindings/r/examples.
+- Added a packaging guard test that sources the example script and checks schema-version drift.
+- Expanded the README with installation guidance for the R bindings.
+
+Files changed:
+- bindings/r/README.md
+- bindings/r/examples/end_to_end.R
+- bindings/r/tests/run.R
+- bindings/r/tests/test-packaging.R
+
+Why:
+- The R bindings need a user-facing installation path and a CI-visible example workflow so packaging regressions and schema drift are caught early.
