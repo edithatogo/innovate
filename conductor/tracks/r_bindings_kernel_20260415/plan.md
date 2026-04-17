@@ -12,7 +12,7 @@
     - [ ] Confirm the new R binding tests fail in the red phase
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Binding Architecture and Red-Phase Tests' (Protocol in workflow.md)
 
-## Phase 2: Stable Operation Wrappers
+## Phase 2: Stable Operation Wrappers [checkpoint: 96ba636]
 
 - [x] Task: Implement R wrappers for stable kernel operations [fcb7e91]
     - [x] Add discovery, fit, predict, and summarize wrappers
@@ -22,7 +22,7 @@
     - [x] Expose stable diagnostics surfaces through idiomatic R helpers
     - [x] Add at least one end-to-end example
     - [x] Validate parity with the kernel contract
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Stable Operation Wrappers' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Stable Operation Wrappers' (Protocol in workflow.md) [96ba636]
 
 ## Phase 3: Packaging and User Guidance
 
