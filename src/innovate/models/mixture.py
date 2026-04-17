@@ -6,10 +6,13 @@ import numpy as np
 
 from innovate.backend import current_backend as B
 from innovate.base.base import DiffusionModel
+from innovate.fitters.diagnostics_contract import UncertaintySummary
 from innovate.fitters.scipy_fitter import ScipyFitter
 
+from .advanced import AdvancedDiffusionModel, AdvancedModelSummary
 
-class MixtureModel(DiffusionModel):
+
+class MixtureModel(AdvancedDiffusionModel):
     """A latent-class mixture model for diffusion dynamics.
 
     This model identifies distinct adopter segments from the data by fitting
@@ -176,7 +179,7 @@ class MixtureModel(DiffusionModel):
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
 
     def __repr__(self):
-        return f"MixtureModel(models={self.model_classes}, weights={self.weights})"
+        return f"MixtureModel(models={self.models}, weights={self.weights})"
 
     def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
         bounds = {}
@@ -217,3 +220,42 @@ class MixtureModel(DiffusionModel):
         # Weighted average of the component predictions
         y_rate = B.sum(component_rates * self.weights[:, None], axis=0)
         return y_rate
+
+    def simulate(
+        self,
+        t: Sequence[float],
+        n_draws: int = 1,
+        random_state: int | None = None,
+        noise_scale: float | None = None,
+    ) -> np.ndarray:
+        """Simulate cumulative mixture trajectories."""
+        prediction = self.predict(t)
+        return self._simulate_from_prediction(
+            t,
+            prediction,
+            n_draws=n_draws,
+            random_state=random_state,
+            noise_scale=noise_scale,
+        )
+
+    def summarize(self, t: Sequence[float] | None = None) -> AdvancedModelSummary:
+        """Return a structured summary of the fitted mixture."""
+        component_weights = {
+            f"component_{i}": float(weight) for i, weight in enumerate(np.asarray(self.weights, dtype=float))
+        }
+        return self._summary(
+            family="mixture",
+            model_name=self.__class__.__name__,
+            t=t,
+            provenance="deterministic",
+            uncertainty=UncertaintySummary.point_estimate(
+                provenance="deterministic",
+                note="Latent-class mixture uses weighted point estimates.",
+            ),
+            notes=("latent-class diffusion workflow",),
+            details={
+                "num_components": self.num_components,
+                "component_weights": component_weights,
+                "components": [model.__class__.__name__ for model in self.models],
+            },
+        )

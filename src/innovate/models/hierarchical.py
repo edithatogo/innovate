@@ -1,10 +1,15 @@
 from collections.abc import Sequence
 
+import numpy as np
+
 from innovate.backend import current_backend as B
 from innovate.base.base import DiffusionModel
+from innovate.fitters.diagnostics_contract import UncertaintySummary
+
+from .advanced import AdvancedDiffusionModel, AdvancedModelSummary
 
 
-class HierarchicalModel(DiffusionModel):
+class HierarchicalModel(AdvancedDiffusionModel):
     """Simple hierarchical wrapper to combine group-level models."""
 
     def __init__(self, model: DiffusionModel, groups: Sequence[str]):
@@ -135,6 +140,46 @@ class HierarchicalModel(DiffusionModel):
         ss_res = B.sum((B.array(y) - y_pred) ** 2)
         ss_tot = B.sum((B.array(y) - B.mean(B.array(y))) ** 2)
         return 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
+
+    def simulate(
+        self,
+        t: Sequence[float],
+        n_draws: int = 1,
+        random_state: int | None = None,
+        noise_scale: float | None = None,
+    ) -> np.ndarray:
+        """Simulate cumulative paths around the hierarchical forecast."""
+        prediction = self.predict(t)
+        return self._simulate_from_prediction(
+            t,
+            prediction,
+            n_draws=n_draws,
+            random_state=random_state,
+            noise_scale=noise_scale,
+        )
+
+    def summarize(self, t: Sequence[float] | None = None) -> AdvancedModelSummary:
+        """Return a structured summary of the hierarchical fit."""
+        group_params = {
+            group: {name: self._params.get(f"{group}_{name}") for name in self.template.param_names}
+            for group in self.groups
+        }
+        return self._summary(
+            family="hierarchical",
+            model_name=self.__class__.__name__,
+            t=t,
+            provenance="deterministic",
+            uncertainty=UncertaintySummary.point_estimate(
+                provenance="deterministic",
+                note="Hierarchical wrapper uses pooled point estimates.",
+            ),
+            notes=("grouped diffusion workflow",),
+            details={
+                "groups": list(self.groups),
+                "template_model": self.template.__class__.__name__,
+                "group_parameters": group_params,
+            },
+        )
 
     @staticmethod
     def differential_equation(t, y, params, covariates, t_eval):

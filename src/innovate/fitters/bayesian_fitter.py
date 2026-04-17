@@ -17,7 +17,12 @@ import jax.numpy as jnp
 import numpy as np
 from jax import random
 
-from innovate.fitters.diagnostics_contract import DiagnosticsContract, DiagnosticsWarning, UncertaintySummary, build_diagnostics_contract
+from innovate.fitters.diagnostics_contract import (
+    DiagnosticsContract,
+    DiagnosticsWarning,
+    UncertaintySummary,
+    build_diagnostics_contract,
+)
 
 
 class BayesianFitter:

@@ -5,7 +5,12 @@ from typing import Any
 import numpy as np
 
 from innovate.base.base import DiffusionModel
-from innovate.fitters.diagnostics_contract import DiagnosticsContract, DiagnosticsWarning, UncertaintySummary, build_diagnostics_contract
+from innovate.fitters.diagnostics_contract import (
+    DiagnosticsContract,
+    DiagnosticsWarning,
+    UncertaintySummary,
+    build_diagnostics_contract,
+)
 
 
 class BootstrapFitter:

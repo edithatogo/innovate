@@ -20,6 +20,8 @@ class ModelCapability:
     stability: str = "stable"
     optional_dependencies: tuple[str, ...] = ()
     supported_backends: tuple[str, ...] = ("numpy", "jax")
+    supports_simulation: bool = False
+    supports_summarize: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -119,6 +121,47 @@ _MODEL_REGISTRY = MappingProxyType(
             supported_backends=("numpy", "jax"),
             supports_covariates=False,
             supports_multivariate_output=True,
+        ),
+        "hierarchical": ModelCapability(
+            key="hierarchical",
+            family="advanced_diffusion",
+            import_path="innovate.models.hierarchical.HierarchicalModel",
+            supported_backends=("numpy",),
+            supports_covariates=True,
+            stability="experimental",
+            supports_simulation=True,
+            supports_summarize=True,
+        ),
+        "mixture": ModelCapability(
+            key="mixture",
+            family="advanced_diffusion",
+            import_path="innovate.models.mixture.MixtureModel",
+            supported_backends=("numpy",),
+            supports_covariates=True,
+            stability="experimental",
+            supports_simulation=True,
+            supports_summarize=True,
+        ),
+        "latent_process": ModelCapability(
+            key="latent_process",
+            family="advanced_diffusion",
+            import_path="innovate.models.advanced.LatentProcessDiffusionModel",
+            supported_backends=("numpy",),
+            supports_covariates=False,
+            stability="experimental",
+            supports_simulation=True,
+            supports_summarize=True,
+        ),
+        "regime_switching": ModelCapability(
+            key="regime_switching",
+            family="advanced_diffusion",
+            import_path="innovate.models.advanced.RegimeSwitchingDiffusionModel",
+            supported_backends=("numpy",),
+            supports_covariates=False,
+            stability="experimental",
+            optional_dependencies=("ruptures",),
+            supports_simulation=True,
+            supports_summarize=True,
         ),
     },
 )
