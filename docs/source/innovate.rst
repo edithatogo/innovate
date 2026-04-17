@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   innovate.benchmarks
    innovate.models
    innovate.fitters
    innovate.utils

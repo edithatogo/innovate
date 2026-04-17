@@ -13,4 +13,5 @@ Tutorials
    tutorials/counterfactual_analysis
    tutorials/bayesian_fitter_tutorial
    tutorials/diagnostics_contract
+   tutorials/benchmark_workflows
    tutorials/advanced_diffusion_inference
