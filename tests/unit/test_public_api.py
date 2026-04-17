@@ -3,9 +3,10 @@
 import pytest
 
 import innovate
-from innovate import backends
+from innovate import backends, benchmarks
 from innovate.backends.numpy_backend import NumPyBackend
 from innovate.base import DiffusionModel
+from innovate.benchmarks import BenchmarkCase, BenchmarkFamily, ModelCard
 from innovate.capabilities import ModelCapability
 from innovate.compete.competition import MultiProductDiffusionModel as StableCompetitionModel
 from innovate.compete.lotka_volterra import LotkaVolterraModel
@@ -32,6 +33,9 @@ def test_top_level_exports_resolve_to_canonical_classes():
     assert innovate.LotkaVolterraModel is LotkaVolterraModel
     assert innovate.ComplementaryGoodsModel is ComplementaryGoodsModel
     assert innovate.ScipyFitter is ScipyFitter
+    assert innovate.BenchmarkCase is BenchmarkCase
+    assert innovate.BenchmarkFamily is BenchmarkFamily
+    assert innovate.ModelCard is ModelCard
 
 
 def test_canonical_subpackages_export_stable_models():
@@ -45,6 +49,9 @@ def test_canonical_subpackages_export_stable_models():
     assert innovate.compete.MultiProductDiffusionModel is StableCompetitionModel
     assert innovate.compete.LotkaVolterraModel is LotkaVolterraModel
     assert innovate.ecosystem.ComplementaryGoodsModel is ComplementaryGoodsModel
+    assert benchmarks.BenchmarkCase is BenchmarkCase
+    assert benchmarks.BenchmarkFamily is BenchmarkFamily
+    assert benchmarks.ModelCard is ModelCard
 
 
 def test_legacy_paths_remain_importable_while_canonical_paths_exist():
