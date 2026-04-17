@@ -1,0 +1,1 @@
+Track: R Bindings over the Functional Kernel\nTask: Document the R binding surface\nValidation: Rscript bindings/r/tests/run.R; git diff --check -- bindings/r\nOutcome: README now documents API surface and backend expectations, including kernel_extract_diagnostics.\n
