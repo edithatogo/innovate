@@ -1,0 +1,12 @@
+Phase 1 implementation: advanced diffusion foundations.
+
+Changes:
+- Added canonical advanced diffusion abstractions and summaries in src/innovate/models/advanced.py.
+- Exposed advanced model exports from src/innovate/models/__init__.py and src/innovate/__init__.py.
+- Added advanced model capability metadata in src/innovate/capabilities.py.
+- Extended hierarchical and mixture workflows with simulate/summarize surfaces.
+- Added unit coverage for canonical imports, registry metadata, hierarchical, mixture, latent-process, and regime-switching workflows.
+- Applied import-order cleanup in fitter modules during review.
+
+Why:
+- To establish a stable advanced-model contract for hierarchical, latent-process, and structural-break diffusion workflows while keeping the base install compatible and testable.
