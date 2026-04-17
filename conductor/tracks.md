@@ -55,7 +55,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Functional Kernel Contract**
+- [~] **Track: Functional Kernel Contract**
   *Link: [./tracks/functional_kernel_contract_20260415/](./tracks/functional_kernel_contract_20260415/)*
 
 ---

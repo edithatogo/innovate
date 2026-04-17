@@ -57,6 +57,7 @@ Welcome to **innovate**, a comprehensive Python library for modeling innovation 
    innovate.fitters.diagnostics_contract.rst
    innovate.plugins.rst
    innovate.stability.rst
+   innovate.kernel.rst
    innovate.base.rst
 
 .. toctree::

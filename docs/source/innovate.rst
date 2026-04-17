@@ -13,6 +13,7 @@ Subpackages
    innovate.utils
    innovate.plugins
    innovate.stability
+   innovate.kernel
 
 Submodules
 ----------
@@ -21,6 +22,14 @@ innovate.backend module
 -----------------------
 
 .. automodule:: innovate.backend
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+innovate.kernel module
+----------------------
+
+.. automodule:: innovate.kernel
    :members:
    :show-inheritance:
    :undoc-members:
