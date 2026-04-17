@@ -221,3 +221,20 @@ kernel_summarize_model <- function(request) {
 kernel_diagnose_model <- function(request) {
   kernel_response_to_r(kernel_call(request))
 }
+
+kernel_extract_diagnostics <- function(result) {
+  if (!is.list(result)) {
+    stop("Diagnostics can only be extracted from list-like kernel results", call. = FALSE)
+  }
+
+  if (!is.null(result$diagnostics)) {
+    return(result$diagnostics)
+  }
+
+  diagnostics <- attr(result, "kernel_diagnostics", exact = TRUE)
+  if (!is.null(diagnostics)) {
+    return(diagnostics)
+  }
+
+  stop("Kernel result does not expose diagnostics", call. = FALSE)
+}
