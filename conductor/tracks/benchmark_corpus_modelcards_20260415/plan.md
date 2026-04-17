@@ -22,16 +22,16 @@
     - [x] Add runners for core diffusion, substitution, and competition models
     - [x] Verify reproducible outputs for smoke-test scenarios
     - [x] Add coverage for benchmark artifact generation
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Evaluation Harness' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Evaluation Harness' (Protocol in workflow.md) [359c788]
 
 ## Phase 3: Reporting and Documentation
 
-- [ ] Task: Generate model cards for stable models
-    - [ ] Populate model-card content from implemented capabilities
-    - [ ] Validate that cards stay synchronized with the registry
-    - [ ] Add tests or checks for schema compliance
-- [ ] Task: Document benchmark workflows
-    - [ ] Add contributor and user guidance for running the benchmarks
-    - [ ] Describe how to interpret outputs and compare models
-    - [ ] Verify all acceptance criteria are satisfied
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Reporting and Documentation' (Protocol in workflow.md)
+- [x] Task: Generate model cards for stable models [359c788]
+    - [x] Populate model-card content from implemented capabilities
+    - [x] Validate that cards stay synchronized with the registry
+    - [x] Add tests or checks for schema compliance
+- [x] Task: Document benchmark workflows [359c788]
+    - [x] Add contributor and user guidance for running the benchmarks
+    - [x] Describe how to interpret outputs and compare models
+    - [x] Verify all acceptance criteria are satisfied
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Reporting and Documentation' (Protocol in workflow.md) [359c788]
