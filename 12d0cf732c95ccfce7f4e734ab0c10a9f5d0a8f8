@@ -1,0 +1,13 @@
+Task: Conductor - User Manual Verification Phase 1: Policy and Contracts
+
+Summary:
+- Verified the Phase 1 stability-tier and extension-contract work against the current spec, plan, and workflow.
+- Confirmed the new public API surface, plugin manifest scaffold, documentation pages, and lazy backend import all validate cleanly.
+
+Validation:
+- `uv run ruff check src/innovate/__init__.py src/innovate/capabilities.py src/innovate/plugins.py src/innovate/stability.py tests/unit/test_plugin_api_stability.py tests/unit/test_plugin_api_docs.py`
+- `uv run pytest tests/unit/test_plugin_api_stability.py tests/unit/test_plugin_api_docs.py -q`
+- `uv run pytest tests/unit/test_public_api.py tests/unit/test_optional_backend_isolation.py tests/unit/test_plugin_api_stability.py tests/unit/test_plugin_api_docs.py -q --cov=innovate.stability --cov=innovate.plugins --cov=innovate.capabilities --cov-report=term-missing --cov-fail-under=80`
+
+Files:
+- conductor/tracks/plugin_api_stability_tiers_20260415/plan.md
