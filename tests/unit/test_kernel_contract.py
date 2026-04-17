@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import numpy as np
 import pytest
 
 
@@ -170,37 +171,48 @@ def test_kernel_contract_validates_kernel_version_and_payload_shapes() -> None:
 
 
 def test_kernel_contract_discovery_and_stub_operations_behave_as_documented() -> None:
-    """Discovery should reflect the capability registry and stubs should fail clearly."""
+    """Discovery should reflect the capability registry and adapter operations should succeed."""
     from innovate import kernel
-    from innovate.capabilities import get_model_registry
+    from innovate.diffuse.bass import BassModel
 
     discovery = kernel.discover_models()
-    capability = next(iter(get_model_registry().values()))
-    record = kernel.KernelDiscoveryRecord.from_capability(capability)
 
     assert discovery.schema_version == "1.0"
     assert discovery.models
-    assert discovery.models[0].to_dict()["key"] in {record.key for record in discovery.models}
     assert kernel.list_kernel_operations() == kernel.KERNEL_OPERATIONS
     assert kernel.KernelDiscoveryResponse.from_dict(discovery.to_dict()) == discovery
-    assert record.to_dict() == next(model.to_dict() for model in discovery.models if model.key == record.key)
+    assert discovery.models[0].to_dict()["key"] in {model.key for model in discovery.models}
 
-    request = kernel.KernelRequest(
+    time = np.linspace(0.0, 4.0, 6)
+    fitted_model = BassModel()
+    fitted_model.params_ = {"p": 0.03, "q": 0.38, "m": 120.0}
+    observed = np.asarray(fitted_model.predict(time), dtype=float)
+
+    fit_request = kernel.KernelRequest(
         operation="fit_model",
         model_key="bass",
-        payload={"inputs": {"time": [1.0, 2.0], "adoption": [4.0, 9.0]}},
+        payload={"inputs": {"time": time.tolist(), "observed": observed.tolist()}},
     )
+    fit_response = kernel.fit_model(fit_request)
 
-    with pytest.raises(NotImplementedError, match="fit_model"):
-        kernel.fit_model(request)
-    with pytest.raises(NotImplementedError, match="predict_model"):
-        kernel.predict_model(request)
-    with pytest.raises(NotImplementedError, match="simulate_model"):
-        kernel.simulate_model(request)
-    with pytest.raises(NotImplementedError, match="summarize_model"):
-        kernel.summarize_model(request)
-    with pytest.raises(NotImplementedError, match="diagnose_model"):
-        kernel.diagnose_model(request)
+    assert fit_response.error is None
+    assert fit_response.result is not None
+    assert fit_response.result["model_key"] == "bass"
+    assert fit_response.result["state"]["model_key"] == "bass"
+
+    predict_request = kernel.KernelRequest(
+        operation="predict_model",
+        model_key="bass",
+        payload={
+            "state": fit_response.result["state"],
+            "inputs": {"time": time.tolist()},
+        },
+    )
+    predict_response = kernel.predict_model(predict_request)
+
+    assert predict_response.error is None
+    assert predict_response.result is not None
+    assert predict_response.result.to_dict()["metadata"]["shape"] == [6]
 
 
 def test_kernel_contract_round_trips_array_and_table_response_payloads() -> None:
