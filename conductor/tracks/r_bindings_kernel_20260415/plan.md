@@ -26,10 +26,10 @@
 
 ## Phase 3: Packaging and User Guidance
 
-- [ ] Task: Harden the R package for users and CI
-    - [ ] Add packaging guidance and installation notes
-    - [ ] Add automated checks for schema-compatibility drift
-    - [ ] Verify core examples run in automated test contexts
+- [x] Task: Harden the R package for users and CI [d15dbfb]
+    - [x] Add packaging guidance and installation notes
+    - [x] Add automated checks for schema-compatibility drift
+    - [x] Verify core examples run in automated test contexts
 - [ ] Task: Document the R binding surface
     - [ ] Add user-facing docs and API guidance
     - [ ] Document backend expectations and support boundaries
