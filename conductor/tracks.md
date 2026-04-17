@@ -40,8 +40,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Network and Policy Diffusion**
-  *Link: [./tracks/network_policy_diffusion_20260415/](./tracks/network_policy_diffusion_20260415/)*
+- [x] **Track: Network and Policy Diffusion** *(Completed)*
+  *Link: [./archive/network_policy_diffusion_20260415/](./archive/network_policy_diffusion_20260415/)*
 
 ---
 
