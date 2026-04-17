@@ -2,11 +2,11 @@
 
 ## Phase 1: Binding Architecture and Red-Phase Tests
 
-- [~] Task: Define the R binding architecture
+- [x] Task: Define the R binding architecture [e13f763]
     - [ ] Choose the R package layout and invocation path into the kernel
     - [ ] Define mapping rules between kernel schemas and R objects
     - [ ] Write failing tests for the basic R-to-kernel contract
-- [ ] Task: Scaffold the R package structure
+- [x] Task: Scaffold the R package structure [e13f763]
     - [ ] Add package metadata and development scaffolding
     - [ ] Add test harness support for contract validation
     - [ ] Confirm the new R binding tests fail in the red phase
