@@ -26,12 +26,12 @@
 
 ## Phase 3: Documentation and Governance
 
-- [ ] Task: Document plugin and stability guidance
-    - [ ] Add lifecycle and compatibility guidance for extension authors
-    - [ ] Document promotion and deprecation workflows
-    - [ ] Add release-governance guidance for stability tiers
-- [ ] Task: Final validation
-    - [ ] Verify acceptance criteria against code and docs
-    - [ ] Confirm extension contracts align with the kernel roadmap
-    - [ ] Prepare follow-up notes for future plugin work
+- [x] Task: Document plugin and stability guidance [9c1920b]
+    - [x] Add lifecycle and compatibility guidance for extension authors
+    - [x] Document promotion and deprecation workflows
+    - [x] Add release-governance guidance for stability tiers
+- [x] Task: Final validation [53e5c87]
+    - [x] Verify acceptance criteria against code and docs
+    - [x] Confirm extension contracts align with the kernel roadmap
+    - [x] Prepare follow-up notes for future plugin work
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Documentation and Governance' (Protocol in workflow.md)
