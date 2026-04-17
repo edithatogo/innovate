@@ -84,7 +84,7 @@ class AdvancedDiffusionModel(DiffusionModel, ABC):
         draws = []
         for _ in range(max(1, int(n_draws))):
             noise = rng.normal(0.0, scale, size=pred.shape)
-            draw = np.maximum.accumulate(np.maximum(pred + noise, 0.0))
+            draw = np.maximum.accumulate(np.maximum(pred + noise, 0.0), axis=-1)
             draws.append(draw)
 
         stacked = np.stack(draws)
@@ -217,11 +217,7 @@ class LatentProcessDiffusionModel(AdvancedDiffusionModel):
     @params_.setter
     def params_(self, value: dict[str, float]):
         self._params = dict(value)
-        base_params = {
-            key[len("base_") :]: float(val)
-            for key, val in value.items()
-            if key.startswith("base_")
-        }
+        base_params = {key[len("base_") :]: float(val) for key, val in value.items() if key.startswith("base_")}
         if base_params:
             self.base_model.params_ = base_params
         self.smoothing = float(value.get("latent_smoothing", self.smoothing))

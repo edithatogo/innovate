@@ -163,6 +163,29 @@ _MODEL_REGISTRY = MappingProxyType(
             supports_simulation=True,
             supports_summarize=True,
         ),
+        "network_diffusion": ModelCapability(
+            key="network_diffusion",
+            family="network_diffusion",
+            import_path="innovate.models.network.NetworkDiffusionModel",
+            supported_backends=("numpy",),
+            supports_covariates=True,
+            stability="experimental",
+            optional_dependencies=("networkx",),
+            supports_multivariate_output=True,
+            supports_simulation=True,
+            supports_summarize=True,
+        ),
+        "policy_hazard": ModelCapability(
+            key="policy_hazard",
+            family="policy_diffusion",
+            import_path="innovate.models.policy.PolicyHazardDiffusionModel",
+            supported_backends=("numpy",),
+            supports_covariates=True,
+            stability="experimental",
+            optional_dependencies=(),
+            supports_simulation=True,
+            supports_summarize=True,
+        ),
     },
 )
 
@@ -181,9 +204,7 @@ _BACKEND_REGISTRY = MappingProxyType(
             description="Optional accelerator backend backed by JAX and XLA.",
             stability="experimental",
             optional_dependencies=("jax", "jaxlib", "diffrax"),
-            available=_module_available("jax")
-            and _module_available("jaxlib")
-            and _module_available("diffrax"),
+            available=_module_available("jax") and _module_available("jaxlib") and _module_available("diffrax"),
         ),
     },
 )
@@ -243,9 +264,7 @@ _FITTER_REGISTRY = MappingProxyType(
             supported_backends=("jax",),
             stability="experimental",
             optional_dependencies=("jax", "jaxlib", "jaxopt"),
-            available=_module_available("jax")
-            and _module_available("jaxlib")
-            and _module_available("jaxopt"),
+            available=_module_available("jax") and _module_available("jaxlib") and _module_available("jaxopt"),
         ),
         "bayesian": FitterCapability(
             key="bayesian",
