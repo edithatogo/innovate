@@ -1,6 +1,7 @@
 export(kernel_schema_version)
 export(kernel_request)
 export(kernel_call)
+export(kernel_response_to_r)
 export(kernel_discover_models)
 export(kernel_fit_model)
 export(kernel_predict_model)

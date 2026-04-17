@@ -35,6 +35,14 @@ kernel_bridge_script <- function() {
 }
 
 kernel_request <- function(operation, model_key = NULL, payload = list(), metadata = list(), schema_version = KERNEL_SCHEMA_VERSION) {
+  if (!is.character(operation) || length(operation) != 1L || !nzchar(operation)) {
+    stop("kernel_request() requires a non-empty operation", call. = FALSE)
+  }
+
+  if (operation != "discover_models" && (is.null(model_key) || !nzchar(model_key))) {
+    stop(sprintf("Kernel operation '%s' requires a model_key", operation), call. = FALSE)
+  }
+
   list(
     schema_version = schema_version,
     operation = operation,
@@ -81,30 +89,135 @@ kernel_call <- function(request) {
   jsonlite::fromJSON(response_path, simplifyVector = FALSE)
 }
 
+kernel_error_to_condition <- function(error, response = NULL) {
+  message <- if (is.list(error) && !is.null(error$message)) error$message else "Unknown kernel error"
+  condition <- structure(
+    list(
+      message = message,
+      error = error,
+      response = response
+    ),
+    class = c("innovate_kernel_error", "error", "condition")
+  )
+  stop(condition)
+}
+
+kernel_table_to_r <- function(result) {
+  columns <- result$columns
+  rows <- result$rows
+  if (length(rows) == 0L) {
+    return(stats::setNames(data.frame(matrix(ncol = length(columns), nrow = 0L)), columns))
+  }
+
+  column_values <- lapply(seq_along(columns), function(index) {
+    vapply(rows, function(row) row[[index]], FUN.VALUE = rows[[1]][[index]])
+  })
+  names(column_values) <- columns
+  as.data.frame(column_values, stringsAsFactors = FALSE, optional = TRUE)
+}
+
+kernel_array_to_r <- function(result) {
+  values <- unlist(result$values, use.names = FALSE)
+  shape <- as.integer(unlist(result$shape, use.names = FALSE))
+  if (length(shape) == 0L) {
+    return(values)
+  }
+  array(values, dim = shape)
+}
+
+kernel_discovery_to_r <- function(response) {
+  models <- response$models
+  if (length(models) == 0L) {
+    return(data.frame())
+  }
+
+  data.frame(
+    schema_version = rep(response$schema_version, length(models)),
+    key = vapply(models, function(model) model$key, character(1L)),
+    family = vapply(models, function(model) model$family, character(1L)),
+    import_path = vapply(models, function(model) model$import_path, character(1L)),
+    stability = vapply(models, function(model) model$stability, character(1L)),
+    supports_covariates = vapply(models, function(model) isTRUE(model$supports_covariates), logical(1L)),
+    supports_multivariate_output = vapply(models, function(model) isTRUE(model$supports_multivariate_output), logical(1L)),
+    supported_backends = vapply(models, function(model) paste(unlist(model$supported_backends, use.names = FALSE), collapse = ", "), character(1L)),
+    optional_dependencies = vapply(models, function(model) paste(unlist(model$optional_dependencies, use.names = FALSE), collapse = ", "), character(1L)),
+    supports_simulation = vapply(models, function(model) isTRUE(model$supports_simulation), logical(1L)),
+    supports_summarize = vapply(models, function(model) isTRUE(model$supports_summarize), logical(1L)),
+    stringsAsFactors = FALSE
+  )
+}
+
+kernel_value_to_r <- function(value) {
+  if (is.null(value)) {
+    return(NULL)
+  }
+  if (!is.list(value)) {
+    return(value)
+  }
+  if (all(c("columns", "rows") %in% names(value))) {
+    return(kernel_table_to_r(value))
+  }
+  if (all(c("shape", "dtype", "values") %in% names(value))) {
+    return(kernel_array_to_r(value))
+  }
+  if (!is.null(value$models) && !is.null(value$schema_version) && is.null(value$operation)) {
+    return(kernel_discovery_to_r(value))
+  }
+  if (!is.null(value$error) && !is.null(value$operation)) {
+    return(kernel_response_to_r(value))
+  }
+
+  lapply(value, kernel_value_to_r)
+}
+
+kernel_response_to_r <- function(response) {
+  if (!is.list(response)) {
+    stop("Kernel responses must be lists", call. = FALSE)
+  }
+
+  if (!is.null(response$error)) {
+    kernel_error_to_condition(response$error, response = response)
+  }
+
+  if (!is.null(response$operation) && !is.null(response$result)) {
+    result <- kernel_value_to_r(response$result)
+    attr(result, "kernel_operation") <- response$operation
+    attr(result, "kernel_schema_version") <- response$schema_version
+    attr(result, "kernel_metadata") <- response$metadata
+    return(result)
+  }
+
+  if (!is.null(response$models) && !is.null(response$schema_version)) {
+    return(kernel_discovery_to_r(response))
+  }
+
+  kernel_value_to_r(response)
+}
+
 kernel_schema_version <- function() {
   KERNEL_SCHEMA_VERSION
 }
 
 kernel_discover_models <- function() {
-  kernel_call(kernel_request(operation = "discover_models"))
+  kernel_response_to_r(kernel_call(kernel_request(operation = "discover_models")))
 }
 
 kernel_fit_model <- function(request) {
-  kernel_call(request)
+  kernel_response_to_r(kernel_call(request))
 }
 
 kernel_predict_model <- function(request) {
-  kernel_call(request)
+  kernel_response_to_r(kernel_call(request))
 }
 
 kernel_simulate_model <- function(request) {
-  kernel_call(request)
+  kernel_response_to_r(kernel_call(request))
 }
 
 kernel_summarize_model <- function(request) {
-  kernel_call(request)
+  kernel_response_to_r(kernel_call(request))
 }
 
 kernel_diagnose_model <- function(request) {
-  kernel_call(request)
+  kernel_response_to_r(kernel_call(request))
 }

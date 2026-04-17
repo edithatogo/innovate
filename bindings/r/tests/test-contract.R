@@ -17,7 +17,7 @@ request <- kernel_request(
       time = c(0, 1, 2),
       observed = c(0.1, 0.2, 0.4)
     ),
-    model_kwargs = list(p0 = c(0.05, 0.3, 0.5))
+    model_kwargs = list()
   )
 )
 
@@ -41,14 +41,18 @@ assert_true(
 response <- kernel_discover_models()
 
 assert_true(
-  identical(response$schema_version, "1.0"),
+  is.data.frame(response),
+  "Kernel discovery should return a data frame"
+)
+assert_true(
+  "schema_version" %in% names(response),
+  "Kernel discovery should expose the stable schema version"
+)
+assert_true(
+  all(response$schema_version == "1.0"),
   "Kernel discovery should return the stable schema version"
 )
 assert_true(
-  is.list(response$models),
-  "Kernel discovery should return a model list"
-)
-assert_true(
-  length(response$models) > 0,
+  nrow(response) > 0,
   "Kernel discovery should expose at least one stable model"
 )
