@@ -12,26 +12,26 @@
     - [x] Confirm the new tests fail before implementation
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Data Contracts and Red-Phase Tests' (Protocol in workflow.md) [c330b84]
 
-## Phase 2: Implement Core Models
+## Phase 2: Implement Core Models [checkpoint: 3d622f3]
 
-- [ ] Task: Implement a network-aware diffusion model
-    - [ ] Add fitting and prediction logic for contagion or peer-effect structure
-    - [ ] Expose interpretable spillover summaries
-    - [ ] Make the network-model tests pass
-- [ ] Task: Implement a policy or hazard-based diffusion model
-    - [ ] Add event-history or timing-sensitive model logic
-    - [ ] Expose timing-effect summaries and forecasts
-    - [ ] Make the policy-model tests pass
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Implement Core Models' (Protocol in workflow.md)
+- [x] Task: Implement a network-aware diffusion model [3d622f3]
+    - [x] Add fitting and prediction logic for contagion or peer-effect structure
+    - [x] Expose interpretable spillover summaries
+    - [x] Make the network-model tests pass
+- [x] Task: Implement a policy or hazard-based diffusion model [3d622f3]
+    - [x] Add event-history or timing-sensitive model logic
+    - [x] Expose timing-effect summaries and forecasts
+    - [x] Make the policy-model tests pass
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Implement Core Models' (Protocol in workflow.md) [3d622f3]
 
-## Phase 3: Validation and User Guidance
+## Phase 3: Validation and User Guidance [checkpoint: 3d622f3]
 
-- [ ] Task: Integrate diagnostics and capability metadata
-    - [ ] Register the new model families in the capability registry
-    - [ ] Add diagnostics for spillover, timing, and fit quality
-    - [ ] Verify compatibility with canonical APIs
-- [ ] Task: Document network and policy workflows
-    - [ ] Add usage examples and data-shape guidance
-    - [ ] Document assumptions and interpretation caveats
-    - [ ] Verify all acceptance criteria are satisfied
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Validation and User Guidance' (Protocol in workflow.md)
+- [x] Task: Integrate diagnostics and capability metadata [3d622f3]
+    - [x] Register the new model families in the capability registry
+    - [x] Add diagnostics for spillover, timing, and fit quality
+    - [x] Verify compatibility with canonical APIs
+- [x] Task: Document network and policy workflows [3d622f3]
+    - [x] Add usage examples and data-shape guidance
+    - [x] Document assumptions and interpretation caveats
+    - [x] Verify all acceptance criteria are satisfied
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Validation and User Guidance' (Protocol in workflow.md) [3d622f3]
