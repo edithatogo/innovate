@@ -178,34 +178,71 @@ class BassModel(DiffusionModel):
             raise ValueError(f"Missing required parameters in model: {missing_params}")
 
         params = [self._params[name] for name in self.param_names]
+        return self._predict_with_backend(t_arr, y0, params, validated_covariates, required_params)
 
-        # Validate parameter values
-        for i, (param_name, param_val) in enumerate(zip(required_params, params)):
-            if not np.isfinite(param_val):
-                raise ValueError(f"Parameter '{param_name}' must be finite, got {param_val}")
+    def _predict_with_backend(
+        self,
+        t_arr: np.ndarray,
+        y0: float,
+        params: Sequence[float],
+        validated_covariates: dict[str, Sequence[float]] | None,
+        required_params: Sequence[str],
+    ) -> np.ndarray:
+        """Run the prediction step using the active backend."""
+        use_jax_backend, solve_backend = self._resolve_prediction_backend(t_arr, params)
+        self._validate_prediction_parameters(required_params, params, use_jax_backend)
 
         def ode_func(t, y, args):
-            return self.differential_equation(t, y, args, validated_covariates, t)
+            return self.differential_equation(t, y, args, validated_covariates, t, backend_impl=solve_backend)
 
-        # Handle different backend method signatures
-        try:
-            from innovate.backends.jax_backend import JaxBackend
-
-            is_jax = isinstance(backend.current_backend, JaxBackend)
-        except (ImportError, ModuleNotFoundError):
-            is_jax = False
-
-        if is_jax:
-            # JAX backend expects 4 parameters: func, y0, t, args
-            sol = backend.current_backend.solve_ode(ode_func, y0, t_arr, tuple(params))
+        if use_jax_backend:
+            sol = solve_backend.solve_ode(ode_func, y0, t_arr, tuple(params))
         else:
-            # NumPy backend expects 3 parameters: func, y0, t (parameters must be in closure)
-            # Modify the function to not require additional args
+
             def ode_func_numpy(y_val, t_val):
                 return self.differential_equation(t_val, y_val, tuple(params), validated_covariates, t_arr)
 
             sol = backend.current_backend.solve_ode(ode_func_numpy, y0, t_arr)
         return sol.flatten()
+
+    def _resolve_prediction_backend(self, t: Sequence[float], params: Sequence[float]) -> tuple[bool, object]:
+        """Determine whether the prediction path needs the JAX backend."""
+        try:
+            from innovate.backends.jax_backend import JaxBackend
+        except ImportError:  # pragma: no cover - optional dependency
+            return False, backend.current_backend
+
+        if isinstance(backend.current_backend, JaxBackend):
+            return True, backend.current_backend
+
+        try:
+            import jax
+
+            jax_types = tuple(
+                candidate
+                for candidate in (
+                    getattr(jax, "Array", None),
+                    getattr(jax.core, "Tracer", None),
+                )
+                if candidate is not None
+            )
+        except ImportError:  # pragma: no cover - jax optional
+            jax_types = ()
+
+        if jax_types and (isinstance(t, jax_types) or any(isinstance(param_val, jax_types) for param_val in params)):
+            return True, JaxBackend()
+
+        return False, backend.current_backend
+
+    def _validate_prediction_parameters(
+        self, required_params: Sequence[str], params: Sequence[float], use_jax_backend: bool
+    ) -> None:
+        """Validate finite parameter values for eager NumPy execution only."""
+        if use_jax_backend:
+            return
+        for param_name, param_val in zip(required_params, params):
+            if not np.isfinite(param_val):
+                raise ValueError(f"Parameter '{param_name}' must be finite, got {param_val}")
 
     def differential_equation(
         self,
@@ -214,6 +251,7 @@ class BassModel(DiffusionModel):
         params: Sequence[float],
         covariates: dict[str, Sequence[float]] | None,
         t_eval: Sequence[float],
+        backend_impl=None,
     ) -> float:
         """Defines the Bass model's differential equation, incorporating covariate effects if provided.
 
@@ -246,10 +284,12 @@ class BassModel(DiffusionModel):
         q_t = q_base
         m_t = m_base
 
+        backend_impl = backend_impl or backend.current_backend
+
         if covariates:
             param_idx = 3 + param_idx_offset
             for cov_name, cov_values in covariates.items():
-                cov_val_t = backend.current_backend.interp(t, t_eval, cov_values)
+                cov_val_t = backend_impl.interp(t, t_eval, cov_values)
 
                 p_t += params[param_idx] * cov_val_t
                 q_t += params[param_idx + 1] * cov_val_t
@@ -270,7 +310,7 @@ class BassModel(DiffusionModel):
             pt.TensorVariable,
         ):  # pragma: no cover - depends on pytensor
             return pt.switch(m_t > 0, rate, 0.0)
-        return backend.current_backend.where(m_t > 0, rate, 0.0)
+        return backend_impl.where(m_t > 0, rate, 0.0)
 
     def score(
         self,

@@ -21,9 +21,9 @@ class BlackJaxFitter:
     def __init__(
         self,
         model: Any,
-        num_chains: int = 4,
-        num_warmup: int = 1000,
-        num_samples: int = 1000,
+        num_chains: int = 1,
+        num_warmup: int = 100,
+        num_samples: int = 100,
     ):
         """Initializes the BlackJaxFitter.
 
@@ -38,8 +38,8 @@ class BlackJaxFitter:
         self.num_chains = num_chains
         self.num_warmup = num_warmup
         self.num_samples = num_samples
-        self.states = None
-        self.kernel = blackjax.nuts
+        self.samples = None
+        self.param_names = None
 
     def fit(
         self,
@@ -60,17 +60,20 @@ class BlackJaxFitter:
         """
         rng_key = jax.random.PRNGKey(0)
 
-        def inference_loop(rng_key, kernel, initial_state, num_samples):
+        param_names = list(initial_params.keys())
+        self.param_names = param_names
+
+        def inference_loop(rng_key, sampler, initial_state, num_samples):
             @jax.jit
             def one_step(state, rng_key):
-                state, _ = kernel(rng_key, state)
-                return state, state
+                new_state, info = sampler.step(rng_key, state)
+                return new_state, new_state.position
 
             keys = jax.random.split(rng_key, num_samples)
-            _, states = jax.lax.scan(one_step, initial_state, keys)
-            return states
+            _, samples = jax.lax.scan(one_step, initial_state, keys)
+            return samples
 
-        all_states = []
+        all_samples = []
         for i in range(self.num_chains):
             chain_rng_key, rng_key = jax.random.split(rng_key)
 
@@ -83,44 +86,37 @@ class BlackJaxFitter:
             )
 
             # Sample from the posterior
-            kernel = blackjax.nuts(log_probability_fn, **parameters)
-            states = inference_loop(chain_rng_key, kernel, last_state, self.num_samples)
-            all_states.append(states)
+            sampler = blackjax.nuts(log_probability_fn, **parameters)
+            samples = inference_loop(chain_rng_key, sampler, last_state, self.num_samples)
+            all_samples.append(samples)
 
-        self.states = all_states
+        self.samples = all_samples
 
     def get_parameter_estimates(self) -> dict[str, float]:
         """Returns the mean of the posterior samples for each parameter."""
-        if self.states is None:
+        if self.samples is None or self.param_names is None:
             raise RuntimeError("The model has not been fitted yet.")
 
-        # Combine chains and extract positions
-        positions = [state.position for state in self.states]
-
-        # This is a simplification. For a real implementation, we would need to handle
-        # the dictionary structure of the positions more carefully.
-        # For now, assuming the positions are dictionaries of parameters.
-
-        # Flatten the list of dictionaries
-        param_samples = {param: jnp.concatenate([p[param] for p in positions]) for param in positions[0]}
+        param_samples = {
+            name: jnp.concatenate([chain_samples[name] for chain_samples in self.samples]) for name in self.param_names
+        }
 
         estimates = {param: float(jnp.mean(samples)) for param, samples in param_samples.items()}
         return estimates
 
     def _get_inference_data(self):
-        if self.states is None:
+        if self.samples is None or self.param_names is None:
             raise RuntimeError("The model has not been fitted yet.")
 
-        # Assuming states is a list of states, one for each chain
         posterior_samples = {
-            param: jnp.stack([chain.position[param] for chain in self.states]) for param in self.states[0].position
+            param: jnp.stack([chain_samples[param] for chain_samples in self.samples]) for param in self.param_names
         }
 
         return az.from_dict(posterior_samples)
 
     def get_confidence_intervals(self) -> dict[str, tuple[float, float]]:
         """Returns the 95% confidence intervals for the parameters."""
-        if self.states is None:
+        if self.samples is None or self.param_names is None:
             raise RuntimeError("The model has not been fitted yet.")
 
         idata = self._get_inference_data()
@@ -137,7 +133,7 @@ class BlackJaxFitter:
 
     def get_summary(self) -> Any:
         """Returns a summary of the MCMC run using arviz."""
-        if self.states is None:
+        if self.samples is None or self.param_names is None:
             raise RuntimeError("The model has not been fitted yet.")
 
         idata = self._get_inference_data()
@@ -145,7 +141,7 @@ class BlackJaxFitter:
 
     def plot_trace(self, **kwargs) -> None:
         """Plots the trace of the MCMC run."""
-        if self.states is None:
+        if self.samples is None or self.param_names is None:
             raise RuntimeError("The model has not been fitted yet.")
 
         idata = self._get_inference_data()

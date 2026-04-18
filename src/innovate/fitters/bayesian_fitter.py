@@ -145,7 +145,7 @@ class BayesianFitter:
     def _compute_log_prior(self, params_dict: dict[str, float], model: Any, t: jnp.ndarray, y: jnp.ndarray) -> float:
         """Compute log prior probability based on parameter bounds."""
         try:
-            bounds = model.bounds(t, y)
+            bounds = model.bounds(t, self._sanitize_observations_for_initialization(y))
             log_prior = 0.0
 
             for param_name, value in params_dict.items():
@@ -186,10 +186,16 @@ class BayesianFitter:
             # Restore original parameters
             model.params_ = original_params
 
+    def _sanitize_observations_for_initialization(self, y: np.ndarray | list | Sequence) -> np.ndarray:
+        """Clip observed values into the domain expected by diffusion model initializers."""
+        y_arr = np.asarray(y, dtype=float)
+        return np.clip(y_arr, 0.0, None)
+
     def _get_initial_parameters(self, model: Any, t: np.ndarray | list, y: np.ndarray | list) -> dict[str, float]:
         """Get initial parameter values for MCMC."""
         if hasattr(model, "initial_guesses"):
-            return model.initial_guesses(t, y)
+            y_init = self._sanitize_observations_for_initialization(y)
+            return model.initial_guesses(t, y_init)
 
         # Fallback for models without initial_guesses
         param_names = getattr(model, "param_names", ["p", "q", "m"])
@@ -300,10 +306,7 @@ class BayesianFitter:
         lower = {name: bounds[0] for name, bounds in intervals.items()}
         upper = {name: bounds[1] for name, bounds in intervals.items()}
         median = {name: stats["median"] for name, stats in summary.items()}
-        samples = {
-            name: np.asarray(values).reshape(-1)
-            for name, values in self.posterior_samples_.items()
-        }
+        samples = {name: np.asarray(values).reshape(-1) for name, values in self.posterior_samples_.items()}
         return UncertaintySummary.posterior_summary(
             lower=lower,
             upper=upper,
