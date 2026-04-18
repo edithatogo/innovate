@@ -14,10 +14,10 @@
 
 ## Phase 2: Stable Operation Wrappers
 
-- [ ] Task: Implement TypeScript wrappers for stable kernel operations
-    - [ ] Add discovery, fit, predict, and summarize wrappers
-    - [ ] Add runtime validation, error mapping, and structured result conversion
-    - [ ] Make the wrapper tests pass
+- [x] Task: Implement TypeScript wrappers for stable kernel operations [21b7f6a]
+    - [x] Add discovery, fit, predict, and summarize wrappers
+    - [x] Add runtime validation, error mapping, and structured result conversion
+    - [x] Make the wrapper tests pass
 - [ ] Task: Add diagnostics and example workflows
     - [ ] Expose stable diagnostics surfaces through idiomatic TypeScript helpers
     - [ ] Add at least one end-to-end example
