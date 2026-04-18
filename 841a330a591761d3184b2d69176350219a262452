@@ -1,0 +1,20 @@
+Task: Add diagnostics and example workflows
+
+Summary:
+- Added a runnable end-to-end diagnostics workflow example under bindings/typescript/examples/diagnostics-workflow.ts.
+- The example discovers a stable model, fits it, predicts, simulates, summarizes, and diagnoses from the fitted state.
+- Added a formatted report helper so users can run the example as a simple CLI workflow.
+- Documented the example usage in bindings/typescript/README.md.
+- Added a test that exercises the end-to-end example and verifies the rendered diagnostics report.
+
+Files:
+- bindings/typescript/README.md
+- bindings/typescript/examples/diagnostics-workflow.ts
+- bindings/typescript/test/diagnostics-workflow.test.ts
+
+Validation:
+- npm run typecheck
+- npx vitest run --no-cache --coverage
+
+Why:
+- The TypeScript bindings now include a concrete user-facing workflow that demonstrates discovery through diagnostics while staying thin and delegating all model semantics to the shared kernel bridge.
