@@ -2,21 +2,29 @@
 
 ## Language
 - **Python** (>=3.10) — *3.8/3.9 dropped (EOL)*
+- **TypeScript** (for bindings) — *added 2026-04-18 for the TypeScript kernel binding track*
 
 ## Package Manager & Build
 - **uv** — Blazing-fast Python package manager and resolver (replaces pip)
 - **setuptools** (>=61.0) — Package building and distribution (managed by uv)
 - **uv.lock** — Locked dependency versions for reproducible builds
+- **Node.js** (>=22) — Runtime for the TypeScript binding package and test harness
+- **npm** — Package manager for the TypeScript binding workspace
 
 ## Core Libraries
-- **NumPy** — Numerical computing and vectorized operations
-- **SciPy** — Scientific computing utilities (optimization, interpolation, statistics)
-- **Pandas** — Data manipulation with Apache Arrow backend
-- **PyArrow** — High-performance columnar data format
+- **NumPy** — Reference numerical backend and Array API baseline
+- **SciPy** — Scientific computing utilities (optimization, interpolation, statistics) with emerging Array API support where practical
+- **Pandas** — Primary user-facing DataFrame API in Python
+- **PyArrow** — Columnar types and interchange layer for pandas integration and future bindings
 - **Statsmodels** — Statistical modeling and hypothesis testing
 
+## Portability and Interchange Standards
+- **Python Array API standard** — Numerical portability target for durable kernel semantics
+- **Apache Arrow** — Durable columnar and tabular interchange boundary for kernel payloads and future non-Python bindings
+- **Polars** — Optional ETL and benchmark-ingestion engine; not part of the stable public API contract
+
 ## Advanced Computation
-- **JAX** — GPU/TPU-accelerated numerical computing (optional backend)
+- **JAX** — Accelerator backend for fitting, simulation, and inference (optional, not public ABI)
 - **PyTensor** — Symbolic tensor computation
 - **NumPyro** — Probabilistic programming with JAX
 - **BlackJAX** — Samplers for Bayesian inference
