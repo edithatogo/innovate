@@ -18,10 +18,10 @@
     - [x] Add discovery, fit, predict, and summarize wrappers
     - [x] Add runtime validation, error mapping, and structured result conversion
     - [x] Make the wrapper tests pass
-- [ ] Task: Add diagnostics and example workflows
-    - [ ] Expose stable diagnostics surfaces through idiomatic TypeScript helpers
-    - [ ] Add at least one end-to-end example
-    - [ ] Validate parity with the kernel contract
+- [x] Task: Add diagnostics and example workflows [841a330]
+    - [x] Expose stable diagnostics surfaces through idiomatic TypeScript helpers
+    - [x] Add at least one end-to-end example
+    - [x] Validate parity with the kernel contract
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Stable Operation Wrappers' (Protocol in workflow.md)
 
 ## Phase 3: Packaging and User Guidance
