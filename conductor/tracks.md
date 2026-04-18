@@ -75,8 +75,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Go Bindings over the Functional Kernel**
-  *Link: [./tracks/go_bindings_kernel_20260416/](./tracks/go_bindings_kernel_20260416/)*
+- [x] **Track: Go Bindings over the Functional Kernel** *(Completed)*
+  *Link: [./archive/go_bindings_kernel_20260416/](./archive/go_bindings_kernel_20260416/)*
 
 ---
 
