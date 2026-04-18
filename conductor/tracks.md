@@ -65,8 +65,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Julia Bindings over the Functional Kernel**
-  *Link: [./tracks/julia_bindings_kernel_20260415/](./tracks/julia_bindings_kernel_20260415/)*
+- [x] **Track: Julia Bindings over the Functional Kernel** *(Completed)*
+  *Link: [./archive/julia_bindings_kernel_20260415/](./archive/julia_bindings_kernel_20260415/)*
 
 ---
 
