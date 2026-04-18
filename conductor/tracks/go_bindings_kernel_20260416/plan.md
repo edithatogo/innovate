@@ -12,17 +12,17 @@
     - [x] Confirm the new Go binding tests fail in the red phase
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Binding Architecture and Red-Phase Tests' (Protocol in workflow.md) [55fc41d]
 
-## Phase 2: Stable Operation Wrappers
+## Phase 2: Stable Operation Wrappers [checkpoint: 33cb22b]
 
-- [ ] Task: Implement Go wrappers for stable kernel operations
-    - [ ] Add discovery, fit, predict, and summarize wrappers
-    - [ ] Add error mapping and structured result conversion
-    - [ ] Make the wrapper tests pass
-- [ ] Task: Add diagnostics and example workflows
-    - [ ] Expose stable diagnostics surfaces through idiomatic Go helpers
-    - [ ] Add at least one end-to-end example
-    - [ ] Validate parity with the kernel contract
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Stable Operation Wrappers' (Protocol in workflow.md)
+- [x] Task: Implement Go wrappers for stable kernel operations
+    - [x] Add discovery, fit, predict, and summarize wrappers
+    - [x] Add error mapping and structured result conversion
+    - [x] Make the wrapper tests pass
+- [x] Task: Add diagnostics and example workflows
+    - [x] Expose stable diagnostics surfaces through idiomatic Go helpers
+    - [x] Add at least one end-to-end example
+    - [x] Validate parity with the kernel contract
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Stable Operation Wrappers' (Protocol in workflow.md)
 
 ## Phase 3: Packaging and User Guidance
 
