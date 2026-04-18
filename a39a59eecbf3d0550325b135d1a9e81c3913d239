@@ -1,0 +1,20 @@
+Phase 3 checkpoint for TypeScript Bindings over the Functional Kernel.
+
+Summary:
+- Hardened the TypeScript package for users and CI in commit 4c81379.
+- Documented the TypeScript binding surface in README and workflow guidance.
+- Added schema compatibility checks and coverage for the schema-version script.
+
+Changed files in the phase:
+- bindings/typescript/package.json
+- bindings/typescript/README.md
+- bindings/typescript/scripts/check-schema-version.ts
+- bindings/typescript/test/check-schema-version.test.ts
+- bindings/typescript/test/schema-compatibility.test.ts
+
+Validation:
+- cd bindings/typescript && npm run typecheck && npx vitest run --no-cache --coverage && npm run schema:check
+- Result: typecheck passed, 19 tests passed, coverage passed, schema check passed.
+
+Review:
+- No high-confidence findings remained after the phase review pass.
