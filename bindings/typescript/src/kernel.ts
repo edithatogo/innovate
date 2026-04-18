@@ -60,7 +60,7 @@ export function kernelBridgeScript(): string {
 }
 
 export function kernelPythonCommand(): string {
-  return process.env.INNOVATE_PYTHON_COMMAND || "uv";
+  return process.env.INNOVATE_PYTHON_COMMAND || "uv run python";
 }
 
 export function kernelSchemaVersion(): string {
