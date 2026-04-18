@@ -12,8 +12,9 @@ without duplicating model logic in Julia.
 
 - Package metadata in `Project.toml`
 - Julia module in `src/Innovate.jl`
-- Contract tests under `test/`
-- A placeholder Python bridge entrypoint under `inst/python/`
+- Contract and wrapper tests under `test/`
+- A Python bridge entrypoint under `inst/python/`
+- Stable operations for discovery, fit, predict, simulate, summarize, and diagnose
 
 ## Example workflow
 
@@ -24,4 +25,5 @@ using .Innovate
 
 request = kernel_request(operation = "discover_models")
 schema_version = kernel_schema_version()
+models = kernel_discover_models()
 ```
