@@ -1,0 +1,9 @@
+name = "Innovate"
+uuid = "ffe8f1e4-c541-43d5-9f32-550aacc4f51a"
+authors = ["OpenAI"]
+version = "0.1.0"
+
+[deps]
+
+[compat]
+julia = "1.12"
