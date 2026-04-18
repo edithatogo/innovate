@@ -1,0 +1,21 @@
+Task: Implement TypeScript wrappers for stable kernel operations
+
+Summary:
+- Added the TypeScript bridge layer for stable kernel operations: discovery, fit, predict, simulate, summarize, and diagnose.
+- Normalized kernel bridge responses into idiomatic TypeScript objects and mapped bridge failures to a typed KernelBridgeError.
+- Exported the wrapper surface and helper types from the package entrypoint.
+- Added coverage for the wrapper flow and bridge error normalization.
+
+Files:
+- bindings/typescript/src/kernel.ts
+- bindings/typescript/src/index.ts
+- bindings/typescript/src/bridge.ts
+- bindings/typescript/test/kernel-wrappers.test.ts
+- bindings/typescript/test/kernel-bridge.test.ts
+
+Validation:
+- npm run typecheck
+- npx vitest run --no-cache --coverage
+
+Why:
+- This creates the stable TypeScript surface on top of the existing Python kernel bridge so consumers can use the kernel without dealing with the lower-level request/response protocol directly.
