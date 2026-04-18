@@ -26,12 +26,12 @@
 
 ## Phase 3: Packaging and User Guidance
 
-- [ ] Task: Harden the Julia package for users and CI
-    - [ ] Add packaging guidance and installation notes
-    - [ ] Add automated checks for schema-compatibility drift
-    - [ ] Verify core examples run in automated test contexts
-- [ ] Task: Document the Julia binding surface
-    - [ ] Add user-facing docs and API guidance
-    - [ ] Document backend expectations and support boundaries
-    - [ ] Verify all acceptance criteria are satisfied
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Packaging and User Guidance' (Protocol in workflow.md)
+- [x] Task: Harden the Julia package for users and CI [4b38790]
+    - [x] Add packaging guidance and installation notes
+    - [x] Add automated checks for schema-compatibility drift
+    - [x] Verify core examples run in automated test contexts
+- [x] Task: Document the Julia binding surface [4b38790]
+    - [x] Add user-facing docs and API guidance
+    - [x] Document backend expectations and support boundaries
+    - [x] Verify all acceptance criteria are satisfied
+- [~] Task: Conductor - User Manual Verification 'Phase 3: Packaging and User Guidance' (Protocol in workflow.md)
