@@ -24,7 +24,7 @@ from .stability import StabilityTier, describe_stability_tier, normalize_stabili
 try:
     __version__ = version("innovate")
 except PackageNotFoundError:  # pragma: no cover - local source tree without install metadata
-    __version__ = "0.0.0"
+    __version__ = "0.5.0"
 
 _LAZY_EXPORTS: dict[str, tuple[str, str | None]] = {
     "backend": ("innovate.backend", None),
