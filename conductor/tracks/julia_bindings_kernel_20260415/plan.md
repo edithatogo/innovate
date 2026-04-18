@@ -22,7 +22,7 @@
     - [x] Expose stable diagnostics surfaces through idiomatic Julia helpers
     - [x] Add at least one end-to-end example
     - [x] Validate parity with the kernel contract
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Stable Operation Wrappers' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Stable Operation Wrappers' (Protocol in workflow.md) [fcf34fa]
 
 ## Phase 3: Packaging and User Guidance
 
