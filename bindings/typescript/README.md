@@ -24,6 +24,19 @@ reimplement model logic.
 - Kernel contract helpers in `src/kernel.ts`
 - Public entrypoint re-exports in `src/index.ts`
 - Contract and scaffold tests under `test/`
+- A runnable end-to-end diagnostics workflow example in `examples/diagnostics-workflow.ts`
+
+## Example workflow
+
+Run the stable-kernel diagnostics example from the package root:
+
+```bash
+npx tsx examples/diagnostics-workflow.ts
+```
+
+The example discovers a stable model, fits it on a small observed time series, then summarizes and
+diagnoses the fitted state through the TypeScript wrapper layer. The package stays thin and does
+not duplicate model semantics.
 
 ## Backend expectations
 
