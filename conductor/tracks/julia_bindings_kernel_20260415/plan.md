@@ -12,7 +12,7 @@
     - [x] Confirm the new Julia binding tests fail in the red phase
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Binding Architecture and Red-Phase Tests' (Protocol in workflow.md) [74eff33]
 
-## Phase 2: Stable Operation Wrappers
+## Phase 2: Stable Operation Wrappers [checkpoint: 8d4d44e]
 
 - [x] Task: Implement Julia wrappers for stable kernel operations
     - [x] Add discovery, fit, predict, and summarize wrappers
