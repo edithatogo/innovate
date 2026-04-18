@@ -85,5 +85,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Arrow Interchange and Schema Layer**
-  *Link: [./tracks/arrow_interchange_schema_20260416/](./tracks/arrow_interchange_schema_20260416/)*
+- [x] **Track: Arrow Interchange and Schema Layer** *(Completed)*
+  *Link: [./archive/arrow_interchange_schema_20260416/](./archive/arrow_interchange_schema_20260416/)*

@@ -13,6 +13,7 @@ Tutorials
    tutorials/counterfactual_analysis
    tutorials/bayesian_fitter_tutorial
    tutorials/diagnostics_contract
+   tutorials/arrow_interchange
    tutorials/functional_kernel_contract
    tutorials/go_bindings
    tutorials/julia_bindings

@@ -14,6 +14,7 @@ Subpackages
    innovate.plugins
    innovate.stability
    innovate.kernel
+   innovate.arrow_interchange
 
 Submodules
 ----------
@@ -30,6 +31,14 @@ innovate.kernel module
 ----------------------
 
 .. automodule:: innovate.kernel
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+innovate.arrow_interchange module
+---------------------------------
+
+.. automodule:: innovate.arrow_interchange
    :members:
    :show-inheritance:
    :undoc-members:
