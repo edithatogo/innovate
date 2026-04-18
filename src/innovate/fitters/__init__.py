@@ -3,6 +3,12 @@
 from .batched_fitter import BatchedFitter
 from .bootstrap_fitter import BootstrapFitter
 from .curve_fitter import CurveFitter
+from .diagnostics_contract import (
+    DiagnosticsContract,
+    DiagnosticsWarning,
+    UncertaintySummary,
+    build_diagnostics_contract,
+)
 from .mom_fitter import MoMFitter
 from .scipy_fitter import ScipyFitter
 
@@ -51,7 +57,11 @@ __all__ = [
     "BlackJaxFitter",
     "BootstrapFitter",
     "CurveFitter",
+    "DiagnosticsContract",
+    "DiagnosticsWarning",
     "JaxFitter",
     "MoMFitter",
     "ScipyFitter",
+    "UncertaintySummary",
+    "build_diagnostics_contract",
 ]

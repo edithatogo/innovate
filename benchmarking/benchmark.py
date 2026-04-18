@@ -1,6 +1,7 @@
 """Benchmarks for the innovate library."""
 
 import timeit
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -121,6 +122,49 @@ def generate_synthetic_data(
     return np.maximum(0, y_noisy)  # ensure non-negative
 
 
+def run_benchmarks_for_backend(
+    model: Any,
+    name: str,
+    t: np.ndarray,
+    y: np.ndarray,
+    backend: str,
+    fitter: Any,
+    covariates: dict[str, np.ndarray] | None = None,
+) -> list[dict[str, Any]]:
+    """Run the benchmark suite for one backend, capturing unsupported cases."""
+    try:
+        use_backend(backend)
+        # Fit the model first before benchmarking predict/simulate.
+        fitter.fit(model, t, y, covariates=covariates)
+    except ValueError as e:
+        return [
+            {
+                "model": name,
+                "backend": backend,
+                "fitter": fitter.__class__.__name__,
+                "task": "fit",
+                "time": None,
+                "error": str(e),
+            },
+        ]
+
+    backend_results = [
+        run_fit_benchmark(model, t, y, backend, fitter, covariates=covariates),
+        run_predict_benchmark(model, t, backend, covariates=covariates),
+    ]
+    for n_sims in [10, 100, 1000]:
+        backend_results.append(
+            run_simulation_benchmark(
+                model,
+                t,
+                backend,
+                n_sims,
+                covariates=covariates,
+            ),
+        )
+    return backend_results
+
+
 def main() -> None:
     """Run the benchmarks and prints the results."""
     t = np.linspace(0, 50, 100)
@@ -154,43 +198,21 @@ def main() -> None:
         y = generate_synthetic_data(model, t, params, covariates=covs)
 
         for backend in backends:
-            try:
-                use_backend(backend)
-                # Fit the model first before benchmarking predict/simulate
-                fitter.fit(model, t, y, covariates=covs)
-
-                # Run benchmarks
-                results.append(
-                    run_fit_benchmark(model, t, y, backend, fitter, covariates=covs),
-                )
-                results.append(
-                    run_predict_benchmark(model, t, backend, covariates=covs),
-                )
-                for n_sims in [10, 100, 1000]:
-                    results.append(
-                        run_simulation_benchmark(
-                            model,
-                            t,
-                            backend,
-                            n_sims,
-                            covariates=covs,
-                        ),
-                    )
-            except ValueError as e:
-                results.append(
-                    {
-                        "model": name,
-                        "backend": backend,
-                        "fitter": fitter.__class__.__name__,
-                        "task": "fit",
-                        "time": None,
-                        "error": str(e),
-                    },
-                )
+            results.extend(
+                run_benchmarks_for_backend(
+                    model,
+                    name,
+                    t,
+                    y,
+                    backend,
+                    fitter,
+                    covariates=covs,
+                ),
+            )
 
     # Print the results
     results_df = pd.DataFrame(results)
-    with open("benchmark_results.txt", "w") as f:
+    with Path("benchmark_results.txt").open("w") as f:
         f.write("\n--- Benchmark Results ---\n")
         f.write(results_df.to_string())
     results_df.to_csv("benchmark_results.csv", index=False)
