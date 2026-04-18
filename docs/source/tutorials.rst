@@ -14,6 +14,7 @@ Tutorials
    tutorials/bayesian_fitter_tutorial
    tutorials/diagnostics_contract
    tutorials/functional_kernel_contract
+   tutorials/go_bindings
    tutorials/julia_bindings
    tutorials/benchmark_workflows
    tutorials/plugin_api_stability

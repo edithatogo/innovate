@@ -22,6 +22,18 @@ func KernelSchemaVersion() string {
 	return kernelSchemaVersionValue
 }
 
+// KernelOperations returns the stable kernel operations exposed by the Go bindings.
+func KernelOperations() []KernelOperation {
+	return []KernelOperation{
+		KernelOperation(kernelOperationDiscoverModels),
+		KernelOperation(kernelOperationFitModel),
+		KernelOperation(kernelOperationPredictModel),
+		KernelOperation(kernelOperationSimulateModel),
+		KernelOperation(kernelOperationSummarizeModel),
+		KernelOperation(kernelOperationDiagnoseModel),
+	}
+}
+
 func moduleRoot() string {
 	_, file, _, ok := runtime.Caller(0)
 	if !ok {
