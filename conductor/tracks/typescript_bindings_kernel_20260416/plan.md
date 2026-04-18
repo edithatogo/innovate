@@ -1,6 +1,6 @@
 # Implementation Plan: TypeScript Bindings over the Functional Kernel
 
-## Phase 1: Binding Architecture and Red-Phase Tests
+## Phase 1: Binding Architecture and Red-Phase Tests [checkpoint: a5f64bb]
 
 - [x] Task: Define the TypeScript binding architecture [d21d1ad]
     - [x] Choose the package layout and invocation path into the kernel
@@ -10,7 +10,7 @@
     - [x] Add package metadata and development scaffolding
     - [x] Add test harness support for contract validation
     - [x] Confirm the new TypeScript binding tests fail in the red phase
-- [~] Task: Conductor - User Manual Verification 'Phase 1: Binding Architecture and Red-Phase Tests' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Binding Architecture and Red-Phase Tests' (Protocol in workflow.md) [a5f64bb]
 
 ## Phase 2: Stable Operation Wrappers
 
