@@ -1,0 +1,8 @@
+{
+  "track_id": "typescript_bindings_kernel_20260416",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-04-16T12:17:14Z",
+  "updated_at": "2026-04-16T12:17:14Z",
+  "description": "Expose the functional kernel to TypeScript through a thin contract-driven SDK with stable data interchange and packaging"
+}

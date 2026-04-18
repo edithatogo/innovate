@@ -70,8 +70,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: TypeScript Bindings over the Functional Kernel**
-  *Link: [./tracks/typescript_bindings_kernel_20260416/](./tracks/typescript_bindings_kernel_20260416/)*
+- [x] **Track: TypeScript Bindings over the Functional Kernel** *(Completed)*
+  *Link: [./archive/typescript_bindings_kernel_20260416/](./archive/typescript_bindings_kernel_20260416/)*
 
 ---
 
