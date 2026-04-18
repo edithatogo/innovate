@@ -12,7 +12,7 @@
     - [x] Confirm the new TypeScript binding tests fail in the red phase
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Binding Architecture and Red-Phase Tests' (Protocol in workflow.md) [a5f64bb]
 
-## Phase 2: Stable Operation Wrappers
+## Phase 2: Stable Operation Wrappers [checkpoint: bc67c3a]
 
 - [x] Task: Implement TypeScript wrappers for stable kernel operations [21b7f6a]
     - [x] Add discovery, fit, predict, and summarize wrappers
@@ -22,7 +22,7 @@
     - [x] Expose stable diagnostics surfaces through idiomatic TypeScript helpers
     - [x] Add at least one end-to-end example
     - [x] Validate parity with the kernel contract
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Stable Operation Wrappers' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Stable Operation Wrappers' (Protocol in workflow.md) [bc67c3a]
 
 ## Phase 3: Packaging and User Guidance
 
