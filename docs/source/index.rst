@@ -56,6 +56,7 @@ Welcome to **innovate**, a comprehensive Python library for modeling innovation 
    innovate.fitters.rst
    innovate.fitters.diagnostics_contract.rst
    innovate.arrow_interchange.rst
+   innovate.rust_bindings.rst
    innovate.plugins.rst
    innovate.stability.rst
    innovate.kernel.rst

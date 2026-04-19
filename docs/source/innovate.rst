@@ -15,6 +15,7 @@ Subpackages
    innovate.stability
    innovate.kernel
    innovate.arrow_interchange
+   innovate.rust_bindings
 
 Submodules
 ----------
@@ -42,6 +43,15 @@ innovate.arrow_interchange module
    :members:
    :show-inheritance:
    :undoc-members:
+
+innovate.rust_bindings module
+-----------------------------
+
+.. note::
+
+   The Rust bindings are documented as a user-facing package guide rather than
+   a Python module, so this page points readers to the Rust package and
+   tutorial materials.
 
 innovate.plots module
 ---------------------
