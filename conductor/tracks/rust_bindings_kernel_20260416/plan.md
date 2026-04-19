@@ -1,6 +1,6 @@
 # Implementation Plan: Rust Bindings over the Functional Kernel
 
-## Phase 1: Binding Architecture and Red-Phase Tests
+## Phase 1: Binding Architecture and Red-Phase Tests [checkpoint: a7c791c]
 
 - [x] Task: Define the Rust binding architecture
     - [x] Choose the crate layout and invocation path into the kernel
@@ -10,7 +10,7 @@
     - [x] Add crate metadata and development scaffolding
     - [x] Add test harness support for contract validation
     - [x] Confirm the new Rust binding tests fail in the red phase
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Binding Architecture and Red-Phase Tests' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Binding Architecture and Red-Phase Tests' (Protocol in workflow.md) [a7c791c]
 
 ## Phase 2: Stable Operation Wrappers
 
