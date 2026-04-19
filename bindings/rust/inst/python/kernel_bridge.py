@@ -8,8 +8,8 @@ from pathlib import Path
 
 from innovate.kernel import (
     KernelRequest,
-    discover_models,
     diagnose_model,
+    discover_models,
     fit_model,
     predict_model,
     simulate_model,

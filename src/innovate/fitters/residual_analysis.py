@@ -53,6 +53,20 @@ class ResidualAnalysis:
             lines.append(f"Heteroscedasticity: {'Yes' if self.has_heteroscedasticity() else 'No'}")
         return "\n".join(lines)
 
+    def to_dict(self) -> dict[str, object]:
+        """Serialize the residual analysis into JSON-friendly values."""
+        return {
+            "residuals": self.residuals.tolist(),
+            "standardized_residuals": self.standardized_residuals.tolist(),
+            "durbin_watson": self.durbin_watson,
+            "shapiro_wilk_p": self.shapiro_wilk_p,
+            "breusch_pagan_p": self.breusch_pagan_p,
+            "mean_residual": self.mean_residual,
+            "std_residual": self.std_residual,
+            "max_abs_residual": self.max_abs_residual,
+            "residual_autocorrelation": self.residual_autocorrelation.tolist(),
+        }
+
 
 def analyze_residuals(  # noqa: PLR0912
     residuals: np.ndarray,
