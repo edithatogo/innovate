@@ -1,0 +1,7 @@
+Phase 1 complete for Rust bindings over the functional kernel.
+
+Validation:
+- cargo test (bindings/rust)
+- cargo fmt --check (bindings/rust)
+
+Checkpoint commit: a7c791c0502572b20d527a499cbb8d8861c4f133
