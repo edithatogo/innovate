@@ -80,8 +80,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Rust Bindings over the Functional Kernel**
-  *Link: [./tracks/rust_bindings_kernel_20260416/](./tracks/rust_bindings_kernel_20260416/)*
+- [x] **Track: Rust Bindings over the Functional Kernel** *(Completed)*
+  *Link: [./archive/rust_bindings_kernel_20260416/](./archive/rust_bindings_kernel_20260416/)*
 
 ---
 
