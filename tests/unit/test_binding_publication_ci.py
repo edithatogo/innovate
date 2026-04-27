@@ -62,5 +62,6 @@ def test_binding_publish_workflow_has_release_gated_registry_steps() -> None:
 
     assert "release:" in workflow
     assert "workflow_dispatch:" in workflow
+    assert 'dotnet-version: "11.0.x"' in workflow
     assert "NPM_TOKEN" in workflow
     assert "CARGO_REGISTRY_TOKEN" in workflow

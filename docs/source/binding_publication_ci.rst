@@ -40,7 +40,7 @@ Go
 
 C#
   Publish the planned C# binding to NuGet after ``bindings/csharp`` exists and
-  the .NET package passes restore, build, test, pack, and NuGet metadata
+  the .NET 11 package passes restore, build, test, pack, and NuGet metadata
   checks.
 
 CI requirements
@@ -53,7 +53,7 @@ Every implemented binding needs a dedicated CI job in ``.github/workflows/ci.yml
 * Go: ``go test ./...``
 * Julia: ``Pkg.instantiate()`` and ``runtests.jl`` or ``Pkg.test()``
 * R: dependency installation plus ``Rscript bindings/r/tests/run.R``
-* C#: ``dotnet test`` once the package exists
+* C#: ``dotnet test`` on .NET 11 once the package exists
 
 Release workflow
 ----------------

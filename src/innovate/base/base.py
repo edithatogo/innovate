@@ -13,15 +13,22 @@ class DiffusionModel(ABC):
     def predict(self, t: Sequence[float]) -> Sequence[float]:
         """Predict adoption levels for the given time points.
 
-        Args:
-            t: Time points at which to predict adoption.
+        Parameters
+        ----------
+        t
+            Time points at which to predict adoption.
 
-        Returns:
+        Returns
+        -------
+        Sequence[float]
             Predicted adoption levels for each time point.
 
-        Raises:
-            RuntimeError: If the model has not been fitted.
-            ValueError: If the time points are invalid.
+        Raises
+        ------
+        RuntimeError
+            If the model has not been fitted.
+        ValueError
+            If the time points are invalid.
         """
 
     @abstractmethod

@@ -26,7 +26,7 @@ def test_csharp_binding_docs_define_thin_contract_scope() -> None:
     ):
         assert phrase in docs
 
-    assert ".NET SDK" in docs
+    assert ".NET 11 SDK" in docs
     assert "INNOVATE_PYTHON_COMMAND" in docs
 
 

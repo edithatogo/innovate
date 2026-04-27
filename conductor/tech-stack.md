@@ -25,7 +25,7 @@
 - **R package tooling / R-universe / CRAN** — DESCRIPTION/NAMESPACE-based package structure, near-term R-universe publication path, and longer-term CRAN target
 - **Julia package tooling / Julia General registry** — Project-based package structure and eventual Julia registry publication path
 - **Go toolchain / versioned Go modules** — Go module tooling and release-tag publication path for Go binding validation
-- **.NET SDK / NuGet** — Planned toolchain and package publication target for C# binding validation
+- **.NET 11 SDK / NuGet** — Planned toolchain and package publication target for C# binding validation
 
 ## Core Libraries
 - **NumPy** — Reference numerical backend and Array API baseline
