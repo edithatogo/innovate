@@ -14,7 +14,7 @@
     - [x] Add tests for canonical top-level imports
     - [x] Add tests for deprecated import-path behavior
     - [x] Add tests for capability registry discovery
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Inventory and Target Topology' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Inventory and Target Topology' (Protocol in workflow.md)
 
 ## Phase 2: Implement the Canonical API
 
@@ -30,7 +30,7 @@
     - [x] Run the new API tests and fix failures
     - [x] Validate examples and docs import paths against the canonical topology
     - [x] Confirm no circular-import regressions were introduced
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Implement the Canonical API' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Implement the Canonical API' (Protocol in workflow.md)
 
 ## Phase 3: Documentation and Compatibility Cleanup
 

@@ -30,6 +30,7 @@
       :template: autosummary/class.rst
    
       STL
+      Sequence
    
    
 

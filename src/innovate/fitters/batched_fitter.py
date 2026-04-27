@@ -17,12 +17,14 @@ class BatchedFitter:
         t_batched: Sequence[Sequence[float]],
         y_batched: Sequence[Sequence[float]],
     ):
-        """Fits the model to a batch of datasets.
+        """Fit the model to a batch of datasets.
 
-        Args:
-        ----
-            t_batched: A sequence of time sequences.
-            y_batched: A sequence of adoption sequences.
+        Parameters
+        ----------
+        t_batched
+            A sequence of time sequences.
+        y_batched
+            A sequence of adoption sequences.
         """
         if len(t_batched) != len(y_batched):
             raise ValueError(
@@ -41,11 +43,12 @@ class BatchedFitter:
         return self.fitted_params
 
     def predict(self, t_batched: Sequence[Sequence[float]]):
-        """Makes predictions for a batch of datasets.
+        """Make predictions for a batch of datasets.
 
-        Args:
-        ----
-            t_batched: A sequence of time sequences.
+        Parameters
+        ----------
+        t_batched
+            A sequence of time sequences.
         """
         if self.fitted_params is None:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")

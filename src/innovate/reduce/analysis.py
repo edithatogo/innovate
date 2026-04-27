@@ -8,16 +8,19 @@ import statsmodels.api as sm
 
 
 def smooth_series(series, fraction=0.1):
-    """Smooths a time series using LOESS.
+    """Smooth a time series using LOESS.
 
-    Args:
-    ----
-        series (np.array): The time series data.
-        fraction (float): The fraction of data used when estimating each y-value.
+    Parameters
+    ----------
+    series : np.array
+        Time series data.
+    fraction : float, default=0.1
+        Fraction of data used when estimating each y-value.
 
     Returns
     -------
-        np.array: The smoothed time series.
+    np.array
+        Smoothed time series.
     """
     if series is None or len(series) == 0:
         return np.array([])
@@ -27,21 +30,26 @@ def smooth_series(series, fraction=0.1):
 
 
 def find_changepoint(series, model="l2", search_method=rpt.Pelt, penalty_value=3):
-    """Finds the most likely single changepoint in a time series.
+    """Find the most likely single changepoint in a time series.
 
-    This is useful for identifying the "peak" or the point where the
-    trend begins to change.
+    This is useful for identifying the peak or the point where the trend
+    begins to change.
 
-    Args:
-    ----
-        series (np.array): The time series data.
-        model (str): The model to use for changepoint detection (e.g., "l1", "l2").
-        search_method (class): The ruptures search method to use (e.g., Pelt, Binseg).
-        penalty_value (int): The penalty value for the Pelt search method.
+    Parameters
+    ----------
+    series : np.array
+        Time series data.
+    model : str, default="l2"
+        Model to use for changepoint detection, for example ``"l1"`` or ``"l2"``.
+    search_method : class, default=rpt.Pelt
+        Ruptures search method to use, for example ``Pelt`` or ``Binseg``.
+    penalty_value : int, default=3
+        Penalty value for the Pelt search method.
 
     Returns
     -------
-        int: The index of the most likely changepoint. Returns -1 if no changepoint is found.
+    int
+        Index of the most likely changepoint. Returns ``-1`` if no changepoint is found.
     """
     if series is None or len(series) < 2:
         return -1
@@ -63,17 +71,18 @@ def find_changepoint(series, model="l2", search_method=rpt.Pelt, penalty_value=3
 
 
 def verify_trend_decline(series):
-    """Verifies if a time series has a statistically significant decreasing trend
-    using the Mann-Kendall test.
+    """Verify whether a time series has a statistically significant decreasing trend.
 
-    Args:
-    ----
-        series (np.array): The time series data, typically the post-changepoint segment.
+    Parameters
+    ----------
+    series : np.array
+        Time series data, typically the post-changepoint segment.
 
     Returns
     -------
-        tuple: A tuple containing the trend result ('decreasing', 'increasing', 'no trend')
-               and the p-value.
+    tuple
+        A ``(trend_result, p_value)`` pair where ``trend_result`` is one of
+        ``"decreasing"``, ``"increasing"``, or ``"no trend"``.
     """
     if series is None or len(series) < 4:  # Mann-Kendall needs at least 4 points
         return "no trend", 1.0
@@ -88,25 +97,31 @@ def identify_reducing_series(
     search_method=rpt.Binseg,
     penalty_value=3,
 ):
-    """Analyzes a list of time series to identify those with a reducing trend.
+    """Analyze time series and identify those with a reducing trend.
 
     This function acts as a pipeline:
-    1. Smooths each series.
-    2. Finds the most likely changepoint (peak).
-    3. Performs a Mann-Kendall test on the post-changepoint data.
+    1. Smooth each series.
+    2. Find the most likely changepoint.
+    3. Perform a Mann-Kendall test on the post-changepoint data.
 
-    Args:
-    ----
-        time_series_list (list of np.array): A list of time series to analyze.
-        smooth_frac (float): The fraction for the LOESS smoother.
-        changepoint_model (str): The model for changepoint detection.
-        search_method (class): The ruptures search method to use.
-        penalty_value (int): The penalty value for the Pelt search method (if used).
+    Parameters
+    ----------
+    time_series_list : list of np.array
+        Time series data to analyze.
+    smooth_frac : float, default=0.1
+        Fraction used by the LOESS smoother.
+    changepoint_model : str, default="l2"
+        Model used for changepoint detection.
+    search_method : class, default=rpt.Binseg
+        Ruptures search method to use.
+    penalty_value : int, default=3
+        Penalty value for the Pelt search method if used.
 
     Returns
     -------
-        pd.DataFrame: A DataFrame summarizing the analysis for each time series,
-                      with columns for changepoint index, trend result, and p-value.
+    pd.DataFrame
+        Summary for each time series, including changepoint index, trend result,
+        and p-value.
     """
     results = []
     for i, series in enumerate(time_series_list):

@@ -16,22 +16,14 @@ from innovate.utils.validation import (
 
 
 class BassModel(DiffusionModel):
-    """Implementation of the Bass Diffusion Model.
-    This is a wrapper around the DualInfluenceGrowth dynamics model.
-    """
+    """Bass diffusion model implementation."""
 
     def __init__(
         self,
         covariates: Sequence[str] | None = None,
         t_event: float | None = None,
     ):
-        """Initialize the BassModel with optional covariates, a time event, and a DualInfluenceGrowth dynamics model.
-
-        Parameters
-        ----------
-            covariates (Sequence[str], optional): List of covariate names to include in the model. Defaults to an empty list if not provided.
-            t_event (float, optional): The time of a structural break or event. If provided, the model will fit separate parameters for the periods before and after this time.
-        """
+        """Initialize the Bass model with optional covariates and events."""
         self._params: dict[str, float] = {}
         self.covariates = validate_covariates(covariates)
         if t_event is not None:
@@ -42,12 +34,7 @@ class BassModel(DiffusionModel):
 
     @property
     def param_names(self) -> Sequence[str]:
-        """Return the list of parameter names for the Bass model, including base parameters and covariate-related coefficients.
-
-        Returns
-        -------
-            names (Sequence[str]): List of parameter names, with covariate effects included if applicable.
-        """
+        """Return the Bass model parameter names."""
         names = ["p", "q", "m"]
         if self.t_event is not None:
             names.extend(["p_post", "q_post", "m_post"])
@@ -88,17 +75,7 @@ class BassModel(DiffusionModel):
         return guesses
 
     def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
-        """Return parameter bounds for the Bass model, including covariate effects.
-
-        Parameters
-        ----------
-            t (Sequence[float]): Sequence of time points.
-            y (Sequence[float]): Observed cumulative adoption values.
-
-        Returns
-        -------
-            Dict[str, tuple]: Dictionary mapping parameter names to (lower, upper) bounds. Base parameters "p", "q", and "m" have fixed bounds; covariate-related parameters are unbounded.
-        """
+        """Return parameter bounds for the Bass model."""
         # Allow singleton series here so callers can inspect parameter domains before fitting.
         t_arr = validate_sequence_numeric(t, "t")
         y_arr = validate_positive_numeric_sequence(y, "y")

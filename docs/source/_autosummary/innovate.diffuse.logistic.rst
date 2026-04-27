@@ -20,6 +20,7 @@
    
       DiffusionModel
       LogisticModel
+      Sequence
       SymmetricGrowth
    
    

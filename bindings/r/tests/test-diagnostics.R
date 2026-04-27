@@ -4,7 +4,22 @@ assert_true <- function(condition, message) {
   }
 }
 
-repo_root <- normalizePath(file.path(getwd(), "innovate"))
+repo_root <- if (exists("find_repo_root")) {
+  find_repo_root()
+} else {
+  candidate <- normalizePath(getwd(), mustWork = TRUE)
+  repeat {
+    if (file.exists(file.path(candidate, "bindings", "r", "DESCRIPTION"))) {
+      break
+    }
+    parent <- dirname(candidate)
+    if (identical(parent, candidate)) {
+      stop("Unable to locate the innovate repository root", call. = FALSE)
+    }
+    candidate <- parent
+  }
+  candidate
+}
 bindings_root <- file.path(repo_root, "bindings", "r")
 
 source(file.path(bindings_root, "R", "kernel_bridge.R"))

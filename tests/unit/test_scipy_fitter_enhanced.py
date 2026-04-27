@@ -44,6 +44,29 @@ class TestFitDiagnostics:
         assert "curve_fit" in summary
         assert "converged" in summary
 
+    def test_to_dict_serializes_contract_fields(self):
+        """Test structured serialization of fit diagnostics."""
+        diag = FitDiagnostics(
+            r_squared=0.95,
+            rmse=2.5,
+            mae=1.8,
+            aic=120.5,
+            bic=125.3,
+            residuals=np.array([1.0, -1.0]),
+            fitted_params={"p": 0.03},
+            n_observations=40,
+            n_parameters=3,
+            optimization_method="curve_fit",
+            convergence_status="converged",
+        )
+
+        payload = diag.to_dict()
+
+        assert payload["residuals"] == [1.0, -1.0]
+        assert payload["fitted_params"] == {"p": 0.03}
+        assert payload["uncertainty"]["report_type"] == "point_estimate"
+        assert payload["warnings"] == []
+
 
 class TestScipyFitterMethods:
     """Test different optimization methods."""

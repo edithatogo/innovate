@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Added a canonical package-level public API at `innovate` for stable model and fitter imports.
+- Added a model capability registry at `innovate.get_model_registry()` and `innovate.get_model_capability()`.
+- Added a canonical plural backend namespace at `innovate.backends`.
+
+### Changed
+- Standardized user-facing documentation around package-level imports such as `from innovate import BassModel, ScipyFitter`.
+- Standardized `innovate.compete.MultiProductDiffusionModel` on the stable matrix-form competition model used by the existing fitter and compatibility paths.
+
+### Compatibility
+- Legacy imports including `innovate.backend` and `innovate.compete.competition` remain importable during the topology cleanup.
+
 ## [0.3.0] - 2025-07-30
 
 ### Added

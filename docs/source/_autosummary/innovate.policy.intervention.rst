@@ -19,8 +19,10 @@
       :template: autosummary/class.rst
    
       BassModel
+      Callable
       DiffusionModel
       PolicyIntervention
+      Sequence
    
    
 

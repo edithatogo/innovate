@@ -1,3 +1,5 @@
+"""Model evaluation helpers for fitted diffusion models."""
+
 from collections.abc import Sequence
 from typing import Any
 
@@ -48,18 +50,7 @@ def get_fit_metrics(
     t: Sequence[float],
     y: Sequence[float],
 ) -> dict[str, float]:
-    """Calculates various goodness-of-fit metrics for a model.
-
-    Args:
-    ----
-        model: The fitted diffusion model.
-        t: The time points.
-        y: The true cumulative adoption values.
-
-    Returns
-    -------
-        A dictionary containing the calculated metrics.
-    """
+    """Compute goodness-of-fit metrics for a model."""
     if not model.params_:
         raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
@@ -94,19 +85,7 @@ def compare_models(
     t_true: Sequence[float],
     y_true: Sequence[float],
 ) -> pd.DataFrame:
-    """Compares multiple diffusion models based on various goodness-of-fit metrics.
-
-    Args:
-    ----
-        models: A dictionary where keys are model names (str) and values are
-                fitted DiffusionModel instances.
-        t_true: The true time points.
-        y_true: The true cumulative adoption values.
-
-    Returns
-    -------
-        A pandas DataFrame containing the comparison metrics for each model.
-    """
+    """Compare diffusion models using goodness-of-fit metrics."""
     results = []
     for name, model in models.items():
         if not hasattr(model, "predict") or not callable(model.predict):
@@ -144,19 +123,7 @@ def find_best_model(
     metric: str = "RMSE",
     minimize: bool = True,
 ) -> tuple[str, dict[str, Any]]:
-    """Identifies the best performing model from a comparison DataFrame.
-
-    Args:
-    ----
-        comparison_df: The DataFrame returned by compare_models.
-        metric: The metric to use for comparison (e.g., 'RMSE', 'R-squared', 'R_squared').
-        minimize: If True, the best model has the minimum value for the metric.
-                  If False, the best model has the maximum value.
-
-    Returns
-    -------
-        A tuple containing the name of the best model and its full results row.
-    """
+    """Return the best-performing model from a comparison table."""
     if metric not in comparison_df.columns:
         raise ValueError(
             f"Metric '{metric}' not found in comparison DataFrame columns.",

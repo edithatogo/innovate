@@ -9,10 +9,4 @@ Submodules
 
    innovate.base.base
 
-Module contents
----------------
-
-.. automodule:: innovate.base
-   :members:
-   :undoc-members:
-   :show-inheritance:
+Package contents are documented on the submodule page above.

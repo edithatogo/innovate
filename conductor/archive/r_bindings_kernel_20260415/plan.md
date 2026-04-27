@@ -3,13 +3,13 @@
 ## Phase 1: Binding Architecture and Red-Phase Tests [checkpoint: 5892b39]
 
 - [x] Task: Define the R binding architecture [e13f763]
-    - [ ] Choose the R package layout and invocation path into the kernel
-    - [ ] Define mapping rules between kernel schemas and R objects
-    - [ ] Write failing tests for the basic R-to-kernel contract
+    - [x] Choose the R package layout and invocation path into the kernel
+    - [x] Define mapping rules between kernel schemas and R objects
+    - [x] Write failing tests for the basic R-to-kernel contract
 - [x] Task: Scaffold the R package structure [e13f763]
-    - [ ] Add package metadata and development scaffolding
-    - [ ] Add test harness support for contract validation
-    - [ ] Confirm the new R binding tests fail in the red phase
+    - [x] Add package metadata and development scaffolding
+    - [x] Add test harness support for contract validation
+    - [x] Confirm the new R binding tests fail in the red phase
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Binding Architecture and Red-Phase Tests' (Protocol in workflow.md)
 
 ## Phase 2: Stable Operation Wrappers [checkpoint: 96ba636]

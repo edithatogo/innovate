@@ -9,10 +9,4 @@ Submodules
 
    innovate.adopt.categorization
 
-Module contents
----------------
-
-.. automodule:: innovate.adopt
-   :members:
-   :undoc-members:
-   :show-inheritance:
+Package contents are documented on the submodule page above.

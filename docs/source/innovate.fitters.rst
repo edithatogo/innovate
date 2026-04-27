@@ -1,6 +1,8 @@
 innovate.fitters package
 ========================
 
+The fitters package is curated through its public submodules.
+
 Submodules
 ----------
 
@@ -28,14 +30,6 @@ innovate.fitters.diagnostics\_contract module
    :show-inheritance:
    :undoc-members:
 
-innovate.fitters.jax\_fitter module
------------------------------------
-
-.. automodule:: innovate.fitters.jax_fitter
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
 innovate.fitters.mom\_fitter module
 -----------------------------------
 
@@ -48,14 +42,6 @@ innovate.fitters.scipy\_fitter module
 -------------------------------------
 
 .. automodule:: innovate.fitters.scipy_fitter
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
-Module contents
----------------
-
-.. automodule:: innovate.fitters
    :members:
    :show-inheritance:
    :undoc-members:

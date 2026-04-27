@@ -22,7 +22,7 @@ class MixtureModel(AdvancedDiffusionModel):
 
     Parameters
     ----------
-    model_classes : Sequence[Type[DiffusionModel]]
+    model_classes : Sequence[Type[innovate.base.base.DiffusionModel]]
         A list of diffusion model classes (e.g., [Bass, Gompertz]) to use as
         the components of the mixture.
     max_iter : int, optional

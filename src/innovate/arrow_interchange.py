@@ -62,7 +62,9 @@ def _decode_metadata(metadata: Mapping[str, bytes] | None) -> dict[str, Any]:
     return decoded
 
 
-def _schema_metadata(kind: str, *, metadata: Mapping[str, Any] | None = None, extra: Mapping[str, Any] | None = None) -> dict[str, bytes]:
+def _schema_metadata(
+    kind: str, *, metadata: Mapping[str, Any] | None = None, extra: Mapping[str, Any] | None = None
+) -> dict[str, bytes]:
     encoded = {
         ARROW_INTERCHANGE_KIND_KEY: kind.encode("utf-8"),
         ARROW_INTERCHANGE_SCHEMA_VERSION_KEY: ARROW_INTERCHANGE_SCHEMA_VERSION.encode("utf-8"),

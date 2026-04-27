@@ -21,6 +21,7 @@
       Any
       CounterfactualAnalysis
       DiffusionModel
+      Sequence
    
    
 

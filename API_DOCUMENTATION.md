@@ -3,6 +3,20 @@
 ## Overview
 The Innovate library provides tools for modeling innovation and policy diffusion, with implementations of classic diffusion models and advanced fitting techniques.
 
+## Canonical Public API
+
+For new user code, prefer the stable package-level imports:
+
+```python
+from innovate import BassModel, GompertzModel, LogisticModel, ScipyFitter
+from innovate.compete import MultiProductDiffusionModel, LotkaVolterraModel
+from innovate.substitute import CompositeDiffusionModel, FisherPryModel, NortonBassModel
+from innovate.ecosystem import ComplementaryGoodsModel
+from innovate.backends import use_backend
+```
+
+Legacy imports such as `innovate.backend` and `innovate.compete.competition` remain importable for compatibility, but the package-level imports above define the intended public API surface.
+
 ## Core Modules
 
 ### 1. Diffusion Models (`innovate.diffuse`)
@@ -36,9 +50,9 @@ Where:
 - **BlackJaxFitter** (`innovate.fitters.blackjax_fitter.BlackjaxFitter`): JAX-based MCMC fitting
 
 ### 4. Competition Models (`innovate.compete`)
-- **MultiProductDiffusionModel** (`innovate.compete.competition.MultiProductDiffusionModel`): Multi-product diffusion with competition effects
+- **MultiProductDiffusionModel** (`innovate.compete.MultiProductDiffusionModel`): Stable matrix-form multi-product diffusion API
 
-### 5. Backend Management (`innovate.backend`)
+### 5. Backend Management (`innovate.backends`)
 - **Backend switching**: Support for NumPy and JAX backends
 - **`use_backend(name)`**: Switch between computational backends
 
@@ -66,8 +80,7 @@ Where:
 
 ### Basic Model Fitting
 ```python
-from innovate.diffuse.bass import BassModel
-from innovate.fitters.scipy_fitter import ScipyFitter
+from innovate import BassModel, ScipyFitter
 
 # Create model and fitter
 model = BassModel()
@@ -95,7 +108,7 @@ model = BassModel(covariates=["marketing_spend", "price"])
 
 ### Backend Switching
 ```python
-from innovate.backend import use_backend
+from innovate.backends import use_backend
 
 # Switch to JAX backend for GPU acceleration
 use_backend('jax')

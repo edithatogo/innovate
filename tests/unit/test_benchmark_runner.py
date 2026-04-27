@@ -34,4 +34,3 @@ def test_benchmark_runner_emits_standardized_metrics_and_diagnostics(tmp_path) -
     assert saved["model_key"] == "bass"
     assert saved["metrics"]["RMSE"] >= 0.0
     assert saved["diagnostics"]["support_level"] in {"supported", "partial"}
-

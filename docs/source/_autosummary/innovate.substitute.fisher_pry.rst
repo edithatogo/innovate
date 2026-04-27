@@ -20,6 +20,7 @@
    
       DiffusionModel
       FisherPryModel
+      Sequence
    
    
 

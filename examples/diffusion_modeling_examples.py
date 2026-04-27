@@ -124,9 +124,7 @@ def example_optimization_methods():
         try:
             fitter.fit(model, t, y)
             diag = fitter.diagnostics
-            print(
-                f"{method:<25} {diag.r_squared:>10.4f} {diag.rmse:>10.4f} {diag.convergence_status:>10}"
-            )
+            print(f"{method:<25} {diag.r_squared:>10.4f} {diag.rmse:>10.4f} {diag.convergence_status:>10}")
         except Exception as e:
             print(f"{method:<25} {'FAILED':>10} {'':>10} {'':>10} - {str(e)[:30]}")
 

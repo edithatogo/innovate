@@ -1,4 +1,4 @@
-# src/innovate/compete/lotka_volterra.py
+"""Lotka-Volterra competitive diffusion model."""
 
 from collections.abc import Sequence
 
@@ -21,12 +21,7 @@ class LotkaVolterraModel(DiffusionModel):
 
     @property
     def param_names(self) -> Sequence[str]:
-        """Returns the names of the model parameters:
-        - alpha1: Growth rate of technology 1
-        - beta1: Competition parameter from technology 2 to 1
-        - alpha2: Growth rate of technology 2
-        - beta2: Competition parameter from technology 1 to 2
-        """
+        """Return the model parameter names."""
         names = ["alpha1", "beta1", "alpha2", "beta2"]
         for cov in self.covariates:
             names.extend(
@@ -40,9 +35,7 @@ class LotkaVolterraModel(DiffusionModel):
         return names
 
     def initial_guesses(self, t: Sequence[float], y: np.ndarray) -> dict[str, float]:
-        """Provides initial guesses for the model parameters by performing a
-        linear regression on the linearized Lotka-Volterra equations.
-        """
+        """Estimate initial parameter guesses from linearized equations."""
         y = B.array(y)
         t = B.array(t)
         dt = B.gradient(t)
@@ -143,21 +136,7 @@ class LotkaVolterraModel(DiffusionModel):
         y0: Sequence[float],
         covariates: dict[str, Sequence[float]] | None = None,
     ) -> np.ndarray:
-        """Predicts the market share of both technologies over time.
-
-        This requires solving a system of ordinary differential equations (ODEs).
-
-        Args:
-        ----
-            t: A sequence of time points.
-            y0: The initial market shares for the two technologies [y1_0, y2_0].
-            covariates: A dictionary of covariate names and their values.
-
-        Returns
-        -------
-            An array where each row corresponds to a time point and columns
-            correspond to the market share of each technology.
-        """
+        """Predict both technologies' market shares over time."""
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
@@ -179,19 +158,7 @@ class LotkaVolterraModel(DiffusionModel):
         covariates: dict[str, Sequence[float]] | None = None,
         **kwargs,
     ):
-        """Fits the Lotka-Volterra model to the data.
-
-        This implementation uses `scipy.optimize.minimize` to find the best
-        parameters by minimizing the sum of squared errors.
-
-        Args:
-        ----
-            t: A sequence of time points.
-            y: A 2D array of observed data, where y[:, 0] is the data for the
-               first technology and y[:, 1] is for the second.
-            covariates: A dictionary of covariate names and their values.
-            kwargs: Additional keyword arguments for `scipy.optimize.minimize`.
-        """
+        """Fit the Lotka-Volterra model to observed data."""
         from scipy.optimize import minimize
 
         y = B.array(y)
@@ -238,18 +205,7 @@ class LotkaVolterraModel(DiffusionModel):
         y: np.ndarray,
         covariates: dict[str, Sequence[float]] | None = None,
     ) -> float:
-        """Calculates the R^2 score for the model fit.
-
-        Args:
-        ----
-            t: A sequence of time points.
-            y: A 2D array of observed data.
-            covariates: A dictionary of covariate names and their values.
-
-        Returns
-        -------
-            The R^2 score.
-        """
+        """Compute the R^2 score for the model fit."""
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
@@ -268,7 +224,7 @@ class LotkaVolterraModel(DiffusionModel):
         y0: Sequence[float],
         covariates: dict[str, Sequence[float]] | None = None,
     ) -> np.ndarray:
-        """Predicts the rate of change of market share for both technologies.
+        """Predict the adoption rate for both technologies.
 
         Args:
         ----

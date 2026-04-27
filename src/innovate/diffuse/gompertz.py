@@ -8,19 +8,14 @@ from innovate.dynamics.growth.skewed import SkewedGrowth
 
 
 class GompertzModel(DiffusionModel):
-    """Implementation of the Gompertz Diffusion Model.
-    This is a wrapper around the SkewedGrowth dynamics model.
-    """
+    """Gompertz diffusion model backed by ``SkewedGrowth``."""
 
     def __init__(
         self,
         covariates: Sequence[str] | None = None,
         t_event: float | None = None,
     ):
-        """Initialize a Gompertz diffusion model with optional covariates.
-
-        Creates an empty parameter dictionary, stores the provided covariate names, and instantiates a SkewedGrowth dynamics model for growth rate computation.
-        """
+        """Initialize the model with optional covariates and event timing."""
         self._params: dict[str, float] = {}
         self.covariates = covariates or []
         self.t_event = t_event
@@ -28,12 +23,7 @@ class GompertzModel(DiffusionModel):
 
     @property
     def param_names(self) -> Sequence[str]:
-        """Return the list of model parameter names, including base parameters and covariate-specific coefficients.
-
-        Returns
-        -------
-            Sequence[str]: List of parameter names for the model, with additional parameters for each covariate in the form 'beta_a_{cov}', 'beta_b_{cov}', and 'beta_c_{cov}'.
-        """
+        """Return the fitted parameter names."""
         names = ["a", "b", "c"]
         if self.t_event is not None:
             names.extend(["a_post", "b_post", "c_post"])
@@ -66,19 +56,7 @@ class GompertzModel(DiffusionModel):
         return guesses
 
     def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
-        """Return parameter bounds for the Gompertz model based on observed data and covariates.
-
-        The bounds ensure that the main parameters are constrained to meaningful ranges, while covariate effect parameters are unbounded.
-
-        Parameters
-        ----------
-            t (Sequence[float]): Time points of the observed data.
-            y (Sequence[float]): Observed cumulative adoption values.
-
-        Returns
-        -------
-            Dict[str, tuple]: Dictionary mapping parameter names to (lower, upper) bounds.
-        """
+        """Return parameter bounds for the observed data."""
         bounds = {
             "a": (np.max(y), np.inf),
             "b": (1e-6, np.inf),
@@ -103,21 +81,7 @@ class GompertzModel(DiffusionModel):
         t: Sequence[float],
         covariates: dict[str, Sequence[float]] | None = None,
     ) -> Sequence[float]:
-        """Predicts cumulative adoption values at specified times using the fitted Gompertz diffusion model.
-
-        Parameters
-        ----------
-            t (Sequence[float]): Time points at which to predict cumulative adoption.
-            covariates (Dict[str, Sequence[float]], optional): Time series of covariate values affecting the model parameters.
-
-        Returns
-        -------
-            Sequence[float]: Predicted cumulative adoption values at each time point.
-
-        Raises
-        ------
-            RuntimeError: If the model parameters have not been set via fitting.
-        """
+        """Predict cumulative adoption for the provided time grid."""
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
@@ -144,20 +108,7 @@ class GompertzModel(DiffusionModel):
         return np.maximum.accumulate(y_pred)
 
     def differential_equation(self, t, y, params, covariates, t_eval):
-        """Defines the time derivative for the Gompertz diffusion model, incorporating covariate effects by adjusting parameters at time t.
-
-        Parameters
-        ----------
-            t (float): Current time point.
-            y (float): Current cumulative adoption value.
-            params (Sequence[float]): Model parameters, including base and covariate coefficients.
-            covariates (dict or None): Optional mapping of covariate names to their time series values.
-            t_eval (Sequence[float]): Time points corresponding to covariate values.
-
-        Returns
-        -------
-            float: The instantaneous growth rate at time t.
-        """
+        """Return the instantaneous growth rate at ``t``."""
         if self.t_event is not None and t >= self.t_event:
             a_base = params[3]
             b_base = params[4]
@@ -197,22 +148,7 @@ class GompertzModel(DiffusionModel):
         y: Sequence[float],
         covariates: dict[str, Sequence[float]] | None = None,
     ) -> float:
-        """Compute the coefficient of determination (R²) between observed data and model predictions.
-
-        Parameters
-        ----------
-            t (Sequence[float]): Time points at which observations are made.
-            y (Sequence[float]): Observed cumulative adoption values.
-            covariates (Dict[str, Sequence[float]], optional): Covariate values for each time point.
-
-        Returns
-        -------
-            float: R² score indicating the proportion of variance explained by the model predictions.
-
-        Raises
-        ------
-            RuntimeError: If the model parameters have not been set.
-        """
+        """Return the coefficient of determination for the fitted model."""
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t, covariates)

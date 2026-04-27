@@ -223,9 +223,7 @@ def list_model_cards() -> dict[str, ModelCard]:
     """Return synchronized model cards for all stable model capabilities."""
     registry = get_model_registry()
     stable_cards = {
-        key: _build_model_card(capability)
-        for key, capability in registry.items()
-        if capability.stability == "stable"
+        key: _build_model_card(capability) for key, capability in registry.items() if capability.stability == "stable"
     }
     return dict(sorted(stable_cards.items(), key=lambda item: item[0]))
 

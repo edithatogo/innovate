@@ -20,6 +20,7 @@
    
       DiffusionModel
       GompertzModel
+      Sequence
       SkewedGrowth
    
    

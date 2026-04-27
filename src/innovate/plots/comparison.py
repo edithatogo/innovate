@@ -12,19 +12,24 @@ def plot_scenario_comparison(
     cumulative: bool = True,
     **kwargs,
 ):
-    """Plots multiple diffusion scenarios on a single graph for comparison.
+    """Plot multiple diffusion scenarios on a single graph.
 
-    Args:
-    ----
-        predictions: A dictionary where keys are scenario names (str) and values
-                     are either pandas DataFrames (for multi-product models)
-                     or sequences of floats (for single-product models).
-                     For DataFrames, the index is assumed to be time.
-        title: The title of the plot.
-        xlabel: The label for the x-axis.
-        ylabel: The label for the y-axis.
-        cumulative: If True, assumes cumulative adoption. If False, plots rates.
-        kwargs: Additional keyword arguments passed to plt.plot.
+    Parameters
+    ----------
+    predictions : Mapping[str, pandas.DataFrame | Sequence[float]]
+        Mapping from scenario names to either pandas DataFrames for
+        multi-product models or sequences of floats for single-product
+        models. DataFrame indices are treated as time.
+    title : str, default="Scenario Comparison"
+        Plot title.
+    xlabel : str, default="Time"
+        X-axis label.
+    ylabel : str, default="Cumulative Adoptions"
+        Y-axis label.
+    cumulative : bool, default=True
+        If True, plot cumulative adoption; otherwise plot rates.
+    **kwargs
+        Additional keyword arguments forwarded to ``plt.plot``.
     """
     plt.figure(figsize=(12, 7))
 

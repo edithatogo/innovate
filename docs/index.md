@@ -1,91 +1,14 @@
-# Innovate Library Documentation
+# Legacy Docs Entry Point
 
-Welcome to the documentation for the Innovate library! This library provides tools for modeling innovation and policy diffusion with implementations of classic diffusion models and advanced fitting techniques.
+The canonical documentation for Innovate now lives under `docs/source/`.
 
-## Table of Contents
+Use the current entry points instead:
 
-```{toctree}
-:maxdepth: 2
-:caption: Contents:
+- [README.md](../README.md)
+- [Canonical docs landing page](source/index.rst)
+- [Bindings hub](source/bindings.rst)
+- [Architecture principles](architecture_principles.md)
+- [Modernization roadmap](architecture_modernization_roadmap.md)
+- [ADR index](adr/index.md)
 
-installation
-quickstart
-api
-tutorials
-mathematical_background
-architecture_principles
-architecture_modernization_roadmap
-adr/index
-contributing
-```
-
-## About
-
-The Innovate library provides:
-
-- **Diffusion Models**: Classic models like Bass, Logistic, and Gompertz
-- **Advanced Fitting**: Scipy, Bayesian, and JAX-based fitting methods
-- **Model Competition**: Multi-product diffusion with competitive effects
-- **Flexible Parameterization**: Support for covariates and structural breaks
-- **Multiple Backends**: NumPy and JAX support for computational efficiency
-
-## Key Features
-
-- **Easy to Use**: Intuitive API similar to scikit-learn
-- **Mathematically Rigorous**: Based on ordinary differential equations
-- **High Performance**: Optimized for speed and memory usage
-- **Extensible**: Easy to add new models and features
-
-## Installation
-
-```bash
-pip install innovate
-```
-
-Or for development:
-
-```bash
-pip install -e ".[dev]"
-```
-
-## Example Usage
-
-```python
-from innovate import BassModel, ScipyFitter
-import numpy as np
-
-# Sample data
-t_data = [0, 1, 2, 3, 4, 5]
-y_data = [10, 25, 45, 70, 90, 95]
-
-# Create and fit model
-model = BassModel()
-fitter = ScipyFitter()
-fitted_model = model.fit(fitter, t_data, y_data)
-
-# Make predictions
-predictions = fitted_model.predict([6, 7, 8])
-print(fitted_model.params_)  # View fitted parameters
-```
-
-## Canonical Public API
-
-For new code, prefer the stable package-level imports:
-
-```python
-from innovate import BassModel, GompertzModel, LogisticModel, ScipyFitter
-from innovate.compete import MultiProductDiffusionModel, LotkaVolterraModel
-from innovate.substitute import FisherPryModel, NortonBassModel
-from innovate.backends import use_backend
-```
-
-Compatibility imports such as `innovate.backend` and `innovate.compete.competition` are still supported, but they are no longer the recommended entry points for examples and user documentation.
-
-## Support and Community
-
-- [GitHub Repository](https://github.com/edithatogo/innovate)
-- [Issues](https://github.com/edithatogo/innovate/issues)
-
-## License
-
-This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
+This page is kept only as a compatibility pointer.

@@ -23,13 +23,10 @@ extensions = [
     "sphinx.ext.doctest",
     "sphinx.ext.coverage",
     "sphinx.ext.githubpages",
-    "myst_parser",
 ]
 
-# Support for markdown files
 source_suffix = {
     ".rst": None,
-    ".md": None,
 }
 
 templates_path = ["_templates"]

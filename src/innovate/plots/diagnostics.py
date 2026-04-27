@@ -55,11 +55,11 @@ def plot_residuals(  # noqa: PLR0912, PLR0915
     diagnostics: DiagnosticsContract | object | None = None,
     residual_analysis: ResidualAnalysis | None = None,
 ):
-    """Plots the residuals of a fitted model, along with their ACF and PACF plots.
+    """Plot residuals, ACF, and PACF for a fitted model.
 
     Parameters
     ----------
-    model : DiffusionModel
+        model : innovate.base.base.DiffusionModel
         A fitted diffusion model.
     t : np.ndarray
         The time steps.
@@ -81,7 +81,7 @@ def plot_residuals(  # noqa: PLR0912, PLR0915
         The color of the PACF plot, by default 'C2'.
     show : bool, optional
         If True, the plot will be shown, by default True. Otherwise, the figure and axes objects will be returned.
-    diagnostics : DiagnosticsContract | object | None, optional
+        diagnostics : innovate.fitters.diagnostics_contract.DiagnosticsContract | object | None, optional
         Optional diagnostics contract or fit diagnostics object. If provided,
         the function reuses the stored residuals and residual analysis instead of
         recomputing them.
@@ -175,7 +175,7 @@ def plot_acf_only(
     title: str = "Autocorrelation Function",
     lags: int = 30,
 ):
-    """Plots the Autocorrelation Function (ACF) of a time series.
+    """Plot the autocorrelation function of a time series.
 
     Parameters
     ----------
@@ -197,7 +197,7 @@ def plot_pacf_only(
     title: str = "Partial Autocorrelation Function",
     lags: int = 30,
 ):
-    """Plots the Partial Autocorrelation Function (PACF) of a time series.
+    """Plot the partial autocorrelation function of a time series.
 
     Parameters
     ----------

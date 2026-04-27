@@ -1,4 +1,27 @@
-repo_root <- normalizePath(file.path(getwd(), "innovate"))
+repo_root <- {
+  resolved <- NULL
+  for (start in normalizePath(c(getwd(), file.path(getwd(), "innovate")), mustWork = FALSE)) {
+    candidate <- start
+    repeat {
+      if (file.exists(file.path(candidate, "bindings", "r", "R", "kernel_bridge.R"))) {
+        resolved <- candidate
+        break
+      }
+      parent <- dirname(candidate)
+      if (identical(parent, candidate)) {
+        break
+      }
+      candidate <- parent
+    }
+    if (!is.null(resolved)) {
+      break
+    }
+  }
+  if (is.null(resolved)) {
+    stop("Unable to locate the innovate repository root", call. = FALSE)
+  }
+  resolved
+}
 source(file.path(repo_root, "bindings", "r", "R", "kernel_bridge.R"))
 
 time <- c(0, 1, 2, 3, 4)

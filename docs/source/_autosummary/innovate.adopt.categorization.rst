@@ -25,6 +25,7 @@
       :template: autosummary/class.rst
    
       DiffusionModel
+      Sequence
    
    
 

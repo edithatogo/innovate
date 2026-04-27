@@ -20,6 +20,7 @@
    
       DiffusionModel
       LotkaVolterraModel
+      Sequence
    
    
 

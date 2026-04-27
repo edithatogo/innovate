@@ -8,22 +8,14 @@ from innovate.dynamics.growth.symmetric import SymmetricGrowth
 
 
 class LogisticModel(DiffusionModel):
-    """Implementation of the Logistic Diffusion Model.
-    This is a wrapper around the SymmetricGrowth dynamics model.
-    """
+    """Logistic diffusion model built on SymmetricGrowth dynamics."""
 
     def __init__(
         self,
         covariates: Sequence[str] | None = None,
         t_event: float | None = None,
     ):
-        """Initialize a LogisticModel with optional covariates and an internal SymmetricGrowth dynamics model.
-
-        Parameters
-        ----------
-            covariates (Sequence[str], optional): List of covariate names to include in the model. Defaults to an empty list.
-            t_event (float, optional): The time of a structural break or event.
-        """
+        """Initialize a logistic model with optional covariates and event time."""
         self._params: dict[str, float] = {}
         self.covariates = covariates or []
         self.t_event = t_event
@@ -31,12 +23,7 @@ class LogisticModel(DiffusionModel):
 
     @property
     def param_names(self) -> Sequence[str]:
-        """Return the list of parameter names for the logistic model, including base parameters and covariate-specific coefficients.
-
-        Returns
-        -------
-            names (Sequence[str]): List of parameter names, with covariate effects prefixed by 'beta_L_', 'beta_k_', and 'beta_x0_' for each covariate.
-        """
+        """Return the parameter names for the logistic model."""
         names = ["L", "k", "x0"]
         if self.t_event is not None:
             names.extend(["L_post", "k_post", "x0_post"])
@@ -69,17 +56,7 @@ class LogisticModel(DiffusionModel):
         return guesses
 
     def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
-        """Return parameter bounds for the logistic model, including covariate effects.
-
-        Parameters
-        ----------
-            t (Sequence[float]): Time points of the observations.
-            y (Sequence[float]): Observed values corresponding to each time point.
-
-        Returns
-        -------
-            Dict[str, tuple]: Dictionary mapping parameter names to their (lower, upper) bounds.
-        """
+        """Return parameter bounds for the logistic model."""
         bounds = {
             "L": (np.max(y), np.inf),
             "k": (1e-6, np.inf),
@@ -104,21 +81,7 @@ class LogisticModel(DiffusionModel):
         t: Sequence[float],
         covariates: dict[str, Sequence[float]] | None = None,
     ) -> Sequence[float]:
-        """Predicts the cumulative values of the logistic diffusion process at specified time points.
-
-        Parameters
-        ----------
-            t (Sequence[float]): Time points at which to compute predictions.
-            covariates (Dict[str, Sequence[float]], optional): Covariate values for each time point.
-
-        Returns
-        -------
-            Sequence[float]: Predicted cumulative values of the logistic model at each time point.
-
-        Raises
-        ------
-            RuntimeError: If the model parameters have not been set (i.e., the model is not fitted).
-        """
+        """Predict cumulative values from the logistic model."""
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
@@ -164,22 +127,7 @@ class LogisticModel(DiffusionModel):
         y: Sequence[float],
         covariates: dict[str, Sequence[float]] | None = None,
     ) -> float:
-        """Compute the coefficient of determination (R²) between observed values and model predictions.
-
-        Parameters
-        ----------
-            t (Sequence[float]): Time points at which observations were made.
-            y (Sequence[float]): Observed values corresponding to time points.
-            covariates (Dict[str, Sequence[float]], optional): Covariate values for each time point.
-
-        Returns
-        -------
-            float: The R² score indicating the proportion of variance explained by the model predictions.
-
-        Raises
-        ------
-            RuntimeError: If the model has not been fitted.
-        """
+        """Compute the R^2 score for the logistic model."""
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t, covariates)

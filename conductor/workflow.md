@@ -8,8 +8,9 @@
 4. **High Code Coverage:** Aim for >80% code coverage for all modules
 5. **User Experience First:** Every decision should prioritize user experience
 6. **Non-Interactive & CI-Aware:** Prefer non-interactive commands. Use `CI=true` for watch-mode tools (tests, linters) to ensure single execution.
-7. **Automated Review:** At the end of every phase, automatically run the `conductor:review` skill, apply fixes, and progress without manual intervention.
+7. **Automated Review:** At the end of every phase and track, automatically run the `conductor-review` skill, apply fixes, and progress without manual intervention.
 8. **CI Gate Enforcement:** After every push to the remote, automatically monitor GitHub Actions runs and address all failures until they pass.
+9. **Autonomous Track Progression:** Once implementation begins, continue phase-to-phase and track-to-track until no incomplete tracks remain unless blocked by repeated validation failures or missing project context.
 
 ## Task Workflow
 
@@ -71,7 +72,7 @@ All tasks follow a strict lifecycle:
 
 **Trigger:** This protocol is executed immediately after a task is completed that also concludes a phase in `plan.md`.
 
-**IMPORTANT:** This entire protocol runs AUTONOMOUSLY. Do NOT ask the user for manual verification. The `conductor:review` skill replaces all manual review steps.
+**IMPORTANT:** This entire protocol runs AUTONOMOUSLY. Do NOT ask the user for manual verification. The `conductor-review` skill replaces all manual review steps. The only valid stop conditions are repeated validation failures, missing required context, or an ambiguity that would risk destructive changes outside Conductor-managed files.
 
 1.  **Announce Protocol Start:** Inform the user that the phase is complete and the automated verification and checkpointing protocol has begun.
 
@@ -87,11 +88,13 @@ All tasks follow a strict lifecycle:
     -   Execute the announced command.
     -   If tests fail, begin debugging. You may attempt to propose a fix a **maximum of two times**. If the tests still fail after your second proposed fix, you **must stop**, report the persistent failure, and ask the user for guidance.
 
-4.  **Run `conductor:review` Skill (Automated):**
-    -   **CRITICAL:** Invoke the `conductor:review` skill for the current phase/track.
+4.  **Run `conductor-review` Skill (Automated):**
+    -   **CRITICAL:** Invoke the `conductor-review` skill for the current phase/track.
     -   Review the output findings from the review.
     -   **Auto-Apply Fixes:** For every finding with a suggested fix, automatically apply the fix using file editing tools.
     -   After applying all fixes, run the test suite again to confirm everything still passes.
+    -   Repeat the review-fix-test loop up to 2 times if new high-confidence fixes are discovered during validation.
+    -   If unresolved issues remain after the second review-fix loop, stop and report the blocker to the user.
     -   Commit any review-fix changes with message: `fix(conductor): Apply review suggestions for phase '<phase_name>'`.
 
 5.  **Push to Remote and Monitor CI Gate:**
@@ -114,7 +117,7 @@ All tasks follow a strict lifecycle:
 7.  **Attach Auditable Verification Report using Git Notes:**
     -   **Step 7.1: Draft Note Content:** Create a detailed verification report including:
         - Automated test command and results
-        - `conductor:review` findings and applied fixes
+        - `conductor-review` findings and applied fixes
         - CI gate monitoring results (all checks passed / failures addressed)
     -   **Step 7.2: Attach Note:** Use the `git notes` command and the full commit hash from the checkpoint commit to attach the full report.
 
@@ -130,6 +133,7 @@ All tasks follow a strict lifecycle:
 10. **Auto-Progress to Next Phase:**
     -   Announce that the phase is complete, all review fixes have been applied, CI gates have passed, and the checkpoint has been created.
     -   Automatically proceed to the next phase in `plan.md`.
+    -   If the completed phase was the final phase for the track, immediately enter the **Track Completion Protocol** instead of stopping for user input.
 
 ### Track Completion Protocol
 
@@ -137,11 +141,13 @@ All tasks follow a strict lifecycle:
 
 1.  **Announce Track Completion:** Inform the user that all phases of the track have been completed.
 
-2.  **Run Final `conductor:review` on Entire Track:**
-    -   Invoke the `conductor:review` skill for the **entire track** (all commits from the track).
+2.  **Run Final `conductor-review` on Entire Track:**
+    -   Invoke the `conductor-review` skill for the **entire track** (all commits from the track).
     -   Review the output findings.
     -   **Auto-Apply Fixes:** For every finding, automatically apply the suggested fix.
     -   Run the full test suite to confirm all tests pass.
+    -   Repeat the review-fix-test loop up to 2 times if new high-confidence fixes are discovered during validation.
+    -   If unresolved issues remain after the second review-fix loop, stop and report the blocker to the user.
     -   Commit any changes with message: `fix(conductor): Apply final review suggestions for track '<track_name>'`.
 
 3.  **Push and Monitor CI Gate:**
@@ -240,8 +246,8 @@ The test suite is organized into three tiers:
 
 ## Code Review Process
 
-### Automated Review via `conductor:review`
-All code review is performed automatically by the `conductor:review` skill. The skill:
+### Automated Review via `conductor-review`
+All code review is performed automatically by the `conductor-review` skill. The skill:
 - Checks implementation against `plan.md` and `spec.md`
 - Validates style compliance against `code_styleguides/*.md`
 - Runs the test suite and analyzes results
@@ -324,14 +330,14 @@ A task is complete when:
 A phase is complete when:
 
 1. All tasks in the phase are done
-2. `conductor:review` has been run and all fixes applied
+2. `conductor-review` has been run and all fixes applied
 3. All CI checks pass on the remote
 4. Checkpoint commit created with verification report attached as git note
 
 A track is complete when:
 
 1. All phases are complete
-2. Final `conductor:review` on the entire track has been run and all fixes applied
+2. Final `conductor-review` on the entire track has been run and all fixes applied
 3. All CI checks pass on the remote
 4. Track has been archived
 5. Next track has been identified and begun (if applicable)

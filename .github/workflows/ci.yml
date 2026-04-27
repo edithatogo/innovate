@@ -170,6 +170,124 @@ jobs:
       - name: Build docs smoke target
         run: uv run python -m sphinx -b html docs/source /tmp/innovate-docs-build
 
+  rust-bindings:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Check Rust formatting
+        working-directory: bindings/rust
+        run: cargo fmt --check
+
+      - name: Run Rust binding tests
+        working-directory: bindings/rust
+        run: cargo test
+
+  typescript-bindings:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: bindings/typescript/package-lock.json
+
+      - name: Install TypeScript dependencies
+        working-directory: bindings/typescript
+        run: npm ci
+
+      - name: Check TypeScript schema compatibility
+        working-directory: bindings/typescript
+        run: npm run schema:check
+
+      - name: Type-check TypeScript bindings
+        working-directory: bindings/typescript
+        run: npm run typecheck
+
+      - name: Run TypeScript binding tests
+        working-directory: bindings/typescript
+        run: npm test
+
+  go-bindings:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: bindings/go/go.mod
+
+      - name: Run Go binding tests
+        working-directory: bindings/go
+        run: go test ./...
+
+  julia-bindings:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Set up Julia
+        uses: julia-actions/setup-julia@v2
+        with:
+          version: "1.12"
+
+      - name: Instantiate Julia binding project
+        run: julia --project=bindings/julia -e 'using Pkg; Pkg.instantiate()'
+
+      - name: Run Julia binding tests
+        run: julia --project=bindings/julia bindings/julia/test/runtests.jl
+
+  r-bindings:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Install R binding dependencies
+        run: Rscript -e 'install.packages("jsonlite", repos = "https://cloud.r-project.org")'
+
+      - name: Run R binding tests
+        run: Rscript bindings/r/tests/run.R
+
   # -----------------------------------------------------------------------
   # Type Checking
   # -----------------------------------------------------------------------

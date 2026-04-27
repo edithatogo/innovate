@@ -7,7 +7,7 @@ from innovate.diffuse.bass import BassModel  # Example of a model it can modify
 
 
 class PolicyIntervention:
-    """A class to apply policy interventions to a diffusion model."""
+    """Apply policy interventions to a diffusion model."""
 
     def __init__(self, model: DiffusionModel):
         self.model = model
@@ -19,20 +19,7 @@ class PolicyIntervention:
         p_effect: Callable[[float], float] | None = None,
         q_effect: Callable[[float], float] | None = None,
     ) -> Callable[[Sequence[float]], Sequence[float]]:
-        """Applies time-varying effects to 'p' and 'q' parameters of the model.
-        This method is specifically designed for Bass-like models.
-
-        Args:
-        ----
-            t_points: A sequence of time points for which to apply the effects.
-            p_effect: A callable that takes time (float) and returns a multiplier for 'p'.
-            q_effect: A callable that takes time (float) and returns a multiplier for 'q'.
-
-        Returns
-        -------
-            A callable that takes a sequence of time points and returns predictions
-            with the applied time-varying policy effects.
-        """
+        """Apply time-varying effects to Bass-like model parameters."""
         if not isinstance(self.model, BassModel):  # Extend to other models as needed
             raise TypeError(
                 "This policy intervention is currently only supported for BassModel.",
@@ -42,10 +29,6 @@ class PolicyIntervention:
             raise RuntimeError(
                 "Model must be fitted or have initial parameters set before applying policy.",
             )
-
-        # Store original parameters if not already done
-        if not self._original_params:
-            self._original_params = self.model.params_.copy()
 
         # Pre-calculate modified parameters for each t_point
         modified_params_at_t_points = []

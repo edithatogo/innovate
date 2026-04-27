@@ -8,6 +8,7 @@ use std::process::Command;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 pub const KERNEL_SCHEMA_VERSION: &str = "1.0";
+const DISCOVERY_MANIFEST_JSON: &str = include_str!("../inst/discovery_manifest.json");
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -361,9 +362,20 @@ impl KernelBinding {
         KernelRequest::diagnose_model(model_key, payload)
     }
 
-    pub fn discover_models(&self) -> Result<KernelDiscoveryResponse, KernelBindingError> {
+    pub fn discover_models_native(&self) -> KernelDiscoveryResponse {
+        serde_json::from_str(DISCOVERY_MANIFEST_JSON)
+            .expect("embedded Rust discovery manifest must decode")
+    }
+
+    pub fn discover_models_via_bridge(
+        &self,
+    ) -> Result<KernelDiscoveryResponse, KernelBindingError> {
         let response = self.invoke(&self.discover_models_request())?;
         KernelDiscoveryResponse::from_response(response)
+    }
+
+    pub fn discover_models(&self) -> Result<KernelDiscoveryResponse, KernelBindingError> {
+        Ok(self.discover_models_native())
     }
 
     pub fn fit_model(

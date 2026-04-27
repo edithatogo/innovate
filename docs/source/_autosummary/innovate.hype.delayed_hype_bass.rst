@@ -28,6 +28,7 @@
       BassModel
       DelayedHypeBassModel
       HypeCycleModel
+      Sequence
       jitcdde
    
    

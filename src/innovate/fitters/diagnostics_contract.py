@@ -177,7 +177,8 @@ def build_diagnostics_contract(
             ),
         )
         return DiagnosticsContract(
-            uncertainty=uncertainty or UncertaintySummary.unsupported(
+            uncertainty=uncertainty
+            or UncertaintySummary.unsupported(
                 "Model does not expose a callable predict method.",
                 provenance="unknown",
             ),
@@ -196,7 +197,8 @@ def build_diagnostics_contract(
             ),
         )
         return DiagnosticsContract(
-            uncertainty=uncertainty or UncertaintySummary.unsupported(
+            uncertainty=uncertainty
+            or UncertaintySummary.unsupported(
                 "Model has not been fitted yet.",
                 provenance=provenance,
             ),

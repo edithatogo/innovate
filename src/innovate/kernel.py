@@ -18,15 +18,7 @@ from .fitters import ScipyFitter
 from .fitters.diagnostics_contract import DiagnosticsContract, DiagnosticsWarning, UncertaintySummary
 from .fitters.residual_analysis import analyze_residuals
 
-KernelJSONValue: TypeAlias = (
-    str
-    | int
-    | float
-    | bool
-    | None
-    | dict[str, "KernelJSONValue"]
-    | list["KernelJSONValue"]
-)
+KernelJSONValue: TypeAlias = str | int | float | bool | None | dict[str, "KernelJSONValue"] | list["KernelJSONValue"]
 
 KERNEL_SCHEMA_MAJOR_VERSION = 1
 KERNEL_SCHEMA_MINOR_VERSION = 0
@@ -92,8 +84,7 @@ def _validate_schema_version(schema_version: str) -> str:
         raise ValueError(f"Unsupported kernel schema version: {schema_version}")
     if request_minor > supported_minor:
         raise ValueError(
-            f"Unsupported kernel schema version: {schema_version}. "
-            f"Supported version is {KERNEL_SCHEMA_VERSION}",
+            f"Unsupported kernel schema version: {schema_version}. Supported version is {KERNEL_SCHEMA_VERSION}",
         )
     return schema_version
 
@@ -459,10 +450,7 @@ def list_kernel_operations() -> tuple[str, ...]:
 
 def discover_models() -> KernelDiscoveryResponse:
     """Return machine-readable discovery metadata for canonical model families."""
-    records = tuple(
-        KernelDiscoveryRecord.from_capability(capability)
-        for capability in get_model_registry().values()
-    )
+    records = tuple(KernelDiscoveryRecord.from_capability(capability) for capability in get_model_registry().values())
     return KernelDiscoveryResponse(models=records)
 
 
@@ -490,7 +478,9 @@ def _resolve_model_capability(model_key: str) -> ModelCapability:
         raise KeyError(f"Unknown model key: {model_key}") from exc
 
 
-def _build_model_instance(model_key: str, constructor_kwargs: Mapping[str, Any] | None = None) -> tuple[ModelCapability, Any]:
+def _build_model_instance(
+    model_key: str, constructor_kwargs: Mapping[str, Any] | None = None
+) -> tuple[ModelCapability, Any]:
     capability = _resolve_model_capability(model_key)
     model_cls = _resolve_model_class(capability.import_path)
     model = model_cls(**_section_mapping(constructor_kwargs))
@@ -694,7 +684,9 @@ def _build_diagnostics_contract(
         )
         residual_analysis = None
 
-    support_level = "supported" if residual_analysis is not None and uncertainty.support_level == "supported" else "partial"
+    support_level = (
+        "supported" if residual_analysis is not None and uncertainty.support_level == "supported" else "partial"
+    )
     return DiagnosticsContract(
         metrics=_compute_metrics(observed, predicted, len(model.param_names) + 1),
         residuals=residuals_flat,
@@ -736,7 +728,9 @@ def _extract_model_state(
         if isinstance(request.payload.get("model_kwargs"), Mapping)
         else request.payload.get("constructor_kwargs")
         if isinstance(request.payload.get("constructor_kwargs"), Mapping)
-        else state.get("constructor_kwargs") if isinstance(state, Mapping) else {},
+        else state.get("constructor_kwargs")
+        if isinstance(state, Mapping)
+        else {},
     )
 
     capability, model = _build_model_instance(request.model_key or "", constructor_kwargs)
@@ -802,9 +796,13 @@ def fit_model(request: KernelRequest) -> KernelResponse:
             if isinstance(request.payload.get("constructor_kwargs"), Mapping)
             else None,
         )
-        fit_options = _section_mapping(request.payload.get("fit_options") if isinstance(request.payload.get("fit_options"), Mapping) else None)
+        fit_options = _section_mapping(
+            request.payload.get("fit_options") if isinstance(request.payload.get("fit_options"), Mapping) else None
+        )
         fitter_options = _section_mapping(
-            request.payload.get("fitter_options") if isinstance(request.payload.get("fitter_options"), Mapping) else None,
+            request.payload.get("fitter_options")
+            if isinstance(request.payload.get("fitter_options"), Mapping)
+            else None,
         )
 
         capability, model = _build_model_instance(request.model_key or "", model_kwargs)
@@ -879,7 +877,11 @@ def predict_model(request: KernelRequest) -> KernelResponse:
         return _kernel_success_response(
             request.operation,
             payload,
-            metadata={"model_key": request.model_key, "family": capability.family, "model_name": model.__class__.__name__},
+            metadata={
+                "model_key": request.model_key,
+                "family": capability.family,
+                "model_name": model.__class__.__name__,
+            },
         )
     except Exception as exc:
         return _kernel_error_response(
@@ -902,7 +904,11 @@ def simulate_model(request: KernelRequest) -> KernelResponse:
         return _kernel_success_response(
             request.operation,
             payload,
-            metadata={"model_key": request.model_key, "family": capability.family, "model_name": model.__class__.__name__},
+            metadata={
+                "model_key": request.model_key,
+                "family": capability.family,
+                "model_name": model.__class__.__name__,
+            },
         )
     except Exception as exc:
         return _kernel_error_response(
@@ -919,7 +925,11 @@ def summarize_model(request: KernelRequest) -> KernelResponse:
         capability, model, inputs, constructor_kwargs = _extract_model_state(request)
         state = _request_section(request, "state")
         time = _extract_time(inputs) if "time" in inputs or "t" in inputs else None
-        observed = _extract_observed(inputs) if any(key in inputs for key in ("observed", "y", "values", "adoption", "share")) else None
+        observed = (
+            _extract_observed(inputs)
+            if any(key in inputs for key in ("observed", "y", "values", "adoption", "share"))
+            else None
+        )
 
         diagnostics: DiagnosticsContract | None = None
         if time is not None and observed is not None:
@@ -953,7 +963,11 @@ def summarize_model(request: KernelRequest) -> KernelResponse:
         return _kernel_success_response(
             request.operation,
             result,
-            metadata={"model_key": request.model_key, "family": capability.family, "model_name": model.__class__.__name__},
+            metadata={
+                "model_key": request.model_key,
+                "family": capability.family,
+                "model_name": model.__class__.__name__,
+            },
         )
     except Exception as exc:
         return _kernel_error_response(
@@ -987,11 +1001,19 @@ def diagnose_model(request: KernelRequest) -> KernelResponse:
                 "state": _serialize_model_state(
                     request.model_key or "",
                     model,
-                    constructor_kwargs=_section_mapping(state.get("constructor_kwargs")) if isinstance(state, Mapping) else None,
-                    predict_kwargs=_section_mapping(state.get("predict_kwargs")) if isinstance(state, Mapping) else None,
+                    constructor_kwargs=_section_mapping(state.get("constructor_kwargs"))
+                    if isinstance(state, Mapping)
+                    else None,
+                    predict_kwargs=_section_mapping(state.get("predict_kwargs"))
+                    if isinstance(state, Mapping)
+                    else None,
                 ),
             },
-            metadata={"model_key": request.model_key, "family": capability.family, "model_name": model.__class__.__name__},
+            metadata={
+                "model_key": request.model_key,
+                "family": capability.family,
+                "model_name": model.__class__.__name__,
+            },
         )
     except Exception as exc:
         return _kernel_error_response(

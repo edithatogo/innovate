@@ -1,15 +1,15 @@
-Welcome to innovate's documentation!
-====================================
+Legacy documentation entry point
+=================================
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+The canonical docs have moved to ``docs/source/``.
 
-   modules
+Please use:
 
-Indices and tables
-==================
+* :doc:`../README`
+* :doc:`source/index`
+* :doc:`source/bindings`
+* :doc:`architecture_principles`
+* :doc:`architecture_modernization_roadmap`
+* :doc:`adr/index`
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+This file remains only for compatibility with older links.

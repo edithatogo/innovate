@@ -10,6 +10,7 @@ faulthandler.enable()
 print("Faulthandler enabled for all tests.")
 print("This will help identify if segfaults are from your code or dependencies.")
 
+
 @pytest.fixture
 def network_diffusion_scenario():
     """Representative network spillover data for diffusion tests."""

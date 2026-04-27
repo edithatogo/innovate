@@ -21,7 +21,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 ---
 
 - [x] **Track: Quality Gates and Release Hardening**
-  *Link: [./tracks/quality_gates_release_20260415/](./tracks/quality_gates_release_20260415/)*
+  *Link: [./archive/quality_gates_release_20260415/](./archive/quality_gates_release_20260415/)*
 
 ---
 
@@ -87,3 +87,18 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Arrow Interchange and Schema Layer** *(Completed)*
   *Link: [./archive/arrow_interchange_schema_20260416/](./archive/arrow_interchange_schema_20260416/)*
+
+---
+
+- [x] **Track: Rust Core Kernel Roadmap and C# Binding Foundation** *(Completed)*
+  *Link: [./archive/rust_core_kernel_20260428/](./archive/rust_core_kernel_20260428/)*
+
+---
+
+- [x] **Track: Rust-Native Discovery Metadata** *(Completed)*
+  *Link: [./archive/rust_native_discovery_20260428/](./archive/rust_native_discovery_20260428/)*
+
+---
+
+- [x] **Track: Binding Publication and Multi-Language CI** *(Completed)*
+  *Link: [./archive/binding_publication_ci_20260428/](./archive/binding_publication_ci_20260428/)*

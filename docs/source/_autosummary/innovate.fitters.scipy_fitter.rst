@@ -13,7 +13,13 @@
 
    .. autosummary::
    
+      analyze_residuals
       curve_fit
+      dataclass
+      differential_evolution
+      field
+      least_squares
+      minimize
    
    
 
@@ -24,9 +30,13 @@
    .. autosummary::
       :template: autosummary/class.rst
    
+      DiagnosticsWarning
       DiffusionModel
+      FitDiagnostics
       MultiProductDiffusionModel
       ScipyFitter
+      Sequence
+      UncertaintySummary
    
    
 

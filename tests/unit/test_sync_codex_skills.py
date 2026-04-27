@@ -58,5 +58,9 @@ def test_sync_skills_copies_nested_files(tmp_path: Path):
     installed = module.sync_skills(source_root, destination_root)
 
     assert installed == ["conductor-review"]
-    assert (destination_root / "conductor-review" / "SKILL.md").read_text(encoding="utf-8") == "name: conductor-review\n"
-    assert (destination_root / "conductor-review" / "references" / "notes.txt").read_text(encoding="utf-8") == "reference material\n"
+    assert (destination_root / "conductor-review" / "SKILL.md").read_text(
+        encoding="utf-8"
+    ) == "name: conductor-review\n"
+    assert (destination_root / "conductor-review" / "references" / "notes.txt").read_text(
+        encoding="utf-8"
+    ) == "reference material\n"

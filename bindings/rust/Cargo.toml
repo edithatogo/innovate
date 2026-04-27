@@ -4,6 +4,9 @@ version = "0.1.0"
 edition = "2021"
 license = "MIT"
 description = "Rust bindings over the Innovate functional kernel"
+homepage = "https://github.com/edithatogo/innovate"
+repository = "https://github.com/edithatogo/innovate"
+readme = "README.md"
 
 [lib]
 name = "innovate_rust"

@@ -47,14 +47,20 @@ Stable surfaces `MUST` be versioned and documented, provisional surfaces `SHOULD
 
 Infrastructure changes `SHOULD` be adopted only when they improve portability, maintainability, or correctness in addition to raw speed. Rewrites motivated solely by novelty or benchmark fashion `SHOULD NOT` displace working interfaces without clear lifecycle and migration benefits.
 
+### 9. Rust Core Trajectory
+
+Rust `SHOULD` be treated as the strategic long-term core runtime for performance-critical and portability-critical kernel execution. Rust-backed components `MUST` remain behind the stable functional kernel contract, `MUST` preserve Python reference semantics until parity tests promote them, and `MUST NOT` create a second public API that bypasses schema compatibility.
+
 ## Immediate Implications
 
 - The durable technical foundation is `Array API + Arrow`, not `XLA` as a public surface.
 - The reference numerical backend remains NumPy/SciPy.
 - JAX remains an accelerator and advanced-inference option, not the universal execution contract.
 - The tabular strategy is `pandas + PyArrow` first, with selective Polars adoption at ingestion and analytics edges only.
+- Rust is the long-term core runtime direction, but Python remains the ergonomic reference interface.
 
 ## Related Documents
 
 - [Architecture Modernization Roadmap](./architecture_modernization_roadmap.md)
 - [ADR Index](./adr/index.md)
+- [ADR 0004: Core API, Bindings, and Rust Core Trajectory](./adr/0004-core-api-bindings-and-rust-core-trajectory.md)

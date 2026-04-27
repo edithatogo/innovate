@@ -26,6 +26,7 @@
    
       Any
       LockInModel
+      Sequence
    
    
 

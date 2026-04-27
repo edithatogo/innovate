@@ -7,18 +7,19 @@ from innovate.base.base import DiffusionModel
 
 
 def categorize_adopters(model: DiffusionModel, t: Sequence[float]) -> pd.DataFrame:
-    """:no-index:
+    """Categorize adopters for each time point.
 
-    Categorizes adopters based on the fitted diffusion model.
-
-    Args:
-    ----
-        model: A fitted diffusion model.
-        t: A sequence of time points.
+    Parameters
+    ----------
+    model
+        A fitted diffusion model.
+    t
+        A sequence of time points.
 
     Returns
     -------
-        A pandas DataFrame with the adopter categories for each time point.
+    pandas.DataFrame
+        The adopter categories for each time point.
     """
     adoption_rate = model.predict_adoption_rate(t)
 

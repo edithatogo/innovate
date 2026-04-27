@@ -27,6 +27,7 @@
       ABC
       Any
       DiffusionModel
+      Sequence
       TypeVar
    
    

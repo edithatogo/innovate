@@ -8,6 +8,7 @@
 
 
 
+
    .. rubric:: Functions
 
    .. autosummary::
@@ -24,11 +25,3 @@
       :template: autosummary/class.rst
 
       Sequence
-
-
-
-
-
-
-
-

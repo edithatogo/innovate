@@ -8,6 +8,7 @@
 
 
 
+
    .. rubric:: Functions
 
    .. autosummary::
@@ -32,7 +33,3 @@
       DiffusionModel
       DualInfluenceGrowth
       Sequence
-
-
-
-

@@ -1,6 +1,9 @@
 innovate.diffuse package
 ========================
 
+The public diffusion API is documented on the submodule pages below to avoid
+duplicating the same objects at the package level.
+
 Submodules
 ----------
 
@@ -10,11 +13,3 @@ Submodules
    innovate.diffuse.bass
    innovate.diffuse.gompertz
    innovate.diffuse.logistic
-
-Module contents
----------------
-
-.. automodule:: innovate.diffuse
-   :members:
-   :undoc-members:
-   :show-inheritance:

@@ -1,14 +1,21 @@
 KERNEL_SCHEMA_VERSION <- "1.0"
 
 kernel_repo_root <- function() {
-  candidates <- c(
-    file.path(getwd(), "innovate"),
-    getwd()
-  )
+  for (start in normalizePath(c(getwd(), file.path(getwd(), "innovate")), mustWork = FALSE)) {
+    candidate <- start
+    repeat {
+      if (
+        dir.exists(file.path(candidate, "src")) &&
+          file.exists(file.path(candidate, "bindings", "r", "DESCRIPTION"))
+      ) {
+        return(candidate)
+      }
 
-  for (candidate in candidates) {
-    if (dir.exists(file.path(candidate, "src"))) {
-      return(normalizePath(candidate))
+      parent <- dirname(candidate)
+      if (identical(parent, candidate)) {
+        break
+      }
+      candidate <- parent
     }
   }
 

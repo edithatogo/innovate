@@ -130,4 +130,3 @@ def test_latent_process_and_regime_switching_workflows_fit_predict_simulate():
     assert regime_summary.family == "regime_switching"
     assert regime_summary.details["regime_count"] >= 1
     assert regime_summary.details["changepoint_index"] >= 0
-

@@ -15,19 +15,24 @@ def plot_network_diffusion(
 ):
     """Plots snapshots of a network diffusion process over time.
 
-    Args:
-    ----
-        graph: The networkx graph representing the network.
-        node_states_over_time: A list of dictionaries, where each dictionary
-                               represents the state of nodes at a given time step.
-                               Keys are node IDs, values are their states (e.g., True/False for adopted/not adopted).
-        title: The base title for the plots.
-        node_color_map: A dictionary mapping node states to colors.
-        pos: Optional. A dictionary of node positions for consistent layout.
-             If None, a spring layout will be computed.
-        snapshot_interval: How often to save/display a snapshot (e.g., 1 for every step).
-        save_path_prefix: Optional. If provided, plots will be saved as
-                          '<save_path_prefix>_step_<step_number>.png'.
+    Parameters
+    ----------
+    graph : nx.Graph
+        The NetworkX graph representing the network.
+    node_states_over_time : list[dict[Any, Any]]
+        State snapshots for each time step. Keys are node IDs and values are
+        their states, for example adopted or not adopted.
+    title : str, default="Network Diffusion"
+        The base title for the plots.
+    node_color_map : dict[Any, str] | None, optional
+        Mapping from node states to colors.
+    pos : dict[Any, Any] | None, optional
+        Node positions for a consistent layout. If omitted, a spring layout is
+        computed.
+    snapshot_interval : int, default=1
+        How often to save or display a snapshot.
+    save_path_prefix : str | None, optional
+        If provided, plots are saved as ``"<save_path_prefix>_step_<step>.png"``.
     """
     if node_color_map is None:
         node_color_map = {False: "skyblue", True: "red"}

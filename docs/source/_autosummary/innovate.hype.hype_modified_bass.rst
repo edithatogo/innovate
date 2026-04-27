@@ -21,6 +21,7 @@
       BassModel
       HypeCycleModel
       HypeModifiedBassModel
+      Sequence
    
    
 

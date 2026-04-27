@@ -26,6 +26,7 @@
       :template: autosummary/class.rst
    
       HypeCycleModel
+      Sequence
       ndarray
    
    

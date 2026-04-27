@@ -13,6 +13,7 @@
 
    .. autosummary::
    
+      get_backend_capability
       use_backend
    
    
@@ -24,7 +25,7 @@
    .. autosummary::
       :template: autosummary/class.rst
    
-      JaxBackend
+      Any
       NumPyBackend
    
    

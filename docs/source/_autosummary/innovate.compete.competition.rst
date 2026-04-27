@@ -20,6 +20,7 @@
    
       DiffusionModel
       MultiProductDiffusionModel
+      Sequence
    
    
 

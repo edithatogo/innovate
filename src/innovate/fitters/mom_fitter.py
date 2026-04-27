@@ -10,18 +10,7 @@ def estimate_bass_mom(
     t: Sequence[float],
     y: Sequence[float],
 ) -> tuple[float, float, float]:
-    """Estimates the parameters (p, q, m) of the Bass Diffusion Model using the Method of Moments.
-    This implementation uses a linear regression approach based on incremental adoptions.
-
-    Args:
-    ----
-        t: A sequence of time points.
-        y: A sequence of cumulative adoptions corresponding to the time points.
-
-    Returns
-    -------
-        A tuple (p, q, m) representing the estimated parameters.
-    """
+    """Estimate Bass parameters from adoption data using method-of-moments regression."""
     if len(t) != len(y) or len(t) < 3:
         raise ValueError(
             "Input sequences t and y must have the same length and at least 3 data points.",
@@ -115,9 +104,7 @@ def estimate_bass_mom(
 
 
 class MoMFitter:
-    """Fitter for the Bass Diffusion Model using the Method of Moments (MoM).
-    This fitter is specifically designed for the BassModel.
-    """
+    """Fit the Bass model with a method-of-moments estimator."""
 
     def __init__(self):
         self._params: dict[str, float] = {}
@@ -128,18 +115,7 @@ class MoMFitter:
         t: Sequence[float],
         y: Sequence[float],
     ) -> DiffusionModel:
-        """Fits the BassModel using the Method of Moments.
-
-        Args:
-        ----
-            model: An instance of BassModel.
-            t: Time points.
-            y: Cumulative adoption data.
-
-        Returns
-        -------
-            The fitted BassModel instance.
-        """
+        """Fit the Bass model using method-of-moments regression."""
         # Ensure the model is a BassModel instance
         from innovate.diffuse.bass import (
             BassModel,

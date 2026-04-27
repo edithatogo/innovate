@@ -14,6 +14,7 @@
    .. autosummary::
    
       acf
+      build_diagnostics_contract
       calculate_aic
       calculate_bic
       calculate_mae
@@ -44,6 +45,7 @@
    
       Any
       DiffusionModel
+      Sequence
    
    
 

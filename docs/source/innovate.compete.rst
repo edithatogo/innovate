@@ -10,10 +10,4 @@ Submodules
    innovate.compete.competition
    innovate.compete.lotka_volterra
 
-Module contents
----------------
-
-.. automodule:: innovate.compete
-   :members:
-   :undoc-members:
-   :show-inheritance:
+Package contents are documented on the submodule pages above.
