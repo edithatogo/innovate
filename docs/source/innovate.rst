@@ -10,6 +10,7 @@ Read next
 - ``docs/source/index.rst`` for the canonical docs landing page
 - ``docs/source/tutorials_comprehensive.rst`` for workflow-oriented guides
 - ``docs/source/bindings.rst`` for language bindings
+- ``docs/source/innovate.benchmarks.rst`` for benchmark API helpers
 - ``docs/source/innovate.kernel.rst`` for the contract-first kernel API
 - ``docs/source/innovate.arrow_interchange.rst`` for the interchange boundary
 - ``docs/source/innovate.plugins.rst`` for plugin extension points
