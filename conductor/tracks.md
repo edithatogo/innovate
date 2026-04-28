@@ -102,3 +102,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Binding Publication and Multi-Language CI** *(Completed)*
   *Link: [./archive/binding_publication_ci_20260428/](./archive/binding_publication_ci_20260428/)*
+
+---
+
+- [~] **Track: Rust Core Summary and Diagnostics Migration**
+  *Link: [./tracks/rust_core_summary_diagnostics_20260428/](./tracks/rust_core_summary_diagnostics_20260428/)*

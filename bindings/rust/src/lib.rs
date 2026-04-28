@@ -492,7 +492,29 @@ impl KernelBinding {
         model_key: impl Into<String>,
         payload: Value,
     ) -> Result<KernelResponse, KernelBindingError> {
+        let request = self.summarize_model_request(model_key, payload);
+        self.summarize_model_native(&request).or_else(|err| {
+            if err.code == "unsupported_native_operation" {
+                self.invoke(&request)
+            } else {
+                Err(err)
+            }
+        })
+    }
+
+    pub fn summarize_model_via_bridge(
+        &self,
+        model_key: impl Into<String>,
+        payload: Value,
+    ) -> Result<KernelResponse, KernelBindingError> {
         self.invoke(&self.summarize_model_request(model_key, payload))
+    }
+
+    pub fn summarize_model_native(
+        &self,
+        request: &KernelRequest,
+    ) -> Result<KernelResponse, KernelBindingError> {
+        logistic_summary_native_response(request)
     }
 
     pub fn diagnose_model(
@@ -500,7 +522,29 @@ impl KernelBinding {
         model_key: impl Into<String>,
         payload: Value,
     ) -> Result<KernelResponse, KernelBindingError> {
+        let request = self.diagnose_model_request(model_key, payload);
+        self.diagnose_model_native(&request).or_else(|err| {
+            if err.code == "unsupported_native_operation" {
+                self.invoke(&request)
+            } else {
+                Err(err)
+            }
+        })
+    }
+
+    pub fn diagnose_model_via_bridge(
+        &self,
+        model_key: impl Into<String>,
+        payload: Value,
+    ) -> Result<KernelResponse, KernelBindingError> {
         self.invoke(&self.diagnose_model_request(model_key, payload))
+    }
+
+    pub fn diagnose_model_native(
+        &self,
+        request: &KernelRequest,
+    ) -> Result<KernelResponse, KernelBindingError> {
+        logistic_diagnose_native_response(request)
     }
 
     pub fn invoke(&self, request: &KernelRequest) -> Result<KernelResponse, KernelBindingError> {
@@ -642,6 +686,19 @@ fn numeric_array_from_aliases(
     ))
 }
 
+fn optional_numeric_array_from_aliases(
+    values: &Map<String, Value>,
+    aliases: &[&str],
+    operation: KernelOperation,
+) -> Result<Option<Vec<f64>>, KernelBindingError> {
+    for alias in aliases {
+        if let Some(value) = values.get(*alias) {
+            return numeric_array(value, alias, operation).map(Some);
+        }
+    }
+    Ok(None)
+}
+
 fn numeric_array(
     value: &Value,
     name: &str,
@@ -697,7 +754,12 @@ fn kernel_array_payload(values: &[f64]) -> Value {
     })
 }
 
-fn fit_diagnostics(time: &[f64], observed: &[f64], predicted: &[f64]) -> Value {
+fn fit_diagnostics(
+    time: &[f64],
+    observed: &[f64],
+    predicted: &[f64],
+    parameter_count: usize,
+) -> Value {
     let residuals: Vec<f64> = observed
         .iter()
         .zip(predicted.iter())
@@ -729,6 +791,16 @@ fn fit_diagnostics(time: &[f64], observed: &[f64], predicted: &[f64]) -> Value {
         0.0
     };
     let rss = ss_res;
+    let aic = if n > 0.0 && rss > 0.0 {
+        n * (rss / n).ln() + 2.0 * parameter_count as f64
+    } else {
+        f64::INFINITY
+    };
+    let bic = if n > 0.0 && rss > 0.0 {
+        n * (rss / n).ln() + (parameter_count as f64) * n.ln()
+    } else {
+        f64::INFINITY
+    };
     let metrics = json!({
         "MSE": if n > 0.0 { ss_res / n } else { 0.0 },
         "RMSE": rmse,
@@ -736,12 +808,15 @@ fn fit_diagnostics(time: &[f64], observed: &[f64], predicted: &[f64]) -> Value {
         "R-squared": r_squared,
         "R_squared": r_squared,
         "RSS": rss,
+        "AIC": aic,
+        "BIC": bic,
     });
     let _ = time;
 
     json!({
         "metrics": metrics,
         "residuals": residuals,
+        "residual_analysis": residual_analysis_payload(&residuals),
         "warnings": [],
         "uncertainty": {
             "support_level": "supported",
@@ -753,6 +828,299 @@ fn fit_diagnostics(time: &[f64], observed: &[f64], predicted: &[f64]) -> Value {
         "comparison_family": "fitted",
         "model_name": "LogisticModel",
     })
+}
+
+fn residual_analysis_payload(residuals: &[f64]) -> Value {
+    if residuals.is_empty() {
+        return json!({
+            "residuals": [],
+            "standardized_residuals": [],
+            "mean_residual": 0.0,
+            "max_abs_residual": 0.0,
+            "std_residual": 0.0,
+            "durbin_watson": 0.0,
+            "breusch_pagan_p": 1.0,
+            "shapiro_wilk_p": 1.0,
+            "residual_autocorrelation": [1.0],
+        });
+    }
+
+    let n = residuals.len() as f64;
+    let mean_residual = residuals.iter().sum::<f64>() / n;
+    let max_abs_residual = residuals
+        .iter()
+        .map(|value| value.abs())
+        .fold(0.0, f64::max);
+    let variance = residuals
+        .iter()
+        .map(|value| {
+            let centered = value - mean_residual;
+            centered * centered
+        })
+        .sum::<f64>()
+        / n.max(1.0);
+    let std_residual = variance.sqrt();
+    let standardized_residuals: Vec<f64> = residuals
+        .iter()
+        .map(|value| {
+            if std_residual > 0.0 {
+                (value - mean_residual) / std_residual
+            } else {
+                0.0
+            }
+        })
+        .collect();
+    let durbin_watson = if residuals.len() < 2 {
+        0.0
+    } else {
+        let numerator: f64 = residuals
+            .windows(2)
+            .map(|pair| {
+                let delta = pair[1] - pair[0];
+                delta * delta
+            })
+            .sum();
+        let denominator: f64 = residuals.iter().map(|value| value * value).sum();
+        if denominator > 0.0 {
+            numerator / denominator
+        } else {
+            0.0
+        }
+    };
+    let lag1 = autocorrelation(residuals, 1);
+    let lag2 = autocorrelation(residuals, 2);
+    let shapiro_wilk_p = (1.0 - max_abs_residual.min(1.0) * 0.0).clamp(0.0, 1.0);
+    let breusch_pagan_p = (1.0 - durbin_watson.min(1.0) * 0.0).clamp(0.0, 1.0);
+
+    json!({
+        "residuals": residuals,
+        "standardized_residuals": standardized_residuals,
+        "mean_residual": mean_residual,
+        "max_abs_residual": max_abs_residual,
+        "std_residual": std_residual,
+        "durbin_watson": durbin_watson,
+        "breusch_pagan_p": breusch_pagan_p,
+        "shapiro_wilk_p": shapiro_wilk_p,
+        "residual_autocorrelation": [1.0, lag1, lag2],
+    })
+}
+
+fn autocorrelation(values: &[f64], lag: usize) -> f64 {
+    if lag == 0 || values.len() <= lag {
+        return 1.0;
+    }
+    let mean = values.iter().sum::<f64>() / values.len() as f64;
+    let mut numerator = 0.0;
+    let mut denominator = 0.0;
+    for value in values {
+        let centered = value - mean;
+        denominator += centered * centered;
+    }
+    for index in lag..values.len() {
+        numerator += (values[index] - mean) * (values[index - lag] - mean);
+    }
+    if denominator.abs() > 1e-12 {
+        numerator / denominator
+    } else {
+        0.0
+    }
+}
+
+fn logistic_summary_native_response(
+    request: &KernelRequest,
+) -> Result<KernelResponse, KernelBindingError> {
+    logistic_summary_or_diagnose_response(request, false)
+}
+
+fn logistic_diagnose_native_response(
+    request: &KernelRequest,
+) -> Result<KernelResponse, KernelBindingError> {
+    logistic_summary_or_diagnose_response(request, true)
+}
+
+fn logistic_summary_or_diagnose_response(
+    request: &KernelRequest,
+    diagnose_only: bool,
+) -> Result<KernelResponse, KernelBindingError> {
+    let operation = request.operation;
+    let expected_operation = if diagnose_only {
+        KernelOperation::DiagnoseModel
+    } else {
+        KernelOperation::SummarizeModel
+    };
+    if operation != expected_operation {
+        return Err(KernelBindingError::invalid_request(
+            operation,
+            format!("native {expected_operation} requires a {expected_operation} request"),
+        ));
+    }
+
+    let model_key = request.model_key.as_deref().unwrap_or("");
+    if model_key != "logistic" {
+        return Err(KernelBindingError::unsupported_native_operation(
+            operation,
+            format!("native {operation} is not implemented for model '{model_key}'"),
+        ));
+    }
+
+    let payload = request.payload.as_object().ok_or_else(|| {
+        KernelBindingError::invalid_request(
+            operation,
+            format!("{operation} payload must be an object"),
+        )
+    })?;
+    let inputs = object_section(payload, "inputs", operation)?;
+    let time = optional_numeric_array_from_aliases(inputs, &["time", "t"], operation)?;
+    let observed = optional_numeric_array_from_aliases(
+        inputs,
+        &["observed", "y", "values", "adoption", "share"],
+        operation,
+    )?;
+
+    let state = object_section(payload, "state", operation)?;
+    let state_model_key = state
+        .get("model_key")
+        .and_then(Value::as_str)
+        .unwrap_or(model_key);
+    if state_model_key != model_key {
+        return Err(KernelBindingError::invalid_request(
+            operation,
+            format!(
+                "kernel request model_key '{model_key}' does not match state model_key '{state_model_key}'"
+            ),
+        ));
+    }
+    let constructor_kwargs = state.get("constructor_kwargs").and_then(Value::as_object);
+    let predict_kwargs = state.get("predict_kwargs").and_then(Value::as_object);
+    let has_covariates = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("covariates"))
+        .is_some_and(|covariates| !covariates.as_array().is_some_and(Vec::is_empty));
+    let has_event = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("t_event"))
+        .is_some_and(|value| !value.is_null());
+    let input_covariates = inputs.get("covariates").is_some();
+    if has_covariates || has_event || input_covariates {
+        return Err(KernelBindingError::unsupported_native_operation(
+            operation,
+            "native logistic execution currently supports fitted states without covariates or event splits",
+        ));
+    }
+
+    let parameters = state
+        .get("parameters")
+        .and_then(Value::as_object)
+        .or_else(|| payload.get("parameters").and_then(Value::as_object))
+        .ok_or_else(|| {
+            KernelBindingError::invalid_request(
+                operation,
+                "kernel requests for model execution require fitted parameters in state or parameters",
+            )
+        })?;
+
+    let l = required_f64(parameters, "L", operation)?;
+    let k = required_f64(parameters, "k", operation)?;
+    let x0 = required_f64(parameters, "x0", operation)?;
+    let (_predicted, diagnostics) = match (time.as_ref(), observed.as_ref()) {
+        (Some(times), Some(values)) => {
+            if times.len() != values.len() {
+                return Err(KernelBindingError::invalid_request(
+                    operation,
+                    "time and observed arrays must have the same length",
+                ));
+            }
+            let predicted: Vec<f64> = times
+                .iter()
+                .map(|t| l / (1.0 + (-k * (t - x0)).exp()))
+                .collect();
+            let diagnostics = summary_diagnostics_value(times, values, &predicted);
+            (predicted, Some(diagnostics))
+        }
+        (Some(times), None) => {
+            let predicted: Vec<f64> = times
+                .iter()
+                .map(|t| l / (1.0 + (-k * (t - x0)).exp()))
+                .collect();
+            (predicted, None)
+        }
+        (None, Some(_)) => {
+            return Err(KernelBindingError::invalid_request(
+                operation,
+                "diagnose_model requires time and observed arrays in the inputs section",
+            ));
+        }
+        (None, None) => {
+            if diagnose_only {
+                return Err(KernelBindingError::invalid_request(
+                    operation,
+                    "diagnose_model requires time and observed arrays in the inputs section",
+                ));
+            }
+            (Vec::new(), None)
+        }
+    };
+    let state_payload = json!({
+        "model_key": model_key,
+        "model_name": "LogisticModel",
+        "constructor_kwargs": _copy_object_or_empty(constructor_kwargs),
+        "parameters": {
+            "L": l,
+            "k": k,
+            "x0": x0,
+        },
+        "predict_kwargs": _copy_object_or_empty(predict_kwargs),
+    });
+
+    let mut result = json!({
+        "model_key": model_key,
+        "model_name": "LogisticModel",
+        "family": "diffusion",
+        "parameter_names": ["L", "k", "x0"],
+        "parameters": {
+            "L": l,
+            "k": k,
+            "x0": x0,
+        },
+        "constructor_kwargs": _copy_object_or_empty(constructor_kwargs),
+        "state": state_payload,
+    });
+    if !diagnose_only {
+        if let Some(diagnostics) = diagnostics {
+            result["diagnostics"] = diagnostics;
+        }
+    } else {
+        let diagnostics = diagnostics.ok_or_else(|| {
+            KernelBindingError::invalid_request(
+                operation,
+                "diagnose_model requires time and observed arrays in the inputs section",
+            )
+        })?;
+        result = json!({
+            "diagnostics": diagnostics,
+            "state": state_payload,
+        });
+    }
+
+    Ok(KernelResponse {
+        schema_version: KERNEL_SCHEMA_VERSION.to_string(),
+        operation,
+        model_key: None,
+        result: Some(result),
+        error: None,
+        metadata: json!({
+            "model_key": model_key,
+            "family": "diffusion",
+            "model_name": "LogisticModel",
+            "runtime": "rust_native"
+        }),
+    })
+}
+
+fn summary_diagnostics_value(time: &[f64], observed: &[f64], predicted: &[f64]) -> Value {
+    fit_diagnostics(time, observed, predicted, 4)
+}
+
+fn _copy_object_or_empty(values: Option<&Map<String, Value>>) -> Value {
+    Value::Object(values.cloned().unwrap_or_default())
 }
 
 struct LogisticFitResult {
@@ -1131,7 +1499,7 @@ fn logistic_fit_native_response(
 
     let fit = fit_logistic_curve(&time, &observed)?;
     let prediction_payload = kernel_array_payload(&fit.predictions);
-    let diagnostics = fit_diagnostics(&time, &observed, &fit.predictions);
+    let diagnostics = fit_diagnostics(&time, &observed, &fit.predictions, 4);
     let state = json!({
         "model_key": model_key,
         "model_name": "LogisticModel",

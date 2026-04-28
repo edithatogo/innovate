@@ -7,7 +7,9 @@ fitted state payloads now run through a Rust-native path with Python bridge
 fallback for unsupported execution shapes. `simulate_model` follows the same
 native logistic slice and bridge fallback. `fit_model` now has a native
 logistic slice as well, with Python bridge fallback for unsupported model
-families.
+families. `summarize_model` and `diagnose_model` also have native logistic
+slices for fitted-state payloads with the same bridge fallback for other
+models.
 
 ## Layout
 
@@ -30,8 +32,8 @@ families.
 - `tests/native_discovery.rs` verifies that Rust-native discovery metadata
   matches the Python bridge response.
 - `tests/operations.rs` verifies Rust-native logistic prediction against the
-  Python bridge contract, verifies the same pattern for simulation and fitting,
-  and confirms fallback for non-native models.
+  Python bridge contract, verifies the same pattern for simulation, fitting,
+  summary, and diagnostics, and confirms fallback for non-native models.
 - `tests/end_to_end.rs` exercises the live Python bridge against a stable
   kernel model.
 - `tests/architecture.rs` verifies the package scaffold and bridge entrypoint.
@@ -45,6 +47,8 @@ families.
   execution path.
 - Simple fitted-state logistic `fit_model` requests use the same native
   execution path.
+- Simple fitted-state logistic `summarize_model` and `diagnose_model` requests
+  use the same native execution path.
 - Unsupported prediction shapes and other execution operations remain thin
   bridges over the shared Python kernel.
 - The repository `src/` tree must be available at runtime.
