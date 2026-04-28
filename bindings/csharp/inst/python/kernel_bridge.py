@@ -36,9 +36,7 @@ def main(argv: list[str]) -> int:
             "diagnose_model": kernel.diagnose_model,
         }
         response = (
-            dispatch[request.operation](request)
-            if request.operation != "discover_models"
-            else kernel.discover_models()
+            dispatch[request.operation](request) if request.operation != "discover_models" else kernel.discover_models()
         )
     except Exception as exc:  # pragma: no cover - defensive bridge fallback
         response = kernel.KernelResponse(
