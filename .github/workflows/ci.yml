@@ -192,6 +192,24 @@ jobs:
         working-directory: bindings/rust
         run: cargo test
 
+  rust-benchmarks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Check Rust benchmark harness compiles
+        working-directory: bindings/rust
+        run: cargo bench --bench native_kernel --no-run
+
   typescript-bindings:
     runs-on: ubuntu-latest
     steps:

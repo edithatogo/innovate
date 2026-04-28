@@ -32,3 +32,11 @@ def test_docs_toctrees_include_benchmarks() -> None:
 
     assert "innovate.benchmarks" in package_docs
     assert "tutorials/benchmark_workflows" in tutorials_docs
+
+
+def test_rust_benchmark_ci_job_is_documented() -> None:
+    """The CI workflow should validate the Rust benchmark harness compiles."""
+    workflow = Path(".github/workflows/ci.yml").read_text()
+
+    assert "rust-benchmarks" in workflow
+    assert "cargo bench --bench native_kernel --no-run" in workflow
