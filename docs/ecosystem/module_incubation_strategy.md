@@ -68,6 +68,24 @@ to connect through public APIs, versioned schemas, and portable artifacts.
 
 Pickle is not a portable ecosystem contract.
 
+### Core Artifact Shapes
+
+- `adoption_curve`: `scenario_id`, `intervention_id`, `time`, `adoption`,
+  `cumulative_adoption`, `population`, `segment`, `uncertainty_label`.
+- `uptake_trajectory`: `scenario_id`, `arm_id`, `time`, `uptake_rate`,
+  `reach`, `adherence`, `retention`, `uncertainty_label`.
+- `policy_spread_trace`: `policy_id`, `network_id`, `time`, `exposure`,
+  `adoption`, `coverage`, `segment`, `uncertainty_label`.
+- `network_diffusion_trace`: `network_id`, `node_id`, `edge_id`, `time`,
+  `activation`, `influence`, `peer_effect`, `uncertainty_label`.
+- `diagnostics_record`: `model_id`, `fit_metric`, `calibration_target`,
+  `residual_summary`, `convergence_status`, `package_version`, `created_at`.
+- `provenance_record`: `schema_version`, `source_model`, `source_commit`,
+  `software_version`, `seed`, `generated_at`.
+
+Tabular artifacts should default to Arrow or Parquet so sibling modules can
+consume them without Python object coupling.
+
 ## HEOML Alignment
 
 The future `heoml.extensions.innovate` namespace should cover:
@@ -82,6 +100,15 @@ The future `heoml.extensions.innovate` namespace should cover:
 
 The HEOML extension should reference stable `innovate` artifact schemas and
 public functional-kernel semantics, not private implementation classes.
+
+### Boundary Rule
+
+- Generic `innovate` artifacts are the portable runtime outputs for adoption,
+  diffusion, and diagnostics.
+- HEOML artifacts are wrappers or namespace mappings around those portable
+  outputs when a health-economic bundle needs a shared extension profile.
+- If an artifact cannot be represented without a private implementation object,
+  it does not belong in the ecosystem contract.
 
 ## Dependency Policy
 
@@ -113,3 +140,7 @@ public functional-kernel semantics, not private implementation classes.
   while HEOML is embedded, or a future standalone `heoml` repository.
 - Benchmark whether `mars` improves adoption-curve surrogate workflows before
   exposing it as a supported optional backend.
+- HEOR naming brainstorm: shortlist `calibrate`, `evidence`, `process`,
+  `report`, `registry`, `workflow`, `quality`, `engines`, and `heoml`; keep
+  PM4Py in the ecosystem-only process-mining bucket; require a CLI surface for
+  every future module and an explicit MCP decision where orchestration matters.

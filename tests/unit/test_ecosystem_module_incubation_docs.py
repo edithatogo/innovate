@@ -29,3 +29,22 @@ def test_ecosystem_module_incubation_docs_define_roles_and_non_goals() -> None:
     assert "pickle" in contract
     assert "mars core API" in contract
     assert "health-economic simulation or VOI engine" in contract
+
+
+def test_ecosystem_module_incubation_docs_define_artifacts_and_heoml_boundary() -> None:
+    """The docs should spell out the artifact groups and the HEOML boundary."""
+    strategy = Path("docs/ecosystem/module_incubation_strategy.md").read_text()
+    contract = Path("specs/ecosystem/README.md").read_text()
+
+    for token in (
+        "adoption_curve",
+        "uptake_trajectory",
+        "policy_spread_trace",
+        "network_diffusion_trace",
+        "diagnostics_record",
+        "provenance_record",
+        "Arrow or Parquet",
+        "HEOML artifacts are wrappers",
+        "portable base layer",
+    ):
+        assert token in strategy or token in contract

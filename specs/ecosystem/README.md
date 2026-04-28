@@ -31,3 +31,14 @@ Stable contracts should define:
 - dependency and optional-extra policy
 - diagnostics and provenance fields
 - deprecation and migration rules
+
+Expected artifact groups include:
+
+- adoption curves and uptake trajectories
+- policy-spread traces and network diffusion traces
+- diagnostics, calibration outputs, and provenance records
+- Arrow or Parquet tabular payloads plus JSON manifests and schemas
+
+HEOML alignment should treat `innovate` artifacts as the portable base layer
+and only add extension metadata when a health-economic bundle requires a shared
+namespace or cross-repo wrapper.

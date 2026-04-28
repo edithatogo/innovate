@@ -16,7 +16,7 @@
 
 ## Phase 2: Artifact And Extension Contracts
 
-- [ ] Task: Define `innovate` ecosystem artifacts.
+- [~] Task: Define `innovate` ecosystem artifacts.
     - [ ] Define adoption curves, uptake trajectories, policy-spread traces, network diffusion traces, and diagnostics.
     - [ ] Define parameter uncertainty, calibration, and provenance fields.
     - [ ] Align tabular artifacts with existing Arrow/Parquet interchange.
