@@ -18,7 +18,8 @@ def complementary_goods_data():
 
     y_true = model.predict(t, y0)
 
-    noise = np.random.normal(0, 0.01, y_true.shape)
+    rng = np.random.default_rng(0)
+    noise = rng.normal(0, 0.01, y_true.shape)
     y_noisy = np.clip(y_true + noise, 0, 1)
 
     return t, y_noisy, true_params
