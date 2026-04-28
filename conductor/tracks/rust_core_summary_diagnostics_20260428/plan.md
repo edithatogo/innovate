@@ -1,6 +1,6 @@
 # Implementation Plan: Rust Core Summary and Diagnostics Migration
 
-## Phase 1: Native Summary and Diagnostics Slice
+## Phase 1: Native Summary and Diagnostics Slice [checkpoint: fb2c89e]
 
 - [x] Task: Write failing Rust parity tests for native summarize and diagnose behavior
     - [x] Add tests for native logistic `summarize_model` parity against the Python bridge
