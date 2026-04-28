@@ -1,6 +1,6 @@
 # Ecosystem Module Incubation Plan
 
-## Phase 1: Role And Boundary Definition
+## Phase 1: Role And Boundary Definition [checkpoint: 1a3ae8a]
 
 - [x] Task: Document current ecosystem roles.
     - [x] Define `innovate` as the adoption and diffusion sibling.
