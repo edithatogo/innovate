@@ -20,11 +20,11 @@
     - [x] Define adoption curves, uptake trajectories, policy-spread traces, network diffusion traces, and diagnostics.
     - [x] Define parameter uncertainty, calibration, and provenance fields.
     - [x] Align tabular artifacts with existing Arrow/Parquet interchange.
-- [~] Task: Define HEOML extension alignment.
-    - [ ] Map adoption/diffusion artifacts to a future `heoml.extensions.innovate` namespace.
-    - [ ] Define when outputs are generic `innovate` artifacts versus HEOML health-economic extension artifacts.
-    - [ ] Keep the existing functional-kernel contract as the primary `innovate` execution contract.
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Artifact And Extension Contracts' (Protocol in workflow.md)
+- [x] Task: Define HEOML extension alignment.
+    - [x] Map adoption/diffusion artifacts to a future `heoml.extensions.innovate` namespace.
+    - [x] Define when outputs are generic `innovate` artifacts versus HEOML health-economic extension artifacts.
+    - [x] Keep the existing functional-kernel contract as the primary `innovate` execution contract.
+- [~] Task: Conductor - Automated Review and Checkpoint 'Artifact And Extension Contracts' (Protocol in workflow.md)
 
 ## Phase 3: Dependency And Promotion Policy
 
