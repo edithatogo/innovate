@@ -31,6 +31,9 @@ Stable contracts should define:
 - dependency and optional-extra policy
 - diagnostics and provenance fields
 - deprecation and migration rules
+- explicit promotion stages from documented to experimental to supported
+- the smoke CI, Renovate, security, and documentation gates needed for each
+  optional adapter
 
 Expected artifact groups include:
 
@@ -48,6 +51,13 @@ Namespace guidance:
 - keep `innovate` artifact names for repo-local consumers
 - use `heoml.extensions.innovate` for cross-repo HEOR bundles
 - preserve the same underlying tabular payload across both representations
+
+Dependency policy:
+
+- keep the base install free of sibling-project dependencies
+- expose adapters only through optional extras or equivalent explicit flags
+- require deterministic fixtures and smoke CI before promotion
+- require a compatibility matrix before an adapter is marked supported
 
 Current scaffolds:
 

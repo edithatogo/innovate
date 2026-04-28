@@ -129,6 +129,12 @@ public functional-kernel semantics, not private implementation classes.
   APIs and fixture contracts exist.
 - Require smoke CI, Renovate coverage, security checks, documentation, and a
   removal path for each optional adapter dependency.
+- Treat every optional adapter as disabled by default and load it only through
+  an explicit extra, plugin, or adapter flag.
+- Require a deterministic smoke fixture for each adapter before it can be
+  treated as more than a documented concept.
+- Require a compatibility matrix that names supported `innovate`, adapter, and
+  sibling-package versions before an integration is called supported.
 - Do not require changes to the `mars` core API. Add adapter logic in
   `innovate` or a future companion package if needed.
 
@@ -140,6 +146,27 @@ public functional-kernel semantics, not private implementation classes.
 4. Add cross-repo smoke CI and fixture validation.
 5. Promote only after version compatibility, docs, release notes, and
    deprecation policy are clear.
+
+### Promotion Stages
+
+- Documented: the integration is specified, but no runtime path ships yet.
+- Experimental: the adapter exists behind an optional extra and is exercised
+  by smoke CI and fixtures, but it may change without deprecation guarantees.
+- Supported: the adapter has version compatibility matrices, release notes,
+  deprecation policy, and an explicit removal path.
+
+### Required Gates
+
+- Optional extras must be explicit and narrow in scope.
+- Smoke CI must cover adapter import, fixture loading, and one end-to-end
+  representative call path.
+- Renovate or equivalent dependency automation must monitor the adapter
+  dependency set.
+- Security checks must cover the adapter package and its transitive runtime
+  dependencies.
+- Documentation must state the contract, the supported versions, and the
+  removal path.
+- Supported adapters must declare a compatibility matrix before promotion.
 
 ## Immediate Follow-Up
 

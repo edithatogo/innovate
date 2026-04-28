@@ -50,3 +50,45 @@ def test_ecosystem_module_incubation_docs_define_artifacts_and_heoml_boundary() 
         "Namespace Rule",
     ):
         assert token in strategy or token in contract
+
+
+def test_ecosystem_module_incubation_docs_define_dependency_policy_and_promotion() -> None:
+    """The docs should spell out the adapter gating and promotion ladder."""
+    strategy = Path("docs/ecosystem/module_incubation_strategy.md").read_text()
+    contract = Path("specs/ecosystem/README.md").read_text()
+
+    for token in (
+        "optional adapter",
+        "deterministic smoke fixture",
+        "compatibility matrix",
+        "documented",
+        "experimental",
+        "supported",
+        "smoke CI",
+        "Renovate",
+        "security checks",
+        "removal path",
+    ):
+        assert token in strategy
+
+    for token in (
+        "explicit promotion stages",
+        "smoke CI",
+        "Renovate",
+        "security",
+        "compatibility matrix",
+        "optional extras",
+    ):
+        assert token in contract
+
+
+def test_ecosystem_module_incubation_docs_update_planning_files() -> None:
+    """The governance docs should reference the ecosystem policy work."""
+    tracks = Path("conductor/tracks.md").read_text()
+    todo = Path("documents/todo.md").read_text()
+    changelog = Path("CHANGELOG.md").read_text()
+
+    assert "adapter promotion policy" in tracks
+    assert "optional extras, smoke CI, and compatibility matrices" in todo
+    assert "documented to experimental to supported" in todo
+    assert "ecosystem dependency and promotion policy notes" in changelog
