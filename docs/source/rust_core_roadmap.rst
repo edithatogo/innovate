@@ -82,3 +82,22 @@ C# should be added as a planned binding after the schema-compatibility and
 operation-dispatch rules are documented for the existing bindings. Its initial
 scope should match the other thin bindings: discovery, request construction,
 response conversion, error mapping, and schema drift checks.
+
+Benchmarking and profiling tooling
+----------------------------------
+
+The Rust migration should be supported by a native performance toolchain so
+benchmark gates and regressions can be evaluated on the Rust side instead of
+only through the Python harness. The next planned step is a dedicated Rust
+benchmark and profiling track that introduces a benchmark harness for native
+kernel paths, records benchmark results for the promoted slices, and provides a
+repeatable local profiling workflow for hot paths. The intended tooling path
+is criterion-based benchmarking together with a native profiling helper such
+as ``cargo-flamegraph``.
+
+This work should stay narrower than the Python testing stack:
+
+* use Rust-native benchmarking for the Rust core paths that matter most;
+* use a repeatable profiling workflow for hotspot analysis;
+* keep mutation testing as a later, lower-priority consideration rather than a
+  required Rust-side mirror of the Python tooling.

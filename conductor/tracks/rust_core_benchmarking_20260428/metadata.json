@@ -1,0 +1,8 @@
+{
+  "track_id": "rust_core_benchmarking_20260428",
+  "type": "feature",
+  "status": "in_progress",
+  "created_at": "2026-04-28T13:25:20Z",
+  "updated_at": "2026-04-28T13:25:20Z",
+  "description": "Rust core benchmarking and profiling tooling"
+}

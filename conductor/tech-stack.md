@@ -72,9 +72,11 @@
 - **hypothesis** — Property-based testing
 - **mutmut** — Mutation testing
 - **syrupy** — Snapshot testing
+- **criterion** — Rust benchmarking harness for native kernel paths
 
 ## Performance Profiling
 - **Scalene** — CPU, memory, and GPU profiler with per-line attribution
+- **cargo-flamegraph** — Rust profiling helper for native hot paths and regressions
 
 ## Security
 - **Bandit** — Security linting for Python code

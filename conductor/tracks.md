@@ -107,3 +107,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Rust Core Summary and Diagnostics Migration** *(Completed)*
   *Link: [./archive/rust_core_summary_diagnostics_20260428/](./archive/rust_core_summary_diagnostics_20260428/)*
+
+---
+
+- [~] **Track: Rust Core Benchmarking and Profiling Tooling**
+  *Link: [./tracks/rust_core_benchmarking_20260428/](./tracks/rust_core_benchmarking_20260428/)*
