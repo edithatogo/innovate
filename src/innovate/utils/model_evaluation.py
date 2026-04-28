@@ -1,5 +1,6 @@
 """Model evaluation helpers for fitted diffusion models."""
 
+import logging
 from collections.abc import Sequence
 from typing import Any
 
@@ -21,6 +22,8 @@ from .metrics import (
     calculate_rss,
     calculate_smape,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def model_aic(model: DiffusionModel, t: Sequence[float], y: Sequence[float]) -> float:
@@ -89,8 +92,9 @@ def compare_models(
     results = []
     for name, model in models.items():
         if not hasattr(model, "predict") or not callable(model.predict):
-            print(
-                f"Warning: Model '{name}' does not have a 'predict' method. Skipping.",
+            logger.warning(
+                "Model '%s' does not have a 'predict' method. Skipping.",
+                name,
             )
             continue
 
@@ -108,8 +112,8 @@ def compare_models(
             metrics["Warning Count"] = len(contract.warnings)
             results.append(metrics)
 
-        except Exception as e:
-            print(f"Error evaluating model '{name}': {e}. Skipping.")
+        except Exception:
+            logger.exception("Error evaluating model '%s'. Skipping.", name)
             continue
 
     if not results:

@@ -144,6 +144,26 @@ class TestDiagnosticsContract:
         assert comparison_df.loc["unsupported", "Warning Count"] >= 1
         assert "Parameters" in comparison_df.columns
 
+    def test_compare_models_logs_when_predict_is_missing(self, caplog) -> None:
+        """Model comparison should use logging for missing predict methods."""
+
+        class MissingPredictModel:
+            param_names: ClassVar[list[str]] = []
+            params_: ClassVar[dict[str, float]] = {}
+
+        caplog.set_level("WARNING", logger="innovate.utils.model_evaluation")
+
+        comparison_df = compare_models(
+            {"missing_predict": MissingPredictModel()},
+            [1.0, 2.0],
+            [1.0, 2.0],
+        )
+
+        assert comparison_df.empty
+        assert any(
+            "does not have a 'predict' method" in record.message for record in caplog.records
+        )
+
     def test_bootstrap_fitter_reports_explicit_unsupported_uncertainty(self) -> None:
         """Bootstrap fitters should surface an explicit unsupported uncertainty marker before fitting."""
         fitter = BootstrapFitter(n_bootstraps=3)
