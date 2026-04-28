@@ -2,7 +2,9 @@
 
 This crate provides a thin Rust-facing binding surface for the shared Innovate kernel.
 Model discovery metadata is available through a Rust-native path and is parity
-tested against the Python bridge. Model execution remains Python-backed.
+tested against the Python bridge. Simple logistic `predict_model` requests with
+fitted state payloads now run through a Rust-native path with Python bridge
+fallback for unsupported execution shapes.
 
 ## Layout
 
@@ -24,6 +26,8 @@ tested against the Python bridge. Model execution remains Python-backed.
   operation list against drift.
 - `tests/native_discovery.rs` verifies that Rust-native discovery metadata
   matches the Python bridge response.
+- `tests/operations.rs` verifies Rust-native logistic prediction against the
+  Python bridge contract and confirms fallback for non-native models.
 - `tests/end_to_end.rs` exercises the live Python bridge against a stable
   kernel model.
 - `tests/architecture.rs` verifies the package scaffold and bridge entrypoint.
@@ -31,7 +35,10 @@ tested against the Python bridge. Model execution remains Python-backed.
 ## Runtime expectations
 
 - The crate uses Rust-native metadata for `discover_models`.
-- Non-discovery operations remain thin bridges over the shared Python kernel.
+- Simple fitted-state logistic `predict_model` requests use Rust-native
+  execution.
+- Unsupported prediction shapes and other execution operations remain thin
+  bridges over the shared Python kernel.
 - The repository `src/` tree must be available at runtime.
 - `uv run python` is the default bridge launcher; override it with
   `INNOVATE_PYTHON_COMMAND` when needed.
@@ -39,8 +46,7 @@ tested against the Python bridge. Model execution remains Python-backed.
 ## Support boundaries
 
 - The package only wraps the stable kernel contract.
-- It does not reimplement diffusion semantics in Rust.
-- Rust-native discovery is metadata-only and must remain parity tested against
-  the Python capability registry.
+- Rust-native execution is intentionally narrow and must remain parity tested
+  against the Python reference semantics.
 - It is intended for local development and direct repository use, not registry
   publication.

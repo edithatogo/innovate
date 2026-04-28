@@ -22,13 +22,17 @@ The roadmap is governed by ADR 0004 and follows four rules:
 Candidate operations
 --------------------
 
-The first Rust-backed candidates should be stable, schema-driven operations
-whose behavior is already explicit in the functional kernel contract:
+The first Rust-backed candidates are stable, schema-driven operations whose
+behavior is already explicit in the functional kernel contract:
 
 * ``discover_models``: low-risk metadata discovery driven by the capability
-  registry and schema version.
+  registry and schema version. This now has a Rust-native path in the Rust
+  binding with parity tests against the Python bridge.
 * ``predict_model``: deterministic execution against fitted state payloads once
-  model-state schemas are stable.
+  model-state schemas are stable. The first implemented slice is Rust-native
+  logistic prediction for simple fitted states, with Python bridge fallback for
+  unsupported shapes such as covariates, event splits, and non-native model
+  families.
 * ``simulate_model``: deterministic or seeded simulation paths where payload
   shapes, dtypes, and error mapping can be verified without Python object
   identity.
