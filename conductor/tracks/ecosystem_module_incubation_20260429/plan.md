@@ -14,7 +14,7 @@
     - [x] Exclude changes to the `mars` core API.
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Role And Boundary Definition' (Protocol in workflow.md)
 
-## Phase 2: Artifact And Extension Contracts
+## Phase 2: Artifact And Extension Contracts [checkpoint: 5c424fb]
 
 - [x] Task: Define `innovate` ecosystem artifacts.
     - [x] Define adoption curves, uptake trajectories, policy-spread traces, network diffusion traces, and diagnostics.
@@ -24,7 +24,7 @@
     - [x] Map adoption/diffusion artifacts to a future `heoml.extensions.innovate` namespace.
     - [x] Define when outputs are generic `innovate` artifacts versus HEOML health-economic extension artifacts.
     - [x] Keep the existing functional-kernel contract as the primary `innovate` execution contract.
-- [~] Task: Conductor - Automated Review and Checkpoint 'Artifact And Extension Contracts' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Artifact And Extension Contracts' (Protocol in workflow.md)
 
 ## Phase 3: Dependency And Promotion Policy
 
