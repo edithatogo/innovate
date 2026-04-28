@@ -6,6 +6,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::time::{SystemTime, UNIX_EPOCH};
+use tracing::{debug, warn};
 
 pub const KERNEL_SCHEMA_VERSION: &str = "1.0";
 const DISCOVERY_MANIFEST_JSON: &str = include_str!("../inst/discovery_manifest.json");
@@ -405,6 +406,11 @@ impl KernelBinding {
         let request = self.fit_model_request(model_key, payload);
         self.fit_model_native(&request).or_else(|err| {
             if err.code == "unsupported_native_operation" {
+                debug!(
+                    operation = %request.operation,
+                    model_key = ?request.model_key,
+                    "native path unsupported, falling back to Python bridge",
+                );
                 self.invoke(&request)
             } else {
                 Err(err)
@@ -435,6 +441,11 @@ impl KernelBinding {
         let request = self.predict_model_request(model_key, payload);
         self.predict_model_native(&request).or_else(|err| {
             if err.code == "unsupported_native_operation" {
+                debug!(
+                    operation = %request.operation,
+                    model_key = ?request.model_key,
+                    "native path unsupported, falling back to Python bridge",
+                );
                 self.invoke(&request)
             } else {
                 Err(err)
@@ -465,6 +476,11 @@ impl KernelBinding {
         let request = self.simulate_model_request(model_key, payload);
         self.simulate_model_native(&request).or_else(|err| {
             if err.code == "unsupported_native_operation" {
+                debug!(
+                    operation = %request.operation,
+                    model_key = ?request.model_key,
+                    "native path unsupported, falling back to Python bridge",
+                );
                 self.invoke(&request)
             } else {
                 Err(err)
@@ -495,6 +511,11 @@ impl KernelBinding {
         let request = self.summarize_model_request(model_key, payload);
         self.summarize_model_native(&request).or_else(|err| {
             if err.code == "unsupported_native_operation" {
+                debug!(
+                    operation = %request.operation,
+                    model_key = ?request.model_key,
+                    "native path unsupported, falling back to Python bridge",
+                );
                 self.invoke(&request)
             } else {
                 Err(err)
@@ -525,6 +546,11 @@ impl KernelBinding {
         let request = self.diagnose_model_request(model_key, payload);
         self.diagnose_model_native(&request).or_else(|err| {
             if err.code == "unsupported_native_operation" {
+                debug!(
+                    operation = %request.operation,
+                    model_key = ?request.model_key,
+                    "native path unsupported, falling back to Python bridge",
+                );
                 self.invoke(&request)
             } else {
                 Err(err)
@@ -554,6 +580,10 @@ impl KernelBinding {
         let command = self.python_command_segments();
 
         if command.is_empty() {
+            warn!(
+                operation = %request.operation,
+                "bridge command is empty; request cannot be dispatched",
+            );
             return Err(KernelBindingError::bridge_command_failed(
                 "INNOVATE_PYTHON_COMMAND must not be empty",
             ));
@@ -580,6 +610,11 @@ impl KernelBinding {
             .env("PYTHONPATH", self.kernel_pythonpath())
             .status()
             .map_err(|err| {
+                warn!(
+                    operation = %request.operation,
+                    error = %err,
+                    "failed to launch kernel bridge",
+                );
                 KernelBindingError::bridge_command_failed(format!(
                     "failed to launch kernel bridge: {err}"
                 ))
@@ -588,6 +623,11 @@ impl KernelBinding {
         if !status.success() {
             let _ = fs::remove_file(&request_path);
             let _ = fs::remove_file(&response_path);
+            warn!(
+                operation = %request.operation,
+                status = %status,
+                "kernel bridge exited with a non-success status",
+            );
             return Err(KernelBindingError::bridge_command_failed(format!(
                 "kernel bridge exited with status {status}"
             )));

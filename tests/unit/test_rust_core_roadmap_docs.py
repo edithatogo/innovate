@@ -53,3 +53,12 @@ def test_architecture_docs_surface_rust_core_strategy() -> None:
     assert "ADR 0004" in architecture
     assert "Rust Core Trajectory" in principles
     assert "rust_core_roadmap" in index
+
+
+def test_rust_binding_docs_surface_tracing_observability() -> None:
+    """Rust binding docs should mention structured tracing on fallback paths."""
+    docs = Path("docs/source/innovate.rust_bindings.rst").read_text()
+
+    assert "tracing" in docs
+    assert "native paths fall back" in docs
+    assert "Python bridge fails" in docs

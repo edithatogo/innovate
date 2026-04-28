@@ -49,6 +49,8 @@ Runtime expectations
 
 - The crate remains thin and contract-driven.
 - `discover_models` uses Rust-native metadata.
+- The crate emits structured `tracing` events when native paths fall back or
+  the Python bridge fails.
 - `fit_model`, `predict_model`, `simulate_model`, `summarize_model`, and
   `diagnose_model` remain Python-backed.
 - The repository `src/` tree must be available at runtime.
