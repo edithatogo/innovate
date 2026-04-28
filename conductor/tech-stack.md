@@ -17,6 +17,9 @@
 
 ## Package Manager & Build
 - **uv** — Blazing-fast Python package manager and resolver (replaces pip)
+  - Python task orchestration remains `uv`-first; `nox` is intentionally
+    deferred unless the Python-only workflow grows enough to justify another
+    runner.
 - **setuptools** (>=61.0) — Package building and distribution (managed by uv)
 - **uv.lock** — Locked dependency versions for reproducible builds
 - **Node.js** (>=22) — Runtime for the TypeScript binding package and test harness

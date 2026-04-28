@@ -196,6 +196,11 @@ uv run ty check src/             # Type check
 uv run scalene src/innovate/     # Profile performance
 ```
 
+`uv` is the canonical Python runner for this repository. A `nox` layer is not
+part of the current workflow because the repo already spans multiple language
+toolchains and the Python task set is still compact enough to manage directly
+with `uv run`.
+
 ### Before Committing
 ```bash
 uv run ruff check . && uv run ruff format --check . && uv run ty check src/ && uv run pytest
