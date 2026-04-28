@@ -1,0 +1,19 @@
+Task: Ecosystem Module Incubation phase 1
+
+Summary:
+- Documented the current HEOR ecosystem roles for innovate, lifecourse, voiage, mars, and HEOML.
+- Added an explicit non-goals section covering sibling internals, pickle, and mars core API changes.
+- Added the first ecosystem contract outline under specs/ecosystem.
+- Added a docs guard test for the ecosystem strategy and contract outline.
+
+Files:
+- conductor/tracks/ecosystem_module_incubation_20260429/index.md
+- conductor/tracks/ecosystem_module_incubation_20260429/metadata.json
+- conductor/tracks/ecosystem_module_incubation_20260429/plan.md
+- conductor/tracks/ecosystem_module_incubation_20260429/spec.md
+- docs/ecosystem/module_incubation_strategy.md
+- specs/ecosystem/README.md
+- tests/unit/test_ecosystem_module_incubation_docs.py
+
+Why:
+- To establish the ecosystem boundary and contract vocabulary before any adapter or integration work.
