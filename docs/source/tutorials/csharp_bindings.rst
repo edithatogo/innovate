@@ -1,13 +1,13 @@
 C# Bindings
 ===========
 
-The C# bindings are a planned thin adapter over the stable ``innovate`` kernel
-contract. The C# layer should not reimplement model behavior; it should build
-typed request objects, invoke the shared kernel bridge, and convert responses
+The C# bindings are a provisional thin adapter over the stable ``innovate`` kernel
+contract. The C# layer does not reimplement model behavior; it builds
+typed request objects, invokes the shared kernel bridge, and converts responses
 into .NET-friendly structures.
 
-Planned package shape
----------------------
+Package shape
+-------------
 
 The initial package should use a conventional .NET 11 SDK project layout:
 
@@ -24,7 +24,7 @@ The initial package should use a conventional .NET 11 SDK project layout:
    │   ├── Innovate.Kernel.Tests.csproj
    │   ├── SchemaCompatibilityTests.cs
    │   ├── KernelContractTests.cs
-   │   └── ErrorMappingTests.cs
+   │   └── KernelBridgeTests.cs
    └── README.md
 
 The binding should use ``INNOVATE_PYTHON_COMMAND`` to select the Python launcher,
@@ -45,7 +45,7 @@ The C# layer should map the kernel contract into explicit types:
 * ``KernelError`` maps to the stable error payload and preserves the kernel
   error code, message, operation, details, and retryability flag.
 
-The first supported operation should be ``discover_models`` because it is
+The first supported operation is ``discover_models`` because it is
 metadata-driven and does not require fitted model state. Follow-up wrappers may
 cover ``fit_model``, ``predict_model``, ``simulate_model``, ``summarize_model``,
 and ``diagnose_model`` once schema compatibility checks are in place.
@@ -65,8 +65,8 @@ The C# package should include tests that verify:
 Support boundaries
 ------------------
 
-* The C# layer is planned and should be treated as provisional until tests and
-  package scaffolding exist.
+* The C# layer is provisional until broader wrapper coverage and package
+  consumer feedback stabilize.
 * The binding should remain a thin adapter over the shared kernel contract.
 * It does not reimplement model behavior.
 * It should not become a separate public API or execution core.

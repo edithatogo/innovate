@@ -35,13 +35,13 @@ Julia
 
 Go
   Publish the Go binding through Go modules by tagging releases that
-  include the ``bindings/go`` module path. The package must pass
-  ``go test ./...`` and module listing checks before release.
+  include the ``bindings/go`` module path, for example
+  ``bindings/go/v0.5.0``. The package must pass ``go test ./...`` and module
+  listing checks before release.
 
 C#
-  Publish the planned C# binding to NuGet after ``bindings/csharp`` exists and
-  the .NET 11 package passes restore, build, test, pack, and NuGet metadata
-  checks.
+  Publish ``Innovate.Kernel`` to NuGet after the .NET 11 package passes
+  restore, test, pack, and NuGet metadata checks.
 
 CI requirements
 ---------------
@@ -53,7 +53,7 @@ Every implemented binding needs a dedicated CI job in ``.github/workflows/ci.yml
 * Go: ``go test ./...``
 * Julia: ``Pkg.instantiate()`` and ``runtests.jl`` or ``Pkg.test()``
 * R: dependency installation plus ``Rscript bindings/r/tests/run.R``
-* C#: ``dotnet test`` on .NET 11 once the package exists
+* C#: ``dotnet test`` on .NET 11
 
 Release workflow
 ----------------

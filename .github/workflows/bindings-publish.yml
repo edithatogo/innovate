@@ -13,7 +13,7 @@ on:
         options: ["true", "false"]
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
 
 jobs:
@@ -65,6 +65,15 @@ jobs:
       - run: Rscript -e 'install.packages(c("jsonlite"), repos = "https://cloud.r-project.org")'
       - run: R CMD build bindings/r
       - run: R CMD check --no-manual innovate_*.tar.gz
+      - name: Upload R package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: r-package-source
+          path: innovate_*.tar.gz
+      - name: R-universe and CRAN publication gate
+        run: |
+          echo "R-universe publication is driven by the configured universe registry."
+          echo "CRAN submission remains a manual maintainer release step after R CMD check passes."
 
   julia-package:
     runs-on: ubuntu-latest
@@ -90,14 +99,41 @@ jobs:
           go-version-file: bindings/go/go.mod
       - run: go test ./...
       - run: go list -m
+      - name: Tag Go submodule release
+        if: ${{ github.event_name == 'release' }}
+        working-directory: .
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          go_tag="bindings/go/${GITHUB_REF_NAME}"
+          if git ls-remote --exit-code --tags origin "refs/tags/${go_tag}" >/dev/null 2>&1; then
+            echo "Go submodule tag ${go_tag} already exists."
+            exit 0
+          fi
+          git tag "$go_tag" "$GITHUB_SHA"
+          git push origin "$go_tag"
 
-  nuget-csharp-planned:
+  nuget-csharp:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
+      - run: uv python install 3.12
+      - run: uv sync
       - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: "11.0.x"
-      - name: NuGet publication is planned
+      - run: dotnet restore bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj
+      - run: dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj --configuration Release --no-restore
+      - run: dotnet pack bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj --configuration Release --output bindings/csharp/artifacts
+      - name: Publish to NuGet
+        if: ${{ github.event_name == 'release' || inputs.dry_run == 'false' }}
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: |
-          test ! -d bindings/csharp || dotnet test bindings/csharp
+          for package in bindings/csharp/artifacts/*.nupkg; do
+            dotnet nuget push "$package" \
+              --api-key "$NUGET_API_KEY" \
+              --source https://api.nuget.org/v3/index.json \
+              --skip-duplicate
+          done

@@ -1,4 +1,4 @@
-"""Tests for planned C# binding documentation."""
+"""Tests for C# binding documentation and package scaffolding."""
 
 from __future__ import annotations
 
@@ -36,3 +36,16 @@ def test_bindings_hub_includes_csharp_plan() -> None:
 
     assert "C#" in hub
     assert "tutorials/csharp_bindings" in hub
+
+
+def test_csharp_binding_package_scaffold_exists() -> None:
+    """The C# binding should have a buildable .NET package scaffold."""
+    binding_root = Path("bindings/csharp")
+
+    assert (binding_root / "Innovate.Kernel/Innovate.Kernel.csproj").is_file()
+    assert (binding_root / "Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj").is_file()
+    assert (binding_root / "inst/python/kernel_bridge.py").is_file()
+
+    project = (binding_root / "Innovate.Kernel/Innovate.Kernel.csproj").read_text()
+    assert "<TargetFramework>net11.0</TargetFramework>" in project
+    assert "<PackageId>Innovate.Kernel</PackageId>" in project

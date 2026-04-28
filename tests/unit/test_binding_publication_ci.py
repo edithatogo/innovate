@@ -31,6 +31,7 @@ def test_ci_workflow_runs_implemented_language_bindings() -> None:
         "go-bindings",
         "julia-bindings",
         "r-bindings",
+        "csharp-bindings",
     ):
         assert job_name in workflow
 
@@ -42,6 +43,7 @@ def test_ci_workflow_runs_implemented_language_bindings() -> None:
         "go test ./...",
         "julia --project=bindings/julia",
         "Rscript bindings/r/tests/run.R",
+        "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj",
     ):
         assert command in workflow
 
@@ -56,7 +58,9 @@ def test_binding_publish_workflow_has_release_gated_registry_steps() -> None:
         "R CMD build bindings/r",
         "Julia General registry",
         "go list -m",
-        "NuGet",
+        "Tag Go submodule release",
+        "Publish to NuGet",
+        "dotnet pack bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj",
     ):
         assert registry_step in workflow
 
@@ -65,3 +69,4 @@ def test_binding_publish_workflow_has_release_gated_registry_steps() -> None:
     assert 'dotnet-version: "11.0.x"' in workflow
     assert "NPM_TOKEN" in workflow
     assert "CARGO_REGISTRY_TOKEN" in workflow
+    assert "NUGET_API_KEY" in workflow
