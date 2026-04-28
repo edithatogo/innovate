@@ -1,0 +1,1 @@
+Archived the Ecosystem Module Incubation track after completing dependency/promotion policy and planning updates. Validation used for the completed slices: uv run python -m pytest tests/unit/test_ecosystem_module_incubation_docs.py and git diff --check. Final registry entry now points to conductor/archive/ecosystem_module_incubation_20260429/.
