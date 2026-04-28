@@ -4,6 +4,20 @@ This file tracks the concrete tasks required to execute the project roadmap. It 
 
 ## High Priority Tasks
 
+- [ ] **Define HEOR module naming brainstorm**
+    -   Keep `calibrate`, `evidence`, `process`, `report`, `registry`, `workflow`, `quality`, `engines`, and `heoml` as the short list.
+    -   Keep PM4Py in the ecosystem-only process-mining bucket.
+    -   Require CLI support for every future module and decide whether MCP is useful case by case.
+
+- [ ] **Define ecosystem module incubation policy**
+    -   Document the `innovate` role alongside `lifecourse`, `voiage`, `mars`, and HEOML.
+    -   Keep the ecosystem scope focused on health economics and outcomes research.
+    -   Define adoption/diffusion artifacts that can feed health-economic scenarios and VOI workflows.
+    -   Reserve HEOML extension alignment for uptake, adoption, diffusion, and policy-spread artifacts.
+    -   Keep `mars` as a fixed-API optional surrogate/metamodel backend.
+    -   Require optional extras, smoke CI, and compatibility matrices before supported status.
+    -   Promote adapters from documented to experimental to supported only after release policy is clear.
+
 - [ ] **Refactor Bayesian Fitter with NumPyro (Blocked)**
     -   **Reason**: Unable to resolve dependency conflicts between `jax`, `numpyro`, and `scipy`.
     -   [ ] Add `numpyro` as a dependency to `pyproject.toml`.

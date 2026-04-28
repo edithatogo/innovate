@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Added the HEOR module naming brainstorm track for `calibrate`, `evidence`, `process`, `report`, `registry`, `workflow`, `quality`, `engines`, and `heoml`, with PM4Py kept as an ecosystem-only process-mining capability.
+- Added an ecosystem-module incubation track and strategy for positioning
+  `innovate` alongside `lifecourse`, `voiage`, `mars`, HEOML, and future
+  sibling modules through optional artifact-first HEOR contracts.
+- Added ecosystem dependency and promotion policy notes covering optional
+  extras, smoke CI, compatibility matrices, and documented-to-supported
+  promotion stages.
 - Added a canonical package-level public API at `innovate` for stable model and fitter imports.
 - Added a model capability registry at `innovate.get_model_registry()` and `innovate.get_model_capability()`.
 - Added a canonical plural backend namespace at `innovate.backends`.

@@ -112,3 +112,14 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Rust Core Benchmarking and Profiling Tooling** *(Completed)*
   *Link: [./archive/rust_core_benchmarking_20260428/](./archive/rust_core_benchmarking_20260428/)*
+
+---
+
+- [ ] **Track: Ecosystem Module Incubation**
+  *Link: [./tracks/ecosystem_module_incubation_20260429/](./tracks/ecosystem_module_incubation_20260429/)*
+  *Scope: HEOR ecosystem roles, portable artifacts, HEOML alignment, and adapter promotion policy.*
+
+---
+
+- [ ] **Track: HEOR Module Naming Brainstorm for `calibrate`, `evidence`, `process`, `report`, `registry`, `workflow`, `quality`, `engines`, `heoml`, and PM4Py-as-ecosystem-only.**
+  *Link: [./tracks/heor_module_naming_brainstorm_20260429/](./tracks/heor_module_naming_brainstorm_20260429/)*
