@@ -37,10 +37,14 @@ behavior is already explicit in the functional kernel contract:
   shapes, dtypes, and error mapping can be verified without Python object
   identity. The same logistic-native slice now covers simulation for simple
   fitted states.
+* ``fit_model``: bounded fitting workflows where the parameter search is
+  deterministic enough to reproduce with the same response contract. The first
+  implemented slice is Rust-native logistic fitting for simple fitted states,
+  with Python bridge fallback for unsupported families and payload shapes.
 
 Operations that require broad Python-backed fitting behavior, optional
 probabilistic runtimes, or model-specific class internals should remain
-Python-backed initially. In particular, ``fit_model``, ``summarize_model``, and
+Python-backed initially. In particular, ``summarize_model`` and
 ``diagnose_model`` should move later unless their state, diagnostics, and
 uncertainty payloads can pass parity checks without relying on hidden Python
 objects.

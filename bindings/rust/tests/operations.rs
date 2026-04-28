@@ -68,6 +68,103 @@ fn request_builders_preserve_model_identity_and_payload_shape() {
 }
 
 #[test]
+fn native_logistic_fit_matches_python_bridge_contract() {
+    let binding = KernelBinding::new();
+    let true_params = json!({
+        "L": 100.0,
+        "k": 0.65,
+        "x0": 3.0
+    });
+    let time = vec![0.0, 1.0, 2.0, 3.0, 4.0, 5.0];
+    let observed = vec![
+        12.45533581839509,
+        21.416501696862853,
+        34.29895373044305,
+        50.0,
+        65.70104626955695,
+        78.58349830313714,
+    ];
+    let payload = json!({
+        "inputs": {
+            "time": time,
+            "observed": observed,
+        }
+    });
+
+    let request = binding.fit_model_request("logistic", payload.clone());
+    let native = binding
+        .fit_model_native(&request)
+        .expect("native logistic fit should succeed");
+    let bridged = binding
+        .fit_model_via_bridge("logistic", payload)
+        .expect("Python bridge fit should succeed");
+
+    assert_eq!(native.schema_version, bridged.schema_version);
+    assert_eq!(native.operation, KernelOperation::FitModel);
+    assert_eq!(native.error, None);
+    assert_eq!(native.metadata["model_key"], "logistic");
+    assert_eq!(native.metadata["runtime"], "rust_native");
+
+    let native_result = native.result.expect("native fit should include a result");
+    let bridged_result = bridged.result.expect("bridged fit should include a result");
+
+    assert_eq!(native_result["family"], bridged_result["family"]);
+    assert_eq!(native_result["model_name"], bridged_result["model_name"]);
+
+    for key in ["L", "k", "x0"] {
+        let native_value = native_result["parameters"][key]
+            .as_f64()
+            .expect("native parameter should be numeric");
+        let bridged_value = bridged_result["parameters"][key]
+            .as_f64()
+            .expect("bridged parameter should be numeric");
+        assert!(
+            (native_value - bridged_value).abs() < 1e-3,
+            "{key} mismatch: native={native_value}, bridged={bridged_value}"
+        );
+    }
+
+    let native_predictions = native_result["predictions"]["values"]
+        .as_array()
+        .expect("native predictions should be an array");
+    let bridged_predictions = bridged_result["predictions"]["values"]
+        .as_array()
+        .expect("bridged predictions should be an array");
+    assert_eq!(native_predictions.len(), bridged_predictions.len());
+
+    for (native_value, bridged_value) in native_predictions.iter().zip(bridged_predictions) {
+        let native_value = native_value
+            .as_f64()
+            .expect("native prediction should be numeric");
+        let bridged_value = bridged_value
+            .as_f64()
+            .expect("bridged prediction should be numeric");
+        assert!((native_value - bridged_value).abs() < 1e-2);
+    }
+
+    for key in ["L", "k", "x0"] {
+        let native_value = native_result["state"]["parameters"][key]
+            .as_f64()
+            .expect("native state parameter should be numeric");
+        let bridged_value = bridged_result["state"]["parameters"][key]
+            .as_f64()
+            .expect("bridged state parameter should be numeric");
+        assert!(
+            (native_value - bridged_value).abs() < 1e-3,
+            "{key} mismatch in state parameters: native={native_value}, bridged={bridged_value}"
+        );
+    }
+    assert_eq!(native_result["diagnostics"]["support_level"], "supported");
+    assert_eq!(native_result["diagnostics"]["provenance"], "deterministic");
+    assert_eq!(native_result["diagnostics"]["comparison_family"], "fitted");
+    assert_eq!(
+        native_result["diagnostics"]["uncertainty"]["report_type"],
+        "point_estimate"
+    );
+    let _ = true_params;
+}
+
+#[test]
 fn native_logistic_prediction_matches_python_bridge_contract() {
     let binding = KernelBinding::new();
     let payload = json!({
@@ -131,6 +228,25 @@ fn native_logistic_prediction_matches_python_bridge_contract() {
             "native value {native_value} should match bridged value {bridged_value}"
         );
     }
+}
+
+#[test]
+fn native_fit_falls_back_to_bridge_for_non_native_models() {
+    let binding = KernelBinding::new();
+    let payload = json!({
+        "inputs": {
+            "time": [0.0, 1.0, 2.0, 3.0],
+            "observed": [0.05, 0.12, 0.3, 0.6]
+        }
+    });
+
+    let response = binding
+        .fit_model("fisher_pry", payload)
+        .expect("non-native fit should fall back to the bridge");
+
+    assert_eq!(response.operation, KernelOperation::FitModel);
+    assert_eq!(response.metadata["model_key"], "fisher_pry");
+    assert!(response.result.is_some());
 }
 
 #[test]

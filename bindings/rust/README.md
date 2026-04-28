@@ -5,7 +5,9 @@ Model discovery metadata is available through a Rust-native path and is parity
 tested against the Python bridge. Simple logistic `predict_model` requests with
 fitted state payloads now run through a Rust-native path with Python bridge
 fallback for unsupported execution shapes. `simulate_model` follows the same
-native logistic slice and bridge fallback.
+native logistic slice and bridge fallback. `fit_model` now has a native
+logistic slice as well, with Python bridge fallback for unsupported model
+families.
 
 ## Layout
 
@@ -28,8 +30,8 @@ native logistic slice and bridge fallback.
 - `tests/native_discovery.rs` verifies that Rust-native discovery metadata
   matches the Python bridge response.
 - `tests/operations.rs` verifies Rust-native logistic prediction against the
-  Python bridge contract, verifies the same pattern for simulation, and confirms
-  fallback for non-native models.
+  Python bridge contract, verifies the same pattern for simulation and fitting,
+  and confirms fallback for non-native models.
 - `tests/end_to_end.rs` exercises the live Python bridge against a stable
   kernel model.
 - `tests/architecture.rs` verifies the package scaffold and bridge entrypoint.
@@ -40,6 +42,8 @@ native logistic slice and bridge fallback.
 - Simple fitted-state logistic `predict_model` requests use Rust-native
   execution.
 - Simple fitted-state logistic `simulate_model` requests use the same native
+  execution path.
+- Simple fitted-state logistic `fit_model` requests use the same native
   execution path.
 - Unsupported prediction shapes and other execution operations remain thin
   bridges over the shared Python kernel.

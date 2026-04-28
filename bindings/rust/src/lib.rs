@@ -402,7 +402,29 @@ impl KernelBinding {
         model_key: impl Into<String>,
         payload: Value,
     ) -> Result<KernelResponse, KernelBindingError> {
+        let request = self.fit_model_request(model_key, payload);
+        self.fit_model_native(&request).or_else(|err| {
+            if err.code == "unsupported_native_operation" {
+                self.invoke(&request)
+            } else {
+                Err(err)
+            }
+        })
+    }
+
+    pub fn fit_model_via_bridge(
+        &self,
+        model_key: impl Into<String>,
+        payload: Value,
+    ) -> Result<KernelResponse, KernelBindingError> {
         self.invoke(&self.fit_model_request(model_key, payload))
+    }
+
+    pub fn fit_model_native(
+        &self,
+        request: &KernelRequest,
+    ) -> Result<KernelResponse, KernelBindingError> {
+        logistic_fit_native_response(request)
     }
 
     pub fn predict_model(
@@ -611,7 +633,7 @@ fn numeric_array_from_aliases(
 ) -> Result<Vec<f64>, KernelBindingError> {
     for alias in aliases {
         if let Some(value) = values.get(*alias) {
-            return numeric_array(value, *alias, operation);
+            return numeric_array(value, alias, operation);
         }
     }
     Err(KernelBindingError::invalid_request(
@@ -655,6 +677,296 @@ fn required_f64(
     values.get(key).and_then(Value::as_f64).ok_or_else(|| {
         KernelBindingError::invalid_request(operation, format!("missing numeric parameter '{key}'"))
     })
+}
+
+fn _fit_constructor_kwargs(payload: &Map<String, Value>) -> Option<&Map<String, Value>> {
+    payload
+        .get("model_kwargs")
+        .and_then(Value::as_object)
+        .or_else(|| payload.get("constructor_kwargs").and_then(Value::as_object))
+}
+
+fn kernel_array_payload(values: &[f64]) -> Value {
+    json!({
+        "shape": [values.len()],
+        "dtype": "float64",
+        "values": values,
+        "metadata": {
+            "shape": [values.len()]
+        }
+    })
+}
+
+fn fit_diagnostics(time: &[f64], observed: &[f64], predicted: &[f64]) -> Value {
+    let residuals: Vec<f64> = observed
+        .iter()
+        .zip(predicted.iter())
+        .map(|(y, y_hat)| y - y_hat)
+        .collect();
+    let n = residuals.len() as f64;
+    let ss_res: f64 = residuals.iter().map(|value| value * value).sum();
+    let mean_observed = if observed.is_empty() {
+        0.0
+    } else {
+        observed.iter().sum::<f64>() / observed.len() as f64
+    };
+    let ss_tot: f64 = observed
+        .iter()
+        .map(|value| {
+            let delta = value - mean_observed;
+            delta * delta
+        })
+        .sum();
+    let r_squared = if ss_tot > 0.0 {
+        1.0 - (ss_res / ss_tot)
+    } else {
+        0.0
+    };
+    let rmse = if n > 0.0 { (ss_res / n).sqrt() } else { 0.0 };
+    let mae = if n > 0.0 {
+        residuals.iter().map(|value| value.abs()).sum::<f64>() / n
+    } else {
+        0.0
+    };
+    let rss = ss_res;
+    let metrics = json!({
+        "MSE": if n > 0.0 { ss_res / n } else { 0.0 },
+        "RMSE": rmse,
+        "MAE": mae,
+        "R-squared": r_squared,
+        "R_squared": r_squared,
+        "RSS": rss,
+    });
+    let _ = time;
+
+    json!({
+        "metrics": metrics,
+        "residuals": residuals,
+        "warnings": [],
+        "uncertainty": {
+            "support_level": "supported",
+            "provenance": "deterministic",
+            "report_type": "point_estimate",
+        },
+        "support_level": "supported",
+        "provenance": "deterministic",
+        "comparison_family": "fitted",
+        "model_name": "LogisticModel",
+    })
+}
+
+struct LogisticFitResult {
+    l: f64,
+    k: f64,
+    x0: f64,
+    predictions: Vec<f64>,
+}
+
+fn fit_logistic_curve(
+    time: &[f64],
+    observed: &[f64],
+) -> Result<LogisticFitResult, KernelBindingError> {
+    let max_y = observed.iter().copied().fold(f64::NEG_INFINITY, f64::max);
+    if !max_y.is_finite() || max_y <= 0.0 {
+        return Err(KernelBindingError::unsupported_native_operation(
+            KernelOperation::FitModel,
+            "native logistic fitting requires positive observed values",
+        ));
+    }
+
+    let lower = (max_y.max(1e-9)) * 1.01;
+    let upper = (max_y * 10.0).max(max_y + 1.0).max(lower * 2.0);
+    let sample_count = 200usize;
+    let mut coarse: Vec<Option<(f64, f64, f64, f64)>> = Vec::with_capacity(sample_count);
+
+    for index in 0..sample_count {
+        let fraction = index as f64 / (sample_count.saturating_sub(1) as f64);
+        let l = lower + (upper - lower) * fraction;
+        coarse.push(fit_logistic_at_asymptote(time, observed, l));
+    }
+
+    let mut best_index: Option<usize> = None;
+    let mut best_candidate: Option<(f64, f64, f64, f64)> = None;
+    for (index, candidate) in coarse.iter().enumerate() {
+        if let Some(candidate) = candidate {
+            if best_candidate
+                .as_ref()
+                .is_none_or(|current| candidate.0 < current.0)
+            {
+                best_index = Some(index);
+                best_candidate = Some(*candidate);
+            }
+        }
+    }
+
+    let (best_sse, best_l, best_k, best_x0) = best_candidate.ok_or_else(|| {
+        KernelBindingError::unsupported_native_operation(
+            KernelOperation::FitModel,
+            "native logistic fitting could not identify a stable asymptote",
+        )
+    })?;
+
+    let refined = if let Some(index) = best_index {
+        let left = if index > 0 {
+            lower + (upper - lower) * ((index - 1) as f64 / (sample_count.saturating_sub(1) as f64))
+        } else {
+            lower
+        };
+        let right = if index + 1 < sample_count {
+            lower + (upper - lower) * ((index + 1) as f64 / (sample_count.saturating_sub(1) as f64))
+        } else {
+            upper
+        };
+        refine_logistic_asymptote(time, observed, left, right)
+            .or(Some((best_sse, best_l, best_k, best_x0)))
+    } else {
+        None
+    };
+
+    let (sse, l, k, x0) = refined
+        .map(|candidate| {
+            if candidate.0 <= best_sse {
+                candidate
+            } else {
+                (best_sse, best_l, best_k, best_x0)
+            }
+        })
+        .unwrap_or((best_sse, best_l, best_k, best_x0));
+
+    let predictions: Vec<f64> = time
+        .iter()
+        .map(|t| l / (1.0 + (-k * (t - x0)).exp()))
+        .collect();
+
+    let _ = sse;
+
+    Ok(LogisticFitResult {
+        l,
+        k,
+        x0,
+        predictions,
+    })
+}
+
+fn fit_logistic_at_asymptote(
+    time: &[f64],
+    observed: &[f64],
+    l: f64,
+) -> Option<(f64, f64, f64, f64)> {
+    let max_observed = observed.iter().copied().fold(f64::NEG_INFINITY, f64::max);
+    if !l.is_finite() || l <= max_observed {
+        return None;
+    }
+
+    let eps = 1e-9;
+    let clipped: Vec<f64> = observed
+        .iter()
+        .map(|value| value.max(eps).min(l - eps))
+        .collect();
+    let logits: Vec<f64> = clipped
+        .iter()
+        .map(|value| (value / (l - value)).ln())
+        .collect();
+
+    let n = time.len() as f64;
+    let sum_t: f64 = time.iter().sum();
+    let sum_z: f64 = logits.iter().sum();
+    let sum_tt: f64 = time.iter().map(|value| value * value).sum();
+    let sum_tz: f64 = time.iter().zip(logits.iter()).map(|(t, z)| t * z).sum();
+    let denom = n * sum_tt - sum_t * sum_t;
+    if !denom.is_finite() || denom.abs() < 1e-12 {
+        return None;
+    }
+
+    let k = (n * sum_tz - sum_t * sum_z) / denom;
+    if !k.is_finite() || k <= 0.0 {
+        return None;
+    }
+
+    let intercept = (sum_z - k * sum_t) / n;
+    let x0 = -intercept / k;
+    if !x0.is_finite() {
+        return None;
+    }
+
+    let predictions: Vec<f64> = time
+        .iter()
+        .map(|t| l / (1.0 + (-k * (t - x0)).exp()))
+        .collect();
+    let sse = observed
+        .iter()
+        .zip(predictions.iter())
+        .map(|(y, y_hat)| {
+            let residual = y - y_hat;
+            residual * residual
+        })
+        .sum();
+
+    Some((sse, l, k, x0))
+}
+
+fn refine_logistic_asymptote(
+    time: &[f64],
+    observed: &[f64],
+    left: f64,
+    right: f64,
+) -> Option<(f64, f64, f64, f64)> {
+    if !left.is_finite() || !right.is_finite() || right <= left {
+        return None;
+    }
+
+    let phi = (1.0 + 5.0_f64.sqrt()) / 2.0;
+    let inv_phi = 1.0 / phi;
+    let mut a = left;
+    let mut b = right;
+    let mut c = b - (b - a) * inv_phi;
+    let mut d = a + (b - a) * inv_phi;
+    let mut fc = fit_logistic_at_asymptote(time, observed, c);
+    let mut fd = fit_logistic_at_asymptote(time, observed, d);
+
+    for _ in 0..48 {
+        match (fc, fd) {
+            (Some(left_candidate), Some(right_candidate)) => {
+                if right_candidate.0 < left_candidate.0 {
+                    a = c;
+                    c = d;
+                    fc = fd;
+                    d = a + (b - a) * inv_phi;
+                    fd = fit_logistic_at_asymptote(time, observed, d);
+                } else {
+                    b = d;
+                    d = c;
+                    fd = fc;
+                    c = b - (b - a) * inv_phi;
+                    fc = fit_logistic_at_asymptote(time, observed, c);
+                }
+            }
+            (Some(_), None) => {
+                b = d;
+                d = c;
+                fd = fc;
+                c = b - (b - a) * inv_phi;
+                fc = fit_logistic_at_asymptote(time, observed, c);
+            }
+            (None, Some(_)) => {
+                a = c;
+                c = d;
+                fc = fd;
+                d = a + (b - a) * inv_phi;
+                fd = fit_logistic_at_asymptote(time, observed, d);
+            }
+            (None, None) => return None,
+        }
+
+        if (b - a).abs() < 1e-10 {
+            break;
+        }
+    }
+
+    [fc, fd]
+        .into_iter()
+        .flatten()
+        .min_by(|left_candidate, right_candidate| left_candidate.0.total_cmp(&right_candidate.0))
 }
 
 fn logistic_native_response(
@@ -753,6 +1065,108 @@ fn logistic_native_response(
             "family": "diffusion",
             "model_name": "LogisticModel",
             "runtime": "rust_native"
+        }),
+    })
+}
+
+fn logistic_fit_native_response(
+    request: &KernelRequest,
+) -> Result<KernelResponse, KernelBindingError> {
+    if request.operation != KernelOperation::FitModel {
+        return Err(KernelBindingError::invalid_request(
+            request.operation,
+            "native fitting requires a fit_model request",
+        ));
+    }
+
+    let model_key = request.model_key.as_deref().unwrap_or("");
+    if model_key != "logistic" {
+        return Err(KernelBindingError::unsupported_native_operation(
+            KernelOperation::FitModel,
+            format!("native fitting is not implemented for model '{model_key}'"),
+        ));
+    }
+
+    let payload = request.payload.as_object().ok_or_else(|| {
+        KernelBindingError::invalid_request(
+            KernelOperation::FitModel,
+            "fit_model payload must be an object",
+        )
+    })?;
+    let inputs = object_section(payload, "inputs", KernelOperation::FitModel)?;
+    let time = numeric_array_from_aliases(inputs, &["time", "t"], KernelOperation::FitModel)?;
+    let observed = numeric_array_from_aliases(
+        inputs,
+        &["observed", "y", "values", "adoption", "share"],
+        KernelOperation::FitModel,
+    )?;
+    if time.len() != observed.len() {
+        return Err(KernelBindingError::invalid_request(
+            KernelOperation::FitModel,
+            "time and observed arrays must have the same length",
+        ));
+    }
+
+    let constructor_kwargs = _fit_constructor_kwargs(payload);
+    let has_covariates = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("covariates"))
+        .is_some_and(|covariates| !covariates.as_array().is_some_and(Vec::is_empty));
+    let has_event = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("t_event"))
+        .is_some_and(|value| !value.is_null());
+    let input_covariates = inputs.get("covariates").is_some();
+    let fit_options = payload.get("fit_options").and_then(Value::as_object);
+    let fitter_options = payload.get("fitter_options").and_then(Value::as_object);
+    if has_covariates
+        || has_event
+        || input_covariates
+        || fit_options.is_some_and(|values| !values.is_empty())
+        || fitter_options.is_some_and(|values| !values.is_empty())
+    {
+        return Err(KernelBindingError::unsupported_native_operation(
+            KernelOperation::FitModel,
+            "native logistic fitting currently supports simple fitted states without covariates, events, or custom fitter options",
+        ));
+    }
+
+    let fit = fit_logistic_curve(&time, &observed)?;
+    let prediction_payload = kernel_array_payload(&fit.predictions);
+    let diagnostics = fit_diagnostics(&time, &observed, &fit.predictions);
+    let state = json!({
+        "model_key": model_key,
+        "model_name": "LogisticModel",
+        "constructor_kwargs": {},
+        "parameters": {
+            "L": fit.l,
+            "k": fit.k,
+            "x0": fit.x0,
+        },
+        "predict_kwargs": {},
+    });
+
+    Ok(KernelResponse {
+        schema_version: KERNEL_SCHEMA_VERSION.to_string(),
+        operation: KernelOperation::FitModel,
+        model_key: None,
+        result: Some(json!({
+            "model_key": model_key,
+            "model_name": "LogisticModel",
+            "family": "diffusion",
+            "parameters": {
+                "L": fit.l,
+                "k": fit.k,
+                "x0": fit.x0,
+            },
+            "predictions": prediction_payload,
+            "diagnostics": diagnostics,
+            "state": state,
+        })),
+        error: None,
+        metadata: json!({
+            "model_key": model_key,
+            "family": "diffusion",
+            "support_level": "supported",
+            "runtime": "rust_native",
         }),
     })
 }
