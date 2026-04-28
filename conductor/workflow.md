@@ -201,6 +201,10 @@ part of the current workflow because the repo already spans multiple language
 toolchains and the Python task set is still compact enough to manage directly
 with `uv run`.
 
+Runtime code should prefer named loggers and structured error payloads over
+ad hoc `print` calls. `print` remains acceptable for tests, examples, and
+explicitly human-facing scripts.
+
 ### Before Committing
 ```bash
 uv run ruff check . && uv run ruff format --check . && uv run ty check src/ && uv run pytest

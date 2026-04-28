@@ -15,6 +15,7 @@ Start here
    innovate.fitters.diagnostics_contract
    innovate.stability
    innovate.plugins
+   runtime_logging
    rust_core_roadmap
    binding_publication_ci
    tutorials

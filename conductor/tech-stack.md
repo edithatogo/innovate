@@ -81,6 +81,12 @@
 - **Scalene** — CPU, memory, and GPU profiler with per-line attribution
 - **cargo-flamegraph** — Rust profiling helper for native hot paths and regressions
 
+## Runtime Observability
+- **logging** — Python runtime logging for library code and bridge diagnostics;
+  keep `print` for tests, examples, and intentionally human-facing scripts
+- **tracing** — Rust-native structured instrumentation for future core runtime
+  observability
+
 ## Security
 - **Bandit** — Security linting for Python code
 - **safety** — Dependency vulnerability scanning
