@@ -110,5 +110,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Rust Core Benchmarking and Profiling Tooling**
-  *Link: [./tracks/rust_core_benchmarking_20260428/](./tracks/rust_core_benchmarking_20260428/)*
+- [x] **Track: Rust Core Benchmarking and Profiling Tooling** *(Completed)*
+  *Link: [./archive/rust_core_benchmarking_20260428/](./archive/rust_core_benchmarking_20260428/)*

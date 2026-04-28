@@ -14,9 +14,13 @@ models.
 ## Layout
 
 - `src/lib.rs`: core Rust API and kernel contract helpers
+- `benches/native_kernel.rs`: Criterion benchmarks for the native logistic
+  kernel paths
 - `inst/discovery_manifest.json`: embedded native discovery metadata, parity
   tested against the Python kernel
 - `inst/python/kernel_bridge.py`: kernel bridge entrypoint used by the bindings
+- `scripts/profile_native_kernels.sh`: repeatable profiling entrypoint for the
+  native Rust benchmarks
 - `tests/`: contract, scaffold, and architecture checks
 
 ## Development
@@ -24,6 +28,19 @@ models.
 - `cargo test`
 - `cargo fmt --check`
 - `cargo clippy --all-targets --all-features`
+- `cargo bench --bench native_kernel`
+
+## Benchmarking and profiling
+
+- `bindings/rust/benches/native_kernel.rs` measures the native logistic
+  `fit_model`, `predict_model`, `simulate_model`, `summarize_model`, and
+  `diagnose_model` paths with Criterion.
+- `bindings/rust/scripts/profile_native_kernels.sh` profiles the same native
+  benchmark group with `cargo flamegraph` and writes
+  `flamegraph-native-kernels.svg`.
+- The benchmark and profiling surface intentionally stays on the Rust-native
+  execution path; the Python bridge remains the fallback implementation for
+  unsupported shapes.
 
 ## Compatibility checks
 

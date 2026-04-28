@@ -94,6 +94,9 @@ kernel paths, records benchmark results for the promoted slices, and provides a
 repeatable local profiling workflow for hot paths. The intended tooling path
 is criterion-based benchmarking together with a native profiling helper such
 as ``cargo-flamegraph``.
+In this repository that is implemented by
+``bindings/rust/benches/native_kernel.rs`` and
+``bindings/rust/scripts/profile_native_kernels.sh``.
 
 This work should stay narrower than the Python testing stack:
 

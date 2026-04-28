@@ -39,6 +39,8 @@ def test_rust_core_roadmap_names_candidate_operations_and_gates() -> None:
     assert "Benchmarking and profiling tooling" in roadmap
     assert "criterion" in roadmap
     assert "cargo-flamegraph" in roadmap
+    assert "bindings/rust/benches/native_kernel.rs" in roadmap
+    assert "bindings/rust/scripts/profile_native_kernels.sh" in roadmap
 
 
 def test_architecture_docs_surface_rust_core_strategy() -> None:
