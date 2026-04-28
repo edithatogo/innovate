@@ -12,7 +12,7 @@
     - [x] Exclude direct sibling-project internals from supported integrations.
     - [x] Exclude pickle from portable interchange.
     - [x] Exclude changes to the `mars` core API.
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Role And Boundary Definition' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Role And Boundary Definition' (Protocol in workflow.md)
 
 ## Phase 2: Artifact And Extension Contracts [checkpoint: 5c424fb]
 
@@ -26,26 +26,26 @@
     - [x] Keep the existing functional-kernel contract as the primary `innovate` execution contract.
 - [x] Task: Conductor - Automated Review and Checkpoint 'Artifact And Extension Contracts' (Protocol in workflow.md)
 
-## Phase 3: Dependency And Promotion Policy
+## Phase 3: Dependency And Promotion Policy [checkpoint: 491489f]
 
-- [ ] Task: Define optional integration gates.
-    - [ ] Require optional extras for ecosystem adapters.
-    - [ ] Require smoke CI, Renovate coverage, security checks, docs, and removal paths.
-    - [ ] Require version compatibility matrices before supported status.
-- [ ] Task: Define promotion stages.
-    - [ ] Start with documented contract and fixtures.
-    - [ ] Promote to experimental adapter only after stable public APIs exist.
-    - [ ] Promote to supported adapter only after conformance and release policy are complete.
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Dependency And Promotion Policy' (Protocol in workflow.md)
+- [x] Task: Define optional integration gates.
+    - [x] Require optional extras for ecosystem adapters.
+    - [x] Require smoke CI, Renovate coverage, security checks, docs, and removal paths.
+    - [x] Require version compatibility matrices before supported status.
+- [x] Task: Define promotion stages.
+    - [x] Start with documented contract and fixtures.
+    - [x] Promote to experimental adapter only after stable public APIs exist.
+    - [x] Promote to supported adapter only after conformance and release policy are complete.
+- [x] Task: Conductor - Automated Review and Checkpoint 'Dependency And Promotion Policy' (Protocol in workflow.md)
 
-## Phase 4: Documentation And Planning Integration
+## Phase 4: Documentation And Planning Integration [checkpoint: 69f9956]
 
-- [ ] Task: Update docs and specs.
-    - [ ] Add ecosystem module strategy documentation.
-    - [ ] Add the `specs/ecosystem/` contract outline.
-    - [ ] Link to the `lifecourse` and `voiage` ecosystem tracks conceptually.
-- [ ] Task: Update planning files.
-    - [ ] Update `conductor/tracks.md`.
-    - [ ] Update `documents/todo.md`.
-    - [ ] Update `CHANGELOG.md`.
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Documentation And Planning Integration' (Protocol in workflow.md)
+- [x] Task: Update docs and specs.
+    - [x] Add ecosystem module strategy documentation.
+    - [x] Add the `specs/ecosystem/` contract outline.
+    - [x] Link to the `lifecourse` and `voiage` ecosystem tracks conceptually.
+- [x] Task: Update planning files.
+    - [x] Update `conductor/tracks.md`.
+    - [x] Update `documents/todo.md`.
+    - [x] Update `CHANGELOG.md`.
+- [x] Task: Conductor - Automated Review and Checkpoint 'Documentation And Planning Integration' (Protocol in workflow.md)
