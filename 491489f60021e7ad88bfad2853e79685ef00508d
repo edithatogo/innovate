@@ -1,0 +1,1 @@
+Phase 3 checkpoint: added dependency and promotion policy guidance for ecosystem module incubation. Validation: uv run python -m pytest tests/unit/test_ecosystem_module_incubation_docs.py; git diff --check. Review: no high-confidence issues found.
