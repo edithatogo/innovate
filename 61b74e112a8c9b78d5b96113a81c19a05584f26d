@@ -1,0 +1,15 @@
+Task: Define HEOML extension alignment
+
+Summary:
+- Added HEOML namespace guidance for future heoml.extensions.innovate artifacts.
+- Documented when outputs remain generic innovate artifacts versus wrapped HEOML artifacts.
+- Kept the tabular payload identical across both forms so the wrapper stays thin and mechanical.
+- Extended the docs guard test to pin the HEOML namespace language.
+
+Files:
+- docs/ecosystem/module_incubation_strategy.md
+- specs/ecosystem/README.md
+- tests/unit/test_ecosystem_module_incubation_docs.py
+
+Why:
+- To make the extension boundary explicit before any integration or promotion policy work.
