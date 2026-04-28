@@ -16,7 +16,14 @@ def test_rust_core_roadmap_names_candidate_operations_and_gates() -> None:
     """The roadmap should make migration and promotion criteria explicit."""
     roadmap = Path("docs/source/rust_core_roadmap.rst").read_text()
 
-    for operation in ("discover_models", "predict_model", "simulate_model", "fit_model", "summarize_model", "diagnose_model"):
+    for operation in (
+        "discover_models",
+        "predict_model",
+        "simulate_model",
+        "fit_model",
+        "summarize_model",
+        "diagnose_model",
+    ):
         assert operation in roadmap
 
     assert "Python reference semantics" in roadmap
