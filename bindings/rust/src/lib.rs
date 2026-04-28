@@ -432,101 +432,7 @@ impl KernelBinding {
         &self,
         request: &KernelRequest,
     ) -> Result<KernelResponse, KernelBindingError> {
-        if request.operation != KernelOperation::PredictModel {
-            return Err(KernelBindingError::invalid_request(
-                request.operation,
-                "native prediction requires a predict_model request",
-            ));
-        }
-
-        let model_key = request.model_key.as_deref().unwrap_or("");
-        if model_key != "logistic" {
-            return Err(KernelBindingError::unsupported_native_operation(
-                KernelOperation::PredictModel,
-                format!("native prediction is not implemented for model '{model_key}'"),
-            ));
-        }
-
-        let payload = request.payload.as_object().ok_or_else(|| {
-            KernelBindingError::invalid_request(
-                KernelOperation::PredictModel,
-                "predict_model payload must be an object",
-            )
-        })?;
-        let inputs = object_section(payload, "inputs", KernelOperation::PredictModel)?;
-        let time =
-            numeric_array_from_aliases(inputs, &["time", "t"], KernelOperation::PredictModel)?;
-        let state = optional_object_section(payload, "state");
-
-        let state_model_key = state
-            .and_then(|state| state.get("model_key"))
-            .and_then(Value::as_str)
-            .unwrap_or(model_key);
-        if state_model_key != model_key {
-            return Err(KernelBindingError::invalid_request(
-                KernelOperation::PredictModel,
-                format!(
-                    "kernel request model_key '{model_key}' does not match state model_key '{state_model_key}'"
-                ),
-            ));
-        }
-
-        let constructor_kwargs = state
-            .and_then(|state| state.get("constructor_kwargs"))
-            .and_then(Value::as_object);
-        let has_covariates = constructor_kwargs
-            .and_then(|kwargs| kwargs.get("covariates"))
-            .is_some_and(|covariates| !covariates.as_array().is_some_and(Vec::is_empty));
-        let has_event = constructor_kwargs
-            .and_then(|kwargs| kwargs.get("t_event"))
-            .is_some_and(|value| !value.is_null());
-        let input_covariates = inputs.get("covariates").is_some();
-        if has_covariates || has_event || input_covariates {
-            return Err(KernelBindingError::unsupported_native_operation(
-                KernelOperation::PredictModel,
-                "native logistic prediction currently supports fitted states without covariates or event splits",
-            ));
-        }
-
-        let parameters = payload
-            .get("parameters")
-            .and_then(Value::as_object)
-            .or_else(|| state.and_then(|state| state.get("parameters")).and_then(Value::as_object))
-            .ok_or_else(|| {
-                KernelBindingError::invalid_request(
-                    KernelOperation::PredictModel,
-                    "kernel requests for model execution require fitted parameters in state or parameters",
-                )
-            })?;
-
-        let l = required_f64(parameters, "L", KernelOperation::PredictModel)?;
-        let k = required_f64(parameters, "k", KernelOperation::PredictModel)?;
-        let x0 = required_f64(parameters, "x0", KernelOperation::PredictModel)?;
-        let predictions: Vec<f64> = time
-            .iter()
-            .map(|t| l / (1.0 + (-k * (t - x0)).exp()))
-            .collect();
-
-        Ok(KernelResponse {
-            schema_version: KERNEL_SCHEMA_VERSION.to_string(),
-            operation: KernelOperation::PredictModel,
-            model_key: None,
-            result: Some(json!({
-                "shape": [predictions.len()],
-                "dtype": "float64",
-                "values": predictions,
-                "metadata": {
-                    "shape": [time.len()]
-                }
-            })),
-            error: None,
-            metadata: json!({
-                "model_key": model_key,
-                "family": "diffusion",
-                "model_name": "LogisticModel",
-                "runtime": "rust_native"
-            }),
-        })
+        logistic_native_response(KernelOperation::PredictModel, request)
     }
 
     pub fn simulate_model(
@@ -534,7 +440,29 @@ impl KernelBinding {
         model_key: impl Into<String>,
         payload: Value,
     ) -> Result<KernelResponse, KernelBindingError> {
+        let request = self.simulate_model_request(model_key, payload);
+        self.simulate_model_native(&request).or_else(|err| {
+            if err.code == "unsupported_native_operation" {
+                self.invoke(&request)
+            } else {
+                Err(err)
+            }
+        })
+    }
+
+    pub fn simulate_model_via_bridge(
+        &self,
+        model_key: impl Into<String>,
+        payload: Value,
+    ) -> Result<KernelResponse, KernelBindingError> {
         self.invoke(&self.simulate_model_request(model_key, payload))
+    }
+
+    pub fn simulate_model_native(
+        &self,
+        request: &KernelRequest,
+    ) -> Result<KernelResponse, KernelBindingError> {
+        logistic_native_response(KernelOperation::SimulateModel, request)
     }
 
     pub fn summarize_model(
@@ -726,6 +654,106 @@ fn required_f64(
 ) -> Result<f64, KernelBindingError> {
     values.get(key).and_then(Value::as_f64).ok_or_else(|| {
         KernelBindingError::invalid_request(operation, format!("missing numeric parameter '{key}'"))
+    })
+}
+
+fn logistic_native_response(
+    operation: KernelOperation,
+    request: &KernelRequest,
+) -> Result<KernelResponse, KernelBindingError> {
+    if request.operation != operation {
+        return Err(KernelBindingError::invalid_request(
+            request.operation,
+            format!("native {operation} requires a {operation} request"),
+        ));
+    }
+
+    let model_key = request.model_key.as_deref().unwrap_or("");
+    if model_key != "logistic" {
+        return Err(KernelBindingError::unsupported_native_operation(
+            operation,
+            format!("native {operation} is not implemented for model '{model_key}'"),
+        ));
+    }
+
+    let payload = request.payload.as_object().ok_or_else(|| {
+        KernelBindingError::invalid_request(
+            operation,
+            format!("{operation} payload must be an object"),
+        )
+    })?;
+    let inputs = object_section(payload, "inputs", operation)?;
+    let time = numeric_array_from_aliases(inputs, &["time", "t"], operation)?;
+    let state = optional_object_section(payload, "state");
+
+    let state_model_key = state
+        .and_then(|state| state.get("model_key"))
+        .and_then(Value::as_str)
+        .unwrap_or(model_key);
+    if state_model_key != model_key {
+        return Err(KernelBindingError::invalid_request(
+            operation,
+            format!(
+                "kernel request model_key '{model_key}' does not match state model_key '{state_model_key}'"
+            ),
+        ));
+    }
+
+    let constructor_kwargs = state
+        .and_then(|state| state.get("constructor_kwargs"))
+        .and_then(Value::as_object);
+    let has_covariates = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("covariates"))
+        .is_some_and(|covariates| !covariates.as_array().is_some_and(Vec::is_empty));
+    let has_event = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("t_event"))
+        .is_some_and(|value| !value.is_null());
+    let input_covariates = inputs.get("covariates").is_some();
+    if has_covariates || has_event || input_covariates {
+        return Err(KernelBindingError::unsupported_native_operation(
+            operation,
+            "native logistic execution currently supports fitted states without covariates or event splits",
+        ));
+    }
+
+    let parameters = payload
+        .get("parameters")
+        .and_then(Value::as_object)
+        .or_else(|| state.and_then(|state| state.get("parameters")).and_then(Value::as_object))
+        .ok_or_else(|| {
+            KernelBindingError::invalid_request(
+                operation,
+                "kernel requests for model execution require fitted parameters in state or parameters",
+            )
+        })?;
+
+    let l = required_f64(parameters, "L", operation)?;
+    let k = required_f64(parameters, "k", operation)?;
+    let x0 = required_f64(parameters, "x0", operation)?;
+    let predictions: Vec<f64> = time
+        .iter()
+        .map(|t| l / (1.0 + (-k * (t - x0)).exp()))
+        .collect();
+
+    Ok(KernelResponse {
+        schema_version: KERNEL_SCHEMA_VERSION.to_string(),
+        operation,
+        model_key: None,
+        result: Some(json!({
+            "shape": [predictions.len()],
+            "dtype": "float64",
+            "values": predictions,
+            "metadata": {
+                "shape": [time.len()]
+            }
+        })),
+        error: None,
+        metadata: json!({
+            "model_key": model_key,
+            "family": "diffusion",
+            "model_name": "LogisticModel",
+            "runtime": "rust_native"
+        }),
     })
 }
 

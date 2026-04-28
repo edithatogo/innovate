@@ -134,6 +134,68 @@ fn native_logistic_prediction_matches_python_bridge_contract() {
 }
 
 #[test]
+fn native_logistic_simulation_matches_python_bridge_contract() {
+    let binding = KernelBinding::new();
+    let payload = json!({
+        "state": {
+            "model_key": "logistic",
+            "model_name": "LogisticModel",
+            "constructor_kwargs": {},
+            "parameters": {
+                "L": 120.0,
+                "k": 0.55,
+                "x0": 2.5
+            },
+            "predict_kwargs": {}
+        },
+        "inputs": {
+            "time": [0.0, 1.0, 2.0, 3.0, 4.0, 5.0]
+        }
+    });
+
+    let request = binding.simulate_model_request("logistic", payload.clone());
+    let native = binding
+        .simulate_model_native(&request)
+        .expect("native logistic simulation should succeed");
+    let bridged = binding
+        .simulate_model_via_bridge("logistic", payload)
+        .expect("Python bridge simulation should succeed");
+
+    assert_eq!(native.schema_version, bridged.schema_version);
+    assert_eq!(native.operation, KernelOperation::SimulateModel);
+    assert_eq!(native.error, None);
+    assert_eq!(native.metadata["model_key"], "logistic");
+    assert_eq!(native.metadata["runtime"], "rust_native");
+
+    let native_result = native
+        .result
+        .expect("native simulation response should include a result");
+    let bridged_result = bridged
+        .result
+        .expect("bridged simulation response should include a result");
+
+    assert_eq!(native_result["shape"], bridged_result["shape"]);
+    assert_eq!(native_result["dtype"], bridged_result["dtype"]);
+
+    let native_values = native_result["values"]
+        .as_array()
+        .expect("native values should be an array");
+    let bridged_values = bridged_result["values"]
+        .as_array()
+        .expect("bridged values should be an array");
+
+    for (native_value, bridged_value) in native_values.iter().zip(bridged_values) {
+        let native_value = native_value
+            .as_f64()
+            .expect("native value should be numeric");
+        let bridged_value = bridged_value
+            .as_f64()
+            .expect("bridged value should be numeric");
+        assert!((native_value - bridged_value).abs() < 1e-12);
+    }
+}
+
+#[test]
 fn native_prediction_falls_back_to_bridge_for_non_native_models() {
     let binding = KernelBinding::new();
     let payload = json!({
@@ -157,6 +219,34 @@ fn native_prediction_falls_back_to_bridge_for_non_native_models() {
         .expect("non-native prediction should fall back to the bridge");
 
     assert_eq!(response.operation, KernelOperation::PredictModel);
+    assert_eq!(response.metadata["model_key"], "fisher_pry");
+    assert!(response.result.is_some());
+}
+
+#[test]
+fn native_simulation_falls_back_to_bridge_for_non_native_models() {
+    let binding = KernelBinding::new();
+    let payload = json!({
+        "state": {
+            "model_key": "fisher_pry",
+            "model_name": "FisherPryModel",
+            "constructor_kwargs": {},
+            "parameters": {
+                "alpha": 1.6,
+                "t0": 2.0
+            },
+            "predict_kwargs": {}
+        },
+        "inputs": {
+            "time": [0.0, 1.0, 2.0, 3.0]
+        }
+    });
+
+    let response = binding
+        .simulate_model("fisher_pry", payload)
+        .expect("non-native simulation should fall back to the bridge");
+
+    assert_eq!(response.operation, KernelOperation::SimulateModel);
     assert_eq!(response.metadata["model_key"], "fisher_pry");
     assert!(response.result.is_some());
 }

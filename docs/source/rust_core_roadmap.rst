@@ -35,7 +35,8 @@ behavior is already explicit in the functional kernel contract:
   families.
 * ``simulate_model``: deterministic or seeded simulation paths where payload
   shapes, dtypes, and error mapping can be verified without Python object
-  identity.
+  identity. The same logistic-native slice now covers simulation for simple
+  fitted states.
 
 Operations that require broad Python-backed fitting behavior, optional
 probabilistic runtimes, or model-specific class internals should remain
