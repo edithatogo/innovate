@@ -601,6 +601,7 @@ impl KernelBinding {
                 request_path.display()
             ))
         })?;
+        let _cleanup = TempFileGuard::new(request_path.clone(), response_path.clone());
 
         let status = Command::new(&command[0])
             .args(&command[1..])
@@ -622,8 +623,6 @@ impl KernelBinding {
             })?;
 
         if !status.success() {
-            let _ = fs::remove_file(&request_path);
-            let _ = fs::remove_file(&response_path);
             warn!(
                 operation = %request.operation,
                 status = %status,
@@ -646,9 +645,6 @@ impl KernelBinding {
                 "failed to decode kernel response: {err}"
             ))
         })?;
-
-        let _ = fs::remove_file(&request_path);
-        let _ = fs::remove_file(&response_path);
 
         if let Some(error) = &response.error {
             return Err(KernelBindingError::from_kernel_error(error));
@@ -1593,6 +1589,27 @@ fn unique_temp_path(prefix: &str, extension: &str) -> PathBuf {
         extension
     );
     env::temp_dir().join(filename)
+}
+
+struct TempFileGuard {
+    request_path: PathBuf,
+    response_path: PathBuf,
+}
+
+impl TempFileGuard {
+    fn new(request_path: PathBuf, response_path: PathBuf) -> Self {
+        Self {
+            request_path,
+            response_path,
+        }
+    }
+}
+
+impl Drop for TempFileGuard {
+    fn drop(&mut self) {
+        let _ = fs::remove_file(&self.request_path);
+        let _ = fs::remove_file(&self.response_path);
+    }
 }
 
 pub use serde_json::json;
