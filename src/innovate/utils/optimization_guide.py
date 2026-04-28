@@ -4,10 +4,13 @@ This file contains suggestions for optimizing the library's performance
 and stability while avoiding segmentation faults.
 """
 
+import logging
 import warnings
 from typing import Any
 
 import numpy as np
+
+logger = logging.getLogger(__name__)
 
 # Optimization suggestions for the library
 
@@ -136,9 +139,10 @@ def suggest_parameter_bounds_safely(model_class, y_data):
 
 
 if __name__ == "__main__":
-    print("Innovate library optimization guide")
-    print("This module contains suggestions and utilities for optimizing the library")
-    print("- Performance optimizations")
-    print("- Numerical stability improvements")
-    print("- Memory efficiency strategies")
-    print("- Safe alternatives to problematic operations")
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
+    logger.info("Innovate library optimization guide")
+    logger.info("This module contains suggestions and utilities for optimizing the library")
+    logger.info("- Performance optimizations")
+    logger.info("- Numerical stability improvements")
+    logger.info("- Memory efficiency strategies")
+    logger.info("- Safe alternatives to problematic operations")

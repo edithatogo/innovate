@@ -1,5 +1,8 @@
 """Tests for the optimization utilities."""
 
+import subprocess
+import sys
+
 from innovate.diffuse.bass import BassModel
 from innovate.diffuse.logistic import LogisticModel
 from src.innovate.utils.optimization_guide import (
@@ -54,6 +57,19 @@ def test_bounds_suggestion():
     single_bounds = suggest_parameter_bounds_safely(BassModel, [50])
     assert "m" in single_bounds
     assert single_bounds["m"][0] == 50
+
+
+def test_optimization_guide_main_uses_logging():
+    """The module's script entrypoint should emit via logging, not print."""
+    completed = subprocess.run(
+        [sys.executable, "-m", "src.innovate.utils.optimization_guide"],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+
+    assert "Innovate library optimization guide" in completed.stderr
+    assert completed.stdout == ""
 
 
 if __name__ == "__main__":
