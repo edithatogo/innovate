@@ -160,9 +160,7 @@ class TestDiagnosticsContract:
         )
 
         assert comparison_df.empty
-        assert any(
-            "does not have a 'predict' method" in record.message for record in caplog.records
-        )
+        assert any("does not have a 'predict' method" in record.message for record in caplog.records)
 
     def test_bootstrap_fitter_reports_explicit_unsupported_uncertainty(self) -> None:
         """Bootstrap fitters should surface an explicit unsupported uncertainty marker before fitting."""
