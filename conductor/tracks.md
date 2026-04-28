@@ -115,8 +115,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Ecosystem Module Incubation**
-  *Link: [./tracks/ecosystem_module_incubation_20260429/](./tracks/ecosystem_module_incubation_20260429/)*
+- [x] **Track: Ecosystem Module Incubation** *(Completed)*
+  *Link: [./archive/ecosystem_module_incubation_20260429/](./archive/ecosystem_module_incubation_20260429/)*
   *Scope: HEOR ecosystem roles, portable artifacts, HEOML alignment, and adapter promotion policy.*
 
 ---
