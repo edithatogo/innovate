@@ -1,0 +1,16 @@
+Task: Define innovate ecosystem artifacts
+
+Summary:
+- Documented the artifact families for adoption curves, uptake trajectories, policy-spread traces, network diffusion traces, diagnostics, and provenance.
+- Added the contract boundary between generic innovate artifacts and HEOML wrapper artifacts.
+- Expanded the ecosystem contract outline to name the stable artifact groups and transport formats.
+- Added a docs guard test to keep the artifact vocabulary pinned down.
+
+Files:
+- conductor/tracks/ecosystem_module_incubation_20260429/plan.md
+- docs/ecosystem/module_incubation_strategy.md
+- specs/ecosystem/README.md
+- tests/unit/test_ecosystem_module_incubation_docs.py
+
+Why:
+- To define the portable ecosystem contract surface before any sibling adapters or promotion policy work.
