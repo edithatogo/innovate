@@ -105,5 +105,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Rust Core Summary and Diagnostics Migration**
-  *Link: [./tracks/rust_core_summary_diagnostics_20260428/](./tracks/rust_core_summary_diagnostics_20260428/)*
+- [x] **Track: Rust Core Summary and Diagnostics Migration** *(Completed)*
+  *Link: [./archive/rust_core_summary_diagnostics_20260428/](./archive/rust_core_summary_diagnostics_20260428/)*

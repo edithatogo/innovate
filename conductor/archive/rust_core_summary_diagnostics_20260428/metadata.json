@@ -1,8 +1,8 @@
 {
   "track_id": "rust_core_summary_diagnostics_20260428",
   "type": "feature",
-  "status": "in_progress",
+  "status": "completed",
   "created_at": "2026-04-28T00:00:00Z",
-  "updated_at": "2026-04-28T00:00:00Z",
+  "updated_at": "2026-04-28T13:25:20Z",
   "description": "Rust core summary and diagnostics migration"
 }
