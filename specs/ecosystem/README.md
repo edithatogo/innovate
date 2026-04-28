@@ -42,3 +42,14 @@ Expected artifact groups include:
 HEOML alignment should treat `innovate` artifacts as the portable base layer
 and only add extension metadata when a health-economic bundle requires a shared
 namespace or cross-repo wrapper.
+
+Namespace guidance:
+
+- keep `innovate` artifact names for repo-local consumers
+- use `heoml.extensions.innovate` for cross-repo HEOR bundles
+- preserve the same underlying tabular payload across both representations
+
+Current scaffolds:
+
+- [process/README.md](./process/README.md) for the HEOR process-mining outline
+  and PM4Py ecosystem-only contract

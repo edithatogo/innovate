@@ -46,5 +46,7 @@ def test_ecosystem_module_incubation_docs_define_artifacts_and_heoml_boundary() 
         "Arrow or Parquet",
         "HEOML artifacts are wrappers",
         "portable base layer",
+        "heoml.extensions.innovate",
+        "Namespace Rule",
     ):
         assert token in strategy or token in contract

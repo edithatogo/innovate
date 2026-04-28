@@ -110,6 +110,15 @@ public functional-kernel semantics, not private implementation classes.
 - If an artifact cannot be represented without a private implementation object,
   it does not belong in the ecosystem contract.
 
+### Namespace Rule
+
+- Use plain `innovate` artifact names for local workflows, bindings, and
+  repository-internal interchange.
+- Use `heoml.extensions.innovate.*` only when a sibling project or downstream
+  HEOR bundle needs a cross-repo, schema-versioned extension surface.
+- Keep the underlying tabular payload identical across both forms so wrappers
+  stay thin and mechanical.
+
 ## Dependency Policy
 
 - Keep the base `innovate` install independent of `lifecourse`, `voiage`, and
