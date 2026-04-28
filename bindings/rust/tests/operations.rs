@@ -1,4 +1,35 @@
 use innovate_rust::{json, KernelBinding, KernelOperation, KernelResponse};
+use std::io::{self, Write};
+use std::sync::{Arc, Mutex};
+use tracing_subscriber::fmt::MakeWriter;
+
+#[derive(Clone)]
+struct SharedBuffer(Arc<Mutex<Vec<u8>>>);
+
+impl Write for SharedBuffer {
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
+        self.0
+            .lock()
+            .expect("buffer mutex should not be poisoned")
+            .extend_from_slice(buf);
+        Ok(buf.len())
+    }
+
+    fn flush(&mut self) -> io::Result<()> {
+        Ok(())
+    }
+}
+
+#[derive(Clone)]
+struct SharedBufferWriter(Arc<Mutex<Vec<u8>>>);
+
+impl<'a> MakeWriter<'a> for SharedBufferWriter {
+    type Writer = SharedBuffer;
+
+    fn make_writer(&'a self) -> Self::Writer {
+        SharedBuffer(self.0.clone())
+    }
+}
 
 #[test]
 fn diagnostics_summary_extracts_support_information() {
@@ -490,6 +521,45 @@ fn native_summary_and_diagnose_fall_back_to_bridge_for_non_native_models() {
     assert_eq!(diagnose.metadata["model_key"], "fisher_pry");
     assert!(summary.result.is_some());
     assert!(diagnose.result.is_some());
+}
+
+#[test]
+fn native_fallback_paths_emit_tracing_events() {
+    let binding = KernelBinding::new();
+    let payload = json!({
+        "state": {
+            "model_key": "fisher_pry",
+            "model_name": "FisherPryModel",
+            "constructor_kwargs": {},
+            "parameters": {
+                "alpha": 1.6,
+                "t0": 2.0
+            },
+            "predict_kwargs": {}
+        },
+        "inputs": {
+            "time": [0.0, 1.0, 2.0, 3.0]
+        }
+    });
+
+    let buffer = Arc::new(Mutex::new(Vec::new()));
+    let subscriber = tracing_subscriber::fmt()
+        .with_max_level(tracing::Level::DEBUG)
+        .with_writer(SharedBufferWriter(buffer.clone()))
+        .without_time()
+        .finish();
+    let _guard = tracing::subscriber::set_default(subscriber);
+
+    let response = binding
+        .predict_model("fisher_pry", payload)
+        .expect("fallback prediction should succeed through the Python bridge");
+
+    let logs = String::from_utf8(buffer.lock().expect("buffer should be readable").clone())
+        .expect("tracing output should be valid UTF-8");
+
+    assert_eq!(response.operation, KernelOperation::PredictModel);
+    assert!(logs.contains("native path unsupported, falling back to Python bridge"));
+    assert!(logs.contains("fisher_pry"));
 }
 
 #[test]

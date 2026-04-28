@@ -19,6 +19,7 @@ tracing = "0.1"
 
 [dev-dependencies]
 criterion = "0.5"
+tracing-subscriber = { version = "0.3", features = ["fmt"] }
 
 [[bench]]
 name = "native_kernel"

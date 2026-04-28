@@ -41,6 +41,8 @@ models.
 - The benchmark and profiling surface intentionally stays on the Rust-native
   execution path; the Python bridge remains the fallback implementation for
   unsupported shapes.
+- Fallback paths and bridge failures emit structured `tracing` events for
+  debugging and regression triage.
 
 ## Compatibility checks
 

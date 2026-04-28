@@ -5,6 +5,7 @@ use std::fmt;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
+use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{SystemTime, UNIX_EPOCH};
 use tracing::{debug, warn};
 
@@ -1580,11 +1581,17 @@ fn logistic_fit_native_response(
 }
 
 fn unique_temp_path(prefix: &str, extension: &str) -> PathBuf {
+    static NEXT_TEMP_ID: AtomicU64 = AtomicU64::new(0);
     let nanos = SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .map(|duration| duration.as_nanos())
         .unwrap_or_default();
-    let filename = format!("{prefix}-{nanos}-{}.{}", std::process::id(), extension);
+    let sequence = NEXT_TEMP_ID.fetch_add(1, Ordering::Relaxed);
+    let filename = format!(
+        "{prefix}-{nanos}-{}-{sequence}.{}",
+        std::process::id(),
+        extension
+    );
     env::temp_dir().join(filename)
 }
 
