@@ -4,6 +4,12 @@
 
 Accepted direction as of 2026-04-16.
 
+## Implementation Status
+
+The implementation tracks that correspond to this roadmap have been completed
+and archived in Conductor as of 2026-04-30. The remaining items in the
+Deferred Work section are strategic follow-ons, not open implementation tasks.
+
 ## Goal
 
 Progress `innovate` toward a mature, durable, broadly consumable platform by sequencing changes around a small number of architectural principles:
