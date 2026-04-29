@@ -23,18 +23,11 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: "1.22"
-
-      - name: Install Vale
-        run: |
-          go install github.com/errata-ai/vale/v2@latest
-          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
-
       - name: Run Vale
-        run: vale --minAlertLevel=suggestion README.md docs conductor specs
+        uses: vale-cli/vale-action@v2.1.1
+        with:
+          files: README.md,docs,conductor,specs
+          vale_flags: "--minAlertLevel=suggestion"
 
   # -----------------------------------------------------------------------
   # Test Matrix

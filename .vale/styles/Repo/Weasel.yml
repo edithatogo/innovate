@@ -1,0 +1,10 @@
+extends: existence
+message: "Avoid vague wording like '%s' in technical documentation."
+link: https://vale.sh/docs/topics/styles/
+level: suggestion
+ignorecase: true
+tokens:
+  - simply
+  - just
+  - clearly
+  - obviously

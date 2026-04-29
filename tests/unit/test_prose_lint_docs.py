@@ -7,6 +7,12 @@ from pathlib import Path
 
 def test_value_prose_lint_style_is_defined() -> None:
     """The repo should define a Vale style for governance prose."""
+    config = Path(".vale.ini")
+    assert config.is_file()
+    config_text = config.read_text()
+    assert "StylesPath = .vale/styles" in config_text
+    assert "BasedOnStyles = Repo" in config_text
+
     style = Path(".vale/styles/Repo/ValueProse.yml")
     assert style.is_file()
 
@@ -26,4 +32,6 @@ def test_governance_docs_reference_value_prose_linting() -> None:
     assert "Repo/ValueProse" in product_guidelines
     assert "Vale" in tech_stack
     assert "Run Vale" in workflow
-    assert "vale --minAlertLevel=suggestion README.md docs conductor specs" in workflow
+    assert "vale-cli/vale-action@v2.1.1" in workflow
+    assert "files: README.md,docs,conductor,specs" in workflow
+    assert 'vale_flags: "--minAlertLevel=suggestion"' in workflow

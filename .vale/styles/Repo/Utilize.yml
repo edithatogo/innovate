@@ -1,0 +1,9 @@
+extends: substitution
+message: "Prefer 'use' over 'utilize'."
+link: https://vale.sh/docs/topics/styles/
+level: suggestion
+ignorecase: true
+swap:
+  utilize: use
+  utilized: used
+  utilizing: using
