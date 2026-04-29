@@ -92,9 +92,16 @@ def test_ecosystem_module_incubation_docs_update_planning_files() -> None:
     tracks = Path("conductor/tracks.md").read_text()
     todo = Path("documents/todo.md").read_text()
     changelog = Path("CHANGELOG.md").read_text()
+    strategy = Path("docs/ecosystem/module_incubation_strategy.md").read_text()
+    contract = Path("specs/ecosystem/README.md").read_text()
 
     assert "adapter promotion policy" in tracks
     assert "optional extras, smoke CI, and compatibility matrices" in todo
     assert "documented to experimental to supported" in todo
     assert "TreeAge-style decision models and DES" in todo
     assert "ecosystem dependency and promotion policy notes" in changelog
+    assert "HEOR Naming Brainstorm" in strategy
+    assert "calibrate" in strategy
+    assert "PM4Py remains in the ecosystem-only process-mining bucket" in strategy
+    assert "HEOR Module Naming Brainstorm" in contract
+    assert "interface expectations" in contract

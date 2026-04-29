@@ -196,3 +196,25 @@ public functional-kernel semantics, not private implementation classes.
   `report`, `registry`, `workflow`, `quality`, `engines`, and `heoml`; keep
   PM4Py in the ecosystem-only process-mining bucket; require a CLI surface for
   every future module and an explicit MCP decision where orchestration matters.
+
+## HEOR Naming Brainstorm
+
+The current HEOR naming shortlist is documented as a planning target only, not
+an implementation commitment. The reserved names are:
+
+- `calibrate`
+- `evidence`
+- `process`
+- `report`
+- `registry`
+- `workflow`
+- `quality`
+- `engines`
+- `heoml`
+
+PM4Py remains in the ecosystem-only process-mining bucket. Any future module
+that comes out of this list should expose a CLI surface, and any MCP interface
+decision should be explicit rather than assumed.
+
+The live track for this work is
+[HEOR Module Naming Brainstorm](../../conductor/tracks/heor_module_naming_brainstorm_20260429/).

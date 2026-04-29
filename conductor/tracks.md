@@ -121,5 +121,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: HEOR Module Naming Brainstorm for `calibrate`, `evidence`, `process`, `report`, `registry`, `workflow`, `quality`, `engines`, `heoml`, and PM4Py-as-ecosystem-only.**
+- [~] **Track: HEOR Module Naming Brainstorm for `calibrate`, `evidence`, `process`, `report`, `registry`, `workflow`, `quality`, `engines`, `heoml`, and PM4Py-as-ecosystem-only.**
   *Link: [./tracks/heor_module_naming_brainstorm_20260429/](./tracks/heor_module_naming_brainstorm_20260429/)*

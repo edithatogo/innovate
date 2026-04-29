@@ -73,3 +73,5 @@ Current scaffolds:
 
 - [process/README.md](./process/README.md) for the HEOR process-mining outline
   and PM4Py ecosystem-only contract
+- [Conductor track: HEOR Module Naming Brainstorm](../../conductor/tracks/heor_module_naming_brainstorm_20260429/)
+  for the reserved sibling-module naming shortlist and interface expectations
