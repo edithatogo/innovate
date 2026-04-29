@@ -25,5 +25,5 @@ def test_governance_docs_reference_value_prose_linting() -> None:
     assert "Value Prose Linting" in product_guidelines
     assert "Repo/ValueProse" in product_guidelines
     assert "Vale" in tech_stack
-    assert "prose-lint" in workflow
     assert "Run Vale" in workflow
+    assert "vale --minAlertLevel=suggestion README.md docs conductor specs" in workflow
