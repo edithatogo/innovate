@@ -6,9 +6,11 @@ Accepted direction as of 2026-04-16.
 
 ## Implementation Status
 
-The implementation tracks that correspond to this roadmap have been completed
-and archived in Conductor as of 2026-04-30. The remaining items in the
-Deferred Work section are strategic follow-ons, not open implementation tasks.
+The implementation tracks for the completed roadmap stages have been completed
+and archived in Conductor as of 2026-04-30. The remaining strategic follow-ons
+from the Deferred Work section are now active Conductor tracks so they can be
+implemented, reviewed, and archived through the same workflow as the completed
+stages.
 
 ## Goal
 
@@ -114,13 +116,31 @@ Primary tracks:
 
 The following remain worthwhile, but they should follow the contract and interchange work rather than precede it:
 
-- wider probabilistic inference coverage
-- richer diagnostics and uncertainty tooling
-- broader benchmark corpus automation
-- hosted services or remote execution layers
-- aggressive DataFrame engine experimentation beyond ingestion and ETL edges
-- broad Rust rewrites before operation-level parity and benchmark gates exist
-- C# package publication before the thin-binding contract is validated
+- wider probabilistic inference coverage: `Probabilistic Inference Expansion`
+- richer diagnostics and uncertainty tooling: `Diagnostics and Uncertainty Expansion`
+- broader benchmark corpus automation: `Benchmark Corpus Automation`
+- hosted services or remote execution layers: `Hosted Services and Remote Execution`
+- aggressive DataFrame engine experimentation beyond ingestion and ETL edges: `DataFrame Engine Experimentation`
+- broad Rust rewrites before operation-level parity and benchmark gates exist: `Rust Core Expansion`
+- C# package publication before the thin-binding contract is validated: `C# Package Publication`
+
+## Active Follow-On Tracks
+
+These tracks convert the deferred work into Conductor-managed backlog items:
+
+- [Probabilistic Inference Expansion](../conductor/tracks/probabilistic_inference_expansion_20260430/)
+- [Diagnostics and Uncertainty Expansion](../conductor/tracks/diagnostics_uncertainty_expansion_20260430/)
+- [Benchmark Corpus Automation](../conductor/tracks/benchmark_corpus_automation_20260430/)
+- [Hosted Services and Remote Execution](../conductor/tracks/hosted_remote_execution_20260430/)
+- [DataFrame Engine Experimentation](../conductor/tracks/dataframe_engine_experimentation_20260430/)
+- [Rust Core Expansion](../conductor/tracks/rust_core_expansion_20260430/)
+- [C# Package Publication](../conductor/tracks/csharp_package_publication_20260430/)
+- [Roadmap Completeness Audit](../conductor/tracks/roadmap_completeness_audit_20260430/)
+
+The `Roadmap Completeness Audit` track exists to check for implied work that is
+not explicit in this roadmap, including release governance, CI/CD coverage,
+observability, versioning, security, documentation, and package publication
+across the supported language ecosystem.
 
 ## Decision Links
 

@@ -123,3 +123,43 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: HEOR Module Naming Brainstorm for `calibrate`, `evidence`, `process`, `report`, `registry`, `workflow`, `quality`, `engines`, `heoml`, and PM4Py-as-ecosystem-only.**
   *Link: [./archive/heor_module_naming_brainstorm_20260429/](./archive/heor_module_naming_brainstorm_20260429/)*
+
+---
+
+- [ ] **Track: Probabilistic Inference Expansion**
+  *Link: [./tracks/probabilistic_inference_expansion_20260430/](./tracks/probabilistic_inference_expansion_20260430/)*
+
+---
+
+- [ ] **Track: Diagnostics and Uncertainty Expansion**
+  *Link: [./tracks/diagnostics_uncertainty_expansion_20260430/](./tracks/diagnostics_uncertainty_expansion_20260430/)*
+
+---
+
+- [ ] **Track: Benchmark Corpus Automation**
+  *Link: [./tracks/benchmark_corpus_automation_20260430/](./tracks/benchmark_corpus_automation_20260430/)*
+
+---
+
+- [ ] **Track: Hosted Services and Remote Execution**
+  *Link: [./tracks/hosted_remote_execution_20260430/](./tracks/hosted_remote_execution_20260430/)*
+
+---
+
+- [ ] **Track: DataFrame Engine Experimentation**
+  *Link: [./tracks/dataframe_engine_experimentation_20260430/](./tracks/dataframe_engine_experimentation_20260430/)*
+
+---
+
+- [ ] **Track: Rust Core Expansion**
+  *Link: [./tracks/rust_core_expansion_20260430/](./tracks/rust_core_expansion_20260430/)*
+
+---
+
+- [ ] **Track: C# Package Publication**
+  *Link: [./tracks/csharp_package_publication_20260430/](./tracks/csharp_package_publication_20260430/)*
+
+---
+
+- [ ] **Track: Roadmap Completeness Audit**
+  *Link: [./tracks/roadmap_completeness_audit_20260430/](./tracks/roadmap_completeness_audit_20260430/)*

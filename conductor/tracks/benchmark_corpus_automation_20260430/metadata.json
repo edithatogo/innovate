@@ -1,0 +1,8 @@
+{
+  "track_id": "benchmark_corpus_automation_20260430",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-04-29T14:58:04Z",
+  "updated_at": "2026-04-29T14:58:04Z",
+  "description": "Automate benchmark corpus maintenance and model-card refresh workflows."
+}

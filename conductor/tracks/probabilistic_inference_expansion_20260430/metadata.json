@@ -1,0 +1,8 @@
+{
+  "track_id": "probabilistic_inference_expansion_20260430",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-04-29T14:58:04Z",
+  "updated_at": "2026-04-29T14:58:04Z",
+  "description": "Expand probabilistic inference coverage after the core contract and interchange layers are stable."
+}

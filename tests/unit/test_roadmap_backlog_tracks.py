@@ -1,0 +1,81 @@
+"""Tests for mapping roadmap deferred work into active Conductor tracks."""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+ROADMAP_BACKLOG_TRACKS = {
+    "wider probabilistic inference coverage": (
+        "Probabilistic Inference Expansion",
+        "probabilistic_inference_expansion_20260430",
+    ),
+    "richer diagnostics and uncertainty tooling": (
+        "Diagnostics and Uncertainty Expansion",
+        "diagnostics_uncertainty_expansion_20260430",
+    ),
+    "broader benchmark corpus automation": (
+        "Benchmark Corpus Automation",
+        "benchmark_corpus_automation_20260430",
+    ),
+    "hosted services or remote execution layers": (
+        "Hosted Services and Remote Execution",
+        "hosted_remote_execution_20260430",
+    ),
+    "aggressive DataFrame engine experimentation beyond ingestion and ETL edges": (
+        "DataFrame Engine Experimentation",
+        "dataframe_engine_experimentation_20260430",
+    ),
+    "broad Rust rewrites before operation-level parity and benchmark gates exist": (
+        "Rust Core Expansion",
+        "rust_core_expansion_20260430",
+    ),
+    "C# package publication before the thin-binding contract is validated": (
+        "C# Package Publication",
+        "csharp_package_publication_20260430",
+    ),
+}
+
+ROADMAP_AUDIT_TRACK = (
+    "Roadmap Completeness Audit",
+    "roadmap_completeness_audit_20260430",
+)
+
+
+def test_deferred_roadmap_items_are_mapped_to_active_tracks() -> None:
+    """Every explicit deferred roadmap item should point to an active track."""
+    roadmap = Path("docs/architecture_modernization_roadmap.md").read_text()
+    registry = Path("conductor/tracks.md").read_text()
+
+    for deferred_item, (title, track_id) in ROADMAP_BACKLOG_TRACKS.items():
+        assert deferred_item in roadmap
+        assert title in roadmap
+        assert f"../conductor/tracks/{track_id}/" in roadmap
+        assert f"- [ ] **Track: {title}**" in registry
+        assert f"./tracks/{track_id}/" in registry
+
+
+def test_roadmap_completeness_audit_track_is_registered() -> None:
+    """The roadmap should include a track for finding missing implied work."""
+    roadmap = Path("docs/architecture_modernization_roadmap.md").read_text()
+    registry = Path("conductor/tracks.md").read_text()
+    title, track_id = ROADMAP_AUDIT_TRACK
+
+    assert title in roadmap
+    assert f"../conductor/tracks/{track_id}/" in roadmap
+    assert "implied work" in roadmap
+    assert f"- [ ] **Track: {title}**" in registry
+    assert f"./tracks/{track_id}/" in registry
+
+
+def test_active_roadmap_track_artifacts_exist() -> None:
+    """Each active roadmap backlog track should have complete Conductor files."""
+    for title, track_id in [*ROADMAP_BACKLOG_TRACKS.values(), ROADMAP_AUDIT_TRACK]:
+        track_dir = Path("conductor/tracks") / track_id
+        metadata = json.loads((track_dir / "metadata.json").read_text())
+
+        assert (track_dir / "spec.md").is_file(), title
+        assert (track_dir / "plan.md").is_file(), title
+        assert (track_dir / "index.md").is_file(), title
+        assert metadata["track_id"] == track_id
+        assert metadata["status"] == "new"

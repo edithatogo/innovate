@@ -1,0 +1,8 @@
+{
+  "track_id": "dataframe_engine_experimentation_20260430",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-04-29T14:58:04Z",
+  "updated_at": "2026-04-29T14:58:04Z",
+  "description": "Evaluate DataFrame engine experimentation beyond ingestion and ETL edges without destabilizing the public API."
+}
