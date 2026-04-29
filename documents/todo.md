@@ -13,6 +13,7 @@ This file tracks the concrete tasks required to execute the project roadmap. It 
     -   Document the `innovate` role alongside `lifecourse`, `voiage`, `mars`, and HEOML.
     -   Keep the ecosystem scope focused on health economics and outcomes research.
     -   Define adoption/diffusion artifacts that can feed health-economic scenarios and VOI workflows.
+    -   Evaluate TreeAge-style decision models and DES as operational modelling adapters.
     -   Reserve HEOML extension alignment for uptake, adoption, diffusion, and policy-spread artifacts.
     -   Keep `mars` as a fixed-API optional surrogate/metamodel backend.
     -   Require optional extras, smoke CI, and compatibility matrices before supported status.

@@ -39,6 +39,8 @@ Expected artifact groups include:
 
 - adoption curves and uptake trajectories
 - policy-spread traces and network diffusion traces
+- decision-analysis and operational-model bundles
+- discrete-event event traces, queue metrics, and pathway logs
 - diagnostics, calibration outputs, and provenance records
 - Arrow or Parquet tabular payloads plus JSON manifests and schemas
 
@@ -58,6 +60,14 @@ Dependency policy:
 - expose adapters only through optional extras or equivalent explicit flags
 - require deterministic fixtures and smoke CI before promotion
 - require a compatibility matrix before an adapter is marked supported
+
+Operational modelling notes:
+
+- TreeAge-style decision-tree and state-transition adapters belong in the
+  ecosystem contract when they consume or emit HEOR adoption and pathway
+  artifacts.
+- DES adapters should represent pathways as event logs or simulation run
+  bundles, not private engine state.
 
 Current scaffolds:
 

@@ -50,6 +50,12 @@ to connect through public APIs, versioned schemas, and portable artifacts.
   uncertainty as a decision-relevant uncertainty source for HEOR VOI workflows.
 - `mars` surrogate adapter: use MARS-style response surfaces for fitting,
   scenario approximation, or sensitivity workflows where benchmarks justify it.
+- `treeage`-style operational modeling adapter: support decision-tree and
+  state-transition health-economic models used in HTA and reimbursement
+  workflows.
+- `des` operational modeling adapter: support discrete-event simulation for
+  patient pathways, queueing, resource utilization, and pathway-level timing
+  uncertainty.
 - HEOML `innovate` extension: define uptake, adoption, diffusion, policy-spread,
   and network trace artifacts for health-economic run bundles.
 - Future policy/reporting tools: consume HEOR adoption artifacts without
@@ -78,6 +84,10 @@ Pickle is not a portable ecosystem contract.
   `adoption`, `coverage`, `segment`, `uncertainty_label`.
 - `network_diffusion_trace`: `network_id`, `node_id`, `edge_id`, `time`,
   `activation`, `influence`, `peer_effect`, `uncertainty_label`.
+- `event_trace`: `simulation_id`, `entity_id`, `event_time`, `event_type`,
+  `state_before`, `state_after`, `resource_id`, `queue_time`.
+- `simulation_run_bundle`: `model_id`, `scenario_id`, `run_id`, `seed`,
+  `inputs_uri`, `outputs_uri`, `event_log_uri`, `status`.
 - `diagnostics_record`: `model_id`, `fit_metric`, `calibration_target`,
   `residual_summary`, `convergence_status`, `package_version`, `created_at`.
 - `provenance_record`: `schema_version`, `source_model`, `source_commit`,
@@ -94,6 +104,8 @@ The future `heoml.extensions.innovate` namespace should cover:
 - adoption and uptake trajectories
 - policy diffusion traces
 - network diffusion summaries
+- decision-tree and state-transition operational modeling metadata
+- discrete-event simulation pathways, queueing, and event logs
 - uncertainty and parameter-draw metadata
 - calibration and fit diagnostics
 - provenance and software-version metadata
@@ -172,6 +184,10 @@ public functional-kernel semantics, not private implementation classes.
 
 - Define a minimal adoption-trajectory fixture that `lifecourse` can consume.
 - Define a diffusion-uncertainty fixture that `voiage` can use for VOI examples.
+- Define a TreeAge-style operational modeling fixture for reimbursement and
+  decision-analysis workflows.
+- Define a DES fixture with event logs and queue metrics for pathway timing
+  examples.
 - Decide whether HEOML extension schemas should live in `innovate`, `lifecourse`
   while HEOML is embedded, or a future standalone `heoml` repository.
 - Benchmark whether `mars` improves adoption-curve surrogate workflows before

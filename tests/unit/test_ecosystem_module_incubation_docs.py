@@ -68,6 +68,8 @@ def test_ecosystem_module_incubation_docs_define_dependency_policy_and_promotion
         "Renovate",
         "security checks",
         "removal path",
+        "TreeAge",
+        "DES",
     ):
         assert token in strategy
 
@@ -78,6 +80,9 @@ def test_ecosystem_module_incubation_docs_define_dependency_policy_and_promotion
         "security",
         "compatibility matrix",
         "optional extras",
+        "decision-analysis",
+        "TreeAge-style",
+        "discrete-event",
     ):
         assert token in contract
 
@@ -91,4 +96,5 @@ def test_ecosystem_module_incubation_docs_update_planning_files() -> None:
     assert "adapter promotion policy" in tracks
     assert "optional extras, smoke CI, and compatibility matrices" in todo
     assert "documented to experimental to supported" in todo
+    assert "TreeAge-style decision models and DES" in todo
     assert "ecosystem dependency and promotion policy notes" in changelog
