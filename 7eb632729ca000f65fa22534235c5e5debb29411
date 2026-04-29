@@ -1,0 +1,1 @@
+HEOR naming brainstorm docs: added the reserved sibling-module shortlist, PM4Py process-mining boundary, and CLI/MCP expectations to the HEOR ecosystem docs, plus regression coverage and a live track link. Files: docs/ecosystem/module_incubation_strategy.md, specs/ecosystem/README.md, tests/unit/test_ecosystem_module_incubation_docs.py, conductor/tracks.md.
