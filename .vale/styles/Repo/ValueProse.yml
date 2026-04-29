@@ -1,0 +1,13 @@
+extends: existence
+message: "Avoid hedging and filler wording in governance prose."
+link: https://vale.sh/docs/topics/styles/
+level: suggestion
+ignorecase: true
+tokens:
+  - maybe
+  - perhaps
+  - probably
+  - merely
+  - simply
+  - kind of
+  - sort of

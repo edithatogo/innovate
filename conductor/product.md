@@ -32,7 +32,7 @@ The library follows a layered architecture. The current Python package provides 
 
 Bindings should be treated as product surfaces with CI and packaging obligations, not just examples. Each implemented binding needs language-native validation in CI and a publication path through its expected ecosystem package manager.
 
-Over time, performance-critical and portability-critical kernel components should move toward a Rust implementation. Rust should be treated as the strategic core runtime direction, not merely as another client binding. Python remains the preferred interactive and research-oriented interface, while Rust provides a path to stronger correctness boundaries, packaging portability, and efficient shared execution.
+Over time, performance-critical and portability-critical kernel components should move toward a Rust implementation. Rust should be treated as the strategic core runtime direction, not as another client binding. Python remains the preferred interactive and research-oriented interface, while Rust provides a path to stronger correctness boundaries, packaging portability, and efficient shared execution.
 
 The current Python source layout is:
 

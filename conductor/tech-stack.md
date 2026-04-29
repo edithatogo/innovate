@@ -63,6 +63,7 @@
 ## Linting & Formatting
 - **Ruff** — Ultra-fast linter and formatter (replaces Black, isort, flake8, Pylint, vulture, unimport)
   - Rules: F (pyflakes), E/W (pycodestyle), I (isort), B (bugbear), SIM (simplify), UP (pyupgrade), RUF (ruff-specific), C90 (mccabe), N (naming)
+- **Vale** — Prose linter for governance and documentation style, including the repo's `Repo/ValueProse` checks
 
 ## Type Checking
 - **ty** — Primary type checker (fastest, by Astral)

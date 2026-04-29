@@ -4,6 +4,7 @@
 - **Clarity First**: Write documentation that is accessible to both domain experts and newcomers. Avoid unnecessary jargon; when domain-specific terms are required, define them on first use.
 - **Concise and Direct**: Prefer short, declarative sentences. Eliminate filler words. Every sentence should carry information.
 - **Active Voice**: Use active voice in documentation, docstrings, and code comments (e.g., "The model fits the data" not "The data is fitted by the model").
+- **Value Prose Linting**: Governance prose is checked with Vale, using the `Repo/ValueProse` style to catch hedging and filler in repo policy docs.
 
 ## Code Documentation
 - **Docstrings**: Every public class and function must have a NumPy-style docstring containing:
