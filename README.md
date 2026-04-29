@@ -3,6 +3,8 @@
 Innovate is a contract-first diffusion modeling library. The current design centers on a stable functional kernel, Arrow interchange, optional backend implementations, and language bindings layered on top of the same core behavior.
 
 The Sphinx site is the canonical deep documentation. This README is the short front door.
+Markdown prose is checked in CI with Vale to keep the short-form docs clear and
+consistent.
 
 ## What lives where
 

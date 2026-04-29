@@ -24,7 +24,7 @@ All tasks follow a strict lifecycle:
 
 3. **Write Failing Tests (Red Phase):**
    - Create a new test file for the feature or bug fix.
-   - Write one or more unit tests that clearly define the expected behavior and acceptance criteria for the task.
+   - Write one or more unit tests that define the expected behavior and acceptance criteria for the task.
    - **CRITICAL:** Run the tests and confirm that they fail as expected. This is the "Red" phase of TDD. Do not proceed until you have failing tests.
 
 4. **Implement to Pass Tests (Green Phase):**
@@ -53,7 +53,7 @@ All tasks follow a strict lifecycle:
    - Perform the commit.
 
 9. **Attach Task Summary with Git Notes:**
-   - **Step 9.1: Get Commit Hash:** Obtain the hash of the *just-completed commit* (`git log -1 --format="%H"`).
+   - **Step 9.1: Get Commit Hash:** Obtain the hash of the most recently completed commit (`git log -1 --format="%H"`).
    - **Step 9.2: Draft Note Content:** Create a detailed summary for the completed task. This should include the task name, a summary of changes, a list of all created/modified files, and the core "why" for the change.
    - **Step 9.3: Attach Note:** Use the `git notes` command to attach the summary to the commit.
      ```bash
@@ -61,7 +61,7 @@ All tasks follow a strict lifecycle:
      ```
 
 10. **Get and Record Task Commit SHA:**
-    - **Step 10.1: Update Plan:** Read `plan.md`, find the line for the completed task, update its status from `[~]` to `[x]`, and append the first 7 characters of the *just-completed commit's* commit hash.
+    - **Step 10.1: Update Plan:** Read `plan.md`, find the line for the completed task, update its status from `[~]` to `[x]`, and append the first 7 characters of the most recently completed commit's hash.
     - **Step 10.2: Write Plan:** Write the updated content back to `plan.md`.
 
 11. **Commit Plan Update:**
@@ -122,7 +122,7 @@ All tasks follow a strict lifecycle:
     -   **Step 7.2: Attach Note:** Use the `git notes` command and the full commit hash from the checkpoint commit to attach the full report.
 
 8.  **Get and Record Phase Checkpoint SHA:**
-    -   **Step 8.1: Get Commit Hash:** Obtain the hash of the *just-created checkpoint commit* (`git log -1 --format="%H"`).
+    -   **Step 8.1: Get Commit Hash:** Obtain the hash of the checkpoint commit most recently created (`git log -1 --format="%H"`).
     -   **Step 8.2: Update Plan:** Read `plan.md`, find the heading for the completed phase, and append the first 7 characters of the commit hash in the format `[checkpoint: <sha>]`.
     -   **Step 8.3: Write Plan:** Write the updated content back to `plan.md`.
 

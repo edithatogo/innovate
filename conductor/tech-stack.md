@@ -48,7 +48,7 @@
 - **NumPyro** — Probabilistic programming with JAX
 - **BlackJAX** — Samplers for Bayesian inference
 - **ArviZ** — Exploratory analysis of Bayesian models
-- **jitcdde** — Just-in-time compiled delay differential equations
+- **jitcdde** — JIT-compiled delay differential equations
 - **diffrax** — Neural differential equations (JAX-based)
 
 ## Agent-Based Modeling & Networks

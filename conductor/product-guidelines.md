@@ -35,7 +35,7 @@
   - **End-to-End Tests** (`tests/e2e/`): Complete user workflows. Run with `pytest -m e2e`.
 - **Coverage Threshold**: Maintain >80% code coverage overall. Critical modules (diffuse, compete, substitute, fitters) should target >90%.
 - **Property-Based Testing**: Use `hypothesis` for testing mathematical invariants and edge cases in model behavior.
-- **Mutation Testing**: Run `mutmut` weekly via CI to assess test quality, not just coverage quantity. Target >70% mutation score.
+- **Mutation Testing**: Run `mutmut` weekly via CI to assess test quality alongside coverage. Target >70% mutation score.
 
 ## Performance
 - **Vectorization First**: Prefer NumPy vectorized operations over Python loops.

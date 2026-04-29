@@ -30,7 +30,7 @@ A Python library for simplifying innovation and policy diffusion modeling.
 
 The library follows a layered architecture. The current Python package provides the primary user-facing API and reference implementation, while the durable product contract is the canonical public API, capability registry, schema layer, and functional kernel. Language bindings must target that contract so behavior stays consistent across Python, R, Rust, Julia, TypeScript, Go, and C#.
 
-Bindings should be treated as product surfaces with CI and packaging obligations, not just examples. Each implemented binding needs language-native validation in CI and a publication path through its expected ecosystem package manager.
+Bindings should be treated as product surfaces with CI and packaging obligations, not as examples alone. Each implemented binding needs language-native validation in CI and a publication path through its expected ecosystem package manager.
 
 Over time, performance-critical and portability-critical kernel components should move toward a Rust implementation. Rust should be treated as the strategic core runtime direction, not as another client binding. Python remains the preferred interactive and research-oriented interface, while Rust provides a path to stronger correctness boundaries, packaging portability, and efficient shared execution.
 
