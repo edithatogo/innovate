@@ -33,5 +33,6 @@ def test_governance_docs_reference_value_prose_linting() -> None:
     assert "Vale" in tech_stack
     assert "Run Vale" in workflow
     assert "vale-cli/vale-action@v2.1.1" in workflow
-    assert 'files: \'["README.md","docs","conductor","specs"]\'' in workflow
+    assert "files: README.md,docs,conductor,specs" in workflow
+    assert 'separator: ","' in workflow
     assert 'vale_flags: "--minAlertLevel=suggestion"' in workflow
