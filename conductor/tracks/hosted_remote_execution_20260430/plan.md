@@ -5,6 +5,7 @@
 - [ ] Task: Define remote execution boundaries
     - [ ] Identify operations eligible for remote execution
     - [ ] Specify request, response, error, provenance, and version fields
+    - [ ] Include backend provenance for NumPy/SciPy, JAX/XLA, Rust-native, and bridge fallback execution
     - [ ] Reuse existing kernel schemas and Arrow-compatible interchange where possible
 - [ ] Task: Define security and observability expectations
     - [ ] Document authentication, authorization, tenant isolation, and data retention requirements

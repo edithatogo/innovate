@@ -163,3 +163,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [ ] **Track: Roadmap Completeness Audit**
   *Link: [./tracks/roadmap_completeness_audit_20260430/](./tracks/roadmap_completeness_audit_20260430/)*
+
+---
+
+- [ ] **Track: XLA Backend Strategy and JAX Kernel Promotion Gates**
+  *Link: [./tracks/xla_backend_strategy_20260430/](./tracks/xla_backend_strategy_20260430/)*

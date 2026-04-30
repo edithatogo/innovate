@@ -47,9 +47,11 @@
 - **PyTensor** — Symbolic tensor computation
 - **NumPyro** — Probabilistic programming with JAX
 - **BlackJAX** — Samplers for Bayesian inference
+- **TensorFlow Probability JAX substrate** — Optional distribution and bijector
+  coverage for JAX-backed probabilistic workflows where it reduces custom code
 - **ArviZ** — Exploratory analysis of Bayesian models
 - **jitcdde** — JIT-compiled delay differential equations
-- **diffrax** — Neural differential equations (JAX-based)
+- **Diffrax** — Neural differential equations (JAX-based)
 
 ## Agent-Based Modeling & Networks
 - **Mesa** — Agent-based modeling framework

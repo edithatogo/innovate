@@ -17,6 +17,7 @@ Evaluate selective DataFrame engine experimentation beyond ingestion and ETL edg
 4. Keep engine-specific query semantics out of the public contract.
 5. Define promotion criteria for adding or expanding optional DataFrame engine paths.
 6. Document fallback behavior and dependency boundaries for users.
+7. Distinguish tabular engine experiments from XLA array-kernel acceleration so DataFrame choices do not hide numerical-kernel acceleration decisions.
 
 ## Non-Functional Requirements
 
@@ -24,6 +25,7 @@ Evaluate selective DataFrame engine experimentation beyond ingestion and ETL edg
 2. Optional DataFrame engines must not become required dependencies for core APIs.
 3. Performance experiments must be backed by reproducible benchmark evidence.
 4. Public APIs must remain stable across engine choices.
+5. XLA-backed numerical kernels should be evaluated separately from DataFrame engine swaps when both could affect a workload.
 
 ## Acceptance Criteria
 
@@ -31,6 +33,7 @@ Evaluate selective DataFrame engine experimentation beyond ingestion and ETL edg
 2. At least one optional engine experiment has correctness and performance fixtures.
 3. Documentation explains where optional engines are supported and where they are not.
 4. CI verifies fallback behavior and prevents public API drift.
+5. Documentation records whether performance gains come from tabular execution, XLA-backed numerical kernels, or both.
 
 ## Out of Scope
 

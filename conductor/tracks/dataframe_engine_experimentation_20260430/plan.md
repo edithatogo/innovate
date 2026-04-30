@@ -9,6 +9,7 @@
 - [ ] Task: Define experiment criteria
     - [ ] Select candidate workloads for optional engine experimentation
     - [ ] Define correctness and performance metrics
+    - [ ] Separate DataFrame-engine effects from XLA-backed numerical-kernel effects
     - [ ] Document dependency, fallback, and support-tier boundaries
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Phase 1: Workload Selection' (Protocol in workflow.md)
 
@@ -28,6 +29,7 @@
 
 - [ ] Task: Document experiment results
     - [ ] Summarize correctness, performance, and memory tradeoffs
+    - [ ] Attribute wins to tabular execution, XLA-backed kernels, or their interaction
     - [ ] Document whether the path is supported, experimental, or rejected
     - [ ] Update architecture docs if engine strategy changes
 - [ ] Task: Run validation gates

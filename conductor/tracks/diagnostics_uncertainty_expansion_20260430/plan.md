@@ -8,6 +8,7 @@
     - [ ] Identify diagnostics currently tied to private Python objects
 - [ ] Task: Define the richer diagnostics contract
     - [ ] Specify artifact payloads for residuals, calibration, uncertainty, and model comparison
+    - [ ] Evaluate JAX/XLA eligibility for array-heavy diagnostics and uncertainty summaries
     - [ ] Define support tiers and promotion criteria by model family
     - [ ] Document compatibility expectations for bindings
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Phase 1: Artifact Contract' (Protocol in workflow.md)
@@ -20,6 +21,7 @@
     - [ ] Add tolerance-based checks for stochastic or approximate outputs
 - [ ] Task: Implement selected richer diagnostics
     - [ ] Add the minimal diagnostics logic for the chosen model family or workflow
+    - [ ] Use a JAX/XLA-backed path for eligible kernels or document why the selected diagnostics are not XLA-suitable
     - [ ] Emit stable schema-compatible artifact payloads
     - [ ] Preserve current public API compatibility
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Phase 2: Implementation Slice' (Protocol in workflow.md)

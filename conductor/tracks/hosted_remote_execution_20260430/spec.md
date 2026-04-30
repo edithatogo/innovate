@@ -17,6 +17,7 @@ Define hosted service and remote execution layers that reuse the functional kern
 4. Define observability requirements for structured logs, traces, metrics, and request correlation.
 5. Prototype a minimal local or test service only after the contract and threat model are documented.
 6. Document which operations are eligible for remote execution and which remain local-only.
+7. Include optional accelerator placement rules so hosted execution can report whether a run used NumPy/SciPy, JAX/XLA, or Rust-native execution.
 
 ## Non-Functional Requirements
 
@@ -24,6 +25,7 @@ Define hosted service and remote execution layers that reuse the functional kern
 2. Sensitive inputs and outputs must have explicit handling rules before hosted deployment.
 3. The first implementation slice must be testable without provisioning production infrastructure.
 4. Failure modes must be structured and language binding friendly.
+5. Remote execution must not require clients to understand XLA internals to consume results.
 
 ## Acceptance Criteria
 

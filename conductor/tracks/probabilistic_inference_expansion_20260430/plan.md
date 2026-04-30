@@ -8,6 +8,8 @@
     - [ ] Record gaps between existing behavior and the functional kernel contract
 - [ ] Task: Define candidate expansion slices
     - [ ] Select model families or inference routines for the first expansion slice
+    - [ ] Evaluate XLA eligibility and prefer NumPyro or BlackJAX where kernel shape and PRNG requirements fit
+    - [ ] Document any reason for rejecting XLA-backed inference before selecting a non-XLA engine
     - [ ] Define posterior, uncertainty, diagnostics, and provenance payload requirements
     - [ ] Document promotion criteria for experimental and supported tiers
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Phase 1: Scope and Contract' (Protocol in workflow.md)
@@ -20,6 +22,7 @@
     - [ ] Verify optional dependency failures produce structured errors
 - [ ] Task: Implement the selected probabilistic inference slice
     - [ ] Add the minimal runtime integration behind optional backend gates
+    - [ ] Separate JIT compilation cost from steady-state inference benchmarks where JAX/XLA is used
     - [ ] Preserve deterministic baseline semantics where applicable
     - [ ] Emit versioned uncertainty, posterior, diagnostics, and provenance artifacts
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Phase 2: First Implementation Slice' (Protocol in workflow.md)

@@ -17,6 +17,7 @@ Automate benchmark corpus maintenance so benchmark fixtures, metadata, model car
 4. Generate or refresh model-card summaries from benchmark outputs where practical.
 5. Document contribution rules for adding benchmark cases without destabilizing CI.
 6. Connect benchmark automation to Rust-core and optional-backend promotion gates.
+7. Add benchmark metadata fields that distinguish XLA compilation cost, steady-state execution, accelerator type, and NumPy/SciPy reference timings.
 
 ## Non-Functional Requirements
 
@@ -24,6 +25,7 @@ Automate benchmark corpus maintenance so benchmark fixtures, metadata, model car
 2. Fast CI must remain bounded and deterministic.
 3. Benchmark outputs must be reproducible enough to support regression analysis.
 4. Automation must produce actionable failure messages for missing metadata or stale outputs.
+5. XLA-backed benchmark results must be reproducible enough to compare CPU-only CI and accelerator environments without conflating compilation and execution cost.
 
 ## Acceptance Criteria
 
@@ -31,6 +33,7 @@ Automate benchmark corpus maintenance so benchmark fixtures, metadata, model car
 2. Model-card freshness or generation checks exist for representative benchmark artifacts.
 3. Scheduled or opt-in benchmark automation is documented and wired into CI/CD where appropriate.
 4. Promotion criteria for backend or Rust-core performance work reference the benchmark automation.
+5. XLA-backed candidate paths have explicit benchmark reporting requirements before promotion.
 
 ## Out of Scope
 

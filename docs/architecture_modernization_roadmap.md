@@ -109,6 +109,14 @@ Primary tracks:
 - Prefer stable schema/versioning before cross-language SDK publication.
 - Prefer Arrow-compatible boundaries before bespoke serialization.
 - Prefer optional acceleration over hard backend pivots.
+- Prefer XLA-backed libraries for eligible accelerator work: JAX for compiled
+  array kernels, NumPyro for first-class probabilistic inference, BlackJAX for
+  lower-level samplers, TensorFlow Probability's JAX substrate for selected
+  distribution or bijector coverage, and Diffrax for JAX-compatible differential
+  equation workflows.
+- Prefer explicit XLA eligibility and rejection gates before implementing
+  non-XLA acceleration for probabilistic inference, diagnostics, simulation, or
+  benchmark-sensitive kernels.
 - Prefer Rust-backed execution behind the existing kernel contract over a second public API.
 - Prefer selective DataFrame engine optimization over whole-library rewrites.
 
@@ -136,11 +144,18 @@ These tracks convert the deferred work into Conductor-managed backlog items:
 - [Rust Core Expansion](../conductor/tracks/rust_core_expansion_20260430/)
 - [C# Package Publication](../conductor/tracks/csharp_package_publication_20260430/)
 - [Roadmap Completeness Audit](../conductor/tracks/roadmap_completeness_audit_20260430/)
+- [XLA Backend Strategy and JAX Kernel Promotion Gates](../conductor/tracks/xla_backend_strategy_20260430/)
 
 The `Roadmap Completeness Audit` track exists to check for implied work that is
 not explicit in this roadmap, including release governance, CI/CD coverage,
 observability, versioning, security, documentation, and package publication
 across the supported language ecosystem.
+
+The `XLA Backend Strategy and JAX Kernel Promotion Gates` track exists to make
+the optional accelerator preference operational. It should define when JAX/XLA
+is preferred, when NumPy/SciPy remains the reference path, when Rust-native
+execution should compete with XLA-backed kernels, and when dynamic operational
+simulation semantics should stay outside XLA-backed implementation.
 
 ## Decision Links
 
