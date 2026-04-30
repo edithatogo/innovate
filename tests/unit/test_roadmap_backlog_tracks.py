@@ -145,9 +145,7 @@ def test_xla_strategy_is_reflected_in_dependent_tracks() -> None:
 
     for track_id, phrases in required_phrases_by_track.items():
         track_dir = Path("conductor/tracks") / track_id
-        track_text = (track_dir / "spec.md").read_text() + (
-            track_dir / "plan.md"
-        ).read_text()
+        track_text = (track_dir / "spec.md").read_text() + (track_dir / "plan.md").read_text()
 
         for phrase in phrases:
             assert phrase in track_text, f"{phrase!r} missing from {track_id}"
