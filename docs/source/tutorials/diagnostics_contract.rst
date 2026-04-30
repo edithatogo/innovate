@@ -18,6 +18,9 @@ Core types
 ----------
 
 - ``DiagnosticsContract``: standardized fit output for a model.
+- ``DiagnosticsArtifactPayload``: versioned residual, calibration,
+  uncertainty, and model-comparison artifacts for bindings and Arrow
+  interchange.
 - ``UncertaintySummary``: canonical uncertainty report with a ``report_type``
   and provenance.
 - ``DiagnosticsWarning``: structured warning records for unsupported or
@@ -42,6 +45,7 @@ Example: inspect a fitted model
     contract = fitter.diagnostics.to_dict()
     print(contract["support_level"])
     print(contract["uncertainty"]["report_type"])
+    print(contract["artifacts"]["schema_version"])
 
 Example: compare models consistently
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -73,3 +77,7 @@ Interpretation guidance
 
 The uncertainty ``provenance`` field records where the summary came from:
 ``deterministic``, ``bootstrap``, or ``bayesian``.
+
+For binding and Arrow consumers, use the versioned artifact payload under
+``contract["artifacts"]``. The detailed artifact schema is documented in
+:doc:`../diagnostics_uncertainty_artifacts`.

@@ -10,13 +10,13 @@ COMPLETED_ROADMAP_FOLLOW_ON_TRACKS = {
         "Probabilistic Inference Expansion",
         "probabilistic_inference_expansion_20260430",
     ),
-}
-
-ROADMAP_BACKLOG_TRACKS = {
     "richer diagnostics and uncertainty tooling": (
         "Diagnostics and Uncertainty Expansion",
         "diagnostics_uncertainty_expansion_20260430",
     ),
+}
+
+ROADMAP_BACKLOG_TRACKS = {
     "broader benchmark corpus automation": (
         "Benchmark Corpus Automation",
         "benchmark_corpus_automation_20260430",

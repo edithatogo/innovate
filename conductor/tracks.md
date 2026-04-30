@@ -131,8 +131,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Diagnostics and Uncertainty Expansion**
-  *Link: [./tracks/diagnostics_uncertainty_expansion_20260430/](./tracks/diagnostics_uncertainty_expansion_20260430/)*
+- [x] **Track: Diagnostics and Uncertainty Expansion** *(Completed)*
+  *Link: [./archive/diagnostics_uncertainty_expansion_20260430/](./tracks/diagnostics_uncertainty_expansion_20260430/)*
 
 ---
 

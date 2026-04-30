@@ -13,6 +13,7 @@ Start here
    innovate.kernel
    innovate.arrow_interchange
    innovate.fitters.diagnostics_contract
+   diagnostics_uncertainty_artifacts
    probabilistic_inference
    innovate.stability
    innovate.plugins
@@ -31,6 +32,7 @@ The architectural rationale and roadmap live in the repository docs, not in the 
 
 - ``docs/architecture_principles.md``
 - ``docs/architecture_modernization_roadmap.md``
+- ``diagnostics_uncertainty_artifacts``
 - ``probabilistic_inference``
 - ``innovate.plugins.rst``
 - ``innovate.stability.rst``

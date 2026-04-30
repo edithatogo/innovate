@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Literal
+from typing import Any, Literal
 
 import numpy as np
 
@@ -14,6 +14,25 @@ WarningSeverity = Literal["info", "warning", "error"]
 ReportType = Literal["point_estimate", "bootstrap_interval", "posterior_summary", "unsupported"]
 SupportLevel = Literal["supported", "partial", "unsupported"]
 Provenance = Literal["deterministic", "bootstrap", "bayesian", "unknown"]
+DiagnosticsArtifactKind = Literal[
+    "residual_diagnostics",
+    "calibration_check",
+    "uncertainty_interval",
+    "model_comparison",
+]
+
+DIAGNOSTICS_ARTIFACT_SCHEMA_MAJOR_VERSION = 1
+DIAGNOSTICS_ARTIFACT_SCHEMA_MINOR_VERSION = 0
+DIAGNOSTICS_ARTIFACT_SCHEMA_VERSION = (
+    f"{DIAGNOSTICS_ARTIFACT_SCHEMA_MAJOR_VERSION}.{DIAGNOSTICS_ARTIFACT_SCHEMA_MINOR_VERSION}"
+)
+
+
+def _finite_or_none(value: float | None) -> float | None:
+    if value is None:
+        return None
+    numeric = float(value)
+    return numeric if np.isfinite(numeric) else None
 
 
 @dataclass(frozen=True)
@@ -124,6 +143,176 @@ class UncertaintySummary:
         }
 
 
+@dataclass(frozen=True)
+class DiagnosticsArtifactPayload:
+    """Versioned, schema-compatible diagnostics artifacts for language bindings."""
+
+    model_name: str
+    support_level: SupportLevel
+    provenance: Provenance
+    artifacts: dict[str, dict[str, Any]]
+    schema_version: str = DIAGNOSTICS_ARTIFACT_SCHEMA_VERSION
+    backend: str = "numpy"
+    xla_eligible: bool = False
+    xla_rationale: str = (
+        "The artifact contract is currently assembled from deterministic NumPy/Python diagnostics. "
+        "Array-heavy residual and interval kernels can be promoted to JAX/XLA after parity and "
+        "benchmark gates pass."
+    )
+    promotion_criteria: tuple[str, ...] = (
+        "schema-compatible payload",
+        "deterministic or tolerance-bounded tests",
+        "binding fixture coverage",
+        "documented support tier",
+    )
+
+    def __post_init__(self) -> None:
+        if self.schema_version != DIAGNOSTICS_ARTIFACT_SCHEMA_VERSION:
+            raise ValueError(
+                f"Unsupported diagnostics artifact schema version: {self.schema_version}",
+            )
+        if self.support_level not in {"supported", "partial", "unsupported"}:
+            raise ValueError("Diagnostics artifact support_level is invalid")
+        if self.provenance not in {"deterministic", "bootstrap", "bayesian", "unknown"}:
+            raise ValueError("Diagnostics artifact provenance is invalid")
+        if not self.artifacts:
+            raise ValueError("Diagnostics artifact payloads must include at least one artifact")
+
+    @classmethod
+    def from_contract(cls, contract: DiagnosticsContract) -> DiagnosticsArtifactPayload:
+        """Build the stable artifact payload from the existing diagnostics contract."""
+        residual_rows = [
+            {
+                "index": int(index),
+                "residual": float(residual),
+                "standardized_residual": float(standardized),
+            }
+            for index, (residual, standardized) in enumerate(
+                zip(
+                    contract.residuals.tolist(),
+                    (
+                        contract.residual_analysis.standardized_residuals.tolist()
+                        if contract.residual_analysis is not None
+                        else np.zeros_like(contract.residuals, dtype=float).tolist()
+                    ),
+                    strict=True,
+                ),
+            )
+        ]
+
+        residual_summary: dict[str, float | None] = {}
+        if contract.residual_analysis is not None:
+            residual_summary = {
+                "mean_residual": _finite_or_none(contract.residual_analysis.mean_residual),
+                "std_residual": _finite_or_none(contract.residual_analysis.std_residual),
+                "max_abs_residual": _finite_or_none(contract.residual_analysis.max_abs_residual),
+                "durbin_watson": _finite_or_none(contract.residual_analysis.durbin_watson),
+                "shapiro_wilk_p": _finite_or_none(contract.residual_analysis.shapiro_wilk_p),
+                "breusch_pagan_p": _finite_or_none(contract.residual_analysis.breusch_pagan_p),
+            }
+
+        uncertainty_rows = [
+            {
+                "parameter": name,
+                "lower": _finite_or_none(contract.uncertainty.lower.get(name)),
+                "median": _finite_or_none(contract.uncertainty.median.get(name)),
+                "upper": _finite_or_none(contract.uncertainty.upper.get(name)),
+            }
+            for name in sorted(
+                set(contract.uncertainty.lower) | set(contract.uncertainty.median) | set(contract.uncertainty.upper),
+            )
+        ]
+
+        metric_rows = [
+            {"metric": name, "value": _finite_or_none(value)} for name, value in sorted(contract.metrics.items())
+        ]
+
+        return cls(
+            model_name=contract.model_name,
+            support_level=contract.support_level,
+            provenance=contract.provenance,
+            artifacts={
+                "residuals": {
+                    "kind": "residual_diagnostics",
+                    "support_level": contract.support_level,
+                    "columns": ("index", "residual", "standardized_residual"),
+                    "rows": residual_rows,
+                    "summary": residual_summary,
+                    "arrow_compatible": True,
+                },
+                "calibration": {
+                    "kind": "calibration_check",
+                    "support_level": "partial" if residual_summary else "unsupported",
+                    "summary": {
+                        "mean_residual": residual_summary.get("mean_residual"),
+                        "max_abs_residual": residual_summary.get("max_abs_residual"),
+                    },
+                    "note": "Initial calibration slice uses residual bias and magnitude checks.",
+                    "arrow_compatible": True,
+                },
+                "uncertainty": {
+                    "kind": "uncertainty_interval",
+                    "support_level": contract.uncertainty.support_level,
+                    "report_type": contract.uncertainty.report_type,
+                    "level": contract.uncertainty.level,
+                    "columns": ("parameter", "lower", "median", "upper"),
+                    "rows": uncertainty_rows,
+                    "arrow_compatible": True,
+                },
+                "model_comparison": {
+                    "kind": "model_comparison",
+                    "support_level": contract.support_level,
+                    "comparison_family": contract.comparison_family,
+                    "columns": ("metric", "value"),
+                    "rows": metric_rows,
+                    "arrow_compatible": True,
+                },
+            },
+        )
+
+    def to_dict(self) -> dict[str, Any]:
+        """Serialize diagnostics artifacts to JSON-friendly values."""
+        return {
+            "schema_version": self.schema_version,
+            "model_name": self.model_name,
+            "support_level": self.support_level,
+            "provenance": self.provenance,
+            "backend": self.backend,
+            "xla": {
+                "eligible": self.xla_eligible,
+                "rationale": self.xla_rationale,
+            },
+            "promotion_criteria": list(self.promotion_criteria),
+            "artifacts": self.artifacts,
+        }
+
+    def to_table_payloads(self) -> dict[str, Any]:
+        """Return Arrow-friendly kernel table payloads for tabular artifacts."""
+        from innovate.kernel import KernelTablePayload  # Local import avoids an import cycle.
+
+        tables: dict[str, KernelTablePayload] = {}
+        for name, artifact in self.artifacts.items():
+            columns = artifact.get("columns")
+            rows = artifact.get("rows")
+            if not columns or not isinstance(rows, list):
+                continue
+            table_rows = [
+                tuple(row.get(column) if isinstance(row, dict) else None for column in columns) for row in rows
+            ]
+            tables[name] = KernelTablePayload.from_rows(
+                columns=tuple(str(column) for column in columns),
+                rows=table_rows,
+                metadata={
+                    "diagnostics_artifact": name,
+                    "diagnostics_artifact_kind": str(artifact.get("kind", "")),
+                    "diagnostics_artifact_schema_version": self.schema_version,
+                    "model_name": self.model_name,
+                    "support_level": self.support_level,
+                },
+            )
+        return tables
+
+
 @dataclass
 class DiagnosticsContract:
     """Canonical diagnostics surface for a fitted model."""
@@ -138,6 +327,10 @@ class DiagnosticsContract:
     comparison_family: str = "deterministic"
     model_name: str = ""
 
+    def to_artifact_payload(self) -> DiagnosticsArtifactPayload:
+        """Build the versioned diagnostics artifact payload."""
+        return DiagnosticsArtifactPayload.from_contract(self)
+
     def to_dict(self) -> dict[str, object]:
         """Serialize the contract into a dictionary for downstream consumers."""
         return {
@@ -150,6 +343,7 @@ class DiagnosticsContract:
             "provenance": self.provenance,
             "comparison_family": self.comparison_family,
             "model_name": self.model_name,
+            "artifacts": self.to_artifact_payload().to_dict(),
         }
 
 
@@ -213,7 +407,9 @@ def build_diagnostics_contract(
 
     t_arr = np.asarray(t, dtype=float)
     y_arr = np.asarray(y, dtype=float)
-    y_pred = np.asarray(model.predict(t_arr), dtype=float)
+    t_values = t_arr.tolist()
+    y_values = y_arr.tolist()
+    y_pred = np.asarray(model.predict(t_values), dtype=float)
     residuals = y_arr - y_pred
     residuals_flat = residuals.reshape(-1)
     y_pred_flat = y_pred.reshape(-1)
@@ -235,7 +431,7 @@ def build_diagnostics_contract(
     if contract_uncertainty.support_level != "supported" or residual_analysis is None:
         support_level = "partial"
 
-    metrics = get_fit_metrics(model, t_arr, y_arr)
+    metrics = get_fit_metrics(model, t_values, y_values)
     return DiagnosticsContract(
         metrics=metrics,
         residuals=residuals_flat,

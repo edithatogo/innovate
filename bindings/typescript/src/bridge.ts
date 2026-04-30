@@ -106,10 +106,14 @@ function normalizeKernelValue(value: unknown): KernelJSONValue {
       return reshapeKernelArray(values, value.shape as number[]);
     }
 
-    if (Array.isArray(value.columns) && Array.isArray(value.rows)) {
+    if (
+      Array.isArray(value.columns) &&
+      Array.isArray(value.rows) &&
+      value.rows.every((row) => Array.isArray(row))
+    ) {
       const columns = value.columns.map((column) => String(column));
       return value.rows.map((row) => {
-        const entries = Array.isArray(row) ? row : [];
+        const entries = row as unknown[];
         return Object.fromEntries(
           columns.map((column, index) => [column, normalizeKernelValue(entries[index])]),
         );

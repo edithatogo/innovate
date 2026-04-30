@@ -138,7 +138,7 @@ These tracks convert the deferred work into Conductor-managed implementation
 items. Completed follow-on tracks point to their Conductor archive.
 
 - [Probabilistic Inference Expansion](../conductor/archive/probabilistic_inference_expansion_20260430/)
-- [Diagnostics and Uncertainty Expansion](../conductor/tracks/diagnostics_uncertainty_expansion_20260430/)
+- [Diagnostics and Uncertainty Expansion](../conductor/archive/diagnostics_uncertainty_expansion_20260430/)
 - [Benchmark Corpus Automation](../conductor/tracks/benchmark_corpus_automation_20260430/)
 - [Hosted Services and Remote Execution](../conductor/tracks/hosted_remote_execution_20260430/)
 - [DataFrame Engine Experimentation](../conductor/tracks/dataframe_engine_experimentation_20260430/)
@@ -157,6 +157,14 @@ payload and optional backend metadata contract in
 `docs/source/probabilistic_inference.rst`. Broader NumPyro model-family
 coverage remains sequenced behind deterministic fixtures, schema compatibility,
 and XLA promotion gates.
+
+The `Diagnostics and Uncertainty Expansion` track starts with a versioned
+diagnostics artifact payload in
+`docs/source/diagnostics_uncertainty_artifacts.rst`. The first slice covers
+residual diagnostics, residual-bias calibration checks, uncertainty interval
+rows, and model-comparison metrics behind the existing kernel and Arrow table
+contracts. JAX/XLA acceleration remains a promotion gate for future array-heavy
+diagnostics rather than a public artifact format.
 
 The `XLA Backend Strategy and JAX Kernel Promotion Gates` track exists to make
 the optional accelerator preference operational. It should define when JAX/XLA

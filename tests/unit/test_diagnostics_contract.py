@@ -11,6 +11,8 @@ from innovate.diffuse.bass import BassModel
 from innovate.fitters import BootstrapFitter, DiagnosticsContract
 from innovate.fitters import DiagnosticsWarning as FittersDiagnosticsWarning
 from innovate.fitters.diagnostics_contract import (
+    DIAGNOSTICS_ARTIFACT_SCHEMA_VERSION,
+    DiagnosticsArtifactPayload,
     DiagnosticsWarning,
     UncertaintySummary,
     build_diagnostics_contract,
@@ -127,6 +129,40 @@ class TestDiagnosticsContract:
         assert isinstance(payload["uncertainty"]["samples"], dict)
         assert payload["residual_analysis"] is not None
         assert isinstance(payload["residual_analysis"]["residuals"], list)
+
+    def test_contract_serialization_includes_versioned_artifacts(self) -> None:
+        """Diagnostics should expose a stable artifact payload for bindings."""
+        model, t, y = self._fit_bass_model()
+        contract = build_diagnostics_contract(model, t, y, model_name="BassModel")
+
+        payload = contract.to_dict()["artifacts"]
+
+        assert payload["schema_version"] == DIAGNOSTICS_ARTIFACT_SCHEMA_VERSION
+        assert payload["model_name"] == "BassModel"
+        assert payload["backend"] == "numpy"
+        assert payload["xla"]["eligible"] is False
+        assert payload["artifacts"]["residuals"]["kind"] == "residual_diagnostics"
+        assert payload["artifacts"]["residuals"]["columns"] == (
+            "index",
+            "residual",
+            "standardized_residual",
+        )
+        assert payload["artifacts"]["residuals"]["rows"][0]["index"] == 0
+        assert payload["artifacts"]["calibration"]["kind"] == "calibration_check"
+        assert payload["artifacts"]["model_comparison"]["kind"] == "model_comparison"
+
+    def test_diagnostics_artifact_payload_emits_kernel_table_payloads(self) -> None:
+        """Tabular diagnostics artifacts should be usable through kernel table payloads."""
+        model, t, y = self._fit_bass_model()
+        contract = build_diagnostics_contract(model, t, y, model_name="BassModel")
+        artifact = DiagnosticsArtifactPayload.from_contract(contract)
+
+        tables = artifact.to_table_payloads()
+
+        assert set(tables) == {"model_comparison", "residuals", "uncertainty"}
+        assert tables["residuals"].columns == ("index", "residual", "standardized_residual")
+        assert tables["residuals"].metadata["diagnostics_artifact_kind"] == "residual_diagnostics"
+        assert tables["model_comparison"].columns == ("metric", "value")
 
     def test_compare_models_keeps_unsupported_models_explicit(self) -> None:
         """Model comparison should not attempt to infer metrics for unsupported models."""

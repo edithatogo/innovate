@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "operation": "diagnose_model",
+  "result": {
+    "diagnostics": {
+      "support_level": "supported",
+      "provenance": "deterministic",
+      "comparison_family": "fitted",
+      "model_name": "BassModel",
+      "artifacts": {
+        "schema_version": "1.0",
+        "model_name": "BassModel",
+        "support_level": "supported",
+        "provenance": "deterministic",
+        "backend": "numpy",
+        "xla": {
+          "eligible": false,
+          "rationale": "Fixture payload for binding compatibility checks."
+        },
+        "promotion_criteria": [
+          "schema-compatible payload",
+          "deterministic or tolerance-bounded tests",
+          "binding fixture coverage",
+          "documented support tier"
+        ],
+        "artifacts": {
+          "residuals": {
+            "kind": "residual_diagnostics",
+            "support_level": "supported",
+            "columns": ["index", "residual", "standardized_residual"],
+            "rows": [
+              {"index": 0, "residual": 0.0, "standardized_residual": 0.0},
+              {"index": 1, "residual": 0.1, "standardized_residual": 1.0}
+            ],
+            "summary": {
+              "mean_residual": 0.05,
+              "std_residual": 0.0707106781,
+              "max_abs_residual": 0.1,
+              "durbin_watson": 2.0,
+              "shapiro_wilk_p": null,
+              "breusch_pagan_p": null
+            },
+            "arrow_compatible": true
+          },
+          "calibration": {
+            "kind": "calibration_check",
+            "support_level": "partial",
+            "summary": {
+              "mean_residual": 0.05,
+              "max_abs_residual": 0.1
+            },
+            "note": "Initial calibration slice uses residual bias and magnitude checks.",
+            "arrow_compatible": true
+          },
+          "uncertainty": {
+            "kind": "uncertainty_interval",
+            "support_level": "supported",
+            "report_type": "point_estimate",
+            "level": null,
+            "columns": ["parameter", "lower", "median", "upper"],
+            "rows": [],
+            "arrow_compatible": true
+          },
+          "model_comparison": {
+            "kind": "model_comparison",
+            "support_level": "supported",
+            "comparison_family": "fitted",
+            "columns": ["metric", "value"],
+            "rows": [
+              {"metric": "RMSE", "value": 0.1},
+              {"metric": "MAE", "value": 0.05}
+            ],
+            "arrow_compatible": true
+          }
+        }
+      }
+    }
+  }
+}

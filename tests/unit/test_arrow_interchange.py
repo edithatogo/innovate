@@ -102,6 +102,31 @@ def test_kernel_table_payload_round_trips_through_arrow_and_pandas() -> None:
     assert from_frame == payload
 
 
+def test_diagnostics_artifact_tables_round_trip_through_arrow() -> None:
+    """Diagnostics artifacts should use the existing Arrow table contract."""
+    import numpy as np
+
+    from innovate import arrow_interchange
+    from innovate.diffuse.bass import BassModel
+    from innovate.fitters.diagnostics_contract import build_diagnostics_contract
+
+    t = np.linspace(1, 6, 6)
+    model = BassModel()
+    model.params_ = {"p": 0.03, "q": 0.35, "m": 1000.0}
+    y = model.predict(t) + np.array([0.0, 0.1, -0.05, 0.08, -0.02, 0.03])
+    artifact = build_diagnostics_contract(model, t, y, model_name="BassModel").to_artifact_payload()
+
+    residual_table_payload = artifact.to_table_payloads()["residuals"]
+    arrow_table = arrow_interchange.kernel_table_payload_to_table(residual_table_payload)
+
+    assert arrow_table.schema.metadata[b"innovate.kind"] == b"table"
+    assert arrow_table.schema.metadata[b"diagnostics_artifact"] == b'"residuals"'
+    assert arrow_table.schema.metadata[b"diagnostics_artifact_schema_version"] == b'"1.0"'
+
+    restored = arrow_interchange.kernel_table_payload_from_table(arrow_table)
+    assert restored == residual_table_payload
+
+
 def test_kernel_discovery_response_round_trips_through_arrow() -> None:
     """Model metadata should round-trip as an Arrow table as well."""
     from innovate import arrow_interchange, kernel

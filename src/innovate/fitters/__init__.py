@@ -1,9 +1,13 @@
 """Fitters module for parameter estimation."""
 
+from typing import Any
+
 from .batched_fitter import BatchedFitter
 from .bootstrap_fitter import BootstrapFitter
 from .curve_fitter import CurveFitter
 from .diagnostics_contract import (
+    DIAGNOSTICS_ARTIFACT_SCHEMA_VERSION,
+    DiagnosticsArtifactPayload,
     DiagnosticsContract,
     DiagnosticsWarning,
     UncertaintySummary,
@@ -36,27 +40,38 @@ class _MissingOptionalDependency:
 
 
 # Optional fitters — only imported when their dependencies are available
+BayesianFitter: Any
 try:
-    from .bayesian_fitter import BayesianFitter
+    from .bayesian_fitter import BayesianFitter as _BayesianFitter
 except ImportError:
     BayesianFitter = _MissingOptionalDependency("BayesianFitter", "innovate[bayesian]")
+else:
+    BayesianFitter = _BayesianFitter
 
+BlackJaxFitter: Any
 try:
-    from .blackjax_fitter import BlackJaxFitter
+    from .blackjax_fitter import BlackJaxFitter as _BlackJaxFitter
 except ImportError:
     BlackJaxFitter = _MissingOptionalDependency("BlackJaxFitter", "innovate[bayesian]")
+else:
+    BlackJaxFitter = _BlackJaxFitter
 
+JaxFitter: Any
 try:
-    from .jax_fitter import JaxFitter
+    from .jax_fitter import JaxFitter as _JaxFitter
 except ImportError:
     JaxFitter = _MissingOptionalDependency("JaxFitter", "innovate[jax]")
+else:
+    JaxFitter = _JaxFitter
 
 __all__ = [
+    "DIAGNOSTICS_ARTIFACT_SCHEMA_VERSION",
     "BatchedFitter",
     "BayesianFitter",
     "BlackJaxFitter",
     "BootstrapFitter",
     "CurveFitter",
+    "DiagnosticsArtifactPayload",
     "DiagnosticsContract",
     "DiagnosticsWarning",
     "JaxFitter",
