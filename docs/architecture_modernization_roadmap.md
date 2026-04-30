@@ -137,7 +137,7 @@ The following remain worthwhile, but they should follow the contract and interch
 These tracks convert the deferred work into Conductor-managed implementation
 items. Completed follow-on tracks point to their Conductor archive.
 
-- [Probabilistic Inference Expansion](../conductor/tracks/probabilistic_inference_expansion_20260430/)
+- [Probabilistic Inference Expansion](../conductor/archive/probabilistic_inference_expansion_20260430/)
 - [Diagnostics and Uncertainty Expansion](../conductor/tracks/diagnostics_uncertainty_expansion_20260430/)
 - [Benchmark Corpus Automation](../conductor/tracks/benchmark_corpus_automation_20260430/)
 - [Hosted Services and Remote Execution](../conductor/tracks/hosted_remote_execution_20260430/)
@@ -151,6 +151,12 @@ The `Roadmap Completeness Audit` track exists to check for implied work that is
 not explicit in this roadmap, including release governance, CI/CD coverage,
 observability, versioning, security, documentation, and package publication
 across the supported language ecosystem.
+
+The `Probabilistic Inference Expansion` track starts with a stable posterior
+payload and optional backend metadata contract in
+`docs/source/probabilistic_inference.rst`. Broader NumPyro model-family
+coverage remains sequenced behind deterministic fixtures, schema compatibility,
+and XLA promotion gates.
 
 The `XLA Backend Strategy and JAX Kernel Promotion Gates` track exists to make
 the optional accelerator preference operational. It should define when JAX/XLA

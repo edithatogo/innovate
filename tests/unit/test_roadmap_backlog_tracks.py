@@ -5,11 +5,14 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-ROADMAP_BACKLOG_TRACKS = {
+COMPLETED_ROADMAP_FOLLOW_ON_TRACKS = {
     "wider probabilistic inference coverage": (
         "Probabilistic Inference Expansion",
         "probabilistic_inference_expansion_20260430",
     ),
+}
+
+ROADMAP_BACKLOG_TRACKS = {
     "richer diagnostics and uncertainty tooling": (
         "Diagnostics and Uncertainty Expansion",
         "diagnostics_uncertainty_expansion_20260430",
@@ -58,6 +61,27 @@ def test_deferred_roadmap_items_are_mapped_to_active_tracks() -> None:
         assert f"../conductor/tracks/{track_id}/" in roadmap
         assert f"- [ ] **Track: {title}**" in registry
         assert f"./tracks/{track_id}/" in registry
+
+
+def test_completed_roadmap_follow_on_tracks_are_archived() -> None:
+    """Completed follow-on tracks should be mapped to their Conductor archives."""
+    roadmap = Path("docs/architecture_modernization_roadmap.md").read_text()
+    registry = Path("conductor/tracks.md").read_text()
+
+    for deferred_item, (title, track_id) in COMPLETED_ROADMAP_FOLLOW_ON_TRACKS.items():
+        track_dir = Path("conductor/archive") / track_id
+        metadata = json.loads((track_dir / "metadata.json").read_text())
+
+        assert deferred_item in roadmap
+        assert title in roadmap
+        assert f"../conductor/archive/{track_id}/" in roadmap
+        assert f"- [x] **Track: {title}** *(Completed)*" in registry
+        assert f"./archive/{track_id}/" in registry
+        assert (track_dir / "spec.md").is_file()
+        assert (track_dir / "plan.md").is_file()
+        assert (track_dir / "index.md").is_file()
+        assert metadata["track_id"] == track_id
+        assert metadata["status"] == "completed"
 
 
 def test_roadmap_completeness_audit_track_is_registered() -> None:
@@ -148,6 +172,8 @@ def test_xla_strategy_is_reflected_in_dependent_tracks() -> None:
 
     for track_id, phrases in required_phrases_by_track.items():
         track_dir = Path("conductor/tracks") / track_id
+        if not track_dir.exists():
+            track_dir = Path("conductor/archive") / track_id
         track_text = (track_dir / "spec.md").read_text() + (track_dir / "plan.md").read_text()
 
         for phrase in phrases:

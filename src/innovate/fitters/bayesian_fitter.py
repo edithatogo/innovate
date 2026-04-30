@@ -23,6 +23,7 @@ from innovate.fitters.diagnostics_contract import (
     UncertaintySummary,
     build_diagnostics_contract,
 )
+from innovate.probabilistic import PosteriorSamplesPayload
 
 
 class BayesianFitter:
@@ -314,6 +315,35 @@ class BayesianFitter:
             level=credible_mass,
             samples=samples,
             note=f"{self.num_chains} chains x {self.num_samples} samples",
+        )
+
+    def get_posterior_payload(
+        self,
+        *,
+        model_key: str = "",
+        engine: str = "blackjax",
+        backend: str = "jax",
+    ) -> PosteriorSamplesPayload:
+        """Return posterior samples as a versioned probabilistic payload."""
+        if self.posterior_samples_ is None:
+            raise RuntimeError("Model has not been fitted yet.")
+
+        resolved_model_key = model_key
+        if not resolved_model_key and self.model_ is not None:
+            resolved_model_key = type(self.model_).__name__
+
+        return PosteriorSamplesPayload.from_samples(
+            model_key=resolved_model_key or "unknown",
+            samples={name: np.asarray(values) for name, values in self.posterior_samples_.items()},
+            engine=engine,
+            backend=backend,
+            seed=self.random_seed,
+            metadata={
+                "num_chains": self.num_chains,
+                "num_samples": self.num_samples,
+                "num_warmup": self.num_warmup,
+                "xla_eligible": True,
+            },
         )
 
     def get_summary(self) -> dict[str, dict[str, float]]:

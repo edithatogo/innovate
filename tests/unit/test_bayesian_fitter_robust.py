@@ -137,6 +137,26 @@ class TestBayesianFitterRobust:
         assert contract.uncertainty.provenance == "bayesian"
         assert any(w.code == "bayesian_unavailable" for w in contract.warnings)
 
+    def test_posterior_payload_exports_versioned_schema(self):
+        """Test that posterior samples can be exported through the probabilistic contract."""
+        fitter = BayesianFitter(num_chains=2, num_warmup=10, num_samples=3, random_seed=123)
+        fitter.posterior_samples_ = {
+            "p": np.array([[0.01, 0.02, 0.03], [0.02, 0.03, 0.04]]),
+            "q": np.array([[0.2, 0.3, 0.4], [0.3, 0.4, 0.5]]),
+        }
+
+        payload = fitter.get_posterior_payload(model_key="bass")
+        summary = payload.to_uncertainty_summary(level=0.8)
+
+        assert payload.schema_version == "1.0"
+        assert payload.model_key == "bass"
+        assert payload.engine == "blackjax"
+        assert payload.backend == "jax"
+        assert payload.seed == 123
+        assert payload.metadata["xla_eligible"] is True
+        assert summary.report_type == "posterior_summary"
+        assert summary.median["p"] == pytest.approx(0.025)
+
     def test_noisy_data_robustness(self):
         """Test robustness with very noisy data."""
         t = np.linspace(1, 10, 15)

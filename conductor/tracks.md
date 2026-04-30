@@ -126,8 +126,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Probabilistic Inference Expansion**
-  *Link: [./tracks/probabilistic_inference_expansion_20260430/](./tracks/probabilistic_inference_expansion_20260430/)*
+- [x] **Track: Probabilistic Inference Expansion** *(Completed)*
+  *Link: [./archive/probabilistic_inference_expansion_20260430/](./archive/probabilistic_inference_expansion_20260430/)*
 
 ---
 
