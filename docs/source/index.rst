@@ -16,6 +16,7 @@ Start here
    innovate.stability
    innovate.plugins
    runtime_logging
+   xla_backend_strategy
    rust_core_roadmap
    binding_publication_ci
    tutorials
@@ -31,6 +32,7 @@ The architectural rationale and roadmap live in the repository docs, not in the 
 - ``docs/architecture_modernization_roadmap.md``
 - ``innovate.plugins.rst``
 - ``innovate.stability.rst``
+- ``xla_backend_strategy``
 - ``rust_core_roadmap``
 - ``adr``
 

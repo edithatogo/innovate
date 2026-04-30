@@ -166,5 +166,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: XLA Backend Strategy and JAX Kernel Promotion Gates**
-  *Link: [./tracks/xla_backend_strategy_20260430/](./tracks/xla_backend_strategy_20260430/)*
+- [x] **Track: XLA Backend Strategy and JAX Kernel Promotion Gates** *(Completed)*
+  *Link: [./archive/xla_backend_strategy_20260430/](./archive/xla_backend_strategy_20260430/)*

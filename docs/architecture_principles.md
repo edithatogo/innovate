@@ -56,11 +56,13 @@ Rust `SHOULD` be treated as the strategic long-term core runtime for performance
 - The durable technical foundation is `Array API + Arrow`, not `XLA` as a public surface.
 - The reference numerical backend remains NumPy/SciPy.
 - JAX remains an accelerator and advanced-inference option, not the universal execution contract.
+- XLA-backed kernels should be preferred for eligible accelerator work when they satisfy documented promotion gates.
 - The tabular strategy is `pandas + PyArrow` first, with selective Polars adoption at ingestion and analytics edges only.
 - Rust is the long-term core runtime direction, but Python remains the ergonomic reference interface.
 
 ## Related Documents
 
 - [Architecture Modernization Roadmap](./architecture_modernization_roadmap.md)
+- [XLA Backend Strategy](./source/xla_backend_strategy.rst)
 - [ADR Index](./adr/index.md)
 - [ADR 0004: Core API, Bindings, and Rust Core Trajectory](./adr/0004-core-api-bindings-and-rust-core-trajectory.md)

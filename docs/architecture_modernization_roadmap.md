@@ -132,9 +132,10 @@ The following remain worthwhile, but they should follow the contract and interch
 - broad Rust rewrites before operation-level parity and benchmark gates exist: `Rust Core Expansion`
 - C# package publication before the thin-binding contract is validated: `C# Package Publication`
 
-## Active Follow-On Tracks
+## Follow-On Track Mapping
 
-These tracks convert the deferred work into Conductor-managed backlog items:
+These tracks convert the deferred work into Conductor-managed implementation
+items. Completed follow-on tracks point to their Conductor archive.
 
 - [Probabilistic Inference Expansion](../conductor/tracks/probabilistic_inference_expansion_20260430/)
 - [Diagnostics and Uncertainty Expansion](../conductor/tracks/diagnostics_uncertainty_expansion_20260430/)
@@ -144,7 +145,7 @@ These tracks convert the deferred work into Conductor-managed backlog items:
 - [Rust Core Expansion](../conductor/tracks/rust_core_expansion_20260430/)
 - [C# Package Publication](../conductor/tracks/csharp_package_publication_20260430/)
 - [Roadmap Completeness Audit](../conductor/tracks/roadmap_completeness_audit_20260430/)
-- [XLA Backend Strategy and JAX Kernel Promotion Gates](../conductor/tracks/xla_backend_strategy_20260430/)
+- [XLA Backend Strategy and JAX Kernel Promotion Gates](../conductor/archive/xla_backend_strategy_20260430/)
 
 The `Roadmap Completeness Audit` track exists to check for implied work that is
 not explicit in this roadmap, including release governance, CI/CD coverage,
@@ -156,6 +157,8 @@ the optional accelerator preference operational. It should define when JAX/XLA
 is preferred, when NumPy/SciPy remains the reference path, when Rust-native
 execution should compete with XLA-backed kernels, and when dynamic operational
 simulation semantics should stay outside XLA-backed implementation.
+The durable policy is documented in the Sphinx page
+`XLA Backend Strategy` (`docs/source/xla_backend_strategy.rst`).
 
 ## Decision Links
 

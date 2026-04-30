@@ -75,11 +75,7 @@ def test_roadmap_completeness_audit_track_is_registered() -> None:
 
 def test_active_roadmap_track_artifacts_exist() -> None:
     """Each active roadmap backlog track should have complete Conductor files."""
-    for title, track_id in [
-        *ROADMAP_BACKLOG_TRACKS.values(),
-        ROADMAP_AUDIT_TRACK,
-        XLA_STRATEGY_TRACK,
-    ]:
+    for title, track_id in [*ROADMAP_BACKLOG_TRACKS.values(), ROADMAP_AUDIT_TRACK]:
         track_dir = Path("conductor/tracks") / track_id
         metadata = json.loads((track_dir / "metadata.json").read_text())
 
@@ -96,10 +92,17 @@ def test_xla_strategy_is_registered_and_linked_from_roadmap() -> None:
     registry = Path("conductor/tracks.md").read_text()
     tech_stack = Path("conductor/tech-stack.md").read_text()
     title, track_id = XLA_STRATEGY_TRACK
+    track_dir = Path("conductor/archive") / track_id
+    metadata = json.loads((track_dir / "metadata.json").read_text())
 
-    assert f"- [ ] **Track: {title}**" in registry
-    assert f"./tracks/{track_id}/" in registry
-    assert f"../conductor/tracks/{track_id}/" in roadmap
+    assert f"- [x] **Track: {title}** *(Completed)*" in registry
+    assert f"./archive/{track_id}/" in registry
+    assert f"../conductor/archive/{track_id}/" in roadmap
+    assert (track_dir / "spec.md").is_file()
+    assert (track_dir / "plan.md").is_file()
+    assert (track_dir / "index.md").is_file()
+    assert metadata["track_id"] == track_id
+    assert metadata["status"] == "completed"
     assert "Prefer XLA-backed libraries" in roadmap
 
     for library in (
