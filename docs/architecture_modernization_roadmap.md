@@ -140,7 +140,7 @@ items. Completed follow-on tracks point to their Conductor archive.
 - [Probabilistic Inference Expansion](../conductor/archive/probabilistic_inference_expansion_20260430/)
 - [Diagnostics and Uncertainty Expansion](../conductor/archive/diagnostics_uncertainty_expansion_20260430/)
 - [Benchmark Corpus Automation](../conductor/archive/benchmark_corpus_automation_20260430/)
-- [Hosted Services and Remote Execution](../conductor/tracks/hosted_remote_execution_20260430/)
+- [Hosted Services and Remote Execution](../conductor/archive/hosted_remote_execution_20260430/)
 - [DataFrame Engine Experimentation](../conductor/tracks/dataframe_engine_experimentation_20260430/)
 - [Rust Core Expansion](../conductor/tracks/rust_core_expansion_20260430/)
 - [C# Package Publication](../conductor/tracks/csharp_package_publication_20260430/)
@@ -171,6 +171,12 @@ model-card freshness validation. Benchmark cases record runtime tier, CI policy,
 reference backend, XLA compilation cost, XLA steady-state runtime, accelerator
 target, and baseline model metadata so expensive benchmark runs stay opt-in
 while promotion evidence remains structured.
+
+The `Hosted Services and Remote Execution` track adds a remote execution contract
+around the functional kernel rather than a second public API. The first slice
+documents the request envelope, structured errors, observability fields, tenant
+and data-retention controls, and backend provenance for NumPy/SciPy, JAX/XLA,
+Rust-native, and bridge fallback execution.
 
 The `XLA Backend Strategy and JAX Kernel Promotion Gates` track exists to make
 the optional accelerator preference operational. It should define when JAX/XLA

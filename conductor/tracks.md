@@ -137,12 +137,12 @@ This file tracks all major tracks for the project. Each track has its own detail
 ---
 
 - [x] **Track: Benchmark Corpus Automation** *(Completed)*
-  *Link: [./archive/benchmark_corpus_automation_20260430/](./tracks/benchmark_corpus_automation_20260430/)*
+  *Link: [./archive/benchmark_corpus_automation_20260430/](./archive/benchmark_corpus_automation_20260430/)*
 
 ---
 
-- [ ] **Track: Hosted Services and Remote Execution**
-  *Link: [./tracks/hosted_remote_execution_20260430/](./tracks/hosted_remote_execution_20260430/)*
+- [x] **Track: Hosted Services and Remote Execution** *(Completed)*
+  *Link: [./archive/hosted_remote_execution_20260430/](./archive/hosted_remote_execution_20260430/)*
 
 ---
 

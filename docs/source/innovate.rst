@@ -14,6 +14,7 @@ Read next
 - ``docs/source/innovate.kernel.rst`` for the contract-first kernel API
 - ``docs/source/innovate.arrow_interchange.rst`` for the interchange boundary
 - ``docs/source/probabilistic_inference.rst`` for posterior payloads and optional XLA-aligned inference backends
+- ``docs/source/remote_execution.rst`` for hosted service and remote execution boundaries
 - ``docs/source/innovate.plugins.rst`` for plugin extension points
 - ``docs/source/innovate.stability.rst`` for stability tiers
 - ``docs/architecture_principles.md`` for the architecture rationale

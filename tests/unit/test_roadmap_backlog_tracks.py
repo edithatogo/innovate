@@ -18,13 +18,13 @@ COMPLETED_ROADMAP_FOLLOW_ON_TRACKS = {
         "Benchmark Corpus Automation",
         "benchmark_corpus_automation_20260430",
     ),
-}
-
-ROADMAP_BACKLOG_TRACKS = {
     "hosted services or remote execution layers": (
         "Hosted Services and Remote Execution",
         "hosted_remote_execution_20260430",
     ),
+}
+
+ROADMAP_BACKLOG_TRACKS = {
     "aggressive DataFrame engine experimentation beyond ingestion and ETL edges": (
         "DataFrame Engine Experimentation",
         "dataframe_engine_experimentation_20260430",

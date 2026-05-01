@@ -18,6 +18,7 @@ Start here
    innovate.stability
    innovate.plugins
    runtime_logging
+   remote_execution
    xla_backend_strategy
    rust_core_roadmap
    binding_publication_ci
@@ -36,6 +37,7 @@ The architectural rationale and roadmap live in the repository docs, not in the 
 - ``probabilistic_inference``
 - ``innovate.plugins.rst``
 - ``innovate.stability.rst``
+- ``remote_execution``
 - ``xla_backend_strategy``
 - ``rust_core_roadmap``
 - ``adr``

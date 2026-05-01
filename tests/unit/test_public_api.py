@@ -3,7 +3,7 @@
 import pytest
 
 import innovate
-from innovate import backends, benchmarks
+from innovate import backends, benchmarks, remote_execution
 from innovate.backends.numpy_backend import NumPyBackend
 from innovate.base import DiffusionModel
 from innovate.benchmarks import BenchmarkAutomationReport, BenchmarkCase, BenchmarkFamily, ModelCard
@@ -15,6 +15,7 @@ from innovate.diffuse.gompertz import GompertzModel
 from innovate.diffuse.logistic import LogisticModel
 from innovate.ecosystem.complementary_goods import ComplementaryGoodsModel
 from innovate.fitters import ScipyFitter
+from innovate.remote_execution import InProcessRemoteExecutor, RemoteExecutionRequest
 from innovate.substitute.composite import CompositeDiffusionModel
 from innovate.substitute.fisher_pry import FisherPryModel
 from innovate.substitute.norton_bass import NortonBassModel
@@ -39,6 +40,8 @@ def test_top_level_exports_resolve_to_canonical_classes():
     assert innovate.BenchmarkJob is benchmarks.BenchmarkJob
     assert innovate.BenchmarkRunner is benchmarks.BenchmarkRunner
     assert innovate.BenchmarkSuiteResult is benchmarks.BenchmarkSuiteResult
+    assert innovate.InProcessRemoteExecutor is InProcessRemoteExecutor
+    assert innovate.RemoteExecutionRequest is RemoteExecutionRequest
     assert innovate.ModelCard is ModelCard
 
 
@@ -61,6 +64,7 @@ def test_canonical_subpackages_export_stable_models():
     assert benchmarks.validate_benchmark_corpus is innovate.validate_benchmark_corpus
     assert benchmarks.refresh_model_card_summaries is innovate.refresh_model_card_summaries
     assert benchmarks.ModelCard is ModelCard
+    assert remote_execution.InProcessRemoteExecutor is innovate.InProcessRemoteExecutor
 
 
 def test_legacy_paths_remain_importable_while_canonical_paths_exist():
