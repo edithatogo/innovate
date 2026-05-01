@@ -14,13 +14,13 @@ COMPLETED_ROADMAP_FOLLOW_ON_TRACKS = {
         "Diagnostics and Uncertainty Expansion",
         "diagnostics_uncertainty_expansion_20260430",
     ),
-}
-
-ROADMAP_BACKLOG_TRACKS = {
     "broader benchmark corpus automation": (
         "Benchmark Corpus Automation",
         "benchmark_corpus_automation_20260430",
     ),
+}
+
+ROADMAP_BACKLOG_TRACKS = {
     "hosted services or remote execution layers": (
         "Hosted Services and Remote Execution",
         "hosted_remote_execution_20260430",

@@ -139,7 +139,7 @@ items. Completed follow-on tracks point to their Conductor archive.
 
 - [Probabilistic Inference Expansion](../conductor/archive/probabilistic_inference_expansion_20260430/)
 - [Diagnostics and Uncertainty Expansion](../conductor/archive/diagnostics_uncertainty_expansion_20260430/)
-- [Benchmark Corpus Automation](../conductor/tracks/benchmark_corpus_automation_20260430/)
+- [Benchmark Corpus Automation](../conductor/archive/benchmark_corpus_automation_20260430/)
 - [Hosted Services and Remote Execution](../conductor/tracks/hosted_remote_execution_20260430/)
 - [DataFrame Engine Experimentation](../conductor/tracks/dataframe_engine_experimentation_20260430/)
 - [Rust Core Expansion](../conductor/tracks/rust_core_expansion_20260430/)
@@ -165,6 +165,12 @@ residual diagnostics, residual-bias calibration checks, uncertainty interval
 rows, and model-comparison metrics behind the existing kernel and Arrow table
 contracts. JAX/XLA acceleration remains a promotion gate for future array-heavy
 diagnostics rather than a public artifact format.
+
+The `Benchmark Corpus Automation` track adds fast benchmark metadata and
+model-card freshness validation. Benchmark cases record runtime tier, CI policy,
+reference backend, XLA compilation cost, XLA steady-state runtime, accelerator
+target, and baseline model metadata so expensive benchmark runs stay opt-in
+while promotion evidence remains structured.
 
 The `XLA Backend Strategy and JAX Kernel Promotion Gates` track exists to make
 the optional accelerator preference operational. It should define when JAX/XLA

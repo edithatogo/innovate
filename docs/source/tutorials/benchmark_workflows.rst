@@ -13,9 +13,31 @@ What the suite includes
 
 - a reproducible benchmark corpus with stable case identifiers
 - synchronized model cards for stable model families
+- fast metadata checks for benchmark contribution review
 - a canonical runner that emits comparable metrics, diagnostics, and
   uncertainty summaries
 - JSON-friendly artifacts that can be saved and diffed in CI
+
+Fast validation
+---------------
+
+Run the fast validation gate before adding or changing benchmark cases:
+
+.. code-block:: python
+
+    from innovate.benchmarks import (
+        refresh_model_card_summaries,
+        validate_benchmark_corpus,
+    )
+
+    report = validate_benchmark_corpus()
+    report.assert_valid()
+
+    summaries = refresh_model_card_summaries()
+    print(summaries["bass"]["freshness"]["status"])
+
+This gate checks required metadata, model-card freshness, and CI policy. It is
+intended for normal pull request CI and does not execute timing benchmarks.
 
 Running the stable suite
 ------------------------
@@ -75,9 +97,20 @@ each stable family has a consistent machine-readable description.
 Recommended workflow
 --------------------
 
-1. Run the stable benchmark suite for the model families you want to compare.
-2. Save the JSON artifact as a release or CI output.
-3. Use the model cards to confirm assumptions, outputs, diagnostics, and
+1. Run ``validate_benchmark_corpus`` after editing cases or model cards.
+2. Use ``workflow_dispatch`` for opt-in timing runs.
+3. Save the JSON artifact as a release or CI output.
+4. Use the model cards to confirm assumptions, outputs, diagnostics, and
    limitations before interpreting the scores.
-4. Keep documentation synchronized with code changes so the suite stays
+5. Keep documentation synchronized with code changes so the suite stays
    reproducible and auditable.
+
+Promotion metadata
+------------------
+
+Backend and Rust-core promotion candidates must report reference backend timing
+separately from accelerated results. XLA compilation cost and XLA
+steady-state runtime should be recorded independently so first-call compilation
+does not get confused with repeated execution. Cases that require expensive
+accelerator timing should use ``workflow_dispatch`` or scheduled CI instead of
+the fast default test path.

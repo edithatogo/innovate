@@ -132,12 +132,12 @@ This file tracks all major tracks for the project. Each track has its own detail
 ---
 
 - [x] **Track: Diagnostics and Uncertainty Expansion** *(Completed)*
-  *Link: [./archive/diagnostics_uncertainty_expansion_20260430/](./tracks/diagnostics_uncertainty_expansion_20260430/)*
+  *Link: [./archive/diagnostics_uncertainty_expansion_20260430/](./archive/diagnostics_uncertainty_expansion_20260430/)*
 
 ---
 
-- [ ] **Track: Benchmark Corpus Automation**
-  *Link: [./tracks/benchmark_corpus_automation_20260430/](./tracks/benchmark_corpus_automation_20260430/)*
+- [x] **Track: Benchmark Corpus Automation** *(Completed)*
+  *Link: [./archive/benchmark_corpus_automation_20260430/](./tracks/benchmark_corpus_automation_20260430/)*
 
 ---
 

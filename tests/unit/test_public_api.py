@@ -6,7 +6,7 @@ import innovate
 from innovate import backends, benchmarks
 from innovate.backends.numpy_backend import NumPyBackend
 from innovate.base import DiffusionModel
-from innovate.benchmarks import BenchmarkCase, BenchmarkFamily, ModelCard
+from innovate.benchmarks import BenchmarkAutomationReport, BenchmarkCase, BenchmarkFamily, ModelCard
 from innovate.capabilities import ModelCapability
 from innovate.compete.competition import MultiProductDiffusionModel as StableCompetitionModel
 from innovate.compete.lotka_volterra import LotkaVolterraModel
@@ -33,6 +33,7 @@ def test_top_level_exports_resolve_to_canonical_classes():
     assert innovate.LotkaVolterraModel is LotkaVolterraModel
     assert innovate.ComplementaryGoodsModel is ComplementaryGoodsModel
     assert innovate.ScipyFitter is ScipyFitter
+    assert innovate.BenchmarkAutomationReport is BenchmarkAutomationReport
     assert innovate.BenchmarkCase is BenchmarkCase
     assert innovate.BenchmarkFamily is BenchmarkFamily
     assert innovate.BenchmarkJob is benchmarks.BenchmarkJob
@@ -57,6 +58,8 @@ def test_canonical_subpackages_export_stable_models():
     assert benchmarks.BenchmarkJob is innovate.BenchmarkJob
     assert benchmarks.BenchmarkRunner is innovate.BenchmarkRunner
     assert benchmarks.BenchmarkSuiteResult is innovate.BenchmarkSuiteResult
+    assert benchmarks.validate_benchmark_corpus is innovate.validate_benchmark_corpus
+    assert benchmarks.refresh_model_card_summaries is innovate.refresh_model_card_summaries
     assert benchmarks.ModelCard is ModelCard
 
 

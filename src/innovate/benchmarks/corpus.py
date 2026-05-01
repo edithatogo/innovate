@@ -9,6 +9,22 @@ from typing import Mapping
 
 import numpy as np
 
+BENCHMARK_METADATA_SCHEMA_VERSION = "1.0"
+DEFAULT_BENCHMARK_METADATA = MappingProxyType(
+    {
+        "runtime_tier": "fast_ci",
+        "ci_policy": "fast",
+        "dataset_size": "small",
+        "cost_estimate": "low",
+        "reference_backend": "numpy_scipy",
+        "reference_timing_kind": "reference_smoke",
+        "xla_compile_cost": "not_applicable",
+        "xla_steady_state_runtime": "not_applicable",
+        "accelerator_target": "cpu",
+        "metadata_schema_version": BENCHMARK_METADATA_SCHEMA_VERSION,
+    },
+)
+
 
 class BenchmarkFamily(str, Enum):
     """Families represented in the benchmark corpus."""
@@ -60,6 +76,9 @@ class BenchmarkCase:
         metadata.setdefault("source", self.source)
         metadata.setdefault("case_id", self.case_id)
         metadata.setdefault("dataset_version", self.dataset_version)
+        for key, value in DEFAULT_BENCHMARK_METADATA.items():
+            metadata.setdefault(key, value)
+        metadata.setdefault("baseline_model_key", self.canonical_model_key)
         object.__setattr__(self, "time", time)
         object.__setattr__(self, "observed", observed)
         object.__setattr__(self, "metadata", MappingProxyType(metadata))

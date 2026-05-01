@@ -11,6 +11,8 @@ It is the right place to discover:
 - synchronized model cards for stable model families
 - machine-readable benchmark run artifacts
 - the default suite entry point for deterministic smoke validation
+- fast metadata validation with ``validate_benchmark_corpus``
+- model-card freshness summaries with ``refresh_model_card_summaries``
 
 Stable benchmark families
 -------------------------
@@ -19,6 +21,29 @@ Stable benchmark families
 - ``substitution``: replacement-share benchmarks such as Fisher-Pry and Norton-Bass
 - ``competition``: multivariate competition benchmarks for stable product comparisons
 
+Fast and opt-in automation
+--------------------------
+
+Fast CI should validate benchmark metadata and model-card freshness without
+running expensive timing suites:
+
+.. code-block:: bash
+
+   uv run python -m pytest tests/unit/test_benchmark_automation.py
+
+The expensive benchmark suite remains opt-in through ``workflow_dispatch`` and
+uses:
+
+.. code-block:: bash
+
+   uv run pytest --benchmark-only --benchmark-json=benchmark.json
+
+Benchmark metadata records the CI policy, runtime tier, reference backend, XLA
+compilation cost requirement, XLA steady-state runtime requirement, accelerator
+target, and baseline model key. These fields keep fast checks bounded while
+preserving the evidence needed for Rust-core and optional-backend promotion
+decisions.
+
 Submodules
 ----------
 
@@ -26,6 +51,7 @@ Submodules
    :maxdepth: 4
 
    innovate.benchmarks.corpus
+   innovate.benchmarks.automation
    innovate.benchmarks.model_cards
    innovate.benchmarks.runner
 
