@@ -3,13 +3,14 @@
 import pytest
 
 import innovate
-from innovate import backends, benchmarks, remote_execution
+from innovate import backends, benchmarks, dataframe_engines, remote_execution
 from innovate.backends.numpy_backend import NumPyBackend
 from innovate.base import DiffusionModel
 from innovate.benchmarks import BenchmarkAutomationReport, BenchmarkCase, BenchmarkFamily, ModelCard
 from innovate.capabilities import ModelCapability
 from innovate.compete.competition import MultiProductDiffusionModel as StableCompetitionModel
 from innovate.compete.lotka_volterra import LotkaVolterraModel
+from innovate.dataframe_engines import DataFrameEngineBenchmarkFixture
 from innovate.diffuse.bass import BassModel
 from innovate.diffuse.gompertz import GompertzModel
 from innovate.diffuse.logistic import LogisticModel
@@ -40,6 +41,7 @@ def test_top_level_exports_resolve_to_canonical_classes():
     assert innovate.BenchmarkJob is benchmarks.BenchmarkJob
     assert innovate.BenchmarkRunner is benchmarks.BenchmarkRunner
     assert innovate.BenchmarkSuiteResult is benchmarks.BenchmarkSuiteResult
+    assert innovate.DataFrameEngineBenchmarkFixture is DataFrameEngineBenchmarkFixture
     assert innovate.InProcessRemoteExecutor is InProcessRemoteExecutor
     assert innovate.RemoteExecutionRequest is RemoteExecutionRequest
     assert innovate.ModelCard is ModelCard
@@ -64,6 +66,7 @@ def test_canonical_subpackages_export_stable_models():
     assert benchmarks.validate_benchmark_corpus is innovate.validate_benchmark_corpus
     assert benchmarks.refresh_model_card_summaries is innovate.refresh_model_card_summaries
     assert benchmarks.ModelCard is ModelCard
+    assert dataframe_engines.describe_dataframe_engine_experiments is innovate.describe_dataframe_engine_experiments
     assert remote_execution.InProcessRemoteExecutor is innovate.InProcessRemoteExecutor
 
 

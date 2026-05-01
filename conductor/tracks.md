@@ -146,8 +146,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: DataFrame Engine Experimentation**
-  *Link: [./tracks/dataframe_engine_experimentation_20260430/](./tracks/dataframe_engine_experimentation_20260430/)*
+- [x] **Track: DataFrame Engine Experimentation** *(Completed)*
+  *Link: [./archive/dataframe_engine_experimentation_20260430/](./archive/dataframe_engine_experimentation_20260430/)*
 
 ---
 

@@ -22,13 +22,13 @@ COMPLETED_ROADMAP_FOLLOW_ON_TRACKS = {
         "Hosted Services and Remote Execution",
         "hosted_remote_execution_20260430",
     ),
-}
-
-ROADMAP_BACKLOG_TRACKS = {
     "aggressive DataFrame engine experimentation beyond ingestion and ETL edges": (
         "DataFrame Engine Experimentation",
         "dataframe_engine_experimentation_20260430",
     ),
+}
+
+ROADMAP_BACKLOG_TRACKS = {
     "broad Rust rewrites before operation-level parity and benchmark gates exist": (
         "Rust Core Expansion",
         "rust_core_expansion_20260430",

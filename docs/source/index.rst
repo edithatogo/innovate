@@ -15,6 +15,7 @@ Start here
    innovate.fitters.diagnostics_contract
    diagnostics_uncertainty_artifacts
    probabilistic_inference
+   dataframe_engine_experiments
    innovate.stability
    innovate.plugins
    runtime_logging
@@ -35,6 +36,7 @@ The architectural rationale and roadmap live in the repository docs, not in the 
 - ``docs/architecture_modernization_roadmap.md``
 - ``diagnostics_uncertainty_artifacts``
 - ``probabilistic_inference``
+- ``dataframe_engine_experiments``
 - ``innovate.plugins.rst``
 - ``innovate.stability.rst``
 - ``remote_execution``

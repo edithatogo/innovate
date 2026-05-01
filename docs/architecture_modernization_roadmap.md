@@ -141,7 +141,7 @@ items. Completed follow-on tracks point to their Conductor archive.
 - [Diagnostics and Uncertainty Expansion](../conductor/archive/diagnostics_uncertainty_expansion_20260430/)
 - [Benchmark Corpus Automation](../conductor/archive/benchmark_corpus_automation_20260430/)
 - [Hosted Services and Remote Execution](../conductor/archive/hosted_remote_execution_20260430/)
-- [DataFrame Engine Experimentation](../conductor/tracks/dataframe_engine_experimentation_20260430/)
+- [DataFrame Engine Experimentation](../conductor/archive/dataframe_engine_experimentation_20260430/)
 - [Rust Core Expansion](../conductor/tracks/rust_core_expansion_20260430/)
 - [C# Package Publication](../conductor/tracks/csharp_package_publication_20260430/)
 - [Roadmap Completeness Audit](../conductor/tracks/roadmap_completeness_audit_20260430/)
@@ -177,6 +177,12 @@ around the functional kernel rather than a second public API. The first slice
 documents the request envelope, structured errors, observability fields, tenant
 and data-retention controls, and backend provenance for NumPy/SciPy, JAX/XLA,
 Rust-native, and bridge fallback execution.
+
+The `DataFrame Engine Experimentation` track keeps pandas plus PyArrow as the
+default Python tabular surface while adding an optional Polars experiment behind
+the Arrow-compatible kernel table contract. Benchmark fixtures record
+correctness, timing, memory, fallback behavior, and whether any gain came from
+tabular execution rather than XLA-backed numerical kernels.
 
 The `XLA Backend Strategy and JAX Kernel Promotion Gates` track exists to make
 the optional accelerator preference operational. It should define when JAX/XLA
