@@ -22,9 +22,8 @@ The current inventory is:
 
 ``Polars``
    Optional downstream Arrow consumer for selected experiments. Polars is
-   experimental and is installed only through ``innovate[dataframe]``. Polars is
-   experimental until benchmark evidence and compatibility gates justify broader
-   support.
+   installed only through ``innovate[dataframe]``. Polars is experimental until
+   benchmark evidence and compatibility gates justify broader support.
 
 Candidate workloads
 -------------------
