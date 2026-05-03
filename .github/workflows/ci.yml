@@ -349,10 +349,10 @@ jobs:
           dotnet-version: ${{ matrix.dotnet-version }}
 
       - name: Restore C# binding dependencies
-        run: dotnet restore bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj -p:TargetFramework=${{ matrix.target-framework }}
+        run: dotnet restore bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj -p:TargetFrameworks=${{ matrix.target-framework }}
 
       - name: Test C# bindings
-        run: dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj --configuration Release --framework ${{ matrix.target-framework }}
+        run: dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj --configuration Release --framework ${{ matrix.target-framework }} -p:TargetFrameworks=${{ matrix.target-framework }}
 
   # -----------------------------------------------------------------------
   # Type Checking

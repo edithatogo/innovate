@@ -126,8 +126,8 @@ jobs:
             10.0.x
             11.0.x
       - run: dotnet restore bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj
-      - run: dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj --configuration Release --framework net10.0
-      - run: dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj --configuration Release --framework net11.0
+      - run: dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj --configuration Release --framework net10.0 -p:TargetFrameworks=net10.0
+      - run: dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj --configuration Release --framework net11.0 -p:TargetFrameworks=net11.0
       - run: dotnet pack bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj --configuration Release --output bindings/csharp/artifacts
       - name: Publish to NuGet
         if: ${{ github.event_name == 'release' || inputs.dry_run == 'false' }}
