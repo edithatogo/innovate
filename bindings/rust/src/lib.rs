@@ -466,7 +466,7 @@ impl KernelBinding {
         &self,
         request: &KernelRequest,
     ) -> Result<KernelResponse, KernelBindingError> {
-        logistic_native_response(KernelOperation::PredictModel, request)
+        fitted_state_native_response(KernelOperation::PredictModel, request)
     }
 
     pub fn simulate_model(
@@ -501,7 +501,7 @@ impl KernelBinding {
         &self,
         request: &KernelRequest,
     ) -> Result<KernelResponse, KernelBindingError> {
-        logistic_native_response(KernelOperation::SimulateModel, request)
+        fitted_state_native_response(KernelOperation::SimulateModel, request)
     }
 
     pub fn summarize_model(
@@ -1374,6 +1374,28 @@ fn refine_logistic_asymptote(
         .min_by(|left_candidate, right_candidate| left_candidate.0.total_cmp(&right_candidate.0))
 }
 
+fn fitted_state_native_response(
+    operation: KernelOperation,
+    request: &KernelRequest,
+) -> Result<KernelResponse, KernelBindingError> {
+    if request.operation != operation {
+        return Err(KernelBindingError::invalid_request(
+            request.operation,
+            format!("native {operation} requires a {operation} request"),
+        ));
+    }
+
+    let model_key = request.model_key.as_deref().unwrap_or("");
+    match model_key {
+        "logistic" => logistic_native_response(operation, request),
+        "bass" => bass_native_response(operation, request),
+        _ => Err(KernelBindingError::unsupported_native_operation(
+            operation,
+            format!("native {operation} is not implemented for model '{model_key}'"),
+        )),
+    }
+}
+
 fn logistic_native_response(
     operation: KernelOperation,
     request: &KernelRequest,
@@ -1469,6 +1491,128 @@ fn logistic_native_response(
             "model_key": model_key,
             "family": "diffusion",
             "model_name": "LogisticModel",
+            "runtime": "rust_native"
+        }),
+    })
+}
+
+fn bass_native_response(
+    operation: KernelOperation,
+    request: &KernelRequest,
+) -> Result<KernelResponse, KernelBindingError> {
+    if request.operation != operation {
+        return Err(KernelBindingError::invalid_request(
+            request.operation,
+            format!("native {operation} requires a {operation} request"),
+        ));
+    }
+
+    let model_key = request.model_key.as_deref().unwrap_or("");
+    if model_key != "bass" {
+        return Err(KernelBindingError::unsupported_native_operation(
+            operation,
+            format!("native {operation} is not implemented for model '{model_key}'"),
+        ));
+    }
+
+    let payload = request.payload.as_object().ok_or_else(|| {
+        KernelBindingError::invalid_request(
+            operation,
+            format!("{operation} payload must be an object"),
+        )
+    })?;
+    let inputs = object_section(payload, "inputs", operation)?;
+    let time = numeric_array_from_aliases(inputs, &["time", "t"], operation)?;
+    if time.iter().any(|value| !value.is_finite() || *value < 0.0) {
+        return Err(KernelBindingError::invalid_request(
+            operation,
+            "time values must be finite and non-negative for native Bass execution",
+        ));
+    }
+    if time
+        .first()
+        .is_some_and(|first_time| first_time.abs() > 1e-12)
+    {
+        return Err(KernelBindingError::unsupported_native_operation(
+            operation,
+            "native Bass execution currently supports time grids that start at zero",
+        ));
+    }
+
+    let state = optional_object_section(payload, "state");
+    let state_model_key = state
+        .and_then(|state| state.get("model_key"))
+        .and_then(Value::as_str)
+        .unwrap_or(model_key);
+    if state_model_key != model_key {
+        return Err(KernelBindingError::invalid_request(
+            operation,
+            format!(
+                "kernel request model_key '{model_key}' does not match state model_key '{state_model_key}'"
+            ),
+        ));
+    }
+
+    let constructor_kwargs = state
+        .and_then(|state| state.get("constructor_kwargs"))
+        .and_then(Value::as_object);
+    let has_covariates = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("covariates"))
+        .is_some_and(|covariates| !covariates.as_array().is_some_and(Vec::is_empty));
+    let has_event = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("t_event"))
+        .is_some_and(|value| !value.is_null());
+    let input_covariates = inputs.get("covariates").is_some();
+    if has_covariates || has_event || input_covariates {
+        return Err(KernelBindingError::unsupported_native_operation(
+            operation,
+            "native Bass execution currently supports fitted states without covariates or event splits",
+        ));
+    }
+
+    let parameters = payload
+        .get("parameters")
+        .and_then(Value::as_object)
+        .or_else(|| {
+            state
+                .and_then(|state| state.get("parameters"))
+                .and_then(Value::as_object)
+        })
+        .ok_or_else(|| {
+            KernelBindingError::invalid_request(
+                operation,
+                "kernel requests for model execution require fitted parameters in state or parameters",
+            )
+        })?;
+
+    let p = required_f64(parameters, "p", operation)?;
+    let q = required_f64(parameters, "q", operation)?;
+    let m = required_f64(parameters, "m", operation)?;
+    if !p.is_finite() || !q.is_finite() || !m.is_finite() || p <= 0.0 || q < 0.0 || m <= 0.0 {
+        return Err(KernelBindingError::invalid_request(
+            operation,
+            "native Bass parameters must be finite with p > 0, q >= 0, and m > 0",
+        ));
+    }
+
+    let predictions: Vec<f64> = time
+        .iter()
+        .map(|t| {
+            let decay = (-(p + q) * t).exp();
+            m * (1.0 - decay) / (1.0 + (q / p) * decay)
+        })
+        .collect();
+
+    Ok(KernelResponse {
+        schema_version: KERNEL_SCHEMA_VERSION.to_string(),
+        operation,
+        model_key: None,
+        result: Some(kernel_array_payload(&predictions)),
+        error: None,
+        metadata: json!({
+            "model_key": model_key,
+            "family": "diffusion",
+            "model_name": "BassModel",
             "runtime": "rust_native"
         }),
     })

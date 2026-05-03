@@ -18,6 +18,8 @@ Expand Rust-backed core execution only where operation-level parity, error mappi
 5. Require benchmark and profiling evidence before promoting a Rust path to default execution.
 6. Compare native Rust candidates against NumPy/SciPy reference behavior and eligible JAX/XLA-backed paths before default promotion.
 7. Document operation-level support status and promotion criteria.
+8. Maintain an operation support inventory that identifies native Rust scope, bridge fallback scope, Python-only reference scope, and Rust vs JAX/XLA eligibility for each stable kernel operation.
+9. Require a benchmark promotion dossier before any Rust-native default promotion; the dossier must compare Python/NumPy/SciPy reference behavior, Rust-native runtime, XLA compile cost and steady-state runtime where eligible, fallback rate, and schema/error compatibility.
 
 ## Non-Functional Requirements
 
@@ -26,6 +28,7 @@ Expand Rust-backed core execution only where operation-level parity, error mappi
 3. The bridge must preserve schema compatibility for every supported binding.
 4. Performance gates must include regression protections and clear fallback behavior.
 5. Rust promotion gates must account for XLA compile cost, steady-state execution, portability, and deployment complexity where JAX is a viable candidate.
+6. Fallback behavior must preserve stable kernel error codes, including unsupported native coverage and bridge execution failures.
 
 ## Acceptance Criteria
 
@@ -34,6 +37,7 @@ Expand Rust-backed core execution only where operation-level parity, error mappi
 3. Documentation identifies which operations are native, bridged, experimental, or Python-backed.
 4. CI validates parity and schema compatibility for the implemented slice.
 5. Promotion evidence explains why Rust-native execution is preferable to or complementary with an XLA-backed implementation for the selected operation.
+6. The Rust core roadmap includes an operation support inventory with native Rust scope, bridge fallback scope, Python-only reference scope, and Rust vs JAX/XLA eligibility.
 
 ## Out of Scope
 

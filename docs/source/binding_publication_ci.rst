@@ -41,7 +41,10 @@ Go
 
 C#
   Publish ``Innovate.Kernel`` to NuGet after the .NET 10 and .NET 11 package
-  targets pass restore, test, pack, and NuGet metadata checks.
+  targets pass restore, test, pack, symbol package generation, bridge-content
+  inclusion, and NuGet metadata checks. The package metadata must include the
+  MIT license expression, repository URL and type, project URL, readme, package
+  tags, SourceLink settings, and release notes before publication.
 
 CI requirements
 ---------------
@@ -61,3 +64,9 @@ Release workflow
 ``.github/workflows/bindings-publish.yml`` is the binding publication gate. It
 must run package checks for every language and only publish when release events
 or explicit manual inputs are used with the required registry secrets.
+
+For NuGet, the release workflow performs a dry-run style artifact gate before
+``dotnet nuget push``: it packs ``Innovate.Kernel``, requires both ``.nupkg``
+and ``.snupkg`` outputs, inspects the generated ``.nuspec`` for publication
+metadata, and verifies the package contains ``README.md`` and the packaged
+``contentFiles/any/any/innovate/kernel_bridge.py`` bridge script.

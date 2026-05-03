@@ -66,6 +66,7 @@ def test_binding_publish_workflow_has_release_gated_registry_steps() -> None:
         "Tag Go submodule release",
         "Publish to NuGet",
         "dotnet pack bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj",
+        "Validate NuGet package artifacts",
     ):
         assert registry_step in workflow
 
@@ -75,6 +76,26 @@ def test_binding_publish_workflow_has_release_gated_registry_steps() -> None:
     assert "11.0.x" in workflow
     assert "--framework net10.0 -p:TargetFrameworks=net10.0" in workflow
     assert "--framework net11.0 -p:TargetFrameworks=net11.0" in workflow
+    assert "-p:ContinuousIntegrationBuild=true" in workflow
+    assert "bindings/csharp/artifacts/*.nupkg" in workflow
+    assert "bindings/csharp/artifacts/*.snupkg" in workflow
+    assert '<license type=\\"expression\\">MIT</license>' in workflow
+    assert '<repository type=\\"git\\" url=\\"https://github.com/edithatogo/innovate\\"' in workflow
+    assert "<tags>innovate health-economics decision-analysis kernel bindings</tags>" in workflow
+    assert "contentFiles/any/any/innovate/kernel_bridge.py" in workflow
     assert "NPM_TOKEN" in workflow
     assert "CARGO_REGISTRY_TOKEN" in workflow
     assert "NUGET_API_KEY" in workflow
+
+
+def test_csharp_nuget_pack_includes_runtime_bridge_asset() -> None:
+    """The NuGet package metadata should include assets needed by the thin bridge."""
+    project = Path("bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj").read_text()
+    docs = Path("docs/source/binding_publication_ci.rst").read_text()
+
+    assert '<None Include="../README.md" Pack="true" PackagePath="/" />' in project
+    assert 'Include="../inst/python/kernel_bridge.py"' in project
+    assert 'PackagePath="contentFiles/any/any/innovate/kernel_bridge.py"' in project
+    assert 'PackageCopyToOutput="true"' in project
+    assert "bridge-content" in docs
+    assert "contentFiles/any/any/innovate/kernel_bridge.py" in docs

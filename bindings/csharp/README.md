@@ -8,6 +8,10 @@ behavior in C#.
 
 The package targets both `net10.0` and `net11.0`.
 
+NuGet packages include MIT license metadata, repository metadata, SourceLink
+settings, a symbol package, this readme, and the packaged Python bridge script
+under `contentFiles/any/any/innovate/kernel_bridge.py`.
+
 ## Development
 
 ```bash

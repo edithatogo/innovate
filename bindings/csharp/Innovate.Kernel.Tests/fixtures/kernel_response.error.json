@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "operation": "predict_model",
+  "result": null,
+  "error": {
+    "code": "invalid_payload",
+    "message": "payload.t is required",
+    "operation": "predict_model",
+    "details": {
+      "field": "payload.t"
+    },
+    "retryable": false
+  },
+  "metadata": {
+    "fixture": "csharp-schema-compatibility"
+  }
+}

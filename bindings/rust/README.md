@@ -2,14 +2,14 @@
 
 This crate provides a thin Rust-facing binding surface for the shared Innovate kernel.
 Model discovery metadata is available through a Rust-native path and is parity
-tested against the Python bridge. Simple logistic `predict_model` requests with
-fitted state payloads now run through a Rust-native path with Python bridge
-fallback for unsupported execution shapes. `simulate_model` follows the same
-native logistic slice and bridge fallback. `fit_model` now has a native
-logistic slice as well, with Python bridge fallback for unsupported model
-families. `summarize_model` and `diagnose_model` also have native logistic
-slices for fitted-state payloads with the same bridge fallback for other
-models.
+tested against the Python bridge. Simple logistic and Bass `predict_model`
+requests with fitted state payloads now run through Rust-native paths with
+Python bridge fallback for unsupported execution shapes. `simulate_model`
+follows the same native fitted-state slices and bridge fallback. `fit_model`
+now has a native logistic slice as well, with Python bridge fallback for
+unsupported model families. `summarize_model` and `diagnose_model` also have
+native logistic slices for fitted-state payloads with the same bridge fallback
+for other models.
 
 ## Layout
 
@@ -50,9 +50,10 @@ models.
   operation list against drift.
 - `tests/native_discovery.rs` verifies that Rust-native discovery metadata
   matches the Python bridge response.
-- `tests/operations.rs` verifies Rust-native logistic prediction against the
-  Python bridge contract, verifies the same pattern for simulation, fitting,
-  summary, and diagnostics, and confirms fallback for non-native models.
+- `tests/operations.rs` verifies Rust-native logistic and Bass prediction
+  against the Python bridge contract, verifies the same pattern for simulation,
+  fitting, summary, and diagnostics where implemented, and confirms fallback
+  for non-native or unsupported shapes.
 - `tests/end_to_end.rs` exercises the live Python bridge against a stable
   kernel model.
 - `tests/architecture.rs` verifies the package scaffold and bridge entrypoint.
@@ -60,10 +61,10 @@ models.
 ## Runtime expectations
 
 - The crate uses Rust-native metadata for `discover_models`.
-- Simple fitted-state logistic `predict_model` requests use Rust-native
-  execution.
-- Simple fitted-state logistic `simulate_model` requests use the same native
-  execution path.
+- Simple fitted-state logistic and Bass `predict_model` requests use
+  Rust-native execution.
+- Simple fitted-state logistic and Bass `simulate_model` requests use the same
+  native execution paths.
 - Simple fitted-state logistic `fit_model` requests use the same native
   execution path.
 - Simple fitted-state logistic `summarize_model` and `diagnose_model` requests

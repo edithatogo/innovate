@@ -2,8 +2,11 @@ Rust Bindings
 =============
 
 The Rust bindings provide a thin adapter over the shared `innovate` kernel.
-They keep the model semantics in Python and expose a Rust-facing request and
-response surface for stable kernel operations.
+They expose a Rust-facing request and response surface for stable kernel
+operations while keeping Python reference semantics authoritative. Native Rust
+execution is currently limited to discovery metadata and simple logistic
+``fit_model``, ``predict_model``, ``simulate_model``, ``summarize_model``, and
+``diagnose_model`` slices; unsupported payloads fall back to the Python bridge.
 
 Installation
 ------------
@@ -68,6 +71,9 @@ Support boundaries
 
 - The Rust layer remains thin and contract-driven.
 - Only the stable kernel operations are wrapped.
+- Native execution is operation-slice-specific rather than model-family-wide.
+- `unsupported_native_operation` triggers wrapper-level Python bridge fallback;
+  `bridge_command_failed` reports transport or bridge execution failure.
 - The package is intended for local development and direct repository use, not
   registry publication.
 - Future transport or FFI work should extend the same contract boundary rather

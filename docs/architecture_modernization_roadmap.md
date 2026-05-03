@@ -6,11 +6,10 @@ Accepted direction as of 2026-04-16.
 
 ## Implementation Status
 
-The implementation tracks for the completed roadmap stages have been completed
-and archived in Conductor as of 2026-04-30. The remaining strategic follow-ons
-from the Deferred Work section are now active Conductor tracks so they can be
-implemented, reviewed, and archived through the same workflow as the completed
-stages.
+The original roadmap stages are covered by Conductor records. Most stage and
+deferred follow-on tracks have been completed and archived; the active backlog
+currently consists of the ecosystem gap tracks registered by the audit. New
+roadmap-level gaps should become Conductor tracks before implementation begins.
 
 ## Goal
 
@@ -132,19 +131,82 @@ The following remain worthwhile, but they should follow the contract and interch
 - broad Rust rewrites before operation-level parity and benchmark gates exist: `Rust Core Expansion`
 - C# package publication before the thin-binding contract is validated: `C# Package Publication`
 
+## Roadmap Coverage Map
+
+Every roadmap goal, stage, primary track, deferred item, and ADR is mapped to a
+completed Conductor archive, an active Conductor track, or the explicit audit
+record that owns missing-coverage checks.
+
+### Goal Principles
+
+| Roadmap principle | Coverage | Conductor or decision record |
+| --- | --- | --- |
+| Array API for numerical portability | Covered | [Functional Kernel Contract](../conductor/archive/functional_kernel_contract_20260415/), [ADR 0001](./adr/0001-array-api-and-arrow-foundation.md) |
+| Arrow for durable interchange | Covered | [Arrow Interchange and Schema Layer](../conductor/archive/arrow_interchange_schema_20260416/), [ADR 0001](./adr/0001-array-api-and-arrow-foundation.md) |
+| JAX as an optional accelerator backend | Covered | [Optional Backends and Dependency Stabilization](../conductor/archive/optional_backends_stabilization_20260415/), [XLA Backend Strategy and JAX Kernel Promotion Gates](../conductor/archive/xla_backend_strategy_20260430/), [ADR 0002](./adr/0002-jax-is-an-optional-accelerator-backend.md) |
+| pandas plus PyArrow as the primary Python tabular surface | Covered | [DataFrame Engine Experimentation](../conductor/archive/dataframe_engine_experimentation_20260430/), [ADR 0003](./adr/0003-python-dataframe-strategy.md) |
+| selective, not foundational, use of Polars | Covered | [DataFrame Engine Experimentation](../conductor/archive/dataframe_engine_experimentation_20260430/), [ADR 0003](./adr/0003-python-dataframe-strategy.md) |
+| Python-first API stabilization followed by thin language bindings | Covered | [Canonical Public API and Package Topology](../conductor/archive/canonical_api_topology_20260415/), [Binding Publication and Multi-Language CI](../conductor/archive/binding_publication_ci_20260428/), [ADR 0004](./adr/0004-core-api-bindings-and-rust-core-trajectory.md) |
+| Rust Core Runtime as the strategic long-term execution direction | Covered | [Rust Core Kernel Roadmap and C# Binding Foundation](../conductor/archive/rust_core_kernel_20260428/), [Rust Core Expansion](../conductor/archive/rust_core_expansion_20260430/), [ADR 0004](./adr/0004-core-api-bindings-and-rust-core-trajectory.md) |
+
+### Stage and Primary Track Coverage
+
+| Roadmap item | Coverage | Conductor record |
+| --- | --- | --- |
+| Stage 1: Stabilize the Python Surface | Covered | Completed primary-track archives below |
+| Complete the canonical public API and package-topology work | Covered | [Canonical Public API and Package Topology](../conductor/archive/canonical_api_topology_20260415/) |
+| Finish optional dependency isolation so the base install is stable without JAX/Bayesian extras | Covered | [Optional Backends and Dependency Stabilization](../conductor/archive/optional_backends_stabilization_20260415/) |
+| Publish support tiers for stable versus experimental model families and backends | Covered | [Quality Gates and Release Hardening](../conductor/archive/quality_gates_release_20260415/), [Plugin API and Stability Tiers](../conductor/archive/plugin_api_stability_tiers_20260415/) |
+| Stage 2: Define the Durable Core Contract | Covered | Completed primary-track archives below |
+| Make the functional kernel Array API-friendly at its numerical boundary | Covered | [Functional Kernel Contract](../conductor/archive/functional_kernel_contract_20260415/) |
+| Define versioned request and response schemas | Covered | [Functional Kernel Contract](../conductor/archive/functional_kernel_contract_20260415/) |
+| Introduce Arrow-compatible interchange for tabular inputs, outputs, diagnostics, and provenance | Covered | [Arrow Interchange and Schema Layer](../conductor/archive/arrow_interchange_schema_20260416/) |
+| Stage 3: Bindings and Plugin Readiness | Covered | Completed binding, plugin, and publication archives below |
+| Expose the functional kernel to R, Julia, TypeScript, Go, and Rust | Covered | [R Bindings over the Functional Kernel](../conductor/archive/r_bindings_kernel_20260415/), [Julia Bindings over the Functional Kernel](../conductor/archive/julia_bindings_kernel_20260415/), [TypeScript Bindings over the Functional Kernel](../conductor/archive/typescript_bindings_kernel_20260416/), [Go Bindings over the Functional Kernel](../conductor/archive/go_bindings_kernel_20260416/), [Rust Bindings over the Functional Kernel](../conductor/archive/rust_bindings_kernel_20260416/) |
+| Prepare each implemented binding for its language package manager | Covered | [Binding Publication and Multi-Language CI](../conductor/archive/binding_publication_ci_20260428/) |
+| Add CI jobs for every implemented binding | Covered | [Binding Publication and Multi-Language CI](../conductor/archive/binding_publication_ci_20260428/) |
+| Make plugin and extension boundaries explicitly versioned | Covered | [Plugin API and Stability Tiers](../conductor/archive/plugin_api_stability_tiers_20260415/) |
+| Reuse Arrow-compatible interchange and kernel version markers across bindings | Covered | [Arrow Interchange and Schema Layer](../conductor/archive/arrow_interchange_schema_20260416/), [Binding Publication and Multi-Language CI](../conductor/archive/binding_publication_ci_20260428/) |
+| Stage 4: Selective Performance Upgrades | Covered | Completed optional-backend, inference, benchmark, and XLA archives below |
+| Keep NumPy/SciPy as the correctness and portability baseline | Covered | [Optional Backends and Dependency Stabilization](../conductor/archive/optional_backends_stabilization_20260415/), [XLA Backend Strategy and JAX Kernel Promotion Gates](../conductor/archive/xla_backend_strategy_20260430/) |
+| Use JAX for accelerator-backed fitters, simulation kernels, and inference where benchmarks justify it | Covered | [Advanced Diffusion Inference](../conductor/archive/advanced_diffusion_inference_20260415/), [XLA Backend Strategy and JAX Kernel Promotion Gates](../conductor/archive/xla_backend_strategy_20260430/) |
+| Maintain benchmark corpus and model cards for scientific comparison | Covered | [Benchmark Corpus and Model Cards](../conductor/archive/benchmark_corpus_modelcards_20260415/) |
+| Introduce Polars only in ETL-heavy or benchmark-corpus workflows | Covered | [DataFrame Engine Experimentation](../conductor/archive/dataframe_engine_experimentation_20260430/) |
+| Avoid turning XLA exports, jaxlib internals, or Polars-specific query semantics into the public contract | Covered | [XLA Backend Strategy and JAX Kernel Promotion Gates](../conductor/archive/xla_backend_strategy_20260430/), [DataFrame Engine Experimentation](../conductor/archive/dataframe_engine_experimentation_20260430/) |
+| Stage 5: Rust Core Runtime | Covered | Foundation and follow-on expansion slices completed; future Rust work should use new narrow tracks |
+| Keep Python/NumPy/SciPy as the Python reference semantics until Rust paths pass parity tests | Covered | [Rust Core Kernel Roadmap and C# Binding Foundation](../conductor/archive/rust_core_kernel_20260428/), [Rust Core Expansion](../conductor/archive/rust_core_expansion_20260430/) |
+| Start with schema-driven operations such as `discover_models`, `predict_model`, and `simulate_model` | Covered | [Rust Core Kernel Roadmap and C# Binding Foundation](../conductor/archive/rust_core_kernel_20260428/), [Rust Core Expansion](../conductor/archive/rust_core_expansion_20260430/) |
+| Keep fitting, diagnostics, uncertainty summaries, and optional probabilistic runtimes Python-backed until their payloads can be validated | Covered | [Rust Core Summary and Diagnostics Migration](../conductor/archive/rust_core_summary_diagnostics_20260428/), [Rust Core Expansion](../conductor/archive/rust_core_expansion_20260430/) |
+| Require schema compatibility, error mapping, and benchmark gates before any Rust-backed operation becomes the default | Covered | [Rust Core Benchmarking and Profiling Tooling](../conductor/archive/rust_core_benchmarking_20260428/), [Rust Core Expansion](../conductor/archive/rust_core_expansion_20260430/) |
+| Add C# as a planned thin binding once the existing binding contract and drift checks are stable | Covered | [Rust Core Kernel Roadmap and C# Binding Foundation](../conductor/archive/rust_core_kernel_20260428/), [C# Package Publication](../conductor/archive/csharp_package_publication_20260430/) |
+| Publish C# through NuGet only after package, .NET CI, and schema-compatibility gates pass | Covered | [C# Package Publication](../conductor/archive/csharp_package_publication_20260430/) |
+
+The active
+[Roadmap Completeness Audit](../conductor/archive/roadmap_completeness_audit_20260430/)
+track identified ecosystem fixture and governance gaps and converted them into
+Conductor records. Future newly discovered architecture gaps should follow the
+same rule: document the evidence, add a narrow track, and register it before
+implementation begins.
+
 ## Follow-On Track Mapping
 
-These tracks convert the deferred work into Conductor-managed implementation
-items. Completed follow-on tracks point to their Conductor archive.
+These tracks convert the deferred work and subsequent audit recommendations into
+Conductor-managed implementation items. Completed follow-on tracks point to their
+Conductor archive; active follow-ons point to their track folder.
 
 - [Probabilistic Inference Expansion](../conductor/archive/probabilistic_inference_expansion_20260430/)
 - [Diagnostics and Uncertainty Expansion](../conductor/archive/diagnostics_uncertainty_expansion_20260430/)
 - [Benchmark Corpus Automation](../conductor/archive/benchmark_corpus_automation_20260430/)
 - [Hosted Services and Remote Execution](../conductor/archive/hosted_remote_execution_20260430/)
 - [DataFrame Engine Experimentation](../conductor/archive/dataframe_engine_experimentation_20260430/)
-- [Rust Core Expansion](../conductor/tracks/rust_core_expansion_20260430/)
-- [C# Package Publication](../conductor/tracks/csharp_package_publication_20260430/)
-- [Roadmap Completeness Audit](../conductor/tracks/roadmap_completeness_audit_20260430/)
+- [Rust Core Expansion](../conductor/archive/rust_core_expansion_20260430/)
+- [C# Package Publication](../conductor/archive/csharp_package_publication_20260430/)
+- [Roadmap Completeness Audit](../conductor/archive/roadmap_completeness_audit_20260430/)
+- [Lifecourse Adoption-Trajectory Fixture](../conductor/tracks/lifecourse_adoption_fixture_20260504/)
+- [Voiage Diffusion-Uncertainty Fixture](../conductor/tracks/voiage_uncertainty_fixture_20260504/)
+- [Operational Modeling Fixture Contracts](../conductor/tracks/operational_modeling_fixtures_20260504/)
+- [HEOML Schema Placement Decision](../conductor/tracks/heoml_schema_placement_20260504/)
+- [MARS Surrogate Benchmark Gate](../conductor/tracks/mars_surrogate_benchmark_gate_20260504/)
 - [XLA Backend Strategy and JAX Kernel Promotion Gates](../conductor/archive/xla_backend_strategy_20260430/)
 
 The `Roadmap Completeness Audit` track exists to check for implied work that is
@@ -192,9 +254,17 @@ simulation semantics should stay outside XLA-backed implementation.
 The durable policy is documented in the Sphinx page
 `XLA Backend Strategy` (`docs/source/xla_backend_strategy.rst`).
 
+The `Rust Core Expansion` track now starts from an operation support inventory
+rather than a broad rewrite. The inventory records native Rust scope, bridge
+fallback scope, Python-only reference scope, Rust vs JAX/XLA eligibility, stable
+error behavior, and the benchmark promotion dossier required before any
+Rust-native path becomes the default.
+
 ## Decision Links
 
-- [ADR 0001: Array API and Arrow Foundation](./adr/0001-array-api-and-arrow-foundation.md)
-- [ADR 0002: JAX Is an Optional Accelerator Backend](./adr/0002-jax-is-an-optional-accelerator-backend.md)
-- [ADR 0003: Python DataFrame Strategy](./adr/0003-python-dataframe-strategy.md)
-- [ADR 0004: Core API, Bindings, and Rust Core Trajectory](./adr/0004-core-api-bindings-and-rust-core-trajectory.md)
+| Decision | Coverage | Conductor record |
+| --- | --- | --- |
+| [ADR 0001: Array API and Arrow Foundation](./adr/0001-array-api-and-arrow-foundation.md) | Covered | [Functional Kernel Contract](../conductor/archive/functional_kernel_contract_20260415/), [Arrow Interchange and Schema Layer](../conductor/archive/arrow_interchange_schema_20260416/) |
+| [ADR 0002: JAX Is an Optional Accelerator Backend](./adr/0002-jax-is-an-optional-accelerator-backend.md) | Covered | [Optional Backends and Dependency Stabilization](../conductor/archive/optional_backends_stabilization_20260415/), [XLA Backend Strategy and JAX Kernel Promotion Gates](../conductor/archive/xla_backend_strategy_20260430/) |
+| [ADR 0003: Python DataFrame Strategy](./adr/0003-python-dataframe-strategy.md) | Covered | [DataFrame Engine Experimentation](../conductor/archive/dataframe_engine_experimentation_20260430/) |
+| [ADR 0004: Core API, Bindings, and Rust Core Trajectory](./adr/0004-core-api-bindings-and-rust-core-trajectory.md) | Covered | [Binding Publication and Multi-Language CI](../conductor/archive/binding_publication_ci_20260428/), [Rust Core Kernel Roadmap and C# Binding Foundation](../conductor/archive/rust_core_kernel_20260428/), [Rust Core Expansion](../conductor/archive/rust_core_expansion_20260430/), [C# Package Publication](../conductor/archive/csharp_package_publication_20260430/) |

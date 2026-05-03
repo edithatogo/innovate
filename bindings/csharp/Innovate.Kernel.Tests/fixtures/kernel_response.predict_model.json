@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "operation": "predict_model",
+  "result": {
+    "dtype": "float64",
+    "metadata": {
+      "model_key": "bass"
+    },
+    "shape": [
+      3
+    ],
+    "values": [
+      3.0,
+      7.2,
+      12.8
+    ]
+  },
+  "error": null,
+  "metadata": {
+    "fixture": "csharp-schema-compatibility"
+  }
+}

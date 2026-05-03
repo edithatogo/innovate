@@ -151,18 +151,43 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Rust Core Expansion**
-  *Link: [./tracks/rust_core_expansion_20260430/](./tracks/rust_core_expansion_20260430/)*
+- [x] **Track: Rust Core Expansion** *(Completed)*
+  *Link: [./archive/rust_core_expansion_20260430/](./archive/rust_core_expansion_20260430/)*
 
 ---
 
-- [ ] **Track: C# Package Publication**
-  *Link: [./tracks/csharp_package_publication_20260430/](./tracks/csharp_package_publication_20260430/)*
+- [x] **Track: C# Package Publication** *(Completed)*
+  *Link: [./archive/csharp_package_publication_20260430/](./archive/csharp_package_publication_20260430/)*
 
 ---
 
-- [ ] **Track: Roadmap Completeness Audit**
-  *Link: [./tracks/roadmap_completeness_audit_20260430/](./tracks/roadmap_completeness_audit_20260430/)*
+- [x] **Track: Roadmap Completeness Audit** *(Completed)*
+  *Link: [./archive/roadmap_completeness_audit_20260430/](./archive/roadmap_completeness_audit_20260430/)*
+
+---
+
+- [ ] **Track: Lifecourse Adoption-Trajectory Fixture**
+  *Link: [./tracks/lifecourse_adoption_fixture_20260504/](./tracks/lifecourse_adoption_fixture_20260504/)*
+
+---
+
+- [ ] **Track: Voiage Diffusion-Uncertainty Fixture**
+  *Link: [./tracks/voiage_uncertainty_fixture_20260504/](./tracks/voiage_uncertainty_fixture_20260504/)*
+
+---
+
+- [ ] **Track: Operational Modeling Fixture Contracts**
+  *Link: [./tracks/operational_modeling_fixtures_20260504/](./tracks/operational_modeling_fixtures_20260504/)*
+
+---
+
+- [ ] **Track: HEOML Schema Placement Decision**
+  *Link: [./tracks/heoml_schema_placement_20260504/](./tracks/heoml_schema_placement_20260504/)*
+
+---
+
+- [ ] **Track: MARS Surrogate Benchmark Gate**
+  *Link: [./tracks/mars_surrogate_benchmark_gate_20260504/](./tracks/mars_surrogate_benchmark_gate_20260504/)*
 
 ---
 

@@ -625,6 +625,222 @@ fn native_logistic_simulation_matches_python_bridge_contract() {
 }
 
 #[test]
+fn native_bass_prediction_matches_python_bridge_contract() {
+    let binding = KernelBinding::new();
+    let payload = json!({
+        "state": {
+            "model_key": "bass",
+            "model_name": "BassModel",
+            "constructor_kwargs": {},
+            "parameters": {
+                "p": 0.03,
+                "q": 0.38,
+                "m": 120.0
+            },
+            "predict_kwargs": {}
+        },
+        "inputs": {
+            "time": [0.0, 0.8, 1.6, 2.4, 3.2, 4.0]
+        }
+    });
+
+    let request = binding.predict_model_request("bass", payload.clone());
+    let native = binding
+        .predict_model_native(&request)
+        .expect("native Bass prediction should succeed");
+    let bridged = binding
+        .predict_model_via_bridge("bass", payload)
+        .expect("Python bridge Bass prediction should succeed");
+
+    assert_eq!(native.schema_version, bridged.schema_version);
+    assert_eq!(native.operation, KernelOperation::PredictModel);
+    assert_eq!(native.error, None);
+    assert_eq!(native.metadata["model_key"], "bass");
+    assert_eq!(native.metadata["model_name"], "BassModel");
+    assert_eq!(native.metadata["runtime"], "rust_native");
+
+    let native_result = native
+        .result
+        .expect("native Bass prediction should include a result");
+    let bridged_result = bridged
+        .result
+        .expect("bridged Bass prediction should include a result");
+
+    assert_eq!(native_result["shape"], bridged_result["shape"]);
+    assert_eq!(native_result["dtype"], bridged_result["dtype"]);
+    assert_eq!(native_result["metadata"], bridged_result["metadata"]);
+
+    let native_values = native_result["values"]
+        .as_array()
+        .expect("native Bass values should be an array");
+    let bridged_values = bridged_result["values"]
+        .as_array()
+        .expect("bridged Bass values should be an array");
+
+    for (native_value, bridged_value) in native_values.iter().zip(bridged_values) {
+        let native_value = native_value
+            .as_f64()
+            .expect("native Bass value should be numeric");
+        let bridged_value = bridged_value
+            .as_f64()
+            .expect("bridged Bass value should be numeric");
+        assert!(
+            (native_value - bridged_value).abs() < 1e-5,
+            "native Bass value {native_value} should match bridged value {bridged_value}"
+        );
+    }
+}
+
+#[test]
+fn native_bass_simulation_matches_python_bridge_contract() {
+    let binding = KernelBinding::new();
+    let payload = json!({
+        "state": {
+            "model_key": "bass",
+            "model_name": "BassModel",
+            "constructor_kwargs": {},
+            "parameters": {
+                "p": 0.02,
+                "q": 0.45,
+                "m": 150.0
+            },
+            "predict_kwargs": {}
+        },
+        "inputs": {
+            "time": [0.0, 1.0, 2.0, 3.0, 4.0]
+        }
+    });
+
+    let request = binding.simulate_model_request("bass", payload.clone());
+    let native = binding
+        .simulate_model_native(&request)
+        .expect("native Bass simulation should succeed");
+    let bridged = binding
+        .simulate_model_via_bridge("bass", payload)
+        .expect("Python bridge Bass simulation should succeed");
+
+    assert_eq!(native.schema_version, bridged.schema_version);
+    assert_eq!(native.operation, KernelOperation::SimulateModel);
+    assert_eq!(native.error, None);
+    assert_eq!(native.metadata["model_key"], "bass");
+    assert_eq!(native.metadata["runtime"], "rust_native");
+
+    let native_result = native
+        .result
+        .expect("native Bass simulation should include a result");
+    let bridged_result = bridged
+        .result
+        .expect("bridged Bass simulation should include a result");
+
+    assert_eq!(native_result["shape"], bridged_result["shape"]);
+    assert_eq!(native_result["dtype"], bridged_result["dtype"]);
+
+    let native_values = native_result["values"]
+        .as_array()
+        .expect("native Bass values should be an array");
+    let bridged_values = bridged_result["values"]
+        .as_array()
+        .expect("bridged Bass values should be an array");
+
+    for (native_value, bridged_value) in native_values.iter().zip(bridged_values) {
+        let native_value = native_value
+            .as_f64()
+            .expect("native Bass value should be numeric");
+        let bridged_value = bridged_value
+            .as_f64()
+            .expect("bridged Bass value should be numeric");
+        assert!((native_value - bridged_value).abs() < 1e-5);
+    }
+}
+
+#[test]
+fn native_bass_reports_structured_errors_for_invalid_or_unsupported_shapes() {
+    let binding = KernelBinding::new();
+    let missing_parameter_payload = json!({
+        "state": {
+            "model_key": "bass",
+            "model_name": "BassModel",
+            "constructor_kwargs": {},
+            "parameters": {
+                "p": 0.03,
+                "m": 120.0
+            },
+            "predict_kwargs": {}
+        },
+        "inputs": {
+            "time": [0.0, 1.0, 2.0]
+        }
+    });
+    let invalid_request = binding.predict_model_request("bass", missing_parameter_payload);
+    let invalid_error = binding
+        .predict_model_native(&invalid_request)
+        .expect_err("missing Bass q parameter should be a structured native error");
+    assert_eq!(invalid_error.code, "invalid_request");
+    assert_eq!(invalid_error.operation, Some(KernelOperation::PredictModel));
+    assert!(invalid_error
+        .message
+        .contains("missing numeric parameter 'q'"));
+
+    let covariate_payload = json!({
+        "state": {
+            "model_key": "bass",
+            "model_name": "BassModel",
+            "constructor_kwargs": {
+                "covariates": ["price"]
+            },
+            "parameters": {
+                "p": 0.03,
+                "q": 0.38,
+                "m": 120.0,
+                "beta_p_price": 0.0,
+                "beta_q_price": 0.0,
+                "beta_m_price": 0.0
+            },
+            "predict_kwargs": {}
+        },
+        "inputs": {
+            "time": [0.0, 1.0, 2.0],
+            "covariates": {
+                "price": [1.0, 1.1, 1.2]
+            }
+        }
+    });
+    let unsupported_request = binding.predict_model_request("bass", covariate_payload);
+    let unsupported_error = binding
+        .predict_model_native(&unsupported_request)
+        .expect_err("Bass covariates should remain on the bridge path");
+    assert_eq!(unsupported_error.code, "unsupported_native_operation");
+    assert_eq!(
+        unsupported_error.operation,
+        Some(KernelOperation::PredictModel)
+    );
+    assert!(unsupported_error.message.contains("without covariates"));
+
+    let shifted_time_payload = json!({
+        "state": {
+            "model_key": "bass",
+            "model_name": "BassModel",
+            "constructor_kwargs": {},
+            "parameters": {
+                "p": 0.03,
+                "q": 0.38,
+                "m": 120.0
+            },
+            "predict_kwargs": {}
+        },
+        "inputs": {
+            "time": [1.0, 2.0, 3.0]
+        }
+    });
+    let shifted_time_request = binding.predict_model_request("bass", shifted_time_payload);
+    let shifted_time_error = binding
+        .predict_model_native(&shifted_time_request)
+        .expect_err("Bass time grids with non-zero starts should remain on the bridge path");
+    assert_eq!(shifted_time_error.code, "unsupported_native_operation");
+    assert!(shifted_time_error.message.contains("start at zero"));
+}
+
+#[test]
 fn native_prediction_falls_back_to_bridge_for_non_native_models() {
     let binding = KernelBinding::new();
     let payload = json!({

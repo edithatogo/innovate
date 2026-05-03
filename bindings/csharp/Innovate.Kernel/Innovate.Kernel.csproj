@@ -7,14 +7,33 @@
     <Version>0.5.0</Version>
     <Authors>edithatogo</Authors>
     <Description>Thin .NET binding over the Innovate functional kernel contract.</Description>
+    <PackageProjectUrl>https://github.com/edithatogo/innovate</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/edithatogo/innovate</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>innovate;health-economics;decision-analysis;kernel;bindings</PackageTags>
+    <PackageReleaseNotes>Initial provisional .NET 10 and .NET 11 binding over the shared Innovate kernel contract.</PackageReleaseNotes>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="../README.md" Pack="true" PackagePath="/" />
+    <None
+      Include="../inst/python/kernel_bridge.py"
+      Pack="true"
+      PackagePath="contentFiles/any/any/innovate/kernel_bridge.py"
+      PackageCopyToOutput="true"
+    />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
 </Project>

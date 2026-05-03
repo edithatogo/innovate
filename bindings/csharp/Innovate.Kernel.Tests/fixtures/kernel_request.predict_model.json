@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "operation": "predict_model",
+  "model_key": "bass",
+  "payload": {
+    "params": {
+      "m": 100.0,
+      "p": 0.03,
+      "q": 0.38
+    },
+    "t": {
+      "dtype": "float64",
+      "metadata": {
+        "unit": "period"
+      },
+      "shape": [
+        3
+      ],
+      "values": [
+        1.0,
+        2.0,
+        3.0
+      ]
+    }
+  },
+  "metadata": {
+    "fixture": "csharp-schema-compatibility"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "track_id": "operational_modeling_fixtures_20260504",
+  "type": "chore",
+  "status": "new",
+  "created_at": "2026-05-03T22:11:02Z",
+  "updated_at": "2026-05-03T22:11:02Z",
+  "description": "Define TreeAge-style decision-model and DES operational-modeling fixtures for HEOR ecosystem contracts."
+}

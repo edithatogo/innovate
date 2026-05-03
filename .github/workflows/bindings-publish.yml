@@ -128,7 +128,32 @@ jobs:
       - run: dotnet restore bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj
       - run: dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj --configuration Release --framework net10.0 -p:TargetFrameworks=net10.0
       - run: dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj --configuration Release --framework net11.0 -p:TargetFrameworks=net11.0
-      - run: dotnet pack bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj --configuration Release --output bindings/csharp/artifacts
+      - run: dotnet pack bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj --configuration Release --output bindings/csharp/artifacts -p:ContinuousIntegrationBuild=true
+      - name: Validate NuGet package artifacts
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+
+          packages=(bindings/csharp/artifacts/*.nupkg)
+          symbols=(bindings/csharp/artifacts/*.snupkg)
+          if [ "${#packages[@]}" -ne 1 ]; then
+            echo "Expected exactly one NuGet package, found ${#packages[@]}."
+            exit 1
+          fi
+          if [ "${#symbols[@]}" -ne 1 ]; then
+            echo "Expected exactly one NuGet symbol package, found ${#symbols[@]}."
+            exit 1
+          fi
+
+          package="${packages[0]}"
+          unzip -l "$package"
+          unzip -p "$package" "Innovate.Kernel.nuspec" | tee /tmp/innovate-kernel.nuspec
+
+          grep -F "<license type=\"expression\">MIT</license>" /tmp/innovate-kernel.nuspec
+          grep -F "<repository type=\"git\" url=\"https://github.com/edithatogo/innovate\"" /tmp/innovate-kernel.nuspec
+          grep -F "<tags>innovate health-economics decision-analysis kernel bindings</tags>" /tmp/innovate-kernel.nuspec
+          unzip -l "$package" | grep -F "README.md"
+          unzip -l "$package" | grep -F "contentFiles/any/any/innovate/kernel_bridge.py"
       - name: Publish to NuGet
         if: ${{ github.event_name == 'release' || inputs.dry_run == 'false' }}
         env:

@@ -33,6 +33,21 @@ matching the existing language bindings. The default command should remain
 ``uv`` with an invocation equivalent to ``uv run python`` from the repository
 root.
 
+NuGet publication
+-----------------
+
+The ``Innovate.Kernel`` project is packable for ``net10.0`` and ``net11.0`` and
+ships as a conventional NuGet package with MIT license metadata, repository
+metadata, project URL, package tags, release notes, SourceLink settings, symbol
+package output, and the package readme. The package also includes the Python
+bridge script as ``contentFiles/any/any/innovate/kernel_bridge.py`` so package
+artifact checks can prove the bridge content is present before NuGet
+publication.
+
+The release workflow must test both target frameworks, create the ``.nupkg`` and
+``.snupkg`` artifacts, inspect the generated NuGet metadata, and verify the
+readme and bridge script are present before running ``dotnet nuget push``.
+
 Schema mapping
 --------------
 
