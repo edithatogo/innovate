@@ -76,7 +76,8 @@
 ## CI/CD
 - **Single Pipeline**: All CI checks run in a consolidated GitHub Actions workflow with parallel jobs.
 - **CI Gate Monitoring**: After every push, CI results are automatically monitored. Failures are addressed iteratively until all checks pass.
-- **Matrix Testing**: Tests run on Python 3.10, 3.11, 3.12, 3.13.
+- **Matrix Testing**: Required unit tests run on Python 3.10, 3.11, 3.12,
+  3.13, and 3.14.
 - **Coverage**: Codecov integration with PR comments on coverage changes.
 - **Scheduled Jobs**: Mutation testing runs weekly. Dependency updates via Renovate run weekly.
 

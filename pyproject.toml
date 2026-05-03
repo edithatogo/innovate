@@ -11,6 +11,14 @@ readme = "README.md"
 authors = [
   { name = "Dylan A Mordaunt", email = "dylan.mordaunt@vuw.ac.nz" },
 ]
+classifiers = [
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+]
 
 # ---------------------------------------------------------------------------
 # Core runtime dependencies
@@ -83,6 +91,7 @@ dev = [
   "pytest-cov>=4.1",
   "syrupy>=4.6",
   "hypothesis>=6.96",
+  "nox>=2025.5.1",
   # Visualization (needed for test suite)
   "matplotlib>=3.7",
   # Mutation testing
@@ -347,7 +356,7 @@ update_changelog_on_bump = true
 # pyproject-fmt — auto-format pyproject.toml
 # ---------------------------------------------------------------------------
 [tool.pyproject-fmt]
-max_supported_python = "3.13"
+max_supported_python = "3.14"
 
 # ---------------------------------------------------------------------------
 # coverage — measurement

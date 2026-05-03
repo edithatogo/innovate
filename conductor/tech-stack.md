@@ -17,9 +17,10 @@
 
 ## Package Manager & Build
 - **uv** — Blazing-fast Python package manager and resolver (replaces pip)
-  - Python task orchestration remains `uv`-first; `nox` is intentionally
-    deferred unless the Python-only workflow grows enough to justify another
-    runner.
+  - Python dependency management remains `uv`-first.
+- **nox** — Python task orchestration for local and CI parity across supported
+  interpreters while delegating environment resolution and command execution to
+  `uv`.
 - **setuptools** (>=61.0) — Package building and distribution (managed by uv)
 - **uv.lock** — Locked dependency versions for reproducible builds
 - **Node.js** (>=22) — Runtime for the TypeScript binding package and test harness
@@ -75,6 +76,8 @@
 - **pytest** — Primary test framework
 - **pytest-xdist** — Parallel test execution
 - **pytest-benchmark** — Performance benchmarking
+- **nox** — Cross-version Python test orchestration for Python 3.10 through
+  Python 3.14
 - **hypothesis** — Property-based testing
 - **mutmut** — Mutation testing
 - **syrupy** — Snapshot testing
