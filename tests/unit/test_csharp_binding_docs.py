@@ -26,6 +26,7 @@ def test_csharp_binding_docs_define_thin_contract_scope() -> None:
     ):
         assert phrase in docs
 
+    assert ".NET 10 and" in docs
     assert ".NET 11 SDK" in docs
     assert "INNOVATE_PYTHON_COMMAND" in docs
 
@@ -47,5 +48,5 @@ def test_csharp_binding_package_scaffold_exists() -> None:
     assert (binding_root / "inst/python/kernel_bridge.py").is_file()
 
     project = (binding_root / "Innovate.Kernel/Innovate.Kernel.csproj").read_text()
-    assert "<TargetFramework>net11.0</TargetFramework>" in project
+    assert "<TargetFrameworks>net10.0;net11.0</TargetFrameworks>" in project
     assert "<PackageId>Innovate.Kernel</PackageId>" in project

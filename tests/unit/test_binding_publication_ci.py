@@ -44,6 +44,10 @@ def test_ci_workflow_runs_implemented_language_bindings() -> None:
         "julia --project=bindings/julia",
         "Rscript bindings/r/tests/run.R",
         "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj",
+        'dotnet-version: "10.0.x"',
+        'dotnet-version: "11.0.x"',
+        'target-framework: "net10.0"',
+        'target-framework: "net11.0"',
     ):
         assert command in workflow
 
@@ -66,7 +70,10 @@ def test_binding_publish_workflow_has_release_gated_registry_steps() -> None:
 
     assert "release:" in workflow
     assert "workflow_dispatch:" in workflow
-    assert 'dotnet-version: "11.0.x"' in workflow
+    assert "10.0.x" in workflow
+    assert "11.0.x" in workflow
+    assert "--framework net10.0" in workflow
+    assert "--framework net11.0" in workflow
     assert "NPM_TOKEN" in workflow
     assert "CARGO_REGISTRY_TOKEN" in workflow
     assert "NUGET_API_KEY" in workflow

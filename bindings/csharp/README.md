@@ -6,6 +6,8 @@ The package preserves the Python reference semantics by invoking the same JSON
 kernel bridge used by the other language bindings. It does not reimplement model
 behavior in C#.
 
+The package targets both `net10.0` and `net11.0`.
+
 ## Development
 
 ```bash

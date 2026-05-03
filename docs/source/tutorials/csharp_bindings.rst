@@ -9,7 +9,8 @@ into .NET-friendly structures.
 Package shape
 -------------
 
-The initial package should use a conventional .NET 11 SDK project layout:
+The initial package should use a conventional multi-targeted .NET 10 and
+.NET 11 SDK project layout:
 
 .. code-block:: text
 

@@ -5,7 +5,7 @@
 - [ ] Task: Validate C# binding contract
     - [ ] Verify C# schema compatibility fixtures against the functional kernel
     - [ ] Confirm C# remains a thin binding with no duplicated model logic
-    - [ ] Identify missing .NET 11 project or packaging settings
+    - [ ] Identify missing .NET 10/.NET 11 project or packaging settings
 - [ ] Task: Define NuGet package metadata and release gates
     - [ ] Specify package ID, versioning, license, README, source-link, and repository metadata
     - [ ] Define signing, provenance, artifact retention, and rollback expectations
@@ -15,7 +15,7 @@
 ## Phase 2: CI and Packaging
 
 - [ ] Task: Add C# publication readiness tests
-    - [ ] Write failing checks for package metadata and .NET 11 targeting
+    - [ ] Write failing checks for package metadata and .NET 10/.NET 11 targeting
     - [ ] Write failing checks for pack artifacts and schema fixture compatibility
     - [ ] Add checks that publication remains gated outside release contexts
 - [ ] Task: Implement NuGet packaging workflow

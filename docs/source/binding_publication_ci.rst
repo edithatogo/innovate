@@ -40,8 +40,8 @@ Go
   listing checks before release.
 
 C#
-  Publish ``Innovate.Kernel`` to NuGet after the .NET 11 package passes
-  restore, test, pack, and NuGet metadata checks.
+  Publish ``Innovate.Kernel`` to NuGet after the .NET 10 and .NET 11 package
+  targets pass restore, test, pack, and NuGet metadata checks.
 
 CI requirements
 ---------------
@@ -53,7 +53,7 @@ Every implemented binding needs a dedicated CI job in ``.github/workflows/ci.yml
 * Go: ``go test ./...``
 * Julia: ``Pkg.instantiate()`` and ``runtests.jl`` or ``Pkg.test()``
 * R: dependency installation plus ``Rscript bindings/r/tests/run.R``
-* C#: ``dotnet test`` on .NET 11
+* C#: ``dotnet test`` on .NET 10 and .NET 11
 
 Release workflow
 ----------------
