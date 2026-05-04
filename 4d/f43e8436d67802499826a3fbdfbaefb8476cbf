@@ -1,0 +1,13 @@
+Fix follow-up R CI dependency install issue.
+
+Root cause:
+- R workflow installed vignette dependencies from cloud.r-project.org, which built source packages on Ubuntu; fs failed, install.packages warned, and rmarkdown remained unavailable until R CMD build failed.
+
+Fix:
+- Use the RSPM repository configured by r-lib/actions when available, falling back to CRAN.
+- Add explicit requireNamespace checks so missing jsonlite/knitr/rmarkdown fails at dependency installation.
+- Extend static workflow policy tests for RSPM and namespace checks.
+
+Validation:
+- python3 -m pytest tests/unit/test_r_package_pdf_manual.py tests/unit/test_binding_publication_ci.py -q
+- R CMD build bindings/r --no-manual
