@@ -1,0 +1,18 @@
+Six-subagent Rust promotion dossier and inventory validation
+
+Summary:
+- Added machine-readable Rust core promotion dossier example under docs/source/_static.
+- Extended migration inventory with native and Python-only model keys.
+- Generalized CI JSON validation for Rust core inventory/dossier artifacts.
+- Documented promotion dossier capture commands for Rust CPU flamegraph metadata, DHAT memory profiles, and XLA CPU/GPU benchmark JSON.
+- Added tests for inventory schema, mixed ownership, promotion evidence categories, dossier evidence sections, crate docs-only decisions, and CI validation.
+
+Validation:
+- uv run ruff check .
+- uv run ruff format --check .
+- pytest tests/unit/test_benchmark_docs.py tests/unit/test_rust_binding_docs.py tests/unit/test_rust_core_roadmap_docs.py tests/unit/test_rust_core_migration_inventory.py tests/unit/test_prose_lint_docs.py tests/unit/test_conductor_workflow_docs.py
+- find ../../docs/source/_static -type f \( -name 'rust_core_*inventory*.json' -o -name 'rust_core_*dossier*.json' \) ... python3 -m json.tool
+- python3 -m json.tool docs/source/_static/rust_core_migration_inventory.json
+- python3 -m json.tool docs/source/_static/rust_core_promotion_dossier_example.json
+- uv run python -m sphinx -b html docs/source /tmp/innovate-docs-build
+- cargo package --list --allow-dirty profiling file check
