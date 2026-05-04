@@ -1,0 +1,18 @@
+Six-subagent Rust core migration inventory and profiling boundary
+
+Summary:
+- Added machine-readable Rust core migration inventory under docs/source/_static.
+- Documented Rust-native, Python bridge, and Python-reference ownership for kernel operation/model slices.
+- Added GPU/XLA profiling boundary commands and artifact separation guidance.
+- Added CI validation for Rust discovery manifest and Rust core migration inventory JSON.
+- Added package/docs tests guarding profiling files, docs-only inventory decisions, fallback coverage, Python registry gaps, and promotion evidence.
+
+Validation:
+- python3 -m json.tool docs/source/_static/rust_core_migration_inventory.json
+- python3 -m json.tool bindings/rust/inst/discovery_manifest.json
+- uv run ruff check .
+- uv run ruff format --check .
+- pytest tests/unit/test_benchmark_docs.py tests/unit/test_rust_binding_docs.py tests/unit/test_rust_core_roadmap_docs.py tests/unit/test_prose_lint_docs.py tests/unit/test_conductor_workflow_docs.py
+- cargo fmt --check && cargo clippy --all-targets --all-features -- -D warnings && cargo check --benches --examples && cargo bench --bench native_kernel --no-run
+- cargo package --allow-dirty
+- uv run python -m sphinx -b html docs/source /tmp/innovate-docs-build
