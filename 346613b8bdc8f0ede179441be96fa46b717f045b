@@ -1,0 +1,11 @@
+Track setup: R Package PDF Manual and Vignette Publication Quality Gate
+
+Summary:
+- Added Conductor spec, plan, metadata, and index for closing the missing R PDF manual gap.
+- Registered the track in conductor/tracks.md.
+- Included five implementation phases, each with automated conductor-review checkpoint tasks.
+- Defined six subagent-parallel workstreams for R docs, vignettes, CI, metadata, tests, and release docs.
+
+Validation:
+- python3 -m json.tool conductor/tracks/r_package_pdf_manual_20260504/metadata.json
+- pytest tests/unit/test_conductor_workflow_docs.py tests/unit/test_roadmap_backlog_tracks.py tests/unit/test_prose_lint_docs.py
