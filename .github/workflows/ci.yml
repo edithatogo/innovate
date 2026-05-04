@@ -413,7 +413,7 @@ jobs:
         uses: r-lib/actions/setup-tinytex@v2
 
       - name: Install R binding dependencies
-        run: Rscript -e 'install.packages("jsonlite", repos = "https://cloud.r-project.org")'
+        run: Rscript -e 'install.packages(c("jsonlite", "knitr", "rmarkdown"), repos = "https://cloud.r-project.org")'
 
       - name: Read R package metadata
         id: r_metadata
