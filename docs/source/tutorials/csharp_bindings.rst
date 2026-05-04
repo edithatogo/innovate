@@ -36,8 +36,8 @@ root.
 NuGet publication
 -----------------
 
-The ``Innovate.Kernel`` project is packable for ``net10.0`` and ``net11.0`` and
-ships as a conventional NuGet package with MIT license metadata, repository
+The ``Innovate.Kernel`` project publishes as ``innovate.cs`` for ``net10.0`` and
+``net11.0`` and ships as a conventional NuGet package with Apache-2.0 license metadata, repository
 metadata, project URL, package tags, release notes, SourceLink settings, symbol
 package output, and the package readme. The package also includes the Python
 bridge script as ``contentFiles/any/any/innovate/kernel_bridge.py`` so package

@@ -52,7 +52,7 @@ def test_csharp_binding_package_scaffold_exists() -> None:
 
     project = (binding_root / "Innovate.Kernel/Innovate.Kernel.csproj").read_text()
     assert "<TargetFrameworks Condition=\"'$(TargetFramework)' == ''\">net10.0;net11.0</TargetFrameworks>" in project
-    assert "<PackageId>Innovate.Kernel</PackageId>" in project
+    assert "<PackageId>innovate.cs</PackageId>" in project
 
 
 def test_csharp_package_metadata_is_nuget_ready() -> None:
@@ -61,11 +61,11 @@ def test_csharp_package_metadata_is_nuget_ready() -> None:
     project = ElementTree.parse(project_path)
     properties = {child.tag: child.text for group in project.findall("PropertyGroup") for child in group if child.text}
 
-    assert properties["PackageId"] == "Innovate.Kernel"
+    assert properties["PackageId"] == "innovate.cs"
     assert properties["PackageProjectUrl"] == "https://github.com/edithatogo/innovate"
     assert properties["RepositoryUrl"] == "https://github.com/edithatogo/innovate"
     assert properties["RepositoryType"] == "git"
-    assert properties["PackageLicenseExpression"] == "MIT"
+    assert properties["PackageLicenseExpression"] == "Apache-2.0"
     assert properties["PackageReadmeFile"] == "README.md"
     assert properties["PackageTags"] == "innovate;health-economics;decision-analysis;kernel;bindings"
     assert properties["PackageReleaseNotes"].startswith("Initial provisional .NET 10 and .NET 11 binding")

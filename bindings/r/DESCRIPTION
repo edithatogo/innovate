@@ -1,11 +1,11 @@
-Package: innovate
+Package: innovate.R
 Title: R Bindings over the Functional Kernel
-Version: 0.0.1
+Version: 0.5.0
 Authors@R: c(
-    person("Innovate", role = c("aut", "cre"))
+    person("Dylan", "Mordaunt", email = "dylan.mordaunt@vuw.ac.nz", role = c("aut", "cre"))
   )
 Description: Thin R bindings for the innovate functional kernel.
-License: Apache-2.0
+License: Apache License (>= 2)
 Encoding: UTF-8
 LazyData: true
 Imports:

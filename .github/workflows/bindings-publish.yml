@@ -147,9 +147,9 @@ jobs:
 
           package="${packages[0]}"
           unzip -l "$package"
-          unzip -p "$package" "Innovate.Kernel.nuspec" | tee /tmp/innovate-kernel.nuspec
+          unzip -p "$package" "innovate.cs.nuspec" | tee /tmp/innovate-kernel.nuspec
 
-          grep -F "<license type=\"expression\">MIT</license>" /tmp/innovate-kernel.nuspec
+          grep -F "<license type=\"expression\">Apache-2.0</license>" /tmp/innovate-kernel.nuspec
           grep -F "<repository type=\"git\" url=\"https://github.com/edithatogo/innovate\"" /tmp/innovate-kernel.nuspec
           grep -F "<tags>innovate health-economics decision-analysis kernel bindings</tags>" /tmp/innovate-kernel.nuspec
           unzip -l "$package" | grep -F "README.md"

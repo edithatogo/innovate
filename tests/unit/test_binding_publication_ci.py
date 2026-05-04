@@ -2,7 +2,57 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
+from xml.etree import ElementTree
+
+try:
+    import tomllib
+except ModuleNotFoundError:  # pragma: no cover - Python 3.10 compatibility
+    import tomli as tomllib
+
+ALIGNED_VERSION = "0.5.0"
+
+
+def _csharp_properties() -> dict[str, str]:
+    project = ElementTree.parse("bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj")
+    return {child.tag: child.text for group in project.findall("PropertyGroup") for child in group if child.text}
+
+
+def test_binding_package_names_follow_language_suffix_policy() -> None:
+    """Binding package names should follow the language suffix policy where valid."""
+    typescript_package = json.loads(Path("bindings/typescript/package.json").read_text())
+    rust_manifest = tomllib.loads(Path("bindings/rust/Cargo.toml").read_text())
+    r_description = Path("bindings/r/DESCRIPTION").read_text()
+    julia_project = tomllib.loads(Path("bindings/julia/Project.toml").read_text())
+    docs = Path("docs/source/binding_publication_ci.rst").read_text()
+
+    assert typescript_package["name"] == "innovate.ts"
+    assert rust_manifest["package"]["name"] == "innovate-rs"
+    assert "Package: innovate.R" in r_description
+    assert julia_project["name"] == "Innovate"
+    assert "innovate.go" in docs
+    assert "innovate.jl" in docs
+    assert "innovate.rs" in docs
+    assert _csharp_properties()["PackageId"] == "innovate.cs"
+
+
+def test_binding_versions_are_aligned_with_python_package_version() -> None:
+    """All binding package versions should match the primary Python release."""
+    pyproject = tomllib.loads(Path("pyproject.toml").read_text())
+    package_json = json.loads(Path("bindings/typescript/package.json").read_text())
+    cargo = tomllib.loads(Path("bindings/rust/Cargo.toml").read_text())
+    julia = tomllib.loads(Path("bindings/julia/Project.toml").read_text())
+    julia_manifest = tomllib.loads(Path("bindings/julia/Manifest.toml").read_text())
+    r_description = Path("bindings/r/DESCRIPTION").read_text()
+
+    assert pyproject["project"]["version"] == ALIGNED_VERSION
+    assert package_json["version"] == ALIGNED_VERSION
+    assert cargo["package"]["version"] == ALIGNED_VERSION
+    assert f"Version: {ALIGNED_VERSION}" in r_description
+    assert julia["version"] == ALIGNED_VERSION
+    assert next(package["version"] for package in julia_manifest["deps"]["Innovate"]) == ALIGNED_VERSION
+    assert _csharp_properties()["Version"] == ALIGNED_VERSION
 
 
 def test_binding_publication_docs_name_registry_targets() -> None:
@@ -79,7 +129,7 @@ def test_binding_publish_workflow_has_release_gated_registry_steps() -> None:
     assert "-p:ContinuousIntegrationBuild=true" in workflow
     assert "bindings/csharp/artifacts/*.nupkg" in workflow
     assert "bindings/csharp/artifacts/*.snupkg" in workflow
-    assert '<license type=\\"expression\\">MIT</license>' in workflow
+    assert '<license type=\\"expression\\">Apache-2.0</license>' in workflow
     assert '<repository type=\\"git\\" url=\\"https://github.com/edithatogo/innovate\\"' in workflow
     assert "<tags>innovate health-economics decision-analysis kernel bindings</tags>" in workflow
     assert "contentFiles/any/any/innovate/kernel_bridge.py" in workflow

@@ -1,4 +1,4 @@
-# innovate TypeScript bindings
+# innovate.ts TypeScript bindings
 
 This package provides a thin TypeScript-facing adapter over the Python `innovate` functional kernel.
 
@@ -60,7 +60,7 @@ kernel implementation.
 ## Usage
 
 ```ts
-import { kernelDiscoverModels, kernelFitModel, kernelRequest } from "innovate-typescript-bindings";
+import { kernelDiscoverModels, kernelFitModel, kernelRequest } from "innovate.ts";
 
 const discovery = kernelDiscoverModels();
 const bass = discovery.find((record) => record.key === "bass");

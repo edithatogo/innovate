@@ -1,6 +1,6 @@
 [package]
-name = "innovate-rust"
-version = "0.1.0"
+name = "innovate-rs"
+version = "0.5.0"
 edition = "2021"
 license = "MIT"
 description = "Rust bindings over the Innovate functional kernel"

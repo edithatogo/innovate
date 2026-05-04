@@ -1,6 +1,8 @@
-# Innovate Rust Bindings
+# innovate.rs Rust Bindings
 
 This crate provides a thin Rust-facing binding surface for the shared Innovate kernel.
+The user-facing language suffix is `innovate.rs`; the crates.io package name is
+`innovate-rs` because Cargo crate names do not use dots.
 Model discovery metadata is available through a Rust-native path and is parity
 tested against the Python bridge. Simple logistic and Bass `predict_model`
 requests with fitted state payloads now run through Rust-native paths with
@@ -80,5 +82,5 @@ for other models.
 - The package only wraps the stable kernel contract.
 - Rust-native execution is intentionally narrow and must remain parity tested
   against the Python reference semantics.
-- It is intended for local development and direct repository use, not registry
-  publication.
+- It is intended for publication as the `innovate-rs` crate once the
+  maintainer-owned crates.io token is configured.

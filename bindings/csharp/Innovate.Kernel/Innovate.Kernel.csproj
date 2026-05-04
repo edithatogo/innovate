@@ -3,7 +3,7 @@
     <TargetFrameworks Condition="'$(TargetFramework)' == ''">net10.0;net11.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PackageId>Innovate.Kernel</PackageId>
+    <PackageId>innovate.cs</PackageId>
     <Version>0.5.0</Version>
     <Authors>edithatogo</Authors>
     <Description>Thin .NET binding over the Innovate functional kernel contract.</Description>
@@ -11,7 +11,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/edithatogo/innovate</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageTags>innovate;health-economics;decision-analysis;kernel;bindings</PackageTags>
     <PackageReleaseNotes>Initial provisional .NET 10 and .NET 11 binding over the shared Innovate kernel contract.</PackageReleaseNotes>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

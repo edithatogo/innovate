@@ -1,6 +1,6 @@
 {
-  "name": "innovate-typescript-bindings",
-  "version": "0.1.0",
+  "name": "innovate.ts",
+  "version": "0.5.0",
   "description": "TypeScript bindings over the Innovate functional kernel",
   "license": "Apache-2.0",
   "private": false,

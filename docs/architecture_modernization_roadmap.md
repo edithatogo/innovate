@@ -209,6 +209,7 @@ Conductor archive.
 - [MARS Surrogate Benchmark Gate](../conductor/archive/mars_surrogate_benchmark_gate_20260504/)
 - [XLA Backend Strategy and JAX Kernel Promotion Gates](../conductor/archive/xla_backend_strategy_20260430/)
 - [HEOR Process Mining Fixture Contract and Interface Decision](../conductor/archive/heor_process_mining_fixture_contract_20260504/)
+- [Binding Package Version and Language-Suffix Name Alignment](../conductor/archive/binding_package_version_name_alignment_20260504/)
 
 The `Voiage Diffusion-Uncertainty Fixture` track now points downstream VOI
 examples to

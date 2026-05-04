@@ -208,3 +208,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Documentation Version Metadata Synchronization** *(Completed)*
   *Link: [./archive/docs_version_metadata_sync_20260504/](./archive/docs_version_metadata_sync_20260504/)*
+
+---
+
+- [x] **Track: Binding Package Version and Language-Suffix Name Alignment** *(Completed)*
+  *Link: [./archive/binding_package_version_name_alignment_20260504/](./archive/binding_package_version_name_alignment_20260504/)*

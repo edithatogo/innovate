@@ -1,4 +1,4 @@
-# Innovate.Kernel
+# innovate.cs
 
 Thin .NET binding over the shared `innovate` functional kernel contract.
 
@@ -8,7 +8,7 @@ behavior in C#.
 
 The package targets both `net10.0` and `net11.0`.
 
-NuGet packages include MIT license metadata, repository metadata, SourceLink
+NuGet packages include Apache-2.0 license metadata, repository metadata, SourceLink
 settings, a symbol package, this readme, and the packaged Python bridge script
 under `contentFiles/any/any/innovate/kernel_bridge.py`.
 

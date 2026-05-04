@@ -13,38 +13,47 @@ Python
   package release workflow.
 
 TypeScript
-  Publish ``innovate-typescript-bindings`` to npm. The package must pass
+  Publish ``innovate.ts`` to npm. The package must pass
   ``npm run schema:check``, ``npm run typecheck``, ``npm test``, and
   ``npm pack --dry-run`` before publication.
 
 Rust
-  Publish ``innovate-rust`` to crates.io once crate metadata, license policy,
-  and package contents are finalized. The package must pass ``cargo fmt
-  --check``, ``cargo test``, and ``cargo package`` before publication.
+  Publish ``innovate-rs`` to crates.io once crate metadata, license policy,
+  and package contents are finalized. The user-facing suffix is
+  ``innovate.rs``; the registry package uses ``innovate-rs`` because Cargo
+  crate names do not use dots. The package must pass ``cargo fmt --check``,
+  ``cargo test``, and ``cargo package`` before publication.
 
 R
-  Prepare the R binding for R-universe first and CRAN only after support
+  Prepare ``innovate.R`` for R-universe first and CRAN only after support
   boundaries, examples, and reverse dependency expectations are stable. The
   package must pass ``R CMD build`` and ``R CMD check``.
 
 Julia
-  Prepare the Julia binding for Julia General registry submission through the
-  standard Registrator workflow after package naming, UUID ownership, and
-  compatibility bounds are finalized. The project must pass
+  Prepare the ``Innovate`` Julia package for Julia General registry submission
+  through the standard Registrator workflow after package naming, UUID
+  ownership, and compatibility bounds are finalized. The user-facing suffix is
+  ``innovate.jl``; the registered Julia package keeps the valid module/package
+  name ``Innovate``. The project must pass
   ``Pkg.instantiate()`` and ``Pkg.test()``.
 
 Go
-  Publish the Go binding through Go modules by tagging releases that
-  include the ``bindings/go`` module path, for example
-  ``bindings/go/v0.5.0``. The package must pass ``go test ./...`` and module
-  listing checks before release.
+  Publish ``innovate.go`` through Go modules by tagging releases that include
+  the ``bindings/go`` module path, for example ``bindings/go/v0.5.0``. The
+  package must pass ``go test ./...`` and module listing checks before release.
 
 C#
-  Publish ``Innovate.Kernel`` to NuGet after the .NET 10 and .NET 11 package
+  Publish ``innovate.cs`` to NuGet after the .NET 10 and .NET 11 package
   targets pass restore, test, pack, symbol package generation, bridge-content
   inclusion, and NuGet metadata checks. The package metadata must include the
-  MIT license expression, repository URL and type, project URL, readme, package
-  tags, SourceLink settings, and release notes before publication.
+  Apache-2.0 license expression, repository URL and type, project URL, readme,
+  package tags, SourceLink settings, and release notes before publication.
+
+Version alignment
+-----------------
+
+The primary Python package and every binding package use the same release
+version. The current aligned version is ``0.5.0``.
 
 CI requirements
 ---------------
@@ -66,7 +75,7 @@ must run package checks for every language and only publish when release events
 or explicit manual inputs are used with the required registry secrets.
 
 For NuGet, the release workflow performs a dry-run style artifact gate before
-``dotnet nuget push``: it packs ``Innovate.Kernel``, requires both ``.nupkg``
+``dotnet nuget push``: it packs ``innovate.cs``, requires both ``.nupkg``
 and ``.snupkg`` outputs, inspects the generated ``.nuspec`` for publication
 metadata, and verifies the package contains ``README.md`` and the packaged
 ``contentFiles/any/any/innovate/kernel_bridge.py`` bridge script.
