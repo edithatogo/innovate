@@ -1,0 +1,16 @@
+Fix CI failures from a0dac4a.
+
+Root causes:
+- R CMD build failed because the r-bindings workflow installed jsonlite only, but the track added VignetteBuilder: knitr and rmarkdown-backed vignette sources.
+- Python 3.14 unit gate failed because the archived Conductor metadata still reported status=planned.
+
+Fixes:
+- Install jsonlite, knitr, and rmarkdown in CI and binding publication R package jobs.
+- Mark the archived r_package_pdf_manual_20260504 metadata status as completed.
+
+Validation:
+- python3 -m pytest tests/unit/test_roadmap_backlog_tracks.py::test_completed_conductor_archive_links_have_completed_metadata tests/unit/test_r_package_pdf_manual.py tests/unit/test_binding_publication_ci.py -q
+- R CMD build bindings/r --no-manual
+
+Local limitation:
+- A broader local uv/nox run was blocked by disk space while extracting llvmlite for Python 3.14; CI remains the authoritative matrix gate.
