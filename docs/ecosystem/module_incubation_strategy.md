@@ -96,6 +96,34 @@ Pickle is not a portable ecosystem contract.
 Tabular artifacts should default to Arrow or Parquet so sibling modules can
 consume them without Python object coupling.
 
+### Operational Modeling Fixture Contracts
+
+The operational-modeling fixture contracts are documented fixtures, not runtime
+engine integrations:
+
+- [operational_modeling/treeage_style/manifest.json](../../specs/ecosystem/operational_modeling/treeage_style/manifest.json)
+  defines a TreeAge-style decision-tree and state-transition contract for HTA
+  and reimbursement examples. It includes strategy, state, transition, payoff,
+  schema-version, provenance, and XLA eligibility or rejection fields while
+  keeping proprietary TreeAge parsing out of scope.
+- [operational_modeling/des/manifest.json](../../specs/ecosystem/operational_modeling/des/manifest.json)
+  defines a DES contract around event-log rows, queue metrics, resource
+  identifiers, pathway states, deterministic ordering, run metadata,
+  provenance, and XLA eligibility or rejection notes. It represents pathways as
+  artifacts rather than private engine state.
+
+These fixtures are the documented stage of the adapter promotion ladder.
+Runtime simulation engines out of the current `innovate` package remain out of
+scope unless a future adapter is isolated behind optional extras and passes the
+same smoke CI, Renovate, security, compatibility-matrix, documentation, and
+removal-path gates as other ecosystem integrations.
+
+TreeAge-style state-transition calculations may be XLA-eligible when they are
+bounded matrix operations with static cycle counts. Classic DES is rejected for
+XLA when dynamic event queues, resource contention, or runtime-created events
+would be distorted; a separate vectorized Monte Carlo approximation can be
+evaluated later only if it preserves the documented artifact semantics.
+
 ## HEOML Alignment
 
 The future `heoml.extensions.innovate` namespace should cover:
@@ -112,6 +140,25 @@ The future `heoml.extensions.innovate` namespace should cover:
 
 The HEOML extension should reference stable `innovate` artifact schemas and
 public functional-kernel semantics, not private implementation classes.
+
+### Schema Placement
+
+The interim HEOML extension schema home is
+`specs/ecosystem/heoml/extensions/innovate/`. This repo-local placement keeps
+the `heoml.extensions.innovate` contract close to the `innovate` artifact
+fixtures and Arrow-compatible interchange checks while HEOML is not yet a
+standalone `heoml` repository.
+
+The placement decision is recorded in
+[ADR 0005: HEOML Schema Placement](../adr/0005-heoml-schema-placement.md).
+The migration trigger is a standalone `heoml` repository with a published
+semver schema bundle, stable extension namespace, cross-repository fixture CI,
+and a documented deprecation window for the repo-local schemas.
+
+HEOML extension contracts must use `schema_version` fields, binding-friendly
+JSON manifests, JSON Schema validation, and Arrow-compatible tabular payloads.
+They MUST NOT use private Python objects, MUST NOT use pickle, and MUST NOT use
+private Python object framing.
 
 ### Boundary Rule
 
@@ -182,8 +229,17 @@ public functional-kernel semantics, not private implementation classes.
 
 ## Immediate Follow-Up
 
-- Define a minimal adoption-trajectory fixture that `lifecourse` can consume.
-- Define a diffusion-uncertainty fixture that `voiage` can use for VOI examples.
+- Define a minimal adoption-trajectory fixture that `lifecourse` can consume:
+  `specs/ecosystem/lifecourse/adoption_trajectory/v1/manifest.json` documents
+  the first deterministic Parquet smoke fixture. This is a documented contract
+  only; runtime adapter implementation remains future work until optional
+  extras, smoke CI, and a compatibility matrix are in place.
+- Define a diffusion-uncertainty fixture that `voiage` can use for VOI examples:
+  `specs/ecosystem/voiage/uncertainty/diffusion_v1/manifest.json` documents
+  parameter draws, adoption trajectories, provenance, sample dimensions, and
+  VOI concept mappings. VOI method implementation remains owned outside `innovate`.
+  This fixture is a decision-relevant uncertainty source, not an EVPI, EVPPI,
+  EVSI, ENBS, or reporting engine.
 - Define a TreeAge-style operational modeling fixture for reimbursement and
   decision-analysis workflows.
 - Define a DES fixture with event logs and queue metrics for pathway timing
@@ -216,5 +272,19 @@ PM4Py remains in the ecosystem-only process-mining bucket. Any future module
 that comes out of this list should expose a CLI surface, and any MCP interface
 decision should be explicit rather than assumed.
 
-The live track for this work is
-[HEOR Module Naming Brainstorm](../../conductor/tracks/heor_module_naming_brainstorm_20260429/).
+The archived track for this work is
+[HEOR Module Naming Brainstorm](../../conductor/archive/heor_module_naming_brainstorm_20260429/).
+
+## MARS Surrogate Benchmark Gate
+
+The MARS surrogate benchmark gate is the evidence path for deciding whether
+`mars` should become an optional backend for adoption-curve surrogate workflows.
+The current outcome is **defer**. `mars` remains outside base and optional
+package metadata until opt-in benchmark evidence records reference
+NumPy/SciPy behavior, MARS surrogate behavior, eligible XLA-backed alternatives,
+dependency cost, failure modes, and gain attribution.
+
+Fast CI should validate only the benchmark-gate metadata. Timing evidence should
+be generated through the opt-in command documented in the benchmark workflow
+tutorial, and any promotion decision should keep surrogate gains separate from
+JAX/XLA compile and steady-state runtime effects.

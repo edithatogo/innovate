@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "fixture_id": "voiage_diffusion_uncertainty_v1",
+  "artifact_type": "diffusion_uncertainty_fixture",
+  "producer": "innovate",
+  "consumer": "voiage",
+  "promotion_stage": "documented",
+  "requires_voiage_runtime": false,
+  "base_dependencies": [
+    "python>=3.10"
+  ],
+  "optional_dependencies": [],
+  "payload_encoding": "csv-with-arrow-compatible-schema",
+  "description": "Small deterministic diffusion-uncertainty fixture for HEOR VOI examples without importing innovate or voiage runtime objects.",
+  "sample_dimensions": {
+    "scenario_count": 2,
+    "draw_count_per_scenario": 3,
+    "parameter_count_per_draw": 3,
+    "time_point_count_per_draw": 4,
+    "trajectory_row_count": 24,
+    "parameter_draw_row_count": 18
+  },
+  "uncertainty_dimensions": {
+    "scenario_id": "decision or implementation scenario",
+    "draw_id": "joint parameter uncertainty sample",
+    "uncertainty_label": "uncertainty source label",
+    "time": "diffusion trajectory time point"
+  },
+  "voi_concept_mapping": {
+    "scenario_id": "decision context or implementation strategy label",
+    "draw_id": "Monte Carlo sample for EVPI, EVPPI, EVSI, and ENBS examples",
+    "parameter_name": "candidate EVPPI grouping variable",
+    "uncertainty_label": "uncertainty source used for reporting and subgrouping",
+    "adoption": "decision-relevant uncertain outcome",
+    "cumulative_adoption": "aggregate implementation outcome for downstream net-benefit examples"
+  },
+  "files": {
+    "parameter_draws": {
+      "path": "parameter_draws.csv",
+      "row_count": 18,
+      "primary_key": [
+        "scenario_id",
+        "draw_id",
+        "parameter_name"
+      ],
+      "columns": [
+        {"name": "schema_version", "type": "string", "required": true},
+        {"name": "scenario_id", "type": "string", "required": true},
+        {"name": "uncertainty_label", "type": "string", "required": true},
+        {"name": "draw_id", "type": "int64", "required": true},
+        {"name": "parameter_name", "type": "string", "required": true},
+        {"name": "value", "type": "float64", "required": true},
+        {"name": "distribution", "type": "string", "required": true},
+        {"name": "unit", "type": "string", "required": true}
+      ]
+    },
+    "adoption_trajectories": {
+      "path": "adoption_trajectories.csv",
+      "row_count": 24,
+      "primary_key": [
+        "scenario_id",
+        "draw_id",
+        "time"
+      ],
+      "columns": [
+        {"name": "schema_version", "type": "string", "required": true},
+        {"name": "scenario_id", "type": "string", "required": true},
+        {"name": "intervention_id", "type": "string", "required": true},
+        {"name": "uncertainty_label", "type": "string", "required": true},
+        {"name": "draw_id", "type": "int64", "required": true},
+        {"name": "time", "type": "int64", "required": true},
+        {"name": "adoption", "type": "float64", "required": true},
+        {"name": "cumulative_adoption", "type": "float64", "required": true},
+        {"name": "population", "type": "int64", "required": true},
+        {"name": "segment", "type": "string", "required": true}
+      ]
+    }
+  },
+  "provenance": {
+    "source_model": "deterministic_bass_reference",
+    "source_package": "innovate",
+    "deterministic_seed": 20260504,
+    "generated_at": "2026-05-04T00:00:00Z",
+    "generator": "hand-authored ecosystem contract fixture",
+    "source_commit": "not-bound"
+  },
+  "compatibility_notes": [
+    "CSV payloads are intentionally small review fixtures; production adapters should use Arrow or Parquet with the same column names and logical types.",
+    "The fixture is documented-stage only and does not define a runtime adapter compatibility matrix.",
+    "Fields avoid pickle, private Python objects, and sibling-project runtime imports."
+  ],
+  "out_of_scope": [
+    "VOI method implementation remains outside innovate",
+    "voiage runtime adapter implementation",
+    "cross-repository smoke CI",
+    "supported-version compatibility matrix"
+  ]
+}

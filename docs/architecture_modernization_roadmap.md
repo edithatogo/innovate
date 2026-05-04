@@ -6,10 +6,10 @@ Accepted direction as of 2026-04-16.
 
 ## Implementation Status
 
-The original roadmap stages are covered by Conductor records. Most stage and
-deferred follow-on tracks have been completed and archived; the active backlog
-currently consists of the ecosystem gap tracks registered by the audit. New
-roadmap-level gaps should become Conductor tracks before implementation begins.
+The original roadmap stages are covered by Conductor records. Stage work,
+deferred follow-on tracks, and the ecosystem gap tracks registered by the audit
+have been completed and archived. New roadmap-level gaps should become
+Conductor tracks before implementation begins.
 
 ## Goal
 
@@ -192,7 +192,7 @@ implementation begins.
 
 These tracks convert the deferred work and subsequent audit recommendations into
 Conductor-managed implementation items. Completed follow-on tracks point to their
-Conductor archive; active follow-ons point to their track folder.
+Conductor archive.
 
 - [Probabilistic Inference Expansion](../conductor/archive/probabilistic_inference_expansion_20260430/)
 - [Diagnostics and Uncertainty Expansion](../conductor/archive/diagnostics_uncertainty_expansion_20260430/)
@@ -202,12 +202,25 @@ Conductor archive; active follow-ons point to their track folder.
 - [Rust Core Expansion](../conductor/archive/rust_core_expansion_20260430/)
 - [C# Package Publication](../conductor/archive/csharp_package_publication_20260430/)
 - [Roadmap Completeness Audit](../conductor/archive/roadmap_completeness_audit_20260430/)
-- [Lifecourse Adoption-Trajectory Fixture](../conductor/tracks/lifecourse_adoption_fixture_20260504/)
-- [Voiage Diffusion-Uncertainty Fixture](../conductor/tracks/voiage_uncertainty_fixture_20260504/)
-- [Operational Modeling Fixture Contracts](../conductor/tracks/operational_modeling_fixtures_20260504/)
-- [HEOML Schema Placement Decision](../conductor/tracks/heoml_schema_placement_20260504/)
-- [MARS Surrogate Benchmark Gate](../conductor/tracks/mars_surrogate_benchmark_gate_20260504/)
+- [Lifecourse Adoption-Trajectory Fixture](../conductor/archive/lifecourse_adoption_fixture_20260504/)
+- [Voiage Diffusion-Uncertainty Fixture](../conductor/archive/voiage_uncertainty_fixture_20260504/)
+- [Operational Modeling Fixture Contracts](../conductor/archive/operational_modeling_fixtures_20260504/)
+- [HEOML Schema Placement Decision](../conductor/archive/heoml_schema_placement_20260504/)
+- [MARS Surrogate Benchmark Gate](../conductor/archive/mars_surrogate_benchmark_gate_20260504/)
 - [XLA Backend Strategy and JAX Kernel Promotion Gates](../conductor/archive/xla_backend_strategy_20260430/)
+
+The `Voiage Diffusion-Uncertainty Fixture` track now points downstream VOI
+examples to
+`specs/ecosystem/voiage/uncertainty/diffusion_v1/manifest.json` as a
+documented-stage uncertainty source; VOI method implementation and supported
+adapter compatibility remain outside this fixture.
+
+The `HEOML Schema Placement Decision` track records the interim schema home as
+`specs/ecosystem/heoml/extensions/innovate/` and defers migration until a
+standalone `heoml` repository provides a semver schema bundle, fixture CI,
+stable namespace, and deprecation window. The placement preserves
+binding-friendly JSON, JSON Schema, and Arrow-compatible payload contracts
+without private Python object framing.
 
 The `Roadmap Completeness Audit` track exists to check for implied work that is
 not explicit in this roadmap, including release governance, CI/CD coverage,

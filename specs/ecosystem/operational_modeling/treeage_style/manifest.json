@@ -1,0 +1,197 @@
+{
+  "schema_version": "0.1.0",
+  "artifact_type": "operational_modeling.treeage_style",
+  "description": "Synthetic TreeAge-style decision-tree and state-transition fixture for HEOR reimbursement examples.",
+  "engine_dependency": "none",
+  "proprietary_parsing": "out_of_scope",
+  "decision_tree": {
+    "model_id": "hta_antiviral_decision_tree_v1",
+    "root_node_id": "n0_decision",
+    "nodes": [
+      {
+        "node_id": "n0_decision",
+        "node_type": "decision",
+        "label": "Choose reimbursement strategy"
+      },
+      {
+        "node_id": "n1_usual_care",
+        "node_type": "terminal",
+        "label": "Usual care"
+      },
+      {
+        "node_id": "n2_early_adoption",
+        "node_type": "terminal",
+        "label": "Early antiviral adoption"
+      }
+    ],
+    "edges": [
+      {
+        "from_node": "n0_decision",
+        "to_node": "n1_usual_care",
+        "strategy_id": "usual_care",
+        "probability": 1.0
+      },
+      {
+        "from_node": "n0_decision",
+        "to_node": "n2_early_adoption",
+        "strategy_id": "early_adoption",
+        "probability": 1.0
+      }
+    ]
+  },
+  "state_transition_model": {
+    "model_id": "hta_antiviral_state_transition_v1",
+    "cycle_length": "1 year",
+    "time_horizon_cycles": 3,
+    "discount_rate_costs": 0.035,
+    "discount_rate_effects": 0.035
+  },
+  "strategies": [
+    {
+      "strategy_id": "usual_care",
+      "label": "Usual care",
+      "description": "Existing treatment pathway without accelerated adoption."
+    },
+    {
+      "strategy_id": "early_adoption",
+      "label": "Early adoption",
+      "description": "Accelerated implementation of a reimbursed antiviral pathway."
+    }
+  ],
+  "states": [
+    {
+      "state_id": "stable",
+      "label": "Stable disease",
+      "absorbing": false
+    },
+    {
+      "state_id": "complication",
+      "label": "Complication",
+      "absorbing": false
+    },
+    {
+      "state_id": "death",
+      "label": "Death",
+      "absorbing": true
+    }
+  ],
+  "transitions": [
+    {
+      "strategy_id": "usual_care",
+      "from_state": "stable",
+      "to_state": "stable",
+      "cycle": 1,
+      "probability": 0.82
+    },
+    {
+      "strategy_id": "usual_care",
+      "from_state": "stable",
+      "to_state": "complication",
+      "cycle": 1,
+      "probability": 0.12
+    },
+    {
+      "strategy_id": "usual_care",
+      "from_state": "stable",
+      "to_state": "death",
+      "cycle": 1,
+      "probability": 0.06
+    },
+    {
+      "strategy_id": "usual_care",
+      "from_state": "complication",
+      "to_state": "death",
+      "cycle": 1,
+      "probability": 0.18
+    },
+    {
+      "strategy_id": "early_adoption",
+      "from_state": "stable",
+      "to_state": "stable",
+      "cycle": 1,
+      "probability": 0.88
+    },
+    {
+      "strategy_id": "early_adoption",
+      "from_state": "stable",
+      "to_state": "complication",
+      "cycle": 1,
+      "probability": 0.08
+    },
+    {
+      "strategy_id": "early_adoption",
+      "from_state": "stable",
+      "to_state": "death",
+      "cycle": 1,
+      "probability": 0.04
+    },
+    {
+      "strategy_id": "early_adoption",
+      "from_state": "complication",
+      "to_state": "death",
+      "cycle": 1,
+      "probability": 0.14
+    }
+  ],
+  "payoffs": [
+    {
+      "strategy_id": "usual_care",
+      "state_id": "stable",
+      "cycle": 1,
+      "cost": 1200.0,
+      "utility": 0.82,
+      "currency": "AUD"
+    },
+    {
+      "strategy_id": "usual_care",
+      "state_id": "complication",
+      "cycle": 1,
+      "cost": 5400.0,
+      "utility": 0.61,
+      "currency": "AUD"
+    },
+    {
+      "strategy_id": "usual_care",
+      "state_id": "death",
+      "cycle": 1,
+      "cost": 0.0,
+      "utility": 0.0,
+      "currency": "AUD"
+    },
+    {
+      "strategy_id": "early_adoption",
+      "state_id": "stable",
+      "cycle": 1,
+      "cost": 2100.0,
+      "utility": 0.86,
+      "currency": "AUD"
+    },
+    {
+      "strategy_id": "early_adoption",
+      "state_id": "complication",
+      "cycle": 1,
+      "cost": 4900.0,
+      "utility": 0.65,
+      "currency": "AUD"
+    },
+    {
+      "strategy_id": "early_adoption",
+      "state_id": "death",
+      "cycle": 1,
+      "cost": 0.0,
+      "utility": 0.0,
+      "currency": "AUD"
+    }
+  ],
+  "xla": {
+    "status": "eligible_with_constraints",
+    "rationale": "State-transition calculations with bounded transition matrices and static cycle counts can be represented as array kernels. Tree traversal, proprietary project import, and reimbursement-workflow metadata should remain artifact handling rather than XLA runtime behavior."
+  },
+  "provenance": {
+    "source": "synthetic_fixture",
+    "generated_by": "innovate ecosystem fixture",
+    "generated_at": "2026-05-04T00:00:00Z",
+    "treeage_file_required": false,
+    "notes": "TreeAge-style means decision-analysis shape compatibility only; proprietary TreeAge parsing is out of scope."
+  }
+}

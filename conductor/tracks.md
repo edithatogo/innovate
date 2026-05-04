@@ -166,28 +166,28 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Lifecourse Adoption-Trajectory Fixture**
-  *Link: [./tracks/lifecourse_adoption_fixture_20260504/](./tracks/lifecourse_adoption_fixture_20260504/)*
+- [x] **Track: Lifecourse Adoption-Trajectory Fixture** *(Completed)*
+  *Link: [./archive/lifecourse_adoption_fixture_20260504/](./archive/lifecourse_adoption_fixture_20260504/)*
 
 ---
 
-- [ ] **Track: Voiage Diffusion-Uncertainty Fixture**
-  *Link: [./tracks/voiage_uncertainty_fixture_20260504/](./tracks/voiage_uncertainty_fixture_20260504/)*
+- [x] **Track: Voiage Diffusion-Uncertainty Fixture** *(Completed)*
+  *Link: [./archive/voiage_uncertainty_fixture_20260504/](./archive/voiage_uncertainty_fixture_20260504/)*
 
 ---
 
-- [ ] **Track: Operational Modeling Fixture Contracts**
-  *Link: [./tracks/operational_modeling_fixtures_20260504/](./tracks/operational_modeling_fixtures_20260504/)*
+- [x] **Track: Operational Modeling Fixture Contracts** *(Completed)*
+  *Link: [./archive/operational_modeling_fixtures_20260504/](./archive/operational_modeling_fixtures_20260504/)*
 
 ---
 
-- [ ] **Track: HEOML Schema Placement Decision**
-  *Link: [./tracks/heoml_schema_placement_20260504/](./tracks/heoml_schema_placement_20260504/)*
+- [x] **Track: HEOML Schema Placement Decision** *(Completed)*
+  *Link: [./archive/heoml_schema_placement_20260504/](./archive/heoml_schema_placement_20260504/)*
 
 ---
 
-- [ ] **Track: MARS Surrogate Benchmark Gate**
-  *Link: [./tracks/mars_surrogate_benchmark_gate_20260504/](./tracks/mars_surrogate_benchmark_gate_20260504/)*
+- [x] **Track: MARS Surrogate Benchmark Gate** *(Completed)*
+  *Link: [./archive/mars_surrogate_benchmark_gate_20260504/](./archive/mars_surrogate_benchmark_gate_20260504/)*
 
 ---
 

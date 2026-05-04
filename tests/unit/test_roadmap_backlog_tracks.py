@@ -128,32 +128,32 @@ def test_roadmap_completeness_audit_track_is_registered() -> None:
 
 
 def test_roadmap_gap_tracks_are_registered() -> None:
-    """Confirmed roadmap audit gaps should have active Conductor records."""
+    """Confirmed roadmap audit gaps should have completed Conductor records."""
     roadmap = ROADMAP_PATH.read_text()
     registry = Path("conductor/tracks.md").read_text()
 
     for title, track_id in ROADMAP_GAP_TRACKS.items():
         assert title in roadmap
-        assert f"../conductor/tracks/{track_id}/" in roadmap
-        assert f"- [ ] **Track: {title}**" in registry
-        assert f"./tracks/{track_id}/" in registry
-        assert (Path("conductor/tracks") / track_id / "spec.md").is_file()
+        assert f"../conductor/archive/{track_id}/" in roadmap
+        assert f"- [x] **Track: {title}** *(Completed)*" in registry
+        assert f"./archive/{track_id}/" in registry
+        assert (Path("conductor/archive") / track_id / "spec.md").is_file()
 
 
 def test_active_roadmap_track_artifacts_exist() -> None:
-    """Each active roadmap backlog track should have complete Conductor files."""
-    active_tracks = [
+    """Each completed roadmap gap track should have complete Conductor files."""
+    completed_gap_tracks = [
         *ROADMAP_GAP_TRACKS.items(),
     ]
-    for title, track_id in active_tracks:
-        track_dir = Path("conductor/tracks") / track_id
+    for title, track_id in completed_gap_tracks:
+        track_dir = Path("conductor/archive") / track_id
         metadata = json.loads((track_dir / "metadata.json").read_text())
 
         assert (track_dir / "spec.md").is_file(), title
         assert (track_dir / "plan.md").is_file(), title
         assert (track_dir / "index.md").is_file(), title
         assert metadata["track_id"] == track_id
-        assert metadata["status"] == "new"
+        assert metadata["status"] == "completed"
 
 
 def test_roadmap_primary_tracks_are_mapped_to_conductor_records() -> None:
@@ -210,8 +210,9 @@ def test_roadmap_status_language_separates_archive_from_active_backlog() -> None
     roadmap = ROADMAP_PATH.read_text()
     normalized_roadmap = " ".join(roadmap.split())
 
-    assert "Most stage and deferred follow-on tracks have been completed and archived" in normalized_roadmap
-    assert "active backlog currently consists of" in normalized_roadmap
+    assert "Stage work, deferred follow-on tracks, and the ecosystem gap tracks" in normalized_roadmap
+    assert "have been completed and archived" in normalized_roadmap
+    assert "active backlog currently consists of" not in normalized_roadmap
     assert "ecosystem gap tracks registered by the audit" in normalized_roadmap
     assert "`Rust Core Expansion`, `C# Package Publication`, `Roadmap Completeness Audit`" not in normalized_roadmap
     assert "remaining strategic follow-ons" not in roadmap

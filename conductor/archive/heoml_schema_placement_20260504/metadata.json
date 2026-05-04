@@ -1,8 +1,8 @@
 {
   "track_id": "heoml_schema_placement_20260504",
   "type": "chore",
-  "status": "new",
+  "status": "completed",
   "created_at": "2026-05-03T22:11:02Z",
-  "updated_at": "2026-05-03T22:11:02Z",
+  "updated_at": "2026-05-04T00:00:00Z",
   "description": "Decide where HEOML extension schemas should live while preserving innovate's artifact-first ecosystem contract."
 }

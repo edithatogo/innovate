@@ -48,6 +48,21 @@ future standalone `heoml` repository" into a narrow governance track.
 4. Release and versioning expectations are explicit enough for future
    cross-repository fixtures.
 
+## Decision Summary
+
+The accepted interim schema home is
+`specs/ecosystem/heoml/extensions/innovate/`. The rationale and alternatives
+are recorded in `docs/adr/0005-heoml-schema-placement.md`.
+
+The selected migration trigger is a future standalone `heoml` repository that
+publishes a semver schema bundle, owns a stable `heoml.extensions.innovate`
+namespace, runs cross-repository fixture CI against `innovate`, and documents a
+deprecation window for repo-local schemas.
+
+All HEOML extension contracts must remain binding-friendly JSON, JSON Schema,
+or Arrow-compatible tabular payloads. They must not use private Python object
+framing, pickle, or sibling-project internals as the contract.
+
 ## Out of Scope
 
 1. Creating a new external `heoml` repository.

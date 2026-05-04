@@ -30,9 +30,9 @@ GAP_TRACKS = {
 
 
 def test_roadmap_gap_tracks_have_complete_conductor_artifacts() -> None:
-    """Drafted roadmap gaps should be ready for registry insertion."""
+    """Completed roadmap gaps should have archived Conductor artifacts."""
     for track_id, (title, _) in GAP_TRACKS.items():
-        track_dir = Path("conductor/tracks") / track_id
+        track_dir = Path("conductor/archive") / track_id
         metadata = json.loads((track_dir / "metadata.json").read_text())
 
         assert (track_dir / "spec.md").is_file(), track_id
@@ -40,7 +40,7 @@ def test_roadmap_gap_tracks_have_complete_conductor_artifacts() -> None:
         assert (track_dir / "index.md").is_file(), track_id
         assert metadata["track_id"] == track_id
         assert metadata["type"] == "chore"
-        assert metadata["status"] == "new"
+        assert metadata["status"] == "completed"
         assert title in (track_dir / "spec.md").read_text()
 
 
@@ -50,8 +50,8 @@ def test_roadmap_gap_tracks_reference_confirmed_gap_sources() -> None:
     contract = Path("specs/ecosystem/README.md").read_text()
 
     for track_id, (_, required_terms) in GAP_TRACKS.items():
-        spec = (Path("conductor/tracks") / track_id / "spec.md").read_text()
-        plan = (Path("conductor/tracks") / track_id / "plan.md").read_text()
+        spec = (Path("conductor/archive") / track_id / "spec.md").read_text()
+        plan = (Path("conductor/archive") / track_id / "plan.md").read_text()
 
         assert "Roadmap Source" in spec
         assert "docs/ecosystem/module_incubation_strategy.md" in spec
@@ -76,10 +76,33 @@ def test_roadmap_gap_tracks_reference_confirmed_gap_sources() -> None:
 
 
 def test_roadmap_gap_tracks_are_registered_and_resolvable() -> None:
-    """Confirmed roadmap gaps should be registered as active Conductor tracks."""
+    """Confirmed roadmap gaps should be registered as completed Conductor tracks."""
     registry = Path("conductor/tracks.md").read_text()
 
     for track_id, (title, _) in GAP_TRACKS.items():
-        assert f"- [ ] **Track: {title}**" in registry
-        assert f"./tracks/{track_id}/" in registry
-        assert (Path("conductor/tracks") / track_id / "spec.md").is_file()
+        assert f"- [x] **Track: {title}** *(Completed)*" in registry
+        assert f"./archive/{track_id}/" in registry
+        assert (Path("conductor/archive") / track_id / "spec.md").is_file()
+
+
+def test_roadmap_gap_tracks_keep_ecosystem_contracts_portable() -> None:
+    """Gap tracks should preserve artifact-first, binding-friendly contracts."""
+    for track_id in GAP_TRACKS:
+        track_dir = Path("conductor/archive") / track_id
+        spec = (track_dir / "spec.md").read_text()
+        normalized_spec = spec.lower()
+
+        assert "private" in normalized_spec or ("public" in normalized_spec and "api" in normalized_spec)
+        assert "base" in normalized_spec
+
+
+def test_roadmap_gap_tracks_have_common_validation_patterns() -> None:
+    """Plans should converge on focused tests and explicit validation gates."""
+    for track_id in GAP_TRACKS:
+        plan = (Path("conductor/archive") / track_id / "plan.md").read_text()
+        normalized_plan = plan.lower()
+
+        assert "write failing" in normalized_plan, track_id
+        assert "run focused" in normalized_plan, track_id
+        assert "validat" in normalized_plan, track_id
+        assert "Conductor - Automated Review and Checkpoint" in plan, track_id

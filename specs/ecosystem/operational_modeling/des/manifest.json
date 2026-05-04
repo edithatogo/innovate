@@ -1,0 +1,234 @@
+{
+  "schema_version": "0.1.0",
+  "artifact_type": "operational_modeling.des",
+  "description": "Synthetic DES pathway fixture with event-log rows, queue metrics, resource identifiers, and run metadata.",
+  "engine_dependency": "none",
+  "private_engine_state": "excluded",
+  "run_metadata": {
+    "simulation_id": "des_antiviral_pathway_v1",
+    "scenario_id": "early_adoption_access",
+    "run_id": "run_001",
+    "seed": 314159,
+    "replications": 1,
+    "time_unit": "days",
+    "warmup_period": 0
+  },
+  "pathway_states": [
+    {
+      "state_id": "referred",
+      "label": "Referred"
+    },
+    {
+      "state_id": "triage",
+      "label": "Triage"
+    },
+    {
+      "state_id": "treatment",
+      "label": "Treatment"
+    },
+    {
+      "state_id": "discharged",
+      "label": "Discharged"
+    }
+  ],
+  "resources": [
+    {
+      "resource_id": "r_triage_nurse",
+      "label": "Triage nurse",
+      "capacity": 1
+    },
+    {
+      "resource_id": "r_clinician",
+      "label": "Treating clinician",
+      "capacity": 1
+    }
+  ],
+  "event_log": {
+    "columns": [
+      {
+        "name": "simulation_id",
+        "type": "string"
+      },
+      {
+        "name": "run_id",
+        "type": "string"
+      },
+      {
+        "name": "entity_id",
+        "type": "string"
+      },
+      {
+        "name": "event_index",
+        "type": "integer"
+      },
+      {
+        "name": "event_time",
+        "type": "number"
+      },
+      {
+        "name": "event_type",
+        "type": "string"
+      },
+      {
+        "name": "state_before",
+        "type": "string"
+      },
+      {
+        "name": "state_after",
+        "type": "string"
+      },
+      {
+        "name": "resource_id",
+        "type": "string"
+      },
+      {
+        "name": "queue_time",
+        "type": "number"
+      }
+    ],
+    "rows": [
+      {
+        "simulation_id": "des_antiviral_pathway_v1",
+        "run_id": "run_001",
+        "entity_id": "patient_001",
+        "event_index": 1,
+        "event_time": 0.0,
+        "event_type": "arrival",
+        "state_before": "referred",
+        "state_after": "triage",
+        "resource_id": "r_triage_nurse",
+        "queue_time": 0.0
+      },
+      {
+        "simulation_id": "des_antiviral_pathway_v1",
+        "run_id": "run_001",
+        "entity_id": "patient_001",
+        "event_index": 2,
+        "event_time": 0.4,
+        "event_type": "service_start",
+        "state_before": "triage",
+        "state_after": "treatment",
+        "resource_id": "r_clinician",
+        "queue_time": 0.1
+      },
+      {
+        "simulation_id": "des_antiviral_pathway_v1",
+        "run_id": "run_001",
+        "entity_id": "patient_001",
+        "event_index": 3,
+        "event_time": 1.2,
+        "event_type": "departure",
+        "state_before": "treatment",
+        "state_after": "discharged",
+        "resource_id": "r_clinician",
+        "queue_time": 0.0
+      },
+      {
+        "simulation_id": "des_antiviral_pathway_v1",
+        "run_id": "run_001",
+        "entity_id": "patient_002",
+        "event_index": 1,
+        "event_time": 0.2,
+        "event_type": "arrival",
+        "state_before": "referred",
+        "state_after": "triage",
+        "resource_id": "r_triage_nurse",
+        "queue_time": 0.0
+      },
+      {
+        "simulation_id": "des_antiviral_pathway_v1",
+        "run_id": "run_001",
+        "entity_id": "patient_002",
+        "event_index": 2,
+        "event_time": 0.7,
+        "event_type": "service_start",
+        "state_before": "triage",
+        "state_after": "treatment",
+        "resource_id": "r_clinician",
+        "queue_time": 0.2
+      },
+      {
+        "simulation_id": "des_antiviral_pathway_v1",
+        "run_id": "run_001",
+        "entity_id": "patient_002",
+        "event_index": 3,
+        "event_time": 1.6,
+        "event_type": "departure",
+        "state_before": "treatment",
+        "state_after": "discharged",
+        "resource_id": "r_clinician",
+        "queue_time": 0.0
+      }
+    ]
+  },
+  "queue_metrics": {
+    "columns": [
+      {
+        "name": "simulation_id",
+        "type": "string"
+      },
+      {
+        "name": "run_id",
+        "type": "string"
+      },
+      {
+        "name": "resource_id",
+        "type": "string"
+      },
+      {
+        "name": "mean_queue_time",
+        "type": "number"
+      },
+      {
+        "name": "p95_queue_time",
+        "type": "number"
+      },
+      {
+        "name": "utilization",
+        "type": "number"
+      },
+      {
+        "name": "completed_entities",
+        "type": "integer"
+      }
+    ],
+    "rows": [
+      {
+        "simulation_id": "des_antiviral_pathway_v1",
+        "run_id": "run_001",
+        "resource_id": "r_triage_nurse",
+        "mean_queue_time": 0.0,
+        "p95_queue_time": 0.0,
+        "utilization": 0.42,
+        "completed_entities": 2
+      },
+      {
+        "simulation_id": "des_antiviral_pathway_v1",
+        "run_id": "run_001",
+        "resource_id": "r_clinician",
+        "mean_queue_time": 0.15,
+        "p95_queue_time": 0.2,
+        "utilization": 0.68,
+        "completed_entities": 2
+      }
+    ]
+  },
+  "ordering_rules": [
+    "sort by simulation_id",
+    "sort by run_id",
+    "sort by entity_id",
+    "sort by event_index",
+    "break ties by event_time"
+  ],
+  "xla": {
+    "status": "rejected_for_classic_des",
+    "rationale": "Classic DES relies on a dynamic event queue, resource contention, and runtime-dependent event creation. A separate vectorized Monte Carlo approximation may be XLA-eligible, but this fixture preserves event-log semantics instead of forcing DES into XLA."
+  },
+  "provenance": {
+    "source": "synthetic_fixture",
+    "generated_by": "innovate ecosystem fixture",
+    "generated_at": "2026-05-04T00:00:00Z",
+    "engine_state_required": false,
+    "notes": "Rows are deterministic and sorted for CI fixture validation."
+  }
+}

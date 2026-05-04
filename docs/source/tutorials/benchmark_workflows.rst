@@ -114,3 +114,23 @@ steady-state runtime should be recorded independently so first-call compilation
 does not get confused with repeated execution. Cases that require expensive
 accelerator timing should use ``workflow_dispatch`` or scheduled CI instead of
 the fast default test path.
+
+MARS surrogate benchmark gate
+-----------------------------
+
+The MARS surrogate benchmark gate is a metadata-first decision gate for the
+ecosystem ``mars`` surrogate package. It keeps ``mars`` out of base and optional
+package metadata while the current outcome is ``defer``.
+
+Fast validation checks candidate scenarios, correctness tolerances, promotion
+thresholds, failure modes, and the eligible ``jax_xla_surrogate_candidate``
+without importing or running ``mars``. The opt-in dry run writes a small JSON
+artifact:
+
+.. code-block:: bash
+
+   uv run python -m innovate.benchmarks.mars_surrogate --write-json benchmark-results/mars-surrogate-gate.json
+
+Future recorded benchmark evidence must compare NumPy/SciPy reference behavior,
+MARS surrogate behavior, and eligible XLA-backed alternatives before any
+adapter promotion decision changes.

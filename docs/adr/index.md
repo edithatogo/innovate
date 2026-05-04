@@ -9,4 +9,5 @@ This directory contains Architecture Decision Records (ADRs) for durable technic
 0002-jax-is-an-optional-accelerator-backend
 0003-python-dataframe-strategy
 0004-core-api-bindings-and-rust-core-trajectory
+0005-heoml-schema-placement
 ```

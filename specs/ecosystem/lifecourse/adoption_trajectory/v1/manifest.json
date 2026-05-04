@@ -1,0 +1,129 @@
+{
+  "schema_version": "innovate.ecosystem.adoption_trajectory.v1",
+  "fixture_id": "lifecourse_adoption_trajectory_smoke_v1",
+  "artifact_type": "adoption_curve",
+  "title": "Lifecourse adoption-trajectory smoke fixture",
+  "purpose": "Small deterministic adoption trajectory that lifecourse can consume for health-economic scenario smoke tests without importing innovate internals.",
+  "promotion_stage": "documented",
+  "runtime_adapter_status": "future_work",
+  "payload": {
+    "format": "parquet",
+    "path": "adoption_trajectory.parquet",
+    "row_count": 12,
+    "sha256": "9d5403ad92108946f7ed043c65023cdf1ba8adcec0b748b04c57f22e8247fe2d"
+  },
+  "schema": {
+    "columns": [
+      {
+        "name": "scenario_id",
+        "arrow_type": "string",
+        "logical_type": "string identifier",
+        "nullable": false,
+        "description": "Health-economic scenario identifier."
+      },
+      {
+        "name": "intervention_id",
+        "arrow_type": "string",
+        "logical_type": "string identifier",
+        "nullable": false,
+        "description": "Intervention or implementation strategy identifier."
+      },
+      {
+        "name": "time",
+        "arrow_type": "int32",
+        "logical_type": "period index",
+        "nullable": false,
+        "description": "Zero-based model time period."
+      },
+      {
+        "name": "adoption",
+        "arrow_type": "double",
+        "logical_type": "period adoption share",
+        "nullable": false,
+        "description": "Incremental adoption share in the period."
+      },
+      {
+        "name": "cumulative_adoption",
+        "arrow_type": "double",
+        "logical_type": "cumulative adoption share",
+        "nullable": false,
+        "description": "Cumulative adopted share by the end of the period."
+      },
+      {
+        "name": "population",
+        "arrow_type": "int32",
+        "logical_type": "count",
+        "nullable": false,
+        "description": "Eligible population represented by the segment."
+      },
+      {
+        "name": "segment",
+        "arrow_type": "string",
+        "logical_type": "string identifier",
+        "nullable": false,
+        "description": "Population segment identifier."
+      },
+      {
+        "name": "uncertainty_label",
+        "arrow_type": "string",
+        "logical_type": "string label",
+        "nullable": false,
+        "description": "Deterministic or uncertainty draw label."
+      }
+    ],
+    "primary_key": [
+      "scenario_id",
+      "intervention_id",
+      "segment",
+      "uncertainty_label",
+      "time"
+    ],
+    "ordering": [
+      "scenario_id",
+      "intervention_id",
+      "segment",
+      "uncertainty_label",
+      "time"
+    ]
+  },
+  "producer": {
+    "project": "innovate",
+    "responsibilities": [
+      "emit the documented columns with stable Arrow-compatible types",
+      "keep cumulative_adoption monotonic within each trajectory",
+      "keep adoption and cumulative_adoption as shares bounded between 0 and 1",
+      "publish schema_version, row_count, payload hash, and provenance"
+    ]
+  },
+  "consumer": {
+    "project": "lifecourse",
+    "responsibilities": [
+      "read the Parquet payload through public Arrow or Parquet readers",
+      "validate schema_version and required columns before scenario use",
+      "map scenario_id, intervention_id, time, segment, and adoption fields into lifecourse scenario inputs"
+    ],
+    "must_not": [
+      "private implementation classes",
+      "depend on pickle or Python object identity",
+      "treat this documented fixture as a supported runtime adapter"
+    ]
+  },
+  "compatibility": {
+    "arrow_compatible": true,
+    "parquet_compatible": true,
+    "parquet_compression": "NONE",
+    "language_binding_safe": true,
+    "future_compatibility_matrix_required": true
+  },
+  "dependency_policy": {
+    "lifecourse_required": false,
+    "innovate_base_import_required": false,
+    "optional_extra_required_for_future_adapter": true
+  },
+  "provenance": {
+    "generated_at": "2026-05-04T00:00:00Z",
+    "generated_by": "conductor track lifecourse_adoption_fixture_20260504",
+    "source": "deterministic hand-authored smoke fixture",
+    "seed": null
+  }
+}

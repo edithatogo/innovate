@@ -44,6 +44,16 @@ target, and baseline model key. These fields keep fast checks bounded while
 preserving the evidence needed for Rust-core and optional-backend promotion
 decisions.
 
+MARS surrogate benchmark gate
+-----------------------------
+
+The MARS surrogate benchmark gate keeps ``mars`` optional and unpromoted until
+metadata and opt-in benchmark evidence justify an adapter. Fast CI validates
+only the gate metadata. Opt-in artifacts compare the NumPy/SciPy reference path,
+the MARS surrogate candidate, and the eligible JAX/XLA alternative while
+recording whether any gain came from the surrogate, XLA, their interaction, or
+neither.
+
 Submodules
 ----------
 
@@ -53,6 +63,7 @@ Submodules
    innovate.benchmarks.corpus
    innovate.benchmarks.automation
    innovate.benchmarks.model_cards
+   innovate.benchmarks.mars_surrogate
    innovate.benchmarks.runner
 
 Module contents
