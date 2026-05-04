@@ -3,7 +3,7 @@
 ## Language
 - **Python** (>=3.10) — *3.8/3.9 dropped (EOL)*
 - **R** — Thin user-facing binding over the stable functional kernel contract
-- **Rust** — Current binding target and strategic long-term core runtime for robust, efficient, portable kernel execution
+- **Rust** — Current binding target and strategic long-term core runtime for selected kernel execution slices; the core is not fully Rust-owned yet
 - **Julia** — Thin user-facing binding over the stable functional kernel contract
 - **TypeScript** — Thin user-facing binding over the stable functional kernel contract
 - **Go** — Thin user-facing binding over the stable functional kernel contract
@@ -12,8 +12,8 @@
 ## Runtime Strategy
 - **Python-first API stabilization** — The canonical Python public API, capability registry, schemas, and functional kernel define the stable product contract before additional language expansion.
 - **Thin binding policy** — R, Rust, Julia, TypeScript, Go, and C# bindings must call or mirror the shared kernel contract. They should not fork or reimplement model behavior independently.
-- **Rust core trajectory** — Rust is the preferred long-term implementation language for performance-critical and portability-critical kernel components. Rust work should evolve from binding/client coverage toward shared core execution while preserving Python ergonomics.
-- **Reference semantics** — Python/NumPy/SciPy remains the reference correctness path until Rust components are promoted behind the same contract and validated by parity tests.
+- **Rust core trajectory** — Rust is the preferred long-term implementation language for performance-critical and portability-critical kernel components, promoted operation by operation. Rust work should evolve from binding/client coverage toward shared core execution while preserving Python ergonomics.
+- **Reference semantics** — Python/NumPy/SciPy remains the reference correctness path until Rust components are promoted behind the same contract and validated by parity, schema, error-mapping, benchmark, profiling, and binding smoke-test evidence.
 
 ## Package Manager & Build
 - **uv** — Blazing-fast Python package manager and resolver (replaces pip)
@@ -85,11 +85,11 @@
 - **criterion** — Rust benchmarking harness for native kernel paths
 
 ## Performance Profiling
-- **Scalene** — CPU, memory, and GPU profiler with per-line attribution
-- **cargo-flamegraph** — Rust profiling helper for native hot paths and regressions
+- **Scalene** — Python CPU and memory profiler with per-line attribution; Python GPU profiling is limited to active Python accelerator paths
+- **cargo-flamegraph** — Rust CPU profiling helper for native hot paths and regressions
 - **DHAT** — Rust heap profiling for allocation-sensitive native kernel paths
 - **JAX/XLA device profilers** — GPU profiling remains attached to optional
-  JAX/XLA backends until Rust owns a native GPU execution backend
+  JAX/XLA backends until Rust owns a promoted native GPU execution backend
 
 ## Runtime Observability
 - **logging** — Python runtime logging for library code and bridge diagnostics;

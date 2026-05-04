@@ -5,9 +5,9 @@ Purpose
 -------
 
 The Rust core roadmap turns the contract-first architecture into an execution
-plan. Python remains the primary ergonomic and reference surface, while Rust is
-the strategic long-term runtime for robust, efficient, portable kernel
-execution.
+plan. Python remains the primary ergonomic and reference surface. Rust is the
+strategic long-term runtime for robust, efficient, portable kernel execution,
+but the core is not fully Rust-owned today.
 
 The roadmap is governed by ADR 0004 and follows four rules:
 
@@ -16,8 +16,27 @@ The roadmap is governed by ADR 0004 and follows four rules:
 * Rust-backed execution must use the same kernel schema compatibility rules as
   every binding.
 * Bindings stay thin and must not duplicate model logic.
-* Rust components are promoted only behind benchmark gates and compatibility
-  checks.
+* Rust components are promoted only behind benchmark gates backed by parity,
+  compatibility, and profiling evidence.
+
+Audited status
+--------------
+
+The core is not entirely Rust. This roadmap is intentionally tied to the
+current source layout so that documentation drift can be checked by tests:
+
+* ``src/innovate/kernel.py`` remains the Python reference owner for
+  ``KERNEL_OPERATIONS`` and the canonical ``discover_models``, ``fit_model``,
+  ``predict_model``, ``simulate_model``, ``summarize_model``, and
+  ``diagnose_model`` functions.
+* ``bindings/rust/src/lib.rs`` exposes Rust-native execution only for the
+  documented slices: packaged discovery metadata, logistic ``fit_model``,
+  logistic ``summarize_model``, logistic ``diagnose_model``, and logistic and
+  Bass ``predict_model``/``simulate_model`` fitted-state execution.
+* The Rust binding still contains the Python bridge fallback path through
+  ``invoke``, ``bridge_script_absolute_path``, ``kernel_pythonpath``, and
+  ``python_command_segments``. Unsupported native slices therefore remain
+  bridge-backed rather than Rust-owned.
 
 Candidate operations
 --------------------
@@ -145,15 +164,18 @@ Rust vs JAX/XLA promotion criteria
 ----------------------------------
 
 Rust-native execution and JAX/XLA-backed execution should compete only for
-slices where both are technically eligible. The promotion decision for each
-operation must record:
+slices where both are technically eligible. Rust is the default candidate for
+portable CPU execution and packaging-sensitive paths. JAX/XLA is the default
+candidate to evaluate for accelerator-oriented array kernels with static shapes,
+explicit randomness, and acceptable compile cost. The promotion decision for
+each operation must record:
 
 * the NumPy/SciPy or Python reference result and tolerance policy;
 * whether a JAX/XLA implementation is eligible, rejected, or complementary;
 * XLA compile cost, steady-state runtime, accelerator target, and dependency
   cost when XLA is eligible;
-* Rust-native runtime, packaging impact, memory behavior where measurable, and
-  bridge fallback rate;
+* Rust-native CPU runtime, packaging impact, memory behavior where measurable,
+  and bridge fallback rate;
 * schema compatibility, error mapping, and binding smoke-test results;
 * the explicit promotion decision: keep Python-backed, keep experimental,
   promote Rust-native, promote XLA-backed, or keep both behind runtime
@@ -171,17 +193,18 @@ all of the following gates pass:
   the same ``KERNEL_SCHEMA_VERSION`` and operation names.
 * Error mapping tests prove Rust errors round-trip through the same stable
   kernel error codes.
-* Benchmark gates show a material performance, packaging, or robustness gain
-  without changing public semantics.
+* Benchmark gates show a material CPU latency, packaging, portability, or
+  robustness gain without changing public semantics.
 * XLA eligibility checks document whether JAX/XLA is unsuitable,
   complementary, or a stronger default candidate than Rust-native execution.
 * Binding smoke tests prove R, Julia, TypeScript, Go, Rust, and future C#
   surfaces can call the promoted operation through the same contract.
 
 Benchmark gates must include a benchmark promotion dossier before defaults
-change. The dossier should include local Criterion output for Rust-native
+change. The dossier should include local Criterion output for Rust-native CPU
 paths, Python reference timings, XLA compile cost and steady-state runtime when
-eligible, and a regression threshold that CI or release checks can enforce.
+eligible, memory evidence for allocation-sensitive slices, and a regression
+threshold that CI or release checks can enforce.
 
 Binding policy
 --------------
@@ -199,14 +222,10 @@ response conversion, error mapping, and schema drift checks.
 Benchmarking and profiling tooling
 ----------------------------------
 
-The Rust migration should be supported by a native performance toolchain so
-benchmark gates and regressions can be evaluated on the Rust side instead of
-only through the Python harness. The next planned step is a dedicated Rust
-benchmark and profiling track that introduces a benchmark harness for native
-kernel paths, records benchmark results for the promoted slices, and provides a
-repeatable local profiling workflow for hot paths. The intended tooling path
-is criterion-based benchmarking together with a native profiling helper such
-as ``cargo-flamegraph``.
+The Rust migration is supported by a native performance toolchain so benchmark
+gates and regressions can be evaluated on the Rust side instead of only through
+the Python harness. The ``criterion`` benchmarks and ``cargo-flamegraph`` cover
+Rust-native CPU hot paths.
 In this repository that is implemented by
 ``bindings/rust/benches/native_kernel.rs`` and
 ``bindings/rust/scripts/profile_native_kernels.sh``.
@@ -219,11 +238,13 @@ remain attached to the optional JAX/XLA backend until a Rust GPU backend is
 promoted behind the kernel contract.
 
 The core is therefore not entirely written in Rust yet. The Rust crate owns
-native metadata discovery and selected logistic and Bass execution slices, while
-unsupported model families, covariate/event payloads, and broader model
-operations still fall back to the shared Python kernel. Rust promotion should
-continue operation by operation with parity, schema, benchmark, and profiling
-evidence.
+native metadata discovery and selected logistic and Bass execution slices.
+Unsupported model families, covariate/event payloads, probabilistic runtimes,
+and broader model operations still fall back to the shared Python kernel.
+Promotion remains operation by operation. A slice can move from experimental to
+default only when parity, schema compatibility, stable error mapping, binding
+smoke tests, CPU benchmark evidence, memory evidence when relevant, and XLA
+eligibility or rejection rationale are recorded.
 
 This work should stay narrower than the Python testing stack:
 

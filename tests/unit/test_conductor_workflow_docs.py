@@ -23,4 +23,4 @@ def test_rust_profiling_stack_records_cpu_memory_and_gpu_scope() -> None:
     assert "**cargo-flamegraph**" in tech_stack
     assert "**DHAT**" in tech_stack
     assert "JAX/XLA device profilers" in tech_stack
-    assert "until Rust owns a native GPU execution backend" in tech_stack
+    assert "until Rust owns a promoted native GPU execution backend" in tech_stack

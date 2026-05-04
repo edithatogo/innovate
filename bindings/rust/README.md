@@ -39,12 +39,23 @@ for other models.
 
 ## Benchmarking and profiling
 
+- The crate package intentionally includes the profiling surface:
+  `benches/native_kernel.rs`, `examples/profile_memory_native_kernels.rs`,
+  `scripts/profile_native_kernels.sh`, and
+  `scripts/profile_memory_native_kernels.sh`.
 - `bindings/rust/benches/native_kernel.rs` measures the native logistic
   `fit_model`, `predict_model`, `simulate_model`, `summarize_model`, and
   `diagnose_model` paths with Criterion.
 - `bindings/rust/scripts/profile_native_kernels.sh` profiles the same native
   benchmark group with `cargo flamegraph` and writes
-  `flamegraph-native-kernels.svg`.
+  `flamegraph-native-kernels.svg`. The script disables incremental compilation,
+  keeps release debug symbols enabled, and writes a
+  `flamegraph-native-kernels.svg.metadata.txt` sidecar with the toolchain,
+  git revision, environment, and command used for the run.
+- Set `INNOVATE_RUST_CPU_PROFILE_OUTPUT` to choose a different flamegraph path
+  and `INNOVATE_RUST_CPU_PROFILE_FREQUENCY` to pass a fixed sampling frequency
+  to `cargo flamegraph`. Extra script arguments are forwarded to the Criterion
+  benchmark binary, which can be used to profile a narrower benchmark filter.
 - `bindings/rust/scripts/profile_memory_native_kernels.sh` profiles the same
   native execution paths with DHAT and writes `dhat-heap.json`. Set
   `INNOVATE_RUST_MEMORY_PROFILE_ITERATIONS` to increase or reduce the loop

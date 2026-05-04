@@ -1,5 +1,8 @@
 use innovate_rust::{json, KernelBinding, KernelRequest};
 
+const ITERATIONS_ENV: &str = "INNOVATE_RUST_MEMORY_PROFILE_ITERATIONS";
+const OUTPUT_ENV: &str = "INNOVATE_RUST_MEMORY_PROFILE_OUTPUT";
+
 #[global_allocator]
 static ALLOC: dhat::Alloc = dhat::Alloc;
 
@@ -126,16 +129,66 @@ fn logistic_diagnose_request(binding: &KernelBinding) -> KernelRequest {
     )
 }
 
+fn bass_predict_request(binding: &KernelBinding) -> KernelRequest {
+    binding.predict_model_request(
+        "bass",
+        json!({
+            "state": {
+                "model_key": "bass",
+                "model_name": "BassModel",
+                "constructor_kwargs": {},
+                "parameters": {
+                    "p": 0.03,
+                    "q": 0.38,
+                    "m": 120.0
+                },
+                "predict_kwargs": {}
+            },
+            "inputs": {
+                "time": [0.0, 0.8, 1.6, 2.4, 3.2, 4.0]
+            }
+        }),
+    )
+}
+
+fn bass_simulate_request(binding: &KernelBinding) -> KernelRequest {
+    binding.simulate_model_request(
+        "bass",
+        json!({
+            "state": {
+                "model_key": "bass",
+                "model_name": "BassModel",
+                "constructor_kwargs": {},
+                "parameters": {
+                    "p": 0.02,
+                    "q": 0.45,
+                    "m": 150.0
+                },
+                "predict_kwargs": {}
+            },
+            "inputs": {
+                "time": [0.0, 1.0, 2.0, 3.0, 4.0]
+            }
+        }),
+    )
+}
+
 fn iteration_count() -> usize {
-    std::env::var("INNOVATE_RUST_MEMORY_PROFILE_ITERATIONS")
+    std::env::var(ITERATIONS_ENV)
         .ok()
         .and_then(|value| value.parse::<usize>().ok())
         .filter(|value| *value > 0)
         .unwrap_or(10_000)
 }
 
+fn output_file_name() -> String {
+    std::env::var(OUTPUT_ENV).unwrap_or_else(|_| "dhat-native-kernels-heap.json".to_string())
+}
+
 fn main() {
-    let _profiler = dhat::Profiler::new_heap();
+    let _profiler = dhat::Profiler::builder()
+        .file_name(output_file_name())
+        .build();
     let binding = KernelBinding::new();
     let iterations = iteration_count();
 
@@ -144,6 +197,8 @@ fn main() {
     let simulate_request = logistic_simulate_request(&binding);
     let summary_request = logistic_summary_request(&binding);
     let diagnose_request = logistic_diagnose_request(&binding);
+    let bass_predict_request = bass_predict_request(&binding);
+    let bass_simulate_request = bass_simulate_request(&binding);
 
     for _ in 0..iterations {
         let _ = binding
@@ -161,5 +216,11 @@ fn main() {
         let _ = binding
             .diagnose_model_native(&diagnose_request)
             .expect("native logistic diagnostics should succeed");
+        let _ = binding
+            .predict_model_native(&bass_predict_request)
+            .expect("native Bass prediction should succeed");
+        let _ = binding
+            .simulate_model_native(&bass_simulate_request)
+            .expect("native Bass simulation should succeed");
     }
 }

@@ -44,8 +44,25 @@ def test_rust_benchmark_ci_job_is_documented() -> None:
     workflow = Path(".github/workflows/ci.yml").read_text()
 
     assert "rust-benchmarks" in workflow
+    assert "cargo check --benches --examples" in workflow
     assert "cargo bench --bench native_kernel --no-run" in workflow
     assert "cargo check --example profile_memory_native_kernels" in workflow
+    assert "cargo package --list" in workflow
+
+
+def test_rust_profiling_surfaces_are_packaged() -> None:
+    """The Rust crate package should keep benchmark and profiling entry points."""
+    cargo = Path("bindings/rust/Cargo.toml").read_text()
+    workflow = Path(".github/workflows/ci.yml").read_text()
+
+    assert '"benches/**"' in cargo
+    assert '"examples/**"' in cargo
+    assert '"scripts/**"' in cargo
+
+    assert "benches/native_kernel.rs" in workflow
+    assert "examples/profile_memory_native_kernels.rs" in workflow
+    assert "scripts/profile_native_kernels.sh" in workflow
+    assert "scripts/profile_memory_native_kernels.sh" in workflow
 
 
 def test_benchmark_docs_describe_fast_and_opt_in_automation() -> None:

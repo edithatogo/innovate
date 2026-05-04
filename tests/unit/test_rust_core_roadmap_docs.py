@@ -5,6 +5,12 @@ from __future__ import annotations
 from pathlib import Path
 
 
+ROOT = Path(".")
+ROADMAP = ROOT / "docs/source/rust_core_roadmap.rst"
+RUST_BINDING = ROOT / "bindings/rust/src/lib.rs"
+PYTHON_KERNEL = ROOT / "src/innovate/kernel.py"
+
+
 def test_rust_core_roadmap_documentation_is_present() -> None:
     """The Rust core trajectory should be documented as a first-class roadmap."""
     docs_root = Path("docs/source")
@@ -79,6 +85,63 @@ def test_rust_core_roadmap_inventories_runtime_status_and_xla_fit() -> None:
         assert operation in roadmap
         for phrase in expected_phrases:
             assert phrase in roadmap
+
+
+def test_rust_core_roadmap_audit_matches_current_runtime_ownership() -> None:
+    """The roadmap should machine-check that Rust is not the whole core yet."""
+    roadmap = ROADMAP.read_text()
+    rust_binding = RUST_BINDING.read_text()
+    python_kernel = PYTHON_KERNEL.read_text()
+
+    for phrase in (
+        "Audited status",
+        "The core is not entirely Rust",
+        "src/innovate/kernel.py",
+        "bindings/rust/src/lib.rs",
+        "Python reference owner",
+        "packaged discovery metadata",
+        "logistic ``fit_model``",
+        "logistic ``summarize_model``",
+        "logistic ``diagnose_model``",
+        "Bass ``predict_model``/``simulate_model``",
+        "Python bridge fallback path",
+        "Unsupported native slices therefore remain",
+        "bridge-backed",
+    ):
+        assert phrase in roadmap
+
+    for operation in (
+        "discover_models",
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model",
+    ):
+        assert f'def {operation}' in python_kernel
+        assert operation in roadmap
+
+    for rust_anchor in (
+        "pub fn discover_models_native",
+        "pub fn fit_model_native",
+        "pub fn predict_model_native",
+        "pub fn simulate_model_native",
+        "pub fn summarize_model_native",
+        "pub fn diagnose_model_native",
+        "fn logistic_fit_native_response",
+        "fn logistic_summary_native_response",
+        "fn logistic_diagnose_native_response",
+        '"logistic" => logistic_native_response',
+        '"bass" => bass_native_response',
+        "pub fn invoke",
+        "fn bridge_script_absolute_path",
+        "fn kernel_pythonpath",
+        "fn python_command_segments",
+    ):
+        assert rust_anchor in rust_binding
+
+    assert '"unsupported_native_operation"' in rust_binding
+    assert "uv run python" in rust_binding
 
 
 def test_rust_core_expansion_track_records_phase_one_inventory() -> None:

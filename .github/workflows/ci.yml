@@ -259,6 +259,10 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Check Rust benchmark and profiling targets compile
+        working-directory: bindings/rust
+        run: cargo check --benches --examples
+
       - name: Check Rust benchmark harness compiles
         working-directory: bindings/rust
         run: cargo bench --bench native_kernel --no-run
@@ -266,6 +270,15 @@ jobs:
       - name: Check Rust memory profiler compiles
         working-directory: bindings/rust
         run: cargo check --example profile_memory_native_kernels
+
+      - name: Validate Rust profiling package contents
+        working-directory: bindings/rust
+        run: |
+          cargo package --list | tee /tmp/innovate-rs-benchmark-package-files.txt
+          grep -F "benches/native_kernel.rs" /tmp/innovate-rs-benchmark-package-files.txt
+          grep -F "examples/profile_memory_native_kernels.rs" /tmp/innovate-rs-benchmark-package-files.txt
+          grep -F "scripts/profile_native_kernels.sh" /tmp/innovate-rs-benchmark-package-files.txt
+          grep -F "scripts/profile_memory_native_kernels.sh" /tmp/innovate-rs-benchmark-package-files.txt
 
   typescript-bindings:
     runs-on: ubuntu-latest
