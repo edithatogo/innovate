@@ -1,0 +1,5 @@
+Fix follow-up R CI failure: R CMD build for rmarkdown-backed vignettes also requires Pandoc. Added r-lib/actions/setup-pandoc@v2 to CI and binding publication R jobs, and extended the static R workflow policy test to require it.
+
+Validation:
+- python3 -m pytest tests/unit/test_r_package_pdf_manual.py tests/unit/test_binding_publication_ci.py -q
+- R CMD build bindings/r --no-manual
