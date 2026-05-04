@@ -416,7 +416,8 @@ jobs:
         uses: r-lib/actions/setup-pandoc@v2
 
       - name: Install R binding dependencies
-        run: Rscript -e 'install.packages(c("jsonlite", "knitr", "rmarkdown"), repos = "https://cloud.r-project.org")'
+        run: |
+          Rscript -e 'repos <- Sys.getenv("RSPM", "https://cloud.r-project.org"); packages <- c("jsonlite", "knitr", "rmarkdown"); install.packages(packages, repos = repos); missing <- packages[!vapply(packages, requireNamespace, logical(1), quietly = TRUE)]; if (length(missing)) stop("Missing R packages: ", paste(missing, collapse = ", "))'
 
       - name: Read R package metadata
         id: r_metadata
