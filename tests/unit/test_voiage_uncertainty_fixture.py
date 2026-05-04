@@ -6,6 +6,8 @@ import csv
 import json
 from pathlib import Path
 
+import pytest
+
 FIXTURE_ROOT = Path("specs/ecosystem/voiage/uncertainty/diffusion_v1")
 MANIFEST_PATH = FIXTURE_ROOT / "manifest.json"
 
@@ -102,8 +104,8 @@ def test_voiage_uncertainty_fixture_values_are_deterministic_and_joinable() -> N
     trajectory_keys = {(row["scenario_id"], row["draw_id"]) for row in trajectory_rows}
     assert trajectory_keys == parameter_keys
 
-    assert sum(float(row["value"]) for row in parameter_rows if row["parameter_name"] == "p") == 0.174
-    assert sum(float(row["adoption"]) for row in trajectory_rows if row["time"] == "3") == 0.852
+    assert sum(float(row["value"]) for row in parameter_rows if row["parameter_name"] == "p") == pytest.approx(0.174)
+    assert sum(float(row["adoption"]) for row in trajectory_rows if row["time"] == "3") == pytest.approx(0.852)
     assert all(row["schema_version"] == "1.0" for row in parameter_rows + trajectory_rows)
 
 
