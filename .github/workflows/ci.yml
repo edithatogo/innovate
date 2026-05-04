@@ -412,6 +412,9 @@ jobs:
       - name: Set up TinyTeX for R manual PDF
         uses: r-lib/actions/setup-tinytex@v2
 
+      - name: Set up Pandoc for R vignettes
+        uses: r-lib/actions/setup-pandoc@v2
+
       - name: Install R binding dependencies
         run: Rscript -e 'install.packages(c("jsonlite", "knitr", "rmarkdown"), repos = "https://cloud.r-project.org")'
 
