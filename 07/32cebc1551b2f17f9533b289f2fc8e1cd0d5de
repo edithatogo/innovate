@@ -1,0 +1,26 @@
+Track: Release Notes and R Artifact Documentation Synchronization
+
+Summary:
+- Added release-notes policy documentation defining Release Please, Release Drafter, Commitizen, and CHANGELOG.md responsibilities.
+- Added CHANGELOG.md sections for 0.4.0 and 0.5.0.
+- Corrected R binding publication docs to reflect the source vignette and versioned R manual artifact.
+- Added static release-policy drift tests.
+- Fixed completed Conductor archive status text for the R PDF manual track and added a guard for completed archive status blocks.
+- Archived the completed release documentation synchronization track.
+
+Six-agent audit inputs:
+- Rust core benchmark/promotion dossier candidate.
+- Julia registry installed-package smoke candidate.
+- XLA benchmark evidence runner candidate.
+- Python quality gates/profiling/mutation candidate.
+- Release docs/R artifact sync candidate implemented here.
+- Conductor archive status drift guard folded into this track.
+
+Validation:
+- python3 -m pytest tests/unit/test_release_notes_policy.py tests/unit/test_binding_publication_ci.py tests/unit/test_r_package_pdf_manual.py tests/unit/test_conductor_workflow_docs.py tests/unit/test_roadmap_backlog_tracks.py::test_completed_conductor_archive_links_have_completed_metadata -q
+- ruff check tests/unit/test_conductor_workflow_docs.py tests/unit/test_release_notes_policy.py
+- ruff format checks after formatting
+- git diff --check
+
+Local limitation:
+- Local uv/Sphinx validation was blocked by disk-space errors while extracting pyarrow/llvmlite; GitHub Actions remains the docs/full-matrix gate.
