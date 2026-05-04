@@ -50,6 +50,8 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
       - run: cargo fmt --check
       - run: cargo clippy --all-targets --all-features -- -D warnings
       - run: cargo test
@@ -151,6 +153,7 @@ jobs:
           version="${GITHUB_REF_NAME}"
           GOPROXY=direct GOSUMDB=sum.golang.org go list -m -json "${module}@${version}"
           for attempt in 1 2 3 4 5; do
+            echo "Validating ${module}@${version} through proxy attempt ${attempt}."
             GOPROXY=https://proxy.golang.org GOSUMDB=sum.golang.org go list -m -json "${module}@${version}" && exit 0
             sleep 30
           done
