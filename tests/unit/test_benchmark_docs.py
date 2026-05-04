@@ -45,6 +45,7 @@ def test_rust_benchmark_ci_job_is_documented() -> None:
 
     assert "rust-benchmarks" in workflow
     assert "cargo bench --bench native_kernel --no-run" in workflow
+    assert "cargo check --example profile_memory_native_kernels" in workflow
 
 
 def test_benchmark_docs_describe_fast_and_opt_in_automation() -> None:

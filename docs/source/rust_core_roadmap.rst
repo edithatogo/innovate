@@ -210,10 +210,27 @@ as ``cargo-flamegraph``.
 In this repository that is implemented by
 ``bindings/rust/benches/native_kernel.rs`` and
 ``bindings/rust/scripts/profile_native_kernels.sh``.
+Memory profiling is implemented separately through the DHAT-backed
+``bindings/rust/examples/profile_memory_native_kernels.rs`` driver and
+``bindings/rust/scripts/profile_memory_native_kernels.sh`` wrapper.
+GPU profiling is not currently part of the Rust crate because Rust does not yet
+own a GPU execution backend in this project; GPU and XLA device profiling should
+remain attached to the optional JAX/XLA backend until a Rust GPU backend is
+promoted behind the kernel contract.
+
+The core is therefore not entirely written in Rust yet. The Rust crate owns
+native metadata discovery and selected logistic and Bass execution slices, while
+unsupported model families, covariate/event payloads, and broader model
+operations still fall back to the shared Python kernel. Rust promotion should
+continue operation by operation with parity, schema, benchmark, and profiling
+evidence.
 
 This work should stay narrower than the Python testing stack:
 
 * use Rust-native benchmarking for the Rust core paths that matter most;
 * use a repeatable profiling workflow for hotspot analysis;
+* use Rust memory profiling for allocation-sensitive native slices;
+* keep GPU profiling with the active GPU/XLA backend until Rust owns a GPU
+  execution path;
 * keep mutation testing as a later, lower-priority consideration rather than a
   required Rust-side mirror of the Python tooling.

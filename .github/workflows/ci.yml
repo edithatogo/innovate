@@ -263,6 +263,10 @@ jobs:
         working-directory: bindings/rust
         run: cargo bench --bench native_kernel --no-run
 
+      - name: Check Rust memory profiler compiles
+        working-directory: bindings/rust
+        run: cargo check --example profile_memory_native_kernels
+
   typescript-bindings:
     runs-on: ubuntu-latest
     strategy:

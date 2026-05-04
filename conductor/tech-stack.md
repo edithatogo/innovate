@@ -87,6 +87,9 @@
 ## Performance Profiling
 - **Scalene** — CPU, memory, and GPU profiler with per-line attribution
 - **cargo-flamegraph** — Rust profiling helper for native hot paths and regressions
+- **DHAT** — Rust heap profiling for allocation-sensitive native kernel paths
+- **JAX/XLA device profilers** — GPU profiling remains attached to optional
+  JAX/XLA backends until Rust owns a native GPU execution backend
 
 ## Runtime Observability
 - **logging** — Python runtime logging for library code and bridge diagnostics;

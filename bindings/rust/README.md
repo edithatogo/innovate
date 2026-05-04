@@ -18,11 +18,15 @@ for other models.
 - `src/lib.rs`: core Rust API and kernel contract helpers
 - `benches/native_kernel.rs`: Criterion benchmarks for the native logistic
   kernel paths
+- `examples/profile_memory_native_kernels.rs`: DHAT memory profiling driver for
+  the native logistic kernel paths
 - `inst/discovery_manifest.json`: embedded native discovery metadata, parity
   tested against the Python kernel
 - `inst/python/kernel_bridge.py`: kernel bridge entrypoint used by the bindings
 - `scripts/profile_native_kernels.sh`: repeatable profiling entrypoint for the
   native Rust benchmarks
+- `scripts/profile_memory_native_kernels.sh`: repeatable memory profiling
+  entrypoint for the native Rust benchmarks
 - `tests/`: contract, scaffold, and architecture checks
 
 ## Development
@@ -31,6 +35,7 @@ for other models.
 - `cargo fmt --check`
 - `cargo clippy --all-targets --all-features`
 - `cargo bench --bench native_kernel`
+- `cargo check --example profile_memory_native_kernels`
 
 ## Benchmarking and profiling
 
@@ -40,11 +45,19 @@ for other models.
 - `bindings/rust/scripts/profile_native_kernels.sh` profiles the same native
   benchmark group with `cargo flamegraph` and writes
   `flamegraph-native-kernels.svg`.
+- `bindings/rust/scripts/profile_memory_native_kernels.sh` profiles the same
+  native execution paths with DHAT and writes `dhat-heap.json`. Set
+  `INNOVATE_RUST_MEMORY_PROFILE_ITERATIONS` to increase or reduce the loop
+  count.
 - The benchmark and profiling surface intentionally stays on the Rust-native
   execution path; the Python bridge remains the fallback implementation for
   unsupported shapes.
 - Fallback paths and bridge failures emit structured `tracing` events for
   debugging and regression triage.
+- GPU profiling is not yet a Rust crate responsibility because this crate does
+  not own a Rust-native GPU execution backend. GPU and XLA device profiling
+  belongs with the optional JAX/XLA backend until a Rust GPU backend is promoted
+  behind the kernel contract.
 
 ## Compatibility checks
 
@@ -73,6 +86,9 @@ for other models.
   use the same native execution path.
 - Unsupported prediction shapes and other execution operations remain thin
   bridges over the shared Python kernel.
+- The core is not yet entirely Rust: Rust-native execution covers the documented
+  slices above, while unsupported model families and payload shapes still use the
+  Python bridge fallback.
 - Rust-native operations do not require Python.
 - Bridge fallback operations require the Python `innovate` package to be
   available to the configured Python command.
