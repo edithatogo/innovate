@@ -252,6 +252,12 @@ private Python object framing.
   `report`, `registry`, `workflow`, `quality`, `engines`, and `heoml`; keep
   PM4Py in the ecosystem-only process-mining bucket; require a CLI surface for
   every future module and an explicit MCP decision where orchestration matters.
+- Define a documented-stage process-mining fixture:
+  `specs/ecosystem/process/fixtures/event_log_v1/manifest.json` records a
+  portable synthetic event-log bundle with pathway discovery, conformance, and
+  bottleneck summary payloads. CLI support is planned before adapter
+  implementation, MCP remains deferred, and PM4Py stays a reference candidate
+  rather than a base dependency.
 
 ## HEOR Naming Brainstorm
 

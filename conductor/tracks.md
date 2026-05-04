@@ -193,3 +193,18 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: XLA Backend Strategy and JAX Kernel Promotion Gates** *(Completed)*
   *Link: [./archive/xla_backend_strategy_20260430/](./archive/xla_backend_strategy_20260430/)*
+
+---
+
+- [x] **Track: Conductor Archive Metadata and Decision-Link Integrity Guard** *(Completed)*
+  *Link: [./archive/conductor_archive_integrity_guard_20260504/](./archive/conductor_archive_integrity_guard_20260504/)*
+
+---
+
+- [x] **Track: HEOR Process Mining Fixture Contract and Interface Decision** *(Completed)*
+  *Link: [./archive/heor_process_mining_fixture_contract_20260504/](./archive/heor_process_mining_fixture_contract_20260504/)*
+
+---
+
+- [x] **Track: Documentation Version Metadata Synchronization** *(Completed)*
+  *Link: [./archive/docs_version_metadata_sync_20260504/](./archive/docs_version_metadata_sync_20260504/)*

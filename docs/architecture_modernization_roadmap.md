@@ -208,6 +208,7 @@ Conductor archive.
 - [HEOML Schema Placement Decision](../conductor/archive/heoml_schema_placement_20260504/)
 - [MARS Surrogate Benchmark Gate](../conductor/archive/mars_surrogate_benchmark_gate_20260504/)
 - [XLA Backend Strategy and JAX Kernel Promotion Gates](../conductor/archive/xla_backend_strategy_20260430/)
+- [HEOR Process Mining Fixture Contract and Interface Decision](../conductor/archive/heor_process_mining_fixture_contract_20260504/)
 
 The `Voiage Diffusion-Uncertainty Fixture` track now points downstream VOI
 examples to
@@ -226,6 +227,12 @@ The `Roadmap Completeness Audit` track exists to check for implied work that is
 not explicit in this roadmap, including release governance, CI/CD coverage,
 observability, versioning, security, documentation, and package publication
 across the supported language ecosystem.
+
+The `HEOR Process Mining Fixture Contract and Interface Decision` track records
+the first documented-stage event-log fixture contract for process-mining
+ecosystem work. It keeps PM4Py reference-only, plans a CLI surface before any
+runtime adapter, and defers MCP until process-mining artifacts become
+agent-queryable or workflow-orchestration heavy.
 
 The `Probabilistic Inference Expansion` track starts with a stable posterior
 payload and optional backend metadata contract in
@@ -281,3 +288,4 @@ Rust-native path becomes the default.
 | [ADR 0002: JAX Is an Optional Accelerator Backend](./adr/0002-jax-is-an-optional-accelerator-backend.md) | Covered | [Optional Backends and Dependency Stabilization](../conductor/archive/optional_backends_stabilization_20260415/), [XLA Backend Strategy and JAX Kernel Promotion Gates](../conductor/archive/xla_backend_strategy_20260430/) |
 | [ADR 0003: Python DataFrame Strategy](./adr/0003-python-dataframe-strategy.md) | Covered | [DataFrame Engine Experimentation](../conductor/archive/dataframe_engine_experimentation_20260430/) |
 | [ADR 0004: Core API, Bindings, and Rust Core Trajectory](./adr/0004-core-api-bindings-and-rust-core-trajectory.md) | Covered | [Binding Publication and Multi-Language CI](../conductor/archive/binding_publication_ci_20260428/), [Rust Core Kernel Roadmap and C# Binding Foundation](../conductor/archive/rust_core_kernel_20260428/), [Rust Core Expansion](../conductor/archive/rust_core_expansion_20260430/), [C# Package Publication](../conductor/archive/csharp_package_publication_20260430/) |
+| [ADR 0005: HEOML Schema Placement](./adr/0005-heoml-schema-placement.md) | Covered | [HEOML Schema Placement Decision](../conductor/archive/heoml_schema_placement_20260504/) |

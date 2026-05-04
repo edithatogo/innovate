@@ -1,7 +1,7 @@
 {
   "track_id": "diagnostics_uncertainty_20260415",
   "type": "feature",
-  "status": "new",
+  "status": "completed",
   "created_at": "2026-04-15T08:04:45Z",
   "updated_at": "2026-04-15T08:04:45Z",
   "description": "Standardize diagnostics, uncertainty reporting, residual analysis, and model comparison across all major model families"

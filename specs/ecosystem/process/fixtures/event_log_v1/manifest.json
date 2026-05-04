@@ -1,0 +1,91 @@
+{
+  "schema_version": "innovate.ecosystem.process.event_log.v1",
+  "fixture_id": "heor_process_event_log_smoke_v1",
+  "artifact_type": "process_mining.event_log_bundle",
+  "promotion_stage": "documented",
+  "runtime_adapter_status": "future_work",
+  "engine_dependency": "none",
+  "reference_candidate": "PM4Py",
+  "pm4py_required": false,
+  "cli_surface": {
+    "status": "planned_before_runtime_adapter",
+    "commands": [
+      "validate-event-log",
+      "summarize-pathway",
+      "export-conformance-summary"
+    ],
+    "rationale": "Process mining workflows need file-oriented validation and summary commands before any runtime adapter is promoted."
+  },
+  "mcp_surface": {
+    "status": "deferred",
+    "rationale": "MCP should be reconsidered only if process-mining artifacts become agent-queryable or workflow-orchestration heavy."
+  },
+  "payloads": {
+    "event_log": {
+      "format": "csv",
+      "path": "event_log.csv",
+      "row_count": 8,
+      "required_columns": [
+        "case_id",
+        "event_index",
+        "event_time",
+        "activity",
+        "resource_id",
+        "pathway_state",
+        "cost",
+        "source_system"
+      ]
+    },
+    "pathway_discovery": {
+      "format": "csv",
+      "path": "pathway_discovery.csv",
+      "row_count": 1
+    },
+    "conformance_summary": {
+      "format": "json",
+      "path": "conformance_summary.json"
+    },
+    "bottleneck_summary": {
+      "format": "csv",
+      "path": "bottleneck_summary.csv",
+      "row_count": 3
+    }
+  },
+  "ordering_rules": [
+    "sort by case_id",
+    "sort by event_index",
+    "break ties by event_time"
+  ],
+  "producer": {
+    "project": "innovate",
+    "responsibilities": [
+      "publish deterministic fixture payloads",
+      "preserve schema_version and fixture_id fields",
+      "avoid private Python object framing"
+    ]
+  },
+  "consumer": {
+    "project": "process",
+    "responsibilities": [
+      "consume event-log CSV payloads without importing innovate internals",
+      "treat PM4Py as optional implementation detail",
+      "preserve conformance and bottleneck metric provenance"
+    ],
+    "must_not": [
+      "require pickle",
+      "require private Python classes",
+      "require PM4Py for basic fixture validation"
+    ]
+  },
+  "dependency_policy": {
+    "innovate_base_import_required": false,
+    "pm4py_required": false,
+    "optional_extra_required": false
+  },
+  "provenance": {
+    "source": "synthetic_fixture",
+    "contains_patient_data": false,
+    "generated_by": "innovate ecosystem fixture",
+    "created_at": "2026-05-04"
+  }
+}

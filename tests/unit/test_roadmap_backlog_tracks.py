@@ -31,6 +31,7 @@ ADR_RECORDS = {
     "ADR 0002: JAX Is an Optional Accelerator Backend": "./adr/0002-jax-is-an-optional-accelerator-backend.md",
     "ADR 0003: Python DataFrame Strategy": "./adr/0003-python-dataframe-strategy.md",
     "ADR 0004: Core API, Bindings, and Rust Core Trajectory": "./adr/0004-core-api-bindings-and-rust-core-trajectory.md",
+    "ADR 0005: HEOML Schema Placement": "./adr/0005-heoml-schema-placement.md",
 }
 
 GOAL_PRINCIPLES = (
@@ -154,6 +155,27 @@ def test_active_roadmap_track_artifacts_exist() -> None:
         assert (track_dir / "index.md").is_file(), title
         assert metadata["track_id"] == track_id
         assert metadata["status"] == "completed"
+
+
+def test_completed_conductor_archive_links_have_completed_metadata() -> None:
+    """Completed registry entries should not drift from archived metadata."""
+    registry = Path("conductor/tracks.md").read_text()
+    completed_archive_links = re.findall(
+        r"- \[x\] \*\*Track: ([^*]+?)\*\*.*?\n\s+\*Link: \[\./archive/([^/]+)/\]",
+        registry,
+    )
+
+    assert completed_archive_links
+    for title, track_id in completed_archive_links:
+        track_dir = Path("conductor/archive") / track_id
+        metadata_path = track_dir / "metadata.json"
+        metadata = json.loads(metadata_path.read_text())
+
+        assert metadata["track_id"] == track_id, title
+        assert metadata["status"] == "completed", title
+        assert (track_dir / "spec.md").is_file(), title
+        assert (track_dir / "plan.md").is_file(), title
+        assert (track_dir / "index.md").is_file(), title
 
 
 def test_roadmap_primary_tracks_are_mapped_to_conductor_records() -> None:

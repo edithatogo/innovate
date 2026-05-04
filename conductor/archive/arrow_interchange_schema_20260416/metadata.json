@@ -1,7 +1,7 @@
 {
   "track_id": "arrow_interchange_schema_20260416",
   "type": "feature",
-  "status": "new",
+  "status": "completed",
   "created_at": "2026-04-16T13:25:00Z",
   "updated_at": "2026-04-16T13:25:00Z",
   "description": "Define Arrow-compatible interchange schemas and validation so the functional kernel and future bindings share a durable typed data boundary"

@@ -1,6 +1,8 @@
 """Configuration file for the Sphinx documentation builder."""
 
 import sys
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as package_version
 from pathlib import Path
 
 # Add source directory to path for module imports
@@ -10,8 +12,12 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 project = "innovate"
 copyright = "2025, Doughnut"
 author = "Doughnut"
-release = "1.0.0"
-version = "1.0.0"
+
+try:
+    release = package_version(project)
+except PackageNotFoundError:
+    release = "0.0.0"
+version = release
 
 # -- General configuration ---------------------------------------------------
 extensions = [

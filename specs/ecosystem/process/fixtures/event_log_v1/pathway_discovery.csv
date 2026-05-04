@@ -1,0 +1,2 @@
+variant_id,activity_sequence,case_count,mean_elapsed_days
+variant_referral_to_intervention,referral_received>triage_completed>assessment_completed>intervention_started,2,10.5

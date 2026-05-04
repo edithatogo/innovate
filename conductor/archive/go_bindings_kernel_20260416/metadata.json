@@ -1,7 +1,7 @@
 {
   "track_id": "go_bindings_kernel_20260416",
   "type": "feature",
-  "status": "new",
+  "status": "completed",
   "created_at": "2026-04-16T12:17:14Z",
   "updated_at": "2026-04-16T12:17:14Z",
   "description": "Expose the functional kernel to Go through a thin contract-driven SDK with stable data interchange and packaging"

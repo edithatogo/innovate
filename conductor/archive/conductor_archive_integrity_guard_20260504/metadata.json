@@ -1,0 +1,8 @@
+{
+  "track_id": "conductor_archive_integrity_guard_20260504",
+  "type": "chore",
+  "status": "completed",
+  "created_at": "2026-05-04T02:01:30Z",
+  "updated_at": "2026-05-04T02:01:30Z",
+  "description": "Conductor Archive Metadata and Decision-Link Integrity Guard"
+}

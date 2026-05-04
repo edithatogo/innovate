@@ -1,0 +1,4 @@
+from_activity,to_activity,case_count,mean_wait_days,p95_wait_days
+referral_received,triage_completed,2,1.75,2.0
+triage_completed,assessment_completed,2,4.0,5.0
+assessment_completed,intervention_started,2,5.75,7.0

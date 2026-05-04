@@ -1,0 +1,9 @@
+case_id,event_index,event_time,activity,resource_id,pathway_state,cost,source_system
+case_001,0,2026-01-01T09:00:00Z,referral_received,intake_team,waiting_for_triage,15.0,synthetic_ehr
+case_001,1,2026-01-02T10:30:00Z,triage_completed,nurse_triage,awaiting_assessment,42.0,synthetic_ehr
+case_001,2,2026-01-05T14:00:00Z,assessment_completed,clinician,care_plan_ready,180.0,synthetic_ehr
+case_001,3,2026-01-10T11:15:00Z,intervention_started,implementation_team,intervention_active,260.0,synthetic_registry
+case_002,0,2026-01-01T09:20:00Z,referral_received,intake_team,waiting_for_triage,15.0,synthetic_ehr
+case_002,1,2026-01-03T13:00:00Z,triage_completed,nurse_triage,awaiting_assessment,42.0,synthetic_ehr
+case_002,2,2026-01-08T09:45:00Z,assessment_completed,clinician,care_plan_ready,180.0,synthetic_ehr
+case_002,3,2026-01-15T15:30:00Z,intervention_started,implementation_team,intervention_active,260.0,synthetic_registry

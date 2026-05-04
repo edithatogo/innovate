@@ -1,0 +1,14 @@
+{
+  "schema_version": "innovate.ecosystem.process.conformance.v1",
+  "fixture_id": "heor_process_event_log_smoke_v1",
+  "reference_variant_id": "variant_referral_to_intervention",
+  "case_count": 2,
+  "conforming_case_count": 2,
+  "nonconforming_case_count": 0,
+  "fitness": 1.0,
+  "precision": 1.0,
+  "notes": [
+    "Synthetic fixture; not derived from patient data.",
+    "Metrics are deterministic placeholders for contract validation."
+  ]
+}

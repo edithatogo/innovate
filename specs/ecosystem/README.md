@@ -110,5 +110,9 @@ Current scaffolds:
   in HEOR VOI examples without importing sibling-project internals
 - [process/README.md](./process/README.md) for the HEOR process-mining outline
   and PM4Py ecosystem-only contract
+- [process/fixtures/event_log_v1/manifest.json](./process/fixtures/event_log_v1/manifest.json)
+  for the documented process-mining fixture contract covering event logs,
+  pathway discovery, conformance summaries, bottleneck summaries, CLI planning,
+  and MCP deferral without requiring PM4Py
 - [Conductor track: HEOR Module Naming Brainstorm](../../conductor/archive/heor_module_naming_brainstorm_20260429/)
   for the reserved sibling-module naming shortlist and interface expectations
