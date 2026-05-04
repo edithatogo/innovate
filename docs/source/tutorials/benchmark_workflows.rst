@@ -115,6 +115,67 @@ does not get confused with repeated execution. Cases that require expensive
 accelerator timing should use ``workflow_dispatch`` or scheduled CI instead of
 the fast default test path.
 
+Promotion dossier capture
+-------------------------
+
+Each promotion dossier should store the raw artifacts and a short manifest under
+one candidate-specific directory, for example
+``benchmark-results/promotion/logistic-native/``. Record the candidate
+operation, commit, command, hardware target, backend versions, and promotion
+decision next to the artifacts so a reviewer can reproduce the run.
+
+Capture Rust-native CPU flamegraph evidence with the packaged profiling script.
+The script writes the SVG and a ``.metadata.txt`` file that records the Rust
+toolchain, ``cargo-flamegraph`` version, git revision, profile environment, and
+command:
+
+.. code-block:: bash
+
+   INNOVATE_RUST_CPU_PROFILE_OUTPUT=../../benchmark-results/promotion/logistic-native/flamegraph-native-kernels.svg \
+     bindings/rust/scripts/profile_native_kernels.sh
+
+Capture Rust-native memory evidence with the DHAT wrapper. Use a fixed
+iteration count in the dossier so allocation profiles can be compared between
+runs:
+
+.. code-block:: bash
+
+   INNOVATE_RUST_MEMORY_PROFILE_ITERATIONS=10000 \
+   INNOVATE_RUST_MEMORY_PROFILE_OUTPUT="$PWD/benchmark-results/promotion/logistic-native/dhat-native-kernels-heap.json" \
+     bindings/rust/scripts/profile_memory_native_kernels.sh
+
+Capture XLA CPU and GPU benchmark JSON separately. The CPU file is the portable
+baseline; the GPU file should come from an accelerator runner with a JAX GPU
+install:
+
+.. code-block:: bash
+
+   JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/logistic-native/benchmark-xla-cpu.json
+   JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/logistic-native/benchmark-xla-gpu.json
+
+The dossier should reference these files explicitly:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 28 36 36
+
+   * - Artifact
+     - Example file
+     - Dossier field
+   * - Rust CPU flamegraph
+     - ``flamegraph-native-kernels.svg`` and
+       ``flamegraph-native-kernels.svg.metadata.txt``
+     - Rust-native CPU runtime, toolchain, command, and git revision
+   * - Rust DHAT memory profile
+     - ``dhat-native-kernels-heap.json``
+     - Allocation-sensitive memory behavior and iteration count
+   * - XLA CPU benchmark
+     - ``benchmark-xla-cpu.json``
+     - XLA compile cost and steady-state runtime for the CPU baseline
+   * - XLA GPU benchmark
+     - ``benchmark-xla-gpu.json``
+     - Accelerator target, XLA compile cost, and steady-state runtime
+
 GPU and XLA profiling boundary
 ------------------------------
 

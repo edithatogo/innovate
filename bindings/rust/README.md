@@ -43,9 +43,10 @@ for other models.
   `benches/native_kernel.rs`, `examples/profile_memory_native_kernels.rs`,
   `scripts/profile_native_kernels.sh`, and
   `scripts/profile_memory_native_kernels.sh`.
-- Migration inventory and roadmap material, including
-  `docs/source/rust_core_roadmap.rst`, is deliberately docs-only repository
-  documentation and is not included in the crate package.
+- Migration inventory, roadmap material, and promotion dossiers, including
+  `docs/source/rust_core_roadmap.rst`, live in the repository docs as
+  release-governance artifacts. They are deliberately docs-only and are not
+  included in the crate package.
 - `bindings/rust/benches/native_kernel.rs` measures the native logistic
   `fit_model`, `predict_model`, `simulate_model`, `summarize_model`, and
   `diagnose_model` paths with Criterion.

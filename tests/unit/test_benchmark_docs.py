@@ -47,7 +47,12 @@ def test_rust_benchmark_ci_job_is_documented() -> None:
     assert "rust-benchmarks" in workflow
     assert "Validate Rust migration inventory" in workflow
     assert "python3 -m json.tool inst/discovery_manifest.json" in workflow
-    assert "python3 -m json.tool ../../docs/source/_static/rust_core_migration_inventory.json" in workflow
+    assert "find ../../docs/source/_static" in workflow
+    assert "rust_core_*inventory*.json" in workflow
+    assert "rust_core_*dossier*.json" in workflow
+    assert "test -s /tmp/innovate-rs-core-json-files.txt" in workflow
+    assert "while IFS= read -r file" in workflow
+    assert 'python3 -m json.tool "$file" >/dev/null' in workflow
     assert "cargo check --benches --examples" in workflow
     assert "cargo bench --bench native_kernel --no-run" in workflow
     assert "cargo check --example profile_memory_native_kernels" in workflow
@@ -57,8 +62,15 @@ def test_rust_benchmark_ci_job_is_documented() -> None:
 def test_rust_migration_inventory_is_machine_readable() -> None:
     """The Rust migration inventory should remain present and JSON-decodable."""
     inventory_path = Path("docs/source/_static/rust_core_migration_inventory.json")
+    static_payloads = sorted(Path("docs/source/_static").glob("rust_core_*inventory*.json")) + sorted(
+        Path("docs/source/_static").glob("rust_core_*dossier*.json")
+    )
 
     assert inventory_path.is_file()
+    assert inventory_path in static_payloads
+    for payload in static_payloads:
+        json.loads(payload.read_text())
+
     inventory = json.loads(inventory_path.read_text())
     assert isinstance(inventory, dict)
     assert inventory["schema_version"] == 1
@@ -97,3 +109,25 @@ def test_benchmark_docs_describe_fast_and_opt_in_automation() -> None:
     assert "validate_benchmark_corpus" in benchmark_docs
     assert "workflow_dispatch" in benchmark_docs
     assert "pytest --benchmark-only" in benchmark_docs
+
+
+def test_benchmark_workflow_documents_promotion_dossier_capture() -> None:
+    """The benchmark tutorial should show how to capture promotion artifacts."""
+    tutorial = Path("docs/source/tutorials/benchmark_workflows.rst").read_text()
+
+    for phrase in (
+        "Promotion dossier capture",
+        "benchmark-results/promotion/logistic-native/",
+        "INNOVATE_RUST_CPU_PROFILE_OUTPUT",
+        "bindings/rust/scripts/profile_native_kernels.sh",
+        "flamegraph-native-kernels.svg.metadata.txt",
+        "INNOVATE_RUST_MEMORY_PROFILE_ITERATIONS=10000",
+        "INNOVATE_RUST_MEMORY_PROFILE_OUTPUT",
+        "bindings/rust/scripts/profile_memory_native_kernels.sh",
+        "dhat-native-kernels-heap.json",
+        "JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/logistic-native/benchmark-xla-cpu.json",
+        "JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/logistic-native/benchmark-xla-gpu.json",
+        "XLA compile cost and steady-state runtime",
+        "Accelerator target",
+    ):
+        assert phrase in tutorial

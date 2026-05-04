@@ -53,7 +53,7 @@ def test_rust_crate_includes_and_documents_profiling_files() -> None:
 
 
 def test_rust_migration_inventory_docs_are_deliberately_docs_only() -> None:
-    """Migration inventory docs should stay out of the crates.io package."""
+    """Release-governance docs should stay out of the crates.io package."""
     cargo = tomllib.loads(Path("bindings/rust/Cargo.toml").read_text())
     readme = Path("bindings/rust/README.md").read_text()
     normalized_readme = " ".join(readme.split())
@@ -63,5 +63,7 @@ def test_rust_migration_inventory_docs_are_deliberately_docs_only() -> None:
     assert "docs/**" not in include
     assert "docs/source/**" not in include
     assert "docs/source/rust_core_roadmap.rst" in readme
-    assert "deliberately docs-only repository documentation" in normalized_readme
+    assert "Migration inventory, roadmap material, and promotion dossiers" in readme
+    assert "release-governance artifacts" in normalized_readme
+    assert "deliberately docs-only" in normalized_readme
     assert "not included in the crate package" in normalized_readme

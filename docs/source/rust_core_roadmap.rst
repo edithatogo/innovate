@@ -222,8 +222,11 @@ all of the following gates pass:
 Benchmark gates must include a benchmark promotion dossier before defaults
 change. The dossier should include local Criterion output for Rust-native CPU
 paths, Python reference timings, XLA compile cost and steady-state runtime when
-eligible, memory evidence for allocation-sensitive slices, and a regression
-threshold that CI or release checks can enforce.
+eligible, memory evidence for allocation-sensitive slices, fallback-rate evidence,
+binding smoke evidence, and a regression threshold that CI or release checks can
+enforce. Use
+:download:`rust_core_promotion_dossier_example.json <_static/rust_core_promotion_dossier_example.json>`
+as the machine-readable template/example for a current Rust-native slice.
 
 Binding policy
 --------------

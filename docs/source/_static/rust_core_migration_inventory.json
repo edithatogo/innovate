@@ -11,6 +11,25 @@
     "python_bridge_default",
     "python_reference_only"
   ],
+  "native_model_keys": [
+    "bass",
+    "logistic"
+  ],
+  "python_only_model_keys": [
+    "complementary_goods",
+    "composite",
+    "fisher_pry",
+    "gompertz",
+    "hierarchical",
+    "latent_process",
+    "lotka_volterra",
+    "mixture",
+    "multi_product",
+    "network_diffusion",
+    "norton_bass",
+    "policy_hazard",
+    "regime_switching"
+  ],
   "inventory": [
     {
       "operation": "discover_models",

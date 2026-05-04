@@ -264,8 +264,13 @@ jobs:
         run: |
           test -s inst/discovery_manifest.json
           python3 -m json.tool inst/discovery_manifest.json >/tmp/innovate-rs-discovery-manifest.json
-          test -s ../../docs/source/_static/rust_core_migration_inventory.json
-          python3 -m json.tool ../../docs/source/_static/rust_core_migration_inventory.json >/tmp/innovate-rs-core-migration-inventory.json
+          find ../../docs/source/_static \
+            -type f \( -name "rust_core_*inventory*.json" -o -name "rust_core_*dossier*.json" \) \
+            -print >/tmp/innovate-rs-core-json-files.txt
+          test -s /tmp/innovate-rs-core-json-files.txt
+          while IFS= read -r file; do
+            python3 -m json.tool "$file" >/dev/null
+          done </tmp/innovate-rs-core-json-files.txt
 
       - name: Check Rust benchmark and profiling targets compile
         working-directory: bindings/rust

@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 
 ROOT = Path()
 ROADMAP = ROOT / "docs/source/rust_core_roadmap.rst"
+MIGRATION_INVENTORY = ROOT / "docs/source/_static/rust_core_migration_inventory.json"
 RUST_BINDING = ROOT / "bindings/rust/src/lib.rs"
 PYTHON_KERNEL = ROOT / "src/innovate/kernel.py"
 PYTHON_CAPABILITIES = ROOT / "src/innovate/capabilities.py"
@@ -15,6 +17,25 @@ PYTHON_CAPABILITIES = ROOT / "src/innovate/capabilities.py"
 def normalized_text(path: Path) -> str:
     """Read prose with line wrapping collapsed for stable phrase assertions."""
     return " ".join(path.read_text().split())
+
+
+def python_model_keys() -> set[str]:
+    """Return model keys from the Python capability registry source."""
+    capabilities = PYTHON_CAPABILITIES.read_text()
+    return set(re.findall(r'^\s{8}"([^"]+)": ModelCapability\(', capabilities, flags=re.MULTILINE))
+
+
+def rust_native_model_keys() -> set[str]:
+    """Return model keys with Rust-native model execution anchors."""
+    rust_binding = RUST_BINDING.read_text()
+    match_keys = set(re.findall(r'"([^"]+)" => [a-z_]+_native_response', rust_binding))
+    explicit_keys = {"logistic"} if "fn logistic_fit_native_response" in rust_binding else set()
+    return match_keys | explicit_keys
+
+
+def migration_inventory() -> dict[str, object]:
+    """Load the checked Rust migration inventory JSON."""
+    return json.loads(MIGRATION_INVENTORY.read_text())
 
 
 def test_rust_core_roadmap_documentation_is_present() -> None:
@@ -98,7 +119,6 @@ def test_rust_core_roadmap_audit_matches_current_runtime_ownership() -> None:
     roadmap = normalized_text(ROADMAP)
     rust_binding = RUST_BINDING.read_text()
     python_kernel = PYTHON_KERNEL.read_text()
-    capabilities = PYTHON_CAPABILITIES.read_text()
 
     for phrase in (
         "Audited status",
@@ -159,19 +179,97 @@ def test_rust_core_roadmap_audit_matches_current_runtime_ownership() -> None:
     assert '"unsupported_native_operation"' in rust_binding
     assert "uv run python" in rust_binding
 
-    python_model_keys = set(re.findall(r'^\s{8}"([^"]+)": ModelCapability\(', capabilities, flags=re.MULTILINE))
-    rust_native_match_keys = set(re.findall(r'"([^"]+)" => [a-z_]+_native_response', rust_binding))
-    rust_native_explicit_keys = {"logistic"} if "fn logistic_fit_native_response" in rust_binding else set()
-    rust_native_model_keys = rust_native_match_keys | rust_native_explicit_keys
+    python_keys = python_model_keys()
+    native_keys = rust_native_model_keys()
 
-    assert {"bass", "logistic"} <= python_model_keys
-    assert {"bass", "logistic"} <= rust_native_model_keys
-    assert rust_native_model_keys < python_model_keys
+    assert {"bass", "logistic"} <= python_keys
+    assert {"bass", "logistic"} <= native_keys
+    assert native_keys < python_keys
 
-    non_native_model_keys = python_model_keys - rust_native_model_keys
+    non_native_model_keys = python_keys - native_keys
     assert {"gompertz", "fisher_pry", "network_diffusion", "policy_hazard"} <= non_native_model_keys
     for model_key in ("gompertz", "fisher_pry", "network_diffusion", "policy_hazard"):
         assert f"``{model_key}``" in roadmap
+
+
+def test_rust_core_migration_inventory_matches_rust_and_python_sources() -> None:
+    """The JSON inventory should match Rust-native anchors and Python capabilities."""
+    inventory = migration_inventory()
+    rust_binding = RUST_BINDING.read_text()
+    python_kernel = PYTHON_KERNEL.read_text()
+
+    assert inventory["schema_version"] == 1
+    assert set(inventory["owner_values"]) == {"rust_native", "python_bridge", "python_reference"}
+    assert set(inventory["fallback_status_values"]) == {
+        "native_default_no_fallback_needed",
+        "native_default_python_bridge_fallback",
+        "python_bridge_default",
+        "python_reference_only",
+    }
+
+    python_keys = python_model_keys()
+    native_keys = rust_native_model_keys()
+    assert set(inventory["native_model_keys"]) == native_keys
+    assert set(inventory["python_only_model_keys"]) == python_keys - native_keys
+    assert set(inventory["native_model_keys"]) | set(inventory["python_only_model_keys"]) == python_keys
+
+    entries = inventory["inventory"]
+    assert isinstance(entries, list)
+    assert entries
+
+    python_operations = set(
+        re.findall(
+            r"^def (discover_models|fit_model|predict_model|simulate_model|summarize_model|diagnose_model)\(",
+            python_kernel,
+            flags=re.MULTILINE,
+        )
+    )
+    inventory_operations = {entry["operation"] for entry in entries if entry["operation"] != "all_kernel_operations"}
+    assert python_operations <= inventory_operations
+
+    for entry in entries:
+        assert entry["current_owner"] in inventory["owner_values"]
+        assert entry["fallback_status"] in inventory["fallback_status_values"]
+        assert entry["operation"]
+        assert entry["model_slice"]
+        assert entry["native_scope"]
+        assert entry["fallback_scope"]
+        assert entry["python_reference_scope"]
+        assert isinstance(entry["profiling_requirements"], list)
+        assert isinstance(entry["promotion_blockers"], list)
+
+    expected_native_anchors = {
+        ("discover_models", "all_packaged_discovery_metadata"): "pub fn discover_models_native",
+        ("fit_model", "logistic_simple_positive_observations"): "fn logistic_fit_native_response",
+        ("predict_model", "logistic_simple_fitted_state"): '"logistic" => logistic_native_response',
+        ("predict_model", "bass_simple_fitted_state"): '"bass" => bass_native_response',
+        ("simulate_model", "logistic_simple_fitted_state"): '"logistic" => logistic_native_response',
+        ("simulate_model", "bass_simple_fitted_state"): '"bass" => bass_native_response',
+        ("summarize_model", "logistic_simple_fitted_state"): "fn logistic_summary_native_response",
+        ("diagnose_model", "logistic_simple_fitted_state"): "fn logistic_diagnose_native_response",
+    }
+    entries_by_key = {(entry["operation"], entry["model_slice"]): entry for entry in entries}
+    for key, rust_anchor in expected_native_anchors.items():
+        assert key in entries_by_key
+        assert entries_by_key[key]["current_owner"] == "rust_native"
+        assert entries_by_key[key]["fallback_status"].startswith("native_default")
+        assert rust_anchor in rust_binding
+
+    for operation in ("fit_model", "summarize_model", "diagnose_model"):
+        entry = entries_by_key[(operation, "bass_and_other_model_families")]
+        assert entry["current_owner"] == "python_bridge"
+        assert entry["fallback_status"] == "python_bridge_default"
+        assert entry["native_scope"] == "None."
+
+    for operation in ("predict_model", "simulate_model"):
+        entry = entries_by_key[(operation, "other_model_families_or_unsupported_payloads")]
+        assert entry["current_owner"] == "python_bridge"
+        assert entry["fallback_status"] == "python_bridge_default"
+        assert entry["native_scope"] == "None."
+
+    for model_key in inventory["python_only_model_keys"]:
+        assert model_key in python_keys
+        assert model_key not in native_keys
 
 
 def test_rust_core_roadmap_explicitly_rejects_full_rust_ownership() -> None:
@@ -222,7 +320,7 @@ def test_rust_core_roadmap_captures_cpu_memory_and_gpu_promotion_evidence() -> N
     roadmap = normalized_text(ROADMAP)
 
     for phrase in (
-        "benchmark promotion dossier",
+        "promotion dossier",
         "Criterion output for Rust-native CPU paths",
         "Python reference timings",
         "XLA compile cost and steady-state runtime when eligible",
