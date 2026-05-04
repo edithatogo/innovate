@@ -64,16 +64,16 @@ jobs:
       - uses: r-lib/actions/setup-r@v2
       - run: Rscript -e 'install.packages(c("jsonlite"), repos = "https://cloud.r-project.org")'
       - run: R CMD build bindings/r
-      - run: R CMD check --no-manual innovate_*.tar.gz
+      - run: R CMD check --as-cran --no-manual innovate.R_*.tar.gz
       - name: Upload R package artifact
         uses: actions/upload-artifact@v4
         with:
           name: r-package-source
-          path: innovate_*.tar.gz
+          path: innovate.R_*.tar.gz
       - name: R-universe and CRAN publication gate
         run: |
           echo "R-universe publication is driven by the configured universe registry."
-          echo "CRAN submission remains a manual maintainer release step after R CMD check passes."
+          echo "CRAN submission remains a manual maintainer release step after R CMD check --as-cran passes."
 
   julia-package:
     runs-on: ubuntu-latest

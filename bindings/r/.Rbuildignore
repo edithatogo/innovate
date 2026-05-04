@@ -1,4 +1,9 @@
-^\\.Rproj$
-^\\.git$
-^README\\.md$
-^tests$
+^[.]Rproj$
+^[.]git$
+^examples$
+^cran-comments[.]md$
+^tests/test-.*[.]R$
+^.*[.]Rcheck$
+^.*[.]tar[.]gz$
+^.*__pycache__.*$
+^.*[.]py[cod]$

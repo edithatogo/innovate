@@ -22,8 +22,22 @@ kernel_repo_root <- function() {
   stop("Unable to locate the innovate repository root", call. = FALSE)
 }
 
+kernel_repo_root_or_null <- function() {
+  tryCatch(kernel_repo_root(), error = function(err) NULL)
+}
+
 kernel_bindings_root <- function() {
-  file.path(kernel_repo_root(), "bindings", "r")
+  repo_root <- kernel_repo_root_or_null()
+  if (!is.null(repo_root)) {
+    return(file.path(repo_root, "bindings", "r"))
+  }
+
+  installed_root <- system.file(package = "innovate.R")
+  if (nzchar(installed_root)) {
+    return(installed_root)
+  }
+
+  stop("Unable to locate the innovate.R package root", call. = FALSE)
 }
 
 kernel_python_command <- function() {
@@ -38,6 +52,11 @@ kernel_python_command <- function() {
 }
 
 kernel_bridge_script <- function() {
+  installed_script <- system.file("python", "kernel_bridge.py", package = "innovate.R")
+  if (nzchar(installed_script)) {
+    return(installed_script)
+  }
+
   file.path(kernel_bindings_root(), "inst", "python", "kernel_bridge.py")
 }
 
@@ -76,17 +95,24 @@ kernel_call <- function(request) {
   jsonlite::write_json(request, request_path, auto_unbox = TRUE, null = "null", digits = NA, pretty = TRUE)
 
   command <- kernel_python_command()
-  args <- c(
-    "run",
-    "python",
-    kernel_bridge_script(),
-    request_path,
-    response_path
-  )
-  env <- c(
-    paste0("PYTHONPATH=", file.path(kernel_repo_root(), "src"))
-  )
-  setwd(kernel_repo_root())
+  args <- if (identical(command, "uv")) {
+    c("run", "python", shQuote(kernel_bridge_script()), shQuote(request_path), shQuote(response_path))
+  } else {
+    c(shQuote(kernel_bridge_script()), shQuote(request_path), shQuote(response_path))
+  }
+
+  repo_root <- kernel_repo_root_or_null()
+  env <- character()
+  if (!is.null(repo_root)) {
+    src_path <- file.path(repo_root, "src")
+    existing_pythonpath <- Sys.getenv("PYTHONPATH")
+    pythonpath <- if (nzchar(existing_pythonpath)) {
+      paste(src_path, existing_pythonpath, sep = .Platform$path.sep)
+    } else {
+      src_path
+    }
+    env <- c(paste0("PYTHONPATH=", pythonpath))
+  }
   output <- system2(command, args = args, stdout = TRUE, stderr = TRUE, env = env)
   status <- attr(output, "status")
   if (!is.null(status) && status != 0L) {

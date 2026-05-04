@@ -138,6 +138,17 @@ def test_binding_publish_workflow_has_release_gated_registry_steps() -> None:
     assert "NUGET_API_KEY" in workflow
 
 
+def test_r_publish_workflow_matches_source_package_tarball_name() -> None:
+    """The R publish workflow should match the package source tarball name."""
+    workflow = Path(".github/workflows/bindings-publish.yml").read_text()
+    r_description = Path("bindings/r/DESCRIPTION").read_text()
+
+    assert "Package: innovate.R" in r_description
+    assert "innovate.R_*.tar.gz" in workflow
+    assert "innovate_*.tar.gz" not in workflow
+    assert "R CMD check --as-cran" in workflow
+
+
 def test_csharp_nuget_pack_includes_runtime_bridge_asset() -> None:
     """The NuGet package metadata should include assets needed by the thin bridge."""
     project = Path("bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj").read_text()

@@ -1,12 +1,17 @@
 Package: innovate.R
-Title: R Bindings over the Functional Kernel
+Title: R Bindings Over the Functional Kernel
 Version: 0.5.0
 Authors@R: c(
     person("Dylan", "Mordaunt", email = "dylan.mordaunt@vuw.ac.nz", role = c("aut", "cre"))
   )
-Description: Thin R bindings for the innovate functional kernel.
+Description: Provides thin R bindings for the Innovate functional kernel.
+    The package constructs versioned JSON request envelopes, invokes the shared
+    Python bridge, and converts kernel responses into R-native objects.
 License: Apache License (>= 2)
 Encoding: UTF-8
-LazyData: true
+URL: https://github.com/edithatogo/innovate
+BugReports: https://github.com/edithatogo/innovate/issues
+SystemRequirements: Python (>= 3.10) with the innovate Python package
+NeedsCompilation: no
 Imports:
     jsonlite

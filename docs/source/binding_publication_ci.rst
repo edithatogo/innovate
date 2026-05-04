@@ -27,7 +27,11 @@ Rust
 R
   Prepare ``innovate.R`` for R-universe first and CRAN only after support
   boundaries, examples, and reverse dependency expectations are stable. The
-  package must pass ``R CMD build`` and ``R CMD check``.
+  package must pass ``R CMD build`` and ``R CMD check --as-cran``. R-universe
+  publication is configured in the maintainer's R-universe registry by adding
+  this repository as package ``innovate.R`` with subdirectory ``bindings/r``;
+  the CI artifact to inspect before enabling publication is
+  ``innovate.R_*.tar.gz``.
 
 Julia
   Prepare the ``Innovate`` Julia package for Julia General registry submission

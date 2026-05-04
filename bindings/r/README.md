@@ -7,9 +7,10 @@ This package provides a thin R-facing adapter over the Python `innovate` functio
 The package shells out to the kernel bridge script at `inst/python/kernel_bridge.py` and passes
 JSON request/response envelopes between R and Python.
 
-The bridge expects the Python source tree to be available at `../src` relative to the repository
-root and uses `uv run python` by default. Set `INNOVATE_PYTHON_COMMAND=python3` if you want to
-override the launcher.
+The bridge uses the installed `inst/python/kernel_bridge.py` helper and invokes Python through
+`uv run python` by default. Set `INNOVATE_PYTHON_COMMAND=python3` to call an existing Python
+environment directly. Installed use expects the Python `innovate` package to be available to that
+Python environment.
 
 ## Current scope
 
@@ -42,8 +43,8 @@ responses without depending on the Python response shape.
 
 The bindings are a thin adapter over the Python kernel bridge, so the runtime expects:
 
-- a checkout with the Python `src` tree available relative to the repository root
-- `uv run python` as the default launcher
+- the Python `innovate` package available to the selected Python runtime
+- `uv run python` as the default launcher, or `INNOVATE_PYTHON_COMMAND=python3`
 - `INNOVATE_PYTHON_COMMAND` only when you need to override the launcher explicitly
 
 The package does not reimplement model logic in R. It forwards requests, translates responses,
@@ -52,7 +53,7 @@ and preserves the kernel diagnostics payload for downstream inspection.
 ## Example workflow
 
 ```r
-source("bindings/r/R/kernel_bridge.R")
+library(innovate.R)
 
 time <- c(0, 1, 2, 3, 4)
 observed <- c(0.02, 0.06, 0.12, 0.25, 0.41)

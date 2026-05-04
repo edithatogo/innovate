@@ -49,3 +49,22 @@ The R package is intentionally a thin adapter. It does not reimplement model
 semantics; it delegates execution to the shared Innovate functional kernel
 bridge.
 }
+\examples{
+kernel_schema_version()
+
+request <- kernel_request(
+  operation = "fit_model",
+  model_key = "bass",
+  payload = list(inputs = list(time = c(0, 1), observed = c(0.1, 0.2)))
+)
+request$operation
+
+response <- list(
+  schema_version = "1.0",
+  operation = "predict_model",
+  result = list(shape = list(2L), dtype = "float64", values = list(0.1, 0.2)),
+  error = NULL,
+  metadata = list()
+)
+kernel_response_to_r(response)
+}

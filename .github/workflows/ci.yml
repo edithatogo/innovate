@@ -329,7 +329,15 @@ jobs:
         run: Rscript -e 'install.packages("jsonlite", repos = "https://cloud.r-project.org")'
 
       - name: Run R binding tests
+        env:
+          INNOVATE_RUN_INTEGRATION_TESTS: "true"
         run: Rscript bindings/r/tests/run.R
+
+      - name: Build R source package
+        run: R CMD build bindings/r
+
+      - name: Check R source package
+        run: R CMD check --as-cran --no-manual innovate.R_*.tar.gz
 
   csharp-bindings:
     runs-on: ubuntu-latest
