@@ -33,11 +33,16 @@ Rust
 R
   Prepare ``innovate.R`` for R-universe first and CRAN only after support
   boundaries, examples, and reverse dependency expectations are stable. The
-  package must pass ``R CMD build`` and ``R CMD check --as-cran``. R-universe
+  package must pass the binding integration tests, ``R CMD build``,
+  ``R CMD check --as-cran``, and local PDF manual generation with
+  ``R CMD Rd2pdf bindings/r --output=innovate.R-manual.pdf``. R-universe
   publication is configured in the maintainer's R-universe registry by adding
   this repository as package ``innovate.R`` with subdirectory ``bindings/r``;
-  the CI artifact to inspect before enabling publication is
-  ``innovate.R_*.tar.gz``.
+  the CI artifact to inspect before enabling publication is the
+  ``innovate.R_*.tar.gz`` source tarball from the R package workflow job.
+  Generated outputs such as source tarballs, ``.Rcheck`` directories, PDF
+  manuals, and built vignette artifacts are release inspection artifacts and
+  must not be committed.
 
 Julia
   Prepare the ``Innovate`` Julia package for Julia General registry submission
@@ -81,7 +86,9 @@ Every implemented binding needs a dedicated CI job in ``.github/workflows/ci.yml
 * Go: ``go test ./...``
 * Julia: ``Pkg.instantiate()`` and ``runtests.jl`` or ``Pkg.test()``
 * R: dependency installation, integration tests, ``R CMD build``, and
-  ``R CMD check --as-cran``
+  ``R CMD check --as-cran``. Maintainers should also run
+  ``R CMD Rd2pdf bindings/r --output=innovate.R-manual.pdf`` locally before
+  publication when R documentation changes.
 * C#: ``dotnet test`` and ``dotnet pack`` on .NET 10 and .NET 11
 
 Release workflow
@@ -90,6 +97,15 @@ Release workflow
 ``.github/workflows/bindings-publish.yml`` is the binding publication gate. It
 must run package checks for every language and only publish when release events
 or explicit manual inputs are used with the required registry secrets.
+
+For R, the release workflow builds ``innovate.R_*.tar.gz`` and runs
+``R CMD check --as-cran --no-manual`` as the CI quality gate. The source tarball
+is uploaded as the R package artifact for maintainer inspection before enabling
+R-universe or preparing a CRAN submission. The package currently has no
+``vignettes/`` directory; if vignettes are added, release candidates must allow
+``R CMD build`` and ``R CMD check --as-cran`` to build and check them by
+default. Any bypass of vignette checks must be documented as a temporary
+maintainer exception, not treated as the normal publication path.
 
 For NuGet, the release workflow performs a dry-run style artifact gate before
 ``dotnet nuget push``: it packs ``innovate.cs``, requires both ``.nupkg``

@@ -216,5 +216,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: R Package PDF Manual and Vignette Publication Quality Gate**
+- [~] **Track: R Package PDF Manual and Vignette Publication Quality Gate**
   *Link: [./tracks/r_package_pdf_manual_20260504/](./tracks/r_package_pdf_manual_20260504/)*

@@ -15,3 +15,7 @@ SystemRequirements: Python (>= 3.10) with the innovate Python package
 NeedsCompilation: no
 Imports:
     jsonlite
+Suggests:
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

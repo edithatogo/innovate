@@ -94,3 +94,38 @@ with standard R tooling:
 install.packages("devtools")
 devtools::install_local("bindings/r")
 ```
+
+## Release and package checks
+
+Run package checks from the repository root so paths match CI:
+
+```bash
+Rscript -e 'install.packages("jsonlite", repos = "https://cloud.r-project.org")'
+Rscript bindings/r/tests/run.R
+R CMD build bindings/r
+R CMD check --as-cran --no-manual innovate.R_*.tar.gz
+```
+
+Build the local PDF manual when reviewing documentation changes:
+
+```bash
+R CMD Rd2pdf bindings/r --output=innovate.R-manual.pdf
+```
+
+The package includes a source vignette under `vignettes/`. `R CMD build
+bindings/r` builds it by default, and release candidates must not bypass
+vignette checks unless the release notes explicitly call out a temporary
+maintainer-only exception.
+
+Generated release artifacts are inspection outputs, not source files. Do not
+commit `innovate.R_*.tar.gz`, `innovate.R.Rcheck/`, `innovate.R-manual.pdf`,
+or generated vignette build products. Keep source documentation in `README.md`,
+`man/`, and future vignette sources.
+
+CI publishes the source tarball as a workflow artifact from the R package job.
+For a release candidate, retrieve `innovate.R_*.tar.gz` from the binding
+publication workflow artifact, inspect the `R CMD check --as-cran` log, and
+only then enable R-universe publication or prepare a CRAN submission. The R
+publication quality gate is: integration tests pass, `R CMD build` succeeds,
+`R CMD check --as-cran` has no errors or warnings, the manual builds locally,
+and generated artifacts are not committed.

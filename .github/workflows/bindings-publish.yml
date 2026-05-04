@@ -74,18 +74,40 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: r-lib/actions/setup-r@v2
+      - name: Set up TinyTeX for R manual PDF
+        uses: r-lib/actions/setup-tinytex@v2
       - run: Rscript -e 'install.packages(c("jsonlite"), repos = "https://cloud.r-project.org")'
+      - name: Read R package metadata
+        id: r_metadata
+        run: |
+          Rscript -e 'd <- read.dcf("bindings/r/DESCRIPTION")[1, ]; cat("package=", d[["Package"]], "\nversion=", d[["Version"]], "\n", sep = "")' >> "$GITHUB_OUTPUT"
       - run: R CMD build bindings/r
+      - name: Build R manual PDF
+        run: |
+          mkdir -p artifacts/r-manual
+          R CMD Rd2pdf --no-preview \
+            --output="artifacts/r-manual/${{ steps.r_metadata.outputs.package }}_${{ steps.r_metadata.outputs.version }}_manual.pdf" \
+            bindings/r
+          test -s "artifacts/r-manual/${{ steps.r_metadata.outputs.package }}_${{ steps.r_metadata.outputs.version }}_manual.pdf"
       - run: R CMD check --as-cran --no-manual innovate.R_*.tar.gz
       - name: Upload R package artifact
         uses: actions/upload-artifact@v4
         with:
-          name: r-package-source
+          name: r-package-source-${{ steps.r_metadata.outputs.package }}-${{ steps.r_metadata.outputs.version }}
           path: innovate.R_*.tar.gz
+      - name: Upload R manual PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: r-manual-${{ steps.r_metadata.outputs.package }}-${{ steps.r_metadata.outputs.version }}
+          path: artifacts/r-manual/${{ steps.r_metadata.outputs.package }}_${{ steps.r_metadata.outputs.version }}_manual.pdf
+      - name: Validate R release artifacts
+        run: |
+          test -s "innovate.R_${{ steps.r_metadata.outputs.version }}.tar.gz"
+          test -s "artifacts/r-manual/${{ steps.r_metadata.outputs.package }}_${{ steps.r_metadata.outputs.version }}_manual.pdf"
       - name: R-universe and CRAN publication gate
         run: |
           echo "R-universe publication is driven by the configured universe registry."
-          echo "CRAN submission remains a manual maintainer release step after R CMD check --as-cran passes."
+          echo "CRAN submission remains a manual maintainer release step after R CMD check --as-cran and manual PDF generation pass."
 
   julia-package:
     runs-on: ubuntu-latest

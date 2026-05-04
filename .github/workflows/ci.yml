@@ -409,8 +409,16 @@ jobs:
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
 
+      - name: Set up TinyTeX for R manual PDF
+        uses: r-lib/actions/setup-tinytex@v2
+
       - name: Install R binding dependencies
         run: Rscript -e 'install.packages("jsonlite", repos = "https://cloud.r-project.org")'
+
+      - name: Read R package metadata
+        id: r_metadata
+        run: |
+          Rscript -e 'd <- read.dcf("bindings/r/DESCRIPTION")[1, ]; cat("package=", d[["Package"]], "\nversion=", d[["Version"]], "\n", sep = "")' >> "$GITHUB_OUTPUT"
 
       - name: Run R binding tests
         env:
@@ -419,6 +427,20 @@ jobs:
 
       - name: Build R source package
         run: R CMD build bindings/r
+
+      - name: Build R manual PDF
+        run: |
+          mkdir -p artifacts/r-manual
+          R CMD Rd2pdf --no-preview \
+            --output="artifacts/r-manual/${{ steps.r_metadata.outputs.package }}_${{ steps.r_metadata.outputs.version }}_manual.pdf" \
+            bindings/r
+          test -s "artifacts/r-manual/${{ steps.r_metadata.outputs.package }}_${{ steps.r_metadata.outputs.version }}_manual.pdf"
+
+      - name: Upload R manual PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: r-manual-${{ steps.r_metadata.outputs.package }}-${{ steps.r_metadata.outputs.version }}
+          path: artifacts/r-manual/${{ steps.r_metadata.outputs.package }}_${{ steps.r_metadata.outputs.version }}_manual.pdf
 
       - name: Check R source package
         run: R CMD check --as-cran --no-manual innovate.R_*.tar.gz

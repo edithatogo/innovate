@@ -1,0 +1,269 @@
+---
+title: "Innovate R kernel bindings"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Innovate R kernel bindings}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+run_live_examples <- identical(Sys.getenv("INNOVATE_R_VIGNETTE_RUN_KERNEL"), "true")
+
+load_innovate_r <- function() {
+  exported_helpers <- c(
+    "kernel_schema_version",
+    "kernel_request",
+    "kernel_discover_models",
+    "kernel_fit_model",
+    "kernel_predict_model",
+    "kernel_simulate_model",
+    "kernel_diagnose_model",
+    "kernel_extract_diagnostics",
+    "kernel_response_to_r"
+  )
+
+  if (requireNamespace("innovate.R", quietly = TRUE)) {
+    for (helper in exported_helpers) {
+      assign(
+        helper,
+        getExportedValue("innovate.R", helper),
+        envir = knitr::knit_global()
+      )
+    }
+    return(invisible(TRUE))
+  }
+
+  candidate <- normalizePath(getwd(), mustWork = FALSE)
+  repeat {
+    bridge <- file.path(candidate, "R", "kernel_bridge.R")
+    if (file.exists(bridge)) {
+      source(bridge, local = knitr::knit_global())
+      return(invisible(TRUE))
+    }
+
+    bridge <- file.path(candidate, "bindings", "r", "R", "kernel_bridge.R")
+    if (file.exists(bridge)) {
+      source(bridge, local = knitr::knit_global())
+      return(invisible(TRUE))
+    }
+
+    parent <- dirname(candidate)
+    if (identical(parent, candidate)) {
+      stop("Unable to locate innovate.R or local R bindings", call. = FALSE)
+    }
+    candidate <- parent
+  }
+}
+
+load_innovate_r()
+```
+
+This vignette shows how the `innovate.R` package acts as a thin R interface to
+the Innovate functional kernel. The examples are designed to build without
+network access. Chunks that invoke the Python bridge are guarded and run only
+when `INNOVATE_R_VIGNETTE_RUN_KERNEL=true`.
+
+## Installation
+
+Install the R binding from a local checkout or from a prepared package artifact.
+The binding also needs a Python environment containing the `innovate` Python
+package. In a repository checkout, the bridge can use the local `src/` tree.
+
+```{r install-local, eval = FALSE}
+install.packages("bindings/r", repos = NULL, type = "source")
+Sys.setenv(INNOVATE_PYTHON_COMMAND = "uv")
+```
+
+For a system Python launcher instead of `uv`, point the binding at `python3`:
+
+```{r install-python-command, eval = FALSE}
+Sys.setenv(INNOVATE_PYTHON_COMMAND = "python3")
+```
+
+The schema version is available without contacting the bridge:
+
+```{r schema-version}
+kernel_schema_version()
+```
+
+## Backend Discovery
+
+Model and backend discovery is provided by the stable kernel operation
+`discover_models`. This live call is disabled by default for vignette builds.
+
+```{r discover-models, eval = run_live_examples}
+models <- kernel_discover_models()
+head(models[, c("key", "family", "supported_backends", "supports_simulation")])
+```
+
+When writing portable code, treat discovery as data. For example, select models
+that advertise simulation support before constructing simulation requests:
+
+```{r discover-filter, eval = FALSE}
+simulation_models <- subset(models, supports_simulation)
+simulation_models$key
+```
+
+## Core Request Examples
+
+The R binding builds versioned request envelopes and sends them to the shared
+kernel. Request construction is local R work and is safe to run during vignette
+builds.
+
+```{r fit-request}
+fit_request <- kernel_request(
+  operation = "fit_model",
+  model_key = "bass",
+  payload = list(
+    inputs = list(
+      time = c(0, 1, 2, 3, 4),
+      observed = c(0.01, 0.04, 0.11, 0.23, 0.38)
+    ),
+    model_kwargs = list()
+  )
+)
+
+fit_request$operation
+fit_request$model_key
+fit_request$schema_version
+```
+
+Run the fit through the bridge only in an environment that has the Python kernel
+available:
+
+```{r fit-model, eval = run_live_examples}
+fit_result <- kernel_fit_model(fit_request)
+fit_result
+```
+
+Prediction and simulation use the same envelope pattern. A fitted-state payload
+can be supplied directly when you already have parameters.
+
+```{r predict-request}
+predict_request <- kernel_request(
+  operation = "predict_model",
+  model_key = "bass",
+  payload = list(
+    state = list(
+      model_key = "bass",
+      model_name = "BassModel",
+      constructor_kwargs = list(),
+      parameters = list(p = 0.03, q = 0.38, m = 120),
+      predict_kwargs = list()
+    ),
+    inputs = list(time = c(0, 1, 2, 3, 4))
+  )
+)
+
+predict_request$payload$state$parameters
+```
+
+```{r predict-model, eval = run_live_examples}
+kernel_predict_model(predict_request)
+```
+
+```{r simulate-request}
+simulate_request <- kernel_request(
+  operation = "simulate_model",
+  model_key = "bass",
+  payload = predict_request$payload
+)
+
+simulate_request$operation
+```
+
+```{r simulate-model, eval = run_live_examples}
+kernel_simulate_model(simulate_request)
+```
+
+## Diagnostics
+
+Diagnostics use the same fitted-state convention plus observed values. The
+helper `kernel_extract_diagnostics()` works on list-like kernel results that
+include diagnostics fields.
+
+```{r diagnose-request}
+diagnose_request <- kernel_request(
+  operation = "diagnose_model",
+  model_key = "logistic",
+  payload = list(
+    state = list(
+      model_key = "logistic",
+      model_name = "LogisticModel",
+      constructor_kwargs = list(),
+      parameters = list(L = 100, k = 0.65, x0 = 3),
+      predict_kwargs = list()
+    ),
+    inputs = list(
+      time = c(0, 1, 2, 3, 4, 5),
+      observed = c(12.4, 21.4, 34.3, 50.0, 65.7, 78.6)
+    )
+  )
+)
+
+diagnose_request$model_key
+```
+
+```{r diagnose-model, eval = run_live_examples}
+diagnostics_result <- kernel_diagnose_model(diagnose_request)
+kernel_extract_diagnostics(diagnostics_result)
+```
+
+The extraction helper intentionally fails when the result does not expose
+diagnostics:
+
+```{r diagnose-guard}
+tryCatch(
+  kernel_extract_diagnostics(list(values = c(1, 2, 3))),
+  error = conditionMessage
+)
+```
+
+## Guarded Failure Modes
+
+The binding performs local request validation before bridge invocation. Kernel
+operations other than `discover_models` require a model key.
+
+```{r missing-model-key}
+tryCatch(
+  kernel_request(operation = "predict_model", payload = list()),
+  error = conditionMessage
+)
+```
+
+Kernel error payloads are converted into an `innovate_kernel_error` condition so
+callers can catch kernel failures without parsing transport output.
+
+```{r kernel-error-condition}
+condition <- tryCatch(
+  kernel_response_to_r(list(
+    schema_version = "1.0",
+    operation = "predict_model",
+    result = NULL,
+    error = list(
+      code = "unsupported_native_operation",
+      message = "Native execution is not available for this payload"
+    ),
+    metadata = list()
+  )),
+  error = identity
+)
+
+inherits(condition, "innovate_kernel_error")
+condition$message
+```
+
+Bridge execution can also fail if the Python command is unavailable or the
+Python environment cannot import the kernel. Keep live calls guarded in
+reproducible documents and surface the configured launcher in logs:
+
+```{r bridge-guard, eval = FALSE}
+Sys.getenv("INNOVATE_PYTHON_COMMAND", "uv")
+kernel_discover_models()
+```

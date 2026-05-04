@@ -5,5 +5,11 @@
 ^tests/test-.*[.]R$
 ^.*[.]Rcheck$
 ^.*[.]tar[.]gz$
+^.*[.]pdf$
+^doc$
+^Meta$
+^vignettes/.*[.]html$
+^vignettes/.*[.]pdf$
+^vignettes/.*[.]rds$
 ^.*__pycache__.*$
 ^.*[.]py[cod]$

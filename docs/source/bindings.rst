@@ -16,6 +16,10 @@ Go
 Julia
   :doc:`tutorials/julia_bindings`
 
+R
+  ``bindings/r/README.md`` documents R package use, local manual builds,
+  generated-artifact policy, and the R publication quality gate.
+
 C#
   :doc:`tutorials/csharp_bindings`
 
