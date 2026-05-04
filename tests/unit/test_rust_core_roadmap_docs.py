@@ -4,8 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-
-ROOT = Path(".")
+ROOT = Path()
 ROADMAP = ROOT / "docs/source/rust_core_roadmap.rst"
 RUST_BINDING = ROOT / "bindings/rust/src/lib.rs"
 PYTHON_KERNEL = ROOT / "src/innovate/kernel.py"
@@ -118,7 +117,7 @@ def test_rust_core_roadmap_audit_matches_current_runtime_ownership() -> None:
         "summarize_model",
         "diagnose_model",
     ):
-        assert f'def {operation}' in python_kernel
+        assert f"def {operation}" in python_kernel
         assert operation in roadmap
 
     for rust_anchor in (
