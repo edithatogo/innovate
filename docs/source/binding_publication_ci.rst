@@ -101,11 +101,14 @@ or explicit manual inputs are used with the required registry secrets.
 For R, the release workflow builds ``innovate.R_*.tar.gz`` and runs
 ``R CMD check --as-cran --no-manual`` as the CI quality gate. The source tarball
 is uploaded as the R package artifact for maintainer inspection before enabling
-R-universe or preparing a CRAN submission. The package currently has no
-``vignettes/`` directory; if vignettes are added, release candidates must allow
-``R CMD build`` and ``R CMD check --as-cran`` to build and check them by
-default. Any bypass of vignette checks must be documented as a temporary
-maintainer exception, not treated as the normal publication path.
+R-universe or preparing a CRAN submission. The package includes a source vignette
+under ``bindings/r/vignettes/`` and release candidates must allow
+``R CMD build`` and ``R CMD check --as-cran`` to build and check it by default.
+The release workflow also uploads
+``r-manual-${{ steps.r_metadata.outputs.package }}-${{ steps.r_metadata.outputs.version }}``
+from ``R CMD Rd2pdf`` so maintainers can inspect the PDF manual before
+R-universe or CRAN publication. Any bypass of vignette checks must be documented
+as a temporary maintainer exception, not treated as the normal publication path.
 
 For NuGet, the release workflow performs a dry-run style artifact gate before
 ``dotnet nuget push``: it packs ``innovate.cs``, requires both ``.nupkg``

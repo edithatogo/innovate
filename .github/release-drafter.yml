@@ -1,4 +1,4 @@
 # Release Drafter configuration.
-# Keep the default draft behavior until the release notes policy is defined.
+# Release-note ownership is defined in docs/source/release_notes_policy.rst.
 template: |
   $CHANGES

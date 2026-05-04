@@ -218,3 +218,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: R Package PDF Manual and Vignette Publication Quality Gate** *(Completed)*
   *Link: [./archive/r_package_pdf_manual_20260504/](./archive/r_package_pdf_manual_20260504/)*
+
+---
+
+- [x] **Track: Release Notes and R Artifact Documentation Synchronization** *(Completed)*
+  *Link: [./archive/release_notes_r_artifact_docs_sync_20260505/](./archive/release_notes_r_artifact_docs_sync_20260505/)*

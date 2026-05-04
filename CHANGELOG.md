@@ -8,6 +8,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Added a release-notes policy that defines how Release Please, Release
+  Drafter, Commitizen, and `CHANGELOG.md` divide responsibilities.
+
+### Fixed
+- Synchronized R publication documentation with the current source vignette and
+  PDF manual artifact workflow.
+
+## [0.5.0] - 2026-05-04
+
+### Added
+- Added aligned multi-language binding package names and versions for Python,
+  R, Julia, Go, TypeScript, C#, and Rust package surfaces.
+- Added CI coverage for Python 3.10 through 3.14, .NET 10 and .NET 11,
+  TypeScript 22 and 24, Go 1.25 and 1.26, Julia 1.12 and nightly, R, and Rust
+  stable/MSRV gates.
+- Added Rust-native profiling workflows for CPU flamegraphs and DHAT memory
+  profiling.
+- Added Rust core migration inventory and promotion dossier governance
+  artifacts.
+- Added an R PDF manual build gate, R vignette source, and versioned R manual
+  artifact upload path.
+
+### Changed
+- Clarified that Rust owns selected native execution slices while the full core
+  remains mixed Rust/Python until every canonical operation is promoted through
+  parity, profiling, benchmark, and binding-smoke evidence.
+- Hardened binding publication documentation for npm, crates.io, R-universe,
+  CRAN, Julia General, Go modules, NuGet, PyPI, and TestPyPI.
+
+## [0.4.0] - 2026-04-30
+
+### Added
 - Added the HEOR module naming brainstorm track for `calibrate`, `evidence`, `process`, `report`, `registry`, `workflow`, `quality`, `engines`, and `heoml`, with PM4Py kept as an ecosystem-only process-mining capability.
 - Added an ecosystem-module incubation track and strategy for positioning
   `innovate` alongside `lifecourse`, `voiage`, `mars`, HEOML, and future

@@ -23,6 +23,7 @@ Start here
    xla_backend_strategy
    rust_core_roadmap
    binding_publication_ci
+   release_notes_policy
    tutorials
    bindings
    adr

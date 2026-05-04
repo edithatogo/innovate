@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+import re
 from pathlib import Path
 
 
@@ -24,3 +26,22 @@ def test_rust_profiling_stack_records_cpu_memory_and_gpu_scope() -> None:
     assert "**DHAT**" in tech_stack
     assert "JAX/XLA device profilers" in tech_stack
     assert "until Rust owns a promoted native GPU execution backend" in tech_stack
+
+
+def test_completed_archive_status_text_matches_metadata() -> None:
+    """Completed Conductor archive indexes should not retain planned status text."""
+    registry = Path("conductor/tracks.md").read_text()
+    completed_archive_links = re.findall(
+        r"- \[x\] \*\*Track: ([^*]+?)\*\*.*?\n\s+\*Link: \[\./archive/([^/]+)/\]",
+        registry,
+    )
+
+    assert completed_archive_links
+    for title, track_id in completed_archive_links:
+        archive_dir = Path("conductor/archive") / track_id
+        metadata = json.loads((archive_dir / "metadata.json").read_text())
+        index_text = (archive_dir / "index.md").read_text()
+
+        if metadata["status"] == "completed" and "## Status" in index_text:
+            assert "Completed." in index_text, title
+            assert "Planned." not in index_text, title
