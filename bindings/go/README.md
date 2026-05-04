@@ -12,8 +12,8 @@ cd bindings/go
 go test ./...
 ```
 
-The Go module is intended for direct repository use. It is not published as a
-standalone registry package.
+The Go module is published through versioned Go module tags using the submodule
+tag pattern `bindings/go/vX.Y.Z`.
 
 ## Architecture
 
@@ -61,5 +61,5 @@ standalone registry package.
 
 - The package only wraps the stable kernel contract.
 - It does not reimplement diffusion semantics in Go.
-- It is designed for local development and in-repo testing, not external
-  registry distribution.
+- It is consumed as a Go module using the import path
+  `github.com/edithatogo/innovate/bindings/go` and versioned submodule tags.

@@ -4,23 +4,23 @@ This package provides a thin TypeScript-facing adapter over the Python `innovate
 
 ## Installation
 
-From the repository root:
+Install the published package from npm:
 
 ```bash
-cd bindings/typescript
-npm install
+npm install innovate.ts
 ```
 
 ## Invocation path
 
-The package shells out to the shared kernel bridge at `inst/python/kernel_bridge.py` and keeps the
-runtime surface thin. The bridge is intentionally Python-backed so the TypeScript layer does not
-reimplement model logic.
+The package shells out to the shared kernel bridge shipped at `inst/python/kernel_bridge.py` and
+keeps the runtime surface thin. The bridge is intentionally Python-backed so the TypeScript layer
+does not reimplement model logic.
 
 ## Current scaffold
 
 - Package metadata in `package.json`
 - TypeScript compiler settings in `tsconfig.json`
+- Published entrypoint and declarations in `dist/`
 - Kernel contract helpers in `src/kernel.ts`
 - Public entrypoint re-exports in `src/index.ts`
 - Contract and scaffold tests under `test/`
@@ -31,6 +31,8 @@ reimplement model logic.
 Run the stable-kernel diagnostics example from the package root:
 
 ```bash
+cd bindings/typescript
+npm install
 npx tsx examples/diagnostics-workflow.ts
 ```
 
@@ -41,6 +43,7 @@ not duplicate model semantics.
 ## Package scripts
 
 - `npm test` runs the TypeScript test suite.
+- `npm run build` compiles the published JavaScript and declaration files.
 - `npm run coverage` runs the suite with V8 coverage enabled.
 - `npm run typecheck` validates the package with `tsc --noEmit`.
 - `npm run schema:check` verifies the TypeScript kernel schema version matches the Python kernel.
@@ -82,9 +85,12 @@ preserving the underlying kernel contract.
 
 ## Backend expectations
 
-- Node.js 22 or newer is expected for the TypeScript test harness.
-- The TypeScript package expects the repository checkout to contain the Python `src/` tree.
-- The default Python launcher is `uv`; set `INNOVATE_PYTHON_COMMAND` only if you need an override.
+- Node.js 22 or newer is required.
+- The Python `innovate` package must be available to the bridge command.
+- The default Python launcher is `uv run python`; set `INNOVATE_PYTHON_COMMAND` when the backend is
+  installed in another environment.
+- Repository checkouts are still supported. Set `INNOVATE_REPO_ROOT` to force discovery of a local
+  checkout and prepend its Python `src/` tree to the bridge process.
 
 The TypeScript package remains a thin adapter over the shared kernel and does not duplicate model
 logic.

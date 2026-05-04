@@ -9,20 +9,26 @@ Publication targets
 -------------------
 
 Python
-  Publish the primary package to PyPI/TestPyPI through the existing Python
-  package release workflow.
+  Publish the primary package to PyPI/TestPyPI through trusted publishing
+  workflows. The package must pass ``uv build`` and
+  ``twine check dist/*`` before publication.
 
 TypeScript
   Publish ``innovate.ts`` to npm. The package must pass
   ``npm run schema:check``, ``npm run typecheck``, ``npm test``, and
-  ``npm pack --dry-run`` before publication.
+  ``npm pack --dry-run`` before publication. Package metadata must include a
+  public package name, license, repository, type declarations, and an explicit
+  ``files`` allow-list so generated caches are not published.
 
 Rust
   Publish ``innovate-rs`` to crates.io once crate metadata, license policy,
   and package contents are finalized. The user-facing suffix is
   ``innovate.rs``; the registry package uses ``innovate-rs`` because Cargo
   crate names do not use dots. The package must pass ``cargo fmt --check``,
-  ``cargo test``, and ``cargo package`` before publication.
+  ``cargo clippy --all-targets --all-features -- -D warnings``,
+  ``cargo test``, and ``cargo package`` before publication. The crate metadata
+  must include a license, repository, readme, description, categories, keywords,
+  and ``rust-version`` MSRV policy.
 
 R
   Prepare ``innovate.R`` for R-universe first and CRAN only after support
@@ -39,12 +45,15 @@ Julia
   ownership, and compatibility bounds are finalized. The user-facing suffix is
   ``innovate.jl``; the registered Julia package keeps the valid module/package
   name ``Innovate``. The project must pass
-  ``Pkg.instantiate()`` and ``Pkg.test()``.
+  ``Pkg.instantiate()`` and ``Pkg.test()``. Registry metadata must include
+  dependency compatibility bounds, including ``JSON`` and ``julia``.
 
 Go
   Publish ``innovate.go`` through Go modules by tagging releases that include
   the ``bindings/go`` module path, for example ``bindings/go/v0.5.0``. The
   package must pass ``go test ./...`` and module listing checks before release.
+  Go versions are governed by the ``go`` directive in ``bindings/go/go.mod``;
+  external module availability is validated through the pushed submodule tag.
 
 C#
   Publish ``innovate.cs`` to NuGet after the .NET 10 and .NET 11 package
@@ -64,12 +73,16 @@ CI requirements
 
 Every implemented binding needs a dedicated CI job in ``.github/workflows/ci.yml``:
 
-* Rust: ``cargo fmt --check`` and ``cargo test``
-* TypeScript: ``npm run schema:check``, ``npm run typecheck``, and ``npm test``
+* Python: ``uv build`` plus ``twine check dist/*``
+* Rust: ``cargo fmt --check``, ``cargo clippy``, ``cargo test``, and
+  ``cargo package``
+* TypeScript: ``npm run schema:check``, ``npm run typecheck``, ``npm test``,
+  and ``npm pack --dry-run`` on the supported Node matrix
 * Go: ``go test ./...``
 * Julia: ``Pkg.instantiate()`` and ``runtests.jl`` or ``Pkg.test()``
-* R: dependency installation plus ``Rscript bindings/r/tests/run.R``
-* C#: ``dotnet test`` on .NET 10 and .NET 11
+* R: dependency installation, integration tests, ``R CMD build``, and
+  ``R CMD check --as-cran``
+* C#: ``dotnet test`` and ``dotnet pack`` on .NET 10 and .NET 11
 
 Release workflow
 ----------------

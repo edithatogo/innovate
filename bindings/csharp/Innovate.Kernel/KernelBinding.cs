@@ -19,9 +19,29 @@ public static class KernelBinding
         ?? FindRepositoryRoot(AppContext.BaseDirectory)
         ?? throw new InvalidOperationException("Unable to locate the innovate repository root.");
 
-    public static string BindingRoot() => Path.Combine(RepositoryRoot(), "bindings", "csharp");
+    public static string BindingRoot() =>
+        TryFindRepositoryRoot() is { } repoRoot
+            ? Path.Combine(repoRoot, "bindings", "csharp")
+            : AppContext.BaseDirectory;
 
-    public static string BridgeScriptPath() => Path.Combine(BindingRoot(), "inst", "python", "kernel_bridge.py");
+    public static string BridgeScriptPath()
+    {
+        var repoBridge = TryFindRepositoryRoot() is { } repoRoot
+            ? Path.Combine(repoRoot, "bindings", "csharp", "inst", "python", "kernel_bridge.py")
+            : null;
+        if (repoBridge is not null && File.Exists(repoBridge))
+        {
+            return repoBridge;
+        }
+
+        var packagedBridge = Path.Combine(AppContext.BaseDirectory, "innovate", "kernel_bridge.py");
+        if (File.Exists(packagedBridge))
+        {
+            return packagedBridge;
+        }
+
+        throw new FileNotFoundException("Unable to locate the Innovate kernel bridge.", packagedBridge);
+    }
 
     public static string PythonCommand() =>
         string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("INNOVATE_PYTHON_COMMAND"))
@@ -80,7 +100,7 @@ public static class KernelBinding
         var startInfo = new ProcessStartInfo
         {
             FileName = command[0],
-            WorkingDirectory = RepositoryRoot(),
+            WorkingDirectory = TryFindRepositoryRoot() ?? AppContext.BaseDirectory,
             RedirectStandardError = true,
             RedirectStandardOutput = true,
             UseShellExecute = false,
@@ -95,11 +115,14 @@ public static class KernelBinding
         startInfo.ArgumentList.Add(requestPath);
         startInfo.ArgumentList.Add(responsePath);
 
-        var srcPath = Path.Combine(RepositoryRoot(), "src");
-        var currentPythonPath = Environment.GetEnvironmentVariable("PYTHONPATH");
-        startInfo.Environment["PYTHONPATH"] = string.IsNullOrEmpty(currentPythonPath)
-            ? srcPath
-            : srcPath + Path.PathSeparator + currentPythonPath;
+        if (TryFindRepositoryRoot() is { } repoRoot)
+        {
+            var srcPath = Path.Combine(repoRoot, "src");
+            var currentPythonPath = Environment.GetEnvironmentVariable("PYTHONPATH");
+            startInfo.Environment["PYTHONPATH"] = string.IsNullOrEmpty(currentPythonPath)
+                ? srcPath
+                : srcPath + Path.PathSeparator + currentPythonPath;
+        }
 
         using var process = Process.Start(startInfo)
             ?? throw new InvalidOperationException("Unable to start the kernel bridge process.");
@@ -137,6 +160,11 @@ public static class KernelBinding
 
         return null;
     }
+
+    private static string? TryFindRepositoryRoot() =>
+        Environment.GetEnvironmentVariable("INNOVATE_REPO_ROOT")
+        ?? FindRepositoryRoot(Environment.CurrentDirectory)
+        ?? FindRepositoryRoot(AppContext.BaseDirectory);
 
     private static IReadOnlyList<string> SplitCommand(string command) =>
         command.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);

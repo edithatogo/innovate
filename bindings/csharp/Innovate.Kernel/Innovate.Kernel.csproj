@@ -15,6 +15,7 @@
     <PackageTags>innovate;health-economics;decision-analysis;kernel;bindings</PackageTags>
     <PackageReleaseNotes>Initial provisional .NET 10 and .NET 11 binding over the shared Innovate kernel contract.</PackageReleaseNotes>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <EnablePackageValidation>true</EnablePackageValidation>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>

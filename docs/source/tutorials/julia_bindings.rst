@@ -58,6 +58,9 @@ Support boundaries
 
 - The Julia layer remains thin and contract-driven.
 - Only the stable kernel operations are wrapped.
-- The package is intended for local development and direct repository use, not registry publication.
+- The package is intended for Julia General registry installation once the
+  Python backend dependency path is packaged. For the monorepo layout, use
+  Registrator with ``subdir=bindings/julia`` and expect manual review unless a
+  dedicated ``Innovate.jl`` repository is used.
 - Future Arrow-based interchange work will extend the same contract boundary rather than replacing
   it with Julia-native model logic.

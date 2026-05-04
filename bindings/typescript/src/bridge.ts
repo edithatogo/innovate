@@ -5,11 +5,12 @@ import { tmpdir } from "node:os";
 
 import {
   kernelBridgeScript,
+  kernelPackageRoot,
   kernelPythonCommand,
-  kernelRepoRoot,
+  kernelRepoRootOrNull,
   kernelRequest,
   type KernelRequest,
-} from "./kernel";
+} from "./kernel.js";
 
 export type KernelJSONValue =
   | string
@@ -182,9 +183,10 @@ function invokeBridge(request: KernelRequest): KernelJSONValue {
   const requestPath = join(tempDir, "request.json");
   const responsePath = join(tempDir, "response.json");
   const command = splitCommand(kernelPythonCommand());
+  const repoRoot = kernelRepoRootOrNull();
   const env = {
     ...process.env,
-    PYTHONPATH: [join(kernelRepoRoot(), "src"), process.env.PYTHONPATH]
+    PYTHONPATH: [repoRoot ? join(repoRoot, "src") : null, process.env.PYTHONPATH]
       .filter((part) => Boolean(part))
       .join(delimiter),
   };
@@ -192,7 +194,7 @@ function invokeBridge(request: KernelRequest): KernelJSONValue {
   try {
     writeFileSync(requestPath, `${JSON.stringify(request, null, 2)}\n`, "utf8");
     const result = spawnSync(command[0], [...command.slice(1), kernelBridgeScript(), requestPath, responsePath], {
-      cwd: kernelRepoRoot(),
+      cwd: repoRoot ?? kernelPackageRoot(),
       env,
       encoding: "utf8",
     });

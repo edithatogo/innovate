@@ -87,13 +87,18 @@ def test_ci_workflow_runs_implemented_language_bindings() -> None:
 
     for command in (
         "cargo test",
+        "cargo clippy --all-targets --all-features -- -D warnings",
+        "cargo package",
         "npm run schema:check",
         "npm run typecheck",
         "npm test",
+        "npm pack --dry-run",
         "go test ./...",
         "julia --project=bindings/julia",
         "Rscript bindings/r/tests/run.R",
+        "R CMD check --as-cran --no-manual innovate.R_*.tar.gz",
         "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj",
+        "dotnet pack bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj",
         'dotnet-version: "10.0.x"',
         'dotnet-version: "11.0.x"',
         'target-framework: "net10.0"',
@@ -136,6 +141,95 @@ def test_binding_publish_workflow_has_release_gated_registry_steps() -> None:
     assert "NPM_TOKEN" in workflow
     assert "CARGO_REGISTRY_TOKEN" in workflow
     assert "NUGET_API_KEY" in workflow
+
+
+def test_python_release_workflows_validate_distribution_metadata() -> None:
+    """Python package release gates should validate built artifacts."""
+    ci = Path(".github/workflows/ci.yml").read_text()
+    pypi = Path(".github/workflows/pypi-publish.yml").read_text()
+    testpypi = Path(".github/workflows/testpypi-publish.yml").read_text()
+    pyproject = tomllib.loads(Path("pyproject.toml").read_text())
+
+    assert "twine>=5.1" in Path("pyproject.toml").read_text()
+    assert "uv build" in ci
+    assert "uv run twine check dist/*" in ci
+    assert "uv build" in pypi
+    assert "uv run twine check dist/*" in pypi
+    assert "pypa/gh-action-pypi-publish@release/v1" in pypi
+    assert "repository-url: https://test.pypi.org/legacy/" in testpypi
+    assert pyproject["project"]["requires-python"] == ">=3.10"
+
+
+def test_typescript_npm_metadata_and_ci_pack_gate() -> None:
+    """The npm package should expose explicit metadata and pack gates."""
+    package_json = json.loads(Path("bindings/typescript/package.json").read_text())
+    ci = Path(".github/workflows/ci.yml").read_text()
+
+    assert package_json["private"] is False
+    assert package_json["license"] == "Apache-2.0"
+    assert package_json["main"] == "./dist/index.js"
+    assert package_json["types"] == "./dist/index.d.ts"
+    assert package_json["exports"]["."]["import"] == "./dist/index.js"
+    assert package_json["exports"]["."]["types"] == "./dist/index.d.ts"
+    assert "files" in package_json
+    assert "dist" in package_json["files"]
+    assert "inst/python/kernel_bridge.py" in package_json["files"]
+    assert package_json["engines"]["node"] == ">=22"
+    assert "node-version: ${{ matrix.node-version }}" in ci
+    assert 'node-version: ["22", "24"]' in ci
+    assert "npm pack --dry-run" in ci
+
+
+def test_rust_crates_metadata_and_package_gates() -> None:
+    """The crates.io package should declare metadata and package checks."""
+    cargo = tomllib.loads(Path("bindings/rust/Cargo.toml").read_text())
+    ci = Path(".github/workflows/ci.yml").read_text()
+    publish = Path(".github/workflows/bindings-publish.yml").read_text()
+
+    package = cargo["package"]
+    assert package["license"] == "Apache-2.0"
+    assert package["rust-version"] == "1.85"
+    assert package["readme"] == "README.md"
+    assert "api-bindings" in package["categories"]
+    assert "kernel" in package["keywords"]
+    assert "cargo clippy --all-targets --all-features -- -D warnings" in ci
+    assert "cargo package" in ci
+    assert "cargo package --list" in publish
+    assert "--allow-dirty" not in publish
+    assert "inst/python/kernel_bridge.py" in publish
+
+
+def test_julia_registry_metadata_has_compat_bounds() -> None:
+    """Julia General registry readiness requires dependency compat bounds."""
+    julia = tomllib.loads(Path("bindings/julia/Project.toml").read_text())
+    workflow = Path(".github/workflows/bindings-publish.yml").read_text()
+
+    assert julia["name"] == "Innovate"
+    assert julia["uuid"] == "ffe8f1e4-c541-43d5-9f32-550aacc4f51a"
+    assert julia["compat"]["julia"] == "1.12"
+    assert julia["compat"]["JSON"] == "0.21"
+    assert "Validate Julia registry metadata" in workflow
+
+
+def test_go_module_release_gate_documents_submodule_tag_pattern() -> None:
+    """Go release validation should protect the submodule tag convention."""
+    workflow = Path(".github/workflows/bindings-publish.yml").read_text()
+    go_mod = Path("bindings/go/go.mod").read_text()
+
+    assert "module github.com/edithatogo/innovate/bindings/go" in go_mod
+    assert "go 1.25.0" in go_mod
+    assert "bindings/go/${GITHUB_REF_NAME}" in workflow
+    assert "bindings/go/${GITHUB_REF_NAME}" in workflow
+    assert "Validate Go module release tag pattern" in workflow
+
+
+def test_csharp_nuget_ci_packs_every_target_framework() -> None:
+    """NuGet readiness should include pack checks in the regular CI matrix."""
+    ci = Path(".github/workflows/ci.yml").read_text()
+
+    assert "dotnet pack bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj" in ci
+    assert "bindings/csharp/artifacts/${{ matrix.target-framework }}" in ci
+    assert "-p:TargetFrameworks=${{ matrix.target-framework }}" in ci
 
 
 def test_r_publish_workflow_matches_source_package_tarball_name() -> None:

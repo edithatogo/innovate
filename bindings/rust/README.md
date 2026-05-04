@@ -73,9 +73,12 @@ for other models.
   use the same native execution path.
 - Unsupported prediction shapes and other execution operations remain thin
   bridges over the shared Python kernel.
-- The repository `src/` tree must be available at runtime.
+- Rust-native operations do not require Python.
+- Bridge fallback operations require the Python `innovate` package to be
+  available to the configured Python command.
 - `uv run python` is the default bridge launcher; override it with
-  `INNOVATE_PYTHON_COMMAND` when needed.
+  `INNOVATE_PYTHON_COMMAND`, for example
+  `INNOVATE_PYTHON_COMMAND="uv run --with innovate==0.5.0 python"`.
 
 ## Support boundaries
 

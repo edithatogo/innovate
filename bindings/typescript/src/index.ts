@@ -6,7 +6,7 @@ export {
   kernelRepoRoot,
   kernelSchemaVersion,
   kernelRequest,
-} from "./kernel";
+} from "./kernel.js";
 
 export {
   KernelBridgeError,
@@ -17,14 +17,14 @@ export {
   kernelPredictModel,
   kernelSimulateModel,
   kernelSummarizeModel,
-} from "./bridge";
+} from "./bridge.js";
 
 export type {
   KernelOperation,
   KernelRequest,
   KernelRequestMetadata,
   KernelRequestPayload,
-} from "./kernel";
+} from "./kernel.js";
 
 export type {
   KernelBridgeErrorDetails,
@@ -34,4 +34,4 @@ export type {
   KernelFitResponse,
   KernelJSONValue,
   KernelSummaryResponse,
-} from "./bridge";
+} from "./bridge.js";

@@ -36,6 +36,10 @@ function hasKernelRoot(candidate: string): boolean {
 }
 
 export function kernelRepoRoot(startDir = dirname(fileURLToPath(import.meta.url))): string {
+  if (process.env.INNOVATE_REPO_ROOT) {
+    return resolve(process.env.INNOVATE_REPO_ROOT);
+  }
+
   let current = resolve(startDir);
   while (true) {
     if (hasKernelRoot(current)) {
@@ -51,12 +55,36 @@ export function kernelRepoRoot(startDir = dirname(fileURLToPath(import.meta.url)
   }
 }
 
+export function kernelRepoRootOrNull(startDir = dirname(fileURLToPath(import.meta.url))): string | null {
+  try {
+    return kernelRepoRoot(startDir);
+  } catch {
+    return null;
+  }
+}
+
+export function kernelPackageRoot(): string {
+  const moduleDir = dirname(fileURLToPath(import.meta.url));
+  return moduleDir.endsWith("dist") ? dirname(moduleDir) : dirname(moduleDir);
+}
+
 export function kernelBindingsRoot(): string {
-  return join(kernelRepoRoot(), "bindings", "typescript");
+  const repoRoot = kernelRepoRootOrNull();
+  return repoRoot ? join(repoRoot, "bindings", "typescript") : kernelPackageRoot();
 }
 
 export function kernelBridgeScript(): string {
-  return join(kernelBindingsRoot(), "inst", "python", "kernel_bridge.py");
+  const repoBridge = join(kernelBindingsRoot(), "inst", "python", "kernel_bridge.py");
+  if (existsSync(repoBridge)) {
+    return repoBridge;
+  }
+
+  const packagedBridge = join(kernelPackageRoot(), "inst", "python", "kernel_bridge.py");
+  if (existsSync(packagedBridge)) {
+    return packagedBridge;
+  }
+
+  throw new Error("Unable to locate the packaged Innovate kernel bridge");
 }
 
 export function kernelPythonCommand(): string {

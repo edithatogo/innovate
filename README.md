@@ -23,6 +23,18 @@ consistent.
 ## Install
 
 ```bash
+python -m pip install innovate
+```
+
+For optional JAX and Bayesian backends:
+
+```bash
+python -m pip install "innovate[jax,bayesian]"
+```
+
+For contributor setup from a checkout:
+
+```bash
 uv sync
 ```
 

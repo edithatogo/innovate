@@ -127,3 +127,5 @@ def package(session: nox.Session) -> None:
     """Build the Python package artifacts."""
     _run_uv(session, "sync", "--python", DEFAULT_PYTHON)
     _run_uv(session, "build", *session.posargs)
+    _run_uv(session, "run", "twine", "check", "dist/*")
+    _run_uv(session, "run", "check-wheel-contents", "dist/*.whl")

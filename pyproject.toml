@@ -5,6 +5,7 @@
 name = "innovate"
 version = "0.5.0"
 description = "A Python library for simplifying innovation/policy diffusion modelling."
+keywords = ["diffusion", "forecasting", "innovation", "modeling", "policy"]
 requires-python = ">=3.10"
 license = "Apache-2.0"
 readme = "README.md"
@@ -12,12 +13,16 @@ authors = [
   { name = "Dylan A Mordaunt", email = "dylan.mordaunt@vuw.ac.nz" },
 ]
 classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "Operating System :: OS Independent",
   "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
+  "Topic :: Scientific/Engineering",
 ]
 
 # ---------------------------------------------------------------------------
@@ -51,6 +56,8 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/edithatogo/innovate"
 Documentation = "https://edithatogo.github.io/innovate"
+Issues = "https://github.com/edithatogo/innovate/issues"
+Source = "https://github.com/edithatogo/innovate"
 
 # ---------------------------------------------------------------------------
 # Optional dependency groups
@@ -125,6 +132,9 @@ dev = [
   "commitizen>=3.13",
   # pyproject.toml formatting
   "pyproject-fmt>=1.7",
+  # Distribution metadata validation
+  "check-wheel-contents>=0.6",
+  "twine>=5.1",
 ]
 
 # ---------------------------------------------------------------------------

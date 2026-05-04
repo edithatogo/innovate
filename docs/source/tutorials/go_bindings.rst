@@ -93,7 +93,8 @@ Support boundaries
 
 * The Go layer remains thin and contract-driven.
 * Only the stable kernel operations are wrapped.
-* The package is intended for local development and direct repository use, not
-  registry publication.
+* The package is consumed as a Go module using the import path
+  ``github.com/edithatogo/innovate/bindings/go`` and versioned submodule tags
+  such as ``bindings/go/v0.5.0``.
 * Future transport or Arrow work should extend the same contract boundary
   rather than replacing it with Go-native model logic.

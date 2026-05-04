@@ -178,6 +178,19 @@ jobs:
       - name: Build package
         run: uv build
 
+      - name: Validate Python package metadata
+        run: uv run twine check dist/*
+
+      - name: Validate Python wheel contents
+        run: uv run check-wheel-contents dist/*.whl
+
+      - name: Validate Python sdist excludes generated caches
+        run: |
+          if tar -tzf dist/*.tar.gz | grep -E '(^|/)([.]ruff_cache|__pycache__|.*[.]pyc)'; then
+            echo "Generated cache files must not be included in the Python sdist."
+            exit 1
+          fi
+
   docs-smoke:
     runs-on: ubuntu-latest
     steps:
@@ -197,6 +210,10 @@ jobs:
 
   rust-bindings:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        rust-version: ["1.85.0", "stable"]
     steps:
       - uses: actions/checkout@v5
 
@@ -207,15 +224,25 @@ jobs:
         run: uv python install 3.12
 
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.rust-version }}
 
       - name: Check Rust formatting
         working-directory: bindings/rust
         run: cargo fmt --check
 
+      - name: Run Rust clippy
+        working-directory: bindings/rust
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
       - name: Run Rust binding tests
         working-directory: bindings/rust
         run: cargo test
+
+      - name: Package Rust crate
+        working-directory: bindings/rust
+        run: cargo package
 
   rust-benchmarks:
     runs-on: ubuntu-latest
@@ -237,6 +264,10 @@ jobs:
 
   typescript-bindings:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ["22", "24"]
     steps:
       - uses: actions/checkout@v5
 
@@ -249,7 +280,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: "22"
+          node-version: ${{ matrix.node-version }}
           cache: npm
           cache-dependency-path: bindings/typescript/package-lock.json
 
@@ -269,8 +300,16 @@ jobs:
         working-directory: bindings/typescript
         run: npm test
 
+      - name: Validate npm package contents
+        working-directory: bindings/typescript
+        run: npm pack --dry-run
+
   go-bindings:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go-version: ["1.25.x", "1.26.x"]
     steps:
       - uses: actions/checkout@v5
 
@@ -283,14 +322,27 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version-file: bindings/go/go.mod
+          go-version: ${{ matrix.go-version }}
 
       - name: Run Go binding tests
         working-directory: bindings/go
         run: go test ./...
 
+      - name: Run Go vet
+        working-directory: bindings/go
+        run: go vet ./...
+
+      - name: Validate Go module path
+        working-directory: bindings/go
+        run: test "$(go list -m)" = "github.com/edithatogo/innovate/bindings/go"
+
   julia-bindings:
     runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.julia-version == 'nightly' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        julia-version: ["1.12", "nightly"]
     steps:
       - uses: actions/checkout@v5
 
@@ -303,7 +355,7 @@ jobs:
       - name: Set up Julia
         uses: julia-actions/setup-julia@v2
         with:
-          version: "1.12"
+          version: ${{ matrix.julia-version }}
 
       - name: Instantiate Julia binding project
         run: julia --project=bindings/julia -e 'using Pkg; Pkg.instantiate()'
@@ -371,6 +423,9 @@ jobs:
 
       - name: Test C# bindings
         run: dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj --configuration Release --framework ${{ matrix.target-framework }} -p:TargetFrameworks=${{ matrix.target-framework }}
+
+      - name: Pack C# binding
+        run: dotnet pack bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj --configuration Release --output bindings/csharp/artifacts/${{ matrix.target-framework }} -p:TargetFrameworks=${{ matrix.target-framework }} -p:ContinuousIntegrationBuild=true
 
   # -----------------------------------------------------------------------
   # Type Checking

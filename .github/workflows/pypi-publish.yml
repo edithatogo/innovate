@@ -1,4 +1,4 @@
-name: Publish to TestPyPI
+name: Publish to PyPI
 
 on:
   release:
@@ -6,13 +6,13 @@ on:
 
 jobs:
   pypi-publish:
-    name: Upload release to TestPyPI
+    name: Upload release to PyPI
     runs-on: ubuntu-latest
     environment:
-      name: testpypi
-      url: https://test.pypi.org/p/innovate
+      name: pypi
+      url: https://pypi.org/p/innovate
     permissions:
-      id-token: write # IMPORTANT: this permission is mandatory for trusted publishing
+      id-token: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -32,9 +32,5 @@ jobs:
       - name: Validate package metadata
         run: uv run twine check dist/*
 
-      - name: Publish package to TestPyPI
+      - name: Publish package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-          repository-url: https://test.pypi.org/legacy/

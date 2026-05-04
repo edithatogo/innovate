@@ -1,0 +1,12 @@
+include LICENSE README.md pyproject.toml
+graft src/innovate
+prune .mypy_cache
+prune .nox
+prune .pytest_cache
+prune .ruff_cache
+prune .venv
+prune build
+prune dist
+global-exclude .DS_Store
+global-exclude __pycache__
+global-exclude *.py[cod]

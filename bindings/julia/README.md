@@ -50,3 +50,15 @@ models = kernel_discover_models()
 
 The Julia bindings are intentionally thin and contract-driven. The Julia schema version is kept in
 lockstep with the Python kernel version, and the automated test suite fails if the versions drift.
+
+## Registry readiness
+
+Julia General registration from this monorepo should use:
+
+```text
+@JuliaRegistrator register subdir=bindings/julia
+```
+
+The package includes local license metadata and dependency compatibility bounds. The remaining
+registry blocker is the installed-package Python backend path: bridge operations require the Python
+`innovate` package to be available to the configured Python launcher.

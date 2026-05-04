@@ -2,11 +2,23 @@
 name = "innovate-rs"
 version = "0.5.0"
 edition = "2021"
-license = "MIT"
+rust-version = "1.85"
+license = "Apache-2.0"
 description = "Rust bindings over the Innovate functional kernel"
+documentation = "https://docs.rs/innovate-rs"
 homepage = "https://github.com/edithatogo/innovate"
 repository = "https://github.com/edithatogo/innovate"
 readme = "README.md"
+keywords = ["innovation", "diffusion", "kernel", "bindings"]
+categories = ["api-bindings", "science"]
+include = [
+  "Cargo.toml",
+  "README.md",
+  "benches/**",
+  "inst/**",
+  "scripts/**",
+  "src/**",
+]
 
 [lib]
 name = "innovate_rust"

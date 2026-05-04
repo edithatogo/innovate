@@ -5,15 +5,33 @@
   "license": "Apache-2.0",
   "private": false,
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "README.md",
+    "dist",
+    "inst/python/kernel_bridge.py"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/edithatogo/innovate.git",
+    "url": "git+https://github.com/edithatogo/innovate.git",
     "directory": "bindings/typescript"
   },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepack": "npm run build",
     "test": "vitest run",
     "coverage": "vitest run --coverage",
     "schema:check": "tsx scripts/check-schema-version.ts",
@@ -21,7 +39,7 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/node": "^24.0.0",
+    "@types/node": "^22.0.0",
     "@vitest/coverage-v8": "^3.2.4",
     "tsx": "^4.19.0",
     "typescript": "^5.8.0",
