@@ -1,0 +1,17 @@
+Six-subagent Rust profiling hardening
+
+Summary:
+- Hardened CPU flamegraph script with repeatable defaults, output/frequency controls, benchmark argument forwarding, and metadata sidecar generation.
+- Expanded DHAT memory profiling to include logistic fit/predict/simulate/summary/diagnose and Bass predict/simulate native slices.
+- Added memory profiler output controls, deterministic default names, positive-iteration validation, stale-output cleanup, and package-content CI checks.
+- Updated README, tech stack, and Rust core roadmap to clarify CPU, memory, GPU/XLA profiling boundaries and that the core is not fully Rust yet.
+- Added machine-checked docs/tests for profiling packaging and Rust-vs-Python core ownership.
+
+Validation:
+- bash -n bindings/rust/scripts/profile_native_kernels.sh && bash -n bindings/rust/scripts/profile_memory_native_kernels.sh && git diff --check
+- cargo fmt --check && cargo clippy --all-targets --all-features -- -D warnings && cargo check --benches --examples && cargo bench --bench native_kernel --no-run
+- pytest tests/unit/test_conductor_workflow_docs.py tests/unit/test_benchmark_docs.py tests/unit/test_rust_binding_docs.py tests/unit/test_rust_core_roadmap_docs.py tests/unit/test_prose_lint_docs.py tests/unit/test_binding_publication_ci.py
+- INNOVATE_RUST_MEMORY_PROFILE_ITERATIONS=1 INNOVATE_RUST_MEMORY_PROFILE_OUTPUT=/tmp/innovate-dhat-six-agent.json ./scripts/profile_memory_native_kernels.sh
+- cargo package --list --allow-dirty profiling file checks
+- cargo package --allow-dirty
+- cargo test
