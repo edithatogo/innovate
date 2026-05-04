@@ -1,0 +1,17 @@
+Rust profiling implementation
+
+Summary:
+- Added DHAT-based Rust-native memory profiling example and wrapper script for native logistic kernel slices.
+- Added CI compile gate for the memory profiler example.
+- Updated Rust README, Rust core roadmap, and tech stack to document CPU, memory, and GPU profiling ownership.
+- Clarified that the core is not yet entirely Rust; unsupported model families and payload shapes still fall back to the Python kernel.
+
+Validation:
+- cargo fmt --check
+- cargo clippy --all-targets --all-features -- -D warnings
+- cargo check --example profile_memory_native_kernels
+- cargo bench --bench native_kernel --no-run
+- INNOVATE_RUST_MEMORY_PROFILE_ITERATIONS=2 ./scripts/profile_memory_native_kernels.sh
+- cargo test
+- pytest tests/unit/test_conductor_workflow_docs.py tests/unit/test_benchmark_docs.py tests/unit/test_rust_binding_docs.py tests/unit/test_rust_core_roadmap_docs.py
+- cargo package --allow-dirty
