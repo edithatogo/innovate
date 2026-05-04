@@ -32,11 +32,22 @@ current source layout so that documentation drift can be checked by tests:
 * ``bindings/rust/src/lib.rs`` exposes Rust-native execution only for the
   documented slices: packaged discovery metadata, logistic ``fit_model``,
   logistic ``summarize_model``, logistic ``diagnose_model``, and logistic and
-  Bass ``predict_model``/``simulate_model`` fitted-state execution.
+  Bass ``predict_model``/``simulate_model`` fitted-state execution. In short:
+  Rust-native execution only for the documented slices.
 * The Rust binding still contains the Python bridge fallback path through
   ``invoke``, ``bridge_script_absolute_path``, ``kernel_pythonpath``, and
   ``python_command_segments``. Unsupported native slices therefore remain
   bridge-backed rather than Rust-owned.
+* A full Rust core must not be claimed until every canonical operation, every
+  Python registry model family, and every stable payload shape has a
+  Rust-native implementation or an explicitly promoted non-Python backend.
+  This means every Python registry model family must be covered before claiming
+  full Rust ownership.
+  Today, model families such as ``gompertz``, ``fisher_pry``,
+  ``network_diffusion``, and ``policy_hazard`` remain outside the Rust-native
+  slice, and covariates, event splits, probabilistic runtimes, custom fitter
+  options, and incomplete fitted states still require fallback or Python-only
+  reference behavior.
 
 Candidate operations
 --------------------
@@ -55,7 +66,7 @@ behavior is already explicit in the functional kernel contract:
 * ``simulate_model``: deterministic or seeded simulation paths where payload
   shapes, dtypes, and error mapping can be verified without Python object
   identity. The same logistic-native slice now covers simulation for simple
-  fitted states.
+  fitted states, and the Bass native slice covers simple Bass fitted states.
 * ``fit_model``: bounded fitting workflows where the parameter search is
   deterministic enough to reproduce with the same response contract. The first
   implemented slice is Rust-native logistic fitting for simple fitted states,
@@ -75,10 +86,19 @@ pass parity checks without relying on hidden Python objects.
 Operation support inventory
 ---------------------------
 
-The current Rust core status is operation-level, not model-family-wide. Native
-Rust support exists only where the request payload is stable, the response shape
-is covered by parity tests, and unsupported cases can return to the Python
-bridge without changing the public kernel contract.
+The current Rust core status is operation- and model-slice-level, not
+model-family-wide. Native Rust support exists only where the request payload is
+stable, the response shape is covered by parity tests, and unsupported cases can
+return to the Python bridge without changing the public kernel contract.
+
+The canonical machine-readable inventory is
+:download:`rust_core_migration_inventory.json <_static/rust_core_migration_inventory.json>`.
+It records each slice's ``current_owner`` as one of ``rust_native``,
+``python_bridge``, or ``python_reference``; its fallback status; profiling
+requirements; and promotion blockers. Release and CI tooling should consume
+that fixture rather than scraping this prose.
+
+The table below is a human summary of the current default slices.
 
 .. list-table::
    :header-rows: 1
@@ -98,16 +118,15 @@ bridge without changing the public kernel contract.
    * - ``fit_model``
      - Native logistic fitting for simple positive observations without
        covariates, events, or custom fitter options.
-     - Unsupported model families, covariates, event splits, and custom fitter
-       options fall back to the Python bridge.
+     - Unsupported model families, covariates, event splits, and custom fitter options fall back to the Python bridge.
      - Broader fitters, optional probabilistic runtimes, uncertainty-aware
        fitting, and model-specific class internals remain Python-backed.
      - Medium. Batched or differentiable fitting can be JAX/XLA-eligible, but
        the current scalar logistic slice favors Rust for packaging, predictable
        CPU latency, and no accelerator dependency.
    * - ``predict_model``
-     - Native logistic prediction for simple fitted states with explicit
-       parameters and time arrays.
+     - Native logistic prediction and Bass prediction for simple fitted states
+       with explicit parameters and time arrays.
      - Unsupported families, covariate payloads, event splits, and incomplete
        fitted states fall back to the Python bridge.
      - Model-specific prediction semantics that depend on Python objects remain
@@ -116,8 +135,8 @@ bridge without changing the public kernel contract.
        promotion must compare XLA compile cost, steady-state runtime, and Rust
        native CPU latency.
    * - ``simulate_model``
-     - Native logistic simulation for the same simple fitted-state payload used
-       by prediction.
+     - Native logistic simulation and Bass simulation for the same simple
+       fitted-state payload used by prediction.
      - Unsupported families, stochastic policies that are not represented in
        the stable payload, covariates, and event splits fall back to the bridge.
      - Probabilistic simulation, DES-style event queues, and model-specific
@@ -235,7 +254,10 @@ Memory profiling is implemented separately through the DHAT-backed
 GPU profiling is not currently part of the Rust crate because Rust does not yet
 own a GPU execution backend in this project; GPU and XLA device profiling should
 remain attached to the optional JAX/XLA backend until a Rust GPU backend is
-promoted behind the kernel contract.
+promoted behind the kernel contract. Use the benchmark workflow's
+``JAX_PLATFORM_NAME=cpu`` and ``JAX_PLATFORM_NAME=gpu`` commands for XLA CPU/GPU
+evidence, and keep those artifacts separate from Rust CPU flamegraphs and DHAT
+heap profiles.
 
 The core is therefore not entirely written in Rust yet. The Rust crate owns
 native metadata discovery and selected logistic and Bass execution slices.

@@ -115,6 +115,46 @@ does not get confused with repeated execution. Cases that require expensive
 accelerator timing should use ``workflow_dispatch`` or scheduled CI instead of
 the fast default test path.
 
+GPU and XLA profiling boundary
+------------------------------
+
+GPU profiling belongs to the optional JAX/XLA backend today. Rust profiling
+covers native CPU hot paths and Rust heap behavior; it should not be used to
+claim GPU coverage until Rust owns a promoted GPU execution backend behind the
+kernel contract.
+
+Use the existing optional-backend setup before collecting XLA evidence:
+
+.. code-block:: bash
+
+   uv sync --extra jax
+
+Use a CPU-only XLA baseline when comparing compilation and steady-state costs in
+portable CI:
+
+.. code-block:: bash
+
+   JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-xla-cpu.json
+
+Use the same benchmark command on an accelerator runner for GPU evidence, with a
+JAX GPU install available in that environment:
+
+.. code-block:: bash
+
+   JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-xla-gpu.json
+
+For Python-side CPU and memory profiling of the optional backend path, use the
+same Scalene command as the opt-in benchmark workflow:
+
+.. code-block:: bash
+
+   uv run scalene src/innovate --cli --reduced-profile
+
+Record the active ``JAX_PLATFORM_NAME``, accelerator model, XLA compilation
+time, XLA steady-state runtime, and memory behavior where measurable. Keep Rust
+CPU and DHAT memory profiles in separate artifacts so Rust-native promotion and
+JAX/XLA accelerator promotion are not conflated.
+
 MARS surrogate benchmark gate
 -----------------------------
 

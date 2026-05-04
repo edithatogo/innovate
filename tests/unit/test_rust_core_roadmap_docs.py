@@ -2,12 +2,19 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 ROOT = Path()
 ROADMAP = ROOT / "docs/source/rust_core_roadmap.rst"
 RUST_BINDING = ROOT / "bindings/rust/src/lib.rs"
 PYTHON_KERNEL = ROOT / "src/innovate/kernel.py"
+PYTHON_CAPABILITIES = ROOT / "src/innovate/capabilities.py"
+
+
+def normalized_text(path: Path) -> str:
+    """Read prose with line wrapping collapsed for stable phrase assertions."""
+    return " ".join(path.read_text().split())
 
 
 def test_rust_core_roadmap_documentation_is_present() -> None:
@@ -19,7 +26,7 @@ def test_rust_core_roadmap_documentation_is_present() -> None:
 
 def test_rust_core_roadmap_names_candidate_operations_and_gates() -> None:
     """The roadmap should make migration and promotion criteria explicit."""
-    roadmap = Path("docs/source/rust_core_roadmap.rst").read_text()
+    roadmap = normalized_text(Path("docs/source/rust_core_roadmap.rst"))
 
     for operation in (
         "discover_models",
@@ -40,7 +47,7 @@ def test_rust_core_roadmap_names_candidate_operations_and_gates() -> None:
     assert "logistic fitting" in roadmap
     assert "logistic summary and diagnostics" in roadmap
     assert "Python bridge fallback" in roadmap
-    assert "same logistic-native slice" in roadmap
+    assert "same simple fitted-state payload" in roadmap
     assert "Benchmarking and profiling tooling" in roadmap
     assert "criterion" in roadmap
     assert "cargo-flamegraph" in roadmap
@@ -55,7 +62,7 @@ def test_rust_core_roadmap_names_candidate_operations_and_gates() -> None:
 
 def test_rust_core_roadmap_inventories_runtime_status_and_xla_fit() -> None:
     """The roadmap should inventory native, fallback, and Python-only status."""
-    roadmap = Path("docs/source/rust_core_roadmap.rst").read_text()
+    roadmap = normalized_text(Path("docs/source/rust_core_roadmap.rst"))
 
     for phrase in (
         "Operation support inventory",
@@ -74,8 +81,8 @@ def test_rust_core_roadmap_inventories_runtime_status_and_xla_fit() -> None:
     expected_inventory = {
         "discover_models": ("Native metadata discovery", "Low"),
         "fit_model": ("Native logistic fitting", "Medium"),
-        "predict_model": ("Native logistic prediction", "High"),
-        "simulate_model": ("Native logistic simulation", "High"),
+        "predict_model": ("Native logistic prediction and Bass prediction", "High"),
+        "simulate_model": ("Native logistic simulation and Bass simulation", "High"),
         "summarize_model": ("Native logistic summary", "Medium"),
         "diagnose_model": ("Native logistic diagnostics", "Medium"),
     }
@@ -88,9 +95,10 @@ def test_rust_core_roadmap_inventories_runtime_status_and_xla_fit() -> None:
 
 def test_rust_core_roadmap_audit_matches_current_runtime_ownership() -> None:
     """The roadmap should machine-check that Rust is not the whole core yet."""
-    roadmap = ROADMAP.read_text()
+    roadmap = normalized_text(ROADMAP)
     rust_binding = RUST_BINDING.read_text()
     python_kernel = PYTHON_KERNEL.read_text()
+    capabilities = PYTHON_CAPABILITIES.read_text()
 
     for phrase in (
         "Audited status",
@@ -106,6 +114,15 @@ def test_rust_core_roadmap_audit_matches_current_runtime_ownership() -> None:
         "Python bridge fallback path",
         "Unsupported native slices therefore remain",
         "bridge-backed",
+        "A full Rust core must not be claimed",
+        "every canonical operation",
+        "every Python registry model family",
+        "every stable payload shape",
+        "covariates",
+        "event splits",
+        "probabilistic runtimes",
+        "custom fitter options",
+        "incomplete fitted states",
     ):
         assert phrase in roadmap
 
@@ -141,6 +158,84 @@ def test_rust_core_roadmap_audit_matches_current_runtime_ownership() -> None:
 
     assert '"unsupported_native_operation"' in rust_binding
     assert "uv run python" in rust_binding
+
+    python_model_keys = set(re.findall(r'^\s{8}"([^"]+)": ModelCapability\(', capabilities, flags=re.MULTILINE))
+    rust_native_match_keys = set(re.findall(r'"([^"]+)" => [a-z_]+_native_response', rust_binding))
+    rust_native_explicit_keys = {"logistic"} if "fn logistic_fit_native_response" in rust_binding else set()
+    rust_native_model_keys = rust_native_match_keys | rust_native_explicit_keys
+
+    assert {"bass", "logistic"} <= python_model_keys
+    assert {"bass", "logistic"} <= rust_native_model_keys
+    assert rust_native_model_keys < python_model_keys
+
+    non_native_model_keys = python_model_keys - rust_native_model_keys
+    assert {"gompertz", "fisher_pry", "network_diffusion", "policy_hazard"} <= non_native_model_keys
+    for model_key in ("gompertz", "fisher_pry", "network_diffusion", "policy_hazard"):
+        assert f"``{model_key}``" in roadmap
+
+
+def test_rust_core_roadmap_explicitly_rejects_full_rust_ownership() -> None:
+    """The inventory should keep the partial-Rust migration state unambiguous."""
+    roadmap = normalized_text(ROADMAP)
+
+    for phrase in (
+        "Python remains the primary ergonomic and reference surface",
+        "the core is not fully Rust-owned today",
+        "The core is not entirely Rust",
+        "Python reference owner",
+        "exposes Rust-native execution only for the documented slices",
+        "Unsupported native slices therefore remain",
+        "The core is therefore not entirely written in Rust yet",
+        "Promotion remains operation by operation",
+    ):
+        assert phrase in roadmap
+
+
+def test_rust_core_roadmap_enumerates_python_bridge_fallback_inventory() -> None:
+    """Every migrated operation should document what still falls back to Python."""
+    roadmap = normalized_text(ROADMAP)
+
+    expected_fallbacks = {
+        "discover_models": "Bridge discovery remains available for parity and drift checks.",
+        "fit_model": "Unsupported model families, covariates, event splits, and custom fitter options fall back to the Python bridge.",
+        "predict_model": "Unsupported families, covariate payloads, event splits, and incomplete fitted states fall back to the Python bridge.",
+        "simulate_model": "Unsupported families, stochastic policies that are not represented in the stable payload, covariates, and event splits fall back to the bridge.",
+        "summarize_model": "Unsupported families, custom diagnostics, covariates, and event splits fall back to the bridge.",
+        "diagnose_model": "Unsupported families, missing diagnostic inputs, covariates, and event splits fall back to the bridge when the wrapper path is used.",
+    }
+
+    for operation, fallback in expected_fallbacks.items():
+        assert operation in roadmap
+        assert fallback in roadmap
+
+    for phrase in (
+        "unsupported_native_operation",
+        "Public wrapper methods treat that code as recoverable",
+        "dispatch the original request to the Python bridge",
+        "bridge_command_failed",
+    ):
+        assert phrase in roadmap
+
+
+def test_rust_core_roadmap_captures_cpu_memory_and_gpu_promotion_evidence() -> None:
+    """Promotion gates should require CPU, memory, and GPU/XLA profiling evidence."""
+    roadmap = normalized_text(ROADMAP)
+
+    for phrase in (
+        "benchmark promotion dossier",
+        "Criterion output for Rust-native CPU paths",
+        "Python reference timings",
+        "XLA compile cost and steady-state runtime when eligible",
+        "memory evidence for allocation-sensitive slices",
+        "regression threshold that CI or release checks can enforce",
+        "cargo-flamegraph",
+        "Rust-native CPU hot paths",
+        "DHAT-backed",
+        "GPU profiling is not currently part of the Rust crate",
+        "GPU and XLA device profiling should remain attached to the optional JAX/XLA backend",
+        "keep GPU profiling with the active GPU/XLA backend until Rust owns a GPU",
+    ):
+        assert phrase in roadmap
 
 
 def test_rust_core_expansion_track_records_phase_one_inventory() -> None:

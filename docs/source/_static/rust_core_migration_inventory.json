@@ -1,0 +1,257 @@
+{
+  "schema_version": 1,
+  "owner_values": [
+    "rust_native",
+    "python_bridge",
+    "python_reference"
+  ],
+  "fallback_status_values": [
+    "native_default_no_fallback_needed",
+    "native_default_python_bridge_fallback",
+    "python_bridge_default",
+    "python_reference_only"
+  ],
+  "inventory": [
+    {
+      "operation": "discover_models",
+      "model_slice": "all_packaged_discovery_metadata",
+      "current_owner": "rust_native",
+      "fallback_status": "native_default_no_fallback_needed",
+      "native_scope": "Packaged discovery metadata from bindings/rust/inst/discovery_manifest.json.",
+      "fallback_scope": "Python bridge discovery remains available for parity and drift checks.",
+      "python_reference_scope": "src/innovate/kernel.py remains authoritative for capability registry semantics and schema versioning.",
+      "profiling_requirements": [
+        "No CPU flamegraph gate required; discovery is metadata I/O.",
+        "Schema compatibility and manifest parity checks are required before metadata changes."
+      ],
+      "promotion_blockers": []
+    },
+    {
+      "operation": "fit_model",
+      "model_slice": "logistic_simple_positive_observations",
+      "current_owner": "rust_native",
+      "fallback_status": "native_default_python_bridge_fallback",
+      "native_scope": "Simple logistic fitting with positive observed values and explicit time arrays; no covariates, events, or custom fitter options.",
+      "fallback_scope": "Unsupported logistic payload shapes and non-native model families fall back through the Python bridge from wrapper methods.",
+      "python_reference_scope": "Broader fitters, probabilistic fitting, uncertainty-aware fitting, and model-specific Python internals remain Python reference owned.",
+      "profiling_requirements": [
+        "Criterion benchmark coverage for native logistic fit.",
+        "CPU flamegraph for fit_model_native before widening the native slice.",
+        "Memory profiling when changing allocation-heavy search or residual code."
+      ],
+      "promotion_blockers": [
+        "No native covariate, event, custom fitter option, or uncertainty payload support.",
+        "No benchmark dossier comparing Python reference timing, Rust CPU timing, and bridge fallback rate for expanded fit payloads."
+      ]
+    },
+    {
+      "operation": "fit_model",
+      "model_slice": "bass_and_other_model_families",
+      "current_owner": "python_bridge",
+      "fallback_status": "python_bridge_default",
+      "native_scope": "None.",
+      "fallback_scope": "Wrapper methods dispatch to the Python bridge.",
+      "python_reference_scope": "Python reference model and fitter implementations own behavior.",
+      "profiling_requirements": [
+        "Add Criterion coverage only after a native fitting candidate exists.",
+        "Compare Python reference timing and Rust CPU timing before any native promotion."
+      ],
+      "promotion_blockers": [
+        "Native fit semantics are not implemented.",
+        "State, diagnostics, error mapping, and fitter option schemas are not stabilized for Rust ownership."
+      ]
+    },
+    {
+      "operation": "predict_model",
+      "model_slice": "logistic_simple_fitted_state",
+      "current_owner": "rust_native",
+      "fallback_status": "native_default_python_bridge_fallback",
+      "native_scope": "Simple fitted logistic states with explicit parameters and time arrays; no covariates or event splits.",
+      "fallback_scope": "Unsupported payload shapes and non-native families fall back through the Python bridge from wrapper methods.",
+      "python_reference_scope": "Python remains authoritative for model-specific prediction semantics outside the stable fitted-state payload.",
+      "profiling_requirements": [
+        "Criterion benchmark coverage for native logistic prediction.",
+        "CPU flamegraph for predict_model_native before widening the native slice.",
+        "Record Rust CPU latency and bridge fallback rate in promotion dossiers."
+      ],
+      "promotion_blockers": [
+        "No native covariate or event split support.",
+        "No documented XLA eligibility decision for large batched prediction payloads."
+      ]
+    },
+    {
+      "operation": "predict_model",
+      "model_slice": "bass_simple_fitted_state",
+      "current_owner": "rust_native",
+      "fallback_status": "native_default_python_bridge_fallback",
+      "native_scope": "Simple fitted Bass states with finite p, q, and m parameters and time grids starting at zero; no covariates or event splits.",
+      "fallback_scope": "Unsupported Bass payload shapes and non-native families fall back through the Python bridge from wrapper methods when the native path reports unsupported_native_operation.",
+      "python_reference_scope": "Python remains authoritative for richer Bass prediction semantics and model-specific internals.",
+      "profiling_requirements": [
+        "Add or maintain Criterion benchmark coverage for native Bass prediction before default expansion.",
+        "CPU flamegraph for predict_model_native Bass slices before widening the native slice."
+      ],
+      "promotion_blockers": [
+        "No native covariate support.",
+        "Native Bass time grids are limited to starts at zero.",
+        "Benchmark and profiling dossier is incomplete for Bass-specific promotion beyond the simple fitted-state slice."
+      ]
+    },
+    {
+      "operation": "predict_model",
+      "model_slice": "other_model_families_or_unsupported_payloads",
+      "current_owner": "python_bridge",
+      "fallback_status": "python_bridge_default",
+      "native_scope": "None.",
+      "fallback_scope": "Wrapper methods dispatch to the Python bridge.",
+      "python_reference_scope": "Python reference implementations own prediction semantics.",
+      "profiling_requirements": [
+        "Profile only after a concrete Rust-native candidate slice is identified.",
+        "Compare against JAX/XLA for large static array payloads where eligible."
+      ],
+      "promotion_blockers": [
+        "No Rust-native implementation.",
+        "Stable fitted-state, covariate, and event schemas are not documented for Rust ownership."
+      ]
+    },
+    {
+      "operation": "simulate_model",
+      "model_slice": "logistic_simple_fitted_state",
+      "current_owner": "rust_native",
+      "fallback_status": "native_default_python_bridge_fallback",
+      "native_scope": "Simple fitted logistic states with explicit parameters and time arrays; no covariates, event splits, or stochastic policy payloads.",
+      "fallback_scope": "Unsupported payload shapes and non-native families fall back through the Python bridge from wrapper methods.",
+      "python_reference_scope": "Python remains authoritative for stochastic policies and model-specific simulation internals.",
+      "profiling_requirements": [
+        "Criterion benchmark coverage for native logistic simulation.",
+        "CPU flamegraph for simulate_model_native before widening the native slice.",
+        "Memory profiling when adding allocation-heavy simulation payloads."
+      ],
+      "promotion_blockers": [
+        "No native covariate, event split, or stochastic policy support.",
+        "No explicit XLA eligibility decision for bounded array simulation."
+      ]
+    },
+    {
+      "operation": "simulate_model",
+      "model_slice": "bass_simple_fitted_state",
+      "current_owner": "rust_native",
+      "fallback_status": "native_default_python_bridge_fallback",
+      "native_scope": "Simple fitted Bass states with finite p, q, and m parameters and time grids starting at zero; no covariates, event splits, or stochastic policy payloads.",
+      "fallback_scope": "Unsupported Bass payload shapes and non-native families fall back through the Python bridge from wrapper methods when the native path reports unsupported_native_operation.",
+      "python_reference_scope": "Python remains authoritative for richer Bass simulation semantics and model-specific internals.",
+      "profiling_requirements": [
+        "Add or maintain Criterion benchmark coverage for native Bass simulation before default expansion.",
+        "CPU flamegraph for simulate_model_native Bass slices before widening the native slice."
+      ],
+      "promotion_blockers": [
+        "No native covariate or stochastic policy support.",
+        "Native Bass time grids are limited to starts at zero.",
+        "Benchmark and profiling dossier is incomplete for Bass-specific promotion beyond the simple fitted-state slice."
+      ]
+    },
+    {
+      "operation": "simulate_model",
+      "model_slice": "other_model_families_or_unsupported_payloads",
+      "current_owner": "python_bridge",
+      "fallback_status": "python_bridge_default",
+      "native_scope": "None.",
+      "fallback_scope": "Wrapper methods dispatch to the Python bridge.",
+      "python_reference_scope": "Python reference implementations own simulation semantics.",
+      "profiling_requirements": [
+        "Profile only after a concrete Rust-native candidate slice is identified.",
+        "Compare Rust CPU, Python reference, and JAX/XLA when randomness and shapes can be represented explicitly."
+      ],
+      "promotion_blockers": [
+        "No Rust-native implementation.",
+        "Stochastic, event, and model-specific simulation schemas are not stabilized for Rust ownership."
+      ]
+    },
+    {
+      "operation": "summarize_model",
+      "model_slice": "logistic_simple_fitted_state",
+      "current_owner": "rust_native",
+      "fallback_status": "native_default_python_bridge_fallback",
+      "native_scope": "Simple fitted logistic states with explicit observed and time arrays and deterministic summary fields.",
+      "fallback_scope": "Unsupported payload shapes and non-native families fall back through the Python bridge from wrapper methods.",
+      "python_reference_scope": "Rich model cards, uncertainty summaries, and backend-specific reports remain Python reference owned.",
+      "profiling_requirements": [
+        "Criterion benchmark coverage for native logistic summary.",
+        "CPU flamegraph before widening the native summary slice.",
+        "Memory profiling when summary output grows or retains large intermediate arrays."
+      ],
+      "promotion_blockers": [
+        "No native support for rich model cards, uncertainty reports, covariates, or event splits.",
+        "No documented profiling dossier for expanded summary payloads."
+      ]
+    },
+    {
+      "operation": "summarize_model",
+      "model_slice": "bass_and_other_model_families",
+      "current_owner": "python_bridge",
+      "fallback_status": "python_bridge_default",
+      "native_scope": "None.",
+      "fallback_scope": "Wrapper methods dispatch to the Python bridge.",
+      "python_reference_scope": "Python reference implementations own summary semantics.",
+      "profiling_requirements": [
+        "Profile only after a concrete Rust-native candidate slice is identified."
+      ],
+      "promotion_blockers": [
+        "No Rust-native implementation.",
+        "Summary schema parity and diagnostics mapping are not stabilized for Rust ownership."
+      ]
+    },
+    {
+      "operation": "diagnose_model",
+      "model_slice": "logistic_simple_fitted_state",
+      "current_owner": "rust_native",
+      "fallback_status": "native_default_python_bridge_fallback",
+      "native_scope": "Simple fitted logistic states with explicit observed and time arrays and deterministic diagnostics fields.",
+      "fallback_scope": "Unsupported payload shapes and non-native families fall back through the Python bridge from wrapper methods.",
+      "python_reference_scope": "Rich residual diagnostics, calibration workflows, posterior diagnostics, and optional backend diagnostics remain Python reference owned.",
+      "profiling_requirements": [
+        "Criterion benchmark coverage for native logistic diagnostics.",
+        "CPU flamegraph before widening the native diagnostics slice.",
+        "Memory profiling for allocation-sensitive residual or metric expansion."
+      ],
+      "promotion_blockers": [
+        "No native support for rich residual diagnostics, posterior diagnostics, covariates, or event splits.",
+        "No documented XLA eligibility decision for vectorized diagnostic metrics."
+      ]
+    },
+    {
+      "operation": "diagnose_model",
+      "model_slice": "bass_and_other_model_families",
+      "current_owner": "python_bridge",
+      "fallback_status": "python_bridge_default",
+      "native_scope": "None.",
+      "fallback_scope": "Wrapper methods dispatch to the Python bridge.",
+      "python_reference_scope": "Python reference implementations own diagnostics semantics.",
+      "profiling_requirements": [
+        "Profile only after a concrete Rust-native candidate slice is identified."
+      ],
+      "promotion_blockers": [
+        "No Rust-native implementation.",
+        "Diagnostics schema parity and stable error mapping are not finalized for Rust ownership."
+      ]
+    },
+    {
+      "operation": "all_kernel_operations",
+      "model_slice": "probabilistic_runtimes_uncertainty_and_python_object_internals",
+      "current_owner": "python_reference",
+      "fallback_status": "python_reference_only",
+      "native_scope": "None.",
+      "fallback_scope": "No Rust fallback should be added until the relevant request and response schemas are stable.",
+      "python_reference_scope": "Python remains the semantic authority for optional probabilistic runtimes, uncertainty reports, backend-specific diagnostics, and behavior that relies on Python object identity.",
+      "profiling_requirements": [
+        "Document XLA eligibility or rejection before proposing Rust-native ownership.",
+        "Add parity, schema, error mapping, CPU benchmark, and memory evidence before promotion."
+      ],
+      "promotion_blockers": [
+        "Stable schema boundary is not defined.",
+        "Parity and profiling evidence does not exist.",
+        "Binding smoke coverage is not available for promoted defaults."
+      ]
+    }
+  ]
+}

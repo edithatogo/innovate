@@ -50,3 +50,18 @@ def test_rust_crate_includes_and_documents_profiling_files() -> None:
         assert package_file in readme
 
     assert "crate package intentionally includes the profiling surface" in readme
+
+
+def test_rust_migration_inventory_docs_are_deliberately_docs_only() -> None:
+    """Migration inventory docs should stay out of the crates.io package."""
+    cargo = tomllib.loads(Path("bindings/rust/Cargo.toml").read_text())
+    readme = Path("bindings/rust/README.md").read_text()
+    normalized_readme = " ".join(readme.split())
+
+    include = set(cargo["package"]["include"])
+
+    assert "docs/**" not in include
+    assert "docs/source/**" not in include
+    assert "docs/source/rust_core_roadmap.rst" in readme
+    assert "deliberately docs-only repository documentation" in normalized_readme
+    assert "not included in the crate package" in normalized_readme

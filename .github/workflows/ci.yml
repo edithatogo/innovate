@@ -259,6 +259,14 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Validate Rust migration inventory
+        working-directory: bindings/rust
+        run: |
+          test -s inst/discovery_manifest.json
+          python3 -m json.tool inst/discovery_manifest.json >/tmp/innovate-rs-discovery-manifest.json
+          test -s ../../docs/source/_static/rust_core_migration_inventory.json
+          python3 -m json.tool ../../docs/source/_static/rust_core_migration_inventory.json >/tmp/innovate-rs-core-migration-inventory.json
+
       - name: Check Rust benchmark and profiling targets compile
         working-directory: bindings/rust
         run: cargo check --benches --examples
@@ -277,6 +285,7 @@ jobs:
           cargo package --list | tee /tmp/innovate-rs-benchmark-package-files.txt
           grep -F "benches/native_kernel.rs" /tmp/innovate-rs-benchmark-package-files.txt
           grep -F "examples/profile_memory_native_kernels.rs" /tmp/innovate-rs-benchmark-package-files.txt
+          grep -F "inst/discovery_manifest.json" /tmp/innovate-rs-benchmark-package-files.txt
           grep -F "scripts/profile_native_kernels.sh" /tmp/innovate-rs-benchmark-package-files.txt
           grep -F "scripts/profile_memory_native_kernels.sh" /tmp/innovate-rs-benchmark-package-files.txt
 

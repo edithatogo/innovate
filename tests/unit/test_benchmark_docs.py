@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 
@@ -44,10 +45,32 @@ def test_rust_benchmark_ci_job_is_documented() -> None:
     workflow = Path(".github/workflows/ci.yml").read_text()
 
     assert "rust-benchmarks" in workflow
+    assert "Validate Rust migration inventory" in workflow
+    assert "python3 -m json.tool inst/discovery_manifest.json" in workflow
+    assert "python3 -m json.tool ../../docs/source/_static/rust_core_migration_inventory.json" in workflow
     assert "cargo check --benches --examples" in workflow
     assert "cargo bench --bench native_kernel --no-run" in workflow
     assert "cargo check --example profile_memory_native_kernels" in workflow
     assert "cargo package --list" in workflow
+
+
+def test_rust_migration_inventory_is_machine_readable() -> None:
+    """The Rust migration inventory should remain present and JSON-decodable."""
+    inventory_path = Path("docs/source/_static/rust_core_migration_inventory.json")
+
+    assert inventory_path.is_file()
+    inventory = json.loads(inventory_path.read_text())
+    assert isinstance(inventory, dict)
+    assert inventory["schema_version"] == 1
+    assert set(inventory["owner_values"]) == {"rust_native", "python_bridge", "python_reference"}
+    assert {entry["operation"] for entry in inventory["inventory"]} >= {
+        "discover_models",
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model",
+    }
 
 
 def test_rust_profiling_surfaces_are_packaged() -> None:
@@ -57,10 +80,12 @@ def test_rust_profiling_surfaces_are_packaged() -> None:
 
     assert '"benches/**"' in cargo
     assert '"examples/**"' in cargo
+    assert '"inst/**"' in cargo
     assert '"scripts/**"' in cargo
 
     assert "benches/native_kernel.rs" in workflow
     assert "examples/profile_memory_native_kernels.rs" in workflow
+    assert "inst/discovery_manifest.json" in workflow
     assert "scripts/profile_native_kernels.sh" in workflow
     assert "scripts/profile_memory_native_kernels.sh" in workflow
 
