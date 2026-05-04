@@ -1,0 +1,20 @@
+Track: R Package PDF Manual and Vignette Publication Quality Gate
+
+Summary:
+- Added CRAN-style R PDF manual generation gates in CI and binding publication workflows with TinyTeX setup and versioned artifacts.
+- Completed R Rd coverage with package-level documentation and static exported-alias tests.
+- Added a buildable, network-free R vignette with live kernel calls guarded by INNOVATE_R_VIGNETTE_RUN_KERNEL.
+- Added R metadata for vignette builds, artifact exclusion policy, CRAN comments, and release docs.
+- Recorded six-agent ownership and standards audit notes in the Conductor track.
+
+Validation:
+- uv run pytest tests/unit/test_r_package_pdf_manual.py tests/unit/test_binding_publication_ci.py tests/unit/test_conductor_workflow_docs.py tests/unit/test_prose_lint_docs.py -q
+- uv run ruff check . && uv run ruff format --check .
+- Rscript tools::checkRd over bindings/r/man/*.Rd
+- R CMD build bindings/r --no-manual
+- R CMD Rd2pdf --no-preview --output=/tmp/innovate.R_manual_check.pdf bindings/r
+- R CMD check --as-cran --no-manual innovate.R_0.5.0.tar.gz
+- uv run python -m sphinx -b html docs/source /tmp/innovate-docs-r-manual-track
+
+Known local limitation:
+- actionlint was not installed locally; workflow linting will be covered by CI.
