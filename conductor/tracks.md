@@ -253,3 +253,43 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Rust Core Ownership Closure and Remaining Slice Inventory** *(Completed)*
   *Link: [./archive/rust_core_ownership_closure_20260506/](./archive/rust_core_ownership_closure_20260506/)*
+
+---
+
+- [x] **Track: Scientific and HPC Ecosystem Readiness Roadmap** *(Completed)*
+  *Link: [./archive/scientific_hpc_ecosystem_readiness_20260507/](./archive/scientific_hpc_ecosystem_readiness_20260507/)*
+
+---
+
+- [ ] **Track: Community Submission Readiness Matrix**
+  *Link: [./tracks/community_submission_readiness_20260507/](./tracks/community_submission_readiness_20260507/)*
+
+---
+
+- [ ] **Track: HPC Packaging and Registry Readiness**
+  *Link: [./tracks/hpc_packaging_registry_readiness_20260507/](./tracks/hpc_packaging_registry_readiness_20260507/)*
+
+---
+
+- [ ] **Track: Accelerator and Parallel Execution Evidence**
+  *Link: [./tracks/accelerator_parallel_execution_evidence_20260507/](./tracks/accelerator_parallel_execution_evidence_20260507/)*
+
+---
+
+- [ ] **Track: Rust Core Migration Execution Plan**
+  *Link: [./tracks/rust_core_migration_execution_20260507/](./tracks/rust_core_migration_execution_20260507/)*
+
+---
+
+- [ ] **Track: ABI and Binary Compatibility Strategy**
+  *Link: [./tracks/abi_binary_compatibility_strategy_20260507/](./tracks/abi_binary_compatibility_strategy_20260507/)*
+
+---
+
+- [ ] **Track: Polyglot Repository and Documentation Architecture**
+  *Link: [./tracks/polyglot_docs_repo_architecture_20260507/](./tracks/polyglot_docs_repo_architecture_20260507/)*
+
+---
+
+- [ ] **Track: External Governance and Sustainability Dossier**
+  *Link: [./tracks/external_governance_sustainability_20260507/](./tracks/external_governance_sustainability_20260507/)*

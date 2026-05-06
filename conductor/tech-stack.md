@@ -31,6 +31,8 @@
 - **Go toolchain / versioned Go modules** — Go module tooling and release-tag publication path for Go binding validation
 - **.NET 10 and .NET 11 SDKs / NuGet** — Supported C# binding toolchains and
   package publication target
+- **Spack / EasyBuild** — Planned HPC packaging targets for reproducible
+  cluster installs, module sanity checks, and dependency-variant evidence
 
 ## Core Libraries
 - **NumPy** — Reference numerical backend and Array API baseline
@@ -42,6 +44,8 @@
 ## Portability and Interchange Standards
 - **Python Array API standard** — Numerical portability target for durable kernel semantics
 - **Apache Arrow** — Durable columnar and tabular interchange boundary for kernel payloads and future non-Python bindings
+- **Arrow C Data Interface** — Candidate native ABI boundary for future
+  process and language crossings where binary compatibility is required
 - **Polars** — Optional ETL and benchmark-ingestion engine; not part of the stable public API contract
 
 ## Advanced Computation
@@ -90,6 +94,8 @@
 - **DHAT** — Rust heap profiling for allocation-sensitive native kernel paths
 - **JAX/XLA device profilers** — GPU profiling remains attached to optional
   JAX/XLA backends until Rust owns a promoted native GPU execution backend
+- **HPC packaging evidence** — Planned Spack, EasyBuild, HPSF, and E4S
+  readiness evidence for CPU, GPU/XLA, and mixed Rust/Python deployment paths
 
 ## Runtime Observability
 - **logging** — Python runtime logging for library code and bridge diagnostics;

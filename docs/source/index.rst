@@ -22,6 +22,7 @@ Start here
    remote_execution
    xla_backend_strategy
    rust_core_roadmap
+   scientific_hpc_readiness_roadmap
    binding_publication_ci
    release_notes_policy
    tutorials
@@ -43,6 +44,7 @@ The architectural rationale and roadmap live in the repository docs, not in the 
 - ``remote_execution``
 - ``xla_backend_strategy``
 - ``rust_core_roadmap``
+- ``scientific_hpc_readiness_roadmap``
 - ``adr``
 
 This page is the canonical landing page for the Sphinx site. For a shorter overview and install instructions, see the project README.
