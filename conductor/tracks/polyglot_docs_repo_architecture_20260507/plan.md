@@ -10,13 +10,13 @@
     - [x] HPC docs
 - [x] Task: Conductor - Automated Review and Checkpoint 'Audit current organization' (Protocol in workflow.md) [cebeaee]
 
-## Phase 2: Propose target architecture
+## Phase 2: Propose target architecture [checkpoint: e26403a]
 
 - [x] Task: Add docs and repo architecture proposal [3431339]
     - [x] Navigation design
     - [x] Ownership map
     - [x] Migration and redirect rules
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Propose target architecture' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Propose target architecture' (Protocol in workflow.md) [e26403a]
 
 ## Phase 3: Validate navigation
 
