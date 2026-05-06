@@ -4,8 +4,9 @@
 
 - [ ] Task: Review the official Starlight package and plugin references
     - [ ] Confirm the current target `@astrojs/starlight` version
-    - [ ] Confirm the current versions of the approved plugins
+    - [ ] Confirm the current versions of `starlight-versions`, `starlight-links-validator`, and `@astrojs/starlight-docsearch`
     - [ ] Capture which plugins are required versus optional
+    - [ ] Record whether DocSearch is selected or left as a future option
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Confirm the Starlight baseline' (Protocol in workflow.md)
 
 ## Phase 2: Update the roadmap and stack docs

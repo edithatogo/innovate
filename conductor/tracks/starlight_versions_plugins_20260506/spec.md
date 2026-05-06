@@ -15,13 +15,18 @@ The goal is to make the docs roadmap specific enough that future Starlight work 
    - versioned documentation
    - internal link validation
    - search integration
-5. Keep the roadmap wording aligned with the repo's Conductor model: roadmap items should be actionable, testable, and easy to archive when complete.
+5. Treat the initial plugin shortlist as:
+   - `starlight-versions` for versioned documentation navigation
+   - `starlight-links-validator` for internal link validation
+   - `@astrojs/starlight-docsearch` as the search-provider option if Algolia DocSearch is selected
+6. Keep the roadmap wording aligned with the repo's Conductor model: roadmap items should be actionable, testable, and easy to archive when complete.
 
 ## Non-Functional Requirements
 
 1. The change should stay documentation-focused.
 2. Any version references must be easy to update when the ecosystem releases new compatible versions.
 3. The docs should not over-specify plugins that are not needed for the current roadmap.
+4. The roadmap should distinguish the core Starlight package from optional plugins and clearly call out any provider-dependent choices such as DocSearch.
 
 ## Acceptance Criteria
 
@@ -29,6 +34,7 @@ The goal is to make the docs roadmap specific enough that future Starlight work 
 2. The approved plugin set is documented with a short rationale for each entry.
 3. The documentation distinguishes required plugins from optional or future candidates.
 4. The related Conductor track can be reviewed and archived cleanly.
+5. The roadmap names the current Starlight version and the initial plugin shortlist explicitly.
 
 ## Out of Scope
 
