@@ -65,4 +65,4 @@ def test_noxfile_exposes_expected_sessions_and_version_matrix() -> None:
 
     assert assignments["SUPPORTED_PYTHONS"] == SUPPORTED_PYTHONS
     assert assignments["DEFAULT_PYTHON"] == "3.12"
-    assert {"tests", "optional_backends", "lint", "types", "docs", "package"}.issubset(sessions)
+    assert {"tests", "optional_backends", "lint", "types", "docs", "package", "version_sync"}.issubset(sessions)

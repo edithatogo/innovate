@@ -57,6 +57,8 @@ keeps package manifests aligned with that source through
   manifests to match the canonical version during a version bump.
 * The script covers the Python, Julia, Rust, R, and C# package manifests so
   maintainers do not have to hand-edit the same version in multiple places.
+* ``nox -s version_sync`` runs the same guard locally, and ``nox -s version_sync
+  -- --write`` rewrites the supported manifests during release prep.
 
 Drift Guards
 ------------

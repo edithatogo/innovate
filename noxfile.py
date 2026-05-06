@@ -32,7 +32,7 @@ PUBLIC_API_TYPE_TARGETS = (
 )
 
 nox.options.default_venv_backend = "none"
-nox.options.sessions = ("lint", "types", "tests", "docs", "package")
+nox.options.sessions = ("lint", "types", "tests", "docs", "package", "version_sync")
 
 
 def _run_uv(session: nox.Session, *args: str, env: dict[str, str] | None = None) -> None:
@@ -129,3 +129,14 @@ def package(session: nox.Session) -> None:
     _run_uv(session, "build", *session.posargs)
     _run_uv(session, "run", "twine", "check", "dist/*")
     _run_uv(session, "run", "check-wheel-contents", "dist/*.whl")
+
+
+@nox.session(python=False)
+def version_sync(session: nox.Session) -> None:
+    """Check or rewrite release-version metadata across package manifests."""
+    _run_uv(session, "sync", "--python", DEFAULT_PYTHON)
+    script = "scripts/sync_versions.py"
+    if "--write" in session.posargs:
+        _run_uv(session, "run", "python", script, "--write")
+        return
+    _run_uv(session, "run", "python", script, "--check")
