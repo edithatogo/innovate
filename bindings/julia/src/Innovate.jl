@@ -37,13 +37,44 @@ Base.showerror(io::IO, error::KernelBridgeError) = print(
 )
 
 """Return the repository root that contains the shared kernel and bindings."""
-kernel_repo_root() = normpath(joinpath(@__DIR__, "..", "..", ".."))
+function _kernel_repo_root_from(start_path::AbstractString)
+    current = normpath(start_path)
+    while true
+        if isfile(joinpath(current, "src", "innovate", "kernel.py")) &&
+           isfile(joinpath(current, "bindings", "julia", "Project.toml"))
+            return current
+        end
+
+        parent = normpath(joinpath(current, ".."))
+        if parent == current
+            return nothing
+        end
+        current = parent
+    end
+end
+
+kernel_repo_root_or_nothing() = _kernel_repo_root_from(@__DIR__)
+
+function kernel_repo_root()
+    repo_root = kernel_repo_root_or_nothing()
+    repo_root === nothing && throw(ArgumentError(
+        "Julia checkout root not found; set INNOVATE_PYTHON_COMMAND and install the Python innovate package for installed-package use.",
+    ))
+    return repo_root
+end
 
 """Return the Julia bindings package root."""
 kernel_bindings_root() = normpath(joinpath(@__DIR__, ".."))
 
 """Return the Python launcher used by the Julia bindings."""
-kernel_python_command() = get(ENV, "INNOVATE_PYTHON_COMMAND", "uv run python")
+function kernel_python_command()
+    command = get(ENV, "INNOVATE_PYTHON_COMMAND", "")
+    if !isempty(command)
+        return command
+    end
+
+    return kernel_repo_root_or_nothing() === nothing ? (Sys.iswindows() ? "python" : "python3") : "uv run python"
+end
 
 """Return the path to the Python kernel bridge entrypoint."""
 kernel_bridge_script() = joinpath(kernel_bindings_root(), "inst", "python", "kernel_bridge.py")
@@ -108,15 +139,28 @@ end
 function kernel_call(request::AbstractDict)
     request_path = tempname() * ".json"
     response_path = tempname() * ".json"
+    repo_root = kernel_repo_root_or_nothing()
 
     try
         open(request_path, "w") do io
             write(io, JSON.json(_jsonify(request)))
         end
 
-        withenv("PYTHONPATH" => joinpath(kernel_repo_root(), "src")) do
-            cd(kernel_repo_root()) do
-                run(_kernel_bridge_raw_command(request_path, response_path))
+        if repo_root === nothing
+            run(_kernel_bridge_raw_command(request_path, response_path))
+        else
+            repo_pythonpath = joinpath(repo_root, "src")
+            existing_pythonpath = get(ENV, "PYTHONPATH", "")
+            merged_pythonpath = isempty(existing_pythonpath) ? repo_pythonpath : string(
+                repo_pythonpath,
+                Sys.iswindows() ? ";" : ":",
+                existing_pythonpath,
+            )
+
+            withenv("PYTHONPATH" => merged_pythonpath) do
+                cd(repo_root) do
+                    run(_kernel_bridge_raw_command(request_path, response_path))
+                end
             end
         end
 

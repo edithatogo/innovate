@@ -221,5 +221,15 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
+- [x] **Track: Rust Bass Promotion Evidence and Benchmark Coverage** *(Completed)*
+  *Link: [./archive/rust_bass_promotion_evidence_20260506/](./archive/rust_bass_promotion_evidence_20260506/)*
+
+---
+
+- [x] **Track: Julia Installed-Package Bridge Runtime Readiness** *(Completed)*
+  *Link: [./archive/julia_installed_bridge_runtime_20260506/](./archive/julia_installed_bridge_runtime_20260506/)*
+
+---
+
 - [x] **Track: Release Notes and R Artifact Documentation Synchronization** *(Completed)*
   *Link: [./archive/release_notes_r_artifact_docs_sync_20260505/](./archive/release_notes_r_artifact_docs_sync_20260505/)*

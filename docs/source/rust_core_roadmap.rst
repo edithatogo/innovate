@@ -227,6 +227,9 @@ binding smoke evidence, and a regression threshold that CI or release checks can
 enforce. Use
 :download:`rust_core_promotion_dossier_example.json <_static/rust_core_promotion_dossier_example.json>`
 as the machine-readable template/example for a current Rust-native slice.
+Use
+:download:`rust_core_promotion_dossier_bass_example.json <_static/rust_core_promotion_dossier_bass_example.json>`
+for the current Bass native slice.
 
 Binding policy
 --------------

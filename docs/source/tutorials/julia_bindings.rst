@@ -8,18 +8,20 @@ normalizes the results into Julia-friendly data structures.
 Installation
 ------------
 
-From the repository root, instantiate the Julia environment and run the package tests:
+For checkout development, instantiate the Julia environment and run the package tests:
 
 .. code-block:: bash
 
    julia --project=bindings/julia -e 'using Pkg; Pkg.instantiate()'
    julia --project=bindings/julia bindings/julia/test/runtests.jl
 
-The binding uses `uv run python` by default. If your environment requires a different launcher, set
-the `INNOVATE_PYTHON_COMMAND` environment variable before calling into the package.
+In a repository checkout the binding uses `uv run python` by default. In an installed-package
+context it uses `INNOVATE_PYTHON_COMMAND` when provided, or `python3` when no override is set.
+The Julia package only prepends `PYTHONPATH` with the repository `src/` directory when a checkout
+is detected.
 
-Basic usage
------------
+Checkout example
+----------------
 
 .. code-block:: julia
 
@@ -46,21 +48,24 @@ Basic usage
 The same pattern works for `predict_model`, `simulate_model`, `summarize_model`, and
 `diagnose_model`.
 
+Installed-package usage is validated by the smoke script in `bindings/julia/test/installed_package_smoke.jl`.
+
 Compatibility and drift checks
 ------------------------------
 
 The Julia package keeps its schema version aligned with the Python kernel contract. The automated
 test suite checks that the Julia and Python schema version constants match, and it also exercises
-the end-to-end example in `bindings/julia/examples/end_to_end.jl` during package tests.
+the end-to-end example in `bindings/julia/examples/end_to_end.jl` during package tests. A separate
+installed-package smoke script is used for registry readiness.
 
 Support boundaries
 ------------------
 
 - The Julia layer remains thin and contract-driven.
 - Only the stable kernel operations are wrapped.
-- The package is intended for Julia General registry installation once the
-  Python backend dependency path is packaged. For the monorepo layout, use
-  Registrator with ``subdir=bindings/julia`` and expect manual review unless a
-  dedicated ``Innovate.jl`` repository is used.
+- The package supports Julia General registry installation, with
+  installed-package smoke validation in CI and publish gates.
+  For the monorepo layout, use Registrator with ``subdir=bindings/julia`` and
+  expect manual review unless a dedicated ``Innovate.jl`` repository is used.
 - Future Arrow-based interchange work will extend the same contract boundary rather than replacing
   it with Julia-native model logic.

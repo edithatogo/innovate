@@ -7,7 +7,7 @@ using Innovate
         Innovate.kernel_bridge_script(),
         joinpath("inst", "python", "kernel_bridge.py")
     )
-    @test Innovate.kernel_python_command() == "uv run python"
+    @test Innovate.kernel_python_command() == get(ENV, "INNOVATE_PYTHON_COMMAND", "uv run python")
 
     request = Innovate.kernel_request(operation = "discover_models")
     @test request["schema_version"] == "1.0"

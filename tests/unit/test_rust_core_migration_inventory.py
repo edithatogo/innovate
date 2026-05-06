@@ -16,7 +16,9 @@ CANONICAL_OPERATIONS = {
 }
 INVENTORY_PATH = Path("docs/source/_static/rust_core_migration_inventory.json")
 DOSSIER_PATH = Path("docs/source/_static/rust_core_promotion_dossier_example.json")
+BASS_DOSSIER_PATH = Path("docs/source/_static/rust_core_promotion_dossier_bass_example.json")
 ROADMAP_PATH = Path("docs/source/rust_core_roadmap.rst")
+BENCH_PATH = Path("bindings/rust/benches/native_kernel.rs")
 REQUIRED_ENTRY_FIELDS = {
     "operation",
     "model_slice",
@@ -38,6 +40,11 @@ def load_inventory() -> dict[str, Any]:
 def load_dossier() -> dict[str, Any]:
     """Load the Rust promotion dossier example artifact."""
     return json.loads(DOSSIER_PATH.read_text())
+
+
+def load_bass_dossier() -> dict[str, Any]:
+    """Load the Bass-specific Rust promotion dossier example artifact."""
+    return json.loads(BASS_DOSSIER_PATH.read_text())
 
 
 def normalized_text(path: Path) -> str:
@@ -177,3 +184,28 @@ def test_rust_promotion_dossier_example_records_required_evidence_sections() -> 
     assert "Rust-native CPU runtime" in dossier["xla_gpu_eligibility"]["required_comparison_when_eligible"]
     assert "python_bridge_fallback_requests" in dossier["fallback_rate"]["metrics"]
     assert {"rust", "python"} <= set(dossier["binding_smoke"]["required_bindings"])
+
+
+def test_rust_bass_promotion_dossier_example_records_bass_evidence() -> None:
+    """The Bass promotion dossier example should point at the Bass native slice."""
+    dossier = load_bass_dossier()
+
+    assert dossier["schema_version"] == 1
+    assert dossier["dossier_type"] == "rust_core_promotion_dossier"
+    assert dossier["evidence_state"] == "template_example_not_release_evidence"
+    assert dossier["slice"]["operation"] == "predict_model"
+    assert dossier["slice"]["model_slice"] == "bass_simple_fitted_state"
+    assert dossier["slice"]["current_owner"] == "rust_native"
+    assert "native_logistic_kernel/predict_model_native/bass" in dossier["cpu_benchmark"]["required_artifacts"][0]
+    assert "native_bass_prediction_matches_python_bridge_contract" in dossier["parity"]["test_evidence"][0]["command"]
+    assert "native_bass_reports_structured_errors_for_invalid_or_unsupported_shapes" in dossier["error_mapping"]["test_evidence"][1]["command"]
+
+
+def test_rust_native_benchmark_harness_includes_bass_cases() -> None:
+    """The Rust Criterion harness should benchmark the native Bass slice."""
+    bench = BENCH_PATH.read_text()
+
+    assert "fn bass_predict_request(binding: &KernelBinding) -> KernelRequest" in bench
+    assert "fn bass_simulate_request(binding: &KernelBinding) -> KernelRequest" in bench
+    assert 'BenchmarkId::new("predict_model_native", "bass")' in bench
+    assert 'BenchmarkId::new("simulate_model_native", "bass")' in bench

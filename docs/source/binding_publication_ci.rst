@@ -45,13 +45,15 @@ R
   must not be committed.
 
 Julia
-  Prepare the ``Innovate`` Julia package for Julia General registry submission
-  through the standard Registrator workflow after package naming, UUID
+  The ``Innovate`` Julia package is ready for Julia General registry submission
+  through the standard Registrator workflow once package naming, UUID
   ownership, and compatibility bounds are finalized. The user-facing suffix is
   ``innovate.jl``; the registered Julia package keeps the valid module/package
   name ``Innovate``. The project must pass
   ``Pkg.instantiate()`` and ``Pkg.test()``. Registry metadata must include
-  dependency compatibility bounds, including ``JSON`` and ``julia``.
+  dependency compatibility bounds, including ``JSON`` and ``julia``. Registry
+  readiness is validated by an installed-package smoke validation that runs the
+  bridge from a copied package tree.
 
 Go
   Publish ``innovate.go`` through Go modules by tagging releases that include
@@ -84,7 +86,8 @@ Every implemented binding needs a dedicated CI job in ``.github/workflows/ci.yml
 * TypeScript: ``npm run schema:check``, ``npm run typecheck``, ``npm test``,
   and ``npm pack --dry-run`` on the supported Node matrix
 * Go: ``go test ./...``
-* Julia: ``Pkg.instantiate()`` and ``runtests.jl`` or ``Pkg.test()``
+* Julia: ``Pkg.instantiate()`` and ``runtests.jl`` or ``Pkg.test()`` plus an
+  installed-package smoke validation step before publication
 * R: dependency installation, integration tests, ``R CMD build``, and
   ``R CMD check --as-cran``. Maintainers should also run
   ``R CMD Rd2pdf bindings/r --output=innovate.R-manual.pdf`` locally before
@@ -109,6 +112,11 @@ The release workflow also uploads
 from ``R CMD Rd2pdf`` so maintainers can inspect the PDF manual before
 R-universe or CRAN publication. Any bypass of vignette checks must be documented
 as a temporary maintainer exception, not treated as the normal publication path.
+
+For Julia, the release workflow runs an installed-package smoke step before the
+registry guidance message. The smoke step exercises a copied package tree,
+confirms ``inst/python/kernel_bridge.py`` is present, and calls the bridge
+through the configured Python launcher.
 
 For NuGet, the release workflow performs a dry-run style artifact gate before
 ``dotnet nuget push``: it packs ``innovate.cs``, requires both ``.nupkg``

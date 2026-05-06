@@ -107,7 +107,7 @@
       "fallback_scope": "Unsupported Bass payload shapes and non-native families fall back through the Python bridge from wrapper methods when the native path reports unsupported_native_operation.",
       "python_reference_scope": "Python remains authoritative for richer Bass prediction semantics and model-specific internals.",
       "profiling_requirements": [
-        "Add or maintain Criterion benchmark coverage for native Bass prediction before default expansion.",
+        "Criterion benchmark coverage for native Bass prediction is present and must be maintained before default expansion.",
         "CPU flamegraph for predict_model_native Bass slices before widening the native slice."
       ],
       "promotion_blockers": [
@@ -160,7 +160,7 @@
       "fallback_scope": "Unsupported Bass payload shapes and non-native families fall back through the Python bridge from wrapper methods when the native path reports unsupported_native_operation.",
       "python_reference_scope": "Python remains authoritative for richer Bass simulation semantics and model-specific internals.",
       "profiling_requirements": [
-        "Add or maintain Criterion benchmark coverage for native Bass simulation before default expansion.",
+        "Criterion benchmark coverage for native Bass simulation is present and must be maintained before default expansion.",
         "CPU flamegraph for simulate_model_native Bass slices before widening the native slice."
       ],
       "promotion_blockers": [

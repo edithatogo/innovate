@@ -124,6 +124,50 @@ fn logistic_diagnose_request(binding: &KernelBinding) -> KernelRequest {
     )
 }
 
+fn bass_predict_request(binding: &KernelBinding) -> KernelRequest {
+    binding.predict_model_request(
+        "bass",
+        json!({
+            "state": {
+                "model_key": "bass",
+                "model_name": "BassModel",
+                "constructor_kwargs": {},
+                "parameters": {
+                    "p": 0.03,
+                    "q": 0.38,
+                    "m": 120.0
+                },
+                "predict_kwargs": {}
+            },
+            "inputs": {
+                "time": [0.0, 0.8, 1.6, 2.4, 3.2, 4.0]
+            }
+        }),
+    )
+}
+
+fn bass_simulate_request(binding: &KernelBinding) -> KernelRequest {
+    binding.simulate_model_request(
+        "bass",
+        json!({
+            "state": {
+                "model_key": "bass",
+                "model_name": "BassModel",
+                "constructor_kwargs": {},
+                "parameters": {
+                    "p": 0.02,
+                    "q": 0.45,
+                    "m": 150.0
+                },
+                "predict_kwargs": {}
+            },
+            "inputs": {
+                "time": [0.0, 1.0, 2.0, 3.0, 4.0]
+            }
+        }),
+    )
+}
+
 fn bench_native_logistic_paths(c: &mut Criterion) {
     let binding = KernelBinding::new();
     let fit_request = logistic_fit_request(&binding);
@@ -131,6 +175,8 @@ fn bench_native_logistic_paths(c: &mut Criterion) {
     let simulate_request = logistic_simulate_request(&binding);
     let summary_request = logistic_summary_request(&binding);
     let diagnose_request = logistic_diagnose_request(&binding);
+    let bass_predict_request = bass_predict_request(&binding);
+    let bass_simulate_request = bass_simulate_request(&binding);
 
     let mut group = c.benchmark_group("native_logistic_kernel");
     group.sample_size(20);
@@ -179,6 +225,24 @@ fn bench_native_logistic_paths(c: &mut Criterion) {
             let response = binding
                 .diagnose_model_native(black_box(&diagnose_request))
                 .expect("native logistic diagnostics should succeed");
+            black_box(response);
+        })
+    });
+
+    group.bench_function(BenchmarkId::new("predict_model_native", "bass"), |b| {
+        b.iter(|| {
+            let response = binding
+                .predict_model_native(black_box(&bass_predict_request))
+                .expect("native Bass prediction should succeed");
+            black_box(response);
+        })
+    });
+
+    group.bench_function(BenchmarkId::new("simulate_model_native", "bass"), |b| {
+        b.iter(|| {
+            let response = binding
+                .simulate_model_native(black_box(&bass_simulate_request))
+                .expect("native Bass simulation should succeed");
             black_box(response);
         })
     });

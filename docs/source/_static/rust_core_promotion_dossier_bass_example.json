@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "dossier_type": "rust_core_promotion_dossier",
+  "evidence_state": "template_example_not_release_evidence",
+  "slice": {
+    "operation": "predict_model",
+    "model_slice": "bass_simple_fitted_state",
+    "current_owner": "rust_native",
+    "target_owner": "rust_native",
+    "fallback_status": "native_default_python_bridge_fallback",
+    "inventory_reference": "docs/source/_static/rust_core_migration_inventory.json"
+  },
+  "promotion_decision": {
+    "requested_decision": "keep_experimental",
+    "allowed_values": [
+      "keep_python_backed",
+      "keep_experimental",
+      "promote_rust_native",
+      "promote_xla_backed",
+      "keep_both_behind_runtime_capability_gates"
+    ],
+    "rationale": "Example dossier for the current Rust-native Bass prediction slice. Replace placeholder evidence before using this as a promotion record."
+  },
+  "parity": {
+    "status": "passing_in_current_slice",
+    "reference_owner": "python_reference",
+    "rust_entrypoint": "KernelBinding::predict_model_native",
+    "bridge_entrypoint": "KernelBinding::predict_model_via_bridge",
+    "test_evidence": [
+      {
+        "command": "cd bindings/rust && cargo test --test operations native_bass_prediction_matches_python_bridge_contract",
+        "expected_result": "Rust-native Bass values match Python bridge values within the test tolerance."
+      }
+    ],
+    "tolerance_policy": {
+      "numeric_values": "Use operation test tolerances for fitted-state prediction arrays.",
+      "schema_fields": "Require exact operation, model_key, schema_version, and stable result-field names."
+    },
+    "open_items": [
+      "Attach CI run URL or local run metadata for the release candidate."
+    ]
+  },
+  "schema_compatibility": {
+    "status": "passing_in_current_slice",
+    "schema_version_source": "src/innovate/kernel.py",
+    "rust_schema_constant": "bindings/rust/src/lib.rs::KERNEL_SCHEMA_VERSION",
+    "test_evidence": [
+      {
+        "command": "cd bindings/rust && cargo test --test schema_compatibility",
+        "expected_result": "Rust schema version and operation names match the Python kernel contract."
+      }
+    ],
+    "open_items": [
+      "Attach CI run URL or local run metadata for the release candidate."
+    ]
+  },
+  "error_mapping": {
+    "status": "partial_for_current_slice",
+    "stable_error_codes": [
+      "unsupported_native_operation",
+      "invalid_request",
+      "bridge_command_failed"
+    ],
+    "test_evidence": [
+      {
+        "command": "cd bindings/rust && cargo test --test operations native_fallback_paths_emit_tracing_events",
+        "expected_result": "Unsupported native payloads fall back through wrapper methods and emit tracing events."
+      },
+      {
+        "command": "cd bindings/rust && cargo test --test operations native_bass_reports_structured_errors_for_invalid_or_unsupported_shapes",
+        "expected_result": "Malformed Bass prediction requests return structured invalid_request or unsupported_native_operation errors."
+      }
+    ],
+    "open_items": [
+      "Add or cite explicit release-candidate invalid_request and fallback run metadata before broadening the slice."
+    ]
+  },
+  "cpu_benchmark": {
+    "status": "template_pending_release_measurement",
+    "benchmark_harness": "bindings/rust/benches/native_kernel.rs",
+    "required_commands": [
+      "cd bindings/rust && cargo bench --bench native_kernel",
+      "cd bindings/rust && scripts/profile_native_kernels.sh predict_model_native"
+    ],
+    "required_artifacts": [
+      "Criterion report for native_logistic_kernel/predict_model_native/bass",
+      "CPU flamegraph SVG",
+      "CPU flamegraph metadata sidecar"
+    ],
+    "metrics": {
+      "rust_native_p50_ns": null,
+      "rust_native_p95_ns": null,
+      "python_reference_p50_ns": null,
+      "python_reference_p95_ns": null,
+      "bridge_overhead_p50_ns": null,
+      "regression_threshold": "Fill with maximum accepted slowdown or minimum required speedup before promotion."
+    },
+    "open_items": [
+      "Record measured Criterion output and comparison baseline for the release candidate."
+    ]
+  },
+  "memory_profiling": {
+    "status": "template_pending_release_measurement",
+    "required_when": "Required when allocation behavior changes or the native slice is widened.",
+    "required_commands": [
+      "cd bindings/rust && scripts/profile_memory_native_kernels.sh"
+    ],
+    "required_artifacts": [
+      "DHAT heap profile JSON",
+      "Peak allocation and allocation-count summary"
+    ],
+    "metrics": {
+      "peak_bytes": null,
+      "total_allocations": null,
+      "allocation_regression_threshold": "Fill before promotion if memory evidence is required."
+    },
+    "open_items": [
+      "Record DHAT evidence or justify why memory profiling is not required for the release candidate."
+    ]
+  },
+  "xla_gpu_eligibility": {
+    "status": "not_promoted",
+    "xla_cpu_eligible": "candidate_for_large_static_batches",
+    "gpu_eligible": "not_current_rust_crate_responsibility",
+    "required_comparison_when_eligible": [
+      "XLA compile cost",
+      "XLA steady-state runtime",
+      "Rust-native CPU runtime",
+      "Dependency and deployment cost"
+    ],
+    "rationale": "Simple scalar fitted-state Bass prediction currently favors Rust-native CPU execution. Large batched prediction may require a separate XLA comparison dossier before default promotion."
+  },
+  "fallback_rate": {
+    "status": "template_pending_release_measurement",
+    "measurement_scope": "Public predict_model wrapper requests for the candidate release workload.",
+    "metrics": {
+      "total_requests": null,
+      "rust_native_requests": null,
+      "python_bridge_fallback_requests": null,
+      "fallback_rate": null
+    },
+    "required_evidence": [
+      "Tracing summary or test workload report showing unsupported_native_operation fallback frequency."
+    ],
+    "open_items": [
+      "Define the representative workload before using this dossier for promotion."
+    ]
+  },
+  "binding_smoke": {
+    "status": "template_pending_release_measurement",
+    "required_bindings": [
+      "rust",
+      "python",
+      "r",
+      "julia",
+      "typescript",
+      "go",
+      "csharp_when_available"
+    ],
+    "evidence": [
+      {
+        "binding": "rust",
+        "command": "cd bindings/rust && cargo test",
+        "expected_result": "Rust binding can call the promoted operation through the stable kernel contract."
+      },
+      {
+        "binding": "python",
+        "command": "uv run python -m pytest tests/unit/ -m 'not optional_backend'",
+        "expected_result": "Python reference surface remains compatible with the shared kernel contract."
+      }
+    ],
+    "open_items": [
+      "Attach smoke evidence for R, Julia, TypeScript, Go, and C# when the promoted default affects those bindings."
+    ]
+  },
+  "release_record": {
+    "release_candidate": null,
+    "git_revision": null,
+    "ci_run_url": null,
+    "reviewer": null,
+    "recorded_at": null
+  }
+}

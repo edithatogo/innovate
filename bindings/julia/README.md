@@ -4,7 +4,7 @@ This package is the Julia-facing adapter over the Python `innovate` functional k
 
 ## Installation
 
-From the repository root:
+For checkout development:
 
 ```bash
 julia --project=bindings/julia -e 'using Pkg; Pkg.instantiate()'
@@ -29,12 +29,13 @@ model logic in Julia.
 ## Backend expectations
 
 - Julia 1.12 or newer is required.
-- The bridge uses `uv run python` by default. Set `INNOVATE_PYTHON_COMMAND` if you need a
-  different Python launcher.
-- The Julia package automatically sets `PYTHONPATH` to the repository `src/` directory before
-  calling the shared kernel.
+- In a repository checkout the bridge uses `uv run python` by default.
+- In an installed-package context the bridge uses the configured Python launcher from
+  `INNOVATE_PYTHON_COMMAND`, or `python3` if no override is set.
+- The Julia package only prepends `PYTHONPATH` with the repository `src/` directory when a
+  checkout is detected.
 
-## Example workflow
+## Checkout example
 
 ```julia
 include(joinpath(@__DIR__, "src", "Innovate.jl"))
@@ -46,6 +47,8 @@ schema_version = kernel_schema_version()
 models = kernel_discover_models()
 ```
 
+Installed-package usage is validated by the smoke test in `test/installed_package_smoke.jl`.
+
 ## Compatibility
 
 The Julia bindings are intentionally thin and contract-driven. The Julia schema version is kept in
@@ -53,12 +56,12 @@ lockstep with the Python kernel version, and the automated test suite fails if t
 
 ## Registry readiness
 
-Julia General registration from this monorepo should use:
+Julia General registration from this monorepo uses:
 
 ```text
 @JuliaRegistrator register subdir=bindings/julia
 ```
 
-The package includes local license metadata and dependency compatibility bounds. The remaining
-registry blocker is the installed-package Python backend path: bridge operations require the Python
-`innovate` package to be available to the configured Python launcher.
+The package includes local license metadata and dependency compatibility bounds. Registry readiness
+is validated by an installed-package smoke test that can run the bridge against a configured Python
+environment with the Python `innovate` package available.

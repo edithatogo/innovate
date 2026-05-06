@@ -395,6 +395,19 @@ jobs:
       - name: Run Julia binding tests
         run: julia --project=bindings/julia bindings/julia/test/runtests.jl
 
+      - name: Run Julia installed-package smoke
+        if: matrix.julia-version == '1.12'
+        env:
+          INNOVATE_JULIA_RUN_BRIDGE_SMOKE: "true"
+          INNOVATE_JULIA_RUN_INSTALLED_PACKAGE_SMOKE: "true"
+          INNOVATE_PYTHON_COMMAND: "uv run --directory ${{ github.workspace }} python"
+        run: |
+          tmpdir="$(mktemp -d)"
+          cp -R bindings/julia "$tmpdir/Innovate"
+          rm -f "$tmpdir/Innovate/Manifest.toml"
+          cd "$tmpdir/Innovate"
+          julia --project=. -e 'using Pkg; Pkg.instantiate(); Pkg.test()'
+
   r-bindings:
     runs-on: ubuntu-latest
     steps:

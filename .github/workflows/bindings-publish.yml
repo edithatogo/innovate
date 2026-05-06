@@ -116,6 +116,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+      - name: Set up Python
+        run: uv python install 3.12
       - uses: julia-actions/setup-julia@v2
         with:
           version: "1.12"
@@ -126,10 +130,21 @@ jobs:
           grep -F 'uuid = "ffe8f1e4-c541-43d5-9f32-550aacc4f51a"' bindings/julia/Project.toml
           grep -F 'version = "0.5.0"' bindings/julia/Project.toml
           grep -F 'JSON = "0.21"' bindings/julia/Project.toml
-      - name: Julia General registry publication is planned
+      - name: Run Julia installed-package smoke
+        env:
+          INNOVATE_JULIA_RUN_BRIDGE_SMOKE: "true"
+          INNOVATE_JULIA_RUN_INSTALLED_PACKAGE_SMOKE: "true"
+          INNOVATE_PYTHON_COMMAND: "uv run --directory ${{ github.workspace }} python"
         run: |
-          echo "Use '@JuliaRegistrator register subdir=bindings/julia' after the Python backend dependency path is packaged."
-          echo "A dedicated Innovate.jl repository may be needed for Julia General AutoMerge; otherwise expect manual review."
+          tmpdir="$(mktemp -d)"
+          cp -R bindings/julia "$tmpdir/Innovate"
+          rm -f "$tmpdir/Innovate/Manifest.toml"
+          cd "$tmpdir/Innovate"
+          julia --project=. -e 'using Pkg; Pkg.instantiate(); Pkg.test()'
+      - name: Julia General registry publication gate
+        run: |
+          echo "Use '@JuliaRegistrator register subdir=bindings/julia' after the installed-package smoke passes."
+          echo "A dedicated Innovate.jl repository may still be needed for Julia General AutoMerge; otherwise expect manual review."
 
   go-module:
     runs-on: ubuntu-latest

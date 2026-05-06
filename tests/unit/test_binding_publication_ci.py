@@ -95,6 +95,7 @@ def test_ci_workflow_runs_implemented_language_bindings() -> None:
         "npm pack --dry-run",
         "go test ./...",
         "julia --project=bindings/julia",
+        "Run Julia installed-package smoke",
         "Rscript bindings/r/tests/run.R",
         "R CMD check --as-cran --no-manual innovate.R_*.tar.gz",
         "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj",
@@ -203,12 +204,40 @@ def test_julia_registry_metadata_has_compat_bounds() -> None:
     """Julia General registry readiness requires dependency compat bounds."""
     julia = tomllib.loads(Path("bindings/julia/Project.toml").read_text())
     workflow = Path(".github/workflows/bindings-publish.yml").read_text()
+    docs = Path("docs/source/binding_publication_ci.rst").read_text()
 
     assert julia["name"] == "Innovate"
     assert julia["uuid"] == "ffe8f1e4-c541-43d5-9f32-550aacc4f51a"
     assert julia["compat"]["julia"] == "1.12"
     assert julia["compat"]["JSON"] == "0.21"
     assert "Validate Julia registry metadata" in workflow
+    assert "Run Julia installed-package smoke" in workflow
+    assert "installed-package smoke validation" in docs
+
+
+def test_julia_installed_package_smoke_gate_runs_copied_package_bridge() -> None:
+    """Julia publication should exercise the copied-package installed smoke path."""
+    ci = Path(".github/workflows/ci.yml").read_text()
+    publish = Path(".github/workflows/bindings-publish.yml").read_text()
+    smoke = Path("bindings/julia/test/installed_package_smoke.jl").read_text()
+    runtests = Path("bindings/julia/test/runtests.jl").read_text()
+
+    for workflow in (ci, publish):
+        assert "Run Julia installed-package smoke" in workflow
+        assert 'INNOVATE_JULIA_RUN_BRIDGE_SMOKE: "true"' in workflow
+        assert 'INNOVATE_JULIA_RUN_INSTALLED_PACKAGE_SMOKE: "true"' in workflow
+        assert 'INNOVATE_PYTHON_COMMAND: "uv run --directory ${{ github.workspace }} python"' in workflow
+        assert 'cp -R bindings/julia "$tmpdir/Innovate"' in workflow
+        assert 'Pkg.instantiate(); Pkg.test()' in workflow
+
+    assert ci.index("Run Julia binding tests") < ci.index("Run Julia installed-package smoke")
+    assert publish.index("Validate Julia registry metadata") < publish.index("Run Julia installed-package smoke")
+    assert publish.index("Run Julia installed-package smoke") < publish.index("Julia General registry publication gate")
+    assert 'INNOVATE_JULIA_RUN_INSTALLED_PACKAGE_SMOKE", "false") == "true"' in runtests
+    assert 'include("installed_package_smoke.jl")' in runtests
+    assert "kernel_repo_root_or_nothing() === nothing" in smoke
+    assert "kernel_discover_models()" in smoke
+    assert 'record["key"] == "bass"' in smoke
 
 
 def test_go_module_release_gate_documents_submodule_tag_pattern() -> None:
