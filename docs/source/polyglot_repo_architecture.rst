@@ -35,6 +35,35 @@ Maintainers
   and the Conductor track archive. Maintainer material should record why a path
   exists, who owns it, and which release gate protects it.
 
+Target documentation architecture
+---------------------------------
+
+The target architecture is a docs-only reorganization around five stable entry
+points. It adds clearer navigation without renaming source directories or
+package surfaces.
+
+Core contract
+  Kernel, schema, stability, Arrow interchange, diagnostics, and API reference
+  pages explain behavior shared by every language.
+
+Binding packages
+  The bindings hub links to R, Rust, Julia, TypeScript, Go, and C# package
+  docs, then delegates package-manager details to
+  :doc:`binding_publication_ci`.
+
+HPC deployment
+  HPC material remains in readiness and strategy pages until Spack, EasyBuild,
+  scheduler, or accelerator artifacts are implemented by their own tracks.
+
+Submission evidence
+  Community submission material should link to stable docs, CI artifacts,
+  release notes, and archived Conductor evidence instead of duplicating those
+  sources.
+
+Maintainer decisions
+  ADRs, release policy, publication gates, and Conductor archive entries record
+  ownership decisions and migration rationale.
+
 Ownership map
 -------------
 
@@ -77,6 +106,13 @@ Ownership map
 
 Source-layout guidance
 ----------------------
+
+Repository layout decision
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Source tree moves are deferred. The current release needs documentation
+navigation and ownership clarity, not directory churn. Any later source move
+must be justified by a dedicated track with tests and redirect coverage.
 
 Keep the current source layout. The repository already separates concerns:
 

@@ -12,7 +12,7 @@
 
 ## Phase 2: Propose target architecture
 
-- [ ] Task: Add docs and repo architecture proposal
+- [~] Task: Add docs and repo architecture proposal
     - [ ] Navigation design
     - [ ] Ownership map
     - [ ] Migration and redirect rules

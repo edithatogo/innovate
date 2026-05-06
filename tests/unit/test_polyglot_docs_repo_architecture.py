@@ -64,3 +64,22 @@ def test_polyglot_architecture_records_layout_and_redirect_policy() -> None:
         "bindings/csharp/README.md",
     ):
         assert stable_path in docs
+
+
+def test_polyglot_architecture_proposes_target_navigation_without_source_moves() -> None:
+    """The target architecture should be explicit enough for future tracks."""
+    docs = DOC_PATH.read_text()
+
+    assert "Target documentation architecture" in docs
+    assert "Repository layout decision" in docs
+    assert "docs-only reorganization" in docs
+    assert "Source tree moves are deferred" in docs
+
+    for target_section in (
+        "Core contract",
+        "Binding packages",
+        "HPC deployment",
+        "Submission evidence",
+        "Maintainer decisions",
+    ):
+        assert target_section in docs
