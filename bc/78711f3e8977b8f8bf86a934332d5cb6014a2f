@@ -1,0 +1,7 @@
+Task: Map current source and docs ownership
+
+Summary: Added the polyglot repository architecture guide, primary docs navigation entry, and unit tests covering audience navigation, ownership maps, stable source-layout guidance, and redirect policy.
+
+Files: docs/source/polyglot_repo_architecture.rst; docs/source/index.rst; tests/unit/test_polyglot_docs_repo_architecture.py; conductor/tracks/polyglot_docs_repo_architecture_20260507/plan.md.
+
+Why: Establishes the current source/docs ownership map before proposing and validating target navigation.
