@@ -2,12 +2,12 @@
 
 ## Phase 1: Audit current organization
 
-- [~] Task: Map current source and docs ownership
-    - [ ] Core package
-    - [ ] Bindings
-    - [ ] Roadmaps
-    - [ ] Community dossiers
-    - [ ] HPC docs
+- [x] Task: Map current source and docs ownership [bc78711]
+    - [x] Core package
+    - [x] Bindings
+    - [x] Roadmaps
+    - [x] Community dossiers
+    - [x] HPC docs
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Audit current organization' (Protocol in workflow.md)
 
 ## Phase 2: Propose target architecture
