@@ -3,7 +3,7 @@
 ## Language
 - **Python** (>=3.10) — *3.8/3.9 dropped (EOL)*
 - **R** — Thin user-facing binding over the stable functional kernel contract
-- **Rust** — Current binding target and strategic long-term core runtime for selected kernel execution slices; the core is not fully Rust-owned yet
+- **Rust** — Current binding target and strategic long-term core runtime for selected kernel execution slices; the core is not fully Rust-owned yet, and the remaining ownership gap is tracked in Conductor as `Rust Core Ownership Closure and Remaining Slice Inventory`
 - **Julia** — Thin user-facing binding over the stable functional kernel contract
 - **TypeScript** — Thin user-facing binding over the stable functional kernel contract
 - **Go** — Thin user-facing binding over the stable functional kernel contract

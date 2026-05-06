@@ -248,3 +248,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Local Version Sync Nox Session** *(Completed)*
   *Link: [./archive/version_sync_nox_20260506/](./archive/version_sync_nox_20260506/)*
+
+---
+
+- [x] **Track: Rust Core Ownership Closure and Remaining Slice Inventory** *(Completed)*
+  *Link: [./archive/rust_core_ownership_closure_20260506/](./archive/rust_core_ownership_closure_20260506/)*

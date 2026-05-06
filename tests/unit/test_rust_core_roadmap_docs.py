@@ -283,10 +283,23 @@ def test_rust_core_roadmap_explicitly_rejects_full_rust_ownership() -> None:
         "Python reference owner",
         "exposes Rust-native execution only for the documented slices",
         "Unsupported native slices therefore remain",
+        "Rust Core Ownership Closure and Remaining Slice Inventory",
         "The core is therefore not entirely written in Rust yet",
         "Promotion remains operation by operation",
     ):
         assert phrase in roadmap
+
+
+def test_rust_core_roadmap_exposes_the_remaining_ownership_gap_track() -> None:
+    """The roadmap should point to the track that owns the residual gap."""
+    roadmap = normalized_text(ROADMAP)
+    tech_stack = Path("conductor/tech-stack.md").read_text()
+    registry = Path("conductor/tracks.md").read_text()
+
+    assert "remaining ownership gap is tracked" in roadmap
+    assert "residual bridge-backed slices and Python-only reference areas" in roadmap
+    assert "Rust Core Ownership Closure and Remaining Slice Inventory" in tech_stack
+    assert "Rust Core Ownership Closure and Remaining Slice Inventory" in registry
 
 
 def test_rust_core_roadmap_enumerates_python_bridge_fallback_inventory() -> None:
