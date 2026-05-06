@@ -236,5 +236,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Starlight Versions and Plugin Roadmap Alignment**
-  *Link: [./tracks/starlight_versions_plugins_20260506/](./tracks/starlight_versions_plugins_20260506/)*
+- [x] **Track: Starlight Versions and Plugin Roadmap Alignment** *(Completed)*
+  *Link: [./archive/starlight_versions_plugins_20260506/](./archive/starlight_versions_plugins_20260506/)*

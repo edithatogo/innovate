@@ -28,6 +28,30 @@ def test_rust_profiling_stack_records_cpu_memory_and_gpu_scope() -> None:
     assert "until Rust owns a promoted native GPU execution backend" in tech_stack
 
 
+def test_starlight_roadmap_track_records_versioned_plugin_baseline() -> None:
+    """The Starlight track should pin the current docs package baseline."""
+    tech_stack = Path("conductor/tech-stack.md").read_text()
+    spec = Path(
+        "conductor/archive/starlight_versions_plugins_20260506/spec.md"
+    ).read_text()
+    plan = Path(
+        "conductor/archive/starlight_versions_plugins_20260506/plan.md"
+    ).read_text()
+
+    assert "@astrojs/starlight" in tech_stack
+    assert "0.38.4" in tech_stack
+    assert "starlight-versions" in tech_stack
+    assert "0.5.4" in tech_stack
+    assert "starlight-links-validator" in tech_stack
+    assert "0.18.0" in tech_stack
+    assert "@astrojs/starlight-docsearch" in tech_stack
+    assert "0.6.1" in tech_stack
+    assert "starlight-versions" in spec
+    assert "starlight-links-validator" in spec
+    assert "@astrojs/starlight-docsearch" in spec
+    assert "Record whether DocSearch is selected or left as a future option" in plan
+
+
 def test_completed_archive_status_text_matches_metadata() -> None:
     """Completed Conductor archive indexes should not retain planned status text."""
     registry = Path("conductor/tracks.md").read_text()

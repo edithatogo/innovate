@@ -107,7 +107,7 @@
 - **sphinx-autodoc-typehints** — Type hint integration in docs
 - **MyST-Parser** — Markdown support for Sphinx
 - **intersphinx** — Cross-referencing with NumPy, SciPy, Pandas, Mesa docs
-- **Astro Starlight** — Planned documentation-site roadmap item for a future web docs surface; the track will pin an explicit `@astrojs/starlight` version plus the selected `starlight-versions`, `starlight-links-validator`, and search-provider plugin choices before implementation
+- **Astro Starlight** — Planned documentation-site roadmap item for a future web docs surface; the current target is `@astrojs/starlight` `0.38.4` with `starlight-versions` `0.5.4`, `starlight-links-validator` `0.18.0`, and optional `@astrojs/starlight-docsearch` `0.6.1` if Algolia DocSearch is chosen; this pinning will be revisited only when the roadmap track is updated
 
 ## Pre-commit & Git Hooks
 - **pre-commit** — Git hook management framework
