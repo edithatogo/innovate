@@ -156,6 +156,9 @@ jobs:
       - name: Validate nox session registry
         run: uv run nox --list
 
+      - name: Verify release version synchronization
+        run: uv run python scripts/sync_versions.py --check
+
       - name: Run actionlint
         run: |
           bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)

@@ -117,6 +117,7 @@
 - **GitHub Actions** — Automated testing, linting, and deployment
 - **Renovate** — Automated dependency updates (replaces Dependabot)
 - **release-please** — Conventional-commit-driven releases and changelogs
+- **scripts/sync_versions.py** — Canonical release-version drift guard and manifest synchronizer backed by `pyproject.toml`
 - **Codecov** — Coverage reporting and PR comments
 - **Multi-language binding CI** — Dedicated GitHub Actions jobs for Rust, TypeScript, Go, Julia, and R binding validation
 - **Binding publication workflow** — Release-gated package checks and publication hooks for npm, crates.io, R, Julia, Go modules, and planned NuGet support

@@ -1,0 +1,8 @@
+{
+  "track_id": "release_version_sync_20260506",
+  "type": "chore",
+  "status": "completed",
+  "created_at": "2026-05-06T08:28:09Z",
+  "updated_at": "2026-05-06T10:56:15Z",
+  "description": "Centralize repo versioning around a canonical release source and add automated sync checks across package manifests, docs, and CI."
+}

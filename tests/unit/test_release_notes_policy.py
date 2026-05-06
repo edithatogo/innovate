@@ -47,3 +47,13 @@ def test_release_policy_is_in_docs_toctree() -> None:
     index = Path("docs/source/index.rst").read_text()
 
     assert "release_notes_policy" in index
+
+
+def test_release_notes_policy_mentions_version_sync_guard() -> None:
+    """Release policy should explain the canonical version sync path."""
+    policy = Path("docs/source/release_notes_policy.rst").read_text()
+
+    assert "Version Synchronization" in policy
+    assert "scripts/sync_versions.py" in policy
+    assert "--check" in policy
+    assert "--write" in policy

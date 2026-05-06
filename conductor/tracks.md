@@ -238,3 +238,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Starlight Versions and Plugin Roadmap Alignment** *(Completed)*
   *Link: [./archive/starlight_versions_plugins_20260506/](./archive/starlight_versions_plugins_20260506/)*
+
+---
+
+- [x] **Track: Canonical Release Version Sync and Drift Guard** *(Completed)*
+  *Link: [./archive/release_version_sync_20260506/](./archive/release_version_sync_20260506/)*

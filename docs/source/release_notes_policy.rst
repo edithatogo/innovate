@@ -44,10 +44,24 @@ aligned version and any language-specific caveats:
 * NuGet publishes ``innovate.cs`` with package metadata, readme, symbols, and
   target-framework notes for .NET 10 and .NET 11.
 
+Version Synchronization
+-----------------------
+
+The canonical release version comes from ``pyproject.toml``. The repository
+keeps package manifests aligned with that source through
+``scripts/sync_versions.py``:
+
+* ``python scripts/sync_versions.py --check`` fails CI when a supported package
+  manifest drifts from the canonical release version.
+* ``python scripts/sync_versions.py --write`` rewrites the supported package
+  manifests to match the canonical version during a version bump.
+* The script covers the Python, Julia, Rust, R, and C# package manifests so
+  maintainers do not have to hand-edit the same version in multiple places.
+
 Drift Guards
 ------------
 
 Static tests assert that the current package version appears in
-``CHANGELOG.md``, that this policy is linked from the Sphinx docs, and that
-release automation comments point back to this policy instead of claiming the
-policy is undefined.
+``CHANGELOG.md``, that this policy is linked from the Sphinx docs, that the
+version sync guard is documented, and that release automation comments point
+back to this policy instead of claiming the policy is undefined.

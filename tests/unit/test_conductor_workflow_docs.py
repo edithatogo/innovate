@@ -16,6 +16,7 @@ def test_python_task_runner_remains_uv_first() -> None:
     assert "**nox** — Python task orchestration" in tech_stack
     assert "`uv` is the canonical Python dependency manager" in workflow
     assert "`nox` provides the Python task layer" in workflow
+    assert "scripts/sync_versions.py" in tech_stack
 
 
 def test_rust_profiling_stack_records_cpu_memory_and_gpu_scope() -> None:
