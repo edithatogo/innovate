@@ -1,0 +1,7 @@
+Task: Add docs and repo architecture proposal
+
+Summary: Expanded the polyglot architecture guide with target documentation entry points, a repository layout decision, and tests guarding the docs-only reorganization decision.
+
+Files: docs/source/polyglot_repo_architecture.rst; tests/unit/test_polyglot_docs_repo_architecture.py; conductor/tracks/polyglot_docs_repo_architecture_20260507/plan.md.
+
+Why: Makes the target architecture explicit while deferring source tree moves until a dedicated migration track exists.
