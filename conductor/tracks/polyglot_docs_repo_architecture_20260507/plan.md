@@ -12,10 +12,10 @@
 
 ## Phase 2: Propose target architecture
 
-- [~] Task: Add docs and repo architecture proposal
-    - [ ] Navigation design
-    - [ ] Ownership map
-    - [ ] Migration and redirect rules
+- [x] Task: Add docs and repo architecture proposal [3431339]
+    - [x] Navigation design
+    - [x] Ownership map
+    - [x] Migration and redirect rules
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Propose target architecture' (Protocol in workflow.md)
 
 ## Phase 3: Validate navigation
