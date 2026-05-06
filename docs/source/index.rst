@@ -23,6 +23,7 @@ Start here
    xla_backend_strategy
    rust_core_roadmap
    scientific_hpc_readiness_roadmap
+   polyglot_repo_architecture
    binding_publication_ci
    release_notes_policy
    tutorials
@@ -45,6 +46,7 @@ The architectural rationale and roadmap live in the repository docs, not in the 
 - ``xla_backend_strategy``
 - ``rust_core_roadmap``
 - ``scientific_hpc_readiness_roadmap``
+- ``polyglot_repo_architecture``
 - ``adr``
 
 This page is the canonical landing page for the Sphinx site. For a shorter overview and install instructions, see the project README.

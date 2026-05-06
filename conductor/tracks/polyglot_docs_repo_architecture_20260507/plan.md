@@ -2,7 +2,7 @@
 
 ## Phase 1: Audit current organization
 
-- [ ] Task: Map current source and docs ownership
+- [~] Task: Map current source and docs ownership
     - [ ] Core package
     - [ ] Bindings
     - [ ] Roadmaps
