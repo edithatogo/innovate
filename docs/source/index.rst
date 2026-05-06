@@ -23,6 +23,7 @@ Start here
    xla_backend_strategy
    rust_core_roadmap
    scientific_hpc_readiness_roadmap
+   community_submission_readiness
    polyglot_repo_architecture
    binding_publication_ci
    release_notes_policy
@@ -46,6 +47,7 @@ The architectural rationale and roadmap live in the repository docs, not in the 
 - ``xla_backend_strategy``
 - ``rust_core_roadmap``
 - ``scientific_hpc_readiness_roadmap``
+- ``community_submission_readiness``
 - ``polyglot_repo_architecture``
 - ``adr``
 

@@ -17,6 +17,9 @@ FOLLOW_ON_TRACKS = {
     "Polyglot Repository and Documentation Architecture": "polyglot_docs_repo_architecture_20260507",
     "External Governance and Sustainability Dossier": "external_governance_sustainability_20260507",
 }
+COMPLETED_FOLLOW_ON_TRACKS = {
+    "ABI and Binary Compatibility Strategy": "abi_binary_compatibility_strategy_20260507",
+}
 
 
 def test_scientific_hpc_readiness_roadmap_is_in_sphinx_navigation() -> None:
@@ -77,15 +80,26 @@ def test_scientific_hpc_follow_on_tracks_are_registered_and_parallel_ready() -> 
     assert "Dependency graph" in roadmap
 
     for title, track_id in FOLLOW_ON_TRACKS.items():
-        track_dir = Path("conductor/tracks") / track_id
+        completed = title in COMPLETED_FOLLOW_ON_TRACKS
+        track_dir = Path("conductor/archive" if completed else "conductor/tracks") / track_id
         metadata = json.loads((track_dir / "metadata.json").read_text())
         track_text = (track_dir / "spec.md").read_text() + (track_dir / "plan.md").read_text()
 
-        assert f"- [ ] **Track: {title}**" in registry
-        assert f"./tracks/{track_id}/" in registry
+        if completed:
+            assert f"- [x] **Track: {title}** *(Completed)*" in registry
+            assert f"./archive/{track_id}/" in registry
+        else:
+            assert (
+                f"- [ ] **Track: {title}**" in registry
+                or f"- [~] **Track: {title}**" in registry
+            )
+            assert f"./tracks/{track_id}/" in registry
         assert title in roadmap
         assert metadata["track_id"] == track_id
-        assert metadata["status"] == "new"
+        if completed:
+            assert metadata["status"] == "completed"
+        else:
+            assert metadata["status"] in {"new", "in_progress"}
         assert "Dependencies" in track_text
         assert "Parallelization" in track_text
         assert (track_dir / "index.md").is_file()

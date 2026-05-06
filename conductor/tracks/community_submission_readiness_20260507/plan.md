@@ -2,7 +2,7 @@
 
 ## Phase 1: Inventory submission standards
 
-- [ ] Task: Map each community target to reviewer evidence
+- [~] Task: Map each community target to reviewer evidence
     - [ ] Apache Arrow
     - [ ] PyPA and pyOpenSci
     - [ ] rOpenSci and R community
