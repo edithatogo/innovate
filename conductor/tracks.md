@@ -233,3 +233,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Release Notes and R Artifact Documentation Synchronization** *(Completed)*
   *Link: [./archive/release_notes_r_artifact_docs_sync_20260505/](./archive/release_notes_r_artifact_docs_sync_20260505/)*
+
+---
+
+- [ ] **Track: Starlight Versions and Plugin Roadmap Alignment**
+  *Link: [./tracks/starlight_versions_plugins_20260506/](./tracks/starlight_versions_plugins_20260506/)*

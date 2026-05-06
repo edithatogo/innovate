@@ -107,6 +107,7 @@
 - **sphinx-autodoc-typehints** — Type hint integration in docs
 - **MyST-Parser** — Markdown support for Sphinx
 - **intersphinx** — Cross-referencing with NumPy, SciPy, Pandas, Mesa docs
+- **Astro Starlight** — Planned documentation-site roadmap item for a future web docs surface; the track will pin an explicit `@astrojs/starlight` version plus the selected versioning, link-validation, and search plugins before implementation
 
 ## Pre-commit & Git Hooks
 - **pre-commit** — Git hook management framework
