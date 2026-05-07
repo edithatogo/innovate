@@ -26,6 +26,7 @@ C#
 Related core docs
 ------------------
 
+- :doc:`polyglot_repo_architecture`
 - :doc:`innovate.kernel`
 - :doc:`innovate.arrow_interchange`
 - :doc:`innovate.stability`

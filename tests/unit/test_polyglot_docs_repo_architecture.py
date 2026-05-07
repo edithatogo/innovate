@@ -83,3 +83,26 @@ def test_polyglot_architecture_proposes_target_navigation_without_source_moves()
         "Maintainer decisions",
     ):
         assert target_section in docs
+
+
+def test_polyglot_navigation_links_are_stable_and_bidirectional() -> None:
+    """Navigation tests should prove new sections and old paths stay reachable."""
+    bindings_hub = Path("docs/source/bindings.rst").read_text()
+    architecture = DOC_PATH.read_text()
+
+    assert "polyglot_repo_architecture" in bindings_hub
+    assert "docs/source/polyglot_repo_architecture.rst" in architecture
+
+    for stable_path in (
+        "docs/source/bindings.rst",
+        "docs/source/binding_publication_ci.rst",
+        "docs/source/scientific_hpc_readiness_roadmap.rst",
+        "docs/source/polyglot_repo_architecture.rst",
+        "bindings/r/README.md",
+        "bindings/rust/README.md",
+        "bindings/julia/README.md",
+        "bindings/typescript/README.md",
+        "bindings/go/README.md",
+        "bindings/csharp/README.md",
+    ):
+        assert Path(stable_path).exists(), stable_path

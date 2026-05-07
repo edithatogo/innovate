@@ -75,8 +75,8 @@ Ownership map
      - Canonical paths
      - Ownership rule
    * - Core package
-     - ``src/innovate/``, ``docs/source/innovate.kernel.rst``,
-       ``docs/source/api_reference.rst``
+     - ``src/innovate/``, ``docs/source/polyglot_repo_architecture.rst``,
+       ``docs/source/innovate.kernel.rst``, ``docs/source/api_reference.rst``
      - Python remains the reference user API while the functional kernel and
        schema contract define portable behavior.
    * - Language bindings
