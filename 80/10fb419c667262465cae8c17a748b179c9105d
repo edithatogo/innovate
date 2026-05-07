@@ -1,0 +1,9 @@
+Task: Add link and navigation tests
+
+Summary: Added a bidirectional navigation guard between the bindings hub and polyglot architecture guide, documented the architecture page as a stable path, and verified legacy docs/binding README paths still exist.
+
+Files: docs/source/bindings.rst; docs/source/polyglot_repo_architecture.rst; tests/unit/test_polyglot_docs_repo_architecture.py.
+
+Validation: uv run pytest tests/unit/test_polyglot_docs_repo_architecture.py -> 5 passed.
+
+Why: Completes the Phase 3 navigation stability acceptance criteria without moving source files.
