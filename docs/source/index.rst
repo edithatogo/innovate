@@ -22,6 +22,7 @@ Start here
    remote_execution
    xla_backend_strategy
    rust_core_roadmap
+   abi_binary_compatibility_strategy
    scientific_hpc_readiness_roadmap
    community_submission_readiness
    polyglot_repo_architecture
@@ -46,6 +47,7 @@ The architectural rationale and roadmap live in the repository docs, not in the 
 - ``remote_execution``
 - ``xla_backend_strategy``
 - ``rust_core_roadmap``
+- ``abi_binary_compatibility_strategy``
 - ``scientific_hpc_readiness_roadmap``
 - ``community_submission_readiness``
 - ``polyglot_repo_architecture``

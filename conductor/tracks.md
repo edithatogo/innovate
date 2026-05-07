@@ -281,8 +281,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: ABI and Binary Compatibility Strategy**
-  *Link: [./tracks/abi_binary_compatibility_strategy_20260507/](./tracks/abi_binary_compatibility_strategy_20260507/)*
+- [x] **Track: ABI and Binary Compatibility Strategy** *(Completed)*
+  *Link: [./archive/abi_binary_compatibility_strategy_20260507/](./archive/abi_binary_compatibility_strategy_20260507/)*
 
 ---
 
