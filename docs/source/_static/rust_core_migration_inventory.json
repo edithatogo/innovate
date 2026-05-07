@@ -43,7 +43,96 @@
         "No CPU flamegraph gate required; discovery is metadata I/O.",
         "Schema compatibility and manifest parity checks are required before metadata changes."
       ],
-      "promotion_blockers": []
+      "promotion_blockers": [],
+      "migration_phase": "phase_0_native_guardrails",
+      "promotion_state": "native_default_guarded",
+      "depends_on": [
+        "kernel_schema_1_0",
+        "python_reference_semantics",
+        "abi_binary_compatibility_strategy_20260507"
+      ],
+      "unsupported_payload_shapes": [
+        "none documented for current slice"
+      ],
+      "promotion_path": [
+        "Keep Python reference parity fixtures green for the documented native slice.",
+        "Capture CPU benchmark, CPU flamegraph metadata, DHAT memory evidence when relevant, and fallback-rate evidence before widening defaults.",
+        "Run binding smoke tests for every thin binding before claiming the operation as Rust-default."
+      ],
+      "promotion_gates": {
+        "parity": {
+          "status": "passed",
+          "evidence": "Rust operation tests compare native and bridge/reference responses for this slice.",
+          "required_before_default": true
+        },
+        "schema_compatibility": {
+          "status": "passed",
+          "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
+          "required_before_default": true
+        },
+        "error_mapping": {
+          "status": "required",
+          "evidence": "Native unsupported payloads must return stable unsupported_native_operation or bridge_command_failed mappings.",
+          "required_before_default": true
+        },
+        "benchmark_evidence": {
+          "status": "not_applicable",
+          "evidence": "Discovery is metadata I/O; schema and manifest parity are sufficient.",
+          "required_before_default": true
+        },
+        "memory_evidence": {
+          "status": "not_applicable",
+          "evidence": "No allocation-sensitive native loop is promoted for discovery.",
+          "required_before_default": false
+        },
+        "binding_smoke": {
+          "status": "passed",
+          "evidence": "Thin bindings must exercise the promoted request/response envelope and fallback behavior.",
+          "required_before_default": true
+        }
+      },
+      "binding_smoke": {
+        "operation": "discover_models",
+        "required_bindings": [
+          "python",
+          "rust",
+          "r",
+          "julia",
+          "typescript",
+          "go",
+          "csharp"
+        ],
+        "contract": "request_response_roundtrip",
+        "required_before_default": true
+      },
+      "evidence_commands": {
+        "parity": [
+          "cd bindings/rust && cargo test --test operations",
+          "uv run pytest tests/unit/test_rust_core_migration_inventory.py"
+        ],
+        "schema": [
+          "cd bindings/rust && cargo test --test schema_compatibility",
+          "uv run pytest tests/unit/test_rust_core_roadmap_docs.py"
+        ],
+        "benchmark": [
+          "cd bindings/rust && cargo bench --bench native_kernel",
+          "bindings/rust/scripts/profile_native_kernels.sh",
+          "JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-cpu.json",
+          "JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-gpu.json"
+        ],
+        "memory": [
+          "bindings/rust/scripts/profile_memory_native_kernels.sh"
+        ],
+        "binding_smoke": [
+          "cd bindings/rust && cargo test",
+          "uv run pytest tests/unit/test_binding_publication_ci.py",
+          "npm test --workspace bindings/typescript",
+          "Rscript bindings/r/tests/run.R",
+          "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+          "go test ./...",
+          "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj"
+        ]
+      }
     },
     {
       "operation": "fit_model",
@@ -61,7 +150,98 @@
       "promotion_blockers": [
         "No native covariate, event, custom fitter option, or uncertainty payload support.",
         "No benchmark dossier comparing Python reference timing, Rust CPU timing, and bridge fallback rate for expanded fit payloads."
-      ]
+      ],
+      "migration_phase": "phase_2_logistic_expansion",
+      "promotion_state": "native_candidate_needs_evidence",
+      "depends_on": [
+        "kernel_schema_1_0",
+        "python_reference_semantics",
+        "bindings/rust/tests/operations.rs",
+        "abi_binary_compatibility_strategy_20260507"
+      ],
+      "unsupported_payload_shapes": [
+        "covariates",
+        "custom fitter options"
+      ],
+      "promotion_path": [
+        "Keep Python reference parity fixtures green for the documented native slice.",
+        "Capture CPU benchmark, CPU flamegraph metadata, DHAT memory evidence when relevant, and fallback-rate evidence before widening defaults.",
+        "Run binding smoke tests for every thin binding before claiming the operation as Rust-default."
+      ],
+      "promotion_gates": {
+        "parity": {
+          "status": "passed",
+          "evidence": "Rust operation tests compare native and bridge/reference responses for this slice.",
+          "required_before_default": true
+        },
+        "schema_compatibility": {
+          "status": "passed",
+          "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
+          "required_before_default": true
+        },
+        "error_mapping": {
+          "status": "passed",
+          "evidence": "Native unsupported payloads must return stable unsupported_native_operation or bridge_command_failed mappings.",
+          "required_before_default": true
+        },
+        "benchmark_evidence": {
+          "status": "required",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "required_before_default": true
+        },
+        "memory_evidence": {
+          "status": "required",
+          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "required_before_default": true
+        },
+        "binding_smoke": {
+          "status": "passed",
+          "evidence": "Thin bindings must exercise the promoted request/response envelope and fallback behavior.",
+          "required_before_default": true
+        }
+      },
+      "binding_smoke": {
+        "operation": "fit_model",
+        "required_bindings": [
+          "python",
+          "rust",
+          "r",
+          "julia",
+          "typescript",
+          "go",
+          "csharp"
+        ],
+        "contract": "request_response_roundtrip",
+        "required_before_default": true
+      },
+      "evidence_commands": {
+        "parity": [
+          "cd bindings/rust && cargo test --test operations",
+          "uv run pytest tests/unit/test_rust_core_migration_inventory.py"
+        ],
+        "schema": [
+          "cd bindings/rust && cargo test --test schema_compatibility",
+          "uv run pytest tests/unit/test_rust_core_roadmap_docs.py"
+        ],
+        "benchmark": [
+          "cd bindings/rust && cargo bench --bench native_kernel",
+          "bindings/rust/scripts/profile_native_kernels.sh",
+          "JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-cpu.json",
+          "JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-gpu.json"
+        ],
+        "memory": [
+          "bindings/rust/scripts/profile_memory_native_kernels.sh"
+        ],
+        "binding_smoke": [
+          "cd bindings/rust && cargo test",
+          "uv run pytest tests/unit/test_binding_publication_ci.py",
+          "npm test --workspace bindings/typescript",
+          "Rscript bindings/r/tests/run.R",
+          "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+          "go test ./...",
+          "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj"
+        ]
+      }
     },
     {
       "operation": "fit_model",
@@ -78,7 +258,99 @@
       "promotion_blockers": [
         "Native fit semantics are not implemented.",
         "State, diagnostics, error mapping, and fitter option schemas are not stabilized for Rust ownership."
-      ]
+      ],
+      "migration_phase": "phase_3_model_family_migration",
+      "promotion_state": "bridge_default_pending_migration",
+      "depends_on": [
+        "kernel_schema_1_0",
+        "python_reference_semantics",
+        "operation_schema_stabilization",
+        "bindings/rust/tests/operations.rs",
+        "abi_binary_compatibility_strategy_20260507"
+      ],
+      "unsupported_payload_shapes": [
+        "none documented for current slice"
+      ],
+      "promotion_path": [
+        "Stabilize request and response schema fixtures for the model slice.",
+        "Implement a Rust-native candidate behind wrapper fallback.",
+        "Capture parity, benchmark, memory, and binding smoke evidence in the promotion dossier.",
+        "Promote only if fallback-rate and error-mapping gates pass."
+      ],
+      "promotion_gates": {
+        "parity": {
+          "status": "required",
+          "evidence": "Add Rust-vs-Python reference parity fixtures for the target request payloads.",
+          "required_before_default": true
+        },
+        "schema_compatibility": {
+          "status": "required",
+          "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
+          "required_before_default": true
+        },
+        "error_mapping": {
+          "status": "required",
+          "evidence": "Define stable Rust error payloads before any native default.",
+          "required_before_default": true
+        },
+        "benchmark_evidence": {
+          "status": "required",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "required_before_default": true
+        },
+        "memory_evidence": {
+          "status": "required",
+          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "required_before_default": true
+        },
+        "binding_smoke": {
+          "status": "passed",
+          "evidence": "Thin bindings must exercise the promoted request/response envelope and fallback behavior.",
+          "required_before_default": true
+        }
+      },
+      "binding_smoke": {
+        "operation": "fit_model",
+        "required_bindings": [
+          "python",
+          "rust",
+          "r",
+          "julia",
+          "typescript",
+          "go",
+          "csharp"
+        ],
+        "contract": "schema_envelope",
+        "required_before_default": true
+      },
+      "evidence_commands": {
+        "parity": [
+          "cd bindings/rust && cargo test --test operations",
+          "uv run pytest tests/unit/test_rust_core_migration_inventory.py"
+        ],
+        "schema": [
+          "cd bindings/rust && cargo test --test schema_compatibility",
+          "uv run pytest tests/unit/test_rust_core_roadmap_docs.py"
+        ],
+        "benchmark": [
+          "cd bindings/rust && cargo bench --bench native_kernel",
+          "bindings/rust/scripts/profile_native_kernels.sh",
+          "JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-cpu.json",
+          "JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-gpu.json"
+        ],
+        "memory": [
+          "bindings/rust/scripts/profile_memory_native_kernels.sh"
+        ],
+        "binding_smoke": [
+          "cd bindings/rust && cargo test",
+          "uv run pytest tests/unit/test_binding_publication_ci.py",
+          "npm test --workspace bindings/typescript",
+          "Rscript bindings/r/tests/run.R",
+          "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+          "go test ./...",
+          "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj"
+        ]
+      }
     },
     {
       "operation": "predict_model",
@@ -96,7 +368,98 @@
       "promotion_blockers": [
         "No native covariate or event split support.",
         "No documented XLA eligibility decision for large batched prediction payloads."
-      ]
+      ],
+      "migration_phase": "phase_2_logistic_expansion",
+      "promotion_state": "native_candidate_needs_evidence",
+      "depends_on": [
+        "kernel_schema_1_0",
+        "python_reference_semantics",
+        "bindings/rust/tests/operations.rs",
+        "abi_binary_compatibility_strategy_20260507"
+      ],
+      "unsupported_payload_shapes": [
+        "covariates",
+        "event splits"
+      ],
+      "promotion_path": [
+        "Keep Python reference parity fixtures green for the documented native slice.",
+        "Capture CPU benchmark, CPU flamegraph metadata, DHAT memory evidence when relevant, and fallback-rate evidence before widening defaults.",
+        "Run binding smoke tests for every thin binding before claiming the operation as Rust-default."
+      ],
+      "promotion_gates": {
+        "parity": {
+          "status": "passed",
+          "evidence": "Rust operation tests compare native and bridge/reference responses for this slice.",
+          "required_before_default": true
+        },
+        "schema_compatibility": {
+          "status": "passed",
+          "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
+          "required_before_default": true
+        },
+        "error_mapping": {
+          "status": "passed",
+          "evidence": "Native unsupported payloads must return stable unsupported_native_operation or bridge_command_failed mappings.",
+          "required_before_default": true
+        },
+        "benchmark_evidence": {
+          "status": "required",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "required_before_default": true
+        },
+        "memory_evidence": {
+          "status": "required",
+          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "required_before_default": true
+        },
+        "binding_smoke": {
+          "status": "passed",
+          "evidence": "Thin bindings must exercise the promoted request/response envelope and fallback behavior.",
+          "required_before_default": true
+        }
+      },
+      "binding_smoke": {
+        "operation": "predict_model",
+        "required_bindings": [
+          "python",
+          "rust",
+          "r",
+          "julia",
+          "typescript",
+          "go",
+          "csharp"
+        ],
+        "contract": "request_response_roundtrip",
+        "required_before_default": true
+      },
+      "evidence_commands": {
+        "parity": [
+          "cd bindings/rust && cargo test --test operations",
+          "uv run pytest tests/unit/test_rust_core_migration_inventory.py"
+        ],
+        "schema": [
+          "cd bindings/rust && cargo test --test schema_compatibility",
+          "uv run pytest tests/unit/test_rust_core_roadmap_docs.py"
+        ],
+        "benchmark": [
+          "cd bindings/rust && cargo bench --bench native_kernel",
+          "bindings/rust/scripts/profile_native_kernels.sh",
+          "JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-cpu.json",
+          "JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-gpu.json"
+        ],
+        "memory": [
+          "bindings/rust/scripts/profile_memory_native_kernels.sh"
+        ],
+        "binding_smoke": [
+          "cd bindings/rust && cargo test",
+          "uv run pytest tests/unit/test_binding_publication_ci.py",
+          "npm test --workspace bindings/typescript",
+          "Rscript bindings/r/tests/run.R",
+          "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+          "go test ./...",
+          "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj"
+        ]
+      }
     },
     {
       "operation": "predict_model",
@@ -114,7 +477,98 @@
         "No native covariate support.",
         "Native Bass time grids are limited to starts at zero.",
         "Benchmark and profiling dossier is incomplete for Bass-specific promotion beyond the simple fitted-state slice."
-      ]
+      ],
+      "migration_phase": "phase_1_default_hardening",
+      "promotion_state": "native_candidate_needs_evidence",
+      "depends_on": [
+        "kernel_schema_1_0",
+        "python_reference_semantics",
+        "bindings/rust/tests/operations.rs",
+        "abi_binary_compatibility_strategy_20260507"
+      ],
+      "unsupported_payload_shapes": [
+        "covariates",
+        "event splits"
+      ],
+      "promotion_path": [
+        "Keep Python reference parity fixtures green for the documented native slice.",
+        "Capture CPU benchmark, CPU flamegraph metadata, DHAT memory evidence when relevant, and fallback-rate evidence before widening defaults.",
+        "Run binding smoke tests for every thin binding before claiming the operation as Rust-default."
+      ],
+      "promotion_gates": {
+        "parity": {
+          "status": "passed",
+          "evidence": "Rust operation tests compare native and bridge/reference responses for this slice.",
+          "required_before_default": true
+        },
+        "schema_compatibility": {
+          "status": "passed",
+          "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
+          "required_before_default": true
+        },
+        "error_mapping": {
+          "status": "passed",
+          "evidence": "Native unsupported payloads must return stable unsupported_native_operation or bridge_command_failed mappings.",
+          "required_before_default": true
+        },
+        "benchmark_evidence": {
+          "status": "required",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "required_before_default": true
+        },
+        "memory_evidence": {
+          "status": "required",
+          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "required_before_default": true
+        },
+        "binding_smoke": {
+          "status": "passed",
+          "evidence": "Thin bindings must exercise the promoted request/response envelope and fallback behavior.",
+          "required_before_default": true
+        }
+      },
+      "binding_smoke": {
+        "operation": "predict_model",
+        "required_bindings": [
+          "python",
+          "rust",
+          "r",
+          "julia",
+          "typescript",
+          "go",
+          "csharp"
+        ],
+        "contract": "request_response_roundtrip",
+        "required_before_default": true
+      },
+      "evidence_commands": {
+        "parity": [
+          "cd bindings/rust && cargo test --test operations",
+          "uv run pytest tests/unit/test_rust_core_migration_inventory.py"
+        ],
+        "schema": [
+          "cd bindings/rust && cargo test --test schema_compatibility",
+          "uv run pytest tests/unit/test_rust_core_roadmap_docs.py"
+        ],
+        "benchmark": [
+          "cd bindings/rust && cargo bench --bench native_kernel",
+          "bindings/rust/scripts/profile_native_kernels.sh",
+          "JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-cpu.json",
+          "JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-gpu.json"
+        ],
+        "memory": [
+          "bindings/rust/scripts/profile_memory_native_kernels.sh"
+        ],
+        "binding_smoke": [
+          "cd bindings/rust && cargo test",
+          "uv run pytest tests/unit/test_binding_publication_ci.py",
+          "npm test --workspace bindings/typescript",
+          "Rscript bindings/r/tests/run.R",
+          "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+          "go test ./...",
+          "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj"
+        ]
+      }
     },
     {
       "operation": "predict_model",
@@ -131,7 +585,100 @@
       "promotion_blockers": [
         "No Rust-native implementation.",
         "Stable fitted-state, covariate, and event schemas are not documented for Rust ownership."
-      ]
+      ],
+      "migration_phase": "phase_3_model_family_migration",
+      "promotion_state": "bridge_default_pending_migration",
+      "depends_on": [
+        "kernel_schema_1_0",
+        "python_reference_semantics",
+        "operation_schema_stabilization",
+        "bindings/rust/tests/operations.rs",
+        "accelerator_parallel_execution_evidence_20260507",
+        "abi_binary_compatibility_strategy_20260507"
+      ],
+      "unsupported_payload_shapes": [
+        "none documented for current slice"
+      ],
+      "promotion_path": [
+        "Stabilize request and response schema fixtures for the model slice.",
+        "Implement a Rust-native candidate behind wrapper fallback.",
+        "Capture parity, benchmark, memory, and binding smoke evidence in the promotion dossier.",
+        "Promote only if fallback-rate and error-mapping gates pass."
+      ],
+      "promotion_gates": {
+        "parity": {
+          "status": "required",
+          "evidence": "Add Rust-vs-Python reference parity fixtures for the target request payloads.",
+          "required_before_default": true
+        },
+        "schema_compatibility": {
+          "status": "required",
+          "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
+          "required_before_default": true
+        },
+        "error_mapping": {
+          "status": "required",
+          "evidence": "Define stable Rust error payloads before any native default.",
+          "required_before_default": true
+        },
+        "benchmark_evidence": {
+          "status": "required",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "required_before_default": true
+        },
+        "memory_evidence": {
+          "status": "required",
+          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "required_before_default": true
+        },
+        "binding_smoke": {
+          "status": "passed",
+          "evidence": "Thin bindings must exercise the promoted request/response envelope and fallback behavior.",
+          "required_before_default": true
+        }
+      },
+      "binding_smoke": {
+        "operation": "predict_model",
+        "required_bindings": [
+          "python",
+          "rust",
+          "r",
+          "julia",
+          "typescript",
+          "go",
+          "csharp"
+        ],
+        "contract": "schema_envelope",
+        "required_before_default": true
+      },
+      "evidence_commands": {
+        "parity": [
+          "cd bindings/rust && cargo test --test operations",
+          "uv run pytest tests/unit/test_rust_core_migration_inventory.py"
+        ],
+        "schema": [
+          "cd bindings/rust && cargo test --test schema_compatibility",
+          "uv run pytest tests/unit/test_rust_core_roadmap_docs.py"
+        ],
+        "benchmark": [
+          "cd bindings/rust && cargo bench --bench native_kernel",
+          "bindings/rust/scripts/profile_native_kernels.sh",
+          "JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-cpu.json",
+          "JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-gpu.json"
+        ],
+        "memory": [
+          "bindings/rust/scripts/profile_memory_native_kernels.sh"
+        ],
+        "binding_smoke": [
+          "cd bindings/rust && cargo test",
+          "uv run pytest tests/unit/test_binding_publication_ci.py",
+          "npm test --workspace bindings/typescript",
+          "Rscript bindings/r/tests/run.R",
+          "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+          "go test ./...",
+          "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj"
+        ]
+      }
     },
     {
       "operation": "simulate_model",
@@ -149,7 +696,99 @@
       "promotion_blockers": [
         "No native covariate, event split, or stochastic policy support.",
         "No explicit XLA eligibility decision for bounded array simulation."
-      ]
+      ],
+      "migration_phase": "phase_2_logistic_expansion",
+      "promotion_state": "native_candidate_needs_evidence",
+      "depends_on": [
+        "kernel_schema_1_0",
+        "python_reference_semantics",
+        "bindings/rust/tests/operations.rs",
+        "abi_binary_compatibility_strategy_20260507"
+      ],
+      "unsupported_payload_shapes": [
+        "covariates",
+        "event splits",
+        "stochastic policy payloads"
+      ],
+      "promotion_path": [
+        "Keep Python reference parity fixtures green for the documented native slice.",
+        "Capture CPU benchmark, CPU flamegraph metadata, DHAT memory evidence when relevant, and fallback-rate evidence before widening defaults.",
+        "Run binding smoke tests for every thin binding before claiming the operation as Rust-default."
+      ],
+      "promotion_gates": {
+        "parity": {
+          "status": "passed",
+          "evidence": "Rust operation tests compare native and bridge/reference responses for this slice.",
+          "required_before_default": true
+        },
+        "schema_compatibility": {
+          "status": "passed",
+          "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
+          "required_before_default": true
+        },
+        "error_mapping": {
+          "status": "passed",
+          "evidence": "Native unsupported payloads must return stable unsupported_native_operation or bridge_command_failed mappings.",
+          "required_before_default": true
+        },
+        "benchmark_evidence": {
+          "status": "required",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "required_before_default": true
+        },
+        "memory_evidence": {
+          "status": "required",
+          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "required_before_default": true
+        },
+        "binding_smoke": {
+          "status": "passed",
+          "evidence": "Thin bindings must exercise the promoted request/response envelope and fallback behavior.",
+          "required_before_default": true
+        }
+      },
+      "binding_smoke": {
+        "operation": "simulate_model",
+        "required_bindings": [
+          "python",
+          "rust",
+          "r",
+          "julia",
+          "typescript",
+          "go",
+          "csharp"
+        ],
+        "contract": "request_response_roundtrip",
+        "required_before_default": true
+      },
+      "evidence_commands": {
+        "parity": [
+          "cd bindings/rust && cargo test --test operations",
+          "uv run pytest tests/unit/test_rust_core_migration_inventory.py"
+        ],
+        "schema": [
+          "cd bindings/rust && cargo test --test schema_compatibility",
+          "uv run pytest tests/unit/test_rust_core_roadmap_docs.py"
+        ],
+        "benchmark": [
+          "cd bindings/rust && cargo bench --bench native_kernel",
+          "bindings/rust/scripts/profile_native_kernels.sh",
+          "JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-cpu.json",
+          "JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-gpu.json"
+        ],
+        "memory": [
+          "bindings/rust/scripts/profile_memory_native_kernels.sh"
+        ],
+        "binding_smoke": [
+          "cd bindings/rust && cargo test",
+          "uv run pytest tests/unit/test_binding_publication_ci.py",
+          "npm test --workspace bindings/typescript",
+          "Rscript bindings/r/tests/run.R",
+          "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+          "go test ./...",
+          "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj"
+        ]
+      }
     },
     {
       "operation": "simulate_model",
@@ -167,7 +806,99 @@
         "No native covariate or stochastic policy support.",
         "Native Bass time grids are limited to starts at zero.",
         "Benchmark and profiling dossier is incomplete for Bass-specific promotion beyond the simple fitted-state slice."
-      ]
+      ],
+      "migration_phase": "phase_1_default_hardening",
+      "promotion_state": "native_candidate_needs_evidence",
+      "depends_on": [
+        "kernel_schema_1_0",
+        "python_reference_semantics",
+        "bindings/rust/tests/operations.rs",
+        "abi_binary_compatibility_strategy_20260507"
+      ],
+      "unsupported_payload_shapes": [
+        "covariates",
+        "event splits",
+        "stochastic policy payloads"
+      ],
+      "promotion_path": [
+        "Keep Python reference parity fixtures green for the documented native slice.",
+        "Capture CPU benchmark, CPU flamegraph metadata, DHAT memory evidence when relevant, and fallback-rate evidence before widening defaults.",
+        "Run binding smoke tests for every thin binding before claiming the operation as Rust-default."
+      ],
+      "promotion_gates": {
+        "parity": {
+          "status": "passed",
+          "evidence": "Rust operation tests compare native and bridge/reference responses for this slice.",
+          "required_before_default": true
+        },
+        "schema_compatibility": {
+          "status": "passed",
+          "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
+          "required_before_default": true
+        },
+        "error_mapping": {
+          "status": "passed",
+          "evidence": "Native unsupported payloads must return stable unsupported_native_operation or bridge_command_failed mappings.",
+          "required_before_default": true
+        },
+        "benchmark_evidence": {
+          "status": "required",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "required_before_default": true
+        },
+        "memory_evidence": {
+          "status": "required",
+          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "required_before_default": true
+        },
+        "binding_smoke": {
+          "status": "passed",
+          "evidence": "Thin bindings must exercise the promoted request/response envelope and fallback behavior.",
+          "required_before_default": true
+        }
+      },
+      "binding_smoke": {
+        "operation": "simulate_model",
+        "required_bindings": [
+          "python",
+          "rust",
+          "r",
+          "julia",
+          "typescript",
+          "go",
+          "csharp"
+        ],
+        "contract": "request_response_roundtrip",
+        "required_before_default": true
+      },
+      "evidence_commands": {
+        "parity": [
+          "cd bindings/rust && cargo test --test operations",
+          "uv run pytest tests/unit/test_rust_core_migration_inventory.py"
+        ],
+        "schema": [
+          "cd bindings/rust && cargo test --test schema_compatibility",
+          "uv run pytest tests/unit/test_rust_core_roadmap_docs.py"
+        ],
+        "benchmark": [
+          "cd bindings/rust && cargo bench --bench native_kernel",
+          "bindings/rust/scripts/profile_native_kernels.sh",
+          "JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-cpu.json",
+          "JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-gpu.json"
+        ],
+        "memory": [
+          "bindings/rust/scripts/profile_memory_native_kernels.sh"
+        ],
+        "binding_smoke": [
+          "cd bindings/rust && cargo test",
+          "uv run pytest tests/unit/test_binding_publication_ci.py",
+          "npm test --workspace bindings/typescript",
+          "Rscript bindings/r/tests/run.R",
+          "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+          "go test ./...",
+          "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj"
+        ]
+      }
     },
     {
       "operation": "simulate_model",
@@ -184,7 +915,100 @@
       "promotion_blockers": [
         "No Rust-native implementation.",
         "Stochastic, event, and model-specific simulation schemas are not stabilized for Rust ownership."
-      ]
+      ],
+      "migration_phase": "phase_3_model_family_migration",
+      "promotion_state": "bridge_default_pending_migration",
+      "depends_on": [
+        "kernel_schema_1_0",
+        "python_reference_semantics",
+        "operation_schema_stabilization",
+        "bindings/rust/tests/operations.rs",
+        "accelerator_parallel_execution_evidence_20260507",
+        "abi_binary_compatibility_strategy_20260507"
+      ],
+      "unsupported_payload_shapes": [
+        "none documented for current slice"
+      ],
+      "promotion_path": [
+        "Stabilize request and response schema fixtures for the model slice.",
+        "Implement a Rust-native candidate behind wrapper fallback.",
+        "Capture parity, benchmark, memory, and binding smoke evidence in the promotion dossier.",
+        "Promote only if fallback-rate and error-mapping gates pass."
+      ],
+      "promotion_gates": {
+        "parity": {
+          "status": "required",
+          "evidence": "Add Rust-vs-Python reference parity fixtures for the target request payloads.",
+          "required_before_default": true
+        },
+        "schema_compatibility": {
+          "status": "required",
+          "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
+          "required_before_default": true
+        },
+        "error_mapping": {
+          "status": "required",
+          "evidence": "Define stable Rust error payloads before any native default.",
+          "required_before_default": true
+        },
+        "benchmark_evidence": {
+          "status": "required",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "required_before_default": true
+        },
+        "memory_evidence": {
+          "status": "required",
+          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "required_before_default": true
+        },
+        "binding_smoke": {
+          "status": "passed",
+          "evidence": "Thin bindings must exercise the promoted request/response envelope and fallback behavior.",
+          "required_before_default": true
+        }
+      },
+      "binding_smoke": {
+        "operation": "simulate_model",
+        "required_bindings": [
+          "python",
+          "rust",
+          "r",
+          "julia",
+          "typescript",
+          "go",
+          "csharp"
+        ],
+        "contract": "schema_envelope",
+        "required_before_default": true
+      },
+      "evidence_commands": {
+        "parity": [
+          "cd bindings/rust && cargo test --test operations",
+          "uv run pytest tests/unit/test_rust_core_migration_inventory.py"
+        ],
+        "schema": [
+          "cd bindings/rust && cargo test --test schema_compatibility",
+          "uv run pytest tests/unit/test_rust_core_roadmap_docs.py"
+        ],
+        "benchmark": [
+          "cd bindings/rust && cargo bench --bench native_kernel",
+          "bindings/rust/scripts/profile_native_kernels.sh",
+          "JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-cpu.json",
+          "JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-gpu.json"
+        ],
+        "memory": [
+          "bindings/rust/scripts/profile_memory_native_kernels.sh"
+        ],
+        "binding_smoke": [
+          "cd bindings/rust && cargo test",
+          "uv run pytest tests/unit/test_binding_publication_ci.py",
+          "npm test --workspace bindings/typescript",
+          "Rscript bindings/r/tests/run.R",
+          "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+          "go test ./...",
+          "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj"
+        ]
+      }
     },
     {
       "operation": "summarize_model",
@@ -202,7 +1026,98 @@
       "promotion_blockers": [
         "No native support for rich model cards, uncertainty reports, covariates, or event splits.",
         "No documented profiling dossier for expanded summary payloads."
-      ]
+      ],
+      "migration_phase": "phase_2_logistic_expansion",
+      "promotion_state": "native_candidate_needs_evidence",
+      "depends_on": [
+        "kernel_schema_1_0",
+        "python_reference_semantics",
+        "bindings/rust/tests/operations.rs",
+        "abi_binary_compatibility_strategy_20260507"
+      ],
+      "unsupported_payload_shapes": [
+        "covariates",
+        "event splits"
+      ],
+      "promotion_path": [
+        "Keep Python reference parity fixtures green for the documented native slice.",
+        "Capture CPU benchmark, CPU flamegraph metadata, DHAT memory evidence when relevant, and fallback-rate evidence before widening defaults.",
+        "Run binding smoke tests for every thin binding before claiming the operation as Rust-default."
+      ],
+      "promotion_gates": {
+        "parity": {
+          "status": "passed",
+          "evidence": "Rust operation tests compare native and bridge/reference responses for this slice.",
+          "required_before_default": true
+        },
+        "schema_compatibility": {
+          "status": "passed",
+          "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
+          "required_before_default": true
+        },
+        "error_mapping": {
+          "status": "passed",
+          "evidence": "Native unsupported payloads must return stable unsupported_native_operation or bridge_command_failed mappings.",
+          "required_before_default": true
+        },
+        "benchmark_evidence": {
+          "status": "required",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "required_before_default": true
+        },
+        "memory_evidence": {
+          "status": "required",
+          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "required_before_default": true
+        },
+        "binding_smoke": {
+          "status": "passed",
+          "evidence": "Thin bindings must exercise the promoted request/response envelope and fallback behavior.",
+          "required_before_default": true
+        }
+      },
+      "binding_smoke": {
+        "operation": "summarize_model",
+        "required_bindings": [
+          "python",
+          "rust",
+          "r",
+          "julia",
+          "typescript",
+          "go",
+          "csharp"
+        ],
+        "contract": "request_response_roundtrip",
+        "required_before_default": true
+      },
+      "evidence_commands": {
+        "parity": [
+          "cd bindings/rust && cargo test --test operations",
+          "uv run pytest tests/unit/test_rust_core_migration_inventory.py"
+        ],
+        "schema": [
+          "cd bindings/rust && cargo test --test schema_compatibility",
+          "uv run pytest tests/unit/test_rust_core_roadmap_docs.py"
+        ],
+        "benchmark": [
+          "cd bindings/rust && cargo bench --bench native_kernel",
+          "bindings/rust/scripts/profile_native_kernels.sh",
+          "JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-cpu.json",
+          "JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-gpu.json"
+        ],
+        "memory": [
+          "bindings/rust/scripts/profile_memory_native_kernels.sh"
+        ],
+        "binding_smoke": [
+          "cd bindings/rust && cargo test",
+          "uv run pytest tests/unit/test_binding_publication_ci.py",
+          "npm test --workspace bindings/typescript",
+          "Rscript bindings/r/tests/run.R",
+          "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+          "go test ./...",
+          "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj"
+        ]
+      }
     },
     {
       "operation": "summarize_model",
@@ -218,7 +1133,99 @@
       "promotion_blockers": [
         "No Rust-native implementation.",
         "Summary schema parity and diagnostics mapping are not stabilized for Rust ownership."
-      ]
+      ],
+      "migration_phase": "phase_3_model_family_migration",
+      "promotion_state": "bridge_default_pending_migration",
+      "depends_on": [
+        "kernel_schema_1_0",
+        "python_reference_semantics",
+        "operation_schema_stabilization",
+        "bindings/rust/tests/operations.rs",
+        "abi_binary_compatibility_strategy_20260507"
+      ],
+      "unsupported_payload_shapes": [
+        "none documented for current slice"
+      ],
+      "promotion_path": [
+        "Stabilize request and response schema fixtures for the model slice.",
+        "Implement a Rust-native candidate behind wrapper fallback.",
+        "Capture parity, benchmark, memory, and binding smoke evidence in the promotion dossier.",
+        "Promote only if fallback-rate and error-mapping gates pass."
+      ],
+      "promotion_gates": {
+        "parity": {
+          "status": "required",
+          "evidence": "Add Rust-vs-Python reference parity fixtures for the target request payloads.",
+          "required_before_default": true
+        },
+        "schema_compatibility": {
+          "status": "required",
+          "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
+          "required_before_default": true
+        },
+        "error_mapping": {
+          "status": "required",
+          "evidence": "Define stable Rust error payloads before any native default.",
+          "required_before_default": true
+        },
+        "benchmark_evidence": {
+          "status": "required",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "required_before_default": true
+        },
+        "memory_evidence": {
+          "status": "required",
+          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "required_before_default": true
+        },
+        "binding_smoke": {
+          "status": "passed",
+          "evidence": "Thin bindings must exercise the promoted request/response envelope and fallback behavior.",
+          "required_before_default": true
+        }
+      },
+      "binding_smoke": {
+        "operation": "summarize_model",
+        "required_bindings": [
+          "python",
+          "rust",
+          "r",
+          "julia",
+          "typescript",
+          "go",
+          "csharp"
+        ],
+        "contract": "schema_envelope",
+        "required_before_default": true
+      },
+      "evidence_commands": {
+        "parity": [
+          "cd bindings/rust && cargo test --test operations",
+          "uv run pytest tests/unit/test_rust_core_migration_inventory.py"
+        ],
+        "schema": [
+          "cd bindings/rust && cargo test --test schema_compatibility",
+          "uv run pytest tests/unit/test_rust_core_roadmap_docs.py"
+        ],
+        "benchmark": [
+          "cd bindings/rust && cargo bench --bench native_kernel",
+          "bindings/rust/scripts/profile_native_kernels.sh",
+          "JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-cpu.json",
+          "JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-gpu.json"
+        ],
+        "memory": [
+          "bindings/rust/scripts/profile_memory_native_kernels.sh"
+        ],
+        "binding_smoke": [
+          "cd bindings/rust && cargo test",
+          "uv run pytest tests/unit/test_binding_publication_ci.py",
+          "npm test --workspace bindings/typescript",
+          "Rscript bindings/r/tests/run.R",
+          "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+          "go test ./...",
+          "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj"
+        ]
+      }
     },
     {
       "operation": "diagnose_model",
@@ -236,7 +1243,98 @@
       "promotion_blockers": [
         "No native support for rich residual diagnostics, posterior diagnostics, covariates, or event splits.",
         "No documented XLA eligibility decision for vectorized diagnostic metrics."
-      ]
+      ],
+      "migration_phase": "phase_2_logistic_expansion",
+      "promotion_state": "native_candidate_needs_evidence",
+      "depends_on": [
+        "kernel_schema_1_0",
+        "python_reference_semantics",
+        "bindings/rust/tests/operations.rs",
+        "abi_binary_compatibility_strategy_20260507"
+      ],
+      "unsupported_payload_shapes": [
+        "covariates",
+        "event splits"
+      ],
+      "promotion_path": [
+        "Keep Python reference parity fixtures green for the documented native slice.",
+        "Capture CPU benchmark, CPU flamegraph metadata, DHAT memory evidence when relevant, and fallback-rate evidence before widening defaults.",
+        "Run binding smoke tests for every thin binding before claiming the operation as Rust-default."
+      ],
+      "promotion_gates": {
+        "parity": {
+          "status": "passed",
+          "evidence": "Rust operation tests compare native and bridge/reference responses for this slice.",
+          "required_before_default": true
+        },
+        "schema_compatibility": {
+          "status": "passed",
+          "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
+          "required_before_default": true
+        },
+        "error_mapping": {
+          "status": "passed",
+          "evidence": "Native unsupported payloads must return stable unsupported_native_operation or bridge_command_failed mappings.",
+          "required_before_default": true
+        },
+        "benchmark_evidence": {
+          "status": "required",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "required_before_default": true
+        },
+        "memory_evidence": {
+          "status": "required",
+          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "required_before_default": true
+        },
+        "binding_smoke": {
+          "status": "passed",
+          "evidence": "Thin bindings must exercise the promoted request/response envelope and fallback behavior.",
+          "required_before_default": true
+        }
+      },
+      "binding_smoke": {
+        "operation": "diagnose_model",
+        "required_bindings": [
+          "python",
+          "rust",
+          "r",
+          "julia",
+          "typescript",
+          "go",
+          "csharp"
+        ],
+        "contract": "request_response_roundtrip",
+        "required_before_default": true
+      },
+      "evidence_commands": {
+        "parity": [
+          "cd bindings/rust && cargo test --test operations",
+          "uv run pytest tests/unit/test_rust_core_migration_inventory.py"
+        ],
+        "schema": [
+          "cd bindings/rust && cargo test --test schema_compatibility",
+          "uv run pytest tests/unit/test_rust_core_roadmap_docs.py"
+        ],
+        "benchmark": [
+          "cd bindings/rust && cargo bench --bench native_kernel",
+          "bindings/rust/scripts/profile_native_kernels.sh",
+          "JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-cpu.json",
+          "JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-gpu.json"
+        ],
+        "memory": [
+          "bindings/rust/scripts/profile_memory_native_kernels.sh"
+        ],
+        "binding_smoke": [
+          "cd bindings/rust && cargo test",
+          "uv run pytest tests/unit/test_binding_publication_ci.py",
+          "npm test --workspace bindings/typescript",
+          "Rscript bindings/r/tests/run.R",
+          "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+          "go test ./...",
+          "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj"
+        ]
+      }
     },
     {
       "operation": "diagnose_model",
@@ -252,7 +1350,99 @@
       "promotion_blockers": [
         "No Rust-native implementation.",
         "Diagnostics schema parity and stable error mapping are not finalized for Rust ownership."
-      ]
+      ],
+      "migration_phase": "phase_3_model_family_migration",
+      "promotion_state": "bridge_default_pending_migration",
+      "depends_on": [
+        "kernel_schema_1_0",
+        "python_reference_semantics",
+        "operation_schema_stabilization",
+        "bindings/rust/tests/operations.rs",
+        "abi_binary_compatibility_strategy_20260507"
+      ],
+      "unsupported_payload_shapes": [
+        "none documented for current slice"
+      ],
+      "promotion_path": [
+        "Stabilize request and response schema fixtures for the model slice.",
+        "Implement a Rust-native candidate behind wrapper fallback.",
+        "Capture parity, benchmark, memory, and binding smoke evidence in the promotion dossier.",
+        "Promote only if fallback-rate and error-mapping gates pass."
+      ],
+      "promotion_gates": {
+        "parity": {
+          "status": "required",
+          "evidence": "Add Rust-vs-Python reference parity fixtures for the target request payloads.",
+          "required_before_default": true
+        },
+        "schema_compatibility": {
+          "status": "required",
+          "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
+          "required_before_default": true
+        },
+        "error_mapping": {
+          "status": "required",
+          "evidence": "Define stable Rust error payloads before any native default.",
+          "required_before_default": true
+        },
+        "benchmark_evidence": {
+          "status": "required",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "required_before_default": true
+        },
+        "memory_evidence": {
+          "status": "required",
+          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "required_before_default": true
+        },
+        "binding_smoke": {
+          "status": "passed",
+          "evidence": "Thin bindings must exercise the promoted request/response envelope and fallback behavior.",
+          "required_before_default": true
+        }
+      },
+      "binding_smoke": {
+        "operation": "diagnose_model",
+        "required_bindings": [
+          "python",
+          "rust",
+          "r",
+          "julia",
+          "typescript",
+          "go",
+          "csharp"
+        ],
+        "contract": "schema_envelope",
+        "required_before_default": true
+      },
+      "evidence_commands": {
+        "parity": [
+          "cd bindings/rust && cargo test --test operations",
+          "uv run pytest tests/unit/test_rust_core_migration_inventory.py"
+        ],
+        "schema": [
+          "cd bindings/rust && cargo test --test schema_compatibility",
+          "uv run pytest tests/unit/test_rust_core_roadmap_docs.py"
+        ],
+        "benchmark": [
+          "cd bindings/rust && cargo bench --bench native_kernel",
+          "bindings/rust/scripts/profile_native_kernels.sh",
+          "JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-cpu.json",
+          "JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-gpu.json"
+        ],
+        "memory": [
+          "bindings/rust/scripts/profile_memory_native_kernels.sh"
+        ],
+        "binding_smoke": [
+          "cd bindings/rust && cargo test",
+          "uv run pytest tests/unit/test_binding_publication_ci.py",
+          "npm test --workspace bindings/typescript",
+          "Rscript bindings/r/tests/run.R",
+          "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+          "go test ./...",
+          "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj"
+        ]
+      }
     },
     {
       "operation": "all_kernel_operations",
@@ -270,7 +1460,112 @@
         "Stable schema boundary is not defined.",
         "Parity and profiling evidence does not exist.",
         "Binding smoke coverage is not available for promoted defaults."
-      ]
+      ],
+      "migration_phase": "phase_4_reference_boundary_review",
+      "promotion_state": "python_reference_boundary",
+      "depends_on": [
+        "kernel_schema_1_0",
+        "python_reference_semantics",
+        "operation_schema_stabilization",
+        "bindings/rust/tests/operations.rs",
+        "accelerator_parallel_execution_evidence_20260507",
+        "abi_binary_compatibility_strategy_20260507"
+      ],
+      "unsupported_payload_shapes": [
+        "none documented for current slice"
+      ],
+      "promotion_path": [
+        "Define a stable schema boundary for the Python-only behavior.",
+        "Decide whether Rust, XLA, or continued Python reference ownership is appropriate.",
+        "Add parity, schema, error mapping, benchmark, memory, and binding smoke evidence before any default change."
+      ],
+      "promotion_gates": {
+        "parity": {
+          "status": "required",
+          "evidence": "Add Rust-vs-Python reference parity fixtures for the target request payloads.",
+          "required_before_default": true
+        },
+        "schema_compatibility": {
+          "status": "required",
+          "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
+          "required_before_default": true
+        },
+        "error_mapping": {
+          "status": "required",
+          "evidence": "Define stable Rust error payloads before any native default.",
+          "required_before_default": true
+        },
+        "benchmark_evidence": {
+          "status": "required",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "required_before_default": true
+        },
+        "memory_evidence": {
+          "status": "required",
+          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "required_before_default": true
+        },
+        "binding_smoke": {
+          "status": "required",
+          "evidence": "Add binding smoke only after a stable schema boundary exists.",
+          "required_before_default": true
+        }
+      },
+      "binding_smoke": {
+        "operation": "all_kernel_operations",
+        "required_bindings": [
+          "python",
+          "rust",
+          "r",
+          "julia",
+          "typescript",
+          "go",
+          "csharp"
+        ],
+        "contract": "fallback_error_contract",
+        "required_before_default": false
+      },
+      "evidence_commands": {
+        "parity": [
+          "cd bindings/rust && cargo test --test operations",
+          "uv run pytest tests/unit/test_rust_core_migration_inventory.py"
+        ],
+        "schema": [
+          "cd bindings/rust && cargo test --test schema_compatibility",
+          "uv run pytest tests/unit/test_rust_core_roadmap_docs.py"
+        ],
+        "benchmark": [
+          "cd bindings/rust && cargo bench --bench native_kernel",
+          "bindings/rust/scripts/profile_native_kernels.sh",
+          "JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-cpu.json",
+          "JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-gpu.json"
+        ],
+        "memory": [
+          "bindings/rust/scripts/profile_memory_native_kernels.sh"
+        ],
+        "binding_smoke": [
+          "cd bindings/rust && cargo test",
+          "uv run pytest tests/unit/test_binding_publication_ci.py",
+          "npm test --workspace bindings/typescript",
+          "Rscript bindings/r/tests/run.R",
+          "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+          "go test ./...",
+          "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj"
+        ]
+      }
     }
+  ],
+  "migration_phase_values": [
+    "phase_0_native_guardrails",
+    "phase_1_default_hardening",
+    "phase_2_logistic_expansion",
+    "phase_3_model_family_migration",
+    "phase_4_reference_boundary_review"
+  ],
+  "promotion_state_values": [
+    "native_default_guarded",
+    "native_candidate_needs_evidence",
+    "bridge_default_pending_migration",
+    "python_reference_boundary"
   ]
 }

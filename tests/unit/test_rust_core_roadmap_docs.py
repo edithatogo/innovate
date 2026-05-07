@@ -114,6 +114,29 @@ def test_rust_core_roadmap_inventories_runtime_status_and_xla_fit() -> None:
             assert phrase in roadmap
 
 
+def test_rust_core_roadmap_defines_execution_backlog_and_smoke_gates() -> None:
+    """The roadmap should turn the inventory into an execution-grade backlog."""
+    roadmap = normalized_text(ROADMAP)
+
+    for phrase in (
+        "Execution backlog by operation family",
+        "phase_0_native_guardrails",
+        "phase_1_default_hardening",
+        "phase_2_logistic_expansion",
+        "phase_3_model_family_migration",
+        "phase_4_reference_boundary_review",
+        "operation-level dependencies",
+        "Promotion dossier capture",
+        "binding smoke matrix",
+        "R, Julia, TypeScript, Go, Rust, C#, and Python",
+        "No Rust-default claim exists without evidence",
+        "fallback-rate evidence",
+        "DHAT memory profile",
+        "CPU flamegraph metadata",
+    ):
+        assert phrase in roadmap
+
+
 def test_rust_core_roadmap_audit_matches_current_runtime_ownership() -> None:
     """The roadmap should machine-check that Rust is not the whole core yet."""
     roadmap = normalized_text(ROADMAP)

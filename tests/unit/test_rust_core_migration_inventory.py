@@ -30,6 +30,15 @@ REQUIRED_ENTRY_FIELDS = {
     "profiling_requirements",
     "promotion_blockers",
 }
+REQUIRED_PROMOTION_GATES = {
+    "parity",
+    "schema_compatibility",
+    "error_mapping",
+    "benchmark_evidence",
+    "memory_evidence",
+    "binding_smoke",
+}
+REQUIRED_BINDINGS = {"python", "rust", "r", "julia", "typescript", "go", "csharp"}
 
 
 def load_inventory() -> dict[str, Any]:
@@ -116,6 +125,106 @@ def test_rust_migration_inventory_records_native_and_fallback_slices() -> None:
 
     for operation, _model_slice in bridge_slices:
         assert operation in CANONICAL_OPERATIONS
+
+
+def test_rust_migration_inventory_is_execution_grade_backlog() -> None:
+    """Every migration slice should carry operation-level execution metadata."""
+    inventory = load_inventory()
+    entries = inventory["inventory"]
+
+    assert inventory["migration_phase_values"]
+    assert inventory["promotion_state_values"]
+
+    phase_values = set(inventory["migration_phase_values"])
+    state_values = set(inventory["promotion_state_values"])
+
+    for entry in entries:
+        assert entry["migration_phase"] in phase_values
+        assert entry["promotion_state"] in state_values
+        assert isinstance(entry["depends_on"], list)
+        assert all(isinstance(dependency, str) and dependency for dependency in entry["depends_on"])
+        assert isinstance(entry["unsupported_payload_shapes"], list)
+        assert entry["python_reference_scope"]
+        assert isinstance(entry["promotion_path"], list)
+        assert len(entry["promotion_path"]) >= 3
+
+    phase_by_key = {(entry["operation"], entry["model_slice"]): entry["migration_phase"] for entry in entries}
+    assert phase_by_key[("discover_models", "all_packaged_discovery_metadata")] == "phase_0_native_guardrails"
+    assert phase_by_key[("predict_model", "bass_simple_fitted_state")] == "phase_1_default_hardening"
+    assert phase_by_key[("simulate_model", "bass_simple_fitted_state")] == "phase_1_default_hardening"
+    assert phase_by_key[("fit_model", "bass_and_other_model_families")] == "phase_3_model_family_migration"
+    assert (
+        phase_by_key[
+            ("all_kernel_operations", "probabilistic_runtimes_uncertainty_and_python_object_internals")
+        ]
+        == "phase_4_reference_boundary_review"
+    )
+
+
+def test_rust_migration_inventory_defines_operation_promotion_gates() -> None:
+    """Promotion gates should be concrete enough to execute by operation family."""
+    entries = load_inventory()["inventory"]
+
+    for entry in entries:
+        gates = entry["promotion_gates"]
+        assert REQUIRED_PROMOTION_GATES <= set(gates)
+        for gate_name in REQUIRED_PROMOTION_GATES:
+            gate = gates[gate_name]
+            assert gate["status"] in {"passed", "required", "not_applicable"}
+            assert gate["evidence"]
+            assert gate["required_before_default"] in {True, False}
+
+        if entry["current_owner"] == "rust_native":
+            assert gates["parity"]["status"] == "passed"
+            assert gates["schema_compatibility"]["status"] == "passed"
+            assert gates["error_mapping"]["status"] in {"passed", "required"}
+            assert gates["benchmark_evidence"]["required_before_default"] is True
+
+        if entry["current_owner"] != "rust_native":
+            assert gates["parity"]["required_before_default"] is True
+            assert gates["schema_compatibility"]["required_before_default"] is True
+            assert gates["error_mapping"]["required_before_default"] is True
+
+
+def test_rust_migration_inventory_defines_binding_smoke_contracts() -> None:
+    """Every promoted operation should specify thin-binding smoke expectations."""
+    entries = load_inventory()["inventory"]
+
+    for entry in entries:
+        smoke = entry["binding_smoke"]
+        assert set(smoke["required_bindings"]) == REQUIRED_BINDINGS
+        assert smoke["operation"] == entry["operation"]
+        assert smoke["contract"] in {
+            "schema_envelope",
+            "request_response_roundtrip",
+            "fallback_error_contract",
+        }
+        assert smoke["required_before_default"] in {True, False}
+        if entry["current_owner"] == "rust_native":
+            assert smoke["required_before_default"] is True
+
+
+def test_rust_migration_inventory_records_benchmark_and_memory_evidence_commands() -> None:
+    """Benchmark and profiling requirements should point at concrete repo commands."""
+    entries = load_inventory()["inventory"]
+    combined = json.dumps(entries)
+
+    for command in (
+        "cargo bench --bench native_kernel",
+        "bindings/rust/scripts/profile_native_kernels.sh",
+        "bindings/rust/scripts/profile_memory_native_kernels.sh",
+        "JAX_PLATFORM_NAME=cpu",
+        "JAX_PLATFORM_NAME=gpu",
+    ):
+        assert command in combined
+
+    for entry in entries:
+        evidence = entry["evidence_commands"]
+        assert "parity" in evidence
+        assert "schema" in evidence
+        assert "benchmark" in evidence
+        assert "memory" in evidence
+        assert "binding_smoke" in evidence
 
 
 def test_rust_migration_inventory_profiles_required_promotion_evidence_categories() -> None:

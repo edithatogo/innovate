@@ -276,8 +276,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Rust Core Migration Execution Plan**
-  *Link: [./tracks/rust_core_migration_execution_20260507/](./tracks/rust_core_migration_execution_20260507/)*
+- [x] **Track: Rust Core Migration Execution Plan** *(Completed)*
+  *Link: [./archive/rust_core_migration_execution_20260507/](./archive/rust_core_migration_execution_20260507/)*
 
 ---
 

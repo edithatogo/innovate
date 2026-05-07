@@ -20,6 +20,8 @@ rules, and binding smoke-test requirements.
    for each slice.
 3. Define binding smoke-test requirements for every promoted operation.
 4. Preserve Python reference semantics until a slice is promoted.
+5. Keep the execution backlog machine-readable so CI can validate owner state,
+   operation dependencies, promotion evidence, and fallback policy.
 
 ## Parallelization
 
@@ -35,3 +37,6 @@ rules, and binding smoke-test requirements.
 1. Every remaining slice has an owner state and promotion path.
 2. No Rust-default claim exists without evidence.
 3. The migration plan can be executed in parallel by operation family.
+4. Every promoted or candidate default records parity, schema, error mapping,
+   benchmark, memory/profiling, fallback-rate, and binding smoke evidence
+   requirements.

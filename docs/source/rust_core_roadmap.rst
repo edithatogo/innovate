@@ -99,8 +99,9 @@ The canonical machine-readable inventory is
 :download:`rust_core_migration_inventory.json <_static/rust_core_migration_inventory.json>`.
 It records each slice's ``current_owner`` as one of ``rust_native``,
 ``python_bridge``, or ``python_reference``; its fallback status; profiling
-requirements; and promotion blockers. Release and CI tooling should consume
-that fixture rather than scraping this prose.
+requirements; promotion blockers; operation-level dependencies; promotion
+gates; evidence commands; and binding smoke requirements. Release and CI tooling
+should consume that fixture rather than scraping this prose.
 
 The table below is a human summary of the current default slices.
 
@@ -166,6 +167,48 @@ The table below is a human summary of the current default slices.
        and optional backend diagnostics remain Python-backed.
      - Medium. Vectorized diagnostic metrics can be JAX/XLA-eligible; promotion
        requires parity, benchmark evidence, and a clear deployment rationale.
+
+Execution backlog by operation family
+-------------------------------------
+
+The machine-readable inventory is the execution backlog. It groups every slice
+into phases that can be worked in parallel while preserving Python reference
+semantics and bridge fallback behavior.
+
+``phase_0_native_guardrails``
+  Keep packaged discovery metadata native and guarded by schema, manifest, and
+  binding smoke checks. Discovery has no CPU flamegraph metadata or DHAT memory
+  profile gate because it is metadata I/O.
+
+``phase_1_default_hardening``
+  Harden the current Bass ``predict_model`` and ``simulate_model`` native
+  slices. Capture parity, fallback-rate evidence, CPU benchmark output, CPU
+  flamegraph metadata, and a promotion dossier before expanding those defaults.
+
+``phase_2_logistic_expansion``
+  Widen the logistic ``fit_model``, ``predict_model``, ``simulate_model``,
+  ``summarize_model``, and ``diagnose_model`` slices only after unsupported
+  payload shapes such as covariates, event splits, custom fitter options, and
+  incomplete fitted states have explicit schema fixtures and error mappings.
+
+``phase_3_model_family_migration``
+  Migrate bridge-default model families operation by operation. Each candidate
+  must declare dependencies on stable request and response schemas, parity
+  fixtures, error mapping, benchmark evidence, memory evidence when relevant,
+  and a binding smoke matrix before any Rust-default claim.
+
+``phase_4_reference_boundary_review``
+  Keep probabilistic runtimes, uncertainty reports, backend-specific diagnostics,
+  and Python object internals Python-reference-owned until a stable schema
+  boundary exists. A later dossier can promote Rust-native, XLA-backed, or
+  continued Python ownership. Rule: No Rust-default claim exists without
+  evidence.
+
+Promotion dossier capture remains mandatory for any default change. The dossier
+must link raw Criterion output, Python reference timings, fallback-rate evidence,
+CPU flamegraph metadata, DHAT memory profile output or a not-applicable
+rationale, XLA CPU/GPU evidence when eligible, and binding smoke results for R,
+Julia, TypeScript, Go, Rust, C#, and Python.
 
 Fallback and error behavior
 ---------------------------
