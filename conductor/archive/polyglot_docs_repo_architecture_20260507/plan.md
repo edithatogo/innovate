@@ -18,10 +18,10 @@
     - [x] Migration and redirect rules
 - [x] Task: Conductor - Automated Review and Checkpoint 'Propose target architecture' (Protocol in workflow.md) [e26403a]
 
-## Phase 3: Validate navigation
+## Phase 3: Validate navigation [checkpoint: 8010fb4]
 
-- [x] Task: Add link and navigation tests
+- [x] Task: Add link and navigation tests [8010fb4]
     - [x] Verify new sections are reachable
     - [x] Verify old paths remain valid
     - [x] Verify ownership docs cover every language binding
-- [x] Task: Conductor - Automated Review and Checkpoint 'Validate navigation' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Validate navigation' (Protocol in workflow.md) [8010fb4]
