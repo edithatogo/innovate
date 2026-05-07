@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "generated_by_track": "external_governance_sustainability_20260507",
+  "status_values": ["ready", "near_ready", "blocked", "deferred"],
+  "governance_items": [
+    {
+      "id": "maintainer_roles",
+      "label": "Maintainer roles and decision responsibilities",
+      "status": "ready",
+      "evidence_links": [
+        "CODEOWNERS",
+        "conductor/tracks.md",
+        "docs/source/external_governance_sustainability.rst"
+      ],
+      "blockers": []
+    },
+    {
+      "id": "security_policy",
+      "label": "Security policy and vulnerability reporting",
+      "status": "ready",
+      "evidence_links": ["SECURITY.md", "CODE_OF_CONDUCT.md"],
+      "blockers": []
+    },
+    {
+      "id": "citation_metadata",
+      "label": "Citation metadata",
+      "status": "ready",
+      "evidence_links": ["CITATION.cff", "README.md", "paper.qmd"],
+      "blockers": []
+    },
+    {
+      "id": "contributor_onboarding",
+      "label": "Contributor onboarding",
+      "status": "ready",
+      "evidence_links": ["CONTRIBUTING.md", "CODE_OF_CONDUCT.md", "docs/source/index.rst"],
+      "blockers": []
+    },
+    {
+      "id": "support_policy",
+      "label": "Support and maintenance policy",
+      "status": "near_ready",
+      "evidence_links": [
+        "docs/source/release_notes_policy.rst",
+        "docs/source/scientific_hpc_readiness_roadmap.rst",
+        "conductor/tracks.md"
+      ],
+      "blockers": [
+        {
+          "status": "open",
+          "summary": "Publish a concise maintainer support matrix that names the language and package surfaces covered by active maintenance."
+        }
+      ]
+    },
+    {
+      "id": "funding_path",
+      "label": "Funding and sustainability path",
+      "status": "blocked",
+      "evidence_links": [
+        "README.md",
+        "docs/source/scientific_hpc_readiness_roadmap.rst",
+        "documents/manuscript_v1_review.md"
+      ],
+      "blockers": [
+        {
+          "status": "open",
+          "summary": "Add a funding or sponsorship statement and link it from the governance dossier."
+        },
+        {
+          "status": "deferred",
+          "summary": "Tie funding claims to a future stewardship decision rather than implying a current sponsor commitment."
+        }
+      ]
+    },
+    {
+      "id": "roadmap_ownership",
+      "label": "Roadmap ownership and decision records",
+      "status": "ready",
+      "evidence_links": [
+        "docs/source/scientific_hpc_readiness_roadmap.rst",
+        "docs/architecture_modernization_roadmap.md",
+        "conductor/archive/"
+      ],
+      "blockers": []
+    }
+  ]
+}

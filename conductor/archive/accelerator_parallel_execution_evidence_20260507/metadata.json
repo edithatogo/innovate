@@ -1,8 +1,8 @@
 {
   "track_id": "accelerator_parallel_execution_evidence_20260507",
   "type": "chore",
-  "status": "new",
+  "status": "completed",
   "created_at": "2026-05-06T22:09:30Z",
-  "updated_at": "2026-05-06T22:09:30Z",
+  "updated_at": "2026-05-07T00:30:00Z",
   "description": "Define CPU, GPU, TPU, distributed, and accelerator evidence gates without leaking backend internals into the public API."
 }

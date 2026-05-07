@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "description": "Backend-neutral artifact requirements for accelerator and parallel execution evidence.",
+  "execution_modes": [
+    "cpu",
+    "gpu",
+    "tpu",
+    "asic_or_vendor_accelerator",
+    "distributed",
+    "scheduler_aware"
+  ],
+  "required_artifact_fields": [
+    "execution_mode",
+    "accelerator_target",
+    "scheduler",
+    "runner_command",
+    "environment",
+    "baseline",
+    "compile_time_seconds",
+    "steady_state_runtime_seconds",
+    "memory_observation",
+    "fallback_status",
+    "rejection_rationale",
+    "evidence_uri"
+  ],
+  "fallback_status_values": [
+    "accepted",
+    "fallback_used",
+    "deferred",
+    "rejected"
+  ],
+  "scheduler_fields": [
+    "scheduler_family",
+    "queue_or_partition_class",
+    "node_count",
+    "task_count",
+    "worker_count",
+    "requested_walltime",
+    "submission_wrapper"
+  ],
+  "required_comparisons": [
+    "single_process_cpu_baseline",
+    "same_kernel_payload",
+    "memory_observation",
+    "fallback_or_rejection_rationale"
+  ],
+  "abi_policy": {
+    "public_contract": "kernel_schema",
+    "allowed_public_fields": [
+      "execution_mode",
+      "accelerator_target",
+      "scheduler",
+      "capability_metadata",
+      "runner_command",
+      "timing_summary",
+      "memory_observation",
+      "fallback_status",
+      "rejection_rationale",
+      "evidence_uri"
+    ],
+    "forbidden_public_fields": [
+      "xla_lowering",
+      "hlo_text",
+      "jaxlib_internal",
+      "device_buffer_pointer",
+      "vendor_runtime_handle",
+      "vendor_generated_code",
+      "rust_native_struct_layout",
+      "scheduler_internal_job_id",
+      "cluster_account_name"
+    ]
+  },
+  "evidence_uri_policy": {
+    "must_resolve": true,
+    "allowed_targets": [
+      "ci_artifact",
+      "benchmark_output",
+      "reviewed_dossier_entry"
+    ]
+  }
+}

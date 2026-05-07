@@ -261,18 +261,18 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Community Submission Readiness Matrix**
-  *Link: [./tracks/community_submission_readiness_20260507/](./tracks/community_submission_readiness_20260507/)*
+- [x] **Track: Community Submission Readiness Matrix** *(Completed)*
+  *Link: [./archive/community_submission_readiness_20260507/](./archive/community_submission_readiness_20260507/)*
 
 ---
 
-- [ ] **Track: HPC Packaging and Registry Readiness**
-  *Link: [./tracks/hpc_packaging_registry_readiness_20260507/](./tracks/hpc_packaging_registry_readiness_20260507/)*
+- [x] **Track: HPC Packaging and Registry Readiness** *(Completed)*
+  *Link: [./archive/hpc_packaging_registry_readiness_20260507/](./archive/hpc_packaging_registry_readiness_20260507/)*
 
 ---
 
-- [ ] **Track: Accelerator and Parallel Execution Evidence**
-  *Link: [./tracks/accelerator_parallel_execution_evidence_20260507/](./tracks/accelerator_parallel_execution_evidence_20260507/)*
+- [x] **Track: Accelerator and Parallel Execution Evidence** *(Completed)*
+  *Link: [./archive/accelerator_parallel_execution_evidence_20260507/](./archive/accelerator_parallel_execution_evidence_20260507/)*
 
 ---
 
@@ -286,10 +286,10 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Polyglot Repository and Documentation Architecture**
-  *Link: [./tracks/polyglot_docs_repo_architecture_20260507/](./tracks/polyglot_docs_repo_architecture_20260507/)*
+- [x] **Track: Polyglot Repository and Documentation Architecture** *(Completed)*
+  *Link: [./archive/polyglot_docs_repo_architecture_20260507/](./archive/polyglot_docs_repo_architecture_20260507/)*
 
 ---
 
-- [ ] **Track: External Governance and Sustainability Dossier**
-  *Link: [./tracks/external_governance_sustainability_20260507/](./tracks/external_governance_sustainability_20260507/)*
+- [x] **Track: External Governance and Sustainability Dossier** *(Completed)*
+  *Link: [./archive/external_governance_sustainability_20260507/](./archive/external_governance_sustainability_20260507/)*

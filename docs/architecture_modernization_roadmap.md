@@ -221,13 +221,13 @@ Conductor archive.
 - [HEOR Process Mining Fixture Contract and Interface Decision](../conductor/archive/heor_process_mining_fixture_contract_20260504/)
 - [Binding Package Version and Language-Suffix Name Alignment](../conductor/archive/binding_package_version_name_alignment_20260504/)
 - [Scientific and HPC Ecosystem Readiness Roadmap](../conductor/archive/scientific_hpc_ecosystem_readiness_20260507/)
-- [Community Submission Readiness Matrix](../conductor/tracks/community_submission_readiness_20260507/)
-- [HPC Packaging and Registry Readiness](../conductor/tracks/hpc_packaging_registry_readiness_20260507/)
+- [Community Submission Readiness Matrix](../conductor/archive/community_submission_readiness_20260507/)
+- [HPC Packaging and Registry Readiness](../conductor/archive/hpc_packaging_registry_readiness_20260507/)
 - [Accelerator and Parallel Execution Evidence](../conductor/tracks/accelerator_parallel_execution_evidence_20260507/)
 - [Rust Core Migration Execution Plan](../conductor/tracks/rust_core_migration_execution_20260507/)
 - [ABI and Binary Compatibility Strategy](../conductor/archive/abi_binary_compatibility_strategy_20260507/)
-- [Polyglot Repository and Documentation Architecture](../conductor/tracks/polyglot_docs_repo_architecture_20260507/)
-- [External Governance and Sustainability Dossier](../conductor/tracks/external_governance_sustainability_20260507/)
+- [Polyglot Repository and Documentation Architecture](../conductor/archive/polyglot_docs_repo_architecture_20260507/)
+- [External Governance and Sustainability Dossier](../conductor/archive/external_governance_sustainability_20260507/)
 
 The `Scientific and HPC Ecosystem Readiness Roadmap` track records the current
 and future architecture diagrams, a submission-readiness matrix, HPC gaps,

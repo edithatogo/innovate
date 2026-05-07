@@ -36,3 +36,11 @@ EasyBuild, HPSF, and E4S readiness work.
 1. Spack and EasyBuild readiness are explicit.
 2. HPC registry claims are blocked until evidence exists.
 3. Deployment options and dependency variants are documented.
+
+## Delivered Evidence
+
+The implemented dossier is ``docs/source/hpc_packaging_registry_readiness.rst``.
+It documents CPU-only, GPU/XLA, and mixed Rust/Python bridge deployment options;
+Spack and EasyBuild candidate packaging surfaces; dependency variants for Rust,
+JAX/XLA, bindings, and docs; install and smoke evidence requirements; and HPSF
+and E4S gates that remain blocked until reproducible registry evidence exists.

@@ -20,8 +20,8 @@
 
 ## Phase 3: Validate navigation
 
-- [ ] Task: Add link and navigation tests
-    - [ ] Verify new sections are reachable
-    - [ ] Verify old paths remain valid
-    - [ ] Verify ownership docs cover every language binding
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Validate navigation' (Protocol in workflow.md)
+- [x] Task: Add link and navigation tests
+    - [x] Verify new sections are reachable
+    - [x] Verify old paths remain valid
+    - [x] Verify ownership docs cover every language binding
+- [x] Task: Conductor - Automated Review and Checkpoint 'Validate navigation' (Protocol in workflow.md)

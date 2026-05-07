@@ -109,7 +109,7 @@
         "CONTRIBUTING.md",
         "SECURITY.md",
         "docs/source/scientific_hpc_readiness_roadmap.rst",
-        "conductor/tracks/external_governance_sustainability_20260507/spec.md"
+        "conductor/archive/external_governance_sustainability_20260507/spec.md"
       ],
       "blockers": [
         {

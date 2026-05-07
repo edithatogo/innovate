@@ -21,10 +21,13 @@ Start here
    runtime_logging
    remote_execution
    xla_backend_strategy
+   accelerator_parallel_execution_evidence
    rust_core_roadmap
    abi_binary_compatibility_strategy
    scientific_hpc_readiness_roadmap
    community_submission_readiness
+   hpc_packaging_registry_readiness
+   external_governance_sustainability
    polyglot_repo_architecture
    binding_publication_ci
    release_notes_policy
@@ -46,10 +49,13 @@ The architectural rationale and roadmap live in the repository docs, not in the 
 - ``innovate.stability.rst``
 - ``remote_execution``
 - ``xla_backend_strategy``
+- ``accelerator_parallel_execution_evidence``
 - ``rust_core_roadmap``
 - ``abi_binary_compatibility_strategy``
 - ``scientific_hpc_readiness_roadmap``
 - ``community_submission_readiness``
+- ``hpc_packaging_registry_readiness``
+- ``external_governance_sustainability``
 - ``polyglot_repo_architecture``
 - ``adr``
 

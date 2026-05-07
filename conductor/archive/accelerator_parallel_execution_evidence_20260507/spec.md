@@ -20,6 +20,10 @@ public API and ABI.
    evaluated without becoming public contract.
 4. Define distributed and scheduler-aware benchmark evidence.
 5. Add result artifact expectations and fallback behavior.
+6. Publish the evidence policy in the Sphinx docs and link it from the root
+   documentation index.
+7. Add a machine-readable artifact schema that can be validated without exposing
+   XLA, vendor runtime, Rust native, or scheduler internals as public fields.
 
 ## Parallelization
 
@@ -35,3 +39,7 @@ public API and ABI.
 1. Accelerator claims are evidence-gated.
 2. Unsupported accelerators have explicit rejection or deferral rationale.
 3. Public APIs remain stable and backend-neutral.
+4. The Sphinx evidence page covers CPU, GPU, TPU, vendor-specific accelerator,
+   distributed, and scheduler-aware execution evidence.
+5. Static tests validate the evidence schema fields and backend-neutral ABI
+   policy.
