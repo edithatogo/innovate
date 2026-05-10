@@ -32,7 +32,7 @@
     - [x] Confirm unsupported shapes fail with explicit capability errors
 - [x] Task: Conductor - Automated Review and Checkpoint 'Promote the Remaining Canonical Operations and Model Families' (Protocol in workflow.md)
 
-## Phase 3: Remove Undocumented Fallback and Lock the ABI Boundary
+## Phase 3: Remove Undocumented Fallback and Lock the ABI Boundary [checkpoint: a343566]
 
 - [x] Task: Narrow bridge fallback to only intentionally non-native surfaces
     - [x] Remove bridge fallback from promoted slices
@@ -46,11 +46,11 @@
     - [x] Confirm Python, Rust, R, Julia, Go, TypeScript, and C# still bind to the same kernel contract
     - [x] Add contract tests for changed request and response shapes
     - [x] Confirm bridge-only behavior is explicit in the remaining fallback paths
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Remove Undocumented Fallback and Lock the ABI Boundary' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Remove Undocumented Fallback and Lock the ABI Boundary' (Protocol in workflow.md)
 
 ## Phase 4: Align Bindings, Packaging, and Publication Surfaces
 
-- [ ] Task: Update binding documentation and manifests
+- [~] Task: Update binding documentation and manifests
     - [ ] Refresh the Rust binding README and package docs
     - [ ] Refresh the Python-facing binding docs if ownership wording changed
     - [ ] Refresh R, Julia, Go, TypeScript, and C# docs or manifests that describe runtime ownership
