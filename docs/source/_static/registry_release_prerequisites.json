@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "version": "0.5.0",
+  "package_targets": [
+    "python_pypi",
+    "typescript_npm",
+    "rust_crates_io",
+    "r_r_universe",
+    "r_cran",
+    "julia_general",
+    "go_modules",
+    "csharp_nuget"
+  ],
+  "targets": [
+    {
+      "target_id": "python_pypi",
+      "release_gate": "uv build and trusted publishing",
+      "required_access": "registry_secret",
+      "status": "ready",
+      "notes": "PyPI and TestPyPI publication is gated by the existing release workflow."
+    },
+    {
+      "target_id": "typescript_npm",
+      "release_gate": "npm pack --dry-run and schema/type checks",
+      "required_access": "registry_secret",
+      "status": "ready",
+      "notes": "npm publication remains release-gated and file-allowlisted."
+    },
+    {
+      "target_id": "rust_crates_io",
+      "release_gate": "cargo fmt, clippy, test, package",
+      "required_access": "registry_secret",
+      "status": "ready",
+      "notes": "crates.io publication awaits an explicit release event."
+    },
+    {
+      "target_id": "r_r_universe",
+      "release_gate": "R CMD build and R CMD check --as-cran",
+      "required_access": "maintainer",
+      "status": "ready",
+      "notes": "R-universe registration is maintained separately from CRAN."
+    },
+    {
+      "target_id": "r_cran",
+      "release_gate": "R CMD check --as-cran and manual inspection",
+      "required_access": "maintainer",
+      "status": "ready",
+      "notes": "CRAN submission remains a maintainer-controlled release action."
+    },
+    {
+      "target_id": "julia_general",
+      "release_gate": "Pkg.instantiate and Pkg.test",
+      "required_access": "maintainer",
+      "status": "ready",
+      "notes": "Julia General uses Registrator plus compatibility bounds."
+    },
+    {
+      "target_id": "go_modules",
+      "release_gate": "go test ./... and tagged module release",
+      "required_access": "maintainer",
+      "status": "ready",
+      "notes": "Go module release uses versioned tags and submodule path rules."
+    },
+    {
+      "target_id": "csharp_nuget",
+      "release_gate": "dotnet test and dotnet pack on net10.0/net11.0",
+      "required_access": "registry_secret",
+      "status": "ready",
+      "notes": "NuGet publishing is gated by symbol package and bridge-content checks."
+    }
+  ]
+}
