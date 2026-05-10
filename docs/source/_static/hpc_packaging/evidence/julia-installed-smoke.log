@@ -1,0 +1,10 @@
+Test Summary:          | Pass  Total  Time
+Julia binding contract |    7      7  0.1s
+Test Summary:          | Pass  Total   Time
+Julia binding wrappers |   16     16  33.7s
+Test Summary:           | Pass  Total  Time
+Julia binding packaging |    7      7  6.1s
+Test Summary:                        | Pass  Total  Time
+Julia installed-package bridge smoke |    6      6  0.9s
+Test Summary:                      | Pass  Total  Time
+Julia binding schema compatibility |    4      4  0.1s

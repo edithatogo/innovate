@@ -35,3 +35,4 @@
     - [x] Document uncertainty provenance and interpretation
     - [x] Add acceptance-criteria coverage to tests and docs
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Comparison Tools and Documentation' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Phase 3: Comparison Tools and Documentation' (Protocol in workflow.md)

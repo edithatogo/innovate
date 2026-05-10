@@ -431,7 +431,15 @@ impl KernelBinding {
         &self,
         request: &KernelRequest,
     ) -> Result<KernelResponse, KernelBindingError> {
-        logistic_fit_native_response(request)
+        match request.model_key.as_deref().unwrap_or("") {
+            "gompertz" => gompertz_fit_native_response(request),
+            "logistic" => logistic_fit_native_response(request),
+            "fisher_pry" => fisher_pry_fit_native_response(request),
+            model_key => Err(KernelBindingError::unsupported_native_operation(
+                KernelOperation::FitModel,
+                format!("native fitting is not implemented for model '{model_key}'"),
+            )),
+        }
     }
 
     pub fn predict_model(
@@ -536,7 +544,15 @@ impl KernelBinding {
         &self,
         request: &KernelRequest,
     ) -> Result<KernelResponse, KernelBindingError> {
-        logistic_summary_native_response(request)
+        match request.model_key.as_deref().unwrap_or("") {
+            "gompertz" => gompertz_summary_native_response(request, false),
+            "logistic" => logistic_summary_native_response(request),
+            "fisher_pry" => fisher_pry_summary_native_response(request, false),
+            model_key => Err(KernelBindingError::unsupported_native_operation(
+                KernelOperation::SummarizeModel,
+                format!("native summarize_model is not implemented for model '{model_key}'"),
+            )),
+        }
     }
 
     pub fn diagnose_model(
@@ -571,7 +587,15 @@ impl KernelBinding {
         &self,
         request: &KernelRequest,
     ) -> Result<KernelResponse, KernelBindingError> {
-        logistic_diagnose_native_response(request)
+        match request.model_key.as_deref().unwrap_or("") {
+            "gompertz" => gompertz_summary_native_response(request, true),
+            "logistic" => logistic_diagnose_native_response(request),
+            "fisher_pry" => fisher_pry_summary_native_response(request, true),
+            model_key => Err(KernelBindingError::unsupported_native_operation(
+                KernelOperation::DiagnoseModel,
+                format!("native diagnose_model is not implemented for model '{model_key}'"),
+            )),
+        }
     }
 
     pub fn invoke(&self, request: &KernelRequest) -> Result<KernelResponse, KernelBindingError> {
@@ -796,6 +820,7 @@ fn fit_diagnostics(
     observed: &[f64],
     predicted: &[f64],
     parameter_count: usize,
+    model_name: &str,
 ) -> Value {
     let residuals: Vec<f64> = observed
         .iter()
@@ -863,7 +888,7 @@ fn fit_diagnostics(
         "support_level": "supported",
         "provenance": "deterministic",
         "comparison_family": "fitted",
-        "model_name": "LogisticModel",
+        "model_name": model_name,
     })
 }
 
@@ -1069,7 +1094,7 @@ fn logistic_summary_or_diagnose_response(
                 .iter()
                 .map(|t| l / (1.0 + (-k * (t - x0)).exp()))
                 .collect();
-            let diagnostics = summary_diagnostics_value(times, values, &predicted);
+            let diagnostics = summary_diagnostics_value(times, values, &predicted, "LogisticModel");
             (predicted, Some(diagnostics))
         }
         (Some(times), None) => {
@@ -1152,8 +1177,13 @@ fn logistic_summary_or_diagnose_response(
     })
 }
 
-fn summary_diagnostics_value(time: &[f64], observed: &[f64], predicted: &[f64]) -> Value {
-    fit_diagnostics(time, observed, predicted, 4)
+fn summary_diagnostics_value(
+    time: &[f64],
+    observed: &[f64],
+    predicted: &[f64],
+    model_name: &str,
+) -> Value {
+    fit_diagnostics(time, observed, predicted, 4, model_name)
 }
 
 fn _copy_object_or_empty(values: Option<&Map<String, Value>>) -> Value {
@@ -1387,8 +1417,10 @@ fn fitted_state_native_response(
 
     let model_key = request.model_key.as_deref().unwrap_or("");
     match model_key {
+        "gompertz" => gompertz_native_response(operation, request),
         "logistic" => logistic_native_response(operation, request),
         "bass" => bass_native_response(operation, request),
+        "fisher_pry" => fisher_pry_native_response(operation, request),
         _ => Err(KernelBindingError::unsupported_native_operation(
             operation,
             format!("native {operation} is not implemented for model '{model_key}'"),
@@ -1491,6 +1523,114 @@ fn logistic_native_response(
             "model_key": model_key,
             "family": "diffusion",
             "model_name": "LogisticModel",
+            "runtime": "rust_native"
+        }),
+    })
+}
+
+fn gompertz_native_response(
+    operation: KernelOperation,
+    request: &KernelRequest,
+) -> Result<KernelResponse, KernelBindingError> {
+    match operation {
+        KernelOperation::FitModel => gompertz_fit_native_response(request),
+        KernelOperation::PredictModel | KernelOperation::SimulateModel => {
+            gompertz_predict_native_response(operation, request)
+        }
+        KernelOperation::SummarizeModel => gompertz_summary_native_response(request, false),
+        KernelOperation::DiagnoseModel => gompertz_summary_native_response(request, true),
+        _ => Err(KernelBindingError::invalid_request(
+            operation,
+            format!("native {operation} requires a fit, predict, simulate, summarize, or diagnose request"),
+        )),
+    }
+}
+
+fn gompertz_predict_native_response(
+    operation: KernelOperation,
+    request: &KernelRequest,
+) -> Result<KernelResponse, KernelBindingError> {
+    if request.operation != operation {
+        return Err(KernelBindingError::invalid_request(
+            request.operation,
+            format!("native {operation} requires a {operation} request"),
+        ));
+    }
+
+    let model_key = request.model_key.as_deref().unwrap_or("");
+    if model_key != "gompertz" {
+        return Err(KernelBindingError::unsupported_native_operation(
+            operation,
+            format!("native {operation} is not implemented for model '{model_key}'"),
+        ));
+    }
+
+    let payload = request.payload.as_object().ok_or_else(|| {
+        KernelBindingError::invalid_request(
+            operation,
+            format!("{operation} payload must be an object"),
+        )
+    })?;
+    let inputs = object_section(payload, "inputs", operation)?;
+    let time = numeric_array_from_aliases(inputs, &["time", "t"], operation)?;
+    let state = optional_object_section(payload, "state");
+
+    let state_model_key = state
+        .and_then(|state| state.get("model_key"))
+        .and_then(Value::as_str)
+        .unwrap_or(model_key);
+    if state_model_key != model_key {
+        return Err(KernelBindingError::invalid_request(
+            operation,
+            format!(
+                "kernel request model_key '{model_key}' does not match state model_key '{state_model_key}'"
+            ),
+        ));
+    }
+
+    let constructor_kwargs = state
+        .and_then(|state| state.get("constructor_kwargs"))
+        .and_then(Value::as_object);
+    let has_covariates = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("covariates"))
+        .is_some_and(|covariates| !covariates.as_array().is_some_and(Vec::is_empty));
+    let has_event = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("t_event"))
+        .is_some_and(|value| !value.is_null());
+    let input_covariates = inputs.get("covariates").is_some();
+    if has_covariates || has_event || input_covariates {
+        return Err(KernelBindingError::unsupported_native_operation(
+            operation,
+            "native Gompertz execution currently supports fitted states without covariates or event splits",
+        ));
+    }
+
+    let parameters = payload
+        .get("parameters")
+        .and_then(Value::as_object)
+        .or_else(|| state.and_then(|state| state.get("parameters")).and_then(Value::as_object))
+        .ok_or_else(|| {
+            KernelBindingError::invalid_request(
+                operation,
+                "kernel requests for model execution require fitted parameters in state or parameters",
+            )
+        })?;
+
+    let a = required_f64(parameters, "a", operation)?;
+    let _b = required_f64(parameters, "b", operation)?;
+    let c = required_f64(parameters, "c", operation)?;
+    let predictions = gompertz_prediction_series(&time, a, c);
+
+    Ok(KernelResponse {
+        schema_version: KERNEL_SCHEMA_VERSION.to_string(),
+        operation,
+        model_key: None,
+        result: Some(kernel_array_payload(&predictions)),
+        error: None,
+        metadata: json!({
+            "model_key": model_key,
+            "family": "diffusion",
+            "model_name": "GompertzModel",
             "runtime": "rust_native"
         }),
     })
@@ -1618,6 +1758,925 @@ fn bass_native_response(
     })
 }
 
+fn fisher_pry_native_response(
+    operation: KernelOperation,
+    request: &KernelRequest,
+) -> Result<KernelResponse, KernelBindingError> {
+    match operation {
+        KernelOperation::FitModel => fisher_pry_fit_native_response(request),
+        KernelOperation::PredictModel | KernelOperation::SimulateModel => {
+            fisher_pry_predict_native_response(operation, request)
+        }
+        KernelOperation::SummarizeModel => fisher_pry_summary_native_response(request, false),
+        KernelOperation::DiagnoseModel => fisher_pry_summary_native_response(request, true),
+        _ => Err(KernelBindingError::invalid_request(
+            operation,
+            format!("native {operation} requires a fit, predict, simulate, summarize, or diagnose request"),
+        )),
+    }
+}
+
+fn fisher_pry_predict_native_response(
+    operation: KernelOperation,
+    request: &KernelRequest,
+) -> Result<KernelResponse, KernelBindingError> {
+    if request.operation != operation {
+        return Err(KernelBindingError::invalid_request(
+            request.operation,
+            format!("native {operation} requires a {operation} request"),
+        ));
+    }
+
+    let model_key = request.model_key.as_deref().unwrap_or("");
+    if model_key != "fisher_pry" {
+        return Err(KernelBindingError::unsupported_native_operation(
+            operation,
+            format!("native {operation} is not implemented for model '{model_key}'"),
+        ));
+    }
+
+    let payload = request.payload.as_object().ok_or_else(|| {
+        KernelBindingError::invalid_request(
+            operation,
+            format!("{operation} payload must be an object"),
+        )
+    })?;
+    let inputs = object_section(payload, "inputs", operation)?;
+    let time = numeric_array_from_aliases(inputs, &["time", "t"], operation)?;
+    let state = optional_object_section(payload, "state");
+
+    let state_model_key = state
+        .and_then(|state| state.get("model_key"))
+        .and_then(Value::as_str)
+        .unwrap_or(model_key);
+    if state_model_key != model_key {
+        return Err(KernelBindingError::invalid_request(
+            operation,
+            format!(
+                "kernel request model_key '{model_key}' does not match state model_key '{state_model_key}'"
+            ),
+        ));
+    }
+
+    let constructor_kwargs = state
+        .and_then(|state| state.get("constructor_kwargs"))
+        .and_then(Value::as_object);
+    let has_covariates = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("covariates"))
+        .is_some_and(|covariates| !covariates.as_array().is_some_and(Vec::is_empty));
+    let has_event = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("t_event"))
+        .is_some_and(|value| !value.is_null());
+    let input_covariates = inputs.get("covariates").is_some();
+    if has_covariates || has_event || input_covariates {
+        return Err(KernelBindingError::unsupported_native_operation(
+            operation,
+            "native Fisher-Pry execution currently supports fitted states without covariates or event splits",
+        ));
+    }
+
+    let parameters = payload
+        .get("parameters")
+        .and_then(Value::as_object)
+        .or_else(|| state.and_then(|state| state.get("parameters")).and_then(Value::as_object))
+        .ok_or_else(|| {
+            KernelBindingError::invalid_request(
+                operation,
+                "kernel requests for model execution require fitted parameters in state or parameters",
+            )
+        })?;
+
+    let alpha = required_f64(parameters, "alpha", operation)?;
+    let t0 = required_f64(parameters, "t0", operation)?;
+    let predictions: Vec<f64> = time
+        .iter()
+        .map(|t| 1.0 / (1.0 + (-alpha * (t - t0)).exp()))
+        .collect();
+
+    Ok(KernelResponse {
+        schema_version: KERNEL_SCHEMA_VERSION.to_string(),
+        operation,
+        model_key: None,
+        result: Some(kernel_array_payload(&predictions)),
+        error: None,
+        metadata: json!({
+            "model_key": model_key,
+            "family": "substitution",
+            "model_name": "FisherPryModel",
+            "runtime": "rust_native"
+        }),
+    })
+}
+
+fn fisher_pry_fit_native_response(
+    request: &KernelRequest,
+) -> Result<KernelResponse, KernelBindingError> {
+    if request.operation != KernelOperation::FitModel {
+        return Err(KernelBindingError::invalid_request(
+            request.operation,
+            "native fitting requires a fit_model request",
+        ));
+    }
+
+    let model_key = request.model_key.as_deref().unwrap_or("");
+    if model_key != "fisher_pry" {
+        return Err(KernelBindingError::unsupported_native_operation(
+            KernelOperation::FitModel,
+            format!("native fitting is not implemented for model '{model_key}'"),
+        ));
+    }
+
+    let payload = request.payload.as_object().ok_or_else(|| {
+        KernelBindingError::invalid_request(
+            KernelOperation::FitModel,
+            "fit_model payload must be an object",
+        )
+    })?;
+    let inputs = object_section(payload, "inputs", KernelOperation::FitModel)?;
+    let time = numeric_array_from_aliases(inputs, &["time", "t"], KernelOperation::FitModel)?;
+    let observed = numeric_array_from_aliases(
+        inputs,
+        &["observed", "y", "values", "adoption", "share"],
+        KernelOperation::FitModel,
+    )?;
+    if time.len() != observed.len() {
+        return Err(KernelBindingError::invalid_request(
+            KernelOperation::FitModel,
+            "time and observed arrays must have the same length",
+        ));
+    }
+
+    let constructor_kwargs = _fit_constructor_kwargs(payload);
+    let has_covariates = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("covariates"))
+        .is_some_and(|covariates| !covariates.as_array().is_some_and(Vec::is_empty));
+    let has_event = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("t_event"))
+        .is_some_and(|value| !value.is_null());
+    let input_covariates = inputs.get("covariates").is_some();
+    let fit_options = payload.get("fit_options").and_then(Value::as_object);
+    let fitter_options = payload.get("fitter_options").and_then(Value::as_object);
+    if has_covariates
+        || has_event
+        || input_covariates
+        || fit_options.is_some_and(|values| !values.is_empty())
+        || fitter_options.is_some_and(|values| !values.is_empty())
+    {
+        return Err(KernelBindingError::unsupported_native_operation(
+            KernelOperation::FitModel,
+            "native Fisher-Pry fitting currently supports simple fitted states without covariates, events, or custom fitter options",
+        ));
+    }
+
+    let eps = 1e-9;
+    let clipped: Vec<f64> = observed
+        .iter()
+        .map(|value| value.max(eps).min(1.0 - eps))
+        .collect();
+    let logits: Vec<f64> = clipped
+        .iter()
+        .map(|value| (value / (1.0 - value)).ln())
+        .collect();
+
+    let n = time.len() as f64;
+    let sum_t: f64 = time.iter().sum();
+    let sum_z: f64 = logits.iter().sum();
+    let sum_tt: f64 = time.iter().map(|value| value * value).sum();
+    let sum_tz: f64 = time.iter().zip(logits.iter()).map(|(t, z)| t * z).sum();
+    let denom = n * sum_tt - sum_t * sum_t;
+    if !denom.is_finite() || denom.abs() < 1e-12 {
+        return Err(KernelBindingError::unsupported_native_operation(
+            KernelOperation::FitModel,
+            "native Fisher-Pry fitting could not identify a stable growth rate",
+        ));
+    }
+
+    let alpha = (n * sum_tz - sum_t * sum_z) / denom;
+    if !alpha.is_finite() || alpha <= 0.0 {
+        return Err(KernelBindingError::unsupported_native_operation(
+            KernelOperation::FitModel,
+            "native Fisher-Pry fitting requires a positive growth rate",
+        ));
+    }
+    let intercept = (sum_z - alpha * sum_t) / n;
+    let t0 = -intercept / alpha;
+    if !t0.is_finite() {
+        return Err(KernelBindingError::unsupported_native_operation(
+            KernelOperation::FitModel,
+            "native Fisher-Pry fitting could not derive a stable midpoint",
+        ));
+    }
+
+    let predictions: Vec<f64> = time
+        .iter()
+        .map(|t| 1.0 / (1.0 + (-alpha * (t - t0)).exp()))
+        .collect();
+    let prediction_payload = kernel_array_payload(&predictions);
+    let diagnostics = fit_diagnostics(&time, &observed, &predictions, 4, "FisherPryModel");
+    let state = json!({
+        "model_key": model_key,
+        "model_name": "FisherPryModel",
+        "constructor_kwargs": {},
+        "parameters": {
+            "alpha": alpha,
+            "t0": t0,
+        },
+        "predict_kwargs": {},
+    });
+
+    Ok(KernelResponse {
+        schema_version: KERNEL_SCHEMA_VERSION.to_string(),
+        operation: KernelOperation::FitModel,
+        model_key: None,
+        result: Some(json!({
+            "model_key": model_key,
+            "model_name": "FisherPryModel",
+            "family": "substitution",
+            "parameters": {
+                "alpha": alpha,
+                "t0": t0,
+            },
+            "predictions": prediction_payload,
+            "diagnostics": diagnostics,
+            "state": state,
+        })),
+        error: None,
+        metadata: json!({
+            "model_key": model_key,
+            "family": "substitution",
+            "model_name": "FisherPryModel",
+            "runtime": "rust_native"
+        }),
+    })
+}
+
+fn fisher_pry_summary_native_response(
+    request: &KernelRequest,
+    diagnose_only: bool,
+) -> Result<KernelResponse, KernelBindingError> {
+    let operation = request.operation;
+    let expected_operation = if diagnose_only {
+        KernelOperation::DiagnoseModel
+    } else {
+        KernelOperation::SummarizeModel
+    };
+    if operation != expected_operation {
+        return Err(KernelBindingError::invalid_request(
+            operation,
+            format!("native {expected_operation} requires a {expected_operation} request"),
+        ));
+    }
+
+    let model_key = request.model_key.as_deref().unwrap_or("");
+    if model_key != "fisher_pry" {
+        return Err(KernelBindingError::unsupported_native_operation(
+            operation,
+            format!("native {operation} is not implemented for model '{model_key}'"),
+        ));
+    }
+
+    let payload = request.payload.as_object().ok_or_else(|| {
+        KernelBindingError::invalid_request(
+            operation,
+            format!("{operation} payload must be an object"),
+        )
+    })?;
+    let inputs = object_section(payload, "inputs", operation)?;
+    let time = optional_numeric_array_from_aliases(inputs, &["time", "t"], operation)?;
+    let observed = optional_numeric_array_from_aliases(
+        inputs,
+        &["observed", "y", "values", "adoption", "share"],
+        operation,
+    )?;
+
+    let state = object_section(payload, "state", operation)?;
+    let state_model_key = state
+        .get("model_key")
+        .and_then(Value::as_str)
+        .unwrap_or(model_key);
+    if state_model_key != model_key {
+        return Err(KernelBindingError::invalid_request(
+            operation,
+            format!(
+                "kernel request model_key '{model_key}' does not match state model_key '{state_model_key}'"
+            ),
+        ));
+    }
+    let constructor_kwargs = state.get("constructor_kwargs").and_then(Value::as_object);
+    let predict_kwargs = state.get("predict_kwargs").and_then(Value::as_object);
+    if constructor_kwargs
+        .and_then(|kwargs| kwargs.get("covariates"))
+        .is_some_and(|covariates| !covariates.as_array().is_some_and(Vec::is_empty))
+        || constructor_kwargs
+            .and_then(|kwargs| kwargs.get("t_event"))
+            .is_some_and(|value| !value.is_null())
+        || inputs.get("covariates").is_some()
+    {
+        return Err(KernelBindingError::unsupported_native_operation(
+            operation,
+            "native Fisher-Pry execution currently supports fitted states without covariates or event splits",
+        ));
+    }
+
+    let parameters = state
+        .get("parameters")
+        .and_then(Value::as_object)
+        .or_else(|| payload.get("parameters").and_then(Value::as_object))
+        .ok_or_else(|| {
+            KernelBindingError::invalid_request(
+                operation,
+                "kernel requests for model execution require fitted parameters in state or parameters",
+            )
+        })?;
+
+    let alpha = required_f64(parameters, "alpha", operation)?;
+    let t0 = required_f64(parameters, "t0", operation)?;
+    let (_predicted, diagnostics) = match (time.as_ref(), observed.as_ref()) {
+        (Some(times), Some(values)) => {
+            if times.len() != values.len() {
+                return Err(KernelBindingError::invalid_request(
+                    operation,
+                    "time and observed arrays must have the same length",
+                ));
+            }
+            let predicted: Vec<f64> = times
+                .iter()
+                .map(|t| 1.0 / (1.0 + (-alpha * (t - t0)).exp()))
+                .collect();
+            let diagnostics = summary_diagnostics_value(times, values, &predicted, "FisherPryModel");
+            (predicted, Some(diagnostics))
+        }
+        (Some(times), None) => {
+            let predicted: Vec<f64> = times
+                .iter()
+                .map(|t| 1.0 / (1.0 + (-alpha * (t - t0)).exp()))
+                .collect();
+            (predicted, None)
+        }
+        (None, Some(_)) => {
+            return Err(KernelBindingError::invalid_request(
+                operation,
+                "diagnose_model requires time and observed arrays in the inputs section",
+            ));
+        }
+        (None, None) => {
+            if diagnose_only {
+                return Err(KernelBindingError::invalid_request(
+                    operation,
+                    "diagnose_model requires time and observed arrays in the inputs section",
+                ));
+            }
+            (Vec::new(), None)
+        }
+    };
+    let state_payload = json!({
+        "model_key": model_key,
+        "model_name": "FisherPryModel",
+        "constructor_kwargs": _copy_object_or_empty(constructor_kwargs),
+        "parameters": {
+            "alpha": alpha,
+            "t0": t0,
+        },
+        "predict_kwargs": _copy_object_or_empty(predict_kwargs),
+    });
+
+    let mut result = json!({
+        "model_key": model_key,
+        "model_name": "FisherPryModel",
+        "family": "substitution",
+        "parameter_names": ["alpha", "t0"],
+        "parameters": {
+            "alpha": alpha,
+            "t0": t0,
+        },
+        "constructor_kwargs": _copy_object_or_empty(constructor_kwargs),
+        "state": state_payload,
+    });
+    if !diagnose_only {
+        if let Some(diagnostics) = diagnostics {
+            result["diagnostics"] = diagnostics;
+        }
+    } else {
+        let diagnostics = diagnostics.ok_or_else(|| {
+            KernelBindingError::invalid_request(
+                operation,
+                "diagnose_model requires time and observed arrays in the inputs section",
+            )
+        })?;
+        result = json!({
+            "diagnostics": diagnostics,
+            "state": state_payload,
+        });
+    }
+
+    Ok(KernelResponse {
+        schema_version: KERNEL_SCHEMA_VERSION.to_string(),
+        operation,
+        model_key: None,
+        result: Some(result),
+        error: None,
+        metadata: json!({
+            "model_key": model_key,
+            "family": "substitution",
+            "model_name": "FisherPryModel",
+            "runtime": "rust_native"
+        }),
+    })
+}
+
+fn gompertz_summary_native_response(
+    request: &KernelRequest,
+    diagnose_only: bool,
+) -> Result<KernelResponse, KernelBindingError> {
+    let operation = request.operation;
+    let expected_operation = if diagnose_only {
+        KernelOperation::DiagnoseModel
+    } else {
+        KernelOperation::SummarizeModel
+    };
+    if operation != expected_operation {
+        return Err(KernelBindingError::invalid_request(
+            operation,
+            format!("native {expected_operation} requires a {expected_operation} request"),
+        ));
+    }
+
+    let model_key = request.model_key.as_deref().unwrap_or("");
+    if model_key != "gompertz" {
+        return Err(KernelBindingError::unsupported_native_operation(
+            operation,
+            format!("native {operation} is not implemented for model '{model_key}'"),
+        ));
+    }
+
+    let payload = request.payload.as_object().ok_or_else(|| {
+        KernelBindingError::invalid_request(
+            operation,
+            format!("{operation} payload must be an object"),
+        )
+    })?;
+    let inputs = object_section(payload, "inputs", operation)?;
+    let time = optional_numeric_array_from_aliases(inputs, &["time", "t"], operation)?;
+    let observed = optional_numeric_array_from_aliases(
+        inputs,
+        &["observed", "y", "values", "adoption", "share"],
+        operation,
+    )?;
+
+    let state = object_section(payload, "state", operation)?;
+    let state_model_key = state
+        .get("model_key")
+        .and_then(Value::as_str)
+        .unwrap_or(model_key);
+    if state_model_key != model_key {
+        return Err(KernelBindingError::invalid_request(
+            operation,
+            format!(
+                "kernel request model_key '{model_key}' does not match state model_key '{state_model_key}'"
+            ),
+        ));
+    }
+    let constructor_kwargs = state.get("constructor_kwargs").and_then(Value::as_object);
+    let predict_kwargs = state.get("predict_kwargs").and_then(Value::as_object);
+    if constructor_kwargs
+        .and_then(|kwargs| kwargs.get("covariates"))
+        .is_some_and(|covariates| !covariates.as_array().is_some_and(Vec::is_empty))
+        || constructor_kwargs
+            .and_then(|kwargs| kwargs.get("t_event"))
+            .is_some_and(|value| !value.is_null())
+        || inputs.get("covariates").is_some()
+    {
+        return Err(KernelBindingError::unsupported_native_operation(
+            operation,
+            "native Gompertz execution currently supports fitted states without covariates or event splits",
+        ));
+    }
+
+    let parameters = state
+        .get("parameters")
+        .and_then(Value::as_object)
+        .or_else(|| payload.get("parameters").and_then(Value::as_object))
+        .ok_or_else(|| {
+            KernelBindingError::invalid_request(
+                operation,
+                "kernel requests for model execution require fitted parameters in state or parameters",
+            )
+        })?;
+
+    let a = required_f64(parameters, "a", operation)?;
+    let b = required_f64(parameters, "b", operation)?;
+    let c = required_f64(parameters, "c", operation)?;
+    if let (Some(times), Some(values)) = (time.as_ref(), observed.as_ref()) {
+        if times.len() != values.len() {
+            return Err(KernelBindingError::invalid_request(
+                operation,
+                "time and observed arrays must have the same length",
+            ));
+        }
+    } else if diagnose_only && observed.is_none() {
+        return Err(KernelBindingError::invalid_request(
+            operation,
+            "diagnose_model requires time and observed arrays in the inputs section",
+        ));
+    } else if observed.is_some() && time.is_none() {
+        return Err(KernelBindingError::invalid_request(
+            operation,
+            "diagnose_model requires time and observed arrays in the inputs section",
+        ));
+    }
+    let predictions = time
+        .as_ref()
+        .map(|times| gompertz_prediction_series(times, a, c))
+        .unwrap_or_default();
+    let diagnostics = match (time.as_ref(), observed.as_ref()) {
+        (Some(times), Some(values)) => {
+            Some(summary_diagnostics_value(times, values, &predictions, "GompertzModel"))
+        }
+        _ => None,
+    };
+    let state_payload = json!({
+        "model_key": model_key,
+        "model_name": "GompertzModel",
+        "constructor_kwargs": _copy_object_or_empty(constructor_kwargs),
+        "parameters": {
+            "a": a,
+            "b": b,
+            "c": c,
+        },
+        "predict_kwargs": _copy_object_or_empty(predict_kwargs),
+    });
+
+    let mut result = json!({
+        "model_key": model_key,
+        "model_name": "GompertzModel",
+        "family": "diffusion",
+        "parameter_names": ["a", "b", "c"],
+        "parameters": {
+            "a": a,
+            "b": b,
+            "c": c,
+        },
+        "constructor_kwargs": _copy_object_or_empty(constructor_kwargs),
+        "state": state_payload,
+    });
+    if !diagnose_only {
+        if let Some(diagnostics) = diagnostics {
+            result["diagnostics"] = diagnostics;
+        }
+    } else {
+        let diagnostics = diagnostics.ok_or_else(|| {
+            KernelBindingError::invalid_request(
+                operation,
+                "diagnose_model requires time and observed arrays in the inputs section",
+            )
+        })?;
+        result = json!({
+            "diagnostics": diagnostics,
+            "state": state_payload,
+        });
+    }
+
+    Ok(KernelResponse {
+        schema_version: KERNEL_SCHEMA_VERSION.to_string(),
+        operation,
+        model_key: None,
+        result: Some(result),
+        error: None,
+        metadata: json!({
+            "model_key": model_key,
+            "family": "diffusion",
+            "model_name": "GompertzModel",
+            "runtime": "rust_native"
+        }),
+    })
+}
+
+fn gompertz_prediction_series(time: &[f64], a: f64, c: f64) -> Vec<f64> {
+    let initial_adopters = 1e-6_f64;
+    let scale = (a / initial_adopters).ln();
+    time.iter()
+        .map(|t| a * (-(scale * (-c * t).exp())).exp())
+        .collect()
+}
+
+struct GompertzFitResult {
+    a: f64,
+    b: f64,
+    c: f64,
+    predictions: Vec<f64>,
+}
+
+fn fit_gompertz_at_asymptote(
+    time: &[f64],
+    observed: &[f64],
+    a: f64,
+) -> Option<(f64, f64, f64, f64)> {
+    let max_observed = observed.iter().copied().fold(f64::NEG_INFINITY, f64::max);
+    if !a.is_finite() || a <= max_observed {
+        return None;
+    }
+
+    let eps = 1e-9;
+    let clipped: Vec<f64> = observed
+        .iter()
+        .map(|value| value.max(eps).min(a - eps))
+        .collect();
+    let transformed: Vec<f64> = clipped
+        .iter()
+        .map(|value| {
+            let ratio = value / a;
+            if ratio <= 0.0 || ratio >= 1.0 {
+                f64::NAN
+            } else {
+                (-ratio.ln()).ln()
+            }
+        })
+        .collect();
+    if transformed.iter().any(|value| !value.is_finite()) {
+        return None;
+    }
+
+    let n = time.len() as f64;
+    let sum_t: f64 = time.iter().sum();
+    let sum_z: f64 = transformed.iter().sum();
+    let sum_tt: f64 = time.iter().map(|value| value * value).sum();
+    let sum_tz: f64 = time.iter().zip(transformed.iter()).map(|(t, z)| t * z).sum();
+    let denom = n * sum_tt - sum_t * sum_t;
+    if !denom.is_finite() || denom.abs() < 1e-12 {
+        return None;
+    }
+
+    let slope = (n * sum_tz - sum_t * sum_z) / denom;
+    let c = -slope;
+    if !c.is_finite() || c <= 0.0 {
+        return None;
+    }
+    let intercept = (sum_z - slope * sum_t) / n;
+    let b = intercept.exp();
+    if !b.is_finite() || b <= 0.0 {
+        return None;
+    }
+
+    let predictions = gompertz_prediction_series(time, a, c);
+    let sse = observed
+        .iter()
+        .zip(predictions.iter())
+        .map(|(y, y_hat)| {
+            let residual = y - y_hat;
+            residual * residual
+        })
+        .sum();
+
+    Some((sse, a, b, c))
+}
+
+fn refine_gompertz_asymptote(
+    time: &[f64],
+    observed: &[f64],
+    left: f64,
+    right: f64,
+) -> Option<(f64, f64, f64, f64)> {
+    if !left.is_finite() || !right.is_finite() || right <= left {
+        return None;
+    }
+
+    let phi = (1.0 + 5.0_f64.sqrt()) / 2.0;
+    let inv_phi = 1.0 / phi;
+    let mut a = left;
+    let mut b = right;
+    let mut c = b - (b - a) * inv_phi;
+    let mut d = a + (b - a) * inv_phi;
+    let mut fc = fit_gompertz_at_asymptote(time, observed, c);
+    let mut fd = fit_gompertz_at_asymptote(time, observed, d);
+
+    for _ in 0..48 {
+        match (fc, fd) {
+            (Some(left_candidate), Some(right_candidate)) => {
+                if right_candidate.0 < left_candidate.0 {
+                    a = c;
+                    c = d;
+                    fc = fd;
+                    d = a + (b - a) * inv_phi;
+                    fd = fit_gompertz_at_asymptote(time, observed, d);
+                } else {
+                    b = d;
+                    d = c;
+                    fd = fc;
+                    c = b - (b - a) * inv_phi;
+                    fc = fit_gompertz_at_asymptote(time, observed, c);
+                }
+            }
+            (Some(_), None) => {
+                b = d;
+                d = c;
+                fd = fc;
+                c = b - (b - a) * inv_phi;
+                fc = fit_gompertz_at_asymptote(time, observed, c);
+            }
+            (None, Some(_)) => {
+                a = c;
+                c = d;
+                fc = fd;
+                d = a + (b - a) * inv_phi;
+                fd = fit_gompertz_at_asymptote(time, observed, d);
+            }
+            (None, None) => return None,
+        }
+
+        if (b - a).abs() < 1e-10 {
+            break;
+        }
+    }
+
+    [fc, fd]
+        .into_iter()
+        .flatten()
+        .min_by(|left_candidate, right_candidate| left_candidate.0.total_cmp(&right_candidate.0))
+}
+
+fn fit_gompertz_curve(
+    time: &[f64],
+    observed: &[f64],
+) -> Result<GompertzFitResult, KernelBindingError> {
+    let max_y = observed.iter().copied().fold(f64::NEG_INFINITY, f64::max);
+    if !max_y.is_finite() || max_y <= 0.0 {
+        return Err(KernelBindingError::unsupported_native_operation(
+            KernelOperation::FitModel,
+            "native Gompertz fitting requires positive observed values",
+        ));
+    }
+
+    let lower = (max_y.max(1e-9)) * 1.001;
+    let upper = (max_y * 10.0).max(max_y + 1.0).max(lower * 2.0);
+    let sample_count = 200usize;
+    let mut coarse: Vec<Option<(f64, f64, f64, f64)>> = Vec::with_capacity(sample_count);
+
+    for index in 0..sample_count {
+        let fraction = index as f64 / (sample_count.saturating_sub(1) as f64);
+        let a = lower + (upper - lower) * fraction;
+        coarse.push(fit_gompertz_at_asymptote(time, observed, a));
+    }
+
+    let mut best_index: Option<usize> = None;
+    let mut best_candidate: Option<(f64, f64, f64, f64)> = None;
+    for (index, candidate) in coarse.iter().enumerate() {
+        if let Some(candidate) = candidate {
+            if best_candidate
+                .as_ref()
+                .is_none_or(|current| candidate.0 < current.0)
+            {
+                best_index = Some(index);
+                best_candidate = Some(*candidate);
+            }
+        }
+    }
+
+    let (best_sse, best_a, best_b, best_c) = best_candidate.ok_or_else(|| {
+        KernelBindingError::unsupported_native_operation(
+            KernelOperation::FitModel,
+            "native Gompertz fitting could not identify a stable asymptote",
+        )
+    })?;
+
+    let refined = if let Some(index) = best_index {
+        let left = if index > 0 {
+            lower + (upper - lower) * ((index - 1) as f64 / (sample_count.saturating_sub(1) as f64))
+        } else {
+            lower
+        };
+        let right = if index + 1 < sample_count {
+            lower + (upper - lower) * ((index + 1) as f64 / (sample_count.saturating_sub(1) as f64))
+        } else {
+            upper
+        };
+        refine_gompertz_asymptote(time, observed, left, right)
+            .or(Some((best_sse, best_a, best_b, best_c)))
+    } else {
+        None
+    };
+
+    let (_, a, b, c) = refined
+        .map(|candidate| {
+            if candidate.0 <= best_sse {
+                candidate
+            } else {
+                (best_sse, best_a, best_b, best_c)
+            }
+        })
+        .unwrap_or((best_sse, best_a, best_b, best_c));
+
+    let predictions = gompertz_prediction_series(time, a, c);
+
+    Ok(GompertzFitResult {
+        a,
+        b,
+        c,
+        predictions,
+    })
+}
+
+fn gompertz_fit_native_response(
+    request: &KernelRequest,
+) -> Result<KernelResponse, KernelBindingError> {
+    if request.operation != KernelOperation::FitModel {
+        return Err(KernelBindingError::invalid_request(
+            request.operation,
+            "native fitting requires a fit_model request",
+        ));
+    }
+
+    let model_key = request.model_key.as_deref().unwrap_or("");
+    if model_key != "gompertz" {
+        return Err(KernelBindingError::unsupported_native_operation(
+            KernelOperation::FitModel,
+            format!("native fitting is not implemented for model '{model_key}'"),
+        ));
+    }
+
+    let payload = request.payload.as_object().ok_or_else(|| {
+        KernelBindingError::invalid_request(
+            KernelOperation::FitModel,
+            "fit_model payload must be an object",
+        )
+    })?;
+    let inputs = object_section(payload, "inputs", KernelOperation::FitModel)?;
+    let time = numeric_array_from_aliases(inputs, &["time", "t"], KernelOperation::FitModel)?;
+    let observed = numeric_array_from_aliases(
+        inputs,
+        &["observed", "y", "values", "adoption", "share"],
+        KernelOperation::FitModel,
+    )?;
+    if time.len() != observed.len() {
+        return Err(KernelBindingError::invalid_request(
+            KernelOperation::FitModel,
+            "time and observed arrays must have the same length",
+        ));
+    }
+
+    let constructor_kwargs = _fit_constructor_kwargs(payload);
+    let has_covariates = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("covariates"))
+        .is_some_and(|covariates| !covariates.as_array().is_some_and(Vec::is_empty));
+    let has_event = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("t_event"))
+        .is_some_and(|value| !value.is_null());
+    let input_covariates = inputs.get("covariates").is_some();
+    let fit_options = payload.get("fit_options").and_then(Value::as_object);
+    let fitter_options = payload.get("fitter_options").and_then(Value::as_object);
+    if has_covariates
+        || has_event
+        || input_covariates
+        || fit_options.is_some_and(|values| !values.is_empty())
+        || fitter_options.is_some_and(|values| !values.is_empty())
+    {
+        return Err(KernelBindingError::unsupported_native_operation(
+            KernelOperation::FitModel,
+            "native Gompertz fitting currently supports simple fitted states without covariates, events, or custom fitter options",
+        ));
+    }
+
+    let fit = fit_gompertz_curve(&time, &observed)?;
+    let prediction_payload = kernel_array_payload(&fit.predictions);
+    let diagnostics = fit_diagnostics(&time, &observed, &fit.predictions, 3, "GompertzModel");
+    let state = json!({
+        "model_key": model_key,
+        "model_name": "GompertzModel",
+        "constructor_kwargs": {},
+        "parameters": {
+            "a": fit.a,
+            "b": fit.b,
+            "c": fit.c,
+        },
+        "predict_kwargs": {},
+    });
+
+    Ok(KernelResponse {
+        schema_version: KERNEL_SCHEMA_VERSION.to_string(),
+        operation: KernelOperation::FitModel,
+        model_key: None,
+        result: Some(json!({
+            "model_key": model_key,
+            "model_name": "GompertzModel",
+            "family": "diffusion",
+            "parameters": {
+                "a": fit.a,
+                "b": fit.b,
+                "c": fit.c,
+            },
+            "predictions": prediction_payload,
+            "diagnostics": diagnostics,
+            "state": state,
+        })),
+        error: None,
+        metadata: json!({
+            "model_key": model_key,
+            "family": "diffusion",
+            "model_name": "GompertzModel",
+            "runtime": "rust_native"
+        }),
+    })
+}
+
 fn logistic_fit_native_response(
     request: &KernelRequest,
 ) -> Result<KernelResponse, KernelBindingError> {
@@ -1680,7 +2739,7 @@ fn logistic_fit_native_response(
 
     let fit = fit_logistic_curve(&time, &observed)?;
     let prediction_payload = kernel_array_payload(&fit.predictions);
-    let diagnostics = fit_diagnostics(&time, &observed, &fit.predictions, 4);
+    let diagnostics = fit_diagnostics(&time, &observed, &fit.predictions, 4, "LogisticModel");
     let state = json!({
         "model_key": model_key,
         "model_name": "LogisticModel",

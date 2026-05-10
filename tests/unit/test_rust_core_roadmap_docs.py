@@ -64,9 +64,10 @@ def test_rust_core_roadmap_names_candidate_operations_and_gates() -> None:
     assert "benchmark gates" in roadmap
     assert "schema compatibility" in roadmap
     assert "Rust-native" in roadmap
-    assert "logistic prediction" in roadmap
-    assert "logistic fitting" in roadmap
-    assert "logistic summary and diagnostics" in roadmap
+    assert "Fisher-Pry" in roadmap
+    assert "logistic, Fisher-Pry, and Gompertz fitting" in roadmap
+    assert "logistic, Fisher-Pry, Gompertz, and Bass prediction" in roadmap
+    assert "logistic, Fisher-Pry, and Gompertz summary and diagnostics" in roadmap
     assert "Python bridge fallback" in roadmap
     assert "same simple fitted-state payload" in roadmap
     assert "Benchmarking and profiling tooling" in roadmap
@@ -101,11 +102,11 @@ def test_rust_core_roadmap_inventories_runtime_status_and_xla_fit() -> None:
 
     expected_inventory = {
         "discover_models": ("Native metadata discovery", "Low"),
-        "fit_model": ("Native logistic fitting", "Medium"),
-        "predict_model": ("Native logistic prediction and Bass prediction", "High"),
-        "simulate_model": ("Native logistic simulation and Bass simulation", "High"),
-        "summarize_model": ("Native logistic summary", "Medium"),
-        "diagnose_model": ("Native logistic diagnostics", "Medium"),
+        "fit_model": ("Native logistic, Fisher-Pry, and Gompertz fitting", "Medium"),
+        "predict_model": ("Native logistic, Fisher-Pry, Gompertz, and Bass prediction", "High"),
+        "simulate_model": ("Native logistic, Fisher-Pry, Gompertz, and Bass simulation", "High"),
+        "summarize_model": ("Native logistic, Fisher-Pry, and Gompertz summary", "Medium"),
+        "diagnose_model": ("Native logistic, Fisher-Pry, and Gompertz diagnostics", "Medium"),
     }
 
     for operation, expected_phrases in expected_inventory.items():
@@ -150,10 +151,9 @@ def test_rust_core_roadmap_audit_matches_current_runtime_ownership() -> None:
         "bindings/rust/src/lib.rs",
         "Python reference owner",
         "packaged discovery metadata",
-        "logistic ``fit_model``",
-        "logistic ``summarize_model``",
-        "logistic ``diagnose_model``",
-        "Bass ``predict_model``/``simulate_model``",
+        "logistic, Fisher-Pry, and Gompertz ``fit_model``",
+        "logistic, Fisher-Pry, and Gompertz ``summarize_model`` and ``diagnose_model``",
+        "logistic, Fisher-Pry, Gompertz, and Bass ``predict_model``/``simulate_model``",
         "Python bridge fallback path",
         "Unsupported native slices therefore remain",
         "bridge-backed",
@@ -187,9 +187,12 @@ def test_rust_core_roadmap_audit_matches_current_runtime_ownership() -> None:
         "pub fn simulate_model_native",
         "pub fn summarize_model_native",
         "pub fn diagnose_model_native",
+        "fn gompertz_fit_native_response",
+        "fn gompertz_summary_native_response",
         "fn logistic_fit_native_response",
         "fn logistic_summary_native_response",
         "fn logistic_diagnose_native_response",
+        '"gompertz" => gompertz_native_response',
         '"logistic" => logistic_native_response',
         '"bass" => bass_native_response',
         "pub fn invoke",
@@ -206,12 +209,13 @@ def test_rust_core_roadmap_audit_matches_current_runtime_ownership() -> None:
     native_keys = rust_native_model_keys()
 
     assert {"bass", "logistic"} <= python_keys
-    assert {"bass", "logistic"} <= native_keys
+    assert {"bass", "gompertz", "logistic"} <= native_keys
     assert native_keys < python_keys
 
     non_native_model_keys = python_keys - native_keys
-    assert {"gompertz", "fisher_pry", "network_diffusion", "policy_hazard"} <= non_native_model_keys
-    for model_key in ("gompertz", "fisher_pry", "network_diffusion", "policy_hazard"):
+    assert "fisher_pry" in native_keys
+    assert {"network_diffusion", "policy_hazard"} <= non_native_model_keys
+    for model_key in ("network_diffusion", "policy_hazard"):
         assert f"``{model_key}``" in roadmap
 
 
@@ -264,12 +268,17 @@ def test_rust_core_migration_inventory_matches_rust_and_python_sources() -> None
     expected_native_anchors = {
         ("discover_models", "all_packaged_discovery_metadata"): "pub fn discover_models_native",
         ("fit_model", "logistic_simple_positive_observations"): "fn logistic_fit_native_response",
+        ("fit_model", "gompertz_simple_positive_observations"): "fn gompertz_fit_native_response",
         ("predict_model", "logistic_simple_fitted_state"): '"logistic" => logistic_native_response',
+        ("predict_model", "gompertz_simple_fitted_state"): '"gompertz" => gompertz_native_response',
         ("predict_model", "bass_simple_fitted_state"): '"bass" => bass_native_response',
         ("simulate_model", "logistic_simple_fitted_state"): '"logistic" => logistic_native_response',
+        ("simulate_model", "gompertz_simple_fitted_state"): '"gompertz" => gompertz_native_response',
         ("simulate_model", "bass_simple_fitted_state"): '"bass" => bass_native_response',
         ("summarize_model", "logistic_simple_fitted_state"): "fn logistic_summary_native_response",
+        ("summarize_model", "gompertz_simple_fitted_state"): "fn gompertz_summary_native_response",
         ("diagnose_model", "logistic_simple_fitted_state"): "fn logistic_diagnose_native_response",
+        ("diagnose_model", "gompertz_simple_fitted_state"): "fn gompertz_summary_native_response",
     }
     entries_by_key = {(entry["operation"], entry["model_slice"]): entry for entry in entries}
     for key, rust_anchor in expected_native_anchors.items():
@@ -306,7 +315,7 @@ def test_rust_core_roadmap_explicitly_rejects_full_rust_ownership() -> None:
         "Python reference owner",
         "exposes Rust-native execution only for the documented slices",
         "Unsupported native slices therefore remain",
-        "Rust Core Ownership Closure and Remaining Slice Inventory",
+        "Rust Core Migration Completion and Polyglot Claim Closure",
         "The core is therefore not entirely written in Rust yet",
         "Promotion remains operation by operation",
     ):
@@ -321,8 +330,8 @@ def test_rust_core_roadmap_exposes_the_remaining_ownership_gap_track() -> None:
 
     assert "remaining ownership gap is tracked" in roadmap
     assert "residual bridge-backed slices and Python-only reference areas" in roadmap
-    assert "Rust Core Ownership Closure and Remaining Slice Inventory" in tech_stack
-    assert "Rust Core Ownership Closure and Remaining Slice Inventory" in registry
+    assert "Rust Core Migration Completion and Polyglot Claim Closure" in tech_stack
+    assert "Rust Core Migration Completion and Polyglot Claim Closure" in registry
 
 
 def test_rust_core_roadmap_enumerates_python_bridge_fallback_inventory() -> None:

@@ -28,6 +28,7 @@ Start here
    community_submission_readiness
    hpc_packaging_registry_readiness
    external_governance_sustainability
+   submission_readiness_dossiers
    polyglot_repo_architecture
    binding_publication_ci
    release_notes_policy

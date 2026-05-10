@@ -28,8 +28,8 @@ package source.
 1. Julia bridge calls work without a repo checkout when `INNOVATE_PYTHON_COMMAND`
    points to a Python environment that has `innovate` installed.
 2. Checkout-mode tests still pass unchanged.
-3. The registry-readiness docs no longer describe Julia publication as blocked by
-   a checkout-only runtime path.
+3. The registry-readiness docs describe the installed-package runtime contract
+   without referring to a checkout-only blocker.
 4. CI or publish workflows include an installed-package smoke validation.
 
 ## Out of Scope

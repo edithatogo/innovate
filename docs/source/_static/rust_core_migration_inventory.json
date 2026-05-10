@@ -1,5 +1,6 @@
 {
   "schema_version": 1,
+  "gap_track": "rust_core_migration_completion_20260511",
   "owner_values": [
     "rust_native",
     "python_bridge",
@@ -13,13 +14,13 @@
   ],
   "native_model_keys": [
     "bass",
+    "fisher_pry",
+    "gompertz",
     "logistic"
   ],
   "python_only_model_keys": [
     "complementary_goods",
     "composite",
-    "fisher_pry",
-    "gompertz",
     "hierarchical",
     "latent_process",
     "lotka_volterra",
@@ -144,6 +145,115 @@
       "python_reference_scope": "Broader fitters, probabilistic fitting, uncertainty-aware fitting, and model-specific Python internals remain Python reference owned.",
       "profiling_requirements": [
         "Criterion benchmark coverage for native logistic fit.",
+        "CPU flamegraph for fit_model_native before widening the native slice.",
+        "Memory profiling when changing allocation-heavy search or residual code."
+      ],
+      "promotion_blockers": [
+        "No native covariate, event, custom fitter option, or uncertainty payload support.",
+        "No benchmark dossier comparing Python reference timing, Rust CPU timing, and bridge fallback rate for expanded fit payloads."
+      ],
+      "migration_phase": "phase_2_logistic_expansion",
+      "promotion_state": "native_candidate_needs_evidence",
+      "depends_on": [
+        "kernel_schema_1_0",
+        "python_reference_semantics",
+        "bindings/rust/tests/operations.rs",
+        "abi_binary_compatibility_strategy_20260507"
+      ],
+      "unsupported_payload_shapes": [
+        "covariates",
+        "custom fitter options"
+      ],
+      "promotion_path": [
+        "Keep Python reference parity fixtures green for the documented native slice.",
+        "Capture CPU benchmark, CPU flamegraph metadata, DHAT memory evidence when relevant, and fallback-rate evidence before widening defaults.",
+        "Run binding smoke tests for every thin binding before claiming the operation as Rust-default."
+      ],
+      "promotion_gates": {
+        "parity": {
+          "status": "passed",
+          "evidence": "Rust operation tests compare native and bridge/reference responses for this slice.",
+          "required_before_default": true
+        },
+        "schema_compatibility": {
+          "status": "passed",
+          "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
+          "required_before_default": true
+        },
+        "error_mapping": {
+          "status": "passed",
+          "evidence": "Native unsupported payloads must return stable unsupported_native_operation or bridge_command_failed mappings.",
+          "required_before_default": true
+        },
+        "benchmark_evidence": {
+          "status": "required",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "required_before_default": true
+        },
+        "memory_evidence": {
+          "status": "required",
+          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "required_before_default": true
+        },
+        "binding_smoke": {
+          "status": "passed",
+          "evidence": "Thin bindings must exercise the promoted request/response envelope and fallback behavior.",
+          "required_before_default": true
+        }
+      },
+      "binding_smoke": {
+        "operation": "fit_model",
+        "required_bindings": [
+          "python",
+          "rust",
+          "r",
+          "julia",
+          "typescript",
+          "go",
+          "csharp"
+        ],
+        "contract": "request_response_roundtrip",
+        "required_before_default": true
+      },
+      "evidence_commands": {
+        "parity": [
+          "cd bindings/rust && cargo test --test operations",
+          "uv run pytest tests/unit/test_rust_core_migration_inventory.py"
+        ],
+        "schema": [
+          "cd bindings/rust && cargo test --test schema_compatibility",
+          "uv run pytest tests/unit/test_rust_core_roadmap_docs.py"
+        ],
+        "benchmark": [
+          "cd bindings/rust && cargo bench --bench native_kernel",
+          "bindings/rust/scripts/profile_native_kernels.sh",
+          "JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-cpu.json",
+          "JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-gpu.json"
+        ],
+        "memory": [
+          "bindings/rust/scripts/profile_memory_native_kernels.sh"
+        ],
+        "binding_smoke": [
+          "cd bindings/rust && cargo test",
+          "uv run pytest tests/unit/test_binding_publication_ci.py",
+          "npm test --workspace bindings/typescript",
+          "Rscript bindings/r/tests/run.R",
+          "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+          "go test ./...",
+          "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj"
+        ]
+      }
+    },
+    {
+      "operation": "fit_model",
+      "model_slice": "gompertz_simple_positive_observations",
+      "current_owner": "rust_native",
+      "fallback_status": "native_default_python_bridge_fallback",
+      "native_scope": "Simple Gompertz fitting with positive observed values and explicit time arrays; no covariates, events, or custom fitter options.",
+      "fallback_scope": "Unsupported Gompertz payload shapes and non-native model families fall back through the Python bridge from wrapper methods.",
+      "python_reference_scope": "Broader fitters, probabilistic fitting, uncertainty-aware fitting, and model-specific Python internals remain Python reference owned.",
+      "profiling_requirements": [
+        "Criterion benchmark coverage for native Gompertz fit.",
         "CPU flamegraph for fit_model_native before widening the native slice.",
         "Memory profiling when changing allocation-heavy search or residual code."
       ],
@@ -572,6 +682,115 @@
     },
     {
       "operation": "predict_model",
+      "model_slice": "gompertz_simple_fitted_state",
+      "current_owner": "rust_native",
+      "fallback_status": "native_default_python_bridge_fallback",
+      "native_scope": "Simple fitted Gompertz states with finite a, b, and c parameters and explicit time arrays; no covariates or event splits.",
+      "fallback_scope": "Unsupported Gompertz payload shapes and non-native families fall back through the Python bridge from wrapper methods when the native path reports unsupported_native_operation.",
+      "python_reference_scope": "Python remains authoritative for richer Gompertz prediction semantics and model-specific internals.",
+      "profiling_requirements": [
+        "Criterion benchmark coverage for native Gompertz prediction is present and must be maintained before default expansion.",
+        "CPU flamegraph for predict_model_native Gompertz slices before widening the native slice."
+      ],
+      "promotion_blockers": [
+        "No native covariate support.",
+        "Native Gompertz time grids are limited to simple fitted states.",
+        "Benchmark and profiling dossier is incomplete for Gompertz-specific promotion beyond the simple fitted-state slice."
+      ],
+      "migration_phase": "phase_1_default_hardening",
+      "promotion_state": "native_candidate_needs_evidence",
+      "depends_on": [
+        "kernel_schema_1_0",
+        "python_reference_semantics",
+        "bindings/rust/tests/operations.rs",
+        "abi_binary_compatibility_strategy_20260507"
+      ],
+      "unsupported_payload_shapes": [
+        "covariates",
+        "event splits"
+      ],
+      "promotion_path": [
+        "Keep Python reference parity fixtures green for the documented native slice.",
+        "Capture CPU benchmark, CPU flamegraph metadata, DHAT memory evidence when relevant, and fallback-rate evidence before widening defaults.",
+        "Run binding smoke tests for every thin binding before claiming the operation as Rust-default."
+      ],
+      "promotion_gates": {
+        "parity": {
+          "status": "passed",
+          "evidence": "Rust operation tests compare native and bridge/reference responses for this slice.",
+          "required_before_default": true
+        },
+        "schema_compatibility": {
+          "status": "passed",
+          "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
+          "required_before_default": true
+        },
+        "error_mapping": {
+          "status": "passed",
+          "evidence": "Native unsupported payloads must return stable unsupported_native_operation or bridge_command_failed mappings.",
+          "required_before_default": true
+        },
+        "benchmark_evidence": {
+          "status": "required",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "required_before_default": true
+        },
+        "memory_evidence": {
+          "status": "required",
+          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "required_before_default": true
+        },
+        "binding_smoke": {
+          "status": "passed",
+          "evidence": "Thin bindings must exercise the promoted request/response envelope and fallback behavior.",
+          "required_before_default": true
+        }
+      },
+      "binding_smoke": {
+        "operation": "predict_model",
+        "required_bindings": [
+          "python",
+          "rust",
+          "r",
+          "julia",
+          "typescript",
+          "go",
+          "csharp"
+        ],
+        "contract": "request_response_roundtrip",
+        "required_before_default": true
+      },
+      "evidence_commands": {
+        "parity": [
+          "cd bindings/rust && cargo test --test operations",
+          "uv run pytest tests/unit/test_rust_core_migration_inventory.py"
+        ],
+        "schema": [
+          "cd bindings/rust && cargo test --test schema_compatibility",
+          "uv run pytest tests/unit/test_rust_core_roadmap_docs.py"
+        ],
+        "benchmark": [
+          "cd bindings/rust && cargo bench --bench native_kernel",
+          "bindings/rust/scripts/profile_native_kernels.sh",
+          "JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-cpu.json",
+          "JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-gpu.json"
+        ],
+        "memory": [
+          "bindings/rust/scripts/profile_memory_native_kernels.sh"
+        ],
+        "binding_smoke": [
+          "cd bindings/rust && cargo test",
+          "uv run pytest tests/unit/test_binding_publication_ci.py",
+          "npm test --workspace bindings/typescript",
+          "Rscript bindings/r/tests/run.R",
+          "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+          "go test ./...",
+          "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj"
+        ]
+      }
+    },
+    {
+      "operation": "predict_model",
       "model_slice": "other_model_families_or_unsupported_payloads",
       "current_owner": "python_bridge",
       "fallback_status": "python_bridge_default",
@@ -902,6 +1121,115 @@
     },
     {
       "operation": "simulate_model",
+      "model_slice": "gompertz_simple_fitted_state",
+      "current_owner": "rust_native",
+      "fallback_status": "native_default_python_bridge_fallback",
+      "native_scope": "Simple fitted Gompertz states with finite a, b, and c parameters and explicit time arrays; no covariates or event splits.",
+      "fallback_scope": "Unsupported Gompertz payload shapes and non-native families fall back through the Python bridge from wrapper methods when the native path reports unsupported_native_operation.",
+      "python_reference_scope": "Python remains authoritative for richer Gompertz simulation semantics and model-specific internals.",
+      "profiling_requirements": [
+        "Criterion benchmark coverage for native Gompertz simulation is present and must be maintained before default expansion.",
+        "CPU flamegraph for simulate_model_native Gompertz slices before widening the native slice."
+      ],
+      "promotion_blockers": [
+        "No native covariate support.",
+        "Native Gompertz time grids are limited to simple fitted states.",
+        "Benchmark and profiling dossier is incomplete for Gompertz-specific promotion beyond the simple fitted-state slice."
+      ],
+      "migration_phase": "phase_1_default_hardening",
+      "promotion_state": "native_candidate_needs_evidence",
+      "depends_on": [
+        "kernel_schema_1_0",
+        "python_reference_semantics",
+        "bindings/rust/tests/operations.rs",
+        "abi_binary_compatibility_strategy_20260507"
+      ],
+      "unsupported_payload_shapes": [
+        "covariates",
+        "event splits"
+      ],
+      "promotion_path": [
+        "Keep Python reference parity fixtures green for the documented native slice.",
+        "Capture CPU benchmark, CPU flamegraph metadata, DHAT memory evidence when relevant, and fallback-rate evidence before widening defaults.",
+        "Run binding smoke tests for every thin binding before claiming the operation as Rust-default."
+      ],
+      "promotion_gates": {
+        "parity": {
+          "status": "passed",
+          "evidence": "Rust operation tests compare native and bridge/reference responses for this slice.",
+          "required_before_default": true
+        },
+        "schema_compatibility": {
+          "status": "passed",
+          "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
+          "required_before_default": true
+        },
+        "error_mapping": {
+          "status": "passed",
+          "evidence": "Native unsupported payloads must return stable unsupported_native_operation or bridge_command_failed mappings.",
+          "required_before_default": true
+        },
+        "benchmark_evidence": {
+          "status": "required",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "required_before_default": true
+        },
+        "memory_evidence": {
+          "status": "required",
+          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "required_before_default": true
+        },
+        "binding_smoke": {
+          "status": "passed",
+          "evidence": "Thin bindings must exercise the promoted request/response envelope and fallback behavior.",
+          "required_before_default": true
+        }
+      },
+      "binding_smoke": {
+        "operation": "simulate_model",
+        "required_bindings": [
+          "python",
+          "rust",
+          "r",
+          "julia",
+          "typescript",
+          "go",
+          "csharp"
+        ],
+        "contract": "request_response_roundtrip",
+        "required_before_default": true
+      },
+      "evidence_commands": {
+        "parity": [
+          "cd bindings/rust && cargo test --test operations",
+          "uv run pytest tests/unit/test_rust_core_migration_inventory.py"
+        ],
+        "schema": [
+          "cd bindings/rust && cargo test --test schema_compatibility",
+          "uv run pytest tests/unit/test_rust_core_roadmap_docs.py"
+        ],
+        "benchmark": [
+          "cd bindings/rust && cargo bench --bench native_kernel",
+          "bindings/rust/scripts/profile_native_kernels.sh",
+          "JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-cpu.json",
+          "JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-gpu.json"
+        ],
+        "memory": [
+          "bindings/rust/scripts/profile_memory_native_kernels.sh"
+        ],
+        "binding_smoke": [
+          "cd bindings/rust && cargo test",
+          "uv run pytest tests/unit/test_binding_publication_ci.py",
+          "npm test --workspace bindings/typescript",
+          "Rscript bindings/r/tests/run.R",
+          "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+          "go test ./...",
+          "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj"
+        ]
+      }
+    },
+    {
+      "operation": "simulate_model",
       "model_slice": "other_model_families_or_unsupported_payloads",
       "current_owner": "python_bridge",
       "fallback_status": "python_bridge_default",
@@ -1121,6 +1449,115 @@
     },
     {
       "operation": "summarize_model",
+      "model_slice": "gompertz_simple_fitted_state",
+      "current_owner": "rust_native",
+      "fallback_status": "native_default_python_bridge_fallback",
+      "native_scope": "Simple fitted Gompertz states with finite a, b, and c parameters and explicit observed/time arrays; no covariates or event splits.",
+      "fallback_scope": "Unsupported Gompertz payload shapes and non-native families fall back through the Python bridge from wrapper methods when the native path reports unsupported_native_operation.",
+      "python_reference_scope": "Python remains authoritative for richer Gompertz summary semantics and model-specific internals.",
+      "profiling_requirements": [
+        "Criterion benchmark coverage for native Gompertz summary is present and must be maintained before default expansion.",
+        "CPU flamegraph for summarize_model_native Gompertz slices before widening the native slice."
+      ],
+      "promotion_blockers": [
+        "No native covariate support.",
+        "Native Gompertz time grids are limited to simple fitted states.",
+        "Benchmark and profiling dossier is incomplete for Gompertz-specific promotion beyond the simple fitted-state slice."
+      ],
+      "migration_phase": "phase_1_default_hardening",
+      "promotion_state": "native_candidate_needs_evidence",
+      "depends_on": [
+        "kernel_schema_1_0",
+        "python_reference_semantics",
+        "bindings/rust/tests/operations.rs",
+        "abi_binary_compatibility_strategy_20260507"
+      ],
+      "unsupported_payload_shapes": [
+        "covariates",
+        "event splits"
+      ],
+      "promotion_path": [
+        "Keep Python reference parity fixtures green for the documented native slice.",
+        "Capture CPU benchmark, CPU flamegraph metadata, DHAT memory evidence when relevant, and fallback-rate evidence before widening defaults.",
+        "Run binding smoke tests for every thin binding before claiming the operation as Rust-default."
+      ],
+      "promotion_gates": {
+        "parity": {
+          "status": "passed",
+          "evidence": "Rust operation tests compare native and bridge/reference responses for this slice.",
+          "required_before_default": true
+        },
+        "schema_compatibility": {
+          "status": "passed",
+          "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
+          "required_before_default": true
+        },
+        "error_mapping": {
+          "status": "passed",
+          "evidence": "Native unsupported payloads must return stable unsupported_native_operation or bridge_command_failed mappings.",
+          "required_before_default": true
+        },
+        "benchmark_evidence": {
+          "status": "required",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "required_before_default": true
+        },
+        "memory_evidence": {
+          "status": "required",
+          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "required_before_default": true
+        },
+        "binding_smoke": {
+          "status": "passed",
+          "evidence": "Thin bindings must exercise the promoted request/response envelope and fallback behavior.",
+          "required_before_default": true
+        }
+      },
+      "binding_smoke": {
+        "operation": "summarize_model",
+        "required_bindings": [
+          "python",
+          "rust",
+          "r",
+          "julia",
+          "typescript",
+          "go",
+          "csharp"
+        ],
+        "contract": "request_response_roundtrip",
+        "required_before_default": true
+      },
+      "evidence_commands": {
+        "parity": [
+          "cd bindings/rust && cargo test --test operations",
+          "uv run pytest tests/unit/test_rust_core_migration_inventory.py"
+        ],
+        "schema": [
+          "cd bindings/rust && cargo test --test schema_compatibility",
+          "uv run pytest tests/unit/test_rust_core_roadmap_docs.py"
+        ],
+        "benchmark": [
+          "cd bindings/rust && cargo bench --bench native_kernel",
+          "bindings/rust/scripts/profile_native_kernels.sh",
+          "JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-cpu.json",
+          "JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-gpu.json"
+        ],
+        "memory": [
+          "bindings/rust/scripts/profile_memory_native_kernels.sh"
+        ],
+        "binding_smoke": [
+          "cd bindings/rust && cargo test",
+          "uv run pytest tests/unit/test_binding_publication_ci.py",
+          "npm test --workspace bindings/typescript",
+          "Rscript bindings/r/tests/run.R",
+          "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+          "go test ./...",
+          "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj"
+        ]
+      }
+    },
+    {
+      "operation": "summarize_model",
       "model_slice": "bass_and_other_model_families",
       "current_owner": "python_bridge",
       "fallback_status": "python_bridge_default",
@@ -1245,6 +1682,115 @@
         "No documented XLA eligibility decision for vectorized diagnostic metrics."
       ],
       "migration_phase": "phase_2_logistic_expansion",
+      "promotion_state": "native_candidate_needs_evidence",
+      "depends_on": [
+        "kernel_schema_1_0",
+        "python_reference_semantics",
+        "bindings/rust/tests/operations.rs",
+        "abi_binary_compatibility_strategy_20260507"
+      ],
+      "unsupported_payload_shapes": [
+        "covariates",
+        "event splits"
+      ],
+      "promotion_path": [
+        "Keep Python reference parity fixtures green for the documented native slice.",
+        "Capture CPU benchmark, CPU flamegraph metadata, DHAT memory evidence when relevant, and fallback-rate evidence before widening defaults.",
+        "Run binding smoke tests for every thin binding before claiming the operation as Rust-default."
+      ],
+      "promotion_gates": {
+        "parity": {
+          "status": "passed",
+          "evidence": "Rust operation tests compare native and bridge/reference responses for this slice.",
+          "required_before_default": true
+        },
+        "schema_compatibility": {
+          "status": "passed",
+          "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
+          "required_before_default": true
+        },
+        "error_mapping": {
+          "status": "passed",
+          "evidence": "Native unsupported payloads must return stable unsupported_native_operation or bridge_command_failed mappings.",
+          "required_before_default": true
+        },
+        "benchmark_evidence": {
+          "status": "required",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "required_before_default": true
+        },
+        "memory_evidence": {
+          "status": "required",
+          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "required_before_default": true
+        },
+        "binding_smoke": {
+          "status": "passed",
+          "evidence": "Thin bindings must exercise the promoted request/response envelope and fallback behavior.",
+          "required_before_default": true
+        }
+      },
+      "binding_smoke": {
+        "operation": "diagnose_model",
+        "required_bindings": [
+          "python",
+          "rust",
+          "r",
+          "julia",
+          "typescript",
+          "go",
+          "csharp"
+        ],
+        "contract": "request_response_roundtrip",
+        "required_before_default": true
+      },
+      "evidence_commands": {
+        "parity": [
+          "cd bindings/rust && cargo test --test operations",
+          "uv run pytest tests/unit/test_rust_core_migration_inventory.py"
+        ],
+        "schema": [
+          "cd bindings/rust && cargo test --test schema_compatibility",
+          "uv run pytest tests/unit/test_rust_core_roadmap_docs.py"
+        ],
+        "benchmark": [
+          "cd bindings/rust && cargo bench --bench native_kernel",
+          "bindings/rust/scripts/profile_native_kernels.sh",
+          "JAX_PLATFORM_NAME=cpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-cpu.json",
+          "JAX_PLATFORM_NAME=gpu uv run pytest --benchmark-only --benchmark-json=benchmark-results/promotion/<slice>/benchmark-xla-gpu.json"
+        ],
+        "memory": [
+          "bindings/rust/scripts/profile_memory_native_kernels.sh"
+        ],
+        "binding_smoke": [
+          "cd bindings/rust && cargo test",
+          "uv run pytest tests/unit/test_binding_publication_ci.py",
+          "npm test --workspace bindings/typescript",
+          "Rscript bindings/r/tests/run.R",
+          "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+          "go test ./...",
+          "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj"
+        ]
+      }
+    },
+    {
+      "operation": "diagnose_model",
+      "model_slice": "gompertz_simple_fitted_state",
+      "current_owner": "rust_native",
+      "fallback_status": "native_default_python_bridge_fallback",
+      "native_scope": "Simple fitted Gompertz states with finite a, b, and c parameters and explicit observed/time arrays; no covariates or event splits.",
+      "fallback_scope": "Unsupported Gompertz payload shapes and non-native families fall back through the Python bridge from wrapper methods when the native path reports unsupported_native_operation.",
+      "python_reference_scope": "Python remains authoritative for richer Gompertz diagnostics semantics and model-specific internals.",
+      "profiling_requirements": [
+        "Criterion benchmark coverage for native Gompertz diagnostics is present and must be maintained before default expansion.",
+        "CPU flamegraph for diagnose_model_native Gompertz slices before widening the native slice."
+      ],
+      "promotion_blockers": [
+        "No native covariate support.",
+        "Native Gompertz time grids are limited to simple fitted states.",
+        "Benchmark and profiling dossier is incomplete for Gompertz-specific promotion beyond the simple fitted-state slice."
+      ],
+      "migration_phase": "phase_1_default_hardening",
       "promotion_state": "native_candidate_needs_evidence",
       "depends_on": [
         "kernel_schema_1_0",

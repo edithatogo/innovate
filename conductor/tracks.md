@@ -20,7 +20,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [x] **Track: Quality Gates and Release Hardening**
+- [x] **Track: Quality Gates and Release Hardening** *(Completed)*
   *Link: [./archive/quality_gates_release_20260415/](./archive/quality_gates_release_20260415/)*
 
 ---
@@ -45,7 +45,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [x] **Track: Benchmark Corpus and Model Cards**
+- [x] **Track: Benchmark Corpus and Model Cards** *(Completed)*
   *Link: [./archive/benchmark_corpus_modelcards_20260415/](./archive/benchmark_corpus_modelcards_20260415/)*
 
 ---
@@ -121,7 +121,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [x] **Track: HEOR Module Naming Brainstorm for `calibrate`, `evidence`, `process`, `report`, `registry`, `workflow`, `quality`, `engines`, `heoml`, and PM4Py-as-ecosystem-only.**
+- [x] **Track: HEOR Module Naming Brainstorm for `calibrate`, `evidence`, `process`, `report`, `registry`, `workflow`, `quality`, `engines`, `heoml`, and PM4Py-as-ecosystem-only.** *(Completed)*
   *Link: [./archive/heor_module_naming_brainstorm_20260429/](./archive/heor_module_naming_brainstorm_20260429/)*
 
 ---
@@ -293,3 +293,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: External Governance and Sustainability Dossier** *(Completed)*
   *Link: [./archive/external_governance_sustainability_20260507/](./archive/external_governance_sustainability_20260507/)*
+
+---
+
+- [~] **Track: Rust Core Migration Completion and Polyglot Claim Closure**
+  *Link: [./tracks/rust_core_migration_completion_20260511/](./tracks/rust_core_migration_completion_20260511/)*

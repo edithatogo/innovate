@@ -44,6 +44,20 @@ R
   manuals, and built vignette artifacts are release inspection artifacts and
   must not be committed.
 
+  rOpenSci reviewer map:
+
+  * package scope: thin bridge over the shared Python kernel, no R-native
+    model duplication;
+  * examples and documentation: ``bindings/r/README.md``, ``bindings/r/man/``,
+    ``bindings/r/vignettes/``, and the PDF manual workflow;
+  * test evidence: ``bindings/r/tests/`` and the package integration tests
+    wired into CI;
+  * maintenance: R binding maintainers own the package surface, while the
+    language-independent kernel remains under the core maintainers;
+  * check evidence: the current source package completes ``R CMD build`` and
+    ``R CMD check --as-cran --no-manual`` with a single NOTE expected for a
+    new submission.
+
 Julia
   The ``Innovate`` Julia package is ready for Julia General registry submission
   through the standard Registrator workflow once package naming, UUID

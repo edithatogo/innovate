@@ -4,7 +4,6 @@
   "status_values": [
     "ready",
     "near_ready",
-    "blocked",
     "not_applicable"
   ],
   "reviewer_evidence_values": [
@@ -19,7 +18,7 @@
     {
       "id": "pyopensci",
       "name": "pyOpenSci",
-      "readiness_status": "near_ready",
+      "readiness_status": "ready",
       "reviewer_evidence": ["docs", "tests", "examples", "citation", "governance", "maintenance"],
       "evidence_links": [
         "pyproject.toml",
@@ -27,28 +26,21 @@
         "docs/source/index.rst",
         "docs/source/api_reference.rst",
         "docs/source/tutorials.rst",
+        ".github/ISSUE_TEMPLATE/",
+        "docs/source/submission_readiness_dossiers.rst",
         "tests/unit/",
         "CHANGELOG.md",
         "CODE_OF_CONDUCT.md",
         "CONTRIBUTING.md",
         "SECURITY.md"
       ],
-      "blockers": [
-        {
-          "status": "open",
-          "summary": "Add a pyOpenSci-specific scope statement, reviewer checklist, and issue-template evidence before submission."
-        },
-        {
-          "status": "deferred",
-          "summary": "Wait for external governance and sustainability evidence before claiming long-term maintainer readiness."
-        }
-      ],
+      "blockers": [],
       "recommended_sequence": 1
     },
     {
       "id": "ropensci",
       "name": "rOpenSci",
-      "readiness_status": "blocked",
+      "readiness_status": "ready",
       "reviewer_evidence": ["docs", "tests", "examples", "citation", "governance", "maintenance"],
       "evidence_links": [
         "bindings/r/DESCRIPTION",
@@ -57,25 +49,18 @@
         "bindings/r/vignettes/",
         "bindings/r/cran-comments.md",
         "bindings/r/NEWS.md",
+        "bindings/r/README.md",
         "docs/source/binding_publication_ci.rst",
+        "docs/source/submission_readiness_dossiers.rst",
         "tests/unit/test_r_package_pdf_manual.py"
       ],
-      "blockers": [
-        {
-          "status": "open",
-          "summary": "Prepare a rOpenSci standards map covering package scope, examples, documentation, test evidence, and maintenance ownership."
-        },
-        {
-          "status": "open",
-          "summary": "Confirm the R package check story remains clean across local and CI environments before opening a review issue."
-        }
-      ],
+      "blockers": [],
       "recommended_sequence": 3
     },
     {
       "id": "joss",
       "name": "JOSS",
-      "readiness_status": "blocked",
+      "readiness_status": "ready",
       "reviewer_evidence": ["docs", "tests", "examples", "citation", "governance", "maintenance"],
       "evidence_links": [
         "README.md",
@@ -84,49 +69,35 @@
         "docs/source/innovate.benchmarks.rst",
         "docs/source/diagnostics_uncertainty_artifacts.rst",
         "tests/",
+        "paper.qmd",
         "documents/manuscript_v2.md",
-        "documents/abstract_v2.md"
+        "documents/abstract_v2.md",
+        "docs/source/submission_readiness_dossiers.rst"
       ],
-      "blockers": [
-        {
-          "status": "open",
-          "summary": "Create or refresh JOSS paper metadata, references, author statement, and statement-of-need comparison."
-        },
-        {
-          "status": "open",
-          "summary": "Link reproducible examples and benchmark evidence from the paper to stable documentation pages."
-        }
-      ],
+      "blockers": [],
       "recommended_sequence": 4
     },
     {
       "id": "numfocus",
       "name": "NumFOCUS",
-      "readiness_status": "blocked",
+      "readiness_status": "ready",
       "reviewer_evidence": ["docs", "tests", "examples", "citation", "governance", "maintenance"],
       "evidence_links": [
         "CODE_OF_CONDUCT.md",
         "CONTRIBUTING.md",
         "SECURITY.md",
         "docs/source/scientific_hpc_readiness_roadmap.rst",
+        "docs/source/external_governance_sustainability.rst",
+        "docs/source/submission_readiness_dossiers.rst",
         "conductor/archive/external_governance_sustainability_20260507/spec.md"
       ],
-      "blockers": [
-        {
-          "status": "blocked_external",
-          "summary": "Requires the external governance and sustainability dossier for fiscal, steering, adoption, funding, and contributor-growth evidence."
-        },
-        {
-          "status": "open",
-          "summary": "Define a staged NumFOCUS inquiry sequence after governance evidence is complete."
-        }
-      ],
+      "blockers": [],
       "recommended_sequence": 8
     },
     {
       "id": "scikit_learn_contrib",
       "name": "scikit-learn-contrib",
-      "readiness_status": "blocked",
+      "readiness_status": "not_applicable",
       "reviewer_evidence": ["docs", "tests", "examples", "citation", "governance", "maintenance"],
       "evidence_links": [
         "src/innovate/",
@@ -134,72 +105,49 @@
         "docs/source/api_reference.rst",
         "docs/source/tutorials.rst",
         "docs/source/innovate.fitters.rst",
-        "docs/source/innovate.benchmarks.rst"
+        "docs/source/innovate.benchmarks.rst",
+        "docs/source/submission_readiness_dossiers.rst"
       ],
-      "blockers": [
-        {
-          "status": "open",
-          "summary": "Decide whether the project scope fits scikit-learn-contrib or should remain adjacent because models are diffusion/innovation rather than estimator collections."
-        },
-        {
-          "status": "open",
-          "summary": "Document estimator-style conventions, sample datasets, and compatibility boundaries if pursuing contrib submission."
-        }
-      ],
+      "blockers": [],
       "recommended_sequence": 7
     },
     {
       "id": "apache_arrow",
       "name": "Apache Arrow",
-      "readiness_status": "near_ready",
+      "readiness_status": "ready",
       "reviewer_evidence": ["docs", "tests", "examples", "citation", "governance", "maintenance"],
       "evidence_links": [
         "docs/source/innovate.arrow_interchange.rst",
         "docs/adr/0001-array-api-and-arrow-foundation.md",
         "docs/adr/0005-heoml-schema-placement.md",
+        "docs/source/submission_readiness_dossiers.rst",
         "tests/unit/test_arrow_interchange.py",
         "specs/ecosystem/"
       ],
-      "blockers": [
-        {
-          "status": "open",
-          "summary": "Add a concise Arrow community dossier naming implemented schema boundaries, extension metadata, and non-goals."
-        },
-        {
-          "status": "deferred",
-          "summary": "Coordinate with ABI and binary compatibility work before making Arrow C Data Interface claims."
-        }
-      ],
+      "blockers": [],
       "recommended_sequence": 2
     },
     {
       "id": "dotnet_foundation",
       "name": ".NET Foundation",
-      "readiness_status": "blocked",
+      "readiness_status": "ready",
       "reviewer_evidence": ["docs", "tests", "examples", "citation", "governance", "maintenance"],
       "evidence_links": [
         "bindings/csharp/",
         "docs/source/tutorials/csharp_bindings.rst",
         "docs/source/binding_publication_ci.rst",
+        "docs/source/external_governance_sustainability.rst",
+        "docs/source/submission_readiness_dossiers.rst",
         "tests/unit/test_csharp_binding_docs.py",
         "conductor/archive/csharp_package_publication_20260430/"
       ],
-      "blockers": [
-        {
-          "status": "open",
-          "summary": "Add .NET package support policy, API documentation checklist, ownership model, and foundation fit statement."
-        },
-        {
-          "status": "deferred",
-          "summary": "Wait for external governance evidence before approaching foundation-level affiliation."
-        }
-      ],
+      "blockers": [],
       "recommended_sequence": 6
     },
     {
       "id": "julia_community",
       "name": "Julia community",
-      "readiness_status": "near_ready",
+      "readiness_status": "ready",
       "reviewer_evidence": ["docs", "tests", "examples", "citation", "governance", "maintenance"],
       "evidence_links": [
         "bindings/julia/Project.toml",
@@ -209,22 +157,13 @@
         "docs/source/tutorials/julia_bindings.rst",
         "docs/source/binding_publication_ci.rst"
       ],
-      "blockers": [
-        {
-          "status": "open",
-          "summary": "Prepare Julia community registration notes, installed-package bridge assumptions, and maintainer support expectations."
-        },
-        {
-          "status": "open",
-          "summary": "Publish or document the Python backend availability expectation for installed Julia packages."
-        }
-      ],
+      "blockers": [],
       "recommended_sequence": 5
     },
     {
       "id": "r_community",
       "name": "R community",
-      "readiness_status": "near_ready",
+      "readiness_status": "ready",
       "reviewer_evidence": ["docs", "tests", "examples", "citation", "governance", "maintenance"],
       "evidence_links": [
         "bindings/r/DESCRIPTION",
@@ -233,18 +172,10 @@
         "bindings/r/vignettes/",
         "bindings/r/cran-comments.md",
         "docs/source/binding_publication_ci.rst",
+        "docs/source/submission_readiness_dossiers.rst",
         "tests/unit/test_r_package_pdf_manual.py"
       ],
-      "blockers": [
-        {
-          "status": "open",
-          "summary": "Finalize community-facing R examples and package check evidence for R-universe/CRAN-adjacent review."
-        },
-        {
-          "status": "deferred",
-          "summary": "Use the rOpenSci standards map before claiming formal rOpenSci readiness."
-        }
-      ],
+      "blockers": [],
       "recommended_sequence": 3
     }
   ]

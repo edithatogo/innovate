@@ -13,7 +13,7 @@ clear maintainer responsibilities and a credible continuity story.
 The canonical machine-readable matrix is
 :download:`external_governance_sustainability_matrix.json <_static/external_governance_sustainability_matrix.json>`.
 No external submission claim should rely on implied governance; the dossier
-must cite explicit files and state any remaining blockers.
+must cite explicit files and state any remaining gaps.
 
 Governance summary
 ------------------
@@ -43,13 +43,13 @@ Governance summary
      - ``CONTRIBUTING.md``, ``CODE_OF_CONDUCT.md``, and docs navigation.
      - None.
    * - Support policy
-     - Near-ready
-     - Release policy docs and roadmap ownership pages.
-     - Add a compact maintainer support matrix for active package surfaces.
+     - Ready
+     - Release policy docs, roadmap ownership pages, and the support matrix below.
+     - None.
    * - Funding path
-     - Blocked
-     - Roadmap and manuscript references.
-     - Add a funding or sponsorship statement before any external affiliation claim.
+     - Ready
+     - This dossier, roadmap references, and the community-maintained funding statement below.
+     - None.
    * - Roadmap ownership
      - Ready
      - ``docs/source/scientific_hpc_readiness_roadmap.rst``, ``docs/architecture_modernization_roadmap.md``, and the Conductor archive.
@@ -80,6 +80,48 @@ Maintenance responsibility matrix
    * - TypeScript, Go, and C# bindings
      - Language binding maintainers
      - Keep package-manager metadata and smoke tests aligned with the core API.
+
+Support matrix
+--------------
+
+The support policy is intentionally compact: each active package surface has a
+named maintainer group, a publication path, and a smoke-test or check gate that
+must pass before release artifacts are considered ready.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 18 24 58
+
+   * - Surface
+     - Support owner
+     - Current support evidence
+   * - Python core
+     - Core maintainers
+     - ``pyproject.toml``, the main test suite, release workflow gates, and the
+       scientific roadmap docs.
+   * - R package
+     - R binding maintainers
+     - ``bindings/r/README.md``, ``bindings/r/cran-comments.md``,
+       ``bindings/r/tests/``, the PDF manual workflow, and ``R CMD check``
+       evidence.
+   * - Julia package
+     - Julia binding maintainers
+     - ``bindings/julia/README.md``, ``bindings/julia/test/``, and the
+       installed-package smoke validation path.
+   * - TypeScript, Go, and C# bindings
+     - Language binding maintainers
+     - Binding READMEs, publication CI, and language-native smoke tests.
+   * - Rust core and slices
+     - Rust maintainers
+     - The Rust roadmap archive, profiling evidence, and bridge-contract docs.
+
+Funding and sustainability statement
+-------------------------------------
+
+``innovate`` is currently community maintained. The repository does not claim a
+dedicated sponsor or fiscal host in this dossier. If the stewardship model
+changes, this statement and the supporting evidence links should be updated
+before any external affiliation claim is made.
 
 Submission readiness sequence
 -----------------------------

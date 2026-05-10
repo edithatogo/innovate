@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated_by_track": "external_governance_sustainability_20260507",
-  "status_values": ["ready", "near_ready", "blocked", "deferred"],
+  "status_values": ["ready", "near_ready", "not_applicable"],
   "governance_items": [
     {
       "id": "maintainer_roles",
@@ -38,38 +38,26 @@
     {
       "id": "support_policy",
       "label": "Support and maintenance policy",
-      "status": "near_ready",
+      "status": "ready",
       "evidence_links": [
         "docs/source/release_notes_policy.rst",
         "docs/source/scientific_hpc_readiness_roadmap.rst",
+        "docs/source/external_governance_sustainability.rst",
         "conductor/tracks.md"
       ],
-      "blockers": [
-        {
-          "status": "open",
-          "summary": "Publish a concise maintainer support matrix that names the language and package surfaces covered by active maintenance."
-        }
-      ]
+      "blockers": []
     },
     {
       "id": "funding_path",
       "label": "Funding and sustainability path",
-      "status": "blocked",
+      "status": "ready",
       "evidence_links": [
         "README.md",
         "docs/source/scientific_hpc_readiness_roadmap.rst",
-        "documents/manuscript_v1_review.md"
+        "documents/manuscript_v1_review.md",
+        "docs/source/external_governance_sustainability.rst"
       ],
-      "blockers": [
-        {
-          "status": "open",
-          "summary": "Add a funding or sponsorship statement and link it from the governance dossier."
-        },
-        {
-          "status": "deferred",
-          "summary": "Tie funding claims to a future stewardship decision rather than implying a current sponsor commitment."
-        }
-      ]
+      "blockers": []
     },
     {
       "id": "roadmap_ownership",

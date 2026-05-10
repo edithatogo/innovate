@@ -9,9 +9,27 @@ checks, and registry evidence needed before ``innovate`` can be proposed for
 HPC-oriented distribution channels such as Spack, EasyBuild, HPSF, or E4S.
 
 The current state is readiness planning, not a registry claim. Spack,
-EasyBuild, HPSF, and E4S publication remains blocked until evidence exists for
-reproducible installs, smoke tests, and performance portability on supported
-HPC deployment shapes.
+EasyBuild, HPSF, and E4S publication still requires HPC-specific scheduler and
+performance-portability evidence, but the repository now contains concrete
+package sketches and install-smoke artifacts for the supported surfaces.
+
+Concrete artifacts
+------------------
+
+The repository now carries the package and evidence bundle directly under
+``docs/source/_static/hpc_packaging/``:
+
+* ``spack/py-innovate.py`` - candidate Spack recipe sketch;
+* ``easybuild/innovate-0.5.0.eb`` - candidate EasyBuild easyconfig sketch;
+* ``evidence/python-install.log`` - clean wheel install into an isolated
+  Python environment;
+* ``evidence/python-smoke.log`` - import and dependency-check smoke log;
+* ``evidence/r-build.log`` - R package build evidence;
+* ``evidence/r-check.log`` - R CMD check evidence;
+* ``evidence/rust-test.log`` - Rust binding test evidence;
+* ``evidence/uv-build.log`` - repository wheel/sdist build evidence;
+* ``evidence/julia-installed-smoke.log`` - installed-package Julia bridge
+  smoke evidence.
 
 Install surfaces
 ----------------
@@ -154,13 +172,15 @@ Install and smoke evidence
 --------------------------
 
 Every packaging candidate needs durable evidence stored with the release or CI
-artifact:
+artifact. The repository now includes that evidence for the local build and
+binding surfaces:
 
-* an install log for CPU-only deployment;
-* a smoke log for ``python -m pip check`` and
-  ``python -c "import innovate; print(innovate.__version__)"``;
-* Rust evidence from ``cargo test --manifest-path bindings/rust/Cargo.toml``
-  when ``+rust`` is enabled;
+* CPU-only install evidence in ``evidence/python-install.log``;
+* Python smoke evidence in ``evidence/python-smoke.log``;
+* Rust evidence from ``evidence/rust-test.log``;
+* Julia installed-package bridge evidence in
+  ``evidence/julia-installed-smoke.log``;
+* repository build evidence in ``evidence/uv-build.log``;
 * JAX/XLA evidence with backend and device metadata when ``+jax`` is enabled;
 * scheduler evidence from at least one Slurm or PBS batch run before an HPC
   registry claim is made;
@@ -178,16 +198,16 @@ HPSF and E4S registry gates
      - Current status
      - Required next evidence
    * - HPSF candidacy
-     - blocked until evidence exists for installability, governance alignment,
-       release durability, and HPC user support.
-     - Add installer logs, smoke logs, support contacts, maintenance policy,
-       and examples showing scheduler-aware deployment.
+     - install and smoke evidence is now present; remaining evidence covers
+       governance alignment, release durability, and HPC user support.
+     - Add installer logs for scheduler-backed environments, support contacts,
+       maintenance policy, and examples showing scheduler-aware deployment.
    * - E4S candidacy
-     - blocked until evidence exists for Spack packaging, performance
-       portability evidence, and accelerator-aware validation.
+     - package sketches and local evidence are present; remaining evidence
+       covers performance portability and accelerator-aware validation.
      - Add accepted or reviewable Spack recipe evidence, CPU/GPU smoke logs,
        dependency variant results, and failure-mode diagnostics.
 
 Result: no HPSF or E4S submission should be made until the package candidates
-have passing install log and smoke log artifacts for CPU, GPU, and mixed bridge
-deployment, plus a documented performance portability evidence bundle.
+have passing install log and smoke log artifacts for CPU, GPU, and mixed
+bridge deployment, plus a documented performance portability evidence bundle.

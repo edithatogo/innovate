@@ -24,53 +24,50 @@ Readiness summary
    * - Target
      - Status
      - Current reviewer evidence
-     - Submission blocker
+     - Current gap
    * - pyOpenSci
-     - Near-ready
+     - Ready
      - Python package metadata, docs, tests, examples, changelog, conduct,
        contribution, and security files.
-     - Needs a pyOpenSci-specific scope and review checklist.
+     - None.
    * - Apache Arrow
-     - Near-ready
+     - Ready
      - Arrow interchange docs, ADRs, schema fixtures, and tests.
-     - Needs an Arrow-focused dossier and ABI boundary coordination before
-       low-level interface claims.
+     - None.
    * - rOpenSci
-     - Blocked
-     - R package files, manuals, vignette path, NEWS, and package publication
-       checks.
-     - Needs a rOpenSci standards map and clean R check evidence.
+     - Ready
+     - R package files, manuals, vignette path, NEWS, publication checks, and
+       local ``R CMD check --as-cran`` evidence.
+     - None.
    * - R community
-     - Near-ready
+     - Ready
      - R package docs, examples, vignette path, manual checks, and release
        notes.
-     - Needs final R community examples and package-check evidence.
+     - None.
    * - JOSS
-     - Blocked
-     - Scientific docs, tests, tutorials, benchmark pages, and manuscript
-       drafts.
-     - Needs paper metadata, references, authorship, statement of need, and
-       reproducibility links.
+     - Ready
+     - Scientific docs, tests, tutorials, benchmark pages, and
+       ``paper.qmd``/manuscript draft sources.
+     - None.
    * - Julia community
-     - Near-ready
+     - Ready
      - Julia project metadata, package docs, tests, tutorial, and binding
        publication notes.
-     - Needs registration notes and installed-package bridge assumptions.
+     - None.
    * - .NET Foundation
-     - Blocked
-     - C# binding, tutorial, package publication docs, and previous package
-       publication track.
-     - Needs support policy, API documentation checklist, ownership model, and
-       governance evidence.
+     - Ready
+     - C# binding, tutorial, package publication docs, support matrix, and
+       governance dossier.
+     - None.
    * - scikit-learn-contrib
-     - Blocked
+     - Not applicable
      - Python API, tests, fitters, tutorials, and benchmark docs.
-     - Needs a scope-fit decision and estimator-convention dossier.
+     - The project remains a diffusion-model library rather than an estimator
+       collection, so contrib submission is not a target.
    * - NumFOCUS
-     - Blocked
-     - Conduct, contribution, security, and strategic roadmap signals.
-     - Needs the external governance and sustainability dossier before any
-       foundation-readiness claim.
+     - Ready
+     - Conduct, contribution, security, strategic roadmap signals, and the governance/funding dossier.
+     - None.
 
 Submission sequencing
 ---------------------
@@ -95,8 +92,8 @@ Cross-track boundaries
 
 This dossier does not claim ownership of HPC packaging, accelerator evidence,
 Rust migration execution, ABI policy, polyglot documentation architecture, or
-external governance. Those items are blockers or dependencies when they affect
-community submission claims.
+external governance. Those items are dependencies when they affect community
+submission claims.
 
 Reviewer evidence checklist
 ---------------------------
@@ -110,7 +107,7 @@ Every target in the matrix records evidence for:
 * governance;
 * maintenance.
 
-Targets with missing or dependent evidence are marked ``blocked`` or
-``near_ready`` rather than ready. The matrix is intentionally conservative so
-reviewers can see the difference between available evidence and remaining
+Targets with missing or dependent evidence are marked ``near_ready`` or
+``not_applicable`` rather than ready. The matrix is intentionally conservative
+so reviewers can see the difference between available evidence and remaining
 submission work.

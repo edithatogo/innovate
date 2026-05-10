@@ -1,0 +1,8 @@
+{
+  "track_id": "rust_core_migration_completion_20260511",
+  "type": "chore",
+  "status": "in_progress",
+  "created_at": "2026-05-10T14:10:54Z",
+  "updated_at": "2026-05-10T14:20:36Z",
+  "description": "Create a comprehensive plan to finish the remaining Rust-core ownership gap and make the polyglot Rust-core migration claim accurate."
+}
