@@ -943,34 +943,48 @@ fn native_gompertz_diagnose_matches_python_bridge_contract() {
 #[test]
 fn native_fit_falls_back_to_bridge_for_non_native_models() {
     let binding = KernelBinding::new();
-    let payload = json!({
+    let prediction_payload = json!({
         "state": {
-            "model_key": "fisher_pry",
-            "model_name": "FisherPryModel",
-            "constructor_kwargs": {
-                "covariates": ["marketing_spend"]
-            },
+            "model_key": "bass",
+            "model_name": "BassModel",
+            "constructor_kwargs": {},
             "parameters": {
-                "alpha": 1.6,
-                "t0": 2.0
+                "p": 0.03,
+                "q": 0.38,
+                "m": 120.0
             },
             "predict_kwargs": {}
         },
         "inputs": {
-            "time": [0.0, 1.0, 2.0, 3.0],
-            "observed": [0.05, 0.12, 0.3, 0.6],
-            "covariates": {
-                "marketing_spend": [0.2, 0.4, 0.6, 0.8]
-            }
+            "time": [0.0, 1.0, 2.0, 3.0, 4.0]
+        }
+    });
+
+    let predicted = binding
+        .predict_model("bass", prediction_payload)
+        .expect("Bass prediction should succeed");
+    let observed = predicted
+        .result
+        .expect("Bass prediction should include a result")["values"]
+        .as_array()
+        .expect("Bass prediction values should be an array")
+        .iter()
+        .map(|value| value.as_f64().expect("Bass prediction value should be numeric"))
+        .collect::<Vec<_>>();
+
+    let payload = json!({
+        "inputs": {
+            "time": [0.0, 1.0, 2.0, 3.0, 4.0],
+            "observed": observed
         }
     });
 
     let response = binding
-        .fit_model("fisher_pry", payload)
+        .fit_model("bass", payload)
         .expect("non-native fit should fall back to the bridge");
 
     assert_eq!(response.operation, KernelOperation::FitModel);
-    assert_eq!(response.metadata["model_key"], "fisher_pry");
+    assert_eq!(response.metadata["model_key"], "bass");
     assert!(response.result.is_some());
 }
 
@@ -1183,7 +1197,7 @@ fn native_logistic_diagnose_matches_python_bridge_contract() {
 }
 
 #[test]
-fn native_summary_and_diagnose_fall_back_to_bridge_for_non_native_models() {
+fn native_summary_and_diagnose_reject_unsupported_native_payloads() {
     let binding = KernelBinding::new();
     let payload = json!({
         "state": {
@@ -1208,19 +1222,19 @@ fn native_summary_and_diagnose_fall_back_to_bridge_for_non_native_models() {
         }
     });
 
-    let summary = binding
+    let summary_error = binding
         .summarize_model("logistic", payload.clone())
-        .expect("non-native summary should fall back to the bridge");
-    let diagnose = binding
+        .expect_err("native summary should reject unsupported covariate payloads");
+    let diagnose_error = binding
         .diagnose_model("logistic", payload)
-        .expect("non-native diagnostics should fall back to the bridge");
+        .expect_err("native diagnostics should reject unsupported covariate payloads");
 
-    assert_eq!(summary.operation, KernelOperation::SummarizeModel);
-    assert_eq!(diagnose.operation, KernelOperation::DiagnoseModel);
-    assert_eq!(summary.metadata["model_key"], "logistic");
-    assert_eq!(diagnose.metadata["model_key"], "logistic");
-    assert!(summary.result.is_some());
-    assert!(diagnose.result.is_some());
+    assert_eq!(summary_error.code, "unsupported_native_operation");
+    assert_eq!(summary_error.operation, Some(KernelOperation::SummarizeModel));
+    assert!(summary_error.message.contains("logistic"));
+    assert_eq!(diagnose_error.code, "unsupported_native_operation");
+    assert_eq!(diagnose_error.operation, Some(KernelOperation::DiagnoseModel));
+    assert!(diagnose_error.message.contains("logistic"));
 }
 
 #[test]
@@ -1549,28 +1563,28 @@ fn native_prediction_falls_back_to_bridge_for_non_native_models() {
     let binding = KernelBinding::new();
     let payload = json!({
         "state": {
-            "model_key": "gompertz",
-            "model_name": "GompertzModel",
+            "model_key": "norton_bass",
+            "model_name": "NortonBassModel",
             "constructor_kwargs": {},
             "parameters": {
-                "a": 100.0,
-                "b": 3.0,
-                "c": 0.15
+                "p1": 0.001,
+                "q1": 0.1,
+                "m1": 100.0
             },
             "predict_kwargs": {}
         },
         "inputs": {
             "time": [0.0, 1.0, 2.0, 3.0],
-            "observed": [0.1, 0.2, 0.3, 0.4]
+            "observed": [0.05, 0.12, 0.3, 0.6]
         }
     });
 
     let response = binding
-        .predict_model("gompertz", payload)
+        .predict_model("norton_bass", payload)
         .expect("non-native prediction should fall back to the bridge");
 
     assert_eq!(response.operation, KernelOperation::PredictModel);
-    assert_eq!(response.metadata["model_key"], "gompertz");
+    assert_eq!(response.metadata["model_key"], "norton_bass");
     assert!(response.result.is_some());
 }
 
@@ -1579,27 +1593,27 @@ fn native_simulation_falls_back_to_bridge_for_non_native_models() {
     let binding = KernelBinding::new();
     let payload = json!({
         "state": {
-            "model_key": "gompertz",
-            "model_name": "GompertzModel",
+            "model_key": "norton_bass",
+            "model_name": "NortonBassModel",
             "constructor_kwargs": {},
             "parameters": {
-                "a": 100.0,
-                "b": 3.0,
-                "c": 0.15
+                "p1": 0.001,
+                "q1": 0.1,
+                "m1": 100.0
             },
             "predict_kwargs": {}
         },
         "inputs": {
             "time": [0.0, 1.0, 2.0, 3.0],
-            "observed": [0.1, 0.2, 0.3, 0.4]
+            "observed": [0.05, 0.12, 0.3, 0.6]
         }
     });
 
     let response = binding
-        .simulate_model("gompertz", payload)
+        .simulate_model("norton_bass", payload)
         .expect("non-native simulation should fall back to the bridge");
 
     assert_eq!(response.operation, KernelOperation::SimulateModel);
-    assert_eq!(response.metadata["model_key"], "gompertz");
+    assert_eq!(response.metadata["model_key"], "norton_bass");
     assert!(response.result.is_some());
 }

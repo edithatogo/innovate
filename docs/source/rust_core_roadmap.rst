@@ -36,9 +36,9 @@ current source layout so that documentation drift can be checked by tests:
   Gompertz, and Bass
   ``predict_model``/``simulate_model`` fitted-state execution. In short:
   Rust-native execution only for the documented slices.
-* The Rust binding still contains the Python bridge fallback path through
+* The Rust binding still contains the Python bridge entrypoint helpers through
   ``invoke``, ``bridge_script_absolute_path``, ``kernel_pythonpath``, and
-  ``python_command_segments``. Unsupported native slices therefore remain
+  ``python_command_segments``. Explicitly non-native slices therefore remain
   bridge-backed rather than Rust-owned.
 * The remaining ownership gap is tracked as the Conductor follow-on track
   ``Rust Core Migration Completion and Polyglot Claim Closure`` so the
@@ -54,7 +54,8 @@ current source layout so that documentation drift can be checked by tests:
   outside the Rust-native slice, while ``fisher_pry`` and ``gompertz`` have
   moved into the Rust-native substitution/diffusion slices. Covariates, event
   splits, probabilistic runtimes, custom fitter options, and incomplete fitted
-  states still require fallback or Python-only reference behavior.
+  states now fail explicitly for promoted native slices, while non-native model
+  families continue to use the Python bridge.
 
 Candidate operations
 --------------------
@@ -68,22 +69,24 @@ behavior is already explicit in the functional kernel contract:
 * ``predict_model``: deterministic execution against fitted state payloads once
   model-state schemas are stable. The first implemented slices are Rust-native
   logistic, Fisher-Pry, Gompertz, and Bass prediction for simple fitted states,
-  with Python bridge fallback for unsupported shapes such as covariates, event
-  splits, and non-native model families.
+  with explicit unsupported-payload errors for promoted slices and Python
+  bridge fallback reserved for non-native model families.
 * ``simulate_model``: deterministic or seeded simulation paths where payload
   shapes, dtypes, and error mapping can be verified without Python object
   identity. The logistic, Fisher-Pry, Gompertz, and Bass native slices cover
-  simulation for simple fitted states.
+  simulation for simple fitted states, while bridge fallback remains available
+  only for explicitly non-native families.
 * ``fit_model``: bounded fitting workflows where the parameter search is
   deterministic enough to reproduce with the same response contract. The first
   implemented slices are Rust-native logistic, Fisher-Pry, and Gompertz fitting
-  for simple fitted states, with Python bridge fallback for unsupported
-  families and payload shapes.
+  for simple fitted states, with Python bridge fallback reserved for
+  unsupported families.
 * ``summarize_model`` and ``diagnose_model``: fitted-state reporting paths that
   can reuse native parameters, residuals, and diagnostics contract fields. The
   first implemented slices are Rust-native logistic, Fisher-Pry, and Gompertz
-  summary and diagnostics for simple fitted states, with Python bridge fallback
-  for unsupported families and payload shapes.
+  summary and diagnostics for simple fitted states, with explicit unsupported
+  payload errors for promoted slices and Python bridge fallback reserved for
+  unsupported families.
 
 Operations that require broad Python-backed fitting behavior, optional
 probabilistic runtimes, or model-specific class internals should remain
@@ -219,10 +222,11 @@ Fallback and error behavior
 
 Native Rust entrypoints return ``unsupported_native_operation`` when the
 operation or payload is outside the documented native slice. Public wrapper
-methods treat that code as recoverable and dispatch the original request to the
-Python bridge, emitting structured ``tracing`` events for observability. Invalid
-payloads that violate the stable request schema remain hard errors and should
-not be silently rewritten into fallback requests.
+methods dispatch that code to the Python bridge only for explicitly
+non-native model families; promoted native slices surface the error directly,
+emitting structured ``tracing`` events for the explicit bridge-fallback cases.
+Invalid payloads that violate the stable request schema remain hard errors and
+should not be silently rewritten into fallback requests.
 
 Bridge execution failures return ``bridge_command_failed`` with the operation,
 message, retryability, and details preserved through the kernel error mapping.
@@ -318,11 +322,12 @@ heap profiles.
 
 The core is therefore not entirely written in Rust yet. The Rust crate owns
 native metadata discovery and selected logistic and Bass execution slices.
-Unsupported model families, covariate/event payloads, probabilistic runtimes,
-and broader model operations still fall back to the shared Python kernel.
-Promotion remains operation by operation. A slice can move from experimental to
-default only when parity, schema compatibility, stable error mapping, binding
-smoke tests, CPU benchmark evidence, memory evidence when relevant, and XLA
+Unsupported model families still fall back to the shared Python kernel, while
+promoted native slices reject unsupported covariates, event payloads,
+probabilistic runtimes, and broader model operations explicitly. Promotion
+remains operation by operation. A slice can move from experimental to default
+only when parity, schema compatibility, stable error mapping, binding smoke
+tests, CPU benchmark evidence, memory evidence when relevant, and XLA
 eligibility or rejection rationale are recorded.
 
 This work should stay narrower than the Python testing stack:

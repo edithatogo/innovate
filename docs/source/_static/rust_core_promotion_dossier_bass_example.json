@@ -7,7 +7,7 @@
     "model_slice": "bass_simple_fitted_state",
     "current_owner": "rust_native",
     "target_owner": "rust_native",
-    "fallback_status": "native_default_python_bridge_fallback",
+    "fallback_status": "native_default_no_fallback_needed",
     "inventory_reference": "docs/source/_static/rust_core_migration_inventory.json"
   },
   "promotion_decision": {

@@ -34,18 +34,18 @@
 
 ## Phase 3: Remove Undocumented Fallback and Lock the ABI Boundary
 
-- [ ] Task: Narrow bridge fallback to only intentionally non-native surfaces
-    - [ ] Remove bridge fallback from promoted slices
-    - [ ] Keep fallback only for explicitly documented exceptions
-    - [ ] Verify native-first routing cannot silently drift to Python
-- [ ] Task: Update ABI and capability metadata
-    - [ ] Refresh ABI policy docs and schema-version notes
-    - [ ] Tighten capability discovery to reflect final ownership
-    - [ ] Add tests that reject exposure of Python internals or private native structs
-- [ ] Task: Validate cross-language contract stability
-    - [ ] Confirm Python, Rust, R, Julia, Go, TypeScript, and C# still bind to the same kernel contract
-    - [ ] Add contract tests for changed request and response shapes
-    - [ ] Confirm bridge-only behavior is explicit in the remaining fallback paths
+- [x] Task: Narrow bridge fallback to only intentionally non-native surfaces
+    - [x] Remove bridge fallback from promoted slices
+    - [x] Keep fallback only for explicitly documented exceptions
+    - [x] Verify native-first routing cannot silently drift to Python
+- [x] Task: Update ABI and capability metadata
+    - [x] Refresh ABI policy docs and schema-version notes
+    - [x] Tighten capability discovery to reflect final ownership
+    - [x] Add tests that reject exposure of Python internals or private native structs
+- [x] Task: Validate cross-language contract stability
+    - [x] Confirm Python, Rust, R, Julia, Go, TypeScript, and C# still bind to the same kernel contract
+    - [x] Add contract tests for changed request and response shapes
+    - [x] Confirm bridge-only behavior is explicit in the remaining fallback paths
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Remove Undocumented Fallback and Lock the ABI Boundary' (Protocol in workflow.md)
 
 ## Phase 4: Align Bindings, Packaging, and Publication Surfaces

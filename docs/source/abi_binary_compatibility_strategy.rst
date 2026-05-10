@@ -36,7 +36,9 @@ Backend capability metadata
    Native implementations must stay behind capability-discovery metadata. A
    backend can report that a model slice is Rust-native, Python-backed,
    XLA-backed, or unsupported, but the reported capability does not expose that
-   backend's private ABI.
+   backend's private ABI. Promoted native slices surface
+   ``unsupported_native_operation`` directly for out-of-slice payloads; bridge
+   fallback is reserved for explicitly non-native model keys.
 
 Arrow native boundary
 ---------------------

@@ -310,6 +310,21 @@ impl KernelDiagnosticsSummary {
     }
 }
 
+fn bridge_fallback_allowed(operation: KernelOperation, model_key: Option<&str>) -> bool {
+    match operation {
+        KernelOperation::FitModel => {
+            !matches!(model_key, Some("logistic" | "gompertz" | "fisher_pry"))
+        }
+        KernelOperation::PredictModel | KernelOperation::SimulateModel => {
+            !matches!(model_key, Some("logistic" | "gompertz" | "fisher_pry" | "bass"))
+        }
+        KernelOperation::SummarizeModel | KernelOperation::DiagnoseModel => {
+            !matches!(model_key, Some("logistic" | "gompertz" | "fisher_pry"))
+        }
+        KernelOperation::DiscoverModels => false,
+    }
+}
+
 #[derive(Debug, Default, Clone, Copy)]
 pub struct KernelBinding;
 
@@ -405,18 +420,8 @@ impl KernelBinding {
         payload: Value,
     ) -> Result<KernelResponse, KernelBindingError> {
         let request = self.fit_model_request(model_key, payload);
-        self.fit_model_native(&request).or_else(|err| {
-            if err.code == "unsupported_native_operation" {
-                debug!(
-                    operation = %request.operation,
-                    model_key = ?request.model_key,
-                    "native path unsupported, falling back to Python bridge",
-                );
-                self.invoke(&request)
-            } else {
-                Err(err)
-            }
-        })
+        self.fit_model_native(&request)
+            .or_else(|err| self.maybe_fallback_to_bridge(&request, err))
     }
 
     pub fn fit_model_via_bridge(
@@ -448,18 +453,8 @@ impl KernelBinding {
         payload: Value,
     ) -> Result<KernelResponse, KernelBindingError> {
         let request = self.predict_model_request(model_key, payload);
-        self.predict_model_native(&request).or_else(|err| {
-            if err.code == "unsupported_native_operation" {
-                debug!(
-                    operation = %request.operation,
-                    model_key = ?request.model_key,
-                    "native path unsupported, falling back to Python bridge",
-                );
-                self.invoke(&request)
-            } else {
-                Err(err)
-            }
-        })
+        self.predict_model_native(&request)
+            .or_else(|err| self.maybe_fallback_to_bridge(&request, err))
     }
 
     pub fn predict_model_via_bridge(
@@ -483,18 +478,8 @@ impl KernelBinding {
         payload: Value,
     ) -> Result<KernelResponse, KernelBindingError> {
         let request = self.simulate_model_request(model_key, payload);
-        self.simulate_model_native(&request).or_else(|err| {
-            if err.code == "unsupported_native_operation" {
-                debug!(
-                    operation = %request.operation,
-                    model_key = ?request.model_key,
-                    "native path unsupported, falling back to Python bridge",
-                );
-                self.invoke(&request)
-            } else {
-                Err(err)
-            }
-        })
+        self.simulate_model_native(&request)
+            .or_else(|err| self.maybe_fallback_to_bridge(&request, err))
     }
 
     pub fn simulate_model_via_bridge(
@@ -518,18 +503,8 @@ impl KernelBinding {
         payload: Value,
     ) -> Result<KernelResponse, KernelBindingError> {
         let request = self.summarize_model_request(model_key, payload);
-        self.summarize_model_native(&request).or_else(|err| {
-            if err.code == "unsupported_native_operation" {
-                debug!(
-                    operation = %request.operation,
-                    model_key = ?request.model_key,
-                    "native path unsupported, falling back to Python bridge",
-                );
-                self.invoke(&request)
-            } else {
-                Err(err)
-            }
-        })
+        self.summarize_model_native(&request)
+            .or_else(|err| self.maybe_fallback_to_bridge(&request, err))
     }
 
     pub fn summarize_model_via_bridge(
@@ -561,18 +536,8 @@ impl KernelBinding {
         payload: Value,
     ) -> Result<KernelResponse, KernelBindingError> {
         let request = self.diagnose_model_request(model_key, payload);
-        self.diagnose_model_native(&request).or_else(|err| {
-            if err.code == "unsupported_native_operation" {
-                debug!(
-                    operation = %request.operation,
-                    model_key = ?request.model_key,
-                    "native path unsupported, falling back to Python bridge",
-                );
-                self.invoke(&request)
-            } else {
-                Err(err)
-            }
-        })
+        self.diagnose_model_native(&request)
+            .or_else(|err| self.maybe_fallback_to_bridge(&request, err))
     }
 
     pub fn diagnose_model_via_bridge(
@@ -702,6 +667,25 @@ impl KernelBinding {
                 .into_os_string()
         });
         joined.to_string_lossy().into_owned()
+    }
+
+    fn maybe_fallback_to_bridge(
+        &self,
+        request: &KernelRequest,
+        err: KernelBindingError,
+    ) -> Result<KernelResponse, KernelBindingError> {
+        if err.code == "unsupported_native_operation"
+            && bridge_fallback_allowed(request.operation, request.model_key.as_deref())
+        {
+            debug!(
+                operation = %request.operation,
+                model_key = ?request.model_key,
+                "native path unsupported, falling back to Python bridge",
+            );
+            self.invoke(request)
+        } else {
+            Err(err)
+        }
     }
 
     fn python_command_segments(&self) -> Vec<String> {

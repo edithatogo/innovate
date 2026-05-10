@@ -110,7 +110,7 @@ def test_rust_migration_inventory_covers_canonical_operations_and_mixed_ownershi
     assert "rust_native" in owners
     assert "python_bridge" in owners
     assert "python_reference" in owners
-    assert "native_default_python_bridge_fallback" in fallback_statuses
+    assert "native_default_no_fallback_needed" in fallback_statuses
     assert "python_bridge_default" in fallback_statuses
     assert any(entry["current_owner"] == "rust_native" for entry in entries)
     assert any(entry["current_owner"] == "python_bridge" for entry in entries)
@@ -404,7 +404,7 @@ def test_rust_native_operations_suite_covers_all_promoted_slices() -> None:
         "native_bass_reports_structured_errors_for_invalid_or_unsupported_shapes",
         "native_prediction_falls_back_to_bridge_for_non_native_models",
         "native_simulation_falls_back_to_bridge_for_non_native_models",
-        "native_summary_and_diagnose_fall_back_to_bridge_for_non_native_models",
+        "native_summary_and_diagnose_reject_unsupported_native_payloads",
         "native_fallback_paths_emit_tracing_events",
     }
 

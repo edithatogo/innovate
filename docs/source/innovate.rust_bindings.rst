@@ -69,9 +69,10 @@ Fallback and errors
 -------------------
 
 Native entrypoints return `unsupported_native_operation` when the request is
-outside the documented Rust slice. Public wrapper methods treat that as a
-recoverable condition, emit a `tracing` event, and retry the original request
-through the Python bridge. Bridge launch, status, or decoding failures are
+outside the documented Rust slice. Public wrapper methods retry that request
+through the Python bridge only for explicitly non-native model families, emit a
+`tracing` event for those bridge-backed cases, and return the native error
+directly for promoted slices. Bridge launch, status, or decoding failures are
 reported as `bridge_command_failed` so callers can distinguish unsupported
 native coverage from transport failure.
 

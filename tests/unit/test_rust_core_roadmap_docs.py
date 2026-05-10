@@ -68,7 +68,7 @@ def test_rust_core_roadmap_names_candidate_operations_and_gates() -> None:
     assert "logistic, Fisher-Pry, and Gompertz fitting" in roadmap
     assert "logistic, Fisher-Pry, Gompertz, and Bass prediction" in roadmap
     assert "logistic, Fisher-Pry, and Gompertz summary and diagnostics" in roadmap
-    assert "Python bridge fallback" in roadmap
+    assert "bridge fallback reserved for non-native model families" in roadmap
     assert "same simple fitted-state payload" in roadmap
     assert "Benchmarking and profiling tooling" in roadmap
     assert "criterion" in roadmap
@@ -154,8 +154,8 @@ def test_rust_core_roadmap_audit_matches_current_runtime_ownership() -> None:
         "logistic, Fisher-Pry, and Gompertz ``fit_model``",
         "logistic, Fisher-Pry, and Gompertz ``summarize_model`` and ``diagnose_model``",
         "logistic, Fisher-Pry, Gompertz, and Bass ``predict_model``/``simulate_model``",
-        "Python bridge fallback path",
-        "Unsupported native slices therefore remain",
+        "Python bridge entrypoint helpers",
+        "Explicitly non-native slices therefore remain",
         "bridge-backed",
         "A full Rust core must not be claimed",
         "every canonical operation",
@@ -314,7 +314,7 @@ def test_rust_core_roadmap_explicitly_rejects_full_rust_ownership() -> None:
         "The core is not entirely Rust",
         "Python reference owner",
         "exposes Rust-native execution only for the documented slices",
-        "Unsupported native slices therefore remain",
+        "Explicitly non-native slices therefore remain",
         "Rust Core Migration Completion and Polyglot Claim Closure",
         "The core is therefore not entirely written in Rust yet",
         "Promotion remains operation by operation",
@@ -340,11 +340,11 @@ def test_rust_core_roadmap_enumerates_python_bridge_fallback_inventory() -> None
 
     expected_fallbacks = {
         "discover_models": "Bridge discovery remains available for parity and drift checks.",
-        "fit_model": "Unsupported model families, covariates, event splits, and custom fitter options fall back to the Python bridge.",
-        "predict_model": "Unsupported families, covariate payloads, event splits, and incomplete fitted states fall back to the Python bridge.",
-        "simulate_model": "Unsupported families, stochastic policies that are not represented in the stable payload, covariates, and event splits fall back to the bridge.",
-        "summarize_model": "Unsupported families, custom diagnostics, covariates, and event splits fall back to the bridge.",
-        "diagnose_model": "Unsupported families, missing diagnostic inputs, covariates, and event splits fall back to the bridge when the wrapper path is used.",
+        "fit_model": "Python bridge fallback reserved for unsupported families.",
+        "predict_model": "explicit unsupported-payload errors for promoted slices",
+        "simulate_model": "bridge fallback remains available only for explicitly non-native families.",
+        "summarize_model": "explicit unsupported payload errors for promoted slices",
+        "diagnose_model": "bridge-fallback cases",
     }
 
     for operation, fallback in expected_fallbacks.items():
@@ -353,8 +353,8 @@ def test_rust_core_roadmap_enumerates_python_bridge_fallback_inventory() -> None
 
     for phrase in (
         "unsupported_native_operation",
-        "Public wrapper methods treat that code as recoverable",
-        "dispatch the original request to the Python bridge",
+        "Public wrapper methods dispatch that code to the Python bridge only for explicitly non-native model families",
+        "promoted native slices surface the error directly",
         "bridge_command_failed",
     ):
         assert phrase in roadmap

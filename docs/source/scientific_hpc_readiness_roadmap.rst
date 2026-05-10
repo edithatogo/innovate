@@ -24,7 +24,7 @@ Current state
      Kernel --> Arrow[Arrow-compatible schemas]
      Kernel --> JAX[JAX/XLA optional backend]
      Kernel --> Rust[Rust native slices]
-     Kernel --> Bridge[Python bridge fallback]
+     Kernel --> Bridge[Explicit non-native bridge fallback]
      Arrow --> R[R binding]
      Arrow --> Julia[Julia binding]
      Arrow --> TS[TypeScript binding]
@@ -145,8 +145,8 @@ The safe boundary is:
   where process or language boundaries require ABI discipline;
 * XLA, ``jaxlib``, Rust internal structs, and scheduler-specific details do not
   become public ABI;
-* native capability discovery decides whether Rust, XLA, bridge fallback, or
-  distributed execution handles a request.
+* native capability discovery decides whether Rust, XLA, explicit bridge
+  fallback, or distributed execution handles a request.
 
 XLA, ``jaxlib``, Rust internal structs, and scheduler-specific details do not become public ABI.
 
