@@ -5,7 +5,6 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-
 DOC_PATH = Path("docs/source/polyglot_repo_architecture.rst")
 
 

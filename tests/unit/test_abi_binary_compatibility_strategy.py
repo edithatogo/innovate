@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-
 DOC_PATH = Path("docs/source/abi_binary_compatibility_strategy.rst")
 INDEX_PATH = Path("docs/source/index.rst")
 TRACK_DIR = Path("conductor/tracks/abi_binary_compatibility_strategy_20260507")

@@ -199,7 +199,7 @@ def test_rust_migration_inventory_defines_operation_promotion_gates() -> None:
 
     for entry in entries:
         gates = entry["promotion_gates"]
-        assert REQUIRED_PROMOTION_GATES <= set(gates)
+        assert set(gates) >= REQUIRED_PROMOTION_GATES
         for gate_name in REQUIRED_PROMOTION_GATES:
             gate = gates[gate_name]
             assert gate["status"] in {"passed", "required", "not_applicable"}
@@ -411,10 +411,10 @@ def test_rust_native_operations_suite_covers_all_promoted_slices() -> None:
     for test_name in expected_native_tests:
         assert test_name in operations
 
-    for discovery_test in {
+    for discovery_test in (
         "native_discovery_manifest_is_packaged_and_decodable",
         "native_discovery_matches_python_bridge_metadata",
         "native_discovery_reports_structured_decode_errors",
         "native_discovery_reports_missing_results_as_bridge_failures",
-    }:
+    ):
         assert discovery_test in native_discovery

@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-
 DOC_PATH = Path("docs/source/accelerator_parallel_execution_evidence.rst")
 ARTIFACT_PATH = Path("docs/source/_static/accelerator_parallel_execution_evidence_schema.json")
 

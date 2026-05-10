@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-
 MATRIX_PATH = Path("docs/source/_static/community_submission_readiness_matrix.json")
 DOC_PATH = Path("docs/source/community_submission_readiness.rst")
 INDEX_PATH = Path("docs/source/index.rst")
@@ -49,19 +48,25 @@ def test_community_submission_matrix_covers_requested_targets() -> None:
     targets = {target["id"] for target in matrix["targets"]}
 
     assert matrix["schema_version"] == 1
-    assert TARGETS == targets
+    assert targets == TARGETS
 
 
 def test_community_submission_targets_have_status_evidence_and_blockers() -> None:
-    """No readiness claim should omit status, reviewer evidence, or blockers."""
+    """Readiness claims should keep evidence complete and blockers explicit when needed."""
     matrix = load_matrix()
 
     for target in matrix["targets"]:
         assert target["readiness_status"] in VALID_STATUSES
         assert set(target["reviewer_evidence"]) >= REQUIRED_EVIDENCE
         assert target["evidence_links"], target["id"]
-        assert target["blockers"], target["id"]
-        assert all(blocker["status"] in {"open", "blocked_external", "deferred"} for blocker in target["blockers"])
+        if target["readiness_status"] in {"ready", "not_applicable"}:
+            assert target["blockers"] == [], target["id"]
+        else:
+            assert target["blockers"], target["id"]
+            assert all(
+                blocker["status"] in {"open", "blocked_external", "deferred"}
+                for blocker in target["blockers"]
+            )
 
 
 def test_community_submission_docs_link_matrix_and_sequence() -> None:
@@ -76,4 +81,3 @@ def test_community_submission_docs_link_matrix_and_sequence() -> None:
     assert "No submission claims readiness without evidence" in docs
     for target in matrix["targets"]:
         assert target["name"] in docs
-

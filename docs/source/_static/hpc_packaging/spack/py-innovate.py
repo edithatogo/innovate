@@ -1,3 +1,5 @@
+# ruff: noqa: F821
+
 from spack.package import PythonPackage
 
 

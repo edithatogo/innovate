@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-
 DOC_PATH = Path("docs/source/external_governance_sustainability.rst")
 MATRIX_PATH = Path("docs/source/_static/external_governance_sustainability_matrix.json")
 INDEX_PATH = Path("docs/source/index.rst")
@@ -53,7 +52,6 @@ def test_external_governance_dossier_links_existing_policy_files() -> None:
         "scientific_hpc_readiness_roadmap",
         "architecture_modernization_roadmap",
         "support matrix",
-        "funding or sponsorship statement",
+        "community-maintained funding statement",
     ):
         assert phrase in docs
-
