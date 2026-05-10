@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "package_targets": [
+    "python_pypi",
+    "typescript_npm",
+    "rust_crates_io",
+    "r_r_universe",
+    "r_cran",
+    "julia_general",
+    "go_modules",
+    "csharp_nuget"
+  ],
+  "hpc_targets": [
+    "spack",
+    "easybuild",
+    "hpsf",
+    "e4s"
+  ],
+  "targets": [
+    {
+      "target_id": "python_pypi",
+      "surface": "Python package",
+      "registry": "PyPI/TestPyPI",
+      "owner": "Python maintainers",
+      "release_path": "uv build -> trusted publishing",
+      "submission_status": "deferred",
+      "evidence": [
+        "docs/source/binding_publication_ci.rst",
+        "docs/source/submission_readiness_dossiers.rst"
+      ],
+      "receipt": "Registry submission not yet executed in this repo context."
+    },
+    {
+      "target_id": "typescript_npm",
+      "surface": "TypeScript binding",
+      "registry": "npm",
+      "owner": "TypeScript maintainers",
+      "release_path": "npm pack --dry-run -> release publish",
+      "submission_status": "deferred",
+      "evidence": [
+        "bindings/typescript/package.json",
+        "docs/source/binding_publication_ci.rst"
+      ],
+      "receipt": "Registry submission not yet executed in this repo context."
+    },
+    {
+      "target_id": "rust_crates_io",
+      "surface": "Rust binding/core",
+      "registry": "crates.io",
+      "owner": "Rust maintainers",
+      "release_path": "cargo package -> cargo publish",
+      "submission_status": "deferred",
+      "evidence": [
+        "bindings/rust/Cargo.toml",
+        "docs/source/binding_publication_ci.rst"
+      ],
+      "receipt": "Registry submission not yet executed in this repo context."
+    },
+    {
+      "target_id": "r_r_universe",
+      "surface": "R binding",
+      "registry": "R-universe",
+      "owner": "R binding maintainers",
+      "release_path": "build tarball -> maintainer registry registration",
+      "submission_status": "deferred",
+      "evidence": [
+        "bindings/r/README.md",
+        "docs/source/binding_publication_ci.rst"
+      ],
+      "receipt": "Registry submission not yet executed in this repo context."
+    },
+    {
+      "target_id": "r_cran",
+      "surface": "R binding",
+      "registry": "CRAN",
+      "owner": "R binding maintainers",
+      "release_path": "R CMD build -> R CMD check --as-cran -> submission",
+      "submission_status": "deferred",
+      "evidence": [
+        "bindings/r/tests/run.R",
+        "docs/source/binding_publication_ci.rst"
+      ],
+      "receipt": "Registry submission not yet executed in this repo context."
+    },
+    {
+      "target_id": "julia_general",
+      "surface": "Julia binding",
+      "registry": "Julia General",
+      "owner": "Julia binding maintainers",
+      "release_path": "Pkg.instantiate() -> Pkg.test() -> Registrator",
+      "submission_status": "deferred",
+      "evidence": [
+        "bindings/julia/test/runtests.jl",
+        "docs/source/binding_publication_ci.rst"
+      ],
+      "receipt": "Registry submission not yet executed in this repo context."
+    },
+    {
+      "target_id": "go_modules",
+      "surface": "Go binding",
+      "registry": "Go modules",
+      "owner": "Go binding maintainers",
+      "release_path": "go test ./... -> versioned module tag",
+      "submission_status": "deferred",
+      "evidence": [
+        "bindings/go/go.mod",
+        "docs/source/binding_publication_ci.rst"
+      ],
+      "receipt": "Registry submission not yet executed in this repo context."
+    },
+    {
+      "target_id": "csharp_nuget",
+      "surface": "C# binding",
+      "registry": "NuGet",
+      "owner": "C# binding maintainers",
+      "release_path": "dotnet test -> dotnet pack -> push",
+      "submission_status": "deferred",
+      "evidence": [
+        "bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj",
+        "docs/source/binding_publication_ci.rst"
+      ],
+      "receipt": "Registry submission not yet executed in this repo context."
+    },
+    {
+      "target_id": "spack",
+      "surface": "HPC packaging",
+      "registry": "Spack",
+      "owner": "HPC maintainers",
+      "release_path": "CI smoke -> scheduler-backed validation -> upstream recipe review",
+      "submission_status": "blocked",
+      "evidence": [
+        "docs/source/hpc_packaging_registry_readiness.rst",
+        "docs/source/_static/hpc_packaging/spack/py-innovate.py"
+      ],
+      "receipt": "Blocked on upstream review and scheduler-backed registry evidence."
+    },
+    {
+      "target_id": "easybuild",
+      "surface": "HPC packaging",
+      "registry": "EasyBuild",
+      "owner": "HPC maintainers",
+      "release_path": "CI smoke -> scheduler-backed validation -> easyconfig review",
+      "submission_status": "blocked",
+      "evidence": [
+        "docs/source/hpc_packaging_registry_readiness.rst",
+        "docs/source/_static/hpc_packaging/easybuild/innovate-0.5.0.eb"
+      ],
+      "receipt": "Blocked on upstream review and scheduler-backed registry evidence."
+    },
+    {
+      "target_id": "hpsf",
+      "surface": "HPC registry",
+      "registry": "HPSF",
+      "owner": "HPC maintainers",
+      "release_path": "governance review -> registry candidacy",
+      "submission_status": "blocked",
+      "evidence": [
+        "docs/source/hpc_packaging_registry_readiness.rst",
+        "docs/source/hpc_registry_contract.rst"
+      ],
+      "receipt": "Blocked pending scheduler-backed evidence and support-policy documentation."
+    },
+    {
+      "target_id": "e4s",
+      "surface": "HPC registry",
+      "registry": "E4S",
+      "owner": "HPC maintainers",
+      "release_path": "performance portability evidence -> registry candidacy",
+      "submission_status": "blocked",
+      "evidence": [
+        "docs/source/hpc_packaging_registry_readiness.rst",
+        "docs/source/hpc_registry_contract.rst"
+      ],
+      "receipt": "Blocked pending accelerator-aware evidence and reviewable package artifacts."
+    }
+  ]
+}
