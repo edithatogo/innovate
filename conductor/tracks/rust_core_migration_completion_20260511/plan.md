@@ -66,18 +66,18 @@
 
 ## Phase 5: Update Architecture, Roadmap, and Readiness Claims
 
-- [~] Task: Rewrite the Rust core roadmap to the new ownership state
-    - [ ] Remove stale bridge-gap language for promoted slices
-    - [ ] Mark any permanently non-native slices explicitly
-    - [ ] Keep the operation inventory fixture as the machine-readable source of truth
-- [ ] Task: Update polyglot architecture and readiness docs
-    - [ ] Refresh the polyglot repository architecture page
-    - [ ] Refresh the scientific and HPC readiness roadmap
-    - [ ] Refresh any submission-readiness or governance docs that reference Rust-core ownership
-- [ ] Task: Update the main README and canonical docs
-    - [ ] Align the short-form README with the final migration claim
-    - [ ] Align the docs landing pages and binding overview pages
-    - [ ] Ensure no page overstates the current ownership state
+- [x] Task: Rewrite the Rust core roadmap to the new ownership state
+    - [x] Remove stale bridge-gap language for promoted slices
+    - [x] Mark any permanently non-native slices explicitly
+    - [x] Keep the operation inventory fixture as the machine-readable source of truth
+- [x] Task: Update polyglot architecture and readiness docs
+    - [x] Refresh the polyglot repository architecture page
+    - [x] Refresh the scientific and HPC readiness roadmap
+    - [x] Refresh any submission-readiness or governance docs that reference Rust-core ownership
+- [x] Task: Update the main README and canonical docs
+    - [x] Align the short-form README with the final migration claim
+    - [x] Align the docs landing pages and binding overview pages
+    - [x] Ensure no page overstates the current ownership state
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Update Architecture, Roadmap, and Readiness Claims' (Protocol in workflow.md)
 
 ## Phase 6: Validate the Full Migration and Archive the Track
