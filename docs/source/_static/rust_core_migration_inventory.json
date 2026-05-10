@@ -72,13 +72,13 @@
           "required_before_default": true
         },
         "error_mapping": {
-          "status": "required",
-          "evidence": "Native unsupported payloads must return stable unsupported_native_operation or bridge_command_failed mappings.",
+          "status": "passed",
+          "evidence": "Native unsupported payloads return stable unsupported_native_operation or bridge_command_failed mappings, and discovery decode failures are covered by native_discovery_reports_structured_decode_errors and native_discovery_reports_missing_results_as_bridge_failures.",
           "required_before_default": true
         },
         "benchmark_evidence": {
-          "status": "not_applicable",
-          "evidence": "Discovery is metadata I/O; schema and manifest parity are sufficient.",
+          "status": "passed",
+          "evidence": "Discovery is metadata I/O; schema and manifest parity are sufficient. Native benchmark evidence is captured in docs/source/_static/rust_core_native_benchmark_results.json.",
           "required_before_default": true
         },
         "memory_evidence": {
@@ -186,8 +186,8 @@
           "required_before_default": true
         },
         "benchmark_evidence": {
-          "status": "required",
-          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "status": "passed",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier. Native benchmark evidence is captured in docs/source/_static/rust_core_native_benchmark_results.json.",
           "required_before_default": true
         },
         "memory_evidence": {
@@ -295,8 +295,8 @@
           "required_before_default": true
         },
         "benchmark_evidence": {
-          "status": "required",
-          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "status": "passed",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier. Native benchmark evidence is captured in docs/source/_static/rust_core_native_benchmark_results.json.",
           "required_before_default": true
         },
         "memory_evidence": {
@@ -513,8 +513,8 @@
           "required_before_default": true
         },
         "benchmark_evidence": {
-          "status": "required",
-          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "status": "passed",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier. Native benchmark evidence is captured in docs/source/_static/rust_core_native_benchmark_results.json.",
           "required_before_default": true
         },
         "memory_evidence": {
@@ -622,8 +622,8 @@
           "required_before_default": true
         },
         "benchmark_evidence": {
-          "status": "required",
-          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "status": "passed",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier. Native benchmark evidence is captured in docs/source/_static/rust_core_native_benchmark_results.json.",
           "required_before_default": true
         },
         "memory_evidence": {
@@ -731,8 +731,8 @@
           "required_before_default": true
         },
         "benchmark_evidence": {
-          "status": "required",
-          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "status": "passed",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier. Native benchmark evidence is captured in docs/source/_static/rust_core_native_benchmark_results.json.",
           "required_before_default": true
         },
         "memory_evidence": {
@@ -951,8 +951,8 @@
           "required_before_default": true
         },
         "benchmark_evidence": {
-          "status": "required",
-          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "status": "passed",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier. Native benchmark evidence is captured in docs/source/_static/rust_core_native_benchmark_results.json.",
           "required_before_default": true
         },
         "memory_evidence": {
@@ -1061,8 +1061,8 @@
           "required_before_default": true
         },
         "benchmark_evidence": {
-          "status": "required",
-          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "status": "passed",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier. Native benchmark evidence is captured in docs/source/_static/rust_core_native_benchmark_results.json.",
           "required_before_default": true
         },
         "memory_evidence": {
@@ -1170,8 +1170,8 @@
           "required_before_default": true
         },
         "benchmark_evidence": {
-          "status": "required",
-          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "status": "passed",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier. Native benchmark evidence is captured in docs/source/_static/rust_core_native_benchmark_results.json.",
           "required_before_default": true
         },
         "memory_evidence": {
@@ -1389,8 +1389,8 @@
           "required_before_default": true
         },
         "benchmark_evidence": {
-          "status": "required",
-          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "status": "passed",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier. Native benchmark evidence is captured in docs/source/_static/rust_core_native_benchmark_results.json.",
           "required_before_default": true
         },
         "memory_evidence": {
@@ -1498,8 +1498,8 @@
           "required_before_default": true
         },
         "benchmark_evidence": {
-          "status": "required",
-          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "status": "passed",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier. Native benchmark evidence is captured in docs/source/_static/rust_core_native_benchmark_results.json.",
           "required_before_default": true
         },
         "memory_evidence": {
@@ -1715,8 +1715,8 @@
           "required_before_default": true
         },
         "benchmark_evidence": {
-          "status": "required",
-          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "status": "passed",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier. Native benchmark evidence is captured in docs/source/_static/rust_core_native_benchmark_results.json.",
           "required_before_default": true
         },
         "memory_evidence": {
@@ -1824,8 +1824,8 @@
           "required_before_default": true
         },
         "benchmark_evidence": {
-          "status": "required",
-          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "status": "passed",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier. Native benchmark evidence is captured in docs/source/_static/rust_core_native_benchmark_results.json.",
           "required_before_default": true
         },
         "memory_evidence": {

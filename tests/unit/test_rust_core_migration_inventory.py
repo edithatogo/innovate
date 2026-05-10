@@ -19,6 +19,9 @@ DOSSIER_PATH = Path("docs/source/_static/rust_core_promotion_dossier_example.jso
 BASS_DOSSIER_PATH = Path("docs/source/_static/rust_core_promotion_dossier_bass_example.json")
 ROADMAP_PATH = Path("docs/source/rust_core_roadmap.rst")
 BENCH_PATH = Path("bindings/rust/benches/native_kernel.rs")
+OPERATIONS_TEST_PATH = Path("bindings/rust/tests/operations.rs")
+NATIVE_DISCOVERY_TEST_PATH = Path("bindings/rust/tests/native_discovery.rs")
+BENCH_RESULTS_PATH = Path("docs/source/_static/rust_core_native_benchmark_results.json")
 REQUIRED_ENTRY_FIELDS = {
     "operation",
     "model_slice",
@@ -206,7 +209,8 @@ def test_rust_migration_inventory_defines_operation_promotion_gates() -> None:
         if entry["current_owner"] == "rust_native":
             assert gates["parity"]["status"] == "passed"
             assert gates["schema_compatibility"]["status"] == "passed"
-            assert gates["error_mapping"]["status"] in {"passed", "required"}
+            assert gates["error_mapping"]["status"] == "passed"
+            assert gates["benchmark_evidence"]["status"] == "passed"
             assert gates["benchmark_evidence"]["required_before_default"] is True
 
         if entry["current_owner"] != "rust_native":
@@ -340,10 +344,77 @@ def test_rust_bass_promotion_dossier_example_records_bass_evidence() -> None:
 
 
 def test_rust_native_benchmark_harness_includes_bass_cases() -> None:
-    """The Rust Criterion harness should benchmark the native Bass slice."""
+    """The Rust Criterion harness should benchmark the native promoted slices."""
     bench = BENCH_PATH.read_text()
+    results = json.loads(BENCH_RESULTS_PATH.read_text())
 
     assert "fn bass_predict_request(binding: &KernelBinding) -> KernelRequest" in bench
     assert "fn bass_simulate_request(binding: &KernelBinding) -> KernelRequest" in bench
+    assert "fn gompertz_fit_request(binding: &KernelBinding) -> KernelRequest" in bench
+    assert "fn gompertz_predict_request(binding: &KernelBinding) -> KernelRequest" in bench
+    assert "fn gompertz_simulate_request(binding: &KernelBinding) -> KernelRequest" in bench
+    assert "fn gompertz_summary_request(binding: &KernelBinding) -> KernelRequest" in bench
+    assert "fn gompertz_diagnose_request(binding: &KernelBinding) -> KernelRequest" in bench
+    assert "fn fisher_pry_fit_request(binding: &KernelBinding) -> KernelRequest" in bench
+    assert "fn fisher_pry_predict_request(binding: &KernelBinding) -> KernelRequest" in bench
+    assert "fn fisher_pry_simulate_request(binding: &KernelBinding) -> KernelRequest" in bench
+    assert "fn fisher_pry_summary_request(binding: &KernelBinding) -> KernelRequest" in bench
+    assert "fn fisher_pry_diagnose_request(binding: &KernelBinding) -> KernelRequest" in bench
+    assert 'BenchmarkId::new("fit_model_native", "gompertz")' in bench
+    assert 'BenchmarkId::new("fit_model_native", "fisher_pry")' in bench
+    assert 'BenchmarkId::new("predict_model_native", "gompertz")' in bench
+    assert 'BenchmarkId::new("predict_model_native", "fisher_pry")' in bench
+    assert 'BenchmarkId::new("simulate_model_native", "gompertz")' in bench
+    assert 'BenchmarkId::new("simulate_model_native", "fisher_pry")' in bench
+    assert 'BenchmarkId::new("summarize_model_native", "gompertz")' in bench
+    assert 'BenchmarkId::new("summarize_model_native", "fisher_pry")' in bench
+    assert 'BenchmarkId::new("diagnose_model_native", "gompertz")' in bench
+    assert 'BenchmarkId::new("diagnose_model_native", "fisher_pry")' in bench
     assert 'BenchmarkId::new("predict_model_native", "bass")' in bench
     assert 'BenchmarkId::new("simulate_model_native", "bass")' in bench
+    assert results["schema_version"] == 1
+    assert results["source_command"] == "cargo bench --manifest-path bindings/rust/Cargo.toml --bench native_kernel"
+    assert len(results["benchmarks"]) == 17
+    assert {entry["model_key"] for entry in results["benchmarks"]} >= {"logistic", "gompertz", "fisher_pry", "bass"}
+
+
+def test_rust_native_operations_suite_covers_all_promoted_slices() -> None:
+    """The Rust operations tests should cover every promoted native slice and fallback rule."""
+    operations = normalized_text(OPERATIONS_TEST_PATH)
+    native_discovery = normalized_text(NATIVE_DISCOVERY_TEST_PATH)
+
+    expected_native_tests = {
+        "native_logistic_fit_matches_python_bridge_contract",
+        "native_logistic_prediction_matches_python_bridge_contract",
+        "native_logistic_simulation_matches_python_bridge_contract",
+        "native_logistic_summary_matches_python_bridge_contract",
+        "native_logistic_diagnose_matches_python_bridge_contract",
+        "native_gompertz_fit_matches_python_bridge_contract",
+        "native_gompertz_prediction_matches_python_bridge_contract",
+        "native_gompertz_simulation_matches_python_bridge_contract",
+        "native_gompertz_summary_matches_python_bridge_contract",
+        "native_gompertz_diagnose_matches_python_bridge_contract",
+        "native_fisher_pry_fit_matches_python_bridge_contract",
+        "native_fisher_pry_prediction_matches_python_bridge_contract",
+        "native_fisher_pry_simulation_matches_python_bridge_contract",
+        "native_fisher_pry_summary_matches_python_bridge_contract",
+        "native_fisher_pry_diagnose_matches_python_bridge_contract",
+        "native_bass_prediction_matches_python_bridge_contract",
+        "native_bass_simulation_matches_python_bridge_contract",
+        "native_bass_reports_structured_errors_for_invalid_or_unsupported_shapes",
+        "native_prediction_falls_back_to_bridge_for_non_native_models",
+        "native_simulation_falls_back_to_bridge_for_non_native_models",
+        "native_summary_and_diagnose_fall_back_to_bridge_for_non_native_models",
+        "native_fallback_paths_emit_tracing_events",
+    }
+
+    for test_name in expected_native_tests:
+        assert test_name in operations
+
+    for discovery_test in {
+        "native_discovery_manifest_is_packaged_and_decodable",
+        "native_discovery_matches_python_bridge_metadata",
+        "native_discovery_reports_structured_decode_errors",
+        "native_discovery_reports_missing_results_as_bridge_failures",
+    }:
+        assert discovery_test in native_discovery

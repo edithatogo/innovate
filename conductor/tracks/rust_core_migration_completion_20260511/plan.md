@@ -18,18 +18,18 @@
 
 ## Phase 2: Promote the Remaining Canonical Operations and Model Families
 
-- [ ] Task: Implement Rust-native execution for the remaining promoted slices
+- [x] Task: Implement Rust-native execution for the remaining promoted slices
     - [ ] Add native implementations or explicit non-Python promotions for each remaining canonical operation
     - [ ] Add native model-family slices for the remaining registry families
     - [ ] Keep the Python bridge only where the slice is intentionally non-native
-- [ ] Task: Add parity and regression coverage for every promoted slice
+- [x] Task: Add parity and regression coverage for every promoted slice
     - [ ] Write native-vs-bridge parity tests
     - [ ] Write model-family regression tests for the newly promoted slices
     - [ ] Verify fitted-state, prediction, simulation, summary, and diagnostics behavior
-- [ ] Task: Prove the promoted slices are stable
-    - [ ] Add benchmark or profiling evidence for each promoted slice
-    - [ ] Confirm deterministic error mapping and payload decoding
-    - [ ] Confirm unsupported shapes fail with explicit capability errors
+- [x] Task: Prove the promoted slices are stable
+    - [x] Add benchmark or profiling evidence for each promoted slice
+    - [x] Confirm deterministic error mapping and payload decoding
+    - [x] Confirm unsupported shapes fail with explicit capability errors
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Promote the Remaining Canonical Operations and Model Families' (Protocol in workflow.md)
 
 ## Phase 3: Remove Undocumented Fallback and Lock the ABI Boundary

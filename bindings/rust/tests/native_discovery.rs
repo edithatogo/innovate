@@ -64,3 +64,47 @@ fn native_discovery_matches_python_bridge_metadata() {
         );
     }
 }
+
+#[test]
+fn native_discovery_reports_structured_decode_errors() {
+    let response = innovate_rust::KernelResponse {
+        schema_version: "1.0".to_string(),
+        operation: innovate_rust::KernelOperation::DiscoverModels,
+        model_key: None,
+        result: Some(serde_json::json!({
+            "schema_version": "1.0",
+            "models": "not-an-array",
+            "metadata": {}
+        })),
+        error: None,
+        metadata: serde_json::json!({}),
+    };
+
+    let error = innovate_rust::KernelDiscoveryResponse::from_response(response)
+        .expect_err("invalid discovery payload should fail deterministically");
+
+    assert_eq!(error.code, "bridge_command_failed");
+    assert!(
+        error
+            .message
+            .contains("failed to decode discovery response")
+    );
+}
+
+#[test]
+fn native_discovery_reports_missing_results_as_bridge_failures() {
+    let response = innovate_rust::KernelResponse {
+        schema_version: "1.0".to_string(),
+        operation: innovate_rust::KernelOperation::DiscoverModels,
+        model_key: None,
+        result: None,
+        error: None,
+        metadata: serde_json::json!({}),
+    };
+
+    let error = innovate_rust::KernelDiscoveryResponse::from_response(response)
+        .expect_err("missing discovery result should be a structured bridge failure");
+
+    assert_eq!(error.code, "bridge_command_failed");
+    assert!(error.message.contains("did not return a result"));
+}
