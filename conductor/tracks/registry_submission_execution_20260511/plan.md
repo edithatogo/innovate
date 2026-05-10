@@ -2,11 +2,11 @@
 
 ## Phase 1: Submission Inventory and Release Readiness
 
-- [ ] Task: Build a complete submission inventory
-    - [ ] Enumerate every package-manager registry target
-    - [ ] Enumerate every HPC registry and packaging target
-    - [ ] Map each target to its package surface, owner, and release path
-- [ ] Task: Verify release prerequisites
+- [x] Task: Build a complete submission inventory c3bb3c9
+    - [x] Enumerate every package-manager registry target
+    - [x] Enumerate every HPC registry and packaging target
+    - [x] Map each target to its package surface, owner, and release path
+- [~] Task: Verify release prerequisites
     - [ ] Confirm package versions and names are aligned
     - [ ] Confirm publication gates exist for each target
     - [ ] Confirm credential or maintainer access requirements are known
@@ -72,4 +72,3 @@
     - [ ] Update the tracks registry entry to completed
     - [ ] Preserve links to the final submission evidence bundle
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Final Review and Archive' (Protocol in workflow.md)
-
