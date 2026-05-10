@@ -298,3 +298,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Rust Core Migration Completion and Polyglot Claim Closure** *(Completed)*
   *Link: [./archive/rust_core_migration_completion_20260511/](./archive/rust_core_migration_completion_20260511/)*
+
+---
+
+- [ ] **Track: Package and HPC Registry Submission Execution**
+  *Link: [./tracks/registry_submission_execution_20260511/](./tracks/registry_submission_execution_20260511/)*
