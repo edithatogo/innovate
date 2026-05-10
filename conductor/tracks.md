@@ -296,5 +296,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Rust Core Migration Completion and Polyglot Claim Closure**
-  *Link: [./tracks/rust_core_migration_completion_20260511/](./tracks/rust_core_migration_completion_20260511/)*
+- [x] **Track: Rust Core Migration Completion and Polyglot Claim Closure** *(Completed)*
+  *Link: [./archive/rust_core_migration_completion_20260511/](./archive/rust_core_migration_completion_20260511/)*
