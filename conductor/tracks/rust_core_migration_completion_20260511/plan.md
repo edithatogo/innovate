@@ -64,7 +64,7 @@
     - [x] Keep package-manager metadata and docs synchronized with the new core claim
 - [x] Task: Conductor - Automated Review and Checkpoint 'Align Bindings, Packaging, and Publication Surfaces' (Protocol in workflow.md)
 
-## Phase 5: Update Architecture, Roadmap, and Readiness Claims
+## Phase 5: Update Architecture, Roadmap, and Readiness Claims [checkpoint: b93fcf5]
 
 - [x] Task: Rewrite the Rust core roadmap to the new ownership state
     - [x] Remove stale bridge-gap language for promoted slices
@@ -78,11 +78,11 @@
     - [x] Align the short-form README with the final migration claim
     - [x] Align the docs landing pages and binding overview pages
     - [x] Ensure no page overstates the current ownership state
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Update Architecture, Roadmap, and Readiness Claims' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Update Architecture, Roadmap, and Readiness Claims' (Protocol in workflow.md)
 
 ## Phase 6: Validate the Full Migration and Archive the Track
 
-- [ ] Task: Run the complete validation matrix
+- [~] Task: Run the complete validation matrix
     - [ ] Run focused Rust-core parity and regression tests
     - [ ] Run binding tests across supported languages
     - [ ] Run docs build, lint, and type checks
