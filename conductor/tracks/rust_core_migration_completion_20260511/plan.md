@@ -48,7 +48,7 @@
     - [x] Confirm bridge-only behavior is explicit in the remaining fallback paths
 - [x] Task: Conductor - Automated Review and Checkpoint 'Remove Undocumented Fallback and Lock the ABI Boundary' (Protocol in workflow.md)
 
-## Phase 4: Align Bindings, Packaging, and Publication Surfaces
+## Phase 4: Align Bindings, Packaging, and Publication Surfaces [checkpoint: c8dfbcc]
 
 - [x] Task: Update binding documentation and manifests
     - [x] Refresh the Rust binding README and package docs
@@ -62,11 +62,11 @@
     - [x] Update reviewer-facing evidence pages that describe the core architecture
     - [x] Update any release or community docs that still imply unresolved Rust ownership gaps
     - [x] Keep package-manager metadata and docs synchronized with the new core claim
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Align Bindings, Packaging, and Publication Surfaces' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Align Bindings, Packaging, and Publication Surfaces' (Protocol in workflow.md)
 
 ## Phase 5: Update Architecture, Roadmap, and Readiness Claims
 
-- [ ] Task: Rewrite the Rust core roadmap to the new ownership state
+- [~] Task: Rewrite the Rust core roadmap to the new ownership state
     - [ ] Remove stale bridge-gap language for promoted slices
     - [ ] Mark any permanently non-native slices explicitly
     - [ ] Keep the operation inventory fixture as the machine-readable source of truth
