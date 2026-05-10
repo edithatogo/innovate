@@ -25,6 +25,8 @@ Start here
    rust_core_roadmap
    abi_binary_compatibility_strategy
    scientific_hpc_readiness_roadmap
+   hpc_registry_contract
+   polyglot_registry_plan
    community_submission_readiness
    hpc_packaging_registry_readiness
    external_governance_sustainability
@@ -54,6 +56,8 @@ The architectural rationale and roadmap live in the repository docs, not in the 
 - ``rust_core_roadmap``
 - ``abi_binary_compatibility_strategy``
 - ``scientific_hpc_readiness_roadmap``
+- ``hpc_registry_contract``
+- ``polyglot_registry_plan``
 - ``community_submission_readiness``
 - ``hpc_packaging_registry_readiness``
 - ``external_governance_sustainability``

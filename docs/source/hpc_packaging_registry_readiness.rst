@@ -13,6 +13,9 @@ EasyBuild, HPSF, and E4S publication still requires HPC-specific scheduler and
 performance-portability evidence, but the repository now contains concrete
 package sketches and install-smoke artifacts for the supported surfaces.
 
+See also :doc:`hpc_registry_contract` for the submission contract and
+:doc:`polyglot_registry_plan` for the broader registry sequencing plan.
+
 Concrete artifacts
 ------------------
 
@@ -211,3 +214,8 @@ HPSF and E4S registry gates
 Result: no HPSF or E4S submission should be made until the package candidates
 have passing install log and smoke log artifacts for CPU, GPU, and mixed
 bridge deployment, plus a documented performance portability evidence bundle.
+
+The current gate remains blocked until evidence exists.
+Current smoke commands to preserve in the evidence bundle include
+``python -c "import innovate; print(innovate.__version__)"`` for Python and
+``Rscript -e`` for the R surface.
