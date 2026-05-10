@@ -1,6 +1,8 @@
 # innovate Julia bindings
 
-This package is the Julia-facing adapter over the Python `innovate` functional kernel.
+This package is the Julia-facing adapter over the Python `innovate` functional kernel. Promoted
+native slices execute in the shared kernel contract, unsupported promoted payloads return explicit
+native errors, and bridge fallback remains available only for explicitly non-native model families.
 
 ## Installation
 
@@ -14,8 +16,8 @@ julia --project=bindings/julia bindings/julia/test/runtests.jl
 ## Invocation path
 
 The Julia package resolves the bridge entrypoint at `inst/python/kernel_bridge.py` and keeps the
-runtime boundary thin. The package shells out to the Python kernel bridge instead of duplicating
-model logic in Julia.
+runtime boundary thin. The package shells out to the Python kernel bridge for explicitly
+non-native model families instead of duplicating model logic in Julia.
 
 ## Current scaffold
 
@@ -34,6 +36,8 @@ model logic in Julia.
   `INNOVATE_PYTHON_COMMAND`, or `python3` if no override is set.
 - The Julia package only prepends `PYTHONPATH` with the repository `src/` directory when a
   checkout is detected.
+- Native promoted slices do not silently fall back to Python; only explicitly non-native
+  families use the bridge.
 
 ## Checkout example
 

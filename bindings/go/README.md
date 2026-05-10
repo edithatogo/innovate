@@ -1,7 +1,10 @@
 # innovate Go bindings
 
 This package provides a thin Go-facing adapter over the Python `innovate`
-functional kernel.
+functional kernel. Promoted native slices execute natively in the shared
+kernel contract, unsupported promoted payloads return explicit native errors,
+and bridge fallback remains available only for explicitly non-native model
+families.
 
 ## Installation
 
@@ -19,7 +22,8 @@ tag pattern `bindings/go/vX.Y.Z`.
 
 - `bindings/go` is the Go module root.
 - The package shells out to `bindings/go/inst/python/kernel_bridge.py` to keep
-  the Go layer contract-driven and free of model logic.
+  the Go layer contract-driven and free of model logic for non-native model
+  families.
 - Kernel request and response envelopes mirror the Python kernel contract so Go
   can exchange structured data without reimplementing diffusion semantics.
 
@@ -56,6 +60,8 @@ tag pattern `bindings/go/vX.Y.Z`.
   overridden by the environment.
 - `INNOVATE_PYTHON_COMMAND` can override the Python launcher when `uv` is not
   available.
+- Native promoted slices do not silently fall back to Python; only explicitly
+  non-native families use the bridge.
 
 ## Support boundaries
 

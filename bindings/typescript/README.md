@@ -1,6 +1,9 @@
 # innovate.ts TypeScript bindings
 
 This package provides a thin TypeScript-facing adapter over the Python `innovate` functional kernel.
+Promoted native slices execute in the shared kernel contract, unsupported promoted payloads
+return explicit native errors, and bridge fallback remains available only for explicitly non-native
+model families.
 
 ## Installation
 
@@ -13,8 +16,8 @@ npm install innovate.ts
 ## Invocation path
 
 The package shells out to the shared kernel bridge shipped at `inst/python/kernel_bridge.py` and
-keeps the runtime surface thin. The bridge is intentionally Python-backed so the TypeScript layer
-does not reimplement model logic.
+keeps the runtime surface thin. The bridge is intentionally Python-backed for explicitly
+non-native model families so the TypeScript layer does not reimplement model logic.
 
 ## Current scaffold
 
@@ -91,6 +94,8 @@ preserving the underlying kernel contract.
   installed in another environment.
 - Repository checkouts are still supported. Set `INNOVATE_REPO_ROOT` to force discovery of a local
   checkout and prepend its Python `src/` tree to the bridge process.
+- Native promoted slices do not silently fall back to Python; only explicitly non-native
+  families use the bridge.
 
 The TypeScript package remains a thin adapter over the shared kernel and does not duplicate model
 logic.

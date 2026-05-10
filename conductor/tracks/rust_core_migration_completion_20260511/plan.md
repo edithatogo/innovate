@@ -50,18 +50,18 @@
 
 ## Phase 4: Align Bindings, Packaging, and Publication Surfaces
 
-- [~] Task: Update binding documentation and manifests
-    - [ ] Refresh the Rust binding README and package docs
-    - [ ] Refresh the Python-facing binding docs if ownership wording changed
-    - [ ] Refresh R, Julia, Go, TypeScript, and C# docs or manifests that describe runtime ownership
-- [ ] Task: Align publication and smoke tests
-    - [ ] Ensure package publish gates still exercise the promoted slices
-    - [ ] Verify binding smoke tests cover native-first execution
-    - [ ] Update release notes or CRAN/NuGet/npm metadata if needed
-- [ ] Task: Keep community-facing evidence aligned
-    - [ ] Update reviewer-facing evidence pages that describe the core architecture
-    - [ ] Update any release or community docs that still imply unresolved Rust ownership gaps
-    - [ ] Keep package-manager metadata and docs synchronized with the new core claim
+- [x] Task: Update binding documentation and manifests
+    - [x] Refresh the Rust binding README and package docs
+    - [x] Refresh the Python-facing binding docs if ownership wording changed
+    - [x] Refresh R, Julia, Go, TypeScript, and C# docs or manifests that describe runtime ownership
+- [x] Task: Align publication and smoke tests
+    - [x] Ensure package publish gates still exercise the promoted slices
+    - [x] Verify binding smoke tests cover native-first execution
+    - [x] Update release notes or CRAN/NuGet/npm metadata if needed
+- [x] Task: Keep community-facing evidence aligned
+    - [x] Update reviewer-facing evidence pages that describe the core architecture
+    - [x] Update any release or community docs that still imply unresolved Rust ownership gaps
+    - [x] Keep package-manager metadata and docs synchronized with the new core claim
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Align Bindings, Packaging, and Publication Surfaces' (Protocol in workflow.md)
 
 ## Phase 5: Update Architecture, Roadmap, and Readiness Claims

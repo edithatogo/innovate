@@ -1,10 +1,12 @@
 # innovate.cs
 
-Thin .NET binding over the shared `innovate` functional kernel contract.
+Thin .NET binding over the shared `innovate` functional kernel contract. Promoted native slices
+execute in the shared contract, unsupported promoted payloads return explicit native errors, and
+bridge fallback remains available only for explicitly non-native model families.
 
 The package preserves the Python reference semantics by invoking the same JSON
-kernel bridge used by the other language bindings. It does not reimplement model
-behavior in C#.
+kernel bridge used by the other language bindings for explicitly non-native
+model families. It does not reimplement model behavior in C#.
 
 The package targets both `net10.0` and `net11.0`.
 

@@ -1,11 +1,13 @@
 # innovate R bindings
 
-This package provides a thin R-facing adapter over the Python `innovate` functional kernel.
+This package provides a thin R-facing adapter over the Python `innovate` functional kernel. Promoted
+native slices execute in the shared kernel contract, unsupported promoted payloads return explicit
+native errors, and bridge fallback remains available only for explicitly non-native model families.
 
 ## Invocation path
 
 The package shells out to the kernel bridge script at `inst/python/kernel_bridge.py` and passes
-JSON request/response envelopes between R and Python.
+JSON request/response envelopes between R and Python for explicitly non-native model families.
 
 The bridge uses the installed `inst/python/kernel_bridge.py` helper and invokes Python through
 `uv run python` by default. Set `INNOVATE_PYTHON_COMMAND=python3` to call an existing Python
@@ -46,6 +48,8 @@ The bindings are a thin adapter over the Python kernel bridge, so the runtime ex
 - the Python `innovate` package available to the selected Python runtime
 - `uv run python` as the default launcher, or `INNOVATE_PYTHON_COMMAND=python3`
 - `INNOVATE_PYTHON_COMMAND` only when you need to override the launcher explicitly
+- Native promoted slices do not silently fall back to Python; only explicitly non-native
+  families use the bridge.
 
 The package does not reimplement model logic in R. It forwards requests, translates responses,
 and preserves the kernel diagnostics payload for downstream inspection.
