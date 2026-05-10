@@ -214,8 +214,8 @@ def test_rust_core_roadmap_audit_matches_current_runtime_ownership() -> None:
 
     non_native_model_keys = python_keys - native_keys
     assert "fisher_pry" in native_keys
-    assert {"network_diffusion", "policy_hazard"} <= non_native_model_keys
-    for model_key in ("network_diffusion", "policy_hazard"):
+    assert {"norton_bass", "composite", "multi_product", "network_diffusion", "policy_hazard"} <= non_native_model_keys
+    for model_key in ("norton_bass", "composite", "multi_product", "network_diffusion", "policy_hazard"):
         assert f"``{model_key}``" in roadmap
 
 

@@ -74,6 +74,13 @@ def test_rust_migration_inventory_declares_required_fields_and_enums() -> None:
         "python_bridge_default",
         "python_reference_only",
     }
+    assert set(inventory["promotion_state_values"]) == {
+        "native_default_guarded",
+        "native_candidate_needs_evidence",
+        "bridge_default_pending_migration",
+        "bridge_default_explicit_exception",
+        "python_reference_boundary",
+    }
     assert inventory["inventory"]
 
     owner_values = set(inventory["owner_values"])
@@ -128,6 +135,17 @@ def test_rust_migration_inventory_records_native_and_fallback_slices() -> None:
     assert ("fit_model", "bass_and_other_model_families") in bridge_slices
     assert ("predict_model", "other_model_families_or_unsupported_payloads") in bridge_slices
     assert ("diagnose_model", "bass_and_other_model_families") in bridge_slices
+    assert {
+        (entry["operation"], entry["model_slice"])
+        for entry in entries
+        if entry["promotion_state"] == "bridge_default_explicit_exception"
+    } == {
+        ("fit_model", "bass_and_other_model_families"),
+        ("predict_model", "other_model_families_or_unsupported_payloads"),
+        ("simulate_model", "other_model_families_or_unsupported_payloads"),
+        ("summarize_model", "bass_and_other_model_families"),
+        ("diagnose_model", "bass_and_other_model_families"),
+    }
 
     for operation, _model_slice in bridge_slices:
         assert operation in CANONICAL_OPERATIONS

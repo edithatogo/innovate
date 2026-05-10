@@ -49,11 +49,12 @@ current source layout so that documentation drift can be checked by tests:
   Rust-native implementation or an explicitly promoted non-Python backend.
   This means every Python registry model family must be covered before claiming
   full Rust ownership.
-  Today, model families such as ``network_diffusion`` and ``policy_hazard``
-  remain outside the Rust-native slice, while ``fisher_pry`` and ``gompertz``
-  have moved into the Rust-native substitution/diffusion slices. Covariates,
-  event splits, probabilistic runtimes, custom fitter options, and incomplete
-  fitted states still require fallback or Python-only reference behavior.
+  Today, model families such as ``norton_bass``, ``composite``,
+  ``multi_product``, ``network_diffusion``, and ``policy_hazard`` remain
+  outside the Rust-native slice, while ``fisher_pry`` and ``gompertz`` have
+  moved into the Rust-native substitution/diffusion slices. Covariates, event
+  splits, probabilistic runtimes, custom fitter options, and incomplete fitted
+  states still require fallback or Python-only reference behavior.
 
 Candidate operations
 --------------------

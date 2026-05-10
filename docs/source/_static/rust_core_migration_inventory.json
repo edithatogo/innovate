@@ -370,7 +370,7 @@
         "State, diagnostics, error mapping, and fitter option schemas are not stabilized for Rust ownership."
       ],
       "migration_phase": "phase_3_model_family_migration",
-      "promotion_state": "bridge_default_pending_migration",
+      "promotion_state": "bridge_default_explicit_exception",
       "depends_on": [
         "kernel_schema_1_0",
         "python_reference_semantics",
@@ -806,7 +806,7 @@
         "Stable fitted-state, covariate, and event schemas are not documented for Rust ownership."
       ],
       "migration_phase": "phase_3_model_family_migration",
-      "promotion_state": "bridge_default_pending_migration",
+      "promotion_state": "bridge_default_explicit_exception",
       "depends_on": [
         "kernel_schema_1_0",
         "python_reference_semantics",
@@ -1245,7 +1245,7 @@
         "Stochastic, event, and model-specific simulation schemas are not stabilized for Rust ownership."
       ],
       "migration_phase": "phase_3_model_family_migration",
-      "promotion_state": "bridge_default_pending_migration",
+      "promotion_state": "bridge_default_explicit_exception",
       "depends_on": [
         "kernel_schema_1_0",
         "python_reference_semantics",
@@ -1572,7 +1572,7 @@
         "Summary schema parity and diagnostics mapping are not stabilized for Rust ownership."
       ],
       "migration_phase": "phase_3_model_family_migration",
-      "promotion_state": "bridge_default_pending_migration",
+      "promotion_state": "bridge_default_explicit_exception",
       "depends_on": [
         "kernel_schema_1_0",
         "python_reference_semantics",
@@ -1898,7 +1898,7 @@
         "Diagnostics schema parity and stable error mapping are not finalized for Rust ownership."
       ],
       "migration_phase": "phase_3_model_family_migration",
-      "promotion_state": "bridge_default_pending_migration",
+      "promotion_state": "bridge_default_explicit_exception",
       "depends_on": [
         "kernel_schema_1_0",
         "python_reference_semantics",
@@ -2112,6 +2112,7 @@
     "native_default_guarded",
     "native_candidate_needs_evidence",
     "bridge_default_pending_migration",
+    "bridge_default_explicit_exception",
     "python_reference_boundary"
   ]
 }
