@@ -6,14 +6,14 @@
     - [x] Enumerate every package-manager registry target
     - [x] Enumerate every HPC registry and packaging target
     - [x] Map each target to its package surface, owner, and release path
-- [~] Task: Verify release prerequisites
-    - [ ] Confirm package versions and names are aligned
-    - [ ] Confirm publication gates exist for each target
-    - [ ] Confirm credential or maintainer access requirements are known
-- [ ] Task: Write failing tests for submission-state tracking
-    - [ ] Add tests that require each target to have a submission status
-    - [ ] Add tests that reject readiness-only language once a submission is complete
-    - [ ] Add tests that require an auditable receipt or blocker note for each target
+- [x] Task: Verify release prerequisites b78b20f
+    - [x] Confirm package versions and names are aligned
+    - [x] Confirm publication gates exist for each target
+    - [x] Confirm credential or maintainer access requirements are known
+- [x] Task: Write failing tests for submission-state tracking b78b20f
+    - [x] Add tests that require each target to have a submission status
+    - [x] Add tests that reject readiness-only language once a submission is complete
+    - [x] Add tests that require an auditable receipt or blocker note for each target
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Submission Inventory and Release Readiness' (Protocol in workflow.md)
 
 ## Phase 2: Execute Package-Manager Submissions
