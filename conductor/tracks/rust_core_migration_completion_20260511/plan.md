@@ -1,6 +1,6 @@
 # Implementation Plan: Rust Core Migration Completion and Polyglot Claim Closure
 
-## Phase 1: Audit the Remaining Rust-Core Gap
+## Phase 1: Audit the Remaining Rust-Core Gap [checkpoint: 6c83eb8]
 
 - [x] Task: Build a complete ownership inventory
     - [x] Enumerate every canonical operation and stable payload shape
@@ -14,7 +14,7 @@
     - [x] Refresh the machine-readable Rust-core inventory fixture
     - [x] Update any stale roadmap assertions that misstate current ownership
     - [x] Record the exact model families and operations that remain to be migrated
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Audit the Remaining Rust-Core Gap' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Audit the Remaining Rust-Core Gap' (Protocol in workflow.md)
 
 ## Phase 2: Promote the Remaining Canonical Operations and Model Families
 
