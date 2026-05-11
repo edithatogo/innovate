@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "captured_at": "2026-05-11T02:30:00+10:00",
+  "captured_at": "2026-05-11T03:55:00+10:00",
   "targets": [
     {
       "target_id": "spack",
@@ -14,6 +14,7 @@
         "docs/source/_static/hpc_packaging/pack_packet.py",
         "docs/source/_static/hpc_packaging/workflow_manifest.json",
         "docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json",
+        "docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log",
         "docs/source/_static/hpc_packaging/evidence/python-install.log",
         "docs/source/_static/hpc_packaging/evidence/python-smoke.log"
       ],
@@ -31,6 +32,7 @@
         "docs/source/_static/hpc_packaging/pack_packet.py",
         "docs/source/_static/hpc_packaging/workflow_manifest.json",
         "docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json",
+        "docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log",
         "docs/source/_static/hpc_packaging/evidence/python-install.log",
         "docs/source/_static/hpc_packaging/evidence/python-smoke.log"
       ],
@@ -48,6 +50,7 @@
         "docs/source/_static/hpc_packaging/pack_packet.py",
         "docs/source/_static/hpc_packaging/workflow_manifest.json",
         "docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json",
+        "docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log",
         "docs/source/_static/hpc_packaging/evidence/r-build.log",
         "docs/source/_static/hpc_packaging/evidence/r-check.log"
       ],
@@ -65,6 +68,7 @@
         "docs/source/_static/hpc_packaging/pack_packet.py",
         "docs/source/_static/hpc_packaging/workflow_manifest.json",
         "docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json",
+        "docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log",
         "docs/source/_static/hpc_packaging/evidence/rust-test.log",
         "docs/source/_static/hpc_packaging/evidence/julia-installed-smoke.log"
       ],

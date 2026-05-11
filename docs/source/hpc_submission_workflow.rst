@@ -17,6 +17,8 @@ Blockers
 If the local environment does not expose scheduler or registry tools, the
 captured blocker bundle lives at
 ``docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json``.
+The current local probe is recorded in
+``docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log``.
 
 Targets
 -------
@@ -63,4 +65,5 @@ Status
 The workflow is blocked in this local environment because the scheduler and
 registry tools are not available. The commands above define the exact
 arrangement needed for the external handoff once the missing tools or review
-channels are available.
+channels are available, and the explicit probe output is preserved alongside
+the blocker bundle.

@@ -41,8 +41,9 @@
     - [ ] Gather any E4S review or registration evidence
 - [ ] Task: Capture HPC registry receipts
     - [ ] Record scheduler metadata and batch logs
-    - [ ] Record HPC registry links, review IDs, or blocker notes
-    - [ ] Update the HPC evidence bundle with submission outcomes
+    - [x] Record HPC registry links, review IDs, or blocker notes
+    - [x] Update the HPC evidence bundle with submission outcomes
+    - Local blocker evidence is captured in `docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json` and `docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log`.
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Execute HPC Registry Submissions' (Protocol in workflow.md)
 
 ## Phase 4: Reconcile Docs and Status Matrices

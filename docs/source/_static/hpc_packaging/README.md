@@ -13,6 +13,7 @@ Artifacts:
 - `submission_packet.json` - machine-readable HPC submission packet
 - `workflow_manifest.json` - per-target commands and artifact destinations
 - `evidence/hpc_submission_blockers.json` - explicit local blocker bundle
+- `evidence/hpc_submission_environment_probe.log` - explicit local tool probe
 - `evidence/` - captured install and smoke logs for the supported surfaces
 
 Evidence files:
@@ -32,3 +33,5 @@ repository artifacts instead of prose-only claims.
 
 The scheduler templates are intentionally conservative: they capture the job
 metadata and expected follow-up steps without claiming success on a cluster.
+The environment probe log records the missing local `sbatch`, `spack`, `eb`,
+and `qsub` commands that block local HPC execution in this workspace.

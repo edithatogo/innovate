@@ -24,6 +24,7 @@ def test_hpc_submission_workflow_doc_mentions_all_targets() -> None:
         "E4S",
         "workflow_manifest.json",
         "hpc_submission_blockers.json",
+        "hpc_submission_environment_probe.log",
         "sbatch docs/source/_static/hpc_packaging/scheduler/slurm/spack-smoke.sbatch",
         "sbatch docs/source/_static/hpc_packaging/scheduler/slurm/easybuild-smoke.sbatch",
     ):

@@ -33,7 +33,7 @@ current source layout so that documentation drift can be checked by tests:
   documented slices: packaged discovery metadata, logistic, Fisher-Pry, and
   Gompertz ``fit_model``, logistic, Fisher-Pry, and Gompertz
   ``summarize_model`` and ``diagnose_model``, and logistic, Fisher-Pry,
-  Gompertz, and Bass
+  Gompertz, Bass, and narrow Norton-Bass
   ``predict_model``/``simulate_model`` fitted-state execution. In short:
   Rust-native execution only for the documented slices.
 * The Rust binding still contains the Python bridge entrypoint helpers through
@@ -51,13 +51,15 @@ current source layout so that documentation drift can be checked by tests:
   Rust-native implementation or an explicitly promoted non-Python backend.
   This means every Python registry model family must be covered before claiming
   full Rust ownership.
-  Today, model families such as ``norton_bass``, ``composite``,
-  ``multi_product``, ``network_diffusion``, and ``policy_hazard`` remain
-  outside the Rust-native slice, while ``fisher_pry`` and ``gompertz`` have
-  moved into the Rust-native substitution/diffusion slices. Covariates, event
-  splits, probabilistic runtimes, custom fitter options, and incomplete fitted
-  states now fail explicitly for promoted native slices, while non-native model
-  families continue to use the Python bridge.
+  Today, model families such as ``composite``, ``multi_product``,
+  ``network_diffusion``, and ``policy_hazard`` remain outside the Rust-native
+  slice, while ``norton_bass`` now has promoted prediction and simulation
+  slices and still uses the Python bridge for summary/diagnostics.
+  ``fisher_pry`` and ``gompertz`` have moved into the Rust-native
+  substitution/diffusion slices. Covariates, event splits, probabilistic
+  runtimes, custom fitter options, and incomplete fitted states now fail
+  explicitly for promoted native slices, while non-native model families
+  continue to use the Python bridge.
 
 Candidate operations
 --------------------
@@ -71,12 +73,14 @@ behavior is already explicit in the functional kernel contract:
 * ``predict_model``: deterministic execution against fitted state payloads once
   model-state schemas are stable. The first implemented slices are Rust-native
   logistic, Fisher-Pry, Gompertz, and Bass prediction for simple fitted states,
-  with explicit unsupported-payload errors for promoted slices and Python
-  bridge fallback reserved for non-native model families.
+  plus narrow Norton-Bass prediction for single-generation fitted states, with
+  explicit unsupported-payload errors for promoted slices and Python bridge
+  fallback reserved for non-native model families.
 * ``simulate_model``: deterministic or seeded simulation paths where payload
   shapes, dtypes, and error mapping can be verified without Python object
   identity. The logistic, Fisher-Pry, Gompertz, and Bass native slices cover
-  simulation for simple fitted states, while bridge fallback remains available
+  simulation for simple fitted states, plus narrow Norton-Bass simulation for
+  single-generation fitted states, while bridge fallback remains available
   only for explicitly non-native families.
 * ``fit_model``: bounded fitting workflows where the parameter search is
   deterministic enough to reproduce with the same response contract. The first
@@ -85,10 +89,10 @@ behavior is already explicit in the functional kernel contract:
   unsupported families.
 * ``summarize_model`` and ``diagnose_model``: fitted-state reporting paths that
   can reuse native parameters, residuals, and diagnostics contract fields. The
-  first implemented slices are Rust-native logistic, Fisher-Pry, and Gompertz
-  summary and diagnostics for simple fitted states, with explicit unsupported
-  payload errors for promoted slices and Python bridge fallback reserved for
-  unsupported families.
+  first implemented slices are Rust-native logistic, Fisher-Pry, Gompertz,
+  Bass, and narrow Norton-Bass summary and diagnostics for simple fitted
+  states, with explicit unsupported payload errors for promoted slices and
+  Python bridge fallback reserved for unsupported families.
 
 Operations that require broad Python-backed fitting behavior, optional
 probabilistic runtimes, or model-specific class internals should remain
@@ -190,7 +194,7 @@ semantics and bridge fallback behavior.
   profile gate because it is metadata I/O.
 
 ``phase_1_default_hardening``
-  Harden the current Bass ``predict_model`` and ``simulate_model`` native
+  Maintain the promoted Bass ``predict_model`` and ``simulate_model`` native
   slices. Capture parity, fallback-rate evidence, CPU benchmark output, CPU
   flamegraph metadata, and a promotion dossier before expanding those defaults.
 
@@ -286,7 +290,7 @@ enforce. Use
 as the machine-readable template/example for a current Rust-native slice.
 Use
 :download:`rust_core_promotion_dossier_bass_example.json <_static/rust_core_promotion_dossier_bass_example.json>`
-for the current Bass native slice.
+for the promoted Bass native slice.
 
 Binding policy
 --------------
@@ -323,7 +327,10 @@ evidence, and keep those artifacts separate from Rust CPU flamegraphs and DHAT
 heap profiles.
 
 The core is therefore not entirely written in Rust yet. The Rust crate owns
-native metadata discovery and selected logistic and Bass execution slices.
+native metadata discovery and selected logistic execution slices, plus the
+promoted Bass execution slices covering fit, prediction, simulation, summary,
+and diagnostics, and narrow Norton-Bass prediction, simulation, summary, and
+diagnostics slices.
 Unsupported model families still fall back to the shared Python kernel, while
 promoted native slices reject unsupported covariates, event payloads,
 probabilistic runtimes, and broader model operations explicitly. Promotion
