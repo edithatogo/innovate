@@ -65,7 +65,7 @@
     - [x] Test that all HPC packet artifacts remain present
 - [x] Task: Conductor - Automated Review and Checkpoint 'Reconcile Docs, Packet, and Status Matrices' (Protocol in workflow.md)
 
-## Phase 5: Final Review and Archive
+## Phase 5: Final Review and Archive [checkpoint: b1ec925]
 
 - [x] Task: Run final conductor review
     - [x] Review the track diff against the spec, plan, workflow, and tests
