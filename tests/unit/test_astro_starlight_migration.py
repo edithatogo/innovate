@@ -42,6 +42,9 @@ def test_astro_and_starlight_config_files_record_the_scaffold() -> None:
         "starlight-links-validator",
         "@astrojs/starlight-docsearch",
         "Kernel",
+        "Arrow Interchange",
+        "Diagnostics",
+        "Rust Core",
         "Bindings",
         "Publication",
         "Migration",
@@ -105,3 +108,52 @@ def test_astro_starlight_navigation_includes_the_migration_page() -> None:
     index = Path("docs/source/index.rst").read_text()
 
     assert "astro_starlight_migration" in index
+
+
+def test_astro_starlight_core_pages_have_migrated_content() -> None:
+    """The first migrated Astro pages should carry actual documentation copy."""
+    kernel = Path("docs/astro-site/src/content/docs/core/kernel.md").read_text()
+    arrow = Path(
+        "docs/astro-site/src/content/docs/core/arrow-interchange.md"
+    ).read_text()
+    diagnostics = Path(
+        "docs/astro-site/src/content/docs/core/diagnostics-contract.md"
+    ).read_text()
+    rust_core = Path(
+        "docs/astro-site/src/content/docs/operations/rust-core.md"
+    ).read_text()
+
+    for phrase in (
+        "stable functional kernel",
+        "Arrow remains the stable interchange boundary",
+        "fitted-state reporting fields",
+        "Rust owns the promoted native slices",
+    ):
+        assert (
+            phrase in kernel
+            or phrase in arrow
+            or phrase in diagnostics
+            or phrase in rust_core
+        )
+
+
+def test_astro_starlight_bindings_and_publication_pages_have_content() -> None:
+    """Bindings and publication landing pages should describe the migration surface."""
+    bindings = Path("docs/astro-site/src/content/docs/bindings/index.md").read_text()
+    publication = Path(
+        "docs/astro-site/src/content/docs/maintainers/publication.md"
+    ).read_text()
+
+    for phrase in (
+        "Python as the canonical reference surface",
+        "Rust as the native runtime and binding target",
+        "PyPI/TestPyPI",
+        "npm",
+        "crates.io",
+        "R-universe",
+        "CRAN",
+        "Julia General",
+        "Go modules",
+        "NuGet",
+    ):
+        assert phrase in bindings or phrase in publication

@@ -42,8 +42,8 @@
 
 ## Phase 3: Migrate Content and Redirects
 
-- [ ] Task: Move canonical docs content into the Astro/Starlight structure
-    - [ ] Migrate the core contract and roadmap pages first
+- [~] Task: Move canonical docs content into the Astro/Starlight structure
+    - [~] Migrate the core contract and roadmap pages first
     - [ ] Migrate binding and release documentation
     - [ ] Migrate archive and migration reference pages needed by readers
 - [ ] Task: Maintain the redirect inventory during cutover

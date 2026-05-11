@@ -10,8 +10,14 @@ export default {
       label: 'Core',
       items: [
         { label: 'Kernel', link: '/core/kernel/' },
+        { label: 'Arrow Interchange', link: '/core/arrow-interchange/' },
+        { label: 'Diagnostics', link: '/core/diagnostics-contract/' },
         { label: 'Bindings', link: '/bindings/' },
       ],
+    },
+    {
+      label: 'Operations',
+      items: [{ label: 'Rust Core', link: '/operations/rust-core/' }],
     },
     {
       label: 'Maintainers',
