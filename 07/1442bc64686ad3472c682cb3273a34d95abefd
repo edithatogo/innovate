@@ -1,0 +1,14 @@
+Astro/Starlight migration phase completion note
+
+Summary:
+- Marked the baseline and scaffold phases complete in the Astro/Starlight migration track.
+- The implementation baseline is now captured in the plan with checkpoint 85730d1.
+- The track plan records the scaffold artifacts, inventories, and migration-policy decisions.
+
+Validation already performed for the phase work:
+- uv run pytest tests/unit/test_astro_starlight_migration.py tests/unit/test_conductor_workflow_docs.py -q
+- uv run sphinx-build -b dummy docs/source docs/_build/dummy
+- git diff --check
+
+Review:
+- conductor-review pass completed with no high-confidence blockers.
