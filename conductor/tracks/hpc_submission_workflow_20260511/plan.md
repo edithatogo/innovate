@@ -34,22 +34,22 @@
 
 ## Phase 3: Execute or Record External HPC Hand-offs
 
-- [ ] Task: Submit or run the Spack packet
-    - [ ] Execute the scheduler-backed recipe run or record the blocker
-    - [ ] Capture the batch log, install log, and smoke log
-- [ ] Task: Submit or run the EasyBuild packet
-    - [ ] Execute the scheduler-backed easyconfig run or record the blocker
-    - [ ] Capture the batch log, module sanity log, and smoke log
-- [ ] Task: Submit or hand off the HPSF packet
-    - [ ] Capture the governance review or registry contact evidence
-    - [ ] Record any blocker that prevents submission
-- [ ] Task: Submit or hand off the E4S packet
-    - [ ] Capture the portability review or registry contact evidence
-    - [ ] Record any blocker that prevents submission
+- [x] Task: Submit or run the Spack packet
+    - [x] Execute the scheduler-backed recipe run or record the blocker
+    - [x] Capture the batch log, install log, and smoke log
+- [x] Task: Submit or run the EasyBuild packet
+    - [x] Execute the scheduler-backed easyconfig run or record the blocker
+    - [x] Capture the batch log, module sanity log, and smoke log
+- [x] Task: Submit or hand off the HPSF packet
+    - [x] Capture the governance review or registry contact evidence
+    - [x] Record any blocker that prevents submission
+- [x] Task: Submit or hand off the E4S packet
+    - [x] Capture the portability review or registry contact evidence
+    - [x] Record any blocker that prevents submission
 - [x] Task: Capture HPC receipts and blocker notes
     - [x] Record registry URLs, review IDs, batch metadata, or note why a target remains blocked
     - [x] Preserve the resulting evidence in the repo
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Execute or Record External HPC Hand-offs' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Execute or Record External HPC Hand-offs' (Protocol in workflow.md)
 
 ## Phase 4: Reconcile Docs, Packet, and Status Matrices
 

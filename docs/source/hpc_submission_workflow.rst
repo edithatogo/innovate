@@ -60,5 +60,7 @@ E4S
 Status
 ------
 
-The workflow is prepared, not submitted. The commands above define the exact
-arrangement needed for the external handoff.
+The workflow is blocked in this local environment because the scheduler and
+registry tools are not available. The commands above define the exact
+arrangement needed for the external handoff once the missing tools or review
+channels are available.

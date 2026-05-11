@@ -5,7 +5,7 @@
     {
       "target_id": "spack",
       "registry": "Spack",
-      "status": "prepared",
+      "status": "blocked",
       "commands": [
         "export INNOVATE_SDIST=innovate-0.5.0.tar.gz",
         "export SPACK_PKG_PATH=docs/source/_static/hpc_packaging/spack/py-innovate.py",
@@ -16,12 +16,12 @@
         "docs/source/_static/hpc_packaging/evidence/spack-smoke.log",
         "docs/source/_static/hpc_packaging/evidence/spack-batch.log"
       ],
-      "notes": "The batch job must run in a real scheduler-backed Spack environment before submission evidence can be claimed."
+      "notes": "The batch job must run in a real scheduler-backed Spack environment before submission evidence can be claimed. Local sbatch/spack tooling is unavailable here."
     },
     {
       "target_id": "easybuild",
       "registry": "EasyBuild",
-      "status": "prepared",
+      "status": "blocked",
       "commands": [
         "export INNOVATE_SDIST=innovate-0.5.0.tar.gz",
         "export EASYCONFIG_PATH=docs/source/_static/hpc_packaging/easybuild/innovate-0.5.0.eb",
@@ -32,12 +32,12 @@
         "docs/source/_static/hpc_packaging/evidence/easybuild-sanity.log",
         "docs/source/_static/hpc_packaging/evidence/easybuild-batch.log"
       ],
-      "notes": "The batch job must run in a real scheduler-backed EasyBuild environment before submission evidence can be claimed."
+      "notes": "The batch job must run in a real scheduler-backed EasyBuild environment before submission evidence can be claimed. Local sbatch/eb tooling is unavailable here."
     },
     {
       "target_id": "hpsf",
       "registry": "HPSF",
-      "status": "prepared",
+      "status": "blocked",
       "commands": [
         "edit docs/source/_static/hpc_packaging/governance/hpsf-evidence.md",
         "attach docs/source/_static/hpc_packaging/evidence/r-build.log",
@@ -47,12 +47,12 @@
         "docs/source/_static/hpc_packaging/governance/hpsf-evidence.md",
         "docs/source/_static/hpc_packaging/evidence/hpsf-review-note.md"
       ],
-      "notes": "HPSF handoff remains a governance submission; the packet must include contacts, support policy, and scheduler-backed deployment evidence."
+      "notes": "HPSF handoff remains a governance submission; the packet must include contacts, support policy, and scheduler-backed deployment evidence. No local governance submission endpoint is available here."
     },
     {
       "target_id": "e4s",
       "registry": "E4S",
-      "status": "prepared",
+      "status": "blocked",
       "commands": [
         "edit docs/source/_static/hpc_packaging/governance/e4s-evidence.md",
         "attach docs/source/_static/hpc_packaging/evidence/rust-test.log",
@@ -62,7 +62,7 @@
         "docs/source/_static/hpc_packaging/governance/e4s-evidence.md",
         "docs/source/_static/hpc_packaging/evidence/e4s-review-note.md"
       ],
-      "notes": "E4S handoff remains a portability submission; the packet must include CPU, GPU, and mixed bridge evidence plus accelerator metadata."
+      "notes": "E4S handoff remains a portability submission; the packet must include CPU, GPU, and mixed bridge evidence plus accelerator metadata. No accelerator-backed runtime or review channel is available here."
     }
   ],
   "blocker_bundle": "evidence/hpc_submission_blockers.json"

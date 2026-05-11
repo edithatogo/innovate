@@ -25,7 +25,7 @@ def test_hpc_submission_workflow_manifest_covers_all_targets() -> None:
     targets = {entry["target_id"]: entry for entry in manifest["targets"]}
     assert set(targets) == {"spack", "easybuild", "hpsf", "e4s"}
     for entry in targets.values():
-        assert entry["status"] == "prepared"
+        assert entry["status"] == "blocked"
         assert entry["commands"]
         assert entry["artifact_destinations"]
         assert entry["notes"]
