@@ -1,0 +1,19 @@
+{
+  "name": "innovate-docs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "astro build",
+    "check": "astro check",
+    "dev": "astro dev",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^4.0.0",
+    "@astrojs/starlight": "0.38.4",
+    "@astrojs/starlight-docsearch": "0.6.1",
+    "astro": "^5.0.0",
+    "starlight-links-validator": "0.18.0",
+    "starlight-versions": "0.5.4"
+  }
+}

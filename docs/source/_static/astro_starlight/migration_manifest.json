@@ -1,0 +1,21 @@
+{
+  "migration_mode": "parallel-run",
+  "search_provider": "algolia-docsearch",
+  "sitemap_provider": "@astrojs/sitemap",
+  "baseline": {
+    "astro": "^5.0.0",
+    "starlight": "0.38.4",
+    "starlight_versions": "0.5.4",
+    "starlight_links_validator": "0.18.0",
+    "starlight_docsearch": "0.6.1"
+  },
+  "scaffold_root": "docs/astro-site",
+  "content_inventory": "docs/source/_static/astro_starlight/content_inventory.json",
+  "redirect_inventory": "docs/source/_static/astro_starlight/redirect_inventory.json",
+  "route_stability_policy": "keep-existing-sphinx-urls",
+  "notes": [
+    "The Sphinx site remains canonical during the parallel-run window.",
+    "Redirects preserve the current Sphinx URLs until cutover is approved.",
+    "Algolia DocSearch is the selected search provider for the scaffold."
+  ]
+}

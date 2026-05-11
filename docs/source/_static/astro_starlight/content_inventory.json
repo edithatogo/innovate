@@ -1,0 +1,188 @@
+[
+  {
+    "source_doc": "docs/source/index.rst",
+    "sphinx_path": "index",
+    "astro_route": "/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/innovate.kernel.rst",
+    "sphinx_path": "innovate.kernel",
+    "astro_route": "/core/kernel/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/innovate.arrow_interchange.rst",
+    "sphinx_path": "innovate.arrow_interchange",
+    "astro_route": "/core/arrow-interchange/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/innovate.fitters.diagnostics_contract.rst",
+    "sphinx_path": "innovate.fitters.diagnostics_contract",
+    "astro_route": "/core/diagnostics-contract/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/diagnostics_uncertainty_artifacts.rst",
+    "sphinx_path": "diagnostics_uncertainty_artifacts",
+    "astro_route": "/roadmap/diagnostics-uncertainty/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/probabilistic_inference.rst",
+    "sphinx_path": "probabilistic_inference",
+    "astro_route": "/roadmap/probabilistic-inference/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/dataframe_engine_experiments.rst",
+    "sphinx_path": "dataframe_engine_experiments",
+    "astro_route": "/roadmap/dataframe-engine/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/innovate.stability.rst",
+    "sphinx_path": "innovate.stability",
+    "astro_route": "/maintainers/stability/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/innovate.plugins.rst",
+    "sphinx_path": "innovate.plugins",
+    "astro_route": "/maintainers/plugins/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/runtime_logging.rst",
+    "sphinx_path": "runtime_logging",
+    "astro_route": "/maintainers/runtime-logging/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/remote_execution.rst",
+    "sphinx_path": "remote_execution",
+    "astro_route": "/operations/remote-execution/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/xla_backend_strategy.rst",
+    "sphinx_path": "xla_backend_strategy",
+    "astro_route": "/operations/xla-backend/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/accelerator_parallel_execution_evidence.rst",
+    "sphinx_path": "accelerator_parallel_execution_evidence",
+    "astro_route": "/operations/accelerator-parallel-execution/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/rust_core_roadmap.rst",
+    "sphinx_path": "rust_core_roadmap",
+    "astro_route": "/operations/rust-core/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/abi_binary_compatibility_strategy.rst",
+    "sphinx_path": "abi_binary_compatibility_strategy",
+    "astro_route": "/operations/abi-compatibility/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/scientific_hpc_readiness_roadmap.rst",
+    "sphinx_path": "scientific_hpc_readiness_roadmap",
+    "astro_route": "/operations/scientific-hpc/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/hpc_registry_contract.rst",
+    "sphinx_path": "hpc_registry_contract",
+    "astro_route": "/operations/hpc-registry/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/hpc_submission_packet.rst",
+    "sphinx_path": "hpc_submission_packet",
+    "astro_route": "/operations/hpc-submission-packet/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/hpc_submission_workflow.rst",
+    "sphinx_path": "hpc_submission_workflow",
+    "astro_route": "/operations/hpc-submission-workflow/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/registry_submission_receipts.rst",
+    "sphinx_path": "registry_submission_receipts",
+    "astro_route": "/operations/registry-submissions/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/polyglot_registry_plan.rst",
+    "sphinx_path": "polyglot_registry_plan",
+    "astro_route": "/operations/polyglot-registry/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/community_submission_readiness.rst",
+    "sphinx_path": "community_submission_readiness",
+    "astro_route": "/operations/community-readiness/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/hpc_packaging_registry_readiness.rst",
+    "sphinx_path": "hpc_packaging_registry_readiness",
+    "astro_route": "/operations/hpc-readiness/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/external_governance_sustainability.rst",
+    "sphinx_path": "external_governance_sustainability",
+    "astro_route": "/operations/governance/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/submission_readiness_dossiers.rst",
+    "sphinx_path": "submission_readiness_dossiers",
+    "astro_route": "/operations/submission-dossiers/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/polyglot_repo_architecture.rst",
+    "sphinx_path": "polyglot_repo_architecture",
+    "astro_route": "/architecture/polyglot-repo/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/binding_publication_ci.rst",
+    "sphinx_path": "binding_publication_ci",
+    "astro_route": "/maintainers/publication/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/release_notes_policy.rst",
+    "sphinx_path": "release_notes_policy",
+    "astro_route": "/maintainers/release-notes/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/tutorials.rst",
+    "sphinx_path": "tutorials",
+    "astro_route": "/tutorials/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/bindings.rst",
+    "sphinx_path": "bindings",
+    "astro_route": "/bindings/",
+    "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/adr.rst",
+    "sphinx_path": "adr",
+    "astro_route": "/architecture/adr/",
+    "status": "migrate"
+  }
+]

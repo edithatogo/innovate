@@ -5,8 +5,9 @@
 Migrate the documentation site from the current Sphinx-centric delivery model
 to a future Astro/Starlight site while preserving the current docs content,
 canonical navigation, and link stability. The track should make the Starlight
-version baseline explicit and choose a small plugin set that keeps versioned
-docs, link validation, search, and sitemap generation auditable.
+version baseline explicit, decide the cutover policy up front, and choose a
+small plugin set that keeps versioned docs, link validation, search, sitemap
+generation, and redirects auditable.
 
 ## Background
 
@@ -14,7 +15,8 @@ The repository already treats the Sphinx site as canonical for the present
 release, and the Starlight roadmap track has been archived after documenting
 the current version baseline. This track is the implementation track that uses
 that baseline to build the actual Astro/Starlight docs surface and migration
-plan.
+plan. The migration must record whether the cutover is a parallel run or a
+full replacement so the acceptance boundary is unambiguous.
 
 ## Recommended Baseline
 
@@ -33,15 +35,19 @@ Recommended additional Astro integration:
 
 1. Scaffold an Astro/Starlight docs site that can build from the current
    documentation content.
-2. Version the docs navigation with `starlight-versions`.
-3. Validate internal links with `starlight-links-validator`.
-4. Integrate search using `@astrojs/starlight-docsearch` if Algolia is chosen,
+2. Decide and document the migration mode: parallel-run or full cutover.
+3. Maintain a content inventory that maps each Sphinx page to a future Astro
+   route, redirect, or archive-only status.
+4. Version the docs navigation with `starlight-versions`.
+5. Validate internal links with `starlight-links-validator`.
+6. Integrate search using `@astrojs/starlight-docsearch` if Algolia is chosen,
    or record the explicit alternative if another provider is selected.
-5. Generate a sitemap with `@astrojs/sitemap` or an equivalent official Astro
+7. Generate a sitemap with `@astrojs/sitemap` or an equivalent official Astro
    integration.
-6. Preserve canonical URLs or redirects for existing Sphinx docs paths.
-7. Update docs and tests so the new site, versions, plugins, and redirects are
-   explicit and auditable.
+8. Preserve canonical URLs or redirects for existing Sphinx docs paths and
+   keep a redirect inventory synchronized with the content inventory.
+9. Update docs and tests so the new site, versions, plugins, redirects, and
+   route stability checks are explicit and auditable.
 
 ## Non-Functional Requirements
 
@@ -50,6 +56,9 @@ Recommended additional Astro integration:
 2. Version pins must be easy to update when the ecosystem changes.
 3. The track must not over-specify unnecessary plugins.
 4. The final site must remain maintainable and link-checkable in CI.
+5. The migration mode and search-provider choice must be explicit before
+   content migration begins.
+6. The redirect inventory and content inventory must remain synchronized.
 
 ## Acceptance Criteria
 
@@ -59,7 +68,9 @@ Recommended additional Astro integration:
 3. Sitemap generation is configured or explicitly deferred with rationale.
 4. Redirects or stable forwarders protect the existing Sphinx doc URLs.
 5. The migration docs and tests reflect the same version/plugin baseline.
-6. The track can be archived cleanly when the docs-site migration is complete.
+6. The content inventory, redirect inventory, and route stability checks all
+   agree on the final migration shape.
+7. The track can be archived cleanly when the docs-site migration is complete.
 
 ## Out of Scope
 

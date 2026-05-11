@@ -1,0 +1,9 @@
+---
+title: Core
+description: Core contract, kernel, and interoperability docs.
+---
+
+# Core
+
+The core section hosts the public contract pages that move first into the new
+Astro/Starlight site.

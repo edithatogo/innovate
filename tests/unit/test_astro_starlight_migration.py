@@ -1,0 +1,107 @@
+"""Tests for the Astro/Starlight migration scaffold and inventories."""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+
+def test_astro_starlight_package_manifest_records_pinned_baseline() -> None:
+    """The scaffold should pin the documented Starlight baseline."""
+    package = json.loads(Path("docs/astro-site/package.json").read_text())
+
+    assert package["name"] == "innovate-docs"
+    assert package["private"] is True
+    assert package["scripts"]["build"] == "astro build"
+    assert package["scripts"]["dev"] == "astro dev"
+    assert package["scripts"]["check"] == "astro check"
+
+    dependencies = package["dependencies"]
+    assert dependencies["@astrojs/starlight"] == "0.38.4"
+    assert dependencies["starlight-versions"] == "0.5.4"
+    assert dependencies["starlight-links-validator"] == "0.18.0"
+    assert dependencies["@astrojs/starlight-docsearch"] == "0.6.1"
+    assert dependencies["@astrojs/sitemap"] == "^4.0.0"
+
+
+def test_astro_and_starlight_config_files_record_the_scaffold() -> None:
+    """The scaffold config files should name the chosen integration surface."""
+    astro_config = Path("docs/astro-site/astro.config.mjs").read_text()
+    starlight_config = Path("docs/astro-site/starlight.config.mjs").read_text()
+
+    for phrase in (
+        "@astrojs/starlight",
+        "@astrojs/sitemap",
+        "Innovate",
+        "docs/astro-site",
+    ):
+        assert phrase in astro_config or phrase in starlight_config
+
+    for phrase in (
+        "starlight-versions",
+        "starlight-links-validator",
+        "@astrojs/starlight-docsearch",
+        "Kernel",
+        "Bindings",
+        "Publication",
+        "Migration",
+    ):
+        assert phrase in starlight_config
+
+
+def test_astro_starlight_migration_manifest_records_parallel_run_decisions() -> None:
+    """The migration manifest should record the transition policy explicitly."""
+    manifest = json.loads(
+        Path("docs/source/_static/astro_starlight/migration_manifest.json").read_text()
+    )
+
+    assert manifest["migration_mode"] == "parallel-run"
+    assert manifest["search_provider"] == "algolia-docsearch"
+    assert manifest["sitemap_provider"] == "@astrojs/sitemap"
+    assert manifest["baseline"]["starlight"] == "0.38.4"
+    assert manifest["baseline"]["starlight_versions"] == "0.5.4"
+    assert manifest["baseline"]["starlight_links_validator"] == "0.18.0"
+    assert manifest["baseline"]["starlight_docsearch"] == "0.6.1"
+    assert manifest["scaffold_root"] == "docs/astro-site"
+    assert manifest["route_stability_policy"] == "keep-existing-sphinx-urls"
+
+
+def test_astro_starlight_inventories_stay_synchronized() -> None:
+    """Content and redirect inventories should describe the same pages."""
+    content_inventory = json.loads(
+        Path("docs/source/_static/astro_starlight/content_inventory.json").read_text()
+    )
+    redirect_inventory = json.loads(
+        Path("docs/source/_static/astro_starlight/redirect_inventory.json").read_text()
+    )
+
+    assert len(content_inventory) == len(redirect_inventory)
+    assert {entry["source_doc"] for entry in content_inventory} == {
+        entry["source_doc"] for entry in redirect_inventory
+    }
+    assert {entry["astro_route"] for entry in content_inventory} == {
+        entry["astro_route"] for entry in redirect_inventory
+    }
+
+
+def test_astro_starlight_docs_page_lists_the_scaffold_artifacts() -> None:
+    """The Sphinx-facing migration page should name the scaffold artifacts."""
+    page = Path("docs/source/astro_starlight_migration.rst").read_text()
+
+    for phrase in (
+        "Astro/Starlight documentation site migration",
+        "parallel-run",
+        "Algolia DocSearch",
+        "content inventory",
+        "redirect inventory",
+        "docs/astro-site/package.json",
+        "docs/source/_static/astro_starlight/migration_manifest.json",
+    ):
+        assert phrase in page
+
+
+def test_astro_starlight_navigation_includes_the_migration_page() -> None:
+    """The Sphinx site should surface the migration page in navigation."""
+    index = Path("docs/source/index.rst").read_text()
+
+    assert "astro_starlight_migration" in index

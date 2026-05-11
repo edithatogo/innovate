@@ -314,5 +314,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Astro/Starlight Documentation Site Migration**
+- [~] **Track: Astro/Starlight Documentation Site Migration**
   *Link: [./tracks/astro_starlight_docs_migration_20260511/](./tracks/astro_starlight_docs_migration_20260511/)*

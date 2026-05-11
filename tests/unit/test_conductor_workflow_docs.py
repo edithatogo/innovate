@@ -55,6 +55,28 @@ def test_starlight_roadmap_track_records_versioned_plugin_baseline() -> None:
     assert "Record whether DocSearch is selected or left as a future option" in plan
 
 
+def test_future_astro_starlight_migration_track_records_cutover_gates() -> None:
+    """The new Astro/Starlight migration track should encode the recommended gates."""
+    spec = Path(
+        "conductor/tracks/astro_starlight_docs_migration_20260511/spec.md"
+    ).read_text()
+    plan = Path(
+        "conductor/tracks/astro_starlight_docs_migration_20260511/plan.md"
+    ).read_text()
+
+    for phrase in (
+        "parallel-run or full cutover",
+        "content inventory",
+        "redirect inventory",
+        "migration mode",
+        "search provider",
+        "@astrojs/sitemap",
+        "route stability",
+        "machine-readable migration manifest",
+    ):
+        assert phrase in spec or phrase in plan
+
+
 def test_completed_archive_status_text_matches_metadata() -> None:
     """Completed Conductor archive indexes should not retain planned status text."""
     registry = Path("conductor/tracks.md").read_text()
