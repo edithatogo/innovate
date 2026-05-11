@@ -17,59 +17,59 @@
     - [x] Require claim-language reconciliation once the ledger is closed
 - [x] Task: Conductor - Automated Review and Checkpoint 'Map the Remaining Rust-Core Ownership Gaps' (Protocol in workflow.md)
 
-## Phase 2: Promote or Explicitly Reassign Remaining Slices
+## Phase 2: Promote or Explicitly Reassign Remaining Slices [checkpoint: 373a223]
 
-- [ ] Task: Implement native Rust execution for promotable slices
-    - [ ] Promote remaining core operations that can be made native
-    - [ ] Promote remaining diffusion-family slices that can be expressed natively
-    - [ ] Promote remaining competition-family slices that can be expressed natively
-    - [ ] Promote remaining payload and schema reconciliation slices that can be expressed natively
-    - [ ] Remove undocumented bridge fallback for promoted slices
-- [ ] Task: Record explicit non-Rust ownership where native promotion is not appropriate
-    - [ ] Preserve Python-reference ownership only where the contract requires it
-    - [ ] Document any families that remain explicitly promoted elsewhere
-    - [ ] Keep bridge fallback limited to documented non-native paths
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Promote or Explicitly Reassign Remaining Slices' (Protocol in workflow.md)
+- [x] Task: Implement native Rust execution for promotable slices
+    - [x] Promote remaining core operations that can be made native
+    - [x] Promote remaining diffusion-family slices that can be expressed natively
+    - [x] Promote remaining competition-family slices that can be expressed natively
+    - [x] Promote remaining payload and schema reconciliation slices that can be expressed natively
+    - [x] Remove undocumented bridge fallback for promoted slices
+- [x] Task: Record explicit non-Rust ownership where native promotion is not appropriate
+    - [x] Preserve Python-reference ownership only where the contract requires it
+    - [x] Document any families that remain explicitly promoted elsewhere
+    - [x] Keep bridge fallback limited to documented non-native paths
+- [x] Task: Conductor - Automated Review and Checkpoint 'Promote or Explicitly Reassign Remaining Slices' (Protocol in workflow.md)
 
-## Phase 3: Prove Parity, Profiling, and Binding Stability
+## Phase 3: Prove Parity, Profiling, and Binding Stability [checkpoint: 373a223]
 
-- [ ] Task: Add and update parity and regression tests
-    - [ ] Test promoted slices against Python reference semantics
-    - [ ] Test error mapping and unsupported-payload behavior
-    - [ ] Test fallback routing for explicitly non-native families
-- [ ] Task: Build a binding smoke matrix for each promoted family
-    - [ ] Cover Rust and Python for every promoted slice
-    - [ ] Cover applicable downstream bindings: R, Julia, TypeScript, Go, and C#
-    - [ ] Record the matrix in the evidence bundle and ledger
-- [ ] Task: Capture performance and profiling evidence
-    - [ ] Capture benchmark output for promoted slices
-    - [ ] Capture CPU profiling and memory profiling where relevant
-    - [ ] Capture any XLA or accelerator evidence that applies
-    - [ ] Attach family-level profiling evidence to the ledger or evidence bundle
-- [ ] Task: Validate all binding surfaces
-    - [ ] Run Rust binding smoke coverage
-    - [ ] Run Python, R, Julia, TypeScript, Go, and C# smoke checks as applicable
-    - [ ] Preserve the resulting evidence bundle in the repo
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Prove Parity, Profiling, and Binding Stability' (Protocol in workflow.md)
+- [x] Task: Add and update parity and regression tests
+    - [x] Test promoted slices against Python reference semantics
+    - [x] Test error mapping and unsupported-payload behavior
+    - [x] Test fallback routing for explicitly non-native families
+- [x] Task: Build a binding smoke matrix for each promoted family
+    - [x] Cover Rust and Python for every promoted slice
+    - [x] Cover applicable downstream bindings: R, Julia, TypeScript, Go, and C#
+    - [x] Record the matrix in the evidence bundle and ledger
+- [x] Task: Capture performance and profiling evidence
+    - [x] Capture benchmark output for promoted slices
+    - [x] Capture CPU profiling and memory profiling where relevant
+    - [x] Capture any XLA or accelerator evidence that applies
+    - [x] Attach family-level profiling evidence to the ledger or evidence bundle
+- [x] Task: Validate all binding surfaces
+    - [x] Run Rust binding smoke coverage
+    - [x] Run Python, R, Julia, TypeScript, Go, and C# smoke checks as applicable
+    - [x] Preserve the resulting evidence bundle in the repo
+- [x] Task: Conductor - Automated Review and Checkpoint 'Prove Parity, Profiling, and Binding Stability' (Protocol in workflow.md)
 
-## Phase 4: Reconcile Docs, Inventory, and Claim Language
+## Phase 4: Reconcile Docs, Inventory, and Claim Language [checkpoint: 373a223]
 
-- [ ] Task: Update the Rust roadmap and related docs
-    - [ ] Reflect the final ownership boundary in the roadmap text
-    - [ ] Update architecture or binding docs if claim language changes
-    - [ ] Remove any roadmap wording that overstates bridge ownership
-- [ ] Task: Reconcile claim language across docs and inventory
-    - [ ] Remove "partial" or equivalent wording once the ledger says full ownership is closed
-    - [ ] Keep the archived closure track available as evidence, not as the active source of truth
-- [ ] Task: Refresh the machine-readable migration inventory
-    - [ ] Set terminal ownership for every slice
-    - [ ] Record promotion blockers and rationale where needed
-    - [ ] Keep the docs and inventory synchronized
-- [ ] Task: Add regression tests for the reconciled state
-    - [ ] Test that the roadmap matches the inventory
-    - [ ] Test that no page claims full Rust ownership without evidence
-    - [ ] Test that the inventory and docs remain aligned
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Reconcile Docs, Inventory, and Claim Language' (Protocol in workflow.md)
+- [x] Task: Update the Rust roadmap and related docs
+    - [x] Reflect the final ownership boundary in the roadmap text
+    - [x] Update architecture or binding docs if claim language changes
+    - [x] Remove any roadmap wording that overstates bridge ownership
+- [x] Task: Reconcile claim language across docs and inventory
+    - [x] Remove "partial" or equivalent wording once the ledger says full ownership is closed
+    - [x] Keep the archived closure track available as evidence, not as the active source of truth
+- [x] Task: Refresh the machine-readable migration inventory
+    - [x] Set terminal ownership for every slice
+    - [x] Record promotion blockers and rationale where needed
+    - [x] Keep the docs and inventory synchronized
+- [x] Task: Add regression tests for the reconciled state
+    - [x] Test that the roadmap matches the inventory
+    - [x] Test that no page claims full Rust ownership without evidence
+    - [x] Test that the inventory and docs remain aligned
+- [x] Task: Conductor - Automated Review and Checkpoint 'Reconcile Docs, Inventory, and Claim Language' (Protocol in workflow.md)
 
 ## Phase 5: Final Review and Archive
 
