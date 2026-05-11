@@ -12,7 +12,7 @@
     - [x] Require the packet to stay non-claiming
 - [x] Task: Conductor - Automated Review and Checkpoint 'Establish the HPC Execution Packet' (Protocol in workflow.md)
 
-## Phase 2: Arrange Per-Target Execution Paths
+## Phase 2: Arrange Per-Target Execution Paths [checkpoint: b0552ec]
 
 - [x] Task: Prepare Spack submission materials
     - [x] Fill in any remaining recipe metadata gaps
