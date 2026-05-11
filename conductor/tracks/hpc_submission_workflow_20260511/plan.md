@@ -32,7 +32,7 @@
     - [x] Define the review or registry handoff target
 - [x] Task: Conductor - Automated Review and Checkpoint 'Arrange Per-Target Execution Paths' (Protocol in workflow.md)
 
-## Phase 3: Execute or Record External HPC Hand-offs
+## Phase 3: Execute or Record External HPC Hand-offs [checkpoint: e9b0df2]
 
 - [x] Task: Submit or run the Spack packet
     - [x] Execute the scheduler-backed recipe run or record the blocker
