@@ -32,19 +32,19 @@
     - [x] Preserve package-manager artifacts in the evidence bundle
 - [x] Task: Conductor - Automated Review and Checkpoint 'Execute Package-Manager Submissions' (Protocol in workflow.md)
 
-## Phase 3: Execute HPC Registry Submissions
+## Phase 3: Execute HPC Registry Submissions [checkpoint: 991247c]
 
-- [ ] Task: Exercise the HPC packaging candidates in submission mode
+- [x] Task: Exercise the HPC packaging candidates in submission mode
     - [x] Validate the Spack recipe in a scheduler-backed environment
     - [x] Validate the EasyBuild easyconfig in a scheduler-backed environment
-    - [ ] Gather any HPSF review or registration evidence
-    - [ ] Gather any E4S review or registration evidence
-- [ ] Task: Capture HPC registry receipts
+    - [x] Gather any HPSF review or registration evidence
+    - [x] Gather any E4S review or registration evidence
+- [x] Task: Capture HPC registry receipts
     - [x] Record scheduler metadata and batch logs
     - [x] Record HPC registry links, review IDs, or blocker notes
     - [x] Update the HPC evidence bundle with submission outcomes
     - Local execution evidence is captured in `docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json`, `docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log`, the captured Slurm/PBS batch logs, and the HPSF/E4S blocker notes.
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Execute HPC Registry Submissions' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Execute HPC Registry Submissions' (Protocol in workflow.md)
 
 ## Phase 4: Reconcile Docs and Status Matrices [checkpoint: 991247c]
 
