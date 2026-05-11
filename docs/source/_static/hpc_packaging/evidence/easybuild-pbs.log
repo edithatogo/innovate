@@ -1,0 +1,9 @@
+scheduler=pbs
+job_id=unknown
+hostname=c7ccd9e8a9f6
+easyconfig=innovate-0.5.0.eb
+sdist=innovate-0.5.0.tar.gz
+Expected follow-up:
+- run the easyconfig in a real EasyBuild module environment
+- capture module load and sanity-check output
+- archive the batch output in docs/source/_static/hpc_packaging/evidence/

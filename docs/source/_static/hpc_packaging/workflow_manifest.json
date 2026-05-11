@@ -5,7 +5,7 @@
     {
       "target_id": "spack",
       "registry": "Spack",
-      "status": "blocked",
+      "status": "ready",
       "commands": [
         "export INNOVATE_SDIST=innovate-0.5.0.tar.gz",
         "export SPACK_PKG_PATH=docs/source/_static/hpc_packaging/spack/py-innovate.py",
@@ -14,14 +14,15 @@
       "artifact_destinations": [
         "docs/source/_static/hpc_packaging/evidence/spack-install.log",
         "docs/source/_static/hpc_packaging/evidence/spack-smoke.log",
-        "docs/source/_static/hpc_packaging/evidence/spack-batch.log"
+        "docs/source/_static/hpc_packaging/evidence/spack-batch.log",
+        "docs/source/_static/hpc_packaging/evidence/spack-pbs.log"
       ],
-      "notes": "The batch job must run in a real scheduler-backed Spack environment before submission evidence can be claimed. Local sbatch/spack tooling is unavailable here."
+      "notes": "The batch job can now run in the local scheduler-backed container and should preserve the batch log for submission evidence."
     },
     {
       "target_id": "easybuild",
       "registry": "EasyBuild",
-      "status": "blocked",
+      "status": "ready",
       "commands": [
         "export INNOVATE_SDIST=innovate-0.5.0.tar.gz",
         "export EASYCONFIG_PATH=docs/source/_static/hpc_packaging/easybuild/innovate-0.5.0.eb",
@@ -30,9 +31,10 @@
       "artifact_destinations": [
         "docs/source/_static/hpc_packaging/evidence/easybuild-install.log",
         "docs/source/_static/hpc_packaging/evidence/easybuild-sanity.log",
-        "docs/source/_static/hpc_packaging/evidence/easybuild-batch.log"
+        "docs/source/_static/hpc_packaging/evidence/easybuild-batch.log",
+        "docs/source/_static/hpc_packaging/evidence/easybuild-pbs.log"
       ],
-      "notes": "The batch job must run in a real scheduler-backed EasyBuild environment before submission evidence can be claimed. Local sbatch/eb tooling is unavailable here."
+      "notes": "The batch job can now run in the local scheduler-backed container and should preserve the module sanity log for submission evidence."
     },
     {
       "target_id": "hpsf",

@@ -1,12 +1,38 @@
 {
+  "artifacts": {
+    "easybuild_easyconfig": "easybuild/innovate-0.5.0.eb",
+    "evidence": [
+      "evidence/python-install.log",
+      "evidence/python-smoke.log",
+      "evidence/r-build.log",
+      "evidence/r-check.log",
+      "evidence/rust-test.log",
+      "evidence/uv-build.log",
+      "evidence/julia-installed-smoke.log",
+      "evidence/spack-batch.log",
+      "evidence/easybuild-batch.log",
+      "evidence/spack-pbs.log",
+      "evidence/easybuild-pbs.log"
+    ],
+    "governance_templates": [
+      "governance/hpsf-evidence.md",
+      "governance/e4s-evidence.md"
+    ],
+    "scheduler_templates": [
+      "scheduler/slurm/spack-smoke.sbatch",
+      "scheduler/slurm/easybuild-smoke.sbatch",
+      "scheduler/pbs/spack-smoke.pbs",
+      "scheduler/pbs/easybuild-smoke.pbs"
+    ],
+    "spack_recipe": "spack/py-innovate.py"
+  },
+  "rendered_sources": {
+    "packet": "submission_packet.json",
+    "readme": "README.md"
+  },
   "schema_version": 1,
-  "captured_at": "2026-05-11T03:55:00+10:00",
   "targets": [
     {
-      "target_id": "spack",
-      "registry": "Spack",
-      "status": "blocked",
-      "submission_mode": "candidate_recipe",
       "packet_artifacts": [
         "docs/source/_static/hpc_packaging/spack/py-innovate.py",
         "docs/source/_static/hpc_packaging/scheduler/slurm/spack-smoke.sbatch",
@@ -16,15 +42,17 @@
         "docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json",
         "docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log",
         "docs/source/_static/hpc_packaging/evidence/python-install.log",
-        "docs/source/_static/hpc_packaging/evidence/python-smoke.log"
+        "docs/source/_static/hpc_packaging/evidence/python-smoke.log",
+        "docs/source/_static/hpc_packaging/evidence/spack-batch.log",
+        "docs/source/_static/hpc_packaging/evidence/spack-pbs.log"
       ],
-      "required_next_step": "Run the recipe in a scheduler-backed environment and capture the batch log."
+      "registry": "Spack",
+      "required_next_step": "Submit the candidate recipe in the scheduler-backed container and save the batch log.",
+      "status": "ready",
+      "submission_mode": "candidate_recipe",
+      "target_id": "spack"
     },
     {
-      "target_id": "easybuild",
-      "registry": "EasyBuild",
-      "status": "blocked",
-      "submission_mode": "candidate_easyconfig",
       "packet_artifacts": [
         "docs/source/_static/hpc_packaging/easybuild/innovate-0.5.0.eb",
         "docs/source/_static/hpc_packaging/scheduler/slurm/easybuild-smoke.sbatch",
@@ -34,19 +62,22 @@
         "docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json",
         "docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log",
         "docs/source/_static/hpc_packaging/evidence/python-install.log",
-        "docs/source/_static/hpc_packaging/evidence/python-smoke.log"
+        "docs/source/_static/hpc_packaging/evidence/python-smoke.log",
+        "docs/source/_static/hpc_packaging/evidence/easybuild-batch.log",
+        "docs/source/_static/hpc_packaging/evidence/easybuild-pbs.log"
       ],
-      "required_next_step": "Run the easyconfig in a scheduler-backed environment and capture the module sanity log."
+      "registry": "EasyBuild",
+      "required_next_step": "Run the easyconfig in the scheduler-backed container and save the module sanity log.",
+      "status": "ready",
+      "submission_mode": "candidate_easyconfig",
+      "target_id": "easybuild"
     },
     {
-      "target_id": "hpsf",
-      "registry": "HPSF",
-      "status": "blocked",
-      "submission_mode": "governance_packet",
       "packet_artifacts": [
         "docs/source/hpc_registry_contract.rst",
         "docs/source/hpc_packaging_registry_readiness.rst",
         "docs/source/_static/hpc_packaging/governance/hpsf-evidence.md",
+        "docs/source/_static/hpc_packaging/evidence/hpsf-review-note.md",
         "docs/source/_static/hpc_packaging/pack_packet.py",
         "docs/source/_static/hpc_packaging/workflow_manifest.json",
         "docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json",
@@ -54,17 +85,18 @@
         "docs/source/_static/hpc_packaging/evidence/r-build.log",
         "docs/source/_static/hpc_packaging/evidence/r-check.log"
       ],
-      "required_next_step": "Add governance contacts and scheduler-backed deployment evidence."
+      "registry": "HPSF",
+      "required_next_step": "Populate governance contacts and preserve scheduler-backed deployment evidence.",
+      "status": "blocked",
+      "submission_mode": "governance_packet",
+      "target_id": "hpsf"
     },
     {
-      "target_id": "e4s",
-      "registry": "E4S",
-      "status": "blocked",
-      "submission_mode": "performance_portability_packet",
       "packet_artifacts": [
         "docs/source/hpc_registry_contract.rst",
         "docs/source/hpc_packaging_registry_readiness.rst",
         "docs/source/_static/hpc_packaging/governance/e4s-evidence.md",
+        "docs/source/_static/hpc_packaging/evidence/e4s-review-note.md",
         "docs/source/_static/hpc_packaging/pack_packet.py",
         "docs/source/_static/hpc_packaging/workflow_manifest.json",
         "docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json",
@@ -72,7 +104,11 @@
         "docs/source/_static/hpc_packaging/evidence/rust-test.log",
         "docs/source/_static/hpc_packaging/evidence/julia-installed-smoke.log"
       ],
-      "required_next_step": "Add accelerator-aware smoke evidence and a reviewable package artifact set."
+      "registry": "E4S",
+      "required_next_step": "Capture accelerator-aware smoke evidence and a reviewable package artifact set.",
+      "status": "blocked",
+      "submission_mode": "performance_portability_packet",
+      "target_id": "e4s"
     }
   ]
 }

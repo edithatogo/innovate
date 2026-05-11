@@ -17,7 +17,7 @@ def test_hpc_submission_packet_exists() -> None:
     assert PACKET_PATH.is_file()
 
 
-def test_hpc_submission_packet_covers_all_blocked_targets() -> None:
+def test_hpc_submission_packet_covers_all_targets() -> None:
     """The packet should enumerate every HPC registry target."""
     packet = load_packet()
 
@@ -25,9 +25,13 @@ def test_hpc_submission_packet_covers_all_blocked_targets() -> None:
     targets = {entry["target_id"]: entry for entry in packet["targets"]}
     assert set(targets) == {"spack", "easybuild", "hpsf", "e4s"}
 
+    assert targets["spack"]["status"] == "ready"
+    assert targets["easybuild"]["status"] == "ready"
+    assert targets["hpsf"]["status"] == "blocked"
+    assert targets["e4s"]["status"] == "blocked"
+
     for entry in targets.values():
         assert entry["registry"]
-        assert entry["status"] == "blocked"
         assert entry["submission_mode"]
         assert entry["packet_artifacts"]
         assert entry["required_next_step"]
@@ -44,6 +48,12 @@ def test_hpc_submission_packet_points_at_existing_evidence() -> None:
         "docs/source/_static/hpc_packaging/evidence/r-check.log",
         "docs/source/_static/hpc_packaging/evidence/rust-test.log",
         "docs/source/_static/hpc_packaging/evidence/julia-installed-smoke.log",
+        "docs/source/_static/hpc_packaging/evidence/spack-batch.log",
+        "docs/source/_static/hpc_packaging/evidence/easybuild-batch.log",
+        "docs/source/_static/hpc_packaging/evidence/spack-pbs.log",
+        "docs/source/_static/hpc_packaging/evidence/easybuild-pbs.log",
+        "docs/source/_static/hpc_packaging/evidence/hpsf-review-note.md",
+        "docs/source/_static/hpc_packaging/evidence/e4s-review-note.md",
         "docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log",
         "docs/source/_static/hpc_packaging/pack_packet.py",
         "docs/source/_static/hpc_packaging/workflow_manifest.json",

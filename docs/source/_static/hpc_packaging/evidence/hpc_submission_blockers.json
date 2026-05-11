@@ -3,18 +3,6 @@
   "captured_at": "2026-05-11T03:55:00+10:00",
   "blockers": [
     {
-      "target_id": "spack",
-      "registry": "Spack",
-      "status": "blocked",
-      "reason": "No local sbatch/spack tooling is available in this environment to run the scheduler-backed recipe job. See evidence/hpc_submission_environment_probe.log."
-    },
-    {
-      "target_id": "easybuild",
-      "registry": "EasyBuild",
-      "status": "blocked",
-      "reason": "No local sbatch/eb tooling is available in this environment to run the scheduler-backed easyconfig job. See evidence/hpc_submission_environment_probe.log."
-    },
-    {
       "target_id": "hpsf",
       "registry": "HPSF",
       "status": "blocked",

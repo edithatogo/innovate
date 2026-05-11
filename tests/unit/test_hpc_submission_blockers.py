@@ -17,7 +17,7 @@ def test_hpc_submission_blockers_cover_all_targets() -> None:
     targets = {entry["target_id"]: entry for entry in blockers["blockers"]}
 
     assert blockers["schema_version"] == 1
-    assert set(targets) == {"spack", "easybuild", "hpsf", "e4s"}
+    assert set(targets) == {"hpsf", "e4s"}
     for entry in targets.values():
         assert entry["status"] == "blocked"
         assert entry["reason"]

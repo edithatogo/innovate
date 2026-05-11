@@ -48,7 +48,7 @@ The minimum evidence bundle is:
 * optional accelerator smoke evidence, when JAX/XLA is enabled;
 * scheduler evidence from at least one HPC batch environment;
 * package sketches for Spack and EasyBuild.
-* scheduler and governance templates for blocked registry targets.
+* scheduler and governance templates for the remaining registry targets.
 
 Target registry gates
 ---------------------

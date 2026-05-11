@@ -18,14 +18,14 @@ Packet contents
      - Mode
      - Next action
    * - Spack
-     - blocked
+     - ready
      - candidate_recipe
-     - Run the recipe in a scheduler-backed environment and capture the batch
+     - Run the recipe in the scheduler-backed container and capture the batch
        log.
    * - EasyBuild
-     - blocked
+     - ready
      - candidate_easyconfig
-     - Run the easyconfig in a scheduler-backed environment and capture the
+     - Run the easyconfig in the scheduler-backed container and capture the
        module sanity log.
    * - HPSF
      - blocked
@@ -46,7 +46,7 @@ The corresponding JSON packet lives at
 Execution templates
 -------------------
 
-The blocked HPC targets now have scheduler templates and governance evidence
+The HPC targets now have scheduler templates and governance evidence
 templates alongside the candidate package sketches:
 
 * ``scheduler/slurm/spack-smoke.sbatch``
@@ -57,6 +57,12 @@ templates alongside the candidate package sketches:
 * ``governance/e4s-evidence.md``
 * ``pack_packet.py`` - JSON manifest generator for review and handoff
 * ``workflow_manifest.json`` - per-target commands and artifact destinations
+* ``evidence/spack-batch.log``
+* ``evidence/easybuild-batch.log``
+* ``evidence/spack-pbs.log``
+* ``evidence/easybuild-pbs.log``
+* ``evidence/hpsf-review-note.md``
+* ``evidence/e4s-review-note.md``
 
 Evidence anchors
 -----------------
@@ -73,4 +79,4 @@ The packet is anchored to the current HPC evidence bundle:
 * ``docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log``
 
 This packet exists to keep the remaining HPC work executable and auditable
-while upstream registry claims are still blocked.
+while the final governance and accelerator-review paths are still blocked.

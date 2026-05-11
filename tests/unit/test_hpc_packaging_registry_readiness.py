@@ -82,6 +82,10 @@ def test_hpc_packaging_readiness_captures_spack_and_easybuild_prototypes() -> No
         "julia --project=bindings/julia -e",
         "Rscript -e",
         "npm test --prefix bindings/typescript",
+        "spack-batch.log",
+        "easybuild-batch.log",
+        "spack-pbs.log",
+        "easybuild-pbs.log",
     ):
         assert phrase in doc
 
@@ -93,9 +97,10 @@ def test_hpc_registry_claims_are_blocked_until_evidence_exists() -> None:
     for phrase in (
         "HPSF candidacy",
         "E4S candidacy",
-        "blocked until evidence exists",
-        "install log",
-        "smoke log",
+        "evidence/hpsf-review-note.md",
+        "evidence/e4s-review-note.md",
+        "install, smoke, and batch evidence is now present",
+        "package sketches, local evidence, and batch logs are present",
         "performance portability evidence",
         "Slurm or PBS",
         "execution templates for Slurm and PBS scheduler submission",

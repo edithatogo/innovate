@@ -1,0 +1,9 @@
+scheduler=slurm
+job_id=local-1778496810
+hostname=366f59e60ccd
+easyconfig=innovate-0.5.0.eb
+sdist=innovate-0.5.0.tar.gz
+Expected follow-up:
+- run the easyconfig in a real EasyBuild module environment
+- capture module load output and sanity-check output
+- archive the batch output in docs/source/_static/hpc_packaging/evidence/

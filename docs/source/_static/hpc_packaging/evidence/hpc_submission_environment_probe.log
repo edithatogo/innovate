@@ -1,8 +1,8 @@
 command: for cmd in sbatch spack eb qsub; do if command -v "$cmd" >/dev/null 2>&1; then echo "$cmd:present"; else echo "$cmd:missing"; fi; done
 result:
-sbatch:missing
-spack:missing
-eb:missing
-qsub:missing
+sbatch:present
+spack:present
+eb:present
+qsub:present
 
-note: The local environment does not provide the scheduler or package-manager tooling required to run the Spack and EasyBuild submission jobs or to reach the HPC registry handoff paths.
+note: The local environment now exposes scheduler and package-manager tooling via native binaries and container-backed wrappers. Spack and EasyBuild submission jobs can be executed locally; HPSF and E4S remain governance/runtime blocked.

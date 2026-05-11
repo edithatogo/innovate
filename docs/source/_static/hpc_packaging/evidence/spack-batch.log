@@ -1,0 +1,9 @@
+scheduler=slurm
+job_id=local-1778496802
+hostname=533db591bd35
+spack_pkg=py-innovate.py
+sdist=innovate-0.5.0.tar.gz
+Expected follow-up:
+- exercise the recipe with a real Spack environment
+- capture `spack spec`, install logs, and a post-install smoke command
+- archive the batch output in docs/source/_static/hpc_packaging/evidence/

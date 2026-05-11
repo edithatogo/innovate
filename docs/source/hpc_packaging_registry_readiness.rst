@@ -38,6 +38,12 @@ The repository now carries the package and evidence bundle directly under
 * ``evidence/uv-build.log`` - repository wheel/sdist build evidence;
 * ``evidence/julia-installed-smoke.log`` - installed-package Julia bridge
   smoke evidence.
+* ``evidence/spack-batch.log`` and ``evidence/easybuild-batch.log`` - local
+  container-backed batch logs for the executable HPC targets;
+* ``evidence/spack-pbs.log`` and ``evidence/easybuild-pbs.log`` - PBS variants
+  of the same batch logs;
+* ``evidence/hpsf-review-note.md`` - durable HPSF blocker note;
+* ``evidence/e4s-review-note.md`` - durable E4S blocker note.
 
 Install surfaces
 ----------------
@@ -208,21 +214,25 @@ HPSF and E4S registry gates
      - Current status
      - Required next evidence
    * - HPSF candidacy
-     - install and smoke evidence is now present; remaining evidence covers
-       governance alignment, release durability, and HPC user support.
-     - Add installer logs for scheduler-backed environments, support contacts,
-       maintenance policy, and examples showing scheduler-aware deployment.
+     - install, smoke, and batch evidence is now present; remaining evidence
+       covers governance alignment, release durability, and HPC user support.
+     - Add support contacts, maintenance policy, and the governance packet;
+       preserve the blocker note in ``evidence/hpsf-review-note.md``.
    * - E4S candidacy
-     - package sketches and local evidence are present; remaining evidence
-       covers performance portability and accelerator-aware validation.
-     - Add accepted or reviewable Spack recipe evidence, CPU/GPU smoke logs,
-       dependency variant results, and failure-mode diagnostics.
+     - package sketches, local evidence, and batch logs are present; remaining
+       evidence covers performance portability and accelerator-aware
+       validation.
+     - Add accelerator metadata, CPU/GPU/mixed-bridge smoke logs, and the
+       portability packet; preserve the blocker note in
+       ``evidence/e4s-review-note.md``.
 
 Result: no HPSF or E4S submission should be made until the package candidates
 have passing install log and smoke log artifacts for CPU, GPU, and mixed
 bridge deployment, plus a documented performance portability evidence bundle.
 
-The current gate remains blocked until evidence exists.
+The current gate remains blocked for governance and accelerator-review
+reasons, but the blocker state is now captured as durable evidence notes in
+the repository.
 Current smoke commands to preserve in the evidence bundle include
 ``python -c "import innovate; print(innovate.__version__)"`` for Python and
 ``Rscript -e`` for the R surface.

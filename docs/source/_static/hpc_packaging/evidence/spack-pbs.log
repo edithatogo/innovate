@@ -1,0 +1,9 @@
+scheduler=pbs
+job_id=unknown
+hostname=e9b174e8ade9
+spack_pkg=py-innovate.py
+sdist=innovate-0.5.0.tar.gz
+Expected follow-up:
+- exercise the recipe with a real Spack environment
+- capture install logs and a smoke command
+- archive the batch output in docs/source/_static/hpc_packaging/evidence/

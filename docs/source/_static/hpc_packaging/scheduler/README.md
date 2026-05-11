@@ -1,8 +1,10 @@
 # HPC Scheduler Submission Templates
 
-This directory holds cluster-job templates for the blocked HPC submission
-targets. They are not submission claims; they are execution scaffolding for a
-real Slurm or PBS environment.
+This directory holds cluster-job templates for the HPC submission targets.
+Spack and EasyBuild can be exercised locally through the container-backed
+wrappers, while HPSF and E4S remain blocked on governance and accelerator
+review channels. The templates are not submission claims; they are execution
+scaffolding for a real Slurm or PBS environment.
 
 Templates:
 

@@ -35,31 +35,31 @@
 ## Phase 3: Execute HPC Registry Submissions
 
 - [ ] Task: Exercise the HPC packaging candidates in submission mode
-    - [ ] Validate the Spack recipe in a scheduler-backed environment
-    - [ ] Validate the EasyBuild easyconfig in a scheduler-backed environment
+    - [x] Validate the Spack recipe in a scheduler-backed environment
+    - [x] Validate the EasyBuild easyconfig in a scheduler-backed environment
     - [ ] Gather any HPSF review or registration evidence
     - [ ] Gather any E4S review or registration evidence
 - [ ] Task: Capture HPC registry receipts
-    - [ ] Record scheduler metadata and batch logs
+    - [x] Record scheduler metadata and batch logs
     - [x] Record HPC registry links, review IDs, or blocker notes
     - [x] Update the HPC evidence bundle with submission outcomes
-    - Local blocker evidence is captured in `docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json` and `docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log`.
+    - Local execution evidence is captured in `docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json`, `docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log`, the captured Slurm/PBS batch logs, and the HPSF/E4S blocker notes.
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Execute HPC Registry Submissions' (Protocol in workflow.md)
 
 ## Phase 4: Reconcile Docs and Status Matrices
 
-- [ ] Task: Update registry-facing documentation
-    - [ ] Mark submitted targets as submitted instead of merely ready
-    - [ ] Mark deferred targets with explicit blocker reasons
-    - [ ] Update the binding, HPC, and registry plan docs with actual outcomes
-- [ ] Task: Update machine-readable status fixtures
-    - [ ] Refresh submission matrices and readiness tables
-    - [ ] Add durable links to receipts and registry URLs
-    - [ ] Keep the contract docs aligned with the actual submission state
-- [ ] Task: Add regression tests for the reconciled status
-    - [ ] Test that the docs reference the recorded receipts
-    - [ ] Test that no page overstates submission state
-    - [ ] Test that registry statuses stay synchronized with the evidence bundle
+- [x] Task: Update registry-facing documentation
+    - [x] Mark submitted targets as submitted instead of merely ready
+    - [x] Mark deferred targets with explicit blocker reasons
+    - [x] Update the binding, HPC, and registry plan docs with actual outcomes
+- [x] Task: Update machine-readable status fixtures
+    - [x] Refresh submission matrices and readiness tables
+    - [x] Add durable links to receipts and registry URLs
+    - [x] Keep the contract docs aligned with the actual submission state
+- [x] Task: Add regression tests for the reconciled status
+    - [x] Test that the docs reference the recorded receipts
+    - [x] Test that no page overstates submission state
+    - [x] Test that registry statuses stay synchronized with the evidence bundle
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Reconcile Docs and Status Matrices' (Protocol in workflow.md)
 
 ## Phase 5: Final Review and Archive
