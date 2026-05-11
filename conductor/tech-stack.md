@@ -3,7 +3,7 @@
 ## Language
 - **Python** (>=3.10) — *3.8/3.9 dropped (EOL)*
 - **R** — Thin user-facing binding over the stable functional kernel contract
-- **Rust** — Current binding target and strategic long-term core runtime for selected kernel execution slices; the core is not fully Rust-owned yet, and the remaining ownership gap is tracked in Conductor as the active track `Rust Core Full Native Migration and Ownership Closure`, with the earlier `Rust Core Migration Completion and Polyglot Claim Closure` track archived as closure evidence. The Rust crate currently owns native metadata discovery plus promoted Bass fit, prediction, simulation, summary, and diagnostics slices alongside the selected logistic execution slices and narrow Norton-Bass prediction, simulation, summary, and diagnostics slices
+- **Rust** — Current binding target and strategic long-term core runtime for selected kernel execution slices; the core is not fully Rust-owned yet, and the remaining ownership gap is recorded in Conductor as archived closure evidence under `Rust Core Full Native Migration and Ownership Closure`, with the earlier `Rust Core Migration Completion and Polyglot Claim Closure` track also archived as closure evidence. The Rust crate currently owns native metadata discovery plus promoted Bass fit, prediction, simulation, summary, and diagnostics slices alongside the selected logistic execution slices and narrow Norton-Bass prediction, simulation, summary, and diagnostics slices
 - **Julia** — Thin user-facing binding over the stable functional kernel contract
 - **TypeScript** — Thin user-facing binding over the stable functional kernel contract
 - **Go** — Thin user-facing binding over the stable functional kernel contract

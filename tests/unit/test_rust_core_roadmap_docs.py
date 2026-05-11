@@ -317,10 +317,10 @@ def test_rust_core_migration_inventory_matches_rust_and_python_sources() -> None
         assert model_key not in native_keys
 
 
-def test_future_rust_migration_track_requires_ledger_and_claim_reconciliation() -> None:
-    """The new Rust migration track should encode the recommended execution gates."""
-    spec = Path("conductor/tracks/rust_core_full_native_migration_20260511/spec.md").read_text()
-    plan = Path("conductor/tracks/rust_core_full_native_migration_20260511/plan.md").read_text()
+def test_archived_rust_migration_track_requires_ledger_and_claim_reconciliation() -> None:
+    """The archived Rust migration track should preserve the recommended execution gates."""
+    spec = Path("conductor/archive/rust_core_full_native_migration_20260511/spec.md").read_text()
+    plan = Path("conductor/archive/rust_core_full_native_migration_20260511/plan.md").read_text()
 
     for phrase in (
         "machine-readable slice ledger",
@@ -357,16 +357,16 @@ def test_rust_core_roadmap_explicitly_rejects_full_rust_ownership() -> None:
 
 
 def test_rust_core_roadmap_exposes_the_remaining_ownership_gap_track() -> None:
-    """The roadmap should point to the track that owns the residual gap."""
+    """The roadmap should point to the archived track that documents the residual gap."""
     roadmap = normalized_text(ROADMAP)
     tech_stack = Path("conductor/tech-stack.md").read_text()
     registry = Path("conductor/tracks.md").read_text()
 
-    assert "remaining ownership gap is tracked" in roadmap
+    assert "remaining ownership gap is tracked as archived Conductor closure evidence" in roadmap
     assert "residual bridge-backed slices and Python-only reference areas" in roadmap
-    assert "Rust Core Full Native Migration and Ownership Closure" in tech_stack
+    assert "archived closure evidence under `Rust Core Full Native Migration and Ownership Closure`" in tech_stack
     assert "Rust Core Migration Completion and Polyglot Claim Closure" in tech_stack
-    assert "Rust Core Full Native Migration and Ownership Closure" in registry
+    assert "./archive/rust_core_full_native_migration_20260511/" in registry
     assert "Rust Core Migration Completion and Polyglot Claim Closure" in registry
 
 
