@@ -1,0 +1,19 @@
+Astro/Starlight operations roadmap increment
+
+Summary:
+- Added an explicit Astro operations roadmap page to represent the Rust roadmap content in the new site.
+- Expanded the operations landing page to point to both Rust Core and Roadmap.
+- Extended the migration tests to cover the new roadmap page.
+
+Files changed:
+- docs/astro-site/src/content/docs/operations/index.md
+- docs/astro-site/src/content/docs/operations/roadmap.md
+- tests/unit/test_astro_starlight_migration.py
+
+Validation:
+- uv run pytest tests/unit/test_astro_starlight_migration.py tests/unit/test_conductor_workflow_docs.py -q
+- uv run sphinx-build -b dummy docs/source docs/_build/dummy
+- git diff --check
+
+Review:
+- No high-confidence blockers remained in the operations roadmap increment.
