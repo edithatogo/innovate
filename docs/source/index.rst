@@ -26,6 +26,9 @@ Start here
    abi_binary_compatibility_strategy
    scientific_hpc_readiness_roadmap
    hpc_registry_contract
+   hpc_submission_packet
+   hpc_submission_workflow
+   registry_submission_receipts
    polyglot_registry_plan
    community_submission_readiness
    hpc_packaging_registry_readiness
@@ -57,6 +60,8 @@ The architectural rationale and roadmap live in the repository docs, not in the 
 - ``abi_binary_compatibility_strategy``
 - ``scientific_hpc_readiness_roadmap``
 - ``hpc_registry_contract``
+- ``registry_submission_receipts``
+- ``hpc_submission_workflow``
 - ``polyglot_registry_plan``
 - ``community_submission_readiness``
 - ``hpc_packaging_registry_readiness``

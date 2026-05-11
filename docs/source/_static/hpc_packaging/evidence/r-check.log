@@ -1,16 +1,17 @@
 * using log directory ‘/Users/doughnut/GitHub/innovate/innovate/innovate.R.Rcheck’
-* using R version 4.3.0 (2023-04-21)
-* using platform: aarch64-apple-darwin20 (64-bit)
+* using R version 4.6.0 (2026-04-24)
+* using platform: aarch64-apple-darwin25.4.0
 * R was compiled by
-    Apple clang version 14.0.0 (clang-1400.0.29.202)
-    GNU Fortran (GCC) 12.2.0
-* running under: macOS 26.3.1
+    Apple clang version 21.0.0 (clang-2100.0.123.102)
+    GNU Fortran (Homebrew GCC 15.2.0_1) 15.2.0
+* running under: macOS Tahoe 26.3.1
 * using session charset: UTF-8
+* current time: 2026-05-10 16:24:18 UTC
 * using options ‘--no-manual --as-cran’
 * checking for file ‘innovate.R/DESCRIPTION’ ... OK
 * this is package ‘innovate.R’ version ‘0.5.0’
 * package encoding: UTF-8
-* checking CRAN incoming feasibility ... [3s/36s] NOTE
+* checking CRAN incoming feasibility ... [2s/22s] NOTE
 Maintainer: ‘Dylan Mordaunt <dylan.mordaunt@vuw.ac.nz>’
 
 New submission
@@ -26,15 +27,14 @@ New submission
 * checking whether package ‘innovate.R’ can be installed ... OK
 * checking installed package size ... OK
 * checking package directory ... OK
-* checking for future file timestamps ... NOTE
-unable to verify current time
+* checking for future file timestamps ... OK
 * checking ‘build’ directory ... OK
 * checking DESCRIPTION meta-information ... OK
 * checking top-level files ... OK
 * checking for left-over files ... OK
 * checking index information ... OK
 * checking package subdirectories ... OK
-* checking R files for non-ASCII characters ... OK
+* checking code files for non-ASCII characters ... OK
 * checking R files for syntax errors ... OK
 * checking whether the package can be loaded ... OK
 * checking whether the package can be loaded with stated dependencies ... OK
@@ -62,11 +62,16 @@ unable to verify current time
 * checking examples ... OK
 * checking for unstated dependencies in ‘tests’ ... OK
 * checking tests ...
+  Running ‘run.R’
  OK
 * checking for unstated dependencies in vignettes ... OK
-* checking package vignettes in ‘inst/doc’ ... OK
+* checking package vignettes ... OK
 * checking re-building of vignette outputs ... OK
 * checking for non-standard things in the check directory ... OK
 * checking for detritus in the temp directory ... OK
 * DONE
-Status: 2 NOTEs
+
+Status: 1 NOTE
+See
+  ‘/Users/doughnut/GitHub/innovate/innovate/innovate.R.Rcheck/00check.log’
+for details.

@@ -78,6 +78,7 @@ def test_registry_submission_docs_still_reflect_readiness_not_submission() -> No
     community_docs = Path("docs/source/community_submission_readiness.rst").read_text(encoding="utf-8")
 
     assert "publication targets" in binding_docs.lower()
+    assert "registry_submission_receipts" in binding_docs
     assert "readiness planning" in hpc_docs.lower()
     assert "not a registry claim" in hpc_docs.lower()
     assert "No submission claims readiness without evidence" in community_docs

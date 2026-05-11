@@ -2,8 +2,6 @@
 
 This file tracks all major tracks for the project. Each track has its own detailed plan in its respective folder.
 
----
-
 - [x] **Track: SOTA Infrastructure Overhaul** *(Completed)*
   *Link: [./archive/sota_infrastructure_overhaul_20260411/](./archive/sota_infrastructure_overhaul_20260411/)*
 
@@ -303,3 +301,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [ ] **Track: Package and HPC Registry Submission Execution**
   *Link: [./tracks/registry_submission_execution_20260511/](./tracks/registry_submission_execution_20260511/)*
+
+---
+
+- [~] **Track: HPC Submission Workflow Arrangement and Registry Handoff**
+  *Link: [./tracks/hpc_submission_workflow_20260511/](./tracks/hpc_submission_workflow_20260511/)*

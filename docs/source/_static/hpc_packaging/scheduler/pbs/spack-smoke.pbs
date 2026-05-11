@@ -1,0 +1,30 @@
+#!/bin/bash
+#PBS -N innovate-spack-smoke
+#PBS -l walltime=00:20:00
+#PBS -l select=1:ncpus=2:mem=4gb
+#PBS -o spack-smoke-$PBS_JOBID.out
+#PBS -e spack-smoke-$PBS_JOBID.err
+
+set -eu
+
+: "${INNOVATE_SDIST:?set INNOVATE_SDIST to the source tarball path}"
+: "${SPACK_PKG_PATH:?set SPACK_PKG_PATH to the candidate Spack package file}"
+
+workdir="$(mktemp -d)"
+trap 'rm -rf "$workdir"' EXIT
+
+cp "$SPACK_PKG_PATH" "$workdir/py-innovate.py"
+cp "$INNOVATE_SDIST" "$workdir/"
+
+echo "scheduler=pbs"
+echo "job_id=${PBS_JOBID:-unknown}"
+echo "hostname=$(hostname)"
+echo "spack_pkg=$(basename "$SPACK_PKG_PATH")"
+echo "sdist=$(basename "$INNOVATE_SDIST")"
+
+cat <<'EOF'
+Expected follow-up:
+- exercise the recipe with a real Spack environment
+- capture install logs and a smoke command
+- archive the batch output in docs/source/_static/hpc_packaging/evidence/
+EOF

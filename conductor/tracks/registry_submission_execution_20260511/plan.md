@@ -19,17 +19,17 @@
 ## Phase 2: Execute Package-Manager Submissions
 
 - [ ] Task: Submit the language packages through their registry paths
-    - [ ] Publish or attempt publish for PyPI/TestPyPI
-    - [ ] Publish or attempt publish for npm
-    - [ ] Publish or attempt publish for crates.io
-    - [ ] Publish or prepare R-universe/CRAN submission evidence
-    - [ ] Submit Julia General registry metadata
-    - [ ] Tag and verify Go module release flow
-    - [ ] Publish or dry-run NuGet release artifacts
+    - [x] Publish or attempt publish for PyPI/TestPyPI
+    - [x] Publish or attempt publish for npm
+    - [x] Publish or attempt publish for crates.io
+    - [x] Publish or prepare R-universe/CRAN submission evidence
+    - [x] Submit Julia General registry metadata
+    - [x] Tag and verify Go module release flow
+    - [x] Publish or dry-run NuGet release artifacts
 - [ ] Task: Capture package-registry receipts
-    - [ ] Record registry URLs, version records, or submission IDs
-    - [ ] Record logs for any blocked or deferred submissions
-    - [ ] Preserve package-manager artifacts in the evidence bundle
+    - [x] Record registry URLs, version records, or submission IDs
+    - [x] Record logs for any blocked or deferred submissions
+    - [x] Preserve package-manager artifacts in the evidence bundle
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Execute Package-Manager Submissions' (Protocol in workflow.md)
 
 ## Phase 3: Execute HPC Registry Submissions

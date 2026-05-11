@@ -1,7 +1,7 @@
 * checking for file ‘bindings/r/DESCRIPTION’ ... OK
 * preparing ‘innovate.R’:
 * checking DESCRIPTION meta-information ... OK
-* installing the package to build vignettes
+* installing the package (it is needed to build vignettes)
 * creating vignettes ... OK
 * checking for LF line-endings in source and make files and shell scripts
 * checking for empty or unneeded directories

@@ -16,6 +16,7 @@ that the HPC packaging work must preserve:
 * optional JAX/XLA extras and accelerator-specific smoke checks;
 * language binding smoke checks for Julia, R, and TypeScript;
 * scheduler-backed deployment evidence for Slurm or PBS environments;
+* scheduler submission templates that record the target job shape;
 * registry-gated metadata for Spack, EasyBuild, HPSF, and E4S.
 
 Contract terms
@@ -47,6 +48,7 @@ The minimum evidence bundle is:
 * optional accelerator smoke evidence, when JAX/XLA is enabled;
 * scheduler evidence from at least one HPC batch environment;
 * package sketches for Spack and EasyBuild.
+* scheduler and governance templates for blocked registry targets.
 
 Target registry gates
 ---------------------
@@ -77,4 +79,3 @@ Non-goals
 This contract does not claim that any registry submission has already occurred.
 It also does not replace the scientific roadmap, ABI policy, or polyglot
 documentation architecture; it only states the HPC-facing evidence boundary.
-

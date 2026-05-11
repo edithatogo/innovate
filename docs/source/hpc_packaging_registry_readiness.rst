@@ -14,6 +14,8 @@ performance-portability evidence, but the repository now contains concrete
 package sketches and install-smoke artifacts for the supported surfaces.
 
 See also :doc:`hpc_registry_contract` for the submission contract and
+:doc:`hpc_submission_packet` for the executable HPC target matrix,
+:doc:`hpc_submission_workflow` for the per-target command checklist, and
 :doc:`polyglot_registry_plan` for the broader registry sequencing plan.
 
 Concrete artifacts
@@ -24,11 +26,14 @@ The repository now carries the package and evidence bundle directly under
 
 * ``spack/py-innovate.py`` - candidate Spack recipe sketch;
 * ``easybuild/innovate-0.5.0.eb`` - candidate EasyBuild easyconfig sketch;
+* ``scheduler/`` - Slurm and PBS job templates for the blocked targets;
+* ``governance/`` - HPSF and E4S evidence templates;
 * ``evidence/python-install.log`` - clean wheel install into an isolated
-  Python environment;
-* ``evidence/python-smoke.log`` - import and dependency-check smoke log;
-* ``evidence/r-build.log`` - R package build evidence;
-* ``evidence/r-check.log`` - R CMD check evidence;
+  Python environment, refreshed from a clean venv;
+* ``evidence/python-smoke.log`` - import and dependency-check smoke log,
+  refreshed from the same venv;
+* ``evidence/r-build.log`` - current R package build evidence;
+* ``evidence/r-check.log`` - current R CMD check evidence;
 * ``evidence/rust-test.log`` - Rust binding test evidence;
 * ``evidence/uv-build.log`` - repository wheel/sdist build evidence;
 * ``evidence/julia-installed-smoke.log`` - installed-package Julia bridge
@@ -186,6 +191,8 @@ binding surfaces:
 * repository build evidence in ``evidence/uv-build.log``;
 * JAX/XLA evidence with backend and device metadata when ``+jax`` is enabled;
 * scheduler evidence from at least one Slurm or PBS batch run before an HPC
+  registry claim is made;
+* execution templates for Slurm and PBS scheduler submission before a
   registry claim is made;
 * CPU, GPU, and mixed bridge smoke results before performance portability is
   claimed.

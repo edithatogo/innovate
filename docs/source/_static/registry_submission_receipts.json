@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-05-11T01:58:09+10:00",
+  "submitted_targets": [
+    {
+      "target_id": "python_pypi",
+      "registry": "PyPI/TestPyPI",
+      "receipt_url": "https://pypi.org/project/innovate/",
+      "version": "0.5.0",
+      "evidence": [
+        "https://pypi.org/pypi/innovate/json"
+      ]
+    },
+    {
+      "target_id": "typescript_npm",
+      "registry": "npm",
+      "receipt_url": "https://www.npmjs.com/package/innovate.ts",
+      "version": "0.5.0",
+      "evidence": [
+        "https://registry.npmjs.org/innovate.ts"
+      ]
+    },
+    {
+      "target_id": "rust_crates_io",
+      "registry": "crates.io",
+      "receipt_url": "https://crates.io/crates/innovate-rs",
+      "version": "0.5.0",
+      "evidence": [
+        "https://crates.io/api/v1/crates/innovate-rs"
+      ]
+    },
+    {
+      "target_id": "julia_general",
+      "registry": "Julia General",
+      "receipt_url": "https://github.com/JuliaRegistries/General/pull/155126",
+      "version": "0.5.0",
+      "evidence": [
+        "https://github.com/edithatogo/innovate/commit/2334da74db0d6f723300b1b32f54b2a20ebefd17#commitcomment-184847382",
+        "bindings/julia/README.md",
+        "bindings/julia/Project.toml"
+      ],
+      "note": "@JuliaRegistrator register subdir=bindings/julia opened JuliaRegistries/General pull request 155126."
+    },
+    {
+      "target_id": "go_modules",
+      "registry": "Go modules",
+      "receipt_url": "https://pkg.go.dev/github.com/edithatogo/innovate/bindings/go",
+      "version": "v0.5.0",
+      "evidence": [
+        "bindings/go/go.mod",
+        "go list -m -versions github.com/edithatogo/innovate/bindings/go"
+      ]
+    },
+    {
+      "target_id": "csharp_nuget",
+      "registry": "NuGet",
+      "receipt_url": "https://www.nuget.org/packages/innovate.cs/",
+      "version": "0.5.0",
+      "evidence": [
+        "https://api.nuget.org/v3-flatcontainer/innovate.cs/index.json"
+      ]
+    },
+    {
+      "target_id": "r_r_universe",
+      "registry": "R-universe",
+      "receipt_url": "https://github.com/edithatogo/edithatogo.r-universe.dev/commit/8033021d768d9c8917f711f30b3387b2ef65b90b",
+      "version": "0.5.0",
+      "evidence": [
+        "https://github.com/edithatogo/edithatogo.r-universe.dev/blob/main/packages.json",
+        "bindings/r/README.md"
+      ],
+      "note": "The R-universe registry repo now includes innovate.R and will build/index asynchronously."
+    }
+  ],
+  "pending_targets": [
+    {
+      "target_id": "r_cran",
+      "registry": "CRAN",
+      "status": "deferred",
+      "blocker": "CRAN submission remains a maintainer-managed release step.",
+      "note": "A submission draft has been prepared in Gmail with the 0.5.0 source tarball attached.",
+      "draft_id": "r-1760283317165815025",
+      "message_id": "19e12b39d53187ee"
+    },
+    {
+      "target_id": "spack",
+      "registry": "Spack",
+      "status": "blocked",
+      "blocker": "Upstream review and scheduler-backed registry evidence are still required."
+    },
+    {
+      "target_id": "easybuild",
+      "registry": "EasyBuild",
+      "status": "blocked",
+      "blocker": "Upstream review and scheduler-backed registry evidence are still required."
+    },
+    {
+      "target_id": "hpsf",
+      "registry": "HPSF",
+      "status": "blocked",
+      "blocker": "Scheduler-backed evidence and support-policy documentation are still required."
+    },
+    {
+      "target_id": "e4s",
+      "registry": "E4S",
+      "status": "blocked",
+      "blocker": "Accelerator-aware evidence and reviewable package artifacts are still required."
+    }
+  ]
+}

@@ -42,6 +42,9 @@ conversation:
 Validation evidence: the package builds cleanly with ``R CMD build bindings/r``
 and passes ``R CMD check --as-cran --no-manual`` with a single new-submission
 NOTE, which is expected for an initial submission.
+The maintainer R-universe registry repo at
+``edithatogo.r-universe.dev`` now includes ``innovate.R`` and will index it
+asynchronously.
 
 JOSS
 ----
@@ -132,4 +135,3 @@ bindings. That makes scikit-learn-contrib a deliberate non-target unless the
 project scope changes in the future.
 
 The scope decision is complete, so there is no remaining blocker to resolve.
-

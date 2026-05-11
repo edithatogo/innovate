@@ -1,0 +1,30 @@
+#!/bin/bash
+#PBS -N innovate-easybuild-smoke
+#PBS -l walltime=00:20:00
+#PBS -l select=1:ncpus=2:mem=4gb
+#PBS -o easybuild-smoke-$PBS_JOBID.out
+#PBS -e easybuild-smoke-$PBS_JOBID.err
+
+set -eu
+
+: "${INNOVATE_SDIST:?set INNOVATE_SDIST to the source tarball path}"
+: "${EASYCONFIG_PATH:?set EASYCONFIG_PATH to the candidate EasyBuild file}"
+
+workdir="$(mktemp -d)"
+trap 'rm -rf "$workdir"' EXIT
+
+cp "$EASYCONFIG_PATH" "$workdir/innovate-0.5.0.eb"
+cp "$INNOVATE_SDIST" "$workdir/"
+
+echo "scheduler=pbs"
+echo "job_id=${PBS_JOBID:-unknown}"
+echo "hostname=$(hostname)"
+echo "easyconfig=$(basename "$EASYCONFIG_PATH")"
+echo "sdist=$(basename "$INNOVATE_SDIST")"
+
+cat <<'EOF'
+Expected follow-up:
+- run the easyconfig in a real EasyBuild module environment
+- capture module load and sanity-check output
+- archive the batch output in docs/source/_static/hpc_packaging/evidence/
+EOF

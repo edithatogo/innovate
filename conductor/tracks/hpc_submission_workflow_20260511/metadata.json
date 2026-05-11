@@ -1,0 +1,8 @@
+{
+  "track_id": "hpc_submission_workflow_20260511",
+  "type": "chore",
+  "status": "new",
+  "created_at": "2026-05-11T03:20:00Z",
+  "updated_at": "2026-05-11T03:20:00Z",
+  "description": "Arrange and execute the remaining HPC submission workflow for Spack, EasyBuild, HPSF, and E4S."
+}

@@ -23,12 +23,12 @@
       "registry": "PyPI/TestPyPI",
       "owner": "Python maintainers",
       "release_path": "uv build -> trusted publishing",
-      "submission_status": "deferred",
+      "submission_status": "submitted",
       "evidence": [
         "docs/source/binding_publication_ci.rst",
-        "docs/source/submission_readiness_dossiers.rst"
+        "https://pypi.org/project/innovate/"
       ],
-      "receipt": "Registry submission not yet executed in this repo context."
+      "receipt": "https://pypi.org/project/innovate/ (version 0.5.0 published)"
     },
     {
       "target_id": "typescript_npm",
@@ -36,12 +36,12 @@
       "registry": "npm",
       "owner": "TypeScript maintainers",
       "release_path": "npm pack --dry-run -> release publish",
-      "submission_status": "deferred",
+      "submission_status": "submitted",
       "evidence": [
         "bindings/typescript/package.json",
-        "docs/source/binding_publication_ci.rst"
+        "https://registry.npmjs.org/innovate.ts"
       ],
-      "receipt": "Registry submission not yet executed in this repo context."
+      "receipt": "https://www.npmjs.com/package/innovate.ts (version 0.5.0 published)"
     },
     {
       "target_id": "rust_crates_io",
@@ -49,12 +49,12 @@
       "registry": "crates.io",
       "owner": "Rust maintainers",
       "release_path": "cargo package -> cargo publish",
-      "submission_status": "deferred",
+      "submission_status": "submitted",
       "evidence": [
         "bindings/rust/Cargo.toml",
-        "docs/source/binding_publication_ci.rst"
+        "https://crates.io/api/v1/crates/innovate-rs"
       ],
-      "receipt": "Registry submission not yet executed in this repo context."
+      "receipt": "https://crates.io/crates/innovate-rs (version 0.5.0 published)"
     },
     {
       "target_id": "r_r_universe",
@@ -62,12 +62,12 @@
       "registry": "R-universe",
       "owner": "R binding maintainers",
       "release_path": "build tarball -> maintainer registry registration",
-      "submission_status": "deferred",
+      "submission_status": "submitted",
       "evidence": [
         "bindings/r/README.md",
-        "docs/source/binding_publication_ci.rst"
+        "https://github.com/edithatogo/edithatogo.r-universe.dev/blob/main/packages.json"
       ],
-      "receipt": "Registry submission not yet executed in this repo context."
+      "receipt": "https://github.com/edithatogo/edithatogo.r-universe.dev/commit/8033021d768d9c8917f711f30b3387b2ef65b90b (R-universe registry entry added)"
     },
     {
       "target_id": "r_cran",
@@ -88,12 +88,12 @@
       "registry": "Julia General",
       "owner": "Julia binding maintainers",
       "release_path": "Pkg.instantiate() -> Pkg.test() -> Registrator",
-      "submission_status": "deferred",
+      "submission_status": "submitted",
       "evidence": [
         "bindings/julia/test/runtests.jl",
-        "docs/source/binding_publication_ci.rst"
+        "https://github.com/JuliaRegistries/General/pull/155126"
       ],
-      "receipt": "Registry submission not yet executed in this repo context."
+      "receipt": "https://github.com/JuliaRegistries/General/pull/155126 (new package registration opened by Registrator)"
     },
     {
       "target_id": "go_modules",
@@ -101,12 +101,12 @@
       "registry": "Go modules",
       "owner": "Go binding maintainers",
       "release_path": "go test ./... -> versioned module tag",
-      "submission_status": "deferred",
+      "submission_status": "submitted",
       "evidence": [
         "bindings/go/go.mod",
-        "docs/source/binding_publication_ci.rst"
+        "https://pkg.go.dev/github.com/edithatogo/innovate/bindings/go"
       ],
-      "receipt": "Registry submission not yet executed in this repo context."
+      "receipt": "bindings/go/v0.5.0 tag is published and go list -m -versions reports v0.5.0."
     },
     {
       "target_id": "csharp_nuget",
@@ -114,12 +114,12 @@
       "registry": "NuGet",
       "owner": "C# binding maintainers",
       "release_path": "dotnet test -> dotnet pack -> push",
-      "submission_status": "deferred",
+      "submission_status": "submitted",
       "evidence": [
         "bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj",
-        "docs/source/binding_publication_ci.rst"
+        "https://api.nuget.org/v3-flatcontainer/innovate.cs/index.json"
       ],
-      "receipt": "Registry submission not yet executed in this repo context."
+      "receipt": "https://www.nuget.org/packages/innovate.cs/ (version 0.5.0 published)"
     },
     {
       "target_id": "spack",

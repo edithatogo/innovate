@@ -8,6 +8,10 @@ schema compatibility checks, and language-specific CI gates.
 Publication targets
 -------------------
 
+The repository now records live submission receipts for the package-manager
+targets that have been published. See ``registry_submission_receipts`` for the
+current registry URLs and blocker notes.
+
 Python
   Publish the primary package to PyPI/TestPyPI through trusted publishing
   workflows. The package must pass ``uv build`` and
@@ -37,7 +41,9 @@ R
   ``R CMD check --as-cran``, and local PDF manual generation with
   ``R CMD Rd2pdf bindings/r --output=innovate.R-manual.pdf``. R-universe
   publication is configured in the maintainer's R-universe registry by adding
-  this repository as package ``innovate.R`` with subdirectory ``bindings/r``;
+  this repository as package ``innovate.R`` with subdirectory ``bindings/r``.
+  The maintainer registry repo now includes the package entry and will build
+  and index it asynchronously;
   the CI artifact to inspect before enabling publication is the
   ``innovate.R_*.tar.gz`` source tarball from the R package workflow job.
   Generated outputs such as source tarballs, ``.Rcheck`` directories, PDF

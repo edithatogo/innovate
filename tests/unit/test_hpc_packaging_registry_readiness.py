@@ -18,6 +18,7 @@ def test_hpc_packaging_readiness_dossier_is_in_sphinx_navigation() -> None:
 
     assert DOC.is_file()
     assert "hpc_packaging_registry_readiness" in index
+    assert "hpc_submission_workflow" in index
 
 
 def test_hpc_packaging_readiness_maps_install_surfaces_and_dependencies() -> None:
@@ -71,6 +72,9 @@ def test_hpc_packaging_readiness_captures_spack_and_easybuild_prototypes() -> No
         "class PyInnovate(PythonPackage):",
         "EasyBuild easyconfig candidate",
         "easyblock = 'PythonPackage'",
+        "Slurm and PBS job templates",
+        "HPSF and E4S evidence templates",
+        "per-target command checklist",
         "module sanity checks",
         "python -c \"import innovate; print(innovate.__version__)\"",
         "python -m pip check",
@@ -94,6 +98,7 @@ def test_hpc_registry_claims_are_blocked_until_evidence_exists() -> None:
         "smoke log",
         "performance portability evidence",
         "Slurm or PBS",
+        "execution templates for Slurm and PBS scheduler submission",
         "CPU, GPU, and mixed bridge",
         "no HPSF or E4S submission should be made",
     ):
