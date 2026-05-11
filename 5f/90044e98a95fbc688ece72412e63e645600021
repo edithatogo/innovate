@@ -1,0 +1,1 @@
+Phase 4 checkpoint: reconciled HPC docs, packet, workflow manifest, and blocker bundle around the blocked state. Validation already passed: targeted pytest suites, Sphinx dummy build, git diff --check.
