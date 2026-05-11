@@ -62,14 +62,14 @@
     - [x] Test that registry statuses stay synchronized with the evidence bundle
 - [x] Task: Conductor - Automated Review and Checkpoint 'Reconcile Docs and Status Matrices' (Protocol in workflow.md)
 
-## Phase 5: Final Review and Archive
+## Phase 5: Final Review and Archive [checkpoint: 923223a]
 
-- [ ] Task: Run final conductor review
-    - [ ] Review the full submission diff against the spec, plan, workflow, and tests
-    - [ ] Apply any high-confidence fixes surfaced by the review
-    - [ ] Re-run validation until the track is stable
-- [ ] Task: Archive the completed submission track
-    - [ ] Move the track folder to the archive location
-    - [ ] Update the tracks registry entry to completed
-    - [ ] Preserve links to the final submission evidence bundle
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Final Review and Archive' (Protocol in workflow.md)
+- [x] Task: Run final conductor review
+    - [x] Review the full submission diff against the spec, plan, workflow, and tests
+    - [x] Apply any high-confidence fixes surfaced by the review
+    - [x] Re-run validation until the track is stable
+- [x] Task: Archive the completed submission track
+    - [x] Move the track folder to the archive location
+    - [x] Update the tracks registry entry to completed
+    - [x] Preserve links to the final submission evidence bundle
+- [x] Task: Conductor - Automated Review and Checkpoint 'Final Review and Archive' (Protocol in workflow.md)
