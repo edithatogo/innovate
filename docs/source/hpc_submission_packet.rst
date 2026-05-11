@@ -69,6 +69,7 @@ The packet is anchored to the current HPC evidence bundle:
 * ``docs/source/_static/hpc_packaging/evidence/r-check.log``
 * ``docs/source/_static/hpc_packaging/evidence/rust-test.log``
 * ``docs/source/_static/hpc_packaging/evidence/julia-installed-smoke.log``
+* ``docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json``
 
 This packet exists to keep the remaining HPC work executable and auditable
 while upstream registry claims are still blocked.

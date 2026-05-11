@@ -46,6 +46,7 @@ def test_hpc_submission_packet_points_at_existing_evidence() -> None:
         "docs/source/_static/hpc_packaging/evidence/julia-installed-smoke.log",
         "docs/source/_static/hpc_packaging/pack_packet.py",
         "docs/source/_static/hpc_packaging/workflow_manifest.json",
+        "docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json",
     }
     packet_artifacts = {
         artifact

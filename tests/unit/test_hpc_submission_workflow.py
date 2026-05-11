@@ -42,3 +42,4 @@ def test_hpc_submission_workflow_commands_are_specific() -> None:
 
     assert "docs/source/_static/hpc_packaging/evidence/spack-install.log" in targets["spack"]["artifact_destinations"]
     assert "docs/source/_static/hpc_packaging/evidence/easybuild-sanity.log" in targets["easybuild"]["artifact_destinations"]
+    assert manifest["blocker_bundle"] == "evidence/hpc_submission_blockers.json"

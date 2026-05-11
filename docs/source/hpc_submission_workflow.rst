@@ -11,6 +11,13 @@ Manifest
 The machine-readable manifest lives at
 ``docs/source/_static/hpc_packaging/workflow_manifest.json``.
 
+Blockers
+--------
+
+If the local environment does not expose scheduler or registry tools, the
+captured blocker bundle lives at
+``docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json``.
+
 Targets
 -------
 

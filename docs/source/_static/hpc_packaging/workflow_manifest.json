@@ -64,5 +64,6 @@
       ],
       "notes": "E4S handoff remains a portability submission; the packet must include CPU, GPU, and mixed bridge evidence plus accelerator metadata."
     }
-  ]
+  ],
+  "blocker_bundle": "evidence/hpc_submission_blockers.json"
 }

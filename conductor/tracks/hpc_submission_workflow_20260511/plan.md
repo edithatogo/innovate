@@ -46,9 +46,9 @@
 - [ ] Task: Submit or hand off the E4S packet
     - [ ] Capture the portability review or registry contact evidence
     - [ ] Record any blocker that prevents submission
-- [ ] Task: Capture HPC receipts and blocker notes
-    - [ ] Record registry URLs, review IDs, batch metadata, or note why a target remains blocked
-    - [ ] Preserve the resulting evidence in the repo
+- [x] Task: Capture HPC receipts and blocker notes
+    - [x] Record registry URLs, review IDs, batch metadata, or note why a target remains blocked
+    - [x] Preserve the resulting evidence in the repo
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Execute or Record External HPC Hand-offs' (Protocol in workflow.md)
 
 ## Phase 4: Reconcile Docs, Packet, and Status Matrices

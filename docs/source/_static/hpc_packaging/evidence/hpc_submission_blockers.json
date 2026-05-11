@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-05-11T03:45:00+10:00",
+  "blockers": [
+    {
+      "target_id": "spack",
+      "registry": "Spack",
+      "status": "blocked",
+      "reason": "No local sbatch/spack tooling is available in this environment to run the scheduler-backed recipe job."
+    },
+    {
+      "target_id": "easybuild",
+      "registry": "EasyBuild",
+      "status": "blocked",
+      "reason": "No local sbatch/eb tooling is available in this environment to run the scheduler-backed easyconfig job."
+    },
+    {
+      "target_id": "hpsf",
+      "registry": "HPSF",
+      "status": "blocked",
+      "reason": "No governance submission endpoint or review contact is available in this environment."
+    },
+    {
+      "target_id": "e4s",
+      "registry": "E4S",
+      "status": "blocked",
+      "reason": "No accelerator-backed runtime or E4S review channel is available in this environment."
+    }
+  ]
+}
