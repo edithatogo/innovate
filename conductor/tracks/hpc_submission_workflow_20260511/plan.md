@@ -53,17 +53,17 @@
 
 ## Phase 4: Reconcile Docs, Packet, and Status Matrices
 
-- [ ] Task: Update the human-facing HPC documentation
-    - [ ] Reflect actual submission or blocker status in the readiness docs
-    - [ ] Link the per-target packet and evidence bundle
-- [ ] Task: Update the machine-readable HPC packet
-    - [ ] Refresh statuses and next-step notes for each target
-    - [ ] Add durable links to receipts, batch logs, or blocker notes
-- [ ] Task: Add regression tests for the reconciled state
-    - [ ] Test that the docs and packet point to the same target states
-    - [ ] Test that no page overstates a submission claim
-    - [ ] Test that all HPC packet artifacts remain present
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Reconcile Docs, Packet, and Status Matrices' (Protocol in workflow.md)
+- [x] Task: Update the human-facing HPC documentation
+    - [x] Reflect actual submission or blocker status in the readiness docs
+    - [x] Link the per-target packet and evidence bundle
+- [x] Task: Update the machine-readable HPC packet
+    - [x] Refresh statuses and next-step notes for each target
+    - [x] Add durable links to receipts, batch logs, or blocker notes
+- [x] Task: Add regression tests for the reconciled state
+    - [x] Test that the docs and packet point to the same target states
+    - [x] Test that no page overstates a submission claim
+    - [x] Test that all HPC packet artifacts remain present
+- [x] Task: Conductor - Automated Review and Checkpoint 'Reconcile Docs, Packet, and Status Matrices' (Protocol in workflow.md)
 
 ## Phase 5: Final Review and Archive
 
