@@ -2,21 +2,28 @@
 
 ## Phase 1: Map the Remaining Rust-Core Ownership Gaps
 
-- [ ] Task: Inventory every remaining canonical operation and model family
-    - [ ] Record the current owner for each inventory slice
-    - [ ] Classify bridge-backed, Python-reference, and Rust-native slices
-    - [ ] Identify the stable payload shapes that still need explicit ownership
-- [ ] Task: Write regression tests for the ownership inventory
-    - [ ] Require every canonical operation to have a terminal ownership state
-    - [ ] Require every Python registry model family to be classified
-    - [ ] Require the inventory to distinguish explicit promotion from implicit fallback
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Map the Remaining Rust-Core Ownership Gaps' (Protocol in workflow.md)
+- [x] Task: Inventory every remaining canonical operation and model family
+    - [x] Record the current owner for each inventory slice
+    - [x] Classify bridge-backed, Python-reference, and Rust-native slices
+    - [x] Identify the stable payload shapes that still need explicit ownership
+- [x] Task: Maintain the machine-readable slice ledger
+    - [x] Keep the ledger synchronized with the rendered roadmap and inventory
+    - [x] Record every canonical operation, model family, and stable payload shape
+    - [x] Record terminal ownership as `rust_native`, `explicitly_promoted_elsewhere`, or `python_reference`
+- [x] Task: Write regression tests for the ownership inventory
+    - [x] Require every canonical operation to have a terminal ownership state
+    - [x] Require every Python registry model family to be classified
+    - [x] Require the inventory to distinguish explicit promotion from implicit fallback
+    - [x] Require claim-language reconciliation once the ledger is closed
+- [x] Task: Conductor - Automated Review and Checkpoint 'Map the Remaining Rust-Core Ownership Gaps' (Protocol in workflow.md)
 
 ## Phase 2: Promote or Explicitly Reassign Remaining Slices
 
 - [ ] Task: Implement native Rust execution for promotable slices
-    - [ ] Promote remaining canonical operations that can be made native
-    - [ ] Promote remaining stable payload shapes that can be expressed natively
+    - [ ] Promote remaining core operations that can be made native
+    - [ ] Promote remaining diffusion-family slices that can be expressed natively
+    - [ ] Promote remaining competition-family slices that can be expressed natively
+    - [ ] Promote remaining payload and schema reconciliation slices that can be expressed natively
     - [ ] Remove undocumented bridge fallback for promoted slices
 - [ ] Task: Record explicit non-Rust ownership where native promotion is not appropriate
     - [ ] Preserve Python-reference ownership only where the contract requires it
@@ -30,10 +37,15 @@
     - [ ] Test promoted slices against Python reference semantics
     - [ ] Test error mapping and unsupported-payload behavior
     - [ ] Test fallback routing for explicitly non-native families
+- [ ] Task: Build a binding smoke matrix for each promoted family
+    - [ ] Cover Rust and Python for every promoted slice
+    - [ ] Cover applicable downstream bindings: R, Julia, TypeScript, Go, and C#
+    - [ ] Record the matrix in the evidence bundle and ledger
 - [ ] Task: Capture performance and profiling evidence
     - [ ] Capture benchmark output for promoted slices
     - [ ] Capture CPU profiling and memory profiling where relevant
     - [ ] Capture any XLA or accelerator evidence that applies
+    - [ ] Attach family-level profiling evidence to the ledger or evidence bundle
 - [ ] Task: Validate all binding surfaces
     - [ ] Run Rust binding smoke coverage
     - [ ] Run Python, R, Julia, TypeScript, Go, and C# smoke checks as applicable
@@ -46,6 +58,9 @@
     - [ ] Reflect the final ownership boundary in the roadmap text
     - [ ] Update architecture or binding docs if claim language changes
     - [ ] Remove any roadmap wording that overstates bridge ownership
+- [ ] Task: Reconcile claim language across docs and inventory
+    - [ ] Remove "partial" or equivalent wording once the ledger says full ownership is closed
+    - [ ] Keep the archived closure track available as evidence, not as the active source of truth
 - [ ] Task: Refresh the machine-readable migration inventory
     - [ ] Set terminal ownership for every slice
     - [ ] Record promotion blockers and rationale where needed
