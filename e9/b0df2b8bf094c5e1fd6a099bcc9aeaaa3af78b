@@ -1,0 +1,1 @@
+Phase 3 checkpoint: recorded external HPC handoff blockers, updated workflow manifest to blocked status, and synchronized docs/tests. Validation passed: targeted pytest suite, Sphinx dummy build, git diff --check.
