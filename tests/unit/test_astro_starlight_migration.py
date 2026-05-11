@@ -122,18 +122,21 @@ def test_astro_starlight_core_pages_have_migrated_content() -> None:
     rust_core = Path(
         "docs/astro-site/src/content/docs/operations/rust-core.md"
     ).read_text()
+    roadmap = Path("docs/astro-site/src/content/docs/operations/roadmap.md").read_text()
 
     for phrase in (
         "stable functional kernel",
         "Arrow remains the stable interchange boundary",
         "fitted-state reporting fields",
         "Rust owns the promoted native slices",
+        "Python remains the reference ergonomic surface",
     ):
         assert (
             phrase in kernel
             or phrase in arrow
             or phrase in diagnostics
             or phrase in rust_core
+            or phrase in roadmap
         )
 
 
