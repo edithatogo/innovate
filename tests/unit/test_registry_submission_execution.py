@@ -8,7 +8,7 @@ from pathlib import Path
 INDEX_PATH = Path("docs/source/index.rst")
 TRACKS_PATH = Path("conductor/tracks.md")
 INVENTORY_PATH = Path("docs/source/_static/registry_submission_inventory.json")
-TRACK_PLAN = Path("conductor/tracks/registry_submission_execution_20260511/plan.md")
+TRACK_PLAN = Path("conductor/archive/registry_submission_execution_20260511/plan.md")
 
 PACKAGE_TARGETS = {
     "python_pypi",
@@ -39,6 +39,8 @@ def test_registry_submission_track_is_registered() -> None:
     registry = TRACKS_PATH.read_text(encoding="utf-8")
 
     assert "registry_submission_execution_20260511" in registry
+    assert "./archive/registry_submission_execution_20260511/" in registry
+    assert "(Completed)" in registry
     assert "Package and HPC Registry Submission Execution" in registry
 
 
