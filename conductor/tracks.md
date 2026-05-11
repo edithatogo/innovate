@@ -299,8 +299,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Package and HPC Registry Submission Execution**
-  *Link: [./tracks/registry_submission_execution_20260511/](./tracks/registry_submission_execution_20260511/)*
+- [x] **Track: Package and HPC Registry Submission Execution** *(Completed)*
+  *Link: [./archive/registry_submission_execution_20260511/](./archive/registry_submission_execution_20260511/)*
 
 ---
 
