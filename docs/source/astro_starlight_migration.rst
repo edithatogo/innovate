@@ -34,6 +34,8 @@ Scaffold artifacts
 * ``docs/source/_static/astro_starlight/migration_manifest.json``
 * ``docs/source/_static/astro_starlight/content_inventory.json``
 * ``docs/source/_static/astro_starlight/redirect_inventory.json``
+* ``docs/source/_static/astro_starlight/route_coverage.json``
+* ``docs/source/_static/astro_starlight/generate_route_coverage.py``
 
 Route-stability policy
 ----------------------

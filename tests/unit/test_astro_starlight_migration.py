@@ -97,6 +97,8 @@ def test_astro_starlight_docs_page_lists_the_scaffold_artifacts() -> None:
         "Algolia DocSearch",
         "content inventory",
         "redirect inventory",
+        "route_coverage.json",
+        "generate_route_coverage.py",
         "docs/astro-site/package.json",
         "docs/source/_static/astro_starlight/migration_manifest.json",
     ):

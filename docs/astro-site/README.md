@@ -25,3 +25,5 @@ Key artifacts:
 - `../source/_static/astro_starlight/migration_manifest.json`
 - `../source/_static/astro_starlight/content_inventory.json`
 - `../source/_static/astro_starlight/redirect_inventory.json`
+- `../source/_static/astro_starlight/route_coverage.json`
+- `../source/_static/astro_starlight/generate_route_coverage.py`
