@@ -46,7 +46,7 @@
     - Local execution evidence is captured in `docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json`, `docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log`, the captured Slurm/PBS batch logs, and the HPSF/E4S blocker notes.
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Execute HPC Registry Submissions' (Protocol in workflow.md)
 
-## Phase 4: Reconcile Docs and Status Matrices
+## Phase 4: Reconcile Docs and Status Matrices [checkpoint: 991247c]
 
 - [x] Task: Update registry-facing documentation
     - [x] Mark submitted targets as submitted instead of merely ready
@@ -60,7 +60,7 @@
     - [x] Test that the docs reference the recorded receipts
     - [x] Test that no page overstates submission state
     - [x] Test that registry statuses stay synchronized with the evidence bundle
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Reconcile Docs and Status Matrices' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Reconcile Docs and Status Matrices' (Protocol in workflow.md)
 
 ## Phase 5: Final Review and Archive
 
