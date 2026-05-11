@@ -16,9 +16,9 @@
     - [x] Add tests that require an auditable receipt or blocker note for each target
 - [x] Task: Conductor - Automated Review and Checkpoint 'Submission Inventory and Release Readiness' (Protocol in workflow.md)
 
-## Phase 2: Execute Package-Manager Submissions
+## Phase 2: Execute Package-Manager Submissions [checkpoint: 79a4ddc]
 
-- [ ] Task: Submit the language packages through their registry paths
+- [x] Task: Submit the language packages through their registry paths
     - [x] Publish or attempt publish for PyPI/TestPyPI
     - [x] Publish or attempt publish for npm
     - [x] Publish or attempt publish for crates.io
@@ -26,11 +26,11 @@
     - [x] Submit Julia General registry metadata
     - [x] Tag and verify Go module release flow
     - [x] Publish or dry-run NuGet release artifacts
-- [ ] Task: Capture package-registry receipts
+- [x] Task: Capture package-registry receipts
     - [x] Record registry URLs, version records, or submission IDs
     - [x] Record logs for any blocked or deferred submissions
     - [x] Preserve package-manager artifacts in the evidence bundle
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Execute Package-Manager Submissions' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Execute Package-Manager Submissions' (Protocol in workflow.md)
 
 ## Phase 3: Execute HPC Registry Submissions
 
