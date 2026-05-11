@@ -10,4 +10,8 @@ Files:
   URLs during parallel-run cutover
 - `route_coverage.json` — generated coverage report for implemented and planned
   Astro routes
+- `cutover_verification.json` — generated comparison of content and redirect
+  inventories
 - `generate_route_coverage.py` — generator for the coverage report
+- `generate_cutover_verification.py` — generator for the cutover verification
+  report

@@ -98,7 +98,9 @@ def test_astro_starlight_docs_page_lists_the_scaffold_artifacts() -> None:
         "content inventory",
         "redirect inventory",
         "route_coverage.json",
+        "cutover_verification.json",
         "generate_route_coverage.py",
+        "generate_cutover_verification.py",
         "docs/astro-site/package.json",
         "docs/source/_static/astro_starlight/migration_manifest.json",
     ):
