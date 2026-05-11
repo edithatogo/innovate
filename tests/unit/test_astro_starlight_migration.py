@@ -180,3 +180,20 @@ def test_astro_starlight_maintainers_area_describes_release_notes() -> None:
         "CHANGELOG.md",
     ):
         assert phrase in release_notes
+
+
+def test_astro_starlight_redirect_route_map_describes_cutover() -> None:
+    """The migration area should expose a route map for redirect coverage."""
+    migration = Path("docs/astro-site/src/content/docs/migration/index.md").read_text()
+    redirects = Path("docs/astro-site/src/content/docs/migration/redirects.md").read_text()
+
+    assert "redirect inventory" in migration
+    for phrase in (
+        "docs/source/index.rst",
+        "/core/kernel/",
+        "/maintainers/publication/",
+        "/maintainers/release-notes/",
+        "/operations/rust-core/",
+        "Canonical Sphinx URLs remain reachable",
+    ):
+        assert phrase in redirects

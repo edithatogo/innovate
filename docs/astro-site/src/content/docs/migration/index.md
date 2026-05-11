@@ -11,3 +11,4 @@ This section records the transition policy for the docs-site migration.
 - Keep the content inventory and redirect inventory synchronized.
 - Preserve canonical Sphinx URLs with redirects until the Astro site is fully
   validated.
+- See the redirect route map for representative source-to-target mappings.
