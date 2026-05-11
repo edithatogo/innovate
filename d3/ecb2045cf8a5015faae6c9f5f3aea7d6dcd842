@@ -1,0 +1,20 @@
+Astro/Starlight binding and release docs increment
+
+Summary:
+- Migrated the binding landing page content into the Astro scaffold.
+- Added the release-notes policy page for maintainers.
+- Updated maintainer navigation and the migration tests so the release policy remains visible in the Astro site.
+
+Files changed:
+- docs/astro-site/src/content/docs/bindings/index.md
+- docs/astro-site/src/content/docs/maintainers/index.md
+- docs/astro-site/src/content/docs/maintainers/release-notes.md
+- tests/unit/test_astro_starlight_migration.py
+
+Validation:
+- uv run pytest tests/unit/test_astro_starlight_migration.py tests/unit/test_conductor_workflow_docs.py -q
+- uv run sphinx-build -b dummy docs/source docs/_build/dummy
+- git diff --check
+
+Review:
+- No high-confidence blockers remained in the binding/release docs increment.
