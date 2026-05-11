@@ -304,5 +304,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: HPC Submission Workflow Arrangement and Registry Handoff**
-  *Link: [./tracks/hpc_submission_workflow_20260511/](./tracks/hpc_submission_workflow_20260511/)*
+- [x] **Track: HPC Submission Workflow Arrangement and Registry Handoff** *(Completed)*
+  *Link: [./archive/hpc_submission_workflow_20260511/](./archive/hpc_submission_workflow_20260511/)*

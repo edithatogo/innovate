@@ -67,12 +67,12 @@
 
 ## Phase 5: Final Review and Archive
 
-- [ ] Task: Run final conductor review
-    - [ ] Review the track diff against the spec, plan, workflow, and tests
-    - [ ] Apply any high-confidence fixes surfaced by review
-    - [ ] Re-run validation until stable
-- [ ] Task: Archive the completed HPC workflow track
-    - [ ] Move the track folder to the archive location
-    - [ ] Update the tracks registry entry to completed
-    - [ ] Preserve links to the packet and evidence bundle
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Final Review and Archive' (Protocol in workflow.md)
+- [x] Task: Run final conductor review
+    - [x] Review the track diff against the spec, plan, workflow, and tests
+    - [x] Apply any high-confidence fixes surfaced by review
+    - [x] Re-run validation until stable
+- [x] Task: Archive the completed HPC workflow track
+    - [x] Move the track folder to the archive location
+    - [x] Update the tracks registry entry to completed
+    - [x] Preserve links to the packet and evidence bundle
+- [x] Task: Conductor - Automated Review and Checkpoint 'Final Review and Archive' (Protocol in workflow.md)
