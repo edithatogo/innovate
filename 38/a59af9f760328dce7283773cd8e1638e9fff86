@@ -1,0 +1,26 @@
+Astro/Starlight initial content migration checkpoint
+
+Summary:
+- Migrated the first concrete Astro/Starlight content pages for the docs site.
+- Added core interchange and diagnostics pages plus an operations landing area and Rust-core summary.
+- Expanded the bindings and publication landing pages so the Astro site carries real content instead of placeholders.
+- Updated the Starlight sidebar and the migration test suite to cover the new pages.
+
+Files changed:
+- docs/astro-site/starlight.config.mjs
+- docs/astro-site/src/content/docs/core/arrow-interchange.md
+- docs/astro-site/src/content/docs/core/diagnostics-contract.md
+- docs/astro-site/src/content/docs/bindings/index.md
+- docs/astro-site/src/content/docs/maintainers/publication.md
+- docs/astro-site/src/content/docs/operations/index.md
+- docs/astro-site/src/content/docs/operations/rust-core.md
+- tests/unit/test_astro_starlight_migration.py
+- conductor/tracks/astro_starlight_docs_migration_20260511/plan.md
+
+Validation:
+- uv run pytest tests/unit/test_astro_starlight_migration.py tests/unit/test_conductor_workflow_docs.py -q
+- uv run sphinx-build -b dummy docs/source docs/_build/dummy
+- git diff --check
+
+Review:
+- No high-confidence blockers remained in the migrated Astro content slice.
