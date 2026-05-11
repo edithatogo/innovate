@@ -2,43 +2,43 @@
 
 ## Phase 1: Confirm the Migration Baseline
 
-- [~] Task: Inventory the current docs site and migration surfaces
-    - [ ] Identify the canonical Sphinx pages that must remain reachable
-    - [ ] Map the docs sections that will move to Astro/Starlight first
-    - [ ] Record the required redirect or forwarder behavior
-    - [ ] Classify each page as migrate, redirect, or archive-only
-- [ ] Task: Decide the migration mode and search provider
-    - [ ] Choose parallel-run or full cutover before content migration starts
-    - [ ] Choose Algolia DocSearch or record the explicit alternative provider
-    - [ ] Decide whether `@astrojs/sitemap` is part of the baseline or an equivalent official Astro integration is used
-- [ ] Task: Confirm the versioned Starlight baseline
-    - [ ] Pin `@astrojs/starlight` `0.38.4`
-    - [ ] Pin `starlight-versions` `0.5.4`
-    - [ ] Pin `starlight-links-validator` `0.18.0`
-    - [ ] Pin `@astrojs/starlight-docsearch` `0.6.1` if Algolia DocSearch is the chosen provider
-- [ ] Task: Write regression tests for the documented baseline
-    - [ ] Require the tech stack and migration docs to mention the same versions
-    - [ ] Require the plugin shortlist to distinguish required versus optional pieces
-    - [ ] Require the migration plan to mention redirects, route inventory, and link checking
-    - [ ] Require a redirect inventory to match the content inventory
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Confirm the Migration Baseline' (Protocol in workflow.md)
+- [x] Task: Inventory the current docs site and migration surfaces [checkpoint: 85730d1]
+    - [x] Identify the canonical Sphinx pages that must remain reachable
+    - [x] Map the docs sections that will move to Astro/Starlight first
+    - [x] Record the required redirect or forwarder behavior
+    - [x] Classify each page as migrate, redirect, or archive-only
+- [x] Task: Decide the migration mode and search provider [checkpoint: 85730d1]
+    - [x] Choose parallel-run or full cutover before content migration starts
+    - [x] Choose Algolia DocSearch or record the explicit alternative provider
+    - [x] Decide whether `@astrojs/sitemap` is part of the baseline or an equivalent official Astro integration is used
+- [x] Task: Confirm the versioned Starlight baseline [checkpoint: 85730d1]
+    - [x] Pin `@astrojs/starlight` `0.38.4`
+    - [x] Pin `starlight-versions` `0.5.4`
+    - [x] Pin `starlight-links-validator` `0.18.0`
+    - [x] Pin `@astrojs/starlight-docsearch` `0.6.1` if Algolia DocSearch is the chosen provider
+- [x] Task: Write regression tests for the documented baseline [checkpoint: 85730d1]
+    - [x] Require the tech stack and migration docs to mention the same versions
+    - [x] Require the plugin shortlist to distinguish required versus optional pieces
+    - [x] Require the migration plan to mention redirects, route inventory, and link checking
+    - [x] Require a redirect inventory to match the content inventory
+- [x] Task: Conductor - Automated Review and Checkpoint 'Confirm the Migration Baseline' (Protocol in workflow.md) [checkpoint: 85730d1]
 
 ## Phase 2: Scaffold the Astro/Starlight Site
 
-- [ ] Task: Create the initial Astro/Starlight project structure
-    - [ ] Add the Astro config and Starlight content structure
-    - [ ] Add versioned navigation support
-    - [ ] Add link validation and search integration hooks
-    - [ ] Add sitemap generation if selected
-- [ ] Task: Create the machine-readable migration manifest
-    - [ ] Record the transition mode, search decision, and sitemap decision
-    - [ ] Record the first-move pages, holdouts, and redirect targets
-    - [ ] Keep the manifest synchronized with the content and redirect inventories
-- [ ] Task: Add docs-site metadata and navigation
-    - [ ] Define the site title, sidebar, and canonical sections
-    - [ ] Preserve the current docs ownership map in the new layout
-    - [ ] Keep the migration scaffolding explicit in the docs site
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Scaffold the Astro/Starlight Site' (Protocol in workflow.md)
+- [x] Task: Create the initial Astro/Starlight project structure [checkpoint: 85730d1]
+    - [x] Add the Astro config and Starlight content structure
+    - [x] Add versioned navigation support
+    - [x] Add link validation and search integration hooks
+    - [x] Add sitemap generation if selected
+- [x] Task: Create the machine-readable migration manifest [checkpoint: 85730d1]
+    - [x] Record the transition mode, search decision, and sitemap decision
+    - [x] Record the first-move pages, holdouts, and redirect targets
+    - [x] Keep the manifest synchronized with the content and redirect inventories
+- [x] Task: Add docs-site metadata and navigation [checkpoint: 85730d1]
+    - [x] Define the site title, sidebar, and canonical sections
+    - [x] Preserve the current docs ownership map in the new layout
+    - [x] Keep the migration scaffolding explicit in the docs site
+- [x] Task: Conductor - Automated Review and Checkpoint 'Scaffold the Astro/Starlight Site' (Protocol in workflow.md) [checkpoint: 85730d1]
 
 ## Phase 3: Migrate Content and Redirects
 
