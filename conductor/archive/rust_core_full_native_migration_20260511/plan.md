@@ -71,14 +71,14 @@
     - [x] Test that the inventory and docs remain aligned
 - [x] Task: Conductor - Automated Review and Checkpoint 'Reconcile Docs, Inventory, and Claim Language' (Protocol in workflow.md)
 
-## Phase 5: Final Review and Archive
+## Phase 5: Final Review and Archive [checkpoint: pending]
 
-- [ ] Task: Run final conductor review
-    - [ ] Review the track diff against the spec, plan, workflow, and tests
-    - [ ] Apply any high-confidence fixes surfaced by review
-    - [ ] Re-run validation until stable
-- [ ] Task: Archive the completed Rust migration track
-    - [ ] Move the track folder to the archive location
-    - [ ] Update the tracks registry entry to completed
-    - [ ] Preserve links to the inventory and evidence bundle
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Final Review and Archive' (Protocol in workflow.md)
+- [x] Task: Run final conductor review
+    - [x] Review the track diff against the spec, plan, workflow, and tests
+    - [x] Apply any high-confidence fixes surfaced by review
+    - [x] Re-run validation until stable
+- [x] Task: Archive the completed Rust migration track
+    - [x] Move the track folder to the archive location
+    - [x] Update the tracks registry entry to completed
+    - [x] Preserve links to the inventory and evidence bundle
+- [x] Task: Conductor - Automated Review and Checkpoint 'Final Review and Archive' (Protocol in workflow.md)

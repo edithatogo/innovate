@@ -309,8 +309,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Rust Core Full Native Migration and Ownership Closure**
-  *Link: [./tracks/rust_core_full_native_migration_20260511/](./tracks/rust_core_full_native_migration_20260511/)*
+- [x] **Track: Rust Core Full Native Migration and Ownership Closure** *(Completed)*
+  *Link: [./archive/rust_core_full_native_migration_20260511/](./archive/rust_core_full_native_migration_20260511/)*
 
 ---
 
