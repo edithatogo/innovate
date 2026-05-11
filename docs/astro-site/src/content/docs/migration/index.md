@@ -12,3 +12,5 @@ This section records the transition policy for the docs-site migration.
 - Preserve canonical Sphinx URLs with redirects until the Astro site is fully
   validated.
 - See the redirect route map for representative source-to-target mappings.
+- See the archive page for completed Conductor evidence.
+- See the migration references page for the provenance index.

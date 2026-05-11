@@ -25,6 +25,8 @@ export default {
         { label: 'Publication', link: '/maintainers/publication/' },
         { label: 'Migration', link: '/migration/' },
         { label: 'Redirects', link: '/migration/redirects/' },
+        { label: 'Archive', link: '/migration/archive/' },
+        { label: 'References', link: '/migration/references/' },
       ],
     },
   ],

@@ -197,3 +197,24 @@ def test_astro_starlight_redirect_route_map_describes_cutover() -> None:
         "Canonical Sphinx URLs remain reachable",
     ):
         assert phrase in redirects
+
+
+def test_astro_starlight_archive_and_reference_pages_describe_provenance() -> None:
+    """The archive and references pages should guide readers to provenance."""
+    archive = Path("docs/astro-site/src/content/docs/migration/archive.md").read_text()
+    references = Path(
+        "docs/astro-site/src/content/docs/migration/references.md"
+    ).read_text()
+    migration = Path("docs/astro-site/src/content/docs/migration/index.md").read_text()
+
+    for phrase in (
+        "completed Conductor tracks",
+        "Rust core ownership closure tracks",
+        "Registry submission receipts",
+        "HPC readiness artifacts",
+        "Migration References",
+        "polyglot_repo_architecture",
+        "rust_core_roadmap",
+        "registry_submission_execution_20260511",
+    ):
+        assert phrase in archive or phrase in references or phrase in migration
