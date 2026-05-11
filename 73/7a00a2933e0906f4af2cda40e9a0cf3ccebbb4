@@ -1,0 +1,20 @@
+Astro/Starlight redirect inventory increment
+
+Summary:
+- Added a redirect route map page to the Astro migration section.
+- Wired the maintainer navigation to surface the redirect page.
+- Extended the migration tests to verify the route-map content and canonical URL policy.
+
+Files changed:
+- docs/astro-site/src/content/docs/migration/index.md
+- docs/astro-site/src/content/docs/migration/redirects.md
+- docs/astro-site/starlight.config.mjs
+- tests/unit/test_astro_starlight_migration.py
+
+Validation:
+- uv run pytest tests/unit/test_astro_starlight_migration.py tests/unit/test_conductor_workflow_docs.py -q
+- uv run sphinx-build -b dummy docs/source docs/_build/dummy
+- git diff --check
+
+Review:
+- No high-confidence blockers remained in the redirect inventory increment.
