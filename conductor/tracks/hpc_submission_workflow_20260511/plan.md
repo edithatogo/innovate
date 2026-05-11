@@ -51,7 +51,7 @@
     - [x] Preserve the resulting evidence in the repo
 - [x] Task: Conductor - Automated Review and Checkpoint 'Execute or Record External HPC Hand-offs' (Protocol in workflow.md)
 
-## Phase 4: Reconcile Docs, Packet, and Status Matrices
+## Phase 4: Reconcile Docs, Packet, and Status Matrices [checkpoint: 5f90044]
 
 - [x] Task: Update the human-facing HPC documentation
     - [x] Reflect actual submission or blocker status in the readiness docs
