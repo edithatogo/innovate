@@ -306,3 +306,13 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: HPC Submission Workflow Arrangement and Registry Handoff** *(Completed)*
   *Link: [./archive/hpc_submission_workflow_20260511/](./archive/hpc_submission_workflow_20260511/)*
+
+---
+
+- [ ] **Track: Rust Core Full Native Migration and Ownership Closure**
+  *Link: [./tracks/rust_core_full_native_migration_20260511/](./tracks/rust_core_full_native_migration_20260511/)*
+
+---
+
+- [ ] **Track: Astro/Starlight Documentation Site Migration**
+  *Link: [./tracks/astro_starlight_docs_migration_20260511/](./tracks/astro_starlight_docs_migration_20260511/)*

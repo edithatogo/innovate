@@ -1,0 +1,8 @@
+{
+  "track_id": "astro_starlight_docs_migration_20260511",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-05-11T07:09:20Z",
+  "updated_at": "2026-05-11T07:09:20Z",
+  "description": "Migrate the docs site to Astro/Starlight with versioned navigation, link validation, search, sitemap, and redirect coverage."
+}

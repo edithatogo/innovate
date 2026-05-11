@@ -3,7 +3,7 @@
 ## Language
 - **Python** (>=3.10) — *3.8/3.9 dropped (EOL)*
 - **R** — Thin user-facing binding over the stable functional kernel contract
-- **Rust** — Current binding target and strategic long-term core runtime for selected kernel execution slices; the core is not fully Rust-owned yet, and the remaining ownership gap is tracked in Conductor as `Rust Core Migration Completion and Polyglot Claim Closure`
+- **Rust** — Current binding target and strategic long-term core runtime for selected kernel execution slices; the core is not fully Rust-owned yet, and the remaining ownership gap is tracked in Conductor as the active track `Rust Core Full Native Migration and Ownership Closure`, with the earlier `Rust Core Migration Completion and Polyglot Claim Closure` track archived as closure evidence
 - **Julia** — Thin user-facing binding over the stable functional kernel contract
 - **TypeScript** — Thin user-facing binding over the stable functional kernel contract
 - **Go** — Thin user-facing binding over the stable functional kernel contract
@@ -113,7 +113,7 @@
 - **sphinx-autodoc-typehints** — Type hint integration in docs
 - **MyST-Parser** — Markdown support for Sphinx
 - **intersphinx** — Cross-referencing with NumPy, SciPy, Pandas, Mesa docs
-- **Astro Starlight** — Planned documentation-site roadmap item for a future web docs surface; the current target is `@astrojs/starlight` `0.38.4` with `starlight-versions` `0.5.4`, `starlight-links-validator` `0.18.0`, and optional `@astrojs/starlight-docsearch` `0.6.1` if Algolia DocSearch is chosen; this pinning will be revisited only when the roadmap track is updated
+- **Astro Starlight** — Planned documentation-site roadmap item for a future web docs surface; the active Conductor track is `Astro/Starlight Documentation Site Migration`. The current target is `@astrojs/starlight` `0.38.4` with `starlight-versions` `0.5.4`, `starlight-links-validator` `0.18.0`, and optional `@astrojs/starlight-docsearch` `0.6.1` if Algolia DocSearch is chosen; `@astrojs/sitemap` is also recommended for public indexing. This pinning will be revisited only when the migration track is updated
 
 ## Pre-commit & Git Hooks
 - **pre-commit** — Git hook management framework

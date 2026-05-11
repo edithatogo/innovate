@@ -315,6 +315,7 @@ def test_rust_core_roadmap_explicitly_rejects_full_rust_ownership() -> None:
         "Python reference owner",
         "exposes Rust-native execution only for the documented slices",
         "Explicitly non-native slices therefore remain",
+        "Rust Core Full Native Migration and Ownership Closure",
         "Rust Core Migration Completion and Polyglot Claim Closure",
         "The core is therefore not entirely written in Rust yet",
         "Promotion remains operation by operation",
@@ -330,7 +331,9 @@ def test_rust_core_roadmap_exposes_the_remaining_ownership_gap_track() -> None:
 
     assert "remaining ownership gap is tracked" in roadmap
     assert "residual bridge-backed slices and Python-only reference areas" in roadmap
+    assert "Rust Core Full Native Migration and Ownership Closure" in tech_stack
     assert "Rust Core Migration Completion and Polyglot Claim Closure" in tech_stack
+    assert "Rust Core Full Native Migration and Ownership Closure" in registry
     assert "Rust Core Migration Completion and Polyglot Claim Closure" in registry
 
 

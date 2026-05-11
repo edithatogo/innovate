@@ -40,10 +40,12 @@ current source layout so that documentation drift can be checked by tests:
   ``invoke``, ``bridge_script_absolute_path``, ``kernel_pythonpath``, and
   ``python_command_segments``. Explicitly non-native slices therefore remain
   bridge-backed rather than Rust-owned.
-* The remaining ownership gap is tracked as the Conductor follow-on track
-  ``Rust Core Migration Completion and Polyglot Claim Closure`` so the
+* The remaining ownership gap is tracked as the active Conductor follow-on
+  track ``Rust Core Full Native Migration and Ownership Closure`` so the
   residual bridge-backed slices and Python-only reference areas stay explicit
-  rather than becoming implicit roadmap drift.
+  rather than becoming implicit roadmap drift. The earlier archived
+  ``Rust Core Migration Completion and Polyglot Claim Closure`` track remains
+  as closure evidence for the prior phase of the migration.
 * A full Rust core must not be claimed until every canonical operation, every
   Python registry model family, and every stable payload shape has a
   Rust-native implementation or an explicitly promoted non-Python backend.
