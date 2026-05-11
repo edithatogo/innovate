@@ -1,0 +1,1 @@
+Final HPC workflow archive: the track was finalized as blocked-complete with reconciled docs, workflow manifest, and blocker bundle. Validation passed before archive: targeted pytest suites, Sphinx dummy build, git diff --check.
