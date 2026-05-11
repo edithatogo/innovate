@@ -1,6 +1,6 @@
 # Implementation Plan: Rust Core Full Native Migration and Ownership Closure
 
-## Phase 1: Map the Remaining Rust-Core Ownership Gaps
+## Phase 1: Map the Remaining Rust-Core Ownership Gaps [checkpoint: 15e6004]
 
 - [x] Task: Inventory every remaining canonical operation and model family
     - [x] Record the current owner for each inventory slice
