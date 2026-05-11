@@ -1,0 +1,30 @@
+Astro/Starlight migration baseline scaffold
+
+Summary:
+- Added the Astro/Starlight docs scaffold under docs/astro-site/.
+- Added machine-readable migration manifest, content inventory, and redirect inventory.
+- Added the Sphinx-facing migration page and navigation entry.
+- Added tests covering the pinned Starlight baseline, migration decisions, inventory synchronization, and docs surfacing.
+
+Files changed:
+- docs/astro-site/package.json
+- docs/astro-site/astro.config.mjs
+- docs/astro-site/starlight.config.mjs
+- docs/astro-site/tsconfig.json
+- docs/astro-site/README.md
+- docs/astro-site/src/content/config.ts
+- docs/astro-site/src/styles/custom.css
+- docs/astro-site/src/content/docs/*
+- docs/source/_static/astro_starlight/*
+- docs/source/astro_starlight_migration.rst
+- docs/source/index.rst
+- tests/unit/test_astro_starlight_migration.py
+- tests/unit/test_conductor_workflow_docs.py
+
+Validation:
+- uv run pytest tests/unit/test_astro_starlight_migration.py tests/unit/test_conductor_workflow_docs.py -q
+- uv run sphinx-build -b dummy docs/source docs/_build/dummy
+- git diff --check
+
+Review:
+- No high-confidence blockers remained after the scaffold and docs review pass.
