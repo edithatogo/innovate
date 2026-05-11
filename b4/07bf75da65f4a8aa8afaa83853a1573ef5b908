@@ -1,0 +1,22 @@
+Astro/Starlight archive and migration-reference increment
+
+Summary:
+- Added an archive page to direct readers to completed Conductor evidence and historical migration artifacts.
+- Added a migration references page listing the primary Sphinx docs and archive locations.
+- Updated the migration landing page and sidebar navigation so the archive/provenance path is visible.
+- Extended the migration tests to cover the archive and reference pages.
+
+Files changed:
+- docs/astro-site/src/content/docs/migration/index.md
+- docs/astro-site/src/content/docs/migration/archive.md
+- docs/astro-site/src/content/docs/migration/references.md
+- docs/astro-site/starlight.config.mjs
+- tests/unit/test_astro_starlight_migration.py
+
+Validation:
+- uv run pytest tests/unit/test_astro_starlight_migration.py tests/unit/test_conductor_workflow_docs.py -q
+- uv run sphinx-build -b dummy docs/source docs/_build/dummy
+- git diff --check
+
+Review:
+- No high-confidence blockers remained in the archive/reference increment.
