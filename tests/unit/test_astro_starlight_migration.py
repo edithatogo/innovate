@@ -146,6 +146,9 @@ def test_astro_starlight_bindings_and_publication_pages_have_content() -> None:
     publication = Path(
         "docs/astro-site/src/content/docs/maintainers/publication.md"
     ).read_text()
+    release_notes = Path(
+        "docs/astro-site/src/content/docs/maintainers/release-notes.md"
+    ).read_text()
 
     for phrase in (
         "Python as the canonical reference surface",
@@ -159,4 +162,21 @@ def test_astro_starlight_bindings_and_publication_pages_have_content() -> None:
         "Go modules",
         "NuGet",
     ):
-        assert phrase in bindings or phrase in publication
+        assert phrase in bindings or phrase in publication or phrase in release_notes
+
+
+def test_astro_starlight_maintainers_area_describes_release_notes() -> None:
+    """The maintainers area should surface the release-notes policy page."""
+    maintainers = Path("docs/astro-site/src/content/docs/maintainers/index.md").read_text()
+    release_notes = Path(
+        "docs/astro-site/src/content/docs/maintainers/release-notes.md"
+    ).read_text()
+
+    assert "Release Notes" in maintainers
+    for phrase in (
+        "Release Please",
+        "Release Drafter",
+        "Commitizen",
+        "CHANGELOG.md",
+    ):
+        assert phrase in release_notes

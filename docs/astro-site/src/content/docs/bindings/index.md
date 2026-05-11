@@ -17,3 +17,8 @@ Current binding families:
 
 The publication guidance stays aligned with the release gates documented in the
 repository docs until the Astro site fully replaces the Sphinx entry points.
+
+See also:
+
+- Publication
+- Release Notes

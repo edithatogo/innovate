@@ -7,3 +7,8 @@ description: Publication, release, and migration documentation.
 
 This section collects the docs used by maintainers during publication and
 migration work.
+
+Available pages:
+
+- Publication
+- Release Notes
