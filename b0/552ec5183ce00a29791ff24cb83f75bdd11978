@@ -1,0 +1,1 @@
+Phase 2 checkpoint: arranged per-target HPC execution paths; added scheduler/governance templates, packet manifest, workflow manifest, and regression tests. Validation passed: targeted pytest suite, Sphinx dummy build, git diff --check.
