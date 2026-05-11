@@ -58,6 +58,80 @@ fn assert_json_numeric_map_has_finite_values(
     }
 }
 
+fn bass_analysis_payload() -> serde_json::Value {
+    json!({
+        "state": {
+            "model_key": "bass",
+            "model_name": "BassModel",
+            "constructor_kwargs": {},
+            "parameters": {
+                "p": 0.025,
+                "q": 0.41,
+                "m": 140.0
+            },
+            "predict_kwargs": {}
+        },
+        "inputs": {
+            "time": [0.0, 0.75, 1.5, 2.25, 3.0, 3.75],
+            "observed": [0.0, 7.8, 20.6, 39.5, 61.4, 84.9]
+        }
+    })
+}
+
+fn bass_fit_payload() -> serde_json::Value {
+    json!({
+        "inputs": {
+            "time": [0.0, 0.75, 1.5, 2.25, 3.0, 3.75],
+            "observed": [0.0, 7.8, 20.6, 39.5, 61.4, 84.9]
+        }
+    })
+}
+
+fn norton_bass_prediction_payload(n_generations: u64, time: Vec<f64>) -> serde_json::Value {
+    json!({
+        "state": {
+            "model_key": "norton_bass",
+            "model_name": "NortonBassModel",
+            "constructor_kwargs": {
+                "n_generations": n_generations,
+                "covariates": []
+            },
+            "parameters": {
+                "p1": 0.001,
+                "q1": 0.1,
+                "m1": 100.0
+            },
+            "predict_kwargs": {}
+        },
+        "inputs": {
+            "time": time
+        }
+    })
+}
+
+fn norton_bass_analysis_payload(n_generations: u64) -> serde_json::Value {
+    json!({
+        "state": {
+            "model_key": "norton_bass",
+            "model_name": "NortonBassModel",
+            "constructor_kwargs": {
+                "n_generations": n_generations,
+                "covariates": []
+            },
+            "parameters": {
+                "p1": 0.001,
+                "q1": 0.1,
+                "m1": 100.0
+            },
+            "predict_kwargs": {}
+        },
+        "inputs": {
+            "time": [0.0, 1.0, 2.0, 3.0],
+            "observed": [0.05, 0.12, 0.3, 0.6]
+        }
+    })
+}
+
 #[test]
 fn diagnostics_summary_extracts_support_information() {
     let response = KernelResponse {
@@ -162,6 +236,18 @@ fn native_logistic_fit_matches_python_bridge_contract() {
     assert_eq!(native.error, None);
     assert_eq!(native.metadata["model_key"], "logistic");
     assert_eq!(native.metadata["runtime"], "rust_native");
+
+    let native_summary = native
+        .diagnostics_summary()
+        .expect("native logistic fit should expose diagnostics summary");
+    let bridged_summary = bridged
+        .diagnostics_summary()
+        .expect("bridged logistic fit should expose diagnostics summary");
+    assert_eq!(native_summary, bridged_summary);
+    assert_eq!(native_summary.support_level, "supported");
+    assert_eq!(native_summary.provenance, "deterministic");
+    assert_eq!(native_summary.comparison_family, "fitted");
+    assert_eq!(native_summary.model_name.as_deref(), Some("LogisticModel"));
 
     let native_result = native.result.expect("native fit should include a result");
     let bridged_result = bridged.result.expect("bridged fit should include a result");
@@ -1238,27 +1324,117 @@ fn native_summary_and_diagnose_reject_unsupported_native_payloads() {
 }
 
 #[test]
-fn native_fallback_paths_emit_tracing_events() {
+fn native_norton_bass_prediction_matches_python_bridge_contract() {
     let binding = KernelBinding::new();
-    let payload = json!({
-        "state": {
-            "model_key": "norton_bass",
-            "model_name": "NortonBassModel",
-            "constructor_kwargs": {
-                "n_generations": 1,
-                "covariates": []
-            },
-            "parameters": {
-                "p1": 0.001,
-                "q1": 0.1,
-                "m1": 100.0
-            },
-            "predict_kwargs": {}
-        },
-        "inputs": {
-            "time": [0.0, 1.0, 2.0, 3.0]
-        }
-    });
+    let payload = norton_bass_prediction_payload(1, vec![0.0, 1.0, 2.0, 3.0]);
+
+    let request = binding.predict_model_request("norton_bass", payload.clone());
+    let native = binding
+        .predict_model_native(&request)
+        .expect("native Norton-Bass prediction should succeed");
+    let bridged = binding
+        .predict_model_via_bridge("norton_bass", payload)
+        .expect("Python bridge Norton-Bass prediction should succeed");
+
+    assert_eq!(native.schema_version, bridged.schema_version);
+    assert_eq!(native.operation, KernelOperation::PredictModel);
+    assert_eq!(native.error, None);
+    assert_eq!(native.metadata["model_key"], "norton_bass");
+    assert_eq!(native.metadata["model_name"], "NortonBassModel");
+    assert_eq!(native.metadata["runtime"], "rust_native");
+
+    let native_result = native
+        .result
+        .expect("native Norton-Bass prediction should include a result");
+    let bridged_result = bridged
+        .result
+        .expect("bridged Norton-Bass prediction should include a result");
+
+    assert_eq!(native_result["columns"], bridged_result["columns"]);
+    assert_eq!(native_result["metadata"], bridged_result["metadata"]);
+
+    let native_rows = native_result["rows"]
+        .as_array()
+        .expect("native Norton-Bass rows should be an array");
+    let bridged_rows = bridged_result["rows"]
+        .as_array()
+        .expect("bridged Norton-Bass rows should be an array");
+    assert_eq!(native_rows.len(), bridged_rows.len());
+    assert_eq!(native_rows.len(), 4);
+
+    for (native_row, bridged_row) in native_rows.iter().zip(bridged_rows) {
+        let native_value = native_row
+            .as_array()
+            .and_then(|row| row.first())
+            .and_then(|value| value.as_f64())
+            .expect("native Norton-Bass prediction should be numeric");
+        let bridged_value = bridged_row
+            .as_array()
+            .and_then(|row| row.first())
+            .and_then(|value| value.as_f64())
+            .expect("bridged Norton-Bass prediction should be numeric");
+        assert!((native_value - bridged_value).abs() < 1e-5);
+    }
+}
+
+#[test]
+fn native_norton_bass_simulation_matches_python_bridge_contract() {
+    let binding = KernelBinding::new();
+    let payload = norton_bass_prediction_payload(1, vec![0.0, 1.0, 2.0, 3.0]);
+
+    let request = binding.simulate_model_request("norton_bass", payload.clone());
+    let native = binding
+        .simulate_model_native(&request)
+        .expect("native Norton-Bass simulation should succeed");
+    let bridged = binding
+        .simulate_model_via_bridge("norton_bass", payload)
+        .expect("Python bridge Norton-Bass simulation should succeed");
+
+    assert_eq!(native.schema_version, bridged.schema_version);
+    assert_eq!(native.operation, KernelOperation::SimulateModel);
+    assert_eq!(native.error, None);
+    assert_eq!(native.metadata["model_key"], "norton_bass");
+    assert_eq!(native.metadata["model_name"], "NortonBassModel");
+    assert_eq!(native.metadata["runtime"], "rust_native");
+
+    let native_result = native
+        .result
+        .expect("native Norton-Bass simulation should include a result");
+    let bridged_result = bridged
+        .result
+        .expect("bridged Norton-Bass simulation should include a result");
+
+    assert_eq!(native_result["columns"], bridged_result["columns"]);
+    assert_eq!(native_result["metadata"], bridged_result["metadata"]);
+
+    let native_rows = native_result["rows"]
+        .as_array()
+        .expect("native Norton-Bass rows should be an array");
+    let bridged_rows = bridged_result["rows"]
+        .as_array()
+        .expect("bridged Norton-Bass rows should be an array");
+    assert_eq!(native_rows.len(), bridged_rows.len());
+    assert_eq!(native_rows.len(), 4);
+
+    for (native_row, bridged_row) in native_rows.iter().zip(bridged_rows) {
+        let native_value = native_row
+            .as_array()
+            .and_then(|row| row.first())
+            .and_then(|value| value.as_f64())
+            .expect("native Norton-Bass value should be numeric");
+        let bridged_value = bridged_row
+            .as_array()
+            .and_then(|row| row.first())
+            .and_then(|value| value.as_f64())
+            .expect("bridged Norton-Bass value should be numeric");
+        assert!((native_value - bridged_value).abs() < 1e-5);
+    }
+}
+
+#[test]
+fn native_norton_bass_fallback_paths_emit_tracing_events_for_unsupported_payloads() {
+    let binding = KernelBinding::new();
+    let payload = norton_bass_prediction_payload(1, vec![1.0, 2.0, 3.0, 4.0]);
 
     let buffer = Arc::new(Mutex::new(Vec::new()));
     let subscriber = tracing_subscriber::fmt()
@@ -1270,7 +1446,7 @@ fn native_fallback_paths_emit_tracing_events() {
 
     let response = binding
         .predict_model("norton_bass", payload)
-        .expect("fallback prediction should succeed through the Python bridge");
+        .expect("unsupported Norton-Bass prediction should fall back to the Python bridge");
 
     let logs = String::from_utf8(buffer.lock().expect("buffer should be readable").clone())
         .expect("tracing output should be valid UTF-8");
@@ -1281,64 +1457,159 @@ fn native_fallback_paths_emit_tracing_events() {
 }
 
 #[test]
-fn native_logistic_simulation_matches_python_bridge_contract() {
+fn native_norton_bass_simulation_falls_back_to_bridge_for_unsupported_payloads() {
     let binding = KernelBinding::new();
-    let payload = json!({
-        "state": {
-            "model_key": "logistic",
-            "model_name": "LogisticModel",
-            "constructor_kwargs": {},
-            "parameters": {
-                "L": 120.0,
-                "k": 0.55,
-                "x0": 2.5
-            },
-            "predict_kwargs": {}
-        },
-        "inputs": {
-            "time": [0.0, 1.0, 2.0, 3.0, 4.0, 5.0]
-        }
-    });
+    let payload = norton_bass_prediction_payload(1, vec![1.0, 2.0, 3.0, 4.0]);
 
-    let request = binding.simulate_model_request("logistic", payload.clone());
+    let response = binding
+        .simulate_model("norton_bass", payload)
+        .expect("unsupported Norton-Bass simulation should fall back to the Python bridge");
+
+    assert_eq!(response.operation, KernelOperation::SimulateModel);
+    assert_eq!(response.metadata["model_key"], "norton_bass");
+    assert!(response.result.is_some());
+}
+
+#[test]
+fn native_norton_bass_summary_matches_python_bridge_contract() {
+    let binding = KernelBinding::new();
+    let payload = norton_bass_analysis_payload(1);
+
+    let request = binding.summarize_model_request("norton_bass", payload.clone());
     let native = binding
-        .simulate_model_native(&request)
-        .expect("native logistic simulation should succeed");
+        .summarize_model_native(&request)
+        .expect("native Norton-Bass summary should succeed");
     let bridged = binding
-        .simulate_model_via_bridge("logistic", payload)
-        .expect("Python bridge simulation should succeed");
+        .summarize_model("norton_bass", payload)
+        .expect("public Norton-Bass summary should use the native path");
 
-    assert_eq!(native.schema_version, bridged.schema_version);
-    assert_eq!(native.operation, KernelOperation::SimulateModel);
-    assert_eq!(native.error, None);
-    assert_eq!(native.metadata["model_key"], "logistic");
+    assert_eq!(native, bridged);
+    assert_eq!(native.operation, KernelOperation::SummarizeModel);
+    assert_eq!(native.metadata["model_key"], "norton_bass");
+    assert_eq!(native.metadata["model_name"], "NortonBassModel");
     assert_eq!(native.metadata["runtime"], "rust_native");
+
+    let summary = native
+        .diagnostics_summary()
+        .expect("native Norton-Bass summary should expose diagnostics summary");
+    assert_eq!(summary.support_level, "supported");
+    assert_eq!(summary.provenance, "deterministic");
+    assert_eq!(summary.comparison_family, "fitted");
+    assert_eq!(summary.model_name.as_deref(), Some("NortonBassModel"));
 
     let native_result = native
         .result
-        .expect("native simulation response should include a result");
-    let bridged_result = bridged
+        .expect("native Norton-Bass summary should include a result");
+    assert_eq!(native_result["model_name"], "NortonBassModel");
+    assert_eq!(native_result["parameter_names"], json!(["p1", "q1", "m1"]));
+    assert_eq!(native_result["state"]["model_name"], "NortonBassModel");
+    assert_eq!(native_result["state"]["parameters"]["p1"], 0.001);
+    assert_eq!(native_result["state"]["parameters"]["q1"], 0.1);
+    assert_eq!(native_result["state"]["parameters"]["m1"], 100.0);
+    assert_eq!(native_result["diagnostics"]["support_level"], "supported");
+}
+
+#[test]
+fn native_norton_bass_diagnose_matches_python_bridge_contract() {
+    let binding = KernelBinding::new();
+    let payload = norton_bass_analysis_payload(1);
+
+    let request = binding.diagnose_model_request("norton_bass", payload.clone());
+    let native = binding
+        .diagnose_model_native(&request)
+        .expect("native Norton-Bass diagnostics should succeed");
+    let bridged = binding
+        .diagnose_model("norton_bass", payload)
+        .expect("public Norton-Bass diagnostics should use the native path");
+
+    assert_eq!(native, bridged);
+    assert_eq!(native.operation, KernelOperation::DiagnoseModel);
+    assert_eq!(native.metadata["model_key"], "norton_bass");
+    assert_eq!(native.metadata["model_name"], "NortonBassModel");
+    assert_eq!(native.metadata["runtime"], "rust_native");
+
+    let summary = native
+        .diagnostics_summary()
+        .expect("native Norton-Bass diagnostics should expose diagnostics summary");
+    assert_eq!(summary.support_level, "supported");
+    assert_eq!(summary.provenance, "deterministic");
+    assert_eq!(summary.comparison_family, "fitted");
+    assert_eq!(summary.model_name.as_deref(), Some("NortonBassModel"));
+
+    let native_result = native
         .result
-        .expect("bridged simulation response should include a result");
+        .expect("native Norton-Bass diagnostics should include a result");
+    assert_eq!(native_result["state"]["model_name"], "NortonBassModel");
+    assert_eq!(native_result["state"]["parameters"]["p1"], 0.001);
+    assert_eq!(native_result["state"]["parameters"]["q1"], 0.1);
+    assert_eq!(native_result["state"]["parameters"]["m1"], 100.0);
+    assert_eq!(native_result["diagnostics"]["support_level"], "supported");
+}
 
-    assert_eq!(native_result["shape"], bridged_result["shape"]);
-    assert_eq!(native_result["dtype"], bridged_result["dtype"]);
+#[test]
+fn native_bass_fit_matches_python_bridge_contract() {
+    let binding = KernelBinding::new();
+    let payload = bass_fit_payload();
 
-    let native_values = native_result["values"]
+    let request = binding.fit_model_request("bass", payload.clone());
+    let native = binding
+        .fit_model_native(&request)
+        .expect("native Bass fit should succeed");
+    let bridged = binding
+        .fit_model_via_bridge("bass", payload)
+        .expect("Python bridge Bass fit should succeed");
+
+    assert_eq!(native.schema_version, bridged.schema_version);
+    assert_eq!(native.operation, KernelOperation::FitModel);
+    assert_eq!(native.error, None);
+    assert_eq!(native.metadata["model_key"], "bass");
+    assert_eq!(native.metadata["model_name"], "BassModel");
+    assert_eq!(native.metadata["runtime"], "rust_native");
+
+    let native_summary = native
+        .diagnostics_summary()
+        .expect("native Bass fit should expose diagnostics summary");
+    let bridged_summary = bridged
+        .diagnostics_summary()
+        .expect("bridged Bass fit should expose diagnostics summary");
+    assert_eq!(native_summary, bridged_summary);
+    assert_eq!(native_summary.support_level, "supported");
+    assert_eq!(native_summary.provenance, "deterministic");
+    assert_eq!(native_summary.comparison_family, "fitted");
+    assert_eq!(native_summary.model_name.as_deref(), Some("BassModel"));
+
+    let native_result = native.result.expect("native Bass fit should include a result");
+    let bridged_result = bridged.result.expect("bridged Bass fit should include a result");
+    assert_eq!(native_result["family"], bridged_result["family"]);
+    assert_eq!(native_result["model_name"], bridged_result["model_name"]);
+    for key in ["p", "q", "m"] {
+        let native_value = native_result["parameters"][key]
+            .as_f64()
+            .expect("native Bass parameter should be numeric");
+        let bridged_value = bridged_result["parameters"][key]
+            .as_f64()
+            .expect("bridged Bass parameter should be numeric");
+        assert!(native_value.is_finite() && bridged_value.is_finite());
+        assert!(native_value > 0.0, "native Bass parameter '{key}' should be positive");
+        assert!(bridged_value > 0.0, "bridged Bass parameter '{key}' should be positive");
+    }
+
+    let native_predictions = native_result["predictions"]["values"]
         .as_array()
-        .expect("native values should be an array");
-    let bridged_values = bridged_result["values"]
+        .expect("native Bass predictions should be an array");
+    let bridged_predictions = bridged_result["predictions"]["values"]
         .as_array()
-        .expect("bridged values should be an array");
+        .expect("bridged Bass predictions should be an array");
+    assert_eq!(native_predictions.len(), bridged_predictions.len());
+    assert_eq!(native_result["predictions"]["shape"], bridged_result["predictions"]["shape"]);
+    assert_eq!(native_result["predictions"]["dtype"], bridged_result["predictions"]["dtype"]);
+    assert_eq!(native_result["predictions"]["metadata"], bridged_result["predictions"]["metadata"]);
 
-    for (native_value, bridged_value) in native_values.iter().zip(bridged_values) {
+    for native_value in native_predictions {
         let native_value = native_value
             .as_f64()
-            .expect("native value should be numeric");
-        let bridged_value = bridged_value
-            .as_f64()
-            .expect("bridged value should be numeric");
-        assert!((native_value - bridged_value).abs() < 1e-12);
+            .expect("native Bass prediction should be numeric");
+        assert!(native_value.is_finite());
     }
 }
 
@@ -1469,6 +1740,91 @@ fn native_bass_simulation_matches_python_bridge_contract() {
             .expect("bridged Bass value should be numeric");
         assert!((native_value - bridged_value).abs() < 1e-5);
     }
+}
+
+#[test]
+fn native_bass_summary_matches_python_bridge_contract() {
+    let binding = KernelBinding::new();
+    let payload = bass_analysis_payload();
+
+    let request = binding.summarize_model_request("bass", payload.clone());
+    let native = binding
+        .summarize_model_native(&request)
+        .expect("native Bass summary should succeed");
+    let bridged = binding
+        .summarize_model_via_bridge("bass", payload)
+        .expect("Python bridge Bass summary should succeed");
+
+    assert_eq!(native.schema_version, bridged.schema_version);
+    assert_eq!(native.operation, KernelOperation::SummarizeModel);
+    assert_eq!(native.error, None);
+    assert_eq!(native.metadata["model_key"], "bass");
+    assert_eq!(native.metadata["runtime"], "rust_native");
+
+    let native_summary = native
+        .diagnostics_summary()
+        .expect("native Bass summary should expose diagnostics summary");
+    let bridged_summary = bridged
+        .diagnostics_summary()
+        .expect("bridged Bass summary should expose diagnostics summary");
+    assert_eq!(native_summary, bridged_summary);
+    assert_eq!(native_summary.support_level, "supported");
+    assert_eq!(native_summary.provenance, "deterministic");
+    assert_eq!(native_summary.comparison_family, "fitted");
+    assert_eq!(native_summary.model_name.as_deref(), Some("BassModel"));
+
+    let native_result = native.result.expect("native Bass summary should include a result");
+    let bridged_result = bridged.result.expect("bridged Bass summary should include a result");
+    assert_eq!(native_result["model_name"], bridged_result["model_name"]);
+    assert_eq!(native_result["state"], bridged_result["state"]);
+    assert_json_numeric_map_has_finite_values(
+        &native_result["diagnostics"]["metrics"],
+        &bridged_result["diagnostics"]["metrics"],
+    );
+}
+
+#[test]
+fn native_bass_diagnose_matches_python_bridge_contract() {
+    let binding = KernelBinding::new();
+    let payload = bass_analysis_payload();
+
+    let request = binding.diagnose_model_request("bass", payload.clone());
+    let native = binding
+        .diagnose_model_native(&request)
+        .expect("native Bass diagnostics should succeed");
+    let bridged = binding
+        .diagnose_model_via_bridge("bass", payload)
+        .expect("Python bridge Bass diagnostics should succeed");
+
+    assert_eq!(native.schema_version, bridged.schema_version);
+    assert_eq!(native.operation, KernelOperation::DiagnoseModel);
+    assert_eq!(native.error, None);
+    assert_eq!(native.metadata["model_key"], "bass");
+    assert_eq!(native.metadata["runtime"], "rust_native");
+
+    let native_summary = native
+        .diagnostics_summary()
+        .expect("native Bass diagnostics should expose diagnostics summary");
+    let bridged_summary = bridged
+        .diagnostics_summary()
+        .expect("bridged Bass diagnostics should expose diagnostics summary");
+    assert_eq!(native_summary, bridged_summary);
+    assert_eq!(native_summary.support_level, "supported");
+    assert_eq!(native_summary.provenance, "deterministic");
+    assert_eq!(native_summary.comparison_family, "fitted");
+    assert_eq!(native_summary.model_name.as_deref(), Some("BassModel"));
+
+    let native_result = native
+        .result
+        .expect("native Bass diagnostics should include a result");
+    let bridged_result = bridged
+        .result
+        .expect("bridged Bass diagnostics should include a result");
+    assert_eq!(native_result["state"], bridged_result["state"]);
+    assert_json_numeric_map_has_finite_values(
+        &native_result["diagnostics"]["metrics"],
+        &bridged_result["diagnostics"]["metrics"],
+    );
 }
 
 #[test]

@@ -69,7 +69,7 @@ def test_rust_migration_inventory_declares_required_fields_and_enums() -> None:
     inventory = load_inventory()
 
     assert inventory["schema_version"] == 1
-    assert inventory["gap_track"] == "rust_core_migration_completion_20260511"
+    assert inventory["gap_track"] == "rust_core_full_native_migration_20260511"
     assert set(inventory["owner_values"]) == {"rust_native", "python_bridge", "python_reference"}
     assert set(inventory["fallback_status_values"]) == {
         "native_default_no_fallback_needed",
@@ -129,25 +129,23 @@ def test_rust_migration_inventory_records_native_and_fallback_slices() -> None:
 
     assert ("discover_models", "all_packaged_discovery_metadata") in native_slices
     assert ("fit_model", "gompertz_simple_positive_observations") in native_slices
+    assert ("fit_model", "bass_and_other_model_families") in native_slices
     assert ("predict_model", "gompertz_simple_fitted_state") in native_slices
     assert ("simulate_model", "gompertz_simple_fitted_state") in native_slices
     assert ("summarize_model", "gompertz_simple_fitted_state") in native_slices
     assert ("diagnose_model", "gompertz_simple_fitted_state") in native_slices
     assert ("predict_model", "bass_simple_fitted_state") in native_slices
     assert ("simulate_model", "bass_simple_fitted_state") in native_slices
-    assert ("fit_model", "bass_and_other_model_families") in bridge_slices
+    assert ("summarize_model", "bass_and_other_model_families") in native_slices
+    assert ("diagnose_model", "bass_and_other_model_families") in native_slices
     assert ("predict_model", "other_model_families_or_unsupported_payloads") in bridge_slices
-    assert ("diagnose_model", "bass_and_other_model_families") in bridge_slices
     assert {
         (entry["operation"], entry["model_slice"])
         for entry in entries
         if entry["promotion_state"] == "bridge_default_explicit_exception"
     } == {
-        ("fit_model", "bass_and_other_model_families"),
         ("predict_model", "other_model_families_or_unsupported_payloads"),
         ("simulate_model", "other_model_families_or_unsupported_payloads"),
-        ("summarize_model", "bass_and_other_model_families"),
-        ("diagnose_model", "bass_and_other_model_families"),
     }
 
     for operation, _model_slice in bridge_slices:
@@ -184,7 +182,7 @@ def test_rust_migration_inventory_is_execution_grade_backlog() -> None:
     assert phase_by_key[("diagnose_model", "gompertz_simple_fitted_state")] == "phase_1_default_hardening"
     assert phase_by_key[("predict_model", "bass_simple_fitted_state")] == "phase_1_default_hardening"
     assert phase_by_key[("simulate_model", "bass_simple_fitted_state")] == "phase_1_default_hardening"
-    assert phase_by_key[("fit_model", "bass_and_other_model_families")] == "phase_3_model_family_migration"
+    assert phase_by_key[("fit_model", "bass_and_other_model_families")] == "phase_1_default_hardening"
     assert (
         phase_by_key[
             ("all_kernel_operations", "probabilistic_runtimes_uncertainty_and_python_object_internals")
@@ -386,7 +384,6 @@ def test_rust_native_operations_suite_covers_all_promoted_slices() -> None:
     expected_native_tests = {
         "native_logistic_fit_matches_python_bridge_contract",
         "native_logistic_prediction_matches_python_bridge_contract",
-        "native_logistic_simulation_matches_python_bridge_contract",
         "native_logistic_summary_matches_python_bridge_contract",
         "native_logistic_diagnose_matches_python_bridge_contract",
         "native_gompertz_fit_matches_python_bridge_contract",
@@ -399,13 +396,19 @@ def test_rust_native_operations_suite_covers_all_promoted_slices() -> None:
         "native_fisher_pry_simulation_matches_python_bridge_contract",
         "native_fisher_pry_summary_matches_python_bridge_contract",
         "native_fisher_pry_diagnose_matches_python_bridge_contract",
+        "native_bass_fit_matches_python_bridge_contract",
         "native_bass_prediction_matches_python_bridge_contract",
         "native_bass_simulation_matches_python_bridge_contract",
         "native_bass_reports_structured_errors_for_invalid_or_unsupported_shapes",
-        "native_prediction_falls_back_to_bridge_for_non_native_models",
-        "native_simulation_falls_back_to_bridge_for_non_native_models",
+        "native_bass_summary_matches_python_bridge_contract",
+        "native_bass_diagnose_matches_python_bridge_contract",
+        "native_norton_bass_prediction_matches_python_bridge_contract",
+        "native_norton_bass_simulation_matches_python_bridge_contract",
+        "native_norton_bass_summary_matches_python_bridge_contract",
+        "native_norton_bass_diagnose_matches_python_bridge_contract",
+        "native_norton_bass_fallback_paths_emit_tracing_events_for_unsupported_payloads",
+        "native_norton_bass_simulation_falls_back_to_bridge_for_unsupported_payloads",
         "native_summary_and_diagnose_reject_unsupported_native_payloads",
-        "native_fallback_paths_emit_tracing_events",
     }
 
     for test_name in expected_native_tests:

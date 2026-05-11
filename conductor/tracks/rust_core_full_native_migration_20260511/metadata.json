@@ -4,5 +4,5 @@
   "status": "new",
   "created_at": "2026-05-11T07:09:20Z",
   "updated_at": "2026-05-11T07:09:20Z",
-  "description": "Complete the remaining Rust-core migration so every canonical operation, model family, and stable payload shape is native or explicitly promoted elsewhere."
+  "description": "Complete the remaining Rust-core migration so every canonical operation, model family, and stable payload shape is native or explicitly promoted elsewhere, with a machine-readable slice ledger and claim-language reconciliation."
 }

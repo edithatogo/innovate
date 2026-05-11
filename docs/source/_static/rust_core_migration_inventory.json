@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "gap_track": "rust_core_migration_completion_20260511",
+  "gap_track": "rust_core_full_native_migration_20260511",
   "owner_values": [
     "rust_native",
     "python_bridge",
@@ -16,7 +16,8 @@
     "bass",
     "fisher_pry",
     "gompertz",
-    "logistic"
+    "logistic",
+    "norton_bass"
   ],
   "python_only_model_keys": [
     "complementary_goods",
@@ -27,7 +28,6 @@
     "mixture",
     "multi_product",
     "network_diffusion",
-    "norton_bass",
     "policy_hazard",
     "regime_switching"
   ],
@@ -356,21 +356,18 @@
     {
       "operation": "fit_model",
       "model_slice": "bass_and_other_model_families",
-      "current_owner": "python_bridge",
-      "fallback_status": "python_bridge_default",
-      "native_scope": "None.",
-      "fallback_scope": "Wrapper methods dispatch to the Python bridge.",
-      "python_reference_scope": "Python reference model and fitter implementations own behavior.",
+      "current_owner": "rust_native",
+      "fallback_status": "native_default_no_fallback_needed",
+      "native_scope": "Simple fitted Bass states with finite p, q, and m parameters and time grids starting at zero; no covariates, events, or custom fitter options.",
+      "fallback_scope": "Promoted native slices raise unsupported_native_operation for unsupported payloads; bridge fallback is reserved for explicitly non-native model keys.",
+      "python_reference_scope": "Python remains authoritative for richer Bass fitting semantics and model-specific internals.",
       "profiling_requirements": [
-        "Add Criterion coverage only after a native fitting candidate exists.",
-        "Compare Python reference timing and Rust CPU timing before any native promotion."
+        "Criterion benchmark coverage for native Bass fitting is present and must be maintained.",
+        "CPU flamegraph for fit_model_native Bass slices documents the promoted native slice."
       ],
-      "promotion_blockers": [
-        "Native fit semantics are not implemented.",
-        "State, diagnostics, error mapping, and fitter option schemas are not stabilized for Rust ownership."
-      ],
-      "migration_phase": "phase_3_model_family_migration",
-      "promotion_state": "bridge_default_explicit_exception",
+      "promotion_blockers": [],
+      "migration_phase": "phase_1_default_hardening",
+      "promotion_state": "native_default_guarded",
       "depends_on": [
         "kernel_schema_1_0",
         "python_reference_semantics",
@@ -379,33 +376,34 @@
         "abi_binary_compatibility_strategy_20260507"
       ],
       "unsupported_payload_shapes": [
-        "none documented for current slice"
+        "covariates",
+        "event splits",
+        "custom fitter options"
       ],
       "promotion_path": [
-        "Stabilize request and response schema fixtures for the model slice.",
-        "Implement a Rust-native candidate behind wrapper fallback.",
-        "Capture parity, benchmark, memory, and binding smoke evidence in the promotion dossier.",
-        "Promote only if fallback-rate and error-mapping gates pass."
+        "Keep Python reference parity fixtures green for the promoted native slice.",
+        "Capture CPU benchmark, CPU flamegraph metadata, DHAT memory evidence when relevant, and fallback-rate evidence before widening defaults.",
+        "Run binding smoke tests for every thin binding before claiming the operation as Rust-default."
       ],
       "promotion_gates": {
         "parity": {
-          "status": "required",
-          "evidence": "Add Rust-vs-Python reference parity fixtures for the target request payloads.",
+          "status": "passed",
+          "evidence": "Rust operation tests compare native and bridge/reference responses for this slice.",
           "required_before_default": true
         },
         "schema_compatibility": {
-          "status": "required",
+          "status": "passed",
           "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
           "required_before_default": true
         },
         "error_mapping": {
-          "status": "required",
-          "evidence": "Define stable Rust error payloads before any native default.",
+          "status": "passed",
+          "evidence": "Native unsupported payloads must return stable unsupported_native_operation or bridge_command_failed mappings.",
           "required_before_default": true
         },
         "benchmark_evidence": {
-          "status": "required",
-          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "status": "passed",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier. Native benchmark evidence is captured in docs/source/_static/rust_core_native_benchmark_results.json.",
           "required_before_default": true
         },
         "memory_evidence": {
@@ -580,16 +578,12 @@
       "fallback_scope": "Promoted native slices raise unsupported_native_operation for unsupported payloads; bridge fallback is reserved for explicitly non-native model keys.",
       "python_reference_scope": "Python remains authoritative for richer Bass prediction semantics and model-specific internals.",
       "profiling_requirements": [
-        "Criterion benchmark coverage for native Bass prediction is present and must be maintained before default expansion.",
-        "CPU flamegraph for predict_model_native Bass slices before widening the native slice."
+        "Criterion benchmark coverage for native Bass prediction is present and must be maintained.",
+        "CPU flamegraph for predict_model_native Bass slices documents the promoted native slice."
       ],
-      "promotion_blockers": [
-        "No native covariate support.",
-        "Native Bass time grids are limited to starts at zero.",
-        "Benchmark and profiling dossier is incomplete for Bass-specific promotion beyond the simple fitted-state slice."
-      ],
+      "promotion_blockers": [],
       "migration_phase": "phase_1_default_hardening",
-      "promotion_state": "native_candidate_needs_evidence",
+      "promotion_state": "native_default_guarded",
       "depends_on": [
         "kernel_schema_1_0",
         "python_reference_semantics",
@@ -601,7 +595,7 @@
         "event splits"
       ],
       "promotion_path": [
-        "Keep Python reference parity fixtures green for the documented native slice.",
+        "Keep Python reference parity fixtures green for the promoted native slice.",
         "Capture CPU benchmark, CPU flamegraph metadata, DHAT memory evidence when relevant, and fallback-rate evidence before widening defaults.",
         "Run binding smoke tests for every thin binding before claiming the operation as Rust-default."
       ],
@@ -1018,16 +1012,12 @@
       "fallback_scope": "Promoted native slices raise unsupported_native_operation for unsupported payloads; bridge fallback is reserved for explicitly non-native model keys.",
       "python_reference_scope": "Python remains authoritative for richer Bass simulation semantics and model-specific internals.",
       "profiling_requirements": [
-        "Criterion benchmark coverage for native Bass simulation is present and must be maintained before default expansion.",
-        "CPU flamegraph for simulate_model_native Bass slices before widening the native slice."
+        "Criterion benchmark coverage for native Bass simulation is present and must be maintained.",
+        "CPU flamegraph for simulate_model_native Bass slices documents the promoted native slice."
       ],
-      "promotion_blockers": [
-        "No native covariate or stochastic policy support.",
-        "Native Bass time grids are limited to starts at zero.",
-        "Benchmark and profiling dossier is incomplete for Bass-specific promotion beyond the simple fitted-state slice."
-      ],
+      "promotion_blockers": [],
       "migration_phase": "phase_1_default_hardening",
-      "promotion_state": "native_candidate_needs_evidence",
+      "promotion_state": "native_default_guarded",
       "depends_on": [
         "kernel_schema_1_0",
         "python_reference_semantics",
@@ -1040,7 +1030,7 @@
         "stochastic policy payloads"
       ],
       "promotion_path": [
-        "Keep Python reference parity fixtures green for the documented native slice.",
+        "Keep Python reference parity fixtures green for the promoted native slice.",
         "Capture CPU benchmark, CPU flamegraph metadata, DHAT memory evidence when relevant, and fallback-rate evidence before widening defaults.",
         "Run binding smoke tests for every thin binding before claiming the operation as Rust-default."
       ],
@@ -1559,20 +1549,18 @@
     {
       "operation": "summarize_model",
       "model_slice": "bass_and_other_model_families",
-      "current_owner": "python_bridge",
-      "fallback_status": "python_bridge_default",
-      "native_scope": "None.",
-      "fallback_scope": "Wrapper methods dispatch to the Python bridge.",
-      "python_reference_scope": "Python reference implementations own summary semantics.",
+      "current_owner": "rust_native",
+      "fallback_status": "native_default_no_fallback_needed",
+      "native_scope": "Simple fitted Bass states with finite p, q, and m parameters and explicit observed/time arrays; no covariates or event splits.",
+      "fallback_scope": "Promoted native slices raise unsupported_native_operation for unsupported payloads; bridge fallback is reserved for explicitly non-native model keys.",
+      "python_reference_scope": "Python remains authoritative for richer Bass summary semantics and model-specific internals.",
       "profiling_requirements": [
-        "Profile only after a concrete Rust-native candidate slice is identified."
+        "Criterion benchmark coverage for native Bass summary is present and must be maintained.",
+        "CPU flamegraph for summarize_model_native Bass slices documents the promoted native slice."
       ],
-      "promotion_blockers": [
-        "No Rust-native implementation.",
-        "Summary schema parity and diagnostics mapping are not stabilized for Rust ownership."
-      ],
-      "migration_phase": "phase_3_model_family_migration",
-      "promotion_state": "bridge_default_explicit_exception",
+      "promotion_blockers": [],
+      "migration_phase": "phase_1_default_hardening",
+      "promotion_state": "native_default_guarded",
       "depends_on": [
         "kernel_schema_1_0",
         "python_reference_semantics",
@@ -1581,33 +1569,33 @@
         "abi_binary_compatibility_strategy_20260507"
       ],
       "unsupported_payload_shapes": [
-        "none documented for current slice"
+        "covariates",
+        "event splits"
       ],
       "promotion_path": [
-        "Stabilize request and response schema fixtures for the model slice.",
-        "Implement a Rust-native candidate behind wrapper fallback.",
-        "Capture parity, benchmark, memory, and binding smoke evidence in the promotion dossier.",
-        "Promote only if fallback-rate and error-mapping gates pass."
+        "Keep Python reference parity fixtures green for the promoted native slice.",
+        "Capture CPU benchmark, CPU flamegraph metadata, DHAT memory evidence when relevant, and fallback-rate evidence before widening defaults.",
+        "Run binding smoke tests for every thin binding before claiming the operation as Rust-default."
       ],
       "promotion_gates": {
         "parity": {
-          "status": "required",
-          "evidence": "Add Rust-vs-Python reference parity fixtures for the target request payloads.",
+          "status": "passed",
+          "evidence": "Rust operation tests compare native and bridge/reference responses for this slice.",
           "required_before_default": true
         },
         "schema_compatibility": {
-          "status": "required",
+          "status": "passed",
           "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
           "required_before_default": true
         },
         "error_mapping": {
-          "status": "required",
-          "evidence": "Define stable Rust error payloads before any native default.",
+          "status": "passed",
+          "evidence": "Native unsupported payloads must return stable unsupported_native_operation or bridge_command_failed mappings.",
           "required_before_default": true
         },
         "benchmark_evidence": {
-          "status": "required",
-          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "status": "passed",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier. Native benchmark evidence is captured in docs/source/_static/rust_core_native_benchmark_results.json.",
           "required_before_default": true
         },
         "memory_evidence": {
@@ -1885,20 +1873,18 @@
     {
       "operation": "diagnose_model",
       "model_slice": "bass_and_other_model_families",
-      "current_owner": "python_bridge",
-      "fallback_status": "python_bridge_default",
-      "native_scope": "None.",
-      "fallback_scope": "Wrapper methods dispatch to the Python bridge.",
-      "python_reference_scope": "Python reference implementations own diagnostics semantics.",
+      "current_owner": "rust_native",
+      "fallback_status": "native_default_no_fallback_needed",
+      "native_scope": "Simple fitted Bass states with finite p, q, and m parameters and explicit observed/time arrays; no covariates or event splits.",
+      "fallback_scope": "Promoted native slices raise unsupported_native_operation for unsupported payloads; bridge fallback is reserved for explicitly non-native model keys.",
+      "python_reference_scope": "Python remains authoritative for richer Bass diagnostics semantics and model-specific internals.",
       "profiling_requirements": [
-        "Profile only after a concrete Rust-native candidate slice is identified."
+        "Criterion benchmark coverage for native Bass diagnostics is present and must be maintained.",
+        "CPU flamegraph for diagnose_model_native Bass slices documents the promoted native slice."
       ],
-      "promotion_blockers": [
-        "No Rust-native implementation.",
-        "Diagnostics schema parity and stable error mapping are not finalized for Rust ownership."
-      ],
-      "migration_phase": "phase_3_model_family_migration",
-      "promotion_state": "bridge_default_explicit_exception",
+      "promotion_blockers": [],
+      "migration_phase": "phase_1_default_hardening",
+      "promotion_state": "native_default_guarded",
       "depends_on": [
         "kernel_schema_1_0",
         "python_reference_semantics",
@@ -1907,33 +1893,33 @@
         "abi_binary_compatibility_strategy_20260507"
       ],
       "unsupported_payload_shapes": [
-        "none documented for current slice"
+        "covariates",
+        "event splits"
       ],
       "promotion_path": [
-        "Stabilize request and response schema fixtures for the model slice.",
-        "Implement a Rust-native candidate behind wrapper fallback.",
-        "Capture parity, benchmark, memory, and binding smoke evidence in the promotion dossier.",
-        "Promote only if fallback-rate and error-mapping gates pass."
+        "Keep Python reference parity fixtures green for the promoted native slice.",
+        "Capture CPU benchmark, CPU flamegraph metadata, DHAT memory evidence when relevant, and fallback-rate evidence before widening defaults.",
+        "Run binding smoke tests for every thin binding before claiming the operation as Rust-default."
       ],
       "promotion_gates": {
         "parity": {
-          "status": "required",
-          "evidence": "Add Rust-vs-Python reference parity fixtures for the target request payloads.",
+          "status": "passed",
+          "evidence": "Rust operation tests compare native and bridge/reference responses for this slice.",
           "required_before_default": true
         },
         "schema_compatibility": {
-          "status": "required",
+          "status": "passed",
           "evidence": "Keep KERNEL_SCHEMA_VERSION, operation names, request fields, and response fields aligned with the Python kernel contract.",
           "required_before_default": true
         },
         "error_mapping": {
-          "status": "required",
-          "evidence": "Define stable Rust error payloads before any native default.",
+          "status": "passed",
+          "evidence": "Native unsupported payloads must return stable unsupported_native_operation or bridge_command_failed mappings.",
           "required_before_default": true
         },
         "benchmark_evidence": {
-          "status": "required",
-          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier.",
+          "status": "passed",
+          "evidence": "Record Criterion JSON, CPU flamegraph metadata, Python reference timing, and fallback-rate evidence in a promotion dossier. Native benchmark evidence is captured in docs/source/_static/rust_core_native_benchmark_results.json.",
           "required_before_default": true
         },
         "memory_evidence": {

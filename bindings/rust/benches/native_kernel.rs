@@ -346,6 +346,18 @@ fn bass_predict_request(binding: &KernelBinding) -> KernelRequest {
     )
 }
 
+fn bass_fit_request(binding: &KernelBinding) -> KernelRequest {
+    binding.fit_model_request(
+        "bass",
+        json!({
+            "inputs": {
+                "time": [0.0, 0.8, 1.6, 2.4, 3.2, 4.0],
+                "observed": [0.02, 0.05, 0.11, 0.2, 0.33, 0.49]
+            }
+        }),
+    )
+}
+
 fn bass_simulate_request(binding: &KernelBinding) -> KernelRequest {
     binding.simulate_model_request(
         "bass",
@@ -368,6 +380,52 @@ fn bass_simulate_request(binding: &KernelBinding) -> KernelRequest {
     )
 }
 
+fn bass_summary_request(binding: &KernelBinding) -> KernelRequest {
+    binding.summarize_model_request(
+        "bass",
+        json!({
+            "state": {
+                "model_key": "bass",
+                "model_name": "BassModel",
+                "constructor_kwargs": {},
+                "parameters": {
+                    "p": 0.02,
+                    "q": 0.45,
+                    "m": 150.0
+                },
+                "predict_kwargs": {}
+            },
+            "inputs": {
+                "time": [0.0, 1.0, 2.0, 3.0, 4.0],
+                "observed": [0.02, 0.05, 0.11, 0.2, 0.33]
+            }
+        }),
+    )
+}
+
+fn bass_diagnose_request(binding: &KernelBinding) -> KernelRequest {
+    binding.diagnose_model_request(
+        "bass",
+        json!({
+            "state": {
+                "model_key": "bass",
+                "model_name": "BassModel",
+                "constructor_kwargs": {},
+                "parameters": {
+                    "p": 0.02,
+                    "q": 0.45,
+                    "m": 150.0
+                },
+                "predict_kwargs": {}
+            },
+            "inputs": {
+                "time": [0.0, 1.0, 2.0, 3.0, 4.0],
+                "observed": [0.02, 0.05, 0.11, 0.2, 0.33]
+            }
+        }),
+    )
+}
+
 fn bench_native_logistic_paths(c: &mut Criterion) {
     let binding = KernelBinding::new();
     let fit_request = logistic_fit_request(&binding);
@@ -385,8 +443,11 @@ fn bench_native_logistic_paths(c: &mut Criterion) {
     let fisher_pry_simulate_request = fisher_pry_simulate_request(&binding);
     let fisher_pry_summary_request = fisher_pry_summary_request(&binding);
     let fisher_pry_diagnose_request = fisher_pry_diagnose_request(&binding);
+    let bass_fit_request = bass_fit_request(&binding);
     let bass_predict_request = bass_predict_request(&binding);
     let bass_simulate_request = bass_simulate_request(&binding);
+    let bass_summary_request = bass_summary_request(&binding);
+    let bass_diagnose_request = bass_diagnose_request(&binding);
 
     let mut group = c.benchmark_group("native_logistic_kernel");
     group.sample_size(20);
@@ -436,14 +497,17 @@ fn bench_native_logistic_paths(c: &mut Criterion) {
         })
     });
 
-    group.bench_function(BenchmarkId::new("predict_model_native", "fisher_pry"), |b| {
-        b.iter(|| {
-            let response = binding
-                .predict_model_native(black_box(&fisher_pry_predict_request))
-                .expect("native Fisher-Pry prediction should succeed");
-            black_box(response);
-        })
-    });
+    group.bench_function(
+        BenchmarkId::new("predict_model_native", "fisher_pry"),
+        |b| {
+            b.iter(|| {
+                let response = binding
+                    .predict_model_native(black_box(&fisher_pry_predict_request))
+                    .expect("native Fisher-Pry prediction should succeed");
+                black_box(response);
+            })
+        },
+    );
 
     group.bench_function(BenchmarkId::new("simulate_model_native", "logistic"), |b| {
         b.iter(|| {
@@ -463,14 +527,17 @@ fn bench_native_logistic_paths(c: &mut Criterion) {
         })
     });
 
-    group.bench_function(BenchmarkId::new("simulate_model_native", "fisher_pry"), |b| {
-        b.iter(|| {
-            let response = binding
-                .simulate_model_native(black_box(&fisher_pry_simulate_request))
-                .expect("native Fisher-Pry simulation should succeed");
-            black_box(response);
-        })
-    });
+    group.bench_function(
+        BenchmarkId::new("simulate_model_native", "fisher_pry"),
+        |b| {
+            b.iter(|| {
+                let response = binding
+                    .simulate_model_native(black_box(&fisher_pry_simulate_request))
+                    .expect("native Fisher-Pry simulation should succeed");
+                black_box(response);
+            })
+        },
+    );
 
     group.bench_function(
         BenchmarkId::new("summarize_model_native", "logistic"),
@@ -484,23 +551,29 @@ fn bench_native_logistic_paths(c: &mut Criterion) {
         },
     );
 
-    group.bench_function(BenchmarkId::new("summarize_model_native", "gompertz"), |b| {
-        b.iter(|| {
-            let response = binding
-                .summarize_model_native(black_box(&gompertz_summary_request))
-                .expect("native Gompertz summary should succeed");
-            black_box(response);
-        })
-    });
+    group.bench_function(
+        BenchmarkId::new("summarize_model_native", "gompertz"),
+        |b| {
+            b.iter(|| {
+                let response = binding
+                    .summarize_model_native(black_box(&gompertz_summary_request))
+                    .expect("native Gompertz summary should succeed");
+                black_box(response);
+            })
+        },
+    );
 
-    group.bench_function(BenchmarkId::new("summarize_model_native", "fisher_pry"), |b| {
-        b.iter(|| {
-            let response = binding
-                .summarize_model_native(black_box(&fisher_pry_summary_request))
-                .expect("native Fisher-Pry summary should succeed");
-            black_box(response);
-        })
-    });
+    group.bench_function(
+        BenchmarkId::new("summarize_model_native", "fisher_pry"),
+        |b| {
+            b.iter(|| {
+                let response = binding
+                    .summarize_model_native(black_box(&fisher_pry_summary_request))
+                    .expect("native Fisher-Pry summary should succeed");
+                black_box(response);
+            })
+        },
+    );
 
     group.bench_function(BenchmarkId::new("diagnose_model_native", "logistic"), |b| {
         b.iter(|| {
@@ -520,11 +593,23 @@ fn bench_native_logistic_paths(c: &mut Criterion) {
         })
     });
 
-    group.bench_function(BenchmarkId::new("diagnose_model_native", "fisher_pry"), |b| {
+    group.bench_function(
+        BenchmarkId::new("diagnose_model_native", "fisher_pry"),
+        |b| {
+            b.iter(|| {
+                let response = binding
+                    .diagnose_model_native(black_box(&fisher_pry_diagnose_request))
+                    .expect("native Fisher-Pry diagnostics should succeed");
+                black_box(response);
+            })
+        },
+    );
+
+    group.bench_function(BenchmarkId::new("fit_model_native", "bass"), |b| {
         b.iter(|| {
             let response = binding
-                .diagnose_model_native(black_box(&fisher_pry_diagnose_request))
-                .expect("native Fisher-Pry diagnostics should succeed");
+                .fit_model_native(black_box(&bass_fit_request))
+                .expect("native Bass fit should succeed");
             black_box(response);
         })
     });
@@ -543,6 +628,24 @@ fn bench_native_logistic_paths(c: &mut Criterion) {
             let response = binding
                 .simulate_model_native(black_box(&bass_simulate_request))
                 .expect("native Bass simulation should succeed");
+            black_box(response);
+        })
+    });
+
+    group.bench_function(BenchmarkId::new("summarize_model_native", "bass"), |b| {
+        b.iter(|| {
+            let response = binding
+                .summarize_model_native(black_box(&bass_summary_request))
+                .expect("native Bass summary should succeed");
+            black_box(response);
+        })
+    });
+
+    group.bench_function(BenchmarkId::new("diagnose_model_native", "bass"), |b| {
+        b.iter(|| {
+            let response = binding
+                .diagnose_model_native(black_box(&bass_diagnose_request))
+                .expect("native Bass diagnostics should succeed");
             black_box(response);
         })
     });

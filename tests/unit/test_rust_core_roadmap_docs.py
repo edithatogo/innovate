@@ -65,9 +65,13 @@ def test_rust_core_roadmap_names_candidate_operations_and_gates() -> None:
     assert "schema compatibility" in roadmap
     assert "Rust-native" in roadmap
     assert "Fisher-Pry" in roadmap
+    assert "promoted Bass execution slices" in roadmap
+    assert "promoted Bass execution slices covering fit, prediction, simulation, summary, and diagnostics" in roadmap
+    assert "narrow Norton-Bass prediction, simulation, summary, and diagnostics slices" in roadmap
     assert "logistic, Fisher-Pry, and Gompertz fitting" in roadmap
     assert "logistic, Fisher-Pry, Gompertz, and Bass prediction" in roadmap
-    assert "logistic, Fisher-Pry, and Gompertz summary and diagnostics" in roadmap
+    assert "narrow Norton-Bass prediction for single-generation fitted states" in roadmap
+    assert "The first implemented slices are Rust-native logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass summary and diagnostics for simple fitted states" in roadmap
     assert "bridge fallback reserved for non-native model families" in roadmap
     assert "same simple fitted-state payload" in roadmap
     assert "Benchmarking and profiling tooling" in roadmap
@@ -105,8 +109,8 @@ def test_rust_core_roadmap_inventories_runtime_status_and_xla_fit() -> None:
         "fit_model": ("Native logistic, Fisher-Pry, and Gompertz fitting", "Medium"),
         "predict_model": ("Native logistic, Fisher-Pry, Gompertz, and Bass prediction", "High"),
         "simulate_model": ("Native logistic, Fisher-Pry, Gompertz, and Bass simulation", "High"),
-        "summarize_model": ("Native logistic, Fisher-Pry, and Gompertz summary", "Medium"),
-        "diagnose_model": ("Native logistic, Fisher-Pry, and Gompertz diagnostics", "Medium"),
+        "summarize_model": ("The first implemented slices are Rust-native logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass summary and diagnostics for simple fitted states", "Medium"),
+        "diagnose_model": ("The first implemented slices are Rust-native logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass summary and diagnostics for simple fitted states", "Medium"),
     }
 
     for operation, expected_phrases in expected_inventory.items():
@@ -134,6 +138,7 @@ def test_rust_core_roadmap_defines_execution_backlog_and_smoke_gates() -> None:
         "fallback-rate evidence",
         "DHAT memory profile",
         "CPU flamegraph metadata",
+        "promoted Bass execution slices",
     ):
         assert phrase in roadmap
 
@@ -152,8 +157,8 @@ def test_rust_core_roadmap_audit_matches_current_runtime_ownership() -> None:
         "Python reference owner",
         "packaged discovery metadata",
         "logistic, Fisher-Pry, and Gompertz ``fit_model``",
-        "logistic, Fisher-Pry, and Gompertz ``summarize_model`` and ``diagnose_model``",
-        "logistic, Fisher-Pry, Gompertz, and Bass ``predict_model``/``simulate_model``",
+        "The first implemented slices are Rust-native logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass summary and diagnostics for simple fitted states",
+        "logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass ``predict_model``/``simulate_model`` fitted-state execution",
         "Python bridge entrypoint helpers",
         "Explicitly non-native slices therefore remain",
         "bridge-backed",
@@ -209,12 +214,13 @@ def test_rust_core_roadmap_audit_matches_current_runtime_ownership() -> None:
     native_keys = rust_native_model_keys()
 
     assert {"bass", "logistic"} <= python_keys
-    assert {"bass", "gompertz", "logistic"} <= native_keys
+    assert {"bass", "gompertz", "logistic", "norton_bass"} <= native_keys
     assert native_keys < python_keys
 
     non_native_model_keys = python_keys - native_keys
     assert "fisher_pry" in native_keys
-    assert {"norton_bass", "composite", "multi_product", "network_diffusion", "policy_hazard"} <= non_native_model_keys
+    assert {"composite", "multi_product", "network_diffusion", "policy_hazard"} <= non_native_model_keys
+    assert "norton_bass" not in non_native_model_keys
     for model_key in ("norton_bass", "composite", "multi_product", "network_diffusion", "policy_hazard"):
         assert f"``{model_key}``" in roadmap
 
@@ -287,11 +293,18 @@ def test_rust_core_migration_inventory_matches_rust_and_python_sources() -> None
         assert entries_by_key[key]["fallback_status"].startswith("native_default")
         assert rust_anchor in rust_binding
 
-    for operation in ("fit_model", "summarize_model", "diagnose_model"):
-        entry = entries_by_key[(operation, "bass_and_other_model_families")]
-        assert entry["current_owner"] == "python_bridge"
-        assert entry["fallback_status"] == "python_bridge_default"
-        assert entry["native_scope"] == "None."
+    for key in (
+        ("fit_model", "bass_and_other_model_families"),
+        ("predict_model", "bass_simple_fitted_state"),
+        ("simulate_model", "bass_simple_fitted_state"),
+        ("summarize_model", "bass_and_other_model_families"),
+        ("diagnose_model", "bass_and_other_model_families"),
+    ):
+        entry = entries_by_key[key]
+        assert entry["current_owner"] == "rust_native"
+        assert entry["fallback_status"] == "native_default_no_fallback_needed"
+        assert entry["promotion_state"] == "native_default_guarded"
+        assert entry["promotion_blockers"] == []
 
     for operation in ("predict_model", "simulate_model"):
         entry = entries_by_key[(operation, "other_model_families_or_unsupported_payloads")]
@@ -302,6 +315,25 @@ def test_rust_core_migration_inventory_matches_rust_and_python_sources() -> None
     for model_key in inventory["python_only_model_keys"]:
         assert model_key in python_keys
         assert model_key not in native_keys
+
+
+def test_future_rust_migration_track_requires_ledger_and_claim_reconciliation() -> None:
+    """The new Rust migration track should encode the recommended execution gates."""
+    spec = Path("conductor/tracks/rust_core_full_native_migration_20260511/spec.md").read_text()
+    plan = Path("conductor/tracks/rust_core_full_native_migration_20260511/plan.md").read_text()
+
+    for phrase in (
+        "machine-readable slice ledger",
+        "terminal ownership state",
+        "claim language",
+        "binding smoke matrix",
+        "claim-language reconciliation",
+        "core operations",
+        "diffusion-family slices",
+        "competition-family slices",
+        "payload and schema reconciliation slices",
+    ):
+        assert phrase in spec or phrase in plan
 
 
 def test_rust_core_roadmap_explicitly_rejects_full_rust_ownership() -> None:
@@ -318,6 +350,7 @@ def test_rust_core_roadmap_explicitly_rejects_full_rust_ownership() -> None:
         "Rust Core Full Native Migration and Ownership Closure",
         "Rust Core Migration Completion and Polyglot Claim Closure",
         "The core is therefore not entirely written in Rust yet",
+        "promoted Bass execution slices",
         "Promotion remains operation by operation",
     ):
         assert phrase in roadmap
