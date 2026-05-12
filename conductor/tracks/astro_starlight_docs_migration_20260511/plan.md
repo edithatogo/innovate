@@ -58,20 +58,20 @@
 
 ## Phase 4: Validate the New Docs Site
 
-- [ ] Task: Add and update tests for the Astro/Starlight migration
-    - [ ] Verify the chosen plugin baseline remains documented
-    - [ ] Verify the sitemap and search decisions remain explicit
-    - [ ] Verify redirect coverage for the canonical docs paths
-    - [ ] Verify route stability for the versioned docs nav
-- [ ] Task: Run the docs build and link validation
-    - [ ] Build the Astro/Starlight site
-    - [ ] Run the link validator
-    - [ ] Confirm the docs remain auditable from the repo
-- [ ] Task: Validate the transition policy and cutover inventory
-    - [ ] Confirm the chosen migration mode is still reflected in the docs
-    - [ ] Confirm the content inventory and redirect inventory still agree
-    - [ ] Confirm sitemap generation is either configured or explicitly deferred with rationale
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Validate the New Docs Site' (Protocol in workflow.md)
+- [x] Task: Add and update tests for the Astro/Starlight migration [checkpoint: 2434e3d]
+    - [x] Verify the chosen plugin baseline remains documented
+    - [x] Verify the sitemap and search decisions remain explicit
+    - [x] Verify redirect coverage for the canonical docs paths
+    - [x] Verify route stability for the versioned docs nav
+- [x] Task: Run the docs build and link validation [checkpoint: 2434e3d]
+    - [x] Build the Astro/Starlight site
+    - [x] Run the link validator
+    - [x] Confirm the docs remain auditable from the repo
+- [x] Task: Validate the transition policy and cutover inventory [checkpoint: 2434e3d]
+    - [x] Confirm the chosen migration mode is still reflected in the docs
+    - [x] Confirm the content inventory and redirect inventory still agree
+    - [x] Confirm sitemap generation is either configured or explicitly deferred with rationale
+- [x] Task: Conductor - Automated Review and Checkpoint 'Validate the New Docs Site' (Protocol in workflow.md) [checkpoint: 2434e3d]
 
 ## Phase 5: Final Review and Archive
 
