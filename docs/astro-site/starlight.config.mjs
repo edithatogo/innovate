@@ -1,3 +1,5 @@
+import starlightLinksValidator from 'starlight-links-validator';
+
 export default {
   title: 'Innovate',
   logo: {
@@ -5,6 +7,7 @@ export default {
   },
   customCss: ['./src/styles/custom.css'],
   components: {},
+  plugins: [starlightLinksValidator()],
   sidebar: [
     {
       label: 'Core',
@@ -25,6 +28,7 @@ export default {
         { label: 'Publication', link: '/maintainers/publication/' },
         { label: 'Migration', link: '/migration/' },
         { label: 'Redirects', link: '/migration/redirects/' },
+        { label: 'Validation', link: '/migration/validation/' },
         { label: 'Archive', link: '/migration/archive/' },
         { label: 'References', link: '/migration/references/' },
       ],

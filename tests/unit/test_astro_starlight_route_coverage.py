@@ -55,6 +55,7 @@ def test_route_coverage_report_matches_astro_content_tree() -> None:
         "/core/arrow-interchange/",
         "/maintainers/publication/",
         "/migration/redirects/",
+        "/migration/validation/",
         "/migration/archive/",
         "/migration/references/",
     ):

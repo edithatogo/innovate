@@ -1,8 +1,8 @@
 {
   "counts": {
-    "implemented": 13,
+    "implemented": 14,
     "planned": 22,
-    "total": 35
+    "total": 36
   },
   "coverage_by_source_doc": [
     {
@@ -227,6 +227,13 @@
       "coverage_source": "migration-support",
       "source_doc": "docs/astro-site/src/content/docs/migration/references.md",
       "status": "implemented"
+    },
+    {
+      "astro_content_path": "docs/astro-site/src/content/docs/migration/validation.md",
+      "astro_route": "/migration/validation/",
+      "coverage_source": "migration-support",
+      "source_doc": "docs/astro-site/src/content/docs/migration/validation.md",
+      "status": "implemented"
     }
   ],
   "generated_from": {
@@ -236,7 +243,8 @@
       "docs/source/astro_starlight_migration.rst",
       "docs/astro-site/src/content/docs/migration/redirects.md",
       "docs/astro-site/src/content/docs/migration/archive.md",
-      "docs/astro-site/src/content/docs/migration/references.md"
+      "docs/astro-site/src/content/docs/migration/references.md",
+      "docs/astro-site/src/content/docs/migration/validation.md"
     ]
   }
 }

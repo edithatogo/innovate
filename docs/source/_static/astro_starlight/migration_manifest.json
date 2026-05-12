@@ -3,7 +3,7 @@
   "search_provider": "algolia-docsearch",
   "sitemap_provider": "@astrojs/sitemap",
   "baseline": {
-    "astro": "^5.0.0",
+    "astro": "^6.0.0",
     "starlight": "0.38.4",
     "starlight_versions": "0.5.4",
     "starlight_links_validator": "0.18.0",

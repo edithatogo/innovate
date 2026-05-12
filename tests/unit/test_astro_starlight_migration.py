@@ -15,13 +15,15 @@ def test_astro_starlight_package_manifest_records_pinned_baseline() -> None:
     assert package["scripts"]["build"] == "astro build"
     assert package["scripts"]["dev"] == "astro dev"
     assert package["scripts"]["check"] == "astro check"
+    assert Path("docs/astro-site/package-lock.json").exists()
 
     dependencies = package["dependencies"]
+    assert dependencies["astro"] == "^6.0.0"
     assert dependencies["@astrojs/starlight"] == "0.38.4"
     assert dependencies["starlight-versions"] == "0.5.4"
     assert dependencies["starlight-links-validator"] == "0.18.0"
     assert dependencies["@astrojs/starlight-docsearch"] == "0.6.1"
-    assert dependencies["@astrojs/sitemap"] == "^4.0.0"
+    assert dependencies["@astrojs/sitemap"] == "^3.7.2"
 
 
 def test_astro_and_starlight_config_files_record_the_scaffold() -> None:
@@ -37,7 +39,12 @@ def test_astro_and_starlight_config_files_record_the_scaffold() -> None:
     ):
         assert phrase in astro_config or phrase in starlight_config
 
+    content_config = Path("docs/astro-site/src/content.config.ts").read_text()
+    assert "glob({ pattern: '**/*.{md,mdx}', base: './src/content/docs' })" in content_config
+    assert "astro/zod" in content_config
+
     for phrase in (
+        "starlightLinksValidator",
         "starlight-versions",
         "starlight-links-validator",
         "@astrojs/starlight-docsearch",
@@ -48,6 +55,7 @@ def test_astro_and_starlight_config_files_record_the_scaffold() -> None:
         "Bindings",
         "Publication",
         "Migration",
+        "Validation",
     ):
         assert phrase in starlight_config
 
@@ -61,6 +69,7 @@ def test_astro_starlight_migration_manifest_records_parallel_run_decisions() -> 
     assert manifest["migration_mode"] == "parallel-run"
     assert manifest["search_provider"] == "algolia-docsearch"
     assert manifest["sitemap_provider"] == "@astrojs/sitemap"
+    assert manifest["baseline"]["astro"] == "^6.0.0"
     assert manifest["baseline"]["starlight"] == "0.38.4"
     assert manifest["baseline"]["starlight_versions"] == "0.5.4"
     assert manifest["baseline"]["starlight_links_validator"] == "0.18.0"
@@ -99,8 +108,10 @@ def test_astro_starlight_docs_page_lists_the_scaffold_artifacts() -> None:
         "redirect inventory",
         "route_coverage.json",
         "cutover_verification.json",
+        "link_validation_report.json",
         "generate_route_coverage.py",
         "generate_cutover_verification.py",
+        "generate_link_validation.py",
         "docs/astro-site/package.json",
         "docs/source/_static/astro_starlight/migration_manifest.json",
     ):
@@ -190,8 +201,10 @@ def test_astro_starlight_redirect_route_map_describes_cutover() -> None:
     """The migration area should expose a route map for redirect coverage."""
     migration = Path("docs/astro-site/src/content/docs/migration/index.md").read_text()
     redirects = Path("docs/astro-site/src/content/docs/migration/redirects.md").read_text()
+    validation = Path("docs/astro-site/src/content/docs/migration/validation.md").read_text()
 
     assert "redirect inventory" in migration
+    assert "route-stability" in validation
     for phrase in (
         "docs/source/index.rst",
         "/core/kernel/",
@@ -201,6 +214,13 @@ def test_astro_starlight_redirect_route_map_describes_cutover() -> None:
         "Canonical Sphinx URLs remain reachable",
     ):
         assert phrase in redirects
+
+    for phrase in (
+        "/migration/redirects/",
+        "/migration/archive/",
+        "/migration/references/",
+    ):
+        assert phrase in migration or phrase in validation
 
 
 def test_astro_starlight_archive_and_reference_pages_describe_provenance() -> None:
@@ -217,6 +237,7 @@ def test_astro_starlight_archive_and_reference_pages_describe_provenance() -> No
         "Registry submission receipts",
         "HPC readiness artifacts",
         "Migration References",
+        "route-stability",
         "polyglot_repo_architecture",
         "rust_core_roadmap",
         "registry_submission_execution_20260511",

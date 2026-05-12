@@ -12,6 +12,9 @@ Files:
   Astro routes
 - `cutover_verification.json` — generated comparison of content and redirect
   inventories
+- `link_validation_report.json` — generated route-stability and link-validation
+  report
 - `generate_route_coverage.py` — generator for the coverage report
 - `generate_cutover_verification.py` — generator for the cutover verification
   report
+- `generate_link_validation.py` — generator for the link-validation report

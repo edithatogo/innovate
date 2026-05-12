@@ -45,6 +45,13 @@ SUPPORT_DOCS = [
         "status": "implemented",
         "coverage_source": "migration-support",
     },
+    {
+        "source_doc": "docs/astro-site/src/content/docs/migration/validation.md",
+        "astro_route": "/migration/validation/",
+        "astro_content_path": "docs/astro-site/src/content/docs/migration/validation.md",
+        "status": "implemented",
+        "coverage_source": "migration-support",
+    },
 ]
 
 

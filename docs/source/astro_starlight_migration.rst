@@ -22,7 +22,8 @@ Pinned scaffold baseline
 * ``starlight-versions`` ``0.5.4``
 * ``starlight-links-validator`` ``0.18.0``
 * ``@astrojs/starlight-docsearch`` ``0.6.1``
-* ``@astrojs/sitemap`` ``^4.0.0``
+* ``astro`` ``^6.0.0``
+* ``@astrojs/sitemap`` ``^3.7.2``
 
 Scaffold artifacts
 ------------------
@@ -30,14 +31,18 @@ Scaffold artifacts
 * ``docs/astro-site/package.json``
 * ``docs/astro-site/astro.config.mjs``
 * ``docs/astro-site/starlight.config.mjs``
+* ``docs/astro-site/package-lock.json``
+* ``docs/astro-site/src/content.config.ts``
 * ``docs/astro-site/src/content/docs/``
 * ``docs/source/_static/astro_starlight/migration_manifest.json``
 * ``docs/source/_static/astro_starlight/content_inventory.json``
 * ``docs/source/_static/astro_starlight/redirect_inventory.json``
 * ``docs/source/_static/astro_starlight/route_coverage.json``
 * ``docs/source/_static/astro_starlight/cutover_verification.json``
+* ``docs/source/_static/astro_starlight/link_validation_report.json``
 * ``docs/source/_static/astro_starlight/generate_route_coverage.py``
 * ``docs/source/_static/astro_starlight/generate_cutover_verification.py``
+* ``docs/source/_static/astro_starlight/generate_link_validation.py``
 
 Route-stability policy
 ----------------------
