@@ -44,7 +44,7 @@ def test_starlight_roadmap_track_records_versioned_plugin_baseline() -> None:
     assert "starlight-versions" in tech_stack
     assert "0.5.4" in tech_stack
     assert "starlight-links-validator" in tech_stack
-    assert "0.18.0" in tech_stack
+    assert "0.24.0" in tech_stack
     assert "@astrojs/starlight-docsearch" in tech_stack
     assert "0.6.1" in tech_stack
     assert "@astrojs/sitemap" in tech_stack
@@ -58,10 +58,10 @@ def test_starlight_roadmap_track_records_versioned_plugin_baseline() -> None:
 def test_future_astro_starlight_migration_track_records_cutover_gates() -> None:
     """The new Astro/Starlight migration track should encode the recommended gates."""
     spec = Path(
-        "conductor/tracks/astro_starlight_docs_migration_20260511/spec.md"
+        "conductor/archive/astro_starlight_docs_migration_20260511/spec.md"
     ).read_text()
     plan = Path(
-        "conductor/tracks/astro_starlight_docs_migration_20260511/plan.md"
+        "conductor/archive/astro_starlight_docs_migration_20260511/plan.md"
     ).read_text()
 
     for phrase in (

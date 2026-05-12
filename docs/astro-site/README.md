@@ -7,7 +7,7 @@ Baseline decisions:
 
 - `@astrojs/starlight` `0.38.4`
 - `starlight-versions` `0.5.4`
-- `starlight-links-validator` `0.18.0`
+- `starlight-links-validator` `0.24.0`
 - `@astrojs/starlight-docsearch` `0.6.1`
 - `astro` `^6.0.0`
 - `@astrojs/sitemap` `^3.7.2`

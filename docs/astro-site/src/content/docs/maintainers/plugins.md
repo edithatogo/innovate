@@ -1,0 +1,15 @@
+---
+title: Plugins Module
+description: Plugin registration and extensibility surface.
+---
+
+# `innovate.plugins` Module
+
+The plugins module is API-facing and documented as module reference material.
+
+The canonical plugin contract remains thin and discoverable through module members. The page supports binding authors and integrators who need extension points across language surfaces.
+
+Migration source:
+
+- `docs/source/innovate.plugins.rst`
+

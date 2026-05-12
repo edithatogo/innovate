@@ -20,7 +20,7 @@ Pinned scaffold baseline
 
 * ``@astrojs/starlight`` ``0.38.4``
 * ``starlight-versions`` ``0.5.4``
-* ``starlight-links-validator`` ``0.18.0``
+* ``starlight-links-validator`` ``0.24.0``
 * ``@astrojs/starlight-docsearch`` ``0.6.1``
 * ``astro`` ``^6.0.0``
 * ``@astrojs/sitemap`` ``^3.7.2``
@@ -54,5 +54,13 @@ of truth for that agreement.
 Next steps
 ----------
 
-The scaffold is ready for content migration and redirect implementation once
-the Astro build is introduced to CI.
+Current status is beyond scaffold and into full content migration and final archive.
+
+- Canonical route migration now includes the remaining roadmap, maintainer,
+  operations, architecture, and tutorial content from the source inventory.
+- Redirect inventory and redirect-to-route mappings are synchronized and machine
+  checked through generated cutover verification.
+- Link-stability checks now include the expanded sidebar and implementation
+  routes added during migration.
+- Final review and archive are next when route coverage is complete and the
+  migration evidence artifacts remain valid.

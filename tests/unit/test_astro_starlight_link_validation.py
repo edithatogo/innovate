@@ -13,8 +13,7 @@ def test_link_validation_report_confirms_sidebar_routes() -> None:
     )
 
     assert report["generated_from"]["route_coverage"].endswith("route_coverage.json")
-    assert report["counts"]["sidebar_routes"] == 11
-    assert report["counts"]["implemented_sidebar_routes"] == 11
+    assert report["counts"]["sidebar_routes"] == report["counts"]["implemented_sidebar_routes"]
     assert report["counts"]["broken_links"] == 0
     assert report["ready_for_route_stability"] is True
 
@@ -23,6 +22,22 @@ def test_link_validation_report_confirms_sidebar_routes() -> None:
         "/core/kernel/",
         "/core/arrow-interchange/",
         "/maintainers/publication/",
+        "/maintainers/release-notes/",
+        "/operations/rust-core/",
+        "/operations/roadmap/",
+        "/operations/remote-execution/",
+        "/operations/xla-backend/",
+        "/operations/abi-compatibility/",
+        "/operations/scientific-hpc/",
+        "/operations/hpc-readiness/",
+        "/operations/hpc-submission-workflow/",
+        "/operations/governance/",
+        "/maintainers/plugins/",
+        "/architecture/",
+        "/architecture/adr/",
+        "/architecture/polyglot-repo/",
+        "/roadmap/diagnostics-uncertainty/",
+        "/tutorials/",
         "/migration/",
         "/migration/redirects/",
         "/migration/validation/",

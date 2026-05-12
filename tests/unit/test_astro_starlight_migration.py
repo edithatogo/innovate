@@ -21,7 +21,7 @@ def test_astro_starlight_package_manifest_records_pinned_baseline() -> None:
     assert dependencies["astro"] == "^6.0.0"
     assert dependencies["@astrojs/starlight"] == "0.38.4"
     assert dependencies["starlight-versions"] == "0.5.4"
-    assert dependencies["starlight-links-validator"] == "0.18.0"
+    assert dependencies["starlight-links-validator"] == "0.24.0"
     assert dependencies["@astrojs/starlight-docsearch"] == "0.6.1"
     assert dependencies["@astrojs/sitemap"] == "^3.7.2"
 
@@ -40,8 +40,10 @@ def test_astro_and_starlight_config_files_record_the_scaffold() -> None:
         assert phrase in astro_config or phrase in starlight_config
 
     content_config = Path("docs/astro-site/src/content.config.ts").read_text()
-    assert "glob({ pattern: '**/*.{md,mdx}', base: './src/content/docs' })" in content_config
-    assert "astro/zod" in content_config
+    assert "docsLoader()" in content_config
+    assert "docsSchema()" in content_config
+    assert "@astrojs/starlight/loaders" in content_config
+    assert "@astrojs/starlight/schema" in content_config
 
     for phrase in (
         "starlightLinksValidator",
@@ -52,6 +54,7 @@ def test_astro_and_starlight_config_files_record_the_scaffold() -> None:
         "Arrow Interchange",
         "Diagnostics",
         "Rust Core",
+        "Release Notes",
         "Bindings",
         "Publication",
         "Migration",
@@ -72,7 +75,7 @@ def test_astro_starlight_migration_manifest_records_parallel_run_decisions() -> 
     assert manifest["baseline"]["astro"] == "^6.0.0"
     assert manifest["baseline"]["starlight"] == "0.38.4"
     assert manifest["baseline"]["starlight_versions"] == "0.5.4"
-    assert manifest["baseline"]["starlight_links_validator"] == "0.18.0"
+    assert manifest["baseline"]["starlight_links_validator"] == "0.24.0"
     assert manifest["baseline"]["starlight_docsearch"] == "0.6.1"
     assert manifest["scaffold_root"] == "docs/astro-site"
     assert manifest["route_stability_policy"] == "keep-existing-sphinx-urls"

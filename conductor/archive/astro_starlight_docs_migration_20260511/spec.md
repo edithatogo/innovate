@@ -24,7 +24,7 @@ The initial Starlight baseline should remain explicit and version-pinned:
 
 - `@astrojs/starlight` `0.38.4`
 - `starlight-versions` `0.5.4`
-- `starlight-links-validator` `0.18.0`
+- `starlight-links-validator` `0.24.0`
 - `@astrojs/starlight-docsearch` `0.6.1` if Algolia DocSearch is selected
 
 Recommended additional Astro integration:

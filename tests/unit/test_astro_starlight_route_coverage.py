@@ -16,8 +16,8 @@ def test_route_coverage_report_is_generated_from_inventories() -> None:
         "content_inventory.json"
     )
     assert report["counts"]["total"] == len(report["coverage_by_source_doc"])
-    assert report["counts"]["implemented"] > 0
-    assert report["counts"]["planned"] > 0
+    assert report["counts"]["implemented"] == report["counts"]["total"]
+    assert report["counts"]["planned"] == 0
 
     implemented = {
         entry["source_doc"]
@@ -31,9 +31,8 @@ def test_route_coverage_report_is_generated_from_inventories() -> None:
     }
 
     assert implemented
-    assert planned
     assert "docs/source/astro_starlight_migration.rst" in implemented
-    assert "docs/source/polyglot_repo_architecture.rst" in planned
+    assert not planned
     assert "docs/source/binding_publication_ci.rst" in implemented
 
 

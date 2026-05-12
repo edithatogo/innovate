@@ -6,7 +6,7 @@
     "astro": "^6.0.0",
     "starlight": "0.38.4",
     "starlight_versions": "0.5.4",
-    "starlight_links_validator": "0.18.0",
+    "starlight_links_validator": "0.24.0",
     "starlight_docsearch": "0.6.1"
   },
   "scaffold_root": "docs/astro-site",

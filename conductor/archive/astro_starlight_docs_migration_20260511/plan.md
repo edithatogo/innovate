@@ -12,9 +12,9 @@
     - [x] Choose Algolia DocSearch or record the explicit alternative provider
     - [x] Decide whether `@astrojs/sitemap` is part of the baseline or an equivalent official Astro integration is used
 - [x] Task: Confirm the versioned Starlight baseline [checkpoint: 85730d1]
-    - [x] Pin `@astrojs/starlight` `0.38.4`
+- [x] Pin `@astrojs/starlight` `0.38.4`
     - [x] Pin `starlight-versions` `0.5.4`
-    - [x] Pin `starlight-links-validator` `0.18.0`
+    - [x] Pin `starlight-links-validator` `0.24.0`
     - [x] Pin `@astrojs/starlight-docsearch` `0.6.1` if Algolia DocSearch is the chosen provider
 - [x] Task: Write regression tests for the documented baseline [checkpoint: 85730d1]
     - [x] Require the tech stack and migration docs to mention the same versions
@@ -42,19 +42,19 @@
 
 ## Phase 3: Migrate Content and Redirects
 
-- [~] Task: Move canonical docs content into the Astro/Starlight structure
-    - [~] Migrate the core contract and roadmap pages first
-    - [ ] Migrate binding and release documentation
-    - [ ] Migrate archive and migration reference pages needed by readers
-- [ ] Task: Maintain the redirect inventory during cutover
-    - [ ] Map each moved Sphinx path to a route or redirect
-    - [ ] Keep the redirect inventory synchronized with the content inventory
-    - [ ] Verify canonical URLs remain reachable throughout the transition
-- [ ] Task: Preserve link stability during the cutover
-    - [ ] Add redirects or forwarders for old Sphinx URLs
-    - [ ] Keep versioned content routes stable
-    - [ ] Verify internal links after migration
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Migrate Content and Redirects' (Protocol in workflow.md)
+- [x] Task: Move canonical docs content into the Astro/Starlight structure
+    - [x] Migrate the core contract and roadmap pages first
+    - [x] Migrate binding and release documentation
+    - [x] Migrate archive and migration reference pages needed by readers
+- [x] Task: Maintain the redirect inventory during cutover
+    - [x] Map each moved Sphinx path to a route or redirect
+    - [x] Keep the redirect inventory synchronized with the content inventory
+    - [x] Verify canonical URLs remain reachable throughout the transition
+- [x] Task: Preserve link stability during the cutover
+    - [x] Add redirects or forwarders for old Sphinx URLs
+    - [x] Keep versioned content routes stable
+    - [x] Verify internal links after migration
+- [x] Task: Conductor - Automated Review and Checkpoint 'Migrate Content and Redirects' (Protocol in workflow.md)
 
 ## Phase 4: Validate the New Docs Site
 
@@ -75,12 +75,12 @@
 
 ## Phase 5: Final Review and Archive
 
-- [ ] Task: Run final conductor review
-    - [ ] Review the track diff against the spec, plan, workflow, and tests
-    - [ ] Apply any high-confidence fixes surfaced by review
-    - [ ] Re-run validation until stable
-- [ ] Task: Archive the completed migration track
-    - [ ] Move the track folder to the archive location
-    - [ ] Update the tracks registry entry to completed
-    - [ ] Preserve links to the migration baseline and build evidence
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Final Review and Archive' (Protocol in workflow.md)
+- [x] Task: Run final conductor review
+    - [x] Review the track diff against the spec, plan, workflow, and tests
+    - [x] Apply any high-confidence fixes surfaced by review
+    - [x] Re-run validation until stable
+- [x] Task: Archive the completed migration track
+    - [x] Move the track folder to the archive location
+    - [x] Update the tracks registry entry to completed
+    - [x] Preserve links to the migration baseline and build evidence
+- [x] Task: Conductor - Automated Review and Checkpoint 'Final Review and Archive' (Protocol in workflow.md)

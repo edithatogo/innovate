@@ -12,3 +12,6 @@ Available pages:
 
 - Publication
 - Release Notes
+- Plugins
+- Stability
+- Runtime Logging

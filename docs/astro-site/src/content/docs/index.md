@@ -1,7 +1,6 @@
 ---
 title: Innovate Documentation
 description: Entry point for the Astro/Starlight docs migration scaffold.
-sidebar: false
 ---
 
 # Innovate Documentation

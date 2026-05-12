@@ -25,6 +25,27 @@ SUPPORT_DOCS = [
         "coverage_source": "migration-support",
     },
     {
+        "source_doc": "docs/astro-site/src/content/docs/maintainers/release-notes.md",
+        "astro_route": "/maintainers/release-notes/",
+        "astro_content_path": "docs/astro-site/src/content/docs/maintainers/release-notes.md",
+        "status": "implemented",
+        "coverage_source": "migration-support",
+    },
+    {
+        "source_doc": "docs/astro-site/src/content/docs/architecture/index.md",
+        "astro_route": "/architecture/",
+        "astro_content_path": "docs/astro-site/src/content/docs/architecture/index.md",
+        "status": "implemented",
+        "coverage_source": "migration-support",
+    },
+    {
+        "source_doc": "docs/astro-site/src/content/docs/operations/roadmap.md",
+        "astro_route": "/operations/roadmap/",
+        "astro_content_path": "docs/astro-site/src/content/docs/operations/roadmap.md",
+        "status": "implemented",
+        "coverage_source": "migration-support",
+    },
+    {
         "source_doc": "docs/astro-site/src/content/docs/migration/redirects.md",
         "astro_route": "/migration/redirects/",
         "astro_content_path": "docs/astro-site/src/content/docs/migration/redirects.md",
