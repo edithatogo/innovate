@@ -23,7 +23,7 @@ def test_use_backend_numpy():
     assert backend.current_backend.__class__.__name__ == "NumPyBackend"
 
 
-@patch("src.innovate.backend.JaxBackend", None)
+@patch.object(backend, "JaxBackend", None)
 def test_use_backend_jax_import_error():
     """Test that using JAX backend raises ImportError when it's not available."""
     with pytest.raises(ImportError, match="JAX backend is not available. Install innovate\\[jax\\] to enable it."):
@@ -41,7 +41,7 @@ class FakeJaxBackend:
 
 
 @pytest.mark.skipif(backend.JaxBackend is None, reason="JAX backend is not installed")
-@patch("src.innovate.backend.JaxBackend", FakeJaxBackend)
+@patch.object(backend, "JaxBackend", FakeJaxBackend)
 def test_use_backend_jax_success():
     """Test switching to JAX backend when it's available."""
     with patch.object(backend, "get_backend_capability", return_value=SimpleNamespace(available=True)):

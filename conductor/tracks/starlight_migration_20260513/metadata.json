@@ -1,0 +1,19 @@
+{
+  "track": "starlight_migration_20260513",
+  "title": "Starlight + starlight-polyglot Migration",
+  "status": "active",
+  "created": "2026-05-13",
+  "owner": "migration-engineer",
+  "summary": "Migrate documentation generation from Sphinx to Astro Starlight with starlight-polyglot for Python API docs.",
+  "motivation": "Replace the legacy Sphinx-based documentation pipeline with a modern, polyglot-aware Starlight site that supports auto-generated API documentation from Python source via Griffe, while preserving 41 existing MDX handbook pages.",
+  "dependencies": [
+    "@astrojs/starlight @ ^0.39.0",
+    "starlight-polyglot @ file: workspace dependency",
+    "pnpm @ latest",
+    "Node.js @ ^22"
+  ],
+  "legacy_retirement": {
+    "supersedes": "Sphinx at docs/source/",
+    "retention": "Legacy Sphinx source and build artifacts retained for archival reference until formal closure of this track."
+  }
+}

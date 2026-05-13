@@ -23,27 +23,34 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: docs/astro-site
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
 
-      - name: Set up Python
-        run: uv python install 3.12
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+          cache-dependency-path: docs/astro-site/pnpm-lock.yaml
 
       - name: Install dependencies
-        run: uv sync --group dev --extra jax --extra bayesian
+        run: pnpm install --frozen-lockfile
 
-      - name: Build documentation
-        run: uv run python -m sphinx -b html docs/source docs/build/html
+      - name: Build documentation site
+        run: pnpm build
 
       - name: Upload documentation artifacts
         uses: actions/upload-artifact@v5
         with:
           name: documentation
-          path: docs/build/html/
+          path: docs/astro-site/dist/
           retention-days: 7
 
   deploy:
