@@ -1,0 +1,23 @@
+{
+  "track": "migrate_starlight",
+  "title": "Migrate Documentation from Sphinx to Starlight",
+  "status": "completed",
+  "started": "2025-05-17",
+  "completed": "2025-05-17",
+  "lead": "Dylan A Mordaunt",
+  "repository": "https://github.com/edithatogo/innovate",
+  "summary": "Migrated the innovate documentation system from Sphinx to Astro/Starlight with starlight-polyglot integration for Python API documentation generation.",
+  "key_deliverables": [
+    "Astro/Starlight documentation site at docs/astro-site/",
+    "starlight-polyglot integration for auto-generating Python API docs",
+    "GitHub Pages deployment workflow",
+    "Conductor track documentation"
+  ],
+  "tags": [
+    "documentation",
+    "starlight",
+    "astro",
+    "migration",
+    "github-pages"
+  ]
+}

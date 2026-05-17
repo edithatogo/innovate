@@ -3,11 +3,9 @@ name: Deploy Documentation
 on:
   push:
     branches:
-      - work
       - main
   pull_request:
     branches:
-      - work
       - main
   # Allow manual triggering
   workflow_dispatch:
@@ -46,15 +44,12 @@ jobs:
       - name: Build documentation site
         run: pnpm build
 
-      - name: Upload documentation artifacts
-        uses: actions/upload-artifact@v5
+      - uses: actions/upload-pages-artifact@v3
         with:
-          name: documentation
           path: docs/astro-site/dist/
-          retention-days: 7
 
   deploy:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     needs: build
     runs-on: ubuntu-latest
     permissions:
@@ -65,20 +60,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Download documentation artifacts
-        uses: actions/download-artifact@v6
-        with:
-          name: documentation
-          path: docs-html
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload to GitHub Pages
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: docs-html
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

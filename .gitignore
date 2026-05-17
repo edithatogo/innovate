@@ -26,3 +26,15 @@ mutmut_config.py
 # Mutation testing output
 mutants/
 .mutmut-cache
+docs/astro-site/node_modules/
+docs/astro-site/dist/
+# Node.js
+node_modules/
+dist/
+# IDE/editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store

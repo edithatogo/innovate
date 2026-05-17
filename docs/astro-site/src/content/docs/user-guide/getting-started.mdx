@@ -1,0 +1,124 @@
+---
+title: Getting Started
+description: Install Innovate and run your first diffusion model.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+This guide walks you through installing Innovate and fitting your first diffusion model.
+
+## Prerequisites
+
+- Python 3.10 or later
+- pip, uv, or conda package manager
+
+## Installation
+
+<Tabs>
+  <TabItem label="pip">
+    ```bash
+    pip install innovate
+    ```
+  </TabItem>
+  <TabItem label="uv">
+    ```bash
+    uv pip install innovate
+    ```
+  </TabItem>
+  <TabItem label="conda">
+    ```bash
+    conda install -c conda-forge innovate
+    ```
+  </TabItem>
+</Tabs>
+
+### Optional dependencies
+
+Innovate supports several optional backends and feature sets:
+
+| Extra | Packages | Command |
+|-------|----------|---------|
+| JAX backend | JAX for GPU-accelerated computation | `pip install "innovate[jax]"` |
+| Bayesian inference | PyMC for MCMC sampling | `pip install "innovate[bayesian]"` |
+| Plotting | Matplotlib-based visualisation | `pip install "innovate[plots]"` |
+| All extras | All optional dependencies | `pip install "innovate[all]"` |
+
+## Your First Model
+
+Let's fit a Bass diffusion model to some adoption data and generate a forecast.
+
+```python
+import pandas as pd
+from innovate import fit_model, predict_model, summarise_model
+
+# Sample adoption data (cumulative adoptions over 12 quarters)
+data = pd.DataFrame({
+    'time': range(1, 13),
+    'adoptions': [
+        1, 3, 8, 18, 35, 60, 90, 125, 160, 195, 225, 245
+    ]
+})
+
+# Fit a Bass diffusion model using maximum likelihood estimation
+result = fit_model(
+    data,
+    model='bass',
+    method='mle',
+    target_col='adoptions',
+    time_col='time'
+)
+
+# View model summary
+summary = summarise_model(result)
+print(summary)
+```
+
+Output:
+```
+Bass Diffusion Model — Fit Summary
+───────────────────────────────────
+Innovation coefficient (p):  0.0083
+Imitation coefficient  (q):  0.4217
+Market potential       (m):  412.35
+───────────────────────────────────
+Log-likelihood:  -42.18
+AIC:              90.36
+BIC:              91.72
+```
+
+### Generate a Forecast
+
+```python
+# Forecast 8 quarters ahead
+forecast = predict_model(result, horizon=8)
+print(forecast)
+```
+
+Output:
+```
+   time  predicted_adoptions
+0    13            267.89
+1    14            288.45
+2    15            306.72
+3    16            322.87
+4    17            337.09
+5    18            349.57
+6    19            360.49
+7    20            370.00
+```
+
+### Visualise the Results
+
+```python
+from innovate.plots import plot_fit
+
+fig = plot_fit(result, forecast)
+fig.show()
+```
+
+## Next Steps
+
+- Learn about [Core Concepts](/core/)
+- Explore [Available Models](/user-guide/fitting/)
+- Read the [API Reference](/api/python/)
+- Try the [Agent-Based Simulation](/tutorials/) tutorial

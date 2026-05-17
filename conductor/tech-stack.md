@@ -1,136 +1,46 @@
-# Technology Stack
-
-## Language
-- **Python** (>=3.10) — *3.8/3.9 dropped (EOL)*
-- **R** — Thin user-facing binding over the stable functional kernel contract
-- **Rust** — Current binding target and strategic long-term core runtime for selected kernel execution slices; the core is not fully Rust-owned yet, and the remaining ownership gap is recorded in Conductor as archived closure evidence under `Rust Core Full Native Migration and Ownership Closure`, with the earlier `Rust Core Migration Completion and Polyglot Claim Closure` track also archived as closure evidence. The Rust crate currently owns native metadata discovery plus promoted Bass fit, prediction, simulation, summary, and diagnostics slices alongside the selected logistic execution slices and narrow Norton-Bass prediction, simulation, summary, and diagnostics slices
-- **Julia** — Thin user-facing binding over the stable functional kernel contract
-- **TypeScript** — Thin user-facing binding over the stable functional kernel contract
-- **Go** — Thin user-facing binding over the stable functional kernel contract
-- **C#** — Planned thin binding target over the stable functional kernel contract
-
-## Runtime Strategy
-- **Python-first API stabilization** — The canonical Python public API, capability registry, schemas, and functional kernel define the stable product contract before additional language expansion.
-- **Thin binding policy** — R, Rust, Julia, TypeScript, Go, and C# bindings must call or mirror the shared kernel contract. They should not fork or reimplement model behavior independently.
-- **Rust core trajectory** — Rust is the preferred long-term implementation language for performance-critical and portability-critical kernel components, promoted operation by operation. Rust work should evolve from binding/client coverage toward shared core execution while preserving Python ergonomics.
-- **Reference semantics** — Python/NumPy/SciPy remains the reference correctness path until Rust components are promoted behind the same contract and validated by parity, schema, error-mapping, benchmark, profiling, and binding smoke-test evidence.
-
-## Package Manager & Build
-- **uv** — Blazing-fast Python package manager and resolver (replaces pip)
-  - Python dependency management remains `uv`-first.
-- **nox** — Python task orchestration for local and CI parity across supported
-  interpreters while delegating environment resolution and command execution to
-  `uv`.
-- **setuptools** (>=61.0) — Package building and distribution (managed by uv)
-- **uv.lock** — Locked dependency versions for reproducible builds
-- **Node.js** (>=22) — Runtime for the TypeScript binding package and test harness
-- **npm** — Package manager and publication target for the TypeScript binding workspace
-- **cargo / crates.io** — Rust build tooling and publication target for Rust binding and future core components
-- **R package tooling / R-universe / CRAN** — DESCRIPTION/NAMESPACE-based package structure, near-term R-universe publication path, and longer-term CRAN target
-- **Julia package tooling / Julia General registry** — Project-based package structure and eventual Julia registry publication path
-- **Go toolchain / versioned Go modules** — Go module tooling and release-tag publication path for Go binding validation
-- **.NET 10 and .NET 11 SDKs / NuGet** — Supported C# binding toolchains and
-  package publication target
-- **Spack / EasyBuild** — Planned HPC packaging targets for reproducible
-  cluster installs, module sanity checks, and dependency-variant evidence
-
-## Core Libraries
-- **NumPy** — Reference numerical backend and Array API baseline
-- **SciPy** — Scientific computing utilities (optimization, interpolation, statistics) with emerging Array API support where practical
-- **Pandas** — Primary user-facing DataFrame API in Python
-- **PyArrow** — Columnar types and interchange layer for pandas integration and future bindings
-- **Statsmodels** — Statistical modeling and hypothesis testing
-
-## Portability and Interchange Standards
-- **Python Array API standard** — Numerical portability target for durable kernel semantics
-- **Apache Arrow** — Durable columnar and tabular interchange boundary for kernel payloads and future non-Python bindings
-- **Arrow C Data Interface** — Candidate native ABI boundary for future
-  process and language crossings where binary compatibility is required
-- **Polars** — Optional ETL and benchmark-ingestion engine; not part of the stable public API contract
-
-## Advanced Computation
-- **JAX** — Accelerator backend for fitting, simulation, and inference (optional, not public ABI)
-- **PyTensor** — Symbolic tensor computation
-- **NumPyro** — Probabilistic programming with JAX
-- **BlackJAX** — Samplers for Bayesian inference
-- **TensorFlow Probability JAX substrate** — Optional distribution and bijector
-  coverage for JAX-backed probabilistic workflows where it reduces custom code
-- **ArviZ** — Exploratory analysis of Bayesian models
-- **jitcdde** — JIT-compiled delay differential equations
-- **Diffrax** — Neural differential equations (JAX-based)
-
-## Agent-Based Modeling & Networks
-- **Mesa** — Agent-based modeling framework
-- **NetworkX** — Graph and network analysis
-- **ndlib** — Network diffusion library
-
-## Rupture & Trend Detection
-- **ruptures** — Change-point detection
-- **pymannkendall** — Mann-Kendall trend tests
-
-## Linting & Formatting
-- **Ruff** — Ultra-fast linter and formatter (replaces Black, isort, flake8, Pylint, vulture, unimport)
-  - Rules: F (pyflakes), E/W (pycodestyle), I (isort), B (bugbear), SIM (simplify), UP (pyupgrade), RUF (ruff-specific), C90 (mccabe), N (naming)
-- **Vale** — Prose linter for governance and documentation style, including the repo's `Repo/ValueProse` checks
-
-## Type Checking
-- **ty** — Primary type checker (fastest, by Astral)
-- **MyPy** — Secondary type checker (strict mode)
-
-## Testing
-- **pytest** — Primary test framework
-- **pytest-xdist** — Parallel test execution
-- **pytest-benchmark** — Performance benchmarking
-- **nox** — Cross-version Python test orchestration for Python 3.10 through
-  Python 3.14
-- **hypothesis** — Property-based testing
-- **mutmut** — Mutation testing
-- **syrupy** — Snapshot testing
-- **criterion** — Rust benchmarking harness for native kernel paths
-
-## Performance Profiling
-- **Scalene** — Python CPU and memory profiler with per-line attribution; Python GPU profiling is limited to active Python accelerator paths
-- **cargo-flamegraph** — Rust CPU profiling helper for native hot paths and regressions
-- **DHAT** — Rust heap profiling for allocation-sensitive native kernel paths
-- **JAX/XLA device profilers** — GPU profiling remains attached to optional
-  JAX/XLA backends until Rust owns a promoted native GPU execution backend
-- **HPC packaging evidence** — Planned Spack, EasyBuild, HPSF, and E4S
-  readiness evidence for CPU, GPU/XLA, and mixed Rust/Python deployment paths
-
-## Runtime Observability
-- **logging** — Python runtime logging for library code and bridge diagnostics;
-  keep `print` for tests, examples, and intentionally human-facing scripts
-- **tracing** — Rust-native structured instrumentation for future core runtime
-  observability
-
-## Security
-- **Bandit** — Security linting for Python code
-- **safety** — Dependency vulnerability scanning
+# Tech Stack
 
 ## Documentation
-- **Astro Starlight** — Documentation site framework (replaces Sphinx)
-- **starlight-polyglot** — Starlight plugin for generating API documentation from Python source code using Griffe via the `src/innovate/` package entry point
-- **@astrojs/starlight** `^0.39.0` — Core Starlight framework
-- **@astrojs/sitemap** — Public indexing support
-- **starlight-versions** `0.5.4` — Multi-version documentation support
-- **starlight-links-validator** `0.24.0` — Link validation plugin
-- **@astrojs/starlight-docsearch** `0.6.1` — Optional Algolia DocSearch integration
-- **Sphinx** (legacy) — Previous documentation generator, superseded by Starlight. The Sphinx source at `docs/source/` and `docs/build/` artifacts remain as archival references until the migration track `starlight_migration_20260513` is formally closed
 
-## Pre-commit & Git Hooks
-- **pre-commit** — Git hook management framework
-- **actionlint** — GitHub Actions workflow linter
+- **Site Generator**: [Astro](https://astro.build) with [Starlight](https://starlight.astro.build)
+- **Documentation Theme**: Starlight (Astro integration)
+- **Polyglot Plugin**: [starlight-polyglot](https://github.com/edithatogo/starlight-polyglot) — auto-generates API docs from Python source code
+- **Versioning**: starlight-versions for multi-version documentation
+- **Link Validation**: starlight-links-validator for CI link checking
+- **Deployment**: GitHub Pages via GitHub Actions
 
-## CI/CD
-- **GitHub Actions** — Automated testing, linting, and deployment
-- **Renovate** — Automated dependency updates (replaces Dependabot)
-- **release-please** — Conventional-commit-driven releases and changelogs
-- **scripts/sync_versions.py** — Canonical release-version drift guard and manifest synchronizer backed by `pyproject.toml`
-- **Codecov** — Coverage reporting and PR comments
-- **Multi-language binding CI** — Dedicated GitHub Actions jobs for Rust, TypeScript, Go, Julia, and R binding validation
-- **Binding publication workflow** — Release-gated package checks and publication hooks for npm, crates.io, R, Julia, Go modules, and planned NuGet support
+## Previous Documentation (Legacy)
 
-## Code Quality & Maintenance
-- **commitizen** — Conventional commits enforcement + changelog generation
-- **pyproject-fmt** — Auto-format pyproject.toml
-- **codespell** — Spell checking for code and docs
+- **Sphinx** with `sphinx_rtd_theme` — being migrated to Starlight
+- **Extensions**: `autodoc`, `napoleon`, `viewcode`, `intersphinx`, `sphinx_autodoc_typehints`
+
+## Runtime Components
+
+### Language
+- Python 3.10+ (primary)
+- Rust (native kernel, bindings target)
+- R, Julia, TypeScript, Go, C# (binding surfaces)
+
+### Package Management
+- **Python**: uv (primary), pip, conda
+- **Node.js**: pnpm (docs site dependencies)
+
+### CI/CD
+- GitHub Actions (CI, docs deployment, package publishing)
+- pnpm/action-setup (Node.js dependency management)
+
+## Repository Structure
+
+```
+innovate/
+├── docs/
+│   ├── astro-site/          # Starlight documentation site
+│   │   ├── src/content/docs/ # Markdown/MDX documentation
+│   │   ├── astro.config.mjs  # Astro configuration
+│   │   └── public/           # Static assets
+│   ├── conf.py              # Legacy Sphinx config
+│   └── source/              # Legacy Sphinx source
+├── src/innovate/            # Python library source
+├── conductor/               # Migration tracks and tech stack
+└── .github/workflows/       # CI/CD workflows
+```
