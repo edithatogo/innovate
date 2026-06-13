@@ -1,0 +1,23 @@
+Checkpoint: Native Operation Slice Implementation
+
+Review scope:
+- docs/source/_static/rust_core_migration_inventory.json
+- docs/source/_static/rust_native_operation_gap_inventory.json
+- tests/unit/test_rust_core_migration_inventory.py
+- conductor/tracks/rust_native_operation_completion_20260614/plan.md
+
+Validation:
+- python -m json.tool docs/source/_static/rust_core_migration_inventory.json >/dev/null
+- python -m json.tool docs/source/_static/rust_native_operation_gap_inventory.json >/dev/null
+- uv run pytest tests/unit/test_rust_native_operation_completion.py tests/unit/test_rust_core_migration_inventory.py tests/unit/test_rust_core_roadmap_docs.py -q
+- cargo test --manifest-path bindings/rust/Cargo.toml --test operations
+
+Results:
+- Python validation passed, 29 tests.
+- Rust operations validation passed, 32 tests.
+
+Conductor-review findings:
+- No high-confidence fixes required.
+
+CI gate:
+- Remote push and CI monitoring were not executed in this local checkpoint.
