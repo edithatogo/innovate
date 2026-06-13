@@ -2,7 +2,7 @@
 
 ## Phase 1: Registry and Payload Red Tests
 
-- [x] Task: Inventory Python registry model families
+- [x] Task: Inventory Python registry model families 43b33ef
     - [x] Compare Python capability registry entries with Rust-native model slices
     - [x] Identify composite, multi-product, network, policy, probabilistic, and ecosystem families requiring classification
     - [x] Commit this task before starting the next task
