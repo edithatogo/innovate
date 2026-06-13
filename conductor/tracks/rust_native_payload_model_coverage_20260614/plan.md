@@ -10,10 +10,10 @@
     - [x] List fitted-state, covariate, event, diagnostics, simulation, and uncertainty payload shapes
     - [x] Mark each payload as stable, provisional, internal, or Python-reference-only
     - [x] Commit this task before starting the next task
-- [ ] Task: Write failing classification tests
-    - [ ] Require every model family to have ownership status
-    - [ ] Require every stable payload shape to have schema and ownership evidence
-    - [ ] Commit this task before starting the next task
+- [x] Task: Write failing classification tests
+    - [x] Require every model family to have ownership status
+    - [x] Require every stable payload shape to have schema and ownership evidence
+    - [x] Commit this task before starting the next task
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Registry and Payload Red Tests' (Protocol in workflow.md)
 
 ## Phase 2: Model-Family Coverage Slices
