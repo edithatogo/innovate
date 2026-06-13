@@ -30,7 +30,7 @@
 
 ## Phase 3: Evidence and Inventory Closure
 
-- [x] Task: Capture benchmark and memory evidence
+- [x] Task: Capture benchmark and memory evidence e3daea5
     - [x] Run Criterion or project-native Rust benchmarks for promoted slices
     - [x] Capture DHAT or not-applicable rationale for memory-sensitive slices
     - [x] Commit this task before starting the next task
