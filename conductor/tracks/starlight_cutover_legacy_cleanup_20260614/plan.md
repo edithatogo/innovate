@@ -6,7 +6,7 @@
     - [x] Compare product, tech-stack, Starlight config, Sphinx config, and migration manifests
     - [x] Identify stale migration-in-progress language
     - [x] Commit this task before starting the next task
-- [x] Task: Write failing cutover tests
+- [x] Task: Write failing cutover tests a2e9d4b
     - [x] Reject product docs claiming Sphinx is the active docs stack
     - [x] Reject active track folders for completed Starlight migration work
     - [x] Require legacy Sphinx references to be labeled archival
