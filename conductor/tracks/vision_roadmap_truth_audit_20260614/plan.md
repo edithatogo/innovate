@@ -6,8 +6,8 @@
     - [x] Review `conductor/product.md`, `conductor/tech-stack.md`, `docs/architecture_modernization_roadmap.md`, `docs/source/rust_core_roadmap.rst`, and Astro/Starlight operations pages
     - [x] Classify each claim as implemented, archived-track-complete, future-state, blocked, or stale
     - [x] Commit this task before starting the next task
-- [ ] Task: Write failing tests for stale completion claims
-    - [ ] Add tests that reject "full Rust core complete" claims while the inventory has Python-owned or bridge-owned slices
+- [~] Task: Write failing tests for stale completion claims
+    - [~] Add tests that reject "full Rust core complete" claims while the inventory has Python-owned or bridge-owned slices
     - [ ] Add tests that reject product-status documentation claiming Sphinx as the active docs stack
     - [ ] Add tests that require roadmap pages to point unresolved work to active Conductor tracks
     - [ ] Commit this task before starting the next task
