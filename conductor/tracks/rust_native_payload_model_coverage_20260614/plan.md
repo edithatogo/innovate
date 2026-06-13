@@ -1,6 +1,6 @@
 # Implementation Plan: Rust-Native Payload and Model-Family Coverage
 
-## Phase 1: Registry and Payload Red Tests [checkpoint: pending]
+## Phase 1: Registry and Payload Red Tests [checkpoint: 1ba624c]
 
 - [x] Task: Inventory Python registry model families 43b33ef
     - [x] Compare Python capability registry entries with Rust-native model slices
