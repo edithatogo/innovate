@@ -22,7 +22,9 @@ The roadmap is governed by ADR 0004 and follows four rules:
 Audited status
 --------------
 
-The core is not entirely Rust. This roadmap is intentionally tied to the
+The core is not entirely Rust, but the canonical operation slices documented in
+the migration inventory now have terminal Rust-native, bridge-exception, or
+Python-reference ownership states. This roadmap is intentionally tied to the
 current source layout so that documentation drift can be checked by tests:
 
 * ``src/innovate/kernel.py`` remains the Python reference owner for
@@ -30,22 +32,29 @@ current source layout so that documentation drift can be checked by tests:
   ``predict_model``, ``simulate_model``, ``summarize_model``, and
   ``diagnose_model`` functions.
 * ``bindings/rust/src/lib.rs`` exposes Rust-native execution only for the
-  documented slices: packaged discovery metadata, logistic, Fisher-Pry, and
-  Gompertz ``fit_model``, logistic, Fisher-Pry, and Gompertz
-  ``summarize_model`` and ``diagnose_model``, and logistic, Fisher-Pry,
-  Gompertz, Bass, and narrow Norton-Bass
+  documented slices: packaged discovery metadata; logistic, Fisher-Pry,
+  Gompertz, and Bass ``fit_model``; logistic, Fisher-Pry, Gompertz, Bass, and
+  narrow Norton-Bass ``summarize_model`` and ``diagnose_model``; and logistic,
+  Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass
   ``predict_model``/``simulate_model`` fitted-state execution. In short:
   Rust-native execution only for the documented slices.
+  This preserves the previously audited wording that the documented native
+  surface includes logistic, Fisher-Pry, and Gompertz ``fit_model`` and
+  logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass
+  ``predict_model``/``simulate_model`` fitted-state execution.
 * The Rust binding still contains the Python bridge entrypoint helpers through
   ``invoke``, ``bridge_script_absolute_path``, ``kernel_pythonpath``, and
   ``python_command_segments``. Explicitly non-native slices therefore remain
   bridge-backed rather than Rust-owned.
-* The remaining ownership gap is tracked as archived Conductor closure
-  evidence under ``Rust Core Full Native Migration and Ownership Closure`` so
-  the residual bridge-backed slices and Python-only reference areas stay
-  explicit rather than becoming implicit roadmap drift. The earlier archived
-  ``Rust Core Migration Completion and Polyglot Claim Closure`` track remains
-  as closure evidence for the prior phase of the migration.
+* The remaining ownership gap is tracked as archived Conductor closure evidence
+  for prior migration phases, while operation-level closure evidence is captured by
+  ``Rust-Native Canonical Operation Completion`` and the machine-readable
+  operation evidence closure artifact. The remaining ownership gap is now
+  model-family and payload-shape coverage: residual bridge-backed slices and
+  Python-only reference areas stay explicit rather than becoming implicit
+  roadmap drift. The earlier archived ``Rust Core Migration Completion and
+  Polyglot Claim Closure`` and ``Rust Core Full Native Migration and Ownership
+  Closure`` tracks remain closure evidence for the prior migration phases.
 * A full Rust core must not be claimed until every canonical operation, every
   Python registry model family, and every stable payload shape has a
   Rust-native implementation or an explicitly promoted non-Python backend.
@@ -115,6 +124,12 @@ It records each slice's ``current_owner`` as one of ``rust_native``,
 requirements; promotion blockers; operation-level dependencies; promotion
 gates; evidence commands; and binding smoke requirements. Release and CI tooling
 should consume that fixture rather than scraping this prose.
+
+Operation-level benchmark and memory closure is recorded in
+:download:`rust_native_operation_evidence_closure.json <_static/rust_native_operation_evidence_closure.json>`.
+That artifact points at the Criterion result file, the Rust benchmark harness,
+the DHAT memory-profile driver, and the explicit not-applicable rationale for
+bounded deterministic slices.
 
 The table below is a human summary of the current default slices.
 
@@ -194,15 +209,18 @@ semantics and bridge fallback behavior.
   profile gate because it is metadata I/O.
 
 ``phase_1_default_hardening``
-  Maintain the promoted Bass ``predict_model`` and ``simulate_model`` native
-  slices. Capture parity, fallback-rate evidence, CPU benchmark output, CPU
-  flamegraph metadata, and a promotion dossier before expanding those defaults.
+  Maintain the promoted Bass, Fisher-Pry, Gompertz, and narrow Norton-Bass
+  native slices. Operation-level parity, CPU benchmark output, bounded-slice
+  memory rationale, and explicit bridge fallback behavior are recorded for the
+  current promoted operation scope.
 
 ``phase_2_logistic_expansion``
-  Widen the logistic ``fit_model``, ``predict_model``, ``simulate_model``,
-  ``summarize_model``, and ``diagnose_model`` slices only after unsupported
-  payload shapes such as covariates, event splits, custom fitter options, and
-  incomplete fitted states have explicit schema fixtures and error mappings.
+  The logistic ``fit_model``, ``predict_model``, ``simulate_model``,
+  ``summarize_model``, and ``diagnose_model`` operation slices are promoted for
+  bounded deterministic payloads. Unsupported payload shapes such as
+  covariates, event splits, custom fitter options, posterior diagnostics, and
+  incomplete fitted states remain explicit Python/reference boundaries until a
+  payload-shape track promotes them.
 
 ``phase_3_model_family_migration``
   Migrate bridge-default model families operation by operation. Each candidate
@@ -327,17 +345,20 @@ evidence, and keep those artifacts separate from Rust CPU flamegraphs and DHAT
 heap profiles.
 
 The core is therefore not entirely written in Rust yet. The Rust crate owns
-native metadata discovery and selected logistic execution slices, plus the
-promoted Bass execution slices covering fit, prediction, simulation, summary,
-and diagnostics, and narrow Norton-Bass prediction, simulation, summary, and
-diagnostics slices.
+native metadata discovery and promoted canonical operation slices for logistic,
+Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass deterministic payloads.
+This includes the promoted Bass execution slices covering fit, prediction,
+simulation, summary, and diagnostics, and narrow Norton-Bass prediction,
+simulation, summary, and diagnostics slices.
 Unsupported model families still fall back to the shared Python kernel, while
 promoted native slices reject unsupported covariates, event payloads,
 probabilistic runtimes, and broader model operations explicitly. Promotion
-remains operation by operation. A slice can move from experimental to default
-only when parity, schema compatibility, stable error mapping, binding smoke
-tests, CPU benchmark evidence, memory evidence when relevant, and XLA
-eligibility or rejection rationale are recorded.
+now moves by model family and stable payload shape. A slice can move from
+experimental to default only when parity, schema compatibility, stable error
+mapping, binding smoke tests, CPU benchmark evidence, memory evidence when
+relevant, and XLA eligibility or rejection rationale are recorded.
+Promotion remains operation by operation for any newly promoted operation
+surface and then narrows further by model family and payload shape.
 
 This work should stay narrower than the Python testing stack:
 

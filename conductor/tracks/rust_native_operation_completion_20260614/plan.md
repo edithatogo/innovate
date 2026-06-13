@@ -34,10 +34,10 @@
     - [x] Run Criterion or project-native Rust benchmarks for promoted slices
     - [x] Capture DHAT or not-applicable rationale for memory-sensitive slices
     - [x] Commit this task before starting the next task
-- [ ] Task: Update inventory and roadmap evidence
-    - [ ] Update `rust_core_migration_inventory.json`
-    - [ ] Update Rust roadmap prose to match the machine-readable state
-    - [ ] Commit this task before starting the next task
+- [x] Task: Update inventory and roadmap evidence
+    - [x] Update `rust_core_migration_inventory.json`
+    - [x] Update Rust roadmap prose to match the machine-readable state
+    - [x] Commit this task before starting the next task
 - [ ] Task: Run binding smoke matrix
     - [ ] Validate Python, Rust, R, Julia, TypeScript, Go, and C# bindings where available
     - [ ] Record blocked or not-applicable binding evidence explicitly
