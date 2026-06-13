@@ -1,0 +1,10 @@
+Task: Classify network, policy, and ecosystem families
+
+Summary:
+- Extended rust_native_model_family_slice_evidence.json with Python-reference boundaries for network, policy, ecosystem, advanced diffusion, and ODE/state-vector families.
+- Added promotion prerequisites for graph, policy event, covariate, posterior, uncertainty, state-vector, and transition schemas.
+- Added tests requiring explicit Python-reference boundaries for object-internal families.
+
+Validation:
+- python -m json.tool docs/source/_static/rust_native_model_family_slice_evidence.json >/dev/null
+- uv run pytest tests/unit/test_rust_native_payload_model_coverage.py -q
