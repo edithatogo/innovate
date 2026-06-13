@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 def test_astro_starlight_package_manifest_records_pinned_baseline() -> None:
-    """The scaffold should pin the documented Starlight baseline."""
+    """The active site manifest should record the documented Starlight baseline."""
     package = json.loads(Path("docs/astro-site/package.json").read_text())
 
     assert package["name"] == "innovate-docs"
@@ -15,15 +15,14 @@ def test_astro_starlight_package_manifest_records_pinned_baseline() -> None:
     assert package["scripts"]["build"] == "astro build"
     assert package["scripts"]["dev"] == "astro dev"
     assert package["scripts"]["check"] == "astro check"
-    assert Path("docs/astro-site/package-lock.json").exists()
+    assert Path("docs/astro-site/pnpm-lock.yaml").exists()
 
     dependencies = package["dependencies"]
     assert dependencies["astro"] == "^6.0.0"
-    assert dependencies["@astrojs/starlight"] == "0.38.4"
-    assert dependencies["starlight-versions"] == "0.5.4"
-    assert dependencies["starlight-links-validator"] == "0.24.0"
-    assert dependencies["@astrojs/starlight-docsearch"] == "0.6.1"
-    assert dependencies["@astrojs/sitemap"] == "^3.7.2"
+    assert dependencies["@astrojs/starlight"] == "^0.39.0"
+    assert dependencies["starlight-versions"] == "^0.5.4"
+    assert dependencies["starlight-links-validator"] == "^0.24.0"
+    assert dependencies["starlight-polyglot"].startswith("file:")
 
 
 def test_astro_and_starlight_config_files_record_the_scaffold() -> None:
@@ -33,9 +32,8 @@ def test_astro_and_starlight_config_files_record_the_scaffold() -> None:
 
     for phrase in (
         "@astrojs/starlight",
-        "@astrojs/sitemap",
         "Innovate",
-        "docs/astro-site",
+        "starlight-polyglot",
     ):
         assert phrase in astro_config or phrase in starlight_config
 
@@ -63,13 +61,16 @@ def test_astro_and_starlight_config_files_record_the_scaffold() -> None:
         assert phrase in starlight_config
 
 
-def test_astro_starlight_migration_manifest_records_parallel_run_decisions() -> None:
-    """The migration manifest should record the transition policy explicitly."""
+def test_astro_starlight_migration_manifest_records_cutover_decisions() -> None:
+    """The migration manifest should record the cutover policy explicitly."""
     manifest = json.loads(
         Path("docs/source/_static/astro_starlight/migration_manifest.json").read_text()
     )
 
-    assert manifest["migration_mode"] == "parallel-run"
+    assert manifest["migration_mode"] == "cutover-complete"
+    assert manifest["active_docs_stack"] == "astro_starlight"
+    assert manifest["legacy_docs_stack"] == "sphinx"
+    assert manifest["legacy_retention_policy"] == "archival_and_redirect_reference_only"
     assert manifest["search_provider"] == "algolia-docsearch"
     assert manifest["sitemap_provider"] == "@astrojs/sitemap"
     assert manifest["baseline"]["astro"] == "^6.0.0"
@@ -78,7 +79,7 @@ def test_astro_starlight_migration_manifest_records_parallel_run_decisions() -> 
     assert manifest["baseline"]["starlight_links_validator"] == "0.24.0"
     assert manifest["baseline"]["starlight_docsearch"] == "0.6.1"
     assert manifest["scaffold_root"] == "docs/astro-site"
-    assert manifest["route_stability_policy"] == "keep-existing-sphinx-urls"
+    assert manifest["route_stability_policy"] == "compatibility-aliases-for-legacy-sphinx-urls"
 
 
 def test_astro_starlight_inventories_stay_synchronized() -> None:
@@ -105,7 +106,7 @@ def test_astro_starlight_docs_page_lists_the_scaffold_artifacts() -> None:
 
     for phrase in (
         "Astro/Starlight documentation site migration",
-        "parallel-run",
+        "cutover-complete",
         "Algolia DocSearch",
         "content inventory",
         "redirect inventory",
@@ -214,7 +215,7 @@ def test_astro_starlight_redirect_route_map_describes_cutover() -> None:
         "/maintainers/publication/",
         "/maintainers/release-notes/",
         "/operations/rust-core/",
-        "Canonical Sphinx URLs remain reachable",
+        "Legacy Sphinx URLs remain reachable",
     ):
         assert phrase in redirects
 

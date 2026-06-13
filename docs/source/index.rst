@@ -70,4 +70,6 @@ The architectural rationale and roadmap live in the repository docs, not in the 
 - ``polyglot_repo_architecture``
 - ``adr``
 
-This page is the canonical landing page for the Sphinx site. For a shorter overview and install instructions, see the project README.
+This page is the legacy Sphinx landing page retained for archival and redirect
+compatibility. For a shorter overview and install instructions, see the project
+README.

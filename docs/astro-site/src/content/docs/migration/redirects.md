@@ -5,14 +5,14 @@ description: Route inventory and forwarder plan for the docs-site cutover.
 
 # Redirects
 
-This page mirrors the redirect inventory that keeps existing Sphinx URLs
-reachable while the Astro/Starlight site runs in parallel.
+This page mirrors the redirect inventory that keeps legacy Sphinx URLs
+reachable as compatibility aliases for the active Astro/Starlight site.
 
 Route-stability rules:
 
-- Every moved Sphinx page must map to a known Astro route.
+- Every moved legacy Sphinx page must map to a known Astro route.
 - Redirect coverage must stay synchronized with the content inventory.
-- Canonical Sphinx URLs remain reachable until cutover completes.
+- Legacy Sphinx URLs remain reachable as compatibility aliases after cutover.
 
 Representative route map:
 

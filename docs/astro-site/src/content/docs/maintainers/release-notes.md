@@ -14,6 +14,6 @@ Responsibilities:
 - Commitizen supports local conventional-commit workflows.
 - CHANGELOG.md remains the durable in-repository release summary.
 
-The Astro site should present the same policy that the Sphinx docs already
-describe, while the Sphinx route remains reachable through the parallel-run
+The Astro/Starlight site presents the same policy that legacy Sphinx docs
+described, while the old Sphinx route remains reachable through compatibility
 redirect inventory.

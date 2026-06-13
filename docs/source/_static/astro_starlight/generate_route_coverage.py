@@ -1,8 +1,8 @@
 """Generate the Astro/Starlight route coverage report.
 
 The report combines the migration inventory with a small set of migration
-support docs that have concrete Astro counterparts. The goal is to make the
-current coverage explicit during the parallel-run window.
+support docs that have concrete Astro counterparts. The goal is to make active
+route coverage and legacy compatibility coverage explicit after cutover.
 """
 
 from __future__ import annotations

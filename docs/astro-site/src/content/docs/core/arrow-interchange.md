@@ -14,5 +14,5 @@ Key migration points:
 
 - Arrow remains the stable interchange boundary for language bindings.
 - The site keeps the interchange contract visible alongside the kernel pages.
-- Redirects will preserve the existing Sphinx URL during the parallel-run
-  period.
+- Redirects preserve the legacy Sphinx URL as a compatibility alias after
+  cutover.

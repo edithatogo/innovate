@@ -1,5 +1,8 @@
 {
-  "migration_mode": "parallel-run",
+  "migration_mode": "cutover-complete",
+  "active_docs_stack": "astro_starlight",
+  "legacy_docs_stack": "sphinx",
+  "legacy_retention_policy": "archival_and_redirect_reference_only",
   "search_provider": "algolia-docsearch",
   "sitemap_provider": "@astrojs/sitemap",
   "baseline": {
@@ -12,10 +15,11 @@
   "scaffold_root": "docs/astro-site",
   "content_inventory": "docs/source/_static/astro_starlight/content_inventory.json",
   "redirect_inventory": "docs/source/_static/astro_starlight/redirect_inventory.json",
-  "route_stability_policy": "keep-existing-sphinx-urls",
+  "route_stability_policy": "compatibility-aliases-for-legacy-sphinx-urls",
   "notes": [
-    "The Sphinx site remains canonical during the parallel-run window.",
-    "Redirects preserve the current Sphinx URLs until cutover is approved.",
-    "Algolia DocSearch is the selected search provider for the scaffold."
+    "Astro/Starlight is the active documentation stack.",
+    "Legacy Sphinx source is retained as archival and redirect-reference material.",
+    "Redirects preserve legacy Sphinx URLs as compatibility aliases.",
+    "Algolia DocSearch is the selected search provider when deployment credentials are available."
   ]
 }

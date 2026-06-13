@@ -21,5 +21,5 @@ Archive references:
 - `conductor/archive/starlight_versions_plugins_20260506/`
 - `conductor/archive/registry_submission_execution_20260511/`
 
-The references page complements the parallel-run route inventory and keeps the
-reader path explicit while the Astro site expands.
+The references page complements the legacy route inventory and keeps the reader
+path explicit now that Astro/Starlight is the active docs site.

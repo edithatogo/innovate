@@ -1,7 +1,8 @@
-# Astro/Starlight migration scaffold
+# Astro/Starlight documentation site
 
-This directory contains the planned Astro/Starlight documentation site surface
-for the `innovate` repository.
+This directory contains the active Astro/Starlight documentation site surface
+for the `innovate` repository. Legacy Sphinx source is retained outside this
+directory as archival and redirect-reference material.
 
 Baseline decisions:
 
@@ -12,11 +13,12 @@ Baseline decisions:
 - `astro` `^6.0.0`
 - `@astrojs/sitemap` `^3.7.2`
 
-Migration policy:
+Cutover policy:
 
-- `parallel-run` while the Sphinx site remains canonical
+- Astro/Starlight is the active documentation stack
+- legacy Sphinx URLs are preserved as compatibility aliases
 - Algolia DocSearch as the selected search provider
-- canonical URL preservation through redirects during cutover
+- route preservation through redirect evidence and cutover verification
 
 Key artifacts:
 

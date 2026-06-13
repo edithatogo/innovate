@@ -45,33 +45,7 @@
       "required_resolution": "archive_or_reclassify_completed"
     }
   ],
-  "stale_cutover_language": [
-    {
-      "path": "docs/source/_static/astro_starlight/migration_manifest.json",
-      "issue": "migration_mode remains parallel-run and notes say Sphinx remains canonical",
-      "required_resolution": "change to cutover-complete with Sphinx archival wording"
-    },
-    {
-      "path": "docs/source/astro_starlight_migration.rst",
-      "issue": "states the migration is a parallel-run and the current Sphinx site remains canonical",
-      "required_resolution": "reword as historical migration record with Astro/Starlight active"
-    },
-    {
-      "path": "docs/astro-site/src/content/docs/migration/index.md",
-      "issue": "asks readers to keep Sphinx live during the parallel-run period",
-      "required_resolution": "reword as legacy redirect/archive policy"
-    },
-    {
-      "path": "docs/astro-site/src/content/docs/migration/redirects.md",
-      "issue": "states canonical Sphinx URLs remain reachable until cutover completes",
-      "required_resolution": "reword redirects as compatibility aliases after cutover"
-    },
-    {
-      "path": "docs/astro-site/README.md",
-      "issue": "states parallel-run while Sphinx remains canonical",
-      "required_resolution": "reword README to say Starlight is active"
-    }
-  ],
+  "stale_cutover_language": [],
   "blocked_or_deferred_items": [
     {
       "item": "DocSearch credentials",
