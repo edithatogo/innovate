@@ -324,8 +324,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Rust-Native Canonical Operation Completion**
-  *Link: [./tracks/rust_native_operation_completion_20260614/](./tracks/rust_native_operation_completion_20260614/)*
+- [x] **Track: Rust-Native Canonical Operation Completion** *(Completed)*
+  *Link: [./archive/rust_native_operation_completion_20260614/](./archive/rust_native_operation_completion_20260614/)*
 
 ---
 
