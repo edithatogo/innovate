@@ -6,11 +6,11 @@
     - [x] Compare product, tech-stack, Starlight config, Sphinx config, and migration manifests
     - [x] Identify stale migration-in-progress language
     - [x] Commit this task before starting the next task
-- [ ] Task: Write failing cutover tests
-    - [ ] Reject product docs claiming Sphinx is the active docs stack
-    - [ ] Reject active track folders for completed Starlight migration work
-    - [ ] Require legacy Sphinx references to be labeled archival
-    - [ ] Commit this task before starting the next task
+- [x] Task: Write failing cutover tests
+    - [x] Reject product docs claiming Sphinx is the active docs stack
+    - [x] Reject active track folders for completed Starlight migration work
+    - [x] Require legacy Sphinx references to be labeled archival
+    - [x] Commit this task before starting the next task
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Red-Phase Cutover Checks' (Protocol in workflow.md)
 
 ## Phase 2: Cutover Cleanup
