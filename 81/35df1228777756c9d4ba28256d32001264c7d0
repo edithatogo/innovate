@@ -1,0 +1,15 @@
+Phase: Red-Phase Cutover Checks
+
+Review summary:
+- Inventory artifact created for active Astro/Starlight surfaces, legacy Sphinx retention, stale migration wording, stale active migration tracks, and DocSearch state.
+- Red tests define the cutover-complete contract before cleanup.
+
+Red validation:
+- uv run pytest tests/unit/test_starlight_cutover_legacy_cleanup.py -q
+- Result: 1 passed, 4 failed as expected.
+
+Expected failures:
+- completed Starlight migration folders still exist under conductor/tracks/
+- migration_manifest.json still uses parallel-run
+- migration docs still contain stale Sphinx-canonical language
+- cutover_surface_inventory.json still records stale work
