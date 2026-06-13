@@ -17,6 +17,8 @@ CANONICAL_OPERATIONS = {
 INVENTORY_PATH = Path("docs/source/_static/rust_core_migration_inventory.json")
 GAP_INVENTORY_PATH = Path("docs/source/_static/rust_native_operation_gap_inventory.json")
 EVIDENCE_CLOSURE_PATH = Path("docs/source/_static/rust_native_operation_evidence_closure.json")
+BINDING_SMOKE_PATH = Path("docs/source/_static/rust_native_operation_binding_smoke.json")
+REQUIRED_BINDINGS = {"python", "rust", "r", "julia", "typescript", "go", "csharp"}
 REQUIRED_PROMOTION_GATES = {
     "parity",
     "schema_compatibility",
@@ -37,6 +39,10 @@ def _gap_inventory() -> dict[str, Any]:
 
 def _evidence_closure() -> dict[str, Any]:
     return json.loads(EVIDENCE_CLOSURE_PATH.read_text())
+
+
+def _binding_smoke() -> dict[str, Any]:
+    return json.loads(BINDING_SMOKE_PATH.read_text())
 
 
 def test_operation_gap_inventory_covers_every_canonical_operation() -> None:
@@ -117,3 +123,22 @@ def test_operation_evidence_closure_records_benchmark_and_memory_boundaries() ->
     assert evidence_by_operation["diagnose_model"]["status"] == "harness_complete_result_partial"
     assert closure["memory_evidence"]["status"] == "closed_for_promoted_bounded_slices"
     assert closure["memory_evidence"]["rerun_before_payload_expansion"] is True
+
+
+def test_binding_smoke_matrix_records_passed_and_blocked_bindings() -> None:
+    """Binding smoke evidence should cover every required language surface."""
+    smoke = _binding_smoke()
+    results = {entry["binding"]: entry for entry in smoke["results"]}
+
+    assert smoke["schema_version"] == 1
+    assert set(smoke["required_bindings"]) == REQUIRED_BINDINGS
+    assert set(results) == REQUIRED_BINDINGS
+    assert smoke["blocked_bindings"] == ["csharp"]
+
+    for binding in REQUIRED_BINDINGS - {"csharp"}:
+        assert results[binding]["status"] == "passed"
+        assert results[binding]["command"]
+
+    assert results["csharp"]["status"] == "blocked"
+    assert "NETSDK1045" in results["csharp"]["blocker"]
+    assert "net11.0" in results["csharp"]["summary"]

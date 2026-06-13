@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "generated_by_track": "rust_native_operation_completion_20260614",
+  "scope": "native canonical operation promotion binding smoke matrix",
+  "results": [
+    {
+      "binding": "python",
+      "status": "passed",
+      "command": "uv run pytest tests/unit/test_binding_publication_ci.py tests/unit/test_rust_native_operation_completion.py -q",
+      "summary": "18 tests passed for Python publication/binding governance and operation completion evidence."
+    },
+    {
+      "binding": "rust",
+      "status": "passed",
+      "command": "cargo test --manifest-path bindings/rust/Cargo.toml",
+      "summary": "Rust crate tests passed, including 32 operation tests and schema compatibility."
+    },
+    {
+      "binding": "r",
+      "status": "passed",
+      "command": "Rscript bindings/r/tests/run.R",
+      "summary": "R binding tests completed."
+    },
+    {
+      "binding": "julia",
+      "status": "passed",
+      "command": "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+      "summary": "Julia contract, wrapper, packaging, runtime path, and schema compatibility tests passed."
+    },
+    {
+      "binding": "typescript",
+      "status": "passed",
+      "command": "npm test -- --testTimeout=60000",
+      "working_directory": "bindings/typescript",
+      "summary": "Vitest passed with 7 files and 20 tests. Default 5s timeout is too low for bridge-backed schema and wrapper smoke tests on this machine."
+    },
+    {
+      "binding": "go",
+      "status": "passed",
+      "command": "go test ./...",
+      "working_directory": "bindings/go",
+      "summary": "Go binding tests passed."
+    },
+    {
+      "binding": "csharp",
+      "status": "blocked",
+      "command": "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj",
+      "summary": "Installed .NET SDK 10.0.107 does not support the binding project target net11.0.",
+      "blocker": "NETSDK1045: The current .NET SDK does not support targeting .NET 11.0."
+    }
+  ],
+  "required_bindings": [
+    "python",
+    "rust",
+    "r",
+    "julia",
+    "typescript",
+    "go",
+    "csharp"
+  ],
+  "blocked_bindings": [
+    "csharp"
+  ]
+}

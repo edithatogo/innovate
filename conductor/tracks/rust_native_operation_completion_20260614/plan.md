@@ -38,8 +38,8 @@
     - [x] Update `rust_core_migration_inventory.json`
     - [x] Update Rust roadmap prose to match the machine-readable state
     - [x] Commit this task before starting the next task
-- [ ] Task: Run binding smoke matrix
-    - [ ] Validate Python, Rust, R, Julia, TypeScript, Go, and C# bindings where available
-    - [ ] Record blocked or not-applicable binding evidence explicitly
-    - [ ] Commit this task before starting the next task
+- [x] Task: Run binding smoke matrix
+    - [x] Validate Python, Rust, R, Julia, TypeScript, Go, and C# bindings where available
+    - [x] Record blocked or not-applicable binding evidence explicitly
+    - [x] Commit this task before starting the next task
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Evidence and Inventory Closure' (Protocol in workflow.md)
