@@ -1,0 +1,12 @@
+Task: Capture benchmark and memory evidence
+
+Summary:
+- Added docs/source/_static/rust_native_operation_evidence_closure.json.
+- Tied promoted operation slices to the existing Criterion result artifact, Criterion benchmark harness, and DHAT memory-profile driver.
+- Distinguished captured benchmark result rows from harness-covered result-refresh gaps.
+- Recorded bounded-slice memory closure and rerun-before-expansion requirements.
+- Added tests for the evidence closure artifact.
+
+Validation:
+- python -m json.tool docs/source/_static/rust_native_operation_evidence_closure.json >/dev/null
+- uv run pytest tests/unit/test_rust_native_operation_completion.py tests/unit/test_rust_core_migration_inventory.py tests/unit/test_rust_core_roadmap_docs.py -q
