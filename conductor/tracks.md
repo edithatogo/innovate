@@ -329,7 +329,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Rust-Native Payload and Model-Family Coverage**
+- [~] **Track: Rust-Native Payload and Model-Family Coverage**
   *Link: [./tracks/rust_native_payload_model_coverage_20260614/](./tracks/rust_native_payload_model_coverage_20260614/)*
 
 ---
