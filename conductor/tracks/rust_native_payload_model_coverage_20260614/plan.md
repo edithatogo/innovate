@@ -32,7 +32,7 @@
     - [x] Commit this task before starting the next task
 - [x] Task: Conductor - Automated Review and Checkpoint 'Model-Family Coverage Slices' (Protocol in workflow.md)
 
-## Phase 3: Full-Claim Gate
+## Phase 3: Full-Claim Gate [checkpoint: 9925c34]
 
 - [x] Task: Update full Rust ownership gate 5f3b9dd
     - [x] Add a machine-readable gate that determines whether full Rust ownership may be claimed
@@ -42,4 +42,4 @@
     - [x] Run Rust, Python, and binding tests for promoted families
     - [x] Record intentionally excluded Python-reference boundaries
     - [x] Commit this task before starting the next task
-- [~] Task: Conductor - Automated Review and Checkpoint 'Full-Claim Gate' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Full-Claim Gate' (Protocol in workflow.md)
