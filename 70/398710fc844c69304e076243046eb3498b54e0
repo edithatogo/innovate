@@ -1,0 +1,18 @@
+Task: Promote eligible summarize_model and diagnose_model slices
+
+Summary:
+- Promoted stable logistic and Gompertz summary/diagnostics slices to rust_native_promoted.
+- Resolved memory evidence gates for native logistic, Gompertz, Bass, and narrow Norton-Bass summary/diagnostics slices with bounded deterministic reporting rationale.
+- Updated rust_native_operation_gap_inventory.json to remove summarize_model and diagnose_model native candidates.
+- The native operation completion red tests now pass.
+
+Validation:
+- python -m json.tool docs/source/_static/rust_core_migration_inventory.json >/dev/null
+- python -m json.tool docs/source/_static/rust_native_operation_gap_inventory.json >/dev/null
+- uv run pytest tests/unit/test_rust_native_operation_completion.py tests/unit/test_rust_core_migration_inventory.py tests/unit/test_rust_core_roadmap_docs.py -q
+- cargo test --manifest-path bindings/rust/Cargo.toml --test operations native_logistic_summary_matches_python_bridge_contract -- --exact
+- cargo test --manifest-path bindings/rust/Cargo.toml --test operations native_logistic_diagnose_matches_python_bridge_contract -- --exact
+- cargo test --manifest-path bindings/rust/Cargo.toml --test operations native_gompertz_summary_matches_python_bridge_contract -- --exact
+- cargo test --manifest-path bindings/rust/Cargo.toml --test operations native_gompertz_diagnose_matches_python_bridge_contract -- --exact
+- cargo test --manifest-path bindings/rust/Cargo.toml --test operations native_bass_summary_matches_python_bridge_contract -- --exact
+- cargo test --manifest-path bindings/rust/Cargo.toml --test operations native_bass_diagnose_matches_python_bridge_contract -- --exact
