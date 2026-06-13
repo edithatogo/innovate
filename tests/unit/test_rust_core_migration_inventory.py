@@ -79,6 +79,7 @@ def test_rust_migration_inventory_declares_required_fields_and_enums() -> None:
     }
     assert set(inventory["promotion_state_values"]) == {
         "native_default_guarded",
+        "rust_native_promoted",
         "native_candidate_needs_evidence",
         "bridge_default_pending_migration",
         "bridge_default_explicit_exception",

@@ -14,10 +14,10 @@
 
 ## Phase 2: Native Operation Slice Implementation
 
-- [ ] Task: Promote eligible `fit_model` slices
-    - [ ] Implement or complete Rust-native operation paths for stable fitted-state payloads
-    - [ ] Add parity and error-mapping tests
-    - [ ] Commit this task before starting the next task
+- [x] Task: Promote eligible `fit_model` slices
+    - [x] Implement or complete Rust-native operation paths for stable fitted-state payloads
+    - [x] Add parity and error-mapping tests
+    - [x] Commit this task before starting the next task
 - [ ] Task: Promote eligible `predict_model` and `simulate_model` slices
     - [ ] Implement missing native paths where schemas are stable
     - [ ] Preserve explicit unsupported-native errors for unstable payloads

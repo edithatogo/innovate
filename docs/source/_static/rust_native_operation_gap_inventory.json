@@ -24,19 +24,18 @@
     {
       "operation": "fit_model",
       "native_default_slices": [
+        "logistic_simple_positive_observations",
+        "gompertz_simple_positive_observations",
         "bass_and_other_model_families"
       ],
-      "native_candidates_needing_evidence": [
-        "logistic_simple_positive_observations",
-        "gompertz_simple_positive_observations"
-      ],
+      "native_candidates_needing_evidence": [],
       "bridge_or_reference_boundaries": [
         "covariate payloads",
         "event payloads",
         "custom fitter options",
         "probabilistic and uncertainty-aware fitters"
       ],
-      "required_closure": "Promote eligible deterministic fitted-state payloads only after memory evidence and unsupported-payload error mapping are explicit."
+      "required_closure": "Stable deterministic fit payloads are promoted; covariate, event, custom fitter, probabilistic, and uncertainty-aware payloads remain explicit Python boundaries."
     },
     {
       "operation": "predict_model",
