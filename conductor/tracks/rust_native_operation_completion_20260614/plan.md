@@ -2,7 +2,7 @@
 
 ## Phase 1: Operation Inventory and Red Tests
 
-- [x] Task: Build the operation gap inventory
+- [x] Task: Build the operation gap inventory 2741aac
     - [x] Parse the Rust migration inventory by operation, owner, fallback status, and promotion gates
     - [x] Identify native candidates, bridge defaults, and Python-reference boundaries
     - [x] Commit this task before starting the next task
