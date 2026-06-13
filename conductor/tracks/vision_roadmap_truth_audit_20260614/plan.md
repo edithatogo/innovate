@@ -24,8 +24,8 @@
     - [x] Ensure the docs site surfaces the same canonical status wording
     - [x] Preserve links to archival evidence and future-state tracks
     - [x] Commit this task before starting the next task
-- [ ] Task: Run targeted tests and docs checks
-    - [ ] Run the new roadmap-status tests
+- [~] Task: Run targeted tests and docs checks
+    - [~] Run the new roadmap-status tests
     - [ ] Run any existing roadmap/doc architecture tests that cover these files
     - [ ] Commit validation-only changes if needed
     - [ ] Commit this task before starting the next task
