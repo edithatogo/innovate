@@ -1,0 +1,11 @@
+Task: Write failing tests for stale completion claims
+
+Summary: Added focused roadmap truth tests covering the canonical status inventory, stale Sphinx product status, stale active-migration language, future-state track links, and full-Rust ownership claim blocking while Rust inventory contains bridge or Python-owned slices.
+
+Files changed:
+- tests/unit/test_vision_roadmap_truth_status.py
+- conductor/tracks/vision_roadmap_truth_audit_20260614/plan.md
+
+Validation: uv run pytest tests/unit/test_vision_roadmap_truth_status.py -q failed as expected against stale docs.
+
+Why: These red-phase tests define the documentation truthfulness contract before implementation updates the docs.
