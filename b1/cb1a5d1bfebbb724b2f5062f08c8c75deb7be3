@@ -1,0 +1,9 @@
+Task: Inventory current vision and roadmap completion claims
+
+Summary: Added a machine-readable inventory classifying product, roadmap, Rust-core, registry, HPC, Astro/Starlight, and Conductor registry status claims as implemented, archived-track-complete, future-state, blocked_external, or stale.
+
+Files changed:
+- docs/source/_static/vision_roadmap_status_inventory.json
+- conductor/tracks/vision_roadmap_truth_audit_20260614/plan.md
+
+Why: The track needs a durable source of truth before tests and documentation wording can distinguish completed tracks from incomplete future-state vision.
