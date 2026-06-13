@@ -22,7 +22,7 @@
     - [x] Add Rust-native support or explicit non-native promotion for remaining stable slices
     - [x] Add parity fixtures and error mapping tests
     - [x] Commit this task before starting the next task
-- [x] Task: Classify composite and multi-product families
+- [x] Task: Classify composite and multi-product families 18c5182
     - [x] Implement native support where schemas are stable
     - [x] Keep bridge fallback only with explicit rationale and tests
     - [x] Commit this task before starting the next task
