@@ -19,7 +19,7 @@
     - [x] Update product status, tech-stack, and roadmap docs to agree on Starlight
     - [x] Preserve Sphinx as archival/redirect source only where needed
     - [x] Commit this task before starting the next task
-- [x] Task: Resolve stale active migration tracks
+- [x] Task: Resolve stale active migration tracks be948da
     - [x] Archive, merge, or remove duplicate completed Starlight track folders according to Conductor workflow
     - [x] Update `conductor/tracks.md` links if needed
     - [x] Commit this task before starting the next task
