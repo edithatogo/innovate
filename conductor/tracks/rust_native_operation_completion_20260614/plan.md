@@ -14,7 +14,7 @@
 
 ## Phase 2: Native Operation Slice Implementation
 
-- [x] Task: Promote eligible `fit_model` slices
+- [x] Task: Promote eligible `fit_model` slices 8116b0a
     - [x] Implement or complete Rust-native operation paths for stable fitted-state payloads
     - [x] Add parity and error-mapping tests
     - [x] Commit this task before starting the next task
