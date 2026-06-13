@@ -1,0 +1,17 @@
+Task: Promote eligible predict_model and simulate_model slices
+
+Summary:
+- Promoted stable logistic and Gompertz fitted-state prediction/simulation slices to rust_native_promoted.
+- Resolved memory evidence gates for native logistic, Gompertz, and Bass prediction/simulation slices with bounded deterministic fitted-state rationale.
+- Kept other_model_families_or_unsupported_payloads as explicit python_bridge bridge_default_explicit_exception boundaries.
+- Updated rust_native_operation_gap_inventory.json to remove predict_model and simulate_model native candidates.
+
+Validation:
+- python -m json.tool docs/source/_static/rust_core_migration_inventory.json >/dev/null
+- python -m json.tool docs/source/_static/rust_native_operation_gap_inventory.json >/dev/null
+- uv run pytest tests/unit/test_rust_core_migration_inventory.py tests/unit/test_rust_core_roadmap_docs.py -q
+- cargo test --manifest-path bindings/rust/Cargo.toml --test operations native_logistic_prediction_matches_python_bridge_contract -- --exact
+- cargo test --manifest-path bindings/rust/Cargo.toml --test operations native_gompertz_prediction_matches_python_bridge_contract -- --exact
+- cargo test --manifest-path bindings/rust/Cargo.toml --test operations native_bass_prediction_matches_python_bridge_contract -- --exact
+- cargo test --manifest-path bindings/rust/Cargo.toml --test operations native_gompertz_simulation_matches_python_bridge_contract -- --exact
+- cargo test --manifest-path bindings/rust/Cargo.toml --test operations native_bass_simulation_matches_python_bridge_contract -- --exact
