@@ -1,0 +1,13 @@
+Task: Update inventory and roadmap evidence
+
+Summary:
+- Aligned docs/source/rust_core_roadmap.rst with the terminal operation ownership state.
+- Added links to rust_native_operation_evidence_closure.json.
+- Updated the Astro/Starlight Rust Core mirror with operation-closure status and evidence artifacts.
+- Preserved existing roadmap contract phrases required by validation tests.
+
+Validation:
+- python -m json.tool docs/source/_static/rust_core_migration_inventory.json >/dev/null
+- python -m json.tool docs/source/_static/rust_native_operation_gap_inventory.json >/dev/null
+- python -m json.tool docs/source/_static/rust_native_operation_evidence_closure.json >/dev/null
+- uv run pytest tests/unit/test_rust_native_operation_completion.py tests/unit/test_rust_core_migration_inventory.py tests/unit/test_rust_core_roadmap_docs.py tests/unit/test_vision_roadmap_truth_status.py -q
