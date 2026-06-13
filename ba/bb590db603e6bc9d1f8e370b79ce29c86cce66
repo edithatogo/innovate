@@ -1,0 +1,8 @@
+Task: Inventory active and legacy docs surfaces
+
+Summary:
+- Added docs/source/_static/astro_starlight/cutover_surface_inventory.json to capture active Astro/Starlight surfaces, legacy Sphinx retention, route/redirect status, stale active migration tracks, stale cutover language, and DocSearch credential/package state.
+- Marked the inventory task complete in the Starlight cutover plan.
+
+Validation:
+- python -m json.tool docs/source/_static/astro_starlight/cutover_surface_inventory.json >/dev/null
