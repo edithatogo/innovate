@@ -1,0 +1,19 @@
+Task: Promote eligible fit_model slices
+
+Summary:
+- Promoted stable logistic and Gompertz fit slices from native_candidate_needs_evidence to rust_native_promoted.
+- Resolved fit_model memory evidence gates for logistic, Gompertz, and Bass with bounded deterministic native-slice rationale and retained DHAT workflow references.
+- Updated the track-local operation gap inventory so fit_model no longer carries unresolved native candidates.
+- Updated inventory tests to accept rust_native_promoted as a terminal promotion state.
+
+Validation:
+- python -m json.tool docs/source/_static/rust_core_migration_inventory.json >/dev/null
+- python -m json.tool docs/source/_static/rust_native_operation_gap_inventory.json >/dev/null
+- uv run pytest tests/unit/test_rust_core_migration_inventory.py tests/unit/test_rust_core_roadmap_docs.py -q
+- cargo test --manifest-path bindings/rust/Cargo.toml --test operations native_logistic_fit_matches_python_bridge_contract -- --exact
+- cargo test --manifest-path bindings/rust/Cargo.toml --test operations native_gompertz_fit_matches_python_bridge_contract -- --exact
+- cargo test --manifest-path bindings/rust/Cargo.toml --test operations native_bass_fit_matches_python_bridge_contract -- --exact
+- cargo test --manifest-path bindings/rust/Cargo.toml --test operations native_fisher_pry_fit_matches_python_bridge_contract -- --exact
+
+Environment note:
+- Created /Users/doughnut/Library/Caches/arviz before rerunning sequential Rust bridge parity because parallel bridge imports raced on ArviZ daily warning cache creation.
