@@ -1,6 +1,6 @@
 # Implementation Plan: Starlight Cutover and Legacy Cleanup
 
-## Phase 1: Red-Phase Cutover Checks [checkpoint: pending]
+## Phase 1: Red-Phase Cutover Checks [checkpoint: 8135df1]
 
 - [x] Task: Inventory active and legacy docs surfaces babb590
     - [x] Compare product, tech-stack, Starlight config, Sphinx config, and migration manifests
