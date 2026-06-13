@@ -1,0 +1,10 @@
+Task: Inventory Python registry model families
+
+Summary:
+- Added docs/source/_static/rust_native_model_family_coverage.json.
+- Compared Python registry model families against Rust-native model keys from rust_core_migration_inventory.json.
+- Classified composite, multi-product, network, policy, probabilistic/advanced, and ecosystem families as explicit bridge or Python-reference boundaries.
+
+Validation:
+- uv run python loaded innovate.kernel.discover_models() through the project environment.
+- python -m json.tool docs/source/_static/rust_native_model_family_coverage.json >/dev/null
