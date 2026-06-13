@@ -1,6 +1,6 @@
 # Implementation Plan: Rust-Native Canonical Operation Completion
 
-## Phase 1: Operation Inventory and Red Tests [checkpoint: pending]
+## Phase 1: Operation Inventory and Red Tests [checkpoint: ed0640a]
 
 - [x] Task: Build the operation gap inventory 2741aac
     - [x] Parse the Rust migration inventory by operation, owner, fallback status, and promotion gates
