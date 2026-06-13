@@ -1,0 +1,10 @@
+Task: Resolve stale active migration tracks
+
+Summary:
+- Moved conductor/tracks/migrate_starlight to conductor/archive/migrate_starlight.
+- Moved conductor/tracks/starlight_migration_20260513 to conductor/archive/starlight_migration_20260513 and marked its metadata completed.
+- Cleared stale_active_track_folders in cutover_surface_inventory.json.
+
+Validation:
+- python -m json.tool docs/source/_static/astro_starlight/cutover_surface_inventory.json >/dev/null
+- uv run pytest tests/unit/test_starlight_cutover_legacy_cleanup.py tests/unit/test_astro_starlight_migration.py tests/unit/test_astro_starlight_cutover_verification.py -q (18 passed)
