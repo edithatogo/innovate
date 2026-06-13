@@ -1,6 +1,6 @@
 # Implementation Plan: Starlight Cutover and Legacy Cleanup
 
-## Phase 1: Red-Phase Cutover Checks
+## Phase 1: Red-Phase Cutover Checks [checkpoint: pending]
 
 - [x] Task: Inventory active and legacy docs surfaces babb590
     - [x] Compare product, tech-stack, Starlight config, Sphinx config, and migration manifests
@@ -11,7 +11,7 @@
     - [x] Reject active track folders for completed Starlight migration work
     - [x] Require legacy Sphinx references to be labeled archival
     - [x] Commit this task before starting the next task
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Red-Phase Cutover Checks' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Red-Phase Cutover Checks' (Protocol in workflow.md)
 
 ## Phase 2: Cutover Cleanup
 
