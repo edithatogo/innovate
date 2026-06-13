@@ -20,10 +20,10 @@
     - [x] Link each future-state boundary to a granular track
     - [x] Remove or qualify stale Sphinx and full-completion wording
     - [x] Commit this task before starting the next task
-- [~] Task: Update Astro/Starlight docs mirrors
-    - [~] Ensure the docs site surfaces the same canonical status wording
-    - [ ] Preserve links to archival evidence and future-state tracks
-    - [ ] Commit this task before starting the next task
+- [x] Task: Update Astro/Starlight docs mirrors 5d189d4
+    - [x] Ensure the docs site surfaces the same canonical status wording
+    - [x] Preserve links to archival evidence and future-state tracks
+    - [x] Commit this task before starting the next task
 - [ ] Task: Run targeted tests and docs checks
     - [ ] Run the new roadmap-status tests
     - [ ] Run any existing roadmap/doc architecture tests that cover these files
