@@ -319,8 +319,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Vision and Roadmap Truth Audit**
-  *Link: [./tracks/vision_roadmap_truth_audit_20260614/](./tracks/vision_roadmap_truth_audit_20260614/)*
+- [x] **Track: Vision and Roadmap Truth Audit** *(Completed)*
+  *Link: [./archive/vision_roadmap_truth_audit_20260614/](./archive/vision_roadmap_truth_audit_20260614/)*
 
 ---
 
