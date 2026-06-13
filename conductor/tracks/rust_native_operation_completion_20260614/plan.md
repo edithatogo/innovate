@@ -18,7 +18,7 @@
     - [x] Implement or complete Rust-native operation paths for stable fitted-state payloads
     - [x] Add parity and error-mapping tests
     - [x] Commit this task before starting the next task
-- [x] Task: Promote eligible `predict_model` and `simulate_model` slices
+- [x] Task: Promote eligible `predict_model` and `simulate_model` slices 5d6f91a
     - [x] Implement missing native paths where schemas are stable
     - [x] Preserve explicit unsupported-native errors for unstable payloads
     - [x] Commit this task before starting the next task
