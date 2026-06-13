@@ -2,10 +2,10 @@
 
 ## Phase 1: Registry and Payload Red Tests
 
-- [ ] Task: Inventory Python registry model families
-    - [ ] Compare Python capability registry entries with Rust-native model slices
-    - [ ] Identify composite, multi-product, network, policy, probabilistic, and ecosystem families requiring classification
-    - [ ] Commit this task before starting the next task
+- [x] Task: Inventory Python registry model families
+    - [x] Compare Python capability registry entries with Rust-native model slices
+    - [x] Identify composite, multi-product, network, policy, probabilistic, and ecosystem families requiring classification
+    - [x] Commit this task before starting the next task
 - [ ] Task: Inventory stable payload shapes
     - [ ] List fitted-state, covariate, event, diagnostics, simulation, and uncertainty payload shapes
     - [ ] Mark each payload as stable, provisional, internal, or Python-reference-only

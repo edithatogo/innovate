@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "generated_by_track": "rust_native_payload_model_coverage_20260614",
+  "source_registry": "src/innovate/kernel.py::discover_models",
+  "source_inventory": "docs/source/_static/rust_core_migration_inventory.json",
+  "ownership_status_values": [
+    "rust_native_promoted",
+    "python_bridge_explicit",
+    "python_reference_boundary",
+    "promoted_non_python_backend"
+  ],
+  "families": [
+    {
+      "model_key": "bass",
+      "family": "diffusion",
+      "ownership_status": "rust_native_promoted",
+      "native_scope": "deterministic fit, prediction, simulation, summary, and diagnostics for bounded fitted-state payloads",
+      "boundary": "covariates, event splits, custom fitter options, and richer Python internals remain excluded"
+    },
+    {
+      "model_key": "logistic",
+      "family": "diffusion",
+      "ownership_status": "rust_native_promoted",
+      "native_scope": "deterministic fit, prediction, simulation, summary, and diagnostics for bounded fitted-state payloads",
+      "boundary": "covariates, event splits, custom fitter options, and richer Python internals remain excluded"
+    },
+    {
+      "model_key": "gompertz",
+      "family": "diffusion",
+      "ownership_status": "rust_native_promoted",
+      "native_scope": "deterministic fit, prediction, simulation, summary, and diagnostics for bounded fitted-state payloads",
+      "boundary": "covariates, event splits, custom fitter options, and richer Python internals remain excluded"
+    },
+    {
+      "model_key": "fisher_pry",
+      "family": "substitution",
+      "ownership_status": "rust_native_promoted",
+      "native_scope": "deterministic fit, prediction, simulation, summary, and diagnostics for bounded fitted-state payloads",
+      "boundary": "richer Python internals remain excluded"
+    },
+    {
+      "model_key": "norton_bass",
+      "family": "substitution",
+      "ownership_status": "rust_native_promoted",
+      "native_scope": "narrow single-generation prediction, simulation, summary, and diagnostics",
+      "boundary": "multi-generation, covariate, and event payloads remain Python bridge boundaries"
+    },
+    {
+      "model_key": "composite",
+      "family": "substitution",
+      "ownership_status": "python_bridge_explicit",
+      "native_scope": "none",
+      "boundary": "composite model orchestration depends on Python object internals"
+    },
+    {
+      "model_key": "multi_product",
+      "family": "competition",
+      "ownership_status": "python_bridge_explicit",
+      "native_scope": "none",
+      "boundary": "multi-product state and covariate schemas are not stable for Rust ownership"
+    },
+    {
+      "model_key": "lotka_volterra",
+      "family": "competition",
+      "ownership_status": "python_bridge_explicit",
+      "native_scope": "none",
+      "boundary": "ODE/state-vector payload schemas need separate promotion evidence"
+    },
+    {
+      "model_key": "complementary_goods",
+      "family": "ecosystem",
+      "ownership_status": "python_reference_boundary",
+      "native_scope": "none",
+      "boundary": "ecosystem interactions remain Python-reference-owned until schema fixtures exist"
+    },
+    {
+      "model_key": "hierarchical",
+      "family": "advanced_diffusion",
+      "ownership_status": "python_reference_boundary",
+      "native_scope": "none",
+      "boundary": "hierarchical/probabilistic semantics remain Python-reference-owned"
+    },
+    {
+      "model_key": "mixture",
+      "family": "advanced_diffusion",
+      "ownership_status": "python_reference_boundary",
+      "native_scope": "none",
+      "boundary": "mixture semantics and uncertainty payloads remain Python-reference-owned"
+    },
+    {
+      "model_key": "latent_process",
+      "family": "advanced_diffusion",
+      "ownership_status": "python_reference_boundary",
+      "native_scope": "none",
+      "boundary": "latent process and uncertainty payloads remain Python-reference-owned"
+    },
+    {
+      "model_key": "regime_switching",
+      "family": "advanced_diffusion",
+      "ownership_status": "python_reference_boundary",
+      "native_scope": "none",
+      "boundary": "regime state and transition semantics remain Python-reference-owned"
+    },
+    {
+      "model_key": "network_diffusion",
+      "family": "network_diffusion",
+      "ownership_status": "python_reference_boundary",
+      "native_scope": "none",
+      "boundary": "network object internals and graph schemas remain Python-reference-owned"
+    },
+    {
+      "model_key": "policy_hazard",
+      "family": "policy_diffusion",
+      "ownership_status": "python_reference_boundary",
+      "native_scope": "none",
+      "boundary": "policy hazard semantics and diagnostics remain Python-reference-owned"
+    }
+  ]
+}
