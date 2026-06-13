@@ -33,18 +33,7 @@
     "redirect_entries": 31,
     "ready_for_cutover": true
   },
-  "stale_active_track_folders": [
-    {
-      "path": "conductor/tracks/migrate_starlight",
-      "recorded_status": "completed",
-      "required_resolution": "archive"
-    },
-    {
-      "path": "conductor/tracks/starlight_migration_20260513",
-      "recorded_status": "active",
-      "required_resolution": "archive_or_reclassify_completed"
-    }
-  ],
+  "stale_active_track_folders": [],
   "stale_cutover_language": [],
   "blocked_or_deferred_items": [
     {

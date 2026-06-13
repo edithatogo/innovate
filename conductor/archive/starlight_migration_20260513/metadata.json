@@ -1,7 +1,7 @@
 {
   "track": "starlight_migration_20260513",
   "title": "Starlight + starlight-polyglot Migration",
-  "status": "active",
+  "status": "completed",
   "created": "2026-05-13",
   "owner": "migration-engineer",
   "summary": "Migrate documentation generation from Sphinx to Astro Starlight with starlight-polyglot for Python API docs.",

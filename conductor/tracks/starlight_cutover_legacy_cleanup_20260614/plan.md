@@ -19,10 +19,10 @@
     - [x] Update product status, tech-stack, and roadmap docs to agree on Starlight
     - [x] Preserve Sphinx as archival/redirect source only where needed
     - [x] Commit this task before starting the next task
-- [ ] Task: Resolve stale active migration tracks
-    - [ ] Archive, merge, or remove duplicate completed Starlight track folders according to Conductor workflow
-    - [ ] Update `conductor/tracks.md` links if needed
-    - [ ] Commit this task before starting the next task
+- [x] Task: Resolve stale active migration tracks
+    - [x] Archive, merge, or remove duplicate completed Starlight track folders according to Conductor workflow
+    - [x] Update `conductor/tracks.md` links if needed
+    - [x] Commit this task before starting the next task
 - [ ] Task: Validate Starlight route and link evidence
     - [ ] Run Starlight build and route/link generation checks
     - [ ] Record blockers for external services such as DocSearch if credentials are unavailable
