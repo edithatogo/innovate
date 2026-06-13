@@ -6,10 +6,10 @@
     - [x] Parse the Rust migration inventory by operation, owner, fallback status, and promotion gates
     - [x] Identify native candidates, bridge defaults, and Python-reference boundaries
     - [x] Commit this task before starting the next task
-- [ ] Task: Write failing operation ownership tests
-    - [ ] Require every canonical operation to have an explicit native or promoted ownership state
-    - [ ] Require evidence gates for every native-default slice
-    - [ ] Commit this task before starting the next task
+- [x] Task: Write failing operation ownership tests
+    - [x] Require every canonical operation to have an explicit native or promoted ownership state
+    - [x] Require evidence gates for every native-default slice
+    - [x] Commit this task before starting the next task
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Operation Inventory and Red Tests' (Protocol in workflow.md)
 
 ## Phase 2: Native Operation Slice Implementation
