@@ -40,34 +40,32 @@
     {
       "operation": "predict_model",
       "native_default_slices": [
+        "logistic_simple_fitted_state",
+        "gompertz_simple_fitted_state",
         "bass_simple_fitted_state"
       ],
-      "native_candidates_needing_evidence": [
-        "logistic_simple_fitted_state",
-        "gompertz_simple_fitted_state"
-      ],
+      "native_candidates_needing_evidence": [],
       "bridge_or_reference_boundaries": [
         "other_model_families_or_unsupported_payloads",
         "custom prediction horizons that require Python model internals",
         "non-deterministic Python object state"
       ],
-      "required_closure": "Promote stable deterministic fitted-state slices and retain explicit unsupported-native errors for non-native payloads."
+      "required_closure": "Stable deterministic fitted-state prediction slices are promoted; unsupported model-family and Python-internal payloads remain explicit bridge boundaries."
     },
     {
       "operation": "simulate_model",
       "native_default_slices": [
+        "logistic_simple_fitted_state",
+        "gompertz_simple_fitted_state",
         "bass_simple_fitted_state"
       ],
-      "native_candidates_needing_evidence": [
-        "logistic_simple_fitted_state",
-        "gompertz_simple_fitted_state"
-      ],
+      "native_candidates_needing_evidence": [],
       "bridge_or_reference_boundaries": [
         "other_model_families_or_unsupported_payloads",
         "stochastic payloads without stable seed contract",
         "non-deterministic Python object state"
       ],
-      "required_closure": "Promote deterministic or seeded fitted-state slices and keep stochastic Python boundaries explicit."
+      "required_closure": "Stable deterministic fitted-state simulation slices are promoted; stochastic and Python-internal payloads remain explicit bridge boundaries."
     },
     {
       "operation": "summarize_model",

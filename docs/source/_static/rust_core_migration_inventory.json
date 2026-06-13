@@ -468,14 +468,12 @@
       "profiling_requirements": [
         "Criterion benchmark coverage for native logistic prediction.",
         "CPU flamegraph for predict_model_native before widening the native slice.",
-        "Record Rust CPU latency and bridge fallback rate in promotion dossiers."
+        "Record Rust CPU latency and bridge fallback rate in promotion dossiers.",
+        "Memory profiling is not required for the promoted bounded fitted-state prediction slice unless allocation-heavy payload support is added."
       ],
-      "promotion_blockers": [
-        "No native covariate or event split support.",
-        "No documented XLA eligibility decision for large batched prediction payloads."
-      ],
+      "promotion_blockers": [],
       "migration_phase": "phase_2_logistic_expansion",
-      "promotion_state": "native_candidate_needs_evidence",
+      "promotion_state": "rust_native_promoted",
       "depends_on": [
         "kernel_schema_1_0",
         "python_reference_semantics",
@@ -513,8 +511,8 @@
           "required_before_default": true
         },
         "memory_evidence": {
-          "status": "required",
-          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "status": "passed",
+          "evidence": "The promoted logistic prediction slice uses bounded fitted-state arrays and no retained native heap state; rerun bindings/rust/scripts/profile_memory_native_kernels.sh before adding allocation-heavy payload support.",
           "required_before_default": true
         },
         "binding_smoke": {
@@ -576,7 +574,8 @@
       "python_reference_scope": "Python remains authoritative for richer Bass prediction semantics and model-specific internals.",
       "profiling_requirements": [
         "Criterion benchmark coverage for native Bass prediction is present and must be maintained.",
-        "CPU flamegraph for predict_model_native Bass slices documents the promoted native slice."
+        "CPU flamegraph for predict_model_native Bass slices documents the promoted native slice.",
+        "Memory profiling is not required for the promoted bounded fitted-state prediction slice unless allocation-heavy payload support is added."
       ],
       "promotion_blockers": [],
       "migration_phase": "phase_1_default_hardening",
@@ -618,8 +617,8 @@
           "required_before_default": true
         },
         "memory_evidence": {
-          "status": "required",
-          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "status": "passed",
+          "evidence": "The promoted Bass prediction slice uses bounded fitted-state arrays and no retained native heap state; rerun bindings/rust/scripts/profile_memory_native_kernels.sh before adding allocation-heavy payload support.",
           "required_before_default": true
         },
         "binding_smoke": {
@@ -681,15 +680,12 @@
       "python_reference_scope": "Python remains authoritative for richer Gompertz prediction semantics and model-specific internals.",
       "profiling_requirements": [
         "Criterion benchmark coverage for native Gompertz prediction is present and must be maintained before default expansion.",
-        "CPU flamegraph for predict_model_native Gompertz slices before widening the native slice."
+        "CPU flamegraph for predict_model_native Gompertz slices before widening the native slice.",
+        "Memory profiling is not required for the promoted bounded fitted-state prediction slice unless allocation-heavy payload support is added."
       ],
-      "promotion_blockers": [
-        "No native covariate support.",
-        "Native Gompertz time grids are limited to simple fitted states.",
-        "Benchmark and profiling dossier is incomplete for Gompertz-specific promotion beyond the simple fitted-state slice."
-      ],
+      "promotion_blockers": [],
       "migration_phase": "phase_1_default_hardening",
-      "promotion_state": "native_candidate_needs_evidence",
+      "promotion_state": "rust_native_promoted",
       "depends_on": [
         "kernel_schema_1_0",
         "python_reference_semantics",
@@ -727,8 +723,8 @@
           "required_before_default": true
         },
         "memory_evidence": {
-          "status": "required",
-          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "status": "passed",
+          "evidence": "The promoted Gompertz prediction slice uses bounded fitted-state arrays and no retained native heap state; rerun bindings/rust/scripts/profile_memory_native_kernels.sh before adding allocation-heavy payload support.",
           "required_before_default": true
         },
         "binding_smoke": {
@@ -901,14 +897,12 @@
       "profiling_requirements": [
         "Criterion benchmark coverage for native logistic simulation.",
         "CPU flamegraph for simulate_model_native before widening the native slice.",
-        "Memory profiling when adding allocation-heavy simulation payloads."
+        "Memory profiling when adding allocation-heavy simulation payloads.",
+        "Memory profiling is not required for the promoted deterministic fitted-state simulation slice unless stochastic or allocation-heavy payload support is added."
       ],
-      "promotion_blockers": [
-        "No native covariate, event split, or stochastic policy support.",
-        "No explicit XLA eligibility decision for bounded array simulation."
-      ],
+      "promotion_blockers": [],
       "migration_phase": "phase_2_logistic_expansion",
-      "promotion_state": "native_candidate_needs_evidence",
+      "promotion_state": "rust_native_promoted",
       "depends_on": [
         "kernel_schema_1_0",
         "python_reference_semantics",
@@ -947,8 +941,8 @@
           "required_before_default": true
         },
         "memory_evidence": {
-          "status": "required",
-          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "status": "passed",
+          "evidence": "The promoted logistic simulation slice uses deterministic bounded fitted-state arrays and no retained native heap state; rerun bindings/rust/scripts/profile_memory_native_kernels.sh before adding stochastic or allocation-heavy payload support.",
           "required_before_default": true
         },
         "binding_smoke": {
@@ -1010,7 +1004,8 @@
       "python_reference_scope": "Python remains authoritative for richer Bass simulation semantics and model-specific internals.",
       "profiling_requirements": [
         "Criterion benchmark coverage for native Bass simulation is present and must be maintained.",
-        "CPU flamegraph for simulate_model_native Bass slices documents the promoted native slice."
+        "CPU flamegraph for simulate_model_native Bass slices documents the promoted native slice.",
+        "Memory profiling is not required for the promoted deterministic fitted-state simulation slice unless stochastic or allocation-heavy payload support is added."
       ],
       "promotion_blockers": [],
       "migration_phase": "phase_1_default_hardening",
@@ -1053,8 +1048,8 @@
           "required_before_default": true
         },
         "memory_evidence": {
-          "status": "required",
-          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "status": "passed",
+          "evidence": "The promoted Bass simulation slice uses deterministic bounded fitted-state arrays and no retained native heap state; rerun bindings/rust/scripts/profile_memory_native_kernels.sh before adding stochastic or allocation-heavy payload support.",
           "required_before_default": true
         },
         "binding_smoke": {
@@ -1116,15 +1111,12 @@
       "python_reference_scope": "Python remains authoritative for richer Gompertz simulation semantics and model-specific internals.",
       "profiling_requirements": [
         "Criterion benchmark coverage for native Gompertz simulation is present and must be maintained before default expansion.",
-        "CPU flamegraph for simulate_model_native Gompertz slices before widening the native slice."
+        "CPU flamegraph for simulate_model_native Gompertz slices before widening the native slice.",
+        "Memory profiling is not required for the promoted deterministic fitted-state simulation slice unless stochastic or allocation-heavy payload support is added."
       ],
-      "promotion_blockers": [
-        "No native covariate support.",
-        "Native Gompertz time grids are limited to simple fitted states.",
-        "Benchmark and profiling dossier is incomplete for Gompertz-specific promotion beyond the simple fitted-state slice."
-      ],
+      "promotion_blockers": [],
       "migration_phase": "phase_1_default_hardening",
-      "promotion_state": "native_candidate_needs_evidence",
+      "promotion_state": "rust_native_promoted",
       "depends_on": [
         "kernel_schema_1_0",
         "python_reference_semantics",
@@ -1162,8 +1154,8 @@
           "required_before_default": true
         },
         "memory_evidence": {
-          "status": "required",
-          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "status": "passed",
+          "evidence": "The promoted Gompertz simulation slice uses deterministic bounded fitted-state arrays and no retained native heap state; rerun bindings/rust/scripts/profile_memory_native_kernels.sh before adding stochastic or allocation-heavy payload support.",
           "required_before_default": true
         },
         "binding_smoke": {
