@@ -135,7 +135,8 @@ The full Rust ownership claim gate is
 :download:`rust_full_ownership_gate.json <_static/rust_full_ownership_gate.json>`.
 Docs and release notes should consume that gate before claiming full Rust
 ownership. Its current decision is ``not_allowed`` because model-family and
-payload-shape boundaries remain explicit.
+payload-shape boundaries remain explicit. The latest validation evidence is
+:download:`rust_full_ownership_validation.json <_static/rust_full_ownership_validation.json>`.
 
 The table below is a human summary of the current default slices.
 

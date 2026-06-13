@@ -43,3 +43,4 @@ Evidence artifacts:
 - `docs/source/_static/rust_native_operation_gap_inventory.json`
 - `docs/source/_static/rust_native_operation_evidence_closure.json`
 - `docs/source/_static/rust_full_ownership_gate.json`
+- `docs/source/_static/rust_full_ownership_validation.json`
