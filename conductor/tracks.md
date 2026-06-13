@@ -334,7 +334,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Starlight Cutover and Legacy Cleanup**
+- [~] **Track: Starlight Cutover and Legacy Cleanup**
   *Link: [./tracks/starlight_cutover_legacy_cleanup_20260614/](./tracks/starlight_cutover_legacy_cleanup_20260614/)*
 
 ---
