@@ -1,0 +1,10 @@
+Task: Inventory stable payload shapes
+
+Summary:
+- Added docs/source/_static/rust_native_payload_shape_coverage.json.
+- Classified fitted-state, simple fit, covariate, event, incomplete fitted-state, diagnostics, simulation, stochastic, uncertainty/posterior, and graph/agent payload shapes.
+- Verified referenced schema fixture files exist.
+
+Validation:
+- python -m json.tool docs/source/_static/rust_native_payload_shape_coverage.json >/dev/null
+- fixture existence check for all non-none schema_fixture values
