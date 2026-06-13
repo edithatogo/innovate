@@ -12,7 +12,7 @@
     - [x] Commit this task before starting the next task
 - [x] Task: Conductor - Automated Review and Checkpoint 'Operation Inventory and Red Tests' (Protocol in workflow.md)
 
-## Phase 2: Native Operation Slice Implementation
+## Phase 2: Native Operation Slice Implementation [checkpoint: pending]
 
 - [x] Task: Promote eligible `fit_model` slices 8116b0a
     - [x] Implement or complete Rust-native operation paths for stable fitted-state payloads
@@ -26,7 +26,7 @@
     - [x] Add native summary and diagnostics paths where deterministic payloads are stable
     - [x] Add parity tests against Python reference responses
     - [x] Commit this task before starting the next task
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Native Operation Slice Implementation' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Native Operation Slice Implementation' (Protocol in workflow.md)
 
 ## Phase 3: Evidence and Inventory Closure
 
