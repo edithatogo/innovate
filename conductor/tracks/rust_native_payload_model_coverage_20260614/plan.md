@@ -18,10 +18,10 @@
 
 ## Phase 2: Model-Family Coverage Slices
 
-- [ ] Task: Promote stable diffusion and substitution family payloads
-    - [ ] Add Rust-native support or explicit non-native promotion for remaining stable slices
-    - [ ] Add parity fixtures and error mapping tests
-    - [ ] Commit this task before starting the next task
+- [x] Task: Promote stable diffusion and substitution family payloads
+    - [x] Add Rust-native support or explicit non-native promotion for remaining stable slices
+    - [x] Add parity fixtures and error mapping tests
+    - [x] Commit this task before starting the next task
 - [ ] Task: Classify composite and multi-product families
     - [ ] Implement native support where schemas are stable
     - [ ] Keep bridge fallback only with explicit rationale and tests

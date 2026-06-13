@@ -9,6 +9,7 @@ from innovate.kernel import discover_models
 
 MODEL_FAMILY_COVERAGE = Path("docs/source/_static/rust_native_model_family_coverage.json")
 PAYLOAD_SHAPE_COVERAGE = Path("docs/source/_static/rust_native_payload_shape_coverage.json")
+SLICE_EVIDENCE = Path("docs/source/_static/rust_native_model_family_slice_evidence.json")
 
 
 def _model_family_coverage() -> dict:
@@ -17,6 +18,10 @@ def _model_family_coverage() -> dict:
 
 def _payload_shape_coverage() -> dict:
     return json.loads(PAYLOAD_SHAPE_COVERAGE.read_text())
+
+
+def _slice_evidence() -> dict:
+    return json.loads(SLICE_EVIDENCE.read_text())
 
 
 def test_every_python_registry_model_family_has_ownership_status() -> None:
@@ -81,3 +86,18 @@ def test_unstable_payload_shapes_are_not_marked_rust_native() -> None:
                 "promoted_non_python_backend",
             }
 
+
+def test_promoted_diffusion_and_substitution_families_have_slice_evidence() -> None:
+    """Promoted stable families should link to parity and error evidence."""
+    evidence = _slice_evidence()
+    entries = {
+        entry["model_key"]: entry
+        for entry in evidence["stable_diffusion_and_substitution"]
+    }
+
+    assert set(entries) == {"bass", "logistic", "gompertz", "fisher_pry", "norton_bass"}
+    for entry in entries.values():
+        assert entry["ownership_status"] == "rust_native_promoted"
+        assert entry["promoted_operations"]
+        assert "Rust operation tests" in entry["parity_evidence"]
+        assert entry["error_mapping_evidence"]
