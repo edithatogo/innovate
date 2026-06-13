@@ -48,5 +48,32 @@
       "parity_evidence": "native_norton_bass_* Rust operation tests",
       "error_mapping_evidence": "native_norton_bass_fallback_paths_emit_tracing_events_for_unsupported_payloads"
     }
+  ],
+  "explicit_bridge_boundaries": [
+    {
+      "model_key": "composite",
+      "family": "substitution",
+      "ownership_status": "python_bridge_explicit",
+      "rationale": "Composite models orchestrate multiple Python model instances and do not have a stable language-neutral state schema.",
+      "required_before_promotion": [
+        "component model schema",
+        "composition graph schema",
+        "parity fixtures",
+        "error mapping fixtures"
+      ]
+    },
+    {
+      "model_key": "multi_product",
+      "family": "competition",
+      "ownership_status": "python_bridge_explicit",
+      "rationale": "Multi-product competition uses model-specific state, covariates, and interaction payloads that are not yet stable for Rust ownership.",
+      "required_before_promotion": [
+        "product interaction schema",
+        "covariate schema",
+        "state-vector fixture",
+        "parity fixtures",
+        "error mapping fixtures"
+      ]
+    }
   ]
 }

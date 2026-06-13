@@ -101,3 +101,20 @@ def test_promoted_diffusion_and_substitution_families_have_slice_evidence() -> N
         assert entry["promoted_operations"]
         assert "Rust operation tests" in entry["parity_evidence"]
         assert entry["error_mapping_evidence"]
+
+
+def test_composite_and_multi_product_families_have_explicit_bridge_boundaries() -> None:
+    """Bridge-owned composite surfaces need rationale and promotion prerequisites."""
+    evidence = _slice_evidence()
+    boundaries = {
+        entry["model_key"]: entry
+        for entry in evidence["explicit_bridge_boundaries"]
+    }
+
+    assert set(boundaries) >= {"composite", "multi_product"}
+    for key in ("composite", "multi_product"):
+        entry = boundaries[key]
+        assert entry["ownership_status"] == "python_bridge_explicit"
+        assert entry["rationale"]
+        assert "parity fixtures" in entry["required_before_promotion"]
+        assert "error mapping fixtures" in entry["required_before_promotion"]
