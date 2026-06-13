@@ -1,0 +1,8 @@
+{
+  "track_id": "conductor_registry_hygiene_20260614",
+  "type": "chore",
+  "status": "new",
+  "created_at": "2026-06-13T15:23:37Z",
+  "updated_at": "2026-06-13T15:23:37Z",
+  "description": "Repair Conductor registry hygiene so active track folders, archived tracks, and registry entries cannot drift."
+}

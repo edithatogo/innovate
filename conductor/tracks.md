@@ -316,3 +316,33 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Astro/Starlight Documentation Site Migration** *(Completed)*
   *Link: [./archive/astro_starlight_docs_migration_20260511/](./archive/astro_starlight_docs_migration_20260511/)*
+
+---
+
+- [ ] **Track: Vision and Roadmap Truth Audit**
+  *Link: [./tracks/vision_roadmap_truth_audit_20260614/](./tracks/vision_roadmap_truth_audit_20260614/)*
+
+---
+
+- [ ] **Track: Rust-Native Canonical Operation Completion**
+  *Link: [./tracks/rust_native_operation_completion_20260614/](./tracks/rust_native_operation_completion_20260614/)*
+
+---
+
+- [ ] **Track: Rust-Native Payload and Model-Family Coverage**
+  *Link: [./tracks/rust_native_payload_model_coverage_20260614/](./tracks/rust_native_payload_model_coverage_20260614/)*
+
+---
+
+- [ ] **Track: Starlight Cutover and Legacy Cleanup**
+  *Link: [./tracks/starlight_cutover_legacy_cleanup_20260614/](./tracks/starlight_cutover_legacy_cleanup_20260614/)*
+
+---
+
+- [ ] **Track: External Submission Blocker Closure**
+  *Link: [./tracks/external_submission_blocker_closure_20260614/](./tracks/external_submission_blocker_closure_20260614/)*
+
+---
+
+- [ ] **Track: Conductor Registry Hygiene**
+  *Link: [./tracks/conductor_registry_hygiene_20260614/](./tracks/conductor_registry_hygiene_20260614/)*

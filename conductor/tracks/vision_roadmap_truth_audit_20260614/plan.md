@@ -1,0 +1,45 @@
+# Implementation Plan: Vision and Roadmap Truth Audit
+
+## Phase 1: Red-Phase Status Coverage
+
+- [ ] Task: Inventory current vision and roadmap completion claims
+    - [ ] Review `conductor/product.md`, `conductor/tech-stack.md`, `docs/architecture_modernization_roadmap.md`, `docs/source/rust_core_roadmap.rst`, and Astro/Starlight operations pages
+    - [ ] Classify each claim as implemented, archived-track-complete, future-state, blocked, or stale
+    - [ ] Commit this task before starting the next task
+- [ ] Task: Write failing tests for stale completion claims
+    - [ ] Add tests that reject "full Rust core complete" claims while the inventory has Python-owned or bridge-owned slices
+    - [ ] Add tests that reject product-status documentation claiming Sphinx as the active docs stack
+    - [ ] Add tests that require roadmap pages to point unresolved work to active Conductor tracks
+    - [ ] Commit this task before starting the next task
+- [ ] Task: Conductor - Automated Review and Checkpoint 'Red-Phase Status Coverage' (Protocol in workflow.md)
+
+## Phase 2: Canonical Status Documentation
+
+- [ ] Task: Update product and roadmap status language
+    - [ ] Add a canonical status statement for completed tracks versus incomplete future-state vision
+    - [ ] Link each future-state boundary to a granular track
+    - [ ] Remove or qualify stale Sphinx and full-completion wording
+    - [ ] Commit this task before starting the next task
+- [ ] Task: Update Astro/Starlight docs mirrors
+    - [ ] Ensure the docs site surfaces the same canonical status wording
+    - [ ] Preserve links to archival evidence and future-state tracks
+    - [ ] Commit this task before starting the next task
+- [ ] Task: Run targeted tests and docs checks
+    - [ ] Run the new roadmap-status tests
+    - [ ] Run any existing roadmap/doc architecture tests that cover these files
+    - [ ] Commit validation-only changes if needed
+    - [ ] Commit this task before starting the next task
+- [ ] Task: Conductor - Automated Review and Checkpoint 'Canonical Status Documentation' (Protocol in workflow.md)
+
+## Phase 3: Final Track Review
+
+- [ ] Task: Reconcile all status matrices
+    - [ ] Confirm no roadmap page has an unowned gap
+    - [ ] Confirm no page overstates implementation, submission, or cutover status
+    - [ ] Commit this task before starting the next task
+- [ ] Task: Run final conductor review
+    - [ ] Review the full track diff against the spec, plan, workflow, and tests
+    - [ ] Apply any high-confidence fixes
+    - [ ] Re-run validation until stable
+    - [ ] Commit this task before starting the next task
+- [ ] Task: Conductor - Automated Review and Checkpoint 'Final Track Review' (Protocol in workflow.md)

@@ -1,0 +1,38 @@
+# Implementation Plan: Conductor Registry Hygiene
+
+## Phase 1: Registry Drift Red Tests
+
+- [ ] Task: Inventory registry and filesystem drift
+    - [ ] Compare `conductor/tracks.md`, `conductor/tracks/`, and `conductor/archive/`
+    - [ ] Identify stale active folders, missing archive folders, and broken links
+    - [ ] Commit this task before starting the next task
+- [ ] Task: Write failing registry hygiene tests
+    - [ ] Require active folders to have active registry entries
+    - [ ] Require completed registry entries to point into `conductor/archive/`
+    - [ ] Require status tooling to report stale or orphaned folders
+    - [ ] Commit this task before starting the next task
+- [ ] Task: Conductor - Automated Review and Checkpoint 'Registry Drift Red Tests' (Protocol in workflow.md)
+
+## Phase 2: Registry Reconciliation
+
+- [ ] Task: Reconcile stale active track folders
+    - [ ] Move completed active folders to archive or remove duplicates only after preserving evidence
+    - [ ] Update links and metadata as needed
+    - [ ] Commit this task before starting the next task
+- [ ] Task: Add registry hygiene automation
+    - [ ] Add or update a script/test that checks registry-to-filesystem consistency
+    - [ ] Include stale-folder diagnostics in the status output or docs
+    - [ ] Commit this task before starting the next task
+- [ ] Task: Conductor - Automated Review and Checkpoint 'Registry Reconciliation' (Protocol in workflow.md)
+
+## Phase 3: Final Hygiene Gate
+
+- [ ] Task: Run full registry hygiene validation
+    - [ ] Verify active tracks, archived tracks, and registry links
+    - [ ] Verify no completed work remains in active track directories
+    - [ ] Commit this task before starting the next task
+- [ ] Task: Run final conductor review
+    - [ ] Review the full track diff against the spec, plan, workflow, and tests
+    - [ ] Apply high-confidence fixes and rerun validation
+    - [ ] Commit this task before starting the next task
+- [ ] Task: Conductor - Automated Review and Checkpoint 'Final Hygiene Gate' (Protocol in workflow.md)
