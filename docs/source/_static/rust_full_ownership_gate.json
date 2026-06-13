@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "generated_by_track": "rust_native_payload_model_coverage_20260614",
+  "full_rust_ownership_claim_allowed": false,
+  "decision": "not_allowed",
+  "reason": "Canonical operations have terminal ownership states, but multiple Python registry model families and stable-adjacent payload shapes remain explicit bridge or Python-reference boundaries.",
+  "required_inputs": [
+    "docs/source/_static/rust_core_migration_inventory.json",
+    "docs/source/_static/rust_native_model_family_coverage.json",
+    "docs/source/_static/rust_native_payload_shape_coverage.json",
+    "docs/source/_static/rust_native_model_family_slice_evidence.json"
+  ],
+  "blocking_model_families": [
+    "composite",
+    "multi_product",
+    "lotka_volterra",
+    "complementary_goods",
+    "hierarchical",
+    "mixture",
+    "latent_process",
+    "regime_switching",
+    "network_diffusion",
+    "policy_hazard"
+  ],
+  "blocking_payload_shapes": [
+    "covariates",
+    "event_splits",
+    "incomplete_fitted_state",
+    "stochastic_simulation_policy",
+    "uncertainty_or_posterior",
+    "graph_or_agent_state"
+  ],
+  "claim_language": "Full Rust ownership is not claimed. Rust owns promoted deterministic operation slices, while model-family and payload-shape boundaries remain explicit."
+}

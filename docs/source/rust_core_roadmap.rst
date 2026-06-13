@@ -131,6 +131,12 @@ That artifact points at the Criterion result file, the Rust benchmark harness,
 the DHAT memory-profile driver, and the explicit not-applicable rationale for
 bounded deterministic slices.
 
+The full Rust ownership claim gate is
+:download:`rust_full_ownership_gate.json <_static/rust_full_ownership_gate.json>`.
+Docs and release notes should consume that gate before claiming full Rust
+ownership. Its current decision is ``not_allowed`` because model-family and
+payload-shape boundaries remain explicit.
+
 The table below is a human summary of the current default slices.
 
 .. list-table::

@@ -10,6 +10,7 @@ from innovate.kernel import discover_models
 MODEL_FAMILY_COVERAGE = Path("docs/source/_static/rust_native_model_family_coverage.json")
 PAYLOAD_SHAPE_COVERAGE = Path("docs/source/_static/rust_native_payload_shape_coverage.json")
 SLICE_EVIDENCE = Path("docs/source/_static/rust_native_model_family_slice_evidence.json")
+FULL_OWNERSHIP_GATE = Path("docs/source/_static/rust_full_ownership_gate.json")
 
 
 def _model_family_coverage() -> dict:
@@ -22,6 +23,10 @@ def _payload_shape_coverage() -> dict:
 
 def _slice_evidence() -> dict:
     return json.loads(SLICE_EVIDENCE.read_text())
+
+
+def _full_ownership_gate() -> dict:
+    return json.loads(FULL_OWNERSHIP_GATE.read_text())
 
 
 def test_every_python_registry_model_family_has_ownership_status() -> None:
@@ -143,3 +148,19 @@ def test_network_policy_ecosystem_and_advanced_families_have_reference_boundarie
         assert entry["ownership_status"] == "python_reference_boundary"
         assert entry["rationale"]
         assert entry["required_before_promotion"]
+
+
+def test_full_rust_ownership_gate_blocks_overclaims() -> None:
+    """The machine-readable gate should block full Rust claims while gaps remain."""
+    gate = _full_ownership_gate()
+    roadmap = Path("docs/source/rust_core_roadmap.rst").read_text()
+    starlight = Path("docs/astro-site/src/content/docs/operations/rust-core.md").read_text()
+
+    assert gate["full_rust_ownership_claim_allowed"] is False
+    assert gate["decision"] == "not_allowed"
+    assert "composite" in gate["blocking_model_families"]
+    assert "network_diffusion" in gate["blocking_model_families"]
+    assert "covariates" in gate["blocking_payload_shapes"]
+    assert "uncertainty_or_posterior" in gate["blocking_payload_shapes"]
+    assert "rust_full_ownership_gate.json" in roadmap
+    assert "rust_full_ownership_gate.json" in starlight
