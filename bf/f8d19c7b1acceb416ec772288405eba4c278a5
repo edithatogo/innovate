@@ -1,0 +1,11 @@
+Task: Write failing operation ownership tests
+
+Summary:
+- Added tests/unit/test_rust_native_operation_completion.py.
+- The tests require every canonical operation slice to have a terminal native/promoted/boundary ownership state.
+- The tests require native-default Rust slices to have all required promotion gates passed.
+
+Red-phase validation:
+- uv run pytest tests/unit/test_rust_native_operation_completion.py -q
+- Result: expected failure, 1 passed and 2 failed.
+- Failures identified 10 non-terminal native_candidate_needs_evidence slices and 15 unresolved memory_evidence gates.
