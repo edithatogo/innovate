@@ -1,0 +1,19 @@
+Checkpoint: Evidence and Inventory Closure
+
+Validation:
+- python -m json.tool docs/source/_static/rust_core_migration_inventory.json >/dev/null
+- python -m json.tool docs/source/_static/rust_native_operation_gap_inventory.json >/dev/null
+- python -m json.tool docs/source/_static/rust_native_operation_evidence_closure.json >/dev/null
+- python -m json.tool docs/source/_static/rust_native_operation_binding_smoke.json >/dev/null
+- uv run pytest tests/unit/test_rust_native_operation_completion.py tests/unit/test_rust_core_migration_inventory.py tests/unit/test_rust_core_roadmap_docs.py tests/unit/test_vision_roadmap_truth_status.py tests/unit/test_binding_publication_ci.py -q
+- cargo test --manifest-path bindings/rust/Cargo.toml
+
+Results:
+- Python validation passed, 50 tests.
+- Rust crate validation passed, including 32 operation tests.
+
+Conductor-review findings:
+- No high-confidence fixes required after validation.
+
+Known blocked evidence:
+- C# smoke remains blocked locally by NETSDK1045 because installed .NET SDK 10.0.107 does not support net11.0.
