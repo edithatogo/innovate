@@ -26,7 +26,7 @@
     - [x] Implement native support where schemas are stable
     - [x] Keep bridge fallback only with explicit rationale and tests
     - [x] Commit this task before starting the next task
-- [x] Task: Classify network, policy, and ecosystem families
+- [x] Task: Classify network, policy, and ecosystem families d4a94c0
     - [x] Promote only stable deterministic payloads
     - [x] Keep object-internal or agent-based behavior Python-reference-owned until schema boundaries exist
     - [x] Commit this task before starting the next task
