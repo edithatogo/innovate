@@ -22,7 +22,7 @@
     - [x] Implement missing native paths where schemas are stable
     - [x] Preserve explicit unsupported-native errors for unstable payloads
     - [x] Commit this task before starting the next task
-- [x] Task: Promote eligible `summarize_model` and `diagnose_model` slices
+- [x] Task: Promote eligible `summarize_model` and `diagnose_model` slices 7039871
     - [x] Add native summary and diagnostics paths where deterministic payloads are stable
     - [x] Add parity tests against Python reference responses
     - [x] Commit this task before starting the next task
