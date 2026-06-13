@@ -34,7 +34,7 @@
 
 ## Phase 3: Full-Claim Gate
 
-- [x] Task: Update full Rust ownership gate
+- [x] Task: Update full Rust ownership gate 5f3b9dd
     - [x] Add a machine-readable gate that determines whether full Rust ownership may be claimed
     - [x] Ensure docs consume the gate rather than hand-written claims
     - [x] Commit this task before starting the next task
