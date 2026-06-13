@@ -1,0 +1,13 @@
+Task: Update product and roadmap status language
+
+Summary: Updated product status, tech-stack legacy docs wording, and architecture roadmap status to distinguish completed Conductor tracks from remaining future-state product vision work. Added links to the new granular future-state tracks.
+
+Files changed:
+- conductor/product.md
+- conductor/tech-stack.md
+- docs/architecture_modernization_roadmap.md
+- conductor/tracks/vision_roadmap_truth_audit_20260614/plan.md
+
+Validation: uv run pytest tests/unit/test_vision_roadmap_truth_status.py -q passed.
+
+Why: The repo needed one truthful status model that avoids overstating full Rust ownership, final docs cutover, or external submission completion.
