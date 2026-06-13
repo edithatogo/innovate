@@ -75,5 +75,63 @@
         "error mapping fixtures"
       ]
     }
+  ],
+  "python_reference_boundaries": [
+    {
+      "model_key": "network_diffusion",
+      "family": "network_diffusion",
+      "ownership_status": "python_reference_boundary",
+      "rationale": "Network topology and graph object internals do not yet have stable language-neutral fixtures.",
+      "required_before_promotion": ["graph schema", "state-vector schema", "deterministic traversal semantics", "parity fixtures"]
+    },
+    {
+      "model_key": "policy_hazard",
+      "family": "policy_diffusion",
+      "ownership_status": "python_reference_boundary",
+      "rationale": "Policy hazard semantics and diagnostics remain Python-reference-owned until event and covariate contracts stabilize.",
+      "required_before_promotion": ["policy event schema", "hazard covariate schema", "diagnostic fixtures", "parity fixtures"]
+    },
+    {
+      "model_key": "complementary_goods",
+      "family": "ecosystem",
+      "ownership_status": "python_reference_boundary",
+      "rationale": "Ecosystem interactions remain Python-reference-owned until coupled-good state schemas are documented.",
+      "required_before_promotion": ["coupled-good schema", "interaction schema", "parity fixtures"]
+    },
+    {
+      "model_key": "hierarchical",
+      "family": "advanced_diffusion",
+      "ownership_status": "python_reference_boundary",
+      "rationale": "Hierarchical and probabilistic semantics remain Python-reference-owned until posterior payloads stabilize.",
+      "required_before_promotion": ["hierarchy schema", "posterior schema", "parity fixtures"]
+    },
+    {
+      "model_key": "mixture",
+      "family": "advanced_diffusion",
+      "ownership_status": "python_reference_boundary",
+      "rationale": "Mixture component semantics and uncertainty payloads remain Python-reference-owned.",
+      "required_before_promotion": ["component schema", "mixture-weight schema", "uncertainty fixtures"]
+    },
+    {
+      "model_key": "latent_process",
+      "family": "advanced_diffusion",
+      "ownership_status": "python_reference_boundary",
+      "rationale": "Latent process state and uncertainty payloads remain Python-reference-owned.",
+      "required_before_promotion": ["latent-state schema", "uncertainty fixtures", "parity fixtures"]
+    },
+    {
+      "model_key": "regime_switching",
+      "family": "advanced_diffusion",
+      "ownership_status": "python_reference_boundary",
+      "rationale": "Regime transition semantics remain Python-reference-owned until transition schemas stabilize.",
+      "required_before_promotion": ["regime-state schema", "transition schema", "parity fixtures"]
+    },
+    {
+      "model_key": "lotka_volterra",
+      "family": "competition",
+      "ownership_status": "python_reference_boundary",
+      "rationale": "ODE/state-vector ownership needs a separate deterministic solver and payload promotion decision.",
+      "required_before_promotion": ["state-vector schema", "solver tolerance policy", "parity fixtures"]
+    }
   ]
 }

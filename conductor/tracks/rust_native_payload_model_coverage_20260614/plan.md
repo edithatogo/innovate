@@ -26,10 +26,10 @@
     - [x] Implement native support where schemas are stable
     - [x] Keep bridge fallback only with explicit rationale and tests
     - [x] Commit this task before starting the next task
-- [ ] Task: Classify network, policy, and ecosystem families
-    - [ ] Promote only stable deterministic payloads
-    - [ ] Keep object-internal or agent-based behavior Python-reference-owned until schema boundaries exist
-    - [ ] Commit this task before starting the next task
+- [x] Task: Classify network, policy, and ecosystem families
+    - [x] Promote only stable deterministic payloads
+    - [x] Keep object-internal or agent-based behavior Python-reference-owned until schema boundaries exist
+    - [x] Commit this task before starting the next task
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Model-Family Coverage Slices' (Protocol in workflow.md)
 
 ## Phase 3: Full-Claim Gate

@@ -118,3 +118,28 @@ def test_composite_and_multi_product_families_have_explicit_bridge_boundaries() 
         assert entry["rationale"]
         assert "parity fixtures" in entry["required_before_promotion"]
         assert "error mapping fixtures" in entry["required_before_promotion"]
+
+
+def test_network_policy_ecosystem_and_advanced_families_have_reference_boundaries() -> None:
+    """Object-internal families should stay Python-reference-owned until schemas exist."""
+    evidence = _slice_evidence()
+    boundaries = {
+        entry["model_key"]: entry
+        for entry in evidence["python_reference_boundaries"]
+    }
+    expected = {
+        "complementary_goods",
+        "hierarchical",
+        "latent_process",
+        "lotka_volterra",
+        "mixture",
+        "network_diffusion",
+        "policy_hazard",
+        "regime_switching",
+    }
+
+    assert set(boundaries) == expected
+    for entry in boundaries.values():
+        assert entry["ownership_status"] == "python_reference_boundary"
+        assert entry["rationale"]
+        assert entry["required_before_promotion"]
