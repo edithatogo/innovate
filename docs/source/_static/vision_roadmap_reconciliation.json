@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "generated_by_track": "vision_roadmap_truth_audit_20260614",
+  "status": "reconciled_with_active_future_state_tracks",
+  "checks": {
+    "roadmap_pages_have_owned_gaps": true,
+    "product_docs_avoid_full_vision_completion_claim": true,
+    "rust_docs_avoid_full_rust_ownership_claim": true,
+    "submission_docs_distinguish_readiness_from_acceptance": true,
+    "docs_cutover_status_points_to_starlight_cleanup": true
+  },
+  "owned_future_state_boundaries": [
+    {
+      "boundary": "canonical vision status and roadmap truthfulness",
+      "owner_track": "vision_roadmap_truth_audit_20260614"
+    },
+    {
+      "boundary": "canonical operation-level Rust-native completion",
+      "owner_track": "rust_native_operation_completion_20260614"
+    },
+    {
+      "boundary": "model-family and stable-payload Rust-native coverage",
+      "owner_track": "rust_native_payload_model_coverage_20260614"
+    },
+    {
+      "boundary": "Astro/Starlight cutover and legacy Sphinx cleanup",
+      "owner_track": "starlight_cutover_legacy_cleanup_20260614"
+    },
+    {
+      "boundary": "external submission blockers and maintainer-managed actions",
+      "owner_track": "external_submission_blocker_closure_20260614"
+    },
+    {
+      "boundary": "Conductor active-track and archive consistency",
+      "owner_track": "conductor_registry_hygiene_20260614"
+    }
+  ],
+  "validation_commands": [
+    "uv run pytest tests/unit/test_vision_roadmap_truth_status.py tests/unit/test_roadmap_backlog_tracks.py tests/unit/test_conductor_workflow_docs.py tests/unit/test_rust_core_roadmap_docs.py -q"
+  ]
+}

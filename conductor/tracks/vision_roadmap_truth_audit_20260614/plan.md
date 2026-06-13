@@ -33,8 +33,8 @@
 
 ## Phase 3: Final Track Review
 
-- [ ] Task: Reconcile all status matrices
-    - [ ] Confirm no roadmap page has an unowned gap
+- [~] Task: Reconcile all status matrices
+    - [~] Confirm no roadmap page has an unowned gap
     - [ ] Confirm no page overstates implementation, submission, or cutover status
     - [ ] Commit this task before starting the next task
 - [ ] Task: Run final conductor review
