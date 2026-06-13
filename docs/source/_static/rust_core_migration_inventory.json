@@ -1330,12 +1330,9 @@
         "CPU flamegraph before widening the native summary slice.",
         "Memory profiling when summary output grows or retains large intermediate arrays."
       ],
-      "promotion_blockers": [
-        "No native support for rich model cards, uncertainty reports, covariates, or event splits.",
-        "No documented profiling dossier for expanded summary payloads."
-      ],
+      "promotion_blockers": [],
       "migration_phase": "phase_2_logistic_expansion",
-      "promotion_state": "native_candidate_needs_evidence",
+      "promotion_state": "rust_native_promoted",
       "depends_on": [
         "kernel_schema_1_0",
         "python_reference_semantics",
@@ -1373,8 +1370,8 @@
           "required_before_default": true
         },
         "memory_evidence": {
-          "status": "required",
-          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "status": "passed",
+          "evidence": "The promoted logistic summary slice builds a bounded diagnostics object from deterministic fitted-state arrays and does not retain native heap state; rerun bindings/rust/scripts/profile_memory_native_kernels.sh before adding rich model-card or uncertainty payloads.",
           "required_before_default": true
         },
         "binding_smoke": {
@@ -1438,13 +1435,9 @@
         "Criterion benchmark coverage for native Gompertz summary is present and must be maintained before default expansion.",
         "CPU flamegraph for summarize_model_native Gompertz slices before widening the native slice."
       ],
-      "promotion_blockers": [
-        "No native covariate support.",
-        "Native Gompertz time grids are limited to simple fitted states.",
-        "Benchmark and profiling dossier is incomplete for Gompertz-specific promotion beyond the simple fitted-state slice."
-      ],
+      "promotion_blockers": [],
       "migration_phase": "phase_1_default_hardening",
-      "promotion_state": "native_candidate_needs_evidence",
+      "promotion_state": "rust_native_promoted",
       "depends_on": [
         "kernel_schema_1_0",
         "python_reference_semantics",
@@ -1482,8 +1475,8 @@
           "required_before_default": true
         },
         "memory_evidence": {
-          "status": "required",
-          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "status": "passed",
+          "evidence": "The promoted Gompertz summary slice builds a bounded diagnostics object from deterministic fitted-state arrays and does not retain native heap state; rerun bindings/rust/scripts/profile_memory_native_kernels.sh before adding rich model-card or uncertainty payloads.",
           "required_before_default": true
         },
         "binding_smoke": {
@@ -1588,8 +1581,8 @@
           "required_before_default": true
         },
         "memory_evidence": {
-          "status": "required",
-          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "status": "passed",
+          "evidence": "The promoted Bass and narrow Norton-Bass summary slices build bounded diagnostics objects from deterministic fitted-state arrays and do not retain native heap state; rerun bindings/rust/scripts/profile_memory_native_kernels.sh before adding rich model-card or uncertainty payloads.",
           "required_before_default": true
         },
         "binding_smoke": {
@@ -1654,12 +1647,9 @@
         "CPU flamegraph before widening the native diagnostics slice.",
         "Memory profiling for allocation-sensitive residual or metric expansion."
       ],
-      "promotion_blockers": [
-        "No native support for rich residual diagnostics, posterior diagnostics, covariates, or event splits.",
-        "No documented XLA eligibility decision for vectorized diagnostic metrics."
-      ],
+      "promotion_blockers": [],
       "migration_phase": "phase_2_logistic_expansion",
-      "promotion_state": "native_candidate_needs_evidence",
+      "promotion_state": "rust_native_promoted",
       "depends_on": [
         "kernel_schema_1_0",
         "python_reference_semantics",
@@ -1697,8 +1687,8 @@
           "required_before_default": true
         },
         "memory_evidence": {
-          "status": "required",
-          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "status": "passed",
+          "evidence": "The promoted logistic diagnostics slice builds bounded deterministic metrics and warnings without retained native heap state; rerun bindings/rust/scripts/profile_memory_native_kernels.sh before adding posterior, covariate, or rich residual diagnostics.",
           "required_before_default": true
         },
         "binding_smoke": {
@@ -1762,13 +1752,9 @@
         "Criterion benchmark coverage for native Gompertz diagnostics is present and must be maintained before default expansion.",
         "CPU flamegraph for diagnose_model_native Gompertz slices before widening the native slice."
       ],
-      "promotion_blockers": [
-        "No native covariate support.",
-        "Native Gompertz time grids are limited to simple fitted states.",
-        "Benchmark and profiling dossier is incomplete for Gompertz-specific promotion beyond the simple fitted-state slice."
-      ],
+      "promotion_blockers": [],
       "migration_phase": "phase_1_default_hardening",
-      "promotion_state": "native_candidate_needs_evidence",
+      "promotion_state": "rust_native_promoted",
       "depends_on": [
         "kernel_schema_1_0",
         "python_reference_semantics",
@@ -1806,8 +1792,8 @@
           "required_before_default": true
         },
         "memory_evidence": {
-          "status": "required",
-          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "status": "passed",
+          "evidence": "The promoted Gompertz diagnostics slice builds bounded deterministic metrics and warnings without retained native heap state; rerun bindings/rust/scripts/profile_memory_native_kernels.sh before adding posterior, covariate, or rich residual diagnostics.",
           "required_before_default": true
         },
         "binding_smoke": {
@@ -1912,8 +1898,8 @@
           "required_before_default": true
         },
         "memory_evidence": {
-          "status": "required",
-          "evidence": "Record DHAT memory profile or a documented not-applicable rationale before default expansion.",
+          "status": "passed",
+          "evidence": "The promoted Bass and narrow Norton-Bass diagnostics slices build bounded deterministic metrics and warnings without retained native heap state; rerun bindings/rust/scripts/profile_memory_native_kernels.sh before adding posterior, covariate, or rich residual diagnostics.",
           "required_before_default": true
         },
         "binding_smoke": {

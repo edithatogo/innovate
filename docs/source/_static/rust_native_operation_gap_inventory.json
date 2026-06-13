@@ -70,32 +70,30 @@
     {
       "operation": "summarize_model",
       "native_default_slices": [
+        "logistic_simple_fitted_state",
+        "gompertz_simple_fitted_state",
         "bass_and_other_model_families"
       ],
-      "native_candidates_needing_evidence": [
-        "logistic_simple_fitted_state",
-        "gompertz_simple_fitted_state"
-      ],
+      "native_candidates_needing_evidence": [],
       "bridge_or_reference_boundaries": [
         "summary payloads that depend on Python-only model internals",
         "probabilistic posterior summaries"
       ],
-      "required_closure": "Promote deterministic fitted-state reporting slices after schema and memory evidence are complete."
+      "required_closure": "Stable deterministic fitted-state reporting slices are promoted; rich model-card, posterior, and Python-internal summary payloads remain explicit Python boundaries."
     },
     {
       "operation": "diagnose_model",
       "native_default_slices": [
+        "logistic_simple_fitted_state",
+        "gompertz_simple_fitted_state",
         "bass_and_other_model_families"
       ],
-      "native_candidates_needing_evidence": [
-        "logistic_simple_fitted_state",
-        "gompertz_simple_fitted_state"
-      ],
+      "native_candidates_needing_evidence": [],
       "bridge_or_reference_boundaries": [
         "diagnostic payloads that depend on Python-only model internals",
         "probabilistic posterior diagnostics"
       ],
-      "required_closure": "Promote deterministic fitted-state diagnostic slices after parity, error mapping, benchmark, memory, and binding-smoke evidence are complete."
+      "required_closure": "Stable deterministic fitted-state diagnostic slices are promoted; posterior, covariate, rich residual, and Python-internal diagnostic payloads remain explicit Python boundaries."
     }
   ],
   "promotion_gate_requirements": [
