@@ -27,7 +27,7 @@ Current migration posture:
 Active future-state tracks:
 
 - Vision and Roadmap Truth Audit:
-  `conductor/tracks/vision_roadmap_truth_audit_20260614/`
+  `conductor/archive/vision_roadmap_truth_audit_20260614/`
 - Rust-Native Canonical Operation Completion:
   `conductor/tracks/rust_native_operation_completion_20260614/`
 - Rust-Native Payload and Model-Family Coverage:

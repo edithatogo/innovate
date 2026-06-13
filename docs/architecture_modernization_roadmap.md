@@ -14,7 +14,7 @@ The product vision is not treated as fully complete while documented
 future-state boundaries remain. Those boundaries are now explicit Conductor
 tracks:
 
-- [Vision and Roadmap Truth Audit](../conductor/tracks/vision_roadmap_truth_audit_20260614/)
+- [Vision and Roadmap Truth Audit](../conductor/archive/vision_roadmap_truth_audit_20260614/)
 - [Rust-Native Canonical Operation Completion](../conductor/tracks/rust_native_operation_completion_20260614/)
 - [Rust-Native Payload and Model-Family Coverage](../conductor/tracks/rust_native_payload_model_coverage_20260614/)
 - [Starlight Cutover and Legacy Cleanup](../conductor/tracks/starlight_cutover_legacy_cleanup_20260614/)
