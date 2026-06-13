@@ -18,7 +18,7 @@
 
 ## Phase 2: Model-Family Coverage Slices
 
-- [x] Task: Promote stable diffusion and substitution family payloads
+- [x] Task: Promote stable diffusion and substitution family payloads aa8c7bc
     - [x] Add Rust-native support or explicit non-native promotion for remaining stable slices
     - [x] Add parity fixtures and error mapping tests
     - [x] Commit this task before starting the next task
