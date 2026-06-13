@@ -1,0 +1,12 @@
+Task: Update Astro/Starlight docs mirrors
+
+Summary: Updated Astro/Starlight operations roadmap and Rust core pages to surface the canonical distinction between archived roadmap completion and remaining future-state work. Added active future-state track references and clarified full Rust ownership is not yet claimed.
+
+Files changed:
+- docs/astro-site/src/content/docs/operations/roadmap.md
+- docs/astro-site/src/content/docs/operations/rust-core.md
+- conductor/tracks/vision_roadmap_truth_audit_20260614/plan.md
+
+Validation: uv run pytest tests/unit/test_vision_roadmap_truth_status.py -q passed.
+
+Why: The Starlight documentation mirror needed to agree with the product and roadmap status language.
