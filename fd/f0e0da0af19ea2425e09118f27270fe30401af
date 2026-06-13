@@ -1,0 +1,10 @@
+Task: Run full Rust ownership validation
+
+Summary:
+- Added docs/source/_static/rust_full_ownership_validation.json with the validated command set, pass counts, promoted model families, explicit bridge boundaries, Python-reference boundaries, and excluded payload boundaries.
+- Corrected lotka_volterra ownership classification to python_reference_boundary so model-family inventory matches slice evidence and the full-ownership gate.
+- Added regression coverage that validates the evidence artifact and intentionally excluded boundaries.
+
+Validation:
+- python -m json.tool docs/source/_static/rust_native_model_family_coverage.json >/dev/null && python -m json.tool docs/source/_static/rust_native_payload_shape_coverage.json >/dev/null && python -m json.tool docs/source/_static/rust_native_model_family_slice_evidence.json >/dev/null && python -m json.tool docs/source/_static/rust_full_ownership_gate.json >/dev/null && python -m json.tool docs/source/_static/rust_full_ownership_validation.json >/dev/null && uv run pytest tests/unit/test_rust_native_payload_model_coverage.py tests/unit/test_rust_native_operation_completion.py tests/unit/test_rust_core_roadmap_docs.py -q
+- cargo test --manifest-path bindings/rust/Cargo.toml --test operations
