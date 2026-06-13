@@ -1,0 +1,9 @@
+Task: Write failing cutover tests
+
+Summary:
+- Added tests/unit/test_starlight_cutover_legacy_cleanup.py to define the cutover-complete contract for active docs stack wording, archived completed Starlight migration tracks, migration manifest state, Sphinx archival/compatibility language, and zero-stale inventory.
+- Confirmed the tests fail against current stale state before cleanup.
+
+Red validation:
+- uv run pytest tests/unit/test_starlight_cutover_legacy_cleanup.py -q
+- Result: 1 passed, 4 failed as expected.
