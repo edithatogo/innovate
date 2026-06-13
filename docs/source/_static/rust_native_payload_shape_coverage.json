@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "generated_by_track": "rust_native_payload_model_coverage_20260614",
+  "status_values": [
+    "stable",
+    "provisional",
+    "internal",
+    "python_reference_only"
+  ],
+  "ownership_status_values": [
+    "rust_native_promoted",
+    "python_bridge_explicit",
+    "python_reference_boundary",
+    "promoted_non_python_backend"
+  ],
+  "payload_shapes": [
+    {
+      "payload_shape": "bounded_fitted_state",
+      "status": "stable",
+      "ownership_status": "rust_native_promoted",
+      "schema_fixture": "bindings/rust/tests/operations.rs",
+      "scope": "explicit model_key, parameters, predict_kwargs, and numeric time arrays"
+    },
+    {
+      "payload_shape": "simple_positive_observations_fit",
+      "status": "stable",
+      "ownership_status": "rust_native_promoted",
+      "schema_fixture": "bindings/rust/tests/operations.rs",
+      "scope": "time and observed arrays for deterministic logistic, Gompertz, Fisher-Pry, and Bass fit slices"
+    },
+    {
+      "payload_shape": "covariates",
+      "status": "provisional",
+      "ownership_status": "python_bridge_explicit",
+      "schema_fixture": "none",
+      "scope": "covariate semantics differ by model family and need separate schema fixtures before Rust promotion"
+    },
+    {
+      "payload_shape": "event_splits",
+      "status": "provisional",
+      "ownership_status": "python_bridge_explicit",
+      "schema_fixture": "none",
+      "scope": "event split semantics are not stable across diffusion, substitution, and policy models"
+    },
+    {
+      "payload_shape": "incomplete_fitted_state",
+      "status": "internal",
+      "ownership_status": "python_bridge_explicit",
+      "schema_fixture": "bindings/rust/tests/operations.rs",
+      "scope": "promoted native slices reject missing parameters or incomplete fitted states with stable errors"
+    },
+    {
+      "payload_shape": "deterministic_diagnostics",
+      "status": "stable",
+      "ownership_status": "rust_native_promoted",
+      "schema_fixture": "tests/fixtures/diagnostics_artifact_payload.json",
+      "scope": "bounded residual metrics, warnings, support level, provenance, and comparison family"
+    },
+    {
+      "payload_shape": "deterministic_simulation",
+      "status": "stable",
+      "ownership_status": "rust_native_promoted",
+      "schema_fixture": "bindings/rust/tests/operations.rs",
+      "scope": "deterministic fitted-state simulation over explicit numeric time arrays"
+    },
+    {
+      "payload_shape": "stochastic_simulation_policy",
+      "status": "provisional",
+      "ownership_status": "python_reference_boundary",
+      "schema_fixture": "none",
+      "scope": "stochastic policies need explicit seed, PRNG, and shape contracts before Rust or XLA promotion"
+    },
+    {
+      "payload_shape": "uncertainty_or_posterior",
+      "status": "python_reference_only",
+      "ownership_status": "python_reference_boundary",
+      "schema_fixture": "none",
+      "scope": "probabilistic posterior, uncertainty, and backend-specific diagnostics remain Python-reference-owned"
+    },
+    {
+      "payload_shape": "graph_or_agent_state",
+      "status": "python_reference_only",
+      "ownership_status": "python_reference_boundary",
+      "schema_fixture": "none",
+      "scope": "network, ABM, ecosystem, and policy object internals remain Python-reference-owned"
+    }
+  ]
+}

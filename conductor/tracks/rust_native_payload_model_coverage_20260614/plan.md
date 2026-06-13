@@ -6,10 +6,10 @@
     - [x] Compare Python capability registry entries with Rust-native model slices
     - [x] Identify composite, multi-product, network, policy, probabilistic, and ecosystem families requiring classification
     - [x] Commit this task before starting the next task
-- [ ] Task: Inventory stable payload shapes
-    - [ ] List fitted-state, covariate, event, diagnostics, simulation, and uncertainty payload shapes
-    - [ ] Mark each payload as stable, provisional, internal, or Python-reference-only
-    - [ ] Commit this task before starting the next task
+- [x] Task: Inventory stable payload shapes
+    - [x] List fitted-state, covariate, event, diagnostics, simulation, and uncertainty payload shapes
+    - [x] Mark each payload as stable, provisional, internal, or Python-reference-only
+    - [x] Commit this task before starting the next task
 - [ ] Task: Write failing classification tests
     - [ ] Require every model family to have ownership status
     - [ ] Require every stable payload shape to have schema and ownership evidence
