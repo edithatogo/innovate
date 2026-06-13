@@ -32,7 +32,7 @@ Migration goals:
 
 Active ownership tracks:
 
-- `conductor/tracks/rust_native_operation_completion_20260614/`
+- `conductor/archive/rust_native_operation_completion_20260614/`
 - `conductor/tracks/rust_native_payload_model_coverage_20260614/`
 
 Evidence artifacts:

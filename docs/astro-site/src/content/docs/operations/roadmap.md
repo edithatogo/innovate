@@ -29,7 +29,7 @@ Active future-state tracks:
 - Vision and Roadmap Truth Audit:
   `conductor/archive/vision_roadmap_truth_audit_20260614/`
 - Rust-Native Canonical Operation Completion:
-  `conductor/tracks/rust_native_operation_completion_20260614/`
+  `conductor/archive/rust_native_operation_completion_20260614/`
 - Rust-Native Payload and Model-Family Coverage:
   `conductor/tracks/rust_native_payload_model_coverage_20260614/`
 - Starlight Cutover and Legacy Cleanup:

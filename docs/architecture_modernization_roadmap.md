@@ -15,7 +15,7 @@ future-state boundaries remain. Those boundaries are now explicit Conductor
 tracks:
 
 - [Vision and Roadmap Truth Audit](../conductor/archive/vision_roadmap_truth_audit_20260614/)
-- [Rust-Native Canonical Operation Completion](../conductor/tracks/rust_native_operation_completion_20260614/)
+- [Rust-Native Canonical Operation Completion](../conductor/archive/rust_native_operation_completion_20260614/)
 - [Rust-Native Payload and Model-Family Coverage](../conductor/tracks/rust_native_payload_model_coverage_20260614/)
 - [Starlight Cutover and Legacy Cleanup](../conductor/tracks/starlight_cutover_legacy_cleanup_20260614/)
 - [External Submission Blocker Closure](../conductor/tracks/external_submission_blocker_closure_20260614/)
