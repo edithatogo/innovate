@@ -2,7 +2,7 @@
 
 ## Phase 1: Red-Phase Cutover Checks
 
-- [x] Task: Inventory active and legacy docs surfaces
+- [x] Task: Inventory active and legacy docs surfaces babb590
     - [x] Compare product, tech-stack, Starlight config, Sphinx config, and migration manifests
     - [x] Identify stale migration-in-progress language
     - [x] Commit this task before starting the next task
