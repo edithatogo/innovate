@@ -1,0 +1,9 @@
+Task: Build the operation gap inventory
+
+Summary:
+- Added docs/source/_static/rust_native_operation_gap_inventory.json as the track-local operation-gap inventory derived from rust_core_migration_inventory.json.
+- Classified canonical operations by native defaults, native candidates needing evidence, and explicit bridge/reference boundaries.
+- Marked the task checklist complete in the track plan.
+
+Validation:
+- python -m json.tool docs/source/_static/rust_native_operation_gap_inventory.json >/dev/null
