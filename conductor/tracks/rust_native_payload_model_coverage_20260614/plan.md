@@ -1,6 +1,6 @@
 # Implementation Plan: Rust-Native Payload and Model-Family Coverage
 
-## Phase 1: Registry and Payload Red Tests
+## Phase 1: Registry and Payload Red Tests [checkpoint: pending]
 
 - [x] Task: Inventory Python registry model families 43b33ef
     - [x] Compare Python capability registry entries with Rust-native model slices
@@ -14,7 +14,7 @@
     - [x] Require every model family to have ownership status
     - [x] Require every stable payload shape to have schema and ownership evidence
     - [x] Commit this task before starting the next task
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Registry and Payload Red Tests' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Registry and Payload Red Tests' (Protocol in workflow.md)
 
 ## Phase 2: Model-Family Coverage Slices
 
