@@ -1,0 +1,16 @@
+Task: Run binding smoke matrix
+
+Summary:
+- Added docs/source/_static/rust_native_operation_binding_smoke.json.
+- Recorded passed smoke checks for Python, Rust, R, Julia, TypeScript, and Go.
+- Recorded C# as blocked because installed .NET SDK 10.0.107 cannot target net11.0.
+- Added tests requiring all required binding surfaces to be represented.
+
+Validation:
+- uv run pytest tests/unit/test_binding_publication_ci.py tests/unit/test_rust_native_operation_completion.py -q
+- cargo test --manifest-path bindings/rust/Cargo.toml
+- Rscript bindings/r/tests/run.R
+- julia --project=bindings/julia bindings/julia/test/runtests.jl
+- go test ./... from bindings/go
+- npm test -- --testTimeout=60000 from bindings/typescript
+- dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj blocked with NETSDK1045 for net11.0
