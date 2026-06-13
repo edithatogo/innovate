@@ -11,7 +11,8 @@
 
 ## Previous Documentation (Legacy)
 
-- **Sphinx** with `sphinx_rtd_theme` — being migrated to Starlight
+- Legacy Sphinx source with `sphinx_rtd_theme` is retained as archival and
+  redirect-reference material while Astro/Starlight is the active docs stack.
 - **Extensions**: `autodoc`, `napoleon`, `viewcode`, `intersphinx`, `sphinx_autodoc_typehints`
 
 ## Runtime Components

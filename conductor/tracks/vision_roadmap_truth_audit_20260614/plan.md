@@ -15,8 +15,8 @@
 
 ## Phase 2: Canonical Status Documentation
 
-- [ ] Task: Update product and roadmap status language
-    - [ ] Add a canonical status statement for completed tracks versus incomplete future-state vision
+- [~] Task: Update product and roadmap status language
+    - [~] Add a canonical status statement for completed tracks versus incomplete future-state vision
     - [ ] Link each future-state boundary to a granular track
     - [ ] Remove or qualify stale Sphinx and full-completion wording
     - [ ] Commit this task before starting the next task

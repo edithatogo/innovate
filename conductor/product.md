@@ -75,4 +75,9 @@ src/innovate/
 - **Build System**: setuptools
 - **Testing**: pytest with parallel execution, property-based testing, mutation testing
 - **Code Quality**: Ruff, MyPy, Pyright, Bandit
-- **Documentation**: Sphinx with RTD theme
+- Documentation: Astro/Starlight site with legacy Sphinx source retained only as
+  archival and redirect-reference material
+- **Vision Status**: Prior Conductor roadmap tracks are complete or archived,
+  but the full product vision remains an active future-state program for full
+  Rust ownership, final documentation cutover cleanup, external submission
+  blocker closure, and Conductor registry hygiene.

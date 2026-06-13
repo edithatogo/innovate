@@ -8,10 +8,23 @@ Accepted direction as of 2026-04-16.
 
 The original roadmap stages are covered by Conductor records. Stage work,
 deferred follow-on tracks, and the ecosystem gap tracks registered by the audit
-have been completed and archived. New roadmap-level gaps should become
-Conductor tracks before implementation begins.
+have been completed and archived.
 
-The next maturity layer is tracked in the Sphinx
+The product vision is not treated as fully complete while documented
+future-state boundaries remain. Those boundaries are now explicit Conductor
+tracks:
+
+- [Vision and Roadmap Truth Audit](../conductor/tracks/vision_roadmap_truth_audit_20260614/)
+- [Rust-Native Canonical Operation Completion](../conductor/tracks/rust_native_operation_completion_20260614/)
+- [Rust-Native Payload and Model-Family Coverage](../conductor/tracks/rust_native_payload_model_coverage_20260614/)
+- [Starlight Cutover and Legacy Cleanup](../conductor/tracks/starlight_cutover_legacy_cleanup_20260614/)
+- [External Submission Blocker Closure](../conductor/tracks/external_submission_blocker_closure_20260614/)
+- [Conductor Registry Hygiene](../conductor/tracks/conductor_registry_hygiene_20260614/)
+
+New roadmap-level gaps should become Conductor tracks before implementation
+begins.
+
+The next maturity layer is tracked in the
 [Scientific and HPC readiness roadmap](source/scientific_hpc_readiness_roadmap.rst).
 It registers follow-on tracks for scientific community submission readiness,
 HPC packaging, accelerator evidence, Rust migration execution, ABI strategy,
