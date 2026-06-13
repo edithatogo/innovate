@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "generated_by_track": "rust_native_operation_completion_20260614",
+  "source_inventory": "docs/source/_static/rust_core_migration_inventory.json",
+  "canonical_operations": [
+    "discover_models",
+    "fit_model",
+    "predict_model",
+    "simulate_model",
+    "summarize_model",
+    "diagnose_model"
+  ],
+  "completion_rule": "Every canonical operation must have only rust_native promoted slices or explicit bridge/reference boundaries with stable unsupported-native behavior.",
+  "operation_gaps": [
+    {
+      "operation": "discover_models",
+      "native_default_slices": [
+        "all_packaged_discovery_metadata"
+      ],
+      "native_candidates_needing_evidence": [],
+      "bridge_or_reference_boundaries": [],
+      "required_closure": "Keep schema, manifest, and binding-smoke evidence current when discovery metadata changes."
+    },
+    {
+      "operation": "fit_model",
+      "native_default_slices": [
+        "bass_and_other_model_families"
+      ],
+      "native_candidates_needing_evidence": [
+        "logistic_simple_positive_observations",
+        "gompertz_simple_positive_observations"
+      ],
+      "bridge_or_reference_boundaries": [
+        "covariate payloads",
+        "event payloads",
+        "custom fitter options",
+        "probabilistic and uncertainty-aware fitters"
+      ],
+      "required_closure": "Promote eligible deterministic fitted-state payloads only after memory evidence and unsupported-payload error mapping are explicit."
+    },
+    {
+      "operation": "predict_model",
+      "native_default_slices": [
+        "bass_simple_fitted_state"
+      ],
+      "native_candidates_needing_evidence": [
+        "logistic_simple_fitted_state",
+        "gompertz_simple_fitted_state"
+      ],
+      "bridge_or_reference_boundaries": [
+        "other_model_families_or_unsupported_payloads",
+        "custom prediction horizons that require Python model internals",
+        "non-deterministic Python object state"
+      ],
+      "required_closure": "Promote stable deterministic fitted-state slices and retain explicit unsupported-native errors for non-native payloads."
+    },
+    {
+      "operation": "simulate_model",
+      "native_default_slices": [
+        "bass_simple_fitted_state"
+      ],
+      "native_candidates_needing_evidence": [
+        "logistic_simple_fitted_state",
+        "gompertz_simple_fitted_state"
+      ],
+      "bridge_or_reference_boundaries": [
+        "other_model_families_or_unsupported_payloads",
+        "stochastic payloads without stable seed contract",
+        "non-deterministic Python object state"
+      ],
+      "required_closure": "Promote deterministic or seeded fitted-state slices and keep stochastic Python boundaries explicit."
+    },
+    {
+      "operation": "summarize_model",
+      "native_default_slices": [
+        "bass_and_other_model_families"
+      ],
+      "native_candidates_needing_evidence": [
+        "logistic_simple_fitted_state",
+        "gompertz_simple_fitted_state"
+      ],
+      "bridge_or_reference_boundaries": [
+        "summary payloads that depend on Python-only model internals",
+        "probabilistic posterior summaries"
+      ],
+      "required_closure": "Promote deterministic fitted-state reporting slices after schema and memory evidence are complete."
+    },
+    {
+      "operation": "diagnose_model",
+      "native_default_slices": [
+        "bass_and_other_model_families"
+      ],
+      "native_candidates_needing_evidence": [
+        "logistic_simple_fitted_state",
+        "gompertz_simple_fitted_state"
+      ],
+      "bridge_or_reference_boundaries": [
+        "diagnostic payloads that depend on Python-only model internals",
+        "probabilistic posterior diagnostics"
+      ],
+      "required_closure": "Promote deterministic fitted-state diagnostic slices after parity, error mapping, benchmark, memory, and binding-smoke evidence are complete."
+    }
+  ],
+  "promotion_gate_requirements": [
+    "parity",
+    "schema_compatibility",
+    "error_mapping",
+    "benchmark_evidence",
+    "memory_evidence",
+    "binding_smoke"
+  ],
+  "intentional_python_reference_boundary": {
+    "operation": "all_kernel_operations",
+    "model_slice": "probabilistic_runtimes_uncertainty_and_python_object_internals",
+    "reason": "Python probabilistic runtimes and Python object internals remain authoritative until their payload contracts are explicitly promoted elsewhere."
+  }
+}
