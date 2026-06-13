@@ -15,7 +15,7 @@
 
 ## Phase 2: Cutover Cleanup
 
-- [x] Task: Update active documentation stack claims
+- [x] Task: Update active documentation stack claims ce91fcf
     - [x] Update product status, tech-stack, and roadmap docs to agree on Starlight
     - [x] Preserve Sphinx as archival/redirect source only where needed
     - [x] Commit this task before starting the next task
