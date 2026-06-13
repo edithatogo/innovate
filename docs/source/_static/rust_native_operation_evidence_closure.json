@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "generated_by_track": "rust_native_operation_completion_20260614",
+  "benchmark_result_artifact": "docs/source/_static/rust_core_native_benchmark_results.json",
+  "benchmark_harness": "bindings/rust/benches/native_kernel.rs",
+  "memory_profile_driver": "bindings/rust/scripts/profile_memory_native_kernels.sh",
+  "validation_commands": [
+    "python -m json.tool docs/source/_static/rust_core_migration_inventory.json >/dev/null",
+    "python -m json.tool docs/source/_static/rust_native_operation_gap_inventory.json >/dev/null",
+    "python -m json.tool docs/source/_static/rust_native_operation_evidence_closure.json >/dev/null",
+    "uv run pytest tests/unit/test_rust_native_operation_completion.py tests/unit/test_rust_core_migration_inventory.py tests/unit/test_rust_core_roadmap_docs.py -q",
+    "cargo test --manifest-path bindings/rust/Cargo.toml --test operations"
+  ],
+  "benchmark_evidence": [
+    {
+      "operation": "discover_models",
+      "captured_result_models": [],
+      "harness_models": [],
+      "status": "not_applicable",
+      "rationale": "Discovery is packaged metadata I/O and has no promoted native numerical loop."
+    },
+    {
+      "operation": "fit_model",
+      "captured_result_models": [
+        "fisher_pry",
+        "gompertz",
+        "logistic"
+      ],
+      "harness_models": [
+        "bass",
+        "fisher_pry",
+        "gompertz",
+        "logistic"
+      ],
+      "status": "harness_complete_result_partial",
+      "rationale": "The current result artifact captures logistic, Gompertz, and Fisher-Pry fit rows; the Criterion harness also includes Bass fit and should be rerun before release evidence refresh."
+    },
+    {
+      "operation": "predict_model",
+      "captured_result_models": [
+        "bass",
+        "fisher_pry",
+        "gompertz",
+        "logistic"
+      ],
+      "harness_models": [
+        "bass",
+        "fisher_pry",
+        "gompertz",
+        "logistic"
+      ],
+      "status": "captured",
+      "rationale": "The result artifact captures every promoted deterministic prediction benchmark row currently in the harness."
+    },
+    {
+      "operation": "simulate_model",
+      "captured_result_models": [
+        "bass",
+        "fisher_pry",
+        "gompertz",
+        "logistic"
+      ],
+      "harness_models": [
+        "bass",
+        "fisher_pry",
+        "gompertz",
+        "logistic"
+      ],
+      "status": "captured",
+      "rationale": "The result artifact captures every promoted deterministic simulation benchmark row currently in the harness."
+    },
+    {
+      "operation": "summarize_model",
+      "captured_result_models": [
+        "fisher_pry",
+        "gompertz",
+        "logistic"
+      ],
+      "harness_models": [
+        "bass",
+        "fisher_pry",
+        "gompertz",
+        "logistic"
+      ],
+      "status": "harness_complete_result_partial",
+      "rationale": "The current result artifact captures logistic, Gompertz, and Fisher-Pry summary rows; the Criterion harness also includes Bass summary and should be rerun before release evidence refresh."
+    },
+    {
+      "operation": "diagnose_model",
+      "captured_result_models": [
+        "fisher_pry",
+        "gompertz",
+        "logistic"
+      ],
+      "harness_models": [
+        "bass",
+        "fisher_pry",
+        "gompertz",
+        "logistic"
+      ],
+      "status": "harness_complete_result_partial",
+      "rationale": "The current result artifact captures logistic, Gompertz, and Fisher-Pry diagnostic rows; the Criterion harness also includes Bass diagnostics and should be rerun before release evidence refresh."
+    }
+  ],
+  "memory_evidence": {
+    "status": "closed_for_promoted_bounded_slices",
+    "rationale": "Promoted operation slices use bounded deterministic request arrays and do not retain native heap state. The DHAT driver remains required before widening to allocation-heavy, stochastic, posterior, covariate, event, or rich reporting payloads.",
+    "not_applicable_operation": "discover_models",
+    "rerun_before_payload_expansion": true
+  }
+}

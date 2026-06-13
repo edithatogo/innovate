@@ -30,10 +30,10 @@
 
 ## Phase 3: Evidence and Inventory Closure
 
-- [ ] Task: Capture benchmark and memory evidence
-    - [ ] Run Criterion or project-native Rust benchmarks for promoted slices
-    - [ ] Capture DHAT or not-applicable rationale for memory-sensitive slices
-    - [ ] Commit this task before starting the next task
+- [x] Task: Capture benchmark and memory evidence
+    - [x] Run Criterion or project-native Rust benchmarks for promoted slices
+    - [x] Capture DHAT or not-applicable rationale for memory-sensitive slices
+    - [x] Commit this task before starting the next task
 - [ ] Task: Update inventory and roadmap evidence
     - [ ] Update `rust_core_migration_inventory.json`
     - [ ] Update Rust roadmap prose to match the machine-readable state

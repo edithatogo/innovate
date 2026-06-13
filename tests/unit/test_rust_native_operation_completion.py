@@ -16,6 +16,7 @@ CANONICAL_OPERATIONS = {
 }
 INVENTORY_PATH = Path("docs/source/_static/rust_core_migration_inventory.json")
 GAP_INVENTORY_PATH = Path("docs/source/_static/rust_native_operation_gap_inventory.json")
+EVIDENCE_CLOSURE_PATH = Path("docs/source/_static/rust_native_operation_evidence_closure.json")
 REQUIRED_PROMOTION_GATES = {
     "parity",
     "schema_compatibility",
@@ -32,6 +33,10 @@ def _migration_entries() -> list[dict[str, Any]]:
 
 def _gap_inventory() -> dict[str, Any]:
     return json.loads(GAP_INVENTORY_PATH.read_text())
+
+
+def _evidence_closure() -> dict[str, Any]:
+    return json.loads(EVIDENCE_CLOSURE_PATH.read_text())
 
 
 def test_operation_gap_inventory_covers_every_canonical_operation() -> None:
@@ -91,3 +96,24 @@ def test_native_default_slices_have_complete_promotion_evidence() -> None:
 
     assert unresolved == []
 
+
+def test_operation_evidence_closure_records_benchmark_and_memory_boundaries() -> None:
+    """Promoted operation evidence should distinguish captured and deferred artifacts."""
+    closure = _evidence_closure()
+    evidence_by_operation = {
+        entry["operation"]: entry for entry in closure["benchmark_evidence"]
+    }
+
+    assert closure["schema_version"] == 1
+    assert closure["benchmark_result_artifact"] == "docs/source/_static/rust_core_native_benchmark_results.json"
+    assert closure["benchmark_harness"] == "bindings/rust/benches/native_kernel.rs"
+    assert closure["memory_profile_driver"] == "bindings/rust/scripts/profile_memory_native_kernels.sh"
+    assert set(evidence_by_operation) == CANONICAL_OPERATIONS
+    assert evidence_by_operation["discover_models"]["status"] == "not_applicable"
+    assert evidence_by_operation["predict_model"]["status"] == "captured"
+    assert evidence_by_operation["simulate_model"]["status"] == "captured"
+    assert evidence_by_operation["fit_model"]["status"] == "harness_complete_result_partial"
+    assert evidence_by_operation["summarize_model"]["status"] == "harness_complete_result_partial"
+    assert evidence_by_operation["diagnose_model"]["status"] == "harness_complete_result_partial"
+    assert closure["memory_evidence"]["status"] == "closed_for_promoted_bounded_slices"
+    assert closure["memory_evidence"]["rerun_before_payload_expansion"] is True
