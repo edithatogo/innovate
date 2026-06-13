@@ -38,7 +38,7 @@
     - [x] Add a machine-readable gate that determines whether full Rust ownership may be claimed
     - [x] Ensure docs consume the gate rather than hand-written claims
     - [x] Commit this task before starting the next task
-- [x] Task: Run full Rust ownership validation
+- [x] Task: Run full Rust ownership validation fdf0e0d
     - [x] Run Rust, Python, and binding tests for promoted families
     - [x] Record intentionally excluded Python-reference boundaries
     - [x] Commit this task before starting the next task
