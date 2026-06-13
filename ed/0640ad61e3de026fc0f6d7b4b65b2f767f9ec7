@@ -1,0 +1,17 @@
+Checkpoint: Operation Inventory and Red Tests
+
+Review scope:
+- docs/source/_static/rust_native_operation_gap_inventory.json
+- tests/unit/test_rust_native_operation_completion.py
+- conductor/tracks/rust_native_operation_completion_20260614/plan.md
+
+Validation:
+- uv run pytest tests/unit/test_rust_native_operation_completion.py -q
+- Result: expected red-phase failure, 1 passed and 2 failed.
+
+Findings:
+- Red tests identify 10 non-terminal native_candidate_needs_evidence slices.
+- Red tests identify 15 native-default evidence gates with memory_evidence still required.
+
+Applied fixes:
+- None in red phase; Phase 2 owns the green implementation.
