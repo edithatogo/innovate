@@ -1,0 +1,10 @@
+Task: Classify composite and multi-product families
+
+Summary:
+- Extended rust_native_model_family_slice_evidence.json with explicit bridge boundaries for composite and multi_product.
+- Recorded promotion prerequisites for stable schemas, parity fixtures, and error mapping fixtures.
+- Added tests requiring bridge-boundary rationale and prerequisites.
+
+Validation:
+- python -m json.tool docs/source/_static/rust_native_model_family_slice_evidence.json >/dev/null
+- uv run pytest tests/unit/test_rust_native_payload_model_coverage.py -q
