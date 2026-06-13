@@ -1,0 +1,10 @@
+Task: Update full Rust ownership gate
+
+Summary:
+- Added docs/source/_static/rust_full_ownership_gate.json as the machine-readable source of truth for whether full Rust ownership may be claimed.
+- Updated Sphinx and Starlight Rust-core docs to point at the gate rather than relying on hand-written ownership claims.
+- Added regression coverage that verifies the gate blocks overclaims and both docs surfaces consume the gate artifact.
+
+Validation:
+- python -m json.tool docs/source/_static/rust_full_ownership_gate.json >/dev/null
+- uv run pytest tests/unit/test_rust_native_payload_model_coverage.py tests/unit/test_rust_core_roadmap_docs.py -q
