@@ -62,7 +62,7 @@
     {
       "model_key": "lotka_volterra",
       "family": "competition",
-      "ownership_status": "python_bridge_explicit",
+      "ownership_status": "python_reference_boundary",
       "native_scope": "none",
       "boundary": "ODE/state-vector payload schemas need separate promotion evidence"
     },

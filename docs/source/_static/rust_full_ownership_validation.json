@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "generated_by_track": "rust_native_payload_model_coverage_20260614",
+  "validation_date": "2026-06-14",
+  "decision": "full_rust_ownership_not_claimed",
+  "gate_source": "docs/source/_static/rust_full_ownership_gate.json",
+  "validated_inputs": [
+    "docs/source/_static/rust_native_model_family_coverage.json",
+    "docs/source/_static/rust_native_payload_shape_coverage.json",
+    "docs/source/_static/rust_native_model_family_slice_evidence.json",
+    "docs/source/_static/rust_full_ownership_gate.json"
+  ],
+  "commands": [
+    {
+      "command": "python -m json.tool docs/source/_static/rust_native_model_family_coverage.json >/dev/null && python -m json.tool docs/source/_static/rust_native_payload_shape_coverage.json >/dev/null && python -m json.tool docs/source/_static/rust_native_model_family_slice_evidence.json >/dev/null && python -m json.tool docs/source/_static/rust_full_ownership_gate.json >/dev/null && uv run pytest tests/unit/test_rust_native_payload_model_coverage.py tests/unit/test_rust_native_operation_completion.py tests/unit/test_rust_core_roadmap_docs.py -q",
+      "status": "passed",
+      "result": "28 passed"
+    },
+    {
+      "command": "cargo test --manifest-path bindings/rust/Cargo.toml --test operations",
+      "status": "passed",
+      "result": "32 passed"
+    }
+  ],
+  "promoted_model_families": [
+    "bass",
+    "fisher_pry",
+    "gompertz",
+    "logistic",
+    "norton_bass"
+  ],
+  "explicit_bridge_boundaries": [
+    "composite",
+    "multi_product"
+  ],
+  "python_reference_boundaries": [
+    "complementary_goods",
+    "hierarchical",
+    "latent_process",
+    "lotka_volterra",
+    "mixture",
+    "network_diffusion",
+    "policy_hazard",
+    "regime_switching"
+  ],
+  "excluded_payload_boundaries": [
+    "covariates",
+    "event_splits",
+    "graph_or_agent_state",
+    "incomplete_fitted_state",
+    "stochastic_simulation_policy",
+    "uncertainty_or_posterior"
+  ],
+  "claim_language": "The validated Rust core owns promoted deterministic model-operation slices only. Full Rust ownership remains blocked by explicit bridge and Python-reference model families plus non-stable payload shapes."
+}

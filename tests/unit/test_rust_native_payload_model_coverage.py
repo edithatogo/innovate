@@ -11,6 +11,9 @@ MODEL_FAMILY_COVERAGE = Path("docs/source/_static/rust_native_model_family_cover
 PAYLOAD_SHAPE_COVERAGE = Path("docs/source/_static/rust_native_payload_shape_coverage.json")
 SLICE_EVIDENCE = Path("docs/source/_static/rust_native_model_family_slice_evidence.json")
 FULL_OWNERSHIP_GATE = Path("docs/source/_static/rust_full_ownership_gate.json")
+FULL_OWNERSHIP_VALIDATION = Path(
+    "docs/source/_static/rust_full_ownership_validation.json"
+)
 
 
 def _model_family_coverage() -> dict:
@@ -27,6 +30,10 @@ def _slice_evidence() -> dict:
 
 def _full_ownership_gate() -> dict:
     return json.loads(FULL_OWNERSHIP_GATE.read_text())
+
+
+def _full_ownership_validation() -> dict:
+    return json.loads(FULL_OWNERSHIP_VALIDATION.read_text())
 
 
 def test_every_python_registry_model_family_has_ownership_status() -> None:
@@ -53,6 +60,7 @@ def test_python_reference_model_families_are_explicit_boundaries() -> None:
         "complementary_goods",
         "hierarchical",
         "latent_process",
+        "lotka_volterra",
         "mixture",
         "network_diffusion",
         "policy_hazard",
@@ -61,7 +69,7 @@ def test_python_reference_model_families_are_explicit_boundaries() -> None:
         assert coverage[key]["ownership_status"] == "python_reference_boundary"
         assert coverage[key]["native_scope"] == "none"
 
-    for key in {"composite", "multi_product", "lotka_volterra"}:
+    for key in {"composite", "multi_product"}:
         assert coverage[key]["ownership_status"] == "python_bridge_explicit"
 
 
@@ -164,3 +172,31 @@ def test_full_rust_ownership_gate_blocks_overclaims() -> None:
     assert "uncertainty_or_posterior" in gate["blocking_payload_shapes"]
     assert "rust_full_ownership_gate.json" in roadmap
     assert "rust_full_ownership_gate.json" in starlight
+
+
+def test_full_rust_ownership_validation_records_passed_gates_and_exclusions() -> None:
+    """Final validation should record commands and intentionally excluded surfaces."""
+    validation = _full_ownership_validation()
+    gate = _full_ownership_gate()
+
+    assert validation["decision"] == "full_rust_ownership_not_claimed"
+    assert validation["gate_source"] == str(FULL_OWNERSHIP_GATE)
+    assert all(command["status"] == "passed" for command in validation["commands"])
+    assert {command["result"] for command in validation["commands"]} == {
+        "28 passed",
+        "32 passed",
+    }
+    assert set(validation["explicit_bridge_boundaries"]) == {"composite", "multi_product"}
+    assert set(validation["python_reference_boundaries"]) == {
+        "complementary_goods",
+        "hierarchical",
+        "latent_process",
+        "lotka_volterra",
+        "mixture",
+        "network_diffusion",
+        "policy_hazard",
+        "regime_switching",
+    }
+    assert set(validation["excluded_payload_boundaries"]) == set(
+        gate["blocking_payload_shapes"]
+    )

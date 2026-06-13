@@ -38,8 +38,8 @@
     - [x] Add a machine-readable gate that determines whether full Rust ownership may be claimed
     - [x] Ensure docs consume the gate rather than hand-written claims
     - [x] Commit this task before starting the next task
-- [ ] Task: Run full Rust ownership validation
-    - [ ] Run Rust, Python, and binding tests for promoted families
-    - [ ] Record intentionally excluded Python-reference boundaries
-    - [ ] Commit this task before starting the next task
+- [x] Task: Run full Rust ownership validation
+    - [x] Run Rust, Python, and binding tests for promoted families
+    - [x] Record intentionally excluded Python-reference boundaries
+    - [x] Commit this task before starting the next task
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Full-Claim Gate' (Protocol in workflow.md)
