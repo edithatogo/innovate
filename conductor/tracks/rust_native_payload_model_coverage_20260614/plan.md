@@ -16,7 +16,7 @@
     - [x] Commit this task before starting the next task
 - [x] Task: Conductor - Automated Review and Checkpoint 'Registry and Payload Red Tests' (Protocol in workflow.md)
 
-## Phase 2: Model-Family Coverage Slices [checkpoint: pending]
+## Phase 2: Model-Family Coverage Slices [checkpoint: 52e33d9]
 
 - [x] Task: Promote stable diffusion and substitution family payloads aa8c7bc
     - [x] Add Rust-native support or explicit non-native promotion for remaining stable slices
