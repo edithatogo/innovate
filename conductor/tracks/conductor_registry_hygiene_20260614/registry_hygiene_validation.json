@@ -1,0 +1,26 @@
+{
+  "active_root": "conductor/tracks",
+  "archive_root": "conductor/archive",
+  "missing_active_directories": [],
+  "missing_archive_directories": [],
+  "missing_links": [],
+  "orphan_archive_directories": [],
+  "registered_active_directories": [
+    "conductor_registry_hygiene_20260614"
+  ],
+  "registry": "conductor/tracks.md",
+  "schema_version": 1,
+  "stale_active_directories": [],
+  "summary": {
+    "active_directories": 1,
+    "missing_active_directories": 0,
+    "missing_archive_directories": 0,
+    "missing_links": 0,
+    "orphan_archive_directories": 0,
+    "registered_active_entries": 1,
+    "registry_entries": 72,
+    "stale_active_directories": 0,
+    "wrong_link_targets": 0
+  },
+  "wrong_link_targets": []
+}
