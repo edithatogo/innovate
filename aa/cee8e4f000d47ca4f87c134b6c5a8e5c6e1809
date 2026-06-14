@@ -1,0 +1,12 @@
+Task: Run full registry hygiene validation
+
+Summary:
+- Generated registry_hygiene_validation.json from scripts/conductor_registry_hygiene.py.
+- Verified zero stale active directories, missing active directories, orphan archive directories, missing archive directories, missing links, or wrong link targets.
+- Ran focused Conductor workflow and Starlight cleanup tests.
+
+Validation:
+- python scripts/conductor_registry_hygiene.py --json > conductor/tracks/conductor_registry_hygiene_20260614/registry_hygiene_validation.json
+- python -m json.tool conductor/tracks/conductor_registry_hygiene_20260614/registry_hygiene_validation.json >/dev/null
+- zero-drift assertion over hygiene report keys
+- uv run pytest tests/unit/test_conductor_registry_hygiene.py tests/unit/test_conductor_workflow_docs.py tests/unit/test_starlight_cutover_legacy_cleanup.py -q (15 passed)
