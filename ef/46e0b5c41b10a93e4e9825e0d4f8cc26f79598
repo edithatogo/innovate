@@ -1,0 +1,20 @@
+Phase: Evidence Refresh
+
+Scope:
+- Package-manager evidence, HPC submission packets, community readiness dossiers, and receipt status tests changed since checkpoint 4402623.
+
+Automated validation:
+- python -m json.tool docs/source/_static/external_submission_target_inventory.json >/dev/null
+- python -m json.tool docs/source/_static/registry_submission_receipts.json >/dev/null
+- python -m json.tool docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json >/dev/null
+- python -m json.tool docs/source/_static/hpc_packaging/workflow_manifest.json >/dev/null
+- python -m json.tool docs/source/_static/hpc_packaging/submission_packet.json >/dev/null
+- python -m json.tool docs/source/_static/community_submission_readiness_matrix.json >/dev/null
+- uv run pytest tests/unit/test_external_submission_blocker_closure.py tests/unit/test_registry_submission_receipts.py tests/unit/test_registry_submission_execution.py tests/unit/test_hpc_submission_blockers.py tests/unit/test_hpc_submission_packet.py tests/unit/test_hpc_submission_workflow.py tests/unit/test_community_submission_readiness.py -q (23 passed)
+
+Conductor review findings:
+- Found one stale test expectation that still treated Spack and EasyBuild as blocked.
+- Applied fix in tests/unit/test_registry_submission_receipts.py to require ready_for_review for Spack and EasyBuild while preserving blocked HPSF/E4S and deferred CRAN.
+
+CI gate:
+- Not pushed during local checkpoint; validation completed locally.
