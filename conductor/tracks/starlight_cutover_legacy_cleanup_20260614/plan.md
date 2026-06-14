@@ -29,7 +29,7 @@
     - [x] Commit this task before starting the next task
 - [x] Task: Conductor - Automated Review and Checkpoint 'Cutover Cleanup' (Protocol in workflow.md)
 
-## Phase 3: Final Cutover Evidence
+## Phase 3: Final Cutover Evidence [checkpoint: pending]
 
 - [x] Task: Refresh migration manifests fc60648
     - [x] Update cutover, redirect, and route coverage artifacts
@@ -39,4 +39,4 @@
     - [x] Review the full track diff against the spec, plan, workflow, and tests
     - [x] Apply high-confidence fixes and rerun validation
     - [x] Commit this task before starting the next task
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Final Cutover Evidence' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Final Cutover Evidence' (Protocol in workflow.md)
