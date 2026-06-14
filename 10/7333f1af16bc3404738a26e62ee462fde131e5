@@ -1,0 +1,10 @@
+Task: Repair completed archive metadata and roadmap links
+
+Summary:
+- Added current track_id fields to legacy Starlight archive metadata.
+- Marked External Submission Blocker Closure and Conductor Registry Hygiene archive metadata as completed.
+- Updated architecture roadmap and Starlight roadmap links from active track paths to archive paths.
+
+Validation:
+- python -m json.tool over affected metadata files
+- uv run pytest tests/unit/test_conductor_registry_hygiene.py tests/unit/test_conductor_workflow_docs.py tests/unit/test_vision_roadmap_truth_status.py tests/unit/test_roadmap_gap_tracks.py tests/unit/test_roadmap_backlog_tracks.py tests/unit/test_astro_starlight_link_validation.py tests/unit/test_astro_starlight_route_coverage.py -q (35 passed)
