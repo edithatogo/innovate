@@ -31,7 +31,7 @@
 
 ## Phase 3: Final Cutover Evidence
 
-- [x] Task: Refresh migration manifests
+- [x] Task: Refresh migration manifests fc60648
     - [x] Update cutover, redirect, and route coverage artifacts
     - [x] Ensure all stale "canonical Sphinx" language is removed or qualified
     - [x] Commit this task before starting the next task
