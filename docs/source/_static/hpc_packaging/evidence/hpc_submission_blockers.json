@@ -1,18 +1,31 @@
 {
   "schema_version": 1,
-  "captured_at": "2026-05-11T03:55:00+10:00",
+  "captured_at": "2026-06-14T00:00:00+10:00",
+  "closure_inventory": "docs/source/_static/external_submission_target_inventory.json",
   "blockers": [
     {
       "target_id": "hpsf",
       "registry": "HPSF",
       "status": "blocked",
-      "reason": "No governance submission endpoint or review contact is available in this environment."
+      "owner": "HPC maintainers",
+      "reason": "No governance submission endpoint or review contact is available in this environment.",
+      "evidence": [
+        "docs/source/_static/hpc_packaging/evidence/hpsf-review-note.md",
+        "docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log"
+      ],
+      "next_action": "Identify governance submission endpoint or review contact and complete HPSF evidence packet."
     },
     {
       "target_id": "e4s",
       "registry": "E4S",
       "status": "blocked",
-      "reason": "No accelerator-backed runtime or E4S review channel is available in this environment."
+      "owner": "HPC maintainers",
+      "reason": "No accelerator-backed runtime or E4S review channel is available in this environment.",
+      "evidence": [
+        "docs/source/_static/hpc_packaging/evidence/e4s-review-note.md",
+        "docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log"
+      ],
+      "next_action": "Add accelerator-backed runtime evidence or E4S review channel before submission claims."
     }
   ]
 }

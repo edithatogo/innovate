@@ -31,6 +31,7 @@
     "readme": "README.md"
   },
   "schema_version": 1,
+  "closure_inventory": "docs/source/_static/external_submission_target_inventory.json",
   "targets": [
     {
       "packet_artifacts": [
@@ -47,8 +48,8 @@
         "docs/source/_static/hpc_packaging/evidence/spack-pbs.log"
       ],
       "registry": "Spack",
-      "required_next_step": "Submit the candidate recipe in the scheduler-backed container and save the batch log.",
-      "status": "ready",
+      "required_next_step": "Submit the candidate recipe upstream only after maintainer review and scheduler-backed evidence refresh.",
+      "status": "ready_for_review",
       "submission_mode": "candidate_recipe",
       "target_id": "spack"
     },
@@ -67,8 +68,8 @@
         "docs/source/_static/hpc_packaging/evidence/easybuild-pbs.log"
       ],
       "registry": "EasyBuild",
-      "required_next_step": "Run the easyconfig in the scheduler-backed container and save the module sanity log.",
-      "status": "ready",
+      "required_next_step": "Submit the candidate easyconfig upstream only after maintainer review and scheduler-backed evidence refresh.",
+      "status": "ready_for_review",
       "submission_mode": "candidate_easyconfig",
       "target_id": "easybuild"
     },
@@ -86,7 +87,7 @@
         "docs/source/_static/hpc_packaging/evidence/r-check.log"
       ],
       "registry": "HPSF",
-      "required_next_step": "Populate governance contacts and preserve scheduler-backed deployment evidence.",
+      "required_next_step": "Identify governance submission endpoint or review contact and complete HPSF evidence packet.",
       "status": "blocked",
       "submission_mode": "governance_packet",
       "target_id": "hpsf"
@@ -105,7 +106,7 @@
         "docs/source/_static/hpc_packaging/evidence/julia-installed-smoke.log"
       ],
       "registry": "E4S",
-      "required_next_step": "Capture accelerator-aware smoke evidence and a reviewable package artifact set.",
+      "required_next_step": "Add accelerator-backed runtime evidence or E4S review channel before submission claims.",
       "status": "blocked",
       "submission_mode": "performance_portability_packet",
       "target_id": "e4s"

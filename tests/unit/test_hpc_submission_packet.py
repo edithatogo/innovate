@@ -25,8 +25,8 @@ def test_hpc_submission_packet_covers_all_targets() -> None:
     targets = {entry["target_id"]: entry for entry in packet["targets"]}
     assert set(targets) == {"spack", "easybuild", "hpsf", "e4s"}
 
-    assert targets["spack"]["status"] == "ready"
-    assert targets["easybuild"]["status"] == "ready"
+    assert targets["spack"]["status"] == "ready_for_review"
+    assert targets["easybuild"]["status"] == "ready_for_review"
     assert targets["hpsf"]["status"] == "blocked"
     assert targets["e4s"]["status"] == "blocked"
 

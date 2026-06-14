@@ -1,11 +1,12 @@
 {
   "schema_version": 1,
-  "captured_at": "2026-05-11T03:35:00+10:00",
+  "captured_at": "2026-06-14T00:00:00+10:00",
+  "closure_inventory": "docs/source/_static/external_submission_target_inventory.json",
   "targets": [
     {
       "target_id": "spack",
       "registry": "Spack",
-      "status": "ready",
+      "status": "ready_for_review",
       "commands": [
         "export INNOVATE_SDIST=innovate-0.5.0.tar.gz",
         "export SPACK_PKG_PATH=docs/source/_static/hpc_packaging/spack/py-innovate.py",
@@ -17,12 +18,12 @@
         "docs/source/_static/hpc_packaging/evidence/spack-batch.log",
         "docs/source/_static/hpc_packaging/evidence/spack-pbs.log"
       ],
-      "notes": "The batch job can now run in the local scheduler-backed container and should preserve the batch log for submission evidence."
+      "notes": "Local scheduler-backed evidence exists. Upstream submission remains maintainer-managed and should not be claimed until a public review link exists."
     },
     {
       "target_id": "easybuild",
       "registry": "EasyBuild",
-      "status": "ready",
+      "status": "ready_for_review",
       "commands": [
         "export INNOVATE_SDIST=innovate-0.5.0.tar.gz",
         "export EASYCONFIG_PATH=docs/source/_static/hpc_packaging/easybuild/innovate-0.5.0.eb",
@@ -34,7 +35,7 @@
         "docs/source/_static/hpc_packaging/evidence/easybuild-batch.log",
         "docs/source/_static/hpc_packaging/evidence/easybuild-pbs.log"
       ],
-      "notes": "The batch job can now run in the local scheduler-backed container and should preserve the module sanity log for submission evidence."
+      "notes": "Local scheduler-backed evidence exists. Upstream submission remains maintainer-managed and should not be claimed until a public review link exists."
     },
     {
       "target_id": "hpsf",

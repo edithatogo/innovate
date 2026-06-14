@@ -18,10 +18,10 @@
     - [x] Update statuses for npm, crates.io, R-universe/CRAN, Julia General, Go modules, and NuGet
     - [x] Record credential-blocked or maintainer-ready states explicitly
     - [x] Commit this task before starting the next task
-- [ ] Task: Refresh HPC target evidence
-    - [ ] Update Spack, EasyBuild, HPSF, and E4S packets and blocker notes
-    - [ ] Preserve scheduler and environment probe evidence
-    - [ ] Commit this task before starting the next task
+- [x] Task: Refresh HPC target evidence
+    - [x] Update Spack, EasyBuild, HPSF, and E4S packets and blocker notes
+    - [x] Preserve scheduler and environment probe evidence
+    - [x] Commit this task before starting the next task
 - [ ] Task: Refresh scientific community dossiers
     - [ ] Update pyOpenSci, rOpenSci, JOSS, NumFOCUS, PyPA, Apache Arrow, .NET Foundation, Julia, and R community states
     - [ ] Record submission readiness versus actual submission state
