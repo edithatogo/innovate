@@ -1,0 +1,10 @@
+Task: Refresh package-manager target evidence
+
+Summary:
+- Updated registry_submission_receipts.json with closure inventory pointer and current captured_at date.
+- Added owner, evidence, and next_action metadata for CRAN and HPC pending rows.
+- Reclassified Spack and EasyBuild pending rows from generic blocked to ready_for_review to match local HPC packet evidence, without claiming upstream submission.
+
+Validation:
+- python -m json.tool docs/source/_static/registry_submission_receipts.json >/dev/null
+- uv run pytest tests/unit/test_external_submission_blocker_closure.py -q now leaves only HPC blocker metadata and docs-link failures for later tasks.
