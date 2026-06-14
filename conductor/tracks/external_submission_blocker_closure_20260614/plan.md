@@ -14,7 +14,7 @@
 
 ## Phase 2: Evidence Refresh
 
-- [x] Task: Refresh package-manager target evidence
+- [x] Task: Refresh package-manager target evidence 123e542
     - [x] Update statuses for npm, crates.io, R-universe/CRAN, Julia General, Go modules, and NuGet
     - [x] Record credential-blocked or maintainer-ready states explicitly
     - [x] Commit this task before starting the next task
