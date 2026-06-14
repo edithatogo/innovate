@@ -15,10 +15,10 @@
 
 ## Phase 2: Registry Reconciliation
 
-- [~] Task: Reconcile stale active track folders
-    - [~] Move completed active folders to archive or remove duplicates only after preserving evidence
-    - [~] Update links and metadata as needed
-    - [ ] Commit this task before starting the next task
+- [x] Task: Reconcile stale active track folders 2bd7c19
+    - [x] Move completed active folders to archive or remove duplicates only after preserving evidence
+    - [x] Update links and metadata as needed
+    - [x] Commit this task before starting the next task
 - [ ] Task: Add registry hygiene automation
     - [ ] Add or update a script/test that checks registry-to-filesystem consistency
     - [ ] Include stale-folder diagnostics in the status output or docs
