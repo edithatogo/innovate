@@ -1,0 +1,10 @@
+Task: Write failing submission-state tests
+
+Summary:
+- Added tests/unit/test_external_submission_blocker_closure.py to enforce the closure contract across package-manager, HPC, and community targets.
+- Tests require status, owner, evidence, next action, receipt-backed submitted claims, current HPC blockers, and docs links to the consolidated target inventory.
+- Confirmed the tests fail against current artifacts before evidence refresh.
+
+Red validation:
+- uv run pytest tests/unit/test_external_submission_blocker_closure.py -q
+- Result: 2 passed, 3 failed as expected.
