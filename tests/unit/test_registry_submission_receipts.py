@@ -46,13 +46,13 @@ def test_registry_submission_receipts_cover_live_targets() -> None:
 
 
 def test_registry_submission_receipts_record_pending_targets() -> None:
-    """R/CRAN and HPC targets should remain explicitly labeled when blocked."""
+    """R/CRAN and HPC targets should keep explicit non-submitted states."""
     receipts = load_receipts()
 
     pending = {entry["target_id"]: entry for entry in receipts["pending_targets"]}
 
     assert pending["r_cran"]["status"] == "deferred"
-    assert pending["spack"]["status"] == "blocked"
-    assert pending["easybuild"]["status"] == "blocked"
+    assert pending["spack"]["status"] == "ready_for_review"
+    assert pending["easybuild"]["status"] == "ready_for_review"
     assert pending["hpsf"]["status"] == "blocked"
     assert pending["e4s"]["status"] == "blocked"
