@@ -1,0 +1,22 @@
+Phase: Docs and Packet Regeneration
+
+Scope:
+- Regenerated HPC submission packet from the closure-aware generator.
+- Updated registry, HPC, community, polyglot, and Starlight docs to distinguish submitted, deferred, ready_for_review, blocked, and not_applicable states.
+- Completed final conductor review and fixed doc-contract phrase wrapping.
+
+Automated validation:
+- python -m json.tool docs/source/_static/external_submission_target_inventory.json >/dev/null
+- python -m json.tool docs/source/_static/registry_submission_receipts.json >/dev/null
+- python -m json.tool docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json >/dev/null
+- python -m json.tool docs/source/_static/hpc_packaging/workflow_manifest.json >/dev/null
+- python -m json.tool docs/source/_static/hpc_packaging/submission_packet.json >/dev/null
+- python -m json.tool docs/source/_static/community_submission_readiness_matrix.json >/dev/null
+- uv run pytest tests/unit/test_external_submission_blocker_closure.py tests/unit/test_registry_submission_receipts.py tests/unit/test_registry_submission_execution.py tests/unit/test_hpc_submission_blockers.py tests/unit/test_hpc_submission_packet.py tests/unit/test_hpc_submission_workflow.py tests/unit/test_hpc_submission_workflow_docs.py tests/unit/test_hpc_pack_packet.py tests/unit/test_community_submission_readiness.py tests/unit/test_astro_starlight_link_validation.py tests/unit/test_astro_starlight_route_coverage.py tests/unit/test_polyglot_registry_plan.py -q (35 passed)
+
+Conductor review findings:
+- Final review found exact-phrase doc contract wrapping in polyglot_registry_plan.rst.
+- Applied the fix and reran validation successfully.
+
+CI gate:
+- Not pushed during local checkpoint; validation completed locally.
