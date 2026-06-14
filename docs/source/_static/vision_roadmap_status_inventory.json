@@ -2,10 +2,10 @@
   "schema_version": 1,
   "generated_by_track": "vision_roadmap_truth_audit_20260614",
   "canonical_status": {
-    "summary": "Conductor roadmap tracks are complete, archived, or actively tracked. The full product vision remains a future-state program for Rust ownership, external submission, and registry-hygiene work, while documentation cutover status is now evidence-backed with an explicit starlight-polyglot build blocker.",
+    "summary": "Conductor roadmap tracks are complete, archived, or actively tracked. The full product vision remains a future-state program for Rust ownership, external submission, and registry-hygiene work, while documentation cutover status is now evidence-backed by passing Astro/Starlight build and check results.",
     "track_state": "active_follow_on_tracks_registered",
     "vision_state": "partially_implemented_future_state_remaining",
-    "claim_policy": "Do not claim full Rust ownership, external submission acceptance, or unblocked documentation build readiness unless the corresponding evidence artifact or track is complete."
+    "claim_policy": "Do not claim full Rust ownership, external submission acceptance, production DocSearch readiness, or upstream starlight-versions compatibility unless the corresponding evidence artifact or external gate is complete."
   },
   "claim_categories": [
     "implemented",
@@ -25,16 +25,16 @@
     },
     {
       "path": "conductor/tech-stack.md",
-      "classification": "implemented_with_blocker",
-      "claim": "The documentation section identifies Astro/Starlight as active and Sphinx as legacy archival/redirect-reference material; build readiness remains blocked by local starlight-polyglot bundle evidence.",
-      "required_resolution": "Resolve the starlight-polyglot handler bundle blocker before claiming unblocked docs-site build readiness.",
+      "classification": "implemented",
+      "claim": "The documentation section identifies Astro/Starlight as active and Sphinx as legacy archival/redirect-reference material; build readiness is validated by passing pnpm build and pnpm check evidence.",
+      "required_resolution": "Keep tech-stack status aligned with Starlight validation evidence and avoid describing Sphinx as the active docs stack.",
       "owning_track": "starlight_cutover_legacy_cleanup_20260614"
     },
     {
       "path": "docs/source/_static/astro_starlight/starlight_validation_evidence.json",
-      "classification": "blocked_external",
-      "claim": "Route and link validation pass, pnpm install passes with workspace approvals, and docs build/check is blocked by the local starlight-polyglot bundle missing ../handlers/python.js.",
-      "required_resolution": "Publish or rebuild starlight-polyglot with handler JavaScript modules, or replace the file dependency with a package version that includes handlers.",
+      "classification": "implemented_with_blocker",
+      "claim": "Route, link, build, and Astro check validation pass; the prior local starlight-polyglot handler bundle blocker is resolved, while DocSearch credentials and starlight-versions Astro 6 compatibility remain explicit external/upstream gates.",
+      "required_resolution": "Keep residual DocSearch and starlight-versions gates explicit until external credentials or upstream plugin compatibility are available.",
       "owning_track": "starlight_cutover_legacy_cleanup_20260614"
     },
     {

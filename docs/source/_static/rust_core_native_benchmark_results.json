@@ -2,7 +2,7 @@
   "schema_version": 1,
   "source_command": "cargo bench --manifest-path bindings/rust/Cargo.toml --bench native_kernel",
   "captured_at": "2026-05-11",
-  "workspace_root": "/Users/doughnut/GitHub/innovate/innovate",
+  "workspace_root": ".",
   "notes": [
     "Criterion used the plotters backend because gnuplot was unavailable.",
     "The run measured the promoted native slices for logistic, Gompertz, Fisher-Pry, and Bass."
