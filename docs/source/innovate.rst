@@ -1,8 +1,9 @@
 innovate package
 ================
 
-This page is retained for compatibility. The canonical package and module
-documentation now lives in the Sphinx docs under ``docs/source``.
+This page is retained for legacy Sphinx compatibility. The active package and
+module documentation is published through the Astro/Starlight site, while the
+``docs/source`` files remain archival and redirect-reference material.
 
 Read next
 ---------

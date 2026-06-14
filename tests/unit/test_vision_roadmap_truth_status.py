@@ -74,6 +74,8 @@ def test_starlight_roadmap_does_not_call_archived_tracks_active() -> None:
         assert "Archived remediation tracks" in roadmap
         assert "Active future-state tracks" not in roadmap
         assert "require their own active tracks" not in roadmap
+        assert "full product vision remains active" not in roadmap.lower()
+        assert "not fully complete" in roadmap
         assert "complete and archived" in roadmap
 
 

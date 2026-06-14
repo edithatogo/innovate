@@ -12,8 +12,8 @@ plan.
 Canonical status:
 
 * Prior Conductor roadmap stages are complete or archived.
-* The full product vision remains active while future-state boundaries are
-  still open.
+* The full product vision is not fully complete while future-state boundaries
+  remain open.
 * The remediation tracks for roadmap truth, Rust operation coverage, Rust
   payload/model coverage, Starlight cutover, external submission blockers, and
   Conductor registry hygiene are complete and archived.

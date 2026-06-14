@@ -60,6 +60,7 @@ def test_migration_manifest_records_cutover_complete_not_parallel_run() -> None:
 def test_sphinx_references_are_archival_or_compatibility_only() -> None:
     """Non-archived docs should not describe Sphinx as active or canonical."""
     checked_paths = [
+        Path("docs/source/innovate.rst"),
         Path("docs/source/astro_starlight_migration.rst"),
         Path("docs/astro-site/README.md"),
         Path("docs/astro-site/src/content/docs/migration/index.md"),
@@ -72,6 +73,7 @@ def test_sphinx_references_are_archival_or_compatibility_only() -> None:
 
     forbidden = (
         "parallel-run",
+        "canonical package and module documentation now lives in the sphinx docs",
         "sphinx site remains canonical",
         "canonical sphinx urls remain reachable until cutover completes",
         "keep the sphinx site live",
