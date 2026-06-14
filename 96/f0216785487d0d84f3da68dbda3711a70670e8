@@ -1,0 +1,11 @@
+Task: Add registry hygiene automation
+
+Summary:
+- Added scripts/conductor_registry_hygiene.py with JSON and text diagnostics for active, archived, stale, orphaned, missing-link, and wrong-link track states.
+- Documented the hygiene command in conductor/index.md.
+- Turned the remaining registry hygiene red test green.
+
+Validation:
+- python scripts/conductor_registry_hygiene.py --json >/tmp/conductor_registry_hygiene.json
+- python -m json.tool /tmp/conductor_registry_hygiene.json >/dev/null
+- uv run pytest tests/unit/test_conductor_registry_hygiene.py tests/unit/test_conductor_workflow_docs.py::test_completed_archive_status_text_matches_metadata -q (5 passed)
