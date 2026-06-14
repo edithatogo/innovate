@@ -1,0 +1,15 @@
+Phase: Registry Drift Red Tests
+
+Scope:
+- Inventory compared conductor/tracks.md, conductor/tracks/, and conductor/archive/.
+- Added red tests for active registry parity, completed archive link resolution, orphan archive parity, and status-tool diagnostics.
+
+Expected red validation:
+- uv run pytest tests/unit/test_conductor_registry_hygiene.py -q (2 failed, 2 passed)
+
+Expected findings:
+- Orphan archive folders: migrate_starlight and starlight_migration_20260513.
+- Missing hygiene status tool: scripts/conductor_registry_hygiene.py.
+
+Conductor review:
+- Failures match planned Phase 1 red-test acceptance and are carried into Phase 2 reconciliation.
