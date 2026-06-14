@@ -1,0 +1,10 @@
+Task: Reconcile stale active track folders
+
+Summary:
+- Registered legacy Starlight archive folders migrate_starlight and starlight_migration_20260513 in conductor/tracks.md as completed archives.
+- Added missing index.md files so linked archive entries satisfy archive integrity expectations.
+- Preserved all archived evidence; no track evidence was deleted.
+
+Validation:
+- uv run pytest tests/unit/test_conductor_registry_hygiene.py -q -k "not status_tool_reports_registry_hygiene_diagnostics" (3 passed)
+- uv run pytest tests/unit/test_conductor_registry_hygiene.py tests/unit/test_conductor_workflow_docs.py::test_completed_archive_status_text_matches_metadata -q (remaining expected failure: missing scripts/conductor_registry_hygiene.py)
