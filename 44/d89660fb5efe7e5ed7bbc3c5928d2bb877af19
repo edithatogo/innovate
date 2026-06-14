@@ -1,0 +1,10 @@
+Task: Regenerate machine-readable packets
+
+Summary:
+- Updated the HPC packet generator to emit the canonical closure inventory pointer and current target states.
+- Regenerated docs/source/_static/hpc_packaging/submission_packet.json from the generator.
+- Added regression coverage requiring regenerated packet artifacts to reference external_submission_target_inventory.json and match HPC inventory statuses.
+
+Validation:
+- python -m json.tool docs/source/_static/hpc_packaging/submission_packet.json >/dev/null
+- uv run pytest tests/unit/test_hpc_pack_packet.py tests/unit/test_external_submission_blocker_closure.py tests/unit/test_hpc_submission_packet.py tests/unit/test_hpc_submission_workflow.py tests/unit/test_hpc_submission_blockers.py tests/unit/test_community_submission_readiness.py -q (19 passed)
