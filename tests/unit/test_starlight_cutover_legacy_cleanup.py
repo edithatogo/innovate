@@ -94,6 +94,7 @@ def test_cutover_inventory_has_no_remaining_stale_work_after_cleanup() -> None:
     assert inventory["legacy_surfaces"]["retention_policy"] == ("archival_and_redirect_reference_only")
     assert inventory["stale_active_track_folders"] == []
     assert inventory["stale_cutover_language"] == []
+    assert inventory["version_status"]["docsearch_package_present"] is True
     resolved_items = {entry["item"]: entry for entry in inventory["resolved_items"]}
     assert resolved_items["starlight-versions active middleware"]["status"] == "enabled"
 

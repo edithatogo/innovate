@@ -13,7 +13,7 @@
 - **Link Validation**: starlight-links-validator `0.24.0` for CI link checking
 - **Prose Linting**: Vale with the `Repo/ValueProse` style checks governance
   prose for hedging and filler wording in CI.
-- **Search**: `@astrojs/starlight-docsearch` `0.6.1` when DocSearch is
+- **Search**: `@astrojs/starlight-docsearch` `0.7.0` when DocSearch is
   selected; `@astrojs/sitemap` is the sitemap integration baseline.
 - **Deployment**: GitHub Pages via GitHub Actions
 - **Migration Track**: Astro/Starlight Documentation Site Migration records

@@ -1,6 +1,18 @@
 import starlightDocSearch from '@astrojs/starlight-docsearch';
 import starlightLinksValidator from 'starlight-links-validator';
 
+const docSearchPlugins =
+  process.env.ALGOLIA_APP_ID && process.env.ALGOLIA_API_KEY && process.env.ALGOLIA_INDEX_NAME
+    ? [
+        starlightDocSearch({
+          appId: process.env.ALGOLIA_APP_ID,
+          apiKey: process.env.ALGOLIA_API_KEY,
+          indexName: process.env.ALGOLIA_INDEX_NAME,
+          searchParameters: {},
+        }),
+      ]
+    : [];
+
 export default {
   title: 'Innovate',
   customCss: ['./src/styles/custom.css'],
@@ -8,12 +20,7 @@ export default {
   plugins: [
     starlightLinksValidator(),
     // Credentials are supplied by the deployment environment.
-    starlightDocSearch({
-      appId: process.env.ALGOLIA_APP_ID ?? 'YOUR_APP_ID',
-      apiKey: process.env.ALGOLIA_API_KEY ?? 'YOUR_SEARCH_API_KEY',
-      indexName: process.env.ALGOLIA_INDEX_NAME ?? 'YOUR_INDEX_NAME',
-      searchParameters: {},
-    }),
+    ...docSearchPlugins,
   ],
   sidebar: [
     {
@@ -90,6 +97,6 @@ export default {
     // The pinned plugin baseline is documented in package.json and the manifest.
     // starlight-versions 0.9.0
     // starlight-links-validator 0.24.0
-    // @astrojs/starlight-docsearch 0.6.1 (Algolia DocSearch)
+    // @astrojs/starlight-docsearch 0.7.0 (Algolia DocSearch)
   },
 };

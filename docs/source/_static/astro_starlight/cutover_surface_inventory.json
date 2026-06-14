@@ -22,7 +22,7 @@
     "starlight_versions": "0.9.0",
     "starlight_links_validator": "0.24.0",
     "docsearch_declared": true,
-    "docsearch_package_present": false
+    "docsearch_package_present": true
   },
   "route_and_redirect_status": {
     "route_coverage_artifact": "docs/source/_static/astro_starlight/route_coverage.json",
@@ -46,7 +46,7 @@
     {
       "item": "DocSearch credentials",
       "status": "external_credentials_required",
-      "evidence": "docs/astro-site/starlight.config.mjs uses ALGOLIA_* environment variables but docs/astro-site/package.json does not currently list @astrojs/starlight-docsearch"
+      "evidence": "docs/astro-site/package.json lists @astrojs/starlight-docsearch and the active Astro config enables DocSearch only when ALGOLIA_APP_ID, ALGOLIA_API_KEY, and ALGOLIA_INDEX_NAME are supplied."
     }
   ]
 }

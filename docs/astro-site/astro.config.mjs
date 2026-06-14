@@ -1,8 +1,21 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import starlightDocSearch from '@astrojs/starlight-docsearch';
 import polyglot from 'starlight-polyglot';
 import starlightLinksValidator from 'starlight-links-validator';
 import starlightVersions from 'starlight-versions';
+
+const docSearchPlugins =
+  process.env.ALGOLIA_APP_ID && process.env.ALGOLIA_API_KEY && process.env.ALGOLIA_INDEX_NAME
+    ? [
+        starlightDocSearch({
+          appId: process.env.ALGOLIA_APP_ID,
+          apiKey: process.env.ALGOLIA_API_KEY,
+          indexName: process.env.ALGOLIA_INDEX_NAME,
+          searchParameters: {},
+        }),
+      ]
+    : [];
 
 export default defineConfig({
   site: 'https://edithatogo.github.io/innovate',
@@ -25,6 +38,7 @@ export default defineConfig({
       ],
       plugins: [
         starlightLinksValidator(),
+        ...docSearchPlugins,
         starlightVersions({
           current: { label: 'Current' },
           versions: [{ slug: 'latest', label: 'Latest' }],

@@ -77,7 +77,7 @@ def test_astro_starlight_migration_manifest_records_cutover_decisions() -> None:
     assert manifest["baseline"]["starlight"] == "0.38.4"
     assert manifest["baseline"]["starlight_versions"] == "0.9.0"
     assert manifest["baseline"]["starlight_links_validator"] == "0.24.0"
-    assert manifest["baseline"]["starlight_docsearch"] == "0.6.1"
+    assert manifest["baseline"]["starlight_docsearch"] == "0.7.0"
     assert manifest["scaffold_root"] == "docs/astro-site"
     assert manifest["route_stability_policy"] == "compatibility-aliases-for-legacy-sphinx-urls"
 

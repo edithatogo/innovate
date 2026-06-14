@@ -54,7 +54,7 @@
       "id": "docsearch_credentials",
       "status": "external_credentials_required",
       "owner": "deployment_environment",
-      "evidence": "docs/astro-site/starlight.config.mjs expects ALGOLIA_APP_ID, ALGOLIA_API_KEY, and ALGOLIA_INDEX_NAME when DocSearch is enabled",
+      "evidence": "docs/astro-site/package.json includes @astrojs/starlight-docsearch and docs/astro-site/astro.config.mjs conditionally enables DocSearch when ALGOLIA_APP_ID, ALGOLIA_API_KEY, and ALGOLIA_INDEX_NAME are supplied.",
       "required_resolution": "Provide deployment credentials before enabling production DocSearch."
     }
   ]
