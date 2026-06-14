@@ -130,12 +130,12 @@ def test_binding_smoke_matrix_records_passed_and_blocked_bindings() -> None:
     assert smoke["schema_version"] == 1
     assert set(smoke["required_bindings"]) == REQUIRED_BINDINGS
     assert set(results) == REQUIRED_BINDINGS
-    assert smoke["blocked_bindings"] == ["csharp"]
+    assert smoke["blocked_bindings"] == []
 
-    for binding in REQUIRED_BINDINGS - {"csharp"}:
+    for binding in REQUIRED_BINDINGS:
         assert results[binding]["status"] == "passed"
         assert results[binding]["command"]
 
-    assert results["csharp"]["status"] == "blocked"
-    assert "NETSDK1045" in results["csharp"]["blocker"]
-    assert "net11.0" in results["csharp"]["summary"]
+    assert "net10.0" in results["csharp"]["command"]
+    assert "9 tests passed" in results["csharp"]["summary"]
+    assert "net11.0 release lane" in results["csharp"]["summary"]
