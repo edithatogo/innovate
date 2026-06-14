@@ -22,10 +22,10 @@
     - [x] Update Spack, EasyBuild, HPSF, and E4S packets and blocker notes
     - [x] Preserve scheduler and environment probe evidence
     - [x] Commit this task before starting the next task
-- [ ] Task: Refresh scientific community dossiers
-    - [ ] Update pyOpenSci, rOpenSci, JOSS, NumFOCUS, PyPA, Apache Arrow, .NET Foundation, Julia, and R community states
-    - [ ] Record submission readiness versus actual submission state
-    - [ ] Commit this task before starting the next task
+- [x] Task: Refresh scientific community dossiers
+    - [x] Update pyOpenSci, rOpenSci, JOSS, NumFOCUS, PyPA, Apache Arrow, .NET Foundation, Julia, and R community states
+    - [x] Record submission readiness versus actual submission state
+    - [x] Commit this task before starting the next task
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Evidence Refresh' (Protocol in workflow.md)
 
 ## Phase 3: Docs and Packet Regeneration

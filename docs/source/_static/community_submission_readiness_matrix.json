@@ -1,6 +1,8 @@
 {
   "schema_version": 1,
   "generated_by_track": "community_submission_readiness_20260507",
+  "closure_inventory": "docs/source/_static/external_submission_target_inventory.json",
+  "submission_claim_policy": "Readiness is not submission. Community targets remain ready_for_review or not_applicable until an external review URL, receipt, or acceptance record exists.",
   "status_values": [
     "ready",
     "near_ready",

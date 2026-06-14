@@ -11,8 +11,14 @@ Arrow, .NET Foundation, Julia community, and R community expectations.
 
 The canonical machine-readable matrix is
 :download:`community_submission_readiness_matrix.json <_static/community_submission_readiness_matrix.json>`.
+The current target-level submission closure inventory is
+:download:`external_submission_target_inventory.json <_static/external_submission_target_inventory.json>`.
 No submission claims readiness without evidence; every target records explicit
 status, evidence links, blockers, and sequencing.
+
+Readiness is not submission. Targets marked ready in this matrix are
+``ready_for_review`` in the closure inventory unless a durable external review
+URL, receipt, or acceptance record exists.
 
 Readiness summary
 -----------------

@@ -6,6 +6,11 @@ and governance gaps surfaced in the readiness matrices. It is intentionally
 evidence-driven: each section points to implemented files rather than
 speculating about future work.
 
+The target-level closure state is tracked in
+``docs/source/_static/external_submission_target_inventory.json``. That
+inventory distinguishes repository readiness from actual external submission,
+review, and acceptance.
+
 pyOpenSci
 ---------
 
