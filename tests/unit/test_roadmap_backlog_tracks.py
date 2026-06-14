@@ -235,10 +235,14 @@ def test_roadmap_status_language_separates_archive_from_active_backlog() -> None
     assert "Stage work, deferred follow-on tracks, and the ecosystem gap tracks" in normalized_roadmap
     assert "have been completed and archived" in normalized_roadmap
     assert "active backlog currently consists of" not in normalized_roadmap
+    assert "active Conductor track" not in normalized_roadmap
+    assert "The active Roadmap Completeness Audit" not in normalized_roadmap
     assert "ecosystem gap tracks registered by the audit" in normalized_roadmap
     assert "`Rust Core Expansion`, `C# Package Publication`, `Roadmap Completeness Audit`" not in normalized_roadmap
     assert "remaining strategic follow-ons" not in roadmap
     assert "are now active Conductor tracks" not in roadmap
+    assert "now captured in archived Conductor records" in normalized_roadmap
+    assert "The archived [Roadmap Completeness Audit]" in normalized_roadmap
     assert "converted them into Conductor records" in normalized_roadmap
 
 

@@ -11,8 +11,8 @@ deferred follow-on tracks, and the ecosystem gap tracks registered by the audit
 have been completed and archived.
 
 The product vision is not treated as fully complete while documented
-future-state boundaries remain. Those boundaries are now explicit Conductor
-tracks:
+future-state boundaries remain. The remediation work for those boundaries is
+now captured in archived Conductor records:
 
 - [Vision and Roadmap Truth Audit](../conductor/archive/vision_roadmap_truth_audit_20260614/)
 - [Rust-Native Canonical Operation Completion](../conductor/archive/rust_native_operation_completion_20260614/)
@@ -157,8 +157,8 @@ The following remain worthwhile, but they should follow the contract and interch
 ## Roadmap Coverage Map
 
 Every roadmap goal, stage, primary track, deferred item, and ADR is mapped to a
-completed Conductor archive, an active Conductor track, or the explicit audit
-record that owns missing-coverage checks.
+completed Conductor archive or an explicit audit record that owns
+missing-coverage checks.
 
 ### Goal Principles
 
@@ -204,7 +204,7 @@ record that owns missing-coverage checks.
 | Add C# as a planned thin binding once the existing binding contract and drift checks are stable | Covered | [Rust Core Kernel Roadmap and C# Binding Foundation](../conductor/archive/rust_core_kernel_20260428/), [C# Package Publication](../conductor/archive/csharp_package_publication_20260430/) |
 | Publish C# through NuGet only after package, .NET CI, and schema-compatibility gates pass | Covered | [C# Package Publication](../conductor/archive/csharp_package_publication_20260430/) |
 
-The active
+The archived
 [Roadmap Completeness Audit](../conductor/archive/roadmap_completeness_audit_20260430/)
 track identified ecosystem fixture and governance gaps and converted them into
 Conductor records. Future newly discovered architecture gaps should follow the
