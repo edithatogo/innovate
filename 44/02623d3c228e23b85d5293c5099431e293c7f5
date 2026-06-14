@@ -1,0 +1,14 @@
+Phase: Submission State Red Tests
+
+Review summary:
+- Consolidated external submission target inventory exists.
+- Red tests define closure requirements for target status, owner, evidence, next action, receipt-backed claims, current HPC blockers, and docs links.
+
+Red validation:
+- uv run pytest tests/unit/test_external_submission_blocker_closure.py -q
+- Result: 2 passed, 3 failed as expected.
+
+Expected failures:
+- registry_submission_receipts.json pending rows lack owner/next_action metadata.
+- hpc_submission_blockers.json blocker rows lack owner/evidence/next_action metadata.
+- docs do not yet link external_submission_target_inventory.json.
