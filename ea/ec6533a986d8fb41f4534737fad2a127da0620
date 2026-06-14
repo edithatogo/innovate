@@ -1,0 +1,19 @@
+Phase: Cutover Cleanup
+
+Review summary:
+- Active docs stack claims now identify Astro/Starlight as active and Sphinx as archival/compatibility material.
+- Completed Starlight migration folders were moved from conductor/tracks/ to conductor/archive/.
+- Route coverage and link validation artifacts were regenerated and now report 41 implemented routes and 0 broken links.
+- pnpm install succeeds after workspace build-script approvals for esbuild and sharp.
+- pnpm build/check remains blocked by the local starlight-polyglot file dependency missing the bundled ../handlers/python.js module; this is recorded in starlight_validation_evidence.json.
+
+Validation:
+- python -m json.tool docs/source/_static/astro_starlight/cutover_surface_inventory.json >/dev/null
+- python -m json.tool docs/source/_static/astro_starlight/starlight_validation_evidence.json >/dev/null
+- python -m json.tool docs/source/_static/astro_starlight/route_coverage.json >/dev/null
+- python -m json.tool docs/source/_static/astro_starlight/link_validation_report.json >/dev/null
+- python -m json.tool docs/source/_static/astro_starlight/cutover_verification.json >/dev/null
+- uv run pytest tests/unit/test_astro_starlight_route_coverage.py tests/unit/test_astro_starlight_link_validation.py tests/unit/test_starlight_cutover_legacy_cleanup.py tests/unit/test_astro_starlight_migration.py tests/unit/test_astro_starlight_cutover_verification.py tests/unit/test_vision_roadmap_truth_status.py -q (28 passed)
+
+CI gate:
+- Not pushed from this local checkpoint; remote CI monitoring was not triggered.
