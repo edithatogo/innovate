@@ -1,0 +1,10 @@
+Task: Run final conductor review
+
+Summary:
+- Reviewed the Starlight cutover track diff against spec, plan, workflow, and tests.
+- Confirmed stale Sphinx-active/canonical wording is removed outside archive/current-track context.
+- Confirmed route/link evidence is green and build blocker is explicitly recorded.
+
+Validation:
+- uv run pytest tests/unit/test_astro_starlight_route_coverage.py tests/unit/test_astro_starlight_link_validation.py tests/unit/test_starlight_cutover_legacy_cleanup.py tests/unit/test_astro_starlight_migration.py tests/unit/test_astro_starlight_cutover_verification.py tests/unit/test_vision_roadmap_truth_status.py -q (28 passed)
+- stale-wording rg scan returned no matches outside archive/current track context
