@@ -25,7 +25,7 @@
     - [x] Commit this task before starting the next task
 - [x] Task: Conductor - Automated Review and Checkpoint 'Registry Reconciliation' (Protocol in workflow.md)
 
-## Phase 3: Final Hygiene Gate
+## Phase 3: Final Hygiene Gate [checkpoint: 66c0ff2]
 
 - [x] Task: Run full registry hygiene validation aacee8e
     - [x] Verify active tracks, archived tracks, and registry links
@@ -35,4 +35,4 @@
     - [x] Review the full track diff against the spec, plan, workflow, and tests
     - [x] Apply high-confidence fixes and rerun validation
     - [x] Commit this task before starting the next task
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Final Hygiene Gate' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Final Hygiene Gate' (Protocol in workflow.md)
