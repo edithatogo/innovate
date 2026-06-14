@@ -1,0 +1,13 @@
+Task: Validate Starlight route and link evidence
+
+Summary:
+- Regenerated route coverage and link validation artifacts; coverage now includes linked /user-guide/getting-started/ and /api/python/ routes.
+- Added docs/source/_static/astro_starlight/starlight_validation_evidence.json recording route/link pass status, pnpm install state, and explicit build blockers.
+- Added docs/astro-site/pnpm-workspace.yaml build-script approvals for esbuild and sharp.
+- Fixed Starlight social config syntax for Starlight 0.39.
+
+Validation:
+- python docs/source/_static/astro_starlight/generate_route_coverage.py && python docs/source/_static/astro_starlight/generate_cutover_verification.py && python docs/source/_static/astro_starlight/generate_link_validation.py
+- uv run pytest tests/unit/test_astro_starlight_route_coverage.py tests/unit/test_astro_starlight_link_validation.py tests/unit/test_starlight_cutover_legacy_cleanup.py tests/unit/test_astro_starlight_migration.py tests/unit/test_astro_starlight_cutover_verification.py -q (23 passed)
+- pnpm install --frozen-lockfile passed after workspace approvals
+- pnpm build && pnpm check blocked by local starlight-polyglot bundle missing ../handlers/python.js
