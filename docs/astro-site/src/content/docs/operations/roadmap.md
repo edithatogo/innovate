@@ -35,9 +35,9 @@ Active future-state tracks:
 - Starlight Cutover and Legacy Cleanup:
   `conductor/archive/starlight_cutover_legacy_cleanup_20260614/`
 - External Submission Blocker Closure:
-  `conductor/tracks/external_submission_blocker_closure_20260614/`
+  `conductor/archive/external_submission_blocker_closure_20260614/`
 - Conductor Registry Hygiene:
-  `conductor/tracks/conductor_registry_hygiene_20260614/`
+  `conductor/archive/conductor_registry_hygiene_20260614/`
 
 Evidence remains in the archived Rust migration records, the Rust migration
 inventory, and the route inventory that preserves the current docs structure.

@@ -18,8 +18,8 @@ tracks:
 - [Rust-Native Canonical Operation Completion](../conductor/archive/rust_native_operation_completion_20260614/)
 - [Rust-Native Payload and Model-Family Coverage](../conductor/archive/rust_native_payload_model_coverage_20260614/)
 - [Starlight Cutover and Legacy Cleanup](../conductor/archive/starlight_cutover_legacy_cleanup_20260614/)
-- [External Submission Blocker Closure](../conductor/tracks/external_submission_blocker_closure_20260614/)
-- [Conductor Registry Hygiene](../conductor/tracks/conductor_registry_hygiene_20260614/)
+- [External Submission Blocker Closure](../conductor/archive/external_submission_blocker_closure_20260614/)
+- [Conductor Registry Hygiene](../conductor/archive/conductor_registry_hygiene_20260614/)
 
 New roadmap-level gaps should become Conductor tracks before implementation
 begins.
