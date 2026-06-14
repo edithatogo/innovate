@@ -9,6 +9,8 @@
 - **Polyglot Plugin**: [starlight-polyglot](https://github.com/edithatogo/starlight-polyglot) — auto-generates API docs from Python source code
 - **Versioning**: starlight-versions `0.5.4` for multi-version documentation
 - **Link Validation**: starlight-links-validator `0.24.0` for CI link checking
+- **Prose Linting**: Vale with the `Repo/ValueProse` style checks governance
+  prose for hedging and filler wording in CI.
 - **Search**: `@astrojs/starlight-docsearch` `0.6.1` when DocSearch is
   selected; `@astrojs/sitemap` is the sitemap integration baseline.
 - **Deployment**: GitHub Pages via GitHub Actions
