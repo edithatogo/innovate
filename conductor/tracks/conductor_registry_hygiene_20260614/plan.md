@@ -27,10 +27,10 @@
 
 ## Phase 3: Final Hygiene Gate
 
-- [~] Task: Run full registry hygiene validation
-    - [~] Verify active tracks, archived tracks, and registry links
-    - [~] Verify no completed work remains in active track directories
-    - [ ] Commit this task before starting the next task
+- [x] Task: Run full registry hygiene validation aacee8e
+    - [x] Verify active tracks, archived tracks, and registry links
+    - [x] Verify no completed work remains in active track directories
+    - [x] Commit this task before starting the next task
 - [ ] Task: Run final conductor review
     - [ ] Review the full track diff against the spec, plan, workflow, and tests
     - [ ] Apply high-confidence fixes and rerun validation
