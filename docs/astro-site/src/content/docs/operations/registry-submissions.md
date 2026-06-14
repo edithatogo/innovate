@@ -17,7 +17,7 @@ Submitted targets:
 - Go modules
 - NuGet
 
-Deferred, review-ready, or blocked targets:
+Deferred or review-ready targets:
 
 - CRAN: deferred until maintainer send.
 - Spack: ready_for_review, pending maintainer-managed upstream submission.

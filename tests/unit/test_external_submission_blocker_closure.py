@@ -166,3 +166,18 @@ def test_docs_do_not_overclaim_submission_or_acceptance_without_receipts() -> No
         assert claim not in docs
 
     assert "external_submission_target_inventory.json" in docs
+
+
+def test_starlight_registry_mirrors_do_not_advertise_blocked_targets() -> None:
+    """Registry mirrors should not mention blocked targets when none remain."""
+    inventory = _target_inventory()
+    assert inventory["generic_blocked_states"] == []
+    assert not any(entry["status"] == "blocked" for entry in inventory["targets"])
+
+    for path in (
+        Path("docs/astro-site/src/content/docs/operations/registry-submissions.md"),
+        Path("docs/astro-site/src/content/docs/latest/operations/registry-submissions.md"),
+    ):
+        docs = path.read_text(encoding="utf-8").lower()
+        assert "deferred or review-ready targets" in docs
+        assert "or blocked targets" not in docs
