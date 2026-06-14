@@ -26,12 +26,12 @@
     ],
     "spack_recipe": "spack/py-innovate.py"
   },
+  "closure_inventory": "docs/source/_static/external_submission_target_inventory.json",
   "rendered_sources": {
     "packet": "submission_packet.json",
     "readme": "README.md"
   },
   "schema_version": 1,
-  "closure_inventory": "docs/source/_static/external_submission_target_inventory.json",
   "targets": [
     {
       "packet_artifacts": [

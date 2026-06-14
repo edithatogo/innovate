@@ -30,8 +30,8 @@
 
 ## Phase 3: Docs and Packet Regeneration
 
-- [ ] Task: Regenerate machine-readable packets
-    - [ ] Rebuild registry receipt, HPC packet, community matrix, and Astro/Starlight mirror artifacts
+- [~] Task: Regenerate machine-readable packets
+    - [~] Rebuild registry receipt, HPC packet, community matrix, and Astro/Starlight mirror artifacts
     - [ ] Commit this task before starting the next task
 - [ ] Task: Update docs and roadmap wording
     - [ ] Remove overclaims and stale blocker language

@@ -42,11 +42,12 @@ def build_manifest() -> dict[str, object]:
                 "evidence/easybuild-pbs.log",
             ],
         },
+        "closure_inventory": "docs/source/_static/external_submission_target_inventory.json",
         "targets": [
             {
                 "target_id": "spack",
                 "registry": "Spack",
-                "status": "ready",
+                "status": "ready_for_review",
                 "submission_mode": "candidate_recipe",
                 "packet_artifacts": [
                     "docs/source/_static/hpc_packaging/spack/py-innovate.py",
@@ -61,12 +62,12 @@ def build_manifest() -> dict[str, object]:
                     "docs/source/_static/hpc_packaging/evidence/spack-batch.log",
                     "docs/source/_static/hpc_packaging/evidence/spack-pbs.log",
                 ],
-                "required_next_step": "Submit the candidate recipe in the scheduler-backed container and save the batch log.",
+                "required_next_step": "Submit the candidate recipe upstream only after maintainer review and scheduler-backed evidence refresh.",
             },
             {
                 "target_id": "easybuild",
                 "registry": "EasyBuild",
-                "status": "ready",
+                "status": "ready_for_review",
                 "submission_mode": "candidate_easyconfig",
                 "packet_artifacts": [
                     "docs/source/_static/hpc_packaging/easybuild/innovate-0.5.0.eb",
@@ -81,7 +82,7 @@ def build_manifest() -> dict[str, object]:
                     "docs/source/_static/hpc_packaging/evidence/easybuild-batch.log",
                     "docs/source/_static/hpc_packaging/evidence/easybuild-pbs.log",
                 ],
-                "required_next_step": "Run the easyconfig in the scheduler-backed container and save the module sanity log.",
+                "required_next_step": "Submit the candidate easyconfig upstream only after maintainer review and scheduler-backed evidence refresh.",
             },
             {
                 "target_id": "hpsf",
@@ -100,7 +101,7 @@ def build_manifest() -> dict[str, object]:
                     "docs/source/_static/hpc_packaging/evidence/r-build.log",
                     "docs/source/_static/hpc_packaging/evidence/r-check.log",
                 ],
-                "required_next_step": "Populate governance contacts and preserve scheduler-backed deployment evidence.",
+                "required_next_step": "Identify governance submission endpoint or review contact and complete HPSF evidence packet.",
             },
             {
                 "target_id": "e4s",
@@ -119,7 +120,7 @@ def build_manifest() -> dict[str, object]:
                     "docs/source/_static/hpc_packaging/evidence/rust-test.log",
                     "docs/source/_static/hpc_packaging/evidence/julia-installed-smoke.log",
                 ],
-                "required_next_step": "Capture accelerator-aware smoke evidence and a reviewable package artifact set.",
+                "required_next_step": "Add accelerator-backed runtime evidence or E4S review channel before submission claims.",
             },
         ],
         "rendered_sources": {
