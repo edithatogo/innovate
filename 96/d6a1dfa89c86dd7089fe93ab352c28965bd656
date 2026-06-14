@@ -1,0 +1,10 @@
+Task: Update docs and roadmap wording
+
+Summary:
+- Clarified registry docs and Starlight mirrors so CRAN is deferred, Spack/EasyBuild are ready_for_review, and HPSF/E4S remain blocked.
+- Linked docs to external_submission_target_inventory.json as the target-level source of truth.
+- Removed duplicate and generic conservative wording from the polyglot registry plan.
+
+Validation:
+- rg stale overclaim scan for submitted/ready/blocked wording in docs/source and docs/astro-site/src/content/docs
+- uv run pytest tests/unit/test_external_submission_blocker_closure.py tests/unit/test_hpc_submission_workflow_docs.py tests/unit/test_astro_starlight_link_validation.py tests/unit/test_astro_starlight_route_coverage.py -q (12 passed)
