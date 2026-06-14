@@ -64,7 +64,7 @@ def test_roadmap_links_remaining_future_state_tracks() -> None:
         assert track_name in roadmap
 
 
-def test_full_rust_core_claims_remain_blocked_until_inventory_is_all_native() -> None:
+def test_full_rust_core_claims_remain_disallowed_until_inventory_is_all_native() -> None:
     """Full Rust ownership cannot be claimed while any slice is bridge or Python owned."""
     migration_inventory = json.loads(RUST_MIGRATION_INVENTORY.read_text())
     owners = {entry["current_owner"] for entry in migration_inventory["inventory"]}

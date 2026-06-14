@@ -51,5 +51,5 @@
     "stochastic_simulation_policy",
     "uncertainty_or_posterior"
   ],
-  "claim_language": "The validated Rust core owns promoted deterministic model-operation slices only. Full Rust ownership remains blocked by explicit bridge and Python-reference model families plus non-stable payload shapes."
+  "claim_language": "The validated Rust core owns promoted deterministic model-operation slices only. Full Rust ownership is not claimed until explicit bridge model families, Python-reference model families, and non-stable payload shapes are promoted through future migration tracks or intentionally retained outside the Rust core."
 }

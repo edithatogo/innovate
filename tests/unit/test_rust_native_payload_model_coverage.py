@@ -185,3 +185,7 @@ def test_full_rust_ownership_validation_records_passed_gates_and_exclusions() ->
         "regime_switching",
     }
     assert set(validation["excluded_payload_boundaries"]) == set(gate["blocking_payload_shapes"])
+    claim = validation["claim_language"].lower()
+    assert "blocked" not in claim
+    assert "not claimed" in claim
+    assert "future migration tracks" in claim
