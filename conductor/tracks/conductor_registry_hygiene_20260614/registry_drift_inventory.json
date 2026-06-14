@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-06-14T00:00:00+10:00",
+  "registry": "conductor/tracks.md",
+  "active_root": "conductor/tracks",
+  "archive_root": "conductor/archive",
+  "summary": {
+    "registry_entries": 70,
+    "active_directories": 1,
+    "registered_active_entries": 1,
+    "stale_active_directories": 0,
+    "missing_active_directories": 0,
+    "orphan_archive_directories": 2,
+    "missing_archive_directories": 0,
+    "missing_links": 0,
+    "wrong_link_targets": 0
+  },
+  "registered_active_directories": [
+    "conductor_registry_hygiene_20260614"
+  ],
+  "stale_active_directories": [],
+  "missing_active_directories": [],
+  "orphan_archive_directories": [
+    "migrate_starlight",
+    "starlight_migration_20260513"
+  ],
+  "missing_archive_directories": [],
+  "missing_links": [],
+  "wrong_link_targets": [],
+  "next_actions": [
+    {
+      "target": "migrate_starlight",
+      "action": "Register as archived legacy evidence or consolidate into an existing Starlight archive entry without deleting evidence."
+    },
+    {
+      "target": "starlight_migration_20260513",
+      "action": "Register as archived legacy evidence or consolidate into an existing Starlight archive entry without deleting evidence."
+    },
+    {
+      "target": "status tooling",
+      "action": "Add regression coverage that fails on stale active directories, missing links, wrong archive paths, and orphan archive directories."
+    }
+  ]
+}
