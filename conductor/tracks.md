@@ -354,5 +354,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Conductor Registry Hygiene**
-  *Link: [./tracks/conductor_registry_hygiene_20260614/](./tracks/conductor_registry_hygiene_20260614/)*
+- [x] **Track: Conductor Registry Hygiene** *(Completed)*
+  *Link: [./archive/conductor_registry_hygiene_20260614/](./archive/conductor_registry_hygiene_20260614/)*
