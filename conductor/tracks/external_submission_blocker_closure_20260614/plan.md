@@ -1,6 +1,6 @@
 # Implementation Plan: External Submission Blocker Closure
 
-## Phase 1: Submission State Red Tests
+## Phase 1: Submission State Red Tests [checkpoint: pending]
 
 - [x] Task: Inventory external submission targets bb962de
     - [x] Parse registry receipts, HPC packets, community matrices, and governance notes
@@ -10,7 +10,7 @@
     - [x] Require each target to have status, owner, evidence, and next action
     - [x] Reject submitted or accepted claims without receipts
     - [x] Commit this task before starting the next task
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Submission State Red Tests' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Submission State Red Tests' (Protocol in workflow.md)
 
 ## Phase 2: Evidence Refresh
 
