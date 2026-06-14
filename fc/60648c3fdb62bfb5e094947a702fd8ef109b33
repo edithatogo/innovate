@@ -1,0 +1,11 @@
+Task: Refresh migration manifests
+
+Summary:
+- Refreshed vision_roadmap_status_inventory.json to remove stale Sphinx-active status and record Starlight cutover evidence plus the explicit starlight-polyglot build blocker.
+- Revalidated generated route, cutover, and link artifacts.
+- Confirmed stale Sphinx-active/canonical wording scan is clean outside archived/current track context.
+
+Validation:
+- python docs/source/_static/astro_starlight/generate_route_coverage.py && python docs/source/_static/astro_starlight/generate_cutover_verification.py && python docs/source/_static/astro_starlight/generate_link_validation.py
+- uv run pytest tests/unit/test_astro_starlight_route_coverage.py tests/unit/test_astro_starlight_link_validation.py tests/unit/test_starlight_cutover_legacy_cleanup.py tests/unit/test_astro_starlight_migration.py tests/unit/test_astro_starlight_cutover_verification.py tests/unit/test_vision_roadmap_truth_status.py -q (28 passed)
+- stale-wording rg scan returned no matches outside archive/current track context
