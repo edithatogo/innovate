@@ -13,9 +13,11 @@ Canonical status:
 - Prior Conductor roadmap stages are complete or archived.
 - The full product vision remains active while future-state boundaries are
   still open.
-- Full Rust ownership, final documentation cutover, external submission
-  blocker closure, and Conductor registry hygiene require their own active
-  tracks before completion can be claimed.
+- The remediation tracks for roadmap truth, Rust operation coverage, Rust
+  payload/model coverage, Starlight cutover, external submission blockers, and
+  Conductor registry hygiene are complete and archived.
+- Full Rust ownership and external submission acceptance remain future-state
+  gates until their evidence artifacts or external receipts exist.
 
 Current migration posture:
 
@@ -24,7 +26,7 @@ Current migration posture:
 - Bridge-backed slices remain explicit until they are either promoted or
   intentionally left on the Python side.
 
-Active future-state tracks:
+Archived remediation tracks:
 
 - Vision and Roadmap Truth Audit:
   `conductor/archive/vision_roadmap_truth_audit_20260614/`

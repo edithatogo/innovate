@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated_by_track": "vision_roadmap_truth_audit_20260614",
-  "status": "reconciled_with_active_future_state_tracks",
+  "status": "reconciled_with_archived_follow_on_tracks",
   "checks": {
     "roadmap_pages_have_owned_gaps": true,
     "product_docs_avoid_full_vision_completion_claim": true,
@@ -9,7 +9,7 @@
     "submission_docs_distinguish_readiness_from_acceptance": true,
     "docs_cutover_status_points_to_starlight_cleanup": true
   },
-  "owned_future_state_boundaries": [
+  "archived_follow_on_track_boundaries": [
     {
       "boundary": "canonical vision status and roadmap truthfulness",
       "owner_track": "vision_roadmap_truth_audit_20260614"

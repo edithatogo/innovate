@@ -2,8 +2,8 @@
   "schema_version": 1,
   "generated_by_track": "vision_roadmap_truth_audit_20260614",
   "canonical_status": {
-    "summary": "Conductor roadmap tracks are complete, archived, or actively tracked. The full product vision remains a future-state program for Rust ownership, external submission, and registry-hygiene work, while documentation cutover status is now evidence-backed by passing Astro/Starlight build and check results.",
-    "track_state": "active_follow_on_tracks_registered",
+    "summary": "Conductor roadmap remediation tracks are complete and archived. The full product vision remains a future-state program for full Rust ownership and maintainer-managed external submissions, while documentation cutover status is evidence-backed by passing Astro/Starlight build and check results.",
+    "track_state": "archived_follow_on_tracks_complete",
     "vision_state": "partially_implemented_future_state_remaining",
     "claim_policy": "Do not claim full Rust ownership, external submission acceptance, or production DocSearch readiness unless the corresponding evidence artifact or external gate is complete."
   },
@@ -75,12 +75,12 @@
     {
       "path": "conductor/tracks.md",
       "classification": "implemented",
-      "claim": "New granular follow-on tracks are registered for roadmap truth, Rust operation completion, Rust payload and model coverage, Starlight cutover, external submission blocker closure, and Conductor registry hygiene.",
-      "required_resolution": "Maintain each unresolved roadmap-level gap as an active Conductor track until implementation and review are complete.",
+      "claim": "Granular follow-on tracks for roadmap truth, Rust operation completion, Rust payload and model coverage, Starlight cutover, external submission blocker closure, and Conductor registry hygiene are completed and archived.",
+      "required_resolution": "Create a new narrow Conductor track for any newly discovered roadmap-level gap before implementation begins.",
       "owning_track": "vision_roadmap_truth_audit_20260614"
     }
   ],
-  "future_state_tracks": [
+  "archived_follow_on_tracks": [
     {
       "track_id": "vision_roadmap_truth_audit_20260614",
       "scope": "Canonical product vision and roadmap status truth."

@@ -77,7 +77,8 @@ src/innovate/
 - **Code Quality**: Ruff, MyPy, Pyright, Bandit
 - Documentation: Astro/Starlight site with legacy Sphinx source retained only as
   archival and redirect-reference material
-- **Vision Status**: Prior Conductor roadmap tracks are complete or archived,
-  but the full product vision remains an active future-state program for full
-  Rust ownership, final documentation cutover cleanup, external submission
-  blocker closure, and Conductor registry hygiene.
+- **Vision Status**: Conductor roadmap remediation tracks are complete and
+  archived. The full product vision still has future-state gates for full Rust
+  ownership and maintainer-managed external submissions; those gates must not
+  be described as complete until their evidence artifacts or external receipts
+  exist.

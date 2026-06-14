@@ -19,10 +19,10 @@ def test_vision_status_inventory_declares_future_state_boundaries() -> None:
     inventory = json.loads(VISION_STATUS_INVENTORY.read_text())
 
     assert inventory["schema_version"] == 1
-    assert inventory["canonical_status"]["track_state"] == "active_follow_on_tracks_registered"
+    assert inventory["canonical_status"]["track_state"] == "archived_follow_on_tracks_complete"
     assert inventory["canonical_status"]["vision_state"] == "partially_implemented_future_state_remaining"
 
-    future_tracks = {track["track_id"] for track in inventory["future_state_tracks"]}
+    future_tracks = {track["track_id"] for track in inventory["archived_follow_on_tracks"]}
     assert {
         "vision_roadmap_truth_audit_20260614",
         "rust_native_operation_completion_20260614",
@@ -49,8 +49,8 @@ def test_tech_stack_marks_sphinx_as_legacy_not_active_migration() -> None:
     assert "Legacy Sphinx source" in tech_stack
 
 
-def test_roadmap_links_remaining_future_state_tracks() -> None:
-    """Every unresolved vision boundary should point to a granular Conductor track."""
+def test_roadmap_links_archived_remediation_tracks() -> None:
+    """Every remediation track should point to an archived Conductor record."""
     roadmap = Path("docs/architecture_modernization_roadmap.md").read_text()
 
     for track_name in (
@@ -62,6 +62,19 @@ def test_roadmap_links_remaining_future_state_tracks() -> None:
         "Conductor Registry Hygiene",
     ):
         assert track_name in roadmap
+
+
+def test_starlight_roadmap_does_not_call_archived_tracks_active() -> None:
+    """Starlight roadmap mirrors should not call archived remediation tracks active."""
+    for path in (
+        Path("docs/astro-site/src/content/docs/operations/roadmap.md"),
+        Path("docs/astro-site/src/content/docs/latest/operations/roadmap.md"),
+    ):
+        roadmap = normalized_text(path)
+        assert "Archived remediation tracks" in roadmap
+        assert "Active future-state tracks" not in roadmap
+        assert "require their own active tracks" not in roadmap
+        assert "complete and archived" in roadmap
 
 
 def test_full_rust_core_claims_remain_disallowed_until_inventory_is_all_native() -> None:
