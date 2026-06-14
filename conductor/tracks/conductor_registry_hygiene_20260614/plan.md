@@ -2,10 +2,10 @@
 
 ## Phase 1: Registry Drift Red Tests
 
-- [~] Task: Inventory registry and filesystem drift
-    - [~] Compare `conductor/tracks.md`, `conductor/tracks/`, and `conductor/archive/`
-    - [~] Identify stale active folders, missing archive folders, and broken links
-    - [ ] Commit this task before starting the next task
+- [x] Task: Inventory registry and filesystem drift aceab82
+    - [x] Compare `conductor/tracks.md`, `conductor/tracks/`, and `conductor/archive/`
+    - [x] Identify stale active folders, missing archive folders, and broken links
+    - [x] Commit this task before starting the next task
 - [ ] Task: Write failing registry hygiene tests
     - [ ] Require active folders to have active registry entries
     - [ ] Require completed registry entries to point into `conductor/archive/`
