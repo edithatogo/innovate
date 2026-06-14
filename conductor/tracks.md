@@ -339,8 +339,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: External Submission Blocker Closure**
-  *Link: [./tracks/external_submission_blocker_closure_20260614/](./tracks/external_submission_blocker_closure_20260614/)*
+- [x] **Track: External Submission Blocker Closure** *(Completed)*
+  *Link: [./archive/external_submission_blocker_closure_20260614/](./archive/external_submission_blocker_closure_20260614/)*
 
 ---
 
