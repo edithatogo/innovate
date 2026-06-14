@@ -18,7 +18,7 @@ importers:
         specifier: ^0.24.0
         version: 0.24.0(@astrojs/starlight@0.39.2(astro@6.3.3(@types/node@24.12.4)(rollup@4.60.4)(yaml@2.9.0))(typescript@6.0.3))(astro@6.3.3(@types/node@24.12.4)(rollup@4.60.4)(yaml@2.9.0))
       starlight-polyglot:
-        specifier: file:/Users/doughnut/GitHub/starlight-polyglot/packages/starlight-polyglot
+        specifier: file:../../../../starlight-polyglot/packages/starlight-polyglot
         version: file:../../../../starlight-polyglot/packages/starlight-polyglot(@astrojs/starlight@0.39.2(astro@6.3.3(@types/node@24.12.4)(rollup@4.60.4)(yaml@2.9.0))(typescript@6.0.3))(astro@6.3.3(@types/node@24.12.4)(rollup@4.60.4)(yaml@2.9.0))
       starlight-versions:
         specifier: ^0.5.4

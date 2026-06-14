@@ -12,7 +12,7 @@
     "@astrojs/starlight": "^0.39.0",
     "astro": "^6.0.0",
     "starlight-links-validator": "^0.24.0",
-    "starlight-polyglot": "file:/Users/doughnut/GitHub/starlight-polyglot/packages/starlight-polyglot",
+    "starlight-polyglot": "file:../../../../starlight-polyglot/packages/starlight-polyglot",
     "starlight-versions": "^0.5.4"
   },
   "devDependencies": {
