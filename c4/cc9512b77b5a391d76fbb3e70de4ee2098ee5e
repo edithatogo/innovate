@@ -1,0 +1,8 @@
+Task: Document Vale prose linting in tech stack
+
+Summary:
+- Restored Vale prose linting to conductor/tech-stack.md so governance prose tooling is documented consistently with product guidelines and CI.
+
+Validation:
+- uv run pytest tests/unit/test_prose_lint_docs.py -q (2 passed)
+- uv run pytest tests/unit -q (full unit suite passed; 10 skipped)
