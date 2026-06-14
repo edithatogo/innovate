@@ -1,0 +1,9 @@
+Task: Inventory external submission targets
+
+Summary:
+- Added docs/source/_static/external_submission_target_inventory.json covering package-manager, HPC, and scientific/community targets.
+- Normalized each target to status, owner, evidence, and next action.
+- Recorded generic blocked-state conflicts and maintainer-managed actions for follow-up tasks.
+
+Validation:
+- python -m json.tool docs/source/_static/external_submission_target_inventory.json >/dev/null
