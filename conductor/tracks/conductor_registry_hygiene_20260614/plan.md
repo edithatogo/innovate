@@ -1,6 +1,6 @@
 # Implementation Plan: Conductor Registry Hygiene
 
-## Phase 1: Registry Drift Red Tests
+## Phase 1: Registry Drift Red Tests [checkpoint: a583530]
 
 - [x] Task: Inventory registry and filesystem drift aceab82
     - [x] Compare `conductor/tracks.md`, `conductor/tracks/`, and `conductor/archive/`
@@ -11,7 +11,7 @@
     - [x] Require completed registry entries to point into `conductor/archive/`
     - [x] Require status tooling to report stale or orphaned folders
     - [x] Commit this task before starting the next task
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Registry Drift Red Tests' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Registry Drift Red Tests' (Protocol in workflow.md)
 
 ## Phase 2: Registry Reconciliation
 
