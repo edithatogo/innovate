@@ -1,0 +1,14 @@
+Task: Align receipt status expectations
+
+Summary:
+- Updated registry receipt tests to classify Spack and EasyBuild as ready_for_review after the HPC evidence refresh.
+- Preserved blocked expectations for HPSF and E4S and deferred expectations for CRAN.
+
+Validation:
+- python -m json.tool docs/source/_static/external_submission_target_inventory.json >/dev/null
+- python -m json.tool docs/source/_static/registry_submission_receipts.json >/dev/null
+- python -m json.tool docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json >/dev/null
+- python -m json.tool docs/source/_static/hpc_packaging/workflow_manifest.json >/dev/null
+- python -m json.tool docs/source/_static/hpc_packaging/submission_packet.json >/dev/null
+- python -m json.tool docs/source/_static/community_submission_readiness_matrix.json >/dev/null
+- uv run pytest tests/unit/test_external_submission_blocker_closure.py tests/unit/test_registry_submission_receipts.py tests/unit/test_registry_submission_execution.py tests/unit/test_hpc_submission_blockers.py tests/unit/test_hpc_submission_packet.py tests/unit/test_hpc_submission_workflow.py tests/unit/test_community_submission_readiness.py -q (23 passed)
