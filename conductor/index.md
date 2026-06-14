@@ -12,3 +12,8 @@
 ## Management
 - [Tracks Registry](./tracks.md)
 - [Tracks Directory](./tracks/)
+
+## Hygiene Checks
+- Run `python scripts/conductor_registry_hygiene.py --json` to report active,
+  archived, stale, orphaned, missing-link, and wrong-link Conductor track
+  diagnostics.
