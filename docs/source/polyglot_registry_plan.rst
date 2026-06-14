@@ -10,8 +10,7 @@ HPC-oriented registry readiness so the repository can track each path
 independently.
 
 The plan is intentionally conservative: the repository contains readiness
-evidence and package gates, but this page does not claim that any external
-submission has already been completed.
+evidence and package gates. This page does not claim that any external submission has already been completed.
 Use the readiness dossiers as submission checklists, not as proof of submission.
 
 Registry layers
@@ -37,8 +36,7 @@ Recommended sequence
 1. Keep the package-manager publication gates aligned with the binding CI jobs.
 2. Keep the scientific submission dossiers aligned with the readiness matrices.
 3. Keep the HPC contract aligned with package sketches and scheduler evidence.
-4. Treat external registry submission as a release decision, not a doc-only
-   milestone.
+4. Treat external registry submission as a release decision, not a doc-only milestone.
 
 Current status by layer
 -----------------------
