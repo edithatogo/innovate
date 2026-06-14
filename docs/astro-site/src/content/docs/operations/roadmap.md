@@ -33,7 +33,7 @@ Active future-state tracks:
 - Rust-Native Payload and Model-Family Coverage:
   `conductor/archive/rust_native_payload_model_coverage_20260614/`
 - Starlight Cutover and Legacy Cleanup:
-  `conductor/tracks/starlight_cutover_legacy_cleanup_20260614/`
+  `conductor/archive/starlight_cutover_legacy_cleanup_20260614/`
 - External Submission Blocker Closure:
   `conductor/tracks/external_submission_blocker_closure_20260614/`
 - Conductor Registry Hygiene:

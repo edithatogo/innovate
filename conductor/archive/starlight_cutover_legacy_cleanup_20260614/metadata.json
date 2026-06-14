@@ -1,8 +1,8 @@
 {
   "track_id": "starlight_cutover_legacy_cleanup_20260614",
   "type": "chore",
-  "status": "new",
+  "status": "completed",
   "created_at": "2026-06-13T15:23:37Z",
-  "updated_at": "2026-06-13T15:23:37Z",
+  "updated_at": "2026-06-14T00:00:00Z",
   "description": "Complete the Astro/Starlight cutover, remove stale Sphinx-as-active claims, and clean up legacy migration artifacts."
 }
