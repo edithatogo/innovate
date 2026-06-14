@@ -6,10 +6,10 @@
     - [x] Parse registry receipts, HPC packets, community matrices, and governance notes
     - [x] Identify generic blocked states and maintainer-managed actions
     - [x] Commit this task before starting the next task
-- [ ] Task: Write failing submission-state tests
-    - [ ] Require each target to have status, owner, evidence, and next action
-    - [ ] Reject submitted or accepted claims without receipts
-    - [ ] Commit this task before starting the next task
+- [x] Task: Write failing submission-state tests
+    - [x] Require each target to have status, owner, evidence, and next action
+    - [x] Reject submitted or accepted claims without receipts
+    - [x] Commit this task before starting the next task
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Submission State Red Tests' (Protocol in workflow.md)
 
 ## Phase 2: Evidence Refresh
