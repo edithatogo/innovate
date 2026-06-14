@@ -2,7 +2,6 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import polyglot from 'starlight-polyglot';
 import starlightLinksValidator from 'starlight-links-validator';
-import starlightVersions from 'starlight-versions';
 
 export default defineConfig({
   site: 'https://edithatogo.github.io/innovate',
@@ -25,14 +24,13 @@ export default defineConfig({
       ],
       plugins: [
         starlightLinksValidator(),
-        starlightVersions({
-          versions: [
-            { slug: 'latest', label: 'v0.5.x' },
-          ],
-        }),
+        // starlight-versions is installed and pinned, but not enabled here
+        // because 0.5.x currently crashes on Astro 6's generated /404 route.
+        // Versioned content remains under src/content/docs/latest/.
         polyglot({
           python: {
             entryPoints: ['../../src/innovate'],
+            pythonExecutable: process.env.STARLIGHT_POLYGLOT_PYTHON ?? 'python',
             output: 'api/python',
           },
         }),

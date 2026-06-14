@@ -1,6 +1,7 @@
 ---
 title: Getting Started
 description: Install Innovate and run your first diffusion model.
+slug: latest/user-guide/getting-started
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -9,8 +10,8 @@ This guide walks you through installing Innovate and fitting your first diffusio
 
 ## Prerequisites
 
-- Python 3.10 or later
-- pip, uv, or conda package manager
+* Python 3.10 or later
+* pip, uv, or conda package manager
 
 ## Installation
 
@@ -20,11 +21,13 @@ This guide walks you through installing Innovate and fitting your first diffusio
     pip install innovate
     ```
   </TabItem>
+
   <TabItem label="uv">
     ```bash
     uv pip install innovate
     ```
   </TabItem>
+
   <TabItem label="conda">
     ```bash
     conda install -c conda-forge innovate
@@ -74,6 +77,7 @@ print(summary)
 ```
 
 Output:
+
 ```
 Bass Diffusion Model — Fit Summary
 ───────────────────────────────────
@@ -95,6 +99,7 @@ print(forecast)
 ```
 
 Output:
+
 ```
    time  predicted_adoptions
 0    13            267.89
@@ -118,7 +123,7 @@ fig.show()
 
 ## Next Steps
 
-- Learn about [Core Concepts](/innovate/core/)
-- Explore [Available Models](/innovate/user-guide/fitting/)
-- Read the [API Reference](/innovate/api/python/)
-- Try the [Agent-Based Simulation](/innovate/tutorials/) tutorial
+* Learn about [Core Concepts](/innovate/latest/core/)
+* Explore [Available Models](/innovate/latest/user-guide/fitting/)
+* Read the [API Reference](/innovate/latest/api/python/)
+* Try the [Agent-Based Simulation](/innovate/latest/tutorials/) tutorial

@@ -13,12 +13,17 @@ Baseline decisions:
 - `astro` `^6.0.0`
 - `@astrojs/sitemap` `^3.7.2`
 
+`starlight-versions` remains installed and `latest/` versioned content is
+present, but the active middleware is disabled until the plugin handles Astro 6
+non-doc routes such as `/404`.
+
 Cutover policy:
 
 - Astro/Starlight is the active documentation stack
 - legacy Sphinx URLs are preserved as compatibility aliases
 - Algolia DocSearch as the selected search provider
 - route preservation through redirect evidence and cutover verification
+- `pnpm build && pnpm check` as the active Starlight build gate
 
 Key artifacts:
 

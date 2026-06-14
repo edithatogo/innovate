@@ -96,8 +96,8 @@ def test_cutover_inventory_has_no_remaining_stale_work_after_cleanup() -> None:
     assert inventory["stale_cutover_language"] == []
 
 
-def test_starlight_validation_evidence_records_routes_and_build_blockers() -> None:
-    """Route/link validation can pass while build blockers remain explicit."""
+def test_starlight_validation_evidence_records_routes_and_build_status() -> None:
+    """Route/link validation and the active Starlight build should both pass."""
     evidence = json.loads(STARLIGHT_VALIDATION.read_text())
 
     assert evidence["route_and_link_status"]["route_coverage"] == "passed"
@@ -106,8 +106,10 @@ def test_starlight_validation_evidence_records_routes_and_build_blockers() -> No
 
     commands = {entry["command"]: entry for entry in evidence["commands"]}
     assert commands["pnpm install --frozen-lockfile"]["status"] == ("passed_after_workspace_build_approvals")
-    assert commands["pnpm build && pnpm check"]["status"] == "blocked"
+    assert commands["pnpm build && pnpm check"]["status"] == "passed"
 
+    resolved = {entry["id"]: entry for entry in evidence["resolved_blockers"]}
+    assert resolved["starlight_polyglot_missing_python_handler_bundle"]["status"] == ("resolved")
     blockers = {entry["id"]: entry for entry in evidence["blockers"]}
-    assert blockers["starlight_polyglot_missing_python_handler_bundle"]["status"] == ("blocked")
     assert blockers["docsearch_credentials"]["status"] == "external_credentials_required"
+    assert blockers["starlight_versions_astro6_404_middleware"]["status"] == ("compatibility_disabled")

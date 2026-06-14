@@ -37,9 +37,9 @@
   "stale_cutover_language": [],
   "blocked_or_deferred_items": [
     {
-      "item": "starlight-polyglot local bundle",
-      "status": "build_blocked",
-      "evidence": "pnpm build fails because the local starlight-polyglot file dependency cannot import ../handlers/python.js from its distributed bundle"
+      "item": "starlight-versions active middleware",
+      "status": "compatibility_disabled",
+      "evidence": "The package remains installed and versioned content remains present, but the active plugin call is disabled because starlight-versions 0.5.x crashes on Astro 6 /404 routes."
     },
     {
       "item": "DocSearch credentials",

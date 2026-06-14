@@ -16,5 +16,10 @@ auditable after migration.
   stable after cutover.
 - route-stability checks ensure the versioned navigation continues to resolve
   the same active and compatibility pages.
-- See the [redirect route map](/migration/redirects/), the [archive page](/migration/archive/),
-  and the [migration references page](/migration/references/).
+- `pnpm build && pnpm check` passes for the active site with Python API
+  generation and link validation enabled.
+- `starlight-versions` remains installed and versioned `latest/` content is
+  present, but its active middleware is disabled until it supports Astro 6
+  non-doc routes such as `/404`.
+- See the [redirect route map](/innovate/migration/redirects/), the [archive page](/innovate/migration/archive/),
+  and the [migration references page](/innovate/migration/references/).

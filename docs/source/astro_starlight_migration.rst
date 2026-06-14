@@ -14,6 +14,9 @@ The migration status is ``cutover-complete``:
 * the selected search provider is Algolia DocSearch;
 * ``@astrojs/sitemap`` is enabled for public indexing;
 * the redirect inventory must stay synchronized with the content inventory.
+* ``pnpm build && pnpm check`` passes for the active site, including
+  ``starlight-polyglot`` Python API generation and
+  ``starlight-links-validator`` validation.
 
 Pinned scaffold baseline
 ------------------------
@@ -24,6 +27,10 @@ Pinned scaffold baseline
 * ``@astrojs/starlight-docsearch`` ``0.6.1``
 * ``astro`` ``^6.0.0``
 * ``@astrojs/sitemap`` ``^3.7.2``
+
+``starlight-versions`` remains installed and the versioned ``latest/`` content
+is present, but the active middleware is disabled until the plugin handles
+Astro 6 non-doc routes such as ``/404``.
 
 Scaffold artifacts
 ------------------

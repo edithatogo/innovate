@@ -29,24 +29,33 @@
     },
     {
       "command": "pnpm build && pnpm check",
-      "status": "blocked",
-      "blocker": "Local starlight-polyglot file dependency fails during Astro config setup: Module not found in bundle: ../handlers/python.js"
+      "status": "passed",
+      "result": "Astro/Starlight build generated 95 pages; starlight-polyglot generated 3 Python API pages; starlight-links-validator reported all internal links valid; astro check reported 0 errors, 0 warnings, and 0 hints."
+    }
+  ],
+  "resolved_blockers": [
+    {
+      "id": "starlight_polyglot_missing_python_handler_bundle",
+      "status": "resolved",
+      "owner": "local_file_dependency",
+      "evidence": "Local starlight-polyglot now ships compiled handler JavaScript and a rebuilt dist/index.js; docs/astro-site pnpm build reaches and completes Python API generation.",
+      "resolution": "Rebuilt the local file dependency and configured the Python handler to use the conda Python executable with Griffe available."
     }
   ],
   "blockers": [
-    {
-      "id": "starlight_polyglot_missing_python_handler_bundle",
-      "status": "blocked",
-      "owner": "local_file_dependency",
-      "evidence": "docs/astro-site/package.json references file:/Users/doughnut/GitHub/starlight-polyglot/packages/starlight-polyglot; its dist/index.js dynamically imports ../handlers/python.js but the bundle glob is empty",
-      "required_resolution": "Publish or rebuild starlight-polyglot so handler JavaScript modules are included in the distributed package, or replace the file dependency with a package version that includes handlers."
-    },
     {
       "id": "docsearch_credentials",
       "status": "external_credentials_required",
       "owner": "deployment_environment",
       "evidence": "docs/astro-site/starlight.config.mjs expects ALGOLIA_APP_ID, ALGOLIA_API_KEY, and ALGOLIA_INDEX_NAME when DocSearch is enabled",
       "required_resolution": "Provide deployment credentials before enabling production DocSearch."
+    },
+    {
+      "id": "starlight_versions_astro6_404_middleware",
+      "status": "compatibility_disabled",
+      "owner": "upstream_plugin_compatibility",
+      "evidence": "starlight-versions 0.5.x throws while rendering Astro 6 /404 because its middleware assumes every route has a Starlight entry slug.",
+      "required_resolution": "Re-enable starlight-versions after the plugin handles non-doc routes or after a compatible release is pinned."
     }
   ]
 }
