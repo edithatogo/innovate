@@ -9,10 +9,9 @@
   },
   "claim_categories": [
     "implemented",
-    "implemented_with_blocker",
     "archived_track_complete",
     "future_state",
-    "blocked_external",
+    "external_gate",
     "stale"
   ],
   "reviewed_sources": [
@@ -32,7 +31,7 @@
     },
     {
       "path": "docs/source/_static/astro_starlight/starlight_validation_evidence.json",
-      "classification": "implemented_with_blocker",
+      "classification": "external_gate",
       "claim": "Route, link, build, and Astro check validation pass; the prior local starlight-polyglot handler bundle blocker is resolved, and starlight-versions is enabled after the 0.9.0 update. Production DocSearch remains an explicit external credential gate.",
       "required_resolution": "Keep residual DocSearch credentials explicit until deployment credentials are available.",
       "owning_track": "starlight_cutover_legacy_cleanup_20260614"
@@ -53,21 +52,21 @@
     },
     {
       "path": "docs/source/registry_submission_receipts.rst",
-      "classification": "blocked_external",
+      "classification": "external_gate",
       "claim": "CRAN remains deferred, Spack and EasyBuild are ready_for_review, and HPSF/E4S are ready_for_maintainer with public review/contact paths but no submission receipts.",
       "required_resolution": "Keep readiness distinct from accepted submission status and require maintainer-opened external review links before claiming submission.",
       "owning_track": "external_submission_blocker_closure_20260614"
     },
     {
       "path": "docs/source/hpc_submission_workflow.rst",
-      "classification": "blocked_external",
+      "classification": "external_gate",
       "claim": "HPSF and E4S now have public proposal/contact paths and remain maintainer-managed until sponsors, review/CI validation, and external request links exist.",
       "required_resolution": "Preserve ready_for_maintainer evidence until external review links or submission receipts exist.",
       "owning_track": "external_submission_blocker_closure_20260614"
     },
     {
       "path": "docs/astro-site/src/content/docs/operations/registry-submissions.md",
-      "classification": "blocked_external",
+      "classification": "external_gate",
       "claim": "The Astro/Starlight mirror lists deferred, ready_for_review, and ready_for_maintainer registry targets without claiming acceptance.",
       "required_resolution": "Keep the Astro/Starlight mirror aligned with the canonical registry receipt evidence.",
       "owning_track": "vision_roadmap_truth_audit_20260614"
@@ -75,7 +74,7 @@
     {
       "path": "conductor/tracks.md",
       "classification": "implemented",
-      "claim": "Granular follow-on tracks for roadmap truth, Rust operation completion, Rust payload and model coverage, Starlight cutover, external submission blocker closure, and Conductor registry hygiene are completed and archived.",
+      "claim": "Granular follow-on tracks for roadmap truth, Rust operation completion, Rust payload and model coverage, Starlight cutover, external submission handoff closure, and Conductor registry hygiene are completed and archived.",
       "required_resolution": "Create a new narrow Conductor track for any newly discovered roadmap-level gap before implementation begins.",
       "owning_track": "vision_roadmap_truth_audit_20260614"
     }
@@ -99,7 +98,7 @@
     },
     {
       "track_id": "external_submission_blocker_closure_20260614",
-      "scope": "External submission blockers, receipts, and explicit deferrals."
+      "scope": "External submission handoffs, receipts, and explicit deferrals."
     },
     {
       "track_id": "conductor_registry_hygiene_20260614",

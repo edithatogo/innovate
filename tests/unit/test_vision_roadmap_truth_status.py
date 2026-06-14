@@ -21,6 +21,13 @@ def test_vision_status_inventory_declares_future_state_boundaries() -> None:
     assert inventory["schema_version"] == 1
     assert inventory["canonical_status"]["track_state"] == "archived_follow_on_tracks_complete"
     assert inventory["canonical_status"]["vision_state"] == "partially_implemented_future_state_remaining"
+    assert "external_gate" in inventory["claim_categories"]
+    assert "blocked_external" not in inventory["claim_categories"]
+    assert "implemented_with_blocker" not in inventory["claim_categories"]
+    assert not any(
+        source["classification"] in {"blocked_external", "implemented_with_blocker"}
+        for source in inventory["reviewed_sources"]
+    )
 
     future_tracks = {track["track_id"] for track in inventory["archived_follow_on_tracks"]}
     assert {
@@ -75,6 +82,8 @@ def test_starlight_roadmap_does_not_call_archived_tracks_active() -> None:
         assert "Active future-state tracks" not in roadmap
         assert "require their own active tracks" not in roadmap
         assert "full product vision remains active" not in roadmap.lower()
+        assert "external submission blockers" not in roadmap.lower()
+        assert "external submission handoffs" in roadmap.lower()
         assert "not fully complete" in roadmap
         assert "complete and archived" in roadmap
 

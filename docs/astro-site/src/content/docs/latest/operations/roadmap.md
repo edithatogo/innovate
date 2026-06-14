@@ -15,7 +15,7 @@ Canonical status:
 * The full product vision is not fully complete while future-state boundaries
   remain open.
 * The remediation tracks for roadmap truth, Rust operation coverage, Rust
-  payload/model coverage, Starlight cutover, external submission blockers, and
+  payload/model coverage, Starlight cutover, external submission handoffs, and
   Conductor registry hygiene are complete and archived.
 * Full Rust ownership and external submission acceptance remain future-state
   gates until their evidence artifacts or external receipts exist.
