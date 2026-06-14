@@ -1,0 +1,8 @@
+Task: Write failing registry hygiene tests
+
+Summary:
+- Added tests for active folder parity, completed archive link resolution, registered archive parity, and status-tool diagnostics.
+- Confirmed red failures expose orphan archive folders migrate_starlight and starlight_migration_20260513 plus missing scripts/conductor_registry_hygiene.py.
+
+Validation:
+- uv run pytest tests/unit/test_conductor_registry_hygiene.py -q (expected failure: 2 failed, 2 passed)
