@@ -14,10 +14,10 @@
 
 ## Phase 2: Evidence Refresh
 
-- [ ] Task: Refresh package-manager target evidence
-    - [ ] Update statuses for npm, crates.io, R-universe/CRAN, Julia General, Go modules, and NuGet
-    - [ ] Record credential-blocked or maintainer-ready states explicitly
-    - [ ] Commit this task before starting the next task
+- [x] Task: Refresh package-manager target evidence
+    - [x] Update statuses for npm, crates.io, R-universe/CRAN, Julia General, Go modules, and NuGet
+    - [x] Record credential-blocked or maintainer-ready states explicitly
+    - [x] Commit this task before starting the next task
 - [ ] Task: Refresh HPC target evidence
     - [ ] Update Spack, EasyBuild, HPSF, and E4S packets and blocker notes
     - [ ] Preserve scheduler and environment probe evidence
