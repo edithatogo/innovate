@@ -90,7 +90,7 @@ def test_hpc_packaging_readiness_captures_spack_and_easybuild_prototypes() -> No
         assert phrase in doc
 
 
-def test_hpc_registry_claims_are_blocked_until_evidence_exists() -> None:
+def test_hpc_registry_claims_are_gated_until_evidence_exists() -> None:
     """HPSF/E4S claims should stay gated by explicit evidence requirements."""
     doc = _doc_text()
 
@@ -106,5 +106,11 @@ def test_hpc_registry_claims_are_blocked_until_evidence_exists() -> None:
         "execution templates for Slurm and PBS scheduler submission",
         "CPU, GPU, and mixed bridge",
         "no HPSF or E4S submission should be made",
+        "maintainer handoff note",
+        "ready_for_maintainer",
     ):
         assert phrase in doc
+
+    assert "durable HPSF blocker note" not in doc
+    assert "durable E4S blocker note" not in doc
+    assert "preserve the blocker note" not in doc

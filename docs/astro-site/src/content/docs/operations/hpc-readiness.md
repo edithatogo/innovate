@@ -12,9 +12,8 @@ Readiness currently includes:
 - candidate package recipes,
 - scheduler evidence collection,
 - install/smoke logs,
-- explicit blockers for upstream registry handoff.
+- explicit maintainer-managed handoff gates for upstream registry review.
 
 Migration source:
 
 - `docs/source/hpc_packaging_registry_readiness.rst`
-

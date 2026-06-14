@@ -12,7 +12,8 @@ Artifacts:
 - `pack_packet.py` - consolidates the packet into a reviewable manifest
 - `submission_packet.json` - machine-readable HPC submission packet
 - `workflow_manifest.json` - per-target commands and artifact destinations
-- `evidence/hpc_submission_blockers.json` - explicit remaining blocker bundle
+- `evidence/hpc_submission_blockers.json` - compatibility-named blocker and
+  resolved-handoff status bundle
 - `evidence/hpc_submission_environment_probe.log` - explicit local tool probe and wrapper state
 - `evidence/` - captured install and smoke logs for the supported surfaces
 

@@ -181,3 +181,14 @@ def test_starlight_registry_mirrors_do_not_advertise_blocked_targets() -> None:
         docs = path.read_text(encoding="utf-8").lower()
         assert "deferred or review-ready targets" in docs
         assert "or blocked targets" not in docs
+
+
+def test_hpc_readiness_mirrors_use_handoff_gate_language() -> None:
+    """HPC readiness mirrors should not advertise generic upstream blockers."""
+    for path in (
+        Path("docs/astro-site/src/content/docs/operations/hpc-readiness.md"),
+        Path("docs/astro-site/src/content/docs/latest/operations/hpc-readiness.md"),
+    ):
+        docs = path.read_text(encoding="utf-8").lower()
+        assert "maintainer-managed handoff gates" in docs
+        assert "explicit blockers for upstream registry handoff" not in docs

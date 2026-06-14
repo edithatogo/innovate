@@ -42,8 +42,8 @@ The repository now carries the package and evidence bundle directly under
   container-backed batch logs for the executable HPC targets;
 * ``evidence/spack-pbs.log`` and ``evidence/easybuild-pbs.log`` - PBS variants
   of the same batch logs;
-* ``evidence/hpsf-review-note.md`` - durable HPSF blocker note;
-* ``evidence/e4s-review-note.md`` - durable E4S blocker note.
+* ``evidence/hpsf-review-note.md`` - durable HPSF maintainer handoff note;
+* ``evidence/e4s-review-note.md`` - durable E4S maintainer handoff note.
 
 Install surfaces
 ----------------
@@ -217,13 +217,14 @@ HPSF and E4S registry gates
      - install, smoke, and batch evidence is now present; remaining evidence
        covers governance alignment, release durability, and HPC user support.
      - Add support contacts, maintenance policy, and the governance packet;
-       preserve the blocker note in ``evidence/hpsf-review-note.md``.
+       preserve the maintainer handoff note in
+       ``evidence/hpsf-review-note.md``.
    * - E4S candidacy
      - package sketches, local evidence, and batch logs are present; remaining
        evidence covers performance portability and accelerator-aware
        validation.
      - Add accelerator metadata, CPU/GPU/mixed-bridge smoke logs, and the
-       portability packet; preserve the blocker note in
+       portability packet; preserve the maintainer handoff note in
        ``evidence/e4s-review-note.md``.
 
 Result: no HPSF or E4S submission should be made until the package candidates

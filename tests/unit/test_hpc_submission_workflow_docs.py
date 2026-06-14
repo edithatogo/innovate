@@ -25,7 +25,13 @@ def test_hpc_submission_workflow_doc_mentions_all_targets() -> None:
         "workflow_manifest.json",
         "hpc_submission_blockers.json",
         "hpc_submission_environment_probe.log",
+        "Handoff status",
+        "compatibility-named blocker bundle",
+        "maintainer handoff states",
         "sbatch docs/source/_static/hpc_packaging/scheduler/slurm/spack-smoke.sbatch",
         "sbatch docs/source/_static/hpc_packaging/scheduler/slurm/easybuild-smoke.sbatch",
     ):
         assert phrase in text
+
+    assert "Any remaining blockers live in" not in text
+    assert "review contact or blocker note" not in text

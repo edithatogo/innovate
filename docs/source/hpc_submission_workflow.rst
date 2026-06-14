@@ -11,12 +11,13 @@ Manifest
 The machine-readable manifest lives at
 ``docs/source/_static/hpc_packaging/workflow_manifest.json``.
 
-Blockers
---------
+Handoff status
+--------------
 
 The current local probe is recorded in
 ``docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log``.
-Any remaining blockers live in
+The compatibility-named blocker bundle records current blockers and resolved
+maintainer handoff states at
 ``docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json``.
 
 Targets
@@ -53,7 +54,7 @@ HPSF
 
 1. Populate ``docs/source/_static/hpc_packaging/governance/hpsf-evidence.md``.
 2. Attach ``r-build.log`` and ``r-check.log``.
-3. Record the review contact or blocker note in the evidence bundle
+3. Record the review contact or maintainer-action note in the evidence bundle
    (currently ``evidence/hpsf-review-note.md``).
 
 E4S
