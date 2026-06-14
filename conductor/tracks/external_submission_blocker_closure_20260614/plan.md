@@ -2,10 +2,10 @@
 
 ## Phase 1: Submission State Red Tests
 
-- [ ] Task: Inventory external submission targets
-    - [ ] Parse registry receipts, HPC packets, community matrices, and governance notes
-    - [ ] Identify generic blocked states and maintainer-managed actions
-    - [ ] Commit this task before starting the next task
+- [x] Task: Inventory external submission targets
+    - [x] Parse registry receipts, HPC packets, community matrices, and governance notes
+    - [x] Identify generic blocked states and maintainer-managed actions
+    - [x] Commit this task before starting the next task
 - [ ] Task: Write failing submission-state tests
     - [ ] Require each target to have status, owner, evidence, and next action
     - [ ] Reject submitted or accepted claims without receipts

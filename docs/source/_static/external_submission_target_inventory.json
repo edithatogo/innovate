@@ -1,0 +1,263 @@
+{
+  "schema_version": 1,
+  "generated_by_track": "external_submission_blocker_closure_20260614",
+  "inventory_date": "2026-06-14",
+  "source_artifacts": [
+    "docs/source/_static/registry_submission_receipts.json",
+    "docs/source/_static/registry_submission_inventory.json",
+    "docs/source/_static/registry_release_prerequisites.json",
+    "docs/source/_static/hpc_packaging/submission_packet.json",
+    "docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json",
+    "docs/source/_static/community_submission_readiness_matrix.json",
+    "docs/source/_static/external_governance_sustainability_matrix.json"
+  ],
+  "status_values": [
+    "submitted",
+    "blocked",
+    "deferred",
+    "ready_for_maintainer",
+    "ready_for_review",
+    "not_applicable"
+  ],
+  "target_groups": {
+    "package_manager": [
+      "python_pypi",
+      "typescript_npm",
+      "rust_crates_io",
+      "r_r_universe",
+      "r_cran",
+      "julia_general",
+      "go_modules",
+      "csharp_nuget"
+    ],
+    "hpc": [
+      "spack",
+      "easybuild",
+      "hpsf",
+      "e4s"
+    ],
+    "scientific_community": [
+      "pyopensci",
+      "ropensci",
+      "joss",
+      "numfocus",
+      "pypa",
+      "apache_arrow",
+      "dotnet_foundation",
+      "julia_community",
+      "r_community",
+      "scikit_learn_contrib"
+    ]
+  },
+  "targets": [
+    {
+      "target_id": "python_pypi",
+      "group": "package_manager",
+      "registry": "PyPI/TestPyPI",
+      "status": "submitted",
+      "owner": "Python maintainers",
+      "evidence": ["https://pypi.org/project/innovate/", "https://pypi.org/pypi/innovate/json"],
+      "next_action": "Keep release receipts current for future versions."
+    },
+    {
+      "target_id": "typescript_npm",
+      "group": "package_manager",
+      "registry": "npm",
+      "status": "submitted",
+      "owner": "TypeScript maintainers",
+      "evidence": ["https://www.npmjs.com/package/innovate.ts", "https://registry.npmjs.org/innovate.ts"],
+      "next_action": "Keep release receipts current for future versions."
+    },
+    {
+      "target_id": "rust_crates_io",
+      "group": "package_manager",
+      "registry": "crates.io",
+      "status": "submitted",
+      "owner": "Rust maintainers",
+      "evidence": ["https://crates.io/crates/innovate-rs", "https://crates.io/api/v1/crates/innovate-rs"],
+      "next_action": "Keep release receipts current for future versions."
+    },
+    {
+      "target_id": "r_r_universe",
+      "group": "package_manager",
+      "registry": "R-universe",
+      "status": "submitted",
+      "owner": "R binding maintainers",
+      "evidence": ["https://github.com/edithatogo/edithatogo.r-universe.dev/commit/8033021d768d9c8917f711f30b3387b2ef65b90b", "bindings/r/README.md"],
+      "next_action": "Monitor asynchronous R-universe indexing for future release versions."
+    },
+    {
+      "target_id": "r_cran",
+      "group": "package_manager",
+      "registry": "CRAN",
+      "status": "deferred",
+      "owner": "R binding maintainers",
+      "evidence": ["docs/source/_static/registry_submission_receipts.json", "bindings/r/cran-comments.md"],
+      "next_action": "Maintainer must execute CRAN submission from prepared source package and record receipt."
+    },
+    {
+      "target_id": "julia_general",
+      "group": "package_manager",
+      "registry": "Julia General",
+      "status": "submitted",
+      "owner": "Julia binding maintainers",
+      "evidence": ["https://github.com/JuliaRegistries/General/pull/155126", "bindings/julia/Project.toml"],
+      "next_action": "Track registry pull request outcome and replace submitted state with accepted only after merge evidence exists."
+    },
+    {
+      "target_id": "go_modules",
+      "group": "package_manager",
+      "registry": "Go modules",
+      "status": "submitted",
+      "owner": "Go binding maintainers",
+      "evidence": ["https://pkg.go.dev/github.com/edithatogo/innovate/bindings/go", "bindings/go/go.mod"],
+      "next_action": "Keep versioned module tags current."
+    },
+    {
+      "target_id": "csharp_nuget",
+      "group": "package_manager",
+      "registry": "NuGet",
+      "status": "submitted",
+      "owner": "C# binding maintainers",
+      "evidence": ["https://www.nuget.org/packages/innovate.cs/", "https://api.nuget.org/v3-flatcontainer/innovate.cs/index.json"],
+      "next_action": "Keep NuGet package receipts current for future versions."
+    },
+    {
+      "target_id": "spack",
+      "group": "hpc",
+      "registry": "Spack",
+      "status": "ready_for_review",
+      "owner": "HPC maintainers",
+      "evidence": ["docs/source/_static/hpc_packaging/spack/py-innovate.py", "docs/source/_static/hpc_packaging/evidence/spack-batch.log", "docs/source/_static/hpc_packaging/evidence/spack-pbs.log"],
+      "next_action": "Submit candidate recipe upstream only after maintainer review and scheduler-backed evidence refresh."
+    },
+    {
+      "target_id": "easybuild",
+      "group": "hpc",
+      "registry": "EasyBuild",
+      "status": "ready_for_review",
+      "owner": "HPC maintainers",
+      "evidence": ["docs/source/_static/hpc_packaging/easybuild/innovate-0.5.0.eb", "docs/source/_static/hpc_packaging/evidence/easybuild-batch.log", "docs/source/_static/hpc_packaging/evidence/easybuild-pbs.log"],
+      "next_action": "Submit candidate easyconfig upstream only after maintainer review and scheduler-backed evidence refresh."
+    },
+    {
+      "target_id": "hpsf",
+      "group": "hpc",
+      "registry": "HPSF",
+      "status": "blocked",
+      "owner": "HPC maintainers",
+      "evidence": ["docs/source/_static/hpc_packaging/evidence/hpsf-review-note.md", "docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json"],
+      "next_action": "Identify governance submission endpoint or review contact and complete HPSF evidence packet."
+    },
+    {
+      "target_id": "e4s",
+      "group": "hpc",
+      "registry": "E4S",
+      "status": "blocked",
+      "owner": "HPC maintainers",
+      "evidence": ["docs/source/_static/hpc_packaging/evidence/e4s-review-note.md", "docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json"],
+      "next_action": "Add accelerator-backed runtime evidence or E4S review channel before submission claims."
+    },
+    {
+      "target_id": "pyopensci",
+      "group": "scientific_community",
+      "registry": "pyOpenSci",
+      "status": "ready_for_review",
+      "owner": "Scientific community maintainers",
+      "evidence": ["docs/source/_static/community_submission_readiness_matrix.json", "docs/source/submission_readiness_dossiers.rst"],
+      "next_action": "Maintainer decides whether to open external review."
+    },
+    {
+      "target_id": "ropensci",
+      "group": "scientific_community",
+      "registry": "rOpenSci",
+      "status": "ready_for_review",
+      "owner": "R/scientific community maintainers",
+      "evidence": ["bindings/r/cran-comments.md", "docs/source/_static/community_submission_readiness_matrix.json"],
+      "next_action": "Maintainer decides whether to open external review after CRAN posture is resolved."
+    },
+    {
+      "target_id": "joss",
+      "group": "scientific_community",
+      "registry": "JOSS",
+      "status": "ready_for_review",
+      "owner": "Scientific community maintainers",
+      "evidence": ["paper.qmd", "documents/manuscript_v2.md", "docs/source/submission_readiness_dossiers.rst"],
+      "next_action": "Maintainer prepares JOSS submission metadata and records the submission URL."
+    },
+    {
+      "target_id": "numfocus",
+      "group": "scientific_community",
+      "registry": "NumFOCUS",
+      "status": "ready_for_review",
+      "owner": "Governance maintainers",
+      "evidence": ["docs/source/external_governance_sustainability.rst", "docs/source/_static/external_governance_sustainability_matrix.json"],
+      "next_action": "Maintainer decides whether to initiate NumFOCUS project review."
+    },
+    {
+      "target_id": "pypa",
+      "group": "scientific_community",
+      "registry": "PyPA",
+      "status": "not_applicable",
+      "owner": "Python maintainers",
+      "evidence": ["pyproject.toml", "docs/source/binding_publication_ci.rst"],
+      "next_action": "No PyPA submission path is claimed; maintain packaging standards only."
+    },
+    {
+      "target_id": "apache_arrow",
+      "group": "scientific_community",
+      "registry": "Apache Arrow",
+      "status": "ready_for_review",
+      "owner": "Interop maintainers",
+      "evidence": ["docs/source/innovate.arrow_interchange.rst", "tests/unit/test_arrow_interchange.py"],
+      "next_action": "Maintainer decides whether to open Arrow community discussion."
+    },
+    {
+      "target_id": "dotnet_foundation",
+      "group": "scientific_community",
+      "registry": ".NET Foundation",
+      "status": "ready_for_review",
+      "owner": "C# binding maintainers",
+      "evidence": ["bindings/csharp/", "docs/source/tutorials/csharp_bindings.rst"],
+      "next_action": "Maintainer decides whether to initiate foundation affiliation review."
+    },
+    {
+      "target_id": "julia_community",
+      "group": "scientific_community",
+      "registry": "Julia community",
+      "status": "ready_for_review",
+      "owner": "Julia binding maintainers",
+      "evidence": ["bindings/julia/README.md", "docs/source/submission_readiness_dossiers.rst"],
+      "next_action": "Track Julia General pull request before broader community announcement."
+    },
+    {
+      "target_id": "r_community",
+      "group": "scientific_community",
+      "registry": "R community",
+      "status": "ready_for_review",
+      "owner": "R binding maintainers",
+      "evidence": ["bindings/r/README.md", "bindings/r/cran-comments.md"],
+      "next_action": "Coordinate R community outreach after CRAN/R-universe posture is current."
+    },
+    {
+      "target_id": "scikit_learn_contrib",
+      "group": "scientific_community",
+      "registry": "scikit-learn-contrib",
+      "status": "not_applicable",
+      "owner": "Python maintainers",
+      "evidence": ["docs/source/_static/community_submission_readiness_matrix.json"],
+      "next_action": "No submission claimed because the project scope is broader than scikit-learn-contrib."
+    }
+  ],
+  "generic_blocked_states": [
+    "registry_submission_receipts.json pending targets for Spack and EasyBuild use generic blocked language even though local HPC packets mark them ready.",
+    "HPSF and E4S blockers need owner, evidence, and next action carried into all mirrored docs."
+  ],
+  "maintainer_managed_actions": [
+    "CRAN submission",
+    "Julia General pull request outcome tracking",
+    "Spack upstream recipe submission",
+    "EasyBuild upstream easyconfig submission",
+    "Scientific community and foundation review submissions"
+  ]
+}
