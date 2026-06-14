@@ -26,10 +26,10 @@ closure inventory:
 * CRAN - deferred until maintainer send.
 * Spack - ready_for_review; upstream submission remains maintainer-managed.
 * EasyBuild - ready_for_review; upstream submission remains maintainer-managed.
-* HPSF - blocked until a governance submission endpoint or review contact is
-  identified.
-* E4S - blocked until accelerator-backed runtime evidence or a review channel
-  is available.
+* HPSF - ready_for_maintainer; public proposal path identified, pending TAC
+  sponsors and a maintainer-opened proposal issue.
+* E4S - ready_for_maintainer; public contact/contribution path identified,
+  pending E4S review/CI validation and maintainer inclusion request.
 
 CRAN has a prepared Gmail submission draft attached to the 0.5.0 source
 tarball; it is still awaiting maintainer send.

@@ -127,12 +127,12 @@
       "registry": "Spack",
       "owner": "HPC maintainers",
       "release_path": "CI smoke -> scheduler-backed validation -> upstream recipe review",
-      "submission_status": "blocked",
+      "submission_status": "ready_for_review",
       "evidence": [
         "docs/source/hpc_packaging_registry_readiness.rst",
         "docs/source/_static/hpc_packaging/spack/py-innovate.py"
       ],
-      "receipt": "Blocked on upstream review and scheduler-backed registry evidence."
+      "receipt": "Ready for maintainer-managed upstream review after scheduler-backed evidence refresh."
     },
     {
       "target_id": "easybuild",
@@ -140,12 +140,12 @@
       "registry": "EasyBuild",
       "owner": "HPC maintainers",
       "release_path": "CI smoke -> scheduler-backed validation -> easyconfig review",
-      "submission_status": "blocked",
+      "submission_status": "ready_for_review",
       "evidence": [
         "docs/source/hpc_packaging_registry_readiness.rst",
         "docs/source/_static/hpc_packaging/easybuild/innovate-0.5.0.eb"
       ],
-      "receipt": "Blocked on upstream review and scheduler-backed registry evidence."
+      "receipt": "Ready for maintainer-managed upstream review after scheduler-backed evidence refresh."
     },
     {
       "target_id": "hpsf",
@@ -153,12 +153,13 @@
       "registry": "HPSF",
       "owner": "HPC maintainers",
       "release_path": "governance review -> registry candidacy",
-      "submission_status": "blocked",
+      "submission_status": "ready_for_maintainer",
       "evidence": [
-        "docs/source/hpc_packaging_registry_readiness.rst",
+        "https://github.com/hpsfoundation/tac/issues/new?template=new-project-proposal.md",
+        "https://raw.githubusercontent.com/hpsfoundation/tac/main/.github/ISSUE_TEMPLATE/new-project-proposal.md",
         "docs/source/hpc_registry_contract.rst"
       ],
-      "receipt": "Blocked pending scheduler-backed evidence and support-policy documentation."
+      "receipt": "Ready for maintainer-managed HPSF TAC sponsor identification and proposal issue."
     },
     {
       "target_id": "e4s",
@@ -166,12 +167,13 @@
       "registry": "E4S",
       "owner": "HPC maintainers",
       "release_path": "performance portability evidence -> registry candidacy",
-      "submission_status": "blocked",
+      "submission_status": "ready_for_maintainer",
       "evidence": [
-        "docs/source/hpc_packaging_registry_readiness.rst",
+        "https://e4s.io/contribution-guide/",
+        "https://e4s.io/contact/",
         "docs/source/hpc_registry_contract.rst"
       ],
-      "receipt": "Blocked pending accelerator-aware evidence and reviewable package artifacts."
+      "receipt": "Ready for maintainer-managed E4S contact, review/CI validation, and inclusion request."
     }
   ]
 }

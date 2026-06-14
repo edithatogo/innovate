@@ -87,7 +87,7 @@ def build_manifest() -> dict[str, object]:
             {
                 "target_id": "hpsf",
                 "registry": "HPSF",
-                "status": "blocked",
+                "status": "ready_for_maintainer",
                 "submission_mode": "governance_packet",
                 "packet_artifacts": [
                     "docs/source/hpc_registry_contract.rst",
@@ -101,12 +101,12 @@ def build_manifest() -> dict[str, object]:
                     "docs/source/_static/hpc_packaging/evidence/r-build.log",
                     "docs/source/_static/hpc_packaging/evidence/r-check.log",
                 ],
-                "required_next_step": "Identify governance submission endpoint or review contact and complete HPSF evidence packet.",
+                "required_next_step": "Maintainer must identify two HPSF TAC sponsors, complete the project proposal template, and open the HPSF TAC GitHub proposal issue.",
             },
             {
                 "target_id": "e4s",
                 "registry": "E4S",
-                "status": "blocked",
+                "status": "ready_for_maintainer",
                 "submission_mode": "performance_portability_packet",
                 "packet_artifacts": [
                     "docs/source/hpc_registry_contract.rst",
@@ -120,7 +120,7 @@ def build_manifest() -> dict[str, object]:
                     "docs/source/_static/hpc_packaging/evidence/rust-test.log",
                     "docs/source/_static/hpc_packaging/evidence/julia-installed-smoke.log",
                 ],
-                "required_next_step": "Add accelerator-backed runtime evidence or E4S review channel before submission claims.",
+                "required_next_step": "Maintainer must contact E4S, validate the Spack package through E4S review/CI expectations, and open the inclusion request only after review evidence exists.",
             },
         ],
         "rendered_sources": {

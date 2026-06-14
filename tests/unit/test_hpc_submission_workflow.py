@@ -26,8 +26,8 @@ def test_hpc_submission_workflow_manifest_covers_all_targets() -> None:
     assert set(targets) == {"spack", "easybuild", "hpsf", "e4s"}
     assert targets["spack"]["status"] == "ready_for_review"
     assert targets["easybuild"]["status"] == "ready_for_review"
-    assert targets["hpsf"]["status"] == "blocked"
-    assert targets["e4s"]["status"] == "blocked"
+    assert targets["hpsf"]["status"] == "ready_for_maintainer"
+    assert targets["e4s"]["status"] == "ready_for_maintainer"
     for entry in targets.values():
         assert entry["commands"]
         assert entry["artifact_destinations"]

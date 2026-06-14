@@ -12,4 +12,6 @@ before an E4S registry claim can be made.
 - package owner:
 
 Status:
-- blocked until the fields above are populated with reviewable evidence.
+- ready_for_maintainer; public E4S contact and contribution paths are
+  identified, and the maintainer must complete these fields before requesting
+  review or inclusion.

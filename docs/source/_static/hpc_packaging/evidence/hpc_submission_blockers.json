@@ -2,30 +2,33 @@
   "schema_version": 1,
   "captured_at": "2026-06-14T00:00:00+10:00",
   "closure_inventory": "docs/source/_static/external_submission_target_inventory.json",
-  "blockers": [
+  "blockers": [],
+  "resolved_blockers": [
     {
       "target_id": "hpsf",
       "registry": "HPSF",
-      "status": "blocked",
+      "status": "ready_for_maintainer",
       "owner": "HPC maintainers",
-      "reason": "No governance submission endpoint or review contact is available in this environment.",
+      "resolution": "Public HPSF TAC project proposal issue path and proposal template identified.",
       "evidence": [
-        "docs/source/_static/hpc_packaging/evidence/hpsf-review-note.md",
-        "docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log"
+        "https://github.com/hpsfoundation/tac/issues/new?template=new-project-proposal.md",
+        "https://raw.githubusercontent.com/hpsfoundation/tac/main/.github/ISSUE_TEMPLATE/new-project-proposal.md",
+        "docs/source/_static/hpc_packaging/evidence/hpsf-review-note.md"
       ],
-      "next_action": "Identify governance submission endpoint or review contact and complete HPSF evidence packet."
+      "next_action": "Maintainer must identify two HPSF TAC sponsors, complete the project proposal template, and open the HPSF TAC GitHub proposal issue."
     },
     {
       "target_id": "e4s",
       "registry": "E4S",
-      "status": "blocked",
+      "status": "ready_for_maintainer",
       "owner": "HPC maintainers",
-      "reason": "No accelerator-backed runtime or E4S review channel is available in this environment.",
+      "resolution": "Public E4S contribution guide, contact route, and inclusion-request process identified.",
       "evidence": [
-        "docs/source/_static/hpc_packaging/evidence/e4s-review-note.md",
-        "docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log"
+        "https://e4s.io/contribution-guide/",
+        "https://e4s.io/contact/",
+        "docs/source/_static/hpc_packaging/evidence/e4s-review-note.md"
       ],
-      "next_action": "Add accelerator-backed runtime evidence or E4S review channel before submission claims."
+      "next_action": "Maintainer must contact E4S, validate the Spack package through E4S review/CI expectations, and open the inclusion request only after review evidence exists."
     }
   ]
 }

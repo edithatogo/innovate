@@ -58,7 +58,7 @@ Current status by layer
      - Use the readiness dossiers as submission checklists, not as proof of
        submission.
    * - HPC registries
-     - Spack/EasyBuild ready_for_review; HPSF/E4S blocked
+     - Spack/EasyBuild ready_for_review; HPSF/E4S ready_for_maintainer
      - Use the HPC registry contract, scheduler evidence, package sketches,
        and closure inventory before any upstream registry claim.
 

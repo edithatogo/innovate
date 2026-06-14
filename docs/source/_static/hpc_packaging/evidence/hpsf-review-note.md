@@ -3,11 +3,12 @@
 Captured: 2026-05-11
 
 Status:
-- blocked
+- ready_for_maintainer
 
 Reason:
-- No governance submission endpoint or review contact is available in this
-  environment.
+- Public HPSF project proposal paths are now identified, but submission remains
+  maintainer-managed because it requires two HPSF TAC sponsors and a GitHub
+  proposal issue opened by the project maintainer.
 
 Evidence attached:
 - `docs/source/_static/hpc_packaging/evidence/r-build.log`
@@ -15,6 +16,6 @@ Evidence attached:
 - `docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log`
 
 Next step:
-- populate `docs/source/_static/hpc_packaging/governance/hpsf-evidence.md`
-  with real maintainership and support contacts, then route the packet through
-  the target governance channel.
+- identify two HPSF TAC sponsors, complete the HPSF new-project proposal
+  template, and open the HPSF TAC GitHub proposal issue:
+  `https://github.com/hpsfoundation/tac/issues/new?template=new-project-proposal.md`.

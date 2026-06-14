@@ -144,19 +144,19 @@
       "target_id": "hpsf",
       "group": "hpc",
       "registry": "HPSF",
-      "status": "blocked",
+      "status": "ready_for_maintainer",
       "owner": "HPC maintainers",
-      "evidence": ["docs/source/_static/hpc_packaging/evidence/hpsf-review-note.md", "docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json"],
-      "next_action": "Identify governance submission endpoint or review contact and complete HPSF evidence packet."
+      "evidence": ["https://github.com/hpsfoundation/tac/issues/new?template=new-project-proposal.md", "https://raw.githubusercontent.com/hpsfoundation/tac/main/.github/ISSUE_TEMPLATE/new-project-proposal.md", "docs/source/_static/hpc_packaging/evidence/hpsf-review-note.md"],
+      "next_action": "Maintainer must identify two HPSF TAC sponsors, complete the project proposal template, and open the HPSF TAC GitHub proposal issue."
     },
     {
       "target_id": "e4s",
       "group": "hpc",
       "registry": "E4S",
-      "status": "blocked",
+      "status": "ready_for_maintainer",
       "owner": "HPC maintainers",
-      "evidence": ["docs/source/_static/hpc_packaging/evidence/e4s-review-note.md", "docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json"],
-      "next_action": "Add accelerator-backed runtime evidence or E4S review channel before submission claims."
+      "evidence": ["https://e4s.io/contribution-guide/", "https://e4s.io/contact/", "docs/source/_static/hpc_packaging/evidence/e4s-review-note.md"],
+      "next_action": "Maintainer must contact E4S, validate the Spack package through E4S review/CI expectations, and open the inclusion request only after review evidence exists."
     },
     {
       "target_id": "pyopensci",
@@ -251,7 +251,7 @@
   ],
   "resolved_generic_blocked_states": [
     "Spack and EasyBuild now use ready_for_review in registry_submission_receipts.json and mirrored HPC docs.",
-    "HPSF and E4S blockers now carry owner, evidence, and next action in receipts, the HPC blocker bundle, and mirrored docs."
+    "HPSF and E4S now have identified public review paths and are classified as ready_for_maintainer rather than blocked."
   ],
   "generic_blocked_states": [],
   "maintainer_managed_actions": [

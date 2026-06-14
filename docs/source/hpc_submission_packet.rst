@@ -28,15 +28,15 @@ Packet contents
      - Submit the candidate easyconfig upstream only after maintainer review
        and scheduler-backed evidence refresh.
    * - HPSF
-     - blocked
+     - ready_for_maintainer
      - governance_packet
-     - Identify governance submission endpoint or review contact and complete
-       the HPSF evidence packet.
+     - Identify two HPSF TAC sponsors, complete the proposal template, and
+       open the HPSF TAC GitHub proposal issue.
    * - E4S
-     - blocked
+     - ready_for_maintainer
      - performance_portability_packet
-     - Add accelerator-backed runtime evidence or E4S review channel before
-       submission claims.
+     - Contact E4S, complete review/CI validation, and open an inclusion
+       request only after review evidence exists.
 
 Machine-readable packet
 -----------------------
@@ -82,5 +82,5 @@ The packet is anchored to the current HPC evidence bundle:
 * ``docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log``
 
 This packet exists to keep the remaining HPC work executable and auditable.
-Spack and EasyBuild are review-ready but not submitted; HPSF and E4S remain
-blocked on governance and accelerator-review paths.
+Spack and EasyBuild are review-ready but not submitted; HPSF and E4S are
+ready for maintainer-managed external proposal/contact steps but not submitted.

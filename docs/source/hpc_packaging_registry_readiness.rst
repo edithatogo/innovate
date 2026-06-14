@@ -230,9 +230,10 @@ Result: no HPSF or E4S submission should be made until the package candidates
 have passing install log and smoke log artifacts for CPU, GPU, and mixed
 bridge deployment, plus a documented performance portability evidence bundle.
 
-The remaining blocked gate applies to HPSF governance and E4S
-accelerator-review evidence only. Spack and EasyBuild remain
-``ready_for_review`` until a maintainer-managed upstream review URL exists.
+The remaining HPC gates are maintainer-managed external actions. HPSF and E4S
+now have public proposal/contact paths and are ``ready_for_maintainer`` rather
+than blocked; Spack and EasyBuild remain ``ready_for_review`` until a
+maintainer-managed upstream review URL exists.
 All target states are mirrored in
 ``docs/source/_static/external_submission_target_inventory.json``.
 Current smoke commands to preserve in the evidence bundle include

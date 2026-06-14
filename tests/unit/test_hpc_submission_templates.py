@@ -29,5 +29,7 @@ def test_hpc_submission_templates_remain_non_claiming() -> None:
 
     assert "cluster-job templates" in readme.lower()
     assert "not submission claims" in readme.lower() or "do not claim success" in readme.lower()
-    assert "blocked until" in hpsf.lower()
-    assert "blocked until" in e4s.lower()
+    assert "ready_for_maintainer" in hpsf.lower()
+    assert "ready_for_maintainer" in e4s.lower()
+    assert "before opening the proposal issue" in hpsf.lower()
+    assert "before requesting" in e4s.lower()

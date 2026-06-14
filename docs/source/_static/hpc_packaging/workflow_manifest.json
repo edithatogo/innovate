@@ -40,32 +40,34 @@
     {
       "target_id": "hpsf",
       "registry": "HPSF",
-      "status": "blocked",
+      "status": "ready_for_maintainer",
       "commands": [
         "edit docs/source/_static/hpc_packaging/governance/hpsf-evidence.md",
         "attach docs/source/_static/hpc_packaging/evidence/r-build.log",
-        "attach docs/source/_static/hpc_packaging/evidence/r-check.log"
+        "attach docs/source/_static/hpc_packaging/evidence/r-check.log",
+        "open https://github.com/hpsfoundation/tac/issues/new?template=new-project-proposal.md"
       ],
       "artifact_destinations": [
         "docs/source/_static/hpc_packaging/governance/hpsf-evidence.md",
         "docs/source/_static/hpc_packaging/evidence/hpsf-review-note.md"
       ],
-      "notes": "HPSF handoff remains a governance submission; the packet must include contacts, support policy, and scheduler-backed deployment evidence. No local governance submission endpoint is available here."
+      "notes": "HPSF handoff remains maintainer-managed. Public proposal path exists; the maintainer must identify two TAC sponsors, complete the proposal template, and open the GitHub proposal issue before any submission claim."
     },
     {
       "target_id": "e4s",
       "registry": "E4S",
-      "status": "blocked",
+      "status": "ready_for_maintainer",
       "commands": [
         "edit docs/source/_static/hpc_packaging/governance/e4s-evidence.md",
         "attach docs/source/_static/hpc_packaging/evidence/rust-test.log",
-        "attach docs/source/_static/hpc_packaging/evidence/julia-installed-smoke.log"
+        "attach docs/source/_static/hpc_packaging/evidence/julia-installed-smoke.log",
+        "open https://e4s.io/contact/"
       ],
       "artifact_destinations": [
         "docs/source/_static/hpc_packaging/governance/e4s-evidence.md",
         "docs/source/_static/hpc_packaging/evidence/e4s-review-note.md"
       ],
-      "notes": "E4S handoff remains a portability submission; the packet must include CPU, GPU, and mixed bridge evidence plus accelerator metadata. No accelerator-backed runtime or review channel is available here."
+      "notes": "E4S handoff remains maintainer-managed. Public contact and contribution paths exist; the maintainer must contact E4S, complete review/CI validation, and open an inclusion request only after evidence is accepted."
     }
   ],
   "blocker_bundle": "evidence/hpc_submission_blockers.json"

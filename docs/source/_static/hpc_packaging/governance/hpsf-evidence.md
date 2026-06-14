@@ -13,4 +13,5 @@ registry claim can be made.
 - package owner:
 
 Status:
-- blocked until the fields above are populated with reviewable evidence.
+- ready_for_maintainer; public HPSF proposal path is identified, and the
+  maintainer must complete these fields before opening the proposal issue.

@@ -5,4 +5,4 @@ spack:present
 eb:present
 qsub:present
 
-note: The local environment now exposes scheduler and package-manager tooling via native binaries and container-backed wrappers. Spack and EasyBuild submission jobs can be executed locally; HPSF and E4S remain governance/runtime blocked.
+note: The local environment now exposes scheduler and package-manager tooling via native binaries and container-backed wrappers. Spack and EasyBuild submission jobs can be executed locally; public HPSF/E4S review paths are identified and remain maintainer-managed external actions.

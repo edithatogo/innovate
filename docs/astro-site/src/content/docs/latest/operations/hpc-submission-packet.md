@@ -12,8 +12,8 @@ Current status matrix:
 
 * Spack: ready\_for\_review, pending maintainer-managed upstream submission.
 * EasyBuild: ready\_for\_review, pending maintainer-managed upstream submission.
-* HPSF: blocked until a governance submission endpoint or review contact is identified.
-* E4S: blocked until accelerator-backed runtime evidence or a review channel is available.
+* HPSF: ready\_for\_maintainer; public proposal path identified, pending TAC sponsors and maintainer-opened proposal issue.
+* E4S: ready\_for\_maintainer; public contact/contribution path identified, pending E4S review/CI validation and maintainer inclusion request.
 
 For each target, the repository stores command paths, candidate package artifacts, and evidence links under `docs/source/_static/hpc_packaging/`.
 Target-level closure state is tracked in `docs/source/_static/external_submission_target_inventory.json`.

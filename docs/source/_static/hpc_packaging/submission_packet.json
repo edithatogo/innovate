@@ -87,8 +87,8 @@
         "docs/source/_static/hpc_packaging/evidence/r-check.log"
       ],
       "registry": "HPSF",
-      "required_next_step": "Identify governance submission endpoint or review contact and complete HPSF evidence packet.",
-      "status": "blocked",
+      "required_next_step": "Maintainer must identify two HPSF TAC sponsors, complete the project proposal template, and open the HPSF TAC GitHub proposal issue.",
+      "status": "ready_for_maintainer",
       "submission_mode": "governance_packet",
       "target_id": "hpsf"
     },
@@ -106,8 +106,8 @@
         "docs/source/_static/hpc_packaging/evidence/julia-installed-smoke.log"
       ],
       "registry": "E4S",
-      "required_next_step": "Add accelerator-backed runtime evidence or E4S review channel before submission claims.",
-      "status": "blocked",
+      "required_next_step": "Maintainer must contact E4S, validate the Spack package through E4S review/CI expectations, and open the inclusion request only after review evidence exists.",
+      "status": "ready_for_maintainer",
       "submission_mode": "performance_portability_packet",
       "target_id": "e4s"
     }

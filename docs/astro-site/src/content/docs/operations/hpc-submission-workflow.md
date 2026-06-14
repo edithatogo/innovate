@@ -18,7 +18,8 @@ Run the command bundles documented by the manifest and record outputs in
 Status boundary:
 
 - Spack and EasyBuild are `ready_for_review`, not submitted.
-- HPSF and E4S remain blocked on governance and accelerator-review evidence.
+- HPSF and E4S are `ready_for_maintainer`, not submitted; external proposal,
+  sponsor, contact, and review/CI validation steps remain maintainer-managed.
 - Target-level closure state is tracked in `docs/source/_static/external_submission_target_inventory.json`.
 
 Migration source:

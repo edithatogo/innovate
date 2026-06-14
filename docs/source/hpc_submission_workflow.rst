@@ -61,7 +61,7 @@ E4S
 
 1. Populate ``docs/source/_static/hpc_packaging/governance/e4s-evidence.md``.
 2. Attach ``rust-test.log`` and ``julia-installed-smoke.log``.
-3. Record the review contact or blocker note in the evidence bundle
+3. Record the review contact or maintainer-action note in the evidence bundle
    (currently ``evidence/e4s-review-note.md``).
 
 Status
@@ -70,8 +70,8 @@ Status
 The workflow is partially executable in this local environment. Spack and
 EasyBuild can be exercised through the container-backed scheduler wrappers,
 and their captured batch logs are preserved in the evidence bundle; they are
-``ready_for_review`` rather than submitted. HPSF and E4S remain blocked on
-governance and accelerator-review channels. The commands above define the
-exact arrangement needed for the external handoff, and the explicit probe
-output is preserved alongside the remaining blocker bundle and closure
+``ready_for_review`` rather than submitted. HPSF and E4S now have public
+proposal/contact paths and are ``ready_for_maintainer`` rather than blocked.
+The commands above define the exact arrangement needed for the external
+handoff, and the explicit probe output is preserved alongside the closure
 inventory.

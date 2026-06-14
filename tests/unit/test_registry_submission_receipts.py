@@ -51,5 +51,5 @@ def test_registry_submission_receipts_record_pending_targets() -> None:
     assert pending["r_cran"]["status"] == "deferred"
     assert pending["spack"]["status"] == "ready_for_review"
     assert pending["easybuild"]["status"] == "ready_for_review"
-    assert pending["hpsf"]["status"] == "blocked"
-    assert pending["e4s"]["status"] == "blocked"
+    assert pending["hpsf"]["status"] == "ready_for_maintainer"
+    assert pending["e4s"]["status"] == "ready_for_maintainer"

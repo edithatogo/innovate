@@ -2,8 +2,8 @@
 
 This directory holds cluster-job templates for the HPC submission targets.
 Spack and EasyBuild can be exercised locally through the container-backed
-wrappers, while HPSF and E4S remain blocked on governance and accelerator
-review channels. The templates are not submission claims; they are execution
+wrappers, while HPSF and E4S require maintainer-managed governance, contact,
+and review/CI validation steps. The templates are not submission claims; they are execution
 scaffolding for a real Slurm or PBS environment.
 
 Templates:

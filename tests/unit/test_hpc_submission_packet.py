@@ -27,8 +27,8 @@ def test_hpc_submission_packet_covers_all_targets() -> None:
 
     assert targets["spack"]["status"] == "ready_for_review"
     assert targets["easybuild"]["status"] == "ready_for_review"
-    assert targets["hpsf"]["status"] == "blocked"
-    assert targets["e4s"]["status"] == "blocked"
+    assert targets["hpsf"]["status"] == "ready_for_maintainer"
+    assert targets["e4s"]["status"] == "ready_for_maintainer"
 
     for entry in targets.values():
         assert entry["registry"]

@@ -54,21 +54,21 @@
     {
       "path": "docs/source/registry_submission_receipts.rst",
       "classification": "blocked_external",
-      "claim": "CRAN, Spack, EasyBuild, HPSF, and E4S remain pending, deferred, or blocked.",
-      "required_resolution": "Keep readiness distinct from accepted submission status and close or reclassify blockers in the external submission blocker track.",
+      "claim": "CRAN remains deferred, Spack and EasyBuild are ready_for_review, and HPSF/E4S are ready_for_maintainer with public review/contact paths but no submission receipts.",
+      "required_resolution": "Keep readiness distinct from accepted submission status and require maintainer-opened external review links before claiming submission.",
       "owning_track": "external_submission_blocker_closure_20260614"
     },
     {
       "path": "docs/source/hpc_submission_workflow.rst",
       "classification": "blocked_external",
-      "claim": "HPSF and E4S remain blocked on governance and accelerator-review channels.",
-      "required_resolution": "Preserve blocker evidence until external review contacts, submission receipts, or explicit deferral decisions exist.",
+      "claim": "HPSF and E4S now have public proposal/contact paths and remain maintainer-managed until sponsors, review/CI validation, and external request links exist.",
+      "required_resolution": "Preserve ready_for_maintainer evidence until external review links or submission receipts exist.",
       "owning_track": "external_submission_blocker_closure_20260614"
     },
     {
       "path": "docs/astro-site/src/content/docs/operations/registry-submissions.md",
       "classification": "blocked_external",
-      "claim": "The Astro/Starlight mirror lists deferred and blocked registry targets.",
+      "claim": "The Astro/Starlight mirror lists deferred, ready_for_review, and ready_for_maintainer registry targets without claiming acceptance.",
       "required_resolution": "Keep the Astro/Starlight mirror aligned with the canonical registry receipt evidence.",
       "owning_track": "vision_roadmap_truth_audit_20260614"
     },
