@@ -12,7 +12,7 @@
     - [x] Commit this task before starting the next task
 - [x] Task: Conductor - Automated Review and Checkpoint 'Submission State Red Tests' (Protocol in workflow.md)
 
-## Phase 2: Evidence Refresh
+## Phase 2: Evidence Refresh [checkpoint: ef46e0b]
 
 - [x] Task: Refresh package-manager target evidence 123e542
     - [x] Update statuses for npm, crates.io, R-universe/CRAN, Julia General, Go modules, and NuGet
@@ -26,7 +26,7 @@
     - [x] Update pyOpenSci, rOpenSci, JOSS, NumFOCUS, PyPA, Apache Arrow, .NET Foundation, Julia, and R community states
     - [x] Record submission readiness versus actual submission state
     - [x] Commit this task before starting the next task
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Evidence Refresh' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Evidence Refresh' (Protocol in workflow.md)
 
 ## Phase 3: Docs and Packet Regeneration
 
