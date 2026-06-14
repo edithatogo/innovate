@@ -1,0 +1,9 @@
+Task: Inventory registry and filesystem drift
+
+Summary:
+- Compared conductor/tracks.md with conductor/tracks/ and conductor/archive/.
+- Found no stale active track folders and no broken registered links.
+- Recorded two orphan archive folders not linked from tracks.md: migrate_starlight and starlight_migration_20260513.
+
+Validation:
+- python -m json.tool conductor/tracks/conductor_registry_hygiene_20260614/registry_drift_inventory.json >/dev/null
