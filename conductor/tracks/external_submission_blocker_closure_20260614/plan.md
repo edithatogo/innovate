@@ -6,7 +6,7 @@
     - [x] Parse registry receipts, HPC packets, community matrices, and governance notes
     - [x] Identify generic blocked states and maintainer-managed actions
     - [x] Commit this task before starting the next task
-- [x] Task: Write failing submission-state tests
+- [x] Task: Write failing submission-state tests 1bc7818
     - [x] Require each target to have status, owner, evidence, and next action
     - [x] Reject submitted or accepted claims without receipts
     - [x] Commit this task before starting the next task
