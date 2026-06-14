@@ -15,7 +15,12 @@ The HPC workflow is now split by target:
 Run the command bundles documented by the manifest and record outputs in
 `docs/source/_static/hpc_packaging/evidence/`.
 
+Status boundary:
+
+- Spack and EasyBuild are `ready_for_review`, not submitted.
+- HPSF and E4S remain blocked on governance and accelerator-review evidence.
+- Target-level closure state is tracked in `docs/source/_static/external_submission_target_inventory.json`.
+
 Migration source:
 
 - `docs/source/hpc_submission_workflow.rst`
-

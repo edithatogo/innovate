@@ -17,17 +17,17 @@ Submitted targets:
 - Go modules
 - NuGet
 
-Deferred/blocked targets:
+Deferred, review-ready, or blocked targets:
 
-- CRAN
-- Spack
-- EasyBuild
-- HPSF
-- E4S
+- CRAN: deferred until maintainer send.
+- Spack: ready_for_review, pending maintainer-managed upstream submission.
+- EasyBuild: ready_for_review, pending maintainer-managed upstream submission.
+- HPSF: blocked until a governance submission endpoint or review contact is identified.
+- E4S: blocked until accelerator-backed runtime evidence or a review channel is available.
 
 Machine-readable evidence remains in `docs/source/_static/registry_submission_receipts.json`.
+Target-level closure state remains in `docs/source/_static/external_submission_target_inventory.json`.
 
 Migration source:
 
 - `docs/source/registry_submission_receipts.rst`
-

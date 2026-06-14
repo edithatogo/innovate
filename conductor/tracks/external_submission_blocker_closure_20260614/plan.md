@@ -33,9 +33,9 @@
 - [x] Task: Regenerate machine-readable packets 44d8966
     - [x] Rebuild registry receipt, HPC packet, community matrix, and Astro/Starlight mirror artifacts
     - [x] Commit this task before starting the next task
-- [ ] Task: Update docs and roadmap wording
-    - [ ] Remove overclaims and stale blocker language
-    - [ ] Link every target to current evidence
+- [~] Task: Update docs and roadmap wording
+    - [~] Remove overclaims and stale blocker language
+    - [~] Link every target to current evidence
     - [ ] Commit this task before starting the next task
 - [ ] Task: Run final conductor review
     - [ ] Review the full track diff against the spec, plan, workflow, and tests

@@ -18,30 +18,33 @@ Packet contents
      - Mode
      - Next action
    * - Spack
-     - ready
+     - ready_for_review
      - candidate_recipe
-     - Run the recipe in the scheduler-backed container and capture the batch
-       log.
+     - Submit the candidate recipe upstream only after maintainer review and
+       scheduler-backed evidence refresh.
    * - EasyBuild
-     - ready
+     - ready_for_review
      - candidate_easyconfig
-     - Run the easyconfig in the scheduler-backed container and capture the
-       module sanity log.
+     - Submit the candidate easyconfig upstream only after maintainer review
+       and scheduler-backed evidence refresh.
    * - HPSF
      - blocked
      - governance_packet
-     - Add governance contacts and scheduler-backed deployment evidence.
+     - Identify governance submission endpoint or review contact and complete
+       the HPSF evidence packet.
    * - E4S
      - blocked
      - performance_portability_packet
-     - Add accelerator-aware smoke evidence and a reviewable package artifact
-       set.
+     - Add accelerator-backed runtime evidence or E4S review channel before
+       submission claims.
 
 Machine-readable packet
 -----------------------
 
 The corresponding JSON packet lives at
 ``docs/source/_static/hpc_packaging/submission_packet.json``.
+The target-level closure inventory lives at
+``docs/source/_static/external_submission_target_inventory.json``.
 
 Execution templates
 -------------------
@@ -78,5 +81,6 @@ The packet is anchored to the current HPC evidence bundle:
 * ``docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json``
 * ``docs/source/_static/hpc_packaging/evidence/hpc_submission_environment_probe.log``
 
-This packet exists to keep the remaining HPC work executable and auditable
-while the final governance and accelerator-review paths are still blocked.
+This packet exists to keep the remaining HPC work executable and auditable.
+Spack and EasyBuild are review-ready but not submitted; HPSF and E4S remain
+blocked on governance and accelerator-review paths.

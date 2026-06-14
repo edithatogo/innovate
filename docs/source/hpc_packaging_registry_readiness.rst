@@ -8,10 +8,10 @@ This dossier defines the package surfaces, dependency variants, installation
 checks, and registry evidence needed before ``innovate`` can be proposed for
 HPC-oriented distribution channels such as Spack, EasyBuild, HPSF, or E4S.
 
-The current state is readiness planning, not a registry claim. Spack,
-EasyBuild, HPSF, and E4S publication still requires HPC-specific scheduler and
-performance-portability evidence, but the repository now contains concrete
-package sketches and install-smoke artifacts for the supported surfaces.
+The current state is readiness planning, not a registry claim. Spack and
+EasyBuild are ready for maintainer review with scheduler evidence captured;
+HPSF and E4S still require governance or accelerator-review evidence before
+any submission claim.
 
 See also :doc:`hpc_registry_contract` for the submission contract and
 :doc:`hpc_submission_packet` for the executable HPC target matrix,
@@ -26,7 +26,7 @@ The repository now carries the package and evidence bundle directly under
 
 * ``spack/py-innovate.py`` - candidate Spack recipe sketch;
 * ``easybuild/innovate-0.5.0.eb`` - candidate EasyBuild easyconfig sketch;
-* ``scheduler/`` - Slurm and PBS job templates for the blocked targets;
+* ``scheduler/`` - Slurm and PBS job templates for the HPC review targets;
 * ``governance/`` - HPSF and E4S evidence templates;
 * ``evidence/python-install.log`` - clean wheel install into an isolated
   Python environment, refreshed from a clean venv;
@@ -230,9 +230,11 @@ Result: no HPSF or E4S submission should be made until the package candidates
 have passing install log and smoke log artifacts for CPU, GPU, and mixed
 bridge deployment, plus a documented performance portability evidence bundle.
 
-The current gate remains blocked for governance and accelerator-review
-reasons, but the blocker state is now captured as durable evidence notes in
-the repository.
+The remaining blocked gate applies to HPSF governance and E4S
+accelerator-review evidence only. Spack and EasyBuild remain
+``ready_for_review`` until a maintainer-managed upstream review URL exists.
+All target states are mirrored in
+``docs/source/_static/external_submission_target_inventory.json``.
 Current smoke commands to preserve in the evidence bundle include
 ``python -c "import innovate; print(innovate.__version__)"`` for Python and
 ``Rscript -e`` for the R surface.

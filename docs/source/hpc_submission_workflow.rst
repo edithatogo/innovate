@@ -69,7 +69,9 @@ Status
 
 The workflow is partially executable in this local environment. Spack and
 EasyBuild can be exercised through the container-backed scheduler wrappers,
-and their captured batch logs are preserved in the evidence bundle. HPSF and
-E4S remain blocked on governance and accelerator-review channels. The commands
-above define the exact arrangement needed for the external handoff, and the
-explicit probe output is preserved alongside the remaining blocker bundle.
+and their captured batch logs are preserved in the evidence bundle; they are
+``ready_for_review`` rather than submitted. HPSF and E4S remain blocked on
+governance and accelerator-review channels. The commands above define the
+exact arrangement needed for the external handoff, and the explicit probe
+output is preserved alongside the remaining blocker bundle and closure
+inventory.

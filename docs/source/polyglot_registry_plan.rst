@@ -12,7 +12,6 @@ independently.
 The plan is intentionally conservative: the repository contains readiness
 evidence and package gates, but this page does not claim that any external
 submission has already been completed.
-It does not claim that any external submission has already been completed.
 Use the readiness dossiers as submission checklists, not as proof of submission.
 
 Registry layers
@@ -40,7 +39,6 @@ Recommended sequence
 3. Keep the HPC contract aligned with package sketches and scheduler evidence.
 4. Treat external registry submission as a release decision, not a doc-only
    milestone.
-   This is a release decision, not a doc-only milestone.
 
 Current status by layer
 -----------------------
@@ -53,17 +51,18 @@ Current status by layer
      - Current status
      - Next action
    * - Package-manager registries
-     - Ready for gated publication
-     - Run the release workflow and submit only when registry secrets and
-       manual release intent are present.
+     - Submitted, deferred, or ready-for-review by target
+     - Use ``docs/source/_static/registry_submission_receipts.json`` and
+       ``docs/source/_static/external_submission_target_inventory.json`` as
+       the source of truth before any release claim.
    * - Scientific community submissions
-     - Readiness documented
+     - Ready-for-review or not-applicable by target
      - Use the readiness dossiers as submission checklists, not as proof of
        submission.
    * - HPC registries
-     - Readiness documented
-     - Use the HPC registry contract, scheduler evidence, and package sketches
-       before any upstream registry claim.
+     - Spack/EasyBuild ready_for_review; HPSF/E4S blocked
+     - Use the HPC registry contract, scheduler evidence, package sketches,
+       and closure inventory before any upstream registry claim.
 
 Planned registry artifacts
 --------------------------
@@ -75,7 +74,9 @@ The plan relies on the following repository artifacts:
 * HPC registry evidence in ``hpc_packaging_registry_readiness.rst``;
 * governance and sustainability evidence in ``external_governance_sustainability.rst``;
 * polyglot architecture guidance in ``polyglot_repo_architecture.rst``;
-* the new HPC registry contract in ``hpc_registry_contract.rst``.
+* the HPC registry contract in ``hpc_registry_contract.rst``;
+* target-level closure state in
+  ``docs/source/_static/external_submission_target_inventory.json``.
 
 Non-goals
 ---------
