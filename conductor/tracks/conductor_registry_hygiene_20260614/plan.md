@@ -13,7 +13,7 @@
     - [x] Commit this task before starting the next task
 - [x] Task: Conductor - Automated Review and Checkpoint 'Registry Drift Red Tests' (Protocol in workflow.md)
 
-## Phase 2: Registry Reconciliation
+## Phase 2: Registry Reconciliation [checkpoint: a569237]
 
 - [x] Task: Reconcile stale active track folders 2bd7c19
     - [x] Move completed active folders to archive or remove duplicates only after preserving evidence
@@ -23,7 +23,7 @@
     - [x] Add or update a script/test that checks registry-to-filesystem consistency
     - [x] Include stale-folder diagnostics in the status output or docs
     - [x] Commit this task before starting the next task
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Registry Reconciliation' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Registry Reconciliation' (Protocol in workflow.md)
 
 ## Phase 3: Final Hygiene Gate
 
