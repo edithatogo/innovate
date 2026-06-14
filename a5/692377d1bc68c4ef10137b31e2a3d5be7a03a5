@@ -1,0 +1,17 @@
+Phase: Registry Reconciliation
+
+Scope:
+- Registered legacy Starlight archive evidence in conductor/tracks.md.
+- Added missing index.md files for the previously orphan archive folders.
+- Added scripts/conductor_registry_hygiene.py with JSON/text drift diagnostics.
+
+Automated validation:
+- python scripts/conductor_registry_hygiene.py --json >/tmp/conductor_registry_hygiene.json
+- python -m json.tool /tmp/conductor_registry_hygiene.json >/dev/null
+- uv run pytest tests/unit/test_conductor_registry_hygiene.py tests/unit/test_conductor_workflow_docs.py::test_completed_archive_status_text_matches_metadata tests/unit/test_starlight_cutover_legacy_cleanup.py::test_completed_starlight_migration_tracks_are_not_active_tracks -q (6 passed)
+
+Conductor review findings:
+- No unresolved local findings; the prior orphan archive and missing status-tool failures are now green.
+
+CI gate:
+- Not pushed during local checkpoint; validation completed locally.
