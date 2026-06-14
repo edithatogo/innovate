@@ -1,0 +1,13 @@
+Task: Refresh HPC target evidence
+
+Summary:
+- Updated hpc_submission_blockers.json with owner, evidence, next_action, closure inventory, and current captured_at metadata.
+- Reclassified Spack and EasyBuild HPC workflow/packet statuses to ready_for_review to avoid implying upstream submission.
+- Preserved scheduler and environment probe evidence links in packet artifacts.
+- Updated legacy HPC tests to expect ready_for_review for review-ready but not submitted targets.
+
+Validation:
+- python -m json.tool docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json >/dev/null
+- python -m json.tool docs/source/_static/hpc_packaging/workflow_manifest.json >/dev/null
+- python -m json.tool docs/source/_static/hpc_packaging/submission_packet.json >/dev/null
+- uv run pytest tests/unit/test_external_submission_blocker_closure.py tests/unit/test_hpc_submission_blockers.py tests/unit/test_hpc_submission_packet.py tests/unit/test_hpc_submission_workflow.py -q now leaves only the planned docs-link failure.
