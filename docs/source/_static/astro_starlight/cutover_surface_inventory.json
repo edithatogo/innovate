@@ -37,6 +37,11 @@
   "stale_cutover_language": [],
   "blocked_or_deferred_items": [
     {
+      "item": "starlight-polyglot local bundle",
+      "status": "build_blocked",
+      "evidence": "pnpm build fails because the local starlight-polyglot file dependency cannot import ../handlers/python.js from its distributed bundle"
+    },
+    {
       "item": "DocSearch credentials",
       "status": "external_credentials_required",
       "evidence": "docs/astro-site/starlight.config.mjs uses ALGOLIA_* environment variables but docs/astro-site/package.json does not currently list @astrojs/starlight-docsearch"

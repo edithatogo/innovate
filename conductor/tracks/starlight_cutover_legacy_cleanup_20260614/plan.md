@@ -23,10 +23,10 @@
     - [x] Archive, merge, or remove duplicate completed Starlight track folders according to Conductor workflow
     - [x] Update `conductor/tracks.md` links if needed
     - [x] Commit this task before starting the next task
-- [ ] Task: Validate Starlight route and link evidence
-    - [ ] Run Starlight build and route/link generation checks
-    - [ ] Record blockers for external services such as DocSearch if credentials are unavailable
-    - [ ] Commit this task before starting the next task
+- [x] Task: Validate Starlight route and link evidence
+    - [x] Run Starlight build and route/link generation checks
+    - [x] Record blockers for external services such as DocSearch if credentials are unavailable
+    - [x] Commit this task before starting the next task
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Cutover Cleanup' (Protocol in workflow.md)
 
 ## Phase 3: Final Cutover Evidence

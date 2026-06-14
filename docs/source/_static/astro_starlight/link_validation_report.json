@@ -1,18 +1,22 @@
 {
   "broken_links": [],
   "checked_routes": [
+    "/api/python/",
+    "/core/kernel/",
+    "/migration/",
     "/migration/archive/",
     "/migration/redirects/",
     "/migration/references/",
-    "/migration/validation/"
+    "/migration/validation/",
+    "/user-guide/getting-started/"
   ],
   "counts": {
     "broken_links": 0,
     "file_links_checked": 0,
     "implemented_sidebar_routes": 37,
-    "links_checked": 7,
-    "markdown_files": 41,
-    "route_links_checked": 7,
+    "links_checked": 11,
+    "markdown_files": 46,
+    "route_links_checked": 11,
     "sidebar_routes": 37
   },
   "generated_from": {
@@ -21,6 +25,38 @@
     "starlight_config": "docs/astro-site/starlight.config.mjs"
   },
   "link_checks": [
+    {
+      "implemented": true,
+      "kind": "route",
+      "normalized_target": "/user-guide/getting-started/",
+      "source_doc": "docs/astro-site/src/content/docs/index.md",
+      "source_route_doc": "docs/astro-site/src/content/docs/user-guide/getting-started.mdx",
+      "target": "/user-guide/getting-started/"
+    },
+    {
+      "implemented": true,
+      "kind": "route",
+      "normalized_target": "/core/kernel/",
+      "source_doc": "docs/astro-site/src/content/docs/index.md",
+      "source_route_doc": "docs/source/innovate.kernel.rst",
+      "target": "/core/kernel/"
+    },
+    {
+      "implemented": true,
+      "kind": "route",
+      "normalized_target": "/api/python/",
+      "source_doc": "docs/astro-site/src/content/docs/index.md",
+      "source_route_doc": "docs/astro-site/src/content/docs/api/python.md",
+      "target": "/api/python/"
+    },
+    {
+      "implemented": true,
+      "kind": "route",
+      "normalized_target": "/migration/",
+      "source_doc": "docs/astro-site/src/content/docs/index.md",
+      "source_route_doc": "docs/source/astro_starlight_migration.rst",
+      "target": "/migration/"
+    },
     {
       "implemented": true,
       "kind": "route",

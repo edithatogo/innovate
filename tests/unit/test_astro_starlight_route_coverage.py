@@ -50,9 +50,11 @@ def test_route_coverage_report_matches_astro_content_tree() -> None:
 
     for route in (
         "/",
+        "/api/python/",
         "/core/kernel/",
         "/core/arrow-interchange/",
         "/maintainers/publication/",
+        "/user-guide/getting-started/",
         "/migration/redirects/",
         "/migration/validation/",
         "/migration/archive/",

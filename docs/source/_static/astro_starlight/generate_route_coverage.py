@@ -25,6 +25,20 @@ SUPPORT_DOCS = [
         "coverage_source": "migration-support",
     },
     {
+        "source_doc": "docs/astro-site/src/content/docs/user-guide/getting-started.mdx",
+        "astro_route": "/user-guide/getting-started/",
+        "astro_content_path": "docs/astro-site/src/content/docs/user-guide/getting-started.mdx",
+        "status": "implemented",
+        "coverage_source": "site-support",
+    },
+    {
+        "source_doc": "docs/astro-site/src/content/docs/api/python.md",
+        "astro_route": "/api/python/",
+        "astro_content_path": "docs/astro-site/src/content/docs/api/python.md",
+        "status": "implemented",
+        "coverage_source": "site-support",
+    },
+    {
         "source_doc": "docs/astro-site/src/content/docs/maintainers/release-notes.md",
         "astro_route": "/maintainers/release-notes/",
         "astro_content_path": "docs/astro-site/src/content/docs/maintainers/release-notes.md",
@@ -85,7 +99,9 @@ def candidate_paths(route: str) -> list[Path]:
     parts = stripped.split("/")
     candidates = [
         ASTRO_CONTENT_ROOT.joinpath(*parts).with_suffix(".md"),
+        ASTRO_CONTENT_ROOT.joinpath(*parts).with_suffix(".mdx"),
         ASTRO_CONTENT_ROOT.joinpath(*parts, "index.md"),
+        ASTRO_CONTENT_ROOT.joinpath(*parts, "index.mdx"),
     ]
     return candidates
 

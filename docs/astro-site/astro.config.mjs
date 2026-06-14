@@ -16,9 +16,13 @@ export default defineConfig({
       editLink: {
         baseUrl: 'https://github.com/edithatogo/innovate/edit/main/docs/astro-site/src/content/docs/',
       },
-      social: {
-        github: 'https://github.com/edithatogo/innovate',
-      },
+      social: [
+        {
+          icon: 'github',
+          label: 'GitHub',
+          href: 'https://github.com/edithatogo/innovate',
+        },
+      ],
       plugins: [
         starlightLinksValidator(),
         starlightVersions({

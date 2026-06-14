@@ -9,6 +9,9 @@ from pathlib import Path
 CUTOVER_INVENTORY = Path(
     "docs/source/_static/astro_starlight/cutover_surface_inventory.json"
 )
+STARLIGHT_VALIDATION = Path(
+    "docs/source/_static/astro_starlight/starlight_validation_evidence.json"
+)
 MIGRATION_MANIFEST = Path(
     "docs/source/_static/astro_starlight/migration_manifest.json"
 )
@@ -106,3 +109,24 @@ def test_cutover_inventory_has_no_remaining_stale_work_after_cleanup() -> None:
     )
     assert inventory["stale_active_track_folders"] == []
     assert inventory["stale_cutover_language"] == []
+
+
+def test_starlight_validation_evidence_records_routes_and_build_blockers() -> None:
+    """Route/link validation can pass while build blockers remain explicit."""
+    evidence = json.loads(STARLIGHT_VALIDATION.read_text())
+
+    assert evidence["route_and_link_status"]["route_coverage"] == "passed"
+    assert evidence["route_and_link_status"]["link_validation"] == "passed"
+    assert evidence["route_and_link_status"]["broken_links"] == 0
+
+    commands = {entry["command"]: entry for entry in evidence["commands"]}
+    assert commands["pnpm install --frozen-lockfile"]["status"] == (
+        "passed_after_workspace_build_approvals"
+    )
+    assert commands["pnpm build && pnpm check"]["status"] == "blocked"
+
+    blockers = {entry["id"]: entry for entry in evidence["blockers"]}
+    assert blockers["starlight_polyglot_missing_python_handler_bundle"]["status"] == (
+        "blocked"
+    )
+    assert blockers["docsearch_credentials"]["status"] == "external_credentials_required"

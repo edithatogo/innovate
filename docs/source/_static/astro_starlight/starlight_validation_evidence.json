@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "generated_by_track": "starlight_cutover_legacy_cleanup_20260614",
+  "validation_date": "2026-06-14",
+  "route_and_link_status": {
+    "route_coverage_artifact": "docs/source/_static/astro_starlight/route_coverage.json",
+    "cutover_verification_artifact": "docs/source/_static/astro_starlight/cutover_verification.json",
+    "link_validation_artifact": "docs/source/_static/astro_starlight/link_validation_report.json",
+    "route_coverage": "passed",
+    "cutover_verification": "passed",
+    "link_validation": "passed",
+    "route_count": 41,
+    "broken_links": 0
+  },
+  "commands": [
+    {
+      "command": "python docs/source/_static/astro_starlight/generate_route_coverage.py && python docs/source/_static/astro_starlight/generate_cutover_verification.py && python docs/source/_static/astro_starlight/generate_link_validation.py",
+      "status": "passed"
+    },
+    {
+      "command": "uv run pytest tests/unit/test_astro_starlight_route_coverage.py tests/unit/test_astro_starlight_link_validation.py tests/unit/test_starlight_cutover_legacy_cleanup.py tests/unit/test_astro_starlight_migration.py tests/unit/test_astro_starlight_cutover_verification.py -q",
+      "status": "passed",
+      "result": "22 passed"
+    },
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "status": "passed_after_workspace_build_approvals",
+      "evidence": "docs/astro-site/pnpm-workspace.yaml allows esbuild and sharp build scripts"
+    },
+    {
+      "command": "pnpm build && pnpm check",
+      "status": "blocked",
+      "blocker": "Local starlight-polyglot file dependency fails during Astro config setup: Module not found in bundle: ../handlers/python.js"
+    }
+  ],
+  "blockers": [
+    {
+      "id": "starlight_polyglot_missing_python_handler_bundle",
+      "status": "blocked",
+      "owner": "local_file_dependency",
+      "evidence": "docs/astro-site/package.json references file:/Users/doughnut/GitHub/starlight-polyglot/packages/starlight-polyglot; its dist/index.js dynamically imports ../handlers/python.js but the bundle glob is empty",
+      "required_resolution": "Publish or rebuild starlight-polyglot so handler JavaScript modules are included in the distributed package, or replace the file dependency with a package version that includes handlers."
+    },
+    {
+      "id": "docsearch_credentials",
+      "status": "external_credentials_required",
+      "owner": "deployment_environment",
+      "evidence": "docs/astro-site/starlight.config.mjs expects ALGOLIA_APP_ID, ALGOLIA_API_KEY, and ALGOLIA_INDEX_NAME when DocSearch is enabled",
+      "required_resolution": "Provide deployment credentials before enabling production DocSearch."
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 {
   "counts": {
-    "implemented": 39,
+    "implemented": 41,
     "planned": 0,
-    "total": 39
+    "total": 41
   },
   "coverage_by_source_doc": [
     {
@@ -230,6 +230,20 @@
       "status": "implemented"
     },
     {
+      "astro_content_path": "docs/astro-site/src/content/docs/user-guide/getting-started.mdx",
+      "astro_route": "/user-guide/getting-started/",
+      "coverage_source": "site-support",
+      "source_doc": "docs/astro-site/src/content/docs/user-guide/getting-started.mdx",
+      "status": "implemented"
+    },
+    {
+      "astro_content_path": "docs/astro-site/src/content/docs/api/python.md",
+      "astro_route": "/api/python/",
+      "coverage_source": "site-support",
+      "source_doc": "docs/astro-site/src/content/docs/api/python.md",
+      "status": "implemented"
+    },
+    {
       "astro_content_path": "docs/astro-site/src/content/docs/maintainers/release-notes.md",
       "astro_route": "/maintainers/release-notes/",
       "coverage_source": "migration-support",
@@ -284,6 +298,8 @@
     "content_inventory": "docs/source/_static/astro_starlight/content_inventory.json",
     "support_docs": [
       "docs/source/astro_starlight_migration.rst",
+      "docs/astro-site/src/content/docs/user-guide/getting-started.mdx",
+      "docs/astro-site/src/content/docs/api/python.md",
       "docs/astro-site/src/content/docs/maintainers/release-notes.md",
       "docs/astro-site/src/content/docs/architecture/index.md",
       "docs/astro-site/src/content/docs/operations/roadmap.md",
