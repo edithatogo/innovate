@@ -1,0 +1,8 @@
+{
+  "track_id": "external_acceptance_completion_20260614",
+  "type": "chore",
+  "status": "new",
+  "created_at": "2026-06-14T12:36:03Z",
+  "updated_at": "2026-06-14T12:36:03Z",
+  "description": "Complete maintainer-managed external submission and acceptance gates where possible, and convert any remaining external gates into receipt-backed, owner-backed, or explicitly deferred states."
+}

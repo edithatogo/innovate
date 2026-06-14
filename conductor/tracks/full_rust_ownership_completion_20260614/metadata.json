@@ -1,0 +1,8 @@
+{
+  "track_id": "full_rust_ownership_completion_20260614",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-06-14T12:36:03Z",
+  "updated_at": "2026-06-14T12:36:03Z",
+  "description": "Complete the remaining future-state Rust ownership work so every canonical operation, model family, and stable payload shape is either Rust-native or explicitly retained outside the Rust core with release-grade evidence."
+}

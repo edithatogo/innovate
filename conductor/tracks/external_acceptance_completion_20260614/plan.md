@@ -1,0 +1,49 @@
+# Implementation Plan
+
+## Phase 1: Live Evidence Refresh
+
+- [ ] Task: Refresh package-manager receipt evidence
+    - [ ] Verify PyPI, npm, crates.io, Julia General, Go modules, NuGet, and R-universe current states
+    - [ ] Record version, receipt URL, acceptance state, and evidence timestamp
+    - [ ] Add drift tests for stale or mismatched registry states
+    - [ ] Commit implementation changes for this task
+    - [ ] Commit this plan update with the task commit SHA
+- [ ] Task: Refresh pending external target evidence
+    - [ ] Re-check CRAN, Spack, EasyBuild, HPSF, E4S, and community target requirements
+    - [ ] Update blocker, owner, and next-action fields with current evidence
+    - [ ] Remove any generic blocked language
+    - [ ] Commit implementation changes for this task
+    - [ ] Commit this plan update with the task commit SHA
+- [ ] Task: Conductor - User Manual Verification 'Live Evidence Refresh' (Protocol in workflow.md)
+
+## Phase 2: Submission Packet Completion
+
+- [ ] Task: Complete CRAN and scientific submission packets
+    - [ ] Refresh R package checks, CRAN comments, and source package evidence
+    - [ ] Prepare pyOpenSci, rOpenSci, JOSS, NumFOCUS, Arrow, .NET, Julia, and R community packets
+    - [ ] Record exact maintainer action boundaries
+    - [ ] Commit implementation changes for this task
+    - [ ] Commit this plan update with the task commit SHA
+- [ ] Task: Complete HPC submission packets
+    - [ ] Refresh Spack and EasyBuild candidate recipes and scheduler evidence
+    - [ ] Prepare HPSF and E4S proposal/contact packets
+    - [ ] Record sponsor, contact, CI, and review expectations
+    - [ ] Commit implementation changes for this task
+    - [ ] Commit this plan update with the task commit SHA
+- [ ] Task: Conductor - User Manual Verification 'Submission Packet Completion' (Protocol in workflow.md)
+
+## Phase 3: Receipts, Deferrals, and Claim Closure
+
+- [ ] Task: Record receipts or owner-backed deferrals
+    - [ ] Store external receipts when submissions are actually made
+    - [ ] Store maintainer-ready deferrals when final action remains external
+    - [ ] Add tests that distinguish readiness, submission, acceptance, and deferral
+    - [ ] Commit implementation changes for this task
+    - [ ] Commit this plan update with the task commit SHA
+- [ ] Task: Reconcile registry docs and release claims
+    - [ ] Update Sphinx archival sources and Starlight active docs
+    - [ ] Refresh machine-readable inventories
+    - [ ] Add stale-claim tests for accepted/submitted wording
+    - [ ] Commit implementation changes for this task
+    - [ ] Commit this plan update with the task commit SHA
+- [ ] Task: Conductor - User Manual Verification 'Receipts, Deferrals, and Claim Closure' (Protocol in workflow.md)
