@@ -31,10 +31,10 @@
 
 ## Phase 3: Final Cutover Evidence
 
-- [ ] Task: Refresh migration manifests
-    - [ ] Update cutover, redirect, and route coverage artifacts
-    - [ ] Ensure all stale "canonical Sphinx" language is removed or qualified
-    - [ ] Commit this task before starting the next task
+- [x] Task: Refresh migration manifests
+    - [x] Update cutover, redirect, and route coverage artifacts
+    - [x] Ensure all stale "canonical Sphinx" language is removed or qualified
+    - [x] Commit this task before starting the next task
 - [ ] Task: Run final conductor review
     - [ ] Review the full track diff against the spec, plan, workflow, and tests
     - [ ] Apply high-confidence fixes and rerun validation
