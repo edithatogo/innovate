@@ -6,10 +6,10 @@
     - [x] Compare `conductor/tracks.md`, `conductor/tracks/`, and `conductor/archive/`
     - [x] Identify stale active folders, missing archive folders, and broken links
     - [x] Commit this task before starting the next task
-- [ ] Task: Write failing registry hygiene tests
-    - [ ] Require active folders to have active registry entries
-    - [ ] Require completed registry entries to point into `conductor/archive/`
-    - [ ] Require status tooling to report stale or orphaned folders
+- [~] Task: Write failing registry hygiene tests
+    - [~] Require active folders to have active registry entries
+    - [~] Require completed registry entries to point into `conductor/archive/`
+    - [~] Require status tooling to report stale or orphaned folders
     - [ ] Commit this task before starting the next task
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Registry Drift Red Tests' (Protocol in workflow.md)
 
