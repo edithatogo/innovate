@@ -46,4 +46,3 @@ def test_release_prerequisites_record_gates_and_access_needs() -> None:
         assert entry["required_access"] in {"maintainer", "registry_secret", "review"}
         assert entry["status"] in {"ready", "blocked", "deferred"}
         assert entry["notes"]
-

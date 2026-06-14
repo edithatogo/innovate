@@ -39,14 +39,23 @@ def test_hpc_submission_workflow_commands_are_specific() -> None:
     targets = {entry["target_id"]: entry for entry in manifest["targets"]}
 
     assert "sbatch docs/source/_static/hpc_packaging/scheduler/slurm/spack-smoke.sbatch" in targets["spack"]["commands"]
-    assert "sbatch docs/source/_static/hpc_packaging/scheduler/slurm/easybuild-smoke.sbatch" in targets["easybuild"]["commands"]
+    assert (
+        "sbatch docs/source/_static/hpc_packaging/scheduler/slurm/easybuild-smoke.sbatch"
+        in targets["easybuild"]["commands"]
+    )
     assert "edit docs/source/_static/hpc_packaging/governance/hpsf-evidence.md" in targets["hpsf"]["commands"]
     assert "edit docs/source/_static/hpc_packaging/governance/e4s-evidence.md" in targets["e4s"]["commands"]
 
     assert "docs/source/_static/hpc_packaging/evidence/spack-install.log" in targets["spack"]["artifact_destinations"]
-    assert "docs/source/_static/hpc_packaging/evidence/easybuild-sanity.log" in targets["easybuild"]["artifact_destinations"]
+    assert (
+        "docs/source/_static/hpc_packaging/evidence/easybuild-sanity.log"
+        in targets["easybuild"]["artifact_destinations"]
+    )
     assert "docs/source/_static/hpc_packaging/evidence/spack-batch.log" in targets["spack"]["artifact_destinations"]
-    assert "docs/source/_static/hpc_packaging/evidence/easybuild-batch.log" in targets["easybuild"]["artifact_destinations"]
+    assert (
+        "docs/source/_static/hpc_packaging/evidence/easybuild-batch.log"
+        in targets["easybuild"]["artifact_destinations"]
+    )
     assert "docs/source/_static/hpc_packaging/evidence/hpsf-review-note.md" in targets["hpsf"]["artifact_destinations"]
     assert "docs/source/_static/hpc_packaging/evidence/e4s-review-note.md" in targets["e4s"]["artifact_destinations"]
     assert manifest["blocker_bundle"] == "evidence/hpc_submission_blockers.json"

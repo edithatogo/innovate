@@ -100,9 +100,7 @@ def sync_outputs(root: Path, version: str) -> dict[Path, str]:
     updates[root / "bindings/r/DESCRIPTION"] = _replace_r_description_version(r_description, version)
 
     csharp = (root / "bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj").read_text(encoding="utf-8")
-    updates[root / "bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj"] = _replace_csproj_version(
-        csharp, version
-    )
+    updates[root / "bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj"] = _replace_csproj_version(csharp, version)
 
     return updates
 

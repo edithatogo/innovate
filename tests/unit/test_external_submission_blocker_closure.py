@@ -5,12 +5,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-
 TARGET_INVENTORY = Path("docs/source/_static/external_submission_target_inventory.json")
 REGISTRY_RECEIPTS = Path("docs/source/_static/registry_submission_receipts.json")
-HPC_BLOCKERS = Path(
-    "docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json"
-)
+HPC_BLOCKERS = Path("docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json")
 HPC_PACKET = Path("docs/source/_static/hpc_packaging/submission_packet.json")
 HPC_WORKFLOW = Path("docs/source/_static/hpc_packaging/workflow_manifest.json")
 COMMUNITY_MATRIX = Path("docs/source/_static/community_submission_readiness_matrix.json")
@@ -77,9 +74,7 @@ def test_external_submission_targets_have_closure_fields() -> None:
 
 def test_registry_receipts_match_current_package_and_hpc_closure_states() -> None:
     """Receipt bundles should not preserve generic blocked states after closure."""
-    inventory = {
-        entry["target_id"]: entry for entry in _target_inventory()["targets"]
-    }
+    inventory = {entry["target_id"]: entry for entry in _target_inventory()["targets"]}
     receipts = json.loads(REGISTRY_RECEIPTS.read_text(encoding="utf-8"))
 
     submitted = {entry["target_id"]: entry for entry in receipts["submitted_targets"]}
@@ -106,17 +101,11 @@ def test_registry_receipts_match_current_package_and_hpc_closure_states() -> Non
 
 def test_hpc_blockers_are_current_and_do_not_hide_ready_targets() -> None:
     """Only actually blocked HPC targets should appear in the blocker bundle."""
-    inventory = {
-        entry["target_id"]: entry for entry in _target_inventory()["targets"]
-    }
+    inventory = {entry["target_id"]: entry for entry in _target_inventory()["targets"]}
     blocker_bundle = json.loads(HPC_BLOCKERS.read_text(encoding="utf-8"))
     blockers = {entry["target_id"]: entry for entry in blocker_bundle["blockers"]}
 
-    expected_blocked = {
-        target_id
-        for target_id in HPC_TARGETS
-        if inventory[target_id]["status"] == "blocked"
-    }
+    expected_blocked = {target_id for target_id in HPC_TARGETS if inventory[target_id]["status"] == "blocked"}
     assert set(blockers) == expected_blocked
 
     for target_id, blocker in blockers.items():
@@ -129,9 +118,7 @@ def test_hpc_blockers_are_current_and_do_not_hide_ready_targets() -> None:
 def test_regenerated_packets_reference_canonical_closure_inventory() -> None:
     """Machine-readable packets should stay tied to the canonical closure map."""
     inventory_path = "docs/source/_static/external_submission_target_inventory.json"
-    inventory = {
-        entry["target_id"]: entry for entry in _target_inventory()["targets"]
-    }
+    inventory = {entry["target_id"]: entry for entry in _target_inventory()["targets"]}
     packet = json.loads(HPC_PACKET.read_text(encoding="utf-8"))
     workflow = json.loads(HPC_WORKFLOW.read_text(encoding="utf-8"))
     blockers = json.loads(HPC_BLOCKERS.read_text(encoding="utf-8"))

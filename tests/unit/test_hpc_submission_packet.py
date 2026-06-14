@@ -59,10 +59,6 @@ def test_hpc_submission_packet_points_at_existing_evidence() -> None:
         "docs/source/_static/hpc_packaging/workflow_manifest.json",
         "docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json",
     }
-    packet_artifacts = {
-        artifact
-        for entry in packet["targets"]
-        for artifact in entry["packet_artifacts"]
-    }
+    packet_artifacts = {artifact for entry in packet["targets"] for artifact in entry["packet_artifacts"]}
 
     assert evidence_paths.issubset(packet_artifacts)

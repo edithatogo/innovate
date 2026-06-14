@@ -76,7 +76,7 @@ def test_hpc_packaging_readiness_captures_spack_and_easybuild_prototypes() -> No
         "HPSF and E4S evidence templates",
         "per-target command checklist",
         "module sanity checks",
-        "python -c \"import innovate; print(innovate.__version__)\"",
+        'python -c "import innovate; print(innovate.__version__)"',
         "python -m pip check",
         "cargo test --manifest-path bindings/rust/Cargo.toml",
         "julia --project=bindings/julia -e",

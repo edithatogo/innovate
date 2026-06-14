@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-
 REPO_ROOT = Path(__file__).resolve().parents[4]
 CONTENT_INVENTORY = REPO_ROOT / "docs/source/_static/astro_starlight/content_inventory.json"
 REDIRECT_INVENTORY = REPO_ROOT / "docs/source/_static/astro_starlight/redirect_inventory.json"

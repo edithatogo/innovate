@@ -8,18 +8,10 @@ from pathlib import Path
 
 def test_cutover_verification_report_confirms_inventory_alignment() -> None:
     """The content and redirect inventories should be fully aligned."""
-    report = json.loads(
-        Path(
-            "docs/source/_static/astro_starlight/cutover_verification.json"
-        ).read_text()
-    )
+    report = json.loads(Path("docs/source/_static/astro_starlight/cutover_verification.json").read_text())
 
-    assert report["generated_from"]["content_inventory"].endswith(
-        "content_inventory.json"
-    )
-    assert report["generated_from"]["redirect_inventory"].endswith(
-        "redirect_inventory.json"
-    )
+    assert report["generated_from"]["content_inventory"].endswith("content_inventory.json")
+    assert report["generated_from"]["redirect_inventory"].endswith("redirect_inventory.json")
     assert report["counts"]["content_entries"] == report["counts"]["redirect_entries"]
     assert report["counts"]["content_only"] == 0
     assert report["counts"]["redirect_only"] == 0
@@ -34,11 +26,7 @@ def test_cutover_verification_report_confirms_inventory_alignment() -> None:
 
 def test_cutover_verification_report_covers_expected_routes() -> None:
     """The cutover verification report should cover the canonical routes."""
-    report = json.loads(
-        Path(
-            "docs/source/_static/astro_starlight/cutover_verification.json"
-        ).read_text()
-    )
+    report = json.loads(Path("docs/source/_static/astro_starlight/cutover_verification.json").read_text())
 
     routes = {entry["astro_route"] for entry in report["matched_entries"]}
     assert "/" in routes

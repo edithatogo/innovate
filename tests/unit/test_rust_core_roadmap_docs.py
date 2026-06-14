@@ -71,7 +71,10 @@ def test_rust_core_roadmap_names_candidate_operations_and_gates() -> None:
     assert "logistic, Fisher-Pry, and Gompertz fitting" in roadmap
     assert "logistic, Fisher-Pry, Gompertz, and Bass prediction" in roadmap
     assert "narrow Norton-Bass prediction for single-generation fitted states" in roadmap
-    assert "The first implemented slices are Rust-native logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass summary and diagnostics for simple fitted states" in roadmap
+    assert (
+        "The first implemented slices are Rust-native logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass summary and diagnostics for simple fitted states"
+        in roadmap
+    )
     assert "bridge fallback reserved for non-native model families" in roadmap
     assert "same simple fitted-state payload" in roadmap
     assert "Benchmarking and profiling tooling" in roadmap
@@ -109,8 +112,14 @@ def test_rust_core_roadmap_inventories_runtime_status_and_xla_fit() -> None:
         "fit_model": ("Native logistic, Fisher-Pry, and Gompertz fitting", "Medium"),
         "predict_model": ("Native logistic, Fisher-Pry, Gompertz, and Bass prediction", "High"),
         "simulate_model": ("Native logistic, Fisher-Pry, Gompertz, and Bass simulation", "High"),
-        "summarize_model": ("The first implemented slices are Rust-native logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass summary and diagnostics for simple fitted states", "Medium"),
-        "diagnose_model": ("The first implemented slices are Rust-native logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass summary and diagnostics for simple fitted states", "Medium"),
+        "summarize_model": (
+            "The first implemented slices are Rust-native logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass summary and diagnostics for simple fitted states",
+            "Medium",
+        ),
+        "diagnose_model": (
+            "The first implemented slices are Rust-native logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass summary and diagnostics for simple fitted states",
+            "Medium",
+        ),
     }
 
     for operation, expected_phrases in expected_inventory.items():

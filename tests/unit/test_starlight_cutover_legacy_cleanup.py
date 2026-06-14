@@ -5,16 +5,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-
-CUTOVER_INVENTORY = Path(
-    "docs/source/_static/astro_starlight/cutover_surface_inventory.json"
-)
-STARLIGHT_VALIDATION = Path(
-    "docs/source/_static/astro_starlight/starlight_validation_evidence.json"
-)
-MIGRATION_MANIFEST = Path(
-    "docs/source/_static/astro_starlight/migration_manifest.json"
-)
+CUTOVER_INVENTORY = Path("docs/source/_static/astro_starlight/cutover_surface_inventory.json")
+STARLIGHT_VALIDATION = Path("docs/source/_static/astro_starlight/starlight_validation_evidence.json")
+MIGRATION_MANIFEST = Path("docs/source/_static/astro_starlight/migration_manifest.json")
 
 
 def _normalized_text(path: Path) -> str:
@@ -44,14 +37,8 @@ def test_product_and_tech_stack_name_starlight_as_active_docs_stack() -> None:
 
 def test_completed_starlight_migration_tracks_are_not_active_tracks() -> None:
     """Completed Starlight migration evidence belongs in the archive, not tracks."""
-    active_tracks = {
-        path.parent.name
-        for path in Path("conductor/tracks").glob("*/metadata.json")
-    }
-    archived_tracks = {
-        path.parent.name
-        for path in Path("conductor/archive").glob("*/metadata.json")
-    }
+    active_tracks = {path.parent.name for path in Path("conductor/tracks").glob("*/metadata.json")}
+    archived_tracks = {path.parent.name for path in Path("conductor/archive").glob("*/metadata.json")}
 
     stale_tracks = {"migrate_starlight", "starlight_migration_20260513"}
     assert stale_tracks.isdisjoint(active_tracks)
@@ -104,9 +91,7 @@ def test_cutover_inventory_has_no_remaining_stale_work_after_cleanup() -> None:
     inventory = json.loads(CUTOVER_INVENTORY.read_text())
 
     assert inventory["active_docs_stack"] == "astro_starlight"
-    assert inventory["legacy_surfaces"]["retention_policy"] == (
-        "archival_and_redirect_reference_only"
-    )
+    assert inventory["legacy_surfaces"]["retention_policy"] == ("archival_and_redirect_reference_only")
     assert inventory["stale_active_track_folders"] == []
     assert inventory["stale_cutover_language"] == []
 
@@ -120,13 +105,9 @@ def test_starlight_validation_evidence_records_routes_and_build_blockers() -> No
     assert evidence["route_and_link_status"]["broken_links"] == 0
 
     commands = {entry["command"]: entry for entry in evidence["commands"]}
-    assert commands["pnpm install --frozen-lockfile"]["status"] == (
-        "passed_after_workspace_build_approvals"
-    )
+    assert commands["pnpm install --frozen-lockfile"]["status"] == ("passed_after_workspace_build_approvals")
     assert commands["pnpm build && pnpm check"]["status"] == "blocked"
 
     blockers = {entry["id"]: entry for entry in evidence["blockers"]}
-    assert blockers["starlight_polyglot_missing_python_handler_bundle"]["status"] == (
-        "blocked"
-    )
+    assert blockers["starlight_polyglot_missing_python_handler_bundle"]["status"] == ("blocked")
     assert blockers["docsearch_credentials"]["status"] == "external_credentials_required"

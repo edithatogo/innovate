@@ -63,10 +63,7 @@ def test_community_submission_targets_have_status_evidence_and_blockers() -> Non
             assert target["blockers"] == [], target["id"]
         else:
             assert target["blockers"], target["id"]
-            assert all(
-                blocker["status"] in {"open", "blocked_external", "deferred"}
-                for blocker in target["blockers"]
-            )
+            assert all(blocker["status"] in {"open", "blocked_external", "deferred"} for blocker in target["blockers"])
 
 
 def test_community_submission_docs_link_matrix_and_sequence() -> None:

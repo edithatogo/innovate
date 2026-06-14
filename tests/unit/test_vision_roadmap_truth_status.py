@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-
 VISION_STATUS_INVENTORY = Path("docs/source/_static/vision_roadmap_status_inventory.json")
 RUST_MIGRATION_INVENTORY = Path("docs/source/_static/rust_core_migration_inventory.json")
 

@@ -32,10 +32,7 @@ def test_registry_submission_receipts_cover_live_targets() -> None:
     receipts = load_receipts()
 
     assert receipts["schema_version"] == 1
-    submitted = {
-        entry["target_id"]: entry
-        for entry in receipts["submitted_targets"]
-    }
+    submitted = {entry["target_id"]: entry for entry in receipts["submitted_targets"]}
     assert set(submitted) == set(SUBMITTED_TARGETS)
 
     for target_id, receipt_url in SUBMITTED_TARGETS.items():

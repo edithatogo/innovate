@@ -11,9 +11,7 @@ MODEL_FAMILY_COVERAGE = Path("docs/source/_static/rust_native_model_family_cover
 PAYLOAD_SHAPE_COVERAGE = Path("docs/source/_static/rust_native_payload_shape_coverage.json")
 SLICE_EVIDENCE = Path("docs/source/_static/rust_native_model_family_slice_evidence.json")
 FULL_OWNERSHIP_GATE = Path("docs/source/_static/rust_full_ownership_gate.json")
-FULL_OWNERSHIP_VALIDATION = Path(
-    "docs/source/_static/rust_full_ownership_validation.json"
-)
+FULL_OWNERSHIP_VALIDATION = Path("docs/source/_static/rust_full_ownership_validation.json")
 
 
 def _model_family_coverage() -> dict:
@@ -52,11 +50,9 @@ def test_every_python_registry_model_family_has_ownership_status() -> None:
 
 def test_python_reference_model_families_are_explicit_boundaries() -> None:
     """Complex Python-owned model families should not look accidentally unowned."""
-    coverage = {
-        entry["model_key"]: entry for entry in _model_family_coverage()["families"]
-    }
+    coverage = {entry["model_key"]: entry for entry in _model_family_coverage()["families"]}
 
-    for key in {
+    for key in (
         "complementary_goods",
         "hierarchical",
         "latent_process",
@@ -65,11 +61,11 @@ def test_python_reference_model_families_are_explicit_boundaries() -> None:
         "network_diffusion",
         "policy_hazard",
         "regime_switching",
-    }:
+    ):
         assert coverage[key]["ownership_status"] == "python_reference_boundary"
         assert coverage[key]["native_scope"] == "none"
 
-    for key in {"composite", "multi_product"}:
+    for key in ("composite", "multi_product"):
         assert coverage[key]["ownership_status"] == "python_bridge_explicit"
 
 
@@ -103,10 +99,7 @@ def test_unstable_payload_shapes_are_not_marked_rust_native() -> None:
 def test_promoted_diffusion_and_substitution_families_have_slice_evidence() -> None:
     """Promoted stable families should link to parity and error evidence."""
     evidence = _slice_evidence()
-    entries = {
-        entry["model_key"]: entry
-        for entry in evidence["stable_diffusion_and_substitution"]
-    }
+    entries = {entry["model_key"]: entry for entry in evidence["stable_diffusion_and_substitution"]}
 
     assert set(entries) == {"bass", "logistic", "gompertz", "fisher_pry", "norton_bass"}
     for entry in entries.values():
@@ -119,10 +112,7 @@ def test_promoted_diffusion_and_substitution_families_have_slice_evidence() -> N
 def test_composite_and_multi_product_families_have_explicit_bridge_boundaries() -> None:
     """Bridge-owned composite surfaces need rationale and promotion prerequisites."""
     evidence = _slice_evidence()
-    boundaries = {
-        entry["model_key"]: entry
-        for entry in evidence["explicit_bridge_boundaries"]
-    }
+    boundaries = {entry["model_key"]: entry for entry in evidence["explicit_bridge_boundaries"]}
 
     assert set(boundaries) >= {"composite", "multi_product"}
     for key in ("composite", "multi_product"):
@@ -136,10 +126,7 @@ def test_composite_and_multi_product_families_have_explicit_bridge_boundaries() 
 def test_network_policy_ecosystem_and_advanced_families_have_reference_boundaries() -> None:
     """Object-internal families should stay Python-reference-owned until schemas exist."""
     evidence = _slice_evidence()
-    boundaries = {
-        entry["model_key"]: entry
-        for entry in evidence["python_reference_boundaries"]
-    }
+    boundaries = {entry["model_key"]: entry for entry in evidence["python_reference_boundaries"]}
     expected = {
         "complementary_goods",
         "hierarchical",
@@ -197,6 +184,4 @@ def test_full_rust_ownership_validation_records_passed_gates_and_exclusions() ->
         "policy_hazard",
         "regime_switching",
     }
-    assert set(validation["excluded_payload_boundaries"]) == set(
-        gate["blocking_payload_shapes"]
-    )
+    assert set(validation["excluded_payload_boundaries"]) == set(gate["blocking_payload_shapes"])

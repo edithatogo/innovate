@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
 import runpy
+from pathlib import Path
 
 PACK_SCRIPT = Path("docs/source/_static/hpc_packaging/pack_packet.py")
 

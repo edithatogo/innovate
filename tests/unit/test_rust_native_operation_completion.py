@@ -68,8 +68,7 @@ def test_every_canonical_operation_slice_has_terminal_ownership_state() -> None:
     non_terminal = [
         (entry["operation"], entry["model_slice"], entry["promotion_state"])
         for entry in _migration_entries()
-        if entry["operation"] in CANONICAL_OPERATIONS
-        and entry["promotion_state"] not in allowed_terminal_states
+        if entry["operation"] in CANONICAL_OPERATIONS and entry["promotion_state"] not in allowed_terminal_states
     ]
 
     assert non_terminal == []
@@ -106,9 +105,7 @@ def test_native_default_slices_have_complete_promotion_evidence() -> None:
 def test_operation_evidence_closure_records_benchmark_and_memory_boundaries() -> None:
     """Promoted operation evidence should distinguish captured and deferred artifacts."""
     closure = _evidence_closure()
-    evidence_by_operation = {
-        entry["operation"]: entry for entry in closure["benchmark_evidence"]
-    }
+    evidence_by_operation = {entry["operation"]: entry for entry in closure["benchmark_evidence"]}
 
     assert closure["schema_version"] == 1
     assert closure["benchmark_result_artifact"] == "docs/source/_static/rust_core_native_benchmark_results.json"

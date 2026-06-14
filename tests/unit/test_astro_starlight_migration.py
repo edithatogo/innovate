@@ -63,9 +63,7 @@ def test_astro_and_starlight_config_files_record_the_scaffold() -> None:
 
 def test_astro_starlight_migration_manifest_records_cutover_decisions() -> None:
     """The migration manifest should record the cutover policy explicitly."""
-    manifest = json.loads(
-        Path("docs/source/_static/astro_starlight/migration_manifest.json").read_text()
-    )
+    manifest = json.loads(Path("docs/source/_static/astro_starlight/migration_manifest.json").read_text())
 
     assert manifest["migration_mode"] == "cutover-complete"
     assert manifest["active_docs_stack"] == "astro_starlight"
@@ -84,17 +82,11 @@ def test_astro_starlight_migration_manifest_records_cutover_decisions() -> None:
 
 def test_astro_starlight_inventories_stay_synchronized() -> None:
     """Content and redirect inventories should describe the same pages."""
-    content_inventory = json.loads(
-        Path("docs/source/_static/astro_starlight/content_inventory.json").read_text()
-    )
-    redirect_inventory = json.loads(
-        Path("docs/source/_static/astro_starlight/redirect_inventory.json").read_text()
-    )
+    content_inventory = json.loads(Path("docs/source/_static/astro_starlight/content_inventory.json").read_text())
+    redirect_inventory = json.loads(Path("docs/source/_static/astro_starlight/redirect_inventory.json").read_text())
 
     assert len(content_inventory) == len(redirect_inventory)
-    assert {entry["source_doc"] for entry in content_inventory} == {
-        entry["source_doc"] for entry in redirect_inventory
-    }
+    assert {entry["source_doc"] for entry in content_inventory} == {entry["source_doc"] for entry in redirect_inventory}
     assert {entry["astro_route"] for entry in content_inventory} == {
         entry["astro_route"] for entry in redirect_inventory
     }
@@ -132,15 +124,9 @@ def test_astro_starlight_navigation_includes_the_migration_page() -> None:
 def test_astro_starlight_core_pages_have_migrated_content() -> None:
     """The first migrated Astro pages should carry actual documentation copy."""
     kernel = Path("docs/astro-site/src/content/docs/core/kernel.md").read_text()
-    arrow = Path(
-        "docs/astro-site/src/content/docs/core/arrow-interchange.md"
-    ).read_text()
-    diagnostics = Path(
-        "docs/astro-site/src/content/docs/core/diagnostics-contract.md"
-    ).read_text()
-    rust_core = Path(
-        "docs/astro-site/src/content/docs/operations/rust-core.md"
-    ).read_text()
+    arrow = Path("docs/astro-site/src/content/docs/core/arrow-interchange.md").read_text()
+    diagnostics = Path("docs/astro-site/src/content/docs/core/diagnostics-contract.md").read_text()
+    rust_core = Path("docs/astro-site/src/content/docs/operations/rust-core.md").read_text()
     roadmap = Path("docs/astro-site/src/content/docs/operations/roadmap.md").read_text()
 
     for phrase in (
@@ -150,24 +136,14 @@ def test_astro_starlight_core_pages_have_migrated_content() -> None:
         "Rust owns the promoted native slices",
         "Python remains the reference ergonomic surface",
     ):
-        assert (
-            phrase in kernel
-            or phrase in arrow
-            or phrase in diagnostics
-            or phrase in rust_core
-            or phrase in roadmap
-        )
+        assert phrase in kernel or phrase in arrow or phrase in diagnostics or phrase in rust_core or phrase in roadmap
 
 
 def test_astro_starlight_bindings_and_publication_pages_have_content() -> None:
     """Bindings and publication landing pages should describe the migration surface."""
     bindings = Path("docs/astro-site/src/content/docs/bindings/index.md").read_text()
-    publication = Path(
-        "docs/astro-site/src/content/docs/maintainers/publication.md"
-    ).read_text()
-    release_notes = Path(
-        "docs/astro-site/src/content/docs/maintainers/release-notes.md"
-    ).read_text()
+    publication = Path("docs/astro-site/src/content/docs/maintainers/publication.md").read_text()
+    release_notes = Path("docs/astro-site/src/content/docs/maintainers/release-notes.md").read_text()
 
     for phrase in (
         "Python as the canonical reference surface",
@@ -187,9 +163,7 @@ def test_astro_starlight_bindings_and_publication_pages_have_content() -> None:
 def test_astro_starlight_maintainers_area_describes_release_notes() -> None:
     """The maintainers area should surface the release-notes policy page."""
     maintainers = Path("docs/astro-site/src/content/docs/maintainers/index.md").read_text()
-    release_notes = Path(
-        "docs/astro-site/src/content/docs/maintainers/release-notes.md"
-    ).read_text()
+    release_notes = Path("docs/astro-site/src/content/docs/maintainers/release-notes.md").read_text()
 
     assert "Release Notes" in maintainers
     for phrase in (
@@ -230,9 +204,7 @@ def test_astro_starlight_redirect_route_map_describes_cutover() -> None:
 def test_astro_starlight_archive_and_reference_pages_describe_provenance() -> None:
     """The archive and references pages should guide readers to provenance."""
     archive = Path("docs/astro-site/src/content/docs/migration/archive.md").read_text()
-    references = Path(
-        "docs/astro-site/src/content/docs/migration/references.md"
-    ).read_text()
+    references = Path("docs/astro-site/src/content/docs/migration/references.md").read_text()
     migration = Path("docs/astro-site/src/content/docs/migration/index.md").read_text()
 
     for phrase in (

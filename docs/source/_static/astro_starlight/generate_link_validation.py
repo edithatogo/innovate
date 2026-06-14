@@ -7,7 +7,6 @@ import re
 from pathlib import Path
 from urllib.parse import urlsplit
 
-
 REPO_ROOT = Path(__file__).resolve().parents[4]
 ASTRO_ROOT = REPO_ROOT / "docs/astro-site/src/content/docs"
 ROUTE_COVERAGE = REPO_ROOT / "docs/source/_static/astro_starlight/route_coverage.json"
@@ -61,9 +60,7 @@ def load_routes() -> dict[str, dict[str, object]]:
     """Load the implemented route map from the coverage report."""
     coverage = json.loads(ROUTE_COVERAGE.read_text())
     return {
-        entry["astro_route"]: entry
-        for entry in coverage["coverage_by_source_doc"]
-        if entry["status"] == "implemented"
+        entry["astro_route"]: entry for entry in coverage["coverage_by_source_doc"] if entry["status"] == "implemented"
     }
 
 
@@ -140,9 +137,7 @@ def build_report() -> dict[str, object]:
         for route in SIDEBAR_ROUTES
     ]
 
-    all_sidebar_routes_implemented = all(
-        entry["implemented"] for entry in sidebar_route_validation
-    )
+    all_sidebar_routes_implemented = all(entry["implemented"] for entry in sidebar_route_validation)
 
     route_links_checked = sum(1 for entry in link_checks if entry["kind"] == "route")
     file_links_checked = sum(1 for entry in link_checks if entry["kind"] == "file")
@@ -160,9 +155,7 @@ def build_report() -> dict[str, object]:
             "file_links_checked": file_links_checked,
             "broken_links": len(broken_links),
             "sidebar_routes": len(SIDEBAR_ROUTES),
-            "implemented_sidebar_routes": sum(
-                1 for entry in sidebar_route_validation if entry["implemented"]
-            ),
+            "implemented_sidebar_routes": sum(1 for entry in sidebar_route_validation if entry["implemented"]),
         },
         "ready_for_route_stability": not broken_links and all_sidebar_routes_implemented,
         "sidebar_route_validation": sidebar_route_validation,

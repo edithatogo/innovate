@@ -32,12 +32,8 @@ def test_rust_profiling_stack_records_cpu_memory_and_gpu_scope() -> None:
 def test_starlight_roadmap_track_records_versioned_plugin_baseline() -> None:
     """The Starlight track should pin the current docs package baseline."""
     tech_stack = Path("conductor/tech-stack.md").read_text()
-    spec = Path(
-        "conductor/archive/starlight_versions_plugins_20260506/spec.md"
-    ).read_text()
-    plan = Path(
-        "conductor/archive/starlight_versions_plugins_20260506/plan.md"
-    ).read_text()
+    spec = Path("conductor/archive/starlight_versions_plugins_20260506/spec.md").read_text()
+    plan = Path("conductor/archive/starlight_versions_plugins_20260506/plan.md").read_text()
 
     assert "@astrojs/starlight" in tech_stack
     assert "0.38.4" in tech_stack
@@ -57,12 +53,8 @@ def test_starlight_roadmap_track_records_versioned_plugin_baseline() -> None:
 
 def test_future_astro_starlight_migration_track_records_cutover_gates() -> None:
     """The new Astro/Starlight migration track should encode the recommended gates."""
-    spec = Path(
-        "conductor/archive/astro_starlight_docs_migration_20260511/spec.md"
-    ).read_text()
-    plan = Path(
-        "conductor/archive/astro_starlight_docs_migration_20260511/plan.md"
-    ).read_text()
+    spec = Path("conductor/archive/astro_starlight_docs_migration_20260511/spec.md").read_text()
+    plan = Path("conductor/archive/astro_starlight_docs_migration_20260511/plan.md").read_text()
 
     for phrase in (
         "parallel-run or full cutover",

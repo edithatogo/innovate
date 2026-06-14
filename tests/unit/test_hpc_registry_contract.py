@@ -49,4 +49,3 @@ def test_hpc_registry_contract_lists_evidence_and_target_gates() -> None:
         "E4S",
     ):
         assert phrase in docs
-

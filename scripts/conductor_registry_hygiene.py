@@ -4,11 +4,10 @@ from __future__ import annotations
 
 import argparse
 import json
-from pathlib import Path
 import re
 import sys
+from pathlib import Path
 from typing import Any
-
 
 ROOT = Path(__file__).resolve().parents[1]
 CONDUCTOR_ROOT = ROOT / "conductor"
@@ -137,7 +136,7 @@ def render_text(report: dict[str, Any]) -> str:
         "wrong_link_targets",
     ):
         value = report[key]
-        lines.append(f"- {key}: {value if value else '[]'}")
+        lines.append(f"- {key}: {value or '[]'}")
 
     return "\n".join(lines)
 

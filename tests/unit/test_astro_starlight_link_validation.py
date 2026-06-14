@@ -8,9 +8,7 @@ from pathlib import Path
 
 def test_link_validation_report_confirms_sidebar_routes() -> None:
     """The report should confirm the sidebar routes are implemented."""
-    report = json.loads(
-        Path("docs/source/_static/astro_starlight/link_validation_report.json").read_text()
-    )
+    report = json.loads(Path("docs/source/_static/astro_starlight/link_validation_report.json").read_text())
 
     assert report["generated_from"]["route_coverage"].endswith("route_coverage.json")
     assert report["counts"]["sidebar_routes"] == report["counts"]["implemented_sidebar_routes"]
@@ -49,9 +47,7 @@ def test_link_validation_report_confirms_sidebar_routes() -> None:
 
 def test_link_validation_report_covers_internal_route_links() -> None:
     """The report should verify the migration pages link to valid routes."""
-    report = json.loads(
-        Path("docs/source/_static/astro_starlight/link_validation_report.json").read_text()
-    )
+    report = json.loads(Path("docs/source/_static/astro_starlight/link_validation_report.json").read_text())
 
     checked_routes = set(report["checked_routes"])
     for route in (

@@ -90,6 +90,4 @@ def test_version_sync_write_updates_supported_manifests(tmp_path: Path) -> None:
     assert tomllib.loads((repo / "bindings/julia/Project.toml").read_text())["version"] == "0.6.0"
     assert tomllib.loads((repo / "bindings/rust/Cargo.toml").read_text())["package"]["version"] == "0.6.0"
     assert "Version: 0.6.0" in (repo / "bindings/r/DESCRIPTION").read_text()
-    assert "<Version>0.6.0</Version>" in (
-        repo / "bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj"
-    ).read_text()
+    assert "<Version>0.6.0</Version>" in (repo / "bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj").read_text()

@@ -185,9 +185,7 @@ def test_rust_migration_inventory_is_execution_grade_backlog() -> None:
     assert phase_by_key[("simulate_model", "bass_simple_fitted_state")] == "phase_1_default_hardening"
     assert phase_by_key[("fit_model", "bass_and_other_model_families")] == "phase_1_default_hardening"
     assert (
-        phase_by_key[
-            ("all_kernel_operations", "probabilistic_runtimes_uncertainty_and_python_object_internals")
-        ]
+        phase_by_key[("all_kernel_operations", "probabilistic_runtimes_uncertainty_and_python_object_internals")]
         == "phase_4_reference_boundary_review"
     )
 
@@ -339,7 +337,10 @@ def test_rust_bass_promotion_dossier_example_records_bass_evidence() -> None:
     assert dossier["slice"]["current_owner"] == "rust_native"
     assert "native_logistic_kernel/predict_model_native/bass" in dossier["cpu_benchmark"]["required_artifacts"][0]
     assert "native_bass_prediction_matches_python_bridge_contract" in dossier["parity"]["test_evidence"][0]["command"]
-    assert "native_bass_reports_structured_errors_for_invalid_or_unsupported_shapes" in dossier["error_mapping"]["test_evidence"][1]["command"]
+    assert (
+        "native_bass_reports_structured_errors_for_invalid_or_unsupported_shapes"
+        in dossier["error_mapping"]["test_evidence"][1]["command"]
+    )
 
 
 def test_rust_native_benchmark_harness_includes_bass_cases() -> None:

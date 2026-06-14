@@ -228,7 +228,7 @@ def test_julia_installed_package_smoke_gate_runs_copied_package_bridge() -> None
         assert 'INNOVATE_JULIA_RUN_INSTALLED_PACKAGE_SMOKE: "true"' in workflow
         assert 'INNOVATE_PYTHON_COMMAND: "uv run --directory ${{ github.workspace }} python"' in workflow
         assert 'cp -R bindings/julia "$tmpdir/Innovate"' in workflow
-        assert 'Pkg.instantiate(); Pkg.test()' in workflow
+        assert "Pkg.instantiate(); Pkg.test()" in workflow
 
     assert ci.index("Run Julia binding tests") < ci.index("Run Julia installed-package smoke")
     assert publish.index("Validate Julia registry metadata") < publish.index("Run Julia installed-package smoke")

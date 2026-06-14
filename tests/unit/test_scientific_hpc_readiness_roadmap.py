@@ -90,10 +90,7 @@ def test_scientific_hpc_follow_on_tracks_are_registered_and_parallel_ready() -> 
             assert f"- [x] **Track: {title}** *(Completed)*" in registry
             assert f"./archive/{track_id}/" in registry
         else:
-            assert (
-                f"- [ ] **Track: {title}**" in registry
-                or f"- [~] **Track: {title}**" in registry
-            )
+            assert f"- [ ] **Track: {title}**" in registry or f"- [~] **Track: {title}**" in registry
             assert f"./tracks/{track_id}/" in registry
         assert title in roadmap
         assert metadata["track_id"] == track_id

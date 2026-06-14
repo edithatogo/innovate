@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
+from pathlib import Path
 
 import nox
 
@@ -128,7 +129,10 @@ def package(session: nox.Session) -> None:
     _run_uv(session, "sync", "--python", DEFAULT_PYTHON)
     _run_uv(session, "build", *session.posargs)
     _run_uv(session, "run", "twine", "check", "dist/*")
-    _run_uv(session, "run", "check-wheel-contents", "dist/*.whl")
+    wheels = sorted(Path("dist").glob("*.whl"))
+    if not wheels:
+        session.error("No wheels found under dist/")
+    _run_uv(session, "run", "check-wheel-contents", *(str(wheel) for wheel in wheels))
 
 
 @nox.session(python=False)
