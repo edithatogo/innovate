@@ -53,6 +53,8 @@ def test_external_submission_inventory_covers_every_required_target() -> None:
     assert set(inventory["target_groups"]["hpc"]) == HPC_TARGETS
     assert set(inventory["target_groups"]["scientific_community"]) == COMMUNITY_TARGETS
     assert set(targets) == PACKAGE_TARGETS | HPC_TARGETS | COMMUNITY_TARGETS
+    assert inventory["generic_blocked_states"] == []
+    assert inventory["resolved_generic_blocked_states"]
 
 
 def test_external_submission_targets_have_closure_fields() -> None:

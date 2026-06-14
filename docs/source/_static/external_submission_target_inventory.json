@@ -249,10 +249,11 @@
       "next_action": "No submission claimed because the project scope is broader than scikit-learn-contrib."
     }
   ],
-  "generic_blocked_states": [
-    "registry_submission_receipts.json pending targets for Spack and EasyBuild use generic blocked language even though local HPC packets mark them ready.",
-    "HPSF and E4S blockers need owner, evidence, and next action carried into all mirrored docs."
+  "resolved_generic_blocked_states": [
+    "Spack and EasyBuild now use ready_for_review in registry_submission_receipts.json and mirrored HPC docs.",
+    "HPSF and E4S blockers now carry owner, evidence, and next action in receipts, the HPC blocker bundle, and mirrored docs."
   ],
+  "generic_blocked_states": [],
   "maintainer_managed_actions": [
     "CRAN submission",
     "Julia General pull request outcome tracking",
