@@ -5,7 +5,7 @@
     "summary": "Conductor roadmap tracks are complete, archived, or actively tracked. The full product vision remains a future-state program for Rust ownership, external submission, and registry-hygiene work, while documentation cutover status is now evidence-backed by passing Astro/Starlight build and check results.",
     "track_state": "active_follow_on_tracks_registered",
     "vision_state": "partially_implemented_future_state_remaining",
-    "claim_policy": "Do not claim full Rust ownership, external submission acceptance, production DocSearch readiness, or upstream starlight-versions compatibility unless the corresponding evidence artifact or external gate is complete."
+    "claim_policy": "Do not claim full Rust ownership, external submission acceptance, or production DocSearch readiness unless the corresponding evidence artifact or external gate is complete."
   },
   "claim_categories": [
     "implemented",
@@ -33,8 +33,8 @@
     {
       "path": "docs/source/_static/astro_starlight/starlight_validation_evidence.json",
       "classification": "implemented_with_blocker",
-      "claim": "Route, link, build, and Astro check validation pass; the prior local starlight-polyglot handler bundle blocker is resolved, while DocSearch credentials and starlight-versions Astro 6 compatibility remain explicit external/upstream gates.",
-      "required_resolution": "Keep residual DocSearch and starlight-versions gates explicit until external credentials or upstream plugin compatibility are available.",
+      "claim": "Route, link, build, and Astro check validation pass; the prior local starlight-polyglot handler bundle blocker is resolved, and starlight-versions is enabled after the 0.9.0 update. Production DocSearch remains an explicit external credential gate.",
+      "required_resolution": "Keep residual DocSearch credentials explicit until deployment credentials are available.",
       "owning_track": "starlight_cutover_legacy_cleanup_20260614"
     },
     {
