@@ -19,10 +19,10 @@
     - [x] Move completed active folders to archive or remove duplicates only after preserving evidence
     - [x] Update links and metadata as needed
     - [x] Commit this task before starting the next task
-- [~] Task: Add registry hygiene automation
-    - [~] Add or update a script/test that checks registry-to-filesystem consistency
-    - [~] Include stale-folder diagnostics in the status output or docs
-    - [ ] Commit this task before starting the next task
+- [x] Task: Add registry hygiene automation 96f0216
+    - [x] Add or update a script/test that checks registry-to-filesystem consistency
+    - [x] Include stale-folder diagnostics in the status output or docs
+    - [x] Commit this task before starting the next task
 - [ ] Task: Conductor - Automated Review and Checkpoint 'Registry Reconciliation' (Protocol in workflow.md)
 
 ## Phase 3: Final Hygiene Gate
