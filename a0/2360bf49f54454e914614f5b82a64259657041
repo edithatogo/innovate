@@ -1,0 +1,11 @@
+Task: Fix deterministic nox gates
+
+Summary:
+- Applied Ruff lint and format fixes across generated helper scripts and affected tests.
+- Fixed nox package session by expanding built wheel paths before invoking check-wheel-contents.
+
+Validation:
+- uv run nox -s lint package (package passed after noxfile fix; lint needed formatting)
+- uv run ruff format .
+- uv run nox -s lint (passed)
+- uv run nox -s lint types docs package version_sync (all passed)
