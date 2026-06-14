@@ -28,7 +28,7 @@
     - [x] Commit this task before starting the next task
 - [x] Task: Conductor - Automated Review and Checkpoint 'Evidence Refresh' (Protocol in workflow.md)
 
-## Phase 3: Docs and Packet Regeneration
+## Phase 3: Docs and Packet Regeneration [checkpoint: 23becac]
 
 - [x] Task: Regenerate machine-readable packets 44d8966
     - [x] Rebuild registry receipt, HPC packet, community matrix, and Astro/Starlight mirror artifacts
@@ -41,4 +41,4 @@
     - [x] Review the full track diff against the spec, plan, workflow, and tests
     - [x] Apply high-confidence fixes and rerun validation
     - [x] Commit this task before starting the next task
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Docs and Packet Regeneration' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Docs and Packet Regeneration' (Protocol in workflow.md)
