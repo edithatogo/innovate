@@ -1,0 +1,10 @@
+Task: Refresh scientific community dossiers
+
+Summary:
+- Linked community_submission_readiness_matrix.json and community/submission dossier docs to external_submission_target_inventory.json.
+- Added explicit policy that readiness is not submission or acceptance.
+- Mirrored the closure inventory pointer in Astro/Starlight community and submission dossier pages.
+
+Validation:
+- python -m json.tool docs/source/_static/community_submission_readiness_matrix.json >/dev/null
+- uv run pytest tests/unit/test_external_submission_blocker_closure.py tests/unit/test_community_submission_readiness.py tests/unit/test_astro_starlight_link_validation.py tests/unit/test_astro_starlight_route_coverage.py -q (12 passed)
