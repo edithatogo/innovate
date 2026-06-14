@@ -23,7 +23,7 @@
     - [x] Archive, merge, or remove duplicate completed Starlight track folders according to Conductor workflow
     - [x] Update `conductor/tracks.md` links if needed
     - [x] Commit this task before starting the next task
-- [x] Task: Validate Starlight route and link evidence
+- [x] Task: Validate Starlight route and link evidence e5d7433
     - [x] Run Starlight build and route/link generation checks
     - [x] Record blockers for external services such as DocSearch if credentials are unavailable
     - [x] Commit this task before starting the next task
