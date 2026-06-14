@@ -88,7 +88,7 @@ export default {
   social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/doughnut/innovate' }],
   markdown: {
     // The pinned plugin baseline is documented in package.json and the manifest.
-    // starlight-versions 0.5.4
+    // starlight-versions 0.9.0
     // starlight-links-validator 0.24.0
     // @astrojs/starlight-docsearch 0.6.1 (Algolia DocSearch)
   },

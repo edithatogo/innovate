@@ -20,7 +20,7 @@ def test_astro_starlight_package_manifest_records_pinned_baseline() -> None:
     dependencies = package["dependencies"]
     assert dependencies["astro"] == "^6.0.0"
     assert dependencies["@astrojs/starlight"] == "^0.39.0"
-    assert dependencies["starlight-versions"] == "^0.5.4"
+    assert dependencies["starlight-versions"] == "^0.9.0"
     assert dependencies["starlight-links-validator"] == "^0.24.0"
     assert dependencies["starlight-polyglot"].startswith("file:")
 
@@ -39,9 +39,11 @@ def test_astro_and_starlight_config_files_record_the_scaffold() -> None:
 
     content_config = Path("docs/astro-site/src/content.config.ts").read_text()
     assert "docsLoader()" in content_config
+    assert "docsVersionsLoader()" in content_config
     assert "docsSchema()" in content_config
     assert "@astrojs/starlight/loaders" in content_config
     assert "@astrojs/starlight/schema" in content_config
+    assert "starlight-versions/loader" in content_config
 
     for phrase in (
         "starlightLinksValidator",
@@ -73,7 +75,7 @@ def test_astro_starlight_migration_manifest_records_cutover_decisions() -> None:
     assert manifest["sitemap_provider"] == "@astrojs/sitemap"
     assert manifest["baseline"]["astro"] == "^6.0.0"
     assert manifest["baseline"]["starlight"] == "0.38.4"
-    assert manifest["baseline"]["starlight_versions"] == "0.5.4"
+    assert manifest["baseline"]["starlight_versions"] == "0.9.0"
     assert manifest["baseline"]["starlight_links_validator"] == "0.24.0"
     assert manifest["baseline"]["starlight_docsearch"] == "0.6.1"
     assert manifest["scaffold_root"] == "docs/astro-site"

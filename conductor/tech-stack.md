@@ -7,9 +7,9 @@
 - **Versioned Baseline**: `@astrojs/starlight` `0.38.4` is the documented
   baseline from the Starlight Versions and Plugin Roadmap Alignment track.
 - **Polyglot Plugin**: [starlight-polyglot](https://github.com/edithatogo/starlight-polyglot) — auto-generates API docs from Python source code
-- **Versioning**: starlight-versions `0.5.4` is installed and versioned
-  content is generated under `latest/`; the active middleware is disabled until
-  the plugin handles Astro 6 non-doc routes such as `/404`.
+- **Versioning**: starlight-versions `0.9.0` is enabled with versioned content
+  under `latest/`; the active build validates Astro 6 non-doc routes such as
+  `/404`.
 - **Link Validation**: starlight-links-validator `0.24.0` for CI link checking
 - **Prose Linting**: Vale with the `Repo/ValueProse` style checks governance
   prose for hedging and filler wording in CI.

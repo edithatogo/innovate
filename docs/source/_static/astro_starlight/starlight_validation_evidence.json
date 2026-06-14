@@ -40,6 +40,13 @@
       "owner": "local_file_dependency",
       "evidence": "Local starlight-polyglot now ships compiled handler JavaScript and a rebuilt dist/index.js; docs/astro-site pnpm build reaches and completes Python API generation.",
       "resolution": "Rebuilt the local file dependency and configured the Python handler to use the conda Python executable with Griffe available."
+    },
+    {
+      "id": "starlight_versions_astro6_404_middleware",
+      "status": "resolved",
+      "owner": "upstream_plugin_compatibility",
+      "evidence": "starlight-versions 0.9.0 declares @astrojs/starlight >=0.39.0 support and the site now builds /404 plus versioned routes with the plugin enabled.",
+      "resolution": "Pinned starlight-versions ^0.9.0, enabled the plugin in astro.config.mjs, and registered docsVersionsLoader() for the versions content collection."
     }
   ],
   "blockers": [
@@ -49,13 +56,6 @@
       "owner": "deployment_environment",
       "evidence": "docs/astro-site/starlight.config.mjs expects ALGOLIA_APP_ID, ALGOLIA_API_KEY, and ALGOLIA_INDEX_NAME when DocSearch is enabled",
       "required_resolution": "Provide deployment credentials before enabling production DocSearch."
-    },
-    {
-      "id": "starlight_versions_astro6_404_middleware",
-      "status": "compatibility_disabled",
-      "owner": "upstream_plugin_compatibility",
-      "evidence": "starlight-versions 0.5.x throws while rendering Astro 6 /404 because its middleware assumes every route has a Starlight entry slug.",
-      "required_resolution": "Re-enable starlight-versions after the plugin handles non-doc routes or after a compatible release is pinned."
     }
   ]
 }

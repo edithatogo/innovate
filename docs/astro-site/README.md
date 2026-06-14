@@ -7,15 +7,14 @@ directory as archival and redirect-reference material.
 Baseline decisions:
 
 - `@astrojs/starlight` `0.38.4`
-- `starlight-versions` `0.5.4`
+- `starlight-versions` `0.9.0`
 - `starlight-links-validator` `0.24.0`
 - `@astrojs/starlight-docsearch` `0.6.1`
 - `astro` `^6.0.0`
 - `@astrojs/sitemap` `^3.7.2`
 
-`starlight-versions` remains installed and `latest/` versioned content is
-present, but the active middleware is disabled until the plugin handles Astro 6
-non-doc routes such as `/404`.
+`starlight-versions` is enabled with the existing `latest/` versioned content,
+and the active build validates Astro 6 non-doc routes such as `/404`.
 
 Cutover policy:
 

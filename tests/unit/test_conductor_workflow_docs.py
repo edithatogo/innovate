@@ -38,7 +38,7 @@ def test_starlight_roadmap_track_records_versioned_plugin_baseline() -> None:
     assert "@astrojs/starlight" in tech_stack
     assert "0.38.4" in tech_stack
     assert "starlight-versions" in tech_stack
-    assert "0.5.4" in tech_stack
+    assert "0.9.0" in tech_stack
     assert "starlight-links-validator" in tech_stack
     assert "0.24.0" in tech_stack
     assert "@astrojs/starlight-docsearch" in tech_stack

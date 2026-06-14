@@ -19,7 +19,7 @@
   "version_status": {
     "package_json_starlight": "^0.39.0",
     "documented_baseline_starlight": "0.38.4",
-    "starlight_versions": "0.5.4",
+    "starlight_versions": "0.9.0",
     "starlight_links_validator": "0.24.0",
     "docsearch_declared": true,
     "docsearch_package_present": false
@@ -35,12 +35,14 @@
   },
   "stale_active_track_folders": [],
   "stale_cutover_language": [],
-  "blocked_or_deferred_items": [
+  "resolved_items": [
     {
       "item": "starlight-versions active middleware",
-      "status": "compatibility_disabled",
-      "evidence": "The package remains installed and versioned content remains present, but the active plugin call is disabled because starlight-versions 0.5.x crashes on Astro 6 /404 routes."
-    },
+      "status": "enabled",
+      "evidence": "starlight-versions 0.9.0 is enabled in docs/astro-site/astro.config.mjs, the versions content collection uses docsVersionsLoader(), and pnpm build renders /404 plus versioned routes successfully."
+    }
+  ],
+  "blocked_or_deferred_items": [
     {
       "item": "DocSearch credentials",
       "status": "external_credentials_required",

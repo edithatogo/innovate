@@ -21,8 +21,8 @@ importers:
         specifier: file:../../../../starlight-polyglot/packages/starlight-polyglot
         version: file:../../../../starlight-polyglot/packages/starlight-polyglot(@astrojs/starlight@0.39.2(astro@6.3.3(@types/node@24.12.4)(rollup@4.60.4)(yaml@2.9.0))(typescript@6.0.3))(astro@6.3.3(@types/node@24.12.4)(rollup@4.60.4)(yaml@2.9.0))
       starlight-versions:
-        specifier: ^0.5.4
-        version: 0.5.6(@astrojs/starlight@0.39.2(astro@6.3.3(@types/node@24.12.4)(rollup@4.60.4)(yaml@2.9.0))(typescript@6.0.3))
+        specifier: ^0.9.0
+        version: 0.9.0(@astrojs/starlight@0.39.2(astro@6.3.3(@types/node@24.12.4)(rollup@4.60.4)(yaml@2.9.0))(typescript@6.0.3))
     devDependencies:
       '@astrojs/check':
         specifier: ^0.9.9
@@ -772,6 +772,11 @@ packages:
 
   acorn@8.16.0:
     resolution: {integrity: sha512-UVJyE9MttOsBQIDKw1skb9nAwQuR5wuGD3+82K6JgJlm/Y+KI92oNsMNGZCYdDsVtRHSak0pcV5Dno5+4jh9sw==}
+    engines: {node: '>=0.4.0'}
+    hasBin: true
+
+  acorn@8.17.0:
+    resolution: {integrity: sha512-xRQbDb9BnwDafYNn6Vwl839DYVjqXYb1XVGtWAZ1kcDc6iwAL4hg3B1dZlRiuENFeO2H53gFG3in621AdERVAg==}
     engines: {node: '>=0.4.0'}
     hasBin: true
 
@@ -1776,11 +1781,11 @@ packages:
       typedoc-plugin-markdown:
         optional: true
 
-  starlight-versions@0.5.6:
-    resolution: {integrity: sha512-hpQ2okM+93MKSVtmIfcFyL27x33uw0L1Sm2SwlnBNC01MW33II9lLbSf6lQHt1ngtEwI8ZDbyzUFIflgMGKKjw==}
-    engines: {node: '>=18'}
+  starlight-versions@0.9.0:
+    resolution: {integrity: sha512-x3R9PODRVWuRWk0EDVgMO8OEttiKlGUUY22QMk9XehY8o3nxSkwyMpvapXgFyZQvpbBLgW5/xCvnoJlb87N5og==}
+    engines: {node: '>=22.12.0'}
     peerDependencies:
-      '@astrojs/starlight': '>=0.32.0'
+      '@astrojs/starlight': '>=0.39.0'
 
   stream-replace-string@2.0.0:
     resolution: {integrity: sha512-TlnjJ1C0QrmxRNrON00JvaFFlNh5TTG00APw23j74ET7gkQpTASi6/L2fuiav8pzK715HXtUeClpBTw2NPSn6w==}
@@ -2857,7 +2862,13 @@ snapshots:
     dependencies:
       acorn: 8.16.0
 
+  acorn-jsx@5.3.2(acorn@8.17.0):
+    dependencies:
+      acorn: 8.17.0
+
   acorn@8.16.0: {}
+
+  acorn@8.17.0: {}
 
   ajv-draft-04@1.0.0(ajv@8.20.0):
     optionalDependencies:
@@ -3899,8 +3910,8 @@ snapshots:
 
   micromark-extension-mdxjs@3.0.0:
     dependencies:
-      acorn: 8.16.0
-      acorn-jsx: 5.3.2(acorn@8.16.0)
+      acorn: 8.17.0
+      acorn-jsx: 5.3.2(acorn@8.17.0)
       micromark-extension-mdx-expression: 3.0.1
       micromark-extension-mdx-jsx: 3.0.2
       micromark-extension-mdx-md: 2.0.0
@@ -4479,7 +4490,7 @@ snapshots:
       astro: 6.3.3(@types/node@24.12.4)(rollup@4.60.4)(yaml@2.9.0)
       github-slugger: 2.0.0
 
-  starlight-versions@0.5.6(@astrojs/starlight@0.39.2(astro@6.3.3(@types/node@24.12.4)(rollup@4.60.4)(yaml@2.9.0))(typescript@6.0.3)):
+  starlight-versions@0.9.0(@astrojs/starlight@0.39.2(astro@6.3.3(@types/node@24.12.4)(rollup@4.60.4)(yaml@2.9.0))(typescript@6.0.3)):
     dependencies:
       '@astrojs/starlight': 0.39.2(astro@6.3.3(@types/node@24.12.4)(rollup@4.60.4)(yaml@2.9.0))(typescript@6.0.3)
       '@pagefind/default-ui': 1.5.2

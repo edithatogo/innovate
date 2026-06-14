@@ -94,6 +94,8 @@ def test_cutover_inventory_has_no_remaining_stale_work_after_cleanup() -> None:
     assert inventory["legacy_surfaces"]["retention_policy"] == ("archival_and_redirect_reference_only")
     assert inventory["stale_active_track_folders"] == []
     assert inventory["stale_cutover_language"] == []
+    resolved_items = {entry["item"]: entry for entry in inventory["resolved_items"]}
+    assert resolved_items["starlight-versions active middleware"]["status"] == "enabled"
 
 
 def test_starlight_validation_evidence_records_routes_and_build_status() -> None:
@@ -110,6 +112,7 @@ def test_starlight_validation_evidence_records_routes_and_build_status() -> None
 
     resolved = {entry["id"]: entry for entry in evidence["resolved_blockers"]}
     assert resolved["starlight_polyglot_missing_python_handler_bundle"]["status"] == ("resolved")
+    assert resolved["starlight_versions_astro6_404_middleware"]["status"] == "resolved"
     blockers = {entry["id"]: entry for entry in evidence["blockers"]}
     assert blockers["docsearch_credentials"]["status"] == "external_credentials_required"
-    assert blockers["starlight_versions_astro6_404_middleware"]["status"] == ("compatibility_disabled")
+    assert "starlight_versions_astro6_404_middleware" not in blockers
