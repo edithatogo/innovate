@@ -13,7 +13,7 @@
     - [x] Commit this task before starting the next task
 - [x] Task: Conductor - Automated Review and Checkpoint 'Red-Phase Cutover Checks' (Protocol in workflow.md)
 
-## Phase 2: Cutover Cleanup
+## Phase 2: Cutover Cleanup [checkpoint: pending]
 
 - [x] Task: Update active documentation stack claims ce91fcf
     - [x] Update product status, tech-stack, and roadmap docs to agree on Starlight
@@ -27,7 +27,7 @@
     - [x] Run Starlight build and route/link generation checks
     - [x] Record blockers for external services such as DocSearch if credentials are unavailable
     - [x] Commit this task before starting the next task
-- [ ] Task: Conductor - Automated Review and Checkpoint 'Cutover Cleanup' (Protocol in workflow.md)
+- [x] Task: Conductor - Automated Review and Checkpoint 'Cutover Cleanup' (Protocol in workflow.md)
 
 ## Phase 3: Final Cutover Evidence
 
