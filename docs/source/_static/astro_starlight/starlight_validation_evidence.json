@@ -49,7 +49,7 @@
       "resolution": "Pinned starlight-versions ^0.9.0, enabled the plugin in astro.config.mjs, and registered docsVersionsLoader() for the versions content collection."
     }
   ],
-  "blockers": [
+  "external_gates": [
     {
       "id": "docsearch_credentials",
       "status": "external_credentials_required",

@@ -97,6 +97,9 @@ def test_cutover_inventory_has_no_remaining_stale_work_after_cleanup() -> None:
     assert inventory["stale_active_track_folders"] == []
     assert inventory["stale_cutover_language"] == []
     assert inventory["version_status"]["docsearch_package_present"] is True
+    assert "blocked_or_deferred_items" not in inventory
+    external_gates = {entry["item"]: entry for entry in inventory["external_gate_items"]}
+    assert external_gates["DocSearch credentials"]["status"] == "external_credentials_required"
     resolved_items = {entry["item"]: entry for entry in inventory["resolved_items"]}
     assert resolved_items["starlight-versions active middleware"]["status"] == "enabled"
 
@@ -116,6 +119,7 @@ def test_starlight_validation_evidence_records_routes_and_build_status() -> None
     resolved = {entry["id"]: entry for entry in evidence["resolved_blockers"]}
     assert resolved["starlight_polyglot_missing_python_handler_bundle"]["status"] == ("resolved")
     assert resolved["starlight_versions_astro6_404_middleware"]["status"] == "resolved"
-    blockers = {entry["id"]: entry for entry in evidence["blockers"]}
-    assert blockers["docsearch_credentials"]["status"] == "external_credentials_required"
-    assert "starlight_versions_astro6_404_middleware" not in blockers
+    assert "blockers" not in evidence
+    external_gates = {entry["id"]: entry for entry in evidence["external_gates"]}
+    assert external_gates["docsearch_credentials"]["status"] == "external_credentials_required"
+    assert "starlight_versions_astro6_404_middleware" not in external_gates

@@ -42,7 +42,7 @@
       "evidence": "starlight-versions 0.9.0 is enabled in docs/astro-site/astro.config.mjs, the versions content collection uses docsVersionsLoader(), and pnpm build renders /404 plus versioned routes successfully."
     }
   ],
-  "blocked_or_deferred_items": [
+  "external_gate_items": [
     {
       "item": "DocSearch credentials",
       "status": "external_credentials_required",
