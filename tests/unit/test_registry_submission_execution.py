@@ -65,12 +65,19 @@ def test_registry_submission_inventory_requires_audit_fields() -> None:
         assert entry["submission_status"] in {
             "submitted",
             "deferred",
-            "blocked",
+            "ready_for_review",
+            "ready_for_maintainer",
             "not_applicable",
         }
         assert entry["evidence"], entry["target_id"]
         assert entry["receipt"] is not None
         assert entry["release_path"], entry["target_id"]
+
+    statuses = {entry["target_id"]: entry["submission_status"] for entry in inventory["targets"]}
+    assert statuses["spack"] == "ready_for_review"
+    assert statuses["easybuild"] == "ready_for_review"
+    assert statuses["hpsf"] == "ready_for_maintainer"
+    assert statuses["e4s"] == "ready_for_maintainer"
 
 
 def test_registry_submission_docs_still_reflect_readiness_not_submission() -> None:

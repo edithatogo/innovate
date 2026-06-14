@@ -10,7 +10,7 @@ Publication targets
 
 The repository now records live submission receipts for the package-manager
 targets that have been published. See ``registry_submission_receipts`` for the
-current registry URLs and blocker notes.
+current registry URLs, deferred targets, and maintainer-managed handoff states.
 
 Python
   Publish the primary package to PyPI/TestPyPI through trusted publishing

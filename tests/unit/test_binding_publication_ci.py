@@ -70,6 +70,10 @@ def test_binding_publication_docs_name_registry_targets() -> None:
     ):
         assert target in docs
 
+    assert "registry_submission_receipts" in docs
+    assert "maintainer-managed handoff states" in docs
+    assert "blocker notes" not in docs
+
 
 def test_ci_workflow_runs_implemented_language_bindings() -> None:
     """The main CI workflow should validate every implemented binding toolchain."""
