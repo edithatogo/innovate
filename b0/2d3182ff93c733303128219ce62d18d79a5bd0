@@ -1,0 +1,21 @@
+Task: Harden R, Julia, and TypeScript bindings
+
+Summary:
+- Added binding_hardening_evidence.v1 machine-readable evidence for R, Julia, and TypeScript.
+- Added idiomatic docs snippets for fit/predict usage in each language.
+- Added unit tests that require package-check evidence, source/example paths, and language-specific snippet markers.
+
+Files:
+- conductor/tracks/polyglot_binding_excellence_20260614/plan.md
+- docs/source/_static/binding_hardening_evidence.json
+- docs/source/_static/binding_snippets/r.md
+- docs/source/_static/binding_snippets/julia.md
+- docs/source/_static/binding_snippets/typescript.md
+- tests/unit/test_polyglot_binding_hardening.py
+
+Validation:
+- uv run pytest tests/unit/test_polyglot_binding_hardening.py tests/unit/test_polyglot_binding_conformance.py tests/unit/test_polyglot_binding_golden_fixtures.py -q
+- uv run ruff check tests/unit/test_polyglot_binding_hardening.py tests/unit/test_polyglot_binding_conformance.py tests/unit/test_polyglot_binding_golden_fixtures.py
+
+Why:
+This makes the first hardened binding set auditable through shared evidence rather than generic parity claims.
