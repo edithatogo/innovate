@@ -8,7 +8,7 @@
     - [ ] Add fail-first tests for API shape and dependency fallback behavior
     - [ ] Commit implementation changes for this task
     - [ ] Commit this plan update with the task commit SHA
-- [ ] Task: Add advanced workflow fixtures
+- [~] Task: Add advanced workflow fixtures
     - [ ] Create representative datasets for ensemble, policy, streaming, and calibration workflows
     - [ ] Add reproducibility metadata and fixture validation tests
     - [ ] Document fixture assumptions

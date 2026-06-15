@@ -1,0 +1,63 @@
+{
+  "schema_version": "advanced_workflow_fixtures.v1",
+  "reproducibility": {
+    "seed": 20260614,
+    "generated_by": "conductor advanced modeling runtime track",
+    "license": "Apache-2.0"
+  },
+  "cases": [
+    {
+      "case_id": "regime_ensemble_adoption",
+      "workflow": "regime_ensemble",
+      "time": [1, 2, 3, 4, 5, 6, 7, 8],
+      "observed": [4.0, 8.2, 14.1, 23.4, 37.5, 54.7, 70.8, 82.0],
+      "covariates": {
+        "awareness_index": [0.12, 0.16, 0.23, 0.31, 0.45, 0.61, 0.73, 0.82]
+      },
+      "assumptions": [
+        "Two plausible adoption regimes are present before and after period 4.",
+        "Observed values are cumulative adoption counts."
+      ]
+    },
+    {
+      "case_id": "policy_rebate_scenario",
+      "workflow": "policy_scenario",
+      "time": [1, 2, 3, 4, 5, 6, 7, 8],
+      "observed": [3.0, 6.0, 10.0, 17.0, 29.0, 45.0, 61.0, 75.0],
+      "covariates": {
+        "rebate_active": [0, 0, 0, 1, 1, 1, 1, 1],
+        "media_spend": [0.3, 0.35, 0.36, 0.5, 0.55, 0.57, 0.6, 0.63]
+      },
+      "assumptions": [
+        "The intervention starts at period 4.",
+        "The effect summary compares active rebate against a no-policy baseline."
+      ]
+    },
+    {
+      "case_id": "streaming_update_monthly",
+      "workflow": "streaming_update",
+      "time": [1, 2, 3, 4, 5, 6],
+      "observed": [5.0, 9.0, 15.0, 24.0, 36.0, 49.0],
+      "covariates": {
+        "batch_index": [1, 1, 2, 2, 3, 3]
+      },
+      "assumptions": [
+        "The first four periods form the initial fit window.",
+        "Periods 5 and 6 arrive as incremental updates."
+      ]
+    },
+    {
+      "case_id": "uncertainty_calibration_backtest",
+      "workflow": "uncertainty_calibration",
+      "time": [1, 2, 3, 4, 5, 6, 7],
+      "observed": [2.0, 5.0, 9.0, 16.0, 26.0, 39.0, 53.0],
+      "covariates": {
+        "holdout": [0, 0, 0, 0, 1, 1, 1]
+      },
+      "assumptions": [
+        "Periods 1 through 4 are used for calibration.",
+        "Periods 5 through 7 are used for interval coverage backtesting."
+      ]
+    }
+  ]
+}
