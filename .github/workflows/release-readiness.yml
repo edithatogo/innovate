@@ -1,0 +1,70 @@
+name: Release Readiness
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [main, work]
+  pull_request:
+    branches: [main, work]
+  workflow_dispatch:
+  schedule:
+    - cron: "30 6 * * 1"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  readiness-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install dependencies
+        run: uv sync --python 3.12
+
+      - name: Generate supply-chain evidence
+        run: uv run nox -s release_supply_chain
+
+      - name: Generate reproducibility evidence
+        run: uv run nox -s release_reproducibility
+
+      - name: Generate release-readiness report
+        run: uv run nox -s release_readiness
+
+      - name: Upload release-readiness-report
+        uses: actions/upload-artifact@v6
+        with:
+          name: release-readiness-report
+          path: |
+            docs/source/_static/release_readiness/readiness-report.json
+            docs/source/_static/release_readiness/evidence/*.json
+          if-no-files-found: error
+
+  release-lane-checks:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Document scheduled or manual release lane
+        run: |
+          printf '%s\n' \
+            'This scheduled or manual release lane owns expensive checks.' \
+            'Mutation sampling, package dry-runs, compatibility sweeps, and external audit refreshes stay out of fast PR checks.'
+
+      - name: Upload release lane note
+        uses: actions/upload-artifact@v6
+        with:
+          name: release-lane-checks
+          path: .github/workflows/release-readiness.yml
