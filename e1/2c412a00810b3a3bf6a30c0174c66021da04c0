@@ -1,0 +1,16 @@
+Task: Add observability and maintenance pages
+
+Summary:
+- Extended scripts/generate_docs_dashboards.py to produce docs/source/_static/astro_starlight/observability_maintenance.json.
+- Generated current and latest Starlight pages for package health, compatibility, deprecation, support, and maintenance policy.
+- Added navigation and maintainer index links for the new policy pages.
+- Extended tests to require evidence links and route registration.
+
+Validation:
+- uv run pytest tests/unit/test_production_docs_observability.py tests/unit/test_astro_starlight_route_coverage.py tests/unit/test_astro_starlight_link_validation.py tests/unit/test_starlight_cutover_legacy_cleanup.py tests/unit/test_astro_starlight_cutover_verification.py -q
+- uv run ruff check scripts/generate_docs_dashboards.py scripts/verify_production_docs.py tests/unit/test_production_docs_observability.py noxfile.py
+- pnpm build && pnpm check && python ../../scripts/generate_docs_dashboards.py --json && python ../../scripts/verify_production_docs.py --json from docs/astro-site
+- uv run nox -s production_docs
+
+Why:
+- Production maturity requires visible support and maintenance policy surfaces that are backed by evidence artifacts rather than free-form status claims.
