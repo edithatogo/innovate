@@ -379,7 +379,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: External Acceptance Completion**
+- [~] **Track: External Acceptance Completion**
   *Link: [./tracks/external_acceptance_completion_20260614/](./tracks/external_acceptance_completion_20260614/)*
 
 ---

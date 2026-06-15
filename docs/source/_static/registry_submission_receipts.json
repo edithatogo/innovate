@@ -1,13 +1,79 @@
 {
   "schema_version": 1,
-  "captured_at": "2026-06-14T00:00:00+10:00",
+  "captured_at": "2026-06-16T00:00:00+10:00",
   "closure_inventory": "docs/source/_static/external_submission_target_inventory.json",
+  "live_evidence": [
+    {
+      "target_id": "python_pypi",
+      "source_kind": "registry_api",
+      "source_url": "https://pypi.org/pypi/innovate/json",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "observed_state": "published",
+      "observed_version": "0.5.0",
+      "evidence_summary": "PyPI JSON reports innovate version 0.5.0 with releases through 0.5.0."
+    },
+    {
+      "target_id": "typescript_npm",
+      "source_kind": "registry_api",
+      "source_url": "https://registry.npmjs.org/innovate.ts",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "observed_state": "published",
+      "observed_version": "0.5.0",
+      "evidence_summary": "npm registry metadata reports latest dist-tag 0.5.0."
+    },
+    {
+      "target_id": "rust_crates_io",
+      "source_kind": "registry_api",
+      "source_url": "https://crates.io/api/v1/crates/innovate-rs",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "observed_state": "published",
+      "observed_version": "0.5.0",
+      "evidence_summary": "crates.io metadata reports newest/max version 0.5.0."
+    },
+    {
+      "target_id": "julia_general",
+      "source_kind": "github_api",
+      "source_url": "https://api.github.com/repos/JuliaRegistries/General/pulls/155126",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "observed_state": "submitted_open_pr",
+      "observed_version": "0.5.0",
+      "evidence_summary": "Julia General pull request 155126 remains open and unmerged for Innovate v0.5.0."
+    },
+    {
+      "target_id": "go_modules",
+      "source_kind": "go_proxy",
+      "source_url": "https://proxy.golang.org/github.com/edithatogo/innovate/bindings/go/@v/list",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "observed_state": "published",
+      "observed_version": "v0.5.0",
+      "evidence_summary": "Go proxy version list includes v0.5.0 for the bindings/go module."
+    },
+    {
+      "target_id": "csharp_nuget",
+      "source_kind": "registry_api",
+      "source_url": "https://api.nuget.org/v3-flatcontainer/innovate.cs/index.json",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "observed_state": "published",
+      "observed_version": "0.5.0",
+      "evidence_summary": "NuGet flat-container index lists innovate.cs version 0.5.0."
+    },
+    {
+      "target_id": "r_r_universe",
+      "source_kind": "registry_api",
+      "source_url": "https://edithatogo.r-universe.dev/api/packages/innovate.R",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "observed_state": "indexed",
+      "observed_version": "0.5.0",
+      "evidence_summary": "R-universe package API reports innovate.R version 0.5.0."
+    }
+  ],
   "submitted_targets": [
     {
       "target_id": "python_pypi",
       "registry": "PyPI/TestPyPI",
       "receipt_url": "https://pypi.org/project/innovate/",
       "version": "0.5.0",
+      "live_evidence_id": "python_pypi",
       "evidence": [
         "https://pypi.org/pypi/innovate/json"
       ]
@@ -17,6 +83,7 @@
       "registry": "npm",
       "receipt_url": "https://www.npmjs.com/package/innovate.ts",
       "version": "0.5.0",
+      "live_evidence_id": "typescript_npm",
       "evidence": [
         "https://registry.npmjs.org/innovate.ts"
       ]
@@ -26,6 +93,7 @@
       "registry": "crates.io",
       "receipt_url": "https://crates.io/crates/innovate-rs",
       "version": "0.5.0",
+      "live_evidence_id": "rust_crates_io",
       "evidence": [
         "https://crates.io/api/v1/crates/innovate-rs"
       ]
@@ -35,6 +103,7 @@
       "registry": "Julia General",
       "receipt_url": "https://github.com/JuliaRegistries/General/pull/155126",
       "version": "0.5.0",
+      "live_evidence_id": "julia_general",
       "evidence": [
         "https://github.com/edithatogo/innovate/commit/2334da74db0d6f723300b1b32f54b2a20ebefd17#commitcomment-184847382",
         "bindings/julia/README.md",
@@ -47,6 +116,7 @@
       "registry": "Go modules",
       "receipt_url": "https://pkg.go.dev/github.com/edithatogo/innovate/bindings/go",
       "version": "v0.5.0",
+      "live_evidence_id": "go_modules",
       "evidence": [
         "bindings/go/go.mod",
         "go list -m -versions github.com/edithatogo/innovate/bindings/go"
@@ -57,6 +127,7 @@
       "registry": "NuGet",
       "receipt_url": "https://www.nuget.org/packages/innovate.cs/",
       "version": "0.5.0",
+      "live_evidence_id": "csharp_nuget",
       "evidence": [
         "https://api.nuget.org/v3-flatcontainer/innovate.cs/index.json"
       ]
@@ -66,6 +137,7 @@
       "registry": "R-universe",
       "receipt_url": "https://github.com/edithatogo/edithatogo.r-universe.dev/commit/8033021d768d9c8917f711f30b3387b2ef65b90b",
       "version": "0.5.0",
+      "live_evidence_id": "r_r_universe",
       "evidence": [
         "https://github.com/edithatogo/edithatogo.r-universe.dev/blob/main/packages.json",
         "bindings/r/README.md"

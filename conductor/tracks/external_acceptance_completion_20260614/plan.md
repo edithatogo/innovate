@@ -2,7 +2,7 @@
 
 ## Phase 1: Live Evidence Refresh
 
-- [ ] Task: Refresh package-manager receipt evidence
+- [~] Task: Refresh package-manager receipt evidence
     - [ ] Verify PyPI, npm, crates.io, Julia General, Go modules, NuGet, and R-universe current states
     - [ ] Record version, receipt URL, acceptance state, and evidence timestamp
     - [ ] Add drift tests for stale or mismatched registry states
