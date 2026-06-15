@@ -1,0 +1,39 @@
+{
+  "schema_version": "advanced_runtime_performance_evidence.v1",
+  "policy": "prefer proven accelerator, otherwise fail-safe numpy fallback",
+  "generated_at": "2026-06-15T00:00:00Z",
+  "evidence": [
+    {
+      "workflow": "regime_ensemble",
+      "backend": "numpy",
+      "fallback_safe": true,
+      "rows": 8,
+      "max_runtime_ms": 5.0,
+      "evidence_type": "local_smoke"
+    },
+    {
+      "workflow": "policy_scenario",
+      "backend": "numpy",
+      "fallback_safe": true,
+      "rows": 8,
+      "max_runtime_ms": 5.0,
+      "evidence_type": "local_smoke"
+    },
+    {
+      "workflow": "streaming_update",
+      "backend": "numpy",
+      "fallback_safe": true,
+      "rows": 6,
+      "max_runtime_ms": 5.0,
+      "evidence_type": "local_smoke"
+    },
+    {
+      "workflow": "uncertainty_calibration",
+      "backend": "numpy",
+      "fallback_safe": true,
+      "rows": 7,
+      "max_runtime_ms": 5.0,
+      "evidence_type": "local_smoke"
+    }
+  ]
+}
