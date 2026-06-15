@@ -18,7 +18,7 @@
 
 ## Phase 2: Modeling Feature Implementation
 
-- [~] Task: Implement ensemble and scenario workflows
+- [x] Task: Implement ensemble and scenario workflows [0369998]
     - [ ] Add ensemble composition and scoring support
     - [ ] Add causal-policy scenario comparison with auditable assumptions
     - [ ] Add integration tests from fit to scenario summary
