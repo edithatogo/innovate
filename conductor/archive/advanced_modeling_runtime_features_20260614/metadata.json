@@ -1,7 +1,7 @@
 {
   "track_id": "advanced_modeling_runtime_features_20260614",
   "type": "feature",
-  "status": "new",
+  "status": "completed",
   "created_at": "2026-06-14T12:36:03Z",
   "updated_at": "2026-06-14T12:36:03Z",
   "description": "Exceed the existing roadmap with advanced modeling and runtime features: regime ensembles, causal-policy simulation, streaming updates, uncertainty calibration, and accelerator-aware execution."
