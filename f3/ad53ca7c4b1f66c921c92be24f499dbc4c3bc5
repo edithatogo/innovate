@@ -1,0 +1,21 @@
+Task: Add binding conformance CI gates
+
+Summary:
+- Added a dedicated Binding Conformance workflow that runs shared binding inventory, golden fixture, and hardening tests.
+- Configured CI artifact upload for binding conformance inventory, golden fixtures, and hardening evidence.
+- Added local fallback documentation for maintainers when language-native toolchains are unavailable.
+- Added unit tests that enforce workflow commands, artifact paths, and fallback docs.
+
+Files:
+- conductor/tracks/polyglot_binding_excellence_20260614/plan.md
+- .github/workflows/binding-conformance.yml
+- docs/source/binding_conformance_ci.rst
+- tests/unit/test_binding_conformance_ci.py
+
+Validation:
+- uv run pytest tests/unit/test_binding_conformance_ci.py tests/unit/test_polyglot_binding_hardening.py tests/unit/test_polyglot_binding_conformance.py tests/unit/test_polyglot_binding_golden_fixtures.py -q
+- uv run ruff check tests/unit/test_binding_conformance_ci.py tests/unit/test_polyglot_binding_hardening.py tests/unit/test_polyglot_binding_conformance.py tests/unit/test_polyglot_binding_golden_fixtures.py
+- actionlint was not installed locally; CI lint remains the workflow syntax gate.
+
+Why:
+This prevents shared binding evidence drift and gives release maintainers inspectable CI artifacts.
