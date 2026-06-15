@@ -18,12 +18,12 @@
 
 ## Phase 2: Security, Provenance, and Reproducibility
 
-- [ ] Task: Add supply-chain evidence gates
-    - [ ] Add SBOM, dependency audit, license inventory, and checksum evidence generation
-    - [ ] Add CI checks that verify evidence freshness
-    - [ ] Ensure local checks do not require secrets
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Add supply-chain evidence gates `5a66657`
+    - [x] Add SBOM, dependency audit, license inventory, and checksum evidence generation
+    - [x] Add CI checks that verify evidence freshness
+    - [x] Ensure local checks do not require secrets
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Add reproducibility gates
     - [ ] Add deterministic benchmark fixture checks
     - [ ] Add seeded simulation and generated artifact reproducibility checks
