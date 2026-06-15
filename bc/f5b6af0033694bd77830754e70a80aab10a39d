@@ -1,0 +1,26 @@
+Task: Add reproducibility gates
+
+Summary:
+- Added scripts.release_reproducibility for deterministic release reproducibility evidence.
+- Added nox release_reproducibility session for local/CI regeneration.
+- Committed reproducibility.json covering seeded simulation digests, benchmark fixture digests, generated artifact checksum, and acceptable nondeterminism owner/rationale.
+- Refreshed readiness-report.json so reproducibility evidence is consumed by the release-readiness evaluator.
+- Added unit tests covering generator output, readiness integration, CLI behavior, and committed evidence presence.
+
+Modified files:
+- noxfile.py
+- scripts/release_reproducibility.py
+- docs/source/_static/release_readiness/evidence/reproducibility.json
+- docs/source/_static/release_readiness/readiness-report.json
+- tests/unit/test_release_reproducibility_evidence.py
+
+Validation:
+- uv run pytest tests/unit/test_release_reproducibility_evidence.py -q
+- uv run nox -s release_reproducibility
+- uv run nox -s release_readiness
+- uv run ruff check noxfile.py scripts/release_reproducibility.py tests/unit/test_release_reproducibility_evidence.py scripts/release_readiness.py
+- uv run ruff format --check noxfile.py scripts/release_reproducibility.py tests/unit/test_release_reproducibility_evidence.py scripts/release_readiness.py
+- uv run pytest tests/unit/test_release_reproducibility_evidence.py tests/unit/test_release_supply_chain_evidence.py tests/unit/test_release_readiness_contract.py tests/unit/test_release_readiness_reporting.py -q
+
+Why:
+- Mature release review needs deterministic evidence for benchmark fixtures, seeded simulations, generated artifacts, and bounded nondeterminism.
