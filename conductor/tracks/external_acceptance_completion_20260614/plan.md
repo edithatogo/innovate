@@ -1,6 +1,6 @@
 # Implementation Plan
 
-## Phase 1: Live Evidence Refresh
+## Phase 1: Live Evidence Refresh [checkpoint: 0045896]
 
 - [x] Task: Refresh package-manager receipt evidence [f52cc66]
     - [x] Verify PyPI, npm, crates.io, Julia General, Go modules, NuGet, and R-universe current states
@@ -14,7 +14,7 @@
     - [x] Remove any generic blocked language
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Conductor - User Manual Verification 'Live Evidence Refresh' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Live Evidence Refresh' (Protocol in workflow.md)
 
 ## Phase 2: Submission Packet Completion
 
