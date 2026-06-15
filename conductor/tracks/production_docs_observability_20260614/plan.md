@@ -8,12 +8,12 @@
     - [x] Document local and CI verification commands
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [~] Task: Finalize DocSearch gate behavior
-    - [ ] Verify fallback behavior without Algolia credentials
-    - [ ] Add deployment-secret documentation and CI-safe checks
-    - [ ] Add evidence fields for enabled, disabled, or externally blocked status
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Finalize DocSearch gate behavior [26ad957]
+    - [x] Verify fallback behavior without Algolia credentials
+    - [x] Add deployment-secret documentation and CI-safe checks
+    - [x] Add evidence fields for enabled, disabled, or externally blocked status
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Conductor - User Manual Verification 'Production Docs Gates' (Protocol in workflow.md)
 
 ## Phase 2: Evidence-Backed Dashboards
