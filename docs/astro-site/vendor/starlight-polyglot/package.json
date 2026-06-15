@@ -1,0 +1,38 @@
+{
+  "name": "starlight-polyglot",
+  "version": "0.1.0-innovate.1",
+  "license": "MIT",
+  "description": "Vendored Starlight polyglot runtime for the Innovate documentation build.",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "github-slugger": "^2.0.0"
+  },
+  "peerDependencies": {
+    "@astrojs/starlight": ">=0.39.0",
+    "astro": ">=6.0.0",
+    "typedoc": ">=0.28.0",
+    "typedoc-plugin-markdown": ">=4.6.0"
+  },
+  "peerDependenciesMeta": {
+    "typedoc": {
+      "optional": true
+    },
+    "typedoc-plugin-markdown": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}
