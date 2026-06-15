@@ -1,0 +1,16 @@
+Task: Define advanced capability contracts
+
+Summary:
+- Added innovate.advanced_runtime with advanced capability metadata, stable AdvancedResult serialization, and explicit backend selection/fallback policy.
+- Exposed the new contract layer through the package lazy public API.
+- Added fail-first and branch coverage tests for stability labels, capability lookup, JSON payloads, and missing-backend fallback behavior.
+
+Files:
+- conductor/tracks.md
+- conductor/tracks/advanced_modeling_runtime_features_20260614/plan.md
+- src/innovate/__init__.py
+- src/innovate/advanced_runtime.py
+- tests/unit/test_advanced_runtime_contracts.py
+
+Why:
+- Advanced workflows need a stable machine-readable contract before modeling implementations can depend on them.
