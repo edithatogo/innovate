@@ -1,6 +1,6 @@
 # Implementation Plan
 
-## Phase 1: Conformance Contract and Golden Fixtures
+## Phase 1: Conformance Contract and Golden Fixtures [checkpoint: 4212538]
 
 - [x] Task: Define cross-language conformance schema [7c36274]
     - [x] Specify binding status, capability, operation, payload, error, and version fields
@@ -14,7 +14,7 @@
     - [x] Wire fixture validation into Python and Rust first
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [~] Task: Conductor - User Manual Verification 'Conformance Contract and Golden Fixtures' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Conformance Contract and Golden Fixtures' (Protocol in workflow.md)
 
 ## Phase 2: Language Binding Hardening
 
