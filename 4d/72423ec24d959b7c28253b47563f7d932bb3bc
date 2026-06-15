@@ -1,0 +1,22 @@
+Task: Add GitHub Actions release-readiness workflow
+
+Summary:
+- Added .github/workflows/release-readiness.yml for local-equivalent release-readiness report generation in GitHub Actions.
+- Workflow runs release_supply_chain, release_reproducibility, and release_readiness nox sessions without secrets.
+- Workflow uploads readiness-report.json and evidence artifacts.
+- Added a scheduled/manual release-lane job documenting slower mutation sampling, dry-run, compatibility, and audit refresh checks separately from fast PR checks.
+- Added unit tests validating workflow triggers, local gate commands, artifact upload, and slow-lane separation.
+
+Modified files:
+- .github/workflows/release-readiness.yml
+- tests/unit/test_release_readiness_workflow.py
+
+Validation:
+- uv run pytest tests/unit/test_release_readiness_workflow.py -q
+- uv run ruff check tests/unit/test_release_readiness_workflow.py
+- uv run ruff format --check tests/unit/test_release_readiness_workflow.py
+- python YAML parse check for .github/workflows/release-readiness.yml
+- actionlint was not installed locally.
+
+Why:
+- Release maturity requires GitHub Actions to expose the same readiness report generation and artifact retention path maintainers can run locally.
