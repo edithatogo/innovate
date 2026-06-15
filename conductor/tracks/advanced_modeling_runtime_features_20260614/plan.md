@@ -32,7 +32,7 @@
     - [x] Commit this plan update with the task commit SHA
 - [x] Task: Conductor - User Manual Verification 'Modeling Feature Implementation' (Protocol in workflow.md)
 
-## Phase 3: Accelerator Policy, Examples, and Validation
+## Phase 3: Accelerator Policy, Examples, and Validation [checkpoint: 552c099]
 
 - [x] Task: Add accelerator-aware execution policy [c0af6ab]
     - [x] Implement capability-based routing for NumPy, JAX, and Rust-native paths
@@ -46,4 +46,4 @@
     - [x] Validate examples in CI or a documented release lane
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [~] Task: Conductor - User Manual Verification 'Accelerator Policy, Examples, and Validation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Accelerator Policy, Examples, and Validation' (Protocol in workflow.md)
