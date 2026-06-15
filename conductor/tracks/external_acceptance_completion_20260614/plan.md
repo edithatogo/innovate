@@ -18,11 +18,11 @@
 
 ## Phase 2: Submission Packet Completion
 
-- [ ] Task: Complete CRAN and scientific submission packets
-    - [ ] Refresh R package checks, CRAN comments, and source package evidence
-    - [ ] Prepare pyOpenSci, rOpenSci, JOSS, NumFOCUS, Arrow, .NET, Julia, and R community packets
-    - [ ] Record exact maintainer action boundaries
-    - [ ] Commit implementation changes for this task
+- [~] Task: Complete CRAN and scientific submission packets
+    - [x] Refresh R package checks, CRAN comments, and source package evidence
+    - [x] Prepare pyOpenSci, rOpenSci, JOSS, NumFOCUS, Arrow, .NET, Julia, and R community packets
+    - [x] Record exact maintainer action boundaries
+    - [x] Commit implementation changes for this task
     - [ ] Commit this plan update with the task commit SHA
 - [ ] Task: Complete HPC submission packets
     - [ ] Refresh Spack and EasyBuild candidate recipes and scheduler evidence

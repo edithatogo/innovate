@@ -7,6 +7,7 @@
     "docs/source/_static/registry_submission_inventory.json",
     "docs/source/_static/registry_release_prerequisites.json",
     "docs/source/_static/hpc_packaging/submission_packet.json",
+    "docs/source/_static/scientific_submission_packet.json",
     "docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json",
     "docs/source/_static/community_submission_readiness_matrix.json",
     "docs/source/_static/external_governance_sustainability_matrix.json"

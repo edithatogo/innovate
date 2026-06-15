@@ -11,6 +11,20 @@ The target-level closure state is tracked in
 inventory distinguishes repository readiness from actual external submission,
 review, and acceptance.
 
+CRAN and scientific submission packet
+-------------------------------------
+
+The maintainer-ready CRAN and scientific/community action packets are stored in
+``docs/source/_static/scientific_submission_packet.json``. That packet is the
+machine-readable handoff for CRAN, pyOpenSci, rOpenSci, JOSS, NumFOCUS, PyPA,
+Apache Arrow, .NET Foundation, Julia community, R community, and
+scikit-learn-contrib decisions.
+
+The packet does not claim external submission or acceptance. Each entry records
+the maintainer owner, external action URL, local artifacts, receipt rule, and
+revisit condition that must be satisfied before the target can move from
+readiness to submitted or accepted.
+
 pyOpenSci
 ---------
 

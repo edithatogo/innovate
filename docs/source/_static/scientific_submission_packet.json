@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "generated_by_track": "external_acceptance_completion_20260614",
+  "packet_date": "2026-06-16",
+  "claim_policy": "Packet readiness is not external submission or acceptance. A target becomes submitted or accepted only after a maintainer records an external receipt, review URL, merged PR, or official response.",
+  "targets": [
+    {
+      "target_id": "r_cran",
+      "name": "CRAN",
+      "status": "ready_for_maintainer",
+      "owner": "R binding maintainers",
+      "external_action_url": "https://cran.r-project.org/submit.html",
+      "maintainer_action_boundary": "Maintainer must run final local R checks, inspect CRAN policies, submit through the CRAN web form, and record the CRAN receipt.",
+      "receipt_rule": "Do not mark submitted until the CRAN incoming receipt or maintainer confirmation URL/email is stored in registry_submission_receipts.json.",
+      "revisit_condition": "Refresh after any R package metadata change, CRAN policy change, or failed CRAN pretest.",
+      "packet_artifacts": [
+        "bindings/r/DESCRIPTION",
+        "bindings/r/NAMESPACE",
+        "bindings/r/README.md",
+        "bindings/r/NEWS.md",
+        "bindings/r/cran-comments.md",
+        "bindings/r/man",
+        "bindings/r/vignettes",
+        "bindings/r/tests",
+        "docs/source/binding_publication_ci.rst",
+        "docs/source/_static/registry_submission_receipts.json"
+      ]
+    },
+    {
+      "target_id": "pyopensci",
+      "name": "pyOpenSci",
+      "status": "ready_for_review",
+      "owner": "Scientific community maintainers",
+      "external_action_url": "https://www.pyopensci.org/software-peer-review/how-to/author-guide.html",
+      "maintainer_action_boundary": "Maintainer must decide whether to open pyOpenSci review and serve as the long-term review contact.",
+      "receipt_rule": "Do not mark submitted until a pyOpenSci software-review issue URL is recorded.",
+      "revisit_condition": "Refresh after packaging metadata, governance docs, or pyOpenSci scope rules change.",
+      "packet_artifacts": [
+        "pyproject.toml",
+        "README.md",
+        "CHANGELOG.md",
+        "CODE_OF_CONDUCT.md",
+        "CONTRIBUTING.md",
+        "SECURITY.md",
+        "docs/source/index.rst",
+        "docs/source/api_reference.rst",
+        "docs/source/tutorials.rst",
+        "docs/source/submission_readiness_dossiers.rst",
+        "tests/unit"
+      ]
+    },
+    {
+      "target_id": "ropensci",
+      "name": "rOpenSci",
+      "status": "ready_for_review",
+      "owner": "R/scientific community maintainers",
+      "external_action_url": "https://devguide.ropensci.org/softwarereview_policies.html",
+      "maintainer_action_boundary": "Maintainer must decide whether to open rOpenSci review after CRAN posture and R package evidence are current.",
+      "receipt_rule": "Do not mark submitted until a rOpenSci software-review issue URL is recorded.",
+      "revisit_condition": "Refresh after CRAN submission state changes or rOpenSci review policies change.",
+      "packet_artifacts": [
+        "bindings/r/DESCRIPTION",
+        "bindings/r/NAMESPACE",
+        "bindings/r/README.md",
+        "bindings/r/NEWS.md",
+        "bindings/r/cran-comments.md",
+        "bindings/r/man",
+        "bindings/r/vignettes",
+        "bindings/r/tests",
+        "docs/source/binding_publication_ci.rst",
+        "tests/unit/test_r_package_pdf_manual.py"
+      ]
+    },
+    {
+      "target_id": "joss",
+      "name": "JOSS",
+      "status": "ready_for_review",
+      "owner": "Scientific community maintainers",
+      "external_action_url": "https://joss.readthedocs.io/en/latest/submitting.html",
+      "maintainer_action_boundary": "Maintainer must prepare final JOSS metadata, submit through JOSS, and record the external review URL.",
+      "receipt_rule": "Do not mark submitted until a JOSS review issue URL or editor acknowledgement is recorded.",
+      "revisit_condition": "Refresh after manuscript, citation, archive DOI, or JOSS criteria change.",
+      "packet_artifacts": [
+        "paper.qmd",
+        "documents/manuscript_v2.md",
+        "documents/abstract_v2.md",
+        "CITATION.cff",
+        "README.md",
+        "docs/source/index.rst",
+        "docs/source/tutorials.rst",
+        "docs/source/innovate.benchmarks.rst",
+        "docs/source/diagnostics_uncertainty_artifacts.rst",
+        "tests"
+      ]
+    },
+    {
+      "target_id": "numfocus",
+      "name": "NumFOCUS",
+      "status": "deferred",
+      "owner": "Governance maintainers",
+      "external_action_url": "https://numfocus.org/projects-overview",
+      "maintainer_action_boundary": "Maintainer must wait for NumFOCUS application capacity to reopen or record an owner-approved governance deferral.",
+      "receipt_rule": "Do not mark submitted until a NumFOCUS application receipt or official response is stored.",
+      "revisit_condition": "Revisit when NumFOCUS publishes reopened application capacity or requests project material.",
+      "packet_artifacts": [
+        "CODE_OF_CONDUCT.md",
+        "CONTRIBUTING.md",
+        "SECURITY.md",
+        "docs/source/scientific_hpc_readiness_roadmap.rst",
+        "docs/source/external_governance_sustainability.rst",
+        "docs/source/submission_readiness_dossiers.rst",
+        "conductor/archive/external_governance_sustainability_20260507/spec.md"
+      ]
+    },
+    {
+      "target_id": "pypa",
+      "name": "PyPA",
+      "status": "not_applicable",
+      "owner": "Python maintainers",
+      "external_action_url": "https://www.pypa.io/en/latest/members/",
+      "maintainer_action_boundary": "Maintainer should not claim PyPA project submission; keep packaging standards and PyPI evidence current.",
+      "receipt_rule": "No submission receipt is expected unless PyPA creates an applicable project intake path.",
+      "revisit_condition": "Revisit only if PyPA project membership rules or Innovate's packaging governance role changes.",
+      "packet_artifacts": [
+        "pyproject.toml",
+        "README.md",
+        "docs/source/binding_publication_ci.rst",
+        "docs/source/_static/registry_submission_receipts.json"
+      ]
+    },
+    {
+      "target_id": "apache_arrow",
+      "name": "Apache Arrow",
+      "status": "ready_for_review",
+      "owner": "Interop maintainers",
+      "external_action_url": "https://arrow.apache.org/community/",
+      "maintainer_action_boundary": "Maintainer must decide whether to open Arrow community discussion using the Arrow interchange evidence packet.",
+      "receipt_rule": "Do not mark submitted until a mailing-list thread, issue, or official discussion URL is recorded.",
+      "revisit_condition": "Refresh after Arrow interchange contract, ADR, or Arrow community process changes.",
+      "packet_artifacts": [
+        "docs/source/innovate.arrow_interchange.rst",
+        "docs/source/tutorials/arrow_interchange.rst",
+        "docs/source/abi_binary_compatibility_strategy.rst",
+        "docs/adr/0001-array-api-and-arrow-foundation.md",
+        "docs/adr/0005-heoml-schema-placement.md",
+        "tests/unit/test_arrow_interchange.py",
+        "specs/ecosystem"
+      ]
+    },
+    {
+      "target_id": "dotnet_foundation",
+      "name": ".NET Foundation",
+      "status": "ready_for_review",
+      "owner": "C# binding maintainers",
+      "external_action_url": "https://dotnetfoundation.org/projects",
+      "maintainer_action_boundary": "Maintainer must decide whether to initiate .NET Foundation project review after NuGet and governance evidence are accepted.",
+      "receipt_rule": "Do not mark submitted until a .NET Foundation application, issue, or official response URL is recorded.",
+      "revisit_condition": "Refresh after NuGet publication, C# binding support, or .NET Foundation requirements change.",
+      "packet_artifacts": [
+        "bindings/csharp",
+        "docs/source/tutorials/csharp_bindings.rst",
+        "docs/source/binding_publication_ci.rst",
+        "docs/source/external_governance_sustainability.rst",
+        "docs/source/submission_readiness_dossiers.rst",
+        "tests/unit/test_csharp_binding_docs.py",
+        "conductor/archive/csharp_package_publication_20260430"
+      ]
+    },
+    {
+      "target_id": "julia_community",
+      "name": "Julia community",
+      "status": "ready_for_review",
+      "owner": "Julia binding maintainers",
+      "external_action_url": "https://pkgdocs.julialang.org/v1/registries/",
+      "maintainer_action_boundary": "Maintainer must track the Julia General pull request outcome before broader Julia community announcement.",
+      "receipt_rule": "Do not mark accepted until the Julia General pull request is merged; record any community announcement URL separately.",
+      "revisit_condition": "Refresh after Julia General PR state, Julia compat bounds, or installed-package smoke evidence changes.",
+      "packet_artifacts": [
+        "bindings/julia/Project.toml",
+        "bindings/julia/README.md",
+        "bindings/julia/src/Innovate.jl",
+        "bindings/julia/test",
+        "docs/source/tutorials/julia_bindings.rst",
+        "docs/source/binding_publication_ci.rst",
+        "docs/source/_static/registry_submission_receipts.json"
+      ]
+    },
+    {
+      "target_id": "r_community",
+      "name": "R community",
+      "status": "ready_for_review",
+      "owner": "R binding maintainers",
+      "external_action_url": "https://r-universe.dev/",
+      "maintainer_action_boundary": "Maintainer must coordinate R community outreach after CRAN and R-universe evidence are current.",
+      "receipt_rule": "Do not mark submitted until an R community discussion, package review, or announcement URL is recorded.",
+      "revisit_condition": "Refresh after CRAN, R-universe, or R package evidence changes.",
+      "packet_artifacts": [
+        "bindings/r/DESCRIPTION",
+        "bindings/r/README.md",
+        "bindings/r/cran-comments.md",
+        "bindings/r/man",
+        "bindings/r/vignettes",
+        "bindings/r/tests",
+        "docs/source/binding_publication_ci.rst",
+        "docs/source/submission_readiness_dossiers.rst",
+        "tests/unit/test_r_package_pdf_manual.py"
+      ]
+    },
+    {
+      "target_id": "scikit_learn_contrib",
+      "name": "scikit-learn-contrib",
+      "status": "not_applicable",
+      "owner": "Python maintainers",
+      "external_action_url": "https://scikit-learn-contrib.github.io/",
+      "maintainer_action_boundary": "Maintainer should not claim scikit-learn-contrib submission because Innovate scope is broader than estimator add-ons.",
+      "receipt_rule": "No submission receipt is expected unless project scope changes to a scikit-learn estimator add-on.",
+      "revisit_condition": "Revisit only if Innovate's scope changes to match scikit-learn-contrib expectations.",
+      "packet_artifacts": [
+        "src/innovate",
+        "tests/unit",
+        "docs/source/api_reference.rst",
+        "docs/source/tutorials.rst",
+        "docs/source/innovate.fitters.rst",
+        "docs/source/innovate.benchmarks.rst",
+        "docs/source/submission_readiness_dossiers.rst"
+      ]
+    }
+  ]
+}
