@@ -1,0 +1,14 @@
+Task: Add accelerator-aware execution policy
+
+Summary:
+- Added tests for fail-safe Rust-to-NumPy fallback behavior using AdvancedRuntimePolicy and select_advanced_backend.
+- Added machine-readable performance smoke evidence for regime ensemble, policy scenario, streaming update, and uncertainty calibration workflows.
+- Recorded the policy as proven accelerator preference with NumPy fallback when optional backends are unavailable.
+
+Files:
+- conductor/tracks/advanced_modeling_runtime_features_20260614/plan.md
+- docs/source/_static/advanced_runtime/performance_evidence.json
+- tests/unit/test_advanced_runtime_accelerator_evidence.py
+
+Why:
+- Accelerator routing needs evidence-backed fallback metadata before advanced workflows can be documented as safe for optional JAX or Rust-native paths.
