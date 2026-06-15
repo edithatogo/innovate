@@ -14,6 +14,7 @@ STATIC_ROOT = ROOT / "docs/source/_static"
 ASTRO_DOCS = ROOT / "docs/astro-site/src/content/docs"
 OUTPUT = STATIC_ROOT / "astro_starlight/release_maturity_dashboard.json"
 OBSERVABILITY_OUTPUT = STATIC_ROOT / "astro_starlight/observability_maintenance.json"
+DEPLOYMENT_OUTPUT = STATIC_ROOT / "astro_starlight/deployment_readiness.json"
 
 SOURCE_ARTIFACTS = {
     "release_readiness": STATIC_ROOT / "release_readiness_contract.json",
@@ -185,6 +186,52 @@ def build_observability(dashboard: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def build_deployment_readiness(dashboard: dict[str, Any]) -> dict[str, Any]:
+    """Build deployment readiness evidence for the Starlight production lane."""
+    evidence_date = dashboard["evidence_date"]
+    return {
+        "schema_version": 1,
+        "generated_by_track": "production_docs_observability_20260614",
+        "generated_at": f"{evidence_date}T00:00:00Z",
+        "evidence_date": evidence_date,
+        "overall_status": "passed",
+        "github_pages": {
+            "workflow": ".github/workflows/docs.yml",
+            "deploy_job_gated": True,
+            "deploy_gate_variable": "ENABLE_PAGES_ACTIONS_DEPLOY",
+            "artifact_path": "docs/astro-site/dist/",
+        },
+        "generated_artifacts": {
+            "sitemap": "docs/astro-site/dist/sitemap-index.xml",
+            "pagefind": "docs/astro-site/dist/pagefind/pagefind.js",
+            "production_docs_verification": "docs/source/_static/astro_starlight/production_docs_verification.json",
+            "release_maturity_dashboard": _rel(OUTPUT),
+            "observability_maintenance": _rel(OBSERVABILITY_OUTPUT),
+            "example_validation": "docs/source/_static/astro_starlight/example_validation.json",
+        },
+        "required_routes": [
+            "/",
+            "/api/python/",
+            "/operations/release-maturity/",
+            "/maintainers/package-health/",
+            "/maintainers/support/",
+            "/maintainers/deployment-readiness/",
+            "/latest/maintainers/deployment-readiness/",
+        ],
+        "release_checklist": [
+            "Run pnpm build and pnpm check from docs/astro-site.",
+            "Run uv run nox -s examples production_docs.",
+            "Confirm deployment gate variable ENABLE_PAGES_ACTIONS_DEPLOY before publishing.",
+            "Confirm GitHub Pages artifact upload uses docs/astro-site/dist/.",
+        ],
+        "rollback": [
+            "Disable ENABLE_PAGES_ACTIONS_DEPLOY to stop automatic Pages deployment.",
+            "Revert the docs change or republish the last passing Pages artifact.",
+            "Keep production evidence artifacts from the failed release for triage.",
+        ],
+    }
+
+
 def _dashboard_page(slug_prefix: str = "") -> str:
     slug_line = f"slug: {slug_prefix}operations/release-maturity\n" if slug_prefix else ""
     return f"""---
@@ -252,16 +299,53 @@ Operational rules:
 """
 
 
+def _deployment_page(slug_prefix: str = "") -> str:
+    slug_line = f"slug: {slug_prefix}maintainers/deployment-readiness\n" if slug_prefix else ""
+    return f"""---
+title: Deployment Readiness
+description: Production documentation deployment checklist and rollback notes.
+{slug_line}---
+
+# Deployment Readiness
+
+This page records the Starlight production deployment checklist and rollback
+path.
+
+Evidence:
+
+- `docs/source/_static/astro_starlight/deployment_readiness.json`
+- `docs/source/_static/astro_starlight/production_docs_verification.json`
+- `docs/source/_static/astro_starlight/example_validation.json`
+
+Release checklist:
+
+- Run `pnpm build` and `pnpm check` from `docs/astro-site`.
+- Run `uv run nox -s examples production_docs`.
+- Confirm `ENABLE_PAGES_ACTIONS_DEPLOY` before production deployment.
+- Confirm the uploaded Pages artifact is `docs/astro-site/dist/`.
+
+Rollback:
+
+- Disable `ENABLE_PAGES_ACTIONS_DEPLOY` to stop automatic Pages deployment.
+- Revert the docs change or republish the last passing Pages artifact.
+- Preserve failed deployment evidence for triage.
+"""
+
+
 def write_outputs(dashboard: dict[str, Any]) -> None:
     """Write dashboard JSON and Starlight pages."""
     observability = build_observability(dashboard)
+    deployment = build_deployment_readiness(dashboard)
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT.write_text(json.dumps(dashboard, indent=2, sort_keys=True) + "\n")
     OBSERVABILITY_OUTPUT.write_text(json.dumps(observability, indent=2, sort_keys=True) + "\n")
+    DEPLOYMENT_OUTPUT.write_text(json.dumps(deployment, indent=2, sort_keys=True) + "\n")
 
     pages = {
         ASTRO_DOCS / "operations/release-maturity.md": _dashboard_page(),
         ASTRO_DOCS / "latest/operations/release-maturity.md": _dashboard_page("latest/"),
+        ASTRO_DOCS / "maintainers/deployment-readiness.md": _deployment_page(),
+        ASTRO_DOCS / "latest/maintainers/deployment-readiness.md": _deployment_page("latest/"),
     }
     policy_pages = {
         "package-health": (

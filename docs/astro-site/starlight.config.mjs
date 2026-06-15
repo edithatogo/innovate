@@ -64,6 +64,7 @@ export default {
         { label: 'Deprecation', link: '/maintainers/deprecation/' },
         { label: 'Support', link: '/maintainers/support/' },
         { label: 'Maintenance', link: '/maintainers/maintenance/' },
+        { label: 'Deployment Readiness', link: '/maintainers/deployment-readiness/' },
         { label: 'Release Readiness', link: '/maintainers/release-readiness/' },
         { label: 'Release Notes', link: '/maintainers/release-notes/' },
         { label: 'Plugins', link: '/maintainers/plugins/' },

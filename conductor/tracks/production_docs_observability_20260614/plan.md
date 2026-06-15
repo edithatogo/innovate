@@ -40,7 +40,7 @@
     - [x] Add CI evidence for runnable examples
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Add production deployment readiness evidence
+- [~] Task: Add production deployment readiness evidence
     - [ ] Verify GitHub Pages workflow, generated routes, and deployment artifacts
     - [ ] Add docs release checklist and rollback notes
     - [ ] Refresh Starlight validation evidence

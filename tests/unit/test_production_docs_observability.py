@@ -10,6 +10,7 @@ DOCSEARCH_GATE = Path("docs/source/_static/astro_starlight/docsearch_gate.json")
 RELEASE_MATURITY_DASHBOARD = Path("docs/source/_static/astro_starlight/release_maturity_dashboard.json")
 OBSERVABILITY_MAINTENANCE = Path("docs/source/_static/astro_starlight/observability_maintenance.json")
 EXAMPLE_VALIDATION = Path("docs/source/_static/astro_starlight/example_validation.json")
+DEPLOYMENT_READINESS = Path("docs/source/_static/astro_starlight/deployment_readiness.json")
 
 
 def _load_json(path: Path) -> dict:
@@ -218,3 +219,34 @@ def test_example_validation_classifies_python_and_binding_snippets() -> None:
 
     docs_page = Path("docs/astro-site/src/content/docs/maintainers/package-health.md").read_text()
     assert "example_validation.json" in docs_page
+
+
+def test_deployment_readiness_records_pages_workflow_and_rollback() -> None:
+    """Deployment readiness should verify Pages workflow, artifacts, and rollback docs."""
+    evidence = _load_json(DEPLOYMENT_READINESS)
+
+    assert evidence["schema_version"] == 1
+    assert evidence["generated_by_track"] == "production_docs_observability_20260614"
+    assert evidence["overall_status"] == "passed"
+    assert evidence["github_pages"]["workflow"] == ".github/workflows/docs.yml"
+    assert evidence["github_pages"]["deploy_job_gated"] is True
+    assert evidence["github_pages"]["artifact_path"] == "docs/astro-site/dist/"
+    assert evidence["generated_artifacts"]["sitemap"] == "docs/astro-site/dist/sitemap-index.xml"
+    assert evidence["generated_artifacts"]["pagefind"] == "docs/astro-site/dist/pagefind/pagefind.js"
+
+    required_routes = set(evidence["required_routes"])
+    assert {"/", "/api/python/", "/operations/release-maturity/", "/maintainers/support/"} <= required_routes
+
+    for path in (
+        Path("docs/astro-site/src/content/docs/maintainers/deployment-readiness.md"),
+        Path("docs/astro-site/src/content/docs/latest/maintainers/deployment-readiness.md"),
+    ):
+        text = path.read_text().lower()
+        assert "deployment_readiness.json" in text
+        assert "release checklist" in text
+        assert "rollback" in text
+        assert "enable_pages_actions_deploy" in text
+
+    workflow = Path(".github/workflows/docs.yml").read_text()
+    assert "ENABLE_PAGES_ACTIONS_DEPLOY" in workflow
+    assert "upload-pages-artifact" in workflow

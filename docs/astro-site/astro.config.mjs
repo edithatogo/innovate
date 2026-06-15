@@ -90,6 +90,7 @@ export default defineConfig({
             { label: 'Deprecation', link: '/maintainers/deprecation/' },
             { label: 'Support', link: '/maintainers/support/' },
             { label: 'Maintenance', link: '/maintainers/maintenance/' },
+            { label: 'Deployment Readiness', link: '/maintainers/deployment-readiness/' },
             { label: 'Release Notes', link: '/maintainers/release-notes/' },
             { label: 'Plugins', link: '/maintainers/plugins/' },
             { label: 'Runtime Logging', link: '/maintainers/runtime-logging/' },

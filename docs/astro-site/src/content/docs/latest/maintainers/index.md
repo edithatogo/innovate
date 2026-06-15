@@ -18,6 +18,7 @@ Available pages:
 * Deprecation
 * Support
 * Maintenance
+* Deployment Readiness
 * Release Readiness
 * Release Notes
 * Plugins

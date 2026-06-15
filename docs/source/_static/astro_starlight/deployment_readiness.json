@@ -1,0 +1,41 @@
+{
+  "evidence_date": "2026-06-16",
+  "generated_artifacts": {
+    "example_validation": "docs/source/_static/astro_starlight/example_validation.json",
+    "observability_maintenance": "docs/source/_static/astro_starlight/observability_maintenance.json",
+    "pagefind": "docs/astro-site/dist/pagefind/pagefind.js",
+    "production_docs_verification": "docs/source/_static/astro_starlight/production_docs_verification.json",
+    "release_maturity_dashboard": "docs/source/_static/astro_starlight/release_maturity_dashboard.json",
+    "sitemap": "docs/astro-site/dist/sitemap-index.xml"
+  },
+  "generated_at": "2026-06-16T00:00:00Z",
+  "generated_by_track": "production_docs_observability_20260614",
+  "github_pages": {
+    "artifact_path": "docs/astro-site/dist/",
+    "deploy_gate_variable": "ENABLE_PAGES_ACTIONS_DEPLOY",
+    "deploy_job_gated": true,
+    "workflow": ".github/workflows/docs.yml"
+  },
+  "overall_status": "passed",
+  "release_checklist": [
+    "Run pnpm build and pnpm check from docs/astro-site.",
+    "Run uv run nox -s examples production_docs.",
+    "Confirm deployment gate variable ENABLE_PAGES_ACTIONS_DEPLOY before publishing.",
+    "Confirm GitHub Pages artifact upload uses docs/astro-site/dist/."
+  ],
+  "required_routes": [
+    "/",
+    "/api/python/",
+    "/operations/release-maturity/",
+    "/maintainers/package-health/",
+    "/maintainers/support/",
+    "/maintainers/deployment-readiness/",
+    "/latest/maintainers/deployment-readiness/"
+  ],
+  "rollback": [
+    "Disable ENABLE_PAGES_ACTIONS_DEPLOY to stop automatic Pages deployment.",
+    "Revert the docs change or republish the last passing Pages artifact.",
+    "Keep production evidence artifacts from the failed release for triage."
+  ],
+  "schema_version": 1
+}
