@@ -25,12 +25,13 @@
     - [x] Add Python parity tests against existing reference behavior
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Promote stable payload shapes
-    - [ ] Add schema-backed Rust payload support for stable covariate, event split, fitted-state, and deterministic simulation payloads
-    - [ ] Add round-trip tests through Python and Rust bindings
-    - [ ] Preserve explicit exclusions for posterior, graph, agent, and callback-heavy payloads
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Promote stable payload shapes `f39953e`
+    - [x] Add schema-backed Rust payload support for stable fitted-state, deterministic diagnostics, deterministic simulation, and simple positive observation fit payloads
+    - [x] Keep covariate and event split payloads as explicit design-boundary exclusions until stable model-family schemas exist
+    - [x] Add round-trip tests through Rust bindings and artifact contract tests for ownership evidence
+    - [x] Preserve explicit exclusions for posterior, graph, agent, callback-heavy, stochastic, covariate, and event payloads
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Conductor - User Manual Verification 'Rust-Native Promotion' (Protocol in workflow.md)
 
 ## Phase 3: Binding Dispatch, Benchmarks, and Claim Closure
