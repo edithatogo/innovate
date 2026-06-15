@@ -122,9 +122,7 @@ def test_stable_payload_shapes_are_fail_closed_against_unowned_entries() -> None
 
     payload_entries = {entry["id"]: entry for entry in ledger["payload_shapes"]}
     stable_payloads = [
-        entry
-        for entry in _load_json(PAYLOAD_SHAPE_COVERAGE)["payload_shapes"]
-        if entry["status"] == "stable"
+        entry for entry in _load_json(PAYLOAD_SHAPE_COVERAGE)["payload_shapes"] if entry["status"] == "stable"
     ]
     assert stable_payloads
 

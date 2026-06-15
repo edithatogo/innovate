@@ -84,11 +84,9 @@ fn native_discovery_reports_structured_decode_errors() {
         .expect_err("invalid discovery payload should fail deterministically");
 
     assert_eq!(error.code, "bridge_command_failed");
-    assert!(
-        error
-            .message
-            .contains("failed to decode discovery response")
-    );
+    assert!(error
+        .message
+        .contains("failed to decode discovery response"));
 }
 
 #[test]

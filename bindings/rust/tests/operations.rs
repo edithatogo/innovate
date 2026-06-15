@@ -53,8 +53,14 @@ fn assert_json_numeric_map_has_finite_values(
         let bridged_value = bridged_value
             .as_f64()
             .unwrap_or_else(|| panic!("bridged diagnostics metric '{key}' should be numeric"));
-        assert!(native_value.is_finite(), "native diagnostics metric '{key}' should be finite");
-        assert!(bridged_value.is_finite(), "bridged diagnostics metric '{key}' should be finite");
+        assert!(
+            native_value.is_finite(),
+            "native diagnostics metric '{key}' should be finite"
+        );
+        assert!(
+            bridged_value.is_finite(),
+            "bridged diagnostics metric '{key}' should be finite"
+        );
     }
 }
 
@@ -767,9 +773,24 @@ fn native_gompertz_fit_matches_python_bridge_contract() {
     let native_parameters = native_result["parameters"]
         .as_object()
         .expect("native parameters should be an object");
-    assert!(native_parameters["a"].as_f64().expect("a should be numeric") > 0.0);
-    assert!(native_parameters["b"].as_f64().expect("b should be numeric") > 0.0);
-    assert!(native_parameters["c"].as_f64().expect("c should be numeric") > 0.0);
+    assert!(
+        native_parameters["a"]
+            .as_f64()
+            .expect("a should be numeric")
+            > 0.0
+    );
+    assert!(
+        native_parameters["b"]
+            .as_f64()
+            .expect("b should be numeric")
+            > 0.0
+    );
+    assert!(
+        native_parameters["c"]
+            .as_f64()
+            .expect("c should be numeric")
+            > 0.0
+    );
 }
 
 #[test]
@@ -1055,7 +1076,11 @@ fn native_fit_falls_back_to_bridge_for_non_native_models() {
         .as_array()
         .expect("Bass prediction values should be an array")
         .iter()
-        .map(|value| value.as_f64().expect("Bass prediction value should be numeric"))
+        .map(|value| {
+            value
+                .as_f64()
+                .expect("Bass prediction value should be numeric")
+        })
         .collect::<Vec<_>>();
 
     let payload = json!({
@@ -1316,10 +1341,16 @@ fn native_summary_and_diagnose_reject_unsupported_native_payloads() {
         .expect_err("native diagnostics should reject unsupported covariate payloads");
 
     assert_eq!(summary_error.code, "unsupported_native_operation");
-    assert_eq!(summary_error.operation, Some(KernelOperation::SummarizeModel));
+    assert_eq!(
+        summary_error.operation,
+        Some(KernelOperation::SummarizeModel)
+    );
     assert!(summary_error.message.contains("logistic"));
     assert_eq!(diagnose_error.code, "unsupported_native_operation");
-    assert_eq!(diagnose_error.operation, Some(KernelOperation::DiagnoseModel));
+    assert_eq!(
+        diagnose_error.operation,
+        Some(KernelOperation::DiagnoseModel)
+    );
     assert!(diagnose_error.message.contains("logistic"));
 }
 
@@ -1578,8 +1609,12 @@ fn native_bass_fit_matches_python_bridge_contract() {
     assert_eq!(native_summary.comparison_family, "fitted");
     assert_eq!(native_summary.model_name.as_deref(), Some("BassModel"));
 
-    let native_result = native.result.expect("native Bass fit should include a result");
-    let bridged_result = bridged.result.expect("bridged Bass fit should include a result");
+    let native_result = native
+        .result
+        .expect("native Bass fit should include a result");
+    let bridged_result = bridged
+        .result
+        .expect("bridged Bass fit should include a result");
     assert_eq!(native_result["family"], bridged_result["family"]);
     assert_eq!(native_result["model_name"], bridged_result["model_name"]);
     for key in ["p", "q", "m"] {
@@ -1590,8 +1625,14 @@ fn native_bass_fit_matches_python_bridge_contract() {
             .as_f64()
             .expect("bridged Bass parameter should be numeric");
         assert!(native_value.is_finite() && bridged_value.is_finite());
-        assert!(native_value > 0.0, "native Bass parameter '{key}' should be positive");
-        assert!(bridged_value > 0.0, "bridged Bass parameter '{key}' should be positive");
+        assert!(
+            native_value > 0.0,
+            "native Bass parameter '{key}' should be positive"
+        );
+        assert!(
+            bridged_value > 0.0,
+            "bridged Bass parameter '{key}' should be positive"
+        );
     }
 
     let native_predictions = native_result["predictions"]["values"]
@@ -1601,9 +1642,18 @@ fn native_bass_fit_matches_python_bridge_contract() {
         .as_array()
         .expect("bridged Bass predictions should be an array");
     assert_eq!(native_predictions.len(), bridged_predictions.len());
-    assert_eq!(native_result["predictions"]["shape"], bridged_result["predictions"]["shape"]);
-    assert_eq!(native_result["predictions"]["dtype"], bridged_result["predictions"]["dtype"]);
-    assert_eq!(native_result["predictions"]["metadata"], bridged_result["predictions"]["metadata"]);
+    assert_eq!(
+        native_result["predictions"]["shape"],
+        bridged_result["predictions"]["shape"]
+    );
+    assert_eq!(
+        native_result["predictions"]["dtype"],
+        bridged_result["predictions"]["dtype"]
+    );
+    assert_eq!(
+        native_result["predictions"]["metadata"],
+        bridged_result["predictions"]["metadata"]
+    );
 
     for native_value in native_predictions {
         let native_value = native_value
@@ -1773,8 +1823,12 @@ fn native_bass_summary_matches_python_bridge_contract() {
     assert_eq!(native_summary.comparison_family, "fitted");
     assert_eq!(native_summary.model_name.as_deref(), Some("BassModel"));
 
-    let native_result = native.result.expect("native Bass summary should include a result");
-    let bridged_result = bridged.result.expect("bridged Bass summary should include a result");
+    let native_result = native
+        .result
+        .expect("native Bass summary should include a result");
+    let bridged_result = bridged
+        .result
+        .expect("bridged Bass summary should include a result");
     assert_eq!(native_result["model_name"], bridged_result["model_name"]);
     assert_eq!(native_result["state"], bridged_result["state"]);
     assert_json_numeric_map_has_finite_values(
