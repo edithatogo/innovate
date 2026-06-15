@@ -2,12 +2,12 @@
 
 ## Phase 1: Release Gate Inventory and Fail-Closed Tests
 
-- [ ] Task: Define the mature release gate contract
-    - [ ] Inventory required release, security, docs, Rust, and binding checks
-    - [ ] Define machine-readable release-readiness status values
-    - [ ] Add tests that fail when required evidence is missing or stale
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Define the mature release gate contract `31c2f5f`
+    - [x] Inventory required release, security, docs, Rust, and binding checks
+    - [x] Define machine-readable release-readiness status values
+    - [x] Add tests that fail when required evidence is missing or stale
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Add release-readiness report generation
     - [ ] Implement a local report command or nox session
     - [ ] Emit JSON and human-readable summaries

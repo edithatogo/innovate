@@ -364,7 +364,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Release Maturity and Hardening**
+- [~] **Track: Release Maturity and Hardening**
   *Link: [./tracks/release_maturity_hardening_20260614/](./tracks/release_maturity_hardening_20260614/)*
 
 ---
