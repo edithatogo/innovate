@@ -4,7 +4,7 @@
   "generated_by": "scripts/release_supply_chain.py",
   "git": {
     "branch": "main",
-    "commit": "26e816be0f290430797b187e06758622dfb7efab",
+    "commit": "9b848ff2ce1a9c25c33d23ac4c1a80203bb6e08e",
     "dirty": false
   },
   "provenance_style": "slsa-inspired-local",
