@@ -1,0 +1,64 @@
+{
+  "schema_version": "binding_hardening_evidence.v1",
+  "kernel_schema_version": "1.0",
+  "generated_at": "2026-06-15T00:00:00Z",
+  "bindings": [
+    {
+      "language": "r",
+      "version": "0.5.0",
+      "phase": "language_binding_hardening",
+      "status": "supported",
+      "package_checks": [
+        "Rscript bindings/r/tests/run.R",
+        "R CMD build bindings/r",
+        "R CMD check --as-cran --no-manual"
+      ],
+      "conformance_cases": 6,
+      "examples": ["bindings/r/inst/examples/end_to_end.R"],
+      "source_paths": [
+        "bindings/r/R/kernel_bridge.R",
+        "bindings/r/tests/test-contract.R",
+        "bindings/r/README.md"
+      ],
+      "snippet": "docs/source/_static/binding_snippets/r.md"
+    },
+    {
+      "language": "julia",
+      "version": "0.5.0",
+      "phase": "language_binding_hardening",
+      "status": "supported",
+      "package_checks": [
+        "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+        "julia --project=bindings/julia -e 'using Pkg; Pkg.test()'"
+      ],
+      "conformance_cases": 6,
+      "examples": ["bindings/julia/examples/end_to_end.jl"],
+      "source_paths": [
+        "bindings/julia/src/Innovate.jl",
+        "bindings/julia/test/contract.jl",
+        "bindings/julia/README.md"
+      ],
+      "snippet": "docs/source/_static/binding_snippets/julia.md"
+    },
+    {
+      "language": "typescript",
+      "version": "0.5.0",
+      "phase": "language_binding_hardening",
+      "status": "supported",
+      "package_checks": [
+        "npm run schema:check",
+        "npm run typecheck",
+        "npm test",
+        "npm pack --dry-run"
+      ],
+      "conformance_cases": 6,
+      "examples": ["bindings/typescript/examples/diagnostics-workflow.ts"],
+      "source_paths": [
+        "bindings/typescript/src/index.ts",
+        "bindings/typescript/test/schema-compatibility.test.ts",
+        "bindings/typescript/README.md"
+      ],
+      "snippet": "docs/source/_static/binding_snippets/typescript.md"
+    }
+  ]
+}

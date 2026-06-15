@@ -18,7 +18,7 @@
 
 ## Phase 2: Language Binding Hardening
 
-- [ ] Task: Harden R, Julia, and TypeScript bindings
+- [~] Task: Harden R, Julia, and TypeScript bindings
     - [ ] Add or refresh language-native package checks
     - [ ] Add idiomatic examples and docs snippets
     - [ ] Add conformance evidence for supported operations
