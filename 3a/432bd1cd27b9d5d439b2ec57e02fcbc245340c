@@ -1,0 +1,21 @@
+Phase: Production Docs Gates
+
+Validation run locally:
+- pnpm build && pnpm check && python ../../scripts/verify_production_docs.py --json (from docs/astro-site): passed; Starlight generated 103 pages including /maintainers/docsearch/ and /latest/maintainers/docsearch/; astro check reported 0 errors, warnings, or hints.
+- uv run pytest tests/unit/test_production_docs_observability.py tests/unit/test_astro_starlight_route_coverage.py tests/unit/test_astro_starlight_link_validation.py tests/unit/test_starlight_cutover_legacy_cleanup.py tests/unit/test_astro_starlight_cutover_verification.py -q: 15 passed.
+- uv run ruff check scripts/verify_production_docs.py tests/unit/test_production_docs_observability.py noxfile.py: passed.
+
+Conductor-review findings and fixes:
+- Fixed production docs verifier timestamp churn by making generated_at stable for the evidence date.
+- Added docs/astro-site/.astro/ to .gitignore so local Astro cache output does not pollute the worktree.
+- Review fix commit: 3dfa4e2.
+
+Remote CI gate for pushed SHA 3dfa4e2fadf3743b759c5e2cef42c1c8ea3d14a3:
+- CI: success https://github.com/edithatogo/innovate/actions/runs/27560745824
+- Deploy Documentation: success https://github.com/edithatogo/innovate/actions/runs/27560745828
+- Binding Conformance: success https://github.com/edithatogo/innovate/actions/runs/27560745783
+- Release Readiness: success https://github.com/edithatogo/innovate/actions/runs/27560746130
+- CodeQL: success https://github.com/edithatogo/innovate/actions/runs/27560743108
+- Automatic Dependency Submission: success https://github.com/edithatogo/innovate/actions/runs/27560743040
+- Release Drafter: success https://github.com/edithatogo/innovate/actions/runs/27560745914
+- Release Please: success https://github.com/edithatogo/innovate/actions/runs/27560745829
