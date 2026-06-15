@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "captured_at": "2026-06-14T00:00:00+10:00",
+  "captured_at": "2026-06-16T00:00:00+10:00",
   "closure_inventory": "docs/source/_static/external_submission_target_inventory.json",
   "targets": [
     {
@@ -18,6 +18,8 @@
         "docs/source/_static/hpc_packaging/evidence/spack-batch.log",
         "docs/source/_static/hpc_packaging/evidence/spack-pbs.log"
       ],
+      "receipt_rule": "Do not mark submitted until the upstream Spack pull request URL is recorded.",
+      "revisit_condition": "Refresh after Spack packaging rules, package dependencies, release version, or scheduler evidence changes.",
       "notes": "Local scheduler-backed evidence exists. Upstream submission remains maintainer-managed and should not be claimed until a public review link exists."
     },
     {
@@ -35,6 +37,8 @@
         "docs/source/_static/hpc_packaging/evidence/easybuild-batch.log",
         "docs/source/_static/hpc_packaging/evidence/easybuild-pbs.log"
       ],
+      "receipt_rule": "Do not mark submitted until the upstream EasyBuild contribution URL is recorded.",
+      "revisit_condition": "Refresh after EasyBuild contribution rules, package dependencies, release version, or scheduler evidence changes.",
       "notes": "Local scheduler-backed evidence exists. Upstream submission remains maintainer-managed and should not be claimed until a public review link exists."
     },
     {
@@ -51,6 +55,8 @@
         "docs/source/_static/hpc_packaging/governance/hpsf-evidence.md",
         "docs/source/_static/hpc_packaging/evidence/hpsf-review-note.md"
       ],
+      "receipt_rule": "Do not mark submitted until the HPSF TAC issue URL or official response is recorded.",
+      "revisit_condition": "Refresh after HPSF TAC proposal template, sponsor availability, or governance evidence changes.",
       "notes": "HPSF handoff remains maintainer-managed. Public proposal path exists; the maintainer must identify two TAC sponsors, complete the proposal template, and open the GitHub proposal issue before any submission claim."
     },
     {
@@ -67,6 +73,8 @@
         "docs/source/_static/hpc_packaging/governance/e4s-evidence.md",
         "docs/source/_static/hpc_packaging/evidence/e4s-review-note.md"
       ],
+      "receipt_rule": "Do not mark submitted until the E4S contact response, review URL, or inclusion request URL is recorded.",
+      "revisit_condition": "Refresh after E4S contribution guidance, Spack package evidence, or performance-portability evidence changes.",
       "notes": "E4S handoff remains maintainer-managed. Public contact and contribution paths exist; the maintainer must contact E4S, complete review/CI validation, and open an inclusion request only after evidence is accepted."
     }
   ],

@@ -27,6 +27,9 @@
     "spack_recipe": "spack/py-innovate.py"
   },
   "closure_inventory": "docs/source/_static/external_submission_target_inventory.json",
+  "generated_by_track": "external_acceptance_completion_20260614",
+  "packet_date": "2026-06-16",
+  "claim_policy": "Packet readiness is not upstream submission or acceptance. A target becomes submitted or accepted only after a maintainer records a public review URL, merged PR, inclusion receipt, or official response.",
   "rendered_sources": {
     "packet": "submission_packet.json",
     "readme": "README.md"
@@ -48,6 +51,15 @@
         "docs/source/_static/hpc_packaging/evidence/spack-pbs.log"
       ],
       "registry": "Spack",
+      "owner": "HPC maintainers",
+      "external_action_url": "https://spack.readthedocs.io/en/latest/contribution_guide.html",
+      "requirement_sources": [
+        "https://spack.readthedocs.io/en/latest/contribution_guide.html",
+        "https://spack.readthedocs.io/en/latest/packaging_guide_creation.html"
+      ],
+      "maintainer_action_boundary": "Maintainer must review the candidate recipe, refresh scheduler evidence, and open the upstream Spack pull request.",
+      "receipt_rule": "Do not mark submitted until the upstream Spack pull request URL is recorded.",
+      "revisit_condition": "Refresh after Spack packaging rules, package dependencies, release version, or scheduler evidence changes.",
       "required_next_step": "Submit the candidate recipe upstream only after maintainer review and scheduler-backed evidence refresh.",
       "status": "ready_for_review",
       "submission_mode": "candidate_recipe",
@@ -68,6 +80,15 @@
         "docs/source/_static/hpc_packaging/evidence/easybuild-pbs.log"
       ],
       "registry": "EasyBuild",
+      "owner": "HPC maintainers",
+      "external_action_url": "https://docs.easybuild.io/contributing/",
+      "requirement_sources": [
+        "https://docs.easybuild.io/contributing/",
+        "https://docs.easybuild.io/writing-easyconfig-files/"
+      ],
+      "maintainer_action_boundary": "Maintainer must review the easyconfig, refresh scheduler evidence, and open the upstream EasyBuild contribution.",
+      "receipt_rule": "Do not mark submitted until the upstream EasyBuild contribution URL is recorded.",
+      "revisit_condition": "Refresh after EasyBuild contribution rules, package dependencies, release version, or scheduler evidence changes.",
       "required_next_step": "Submit the candidate easyconfig upstream only after maintainer review and scheduler-backed evidence refresh.",
       "status": "ready_for_review",
       "submission_mode": "candidate_easyconfig",
@@ -87,6 +108,15 @@
         "docs/source/_static/hpc_packaging/evidence/r-check.log"
       ],
       "registry": "HPSF",
+      "owner": "HPC maintainers",
+      "external_action_url": "https://github.com/hpsfoundation/tac/issues/new?template=new-project-proposal.md",
+      "requirement_sources": [
+        "https://github.com/hpsfoundation/tac/issues/new?template=new-project-proposal.md",
+        "https://raw.githubusercontent.com/hpsfoundation/tac/main/.github/ISSUE_TEMPLATE/new-project-proposal.md"
+      ],
+      "maintainer_action_boundary": "Maintainer must identify TAC sponsors, complete the HPSF proposal template, and open the HPSF TAC issue.",
+      "receipt_rule": "Do not mark submitted until the HPSF TAC issue URL or official response is recorded.",
+      "revisit_condition": "Refresh after HPSF TAC proposal template, sponsor availability, or governance evidence changes.",
       "required_next_step": "Maintainer must identify two HPSF TAC sponsors, complete the project proposal template, and open the HPSF TAC GitHub proposal issue.",
       "status": "ready_for_maintainer",
       "submission_mode": "governance_packet",
@@ -106,6 +136,15 @@
         "docs/source/_static/hpc_packaging/evidence/julia-installed-smoke.log"
       ],
       "registry": "E4S",
+      "owner": "HPC maintainers",
+      "external_action_url": "https://e4s.io/contact/",
+      "requirement_sources": [
+        "https://e4s.io/contribution-guide/",
+        "https://e4s.io/contact/"
+      ],
+      "maintainer_action_boundary": "Maintainer must contact E4S, validate the Spack package through E4S review or CI, and submit inclusion only after review evidence exists.",
+      "receipt_rule": "Do not mark submitted until the E4S contact response, review URL, or inclusion request URL is recorded.",
+      "revisit_condition": "Refresh after E4S contribution guidance, Spack package evidence, or performance-portability evidence changes.",
       "required_next_step": "Maintainer must contact E4S, validate the Spack package through E4S review/CI expectations, and open the inclusion request only after review evidence exists.",
       "status": "ready_for_maintainer",
       "submission_mode": "performance_portability_packet",

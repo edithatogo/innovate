@@ -45,6 +45,9 @@ The corresponding JSON packet lives at
 ``docs/source/_static/hpc_packaging/submission_packet.json``.
 The target-level closure inventory lives at
 ``docs/source/_static/external_submission_target_inventory.json``.
+Each target entry records the maintainer owner, external action URL,
+requirement sources, receipt rule, and revisit condition needed to move from
+readiness to a submitted or accepted external state.
 
 Execution templates
 -------------------

@@ -6,10 +6,20 @@ import json
 from pathlib import Path
 
 PACKET_PATH = Path("docs/source/_static/hpc_packaging/submission_packet.json")
+WORKFLOW_PATH = Path("docs/source/_static/hpc_packaging/workflow_manifest.json")
+BLOCKERS_PATH = Path("docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json")
 
 
 def load_packet() -> dict[str, object]:
     return json.loads(PACKET_PATH.read_text(encoding="utf-8"))
+
+
+def load_workflow() -> dict[str, object]:
+    return json.loads(WORKFLOW_PATH.read_text(encoding="utf-8"))
+
+
+def load_blockers() -> dict[str, object]:
+    return json.loads(BLOCKERS_PATH.read_text(encoding="utf-8"))
 
 
 def test_hpc_submission_packet_exists() -> None:
@@ -62,3 +72,35 @@ def test_hpc_submission_packet_points_at_existing_evidence() -> None:
     packet_artifacts = {artifact for entry in packet["targets"] for artifact in entry["packet_artifacts"]}
 
     assert evidence_paths.issubset(packet_artifacts)
+
+
+def test_hpc_submission_packet_has_current_external_action_boundaries() -> None:
+    """Each HPC target should have exact external paths and receipt rules."""
+    packet = load_packet()
+
+    assert packet["packet_date"] == "2026-06-16"
+    for entry in packet["targets"]:
+        assert entry["owner"] == "HPC maintainers", entry["target_id"]
+        assert entry["external_action_url"].startswith("https://"), entry["target_id"]
+        assert entry["requirement_sources"], entry["target_id"]
+        assert all(url.startswith("https://") for url in entry["requirement_sources"]), entry["target_id"]
+        assert entry["maintainer_action_boundary"], entry["target_id"]
+        assert "maintainer" in entry["maintainer_action_boundary"].lower(), entry["target_id"]
+        assert entry["receipt_rule"], entry["target_id"]
+        assert entry["revisit_condition"], entry["target_id"]
+        assert "blocked" not in json.dumps(entry).lower(), entry["target_id"]
+
+
+def test_hpc_workflow_and_blocker_bundle_are_refreshed_for_external_acceptance() -> None:
+    """Scheduler and governance handoff evidence should be current for this track."""
+    workflow = load_workflow()
+    blockers = load_blockers()
+
+    assert workflow["captured_at"].startswith("2026-06-16")
+    assert blockers["captured_at"].startswith("2026-06-16")
+    assert blockers["blockers"] == []
+    assert {entry["target_id"] for entry in workflow["targets"]} == {"spack", "easybuild", "hpsf", "e4s"}
+
+    for entry in workflow["targets"]:
+        assert entry["receipt_rule"], entry["target_id"]
+        assert entry["revisit_condition"], entry["target_id"]
