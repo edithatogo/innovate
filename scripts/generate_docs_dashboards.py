@@ -286,9 +286,7 @@ def write_outputs(dashboard: dict[str, Any]) -> None:
     }
     for slug, (title, summary) in policy_pages.items():
         pages[ASTRO_DOCS / f"maintainers/{slug}.md"] = _policy_page(title, slug, summary)
-        pages[ASTRO_DOCS / f"latest/maintainers/{slug}.md"] = _policy_page(
-            title, slug, summary, "latest/"
-        )
+        pages[ASTRO_DOCS / f"latest/maintainers/{slug}.md"] = _policy_page(title, slug, summary, "latest/")
     for path, content in pages.items():
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content)

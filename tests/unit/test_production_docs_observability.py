@@ -7,9 +7,7 @@ from pathlib import Path
 
 PRODUCTION_VERIFICATION = Path("docs/source/_static/astro_starlight/production_docs_verification.json")
 DOCSEARCH_GATE = Path("docs/source/_static/astro_starlight/docsearch_gate.json")
-RELEASE_MATURITY_DASHBOARD = Path(
-    "docs/source/_static/astro_starlight/release_maturity_dashboard.json"
-)
+RELEASE_MATURITY_DASHBOARD = Path("docs/source/_static/astro_starlight/release_maturity_dashboard.json")
 OBSERVABILITY_MAINTENANCE = Path("docs/source/_static/astro_starlight/observability_maintenance.json")
 
 
@@ -156,12 +154,8 @@ def test_observability_and_maintenance_pages_are_evidence_linked() -> None:
     assert artifact["schema_version"] == 1
     assert artifact["generated_by_track"] == "production_docs_observability_20260614"
     assert artifact["staleness"]["status"] == "fresh"
-    assert artifact["source_artifacts"]["release_maturity_dashboard"].endswith(
-        "release_maturity_dashboard.json"
-    )
-    assert artifact["source_artifacts"]["production_docs_verification"].endswith(
-        "production_docs_verification.json"
-    )
+    assert artifact["source_artifacts"]["release_maturity_dashboard"].endswith("release_maturity_dashboard.json")
+    assert artifact["source_artifacts"]["production_docs_verification"].endswith("production_docs_verification.json")
 
     pages = {entry["id"]: entry for entry in artifact["pages"]}
     assert set(pages) == {
