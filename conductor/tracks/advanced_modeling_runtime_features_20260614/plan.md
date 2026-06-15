@@ -40,7 +40,7 @@
     - [ ] Record performance evidence for selected workflows
     - [ ] Commit implementation changes for this task
     - [ ] Commit this plan update with the task commit SHA
-- [ ] Task: Add advanced examples and docs
+- [~] Task: Add advanced examples and docs
     - [ ] Add end-to-end examples for ensemble forecasts, policy scenarios, streaming updates, and calibrated intervals
     - [ ] Add docs pages and Starlight routes
     - [ ] Validate examples in CI or a documented release lane

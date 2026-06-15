@@ -11,5 +11,6 @@ package history.
    :maxdepth: 2
 
    tutorials_comprehensive
+   tutorials/advanced_runtime_workflows
    tutorials/benchmark_workflows
    tutorials/plugin_api_stability
