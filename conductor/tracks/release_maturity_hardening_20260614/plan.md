@@ -16,7 +16,7 @@
     - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Conductor - User Manual Verification 'Release Gate Inventory and Fail-Closed Tests' (Protocol in workflow.md)
 
-## Phase 2: Security, Provenance, and Reproducibility
+## Phase 2: Security, Provenance, and Reproducibility [checkpoint: 4baafb5]
 
 - [x] Task: Add supply-chain evidence gates `5a66657`
     - [x] Add SBOM, dependency audit, license inventory, and checksum evidence generation
