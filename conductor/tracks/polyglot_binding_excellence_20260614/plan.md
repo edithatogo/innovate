@@ -16,7 +16,7 @@
     - [x] Commit this plan update with the task commit SHA
 - [x] Task: Conductor - User Manual Verification 'Conformance Contract and Golden Fixtures' (Protocol in workflow.md)
 
-## Phase 2: Language Binding Hardening
+## Phase 2: Language Binding Hardening [checkpoint: d84beb1]
 
 - [x] Task: Harden R, Julia, and TypeScript bindings [b02d318]
     - [x] Add or refresh language-native package checks
@@ -30,7 +30,7 @@
     - [x] Align errors and serialization with the shared contract
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Conductor - User Manual Verification 'Language Binding Hardening' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Language Binding Hardening' (Protocol in workflow.md)
 
 ## Phase 3: CI, Docs, and Release Evidence
 
