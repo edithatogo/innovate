@@ -1,0 +1,14 @@
+Phase: Examples, API Snippets, and Deployment Readiness
+
+Validation run locally:
+- pnpm build && pnpm check from docs/astro-site: passed; Starlight generated 117 pages and internal links were valid.
+- python ../../scripts/generate_docs_dashboards.py --json && python ../../scripts/verify_production_docs.py --json from docs/astro-site: passed.
+- uv run nox -s examples production_docs: passed.
+- uv run pytest tests/unit/test_production_docs_observability.py tests/unit/test_astro_starlight_route_coverage.py tests/unit/test_astro_starlight_link_validation.py tests/unit/test_starlight_cutover_legacy_cleanup.py tests/unit/test_astro_starlight_cutover_verification.py -q: 19 passed.
+- uv run ruff check . && uv run ruff format --check .: passed.
+
+Conductor-review findings and fixes:
+- No additional Phase 3 fixes were required after validation.
+
+Remote CI gate:
+- Pending for the Phase 3 checkpoint push; local validation is complete before push.
