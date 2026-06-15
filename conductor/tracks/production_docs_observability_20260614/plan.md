@@ -1,6 +1,6 @@
 # Implementation Plan
 
-## Phase 1: Production Docs Gates
+## Phase 1: Production Docs Gates [checkpoint: 3a432bd]
 
 - [x] Task: Add production docs verification contract [592dd0b]
     - [x] Define route, redirect, sitemap, search, version, and API generation checks
@@ -14,7 +14,7 @@
     - [x] Add evidence fields for enabled, disabled, or externally blocked status
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Conductor - User Manual Verification 'Production Docs Gates' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Production Docs Gates' (Protocol in workflow.md) [3a432bd]
 
 ## Phase 2: Evidence-Backed Dashboards
 
