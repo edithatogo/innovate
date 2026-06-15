@@ -43,7 +43,7 @@ jobs:
         run: uv run nox -s release_readiness
 
       - name: Upload release-readiness-report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v4
         with:
           name: release-readiness-report
           path: |
@@ -64,7 +64,7 @@ jobs:
             'Mutation sampling, package dry-runs, compatibility sweeps, and external audit refreshes stay out of fast PR checks.'
 
       - name: Upload release lane note
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v4
         with:
           name: release-lane-checks
           path: .github/workflows/release-readiness.yml
