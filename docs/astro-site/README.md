@@ -23,6 +23,9 @@ Cutover policy:
 - Algolia DocSearch as the selected search provider
 - route preservation through redirect evidence and cutover verification
 - `pnpm build && pnpm check` as the active Starlight build gate
+- `python ../../scripts/verify_production_docs.py --json` after `pnpm build`
+  to verify production routes, redirects, sitemap, search fallback, versioned
+  docs, generated API pages, and CI wiring
 
 Key artifacts:
 
@@ -37,6 +40,7 @@ Key artifacts:
 - `../source/_static/astro_starlight/route_coverage.json`
 - `../source/_static/astro_starlight/cutover_verification.json`
 - `../source/_static/astro_starlight/link_validation_report.json`
+- `../source/_static/astro_starlight/production_docs_verification.json`
 - `../source/_static/astro_starlight/generate_route_coverage.py`
 - `../source/_static/astro_starlight/generate_cutover_verification.py`
 - `../source/_static/astro_starlight/generate_link_validation.py`

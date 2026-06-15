@@ -2,7 +2,7 @@
 
 ## Phase 1: Production Docs Gates
 
-- [ ] Task: Add production docs verification contract
+- [~] Task: Add production docs verification contract
     - [ ] Define route, redirect, sitemap, search, version, and API generation checks
     - [ ] Add tests that fail when production docs evidence is missing or stale
     - [ ] Document local and CI verification commands

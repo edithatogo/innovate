@@ -1,0 +1,110 @@
+{
+  "checks": [
+    {
+      "evidence": {
+        "broken_links": 0,
+        "implemented": 41,
+        "planned": 0
+      },
+      "id": "route_coverage",
+      "source": "docs/source/_static/astro_starlight/route_coverage.json",
+      "status": "passed"
+    },
+    {
+      "evidence": {
+        "content_only": 0,
+        "redirect_entries": 31,
+        "redirect_only": 0
+      },
+      "id": "redirect_inventory",
+      "source": "docs/source/_static/astro_starlight/cutover_verification.json",
+      "status": "passed"
+    },
+    {
+      "evidence": {
+        "required_files": [
+          "docs/astro-site/dist/sitemap-index.xml",
+          "docs/astro-site/dist/sitemap-0.xml"
+        ]
+      },
+      "id": "sitemap",
+      "source": "docs/astro-site/dist",
+      "status": "passed"
+    },
+    {
+      "evidence": {
+        "fallback_without_credentials": true,
+        "provider": "algolia-docsearch",
+        "required_environment": [
+          "ALGOLIA_APP_ID",
+          "ALGOLIA_API_KEY",
+          "ALGOLIA_INDEX_NAME"
+        ]
+      },
+      "id": "search_configuration",
+      "source": "docs/astro-site/astro.config.mjs",
+      "status": "ci_safe"
+    },
+    {
+      "evidence": {
+        "required_routes": [
+          "/latest/",
+          "/latest/api/python/"
+        ]
+      },
+      "id": "versioned_docs",
+      "source": "docs/astro-site/dist",
+      "status": "passed"
+    },
+    {
+      "evidence": {
+        "generator": "starlight-polyglot",
+        "required_routes": [
+          "/api/python/",
+          "/latest/api/python/"
+        ]
+      },
+      "id": "api_generation",
+      "source": "docs/astro-site/dist",
+      "status": "passed"
+    },
+    {
+      "evidence": {
+        "required_step": "Verify production documentation contract",
+        "workflow": "Deploy Documentation"
+      },
+      "id": "ci_workflow",
+      "source": ".github/workflows/docs.yml",
+      "status": "passed"
+    }
+  ],
+  "commands": [
+    {
+      "command": "python scripts/verify_production_docs.py --json",
+      "status": "passed"
+    },
+    {
+      "command": "pnpm build && python ../../scripts/verify_production_docs.py --json",
+      "status": "ci_wired"
+    }
+  ],
+  "evidence_date": "2026-06-16",
+  "generated_at": "2026-06-15T16:23:33Z",
+  "generated_by_track": "production_docs_observability_20260614",
+  "generated_from": {
+    "astro_config": "docs/astro-site/astro.config.mjs",
+    "cutover_verification": "docs/source/_static/astro_starlight/cutover_verification.json",
+    "dist": "docs/astro-site/dist",
+    "docs_workflow": ".github/workflows/docs.yml",
+    "link_validation": "docs/source/_static/astro_starlight/link_validation_report.json",
+    "redirect_inventory": "docs/source/_static/astro_starlight/redirect_inventory.json",
+    "route_coverage": "docs/source/_static/astro_starlight/route_coverage.json"
+  },
+  "overall_status": "passed",
+  "schema_version": 1,
+  "staleness": {
+    "max_age_days": 30,
+    "source": "generated_at",
+    "status": "fresh"
+  }
+}

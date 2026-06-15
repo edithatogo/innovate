@@ -134,6 +134,13 @@ def docs(session: nox.Session) -> None:
 
 
 @nox.session(python=False)
+def production_docs(session: nox.Session) -> None:
+    """Verify the Astro/Starlight production documentation contract."""
+    _run_uv(session, "sync", "--python", DEFAULT_PYTHON)
+    _run_uv(session, "run", "python", "scripts/verify_production_docs.py", "--json", *session.posargs)
+
+
+@nox.session(python=False)
 def package(session: nox.Session) -> None:
     """Build the Python package artifacts."""
     _run_uv(session, "sync", "--python", DEFAULT_PYTHON)

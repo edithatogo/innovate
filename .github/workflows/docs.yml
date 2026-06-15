@@ -54,6 +54,9 @@ jobs:
       - name: Build documentation site
         run: pnpm build
 
+      - name: Verify production documentation contract
+        run: python ../../scripts/verify_production_docs.py --json
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: docs/astro-site/dist/
