@@ -8,7 +8,7 @@
     - [x] Document local and CI verification commands
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Finalize DocSearch gate behavior
+- [~] Task: Finalize DocSearch gate behavior
     - [ ] Verify fallback behavior without Algolia credentials
     - [ ] Add deployment-secret documentation and CI-safe checks
     - [ ] Add evidence fields for enabled, disabled, or externally blocked status

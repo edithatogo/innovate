@@ -16,6 +16,7 @@ ROUTE_COVERAGE = ROOT / "docs/source/_static/astro_starlight/route_coverage.json
 REDIRECT_INVENTORY = ROOT / "docs/source/_static/astro_starlight/redirect_inventory.json"
 CUTOVER_VERIFICATION = ROOT / "docs/source/_static/astro_starlight/cutover_verification.json"
 LINK_VALIDATION = ROOT / "docs/source/_static/astro_starlight/link_validation_report.json"
+DOCSEARCH_GATE = ROOT / "docs/source/_static/astro_starlight/docsearch_gate.json"
 ASTRO_CONFIG = ASTRO_ROOT / "astro.config.mjs"
 DOCS_WORKFLOW = ROOT / ".github/workflows/docs.yml"
 
@@ -48,6 +49,7 @@ def build_evidence() -> dict[str, Any]:
     route_coverage = _read_json(ROUTE_COVERAGE)
     cutover = _read_json(CUTOVER_VERIFICATION)
     link_validation = _read_json(LINK_VALIDATION)
+    docsearch_gate = _read_json(DOCSEARCH_GATE)
     astro_config = ASTRO_CONFIG.read_text()
     docs_workflow = DOCS_WORKFLOW.read_text()
 
@@ -103,6 +105,9 @@ def build_evidence() -> dict[str, Any]:
                 "provider": "algolia-docsearch",
                 "fallback_without_credentials": docsearch_has_safe_gate and docsearch_has_spread,
                 "required_environment": docsearch_env_vars,
+                "docsearch_gate": _rel(DOCSEARCH_GATE),
+                "local_status": docsearch_gate["current_local_status"],
+                "production_status": docsearch_gate["production_status"],
             },
         },
         {
@@ -151,6 +156,7 @@ def build_evidence() -> dict[str, Any]:
             "redirect_inventory": _rel(REDIRECT_INVENTORY),
             "cutover_verification": _rel(CUTOVER_VERIFICATION),
             "link_validation": _rel(LINK_VALIDATION),
+            "docsearch_gate": _rel(DOCSEARCH_GATE),
             "astro_config": _rel(ASTRO_CONFIG),
             "docs_workflow": _rel(DOCS_WORKFLOW),
             "dist": _rel(ASTRO_DIST),

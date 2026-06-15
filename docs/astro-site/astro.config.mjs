@@ -84,6 +84,7 @@ export default defineConfig({
           items: [
             { label: 'Overview', link: '/maintainers/' },
             { label: 'Publication', link: '/maintainers/publication/' },
+            { label: 'DocSearch Gate', link: '/maintainers/docsearch/' },
             { label: 'Release Notes', link: '/maintainers/release-notes/' },
             { label: 'Plugins', link: '/maintainers/plugins/' },
             { label: 'Runtime Logging', link: '/maintainers/runtime-logging/' },

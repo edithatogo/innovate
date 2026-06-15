@@ -11,6 +11,7 @@ migration work.
 Available pages:
 
 - Publication
+- DocSearch Gate
 - Release Readiness
 - Release Notes
 - Plugins

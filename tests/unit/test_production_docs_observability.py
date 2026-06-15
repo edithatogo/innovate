@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 PRODUCTION_VERIFICATION = Path("docs/source/_static/astro_starlight/production_docs_verification.json")
+DOCSEARCH_GATE = Path("docs/source/_static/astro_starlight/docsearch_gate.json")
 
 
 def _load_json(path: Path) -> dict:
@@ -66,3 +67,38 @@ def test_production_docs_verification_commands_are_documented_and_ci_wired() -> 
     assert "Verify production documentation contract" in docs_workflow
     assert "verify_production_docs.py" in docs_workflow
     assert "def production_docs" in noxfile
+
+
+def test_docsearch_gate_documents_safe_secret_boundaries() -> None:
+    """DocSearch evidence should separate local fallback from production enablement."""
+    gate = _load_json(DOCSEARCH_GATE)
+
+    assert gate["schema_version"] == 1
+    assert gate["provider"] == "algolia-docsearch"
+    assert gate["current_local_status"] == "disabled_without_credentials"
+    assert gate["production_status"] == "external_credentials_required"
+    assert gate["credential_policy"]["hard_code_credentials"] is False
+    assert gate["credential_policy"]["required_environment"] == [
+        "ALGOLIA_APP_ID",
+        "ALGOLIA_API_KEY",
+        "ALGOLIA_INDEX_NAME",
+    ]
+
+    modes = {entry["status"]: entry for entry in gate["modes"]}
+    assert modes["enabled"]["evidence_fields"] == ["app_id_present", "api_key_present", "index_name_present"]
+    assert modes["disabled_without_credentials"]["ci_safe"] is True
+    assert modes["external_credentials_required"]["owner"] == "deployment_environment"
+
+    production = _load_json(PRODUCTION_VERIFICATION)
+    search_check = {entry["id"]: entry for entry in production["checks"]}["search_configuration"]
+    assert search_check["evidence"]["docsearch_gate"] == str(DOCSEARCH_GATE)
+
+    for path in (
+        Path("docs/astro-site/src/content/docs/maintainers/docsearch.md"),
+        Path("docs/astro-site/src/content/docs/latest/maintainers/docsearch.md"),
+    ):
+        text = path.read_text().lower()
+        assert "algolia_app_id" in text
+        assert "disabled_without_credentials" in text
+        assert "external_credentials_required" in text
+        assert "do not hard-code" in text

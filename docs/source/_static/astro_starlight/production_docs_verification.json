@@ -33,7 +33,10 @@
     },
     {
       "evidence": {
+        "docsearch_gate": "docs/source/_static/astro_starlight/docsearch_gate.json",
         "fallback_without_credentials": true,
+        "local_status": "disabled_without_credentials",
+        "production_status": "external_credentials_required",
         "provider": "algolia-docsearch",
         "required_environment": [
           "ALGOLIA_APP_ID",
@@ -89,13 +92,14 @@
     }
   ],
   "evidence_date": "2026-06-16",
-  "generated_at": "2026-06-15T16:23:33Z",
+  "generated_at": "2026-06-15T16:25:49Z",
   "generated_by_track": "production_docs_observability_20260614",
   "generated_from": {
     "astro_config": "docs/astro-site/astro.config.mjs",
     "cutover_verification": "docs/source/_static/astro_starlight/cutover_verification.json",
     "dist": "docs/astro-site/dist",
     "docs_workflow": ".github/workflows/docs.yml",
+    "docsearch_gate": "docs/source/_static/astro_starlight/docsearch_gate.json",
     "link_validation": "docs/source/_static/astro_starlight/link_validation_report.json",
     "redirect_inventory": "docs/source/_static/astro_starlight/redirect_inventory.json",
     "route_coverage": "docs/source/_static/astro_starlight/route_coverage.json"

@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "provider": "algolia-docsearch",
+  "current_local_status": "disabled_without_credentials",
+  "production_status": "external_credentials_required",
+  "credential_policy": {
+    "hard_code_credentials": false,
+    "required_environment": [
+      "ALGOLIA_APP_ID",
+      "ALGOLIA_API_KEY",
+      "ALGOLIA_INDEX_NAME"
+    ],
+    "deployment_secret_surface": "GitHub Actions environment or Pages deployment environment"
+  },
+  "modes": [
+    {
+      "status": "enabled",
+      "ci_safe": true,
+      "owner": "deployment_environment",
+      "evidence_fields": [
+        "app_id_present",
+        "api_key_present",
+        "index_name_present"
+      ],
+      "meaning": "DocSearch is loaded when all three required Algolia variables are present."
+    },
+    {
+      "status": "disabled_without_credentials",
+      "ci_safe": true,
+      "owner": "local_and_pull_request_ci",
+      "evidence_fields": [
+        "fallback_without_credentials"
+      ],
+      "meaning": "The Starlight build omits the DocSearch plugin when credentials are absent."
+    },
+    {
+      "status": "external_credentials_required",
+      "ci_safe": true,
+      "owner": "deployment_environment",
+      "evidence_fields": [
+        "required_environment"
+      ],
+      "meaning": "Production search requires Algolia credentials outside the repository."
+    }
+  ],
+  "sources": {
+    "astro_config": "docs/astro-site/astro.config.mjs",
+    "production_verification": "docs/source/_static/astro_starlight/production_docs_verification.json",
+    "maintainer_docs": "docs/astro-site/src/content/docs/maintainers/docsearch.md"
+  }
+}
