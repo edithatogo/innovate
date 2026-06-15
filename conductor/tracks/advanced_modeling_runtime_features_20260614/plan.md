@@ -35,15 +35,15 @@
 ## Phase 3: Accelerator Policy, Examples, and Validation
 
 - [x] Task: Add accelerator-aware execution policy [c0af6ab]
-    - [ ] Implement capability-based routing for NumPy, JAX, and Rust-native paths
-    - [ ] Add safe fallback tests for missing optional dependencies
-    - [ ] Record performance evidence for selected workflows
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+    - [x] Implement capability-based routing for NumPy, JAX, and Rust-native paths
+    - [x] Add safe fallback tests for missing optional dependencies
+    - [x] Record performance evidence for selected workflows
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [x] Task: Add advanced examples and docs [62da688]
-    - [ ] Add end-to-end examples for ensemble forecasts, policy scenarios, streaming updates, and calibrated intervals
-    - [ ] Add docs pages and Starlight routes
-    - [ ] Validate examples in CI or a documented release lane
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
-- [ ] Task: Conductor - User Manual Verification 'Accelerator Policy, Examples, and Validation' (Protocol in workflow.md)
+    - [x] Add end-to-end examples for ensemble forecasts, policy scenarios, streaming updates, and calibrated intervals
+    - [x] Add docs pages and Starlight routes
+    - [x] Validate examples in CI or a documented release lane
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
+- [~] Task: Conductor - User Manual Verification 'Accelerator Policy, Examples, and Validation' (Protocol in workflow.md)
