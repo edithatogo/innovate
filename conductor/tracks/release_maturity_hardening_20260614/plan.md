@@ -32,7 +32,7 @@
     - [x] Commit this plan update with the task commit SHA
 - [x] Task: Conductor - User Manual Verification 'Security, Provenance, and Reproducibility' (Protocol in workflow.md)
 
-## Phase 3: CI Enforcement and Release Dry Run
+## Phase 3: CI Enforcement and Release Dry Run [checkpoint: 57232c2]
 
 - [x] Task: Add GitHub Actions release-readiness workflow `4d72423`
     - [x] Wire the local release-readiness command into CI
