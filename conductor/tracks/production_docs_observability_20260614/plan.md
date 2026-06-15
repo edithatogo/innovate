@@ -24,12 +24,12 @@
     - [x] Add stale data tests
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [~] Task: Add observability and maintenance pages
-    - [ ] Add package health, compatibility, deprecation, support, and maintenance policy pages
-    - [ ] Link dashboards to machine-readable evidence
-    - [ ] Validate route coverage and links
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Add observability and maintenance pages [e12c412]
+    - [x] Add package health, compatibility, deprecation, support, and maintenance policy pages
+    - [x] Link dashboards to machine-readable evidence
+    - [x] Validate route coverage and links
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Conductor - User Manual Verification 'Evidence-Backed Dashboards' (Protocol in workflow.md)
 
 ## Phase 3: Examples, API Snippets, and Deployment Readiness
