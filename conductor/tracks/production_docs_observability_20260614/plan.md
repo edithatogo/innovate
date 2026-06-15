@@ -34,12 +34,12 @@
 
 ## Phase 3: Examples, API Snippets, and Deployment Readiness
 
-- [~] Task: Validate examples and API snippets
-    - [ ] Add or update snippet validation for Python and binding examples
-    - [ ] Classify examples that require optional dependencies or external credentials
-    - [ ] Add CI evidence for runnable examples
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Validate examples and API snippets [55a3fe8]
+    - [x] Add or update snippet validation for Python and binding examples
+    - [x] Classify examples that require optional dependencies or external credentials
+    - [x] Add CI evidence for runnable examples
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Add production deployment readiness evidence
     - [ ] Verify GitHub Pages workflow, generated routes, and deployment artifacts
     - [ ] Add docs release checklist and rollback notes
