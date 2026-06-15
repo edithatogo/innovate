@@ -19,18 +19,18 @@
 ## Phase 2: Modeling Feature Implementation
 
 - [x] Task: Implement ensemble and scenario workflows [0369998]
-    - [ ] Add ensemble composition and scoring support
-    - [ ] Add causal-policy scenario comparison with auditable assumptions
-    - [ ] Add integration tests from fit to scenario summary
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+    - [x] Add ensemble composition and scoring support
+    - [x] Add causal-policy scenario comparison with auditable assumptions
+    - [x] Add integration tests from fit to scenario summary
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [x] Task: Implement streaming updates and uncertainty calibration [a8d3e5f]
-    - [ ] Add incremental update support for selected stable fitted models
-    - [ ] Add prediction interval calibration and backtesting utilities
-    - [ ] Add residual and coverage diagnostics
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
-- [ ] Task: Conductor - User Manual Verification 'Modeling Feature Implementation' (Protocol in workflow.md)
+    - [x] Add incremental update support for selected stable fitted models
+    - [x] Add prediction interval calibration and backtesting utilities
+    - [x] Add residual and coverage diagnostics
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
+- [~] Task: Conductor - User Manual Verification 'Modeling Feature Implementation' (Protocol in workflow.md)
 
 ## Phase 3: Accelerator Policy, Examples, and Validation
 
