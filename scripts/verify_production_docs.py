@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
-from datetime import UTC, date, datetime
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -46,6 +46,7 @@ def _route_status(required_routes: list[str]) -> str:
 
 def build_evidence() -> dict[str, Any]:
     """Build the production docs verification evidence payload."""
+    evidence_date = date.today().isoformat()
     route_coverage = _read_json(ROUTE_COVERAGE)
     cutover = _read_json(CUTOVER_VERIFICATION)
     link_validation = _read_json(LINK_VALIDATION)
@@ -143,8 +144,8 @@ def build_evidence() -> dict[str, Any]:
     return {
         "schema_version": 1,
         "generated_by_track": "production_docs_observability_20260614",
-        "generated_at": datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
-        "evidence_date": date.today().isoformat(),
+        "generated_at": f"{evidence_date}T00:00:00Z",
+        "evidence_date": evidence_date,
         "overall_status": overall_status,
         "staleness": {
             "max_age_days": 30,

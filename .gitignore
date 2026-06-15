@@ -28,6 +28,7 @@ mutants/
 .mutmut-cache
 docs/astro-site/node_modules/
 docs/astro-site/dist/
+docs/astro-site/.astro/
 # Node.js
 node_modules/
 dist/
