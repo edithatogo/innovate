@@ -34,12 +34,12 @@
 
 ## Phase 3: CI Enforcement and Release Dry Run
 
-- [ ] Task: Add GitHub Actions release-readiness workflow
-    - [ ] Wire the local release-readiness command into CI
-    - [ ] Split slow checks into release or scheduled lanes without weakening required fast checks
-    - [ ] Add artifact upload for readiness reports
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Add GitHub Actions release-readiness workflow `4d72423`
+    - [x] Wire the local release-readiness command into CI
+    - [x] Split slow checks into release or scheduled lanes without weakening required fast checks
+    - [x] Add artifact upload for readiness reports
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Execute and document a release dry run
     - [ ] Run package build checks for all package surfaces
     - [ ] Verify docs and registry receipts consume the readiness artifact
