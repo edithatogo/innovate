@@ -1,0 +1,24 @@
+Task: Refresh package-manager receipt evidence
+
+Summary:
+- Refreshed registry_submission_receipts captured_at to 2026-06-16.
+- Added live_evidence entries for PyPI, npm, crates.io, Julia General, Go proxy, NuGet, and R-universe.
+- Linked each submitted package-manager receipt to its live evidence ID.
+- Added tests that distinguish observed published/indexed/open-PR states and guard freshness.
+
+Live checks:
+- PyPI JSON: innovate 0.5.0
+- npm registry: innovate.ts latest 0.5.0
+- crates.io API: innovate-rs newest/max 0.5.0
+- Julia General PR 155126: open, unmerged
+- Go proxy: v0.5.0 listed
+- NuGet flat-container: innovate.cs 0.5.0 listed
+- R-universe package API: innovate.R 0.5.0 indexed
+
+Validation:
+- uv run pytest tests/unit/test_external_acceptance_live_evidence.py tests/unit/test_registry_submission_receipts.py tests/unit/test_external_submission_blocker_closure.py -q
+- uv run ruff check tests/unit/test_external_acceptance_live_evidence.py tests/unit/test_registry_submission_receipts.py tests/unit/test_external_submission_blocker_closure.py
+- python -m json.tool docs/source/_static/registry_submission_receipts.json
+
+Why:
+This converts package-manager receipt evidence from static readiness claims into current observed registry states without overclaiming Julia General acceptance.
