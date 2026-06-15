@@ -24,7 +24,7 @@
     - [x] Add stale data tests
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Add observability and maintenance pages
+- [~] Task: Add observability and maintenance pages
     - [ ] Add package health, compatibility, deprecation, support, and maintenance policy pages
     - [ ] Link dashboards to machine-readable evidence
     - [ ] Validate route coverage and links

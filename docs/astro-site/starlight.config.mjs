@@ -59,6 +59,11 @@ export default {
       items: [
         { label: 'Publication', link: '/maintainers/publication/' },
         { label: 'DocSearch Gate', link: '/maintainers/docsearch/' },
+        { label: 'Package Health', link: '/maintainers/package-health/' },
+        { label: 'Compatibility', link: '/maintainers/compatibility/' },
+        { label: 'Deprecation', link: '/maintainers/deprecation/' },
+        { label: 'Support', link: '/maintainers/support/' },
+        { label: 'Maintenance', link: '/maintainers/maintenance/' },
         { label: 'Release Readiness', link: '/maintainers/release-readiness/' },
         { label: 'Release Notes', link: '/maintainers/release-notes/' },
         { label: 'Plugins', link: '/maintainers/plugins/' },

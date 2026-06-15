@@ -10,6 +10,7 @@ DOCSEARCH_GATE = Path("docs/source/_static/astro_starlight/docsearch_gate.json")
 RELEASE_MATURITY_DASHBOARD = Path(
     "docs/source/_static/astro_starlight/release_maturity_dashboard.json"
 )
+OBSERVABILITY_MAINTENANCE = Path("docs/source/_static/astro_starlight/observability_maintenance.json")
 
 
 def _load_json(path: Path) -> dict:
@@ -146,3 +147,48 @@ def test_release_maturity_dashboard_is_evidence_backed() -> None:
         assert "registry_submission_inventory.json" in text
         assert "full rust ownership is not claimed" in text
         assert "not all external registries are accepted" in text
+
+
+def test_observability_and_maintenance_pages_are_evidence_linked() -> None:
+    """Support and maintenance pages should route back to machine-readable evidence."""
+    artifact = _load_json(OBSERVABILITY_MAINTENANCE)
+
+    assert artifact["schema_version"] == 1
+    assert artifact["generated_by_track"] == "production_docs_observability_20260614"
+    assert artifact["staleness"]["status"] == "fresh"
+    assert artifact["source_artifacts"]["release_maturity_dashboard"].endswith(
+        "release_maturity_dashboard.json"
+    )
+    assert artifact["source_artifacts"]["production_docs_verification"].endswith(
+        "production_docs_verification.json"
+    )
+
+    pages = {entry["id"]: entry for entry in artifact["pages"]}
+    assert set(pages) == {
+        "package_health",
+        "compatibility",
+        "deprecation",
+        "support",
+        "maintenance",
+    }
+    for page in pages.values():
+        assert page["current_route"].startswith("/maintainers/")
+        assert page["latest_route"].startswith("/latest/maintainers/")
+        assert page["evidence_links"], page["id"]
+
+    for slug in ("package-health", "compatibility", "deprecation", "support", "maintenance"):
+        for prefix in ("", "latest/"):
+            path = Path(f"docs/astro-site/src/content/docs/{prefix}maintainers/{slug}.md")
+            text = path.read_text().lower()
+            assert "observability_maintenance.json" in text
+            assert "release_maturity_dashboard.json" in text
+
+    astro_config = Path("docs/astro-site/astro.config.mjs").read_text()
+    for route in (
+        "/maintainers/package-health/",
+        "/maintainers/compatibility/",
+        "/maintainers/deprecation/",
+        "/maintainers/support/",
+        "/maintainers/maintenance/",
+    ):
+        assert route in astro_config

@@ -12,6 +12,11 @@ Available pages:
 
 - Publication
 - DocSearch Gate
+- Package Health
+- Compatibility
+- Deprecation
+- Support
+- Maintenance
 - Release Readiness
 - Release Notes
 - Plugins

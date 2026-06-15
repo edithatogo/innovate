@@ -1,0 +1,70 @@
+{
+  "evidence_date": "2026-06-16",
+  "generated_at": "2026-06-16T00:00:00Z",
+  "generated_by_track": "production_docs_observability_20260614",
+  "pages": [
+    {
+      "current_route": "/maintainers/package-health/",
+      "evidence_links": [
+        "docs/source/_static/astro_starlight/release_maturity_dashboard.json",
+        "docs/source/_static/registry_submission_inventory.json",
+        "docs/source/_static/binding_conformance_inventory.json"
+      ],
+      "id": "package_health",
+      "latest_route": "/latest/maintainers/package-health/",
+      "title": "Package Health"
+    },
+    {
+      "current_route": "/maintainers/compatibility/",
+      "evidence_links": [
+        "docs/source/_static/astro_starlight/release_maturity_dashboard.json",
+        "docs/source/_static/binding_conformance_inventory.json"
+      ],
+      "id": "compatibility",
+      "latest_route": "/latest/maintainers/compatibility/",
+      "title": "Compatibility Policy"
+    },
+    {
+      "current_route": "/maintainers/deprecation/",
+      "evidence_links": [
+        "docs/source/_static/astro_starlight/release_maturity_dashboard.json",
+        "docs/source/_static/release_readiness_contract.json"
+      ],
+      "id": "deprecation",
+      "latest_route": "/latest/maintainers/deprecation/",
+      "title": "Deprecation Policy"
+    },
+    {
+      "current_route": "/maintainers/support/",
+      "evidence_links": [
+        "docs/source/_static/astro_starlight/release_maturity_dashboard.json",
+        "docs/source/_static/astro_starlight/production_docs_verification.json"
+      ],
+      "id": "support",
+      "latest_route": "/latest/maintainers/support/",
+      "title": "Support Policy"
+    },
+    {
+      "current_route": "/maintainers/maintenance/",
+      "evidence_links": [
+        "docs/source/_static/astro_starlight/release_maturity_dashboard.json",
+        "docs/source/_static/astro_starlight/production_docs_verification.json"
+      ],
+      "id": "maintenance",
+      "latest_route": "/latest/maintainers/maintenance/",
+      "title": "Maintenance Policy"
+    }
+  ],
+  "schema_version": 1,
+  "source_artifacts": {
+    "binding_conformance_inventory": "docs/source/_static/binding_conformance_inventory.json",
+    "production_docs_verification": "docs/source/_static/astro_starlight/production_docs_verification.json",
+    "registry_submission_inventory": "docs/source/_static/registry_submission_inventory.json",
+    "release_maturity_dashboard": "docs/source/_static/astro_starlight/release_maturity_dashboard.json"
+  },
+  "staleness": {
+    "max_age_days": 30,
+    "source": "generated_at",
+    "status": "fresh"
+  }
+}

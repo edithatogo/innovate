@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 STATIC_ROOT = ROOT / "docs/source/_static"
 ASTRO_DOCS = ROOT / "docs/astro-site/src/content/docs"
 OUTPUT = STATIC_ROOT / "astro_starlight/release_maturity_dashboard.json"
+OBSERVABILITY_OUTPUT = STATIC_ROOT / "astro_starlight/observability_maintenance.json"
 
 SOURCE_ARTIFACTS = {
     "release_readiness": STATIC_ROOT / "release_readiness_contract.json",
@@ -108,6 +109,82 @@ def build_dashboard() -> dict[str, Any]:
     }
 
 
+def build_observability(dashboard: dict[str, Any]) -> dict[str, Any]:
+    """Build support and maintenance policy route evidence."""
+    evidence_date = dashboard["evidence_date"]
+    pages = [
+        {
+            "id": "package_health",
+            "title": "Package Health",
+            "current_route": "/maintainers/package-health/",
+            "latest_route": "/latest/maintainers/package-health/",
+            "evidence_links": [
+                _rel(OUTPUT),
+                _rel(SOURCE_ARTIFACTS["registry_state"]),
+                _rel(SOURCE_ARTIFACTS["binding_conformance"]),
+            ],
+        },
+        {
+            "id": "compatibility",
+            "title": "Compatibility Policy",
+            "current_route": "/maintainers/compatibility/",
+            "latest_route": "/latest/maintainers/compatibility/",
+            "evidence_links": [
+                _rel(OUTPUT),
+                _rel(SOURCE_ARTIFACTS["binding_conformance"]),
+            ],
+        },
+        {
+            "id": "deprecation",
+            "title": "Deprecation Policy",
+            "current_route": "/maintainers/deprecation/",
+            "latest_route": "/latest/maintainers/deprecation/",
+            "evidence_links": [
+                _rel(OUTPUT),
+                _rel(SOURCE_ARTIFACTS["release_readiness"]),
+            ],
+        },
+        {
+            "id": "support",
+            "title": "Support Policy",
+            "current_route": "/maintainers/support/",
+            "latest_route": "/latest/maintainers/support/",
+            "evidence_links": [
+                _rel(OUTPUT),
+                "docs/source/_static/astro_starlight/production_docs_verification.json",
+            ],
+        },
+        {
+            "id": "maintenance",
+            "title": "Maintenance Policy",
+            "current_route": "/maintainers/maintenance/",
+            "latest_route": "/latest/maintainers/maintenance/",
+            "evidence_links": [
+                _rel(OUTPUT),
+                "docs/source/_static/astro_starlight/production_docs_verification.json",
+            ],
+        },
+    ]
+    return {
+        "schema_version": 1,
+        "generated_by_track": "production_docs_observability_20260614",
+        "generated_at": f"{evidence_date}T00:00:00Z",
+        "evidence_date": evidence_date,
+        "staleness": {
+            "max_age_days": 30,
+            "status": "fresh",
+            "source": "generated_at",
+        },
+        "source_artifacts": {
+            "release_maturity_dashboard": _rel(OUTPUT),
+            "production_docs_verification": "docs/source/_static/astro_starlight/production_docs_verification.json",
+            "registry_submission_inventory": _rel(SOURCE_ARTIFACTS["registry_state"]),
+            "binding_conformance_inventory": _rel(SOURCE_ARTIFACTS["binding_conformance"]),
+        },
+        "pages": pages,
+    }
+
+
 def _dashboard_page(slug_prefix: str = "") -> str:
     slug_line = f"slug: {slug_prefix}operations/release-maturity\n" if slug_prefix else ""
     return f"""---
@@ -148,15 +225,70 @@ Guardrails:
 """
 
 
+def _policy_page(title: str, slug: str, summary: str, slug_prefix: str = "") -> str:
+    slug_line = f"slug: {slug_prefix}maintainers/{slug}\n" if slug_prefix else ""
+    return f"""---
+title: {title}
+description: Evidence-backed {title.lower()} for Innovate maintainers.
+{slug_line}---
+
+# {title}
+
+{summary}
+
+Evidence:
+
+- `docs/source/_static/astro_starlight/observability_maintenance.json`
+- `docs/source/_static/astro_starlight/release_maturity_dashboard.json`
+- `docs/source/_static/astro_starlight/production_docs_verification.json`
+
+Operational rules:
+
+- Keep user-facing claims aligned with the machine-readable evidence artifacts.
+- Treat external registry or deployment state as pending unless the relevant
+  artifact shows accepted, published, or passed evidence.
+- Refresh the evidence artifacts before a public release announcement.
+"""
+
+
 def write_outputs(dashboard: dict[str, Any]) -> None:
     """Write dashboard JSON and Starlight pages."""
+    observability = build_observability(dashboard)
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT.write_text(json.dumps(dashboard, indent=2, sort_keys=True) + "\n")
+    OBSERVABILITY_OUTPUT.write_text(json.dumps(observability, indent=2, sort_keys=True) + "\n")
 
     pages = {
         ASTRO_DOCS / "operations/release-maturity.md": _dashboard_page(),
         ASTRO_DOCS / "latest/operations/release-maturity.md": _dashboard_page("latest/"),
     }
+    policy_pages = {
+        "package-health": (
+            "Package Health",
+            "Package health summarizes package, binding, registry, and docs evidence before release.",
+        ),
+        "compatibility": (
+            "Compatibility Policy",
+            "Compatibility policy defines how supported languages and kernel schema commitments are presented.",
+        ),
+        "deprecation": (
+            "Deprecation Policy",
+            "Deprecation policy keeps removals and migrations tied to release readiness evidence.",
+        ),
+        "support": (
+            "Support Policy",
+            "Support policy names the maintained docs, registry, and issue-reporting surfaces.",
+        ),
+        "maintenance": (
+            "Maintenance Policy",
+            "Maintenance policy defines the evidence refresh and release readiness cadence.",
+        ),
+    }
+    for slug, (title, summary) in policy_pages.items():
+        pages[ASTRO_DOCS / f"maintainers/{slug}.md"] = _policy_page(title, slug, summary)
+        pages[ASTRO_DOCS / f"latest/maintainers/{slug}.md"] = _policy_page(
+            title, slug, summary, "latest/"
+        )
     for path, content in pages.items():
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content)
