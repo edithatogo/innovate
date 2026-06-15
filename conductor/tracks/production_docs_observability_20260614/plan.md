@@ -18,12 +18,12 @@
 
 ## Phase 2: Evidence-Backed Dashboards
 
-- [~] Task: Add release and maturity dashboard artifacts
-    - [ ] Generate docs data from release-readiness, Rust ownership, registry, and binding conformance artifacts
-    - [ ] Add Starlight pages that render status without duplicated claims
-    - [ ] Add stale data tests
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Add release and maturity dashboard artifacts [b1d0848]
+    - [x] Generate docs data from release-readiness, Rust ownership, registry, and binding conformance artifacts
+    - [x] Add Starlight pages that render status without duplicated claims
+    - [x] Add stale data tests
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Add observability and maintenance pages
     - [ ] Add package health, compatibility, deprecation, support, and maintenance policy pages
     - [ ] Link dashboards to machine-readable evidence
