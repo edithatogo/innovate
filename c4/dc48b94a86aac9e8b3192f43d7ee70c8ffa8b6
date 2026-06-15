@@ -1,0 +1,24 @@
+Task: Complete HPC submission packets
+
+Summary:
+- Refreshed the HPC packet date and External Acceptance Completion ownership.
+- Added maintainer owners, external action URLs, requirement sources, maintainer action boundaries, receipt rules, and revisit conditions for Spack, EasyBuild, HPSF, and E4S.
+- Refreshed workflow_manifest.json and hpc_submission_blockers.json timestamps to 2026-06-16 and added workflow receipt/revisit fields.
+- Updated hpc_submission_packet.rst to describe the new boundary fields.
+- Extended unit tests to enforce current external action boundaries and refreshed workflow/blocker evidence.
+
+Modified files:
+- conductor/tracks/external_acceptance_completion_20260614/plan.md
+- docs/source/_static/hpc_packaging/submission_packet.json
+- docs/source/_static/hpc_packaging/workflow_manifest.json
+- docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json
+- docs/source/hpc_submission_packet.rst
+- tests/unit/test_hpc_submission_packet.py
+
+Validation:
+- uv run pytest tests/unit/test_hpc_submission_packet.py tests/unit/test_scientific_submission_packet.py tests/unit/test_community_submission_readiness.py tests/unit/test_external_acceptance_live_evidence.py tests/unit/test_external_submission_blocker_closure.py tests/unit/test_registry_submission_receipts.py -q => 27 passed
+- uv run ruff check tests/unit/test_hpc_submission_packet.py tests/unit/test_scientific_submission_packet.py tests/unit/test_community_submission_readiness.py tests/unit/test_external_acceptance_live_evidence.py tests/unit/test_external_submission_blocker_closure.py tests/unit/test_registry_submission_receipts.py => passed
+- python -m json.tool docs/source/_static/hpc_packaging/submission_packet.json
+- python -m json.tool docs/source/_static/hpc_packaging/workflow_manifest.json
+- python -m json.tool docs/source/_static/hpc_packaging/evidence/hpc_submission_blockers.json
+- python -m json.tool docs/source/_static/scientific_submission_packet.json
