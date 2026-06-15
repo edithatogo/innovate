@@ -8,12 +8,12 @@
     - [x] Add tests that fail when required evidence is missing or stale
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Add release-readiness report generation
-    - [ ] Implement a local report command or nox session
-    - [ ] Emit JSON and human-readable summaries
-    - [ ] Document how maintainers interpret release candidate versus release-ready states
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Add release-readiness report generation `be6e259`
+    - [x] Implement a local report command or nox session
+    - [x] Emit JSON and human-readable summaries
+    - [x] Document how maintainers interpret release candidate versus release-ready states
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Conductor - User Manual Verification 'Release Gate Inventory and Fail-Closed Tests' (Protocol in workflow.md)
 
 ## Phase 2: Security, Provenance, and Reproducibility
