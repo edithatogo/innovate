@@ -24,12 +24,12 @@
     - [x] Ensure local checks do not require secrets
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Add reproducibility gates
-    - [ ] Add deterministic benchmark fixture checks
-    - [ ] Add seeded simulation and generated artifact reproducibility checks
-    - [ ] Record acceptable nondeterminism with owner and rationale
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Add reproducibility gates `bcf5b6a`
+    - [x] Add deterministic benchmark fixture checks
+    - [x] Add seeded simulation and generated artifact reproducibility checks
+    - [x] Record acceptable nondeterminism with owner and rationale
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Conductor - User Manual Verification 'Security, Provenance, and Reproducibility' (Protocol in workflow.md)
 
 ## Phase 3: CI Enforcement and Release Dry Run
