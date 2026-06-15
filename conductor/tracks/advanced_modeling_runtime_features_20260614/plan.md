@@ -16,7 +16,7 @@
     - [x] Commit this plan update with the task commit SHA
 - [x] Task: Conductor - User Manual Verification 'Advanced API Contracts' (Protocol in workflow.md)
 
-## Phase 2: Modeling Feature Implementation
+## Phase 2: Modeling Feature Implementation [checkpoint: cb60d7d]
 
 - [x] Task: Implement ensemble and scenario workflows [0369998]
     - [x] Add ensemble composition and scoring support
@@ -30,7 +30,7 @@
     - [x] Add residual and coverage diagnostics
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [~] Task: Conductor - User Manual Verification 'Modeling Feature Implementation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Modeling Feature Implementation' (Protocol in workflow.md)
 
 ## Phase 3: Accelerator Policy, Examples, and Validation
 
