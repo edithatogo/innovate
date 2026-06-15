@@ -1,0 +1,24 @@
+Task: Execute and document a release dry run
+
+Summary:
+- Added release-dry-run.json covering Python, Rust, TypeScript, R, Julia, Go, C#, docs, and HPC package surfaces.
+- Documented final gate sequence in Sphinx and Astro/Starlight maintainer docs.
+- Added tests ensuring dry-run evidence covers package surfaces, links docs/registry consumers to readiness artifacts, and documents maintainer approval boundaries.
+
+Modified files:
+- docs/source/_static/release_readiness/release-dry-run.json
+- docs/source/release_readiness.rst
+- docs/astro-site/src/content/docs/maintainers/release-readiness.md
+- docs/astro-site/src/content/docs/latest/maintainers/release-readiness.md
+- tests/unit/test_release_dry_run_evidence.py
+
+Validation:
+- uv run pytest tests/unit/test_release_dry_run_evidence.py tests/unit/test_release_readiness_workflow.py -q
+- uv run nox -s package
+- uv run ruff check tests/unit/test_release_dry_run_evidence.py tests/unit/test_release_readiness_workflow.py
+- uv run ruff format --check tests/unit/test_release_dry_run_evidence.py tests/unit/test_release_readiness_workflow.py
+- uv run nox -s docs
+- STARLIGHT_POLYGLOT_PYTHON=python pnpm build
+
+Why:
+- The release maturity track needs a durable dry-run artifact that ties package dry-runs, readiness reports, docs, registry receipts, and maintainer approval boundaries together.
