@@ -1,0 +1,18 @@
+Task: Add production deployment readiness evidence
+
+Summary:
+- Extended scripts/generate_docs_dashboards.py to generate docs/source/_static/astro_starlight/deployment_readiness.json.
+- Added current and latest Deployment Readiness pages with release checklist and rollback notes.
+- Added Starlight navigation and maintainer index entries for deployment readiness.
+- Added tests for GitHub Pages workflow gating, generated artifacts, required routes, checklist, and rollback content.
+
+Validation:
+- uv run python scripts/validate_examples.py --json && uv run python scripts/generate_docs_dashboards.py --json && uv run pytest tests/unit/test_production_docs_observability.py -q
+- python ../../scripts/generate_docs_dashboards.py --json && python ../../scripts/verify_production_docs.py --json from docs/astro-site
+- uv run ruff check scripts/validate_examples.py scripts/generate_docs_dashboards.py tests/unit/test_production_docs_observability.py noxfile.py
+- uv run ruff format --check scripts/validate_examples.py scripts/generate_docs_dashboards.py tests/unit/test_production_docs_observability.py noxfile.py
+- pnpm build && pnpm check from docs/astro-site: passed before the docs workflow validation command split; Starlight generated 117 pages.
+- uv run nox -s examples production_docs: passed.
+
+Why:
+- The production docs lane needs explicit deployment readiness evidence, release checklist, and rollback guidance before release-facing documentation can be considered mature.
