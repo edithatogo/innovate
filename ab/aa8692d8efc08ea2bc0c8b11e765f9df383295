@@ -1,0 +1,16 @@
+Task: Build the final Rust ownership ledger
+
+Summary:
+- Added docs/source/_static/rust_final_ownership_ledger.json as the consolidated Rust ownership ledger for model families, payload shapes, and canonical operations.
+- Added tests/unit/test_rust_final_ownership_ledger.py to enforce coverage, owner/rationale/evidence/revisit policy, and release-claim boundaries.
+- Linked the final ledger into rust_full_ownership_validation.json.
+- Marked the Full Rust Ownership Completion track and first task in progress before implementation.
+
+Validation:
+- uv run pytest tests/unit/test_rust_final_ownership_ledger.py tests/unit/test_rust_native_payload_model_coverage.py -q
+- python -m json.tool docs/source/_static/rust_final_ownership_ledger.json >/dev/null
+- python -m json.tool docs/source/_static/rust_full_ownership_validation.json >/dev/null
+- uv run pytest tests/unit/test_rust_final_ownership_ledger.py tests/unit/test_rust_native_payload_model_coverage.py tests/unit/test_rust_native_operation_completion.py tests/unit/test_rust_core_roadmap_docs.py -q
+
+Why:
+The release-readiness roadmap needed one final ownership artifact that supports exact release claims without overclaiming full Rust ownership for retained Python or design-decision boundaries.
