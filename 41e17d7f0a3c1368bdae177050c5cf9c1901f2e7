@@ -1,0 +1,1 @@
+CI lint repair after run 27527261142: Ruff linted the vendored starlight-polyglot extractor under docs/astro-site/vendor and failed on third-party style rules. Added docs/astro-site/vendor to tool.ruff.exclude. Local validation: uv run ruff check . && uv run ruff format --check .
