@@ -1,0 +1,16 @@
+Task: Implement ensemble and scenario workflows
+
+Summary:
+- Added compose_regime_ensemble for weighted regime forecasts with MAE/RMSE diagnostics and auditable assumptions.
+- Added compare_policy_scenarios for baseline/intervention policy comparison with incremental effect, final relative lift, covariates, and fit diagnostics.
+- Exposed both workflows through the package lazy public API.
+- Added integration tests driven by deterministic advanced runtime fixtures.
+
+Files:
+- conductor/tracks/advanced_modeling_runtime_features_20260614/plan.md
+- src/innovate/__init__.py
+- src/innovate/advanced_runtime.py
+- tests/integration/test_advanced_modeling_workflows.py
+
+Why:
+- Forecasting and policy analysis need reportable advanced workflow outputs with inspectable assumptions and stable serialization.
