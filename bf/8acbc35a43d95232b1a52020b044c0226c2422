@@ -1,0 +1,16 @@
+Task: Add fail-first ownership contract tests
+
+Summary:
+- Extended the final Rust ownership ledger tests to fail closed for unowned stable payload shapes, promoted model families missing native operation coverage, and docs surfaces with unsafe full-ownership claims.
+- Added fail_closed_contracts metadata and native operation lists to rust_final_ownership_ledger.json.
+- Wired the final ledger into Sphinx, Starlight, and vision roadmap status claim surfaces.
+- Updated an existing roadmap wording assertion to use the safer negative phrase.
+
+Validation:
+- uv run pytest tests/unit/test_rust_final_ownership_ledger.py -q failed first on missing fail_closed_contracts.
+- python -m json.tool docs/source/_static/rust_final_ownership_ledger.json >/dev/null
+- python -m json.tool docs/source/_static/vision_roadmap_status_inventory.json >/dev/null
+- uv run pytest tests/unit/test_rust_final_ownership_ledger.py tests/unit/test_rust_native_payload_model_coverage.py tests/unit/test_rust_native_operation_completion.py tests/unit/test_rust_core_roadmap_docs.py tests/unit/test_vision_roadmap_truth_status.py -q
+
+Why:
+Release claims should fail closed whenever stable payload ownership, promoted Rust operations, or full-ownership documentation claims drift away from the evidence ledger.
