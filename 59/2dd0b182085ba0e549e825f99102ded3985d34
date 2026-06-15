@@ -1,0 +1,15 @@
+Task: Add production docs verification contract
+
+Summary:
+- Added scripts/verify_production_docs.py to produce machine-readable production docs evidence for routes, redirects, sitemap, search fallback, versioned docs, API generation, and CI wiring.
+- Added production_docs nox session, docs workflow verification step, and Astro/Starlight README command documentation.
+- Added regression tests in tests/unit/test_production_docs_observability.py and generated docs/source/_static/astro_starlight/production_docs_verification.json.
+
+Validation:
+- uv run pytest tests/unit/test_production_docs_observability.py -q
+- uv run python scripts/verify_production_docs.py --json
+- uv run ruff check scripts/verify_production_docs.py tests/unit/test_production_docs_observability.py noxfile.py
+- uv run nox --list | rg 'production_docs|docs'
+
+Why:
+- Production docs readiness needs a CI-safe contract proving the Starlight output has release-critical routes, generated API pages, sitemap, and safe DocSearch fallback without requiring production secrets.
