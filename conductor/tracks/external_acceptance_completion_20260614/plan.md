@@ -8,11 +8,11 @@
     - [x] Add drift tests for stale or mismatched registry states
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Refresh pending external target evidence
-    - [ ] Re-check CRAN, Spack, EasyBuild, HPSF, E4S, and community target requirements
-    - [ ] Update blocker, owner, and next-action fields with current evidence
-    - [ ] Remove any generic blocked language
-    - [ ] Commit implementation changes for this task
+- [~] Task: Refresh pending external target evidence
+    - [x] Re-check CRAN, Spack, EasyBuild, HPSF, E4S, and community target requirements
+    - [x] Update blocker, owner, and next-action fields with current evidence
+    - [x] Remove any generic blocked language
+    - [x] Commit implementation changes for this task
     - [ ] Commit this plan update with the task commit SHA
 - [ ] Task: Conductor - User Manual Verification 'Live Evidence Refresh' (Protocol in workflow.md)
 

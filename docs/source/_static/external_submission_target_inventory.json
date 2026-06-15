@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_by_track": "external_submission_blocker_closure_20260614",
-  "inventory_date": "2026-06-14",
+  "generated_by_track": "external_acceptance_completion_20260614",
+  "inventory_date": "2026-06-16",
   "source_artifacts": [
     "docs/source/_static/registry_submission_receipts.json",
     "docs/source/_static/registry_submission_inventory.json",
@@ -18,6 +18,158 @@
     "ready_for_maintainer",
     "ready_for_review",
     "not_applicable"
+  ],
+  "pending_requirement_refresh": [
+    {
+      "target_id": "r_cran",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "owner": "R binding maintainers",
+      "requirement_sources": [
+        "https://cran.r-project.org/submit.html",
+        "https://cran.r-project.org/web/packages/policies.html"
+      ],
+      "action_boundary": "Maintainer must use CRAN's package submission path and record the CRAN receipt; no agent-side final submit is authorized."
+    },
+    {
+      "target_id": "spack",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "owner": "HPC maintainers",
+      "requirement_sources": [
+        "https://spack.readthedocs.io/en/latest/contribution_guide.html",
+        "https://spack.readthedocs.io/en/latest/packaging_guide_creation.html"
+      ],
+      "action_boundary": "Maintainer must review the candidate recipe, refresh scheduler evidence, and open the upstream Spack pull request."
+    },
+    {
+      "target_id": "easybuild",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "owner": "HPC maintainers",
+      "requirement_sources": [
+        "https://docs.easybuild.io/contributing/",
+        "https://docs.easybuild.io/writing-easyconfig-files/"
+      ],
+      "action_boundary": "Maintainer must review the easyconfig, refresh scheduler evidence, and open the upstream EasyBuild contribution."
+    },
+    {
+      "target_id": "hpsf",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "owner": "HPC maintainers",
+      "requirement_sources": [
+        "https://github.com/hpsfoundation/tac/issues/new?template=new-project-proposal.md",
+        "https://raw.githubusercontent.com/hpsfoundation/tac/main/.github/ISSUE_TEMPLATE/new-project-proposal.md"
+      ],
+      "action_boundary": "Maintainer must identify TAC sponsors, complete the HPSF proposal template, and open the HPSF TAC issue."
+    },
+    {
+      "target_id": "e4s",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "owner": "HPC maintainers",
+      "requirement_sources": [
+        "https://e4s.io/contribution-guide/",
+        "https://e4s.io/contact/"
+      ],
+      "action_boundary": "Maintainer must contact E4S, validate the Spack package through E4S review or CI, and submit inclusion only after review evidence exists."
+    },
+    {
+      "target_id": "pyopensci",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "owner": "Scientific community maintainers",
+      "requirement_sources": [
+        "https://www.pyopensci.org/software-peer-review/how-to/author-guide.html",
+        "https://www.pyopensci.org/software-peer-review/about/package-scope.html"
+      ],
+      "action_boundary": "Maintainer must decide whether to open pyOpenSci peer review and serve as the long-term review contact."
+    },
+    {
+      "target_id": "ropensci",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "owner": "R/scientific community maintainers",
+      "requirement_sources": [
+        "https://devguide.ropensci.org/softwarereview_policies.html",
+        "https://devguide.ropensci.org/softwarereview_intro.html"
+      ],
+      "action_boundary": "Maintainer must decide whether to open rOpenSci review after CRAN posture and R package evidence are current."
+    },
+    {
+      "target_id": "joss",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "owner": "Scientific community maintainers",
+      "requirement_sources": [
+        "https://joss.readthedocs.io/en/latest/submitting.html",
+        "https://joss.readthedocs.io/en/latest/review_criteria.html"
+      ],
+      "action_boundary": "Maintainer must prepare JOSS metadata, submit through JOSS, and record the external submission URL."
+    },
+    {
+      "target_id": "numfocus",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "owner": "Governance maintainers",
+      "requirement_sources": [
+        "https://numfocus.org/projects-overview",
+        "https://numfocus.org/projects-overview#apply-to-join-numfocus"
+      ],
+      "action_boundary": "Maintainer must wait for NumFOCUS application capacity to reopen or record an owner-approved governance deferral."
+    },
+    {
+      "target_id": "pypa",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "owner": "Python maintainers",
+      "requirement_sources": [
+        "https://www.pypa.io/en/latest/members/",
+        "https://packaging.python.org/en/latest/"
+      ],
+      "action_boundary": "No submission claimed; maintain PyPA-compatible packaging standards and PyPI publication evidence."
+    },
+    {
+      "target_id": "apache_arrow",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "owner": "Interop maintainers",
+      "requirement_sources": [
+        "https://arrow.apache.org/community/",
+        "https://arrow.apache.org/docs/format/Columnar.html"
+      ],
+      "action_boundary": "Maintainer must decide whether to open Arrow community discussion using the Arrow interchange evidence packet."
+    },
+    {
+      "target_id": "dotnet_foundation",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "owner": "C# binding maintainers",
+      "requirement_sources": [
+        "https://dotnetfoundation.org/projects",
+        "https://dotnetfoundation.org/projects/current-projects"
+      ],
+      "action_boundary": "Maintainer must decide whether to initiate .NET Foundation project review after NuGet and governance evidence are accepted."
+    },
+    {
+      "target_id": "julia_community",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "owner": "Julia binding maintainers",
+      "requirement_sources": [
+        "https://pkgdocs.julialang.org/v1/registries/",
+        "https://github.com/JuliaRegistries/General/pull/155126"
+      ],
+      "action_boundary": "Maintainer must track the Julia General pull request outcome before broader Julia community announcement."
+    },
+    {
+      "target_id": "r_community",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "owner": "R binding maintainers",
+      "requirement_sources": [
+        "https://r-universe.dev/",
+        "https://cran.r-project.org/submit.html"
+      ],
+      "action_boundary": "Maintainer must coordinate R community outreach after CRAN and R-universe evidence are current."
+    },
+    {
+      "target_id": "scikit_learn_contrib",
+      "checked_at": "2026-06-16T00:00:00+10:00",
+      "owner": "Python maintainers",
+      "requirement_sources": [
+        "https://scikit-learn-contrib.github.io/",
+        "https://github.com/scikit-learn-contrib/scikit-learn-contrib"
+      ],
+      "action_boundary": "No submission claimed because Innovate scope is broader than scikit-learn-contrib estimator add-ons."
+    }
   ],
   "target_groups": {
     "package_manager": [
