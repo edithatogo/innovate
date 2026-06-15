@@ -1,0 +1,1 @@
+Deploy Documentation repair: vendor the Starlight polyglot runtime as a repo-local docs package because the published npm artifact omitted runtime handler/script files and the previous file dependency pointed outside the repository. Validated with pnpm install --frozen-lockfile and pnpm build.
