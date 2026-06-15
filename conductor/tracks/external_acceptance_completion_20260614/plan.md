@@ -16,7 +16,7 @@
     - [x] Commit this plan update with the task commit SHA
 - [x] Task: Conductor - User Manual Verification 'Live Evidence Refresh' (Protocol in workflow.md)
 
-## Phase 2: Submission Packet Completion
+## Phase 2: Submission Packet Completion [checkpoint: 46cebc0]
 
 - [x] Task: Complete CRAN and scientific submission packets [e4438d7]
     - [x] Refresh R package checks, CRAN comments, and source package evidence
@@ -30,7 +30,7 @@
     - [x] Record sponsor, contact, CI, and review expectations
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Conductor - User Manual Verification 'Submission Packet Completion' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Submission Packet Completion' (Protocol in workflow.md)
 
 ## Phase 3: Receipts, Deferrals, and Claim Closure
 
