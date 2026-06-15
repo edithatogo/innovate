@@ -310,6 +310,252 @@ impl KernelDiagnosticsSummary {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StableModelState {
+    pub model_key: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub model_name: Option<String>,
+    #[serde(default)]
+    pub constructor_kwargs: Value,
+    #[serde(default)]
+    pub parameters: Value,
+    #[serde(default)]
+    pub predict_kwargs: Value,
+}
+
+impl StableModelState {
+    fn from_object(
+        model_key: &str,
+        operation: KernelOperation,
+        state: &Map<String, Value>,
+    ) -> Result<Self, KernelBindingError> {
+        let state_model_key = state
+            .get("model_key")
+            .and_then(Value::as_str)
+            .unwrap_or(model_key);
+        if state_model_key != model_key {
+            return Err(KernelBindingError::invalid_request(
+                operation,
+                format!(
+                    "kernel request model_key '{model_key}' does not match state model_key '{state_model_key}'"
+                ),
+            ));
+        }
+
+        Ok(Self {
+            model_key: state_model_key.to_string(),
+            model_name: state
+                .get("model_name")
+                .and_then(Value::as_str)
+                .map(ToString::to_string),
+            constructor_kwargs: state
+                .get("constructor_kwargs")
+                .cloned()
+                .unwrap_or_else(|| json!({})),
+            parameters: state
+                .get("parameters")
+                .cloned()
+                .unwrap_or_else(|| json!({})),
+            predict_kwargs: state
+                .get("predict_kwargs")
+                .cloned()
+                .unwrap_or_else(|| json!({})),
+        })
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SimplePositiveObservationsFitPayload {
+    pub payload_shape: String,
+    pub model_key: String,
+    pub time: Vec<f64>,
+    pub observed: Vec<f64>,
+    #[serde(default)]
+    pub constructor_kwargs: Value,
+}
+
+impl SimplePositiveObservationsFitPayload {
+    pub fn from_value(
+        model_key: &str,
+        operation: KernelOperation,
+        payload: &Value,
+    ) -> Result<Self, KernelBindingError> {
+        let payload = payload.as_object().ok_or_else(|| {
+            KernelBindingError::invalid_request(
+                operation,
+                format!("{operation} payload must be an object"),
+            )
+        })?;
+        let inputs = object_section(payload, "inputs", operation)?;
+        let time = numeric_array_from_aliases(inputs, &["time", "t"], operation)?;
+        let observed = numeric_array_from_aliases(
+            inputs,
+            &["observed", "y", "values", "adoption", "share"],
+            operation,
+        )?;
+        if time.len() != observed.len() {
+            return Err(KernelBindingError::invalid_request(
+                operation,
+                "time and observed arrays must have the same length",
+            ));
+        }
+        if time.iter().any(|value| !value.is_finite())
+            || observed.iter().any(|value| !value.is_finite())
+        {
+            return Err(KernelBindingError::invalid_request(
+                operation,
+                "time and observed arrays must contain finite numeric values",
+            ));
+        }
+        let constructor_kwargs = _fit_constructor_kwargs(payload);
+        ensure_no_covariates_or_event_splits(
+            operation,
+            constructor_kwargs,
+            inputs,
+            "native fitting currently supports simple fitted states without covariates, events, or custom fitter options",
+        )?;
+        let fit_options = payload.get("fit_options").and_then(Value::as_object);
+        let fitter_options = payload.get("fitter_options").and_then(Value::as_object);
+        if fit_options.is_some_and(|values| !values.is_empty())
+            || fitter_options.is_some_and(|values| !values.is_empty())
+        {
+            return Err(KernelBindingError::unsupported_native_operation(
+                operation,
+                "native fitting currently supports simple fitted states without covariates, events, or custom fitter options",
+            ));
+        }
+
+        Ok(Self {
+            payload_shape: "simple_positive_observations_fit".to_string(),
+            model_key: model_key.to_string(),
+            time,
+            observed,
+            constructor_kwargs: constructor_kwargs
+                .map(|values| Value::Object(values.clone()))
+                .unwrap_or_else(|| json!({})),
+        })
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct BoundedFittedStatePayload {
+    pub payload_shape: String,
+    pub model_key: String,
+    pub time: Vec<f64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub observed: Option<Vec<f64>>,
+    pub state: StableModelState,
+}
+
+impl BoundedFittedStatePayload {
+    pub fn from_value(
+        model_key: &str,
+        operation: KernelOperation,
+        payload: &Value,
+    ) -> Result<Self, KernelBindingError> {
+        let payload = payload.as_object().ok_or_else(|| {
+            KernelBindingError::invalid_request(
+                operation,
+                format!("{operation} payload must be an object"),
+            )
+        })?;
+        let inputs = object_section(payload, "inputs", operation)?;
+        let time = numeric_array_from_aliases(inputs, &["time", "t"], operation)?;
+        if time.iter().any(|value| !value.is_finite()) {
+            return Err(KernelBindingError::invalid_request(
+                operation,
+                "time values must be finite for native fitted-state execution",
+            ));
+        }
+        let observed = optional_numeric_array_from_aliases(
+            inputs,
+            &["observed", "y", "values", "adoption", "share"],
+            operation,
+        )?;
+        if observed
+            .as_ref()
+            .is_some_and(|values| values.len() != time.len())
+        {
+            return Err(KernelBindingError::invalid_request(
+                operation,
+                "time and observed arrays must have the same length",
+            ));
+        }
+        if observed
+            .as_ref()
+            .is_some_and(|values| values.iter().any(|value| !value.is_finite()))
+        {
+            return Err(KernelBindingError::invalid_request(
+                operation,
+                "observed arrays must contain finite numeric values",
+            ));
+        }
+
+        let state = object_section(payload, "state", operation)?;
+        let decoded_state = StableModelState::from_object(model_key, operation, state)?;
+        let constructor_kwargs = state.get("constructor_kwargs").and_then(Value::as_object);
+        ensure_no_covariates_or_event_splits(
+            operation,
+            constructor_kwargs,
+            inputs,
+            "native fitted-state execution currently supports fitted states without covariates or event splits",
+        )?;
+
+        Ok(Self {
+            payload_shape: "bounded_fitted_state".to_string(),
+            model_key: model_key.to_string(),
+            time,
+            observed,
+            state: decoded_state,
+        })
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DeterministicSimulationPayload {
+    pub payload_shape: String,
+    pub fitted_state: BoundedFittedStatePayload,
+}
+
+impl DeterministicSimulationPayload {
+    pub fn from_value(model_key: &str, payload: &Value) -> Result<Self, KernelBindingError> {
+        Ok(Self {
+            payload_shape: "deterministic_simulation".to_string(),
+            fitted_state: BoundedFittedStatePayload::from_value(
+                model_key,
+                KernelOperation::SimulateModel,
+                payload,
+            )?,
+        })
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DeterministicDiagnosticsPayload {
+    pub payload_shape: String,
+    pub fitted_state: BoundedFittedStatePayload,
+}
+
+impl DeterministicDiagnosticsPayload {
+    pub fn from_value(model_key: &str, payload: &Value) -> Result<Self, KernelBindingError> {
+        let fitted_state = BoundedFittedStatePayload::from_value(
+            model_key,
+            KernelOperation::DiagnoseModel,
+            payload,
+        )?;
+        if fitted_state.observed.is_none() {
+            return Err(KernelBindingError::invalid_request(
+                KernelOperation::DiagnoseModel,
+                "diagnose_model requires time and observed arrays in the inputs section",
+            ));
+        }
+        Ok(Self {
+            payload_shape: "deterministic_diagnostics".to_string(),
+            fitted_state,
+        })
+    }
+}
+
 fn bridge_fallback_allowed(operation: KernelOperation, model_key: Option<&str>) -> bool {
     match operation {
         KernelOperation::FitModel => {
@@ -720,6 +966,28 @@ fn optional_object_section<'a>(
     key: &str,
 ) -> Option<&'a Map<String, Value>> {
     payload.get(key).and_then(Value::as_object)
+}
+
+fn ensure_no_covariates_or_event_splits(
+    operation: KernelOperation,
+    constructor_kwargs: Option<&Map<String, Value>>,
+    inputs: &Map<String, Value>,
+    message: &'static str,
+) -> Result<(), KernelBindingError> {
+    let has_covariates = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("covariates"))
+        .is_some_and(|covariates| !covariates.as_array().is_some_and(Vec::is_empty));
+    let has_event = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("t_event"))
+        .is_some_and(|value| !value.is_null());
+    let input_covariates = inputs.get("covariates").is_some();
+    if has_covariates || has_event || input_covariates {
+        return Err(KernelBindingError::unsupported_native_operation(
+            operation, message,
+        ));
+    }
+
+    Ok(())
 }
 
 fn numeric_array_from_aliases(
@@ -1647,21 +1915,23 @@ fn bass_native_response(
         ));
     }
 
-    let payload = request.payload.as_object().ok_or_else(|| {
-        KernelBindingError::invalid_request(
-            operation,
-            format!("{operation} payload must be an object"),
-        )
-    })?;
-    let inputs = object_section(payload, "inputs", operation)?;
-    let time = numeric_array_from_aliases(inputs, &["time", "t"], operation)?;
-    if time.iter().any(|value| !value.is_finite() || *value < 0.0) {
+    let stable_payload = if operation == KernelOperation::SimulateModel {
+        DeterministicSimulationPayload::from_value(model_key, &request.payload)?.fitted_state
+    } else {
+        BoundedFittedStatePayload::from_value(model_key, operation, &request.payload)?
+    };
+    if stable_payload
+        .time
+        .iter()
+        .any(|value| !value.is_finite() || *value < 0.0)
+    {
         return Err(KernelBindingError::invalid_request(
             operation,
             "time values must be finite and non-negative for native Bass execution",
         ));
     }
-    if time
+    if stable_payload
+        .time
         .first()
         .is_some_and(|first_time| first_time.abs() > 1e-12)
     {
@@ -1671,45 +1941,16 @@ fn bass_native_response(
         ));
     }
 
-    let state = optional_object_section(payload, "state");
-    let state_model_key = state
-        .and_then(|state| state.get("model_key"))
-        .and_then(Value::as_str)
-        .unwrap_or(model_key);
-    if state_model_key != model_key {
-        return Err(KernelBindingError::invalid_request(
+    let payload = request.payload.as_object().ok_or_else(|| {
+        KernelBindingError::invalid_request(
             operation,
-            format!(
-                "kernel request model_key '{model_key}' does not match state model_key '{state_model_key}'"
-            ),
-        ));
-    }
-
-    let constructor_kwargs = state
-        .and_then(|state| state.get("constructor_kwargs"))
-        .and_then(Value::as_object);
-    let has_covariates = constructor_kwargs
-        .and_then(|kwargs| kwargs.get("covariates"))
-        .is_some_and(|covariates| !covariates.as_array().is_some_and(Vec::is_empty));
-    let has_event = constructor_kwargs
-        .and_then(|kwargs| kwargs.get("t_event"))
-        .is_some_and(|value| !value.is_null());
-    let input_covariates = inputs.get("covariates").is_some();
-    if has_covariates || has_event || input_covariates {
-        return Err(KernelBindingError::unsupported_native_operation(
-            operation,
-            "native Bass execution currently supports fitted states without covariates or event splits",
-        ));
-    }
-
+            format!("{operation} payload must be an object"),
+        )
+    })?;
     let parameters = payload
         .get("parameters")
         .and_then(Value::as_object)
-        .or_else(|| {
-            state
-                .and_then(|state| state.get("parameters"))
-                .and_then(Value::as_object)
-        })
+        .or_else(|| stable_payload.state.parameters.as_object())
         .ok_or_else(|| {
             KernelBindingError::invalid_request(
                 operation,
@@ -1727,7 +1968,8 @@ fn bass_native_response(
         ));
     }
 
-    let predictions: Vec<f64> = time
+    let predictions: Vec<f64> = stable_payload
+        .time
         .iter()
         .map(|t| {
             let decay = (-(p + q) * t).exp();
@@ -2391,45 +2633,25 @@ fn bass_fit_native_response(request: &KernelRequest) -> Result<KernelResponse, K
         ));
     }
 
-    let payload = request.payload.as_object().ok_or_else(|| {
-        KernelBindingError::invalid_request(
-            KernelOperation::FitModel,
-            "fit_model payload must be an object",
-        )
-    })?;
-    let inputs = object_section(payload, "inputs", KernelOperation::FitModel)?;
-    let time = numeric_array_from_aliases(inputs, &["time", "t"], KernelOperation::FitModel)?;
-    let observed = numeric_array_from_aliases(
-        inputs,
-        &["observed", "y", "values", "adoption", "share"],
+    let stable_payload = SimplePositiveObservationsFitPayload::from_value(
+        model_key,
         KernelOperation::FitModel,
+        &request.payload,
     )?;
+    let constructor_kwargs = stable_payload
+        .constructor_kwargs
+        .as_object()
+        .filter(|values| !values.is_empty());
 
-    let constructor_kwargs = _fit_constructor_kwargs(payload);
-    let has_covariates = constructor_kwargs
-        .and_then(|kwargs| kwargs.get("covariates"))
-        .is_some_and(|covariates| !covariates.as_array().is_some_and(Vec::is_empty));
-    let has_event = constructor_kwargs
-        .and_then(|kwargs| kwargs.get("t_event"))
-        .is_some_and(|value| !value.is_null());
-    let input_covariates = inputs.get("covariates").is_some();
-    let fit_options = payload.get("fit_options").and_then(Value::as_object);
-    let fitter_options = payload.get("fitter_options").and_then(Value::as_object);
-    if has_covariates
-        || has_event
-        || input_covariates
-        || fit_options.is_some_and(|values| !values.is_empty())
-        || fitter_options.is_some_and(|values| !values.is_empty())
-    {
-        return Err(KernelBindingError::unsupported_native_operation(
-            KernelOperation::FitModel,
-            "native Bass fitting currently supports simple fitted states without covariates, events, or custom fitter options",
-        ));
-    }
-
-    let fit = fit_bass_curve(&time, &observed)?;
+    let fit = fit_bass_curve(&stable_payload.time, &stable_payload.observed)?;
     let prediction_payload = kernel_array_payload(&fit.predictions);
-    let diagnostics = fit_diagnostics(&time, &observed, &fit.predictions, 4, "BassModel");
+    let diagnostics = fit_diagnostics(
+        &stable_payload.time,
+        &stable_payload.observed,
+        &fit.predictions,
+        4,
+        "BassModel",
+    );
     let state = json!({
         "model_key": model_key,
         "model_name": "BassModel",
@@ -2504,6 +2726,10 @@ fn bass_summary_or_diagnose_response(
             operation,
             format!("native {operation} is not implemented for model '{model_key}'"),
         ));
+    }
+    if diagnose_only {
+        let _diagnostics_payload =
+            DeterministicDiagnosticsPayload::from_value(model_key, &request.payload)?;
     }
 
     let payload = request.payload.as_object().ok_or_else(|| {

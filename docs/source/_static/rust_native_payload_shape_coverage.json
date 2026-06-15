@@ -19,14 +19,18 @@
       "status": "stable",
       "ownership_status": "rust_native_promoted",
       "schema_fixture": "bindings/rust/tests/operations.rs",
-      "scope": "explicit model_key, parameters, predict_kwargs, and numeric time arrays"
+      "scope": "schema-backed explicit model_key, parameters, predict_kwargs, optional observed values, and numeric time arrays",
+      "schema_type": "BoundedFittedStatePayload",
+      "schema_source": "bindings/rust/src/lib.rs"
     },
     {
       "payload_shape": "simple_positive_observations_fit",
       "status": "stable",
       "ownership_status": "rust_native_promoted",
       "schema_fixture": "bindings/rust/tests/operations.rs",
-      "scope": "time and observed arrays for deterministic logistic, Gompertz, Fisher-Pry, Bass, and single-generation Norton-Bass fit slices"
+      "scope": "schema-backed time and observed arrays for deterministic logistic, Gompertz, Fisher-Pry, Bass, and single-generation Norton-Bass fit slices",
+      "schema_type": "SimplePositiveObservationsFitPayload",
+      "schema_source": "bindings/rust/src/lib.rs"
     },
     {
       "payload_shape": "covariates",
@@ -53,15 +57,19 @@
       "payload_shape": "deterministic_diagnostics",
       "status": "stable",
       "ownership_status": "rust_native_promoted",
-      "schema_fixture": "tests/fixtures/diagnostics_artifact_payload.json",
-      "scope": "bounded residual metrics, warnings, support level, provenance, and comparison family"
+      "schema_fixture": "bindings/rust/tests/operations.rs",
+      "scope": "schema-backed bounded fitted-state diagnostics with observed values, residual metrics, warnings, support level, provenance, and comparison family",
+      "schema_type": "DeterministicDiagnosticsPayload",
+      "schema_source": "bindings/rust/src/lib.rs"
     },
     {
       "payload_shape": "deterministic_simulation",
       "status": "stable",
       "ownership_status": "rust_native_promoted",
       "schema_fixture": "bindings/rust/tests/operations.rs",
-      "scope": "deterministic fitted-state simulation over explicit numeric time arrays"
+      "scope": "schema-backed deterministic fitted-state simulation over explicit numeric time arrays",
+      "schema_type": "DeterministicSimulationPayload",
+      "schema_source": "bindings/rust/src/lib.rs"
     },
     {
       "payload_shape": "stochastic_simulation_policy",

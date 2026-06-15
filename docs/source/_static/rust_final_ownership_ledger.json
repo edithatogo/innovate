@@ -274,25 +274,29 @@
       "id": "bounded_fitted_state",
       "status": "rust_native_promoted",
       "owner": "Rust core maintainers",
-      "rationale": "Bounded fitted-state payloads have explicit model keys, parameters, predict kwargs, and numeric time arrays.",
+      "rationale": "Bounded fitted-state payloads have native Rust schema support for explicit model keys, parameters, predict kwargs, optional observed values, and numeric time arrays.",
       "evidence": [
         "docs/source/_static/rust_native_payload_shape_coverage.json",
-        "bindings/rust/tests/operations.rs"
+        "bindings/rust/tests/operations.rs",
+        "bindings/rust/src/lib.rs"
       ],
       "release_claim_state": "claimable_native",
-      "revisit_condition": "Revisit when fitted state includes Python object internals or richer model-specific state."
+      "revisit_condition": "Revisit when fitted state includes Python object internals or richer model-specific state.",
+      "schema_type": "BoundedFittedStatePayload"
     },
     {
       "id": "simple_positive_observations_fit",
       "status": "rust_native_promoted",
       "owner": "Rust core maintainers",
-      "rationale": "Positive time and observed arrays are stable fit payloads for promoted deterministic model slices.",
+      "rationale": "Positive time and observed arrays have native Rust schema support for promoted deterministic fit slices.",
       "evidence": [
         "docs/source/_static/rust_native_payload_shape_coverage.json",
-        "bindings/rust/tests/operations.rs"
+        "bindings/rust/tests/operations.rs",
+        "bindings/rust/src/lib.rs"
       ],
       "release_claim_state": "claimable_native",
-      "revisit_condition": "Revisit when fit payloads include weights, events, covariates, or custom fitter options."
+      "revisit_condition": "Revisit when fit payloads include weights, events, covariates, or custom fitter options.",
+      "schema_type": "SimplePositiveObservationsFitPayload"
     },
     {
       "id": "covariates",
@@ -334,25 +338,29 @@
       "id": "deterministic_diagnostics",
       "status": "rust_native_promoted",
       "owner": "Rust core maintainers",
-      "rationale": "Bounded residual metrics, warnings, support level, provenance, and comparison family have stable deterministic diagnostic payload coverage.",
+      "rationale": "Deterministic diagnostics have native Rust schema support for bounded fitted states with observed values plus residual metrics, warnings, support level, provenance, and comparison family.",
       "evidence": [
         "docs/source/_static/rust_native_payload_shape_coverage.json",
-        "tests/fixtures/diagnostics_artifact_payload.json"
+        "tests/fixtures/diagnostics_artifact_payload.json",
+        "bindings/rust/src/lib.rs"
       ],
       "release_claim_state": "claimable_native",
-      "revisit_condition": "Revisit before claiming posterior, covariate-aware, or Python-internal diagnostics."
+      "revisit_condition": "Revisit before claiming posterior, covariate-aware, or Python-internal diagnostics.",
+      "schema_type": "DeterministicDiagnosticsPayload"
     },
     {
       "id": "deterministic_simulation",
       "status": "rust_native_promoted",
       "owner": "Rust core maintainers",
-      "rationale": "Deterministic fitted-state simulation over explicit numeric time arrays is stable and Rust-native.",
+      "rationale": "Deterministic simulation payloads have native Rust schema support over bounded fitted-state arrays and explicit numeric time grids.",
       "evidence": [
         "docs/source/_static/rust_native_payload_shape_coverage.json",
-        "bindings/rust/tests/operations.rs"
+        "bindings/rust/tests/operations.rs",
+        "bindings/rust/src/lib.rs"
       ],
       "release_claim_state": "claimable_native",
-      "revisit_condition": "Revisit before promoting stochastic policies or simulator object state."
+      "revisit_condition": "Revisit before promoting stochastic policies or simulator object state.",
+      "schema_type": "DeterministicSimulationPayload"
     },
     {
       "id": "stochastic_simulation_policy",

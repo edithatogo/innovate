@@ -52,5 +52,16 @@
     "stochastic_simulation_policy",
     "uncertainty_or_posterior"
   ],
-  "claim_language": "The validated Rust core owns promoted deterministic model-operation slices only. Full Rust ownership is not claimed until explicit bridge model families, Python-reference model families, and non-stable payload shapes are promoted through future migration tracks or intentionally retained outside the Rust core."
+  "claim_language": "The validated Rust core owns promoted deterministic model-operation slices only. Full Rust ownership is not claimed until explicit bridge model families, Python-reference model families, and non-stable payload shapes are promoted through future migration tracks or intentionally retained outside the Rust core.",
+  "last_validated": "2026-06-15",
+  "stable_payload_schema_evidence": {
+    "schema_source": "bindings/rust/src/lib.rs",
+    "schema_tests": "bindings/rust/tests/operations.rs",
+    "schema_types": {
+      "bounded_fitted_state": "BoundedFittedStatePayload",
+      "simple_positive_observations_fit": "SimplePositiveObservationsFitPayload",
+      "deterministic_diagnostics": "DeterministicDiagnosticsPayload",
+      "deterministic_simulation": "DeterministicSimulationPayload"
+    }
+  }
 }

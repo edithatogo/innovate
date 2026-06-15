@@ -1,4 +1,7 @@
 use innovate_rust::{json, KernelBinding, KernelOperation, KernelResponse};
+use innovate_rust::{
+    BoundedFittedStatePayload, DeterministicSimulationPayload, SimplePositiveObservationsFitPayload,
+};
 use std::io::{self, Write};
 use std::sync::{Arc, Mutex};
 use tracing_subscriber::fmt::MakeWriter;
@@ -216,6 +219,106 @@ fn request_builders_preserve_model_identity_and_payload_shape() {
     assert_eq!(simulate_request.model_key.as_deref(), Some("logistic"));
     assert_eq!(summarize_request.model_key.as_deref(), Some("logistic"));
     assert_eq!(diagnose_request.model_key.as_deref(), Some("logistic"));
+}
+
+#[test]
+fn stable_fit_observation_payload_schema_round_trips() {
+    let payload = bass_fit_payload();
+    let decoded = SimplePositiveObservationsFitPayload::from_value(
+        "bass",
+        KernelOperation::FitModel,
+        &payload,
+    )
+    .expect("simple positive observation payload should decode");
+
+    assert_eq!(decoded.model_key, "bass");
+    assert_eq!(decoded.time, vec![0.0, 0.75, 1.5, 2.25, 3.0, 3.75]);
+    assert_eq!(decoded.observed, vec![0.0, 7.8, 20.6, 39.5, 61.4, 84.9]);
+    assert_eq!(decoded.constructor_kwargs, json!({}));
+
+    let encoded = serde_json::to_value(&decoded).expect("schema payload should serialize");
+    assert_eq!(encoded["model_key"], "bass");
+    assert_eq!(encoded["payload_shape"], "simple_positive_observations_fit");
+    assert_eq!(
+        encoded["time"]
+            .as_array()
+            .expect("time should be an array")
+            .len(),
+        6
+    );
+}
+
+#[test]
+fn stable_fit_observation_payload_rejects_unstable_shapes() {
+    let covariate_payload = json!({
+        "constructor_kwargs": {
+            "covariates": ["price"]
+        },
+        "inputs": {
+            "time": [0.0, 1.0, 2.0],
+            "observed": [1.0, 2.0, 3.0],
+            "covariates": {
+                "price": [1.0, 1.1, 1.2]
+            }
+        }
+    });
+    let covariate_error = SimplePositiveObservationsFitPayload::from_value(
+        "bass",
+        KernelOperation::FitModel,
+        &covariate_payload,
+    )
+    .expect_err("covariate payloads remain an explicit bridge boundary");
+    assert_eq!(covariate_error.code, "unsupported_native_operation");
+    assert!(covariate_error.message.contains("without covariates"));
+
+    let event_payload = json!({
+        "constructor_kwargs": {
+            "t_event": 2.0
+        },
+        "inputs": {
+            "time": [0.0, 1.0, 2.0],
+            "observed": [1.0, 2.0, 3.0]
+        }
+    });
+    let event_error = SimplePositiveObservationsFitPayload::from_value(
+        "bass",
+        KernelOperation::FitModel,
+        &event_payload,
+    )
+    .expect_err("event split payloads remain an explicit bridge boundary");
+    assert_eq!(event_error.code, "unsupported_native_operation");
+    assert!(event_error.message.contains("event"));
+}
+
+#[test]
+fn stable_fitted_state_and_simulation_payload_schemas_round_trip() {
+    let payload = bass_analysis_payload();
+    let fitted_state =
+        BoundedFittedStatePayload::from_value("bass", KernelOperation::PredictModel, &payload)
+            .expect("bounded fitted-state payload should decode");
+    assert_eq!(fitted_state.model_key, "bass");
+    assert_eq!(fitted_state.time.len(), 6);
+    assert_eq!(
+        fitted_state
+            .observed
+            .as_ref()
+            .expect("observed should decode")
+            .len(),
+        6
+    );
+    assert_eq!(fitted_state.state.parameters["p"], 0.025);
+
+    let simulation = DeterministicSimulationPayload::from_value("bass", &payload)
+        .expect("deterministic simulation payload should decode");
+    assert_eq!(simulation.payload_shape, "deterministic_simulation");
+    assert_eq!(simulation.fitted_state, fitted_state);
+
+    let encoded = serde_json::to_value(&simulation).expect("simulation payload should serialize");
+    assert_eq!(encoded["payload_shape"], "deterministic_simulation");
+    assert_eq!(
+        encoded["fitted_state"]["payload_shape"],
+        "bounded_fitted_state"
+    );
 }
 
 #[test]
