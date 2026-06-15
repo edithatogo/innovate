@@ -24,7 +24,7 @@
     - [ ] Add integration tests from fit to scenario summary
     - [ ] Commit implementation changes for this task
     - [ ] Commit this plan update with the task commit SHA
-- [ ] Task: Implement streaming updates and uncertainty calibration
+- [~] Task: Implement streaming updates and uncertainty calibration
     - [ ] Add incremental update support for selected stable fitted models
     - [ ] Add prediction interval calibration and backtesting utilities
     - [ ] Add residual and coverage diagnostics

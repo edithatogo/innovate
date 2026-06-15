@@ -109,12 +109,14 @@ _LAZY_EXPORTS: dict[str, tuple[str, str | None]] = {
     "refresh_model_card_summaries": ("innovate.benchmarks", "refresh_model_card_summaries"),
     "run_stable_benchmark_suite": ("innovate.benchmarks", "run_stable_benchmark_suite"),
     "validate_benchmark_corpus": ("innovate.benchmarks", "validate_benchmark_corpus"),
+    "calibrate_prediction_intervals": ("innovate.advanced_runtime", "calibrate_prediction_intervals"),
     "compare_policy_scenarios": ("innovate.advanced_runtime", "compare_policy_scenarios"),
     "compose_regime_ensemble": ("innovate.advanced_runtime", "compose_regime_ensemble"),
     "detect_advanced_backends": ("innovate.advanced_runtime", "detect_advanced_backends"),
     "get_advanced_capability": ("innovate.advanced_runtime", "get_advanced_capability"),
     "list_advanced_capabilities": ("innovate.advanced_runtime", "list_advanced_capabilities"),
     "select_advanced_backend": ("innovate.advanced_runtime", "select_advanced_backend"),
+    "update_streaming_forecast": ("innovate.advanced_runtime", "update_streaming_forecast"),
 }
 
 __all__ = [
@@ -176,6 +178,7 @@ __all__ = [
     "backend",
     "backends",
     "benchmarks",
+    "calibrate_prediction_intervals",
     "compare_policy_scenarios",
     "compete",
     "compose_regime_ensemble",
@@ -211,6 +214,7 @@ __all__ = [
     "run_stable_benchmark_suite",
     "select_advanced_backend",
     "substitute",
+    "update_streaming_forecast",
     "validate_benchmark_corpus",
 ]
 

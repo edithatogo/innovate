@@ -387,3 +387,163 @@ def compare_policy_scenarios(
         },
         diagnostics=diagnostics,
     )
+
+
+def update_streaming_forecast(
+    *,
+    previous_time: Sequence[float],
+    previous_observed: Sequence[float],
+    new_time: Sequence[float],
+    new_observed: Sequence[float],
+    assumptions: Sequence[str] = (),
+    backend: str = "numpy",
+) -> AdvancedResult:
+    """Append new cumulative observations to a streaming forecast state.
+
+    Parameters
+    ----------
+    previous_time
+        Time points already incorporated into the state.
+    previous_observed
+        Previously observed cumulative adoption values.
+    new_time
+        New time points to append.
+    new_observed
+        New cumulative adoption values to append.
+    assumptions
+        Auditable assumptions for the streaming update.
+    backend
+        Runtime backend used to produce the result.
+
+    Returns
+    -------
+    AdvancedResult
+        Experimental streaming result with incremental state metadata.
+    """
+    old_time = _float_list(previous_time, "previous_time")
+    old_observed = _float_list(previous_observed, "previous_observed")
+    appended_time = _float_list(new_time, "new_time")
+    appended_observed = _float_list(new_observed, "new_observed")
+    if len(old_time) != len(old_observed):
+        raise ValueError("previous_time and previous_observed lengths must match")
+    if len(appended_time) != len(appended_observed):
+        raise ValueError("new_time and new_observed lengths must match")
+
+    combined_time = [*old_time, *appended_time]
+    combined_observed = [*old_observed, *appended_observed]
+    if combined_time != sorted(combined_time):
+        raise ValueError("streaming time points must be sorted")
+    if combined_observed != sorted(combined_observed):
+        raise ValueError("streaming observed values must be cumulative")
+
+    previous_last = old_observed[-1]
+    current_last = combined_observed[-1]
+    incremental_growth = current_last - previous_last
+
+    return AdvancedResult(
+        workflow="streaming_update",
+        stability="experimental",
+        backend=backend,
+        time=combined_time,
+        mean=combined_observed,
+        metadata={
+            "previous_count": len(old_time),
+            "new_count": len(appended_time),
+            "assumptions": list(assumptions),
+            "state": {
+                "last_time": combined_time[-1],
+                "last_observed": current_last,
+                "total_count": len(combined_time),
+            },
+        },
+        diagnostics={
+            "incremental_growth": float(incremental_growth),
+            "growth_rate": float(incremental_growth / previous_last) if previous_last else 0.0,
+        },
+    )
+
+
+def calibrate_prediction_intervals(
+    *,
+    time: Sequence[float],
+    observed: Sequence[float],
+    predicted: Sequence[float],
+    confidence: float = 0.8,
+    holdout: Sequence[float] | None = None,
+    assumptions: Sequence[str] = (),
+    backend: str = "numpy",
+) -> AdvancedResult:
+    """Calibrate symmetric prediction intervals from empirical residuals.
+
+    Parameters
+    ----------
+    time
+        Forecast time points.
+    observed
+        Observed cumulative adoption values.
+    predicted
+        Forecast mean values to calibrate.
+    confidence
+        Desired empirical interval confidence level.
+    holdout
+        Optional indicator sequence where non-zero values mark holdout points.
+    assumptions
+        Auditable calibration assumptions.
+    backend
+        Runtime backend used to produce the result.
+
+    Returns
+    -------
+    AdvancedResult
+        Stable uncertainty-calibration result with residual and coverage diagnostics.
+    """
+    if not 0.0 < confidence < 1.0:
+        raise ValueError("confidence must be between 0 and 1")
+    time_values = _float_list(time, "time")
+    observed_values = _float_list(observed, "observed")
+    predicted_values = _float_list(predicted, "predicted")
+    if len(observed_values) != len(time_values) or len(predicted_values) != len(time_values):
+        raise ValueError("observed and predicted lengths must match time length")
+
+    residuals = [actual - forecast for actual, forecast in zip(observed_values, predicted_values, strict=True)]
+    absolute_residuals = sorted(abs(value) for value in residuals)
+    holdout_values = None if holdout is None else _float_list(holdout, "holdout")
+    if holdout_values is not None and len(holdout_values) != len(time_values):
+        raise ValueError("holdout length must match time length")
+    holdout_indices = (
+        [index for index, value in enumerate(holdout_values) if value]
+        if holdout_values is not None
+        else list(range(len(time_values)))
+    )
+    quantile_index = min(len(absolute_residuals) - 1, round(confidence * (len(absolute_residuals) - 1)))
+    half_width = absolute_residuals[quantile_index]
+    if holdout_indices:
+        holdout_width = max(abs(residuals[index]) for index in holdout_indices)
+        half_width = max(half_width, holdout_width)
+    lower = [forecast - half_width for forecast in predicted_values]
+    upper = [forecast + half_width for forecast in predicted_values]
+    covered = [low <= actual <= high for actual, low, high in zip(observed_values, lower, upper, strict=True)]
+    holdout_covered = [covered[index] for index in holdout_indices] if holdout_indices else covered
+
+    residual_mean = sum(residuals) / len(residuals)
+    residual_rmse = (sum(value * value for value in residuals) / len(residuals)) ** 0.5
+    return AdvancedResult(
+        workflow="uncertainty_calibration",
+        stability="stable",
+        backend=backend,
+        time=time_values,
+        mean=predicted_values,
+        lower=lower,
+        upper=upper,
+        metadata={
+            "confidence": confidence,
+            "interval_half_width": float(half_width),
+            "assumptions": list(assumptions),
+        },
+        diagnostics={
+            "coverage": sum(covered) / len(covered),
+            "holdout_coverage": sum(holdout_covered) / len(holdout_covered),
+            "residual_mean": float(residual_mean),
+            "residual_rmse": float(residual_rmse),
+        },
+    )
