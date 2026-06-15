@@ -36,6 +36,8 @@ Start here
    submission_readiness_dossiers
    astro_starlight_migration
    polyglot_repo_architecture
+   binding_parity
+   binding_conformance_ci
    binding_publication_ci
    release_notes_policy
    release_readiness

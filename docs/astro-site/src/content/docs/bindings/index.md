@@ -15,10 +15,12 @@ Current binding families:
 - R, Julia, TypeScript, Go, and C# as thin package surfaces over the shared
   kernel contract
 
-The publication guidance stays aligned with the release gates documented in the
-repository docs until the Astro site fully replaces the Sphinx entry points.
+The binding parity page links the shared conformance inventory, golden
+fixtures, hardening evidence, and registry-readiness receipts used by release
+maintainers.
 
 See also:
 
+- Binding parity
 - Publication
 - Release Notes
