@@ -40,6 +40,14 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: docs/astro-site/pnpm-lock.yaml
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python documentation extractor
+        run: python -m pip install griffe
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
