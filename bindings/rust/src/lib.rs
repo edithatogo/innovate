@@ -2109,8 +2109,8 @@ fn solve_3x3_system(mut matrix: [[f64; 3]; 3], mut rhs: [f64; 3]) -> Option<[f64
     for pivot_col in 0..3 {
         let mut pivot_row = pivot_col;
         let mut pivot_value = matrix[pivot_row][pivot_col].abs();
-        for candidate_row in (pivot_col + 1)..3 {
-            let candidate_value = matrix[candidate_row][pivot_col].abs();
+        for (candidate_row, candidate) in matrix.iter().enumerate().skip(pivot_col + 1) {
+            let candidate_value = candidate[pivot_col].abs();
             if candidate_value > pivot_value {
                 pivot_row = candidate_row;
                 pivot_value = candidate_value;
@@ -2129,8 +2129,9 @@ fn solve_3x3_system(mut matrix: [[f64; 3]; 3], mut rhs: [f64; 3]) -> Option<[f64
         let pivot = matrix[pivot_col][pivot_col];
         for row in (pivot_col + 1)..3 {
             let factor = matrix[row][pivot_col] / pivot;
-            for col in pivot_col..3 {
-                matrix[row][col] -= factor * matrix[pivot_col][col];
+            let pivot_values = matrix[pivot_col];
+            for (col, value) in matrix[row].iter_mut().enumerate().skip(pivot_col) {
+                *value -= factor * pivot_values[col];
             }
             rhs[row] -= factor * rhs[pivot_col];
         }
@@ -3054,12 +3055,7 @@ fn gompertz_summary_native_response(
                 "time and observed arrays must have the same length",
             ));
         }
-    } else if diagnose_only && observed.is_none() {
-        return Err(KernelBindingError::invalid_request(
-            operation,
-            "diagnose_model requires time and observed arrays in the inputs section",
-        ));
-    } else if observed.is_some() && time.is_none() {
+    } else if (diagnose_only && observed.is_none()) || (observed.is_some() && time.is_none()) {
         return Err(KernelBindingError::invalid_request(
             operation,
             "diagnose_model requires time and observed arrays in the inputs section",
