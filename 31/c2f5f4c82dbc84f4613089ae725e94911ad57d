@@ -1,0 +1,15 @@
+Task: Define the mature release gate contract
+
+Summary:
+- Added a committed release-readiness contract covering Python, coverage, mutation sampling, type checks, lint/format, docs, Rust, binding smoke, package dry run, security, SBOM, license inventory, provenance, checksums, reproducibility, and compatibility evidence.
+- Added scripts.release_readiness to load the contract, evaluate required evidence, fail closed on missing/stale/failing evidence, render text, and emit JSON for local/CI consumers.
+- Added unit coverage for contract validation, fail-closed behavior, passing evidence, invalid payloads, CLI output, and status handling.
+
+Modified files:
+- docs/source/_static/release_readiness_contract.json
+- scripts/__init__.py
+- scripts/release_readiness.py
+- tests/unit/test_release_readiness_contract.py
+
+Why:
+- Release maturity needs an auditable machine-readable contract before report generation, CI wiring, supply-chain, and reproducibility gates can be enforced.
