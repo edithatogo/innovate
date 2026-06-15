@@ -1,0 +1,15 @@
+Task: Add advanced workflow fixtures
+
+Summary:
+- Added deterministic advanced workflow fixtures for regime ensembles, policy scenarios, streaming updates, and uncertainty calibration.
+- Added fixture assumptions documentation colocated with the fixture bundle.
+- Added validation tests for schema metadata, reproducibility metadata, shape consistency, monotone cumulative observations, covariate alignment, and assumption documentation.
+
+Files:
+- conductor/tracks/advanced_modeling_runtime_features_20260614/plan.md
+- tests/fixtures/advanced_runtime/README.md
+- tests/fixtures/advanced_runtime/workflows.json
+- tests/unit/test_advanced_runtime_fixtures.py
+
+Why:
+- Advanced workflow implementations need compact deterministic datasets with auditable assumptions before feature behavior can be validated.
