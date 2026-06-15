@@ -40,10 +40,10 @@
     - [x] Add tests that distinguish readiness, submission, acceptance, and deferral
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [~] Task: Reconcile registry docs and release claims
+- [x] Task: Reconcile registry docs and release claims [64a5367]
     - [x] Update Sphinx archival sources and Starlight active docs
     - [x] Refresh machine-readable inventories
     - [x] Add stale-claim tests for accepted/submitted wording
     - [x] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Conductor - User Manual Verification 'Receipts, Deferrals, and Claim Closure' (Protocol in workflow.md)
