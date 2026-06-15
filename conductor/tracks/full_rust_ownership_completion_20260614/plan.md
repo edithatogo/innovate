@@ -2,12 +2,12 @@
 
 ## Phase 1: Ownership Ledger and Contract Tests
 
-- [~] Task: Build the final Rust ownership ledger
-    - [ ] Inventory every canonical operation, model family, and stable payload shape from current Python, Rust, and binding registries
-    - [ ] Classify each item as promote-now, retain-outside-core, or requires-design-decision
-    - [ ] Add machine-readable owner, rationale, evidence path, and release-claim state
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Build the final Rust ownership ledger `abaa869`
+    - [x] Inventory every canonical operation, model family, and stable payload shape from current Python, Rust, and binding registries
+    - [x] Classify each item as promote-now, retain-outside-core, or requires-design-decision
+    - [x] Add machine-readable owner, rationale, evidence path, and release-claim state
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Add fail-first ownership contract tests
     - [ ] Add tests that fail for unowned stable payload shapes
     - [ ] Add tests that fail for promoted model families missing Rust operation coverage
