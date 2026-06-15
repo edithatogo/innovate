@@ -1,0 +1,91 @@
+{
+  "schema_version": "binding_conformance.v1",
+  "kernel_schema_version": "1.0",
+  "generated_at": "2026-06-15T00:00:00Z",
+  "bindings": [
+    {
+      "language": "python",
+      "version": "0.5.0",
+      "status": "supported",
+      "package_manifest": "pyproject.toml",
+      "capabilities": ["kernel", "capability_registry", "advanced_runtime", "diagnostics"],
+      "operations": ["discover_models", "fit_model", "predict_model", "simulate_model", "summarize_model", "diagnose_model"],
+      "payloads": ["KernelRequest", "KernelResponse", "KernelError", "KernelArrayPayload", "KernelTablePayload"],
+      "errors": ["invalid_request", "invalid_schema_version", "unavailable_model", "unsupported_operation", "backend_unavailable", "invalid_payload", "internal_error"],
+      "package_checks": ["uv run nox -s tests", "uv run nox -s package"],
+      "evidence_paths": ["src/innovate/kernel.py", "tests/unit/test_kernel_contract.py"]
+    },
+    {
+      "language": "r",
+      "version": "0.5.0",
+      "status": "supported",
+      "package_manifest": "bindings/r/DESCRIPTION",
+      "capabilities": ["kernel_bridge", "wrappers", "diagnostics"],
+      "operations": ["discover_models", "fit_model", "predict_model", "simulate_model", "summarize_model", "diagnose_model"],
+      "payloads": ["KernelRequest", "KernelResponse", "KernelError"],
+      "errors": ["invalid_request", "invalid_schema_version", "unavailable_model", "unsupported_operation", "backend_unavailable", "invalid_payload", "internal_error"],
+      "package_checks": ["Rscript bindings/r/tests/run.R", "R CMD build bindings/r", "R CMD check --as-cran --no-manual"],
+      "evidence_paths": ["bindings/r/tests/test-contract.R", "bindings/r/inst/examples/end_to_end.R", "bindings/r/README.md"]
+    },
+    {
+      "language": "julia",
+      "version": "0.5.0",
+      "status": "supported",
+      "package_manifest": "bindings/julia/Project.toml",
+      "capabilities": ["kernel_bridge", "wrappers", "schema_compatibility"],
+      "operations": ["discover_models", "fit_model", "predict_model", "simulate_model", "summarize_model", "diagnose_model"],
+      "payloads": ["KernelRequest", "KernelResponse", "KernelError"],
+      "errors": ["invalid_request", "invalid_schema_version", "unavailable_model", "unsupported_operation", "backend_unavailable", "invalid_payload", "internal_error"],
+      "package_checks": ["julia --project=bindings/julia bindings/julia/test/runtests.jl", "julia --project=bindings/julia -e 'using Pkg; Pkg.test()'"],
+      "evidence_paths": ["bindings/julia/test/contract.jl", "bindings/julia/examples/end_to_end.jl", "bindings/julia/README.md"]
+    },
+    {
+      "language": "typescript",
+      "version": "0.5.0",
+      "status": "supported",
+      "package_manifest": "bindings/typescript/package.json",
+      "capabilities": ["kernel_bridge", "types", "schema_check"],
+      "operations": ["discover_models", "fit_model", "predict_model", "simulate_model", "summarize_model", "diagnose_model"],
+      "payloads": ["KernelRequest", "KernelResponse", "KernelError"],
+      "errors": ["invalid_request", "invalid_schema_version", "unavailable_model", "unsupported_operation", "backend_unavailable", "invalid_payload", "internal_error"],
+      "package_checks": ["npm run schema:check", "npm run typecheck", "npm test", "npm pack --dry-run"],
+      "evidence_paths": ["bindings/typescript/src/index.ts", "bindings/typescript/examples/diagnostics-workflow.ts", "bindings/typescript/README.md"]
+    },
+    {
+      "language": "go",
+      "version": "0.5.0",
+      "status": "supported",
+      "package_manifest": "bindings/go/go.mod",
+      "capabilities": ["kernel_bridge", "wrappers", "go_module"],
+      "operations": ["discover_models", "fit_model", "predict_model", "simulate_model", "summarize_model", "diagnose_model"],
+      "payloads": ["KernelRequest", "KernelResponse", "KernelError"],
+      "errors": ["invalid_request", "invalid_schema_version", "unavailable_model", "unsupported_operation", "backend_unavailable", "invalid_payload", "internal_error"],
+      "package_checks": ["go test ./...", "go list -m"],
+      "evidence_paths": ["bindings/go/kernel_contract_test.go", "bindings/go/example_test.go", "bindings/go/README.md"]
+    },
+    {
+      "language": "csharp",
+      "version": "0.5.0",
+      "status": "supported",
+      "package_manifest": "bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj",
+      "capabilities": ["kernel_bridge", "wrappers", "nuget_pack"],
+      "operations": ["discover_models", "fit_model", "predict_model", "simulate_model", "summarize_model", "diagnose_model"],
+      "payloads": ["KernelRequest", "KernelResponse", "KernelError"],
+      "errors": ["invalid_request", "invalid_schema_version", "unavailable_model", "unsupported_operation", "backend_unavailable", "invalid_payload", "internal_error"],
+      "package_checks": ["dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj", "dotnet pack bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj"],
+      "evidence_paths": ["bindings/csharp/Innovate.Kernel.Tests/KernelContractTests.cs", "bindings/csharp/Innovate.Kernel.Tests/KernelBridgeTests.cs", "bindings/csharp/README.md"]
+    },
+    {
+      "language": "rust",
+      "version": "0.5.0",
+      "status": "supported",
+      "package_manifest": "bindings/rust/Cargo.toml",
+      "capabilities": ["kernel_bridge", "native_discovery", "cargo_package"],
+      "operations": ["discover_models", "fit_model", "predict_model", "simulate_model", "summarize_model", "diagnose_model"],
+      "payloads": ["KernelRequest", "KernelResponse", "KernelError"],
+      "errors": ["invalid_request", "invalid_schema_version", "unavailable_model", "unsupported_operation", "backend_unavailable", "invalid_payload", "internal_error"],
+      "package_checks": ["cargo fmt --check", "cargo clippy --all-targets --all-features -- -D warnings", "cargo test", "cargo package"],
+      "evidence_paths": ["bindings/rust/tests/operations.rs", "bindings/rust/tests/schema_compatibility.rs", "bindings/rust/README.md"]
+    }
+  ]
+}

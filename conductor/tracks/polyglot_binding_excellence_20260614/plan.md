@@ -2,7 +2,7 @@
 
 ## Phase 1: Conformance Contract and Golden Fixtures
 
-- [ ] Task: Define cross-language conformance schema
+- [~] Task: Define cross-language conformance schema
     - [ ] Specify binding status, capability, operation, payload, error, and version fields
     - [ ] Add tests that fail on missing binding evidence
     - [ ] Generate a machine-readable binding conformance inventory
