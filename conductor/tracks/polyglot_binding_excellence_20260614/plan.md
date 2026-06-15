@@ -8,7 +8,7 @@
     - [ ] Generate a machine-readable binding conformance inventory
     - [ ] Commit implementation changes for this task
     - [ ] Commit this plan update with the task commit SHA
-- [~] Task: Add golden fixture suite
+- [x] Task: Add golden fixture suite [32a3040]
     - [ ] Create canonical operation and payload fixtures
     - [ ] Add expected outputs with documented numerical tolerances
     - [ ] Wire fixture validation into Python and Rust first
