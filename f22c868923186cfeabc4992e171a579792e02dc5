@@ -1,0 +1,1 @@
+Full Rust Ownership Completion: repair Deploy Documentation run 27526530691 by pinning pnpm/action-setup version explicitly in .github/workflows/docs.yml; local Starlight build passed with pnpm 9.15.9.
