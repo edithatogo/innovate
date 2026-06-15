@@ -1,0 +1,169 @@
+{
+  "schema_version": "binding_golden_fixtures.v1",
+  "kernel_schema_version": "1.0",
+  "generated_at": "2026-06-15T00:00:00Z",
+  "tolerance_policy": "absolute and relative tolerances apply to numeric response fields only",
+  "payload_round_trips": [
+    "KernelRequest",
+    "KernelResponse",
+    "KernelError",
+    "KernelArrayPayload",
+    "KernelTablePayload"
+  ],
+  "error_fixture": {
+    "code": "unsupported_operation",
+    "message": "Operation is not supported by this binding surface.",
+    "operation": "simulate_model",
+    "details": {
+      "binding": "example"
+    },
+    "retryable": false
+  },
+  "fixtures": [
+    {
+      "case_id": "discover_models.v1",
+      "operation": "discover_models",
+      "request": {
+        "schema_version": "1.0",
+        "operation": "discover_models",
+        "model": null,
+        "payload": {},
+        "metadata": {}
+      },
+      "expected": {
+        "ok": true,
+        "contains_models": ["bass", "logistic", "gompertz"]
+      },
+      "tolerance": {
+        "absolute": 0.0,
+        "relative": 0.0
+      }
+    },
+    {
+      "case_id": "fit_model.logistic.v1",
+      "operation": "fit_model",
+      "request": {
+        "schema_version": "1.0",
+        "operation": "fit_model",
+        "model": "logistic",
+        "payload": {
+          "time": [1, 2, 3, 4, 5],
+          "observed": [8.0, 14.0, 24.0, 39.0, 58.0]
+        },
+        "metadata": {
+          "method": "scipy"
+        }
+      },
+      "expected": {
+        "ok": true,
+        "model": "logistic",
+        "required_fields": ["params", "metrics"]
+      },
+      "tolerance": {
+        "absolute": 0.000001,
+        "relative": 0.000001
+      }
+    },
+    {
+      "case_id": "predict_model.logistic.v1",
+      "operation": "predict_model",
+      "request": {
+        "schema_version": "1.0",
+        "operation": "predict_model",
+        "model": "logistic",
+        "payload": {
+          "params": {
+            "L": 100.0,
+            "k": 0.4,
+            "x0": 4.0
+          },
+          "time": [1, 2, 3]
+        },
+        "metadata": {}
+      },
+      "expected": {
+        "ok": true,
+        "mean": [23.1475216701, 31.0025992837, 40.1312335536]
+      },
+      "tolerance": {
+        "absolute": 0.000001,
+        "relative": 0.000001
+      }
+    },
+    {
+      "case_id": "simulate_model.logistic.v1",
+      "operation": "simulate_model",
+      "request": {
+        "schema_version": "1.0",
+        "operation": "simulate_model",
+        "model": "logistic",
+        "payload": {
+          "params": {
+            "L": 100.0,
+            "k": 0.4,
+            "x0": 4.0
+          },
+          "time": [1, 2, 3],
+          "n_draws": 2,
+          "seed": 20260614
+        },
+        "metadata": {}
+      },
+      "expected": {
+        "ok": true,
+        "shape": [2, 3]
+      },
+      "tolerance": {
+        "absolute": 0.000001,
+        "relative": 0.000001
+      }
+    },
+    {
+      "case_id": "summarize_model.logistic.v1",
+      "operation": "summarize_model",
+      "request": {
+        "schema_version": "1.0",
+        "operation": "summarize_model",
+        "model": "logistic",
+        "payload": {
+          "params": {
+            "L": 100.0,
+            "k": 0.4,
+            "x0": 4.0
+          }
+        },
+        "metadata": {}
+      },
+      "expected": {
+        "ok": true,
+        "required_fields": ["model", "params", "stability"]
+      },
+      "tolerance": {
+        "absolute": 0.000001,
+        "relative": 0.000001
+      }
+    },
+    {
+      "case_id": "diagnose_model.logistic.v1",
+      "operation": "diagnose_model",
+      "request": {
+        "schema_version": "1.0",
+        "operation": "diagnose_model",
+        "model": "logistic",
+        "payload": {
+          "observed": [8.0, 14.0, 24.0],
+          "predicted": [8.2, 13.8, 23.7]
+        },
+        "metadata": {}
+      },
+      "expected": {
+        "ok": true,
+        "required_fields": ["residuals", "metrics", "warnings"]
+      },
+      "tolerance": {
+        "absolute": 0.000001,
+        "relative": 0.000001
+      }
+    }
+  ]
+}
