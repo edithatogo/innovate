@@ -34,7 +34,7 @@
 
 ## Phase 3: Accelerator Policy, Examples, and Validation
 
-- [~] Task: Add accelerator-aware execution policy
+- [x] Task: Add accelerator-aware execution policy [c0af6ab]
     - [ ] Implement capability-based routing for NumPy, JAX, and Rust-native paths
     - [ ] Add safe fallback tests for missing optional dependencies
     - [ ] Record performance evidence for selected workflows
