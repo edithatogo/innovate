@@ -1,0 +1,1 @@
+Deploy Documentation repair. GitHub Actions run 27526155984 failed before build because pnpm/action-setup@v4 had no pnpm version. Added packageManager pnpm@9.15.9 to docs/astro-site/package.json and packages ['.'] to docs/astro-site/pnpm-workspace.yaml. Local validation: python -m json.tool docs/astro-site/package.json; pnpm install --frozen-lockfile; pnpm build.
