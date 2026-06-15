@@ -34,12 +34,12 @@
 
 ## Phase 3: CI, Docs, and Release Evidence
 
-- [~] Task: Add binding conformance CI gates
-    - [ ] Add or update GitHub Actions workflows for language-native checks
-    - [ ] Upload conformance reports as CI artifacts
-    - [ ] Ensure local checks have documented fallbacks when toolchains are unavailable
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Add binding conformance CI gates [f3ad53c]
+    - [x] Add or update GitHub Actions workflows for language-native checks
+    - [x] Upload conformance reports as CI artifacts
+    - [x] Ensure local checks have documented fallbacks when toolchains are unavailable
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Publish binding parity documentation
     - [ ] Add Starlight binding parity pages
     - [ ] Link package-manager receipts and conformance evidence
