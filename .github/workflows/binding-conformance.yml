@@ -1,0 +1,51 @@
+name: Binding Conformance
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [work, main]
+  pull_request:
+    branches: [work, main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  shared-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run binding conformance tests
+        run: |
+          uv run pytest \
+            tests/unit/test_polyglot_binding_conformance.py \
+            tests/unit/test_polyglot_binding_golden_fixtures.py \
+            tests/unit/test_polyglot_binding_hardening.py \
+            -q
+
+      - name: Upload binding conformance evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: binding-conformance-evidence
+          path: |
+            docs/source/_static/binding_conformance_inventory.json
+            docs/source/_static/binding_golden_fixtures.json
+            docs/source/_static/binding_hardening_evidence.json
+          if-no-files-found: error
+

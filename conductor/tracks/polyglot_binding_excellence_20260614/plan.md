@@ -34,7 +34,7 @@
 
 ## Phase 3: CI, Docs, and Release Evidence
 
-- [ ] Task: Add binding conformance CI gates
+- [~] Task: Add binding conformance CI gates
     - [ ] Add or update GitHub Actions workflows for language-native checks
     - [ ] Upload conformance reports as CI artifacts
     - [ ] Ensure local checks have documented fallbacks when toolchains are unavailable
