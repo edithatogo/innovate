@@ -1,0 +1,16 @@
+Task: Add release and maturity dashboard artifacts
+
+Summary:
+- Added scripts/generate_docs_dashboards.py to read release readiness, Rust ownership, registry, and binding conformance source artifacts.
+- Generated docs/source/_static/astro_starlight/release_maturity_dashboard.json with guarded status cards and source artifact links.
+- Added current and latest Starlight Release Maturity Dashboard pages and navigation.
+- Wired dashboard generation into docs workflow and nox production_docs session.
+- Extended production docs observability tests for evidence-backed dashboard behavior and overclaim guardrails.
+
+Validation:
+- uv run pytest tests/unit/test_production_docs_observability.py -q
+- uv run nox -s production_docs
+- uv run ruff check scripts/generate_docs_dashboards.py scripts/verify_production_docs.py tests/unit/test_production_docs_observability.py noxfile.py
+
+Why:
+- Release maturity status must be generated from existing machine-readable evidence rather than manually duplicated claims, and must explicitly avoid overclaiming external registry acceptance or full Rust ownership.
