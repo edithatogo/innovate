@@ -40,10 +40,10 @@
     - [x] Ensure local checks have documented fallbacks when toolchains are unavailable
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [~] Task: Publish binding parity documentation
-    - [ ] Add Starlight binding parity pages
-    - [ ] Link package-manager receipts and conformance evidence
-    - [ ] Add stale-claim tests for docs and package manifests
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Publish binding parity documentation [0af84ec]
+    - [x] Add Starlight binding parity pages
+    - [x] Link package-manager receipts and conformance evidence
+    - [x] Add stale-claim tests for docs and package manifests
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Conductor - User Manual Verification 'CI, Docs, and Release Evidence' (Protocol in workflow.md)
