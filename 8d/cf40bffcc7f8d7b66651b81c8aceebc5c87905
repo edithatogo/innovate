@@ -1,0 +1,16 @@
+Task: Refresh pending external target evidence
+
+Summary:
+- Added current pending_requirement_refresh evidence for CRAN, Spack, EasyBuild, HPSF, E4S, pyOpenSci, rOpenSci, JOSS, NumFOCUS, PyPA, Arrow, .NET Foundation, Julia, R community, and scikit-learn-contrib targets.
+- Updated the external submission target inventory date and track ownership to the External Acceptance Completion track.
+- Added drift tests requiring exact requirement sources, owner-backed action boundaries, and no generic blocked language for pending targets.
+
+Modified files:
+- conductor/tracks/external_acceptance_completion_20260614/plan.md
+- docs/source/_static/external_submission_target_inventory.json
+- tests/unit/test_external_acceptance_live_evidence.py
+
+Validation:
+- python -m json.tool docs/source/_static/external_submission_target_inventory.json
+- uv run pytest tests/unit/test_external_acceptance_live_evidence.py tests/unit/test_external_submission_blocker_closure.py -q
+- uv run ruff check tests/unit/test_external_acceptance_live_evidence.py tests/unit/test_external_submission_blocker_closure.py
