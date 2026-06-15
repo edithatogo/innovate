@@ -9,6 +9,7 @@ PRODUCTION_VERIFICATION = Path("docs/source/_static/astro_starlight/production_d
 DOCSEARCH_GATE = Path("docs/source/_static/astro_starlight/docsearch_gate.json")
 RELEASE_MATURITY_DASHBOARD = Path("docs/source/_static/astro_starlight/release_maturity_dashboard.json")
 OBSERVABILITY_MAINTENANCE = Path("docs/source/_static/astro_starlight/observability_maintenance.json")
+EXAMPLE_VALIDATION = Path("docs/source/_static/astro_starlight/example_validation.json")
 
 
 def _load_json(path: Path) -> dict:
@@ -186,3 +187,34 @@ def test_observability_and_maintenance_pages_are_evidence_linked() -> None:
         "/maintainers/maintenance/",
     ):
         assert route in astro_config
+
+
+def test_example_validation_classifies_python_and_binding_snippets() -> None:
+    """Runnable examples should have explicit validation or classification evidence."""
+    evidence = _load_json(EXAMPLE_VALIDATION)
+
+    assert evidence["schema_version"] == 1
+    assert evidence["generated_by_track"] == "production_docs_observability_20260614"
+    assert evidence["overall_status"] == "passed"
+    assert evidence["ci_evidence"]["nox_session"] == "examples"
+    assert evidence["ci_evidence"]["command"] == "uv run nox -s examples"
+
+    examples = {entry["id"]: entry for entry in evidence["examples"]}
+    assert examples["python_api_smoke"]["status"] == "runnable"
+    assert examples["python_api_smoke"]["command"].startswith("uv run python")
+
+    for example_id in (
+        "r_binding_end_to_end",
+        "julia_binding_end_to_end",
+        "typescript_diagnostics_workflow",
+        "go_binding_example_test",
+        "rust_memory_profile_example",
+    ):
+        assert examples[example_id]["classification"] in {
+            "runnable_in_language_ci",
+            "optional_dependency_or_toolchain",
+        }
+        assert examples[example_id]["source_path"]
+
+    docs_page = Path("docs/astro-site/src/content/docs/maintainers/package-health.md").read_text()
+    assert "example_validation.json" in docs_page

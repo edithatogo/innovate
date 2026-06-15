@@ -34,7 +34,7 @@
 
 ## Phase 3: Examples, API Snippets, and Deployment Readiness
 
-- [ ] Task: Validate examples and API snippets
+- [~] Task: Validate examples and API snippets
     - [ ] Add or update snippet validation for Python and binding examples
     - [ ] Classify examples that require optional dependencies or external credentials
     - [ ] Add CI evidence for runnable examples

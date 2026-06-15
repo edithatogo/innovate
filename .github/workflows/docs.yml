@@ -52,7 +52,9 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Generate production documentation dashboards
-        run: python ../../scripts/generate_docs_dashboards.py --json
+        run: |
+          python ../../scripts/validate_examples.py --json
+          python ../../scripts/generate_docs_dashboards.py --json
 
       - name: Build documentation site
         run: pnpm build

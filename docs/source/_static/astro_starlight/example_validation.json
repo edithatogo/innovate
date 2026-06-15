@@ -1,0 +1,62 @@
+{
+  "ci_evidence": {
+    "command": "uv run nox -s examples",
+    "nox_session": "examples"
+  },
+  "evidence_date": "2026-06-16",
+  "examples": [
+    {
+      "classification": "runnable_in_current_environment",
+      "command": "uv run python -c '<BassModel API smoke>'",
+      "id": "python_api_smoke",
+      "language": "python",
+      "returncode": 0,
+      "source_path": "docs/astro-site/src/content/docs/api/python.md",
+      "status": "runnable"
+    },
+    {
+      "classification": "runnable_in_language_ci",
+      "command": "Rscript bindings/r/tests/run.R",
+      "id": "r_binding_end_to_end",
+      "language": "r",
+      "source_path": "bindings/r/inst/examples/end_to_end.R",
+      "status": "classified"
+    },
+    {
+      "classification": "runnable_in_language_ci",
+      "command": "julia --project=bindings/julia bindings/julia/test/runtests.jl",
+      "id": "julia_binding_end_to_end",
+      "language": "julia",
+      "source_path": "bindings/julia/examples/end_to_end.jl",
+      "status": "classified"
+    },
+    {
+      "classification": "runnable_in_language_ci",
+      "command": "npm test --prefix bindings/typescript",
+      "id": "typescript_diagnostics_workflow",
+      "language": "typescript",
+      "source_path": "bindings/typescript/examples/diagnostics-workflow.ts",
+      "status": "classified"
+    },
+    {
+      "classification": "runnable_in_language_ci",
+      "command": "go test ./...",
+      "id": "go_binding_example_test",
+      "language": "go",
+      "source_path": "bindings/go/example_test.go",
+      "status": "classified"
+    },
+    {
+      "classification": "optional_dependency_or_toolchain",
+      "command": "cargo check --example profile_memory_native_kernels",
+      "id": "rust_memory_profile_example",
+      "language": "rust",
+      "source_path": "bindings/rust/examples/profile_memory_native_kernels.rs",
+      "status": "classified"
+    }
+  ],
+  "generated_at": "2026-06-16T00:00:00Z",
+  "generated_by_track": "production_docs_observability_20260614",
+  "overall_status": "passed",
+  "schema_version": 1
+}

@@ -241,6 +241,7 @@ Evidence:
 - `docs/source/_static/astro_starlight/observability_maintenance.json`
 - `docs/source/_static/astro_starlight/release_maturity_dashboard.json`
 - `docs/source/_static/astro_starlight/production_docs_verification.json`
+- `docs/source/_static/astro_starlight/example_validation.json`
 
 Operational rules:
 
