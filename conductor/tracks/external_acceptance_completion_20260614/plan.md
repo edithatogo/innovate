@@ -24,12 +24,12 @@
     - [x] Record exact maintainer action boundaries
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [~] Task: Complete HPC submission packets
+- [x] Task: Complete HPC submission packets [c4dc48b]
     - [x] Refresh Spack and EasyBuild candidate recipes and scheduler evidence
     - [x] Prepare HPSF and E4S proposal/contact packets
     - [x] Record sponsor, contact, CI, and review expectations
     - [x] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Conductor - User Manual Verification 'Submission Packet Completion' (Protocol in workflow.md)
 
 ## Phase 3: Receipts, Deferrals, and Claim Closure
