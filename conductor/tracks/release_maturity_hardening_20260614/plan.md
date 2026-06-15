@@ -14,7 +14,7 @@
     - [x] Document how maintainers interpret release candidate versus release-ready states
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Conductor - User Manual Verification 'Release Gate Inventory and Fail-Closed Tests' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Release Gate Inventory and Fail-Closed Tests' (Protocol in workflow.md)
 
 ## Phase 2: Security, Provenance, and Reproducibility [checkpoint: 4baafb5]
 
@@ -30,7 +30,7 @@
     - [x] Record acceptable nondeterminism with owner and rationale
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Conductor - User Manual Verification 'Security, Provenance, and Reproducibility' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Security, Provenance, and Reproducibility' (Protocol in workflow.md)
 
 ## Phase 3: CI Enforcement and Release Dry Run
 
@@ -46,4 +46,4 @@
     - [x] Update release documentation with the final gate sequence
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Conductor - User Manual Verification 'CI Enforcement and Release Dry Run' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'CI Enforcement and Release Dry Run' (Protocol in workflow.md)
