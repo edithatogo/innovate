@@ -1,0 +1,30 @@
+Task: Add supply-chain evidence gates
+
+Summary:
+- Added scripts.release_supply_chain for offline generation of security audit, SBOM, license inventory, provenance, and checksum evidence.
+- Added nox release_supply_chain session for deterministic local/CI regeneration.
+- Committed generated supply-chain evidence under docs/source/_static/release_readiness/evidence/.
+- Refreshed readiness-report.json so supply-chain evidence is consumed by the release-readiness evaluator.
+- Added unit tests covering generator output, readiness integration, CLI behavior, and committed evidence presence.
+
+Modified files:
+- noxfile.py
+- scripts/release_supply_chain.py
+- docs/source/_static/release_readiness/evidence/security-audit.json
+- docs/source/_static/release_readiness/evidence/sbom.json
+- docs/source/_static/release_readiness/evidence/license-inventory.json
+- docs/source/_static/release_readiness/evidence/provenance.json
+- docs/source/_static/release_readiness/evidence/checksums.json
+- docs/source/_static/release_readiness/readiness-report.json
+- tests/unit/test_release_supply_chain_evidence.py
+
+Validation:
+- uv run pytest tests/unit/test_release_supply_chain_evidence.py -q
+- uv run nox -s release_supply_chain
+- uv run nox -s release_readiness
+- uv run ruff check noxfile.py scripts/release_supply_chain.py tests/unit/test_release_supply_chain_evidence.py scripts/release_readiness.py
+- uv run ruff format --check noxfile.py scripts/release_supply_chain.py tests/unit/test_release_supply_chain_evidence.py scripts/release_readiness.py
+- uv run pytest tests/unit/test_release_supply_chain_evidence.py tests/unit/test_release_readiness_contract.py tests/unit/test_release_readiness_reporting.py -q
+
+Why:
+- Release maturity requires supply-chain evidence to exist as machine-readable artifacts before CI can verify freshness and fail closed.
