@@ -3,18 +3,18 @@
 ## Phase 1: Conformance Contract and Golden Fixtures
 
 - [x] Task: Define cross-language conformance schema [7c36274]
-    - [ ] Specify binding status, capability, operation, payload, error, and version fields
-    - [ ] Add tests that fail on missing binding evidence
-    - [ ] Generate a machine-readable binding conformance inventory
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+    - [x] Specify binding status, capability, operation, payload, error, and version fields
+    - [x] Add tests that fail on missing binding evidence
+    - [x] Generate a machine-readable binding conformance inventory
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [x] Task: Add golden fixture suite [32a3040]
-    - [ ] Create canonical operation and payload fixtures
-    - [ ] Add expected outputs with documented numerical tolerances
-    - [ ] Wire fixture validation into Python and Rust first
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
-- [ ] Task: Conductor - User Manual Verification 'Conformance Contract and Golden Fixtures' (Protocol in workflow.md)
+    - [x] Create canonical operation and payload fixtures
+    - [x] Add expected outputs with documented numerical tolerances
+    - [x] Wire fixture validation into Python and Rust first
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
+- [~] Task: Conductor - User Manual Verification 'Conformance Contract and Golden Fixtures' (Protocol in workflow.md)
 
 ## Phase 2: Language Binding Hardening
 
