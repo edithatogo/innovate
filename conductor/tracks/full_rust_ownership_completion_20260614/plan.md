@@ -1,6 +1,6 @@
 # Implementation Plan
 
-## Phase 1: Ownership Ledger and Contract Tests
+## Phase 1: Ownership Ledger and Contract Tests [checkpoint: cfe08e0]
 
 - [x] Task: Build the final Rust ownership ledger `abaa869`
     - [x] Inventory every canonical operation, model family, and stable payload shape from current Python, Rust, and binding registries
@@ -14,7 +14,7 @@
     - [x] Add tests that fail when docs claim full ownership without evidence
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Conductor - User Manual Verification 'Ownership Ledger and Contract Tests' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Ownership Ledger and Contract Tests' (Protocol in workflow.md) `cfe08e0`
 
 ## Phase 2: Rust-Native Promotion
 
