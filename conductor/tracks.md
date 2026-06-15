@@ -369,7 +369,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Advanced Modeling and Runtime Features**
+- [~] **Track: Advanced Modeling and Runtime Features**
   *Link: [./tracks/advanced_modeling_runtime_features_20260614/](./tracks/advanced_modeling_runtime_features_20260614/)*
 
 ---
