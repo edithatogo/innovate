@@ -1,0 +1,1 @@
+Deploy Documentation repair after run 27527124094: Pages build reached starlight-polyglot but failed because griffe was missing from the docs workflow Python environment. Added actions/setup-python 3.12 and installed griffe before pnpm build. Local validation: python -m pip install griffe; STARLIGHT_POLYGLOT_PYTHON=python pnpm build.
