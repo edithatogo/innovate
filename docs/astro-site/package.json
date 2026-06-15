@@ -1,6 +1,7 @@
 {
   "name": "innovate-docs",
   "private": true,
+  "packageManager": "pnpm@9.15.9",
   "type": "module",
   "scripts": {
     "build": "astro build",
