@@ -32,7 +32,7 @@
     - [x] Commit this plan update with the task commit SHA
 - [x] Task: Conductor - User Manual Verification 'Language Binding Hardening' (Protocol in workflow.md)
 
-## Phase 3: CI, Docs, and Release Evidence
+## Phase 3: CI, Docs, and Release Evidence [checkpoint: 07e24f0]
 
 - [x] Task: Add binding conformance CI gates [f3ad53c]
     - [x] Add or update GitHub Actions workflows for language-native checks
@@ -46,4 +46,4 @@
     - [x] Add stale-claim tests for docs and package manifests
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Conductor - User Manual Verification 'CI, Docs, and Release Evidence' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'CI, Docs, and Release Evidence' (Protocol in workflow.md)
