@@ -1,0 +1,1 @@
+Deploy Documentation repair: force-add the vendored Starlight polyglot dist bundle that was excluded by the repository-wide dist/ ignore rule. Required for GitHub Actions docs builds from a clean checkout.
