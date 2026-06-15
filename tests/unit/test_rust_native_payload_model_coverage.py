@@ -170,7 +170,7 @@ def test_full_rust_ownership_validation_records_passed_gates_and_exclusions() ->
     assert validation["gate_source"] == str(FULL_OWNERSHIP_GATE)
     assert all(command["status"] == "passed" for command in validation["commands"])
     assert {command["result"] for command in validation["commands"]} == {
-        "28 passed",
+        "34 passed",
         "32 passed",
     }
     assert set(validation["explicit_bridge_boundaries"]) == {"composite", "multi_product"}
