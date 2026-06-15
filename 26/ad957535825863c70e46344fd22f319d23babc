@@ -1,0 +1,16 @@
+Task: Finalize DocSearch gate behavior
+
+Summary:
+- Added docs/source/_static/astro_starlight/docsearch_gate.json with enabled, disabled_without_credentials, and external_credentials_required states.
+- Added Starlight DocSearch Gate pages under current and latest maintainer docs and linked them in sidebars and indexes.
+- Updated scripts/verify_production_docs.py and production_docs_verification.json to reference the dedicated DocSearch gate.
+- Extended production docs observability tests for secret-safe search behavior.
+
+Validation:
+- uv run python scripts/verify_production_docs.py --json
+- uv run pytest tests/unit/test_production_docs_observability.py -q
+- uv run pytest tests/unit/test_astro_starlight_route_coverage.py tests/unit/test_astro_starlight_link_validation.py tests/unit/test_starlight_cutover_legacy_cleanup.py tests/unit/test_production_docs_observability.py -q
+- uv run ruff check scripts/verify_production_docs.py tests/unit/test_production_docs_observability.py
+
+Why:
+- Production DocSearch must be explicitly gateable by deployment credentials while local and pull-request builds remain deterministic and secret-free.
