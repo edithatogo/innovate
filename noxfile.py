@@ -33,7 +33,16 @@ PUBLIC_API_TYPE_TARGETS = (
 )
 
 nox.options.default_venv_backend = "none"
-nox.options.sessions = ("lint", "types", "tests", "docs", "package", "version_sync", "release_readiness")
+nox.options.sessions = (
+    "lint",
+    "types",
+    "tests",
+    "docs",
+    "package",
+    "version_sync",
+    "release_supply_chain",
+    "release_readiness",
+)
 
 
 def _run_uv(session: nox.Session, *args: str, env: dict[str, str] | None = None) -> None:
@@ -159,5 +168,19 @@ def release_readiness(session: nox.Session) -> None:
         "--allow-blocked",
         "--output",
         "docs/source/_static/release_readiness/readiness-report.json",
+        *session.posargs,
+    )
+
+
+@nox.session(python=False)
+def release_supply_chain(session: nox.Session) -> None:
+    """Generate offline supply-chain release evidence."""
+    _run_uv(session, "sync", "--python", DEFAULT_PYTHON)
+    _run_uv(
+        session,
+        "run",
+        "python",
+        "scripts/release_supply_chain.py",
+        "--json",
         *session.posargs,
     )

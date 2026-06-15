@@ -1,0 +1,42 @@
+{
+  "artifacts": [
+    {
+      "path": "pyproject.toml",
+      "sha256": "f022781dd0a30afd4eb3c0b1dee91d7853cb1a54f0ae4a37b07d9e710a91a99a"
+    },
+    {
+      "path": "uv.lock",
+      "sha256": "8c3964625ad3f5f071b1ed0599ffcec6d96ea47cf871b79c488b11b48f1a35e4"
+    },
+    {
+      "path": "bindings/rust/Cargo.toml",
+      "sha256": "83ece352d4d4d59f572e44432f90d7fbc1fee15114726f77fa2b0e703d5429cf"
+    },
+    {
+      "path": "bindings/typescript/package.json",
+      "sha256": "40ca3d4da88e4b84ea2dca8eb0f8253c32cdf38d3234de6ba24e74ec160ed67a"
+    },
+    {
+      "path": "bindings/julia/Project.toml",
+      "sha256": "d62d64780f6c3f44fa6c492e56ddfd9946b9e80358eebd1b4057bdd88cef923b"
+    },
+    {
+      "path": "bindings/r/DESCRIPTION",
+      "sha256": "d71925617660f09e339b7e2307cb51496e70422fd1e892b0b04f83d6aec1bdf5"
+    },
+    {
+      "path": "bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj",
+      "sha256": "d4b945e13f4496f9b8ba69bec4c281803a0a22d0cc480d2c85dded150c2a7ef2"
+    },
+    {
+      "path": "docs/source/_static/release_readiness_contract.json",
+      "sha256": "e7158d9b8847d9b93e6060f5e5eaae200310585e6b1239b2453a7294349d1d76"
+    }
+  ],
+  "evidence_id": "checksums",
+  "generated_by": "scripts/release_supply_chain.py",
+  "requires_secrets": false,
+  "schema_version": 1,
+  "status": "pass",
+  "summary": "Checksum manifest generated for release-critical committed inputs."
+}

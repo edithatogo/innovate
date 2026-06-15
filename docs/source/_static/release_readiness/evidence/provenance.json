@@ -1,0 +1,15 @@
+{
+  "builder": "local-nox-and-github-actions-compatible",
+  "evidence_id": "provenance",
+  "generated_by": "scripts/release_supply_chain.py",
+  "git": {
+    "branch": "main",
+    "commit": "cd1ee602146156ba816974258b30a48f20ef7499",
+    "dirty": true
+  },
+  "provenance_style": "slsa-inspired-local",
+  "requires_secrets": false,
+  "schema_version": 1,
+  "status": "pass",
+  "summary": "Local SLSA-style provenance metadata captured from git state."
+}

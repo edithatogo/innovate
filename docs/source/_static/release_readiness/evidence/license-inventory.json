@@ -1,0 +1,20 @@
+{
+  "declared_license_files": [
+    "LICENSE"
+  ],
+  "evidence_id": "license_inventory",
+  "generated_by": "scripts/release_supply_chain.py",
+  "package_manifests": [
+    "pyproject.toml",
+    "bindings/rust/Cargo.toml",
+    "bindings/typescript/package.json",
+    "bindings/r/DESCRIPTION",
+    "bindings/julia/Project.toml",
+    "bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj"
+  ],
+  "project_license": "Apache-2.0",
+  "requires_secrets": false,
+  "schema_version": 1,
+  "status": "pass",
+  "summary": "Release license inventory generated from committed manifests."
+}

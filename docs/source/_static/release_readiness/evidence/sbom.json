@@ -1,0 +1,86 @@
+{
+  "bom_format": "CycloneDX-compatible",
+  "components": [
+    {
+      "name": "jitcdde>=1.8",
+      "scope": "runtime",
+      "type": "library"
+    },
+    {
+      "name": "mesa>=2.0",
+      "scope": "runtime",
+      "type": "library"
+    },
+    {
+      "name": "ndlib>=5.1",
+      "scope": "runtime",
+      "type": "library"
+    },
+    {
+      "name": "networkx>=3.0",
+      "scope": "runtime",
+      "type": "library"
+    },
+    {
+      "name": "numpy>=1.24",
+      "scope": "runtime",
+      "type": "library"
+    },
+    {
+      "name": "pandas>=2.0",
+      "scope": "runtime",
+      "type": "library"
+    },
+    {
+      "name": "pyarrow>=14.0",
+      "scope": "runtime",
+      "type": "library"
+    },
+    {
+      "name": "pymannkendall>=1.4",
+      "scope": "runtime",
+      "type": "library"
+    },
+    {
+      "name": "pytensor>=2.18",
+      "scope": "runtime",
+      "type": "library"
+    },
+    {
+      "name": "ruptures>=1.1",
+      "scope": "runtime",
+      "type": "library"
+    },
+    {
+      "name": "scipy>=1.10",
+      "scope": "runtime",
+      "type": "library"
+    },
+    {
+      "name": "statsmodels>=0.14",
+      "scope": "runtime",
+      "type": "library"
+    },
+    {
+      "name": "sympy>=1.12",
+      "scope": "runtime",
+      "type": "library"
+    },
+    {
+      "name": "typing-extensions>=4.7",
+      "scope": "runtime",
+      "type": "library"
+    }
+  ],
+  "evidence_id": "sbom",
+  "generated_by": "scripts/release_supply_chain.py",
+  "package": {
+    "license": "Apache-2.0",
+    "name": "innovate",
+    "version": "0.5.0"
+  },
+  "requires_secrets": false,
+  "schema_version": 1,
+  "status": "pass",
+  "summary": "Offline CycloneDX-style component inventory generated from package metadata."
+}

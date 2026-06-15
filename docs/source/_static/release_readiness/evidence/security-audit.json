@@ -1,0 +1,20 @@
+{
+  "audit_mode": "offline_manifest",
+  "deferred_online_scans": [
+    "vulnerability database refreshes are release-lane checks when network is available"
+  ],
+  "dependency_count": 14,
+  "evidence_id": "security_audit",
+  "generated_by": "scripts/release_supply_chain.py",
+  "network_required": false,
+  "requires_secrets": false,
+  "scanners": [
+    "bandit",
+    "safety",
+    "cargo-audit",
+    "npm-audit"
+  ],
+  "schema_version": 1,
+  "status": "pass",
+  "summary": "Offline audit manifest confirms no release-readiness evidence path requires secrets."
+}
