@@ -26,3 +26,15 @@ repository in a release candidate state.
 Use the report as the release review input. Do not substitute registry receipts,
 HPC readiness dossiers, or external acceptance notes for the mature release
 gate.
+
+## Final gate sequence
+
+The dry-run record lives at
+`docs/source/_static/release_readiness/release-dry-run.json`.
+
+1. Generate supply-chain evidence with `uv run nox -s release_supply_chain`.
+2. Generate reproducibility evidence with `uv run nox -s release_reproducibility`.
+3. Generate the release-readiness report with `uv run nox -s release_readiness`.
+4. Run package dry-runs, including `uv run nox -s package` for Python and the language-specific commands in `release-dry-run.json`.
+5. Review release candidate blockers from `readiness-report.json`.
+6. Require maintainer approval before public release, tagging, registry publication, or external acceptance claims.

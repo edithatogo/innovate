@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "generated_by_track": "release_maturity_hardening_20260614",
+  "status": "release_candidate",
+  "readiness_report": "docs/source/_static/release_readiness/readiness-report.json",
+  "package_surfaces": [
+    {
+      "id": "python",
+      "dry_run_command": "uv run nox -s package",
+      "status": "passed",
+      "evidence": "Python package build, twine check, and wheel-contents validation are owned by the package nox session."
+    },
+    {
+      "id": "rust",
+      "dry_run_command": "cargo package --manifest-path bindings/rust/Cargo.toml --allow-dirty --no-verify",
+      "status": "documented",
+      "evidence": "Rust package dry-run command is recorded for release-lane execution before crates.io publication."
+    },
+    {
+      "id": "typescript",
+      "dry_run_command": "npm pack --dry-run",
+      "status": "documented",
+      "evidence": "TypeScript package dry run is retained as a release-lane check under bindings/typescript."
+    },
+    {
+      "id": "r",
+      "dry_run_command": "R CMD check --as-cran bindings/r",
+      "status": "documented",
+      "evidence": "R package check remains tied to CRAN/r-universe release lanes."
+    },
+    {
+      "id": "julia",
+      "dry_run_command": "julia --project=bindings/julia -e 'using Pkg; Pkg.test()'",
+      "status": "documented",
+      "evidence": "Julia package smoke and test commands remain release-lane checks."
+    },
+    {
+      "id": "go",
+      "dry_run_command": "go test ./...",
+      "status": "documented",
+      "evidence": "Go module checks are executed from the binding package surface before publication."
+    },
+    {
+      "id": "csharp",
+      "dry_run_command": "dotnet pack bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj --no-restore",
+      "status": "documented",
+      "evidence": "NuGet package dry run remains documented for the C# binding surface."
+    },
+    {
+      "id": "docs",
+      "dry_run_command": "uv run nox -s docs && STARLIGHT_POLYGLOT_PYTHON=python pnpm build",
+      "status": "passed",
+      "evidence": "Sphinx and Astro/Starlight documentation builds were run during this track."
+    },
+    {
+      "id": "hpc",
+      "dry_run_command": "python docs/source/_static/hpc_packaging/pack_packet.py",
+      "status": "documented",
+      "evidence": "HPC packaging submission packet remains the release-lane bridge to Spack, EasyBuild, HPSF, and E4S checks."
+    }
+  ],
+  "consumers": [
+    "docs/source/release_readiness.rst",
+    "docs/source/registry_submission_receipts.rst",
+    "docs/source/hpc_packaging_registry_readiness.rst",
+    "docs/astro-site/src/content/docs/maintainers/release-readiness.md",
+    "docs/astro-site/src/content/docs/latest/maintainers/release-readiness.md"
+  ],
+  "final_gate_sequence": [
+    "generate_supply_chain_evidence",
+    "generate_reproducibility_evidence",
+    "generate_release_readiness_report",
+    "run_package_dry_runs",
+    "review_release_candidate_blockers",
+    "maintainer_approval_before_public_release"
+  ],
+  "notes": [
+    "This dry run is a release-candidate artifact, not a public release approval.",
+    "External registry acceptance remains separate from local release readiness."
+  ]
+}
