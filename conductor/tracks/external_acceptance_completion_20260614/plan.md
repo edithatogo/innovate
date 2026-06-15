@@ -32,7 +32,7 @@
     - [x] Commit this plan update with the task commit SHA
 - [x] Task: Conductor - User Manual Verification 'Submission Packet Completion' (Protocol in workflow.md)
 
-## Phase 3: Receipts, Deferrals, and Claim Closure
+## Phase 3: Receipts, Deferrals, and Claim Closure [checkpoint: 96b733e]
 
 - [x] Task: Record receipts or owner-backed deferrals [6abf1a1]
     - [x] Store external receipts when submissions are actually made
@@ -46,4 +46,4 @@
     - [x] Add stale-claim tests for accepted/submitted wording
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Conductor - User Manual Verification 'Receipts, Deferrals, and Claim Closure' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Receipts, Deferrals, and Claim Closure' (Protocol in workflow.md)
