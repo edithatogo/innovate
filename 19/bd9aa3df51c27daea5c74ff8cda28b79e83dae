@@ -1,0 +1,23 @@
+Phase: Evidence-Backed Dashboards
+
+Validation run locally:
+- pnpm build && pnpm check && python ../../scripts/generate_docs_dashboards.py --json && python ../../scripts/verify_production_docs.py --json from docs/astro-site: passed; Starlight generated 115 pages and reported all internal links valid.
+- uv run pytest tests/unit/test_production_docs_observability.py tests/unit/test_astro_starlight_route_coverage.py tests/unit/test_astro_starlight_link_validation.py tests/unit/test_starlight_cutover_legacy_cleanup.py tests/unit/test_astro_starlight_cutover_verification.py -q: 17 passed.
+- uv run ruff check scripts/generate_docs_dashboards.py scripts/verify_production_docs.py tests/unit/test_production_docs_observability.py noxfile.py: passed.
+- uv run nox -s production_docs: passed.
+- uv run ruff check . && uv run ruff format --check .: passed after CI lint fix.
+
+Conductor-review findings and fixes:
+- Moved dashboard generation before pnpm build in .github/workflows/docs.yml so regenerated pages are included in the deployed site.
+- Applied Ruff formatting after CI lint failure and verified full local Ruff check/format.
+- Review fix commits: 52b2f39 and 5333a5d.
+
+Remote CI gate for pushed SHA 5333a5d9bdea156cb82b7bd50832577a2ca7c44e:
+- CI: success https://github.com/edithatogo/innovate/actions/runs/27563525426
+- Deploy Documentation: success https://github.com/edithatogo/innovate/actions/runs/27563525395
+- Binding Conformance: success https://github.com/edithatogo/innovate/actions/runs/27563528363
+- Release Readiness: success https://github.com/edithatogo/innovate/actions/runs/27563525893
+- CodeQL: success https://github.com/edithatogo/innovate/actions/runs/27563523790
+- Automatic Dependency Submission: success https://github.com/edithatogo/innovate/actions/runs/27563523783
+- Release Drafter: success https://github.com/edithatogo/innovate/actions/runs/27563526459
+- Release Please: success https://github.com/edithatogo/innovate/actions/runs/27563525453
