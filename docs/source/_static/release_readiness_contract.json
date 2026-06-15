@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "generated_by_track": "release_maturity_hardening_20260614",
+  "status_values": [
+    "blocked",
+    "deferred",
+    "fail",
+    "manual",
+    "missing",
+    "pass",
+    "release_candidate",
+    "release_ready",
+    "stale",
+    "unknown"
+  ],
+  "required_evidence": [
+    {
+      "id": "python_tests",
+      "owner": "quality",
+      "lane": "fast",
+      "freshness_days": 7,
+      "producer": "uv run nox -s tests",
+      "artifact": "python-tests.json"
+    },
+    {
+      "id": "coverage",
+      "owner": "quality",
+      "lane": "fast",
+      "freshness_days": 7,
+      "producer": "pytest coverage.xml",
+      "artifact": "coverage.json"
+    },
+    {
+      "id": "mutation_sampling",
+      "owner": "quality",
+      "lane": "nightly",
+      "freshness_days": 14,
+      "producer": "mutmut sampled run",
+      "artifact": "mutation-sampling.json"
+    },
+    {
+      "id": "type_checks",
+      "owner": "quality",
+      "lane": "fast",
+      "freshness_days": 7,
+      "producer": "uv run nox -s types",
+      "artifact": "type-checks.json"
+    },
+    {
+      "id": "lint_format",
+      "owner": "quality",
+      "lane": "fast",
+      "freshness_days": 7,
+      "producer": "uv run nox -s lint",
+      "artifact": "lint-format.json"
+    },
+    {
+      "id": "docs_build",
+      "owner": "docs",
+      "lane": "fast",
+      "freshness_days": 7,
+      "producer": "uv run nox -s docs and pnpm build",
+      "artifact": "docs-build.json"
+    },
+    {
+      "id": "rust_tests",
+      "owner": "rust",
+      "lane": "fast",
+      "freshness_days": 7,
+      "producer": "cargo test --manifest-path bindings/rust/Cargo.toml",
+      "artifact": "rust-tests.json"
+    },
+    {
+      "id": "binding_smoke",
+      "owner": "bindings",
+      "lane": "release",
+      "freshness_days": 14,
+      "producer": "language binding package smoke tests",
+      "artifact": "binding-smoke.json"
+    },
+    {
+      "id": "package_dry_run",
+      "owner": "release",
+      "lane": "release",
+      "freshness_days": 14,
+      "producer": "uv build and registry dry-run checks",
+      "artifact": "package-dry-run.json"
+    },
+    {
+      "id": "security_audit",
+      "owner": "security",
+      "lane": "release",
+      "freshness_days": 14,
+      "producer": "bandit, safety, cargo audit, and npm audit where available",
+      "artifact": "security-audit.json"
+    },
+    {
+      "id": "sbom",
+      "owner": "supply_chain",
+      "lane": "release",
+      "freshness_days": 30,
+      "producer": "CycloneDX or equivalent SBOM generator",
+      "artifact": "sbom.json"
+    },
+    {
+      "id": "license_inventory",
+      "owner": "supply_chain",
+      "lane": "release",
+      "freshness_days": 30,
+      "producer": "license inventory scanner",
+      "artifact": "license-inventory.json"
+    },
+    {
+      "id": "provenance",
+      "owner": "supply_chain",
+      "lane": "release",
+      "freshness_days": 30,
+      "producer": "SLSA-style provenance metadata where available",
+      "artifact": "provenance.json"
+    },
+    {
+      "id": "checksums",
+      "owner": "release",
+      "lane": "release",
+      "freshness_days": 30,
+      "producer": "artifact checksum manifest",
+      "artifact": "checksums.json"
+    },
+    {
+      "id": "reproducibility",
+      "owner": "quality",
+      "lane": "release",
+      "freshness_days": 14,
+      "producer": "seeded simulation, benchmark fixture, and generated docs reproducibility checks",
+      "artifact": "reproducibility.json"
+    },
+    {
+      "id": "compatibility",
+      "owner": "release",
+      "lane": "release",
+      "freshness_days": 14,
+      "producer": "Python, Rust MSRV, Node/pnpm, and binding manifest compatibility checks",
+      "artifact": "compatibility.json"
+    }
+  ]
+}
