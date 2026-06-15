@@ -18,12 +18,13 @@
 
 ## Phase 2: Rust-Native Promotion
 
-- [ ] Task: Promote deterministic bridge model families
-    - [ ] Implement Rust-native kernels for feasible composite and multi-product deterministic slices
-    - [ ] Expose fit, predict, summarize, diagnostics, and serialization where mathematically stable
-    - [ ] Add Python parity tests against existing reference behavior
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Promote deterministic bridge model families `feeae52`
+    - [x] Promote the feasible deterministic Norton-Bass single-generation fit slice
+    - [x] Keep composite and multi-product deterministic slices explicit design-boundary items until stable schemas exist
+    - [x] Expose fit, predict, summarize, diagnostics, and serialization where mathematically stable
+    - [x] Add Python parity tests against existing reference behavior
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Promote stable payload shapes
     - [ ] Add schema-backed Rust payload support for stable covariate, event split, fitted-state, and deterministic simulation payloads
     - [ ] Add round-trip tests through Python and Rust bindings
