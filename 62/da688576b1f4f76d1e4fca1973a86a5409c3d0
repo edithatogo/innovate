@@ -1,0 +1,24 @@
+Task: Add advanced examples and docs
+
+Summary:
+- Added examples/advanced_runtime_workflows.py covering ensemble, policy, streaming, and calibration workflows end-to-end.
+- Added Sphinx tutorial and indexed it from docs/source/tutorials.rst.
+- Added current and latest Starlight tutorial routes.
+- Added tests that execute the example and assert docs mention stable/experimental surfaces and performance evidence.
+
+Validation:
+- uv run pytest tests/unit/test_advanced_runtime_docs_examples.py tests/unit/test_advanced_runtime_accelerator_evidence.py tests/integration/test_advanced_modeling_workflows.py -q passed.
+- uv run nox -s docs passed with pre-existing Sphinx warnings.
+- STARLIGHT_POLYGLOT_PYTHON=python pnpm build passed with valid links.
+
+Files:
+- conductor/tracks/advanced_modeling_runtime_features_20260614/plan.md
+- examples/advanced_runtime_workflows.py
+- docs/source/tutorials.rst
+- docs/source/tutorials/advanced_runtime_workflows.rst
+- docs/astro-site/src/content/docs/tutorials/advanced-runtime.md
+- docs/astro-site/src/content/docs/latest/tutorials/advanced-runtime.md
+- tests/unit/test_advanced_runtime_docs_examples.py
+
+Why:
+- Advanced runtime features need runnable examples and current Starlight documentation before the track can claim end-to-end usability.
