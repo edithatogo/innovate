@@ -18,12 +18,12 @@
 
 ## Phase 2: Language Binding Hardening
 
-- [~] Task: Harden R, Julia, and TypeScript bindings
-    - [ ] Add or refresh language-native package checks
-    - [ ] Add idiomatic examples and docs snippets
-    - [ ] Add conformance evidence for supported operations
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Harden R, Julia, and TypeScript bindings [b02d318]
+    - [x] Add or refresh language-native package checks
+    - [x] Add idiomatic examples and docs snippets
+    - [x] Add conformance evidence for supported operations
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Harden Go, C#, and Rust bindings
     - [ ] Add or refresh package checks, examples, and version validation
     - [ ] Add conformance evidence for supported operations
