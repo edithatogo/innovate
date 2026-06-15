@@ -1,6 +1,6 @@
 # Implementation Plan
 
-## Phase 1: Advanced API Contracts
+## Phase 1: Advanced API Contracts [checkpoint: 49187a3]
 
 - [x] Task: Define advanced capability contracts [5bbcbae]
     - [x] Specify stable and experimental APIs for ensembles, policy scenarios, streaming updates, and uncertainty calibration
@@ -14,7 +14,7 @@
     - [x] Document fixture assumptions
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [~] Task: Conductor - User Manual Verification 'Advanced API Contracts' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Advanced API Contracts' (Protocol in workflow.md)
 
 ## Phase 2: Modeling Feature Implementation
 
