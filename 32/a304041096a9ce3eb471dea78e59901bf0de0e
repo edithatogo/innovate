@@ -1,0 +1,16 @@
+Task: Add golden fixture suite
+
+Summary:
+- Added docs/source/_static/binding_golden_fixtures.json covering discover, fit, predict, simulate, summarize, and diagnose canonical operations.
+- Added payload round-trip and stable error fixture metadata.
+- Added Rust-local fixture copy under bindings/rust/inst/ and tests that assert byte equality with the shared fixture.
+- Added tests for operation coverage, expected outputs, tolerances, and payload/error round-trip coverage.
+
+Files:
+- conductor/tracks/polyglot_binding_excellence_20260614/plan.md
+- docs/source/_static/binding_golden_fixtures.json
+- bindings/rust/inst/binding_golden_fixtures.json
+- tests/unit/test_polyglot_binding_golden_fixtures.py
+
+Why:
+- Binding parity needs deterministic cross-language fixtures before language-specific conformance evidence can be hardened.
