@@ -1,0 +1,413 @@
+{
+  "schema_version": 1,
+  "generated_by_track": "full_rust_ownership_completion_20260614",
+  "ledger_date": "2026-06-15",
+  "source_artifacts": [
+    "docs/source/_static/rust_native_model_family_coverage.json",
+    "docs/source/_static/rust_native_payload_shape_coverage.json",
+    "docs/source/_static/rust_native_operation_gap_inventory.json",
+    "docs/source/_static/rust_native_model_family_slice_evidence.json",
+    "docs/source/_static/rust_full_ownership_gate.json"
+  ],
+  "status_values": [
+    "rust_native_promoted",
+    "retain_outside_core",
+    "requires_design_decision"
+  ],
+  "release_claim_state_values": [
+    "claimable_native",
+    "claimable_external_boundary",
+    "not_claimable_until_promoted"
+  ],
+  "model_families": [
+    {
+      "id": "bass",
+      "status": "rust_native_promoted",
+      "owner": "Rust core maintainers",
+      "rationale": "Stable deterministic Bass fit, prediction, simulation, summary, diagnostics, and bounded fitted-state payloads have Rust-native coverage.",
+      "evidence": [
+        "docs/source/_static/rust_native_model_family_coverage.json",
+        "docs/source/_static/rust_native_model_family_slice_evidence.json",
+        "bindings/rust/tests/operations.rs"
+      ],
+      "release_claim_state": "claimable_native",
+      "revisit_condition": "Revisit before promoting covariate, event, custom fitter, or probabilistic Bass payloads."
+    },
+    {
+      "id": "logistic",
+      "status": "rust_native_promoted",
+      "owner": "Rust core maintainers",
+      "rationale": "Stable deterministic Logistic fit, prediction, simulation, summary, diagnostics, and bounded fitted-state payloads have Rust-native coverage.",
+      "evidence": [
+        "docs/source/_static/rust_native_model_family_coverage.json",
+        "docs/source/_static/rust_native_model_family_slice_evidence.json",
+        "bindings/rust/tests/operations.rs"
+      ],
+      "release_claim_state": "claimable_native",
+      "revisit_condition": "Revisit before promoting covariate, event, custom fitter, or probabilistic Logistic payloads."
+    },
+    {
+      "id": "gompertz",
+      "status": "rust_native_promoted",
+      "owner": "Rust core maintainers",
+      "rationale": "Stable deterministic Gompertz fit, prediction, simulation, summary, diagnostics, and bounded fitted-state payloads have Rust-native coverage.",
+      "evidence": [
+        "docs/source/_static/rust_native_model_family_coverage.json",
+        "docs/source/_static/rust_native_model_family_slice_evidence.json",
+        "bindings/rust/tests/operations.rs"
+      ],
+      "release_claim_state": "claimable_native",
+      "revisit_condition": "Revisit before promoting covariate, event, custom fitter, or probabilistic Gompertz payloads."
+    },
+    {
+      "id": "fisher_pry",
+      "status": "rust_native_promoted",
+      "owner": "Rust core maintainers",
+      "rationale": "Stable deterministic Fisher-Pry fit, prediction, simulation, summary, diagnostics, and bounded fitted-state payloads have Rust-native coverage.",
+      "evidence": [
+        "docs/source/_static/rust_native_model_family_coverage.json",
+        "docs/source/_static/rust_native_model_family_slice_evidence.json",
+        "bindings/rust/tests/operations.rs"
+      ],
+      "release_claim_state": "claimable_native",
+      "revisit_condition": "Revisit before promoting richer Python internals or non-deterministic substitution payloads."
+    },
+    {
+      "id": "norton_bass",
+      "status": "rust_native_promoted",
+      "owner": "Rust core maintainers",
+      "rationale": "Narrow single-generation deterministic Norton-Bass prediction, simulation, summary, and diagnostics are Rust-native.",
+      "evidence": [
+        "docs/source/_static/rust_native_model_family_coverage.json",
+        "docs/source/_static/rust_native_model_family_slice_evidence.json",
+        "bindings/rust/tests/operations.rs"
+      ],
+      "release_claim_state": "claimable_native",
+      "revisit_condition": "Revisit before claiming multi-generation, covariate, or event payload ownership."
+    },
+    {
+      "id": "composite",
+      "status": "requires_design_decision",
+      "owner": "Python bridge maintainers",
+      "rationale": "Composite orchestration depends on Python object internals and lacks parity, schema, and error-mapping fixtures for Rust promotion.",
+      "evidence": [
+        "docs/source/_static/rust_native_model_family_coverage.json",
+        "docs/source/_static/rust_native_model_family_slice_evidence.json",
+        "docs/source/_static/rust_full_ownership_gate.json"
+      ],
+      "release_claim_state": "not_claimable_until_promoted",
+      "revisit_condition": "Revisit when composite parity fixtures, stable orchestration schema, and error mapping fixtures exist."
+    },
+    {
+      "id": "multi_product",
+      "status": "requires_design_decision",
+      "owner": "Python bridge maintainers",
+      "rationale": "Multi-product competition uses model-specific state, covariates, and interaction payloads that are not stable for Rust ownership.",
+      "evidence": [
+        "docs/source/_static/rust_native_model_family_coverage.json",
+        "docs/source/_static/rust_native_model_family_slice_evidence.json",
+        "docs/source/_static/rust_full_ownership_gate.json"
+      ],
+      "release_claim_state": "not_claimable_until_promoted",
+      "revisit_condition": "Revisit when multi-product state, covariate, and interaction schemas have stable fixtures."
+    },
+    {
+      "id": "lotka_volterra",
+      "status": "retain_outside_core",
+      "owner": "Python reference maintainers",
+      "rationale": "ODE and state-vector payload ownership needs a separate deterministic solver and payload promotion decision.",
+      "evidence": [
+        "docs/source/_static/rust_native_model_family_coverage.json",
+        "docs/source/_static/rust_native_model_family_slice_evidence.json"
+      ],
+      "release_claim_state": "claimable_external_boundary",
+      "revisit_condition": "Revisit only after solver, state-vector schema, parity, and benchmark evidence are approved."
+    },
+    {
+      "id": "complementary_goods",
+      "status": "retain_outside_core",
+      "owner": "Python reference maintainers",
+      "rationale": "Ecosystem interaction semantics remain Python-reference-owned until schema fixtures exist.",
+      "evidence": [
+        "docs/source/_static/rust_native_model_family_coverage.json",
+        "docs/source/_static/rust_native_model_family_slice_evidence.json"
+      ],
+      "release_claim_state": "claimable_external_boundary",
+      "revisit_condition": "Revisit when ecosystem interaction fixtures and stable payload schemas are available."
+    },
+    {
+      "id": "hierarchical",
+      "status": "retain_outside_core",
+      "owner": "Python reference maintainers",
+      "rationale": "Hierarchical and probabilistic semantics remain Python-reference-owned.",
+      "evidence": [
+        "docs/source/_static/rust_native_model_family_coverage.json",
+        "docs/source/_static/rust_native_model_family_slice_evidence.json"
+      ],
+      "release_claim_state": "claimable_external_boundary",
+      "revisit_condition": "Revisit only with a stable hierarchy schema and posterior boundary decision."
+    },
+    {
+      "id": "mixture",
+      "status": "retain_outside_core",
+      "owner": "Python reference maintainers",
+      "rationale": "Mixture semantics and uncertainty payloads remain Python-reference-owned.",
+      "evidence": [
+        "docs/source/_static/rust_native_model_family_coverage.json",
+        "docs/source/_static/rust_native_model_family_slice_evidence.json"
+      ],
+      "release_claim_state": "claimable_external_boundary",
+      "revisit_condition": "Revisit only after mixture component schema and uncertainty payload boundaries are stable."
+    },
+    {
+      "id": "latent_process",
+      "status": "retain_outside_core",
+      "owner": "Python reference maintainers",
+      "rationale": "Latent process and uncertainty payloads remain Python-reference-owned.",
+      "evidence": [
+        "docs/source/_static/rust_native_model_family_coverage.json",
+        "docs/source/_static/rust_native_model_family_slice_evidence.json"
+      ],
+      "release_claim_state": "claimable_external_boundary",
+      "revisit_condition": "Revisit only after latent-state schema and posterior payload decisions are complete."
+    },
+    {
+      "id": "regime_switching",
+      "status": "retain_outside_core",
+      "owner": "Python reference maintainers",
+      "rationale": "Regime state and transition semantics remain Python-reference-owned.",
+      "evidence": [
+        "docs/source/_static/rust_native_model_family_coverage.json",
+        "docs/source/_static/rust_native_model_family_slice_evidence.json"
+      ],
+      "release_claim_state": "claimable_external_boundary",
+      "revisit_condition": "Revisit only after regime-state and transition schemas are stable."
+    },
+    {
+      "id": "network_diffusion",
+      "status": "retain_outside_core",
+      "owner": "Python reference maintainers",
+      "rationale": "Network object internals and graph schemas remain Python-reference-owned.",
+      "evidence": [
+        "docs/source/_static/rust_native_model_family_coverage.json",
+        "docs/source/_static/rust_native_model_family_slice_evidence.json"
+      ],
+      "release_claim_state": "claimable_external_boundary",
+      "revisit_condition": "Revisit only after graph and agent-state schema ownership is decided."
+    },
+    {
+      "id": "policy_hazard",
+      "status": "retain_outside_core",
+      "owner": "Python reference maintainers",
+      "rationale": "Policy hazard semantics and diagnostics remain Python-reference-owned.",
+      "evidence": [
+        "docs/source/_static/rust_native_model_family_coverage.json",
+        "docs/source/_static/rust_native_model_family_slice_evidence.json"
+      ],
+      "release_claim_state": "claimable_external_boundary",
+      "revisit_condition": "Revisit only after policy intervention and hazard diagnostic schemas are stable."
+    }
+  ],
+  "payload_shapes": [
+    {
+      "id": "bounded_fitted_state",
+      "status": "rust_native_promoted",
+      "owner": "Rust core maintainers",
+      "rationale": "Bounded fitted-state payloads have explicit model keys, parameters, predict kwargs, and numeric time arrays.",
+      "evidence": [
+        "docs/source/_static/rust_native_payload_shape_coverage.json",
+        "bindings/rust/tests/operations.rs"
+      ],
+      "release_claim_state": "claimable_native",
+      "revisit_condition": "Revisit when fitted state includes Python object internals or richer model-specific state."
+    },
+    {
+      "id": "simple_positive_observations_fit",
+      "status": "rust_native_promoted",
+      "owner": "Rust core maintainers",
+      "rationale": "Positive time and observed arrays are stable fit payloads for promoted deterministic model slices.",
+      "evidence": [
+        "docs/source/_static/rust_native_payload_shape_coverage.json",
+        "bindings/rust/tests/operations.rs"
+      ],
+      "release_claim_state": "claimable_native",
+      "revisit_condition": "Revisit when fit payloads include weights, events, covariates, or custom fitter options."
+    },
+    {
+      "id": "covariates",
+      "status": "requires_design_decision",
+      "owner": "Python bridge maintainers",
+      "rationale": "Covariate semantics differ by model family and need separate schema fixtures before Rust promotion.",
+      "evidence": [
+        "docs/source/_static/rust_native_payload_shape_coverage.json",
+        "docs/source/_static/rust_full_ownership_gate.json"
+      ],
+      "release_claim_state": "not_claimable_until_promoted",
+      "revisit_condition": "Revisit when model-family-specific covariate schemas and parity fixtures exist."
+    },
+    {
+      "id": "event_splits",
+      "status": "requires_design_decision",
+      "owner": "Python bridge maintainers",
+      "rationale": "Event split semantics are not stable across diffusion, substitution, and policy models.",
+      "evidence": [
+        "docs/source/_static/rust_native_payload_shape_coverage.json",
+        "docs/source/_static/rust_full_ownership_gate.json"
+      ],
+      "release_claim_state": "not_claimable_until_promoted",
+      "revisit_condition": "Revisit when event split semantics are normalized across model families."
+    },
+    {
+      "id": "incomplete_fitted_state",
+      "status": "requires_design_decision",
+      "owner": "Python bridge maintainers",
+      "rationale": "Promoted native slices reject missing parameters or incomplete fitted states with stable errors; ownership is limited to rejection behavior.",
+      "evidence": [
+        "docs/source/_static/rust_native_payload_shape_coverage.json",
+        "bindings/rust/tests/operations.rs"
+      ],
+      "release_claim_state": "not_claimable_until_promoted",
+      "revisit_condition": "Revisit if partial fitted-state recovery or repair becomes a product requirement."
+    },
+    {
+      "id": "deterministic_diagnostics",
+      "status": "rust_native_promoted",
+      "owner": "Rust core maintainers",
+      "rationale": "Bounded residual metrics, warnings, support level, provenance, and comparison family have stable deterministic diagnostic payload coverage.",
+      "evidence": [
+        "docs/source/_static/rust_native_payload_shape_coverage.json",
+        "tests/fixtures/diagnostics_artifact_payload.json"
+      ],
+      "release_claim_state": "claimable_native",
+      "revisit_condition": "Revisit before claiming posterior, covariate-aware, or Python-internal diagnostics."
+    },
+    {
+      "id": "deterministic_simulation",
+      "status": "rust_native_promoted",
+      "owner": "Rust core maintainers",
+      "rationale": "Deterministic fitted-state simulation over explicit numeric time arrays is stable and Rust-native.",
+      "evidence": [
+        "docs/source/_static/rust_native_payload_shape_coverage.json",
+        "bindings/rust/tests/operations.rs"
+      ],
+      "release_claim_state": "claimable_native",
+      "revisit_condition": "Revisit before promoting stochastic policies or simulator object state."
+    },
+    {
+      "id": "stochastic_simulation_policy",
+      "status": "retain_outside_core",
+      "owner": "Python reference maintainers",
+      "rationale": "Stochastic policies need explicit seed, PRNG, and shape contracts before Rust or XLA promotion.",
+      "evidence": [
+        "docs/source/_static/rust_native_payload_shape_coverage.json",
+        "docs/source/_static/rust_full_ownership_gate.json"
+      ],
+      "release_claim_state": "claimable_external_boundary",
+      "revisit_condition": "Revisit when seed, PRNG, and shape contracts are accepted."
+    },
+    {
+      "id": "uncertainty_or_posterior",
+      "status": "retain_outside_core",
+      "owner": "Python reference maintainers",
+      "rationale": "Probabilistic posterior, uncertainty, and backend-specific diagnostics remain Python-reference-owned.",
+      "evidence": [
+        "docs/source/_static/rust_native_payload_shape_coverage.json",
+        "docs/source/_static/rust_full_ownership_gate.json"
+      ],
+      "release_claim_state": "claimable_external_boundary",
+      "revisit_condition": "Revisit when posterior interchange and uncertainty schema ownership are explicitly designed."
+    },
+    {
+      "id": "graph_or_agent_state",
+      "status": "retain_outside_core",
+      "owner": "Python reference maintainers",
+      "rationale": "Network, ABM, ecosystem, and policy object internals remain Python-reference-owned.",
+      "evidence": [
+        "docs/source/_static/rust_native_payload_shape_coverage.json",
+        "docs/source/_static/rust_full_ownership_gate.json"
+      ],
+      "release_claim_state": "claimable_external_boundary",
+      "revisit_condition": "Revisit when graph, agent, and ecosystem state schemas are stable."
+    }
+  ],
+  "canonical_operations": [
+    {
+      "id": "discover_models",
+      "status": "rust_native_promoted",
+      "owner": "Rust core maintainers",
+      "rationale": "Packaged discovery metadata is native and has manifest parity evidence.",
+      "evidence": [
+        "docs/source/_static/rust_native_operation_gap_inventory.json",
+        "docs/source/_static/rust_native_operation_binding_smoke.json",
+        "bindings/rust/tests/native_discovery.rs"
+      ],
+      "release_claim_state": "claimable_native",
+      "revisit_condition": "Revisit when discovery schema or packaged metadata changes."
+    },
+    {
+      "id": "fit_model",
+      "status": "rust_native_promoted",
+      "owner": "Rust core maintainers",
+      "rationale": "Stable deterministic fit payloads are promoted, while covariate, event, custom fitter, probabilistic, and uncertainty-aware payloads remain explicit boundaries.",
+      "evidence": [
+        "docs/source/_static/rust_native_operation_gap_inventory.json",
+        "docs/source/_static/rust_native_operation_evidence_closure.json",
+        "bindings/rust/tests/operations.rs"
+      ],
+      "release_claim_state": "claimable_native",
+      "revisit_condition": "Revisit before widening fit defaults to covariate, event, custom fitter, probabilistic, or uncertainty-aware payloads."
+    },
+    {
+      "id": "predict_model",
+      "status": "rust_native_promoted",
+      "owner": "Rust core maintainers",
+      "rationale": "Stable deterministic fitted-state prediction slices are promoted; unsupported model-family and Python-internal payloads remain explicit boundaries.",
+      "evidence": [
+        "docs/source/_static/rust_native_operation_gap_inventory.json",
+        "docs/source/_static/rust_native_operation_evidence_closure.json",
+        "bindings/rust/tests/operations.rs"
+      ],
+      "release_claim_state": "claimable_native",
+      "revisit_condition": "Revisit before claiming custom horizons that require Python internals or non-deterministic state."
+    },
+    {
+      "id": "simulate_model",
+      "status": "rust_native_promoted",
+      "owner": "Rust core maintainers",
+      "rationale": "Stable deterministic fitted-state simulation slices are promoted; stochastic and Python-internal payloads remain explicit boundaries.",
+      "evidence": [
+        "docs/source/_static/rust_native_operation_gap_inventory.json",
+        "docs/source/_static/rust_native_operation_evidence_closure.json",
+        "bindings/rust/tests/operations.rs"
+      ],
+      "release_claim_state": "claimable_native",
+      "revisit_condition": "Revisit before promoting stochastic policies or simulator object internals."
+    },
+    {
+      "id": "summarize_model",
+      "status": "rust_native_promoted",
+      "owner": "Rust core maintainers",
+      "rationale": "Stable deterministic fitted-state reporting slices are promoted; rich model-card, posterior, and Python-internal summary payloads remain explicit Python boundaries.",
+      "evidence": [
+        "docs/source/_static/rust_native_operation_gap_inventory.json",
+        "docs/source/_static/rust_native_operation_evidence_closure.json",
+        "bindings/rust/tests/operations.rs"
+      ],
+      "release_claim_state": "claimable_native",
+      "revisit_condition": "Revisit before claiming rich model-card, posterior, or Python-internal summary ownership."
+    },
+    {
+      "id": "diagnose_model",
+      "status": "rust_native_promoted",
+      "owner": "Rust core maintainers",
+      "rationale": "Stable deterministic fitted-state diagnostic slices are promoted; posterior, covariate, rich residual, and Python-internal diagnostic payloads remain explicit boundaries.",
+      "evidence": [
+        "docs/source/_static/rust_native_operation_gap_inventory.json",
+        "docs/source/_static/rust_native_operation_evidence_closure.json",
+        "bindings/rust/tests/operations.rs"
+      ],
+      "release_claim_state": "claimable_native",
+      "revisit_condition": "Revisit before claiming posterior, covariate-aware, rich residual, or Python-internal diagnostic ownership."
+    }
+  ]
+}

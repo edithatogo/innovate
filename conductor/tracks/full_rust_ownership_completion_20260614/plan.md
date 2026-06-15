@@ -2,7 +2,7 @@
 
 ## Phase 1: Ownership Ledger and Contract Tests
 
-- [ ] Task: Build the final Rust ownership ledger
+- [~] Task: Build the final Rust ownership ledger
     - [ ] Inventory every canonical operation, model family, and stable payload shape from current Python, Rust, and binding registries
     - [ ] Classify each item as promote-now, retain-outside-core, or requires-design-decision
     - [ ] Add machine-readable owner, rationale, evidence path, and release-claim state

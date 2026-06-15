@@ -8,6 +8,7 @@
     "docs/source/_static/rust_native_model_family_coverage.json",
     "docs/source/_static/rust_native_payload_shape_coverage.json",
     "docs/source/_static/rust_native_model_family_slice_evidence.json",
+    "docs/source/_static/rust_final_ownership_ledger.json",
     "docs/source/_static/rust_full_ownership_gate.json"
   ],
   "commands": [
