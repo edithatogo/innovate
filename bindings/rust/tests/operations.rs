@@ -1,6 +1,7 @@
 use innovate_rust::{json, KernelBinding, KernelOperation, KernelResponse};
 use innovate_rust::{
-    BoundedFittedStatePayload, DeterministicSimulationPayload, SimplePositiveObservationsFitPayload,
+    BoundedFittedStatePayload, DeterministicDiagnosticsPayload, DeterministicSimulationPayload,
+    SimplePositiveObservationsFitPayload,
 };
 use std::io::{self, Write};
 use std::sync::{Arc, Mutex};
@@ -288,10 +289,27 @@ fn stable_fit_observation_payload_rejects_unstable_shapes() {
     .expect_err("event split payloads remain an explicit bridge boundary");
     assert_eq!(event_error.code, "unsupported_native_operation");
     assert!(event_error.message.contains("event"));
+
+    let negative_observed_payload = json!({
+        "inputs": {
+            "time": [0.0, 1.0, 2.0],
+            "observed": [1.0, -0.1, 3.0]
+        }
+    });
+    let negative_observed_error = SimplePositiveObservationsFitPayload::from_value(
+        "bass",
+        KernelOperation::FitModel,
+        &negative_observed_payload,
+    )
+    .expect_err("negative observed values should not satisfy the stable fit schema");
+    assert_eq!(negative_observed_error.code, "invalid_request");
+    assert!(negative_observed_error
+        .message
+        .contains("observed values must be non-negative"));
 }
 
 #[test]
-fn stable_fitted_state_and_simulation_payload_schemas_round_trip() {
+fn stable_fitted_state_diagnostics_and_simulation_payload_schemas_round_trip() {
     let payload = bass_analysis_payload();
     let fitted_state =
         BoundedFittedStatePayload::from_value("bass", KernelOperation::PredictModel, &payload)
@@ -313,11 +331,24 @@ fn stable_fitted_state_and_simulation_payload_schemas_round_trip() {
     assert_eq!(simulation.payload_shape, "deterministic_simulation");
     assert_eq!(simulation.fitted_state, fitted_state);
 
+    let diagnostics = DeterministicDiagnosticsPayload::from_value("bass", &payload)
+        .expect("deterministic diagnostics payload should decode");
+    assert_eq!(diagnostics.payload_shape, "deterministic_diagnostics");
+    assert_eq!(diagnostics.fitted_state.model_key, fitted_state.model_key);
+    assert_eq!(diagnostics.fitted_state.observed, fitted_state.observed);
+
     let encoded = serde_json::to_value(&simulation).expect("simulation payload should serialize");
     assert_eq!(encoded["payload_shape"], "deterministic_simulation");
     assert_eq!(
         encoded["fitted_state"]["payload_shape"],
         "bounded_fitted_state"
+    );
+
+    let encoded_diagnostics =
+        serde_json::to_value(&diagnostics).expect("diagnostics payload should serialize");
+    assert_eq!(
+        encoded_diagnostics["payload_shape"],
+        "deterministic_diagnostics"
     );
 }
 

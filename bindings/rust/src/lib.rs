@@ -400,11 +400,13 @@ impl SimplePositiveObservationsFitPayload {
             ));
         }
         if time.iter().any(|value| !value.is_finite())
-            || observed.iter().any(|value| !value.is_finite())
+            || observed
+                .iter()
+                .any(|value| !value.is_finite() || *value < 0.0)
         {
             return Err(KernelBindingError::invalid_request(
                 operation,
-                "time and observed arrays must contain finite numeric values",
+                "time and observed arrays must contain finite numeric values and observed values must be non-negative",
             ));
         }
         let constructor_kwargs = _fit_constructor_kwargs(payload);
