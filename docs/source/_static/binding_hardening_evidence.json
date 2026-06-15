@@ -59,6 +59,59 @@
         "bindings/typescript/README.md"
       ],
       "snippet": "docs/source/_static/binding_snippets/typescript.md"
+    },
+    {
+      "language": "go",
+      "version": "0.5.0",
+      "phase": "language_binding_hardening",
+      "status": "supported",
+      "package_checks": ["go test ./...", "go list -m"],
+      "conformance_cases": 6,
+      "examples": ["bindings/go/example_test.go"],
+      "source_paths": [
+        "bindings/go/kernel.go",
+        "bindings/go/kernel_contract_test.go",
+        "bindings/go/README.md"
+      ],
+      "snippet": "docs/source/_static/binding_snippets/go.md"
+    },
+    {
+      "language": "csharp",
+      "version": "0.5.0",
+      "phase": "language_binding_hardening",
+      "status": "supported",
+      "package_checks": [
+        "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj",
+        "dotnet pack bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj"
+      ],
+      "conformance_cases": 6,
+      "examples": ["bindings/csharp/Innovate.Kernel.Tests/KernelContractTests.cs"],
+      "source_paths": [
+        "bindings/csharp/Innovate.Kernel/KernelBinding.cs",
+        "bindings/csharp/Innovate.Kernel.Tests/KernelBridgeTests.cs",
+        "bindings/csharp/README.md"
+      ],
+      "snippet": "docs/source/_static/binding_snippets/csharp.md"
+    },
+    {
+      "language": "rust",
+      "version": "0.5.0",
+      "phase": "language_binding_hardening",
+      "status": "supported",
+      "package_checks": [
+        "cargo fmt --check",
+        "cargo clippy --all-targets --all-features -- -D warnings",
+        "cargo test",
+        "cargo package"
+      ],
+      "conformance_cases": 6,
+      "examples": ["bindings/rust/tests/operations.rs"],
+      "source_paths": [
+        "bindings/rust/src/lib.rs",
+        "bindings/rust/tests/schema_compatibility.rs",
+        "bindings/rust/README.md"
+      ],
+      "snippet": "docs/source/_static/binding_snippets/rust.md"
     }
   ]
 }

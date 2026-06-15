@@ -39,3 +39,31 @@ def test_r_julia_typescript_docs_snippets_are_language_specific() -> None:
         text = (SNIPPETS_DIR / f"{language}.md").read_text(encoding="utf-8")
         for marker in markers:
             assert marker in text
+
+
+def test_go_csharp_rust_hardening_evidence_exists() -> None:
+    """Go, C#, and Rust bindings should have package-check evidence."""
+    evidence = {entry["language"]: entry for entry in _evidence()["bindings"]}
+
+    for language in ["go", "csharp", "rust"]:
+        entry = evidence[language]
+        assert entry["phase"] == "language_binding_hardening"
+        assert entry["package_checks"]
+        assert entry["conformance_cases"] >= 6
+        assert entry["examples"]
+        assert all(Path(path).exists() for path in entry["examples"])
+        assert all(Path(path).exists() for path in entry["source_paths"])
+
+
+def test_go_csharp_rust_docs_snippets_are_language_specific() -> None:
+    """Compiled bindings should expose idiomatic predict examples."""
+    expected = {
+        "go": ["package main", "PredictModel"],
+        "csharp": ["using Innovate.Kernel", "PredictModelAsync"],
+        "rust": ["use innovate", "predict_model"],
+    }
+
+    for language, markers in expected.items():
+        text = (SNIPPETS_DIR / f"{language}.md").read_text(encoding="utf-8")
+        for marker in markers:
+            assert marker in text
