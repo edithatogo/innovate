@@ -1,0 +1,32 @@
+Task: Add release-readiness report generation
+
+Summary:
+- Added nox release_readiness session as the single local command to generate readiness reports.
+- Extended scripts.release_readiness with --allow-blocked for report-generation lanes while preserving fail-closed enforcement by default.
+- Generated the initial docs/source/_static/release_readiness/readiness-report.json artifact.
+- Added Sphinx and Astro/Starlight maintainer docs explaining release candidate, release-ready, public release, and external acceptance boundaries.
+- Added reporting tests for nox wiring, Sphinx docs, and Starlight navigation.
+
+Modified files:
+- noxfile.py
+- scripts/release_readiness.py
+- docs/source/release_readiness.rst
+- docs/source/index.rst
+- docs/source/_static/release_readiness/readiness-report.json
+- docs/astro-site/starlight.config.mjs
+- docs/astro-site/src/content/docs/maintainers/index.md
+- docs/astro-site/src/content/docs/maintainers/release-readiness.md
+- docs/astro-site/src/content/docs/latest/maintainers/index.md
+- docs/astro-site/src/content/docs/latest/maintainers/release-readiness.md
+- tests/unit/test_release_readiness_reporting.py
+
+Validation:
+- uv run pytest tests/unit/test_release_readiness_reporting.py tests/unit/test_release_readiness_contract.py -q
+- uv run nox -s release_readiness
+- uv run ruff check noxfile.py scripts/release_readiness.py tests/unit/test_release_readiness_reporting.py tests/unit/test_release_readiness_contract.py
+- uv run ruff format --check noxfile.py scripts/release_readiness.py tests/unit/test_release_readiness_reporting.py tests/unit/test_release_readiness_contract.py
+- uv run nox -s docs
+- STARLIGHT_POLYGLOT_PYTHON=python pnpm build
+
+Why:
+- Maintainers need a deterministic local report command and clear release-state documentation before CI can enforce mature release gates.
