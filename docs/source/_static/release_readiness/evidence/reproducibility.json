@@ -1,0 +1,41 @@
+{
+  "acceptable_nondeterminism": [
+    {
+      "mitigation": "Release evidence records deterministic artifact digests and separates acceptance from readiness.",
+      "owner": "release maintainer",
+      "rationale": "Runtime duration and third-party review queues vary outside the package artifact content.",
+      "surface": "wall-clock runtime and external registry review timing"
+    }
+  ],
+  "benchmark_fixture": {
+    "first_digest": "68e9dea2153ebba96a49f1f5941aaa75e56fbf0f0cc278a1ee9e0ef4086fe1de",
+    "matches": true,
+    "path": "docs/source/_static/rust_core_native_benchmark_results.json",
+    "second_digest": "68e9dea2153ebba96a49f1f5941aaa75e56fbf0f0cc278a1ee9e0ef4086fe1de"
+  },
+  "evidence_id": "reproducibility",
+  "generated_artifacts": {
+    "readiness_contract_path": "docs/source/_static/release_readiness_contract.json",
+    "readiness_contract_sha256": "e7158d9b8847d9b93e6060f5e5eaae200310585e6b1239b2453a7294349d1d76"
+  },
+  "generated_by": "scripts/release_reproducibility.py",
+  "requires_secrets": false,
+  "schema_version": 1,
+  "seeded_simulation": {
+    "draw_count": 1,
+    "first_digest": "7ea17d758dc60d61bdefeed0d91d3534dc32132b5dd7351e51cc8a10dbc5bfa3",
+    "matches": true,
+    "sample": [
+      0.07617927,
+      1.24000397,
+      3.6876128,
+      7.23514118,
+      11.5122412,
+      17.67445512
+    ],
+    "second_digest": "7ea17d758dc60d61bdefeed0d91d3534dc32132b5dd7351e51cc8a10dbc5bfa3",
+    "seed": 42
+  },
+  "status": "pass",
+  "summary": "Seeded simulation, benchmark fixture, and generated artifact checks are reproducible."
+}

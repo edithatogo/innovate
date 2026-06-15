@@ -73,7 +73,7 @@
       "status": "missing"
     },
     {
-      "age_days": 0.0,
+      "age_days": 0.002,
       "artifact": "docs/source/_static/release_readiness/evidence/security-audit.json",
       "freshness_days": 14,
       "id": "security_audit",
@@ -84,7 +84,7 @@
       "summary": "Offline audit manifest confirms no release-readiness evidence path requires secrets."
     },
     {
-      "age_days": 0.0,
+      "age_days": 0.002,
       "artifact": "docs/source/_static/release_readiness/evidence/sbom.json",
       "freshness_days": 30,
       "id": "sbom",
@@ -95,7 +95,7 @@
       "summary": "Offline CycloneDX-style component inventory generated from package metadata."
     },
     {
-      "age_days": 0.0,
+      "age_days": 0.002,
       "artifact": "docs/source/_static/release_readiness/evidence/license-inventory.json",
       "freshness_days": 30,
       "id": "license_inventory",
@@ -106,7 +106,7 @@
       "summary": "Release license inventory generated from committed manifests."
     },
     {
-      "age_days": 0.0,
+      "age_days": 0.002,
       "artifact": "docs/source/_static/release_readiness/evidence/provenance.json",
       "freshness_days": 30,
       "id": "provenance",
@@ -117,7 +117,7 @@
       "summary": "Local SLSA-style provenance metadata captured from git state."
     },
     {
-      "age_days": 0.0,
+      "age_days": 0.002,
       "artifact": "docs/source/_static/release_readiness/evidence/checksums.json",
       "freshness_days": 30,
       "id": "checksums",
@@ -128,12 +128,15 @@
       "summary": "Checksum manifest generated for release-critical committed inputs."
     },
     {
+      "age_days": 0.0,
       "artifact": "docs/source/_static/release_readiness/evidence/reproducibility.json",
+      "freshness_days": 14,
       "id": "reproducibility",
       "lane": "release",
       "owner": "quality",
       "producer": "seeded simulation, benchmark fixture, and generated docs reproducibility checks",
-      "status": "missing"
+      "status": "pass",
+      "summary": "Seeded simulation, benchmark fixture, and generated artifact checks are reproducible."
     },
     {
       "artifact": "docs/source/_static/release_readiness/evidence/compatibility.json",
@@ -157,7 +160,6 @@
     "rust_tests",
     "binding_smoke",
     "package_dry_run",
-    "reproducibility",
     "compatibility"
   ],
   "overall_status": "blocked",
@@ -166,8 +168,8 @@
   "stale_evidence": [],
   "status_counts": {
     "fail": 0,
-    "missing": 11,
-    "pass": 5,
+    "missing": 10,
+    "pass": 6,
     "stale": 0
   }
 }

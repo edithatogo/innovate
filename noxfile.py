@@ -41,6 +41,7 @@ nox.options.sessions = (
     "package",
     "version_sync",
     "release_supply_chain",
+    "release_reproducibility",
     "release_readiness",
 )
 
@@ -181,6 +182,20 @@ def release_supply_chain(session: nox.Session) -> None:
         "run",
         "python",
         "scripts/release_supply_chain.py",
+        "--json",
+        *session.posargs,
+    )
+
+
+@nox.session(python=False)
+def release_reproducibility(session: nox.Session) -> None:
+    """Generate deterministic reproducibility release evidence."""
+    _run_uv(session, "sync", "--python", DEFAULT_PYTHON)
+    _run_uv(
+        session,
+        "run",
+        "python",
+        "scripts/release_reproducibility.py",
         "--json",
         *session.posargs,
     )
