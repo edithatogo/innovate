@@ -1,0 +1,1 @@
+Plan update for Full Rust Ownership Completion Phase 2 stable payload task. Records implementation commit f39953e and narrows the completed scope to stable schema-backed payloads while leaving covariates and event splits as explicit design-boundary exclusions.
