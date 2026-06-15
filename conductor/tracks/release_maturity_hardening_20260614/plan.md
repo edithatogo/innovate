@@ -1,6 +1,6 @@
 # Implementation Plan
 
-## Phase 1: Release Gate Inventory and Fail-Closed Tests
+## Phase 1: Release Gate Inventory and Fail-Closed Tests [checkpoint: 5c29dba]
 
 - [x] Task: Define the mature release gate contract `31c2f5f`
     - [x] Inventory required release, security, docs, Rust, and binding checks
