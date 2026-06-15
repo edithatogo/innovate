@@ -187,6 +187,7 @@ exclude = [
   "_build",
   "build",
   "dist",
+  "docs/astro-site/vendor",
   "node_modules",
   "*.egg-info",
   "*.ipynb",
