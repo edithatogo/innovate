@@ -46,6 +46,7 @@ export default {
         { label: 'Polyglot Registry Plan', link: '/operations/polyglot-registry/' },
         { label: 'Remote Execution', link: '/operations/remote-execution/' },
         { label: 'Registry Submissions', link: '/operations/registry-submissions/' },
+        { label: 'Release Maturity', link: '/operations/release-maturity/' },
         { label: 'Rust Core', link: '/operations/rust-core/' },
         { label: 'Roadmap', link: '/operations/roadmap/' },
         { label: 'Scientific HPC', link: '/operations/scientific-hpc/' },

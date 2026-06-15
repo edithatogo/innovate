@@ -20,6 +20,7 @@ Available pages:
 - HPC Submission Workflow
 - Polyglot Registry Plan
 - Registry Submissions
+- Release Maturity Dashboard
 - Remote Execution
 - Scientific and HPC Roadmap
 - Submission Dossiers

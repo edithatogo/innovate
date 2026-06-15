@@ -95,6 +95,7 @@ export default defineConfig({
           label: 'Operations',
           items: [
             { label: 'Roadmap', link: '/operations/roadmap/' },
+            { label: 'Release Maturity', link: '/operations/release-maturity/' },
             { label: 'HPC Readiness', link: '/operations/hpc-readiness/' },
             { label: 'Rust Core', link: '/operations/rust-core/' },
             { label: 'Governance', link: '/operations/governance/' },

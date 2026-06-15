@@ -7,6 +7,9 @@ from pathlib import Path
 
 PRODUCTION_VERIFICATION = Path("docs/source/_static/astro_starlight/production_docs_verification.json")
 DOCSEARCH_GATE = Path("docs/source/_static/astro_starlight/docsearch_gate.json")
+RELEASE_MATURITY_DASHBOARD = Path(
+    "docs/source/_static/astro_starlight/release_maturity_dashboard.json"
+)
 
 
 def _load_json(path: Path) -> dict:
@@ -102,3 +105,44 @@ def test_docsearch_gate_documents_safe_secret_boundaries() -> None:
         assert "disabled_without_credentials" in text
         assert "external_credentials_required" in text
         assert "do not hard-code" in text
+
+
+def test_release_maturity_dashboard_is_evidence_backed() -> None:
+    """Release maturity dashboards should summarize source artifacts without overclaiming."""
+    dashboard = _load_json(RELEASE_MATURITY_DASHBOARD)
+
+    assert dashboard["schema_version"] == 1
+    assert dashboard["generated_by_track"] == "production_docs_observability_20260614"
+    assert dashboard["staleness"]["status"] == "fresh"
+    assert dashboard["staleness"]["max_age_days"] == 30
+
+    source_artifacts = dashboard["source_artifacts"]
+    assert source_artifacts["release_readiness"].endswith("release_readiness_contract.json")
+    assert source_artifacts["rust_ownership"].endswith("rust_full_ownership_gate.json")
+    assert source_artifacts["registry_state"].endswith("registry_submission_inventory.json")
+    assert source_artifacts["binding_conformance"].endswith("binding_conformance_inventory.json")
+
+    cards = {entry["id"]: entry for entry in dashboard["cards"]}
+    assert cards["release_readiness"]["status"] == "release_candidate_evidence_defined"
+    assert cards["rust_ownership"]["status"] == "full_rust_ownership_not_claimed"
+    assert cards["registry_state"]["status"] == "mixed_external_acceptance"
+    assert cards["binding_conformance"]["status"] == "supported_bindings_documented"
+
+    registry_counts = cards["registry_state"]["metrics"]["submission_status_counts"]
+    assert registry_counts["submitted"] >= 1
+    assert registry_counts["ready_for_review"] >= 1
+    assert registry_counts["deferred"] >= 1
+
+    assert dashboard["claim_guardrails"]["external_acceptance"] == "Do not claim all registries accepted."
+    assert dashboard["claim_guardrails"]["rust_ownership"] == "Do not claim full Rust ownership."
+
+    for path in (
+        Path("docs/astro-site/src/content/docs/operations/release-maturity.md"),
+        Path("docs/astro-site/src/content/docs/latest/operations/release-maturity.md"),
+    ):
+        text = path.read_text().lower()
+        assert "release_maturity_dashboard.json" in text
+        assert "rust_full_ownership_gate.json" in text
+        assert "registry_submission_inventory.json" in text
+        assert "full rust ownership is not claimed" in text
+        assert "not all external registries are accepted" in text

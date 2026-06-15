@@ -1,0 +1,88 @@
+{
+  "cards": [
+    {
+      "id": "release_readiness",
+      "metrics": {
+        "required_evidence_count": 16,
+        "status_values": [
+          "blocked",
+          "deferred",
+          "fail",
+          "manual",
+          "missing",
+          "pass",
+          "release_candidate",
+          "release_ready",
+          "stale",
+          "unknown"
+        ]
+      },
+      "source": "docs/source/_static/release_readiness_contract.json",
+      "status": "release_candidate_evidence_defined",
+      "summary": "Release readiness has a defined evidence contract; release-ready status still depends on current CI and release-lane evidence.",
+      "title": "Release readiness"
+    },
+    {
+      "id": "rust_ownership",
+      "metrics": {
+        "blocking_model_family_count": 10,
+        "blocking_payload_shape_count": 6,
+        "decision": "not_allowed"
+      },
+      "source": "docs/source/_static/rust_full_ownership_gate.json",
+      "status": "full_rust_ownership_not_claimed",
+      "summary": "Full Rust ownership is not claimed. Rust owns promoted deterministic operation slices, while model-family and payload-shape boundaries remain explicit.",
+      "title": "Rust ownership"
+    },
+    {
+      "id": "registry_state",
+      "metrics": {
+        "hpc_targets": 4,
+        "package_targets": 8,
+        "submission_status_counts": {
+          "deferred": 1,
+          "ready_for_maintainer": 2,
+          "ready_for_review": 2,
+          "submitted": 7
+        }
+      },
+      "source": "docs/source/_static/registry_submission_inventory.json",
+      "status": "mixed_external_acceptance",
+      "summary": "Registry evidence includes published, submitted, deferred, and maintainer-review states; not all external registries are accepted.",
+      "title": "Registry state"
+    },
+    {
+      "id": "binding_conformance",
+      "metrics": {
+        "binding_count": 7,
+        "binding_status_counts": {
+          "supported": 7
+        },
+        "kernel_schema_version": "1.0"
+      },
+      "source": "docs/source/_static/binding_conformance_inventory.json",
+      "status": "supported_bindings_documented",
+      "summary": "Polyglot binding conformance is documented across supported bindings with package checks and evidence paths.",
+      "title": "Binding conformance"
+    }
+  ],
+  "claim_guardrails": {
+    "external_acceptance": "Do not claim all registries accepted.",
+    "rust_ownership": "Do not claim full Rust ownership."
+  },
+  "evidence_date": "2026-06-16",
+  "generated_at": "2026-06-16T00:00:00Z",
+  "generated_by_track": "production_docs_observability_20260614",
+  "schema_version": 1,
+  "source_artifacts": {
+    "binding_conformance": "docs/source/_static/binding_conformance_inventory.json",
+    "registry_state": "docs/source/_static/registry_submission_inventory.json",
+    "release_readiness": "docs/source/_static/release_readiness_contract.json",
+    "rust_ownership": "docs/source/_static/rust_full_ownership_gate.json"
+  },
+  "staleness": {
+    "max_age_days": 30,
+    "source": "generated_at",
+    "status": "fresh"
+  }
+}

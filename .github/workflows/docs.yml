@@ -54,6 +54,9 @@ jobs:
       - name: Build documentation site
         run: pnpm build
 
+      - name: Generate production documentation dashboards
+        run: python ../../scripts/generate_docs_dashboards.py --json
+
       - name: Verify production documentation contract
         run: python ../../scripts/verify_production_docs.py --json
 
