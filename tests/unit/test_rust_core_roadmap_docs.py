@@ -351,7 +351,7 @@ def test_rust_core_roadmap_explicitly_rejects_full_rust_ownership() -> None:
 
     for phrase in (
         "Python remains the primary ergonomic and reference surface",
-        "the core is not fully Rust-owned today",
+        "Rust does not own the complete core today",
         "The core is not entirely Rust",
         "Python reference owner",
         "exposes Rust-native execution only for the documented slices",

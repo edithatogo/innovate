@@ -19,12 +19,45 @@
     "claimable_external_boundary",
     "not_claimable_until_promoted"
   ],
+  "fail_closed_contracts": {
+    "stable_payload_shapes": {
+      "default": "fail_release_claim",
+      "missing_entry": "fail_release_claim",
+      "missing_schema_fixture": "fail_release_claim",
+      "allowed_native_statuses": [
+        "rust_native_promoted"
+      ]
+    },
+    "promoted_model_operations": {
+      "required_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "missing_operation": "fail_release_claim",
+      "missing_binding_smoke": "fail_release_claim"
+    },
+    "documentation_claims": {
+      "full_rust_ownership_claim_allowed": false,
+      "missing_ledger_reference": "fail_docs_claim",
+      "overclaim_state": "fail_docs_claim"
+    }
+  },
   "model_families": [
     {
       "id": "bass",
       "status": "rust_native_promoted",
       "owner": "Rust core maintainers",
       "rationale": "Stable deterministic Bass fit, prediction, simulation, summary, diagnostics, and bounded fitted-state payloads have Rust-native coverage.",
+      "native_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
       "evidence": [
         "docs/source/_static/rust_native_model_family_coverage.json",
         "docs/source/_static/rust_native_model_family_slice_evidence.json",
@@ -38,6 +71,13 @@
       "status": "rust_native_promoted",
       "owner": "Rust core maintainers",
       "rationale": "Stable deterministic Logistic fit, prediction, simulation, summary, diagnostics, and bounded fitted-state payloads have Rust-native coverage.",
+      "native_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
       "evidence": [
         "docs/source/_static/rust_native_model_family_coverage.json",
         "docs/source/_static/rust_native_model_family_slice_evidence.json",
@@ -51,6 +91,13 @@
       "status": "rust_native_promoted",
       "owner": "Rust core maintainers",
       "rationale": "Stable deterministic Gompertz fit, prediction, simulation, summary, diagnostics, and bounded fitted-state payloads have Rust-native coverage.",
+      "native_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
       "evidence": [
         "docs/source/_static/rust_native_model_family_coverage.json",
         "docs/source/_static/rust_native_model_family_slice_evidence.json",
@@ -64,6 +111,13 @@
       "status": "rust_native_promoted",
       "owner": "Rust core maintainers",
       "rationale": "Stable deterministic Fisher-Pry fit, prediction, simulation, summary, diagnostics, and bounded fitted-state payloads have Rust-native coverage.",
+      "native_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
       "evidence": [
         "docs/source/_static/rust_native_model_family_coverage.json",
         "docs/source/_static/rust_native_model_family_slice_evidence.json",
@@ -77,6 +131,12 @@
       "status": "rust_native_promoted",
       "owner": "Rust core maintainers",
       "rationale": "Narrow single-generation deterministic Norton-Bass prediction, simulation, summary, and diagnostics are Rust-native.",
+      "native_operations": [
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
       "evidence": [
         "docs/source/_static/rust_native_model_family_coverage.json",
         "docs/source/_static/rust_native_model_family_slice_evidence.json",

@@ -5,7 +5,7 @@
     "summary": "Conductor roadmap remediation tracks are complete and archived. The full product vision remains a future-state program for full Rust ownership and maintainer-managed external submissions, while documentation cutover status is evidence-backed by passing Astro/Starlight build and check results.",
     "track_state": "archived_follow_on_tracks_complete",
     "vision_state": "partially_implemented_future_state_remaining",
-    "claim_policy": "Do not claim full Rust ownership, external submission acceptance, or production DocSearch readiness unless the corresponding evidence artifact or external gate is complete."
+    "claim_policy": "Do not claim full Rust ownership, external submission acceptance, or production DocSearch readiness unless the corresponding evidence artifact or external gate is complete. Rust release claims must consume docs/source/_static/rust_final_ownership_ledger.json."
   },
   "claim_categories": [
     "implemented",
@@ -46,8 +46,8 @@
     {
       "path": "docs/source/rust_core_roadmap.rst",
       "classification": "future_state",
-      "claim": "The core is not fully Rust-owned, and full Rust ownership must not be claimed until every canonical operation, model family, and stable payload shape is native or explicitly promoted elsewhere.",
-      "required_resolution": "Link operation and payload gaps to the new Rust-native completion tracks.",
+      "claim": "Rust does not own the complete core, and full Rust ownership must not be claimed until every canonical operation, model family, and stable payload shape is native or explicitly promoted elsewhere; release claims are fail-closed by docs/source/_static/rust_final_ownership_ledger.json.",
+      "required_resolution": "Link operation and payload gaps to the new Rust-native completion tracks and keep rust_final_ownership_ledger.json current.",
       "owning_track": "rust_native_operation_completion_20260614"
     },
     {

@@ -12,6 +12,11 @@ LEDGER_PATH = Path("docs/source/_static/rust_final_ownership_ledger.json")
 MODEL_FAMILY_COVERAGE = Path("docs/source/_static/rust_native_model_family_coverage.json")
 PAYLOAD_SHAPE_COVERAGE = Path("docs/source/_static/rust_native_payload_shape_coverage.json")
 OPERATION_GAP_INVENTORY = Path("docs/source/_static/rust_native_operation_gap_inventory.json")
+ROADMAP_DOCS = [
+    Path("docs/source/rust_core_roadmap.rst"),
+    Path("docs/astro-site/src/content/docs/operations/rust-core.md"),
+    Path("docs/source/_static/vision_roadmap_status_inventory.json"),
+]
 
 ALLOWED_LEDGER_STATUSES = {
     "rust_native_promoted",
@@ -103,3 +108,79 @@ def test_final_ownership_ledger_preserves_current_claim_boundaries() -> None:
         "uncertainty_or_posterior",
     ):
         assert payloads[payload_shape]["status"] == "retain_outside_core"
+
+
+def test_stable_payload_shapes_are_fail_closed_against_unowned_entries() -> None:
+    """Stable payloads must be Rust-owned or fail closed before release claims."""
+    ledger = _load_json(LEDGER_PATH)
+
+    guardrails = ledger["fail_closed_contracts"]["stable_payload_shapes"]
+    assert guardrails["default"] == "fail_release_claim"
+    assert guardrails["missing_entry"] == "fail_release_claim"
+    assert guardrails["missing_schema_fixture"] == "fail_release_claim"
+    assert guardrails["allowed_native_statuses"] == ["rust_native_promoted"]
+
+    payload_entries = {entry["id"]: entry for entry in ledger["payload_shapes"]}
+    stable_payloads = [
+        entry
+        for entry in _load_json(PAYLOAD_SHAPE_COVERAGE)["payload_shapes"]
+        if entry["status"] == "stable"
+    ]
+    assert stable_payloads
+
+    for payload in stable_payloads:
+        ledger_entry = payload_entries[payload["payload_shape"]]
+        assert ledger_entry["status"] == "rust_native_promoted"
+        assert ledger_entry["release_claim_state"] == "claimable_native"
+
+
+def test_promoted_model_families_are_fail_closed_against_missing_operations() -> None:
+    """Promoted model families must list the Rust operations they support."""
+    ledger = _load_json(LEDGER_PATH)
+
+    guardrails = ledger["fail_closed_contracts"]["promoted_model_operations"]
+    required_operations = set(guardrails["required_operations"])
+    assert required_operations == {
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model",
+    }
+    assert guardrails["missing_operation"] == "fail_release_claim"
+    assert guardrails["missing_binding_smoke"] == "fail_release_claim"
+
+    for entry in ledger["model_families"]:
+        if entry["status"] != "rust_native_promoted":
+            continue
+        operations = set(entry["native_operations"])
+        if entry["id"] == "norton_bass":
+            assert operations == {
+                "predict_model",
+                "simulate_model",
+                "summarize_model",
+                "diagnose_model",
+            }
+        else:
+            assert operations == required_operations
+
+
+def test_docs_full_ownership_claims_are_fail_closed_by_ledger() -> None:
+    """Docs must not claim full Rust ownership until the ledger allows it."""
+    ledger = _load_json(LEDGER_PATH)
+    guardrails = ledger["fail_closed_contracts"]["documentation_claims"]
+
+    assert guardrails["full_rust_ownership_claim_allowed"] is False
+    assert guardrails["missing_ledger_reference"] == "fail_docs_claim"
+    assert guardrails["overclaim_state"] == "fail_docs_claim"
+
+    overclaim_phrases = {
+        "fully rust-owned",
+        "full rust ownership is complete",
+        "all model families are rust-native",
+        "all stable payload shapes are rust-native",
+    }
+    for path in ROADMAP_DOCS:
+        text = path.read_text().lower()
+        assert "rust_final_ownership_ledger.json" in text
+        assert not any(phrase in text for phrase in overclaim_phrases)

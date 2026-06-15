@@ -8,7 +8,7 @@
     - [x] Add machine-readable owner, rationale, evidence path, and release-claim state
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Add fail-first ownership contract tests
+- [~] Task: Add fail-first ownership contract tests
     - [ ] Add tests that fail for unowned stable payload shapes
     - [ ] Add tests that fail for promoted model families missing Rust operation coverage
     - [ ] Add tests that fail when docs claim full ownership without evidence

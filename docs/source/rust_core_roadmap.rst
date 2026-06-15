@@ -7,7 +7,7 @@ Purpose
 The Rust core roadmap turns the contract-first architecture into an execution
 plan. Python remains the primary ergonomic and reference surface. Rust is the
 strategic long-term runtime for robust, efficient, portable kernel execution,
-but the core is not fully Rust-owned today.
+but Rust does not own the complete core today.
 
 The roadmap is governed by ADR 0004 and follows four rules:
 
@@ -137,6 +137,10 @@ Docs and release notes should consume that gate before claiming full Rust
 ownership. Its current decision is ``not_allowed`` because model-family and
 payload-shape boundaries remain explicit. The latest validation evidence is
 :download:`rust_full_ownership_validation.json <_static/rust_full_ownership_validation.json>`.
+The fail-closed ownership ledger is
+:download:`rust_final_ownership_ledger.json <_static/rust_final_ownership_ledger.json>`;
+it records owner, rationale, evidence, release-claim state, and revisit policy
+for every model family, stable payload shape, and canonical operation.
 
 The table below is a human summary of the current default slices.
 
