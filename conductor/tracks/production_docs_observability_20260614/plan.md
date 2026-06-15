@@ -32,7 +32,7 @@
     - [x] Commit this plan update with the task commit SHA
 - [x] Task: Conductor - User Manual Verification 'Evidence-Backed Dashboards' (Protocol in workflow.md) [19bd9aa]
 
-## Phase 3: Examples, API Snippets, and Deployment Readiness
+## Phase 3: Examples, API Snippets, and Deployment Readiness [checkpoint: 73dbbea]
 
 - [x] Task: Validate examples and API snippets [55a3fe8]
     - [x] Add or update snippet validation for Python and binding examples
@@ -46,4 +46,4 @@
     - [x] Refresh Starlight validation evidence
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Conductor - User Manual Verification 'Examples, API Snippets, and Deployment Readiness' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Examples, API Snippets, and Deployment Readiness' (Protocol in workflow.md) [73dbbea]
