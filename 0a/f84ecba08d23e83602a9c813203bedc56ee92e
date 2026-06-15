@@ -1,0 +1,25 @@
+Task: Publish binding parity documentation
+
+Summary:
+- Added current and latest Starlight binding parity pages with language status, machine-readable evidence paths, conformance artifact references, and registry receipt links.
+- Added a Sphinx binding parity page and linked binding parity/conformance CI in the Sphinx index.
+- Replaced stale wording that framed Astro as a future replacement for Sphinx binding entry points.
+- Added tests for parity page coverage, package receipt links, evidence paths, and stale-claim prevention.
+
+Files:
+- conductor/tracks/polyglot_binding_excellence_20260614/plan.md
+- docs/astro-site/src/content/docs/bindings/index.md
+- docs/astro-site/src/content/docs/bindings/parity.md
+- docs/astro-site/src/content/docs/latest/bindings/index.md
+- docs/astro-site/src/content/docs/latest/bindings/parity.md
+- docs/source/binding_parity.rst
+- docs/source/index.rst
+- tests/unit/test_binding_parity_docs.py
+
+Validation:
+- uv run pytest tests/unit/test_binding_parity_docs.py tests/unit/test_binding_conformance_ci.py tests/unit/test_polyglot_binding_hardening.py tests/unit/test_polyglot_binding_conformance.py tests/unit/test_polyglot_binding_golden_fixtures.py -q
+- uv run ruff check tests/unit/test_binding_parity_docs.py tests/unit/test_binding_conformance_ci.py tests/unit/test_polyglot_binding_hardening.py tests/unit/test_polyglot_binding_conformance.py tests/unit/test_polyglot_binding_golden_fixtures.py
+- uv run python -m sphinx -b html docs/source /tmp/innovate-docs-build-polyglot passed with pre-existing warnings.
+
+Why:
+This replaces generic binding claims with evidence-backed parity documentation across Starlight and legacy Sphinx entry points.
