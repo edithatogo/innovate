@@ -8,6 +8,7 @@
       "version": "0.5.0",
       "phase": "language_binding_hardening",
       "status": "supported",
+      "package_manifest": "bindings/r/DESCRIPTION",
       "package_checks": [
         "Rscript bindings/r/tests/run.R",
         "R CMD build bindings/r",
@@ -27,6 +28,7 @@
       "version": "0.5.0",
       "phase": "language_binding_hardening",
       "status": "supported",
+      "package_manifest": "bindings/julia/Project.toml",
       "package_checks": [
         "julia --project=bindings/julia bindings/julia/test/runtests.jl",
         "julia --project=bindings/julia -e 'using Pkg; Pkg.test()'"
@@ -45,6 +47,7 @@
       "version": "0.5.0",
       "phase": "language_binding_hardening",
       "status": "supported",
+      "package_manifest": "bindings/typescript/package.json",
       "package_checks": [
         "npm run schema:check",
         "npm run typecheck",
@@ -65,6 +68,7 @@
       "version": "0.5.0",
       "phase": "language_binding_hardening",
       "status": "supported",
+      "package_manifest": "bindings/go/go.mod",
       "package_checks": ["go test ./...", "go list -m"],
       "conformance_cases": 6,
       "examples": ["bindings/go/example_test.go"],
@@ -80,6 +84,7 @@
       "version": "0.5.0",
       "phase": "language_binding_hardening",
       "status": "supported",
+      "package_manifest": "bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj",
       "package_checks": [
         "dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj",
         "dotnet pack bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj"
@@ -98,6 +103,7 @@
       "version": "0.5.0",
       "phase": "language_binding_hardening",
       "status": "supported",
+      "package_manifest": "bindings/rust/Cargo.toml",
       "package_checks": [
         "cargo fmt --check",
         "cargo clippy --all-targets --all-features -- -D warnings",
