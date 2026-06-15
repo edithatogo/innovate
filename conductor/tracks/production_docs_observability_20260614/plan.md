@@ -40,10 +40,10 @@
     - [x] Add CI evidence for runnable examples
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [~] Task: Add production deployment readiness evidence
-    - [ ] Verify GitHub Pages workflow, generated routes, and deployment artifacts
-    - [ ] Add docs release checklist and rollback notes
-    - [ ] Refresh Starlight validation evidence
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Add production deployment readiness evidence [b1c2a67]
+    - [x] Verify GitHub Pages workflow, generated routes, and deployment artifacts
+    - [x] Add docs release checklist and rollback notes
+    - [x] Refresh Starlight validation evidence
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Conductor - User Manual Verification 'Examples, API Snippets, and Deployment Readiness' (Protocol in workflow.md)
