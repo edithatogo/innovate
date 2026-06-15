@@ -3,18 +3,18 @@
 ## Phase 1: Advanced API Contracts
 
 - [x] Task: Define advanced capability contracts [5bbcbae]
-    - [ ] Specify stable and experimental APIs for ensembles, policy scenarios, streaming updates, and uncertainty calibration
-    - [ ] Add serialization and capability metadata for result objects
-    - [ ] Add fail-first tests for API shape and dependency fallback behavior
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+    - [x] Specify stable and experimental APIs for ensembles, policy scenarios, streaming updates, and uncertainty calibration
+    - [x] Add serialization and capability metadata for result objects
+    - [x] Add fail-first tests for API shape and dependency fallback behavior
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [x] Task: Add advanced workflow fixtures [43125f9]
-    - [ ] Create representative datasets for ensemble, policy, streaming, and calibration workflows
-    - [ ] Add reproducibility metadata and fixture validation tests
-    - [ ] Document fixture assumptions
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
-- [ ] Task: Conductor - User Manual Verification 'Advanced API Contracts' (Protocol in workflow.md)
+    - [x] Create representative datasets for ensemble, policy, streaming, and calibration workflows
+    - [x] Add reproducibility metadata and fixture validation tests
+    - [x] Document fixture assumptions
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
+- [~] Task: Conductor - User Manual Verification 'Advanced API Contracts' (Protocol in workflow.md)
 
 ## Phase 2: Modeling Feature Implementation
 
