@@ -2,12 +2,12 @@
 
 ## Phase 1: Live Evidence Refresh
 
-- [~] Task: Refresh package-manager receipt evidence
-    - [ ] Verify PyPI, npm, crates.io, Julia General, Go modules, NuGet, and R-universe current states
-    - [ ] Record version, receipt URL, acceptance state, and evidence timestamp
-    - [ ] Add drift tests for stale or mismatched registry states
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Refresh package-manager receipt evidence [f52cc66]
+    - [x] Verify PyPI, npm, crates.io, Julia General, Go modules, NuGet, and R-universe current states
+    - [x] Record version, receipt URL, acceptance state, and evidence timestamp
+    - [x] Add drift tests for stale or mismatched registry states
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Refresh pending external target evidence
     - [ ] Re-check CRAN, Spack, EasyBuild, HPSF, E4S, and community target requirements
     - [ ] Update blocker, owner, and next-action fields with current evidence
