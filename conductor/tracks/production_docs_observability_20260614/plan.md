@@ -2,12 +2,12 @@
 
 ## Phase 1: Production Docs Gates
 
-- [~] Task: Add production docs verification contract
-    - [ ] Define route, redirect, sitemap, search, version, and API generation checks
-    - [ ] Add tests that fail when production docs evidence is missing or stale
-    - [ ] Document local and CI verification commands
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Add production docs verification contract [592dd0b]
+    - [x] Define route, redirect, sitemap, search, version, and API generation checks
+    - [x] Add tests that fail when production docs evidence is missing or stale
+    - [x] Document local and CI verification commands
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Finalize DocSearch gate behavior
     - [ ] Verify fallback behavior without Algolia credentials
     - [ ] Add deployment-secret documentation and CI-safe checks
