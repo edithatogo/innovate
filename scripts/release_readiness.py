@@ -185,6 +185,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--json", action="store_true", help="emit JSON instead of text")
     parser.add_argument("--evidence-root", type=Path, default=DEFAULT_EVIDENCE_ROOT)
     parser.add_argument("--output", type=Path, help="write JSON report to this path")
+    parser.add_argument(
+        "--allow-blocked",
+        action="store_true",
+        help="return success after writing a blocked report; useful for report-generation lanes",
+    )
     args = parser.parse_args(argv)
 
     report = build_readiness_report(evidence_root=args.evidence_root)
@@ -197,7 +202,7 @@ def main(argv: list[str] | None = None) -> int:
     else:
         print(render_text(report))
 
-    return 0 if report["overall_status"] == "release_ready" else 1
+    return 0 if args.allow_blocked or report["overall_status"] == "release_ready" else 1
 
 
 if __name__ == "__main__":

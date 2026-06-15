@@ -11,6 +11,7 @@ migration work.
 Available pages:
 
 - Publication
+- Release Readiness
 - Release Notes
 - Plugins
 - Stability

@@ -38,6 +38,7 @@ Start here
    polyglot_repo_architecture
    binding_publication_ci
    release_notes_policy
+   release_readiness
    tutorials
    bindings
    adr
@@ -68,6 +69,7 @@ The architectural rationale and roadmap live in the repository docs, not in the 
 - ``hpc_packaging_registry_readiness``
 - ``external_governance_sustainability``
 - ``polyglot_repo_architecture``
+- ``release_readiness``
 - ``adr``
 
 This page is the legacy Sphinx landing page retained for archival and redirect

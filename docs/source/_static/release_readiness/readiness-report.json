@@ -1,0 +1,163 @@
+{
+  "checks": [
+    {
+      "artifact": "docs/source/_static/release_readiness/evidence/python-tests.json",
+      "id": "python_tests",
+      "lane": "fast",
+      "owner": "quality",
+      "producer": "uv run nox -s tests",
+      "status": "missing"
+    },
+    {
+      "artifact": "docs/source/_static/release_readiness/evidence/coverage.json",
+      "id": "coverage",
+      "lane": "fast",
+      "owner": "quality",
+      "producer": "pytest coverage.xml",
+      "status": "missing"
+    },
+    {
+      "artifact": "docs/source/_static/release_readiness/evidence/mutation-sampling.json",
+      "id": "mutation_sampling",
+      "lane": "nightly",
+      "owner": "quality",
+      "producer": "mutmut sampled run",
+      "status": "missing"
+    },
+    {
+      "artifact": "docs/source/_static/release_readiness/evidence/type-checks.json",
+      "id": "type_checks",
+      "lane": "fast",
+      "owner": "quality",
+      "producer": "uv run nox -s types",
+      "status": "missing"
+    },
+    {
+      "artifact": "docs/source/_static/release_readiness/evidence/lint-format.json",
+      "id": "lint_format",
+      "lane": "fast",
+      "owner": "quality",
+      "producer": "uv run nox -s lint",
+      "status": "missing"
+    },
+    {
+      "artifact": "docs/source/_static/release_readiness/evidence/docs-build.json",
+      "id": "docs_build",
+      "lane": "fast",
+      "owner": "docs",
+      "producer": "uv run nox -s docs and pnpm build",
+      "status": "missing"
+    },
+    {
+      "artifact": "docs/source/_static/release_readiness/evidence/rust-tests.json",
+      "id": "rust_tests",
+      "lane": "fast",
+      "owner": "rust",
+      "producer": "cargo test --manifest-path bindings/rust/Cargo.toml",
+      "status": "missing"
+    },
+    {
+      "artifact": "docs/source/_static/release_readiness/evidence/binding-smoke.json",
+      "id": "binding_smoke",
+      "lane": "release",
+      "owner": "bindings",
+      "producer": "language binding package smoke tests",
+      "status": "missing"
+    },
+    {
+      "artifact": "docs/source/_static/release_readiness/evidence/package-dry-run.json",
+      "id": "package_dry_run",
+      "lane": "release",
+      "owner": "release",
+      "producer": "uv build and registry dry-run checks",
+      "status": "missing"
+    },
+    {
+      "artifact": "docs/source/_static/release_readiness/evidence/security-audit.json",
+      "id": "security_audit",
+      "lane": "release",
+      "owner": "security",
+      "producer": "bandit, safety, cargo audit, and npm audit where available",
+      "status": "missing"
+    },
+    {
+      "artifact": "docs/source/_static/release_readiness/evidence/sbom.json",
+      "id": "sbom",
+      "lane": "release",
+      "owner": "supply_chain",
+      "producer": "CycloneDX or equivalent SBOM generator",
+      "status": "missing"
+    },
+    {
+      "artifact": "docs/source/_static/release_readiness/evidence/license-inventory.json",
+      "id": "license_inventory",
+      "lane": "release",
+      "owner": "supply_chain",
+      "producer": "license inventory scanner",
+      "status": "missing"
+    },
+    {
+      "artifact": "docs/source/_static/release_readiness/evidence/provenance.json",
+      "id": "provenance",
+      "lane": "release",
+      "owner": "supply_chain",
+      "producer": "SLSA-style provenance metadata where available",
+      "status": "missing"
+    },
+    {
+      "artifact": "docs/source/_static/release_readiness/evidence/checksums.json",
+      "id": "checksums",
+      "lane": "release",
+      "owner": "release",
+      "producer": "artifact checksum manifest",
+      "status": "missing"
+    },
+    {
+      "artifact": "docs/source/_static/release_readiness/evidence/reproducibility.json",
+      "id": "reproducibility",
+      "lane": "release",
+      "owner": "quality",
+      "producer": "seeded simulation, benchmark fixture, and generated docs reproducibility checks",
+      "status": "missing"
+    },
+    {
+      "artifact": "docs/source/_static/release_readiness/evidence/compatibility.json",
+      "id": "compatibility",
+      "lane": "release",
+      "owner": "release",
+      "producer": "Python, Rust MSRV, Node/pnpm, and binding manifest compatibility checks",
+      "status": "missing"
+    }
+  ],
+  "contract_path": "docs/source/_static/release_readiness_contract.json",
+  "evidence_root": "docs/source/_static/release_readiness/evidence",
+  "failing_evidence": [],
+  "missing_evidence": [
+    "python_tests",
+    "coverage",
+    "mutation_sampling",
+    "type_checks",
+    "lint_format",
+    "docs_build",
+    "rust_tests",
+    "binding_smoke",
+    "package_dry_run",
+    "security_audit",
+    "sbom",
+    "license_inventory",
+    "provenance",
+    "checksums",
+    "reproducibility",
+    "compatibility"
+  ],
+  "overall_status": "blocked",
+  "release_state": "release_candidate",
+  "schema_version": 1,
+  "stale_evidence": [],
+  "status_counts": {
+    "fail": 0,
+    "missing": 16,
+    "pass": 0,
+    "stale": 0
+  }
+}

@@ -57,6 +57,7 @@ export default {
       label: 'Maintainers',
       items: [
         { label: 'Publication', link: '/maintainers/publication/' },
+        { label: 'Release Readiness', link: '/maintainers/release-readiness/' },
         { label: 'Release Notes', link: '/maintainers/release-notes/' },
         { label: 'Plugins', link: '/maintainers/plugins/' },
         { label: 'Runtime Logging', link: '/maintainers/runtime-logging/' },

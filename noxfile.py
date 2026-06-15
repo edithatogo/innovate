@@ -33,7 +33,7 @@ PUBLIC_API_TYPE_TARGETS = (
 )
 
 nox.options.default_venv_backend = "none"
-nox.options.sessions = ("lint", "types", "tests", "docs", "package", "version_sync")
+nox.options.sessions = ("lint", "types", "tests", "docs", "package", "version_sync", "release_readiness")
 
 
 def _run_uv(session: nox.Session, *args: str, env: dict[str, str] | None = None) -> None:
@@ -144,3 +144,20 @@ def version_sync(session: nox.Session) -> None:
         _run_uv(session, "run", "python", script, "--write")
         return
     _run_uv(session, "run", "python", script, "--check")
+
+
+@nox.session(python=False)
+def release_readiness(session: nox.Session) -> None:
+    """Generate the local release-readiness report artifacts."""
+    _run_uv(session, "sync", "--python", DEFAULT_PYTHON)
+    _run_uv(
+        session,
+        "run",
+        "python",
+        "scripts/release_readiness.py",
+        "--json",
+        "--allow-blocked",
+        "--output",
+        "docs/source/_static/release_readiness/readiness-report.json",
+        *session.posargs,
+    )
