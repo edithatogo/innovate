@@ -8,12 +8,12 @@
     - [x] Add machine-readable owner, rationale, evidence path, and release-claim state
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [~] Task: Add fail-first ownership contract tests
-    - [ ] Add tests that fail for unowned stable payload shapes
-    - [ ] Add tests that fail for promoted model families missing Rust operation coverage
-    - [ ] Add tests that fail when docs claim full ownership without evidence
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Add fail-first ownership contract tests `bf8acbc`
+    - [x] Add tests that fail for unowned stable payload shapes
+    - [x] Add tests that fail for promoted model families missing Rust operation coverage
+    - [x] Add tests that fail when docs claim full ownership without evidence
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Conductor - User Manual Verification 'Ownership Ledger and Contract Tests' (Protocol in workflow.md)
 
 ## Phase 2: Rust-Native Promotion
