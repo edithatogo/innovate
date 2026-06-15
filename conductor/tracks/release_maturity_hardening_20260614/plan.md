@@ -40,10 +40,10 @@
     - [x] Add artifact upload for readiness reports
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Execute and document a release dry run
-    - [ ] Run package build checks for all package surfaces
-    - [ ] Verify docs and registry receipts consume the readiness artifact
-    - [ ] Update release documentation with the final gate sequence
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Execute and document a release dry run `1a660d9`
+    - [x] Run package build checks for all package surfaces
+    - [x] Verify docs and registry receipts consume the readiness artifact
+    - [x] Update release documentation with the final gate sequence
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Conductor - User Manual Verification 'CI Enforcement and Release Dry Run' (Protocol in workflow.md)
