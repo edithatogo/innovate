@@ -26,7 +26,7 @@
       "status": "stable",
       "ownership_status": "rust_native_promoted",
       "schema_fixture": "bindings/rust/tests/operations.rs",
-      "scope": "time and observed arrays for deterministic logistic, Gompertz, Fisher-Pry, and Bass fit slices"
+      "scope": "time and observed arrays for deterministic logistic, Gompertz, Fisher-Pry, Bass, and single-generation Norton-Bass fit slices"
     },
     {
       "payload_shape": "covariates",

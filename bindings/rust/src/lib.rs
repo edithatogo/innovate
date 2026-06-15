@@ -442,6 +442,7 @@ impl KernelBinding {
             "logistic" => logistic_fit_native_response(request),
             "bass" => bass_fit_native_response(request),
             "fisher_pry" => fisher_pry_fit_native_response(request),
+            "norton_bass" => norton_bass_fit_native_response(request),
             model_key => Err(KernelBindingError::unsupported_native_operation(
                 KernelOperation::FitModel,
                 format!("native fitting is not implemented for model '{model_key}'"),
@@ -1771,6 +1772,118 @@ fn norton_bass_summary_native_response(
     diagnose_only: bool,
 ) -> Result<KernelResponse, KernelBindingError> {
     norton_bass_summary_or_diagnose_response(request, diagnose_only)
+}
+
+fn norton_bass_fit_native_response(
+    request: &KernelRequest,
+) -> Result<KernelResponse, KernelBindingError> {
+    if request.operation != KernelOperation::FitModel {
+        return Err(KernelBindingError::invalid_request(
+            request.operation,
+            "native fitting requires a fit_model request",
+        ));
+    }
+
+    let model_key = request.model_key.as_deref().unwrap_or("");
+    if model_key != "norton_bass" {
+        return Err(KernelBindingError::unsupported_native_operation(
+            KernelOperation::FitModel,
+            format!("native fitting is not implemented for model '{model_key}'"),
+        ));
+    }
+
+    let payload = request.payload.as_object().ok_or_else(|| {
+        KernelBindingError::invalid_request(
+            KernelOperation::FitModel,
+            "fit_model payload must be an object",
+        )
+    })?;
+    let inputs = object_section(payload, "inputs", KernelOperation::FitModel)?;
+    let time = numeric_array_from_aliases(inputs, &["time", "t"], KernelOperation::FitModel)?;
+    let observed = numeric_array_from_aliases(
+        inputs,
+        &["observed", "y", "values", "adoption", "share"],
+        KernelOperation::FitModel,
+    )?;
+
+    let constructor_kwargs = _fit_constructor_kwargs(payload);
+    let n_generations = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("n_generations"))
+        .and_then(Value::as_u64)
+        .unwrap_or(1);
+    let has_covariates = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("covariates"))
+        .is_some_and(|covariates| !covariates.as_array().is_some_and(Vec::is_empty));
+    let has_event = constructor_kwargs
+        .and_then(|kwargs| kwargs.get("t_event"))
+        .is_some_and(|value| !value.is_null());
+    let input_covariates = inputs.get("covariates").is_some();
+    let fit_options = payload.get("fit_options").and_then(Value::as_object);
+    let fitter_options = payload.get("fitter_options").and_then(Value::as_object);
+    if n_generations != 1
+        || has_covariates
+        || has_event
+        || input_covariates
+        || fit_options.is_some_and(|values| !values.is_empty())
+        || fitter_options.is_some_and(|values| !values.is_empty())
+    {
+        return Err(KernelBindingError::unsupported_native_operation(
+            KernelOperation::FitModel,
+            "native Norton-Bass fitting currently supports one generation without covariates, events, or custom fitter options",
+        ));
+    }
+
+    let fit = fit_bass_curve(&time, &observed)?;
+    let prediction_rows: Vec<Vec<f64>> = fit
+        .predictions
+        .iter()
+        .copied()
+        .map(|value| vec![value])
+        .collect();
+    let diagnostics = fit_diagnostics(&time, &observed, &fit.predictions, 3, "NortonBassModel");
+    let state = json!({
+        "model_key": model_key,
+        "model_name": "NortonBassModel",
+        "constructor_kwargs": _copy_object_or_empty(constructor_kwargs),
+        "parameters": {
+            "p1": fit.p,
+            "q1": fit.q,
+            "m1": fit.m,
+        },
+        "predict_kwargs": {},
+    });
+
+    Ok(KernelResponse {
+        schema_version: KERNEL_SCHEMA_VERSION.to_string(),
+        operation: KernelOperation::FitModel,
+        model_key: None,
+        result: Some(json!({
+            "model_key": model_key,
+            "model_name": "NortonBassModel",
+            "family": "substitution",
+            "parameters": {
+                "p1": fit.p,
+                "q1": fit.q,
+                "m1": fit.m,
+            },
+            "predictions": {
+                "columns": ["series_1"],
+                "rows": prediction_rows,
+                "metadata": {
+                    "shape": [time.len(), 1]
+                }
+            },
+            "diagnostics": diagnostics,
+            "state": state,
+        })),
+        error: None,
+        metadata: json!({
+            "model_key": model_key,
+            "family": "substitution",
+            "model_name": "NortonBassModel",
+            "runtime": "rust_native"
+        }),
+    })
 }
 
 fn norton_bass_predict_or_simulate_response(

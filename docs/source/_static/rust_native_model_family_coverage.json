@@ -42,7 +42,7 @@
       "model_key": "norton_bass",
       "family": "substitution",
       "ownership_status": "rust_native_promoted",
-      "native_scope": "narrow single-generation prediction, simulation, summary, and diagnostics",
+      "native_scope": "narrow single-generation fit, prediction, simulation, summary, and diagnostics",
       "boundary": "multi-generation, covariate, and event payloads remain Python bridge boundaries"
     },
     {

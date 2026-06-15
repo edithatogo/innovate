@@ -67,8 +67,8 @@ def test_rust_core_roadmap_names_candidate_operations_and_gates() -> None:
     assert "Fisher-Pry" in roadmap
     assert "promoted Bass execution slices" in roadmap
     assert "promoted Bass execution slices covering fit, prediction, simulation, summary, and diagnostics" in roadmap
-    assert "narrow Norton-Bass prediction, simulation, summary, and diagnostics slices" in roadmap
-    assert "logistic, Fisher-Pry, and Gompertz fitting" in roadmap
+    assert "narrow Norton-Bass fit, prediction, simulation, summary, and diagnostics slices" in roadmap
+    assert "logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass fitting" in roadmap
     assert "logistic, Fisher-Pry, Gompertz, and Bass prediction" in roadmap
     assert "narrow Norton-Bass prediction for single-generation fitted states" in roadmap
     assert (
@@ -109,7 +109,7 @@ def test_rust_core_roadmap_inventories_runtime_status_and_xla_fit() -> None:
 
     expected_inventory = {
         "discover_models": ("Native metadata discovery", "Low"),
-        "fit_model": ("Native logistic, Fisher-Pry, and Gompertz fitting", "Medium"),
+        "fit_model": ("Native logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass fitting", "Medium"),
         "predict_model": ("Native logistic, Fisher-Pry, Gompertz, and Bass prediction", "High"),
         "simulate_model": ("Native logistic, Fisher-Pry, Gompertz, and Bass simulation", "High"),
         "summarize_model": (
@@ -165,7 +165,7 @@ def test_rust_core_roadmap_audit_matches_current_runtime_ownership() -> None:
         "bindings/rust/src/lib.rs",
         "Python reference owner",
         "packaged discovery metadata",
-        "logistic, Fisher-Pry, and Gompertz ``fit_model``",
+        "logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass ``fit_model``",
         "The first implemented slices are Rust-native logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass summary and diagnostics for simple fitted states",
         "logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass ``predict_model``/``simulate_model`` fitted-state execution",
         "Python bridge entrypoint helpers",

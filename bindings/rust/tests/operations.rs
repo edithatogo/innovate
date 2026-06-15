@@ -115,6 +115,19 @@ fn norton_bass_prediction_payload(n_generations: u64, time: Vec<f64>) -> serde_j
     })
 }
 
+fn norton_bass_fit_payload(n_generations: u64) -> serde_json::Value {
+    json!({
+        "constructor_kwargs": {
+            "n_generations": n_generations,
+            "covariates": []
+        },
+        "inputs": {
+            "time": [0.0, 0.75, 1.5, 2.25, 3.0, 3.75],
+            "observed": [0.0, 7.8, 20.6, 39.5, 61.4, 84.9]
+        }
+    })
+}
+
 fn norton_bass_analysis_payload(n_generations: u64) -> serde_json::Value {
     json!({
         "state": {
@@ -1575,6 +1588,102 @@ fn native_norton_bass_diagnose_matches_python_bridge_contract() {
     assert_eq!(native_result["state"]["parameters"]["q1"], 0.1);
     assert_eq!(native_result["state"]["parameters"]["m1"], 100.0);
     assert_eq!(native_result["diagnostics"]["support_level"], "supported");
+}
+
+#[test]
+fn native_norton_bass_fit_matches_python_bridge_contract() {
+    let binding = KernelBinding::new();
+    let payload = norton_bass_fit_payload(1);
+
+    let request = binding.fit_model_request("norton_bass", payload.clone());
+    let native = binding
+        .fit_model_native(&request)
+        .expect("native Norton-Bass fit should succeed");
+    let bridged = binding
+        .fit_model_via_bridge("norton_bass", payload)
+        .expect("Python bridge Norton-Bass fit should succeed");
+
+    assert_eq!(native.schema_version, bridged.schema_version);
+    assert_eq!(native.operation, KernelOperation::FitModel);
+    assert_eq!(native.error, None);
+    assert_eq!(native.metadata["model_key"], "norton_bass");
+    assert_eq!(native.metadata["model_name"], "NortonBassModel");
+    assert_eq!(native.metadata["runtime"], "rust_native");
+
+    let native_summary = native
+        .diagnostics_summary()
+        .expect("native Norton-Bass fit should expose diagnostics summary");
+    let bridged_summary = bridged
+        .diagnostics_summary()
+        .expect("bridged Norton-Bass fit should expose diagnostics summary");
+    assert_eq!(native_summary.support_level, bridged_summary.support_level);
+    assert_eq!(native_summary.provenance, bridged_summary.provenance);
+    assert_eq!(
+        native_summary.comparison_family,
+        bridged_summary.comparison_family
+    );
+    assert_eq!(
+        native_summary.model_name.as_deref(),
+        Some("NortonBassModel")
+    );
+
+    let native_result = native
+        .result
+        .expect("native Norton-Bass fit should include a result");
+    let bridged_result = bridged
+        .result
+        .expect("bridged Norton-Bass fit should include a result");
+    assert_eq!(native_result["family"], bridged_result["family"]);
+    assert_eq!(native_result["model_name"], bridged_result["model_name"]);
+    assert_eq!(
+        native_result["predictions"]["columns"],
+        bridged_result["predictions"]["columns"]
+    );
+    assert_eq!(
+        native_result["predictions"]["metadata"],
+        bridged_result["predictions"]["metadata"]
+    );
+
+    for key in ["p1", "q1", "m1"] {
+        let native_value = native_result["parameters"][key]
+            .as_f64()
+            .expect("native Norton-Bass parameter should be numeric");
+        let bridged_value = bridged_result["parameters"][key]
+            .as_f64()
+            .expect("bridged Norton-Bass parameter should be numeric");
+        assert!(native_value.is_finite() && bridged_value.is_finite());
+        assert!(
+            native_value > 0.0,
+            "native Norton-Bass parameter '{key}' should be positive"
+        );
+        assert!(
+            bridged_value > 0.0,
+            "bridged Norton-Bass parameter '{key}' should be positive"
+        );
+    }
+
+    let native_rows = native_result["predictions"]["rows"]
+        .as_array()
+        .expect("native Norton-Bass prediction rows should be an array");
+    let bridged_rows = bridged_result["predictions"]["rows"]
+        .as_array()
+        .expect("bridged Norton-Bass prediction rows should be an array");
+    assert_eq!(native_rows.len(), bridged_rows.len());
+}
+
+#[test]
+fn native_norton_bass_fit_falls_back_for_multi_generation_payloads() {
+    let binding = KernelBinding::new();
+    let payload = norton_bass_fit_payload(2);
+
+    let request = binding.fit_model_request("norton_bass", payload);
+    let error = binding
+        .fit_model_native(&request)
+        .expect_err("native Norton-Bass fit should reject multi-generation payloads");
+
+    assert_eq!(error.code, "unsupported_native_operation");
+    assert_eq!(error.operation, Some(KernelOperation::FitModel));
+    assert!(error.message.contains("Norton-Bass"));
 }
 
 #[test]

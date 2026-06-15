@@ -404,6 +404,8 @@ def test_rust_native_operations_suite_covers_all_promoted_slices() -> None:
         "native_bass_reports_structured_errors_for_invalid_or_unsupported_shapes",
         "native_bass_summary_matches_python_bridge_contract",
         "native_bass_diagnose_matches_python_bridge_contract",
+        "native_norton_bass_fit_matches_python_bridge_contract",
+        "native_norton_bass_fit_falls_back_for_multi_generation_payloads",
         "native_norton_bass_prediction_matches_python_bridge_contract",
         "native_norton_bass_simulation_matches_python_bridge_contract",
         "native_norton_bass_summary_matches_python_bridge_contract",

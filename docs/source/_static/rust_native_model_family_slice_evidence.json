@@ -44,7 +44,7 @@
       "model_key": "norton_bass",
       "family": "substitution",
       "ownership_status": "rust_native_promoted",
-      "promoted_operations": ["predict_model", "simulate_model", "summarize_model", "diagnose_model"],
+      "promoted_operations": ["fit_model", "predict_model", "simulate_model", "summarize_model", "diagnose_model"],
       "parity_evidence": "native_norton_bass_* Rust operation tests",
       "error_mapping_evidence": "native_norton_bass_fallback_paths_emit_tracing_events_for_unsupported_payloads"
     }

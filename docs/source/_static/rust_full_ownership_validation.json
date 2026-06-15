@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated_by_track": "rust_native_payload_model_coverage_20260614",
-  "validation_date": "2026-06-14",
+  "validation_date": "2026-06-15",
   "decision": "full_rust_ownership_not_claimed",
   "gate_source": "docs/source/_static/rust_full_ownership_gate.json",
   "validated_inputs": [
@@ -20,7 +20,7 @@
     {
       "command": "cargo test --manifest-path bindings/rust/Cargo.toml --test operations",
       "status": "passed",
-      "result": "32 passed"
+      "result": "34 passed"
     }
   ],
   "promoted_model_families": [

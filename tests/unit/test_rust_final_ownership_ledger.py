@@ -152,15 +152,7 @@ def test_promoted_model_families_are_fail_closed_against_missing_operations() ->
         if entry["status"] != "rust_native_promoted":
             continue
         operations = set(entry["native_operations"])
-        if entry["id"] == "norton_bass":
-            assert operations == {
-                "predict_model",
-                "simulate_model",
-                "summarize_model",
-                "diagnose_model",
-            }
-        else:
-            assert operations == required_operations
+        assert operations == required_operations
 
 
 def test_docs_full_ownership_claims_are_fail_closed_by_ledger() -> None:

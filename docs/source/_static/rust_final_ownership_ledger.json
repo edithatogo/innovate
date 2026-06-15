@@ -130,8 +130,9 @@
       "id": "norton_bass",
       "status": "rust_native_promoted",
       "owner": "Rust core maintainers",
-      "rationale": "Narrow single-generation deterministic Norton-Bass prediction, simulation, summary, and diagnostics are Rust-native.",
+      "rationale": "Narrow single-generation deterministic Norton-Bass fit, prediction, simulation, summary, and diagnostics are Rust-native.",
       "native_operations": [
+        "fit_model",
         "predict_model",
         "simulate_model",
         "summarize_model",

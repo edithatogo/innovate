@@ -33,13 +33,13 @@ current source layout so that documentation drift can be checked by tests:
   ``diagnose_model`` functions.
 * ``bindings/rust/src/lib.rs`` exposes Rust-native execution only for the
   documented slices: packaged discovery metadata; logistic, Fisher-Pry,
-  Gompertz, and Bass ``fit_model``; logistic, Fisher-Pry, Gompertz, Bass, and
-  narrow Norton-Bass ``summarize_model`` and ``diagnose_model``; and logistic,
-  Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass
+  Gompertz, Bass, and narrow Norton-Bass ``fit_model``; logistic, Fisher-Pry,
+  Gompertz, Bass, and narrow Norton-Bass ``summarize_model`` and
+  ``diagnose_model``; and logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass
   ``predict_model``/``simulate_model`` fitted-state execution. In short:
   Rust-native execution only for the documented slices.
   This preserves the previously audited wording that the documented native
-  surface includes logistic, Fisher-Pry, and Gompertz ``fit_model`` and
+  surface includes logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass ``fit_model`` and
   logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass
   ``predict_model``/``simulate_model`` fitted-state execution.
 * The Rust binding still contains the Python bridge entrypoint helpers through
@@ -62,8 +62,8 @@ current source layout so that documentation drift can be checked by tests:
   full Rust ownership.
   Today, model families such as ``composite``, ``multi_product``,
   ``network_diffusion``, and ``policy_hazard`` remain outside the Rust-native
-  slice, while ``norton_bass`` now has promoted prediction and simulation
-  slices and still uses the Python bridge for summary/diagnostics.
+  slice, while ``norton_bass`` now has promoted single-generation fit,
+  prediction, simulation, summary, and diagnostics slices.
   ``fisher_pry`` and ``gompertz`` have moved into the Rust-native
   substitution/diffusion slices. Covariates, event splits, probabilistic
   runtimes, custom fitter options, and incomplete fitted states now fail
@@ -93,9 +93,9 @@ behavior is already explicit in the functional kernel contract:
   only for explicitly non-native families.
 * ``fit_model``: bounded fitting workflows where the parameter search is
   deterministic enough to reproduce with the same response contract. The first
-  implemented slices are Rust-native logistic, Fisher-Pry, and Gompertz fitting
-  for simple fitted states, with Python bridge fallback reserved for
-  unsupported families.
+  implemented slices are Rust-native logistic, Fisher-Pry, Gompertz, Bass, and
+  narrow Norton-Bass fitting for simple fitted states, with Python bridge
+  fallback reserved for unsupported families.
 * ``summarize_model`` and ``diagnose_model``: fitted-state reporting paths that
   can reuse native parameters, residuals, and diagnostics contract fields. The
   first implemented slices are Rust-native logistic, Fisher-Pry, Gompertz,
@@ -160,8 +160,9 @@ The table below is a human summary of the current default slices.
      - Python registry remains authoritative for model metadata generation.
      - Low. Discovery is metadata I/O, so XLA is not useful.
    * - ``fit_model``
-     - Native logistic, Fisher-Pry, and Gompertz fitting for simple positive
-       observations without covariates, events, or custom fitter options.
+     - Native logistic, Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass
+       fitting for simple positive observations without covariates, events, or
+       custom fitter options.
      - Unsupported model families, covariates, event splits, and custom fitter options fall back to the Python bridge.
      - Broader fitters, optional probabilistic runtimes, uncertainty-aware
        fitting, and model-specific class internals remain Python-backed.
@@ -359,7 +360,7 @@ The core is therefore not entirely written in Rust yet. The Rust crate owns
 native metadata discovery and promoted canonical operation slices for logistic,
 Fisher-Pry, Gompertz, Bass, and narrow Norton-Bass deterministic payloads.
 This includes the promoted Bass execution slices covering fit, prediction,
-simulation, summary, and diagnostics, and narrow Norton-Bass prediction,
+simulation, summary, and diagnostics, and narrow Norton-Bass fit, prediction,
 simulation, summary, and diagnostics slices.
 Unsupported model families still fall back to the shared Python kernel, while
 promoted native slices reject unsupported covariates, event payloads,
