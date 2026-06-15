@@ -14,6 +14,10 @@ The page is intentionally evidence-driven: each target points to concrete files 
 Current target-level closure state is recorded in
 `docs/source/_static/external_submission_target_inventory.json`; readiness does
 not imply external submission or acceptance.
+The receipt and owner-backed deferral ledger is
+`docs/source/_static/external_acceptance_deferrals.json`.
+The CRAN/scientific handoff packet is
+`docs/source/_static/scientific_submission_packet.json`.
 
 Migration source:
 

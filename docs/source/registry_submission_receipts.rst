@@ -36,5 +36,10 @@ tarball; it is still awaiting maintainer send.
 
 The machine-readable evidence bundle is stored at
 ``docs/source/_static/registry_submission_receipts.json``.
+The receipt and owner-backed deferral ledger is stored at
+``docs/source/_static/external_acceptance_deferrals.json``.
 The target-level closure inventory is stored at
 ``docs/source/_static/external_submission_target_inventory.json``.
+Prepared handoff packets live at
+``docs/source/_static/scientific_submission_packet.json`` and
+``docs/source/_static/hpc_packaging/submission_packet.json``.

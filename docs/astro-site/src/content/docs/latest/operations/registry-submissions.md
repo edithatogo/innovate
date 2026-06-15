@@ -27,7 +27,9 @@ Deferred or review-ready targets:
 * E4S: ready\_for\_maintainer; public contact/contribution path identified, pending E4S review/CI validation and maintainer inclusion request.
 
 Machine-readable evidence remains in `docs/source/_static/registry_submission_receipts.json`.
+Receipt and owner-backed deferral state is recorded in `docs/source/_static/external_acceptance_deferrals.json`.
 Target-level closure state remains in `docs/source/_static/external_submission_target_inventory.json`.
+Prepared handoff packets live in `docs/source/_static/scientific_submission_packet.json` and `docs/source/_static/hpc_packaging/submission_packet.json`.
 
 Migration source:
 

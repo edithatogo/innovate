@@ -166,6 +166,9 @@ def test_docs_do_not_overclaim_submission_or_acceptance_without_receipts() -> No
         assert claim not in docs
 
     assert "external_submission_target_inventory.json" in docs
+    assert "external_acceptance_deferrals.json" in docs
+    assert "scientific_submission_packet.json" in docs
+    assert "hpc_packaging/submission_packet.json" in docs
 
 
 def test_starlight_registry_mirrors_do_not_advertise_blocked_targets() -> None:
@@ -180,6 +183,7 @@ def test_starlight_registry_mirrors_do_not_advertise_blocked_targets() -> None:
     ):
         docs = path.read_text(encoding="utf-8").lower()
         assert "deferred or review-ready targets" in docs
+        assert "external_acceptance_deferrals.json" in docs
         assert "or blocked targets" not in docs
 
 
