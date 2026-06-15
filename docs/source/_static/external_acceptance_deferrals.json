@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "generated_by_track": "external_acceptance_completion_20260614",
+  "captured_at": "2026-06-16T00:00:00+10:00",
+  "claim_policy": "Do not claim acceptance unless an external registry page, merged pull request, review URL, receipt, or official response is recorded here.",
+  "receipts": [
+    {
+      "target_id": "python_pypi",
+      "receipt_kind": "registry_publication",
+      "receipt_url": "https://pypi.org/project/innovate/",
+      "version": "0.5.0",
+      "acceptance_state": "published"
+    },
+    {
+      "target_id": "typescript_npm",
+      "receipt_kind": "registry_publication",
+      "receipt_url": "https://www.npmjs.com/package/innovate.ts",
+      "version": "0.5.0",
+      "acceptance_state": "published"
+    },
+    {
+      "target_id": "rust_crates_io",
+      "receipt_kind": "registry_publication",
+      "receipt_url": "https://crates.io/crates/innovate-rs",
+      "version": "0.5.0",
+      "acceptance_state": "published"
+    },
+    {
+      "target_id": "julia_general",
+      "receipt_kind": "open_registry_pr",
+      "receipt_url": "https://github.com/JuliaRegistries/General/pull/155126",
+      "version": "0.5.0",
+      "acceptance_state": "submitted_open_pr"
+    },
+    {
+      "target_id": "go_modules",
+      "receipt_kind": "module_index",
+      "receipt_url": "https://pkg.go.dev/github.com/edithatogo/innovate/bindings/go",
+      "version": "v0.5.0",
+      "acceptance_state": "published"
+    },
+    {
+      "target_id": "csharp_nuget",
+      "receipt_kind": "registry_publication",
+      "receipt_url": "https://www.nuget.org/packages/innovate.cs/",
+      "version": "0.5.0",
+      "acceptance_state": "published"
+    },
+    {
+      "target_id": "r_r_universe",
+      "receipt_kind": "registry_publication",
+      "receipt_url": "https://github.com/edithatogo/edithatogo.r-universe.dev/commit/8033021d768d9c8917f711f30b3387b2ef65b90b",
+      "version": "0.5.0",
+      "acceptance_state": "indexed"
+    }
+  ],
+  "owner_backed_deferrals": [
+    {
+      "target_id": "r_cran",
+      "current_state": "deferred",
+      "owner": "R binding maintainers",
+      "prepared_packet": "docs/source/_static/scientific_submission_packet.json",
+      "external_action_url": "https://cran.r-project.org/submit.html",
+      "receipt_or_revisit_condition": "Submit only by maintainer action; revisit after CRAN receipt, CRAN policy change, or R package metadata change."
+    },
+    {
+      "target_id": "spack",
+      "current_state": "ready_for_review",
+      "owner": "HPC maintainers",
+      "prepared_packet": "docs/source/_static/hpc_packaging/submission_packet.json",
+      "external_action_url": "https://spack.readthedocs.io/en/latest/contribution_guide.html",
+      "receipt_or_revisit_condition": "Revisit after upstream Spack pull request URL, Spack packaging rule change, or refreshed scheduler evidence."
+    },
+    {
+      "target_id": "easybuild",
+      "current_state": "ready_for_review",
+      "owner": "HPC maintainers",
+      "prepared_packet": "docs/source/_static/hpc_packaging/submission_packet.json",
+      "external_action_url": "https://docs.easybuild.io/contributing/",
+      "receipt_or_revisit_condition": "Revisit after upstream EasyBuild contribution URL, EasyBuild rule change, or refreshed scheduler evidence."
+    },
+    {
+      "target_id": "hpsf",
+      "current_state": "ready_for_maintainer",
+      "owner": "HPC maintainers",
+      "prepared_packet": "docs/source/_static/hpc_packaging/submission_packet.json",
+      "external_action_url": "https://github.com/hpsfoundation/tac/issues/new?template=new-project-proposal.md",
+      "receipt_or_revisit_condition": "Revisit after HPSF TAC issue URL, sponsor decision, proposal template change, or official response."
+    },
+    {
+      "target_id": "e4s",
+      "current_state": "ready_for_maintainer",
+      "owner": "HPC maintainers",
+      "prepared_packet": "docs/source/_static/hpc_packaging/submission_packet.json",
+      "external_action_url": "https://e4s.io/contact/",
+      "receipt_or_revisit_condition": "Revisit after E4S contact response, inclusion request URL, guidance change, or review evidence."
+    },
+    {
+      "target_id": "pyopensci",
+      "current_state": "ready_for_review",
+      "owner": "Scientific community maintainers",
+      "prepared_packet": "docs/source/_static/scientific_submission_packet.json",
+      "external_action_url": "https://www.pyopensci.org/software-peer-review/how-to/author-guide.html",
+      "receipt_or_revisit_condition": "Revisit after pyOpenSci review issue URL, scope rule change, or maintainer decision not to pursue review."
+    },
+    {
+      "target_id": "ropensci",
+      "current_state": "ready_for_review",
+      "owner": "R/scientific community maintainers",
+      "prepared_packet": "docs/source/_static/scientific_submission_packet.json",
+      "external_action_url": "https://devguide.ropensci.org/softwarereview_policies.html",
+      "receipt_or_revisit_condition": "Revisit after rOpenSci review issue URL, policy change, or CRAN posture change."
+    },
+    {
+      "target_id": "joss",
+      "current_state": "ready_for_review",
+      "owner": "Scientific community maintainers",
+      "prepared_packet": "docs/source/_static/scientific_submission_packet.json",
+      "external_action_url": "https://joss.readthedocs.io/en/latest/submitting.html",
+      "receipt_or_revisit_condition": "Revisit after JOSS review issue URL, editor acknowledgement, archive DOI change, or manuscript change."
+    },
+    {
+      "target_id": "numfocus",
+      "current_state": "deferred",
+      "owner": "Governance maintainers",
+      "prepared_packet": "docs/source/_static/scientific_submission_packet.json",
+      "external_action_url": "https://numfocus.org/projects-overview",
+      "receipt_or_revisit_condition": "Revisit when NumFOCUS application capacity reopens or a governance owner records a fresh deferral."
+    },
+    {
+      "target_id": "pypa",
+      "current_state": "not_applicable",
+      "owner": "Python maintainers",
+      "prepared_packet": "docs/source/_static/scientific_submission_packet.json",
+      "external_action_url": "https://www.pypa.io/en/latest/members/",
+      "receipt_or_revisit_condition": "No receipt expected unless PyPA creates an applicable project intake path or governance scope changes."
+    },
+    {
+      "target_id": "apache_arrow",
+      "current_state": "ready_for_review",
+      "owner": "Interop maintainers",
+      "prepared_packet": "docs/source/_static/scientific_submission_packet.json",
+      "external_action_url": "https://arrow.apache.org/community/",
+      "receipt_or_revisit_condition": "Revisit after Arrow mailing-list thread, issue URL, official response, or interchange contract change."
+    },
+    {
+      "target_id": "dotnet_foundation",
+      "current_state": "ready_for_review",
+      "owner": "C# binding maintainers",
+      "prepared_packet": "docs/source/_static/scientific_submission_packet.json",
+      "external_action_url": "https://dotnetfoundation.org/projects",
+      "receipt_or_revisit_condition": "Revisit after .NET Foundation application URL, official response, NuGet evidence change, or governance change."
+    },
+    {
+      "target_id": "julia_community",
+      "current_state": "ready_for_review",
+      "owner": "Julia binding maintainers",
+      "prepared_packet": "docs/source/_static/scientific_submission_packet.json",
+      "external_action_url": "https://pkgdocs.julialang.org/v1/registries/",
+      "receipt_or_revisit_condition": "Revisit after Julia General merge, registry response, community announcement URL, or Julia compat change."
+    },
+    {
+      "target_id": "r_community",
+      "current_state": "ready_for_review",
+      "owner": "R binding maintainers",
+      "prepared_packet": "docs/source/_static/scientific_submission_packet.json",
+      "external_action_url": "https://r-universe.dev/",
+      "receipt_or_revisit_condition": "Revisit after R community discussion URL, package review URL, CRAN state change, or R-universe state change."
+    },
+    {
+      "target_id": "scikit_learn_contrib",
+      "current_state": "not_applicable",
+      "owner": "Python maintainers",
+      "prepared_packet": "docs/source/_static/scientific_submission_packet.json",
+      "external_action_url": "https://scikit-learn-contrib.github.io/",
+      "receipt_or_revisit_condition": "No receipt expected unless Innovate scope changes to a scikit-learn estimator add-on."
+    }
+  ]
+}

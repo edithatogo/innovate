@@ -34,11 +34,11 @@
 
 ## Phase 3: Receipts, Deferrals, and Claim Closure
 
-- [ ] Task: Record receipts or owner-backed deferrals
-    - [ ] Store external receipts when submissions are actually made
-    - [ ] Store maintainer-ready deferrals when final action remains external
-    - [ ] Add tests that distinguish readiness, submission, acceptance, and deferral
-    - [ ] Commit implementation changes for this task
+- [~] Task: Record receipts or owner-backed deferrals
+    - [x] Store external receipts when submissions are actually made
+    - [x] Store maintainer-ready deferrals when final action remains external
+    - [x] Add tests that distinguish readiness, submission, acceptance, and deferral
+    - [x] Commit implementation changes for this task
     - [ ] Commit this plan update with the task commit SHA
 - [ ] Task: Reconcile registry docs and release claims
     - [ ] Update Sphinx archival sources and Starlight active docs

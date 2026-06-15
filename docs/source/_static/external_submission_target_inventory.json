@@ -4,6 +4,7 @@
   "inventory_date": "2026-06-16",
   "source_artifacts": [
     "docs/source/_static/registry_submission_receipts.json",
+    "docs/source/_static/external_acceptance_deferrals.json",
     "docs/source/_static/registry_submission_inventory.json",
     "docs/source/_static/registry_release_prerequisites.json",
     "docs/source/_static/hpc_packaging/submission_packet.json",
@@ -342,10 +343,10 @@
       "target_id": "numfocus",
       "group": "scientific_community",
       "registry": "NumFOCUS",
-      "status": "ready_for_review",
+      "status": "deferred",
       "owner": "Governance maintainers",
       "evidence": ["docs/source/external_governance_sustainability.rst", "docs/source/_static/external_governance_sustainability_matrix.json"],
-      "next_action": "Maintainer decides whether to initiate NumFOCUS project review."
+      "next_action": "Maintainer must wait for NumFOCUS application capacity to reopen or record an owner-approved governance deferral."
     },
     {
       "target_id": "pypa",
