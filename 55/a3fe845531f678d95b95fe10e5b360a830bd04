@@ -1,0 +1,18 @@
+Task: Validate examples and API snippets
+
+Summary:
+- Added scripts/validate_examples.py to run a Python public API smoke and classify binding examples across R, Julia, TypeScript, Go, and Rust.
+- Generated docs/source/_static/astro_starlight/example_validation.json.
+- Added nox examples session and wired example validation into production docs generation and docs CI.
+- Linked example validation evidence from generated maintainer policy pages.
+- Extended production docs observability tests for runnable/classified snippets and CI evidence.
+
+Validation:
+- uv run nox -s examples
+- uv run nox -s production_docs
+- uv run pytest tests/unit/test_production_docs_observability.py -q
+- uv run ruff check scripts/validate_examples.py scripts/generate_docs_dashboards.py tests/unit/test_production_docs_observability.py noxfile.py
+- uv run ruff format --check scripts/validate_examples.py scripts/generate_docs_dashboards.py tests/unit/test_production_docs_observability.py noxfile.py
+
+Why:
+- Production docs need explicit proof that public Python API snippets run and binding examples are either covered by language CI or clearly classified as optional/toolchain-dependent.
