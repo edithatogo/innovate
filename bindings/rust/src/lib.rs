@@ -2253,8 +2253,8 @@ fn solve_3x3_system(mut matrix: [[f64; 3]; 3], mut rhs: [f64; 3]) -> Option<[f64
     let mut solution = [0.0; 3];
     for row in (0..3).rev() {
         let mut value = rhs[row];
-        for col in (row + 1)..3 {
-            value -= matrix[row][col] * solution[col];
+        for (col, solution_value) in solution.iter().enumerate().skip(row + 1) {
+            value -= matrix[row][col] * solution_value;
         }
         let pivot = matrix[row][row];
         if !pivot.is_finite() || pivot.abs() < 1e-12 {

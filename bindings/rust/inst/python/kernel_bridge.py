@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import json
+import math
 import sys
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 
 from innovate.kernel import (
@@ -26,6 +28,24 @@ OPERATIONS = {
 }
 
 
+def _strict_json_value(value):
+    if isinstance(value, Mapping):
+        json_value = {str(key): _strict_json_value(item) for key, item in value.items()}
+    elif isinstance(value, str | bytes) or value is None or isinstance(value, bool | int):
+        json_value = value
+    elif isinstance(value, float):
+        json_value = value if math.isfinite(value) else None
+    elif hasattr(value, "tolist"):
+        json_value = _strict_json_value(value.tolist())
+    elif hasattr(value, "item"):
+        json_value = _strict_json_value(value.item())
+    elif isinstance(value, Sequence):
+        json_value = [_strict_json_value(item) for item in value]
+    else:
+        json_value = value
+    return json_value
+
+
 def main() -> int:
     if len(sys.argv) != 3:
         raise SystemExit("usage: kernel_bridge.py <request.json> <response.json>")
@@ -46,7 +66,7 @@ def main() -> int:
         }
     else:
         payload = response.to_dict()
-    response_path.write_text(json.dumps(payload, indent=2, sort_keys=True))
+    response_path.write_text(json.dumps(_strict_json_value(payload), allow_nan=False, indent=2, sort_keys=True))
     return 0
 
 
