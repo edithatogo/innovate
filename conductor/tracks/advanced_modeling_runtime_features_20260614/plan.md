@@ -2,7 +2,7 @@
 
 ## Phase 1: Advanced API Contracts
 
-- [~] Task: Define advanced capability contracts
+- [x] Task: Define advanced capability contracts [5bbcbae]
     - [ ] Specify stable and experimental APIs for ensembles, policy scenarios, streaming updates, and uncertainty calibration
     - [ ] Add serialization and capability metadata for result objects
     - [ ] Add fail-first tests for API shape and dependency fallback behavior
