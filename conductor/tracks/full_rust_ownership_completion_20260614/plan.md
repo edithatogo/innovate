@@ -16,7 +16,7 @@
     - [x] Commit this plan update with the task commit SHA
 - [x] Task: Conductor - User Manual Verification 'Ownership Ledger and Contract Tests' (Protocol in workflow.md) `cfe08e0`
 
-## Phase 2: Rust-Native Promotion
+## Phase 2: Rust-Native Promotion [checkpoint: fb1da2c]
 
 - [x] Task: Promote deterministic bridge model families `feeae52`
     - [x] Promote the feasible deterministic Norton-Bass single-generation fit slice
@@ -32,7 +32,7 @@
     - [x] Preserve explicit exclusions for posterior, graph, agent, callback-heavy, stochastic, covariate, and event payloads
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Conductor - User Manual Verification 'Rust-Native Promotion' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Rust-Native Promotion' (Protocol in workflow.md) `fb1da2c`
 
 ## Phase 3: Binding Dispatch, Benchmarks, and Claim Closure
 
