@@ -36,12 +36,12 @@
 
 ## Phase 3: Binding Dispatch, Benchmarks, and Claim Closure
 
-- [~] Task: Wire promoted Rust operations through binding dispatch
-    - [ ] Update Python dispatch and binding smoke surfaces for promoted operations
-    - [ ] Verify R, Julia, TypeScript, Go, and C# clients expose consistent capabilities or explicit non-support metadata
-    - [ ] Add capability-registry drift tests
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Wire promoted Rust operations through binding dispatch `ec09bf1`
+    - [x] Update Python dispatch and binding smoke surfaces for promoted operations
+    - [x] Verify R, Julia, TypeScript, Go, and C# clients expose consistent capabilities or explicit non-support metadata
+    - [x] Add capability-registry drift tests
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Add benchmark and release-claim evidence
     - [ ] Add benchmark evidence for promoted native slices
     - [ ] Refresh ownership validation artifacts and roadmap wording
