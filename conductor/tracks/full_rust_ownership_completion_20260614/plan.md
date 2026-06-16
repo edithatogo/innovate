@@ -42,10 +42,10 @@
     - [x] Add capability-registry drift tests
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [~] Task: Add benchmark and release-claim evidence
-    - [ ] Add benchmark evidence for promoted native slices
-    - [ ] Refresh ownership validation artifacts and roadmap wording
-    - [ ] Add tests that reject stale future-state or overclaim wording
-    - [ ] Commit implementation changes for this task
-    - [ ] Commit this plan update with the task commit SHA
+- [x] Task: Add benchmark and release-claim evidence `4441404`
+    - [x] Add benchmark evidence for promoted native slices
+    - [x] Refresh ownership validation artifacts and roadmap wording
+    - [x] Add tests that reject stale future-state or overclaim wording
+    - [x] Commit implementation changes for this task
+    - [x] Commit this plan update with the task commit SHA
 - [ ] Task: Conductor - User Manual Verification 'Binding Dispatch, Benchmarks, and Claim Closure' (Protocol in workflow.md)
