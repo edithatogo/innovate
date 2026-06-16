@@ -36,7 +36,7 @@
 
 ## Phase 3: Binding Dispatch, Benchmarks, and Claim Closure
 
-- [ ] Task: Wire promoted Rust operations through binding dispatch
+- [~] Task: Wire promoted Rust operations through binding dispatch
     - [ ] Update Python dispatch and binding smoke surfaces for promoted operations
     - [ ] Verify R, Julia, TypeScript, Go, and C# clients expose consistent capabilities or explicit non-support metadata
     - [ ] Add capability-registry drift tests

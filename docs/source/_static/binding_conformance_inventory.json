@@ -13,7 +13,8 @@
       "payloads": ["KernelRequest", "KernelResponse", "KernelError", "KernelArrayPayload", "KernelTablePayload"],
       "errors": ["invalid_request", "invalid_schema_version", "unavailable_model", "unsupported_operation", "backend_unavailable", "invalid_payload", "internal_error"],
       "package_checks": ["uv run nox -s tests", "uv run nox -s package"],
-      "evidence_paths": ["src/innovate/kernel.py", "tests/unit/test_kernel_contract.py"]
+      "evidence_paths": ["src/innovate/kernel.py", "tests/unit/test_kernel_contract.py"],
+      "rust_dispatch": {"dispatch_mode": "python_bridge_visible", "promoted_models": ["bass", "fisher_pry", "gompertz", "logistic", "norton_bass"], "promoted_operations": ["fit_model", "predict_model", "simulate_model", "summarize_model", "diagnose_model"], "fallback_policy": "language_client_uses_shared_kernel_bridge", "unsupported_payload_policy": "bridge_error_contract", "evidence_paths": ["src/innovate/kernel.py", "tests/unit/test_kernel_contract.py"]}
     },
     {
       "language": "r",
@@ -25,7 +26,8 @@
       "payloads": ["KernelRequest", "KernelResponse", "KernelError"],
       "errors": ["invalid_request", "invalid_schema_version", "unavailable_model", "unsupported_operation", "backend_unavailable", "invalid_payload", "internal_error"],
       "package_checks": ["Rscript bindings/r/tests/run.R", "R CMD build bindings/r", "R CMD check --as-cran --no-manual"],
-      "evidence_paths": ["bindings/r/tests/test-contract.R", "bindings/r/inst/examples/end_to_end.R", "bindings/r/README.md"]
+      "evidence_paths": ["bindings/r/tests/test-contract.R", "bindings/r/inst/examples/end_to_end.R", "bindings/r/README.md"],
+      "rust_dispatch": {"dispatch_mode": "python_bridge_visible", "promoted_models": ["bass", "fisher_pry", "gompertz", "logistic", "norton_bass"], "promoted_operations": ["fit_model", "predict_model", "simulate_model", "summarize_model", "diagnose_model"], "fallback_policy": "language_client_uses_shared_kernel_bridge", "unsupported_payload_policy": "bridge_error_contract", "evidence_paths": ["bindings/r/tests/test-contract.R", "bindings/r/inst/examples/end_to_end.R"]}
     },
     {
       "language": "julia",
@@ -37,7 +39,8 @@
       "payloads": ["KernelRequest", "KernelResponse", "KernelError"],
       "errors": ["invalid_request", "invalid_schema_version", "unavailable_model", "unsupported_operation", "backend_unavailable", "invalid_payload", "internal_error"],
       "package_checks": ["julia --project=bindings/julia bindings/julia/test/runtests.jl", "julia --project=bindings/julia -e 'using Pkg; Pkg.test()'"],
-      "evidence_paths": ["bindings/julia/test/contract.jl", "bindings/julia/examples/end_to_end.jl", "bindings/julia/README.md"]
+      "evidence_paths": ["bindings/julia/test/contract.jl", "bindings/julia/examples/end_to_end.jl", "bindings/julia/README.md"],
+      "rust_dispatch": {"dispatch_mode": "python_bridge_visible", "promoted_models": ["bass", "fisher_pry", "gompertz", "logistic", "norton_bass"], "promoted_operations": ["fit_model", "predict_model", "simulate_model", "summarize_model", "diagnose_model"], "fallback_policy": "language_client_uses_shared_kernel_bridge", "unsupported_payload_policy": "bridge_error_contract", "evidence_paths": ["bindings/julia/test/contract.jl", "bindings/julia/examples/end_to_end.jl"]}
     },
     {
       "language": "typescript",
@@ -49,7 +52,8 @@
       "payloads": ["KernelRequest", "KernelResponse", "KernelError"],
       "errors": ["invalid_request", "invalid_schema_version", "unavailable_model", "unsupported_operation", "backend_unavailable", "invalid_payload", "internal_error"],
       "package_checks": ["npm run schema:check", "npm run typecheck", "npm test", "npm pack --dry-run"],
-      "evidence_paths": ["bindings/typescript/src/index.ts", "bindings/typescript/examples/diagnostics-workflow.ts", "bindings/typescript/README.md"]
+      "evidence_paths": ["bindings/typescript/src/index.ts", "bindings/typescript/examples/diagnostics-workflow.ts", "bindings/typescript/README.md"],
+      "rust_dispatch": {"dispatch_mode": "python_bridge_visible", "promoted_models": ["bass", "fisher_pry", "gompertz", "logistic", "norton_bass"], "promoted_operations": ["fit_model", "predict_model", "simulate_model", "summarize_model", "diagnose_model"], "fallback_policy": "language_client_uses_shared_kernel_bridge", "unsupported_payload_policy": "bridge_error_contract", "evidence_paths": ["bindings/typescript/src/index.ts", "bindings/typescript/examples/diagnostics-workflow.ts"]}
     },
     {
       "language": "go",
@@ -61,7 +65,8 @@
       "payloads": ["KernelRequest", "KernelResponse", "KernelError"],
       "errors": ["invalid_request", "invalid_schema_version", "unavailable_model", "unsupported_operation", "backend_unavailable", "invalid_payload", "internal_error"],
       "package_checks": ["go test ./...", "go list -m"],
-      "evidence_paths": ["bindings/go/kernel_contract_test.go", "bindings/go/example_test.go", "bindings/go/README.md"]
+      "evidence_paths": ["bindings/go/kernel_contract_test.go", "bindings/go/example_test.go", "bindings/go/README.md"],
+      "rust_dispatch": {"dispatch_mode": "python_bridge_visible", "promoted_models": ["bass", "fisher_pry", "gompertz", "logistic", "norton_bass"], "promoted_operations": ["fit_model", "predict_model", "simulate_model", "summarize_model", "diagnose_model"], "fallback_policy": "language_client_uses_shared_kernel_bridge", "unsupported_payload_policy": "bridge_error_contract", "evidence_paths": ["bindings/go/kernel_contract_test.go", "bindings/go/example_test.go"]}
     },
     {
       "language": "csharp",
@@ -73,7 +78,8 @@
       "payloads": ["KernelRequest", "KernelResponse", "KernelError"],
       "errors": ["invalid_request", "invalid_schema_version", "unavailable_model", "unsupported_operation", "backend_unavailable", "invalid_payload", "internal_error"],
       "package_checks": ["dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj", "dotnet pack bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj"],
-      "evidence_paths": ["bindings/csharp/Innovate.Kernel.Tests/KernelContractTests.cs", "bindings/csharp/Innovate.Kernel.Tests/KernelBridgeTests.cs", "bindings/csharp/README.md"]
+      "evidence_paths": ["bindings/csharp/Innovate.Kernel.Tests/KernelContractTests.cs", "bindings/csharp/Innovate.Kernel.Tests/KernelBridgeTests.cs", "bindings/csharp/README.md"],
+      "rust_dispatch": {"dispatch_mode": "python_bridge_visible", "promoted_models": ["bass", "fisher_pry", "gompertz", "logistic", "norton_bass"], "promoted_operations": ["fit_model", "predict_model", "simulate_model", "summarize_model", "diagnose_model"], "fallback_policy": "language_client_uses_shared_kernel_bridge", "unsupported_payload_policy": "bridge_error_contract", "evidence_paths": ["bindings/csharp/Innovate.Kernel.Tests/KernelContractTests.cs", "bindings/csharp/Innovate.Kernel.Tests/KernelBridgeTests.cs"]}
     },
     {
       "language": "rust",
@@ -85,7 +91,8 @@
       "payloads": ["KernelRequest", "KernelResponse", "KernelError"],
       "errors": ["invalid_request", "invalid_schema_version", "unavailable_model", "unsupported_operation", "backend_unavailable", "invalid_payload", "internal_error"],
       "package_checks": ["cargo fmt --check", "cargo clippy --all-targets --all-features -- -D warnings", "cargo test", "cargo package"],
-      "evidence_paths": ["bindings/rust/tests/operations.rs", "bindings/rust/tests/schema_compatibility.rs", "bindings/rust/README.md"]
+      "evidence_paths": ["bindings/rust/tests/operations.rs", "bindings/rust/tests/schema_compatibility.rs", "bindings/rust/README.md"],
+      "rust_dispatch": {"dispatch_mode": "rust_native", "promoted_models": ["bass", "fisher_pry", "gompertz", "logistic", "norton_bass"], "promoted_operations": ["fit_model", "predict_model", "simulate_model", "summarize_model", "diagnose_model"], "fallback_policy": "python_bridge_for_explicit_non_native_boundaries", "unsupported_payload_policy": "structured_unsupported_native_operation", "evidence_paths": ["bindings/rust/src/lib.rs", "bindings/rust/tests/operations.rs", "bindings/rust/tests/schema_compatibility.rs"]}
     }
   ]
 }
