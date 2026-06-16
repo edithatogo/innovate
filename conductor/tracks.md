@@ -359,8 +359,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Full Rust Ownership Completion**
-  *Link: [./tracks/full_rust_ownership_completion_20260614/](./tracks/full_rust_ownership_completion_20260614/)*
+- [x] **Track: Full Rust Ownership Completion** *(Completed)*
+  *Link: [./archive/full_rust_ownership_completion_20260614/](./archive/full_rust_ownership_completion_20260614/)*
 
 ---
 
