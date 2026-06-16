@@ -26,6 +26,11 @@ Current status:
   `docs/source/_static/rust_final_ownership_ledger.json`, which records owner,
   rationale, evidence, release-claim state, and revisit policy for model
   families, payload shapes, and canonical operations.
+- Native benchmark evidence is governed by
+  `docs/source/_static/rust_core_native_benchmark_results.json`, which records
+  25 promoted deterministic model-operation slices and a fail-closed regression
+  threshold. That evidence supports promoted-slice claims only; it does not
+  permit a full Rust ownership claim.
 - The migration record is mirrored in the Astro/Starlight site and preserved in
   legacy Sphinx source as archival evidence during cutover cleanup.
 
@@ -46,6 +51,7 @@ Evidence artifacts:
 - `docs/source/_static/rust_core_migration_inventory.json`
 - `docs/source/_static/rust_native_operation_gap_inventory.json`
 - `docs/source/_static/rust_native_operation_evidence_closure.json`
+- `docs/source/_static/rust_core_native_benchmark_results.json`
 - `docs/source/_static/rust_final_ownership_ledger.json`
 - `docs/source/_static/rust_full_ownership_gate.json`
 - `docs/source/_static/rust_full_ownership_validation.json`

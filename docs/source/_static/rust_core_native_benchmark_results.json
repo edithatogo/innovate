@@ -1,148 +1,249 @@
 {
   "schema_version": 1,
   "source_command": "cargo bench --manifest-path bindings/rust/Cargo.toml --bench native_kernel",
-  "captured_at": "2026-05-11",
+  "captured_at": "2026-06-16",
   "workspace_root": ".",
+  "regression_thresholds": {
+    "max_upper_bound_regression_ratio": 1.25,
+    "threshold_basis": "upper_bound_ns",
+    "release_policy": "fail_release_claim_when_any_promoted_native_slice_exceeds_threshold_without_a_waiver"
+  },
+  "release_claim_policy": {
+    "full_rust_ownership_claim_allowed": false,
+    "allowed_claim": "promoted deterministic Rust-native slices have benchmark evidence",
+    "disallowed_claim": "full Rust ownership is complete",
+    "reason": "Explicit bridge, Python-reference, and non-stable payload boundaries remain outside Rust ownership."
+  },
   "notes": [
     "Criterion used the plotters backend because gnuplot was unavailable.",
-    "The run measured the promoted native slices for logistic, Gompertz, Fisher-Pry, and Bass."
+    "The run measured promoted native slices for logistic, Gompertz, Fisher-Pry, Bass, and Norton-Bass.",
+    "Criterion reported regressions against prior local baselines for several pre-existing slices; this artifact records the refreshed measured values and fail-closed thresholds rather than permitting a full-ownership claim."
   ],
   "benchmarks": [
     {
       "group": "native_logistic_kernel",
       "operation": "fit_model_native",
       "model_key": "logistic",
-      "lower_bound_ns": 39481.0,
-      "estimate_ns": 39870.0,
-      "upper_bound_ns": 40152.0
+      "lower_bound_ns": 50645.0,
+      "estimate_ns": 51207.0,
+      "upper_bound_ns": 52222.0,
+      "regression_threshold_ns": 65277.5
     },
     {
       "group": "native_logistic_kernel",
       "operation": "fit_model_native",
       "model_key": "gompertz",
-      "lower_bound_ns": 48108.0,
-      "estimate_ns": 48506.0,
-      "upper_bound_ns": 48940.0
+      "lower_bound_ns": 55672.0,
+      "estimate_ns": 55741.0,
+      "upper_bound_ns": 55854.0,
+      "regression_threshold_ns": 69817.5
     },
     {
       "group": "native_logistic_kernel",
       "operation": "fit_model_native",
       "model_key": "fisher_pry",
-      "lower_bound_ns": 6841.3,
-      "estimate_ns": 6897.4,
-      "upper_bound_ns": 6937.0
+      "lower_bound_ns": 8566.4,
+      "estimate_ns": 8591.3,
+      "upper_bound_ns": 8624.7,
+      "regression_threshold_ns": 10780.875
     },
     {
       "group": "native_logistic_kernel",
       "operation": "predict_model_native",
       "model_key": "logistic",
-      "lower_bound_ns": 843.24,
-      "estimate_ns": 846.32,
-      "upper_bound_ns": 848.64
+      "lower_bound_ns": 1089.6,
+      "estimate_ns": 1129.5,
+      "upper_bound_ns": 1180.6,
+      "regression_threshold_ns": 1475.75
     },
     {
       "group": "native_logistic_kernel",
       "operation": "predict_model_native",
       "model_key": "gompertz",
-      "lower_bound_ns": 850.78,
-      "estimate_ns": 859.43,
-      "upper_bound_ns": 867.05
+      "lower_bound_ns": 1075.1,
+      "estimate_ns": 1076.3,
+      "upper_bound_ns": 1077.8,
+      "regression_threshold_ns": 1347.25
     },
     {
       "group": "native_logistic_kernel",
       "operation": "predict_model_native",
       "model_key": "fisher_pry",
-      "lower_bound_ns": 810.2,
-      "estimate_ns": 814.4,
-      "upper_bound_ns": 819.47
+      "lower_bound_ns": 1057.5,
+      "estimate_ns": 1076.2,
+      "upper_bound_ns": 1106.8,
+      "regression_threshold_ns": 1383.5
     },
     {
       "group": "native_logistic_kernel",
       "operation": "predict_model_native",
       "model_key": "bass",
-      "lower_bound_ns": 848.8,
-      "estimate_ns": 855.95,
-      "upper_bound_ns": 862.2
+      "lower_bound_ns": 1433.1,
+      "estimate_ns": 1475.4,
+      "upper_bound_ns": 1523.6,
+      "regression_threshold_ns": 1904.5
+    },
+    {
+      "group": "native_logistic_kernel",
+      "operation": "predict_model_native",
+      "model_key": "norton_bass",
+      "lower_bound_ns": 1216.2,
+      "estimate_ns": 1219.8,
+      "upper_bound_ns": 1224.8,
+      "regression_threshold_ns": 1531.0
     },
     {
       "group": "native_logistic_kernel",
       "operation": "simulate_model_native",
       "model_key": "logistic",
-      "lower_bound_ns": 837.3,
-      "estimate_ns": 844.41,
-      "upper_bound_ns": 852.29
+      "lower_bound_ns": 1082.1,
+      "estimate_ns": 1084.4,
+      "upper_bound_ns": 1087.0,
+      "regression_threshold_ns": 1358.75
     },
     {
       "group": "native_logistic_kernel",
       "operation": "simulate_model_native",
       "model_key": "gompertz",
-      "lower_bound_ns": 854.33,
-      "estimate_ns": 859.01,
-      "upper_bound_ns": 863.11
+      "lower_bound_ns": 1098.5,
+      "estimate_ns": 1122.7,
+      "upper_bound_ns": 1144.8,
+      "regression_threshold_ns": 1431.0
     },
     {
       "group": "native_logistic_kernel",
       "operation": "simulate_model_native",
       "model_key": "fisher_pry",
-      "lower_bound_ns": 826.32,
-      "estimate_ns": 832.1,
-      "upper_bound_ns": 836.85
+      "lower_bound_ns": 1070.2,
+      "estimate_ns": 1095.0,
+      "upper_bound_ns": 1119.7,
+      "regression_threshold_ns": 1399.625
     },
     {
       "group": "native_logistic_kernel",
       "operation": "simulate_model_native",
       "model_key": "bass",
-      "lower_bound_ns": 842.26,
-      "estimate_ns": 848.65,
-      "upper_bound_ns": 854.75
+      "lower_bound_ns": 1497.1,
+      "estimate_ns": 1539.0,
+      "upper_bound_ns": 1590.5,
+      "regression_threshold_ns": 1988.125
+    },
+    {
+      "group": "native_logistic_kernel",
+      "operation": "simulate_model_native",
+      "model_key": "norton_bass",
+      "lower_bound_ns": 1217.2,
+      "estimate_ns": 1220.2,
+      "upper_bound_ns": 1224.2,
+      "regression_threshold_ns": 1530.25
     },
     {
       "group": "native_logistic_kernel",
       "operation": "summarize_model_native",
       "model_key": "logistic",
-      "lower_bound_ns": 4847.2,
-      "estimate_ns": 4866.7,
-      "upper_bound_ns": 4887.5
+      "lower_bound_ns": 6048.3,
+      "estimate_ns": 6226.4,
+      "upper_bound_ns": 6402.9,
+      "regression_threshold_ns": 8003.625
     },
     {
       "group": "native_logistic_kernel",
       "operation": "summarize_model_native",
       "model_key": "gompertz",
-      "lower_bound_ns": 4809.9,
-      "estimate_ns": 5074.3,
-      "upper_bound_ns": 5568.5
+      "lower_bound_ns": 5879.1,
+      "estimate_ns": 6009.0,
+      "upper_bound_ns": 6146.4,
+      "regression_threshold_ns": 7683.0
     },
     {
       "group": "native_logistic_kernel",
       "operation": "summarize_model_native",
       "model_key": "fisher_pry",
-      "lower_bound_ns": 4610.1,
-      "estimate_ns": 4670.1,
-      "upper_bound_ns": 4738.2
+      "lower_bound_ns": 5569.5,
+      "estimate_ns": 5578.2,
+      "upper_bound_ns": 5587.6,
+      "regression_threshold_ns": 6984.5
+    },
+    {
+      "group": "native_logistic_kernel",
+      "operation": "summarize_model_native",
+      "model_key": "bass",
+      "lower_bound_ns": 5792.3,
+      "estimate_ns": 5847.0,
+      "upper_bound_ns": 5944.7,
+      "regression_threshold_ns": 7430.875
+    },
+    {
+      "group": "native_logistic_kernel",
+      "operation": "summarize_model_native",
+      "model_key": "norton_bass",
+      "lower_bound_ns": 6304.4,
+      "estimate_ns": 6440.1,
+      "upper_bound_ns": 6606.7,
+      "regression_threshold_ns": 8258.375
     },
     {
       "group": "native_logistic_kernel",
       "operation": "diagnose_model_native",
       "model_key": "logistic",
-      "lower_bound_ns": 6993.1,
-      "estimate_ns": 7071.2,
-      "upper_bound_ns": 7210.6
+      "lower_bound_ns": 8698.0,
+      "estimate_ns": 8919.0,
+      "upper_bound_ns": 9206.5,
+      "regression_threshold_ns": 11508.125
     },
     {
       "group": "native_logistic_kernel",
       "operation": "diagnose_model_native",
       "model_key": "gompertz",
-      "lower_bound_ns": 6884.2,
-      "estimate_ns": 6943.5,
-      "upper_bound_ns": 7011.3
+      "lower_bound_ns": 8664.5,
+      "estimate_ns": 8811.1,
+      "upper_bound_ns": 9030.3,
+      "regression_threshold_ns": 11287.875
     },
     {
       "group": "native_logistic_kernel",
       "operation": "diagnose_model_native",
       "model_key": "fisher_pry",
-      "lower_bound_ns": 6705.1,
-      "estimate_ns": 6737.8,
-      "upper_bound_ns": 6780.0
+      "lower_bound_ns": 8385.9,
+      "estimate_ns": 8598.8,
+      "upper_bound_ns": 8828.7,
+      "regression_threshold_ns": 11035.875
+    },
+    {
+      "group": "native_logistic_kernel",
+      "operation": "diagnose_model_native",
+      "model_key": "bass",
+      "lower_bound_ns": 9251.6,
+      "estimate_ns": 9416.2,
+      "upper_bound_ns": 9587.5,
+      "regression_threshold_ns": 11984.375
+    },
+    {
+      "group": "native_logistic_kernel",
+      "operation": "diagnose_model_native",
+      "model_key": "norton_bass",
+      "lower_bound_ns": 9078.8,
+      "estimate_ns": 9125.9,
+      "upper_bound_ns": 9188.9,
+      "regression_threshold_ns": 11486.125
+    },
+    {
+      "group": "native_logistic_kernel",
+      "operation": "fit_model_native",
+      "model_key": "bass",
+      "lower_bound_ns": 8763.9,
+      "estimate_ns": 9099.7,
+      "upper_bound_ns": 9629.0,
+      "regression_threshold_ns": 12036.25
+    },
+    {
+      "group": "native_logistic_kernel",
+      "operation": "fit_model_native",
+      "model_key": "norton_bass",
+      "lower_bound_ns": 9148.9,
+      "estimate_ns": 9369.7,
+      "upper_bound_ns": 9634.7,
+      "regression_threshold_ns": 12043.375
     }
   ]
 }

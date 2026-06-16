@@ -42,7 +42,7 @@
     - [x] Add capability-registry drift tests
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Add benchmark and release-claim evidence
+- [~] Task: Add benchmark and release-claim evidence
     - [ ] Add benchmark evidence for promoted native slices
     - [ ] Refresh ownership validation artifacts and roadmap wording
     - [ ] Add tests that reject stale future-state or overclaim wording

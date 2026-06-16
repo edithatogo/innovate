@@ -54,6 +54,29 @@
   ],
   "claim_language": "The validated Rust core owns promoted deterministic model-operation slices only. Full Rust ownership is not claimed until explicit bridge model families, Python-reference model families, and non-stable payload shapes are promoted through future migration tracks or intentionally retained outside the Rust core.",
   "last_validated": "2026-06-15",
+  "release_claim_gate": {
+    "full_rust_ownership_claim_allowed": false,
+    "allowed_claim": "promoted deterministic Rust-native slices have benchmark and binding dispatch evidence",
+    "disallowed_claims": [
+      "full Rust ownership is complete",
+      "all model families are Rust-native",
+      "all stable payload shapes are Rust-native"
+    ],
+    "claim_guard": "fail_closed_until_bridge_reference_and_payload_boundaries_are_resolved_or_promoted",
+    "blocking_boundary_sources": [
+      "explicit_bridge_boundaries",
+      "python_reference_boundaries",
+      "excluded_payload_boundaries"
+    ]
+  },
+  "benchmark_evidence": {
+    "source": "docs/source/_static/rust_core_native_benchmark_results.json",
+    "source_command": "cargo bench --manifest-path bindings/rust/Cargo.toml --bench native_kernel",
+    "captured_at": "2026-06-16",
+    "promoted_slice_count": 25,
+    "regression_policy": "fail_release_claim_when_any_promoted_native_slice_exceeds_threshold_without_a_waiver",
+    "binding_dispatch_evidence": "docs/source/_static/rust_native_operation_binding_smoke.json"
+  },
   "stable_payload_schema_evidence": {
     "schema_source": "bindings/rust/src/lib.rs",
     "schema_tests": "bindings/rust/tests/operations.rs",

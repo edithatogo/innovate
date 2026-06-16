@@ -360,6 +360,11 @@ def test_rust_native_benchmark_harness_includes_bass_cases() -> None:
     assert "fn fisher_pry_simulate_request(binding: &KernelBinding) -> KernelRequest" in bench
     assert "fn fisher_pry_summary_request(binding: &KernelBinding) -> KernelRequest" in bench
     assert "fn fisher_pry_diagnose_request(binding: &KernelBinding) -> KernelRequest" in bench
+    assert "fn norton_bass_fit_request(binding: &KernelBinding) -> KernelRequest" in bench
+    assert "fn norton_bass_predict_request(binding: &KernelBinding) -> KernelRequest" in bench
+    assert "fn norton_bass_simulate_request(binding: &KernelBinding) -> KernelRequest" in bench
+    assert "fn norton_bass_summary_request(binding: &KernelBinding) -> KernelRequest" in bench
+    assert "fn norton_bass_diagnose_request(binding: &KernelBinding) -> KernelRequest" in bench
     assert 'BenchmarkId::new("fit_model_native", "gompertz")' in bench
     assert 'BenchmarkId::new("fit_model_native", "fisher_pry")' in bench
     assert 'BenchmarkId::new("predict_model_native", "gompertz")' in bench
@@ -372,10 +377,36 @@ def test_rust_native_benchmark_harness_includes_bass_cases() -> None:
     assert 'BenchmarkId::new("diagnose_model_native", "fisher_pry")' in bench
     assert 'BenchmarkId::new("predict_model_native", "bass")' in bench
     assert 'BenchmarkId::new("simulate_model_native", "bass")' in bench
+    assert 'BenchmarkId::new("fit_model_native", "norton_bass")' in bench
+    assert 'BenchmarkId::new("predict_model_native", "norton_bass")' in bench
+    assert 'BenchmarkId::new("simulate_model_native", "norton_bass")' in bench
+    assert 'BenchmarkId::new("summarize_model_native", "norton_bass")' in bench
+    assert 'BenchmarkId::new("diagnose_model_native", "norton_bass")' in bench
     assert results["schema_version"] == 1
     assert results["source_command"] == "cargo bench --manifest-path bindings/rust/Cargo.toml --bench native_kernel"
-    assert len(results["benchmarks"]) == 17
-    assert {entry["model_key"] for entry in results["benchmarks"]} >= {"logistic", "gompertz", "fisher_pry", "bass"}
+    assert results["regression_thresholds"]["max_upper_bound_regression_ratio"] == 1.25
+    assert results["release_claim_policy"]["full_rust_ownership_claim_allowed"] is False
+    assert len(results["benchmarks"]) == 25
+    assert {entry["model_key"] for entry in results["benchmarks"]} >= {
+        "logistic",
+        "gompertz",
+        "fisher_pry",
+        "bass",
+        "norton_bass",
+    }
+    assert {
+        (entry["operation"], entry["model_key"])
+        for entry in results["benchmarks"]
+        if entry["model_key"] == "norton_bass"
+    } == {
+        ("fit_model_native", "norton_bass"),
+        ("predict_model_native", "norton_bass"),
+        ("simulate_model_native", "norton_bass"),
+        ("summarize_model_native", "norton_bass"),
+        ("diagnose_model_native", "norton_bass"),
+    }
+    for entry in results["benchmarks"]:
+        assert entry["regression_threshold_ns"] >= entry["upper_bound_ns"]
 
 
 def test_rust_native_operations_suite_covers_all_promoted_slices() -> None:

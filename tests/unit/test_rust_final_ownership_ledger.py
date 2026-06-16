@@ -12,6 +12,8 @@ LEDGER_PATH = Path("docs/source/_static/rust_final_ownership_ledger.json")
 MODEL_FAMILY_COVERAGE = Path("docs/source/_static/rust_native_model_family_coverage.json")
 PAYLOAD_SHAPE_COVERAGE = Path("docs/source/_static/rust_native_payload_shape_coverage.json")
 OPERATION_GAP_INVENTORY = Path("docs/source/_static/rust_native_operation_gap_inventory.json")
+FULL_OWNERSHIP_VALIDATION = Path("docs/source/_static/rust_full_ownership_validation.json")
+NATIVE_BENCHMARK_RESULTS = Path("docs/source/_static/rust_core_native_benchmark_results.json")
 ROADMAP_DOCS = [
     Path("docs/source/rust_core_roadmap.rst"),
     Path("docs/astro-site/src/content/docs/operations/rust-core.md"),
@@ -174,3 +176,22 @@ def test_docs_full_ownership_claims_are_fail_closed_by_ledger() -> None:
         text = path.read_text().lower()
         assert "rust_final_ownership_ledger.json" in text
         assert not any(phrase in text for phrase in overclaim_phrases)
+
+
+def test_full_rust_ownership_validation_is_fail_closed_with_benchmark_evidence() -> None:
+    """Release evidence should allow only the narrower promoted-slice claim."""
+    validation = _load_json(FULL_OWNERSHIP_VALIDATION)
+    benchmarks = _load_json(NATIVE_BENCHMARK_RESULTS)
+
+    assert validation["decision"] == "full_rust_ownership_not_claimed"
+    assert validation["release_claim_gate"]["full_rust_ownership_claim_allowed"] is False
+    assert validation["release_claim_gate"]["allowed_claim"] == (
+        "promoted deterministic Rust-native slices have benchmark and binding dispatch evidence"
+    )
+    assert validation["benchmark_evidence"]["source"] == str(NATIVE_BENCHMARK_RESULTS)
+    assert validation["benchmark_evidence"]["promoted_slice_count"] == 25
+    assert validation["benchmark_evidence"]["regression_policy"] == (
+        "fail_release_claim_when_any_promoted_native_slice_exceeds_threshold_without_a_waiver"
+    )
+    assert benchmarks["release_claim_policy"]["full_rust_ownership_claim_allowed"] is False
+    assert benchmarks["regression_thresholds"]["max_upper_bound_regression_ratio"] == 1.25

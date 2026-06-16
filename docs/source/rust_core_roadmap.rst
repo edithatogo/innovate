@@ -130,6 +130,12 @@ Operation-level benchmark and memory closure is recorded in
 That artifact points at the Criterion result file, the Rust benchmark harness,
 the DHAT memory-profile driver, and the explicit not-applicable rationale for
 bounded deterministic slices.
+The refreshed Criterion result file
+:download:`rust_core_native_benchmark_results.json <_static/rust_core_native_benchmark_results.json>`
+records 25 promoted deterministic model-operation slices across logistic,
+Gompertz, Fisher-Pry, Bass, and narrow Norton-Bass. It also carries the
+fail-closed regression threshold and release-claim policy: benchmark evidence
+supports the narrower promoted-slice claim only, not full Rust ownership.
 
 The full Rust ownership claim gate is
 :download:`rust_full_ownership_gate.json <_static/rust_full_ownership_gate.json>`.

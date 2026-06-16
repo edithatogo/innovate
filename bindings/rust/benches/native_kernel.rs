@@ -426,6 +426,124 @@ fn bass_diagnose_request(binding: &KernelBinding) -> KernelRequest {
     )
 }
 
+fn norton_bass_fit_request(binding: &KernelBinding) -> KernelRequest {
+    binding.fit_model_request(
+        "norton_bass",
+        json!({
+            "constructor_kwargs": {
+                "n_generations": 1,
+                "covariates": []
+            },
+            "inputs": {
+                "time": [0.0, 0.75, 1.5, 2.25, 3.0, 3.75],
+                "observed": [0.0, 7.8, 20.6, 39.5, 61.4, 84.9]
+            }
+        }),
+    )
+}
+
+fn norton_bass_predict_request(binding: &KernelBinding) -> KernelRequest {
+    binding.predict_model_request(
+        "norton_bass",
+        json!({
+            "state": {
+                "model_key": "norton_bass",
+                "model_name": "NortonBassModel",
+                "constructor_kwargs": {
+                    "n_generations": 1,
+                    "covariates": []
+                },
+                "parameters": {
+                    "p1": 0.001,
+                    "q1": 0.1,
+                    "m1": 100.0
+                },
+                "predict_kwargs": {}
+            },
+            "inputs": {
+                "time": [0.0, 1.0, 2.0, 3.0]
+            }
+        }),
+    )
+}
+
+fn norton_bass_simulate_request(binding: &KernelBinding) -> KernelRequest {
+    binding.simulate_model_request(
+        "norton_bass",
+        json!({
+            "state": {
+                "model_key": "norton_bass",
+                "model_name": "NortonBassModel",
+                "constructor_kwargs": {
+                    "n_generations": 1,
+                    "covariates": []
+                },
+                "parameters": {
+                    "p1": 0.001,
+                    "q1": 0.1,
+                    "m1": 100.0
+                },
+                "predict_kwargs": {}
+            },
+            "inputs": {
+                "time": [0.0, 1.0, 2.0, 3.0]
+            }
+        }),
+    )
+}
+
+fn norton_bass_summary_request(binding: &KernelBinding) -> KernelRequest {
+    binding.summarize_model_request(
+        "norton_bass",
+        json!({
+            "state": {
+                "model_key": "norton_bass",
+                "model_name": "NortonBassModel",
+                "constructor_kwargs": {
+                    "n_generations": 1,
+                    "covariates": []
+                },
+                "parameters": {
+                    "p1": 0.001,
+                    "q1": 0.1,
+                    "m1": 100.0
+                },
+                "predict_kwargs": {}
+            },
+            "inputs": {
+                "time": [0.0, 1.0, 2.0, 3.0],
+                "observed": [0.05, 0.12, 0.3, 0.6]
+            }
+        }),
+    )
+}
+
+fn norton_bass_diagnose_request(binding: &KernelBinding) -> KernelRequest {
+    binding.diagnose_model_request(
+        "norton_bass",
+        json!({
+            "state": {
+                "model_key": "norton_bass",
+                "model_name": "NortonBassModel",
+                "constructor_kwargs": {
+                    "n_generations": 1,
+                    "covariates": []
+                },
+                "parameters": {
+                    "p1": 0.001,
+                    "q1": 0.1,
+                    "m1": 100.0
+                },
+                "predict_kwargs": {}
+            },
+            "inputs": {
+                "time": [0.0, 1.0, 2.0, 3.0],
+                "observed": [0.05, 0.12, 0.3, 0.6]
+            }
+        }),
+    )
+}
+
 fn bench_native_logistic_paths(c: &mut Criterion) {
     let binding = KernelBinding::new();
     let fit_request = logistic_fit_request(&binding);
@@ -448,6 +566,11 @@ fn bench_native_logistic_paths(c: &mut Criterion) {
     let bass_simulate_request = bass_simulate_request(&binding);
     let bass_summary_request = bass_summary_request(&binding);
     let bass_diagnose_request = bass_diagnose_request(&binding);
+    let norton_bass_fit_request = norton_bass_fit_request(&binding);
+    let norton_bass_predict_request = norton_bass_predict_request(&binding);
+    let norton_bass_simulate_request = norton_bass_simulate_request(&binding);
+    let norton_bass_summary_request = norton_bass_summary_request(&binding);
+    let norton_bass_diagnose_request = norton_bass_diagnose_request(&binding);
 
     let mut group = c.benchmark_group("native_logistic_kernel");
     group.sample_size(20);
@@ -649,6 +772,63 @@ fn bench_native_logistic_paths(c: &mut Criterion) {
             black_box(response);
         })
     });
+
+    group.bench_function(BenchmarkId::new("fit_model_native", "norton_bass"), |b| {
+        b.iter(|| {
+            let response = binding
+                .fit_model_native(black_box(&norton_bass_fit_request))
+                .expect("native Norton-Bass fit should succeed");
+            black_box(response);
+        })
+    });
+
+    group.bench_function(
+        BenchmarkId::new("predict_model_native", "norton_bass"),
+        |b| {
+            b.iter(|| {
+                let response = binding
+                    .predict_model_native(black_box(&norton_bass_predict_request))
+                    .expect("native Norton-Bass prediction should succeed");
+                black_box(response);
+            })
+        },
+    );
+
+    group.bench_function(
+        BenchmarkId::new("simulate_model_native", "norton_bass"),
+        |b| {
+            b.iter(|| {
+                let response = binding
+                    .simulate_model_native(black_box(&norton_bass_simulate_request))
+                    .expect("native Norton-Bass simulation should succeed");
+                black_box(response);
+            })
+        },
+    );
+
+    group.bench_function(
+        BenchmarkId::new("summarize_model_native", "norton_bass"),
+        |b| {
+            b.iter(|| {
+                let response = binding
+                    .summarize_model_native(black_box(&norton_bass_summary_request))
+                    .expect("native Norton-Bass summary should succeed");
+                black_box(response);
+            })
+        },
+    );
+
+    group.bench_function(
+        BenchmarkId::new("diagnose_model_native", "norton_bass"),
+        |b| {
+            b.iter(|| {
+                let response = binding
+                    .diagnose_model_native(black_box(&norton_bass_diagnose_request))
+                    .expect("native Norton-Bass diagnostics should succeed");
+                black_box(response);
+            })
+        },
+    );
 
     group.finish();
 }
