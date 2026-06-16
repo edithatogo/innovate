@@ -34,7 +34,7 @@
     - [x] Commit this plan update with the task commit SHA
 - [x] Task: Conductor - User Manual Verification 'Rust-Native Promotion' (Protocol in workflow.md) `fb1da2c`
 
-## Phase 3: Binding Dispatch, Benchmarks, and Claim Closure
+## Phase 3: Binding Dispatch, Benchmarks, and Claim Closure [checkpoint: f212391]
 
 - [x] Task: Wire promoted Rust operations through binding dispatch `ec09bf1`
     - [x] Update Python dispatch and binding smoke surfaces for promoted operations
@@ -48,4 +48,4 @@
     - [x] Add tests that reject stale future-state or overclaim wording
     - [x] Commit implementation changes for this task
     - [x] Commit this plan update with the task commit SHA
-- [ ] Task: Conductor - User Manual Verification 'Binding Dispatch, Benchmarks, and Claim Closure' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Binding Dispatch, Benchmarks, and Claim Closure' (Protocol in workflow.md) `f212391`
