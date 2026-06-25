@@ -90,6 +90,19 @@ def _build_model_card(capability: ModelCapability) -> ModelCard:
 
 
 _MODEL_CARD_BLUEPRINTS: dict[str, dict[str, tuple[str, ...] | str]] = {
+    "lock_in": {
+        "model_name": "LockInModel",
+        "summary": "Path dependence and lock-in between competing technologies with network effects.",
+        "assumptions": (
+            "Intrinsic growth rates and network effects are constant.",
+            "Negative influence from competitor is proportional to its adoption.",
+        ),
+        "inputs": ("time", "observed adoption share for each technology"),
+        "outputs": ("fitted parameters", "predicted adoption trajectories", "equilibrium shares"),
+        "diagnostics": ("r2", "rmse"),
+        "limitations": ("Simplified two-technology model; does not capture multi-technology dynamics.",),
+        "benchmark_case_ids": ("lock_in_smoke",),
+    },
     "bass": {
         "model_name": "BassModel",
         "summary": "Core diffusion baseline for cumulative adoption curves.",
