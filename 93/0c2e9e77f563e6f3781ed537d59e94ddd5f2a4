@@ -1,0 +1,4 @@
+Task: Inventory all ecosystem dependencies (Phase 1/ Task 1)
+Summary: Added dependency baseline inventory script, tests, and generated inventory JSON artifact.
+Files: scripts/dependency_baseline_inventory.py, tests/unit/test_dependency_baseline_inventory.py, docs/source/_static/dependency_baseline_inventory.json
+Why: Establish baseline of all outdated/mismatched dependencies across Python, Node, Rust, C#, Go, R, and Julia ecosystems.
