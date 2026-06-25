@@ -2,10 +2,10 @@
 
 ## Phase 1: Scientific Gap Audit
 
-- [ ] Task: Inventory advanced modeling capabilities
-    - [ ] Audit policy, competition, substitution, network, multi-product, composite, path-dependence, and advanced runtime modules.
-    - [ ] Compare APIs against product vision, docs, model cards, capability registry, and tests.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Inventory advanced modeling capabilities
+    - [x] Audit policy, competition, substitution, network, multi-product, composite, path-dependence, and advanced runtime modules.
+    - [x] Compare APIs against product vision, docs, model cards, capability registry, and tests.
+    - [x] Commit task changes and attach the required Conductor git note.
 - [ ] Task: Write failing gap tests
     - [ ] Add tests requiring explicit capability status, docs, model cards, and schema status for each targeted model family.
     - [ ] Commit task changes and attach the required Conductor git note.

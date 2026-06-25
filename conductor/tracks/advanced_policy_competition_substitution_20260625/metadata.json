@@ -1,7 +1,7 @@
 {
   "track_id": "advanced_policy_competition_substitution_20260625",
   "type": "feature",
-  "status": "new",
+  "status": "in_progress",
   "created_at": "2026-06-25T11:32:58Z",
   "updated_at": "2026-06-25T11:32:58Z",
   "description": "Identify and implement advanced modeling gaps around policy diffusion, competition, substitution, network diffusion, and related Rust/polyglot payloads."
