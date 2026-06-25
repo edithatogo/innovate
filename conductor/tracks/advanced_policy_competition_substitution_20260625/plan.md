@@ -6,7 +6,7 @@
     - [x] Audit policy, competition, substitution, network, multi-product, composite, path-dependence, and advanced runtime modules.
     - [x] Compare APIs against product vision, docs, model cards, capability registry, and tests.
     - [x] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Write failing gap tests
+- [~] Task: Write failing gap tests
     - [ ] Add tests requiring explicit capability status, docs, model cards, and schema status for each targeted model family.
     - [ ] Commit task changes and attach the required Conductor git note.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Scientific Gap Audit' (Protocol in workflow.md)

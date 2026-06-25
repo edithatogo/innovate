@@ -8,11 +8,12 @@
 - [x] Task: Write release-hardening guard tests
     - [x] Add tests for evidence freshness, required gate presence, and release-ready fail-closed behavior.
     - [x] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Gate Inventory and Failing Tests' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Gate Inventory and Failing Tests' (Protocol in workflow.md)
+    - [x] All 20 guard tests pass, gates inventoried, phase complete.
 
 ## Phase 2: CI and Automation Hardening
 
-- [ ] Task: Align nox and GitHub Actions gates
+- [~] Task: Align nox and GitHub Actions gates
     - [ ] Ensure lint, types, tests, docs, package, security, dependency dashboards, and binding checks are covered.
     - [ ] Commit task changes and attach the required Conductor git note.
 - [ ] Task: Add mutation and coverage release evidence

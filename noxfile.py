@@ -39,6 +39,7 @@ nox.options.sessions = (
     "tests",
     "docs",
     "package",
+    "security",
     "version_sync",
     "release_supply_chain",
     "release_reproducibility",
@@ -166,6 +167,14 @@ def package(session: nox.Session) -> None:
     if not wheels:
         session.error("No wheels found under dist/")
     _run_uv(session, "run", "check-wheel-contents", *(str(wheel) for wheel in wheels))
+
+
+@nox.session(python=False)
+def security(session: nox.Session) -> None:
+    """Run Bandit static analysis and Safety vulnerability scan on Python dependencies."""
+    _run_uv(session, "sync", "--python", DEFAULT_PYTHON)
+    _run_uv(session, "run", "bandit", "-r", "src/innovate", "-c", "pyproject.toml")
+    _run_uv(session, "run", "safety", "check")
 
 
 @nox.session(python=False)
