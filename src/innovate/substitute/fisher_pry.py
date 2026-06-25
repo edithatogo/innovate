@@ -122,6 +122,33 @@ class FisherPryModel(DiffusionModel):
         y_pred = self.predict(t_arr)
         return self.differential_equation(y_pred, t_arr, **self._params)
 
+    def threshold_diagnostics(self) -> dict[str, float]:
+        """Compute replacement threshold diagnostics for the fitted model.
+
+        Returns
+        -------
+        dict
+            Keys: 'replacement_half_life' (time to 50% adoption),
+                  'takeoff_time' (time to 10% adoption),
+                  'saturation_time' (time to 90% adoption),
+                  'max_adoption_rate_time' (peak of adoption rate).
+        """
+        if not self._params:
+            raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
+        alpha = self._params.get("alpha", 1.0)
+        t0 = self._params.get("t0", 0.0)
+        # For logistic model f(t) = 1 / (1 + exp(-alpha*(t - t0)))
+        # t_50 = t0, t_10 = t0 - log(9)/alpha, t_90 = t0 + log(9)/alpha
+        import numpy as np
+
+        log9 = np.log(9.0)
+        return {
+            "replacement_half_life": float(t0),
+            "takeoff_time": float(t0 - log9 / alpha),
+            "saturation_time": float(t0 + log9 / alpha),
+            "max_adoption_rate_time": float(t0),
+        }
+
     def fit(self, fitter, t: Sequence[float], y: Sequence[float], **kwargs):
         """Fits the Fisher-Pry model to the data.
 

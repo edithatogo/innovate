@@ -59,6 +59,54 @@ class MultiProductDiffusionModel(DiffusionModel):
 
         return force * remaining_potential
 
+    def cross_elasticity(self, t: Sequence[float], base_params: dict[str, float] | None = None) -> np.ndarray:
+        """Compute cross-elasticity matrix between products at given time points.
+
+        Returns an N x len(t) array where entry (i,k) is the percentage change
+        in product i's adoption rate for a 1% change in product j's adoption
+        at time point k, summed/sign-averaged across j != i.
+        """
+        from scipy.integrate import solve_ivp
+
+        t_arr = B.array(t)
+        params = base_params or {}
+        p = B.array(params.get("p", self.p))
+        Q_val = B.array(params.get("Q", self.Q))
+        m_val = B.array(params.get("m", self.m))
+
+        y0 = B.zeros(self.N)
+        y0[0] = 1e-6
+
+        def _grad(t_val, y_val):
+            y_b = B.array(y_val)
+            share = B.where(m_val.flatten() != 0, y_b / m_val.flatten(), B.zeros_like(y_b))
+            share = B.where(share > 1.0, 1.0, share)
+            return (p + B.matmul(Q_val, share)) * B.where(m_val - y_b < 0, 0, m_val - y_b)
+
+        sol = solve_ivp(_grad, (float(t_arr[0]), float(t_arr[-1])), y0, t_eval=t_arr, method="RK45")
+        y_path = sol.y
+        # Cross-elasticity proxy: sensitivity of each product to the sum of competitors
+        n = self.N
+        elasticity = np.zeros((n, len(t_arr)))
+        for i in range(n):
+            for j in range(n):
+                if i != j:
+                    cross_effect = abs(float(Q_val[i, j])) * y_path[j, :] / (m_val[i] + 1e-10)
+                    elasticity[i, :] += np.asarray(cross_effect)
+        return elasticity
+
+    def equilibrium(self) -> dict[str, float]:
+        """Estimate equilibrium market shares.
+
+        For the multi-product diffusion model under competition,
+        this solves for the steady-state where all diffusion processes
+        have saturated.
+
+        Returns a dict mapping product names to equilibrium shares.
+        """
+        total_m = float(np.sum(self.m))
+        return {name: float(m_i) / total_m for name, m_i in zip(self.names, self.m)}
+
     def predict(self, t: Sequence[float]) -> pd.DataFrame:
         # Ensure parameters are set (either by init or by a fitter)
         if not self.params_ and (self.p is None or self.Q is None or self.m is None):

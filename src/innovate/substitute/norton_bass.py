@@ -104,6 +104,38 @@ class NortonBassModel(DiffusionModel):
         )
         return sol.y.T
 
+    def threshold_diagnostics(self) -> dict[str, float]:
+        """Compute replacement threshold diagnostics for each generation.
+
+        Returns
+        -------
+        dict
+            Keys: 'generation_i_half_life', 'generation_i_takeoff',
+                  'generation_i_saturation' for each generation i.
+        """
+        if not self._params:
+            raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
+        import numpy as np
+
+        diag: dict[str, float] = {}
+        log9 = np.log(9.0)
+        for i in range(self.n_generations):
+            p = self._params.get(f"p{i}", 0.03)
+            q = self._params.get(f"q{i}", 0.4)
+            # Bass inflection point at t* = ln(q/p) / (p+q)
+            if p > 0 and q > 0:
+                peak_time = np.log(q / p) / (p + q)
+                takeoff = peak_time - log9 / (p + q) if (p + q) > 0 else 0.0
+                saturation = peak_time + log9 / (p + q) if (p + q) > 0 else 0.0
+            else:
+                peak_time = 0.0
+                takeoff = 0.0
+                saturation = 0.0
+            diag[f"generation_{i}_half_life"] = float(peak_time)
+            diag[f"generation_{i}_takeoff"] = float(max(takeoff, 0.0))
+            diag[f"generation_{i}_saturation"] = float(saturation)
+        return diag
+
     def differential_equation(self, t, y, params, covariates, t_eval):
         """System of differential equations for the Norton-Bass model."""
         # Base parameters are stored per generation as [p_i, q_i, m_i].

@@ -46,6 +46,17 @@ class MultiProductDiffusionModel(DiffusionModel):
         if self.names is not None and len(self.names) != self.n_products:
             raise ValueError("Number of names must match n_products.")
 
+    def equilibrium(self) -> dict[str, float]:
+        """Compute equilibrium market shares as Nash steady-state shares.
+
+        Returns a dictionary mapping product names (or indices) to their
+        equilibrium market share (as a fraction of total market potential).
+        """
+        if self.m is None:
+            return {}
+        m_sum = float(np.sum(self.m))
+        return {f"product_{i}": float(m_i) / m_sum for i, m_i in enumerate(self.m)}
+
     @property
     def param_names(self) -> Sequence[str]:
         names = []

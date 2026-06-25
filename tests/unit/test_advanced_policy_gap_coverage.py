@@ -38,10 +38,10 @@ def test_path_dependence_module_exports() -> None:
 
 
 def test_equilibrium_method_on_lotka_volterra() -> None:
-    """LotkaVolterraModel should have an equilibrium() method."""
-    src_file = ROOT / "src" / "innovate" / "dynamics" / "competition.py"
+    """LotkaVolterraCompetition should have an equilibrium() method."""
+    src_file = ROOT / "src" / "innovate" / "dynamics" / "competition" / "lotka_volterra.py"
     if not src_file.exists():
-        src_file = ROOT / "src" / "innovate" / "compete" / "competition.py"
+        src_file = ROOT / "src" / "innovate" / "compete" / "lotka_volterra.py"
     text = src_file.read_text(encoding="utf-8")
     assert "def equilibrium" in text, (
         "LotkaVolterraModel missing equilibrium() method"

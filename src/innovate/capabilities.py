@@ -71,6 +71,13 @@ def _module_available(module_name: str) -> bool:
 
 _MODEL_REGISTRY = MappingProxyType(
     {
+        "lock_in": ModelCapability(
+            key="lock_in",
+            family="path_dependence",
+            import_path="innovate.path_dependence.LockInModel",
+            supported_backends=("numpy",),
+            supports_covariates=False,
+        ),
         "bass": ModelCapability(
             key="bass",
             family="diffusion",

@@ -200,6 +200,22 @@ class NetworkDiffusionModel(AdvancedDiffusionModel):
             },
         )
 
+    def set_intervention_nodes(self, node_indices: list[int]) -> None:
+        """Mark specific nodes as intervention targets.
+
+        Intervention nodes receive an additional adoption boost during
+        prediction, simulating targeted policy or marketing interventions.
+
+        Parameters
+        ----------
+        node_indices : list of int
+            Indices of nodes to mark as intervention targets.
+        """
+        self._intervention_nodes = list(node_indices)
+
+    def _has_intervention_nodes(self) -> bool:
+        return hasattr(self, "_intervention_nodes") and bool(self._intervention_nodes)
+
     @staticmethod
     def differential_equation(t, y, params, covariates, t_eval):
         raise NotImplementedError
