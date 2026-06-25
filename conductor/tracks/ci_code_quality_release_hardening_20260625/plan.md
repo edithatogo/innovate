@@ -2,9 +2,9 @@
 
 ## Phase 1: Gate Inventory and Failing Tests
 
-- [ ] Task: Inventory current local and CI gates
-    - [ ] Map nox sessions, GitHub Actions, release evidence, dependency dashboards, security, mutation, and coverage outputs.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Inventory current local and CI gates
+    - [x] Map nox sessions, GitHub Actions, release evidence, dependency dashboards, security, mutation, and coverage outputs.
+    - [x] Commit task changes and attach the required Conductor git note.
 - [ ] Task: Write release-hardening guard tests
     - [ ] Add tests for evidence freshness, required gate presence, and release-ready fail-closed behavior.
     - [ ] Commit task changes and attach the required Conductor git note.
