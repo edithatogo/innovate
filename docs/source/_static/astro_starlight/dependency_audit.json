@@ -1,0 +1,81 @@
+{
+  "track_id": "astro7_starlight040_migration_20260624",
+  "phase": 1,
+  "task": "audit_current_dependency_surface",
+  "audit_date": "2026-06-24",
+  "scaffold_root": "docs/astro-site",
+  "package_manager": {
+    "tool": "pnpm",
+    "declared_version": "9.15.9",
+    "resolved": "11.2.2"
+  },
+  "node_version_ci": "22",
+  "dependencies_declared": {
+    "astro": "^7.0.2",
+    "@astrojs/starlight": "^0.41.0",
+    "@astrojs/markdown-remark": "^7.2.0",
+    "@astrojs/starlight-docsearch": "^0.7.0",
+    "starlight-links-validator": "^0.24.1",
+    "starlight-versions": "^0.9.0",
+    "starlight-polyglot": "file:./vendor/starlight-polyglot"
+  },
+  "devDependencies_declared": {
+    "@astrojs/check": "^0.9.9",
+    "typescript": "^6.0.3"
+  },
+  "dependencies_locked": {
+    "astro": "7.0.2",
+    "@astrojs/starlight": "0.41.0",
+    "@astrojs/markdown-remark": "7.2.0",
+    "@astrojs/starlight-docsearch": "0.7.0",
+    "starlight-links-validator": "0.24.1",
+    "starlight-versions": "0.9.0",
+    "starlight-polyglot": "0.1.0-innovate.1 (vendored)"
+  },
+  "devDependencies_locked": {
+    "@astrojs/check": "0.9.9",
+    "typescript": "6.0.3"
+  },
+  "transitive_peers": {
+    "astro-expressive-code": "0.43.1"
+  },
+  "peer_dependency_exceptions": [
+    {
+      "package": "astro-expressive-code@0.43.1",
+      "issue": "peer range not widened to Astro 7",
+      "status": "compatible_at_runtime",
+      "evidence": "pnpm check and pnpm build pass on Astro 7.0.2 with @astrojs/starlight 0.41.0"
+    }
+  ],
+  "plugin_relationships": {
+    "starlight": "0.41.0",
+    "starlight-links-validator": "0.24.1 → @astrojs/starlight@0.41.0, astro@7.0.2",
+    "starlight-versions": "0.9.0 → @astrojs/starlight@0.41.0",
+    "@astrojs/starlight-docsearch": "0.7.0 → @astrojs/starlight@0.41.0",
+    "starlight-polyglot": "vendored 0.1.0-innovate.1 → @astrojs/starlight@0.41.0, astro@7.0.2"
+  },
+  "config_files": {
+    "astro.config.mjs": "present",
+    "starlight.config.mjs": "present",
+    "content.config.ts": "present",
+    "tsconfig.json": "present"
+  },
+  "ci_workflows": {
+    "docs.yml": "pnpm install --frozen-lockfile, pnpm build, Node 22, pnpm 9.15.9",
+    "ci.yml": "pnpm install with docs build in nox -s docs",
+    "release-readiness.yml": "release readiness report generation"
+  },
+  "migration_evidence": {
+    "migration_manifest": "docs/source/_static/astro_starlight/migration_manifest.json",
+    "starlight_validation": "docs/source/_static/astro_starlight/starlight_validation_evidence.json",
+    "route_coverage": "docs/source/_static/astro_starlight/route_coverage.json",
+    "content_inventory": "docs/source/_static/astro_starlight/content_inventory.json",
+    "deployment_readiness": "docs/source/_static/astro_starlight/deployment_readiness.json"
+  },
+  "notes": [
+    "Repository already uses Starlight 0.41.0, not 0.40.x as originally requested.",
+    "Tech stack already records astro ^7.0.2 with @astrojs/starlight ^0.41.0 as baseline.",
+    "astro-expressive-code 0.43.1 peer range is not widened to Astro 7 but runtime is compatible.",
+    "All existing tests pass against the current dependency contract."
+  ]
+}

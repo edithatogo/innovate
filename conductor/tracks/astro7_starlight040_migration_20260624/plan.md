@@ -2,7 +2,7 @@
 
 ## Phase 1: Baseline Audit and Target Contract
 
-- [ ] Task: Audit current docs frontend dependency surface
+- [~] Task: Audit current docs frontend dependency surface
     - [ ] Read `docs/astro-site/package.json`, `docs/astro-site/pnpm-lock.yaml`, `astro.config.mjs`, `starlight.config.mjs`, docs workflows, and existing Astro/Starlight evidence artifacts.
     - [ ] Record the current versions and plugin relationships for Astro, Starlight, markdown processing, link validation, versioning, DocSearch, polyglot generation, TypeScript, and pnpm.
     - [ ] Commit task changes and attach the required Conductor git note.
