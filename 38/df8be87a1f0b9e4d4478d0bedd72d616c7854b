@@ -1,0 +1,1 @@
+Phase 1 green phase (38df8be). Implemented gap fixes: LockInModel registry + exports, equilibrium() on LotkaVolterra and MultiProduct, cross_elasticity(), threshold_diagnostics() on FisherPry and NortonBass, set_intervention_nodes() on NetworkDiffusion. 9/10 gap tests pass. Starlight docs deferred to Phase 4.
