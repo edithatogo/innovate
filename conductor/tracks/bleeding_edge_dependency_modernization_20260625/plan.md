@@ -2,9 +2,9 @@
 
 ## Phase 1: Dependency Baseline Audit
 
-- [ ] Task: Inventory all ecosystem dependencies
-    - [ ] Run `uv tree --outdated`, `pnpm outdated`, `npm outdated`, Cargo checks, and R/Julia/.NET package checks where available.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Inventory all ecosystem dependencies (930c2e9)
+    - [x] Run `uv tree --outdated`, `pnpm outdated`, `npm outdated`, Cargo checks, and R/Julia/.NET package checks where available.
+    - [x] Commit task changes and attach the required Conductor git note.
 - [ ] Task: Write dependency baseline tests
     - [ ] Add tests for Python 3.14, NumPy 2+, Pydantic v2, basedpyright strict, Astro 7, TypeScript 6, Node 26 types, Vitest 4, criterion 0.8, and mutmut current baseline.
     - [ ] Commit task changes and attach the required Conductor git note.
