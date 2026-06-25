@@ -425,7 +425,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 ---
 
 - [ ] **Track: Advanced Policy, Competition, and Substitution Modeling**
-*Link: [./tracks/advanced_policy_competition_substitution_20260625/](./tracks/advanced_policy_competition_substitution_20260625/)*
+*Link: [./archive/advanced_policy_competition_substitution_20260625/](./tracks/advanced_policy_competition_substitution_20260625/)*
 
 ---
 
