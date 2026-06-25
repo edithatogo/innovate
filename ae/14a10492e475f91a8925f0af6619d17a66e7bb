@@ -1,0 +1,1 @@
+Task 2 - Write failing gap tests completed (ae14a10). Created test_advanced_policy_gap_coverage.py with 10 tests covering LockInModel registration, path_dependence exports, equilibrium methods, cross-elasticity, threshold diagnostics, intervention API, gap inventory, and Starlight docs. 8 tests fail as expected (red phase).
