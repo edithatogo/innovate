@@ -44,21 +44,21 @@
       "owning_track": "vision_roadmap_truth_audit_20260614"
     },
     {
-      "path": "docs/source/rust_core_roadmap.rst",
+      "path": "docs/astro-site/src/content/docs/operations/rust-core.md",
       "classification": "future_state",
       "claim": "Rust does not own the complete core, and full Rust ownership must not be claimed until every canonical operation, model family, and stable payload shape is native or explicitly promoted elsewhere; release claims are fail-closed by docs/source/_static/rust_final_ownership_ledger.json.",
       "required_resolution": "Link operation and payload gaps to the new Rust-native completion tracks and keep rust_final_ownership_ledger.json current.",
       "owning_track": "rust_native_operation_completion_20260614"
     },
     {
-      "path": "docs/source/registry_submission_receipts.rst",
+      "path": "docs/astro-site/src/content/docs/operations/registry-submissions.md",
       "classification": "external_gate",
       "claim": "CRAN remains deferred, Spack and EasyBuild are ready_for_review, and HPSF/E4S are ready_for_maintainer with public review/contact paths but no submission receipts.",
       "required_resolution": "Keep readiness distinct from accepted submission status and require maintainer-opened external review links before claiming submission.",
       "owning_track": "external_submission_blocker_closure_20260614"
     },
     {
-      "path": "docs/source/hpc_submission_workflow.rst",
+      "path": "docs/astro-site/src/content/docs/operations/hpc-submission-workflow.md",
       "classification": "external_gate",
       "claim": "HPSF and E4S now have public proposal/contact paths and remain maintainer-managed until sponsors, review/CI validation, and external request links exist.",
       "required_resolution": "Preserve ready_for_maintainer evidence until external review links or submission receipts exist.",

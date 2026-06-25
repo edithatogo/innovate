@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from collections.abc import Sequence
 from typing import Any
 
@@ -39,7 +41,7 @@ class ComplementaryGoodsModel:
         solution = odeint(self.differential_equation, y0, t, args=tuple(self._params.values()))
         return solution
 
-    def fit(self, t: Sequence[float], y: np.ndarray, **kwargs: Any) -> "ComplementaryGoodsModel":
+    def fit(self, t: Sequence[float], y: np.ndarray, **kwargs: Any) -> ComplementaryGoodsModel:
         """Fits the model to the data."""
         from scipy.optimize import minimize
 

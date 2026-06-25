@@ -1,0 +1,10 @@
+{
+  "command": "cargo test --manifest-path bindings/rust/Cargo.toml",
+  "evidence_id": "rust_tests",
+  "generated_at": "2026-06-24T03:12:00Z",
+  "generated_by": "codex-python-314-modernization",
+  "requires_secrets": false,
+  "schema_version": 1,
+  "status": "pass",
+  "summary": "Rust binding unit, architecture, discovery, operation, scaffold, and schema compatibility tests passed."
+}

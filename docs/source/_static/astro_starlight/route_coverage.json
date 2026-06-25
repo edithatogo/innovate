@@ -37,168 +37,168 @@
       "astro_content_path": "docs/astro-site/src/content/docs/roadmap/diagnostics-uncertainty.md",
       "astro_route": "/roadmap/diagnostics-uncertainty/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/diagnostics_uncertainty_artifacts.rst",
+      "source_doc": "docs/astro-site/src/content/docs/roadmap/diagnostics-uncertainty.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/roadmap/probabilistic-inference.md",
       "astro_route": "/roadmap/probabilistic-inference/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/probabilistic_inference.rst",
+      "source_doc": "docs/astro-site/src/content/docs/roadmap/probabilistic-inference.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/roadmap/dataframe-engine.md",
       "astro_route": "/roadmap/dataframe-engine/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/dataframe_engine_experiments.rst",
+      "source_doc": "docs/astro-site/src/content/docs/roadmap/dataframe-engine.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/maintainers/stability.md",
       "astro_route": "/maintainers/stability/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/innovate.stability.rst",
+      "source_doc": "docs/astro-site/src/content/docs/maintainers/stability.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/maintainers/plugins.md",
       "astro_route": "/maintainers/plugins/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/innovate.plugins.rst",
+      "source_doc": "docs/astro-site/src/content/docs/maintainers/plugins.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/maintainers/runtime-logging.md",
       "astro_route": "/maintainers/runtime-logging/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/runtime_logging.rst",
+      "source_doc": "docs/astro-site/src/content/docs/maintainers/runtime-logging.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/operations/remote-execution.md",
       "astro_route": "/operations/remote-execution/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/remote_execution.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/remote-execution.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/operations/xla-backend.md",
       "astro_route": "/operations/xla-backend/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/xla_backend_strategy.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/xla-backend.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/operations/accelerator-parallel-execution.md",
       "astro_route": "/operations/accelerator-parallel-execution/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/accelerator_parallel_execution_evidence.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/accelerator-parallel-execution.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/operations/rust-core.md",
       "astro_route": "/operations/rust-core/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/rust_core_roadmap.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/rust-core.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/operations/abi-compatibility.md",
       "astro_route": "/operations/abi-compatibility/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/abi_binary_compatibility_strategy.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/abi-compatibility.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/operations/scientific-hpc.md",
       "astro_route": "/operations/scientific-hpc/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/scientific_hpc_readiness_roadmap.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/scientific-hpc.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/operations/hpc-registry.md",
       "astro_route": "/operations/hpc-registry/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/hpc_registry_contract.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/hpc-registry.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/operations/hpc-submission-packet.md",
       "astro_route": "/operations/hpc-submission-packet/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/hpc_submission_packet.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/hpc-submission-packet.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/operations/hpc-submission-workflow.md",
       "astro_route": "/operations/hpc-submission-workflow/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/hpc_submission_workflow.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/hpc-submission-workflow.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/operations/registry-submissions.md",
       "astro_route": "/operations/registry-submissions/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/registry_submission_receipts.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/registry-submissions.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/operations/polyglot-registry.md",
       "astro_route": "/operations/polyglot-registry/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/polyglot_registry_plan.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/polyglot-registry.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/operations/community-readiness.md",
       "astro_route": "/operations/community-readiness/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/community_submission_readiness.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/community-readiness.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/operations/hpc-readiness.md",
       "astro_route": "/operations/hpc-readiness/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/hpc_packaging_registry_readiness.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/hpc-readiness.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/operations/governance.md",
       "astro_route": "/operations/governance/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/external_governance_sustainability.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/governance.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/operations/submission-dossiers.md",
       "astro_route": "/operations/submission-dossiers/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/submission_readiness_dossiers.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/submission-dossiers.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/architecture/polyglot-repo.md",
       "astro_route": "/architecture/polyglot-repo/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/polyglot_repo_architecture.rst",
+      "source_doc": "docs/astro-site/src/content/docs/architecture/polyglot-repo.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/maintainers/publication.md",
       "astro_route": "/maintainers/publication/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/binding_publication_ci.rst",
+    "source_doc": "docs/astro-site/src/content/docs/maintainers/publication.md",
       "status": "implemented"
     },
     {
       "astro_content_path": "docs/astro-site/src/content/docs/maintainers/release-notes.md",
       "astro_route": "/maintainers/release-notes/",
       "coverage_source": "inventory",
-      "source_doc": "docs/source/release_notes_policy.rst",
+      "source_doc": "docs/astro-site/src/content/docs/maintainers/release-notes.md",
       "status": "implemented"
     },
     {

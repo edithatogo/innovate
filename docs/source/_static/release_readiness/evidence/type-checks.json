@@ -1,0 +1,11 @@
+{
+  "command": "uv run nox -s types",
+  "evidence_id": "type_checks",
+  "generated_at": "2026-06-24T03:25:52Z",
+  "generated_by": "codex-python-314-modernization",
+  "python_version": "3.14",
+  "requires_secrets": false,
+  "schema_version": 1,
+  "status": "pass",
+  "summary": "Strict basedpyright public API gate passed with --warnings, 0 errors, and 0 warnings."
+}

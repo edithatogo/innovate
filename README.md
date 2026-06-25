@@ -2,8 +2,7 @@
 
 Innovate is a contract-first diffusion modeling library. The current design centers on a stable functional kernel, Arrow interchange, optional backend implementations, and language bindings layered on top of the same core behavior.
 
-The Astro/Starlight site is the active deep documentation. Legacy Sphinx source
-is retained only as archival and redirect-reference material. This README is the
+The Astro/Starlight site is the active documentation surface. This README is the
 short front door.
 Markdown prose is checked in CI with Vale to keep the short-form docs clear and
 consistent.
@@ -13,7 +12,7 @@ consistent.
 - `src/innovate/` contains the Python kernel, fitters, diagnostics, Arrow interchange, and stability layers.
 - `bindings/` contains the language bindings and their tests.
 - `docs/astro-site/` contains the active Astro/Starlight documentation site.
-- `docs/source/` contains legacy Sphinx documentation retained for archival and redirect-reference use.
+- `docs/source/_static/` contains machine-readable release, registry, and migration evidence consumed by the Astro/Starlight site and CI.
 - `conductor/` contains the track history and archived implementation plans.
 
 ## Core ideas

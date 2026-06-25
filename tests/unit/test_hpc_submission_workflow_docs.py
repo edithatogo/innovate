@@ -4,18 +4,20 @@ from __future__ import annotations
 
 from pathlib import Path
 
-DOC = Path("docs/source/hpc_submission_workflow.rst")
-INDEX = Path("docs/source/index.rst")
+DOC = Path("docs/astro-site/src/content/docs/operations/hpc-submission-workflow.md")
+LATEST_DOC = Path("docs/astro-site/src/content/docs/latest/operations/hpc-submission-workflow.md")
+STARLIGHT_CONFIG = Path("docs/astro-site/starlight.config.mjs")
 
 
-def test_hpc_submission_workflow_doc_is_in_sphinx_navigation() -> None:
+def test_hpc_submission_workflow_doc_is_in_starlight_navigation() -> None:
     assert DOC.is_file()
-    index = INDEX.read_text(encoding="utf-8")
-    assert "hpc_submission_workflow" in index
+    assert LATEST_DOC.is_file()
+    config = STARLIGHT_CONFIG.read_text(encoding="utf-8")
+    assert "/operations/hpc-submission-workflow/" in config
 
 
 def test_hpc_submission_workflow_doc_mentions_all_targets() -> None:
-    text = DOC.read_text(encoding="utf-8")
+    text = DOC.read_text(encoding="utf-8") + "\n" + LATEST_DOC.read_text(encoding="utf-8")
 
     for phrase in (
         "Spack",

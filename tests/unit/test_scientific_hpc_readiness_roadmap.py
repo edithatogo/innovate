@@ -5,8 +5,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-ROADMAP = Path("docs/source/scientific_hpc_readiness_roadmap.rst")
+ROADMAP = Path("docs/astro-site/src/content/docs/operations/scientific-hpc.md")
+LATEST_ROADMAP = Path("docs/astro-site/src/content/docs/latest/operations/scientific-hpc.md")
 TRACKS = Path("conductor/tracks.md")
+STARLIGHT_CONFIG = Path("docs/astro-site/starlight.config.mjs")
 
 FOLLOW_ON_TRACKS = {
     "Community Submission Readiness Matrix": "community_submission_readiness_20260507",
@@ -19,17 +21,22 @@ FOLLOW_ON_TRACKS = {
 }
 
 
-def test_scientific_hpc_readiness_roadmap_is_in_sphinx_navigation() -> None:
+def _roadmap_text() -> str:
+    return ROADMAP.read_text() + "\n" + LATEST_ROADMAP.read_text()
+
+
+def test_scientific_hpc_readiness_roadmap_is_in_starlight_navigation() -> None:
     """The strategic roadmap should be reachable from the docs site."""
-    index = Path("docs/source/index.rst").read_text()
+    config = STARLIGHT_CONFIG.read_text()
 
     assert ROADMAP.is_file()
-    assert "scientific_hpc_readiness_roadmap" in index
+    assert LATEST_ROADMAP.is_file()
+    assert "/operations/scientific-hpc/" in config
 
 
 def test_scientific_hpc_readiness_roadmap_covers_submission_targets() -> None:
     """The roadmap should cover the requested scientific community targets."""
-    roadmap = ROADMAP.read_text()
+    roadmap = _roadmap_text()
 
     for target in (
         "Apache Arrow",
@@ -51,7 +58,7 @@ def test_scientific_hpc_readiness_roadmap_covers_submission_targets() -> None:
 
 def test_scientific_hpc_readiness_roadmap_covers_hpc_and_abi_gaps() -> None:
     """HPC, accelerator, ABI, and API compatibility gaps should be explicit."""
-    roadmap = ROADMAP.read_text()
+    roadmap = _roadmap_text()
 
     for phrase in (
         "CPU, GPU, TPU",
@@ -70,7 +77,7 @@ def test_scientific_hpc_readiness_roadmap_covers_hpc_and_abi_gaps() -> None:
 def test_scientific_hpc_follow_on_tracks_are_registered_and_parallel_ready() -> None:
     """Follow-on tracks should exist with dependencies and parallel ownership."""
     registry = TRACKS.read_text()
-    roadmap = ROADMAP.read_text()
+    roadmap = _roadmap_text()
 
     assert "Agent A" in roadmap
     assert "Agent F" in roadmap

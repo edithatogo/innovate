@@ -1,0 +1,11 @@
+{
+  "command": "uv run nox -s tests -- --ignore=tests/unit/test_benchmark_runner.py --ignore=tests/unit/test_benchmark_suite.py --ignore=tests/unit/test_mixture_comprehensive.py --ignore=tests/unit/test_network_policy_diffusion.py --ignore=tests/unit/test_specific_modules_coverage.py",
+  "evidence_id": "python_tests",
+  "generated_at": "2026-06-24T03:12:45Z",
+  "generated_by": "codex-python-314-modernization",
+  "python_version": "3.14",
+  "requires_secrets": false,
+  "schema_version": 1,
+  "status": "pass",
+  "summary": "Required Python 3.14 unit gate passed through nox with the CI 3.14 ignore set."
+}

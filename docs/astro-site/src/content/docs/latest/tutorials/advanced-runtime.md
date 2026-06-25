@@ -15,6 +15,10 @@ being gathered.
 - `uncertainty_calibration` returns calibrated intervals, residual diagnostics,
   overall coverage, and holdout coverage.
 
+These promoted contracts include explicit `schema_version`, `capability`,
+`metadata`, and `diagnostics` fields so downstream bindings can validate the
+payload shape without depending on Python object internals.
+
 ## Experimental surfaces
 
 - `regime_ensemble` combines compatible adoption trajectories with weights and
@@ -27,6 +31,13 @@ being gathered.
 Run `examples/advanced_runtime_workflows.py` to build one report covering every
 advanced runtime workflow. The example does not require JAX, Rust-native
 bindings, or probabilistic extras.
+
+The validated example builds:
+
+- a weighted regime ensemble;
+- a policy intervention scenario;
+- a streaming update payload;
+- calibrated prediction intervals with holdout coverage.
 
 ## Accelerator evidence
 

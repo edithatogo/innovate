@@ -19,7 +19,9 @@ def test_benchmark_docs_pages_are_present() -> None:
 
 def test_benchmark_workflow_tutorial_mentions_canonical_helpers() -> None:
     """The workflow tutorial should explain the stable benchmark entry points."""
-    tutorial = Path("docs/source/tutorials/benchmark_workflows.rst").read_text()
+    tutorial = Path(
+        "docs/astro-site/src/content/docs/tutorials/benchmark-workflows.md"
+    ).read_text()
 
     assert "validate_benchmark_corpus" in tutorial
     assert "refresh_model_card_summaries" in tutorial
@@ -35,9 +37,11 @@ def test_docs_toctrees_include_benchmarks() -> None:
     """The docs index should surface the benchmark API and tutorial pages."""
     package_docs = Path("docs/source/innovate.rst").read_text()
     tutorials_docs = Path("docs/source/tutorials.rst").read_text()
+    starlight_config = Path("docs/astro-site/starlight.config.mjs").read_text()
 
     assert "innovate.benchmarks" in package_docs
-    assert "tutorials/benchmark_workflows" in tutorials_docs
+    assert "tutorials/benchmark_workflows" not in tutorials_docs
+    assert "/tutorials/benchmark-workflows/" in starlight_config
 
 
 def test_rust_benchmark_ci_job_is_documented() -> None:
@@ -113,7 +117,9 @@ def test_benchmark_docs_describe_fast_and_opt_in_automation() -> None:
 
 def test_benchmark_workflow_documents_promotion_dossier_capture() -> None:
     """The benchmark tutorial should show how to capture promotion artifacts."""
-    tutorial = Path("docs/source/tutorials/benchmark_workflows.rst").read_text()
+    tutorial = Path(
+        "docs/astro-site/src/content/docs/tutorials/benchmark-workflows.md"
+    ).read_text()
 
     for phrase in (
         "Promotion dossier capture",

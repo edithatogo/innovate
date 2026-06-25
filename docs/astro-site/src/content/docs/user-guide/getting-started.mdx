@@ -9,7 +9,7 @@ This guide walks you through installing Innovate and fitting your first diffusio
 
 ## Prerequisites
 
-- Python 3.10 or later
+- Python 3.14
 - pip, uv, or conda package manager
 
 ## Installation
@@ -39,7 +39,7 @@ Innovate supports several optional backends and feature sets:
 | Extra | Packages | Command |
 |-------|----------|---------|
 | JAX backend | JAX for GPU-accelerated computation | `pip install "innovate[jax]"` |
-| Bayesian inference | PyMC for MCMC sampling | `pip install "innovate[bayesian]"` |
+| Bayesian inference | NumPyro and BlackJAX for MCMC sampling | `pip install "innovate[bayesian]"` |
 | Plotting | Matplotlib-based visualisation | `pip install "innovate[plots]"` |
 | All extras | All optional dependencies | `pip install "innovate[all]"` |
 

@@ -93,7 +93,7 @@ pip install "innovate[numba]"
 
 ## Bayesian Backend
 
-Full Bayesian inference using PyMC.
+Full Bayesian inference using the JAX-based NumPyro and BlackJAX stack.
 
 ```python
 set_backend('bayesian')

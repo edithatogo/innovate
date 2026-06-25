@@ -45,7 +45,7 @@ def validate_bass_parameters(  # noqa: PLR0912, PLR0915
             if p < 0:
                 issues.append(f"Parameter 'p' (innovation coefficient) should be non-negative, got {p}")
                 is_valid = False
-        except (ValueError, TypeError):
+        except ValueError, TypeError:
             issues.append(f"Parameter 'p' must be a positive number, got {params['p']}")
             is_valid = False
 
@@ -55,7 +55,7 @@ def validate_bass_parameters(  # noqa: PLR0912, PLR0915
             if q < 0:
                 issues.append(f"Parameter 'q' (imitation coefficient) should be non-negative, got {q}")
                 is_valid = False
-        except (ValueError, TypeError):
+        except ValueError, TypeError:
             issues.append(f"Parameter 'q' must be a positive number, got {params['q']}")
             is_valid = False
 
@@ -65,7 +65,7 @@ def validate_bass_parameters(  # noqa: PLR0912, PLR0915
             if m <= 0:
                 issues.append(f"Parameter 'm' (market potential) should be positive, got {m}")
                 is_valid = False
-        except (ValueError, TypeError):
+        except ValueError, TypeError:
             issues.append(f"Parameter 'm' must be a positive number, got {params['m']}")
             is_valid = False
 
@@ -78,7 +78,7 @@ def validate_bass_parameters(  # noqa: PLR0912, PLR0915
                     f"Parameter 'p_post' (post-event innovation coefficient) should be non-negative, got {p_post}"
                 )
                 is_valid = False
-        except (ValueError, TypeError):
+        except ValueError, TypeError:
             issues.append(f"Parameter 'p_post' must be a positive number, got {params['p_post']}")
             is_valid = False
 
@@ -90,7 +90,7 @@ def validate_bass_parameters(  # noqa: PLR0912, PLR0915
                     f"Parameter 'q_post' (post-event imitation coefficient) should be non-negative, got {q_post}"
                 )
                 is_valid = False
-        except (ValueError, TypeError):
+        except ValueError, TypeError:
             issues.append(f"Parameter 'q_post' must be a positive number, got {params['q_post']}")
             is_valid = False
 
@@ -100,7 +100,7 @@ def validate_bass_parameters(  # noqa: PLR0912, PLR0915
             if m_post <= 0:
                 issues.append(f"Parameter 'm_post' (post-event market potential) should be positive, got {m_post}")
                 is_valid = False
-        except (ValueError, TypeError):
+        except ValueError, TypeError:
             issues.append(f"Parameter 'm_post' must be a positive number, got {params['m_post']}")
             is_valid = False
 
@@ -151,7 +151,7 @@ def validate_logistic_parameters(params: dict[str, float]) -> dict[str, Any]:
             if L <= 0:
                 issues.append(f"Parameter 'L' (maximum value) should be positive, got {L}")
                 is_valid = False
-        except (ValueError, TypeError):
+        except ValueError, TypeError:
             issues.append(f"Parameter 'L' must be a positive number, got {params['L']}")
             is_valid = False
 
@@ -161,14 +161,14 @@ def validate_logistic_parameters(params: dict[str, float]) -> dict[str, Any]:
             if k <= 0:
                 issues.append(f"Parameter 'k' (growth rate) should be positive, got {k}")
                 is_valid = False
-        except (ValueError, TypeError):
+        except ValueError, TypeError:
             issues.append(f"Parameter 'k' must be a positive number, got {params['k']}")
             is_valid = False
 
     if "x0" in params:
         try:
             validate_float(params["x0"], "x0")
-        except (ValueError, TypeError):
+        except ValueError, TypeError:
             issues.append(f"Parameter 'x0' (x-value of sigmoid's midpoint) should be numeric, got {params['x0']}")
             is_valid = False
 
@@ -209,7 +209,7 @@ def validate_gompertz_parameters(params: dict[str, float]) -> dict[str, Any]:
             if a <= 0:
                 issues.append(f"Parameter 'a' (upper asymptote) should be positive, got {a}")
                 is_valid = False
-        except (ValueError, TypeError):
+        except ValueError, TypeError:
             issues.append(f"Parameter 'a' must be a positive number, got {params['a']}")
             is_valid = False
 
@@ -219,7 +219,7 @@ def validate_gompertz_parameters(params: dict[str, float]) -> dict[str, Any]:
             if b <= 0:
                 issues.append(f"Parameter 'b' (displacement along y-axis) should be positive, got {b}")
                 is_valid = False
-        except (ValueError, TypeError):
+        except ValueError, TypeError:
             issues.append(f"Parameter 'b' must be a positive number, got {params['b']}")
             is_valid = False
 
@@ -229,7 +229,7 @@ def validate_gompertz_parameters(params: dict[str, float]) -> dict[str, Any]:
             if c <= 0:
                 issues.append(f"Parameter 'c' (growth rate) should be positive, got {c}")
                 is_valid = False
-        except (ValueError, TypeError):
+        except ValueError, TypeError:
             issues.append(f"Parameter 'c' must be a positive number between 0 and 1, got {params['c']}")
             is_valid = False
 

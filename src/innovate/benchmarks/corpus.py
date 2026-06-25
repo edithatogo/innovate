@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 from types import MappingProxyType
 from typing import Mapping
 
@@ -26,7 +26,7 @@ DEFAULT_BENCHMARK_METADATA = MappingProxyType(
 )
 
 
-class BenchmarkFamily(str, Enum):
+class BenchmarkFamily(StrEnum):
     """Families represented in the benchmark corpus."""
 
     DIFFUSION = "diffusion"

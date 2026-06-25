@@ -1,0 +1,62 @@
+{
+  "checks": [
+    {
+      "artifact": "pyproject.toml",
+      "expectation": "requires-python >=3.14 and Python 3.14-only classifier",
+      "status": "pass"
+    },
+    {
+      "artifact": "pyproject.toml",
+      "expectation": "runtime dependencies use Python 3.14 lock-validated floors plus upper bounds for unstable scientific API lines",
+      "status": "pass"
+    },
+    {
+      "artifact": "pyproject.toml",
+      "expectation": "ruptures remains bounded to >=1.1.9,<1.1.10 because 1.1.10 excludes Python 3.14 in stable package metadata",
+      "status": "pass"
+    },
+    {
+      "artifact": "uv.lock",
+      "expectation": "lockfile resolved with requires-python >=3.14",
+      "status": "pass"
+    },
+    {
+      "artifact": ".github/workflows/ci.yml",
+      "expectation": "required Python CI lane uses 3.14",
+      "status": "pass"
+    },
+    {
+      "artifact": "pyproject.toml",
+      "expectation": "basedpyright targets Python 3.14 in strict mode",
+      "status": "pass"
+    },
+    {
+      "artifact": "docs/astro-site/src/content/docs/operations/hpc-readiness.md",
+      "expectation": "HPC registry compatibility constraints record Python 3.14-only acceptance blockers externally",
+      "status": "pass"
+    },
+    {
+      "artifact": "docs/astro-site/package.json",
+      "expectation": "Astro 7.0.2 and Starlight 0.41.0 are the active documentation package baseline",
+      "status": "pass"
+    },
+    {
+      "artifact": "docs/astro-site/astro.config.mjs",
+      "expectation": "Astro 7 uses @astrojs/markdown-remark unified() for link-validator compatibility",
+      "status": "pass"
+    }
+  ],
+  "evidence_id": "compatibility",
+  "external_constraints": [
+    "Registries, HPC package managers, or downstream centers that cannot yet consume Python 3.14-only packages must be tracked as external compatibility constraints rather than lowering the project baseline.",
+    "ruptures 1.1.10 is not a stable Python 3.14 install candidate, so the runtime contract uses ruptures>=1.1.9,<1.1.10 until a compatible stable upstream release exists.",
+    "astro-expressive-code 0.43.1 has not yet widened its peer metadata to Astro 7, but the Astro 7.0.2/Starlight 0.41.0 docs site passes pnpm check and pnpm build."
+  ],
+  "generated_at": "2026-06-24T03:37:00Z",
+  "generated_by": "codex-python-314-modernization",
+  "python_version": "3.14",
+  "requires_secrets": false,
+  "schema_version": 1,
+  "status": "pass",
+  "summary": "Python package metadata, runtime dependency bounds, lockfile, CI matrix, strict type checker target, HPC registry documentation, and Astro/Starlight docs compatibility are validated."
+}

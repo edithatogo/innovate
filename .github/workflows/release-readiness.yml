@@ -28,10 +28,10 @@ jobs:
           enable-cache: true
 
       - name: Set up Python
-        run: uv python install 3.12
+        run: uv python install 3.14
 
       - name: Install dependencies
-        run: uv sync --python 3.12
+        run: uv sync --python 3.14
 
       - name: Generate supply-chain evidence
         run: uv run nox -s release_supply_chain

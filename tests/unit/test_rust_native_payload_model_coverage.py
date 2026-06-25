@@ -148,7 +148,7 @@ def test_network_policy_ecosystem_and_advanced_families_have_reference_boundarie
 def test_full_rust_ownership_gate_blocks_overclaims() -> None:
     """The machine-readable gate should block full Rust claims while gaps remain."""
     gate = _full_ownership_gate()
-    roadmap = Path("docs/source/rust_core_roadmap.rst").read_text()
+    roadmap = Path("docs/astro-site/src/content/docs/operations/rust-core.md").read_text()
     starlight = Path("docs/astro-site/src/content/docs/operations/rust-core.md").read_text()
 
     assert gate["full_rust_ownership_claim_allowed"] is False

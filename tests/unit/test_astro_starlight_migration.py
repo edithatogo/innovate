@@ -18,10 +18,11 @@ def test_astro_starlight_package_manifest_records_pinned_baseline() -> None:
     assert Path("docs/astro-site/pnpm-lock.yaml").exists()
 
     dependencies = package["dependencies"]
-    assert dependencies["astro"] == "^6.0.0"
-    assert dependencies["@astrojs/starlight"] == "^0.39.0"
+    assert dependencies["astro"] == "^7.0.2"
+    assert dependencies["@astrojs/starlight"] == "^0.41.0"
+    assert dependencies["@astrojs/markdown-remark"] == "^7.2.0"
     assert dependencies["starlight-versions"] == "^0.9.0"
-    assert dependencies["starlight-links-validator"] == "^0.24.0"
+    assert dependencies["starlight-links-validator"] == "^0.24.1"
     assert dependencies["starlight-polyglot"].startswith("file:")
 
 
@@ -69,17 +70,17 @@ def test_astro_starlight_migration_manifest_records_cutover_decisions() -> None:
 
     assert manifest["migration_mode"] == "cutover-complete"
     assert manifest["active_docs_stack"] == "astro_starlight"
-    assert manifest["legacy_docs_stack"] == "sphinx"
-    assert manifest["legacy_retention_policy"] == "archival_and_redirect_reference_only"
+    assert manifest["legacy_docs_stack"] == "removed"
+    assert manifest["legacy_retention_policy"] == "removed"
     assert manifest["search_provider"] == "algolia-docsearch"
     assert manifest["sitemap_provider"] == "@astrojs/sitemap"
-    assert manifest["baseline"]["astro"] == "^6.0.0"
-    assert manifest["baseline"]["starlight"] == "0.38.4"
+    assert manifest["baseline"]["astro"] == "^7.0.2"
+    assert manifest["baseline"]["starlight"] == "0.41.0"
     assert manifest["baseline"]["starlight_versions"] == "0.9.0"
-    assert manifest["baseline"]["starlight_links_validator"] == "0.24.0"
+    assert manifest["baseline"]["starlight_links_validator"] == "0.24.1"
     assert manifest["baseline"]["starlight_docsearch"] == "0.7.0"
     assert manifest["scaffold_root"] == "docs/astro-site"
-    assert manifest["route_stability_policy"] == "compatibility-aliases-for-legacy-sphinx-urls"
+    assert manifest["route_stability_policy"] == "astro-native-routes-only"
 
 
 def test_astro_starlight_inventories_stay_synchronized() -> None:
@@ -191,7 +192,7 @@ def test_astro_starlight_redirect_route_map_describes_cutover() -> None:
         "/maintainers/publication/",
         "/maintainers/release-notes/",
         "/operations/rust-core/",
-        "Legacy Sphinx URLs remain reachable",
+        "Former Sphinx URLs remain recorded as historical redirect evidence",
     ):
         assert phrase in redirects
 

@@ -1,0 +1,8 @@
+{
+  "track_id": "bleeding_edge_dependency_modernization_20260625",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-06-25T11:32:58Z",
+  "updated_at": "2026-06-25T11:32:58Z",
+  "description": "Modernize dependency baselines and dependency dashboards across Python 3.14, Astro 7, Node 26, TypeScript 6, Rust, R, Julia, Go, and .NET."
+}

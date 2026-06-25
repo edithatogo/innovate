@@ -48,12 +48,12 @@ def test_product_status_does_not_claim_sphinx_as_active_docs_stack() -> None:
     assert "Documentation: Astro/Starlight" in product
 
 
-def test_tech_stack_marks_sphinx_as_legacy_not_active_migration() -> None:
-    """The tech stack should not imply the Starlight migration is still active."""
+def test_tech_stack_marks_starlight_as_only_active_docs_site() -> None:
+    """The tech stack should not include Sphinx in the active docs stack."""
     tech_stack = normalized_text(Path("conductor/tech-stack.md"))
 
     assert "being migrated to Starlight" not in tech_stack
-    assert "Legacy Sphinx source" in tech_stack
+    assert "Astro/Starlight under `docs/astro-site` is the only documentation site." in tech_stack
 
 
 def test_roadmap_links_archived_remediation_tracks() -> None:
@@ -97,7 +97,7 @@ def test_full_rust_core_claims_remain_disallowed_until_inventory_is_all_native()
         for path in (
             Path("conductor/product.md"),
             Path("docs/architecture_modernization_roadmap.md"),
-            Path("docs/source/rust_core_roadmap.rst"),
+            Path("docs/astro-site/src/content/docs/operations/rust-core.md"),
         )
     )
 

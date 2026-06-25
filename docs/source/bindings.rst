@@ -9,24 +9,25 @@ Bindings overview
 
 Rust
   :doc:`innovate.rust_bindings`
+  Canonical guide: ``docs/astro-site/src/content/docs/bindings/rust.md``.
 
 Go
-  :doc:`tutorials/go_bindings`
+  Canonical guide: ``docs/astro-site/src/content/docs/bindings/go.md``.
 
 Julia
-  :doc:`tutorials/julia_bindings`
+  Canonical guide: ``docs/astro-site/src/content/docs/bindings/julia.md``.
 
 R
   ``bindings/r/README.md`` documents R package use, local manual builds,
   generated-artifact policy, and the R publication quality gate.
 
 C#
-  :doc:`tutorials/csharp_bindings`
+  Canonical guide: ``docs/astro-site/src/content/docs/bindings/csharp.md``.
 
 Related core docs
 ------------------
 
-- :doc:`polyglot_repo_architecture`
+- `Polyglot repository architecture <../astro-site/src/content/docs/architecture/polyglot-repo.md>`_
 - :doc:`innovate.kernel`
 - :doc:`innovate.arrow_interchange`
 - :doc:`innovate.stability`

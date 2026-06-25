@@ -21,16 +21,17 @@ The migration status is ``cutover-complete``:
 Pinned scaffold baseline
 ------------------------
 
-* ``@astrojs/starlight`` ``0.38.4``
-* ``starlight-versions`` ``0.5.4``
-* ``starlight-links-validator`` ``0.24.0``
-* ``@astrojs/starlight-docsearch`` ``0.6.1``
-* ``astro`` ``^6.0.0``
+* ``astro`` ``^7.0.2``
+* ``@astrojs/starlight`` ``^0.41.0``
+* ``@astrojs/markdown-remark`` ``^7.2.0``
+* ``starlight-versions`` ``0.9.0``
+* ``starlight-links-validator`` ``0.24.1``
+* ``@astrojs/starlight-docsearch`` ``0.7.0``
 * ``@astrojs/sitemap`` ``^3.7.2``
 
 ``starlight-versions`` remains installed and the versioned ``latest/`` content
-is present, but the active middleware is disabled until the plugin handles
-Astro 6 non-doc routes such as ``/404``.
+is present, and the active build validates Astro 7 non-doc routes such as
+``/404``.
 
 Scaffold artifacts
 ------------------
@@ -38,7 +39,7 @@ Scaffold artifacts
 * ``docs/astro-site/package.json``
 * ``docs/astro-site/astro.config.mjs``
 * ``docs/astro-site/starlight.config.mjs``
-* ``docs/astro-site/package-lock.json``
+* ``docs/astro-site/pnpm-lock.yaml``
 * ``docs/astro-site/src/content.config.ts``
 * ``docs/astro-site/src/content/docs/``
 * ``docs/source/_static/astro_starlight/migration_manifest.json``

@@ -5,28 +5,30 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-DOC_PATH = Path("docs/source/abi_binary_compatibility_strategy.rst")
-INDEX_PATH = Path("docs/source/index.rst")
+DOC_PATH = Path("docs/astro-site/src/content/docs/operations/abi-compatibility.md")
+LATEST_DOC_PATH = Path("docs/astro-site/src/content/docs/latest/operations/abi-compatibility.md")
+STARLIGHT_CONFIG = Path("docs/astro-site/starlight.config.mjs")
 TRACK_DIR = Path("conductor/tracks/abi_binary_compatibility_strategy_20260507")
 ARCHIVE_DIR = Path("conductor/archive/abi_binary_compatibility_strategy_20260507")
 REGISTRY_PATH = Path("conductor/tracks.md")
 
 
 def _strategy_doc() -> str:
-    return DOC_PATH.read_text()
+    return "\n".join((DOC_PATH.read_text(), LATEST_DOC_PATH.read_text()))
 
 
 def _normalized_doc() -> str:
     return " ".join(_strategy_doc().split())
 
 
-def test_abi_strategy_doc_is_in_sphinx_navigation() -> None:
-    """The ABI strategy must be discoverable from the core docs index."""
+def test_abi_strategy_doc_is_in_starlight_navigation() -> None:
+    """The ABI strategy must be discoverable from Starlight navigation."""
     assert DOC_PATH.is_file()
-    index = INDEX_PATH.read_text()
+    assert LATEST_DOC_PATH.is_file()
+    starlight_config = STARLIGHT_CONFIG.read_text()
 
-    assert "abi_binary_compatibility_strategy" in index
-    assert index.index("rust_core_roadmap") < index.index("abi_binary_compatibility_strategy")
+    assert "/operations/abi-compatibility/" in starlight_config
+    assert "slug: latest/operations/abi-compatibility" in LATEST_DOC_PATH.read_text()
 
 
 def test_abi_strategy_separates_api_schema_and_native_abi() -> None:

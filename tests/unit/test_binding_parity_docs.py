@@ -6,8 +6,6 @@ from pathlib import Path
 
 CURRENT = Path("docs/astro-site/src/content/docs/bindings/parity.md")
 LATEST = Path("docs/astro-site/src/content/docs/latest/bindings/parity.md")
-SPHINX = Path("docs/source/binding_parity.rst")
-INDEX = Path("docs/source/index.rst")
 
 
 def test_starlight_binding_parity_pages_cover_all_supported_languages() -> None:
@@ -26,28 +24,21 @@ def test_starlight_binding_parity_pages_cover_all_supported_languages() -> None:
             assert evidence in text
 
 
-def test_sphinx_binding_parity_doc_links_evidence_and_package_receipts() -> None:
-    """Legacy Sphinx docs should retain a parity entry during the cutover."""
-    text = SPHINX.read_text(encoding="utf-8")
-
-    assert "Binding parity" in text
-    assert "registry_submission_receipts" in text
-    assert "binding_conformance_ci" in text
-    assert "language-native package checks" in text
-    assert "binding_hardening_evidence.json" in text
-    assert "binding_parity" in INDEX.read_text(encoding="utf-8")
-
-
 def test_binding_docs_do_not_keep_stale_sphinx_cutover_claims() -> None:
-    """Binding pages should not say Astro still needs to replace Sphinx."""
-    stale_claim = "until the Astro site fully replaces the Sphinx entry points"
+    """Binding pages should not reference an obsolete Sphinx cutover."""
+    stale_claims = (
+        "until the Astro site fully replaces the Sphinx entry points",
+        "Sphinx",
+        "sphinx",
+    )
     docs = [
         Path("docs/astro-site/src/content/docs/bindings/index.md"),
         Path("docs/astro-site/src/content/docs/latest/bindings/index.md"),
         CURRENT,
         LATEST,
-        SPHINX,
     ]
 
     for path in docs:
-        assert stale_claim not in path.read_text(encoding="utf-8")
+        text = path.read_text(encoding="utf-8")
+        for stale_claim in stale_claims:
+            assert stale_claim not in text

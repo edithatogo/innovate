@@ -25,7 +25,7 @@ New roadmap-level gaps should become Conductor tracks before implementation
 begins.
 
 The next maturity layer is tracked in the
-[Scientific and HPC readiness roadmap](source/scientific_hpc_readiness_roadmap.rst).
+[Scientific and HPC readiness roadmap](astro-site/src/content/docs/operations/scientific-hpc.md).
 It registers follow-on tracks for scientific community submission readiness,
 HPC packaging, accelerator evidence, Rust migration execution, ABI strategy,
 polyglot documentation architecture, and governance.
@@ -217,6 +217,48 @@ These tracks convert the deferred work and subsequent audit recommendations into
 Conductor-managed implementation items. Completed follow-on tracks point to their
 Conductor archive.
 
+### Active Release-Completion Tracks
+
+The following active Conductor tracks cover the remaining path from partial
+future-state completion to a mature, hardened release:
+
+| Remaining area | Active track |
+| --- | --- |
+| Roadmap and release-claim truth closure | [Roadmap Release Truth Closure](../conductor/tracks/roadmap_release_truth_closure_20260625/) |
+| Starlight-only documentation completion and active RST retirement | [Starlight-Only Documentation Completion](../conductor/tracks/starlight_only_docs_completion_20260625/) |
+| Rust-native ownership proof for canonical operations, payloads, and exceptions | [Rust-Native Ownership Release Proof](../conductor/tracks/rust_native_ownership_release_proof_20260625/) |
+| Polyglot and HPC registry acceptance evidence | [Polyglot Registry Acceptance Completion](../conductor/tracks/polyglot_registry_acceptance_completion_20260625/) |
+| Bleeding-edge dependency floors, dashboards, and runtime baselines | [Bleeding-Edge Dependency Modernization](../conductor/tracks/bleeding_edge_dependency_modernization_20260625/) |
+| CI, code quality, release-readiness, observability, security, coverage, and mutation gates | [CI, Code Quality, and Release Hardening](../conductor/tracks/ci_code_quality_release_hardening_20260625/) |
+| Policy diffusion, competition, substitution, network diffusion, and related advanced modeling gaps | [Advanced Policy, Competition, and Substitution Modeling](../conductor/tracks/advanced_policy_competition_substitution_20260625/) |
+| Reproducible scenario experiments across diffusion, substitution, competition, and policy interventions | [Scenario Experiment Workflows](../conductor/tracks/scenario_experiment_workflows_20260625/) |
+| Causal policy evaluation, rollout timing, spillovers, and heterogeneous effects | [Causal Policy Evaluation](../conductor/tracks/causal_policy_evaluation_20260625/) |
+| Scientific validation reports, benchmark corpus expansion, and leaderboard artifacts | [Model Validation and Benchmark Expansion](../conductor/tracks/model_validation_benchmark_expansion_20260625/) |
+| Kairos-backed ABM and network simulation adapter migration | [Kairos ABM and Network Simulation Migration](../conductor/tracks/kairos_abm_network_simulation_migration_20260625/) |
+| Data ingestion, validation, provenance, and dataset connector workflows | [Data Ingestion and Provenance Connectors](../conductor/tracks/data_ingestion_provenance_connectors_20260625/) |
+| Explainability, sensitivity analysis, and decision-report artifacts | [Explainability, Sensitivity, and Decision Reports](../conductor/tracks/explainability_sensitivity_decision_reports_20260625/) |
+
+These tracks supersede any ambiguous claim that archived tracks alone make the
+product fully migrated, mature, externally accepted, or release-ready. Archived
+tracks remain evidence for completed slices; active tracks own current release
+gaps.
+
+Recommended implementation order:
+
+1. [Roadmap Release Truth Closure](../conductor/tracks/roadmap_release_truth_closure_20260625/)
+2. [Starlight-Only Documentation Completion](../conductor/tracks/starlight_only_docs_completion_20260625/)
+3. [Rust-Native Ownership Release Proof](../conductor/tracks/rust_native_ownership_release_proof_20260625/)
+4. [Advanced Policy, Competition, and Substitution Modeling](../conductor/tracks/advanced_policy_competition_substitution_20260625/)
+5. [Scenario Experiment Workflows](../conductor/tracks/scenario_experiment_workflows_20260625/)
+6. [Causal Policy Evaluation](../conductor/tracks/causal_policy_evaluation_20260625/)
+7. [Kairos ABM and Network Simulation Migration](../conductor/tracks/kairos_abm_network_simulation_migration_20260625/)
+8. [Data Ingestion and Provenance Connectors](../conductor/tracks/data_ingestion_provenance_connectors_20260625/)
+9. [Explainability, Sensitivity, and Decision Reports](../conductor/tracks/explainability_sensitivity_decision_reports_20260625/)
+10. [Model Validation and Benchmark Expansion](../conductor/tracks/model_validation_benchmark_expansion_20260625/)
+11. [Bleeding-Edge Dependency Modernization](../conductor/tracks/bleeding_edge_dependency_modernization_20260625/)
+12. [CI, Code Quality, and Release Hardening](../conductor/tracks/ci_code_quality_release_hardening_20260625/)
+13. [Polyglot Registry Acceptance Completion](../conductor/tracks/polyglot_registry_acceptance_completion_20260625/)
+
 - [Probabilistic Inference Expansion](../conductor/archive/probabilistic_inference_expansion_20260430/)
 - [Diagnostics and Uncertainty Expansion](../conductor/archive/diagnostics_uncertainty_expansion_20260430/)
 - [Benchmark Corpus Automation](../conductor/archive/benchmark_corpus_automation_20260430/)
@@ -275,13 +317,13 @@ agent-queryable or workflow-orchestration heavy.
 
 The `Probabilistic Inference Expansion` track starts with a stable posterior
 payload and optional backend metadata contract in
-`docs/source/probabilistic_inference.rst`. Broader NumPyro model-family
+`docs/astro-site/src/content/docs/roadmap/probabilistic-inference.md`. Broader NumPyro model-family
 coverage remains sequenced behind deterministic fixtures, schema compatibility,
 and XLA promotion gates.
 
 The `Diagnostics and Uncertainty Expansion` track starts with a versioned
 diagnostics artifact payload in
-`docs/source/diagnostics_uncertainty_artifacts.rst`. The first slice covers
+`docs/astro-site/src/content/docs/roadmap/diagnostics-uncertainty.md`. The first slice covers
 residual diagnostics, residual-bias calibration checks, uncertainty interval
 rows, and model-comparison metrics behind the existing kernel and Arrow table
 contracts. JAX/XLA acceleration remains a promotion gate for future array-heavy
@@ -311,7 +353,7 @@ is preferred, when NumPy/SciPy remains the reference path, when Rust-native
 execution should compete with XLA-backed kernels, and when dynamic operational
 simulation semantics should stay outside XLA-backed implementation.
 The durable policy is documented in the Sphinx page
-`XLA Backend Strategy` (`docs/source/xla_backend_strategy.rst`).
+`XLA Backend Strategy` (`docs/astro-site/src/content/docs/operations/xla-backend.md`).
 
 The `Rust Core Expansion` track now starts from an operation support inventory
 rather than a broad rewrite. The inventory records native Rust scope, bridge

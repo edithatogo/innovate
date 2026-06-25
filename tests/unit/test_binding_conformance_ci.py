@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 WORKFLOW = Path(".github/workflows/binding-conformance.yml")
-DOC = Path("docs/source/binding_conformance_ci.rst")
+DOC = Path("docs/astro-site/src/content/docs/maintainers/binding-conformance.md")
 
 
 def test_binding_conformance_workflow_runs_shared_contract_tests() -> None:
@@ -38,8 +38,10 @@ def test_binding_conformance_workflow_uploads_evidence_artifacts() -> None:
 def test_binding_conformance_ci_has_documented_local_fallback() -> None:
     """Local fallback commands should be explicit for missing toolchains."""
     doc = DOC.read_text(encoding="utf-8")
+    starlight_config = Path("docs/astro-site/starlight.config.mjs").read_text(encoding="utf-8")
 
     assert "Binding conformance CI" in doc
     assert "uv run pytest" in doc
     assert "language-native package checks" in doc
     assert "toolchain is unavailable" in doc
+    assert "/maintainers/binding-conformance/" in starlight_config

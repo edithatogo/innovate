@@ -7,8 +7,8 @@ from pathlib import Path
 
 import nox
 
-SUPPORTED_PYTHONS = ("3.10", "3.11", "3.12", "3.13", "3.14")
-DEFAULT_PYTHON = "3.12"
+SUPPORTED_PYTHONS = ("3.14",)
+DEFAULT_PYTHON = "3.14"
 PYTEST_BASE_IGNORES = (
     "--ignore=tests/unit/test_bayesian_fitter_robust.py",
     "--ignore=tests/unit/test_blackjax_fitter.py",
@@ -78,7 +78,7 @@ def _pytest_args(test_targets: Sequence[str]) -> tuple[str, ...]:
 @nox.session(python=False)
 @nox.parametrize("python", SUPPORTED_PYTHONS)
 def tests(session: nox.Session, python: str) -> None:
-    """Run the required unit gate on every supported Python version."""
+    """Run the required unit gate on the Python 3.14 baseline."""
     _prepare_python(session, python)
     _run_uv(
         session,
@@ -120,17 +120,24 @@ def lint(session: nox.Session) -> None:
 
 @nox.session(python=False)
 def types(session: nox.Session) -> None:
-    """Run type checks for the verified public API surface."""
+    """Run strict basedpyright checks for the verified public API surface."""
     _run_uv(session, "sync", "--python", DEFAULT_PYTHON)
-    _run_uv(session, "run", "ty", "check", *PUBLIC_API_TYPE_TARGETS, *session.posargs)
-    _run_uv(session, "run", "mypy", *PUBLIC_API_TYPE_TARGETS)
+    _run_uv(session, "run", "basedpyright", "--warnings", *PUBLIC_API_TYPE_TARGETS, *session.posargs)
 
 
 @nox.session(python=False)
 def docs(session: nox.Session) -> None:
-    """Build the Sphinx documentation smoke target."""
+    """Build the Astro/Starlight documentation smoke target."""
     _run_uv(session, "sync", "--python", DEFAULT_PYTHON)
-    _run_uv(session, "run", "python", "-m", "sphinx", "-b", "html", "docs/source", "/tmp/innovate-docs-build")
+    session.run("pnpm", "--dir", "docs/astro-site", "install", "--frozen-lockfile", external=True)
+    session.run(
+        "pnpm",
+        "--dir",
+        "docs/astro-site",
+        "build",
+        external=True,
+        env={"STARLIGHT_POLYGLOT_PYTHON": "uv run python"},
+    )
 
 
 @nox.session(python=False)

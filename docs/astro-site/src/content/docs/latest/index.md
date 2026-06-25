@@ -86,4 +86,4 @@ print(forecast)
 | Installation guide | [Getting Started](/innovate/latest/user-guide/getting-started/) |
 | Core concepts | [Kernel Overview](/innovate/latest/core/kernel/) |
 | Full API reference | [Python API](/innovate/latest/api/python/) |
-| Migration from Sphinx | [Migration Guide](/innovate/latest/migration/) |
+| Documentation migration | [Migration Guide](/innovate/latest/migration/) |

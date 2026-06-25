@@ -8,7 +8,7 @@ Innovate supports multiple installation methods and runtime environments.
 
 ## System Requirements
 
-* **Python**: 3.10, 3.11, 3.12, 3.13, or 3.14
+* **Python**: 3.14
 * **Operating System**: Linux, macOS, Windows
 * **RAM**: 4 GB minimum (16 GB recommended for large-scale simulations)
 
@@ -72,7 +72,7 @@ Numba compiles numerical kernels at runtime, accelerating tight loops in simulat
 pip install "innovate[bayesian]"
 ```
 
-Adds PyMC-based MCMC sampling for full Bayesian inference on diffusion model parameters, providing posterior distributions and credible intervals.
+Adds JAX-based MCMC sampling with NumPyro and BlackJAX for full Bayesian inference on diffusion model parameters, providing posterior distributions and credible intervals.
 
 ## Verifying the Installation
 

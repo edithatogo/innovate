@@ -6,8 +6,9 @@ import json
 from pathlib import Path
 
 MATRIX_PATH = Path("docs/source/_static/community_submission_readiness_matrix.json")
-DOC_PATH = Path("docs/source/community_submission_readiness.rst")
-INDEX_PATH = Path("docs/source/index.rst")
+DOC_PATH = Path("docs/astro-site/src/content/docs/operations/community-readiness.md")
+LATEST_DOC_PATH = Path("docs/astro-site/src/content/docs/latest/operations/community-readiness.md")
+STARLIGHT_CONFIG = Path("docs/astro-site/starlight.config.mjs")
 
 TARGETS = {
     "pyopensci",
@@ -68,11 +69,11 @@ def test_community_submission_targets_have_status_evidence_and_blockers() -> Non
 
 def test_community_submission_docs_link_matrix_and_sequence() -> None:
     """The reviewer-facing page should be navigable and link the matrix."""
-    docs = DOC_PATH.read_text(encoding="utf-8")
-    index = INDEX_PATH.read_text(encoding="utf-8")
+    docs = DOC_PATH.read_text(encoding="utf-8") + "\n" + LATEST_DOC_PATH.read_text(encoding="utf-8")
+    config = STARLIGHT_CONFIG.read_text(encoding="utf-8")
     matrix = load_matrix()
 
-    assert "community_submission_readiness" in index
+    assert "/operations/community-readiness/" in config
     assert "community_submission_readiness_matrix.json" in docs
     assert "Submission sequencing" in docs
     assert "No submission claims readiness without evidence" in docs

@@ -25,7 +25,7 @@
       "release_path": "uv build -> trusted publishing",
       "submission_status": "submitted",
       "evidence": [
-        "docs/source/binding_publication_ci.rst",
+        "docs/astro-site/src/content/docs/maintainers/publication.md",
         "https://pypi.org/project/innovate/"
       ],
       "receipt": "https://pypi.org/project/innovate/ (version 0.5.0 published)"
@@ -78,7 +78,7 @@
       "submission_status": "deferred",
       "evidence": [
         "bindings/r/tests/run.R",
-        "docs/source/binding_publication_ci.rst"
+        "docs/astro-site/src/content/docs/maintainers/publication.md"
       ],
       "receipt": "Registry submission not yet executed in this repo context."
     },
@@ -129,7 +129,7 @@
       "release_path": "CI smoke -> scheduler-backed validation -> upstream recipe review",
       "submission_status": "ready_for_review",
       "evidence": [
-        "docs/source/hpc_packaging_registry_readiness.rst",
+        "docs/astro-site/src/content/docs/operations/hpc-readiness.md",
         "docs/source/_static/hpc_packaging/spack/py-innovate.py"
       ],
       "receipt": "Ready for maintainer-managed upstream review after scheduler-backed evidence refresh."
@@ -142,7 +142,7 @@
       "release_path": "CI smoke -> scheduler-backed validation -> easyconfig review",
       "submission_status": "ready_for_review",
       "evidence": [
-        "docs/source/hpc_packaging_registry_readiness.rst",
+        "docs/astro-site/src/content/docs/operations/hpc-readiness.md",
         "docs/source/_static/hpc_packaging/easybuild/innovate-0.5.0.eb"
       ],
       "receipt": "Ready for maintainer-managed upstream review after scheduler-backed evidence refresh."
@@ -157,7 +157,7 @@
       "evidence": [
         "https://github.com/hpsfoundation/tac/issues/new?template=new-project-proposal.md",
         "https://raw.githubusercontent.com/hpsfoundation/tac/main/.github/ISSUE_TEMPLATE/new-project-proposal.md",
-        "docs/source/hpc_registry_contract.rst"
+        "docs/astro-site/src/content/docs/operations/hpc-registry.md"
       ],
       "receipt": "Ready for maintainer-managed HPSF TAC sponsor identification and proposal issue."
     },
@@ -171,7 +171,7 @@
       "evidence": [
         "https://e4s.io/contribution-guide/",
         "https://e4s.io/contact/",
-        "docs/source/hpc_registry_contract.rst"
+        "docs/astro-site/src/content/docs/operations/hpc-registry.md"
       ],
       "receipt": "Ready for maintainer-managed E4S contact, review/CI validation, and inclusion request."
     }

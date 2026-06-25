@@ -90,8 +90,8 @@ def build_manifest() -> dict[str, object]:
                 "status": "ready_for_maintainer",
                 "submission_mode": "governance_packet",
                 "packet_artifacts": [
-                    "docs/source/hpc_registry_contract.rst",
-                    "docs/source/hpc_packaging_registry_readiness.rst",
+                    "docs/astro-site/src/content/docs/operations/hpc-registry.md",
+                    "docs/astro-site/src/content/docs/operations/hpc-readiness.md",
                     "docs/source/_static/hpc_packaging/governance/hpsf-evidence.md",
                     "docs/source/_static/hpc_packaging/evidence/hpsf-review-note.md",
                     "docs/source/_static/hpc_packaging/pack_packet.py",
@@ -109,8 +109,8 @@ def build_manifest() -> dict[str, object]:
                 "status": "ready_for_maintainer",
                 "submission_mode": "performance_portability_packet",
                 "packet_artifacts": [
-                    "docs/source/hpc_registry_contract.rst",
-                    "docs/source/hpc_packaging_registry_readiness.rst",
+                    "docs/astro-site/src/content/docs/operations/hpc-registry.md",
+                    "docs/astro-site/src/content/docs/operations/hpc-readiness.md",
                     "docs/source/_static/hpc_packaging/governance/e4s-evidence.md",
                     "docs/source/_static/hpc_packaging/evidence/e4s-review-note.md",
                     "docs/source/_static/hpc_packaging/pack_packet.py",

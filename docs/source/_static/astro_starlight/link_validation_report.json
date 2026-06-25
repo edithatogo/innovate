@@ -139,82 +139,82 @@
     {
       "implemented": true,
       "route": "/operations/rust-core/",
-      "source_doc": "docs/source/rust_core_roadmap.rst"
+      "source_doc": "docs/astro-site/src/content/docs/operations/rust-core.md"
     },
     {
       "implemented": true,
       "route": "/operations/community-readiness/",
-      "source_doc": "docs/source/community_submission_readiness.rst"
+      "source_doc": "docs/astro-site/src/content/docs/operations/community-readiness.md"
     },
     {
       "implemented": true,
       "route": "/operations/accelerator-parallel-execution/",
-      "source_doc": "docs/source/accelerator_parallel_execution_evidence.rst"
+      "source_doc": "docs/astro-site/src/content/docs/operations/accelerator-parallel-execution.md"
     },
     {
       "implemented": true,
       "route": "/operations/abi-compatibility/",
-      "source_doc": "docs/source/abi_binary_compatibility_strategy.rst"
+      "source_doc": "docs/astro-site/src/content/docs/operations/abi-compatibility.md"
     },
     {
       "implemented": true,
       "route": "/operations/governance/",
-      "source_doc": "docs/source/external_governance_sustainability.rst"
+      "source_doc": "docs/astro-site/src/content/docs/operations/governance.md"
     },
     {
       "implemented": true,
       "route": "/operations/hpc-registry/",
-      "source_doc": "docs/source/hpc_registry_contract.rst"
+      "source_doc": "docs/astro-site/src/content/docs/operations/hpc-registry.md"
     },
     {
       "implemented": true,
       "route": "/operations/hpc-readiness/",
-      "source_doc": "docs/source/hpc_packaging_registry_readiness.rst"
+      "source_doc": "docs/astro-site/src/content/docs/operations/hpc-readiness.md"
     },
     {
       "implemented": true,
       "route": "/operations/hpc-submission-packet/",
-      "source_doc": "docs/source/hpc_submission_packet.rst"
+      "source_doc": "docs/astro-site/src/content/docs/operations/hpc-submission-packet.md"
     },
     {
       "implemented": true,
       "route": "/operations/hpc-submission-workflow/",
-      "source_doc": "docs/source/hpc_submission_workflow.rst"
+      "source_doc": "docs/astro-site/src/content/docs/operations/hpc-submission-workflow.md"
     },
     {
       "implemented": true,
       "route": "/operations/polyglot-registry/",
-      "source_doc": "docs/source/polyglot_registry_plan.rst"
+      "source_doc": "docs/astro-site/src/content/docs/operations/polyglot-registry.md"
     },
     {
       "implemented": true,
       "route": "/operations/remote-execution/",
-      "source_doc": "docs/source/remote_execution.rst"
+      "source_doc": "docs/astro-site/src/content/docs/operations/remote-execution.md"
     },
     {
       "implemented": true,
       "route": "/operations/registry-submissions/",
-      "source_doc": "docs/source/registry_submission_receipts.rst"
+      "source_doc": "docs/astro-site/src/content/docs/operations/registry-submissions.md"
     },
     {
       "implemented": true,
       "route": "/operations/scientific-hpc/",
-      "source_doc": "docs/source/scientific_hpc_readiness_roadmap.rst"
+      "source_doc": "docs/astro-site/src/content/docs/operations/scientific-hpc.md"
     },
     {
       "implemented": true,
       "route": "/operations/submission-dossiers/",
-      "source_doc": "docs/source/submission_readiness_dossiers.rst"
+      "source_doc": "docs/astro-site/src/content/docs/operations/submission-dossiers.md"
     },
     {
       "implemented": true,
       "route": "/operations/xla-backend/",
-      "source_doc": "docs/source/xla_backend_strategy.rst"
+      "source_doc": "docs/astro-site/src/content/docs/operations/xla-backend.md"
     },
     {
       "implemented": true,
       "route": "/maintainers/publication/",
-      "source_doc": "docs/source/binding_publication_ci.rst"
+      "source_doc": "docs/astro-site/src/content/docs/maintainers/publication.md"
     },
     {
       "implemented": true,
@@ -224,17 +224,17 @@
     {
       "implemented": true,
       "route": "/maintainers/plugins/",
-      "source_doc": "docs/source/innovate.plugins.rst"
+      "source_doc": "docs/astro-site/src/content/docs/maintainers/plugins.md"
     },
     {
       "implemented": true,
       "route": "/maintainers/stability/",
-      "source_doc": "docs/source/innovate.stability.rst"
+      "source_doc": "docs/astro-site/src/content/docs/maintainers/stability.md"
     },
     {
       "implemented": true,
       "route": "/maintainers/runtime-logging/",
-      "source_doc": "docs/source/runtime_logging.rst"
+      "source_doc": "docs/astro-site/src/content/docs/maintainers/runtime-logging.md"
     },
     {
       "implemented": true,
@@ -249,7 +249,7 @@
     {
       "implemented": true,
       "route": "/architecture/polyglot-repo/",
-      "source_doc": "docs/source/polyglot_repo_architecture.rst"
+      "source_doc": "docs/astro-site/src/content/docs/architecture/polyglot-repo.md"
     },
     {
       "implemented": true,
@@ -259,17 +259,17 @@
     {
       "implemented": true,
       "route": "/roadmap/diagnostics-uncertainty/",
-      "source_doc": "docs/source/diagnostics_uncertainty_artifacts.rst"
+      "source_doc": "docs/astro-site/src/content/docs/roadmap/diagnostics-uncertainty.md"
     },
     {
       "implemented": true,
       "route": "/roadmap/probabilistic-inference/",
-      "source_doc": "docs/source/probabilistic_inference.rst"
+      "source_doc": "docs/astro-site/src/content/docs/roadmap/probabilistic-inference.md"
     },
     {
       "implemented": true,
       "route": "/roadmap/dataframe-engine/",
-      "source_doc": "docs/source/dataframe_engine_experiments.rst"
+      "source_doc": "docs/astro-site/src/content/docs/roadmap/dataframe-engine.md"
     },
     {
       "implemented": true,

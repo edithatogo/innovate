@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 import starlight from '@astrojs/starlight';
 import starlightDocSearch from '@astrojs/starlight-docsearch';
 import polyglot from 'starlight-polyglot';
@@ -21,6 +22,9 @@ export default defineConfig({
   site: 'https://edithatogo.github.io/innovate',
   base: '/innovate',
   trailingSlash: 'always',
+  markdown: {
+    processor: unified(),
+  },
   integrations: [
     starlight({
       title: 'Innovate',

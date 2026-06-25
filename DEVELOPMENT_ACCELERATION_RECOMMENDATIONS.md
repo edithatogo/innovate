@@ -10,9 +10,9 @@
   - **Darglint**: Ensure docstrings match function signatures
 
 ### 1.2 Type Hinting Improvements
-- **Current status**: Uses mypy for type checking
+- **Current status**: Uses strict basedpyright for the verified public API surface
 - **Recommendations**:
-  - Increase strictness of mypy configuration
+  - Expand basedpyright strict coverage beyond the verified public API surface
   - Add type hints to all public APIs if not already present
   - Consider using `typing.Protocol` for interface definitions
 
@@ -151,7 +151,7 @@
 
 ### High Priority (Immediate)
 1. Pytest-parallel for faster test execution
-2. More comprehensive mypy strictness
+2. More comprehensive basedpyright strict coverage
 3. Enhanced pre-commit hooks
 4. Documentation improvements
 

@@ -23,7 +23,7 @@ def test_route_coverage_report_is_generated_from_inventories() -> None:
     assert implemented
     assert "docs/source/astro_starlight_migration.rst" in implemented
     assert not planned
-    assert "docs/source/binding_publication_ci.rst" in implemented
+    assert "docs/astro-site/src/content/docs/maintainers/publication.md" in implemented
 
 
 def test_route_coverage_report_matches_astro_content_tree() -> None:

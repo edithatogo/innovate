@@ -143,13 +143,10 @@ def test_docs_do_not_overclaim_submission_or_acceptance_without_receipts() -> No
     docs = "\n".join(
         path.read_text(encoding="utf-8")
         for path in (
-            Path("docs/source/registry_submission_receipts.rst"),
-            Path("docs/source/hpc_submission_packet.rst"),
-            Path("docs/source/community_submission_readiness.rst"),
-            Path("docs/source/submission_readiness_dossiers.rst"),
             Path("docs/astro-site/src/content/docs/operations/registry-submissions.md"),
             Path("docs/astro-site/src/content/docs/operations/hpc-submission-packet.md"),
             Path("docs/astro-site/src/content/docs/operations/community-readiness.md"),
+            Path("docs/astro-site/src/content/docs/operations/submission-dossiers.md"),
         )
     ).lower()
 

@@ -46,6 +46,8 @@ not duplicate model semantics.
 ## Package scripts
 
 - `npm test` runs the TypeScript test suite.
+- Bridge-backed Vitest checks run serially with a 120 second timeout because
+  they launch the shared Python kernel bridge.
 - `npm run build` compiles the published JavaScript and declaration files.
 - `npm run coverage` runs the suite with V8 coverage enabled.
 - `npm run typecheck` validates the package with `tsc --noEmit`.
@@ -88,7 +90,7 @@ preserving the underlying kernel contract.
 
 ## Backend expectations
 
-- Node.js 22 or newer is required.
+- Node.js 26 or newer is required.
 - The Python `innovate` package must be available to the bridge command.
 - The default Python launcher is `uv run python`; set `INNOVATE_PYTHON_COMMAND` when the backend is
   installed in another environment.

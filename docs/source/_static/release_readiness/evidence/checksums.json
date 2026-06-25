@@ -2,11 +2,11 @@
   "artifacts": [
     {
       "path": "pyproject.toml",
-      "sha256": "f022781dd0a30afd4eb3c0b1dee91d7853cb1a54f0ae4a37b07d9e710a91a99a"
+      "sha256": "0c3eec54dbcb6a471df28688498b30bfda866fc93bee62c82004349e09f5da90"
     },
     {
       "path": "uv.lock",
-      "sha256": "8c3964625ad3f5f071b1ed0599ffcec6d96ea47cf871b79c488b11b48f1a35e4"
+      "sha256": "899be3a19cc2ab33c4d1cd545a6588496bfde8ee22d65a3bcf3a27ef86108e4c"
     },
     {
       "path": "bindings/rust/Cargo.toml",
@@ -29,8 +29,16 @@
       "sha256": "d4b945e13f4496f9b8ba69bec4c281803a0a22d0cc480d2c85dded150c2a7ef2"
     },
     {
+      "path": "docs/astro-site/package.json",
+      "sha256": "3baef32ca754c74c08eccfbefec8023fb75616e989f0c3a693b48c51e54fa11a"
+    },
+    {
+      "path": "docs/astro-site/pnpm-lock.yaml",
+      "sha256": "c52bb9f15f20d4b65221c64a073dce7cbf1ff3efa4c55bd9819d43c79d03e7b4"
+    },
+    {
       "path": "docs/source/_static/release_readiness_contract.json",
-      "sha256": "e7158d9b8847d9b93e6060f5e5eaae200310585e6b1239b2453a7294349d1d76"
+      "sha256": "3fc310f449d401d239e2779fa45e1b8bf2417221c931844fc709a34b8b2cb3f1"
     }
   ],
   "evidence_id": "checksums",

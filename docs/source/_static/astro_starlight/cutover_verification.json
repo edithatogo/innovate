@@ -49,7 +49,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/diagnostics_uncertainty_artifacts.rst",
+      "source_doc": "docs/astro-site/src/content/docs/roadmap/diagnostics-uncertainty.md",
       "sphinx_path": "diagnostics_uncertainty_artifacts"
     },
     {
@@ -57,7 +57,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/probabilistic_inference.rst",
+      "source_doc": "docs/astro-site/src/content/docs/roadmap/probabilistic-inference.md",
       "sphinx_path": "probabilistic_inference"
     },
     {
@@ -65,7 +65,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/dataframe_engine_experiments.rst",
+      "source_doc": "docs/astro-site/src/content/docs/roadmap/dataframe-engine.md",
       "sphinx_path": "dataframe_engine_experiments"
     },
     {
@@ -73,7 +73,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/innovate.stability.rst",
+      "source_doc": "docs/astro-site/src/content/docs/maintainers/stability.md",
       "sphinx_path": "innovate.stability"
     },
     {
@@ -81,7 +81,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/innovate.plugins.rst",
+      "source_doc": "docs/astro-site/src/content/docs/maintainers/plugins.md",
       "sphinx_path": "innovate.plugins"
     },
     {
@@ -89,7 +89,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/runtime_logging.rst",
+      "source_doc": "docs/astro-site/src/content/docs/maintainers/runtime-logging.md",
       "sphinx_path": "runtime_logging"
     },
     {
@@ -97,7 +97,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/remote_execution.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/remote-execution.md",
       "sphinx_path": "remote_execution"
     },
     {
@@ -105,7 +105,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/xla_backend_strategy.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/xla-backend.md",
       "sphinx_path": "xla_backend_strategy"
     },
     {
@@ -113,7 +113,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/accelerator_parallel_execution_evidence.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/accelerator-parallel-execution.md",
       "sphinx_path": "accelerator_parallel_execution_evidence"
     },
     {
@@ -121,7 +121,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/rust_core_roadmap.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/rust-core.md",
       "sphinx_path": "rust_core_roadmap"
     },
     {
@@ -129,7 +129,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/abi_binary_compatibility_strategy.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/abi-compatibility.md",
       "sphinx_path": "abi_binary_compatibility_strategy"
     },
     {
@@ -137,7 +137,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/scientific_hpc_readiness_roadmap.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/scientific-hpc.md",
       "sphinx_path": "scientific_hpc_readiness_roadmap"
     },
     {
@@ -145,7 +145,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/hpc_registry_contract.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/hpc-registry.md",
       "sphinx_path": "hpc_registry_contract"
     },
     {
@@ -153,7 +153,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/hpc_submission_packet.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/hpc-submission-packet.md",
       "sphinx_path": "hpc_submission_packet"
     },
     {
@@ -161,7 +161,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/hpc_submission_workflow.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/hpc-submission-workflow.md",
       "sphinx_path": "hpc_submission_workflow"
     },
     {
@@ -169,7 +169,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/registry_submission_receipts.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/registry-submissions.md",
       "sphinx_path": "registry_submission_receipts"
     },
     {
@@ -177,7 +177,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/polyglot_registry_plan.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/polyglot-registry.md",
       "sphinx_path": "polyglot_registry_plan"
     },
     {
@@ -185,7 +185,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/community_submission_readiness.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/community-readiness.md",
       "sphinx_path": "community_submission_readiness"
     },
     {
@@ -193,7 +193,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/hpc_packaging_registry_readiness.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/hpc-readiness.md",
       "sphinx_path": "hpc_packaging_registry_readiness"
     },
     {
@@ -201,7 +201,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/external_governance_sustainability.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/governance.md",
       "sphinx_path": "external_governance_sustainability"
     },
     {
@@ -209,7 +209,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/submission_readiness_dossiers.rst",
+      "source_doc": "docs/astro-site/src/content/docs/operations/submission-dossiers.md",
       "sphinx_path": "submission_readiness_dossiers"
     },
     {
@@ -217,7 +217,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/polyglot_repo_architecture.rst",
+      "source_doc": "docs/astro-site/src/content/docs/architecture/polyglot-repo.md",
       "sphinx_path": "polyglot_repo_architecture"
     },
     {
@@ -225,7 +225,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/binding_publication_ci.rst",
+      "source_doc": "docs/astro-site/src/content/docs/maintainers/publication.md",
       "sphinx_path": "binding_publication_ci"
     },
     {
@@ -233,7 +233,7 @@
       "redirect_type": "temporary-forward",
       "redirect_type_ok": true,
       "routes_match": true,
-      "source_doc": "docs/source/release_notes_policy.rst",
+      "source_doc": "docs/astro-site/src/content/docs/maintainers/release-notes.md",
       "sphinx_path": "release_notes_policy"
     },
     {

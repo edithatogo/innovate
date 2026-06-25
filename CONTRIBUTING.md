@@ -126,16 +126,7 @@ The repo-managed bundle includes the project setup, status, revert, new-track, i
 
 Type checking:
 ```bash
-uv run ty check \
-  src/innovate/__init__.py \
-  src/innovate/backend.py \
-  src/innovate/backends/__init__.py \
-  src/innovate/capabilities.py \
-  src/innovate/diffuse/__init__.py \
-  src/innovate/substitute/__init__.py \
-  src/innovate/ecosystem/__init__.py
-
-uv run mypy \
+uv run basedpyright \
   src/innovate/__init__.py \
   src/innovate/backend.py \
   src/innovate/backends/__init__.py \
@@ -148,7 +139,8 @@ uv run mypy \
 Package and docs smoke checks:
 ```bash
 uv build
-uv run python -m sphinx -b html docs/source /tmp/innovate-docs-build
+pnpm --dir docs/astro-site install --frozen-lockfile
+pnpm --dir docs/astro-site build
 ```
 
 ## Project Structure

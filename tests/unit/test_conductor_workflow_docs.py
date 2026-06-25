@@ -36,11 +36,13 @@ def test_starlight_roadmap_track_records_versioned_plugin_baseline() -> None:
     plan = Path("conductor/archive/starlight_versions_plugins_20260506/plan.md").read_text()
 
     assert "@astrojs/starlight" in tech_stack
-    assert "0.38.4" in tech_stack
+    assert "^0.41.0" in tech_stack
+    assert "@astrojs/markdown-remark" in tech_stack
+    assert "^7.2.0" in tech_stack
     assert "starlight-versions" in tech_stack
     assert "0.9.0" in tech_stack
     assert "starlight-links-validator" in tech_stack
-    assert "0.24.0" in tech_stack
+    assert "0.24.1" in tech_stack
     assert "@astrojs/starlight-docsearch" in tech_stack
     assert "0.7.0" in tech_stack
     assert "@astrojs/sitemap" in tech_stack

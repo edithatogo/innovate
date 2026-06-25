@@ -53,7 +53,7 @@ def test_r_vignette_metadata_and_source_are_present() -> None:
 def test_r_manual_policy_is_documented_for_users_and_releases() -> None:
     """Manual generation commands and artifact policy should be explicit."""
     readme = (R_BINDING_ROOT / "README.md").read_text()
-    publication_docs = Path("docs/source/binding_publication_ci.rst").read_text()
+    publication_docs = Path("docs/astro-site/src/content/docs/maintainers/publication.md").read_text()
     cran_comments = (R_BINDING_ROOT / "cran-comments.md").read_text()
 
     for text in (readme, publication_docs, cran_comments):

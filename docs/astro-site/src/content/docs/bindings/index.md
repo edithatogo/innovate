@@ -15,6 +15,13 @@ Current binding families:
 - R, Julia, TypeScript, Go, and C# as thin package surfaces over the shared
   kernel contract
 
+Language-specific guides:
+
+- C# Bindings
+- Go Bindings
+- Julia Bindings
+- Rust Bindings
+
 The binding parity page links the shared conformance inventory, golden
 fixtures, hardening evidence, and registry-readiness receipts used by release
 maintainers.

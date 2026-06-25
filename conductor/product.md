@@ -62,7 +62,7 @@ src/innovate/
 ## Key Differentiators
 
 1. **Unified Framework**: Combines diffusion models, competition models, and ABM under one roof
-2. **Advanced Fitting**: Bayesian (PyMC/NumPyro), JAX-accelerated, and classical optimization
+2. **Advanced Fitting**: Bayesian (NumPyro/BlackJAX), JAX-accelerated, and classical optimization
 3. **Rich Visualization**: Built-in plotting for diffusion curves, competition dynamics, and diagnostics
 4. **Production-Ready**: Comprehensive test suite, type hints, CI/CD, and documentation
 5. **Language-Neutral Kernel Contract**: Stable schemas and operations enable consistent bindings across Python, R, Rust, Julia, TypeScript, Go, and C#
@@ -75,8 +75,8 @@ src/innovate/
 - **Build System**: setuptools
 - **Testing**: pytest with parallel execution, property-based testing, mutation testing
 - **Code Quality**: Ruff, MyPy, Pyright, Bandit
-- Documentation: Astro/Starlight site with legacy Sphinx source retained only as
-  archival and redirect-reference material
+- Documentation: Astro/Starlight site only. Release, registry, and migration
+  evidence remains as data artifacts under `docs/source/_static/`.
 - **Vision Status**: Conductor roadmap remediation tracks are complete and
   archived. The full product vision still has future-state gates for full Rust
   ownership and maintainer-managed external submissions; those gates must not

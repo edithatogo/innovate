@@ -6,7 +6,8 @@ import json
 from pathlib import Path
 
 PACKET_PATH = Path("docs/source/_static/scientific_submission_packet.json")
-DOC_PATH = Path("docs/source/submission_readiness_dossiers.rst")
+DOC_PATH = Path("docs/astro-site/src/content/docs/operations/submission-dossiers.md")
+LATEST_DOC_PATH = Path("docs/astro-site/src/content/docs/latest/operations/submission-dossiers.md")
 
 EXPECTED_TARGETS = {
     "r_cran",
@@ -78,7 +79,7 @@ def test_scientific_submission_packets_reference_existing_or_external_evidence()
 
 def test_submission_dossiers_document_scientific_packet() -> None:
     """Reviewer-facing docs should link the machine-readable packet."""
-    docs = DOC_PATH.read_text(encoding="utf-8")
+    docs = DOC_PATH.read_text(encoding="utf-8") + "\n" + LATEST_DOC_PATH.read_text(encoding="utf-8")
 
     assert "scientific_submission_packet.json" in docs
     assert "CRAN and scientific submission packet" in docs

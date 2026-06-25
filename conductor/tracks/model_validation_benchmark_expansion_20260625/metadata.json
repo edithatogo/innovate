@@ -1,0 +1,8 @@
+{
+  "track_id": "model_validation_benchmark_expansion_20260625",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-06-25T11:45:00Z",
+  "updated_at": "2026-06-25T11:45:00Z",
+  "description": "Expand model validation, calibration, benchmark datasets, leaderboard artifacts, and scientific reproducibility gates."
+}

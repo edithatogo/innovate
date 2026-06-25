@@ -6,7 +6,6 @@ import json
 from pathlib import Path
 
 DRY_RUN = Path("docs/source/_static/release_readiness/release-dry-run.json")
-READINESS_DOC = Path("docs/source/release_readiness.rst")
 STARLIGHT_DOC = Path("docs/astro-site/src/content/docs/maintainers/release-readiness.md")
 STARLIGHT_LATEST_DOC = Path("docs/astro-site/src/content/docs/latest/maintainers/release-readiness.md")
 
@@ -39,9 +38,11 @@ def test_release_dry_run_links_registry_docs_to_readiness_report() -> None:
     """Registry and docs receipts should consume the release-readiness artifact."""
     payload = json.loads(DRY_RUN.read_text(encoding="utf-8"))
 
-    assert "docs/source/registry_submission_receipts.rst" in payload["consumers"]
-    assert "docs/source/hpc_packaging_registry_readiness.rst" in payload["consumers"]
-    assert "docs/source/release_readiness.rst" in payload["consumers"]
+    assert "docs/astro-site/src/content/docs/maintainers/release-readiness.md" in payload["consumers"]
+    assert "docs/astro-site/src/content/docs/latest/maintainers/release-readiness.md" in payload["consumers"]
+    assert "docs/astro-site/src/content/docs/maintainers/publication.md" in payload["consumers"]
+    assert "docs/astro-site/src/content/docs/latest/maintainers/publication.md" in payload["consumers"]
+    assert not any(consumer.endswith(".rst") for consumer in payload["consumers"])
     assert payload["final_gate_sequence"] == [
         "generate_supply_chain_evidence",
         "generate_reproducibility_evidence",
@@ -54,7 +55,7 @@ def test_release_dry_run_links_registry_docs_to_readiness_report() -> None:
 
 def test_release_readiness_docs_include_final_gate_sequence() -> None:
     """Maintainer docs should explain the final release gate sequence."""
-    for doc_path in (READINESS_DOC, STARLIGHT_DOC, STARLIGHT_LATEST_DOC):
+    for doc_path in (STARLIGHT_DOC, STARLIGHT_LATEST_DOC):
         content = doc_path.read_text(encoding="utf-8")
         assert "Final gate sequence" in content
         assert "release-dry-run.json" in content

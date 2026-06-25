@@ -6,6 +6,8 @@ that suffered from segmentation faults. BlackJAX provides a more stable
 JAX-based alternative for Bayesian inference.
 """
 
+from __future__ import annotations
+
 import warnings
 from collections.abc import Callable, Sequence
 from typing import Any
@@ -76,7 +78,7 @@ class BayesianFitter:
 
     def fit(
         self, model: Any, t: np.ndarray | list | Sequence, y: np.ndarray | list | Sequence, **kwargs
-    ) -> "BayesianFitter":
+    ) -> BayesianFitter:
         """
         Fit the model using Bayesian inference.
 

@@ -3,7 +3,7 @@
   "generated_by_track": "starlight_cutover_legacy_cleanup_20260614",
   "inventory_date": "2026-06-14",
   "active_docs_stack": "astro_starlight",
-  "legacy_docs_stack": "sphinx",
+  "legacy_docs_stack": "removed",
   "active_surfaces": {
     "product_definition": "conductor/product.md",
     "tech_stack": "conductor/tech-stack.md",
@@ -12,15 +12,16 @@
     "docs_workflow": ".github/workflows/docs.yml"
   },
   "legacy_surfaces": {
-    "sphinx_config": "docs/source/conf.py",
-    "sphinx_source_root": "docs/source",
-    "retention_policy": "archival_and_redirect_reference_only"
+    "retention_policy": "removed",
+    "static_evidence_root": "docs/source/_static"
   },
   "version_status": {
-    "package_json_starlight": "^0.39.0",
-    "documented_baseline_starlight": "0.38.4",
+    "package_json_astro": "^7.0.2",
+    "package_json_starlight": "^0.41.0",
+    "documented_baseline_starlight": "0.41.0",
+    "markdown_processor": "@astrojs/markdown-remark ^7.2.0",
     "starlight_versions": "0.9.0",
-    "starlight_links_validator": "0.24.0",
+    "starlight_links_validator": "0.24.1",
     "docsearch_declared": true,
     "docsearch_package_present": true
   },

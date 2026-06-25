@@ -6,7 +6,7 @@ import runpy
 from pathlib import Path
 
 EXAMPLE_PATH = Path("examples/advanced_runtime_workflows.py")
-SPHINX_DOC = Path("docs/source/tutorials/advanced_runtime_workflows.rst")
+RETIRED_SPHINX_DOC = Path("docs/source/tutorials/advanced_runtime_workflows.rst")
 STARLIGHT_DOC = Path("docs/astro-site/src/content/docs/tutorials/advanced-runtime.md")
 STARLIGHT_LATEST_DOC = Path("docs/astro-site/src/content/docs/latest/tutorials/advanced-runtime.md")
 TUTORIAL_INDEX = Path("docs/source/tutorials.rst")
@@ -29,15 +29,18 @@ def test_advanced_runtime_example_executes_and_returns_payloads() -> None:
     assert report["calibration"]["diagnostics"]["coverage"] >= 0.8
 
 
-def test_advanced_runtime_sphinx_docs_are_indexed() -> None:
-    """Legacy Sphinx docs should retain an indexed tutorial for the advanced runtime."""
-    doc = SPHINX_DOC.read_text(encoding="utf-8")
+def test_advanced_runtime_starlight_docs_are_canonical() -> None:
+    """The advanced runtime tutorial should be canonical in Starlight only."""
+    doc = STARLIGHT_DOC.read_text(encoding="utf-8")
     index = TUTORIAL_INDEX.read_text(encoding="utf-8")
 
     assert "Advanced runtime workflows" in doc
     assert "examples/advanced_runtime_workflows.py" in doc
     assert "performance_evidence.json" in doc
-    assert "tutorials/advanced_runtime_workflows" in index
+    assert "schema_version" in doc
+    assert "weighted regime ensemble" in doc
+    assert "tutorials/advanced_runtime_workflows" not in index
+    assert not RETIRED_SPHINX_DOC.exists()
 
 
 def test_advanced_runtime_starlight_docs_exist_for_current_and_latest() -> None:

@@ -42,11 +42,11 @@
       "resolution": "Rebuilt the local file dependency and configured the Python handler to use the conda Python executable with Griffe available."
     },
     {
-      "id": "starlight_versions_astro6_404_middleware",
+      "id": "starlight_versions_astro7_404_middleware",
       "status": "resolved",
       "owner": "upstream_plugin_compatibility",
-      "evidence": "starlight-versions 0.9.0 declares @astrojs/starlight >=0.39.0 support and the site now builds /404 plus versioned routes with the plugin enabled.",
-      "resolution": "Pinned starlight-versions ^0.9.0, enabled the plugin in astro.config.mjs, and registered docsVersionsLoader() for the versions content collection."
+      "evidence": "starlight-versions 0.9.0 remains enabled on Astro 7.0.2 with @astrojs/starlight 0.41.0; the site builds /404 plus versioned routes with the plugin enabled.",
+      "resolution": "Pinned the Astro 7/Starlight 0.41 package baseline, configured Astro to use @astrojs/markdown-remark unified(), and registered docsVersionsLoader() for the versions content collection."
     }
   ],
   "external_gates": [
@@ -56,6 +56,13 @@
       "owner": "deployment_environment",
       "evidence": "docs/astro-site/package.json includes @astrojs/starlight-docsearch and docs/astro-site/astro.config.mjs conditionally enables DocSearch when ALGOLIA_APP_ID, ALGOLIA_API_KEY, and ALGOLIA_INDEX_NAME are supplied.",
       "required_resolution": "Provide deployment credentials before enabling production DocSearch."
+    },
+    {
+      "id": "astro_expressive_code_peer_range",
+      "status": "upstream_peer_metadata_lag",
+      "owner": "upstream_plugin_compatibility",
+      "evidence": "pnpm reports astro-expressive-code 0.43.1 has not widened its peer range to Astro 7, while pnpm check and pnpm build pass on Astro 7.0.2 with @astrojs/starlight 0.41.0.",
+      "required_resolution": "Track the upstream peer range and remove this external constraint once astro-expressive-code advertises Astro 7 support."
     }
   ]
 }

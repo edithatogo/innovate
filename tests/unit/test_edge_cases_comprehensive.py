@@ -72,7 +72,7 @@ class TestEdgeCasesErrorHandling:
             result = model.predict(t_nan)
             # If it doesn't raise an error, result should handle NaN appropriately
             assert len(result) == len(t_nan)
-        except (ValueError, RuntimeError):
+        except ValueError, RuntimeError:
             # This is also acceptable behavior
             pass
 
@@ -157,7 +157,7 @@ class TestEdgeCasesErrorHandling:
             fitter.fit(model, t, y_zeros)
             # If fitting succeeds, parameters should be reasonable
             assert model.params_ is not None
-        except (RuntimeError, ValueError):
+        except RuntimeError, ValueError:
             # Fitting failure is acceptable for degenerate data
             pass
 
@@ -168,7 +168,7 @@ class TestEdgeCasesErrorHandling:
             # If fitting succeeds, check parameters are finite
             if model.params_:
                 assert all(np.isfinite(v) for v in model.params_.values())
-        except (RuntimeError, ValueError):
+        except RuntimeError, ValueError:
             # Fitting failure is acceptable for non-monotonic data
             pass
 
@@ -178,7 +178,7 @@ class TestEdgeCasesErrorHandling:
             fitter.fit(model, t, y_noisy)
             if model.params_:
                 assert all(np.isfinite(v) for v in model.params_.values())
-        except (RuntimeError, ValueError):
+        except RuntimeError, ValueError:
             pass
 
     def test_preprocessing_edge_cases(self):
@@ -244,7 +244,7 @@ class TestEdgeCasesErrorHandling:
             metrics = get_fit_metrics(model, t_short, y_long)
             # If it doesn't raise an error, should return valid metrics
             assert isinstance(metrics, dict)
-        except (ValueError, IndexError):
+        except ValueError, IndexError:
             # This is acceptable behavior for mismatched inputs
             pass
 
@@ -433,6 +433,6 @@ class TestBoundaryValueAnalysis:
         try:
             result = model.predict(t)
             assert np.all(np.isfinite(result))
-        except (ZeroDivisionError, RuntimeError):
+        except ZeroDivisionError, RuntimeError:
             # If implementation doesn't handle this, exception is acceptable
             pass

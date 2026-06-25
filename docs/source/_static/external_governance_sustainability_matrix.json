@@ -10,7 +10,7 @@
       "evidence_links": [
         "CODEOWNERS",
         "conductor/tracks.md",
-        "docs/source/external_governance_sustainability.rst"
+        "docs/astro-site/src/content/docs/operations/governance.md"
       ],
       "blockers": []
     },
@@ -40,9 +40,9 @@
       "label": "Support and maintenance policy",
       "status": "ready",
       "evidence_links": [
-        "docs/source/release_notes_policy.rst",
-        "docs/source/scientific_hpc_readiness_roadmap.rst",
-        "docs/source/external_governance_sustainability.rst",
+        "docs/astro-site/src/content/docs/maintainers/release-notes.md",
+        "docs/astro-site/src/content/docs/operations/scientific-hpc.md",
+        "docs/astro-site/src/content/docs/operations/governance.md",
         "conductor/tracks.md"
       ],
       "blockers": []
@@ -53,9 +53,9 @@
       "status": "ready",
       "evidence_links": [
         "README.md",
-        "docs/source/scientific_hpc_readiness_roadmap.rst",
+        "docs/astro-site/src/content/docs/operations/scientific-hpc.md",
         "documents/manuscript_v1_review.md",
-        "docs/source/external_governance_sustainability.rst"
+        "docs/astro-site/src/content/docs/operations/governance.md"
       ],
       "blockers": []
     },
@@ -64,7 +64,7 @@
       "label": "Roadmap ownership and decision records",
       "status": "ready",
       "evidence_links": [
-        "docs/source/scientific_hpc_readiness_roadmap.rst",
+        "docs/astro-site/src/content/docs/operations/scientific-hpc.md",
         "docs/architecture_modernization_roadmap.md",
         "conductor/archive/"
       ],

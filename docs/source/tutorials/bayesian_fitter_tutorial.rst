@@ -1,8 +1,8 @@
 .. _bayesian_fitter_tutorial:
 
-==================================
+=====================================
 Bayesian Fitting for Diffusion Models
-==================================
+=====================================
 
 This tutorial provides a guide to using the ``NumpyroFitter`` in the ``innovate`` library. Bayesian methods offer a powerful way to estimate the parameters of diffusion models, providing not just point estimates but entire posterior distributions that quantify uncertainty.
 
@@ -15,7 +15,9 @@ Traditional fitting methods, like those based on least squares, provide a single
 - **Regularization**: Priors naturally regularize the model, preventing overfitting and leading to more stable estimates, especially with noisy or sparse data.
 - **Flexibility**: The Bayesian framework is highly flexible, allowing for the incorporation of prior knowledge and the construction of complex hierarchical models.
 
-The ``innovate`` library's ``NumpyroFitter`` uses the powerful ``PyMC`` library under the hood to perform Markov Chain Monte Carlo (MCMC) sampling.
+The ``innovate`` library's Bayesian fitters use the declared JAX probabilistic
+stack, including NumPyro and BlackJAX, to perform Markov Chain Monte Carlo
+(MCMC) sampling.
 
 A Simple Example: Fitting a Logistic Model
 ------------------------------------------

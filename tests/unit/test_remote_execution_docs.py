@@ -5,20 +5,28 @@ from __future__ import annotations
 from pathlib import Path
 
 
-def test_remote_execution_docs_are_published_in_sphinx_navigation() -> None:
-    """Remote execution docs should be visible from the canonical docs pages."""
-    docs_root = Path("docs/source")
-    index = (docs_root / "index.rst").read_text()
-    package_docs = (docs_root / "innovate.rst").read_text()
+DOC_PATH = Path("docs/astro-site/src/content/docs/operations/remote-execution.md")
+LATEST_DOC_PATH = Path("docs/astro-site/src/content/docs/latest/operations/remote-execution.md")
+STARLIGHT_CONFIG = Path("docs/astro-site/starlight.config.mjs")
 
-    assert (docs_root / "remote_execution.rst").is_file()
-    assert "remote_execution" in index
-    assert "docs/source/remote_execution.rst" in package_docs
+
+def _docs_text() -> str:
+    return "\n".join((DOC_PATH.read_text(), LATEST_DOC_PATH.read_text()))
+
+
+def test_remote_execution_docs_are_published_in_starlight_navigation() -> None:
+    """Remote execution docs should be visible from the canonical Starlight pages."""
+    starlight_config = STARLIGHT_CONFIG.read_text()
+
+    assert DOC_PATH.is_file()
+    assert LATEST_DOC_PATH.is_file()
+    assert "/operations/remote-execution/" in starlight_config
+    assert "slug: latest/operations/remote-execution" in LATEST_DOC_PATH.read_text()
 
 
 def test_remote_execution_docs_define_contract_and_threat_model() -> None:
     """Docs should cover the hosted boundary, controls, and provenance fields."""
-    docs = Path("docs/source/remote_execution.rst").read_text()
+    docs = _docs_text()
 
     for phrase in (
         "RemoteExecutionRequest",

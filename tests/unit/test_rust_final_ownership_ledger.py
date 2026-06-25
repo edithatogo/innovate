@@ -15,8 +15,8 @@ OPERATION_GAP_INVENTORY = Path("docs/source/_static/rust_native_operation_gap_in
 FULL_OWNERSHIP_VALIDATION = Path("docs/source/_static/rust_full_ownership_validation.json")
 NATIVE_BENCHMARK_RESULTS = Path("docs/source/_static/rust_core_native_benchmark_results.json")
 ROADMAP_DOCS = [
-    Path("docs/source/rust_core_roadmap.rst"),
     Path("docs/astro-site/src/content/docs/operations/rust-core.md"),
+    Path("docs/astro-site/src/content/docs/latest/operations/rust-core.md"),
     Path("docs/source/_static/vision_roadmap_status_inventory.json"),
 ]
 

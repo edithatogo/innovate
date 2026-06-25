@@ -91,8 +91,8 @@ def test_missing_probabilistic_backend_error_is_structured() -> None:
 def test_probabilistic_inference_docs_are_linked() -> None:
     """Probabilistic payload documentation should be reachable from docs navigation."""
     docs = {
-        "strategy": Path("docs/source/probabilistic_inference.rst"),
-        "index": Path("docs/source/index.rst"),
+        "strategy": Path("docs/astro-site/src/content/docs/roadmap/probabilistic-inference.md"),
+        "index": Path("docs/astro-site/starlight.config.mjs"),
         "innovate": Path("docs/source/innovate.rst"),
         "roadmap": Path("docs/architecture_modernization_roadmap.md"),
     }
@@ -103,6 +103,6 @@ def test_probabilistic_inference_docs_are_linked() -> None:
     assert "BlackJAX" in text["strategy"]
     assert "TensorFlow Probability's JAX substrate" in text["strategy"]
     assert "structured errors for missing optional dependencies" in text["strategy"]
-    assert "probabilistic_inference" in text["index"]
-    assert "probabilistic_inference.rst" in text["innovate"]
-    assert "probabilistic_inference.rst" in text["roadmap"]
+    assert "/roadmap/probabilistic-inference/" in text["index"]
+    assert "roadmap/probabilistic-inference.md" in text["innovate"]
+    assert "roadmap/probabilistic-inference.md" in text["roadmap"]

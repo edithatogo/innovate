@@ -4,21 +4,23 @@ from __future__ import annotations
 
 from pathlib import Path
 
-DOC = Path("docs/source/hpc_packaging_registry_readiness.rst")
-INDEX = Path("docs/source/index.rst")
+DOC = Path("docs/astro-site/src/content/docs/operations/hpc-readiness.md")
+LATEST_DOC = Path("docs/astro-site/src/content/docs/latest/operations/hpc-readiness.md")
+STARLIGHT_CONFIG = Path("docs/astro-site/starlight.config.mjs")
 
 
 def _doc_text() -> str:
-    return DOC.read_text()
+    return DOC.read_text() + "\n" + LATEST_DOC.read_text()
 
 
-def test_hpc_packaging_readiness_dossier_is_in_sphinx_navigation() -> None:
+def test_hpc_packaging_readiness_dossier_is_in_starlight_navigation() -> None:
     """The HPC packaging dossier should be reachable from the docs site."""
-    index = INDEX.read_text()
+    config = STARLIGHT_CONFIG.read_text()
 
     assert DOC.is_file()
-    assert "hpc_packaging_registry_readiness" in index
-    assert "hpc_submission_workflow" in index
+    assert LATEST_DOC.is_file()
+    assert "/operations/hpc-readiness/" in config
+    assert "/operations/hpc-submission-workflow/" in config
 
 
 def test_hpc_packaging_readiness_maps_install_surfaces_and_dependencies() -> None:
@@ -41,20 +43,19 @@ def test_hpc_packaging_readiness_maps_install_surfaces_and_dependencies() -> Non
         assert phrase in doc
 
     for dependency in (
-        "py-numpy",
-        "py-scipy",
-        "py-pandas",
-        "py-pyarrow",
-        "py-statsmodels",
-        "py-mesa",
-        "py-networkx",
-        "py-ndlib",
-        "py-jitcdde",
-        "py-sympy",
-        "py-ruptures",
-        "py-pymannkendall",
-        "py-pytensor",
-        "py-typing-extensions",
+        "py-numpy@2.4.4:2",
+        "py-scipy@1.17.1:1",
+        "py-pandas@3.0.2:3",
+        "py-pyarrow@23.0.1:23",
+        "py-statsmodels@0.14.6:0.14",
+        "py-mesa@3.5.1:3",
+        "py-networkx@3.6.1:3",
+        "py-ndlib@5.1.1:5",
+        "py-jitcdde@1.8.3:1",
+        "py-sympy@1.14:1",
+        "py-ruptures@1.1.9:1.1.9",
+        "py-pymannkendall@1.4.3:1",
+        "py-pytensor@2.38.2:2",
         "py-jax",
         "py-jaxlib",
         "cargo",
@@ -76,6 +77,7 @@ def test_hpc_packaging_readiness_captures_spack_and_easybuild_prototypes() -> No
         "HPSF and E4S evidence templates",
         "per-target command checklist",
         "module sanity checks",
+        "Python 3.14-only",
         'python -c "import innovate; print(innovate.__version__)"',
         "python -m pip check",
         "cargo test --manifest-path bindings/rust/Cargo.toml",

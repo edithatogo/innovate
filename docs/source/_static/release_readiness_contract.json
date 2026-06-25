@@ -19,7 +19,8 @@
       "owner": "quality",
       "lane": "fast",
       "freshness_days": 7,
-      "producer": "uv run nox -s tests",
+      "producer": "uv run nox -s tests (Python 3.14)",
+      "required_python_version": "3.14",
       "artifact": "python-tests.json"
     },
     {
@@ -27,7 +28,8 @@
       "owner": "quality",
       "lane": "fast",
       "freshness_days": 7,
-      "producer": "pytest coverage.xml",
+      "producer": "pytest coverage.xml (Python 3.14)",
+      "required_python_version": "3.14",
       "artifact": "coverage.json"
     },
     {
@@ -43,7 +45,8 @@
       "owner": "quality",
       "lane": "fast",
       "freshness_days": 7,
-      "producer": "uv run nox -s types",
+      "producer": "uv run nox -s types (basedpyright strict, Python 3.14)",
+      "required_python_version": "3.14",
       "artifact": "type-checks.json"
     },
     {
@@ -83,7 +86,8 @@
       "owner": "release",
       "lane": "release",
       "freshness_days": 14,
-      "producer": "uv build and registry dry-run checks",
+      "producer": "uv build and registry dry-run checks under Python 3.14",
+      "required_python_version": "3.14",
       "artifact": "package-dry-run.json"
     },
     {
@@ -139,7 +143,8 @@
       "owner": "release",
       "lane": "release",
       "freshness_days": 14,
-      "producer": "Python, Rust MSRV, Node/pnpm, and binding manifest compatibility checks",
+      "producer": "Python 3.14, Rust MSRV, Node/pnpm, and binding manifest compatibility checks",
+      "required_python_version": "3.14",
       "artifact": "compatibility.json"
     }
   ]

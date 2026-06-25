@@ -49,7 +49,7 @@ class FisherPryModel(DiffusionModel):
             # Using polyfit for a simple linear regression
             slope, _ = np.polyfit(t_arr, linearized_y, 1)
             alpha_guess = max(0, slope)  # Ensure alpha is non-negative
-        except (np.linalg.LinAlgError, ValueError):
+        except np.linalg.LinAlgError, ValueError:
             alpha_guess = 0.5  # Fallback value
 
         return {

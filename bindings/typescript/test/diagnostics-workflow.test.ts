@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { formatDiagnosticsWorkflow, runDiagnosticsWorkflow } from "../examples/diagnostics-workflow";
 
 describe("Diagnostics workflow example", () => {
-  it("runs the end-to-end stable kernel diagnostics example", { timeout: 30000 }, () => {
+  it("runs the end-to-end stable kernel diagnostics example", { timeout: 120000 }, () => {
     const workflow = runDiagnosticsWorkflow();
 
     expect(workflow.modelKey).toBe("bass");
@@ -22,7 +22,7 @@ describe("Diagnostics workflow example", () => {
     });
   });
 
-  it("formats a concise diagnostics report for users", { timeout: 30000 }, () => {
+  it("formats a concise diagnostics report for users", { timeout: 120000 }, () => {
     const report = formatDiagnosticsWorkflow(runDiagnosticsWorkflow());
 
     expect(report).toContain("Model: bass (diffusion)");

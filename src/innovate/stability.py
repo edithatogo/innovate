@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 
 
-class StabilityTier(str, Enum):
+class StabilityTier(StrEnum):
     """Normalized stability tiers for stable, provisional, and internal surfaces."""
 
     STABLE = "stable"

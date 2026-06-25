@@ -104,7 +104,7 @@ class TestCompositeDiffusionModelPredict:
         try:
             preds = comp.predict(t)
             assert preds.shape[0] == 10
-        except (ValueError, IndexError):
+        except ValueError, IndexError:
             pytest.skip("Composite predict has known shape issue with ODE solver")
 
     def test_single_model(self):
@@ -116,7 +116,7 @@ class TestCompositeDiffusionModelPredict:
         try:
             preds = comp.predict(t)
             assert preds.shape[0] == 5
-        except (ValueError, IndexError):
+        except ValueError, IndexError:
             pytest.skip("Composite predict has known shape issue with ODE solver")
 
 
@@ -140,7 +140,7 @@ class TestCompositeDiffusionModelScore:
             y_pred = comp.predict(t)
             score = comp.score(t, y_pred)
             assert score > 0.99
-        except (ValueError, IndexError):
+        except ValueError, IndexError:
             pytest.skip("Composite predict has known shape issue with ODE solver")
 
 

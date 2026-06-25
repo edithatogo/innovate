@@ -10,6 +10,10 @@ The stability module documentation is API-oriented and currently imported as an 
 
 This page remains the reader destination for members who need module-level API discoverability. Core behavior and public methods are generated from module exports.
 
-See also:
+The public tiers are `stable`, `provisional`, and `internal`. Maintainers use
+this page with the plugin stability tutorial to keep extension contracts,
+release notes, and generated API references aligned.
 
-* `docs/source/innovate.stability.rst`
+Canonical source:
+
+- `docs/astro-site/src/content/docs/maintainers/stability.md`

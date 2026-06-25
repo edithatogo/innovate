@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 MANIFEST_PATH = Path("docs/source/_static/hpc_packaging/workflow_manifest.json")
-DOC_PATH = Path("docs/source/hpc_submission_workflow.rst")
+DOC_PATH = Path("docs/astro-site/src/content/docs/operations/hpc-submission-workflow.md")
 
 
 def load_manifest() -> dict[str, object]:

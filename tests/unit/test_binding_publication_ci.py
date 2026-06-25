@@ -3,15 +3,19 @@
 from __future__ import annotations
 
 import json
+import tomllib
 from pathlib import Path
 from xml.etree import ElementTree
 
-try:
-    import tomllib
-except ModuleNotFoundError:  # pragma: no cover - Python 3.10 compatibility
-    import tomli as tomllib
-
 ALIGNED_VERSION = "0.5.0"
+PUBLICATION_DOCS = (
+    Path("docs/astro-site/src/content/docs/maintainers/publication.md"),
+    Path("docs/astro-site/src/content/docs/latest/maintainers/publication.md"),
+)
+
+
+def _publication_docs() -> str:
+    return "\n".join(path.read_text(encoding="utf-8") for path in PUBLICATION_DOCS)
 
 
 def _csharp_properties() -> dict[str, str]:
@@ -25,7 +29,7 @@ def test_binding_package_names_follow_language_suffix_policy() -> None:
     rust_manifest = tomllib.loads(Path("bindings/rust/Cargo.toml").read_text())
     r_description = Path("bindings/r/DESCRIPTION").read_text()
     julia_project = tomllib.loads(Path("bindings/julia/Project.toml").read_text())
-    docs = Path("docs/source/binding_publication_ci.rst").read_text()
+    docs = _publication_docs()
 
     assert typescript_package["name"] == "innovate.ts"
     assert rust_manifest["package"]["name"] == "innovate-rs"
@@ -57,7 +61,7 @@ def test_binding_versions_are_aligned_with_python_package_version() -> None:
 
 def test_binding_publication_docs_name_registry_targets() -> None:
     """Every planned binding should have a package-manager publication target."""
-    docs = Path("docs/source/binding_publication_ci.rst").read_text()
+    docs = _publication_docs()
 
     for target in (
         "npm",
@@ -162,13 +166,14 @@ def test_python_release_workflows_validate_distribution_metadata() -> None:
     assert "uv run twine check dist/*" in pypi
     assert "pypa/gh-action-pypi-publish@release/v1" in pypi
     assert "repository-url: https://test.pypi.org/legacy/" in testpypi
-    assert pyproject["project"]["requires-python"] == ">=3.10"
+    assert pyproject["project"]["requires-python"] == ">=3.14"
 
 
 def test_typescript_npm_metadata_and_ci_pack_gate() -> None:
     """The npm package should expose explicit metadata and pack gates."""
     package_json = json.loads(Path("bindings/typescript/package.json").read_text())
     ci = Path(".github/workflows/ci.yml").read_text()
+    vitest_config = Path("bindings/typescript/vitest.config.ts").read_text()
 
     assert package_json["private"] is False
     assert package_json["license"] == "Apache-2.0"
@@ -179,10 +184,16 @@ def test_typescript_npm_metadata_and_ci_pack_gate() -> None:
     assert "files" in package_json
     assert "dist" in package_json["files"]
     assert "inst/python/kernel_bridge.py" in package_json["files"]
-    assert package_json["engines"]["node"] == ">=22"
+    assert package_json["engines"]["node"] == ">=26"
+    assert package_json["devDependencies"]["typescript"].startswith("^6.")
+    assert package_json["devDependencies"]["vitest"].startswith("^4.")
+    assert package_json["devDependencies"]["@vitest/coverage-v8"].startswith("^4.")
+    assert package_json["devDependencies"]["@types/node"].startswith("^26.")
     assert "node-version: ${{ matrix.node-version }}" in ci
-    assert 'node-version: ["22", "24"]' in ci
+    assert 'node-version: ["26"]' in ci
     assert "npm pack --dry-run" in ci
+    assert "fileParallelism: false" in vitest_config
+    assert "testTimeout: 120000" in vitest_config
 
 
 def test_rust_crates_metadata_and_package_gates() -> None:
@@ -208,7 +219,7 @@ def test_julia_registry_metadata_has_compat_bounds() -> None:
     """Julia General registry readiness requires dependency compat bounds."""
     julia = tomllib.loads(Path("bindings/julia/Project.toml").read_text())
     workflow = Path(".github/workflows/bindings-publish.yml").read_text()
-    docs = Path("docs/source/binding_publication_ci.rst").read_text()
+    docs = _publication_docs()
 
     assert julia["name"] == "Innovate"
     assert julia["uuid"] == "ffe8f1e4-c541-43d5-9f32-550aacc4f51a"
@@ -279,7 +290,7 @@ def test_r_publish_workflow_matches_source_package_tarball_name() -> None:
 def test_csharp_nuget_pack_includes_runtime_bridge_asset() -> None:
     """The NuGet package metadata should include assets needed by the thin bridge."""
     project = Path("bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj").read_text()
-    docs = Path("docs/source/binding_publication_ci.rst").read_text()
+    docs = _publication_docs()
 
     assert '<None Include="../README.md" Pack="true" PackagePath="/" />' in project
     assert 'Include="../inst/python/kernel_bridge.py"' in project

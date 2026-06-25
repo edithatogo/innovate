@@ -155,16 +155,16 @@ Create a `pyproject.toml` entry for mutmut:
 
 ```toml
 [tool.mutmut]
-paths_to_mutate = ["src/innovate/"]
+source_paths = ["src/innovate/"]
 backup = false
-runner = "python -m pytest"
-tests_dir = "tests/"
+pytest_add_cli_args = ["-q"]
+pytest_add_cli_args_test_selection = ["tests"]
 ```
 
 **Commands**:
 ```bash
-# Run mutation testing on a specific file
-mutmut run --paths-to-mutate=src/innovate/diffuse/bass.py
+# Re-run a specific generated mutant by name
+mutmut run <mutant-name>
 
 # Run mutation testing on the whole project
 mutmut run
@@ -724,12 +724,11 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
-        python-version: '3.9'
+        python-version: '3.14'
     - name: Install dependencies
       run: |
-        pip install -e .
-        pip install -r requirements.txt
-        pip install pytest pytest-cov hypothesis mutmut pytest-benchmark
+        pip install uv
+        uv sync --group dev
     - name: Run standard tests
       run: pytest --cov=innovate --cov-report=xml
     - name: Run property-based tests

@@ -8,14 +8,15 @@ from xml.etree import ElementTree
 
 def test_csharp_binding_documentation_is_present() -> None:
     """The planned C# binding should have an explicit contract document."""
-    docs_root = Path("docs/source")
+    docs_root = Path("docs/astro-site/src/content/docs/bindings")
 
-    assert (docs_root / "tutorials/csharp_bindings.rst").is_file()
+    assert (docs_root / "csharp.md").is_file()
+    assert not Path("docs/source/tutorials/csharp_bindings.rst").exists()
 
 
 def test_csharp_binding_docs_define_thin_contract_scope() -> None:
     """The C# binding guidance should align with the shared kernel contract."""
-    docs = Path("docs/source/tutorials/csharp_bindings.rst").read_text()
+    docs = Path("docs/astro-site/src/content/docs/bindings/csharp.md").read_text()
 
     for phrase in (
         "thin adapter",
@@ -37,9 +38,11 @@ def test_csharp_binding_docs_define_thin_contract_scope() -> None:
 def test_bindings_hub_includes_csharp_plan() -> None:
     """The bindings hub should surface C# as a planned binding target."""
     hub = Path("docs/source/bindings.rst").read_text()
+    starlight_config = Path("docs/astro-site/starlight.config.mjs").read_text()
 
     assert "C#" in hub
-    assert "tutorials/csharp_bindings" in hub
+    assert "docs/astro-site/src/content/docs/bindings/csharp.md" in hub
+    assert "/bindings/csharp/" in starlight_config
 
 
 def test_csharp_binding_package_scaffold_exists() -> None:

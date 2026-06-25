@@ -1,0 +1,20 @@
+{
+  "artifacts": [
+    "dist/innovate-0.5.0-py3-none-any.whl",
+    "dist/innovate-0.5.0.tar.gz"
+  ],
+  "checks": [
+    "uv build",
+    "uv run twine check dist/*",
+    "uv run check-wheel-contents dist/innovate-0.5.0-py3-none-any.whl"
+  ],
+  "command": "uv run nox -s package",
+  "evidence_id": "package_dry_run",
+  "generated_at": "2026-06-24T03:37:00Z",
+  "generated_by": "codex-python-314-modernization",
+  "python_version": "3.14",
+  "requires_secrets": false,
+  "schema_version": 1,
+  "status": "pass",
+  "summary": "Python package build, twine check, wheel contents validation, and isolated wheel install passed under Python 3.14 with pip-installable runtime floors."
+}

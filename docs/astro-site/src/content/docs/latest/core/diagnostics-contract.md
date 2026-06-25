@@ -9,8 +9,8 @@ slug: latest/core/diagnostics-contract
 The diagnostics contract documents the fitted-state reporting fields that stay
 stable across bindings and runtime implementations.
 
-This migration page records the same boundary that the Sphinx docs describe:
+This page records the stable diagnostics boundary:
 
 * diagnostics stay tied to the shared kernel contract;
 * unsupported shapes continue to fail explicitly;
-* future redirects must preserve the existing docs path.
+* future route changes must preserve the Astro documentation path.

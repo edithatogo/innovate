@@ -46,12 +46,12 @@
       "status": "documented",
       "evidence": "NuGet package dry run remains documented for the C# binding surface."
     },
-    {
-      "id": "docs",
-      "dry_run_command": "uv run nox -s docs && STARLIGHT_POLYGLOT_PYTHON=python pnpm build",
-      "status": "passed",
-      "evidence": "Sphinx and Astro/Starlight documentation builds were run during this track."
-    },
+      {
+        "id": "docs",
+        "dry_run_command": "uv run nox -s docs && pnpm --dir docs/astro-site check",
+        "status": "passed",
+        "evidence": "Astro/Starlight documentation build and check are the only docs release-lane gates."
+      },
     {
       "id": "hpc",
       "dry_run_command": "python docs/source/_static/hpc_packaging/pack_packet.py",
@@ -60,11 +60,10 @@
     }
   ],
   "consumers": [
-    "docs/source/release_readiness.rst",
-    "docs/source/registry_submission_receipts.rst",
-    "docs/source/hpc_packaging_registry_readiness.rst",
     "docs/astro-site/src/content/docs/maintainers/release-readiness.md",
-    "docs/astro-site/src/content/docs/latest/maintainers/release-readiness.md"
+    "docs/astro-site/src/content/docs/latest/maintainers/release-readiness.md",
+    "docs/astro-site/src/content/docs/maintainers/publication.md",
+    "docs/astro-site/src/content/docs/latest/maintainers/publication.md"
   ],
   "final_gate_sequence": [
     "generate_supply_chain_evidence",

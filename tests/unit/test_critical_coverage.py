@@ -77,7 +77,7 @@ class TestCriticalEdgeCases:
         try:
             result = model.predict([])
             assert len(result) == 0
-        except (ValueError, IndexError):
+        except ValueError, IndexError:
             # Either empty result or error is acceptable
             pass
 
@@ -295,7 +295,7 @@ class TestErrorRecovery:
         try:
             result = model.predict(t)
             assert np.all(np.isfinite(result))
-        except (ZeroDivisionError, RuntimeError, ValueError):
+        except ZeroDivisionError, RuntimeError, ValueError:
             # If the implementation doesn't handle this, exception is acceptable
             pass
 
@@ -323,7 +323,7 @@ class TestErrorRecovery:
             result = model.predict(t_with_nan)
             # If it doesn't raise an error, should handle NaN appropriately
             assert len(result) == len(t_with_nan)
-        except (ValueError, RuntimeError):
+        except ValueError, RuntimeError:
             # Raising an error for NaN input is also acceptable
             pass
 
@@ -342,6 +342,6 @@ class TestErrorRecovery:
             # At infinite time, should approach market potential
             if np.isfinite(result[2]):
                 assert result[2] <= model.params_["m"] + 1e-6
-        except (ValueError, RuntimeError, OverflowError):
+        except ValueError, RuntimeError, OverflowError:
             # Raising an error for infinite input is also acceptable
             pass

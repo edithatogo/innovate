@@ -3,7 +3,7 @@
   "deferred_online_scans": [
     "vulnerability database refreshes are release-lane checks when network is available"
   ],
-  "dependency_count": 14,
+  "dependency_count": 13,
   "evidence_id": "security_audit",
   "generated_by": "scripts/release_supply_chain.py",
   "network_required": false,

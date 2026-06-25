@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from collections.abc import Sequence
 from typing import Any
 
@@ -84,7 +86,7 @@ class LockInModel:
         sol = np.minimum(sol, m)
         return sol
 
-    def fit(self, t: Sequence[float], y: np.ndarray, **kwargs: Any) -> "LockInModel":
+    def fit(self, t: Sequence[float], y: np.ndarray, **kwargs: Any) -> LockInModel:
         from scipy.optimize import minimize
 
         y = np.array(y)

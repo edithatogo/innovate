@@ -2,28 +2,24 @@
 
 from __future__ import annotations
 
+import tomllib
 from pathlib import Path
-
-try:
-    import tomllib
-except ModuleNotFoundError:  # pragma: no cover - Python < 3.11
-    import tomli as tomllib
 
 
 def test_dataframe_engine_docs_are_published() -> None:
-    """The DataFrame engine strategy should be visible in the Sphinx docs."""
-    docs_root = Path("docs/source")
-    index = (docs_root / "index.rst").read_text()
-    package_docs = (docs_root / "innovate.rst").read_text()
+    """The DataFrame engine strategy should be visible in the Starlight docs."""
+    docs_root = Path("docs/astro-site/src/content/docs/roadmap")
+    index = Path("docs/astro-site/starlight.config.mjs").read_text()
+    package_docs = Path("docs/source/innovate.rst").read_text()
 
-    assert (docs_root / "dataframe_engine_experiments.rst").is_file()
-    assert "dataframe_engine_experiments" in index
-    assert "docs/source/dataframe_engine_experiments.rst" in package_docs
+    assert (docs_root / "dataframe-engine.md").is_file()
+    assert "/roadmap/dataframe-engine/" in index
+    assert "roadmap/dataframe-engine.md" in package_docs
 
 
 def test_dataframe_engine_docs_define_support_and_promotion_boundaries() -> None:
     """Docs should distinguish optional engines from the stable tabular contract."""
-    docs = Path("docs/source/dataframe_engine_experiments.rst").read_text()
+    docs = Path("docs/astro-site/src/content/docs/roadmap/dataframe-engine.md").read_text()
 
     for phrase in (
         "pandas plus PyArrow remains the default",

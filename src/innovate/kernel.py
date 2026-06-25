@@ -5,10 +5,10 @@ from __future__ import annotations
 import inspect
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import Enum, StrEnum
 from importlib import import_module
 from math import prod
-from typing import Any, TypeAlias
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -18,7 +18,7 @@ from .fitters import ScipyFitter
 from .fitters.diagnostics_contract import DiagnosticsContract, DiagnosticsWarning, UncertaintySummary
 from .fitters.residual_analysis import analyze_residuals
 
-KernelJSONValue: TypeAlias = str | int | float | bool | None | dict[str, "KernelJSONValue"] | list["KernelJSONValue"]
+type KernelJSONValue = str | int | float | bool | None | dict[str, KernelJSONValue] | list[KernelJSONValue]
 
 KERNEL_SCHEMA_MAJOR_VERSION = 1
 KERNEL_SCHEMA_MINOR_VERSION = 0
@@ -33,7 +33,7 @@ KERNEL_OPERATIONS = (
 )
 
 
-class KernelOperation(str, Enum):
+class KernelOperation(StrEnum):
     """Canonical kernel operations."""
 
     DISCOVER_MODELS = "discover_models"
@@ -44,7 +44,7 @@ class KernelOperation(str, Enum):
     DIAGNOSE_MODEL = "diagnose_model"
 
 
-class KernelErrorCode(str, Enum):
+class KernelErrorCode(StrEnum):
     """Stable error codes for kernel responses."""
 
     INVALID_REQUEST = "invalid_request"

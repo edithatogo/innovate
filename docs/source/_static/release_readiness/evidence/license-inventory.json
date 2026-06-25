@@ -10,7 +10,8 @@
     "bindings/typescript/package.json",
     "bindings/r/DESCRIPTION",
     "bindings/julia/Project.toml",
-    "bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj"
+    "bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj",
+    "docs/astro-site/package.json"
   ],
   "project_license": "Apache-2.0",
   "requires_secrets": false,

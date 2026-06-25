@@ -386,3 +386,78 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Production Documentation and Observability** *(Completed)*
   *Link: [./archive/production_docs_observability_20260614/](./archive/production_docs_observability_20260614/)*
+
+---
+
+- [ ] **Track: Astro 7 and Starlight 0.40 Dedicated Migration**
+*Link: [./tracks/astro7_starlight040_migration_20260624/](./tracks/astro7_starlight040_migration_20260624/)*
+
+---
+
+- [ ] **Track: Roadmap Release Truth Closure**
+*Link: [./tracks/roadmap_release_truth_closure_20260625/](./tracks/roadmap_release_truth_closure_20260625/)*
+
+---
+
+- [ ] **Track: Starlight-Only Documentation Completion**
+*Link: [./tracks/starlight_only_docs_completion_20260625/](./tracks/starlight_only_docs_completion_20260625/)*
+
+---
+
+- [ ] **Track: Rust-Native Ownership Release Proof**
+*Link: [./tracks/rust_native_ownership_release_proof_20260625/](./tracks/rust_native_ownership_release_proof_20260625/)*
+
+---
+
+- [ ] **Track: Polyglot Registry Acceptance Completion**
+*Link: [./tracks/polyglot_registry_acceptance_completion_20260625/](./tracks/polyglot_registry_acceptance_completion_20260625/)*
+
+---
+
+- [ ] **Track: Bleeding-Edge Dependency Modernization**
+*Link: [./tracks/bleeding_edge_dependency_modernization_20260625/](./tracks/bleeding_edge_dependency_modernization_20260625/)*
+
+---
+
+- [ ] **Track: CI, Code Quality, and Release Hardening**
+*Link: [./tracks/ci_code_quality_release_hardening_20260625/](./tracks/ci_code_quality_release_hardening_20260625/)*
+
+---
+
+- [ ] **Track: Advanced Policy, Competition, and Substitution Modeling**
+*Link: [./tracks/advanced_policy_competition_substitution_20260625/](./tracks/advanced_policy_competition_substitution_20260625/)*
+
+---
+
+- [ ] **Track: Scenario Experiment Workflows**
+*Link: [./tracks/scenario_experiment_workflows_20260625/](./tracks/scenario_experiment_workflows_20260625/)*
+
+---
+
+- [ ] **Track: Causal Policy Evaluation**
+*Link: [./tracks/causal_policy_evaluation_20260625/](./tracks/causal_policy_evaluation_20260625/)*
+
+---
+
+- [ ] **Track: Model Validation and Benchmark Expansion**
+*Link: [./tracks/model_validation_benchmark_expansion_20260625/](./tracks/model_validation_benchmark_expansion_20260625/)*
+
+---
+
+- [ ] **Track: Kairos Dependency Inclusion**
+*Link: [./tracks/kairos_dependency_inclusion_20260626/](./tracks/kairos_dependency_inclusion_20260626/)*
+
+---
+
+- [ ] **Track: Kairos ABM and Network Simulation Migration**
+*Link: [./tracks/kairos_abm_network_simulation_migration_20260625/](./tracks/kairos_abm_network_simulation_migration_20260625/)*
+
+---
+
+- [ ] **Track: Data Ingestion and Provenance Connectors**
+*Link: [./tracks/data_ingestion_provenance_connectors_20260625/](./tracks/data_ingestion_provenance_connectors_20260625/)*
+
+---
+
+- [ ] **Track: Explainability, Sensitivity, and Decision Reports**
+*Link: [./tracks/explainability_sensitivity_decision_reports_20260625/](./tracks/explainability_sensitivity_decision_reports_20260625/)*

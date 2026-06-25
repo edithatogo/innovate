@@ -1,4 +1,5 @@
 """Canonical public API for the :mod:`innovate` package."""
+# pyright: reportUnsupportedDunderAll=false
 
 from __future__ import annotations
 

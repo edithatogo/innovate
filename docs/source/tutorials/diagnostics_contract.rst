@@ -80,4 +80,4 @@ The uncertainty ``provenance`` field records where the summary came from:
 
 For binding and Arrow consumers, use the versioned artifact payload under
 ``contract["artifacts"]``. The detailed artifact schema is documented in
-:doc:`../diagnostics_uncertainty_artifacts`.
+``docs/astro-site/src/content/docs/roadmap/diagnostics-uncertainty.md``.

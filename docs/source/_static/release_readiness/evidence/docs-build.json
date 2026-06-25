@@ -1,0 +1,19 @@
+{
+  "checks": [
+    "uv run nox -s docs",
+    "pnpm check",
+    "pnpm build"
+  ],
+  "commands": {
+    "astro_check": "pnpm check",
+    "starlight": "pnpm build",
+    "sphinx": "uv run nox -s docs"
+  },
+  "evidence_id": "docs_build",
+  "generated_at": "2026-06-24T03:17:26Z",
+  "generated_by": "codex-python-314-modernization",
+  "requires_secrets": false,
+  "schema_version": 1,
+  "status": "pass",
+  "summary": "Legacy Sphinx documentation and the Astro 7/Starlight 0.41 production site both built successfully."
+}

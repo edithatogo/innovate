@@ -11,6 +11,8 @@ import pytest
 
 from scripts.release_readiness import (
     CONTRACT_PATH,
+    PYTHON_BASELINE,
+    PYTHON_BASELINE_EVIDENCE_IDS,
     REQUIRED_EVIDENCE_IDS,
     VALID_STATUS_VALUES,
     build_readiness_report,
@@ -19,6 +21,13 @@ from scripts.release_readiness import (
     main,
     render_text,
 )
+
+
+def _passing_payload(entry: dict[str, object]) -> dict[str, object]:
+    payload: dict[str, object] = {"status": "pass", "summary": entry["id"]}
+    if entry["id"] in PYTHON_BASELINE_EVIDENCE_IDS:
+        payload["python_version"] = PYTHON_BASELINE
+    return payload
 
 
 def test_release_readiness_contract_declares_required_surfaces() -> None:
@@ -57,6 +66,8 @@ def test_release_readiness_contract_declares_required_surfaces() -> None:
         assert entry["freshness_days"] > 0
         assert entry["producer"]
         assert entry["artifact"]
+        if entry["id"] in PYTHON_BASELINE_EVIDENCE_IDS:
+            assert entry["required_python_version"] == PYTHON_BASELINE
 
 
 def test_release_readiness_evaluation_fails_closed_when_evidence_is_missing(tmp_path: Path) -> None:
@@ -68,7 +79,7 @@ def test_release_readiness_evaluation_fails_closed_when_evidence_is_missing(tmp_
     for entry in contract["required_evidence"][:-1]:
         artifact = evidence_dir / entry["artifact"]
         artifact.parent.mkdir(parents=True, exist_ok=True)
-        artifact.write_text(json.dumps({"status": "pass"}) + "\n", encoding="utf-8")
+        artifact.write_text(json.dumps(_passing_payload(entry)) + "\n", encoding="utf-8")
 
     report = evaluate_evidence(contract=contract, evidence_root=evidence_dir)
 
@@ -91,10 +102,8 @@ def test_release_readiness_statuses_block_release_ready(tmp_path: Path, status: 
             continue
         artifact = evidence_dir / entry["artifact"]
         artifact.parent.mkdir(parents=True, exist_ok=True)
-        artifact.write_text(
-            json.dumps({"status": status if entry["id"] == blocked_id else "pass"}) + "\n",
-            encoding="utf-8",
-        )
+        payload = {"status": status, "summary": entry["id"]} if entry["id"] == blocked_id else _passing_payload(entry)
+        artifact.write_text(json.dumps(payload) + "\n", encoding="utf-8")
 
     report = evaluate_evidence(contract=contract, evidence_root=evidence_dir)
 
@@ -125,7 +134,7 @@ def test_release_readiness_report_passes_when_all_evidence_is_fresh(tmp_path: Pa
     for entry in contract["required_evidence"]:
         artifact = evidence_dir / entry["artifact"]
         artifact.parent.mkdir(parents=True, exist_ok=True)
-        artifact.write_text(json.dumps({"status": "pass", "summary": entry["id"]}) + "\n", encoding="utf-8")
+        artifact.write_text(json.dumps(_passing_payload(entry)) + "\n", encoding="utf-8")
 
     report = evaluate_evidence(contract=contract, evidence_root=evidence_dir)
     rendered = render_text(report)
@@ -168,6 +177,41 @@ def test_release_readiness_contract_validation_detects_drift(tmp_path: Path) -> 
     with pytest.raises(ValueError, match="status values drifted"):
         load_contract(drifted_status_path)
 
+    drifted_python = dict(contract)
+    drifted_python["required_evidence"] = [
+        {key: value for key, value in entry.items() if key != "required_python_version"}
+        if entry["id"] in PYTHON_BASELINE_EVIDENCE_IDS
+        else entry
+        for entry in contract["required_evidence"]
+    ]
+    drifted_python_path = tmp_path / "drifted-python-baseline.json"
+    drifted_python_path.write_text(json.dumps(drifted_python), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="Python baseline evidence requirements drifted"):
+        load_contract(drifted_python_path)
+
+
+def test_release_readiness_python_baseline_evidence_is_required(tmp_path: Path) -> None:
+    """Python baseline evidence items must prove they ran on Python 3.14."""
+    contract = load_contract()
+    evidence_dir = tmp_path / "evidence"
+    evidence_dir.mkdir()
+    missing_python_entry = next(entry for entry in contract["required_evidence"] if entry["id"] == "type_checks")
+
+    for entry in contract["required_evidence"]:
+        artifact = evidence_dir / entry["artifact"]
+        artifact.parent.mkdir(parents=True, exist_ok=True)
+        payload = _passing_payload(entry)
+        if entry == missing_python_entry:
+            payload.pop("python_version", None)
+        artifact.write_text(json.dumps(payload) + "\n", encoding="utf-8")
+
+    report = evaluate_evidence(contract=contract, evidence_root=evidence_dir)
+
+    assert report["overall_status"] == "blocked"
+    assert {item["id"] for item in report["failing_evidence"]} == {missing_python_entry["id"]}
+    assert report["failing_evidence"][0]["failure_reason"] == "missing required Python 3.14 evidence"
+
 
 def test_release_readiness_report_treats_non_evidence_status_as_failure(tmp_path: Path) -> None:
     """Release-state labels in evidence artifacts should not count as passing evidence."""
@@ -178,10 +222,10 @@ def test_release_readiness_report_treats_non_evidence_status_as_failure(tmp_path
 
     for entry in contract["required_evidence"]:
         artifact = evidence_dir / entry["artifact"]
-        artifact.write_text(
-            json.dumps({"status": "release_ready" if entry == blocked_entry else "pass"}) + "\n",
-            encoding="utf-8",
+        payload = (
+            {"status": "release_ready", "summary": entry["id"]} if entry == blocked_entry else _passing_payload(entry)
         )
+        artifact.write_text(json.dumps(payload) + "\n", encoding="utf-8")
 
     report = evaluate_evidence(contract=contract, evidence_root=evidence_dir)
 

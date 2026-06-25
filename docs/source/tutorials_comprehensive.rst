@@ -34,13 +34,8 @@ Integration and Bindings
 .. toctree::
    :maxdepth: 1
 
-   tutorials/benchmark_workflows
    tutorials/jax_backend
    tutorials/ndlib_integration
-   tutorials/plugin_api_stability
-   tutorials/go_bindings
-   tutorials/julia_bindings
-   tutorials/rust_bindings
 
 Further Reading
 ---------------

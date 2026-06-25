@@ -2,12 +2,8 @@
 
 from __future__ import annotations
 
+import tomllib
 from pathlib import Path
-
-try:
-    import tomllib
-except ModuleNotFoundError:  # pragma: no cover - Python 3.10 compatibility
-    import tomli as tomllib
 
 
 def test_rust_binding_readme_mentions_tracing_and_fallbacks() -> None:
@@ -62,7 +58,7 @@ def test_rust_migration_inventory_docs_are_deliberately_docs_only() -> None:
 
     assert "docs/**" not in include
     assert "docs/source/**" not in include
-    assert "docs/source/rust_core_roadmap.rst" in readme
+    assert "docs/astro-site/src/content/docs/operations/rust-core.md" in readme
     assert "Migration inventory, roadmap material, and promotion dossiers" in readme
     assert "release-governance artifacts" in normalized_readme
     assert "deliberately docs-only" in normalized_readme

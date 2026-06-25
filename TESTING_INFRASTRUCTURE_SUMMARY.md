@@ -131,9 +131,9 @@ The faulthandler is configured to provide Python tracebacks for segmentation fau
 
 The testing infrastructure is integrated with CI/CD:
 - **Workflow:** `.github/workflows/python_ci.yml`
-- Runs tests with multiple Python versions
+- Runs tests on the Python 3.14 baseline
 - Performs coverage analysis
-- Executes static type checking (mypy)
+- Executes static type checking with strict basedpyright
 - Conducts security scanning (bandit)
 
 ## 11. Known Issues and Limitations

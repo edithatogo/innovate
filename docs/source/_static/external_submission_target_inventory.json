@@ -318,7 +318,7 @@
       "registry": "pyOpenSci",
       "status": "ready_for_review",
       "owner": "Scientific community maintainers",
-      "evidence": ["docs/source/_static/community_submission_readiness_matrix.json", "docs/source/submission_readiness_dossiers.rst"],
+      "evidence": ["docs/source/_static/community_submission_readiness_matrix.json", "docs/astro-site/src/content/docs/operations/submission-dossiers.md"],
       "next_action": "Maintainer decides whether to open external review."
     },
     {
@@ -336,7 +336,7 @@
       "registry": "JOSS",
       "status": "ready_for_review",
       "owner": "Scientific community maintainers",
-      "evidence": ["paper.qmd", "documents/manuscript_v2.md", "docs/source/submission_readiness_dossiers.rst"],
+      "evidence": ["paper.qmd", "documents/manuscript_v2.md", "docs/astro-site/src/content/docs/operations/submission-dossiers.md"],
       "next_action": "Maintainer prepares JOSS submission metadata and records the submission URL."
     },
     {
@@ -345,7 +345,7 @@
       "registry": "NumFOCUS",
       "status": "deferred",
       "owner": "Governance maintainers",
-      "evidence": ["docs/source/external_governance_sustainability.rst", "docs/source/_static/external_governance_sustainability_matrix.json"],
+      "evidence": ["docs/astro-site/src/content/docs/operations/governance.md", "docs/source/_static/external_governance_sustainability_matrix.json"],
       "next_action": "Maintainer must wait for NumFOCUS application capacity to reopen or record an owner-approved governance deferral."
     },
     {
@@ -354,7 +354,7 @@
       "registry": "PyPA",
       "status": "not_applicable",
       "owner": "Python maintainers",
-      "evidence": ["pyproject.toml", "docs/source/binding_publication_ci.rst"],
+      "evidence": ["pyproject.toml", "docs/astro-site/src/content/docs/maintainers/publication.md"],
       "next_action": "No PyPA submission path is claimed; maintain packaging standards only."
     },
     {
@@ -372,7 +372,7 @@
       "registry": ".NET Foundation",
       "status": "ready_for_review",
       "owner": "C# binding maintainers",
-      "evidence": ["bindings/csharp/", "docs/source/tutorials/csharp_bindings.rst"],
+      "evidence": ["bindings/csharp/", "docs/astro-site/src/content/docs/bindings/csharp.md"],
       "next_action": "Maintainer decides whether to initiate foundation affiliation review."
     },
     {
@@ -381,7 +381,7 @@
       "registry": "Julia community",
       "status": "ready_for_review",
       "owner": "Julia binding maintainers",
-      "evidence": ["bindings/julia/README.md", "docs/source/submission_readiness_dossiers.rst"],
+      "evidence": ["bindings/julia/README.md", "docs/astro-site/src/content/docs/operations/submission-dossiers.md"],
       "next_action": "Track Julia General pull request before broader community announcement."
     },
     {

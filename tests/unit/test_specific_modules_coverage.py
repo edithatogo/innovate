@@ -56,7 +56,7 @@ class TestFitterCoverage:
             # If it converges, parameters should be finite
             if model.params_:
                 assert all(np.isfinite(v) for v in model.params_.values())
-        except (RuntimeError, ValueError):
+        except RuntimeError, ValueError:
             # Convergence failure is acceptable for bad data
             pass
 
@@ -73,7 +73,7 @@ class TestFitterCoverage:
             # Fitting constant data should either work or fail gracefully
             if model.params_:
                 assert all(np.isfinite(v) for v in model.params_.values())
-        except (RuntimeError, ValueError):
+        except RuntimeError, ValueError:
             # Expected failure for constant data
             pass
 
@@ -120,7 +120,7 @@ class TestFitterCoverage:
                         assert lower <= upper
                         assert np.isfinite(lower)
                         assert np.isfinite(upper)
-            except (AttributeError, KeyError, NotImplementedError):
+            except AttributeError, KeyError, NotImplementedError:
                 # Method might not be implemented
                 pass
 
@@ -167,7 +167,7 @@ class TestAdoptionCategorization:
                 for cat in expected_categories:
                     if cat in categories:
                         assert isinstance(categories[cat], (int, float, np.number))
-            except (TypeError, ValueError, AttributeError):
+            except TypeError, ValueError, AttributeError:
                 # Function might have different signature or not be implemented
                 pass
 
@@ -188,7 +188,7 @@ class TestEcosystemModels:
             try:
                 model = EcosystemModel()
                 assert model is not None
-            except (TypeError, NotImplementedError):
+            except TypeError, NotImplementedError:
                 # Constructor might need parameters
                 pass
         except ImportError:
@@ -204,7 +204,7 @@ class TestEcosystemModels:
             try:
                 model = ComplementaryGoodsModel()
                 assert model is not None
-            except (TypeError, NotImplementedError):
+            except TypeError, NotImplementedError:
                 # Might need specific parameters
                 pass
 
@@ -229,7 +229,7 @@ class TestPathDependenceModels:
                 if hasattr(model, "set_params"):
                     model.set_params(switching_cost=0.1, network_effect=0.2)
 
-            except (TypeError, NotImplementedError):
+            except TypeError, NotImplementedError:
                 # Might need specific initialization parameters
                 pass
 
@@ -255,11 +255,11 @@ class TestPathDependenceModels:
                         result = model.predict(t)
                         assert len(result) == len(t)
                         assert all(np.isfinite(result))
-                    except (RuntimeError, NotImplementedError):
+                    except RuntimeError, NotImplementedError:
                         # Method might not be fully implemented
                         pass
 
-            except (TypeError, AttributeError):
+            except TypeError, AttributeError:
                 pass
 
         except ImportError:
@@ -302,10 +302,10 @@ class TestHypeModels:
                         assert max_idx > 0  # Peak shouldn't be at start
                         assert max_idx < len(result) - 1  # Peak shouldn't be at end
 
-                    except (RuntimeError, NotImplementedError):
+                    except RuntimeError, NotImplementedError:
                         pass
 
-            except (TypeError, AttributeError):
+            except TypeError, AttributeError:
                 pass
 
         except ImportError:
@@ -330,10 +330,10 @@ class TestHypeModels:
                         assert all(np.isfinite(result))
                         assert all(r >= 0 for r in result)  # Non-negative adoption
 
-                    except (RuntimeError, NotImplementedError):
+                    except RuntimeError, NotImplementedError:
                         pass
 
-            except (TypeError, AttributeError):
+            except TypeError, AttributeError:
                 pass
 
         except ImportError:
@@ -361,10 +361,10 @@ class TestFailureAnalysis:
                     try:
                         result = analyzer.analyze_failure(t, adoption)
                         assert result is not None
-                    except (TypeError, NotImplementedError):
+                    except TypeError, NotImplementedError:
                         pass
 
-            except (TypeError, AttributeError):
+            except TypeError, AttributeError:
                 pass
 
         except ImportError:
@@ -383,7 +383,7 @@ class TestFailureAnalysis:
                 risk = predict_failure_risk(adoption, t)
                 assert isinstance(risk, (int, float, np.number))
                 assert 0 <= risk <= 1  # Risk should be probability
-            except (TypeError, NotImplementedError, NameError):
+            except TypeError, NotImplementedError, NameError:
                 pass
 
         except ImportError:
@@ -420,7 +420,7 @@ class TestSubstituteModels:
                     # Should show S-curve behavior
                     assert result[0] < result[-1]  # Should increase over time
 
-                except (RuntimeError, NotImplementedError):
+                except RuntimeError, NotImplementedError:
                     pass
 
         except ImportError:

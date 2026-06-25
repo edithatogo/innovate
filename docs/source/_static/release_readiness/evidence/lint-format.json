@@ -1,0 +1,15 @@
+{
+  "checks": [
+    "uv run ruff check .",
+    "uv run ruff format --check ."
+  ],
+  "command": "uv run nox -s lint",
+  "evidence_id": "lint_format",
+  "generated_at": "2026-06-24T03:25:52Z",
+  "generated_by": "codex-python-314-modernization",
+  "python_version": "3.14",
+  "requires_secrets": false,
+  "schema_version": 1,
+  "status": "pass",
+  "summary": "Ruff lint and format checks passed under the Python 3.14 nox lint session."
+}

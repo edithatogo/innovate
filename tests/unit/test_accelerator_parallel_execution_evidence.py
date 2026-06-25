@@ -5,13 +5,19 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-DOC_PATH = Path("docs/source/accelerator_parallel_execution_evidence.rst")
+DOC_PATH = Path("docs/astro-site/src/content/docs/operations/accelerator-parallel-execution.md")
+LATEST_DOC_PATH = Path("docs/astro-site/src/content/docs/latest/operations/accelerator-parallel-execution.md")
 ARTIFACT_PATH = Path("docs/source/_static/accelerator_parallel_execution_evidence_schema.json")
+STARLIGHT_CONFIG = Path("docs/astro-site/starlight.config.mjs")
+
+
+def _doc_text() -> str:
+    return "\n".join((DOC_PATH.read_text(), LATEST_DOC_PATH.read_text()))
 
 
 def test_accelerator_parallel_execution_evidence_doc_covers_execution_modes() -> None:
     """The evidence page should cover accelerator, distributed, and scheduler modes."""
-    doc = DOC_PATH.read_text()
+    doc = _doc_text()
 
     for phrase in (
         "CPU parallelism",
@@ -58,8 +64,11 @@ def test_evidence_schema_requires_scheduler_and_fallback_fields() -> None:
     }.issubset(required)
 
 
-def test_accelerator_evidence_docs_are_linked_from_sphinx_index() -> None:
-    """The evidence page should be reachable from the Sphinx root index."""
-    index = Path("docs/source/index.rst").read_text()
+def test_accelerator_evidence_docs_are_linked_from_starlight_sidebar() -> None:
+    """The evidence page should be reachable from Starlight navigation."""
+    starlight_config = STARLIGHT_CONFIG.read_text()
 
-    assert "accelerator_parallel_execution_evidence" in index
+    assert DOC_PATH.is_file()
+    assert LATEST_DOC_PATH.is_file()
+    assert "/operations/accelerator-parallel-execution/" in starlight_config
+    assert "slug: latest/operations/accelerator-parallel-execution" in LATEST_DOC_PATH.read_text()

@@ -6,16 +6,27 @@ slug: latest/maintainers/runtime-logging
 
 # Runtime Logging and Instrumentation
 
-The repository favors standard logging primitives and structured error payloads.
+The repository does not use a custom logging framework. Runtime code should use
+standard logging primitives and structured error payloads rather than ad hoc
+`print` calls.
 
-Guidance:
+## Guidance
 
-* Modules should emit context-rich warnings and errors for operator-relevant failures.
-* Machine logs should remain machine-readable in automated paths.
-* Print statements are reserved for scripts and intentionally human-facing examples.
+- Library modules should create module-level loggers and emit context-rich
+  warnings or errors when a failure needs operator attention.
+- Bridge scripts should keep stdout machine-readable and reserve stderr for
+  diagnostics or unrecoverable failures.
+- Tests, examples, and intentionally human-facing scripts may still use
+  `print`.
+- Rust-native runtime observability should move toward structured
+  instrumentation rather than text-only debugging output as the core expands.
 
-Runtime observability guidance is expected to become more structured as native Rust execution expands.
+## Scope
 
-Migration source:
+This page is governance, not a public API. It describes the repo's default
+observability stance so Python and Rust work can stay consistent while the core
+continues to move native.
 
-* `docs/source/runtime_logging.rst`
+Canonical source:
+
+- `docs/astro-site/src/content/docs/maintainers/runtime-logging.md`

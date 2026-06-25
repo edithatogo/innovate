@@ -2,72 +2,67 @@
   "bom_format": "CycloneDX-compatible",
   "components": [
     {
-      "name": "jitcdde>=1.8",
+      "name": "jitcdde>=1.8.3,<2",
       "scope": "runtime",
       "type": "library"
     },
     {
-      "name": "mesa>=2.0",
+      "name": "mesa>=3.5.1,<4",
       "scope": "runtime",
       "type": "library"
     },
     {
-      "name": "ndlib>=5.1",
+      "name": "ndlib>=5.1.1,<6",
       "scope": "runtime",
       "type": "library"
     },
     {
-      "name": "networkx>=3.0",
+      "name": "networkx>=3.6.1,<4",
       "scope": "runtime",
       "type": "library"
     },
     {
-      "name": "numpy>=1.24",
+      "name": "numpy>=2.4.4,<3",
       "scope": "runtime",
       "type": "library"
     },
     {
-      "name": "pandas>=2.0",
+      "name": "pandas>=3.0.2,<4",
       "scope": "runtime",
       "type": "library"
     },
     {
-      "name": "pyarrow>=14.0",
+      "name": "pyarrow>=23.0.1,<24",
       "scope": "runtime",
       "type": "library"
     },
     {
-      "name": "pymannkendall>=1.4",
+      "name": "pymannkendall>=1.4.3,<2",
       "scope": "runtime",
       "type": "library"
     },
     {
-      "name": "pytensor>=2.18",
+      "name": "pytensor>=2.38.2,<3",
       "scope": "runtime",
       "type": "library"
     },
     {
-      "name": "ruptures>=1.1",
+      "name": "ruptures>=1.1.9,<1.1.10",
       "scope": "runtime",
       "type": "library"
     },
     {
-      "name": "scipy>=1.10",
+      "name": "scipy>=1.17.1,<2",
       "scope": "runtime",
       "type": "library"
     },
     {
-      "name": "statsmodels>=0.14",
+      "name": "statsmodels>=0.14.6,<0.15",
       "scope": "runtime",
       "type": "library"
     },
     {
-      "name": "sympy>=1.12",
-      "scope": "runtime",
-      "type": "library"
-    },
-    {
-      "name": "typing-extensions>=4.7",
+      "name": "sympy>=1.14,<2",
       "scope": "runtime",
       "type": "library"
     }

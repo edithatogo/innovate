@@ -1,11 +1,10 @@
 import warnings
 from collections.abc import Sequence
 from dataclasses import dataclass, field
-from typing import Literal
+from typing import Literal, Self
 
 import numpy as np
 from scipy.optimize import curve_fit, differential_evolution, least_squares, minimize
-from typing_extensions import Self
 
 from innovate.base.base import DiffusionModel
 from innovate.compete.competition import MultiProductDiffusionModel

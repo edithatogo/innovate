@@ -7,13 +7,9 @@ import hashlib
 import json
 import subprocess
 import sys
+import tomllib
 from pathlib import Path
 from typing import Any
-
-try:
-    import tomllib
-except ModuleNotFoundError:  # pragma: no cover - Python 3.10 compatibility
-    import tomli as tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT_ROOT = Path("docs/source/_static/release_readiness/evidence")
@@ -32,6 +28,8 @@ CHECKSUM_INPUTS = (
     "bindings/julia/Project.toml",
     "bindings/r/DESCRIPTION",
     "bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj",
+    "docs/astro-site/package.json",
+    "docs/astro-site/pnpm-lock.yaml",
     "docs/source/_static/release_readiness_contract.json",
 )
 
@@ -133,6 +131,7 @@ def _license_inventory(pyproject: dict[str, Any]) -> dict[str, Any]:
                 "bindings/r/DESCRIPTION",
                 "bindings/julia/Project.toml",
                 "bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj",
+                "docs/astro-site/package.json",
             ],
         }
     )

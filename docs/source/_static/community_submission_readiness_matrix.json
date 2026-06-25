@@ -29,7 +29,7 @@
         "docs/source/api_reference.rst",
         "docs/source/tutorials.rst",
         ".github/ISSUE_TEMPLATE/",
-        "docs/source/submission_readiness_dossiers.rst",
+        "docs/astro-site/src/content/docs/operations/submission-dossiers.md",
         "tests/unit/",
         "CHANGELOG.md",
         "CODE_OF_CONDUCT.md",
@@ -52,8 +52,8 @@
         "bindings/r/cran-comments.md",
         "bindings/r/NEWS.md",
         "bindings/r/README.md",
-        "docs/source/binding_publication_ci.rst",
-        "docs/source/submission_readiness_dossiers.rst",
+        "docs/astro-site/src/content/docs/maintainers/publication.md",
+        "docs/astro-site/src/content/docs/operations/submission-dossiers.md",
         "tests/unit/test_r_package_pdf_manual.py"
       ],
       "blockers": [],
@@ -69,12 +69,12 @@
         "docs/source/index.rst",
         "docs/source/tutorials.rst",
         "docs/source/innovate.benchmarks.rst",
-        "docs/source/diagnostics_uncertainty_artifacts.rst",
+        "docs/astro-site/src/content/docs/roadmap/diagnostics-uncertainty.md",
         "tests/",
         "paper.qmd",
         "documents/manuscript_v2.md",
         "documents/abstract_v2.md",
-        "docs/source/submission_readiness_dossiers.rst"
+        "docs/astro-site/src/content/docs/operations/submission-dossiers.md"
       ],
       "blockers": [],
       "recommended_sequence": 4
@@ -88,9 +88,9 @@
         "CODE_OF_CONDUCT.md",
         "CONTRIBUTING.md",
         "SECURITY.md",
-        "docs/source/scientific_hpc_readiness_roadmap.rst",
-        "docs/source/external_governance_sustainability.rst",
-        "docs/source/submission_readiness_dossiers.rst",
+        "docs/astro-site/src/content/docs/operations/scientific-hpc.md",
+        "docs/astro-site/src/content/docs/operations/governance.md",
+        "docs/astro-site/src/content/docs/operations/submission-dossiers.md",
         "conductor/archive/external_governance_sustainability_20260507/spec.md"
       ],
       "blockers": [],
@@ -108,7 +108,7 @@
         "docs/source/tutorials.rst",
         "docs/source/innovate.fitters.rst",
         "docs/source/innovate.benchmarks.rst",
-        "docs/source/submission_readiness_dossiers.rst"
+        "docs/astro-site/src/content/docs/operations/submission-dossiers.md"
       ],
       "blockers": [],
       "recommended_sequence": 7
@@ -122,7 +122,7 @@
         "docs/source/innovate.arrow_interchange.rst",
         "docs/adr/0001-array-api-and-arrow-foundation.md",
         "docs/adr/0005-heoml-schema-placement.md",
-        "docs/source/submission_readiness_dossiers.rst",
+        "docs/astro-site/src/content/docs/operations/submission-dossiers.md",
         "tests/unit/test_arrow_interchange.py",
         "specs/ecosystem/"
       ],
@@ -136,10 +136,10 @@
       "reviewer_evidence": ["docs", "tests", "examples", "citation", "governance", "maintenance"],
       "evidence_links": [
         "bindings/csharp/",
-        "docs/source/tutorials/csharp_bindings.rst",
-        "docs/source/binding_publication_ci.rst",
-        "docs/source/external_governance_sustainability.rst",
-        "docs/source/submission_readiness_dossiers.rst",
+        "docs/astro-site/src/content/docs/bindings/csharp.md",
+        "docs/astro-site/src/content/docs/maintainers/publication.md",
+        "docs/astro-site/src/content/docs/operations/governance.md",
+        "docs/astro-site/src/content/docs/operations/submission-dossiers.md",
         "tests/unit/test_csharp_binding_docs.py",
         "conductor/archive/csharp_package_publication_20260430/"
       ],
@@ -156,8 +156,8 @@
         "bindings/julia/README.md",
         "bindings/julia/src/Innovate.jl",
         "bindings/julia/test/",
-        "docs/source/tutorials/julia_bindings.rst",
-        "docs/source/binding_publication_ci.rst"
+        "docs/astro-site/src/content/docs/bindings/julia.md",
+        "docs/astro-site/src/content/docs/maintainers/publication.md"
       ],
       "blockers": [],
       "recommended_sequence": 5
@@ -173,8 +173,8 @@
         "bindings/r/man/",
         "bindings/r/vignettes/",
         "bindings/r/cran-comments.md",
-        "docs/source/binding_publication_ci.rst",
-        "docs/source/submission_readiness_dossiers.rst",
+        "docs/astro-site/src/content/docs/maintainers/publication.md",
+        "docs/astro-site/src/content/docs/operations/submission-dossiers.md",
         "tests/unit/test_r_package_pdf_manual.py"
       ],
       "blockers": [],

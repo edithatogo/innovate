@@ -192,15 +192,15 @@ uv run pytest                    # Run all tests
 uv run pytest -m unit            # Run unit tests only (fast feedback)
 uv run ruff check .              # Lint
 uv run ruff format .             # Format
-uv run ty check src/             # Type check
+uv run basedpyright src/         # Type check
 uv run nox --list                # Show Python task sessions
-uv run nox -s tests              # Run required unit gate on Python 3.10-3.14
+uv run nox -s tests              # Run required unit gate on Python 3.14
 uv run scalene src/innovate/     # Profile performance
 ```
 
 `uv` is the canonical Python dependency manager and command runner for this
 repository. `nox` provides the Python task layer for repeatable local and CI
-checks, including the supported Python 3.10 through 3.14 unit-test matrix.
+checks, including the required Python 3.14 unit-test baseline.
 
 Runtime code should prefer named loggers and structured error payloads over
 ad hoc `print` calls. `print` remains acceptable for tests, examples, and

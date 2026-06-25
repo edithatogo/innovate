@@ -1,4 +1,4 @@
 # Release Drafter configuration.
-# Release-note ownership is defined in docs/source/release_notes_policy.rst.
+# Release-note ownership is defined in the Astro/Starlight maintainer docs.
 template: |
   $CHANGES

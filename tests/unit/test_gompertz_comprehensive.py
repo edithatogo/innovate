@@ -275,7 +275,7 @@ class TestGompertzModelEdgeCases:
         try:
             pred = model.predict([])
             assert len(pred) == 0
-        except (IndexError, ValueError):
+        except IndexError, ValueError:
             pass  # Acceptable behavior for empty input
 
     def test_predict_single_time_point(self):

@@ -19,6 +19,6 @@ auditable after migration.
 - `pnpm build && pnpm check` passes for the active site with Python API
   generation and link validation enabled.
 - `starlight-versions` is enabled with the existing versioned `latest/`
-  content, and `pnpm build` validates Astro 6 non-doc routes such as `/404`.
+  content, and `pnpm build` validates Astro 7 non-doc routes such as `/404`.
 - See the [redirect route map](/innovate/migration/redirects/), the [archive page](/innovate/migration/archive/),
   and the [migration references page](/innovate/migration/references/).

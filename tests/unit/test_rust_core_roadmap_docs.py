@@ -7,7 +7,9 @@ import re
 from pathlib import Path
 
 ROOT = Path()
-ROADMAP = ROOT / "docs/source/rust_core_roadmap.rst"
+ROADMAP = ROOT / "docs/astro-site/src/content/docs/operations/rust-core.md"
+LATEST_ROADMAP = ROOT / "docs/astro-site/src/content/docs/latest/operations/rust-core.md"
+STARLIGHT_CONFIG = ROOT / "docs/astro-site/starlight.config.mjs"
 MIGRATION_INVENTORY = ROOT / "docs/source/_static/rust_core_migration_inventory.json"
 RUST_BINDING = ROOT / "bindings/rust/src/lib.rs"
 PYTHON_KERNEL = ROOT / "src/innovate/kernel.py"
@@ -40,14 +42,15 @@ def migration_inventory() -> dict[str, object]:
 
 def test_rust_core_roadmap_documentation_is_present() -> None:
     """The Rust core trajectory should be documented as a first-class roadmap."""
-    docs_root = Path("docs/source")
-
-    assert (docs_root / "rust_core_roadmap.rst").is_file()
+    assert ROADMAP.is_file()
+    assert LATEST_ROADMAP.is_file()
+    assert "/operations/rust-core/" in STARLIGHT_CONFIG.read_text()
+    assert "slug: latest/operations/rust-core" in LATEST_ROADMAP.read_text()
 
 
 def test_rust_core_roadmap_names_candidate_operations_and_gates() -> None:
     """The roadmap should make migration and promotion criteria explicit."""
-    roadmap = normalized_text(Path("docs/source/rust_core_roadmap.rst"))
+    roadmap = normalized_text(Path("docs/astro-site/src/content/docs/operations/rust-core.md"))
 
     for operation in (
         "discover_models",
@@ -91,7 +94,7 @@ def test_rust_core_roadmap_names_candidate_operations_and_gates() -> None:
 
 def test_rust_core_roadmap_inventories_runtime_status_and_xla_fit() -> None:
     """The roadmap should inventory native, fallback, and Python-only status."""
-    roadmap = normalized_text(Path("docs/source/rust_core_roadmap.rst"))
+    roadmap = normalized_text(Path("docs/astro-site/src/content/docs/operations/rust-core.md"))
 
     for phrase in (
         "Operation support inventory",
@@ -448,12 +451,12 @@ def test_architecture_docs_surface_rust_core_strategy() -> None:
     """Architecture indices should link the Rust core strategy and ADR."""
     architecture = Path("docs/architecture_modernization_roadmap.md").read_text()
     principles = Path("docs/architecture_principles.md").read_text()
-    index = Path("docs/source/index.rst").read_text()
+    starlight_config = STARLIGHT_CONFIG.read_text()
 
     assert "Rust Core Runtime" in architecture
     assert "ADR 0004" in architecture
     assert "Rust Core Trajectory" in principles
-    assert "rust_core_roadmap" in index
+    assert "/operations/rust-core/" in starlight_config
 
 
 def test_rust_binding_docs_surface_tracing_observability() -> None:

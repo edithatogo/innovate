@@ -30,6 +30,10 @@ export default {
         { label: 'Arrow Interchange', link: '/core/arrow-interchange/' },
         { label: 'Diagnostics', link: '/core/diagnostics-contract/' },
         { label: 'Bindings', link: '/bindings/' },
+        { label: 'C# Bindings', link: '/bindings/csharp/' },
+        { label: 'Go Bindings', link: '/bindings/go/' },
+        { label: 'Julia Bindings', link: '/bindings/julia/' },
+        { label: 'Rust Bindings', link: '/bindings/rust/' },
       ],
     },
     {
@@ -67,6 +71,7 @@ export default {
         { label: 'Deployment Readiness', link: '/maintainers/deployment-readiness/' },
         { label: 'Release Readiness', link: '/maintainers/release-readiness/' },
         { label: 'Release Notes', link: '/maintainers/release-notes/' },
+        { label: 'Binding Conformance', link: '/maintainers/binding-conformance/' },
         { label: 'Plugins', link: '/maintainers/plugins/' },
         { label: 'Runtime Logging', link: '/maintainers/runtime-logging/' },
         { label: 'Stability', link: '/maintainers/stability/' },
@@ -95,7 +100,12 @@ export default {
     },
     {
       label: 'Tutorials',
-      items: [{ label: 'Tutorials', link: '/tutorials/' }],
+      items: [
+        { label: 'Tutorials', link: '/tutorials/' },
+        { label: 'Advanced Runtime', link: '/tutorials/advanced-runtime/' },
+        { label: 'Benchmark Workflows', link: '/tutorials/benchmark-workflows/' },
+        { label: 'Plugin API Stability', link: '/tutorials/plugin-api-stability/' },
+      ],
     },
   ],
   editLink: {
@@ -105,7 +115,7 @@ export default {
   markdown: {
     // The pinned plugin baseline is documented in package.json and the manifest.
     // starlight-versions 0.9.0
-    // starlight-links-validator 0.24.0
+    // starlight-links-validator 0.24.1
     // @astrojs/starlight-docsearch 0.7.0 (Algolia DocSearch)
   },
 };

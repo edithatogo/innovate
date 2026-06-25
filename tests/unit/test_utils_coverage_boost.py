@@ -95,7 +95,7 @@ class TestBackendFunctionality:
                 np.asarray(predictions_jax, dtype=float),
                 rtol=1e-5,
             )
-        except (ValueError, ImportError):
+        except ValueError, ImportError:
             # JAX not available, skip comparison
             pass
 
@@ -361,7 +361,7 @@ class TestPreprocessTimeSeriesModule:
             result = sarima_fit(data, order, seasonal_order)
             if result is not None:
                 assert len(result) == len(data)
-        except (ValueError, Exception):
+        except ValueError, Exception:
             # Expected for too short series
             pass
         except ImportError:
@@ -393,7 +393,7 @@ class TestEdgeCasesAndErrorHandling:
                 metrics = get_fit_metrics(model, t, y)
                 # Should either exclude inf values or return inf metrics
                 assert "MSE" in metrics
-            except (ValueError, RuntimeError):
+            except ValueError, RuntimeError:
                 # Raising error for inf values is also acceptable
                 pass
 
@@ -409,7 +409,7 @@ class TestEdgeCasesAndErrorHandling:
             metrics = get_fit_metrics(model, t, y)
             # Should handle NaN appropriately
             assert "MSE" in metrics
-        except (ValueError, RuntimeError):
+        except ValueError, RuntimeError:
             # Raising error for NaN is also acceptable
             pass
 
@@ -430,7 +430,7 @@ class TestEdgeCasesAndErrorHandling:
                 use_backend("jax")
             else:
                 use_backend("numpy")
-        except (ValueError, ImportError):
+        except ValueError, ImportError:
             pass
 
         # Continue computation
@@ -462,7 +462,7 @@ class TestEdgeCasesAndErrorHandling:
         try:
             result = model.predict(empty_t)
             assert len(result) == 0
-        except (ValueError, IndexError):
+        except ValueError, IndexError:
             # Raising error for empty input is acceptable
             pass
 

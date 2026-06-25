@@ -51,7 +51,7 @@ result = fit_model(
 
 ### Bayesian MCMC
 
-Full Bayesian inference using PyMC. Returns posterior samples for all parameters.
+Full Bayesian inference using NumPyro and BlackJAX. Returns posterior samples for all parameters.
 
 ```python
 result = fit_model(

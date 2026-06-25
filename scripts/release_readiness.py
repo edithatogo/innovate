@@ -42,6 +42,14 @@ REQUIRED_EVIDENCE_IDS = {
     "reproducibility",
     "compatibility",
 }
+PYTHON_BASELINE = "3.14"
+PYTHON_BASELINE_EVIDENCE_IDS = {
+    "python_tests",
+    "coverage",
+    "type_checks",
+    "package_dry_run",
+    "compatibility",
+}
 PASSING_STATUSES = {"pass"}
 FAILING_STATUSES = {"fail", "blocked", "unknown", "manual", "deferred"}
 
@@ -62,6 +70,15 @@ def load_contract(path: Path = CONTRACT_PATH) -> dict[str, Any]:
         raise ValueError(f"Release-readiness evidence ids drifted: missing={missing}, extra={extra}")
     if status_values != VALID_STATUS_VALUES:
         raise ValueError("Release-readiness status values drifted from evaluator constants")
+    python_baseline_requirements = {
+        entry["id"]: entry.get("required_python_version")
+        for entry in contract["required_evidence"]
+        if entry["id"] in PYTHON_BASELINE_EVIDENCE_IDS
+    }
+    if set(python_baseline_requirements) != PYTHON_BASELINE_EVIDENCE_IDS or any(
+        required != PYTHON_BASELINE for required in python_baseline_requirements.values()
+    ):
+        raise ValueError("Release-readiness Python baseline evidence requirements drifted")
 
     return contract
 
@@ -75,6 +92,18 @@ def _load_evidence(path: Path) -> dict[str, Any]:
 
 def _artifact_age_days(path: Path, now: float) -> float:
     return (now - path.stat().st_mtime) / 86_400
+
+
+def _has_required_python_version(data: dict[str, Any], required_version: str) -> bool:
+    python_version = data.get("python_version")
+    if isinstance(python_version, str) and python_version == required_version:
+        return True
+
+    python_versions = data.get("python_versions")
+    if isinstance(python_versions, list):
+        return required_version in {str(version) for version in python_versions}
+
+    return False
 
 
 def evaluate_evidence(
@@ -102,6 +131,9 @@ def evaluate_evidence(
             "producer": requirement["producer"],
             "status": "missing",
         }
+        required_python_version = requirement.get("required_python_version")
+        if required_python_version:
+            check["required_python_version"] = required_python_version
 
         if not artifact_path.is_file():
             missing.append(requirement["id"])
@@ -126,7 +158,13 @@ def evaluate_evidence(
             stale.append(check)
             counts["stale"] += 1
         elif status in PASSING_STATUSES:
-            counts["pass"] += 1
+            if required_python_version and not _has_required_python_version(data, str(required_python_version)):
+                check["status"] = "fail"
+                check["failure_reason"] = f"missing required Python {required_python_version} evidence"
+                failing.append(check)
+                counts["fail"] += 1
+            else:
+                counts["pass"] += 1
         elif status in FAILING_STATUSES or status not in VALID_STATUS_VALUES:
             failing.append(check)
             counts["fail"] += 1

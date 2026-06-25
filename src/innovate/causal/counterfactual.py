@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from collections.abc import Sequence
 from typing import Any
 
@@ -9,7 +11,7 @@ from innovate.base import DiffusionModel
 class CounterfactualAnalysis:
     """A class for conducting counterfactual analysis on fitted diffusion models."""
 
-    def __init__(self, model: "DiffusionModel"):
+    def __init__(self, model: DiffusionModel):
         if not model.params_:
             raise ValueError(
                 "The model must be fitted before conducting counterfactual analysis.",

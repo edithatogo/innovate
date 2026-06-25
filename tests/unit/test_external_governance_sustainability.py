@@ -5,21 +5,23 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-DOC_PATH = Path("docs/source/external_governance_sustainability.rst")
+DOC_PATH = Path("docs/astro-site/src/content/docs/operations/governance.md")
+LATEST_DOC_PATH = Path("docs/astro-site/src/content/docs/latest/operations/governance.md")
 MATRIX_PATH = Path("docs/source/_static/external_governance_sustainability_matrix.json")
-INDEX_PATH = Path("docs/source/index.rst")
+STARLIGHT_CONFIG = Path("docs/astro-site/starlight.config.mjs")
 
 
 def load_matrix() -> dict[str, object]:
     return json.loads(MATRIX_PATH.read_text(encoding="utf-8"))
 
 
-def test_external_governance_dossier_is_in_sphinx_navigation() -> None:
-    """The governance dossier should be reachable from the Sphinx landing page."""
-    index = INDEX_PATH.read_text(encoding="utf-8")
+def test_external_governance_dossier_is_in_starlight_navigation() -> None:
+    """The governance dossier should be reachable from the Starlight navigation."""
+    config = STARLIGHT_CONFIG.read_text(encoding="utf-8")
 
     assert DOC_PATH.is_file()
-    assert "external_governance_sustainability" in index
+    assert LATEST_DOC_PATH.is_file()
+    assert "/operations/governance/" in config
 
 
 def test_external_governance_matrix_covers_core_governance_items() -> None:
@@ -41,7 +43,7 @@ def test_external_governance_matrix_covers_core_governance_items() -> None:
 
 def test_external_governance_dossier_links_existing_policy_files() -> None:
     """The dossier should point at the repo's current stewardship evidence."""
-    docs = DOC_PATH.read_text(encoding="utf-8")
+    docs = DOC_PATH.read_text(encoding="utf-8") + "\n" + LATEST_DOC_PATH.read_text(encoding="utf-8")
 
     for phrase in (
         "CODEOWNERS",

@@ -13,7 +13,7 @@
   - `Parameters` section with types and descriptions
   - `Returns` section with type and description
   - `Examples` section with runnable code snippets
-- **Type Hints**: All public APIs must be fully type-hinted. Use `typing_extensions` for forward compatibility. Type checking is enforced by `ty` (primary) and `mypy` (secondary).
+- **Type Hints**: All public APIs must be fully type-hinted against the Python 3.14 baseline. Type checking is enforced by strict `basedpyright` on the verified public API surface.
 - **Inline Comments**: Comment *why*, not *what*. Only add inline comments for non-obvious logic, mathematical derivations, or performance-critical sections.
 
 ## API Design Principles
@@ -59,12 +59,12 @@
   - `uv run ruff check .` — Lint (replaces flake8, Pylint, vulture, unimport)
   - `uv run ruff format .` — Format (replaces Black)
   - `uv run ruff check . --select I` — Import sorting (replaces isort)
-- **Pre-commit Hooks**: All commits are validated by pre-commit hooks running Ruff, mypy, codespell, and safety checks.
+- **Pre-commit Hooks**: All commits are validated by pre-commit hooks running Ruff, basedpyright, codespell, and safety checks where configured.
 - **No Legacy Tools**: Black, isort, flake8, Pylint, vulture, and unimport are not used.
 
 ## Type Safety
-- **Primary**: `ty` is the primary type checker (fastest, by Astral).
-- **Secondary**: `mypy` runs in strict mode as a secondary check in CI.
+- **Primary**: `basedpyright` runs in strict mode for the verified public API surface.
+- **Baseline**: Type checking uses Python 3.14 semantics.
 - **Enforcement**: All CI checks must pass type checking before code can be merged.
 
 ## Versioning & Releases
@@ -76,8 +76,7 @@
 ## CI/CD
 - **Single Pipeline**: All CI checks run in a consolidated GitHub Actions workflow with parallel jobs.
 - **CI Gate Monitoring**: After every push, CI results are automatically monitored. Failures are addressed iteratively until all checks pass.
-- **Matrix Testing**: Required unit tests run on Python 3.10, 3.11, 3.12,
-  3.13, and 3.14.
+- **Matrix Testing**: Required unit tests run on the Python 3.14 baseline.
 - **Coverage**: Codecov integration with PR comments on coverage changes.
 - **Scheduled Jobs**: Mutation testing runs weekly. Dependency updates via Renovate run weekly.
 

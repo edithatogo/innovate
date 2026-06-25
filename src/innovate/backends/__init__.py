@@ -1,4 +1,5 @@
 """Canonical runtime backend namespace for :mod:`innovate`."""
+# pyright: reportUnsupportedDunderAll=false
 
 from __future__ import annotations
 

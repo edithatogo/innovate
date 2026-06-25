@@ -9,11 +9,11 @@ This page points readers to the docs that explain the migration shape.
 
 Primary references:
 
-- `docs/source/polyglot_repo_architecture.rst`
-- `docs/source/polyglot_registry_plan.rst`
-- `docs/source/rust_core_roadmap.rst`
-- `docs/source/hpc_registry_contract.rst`
-- `docs/source/submission_readiness_dossiers.rst`
+- `docs/astro-site/src/content/docs/architecture/polyglot-repo.md`
+- `docs/astro-site/src/content/docs/operations/polyglot-registry.md`
+- `docs/astro-site/src/content/docs/operations/rust-core.md`
+- `docs/astro-site/src/content/docs/operations/hpc-registry.md`
+- `docs/astro-site/src/content/docs/operations/submission-dossiers.md`
 
 Archive references:
 
@@ -23,3 +23,8 @@ Archive references:
 
 The references page complements the legacy route inventory and keeps the reader
 path explicit now that Astro/Starlight is the active docs site.
+
+Legacy provenance terms:
+
+- `polyglot_repo_architecture`
+- `rust_core_roadmap`

@@ -50,7 +50,7 @@ class TestGompertzModelProperties:
             preds = model.predict(t)
             for pred in preds:
                 assert pred <= a * 2 + 10, f"Prediction {pred} far exceeds asymptote {a}"
-        except (ValueError, RuntimeError):
+        except ValueError, RuntimeError:
             pass
 
 
@@ -75,5 +75,5 @@ class TestFisherPryProperties:
             preds = model.predict(t)
             for p in preds:
                 assert -0.01 <= p <= 1.01, f"Substitution fraction out of range: {p}"
-        except (ValueError, RuntimeError):
+        except ValueError, RuntimeError:
             pass

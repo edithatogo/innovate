@@ -18,4 +18,4 @@ Related docs
 
 * `Architecture principles <../architecture_principles.md>`_
 * `Modernization roadmap <../architecture_modernization_roadmap.md>`_
-* :doc:`xla_backend_strategy`
+* `XLA Backend Strategy <../astro-site/src/content/docs/operations/xla-backend.md>`_

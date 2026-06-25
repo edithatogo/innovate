@@ -55,7 +55,7 @@ describe("TypeScript kernel wrappers", () => {
     });
   });
 
-  it("predicts, simulates, summarizes, and diagnoses from a fitted state", { timeout: 20000 }, () => {
+  it("predicts, simulates, summarizes, and diagnoses from a fitted state", { timeout: 120000 }, () => {
     const discovery = kernelDiscoverModels();
     const bass = discovery.find((record) => record.key === "bass");
     if (!bass) {

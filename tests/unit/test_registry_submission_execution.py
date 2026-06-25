@@ -82,9 +82,11 @@ def test_registry_submission_inventory_requires_audit_fields() -> None:
 
 def test_registry_submission_docs_still_reflect_readiness_not_submission() -> None:
     """Existing docs should not overstate submission until receipts exist."""
-    binding_docs = Path("docs/source/binding_publication_ci.rst").read_text(encoding="utf-8")
-    hpc_docs = Path("docs/source/hpc_packaging_registry_readiness.rst").read_text(encoding="utf-8")
-    community_docs = Path("docs/source/community_submission_readiness.rst").read_text(encoding="utf-8")
+    binding_docs = Path("docs/astro-site/src/content/docs/maintainers/publication.md").read_text(encoding="utf-8")
+    hpc_docs = Path("docs/astro-site/src/content/docs/operations/hpc-readiness.md").read_text(encoding="utf-8")
+    community_docs = Path("docs/astro-site/src/content/docs/operations/community-readiness.md").read_text(
+        encoding="utf-8"
+    )
 
     assert "publication targets" in binding_docs.lower()
     assert "registry_submission_receipts" in binding_docs

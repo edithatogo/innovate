@@ -26,7 +26,7 @@ jobs:
           enable-cache: true
 
       - name: Set up Python
-        run: uv python install 3.12
+        run: uv python install 3.14
 
       - name: Install dependencies
         run: uv sync
@@ -48,4 +48,3 @@ jobs:
             docs/source/_static/binding_golden_fixtures.json
             docs/source/_static/binding_hardening_evidence.json
           if-no-files-found: error
-

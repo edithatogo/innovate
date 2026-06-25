@@ -6,5 +6,5 @@ slug: latest/core/kernel
 
 # Kernel
 
-This page mirrors the stable functional kernel landing page from the Sphinx
+This page is the stable functional kernel landing page for the Astro/Starlight
 site.

@@ -48,7 +48,7 @@ def validate_float(
 
     try:
         float_val = float(value)
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         raise TypeError(f"Parameter '{param_name}' must be convertible to float, got {value}")
 
     if min_val is not None and float_val < min_val:

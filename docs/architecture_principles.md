@@ -63,6 +63,6 @@ Rust `SHOULD` be treated as the strategic long-term core runtime for performance
 ## Related Documents
 
 - [Architecture Modernization Roadmap](./architecture_modernization_roadmap.md)
-- [XLA Backend Strategy](./source/xla_backend_strategy.rst)
+- [XLA Backend Strategy](./astro-site/src/content/docs/operations/xla-backend.md)
 - [ADR Index](./adr/index.md)
 - [ADR 0004: Core API, Bindings, and Rust Core Trajectory](./adr/0004-core-api-bindings-and-rust-core-trajectory.md)

@@ -8,9 +8,9 @@ description: Cutover policy, inventories, and route-stability notes.
 This section records the cutover policy for the docs-site migration.
 
 - Treat Astro/Starlight as the active documentation stack.
-- Retain Sphinx source as archival and redirect-reference material.
-- Keep the content inventory and redirect inventory synchronized.
-- Preserve legacy Sphinx URLs with compatibility redirects.
+- Keep the content inventory synchronized with Astro routes.
+- Keep the redirect inventory as historical route provenance during the cutover.
+- Keep historical migration evidence as data artifacts, not as a second docs site.
 - See the [redirect route map](/innovate/migration/redirects/) for representative
   source-to-target mappings.
 - See the [validation page](/innovate/migration/validation/) for route-stability and

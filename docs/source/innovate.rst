@@ -14,9 +14,9 @@ Read next
 - ``docs/source/innovate.benchmarks.rst`` for benchmark API helpers
 - ``docs/source/innovate.kernel.rst`` for the contract-first kernel API
 - ``docs/source/innovate.arrow_interchange.rst`` for the interchange boundary
-- ``docs/source/probabilistic_inference.rst`` for posterior payloads and optional XLA-aligned inference backends
-- ``docs/source/dataframe_engine_experiments.rst`` for optional DataFrame engine experiments
-- ``docs/source/remote_execution.rst`` for hosted service and remote execution boundaries
-- ``docs/source/innovate.plugins.rst`` for plugin extension points
-- ``docs/source/innovate.stability.rst`` for stability tiers
+- ``docs/astro-site/src/content/docs/roadmap/probabilistic-inference.md`` for posterior payloads and optional XLA-aligned inference backends
+- ``docs/astro-site/src/content/docs/roadmap/dataframe-engine.md`` for optional DataFrame engine experiments
+- ``docs/astro-site/src/content/docs/operations/remote-execution.md`` for hosted service and remote execution boundaries
+- ``docs/astro-site/src/content/docs/maintainers/plugins.md`` for plugin extension points
+- ``docs/astro-site/src/content/docs/maintainers/stability.md`` for stability tiers
 - ``docs/architecture_principles.md`` for the architecture rationale

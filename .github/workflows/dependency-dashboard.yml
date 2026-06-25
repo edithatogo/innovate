@@ -1,0 +1,64 @@
+name: Dependency Dashboard
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "27 5 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+
+      - name: Set up Python
+        run: uv python install 3.14
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "26"
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+          run_install: false
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Set up Julia
+        uses: julia-actions/setup-julia@v2
+        with:
+          version: "1.12"
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            10.0.x
+            11.0.x
+
+      - name: Install JavaScript dependencies
+        run: |
+          pnpm --dir docs/astro-site install --frozen-lockfile
+          npm ci --prefix bindings/typescript
+
+      - name: Generate dependency dashboard
+        run: uv run python scripts/dependency_dashboard.py --output-dir dependency-dashboard
+
+      - name: Upload dependency dashboard
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-dashboard
+          path: dependency-dashboard
