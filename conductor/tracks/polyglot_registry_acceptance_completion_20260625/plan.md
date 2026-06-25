@@ -2,7 +2,7 @@
 
 ## Phase 1: Registry State Audit
 
-- [ ] Task: Inventory language and HPC registry states
+- [~] Task: Inventory language and HPC registry states
     - [ ] Audit Python, TestPyPI/PyPI, conda, Rust, R, Julia, TypeScript, Go, C#, Spack, EasyBuild, HPSF, and E4S artifacts.
     - [ ] Commit task changes and attach the required Conductor git note.
 - [ ] Task: Write receipt-state consistency tests

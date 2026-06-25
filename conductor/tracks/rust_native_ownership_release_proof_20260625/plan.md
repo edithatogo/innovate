@@ -2,8 +2,8 @@
 
 ## Phase 1: Ownership Audit
 
-- [ ] Task: Build operation and model-family matrix
-    - [ ] Inventory canonical operations, stable payloads, model families, and current Rust/native/fallback status.
+- [~] Task: Build operation and model-family matrix
+    - [~] Inventory canonical operations, stable payloads, model families, and current Rust/native/fallback status.
     - [ ] Commit task changes and attach the required Conductor git note.
 - [ ] Task: Write failing coverage tests
     - [ ] Add tests that require every stable operation and model family to have native or exception status.
