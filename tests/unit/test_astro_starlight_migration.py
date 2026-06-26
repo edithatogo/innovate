@@ -19,7 +19,7 @@ def test_astro_starlight_package_manifest_records_pinned_baseline() -> None:
 
     dependencies = package["dependencies"]
     assert dependencies["astro"] == "^7.0.2"
-    assert dependencies["@astrojs/starlight"] == "^0.41.0"
+    assert dependencies["@astrojs/starlight"] == "^0.40.0"
     assert dependencies["@astrojs/markdown-remark"] == "^7.2.0"
     assert dependencies["starlight-versions"] == "^0.9.0"
     assert dependencies["starlight-links-validator"] == "^0.24.1"
