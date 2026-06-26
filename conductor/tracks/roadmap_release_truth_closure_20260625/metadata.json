@@ -1,8 +1,0 @@
-{
-  "track_id": "roadmap_release_truth_closure_20260625",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-06-25T11:32:58Z",
-  "updated_at": "2026-06-25T11:32:58Z",
-  "description": "Create a release-truth closure track that maps every roadmap, vision, external gate, and maturity claim to active or archived Conductor evidence."
-}

@@ -44,3 +44,21 @@ Archived remediation tracks:
 
 Evidence remains in the archived Rust migration records, the Rust migration
 inventory, and the route inventory that preserves the current docs structure.
+
+## Truth Ledger
+
+The roadmap truth ledger provides a machine-readable view of every roadmap
+claim, its current status, evidence, and owning track. Each entry maps to an
+active Conductor track, an archived track, an external blocker, or an explicit
+future-state deferral.
+
+Canonical source: `conductor/tracks/roadmap_release_truth_closure_20260625/truth_ledger.json`
+
+Status legend:
+
+- `complete`: claim is backed by evidence and no active track remains.
+- `active`: claim is owned by an active Conductor track.
+- `external_blocked`: claim is blocked by an external dependency outside the
+  project's control.
+- `future_state`: claim is deferred to a future release and not yet tracked.
+- `out_of_scope`: claim was intentionally excluded from the product scope.

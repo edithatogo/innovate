@@ -389,13 +389,13 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Astro 7 and Starlight 0.40 Dedicated Migration**
+- [~] **Track: Astro 7 and Starlight 0.40 Dedicated Migration**
 *Link: [./tracks/astro7_starlight040_migration_20260624/](./tracks/astro7_starlight040_migration_20260624/)*
 
 ---
 
-- [ ] **Track: Roadmap Release Truth Closure**
-*Link: [./tracks/roadmap_release_truth_closure_20260625/](./tracks/roadmap_release_truth_closure_20260625/)*
+- [x] **Track: Roadmap Release Truth Closure** *(Completed)*
+*Link: [./archive/roadmap_release_truth_closure_20260625/](./archive/roadmap_release_truth_closure_20260625/)*
 
 ---
 

@@ -2,9 +2,9 @@
 
 ## Phase 1: Remaining RST Audit
 
-- [ ] Task: Classify remaining RST files
-    - [ ] Group files as tutorial, bridge, generated API, template, archive, or evidence.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Classify remaining RST files
+    - [x] Group files as tutorial, bridge, generated API, template, archive, or evidence.
+    - [x] Commit task changes and attach the required Conductor git note.
 - [ ] Task: Write fail-closed active-RST tests
     - [ ] Add an allowlist-based guard for any retained RST file.
     - [ ] Confirm tests fail for unclassified active RST files.

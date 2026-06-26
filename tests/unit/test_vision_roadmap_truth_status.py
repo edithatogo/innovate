@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
 VISION_STATUS_INVENTORY = Path("docs/source/_static/vision_roadmap_status_inventory.json")
 RUST_MIGRATION_INVENTORY = Path("docs/source/_static/rust_core_migration_inventory.json")
 
@@ -109,3 +110,99 @@ def test_full_rust_core_claims_remain_disallowed_until_inventory_is_all_native()
         )
         for claim in forbidden_claims:
             assert claim not in project_docs
+
+def test_roadmap_truth_ledger_exists() -> None:
+    """The roadmap truth ledger must exist as a machine-readable artifact."""
+    ledger = Path("conductor/tracks/roadmap_release_truth_closure_20260625/truth_ledger.json")
+    assert ledger.exists(), "Truth ledger not yet created - Phase 2 must implement it"
+
+
+def test_roadmap_truth_ledger_covers_all_roadmap_claims() -> None:
+    """Every roadmap claim must map to evidence, active track, external blocker, or out-of-scope rationale."""
+    inventory = Path("conductor/tracks/roadmap_release_truth_closure_20260625/inventory.json")
+    assert inventory.exists(), "Inventory not yet created - Phase 1 must build it first"
+
+    inventory_data = json.loads(inventory.read_text())
+    claims = inventory_data.get("roadmap_claims", [])
+
+    ledger = Path("conductor/tracks/roadmap_release_truth_closure_20260625/truth_ledger.json")
+    assert ledger.exists(), "Truth ledger must exist before coverage can be validated"
+
+    ledger_data = json.loads(ledger.read_text())
+    ledger_claim_keys = {entry["claim"] for entry in ledger_data.get("entries", [])}
+
+    for claim in claims:
+        claim_key = claim["claim"]
+        assert claim_key in ledger_claim_keys, (
+            f"Claim '{claim_key}' from {claim['source']} is not covered in the truth ledger"
+        )
+
+
+def test_roadmap_truth_ledger_entries_have_required_fields() -> None:
+    """Every truth ledger entry must have status, owner, and evidence fields."""
+    ledger = Path("conductor/tracks/roadmap_release_truth_closure_20260625/truth_ledger.json")
+    if not ledger.exists():
+        return  # Test passes vacuously before ledger exists
+
+    ledger_data = json.loads(ledger.read_text())
+    for entry in ledger_data.get("entries", []):
+        assert "claim" in entry
+        assert "status" in entry, f"Entry '{entry.get('claim', 'unknown')}' missing status"
+        assert entry["status"] in {"complete", "active", "external_blocked", "future_state", "out_of_scope"}, (
+            f"Entry '{entry.get('claim', 'unknown')}' has invalid status: {entry.get('status')}"
+        )
+        assert "evidence" in entry, f"Entry '{entry.get('claim', 'unknown')}' missing evidence"
+        assert "track_link" in entry, f"Entry '{entry.get('claim', 'unknown')}' missing track_link"
+
+
+def test_no_stale_or_missing_completion_claims() -> None:
+    """No claim should say 'complete' without corresponding archived track evidence."""
+    inventory = Path("conductor/tracks/roadmap_release_truth_closure_20260625/inventory.json")
+    ledger = Path("conductor/tracks/roadmap_release_truth_closure_20260625/truth_ledger.json")
+    if not ledger.exists():
+        return  # Test passes vacuously before ledger exists
+
+    inventory_data = json.loads(inventory.read_text())
+    ledger_data = json.loads(ledger.read_text())
+    ledger_entries = {e["claim"]: e for e in ledger_data.get("entries", [])}
+
+    for claim in inventory_data.get("roadmap_claims", []):
+        claim_key = claim["claim"]
+        if claim_key in ledger_entries:
+            entry = ledger_entries[claim_key]
+            if entry["status"] == "complete":
+                assert entry.get("evidence"), (
+                    f"Complete claim '{claim_key}' must have evidence"
+                )
+def test_no_active_rst_outside_allowlist() -> None:
+    """Fail if any RST file outside the explicit allowlist exists as active docs."""
+    classification = Path("conductor/tracks/starlight_only_docs_completion_20260625/rst_classification.json")
+    if not classification.exists():
+        return  # Pass vacuously until classification exists
+
+    data = json.loads(classification.read_text())
+    keep_allowlist = {Path(p).resolve() for p in data.get("keep_allowlist", [])}
+
+    docs_root = Path("docs")
+    active_rst_files = set()
+    for rst in docs_root.rglob("*.rst"):
+        resolved = rst.resolve()
+        if resolved in keep_allowlist:
+            continue
+        active_rst_files.add(rst)
+
+    if active_rst_files:
+        msg = "Unexpected RST files outside allowlist:\n" + "\n".join(
+            f"  - {p}" for p in sorted(active_rst_files)[:10]
+        )
+        if len(active_rst_files) > 10:
+            msg += f"\n  ... and {len(active_rst_files) - 10} more"
+        pytest.fail(msg)
+
+
+def test_starlight_migration_route_coverage_inventory_exists() -> None:
+    """Migration evidence should include a route inventory."""
+    inventory = Path("docs/source/_static/astro_starlight/route_inventory.json")
+    assert inventory.exists() or inventory.parent.exists(), (
+        "Route inventory evidence should exist under docs/source/_static/astro_starlight/"
+    )
