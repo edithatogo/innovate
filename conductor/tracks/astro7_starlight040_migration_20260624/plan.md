@@ -43,10 +43,10 @@
     - [x] Run Starlight polyglot generation and confirm generated Python API pages are present. [dc237a3]
     - [x] Ensure Sphinx remains legacy/archive-only unless required for redirect-reference validation. [dc237a3]
     - [x] Commit task changes and attach the required Conductor git note. [dc237a3]
-- [~] Task: Validate frontend/docs UX stability
-    - [ ] Confirm sidebar structure, custom CSS, version switcher behavior, link validation, and DocSearch gating.
-    - [ ] Add or update tests/evidence for navigation and content parity with the prior docs surface.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Validate frontend/docs UX stability [ce7ece6]
+    - [x] Confirm sidebar structure, custom CSS, version switcher behavior, link validation, and DocSearch gating. [ce7ece6]
+    - [x] Add or update tests/evidence for navigation and content parity with the prior docs surface. [ce7ece6]
+    - [x] Commit task changes and attach the required Conductor git note. [ce7ece6]
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Route, Content, and UX Cutover Validation' (Protocol in workflow.md)
 
 ## Phase 4: CI, Release Evidence, and Documentation
