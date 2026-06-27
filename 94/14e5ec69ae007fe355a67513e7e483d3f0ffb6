@@ -1,0 +1,12 @@
+Task: Write failing dependency-contract tests (Phase 1)
+
+Summary:
+- Created test_starlight_dependency_contract.py with 5 tests
+- Test 1: Asserts package.json starlight specifier matches target (^0.41.0) - FAILS
+- Test 2: Asserts manifest baseline is 0.41.0 - XFAIL
+- Test 3: Asserts package.json and lockfile specifiers agree - XFAIL
+- Test 4: Asserts lockfile resolves to 0.41.x - PASSES
+- Test 5: Asserts target decision artifact exists - PASSES
+
+Files created:
+- tests/unit/test_starlight_dependency_contract.py
