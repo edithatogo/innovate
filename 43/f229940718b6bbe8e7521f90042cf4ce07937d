@@ -1,0 +1,8 @@
+Task: Update CI and nox docs gates (Phase 4)
+
+Summary:
+- Verified nox docs session uses correct pnpm commands and Astro dir
+- Verified GitHub Actions docs workflow uses expected toolchain versions
+- Verified production docs contract passes (verify_production_docs.py)
+- Added 3 validation tests for CI/nox gates
+- 13 route/CI validation tests pass
