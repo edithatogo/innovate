@@ -1,6 +1,6 @@
 # Astro 7 and Starlight 0.40 Dedicated Migration Plan
 
-## Phase 1: Baseline Audit and Target Contract
+## Phase 1: Baseline Audit and Target Contract [checkpoint: 81fe675]
 
 - [x] Task: Audit current docs frontend dependency surface [3de5d5f]
     - [x] Read `docs/astro-site/package.json`, `docs/astro-site/pnpm-lock.yaml`, `astro.config.mjs`, `starlight.config.mjs`, docs workflows, and existing Astro/Starlight evidence artifacts. [3de5d5f]
@@ -14,7 +14,7 @@
     - [x] Add or update tests that compare documented Astro/Starlight baseline, package manifest, lockfile, and migration evidence. [9414e5e]
     - [x] Confirm the tests fail before implementation if the target contract is absent or inconsistent. [9414e5e]
     - [x] Commit task changes and attach the required Conductor git note. [9414e5e]
-- [~] Task: Conductor - User Manual Verification 'Phase 1: Baseline Audit and Target Contract' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Baseline Audit and Target Contract' (Protocol in workflow.md) [81fe675]
 
 ## Phase 2: Dependency Migration and Plugin Compatibility
 
