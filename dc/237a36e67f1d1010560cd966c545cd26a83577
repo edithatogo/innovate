@@ -1,0 +1,6 @@
+Task: Validate generated API docs and legacy source boundaries (Phase 3)
+
+Summary:
+- Verified Starlight polyglot-generated Python API doc exists at api/python.md
+- Verified Sphinx is archive-only (no conf.py, no build directory)
+- Added 2 validation tests for API docs and Sphinx boundaries
