@@ -49,7 +49,7 @@
     - [x] Commit task changes and attach the required Conductor git note. [ce7ece6]
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Route, Content, and UX Cutover Validation' (Protocol in workflow.md) [3f11d4e]
 
-## Phase 4: CI, Release Evidence, and Documentation
+## Phase 4: CI, Release Evidence, and Documentation [checkpoint: 2b74b11]
 
 - [x] Task: Update CI and nox docs gates [43f2299]
     - [x] Ensure GitHub Actions and `nox` docs sessions run the selected Astro/Starlight validation commands. [43f2299]
@@ -62,7 +62,7 @@
 - [x] Task: Update maintainer-facing migration documentation [ada510e]
     - [x] Document the selected target, validation commands, plugin exceptions, rollback notes, and future upgrade rules. [ada510e]
     - [x] Commit task changes and attach the required Conductor git note. [ada510e]
-- [~] Task: Conductor - User Manual Verification 'Phase 4: CI, Release Evidence, and Documentation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: CI, Release Evidence, and Documentation' (Protocol in workflow.md) [2b74b11]
 
 ## Phase 5: Final Review, CI Gate, and Archival Readiness
 
