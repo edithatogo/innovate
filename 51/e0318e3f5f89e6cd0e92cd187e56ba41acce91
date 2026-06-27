@@ -1,0 +1,12 @@
+Task: Prove plugin compatibility (Phase 2)
+
+Summary:
+- Ran pnpm install --lockfile-only - passed (no lockfile changes needed)
+- Ran pnpm check - 0 errors, 0 warnings, 0 hints
+- All plugins compatible with Starlight 0.41.0
+- Only peer note: astro-expressive-code peer range (pre-existing)
+- Recorded verification in migration-manifest.json
+
+Files modified:
+- docs/astro-site/migration-manifest.json
+- conductor/tracks/.../plan.md
