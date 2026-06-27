@@ -293,8 +293,6 @@ def coverage(session: nox.Session) -> None:
 @nox.session(python=False)
 def mutation(session: nox.Session) -> None:
     """Run mutmut mutation testing, enforce >70% threshold, and write release evidence."""
-    from scripts.release_evidence import MUTATION_SCORE_THRESHOLD, write_mutation_evidence
-
     _run_uv(session, "sync", "--python", DEFAULT_PYTHON)
     _run_uv(
         session,

@@ -12,9 +12,6 @@ import pytest
 
 from scripts.release_readiness import (
     CONTRACT_PATH,
-    DEFAULT_EVIDENCE_ROOT,
-    FAILING_STATUSES,
-    PASSING_STATUSES,
     REQUIRED_EVIDENCE_IDS,
     VALID_STATUS_VALUES,
     evaluate_evidence,

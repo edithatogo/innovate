@@ -3,8 +3,7 @@
 from __future__ import annotations
 
 import json
-import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -16,7 +15,7 @@ EVIDENCE_ROOT = Path("docs/source/_static/release_readiness/evidence")
 
 
 def _now_iso() -> str:
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def build_coverage_evidence(
