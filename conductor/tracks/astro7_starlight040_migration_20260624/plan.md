@@ -66,7 +66,7 @@
 
 ## Phase 5: Final Review, CI Gate, and Archival Readiness
 
-- [ ] Task: Run full docs and targeted regression validation
+- [~] Task: Run full docs and targeted regression validation
     - [ ] Run `pnpm --dir docs/astro-site check`.
     - [ ] Run `pnpm --dir docs/astro-site build`.
     - [ ] Run `uv run nox -s docs`.
