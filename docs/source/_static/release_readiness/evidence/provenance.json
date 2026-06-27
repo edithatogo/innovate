@@ -1,10 +1,11 @@
 {
   "builder": "local-nox-and-github-actions-compatible",
   "evidence_id": "provenance",
+  "generated_at": "2026-06-27T10:35:42Z",
   "generated_by": "scripts/release_supply_chain.py",
   "git": {
     "branch": "main",
-    "commit": "2e43de7e72cd9ca7fd4ea741059063b342891902",
+    "commit": "23eed392e756a898ec39c2ba2000108d3dafcca6",
     "dirty": true
   },
   "provenance_style": "slsa-inspired-local",

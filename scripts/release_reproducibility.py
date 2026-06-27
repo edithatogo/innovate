@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -15,6 +16,10 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT_ROOT = Path("docs/source/_static/release_readiness/evidence")
 CONTRACT_PATH = Path("docs/source/_static/release_readiness_contract.json")
 BENCHMARK_FIXTURE = Path("docs/source/_static/rust_core_native_benchmark_results.json")
+
+
+def _now_iso() -> str:
+    return datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def _resolve(path: Path) -> Path:
@@ -99,6 +104,7 @@ def build_reproducibility_evidence(output_root: Path = DEFAULT_OUTPUT_ROOT) -> d
         "summary": "Seeded simulation, benchmark fixture, and generated artifact checks are reproducible.",
         "generated_by": "scripts/release_reproducibility.py",
         "requires_secrets": False,
+        "generated_at": _now_iso(),
         "seeded_simulation": _seeded_simulation(),
         "benchmark_fixture": _benchmark_fixture(),
         "generated_artifacts": _generated_artifacts(),

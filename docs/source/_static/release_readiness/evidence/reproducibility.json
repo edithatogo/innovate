@@ -8,16 +8,17 @@
     }
   ],
   "benchmark_fixture": {
-    "first_digest": "68e9dea2153ebba96a49f1f5941aaa75e56fbf0f0cc278a1ee9e0ef4086fe1de",
+    "first_digest": "ea79970e0e05ac9b2b4bc1f68a54c583d9ae0bdb9d8363eead4addf50be41657",
     "matches": true,
     "path": "docs/source/_static/rust_core_native_benchmark_results.json",
-    "second_digest": "68e9dea2153ebba96a49f1f5941aaa75e56fbf0f0cc278a1ee9e0ef4086fe1de"
+    "second_digest": "ea79970e0e05ac9b2b4bc1f68a54c583d9ae0bdb9d8363eead4addf50be41657"
   },
   "evidence_id": "reproducibility",
   "generated_artifacts": {
     "readiness_contract_path": "docs/source/_static/release_readiness_contract.json",
-    "readiness_contract_sha256": "e7158d9b8847d9b93e6060f5e5eaae200310585e6b1239b2453a7294349d1d76"
+    "readiness_contract_sha256": "3fc310f449d401d239e2779fa45e1b8bf2417221c931844fc709a34b8b2cb3f1"
   },
+  "generated_at": "2026-06-27T10:39:55Z",
   "generated_by": "scripts/release_reproducibility.py",
   "requires_secrets": false,
   "schema_version": 1,

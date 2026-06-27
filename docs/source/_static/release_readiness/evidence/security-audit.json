@@ -5,6 +5,7 @@
   ],
   "dependency_count": 13,
   "evidence_id": "security_audit",
+  "generated_at": "2026-06-27T10:35:42Z",
   "generated_by": "scripts/release_supply_chain.py",
   "network_required": false,
   "requires_secrets": false,

@@ -2,19 +2,19 @@
   "artifacts": [
     {
       "path": "pyproject.toml",
-      "sha256": "0c3eec54dbcb6a471df28688498b30bfda866fc93bee62c82004349e09f5da90"
+      "sha256": "418474741c379b07d4ef51765deadef3fc3d7e823a56227e942fa498cdba3ad8"
     },
     {
       "path": "uv.lock",
-      "sha256": "899be3a19cc2ab33c4d1cd545a6588496bfde8ee22d65a3bcf3a27ef86108e4c"
+      "sha256": "b3efee082143a22d98691ec455bf6566a6e74b0ca3980575700a9fb7a81017db"
     },
     {
       "path": "bindings/rust/Cargo.toml",
-      "sha256": "83ece352d4d4d59f572e44432f90d7fbc1fee15114726f77fa2b0e703d5429cf"
+      "sha256": "02979ed4b97f9ad69135a6751573796cb312480536aed7903cbab0a0f7c10e57"
     },
     {
       "path": "bindings/typescript/package.json",
-      "sha256": "40ca3d4da88e4b84ea2dca8eb0f8253c32cdf38d3234de6ba24e74ec160ed67a"
+      "sha256": "847c1cbd32727576b4e16e200a686ed8f7c9d3550e9a3e7082a65a8ca00fe136"
     },
     {
       "path": "bindings/julia/Project.toml",
@@ -42,6 +42,7 @@
     }
   ],
   "evidence_id": "checksums",
+  "generated_at": "2026-06-27T10:35:43Z",
   "generated_by": "scripts/release_supply_chain.py",
   "requires_secrets": false,
   "schema_version": 1,

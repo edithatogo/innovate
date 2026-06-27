@@ -68,6 +68,7 @@
     }
   ],
   "evidence_id": "sbom",
+  "generated_at": "2026-06-27T10:35:42Z",
   "generated_by": "scripts/release_supply_chain.py",
   "package": {
     "license": "Apache-2.0",

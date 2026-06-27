@@ -8,8 +8,13 @@ import json
 import subprocess
 import sys
 import tomllib
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
+
+
+def _now_iso() -> str:
+    return datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT_ROOT = Path("docs/source/_static/release_readiness/evidence")
@@ -61,6 +66,7 @@ def _base_payload(evidence_id: str, summary: str) -> dict[str, Any]:
         "summary": summary,
         "generated_by": "scripts/release_supply_chain.py",
         "requires_secrets": False,
+        "generated_at": _now_iso(),
     }
 
 

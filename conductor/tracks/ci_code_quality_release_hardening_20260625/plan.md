@@ -25,13 +25,14 @@
 
 ## Phase 3: Observability and Release Evidence
 
-- [ ] Task: Harden runtime and release observability
-    - [ ] Validate structured logging, release reports, SBOM, provenance, checksums, and security evidence.
-    - [ ] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Refresh release-readiness report
-    - [ ] Require fresh passing evidence before `release_ready`.
-    - [ ] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Observability and Release Evidence' (Protocol in workflow.md)
+- [x] Task: Harden runtime and release observability
+    - [x] Validate structured logging, release reports, SBOM, provenance, checksums, and security evidence.
+    - [x] Commit task changes and attach the required Conductor git note.
+- [x] Task: Refresh release-readiness report
+    - [x] Require fresh passing evidence before `release_ready`.
+    - [x] Commit task changes and attach the required Conductor git note.
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Observability and Release Evidence' (Protocol in workflow.md)
+    - [x] Verified: 39 observability tests pass, evidence artifacts have generated_at, runtime-logging.md exists.
 
 ## Phase 4: Full Release Gate
 
