@@ -8,15 +8,19 @@
     "lockfile_resolved_version": "0.41.0",
     "lockfile_specifier": "^0.41.0",
     "package_json_specifier": "^0.40.0",
+    "package_json_after": "^0.41.0",
     "existing_test_expectation": "0.41.0 (in test_astro_starlight_migration.py:78)",
-    "migration_manifest_current": "0.40.0"
+    "migration_manifest_current": "0.40.0",
+    "migration_manifest_after": "0.41.0"
   },
   "rationale": "The pnpm-lock.yaml has already resolved to @astrojs/starlight 0.41.0. The lockfile specifier is ^0.41.0, indicating a prior package.json update. Existing tests already expect 0.41.0 in the migration manifest baseline. Promoting to 0.41.x documents the effective state and aligns package.json with the lockfile, preventing CI drift.",
-  "actions_required": [
-    "Update package.json @astrojs/starlight specifier from ^0.40.0 to ^0.41.0",
-    "Update migration_manifest.json baseline starlight from 0.40.0 to 0.41.0",
-    "Run pnpm install --frozen-lockfile to validate lockfile consistency",
-    "Update dependency-contract tests if needed"
+  "actions_taken": [
+    "Updated package.json @astrojs/starlight specifier from ^0.40.0 to ^0.41.0",
+    "Updated migration_manifest.json baseline starlight from 0.40.0 to 0.41.0",
+    "Updated test_astro_starlight_migration.py line 22 expectation from ^0.40.0 to ^0.41.0"
+  ],
+  "actions_remaining": [
+    "Run pnpm install --frozen-lockfile to validate lockfile consistency (in Phase 2 Task 7)"
   ],
   "compatibility_constraints": {
     "@astrojs/markdown-remark": "7.2.0 (compatible with Astro 7 and Starlight 0.41)",
@@ -32,6 +36,7 @@
     "The repository already contains Starlight 0.41.0 in the lockfile, so promotion is the low-risk path.",
     "No peer-dependency exceptions were detected for the Starlight 0.41.x line.",
     "Algolia DocSearch remains gated on environment variables (ALGOLIA_APP_ID, ALGOLIA_API_KEY, ALGOLIA_INDEX_NAME).",
-    "Downgrading to 0.40.x would require reverting the lockfile and testing all plugin compatibility - higher risk."
+    "Downgrading to 0.40.x would require reverting the lockfile and testing all plugin compatibility - higher risk.",
+    "Phase 2 Task 5: Applied package.json, manifest, and test updates to promote Starlight to ^0.41.0."
   ]
 }

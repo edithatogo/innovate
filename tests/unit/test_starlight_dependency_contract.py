@@ -11,8 +11,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import pytest
-
 TARGET_DECISION_PATH = Path("docs/source/_static/astro_starlight/starlight_target_decision.json")
 PACKAGE_PATH = Path("docs/astro-site/package.json")
 LOCKFILE_PATH = Path("docs/astro-site/pnpm-lock.yaml")
@@ -35,13 +33,8 @@ def test_package_json_starlight_specifier_matches_target() -> None:
     )
 
 
-@pytest.mark.xfail(strict=True)
 def test_migration_manifest_starlight_matches_target() -> None:
-    """The migration manifest baseline must reflect the promoted Starlight version.
-
-    This is currently expected to fail because the manifest still says 0.40.0.
-    Once updated to 0.41.0, this test should be changed to non-xfail.
-    """
+    """The migration manifest baseline must reflect the promoted Starlight version."""
     manifest = json.loads(MANIFEST_PATH.read_text())
     assert manifest["baseline"]["starlight"] == EXPECTED_MANIFEST_STARLIGHT, (
         f"Manifest baseline starlight is {manifest['baseline']['starlight']}, "
@@ -49,13 +42,8 @@ def test_migration_manifest_starlight_matches_target() -> None:
     )
 
 
-@pytest.mark.xfail(strict=True)
 def test_package_json_lockfile_starlight_specifiers_agree() -> None:
-    """The package.json and lockfile starlight specifiers must be consistent.
-
-    Currently expected to fail because package.json has ^0.40.0 while
-    lockfile has ^0.41.0.
-    """
+    """The package.json and lockfile starlight specifiers must be consistent."""
     package = json.loads(PACKAGE_PATH.read_text())
     lines = _lockfile_starlight_lines(LOCKFILE_PATH.read_text())
     assert lines, "Could not find @astrojs/starlight entry in lockfile"

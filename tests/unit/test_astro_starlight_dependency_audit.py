@@ -77,14 +77,15 @@ def test_target_decision_selects_starlight_41() -> None:
     assert decision["evidence"]["lockfile_resolved_version"] == "0.41.0"
 
 
-def test_target_decision_lists_actions_required() -> None:
-    """The decision must list concrete follow-up actions."""
+def test_target_decision_lists_actions() -> None:
+    """The decision must list concrete taken and remaining actions."""
     decision = json.loads(TARGET_DECISION_PATH.read_text())
-    actions = decision["actions_required"]
-    assert len(actions) >= 3
-    assert any("package.json" in a for a in actions)
-    assert any("migration_manifest" in a for a in actions)
-    assert any("lockfile" in a for a in actions)
+    taken = decision["actions_taken"]
+    remaining = decision["actions_remaining"]
+    assert len(taken) >= 2
+    assert len(remaining) >= 1
+    assert any("package.json" in a for a in taken)
+    assert any("migration_manifest" in a for a in taken)
 
 
 def test_target_decision_documents_compatibility() -> None:
