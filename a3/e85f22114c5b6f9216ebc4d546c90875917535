@@ -1,0 +1,11 @@
+Task: Define the Starlight 0.40 target decision (Phase 1)
+
+Summary:
+- Wrote starlight_target_decision.json artifact documenting the promotion from Starlight 0.40.x to 0.41.x
+- Decision based on evidence: lockfile resolved to 0.41.0, existing tests expect 0.41.0
+- Documented all plugin compatibility constraints for Starlight 0.41.x
+- Added 4 unit tests validating the decision artifact
+
+Files created/modified:
+- docs/source/_static/astro_starlight/starlight_target_decision.json (created)
+- tests/unit/test_astro_starlight_dependency_audit.py (updated)
