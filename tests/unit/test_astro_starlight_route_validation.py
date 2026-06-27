@@ -86,9 +86,24 @@ def test_versioned_latest_content_exists() -> None:
 
 def test_astro_site_builds_successfully() -> None:
     """The Astro site must build without errors (pnpm check already validates this)."""
-    from pathlib import Path as _Path
-    lockfile = _Path("docs/astro-site/pnpm-lock.yaml")
-    package = json.loads(_Path("docs/astro-site/package.json").read_text())
+    lockfile = Path("docs/astro-site/pnpm-lock.yaml")
+    package = json.loads(Path("docs/astro-site/package.json").read_text())
     assert lockfile.exists()
     assert package["scripts"]["check"] == "astro check"
     assert package["scripts"]["build"] == "astro build"
+
+
+def test_generated_python_api_docs_exist() -> None:
+    """Starlight polyglot generation must produce Python API pages."""
+    api_doc = Path("docs/astro-site/src/content/docs/api/python.md")
+    assert api_doc.exists(), "Python API docs not generated"
+    content = api_doc.read_text()
+    assert "Python API Reference" in content or "innovate" in content
+
+
+def test_sphinx_is_legacy_archive_only() -> None:
+    """Sphinx must not have active build infrastructure."""
+    conf_py = Path("docs/source/conf.py")
+    build_dir = Path("docs/build")
+    assert not conf_py.exists(), "Sphinx conf.py must not exist (archive-only)"
+    assert not build_dir.exists(), "Sphinx build directory must not exist (archive-only)"
