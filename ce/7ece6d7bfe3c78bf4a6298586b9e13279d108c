@@ -1,0 +1,8 @@
+Task: Validate frontend/docs UX stability (Phase 3)
+
+Summary:
+- Validated custom CSS file exists at src/styles/custom.css
+- Validated starlight-versions plugin configured for version switcher
+- Validated DocSearch is properly gated behind ALGOLIA env vars
+- Validated sidebar contains all 7 core sections
+- 48 Starlight/Astro tests pass
