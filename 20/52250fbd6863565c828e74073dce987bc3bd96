@@ -1,0 +1,12 @@
+Task: Validate route inventory and versioned content (Phase 3)
+
+Summary:
+- Created test_astro_starlight_route_validation.py
+- Verified all sidebar routes from astro.config.mjs have content files
+- Verified route_coverage.json includes core routes
+- Verified versioned latest/ content exists
+- Found and fixed: getting-started uses .mdx extension
+- 32 Starlight/Astro tests pass
+
+Files created:
+- tests/unit/test_astro_starlight_route_validation.py
