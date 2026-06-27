@@ -1,0 +1,102 @@
+{
+  "audit_type": "pre-migration-dependency-surface",
+  "audit_date": "2026-06-27",
+  "track": "astro7_starlight040_migration_20260624",
+  "phase": "1",
+  "package_manager": {
+    "tool": "pnpm",
+    "version": "9.15.9",
+    "lockfile_version": "9.0"
+  },
+  "dependencies": {
+    "astro": {
+      "package_json_specifier": "^7.0.2",
+      "lockfile_specifier": "^7.0.2",
+      "lockfile_resolved": "7.0.2"
+    },
+    "@astrojs/starlight": {
+      "package_json_specifier": "^0.40.0",
+      "lockfile_specifier": "^0.41.0",
+      "lockfile_resolved": "0.41.0",
+      "note": "MISMATCH: package.json caps at 0.40.x but lockfile resolved to 0.41.0"
+    },
+    "@astrojs/markdown-remark": {
+      "package_json_specifier": "^7.2.0",
+      "lockfile_specifier": "^7.2.0",
+      "lockfile_resolved": "7.2.0"
+    },
+    "starlight-links-validator": {
+      "package_json_specifier": "^0.24.1",
+      "lockfile_specifier": "^0.24.1",
+      "lockfile_resolved": "0.24.1"
+    },
+    "starlight-versions": {
+      "package_json_specifier": "^0.9.0",
+      "lockfile_specifier": "^0.9.0",
+      "lockfile_resolved": "0.9.0"
+    },
+    "@astrojs/starlight-docsearch": {
+      "package_json_specifier": "^0.7.0",
+      "lockfile_specifier": "^0.7.0",
+      "lockfile_resolved": "0.7.0"
+    },
+    "starlight-polyglot": {
+      "package_json_specifier": "file:./vendor/starlight-polyglot",
+      "source": "vendor directory",
+      "vendor_path": "docs/astro-site/vendor/starlight-polyglot"
+    }
+  },
+  "devDependencies": {
+    "@astrojs/check": {
+      "package_json_specifier": "^0.9.9",
+      "lockfile_specifier": "^0.9.9",
+      "lockfile_resolved": "0.9.9"
+    },
+    "typescript": {
+      "package_json_specifier": "^6.0.3",
+      "lockfile_specifier": "^6.0.3",
+      "lockfile_resolved": "6.0.3"
+    }
+  },
+  "plugin_relationships": {
+    "starlightLinksValidator": {
+      "type": "starlight-plugin",
+      "package": "starlight-links-validator",
+      "used_in": ["astro.config.mjs", "starlight.config.mjs"]
+    },
+    "starlightDocSearch": {
+      "type": "starlight-plugin",
+      "package": "@astrojs/starlight-docsearch",
+      "used_in": ["astro.config.mjs", "starlight.config.mjs"],
+      "gated_by": "ALGOLIA_APP_ID, ALGOLIA_API_KEY, ALGOLIA_INDEX_NAME env vars"
+    },
+    "starlightVersions": {
+      "type": "starlight-plugin",
+      "package": "starlight-versions",
+      "used_in": ["astro.config.mjs"],
+      "loader_used": "starlight-versions/loader"
+    },
+    "polyglot": {
+      "type": "starlight-plugin",
+      "package": "starlight-polyglot",
+      "used_in": ["astro.config.mjs"],
+      "source": "file:./vendor/starlight-polyglot"
+    }
+  },
+  "config_files": {
+    "astro_config": "docs/astro-site/astro.config.mjs",
+    "starlight_config": "docs/astro-site/starlight.config.mjs",
+    "tsconfig": "docs/astro-site/tsconfig.json",
+    "content_config": "docs/astro-site/src/content.config.ts"
+  },
+  "ci_workflow": {
+    "file": ".github/workflows/docs.yml",
+    "pnpm_version": "9.15.9",
+    "node_version": "22",
+    "python_version": "3.14"
+  },
+  "migration_manifest_baseline": {
+    "starlight": "0.40.0",
+    "note": "Manifest baseline must be reconciled with lockfile resolved version 0.41.0"
+  }
+}
