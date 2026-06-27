@@ -16,7 +16,7 @@
     - [x] Commit task changes and attach the required Conductor git note. [9414e5e]
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Baseline Audit and Target Contract' (Protocol in workflow.md) [81fe675]
 
-## Phase 2: Dependency Migration and Plugin Compatibility
+## Phase 2: Dependency Migration and Plugin Compatibility [checkpoint: de25cd7]
 
 - [x] Task: Apply the selected Astro 7/Starlight target [f7d9962]
     - [x] Update `docs/astro-site/package.json` and `pnpm-lock.yaml` to the selected Astro 7/Starlight baseline. [f7d9962]
@@ -31,7 +31,7 @@
     - [x] Run `pnpm --dir docs/astro-site check`. [51e0318]
     - [x] Record peer-dependency exceptions or plugin compatibility workarounds in migration evidence. [51e0318]
     - [x] Commit task changes and attach the required Conductor git note. [51e0318]
-- [~] Task: Conductor - User Manual Verification 'Phase 2: Dependency Migration and Plugin Compatibility' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Dependency Migration and Plugin Compatibility' (Protocol in workflow.md) [de25cd7]
 
 ## Phase 3: Route, Content, and UX Cutover Validation
 
