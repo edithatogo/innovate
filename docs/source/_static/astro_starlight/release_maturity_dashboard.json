@@ -70,8 +70,8 @@
     "external_acceptance": "Do not claim all registries accepted.",
     "rust_ownership": "Do not claim full Rust ownership."
   },
-  "evidence_date": "2026-06-16",
-  "generated_at": "2026-06-16T00:00:00Z",
+  "evidence_date": "2026-06-27",
+  "generated_at": "2026-06-27T00:00:00Z",
   "generated_by_track": "production_docs_observability_20260614",
   "schema_version": 1,
   "source_artifacts": {
