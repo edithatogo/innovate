@@ -31,7 +31,7 @@
     - [x] Run `pnpm --dir docs/astro-site check`. [51e0318]
     - [x] Record peer-dependency exceptions or plugin compatibility workarounds in migration evidence. [51e0318]
     - [x] Commit task changes and attach the required Conductor git note. [51e0318]
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Dependency Migration and Plugin Compatibility' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 2: Dependency Migration and Plugin Compatibility' (Protocol in workflow.md)
 
 ## Phase 3: Route, Content, and UX Cutover Validation
 
