@@ -55,10 +55,10 @@
     - [x] Ensure GitHub Actions and `nox` docs sessions run the selected Astro/Starlight validation commands. [43f2299]
     - [x] Verify docs workflows use the intended Node/pnpm setup and Python 3.14 polyglot context. [43f2299]
     - [x] Commit task changes and attach the required Conductor git note. [43f2299]
-- [~] Task: Refresh release-readiness evidence
-    - [ ] Regenerate docs-build and compatibility evidence after Astro/Starlight validation.
-    - [ ] Update release-readiness report without marking unrelated missing evidence as complete.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Refresh release-readiness evidence [57abc56]
+    - [x] Regenerate docs-build and compatibility evidence after Astro/Starlight validation. [57abc56]
+    - [x] Update release-readiness report without marking unrelated missing evidence as complete. [57abc56]
+    - [x] Commit task changes and attach the required Conductor git note. [57abc56]
 - [ ] Task: Update maintainer-facing migration documentation
     - [ ] Document the selected target, validation commands, plugin exceptions, rollback notes, and future upgrade rules.
     - [ ] Commit task changes and attach the required Conductor git note.
