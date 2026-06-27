@@ -389,8 +389,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Astro 7 and Starlight 0.40 Dedicated Migration**
-*Link: [./tracks/astro7_starlight040_migration_20260624/](./tracks/astro7_starlight040_migration_20260624/)*
+- [x] **Track: Astro 7 and Starlight 0.40 Dedicated Migration** *(Completed)*
+*Link: [./archive/astro7_starlight040_migration_20260624/](./archive/astro7_starlight040_migration_20260624/)*
 
 ---
 
