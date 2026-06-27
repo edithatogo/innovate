@@ -1,0 +1,18 @@
+conductor-track=ci_code_quality_release_hardening_20260625 phase=3 task=observability_release_evidence commit=ed19111a38615b97a82b53fb248180b42c40bc49
+
+Task: Harden runtime and release observability + Refresh release-readiness report
+
+Summary:
+- Added generated_at timestamp to all evidence artifacts (SBOM, provenance, checksums, security_audit, license_inventory, reproducibility)
+- Added _now_iso() helper to release_supply_chain.py and release_reproducibility.py
+- Created runtime-logging.md with structured logging documentation
+- Added 39 tests in test_release_observability_evidence.py validating evidence schemas, nox sessions, structured logging, gate inventory, and readiness freshness
+- Regenerated all evidence artifacts with generated_at field
+
+Files:
+- scripts/release_supply_chain.py (modified - added generated_at)
+- scripts/release_reproducibility.py (modified - added generated_at)
+- tests/unit/test_release_observability_evidence.py (new - 39 tests)
+- docs/astro-site/src/content/docs/operations/runtime-logging.md (new)
+- docs/source/_static/release_readiness/evidence/*.json (regenerated)
+- conductor/tracks/ci_code_quality_release_hardening_20260625/plan.md (updated)
