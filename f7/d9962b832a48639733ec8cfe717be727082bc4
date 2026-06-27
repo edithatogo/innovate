@@ -1,0 +1,17 @@
+Task: Apply the selected Astro 7/Starlight target (Phase 2)
+
+Summary:
+- Updated package.json @astrojs/starlight specifier from ^0.40.0 to ^0.41.0
+- Updated migration_manifest.json baseline starlight from 0.40.0 to 0.41.0
+- Updated test_astro_starlight_migration.py line 22 expectation
+- Removed xfail markers from 2 contract tests (now pass)
+- Updated target decision artifact with actions_taken/actions_remaining
+- All 38 Starlight/Astro tests pass
+
+Files modified:
+- docs/astro-site/package.json
+- docs/source/_static/astro_starlight/migration_manifest.json
+- docs/source/_static/astro_starlight/starlight_target_decision.json
+- tests/unit/test_astro_starlight_migration.py
+- tests/unit/test_astro_starlight_dependency_audit.py
+- tests/unit/test_starlight_dependency_contract.py
