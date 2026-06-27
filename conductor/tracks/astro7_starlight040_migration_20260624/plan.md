@@ -10,10 +10,10 @@
     - [x] Write a target decision artifact that either selects Starlight 0.40.x or explicitly promotes the currently committed successor line with evidence. [a3e85f2]
     - [x] Document external compatibility constraints such as peer metadata exceptions without weakening the selected target. [a3e85f2]
     - [x] Commit task changes and attach the required Conductor git note. [a3e85f2]
-- [ ] Task: Write failing dependency-contract tests
-    - [ ] Add or update tests that compare documented Astro/Starlight baseline, package manifest, lockfile, and migration evidence.
-    - [ ] Confirm the tests fail before implementation if the target contract is absent or inconsistent.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Write failing dependency-contract tests [9414e5e]
+    - [x] Add or update tests that compare documented Astro/Starlight baseline, package manifest, lockfile, and migration evidence. [9414e5e]
+    - [x] Confirm the tests fail before implementation if the target contract is absent or inconsistent. [9414e5e]
+    - [x] Commit task changes and attach the required Conductor git note. [9414e5e]
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Baseline Audit and Target Contract' (Protocol in workflow.md)
 
 ## Phase 2: Dependency Migration and Plugin Compatibility
