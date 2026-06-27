@@ -51,7 +51,7 @@
 
 ## Phase 4: CI, Release Evidence, and Documentation
 
-- [ ] Task: Update CI and nox docs gates
+- [~] Task: Update CI and nox docs gates
     - [ ] Ensure GitHub Actions and `nox` docs sessions run the selected Astro/Starlight validation commands.
     - [ ] Verify docs workflows use the intended Node/pnpm setup and Python 3.14 polyglot context.
     - [ ] Commit task changes and attach the required Conductor git note.

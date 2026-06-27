@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 
 ROUTES = {
     "/": "docs/astro-site/src/content/docs/index.md",
@@ -136,3 +138,33 @@ def test_sidebar_contains_core_sections() -> None:
     config = Path("docs/astro-site/astro.config.mjs").read_text()
     for section in ("Getting Started", "User Guide", "API Reference", "Maintainers", "Operations", "Architecture", "Migration"):
         assert section in config
+
+
+def test_nox_docs_session_runs_pnpm_install_and_build() -> None:
+    """The nox docs session must install deps and build the Astro site."""
+    noxfile = Path("noxfile.py").read_text()
+    assert "docs/astro-site" in noxfile
+    assert "pnpm install" in noxfile or "frozen-lockfile" in noxfile
+    assert "pnpm build" in noxfile or '"build"' in noxfile
+
+
+def test_docs_workflow_uses_correct_node_and_pnpm_versions() -> None:
+    """The GitHub Actions docs workflow must use the expected toolchain."""
+    workflow = Path(".github/workflows/docs.yml").read_text()
+    assert "pnpm/action-setup" in workflow
+    assert "setup-node" in workflow
+    assert "python-version: '3.14'" in workflow or "python-version: 3.14" in workflow
+    assert "pnpm build" in workflow or "pnpm" in workflow
+
+
+def test_production_docs_contract_passes() -> None:
+    """The production docs verification script must pass."""
+    import subprocess, json, sys
+    result = subprocess.run(
+        [sys.executable, "scripts/verify_production_docs.py", "--json"],
+        capture_output=True, text=True, check=False,
+    )
+    if result.returncode != 0:
+        pytest.fail(f"Production docs verification failed:\n{result.stderr}")
+    report = json.loads(result.stdout)
+    assert report["overall_status"] == "passed"
