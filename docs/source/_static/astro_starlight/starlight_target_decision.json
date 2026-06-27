@@ -1,0 +1,37 @@
+{
+  "decision_type": "starlight-target-promotion",
+  "decision_date": "2026-06-27",
+  "track": "astro7_starlight040_migration_20260624",
+  "phase": "1",
+  "selected_target": "Starlight 0.41.x",
+  "evidence": {
+    "lockfile_resolved_version": "0.41.0",
+    "lockfile_specifier": "^0.41.0",
+    "package_json_specifier": "^0.40.0",
+    "existing_test_expectation": "0.41.0 (in test_astro_starlight_migration.py:78)",
+    "migration_manifest_current": "0.40.0"
+  },
+  "rationale": "The pnpm-lock.yaml has already resolved to @astrojs/starlight 0.41.0. The lockfile specifier is ^0.41.0, indicating a prior package.json update. Existing tests already expect 0.41.0 in the migration manifest baseline. Promoting to 0.41.x documents the effective state and aligns package.json with the lockfile, preventing CI drift.",
+  "actions_required": [
+    "Update package.json @astrojs/starlight specifier from ^0.40.0 to ^0.41.0",
+    "Update migration_manifest.json baseline starlight from 0.40.0 to 0.41.0",
+    "Run pnpm install --frozen-lockfile to validate lockfile consistency",
+    "Update dependency-contract tests if needed"
+  ],
+  "compatibility_constraints": {
+    "@astrojs/markdown-remark": "7.2.0 (compatible with Astro 7 and Starlight 0.41)",
+    "starlight-links-validator": "0.24.1 (compatible with Starlight 0.41)",
+    "starlight-versions": "0.9.0 (compatible with Starlight 0.41)",
+    "@astrojs/starlight-docsearch": "0.7.0 (resolves against @astrojs/starlight 0.41.0 in lockfile)",
+    "starlight-polyglot": "file:./vendor/starlight-polyglot (vendor-local, uses @astrojs/starlight peer)",
+    "@astrojs/check": "0.9.9 (compatible)",
+    "typescript": "6.0.3 (compatible)"
+  },
+  "notes": [
+    "The initially requested target was Astro 7 / Starlight 0.40 per the spec.",
+    "The repository already contains Starlight 0.41.0 in the lockfile, so promotion is the low-risk path.",
+    "No peer-dependency exceptions were detected for the Starlight 0.41.x line.",
+    "Algolia DocSearch remains gated on environment variables (ALGOLIA_APP_ID, ALGOLIA_API_KEY, ALGOLIA_INDEX_NAME).",
+    "Downgrading to 0.40.x would require reverting the lockfile and testing all plugin compatibility - higher risk."
+  ]
+}

@@ -60,3 +60,37 @@ def test_audit_records_migration_manifest_baseline() -> None:
     audit = json.loads(AUDIT_PATH.read_text())
     manifest = audit["migration_manifest_baseline"]
     assert manifest["starlight"] == "0.40.0"
+
+
+TARGET_DECISION_PATH = Path("docs/source/_static/astro_starlight/starlight_target_decision.json")
+
+
+def test_target_decision_artifact_exists() -> None:
+    """The Starlight target decision artifact must exist."""
+    assert TARGET_DECISION_PATH.exists()
+
+
+def test_target_decision_selects_starlight_41() -> None:
+    """The decision must select Starlight 0.41.x based on lockfile evidence."""
+    decision = json.loads(TARGET_DECISION_PATH.read_text())
+    assert decision["selected_target"] == "Starlight 0.41.x"
+    assert decision["evidence"]["lockfile_resolved_version"] == "0.41.0"
+
+
+def test_target_decision_lists_actions_required() -> None:
+    """The decision must list concrete follow-up actions."""
+    decision = json.loads(TARGET_DECISION_PATH.read_text())
+    actions = decision["actions_required"]
+    assert len(actions) >= 3
+    assert any("package.json" in a for a in actions)
+    assert any("migration_manifest" in a for a in actions)
+    assert any("lockfile" in a for a in actions)
+
+
+def test_target_decision_documents_compatibility() -> None:
+    """The decision must document plugin compatibility constraints."""
+    decision = json.loads(TARGET_DECISION_PATH.read_text())
+    constraints = decision["compatibility_constraints"]
+    assert "starlight-links-validator" in constraints
+    assert "starlight-versions" in constraints
+    assert "@astrojs/starlight-docsearch" in constraints
