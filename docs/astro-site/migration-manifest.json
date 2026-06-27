@@ -25,6 +25,19 @@
     "starlightConfig": "docs/astro-site/starlight.config.mjs"
   },
   "rationale": "Current package.json specifies @astrojs/starlight ^0.41.0, which is the latest stable version and compatible with migration goals. Downgrading to 0.40.x would require changes that could introduce breaking changes. The selected version is promoted with evidence of compatibility.",
+  "rollback_notes": [
+    "To revert to Starlight 0.40.x: change package.json specifier to ^0.40.0, run 'pnpm install --lockfile-only', then 'pnpm check' to validate",
+    "Rollback also requires reverting migration_manifest.json baseline starlight to 0.40.0",
+    "Test all plugins for 0.40.x compatibility before committing rollback: starlight-links-validator, starlight-versions, starlight-docsearch, starlight-polyglot"
+  ],
+  "future_upgrade_rules": [
+    "Update package.json specifier and run 'pnpm install --lockfile-only' to validate",
+    "Update migration_manifest.json baseline entry for the upgraded version",
+    "Run 'pnpm check' to verify type compatibility with new version",
+    "Update test_astro_starlight_migration.py baseline assertions",
+    "Run full Starlight/Astro test suite before committing",
+    "Rollback to previous version if pnpm check or tests fail"
+  ],
   "verification": {
     "date": "2026-06-27",
     "pnpm_check": {
