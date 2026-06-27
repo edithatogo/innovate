@@ -1,0 +1,7 @@
+Task: Update maintainer-facing migration documentation (Phase 4)
+
+Summary:
+- Added rollback notes for reverting to Starlight 0.40.x to migration-manifest.json
+- Added future upgrade rules for version bumps
+- Documented validation commands and plugin compatibility
+- 39 tests pass
