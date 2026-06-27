@@ -105,3 +105,95 @@ def test_noxfile_exposes_expected_sessions_and_version_matrix() -> None:
     assert assignments["DEFAULT_PYTHON"] == "3.14"
     assert {"tests", "optional_backends", "lint", "types", "docs", "package", "version_sync"}.issubset(sessions)
     assert 'basedpyright", "--warnings"' in Path("noxfile.py").read_text()
+
+
+def test_noxfile_includes_dependency_dashboard_session() -> None:
+    """Nox should have a dependency_dashboard session that runs the dependency dashboard script."""
+    module = ast.parse(Path("noxfile.py").read_text())
+    session_names = {
+        node.name
+        for node in module.body
+        if isinstance(node, ast.FunctionDef)
+        and any(
+            isinstance(decorator, ast.Call)
+            and isinstance(decorator.func, ast.Attribute)
+            and decorator.func.attr == "session"
+            for decorator in node.decorator_list
+        )
+    }
+    assert "dependency_dashboard" in session_names
+    nox_text = Path("noxfile.py").read_text()
+    assert "scripts/dependency_dashboard.py" in nox_text
+
+
+def test_noxfile_includes_binding_conformance_session() -> None:
+    """Nox should have a bindings or binding_conformance session for polyglot checks."""
+    module = ast.parse(Path("noxfile.py").read_text())
+    session_names = {
+        node.name
+        for node in module.body
+        if isinstance(node, ast.FunctionDef)
+        and any(
+            isinstance(decorator, ast.Call)
+            and isinstance(decorator.func, ast.Attribute)
+            and decorator.func.attr == "session"
+            for decorator in node.decorator_list
+        )
+    }
+    assert "binding_conformance" in session_names
+
+
+def test_noxfile_includes_mutation_session() -> None:
+    """Nox should have a mutation session that runs mutmut."""
+    module = ast.parse(Path("noxfile.py").read_text())
+    session_names = {
+        node.name
+        for node in module.body
+        if isinstance(node, ast.FunctionDef)
+        and any(
+            isinstance(decorator, ast.Call)
+            and isinstance(decorator.func, ast.Attribute)
+            and decorator.func.attr == "session"
+            for decorator in node.decorator_list
+        )
+    }
+    assert "mutation" in session_names
+    nox_text = Path("noxfile.py").read_text()
+    assert "mutmut" in nox_text
+
+
+def test_noxfile_includes_coverage_session() -> None:
+    """Nox should have a coverage session that produces a standalone coverage report."""
+    module = ast.parse(Path("noxfile.py").read_text())
+    session_names = {
+        node.name
+        for node in module.body
+        if isinstance(node, ast.FunctionDef)
+        and any(
+            isinstance(decorator, ast.Call)
+            and isinstance(decorator.func, ast.Attribute)
+            and decorator.func.attr == "session"
+            for decorator in node.decorator_list
+        )
+    }
+    assert "coverage" in session_names
+    nox_text = Path("noxfile.py").read_text()
+    assert "--cov-report=html" in nox_text or "coverage html" in nox_text
+
+
+def test_nox_default_sessions_include_all_required_gates() -> None:
+    """nox.options.sessions should list every required quality gate."""
+    module = ast.parse(Path("noxfile.py").read_text())
+    options_sessions = None
+    for node in module.body:
+        if isinstance(node, ast.Assign):
+            for target in node.targets:
+                if isinstance(target, ast.Attribute) and target.attr == "sessions":
+                    if isinstance(target.value, ast.Attribute) and target.value.attr == "options":
+                        if isinstance(target.value.value, ast.Name) and target.value.value.id == "nox":
+                            options_sessions = {ast.literal_eval(e) for e in node.value.elts}
+    assert options_sessions is not None
+    required = {"lint", "types", "tests", "docs", "package", "security",
+                "version_sync", "coverage", "mutation",
+                "dependency_dashboard", "binding_conformance"}
+    assert required.issubset(options_sessions)

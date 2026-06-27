@@ -13,9 +13,10 @@
 
 ## Phase 2: CI and Automation Hardening
 
-- [~] Task: Align nox and GitHub Actions gates
-    - [ ] Ensure lint, types, tests, docs, package, security, dependency dashboards, and binding checks are covered.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Align nox and GitHub Actions gates
+    - [x] Ensure lint, types, tests, docs, package, security, dependency dashboards, and binding checks are covered.
+    - [x] Add `coverage`, `mutation`, `dependency_dashboard`, and `binding_conformance` nox sessions.
+    - [x] Commit task changes and attach the required Conductor git note.
 - [ ] Task: Add mutation and coverage release evidence
     - [ ] Update mutation testing and coverage workflows/evidence with clear thresholds and schedules.
     - [ ] Commit task changes and attach the required Conductor git note.

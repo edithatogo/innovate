@@ -37,10 +37,14 @@ nox.options.sessions = (
     "lint",
     "types",
     "tests",
+    "coverage",
     "docs",
     "package",
     "security",
+    "mutation",
     "version_sync",
+    "dependency_dashboard",
+    "binding_conformance",
     "release_supply_chain",
     "release_reproducibility",
     "release_readiness",
@@ -231,3 +235,84 @@ def release_reproducibility(session: nox.Session) -> None:
         "--json",
         *session.posargs,
     )
+@nox.session(python=False)
+def coverage(session: nox.Session) -> None:
+    """Run unit tests and produce a standalone coverage report (HTML + XML)."""
+    _run_uv(session, "sync", "--python", DEFAULT_PYTHON)
+    _run_uv(
+        session,
+        "run",
+        "python",
+        "-m",
+        "pytest",
+        "tests/unit/",
+        "-m",
+        "not optional_backend",
+        *PYTEST_BASE_IGNORES,
+        "--cov=innovate",
+        "--cov-report=xml",
+        "--cov-report=html",
+        "--cov-report=term-missing",
+        "--cov-fail-under=80",
+        "--tb=short",
+        "-q",
+        env={"CI": "true", "JAX_PLATFORM_NAME": "cpu"},
+    )
+
+
+@nox.session(python=False)
+def mutation(session: nox.Session) -> None:
+    """Run mutmut mutation testing and output a JSON summary."""
+    _run_uv(session, "sync", "--python", DEFAULT_PYTHON)
+    _run_uv(
+        session,
+        "run",
+        "python",
+        "-m",
+        "mutmut",
+        "run",
+        *session.posargs,
+    )
+    _run_uv(
+        session,
+        "run",
+        "python",
+        "-m",
+        "mutmut",
+        "results",
+    )
+
+
+@nox.session(python=False)
+def dependency_dashboard(session: nox.Session) -> None:
+    """Generate a non-mutating dependency freshness dashboard across all ecosystems."""
+    _run_uv(session, "sync", "--python", DEFAULT_PYTHON)
+    _run_uv(
+        session,
+        "run",
+        "python",
+        "scripts/dependency_dashboard.py",
+        "--json",
+        *session.posargs,
+    )
+
+
+@nox.session(python=False)
+def binding_conformance(session: nox.Session) -> None:
+    """Run polyglot binding conformance tests (Python, Rust, R, Julia, C#, TS)."""
+    _run_uv(session, "sync", "--python", DEFAULT_PYTHON)
+    _run_uv(
+        session,
+        "run",
+        "python",
+        "-m",
+        "pytest",
+        "tests/unit/test_polyglot_binding_conformance.py",
+        "tests/unit/test_polyglot_binding_golden_fixtures.py",
+        "tests/unit/test_polyglot_binding_hardening.py",
+        "tests/unit/test_binding_conformance_ci.py",
+        "-q",
+        "--tb=short",
+        *session.posargs,
+    )
+
