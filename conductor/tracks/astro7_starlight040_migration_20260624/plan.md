@@ -22,10 +22,10 @@
     - [x] Update `docs/astro-site/package.json` and `pnpm-lock.yaml` to the selected Astro 7/Starlight baseline. [f7d9962]
     - [x] Update `@astrojs/markdown-remark`, `starlight-links-validator`, `starlight-versions`, `@astrojs/starlight-docsearch`, `@astrojs/check`, TypeScript, and local plugin wiring as needed. [f7d9962]
     - [x] Commit task changes and attach the required Conductor git note. [f7d9962]
-- [ ] Task: Update Astro and Starlight configuration
-    - [ ] Validate `astro.config.mjs` uses the Astro 7-compatible markdown processor and plugin ordering.
-    - [ ] Remove stale or duplicate Starlight config paths unless retained as explicit legacy reference material.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Update Astro and Starlight configuration
+    - [x] Validate `astro.config.mjs` uses the Astro 7-compatible markdown processor and plugin ordering. (Verified: `unified()` processor, correct ordering) [skip-ci]
+    - [x] Remove stale or duplicate Starlight config paths unless retained as explicit legacy reference material. (Verified: all sidebar paths exist, no stale references) [skip-ci]
+    - [x] Commit task changes and attach the required Conductor git note. (No code changes needed - config already valid) [skip-ci]
 - [ ] Task: Prove plugin compatibility
     - [ ] Run `pnpm --dir docs/astro-site install --lockfile-only` if dependency metadata changed.
     - [ ] Run `pnpm --dir docs/astro-site check`.
