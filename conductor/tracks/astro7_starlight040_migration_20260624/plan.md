@@ -6,10 +6,10 @@
     - [x] Read `docs/astro-site/package.json`, `docs/astro-site/pnpm-lock.yaml`, `astro.config.mjs`, `starlight.config.mjs`, docs workflows, and existing Astro/Starlight evidence artifacts. [3de5d5f]
     - [x] Record the current versions and plugin relationships for Astro, Starlight, markdown processing, link validation, versioning, DocSearch, polyglot generation, TypeScript, and pnpm. [3de5d5f]
     - [x] Commit task changes and attach the required Conductor git note. [3de5d5f]
-- [ ] Task: Define the Starlight 0.40 target decision
-    - [ ] Write a target decision artifact that either selects Starlight 0.40.x or explicitly promotes the currently committed successor line with evidence.
-    - [ ] Document external compatibility constraints such as peer metadata exceptions without weakening the selected target.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Define the Starlight 0.40 target decision [a3e85f2]
+    - [x] Write a target decision artifact that either selects Starlight 0.40.x or explicitly promotes the currently committed successor line with evidence. [a3e85f2]
+    - [x] Document external compatibility constraints such as peer metadata exceptions without weakening the selected target. [a3e85f2]
+    - [x] Commit task changes and attach the required Conductor git note. [a3e85f2]
 - [ ] Task: Write failing dependency-contract tests
     - [ ] Add or update tests that compare documented Astro/Starlight baseline, package manifest, lockfile, and migration evidence.
     - [ ] Confirm the tests fail before implementation if the target contract is absent or inconsistent.
