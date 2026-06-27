@@ -107,3 +107,32 @@ def test_sphinx_is_legacy_archive_only() -> None:
     build_dir = Path("docs/build")
     assert not conf_py.exists(), "Sphinx conf.py must not exist (archive-only)"
     assert not build_dir.exists(), "Sphinx build directory must not exist (archive-only)"
+
+
+def test_custom_css_file_exists() -> None:
+    """The Starlight custom CSS file must be present."""
+    css = Path("docs/astro-site/src/styles/custom.css")
+    assert css.exists()
+
+
+def test_version_switcher_is_configured() -> None:
+    """Starlight-versions plugin must be configured in astro.config.mjs."""
+    config = Path("docs/astro-site/astro.config.mjs").read_text()
+    assert "starlightVersions" in config
+    assert "starlight-versions" in config
+
+
+def test_docsearch_is_gated_by_env_vars() -> None:
+    """DocSearch must require env vars to activate (not hardcoded)."""
+    config = Path("docs/astro-site/astro.config.mjs").read_text()
+    assert "ALGOLIA_APP_ID" in config
+    assert "ALGOLIA_API_KEY" in config
+    assert "ALGOLIA_INDEX_NAME" in config
+    assert "starlightDocSearch" in config
+
+
+def test_sidebar_contains_core_sections() -> None:
+    """The Starlight sidebar must define the expected top-level sections."""
+    config = Path("docs/astro-site/astro.config.mjs").read_text()
+    for section in ("Getting Started", "User Guide", "API Reference", "Maintainers", "Operations", "Architecture", "Migration"):
+        assert section in config
