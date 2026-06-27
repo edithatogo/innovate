@@ -59,9 +59,9 @@
     - [x] Regenerate docs-build and compatibility evidence after Astro/Starlight validation. [57abc56]
     - [x] Update release-readiness report without marking unrelated missing evidence as complete. [57abc56]
     - [x] Commit task changes and attach the required Conductor git note. [57abc56]
-- [~] Task: Update maintainer-facing migration documentation
-    - [ ] Document the selected target, validation commands, plugin exceptions, rollback notes, and future upgrade rules.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Update maintainer-facing migration documentation [ada510e]
+    - [x] Document the selected target, validation commands, plugin exceptions, rollback notes, and future upgrade rules. [ada510e]
+    - [x] Commit task changes and attach the required Conductor git note. [ada510e]
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: CI, Release Evidence, and Documentation' (Protocol in workflow.md)
 
 ## Phase 5: Final Review, CI Gate, and Archival Readiness
