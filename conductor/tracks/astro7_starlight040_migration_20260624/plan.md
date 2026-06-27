@@ -18,10 +18,10 @@
 
 ## Phase 2: Dependency Migration and Plugin Compatibility
 
-- [ ] Task: Apply the selected Astro 7/Starlight target
-    - [ ] Update `docs/astro-site/package.json` and `pnpm-lock.yaml` to the selected Astro 7/Starlight baseline.
-    - [ ] Update `@astrojs/markdown-remark`, `starlight-links-validator`, `starlight-versions`, `@astrojs/starlight-docsearch`, `@astrojs/check`, TypeScript, and local plugin wiring as needed.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Apply the selected Astro 7/Starlight target [f7d9962]
+    - [x] Update `docs/astro-site/package.json` and `pnpm-lock.yaml` to the selected Astro 7/Starlight baseline. [f7d9962]
+    - [x] Update `@astrojs/markdown-remark`, `starlight-links-validator`, `starlight-versions`, `@astrojs/starlight-docsearch`, `@astrojs/check`, TypeScript, and local plugin wiring as needed. [f7d9962]
+    - [x] Commit task changes and attach the required Conductor git note. [f7d9962]
 - [ ] Task: Update Astro and Starlight configuration
     - [ ] Validate `astro.config.mjs` uses the Astro 7-compatible markdown processor and plugin ordering.
     - [ ] Remove stale or duplicate Starlight config paths unless retained as explicit legacy reference material.
