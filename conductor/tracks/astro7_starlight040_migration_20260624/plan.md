@@ -14,7 +14,7 @@
     - [x] Add or update tests that compare documented Astro/Starlight baseline, package manifest, lockfile, and migration evidence. [9414e5e]
     - [x] Confirm the tests fail before implementation if the target contract is absent or inconsistent. [9414e5e]
     - [x] Commit task changes and attach the required Conductor git note. [9414e5e]
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Baseline Audit and Target Contract' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 1: Baseline Audit and Target Contract' (Protocol in workflow.md)
 
 ## Phase 2: Dependency Migration and Plugin Compatibility
 
