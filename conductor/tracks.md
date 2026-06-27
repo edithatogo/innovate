@@ -399,7 +399,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Starlight-Only Documentation Completion**
+- [~] **Track: Starlight-Only Documentation Completion**
 *Link: [./tracks/starlight_only_docs_completion_20260625/](./tracks/starlight_only_docs_completion_20260625/)*
 
 ---
@@ -424,8 +424,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Advanced Policy, Competition, and Substitution Modeling**
-*Link: [./archive/advanced_policy_competition_substitution_20260625/](./tracks/advanced_policy_competition_substitution_20260625/)*
+- [x] **Track: Advanced Policy, Competition, and Substitution Modeling** *(Completed)*
+*Link: [./archive/advanced_policy_competition_substitution_20260625/](./archive/advanced_policy_competition_substitution_20260625/)*
 
 ---
 
