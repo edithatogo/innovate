@@ -237,7 +237,7 @@ def release_reproducibility(session: nox.Session) -> None:
     )
 @nox.session(python=False)
 def coverage(session: nox.Session) -> None:
-    """Run unit tests and produce a standalone coverage report (HTML + XML)."""
+    """Run unit tests, produce a standalone coverage report (HTML + XML), and write release evidence."""
     _run_uv(session, "sync", "--python", DEFAULT_PYTHON)
     _run_uv(
         session,
@@ -253,16 +253,48 @@ def coverage(session: nox.Session) -> None:
         "--cov-report=xml",
         "--cov-report=html",
         "--cov-report=term-missing",
+        "--cov-json-report=.coverage-raw.json",
         "--cov-fail-under=80",
         "--tb=short",
         "-q",
         env={"CI": "true", "JAX_PLATFORM_NAME": "cpu"},
     )
+    # Write coverage evidence for release readiness and enforce threshold
+    _run_uv(
+        session,
+        "run",
+        "python",
+        "-c",
+        (
+            "import json, sys; "
+            "from scripts.release_evidence import write_coverage_evidence, COVERAGE_THRESHOLD_LINE_RATE; "
+            "data = json.loads(open('.coverage-raw.json').read()); "
+            "meta = data.get('meta', {}); "
+            "totals = data.get('totals', {}); "
+            "line_rate = totals.get('percent_covered', 0.0) / 100.0; "
+            "write_coverage_evidence("
+            "line_rate=line_rate, "
+            "branch_rate=totals.get('percent_covered_branches', 0.0) / 100.0, "
+            "lines_covered=totals.get('covered_lines', 0), "
+            "lines_valid=totals.get('num_statements', 0), "
+            "branches_covered=totals.get('covered_branches', 0), "
+            "branches_valid=totals.get('num_branches', 0), "
+            "summary=f\"Line rate: {totals.get('percent_covered', 0):.1f}%\", "
+            "); "
+            "print('Coverage evidence written'); "
+            "if line_rate < COVERAGE_THRESHOLD_LINE_RATE: "
+            "    print(f'FAIL: Line rate {line_rate:.1%} is below threshold {COVERAGE_THRESHOLD_LINE_RATE:.0%}', file=sys.stderr); "
+            "    sys.exit(1); "
+            "print(f'Line rate {line_rate:.1%} meets threshold {COVERAGE_THRESHOLD_LINE_RATE:.0%}')"
+        ),
+    )
 
 
 @nox.session(python=False)
 def mutation(session: nox.Session) -> None:
-    """Run mutmut mutation testing and output a JSON summary."""
+    """Run mutmut mutation testing, enforce >70% threshold, and write release evidence."""
+    from scripts.release_evidence import MUTATION_SCORE_THRESHOLD, write_mutation_evidence
+
     _run_uv(session, "sync", "--python", DEFAULT_PYTHON)
     _run_uv(
         session,
@@ -280,6 +312,29 @@ def mutation(session: nox.Session) -> None:
         "-m",
         "mutmut",
         "results",
+    )
+    # Parse mutmut results and write evidence
+    _run_uv(
+        session,
+        "run",
+        "python",
+        "-c",
+        (
+            "from scripts.release_evidence import _parse_mutmut_results, write_mutation_evidence, MUTATION_SCORE_THRESHOLD; "
+            "parsed = _parse_mutmut_results(); "
+            "score = parsed['score']; "
+            "write_mutation_evidence("
+            "score=score, "
+            "mutants_killed=parsed['killed'], "
+            "mutants_total=parsed['total'], "
+            "summary=f\"Mutants killed: {parsed['killed']}/{parsed['total']} (score: {score:.1%})\", "
+            "); "
+            "if score < MUTATION_SCORE_THRESHOLD: "
+            "    import sys; "
+            "    print(f'FAIL: Mutation score {score:.1%} is below threshold {MUTATION_SCORE_THRESHOLD:.0%}', file=sys.stderr); "
+            "    sys.exit(1); "
+            "print(f'Mutation score {score:.1%} meets threshold {MUTATION_SCORE_THRESHOLD:.0%}')"
+        ),
     )
 
 

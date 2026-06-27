@@ -248,3 +248,117 @@ class TestReleaseReadyFailClosed:
 
         exit_code = main(["--json", "--evidence-root", str(tmp_evidence_root), "--allow-blocked"])
         assert exit_code == 0
+# ---------------------------------------------------------------------------
+# Task 2: Coverage and mutation evidence thresholds
+# ---------------------------------------------------------------------------
+
+
+class TestCoverageMutationEvidence:
+    """Coverage and mutation evidence must be generated with clear thresholds."""
+
+    def test_coverage_evidence_has_80_percent_threshold(self) -> None:
+        """Coverage evidence must document an 80% line-rate threshold."""
+        from scripts.release_evidence import COVERAGE_THRESHOLD_LINE_RATE
+
+        assert COVERAGE_THRESHOLD_LINE_RATE == 0.80
+
+    def test_mutation_evidence_has_70_percent_threshold(self) -> None:
+        """Mutation evidence must document a 70% score threshold."""
+        from scripts.release_evidence import MUTATION_SCORE_THRESHOLD
+
+        assert MUTATION_SCORE_THRESHOLD == 0.70
+
+    def test_coverage_evidence_schema(self, tmp_path: Path) -> None:
+        """Generated coverage evidence must contain required fields."""
+        from scripts.release_evidence import build_coverage_evidence
+
+        evidence = build_coverage_evidence(
+            line_rate=0.85,
+            branch_rate=0.75,
+            lines_covered=4000,
+            lines_valid=5000,
+            branches_covered=800,
+            branches_valid=1200,
+            summary="Coverage report passed",
+        )
+        assert evidence["evidence_id"] == "coverage"
+        assert evidence["schema_version"] == 1
+        assert evidence["status"] == "pass"
+        assert evidence["line_rate"] == 0.85
+        assert evidence["branch_rate"] == 0.75
+        assert evidence["python_version"] == "3.14"
+        assert "generated_at" in evidence
+
+    def test_coverage_below_threshold_fails(self) -> None:
+        """Coverage below 80% threshold should produce a 'fail' status."""
+        from scripts.release_evidence import build_coverage_evidence
+
+        evidence = build_coverage_evidence(
+            line_rate=0.65,
+            branch_rate=0.60,
+            lines_covered=3000,
+            lines_valid=5000,
+            branches_covered=600,
+            branches_valid=1200,
+            summary="Coverage below threshold",
+        )
+        assert evidence["status"] == "fail"
+        assert "below threshold" in evidence.get("summary", "").lower() or "below threshold" in evidence.get("failure_reason", "").lower()
+
+    def test_mutation_evidence_schema(self, tmp_path: Path) -> None:
+        """Generated mutation evidence must contain required fields."""
+        from scripts.release_evidence import build_mutation_evidence
+
+        evidence = build_mutation_evidence(
+            score=0.85,
+            mutants_killed=85,
+            mutants_total=100,
+            summary="Mutation score passed",
+        )
+        assert evidence["evidence_id"] == "mutation_sampling"
+        assert evidence["schema_version"] == 1
+        assert evidence["status"] == "pass"
+        assert evidence["mutation_score"] == 0.85
+        assert evidence["mutants_killed"] == 85
+        assert evidence["mutants_total"] == 100
+        assert "generated_at" in evidence
+
+    def test_mutation_below_threshold_fails(self) -> None:
+        """Mutation score below 70% threshold should produce a 'fail' status."""
+        from scripts.release_evidence import build_mutation_evidence
+
+        evidence = build_mutation_evidence(
+            score=0.50,
+            mutants_killed=50,
+            mutants_total=100,
+            summary="Mutation score below threshold",
+        )
+        assert evidence["status"] == "fail"
+        assert "below threshold" in evidence.get("summary", "").lower() or "below threshold" in evidence.get("failure_reason", "").lower()
+
+    def test_coverage_evidence_has_threshold_documented(self) -> None:
+        """Coverage threshold must be documented in gate-inventory Section 5."""
+        gate_inv = (ROOT / "conductor/tracks/ci_code_quality_release_hardening_20260625/gate-inventory.md").read_text()
+        # Find Section 5 coverage entry
+        assert "80" in gate_inv, "Gate inventory must document 80% coverage threshold"
+
+    def test_mutation_evidence_has_threshold_documented(self) -> None:
+        """Mutation threshold must be documented in gate-inventory Section 5."""
+        gate_inv = (ROOT / "conductor/tracks/ci_code_quality_release_hardening_20260625/gate-inventory.md").read_text()
+        # Find Section 5 mutation entry
+        assert "70" in gate_inv, "Gate inventory must document 70% mutation threshold"
+
+    def test_nox_coverage_session_writes_evidence(self) -> None:
+        """The coverage nox session should contain evidence generation steps."""
+        nox_text = (ROOT / "noxfile.py").read_text()
+        assert "coverage.json" in nox_text or "build_coverage_evidence" in nox_text or "release_evidence" in nox_text
+
+    def test_nox_mutation_session_writes_evidence(self) -> None:
+        """The mutation nox session should contain evidence generation steps."""
+        nox_text = (ROOT / "noxfile.py").read_text()
+        assert "mutation-sampling.json" in nox_text or "build_mutation_evidence" in nox_text or "release_evidence" in nox_text
+
+    def test_nox_mutation_session_enforces_threshold(self) -> None:
+        """The mutation nox session should enforce a minimum mutation score threshold."""
+        nox_text = (ROOT / "noxfile.py").read_text()
+        assert "threshold" in nox_text.lower() or "MUTATION_SCORE_THRESHOLD" in nox_text
