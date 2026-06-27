@@ -1,0 +1,21 @@
+conductor-track=ci_code_quality_release_hardening_20260625 phase=2 task=mutation_coverage_release_evidence commit=d98bf453233bf743a58780f73541b89c14e5beb8
+
+Task: Add mutation and coverage release evidence
+
+Summary:
+- Added scripts/release_evidence.py with COVERAGE_THRESHOLD_LINE_RATE=0.80 and MUTATION_SCORE_THRESHOLD=0.70
+- Added write_coverage_evidence() and write_mutation_evidence() functions
+- Added _parse_mutmut_results() for parsing mutmut output
+- Updated noxfile.py coverage session to enforce 80% fail-under with HTML+XML reports and evidence writing
+- Updated noxfile.py mutation session to enforce >70% threshold with mutmut results parsing and evidence writing
+- Added tests/unit/test_coverage_mutation_thresholds.py with 10 tests validating thresholds
+- Updated gate-inventory.md with coverage and mutation threshold documentation
+- Updated plan.md to mark Phase 2 Task 2 as complete
+
+Files:
+- scripts/release_evidence.py (new)
+- noxfile.py (modified)
+- tests/unit/test_coverage_mutation_thresholds.py (new)
+- tests/unit/test_release_hardening_guards.py (modified)
+- conductor/tracks/ci_code_quality_release_hardening_20260625/gate-inventory.md (modified)
+- conductor/tracks/ci_code_quality_release_hardening_20260625/plan.md (modified)
