@@ -35,10 +35,10 @@
 
 ## Phase 3: Route, Content, and UX Cutover Validation
 
-- [~] Task: Validate route inventory and versioned content
-    - [ ] Verify core routes, maintainer routes, operations routes, architecture routes, migration routes, versioned `latest/` routes, and `/404`.
-    - [ ] Update route inventory evidence and tests for all tracked route groups.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Validate route inventory and versioned content [2052250]
+    - [x] Verify core routes, maintainer routes, operations routes, architecture routes, migration routes, versioned `latest/` routes, and `/404`. [2052250]
+    - [x] Update route inventory evidence and tests for all tracked route groups. [2052250]
+    - [x] Commit task changes and attach the required Conductor git note. [2052250]
 - [ ] Task: Validate generated API docs and legacy source boundaries
     - [ ] Run Starlight polyglot generation and confirm generated Python API pages are present.
     - [ ] Ensure Sphinx remains legacy/archive-only unless required for redirect-reference validation.
