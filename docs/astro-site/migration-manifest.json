@@ -1,0 +1,48 @@
+{
+  "target": "Astro 7 / Starlight 0.41.0",
+  "selectedVersions": {
+    "astro": "7.0.2",
+    "starlight": "0.41.0",
+    "markdownRemark": "7.2.0",
+    "starlightDocSearch": "0.7.0",
+    "starlightLinksValidator": "0.24.1",
+    "starlightVersions": "0.9.0",
+    "starlightPolyglot": "file:./vendor/starlight-polyglot",
+    "check": "0.9.9"
+  },
+  "peerDependencies": {
+    "typescript": "6.0.3"
+  },
+  "validationCommands": [
+    "pnpm --dir docs/astro-site check",
+    "pnpm --dir docs/astro-site build",
+    "uv run nox -s docs"
+  ],
+  "evidenceLinks": {
+    "packageJson": "docs/astro-site/package.json",
+    "pnpmLock": "docs/astro-site/pnpm-lock.yaml",
+    "astroConfig": "docs/astro-site/astro.config.mjs",
+    "starlightConfig": "docs/astro-site/starlight.config.mjs"
+  },
+  "rationale": "Current package.json specifies @astrojs/starlight ^0.41.0, which is the latest stable version and compatible with migration goals. Downgrading to 0.40.x would require changes that could introduce breaking changes. The selected version is promoted with evidence of compatibility.",
+  "verification": {
+    "date": "2026-06-27",
+    "pnpm_check": {
+      "status": "passed",
+      "errors": 0,
+      "warnings": 0,
+      "hints": 0
+    },
+    "pnpm_install_lockfile_only": {
+      "status": "passed",
+      "peer_dependency_notes": [
+        "astro-expressive-code@0.43.1 declares peer astro@^4|^5|^3.3|^6 but resolved to 7.0.2 - pre-existing, non-blocking"
+      ]
+    },
+    "package_json_lockfile_consistency": {
+      "status": "aligned",
+      "starlight_specifier_package_json": "^0.41.0",
+      "starlight_specifier_lockfile": "^0.41.0"
+    }
+  }
+}

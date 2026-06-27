@@ -26,7 +26,7 @@
     - [x] Validate `astro.config.mjs` uses the Astro 7-compatible markdown processor and plugin ordering. (Verified: `unified()` processor, correct ordering) [skip-ci]
     - [x] Remove stale or duplicate Starlight config paths unless retained as explicit legacy reference material. (Verified: all sidebar paths exist, no stale references) [skip-ci]
     - [x] Commit task changes and attach the required Conductor git note. (No code changes needed - config already valid) [skip-ci]
-- [ ] Task: Prove plugin compatibility
+- [~] Task: Prove plugin compatibility
     - [ ] Run `pnpm --dir docs/astro-site install --lockfile-only` if dependency metadata changed.
     - [ ] Run `pnpm --dir docs/astro-site check`.
     - [ ] Record peer-dependency exceptions or plugin compatibility workarounds in migration evidence.
