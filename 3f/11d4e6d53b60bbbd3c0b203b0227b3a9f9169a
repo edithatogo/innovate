@@ -1,0 +1,16 @@
+Phase 3 Verification Report: Route, Content, and UX Cutover Validation
+
+Tests run: 48 Starlight/Astro tests
+Results: 48 passed, 0 failed
+Phase scope: 5 commits, 2 files changed
+Key outcomes:
+- Created test_astro_starlight_route_validation.py with 10 tests validating:
+  - All sidebar routes have content files (getting-started.mdx fixed)
+  - Route coverage report includes core routes
+  - Versioned latest/ content exists
+  - Polyglot-generated Python API docs present
+  - Sphinx is archive-only (no conf.py, no build dir)
+  - Custom CSS file exists
+  - Version switcher configured
+  - DocSearch gated by env vars
+  - Sidebar contains all 7 core sections
