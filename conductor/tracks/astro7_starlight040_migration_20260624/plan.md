@@ -35,7 +35,7 @@
 
 ## Phase 3: Route, Content, and UX Cutover Validation
 
-- [ ] Task: Validate route inventory and versioned content
+- [~] Task: Validate route inventory and versioned content
     - [ ] Verify core routes, maintainer routes, operations routes, architecture routes, migration routes, versioned `latest/` routes, and `/404`.
     - [ ] Update route inventory evidence and tests for all tracked route groups.
     - [ ] Commit task changes and attach the required Conductor git note.
