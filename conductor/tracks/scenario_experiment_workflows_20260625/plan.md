@@ -8,9 +8,9 @@
     - [x] Add tests for baseline, intervention, substitution, competition, and network scenario specs.
     - [x] Implement validated schema models and artifact envelopes.
     - [x] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Add scenario registry metadata
-    - [ ] Register scenario payload families in capability/model metadata.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Add scenario registry metadata [034b679]
+    - [x] Register scenario payload families in capability/model metadata.
+    - [x] Commit task changes and attach the required Conductor git note.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Scenario Contract' (Protocol in workflow.md)
 
 ## Phase 2 Checkpoint: [checkpoint: pending]
