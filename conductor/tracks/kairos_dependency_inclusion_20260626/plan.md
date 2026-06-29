@@ -4,11 +4,11 @@
 
 ### Phase 1 Checkpoint: [checkpoint: pending] Source Verification and Dependency Policy
 
-- [~] Task: Verify Kairos source and crate inventory
-    - [ ] Confirm the Kairos repository workspace exposes `kairo-ecs-types`, `kairo-ecs-core`, `kairo-ecs-state`, `kairo-ecs-rng`, `kairo-ecs-des`, `kairo-ecs-abm`, and `kairo-ecs-arrow`.
-    - [ ] Check whether matching `kairo-ecs-*` crates exist in crates.io and record whether repository sourcing or published versions are valid for this release.
-    - [ ] Record the selected Kairos source revision or published version set in release evidence.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Verify Kairos source and crate inventory 943e3cb
+    - [x] Confirm the Kairos repository workspace exposes `kairo-ecs-types`, `kairo-ecs-core`, `kairo-ecs-state`, `kairo-ecs-rng`, `kairo-ecs-des`, `kairo-ecs-abm`, and `kairo-ecs-arrow`.
+    - [x] Check whether matching `kairo-ecs-*` crates exist in crates.io and record whether repository sourcing or published versions are valid for this release.
+    - [x] Record the selected Kairos source revision or published version set in release evidence.
+    - [x] Commit task changes and attach the required Conductor git note.
 - [ ] Task: Define dependency migration policy
     - [ ] Write failing checks that assert Mesa and NDLib are not required by the base install after the migration.
     - [ ] Write checks that require `networkx` to be either justified for plotting/graph utility APIs or moved behind a graph/visualization extra.
