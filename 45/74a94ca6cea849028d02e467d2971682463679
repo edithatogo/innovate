@@ -1,0 +1,70 @@
+Task: Refresh route and migration evidence
+Track: Starlight-Only Documentation Completion
+Phase: Phase 3: API and Evidence Parity
+
+Summary:
+Updated static content and redirect inventories to comprehensively document
+the Phase 2 tutorial migrations and establish authoritative route mappings
+for all Starlight documentation.
+
+Subtask 1: Regenerate content inventory
+- Added 23 new entries for Phase 2 migrations
+- Entries include both current and latest documentation versions
+- Total entries expanded from 31 to 54
+- All entries marked with migration_phase: phase_2
+
+Subtask 2: Regenerate redirect inventory
+- Added 11 redirect entries mapping old Sphinx paths to new Starlight routes
+- Ensures backwards compatibility for existing documentation links
+- Total entries expanded from 31 to 42
+- Phase tracking enabled for audit purposes
+
+Routes Documented:
+Current Routes:
+  /tutorials/functional-kernel-contract/
+  /tutorials/diagnostics-contract/
+  /tutorials/arrow-interchange/
+  /tutorials/norton-bass/
+  /tutorials/advanced-diffusion-inference/
+  /tutorials/bayesian-fitter/
+  /tutorials/multi-product/
+  /tutorials/seasonal-data/
+  /tutorials/counterfactual-analysis/
+  /tutorials/jax-backend/
+  /tutorials/ndlib-integration/
+  /bindings/
+
+Latest Versions:
+  /latest/tutorials/functional-kernel-contract/
+  /latest/tutorials/diagnostics-contract/
+  /latest/tutorials/arrow-interchange/
+  /latest/tutorials/norton-bass/
+  /latest/tutorials/advanced-diffusion-inference/
+  /latest/tutorials/bayesian-fitter/
+  /latest/tutorials/multi-product/
+  /latest/tutorials/seasonal-data/
+  /latest/tutorials/counterfactual-analysis/
+  /latest/tutorials/jax-backend/
+  /latest/tutorials/ndlib-integration/
+  /latest/bindings/
+
+Inventory Metadata:
+- Content inventory: comprehensive topology of Sphinx → Starlight mapping
+- Redirect inventory: active redirects for backwards compatibility
+- Both inventories provide machine-readable format for automation
+- Enable link validation and route verification in CI/CD
+
+Purpose:
+These inventories serve as the authoritative source of truth for:
+1. Documentation topology and route structure
+2. Migration status and phase tracking
+3. Redirect rules for backwards compatibility
+4. Automated validation of link integrity
+
+Subtask 3: Commit and attach git note
+- ✓ Committed inventory updates
+- ✓ Attached this verification note
+
+Phase 3 Tasks Complete:
+✓ Task 1: Replace generated API bridge dependency [6d80d4c]
+✓ Task 2: Refresh route and migration evidence [4574a94]
