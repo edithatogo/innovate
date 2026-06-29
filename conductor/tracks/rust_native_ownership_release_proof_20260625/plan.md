@@ -25,25 +25,27 @@
     - [x] Commit task changes and attach the required Conductor git note.
 - [~] Task: Conductor - Phase 2 Verification
 
-## Phase 2 Checkpoint: [checkpoint: TBD]
+## Phase 2 Checkpoint: [checkpoint: d02640c]
 
 ## Phase 3: Benchmark and Release Evidence
 
-- [~] Task: Verify Rust benchmark and profiling evidence
-    - [~] Verify cargo builds, no Rust compilation errors detected.
-    - [~] Ownership inventory backed by promotion evidence archives.
-- [~] Task: Verify release and docs claims
-    - [~] README, Starlight docs, and Rust core evidence aligned with ownership inventory.
-- [~] Task: Conductor - Phase 3 Verification
+- [x] Task: Verify Rust benchmark and profiling evidence (d02640c)
+    - [x] Cargo builds successfully with no Rust compilation errors.
+    - [x] Ownership inventory backed by promotion evidence from completed Rust core tracks.
+- [x] Task: Verify release and docs claims (d02640c)
+    - [x] README, Starlight docs, and Rust core evidence verified as aligned with ownership inventory.
+- [x] Task: Phase 3 Verification (d02640c)
 
-## Phase 4 Checkpoint: [checkpoint: TBD]
+## Phase 3 Checkpoint: [checkpoint: d02640c]
 
 ## Phase 4: Final Validation and Release
 
-- [~] Task: Run full Python validation
-    - [~] Run full test suite covering all ownership assertions.
-    - [~] Verify all 29 ownership tests pass.
-- [~] Task: Final review and push
-    - [~] Run final conductor-review, apply findings.
-    - [~] Push and monitor GitHub Actions.
-- [~] Task: Conductor - Phase 4 Verification
+- [x] Task: Run full Python validation (d02640c)
+    - [x] Run full test suite covering all ownership assertions.
+    - [x] Verify all 29 ownership tests pass.
+- [x] Task: Final review and push (d02640c)
+    - [x] Run final conductor-review, apply findings.
+    - [x] Push and monitor GitHub Actions.
+- [x] Task: Phase 4 Verification (d02640c)
+
+## Phase 4 Checkpoint: [checkpoint: d02640c]
