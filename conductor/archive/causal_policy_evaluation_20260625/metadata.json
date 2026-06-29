@@ -1,0 +1,8 @@
+{
+  "track_id": "causal_policy_evaluation_20260625",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-06-25T11:45:00Z",
+  "updated_at": "2026-06-25T11:45:00Z",
+  "description": "Add causal policy evaluation workflows for diffusion interventions, rollout timing, spillovers, and heterogeneous effects."
+}
