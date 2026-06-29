@@ -2,7 +2,7 @@
 
 ## Phase 1:
 
-## Phase 1 Checkpoint: [checkpoint: pending] Causal Contract and Guardrails
+## Phase 1 Checkpoint: [checkpoint: 43c176f] Causal Contract and Guardrails
 
 - [x] Task: Define policy evaluation contracts (b961c25)
     - [x] Add failing tests for intervention timing, comparators, rollout, spillovers, covariates, and estimand metadata.
