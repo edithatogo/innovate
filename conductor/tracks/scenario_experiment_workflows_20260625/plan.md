@@ -2,7 +2,7 @@
 
 ## Phase 1: Scenario Contract Schemas
 
-## Phase 1 Checkpoint: [checkpoint: pending] Scenario Contract
+## Phase 1 Checkpoint: [checkpoint: 15905f3] Scenario Contract
 
 - [x] Task: Define scenario schemas [c81d673]
     - [x] Add tests for baseline, intervention, substitution, competition, and network scenario specs.
