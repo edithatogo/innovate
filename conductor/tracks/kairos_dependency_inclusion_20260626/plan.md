@@ -2,7 +2,7 @@
 
 ## Phase 1: Source Verification and Dependency Policy
 
-### Phase 1 Checkpoint: [checkpoint: pending] Source Verification and Dependency Policy
+## Phase 1 Checkpoint: [checkpoint: ede15af] Source Verification and Dependency Policy
 
 - [x] Task: Verify Kairos source and crate inventory 943e3cb
     - [x] Confirm the Kairos repository workspace exposes `kairo-ecs-types`, `kairo-ecs-core`, `kairo-ecs-state`, `kairo-ecs-rng`, `kairo-ecs-des`, `kairo-ecs-abm`, and `kairo-ecs-arrow`.
