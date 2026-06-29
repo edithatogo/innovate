@@ -25,14 +25,14 @@
 
 ## Phase 3: API and Evidence Parity
 
-- [ ] Task: Replace generated API bridge dependency
-    - [ ] Extend Starlight/polyglot or static inventories to cover module API parity.
-    - [ ] Remove generated RST and autosummary templates when parity is proven.
-    - [ ] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Refresh route and migration evidence
-    - [ ] Regenerate content inventory, redirect inventory, route coverage, and validation evidence.
-    - [ ] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: API and Evidence Parity' (Protocol in workflow.md)
+- [x] Task: Replace generated API bridge dependency [6d80d4c]
+    - [x] Extend Starlight/polyglot or static inventories to cover module API parity.
+    - [x] Remove generated RST and autosummary templates when parity is proven.
+    - [x] Commit task changes and attach the required Conductor git note.
+- [x] Task: Refresh route and migration evidence [4574a94]
+    - [x] Regenerate content inventory, redirect inventory, route coverage, and validation evidence.
+    - [x] Commit task changes and attach the required Conductor git note.
+- [x] Task: Conductor - User Manual Verification 'Phase 3: API and Evidence Parity' (Protocol in workflow.md)
 
 ## Phase 4: Final Docs Release Gate
 
