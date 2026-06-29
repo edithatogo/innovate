@@ -1,0 +1,22 @@
+Task: Define scenario schemas
+
+Summary: Implemented complete scenario specification schemas for baseline, intervention, substitution, competition, and network diffusion workflows.
+
+Files Changed:
+- src/innovate/scenario/__init__.py (new)
+- src/innovate/scenario/schemas.py (new)
+- tests/unit/test_scenario_schemas.py (new)
+
+Details:
+- ScenarioBase abstract class with validation for common fields
+- BaselineScenario: Reference scenario with no interventions
+- InterventionScenario: Policy or program interventions with timing and magnitude
+- SubstitutionScenario: Technology replacement with incumbent/entrant tracking
+- CompetitionScenario: Multi-product markets with market share validation
+- NetworkScenario: Network diffusion with topology configuration
+- ArtifactEnvelope: Reproducible execution metadata with seed and version
+- All scenarios support JSON serialization
+- Comprehensive validation with meaningful error messages
+- 21 unit tests covering all scenario types and edge cases
+
+Why: This establishes the foundational contract for scenario specifications, enabling deterministic, reproducible experiment workflows across Python and polyglot bindings.
