@@ -399,8 +399,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Starlight-Only Documentation Completion**
-*Link: [./tracks/starlight_only_docs_completion_20260625/](./tracks/starlight_only_docs_completion_20260625/)*
+- [x] **Track: Starlight-Only Documentation Completion** *(Completed)*
+  *Link: [./archive/starlight_only_docs_completion_20260625/](./archive/starlight_only_docs_completion_20260625/)*
 
 ---
 
