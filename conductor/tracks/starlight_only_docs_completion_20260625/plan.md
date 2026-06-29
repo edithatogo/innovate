@@ -23,7 +23,7 @@
     - [x] Commit task changes and attach the required Conductor git note.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Tutorial and Bridge Migration' (Protocol in workflow.md)
 
-## Phase 3: API and Evidence Parity
+## Phase 3: API and Evidence Parity [checkpoint: 79ea9d6]
 
 - [x] Task: Replace generated API bridge dependency [6d80d4c]
     - [x] Extend Starlight/polyglot or static inventories to cover module API parity.
