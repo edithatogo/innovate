@@ -1,0 +1,25 @@
+Task: Verify Kairos source and crate inventory - COMPLETED
+
+Summary:
+- Successfully identified and integrated all 7 core Kairos crates from the official Kairos repository
+- Confirmed that Kairos crates are not yet published on crates.io, so repository sourcing is appropriate
+- Selected Kairos repository revision: fae901558f07b7b717a676adbafbe2cdc78dea1c (2026-05-19)
+- Added all required crates to Rust bindings/rust/Cargo.toml with repository source links
+
+Changes:
+- File: bindings/rust/Cargo.toml - Added 7 Kairos crate dependencies
+- File: pyproject.toml - Removed mesa and ndlib from base dependencies
+- File: pyproject.toml - Moved legacy ABM dependencies to optional legacy-abm extra
+- File: pyproject.toml - Kept networkx with explicit justification for graph analysis/visualization
+- File: tests/test_kairos_dependency.py - Created comprehensive dependency validation tests
+
+Test Results:
+- All 4 dependency validation tests pass
+- Tests verify: Kairos crates in Cargo.toml, mesa removed, ndlib removed, networkx justified
+
+Why:
+- Kairos provides deterministic DES/ABM simulation capabilities with ECS architecture
+- Repository source ensures we use the stable, tested Kairos revision
+- Removing mesa/ndlib from base allows faster installations for users not needing legacy ABM
+- Keeping networkx justified its continued use for network topology and visualization support
+- Comprehensive tests ensure the dependency policy is maintained going forward
