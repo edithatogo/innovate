@@ -5,10 +5,10 @@
 - [x] Task: Classify remaining RST files
     - [x] Group files as tutorial, bridge, generated API, template, archive, or evidence.
     - [x] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Write fail-closed active-RST tests
-    - [ ] Add an allowlist-based guard for any retained RST file.
-    - [ ] Confirm tests fail for unclassified active RST files.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Write fail-closed active-RST tests [53ebe96]
+    - [x] Add an allowlist-based guard for any retained RST file.
+    - [x] Confirm tests fail for unclassified active RST files.
+    - [x] Commit task changes and attach the required Conductor git note.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Remaining RST Audit' (Protocol in workflow.md)
 
 ## Phase 2: Tutorial and Bridge Migration
