@@ -13,16 +13,16 @@
     - [x] Commit task changes and attach the required Conductor git note.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Scenario Contract' (Protocol in workflow.md)
 
-## Phase 2 Checkpoint: [checkpoint: pending]
+## Phase 2 Checkpoint: [checkpoint: deefb7d]
 
 ## Phase 2: Experiment Runner
 
-- [ ] Task: Implement scenario execution
-    - [ ] Add runner APIs for scenario grids, deterministic seeds, diagnostics, and artifact export.
-    - [ ] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Implement scenario comparison summaries
-    - [ ] Add ranking, incremental effect, threshold timing, and uncertainty summaries.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Implement scenario execution [deefb7d]
+    - [x] Add runner APIs for scenario grids, deterministic seeds, diagnostics, and artifact export.
+    - [x] Commit task changes and attach the required Conductor git note.
+- [x] Task: Implement scenario comparison summaries [deefb7d]
+    - [x] Add ranking, incremental effect, threshold timing, and uncertainty summaries.
+    - [x] Commit task changes and attach the required Conductor git note.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Experiment Runner' (Protocol in workflow.md)
 
 ## Phase 3 Checkpoint: [checkpoint: pending]
