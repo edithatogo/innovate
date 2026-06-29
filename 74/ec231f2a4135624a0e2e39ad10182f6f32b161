@@ -1,0 +1,44 @@
+Task: Add Kairos Rust/toolchain dependency plumbing - COMPLETED
+
+Summary:
+- Integrated Kairos crates into Rust build system with git dependencies
+- Verified Cargo.lock properly records all dependencies and revisions
+- Created comprehensive validation tests ensuring build plumbing works
+
+Implementation Details:
+1. Rust Dependencies Added (bindings/rust/Cargo.toml):
+   - kairo-ecs-types v0.0.0 (repository source)
+   - kairo-ecs-core v0.0.0 (repository source)
+   - kairo-ecs-state v0.0.0 (repository source)
+   - kairo-ecs-rng v0.0.0 (repository source)
+   - kairo-ecs-des v0.1.0 (repository source)
+   - kairo-ecs-abm v0.1.0 (repository source)
+   - kairo-ecs-arrow v0.1.0 (repository source)
+   - All sourced from: https://github.com/edithatogo/kairos.git @ fae901558f07b7b717a676adbafbe2cdc78dea1c
+
+2. Bridge Crates (Gated Behind Smoke Tests):
+   - kairo-ecs-ffi, kairo-ecs-uniffi, kairo-ecs-diplomat NOT included yet
+   - Will be added only after passing stability/smoke tests
+   - Currently marked as 'in review' in Kairos, so gate is appropriate
+
+3. Build Plumbing Validation:
+   - Cargo.lock updated with all Kairos crate entries
+   - Cargo.lock records exact Kairos revision for reproducibility
+   - cargo check succeeds with Kairos dependencies integrated
+   - Build time: ~10 seconds on clean; cache hits within seconds
+
+Changes:
+- File: bindings/rust/Cargo.toml - 7 Kairos git dependencies added
+- File: bindings/rust/Cargo.lock - Auto-updated by Cargo with Kairos crates
+- File: tests/test_kairos_build_plumbing.py - 4 new validation tests
+
+Test Results:
+- 4/4 build plumbing tests pass
+- Cargo.lock properly records all dependencies and revision
+- Rust build succeeds with Kairos integration
+
+Why:
+- Git dependency allows us to use repository source until crates.io publication
+- Cargo.lock ensures reproducible builds across environments
+- Explicit revision pinning prevents accidental Kairos updates
+- Comprehensive tests validate build plumbing won't regress
