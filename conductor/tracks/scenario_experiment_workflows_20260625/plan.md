@@ -25,16 +25,16 @@
     - [x] Commit task changes and attach the required Conductor git note.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Experiment Runner' (Protocol in workflow.md)
 
-## Phase 3 Checkpoint: [checkpoint: pending]
+## Phase 3 Checkpoint: [checkpoint: ec8c129]
 
 ## Phase 3: Docs, Examples, and Release Evidence
 
-- [ ] Task: Add examples and Starlight tutorials
-    - [ ] Document policy, competition, and substitution scenario workflows.
-    - [ ] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Add release and binding evidence
-    - [ ] Record JSON/Arrow compatibility and Rust/polyglot status for scenario payloads.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Add examples and Starlight tutorials [ec8c129]
+    - [x] Document policy, competition, and substitution scenario workflows.
+    - [x] Commit task changes and attach the required Conductor git note.
+- [x] Task: Add release and binding evidence [0545b8e]
+    - [x] Record JSON/Arrow compatibility and Rust/polyglot status for scenario payloads.
+    - [x] Commit task changes and attach the required Conductor git note.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Docs, Examples, and Release Evidence' (Protocol in workflow.md)
 
 ## Phase 4 Checkpoint: [checkpoint: pending]
