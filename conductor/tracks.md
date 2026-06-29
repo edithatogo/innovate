@@ -409,7 +409,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Polyglot Registry Acceptance Completion**
+- [~] **Track: Polyglot Registry Acceptance Completion**
 *Link: [./tracks/polyglot_registry_acceptance_completion_20260625/](./tracks/polyglot_registry_acceptance_completion_20260625/)*
 
 ---
