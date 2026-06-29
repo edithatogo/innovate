@@ -31,10 +31,10 @@
 
 ## Phase 3: Docs, Examples, and Claim Policy
 
-- [x] Task: Add docs and examples
+- [x] Task: Add docs and examples (8152be0)
     - [x] Document causal policy evaluation workflows in Starlight with assumptions and limitations.
     - [x] Commit task changes and attach the required Conductor git note.
-- [x] Task: Wire model cards and release evidence
+- [x] Task: Wire model cards and release evidence (8152be0)
     - [x] Add model-card entries and release-claim safeguards.
     - [x] Commit task changes and attach the required Conductor git note.
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Docs, Examples, and Claim Policy' (Protocol in workflow.md)
