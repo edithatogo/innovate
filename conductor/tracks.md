@@ -404,7 +404,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Rust-Native Ownership Release Proof**
+- [~] **Track: Rust-Native Ownership Release Proof**
 *Link: [./tracks/rust_native_ownership_release_proof_20260625/](./tracks/rust_native_ownership_release_proof_20260625/)*
 
 ---
