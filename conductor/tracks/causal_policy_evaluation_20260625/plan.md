@@ -27,7 +27,7 @@
     - [x] Commit task changes and attach the required Conductor git note.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Evaluation Workflows' (Protocol in workflow.md)
 
-## Phase 3 Checkpoint: [checkpoint: pending]
+## Phase 3 Checkpoint: [checkpoint: ace9d18]
 
 ## Phase 3: Docs, Examples, and Claim Policy
 
