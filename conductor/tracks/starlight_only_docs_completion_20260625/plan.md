@@ -11,7 +11,7 @@
     - [x] Commit task changes and attach the required Conductor git note.
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Remaining RST Audit' (Protocol in workflow.md)
 
-## Phase 2: Tutorial and Bridge Migration
+## Phase 2: Tutorial and Bridge Migration [checkpoint: b4123d3]
 
 - [x] Task: Migrate core contract tutorials [706084d]
     - [x] Promote functional kernel, diagnostics, and Arrow tutorials to Starlight current/latest pages.
