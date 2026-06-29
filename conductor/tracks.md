@@ -434,8 +434,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [x] **Track: Causal Policy Evaluation** *(Completed)*
-*Link: [./archive/causal_policy_evaluation_20260625/](./archive/causal_policy_evaluation_20260625/)*
+- [~] **Track: Causal Policy Evaluation** *(In Progress)*
+*Link: [./tracks/causal_policy_evaluation_20260625/](./tracks/causal_policy_evaluation_20260625/)*
 
 ---
 
