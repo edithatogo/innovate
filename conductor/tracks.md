@@ -409,12 +409,12 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Polyglot Registry Acceptance Completion**
-*Link: [./tracks/polyglot_registry_acceptance_completion_20260625/](./tracks/polyglot_registry_acceptance_completion_20260625/)*
+- [x] **Track: Polyglot Registry Acceptance Completion** *(Completed)*
+*Link: [./archive/polyglot_registry_acceptance_completion_20260625/](./archive/polyglot_registry_acceptance_completion_20260625/)*
 
 ---
 
-- [ ] **Track: Bleeding-Edge Dependency Modernization**
+- [~] **Track: Bleeding-Edge Dependency Modernization**
 *Link: [./tracks/bleeding_edge_dependency_modernization_20260625/](./tracks/bleeding_edge_dependency_modernization_20260625/)*
 
 ---
@@ -429,35 +429,35 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Scenario Experiment Workflows**
+- [~] **Track: Scenario Experiment Workflows**
 *Link: [./tracks/scenario_experiment_workflows_20260625/](./tracks/scenario_experiment_workflows_20260625/)*
 
 ---
 
-- [ ] **Track: Causal Policy Evaluation**
+- [~] **Track: Causal Policy Evaluation**
 *Link: [./tracks/causal_policy_evaluation_20260625/](./tracks/causal_policy_evaluation_20260625/)*
 
 ---
 
-- [ ] **Track: Model Validation and Benchmark Expansion**
+- [~] **Track: Model Validation and Benchmark Expansion**
 *Link: [./tracks/model_validation_benchmark_expansion_20260625/](./tracks/model_validation_benchmark_expansion_20260625/)*
 
 ---
 
-- [ ] **Track: Kairos Dependency Inclusion**
+- [~] **Track: Kairos Dependency Inclusion**
 *Link: [./tracks/kairos_dependency_inclusion_20260626/](./tracks/kairos_dependency_inclusion_20260626/)*
 
 ---
 
-- [ ] **Track: Kairos ABM and Network Simulation Migration**
+- [~] **Track: Kairos ABM and Network Simulation Migration**
 *Link: [./tracks/kairos_abm_network_simulation_migration_20260625/](./tracks/kairos_abm_network_simulation_migration_20260625/)*
 
 ---
 
-- [ ] **Track: Data Ingestion and Provenance Connectors**
+- [~] **Track: Data Ingestion and Provenance Connectors**
 *Link: [./tracks/data_ingestion_provenance_connectors_20260625/](./tracks/data_ingestion_provenance_connectors_20260625/)*
 
 ---
 
-- [ ] **Track: Explainability, Sensitivity, and Decision Reports**
+- [~] **Track: Explainability, Sensitivity, and Decision Reports**
 *Link: [./tracks/explainability_sensitivity_decision_reports_20260625/](./tracks/explainability_sensitivity_decision_reports_20260625/)*
