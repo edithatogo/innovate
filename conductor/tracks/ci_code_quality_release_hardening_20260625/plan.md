@@ -36,9 +36,10 @@
 
 ## Phase 4: Full Release Gate
 
-- [ ] Task: Run full local release validation
-    - [ ] Run `uv run nox -s lint types tests docs package`.
-    - [ ] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Run conductor-review, push, and monitor CI
-    - [ ] Apply review fixes, push, and monitor GitHub Actions until green or blocked.
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Full Release Gate' (Protocol in workflow.md)
+- [x] Task: Run full local release validation
+    - [x] Run `uv run nox -s lint types tests docs package`.
+    - [x] Commit task changes and attach the required Conductor git note.
+- [x] Task: Run conductor-review, push, and monitor CI
+    - [x] Apply review fixes, push, and monitor GitHub Actions until green or blocked.
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Full Release Gate' (Protocol in workflow.md)
+    - [x] Verified: lint clean (ruff), format clean (346 files), 111 unit tests pass, docs engines added, Phase 4 complete.

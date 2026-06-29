@@ -188,12 +188,27 @@ def test_nox_default_sessions_include_all_required_gates() -> None:
     for node in module.body:
         if isinstance(node, ast.Assign):
             for target in node.targets:
-                if isinstance(target, ast.Attribute) and target.attr == "sessions":
-                    if isinstance(target.value, ast.Attribute) and target.value.attr == "options":
-                        if isinstance(target.value.value, ast.Name) and target.value.value.id == "nox":
-                            options_sessions = {ast.literal_eval(e) for e in node.value.elts}
+                if (
+                    isinstance(target, ast.Attribute)
+                    and target.attr == "sessions"
+                    and isinstance(target.value, ast.Attribute)
+                    and target.value.attr == "options"
+                    and isinstance(target.value.value, ast.Name)
+                    and target.value.value.id == "nox"
+                ):
+                    options_sessions = {ast.literal_eval(e) for e in node.value.elts}
     assert options_sessions is not None
-    required = {"lint", "types", "tests", "docs", "package", "security",
-                "version_sync", "coverage", "mutation",
-                "dependency_dashboard", "binding_conformance"}
+    required = {
+        "lint",
+        "types",
+        "tests",
+        "docs",
+        "package",
+        "security",
+        "version_sync",
+        "coverage",
+        "mutation",
+        "dependency_dashboard",
+        "binding_conformance",
+    }
     assert required.issubset(options_sessions)

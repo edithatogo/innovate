@@ -28,8 +28,7 @@ def test_package_json_starlight_specifier_matches_target() -> None:
     package = json.loads(PACKAGE_PATH.read_text())
     specifier = package["dependencies"]["@astrojs/starlight"]
     assert specifier == EXPECTED_STARLIGHT_SPECIFIER, (
-        f"package.json has @astrojs/starlight {specifier}, "
-        f"expected {EXPECTED_STARLIGHT_SPECIFIER} per target decision"
+        f"package.json has @astrojs/starlight {specifier}, expected {EXPECTED_STARLIGHT_SPECIFIER} per target decision"
     )
 
 
@@ -37,8 +36,7 @@ def test_migration_manifest_starlight_matches_target() -> None:
     """The migration manifest baseline must reflect the promoted Starlight version."""
     manifest = json.loads(MANIFEST_PATH.read_text())
     assert manifest["baseline"]["starlight"] == EXPECTED_MANIFEST_STARLIGHT, (
-        f"Manifest baseline starlight is {manifest['baseline']['starlight']}, "
-        f"expected {EXPECTED_MANIFEST_STARLIGHT}"
+        f"Manifest baseline starlight is {manifest['baseline']['starlight']}, expected {EXPECTED_MANIFEST_STARLIGHT}"
     )
 
 
@@ -49,18 +47,18 @@ def test_package_json_lockfile_starlight_specifiers_agree() -> None:
     assert lines, "Could not find @astrojs/starlight entry in lockfile"
 
     package_spec = package["dependencies"]["@astrojs/starlight"]
-    spec_line = next((l for l in lines if l.startswith("specifier:")), "")
+    spec_line = next((line for line in lines if line.startswith("specifier:")), "")
     lockfile_spec = spec_line.replace("specifier:", "").strip().strip("'\"")
 
     assert package_spec == lockfile_spec, (
-        f"package.json specifier ({package_spec}) does not match "
-        f"lockfile specifier ({lockfile_spec})"
+        f"package.json specifier ({package_spec}) does not match lockfile specifier ({lockfile_spec})"
     )
 
 
 def _lockfile_starlight_lines(lockfile_text: str) -> list[str]:
     """Extract lines from the @astrojs/starlight entry in the lockfile."""
     import re
+
     match = re.search(
         r"@astrojs/starlight':?\n((?:\s+[^\n]+\n)+)",
         lockfile_text,
@@ -75,12 +73,10 @@ def test_lockfile_starlight_resolved_version_is_41() -> None:
     lines = _lockfile_starlight_lines(LOCKFILE_PATH.read_text())
     assert lines, "Could not find @astrojs/starlight entry in lockfile"
 
-    spec_line = next((l for l in lines if l.startswith("specifier:")), "")
-    ver_line = next((l for l in lines if l.startswith("version:")), "")
+    spec_line = next((line for line in lines if line.startswith("specifier:")), "")
+    ver_line = next((line for line in lines if line.startswith("version:")), "")
 
-    assert "0.41." in ver_line, (
-        f"Lockfile resolved to Starlight {ver_line}, expected 0.41.x"
-    )
+    assert "0.41." in ver_line, f"Lockfile resolved to Starlight {ver_line}, expected 0.41.x"
 
 
 def test_target_decision_artifact_is_present() -> None:

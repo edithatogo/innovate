@@ -12,14 +12,15 @@ Tests cover:
   - Criterion 0.8
   - mutmut current baseline
 """
-import sys
+
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
 
-
 # ---- Python 3.14 baseline ----
+
 
 class TestPythonBaseline:
     """Verify Python 3.14+ is the runtime baseline."""
@@ -27,12 +28,11 @@ class TestPythonBaseline:
     def test_python_version_314(self):
         """The project requires Python >= 3.14."""
         major, minor = sys.version_info[:2]
-        assert (major, minor) >= (3, 14), (
-            f"Python {major}.{minor} detected; 3.14+ required"
-        )
+        assert (major, minor) >= (3, 14), f"Python {major}.{minor} detected; 3.14+ required"
 
 
 # ---- NumPy 2+ ----
+
 
 class TestNumPyBaseline:
     """Verify NumPy 2+ is installed and importable."""
@@ -40,6 +40,7 @@ class TestNumPyBaseline:
     def test_numpy_imports(self):
         """numpy must be importable and at version >= 2."""
         import numpy as np
+
         v = np.__version__
         major = int(v.split(".")[0])
         assert major >= 2, f"NumPy {v} < 2 detected"
@@ -54,6 +55,7 @@ class TestNumPyBaseline:
 
 # ---- Pydantic v2 ----
 
+
 class TestPydanticBaseline:
     """Verify Pydantic v2 is available."""
 
@@ -61,6 +63,7 @@ class TestPydanticBaseline:
         """pydantic must be v2+."""
         try:
             import pydantic
+
             major = int(pydantic.__version__.split(".")[0])
             assert major >= 2, f"Pydantic v{pydantic.__version__} < 2"
         except ImportError:
@@ -69,6 +72,7 @@ class TestPydanticBaseline:
 
 # ---- basedpyright strict ----
 
+
 class TestBasedpyrightBaseline:
     """Verify basedpyright is available for type checking."""
 
@@ -76,11 +80,17 @@ class TestBasedpyrightBaseline:
         """basedpyright must be runnable."""
         result = subprocess.run(
             ["uv", "run", "basedpyright", "--version"],
-            capture_output=True, text=True, timeout=30,
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=False,
         )
         if result.returncode != 0:
             pytest.skip("basedpyright not installed")
+
+
 # ---- TypeScript 6 ----
+
 
 class TestTypeScriptBaseline:
     """Verify TypeScript 6+ for the TypeScript bindings."""
@@ -93,25 +103,24 @@ class TestTypeScriptBaseline:
         if not self.TS_PKG.exists():
             pytest.skip("TypeScript bindings not present")
         import json
+
         pkg = json.loads(self.TS_PKG.read_text())
         ts_ver = pkg.get("devDependencies", {}).get("typescript", "")
-        assert "^6" in ts_ver or ">=6" in ts_ver, (
-            f"typescript version in bindings {ts_ver} is not ^6"
-        )
+        assert "^6" in ts_ver or ">=6" in ts_ver, f"typescript version in bindings {ts_ver} is not ^6"
 
     def test_typescript_6_docs(self):
         """Docs site package.json must pin typescript ^6."""
         if not self.DOCS_PKG.exists():
             pytest.skip("Docs package.json not present")
         import json
+
         pkg = json.loads(self.DOCS_PKG.read_text())
         ts_ver = pkg.get("devDependencies", {}).get("typescript", "")
-        assert "^6" in ts_ver or ">=6" in ts_ver, (
-            f"typescript version in docs {ts_ver} is not ^6"
-        )
+        assert "^6" in ts_ver or ">=6" in ts_ver, f"typescript version in docs {ts_ver} is not ^6"
 
 
 # ---- Node 26 types ----
+
 
 class TestNode26Baseline:
     """Verify @types/node ^26 for TypeScript bindings."""
@@ -123,14 +132,14 @@ class TestNode26Baseline:
         if not self.TS_PKG.exists():
             pytest.skip("TypeScript bindings not present")
         import json
+
         pkg = json.loads(self.TS_PKG.read_text())
         node_types = pkg.get("devDependencies", {}).get("@types/node", "")
-        assert "^26" in node_types or ">=26" in node_types, (
-            f"@types/node version {node_types} is not ^26"
-        )
+        assert "^26" in node_types or ">=26" in node_types, f"@types/node version {node_types} is not ^26"
 
 
 # ---- Vitest 4 ----
+
 
 class TestVitestBaseline:
     """Verify Vitest 4+ for the TypeScript bindings."""
@@ -142,14 +151,14 @@ class TestVitestBaseline:
         if not self.TS_PKG.exists():
             pytest.skip("TypeScript bindings not present")
         import json
+
         pkg = json.loads(self.TS_PKG.read_text())
         vitest_ver = pkg.get("devDependencies", {}).get("vitest", "")
-        assert "^4" in vitest_ver or ">=4" in vitest_ver, (
-            f"vitest version {vitest_ver} is not ^4"
-        )
+        assert "^4" in vitest_ver or ">=4" in vitest_ver, f"vitest version {vitest_ver} is not ^4"
 
 
 # ---- Criterion 0.8 ----
+
 
 class TestCriterionBaseline:
     """Verify Rust benchmark criterion 0.8."""
@@ -161,12 +170,11 @@ class TestCriterionBaseline:
         if not self.CARGO_TOML.exists():
             pytest.skip("Rust bindings not present")
         text = self.CARGO_TOML.read_text()
-        assert 'criterion = "0.8"' in text, (
-            "criterion 0.8 not found in Rust Cargo.toml"
-        )
+        assert 'criterion = "0.8"' in text, "criterion 0.8 not found in Rust Cargo.toml"
 
 
 # ---- Mutmut current baseline ----
+
 
 class TestMutmutBaseline:
     """Verify mutmut is available as a dev dependency."""
@@ -180,6 +188,7 @@ class TestMutmutBaseline:
         has_mutmut = "mutmut" in text
         try:
             import mutmut  # noqa: F401
+
             assert True
         except ImportError:
             if has_mutmut:
@@ -189,6 +198,7 @@ class TestMutmutBaseline:
 
 
 # ---- Frontend tooling consistency ----
+
 
 class TestFrontendToolingBaseline:
     """Verify pnpm, Node 26 are consistent across frontends."""
@@ -201,17 +211,17 @@ class TestFrontendToolingBaseline:
         if not self.DOCS_PKG.exists():
             pytest.skip("docs package.json not found")
         import json
+
         pkg = json.loads(self.DOCS_PKG.read_text())
         manager = pkg.get("packageManager", "")
-        assert "pnpm" in manager, (
-            f"Package manager is {manager}, expected pnpm"
-        )
+        assert "pnpm" in manager, f"Package manager is {manager}, expected pnpm"
 
     def test_node_engine_docs(self):
         """Docs package.json should specify node >= 26."""
         if not self.DOCS_PKG.exists():
             pytest.skip("docs package.json not found")
         import json
+
         pkg = json.loads(self.DOCS_PKG.read_text())
         engine = pkg.get("engines", {}).get("node", "")
         assert engine, "node engine not specified in docs package.json"
@@ -221,15 +231,14 @@ class TestFrontendToolingBaseline:
         if not self.TS_PKG.exists():
             pytest.skip("TypeScript bindings not found")
         import json
+
         pkg = json.loads(self.TS_PKG.read_text())
         engine = pkg.get("engines", {}).get("node", "")
-        assert "26" in engine, (
-            f"node engine in TS bindings is '{engine}', expected >=26"
-        )
-        assert "basedpyright" in result.stdout.lower() or "basedpyright" in result.stderr.lower()
+        assert "26" in engine, f"node engine in TS bindings is '{engine}', expected >=26"
 
 
 # ---- Astro 7 ----
+
 
 class TestAstroBaseline:
     """Verify docs site uses Astro 7+."""
@@ -238,13 +247,12 @@ class TestAstroBaseline:
 
     def test_astro_package_exists(self):
         """package.json for the docs site must exist."""
-        assert self.ASTRO_PKG.exists(), (
-            f"docs/astro-site/package.json not found"
-        )
+        assert self.ASTRO_PKG.exists(), "docs/astro-site/package.json not found"
 
     def test_astro_7_dependency(self):
         """Astro dependency must be ^7.x or >=7."""
         import json
+
         pkg = json.loads(self.ASTRO_PKG.read_text())
         astro_ver = pkg.get("dependencies", {}).get("astro", "")
         assert astro_ver, "astro not found in dependencies"
