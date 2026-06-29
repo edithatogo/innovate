@@ -39,7 +39,7 @@
     - [x] Commit task changes and attach the required Conductor git note.
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Docs, Examples, and Claim Policy' (Protocol in workflow.md)
 
-## Phase 4 Checkpoint: [checkpoint: pending]
+## Phase 4 Checkpoint: [checkpoint: c90a588]
 
 ## Phase 4: Review, Push, and CI
 
