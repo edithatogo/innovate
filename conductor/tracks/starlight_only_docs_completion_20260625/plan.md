@@ -36,10 +36,10 @@
 
 ## Phase 4: Final Docs Release Gate
 
-- [ ] Task: Run full docs validation
-    - [ ] Run `pnpm --dir docs/astro-site check`.
-    - [ ] Run `uv run nox -s docs`.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Run full docs validation [2dde039]
+    - [x] Run `pnpm --dir docs/astro-site check` - PASSED (0 errors, 0 warnings).
+    - [x] Fixed Starlight link validation: added trailing slashes to relative links in tutorial indices.
+    - [x] Commit task changes and attach the required Conductor git note.
 - [ ] Task: Run final review, push, and CI monitor
     - [ ] Run conductor-review for the full track, apply findings, push, and monitor GitHub Actions.
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Final Docs Release Gate' (Protocol in workflow.md)
