@@ -10,8 +10,8 @@ This section hosts the tutorial surface in Starlight and is the canonical target
 
 Current tutorial areas:
 
-* **Core contracts**: [Functional Kernel Contract](functional-kernel-contract.md), [Diagnostics Contract](diagnostics-contract.md), and [Arrow Interchange](arrow-interchange.md)
-* **Modeling and Integration**: [Norton-Bass](norton-bass.md), [Advanced Diffusion](advanced-diffusion-inference.md), [Bayesian Fitting](bayesian-fitter.md), [Multi-Product](multi-product.md), [Seasonal Data](seasonal-data.md), [Counterfactual Analysis](counterfactual-analysis.md), [JAX Backend](jax-backend.md), and [NDlib Integration](ndlib-integration.md)
+* **Core contracts**: [Functional Kernel Contract](/latest/tutorials/functional-kernel-contract/), [Diagnostics Contract](/latest/tutorials/diagnostics-contract/), and [Arrow Interchange](/latest/tutorials/arrow-interchange/)
+* **Modeling and Integration**: [Norton-Bass](/latest/tutorials/norton-bass/), [Advanced Diffusion](/latest/tutorials/advanced-diffusion-inference/), [Bayesian Fitting](/latest/tutorials/bayesian-fitter/), [Multi-Product](/latest/tutorials/multi-product/), [Seasonal Data](/latest/tutorials/seasonal-data/), [Counterfactual Analysis](/latest/tutorials/counterfactual-analysis/), [JAX Backend](/latest/tutorials/jax-backend/), and [NDlib Integration](/latest/tutorials/ndlib-integration/)
 * Core usage patterns
 * Benchmark workflows
 * Plugin API stability
