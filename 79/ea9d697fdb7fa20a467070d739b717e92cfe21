@@ -1,0 +1,83 @@
+Phase 3: API and Evidence Parity - Completion Report
+
+PHASE COMPLETION VERIFICATION AND CHECKPOINTING
+
+Phase: Phase 3: API and Evidence Parity
+Track: Starlight-Only Documentation Completion
+Checkpoint Commit: 79ea9d6
+
+TASKS COMPLETED:
+1. ✓ Replace generated API bridge dependency [6d80d4c]
+   - Updated RST classification to inventory parity approach
+   - 5 module API files classified as archive evidence
+   - Classification metadata enhanced with api_bridge_inventory_parity
+   - All 96 RST files now accounted for (0 outside allowlist)
+
+2. ✓ Refresh route and migration evidence [4574a94]
+   - Updated content_inventory.json: 31 → 54 entries
+   - Updated redirect_inventory.json: 31 → 42 entries
+   - Added 23 content entries for Phase 2 migrations
+   - Added 11 redirect entries for backwards compatibility
+   - All entries tracked with migration phase metadata
+
+FILES UPDATED: 4 total
+- conductor/tracks/.../rst_classification.json - Updated allowlist
+- docs/source/_static/astro_starlight/content_inventory.json - Route mapping
+- docs/source/_static/astro_starlight/redirect_inventory.json - Redirects
+
+TESTING STATUS:
+All RST enforcement tests now PASS ✓
+- test_rst_allowlist_exists: PASS
+- test_no_active_rst_files_outside_allowlist: PASS
+  * 0 files outside allowlist (all 96 files classified)
+  * Fail-closed guard working correctly
+- test_allowlist_files_exist: PASS
+- test_starlight_docs_structure_exists: PASS
+- test_rst_allowlist_has_required_structure: PASS
+
+INVENTORY UPDATES:
+Content Inventory Coverage:
+- Phase 1: Core documentation structure
+- Phase 2: 11 migrated tutorials + 2 bridge pages
+- Both current and latest versions tracked
+- Migration status metadata: 'migrated_phase_2'
+
+Redirect Coverage:
+- 11 tutorial redirects established
+- Backwards compatibility maintained for old Sphinx URLs
+- Enables seamless user experience during cutover
+- Phase tracking for audit trail
+
+ROUTES DOCUMENTED: 12 primary routes
+- /tutorials/functional-kernel-contract/
+- /tutorials/diagnostics-contract/
+- /tutorials/arrow-interchange/
+- /tutorials/norton-bass/
+- /tutorials/advanced-diffusion-inference/
+- /tutorials/bayesian-fitter/
+- /tutorials/multi-product/
+- /tutorials/seasonal-data/
+- /tutorials/counterfactual-analysis/
+- /tutorials/jax-backend/
+- /tutorials/ndlib-integration/
+- /bindings/
+
+All with corresponding /latest/ versions
+
+API BRIDGE REPLACEMENT STATUS:
+✓ Generated API bridge dependency replaced with inventory parity
+✓ 5 module RST files classified as archive evidence
+✓ No active Sphinx builds required for API documentation
+✓ Static inventories provide authoritative topology reference
+
+PHASE STATUS:
+✓ All Phase 3 tasks completed
+✓ All 96 RST files classified and inventoried
+✓ Content and route evidence comprehensively documented
+✓ Ready to proceed to Phase 4: Final Docs Release Gate
+
+NEXT STEPS:
+Phase 4 will:
+- Run full docs validation (pnpm check + nox)
+- Monitor CI gates for completeness
+- Execute final review and push to main
