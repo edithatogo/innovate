@@ -19,10 +19,10 @@
 
 ## Phase 2: Evaluation Workflows
 
-- [x] Task: Implement evaluation summaries
+- [x] Task: Implement evaluation summaries (0b2821d)
     - [x] Add pre/post, event-study trajectory, counterfactual, and heterogeneous-effect summaries.
     - [x] Commit task changes and attach the required Conductor git note.
-- [x] Task: Add uncertainty and diagnostics
+- [x] Task: Add uncertainty and diagnostics (0b2821d)
     - [x] Add uncertainty metadata, sensitivity notes, and diagnostic warnings.
     - [x] Commit task changes and attach the required Conductor git note.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Evaluation Workflows' (Protocol in workflow.md)
