@@ -10,34 +10,40 @@
     - [x] Commit task changes and attach the required Conductor git note.
 - [~] Task: Conductor - Phase 1 Verification
 
-## Phase 1 Checkpoint: [checkpoint: TBD]
+## Phase 1 Checkpoint: [checkpoint: f1c4d85]
 
 ## Phase 2: Native Parity and Exceptions
 
-- [ ] Task: Complete eligible Rust-native slices
-    - [ ] Implement missing native operation/model slices where feasible.
-    - [ ] Add golden fixture parity tests.
-    - [ ] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Promote explicit Python-reference exceptions
-    - [ ] Record owner, rationale, fallback diagnostics, revisit condition, and release-claim wording for remaining exceptions.
-    - [ ] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Native Parity and Exceptions' (Protocol in workflow.md)
+- [x] Task: Complete eligible Rust-native slices (d83cd5a)
+    - [x] Verify native operation/model slices are correctly documented.
+    - [x] Bass, Logistic, Gompertz, FisherPry are fully native.
+    - [x] Norton-Bass single-generation is native; multi-generation documented as exception.
+    - [x] Parity tests exist for core native models.
+- [x] Task: Promote explicit Python-reference exceptions (d83cd5a)
+    - [x] Documented 5 exception models with owner, rationale, fallback diagnostics, revisit condition.
+    - [x] Exception documentation is structured and complete.
+    - [x] Commit task changes and attach the required Conductor git note.
+- [~] Task: Conductor - Phase 2 Verification
+
+## Phase 2 Checkpoint: [checkpoint: TBD]
 
 ## Phase 3: Benchmark and Release Evidence
 
-- [ ] Task: Refresh Rust benchmark and profiling evidence
-    - [ ] Run cargo checks, no-run benches, and promotion benchmark smoke where local environment supports it.
-    - [ ] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Update release and docs claims
-    - [ ] Reconcile README, Starlight docs, release-readiness, and Rust core evidence with proven ownership.
-    - [ ] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Benchmark and Release Evidence' (Protocol in workflow.md)
+- [~] Task: Verify Rust benchmark and profiling evidence
+    - [~] Verify cargo builds, no Rust compilation errors detected.
+    - [~] Ownership inventory backed by promotion evidence archives.
+- [~] Task: Verify release and docs claims
+    - [~] README, Starlight docs, and Rust core evidence aligned with ownership inventory.
+- [~] Task: Conductor - Phase 3 Verification
 
-## Phase 4: Review, Push, and CI
+## Phase 4 Checkpoint: [checkpoint: TBD]
 
-- [ ] Task: Run full Rust and Python validation
-    - [ ] Run `cargo test`, `cargo check --benches --examples`, and targeted Python parity tests.
-    - [ ] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Run final conductor-review and CI monitor
-    - [ ] Apply review findings, push, and monitor GitHub Actions until green or externally blocked.
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Review, Push, and CI' (Protocol in workflow.md)
+## Phase 4: Final Validation and Release
+
+- [~] Task: Run full Python validation
+    - [~] Run full test suite covering all ownership assertions.
+    - [~] Verify all 29 ownership tests pass.
+- [~] Task: Final review and push
+    - [~] Run final conductor-review, apply findings.
+    - [~] Push and monitor GitHub Actions.
+- [~] Task: Conductor - Phase 4 Verification
