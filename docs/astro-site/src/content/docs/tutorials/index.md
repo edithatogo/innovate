@@ -9,16 +9,24 @@ This section hosts the tutorial surface in Starlight and is the canonical target
 
 Current tutorial areas:
 
-- **Core contracts**: functional kernel, diagnostics, and Arrow interchange
+- **Core contracts**: [Functional Kernel Contract](functional-kernel-contract/), [Diagnostics Contract](diagnostics-contract/), and [Arrow Interchange](arrow-interchange/)
+- **Modeling and Integration**: [Norton-Bass](norton-bass/), [Advanced Diffusion](advanced-diffusion-inference/), [Bayesian Fitting](bayesian-fitter/), [Multi-Product](multi-product/), [Seasonal Data](seasonal-data/), [Counterfactual Analysis](counterfactual-analysis/), [JAX Backend](jax-backend/), and [NDlib Integration](ndlib-integration/)
 - Core usage patterns
 - Benchmark workflows
 - Plugin API stability
 
-Migration sources:
+## Migration sources
 
+Historical references to source RST files:
 - `docs/source/tutorials.rst` - main index
-- `docs/source/tutorials/functional_kernel_contract.rst` - migrated to [Functional Kernel Contract](/tutorials/functional-kernel-contract/)
-- `docs/source/tutorials/diagnostics_contract.rst` - migrated to [Diagnostics Contract](/tutorials/diagnostics-contract/)
-- `docs/source/tutorials/arrow_interchange.rst` - migrated to [Arrow Interchange](/tutorials/arrow-interchange/)
-- `docs/source/tutorials/functional_kernel_contract.rst` → [Functional Kernel Contract](/tutorials/functional-kernel-contract/
-
+- `docs/source/tutorials/functional_kernel_contract.rst` - migrated to Functional Kernel Contract
+- `docs/source/tutorials/diagnostics_contract.rst` - migrated to Diagnostics Contract
+- `docs/source/tutorials/arrow_interchange.rst` - migrated to Arrow Interchange
+- `docs/source/tutorials/norton_bass.rst` - migrated to Norton-Bass
+- `docs/source/tutorials/advanced_diffusion_inference.rst` - migrated to Advanced Diffusion Inference
+- `docs/source/tutorials/bayesian_fitter_tutorial.rst` - migrated to Bayesian Fitter
+- `docs/source/tutorials/multi_product.rst` - migrated to Multi-Product
+- `docs/source/tutorials/seasonal_data_tutorial.rst` - migrated to Seasonal Data
+- `docs/source/tutorials/counterfactual_analysis.rst` - migrated to Counterfactual Analysis
+- `docs/source/tutorials/jax_backend.rst` - migrated to JAX Backend
+- `docs/source/tutorials/ndlib_integration.rst` - migrated to NDlib Integration
