@@ -1,0 +1,30 @@
+Task: Implement evaluation summaries
+
+Summary:
+Implemented evaluation workflows with complete uncertainty and diagnostics support.
+
+Created Files:
+- src/innovate/causal/evaluation.py - Pre/post, event-study, counterfactual summaries
+- src/innovate/causal/diagnostics.py - Uncertainty and diagnostic tools
+
+Key Components:
+1. PrePostSummary: Difference-in-differences with pre/post comparison
+2. EventStudyTrajectory: Event-study analysis with parallel trends assumption
+3. CounterfactualComparison: Compare actual vs counterfactual outcomes
+4. HeterogeneousEffectsSummary: Subgroup treatment effects with CIs
+5. UncertaintyMetadata: Confidence interval tracking with significance testing
+6. DiagnosticsSummary: Collection of warnings and diagnostic notes
+7. CovariateBalance: Standardized mean difference calculation and balance testing
+
+Test Results: 38 passing (7 new Phase 2 tests)
+Coverage: Evaluation summaries, uncertainty quantification, diagnostics
+
+Design Decisions:
+- Modular summary classes for different analysis types
+- SMD-based covariate balance with configurable thresholds
+- CI construction from point estimates and SEs
+- Automatic parallel trends testing in event studies
+
+Why:
+Enables comprehensive causal effect evaluation with proper uncertainty
+quantification and diagnostic checks needed for policy reports.
