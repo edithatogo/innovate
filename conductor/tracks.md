@@ -429,8 +429,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [x] **Track: Scenario Experiment Workflows** *(Completed)*
-*Link: [./archive/scenario_experiment_workflows_20260625/](./archive/scenario_experiment_workflows_20260625/)*
+- [~] **Track: Scenario Experiment Workflows** *(In Progress)*
+*Link: [./tracks/scenario_experiment_workflows_20260625/](./tracks/scenario_experiment_workflows_20260625/)*
 
 ---
 
