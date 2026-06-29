@@ -1,0 +1,44 @@
+Task: Migrate core contract tutorials
+Track: Starlight-Only Documentation Completion
+Phase: Phase 2: Tutorial and Bridge Migration
+
+Summary:
+Migrated three core contract tutorials from RST to Markdown format in Starlight.
+All content preserved and now discoverable through the Starlight documentation.
+
+Changes:
+Files Created (6):
+- docs/astro-site/src/content/docs/tutorials/functional-kernel-contract.md
+- docs/astro-site/src/content/docs/tutorials/diagnostics-contract.md
+- docs/astro-site/src/content/docs/tutorials/arrow-interchange.md
+- docs/astro-site/src/content/docs/latest/tutorials/functional-kernel-contract.md
+- docs/astro-site/src/content/docs/latest/tutorials/diagnostics-contract.md
+- docs/astro-site/src/content/docs/latest/tutorials/arrow-interchange.md
+
+Files Modified (2):
+- docs/astro-site/src/content/docs/tutorials/index.md
+- docs/astro-site/src/content/docs/latest/tutorials/index.md
+
+Subtask 1: Promote functional kernel, diagnostics, and Arrow tutorials
+- ✓ Read RST files from docs/source/tutorials/
+- ✓ Converted to Markdown with proper frontmatter
+- ✓ Placed in both current and latest routes
+- ✓ Updated index pages with migration references
+
+Subtask 2: Repoint tests and evidence
+- Tests already reference code modules (not RST files)
+- No test updates required
+- Migration tracking added to tutorial indices
+
+Why:
+These core contract tutorials form the foundation of understanding kernel payloads,
+diagnostics, and cross-language interoperability. Moving them to Starlight ensures
+they are discoverable and maintainable alongside other documentation.
+
+Subtask 3: Commit and attach git note
+- ✓ Committed with descriptive message
+- ✓ Attached this verification note
+
+Remaining in Phase 2:
+- Task: Migrate modeling and integration tutorials (11 files)
+- Task: Conductor - User Manual Verification
