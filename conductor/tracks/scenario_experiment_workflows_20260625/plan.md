@@ -4,10 +4,10 @@
 
 ## Phase 1 Checkpoint: [checkpoint: pending] Scenario Contract
 
-- [ ] Task: Define scenario schemas
-    - [ ] Add tests for baseline, intervention, substitution, competition, and network scenario specs.
-    - [ ] Implement validated schema models and artifact envelopes.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Define scenario schemas [c81d673]
+    - [x] Add tests for baseline, intervention, substitution, competition, and network scenario specs.
+    - [x] Implement validated schema models and artifact envelopes.
+    - [x] Commit task changes and attach the required Conductor git note.
 - [ ] Task: Add scenario registry metadata
     - [ ] Register scenario payload families in capability/model metadata.
     - [ ] Commit task changes and attach the required Conductor git note.
