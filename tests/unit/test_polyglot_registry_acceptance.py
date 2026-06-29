@@ -5,7 +5,6 @@ Validates that registry acceptance states are accurately documented,
 receipt-gated, and properly synchronized.
 """
 
-import json
 from pathlib import Path
 
 import pytest
@@ -48,7 +47,7 @@ class TestRegistryInventory:
         assert "Owner" in content, "Registry inventory should document owners"
         # Count rows to verify completeness
         lines = content.split("\n")
-        data_rows = [l for l in lines if l.startswith("|") and "Status" not in l and "Target" not in l]
+        data_rows = [line for line in lines if line.startswith("|") and "Status" not in line and "Target" not in line]
         assert len(data_rows) > 0, "Registry inventory should have data rows"
 
     def test_all_states_have_actions(self, inventory_path):
@@ -93,7 +92,7 @@ class TestRegistryStates:
         # Count accepted entries and evidence references
         if "accepted" in content.lower():
             lines = content.split("\n")
-            accepted_lines = [l for l in lines if "accepted" in l.lower()]
+            accepted_lines = [line for line in lines if "accepted" in line.lower()]
 
             # Each accepted line should have some evidence reference
             for line in accepted_lines:
@@ -101,9 +100,8 @@ class TestRegistryStates:
                 parts = line.split("|")
                 if len(parts) > 3:
                     evidence_part = parts[3].strip()
-                    assert evidence_part and evidence_part.lower() != "none", (
-                        f"Accepted state should have evidence: {line}"
-                    )
+                    assert evidence_part, f"Accepted state should have evidence: {line}"
+                    assert evidence_part.lower() != "none", f"Accepted state should have evidence: {line}"
 
 
 class TestNoUndocumentedAcceptance:
@@ -145,7 +143,8 @@ class TestNoUndocumentedAcceptance:
                 # Evidence should not be empty or just whitespace
                 if len(parts) > 3:
                     evidence = parts[3].strip()
-                    assert len(evidence) > 0 and evidence != "-", f"Accepted state must have evidence: {line}"
+                    assert len(evidence) > 0, f"Accepted state must have evidence: {line}"
+                    assert evidence != "-", f"Accepted state must have evidence: {line}"
 
 
 class TestLanguageTargetCompleteness:

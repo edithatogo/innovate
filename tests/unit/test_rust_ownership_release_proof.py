@@ -6,13 +6,10 @@ Validates that all canonical operations and model families have:
 2. Explicit Python-reference exception with documented rationale
 """
 
-import json
 from pathlib import Path
-from unittest.mock import MagicMock, patch
 
 import pytest
 
-import innovate
 from innovate.base.base import DiffusionModel
 from innovate.compete import LotkaVolterraModel, MultiProductDiffusionModel
 from innovate.diffuse import BassModel, GompertzModel, LogisticModel
@@ -277,7 +274,7 @@ class TestOwnershipExceptionProcesses:
         # - rationale: why not native
         # - fallback_diagnostic: user message
         # - revisit_condition: future path
-        for field in exception_requirements.keys():
+        for field in exception_requirements:
             assert field in [
                 "owner",
                 "rationale",
@@ -290,7 +287,7 @@ class TestPythonRustParity:
     """Test parity between Python and Rust for native operations."""
 
     @pytest.mark.parametrize(
-        "model_class,model_key",
+        ("model_class", "model_key"),
         [
             (BassModel, "bass"),
             (LogisticModel, "logistic"),

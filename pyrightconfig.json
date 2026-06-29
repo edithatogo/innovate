@@ -10,9 +10,9 @@
   "defineConstant": {
     "DEBUG": true
   },
-  "pythonVersion": "3.8",
+  "pythonVersion": "3.14",
   "pythonPlatform": "All",
-  "typeCheckingMode": "basic",
+  "typeCheckingMode": "strict",
   "reportMissingImports": "error",
   "reportMissingTypeStubs": "none",
   "reportPrivateUsage": "none",

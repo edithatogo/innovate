@@ -36,7 +36,7 @@ def load_allowlist() -> set[str]:
             "This file should be created during Phase 1: Remaining RST Audit"
         )
 
-    with open(RST_CLASSIFICATION) as f:
+    with Path(RST_CLASSIFICATION).open() as f:
         classification = json.load(f)
 
     allowlist = classification.get("keep_allowlist", [])
@@ -64,7 +64,7 @@ def test_rst_allowlist_exists() -> None:
         "Run the Classify remaining RST files task to generate this file."
     )
 
-    with open(RST_CLASSIFICATION) as f:
+    with Path(RST_CLASSIFICATION).open() as f:
         data = json.load(f)
 
     assert "keep_allowlist" in data, "Missing 'keep_allowlist' key in classification"
