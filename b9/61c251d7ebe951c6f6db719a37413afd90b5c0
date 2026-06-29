@@ -1,0 +1,30 @@
+Task: Define policy evaluation contracts
+
+Summary:
+Implemented comprehensive causal policy evaluation framework with:
+
+Created Files:
+- src/innovate/causal/policy.py - Core causal policy evaluation classes
+- src/innovate/causal/sensitivity.py - Sensitivity analysis for unmeasured confounding
+- tests/unit/test_causal_policy_evaluation.py - Comprehensive test suite
+
+Key Components:
+1. InterventionContract: Defines policy intervention specifications with timing, comparators, rollout schedules, and spillover effects
+2. CausalModelContract: Specifies causal models with treatment variables, outcomes, confounders, and identifying assumptions
+3. TreatmentEffectEstimator: Implements ATE, ATT, CATE estimation with bootstrap confidence intervals
+4. RosenbaumBounds & EValue: Sensitivity analysis for unmeasured confounding
+5. PolicyEvaluationError: Custom exception for contract enforcement
+
+Test Results: 31 passing, 1 skipped (scenario integration)
+Coverage: All critical paths tested including misuse guards
+
+Design Decisions:
+- Used dataclass-based contracts for validation and serialization
+- Implemented JSON/Arrow compatibility for polyglot support
+- Built-in guards against post-treatment leakage and missing comparators
+- Modular sensitivity analysis for different assumptions
+
+Why:
+Establishes foundation for causal policy evaluation with validated contracts,
+enables detection of common misuse patterns, and provides interface for treatment
+effect estimation needed in later phases.
