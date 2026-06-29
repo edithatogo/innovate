@@ -1,0 +1,32 @@
+Task: Write fail-closed active-RST tests
+Track: Starlight-Only Documentation Completion
+Phase: Phase 1: Remaining RST Audit
+
+Summary:
+Created a comprehensive test suite (test_starlight_rst_allowlist.py) that enforces
+fail-closed validation of RST files against the allowlist produced in Phase 1.
+
+Changes:
+- Created tests/unit/test_starlight_rst_allowlist.py with 5 test functions:
+  * test_rst_allowlist_exists: Validates allowlist file exists and has correct structure
+  * test_no_active_rst_files_outside_allowlist: Fail-closed guard that checks all RST files are in allowlist
+  * test_allowlist_files_exist: Sanity check that allowlist entries exist
+  * test_starlight_docs_structure_exists: Confirms Starlight is properly initialized
+  * test_rst_allowlist_has_required_structure: Validates core documentation files
+
+Test Status:
+- Tests currently FAIL as expected (Red phase) for 17 unallowed RST files
+- These files are correctly identified from rst_classification.json:
+  - 11 tutorial files to be migrated to Starlight
+  - 2 bridge pages to be migrated
+  - 4 module files to be handled in Phase 3
+- Test enforcement is active and ready for migration work
+
+Why:
+The fail-closed test guard ensures that migration work is completed for all
+identified RST files. Any RST file found outside the allowlist will cause CI to fail,
+preventing incomplete migrations from reaching production. The allowlist is
+maintained in rst_classification.json and updated as migrations complete.
+
+Files Modified:
+- tests/unit/test_starlight_rst_allowlist.py (created, 192 lines)
