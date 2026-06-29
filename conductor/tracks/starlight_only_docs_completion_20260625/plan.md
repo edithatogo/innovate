@@ -13,10 +13,10 @@
 
 ## Phase 2: Tutorial and Bridge Migration
 
-- [ ] Task: Migrate core contract tutorials
-    - [ ] Promote functional kernel, diagnostics, and Arrow tutorials to Starlight current/latest pages.
-    - [ ] Repoint tests and evidence.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Migrate core contract tutorials [706084d]
+    - [x] Promote functional kernel, diagnostics, and Arrow tutorials to Starlight current/latest pages.
+    - [x] Repoint tests and evidence.
+    - [x] Commit task changes and attach the required Conductor git note.
 - [ ] Task: Migrate modeling and integration tutorials
     - [ ] Promote Norton-Bass, advanced diffusion, Bayesian fitter, multi-product, seasonal, counterfactual, JAX, and NDLib docs.
     - [ ] Add route/sidebar entries where needed.
