@@ -34,7 +34,7 @@
 
 ### Phase 3 Checkpoint: [checkpoint: pending]
 
-- [ ] Task: Add Kairos build and smoke evidence
+- [~] Task: Add Kairos build and smoke evidence
     - [ ] Add a Rust/toolchain build gate proving the selected Kairos crate set builds in Innovate.
     - [ ] Add a minimal deterministic Kairos DES smoke scenario.
     - [ ] Add a minimal Kairos ABM smoke scenario covering ECS-style agent state and behavior update plumbing.
