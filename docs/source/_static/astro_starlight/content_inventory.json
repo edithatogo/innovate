@@ -184,5 +184,143 @@
     "sphinx_path": "adr",
     "astro_route": "/architecture/adr/",
     "status": "migrate"
+  },
+  {
+    "source_doc": "docs/source/tutorials/functional_kernel_contract.rst",
+    "sphinx_path": "tutorials/functional-kernel-contract",
+    "astro_route": "/tutorials/functional-kernel-contract/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/diagnostics_contract.rst",
+    "sphinx_path": "tutorials/diagnostics-contract",
+    "astro_route": "/tutorials/diagnostics-contract/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/arrow_interchange.rst",
+    "sphinx_path": "tutorials/arrow-interchange",
+    "astro_route": "/tutorials/arrow-interchange/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/norton_bass.rst",
+    "sphinx_path": "tutorials/norton-bass",
+    "astro_route": "/tutorials/norton-bass/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/advanced_diffusion_inference.rst",
+    "sphinx_path": "tutorials/advanced-diffusion-inference",
+    "astro_route": "/tutorials/advanced-diffusion-inference/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/bayesian_fitter_tutorial.rst",
+    "sphinx_path": "tutorials/bayesian-fitter",
+    "astro_route": "/tutorials/bayesian-fitter/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/multi_product.rst",
+    "sphinx_path": "tutorials/multi-product",
+    "astro_route": "/tutorials/multi-product/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/seasonal_data_tutorial.rst",
+    "sphinx_path": "tutorials/seasonal-data",
+    "astro_route": "/tutorials/seasonal-data/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/counterfactual_analysis.rst",
+    "sphinx_path": "tutorials/counterfactual-analysis",
+    "astro_route": "/tutorials/counterfactual-analysis/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/jax_backend.rst",
+    "sphinx_path": "tutorials/jax-backend",
+    "astro_route": "/tutorials/jax-backend/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/ndlib_integration.rst",
+    "sphinx_path": "tutorials/ndlib-integration",
+    "astro_route": "/tutorials/ndlib-integration/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/functional_kernel_contract.rst",
+    "sphinx_path": "tutorials/functional-kernel-contract_latest",
+    "astro_route": "/latest/tutorials/functional-kernel-contract/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/diagnostics_contract.rst",
+    "sphinx_path": "tutorials/diagnostics-contract_latest",
+    "astro_route": "/latest/tutorials/diagnostics-contract/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/arrow_interchange.rst",
+    "sphinx_path": "tutorials/arrow-interchange_latest",
+    "astro_route": "/latest/tutorials/arrow-interchange/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/norton_bass.rst",
+    "sphinx_path": "tutorials/norton-bass_latest",
+    "astro_route": "/latest/tutorials/norton-bass/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/advanced_diffusion_inference.rst",
+    "sphinx_path": "tutorials/advanced-diffusion-inference_latest",
+    "astro_route": "/latest/tutorials/advanced-diffusion-inference/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/bayesian_fitter_tutorial.rst",
+    "sphinx_path": "tutorials/bayesian-fitter_latest",
+    "astro_route": "/latest/tutorials/bayesian-fitter/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/multi_product.rst",
+    "sphinx_path": "tutorials/multi-product_latest",
+    "astro_route": "/latest/tutorials/multi-product/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/seasonal_data_tutorial.rst",
+    "sphinx_path": "tutorials/seasonal-data_latest",
+    "astro_route": "/latest/tutorials/seasonal-data/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/counterfactual_analysis.rst",
+    "sphinx_path": "tutorials/counterfactual-analysis_latest",
+    "astro_route": "/latest/tutorials/counterfactual-analysis/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/jax_backend.rst",
+    "sphinx_path": "tutorials/jax-backend_latest",
+    "astro_route": "/latest/tutorials/jax-backend/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/tutorials/ndlib_integration.rst",
+    "sphinx_path": "tutorials/ndlib-integration_latest",
+    "astro_route": "/latest/tutorials/ndlib-integration/",
+    "status": "migrated_phase_2"
+  },
+  {
+    "source_doc": "docs/source/bindings.rst",
+    "sphinx_path": "bindings_latest",
+    "astro_route": "/latest/bindings/",
+    "status": "migrated_phase_2"
   }
 ]

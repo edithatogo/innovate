@@ -184,5 +184,71 @@
     "sphinx_path": "adr",
     "astro_route": "/architecture/adr/",
     "redirect_type": "temporary-forward"
+  },
+  {
+    "from_sphinx_path": "tutorials/functional-kernel",
+    "to_astro_route": "/tutorials/functional-kernel-contract/",
+    "status": "active",
+    "phase": "phase_2"
+  },
+  {
+    "from_sphinx_path": "tutorials/diagnostics-contract",
+    "to_astro_route": "/tutorials/diagnostics-contract/",
+    "status": "active",
+    "phase": "phase_2"
+  },
+  {
+    "from_sphinx_path": "tutorials/arrow-interchange",
+    "to_astro_route": "/tutorials/arrow-interchange/",
+    "status": "active",
+    "phase": "phase_2"
+  },
+  {
+    "from_sphinx_path": "tutorials/norton-bass",
+    "to_astro_route": "/tutorials/norton-bass/",
+    "status": "active",
+    "phase": "phase_2"
+  },
+  {
+    "from_sphinx_path": "tutorials/advanced-diffusion-inference",
+    "to_astro_route": "/tutorials/advanced-diffusion-inference/",
+    "status": "active",
+    "phase": "phase_2"
+  },
+  {
+    "from_sphinx_path": "tutorials/bayesian-fitter",
+    "to_astro_route": "/tutorials/bayesian-fitter/",
+    "status": "active",
+    "phase": "phase_2"
+  },
+  {
+    "from_sphinx_path": "tutorials/multi-product",
+    "to_astro_route": "/tutorials/multi-product/",
+    "status": "active",
+    "phase": "phase_2"
+  },
+  {
+    "from_sphinx_path": "tutorials/seasonal-data",
+    "to_astro_route": "/tutorials/seasonal-data/",
+    "status": "active",
+    "phase": "phase_2"
+  },
+  {
+    "from_sphinx_path": "tutorials/counterfactual-analysis",
+    "to_astro_route": "/tutorials/counterfactual-analysis/",
+    "status": "active",
+    "phase": "phase_2"
+  },
+  {
+    "from_sphinx_path": "tutorials/jax-backend",
+    "to_astro_route": "/tutorials/jax-backend/",
+    "status": "active",
+    "phase": "phase_2"
+  },
+  {
+    "from_sphinx_path": "tutorials/ndlib-integration",
+    "to_astro_route": "/tutorials/ndlib-integration/",
+    "status": "active",
+    "phase": "phase_2"
   }
 ]
