@@ -1,0 +1,26 @@
+Phase 2 Checkpoint: Native Parity and Exceptions
+
+Completion Status:
+- Native Rust models confirmed: Bass, Logistic, Gompertz, FisherPry (all 6 canonical operations)
+- Norton-Bass: single-generation native, multi-generation with documented exception
+- All 5 bridge-fallback models documented with structured exception metadata
+- Each exception includes owner, rationale, fallback diagnostic, revisit condition
+- Release-claim constraints documented per specification
+
+Exception Models:
+1. norton_bass: Multi-generation fit fallback
+2. composite: Full bridge fallback (provisional stability)
+3. multi_product: Full bridge fallback (provisional stability)
+4. network_diffusion: Fit/simulate bridge fallback (provisional stability)
+5. policy_hazard: Full bridge fallback (provisional stability)
+
+Test Status:
+- All 29 ownership tests pass
+- No undocumented fallbacks detected
+- Exception documentation complete and reviewable
+
+Files Changed:
+- conductor/tracks/rust_native_ownership_release_proof_20260625/plan.md
+- conductor/tracks/rust_native_ownership_release_proof_20260625/exceptions.json
+
+Ready for Phase 3
