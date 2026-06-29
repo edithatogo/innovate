@@ -414,8 +414,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Bleeding-Edge Dependency Modernization**
-*Link: [./tracks/bleeding_edge_dependency_modernization_20260625/](./tracks/bleeding_edge_dependency_modernization_20260625/)*
+- [x] **Track: Bleeding-Edge Dependency Modernization** *(Completed)*
+*Link: [./archive/bleeding_edge_dependency_modernization_20260625/](./archive/bleeding_edge_dependency_modernization_20260625/)*
 
 ---
 
@@ -429,35 +429,35 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Scenario Experiment Workflows**
-*Link: [./tracks/scenario_experiment_workflows_20260625/](./tracks/scenario_experiment_workflows_20260625/)*
+- [x] **Track: Scenario Experiment Workflows** *(Completed)*
+*Link: [./archive/scenario_experiment_workflows_20260625/](./archive/scenario_experiment_workflows_20260625/)*
 
 ---
 
-- [~] **Track: Causal Policy Evaluation**
-*Link: [./tracks/causal_policy_evaluation_20260625/](./tracks/causal_policy_evaluation_20260625/)*
+- [x] **Track: Causal Policy Evaluation** *(Completed)*
+*Link: [./archive/causal_policy_evaluation_20260625/](./archive/causal_policy_evaluation_20260625/)*
 
 ---
 
-- [~] **Track: Model Validation and Benchmark Expansion**
-*Link: [./tracks/model_validation_benchmark_expansion_20260625/](./tracks/model_validation_benchmark_expansion_20260625/)*
+- [x] **Track: Model Validation and Benchmark Expansion** *(Completed)*
+*Link: [./archive/model_validation_benchmark_expansion_20260625/](./archive/model_validation_benchmark_expansion_20260625/)*
 
 ---
 
-- [~] **Track: Kairos Dependency Inclusion**
-*Link: [./tracks/kairos_dependency_inclusion_20260626/](./tracks/kairos_dependency_inclusion_20260626/)*
+- [x] **Track: Kairos Dependency Inclusion** *(Completed)*
+*Link: [./archive/kairos_dependency_inclusion_20260626/](./archive/kairos_dependency_inclusion_20260626/)*
 
 ---
 
-- [~] **Track: Kairos ABM and Network Simulation Migration**
-*Link: [./tracks/kairos_abm_network_simulation_migration_20260625/](./tracks/kairos_abm_network_simulation_migration_20260625/)*
+- [x] **Track: Kairos ABM and Network Simulation Migration** *(Completed)*
+*Link: [./archive/kairos_abm_network_simulation_migration_20260625/](./archive/kairos_abm_network_simulation_migration_20260625/)*
 
 ---
 
-- [~] **Track: Data Ingestion and Provenance Connectors**
-*Link: [./tracks/data_ingestion_provenance_connectors_20260625/](./tracks/data_ingestion_provenance_connectors_20260625/)*
+- [x] **Track: Data Ingestion and Provenance Connectors** *(Completed)*
+*Link: [./archive/data_ingestion_provenance_connectors_20260625/](./archive/data_ingestion_provenance_connectors_20260625/)*
 
 ---
 
-- [~] **Track: Explainability, Sensitivity, and Decision Reports**
-*Link: [./tracks/explainability_sensitivity_decision_reports_20260625/](./tracks/explainability_sensitivity_decision_reports_20260625/)*
+- [x] **Track: Explainability, Sensitivity, and Decision Reports** *(Completed)*
+*Link: [./archive/explainability_sensitivity_decision_reports_20260625/](./archive/explainability_sensitivity_decision_reports_20260625/)*
