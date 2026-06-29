@@ -20,6 +20,7 @@ class UncertaintyMetadata:
     """Metadata for uncertainty quantification.
 
     Attributes:
+    -----------
         estimand: Type of estimand (ATE, ATT, CATE, etc.)
         point_estimate: Point estimate of effect
         ci_lower: Lower confidence interval bound
@@ -56,6 +57,7 @@ class DiagnosticsSummary:
     """Collect diagnostic warnings and notes for analysis.
 
     Attributes:
+    -----------
         warnings: Dictionary of warning type to message
         notes: Dictionary of note type to message
     """
@@ -86,6 +88,7 @@ class CovariateBalance:
     """Assess covariate balance between treated and control groups.
 
     Attributes:
+    -----------
         treated_covariates: Dictionary of covariate names to arrays for treated
         control_covariates: Dictionary of covariate names to arrays for control
     """
