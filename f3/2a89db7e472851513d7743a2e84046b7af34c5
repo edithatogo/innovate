@@ -1,0 +1,27 @@
+Task: Inventory all ecosystem dependencies and write baseline tests
+
+Summary:
+Created comprehensive test module (tests/test_dependency_baselines.py) that validates:
+- Python 3.14 as minimum runtime version
+- NumPy 2.0+ requirement
+- Pydantic v2.0+ requirement
+- Polars 1.0+ as optional dataframe engine
+- basedpyright strict type checking configuration
+- Astro 7 with Starlight 0.40+ for documentation
+- TypeScript 6+ for frontend toolchain
+- Node.js 26+ engine requirement
+- Vitest 4+ for frontend testing (if used)
+- Rust criterion 0.8+ for benchmarks
+- mutmut for mutation testing
+
+Test Results: 19/20 passing (one config fix needed for pyrightconfig.json)
+
+Files Created:
+- tests/test_dependency_baselines.py (259 lines)
+
+Dependencies Inventoried:
+- Python ecosystem: NumPy, Pandas, Pydantic, SciPy, SymPy, PyTensor, Mesa, NetworkX, JAX (optional)
+- Node.js ecosystem: Astro, Starlight, TypeScript
+- Rust ecosystem: criterion, serde, tracing
+
+Next: Complete pyrightconfig.json update and run full validation suite.
