@@ -43,9 +43,9 @@
 
 ## Phase 4: Review, Push, and CI
 
-- [x] Task: Run full causal policy validation
+- [x] Task: Run full causal policy validation (ed0e2a7)
     - [x] Run targeted tests plus `uv run nox -s lint types tests docs package`.
     - [x] Commit task changes and attach the required Conductor git note.
-- [x] Task: Run conductor-review, push, and monitor CI
+- [x] Task: Run conductor-review, push, and monitor CI (ed0e2a7)
     - [x] Apply review fixes, push, and monitor GitHub Actions until green or blocked.
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Review, Push, and CI' (Protocol in workflow.md)
