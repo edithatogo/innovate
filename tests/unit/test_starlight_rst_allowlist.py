@@ -139,9 +139,10 @@ def test_rst_allowlist_has_required_structure() -> None:
     allowlist = load_allowlist()
 
     # These are core files that should always be in the allowlist
+    # Note: allowlist paths are relative to project root (docs/ not innovate/docs/)
     required_core_files = [
-        "innovate/docs/index.rst",
-        "innovate/docs/source/index.rst",
+        "docs/index.rst",
+        "docs/source/index.rst",
     ]
 
     for required_file in required_core_files:
