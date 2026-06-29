@@ -37,13 +37,13 @@
     - [x] Commit task changes and attach the required Conductor git note.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Docs, Examples, and Release Evidence' (Protocol in workflow.md)
 
-## Phase 4 Checkpoint: [checkpoint: pending]
+## Phase 4 Checkpoint: [checkpoint: 0bf9385]
 
 ## Phase 4: Review, Push, and CI
 
-- [ ] Task: Run full scenario validation
-    - [ ] Run targeted tests plus `uv run nox -s lint types tests docs package`.
-    - [ ] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Run conductor-review, push, and monitor CI
-    - [ ] Apply review fixes, push, and monitor GitHub Actions until green or blocked.
+- [x] Task: Run full scenario validation [0bf9385]
+    - [x] Run targeted tests plus `uv run nox -s lint types tests docs package`.
+    - [x] Commit task changes and attach the required Conductor git note.
+- [x] Task: Run conductor-review, push, and monitor CI [0bf9385]
+    - [x] Apply review fixes, push, and monitor GitHub Actions until green or blocked.
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Review, Push, and CI' (Protocol in workflow.md)
