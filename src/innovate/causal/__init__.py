@@ -3,6 +3,17 @@
 from __future__ import annotations
 
 from innovate.causal.counterfactual import CounterfactualAnalysis
+from innovate.causal.diagnostics import (
+    CovariateBalance,
+    DiagnosticsSummary,
+    UncertaintyMetadata,
+)
+from innovate.causal.evaluation import (
+    CounterfactualComparison,
+    EventStudyTrajectory,
+    HeterogeneousEffectsSummary,
+    PrePostSummary,
+)
 from innovate.causal.policy import (
     CausalModel,
     CausalModelContract,
@@ -26,4 +37,11 @@ __all__ = [
     "RosenbaumBounds",
     "EValue",
     "SensitivityAnalysis",
+    "PrePostSummary",
+    "EventStudyTrajectory",
+    "CounterfactualComparison",
+    "HeterogeneousEffectsSummary",
+    "UncertaintyMetadata",
+    "DiagnosticsSummary",
+    "CovariateBalance",
 ]
