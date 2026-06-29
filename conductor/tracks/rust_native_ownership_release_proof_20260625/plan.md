@@ -2,13 +2,15 @@
 
 ## Phase 1: Ownership Audit
 
-- [~] Task: Build operation and model-family matrix
+- [x] Task: Build operation and model-family matrix (ac55f3d)
     - [x] Inventory canonical operations, stable payloads, model families, and current Rust/native/fallback status.
-    - [~] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Write failing coverage tests
-    - [ ] Add tests that require every stable operation and model family to have native or exception status.
-    - [ ] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Ownership Audit' (Protocol in workflow.md)
+    - [x] Commit task changes and attach the required Conductor git note.
+- [x] Task: Write failing coverage tests (ac55f3d)
+    - [x] Add tests that require every stable operation and model family to have native or exception status.
+    - [x] Commit task changes and attach the required Conductor git note.
+- [~] Task: Conductor - Phase 1 Verification
+
+## Phase 1 Checkpoint: [checkpoint: TBD]
 
 ## Phase 2: Native Parity and Exceptions
 

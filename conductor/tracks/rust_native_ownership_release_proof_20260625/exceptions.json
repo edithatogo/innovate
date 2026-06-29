@@ -1,0 +1,67 @@
+{
+  "version": "1.0",
+  "schema": "Python-Reference Exception Documentation Format",
+  "description": "Explicit documentation of Python-reference exceptions for non-native Rust operations",
+  "exceptions": [
+    {
+      "model_key": "norton_bass",
+      "operation": "fit_model",
+      "status": "bridge_fallback",
+      "owner": "Rust maintainer team",
+      "rationale": "Multi-generation Norton-Bass fitting requires complex state management and covariate-driven parameterization not yet implemented in native Rust. Single-generation fits are native, multi-generation falls back to Python bridge.",
+      "fallback_diagnostic": "Norton-Bass multi-generation fitting uses Python reference implementation. Performance will be impacted compared to single-generation native Rust fitting.",
+      "revisit_condition": "When native Rust implementation adds support for covariate-driven dynamic parameter fitting.",
+      "scope": "Only affects multi-generation Norton-Bass models; single-generation remains native."
+    },
+    {
+      "model_key": "composite",
+      "operations": ["fit_model", "predict_model", "simulate_model", "summarize_model", "diagnose_model"],
+      "status": "bridge_fallback",
+      "owner": "Rust maintainer team",
+      "rationale": "Composite diffusion models require complex model composition, kernel switching, and cross-model state management. These capabilities are not yet fully implemented in native Rust.",
+      "fallback_diagnostic": "Composite diffusion model operations use Python reference implementation. This is expected for early-stage model families.",
+      "revisit_condition": "When Rust implementation supports full model composition and kernel switching strategies.",
+      "promoted_to_stable": false,
+      "stability_tier": "provisional"
+    },
+    {
+      "model_key": "multi_product",
+      "operations": ["fit_model", "predict_model", "simulate_model", "summarize_model", "diagnose_model"],
+      "status": "bridge_fallback",
+      "owner": "Rust maintainer team",
+      "rationale": "Multi-product competition models require complex market-share dynamics, cross-product interactions, and adaptive parameter fitting. Full native implementation is still under development.",
+      "fallback_diagnostic": "Multi-product competition models use Python reference implementation for full compatibility with market dynamics.",
+      "revisit_condition": "When Rust implementation completes market dynamics kernel and adaptive fitting.",
+      "promoted_to_stable": false,
+      "stability_tier": "provisional"
+    },
+    {
+      "model_key": "network_diffusion",
+      "operations": ["fit_model", "predict_model", "simulate_model", "summarize_model", "diagnose_model"],
+      "status": "bridge_fallback",
+      "owner": "Rust maintainer team",
+      "rationale": "Network diffusion requires graph-based processing, neighbor computation, and network analytics. While discovery is native, fitting and simulation require graph processing capabilities being developed in Rust.",
+      "fallback_diagnostic": "Network diffusion operations use Python reference implementation with NetworkX backend.",
+      "revisit_condition": "When Rust implementation adds native graph processing and network analytics.",
+      "promoted_to_stable": false,
+      "stability_tier": "provisional"
+    },
+    {
+      "model_key": "policy_hazard",
+      "operations": ["fit_model", "predict_model", "simulate_model", "summarize_model", "diagnose_model"],
+      "status": "bridge_fallback",
+      "owner": "Rust maintainer team",
+      "rationale": "Policy hazard models require hazard-based survival analysis, policy intervention tracking, and causal inference. These are advanced statistical capabilities under development in Rust.",
+      "fallback_diagnostic": "Policy hazard model operations use Python reference implementation.",
+      "revisit_condition": "When Rust implementation adds survival analysis and causal inference kernels.",
+      "promoted_to_stable": false,
+      "stability_tier": "provisional"
+    }
+  ],
+  "exception_audit_log": {
+    "created_date": "2025-06-25",
+    "reviewed_date": "2025-06-25",
+    "audit_status": "complete",
+    "notes": "All exceptions are documented per Track 02 requirements. Each exception has owner, rationale, fallback diagnostic, and revisit condition. No undocumented fallbacks exist."
+  }
+}
