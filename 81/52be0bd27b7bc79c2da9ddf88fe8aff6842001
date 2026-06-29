@@ -1,0 +1,26 @@
+Task: Add docs, model cards, and release evidence
+
+Summary:
+Implemented comprehensive documentation support with model cards and release evidence validation.
+
+Created Files:
+- src/innovate/causal/model_card.py - Model cards, release evidence, assumption docs
+- tests/unit/test_causal_policy_docs.py - Comprehensive documentation tests
+
+Key Components:
+1. CausalModelCard: Document model assumptions and limitations
+2. ReleaseEvidence: Validate causal claims before external release
+3. AssumptionDocument: Transparent assumption documentation with validation
+
+Test Results: 14 passing documentation tests
+Coverage: Model cards, release validation, assumption documentation
+
+Design Decisions:
+- Structured model cards for reproducibility
+- Release validation workflow with evidence requirements
+- Markdown support for policy documentation
+- JSON export for portability
+
+Why:
+Enables transparent documentation of causal analyses for policy stakeholders,
+implements safeguards against unsupported claims, and supports release gates.
