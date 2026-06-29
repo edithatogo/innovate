@@ -26,6 +26,15 @@ name = "innovate_rust"
 path = "src/lib.rs"
 
 [dependencies]
+# Kairos DES/ABM integration crates (from github.com/edithatogo/kairos @ fae901558f07b7b717a676adbafbe2cdc78dea1c)
+kairo-ecs-types = { git = "https://github.com/edithatogo/kairos.git", rev = "fae901558f07b7b717a676adbafbe2cdc78dea1c" }
+kairo-ecs-core = { git = "https://github.com/edithatogo/kairos.git", rev = "fae901558f07b7b717a676adbafbe2cdc78dea1c" }
+kairo-ecs-state = { git = "https://github.com/edithatogo/kairos.git", rev = "fae901558f07b7b717a676adbafbe2cdc78dea1c" }
+kairo-ecs-rng = { git = "https://github.com/edithatogo/kairos.git", rev = "fae901558f07b7b717a676adbafbe2cdc78dea1c" }
+kairo-ecs-des = { git = "https://github.com/edithatogo/kairos.git", rev = "fae901558f07b7b717a676adbafbe2cdc78dea1c" }
+kairo-ecs-abm = { git = "https://github.com/edithatogo/kairos.git", rev = "fae901558f07b7b717a676adbafbe2cdc78dea1c" }
+kairo-ecs-arrow = { git = "https://github.com/edithatogo/kairos.git", rev = "fae901558f07b7b717a676adbafbe2cdc78dea1c" }
+# Standard dependencies
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tracing = "0.1"

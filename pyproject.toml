@@ -33,10 +33,8 @@ dependencies = [
   "pyarrow>=23.0.1,<24",
   # Statistics / econometrics
   "statsmodels>=0.14.6,<0.15",
-  # Agent-based modeling & networks
-  "mesa>=3.5.1,<4",
-  "networkx>=3.6.1,<4",
-  "ndlib>=5.1.1,<6",
+  # Network analysis (retained for graph analysis and visualization support)
+    "networkx>=3.6.1,<4",  # Required for network topology analysis and graph visualization
   # Differential equations
   "jitcdde>=1.8.3,<2",
   "sympy>=1.14,<2",
@@ -80,6 +78,11 @@ bayesian = [
 ]
 dataframe = [
   "polars>=1.0",
+]
+# Legacy ABM/DES backends (mesa and ndlib) - to be replaced by Kairos
+legacy-abm = [
+  "mesa>=3.5.1,<4",
+  "ndlib>=5.1.1,<6",
 ]
 
 [dependency-groups]

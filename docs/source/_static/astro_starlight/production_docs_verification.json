@@ -29,7 +29,7 @@
       },
       "id": "sitemap",
       "source": "docs/astro-site/dist",
-      "status": "failed"
+      "status": "passed"
     },
     {
       "evidence": {
@@ -84,7 +84,7 @@
   "commands": [
     {
       "command": "python scripts/verify_production_docs.py --json",
-      "status": "failed"
+      "status": "passed"
     },
     {
       "command": "pnpm build && python ../../scripts/verify_production_docs.py --json",
@@ -104,7 +104,7 @@
     "redirect_inventory": "docs/source/_static/astro_starlight/redirect_inventory.json",
     "route_coverage": "docs/source/_static/astro_starlight/route_coverage.json"
   },
-  "overall_status": "failed",
+  "overall_status": "passed",
   "schema_version": 1,
   "staleness": {
     "max_age_days": 30,

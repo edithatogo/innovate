@@ -4,7 +4,7 @@
 
 ### Phase 1 Checkpoint: [checkpoint: pending] Source Verification and Dependency Policy
 
-- [ ] Task: Verify Kairos source and crate inventory
+- [~] Task: Verify Kairos source and crate inventory
     - [ ] Confirm the Kairos repository workspace exposes `kairo-ecs-types`, `kairo-ecs-core`, `kairo-ecs-state`, `kairo-ecs-rng`, `kairo-ecs-des`, `kairo-ecs-abm`, and `kairo-ecs-arrow`.
     - [ ] Check whether matching `kairo-ecs-*` crates exist in crates.io and record whether repository sourcing or published versions are valid for this release.
     - [ ] Record the selected Kairos source revision or published version set in release evidence.

@@ -938,8 +938,6 @@ version = "0.5.0"
 source = { editable = "." }
 dependencies = [
     { name = "jitcdde" },
-    { name = "mesa" },
-    { name = "ndlib" },
     { name = "networkx" },
     { name = "numpy" },
     { name = "pandas" },
@@ -973,6 +971,10 @@ jax = [
     { name = "jaxlib" },
     { name = "jaxopt" },
     { name = "numpyro" },
+]
+legacy-abm = [
+    { name = "mesa" },
+    { name = "ndlib" },
 ]
 
 [package.dev-dependencies]
@@ -1019,8 +1021,8 @@ requires-dist = [
     { name = "jaxopt", marker = "extra == 'bayesian'", specifier = ">=0.8" },
     { name = "jaxopt", marker = "extra == 'jax'", specifier = ">=0.8" },
     { name = "jitcdde", specifier = ">=1.8.3,<2" },
-    { name = "mesa", specifier = ">=3.5.1,<4" },
-    { name = "ndlib", specifier = ">=5.1.1,<6" },
+    { name = "mesa", marker = "extra == 'legacy-abm'", specifier = ">=3.5.1,<4" },
+    { name = "ndlib", marker = "extra == 'legacy-abm'", specifier = ">=5.1.1,<6" },
     { name = "networkx", specifier = ">=3.6.1,<4" },
     { name = "numpy", specifier = ">=2.4.4,<3" },
     { name = "numpyro", marker = "extra == 'bayesian'", specifier = ">=0.20.1,<0.21" },
@@ -1035,7 +1037,7 @@ requires-dist = [
     { name = "statsmodels", specifier = ">=0.14.6,<0.15" },
     { name = "sympy", specifier = ">=1.14,<2" },
 ]
-provides-extras = ["jax", "bayesian", "dataframe"]
+provides-extras = ["jax", "bayesian", "dataframe", "legacy-abm"]
 
 [package.metadata.requires-dev]
 dev = [
