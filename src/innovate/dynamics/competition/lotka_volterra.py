@@ -111,21 +111,23 @@ class LotkaVolterraCompetition(CompetitiveInteraction):
                 "description": "The initial population of species 2.",
             },
         }
-def equilibrium(self, **params) -> dict[str, float]:
-        """Compute equilibrium populations for the competitive system.
 
-        Returns
-        -------
-        dict
-            Keys: 'N1_eq', 'N2_eq' representing equilibrium populations of each species.
-        """
-        K1 = float(params.get("carrying_capacity_1", 1000.0))
-        K2 = float(params.get("carrying_capacity_2", 1000.0))
-        alpha12 = float(params.get("competition_coeff_12", 1.0))
-        alpha21 = float(params.get("competition_coeff_21", 1.0))
-        det = 1.0 - alpha12 * alpha21
-        if det <= 0:
-            return {"N1_eq": K1, "N2_eq": 0.0}
-        n1_eq = (K1 - alpha12 * K2) / det
-        n2_eq = (K2 - alpha21 * K1) / det
-        return {"N1_eq": max(float(n1_eq), 0.0), "N2_eq": max(float(n2_eq), 0.0)}
+
+def equilibrium(self, **params) -> dict[str, float]:
+    """Compute equilibrium populations for the competitive system.
+
+    Returns
+    -------
+    dict
+        Keys: 'N1_eq', 'N2_eq' representing equilibrium populations of each species.
+    """
+    K1 = float(params.get("carrying_capacity_1", 1000.0))
+    K2 = float(params.get("carrying_capacity_2", 1000.0))
+    alpha12 = float(params.get("competition_coeff_12", 1.0))
+    alpha21 = float(params.get("competition_coeff_21", 1.0))
+    det = 1.0 - alpha12 * alpha21
+    if det <= 0:
+        return {"N1_eq": K1, "N2_eq": 0.0}
+    n1_eq = (K1 - alpha12 * K2) / det
+    n2_eq = (K2 - alpha21 * K1) / det
+    return {"N1_eq": max(float(n1_eq), 0.0), "N2_eq": max(float(n2_eq), 0.0)}

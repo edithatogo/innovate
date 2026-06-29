@@ -22,9 +22,7 @@ def test_plugin_api_docs_pages_are_present() -> None:
 
 def test_plugin_api_docs_describe_tiers_and_extension_points() -> None:
     """The tutorial should explain the public tiers and extension contract."""
-    tutorial = Path(
-        "docs/astro-site/src/content/docs/tutorials/plugin-api-stability.md"
-    ).read_text()
+    tutorial = Path("docs/astro-site/src/content/docs/tutorials/plugin-api-stability.md").read_text()
 
     assert "stable" in tutorial.lower()
     assert "provisional" in tutorial.lower()

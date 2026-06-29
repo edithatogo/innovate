@@ -124,13 +124,16 @@ CHECKS: tuple[Check, ...] = (
 
 def _tool_exists(tool: str) -> bool:
     if tool == "cargo-outdated":
-        return "outdated" in subprocess.run(
-            ["cargo", "--list"],
-            cwd=ROOT,
-            check=False,
-            capture_output=True,
-            text=True,
-        ).stdout
+        return (
+            "outdated"
+            in subprocess.run(
+                ["cargo", "--list"],
+                cwd=ROOT,
+                check=False,
+                capture_output=True,
+                text=True,
+            ).stdout
+        )
     return shutil.which(tool) is not None
 
 

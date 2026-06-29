@@ -74,9 +74,7 @@ def test_mars_surrogate_gate_validation_records_no_fast_ci_execution() -> None:
 def test_mars_surrogate_docs_record_deferred_decision_and_thresholds() -> None:
     """Documentation should state the current decision and benchmark thresholds."""
     docs = Path("docs/source/innovate.benchmarks.mars_surrogate.rst").read_text()
-    tutorial = Path(
-        "docs/astro-site/src/content/docs/tutorials/benchmark-workflows.md"
-    ).read_text()
+    tutorial = Path("docs/astro-site/src/content/docs/tutorials/benchmark-workflows.md").read_text()
     ecosystem = Path("docs/ecosystem/module_incubation_strategy.md").read_text()
 
     assert "defer" in docs.lower()

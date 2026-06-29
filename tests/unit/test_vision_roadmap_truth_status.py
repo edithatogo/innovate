@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 import pytest
+
 VISION_STATUS_INVENTORY = Path("docs/source/_static/vision_roadmap_status_inventory.json")
 RUST_MIGRATION_INVENTORY = Path("docs/source/_static/rust_core_migration_inventory.json")
 
@@ -111,6 +112,7 @@ def test_full_rust_core_claims_remain_disallowed_until_inventory_is_all_native()
         for claim in forbidden_claims:
             assert claim not in project_docs
 
+
 def test_roadmap_truth_ledger_exists() -> None:
     """The roadmap truth ledger must exist as a machine-readable artifact."""
     ledger = Path("conductor/tracks/roadmap_release_truth_closure_20260625/truth_ledger.json")
@@ -171,9 +173,9 @@ def test_no_stale_or_missing_completion_claims() -> None:
         if claim_key in ledger_entries:
             entry = ledger_entries[claim_key]
             if entry["status"] == "complete":
-                assert entry.get("evidence"), (
-                    f"Complete claim '{claim_key}' must have evidence"
-                )
+                assert entry.get("evidence"), f"Complete claim '{claim_key}' must have evidence"
+
+
 def test_no_active_rst_outside_allowlist() -> None:
     """Fail if any RST file outside the explicit allowlist exists as active docs."""
     classification = Path("conductor/tracks/starlight_only_docs_completion_20260625/rst_classification.json")
@@ -192,9 +194,7 @@ def test_no_active_rst_outside_allowlist() -> None:
         active_rst_files.add(rst)
 
     if active_rst_files:
-        msg = "Unexpected RST files outside allowlist:\n" + "\n".join(
-            f"  - {p}" for p in sorted(active_rst_files)[:10]
-        )
+        msg = "Unexpected RST files outside allowlist:\n" + "\n".join(f"  - {p}" for p in sorted(active_rst_files)[:10])
         if len(active_rst_files) > 10:
             msg += f"\n  ... and {len(active_rst_files) - 10} more"
         pytest.fail(msg)

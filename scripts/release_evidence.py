@@ -61,7 +61,9 @@ def build_mutation_evidence(
         "evidence_id": "mutation_sampling",
         "schema_version": 1,
         "status": "pass" if passed else "fail",
-        "summary": summary if not passed else f"Mutation score {score:.1%} meets threshold {MUTATION_SCORE_THRESHOLD:.0%}",
+        "summary": summary
+        if not passed
+        else f"Mutation score {score:.1%} meets threshold {MUTATION_SCORE_THRESHOLD:.0%}",
         "mutation_score": score,
         "mutants_killed": mutants_killed,
         "mutants_total": mutants_total,

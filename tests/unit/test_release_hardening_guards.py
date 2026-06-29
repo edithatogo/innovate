@@ -38,7 +38,6 @@ def tmp_evidence_root(tmp_path: Path) -> Path:
     return tmp_path / "evidence"
 
 
-
 def _make_evidence(
     path: Path,
     status: str = "pass",
@@ -56,6 +55,7 @@ def _make_evidence(
         past = time.time() - mtime_offset_days * 86_400
         os.utime(path, (past, past))
     return data
+
 
 # ---------------------------------------------------------------------------
 # Task 1: Evidence freshness tests
@@ -106,6 +106,7 @@ class TestEvidenceFreshness:
         assert report["status_counts"]["stale"] > 0
         assert report["status_counts"]["pass"] > 0
 
+
 # ---------------------------------------------------------------------------
 # Task 2: Required gate presence tests
 # ---------------------------------------------------------------------------
@@ -119,9 +120,7 @@ class TestRequiredGatePresence:
         evidence_ids = {entry["id"] for entry in contract_dict["required_evidence"]}
         missing = REQUIRED_EVIDENCE_IDS - evidence_ids
         extra = evidence_ids - REQUIRED_EVIDENCE_IDS
-        assert evidence_ids == REQUIRED_EVIDENCE_IDS, (
-            f"Missing: {missing}, Extra: {extra}"
-        )
+        assert evidence_ids == REQUIRED_EVIDENCE_IDS, f"Missing: {missing}, Extra: {extra}"
 
     def test_no_duplicate_evidence_ids(self, contract_dict: dict[str, Any]) -> None:
         """Evidence IDs must be unique in the contract."""
@@ -148,6 +147,7 @@ class TestRequiredGatePresence:
     def test_contract_has_schema_version(self, contract_dict: dict[str, Any]) -> None:
         """Contract should include a schema_version field."""
         assert contract_dict.get("schema_version") == 1
+
 
 # ---------------------------------------------------------------------------
 # Task 3: Release-ready fail-closed behavior tests
@@ -245,6 +245,8 @@ class TestReleaseReadyFailClosed:
 
         exit_code = main(["--json", "--evidence-root", str(tmp_evidence_root), "--allow-blocked"])
         assert exit_code == 0
+
+
 # ---------------------------------------------------------------------------
 # Task 2: Coverage and mutation evidence thresholds
 # ---------------------------------------------------------------------------
@@ -300,7 +302,10 @@ class TestCoverageMutationEvidence:
             summary="Coverage below threshold",
         )
         assert evidence["status"] == "fail"
-        assert "below threshold" in evidence.get("summary", "").lower() or "below threshold" in evidence.get("failure_reason", "").lower()
+        assert (
+            "below threshold" in evidence.get("summary", "").lower()
+            or "below threshold" in evidence.get("failure_reason", "").lower()
+        )
 
     def test_mutation_evidence_schema(self, tmp_path: Path) -> None:
         """Generated mutation evidence must contain required fields."""
@@ -331,7 +336,10 @@ class TestCoverageMutationEvidence:
             summary="Mutation score below threshold",
         )
         assert evidence["status"] == "fail"
-        assert "below threshold" in evidence.get("summary", "").lower() or "below threshold" in evidence.get("failure_reason", "").lower()
+        assert (
+            "below threshold" in evidence.get("summary", "").lower()
+            or "below threshold" in evidence.get("failure_reason", "").lower()
+        )
 
     def test_coverage_evidence_has_threshold_documented(self) -> None:
         """Coverage threshold must be documented in gate-inventory Section 5."""
@@ -353,7 +361,11 @@ class TestCoverageMutationEvidence:
     def test_nox_mutation_session_writes_evidence(self) -> None:
         """The mutation nox session should contain evidence generation steps."""
         nox_text = (ROOT / "noxfile.py").read_text()
-        assert "mutation-sampling.json" in nox_text or "build_mutation_evidence" in nox_text or "release_evidence" in nox_text
+        assert (
+            "mutation-sampling.json" in nox_text
+            or "build_mutation_evidence" in nox_text
+            or "release_evidence" in nox_text
+        )
 
     def test_nox_mutation_session_enforces_threshold(self) -> None:
         """The mutation nox session should enforce a minimum mutation score threshold."""

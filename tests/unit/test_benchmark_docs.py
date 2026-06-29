@@ -19,9 +19,7 @@ def test_benchmark_docs_pages_are_present() -> None:
 
 def test_benchmark_workflow_tutorial_mentions_canonical_helpers() -> None:
     """The workflow tutorial should explain the stable benchmark entry points."""
-    tutorial = Path(
-        "docs/astro-site/src/content/docs/tutorials/benchmark-workflows.md"
-    ).read_text()
+    tutorial = Path("docs/astro-site/src/content/docs/tutorials/benchmark-workflows.md").read_text()
 
     assert "validate_benchmark_corpus" in tutorial
     assert "refresh_model_card_summaries" in tutorial
@@ -117,9 +115,7 @@ def test_benchmark_docs_describe_fast_and_opt_in_automation() -> None:
 
 def test_benchmark_workflow_documents_promotion_dossier_capture() -> None:
     """The benchmark tutorial should show how to capture promotion artifacts."""
-    tutorial = Path(
-        "docs/astro-site/src/content/docs/tutorials/benchmark-workflows.md"
-    ).read_text()
+    tutorial = Path("docs/astro-site/src/content/docs/tutorials/benchmark-workflows.md").read_text()
 
     for phrase in (
         "Promotion dossier capture",

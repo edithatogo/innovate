@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-
 AUDIT_PATH = Path("docs/source/_static/astro_starlight/current_dependency_audit.json")
 PACKAGE_PATH = Path("docs/astro-site/package.json")
 LOCKFILE_PATH = Path("docs/astro-site/pnpm-lock.yaml")

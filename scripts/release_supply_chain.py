@@ -16,6 +16,7 @@ from typing import Any
 def _now_iso() -> str:
     return datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT_ROOT = Path("docs/source/_static/release_readiness/evidence")
 EVIDENCE_IDS = {

@@ -27,9 +27,9 @@ def test_dependency_dashboard_uses_non_mutating_commands() -> None:
     commands = {check.check_id: " ".join(check.command) for check in dependency_dashboard.CHECKS}
 
     assert "uv tree --outdated --frozen" in commands["uv-tree-outdated"]
-    assert "pnpm outdated --format json" == commands["pnpm-outdated-docs"]
-    assert "npm outdated --json" == commands["npm-outdated-typescript-binding"]
-    assert "cargo update --dry-run" == commands["cargo-update-dry-run"]
+    assert commands["pnpm-outdated-docs"] == "pnpm outdated --format json"
+    assert commands["npm-outdated-typescript-binding"] == "npm outdated --json"
+    assert commands["cargo-update-dry-run"] == "cargo update --dry-run"
     assert "cargo outdated" in commands["cargo-outdated"]
     assert "Pkg.status(; outdated=true)" in commands["julia-pkg-status-outdated"]
     assert "dotnet list" in commands["dotnet-outdated-runtime-package"]

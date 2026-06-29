@@ -1,4 +1,4 @@
-# Track astro7_starlight040_migration_20260624 Context
+# Track roadmap_release_truth_closure_20260625 Context
 
 - [Specification](./spec.md)
 - [Implementation Plan](./plan.md)

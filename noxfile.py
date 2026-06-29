@@ -235,6 +235,8 @@ def release_reproducibility(session: nox.Session) -> None:
         "--json",
         *session.posargs,
     )
+
+
 @nox.session(python=False)
 def coverage(session: nox.Session) -> None:
     """Run unit tests, produce a standalone coverage report (HTML + XML), and write release evidence."""
@@ -368,4 +370,3 @@ def binding_conformance(session: nox.Session) -> None:
         "--tb=short",
         *session.posargs,
     )
-

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-
 DOC_PATH = Path("docs/astro-site/src/content/docs/operations/remote-execution.md")
 LATEST_DOC_PATH = Path("docs/astro-site/src/content/docs/latest/operations/remote-execution.md")
 STARLIGHT_CONFIG = Path("docs/astro-site/starlight.config.mjs")

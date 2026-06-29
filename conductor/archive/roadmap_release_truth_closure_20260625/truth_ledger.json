@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "track_id": "roadmap_release_truth_closure_20260625",
+  "created_at": "2026-06-26T06:28:00Z",
+  "updated_at": "2026-06-26T06:28:00Z",
+  "entries": [
+    {
+      "claim": "Prior Conductor roadmap stages are complete or archived",
+      "status": "complete",
+      "owner": "conductor/archive/",
+      "evidence": "80 archived tracks under conductor/archive/",
+      "track_link": null,
+      "release_claim_policy": "allow"
+    },
+    {
+      "claim": "Full product vision incomplete - future-state gates remain open",
+      "status": "future_state",
+      "owner": "conductor/tracks/",
+      "evidence": "14 active tracks under conductor/tracks/",
+      "track_link": null,
+      "release_claim_policy": "qualified_only"
+    },
+    {
+      "claim": "Remediation tracks for roadmap truth complete and archived",
+      "status": "active",
+      "owner": "roadmap_release_truth_closure_20260625",
+      "evidence": "Active track under conductor/tracks/roadmap_release_truth_closure_20260625/",
+      "track_link": "roadmap_release_truth_closure_20260625",
+      "release_claim_policy": "blocked_until_complete"
+    },
+    {
+      "claim": "Full Rust ownership is a future-state gate",
+      "status": "active",
+      "owner": "rust_native_ownership_release_proof_20260625",
+      "evidence": "Active track under conductor/tracks/rust_native_ownership_release_proof_20260625/",
+      "track_link": "rust_native_ownership_release_proof_20260625",
+      "release_claim_policy": "blocked_until_complete"
+    },
+    {
+      "claim": "External submission acceptance is a future-state gate",
+      "status": "active",
+      "owner": "polyglot_registry_acceptance_completion_20260625",
+      "evidence": "Active track under conductor/tracks/polyglot_registry_acceptance_completion_20260625/",
+      "track_link": "polyglot_registry_acceptance_completion_20260625",
+      "release_claim_policy": "blocked_until_complete"
+    },
+    {
+      "claim": "Python remains the reference ergonomic surface",
+      "status": "complete",
+      "owner": "src/innovate/",
+      "evidence": "Primary Python source under src/innovate/",
+      "track_link": null,
+      "release_claim_policy": "allow"
+    },
+    {
+      "claim": "Rust is the strategic long-term runtime",
+      "status": "active",
+      "owner": "rust_native_ownership_release_proof_20260625",
+      "evidence": "Active track under conductor/tracks/rust_native_ownership_release_proof_20260625/",
+      "track_link": "rust_native_ownership_release_proof_20260625",
+      "release_claim_policy": "qualified_only"
+    },
+    {
+      "claim": "Modular extensible library for innovation diffusion",
+      "status": "complete",
+      "owner": "src/innovate/",
+      "evidence": "Full Python library source",
+      "track_link": null,
+      "release_claim_policy": "allow"
+    },
+    {
+      "claim": "Contract-first portability with stable API and kernel",
+      "status": "complete",
+      "owner": "archived",
+      "evidence": "Archived track: canonical_api_topology_20260415, functional_kernel_contract_20260415",
+      "track_link": "functional_kernel_contract_20260415",
+      "release_claim_policy": "allow"
+    },
+    {
+      "claim": "Thin language bindings for R, Julia, TS, Go, C#, Rust",
+      "status": "active",
+      "owner": "polyglot_registry_acceptance_completion_20260625",
+      "evidence": "Active track for registry acceptance",
+      "track_link": "polyglot_registry_acceptance_completion_20260625",
+      "release_claim_policy": "qualified_only"
+    },
+    {
+      "claim": "Arrow interchange for cross-language data contract",
+      "status": "complete",
+      "owner": "archived",
+      "evidence": "Archived track: arrow_interchange_schema_20260416",
+      "track_link": "arrow_interchange_schema_20260416",
+      "release_claim_policy": "allow"
+    },
+    {
+      "claim": "Installable packages for each binding ecosystem",
+      "status": "active",
+      "owner": "polyglot_registry_acceptance_completion_20260625",
+      "evidence": "Active track for registry acceptance",
+      "track_link": "polyglot_registry_acceptance_completion_20260625",
+      "release_claim_policy": "qualified_only"
+    },
+    {
+      "claim": "Rust core trajectory for strategic long-term execution",
+      "status": "active",
+      "owner": "rust_native_ownership_release_proof_20260625",
+      "evidence": "Active track for rust ownership proof",
+      "track_link": "rust_native_ownership_release_proof_20260625",
+      "release_claim_policy": "qualified_only"
+    },
+    {
+      "claim": "Astro/Starlight is the active documentation surface",
+      "status": "active",
+      "owner": "astro7_starlight040_migration_20260624",
+      "evidence": "Active track for Astro 7 / Starlight 0.40 migration",
+      "track_link": "astro7_starlight040_migration_20260624",
+      "release_claim_policy": "qualified_only"
+    },
+    {
+      "claim": "CI gates enforce lint types tests docs package",
+      "status": "active",
+      "owner": "ci_code_quality_release_hardening_20260625",
+      "evidence": "Active track for CI hardening",
+      "track_link": "ci_code_quality_release_hardening_20260625",
+      "release_claim_policy": "qualified_only"
+    }
+  ]
+}

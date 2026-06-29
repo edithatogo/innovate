@@ -7,7 +7,6 @@ from pathlib import Path
 
 import pytest
 
-
 ROUTES = {
     "/": "docs/astro-site/src/content/docs/index.md",
     "/core/kernel/": "docs/astro-site/src/content/docs/core/kernel.md",
@@ -136,7 +135,15 @@ def test_docsearch_is_gated_by_env_vars() -> None:
 def test_sidebar_contains_core_sections() -> None:
     """The Starlight sidebar must define the expected top-level sections."""
     config = Path("docs/astro-site/astro.config.mjs").read_text()
-    for section in ("Getting Started", "User Guide", "API Reference", "Maintainers", "Operations", "Architecture", "Migration"):
+    for section in (
+        "Getting Started",
+        "User Guide",
+        "API Reference",
+        "Maintainers",
+        "Operations",
+        "Architecture",
+        "Migration",
+    ):
         assert section in config
 
 
@@ -159,10 +166,15 @@ def test_docs_workflow_uses_correct_node_and_pnpm_versions() -> None:
 
 def test_production_docs_contract_passes() -> None:
     """The production docs verification script must pass."""
-    import subprocess, json, sys
+    import json
+    import subprocess
+    import sys
+
     result = subprocess.run(
         [sys.executable, "scripts/verify_production_docs.py", "--json"],
-        capture_output=True, text=True, check=False,
+        capture_output=True,
+        text=True,
+        check=False,
     )
     if result.returncode != 0:
         pytest.fail(f"Production docs verification failed:\n{result.stderr}")

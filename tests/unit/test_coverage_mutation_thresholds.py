@@ -62,13 +62,11 @@ def test_coverage_threshold_in_pyproject_toml() -> None:
 def test_mutation_config_in_pyproject_toml() -> None:
     """pyproject.toml should have mutmut source_paths configured."""
     text = Path("pyproject.toml").read_text()
-    assert "source_paths = [\"src/innovate/\"]" in text
+    assert 'source_paths = ["src/innovate/"]' in text
 
 
 def test_gate_inventory_lists_correct_thresholds() -> None:
     """Gate inventory should show 80% coverage threshold and >70% mutation threshold."""
-    text = Path(
-        "conductor/tracks/ci_code_quality_release_hardening_20260625/gate-inventory.md"
-    ).read_text()
+    text = Path("conductor/tracks/ci_code_quality_release_hardening_20260625/gate-inventory.md").read_text()
     assert "80% (fail-under=80)" in text
     assert ">70% (enforced)" in text
