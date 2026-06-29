@@ -1,0 +1,52 @@
+Task: Migrate modeling and integration tutorials
+Track: Starlight-Only Documentation Completion
+Phase: Phase 2: Tutorial and Bridge Migration
+
+Summary:
+Migrated eight modeling and integration tutorials from RST to Markdown format.
+All content preserved and now discoverable through Starlight in both current and latest versions.
+
+Files Created (16 total):
+Current versions (docs/astro-site/src/content/docs/tutorials/):
+- norton-bass.md
+- advanced-diffusion-inference.md
+- bayesian-fitter.md
+- multi-product.md
+- seasonal-data.md
+- counterfactual-analysis.md
+- jax-backend.md
+- ndlib-integration.md
+
+Latest versions (docs/astro-site/src/content/docs/latest/tutorials/):
+- norton-bass.md
+- advanced-diffusion-inference.md
+- bayesian-fitter.md
+- multi-product.md
+- seasonal-data.md
+- counterfactual-analysis.md
+- jax-backend.md
+- ndlib-integration.md
+
+Subtask 1: Promote Norton-Bass, advanced diffusion, Bayesian fitter, multi-product, seasonal, counterfactual, JAX, and NDLib docs
+- ✓ Read RST files from docs/source/tutorials/
+- ✓ Converted to Markdown with proper frontmatter
+- ✓ Placed in both current and latest routes
+- ✓ Preserved all code examples and technical content
+
+Subtask 2: Add route/sidebar entries where needed
+- Tutorial indices already updated in previous core contract migration
+- All 11 tutorials now accessible through Starlight structure
+
+Subtask 3: Commit and attach git note
+- ✓ Committed with comprehensive message
+- ✓ Attached this verification note
+
+Phase 2 Status:
+✓ Task 1: Migrate core contract tutorials (completed)
+✓ Task 2: Migrate modeling and integration tutorials (completed)
+- Ready for Phase 2 verification
+- All 11 tutorial files migrated (3 core + 8 modeling/integration)
+- 22 Markdown files created (11 current + 11 latest)
+
+Remaining in Phase 2:
+- Task: Conductor - User Manual Verification 'Phase 2: Tutorial and Bridge Migration'
