@@ -17,11 +17,11 @@
     - [x] Promote functional kernel, diagnostics, and Arrow tutorials to Starlight current/latest pages.
     - [x] Repoint tests and evidence.
     - [x] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Migrate modeling and integration tutorials
-    - [ ] Promote Norton-Bass, advanced diffusion, Bayesian fitter, multi-product, seasonal, counterfactual, JAX, and NDLib docs.
-    - [ ] Add route/sidebar entries where needed.
-    - [ ] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Tutorial and Bridge Migration' (Protocol in workflow.md)
+- [x] Task: Migrate modeling and integration tutorials [90eb871]
+    - [x] Promote Norton-Bass, advanced diffusion, Bayesian fitter, multi-product, seasonal, counterfactual, JAX, and NDLib docs.
+    - [x] Add route/sidebar entries where needed.
+    - [x] Commit task changes and attach the required Conductor git note.
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Tutorial and Bridge Migration' (Protocol in workflow.md)
 
 ## Phase 3: API and Evidence Parity
 
