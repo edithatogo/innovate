@@ -444,8 +444,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [x] **Track: Kairos Dependency Inclusion** *(Completed)*
-*Link: [./archive/kairos_dependency_inclusion_20260626/](./archive/kairos_dependency_inclusion_20260626/)*
+- [~] **Track: Kairos Dependency Inclusion** *(In Progress)*
+*Link: [./tracks/kairos_dependency_inclusion_20260626/](./tracks/kairos_dependency_inclusion_20260626/)*
 
 ---
 
