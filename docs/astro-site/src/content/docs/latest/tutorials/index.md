@@ -10,10 +10,14 @@ This section hosts the tutorial surface in Starlight and is the canonical target
 
 Current tutorial areas:
 
-* core usage patterns
-* benchmark workflows
-* plugin API stability
+* **Core contracts**: functional kernel, diagnostics, and Arrow interchange
+* Core usage patterns
+* Benchmark workflows
+* Plugin API stability
 
-Migration source:
+Migration sources:
 
-* `docs/source/tutorials.rst`
+* `docs/source/tutorials.rst` - main index
+* `docs/source/tutorials/functional_kernel_contract.rst` - migrated to [Functional Kernel Contract](/latest/tutorials/functional-kernel-contract/)
+* `docs/source/tutorials/diagnostics_contract.rst` - migrated to [Diagnostics Contract](/latest/tutorials/diagnostics-contract/)
+* `docs/source/tutorials/arrow_interchange.rst` - migrated to [Arrow Interchange](/latest/tutorials/arrow-interchange/)
