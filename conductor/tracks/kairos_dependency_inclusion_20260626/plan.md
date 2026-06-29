@@ -9,7 +9,7 @@
     - [x] Check whether matching `kairo-ecs-*` crates exist in crates.io and record whether repository sourcing or published versions are valid for this release.
     - [x] Record the selected Kairos source revision or published version set in release evidence.
     - [x] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Define dependency migration policy
+- [~] Task: Define dependency migration policy
     - [ ] Write failing checks that assert Mesa and NDLib are not required by the base install after the migration.
     - [ ] Write checks that require `networkx` to be either justified for plotting/graph utility APIs or moved behind a graph/visualization extra.
     - [ ] Document external compatibility constraints for Python 3.14-only packaging if any dependency or registry blocks the target baseline.

@@ -143,3 +143,62 @@ class TestKairosDependencyInclusion:
                     "Either provide a comment explaining its use for plotting/graph APIs, "
                     "or move it to an optional extra."
                 )
+
+    def test_legacy_abm_extra_exists(self):
+        """Test that legacy-abm optional dependency extra is defined."""
+        project_root = Path(__file__).parent.parent
+        pyproject_toml = project_root / "pyproject.toml"
+
+        assert pyproject_toml.exists(), f"pyproject.toml not found at {pyproject_toml}"
+
+        content = pyproject_toml.read_text()
+
+        # Check that legacy-abm extra is defined
+        assert "legacy-abm = [" in content, (
+            "legacy-abm optional dependency group not found. Mesa and ndlib must be available via legacy-abm extra."
+        )
+
+        # Check that mesa and ndlib are in the extra
+        lines = content.split("\n")
+        in_legacy_abm = False
+        has_mesa = False
+        has_ndlib = False
+
+        for line in lines:
+            if "legacy-abm = [" in line:
+                in_legacy_abm = True
+            elif in_legacy_abm and line.startswith("["):
+                break
+            elif in_legacy_abm:
+                if "mesa" in line:
+                    has_mesa = True
+                if "ndlib" in line:
+                    has_ndlib = True
+
+        assert has_mesa, "mesa not found in legacy-abm extra"
+        assert has_ndlib, "ndlib not found in legacy-abm extra"
+
+    def test_integration_report_exists(self):
+        """Test that Kairos integration report document exists."""
+        track_dir = Path(__file__).parent.parent / "conductor" / "tracks" / "kairos_dependency_inclusion_20260626"
+        report_file = track_dir / "KAIROS_INTEGRATION_REPORT.md"
+
+        assert report_file.exists(), (
+            f"Kairos integration report not found at {report_file}. "
+            "External compatibility constraints and dependency policy must be documented."
+        )
+
+        content = report_file.read_text()
+
+        # Check for key sections
+        required_sections = [
+            "Kairos Source Verification",
+            "Dependency Migration Policy",
+            "External Compatibility Constraints",
+            "Python 3.14 Baseline",
+            "Rust Toolchain",
+            "Registry / Packaging Constraints",
+        ]
+
+        for section in required_sections:
+            assert section in content, f"Required section '{section}' not found in Kairos integration report."
