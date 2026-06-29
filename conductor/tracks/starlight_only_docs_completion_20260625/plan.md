@@ -1,6 +1,6 @@
 # Starlight-Only Documentation Completion Plan
 
-## Phase 1: Remaining RST Audit
+## Phase 1: Remaining RST Audit [checkpoint: c9a4cf4]
 
 - [x] Task: Classify remaining RST files
     - [x] Group files as tutorial, bridge, generated API, template, archive, or evidence.
