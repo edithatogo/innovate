@@ -8,9 +8,9 @@
     - [x] Add failing tests for intervention timing, comparators, rollout, spillovers, covariates, and estimand metadata.
     - [x] Implement validated input/output contracts.
     - [x] Commit task changes and attach the required Conductor git note.
-- [~] Task: Add misuse guardrails
-    - [~] Validate missing comparator, leakage, time-window mismatch, and unsupported claim failures.
-    - [ ] Commit task changes and attach the required Conductor git note.
+- [x] Task: Add misuse guardrails (b961c25)
+    - [x] Validate missing comparator, leakage, time-window mismatch, and unsupported claim failures.
+    - [x] Commit task changes and attach the required Conductor git note.
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Causal Contract and Guardrails' (Protocol in workflow.md)
 
 ## Phase 2 Checkpoint: [checkpoint: pending]
