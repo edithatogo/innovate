@@ -17,7 +17,7 @@
 
 ## Phase 2: Manifest Migration and Build Plumbing
 
-### Phase 2 Checkpoint: [checkpoint: pending]
+### Phase 2 Checkpoint: [checkpoint: 7fe4ee5]
 
 - [x] Task: Add Kairos Rust/toolchain dependency plumbing 74ec231
     - [x] Add repository-first Kairos dependency entries for the selected crate set in the appropriate Rust workspace or binding manifests.
