@@ -4,9 +4,7 @@ This module provides functions for generating scenario comparison summaries
 including ranking, incremental effects, threshold timing, and uncertainty.
 """
 
-from typing import Any, Optional
-
-import numpy as np
+from typing import Any
 
 from innovate.scenario.execution import ScenarioExecution
 
@@ -15,7 +13,7 @@ def compute_ranking(
     baseline: ScenarioExecution,
     alternative: ScenarioExecution,
     metric: str = "final_adoption",
-) -> dict[str, float]:
+) -> dict[str, Any]:
     """Compute ranking scores for two scenarios.
 
     Parameters
@@ -96,7 +94,7 @@ def compute_threshold_timing(
     baseline: ScenarioExecution,
     alternative: ScenarioExecution,
     threshold: float = 0.5,
-) -> dict[str, Optional[float]]:
+) -> dict[str, float | None]:
     """Compute time to reach adoption threshold.
 
     Parameters

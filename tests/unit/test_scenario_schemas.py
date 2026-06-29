@@ -6,7 +6,6 @@ substitution, competition, and network diffusion workflows.
 
 import json
 from datetime import datetime
-from typing import Any
 
 import pytest
 

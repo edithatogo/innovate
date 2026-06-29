@@ -11,7 +11,6 @@ from innovate.scenario.execution import ScenarioExecution
 from innovate.scenario.schemas import (
     BaselineScenario,
     InterventionScenario,
-    SubstitutionScenario,
 )
 from innovate.scenario.summaries import (
     compute_incremental_effect,
@@ -308,14 +307,13 @@ class TestSummarizeComparison:
         def clean_for_json(obj):
             if isinstance(obj, dict):
                 return {k: clean_for_json(v) for k, v in obj.items()}
-            elif isinstance(obj, (list, tuple)):
+            if isinstance(obj, (list, tuple)):
                 return [clean_for_json(item) for item in obj]
-            elif isinstance(obj, float):
+            if isinstance(obj, float):
                 if np.isnan(obj) or np.isinf(obj):
                     return None
                 return obj
-            else:
-                return obj
+            return obj
 
         clean_summary = clean_for_json(summary)
         json_str = json.dumps(clean_summary)

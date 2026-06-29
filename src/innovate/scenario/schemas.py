@@ -5,12 +5,11 @@ substitution, competition, and network diffusion scenarios.
 """
 
 from abc import ABC, abstractmethod
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from innovate.utils.validation import (
     validate_float,
-    validate_positive_numeric_sequence,
 )
 
 
@@ -479,7 +478,7 @@ class ArtifactEnvelope:
         self.model_type = str(model_type)
         self.version = str(version)
         self.notes = notes if notes is None else str(notes)
-        self.timestamp = timestamp if timestamp is not None else datetime.now(timezone.utc)
+        self.timestamp = timestamp if timestamp is not None else datetime.now(UTC)
 
     def to_dict(self) -> dict[str, Any]:
         """Convert artifact envelope to a dictionary representation."""

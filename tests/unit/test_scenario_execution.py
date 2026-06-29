@@ -5,7 +5,6 @@ generating diagnostics, and comparing scenario results.
 """
 
 import json
-from typing import Any
 
 import numpy as np
 import pytest

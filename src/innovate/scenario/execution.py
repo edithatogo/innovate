@@ -4,8 +4,8 @@ This module provides APIs for executing scenarios, tracking execution
 metadata and diagnostics, and comparing scenario results.
 """
 
-from datetime import datetime, timezone
-from typing import Any, Optional
+from datetime import UTC, datetime
+from typing import Any
 
 import numpy as np
 
@@ -22,11 +22,11 @@ class ScenarioExecution:
         model_type: str,
         version: str,
         execution_time_seconds: float = 0.0,
-        time_points: Optional[np.ndarray] = None,
-        adoption_curve: Optional[np.ndarray] = None,
-        diagnostics: Optional[dict[str, Any]] = None,
-        notes: Optional[str] = None,
-        timestamp: Optional[datetime] = None,
+        time_points: np.ndarray | None = None,
+        adoption_curve: np.ndarray | None = None,
+        diagnostics: dict[str, Any] | None = None,
+        notes: str | None = None,
+        timestamp: datetime | None = None,
     ):
         """Initialize a scenario execution.
 
@@ -62,7 +62,7 @@ class ScenarioExecution:
         self.adoption_curve = np.array(adoption_curve, dtype=float) if adoption_curve is not None else None
         self.diagnostics = diagnostics if diagnostics is not None else {}
         self.notes = notes if notes is None else str(notes)
-        self.timestamp = timestamp if timestamp is not None else datetime.now(timezone.utc)
+        self.timestamp = timestamp if timestamp is not None else datetime.now(UTC)
 
     def to_dict(self) -> dict[str, Any]:
         """Convert execution to a dictionary representation.
@@ -94,10 +94,10 @@ class ScenarioComparison:
         baseline_execution: ScenarioExecution,
         alternative_execution: ScenarioExecution,
         comparison_metric: str = "ranking",
-        incremental_effect: Optional[float] = None,
-        threshold_timing: Optional[dict[str, Any]] = None,
-        uncertainty_bounds: Optional[dict[str, float]] = None,
-        notes: Optional[str] = None,
+        incremental_effect: float | None = None,
+        threshold_timing: dict[str, Any] | None = None,
+        uncertainty_bounds: dict[str, float] | None = None,
+        notes: str | None = None,
     ):
         """Initialize a scenario comparison.
 
@@ -172,7 +172,7 @@ class ScenarioExecutor:
     def execute(
         self,
         scenario: ScenarioBase,
-        notes: Optional[str] = None,
+        notes: str | None = None,
     ) -> ScenarioExecution:
         """Execute a single scenario.
 
@@ -199,7 +199,7 @@ class ScenarioExecutor:
     def execute_grid(
         self,
         scenarios: list[ScenarioBase],
-        notes: Optional[str] = None,
+        notes: str | None = None,
     ) -> list[ScenarioExecution]:
         """Execute a grid of scenarios.
 
