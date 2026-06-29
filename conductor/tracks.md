@@ -419,8 +419,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: CI, Code Quality, and Release Hardening**
-*Link: [./tracks/ci_code_quality_release_hardening_20260625/](./tracks/ci_code_quality_release_hardening_20260625/)*
+- [x] **Track: CI, Code Quality, and Release Hardening** *(Completed)*
+*Link: [./archive/ci_code_quality_release_hardening_20260625/](./archive/ci_code_quality_release_hardening_20260625/)*
 
 ---
 
