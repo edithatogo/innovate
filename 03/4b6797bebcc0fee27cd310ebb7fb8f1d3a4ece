@@ -1,0 +1,20 @@
+Task: Add scenario registry metadata
+
+Summary: Created and registered scenario capability metadata for all scenario types in the capability registry.
+
+Files Changed:
+- src/innovate/scenario/registry.py (new)
+- tests/unit/test_scenario_registry.py (new)
+
+Details:
+- ScenarioCapability dataclass for machine-readable metadata
+- Registry maps scenario keys to capabilities
+- All 5 scenarios registered: baseline, intervention, substitution, competition, network
+- All marked as stable
+- All support JSON/Arrow payloads (deterministic serialization)
+- All support Python and Rust bindings (polyglot ready)
+- Immutable registry using MappingProxyType
+- Discovery functions: get_scenario_registry(), get_scenario_capability()
+- 10 unit tests covering registry functionality
+
+Why: Establishes the discovery contract for scenarios, enabling tools to introspect scenario capabilities, identify binding compatibility, and validate against payload stability requirements.
