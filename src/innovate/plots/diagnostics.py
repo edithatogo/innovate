@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict, is_dataclass
+from dataclasses import asdict, dataclass, is_dataclass
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -10,6 +10,20 @@ from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 
 from innovate.fitters.diagnostics_contract import DiagnosticsContract
 from innovate.fitters.residual_analysis import ResidualAnalysis
+
+
+@dataclass
+class ResidualPlotConfig:
+    """Configuration for residual plots."""
+
+    title: str = "Residual Analysis"
+    lags: int = 30
+    acf_only: bool = False
+    figsize: tuple = (10, None)
+    color_residuals: str = "C0"
+    color_acf: str = "C1"
+    color_pacf: str = "C2"
+    show: bool = True
 
 
 def _extract_diagnostics_payload(
@@ -44,14 +58,7 @@ def plot_residuals(  # noqa: PLR0912, PLR0915
     model,
     t: np.ndarray,
     y: np.ndarray,
-    title: str = "Residual Analysis",
-    lags: int = 30,
-    acf_only: bool = False,
-    figsize: tuple = (10, None),
-    color_residuals: str = "C0",
-    color_acf: str = "C1",
-    color_pacf: str = "C2",
-    show: bool = True,
+    config: ResidualPlotConfig | None = None,
     diagnostics: DiagnosticsContract | object | None = None,
     residual_analysis: ResidualAnalysis | None = None,
 ):
@@ -65,23 +72,9 @@ def plot_residuals(  # noqa: PLR0912, PLR0915
         The time steps.
     y : np.ndarray
         The observed data.
-    title : str, optional
-        The title for the overall plot, by default "Residual Analysis".
-    lags : int, optional
-        The number of lags to show in the ACF and PACF plots, by default 30.
-    acf_only : bool, optional
-        If True, only the ACF plot will be shown, by default False.
-    figsize : tuple, optional
-        The figure size, by default (10, None). If None, the height is automatically determined.
-    color_residuals : str, optional
-        The color of the residuals plot, by default 'C0'.
-    color_acf : str, optional
-        The color of the ACF plot, by default 'C1'.
-    color_pacf : str, optional
-        The color of the PACF plot, by default 'C2'.
-    show : bool, optional
-        If True, the plot will be shown, by default True. Otherwise, the figure and axes objects will be returned.
-        diagnostics : innovate.fitters.diagnostics_contract.DiagnosticsContract | object | None, optional
+    config : ResidualPlotConfig | None, optional
+        Configuration for the plot. If None, default configuration is used.
+    diagnostics : innovate.fitters.diagnostics_contract.DiagnosticsContract | object | None, optional
         Optional diagnostics contract or fit diagnostics object. If provided,
         the function reuses the stored residuals and residual analysis instead of
         recomputing them.
@@ -89,6 +82,8 @@ def plot_residuals(  # noqa: PLR0912, PLR0915
         Explicit residual analysis object to plot. Takes precedence over the
         analysis attached to ``diagnostics``.
     """
+    if config is None:
+        config = ResidualPlotConfig()
     if not hasattr(model, "params_") or not model.params_:
         raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
@@ -111,15 +106,16 @@ def plot_residuals(  # noqa: PLR0912, PLR0915
             residual_analysis = None
 
     # Create figure
-    n_rows = 2 if acf_only else 3
+    n_rows = 2 if config.acf_only else 3
+    figsize = config.figsize
     if figsize[1] is None:
         figsize = (figsize[0], 4 * n_rows)
 
     fig, axes = plt.subplots(n_rows, 1, figsize=figsize)
-    fig.suptitle(title, fontsize=16)
+    fig.suptitle(config.title, fontsize=16)
 
     # Plot residuals
-    axes[0].plot(t_arr, residuals, color=color_residuals)
+    axes[0].plot(t_arr, residuals, color=config.color_residuals)
     axes[0].axhline(0, linestyle="--", color="k", alpha=0.7)
     axes[0].set_title("Residuals")
     axes[0].set_xlabel("Time")
@@ -149,21 +145,21 @@ def plot_residuals(  # noqa: PLR0912, PLR0915
                 bbox={"boxstyle": "round", "facecolor": "white", "alpha": 0.75},
             )
 
-    acf_lags = min(int(lags), max(1, len(residuals) - 1))
+    acf_lags = min(int(config.lags), max(1, len(residuals) - 1))
 
     # Plot ACF
-    plot_acf(residuals, ax=axes[1], lags=acf_lags, color=color_acf)
+    plot_acf(residuals, ax=axes[1], lags=acf_lags, color=config.color_acf)
     axes[1].set_title("Autocorrelation Function (ACF)")
 
-    if not acf_only:
-        pacf_lags = min(int(lags), max(1, len(residuals) // 2))
+    if not config.acf_only:
+        pacf_lags = min(int(config.lags), max(1, len(residuals) // 2))
         # Plot PACF
-        plot_pacf(residuals, ax=axes[2], lags=pacf_lags, color=color_pacf)
+        plot_pacf(residuals, ax=axes[2], lags=pacf_lags, color=config.color_pacf)
         axes[2].set_title("Partial Autocorrelation Function (PACF)")
 
     plt.tight_layout(rect=[0, 0, 1, 0.96])
 
-    if show:
+    if config.show:
         plt.show()
     else:
         return fig, axes

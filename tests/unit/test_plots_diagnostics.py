@@ -10,7 +10,7 @@ import pytest
 from innovate.diffuse.logistic import LogisticModel
 from innovate.fitters.diagnostics_contract import DiagnosticsContract, UncertaintySummary
 from innovate.fitters.scipy_fitter import ScipyFitter
-from innovate.plots.diagnostics import plot_residuals
+from innovate.plots.diagnostics import ResidualPlotConfig, plot_residuals
 
 
 @pytest.fixture
@@ -30,7 +30,7 @@ def test_plot_residuals_runs_without_error(fitted_logistic_model):
     """Tests that plot_residuals runs without raising an exception."""
     model, t, y = fitted_logistic_model
     try:
-        fig, _ = plot_residuals(model, t, y, show=False)
+        fig, _ = plot_residuals(model, t, y, config=ResidualPlotConfig(show=False))
         plt.close(fig)
     except Exception as e:
         pytest.fail(f"plot_residuals raised an exception: {e}")
@@ -56,7 +56,7 @@ def test_plot_residuals_accepts_diagnostics_contract(fitted_logistic_model):
         model_name="Logistic",
     )
 
-    fig, axes = plot_residuals(model, t, y, diagnostics=contract, show=False)
+    fig, axes = plot_residuals(model, t, y, diagnostics=contract, config=ResidualPlotConfig(show=False))
     try:
         assert fig._suptitle.get_text() == "Residual Analysis"
         assert "support=supported" in axes[0].texts[0].get_text()
