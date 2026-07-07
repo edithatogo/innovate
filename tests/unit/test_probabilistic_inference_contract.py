@@ -71,6 +71,17 @@ def test_posterior_samples_payload_rejects_inconsistent_draw_shapes() -> None:
         )
 
 
+def test_require_probabilistic_backend_succeeds_when_available() -> None:
+    """require_probabilistic_backend should do nothing when dependencies are available."""
+    from innovate.probabilistic import require_probabilistic_backend
+
+    # Standard library modules or base dependencies should always be available.
+    require_probabilistic_backend(
+        engine="example_available_engine",
+        optional_dependencies=("os", "sys"),
+    )
+
+
 def test_missing_probabilistic_backend_error_is_structured() -> None:
     """Missing optional probabilistic dependencies should produce structured errors."""
     from innovate.probabilistic import ProbabilisticBackendUnavailable, require_probabilistic_backend
