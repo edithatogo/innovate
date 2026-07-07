@@ -10,6 +10,7 @@ from innovate.advanced_runtime import (
     AdvancedCapability,
     AdvancedResult,
     AdvancedRuntimePolicy,
+    compare_policy_scenarios,
     detect_advanced_backends,
     get_advanced_capability,
     list_advanced_capabilities,
@@ -157,3 +158,61 @@ def test_detect_advanced_backends_reports_numpy_available() -> None:
 
     assert detected["numpy"] is True
     assert set(detected) == {"numpy", "jax", "rust"}
+
+
+
+def test_compare_policy_scenarios_happy_path() -> None:
+    """compare_policy_scenarios correctly computes effect and relative lift."""
+    time = [1.0, 2.0, 3.0]
+    baseline = [10.0, 20.0, 30.0]
+    intervention = [10.0, 25.0, 45.0]
+
+    result = compare_policy_scenarios(
+        time=time,
+        baseline=baseline,
+        intervention=intervention,
+        scenario_name="test_scenario",
+        assumptions=["a1"],
+        covariates={"cov1": [0.1, 0.2, 0.3]},
+    )
+
+    assert result.workflow == "policy_scenario"
+    assert result.stability == "stable"
+    assert result.backend == "numpy"
+    assert list(result.time) == time
+    assert list(result.mean) == intervention
+
+    metadata = result.metadata
+    assert metadata["scenario_name"] == "test_scenario"
+    assert list(metadata["baseline"]) == baseline
+    assert metadata["incremental_effect"] == 20.0  # (10-10) + (25-20) + (45-30) = 0 + 5 + 15 = 20
+    assert metadata["relative_lift_final"] == 0.5  # 45 / 30 - 1 = 1.5 - 1 = 0.5
+    assert metadata["assumptions"] == ["a1"]
+    assert metadata["covariates"]["cov1"] == [0.1, 0.2, 0.3]
+
+
+def test_compare_policy_scenarios_zero_baseline() -> None:
+    """compare_policy_scenarios correctly handles zero final baseline value."""
+    result = compare_policy_scenarios(
+        time=[1.0],
+        baseline=[0.0],
+        intervention=[5.0],
+    )
+    assert result.metadata["relative_lift_final"] is None
+
+
+def test_compare_policy_scenarios_length_mismatch() -> None:
+    """compare_policy_scenarios validates array lengths."""
+    with pytest.raises(ValueError, match="baseline and intervention lengths must match time length"):
+        compare_policy_scenarios(
+            time=[1.0, 2.0],
+            baseline=[10.0],
+            intervention=[10.0, 20.0],
+        )
+
+    with pytest.raises(ValueError, match="baseline and intervention lengths must match time length"):
+        compare_policy_scenarios(
+            time=[1.0, 2.0],
+            baseline=[10.0, 20.0],
+            intervention=[10.0],
+        )
