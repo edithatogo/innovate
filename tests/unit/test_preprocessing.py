@@ -214,6 +214,49 @@ class TestApplySTLDecomposition:
         with pytest.raises(ValueError, match="Period must be specified"):
             apply_stl_decomposition(data, period=None)
 
+    def test_apply_stl_decomposition_robust_parameter(self):
+        """Test STL decomposition passes the robust parameter correctly."""
+        from unittest.mock import patch
+
+        dates = pd.date_range(start="2020-01-01", periods=50, freq="D")
+        data = pd.Series(np.random.randn(50), index=dates)
+
+        with patch("src.innovate.utils.preprocessing.STL") as mock_stl:
+            # Mock the fit method and its return value
+            mock_fit = mock_stl.return_value.fit.return_value
+            mock_fit.trend = pd.Series(np.zeros(50), index=dates)
+            mock_fit.seasonal = pd.Series(np.zeros(50), index=dates)
+            mock_fit.resid = pd.Series(np.zeros(50), index=dates)
+
+            # Test robust=True
+            apply_stl_decomposition(data, period=7, robust=True)
+            mock_stl.assert_called_with(data, period=7, robust=True)
+
+            # Test robust=False
+            apply_stl_decomposition(data, period=7, robust=False)
+            mock_stl.assert_called_with(data, period=7, robust=False)
+
+    def test_apply_stl_decomposition_robust_execution(self):
+        """Test STL decomposition executes without errors for both robust values."""
+        dates = pd.date_range(start="2020-01-01", periods=50, freq="D")
+
+        # Create data with trend, seasonality, and an outlier
+        trend = np.linspace(0, 10, 50)
+        seasonal = 2 * np.sin(2 * np.pi * np.arange(50) / 7)
+        noise = np.random.normal(0, 0.5, 50)
+        data = pd.Series(trend + seasonal + noise, index=dates)
+
+        # Add outlier
+        data.iloc[25] += 20.0
+
+        # Execute with robust=True
+        trend_r, seasonal_r, resid_r = apply_stl_decomposition(data, period=7, robust=True)
+        assert len(trend_r) == 50
+
+        # Execute with robust=False
+        trend_nr, seasonal_nr, resid_nr = apply_stl_decomposition(data, period=7, robust=False)
+        assert len(trend_nr) == 50
+
 
 class TestCumulativeSum:
     """Test cases for cumulative_sum function."""
