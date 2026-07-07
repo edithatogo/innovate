@@ -96,6 +96,66 @@ class TestSARIMAFit:
         # The fitted values should have been calculated (no NaN values)
         assert not result.isna().all()
 
+    def test_apply_sarima_invalid_order_negative(self):
+        """Test SARIMA with negative values in order raises ValueError."""
+        dates = pd.date_range(start="2020-01-01", periods=30, freq="D")
+        series = pd.Series(np.random.randn(30), index=dates)
+
+        # Negative order parameters should raise ValueError
+        order = (-1, 1, 1)
+        seasonal_order = (1, 1, 1, 7)
+
+        with pytest.raises(ValueError):
+            apply_sarima(series, order, seasonal_order)
+
+    def test_apply_sarima_invalid_seasonal_order_negative(self):
+        """Test SARIMA with negative values in seasonal_order raises ValueError."""
+        dates = pd.date_range(start="2020-01-01", periods=30, freq="D")
+        series = pd.Series(np.random.randn(30), index=dates)
+
+        order = (1, 1, 1)
+        # Negative seasonal_order parameters should raise ValueError
+        seasonal_order = (-1, 1, 1, 7)
+
+        with pytest.raises(ValueError):
+            apply_sarima(series, order, seasonal_order)
+
+    def test_apply_sarima_invalid_order_length(self):
+        """Test SARIMA with incorrect order tuple length raises ValueError."""
+        dates = pd.date_range(start="2020-01-01", periods=30, freq="D")
+        series = pd.Series(np.random.randn(30), index=dates)
+
+        # Incorrect length for order tuple (should be 3)
+        order = (1, 1)
+        seasonal_order = (1, 1, 1, 7)
+
+        with pytest.raises(ValueError):
+            apply_sarima(series, order, seasonal_order)
+
+    def test_apply_sarima_invalid_seasonal_order_length(self):
+        """Test SARIMA with incorrect seasonal_order tuple length raises ValueError."""
+        dates = pd.date_range(start="2020-01-01", periods=30, freq="D")
+        series = pd.Series(np.random.randn(30), index=dates)
+
+        order = (1, 1, 1)
+        # Incorrect length for seasonal_order tuple (should be 4)
+        seasonal_order = (1, 1, 1)
+
+        with pytest.raises(ValueError):
+            apply_sarima(series, order, seasonal_order)
+
+    def test_apply_sarima_invalid_order_type(self):
+        """Test SARIMA with invalid type in order raises ValueError."""
+        dates = pd.date_range(start="2020-01-01", periods=30, freq="D")
+        series = pd.Series(np.random.randn(30), index=dates)
+
+        # Invalid type for order parameter (e.g., string)
+        order = ("a", 1, 1)
+        seasonal_order = (1, 1, 1, 7)
+
+        with pytest.raises(ValueError):
+            apply_sarima(series, order, seasonal_order)
+
 
 class TestEnsureDatetimeIndex:
     """Test cases for ensure_datetime_index function."""
