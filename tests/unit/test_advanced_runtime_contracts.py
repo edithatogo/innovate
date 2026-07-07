@@ -157,3 +157,18 @@ def test_detect_advanced_backends_reports_numpy_available() -> None:
 
     assert detected["numpy"] is True
     assert set(detected) == {"numpy", "jax", "rust"}
+
+
+def test_detect_advanced_backends_optional_backends(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Backend detection should correctly report optional backend availability."""
+    # Test when all optional backends are available
+    monkeypatch.setattr("innovate.advanced_runtime.find_spec", lambda _name: True)
+    detected_available = detect_advanced_backends()
+    assert detected_available["jax"] is True
+    assert detected_available["rust"] is True
+
+    # Test when optional backends are unavailable
+    monkeypatch.setattr("innovate.advanced_runtime.find_spec", lambda _name: None)
+    detected_unavailable = detect_advanced_backends()
+    assert detected_unavailable["jax"] is False
+    assert detected_unavailable["rust"] is False
