@@ -67,3 +67,31 @@ def test_extension_manifest_rejects_unknown_extension_points() -> None:
             stability=StabilityTier.INTERNAL,
             extension_points=("model_registry", "remote_distribution"),
         )
+
+
+def test_get_registered_extensions_immutability(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The returned registry mapping must be immutable."""
+    # Ensure we start with a clean slate for the test by clearing the internal registry
+    import innovate.plugins
+    monkeypatch.setattr(innovate.plugins, "_REGISTERED_EXTENSIONS", {})
+
+    # Ensure there is at least one extension registered to test content check
+    manifest = ExtensionManifest(
+        name="test-immutability-plugin",
+        version="1.0.0",
+        entrypoint="test.plugin:register",
+        stability=StabilityTier.INTERNAL,
+        extension_points=("diagnostics",),
+    )
+
+    register_extension(manifest)
+
+    registry = get_registered_extensions()
+
+    # Check that content is present
+    assert "test-immutability-plugin" in registry
+    assert registry["test-immutability-plugin"].version == "1.0.0"
+
+    # Check immutability
+    with pytest.raises(TypeError):
+        registry["new-plugin"] = None  # type: ignore[index]
