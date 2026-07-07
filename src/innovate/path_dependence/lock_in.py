@@ -146,7 +146,15 @@ class LockInModel:
 
         cumulative_predictions = self.predict(t, y0)
         # Numerical integration can introduce tiny negative steps near saturation.
-        rates = np.maximum(0, np.diff(cumulative_predictions, axis=0))
+
+        rates = np.empty_like(cumulative_predictions)
+
         initial_rates = self.differential_equation(y0, t[0], *self._params.values())
         initial_rates = np.maximum(0, initial_rates)
-        return np.vstack([initial_rates, rates])
+        rates[0] = initial_rates
+
+        if len(t) > 1:
+            np.subtract(cumulative_predictions[1:], cumulative_predictions[:-1], out=rates[1:])
+            np.maximum(0, rates[1:], out=rates[1:])
+
+        return rates
