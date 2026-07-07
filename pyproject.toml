@@ -34,7 +34,7 @@ dependencies = [
   # Statistics / econometrics
   "statsmodels>=0.14.6,<0.15",
   # Network analysis (retained for graph analysis and visualization support)
-    "networkx>=3.6.1,<4",  # Required for network topology analysis and graph visualization
+  "networkx>=3.6.1,<4",  # Required for network topology analysis and graph visualization
   # Differential equations
   "jitcdde>=1.8.3,<2",
   "sympy>=1.14,<2",
@@ -45,6 +45,8 @@ dependencies = [
   "pymannkendall>=1.4.3,<2",
   # Symbolic / tensor computation
   "pytensor>=2.38.2,<3",
+  "pandasdmx>=1.9.0",
+  "pydantic>=2.13.4",
 ]
 
 [project.urls]
