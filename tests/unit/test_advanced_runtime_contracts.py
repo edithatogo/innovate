@@ -17,6 +17,17 @@ from innovate.advanced_runtime import (
 )
 
 
+def test_list_advanced_capabilities_deterministic_order() -> None:
+    """Advanced capability metadata is returned as a tuple in strictly sorted alphabetical order."""
+    capabilities = list_advanced_capabilities()
+
+    assert isinstance(capabilities, tuple)
+    assert len(capabilities) > 0
+
+    keys = [cap.key for cap in capabilities]
+    assert keys == sorted(keys)
+
+
 def test_advanced_capability_registry_marks_stability_and_dependencies() -> None:
     """Advanced workflows expose machine-readable stability and dependency metadata."""
     capabilities = {capability.key: capability for capability in list_advanced_capabilities()}
