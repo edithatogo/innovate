@@ -28,6 +28,7 @@ class MultiProductDiffusionModel(DiffusionModel):
         self.Q = B.array(Q) if Q is not None else None
         self.m = B.array(m) if m is not None else None
         self.names = names
+        self._param_names_cache = None
 
         if (
             self.p is not None
@@ -59,6 +60,9 @@ class MultiProductDiffusionModel(DiffusionModel):
 
     @property
     def param_names(self) -> Sequence[str]:
+        if self._param_names_cache is not None:
+            return self._param_names_cache
+
         names = []
         # Add p, q, m parameters for each product
         for prefix in ["p", "q", "m"]:
@@ -82,6 +86,8 @@ class MultiProductDiffusionModel(DiffusionModel):
                 for j in range(self.n_products):
                     if i != j:
                         names.append(f"beta_alpha_{i + 1}_{j + 1}_{cov}")
+
+        self._param_names_cache = names
         return names
 
     def initial_guesses(
@@ -173,26 +179,14 @@ class MultiProductDiffusionModel(DiffusionModel):
             params_for_ode = list(p_vals) + list(q_vals) + list(m_vals) + alpha_flat
 
             if self.covariates and self._params:
-                for cov in self.covariates:
-                    for i in range(self.n_products):
-                        params_for_ode.append(
-                            self._params.get(f"beta_p{i + 1}_{cov}", 0.0),
-                        )
-                        params_for_ode.append(
-                            self._params.get(f"beta_q{i + 1}_{cov}", 0.0),
-                        )
-                        params_for_ode.append(
-                            self._params.get(f"beta_m{i + 1}_{cov}", 0.0),
-                        )
-                    for i in range(self.n_products):
-                        for j in range(self.n_products):
-                            if i != j:
-                                params_for_ode.append(
-                                    self._params.get(
-                                        f"beta_alpha_{i + 1}_{j + 1}_{cov}",
-                                        0.0,
-                                    ),
-                                )
+                # The first part of param_names (3*n_products + n_products*(n_products-1))
+                # are the base parameters (p, q, m, alpha). The rest are the covariate betas.
+                # We can just iterate through them to avoid creating f-strings repeatedly.
+                num_base_params = 3 * self.n_products + self.n_products * (self.n_products - 1)
+                covariate_names = self.param_names[num_base_params:]
+
+                for name in covariate_names:
+                    params_for_ode.append(self._params.get(name, 0.0))
 
         elif self._params:
             # Use fitted parameters if available
