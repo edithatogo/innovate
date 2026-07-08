@@ -9,6 +9,7 @@ import numpy as np
 import pytest
 
 from innovate.advanced_runtime import (
+    RegimeEnsembleConfig,
     calibrate_prediction_intervals,
     compare_policy_scenarios,
     compose_regime_ensemble,
@@ -35,11 +36,13 @@ def test_compose_regime_ensemble_scores_and_serializes_result() -> None:
     fast_regime = observed * 1.04
 
     result = compose_regime_ensemble(
-        time=time,
-        predictions={"slow": slow_regime, "fast": fast_regime},
-        observed=observed,
-        weights={"slow": 0.45, "fast": 0.55},
-        assumptions=fixture["assumptions"],
+        RegimeEnsembleConfig(
+            time=time,
+            predictions={"slow": slow_regime, "fast": fast_regime},
+            observed=observed,
+            weights={"slow": 0.45, "fast": 0.55},
+            assumptions=fixture["assumptions"],
+        )
     )
 
     payload = result.to_dict()

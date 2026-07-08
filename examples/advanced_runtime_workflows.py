@@ -5,6 +5,7 @@ from __future__ import annotations
 import numpy as np
 
 from innovate.advanced_runtime import (
+    RegimeEnsembleConfig,
     calibrate_prediction_intervals,
     compare_policy_scenarios,
     compose_regime_ensemble,
@@ -19,11 +20,13 @@ def build_report() -> dict[str, dict[str, object]]:
     slow = observed * 0.94
     fast = observed * 1.04
     ensemble = compose_regime_ensemble(
-        time=time,
-        predictions={"slow": slow, "fast": fast},
-        observed=observed,
-        weights={"slow": 0.45, "fast": 0.55},
-        assumptions=["Two plausible adoption regimes are combined."],
+        RegimeEnsembleConfig(
+            time=time,
+            predictions={"slow": slow, "fast": fast},
+            observed=observed,
+            weights={"slow": 0.45, "fast": 0.55},
+            assumptions=["Two plausible adoption regimes are combined."],
+        )
     )
 
     policy_observed = np.array([3.0, 6.0, 10.0, 17.0, 29.0, 45.0, 61.0, 75.0])

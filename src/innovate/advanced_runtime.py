@@ -250,46 +250,40 @@ def select_advanced_backend(
     raise RuntimeError(f"No available backend for advanced workflow {workflow!r}")
 
 
+@dataclass(frozen=True, slots=True)
+class RegimeEnsembleConfig:
+    time: Sequence[float]
+    predictions: Mapping[str, Sequence[float]]
+    observed: Sequence[float] | None = None
+    weights: Mapping[str, float] | None = None
+    assumptions: Sequence[str] = ()
+    backend: str = "numpy"
+
+
 def compose_regime_ensemble(
-    *,
-    time: Sequence[float],
-    predictions: Mapping[str, Sequence[float]],
-    observed: Sequence[float] | None = None,
-    weights: Mapping[str, float] | None = None,
-    assumptions: Sequence[str] = (),
-    backend: str = "numpy",
+    config: RegimeEnsembleConfig,
 ) -> AdvancedResult:
     """Combine compatible regime forecasts into a weighted ensemble result.
 
     Parameters
     ----------
-    time
-        Forecast time points.
-    predictions
-        Mapping of regime names to forecast trajectories.
-    observed
-        Optional observed cumulative adoption values used for diagnostics.
-    weights
-        Optional regime weights. When omitted, regimes receive equal weight.
-    assumptions
-        Auditable assumptions attached to the result payload.
-    backend
-        Runtime backend used to produce the result.
+    config
+        Configuration payload grouping properties together for a regime ensemble.
 
     Returns
     -------
     AdvancedResult
         Experimental ensemble result with stable serialization.
     """
-    time_values = _float_list(time, "time")
-    if not predictions:
+    time_values = _float_list(config.time, "time")
+    if not config.predictions:
         raise ValueError("predictions must contain at least one regime")
-    aligned = _aligned_float_lists(predictions, len(time_values))
+    aligned = _aligned_float_lists(config.predictions, len(time_values))
 
-    if weights is None:
+    if config.weights is None:
         weight_values = {key: 1.0 / len(aligned) for key in aligned}
     else:
-        weight_values = {str(key): float(value) for key, value in weights.items()}
+        weight_values = {str(key): float(value) for key, value in config.weights.items()}
         missing = set(aligned) - set(weight_values)
         extra = set(weight_values) - set(aligned)
         if missing or extra:
@@ -300,18 +294,18 @@ def compose_regime_ensemble(
         weight_values = {key: value / total for key, value in weight_values.items()}
 
     mean = [sum(aligned[key][index] * weight_values[key] for key in aligned) for index in range(len(time_values))]
-    diagnostics = _score_predictions(observed, mean) if observed is not None else {}
+    diagnostics = _score_predictions(config.observed, mean) if config.observed is not None else {}
 
     return AdvancedResult(
         workflow="regime_ensemble",
         stability="experimental",
-        backend=backend,
+        backend=config.backend,
         time=time_values,
         mean=mean,
         metadata={
             "weights": dict(sorted(weight_values.items())),
             "regimes": sorted(aligned),
-            "assumptions": list(assumptions),
+            "assumptions": list(config.assumptions),
         },
         diagnostics=diagnostics,
     )
