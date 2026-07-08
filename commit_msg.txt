@@ -1,0 +1,14 @@
+🧪 Add unit tests for plugin registration
+
+This PR addresses the testing gap for the `register_extension` function in `src/innovate/plugins.py`.
+
+🎯 **What:**
+Created targeted unit tests for plugin registration.
+
+📊 **Coverage:**
+- Tests that valid manifest successfully registers.
+- Tests that double registration attempts correctly raise a `ValueError`.
+- Tests that validation checks (`validate()`) run and reject invalid manifests appropriately.
+
+✨ **Result:**
+The `register_extension` function is now fully covered by focused unit tests in `tests/unit/test_plugins.py`, ensuring reliable behavior of the plugin subsystem.

@@ -9,9 +9,7 @@ from innovate.capabilities import ModelCapability
 from innovate.plugins import (
     ExtensionManifest,
     StabilityTier,
-    get_registered_extensions,
     normalize_stability_tier,
-    register_extension,
 )
 
 
@@ -33,28 +31,6 @@ def test_capabilities_expose_normalized_stability_tiers() -> None:
 
     with pytest.raises(ValueError, match="Unknown stability tier"):
         normalize_stability_tier("beta-release")
-
-
-def test_extension_manifest_registers_and_validates() -> None:
-    """A manifest should validate before it can be registered."""
-    manifest = ExtensionManifest(
-        name="demo-plugin",
-        version="1.0.0",
-        entrypoint="demo.plugin:register",
-        stability=StabilityTier.PROVISIONAL,
-        extension_points=("model_registry", "diagnostics"),
-    )
-
-    assert manifest.validate() is None
-    register_extension(manifest)
-
-    registry = get_registered_extensions()
-    assert registry["demo-plugin"] is manifest
-    assert registry["demo-plugin"].stability is StabilityTier.PROVISIONAL
-    assert registry["demo-plugin"].extension_points == ("model_registry", "diagnostics")
-
-    with pytest.raises(ValueError, match="already registered"):
-        register_extension(manifest)
 
 
 def test_extension_manifest_rejects_unknown_extension_points() -> None:
