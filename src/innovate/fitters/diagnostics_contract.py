@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from operator import itemgetter
 from typing import Any, Literal
 
 import numpy as np
@@ -296,9 +297,17 @@ class DiagnosticsArtifactPayload:
             rows = artifact.get("rows")
             if not columns or not isinstance(rows, list):
                 continue
-            table_rows = [
-                tuple(row.get(column) if isinstance(row, dict) else None for column in columns) for row in rows
-            ]
+            try:
+                getter = itemgetter(*columns)
+                if len(columns) == 1:
+                    table_rows = [(getter(row),) for row in rows]
+                else:
+                    table_rows = [getter(row) for row in rows]
+            except (KeyError, TypeError):
+                # Fallback for irregular data (missing keys or non-dictionary rows)
+                table_rows = [
+                    tuple(row.get(column) if isinstance(row, dict) else None for column in columns) for row in rows
+                ]
             tables[name] = KernelTablePayload.from_rows(
                 columns=tuple(str(column) for column in columns),
                 rows=table_rows,
