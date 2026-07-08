@@ -106,3 +106,27 @@ def test_probabilistic_inference_docs_are_linked() -> None:
     assert "/roadmap/probabilistic-inference/" in text["index"]
     assert "roadmap/probabilistic-inference.md" in text["innovate"]
     assert "roadmap/probabilistic-inference.md" in text["roadmap"]
+
+
+def test_probabilistic_backend_statuses_availability() -> None:
+    """Backend availability should accurately reflect installed dependencies."""
+    from unittest.mock import patch
+
+    from innovate.probabilistic import list_probabilistic_backend_statuses
+
+    with patch("innovate.probabilistic._module_available", return_value=True):
+        statuses = list_probabilistic_backend_statuses()
+        assert all(status.available for status in statuses)
+
+    with patch("innovate.probabilistic._module_available", return_value=False):
+        statuses = list_probabilistic_backend_statuses()
+        assert not any(status.available for status in statuses)
+
+    def mock_available(module_name: str) -> bool:
+        return module_name != "blackjax"
+
+    with patch("innovate.probabilistic._module_available", side_effect=mock_available):
+        statuses = {status.engine: status for status in list_probabilistic_backend_statuses()}
+        assert statuses["numpyro"].available is True
+        assert statuses["blackjax"].available is False
+        assert statuses["tensorflow_probability_jax"].available is True
