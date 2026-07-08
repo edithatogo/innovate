@@ -49,6 +49,16 @@ class DiagnosticsWarning:
 
 
 @dataclass(frozen=True)
+class IntervalConfig:
+    """Configuration for uncertainty intervals."""
+
+    lower: dict[str, float]
+    upper: dict[str, float]
+    median: dict[str, float] | None = None
+    level: float = 0.95
+
+
+@dataclass(frozen=True)
 class UncertaintySummary:
     """Canonical uncertainty summary for deterministic and probabilistic fitters."""
 
@@ -75,11 +85,8 @@ class UncertaintySummary:
     @classmethod
     def bootstrap_interval(
         cls,
-        lower: dict[str, float],
-        upper: dict[str, float],
-        median: dict[str, float] | None = None,
+        interval: IntervalConfig,
         *,
-        level: float = 0.95,
         note: str = "",
     ) -> UncertaintySummary:
         """Create a bootstrap interval summary."""
@@ -87,21 +94,18 @@ class UncertaintySummary:
             report_type="bootstrap_interval",
             provenance="bootstrap",
             support_level="supported",
-            level=level,
-            lower=lower,
-            upper=upper,
-            median={} if median is None else median,
+            level=interval.level,
+            lower=interval.lower,
+            upper=interval.upper,
+            median={} if interval.median is None else interval.median,
             note=note,
         )
 
     @classmethod
     def posterior_summary(
         cls,
-        lower: dict[str, float],
-        upper: dict[str, float],
-        median: dict[str, float] | None = None,
+        interval: IntervalConfig,
         *,
-        level: float = 0.95,
         samples: dict[str, np.ndarray] | None = None,
         note: str = "",
     ) -> UncertaintySummary:
@@ -110,10 +114,10 @@ class UncertaintySummary:
             report_type="posterior_summary",
             provenance="bayesian",
             support_level="supported",
-            level=level,
-            lower=lower,
-            upper=upper,
-            median={} if median is None else median,
+            level=interval.level,
+            lower=interval.lower,
+            upper=interval.upper,
+            median={} if interval.median is None else interval.median,
             samples={} if samples is None else samples,
             note=note,
         )
