@@ -5,6 +5,7 @@ from __future__ import annotations
 import numpy as np
 
 from innovate.advanced_runtime import (
+    PolicyScenarioConfig,
     calibrate_prediction_intervals,
     compare_policy_scenarios,
     compose_regime_ensemble,
@@ -29,13 +30,15 @@ def build_report() -> dict[str, dict[str, object]]:
     policy_observed = np.array([3.0, 6.0, 10.0, 17.0, 29.0, 45.0, 61.0, 75.0])
     baseline = policy_observed * np.array([1.0, 1.0, 1.0, 0.93, 0.9, 0.88, 0.86, 0.84])
     policy = compare_policy_scenarios(
-        time=time,
-        baseline=baseline,
-        intervention=policy_observed,
-        observed=policy_observed,
-        scenario_name="rebate",
-        assumptions=["A rebate policy starts at period 4."],
-        covariates={"rebate_active": [0, 0, 0, 1, 1, 1, 1, 1]},
+        PolicyScenarioConfig(
+            time=time,
+            baseline=baseline,
+            intervention=policy_observed,
+            observed=policy_observed,
+            scenario_name="rebate",
+            assumptions=["A rebate policy starts at period 4."],
+            covariates={"rebate_active": [0, 0, 0, 1, 1, 1, 1, 1]},
+        )
     )
 
     streaming = update_streaming_forecast(
