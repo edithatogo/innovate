@@ -283,3 +283,13 @@ def test_kernel_contract_schema_version_compatibility_helper() -> None:
     assert not kernel._is_schema_version_compatible("1.2", "1.0")
     assert not kernel._is_schema_version_compatible("2.0", "1.0")
     assert not kernel._is_schema_version_compatible("1", "1.0")
+
+
+def test_list_kernel_operations() -> None:
+    """list_kernel_operations should return the canonical tuple of kernel operations."""
+    from innovate import kernel
+
+    operations = kernel.list_kernel_operations()
+    assert isinstance(operations, tuple)
+    assert all(isinstance(op, str) for op in operations)
+    assert operations == kernel.KERNEL_OPERATIONS
