@@ -22,7 +22,7 @@ def test_blackjax_fitter():
     fitter = BlackJaxFitter(model)
 
     # Generate some synthetic data
-    t = jnp.arange(20)
+    t = jnp.arange(20, dtype=jnp.float32)
     model.params_ = {"p": 0.03, "q": 0.38, "m": 1000}
     y = model.predict(t)
 

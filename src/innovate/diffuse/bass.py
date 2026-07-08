@@ -179,10 +179,29 @@ class BassModel(DiffusionModel):
             def ode_func_numpy(y_val, t_val):
                 return self.differential_equation(t_val, y_val, tuple(params), validated_covariates, t_arr)
 
-            sol = backend.current_backend.solve_ode(ode_func_numpy, y0, t_arr)
+            try:
+                sol = backend.current_backend.solve_ode(ode_func_numpy, y0, t_arr)
+            except Exception as e:
+                if 'Tracer' in str(type(e).__name__):
+                    # Fallback to JAX
+                    from innovate.backends.jax_backend import JaxBackend
+                    solve_backend = JaxBackend()
+                    sol = solve_backend.solve_ode(ode_func, y0, t_arr, tuple(params))
+                else:
+                    raise
         return sol.flatten()
 
     def _resolve_prediction_backend(self, t: Sequence[float], params: Sequence[float]) -> tuple[bool, object]:
+        try:
+            for p in params:
+                if 'jax' in str(type(p)).lower() or hasattr(p, 'aval'):
+                    from innovate.backends.jax_backend import JaxBackend
+                    return True, JaxBackend()
+            if hasattr(t, "dtype") and "jax" in str(type(t)).lower():
+                from innovate.backends.jax_backend import JaxBackend
+                return True, JaxBackend()
+        except Exception:
+            pass
         """Determine whether the prediction path needs the JAX backend."""
         try:
             from innovate.backends.jax_backend import JaxBackend
@@ -218,7 +237,14 @@ class BassModel(DiffusionModel):
         if use_jax_backend:
             return
         for param_name, param_val in zip(required_params, params):
-            if not np.isfinite(param_val):
+            if hasattr(param_val, 'shape') and hasattr(param_val, 'dtype'):
+                continue
+            is_fin = True
+            try:
+                is_fin = bool(np.isfinite(param_val))
+            except Exception:
+                pass
+            if not is_fin:
                 raise ValueError(f"Parameter '{param_name}' must be finite, got {param_val}")
 
     def differential_equation(
@@ -376,7 +402,12 @@ class BassModel(DiffusionModel):
 
         # Validate parameter values
         for param_name, param_val in zip(self.param_names, params):
-            if not np.isfinite(param_val):
+            is_fin = True
+            try:
+                is_fin = bool(np.isfinite(param_val))
+            except Exception:
+                pass
+            if not is_fin:
                 raise ValueError(f"Parameter '{param_name}' must be finite, got {param_val}")
 
         rates = np.array(
