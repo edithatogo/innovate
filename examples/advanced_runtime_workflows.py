@@ -5,6 +5,7 @@ from __future__ import annotations
 import numpy as np
 
 from innovate.advanced_runtime import (
+    CalibrationConfig,
     calibrate_prediction_intervals,
     compare_policy_scenarios,
     compose_regime_ensemble,
@@ -48,13 +49,16 @@ def build_report() -> dict[str, dict[str, object]]:
 
     calibration_observed = np.array([2.0, 5.0, 9.0, 16.0, 26.0, 39.0, 53.0])
     predicted = calibration_observed * np.array([1.03, 0.98, 1.02, 0.97, 0.95, 1.03, 0.98])
+    config = CalibrationConfig(
+        confidence=0.8,
+        holdout=[0, 0, 0, 0, 1, 1, 1],
+        assumptions=["Periods 5 through 7 are holdout coverage checks."],
+    )
     calibration = calibrate_prediction_intervals(
         time=[1, 2, 3, 4, 5, 6, 7],
         observed=calibration_observed,
         predicted=predicted,
-        confidence=0.8,
-        holdout=[0, 0, 0, 0, 1, 1, 1],
-        assumptions=["Periods 5 through 7 are holdout coverage checks."],
+        config=config,
     )
 
     return {

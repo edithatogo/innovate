@@ -9,6 +9,7 @@ import numpy as np
 import pytest
 
 from innovate.advanced_runtime import (
+    CalibrationConfig,
     calibrate_prediction_intervals,
     compare_policy_scenarios,
     compose_regime_ensemble,
@@ -114,13 +115,16 @@ def test_calibrate_prediction_intervals_reports_coverage_and_residuals() -> None
     observed = np.asarray(fixture["observed"], dtype=float)
     predicted = observed * np.array([1.03, 0.98, 1.02, 0.97, 0.95, 1.03, 0.98])
 
+    config = CalibrationConfig(
+        confidence=0.8,
+        holdout=fixture["covariates"]["holdout"],
+        assumptions=fixture["assumptions"],
+    )
     result = calibrate_prediction_intervals(
         time=fixture["time"],
         observed=observed,
         predicted=predicted,
-        confidence=0.8,
-        holdout=fixture["covariates"]["holdout"],
-        assumptions=fixture["assumptions"],
+        config=config,
     )
 
     payload = result.to_dict()

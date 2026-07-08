@@ -463,15 +463,22 @@ def update_streaming_forecast(
     )
 
 
+@dataclass(frozen=True, slots=True)
+class CalibrationConfig:
+    """Configuration for prediction interval calibration."""
+
+    confidence: float = 0.8
+    holdout: Sequence[float] | None = None
+    assumptions: Sequence[str] = ()
+    backend: str = "numpy"
+
+
 def calibrate_prediction_intervals(
     *,
     time: Sequence[float],
     observed: Sequence[float],
     predicted: Sequence[float],
-    confidence: float = 0.8,
-    holdout: Sequence[float] | None = None,
-    assumptions: Sequence[str] = (),
-    backend: str = "numpy",
+    config: CalibrationConfig | None = None,
 ) -> AdvancedResult:
     """Calibrate symmetric prediction intervals from empirical residuals.
 
@@ -483,21 +490,17 @@ def calibrate_prediction_intervals(
         Observed cumulative adoption values.
     predicted
         Forecast mean values to calibrate.
-    confidence
-        Desired empirical interval confidence level.
-    holdout
-        Optional indicator sequence where non-zero values mark holdout points.
-    assumptions
-        Auditable calibration assumptions.
-    backend
-        Runtime backend used to produce the result.
+    config
+        Optional configuration for calibration, holdout, assumptions, and backend.
 
     Returns
     -------
     AdvancedResult
         Stable uncertainty-calibration result with residual and coverage diagnostics.
     """
-    if not 0.0 < confidence < 1.0:
+    config = config or CalibrationConfig()
+
+    if not 0.0 < config.confidence < 1.0:
         raise ValueError("confidence must be between 0 and 1")
     time_values = _float_list(time, "time")
     observed_values = _float_list(observed, "observed")
@@ -507,7 +510,7 @@ def calibrate_prediction_intervals(
 
     residuals = [actual - forecast for actual, forecast in zip(observed_values, predicted_values, strict=True)]
     absolute_residuals = sorted(abs(value) for value in residuals)
-    holdout_values = None if holdout is None else _float_list(holdout, "holdout")
+    holdout_values = None if config.holdout is None else _float_list(config.holdout, "holdout")
     if holdout_values is not None and len(holdout_values) != len(time_values):
         raise ValueError("holdout length must match time length")
     holdout_indices = (
@@ -515,7 +518,7 @@ def calibrate_prediction_intervals(
         if holdout_values is not None
         else list(range(len(time_values)))
     )
-    quantile_index = min(len(absolute_residuals) - 1, round(confidence * (len(absolute_residuals) - 1)))
+    quantile_index = min(len(absolute_residuals) - 1, round(config.confidence * (len(absolute_residuals) - 1)))
     half_width = absolute_residuals[quantile_index]
     if holdout_indices:
         holdout_width = max(abs(residuals[index]) for index in holdout_indices)
@@ -530,15 +533,15 @@ def calibrate_prediction_intervals(
     return AdvancedResult(
         workflow="uncertainty_calibration",
         stability="stable",
-        backend=backend,
+        backend=config.backend,
         time=time_values,
         mean=predicted_values,
         lower=lower,
         upper=upper,
         metadata={
-            "confidence": confidence,
+            "confidence": config.confidence,
             "interval_half_width": float(half_width),
-            "assumptions": list(assumptions),
+            "assumptions": list(config.assumptions),
         },
         diagnostics={
             "coverage": sum(covered) / len(covered),
