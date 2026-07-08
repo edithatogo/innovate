@@ -117,6 +117,7 @@ _LAZY_EXPORTS: dict[str, tuple[str, str | None]] = {
     "get_advanced_capability": ("innovate.advanced_runtime", "get_advanced_capability"),
     "list_advanced_capabilities": ("innovate.advanced_runtime", "list_advanced_capabilities"),
     "select_advanced_backend": ("innovate.advanced_runtime", "select_advanced_backend"),
+    "StreamingUpdateConfig": ("innovate.advanced_runtime", "StreamingUpdateConfig"),
     "update_streaming_forecast": ("innovate.advanced_runtime", "update_streaming_forecast"),
 }
 
@@ -173,6 +174,7 @@ __all__ = [
     "RemoteExecutionResponse",
     "ScipyFitter",
     "StabilityTier",
+    "StreamingUpdateConfig",
     "__version__",
     "advanced_runtime",
     "arrow_interchange",

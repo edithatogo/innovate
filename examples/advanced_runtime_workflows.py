@@ -5,6 +5,7 @@ from __future__ import annotations
 import numpy as np
 
 from innovate.advanced_runtime import (
+    StreamingUpdateConfig,
     calibrate_prediction_intervals,
     compare_policy_scenarios,
     compose_regime_ensemble,
@@ -38,13 +39,14 @@ def build_report() -> dict[str, dict[str, object]]:
         covariates={"rebate_active": [0, 0, 0, 1, 1, 1, 1, 1]},
     )
 
-    streaming = update_streaming_forecast(
+    config = StreamingUpdateConfig(
         previous_time=[1, 2, 3, 4],
         previous_observed=[5.0, 9.0, 15.0, 24.0],
         new_time=[5, 6],
         new_observed=[36.0, 49.0],
         assumptions=["Periods 5 and 6 arrive after the initial fit window."],
     )
+    streaming = update_streaming_forecast(config)
 
     calibration_observed = np.array([2.0, 5.0, 9.0, 16.0, 26.0, 39.0, 53.0])
     predicted = calibration_observed * np.array([1.03, 0.98, 1.02, 0.97, 0.95, 1.03, 0.98])

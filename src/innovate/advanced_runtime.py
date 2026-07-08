@@ -389,41 +389,35 @@ def compare_policy_scenarios(
     )
 
 
-def update_streaming_forecast(
-    *,
-    previous_time: Sequence[float],
-    previous_observed: Sequence[float],
-    new_time: Sequence[float],
-    new_observed: Sequence[float],
-    assumptions: Sequence[str] = (),
-    backend: str = "numpy",
-) -> AdvancedResult:
+@dataclass(frozen=True, slots=True)
+class StreamingUpdateConfig:
+    """Configuration for appending new observations to a streaming forecast state."""
+
+    previous_time: Sequence[float]
+    previous_observed: Sequence[float]
+    new_time: Sequence[float]
+    new_observed: Sequence[float]
+    assumptions: Sequence[str] = ()
+    backend: str = "numpy"
+
+
+def update_streaming_forecast(config: StreamingUpdateConfig) -> AdvancedResult:
     """Append new cumulative observations to a streaming forecast state.
 
     Parameters
     ----------
-    previous_time
-        Time points already incorporated into the state.
-    previous_observed
-        Previously observed cumulative adoption values.
-    new_time
-        New time points to append.
-    new_observed
-        New cumulative adoption values to append.
-    assumptions
-        Auditable assumptions for the streaming update.
-    backend
-        Runtime backend used to produce the result.
+    config
+        Configuration object containing the previous state and new observations to append.
 
     Returns
     -------
     AdvancedResult
         Experimental streaming result with incremental state metadata.
     """
-    old_time = _float_list(previous_time, "previous_time")
-    old_observed = _float_list(previous_observed, "previous_observed")
-    appended_time = _float_list(new_time, "new_time")
-    appended_observed = _float_list(new_observed, "new_observed")
+    old_time = _float_list(config.previous_time, "previous_time")
+    old_observed = _float_list(config.previous_observed, "previous_observed")
+    appended_time = _float_list(config.new_time, "new_time")
+    appended_observed = _float_list(config.new_observed, "new_observed")
     if len(old_time) != len(old_observed):
         raise ValueError("previous_time and previous_observed lengths must match")
     if len(appended_time) != len(appended_observed):
@@ -443,13 +437,13 @@ def update_streaming_forecast(
     return AdvancedResult(
         workflow="streaming_update",
         stability="experimental",
-        backend=backend,
+        backend=config.backend,
         time=combined_time,
         mean=combined_observed,
         metadata={
             "previous_count": len(old_time),
             "new_count": len(appended_time),
-            "assumptions": list(assumptions),
+            "assumptions": list(config.assumptions),
             "state": {
                 "last_time": combined_time[-1],
                 "last_observed": current_last,

@@ -9,6 +9,7 @@ import numpy as np
 import pytest
 
 from innovate.advanced_runtime import (
+    StreamingUpdateConfig,
     calibrate_prediction_intervals,
     compare_policy_scenarios,
     compose_regime_ensemble,
@@ -89,13 +90,14 @@ def test_update_streaming_forecast_returns_incremental_state_and_diagnostics() -
     new_time = fixture["time"][4:]
     new_observed = fixture["observed"][4:]
 
-    result = update_streaming_forecast(
+    config = StreamingUpdateConfig(
         previous_time=initial_time,
         previous_observed=initial_observed,
         new_time=new_time,
         new_observed=new_observed,
         assumptions=fixture["assumptions"],
     )
+    result = update_streaming_forecast(config)
 
     payload = result.to_dict()
     assert result.workflow == "streaming_update"
