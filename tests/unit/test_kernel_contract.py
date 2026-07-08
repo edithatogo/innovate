@@ -283,3 +283,44 @@ def test_kernel_contract_schema_version_compatibility_helper() -> None:
     assert not kernel._is_schema_version_compatible("1.2", "1.0")
     assert not kernel._is_schema_version_compatible("2.0", "1.0")
     assert not kernel._is_schema_version_compatible("1", "1.0")
+
+
+def test_discover_models_returns_valid_response(monkeypatch) -> None:
+    """discover_models should return a valid response reflecting the model registry."""
+    from innovate import kernel
+    from innovate.capabilities import ModelCapability
+
+    mock_capability = ModelCapability(
+        key="mock_model",
+        family="mock_family",
+        import_path="mock.path",
+        supports_covariates=False,
+    )
+    monkeypatch.setattr("innovate.kernel.get_model_registry", lambda: {"mock_model": mock_capability})
+
+    response = kernel.discover_models()
+
+    assert isinstance(response, kernel.KernelDiscoveryResponse)
+    assert response.schema_version == kernel.KERNEL_SCHEMA_VERSION
+    assert len(response.models) == 1
+
+    record = response.models[0]
+    assert isinstance(record, kernel.KernelDiscoveryRecord)
+    assert record.key == "mock_model"
+    assert record.family == "mock_family"
+    assert record.import_path == "mock.path"
+    assert record.supports_covariates is False
+    assert record.stability == "stable"
+    assert record.supported_backends == ("numpy", "jax")
+
+
+def test_discover_models_empty_registry(monkeypatch) -> None:
+    """discover_models should handle an empty model registry gracefully."""
+    from innovate import kernel
+
+    monkeypatch.setattr("innovate.kernel.get_model_registry", lambda: {})
+    response = kernel.discover_models()
+
+    assert isinstance(response, kernel.KernelDiscoveryResponse)
+    assert response.schema_version == kernel.KERNEL_SCHEMA_VERSION
+    assert response.models == ()
