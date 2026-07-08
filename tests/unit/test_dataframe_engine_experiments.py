@@ -89,3 +89,10 @@ def test_dataframe_benchmark_fixture_records_attribution_boundaries() -> None:
     assert payload["attribution"]["tabular_execution"] is True
     assert payload["attribution"]["xla_numerical_kernel"] is False
     assert "correctness_hash" in payload["metrics"]
+
+
+def test_unsupported_engine_raises_value_error() -> None:
+    """An explicit request for an unknown engine should fail fast with a ValueError."""
+    payload = _table_payload()
+    with pytest.raises(ValueError, match="Unsupported DataFrame engine: unsupported"):
+        kernel_table_payload_to_experimental_dataframe(payload, engine="unsupported")
