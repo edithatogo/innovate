@@ -634,21 +634,29 @@ def _compute_metrics(observed: np.ndarray, predicted: np.ndarray, n_parameters: 
     }
 
 
+@dataclass(frozen=True, slots=True)
+class DiagnosticsContext:
+    """Context object for building diagnostics."""
+
+    model: Any
+    time: np.ndarray
+    observed: np.ndarray
+    inputs: Mapping[str, Any]
+    state: Mapping[str, Any] | None = None
+    provenance: str = "deterministic"
+    model_name: str = ""
+
+
 def _build_diagnostics_contract(
-    model: Any,
-    time: np.ndarray,
-    observed: np.ndarray,
-    *,
-    inputs: Mapping[str, Any],
-    state: Mapping[str, Any] | None = None,
-    provenance: str = "deterministic",
-    model_name: str = "",
+    context: DiagnosticsContext,
 ) -> DiagnosticsContract:
-    uncertainty = UncertaintySummary.point_estimate(provenance=provenance)
+    uncertainty = UncertaintySummary.point_estimate(provenance=context.provenance)
     warning_list: list[DiagnosticsWarning] = []
 
     try:
-        prediction, _ = _call_model_predict(model, time, inputs=inputs, state=state, observed=observed)
+        prediction, _ = _call_model_predict(
+            context.model, context.time, inputs=context.inputs, state=context.state, observed=context.observed
+        )
         predicted = _coerce_array(prediction)
     except Exception as exc:
         warning_list.append(
@@ -662,14 +670,14 @@ def _build_diagnostics_contract(
             residuals=np.array([]),
             residual_analysis=None,
             warnings=warning_list,
-            uncertainty=UncertaintySummary.unsupported(str(exc), provenance=provenance),
+            uncertainty=UncertaintySummary.unsupported(str(exc), provenance=context.provenance),
             support_level="unsupported",
-            provenance=provenance,
+            provenance=context.provenance,
             comparison_family="unsupported",
-            model_name=model_name,
+            model_name=context.model_name,
         )
 
-    residuals = observed - predicted
+    residuals = context.observed - predicted
     residuals_flat = residuals.reshape(-1)
     predicted_flat = predicted.reshape(-1)
 
@@ -688,15 +696,15 @@ def _build_diagnostics_contract(
         "supported" if residual_analysis is not None and uncertainty.support_level == "supported" else "partial"
     )
     return DiagnosticsContract(
-        metrics=_compute_metrics(observed, predicted, len(model.param_names) + 1),
+        metrics=_compute_metrics(context.observed, predicted, len(context.model.param_names) + 1),
         residuals=residuals_flat,
         residual_analysis=residual_analysis,
         warnings=warning_list,
         uncertainty=uncertainty,
         support_level=support_level,
-        provenance=provenance,
+        provenance=context.provenance,
         comparison_family="fitted",
-        model_name=model_name,
+        model_name=context.model_name,
     )
 
 
@@ -822,13 +830,15 @@ def fit_model(request: KernelRequest) -> KernelResponse:
 
         predict_kwargs = _extract_predict_kwargs(model, inputs=inputs, observed=observed)
         diagnostics = _build_diagnostics_contract(
-            model,
-            time,
-            observed,
-            inputs=inputs,
-            state=None,
-            provenance="deterministic",
-            model_name=model.__class__.__name__,
+            DiagnosticsContext(
+                model=model,
+                time=time,
+                observed=observed,
+                inputs=inputs,
+                state=None,
+                provenance="deterministic",
+                model_name=model.__class__.__name__,
+            )
         )
         prediction, _ = _call_model_predict(model, time, inputs=inputs, observed=observed)
         prediction_payload = _coerce_prediction_payload(model, prediction)
@@ -934,13 +944,15 @@ def summarize_model(request: KernelRequest) -> KernelResponse:
         diagnostics: DiagnosticsContract | None = None
         if time is not None and observed is not None:
             diagnostics = _build_diagnostics_contract(
-                model,
-                time,
-                observed,
-                inputs=inputs,
-                state=state,
-                provenance="deterministic",
-                model_name=model.__class__.__name__,
+                DiagnosticsContext(
+                    model=model,
+                    time=time,
+                    observed=observed,
+                    inputs=inputs,
+                    state=state,
+                    provenance="deterministic",
+                    model_name=model.__class__.__name__,
+                )
             )
 
         result = {
@@ -986,13 +998,15 @@ def diagnose_model(request: KernelRequest) -> KernelResponse:
         time = _extract_time(inputs)
         observed = _extract_observed(inputs)
         diagnostics = _build_diagnostics_contract(
-            model,
-            time,
-            observed,
-            inputs=inputs,
-            state=state,
-            provenance="deterministic",
-            model_name=model.__class__.__name__,
+            DiagnosticsContext(
+                model=model,
+                time=time,
+                observed=observed,
+                inputs=inputs,
+                state=state,
+                provenance="deterministic",
+                model_name=model.__class__.__name__,
+            )
         )
         return _kernel_success_response(
             request.operation,
