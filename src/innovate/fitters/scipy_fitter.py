@@ -85,6 +85,18 @@ class FitDiagnostics:
 OptimizationMethod = Literal["curve_fit", "least_squares", "nelder_mead", "lbfgsb", "differential_evolution", "auto"]
 
 
+@dataclass
+class FitContext:
+    """Context object containing all information needed to compute fit diagnostics."""
+
+    model: DiffusionModel
+    t: np.ndarray
+    y: np.ndarray
+    method: str
+    convergence_status: str = "converged"
+    message: str = ""
+
+
 class ScipyFitter:
     """A fitter class that uses SciPy optimization methods for model estimation.
 
@@ -131,21 +143,16 @@ class ScipyFitter:
 
     def _compute_diagnostics(
         self,
-        model: DiffusionModel,
-        t: np.ndarray,
-        y: np.ndarray,
-        method: str,
-        convergence_status: str = "converged",
-        message: str = "",
+        context: FitContext,
     ) -> FitDiagnostics:
         """Compute goodness-of-fit diagnostics after successful fitting."""
-        y_pred = model.predict(t)
+        y_pred = context.model.predict(context.t)
         y_pred = np.asarray(y_pred).flatten()
-        y_flat = y.flatten()
+        y_flat = context.y.flatten()
 
         residuals = y_flat - y_pred
         n = len(y_flat)
-        k = len(model.param_names)
+        k = len(context.model.param_names)
 
         ss_res = np.sum(residuals**2)
         ss_tot = np.sum((y_flat - np.mean(y_flat)) ** 2)
@@ -155,11 +162,11 @@ class ScipyFitter:
         residual_analysis = analyze_residuals(residuals, fitted_values=y_pred) if n > 1 else None
 
         warnings_list: list[DiagnosticsWarning] = []
-        if convergence_status != "converged":
+        if context.convergence_status != "converged":
             warnings_list.append(
                 DiagnosticsWarning(
                     code="optimizer_convergence",
-                    message=message or "Optimization did not converge cleanly.",
+                    message=context.message or "Optimization did not converge cleanly.",
                 ),
             )
 
@@ -179,16 +186,16 @@ class ScipyFitter:
             aic=float(aic),
             bic=float(bic),
             residuals=residuals,
-            fitted_params=model.params_.copy(),
+            fitted_params=context.model.params_.copy(),
             n_observations=n,
             n_parameters=k,
-            optimization_method=method,
-            convergence_status=convergence_status,
-            message=message,
+            optimization_method=context.method,
+            convergence_status=context.convergence_status,
+            message=context.message,
             residual_analysis=residual_analysis,
             uncertainty=UncertaintySummary.point_estimate(),
             warnings=warnings_list,
-            support_level="supported" if convergence_status == "converged" else "partial",
+            support_level="supported" if context.convergence_status == "converged" else "partial",
             provenance="deterministic",
         )
 
@@ -406,7 +413,9 @@ class ScipyFitter:
                 kwargs["bounds"] = bounds
             model.fit(t, y, **kwargs)
             if self.store_diagnostics:
-                self.diagnostics = self._compute_diagnostics(model, t_arr, y_arr, "model_builtin")
+                self.diagnostics = self._compute_diagnostics(
+                    FitContext(model=model, t=t_arr, y=y_arr, method="model_builtin")
+                )
             return self
 
         y_arr = y_arr.flatten()
@@ -450,6 +459,8 @@ class ScipyFitter:
 
         # Compute and store diagnostics
         if self.store_diagnostics:
-            self.diagnostics = self._compute_diagnostics(model, t_arr, y_arr, method, status, message)
+            self.diagnostics = self._compute_diagnostics(
+                FitContext(model=model, t=t_arr, y=y_arr, method=method, convergence_status=status, message=message)
+            )
 
         return self
