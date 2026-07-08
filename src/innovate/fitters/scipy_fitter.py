@@ -13,6 +13,18 @@ from innovate.fitters.residual_analysis import analyze_residuals
 
 
 @dataclass
+class FitContext:
+    """Context for fitting optimization routines."""
+
+    model: DiffusionModel
+    t_arr: np.ndarray
+    y_arr: np.ndarray
+    p0: list[float]
+    bounds: tuple
+    sigma: np.ndarray | None = None
+
+
+@dataclass
 class FitDiagnostics:
     """Container for fit diagnostics and goodness-of-fit metrics."""
 
@@ -194,27 +206,22 @@ class ScipyFitter:
 
     def _fit_curve_fit(
         self,
-        model: DiffusionModel,
-        t_arr: np.ndarray,
-        y_arr: np.ndarray,
-        p0: list[float],
-        bounds: tuple,
-        sigma,
+        ctx: FitContext,
         **kwargs,
     ) -> tuple[np.ndarray, str, str]:
         """Fit using scipy.optimize.curve_fit."""
 
         def fit_function(t, *params):
-            model.params_ = dict(zip(model.param_names, params))
-            return model.predict(t).flatten()
+            ctx.model.params_ = dict(zip(ctx.model.param_names, params))
+            return ctx.model.predict(t).flatten()
 
         popt, pcov = curve_fit(
             fit_function,
-            t_arr,
-            y_arr,
-            p0=p0,
-            bounds=bounds,
-            sigma=sigma,
+            ctx.t_arr,
+            ctx.y_arr,
+            p0=ctx.p0,
+            bounds=ctx.bounds,
+            sigma=ctx.sigma,
             absolute_sigma=True,
             maxfev=self.maxiter * 10,
             **kwargs,
@@ -223,24 +230,19 @@ class ScipyFitter:
 
     def _fit_least_squares(
         self,
-        model: DiffusionModel,
-        t_arr: np.ndarray,
-        y_arr: np.ndarray,
-        p0: list[float],
-        bounds: tuple,
-        sigma=None,
+        ctx: FitContext,
         **kwargs,
     ) -> tuple[np.ndarray, str, str]:
         """Fit using scipy.optimize.least_squares with robust loss."""
 
         def residuals(params):
-            model.params_ = dict(zip(model.param_names, params))
-            return model.predict(t_arr).flatten() - y_arr
+            ctx.model.params_ = dict(zip(ctx.model.param_names, params))
+            return ctx.model.predict(ctx.t_arr).flatten() - ctx.y_arr
 
         result = least_squares(
             residuals,
-            p0,
-            bounds=bounds,
+            ctx.p0,
+            bounds=ctx.bounds,
             loss="huber",
             max_nfev=self.maxiter,
             **kwargs,
@@ -249,28 +251,23 @@ class ScipyFitter:
 
     def _fit_nelder_mead(
         self,
-        model: DiffusionModel,
-        t_arr: np.ndarray,
-        y_arr: np.ndarray,
-        p0: list[float],
-        bounds: tuple,
-        sigma=None,
+        ctx: FitContext,
         **kwargs,
     ) -> tuple[np.ndarray, str, str]:
         """Fit using Nelder-Mead simplex method."""
 
         def objective(params):
-            model.params_ = dict(zip(model.param_names, params))
+            ctx.model.params_ = dict(zip(ctx.model.param_names, params))
             try:
-                y_pred = model.predict(t_arr).flatten()
-                return np.sum((y_arr - y_pred) ** 2)
+                y_pred = ctx.model.predict(ctx.t_arr).flatten()
+                return np.sum((ctx.y_arr - y_pred) ** 2)
             except Exception as e:
                 warnings.warn(f"Objective evaluation failed during Nelder-Mead optimization: {e}", stacklevel=2)
                 return 1e10
 
         result = minimize(
             objective,
-            p0,
+            ctx.p0,
             method="Nelder-Mead",
             options={"maxiter": self.maxiter, "adaptive": True},
             **kwargs,
@@ -279,31 +276,26 @@ class ScipyFitter:
 
     def _fit_lbfgsb(
         self,
-        model: DiffusionModel,
-        t_arr: np.ndarray,
-        y_arr: np.ndarray,
-        p0: list[float],
-        bounds: tuple,
-        sigma=None,
+        ctx: FitContext,
         **kwargs,
     ) -> tuple[np.ndarray, str, str]:
         """Fit using L-BFGS-B optimizer."""
 
         def objective(params):
-            model.params_ = dict(zip(model.param_names, params))
+            ctx.model.params_ = dict(zip(ctx.model.param_names, params))
             try:
-                y_pred = model.predict(t_arr).flatten()
-                return np.sum((y_arr - y_pred) ** 2)
+                y_pred = ctx.model.predict(ctx.t_arr).flatten()
+                return np.sum((ctx.y_arr - y_pred) ** 2)
             except Exception as e:
                 warnings.warn(f"Objective evaluation failed during L-BFGS-B optimization: {e}", stacklevel=2)
                 return 1e10
 
-        lb, ub = bounds
+        lb, ub = ctx.bounds
         bounds_list = list(zip(lb, ub))
 
         result = minimize(
             objective,
-            p0,
+            ctx.p0,
             method="L-BFGS-B",
             bounds=bounds_list,
             options={"maxiter": self.maxiter},
@@ -313,26 +305,21 @@ class ScipyFitter:
 
     def _fit_differential_evolution(
         self,
-        model: DiffusionModel,
-        t_arr: np.ndarray,
-        y_arr: np.ndarray,
-        p0: list[float],
-        bounds: tuple,
-        sigma=None,
+        ctx: FitContext,
         **kwargs,
     ) -> tuple[np.ndarray, str, str]:
         """Fit using differential evolution (global optimization)."""
 
         def objective(params):
-            model.params_ = dict(zip(model.param_names, params))
+            ctx.model.params_ = dict(zip(ctx.model.param_names, params))
             try:
-                y_pred = model.predict(t_arr).flatten()
-                return np.sum((y_arr - y_pred) ** 2)
+                y_pred = ctx.model.predict(ctx.t_arr).flatten()
+                return np.sum((ctx.y_arr - y_pred) ** 2)
             except Exception as e:
                 warnings.warn(f"Objective evaluation failed during differential evolution: {e}", stacklevel=2)
                 return 1e10
 
-        lb, ub = bounds
+        lb, ub = ctx.bounds
         # Differential evolution requires finite bounds
         LARGE_BOUND = 1e6
         bounds_list = [(max(-LARGE_BOUND, lo), min(LARGE_BOUND, hi)) for lo, hi in zip(lb, ub)]
@@ -443,7 +430,8 @@ class ScipyFitter:
             raise ValueError(f"Unknown method '{method}'. Choose from: {list(fit_methods.keys())} or 'auto'")
 
         try:
-            popt, status, message = fit_methods[method](model, t_arr, y_arr, p0, bounds, sigma, **kwargs)
+            ctx = FitContext(model=model, t_arr=t_arr, y_arr=y_arr, p0=p0, bounds=bounds, sigma=sigma)
+            popt, status, message = fit_methods[method](ctx, **kwargs)
             model.params_ = dict(zip(model.param_names, popt))
         except Exception as e:
             raise RuntimeError(f"Fitting failed with method '{method}': {e}")
