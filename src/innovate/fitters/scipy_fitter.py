@@ -7,6 +7,7 @@ import numpy as np
 from scipy.optimize import curve_fit, differential_evolution, least_squares, minimize
 
 from innovate.base.base import DiffusionModel
+from innovate.base.options import FitOptions
 from innovate.compete.competition import MultiProductDiffusionModel
 from innovate.fitters.diagnostics_contract import DiagnosticsWarning, UncertaintySummary
 from innovate.fitters.residual_analysis import analyze_residuals
@@ -135,9 +136,11 @@ class ScipyFitter:
         t: np.ndarray,
         y: np.ndarray,
         method: str,
-        convergence_status: str = "converged",
-        message: str = "",
+        status: dict[str, str] | None = None,
     ) -> FitDiagnostics:
+        status = status or {}
+        convergence_status = status.get("convergence_status", "converged")
+        message = status.get("message", "")
         """Compute goodness-of-fit diagnostics after successful fitting."""
         y_pred = model.predict(t)
         y_pred = np.asarray(y_pred).flatten()
@@ -197,11 +200,12 @@ class ScipyFitter:
         model: DiffusionModel,
         t_arr: np.ndarray,
         y_arr: np.ndarray,
-        p0: list[float],
-        bounds: tuple,
-        sigma,
+        options: FitOptions,
         **kwargs,
     ) -> tuple[np.ndarray, str, str]:
+        p0 = list(options.p0) if options.p0 is not None else None
+        bounds = options.bounds
+        sigma = 1.0 / np.sqrt(options.weights) if options.weights is not None else None
         """Fit using scipy.optimize.curve_fit."""
 
         def fit_function(t, *params):
@@ -226,11 +230,12 @@ class ScipyFitter:
         model: DiffusionModel,
         t_arr: np.ndarray,
         y_arr: np.ndarray,
-        p0: list[float],
-        bounds: tuple,
-        sigma=None,
+        options: FitOptions,
         **kwargs,
     ) -> tuple[np.ndarray, str, str]:
+        p0 = list(options.p0) if options.p0 is not None else None
+        bounds = options.bounds
+        sigma = 1.0 / np.sqrt(options.weights) if options.weights is not None else None
         """Fit using scipy.optimize.least_squares with robust loss."""
 
         def residuals(params):
@@ -252,11 +257,12 @@ class ScipyFitter:
         model: DiffusionModel,
         t_arr: np.ndarray,
         y_arr: np.ndarray,
-        p0: list[float],
-        bounds: tuple,
-        sigma=None,
+        options: FitOptions,
         **kwargs,
     ) -> tuple[np.ndarray, str, str]:
+        p0 = list(options.p0) if options.p0 is not None else None
+        bounds = options.bounds
+        sigma = 1.0 / np.sqrt(options.weights) if options.weights is not None else None
         """Fit using Nelder-Mead simplex method."""
 
         def objective(params):
@@ -282,11 +288,12 @@ class ScipyFitter:
         model: DiffusionModel,
         t_arr: np.ndarray,
         y_arr: np.ndarray,
-        p0: list[float],
-        bounds: tuple,
-        sigma=None,
+        options: FitOptions,
         **kwargs,
     ) -> tuple[np.ndarray, str, str]:
+        p0 = list(options.p0) if options.p0 is not None else None
+        bounds = options.bounds
+        sigma = 1.0 / np.sqrt(options.weights) if options.weights is not None else None
         """Fit using L-BFGS-B optimizer."""
 
         def objective(params):
@@ -316,11 +323,12 @@ class ScipyFitter:
         model: DiffusionModel,
         t_arr: np.ndarray,
         y_arr: np.ndarray,
-        p0: list[float],
-        bounds: tuple,
-        sigma=None,
+        options: FitOptions,
         **kwargs,
     ) -> tuple[np.ndarray, str, str]:
+        p0 = list(options.p0) if options.p0 is not None else None
+        bounds = options.bounds
+        sigma = 1.0 / np.sqrt(options.weights) if options.weights is not None else None
         """Fit using differential evolution (global optimization)."""
 
         def objective(params):
@@ -347,14 +355,12 @@ class ScipyFitter:
         )
         return result.x, "converged" if result.success else "failed", result.message
 
-    def fit(  # noqa: PLR0912
+    def fit(  # noqa: PLR0912, PLR0915
         self,
         model: DiffusionModel,
         t: Sequence[float],
         y: Sequence[float],
-        p0: Sequence[float] | None = None,
-        bounds: tuple | None = None,
-        weights: Sequence[float] | None = None,
+        options: FitOptions | None = None,
         **kwargs,
     ) -> Self:
         """Fits a DiffusionModel instance using the configured optimization method.
@@ -363,9 +369,7 @@ class ScipyFitter:
             model: An instance of a DiffusionModel (e.g., BassModel, GompertzModel, LogisticModel).
             t: Time points (independent variable).
             y: Observed adoption data (dependent variable).
-            p0: Initial guesses for the parameters. If None, model.initial_guesses() is used.
-            bounds: Bounds for the parameters. If None, model.bounds() is used.
-            weights: Weights for the observed data points.
+            options: Configuration options for model fitting, including initial guesses (p0), bounds, and weights.
             kwargs: Additional keyword arguments passed to the optimizer.
 
         Returns
@@ -389,6 +393,11 @@ class ScipyFitter:
             raise ValueError("Observation array contains non-finite values (NaN or Inf)")
         if np.any(~np.isfinite(t_arr)):
             raise ValueError("Time array contains non-finite values (NaN or Inf)")
+
+        options = options or FitOptions()
+        p0 = options.p0
+        bounds = options.bounds
+        weights = options.weights
 
         sigma = 1.0 / np.sqrt(weights) if weights is not None else None
 
@@ -443,13 +452,17 @@ class ScipyFitter:
             raise ValueError(f"Unknown method '{method}'. Choose from: {list(fit_methods.keys())} or 'auto'")
 
         try:
-            popt, status, message = fit_methods[method](model, t_arr, y_arr, p0, bounds, sigma, **kwargs)
+            options.p0 = p0
+            options.bounds = bounds
+            popt, status, message = fit_methods[method](model, t_arr, y_arr, options, **kwargs)
             model.params_ = dict(zip(model.param_names, popt))
         except Exception as e:
             raise RuntimeError(f"Fitting failed with method '{method}': {e}")
 
         # Compute and store diagnostics
         if self.store_diagnostics:
-            self.diagnostics = self._compute_diagnostics(model, t_arr, y_arr, method, status, message)
+            self.diagnostics = self._compute_diagnostics(
+                model, t_arr, y_arr, method, {"convergence_status": status, "message": message}
+            )
 
         return self

@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from typing import Any, TypeVar
 
+from innovate.base.options import FitOptions
+
 # Define a type variable for the class itself, for type hinting Self
 Self = TypeVar("Self", bound="DiffusionModel")
 
@@ -81,11 +83,14 @@ class DiffusionModel(ABC):
         """Fits the diffusion model to the given time and adoption data."""
         p0 = self.initial_guesses(t, y)
         bounds = self.bounds(t, y)
+        options = FitOptions(
+            p0=list(p0.values()),
+            bounds=list(zip(*bounds.values())),
+        )
         return fitter.fit(
             self,
             t,
             y,
-            p0=list(p0.values()),
-            bounds=list(zip(*bounds.values())),
+            options=options,
             **kwargs,
         )

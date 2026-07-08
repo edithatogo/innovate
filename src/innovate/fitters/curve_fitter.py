@@ -4,6 +4,7 @@ import numpy as np
 from scipy.optimize import curve_fit
 
 from innovate.base.base import DiffusionModel
+from innovate.base.options import FitOptions
 
 
 class CurveFitter:
@@ -17,8 +18,7 @@ class CurveFitter:
         model: DiffusionModel,
         t: np.ndarray,
         y: np.ndarray,
-        p0: list,
-        bounds: tuple,
+        options: FitOptions | None = None,
         **kwargs,
     ):
         """Fits the model to the data using curve_fit."""
@@ -34,6 +34,9 @@ class CurveFitter:
             return temp_model.predict(t)
 
         # Use the model's initial guesses and bounds
+        options = options or FitOptions()
+        p0 = options.p0
+        bounds = options.bounds
         popt, _ = curve_fit(func, t, y, p0=p0, bounds=bounds)
 
         # Set the model parameters to the optimal values

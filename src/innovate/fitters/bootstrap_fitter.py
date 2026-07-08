@@ -5,6 +5,7 @@ from typing import Any
 import numpy as np
 
 from innovate.base.base import DiffusionModel
+from innovate.base.options import FitOptions
 from innovate.fitters.diagnostics_contract import (
     DiagnosticsContract,
     DiagnosticsWarning,
@@ -48,7 +49,8 @@ class BootstrapFitter:
         model: DiffusionModel,
         t: Sequence[float],
         y: Sequence[float],
-        **kwargs,
+
+        options: FitOptions | None = None,        **kwargs,
     ) -> None:
         """Perform bootstrap fitting to estimate parameter uncertainty.
 

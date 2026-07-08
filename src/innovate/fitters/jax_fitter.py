@@ -6,6 +6,7 @@ from jaxopt import LBFGS
 
 from innovate.backend import current_backend, use_backend
 from innovate.base.base import DiffusionModel
+from innovate.base.options import FitOptions
 
 
 class JaxFitter:
@@ -16,7 +17,8 @@ class JaxFitter:
         model: DiffusionModel,
         t: Sequence[float],
         y: Sequence[float],
-        **kwargs,
+
+        options: FitOptions | None = None,        **kwargs,
     ) -> dict[str, float]:
         t_arr = jnp.asarray(t)
         y_arr = jnp.asarray(y)
