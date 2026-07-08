@@ -25,7 +25,8 @@ class PolicyEvaluationError(Exception):
 class InterventionContract:
     """Specification for a policy intervention.
 
-    Attributes:
+    Attributes
+    ----------
         name: Identifier for the intervention
         timing: Type of timing ("post", "pre", "staggered", "event-study")
         comparator: Type of comparison group ("control", "synthetic", "historical")
@@ -68,7 +69,8 @@ class InterventionContract:
 class CausalModelContract:
     """Specification for a causal model with confounding control.
 
-    Attributes:
+    Attributes
+    ----------
         name: Identifier for the causal model
         treatment_variable: Name of treatment/intervention indicator
         outcome_variable: Name of outcome variable
@@ -142,7 +144,8 @@ class CausalModelContract:
 class CausalModel:
     """Main class for causal policy evaluation.
 
-    Attributes:
+    Attributes
+    ----------
         intervention: Intervention specification
         causal_model: Causal model contract
         data: Optional data dictionary
@@ -181,7 +184,24 @@ class CausalModel:
     @classmethod
     def from_json(cls, json_str: str) -> CausalModel:
         """Load causal model from JSON."""
-        data = json.loads(json_str)
+        try:
+            data = json.loads(json_str)
+        except json.JSONDecodeError as e:
+            raise PolicyEvaluationError(f"Invalid JSON string: {e}")
+
+        if not isinstance(data, dict):
+            raise PolicyEvaluationError("JSON data must be a dictionary")
+
+        if "intervention" not in data:
+            raise PolicyEvaluationError("Missing 'intervention' key in JSON data")
+        if not isinstance(data["intervention"], dict):
+            raise PolicyEvaluationError("'intervention' must be a dictionary")
+
+        if "causal_model" not in data:
+            raise PolicyEvaluationError("Missing 'causal_model' key in JSON data")
+        if not isinstance(data["causal_model"], dict):
+            raise PolicyEvaluationError("'causal_model' must be a dictionary")
+
         intervention = InterventionContract(**data["intervention"])
         causal_model = CausalModelContract(**data["causal_model"])
         return cls(intervention=intervention, causal_model=causal_model)
@@ -229,7 +249,8 @@ class CausalModel:
 class TreatmentEffectEstimator:
     """Estimator for treatment effects.
 
-    Attributes:
+    Attributes
+    ----------
         method: Estimation method ("naive", "matching", "weighting", "forest")
         outcome_variable: Name of outcome variable
         treatment_variable: Name of treatment variable
@@ -247,7 +268,8 @@ class TreatmentEffectEstimator:
         Args:
             data: Dictionary with treatment and outcome variables
 
-        Returns:
+        Returns
+        -------
             Point estimate of ATE
         """
         treatment = data[self.treatment_variable]
@@ -270,7 +292,8 @@ class TreatmentEffectEstimator:
             data: Dictionary with variables
             confounders: Confounder variables to control for
 
-        Returns:
+        Returns
+        -------
             Point estimate of ATT
         """
         treatment = data[self.treatment_variable]
@@ -296,7 +319,8 @@ class TreatmentEffectEstimator:
             data: Dictionary with variables
             effect_modifiers: Variables to condition on
 
-        Returns:
+        Returns
+        -------
             Dictionary of CATEs by group
         """
         treatment = data[self.treatment_variable]
@@ -328,7 +352,8 @@ class TreatmentEffectEstimator:
             n_bootstrap: Number of bootstrap samples
             ci: Confidence level
 
-        Returns:
+        Returns
+        -------
             Dictionary with point estimate and confidence intervals
         """
         point_estimate = self.estimate_ate(data)
