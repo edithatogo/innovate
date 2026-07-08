@@ -25,7 +25,7 @@ from innovate.fitters.diagnostics_contract import (
     UncertaintySummary,
     build_diagnostics_contract,
 )
-from innovate.probabilistic import PosteriorSamplesPayload
+from innovate.probabilistic import PosteriorConfig, PosteriorSamplesPayload
 
 
 class BayesianFitter:
@@ -334,9 +334,7 @@ class BayesianFitter:
         if not resolved_model_key and self.model_ is not None:
             resolved_model_key = type(self.model_).__name__
 
-        return PosteriorSamplesPayload.from_samples(
-            model_key=resolved_model_key or "unknown",
-            samples={name: np.asarray(values) for name, values in self.posterior_samples_.items()},
+        config = PosteriorConfig(
             engine=engine,
             backend=backend,
             seed=self.random_seed,
@@ -346,6 +344,11 @@ class BayesianFitter:
                 "num_warmup": self.num_warmup,
                 "xla_eligible": True,
             },
+        )
+        return PosteriorSamplesPayload.from_samples(
+            model_key=resolved_model_key or "unknown",
+            samples={name: np.asarray(values) for name, values in self.posterior_samples_.items()},
+            config=config,
         )
 
     def get_summary(self) -> dict[str, dict[str, float]]:

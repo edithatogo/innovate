@@ -30,17 +30,20 @@ def test_probabilistic_backend_statuses_are_xla_first_and_optional() -> None:
 
 def test_posterior_samples_payload_round_trips_and_summarizes() -> None:
     """Posterior draws should round-trip through a stable schema payload."""
-    from innovate.probabilistic import PosteriorSamplesPayload
+    from innovate.probabilistic import PosteriorConfig, PosteriorSamplesPayload
 
+    config = PosteriorConfig(
+        engine="blackjax",
+        seed=123,
+        metadata={"xla_eligible": True},
+    )
     payload = PosteriorSamplesPayload.from_samples(
         model_key="bass",
         samples={
             "p": np.array([[0.01, 0.02, 0.03], [0.02, 0.03, 0.04]]),
             "q": np.array([[0.2, 0.3, 0.4], [0.3, 0.4, 0.5]]),
         },
-        engine="blackjax",
-        seed=123,
-        metadata={"xla_eligible": True},
+        config=config,
     )
 
     restored = PosteriorSamplesPayload.from_dict(payload.to_dict())

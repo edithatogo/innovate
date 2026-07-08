@@ -137,6 +137,16 @@ def require_probabilistic_backend(
 
 
 @dataclass(frozen=True, slots=True)
+class PosteriorConfig:
+    """Configuration for posterior samples generation."""
+
+    engine: str = "blackjax"
+    backend: str = "jax"
+    seed: int | None = None
+    metadata: Mapping[str, Any] = field(default_factory=dict)
+
+
+@dataclass(frozen=True, slots=True)
 class PosteriorSamplesPayload:
     """Versioned posterior draws for schema-compatible probabilistic outputs."""
 
@@ -177,14 +187,14 @@ class PosteriorSamplesPayload:
         *,
         model_key: str,
         samples: Mapping[str, Any],
-        engine: str = "blackjax",
-        backend: str = "jax",
-        seed: int | None = None,
-        metadata: Mapping[str, Any] | None = None,
+        config: PosteriorConfig | None = None,
     ) -> PosteriorSamplesPayload:
         """Build a posterior payload from parameter draws shaped as chains x draws."""
         if not samples:
             raise ValueError("Posterior payload requires at least one parameter sample")
+
+        if config is None:
+            config = PosteriorConfig()
 
         arrays = {name: np.asarray(values, dtype=float) for name, values in samples.items()}
         shapes = {array.shape for array in arrays.values()}
@@ -198,10 +208,10 @@ class PosteriorSamplesPayload:
             parameter_names=tuple(arrays),
             draw_shape=(int(draw_shape[0]), int(draw_shape[1])),
             samples=flattened,
-            engine=engine,
-            backend=backend,
-            seed=seed,
-            metadata={} if metadata is None else metadata,
+            engine=config.engine,
+            backend=config.backend,
+            seed=config.seed,
+            metadata=config.metadata,
         )
 
     @classmethod
@@ -276,6 +286,7 @@ __all__ = [
     "PROBABILISTIC_SCHEMA_MAJOR_VERSION",
     "PROBABILISTIC_SCHEMA_MINOR_VERSION",
     "PROBABILISTIC_SCHEMA_VERSION",
+    "PosteriorConfig",
     "PosteriorSamplesPayload",
     "ProbabilisticBackendStatus",
     "ProbabilisticBackendUnavailable",
