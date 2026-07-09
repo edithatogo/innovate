@@ -1,7 +1,7 @@
 {
   "track_id": "starlight_only_docs_completion_20260625",
   "type": "feature",
-  "status": "new",
+  "status": "completed",
   "created_at": "2026-06-25T11:32:58Z",
   "updated_at": "2026-06-25T11:32:58Z",
   "description": "Complete the Starlight-only documentation migration by retiring remaining active RST sources and proving route, API, tutorial, and evidence parity."
