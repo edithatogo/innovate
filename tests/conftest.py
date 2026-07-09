@@ -1,3 +1,11 @@
+def mock_pandasdmx():
+    import sys
+    from unittest.mock import MagicMock
+
+    sys.modules["pandasdmx"] = MagicMock()
+
+
+mock_pandasdmx()
 """Configuration for pytest with faulthandler enabled to catch segmentation faults."""
 
 import faulthandler
