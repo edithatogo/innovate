@@ -8,7 +8,7 @@ from pathlib import Path
 DOC_PATH = Path("docs/astro-site/src/content/docs/operations/abi-compatibility.md")
 LATEST_DOC_PATH = Path("docs/astro-site/src/content/docs/latest/operations/abi-compatibility.md")
 STARLIGHT_CONFIG = Path("docs/astro-site/starlight.config.mjs")
-TRACK_DIR = Path("conductor/tracks/abi_binary_compatibility_strategy_20260507")
+TRACK_DIR = Path("conductor/archive/abi_binary_compatibility_strategy_20260507")
 ARCHIVE_DIR = Path("conductor/archive/abi_binary_compatibility_strategy_20260507")
 REGISTRY_PATH = Path("conductor/tracks.md")
 

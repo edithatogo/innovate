@@ -343,13 +343,13 @@ class TestCoverageMutationEvidence:
 
     def test_coverage_evidence_has_threshold_documented(self) -> None:
         """Coverage threshold must be documented in gate-inventory Section 5."""
-        gate_inv = (ROOT / "conductor/tracks/ci_code_quality_release_hardening_20260625/gate-inventory.md").read_text()
+        gate_inv = (ROOT / "conductor/archive/ci_code_quality_release_hardening_20260625/gate-inventory.md").read_text()
         # Find Section 5 coverage entry
         assert "80" in gate_inv, "Gate inventory must document 80% coverage threshold"
 
     def test_mutation_evidence_has_threshold_documented(self) -> None:
         """Mutation threshold must be documented in gate-inventory Section 5."""
-        gate_inv = (ROOT / "conductor/tracks/ci_code_quality_release_hardening_20260625/gate-inventory.md").read_text()
+        gate_inv = (ROOT / "conductor/archive/ci_code_quality_release_hardening_20260625/gate-inventory.md").read_text()
         # Find Section 5 mutation entry
         assert "70" in gate_inv, "Gate inventory must document 70% mutation threshold"
 
