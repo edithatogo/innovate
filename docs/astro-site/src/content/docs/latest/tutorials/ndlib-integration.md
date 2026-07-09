@@ -5,7 +5,7 @@ description: Legacy NDlib network diffusion (optional legacy-abm extra). Prefer 
 
 > **Migration note:** Mesa and NDLib are **not** base dependencies. Install
 > `pip install innovate[legacy-abm]` before using this tutorial. For new
-> simulation work, use the [Kairos Simulation Adapter](../kairos-simulation-adapter/)
+> simulation work, use the [Kairos Simulation Adapter](/innovate/latest/tutorials/kairos-simulation-adapter/)
 > (`innovate.abm.kairos_adapter`) instead.
 
 This tutorial demonstrates how to use the `NdlibInnovationModel` to simulate diffusion on a network.
