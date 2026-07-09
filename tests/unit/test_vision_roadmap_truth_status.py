@@ -115,19 +115,19 @@ def test_full_rust_core_claims_remain_disallowed_until_inventory_is_all_native()
 
 def test_roadmap_truth_ledger_exists() -> None:
     """The roadmap truth ledger must exist as a machine-readable artifact."""
-    ledger = Path("conductor/tracks/roadmap_release_truth_closure_20260625/truth_ledger.json")
+    ledger = Path("conductor/archive/roadmap_release_truth_closure_20260625/truth_ledger.json")
     assert ledger.exists(), "Truth ledger not yet created - Phase 2 must implement it"
 
 
 def test_roadmap_truth_ledger_covers_all_roadmap_claims() -> None:
     """Every roadmap claim must map to evidence, active track, external blocker, or out-of-scope rationale."""
-    inventory = Path("conductor/tracks/roadmap_release_truth_closure_20260625/inventory.json")
+    inventory = Path("conductor/archive/roadmap_release_truth_closure_20260625/inventory.json")
     assert inventory.exists(), "Inventory not yet created - Phase 1 must build it first"
 
     inventory_data = json.loads(inventory.read_text())
     claims = inventory_data.get("roadmap_claims", [])
 
-    ledger = Path("conductor/tracks/roadmap_release_truth_closure_20260625/truth_ledger.json")
+    ledger = Path("conductor/archive/roadmap_release_truth_closure_20260625/truth_ledger.json")
     assert ledger.exists(), "Truth ledger must exist before coverage can be validated"
 
     ledger_data = json.loads(ledger.read_text())
@@ -142,7 +142,7 @@ def test_roadmap_truth_ledger_covers_all_roadmap_claims() -> None:
 
 def test_roadmap_truth_ledger_entries_have_required_fields() -> None:
     """Every truth ledger entry must have status, owner, and evidence fields."""
-    ledger = Path("conductor/tracks/roadmap_release_truth_closure_20260625/truth_ledger.json")
+    ledger = Path("conductor/archive/roadmap_release_truth_closure_20260625/truth_ledger.json")
     if not ledger.exists():
         return  # Test passes vacuously before ledger exists
 
@@ -159,8 +159,8 @@ def test_roadmap_truth_ledger_entries_have_required_fields() -> None:
 
 def test_no_stale_or_missing_completion_claims() -> None:
     """No claim should say 'complete' without corresponding archived track evidence."""
-    inventory = Path("conductor/tracks/roadmap_release_truth_closure_20260625/inventory.json")
-    ledger = Path("conductor/tracks/roadmap_release_truth_closure_20260625/truth_ledger.json")
+    inventory = Path("conductor/archive/roadmap_release_truth_closure_20260625/inventory.json")
+    ledger = Path("conductor/archive/roadmap_release_truth_closure_20260625/truth_ledger.json")
     if not ledger.exists():
         return  # Test passes vacuously before ledger exists
 
@@ -178,7 +178,7 @@ def test_no_stale_or_missing_completion_claims() -> None:
 
 def test_no_active_rst_outside_allowlist() -> None:
     """Fail if any RST file outside the explicit allowlist exists as active docs."""
-    classification = Path("conductor/tracks/starlight_only_docs_completion_20260625/rst_classification.json")
+    classification = Path("conductor/archive/starlight_only_docs_completion_20260625/rst_classification.json")
     if not classification.exists():
         return  # Pass vacuously until classification exists
 

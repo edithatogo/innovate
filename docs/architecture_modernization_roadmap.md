@@ -224,19 +224,19 @@ future-state completion to a mature, hardened release:
 
 | Remaining area | Active track |
 | --- | --- |
-| Roadmap and release-claim truth closure | [Roadmap Release Truth Closure](../conductor/tracks/roadmap_release_truth_closure_20260625/) |
-| Starlight-only documentation completion and active RST retirement | [Starlight-Only Documentation Completion](../conductor/tracks/starlight_only_docs_completion_20260625/) |
-| Rust-native ownership proof for canonical operations, payloads, and exceptions | [Rust-Native Ownership Release Proof](../conductor/tracks/rust_native_ownership_release_proof_20260625/) |
-| Polyglot and HPC registry acceptance evidence | [Polyglot Registry Acceptance Completion](../conductor/tracks/polyglot_registry_acceptance_completion_20260625/) |
-| Bleeding-edge dependency floors, dashboards, and runtime baselines | [Bleeding-Edge Dependency Modernization](../conductor/tracks/bleeding_edge_dependency_modernization_20260625/) |
-| CI, code quality, release-readiness, observability, security, coverage, and mutation gates | [CI, Code Quality, and Release Hardening](../conductor/tracks/ci_code_quality_release_hardening_20260625/) |
-| Policy diffusion, competition, substitution, network diffusion, and related advanced modeling gaps | [Advanced Policy, Competition, and Substitution Modeling](../conductor/tracks/advanced_policy_competition_substitution_20260625/) |
-| Reproducible scenario experiments across diffusion, substitution, competition, and policy interventions | [Scenario Experiment Workflows](../conductor/tracks/scenario_experiment_workflows_20260625/) |
-| Causal policy evaluation, rollout timing, spillovers, and heterogeneous effects | [Causal Policy Evaluation](../conductor/tracks/causal_policy_evaluation_20260625/) |
-| Scientific validation reports, benchmark corpus expansion, and leaderboard artifacts | [Model Validation and Benchmark Expansion](../conductor/tracks/model_validation_benchmark_expansion_20260625/) |
+| Roadmap and release-claim truth closure | [Roadmap Release Truth Closure](../conductor/archive/roadmap_release_truth_closure_20260625/) |
+| Starlight-only documentation completion and active RST retirement | [Starlight-Only Documentation Completion](../conductor/archive/starlight_only_docs_completion_20260625/) |
+| Rust-native ownership proof for canonical operations, payloads, and exceptions | [Rust-Native Ownership Release Proof](../conductor/archive/rust_native_ownership_release_proof_20260625/) |
+| Polyglot and HPC registry acceptance evidence | [Polyglot Registry Acceptance Completion](../conductor/archive/polyglot_registry_acceptance_completion_20260625/) |
+| Bleeding-edge dependency floors, dashboards, and runtime baselines | [Bleeding-Edge Dependency Modernization](../conductor/archive/bleeding_edge_dependency_modernization_20260625/) |
+| CI, code quality, release-readiness, observability, security, coverage, and mutation gates | [CI, Code Quality, and Release Hardening](../conductor/archive/ci_code_quality_release_hardening_20260625/) |
+| Policy diffusion, competition, substitution, network diffusion, and related advanced modeling gaps | [Advanced Policy, Competition, and Substitution Modeling](../conductor/archive/advanced_policy_competition_substitution_20260625/) |
+| Reproducible scenario experiments across diffusion, substitution, competition, and policy interventions | [Scenario Experiment Workflows](../conductor/archive/scenario_experiment_workflows_20260625/) |
+| Causal policy evaluation, rollout timing, spillovers, and heterogeneous effects | [Causal Policy Evaluation](../conductor/archive/causal_policy_evaluation_20260625/) |
+| Scientific validation reports, benchmark corpus expansion, and leaderboard artifacts | [Model Validation and Benchmark Expansion](../conductor/archive/model_validation_benchmark_expansion_20260625/) |
 | Kairos-backed ABM and network simulation adapter migration | [Kairos ABM and Network Simulation Migration](../conductor/archive/kairos_abm_network_simulation_migration_20260625/) |
-| Data ingestion, validation, provenance, and dataset connector workflows | [Data Ingestion and Provenance Connectors](../conductor/tracks/data_ingestion_provenance_connectors_20260625/) |
-| Explainability, sensitivity analysis, and decision-report artifacts | [Explainability, Sensitivity, and Decision Reports](../conductor/tracks/explainability_sensitivity_decision_reports_20260625/) |
+| Data ingestion, validation, provenance, and dataset connector workflows | [Data Ingestion and Provenance Connectors](../conductor/archive/data_ingestion_provenance_connectors_20260625/) |
+| Explainability, sensitivity analysis, and decision-report artifacts | [Explainability, Sensitivity, and Decision Reports](../conductor/archive/explainability_sensitivity_decision_reports_20260625/) |
 
 These tracks supersede any ambiguous claim that archived tracks alone make the
 product fully migrated, mature, externally accepted, or release-ready. Archived
@@ -245,19 +245,19 @@ gaps.
 
 Recommended implementation order:
 
-1. [Roadmap Release Truth Closure](../conductor/tracks/roadmap_release_truth_closure_20260625/)
-2. [Starlight-Only Documentation Completion](../conductor/tracks/starlight_only_docs_completion_20260625/)
-3. [Rust-Native Ownership Release Proof](../conductor/tracks/rust_native_ownership_release_proof_20260625/)
-4. [Advanced Policy, Competition, and Substitution Modeling](../conductor/tracks/advanced_policy_competition_substitution_20260625/)
-5. [Scenario Experiment Workflows](../conductor/tracks/scenario_experiment_workflows_20260625/)
-6. [Causal Policy Evaluation](../conductor/tracks/causal_policy_evaluation_20260625/)
+1. [Roadmap Release Truth Closure](../conductor/archive/roadmap_release_truth_closure_20260625/)
+2. [Starlight-Only Documentation Completion](../conductor/archive/starlight_only_docs_completion_20260625/)
+3. [Rust-Native Ownership Release Proof](../conductor/archive/rust_native_ownership_release_proof_20260625/)
+4. [Advanced Policy, Competition, and Substitution Modeling](../conductor/archive/advanced_policy_competition_substitution_20260625/)
+5. [Scenario Experiment Workflows](../conductor/archive/scenario_experiment_workflows_20260625/)
+6. [Causal Policy Evaluation](../conductor/archive/causal_policy_evaluation_20260625/)
 7. [Kairos ABM and Network Simulation Migration](../conductor/archive/kairos_abm_network_simulation_migration_20260625/)
-8. [Data Ingestion and Provenance Connectors](../conductor/tracks/data_ingestion_provenance_connectors_20260625/)
-9. [Explainability, Sensitivity, and Decision Reports](../conductor/tracks/explainability_sensitivity_decision_reports_20260625/)
-10. [Model Validation and Benchmark Expansion](../conductor/tracks/model_validation_benchmark_expansion_20260625/)
-11. [Bleeding-Edge Dependency Modernization](../conductor/tracks/bleeding_edge_dependency_modernization_20260625/)
-12. [CI, Code Quality, and Release Hardening](../conductor/tracks/ci_code_quality_release_hardening_20260625/)
-13. [Polyglot Registry Acceptance Completion](../conductor/tracks/polyglot_registry_acceptance_completion_20260625/)
+8. [Data Ingestion and Provenance Connectors](../conductor/archive/data_ingestion_provenance_connectors_20260625/)
+9. [Explainability, Sensitivity, and Decision Reports](../conductor/archive/explainability_sensitivity_decision_reports_20260625/)
+10. [Model Validation and Benchmark Expansion](../conductor/archive/model_validation_benchmark_expansion_20260625/)
+11. [Bleeding-Edge Dependency Modernization](../conductor/archive/bleeding_edge_dependency_modernization_20260625/)
+12. [CI, Code Quality, and Release Hardening](../conductor/archive/ci_code_quality_release_hardening_20260625/)
+13. [Polyglot Registry Acceptance Completion](../conductor/archive/polyglot_registry_acceptance_completion_20260625/)
 
 - [Probabilistic Inference Expansion](../conductor/archive/probabilistic_inference_expansion_20260430/)
 - [Diagnostics and Uncertainty Expansion](../conductor/archive/diagnostics_uncertainty_expansion_20260430/)
