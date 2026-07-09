@@ -54,6 +54,20 @@ def test_claim_record_rejects_recommendation_language() -> None:
         )
 
 
+def test_causal_claim_requires_identification_assumptions() -> None:
+    with pytest.raises(ValueError, match="identification assumption"):
+        ClaimRecord(
+            claim_type="causal",
+            statement="The intervention raised adoption in the target population.",
+        )
+    ok = ClaimRecord(
+        claim_type="causal",
+        statement="The intervention raised adoption under the stated design.",
+        assumptions=("No unmeasured confounding",),
+    )
+    assert ok.assumptions == ("No unmeasured confounding",)
+
+
 def test_decision_report_envelope_and_claim_safety() -> None:
     report = build_decision_report(
         title="Demo",
@@ -100,6 +114,21 @@ def test_parameter_perturbation_and_elasticity_deterministic() -> None:
     assert plus["elasticity"] == pytest.approx((0.2 / 12.0) / 0.1)
 
 
+def test_sensitivity_json_safe_when_baseline_outcome_zero() -> None:
+    def outcome(params):
+        return 0.0 if params["beta"] == 0.0 else 1.0
+
+    summary = parameter_perturbation_summary(
+        outcome,
+        [ParameterSensitivityInput(name="beta", baseline=0.0, deltas=(1.0,))],
+    )
+    row = summary["rows"][0]
+    assert row["relative_change"] is None
+    assert row["elasticity"] is None
+    # Must be strict JSON (no NaN tokens).
+    json.loads(json.dumps(summary, allow_nan=False))
+
+
 def test_assumption_timing_threshold_sensitivity() -> None:
     def outcome(params):
         return params.get("alpha", 1.0) * (10.0 - 0.5 * params.get("t_event", 0.0))
@@ -136,6 +165,9 @@ def test_explainability_summaries() -> None:
     competition = competition_effect_summary({"A": 0.4, "B": 0.35, "C": 0.25}, focal_product="A")
     assert competition["competitive_pressure"] == pytest.approx(0.6)
     assert competition["lead"] == pytest.approx(0.05)
+    assert competition["share_sum"] == pytest.approx(1.0)
+    with pytest.raises(ValueError, match="exceeds 1.0"):
+        competition_effect_summary({"A": 0.7, "B": 0.5}, focal_product="A")
 
     substitution = substitution_threshold_summary([0.05, 0.2, 0.4, 0.55], thresholds=(0.25, 0.5))
     assert substitution["crossings"][0]["first_index"] == 2

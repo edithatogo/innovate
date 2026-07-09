@@ -11,8 +11,11 @@ from innovate.reports.schemas import DecisionReport, build_decision_report
 
 
 def export_report_json(report: DecisionReport, *, indent: int | None = 2) -> str:
-    """Serialize a decision report to stable JSON text."""
-    return json.dumps(report.to_dict(), sort_keys=True, indent=indent)
+    """Serialize a decision report to stable JSON text.
+
+    Uses ``allow_nan=False`` so non-finite floats cannot leak invalid JSON.
+    """
+    return json.dumps(report.to_dict(), sort_keys=True, indent=indent, allow_nan=False)
 
 
 def export_report_markdown(report: DecisionReport) -> str:

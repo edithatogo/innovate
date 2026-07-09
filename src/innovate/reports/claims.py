@@ -74,9 +74,19 @@ class ClaimRecord:
         assert_safe_public_wording(self.statement)
         if self.allowed_as_recommendation:
             raise ValueError("allowed_as_recommendation must be False; automated recommendations are out of scope")
-        object.__setattr__(self, "assumptions", tuple(str(item) for item in self.assumptions))
-        object.__setattr__(self, "limitations", tuple(str(item) for item in self.limitations))
-        object.__setattr__(self, "evidence_refs", tuple(str(item) for item in self.evidence_refs))
+        assumptions = tuple(str(item).strip() for item in self.assumptions if str(item).strip())
+        limitations = tuple(str(item).strip() for item in self.limitations if str(item).strip())
+        for text in (*assumptions, *limitations):
+            assert_safe_public_wording(text)
+        # Causal claims must state identification assumptions (fail closed).
+        if self.claim_type == "causal" and not assumptions:
+            raise ValueError(
+                "causal claims require at least one identification assumption; "
+                "sensitivity alone does not establish causality"
+            )
+        object.__setattr__(self, "assumptions", assumptions)
+        object.__setattr__(self, "limitations", limitations)
+        object.__setattr__(self, "evidence_refs", tuple(str(item) for item in self.evidence_refs if str(item).strip()))
 
     @property
     def interpretation(self) -> str:

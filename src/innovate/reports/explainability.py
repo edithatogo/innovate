@@ -50,6 +50,11 @@ def competition_effect_summary(
     if focal_product not in product_shares:
         raise ValueError(f"focal_product '{focal_product}' missing from product_shares")
     shares = {str(key): float(value) for key, value in product_shares.items()}
+    if any(share < 0.0 for share in shares.values()):
+        raise ValueError("product_shares must be non-negative")
+    total_share = sum(shares.values())
+    if total_share > 1.0 + 1e-9:
+        raise ValueError(f"product_shares sum to {total_share}, which exceeds 1.0")
     focal = shares[focal_product]
     competitors = {name: share for name, share in sorted(shares.items()) if name != focal_product}
     pressure = sum(competitors.values())
@@ -59,6 +64,7 @@ def competition_effect_summary(
         "focal_share": focal,
         "competitor_shares": competitors,
         "competitive_pressure": pressure,
+        "share_sum": total_share,
         "lead": focal - (max(competitors.values()) if competitors else 0.0),
         "deterministic": True,
     }

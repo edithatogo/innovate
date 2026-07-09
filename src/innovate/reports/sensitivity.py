@@ -107,6 +107,14 @@ class ThresholdSensitivityInput:
 OutcomeFn = Callable[[Mapping[str, float]], float]
 
 
+def _json_number(value: float) -> float | None:
+    """Return a JSON-safe number; map non-finite values to None (null)."""
+    number = float(value)
+    if not np.isfinite(number):
+        return None
+    return number
+
+
 def parameter_perturbation_summary(
     outcome_fn: OutcomeFn,
     inputs: Sequence[ParameterSensitivityInput],
@@ -117,29 +125,33 @@ def parameter_perturbation_summary(
     base_context = dict(context or {})
     rows: list[dict[str, Any]] = []
     for item in inputs:
-        params = {**base_context, item.name: item.baseline}
+        baseline = float(item.baseline)
+        params = {**base_context, item.name: baseline}
         baseline_outcome = float(outcome_fn(params))
         for delta in item.deltas:
-            value = item.baseline + delta
+            delta_f = float(delta)
+            value = baseline + delta_f
             outcome = float(outcome_fn({**params, item.name: value}))
             abs_change = outcome - baseline_outcome
-            rel = abs_change / baseline_outcome if baseline_outcome != 0 else float("nan")
-            elasticity = (
-                (abs_change / baseline_outcome) / (delta / item.baseline)
-                if baseline_outcome != 0 and item.baseline != 0 and delta != 0
-                else float("nan")
-            )
+            if baseline_outcome != 0:
+                rel: float | None = abs_change / baseline_outcome
+            else:
+                rel = None
+            if baseline_outcome != 0 and baseline != 0 and delta_f != 0:
+                elasticity: float | None = (abs_change / baseline_outcome) / (delta_f / baseline)
+            else:
+                elasticity = None
             rows.append(
                 {
                     "parameter": item.name,
-                    "baseline": item.baseline,
-                    "delta": delta,
+                    "baseline": baseline,
+                    "delta": delta_f,
                     "value": value,
                     "baseline_outcome": baseline_outcome,
                     "outcome": outcome,
                     "absolute_change": abs_change,
-                    "relative_change": rel,
-                    "elasticity": elasticity,
+                    "relative_change": _json_number(rel) if rel is not None else None,
+                    "elasticity": _json_number(elasticity) if elasticity is not None else None,
                 }
             )
     return {"kind": "parameter_perturbation", "rows": rows, "deterministic": True}

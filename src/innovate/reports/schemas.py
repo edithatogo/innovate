@@ -44,17 +44,21 @@ class DecisionReport:
             raise ValueError("claims must be non-empty")
         if self.schema_version != REPORT_SCHEMA_VERSION:
             raise ValueError(f"unsupported report schema_version: {self.schema_version}")
+        from innovate.reports.claims import assert_safe_public_wording
+
         object.__setattr__(self, "claims", tuple(self.claims))
-        object.__setattr__(self, "assumptions", tuple(str(item) for item in self.assumptions))
-        object.__setattr__(self, "limitations", tuple(str(item) for item in self.limitations))
+        assumptions = tuple(str(item).strip() for item in self.assumptions if str(item).strip())
+        limitations = tuple(str(item).strip() for item in self.limitations if str(item).strip())
+        for text in (*assumptions, *limitations):
+            assert_safe_public_wording(text)
+        object.__setattr__(self, "assumptions", assumptions)
+        object.__setattr__(self, "limitations", limitations)
         object.__setattr__(self, "diagnostics", dict(self.diagnostics))
         object.__setattr__(self, "uncertainty", dict(self.uncertainty))
         object.__setattr__(self, "sensitivity", dict(self.sensitivity))
         object.__setattr__(self, "explainability", dict(self.explainability))
         object.__setattr__(self, "metadata", dict(self.metadata))
         if self.interpretation:
-            from innovate.reports.claims import assert_safe_public_wording
-
             assert_safe_public_wording(self.interpretation)
 
     def claim_safety(self) -> dict[str, Any]:
