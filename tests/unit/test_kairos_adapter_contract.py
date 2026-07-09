@@ -47,12 +47,8 @@ def _sample_request(*, seed: int = 42) -> KairosSimulationRequest:
         topology=topology,
         horizon=10.0,
         steps=10,
-        interventions=(
-            InterventionSpec(time=3.0, label="subsidy", effect=0.4, target_nodes=("n2",)),
-        ),
-        random_streams=(
-            RandomStreamConfig(name="behavior", seed=SimulationSeed(primary=seed, stream_id="behavior")),
-        ),
+        interventions=(InterventionSpec(time=3.0, label="subsidy", effect=0.4, target_nodes=("n2",)),),
+        random_streams=(RandomStreamConfig(name="behavior", seed=SimulationSeed(primary=seed, stream_id="behavior")),),
         adoption_threshold=0.35,
     )
 
@@ -146,7 +142,8 @@ def test_policy_network_trace_and_telemetry_artifacts() -> None:
     assert payload["schema_version"] == "1.0"
     assert payload["dependency_evidence"]["claims_promoted_bridge"] is False
     arrow_table = adapter.export_arrow_table_dict(result)
-    assert "columns" in arrow_table and "rows" in arrow_table
+    assert "columns" in arrow_table
+    assert "rows" in arrow_table
     assert len(arrow_table["rows"]) == 10
 
 
@@ -165,7 +162,7 @@ def test_legacy_migration_guidance_and_fail_safe(monkeypatch: pytest.MonkeyPatch
     import innovate.abm.legacy as legacy_mod
 
     def _boom(name: str) -> None:
-        raise ImportError(f"No module named '{name.split('.')[-1]}'")
+        raise ImportError(f"No module named '{name.rsplit('.', maxsplit=1)[-1]}'")
 
     monkeypatch.setattr(legacy_mod, "import_module", _boom)
     with pytest.raises(LegacyABMDependencyError, match="legacy-abm"):

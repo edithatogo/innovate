@@ -7,12 +7,12 @@ from typing import Any
 
 LEGACY_ABM_EXTRA = "legacy-abm"
 LEGACY_MIGRATION_NOTE = (
-    "Legacy Mesa/NDLib ABM surfaces require the optional '{extra}' extra "
-    "(`pip install innovate[{extra}]`). The supported migration path is the "
+    f"Legacy Mesa/NDLib ABM surfaces require the optional '{LEGACY_ABM_EXTRA}' extra "
+    f"(`pip install innovate[{LEGACY_ABM_EXTRA}]`). The supported migration path is the "
     "Kairos-aligned adapter in `innovate.abm.kairos_adapter` with contracts in "
     "`innovate.abm.kairos_contract`. Mesa and NDLib are not base runtime "
     "dependencies."
-).format(extra=LEGACY_ABM_EXTRA)
+)
 
 _LEGACY_MODULES = {
     "agent": "innovate.abm.agent",
@@ -28,9 +28,7 @@ class LegacyABMDependencyError(ImportError):
     """Raised when legacy ABM imports are requested without optional deps."""
 
     def __init__(self, missing: str, *, cause: BaseException | None = None) -> None:
-        message = (
-            f"Cannot import legacy ABM dependency '{missing}'. {LEGACY_MIGRATION_NOTE}"
-        )
+        message = f"Cannot import legacy ABM dependency '{missing}'. {LEGACY_MIGRATION_NOTE}"
         super().__init__(message)
         self.missing = missing
         if cause is not None:

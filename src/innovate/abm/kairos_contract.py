@@ -49,7 +49,7 @@ class SimulationSeed:
 
     def __post_init__(self) -> None:
         if not isinstance(self.primary, int) or isinstance(self.primary, bool):
-            raise ValueError("primary seed must be an integer")
+            raise TypeError("primary seed must be an integer")
         _require_non_empty_str(self.stream_id, "stream_id")
 
     def to_dict(self) -> dict[str, object]:
@@ -135,7 +135,7 @@ class InterventionSpec:
 
     def __post_init__(self) -> None:
         if not isinstance(self.time, (int, float)) or isinstance(self.time, bool):
-            raise ValueError("time must be numeric")
+            raise TypeError("time must be numeric")
         if float(self.time) < 0.0:
             raise ValueError("time must be non-negative")
         _require_non_empty_str(self.label, "label")
