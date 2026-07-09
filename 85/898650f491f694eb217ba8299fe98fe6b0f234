@@ -1,0 +1,12 @@
+Task: Update Starlight docs and model cards
+
+Summary:
+- Kairos simulation adapter tutorial (stable + latest).
+- NDlib migration notes.
+- Release evidence JSON for adapter status.
+- Sidebar entry for the tutorial.
+
+Files:
+- docs/astro-site/.../kairos-simulation-adapter.md
+- docs/source/_static/release_readiness/evidence/kairos_simulation_adapter.json
+- starlight.config.mjs
