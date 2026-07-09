@@ -17,7 +17,7 @@ class TestRegistryInventory:
     def inventory_path(self):
         """Return path to registry inventory."""
         return Path(__file__).parent.parent.parent / (
-            "conductor/tracks/polyglot_registry_acceptance_completion_20260625/registry_inventory.md"
+            "conductor/archive/polyglot_registry_acceptance_completion_20260625/registry_inventory.md"
         )
 
     def test_inventory_exists(self, inventory_path):
@@ -64,7 +64,7 @@ class TestRegistryStates:
     def inventory_path(self):
         """Return path to registry inventory."""
         return Path(__file__).parent.parent.parent / (
-            "conductor/tracks/polyglot_registry_acceptance_completion_20260625/registry_inventory.md"
+            "conductor/archive/polyglot_registry_acceptance_completion_20260625/registry_inventory.md"
         )
 
     def test_valid_registry_states(self, inventory_path):
@@ -111,7 +111,7 @@ class TestNoUndocumentedAcceptance:
     def inventory_path(self):
         """Return path to registry inventory."""
         return Path(__file__).parent.parent.parent / (
-            "conductor/tracks/polyglot_registry_acceptance_completion_20260625/registry_inventory.md"
+            "conductor/archive/polyglot_registry_acceptance_completion_20260625/registry_inventory.md"
         )
 
     def test_acceptance_has_receipts(self, inventory_path):
@@ -154,7 +154,7 @@ class TestLanguageTargetCompleteness:
     def inventory_path(self):
         """Return path to registry inventory."""
         return Path(__file__).parent.parent.parent / (
-            "conductor/tracks/polyglot_registry_acceptance_completion_20260625/registry_inventory.md"
+            "conductor/archive/polyglot_registry_acceptance_completion_20260625/registry_inventory.md"
         )
 
     def test_python_targets(self, inventory_path):
@@ -187,7 +187,7 @@ class TestMaintainerResponsibility:
     def inventory_path(self):
         """Return path to registry inventory."""
         return Path(__file__).parent.parent.parent / (
-            "conductor/tracks/polyglot_registry_acceptance_completion_20260625/registry_inventory.md"
+            "conductor/archive/polyglot_registry_acceptance_completion_20260625/registry_inventory.md"
         )
 
     def test_deferred_actions_are_clear(self, inventory_path):
