@@ -6,9 +6,6 @@ This test module validates that:
 3. Kairos smoke tests work (DES and ABM scenarios)
 """
 
-import json
-import subprocess
-import sys
 from pathlib import Path
 
 
