@@ -8,6 +8,7 @@ from innovate.stability import (
     STABILITY_LIFECYCLE_RULES,
     StabilityTier,
     describe_stability_tier,
+    normalize_stability_tier,
 )
 
 
@@ -39,3 +40,31 @@ def test_describe_stability_tier_invalid_value() -> None:
 
     with pytest.raises(ValueError, match="Unknown stability tier 'production'"):
         describe_stability_tier("production")
+
+
+@pytest.mark.parametrize(
+    ("value", "expected"),
+    [
+        (StabilityTier.STABLE, StabilityTier.STABLE),
+        (StabilityTier.PROVISIONAL, StabilityTier.PROVISIONAL),
+        (StabilityTier.INTERNAL, StabilityTier.INTERNAL),
+        ("stable", StabilityTier.STABLE),
+        (" STABLE ", StabilityTier.STABLE),
+        ("beta", StabilityTier.PROVISIONAL),
+        ("BETA", StabilityTier.PROVISIONAL),
+        ("experimental", StabilityTier.PROVISIONAL),
+        ("provisional", StabilityTier.PROVISIONAL),
+        ("internal", StabilityTier.INTERNAL),
+        ("internal-only", StabilityTier.INTERNAL),
+        (" InTeRnAl-OnLy ", StabilityTier.INTERNAL),
+    ],
+)
+def test_normalize_stability_tier_success(value: str | StabilityTier, expected: StabilityTier) -> None:
+    """It should correctly normalize valid strings and enums to StabilityTier."""
+    assert normalize_stability_tier(value) is expected
+
+
+def test_normalize_stability_tier_error() -> None:
+    """It should raise ValueError for unknown stability tiers."""
+    with pytest.raises(ValueError, match="Unknown stability tier 'unknown'"):
+        normalize_stability_tier("unknown")
