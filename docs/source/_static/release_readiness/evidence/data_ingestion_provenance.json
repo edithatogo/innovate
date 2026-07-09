@@ -1,0 +1,41 @@
+{
+  "id": "data_ingestion_provenance",
+  "title": "Data ingestion and provenance connectors",
+  "status": "pass",
+  "summary": "Dataset contracts, fail-closed provenance, local CSV/Parquet/Arrow ingestion, optional Polars path, synthetic public-data adapter, and benchmark/scenario links are available.",
+  "schema_version": "1.0",
+  "formats_supported": ["csv", "parquet", "arrow", "pandas", "polars"],
+  "dataset_kinds": [
+    "adoption",
+    "substitution",
+    "competition",
+    "policy_timing",
+    "network_edges"
+  ],
+  "provenance_required": true,
+  "unknown_license_policy": "fail_closed",
+  "bundled_restricted_datasets": false,
+  "public_adapters": [
+    {
+      "adapter_id": "synthetic_adoption_v1",
+      "license": "CC0-1.0",
+      "notes": "Synthetic open fixture only; does not fetch external restricted data."
+    }
+  ],
+  "limitations": [
+    "Polars is optional and may be absent in base environments.",
+    "Legacy OECD helper is not a production-ready licensed adapter.",
+    "No dataset hosting or scraping without explicit permission."
+  ],
+  "artifacts": [
+    "src/innovate/data/contracts.py",
+    "src/innovate/data/provenance.py",
+    "src/innovate/data/validation.py",
+    "src/innovate/data/ingestion.py",
+    "src/innovate/data/adapters.py",
+    "src/innovate/data/integration.py",
+    "tests/unit/test_data_ingestion_provenance.py",
+    "docs/astro-site/src/content/docs/tutorials/data-ingestion-provenance.md",
+    "conductor/archive/data_ingestion_provenance_connectors_20260625/"
+  ]
+}

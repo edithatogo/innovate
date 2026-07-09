@@ -1,0 +1,35 @@
+{
+  "id": "explainability_decision_reports",
+  "title": "Explainability, sensitivity, and decision reports",
+  "status": "pass",
+  "summary": "Claim taxonomy, sensitivity helpers, explainability summaries, and JSON/Markdown decision-report exports are available with fail-closed recommendation wording.",
+  "schema_version": "1.0",
+  "claim_types": ["descriptive", "predictive", "simulation", "causal"],
+  "recommendations_allowed": false,
+  "forbidden_phrase_policy": "fail_closed",
+  "exports": ["json", "markdown"],
+  "workflows": ["policy", "competition", "substitution", "diffusion", "generic"],
+  "sensitivity_helpers": [
+    "parameter_perturbation",
+    "assumption_sensitivity",
+    "intervention_timing",
+    "threshold_sensitivity"
+  ],
+  "explainability_helpers": [
+    "adoption_drivers",
+    "competition_effects",
+    "substitution_thresholds",
+    "policy_components"
+  ],
+  "limitations": [
+    "No automated policy recommendations.",
+    "No legal, clinical, or regulatory advice.",
+    "Causal claims require stated identification assumptions."
+  ],
+  "artifacts": [
+    "src/innovate/reports/",
+    "tests/unit/test_explainability_decision_reports.py",
+    "docs/astro-site/src/content/docs/tutorials/decision-reports.md",
+    "conductor/archive/explainability_sensitivity_decision_reports_20260625/"
+  ]
+}
