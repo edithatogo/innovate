@@ -49,6 +49,16 @@ class DiagnosticsWarning:
 
 
 @dataclass(frozen=True)
+class IntervalConfig:
+    """Configuration for uncertainty intervals."""
+
+    lower: dict[str, float]
+    upper: dict[str, float]
+    median: dict[str, float] | None = None
+    level: float = 0.95
+
+
+@dataclass(frozen=True)
 class UncertaintySummary:
     """Canonical uncertainty summary for deterministic and probabilistic fitters."""
 
@@ -75,11 +85,8 @@ class UncertaintySummary:
     @classmethod
     def bootstrap_interval(
         cls,
-        lower: dict[str, float],
-        upper: dict[str, float],
-        median: dict[str, float] | None = None,
+        interval: IntervalConfig,
         *,
-        level: float = 0.95,
         note: str = "",
     ) -> UncertaintySummary:
         """Create a bootstrap interval summary."""
@@ -87,21 +94,18 @@ class UncertaintySummary:
             report_type="bootstrap_interval",
             provenance="bootstrap",
             support_level="supported",
-            level=level,
-            lower=lower,
-            upper=upper,
-            median={} if median is None else median,
+            level=interval.level,
+            lower=interval.lower,
+            upper=interval.upper,
+            median={} if interval.median is None else interval.median,
             note=note,
         )
 
     @classmethod
     def posterior_summary(
         cls,
-        lower: dict[str, float],
-        upper: dict[str, float],
-        median: dict[str, float] | None = None,
+        interval: IntervalConfig,
         *,
-        level: float = 0.95,
         samples: dict[str, np.ndarray] | None = None,
         note: str = "",
     ) -> UncertaintySummary:
@@ -110,10 +114,10 @@ class UncertaintySummary:
             report_type="posterior_summary",
             provenance="bayesian",
             support_level="supported",
-            level=level,
-            lower=lower,
-            upper=upper,
-            median={} if median is None else median,
+            level=interval.level,
+            lower=interval.lower,
+            upper=interval.upper,
+            median={} if interval.median is None else interval.median,
             samples={} if samples is None else samples,
             note=note,
         )
@@ -288,6 +292,8 @@ class DiagnosticsArtifactPayload:
 
     def to_table_payloads(self) -> dict[str, Any]:
         """Return Arrow-friendly kernel table payloads for tabular artifacts."""
+        import operator
+
         from innovate.kernel import KernelTablePayload  # Local import avoids an import cycle.
 
         tables: dict[str, KernelTablePayload] = {}
@@ -296,9 +302,18 @@ class DiagnosticsArtifactPayload:
             rows = artifact.get("rows")
             if not columns or not isinstance(rows, list):
                 continue
-            table_rows = [
-                tuple(row.get(column) if isinstance(row, dict) else None for column in columns) for row in rows
-            ]
+
+            none_tuple = tuple(None for _ in columns)
+            try:
+                getter = operator.itemgetter(*columns)
+                if len(columns) == 1:
+                    table_rows = [(getter(row),) if isinstance(row, dict) else none_tuple for row in rows]
+                else:
+                    table_rows = [getter(row) if isinstance(row, dict) else none_tuple for row in rows]
+            except KeyError:
+                table_rows = [
+                    tuple(row.get(column) if isinstance(row, dict) else None for column in columns) for row in rows
+                ]
             tables[name] = KernelTablePayload.from_rows(
                 columns=tuple(str(column) for column in columns),
                 rows=table_rows,
