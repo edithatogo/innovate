@@ -282,10 +282,12 @@ class MultiProductDiffusionModel(DiffusionModel):
                     alpha_t[i, j] = alpha_t_flat[alpha_idx]
                     alpha_idx += 1
 
-        dydt = B.zeros_like(y)
-        for i in range(n_products):
-            interaction_term = sum(alpha_t[i, j] * y[j] for j in range(n_products) if i != j)
-            dydt[i] = (p_t[i] + q_t[i] * y[i] / m_t[i]) * (m_t[i] - y[i] - interaction_term) if m_t[i] > 0 else 0
+        # Vectorized calculation of dydt
+        interaction_terms = B.matmul(alpha_t, y)
+        m_t_safe = B.where(m_t > 0, m_t, 1.0)
+
+        dydt_calc = (p_t + q_t * y / m_t_safe) * (m_t - y - interaction_terms)
+        dydt = B.where(m_t > 0, dydt_calc, 0.0)
 
         return dydt
 
