@@ -67,3 +67,28 @@ def test_extension_manifest_rejects_unknown_extension_points() -> None:
             stability=StabilityTier.INTERNAL,
             extension_points=("model_registry", "remote_distribution"),
         )
+
+
+from unittest.mock import patch
+
+
+def test_get_registered_extensions_immutability() -> None:
+    """The registry accessor must return an immutable view of the registry."""
+    dummy_manifest = ExtensionManifest(
+        name="test-immutability",
+        version="1.0.0",
+        entrypoint="test.plugin:entry",
+        stability=StabilityTier.INTERNAL,
+        extension_points=("diagnostics",),
+    )
+
+    with patch.dict("innovate.plugins._REGISTERED_EXTENSIONS", {"test-immutability": dummy_manifest}, clear=True):
+        registry = get_registered_extensions()
+
+        # Verify contents
+        assert len(registry) == 1
+        assert registry["test-immutability"] is dummy_manifest
+
+        # Verify immutability
+        with pytest.raises(TypeError):
+            registry["new-plugin"] = dummy_manifest  # type: ignore[index]
