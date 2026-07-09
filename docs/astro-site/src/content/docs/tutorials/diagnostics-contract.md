@@ -56,9 +56,9 @@ print(comparison[["RMSE", "Diagnostics Support", "Uncertainty Report Type"]])
 ## Example: plot diagnostics from a contract
 
 ```python
-from innovate.plots.diagnostics import plot_residuals
+from innovate.plots.diagnostics import ResidualPlotConfig, plot_residuals
 
-plot_residuals(model, t, y, diagnostics=fitter.diagnostics, show=False)
+plot_residuals(model, t, y, diagnostics=fitter.diagnostics, config=ResidualPlotConfig(show=False))
 ```
 
 ## Interpretation guidance
