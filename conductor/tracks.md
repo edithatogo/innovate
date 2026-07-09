@@ -454,8 +454,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Data Ingestion and Provenance Connectors** *(In Progress)*
-*Link: [./tracks/data_ingestion_provenance_connectors_20260625/](./tracks/data_ingestion_provenance_connectors_20260625/)*
+- [x] **Track: Data Ingestion and Provenance Connectors** *(Completed)*
+*Link: [./archive/data_ingestion_provenance_connectors_20260625/](./archive/data_ingestion_provenance_connectors_20260625/)*
 
 ---
 

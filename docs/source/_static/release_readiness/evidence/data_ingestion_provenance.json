@@ -36,6 +36,6 @@
     "src/innovate/data/integration.py",
     "tests/unit/test_data_ingestion_provenance.py",
     "docs/astro-site/src/content/docs/tutorials/data-ingestion-provenance.md",
-    "conductor/tracks/data_ingestion_provenance_connectors_20260625/"
+    "conductor/archive/data_ingestion_provenance_connectors_20260625/"
   ]
 }
