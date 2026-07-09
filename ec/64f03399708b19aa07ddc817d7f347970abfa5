@@ -1,0 +1,4 @@
+Track complete and archived: data_ingestion_provenance_connectors_20260625
+
+Implementation commits: dedd624, 0def3ea
+Tests: 10 passed (polars optional skip)
