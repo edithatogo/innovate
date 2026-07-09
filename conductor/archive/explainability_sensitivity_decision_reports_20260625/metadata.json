@@ -1,8 +1,8 @@
 {
   "track_id": "explainability_sensitivity_decision_reports_20260625",
   "type": "feature",
-  "status": "new",
+  "status": "completed",
   "created_at": "2026-06-25T11:55:00Z",
-  "updated_at": "2026-06-25T11:55:00Z",
+  "updated_at": "2026-07-09T02:30:00Z",
   "description": "Add explainability, sensitivity analysis, and decision-report artifacts for diffusion, policy, competition, and substitution workflows."
 }

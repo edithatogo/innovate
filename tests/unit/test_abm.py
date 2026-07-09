@@ -1,4 +1,9 @@
+"""Legacy Mesa ABM tests (requires optional innovate[legacy-abm])."""
+
 import pandas as pd
+import pytest
+
+pytest.importorskip("mesa")
 
 from innovate.abm.competitive_diffusion import CompetitiveDiffusionModel
 from innovate.abm.disruptive_innovation import DisruptiveInnovationModel

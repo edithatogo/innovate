@@ -1,8 +1,8 @@
 {
   "track_id": "data_ingestion_provenance_connectors_20260625",
   "type": "feature",
-  "status": "new",
+  "status": "completed",
   "created_at": "2026-06-25T11:55:00Z",
-  "updated_at": "2026-06-25T11:55:00Z",
+  "updated_at": "2026-07-09T01:30:00Z",
   "description": "Add robust data ingestion, validation, provenance, and external dataset connector workflows for diffusion and policy modeling."
 }
