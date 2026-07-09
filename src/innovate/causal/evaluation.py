@@ -19,7 +19,8 @@ import numpy as np
 class PrePostSummary:
     """Pre-post difference-in-differences summary.
 
-    Attributes:
+    Attributes
+    ----------
         pre_treated: Pre-intervention outcomes for treated units
         post_treated: Post-intervention outcomes for treated units
         pre_control: Pre-intervention outcomes for control units
@@ -34,7 +35,8 @@ class PrePostSummary:
     def calculate(self) -> dict[str, float]:
         """Calculate difference-in-differences estimate.
 
-        Returns:
+        Returns
+        -------
             Dictionary with components of the DiD estimate
         """
         # Change in treated units
@@ -61,7 +63,8 @@ class PrePostSummary:
 class EventStudyTrajectory:
     """Event-study style trajectory with relative time coefficients.
 
-    Attributes:
+    Attributes
+    ----------
         periods: Relative time periods (... -2, -1, 0, 1, 2, ...)
         coefficients: Effect coefficients for each period
         standard_errors: Standard errors for coefficients
@@ -74,7 +77,8 @@ class EventStudyTrajectory:
     def summarize(self) -> dict[str, Any]:
         """Summarize event-study results.
 
-        Returns:
+        Returns
+        -------
             Dictionary with pre-trend and post-effect summaries
         """
         # Identify pre and post event periods
@@ -106,7 +110,8 @@ class EventStudyTrajectory:
 class CounterfactualComparison:
     """Compare actual outcomes to counterfactual scenario.
 
-    Attributes:
+    Attributes
+    ----------
         actual: Observed/actual outcomes
         counterfactual: Counterfactual outcomes (what would have happened)
     """
@@ -117,7 +122,8 @@ class CounterfactualComparison:
     def summarize(self) -> dict[str, float]:
         """Summarize counterfactual comparison.
 
-        Returns:
+        Returns
+        -------
             Dictionary with effect estimates
         """
         effect = np.mean(self.actual) - np.mean(self.counterfactual)
@@ -141,7 +147,8 @@ class CounterfactualComparison:
 class HeterogeneousEffectsSummary:
     """Summary of heterogeneous treatment effects by subgroup.
 
-    Attributes:
+    Attributes
+    ----------
         group_labels: Labels for subgroups
         effects: Treatment effects for each group
         standard_errors: Standard errors for effects
@@ -154,7 +161,8 @@ class HeterogeneousEffectsSummary:
     def summarize(self) -> dict[str, Any]:
         """Summarize heterogeneous effects by group.
 
-        Returns:
+        Returns
+        -------
             Dictionary with group-level effects
         """
         by_group = {}
