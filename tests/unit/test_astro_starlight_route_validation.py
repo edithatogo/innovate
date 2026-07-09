@@ -165,10 +165,14 @@ def test_docs_workflow_uses_correct_node_and_pnpm_versions() -> None:
 
 
 def test_production_docs_contract_passes() -> None:
-    """The production docs verification script must pass."""
+    """The production docs verification script must pass when site dist exists."""
     import json
     import subprocess
     import sys
+    from pathlib import Path
+
+    if not Path("docs/astro-site/dist").exists():
+        pytest.skip("docs/astro-site/dist not built in this environment; covered by Deploy Documentation")
 
     result = subprocess.run(
         [sys.executable, "scripts/verify_production_docs.py", "--json"],
@@ -177,6 +181,6 @@ def test_production_docs_contract_passes() -> None:
         check=False,
     )
     if result.returncode != 0:
-        pytest.fail(f"Production docs verification failed:\n{result.stderr}")
+        pytest.fail(f"Production docs verification failed:\n{result.stderr}\n{result.stdout}")
     report = json.loads(result.stdout)
     assert report["overall_status"] == "passed"

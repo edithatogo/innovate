@@ -161,16 +161,22 @@ class TestVitestBaseline:
 
 
 class TestCriterionBaseline:
-    """Verify Rust benchmark criterion 0.8."""
+    """Verify Rust benchmark criterion stays MSRV-compatible."""
 
     CARGO_TOML = Path("bindings/rust/Cargo.toml")
 
-    def test_criterion_08(self):
-        """Cargo.toml must have criterion 0.8."""
+    def test_criterion_msrv_compatible(self):
+        """Cargo.toml must pin criterion to a 1.85-compatible release.
+
+        criterion 0.8.x requires rustc >= 1.86, which breaks the CI MSRV matrix
+        (1.85.0). Keep 0.5.x until the MSRV is raised.
+        """
         if not self.CARGO_TOML.exists():
             pytest.skip("Rust bindings not present")
         text = self.CARGO_TOML.read_text()
-        assert 'criterion = "0.8"' in text, "criterion 0.8 not found in Rust Cargo.toml"
+        assert 'criterion = "=0.5.1"' in text or 'criterion = "0.5"' in text or 'criterion = "0.5.1"' in text, (
+            "MSRV-compatible criterion pin not found in Rust Cargo.toml"
+        )
 
 
 # ---- Mutmut current baseline ----
