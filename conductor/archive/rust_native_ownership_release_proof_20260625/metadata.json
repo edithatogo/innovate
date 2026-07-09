@@ -1,7 +1,7 @@
 {
   "track_id": "rust_native_ownership_release_proof_20260625",
   "type": "feature",
-  "status": "new",
+  "status": "completed",
   "created_at": "2026-06-25T11:32:58Z",
   "updated_at": "2026-06-25T11:32:58Z",
   "description": "Prove or complete Rust-native ownership for canonical operations, payloads, model families, and fallback exceptions before release claims."
