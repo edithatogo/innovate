@@ -313,3 +313,13 @@ def test_discover_models_returns_correct_response_structure() -> None:
     assert response.models[0].key == "test_model"
     assert response.models[0].family == "test_family"
     assert response.models[0].import_path == "dummy.path.TestModel"
+
+
+def test_list_kernel_operations() -> None:
+    """list_kernel_operations should return the canonical tuple of kernel operations."""
+    from innovate import kernel
+
+    operations = kernel.list_kernel_operations()
+    assert isinstance(operations, tuple)
+    assert all(isinstance(op, str) for op in operations)
+    assert operations == kernel.KERNEL_OPERATIONS
