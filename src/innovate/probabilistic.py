@@ -9,7 +9,7 @@ from typing import Any, Mapping
 
 import numpy as np
 
-from innovate.fitters.diagnostics_contract import UncertaintySummary
+from innovate.fitters.diagnostics_contract import IntervalConfig, UncertaintySummary
 
 PROBABILISTIC_SCHEMA_MAJOR_VERSION = 1
 PROBABILISTIC_SCHEMA_MINOR_VERSION = 0
@@ -137,6 +137,16 @@ def require_probabilistic_backend(
 
 
 @dataclass(frozen=True, slots=True)
+class PosteriorConfig:
+    """Configuration parameters for posterior sampling."""
+
+    engine: str = "blackjax"
+    backend: str = "jax"
+    seed: int | None = None
+    metadata: Mapping[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
 class PosteriorSamplesPayload:
     """Versioned posterior draws for schema-compatible probabilistic outputs."""
 
@@ -177,10 +187,7 @@ class PosteriorSamplesPayload:
         *,
         model_key: str,
         samples: Mapping[str, Any],
-        engine: str = "blackjax",
-        backend: str = "jax",
-        seed: int | None = None,
-        metadata: Mapping[str, Any] | None = None,
+        config: PosteriorConfig | None = None,
     ) -> PosteriorSamplesPayload:
         """Build a posterior payload from parameter draws shaped as chains x draws."""
         if not samples:
@@ -192,16 +199,17 @@ class PosteriorSamplesPayload:
             raise ValueError("Posterior parameters must share the same 2D draw shape")
 
         draw_shape = next(iter(shapes))
+        config = config or PosteriorConfig()
         flattened = {name: tuple(array.reshape(-1).tolist()) for name, array in arrays.items()}
         return cls(
             model_key=model_key,
             parameter_names=tuple(arrays),
             draw_shape=(int(draw_shape[0]), int(draw_shape[1])),
             samples=flattened,
-            engine=engine,
-            backend=backend,
-            seed=seed,
-            metadata={} if metadata is None else metadata,
+            engine=config.engine,
+            backend=config.backend,
+            seed=config.seed,
+            metadata={} if config.metadata is None else config.metadata,
         )
 
     @classmethod
@@ -258,11 +266,14 @@ class PosteriorSamplesPayload:
             median[parameter_name] = float(np.median(draws))
             summary_samples[parameter_name] = draws
 
-        return UncertaintySummary.posterior_summary(
+        interval = IntervalConfig(
             lower=lower,
             upper=upper,
             median=median,
             level=level,
+        )
+        return UncertaintySummary.posterior_summary(
+            interval=interval,
             samples=summary_samples,
             note=(
                 f"{self.draw_shape[0]} chains x {self.draw_shape[1]} draws; "

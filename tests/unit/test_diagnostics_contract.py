@@ -14,6 +14,7 @@ from innovate.fitters.diagnostics_contract import (
     DIAGNOSTICS_ARTIFACT_SCHEMA_VERSION,
     DiagnosticsArtifactPayload,
     DiagnosticsWarning,
+    IntervalConfig,
     UncertaintySummary,
     build_diagnostics_contract,
 )
@@ -57,16 +58,20 @@ class TestDiagnosticsContract:
         """The contract should support deterministic, bootstrap, and posterior uncertainty."""
         point = UncertaintySummary.point_estimate(provenance="deterministic")
         bootstrap = UncertaintySummary.bootstrap_interval(
-            lower={"p": 0.1, "q": 0.2},
-            upper={"p": 0.4, "q": 0.5},
-            median={"p": 0.25, "q": 0.35},
-            level=0.95,
+            interval=IntervalConfig(
+                lower={"p": 0.1, "q": 0.2},
+                upper={"p": 0.4, "q": 0.5},
+                median={"p": 0.25, "q": 0.35},
+                level=0.95,
+            )
         )
         posterior = UncertaintySummary.posterior_summary(
-            lower={"p": 0.11},
-            upper={"p": 0.43},
-            median={"p": 0.27},
-            level=0.9,
+            interval=IntervalConfig(
+                lower={"p": 0.11},
+                upper={"p": 0.43},
+                median={"p": 0.27},
+                level=0.9,
+            )
         )
 
         assert point.report_type == "point_estimate"
