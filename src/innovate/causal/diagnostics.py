@@ -19,8 +19,8 @@ import numpy as np
 class UncertaintyMetadata:
     """Metadata for uncertainty quantification.
 
-    Attributes:
-    -----------
+    Attributes
+    ----------
         estimand: Type of estimand (ATE, ATT, CATE, etc.)
         point_estimate: Point estimate of effect
         ci_lower: Lower confidence interval bound
@@ -56,8 +56,8 @@ class UncertaintyMetadata:
 class DiagnosticsSummary:
     """Collect diagnostic warnings and notes for analysis.
 
-    Attributes:
-    -----------
+    Attributes
+    ----------
         warnings: Dictionary of warning type to message
         notes: Dictionary of note type to message
     """
@@ -87,8 +87,8 @@ class DiagnosticsSummary:
 class CovariateBalance:
     """Assess covariate balance between treated and control groups.
 
-    Attributes:
-    -----------
+    Attributes
+    ----------
         treated_covariates: Dictionary of covariate names to arrays for treated
         control_covariates: Dictionary of covariate names to arrays for control
     """
@@ -99,12 +99,13 @@ class CovariateBalance:
     def calculate_smd(self) -> dict[str, float]:
         """Calculate standardized mean differences for all covariates.
 
-        Returns:
+        Returns
+        -------
             Dictionary of covariate names to SMD values (0-1 scale)
         """
         smd_dict = {}
 
-        for covariate_name in self.treated_covariates.keys():
+        for covariate_name in self.treated_covariates:
             if covariate_name not in self.control_covariates:
                 continue
 
@@ -142,7 +143,8 @@ class CovariateBalance:
         Args:
             threshold: SMD threshold for balance (typical: 0.1)
 
-        Returns:
+        Returns
+        -------
             True if all SMDs are below threshold
         """
         smd_dict = self.calculate_smd()
@@ -154,7 +156,8 @@ class CovariateBalance:
         Args:
             threshold: SMD threshold for balance
 
-        Returns:
+        Returns
+        -------
             Dictionary with balance statistics
         """
         smd_dict = self.calculate_smd()
