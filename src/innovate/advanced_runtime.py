@@ -317,18 +317,9 @@ def compose_regime_ensemble(
     )
 
 
-def compare_policy_scenarios(
-    *,
-    time: Sequence[float],
-    baseline: Sequence[float],
-    intervention: Sequence[float],
-    observed: Sequence[float] | None = None,
-    scenario_name: str = "intervention",
-    assumptions: Sequence[str] = (),
-    covariates: Mapping[str, Sequence[float]] | None = None,
-    backend: str = "numpy",
-) -> AdvancedResult:
-    """Compare policy baseline and intervention trajectories.
+@dataclass(frozen=True, kw_only=True)
+class PolicyScenarioConfig:
+    """Configuration for policy scenario comparison.
 
     Parameters
     ----------
@@ -348,41 +339,67 @@ def compare_policy_scenarios(
         Optional covariate series used by the scenario.
     backend
         Runtime backend used to produce the result.
+    """
+
+    time: Sequence[float]
+    baseline: Sequence[float]
+    intervention: Sequence[float]
+    observed: Sequence[float] | None = None
+    scenario_name: str = "intervention"
+    assumptions: Sequence[str] = ()
+    covariates: Mapping[str, Sequence[float]] | None = None
+    backend: str = "numpy"
+
+
+def compare_policy_scenarios(
+    config: PolicyScenarioConfig,
+) -> AdvancedResult:
+    """Compare policy baseline and intervention trajectories.
+
+    Parameters
+    ----------
+    config
+        The scenario comparison configuration.
 
     Returns
     -------
     AdvancedResult
         Stable policy scenario result with effect metadata.
     """
-    time_values = _float_list(time, "time")
-    baseline_values = _float_list(baseline, "baseline")
-    intervention_values = _float_list(intervention, "intervention")
+    time_values = _float_list(config.time, "time")
+    baseline_values = _float_list(config.baseline, "baseline")
+    intervention_values = _float_list(config.intervention, "intervention")
     if len(baseline_values) != len(time_values) or len(intervention_values) != len(time_values):
         raise ValueError("baseline and intervention lengths must match time length")
 
     effects = [new - old for old, new in zip(baseline_values, intervention_values, strict=True)]
     final_baseline = baseline_values[-1]
     relative_lift_final = None if final_baseline == 0 else intervention_values[-1] / final_baseline - 1.0
-    aligned_covariates = _aligned_float_lists(covariates or {}, len(time_values))
+    aligned_covariates = _aligned_float_lists(config.covariates or {}, len(time_values))
     diagnostics: dict[str, float] = {}
-    if observed is not None:
-        diagnostics = {f"baseline_{key}": value for key, value in _score_predictions(observed, baseline_values).items()}
+    if config.observed is not None:
+        diagnostics = {
+            f"baseline_{key}": value for key, value in _score_predictions(config.observed, baseline_values).items()
+        }
         diagnostics.update(
-            {f"intervention_{key}": value for key, value in _score_predictions(observed, intervention_values).items()},
+            {
+                f"intervention_{key}": value
+                for key, value in _score_predictions(config.observed, intervention_values).items()
+            },
         )
 
     return AdvancedResult(
         workflow="policy_scenario",
         stability="stable",
-        backend=backend,
+        backend=config.backend,
         time=time_values,
         mean=intervention_values,
         metadata={
-            "scenario_name": scenario_name,
+            "scenario_name": config.scenario_name,
             "baseline": baseline_values,
             "incremental_effect": float(sum(effects)),
             "relative_lift_final": relative_lift_final,
-            "assumptions": list(assumptions),
+            "assumptions": list(config.assumptions),
             "covariates": aligned_covariates,
         },
         diagnostics=diagnostics,
