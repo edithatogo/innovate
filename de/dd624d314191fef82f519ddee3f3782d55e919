@@ -1,0 +1,6 @@
+Phase 1-2: dataset contracts, validation, ingestion, adapters
+
+Files:
+- src/innovate/data/*
+- tests/unit/test_data_ingestion_provenance.py
+- conductor track reopen
