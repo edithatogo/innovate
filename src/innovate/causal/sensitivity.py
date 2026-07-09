@@ -17,7 +17,8 @@ import numpy as np
 class RosenbaumBounds:
     """Calculate Rosenbaum bounds for sensitivity to hidden bias.
 
-    Attributes:
+    Attributes
+    ----------
         matched_pairs: Number of matched pairs
         treated_outcomes: Outcomes for treated units
         control_outcomes: Outcomes for control units
@@ -33,7 +34,8 @@ class RosenbaumBounds:
         Args:
             gamma: Odds of treatment assignment odds ratio (1 = no hidden bias)
 
-        Returns:
+        Returns
+        -------
             Tuple of (lower_bound, upper_bound)
         """
         # Simplified Rosenbaum bounds calculation
@@ -71,7 +73,8 @@ class RosenbaumBounds:
 class EValue:
     """E-value for robustness to unmeasured confounding.
 
-    Attributes:
+    Attributes
+    ----------
         point_estimate: Point estimate of effect
         ci_lower: Lower confidence interval bound
         ci_upper: Upper confidence interval bound
@@ -84,7 +87,8 @@ class EValue:
     def calculate(self) -> float:
         """Calculate E-value.
 
-        Returns:
+        Returns
+        -------
             E-value indicating strength of unmeasured confounder
         """
         # E-value is the minimum bias factor required to change inference
@@ -92,16 +96,16 @@ class EValue:
 
         if self.point_estimate >= 1:
             return self.point_estimate + np.sqrt(self.point_estimate * (self.point_estimate - 1))
-        else:
-            recip = 1 / self.point_estimate
-            return recip + np.sqrt(recip * (recip - 1))
+        recip = 1 / self.point_estimate
+        return recip + np.sqrt(recip * (recip - 1))
 
 
 @dataclass
 class SensitivityAnalysis:
     """Conduct sensitivity analysis for unmeasured confounding.
 
-    Attributes:
+    Attributes
+    ----------
         point_estimate: Effect estimate
         method: Method for sensitivity ("rosenbaum", "e_value", "bounds")
     """
@@ -115,7 +119,8 @@ class SensitivityAnalysis:
         Args:
             gamma_range: List of gamma values to evaluate
 
-        Returns:
+        Returns
+        -------
             List of sensitivity results
         """
         results = []
@@ -138,7 +143,8 @@ class SensitivityAnalysis:
             gamma: Odds ratio for unmeasured confounding
             direction: Direction of bias ("both", "positive", "negative")
 
-        Returns:
+        Returns
+        -------
             Bounds under the scenario
         """
         robustness = self._calculate_robustness(gamma)
