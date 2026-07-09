@@ -62,9 +62,9 @@ Example: plot diagnostics from a contract
 
 .. code-block:: python
 
-    from innovate.plots.diagnostics import plot_residuals
+    from innovate.plots.diagnostics import ResidualPlotConfig, plot_residuals
 
-    plot_residuals(model, t, y, diagnostics=fitter.diagnostics, show=False)
+    plot_residuals(model, t, y, diagnostics=fitter.diagnostics, config=ResidualPlotConfig(show=False))
 
 Interpretation guidance
 -----------------------
