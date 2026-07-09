@@ -6,7 +6,6 @@ This test module validates that:
 3. Release evidence documents smoke test status
 """
 
-import subprocess
 from pathlib import Path
 
 
