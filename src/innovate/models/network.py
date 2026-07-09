@@ -39,26 +39,33 @@ class NetworkDiffusionModel(AdvancedDiffusionModel):
 
     @property
     def param_names(self) -> Sequence[str]:
+        base_names = self.base_model.param_names
         names = ["spillover_strength"]
-        for node_index in range(len(self.network_inputs.node_labels)):
-            for param_name in self.base_model.param_names:
-                names.append(f"node_{node_index}_{param_name}")
+        names.extend(
+            f"node_{node_index}_{param_name}"
+            for node_index, _ in enumerate(self.network_inputs.node_labels)
+            for param_name in base_names
+        )
         return names
 
     def initial_guesses(self, t: Sequence[float], y: Sequence[float]) -> dict[str, float]:
         guesses = {"spillover_strength": self.spillover_strength}
         base_guesses = self.base_model.initial_guesses(t, y)
-        for node_index in range(len(self.network_inputs.node_labels)):
-            for name, value in base_guesses.items():
-                guesses[f"node_{node_index}_{name}"] = value
+        guesses.update(
+            (f"node_{node_index}_{name}", value)
+            for node_index, _ in enumerate(self.network_inputs.node_labels)
+            for name, value in base_guesses.items()
+        )
         return guesses
 
     def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
         bounds = {"spillover_strength": (0.0, np.inf)}
         base_bounds = self.base_model.bounds(t, y)
-        for node_index in range(len(self.network_inputs.node_labels)):
-            for name, value in base_bounds.items():
-                bounds[f"node_{node_index}_{name}"] = value
+        bounds.update(
+            (f"node_{node_index}_{name}", value)
+            for node_index, _ in enumerate(self.network_inputs.node_labels)
+            for name, value in base_bounds.items()
+        )
         return bounds
 
     def _normalize_observations(self, t: Sequence[float], y: Sequence[Sequence[float]] | np.ndarray) -> np.ndarray:
@@ -139,13 +146,19 @@ class NetworkDiffusionModel(AdvancedDiffusionModel):
     def params_(self, value: dict[str, float]):
         self._params = dict(value)
         self.spillover_strength = float(value.get("spillover_strength", self.spillover_strength))
+
+        grouped_params: list[dict[str, float]] = [{} for _ in self.network_inputs.node_labels]
+        for key, param_value in value.items():
+            if key.startswith("node_"):
+                parts = key.split("_", 2)
+                if len(parts) >= 3 and parts[1].isdigit():
+                    idx = int(parts[1])
+                    if idx < len(grouped_params):
+                        grouped_params[idx][parts[2]] = float(param_value)
+
         node_models: list[DiffusionModel] = []
-        for node_index in range(len(self.network_inputs.node_labels)):
+        for node_params in grouped_params:
             model = copy.deepcopy(self.base_model)
-            prefix = f"node_{node_index}_"
-            node_params = {
-                key[len(prefix) :]: float(param_value) for key, param_value in value.items() if key.startswith(prefix)
-            }
             if node_params:
                 model.params_ = node_params
             node_models.append(model)
@@ -193,6 +206,7 @@ class NetworkDiffusionModel(AdvancedDiffusionModel):
         edge_count = int(np.count_nonzero(adjacency))
         degree = adjacency.sum(axis=1)
 
+        node_count = len(self.network_inputs.node_labels)
         return self._summary(
             family="network_diffusion",
             model_name=self.__class__.__name__,
@@ -204,7 +218,7 @@ class NetworkDiffusionModel(AdvancedDiffusionModel):
             ),
             notes=("network contagion and spillover workflow",),
             details={
-                "node_count": len(self.network_inputs.node_labels),
+                "node_count": node_count,
                 "edge_count": edge_count,
                 "edge_density": edge_count / possible_edges,
                 "average_degree": float(np.mean(degree)) if degree.size else 0.0,
