@@ -48,6 +48,16 @@ class DiagnosticsWarning:
         return {"code": self.code, "message": self.message, "severity": self.severity}
 
 
+
+@dataclass(frozen=True)
+class IntervalEstimates:
+    """Grouped interval estimates for uncertainty summaries."""
+
+    lower: dict[str, float]
+    upper: dict[str, float]
+    median: dict[str, float] | None = None
+
+
 @dataclass(frozen=True)
 class UncertaintySummary:
     """Canonical uncertainty summary for deterministic and probabilistic fitters."""
@@ -75,9 +85,7 @@ class UncertaintySummary:
     @classmethod
     def bootstrap_interval(
         cls,
-        lower: dict[str, float],
-        upper: dict[str, float],
-        median: dict[str, float] | None = None,
+        estimates: IntervalEstimates,
         *,
         level: float = 0.95,
         note: str = "",
@@ -88,18 +96,16 @@ class UncertaintySummary:
             provenance="bootstrap",
             support_level="supported",
             level=level,
-            lower=lower,
-            upper=upper,
-            median={} if median is None else median,
+            lower=estimates.lower,
+            upper=estimates.upper,
+            median={} if estimates.median is None else estimates.median,
             note=note,
         )
 
     @classmethod
     def posterior_summary(
         cls,
-        lower: dict[str, float],
-        upper: dict[str, float],
-        median: dict[str, float] | None = None,
+        estimates: IntervalEstimates,
         *,
         level: float = 0.95,
         samples: dict[str, np.ndarray] | None = None,
@@ -111,9 +117,9 @@ class UncertaintySummary:
             provenance="bayesian",
             support_level="supported",
             level=level,
-            lower=lower,
-            upper=upper,
-            median={} if median is None else median,
+            lower=estimates.lower,
+            upper=estimates.upper,
+            median={} if estimates.median is None else estimates.median,
             samples={} if samples is None else samples,
             note=note,
         )

@@ -10,6 +10,7 @@ from .diagnostics_contract import (
     DiagnosticsArtifactPayload,
     DiagnosticsContract,
     DiagnosticsWarning,
+    IntervalEstimates,
     UncertaintySummary,
     build_diagnostics_contract,
 )
@@ -74,6 +75,7 @@ __all__ = [
     "DiagnosticsArtifactPayload",
     "DiagnosticsContract",
     "DiagnosticsWarning",
+    "IntervalEstimates",
     "JaxFitter",
     "MoMFitter",
     "ScipyFitter",

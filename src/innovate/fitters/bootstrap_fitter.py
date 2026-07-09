@@ -8,6 +8,7 @@ from innovate.base.base import DiffusionModel
 from innovate.fitters.diagnostics_contract import (
     DiagnosticsContract,
     DiagnosticsWarning,
+    IntervalEstimates,
     UncertaintySummary,
     build_diagnostics_contract,
 )
@@ -139,9 +140,7 @@ class BootstrapFitter:
         upper = {name: values["upper"] for name, values in cis.items()}
         median = {name: values["median"] for name, values in cis.items()}
         return UncertaintySummary.bootstrap_interval(
-            lower=lower,
-            upper=upper,
-            median=median,
+            IntervalEstimates(lower=lower, upper=upper, median=median),
             level=1 - alpha,
             note=f"{len(self.bootstrapped_params)} successful bootstrap samples",
         )

@@ -9,7 +9,7 @@ from typing import Any, Mapping
 
 import numpy as np
 
-from innovate.fitters.diagnostics_contract import UncertaintySummary
+from innovate.fitters.diagnostics_contract import IntervalEstimates, UncertaintySummary
 
 PROBABILISTIC_SCHEMA_MAJOR_VERSION = 1
 PROBABILISTIC_SCHEMA_MINOR_VERSION = 0
@@ -259,9 +259,7 @@ class PosteriorSamplesPayload:
             summary_samples[parameter_name] = draws
 
         return UncertaintySummary.posterior_summary(
-            lower=lower,
-            upper=upper,
-            median=median,
+            IntervalEstimates(lower=lower, upper=upper, median=median),
             level=level,
             samples=summary_samples,
             note=(
