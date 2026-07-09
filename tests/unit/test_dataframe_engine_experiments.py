@@ -120,3 +120,28 @@ def test_kernel_table_payload_from_experimental_dataframe_type_error() -> None:
     """It should raise TypeError for unsupported types."""
     with pytest.raises(TypeError, match="Expected a pandas or experimental Polars DataFrame"):
         kernel_table_payload_from_experimental_dataframe([{"time": 1.0}])
+
+
+def test_dataframe_engine_available_returns_true_for_pandas_engines() -> None:
+    """Pandas variants should always report as available without import checks."""
+    assert dataframe_engine_available("pandas") is True
+    assert dataframe_engine_available("pandas+pyarrow") is True
+    assert dataframe_engine_available("pandas-pyarrow") is True
+    assert dataframe_engine_available("PANDAS") is True
+
+
+def test_dataframe_engine_available_checks_importlib_for_polars() -> None:
+    """Polars availability should depend on whether the module can be found."""
+    with mock.patch("importlib.util.find_spec", return_value=mock.Mock()) as find_spec_mock:
+        assert dataframe_engine_available("polars") is True
+        find_spec_mock.assert_called_once_with("polars")
+
+    with mock.patch("importlib.util.find_spec", return_value=None) as find_spec_mock:
+        assert dataframe_engine_available("polars") is False
+        find_spec_mock.assert_called_once_with("polars")
+
+
+def test_dataframe_engine_available_raises_on_unsupported_engine() -> None:
+    """Unknown engines should raise ValueError instead of returning False."""
+    with pytest.raises(ValueError, match="Unsupported DataFrame engine: duckdb"):
+        dataframe_engine_available("duckdb")
