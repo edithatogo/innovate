@@ -283,3 +283,33 @@ def test_kernel_contract_schema_version_compatibility_helper() -> None:
     assert not kernel._is_schema_version_compatible("1.2", "1.0")
     assert not kernel._is_schema_version_compatible("2.0", "1.0")
     assert not kernel._is_schema_version_compatible("1", "1.0")
+
+
+def test_discover_models_returns_correct_response_structure() -> None:
+    """discover_models should return machine-readable metadata for all registered models."""
+    from unittest.mock import patch
+
+    from innovate import kernel
+    from innovate.capabilities import ModelCapability
+
+    mock_registry = {
+        "test_model": ModelCapability(
+            key="test_model",
+            family="test_family",
+            import_path="dummy.path.TestModel",
+            stability="stable",
+            supports_covariates=False,
+            supports_multivariate_output=False,
+            supported_backends=("numpy",),
+            optional_dependencies=(),
+        )
+    }
+
+    with patch("innovate.kernel.get_model_registry", return_value=mock_registry):
+        response = kernel.discover_models()
+
+    assert response.schema_version == kernel.KERNEL_SCHEMA_VERSION
+    assert len(response.models) == 1
+    assert response.models[0].key == "test_model"
+    assert response.models[0].family == "test_family"
+    assert response.models[0].import_path == "dummy.path.TestModel"

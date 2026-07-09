@@ -89,3 +89,34 @@ def test_dataframe_benchmark_fixture_records_attribution_boundaries() -> None:
     assert payload["attribution"]["tabular_execution"] is True
     assert payload["attribution"]["xla_numerical_kernel"] is False
     assert "correctness_hash" in payload["metrics"]
+
+
+def test_kernel_table_payload_from_experimental_dataframe_pandas() -> None:
+    """It should extract a payload from a pandas DataFrame."""
+    df = pd.DataFrame({"time": [1.0, 2.0], "adoption": [10.0, 20.0]})
+    metadata = {"source": "test"}
+    payload = kernel_table_payload_from_experimental_dataframe(df, metadata=metadata)
+    assert payload.metadata == metadata
+    assert payload.columns == ("time", "adoption")
+    assert payload.rows == ((1.0, 10.0), (2.0, 20.0))
+
+
+def test_kernel_table_payload_from_experimental_dataframe_polars() -> None:
+    """It should extract a payload from a polars DataFrame."""
+    if importlib.util.find_spec("polars") is None:
+        pytest.skip("polars is not installed")
+
+    import polars as pl
+
+    df = pl.DataFrame({"time": [1.0, 2.0], "adoption": [10.0, 20.0]})
+    metadata = {"source": "test"}
+    payload = kernel_table_payload_from_experimental_dataframe(df, metadata=metadata)
+    assert payload.metadata == metadata
+    assert payload.columns == ("time", "adoption")
+    assert payload.rows == ((1.0, 10.0), (2.0, 20.0))
+
+
+def test_kernel_table_payload_from_experimental_dataframe_type_error() -> None:
+    """It should raise TypeError for unsupported types."""
+    with pytest.raises(TypeError, match="Expected a pandas or experimental Polars DataFrame"):
+        kernel_table_payload_from_experimental_dataframe([{"time": 1.0}])
