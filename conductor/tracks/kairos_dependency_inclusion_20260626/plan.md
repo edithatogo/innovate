@@ -17,7 +17,7 @@
 
 ## Phase 2: Manifest Migration and Build Plumbing
 
-### Phase 2 Checkpoint: [checkpoint: pending]
+### Phase 2 Checkpoint: [checkpoint: 7fe4ee5]
 
 - [x] Task: Add Kairos Rust/toolchain dependency plumbing 74ec231
     - [x] Add repository-first Kairos dependency entries for the selected crate set in the appropriate Rust workspace or binding manifests.
@@ -34,7 +34,7 @@
 
 ### Phase 3 Checkpoint: [checkpoint: pending]
 
-- [ ] Task: Add Kairos build and smoke evidence
+- [~] Task: Add Kairos build and smoke evidence
     - [ ] Add a Rust/toolchain build gate proving the selected Kairos crate set builds in Innovate.
     - [ ] Add a minimal deterministic Kairos DES smoke scenario.
     - [ ] Add a minimal Kairos ABM smoke scenario covering ECS-style agent state and behavior update plumbing.

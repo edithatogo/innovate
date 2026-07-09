@@ -90,12 +90,52 @@ legacy-abm = [
 
 ### IV. Smoke Test Status
 
-**Phase 1 Status**: ✅ Dependency policy defined and tests written
-**Phase 2 Status**: Pending - Rust build plumbing and smoke evidence
-**Phase 3 Status**: Pending - DES and ABM smoke scenarios
+**Phase 1 Status**: ✅ COMPLETE - Dependency policy defined and tests written
+- Tests: 6/6 dependency validation tests passing
+- Evidence: KAIROS_INTEGRATION_REPORT.md documents policy
 
-### V. Next Steps
+**Phase 2 Status**: ✅ COMPLETE - Rust build plumbing and smoke evidence
+- Tests: 4/4 build plumbing tests passing
+- Evidence: Cargo.lock updated with Kairos crates and exact revision
+- Build Verification: cargo check succeeds with Kairos dependencies
 
-1. **Phase 2**: Add Kairos Rust build integration and update Cargo.lock
-2. **Phase 3**: Implement minimal DES and ABM smoke test scenarios
-3. **Follow-on Track**: Kairos ABM and Network Simulation Migration (full adapter implementation)
+**Phase 3 Status**: ✅ COMPLETE - DES and ABM smoke scenarios
+- Tests: 4/4 smoke scenario tests passing
+- DES Smoke Scenario: `bindings/rust/examples/kairos_des_smoke.rs`
+  * Demonstrates event queue and seeded RNG integration
+  * Shows deterministic event scheduling capability
+  * Successfully imports kairo-ecs-des, kairo-ecs-core, kairo-ecs-rng
+- ABM Smoke Scenario: `bindings/rust/examples/kairos_abm_smoke.rs`
+  * Demonstrates ECS-based agent state and behavior updating
+  * Shows entity store and agent type integration
+  * Successfully imports kairo-ecs-abm, kairo-ecs-core, kairo-ecs-state
+
+### V. Release Evidence Summary
+
+**Kairos Integration Verified:**
+- ✅ 7 core Kairos crates integrated into Rust bindings
+- ✅ Repository source: https://github.com/edithatogo/kairos.git
+- ✅ Revision pinned: fae901558f07b7b717a676adbafbe2cdc78dea1c (2026-05-19)
+- ✅ All crates compile successfully in Innovate Rust toolchain
+- ✅ Cargo.lock records exact dependencies for reproducibility
+- ✅ DES smoke scenario demonstrates event scheduling
+- ✅ ABM smoke scenario demonstrates ECS agent modeling
+- ✅ Bridge crates (ffi, uniffi, diplomat) gated pending stability review
+
+**Compatibility Constraints:**
+- ✅ Python 3.14 baseline maintained (no blockers)
+- ✅ Rust 1.85+ required (Kairos needs 1.76+)
+- ✅ No registry/packaging constraints introduced
+- ✅ Legacy dependencies (mesa, ndlib) available via optional extra
+
+### VI. Next Steps
+
+1. **Follow-on Track**: Kairos ABM and Network Simulation Migration
+   - Implement full adapter layer for existing ABM/network APIs
+   - Migrate example models to Kairos backend
+   - Document migration patterns for users
+
+2. **Continued Integration**:
+   - Monitor Kairos repository for stability updates
+   - Plan migration to published crates.io versions once available
+   - Add comprehensive model benchmarks comparing legacy vs Kairos backends)

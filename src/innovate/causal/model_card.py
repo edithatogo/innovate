@@ -16,7 +16,8 @@ from typing import Any
 class CausalModelCard:
     """Model card for causal analysis.
 
-    Attributes:
+    Attributes
+    ----------
         name: Name of the causal analysis
         description: Description of the analysis purpose
         estimand: Type of estimand (ATE, ATT, CATE)
@@ -71,7 +72,8 @@ class CausalModelCard:
 class ReleaseEvidence:
     """Evidence and caveats for releasing causal claim.
 
-    Attributes:
+    Attributes
+    ----------
         claim: The causal claim being made
         supporting_evidence: List of evidence items supporting the claim
         caveats: List of important caveats
@@ -98,7 +100,8 @@ class ReleaseEvidence:
     def validate_for_release(self) -> tuple[bool, list[str]]:
         """Validate that evidence is sufficient for release.
 
-        Returns:
+        Returns
+        -------
             Tuple of (is_valid, list_of_issues)
         """
         issues = []
@@ -140,7 +143,8 @@ class ReleaseEvidence:
 class AssumptionDocument:
     """Document identifying assumptions and their justification.
 
-    Attributes:
+    Attributes
+    ----------
         assumption_name: Name of the assumption
         mathematical_statement: Mathematical formulation
         intuitive_explanation: Plain English explanation
@@ -166,11 +170,14 @@ class AssumptionDocument:
 
     def to_markdown(self) -> str:
         """Convert to markdown for documentation."""
-        md = f"### {self.assumption_name}\n\n"
-        md += f"**Mathematical Statement:** {self.mathematical_statement}\n\n"
-        md += f"**Intuitive Explanation:** {self.intuitive_explanation}\n\n"
-        if self.how_checked:
-            md += f"**How Checked:** {self.how_checked}\n\n"
-        if self.sensitivity_to_violation:
-            md += f"**Sensitivity to Violation:** {self.sensitivity_to_violation}\n\n"
-        return md
+        return "".join(
+            [
+                f"### {self.assumption_name}\n\n",
+                f"**Mathematical Statement:** {self.mathematical_statement}\n\n",
+                f"**Intuitive Explanation:** {self.intuitive_explanation}\n\n",
+                f"**How Checked:** {self.how_checked}\n\n" if self.how_checked else "",
+                f"**Sensitivity to Violation:** {self.sensitivity_to_violation}\n\n"
+                if self.sensitivity_to_violation
+                else "",
+            ]
+        )

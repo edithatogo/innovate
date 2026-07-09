@@ -1,0 +1,42 @@
+{
+  "id": "kairos_simulation_adapter",
+  "title": "Kairos simulation adapter status",
+  "status": "pass",
+  "summary": "Kairos-aligned Python adapter contract and deterministic reference engine are available. Bridge crates remain gated. Mesa/NDLib are optional legacy-abm only.",
+  "schema_version": "1.0",
+  "backend": "kairos_contract_reference",
+  "kairos_source": "https://github.com/edithatogo/kairos.git",
+  "kairos_revision": "fae901558f07b7b717a676adbafbe2cdc78dea1c",
+  "core_crates": [
+    "kairo-ecs-types",
+    "kairo-ecs-core",
+    "kairo-ecs-state",
+    "kairo-ecs-rng",
+    "kairo-ecs-des",
+    "kairo-ecs-abm",
+    "kairo-ecs-arrow"
+  ],
+  "bridge_crates": {
+    "kairo-ecs-ffi": "gated",
+    "kairo-ecs-uniffi": "gated",
+    "kairo-ecs-diplomat": "gated"
+  },
+  "claims": {
+    "promoted_bridge": false,
+    "kairos_smoke_ready": true,
+    "mesa_base_required": false,
+    "ndlib_base_required": false
+  },
+  "artifacts": [
+    "src/innovate/abm/kairos_contract.py",
+    "src/innovate/abm/kairos_adapter.py",
+    "src/innovate/abm/legacy.py",
+    "tests/unit/test_kairos_adapter_contract.py",
+    "docs/astro-site/src/content/docs/tutorials/kairos-simulation-adapter.md",
+    "conductor/archive/kairos_abm_network_simulation_migration_20260625/"
+  ],
+  "notes": [
+    "Release readiness must not claim promoted FFI/UniFFI/Diplomat bridges without smoke promotion.",
+    "Legacy ABM examples require innovate[legacy-abm]."
+  ]
+}

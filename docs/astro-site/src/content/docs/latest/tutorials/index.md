@@ -10,8 +10,8 @@ This section hosts the tutorial surface in Starlight and is the canonical target
 
 Current tutorial areas:
 
-* **Core contracts**: [Functional Kernel Contract](/latest/tutorials/functional-kernel-contract/), [Diagnostics Contract](/latest/tutorials/diagnostics-contract/), and [Arrow Interchange](/latest/tutorials/arrow-interchange/)
-* **Modeling and Integration**: [Norton-Bass](/latest/tutorials/norton-bass/), [Advanced Diffusion](/latest/tutorials/advanced-diffusion-inference/), [Bayesian Fitting](/latest/tutorials/bayesian-fitter/), [Multi-Product](/latest/tutorials/multi-product/), [Seasonal Data](/latest/tutorials/seasonal-data/), [Counterfactual Analysis](/latest/tutorials/counterfactual-analysis/), [JAX Backend](/latest/tutorials/jax-backend/), and [NDlib Integration](/latest/tutorials/ndlib-integration/)
+* **Core contracts**: [Functional Kernel Contract](/innovate/latest/tutorials/functional-kernel-contract/), [Diagnostics Contract](/innovate/latest/tutorials/diagnostics-contract/), and [Arrow Interchange](/innovate/latest/tutorials/arrow-interchange/)
+* **Modeling and Integration**: [Norton-Bass](/innovate/latest/tutorials/norton-bass/), [Advanced Diffusion](/innovate/latest/tutorials/advanced-diffusion-inference/), [Bayesian Fitting](/innovate/latest/tutorials/bayesian-fitter/), [Multi-Product](/innovate/latest/tutorials/multi-product/), [Seasonal Data](/innovate/latest/tutorials/seasonal-data/), [Counterfactual Analysis](/innovate/latest/tutorials/counterfactual-analysis/), [JAX Backend](/innovate/latest/tutorials/jax-backend/), [Kairos Simulation Adapter](/innovate/latest/tutorials/kairos-simulation-adapter/), [Data Ingestion and Provenance](/innovate/latest/tutorials/data-ingestion-provenance/), [Decision Reports](/innovate/latest/tutorials/decision-reports/), and [NDlib Integration](/innovate/latest/tutorials/ndlib-integration/) (legacy extra)
 * Core usage patterns
 * Benchmark workflows
 * Plugin API stability
@@ -19,6 +19,7 @@ Current tutorial areas:
 ## Migration sources
 
 Historical references to source RST files:
+
 * `docs/source/tutorials.rst` - main index
 * `docs/source/tutorials/functional_kernel_contract.rst` - migrated to Functional Kernel Contract
 * `docs/source/tutorials/diagnostics_contract.rst` - migrated to Diagnostics Contract

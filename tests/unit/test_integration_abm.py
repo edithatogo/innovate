@@ -1,6 +1,11 @@
 import networkx as nx
 import numpy as np
 import pandas as pd
+import pytest
+
+pytest.importorskip("ndlib")
+pytest.importorskip("mesa")
+
 from ndlib.models.ModelConfig import Configuration
 
 from innovate.abm.ndlib_model import NDlibModel as NdlibInnovationModel
