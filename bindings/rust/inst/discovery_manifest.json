@@ -1,186 +1,243 @@
 {
-  "schema_version": "1.0",
+  "metadata": {},
   "models": [
     {
-      "key": "bass",
       "family": "diffusion",
       "import_path": "innovate.diffuse.BassModel",
+      "key": "bass",
+      "optional_dependencies": [],
       "stability": "stable",
+      "supported_backends": [
+        "numpy",
+        "jax"
+      ],
       "supports_covariates": true,
       "supports_multivariate_output": false,
-      "supported_backends": ["numpy", "jax"],
-      "optional_dependencies": [],
       "supports_simulation": false,
       "supports_summarize": false
     },
     {
-      "key": "logistic",
-      "family": "diffusion",
-      "import_path": "innovate.diffuse.LogisticModel",
-      "stability": "stable",
-      "supports_covariates": true,
-      "supports_multivariate_output": false,
-      "supported_backends": ["numpy", "jax"],
-      "optional_dependencies": [],
-      "supports_simulation": false,
-      "supports_summarize": false
-    },
-    {
-      "key": "gompertz",
-      "family": "diffusion",
-      "import_path": "innovate.diffuse.GompertzModel",
-      "stability": "stable",
-      "supports_covariates": true,
-      "supports_multivariate_output": false,
-      "supported_backends": ["numpy", "jax"],
-      "optional_dependencies": [],
-      "supports_simulation": false,
-      "supports_summarize": false
-    },
-    {
-      "key": "fisher_pry",
-      "family": "substitution",
-      "import_path": "innovate.substitute.FisherPryModel",
-      "stability": "stable",
-      "supports_covariates": false,
-      "supports_multivariate_output": false,
-      "supported_backends": ["numpy", "jax"],
-      "optional_dependencies": [],
-      "supports_simulation": false,
-      "supports_summarize": false
-    },
-    {
-      "key": "norton_bass",
-      "family": "substitution",
-      "import_path": "innovate.substitute.NortonBassModel",
-      "stability": "stable",
-      "supports_covariates": true,
-      "supports_multivariate_output": true,
-      "supported_backends": ["numpy", "jax"],
-      "optional_dependencies": [],
-      "supports_simulation": false,
-      "supports_summarize": false
-    },
-    {
-      "key": "composite",
-      "family": "substitution",
-      "import_path": "innovate.substitute.CompositeDiffusionModel",
-      "stability": "stable",
-      "supports_covariates": false,
-      "supports_multivariate_output": true,
-      "supported_backends": ["numpy", "jax"],
-      "optional_dependencies": [],
-      "supports_simulation": false,
-      "supports_summarize": false
-    },
-    {
-      "key": "multi_product",
-      "family": "competition",
-      "import_path": "innovate.compete.MultiProductDiffusionModel",
-      "stability": "stable",
-      "supports_covariates": true,
-      "supports_multivariate_output": true,
-      "supported_backends": ["numpy", "jax"],
-      "optional_dependencies": [],
-      "supports_simulation": false,
-      "supports_summarize": false
-    },
-    {
-      "key": "lotka_volterra",
-      "family": "competition",
-      "import_path": "innovate.compete.LotkaVolterraModel",
-      "stability": "stable",
-      "supports_covariates": true,
-      "supports_multivariate_output": true,
-      "supported_backends": ["numpy", "jax"],
-      "optional_dependencies": [],
-      "supports_simulation": false,
-      "supports_summarize": false
-    },
-    {
-      "key": "complementary_goods",
       "family": "ecosystem",
       "import_path": "innovate.ecosystem.ComplementaryGoodsModel",
+      "key": "complementary_goods",
+      "optional_dependencies": [],
       "stability": "stable",
+      "supported_backends": [
+        "numpy",
+        "jax"
+      ],
       "supports_covariates": false,
       "supports_multivariate_output": true,
-      "supported_backends": ["numpy", "jax"],
-      "optional_dependencies": [],
       "supports_simulation": false,
       "supports_summarize": false
     },
     {
-      "key": "hierarchical",
+      "family": "substitution",
+      "import_path": "innovate.substitute.CompositeDiffusionModel",
+      "key": "composite",
+      "optional_dependencies": [],
+      "stability": "stable",
+      "supported_backends": [
+        "numpy",
+        "jax"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": true,
+      "supports_simulation": false,
+      "supports_summarize": false
+    },
+    {
+      "family": "substitution",
+      "import_path": "innovate.substitute.FisherPryModel",
+      "key": "fisher_pry",
+      "optional_dependencies": [],
+      "stability": "stable",
+      "supported_backends": [
+        "numpy",
+        "jax"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": false,
+      "supports_simulation": false,
+      "supports_summarize": false
+    },
+    {
+      "family": "diffusion",
+      "import_path": "innovate.diffuse.GompertzModel",
+      "key": "gompertz",
+      "optional_dependencies": [],
+      "stability": "stable",
+      "supported_backends": [
+        "numpy",
+        "jax"
+      ],
+      "supports_covariates": true,
+      "supports_multivariate_output": false,
+      "supports_simulation": false,
+      "supports_summarize": false
+    },
+    {
       "family": "advanced_diffusion",
       "import_path": "innovate.models.hierarchical.HierarchicalModel",
+      "key": "hierarchical",
+      "optional_dependencies": [],
       "stability": "provisional",
+      "supported_backends": [
+        "numpy"
+      ],
       "supports_covariates": true,
       "supports_multivariate_output": false,
-      "supported_backends": ["numpy"],
-      "optional_dependencies": [],
       "supports_simulation": true,
       "supports_summarize": true
     },
     {
-      "key": "mixture",
-      "family": "advanced_diffusion",
-      "import_path": "innovate.models.mixture.MixtureModel",
-      "stability": "provisional",
-      "supports_covariates": true,
-      "supports_multivariate_output": false,
-      "supported_backends": ["numpy"],
-      "optional_dependencies": [],
-      "supports_simulation": true,
-      "supports_summarize": true
-    },
-    {
-      "key": "latent_process",
       "family": "advanced_diffusion",
       "import_path": "innovate.models.advanced.LatentProcessDiffusionModel",
-      "stability": "provisional",
-      "supports_covariates": false,
-      "supports_multivariate_output": false,
-      "supported_backends": ["numpy"],
+      "key": "latent_process",
       "optional_dependencies": [],
-      "supports_simulation": true,
-      "supports_summarize": true
-    },
-    {
-      "key": "regime_switching",
-      "family": "advanced_diffusion",
-      "import_path": "innovate.models.advanced.RegimeSwitchingDiffusionModel",
       "stability": "provisional",
+      "supported_backends": [
+        "numpy"
+      ],
       "supports_covariates": false,
       "supports_multivariate_output": false,
-      "supported_backends": ["numpy"],
-      "optional_dependencies": ["ruptures"],
       "supports_simulation": true,
       "supports_summarize": true
     },
     {
-      "key": "network_diffusion",
-      "family": "network_diffusion",
-      "import_path": "innovate.models.network.NetworkDiffusionModel",
-      "stability": "provisional",
+      "family": "path_dependence",
+      "import_path": "innovate.path_dependence.LockInModel",
+      "key": "lock_in",
+      "optional_dependencies": [],
+      "stability": "stable",
+      "supported_backends": [
+        "numpy"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": false,
+      "supports_simulation": false,
+      "supports_summarize": false
+    },
+    {
+      "family": "diffusion",
+      "import_path": "innovate.diffuse.LogisticModel",
+      "key": "logistic",
+      "optional_dependencies": [],
+      "stability": "stable",
+      "supported_backends": [
+        "numpy",
+        "jax"
+      ],
+      "supports_covariates": true,
+      "supports_multivariate_output": false,
+      "supports_simulation": false,
+      "supports_summarize": false
+    },
+    {
+      "family": "competition",
+      "import_path": "innovate.compete.LotkaVolterraModel",
+      "key": "lotka_volterra",
+      "optional_dependencies": [],
+      "stability": "stable",
+      "supported_backends": [
+        "numpy",
+        "jax"
+      ],
       "supports_covariates": true,
       "supports_multivariate_output": true,
-      "supported_backends": ["numpy"],
-      "optional_dependencies": ["networkx"],
+      "supports_simulation": false,
+      "supports_summarize": false
+    },
+    {
+      "family": "advanced_diffusion",
+      "import_path": "innovate.models.mixture.MixtureModel",
+      "key": "mixture",
+      "optional_dependencies": [],
+      "stability": "provisional",
+      "supported_backends": [
+        "numpy"
+      ],
+      "supports_covariates": true,
+      "supports_multivariate_output": false,
       "supports_simulation": true,
       "supports_summarize": true
     },
     {
-      "key": "policy_hazard",
+      "family": "competition",
+      "import_path": "innovate.compete.MultiProductDiffusionModel",
+      "key": "multi_product",
+      "optional_dependencies": [],
+      "stability": "stable",
+      "supported_backends": [
+        "numpy",
+        "jax"
+      ],
+      "supports_covariates": true,
+      "supports_multivariate_output": true,
+      "supports_simulation": false,
+      "supports_summarize": false
+    },
+    {
+      "family": "network_diffusion",
+      "import_path": "innovate.models.network.NetworkDiffusionModel",
+      "key": "network_diffusion",
+      "optional_dependencies": [
+        "networkx"
+      ],
+      "stability": "provisional",
+      "supported_backends": [
+        "numpy"
+      ],
+      "supports_covariates": true,
+      "supports_multivariate_output": true,
+      "supports_simulation": true,
+      "supports_summarize": true
+    },
+    {
+      "family": "substitution",
+      "import_path": "innovate.substitute.NortonBassModel",
+      "key": "norton_bass",
+      "optional_dependencies": [],
+      "stability": "stable",
+      "supported_backends": [
+        "numpy",
+        "jax"
+      ],
+      "supports_covariates": true,
+      "supports_multivariate_output": true,
+      "supports_simulation": false,
+      "supports_summarize": false
+    },
+    {
       "family": "policy_diffusion",
       "import_path": "innovate.models.policy.PolicyHazardDiffusionModel",
+      "key": "policy_hazard",
+      "optional_dependencies": [],
       "stability": "provisional",
+      "supported_backends": [
+        "numpy"
+      ],
       "supports_covariates": true,
       "supports_multivariate_output": false,
-      "supported_backends": ["numpy"],
-      "optional_dependencies": [],
+      "supports_simulation": true,
+      "supports_summarize": true
+    },
+    {
+      "family": "advanced_diffusion",
+      "import_path": "innovate.models.advanced.RegimeSwitchingDiffusionModel",
+      "key": "regime_switching",
+      "optional_dependencies": [
+        "ruptures"
+      ],
+      "stability": "provisional",
+      "supported_backends": [
+        "numpy"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": false,
       "supports_simulation": true,
       "supports_summarize": true
     }
   ],
-  "metadata": {}
+  "schema_version": "1.0"
 }
