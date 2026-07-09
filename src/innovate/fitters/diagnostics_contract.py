@@ -288,6 +288,8 @@ class DiagnosticsArtifactPayload:
 
     def to_table_payloads(self) -> dict[str, Any]:
         """Return Arrow-friendly kernel table payloads for tabular artifacts."""
+        import operator
+
         from innovate.kernel import KernelTablePayload  # Local import avoids an import cycle.
 
         tables: dict[str, KernelTablePayload] = {}
@@ -296,9 +298,18 @@ class DiagnosticsArtifactPayload:
             rows = artifact.get("rows")
             if not columns or not isinstance(rows, list):
                 continue
-            table_rows = [
-                tuple(row.get(column) if isinstance(row, dict) else None for column in columns) for row in rows
-            ]
+
+            none_tuple = tuple(None for _ in columns)
+            try:
+                getter = operator.itemgetter(*columns)
+                if len(columns) == 1:
+                    table_rows = [(getter(row),) if isinstance(row, dict) else none_tuple for row in rows]
+                else:
+                    table_rows = [getter(row) if isinstance(row, dict) else none_tuple for row in rows]
+            except KeyError:
+                table_rows = [
+                    tuple(row.get(column) if isinstance(row, dict) else None for column in columns) for row in rows
+                ]
             tables[name] = KernelTablePayload.from_rows(
                 columns=tuple(str(column) for column in columns),
                 rows=table_rows,
