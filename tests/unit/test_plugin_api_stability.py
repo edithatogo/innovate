@@ -92,3 +92,55 @@ def test_get_registered_extensions_immutability() -> None:
         # Verify immutability
         with pytest.raises(TypeError):
             registry["new-plugin"] = dummy_manifest  # type: ignore[index]
+
+
+def test_extension_manifest_rejects_empty_name() -> None:
+    with pytest.raises(ValueError, match="Extension manifest name must be non-empty."):
+        ExtensionManifest(
+            name="",
+            version="1.0.0",
+            entrypoint="demo.plugin:register",
+            stability=StabilityTier.PROVISIONAL,
+            extension_points=("model_registry",),
+        )
+
+
+def test_extension_manifest_rejects_empty_version() -> None:
+    with pytest.raises(ValueError, match="Extension manifest version must be non-empty."):
+        ExtensionManifest(
+            name="demo-plugin",
+            version="",
+            entrypoint="demo.plugin:register",
+            stability=StabilityTier.PROVISIONAL,
+            extension_points=("model_registry",),
+        )
+
+
+def test_extension_manifest_rejects_invalid_entrypoint() -> None:
+    with pytest.raises(ValueError, match="Extension manifest entrypoint must be in 'module:callable' format."):
+        ExtensionManifest(
+            name="demo-plugin",
+            version="1.0.0",
+            entrypoint="demo.plugin",
+            stability=StabilityTier.PROVISIONAL,
+            extension_points=("model_registry",),
+        )
+    with pytest.raises(ValueError, match="Extension manifest entrypoint must be in 'module:callable' format."):
+        ExtensionManifest(
+            name="demo-plugin",
+            version="1.0.0",
+            entrypoint="",
+            stability=StabilityTier.PROVISIONAL,
+            extension_points=("model_registry",),
+        )
+
+
+def test_extension_manifest_rejects_empty_extension_points() -> None:
+    with pytest.raises(ValueError, match="Extension manifest extension_points must be non-empty."):
+        ExtensionManifest(
+            name="demo-plugin",
+            version="1.0.0",
+            entrypoint="demo.plugin:register",
+            stability=StabilityTier.PROVISIONAL,
+            extension_points=(),
+        )

@@ -313,3 +313,53 @@ def test_discover_models_returns_correct_response_structure() -> None:
     assert response.models[0].key == "test_model"
     assert response.models[0].family == "test_family"
     assert response.models[0].import_path == "dummy.path.TestModel"
+
+
+def test_discover_models_returns_valid_response(monkeypatch) -> None:
+    """discover_models should return a valid response reflecting the model registry."""
+    from innovate import kernel
+    from innovate.capabilities import ModelCapability
+
+    mock_capability = ModelCapability(
+        key="mock_model",
+        family="mock_family",
+        import_path="mock.path",
+        supports_covariates=False,
+    )
+    monkeypatch.setattr("innovate.kernel.get_model_registry", lambda: {"mock_model": mock_capability})
+
+    response = kernel.discover_models()
+
+    assert isinstance(response, kernel.KernelDiscoveryResponse)
+    assert response.schema_version == kernel.KERNEL_SCHEMA_VERSION
+    assert len(response.models) == 1
+
+    record = response.models[0]
+    assert isinstance(record, kernel.KernelDiscoveryRecord)
+    assert record.key == "mock_model"
+    assert record.family == "mock_family"
+    assert record.import_path == "mock.path"
+    assert record.supports_covariates is False
+    assert record.stability == "stable"
+    assert record.supported_backends == ("numpy", "jax")
+
+
+def test_discover_models_empty_registry(monkeypatch) -> None:
+    """discover_models should handle an empty model registry gracefully."""
+    from innovate import kernel
+
+    monkeypatch.setattr("innovate.kernel.get_model_registry", lambda: {})
+    response = kernel.discover_models()
+
+    assert isinstance(response, kernel.KernelDiscoveryResponse)
+    assert response.schema_version == kernel.KERNEL_SCHEMA_VERSION
+    assert response.models == ()
+
+
+def test_list_kernel_operations() -> None:
+    """list_kernel_operations should return the documented public operations."""
+    from innovate import kernel
+
+    operations = kernel.list_kernel_operations()
+    assert isinstance(operations, tuple)
+    assert "discover_models" in operations
