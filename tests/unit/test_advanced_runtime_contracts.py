@@ -51,7 +51,19 @@ def test_advanced_capability_validation_and_lookup_errors() -> None:
         AdvancedCapability(key="", family="ensemble", stability="experimental")
     with pytest.raises(ValueError, match="family"):
         AdvancedCapability(key="candidate", family="", stability="experimental")
-    with pytest.raises(KeyError, match="unknown"):
+
+
+def test_get_advanced_capability() -> None:
+    """It should return the capability metadata by key or raise KeyError if unknown."""
+    # Happy path
+    capability = get_advanced_capability("policy_scenario")
+    assert capability.key == "policy_scenario"
+    assert capability.family == "policy"
+    assert capability.stability == "stable"
+    assert "numpy" in capability.supported_backends
+
+    # Error path
+    with pytest.raises(KeyError, match="Unknown advanced workflow capability: unknown"):
         get_advanced_capability("unknown")
 
 
