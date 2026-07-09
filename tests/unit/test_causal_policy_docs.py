@@ -6,8 +6,6 @@ and release evidence validation.
 
 from __future__ import annotations
 
-import pytest
-
 from innovate.causal.model_card import (
     AssumptionDocument,
     CausalModelCard,
