@@ -106,6 +106,7 @@ export default {
         { label: 'Benchmark Workflows', link: '/tutorials/benchmark-workflows/' },
         { label: 'Kairos Simulation Adapter', link: '/tutorials/kairos-simulation-adapter/' },
         { label: 'Data Ingestion and Provenance', link: '/tutorials/data-ingestion-provenance/' },
+        { label: 'Decision Reports', link: '/tutorials/decision-reports/' },
         { label: 'Plugin API Stability', link: '/tutorials/plugin-api-stability/' },
       ],
     },
