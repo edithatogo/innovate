@@ -1,0 +1,5 @@
+conductor-review: kairos_abm_network_simulation_migration_20260625
+
+Applied high-confidence fixes from whole-track review.
+Track remains archived at conductor/archive/kairos_abm_network_simulation_migration_20260625/.
+16 unit tests pass.
