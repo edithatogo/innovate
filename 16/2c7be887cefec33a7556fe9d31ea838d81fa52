@@ -1,0 +1,11 @@
+Track complete: Kairos ABM and Network Simulation Migration
+
+Delivered:
+- kairos_contract / kairos_adapter / legacy modules
+- unit tests + legacy importorskip guards
+- Starlight tutorial + release evidence JSON
+- Archive hygiene for this track
+
+Remaining outside track:
+- kairos_dependency_inclusion formalization still open
+- other stale track folders (data_ingestion, explainability)
