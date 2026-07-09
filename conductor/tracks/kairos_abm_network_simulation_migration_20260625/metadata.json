@@ -1,8 +1,8 @@
 {
   "track_id": "kairos_abm_network_simulation_migration_20260625",
   "type": "feature",
-  "status": "new",
+  "status": "in_progress",
   "created_at": "2026-06-25T11:55:00Z",
-  "updated_at": "2026-06-25T14:40:53Z",
+  "updated_at": "2026-07-09T00:15:00Z",
   "description": "Migrate ABM and network simulation surfaces to Kairos-backed adapters after Kairos dependency inclusion establishes repo-first build evidence and removes Mesa/NDLib from the base runtime."
 }
