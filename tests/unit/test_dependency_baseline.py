@@ -174,11 +174,9 @@ class TestCriterionBaseline:
         if not self.CARGO_TOML.exists():
             pytest.skip("Rust bindings not present")
         text = self.CARGO_TOML.read_text()
-        assert (
-            'criterion = "=0.5.1"' in text
-            or 'criterion = "0.5"' in text
-            or 'criterion = "0.5.1"' in text
-        ), "MSRV-compatible criterion pin not found in Rust Cargo.toml"
+        assert 'criterion = "=0.5.1"' in text or 'criterion = "0.5"' in text or 'criterion = "0.5.1"' in text, (
+            "MSRV-compatible criterion pin not found in Rust Cargo.toml"
+        )
 
 
 # ---- Mutmut current baseline ----
