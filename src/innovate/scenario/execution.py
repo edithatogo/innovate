@@ -4,7 +4,9 @@ This module provides APIs for executing scenarios, tracking execution
 metadata and diagnostics, and comparing scenario results.
 """
 
+import concurrent.futures
 from datetime import UTC, datetime
+from functools import partial
 from typing import Any
 
 import numpy as np
@@ -200,6 +202,7 @@ class ScenarioExecutor:
         self,
         scenarios: list[ScenarioBase],
         notes: str | None = None,
+        max_workers: int | None = None,
     ) -> list[ScenarioExecution]:
         """Execute a grid of scenarios.
 
@@ -209,13 +212,17 @@ class ScenarioExecutor:
             List of scenarios to execute.
         notes
             Optional notes about the grid execution.
+        max_workers
+            Optional max workers for ThreadPoolExecutor.
 
         Returns
         -------
         list[ScenarioExecution]
             List of execution results.
         """
-        return [self.execute(scenario, notes=notes) for scenario in scenarios]
+        execute_partial = partial(self.execute, notes=notes)
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+            return list(executor.map(execute_partial, scenarios))
 
 
 def compare_scenarios(
