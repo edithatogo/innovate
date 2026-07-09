@@ -105,7 +105,7 @@ class CovariateBalance:
         """
         smd_dict = {}
 
-        for covariate_name in self.treated_covariates.keys():
+        for covariate_name in self.treated_covariates:
             if covariate_name not in self.control_covariates:
                 continue
 

@@ -9,7 +9,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
 EVIDENCE_ROOT = ROOT / "docs/source/_static/release_readiness/evidence"
-GATE_INVENTORY = ROOT / "conductor/tracks/ci_code_quality_release_hardening_20260625/gate-inventory.md"
+GATE_INVENTORY = ROOT / "conductor/archive/ci_code_quality_release_hardening_20260625/gate-inventory.md"
 REQUIRED_FIELDS = {"evidence_id", "schema_version", "status", "generated_at"}
 ARTIFACT_MAP = {
     "sbom": "sbom.json",
