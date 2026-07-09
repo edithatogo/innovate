@@ -33,7 +33,7 @@
     "src/innovate/abm/legacy.py",
     "tests/unit/test_kairos_adapter_contract.py",
     "docs/astro-site/src/content/docs/tutorials/kairos-simulation-adapter.md",
-    "conductor/tracks/kairos_abm_network_simulation_migration_20260625/"
+    "conductor/archive/kairos_abm_network_simulation_migration_20260625/"
   ],
   "notes": [
     "Release readiness must not claim promoted FFI/UniFFI/Diplomat bridges without smoke promotion.",

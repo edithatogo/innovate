@@ -234,7 +234,7 @@ future-state completion to a mature, hardened release:
 | Reproducible scenario experiments across diffusion, substitution, competition, and policy interventions | [Scenario Experiment Workflows](../conductor/tracks/scenario_experiment_workflows_20260625/) |
 | Causal policy evaluation, rollout timing, spillovers, and heterogeneous effects | [Causal Policy Evaluation](../conductor/tracks/causal_policy_evaluation_20260625/) |
 | Scientific validation reports, benchmark corpus expansion, and leaderboard artifacts | [Model Validation and Benchmark Expansion](../conductor/tracks/model_validation_benchmark_expansion_20260625/) |
-| Kairos-backed ABM and network simulation adapter migration | [Kairos ABM and Network Simulation Migration](../conductor/tracks/kairos_abm_network_simulation_migration_20260625/) |
+| Kairos-backed ABM and network simulation adapter migration | [Kairos ABM and Network Simulation Migration](../conductor/archive/kairos_abm_network_simulation_migration_20260625/) |
 | Data ingestion, validation, provenance, and dataset connector workflows | [Data Ingestion and Provenance Connectors](../conductor/tracks/data_ingestion_provenance_connectors_20260625/) |
 | Explainability, sensitivity analysis, and decision-report artifacts | [Explainability, Sensitivity, and Decision Reports](../conductor/tracks/explainability_sensitivity_decision_reports_20260625/) |
 
@@ -251,7 +251,7 @@ Recommended implementation order:
 4. [Advanced Policy, Competition, and Substitution Modeling](../conductor/tracks/advanced_policy_competition_substitution_20260625/)
 5. [Scenario Experiment Workflows](../conductor/tracks/scenario_experiment_workflows_20260625/)
 6. [Causal Policy Evaluation](../conductor/tracks/causal_policy_evaluation_20260625/)
-7. [Kairos ABM and Network Simulation Migration](../conductor/tracks/kairos_abm_network_simulation_migration_20260625/)
+7. [Kairos ABM and Network Simulation Migration](../conductor/archive/kairos_abm_network_simulation_migration_20260625/)
 8. [Data Ingestion and Provenance Connectors](../conductor/tracks/data_ingestion_provenance_connectors_20260625/)
 9. [Explainability, Sensitivity, and Decision Reports](../conductor/tracks/explainability_sensitivity_decision_reports_20260625/)
 10. [Model Validation and Benchmark Expansion](../conductor/tracks/model_validation_benchmark_expansion_20260625/)
