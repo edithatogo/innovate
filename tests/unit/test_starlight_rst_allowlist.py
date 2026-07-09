@@ -17,7 +17,7 @@ from pathlib import Path
 ROOT = Path()
 DOCS_DIR = ROOT / "docs"
 RST_CLASSIFICATION = (
-    ROOT / "conductor" / "tracks" / "starlight_only_docs_completion_20260625" / "rst_classification.json"
+    ROOT / "conductor" / "archive" / "starlight_only_docs_completion_20260625" / "rst_classification.json"
 )
 
 # Starlight paths
