@@ -18,6 +18,7 @@ from innovate.data import (
     SubstitutionDataset,
     SyntheticAdoptionPublicAdapter,
     attach_provenance,
+    compute_dataset_content_checksum,
     dataset_from_dict,
     dataset_to_baseline_scenario,
     frame_to_dataset,
@@ -129,7 +130,7 @@ def test_benchmark_and_scenario_integration() -> None:
     link = get_dataset_benchmark_link("adoption")
     assert "bass_smoke_adoption" in link.benchmark_case_ids
     cards = resolve_model_cards_for_dataset("adoption")
-    assert "bass" in cards or len(cards) >= 0
+    assert "bass" in cards
     adapter = SyntheticAdoptionPublicAdapter()
     dataset, report = adapter.ingest(periods=6)
     require_valid(dataset)
@@ -139,6 +140,32 @@ def test_benchmark_and_scenario_integration() -> None:
     assert bundle["validation"]["ok"] is True
     assert bundle["benchmark_link"]["dataset_kind"] == "adoption"
     json.dumps(bundle)  # serializable
+
+
+def test_content_checksum_stable_after_checksum_attachment() -> None:
+    frame = pd.DataFrame({"time": [0, 1, 2], "adoption": [1.0, 2.0, 3.0]})
+    ds = frame_to_dataset(frame, "adoption", provenance=_prov(extraction_time="2026-01-01T00:00:00+00:00"))
+    assert ds.provenance is not None
+    digest = compute_dataset_content_checksum(ds.to_dict())
+    assert ds.provenance.checksum == digest
+    # Recomputing after checksum is present must not change the digest.
+    assert compute_dataset_content_checksum(ds.to_dict()) == digest
+
+
+def test_adoption_share_unit_requires_unit_interval() -> None:
+    ok = AdoptionDataset(time=[0, 1], adoption=[0.1, 0.2], unit="share")
+    assert validate_dataset(ok).ok
+    bad = AdoptionDataset(time=[0, 1], adoption=[1.0, 2.0], unit="share")
+    assert validate_dataset(bad).ok is False
+
+
+def test_synthetic_adapter_is_reproducible() -> None:
+    adapter = SyntheticAdoptionPublicAdapter()
+    left, _ = adapter.ingest(periods=5, seed=3)
+    right, _ = adapter.ingest(periods=5, seed=3)
+    assert left.to_dict() == right.to_dict()
+    assert left.provenance is not None
+    assert left.provenance.extraction_time == "1970-01-01T00:00:00+00:00"
 
 
 def test_duplicate_and_unit_failures() -> None:

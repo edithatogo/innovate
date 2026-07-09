@@ -20,7 +20,10 @@ from innovate.data.contracts import (
     SubstitutionDataset,
     attach_provenance,
 )
-from innovate.data.provenance import DatasetProvenance, compute_payload_checksum
+from innovate.data.provenance import (
+    DatasetProvenance,
+    compute_dataset_content_checksum,
+)
 from innovate.data.validation import ValidationReport, require_valid, validate_dataset
 
 FrameLike = Any
@@ -84,11 +87,13 @@ def frame_to_dataset(
     dataset: DatasetContract
     if kind == "adoption":
         _require_columns(table, ("time", "adoption"))
+        # Keep unit as count by default even when a denominator column exists;
+        # callers must opt into unit="share" when values are already fractions.
         dataset = AdoptionDataset(
             time=table["time"].to_numpy(dtype=float),
             adoption=table["adoption"].to_numpy(dtype=float),
             denominator=table["denominator"].to_numpy(dtype=float) if "denominator" in table.columns else None,
-            unit=unit or ("share" if "denominator" in table.columns else "count"),
+            unit=unit or "count",
             provenance=provenance,
         )
     elif kind == "substitution":
@@ -149,7 +154,7 @@ def frame_to_dataset(
         raise ValueError(f"unsupported dataset kind: {kind}")
 
     if provenance is not None and dataset.provenance is not None and not dataset.provenance.checksum:
-        checksum = compute_payload_checksum(dataset.to_dict())
+        checksum = compute_dataset_content_checksum(dataset.to_dict())
         dataset = attach_provenance(dataset, provenance.with_checksum(checksum))
 
     if validate:

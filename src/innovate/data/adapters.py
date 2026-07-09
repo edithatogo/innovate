@@ -71,7 +71,11 @@ class PublicDataAdapter(ABC):
         """Return a tabular frame ready for contract conversion."""
 
     def provenance(
-        self, *, transform_steps: tuple[str, ...] = (), extra: Mapping[str, Any] | None = None
+        self,
+        *,
+        transform_steps: tuple[str, ...] = (),
+        extra: Mapping[str, Any] | None = None,
+        extraction_time: str | None = None,
     ) -> DatasetProvenance:
         steps = ("adapter:" + self.manifest.adapter_id, *transform_steps)
         return DatasetProvenance.create(
@@ -79,6 +83,7 @@ class PublicDataAdapter(ABC):
             license=self.manifest.license,
             citation=self.manifest.citation,
             transform_steps=steps,
+            extraction_time=extraction_time,
             extra={
                 "adapter_id": self.manifest.adapter_id,
                 "homepage": self.manifest.homepage,
@@ -88,11 +93,15 @@ class PublicDataAdapter(ABC):
 
     def ingest(self, **kwargs: Any) -> tuple[DatasetContract, ValidationReport]:
         """Load, attach provenance, convert, and validate."""
+        extraction_time = kwargs.pop("extraction_time", None)
         frame = self.load_frame(**kwargs)
         dataset = frame_to_dataset(
             frame,
             self.manifest.dataset_kind,
-            provenance=self.provenance(transform_steps=("load_frame", "frame_to_dataset")),
+            provenance=self.provenance(
+                transform_steps=("load_frame", "frame_to_dataset"),
+                extraction_time=extraction_time,
+            ),
             validate=True,
         )
         return dataset, validate_dataset(dataset)
@@ -129,6 +138,11 @@ class SyntheticAdoptionPublicAdapter(PublicDataAdapter):
             level = min(100.0, level * (1.0 + 0.35 / (1.0 + step * 0.1)) + base)
             adoption.append(level)
         return pd.DataFrame({"time": time, "adoption": adoption, "denominator": [100.0] * periods})
+
+    def ingest(self, **kwargs: Any) -> tuple[DatasetContract, ValidationReport]:
+        """Ingest with a deterministic extraction_time when callers omit one."""
+        kwargs.setdefault("extraction_time", "1970-01-01T00:00:00+00:00")
+        return super().ingest(**kwargs)
 
 
 def list_builtin_adapters() -> tuple[AdapterManifest, ...]:

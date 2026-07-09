@@ -184,23 +184,49 @@ def _unit_compatibility(unit: str, allowed: set[str], name: str) -> ValidationCh
     )
 
 
+def _adoption_share_bounds(dataset: AdoptionDataset) -> ValidationCheck | None:
+    if dataset.unit != "share":
+        return None
+    if np.any((dataset.adoption < 0.0) | (dataset.adoption > 1.0 + 1e-9)):
+        return ValidationCheck(
+            name="share_bounds:adoption",
+            status="fail",
+            message="adoption values with unit='share' must be in [0, 1]",
+            details={
+                "min": float(dataset.adoption.min()),
+                "max": float(dataset.adoption.max()),
+            },
+        )
+    return ValidationCheck(
+        name="share_bounds:adoption",
+        status="pass",
+        message="adoption share values are within [0, 1]",
+    )
+
+
+def _validate_adoption(dataset: AdoptionDataset) -> list[ValidationCheck]:
+    checks = [
+        _missingness(dataset.time, "time"),
+        _missingness(dataset.adoption, "adoption"),
+        _time_alignment(dataset.time),
+        _monotonicity(dataset.adoption, "adoption", non_decreasing=True),
+        _denominator_consistency(dataset.adoption, dataset.denominator),
+        _duplicate_keys([(float(t),) for t in dataset.time], "time"),
+        _unit_compatibility(dataset.unit, {"count", "share", "rate"}, "adoption"),
+    ]
+    if dataset.denominator is not None:
+        checks.append(_missingness(dataset.denominator, "denominator"))
+    share_check = _adoption_share_bounds(dataset)
+    if share_check is not None:
+        checks.append(share_check)
+    return checks
+
+
 def validate_dataset(dataset: DatasetContract) -> ValidationReport:
     """Run standard validation diagnostics for a dataset contract."""
     checks: list[ValidationCheck] = []
     if isinstance(dataset, AdoptionDataset):
-        checks.extend(
-            [
-                _missingness(dataset.time, "time"),
-                _missingness(dataset.adoption, "adoption"),
-                _time_alignment(dataset.time),
-                _monotonicity(dataset.adoption, "adoption", non_decreasing=True),
-                _denominator_consistency(dataset.adoption, dataset.denominator),
-                _duplicate_keys([(float(t),) for t in dataset.time], "time"),
-                _unit_compatibility(dataset.unit, {"count", "share", "rate"}, "adoption"),
-            ]
-        )
-        if dataset.denominator is not None:
-            checks.append(_missingness(dataset.denominator, "denominator"))
+        checks.extend(_validate_adoption(dataset))
     elif isinstance(dataset, SubstitutionDataset):
         checks.extend(
             [

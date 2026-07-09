@@ -31,6 +31,24 @@ def compute_payload_checksum(payload: Mapping[str, Any] | Sequence[Any] | str | 
     return digest.hexdigest()
 
 
+def compute_dataset_content_checksum(dataset_payload: Mapping[str, Any]) -> str:
+    """Checksum dataset content excluding the mutable provenance.checksum field.
+
+    Hashing the full ``to_dict()`` output would bake an empty checksum into the
+    digest and then change the payload when the checksum is filled in, making
+    re-validation of the digest ambiguous.
+    """
+    payload = dict(dataset_payload)
+    provenance = payload.get("provenance")
+    if isinstance(provenance, Mapping):
+        provenance_copy = dict(provenance)
+        provenance_copy.pop("checksum", None)
+        # extraction_time may vary by wall clock; content identity is data rows.
+        provenance_copy.pop("extraction_time", None)
+        payload["provenance"] = provenance_copy
+    return compute_payload_checksum(payload)
+
+
 @dataclass(frozen=True, slots=True)
 class DatasetProvenance:
     """Reproducible provenance record for an ingested dataset.

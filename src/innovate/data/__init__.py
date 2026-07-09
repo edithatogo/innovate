@@ -40,6 +40,7 @@ from innovate.data.integration import (
 from innovate.data.provenance import (
     DATASET_PROVENANCE_SCHEMA_VERSION,
     DatasetProvenance,
+    compute_dataset_content_checksum,
     compute_payload_checksum,
 )
 from innovate.data.validation import (
@@ -75,6 +76,7 @@ __all__ = [
     "ValidationCheck",
     "ValidationReport",
     "attach_provenance",
+    "compute_dataset_content_checksum",
     "compute_payload_checksum",
     "dataset_from_dict",
     "dataset_to_baseline_scenario",
