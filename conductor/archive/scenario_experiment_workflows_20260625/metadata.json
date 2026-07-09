@@ -1,7 +1,7 @@
 {
   "track_id": "scenario_experiment_workflows_20260625",
   "type": "feature",
-  "status": "new",
+  "status": "completed",
   "created_at": "2026-06-25T11:45:00Z",
   "updated_at": "2026-06-25T11:45:00Z",
   "description": "Create scenario experiment workflow APIs for comparing diffusion, substitution, competition, and policy interventions with reproducible artifacts."
