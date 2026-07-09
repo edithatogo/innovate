@@ -184,7 +184,24 @@ class CausalModel:
     @classmethod
     def from_json(cls, json_str: str) -> CausalModel:
         """Load causal model from JSON."""
-        data = json.loads(json_str)
+        try:
+            data = json.loads(json_str)
+        except json.JSONDecodeError as e:
+            raise PolicyEvaluationError(f"Invalid JSON string: {e}")
+
+        if not isinstance(data, dict):
+            raise PolicyEvaluationError("JSON data must be a dictionary")
+
+        if "intervention" not in data:
+            raise PolicyEvaluationError("Missing 'intervention' key in JSON data")
+        if not isinstance(data["intervention"], dict):
+            raise PolicyEvaluationError("'intervention' must be a dictionary")
+
+        if "causal_model" not in data:
+            raise PolicyEvaluationError("Missing 'causal_model' key in JSON data")
+        if not isinstance(data["causal_model"], dict):
+            raise PolicyEvaluationError("'causal_model' must be a dictionary")
+
         intervention = InterventionContract(**data["intervention"])
         causal_model = CausalModelContract(**data["causal_model"])
         return cls(intervention=intervention, causal_model=causal_model)
