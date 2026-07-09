@@ -157,3 +157,24 @@ def test_detect_advanced_backends_reports_numpy_available() -> None:
 
     assert detected["numpy"] is True
     assert set(detected) == {"numpy", "jax", "rust"}
+
+
+def test_list_advanced_capabilities_deterministic_order() -> None:
+    """list_advanced_capabilities should return capabilities as a tuple sorted by key."""
+    capabilities = list_advanced_capabilities()
+
+    assert isinstance(capabilities, tuple)
+    assert len(capabilities) > 0
+    assert all(isinstance(c, AdvancedCapability) for c in capabilities)
+
+    keys = [c.key for c in capabilities]
+    assert keys == sorted(keys), "Capabilities must be returned in deterministic (sorted) order"
+
+    # Optional but good: Verify it returns the full known set
+    expected_keys = {
+        "regime_ensemble",
+        "policy_scenario",
+        "streaming_update",
+        "uncertainty_calibration",
+    }
+    assert set(keys) == expected_keys
