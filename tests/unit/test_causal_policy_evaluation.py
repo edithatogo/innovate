@@ -8,7 +8,6 @@ specification for Track 06: Causal Policy Evaluation.
 from __future__ import annotations
 
 import json
-from typing import Any
 
 import numpy as np
 import pytest
