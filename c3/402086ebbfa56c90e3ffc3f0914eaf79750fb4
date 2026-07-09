@@ -1,0 +1,11 @@
+Task: Verify dependency inclusion prerequisite
+
+Summary:
+- Confirmed Kairos crates pinned and smoke examples present.
+- Mesa/NDLib not base deps; bridges remain gated.
+- Proceeding with behavior-level adapter work under honest evidence rules.
+
+Files:
+- conductor/tracks.md
+- conductor/tracks/kairos_abm_network_simulation_migration_20260625/PREREQUISITE_STATUS.md
+- plan.md, metadata.json
