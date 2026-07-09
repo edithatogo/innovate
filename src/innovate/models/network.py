@@ -106,7 +106,20 @@ class NetworkDiffusionModel(AdvancedDiffusionModel):
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
 
         t_arr = np.asarray(t, dtype=float)
-        return np.vstack([np.asarray(model.predict(t_arr, covariates), dtype=float) for model in self._node_models])
+
+        if covariates is not None:
+            return np.vstack([np.asarray(model.predict(t_arr, covariates), dtype=float) for model in self._node_models])
+
+        from innovate.backend import current_backend as B
+        from innovate.fitters.batched_fitter import BatchedFitter
+
+        fitter = BatchedFitter(self.base_model, None)
+        params_list = [list(m.params_.values()) for m in self._node_models]
+        fitter.fitted_params = B.array(params_list)
+
+        t_batched = B.array([t_arr] * len(self._node_models))
+        predictions = fitter.predict(t_batched)
+        return np.asarray(predictions, dtype=float)
 
     def predict(
         self,
