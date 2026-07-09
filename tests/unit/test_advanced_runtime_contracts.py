@@ -172,6 +172,16 @@ def test_select_advanced_backend_reports_no_available_backend() -> None:
         )
 
 
+def test_select_advanced_backend_uses_defaults() -> None:
+    """Backend selection should use default policy and dynamic availability when omitted."""
+    selection = select_advanced_backend("policy_scenario")
+
+    assert selection.backend == "numpy"
+    assert selection.requested_backend == "numpy"
+    assert selection.fallback_used is False
+    assert selection.reason == "preferred_backend_available"
+
+
 def test_detect_advanced_backends_reports_numpy_available() -> None:
     """Backend detection should always include the dependency-free NumPy path."""
     detected = detect_advanced_backends()
