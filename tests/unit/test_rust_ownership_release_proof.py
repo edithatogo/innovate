@@ -23,7 +23,7 @@ class TestOwnershipInventory:
     def inventory_path(self):
         """Return path to operation/model inventory."""
         return Path(__file__).parent.parent.parent / (
-            "conductor/tracks/rust_native_ownership_release_proof_20260625/operation_model_inventory.md"
+            "conductor/archive/rust_native_ownership_release_proof_20260625/operation_model_inventory.md"
         )
 
     def test_inventory_exists(self, inventory_path):
@@ -188,7 +188,7 @@ class TestRustNativeClaimsAreDocumented:
     def test_bridge_fallbacks_documented(self):
         """Verify that bridge fallbacks are documented with rationale."""
         inventory_path = (
-            Path(__file__).parent.parent.parent / "conductor/tracks/rust_native_ownership_release_proof_20260625/"
+            Path(__file__).parent.parent.parent / "conductor/archive/rust_native_ownership_release_proof_20260625/"
             "operation_model_inventory.md"
         )
         content = inventory_path.read_text()
@@ -203,7 +203,7 @@ class TestRustNativeClaimsAreDocumented:
         # This test validates that we don't have silent fallbacks
         # All bridge/fallback cases should be in the inventory
         inventory_path = (
-            Path(__file__).parent.parent.parent / "conductor/tracks/rust_native_ownership_release_proof_20260625/"
+            Path(__file__).parent.parent.parent / "conductor/archive/rust_native_ownership_release_proof_20260625/"
             "operation_model_inventory.md"
         )
         assert inventory_path.exists(), "Ownership inventory required"
@@ -260,7 +260,7 @@ class TestOwnershipExceptionProcesses:
         """Verify exception documentation template exists."""
         # Should be a structured location for exceptions
         exception_path = (
-            Path(__file__).parent.parent.parent / "conductor/tracks/rust_native_ownership_release_proof_20260625/"
+            Path(__file__).parent.parent.parent / "conductor/archive/rust_native_ownership_release_proof_20260625/"
             "exceptions.json"
         )
         # For now, we just verify the track is set up to hold this

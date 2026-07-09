@@ -73,6 +73,7 @@ class TestKairosBuildPlumbing:
         result = subprocess.run(
             ["cargo", "check"],
             cwd=rust_binding_dir,
+            check=False,
             capture_output=True,
             text=True,
             timeout=300,
