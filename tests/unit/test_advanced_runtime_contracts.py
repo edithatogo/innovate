@@ -55,6 +55,15 @@ def test_advanced_capability_validation_and_lookup_errors() -> None:
         get_advanced_capability("unknown")
 
 
+def test_get_advanced_capability_returns_correct_capability() -> None:
+    """Lookup should successfully return an existing advanced capability."""
+    capability = get_advanced_capability("policy_scenario")
+    assert capability.key == "policy_scenario"
+    assert capability.family == "policy"
+    assert capability.stability == "stable"
+    assert capability.supported_backends == ("numpy", "jax", "rust")
+
+
 def test_advanced_result_serializes_to_stable_json_payload() -> None:
     """Result objects should round-trip through JSON without losing metadata."""
     result = AdvancedResult(
