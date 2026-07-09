@@ -1,0 +1,4 @@
+Task: preserve legacy boundaries + plan progress
+
+- test_abm skips without mesa
+- plan phases 0-3 task checkboxes updated (CI task remaining)
