@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-import pytest
-
 import json
 from pathlib import Path
+
+import pytest
 
 PRODUCTION_VERIFICATION = Path("docs/source/_static/astro_starlight/production_docs_verification.json")
 DOCSEARCH_GATE = Path("docs/source/_static/astro_starlight/docsearch_gate.json")
@@ -26,7 +26,7 @@ def test_production_docs_verification_contract_covers_release_routes() -> None:
     assert evidence["schema_version"] == 1
     assert evidence["generated_by_track"] == "production_docs_observability_20260614"
     if evidence["overall_status"] != "passed":
-        pytest.skip(f"production docs verification status={evidence["overall_status"]}")
+        pytest.skip(f"production docs verification status={evidence['overall_status']}")
     assert evidence["staleness"]["max_age_days"] == 30
     assert evidence["staleness"]["status"] == "fresh"
 
@@ -201,7 +201,7 @@ def test_example_validation_classifies_python_and_binding_snippets() -> None:
     assert evidence["schema_version"] == 1
     assert evidence["generated_by_track"] == "production_docs_observability_20260614"
     if evidence["overall_status"] != "passed":
-        pytest.skip(f"production docs verification status={evidence["overall_status"]}")
+        pytest.skip(f"production docs verification status={evidence['overall_status']}")
     assert evidence["ci_evidence"]["nox_session"] == "examples"
     assert evidence["ci_evidence"]["command"] == "uv run nox -s examples"
 
@@ -233,7 +233,7 @@ def test_deployment_readiness_records_pages_workflow_and_rollback() -> None:
     assert evidence["schema_version"] == 1
     assert evidence["generated_by_track"] == "production_docs_observability_20260614"
     if evidence["overall_status"] != "passed":
-        pytest.skip(f"production docs verification status={evidence["overall_status"]}")
+        pytest.skip(f"production docs verification status={evidence['overall_status']}")
     assert evidence["github_pages"]["workflow"] == ".github/workflows/docs.yml"
     assert evidence["github_pages"]["deploy_job_gated"] is True
     assert evidence["github_pages"]["artifact_path"] == "docs/astro-site/dist/"

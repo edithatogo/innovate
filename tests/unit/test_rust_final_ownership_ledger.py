@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-import pytest
-
 import json
 from pathlib import Path
 from typing import Any
+
+import pytest
 
 from innovate.kernel import discover_models
 

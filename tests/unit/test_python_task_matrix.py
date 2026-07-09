@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-import pytest
-
 import ast
 import re
 import tomllib
 from pathlib import Path
+
+import pytest
 
 SUPPORTED_PYTHONS = ("3.14",)
 LOCK_VALIDATED_RUNTIME_DEPENDENCIES = {

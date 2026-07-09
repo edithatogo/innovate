@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-import pytest
-
 import json
 import re
 from pathlib import Path
+
+import pytest
 
 ROOT = Path()
 ROADMAP = ROOT / "docs/astro-site/src/content/docs/operations/rust-core.md"

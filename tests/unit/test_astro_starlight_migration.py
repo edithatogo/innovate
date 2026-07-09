@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-import pytest
-
 import json
 from pathlib import Path
+
+import pytest
 
 
 def test_astro_starlight_package_manifest_records_pinned_baseline() -> None:

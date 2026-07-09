@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-import pytest
 from importlib.metadata import version as package_version
 from pathlib import Path
+
+import pytest
 
 
 @pytest.mark.skipif(not Path("docs/source/conf.py").exists(), reason="Sphinx conf removed after Starlight cutover")

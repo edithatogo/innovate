@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-import pytest
-
 from pathlib import Path
+
+import pytest
 
 from innovate.benchmarks import (
     BENCHMARK_METADATA_SCHEMA_VERSION,
