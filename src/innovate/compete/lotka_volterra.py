@@ -247,7 +247,7 @@ class LotkaVolterraModel(DiffusionModel):
         alpha2_base = self._params["alpha2"]
         beta2_base = self._params["beta2"]
 
-        rates = []
+        rates = np.empty((len(t), 2))
         for i in range(len(t)):
             alpha1_t = alpha1_base
             beta1_t = beta1_base
@@ -267,6 +267,6 @@ class LotkaVolterraModel(DiffusionModel):
             y1, y2 = y_pred[i]
             dy1_dt = alpha1_t * y1 * (1 - y1) - beta1_t * y1 * y2
             dy2_dt = alpha2_t * y2 * (1 - y2) - beta2_t * y1 * y2
-            rates.append([dy1_dt, dy2_dt])
+            rates[i] = [dy1_dt, dy2_dt]
 
         return B.array(rates)
