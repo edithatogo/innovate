@@ -120,3 +120,54 @@ def test_kernel_table_payload_from_experimental_dataframe_type_error() -> None:
     """It should raise TypeError for unsupported types."""
     with pytest.raises(TypeError, match="Expected a pandas or experimental Polars DataFrame"):
         kernel_table_payload_from_experimental_dataframe([{"time": 1.0}])
+
+
+def test_describe_dataframe_engine_experiments_comprehensive() -> None:
+    """The describe_dataframe_engine_experiments function should return the complete contract."""
+    contract = describe_dataframe_engine_experiments()
+
+    assert contract["schema_version"] == kernel.KERNEL_SCHEMA_VERSION
+    assert contract["default_surface"] == "pandas+pyarrow"
+
+    assert "pandas" in contract["inventory"]
+    assert "pyarrow" in contract["inventory"]
+    assert "polars" in contract["inventory"]
+
+    assert "Python-facing tabular outputs" in contract["inventory"]["pandas"]
+    assert "optional downstream Arrow consumer" in contract["inventory"]["polars"]
+
+    assert "benchmark_corpus_metadata" in contract["candidate_workloads"]
+    assert "diagnostics_artifact_tables" in contract["candidate_workloads"]
+
+    assert "row_count" in contract["metrics"]
+    assert "column_count" in contract["metrics"]
+    assert "correctness_hash" in contract["metrics"]
+    assert "wall_time_ms" in contract["metrics"]
+    assert "peak_memory_bytes" in contract["metrics"]
+
+    assert contract["optional_engines"]["polars"]["support_tier"] == "experimental"
+    assert contract["optional_engines"]["polars"]["dependency_extra"] == "dataframe"
+    assert contract["optional_engines"]["polars"]["fallback"] == "pandas+pyarrow"
+
+    assert contract["public_contract"] == "kernel schema and Arrow-compatible payloads"
+
+    assert "Polars lazy query plans" in contract["blocked_public_contracts"]
+    assert "engine-specific expression trees" in contract["blocked_public_contracts"]
+    assert "XLA compiler internals" in contract["blocked_public_contracts"]
+
+    assert "correctness parity with pandas+pyarrow" in contract["promotion_criteria"]
+    assert "reproducible benchmark evidence" in contract["promotion_criteria"]
+    assert "no public API drift" in contract["promotion_criteria"]
+    assert "explicit optional dependency gate" in contract["promotion_criteria"]
+
+    assert (
+        contract["attribution"]["tabular_execution"] == "DataFrame engine, query planning, and Arrow table conversion"
+    )
+    assert contract["attribution"]["separate_from"] == "XLA-backed numerical kernels"
+
+
+def test_unsupported_engine_raises_value_error() -> None:
+    """An explicit request for an unknown engine should fail fast with a ValueError."""
+    payload = _table_payload()
+    with pytest.raises(ValueError, match="Unsupported DataFrame engine: unsupported"):
+        kernel_table_payload_to_experimental_dataframe(payload, engine="unsupported")
