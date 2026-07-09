@@ -9,6 +9,7 @@ import numpy as np
 import pytest
 
 from innovate.advanced_runtime import (
+    PolicyScenarioConfig,
     calibrate_prediction_intervals,
     compare_policy_scenarios,
     compose_regime_ensemble,
@@ -61,13 +62,15 @@ def test_compare_policy_scenarios_reports_auditable_effect_summary() -> None:
     intervention = observed
 
     result = compare_policy_scenarios(
-        time=fixture["time"],
-        baseline=baseline,
-        intervention=intervention,
-        observed=observed,
-        scenario_name="rebate",
-        assumptions=fixture["assumptions"],
-        covariates=fixture["covariates"],
+        PolicyScenarioConfig(
+            time=fixture["time"],
+            baseline=baseline,
+            intervention=intervention,
+            observed=observed,
+            scenario_name="rebate",
+            assumptions=fixture["assumptions"],
+            covariates=fixture["covariates"],
+        )
     )
 
     payload = result.to_dict()
