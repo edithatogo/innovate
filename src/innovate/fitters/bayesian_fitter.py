@@ -22,10 +22,11 @@ from jax import random
 from innovate.fitters.diagnostics_contract import (
     DiagnosticsContract,
     DiagnosticsWarning,
+    IntervalConfig,
     UncertaintySummary,
     build_diagnostics_contract,
 )
-from innovate.probabilistic import PosteriorSamplesPayload
+from innovate.probabilistic import PosteriorConfig, PosteriorSamplesPayload
 
 
 class BayesianFitter:
@@ -310,11 +311,14 @@ class BayesianFitter:
         upper = {name: bounds[1] for name, bounds in intervals.items()}
         median = {name: stats["median"] for name, stats in summary.items()}
         samples = {name: np.asarray(values).reshape(-1) for name, values in self.posterior_samples_.items()}
-        return UncertaintySummary.posterior_summary(
+        interval = IntervalConfig(
             lower=lower,
             upper=upper,
             median=median,
             level=credible_mass,
+        )
+        return UncertaintySummary.posterior_summary(
+            interval=interval,
             samples=samples,
             note=f"{self.num_chains} chains x {self.num_samples} samples",
         )
@@ -337,15 +341,17 @@ class BayesianFitter:
         return PosteriorSamplesPayload.from_samples(
             model_key=resolved_model_key or "unknown",
             samples={name: np.asarray(values) for name, values in self.posterior_samples_.items()},
-            engine=engine,
-            backend=backend,
-            seed=self.random_seed,
-            metadata={
-                "num_chains": self.num_chains,
-                "num_samples": self.num_samples,
-                "num_warmup": self.num_warmup,
-                "xla_eligible": True,
-            },
+            config=PosteriorConfig(
+                engine=engine,
+                backend=backend,
+                seed=self.random_seed,
+                metadata={
+                    "num_chains": self.num_chains,
+                    "num_samples": self.num_samples,
+                    "num_warmup": self.num_warmup,
+                    "xla_eligible": True,
+                },
+            ),
         )
 
     def get_summary(self) -> dict[str, dict[str, float]]:
