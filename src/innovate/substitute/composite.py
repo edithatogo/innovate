@@ -109,20 +109,6 @@ class CompositeDiffusionModel(DiffusionModel):
         y0 = np.zeros(len(self.models))
         from scipy.integrate import solve_ivp
 
-        # Compile the differential equation if the parameters are pytensor variables
-        # if any(isinstance(p, pt.TensorVariable) for p in self._params.values()):
-        #     t_sym = pt.scalar("t")
-        #     y_sym = pt.vector("y")
-        #     params_sym = [pt.scalar(name) for name in self.param_names]
-
-        #     dydt = self.differential_equation(t_sym, y_sym, params_sym)
-
-        #     def fun_with_params(t, y):
-        #         return fun(t, y, *param_values)
-
-        #     fun = fun_with_params
-        # else:
-
         def ode_func(t, y):
             return self.differential_equation(t, y, self._params)
 
