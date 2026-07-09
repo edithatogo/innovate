@@ -85,6 +85,18 @@ class FitDiagnostics:
 OptimizationMethod = Literal["curve_fit", "least_squares", "nelder_mead", "lbfgsb", "differential_evolution", "auto"]
 
 
+@dataclass
+class DiagnosticsContext:
+    """Context parameters for computing fit diagnostics."""
+
+    model: DiffusionModel
+    t: np.ndarray
+    y: np.ndarray
+    method: str
+    convergence_status: str = "converged"
+    message: str = ""
+
+
 class ScipyFitter:
     """A fitter class that uses SciPy optimization methods for model estimation.
 
@@ -131,14 +143,16 @@ class ScipyFitter:
 
     def _compute_diagnostics(
         self,
-        model: DiffusionModel,
-        t: np.ndarray,
-        y: np.ndarray,
-        method: str,
-        convergence_status: str = "converged",
-        message: str = "",
+        context: DiagnosticsContext,
     ) -> FitDiagnostics:
         """Compute goodness-of-fit diagnostics after successful fitting."""
+        model = context.model
+        t = context.t
+        y = context.y
+        method = context.method
+        convergence_status = context.convergence_status
+        message = context.message
+
         y_pred = model.predict(t)
         y_pred = np.asarray(y_pred).flatten()
         y_flat = y.flatten()
@@ -406,7 +420,8 @@ class ScipyFitter:
                 kwargs["bounds"] = bounds
             model.fit(t, y, **kwargs)
             if self.store_diagnostics:
-                self.diagnostics = self._compute_diagnostics(model, t_arr, y_arr, "model_builtin")
+                context = DiagnosticsContext(model=model, t=t_arr, y=y_arr, method="model_builtin")
+                self.diagnostics = self._compute_diagnostics(context)
             return self
 
         y_arr = y_arr.flatten()
@@ -450,6 +465,14 @@ class ScipyFitter:
 
         # Compute and store diagnostics
         if self.store_diagnostics:
-            self.diagnostics = self._compute_diagnostics(model, t_arr, y_arr, method, status, message)
+            context = DiagnosticsContext(
+                model=model,
+                t=t_arr,
+                y=y_arr,
+                method=method,
+                convergence_status=status,
+                message=message,
+            )
+            self.diagnostics = self._compute_diagnostics(context)
 
         return self
