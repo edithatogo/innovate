@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 
 CAPABILITIES_SRC = ROOT / "src" / "innovate" / "capabilities.py"
-GAP_INVENTORY = ROOT / "conductor" / "tracks" / "advanced_policy_competition_substitution_20260625" / "gap_inventory.md"
+GAP_INVENTORY = ROOT / "conductor" / "archive" / "advanced_policy_competition_substitution_20260625" / "gap_inventory.md"
 
 
 def test_lock_in_model_registered_in_capabilities() -> None:
