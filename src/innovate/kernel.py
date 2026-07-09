@@ -753,7 +753,7 @@ def _extract_model_state(
 
 
 def _kernel_error_response(
-    operation: str,
+    request: KernelRequest,
     code: KernelErrorCode,
     message: str,
     *,
@@ -761,16 +761,22 @@ def _kernel_error_response(
     retryable: bool = False,
     metadata: Mapping[str, KernelJSONValue] | None = None,
 ) -> KernelResponse:
+    final_metadata: dict[str, KernelJSONValue] = {}
+    if request.model_key is not None:
+        final_metadata["model_key"] = request.model_key
+    if metadata:
+        final_metadata.update(metadata)
+
     return KernelResponse(
-        operation=operation,
+        operation=request.operation,
         error=KernelError(
             code=code.value,
             message=message,
-            operation=operation,
+            operation=request.operation,
             details=_section_mapping(details),
             retryable=retryable,
         ),
-        metadata=_section_mapping(metadata),
+        metadata=final_metadata,
     )
 
 
@@ -858,10 +864,9 @@ def fit_model(request: KernelRequest) -> KernelResponse:
         )
     except Exception as exc:
         return _kernel_error_response(
-            request.operation,
+            request,
             KernelErrorCode.INVALID_REQUEST,
             str(exc),
-            metadata={"model_key": request.model_key},
         )
 
 
@@ -885,10 +890,9 @@ def predict_model(request: KernelRequest) -> KernelResponse:
         )
     except Exception as exc:
         return _kernel_error_response(
-            request.operation,
+            request,
             KernelErrorCode.INVALID_REQUEST,
             str(exc),
-            metadata={"model_key": request.model_key},
         )
 
 
@@ -912,10 +916,9 @@ def simulate_model(request: KernelRequest) -> KernelResponse:
         )
     except Exception as exc:
         return _kernel_error_response(
-            request.operation,
+            request,
             KernelErrorCode.INVALID_REQUEST,
             str(exc),
-            metadata={"model_key": request.model_key},
         )
 
 
@@ -971,10 +974,9 @@ def summarize_model(request: KernelRequest) -> KernelResponse:
         )
     except Exception as exc:
         return _kernel_error_response(
-            request.operation,
+            request,
             KernelErrorCode.INVALID_REQUEST,
             str(exc),
-            metadata={"model_key": request.model_key},
         )
 
 
@@ -1017,10 +1019,9 @@ def diagnose_model(request: KernelRequest) -> KernelResponse:
         )
     except Exception as exc:
         return _kernel_error_response(
-            request.operation,
+            request,
             KernelErrorCode.INVALID_REQUEST,
             str(exc),
-            metadata={"model_key": request.model_key},
         )
 
 
