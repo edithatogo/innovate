@@ -1,0 +1,16 @@
+Tasks: Audit simulation surfaces; Define Kairos adapter contract; Implement Kairos adapter path; Preserve legacy compatibility boundaries
+
+Summary:
+- Inventory of ABM/NDLib/network/policy surfaces and gaps.
+- Contract models + dependency evidence.
+- Deterministic KairosSimulationAdapter with JSON/Arrow telemetry.
+- LegacyABMDependencyError and migration guidance.
+
+Files:
+- src/innovate/abm/kairos_contract.py
+- src/innovate/abm/kairos_adapter.py
+- src/innovate/abm/legacy.py
+- src/innovate/abm/__init__.py
+- src/innovate/abm/SIMULATION_MODEL_CARD.md
+- tests/unit/test_kairos_adapter_contract.py
+- conductor/.../SIMULATION_SURFACE_AUDIT.md
