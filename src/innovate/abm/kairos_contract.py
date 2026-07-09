@@ -56,17 +56,25 @@ class SimulationSeed:
         return {"primary": self.primary, "stream_id": self.stream_id}
 
 
+# Reference engine uses stdlib random.Random; only this algorithm is accepted.
+SUPPORTED_STREAM_ALGORITHMS: frozenset[str] = frozenset({"mt19937", "reference"})
+
+
 @dataclass(frozen=True, slots=True)
 class RandomStreamConfig:
     """Configuration for a named deterministic random stream."""
 
     name: str
     seed: SimulationSeed
-    algorithm: str = "pcg64"
+    algorithm: str = "reference"
 
     def __post_init__(self) -> None:
         _require_non_empty_str(self.name, "name")
         _require_non_empty_str(self.algorithm, "algorithm")
+        if self.algorithm not in SUPPORTED_STREAM_ALGORITHMS:
+            raise ValueError(
+                f"unsupported stream algorithm '{self.algorithm}'; supported: {sorted(SUPPORTED_STREAM_ALGORITHMS)}"
+            )
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -151,22 +159,31 @@ class InterventionSpec:
 
 @dataclass(frozen=True, slots=True)
 class AgentStateSpec:
-    """Initial ECS-style agent state."""
+    """Initial ECS-style agent state.
+
+    When ``node_id`` is set, the agent is placed on that topology node.
+    When omitted, the adapter uses stable round-robin placement by agent order
+    (agent order is therefore significant for reproducibility).
+    """
 
     agent_id: str
     state: str
     attributes: Mapping[str, float] = field(default_factory=dict)
+    node_id: str | None = None
 
     def __post_init__(self) -> None:
         _require_non_empty_str(self.agent_id, "agent_id")
         _require_non_empty_str(self.state, "state")
         object.__setattr__(self, "attributes", {str(k): float(v) for k, v in self.attributes.items()})
+        if self.node_id is not None:
+            _require_non_empty_str(self.node_id, "node_id")
 
     def to_dict(self) -> dict[str, object]:
         return {
             "agent_id": self.agent_id,
             "state": self.state,
             "attributes": dict(self.attributes),
+            "node_id": self.node_id,
         }
 
 
@@ -282,8 +299,12 @@ class KairosDependencyEvidence:
         return any(item.status == "promoted" for item in self.bridge_crates)
 
     def claims_kairos_backed_simulation(self) -> bool:
-        """True only when core smoke evidence and no unpromoted-claim lie exist."""
-        return bool(self.smoke_des and self.smoke_abm and self.revision)
+        """True only with observed source, revision, core crates, and smoke files.
+
+        Fail closed: missing Cargo evidence or empty crate inventory must not
+        claim Kairos-backed simulation support.
+        """
+        return bool(self.source_url and self.revision and self.core_crates and self.smoke_des and self.smoke_abm)
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -328,6 +349,14 @@ class KairosSimulationRequest:
             raise ValueError("agent_id values must be unique")
         if not 0.0 <= float(self.adoption_threshold) <= 1.0:
             raise ValueError("adoption_threshold must be in [0, 1]")
+        known_nodes = set(self.topology.node_ids)
+        for intervention in self.interventions:
+            unknown = [node for node in intervention.target_nodes if node not in known_nodes]
+            if unknown:
+                raise ValueError(f"intervention target_nodes must be known topology nodes: {unknown}")
+        for agent in self.agents:
+            if agent.node_id is not None and agent.node_id not in known_nodes:
+                raise ValueError(f"agent node_id must be a known topology node: {agent.node_id}")
 
     def to_dict(self) -> dict[str, object]:
         return {

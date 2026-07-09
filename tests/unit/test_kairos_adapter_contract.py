@@ -81,9 +81,11 @@ def test_request_requires_positive_horizon_and_unique_agents() -> None:
         )
 
 
-def test_dependency_evidence_is_fail_closed_for_bridges(tmp_path: Path) -> None:
+def test_dependency_evidence_is_fail_closed_for_bridges() -> None:
     evidence = collect_kairos_dependency_evidence()
     assert evidence.revision == KAIROS_PINNED_REVISION
+    assert evidence.source_url
+    assert evidence.core_crates
     assert evidence.smoke_des is True
     assert evidence.smoke_abm is True
     assert evidence.mesa_base_required is False
@@ -94,6 +96,28 @@ def test_dependency_evidence_is_fail_closed_for_bridges(tmp_path: Path) -> None:
         assert bridge_crate_available(crate, evidence) is False
 
 
+def test_dependency_evidence_does_not_invent_manifest_facts(tmp_path: Path) -> None:
+    empty = collect_kairos_dependency_evidence(repo_root=tmp_path)
+    assert empty.revision == ""
+    assert empty.source_url == ""
+    assert empty.core_crates == ()
+    assert empty.smoke_des is False
+    assert empty.smoke_abm is False
+    assert empty.claims_kairos_backed_simulation() is False
+    assert empty.claims_promoted_bridge() is False
+
+
+def test_promoted_bridge_request_stays_gated_until_dispatch_exists() -> None:
+    adapter = KairosSimulationAdapter(promoted_bridges={"kairo-ecs-ffi": True})
+    status = adapter.status()
+    assert status["bridge_promoted"] is False
+    # Run must still succeed via the reference engine without claiming native dispatch.
+    result = adapter.run(_sample_request(seed=5))
+    assert result.backend == "kairos_contract_reference"
+    assert result.dependency_evidence.claims_promoted_bridge() is False
+    assert any("dispatch is not implemented" in item.reason for item in result.dependency_evidence.bridge_crates)
+
+
 def test_adapter_status_reports_honest_backend() -> None:
     adapter = KairosSimulationAdapter()
     status = adapter.status()
@@ -101,6 +125,103 @@ def test_adapter_status_reports_honest_backend() -> None:
     assert status["bridge_promoted"] is False
     assert status["kairos_smoke_ready"] is True
     assert status["legacy_base_deps_present"] is False
+
+
+def test_targeted_intervention_boosts_only_named_nodes() -> None:
+    adapter = KairosSimulationAdapter()
+    topology = TopologySpec.from_edge_list(["n0", "n1"], [])
+    agents = (
+        AgentStateSpec(agent_id="a0", state="susceptible"),
+        AgentStateSpec(agent_id="a1", state="susceptible"),
+    )
+    # Map a0->n0, a1->n1; target only n1. With threshold 0.95 and noise < 0.1,
+    # only the targeted node (boost 1.0) can adopt; n0 cannot.
+    request = KairosSimulationRequest(
+        seed=SimulationSeed(primary=1),
+        agents=agents,
+        topology=topology,
+        horizon=2.0,
+        steps=2,
+        interventions=(InterventionSpec(time=0.0, label="focus", effect=1.0, target_nodes=("n1",)),),
+        adoption_threshold=0.95,
+    )
+    result = adapter.run(request)
+    final = {agent.agent_id: agent.state for agent in result.final_agents}
+    assert final["a1"] == "adopted"
+    assert final["a0"] == "susceptible"
+
+
+def test_intervention_rejects_unknown_target_nodes() -> None:
+    topology = TopologySpec.from_edge_list(["n0"], [])
+    with pytest.raises(ValueError, match="target_nodes"):
+        KairosSimulationRequest(
+            seed=SimulationSeed(primary=1),
+            agents=(AgentStateSpec(agent_id="a0", state="susceptible"),),
+            topology=topology,
+            horizon=1.0,
+            steps=1,
+            interventions=(InterventionSpec(time=0.0, label="bad", effect=1.0, target_nodes=("missing",)),),
+        )
+
+
+def test_unsupported_stream_algorithm_is_rejected() -> None:
+    with pytest.raises(ValueError, match="unsupported stream algorithm"):
+        RandomStreamConfig(
+            name="behavior",
+            seed=SimulationSeed(primary=1),
+            algorithm="pcg64",
+        )
+
+
+def test_explicit_agent_node_placement() -> None:
+    adapter = KairosSimulationAdapter()
+    topology = TopologySpec.from_edge_list(["n0", "n1"], [])
+    request = KairosSimulationRequest(
+        seed=SimulationSeed(primary=1),
+        agents=(
+            AgentStateSpec(agent_id="a0", state="susceptible", node_id="n1"),
+            AgentStateSpec(agent_id="a1", state="susceptible", node_id="n0"),
+        ),
+        topology=topology,
+        horizon=2.0,
+        steps=2,
+        interventions=(InterventionSpec(time=0.0, label="focus", effect=1.0, target_nodes=("n1",)),),
+        adoption_threshold=0.95,
+    )
+    result = adapter.run(request)
+    final = {agent.agent_id: agent.state for agent in result.final_agents}
+    # a0 is on n1 (targeted) and adopts; a1 is on n0 and stays susceptible.
+    assert final["a0"] == "adopted"
+    assert final["a1"] == "susceptible"
+
+
+def test_random_stream_primary_seed_affects_outcomes() -> None:
+    adapter = KairosSimulationAdapter()
+    topology = TopologySpec.from_edge_list(["n0", "n1"], [("n0", "n1", 1.0)])
+    agents = (
+        AgentStateSpec(agent_id="a0", state="susceptible"),
+        AgentStateSpec(agent_id="a1", state="adopted"),
+    )
+
+    def _request(stream_primary: int) -> KairosSimulationRequest:
+        return KairosSimulationRequest(
+            seed=SimulationSeed(primary=42, stream_id="main"),
+            agents=agents,
+            topology=topology,
+            horizon=5.0,
+            steps=5,
+            random_streams=(
+                RandomStreamConfig(
+                    name="behavior",
+                    seed=SimulationSeed(primary=stream_primary, stream_id="behavior"),
+                ),
+            ),
+            adoption_threshold=0.5,
+        )
+
+    left = adapter.run(_request(1))
+    right = adapter.run(_request(9999))
+    assert left.to_dict() != right.to_dict()
 
 
 def test_deterministic_scheduler_and_streams() -> None:

@@ -53,19 +53,31 @@ def collect_kairos_dependency_evidence(
     pyproject = root / "pyproject.toml"
 
     cargo_text = cargo.read_text(encoding="utf-8") if cargo.is_file() else ""
+    # Fail closed: never invent revision/source/crates when the manifest is missing.
     revision = KAIROS_PINNED_REVISION if KAIROS_PINNED_REVISION in cargo_text else ""
     source_url = KAIROS_SOURCE_URL if "edithatogo/kairos" in cargo_text else ""
     core = tuple(crate for crate in CORE_KAIROS_CRATES if crate in cargo_text)
 
+    # Promotion is only honest when a bridge dispatch path exists. Until then,
+    # caller-supplied promotion flags remain gated with an explicit reason.
+    dispatch_ready = False
     promoted = dict(promoted_bridges or {})
     bridge_statuses: list[BridgeCrateStatus] = []
     for crate in BRIDGE_KAIROS_CRATES:
-        if promoted.get(crate):
+        if promoted.get(crate) and dispatch_ready:
             bridge_statuses.append(
                 BridgeCrateStatus(
                     crate=crate,
                     status="promoted",
                     reason="explicit smoke promotion recorded by caller",
+                )
+            )
+        elif promoted.get(crate):
+            bridge_statuses.append(
+                BridgeCrateStatus(
+                    crate=crate,
+                    status="gated",
+                    reason="promotion requested but native bridge dispatch is not implemented",
                 )
             )
         else:
@@ -82,9 +94,9 @@ def collect_kairos_dependency_evidence(
     ndlib_base = _dependency_listed_in_base(pyproject_text, "ndlib")
 
     return KairosDependencyEvidence(
-        source_url=source_url or KAIROS_SOURCE_URL,
-        revision=revision or KAIROS_PINNED_REVISION,
-        core_crates=core or CORE_KAIROS_CRATES,
+        source_url=source_url,
+        revision=revision,
+        core_crates=core,
         bridge_crates=tuple(bridge_statuses),
         smoke_des=des_smoke.is_file(),
         smoke_abm=abm_smoke.is_file(),
@@ -94,17 +106,24 @@ def collect_kairos_dependency_evidence(
 
 
 def _dependency_listed_in_base(pyproject_text: str, package: str) -> bool:
-    """Return True if package appears in the base dependencies list."""
+    """Return True if package appears in the base project dependencies list.
+
+    Only matches the top-level ``dependencies = [`` array, not
+    ``[project.optional-dependencies]`` extras such as ``legacy-abm``.
+    """
     in_deps = False
+    package_token = f'"{package}'
     for line in pyproject_text.splitlines():
         stripped = line.strip()
-        if stripped.startswith("dependencies"):
+        if stripped.startswith("dependencies") and "=" in stripped and not stripped.startswith("["):
             in_deps = True
             continue
         if in_deps:
             if stripped.startswith("["):
                 break
-            if package in stripped and not stripped.startswith("#"):
+            if stripped.startswith("#"):
+                continue
+            if package_token in stripped or f"'{package}" in stripped:
                 return True
     return False
 
@@ -119,13 +138,19 @@ def _stable_seed_token(value: str) -> int:
 
 
 def _seeded_rng(request: KairosSimulationRequest) -> random.Random:
-    rng = random.Random(request.seed.primary)
+    """Build a deterministic RNG from the primary seed and optional stream mix.
+
+    Each configured stream contributes its name, stream_id, and seed.primary so
+    multi-stream configurations are not last-wins and do not drop stream seeds.
+    """
+    mixed = request.seed.primary & 0xFFFFFFFF
+    mixed ^= _stable_seed_token(request.seed.stream_id)
     for stream in request.random_streams:
-        mixed = (
-            request.seed.primary ^ _stable_seed_token(stream.name) ^ _stable_seed_token(stream.seed.stream_id)
-        ) & 0xFFFFFFFF
-        rng = random.Random(mixed)
-    return rng
+        mixed ^= _stable_seed_token(stream.name)
+        mixed ^= _stable_seed_token(stream.seed.stream_id)
+        mixed ^= int(stream.seed.primary) & 0xFFFFFFFF
+        mixed = (mixed * 16777619) & 0xFFFFFFFF
+    return random.Random(mixed)
 
 
 def _adjacency_from_topology(request: KairosSimulationRequest) -> dict[str, list[tuple[str, float]]]:
@@ -142,13 +167,20 @@ def _apply_due_interventions(
     interventions: Sequence[InterventionSpec],
     intervention_index: int,
     time: float,
-    active_boost: float,
+    global_boost: float,
+    node_boosts: dict[str, float],
     applied_labels: list[str],
     scheduler_events: list[SchedulerEvent],
 ) -> tuple[int, float]:
     while intervention_index < len(interventions) and float(interventions[intervention_index].time) <= time:
         intervention = interventions[intervention_index]
-        active_boost += float(intervention.effect)
+        effect = float(intervention.effect)
+        targets = tuple(intervention.target_nodes)
+        if targets:
+            for node in targets:
+                node_boosts[node] = node_boosts.get(node, 0.0) + effect
+        else:
+            global_boost += effect
         applied_labels.append(intervention.label)
         scheduler_events.append(
             SchedulerEvent(
@@ -156,14 +188,14 @@ def _apply_due_interventions(
                 event_type="intervention",
                 payload={
                     "label": intervention.label,
-                    "effect": float(intervention.effect),
-                    "target_nodes": list(intervention.target_nodes),
+                    "effect": effect,
+                    "target_nodes": list(targets),
                 },
                 event_id=f"evt-int-{intervention_index}",
             )
         )
         intervention_index += 1
-    return intervention_index, active_boost
+    return intervention_index, global_boost
 
 
 def _append_des_tick(
@@ -222,7 +254,8 @@ def _apply_agent_adoptions(
     time: float,
     step: int,
     rng: random.Random,
-    active_boost: float,
+    global_boost: float,
+    node_boosts: Mapping[str, float],
     agent_states: dict[str, AgentStateSpec],
     agent_nodes: dict[str, str],
     adjacency: dict[str, list[tuple[str, float]]],
@@ -230,19 +263,23 @@ def _apply_agent_adoptions(
     scheduler_events: list[SchedulerEvent],
 ) -> None:
     threshold = float(request.adoption_threshold)
-    for agent_id, agent in list(agent_states.items()):
-        if agent.state == "adopted":
+    # Iterate agents in request order for stable deterministic updates.
+    for agent in request.agents:
+        agent_id = agent.agent_id
+        current = agent_states[agent_id]
+        if current.state == "adopted":
             continue
         node = agent_nodes[agent_id]
         pressure = _neighbor_pressure(node, adjacency, agent_nodes, agent_states)
-        score = pressure + active_boost + rng.random() * 0.1
+        local_boost = global_boost + float(node_boosts.get(node, 0.0))
+        score = pressure + local_boost + rng.random() * 0.1
         if score < threshold:
             continue
-        previous = agent.state
+        previous = current.state
         agent_states[agent_id] = AgentStateSpec(
-            agent_id=agent.agent_id,
+            agent_id=current.agent_id,
             state="adopted",
-            attributes={**dict(agent.attributes), "adopted_at": time},
+            attributes={**dict(current.attributes), "adopted_at": time},
         )
         agent_updates.append(
             ABMBehaviorUpdate(
@@ -329,24 +366,30 @@ class KairosSimulationAdapter:
         _ = request.to_dict()
 
     def run(self, request: KairosSimulationRequest) -> KairosSimulationResult:
-        """Execute a deterministic simulation for the request contract."""
-        self.validate_request(request)
-        if self.evidence.claims_promoted_bridge():
-            # Future: dispatch to promoted native bridge. Until then, never claim it.
-            raise RuntimeError("promoted bridge dispatch is not implemented")
+        """Execute a deterministic simulation for the request contract.
 
+        Uses the contract reference engine. Native bridge dispatch is not
+        implemented; promotion flags remain gated so this path never claims
+        an unavailable FFI/UniFFI/Diplomat backend.
+        """
+        self.validate_request(request)
         return self._run_reference(request)
 
     def _run_reference(self, request: KairosSimulationRequest) -> KairosSimulationResult:
         rng = _seeded_rng(request)
         agent_states = {agent.agent_id: agent for agent in request.agents}
         node_ids = list(request.topology.node_ids)
-        agent_nodes = {agent_id: node_ids[index % len(node_ids)] for index, agent_id in enumerate(agent_states)}
+        # Explicit node_id when provided; otherwise stable round-robin by agent order.
+        agent_nodes = {
+            agent.agent_id: (agent.node_id if agent.node_id is not None else node_ids[index % len(node_ids)])
+            for index, agent in enumerate(request.agents)
+        }
         adjacency = _adjacency_from_topology(request)
 
         interventions = sorted(request.interventions, key=lambda item: float(item.time))
         intervention_index = 0
-        active_boost = 0.0
+        global_boost = 0.0
+        node_boosts: dict[str, float] = {}
         applied_labels: list[str] = []
         scheduler_events: list[SchedulerEvent] = [
             SchedulerEvent(
@@ -365,11 +408,12 @@ class KairosSimulationAdapter:
 
         for step in range(1, request.steps + 1):
             time = step * dt
-            intervention_index, active_boost = _apply_due_interventions(
+            intervention_index, global_boost = _apply_due_interventions(
                 interventions,
                 intervention_index,
                 time,
-                active_boost,
+                global_boost,
+                node_boosts,
                 applied_labels,
                 scheduler_events,
             )
@@ -379,7 +423,8 @@ class KairosSimulationAdapter:
                 time=time,
                 step=step,
                 rng=rng,
-                active_boost=active_boost,
+                global_boost=global_boost,
+                node_boosts=node_boosts,
                 agent_states=agent_states,
                 agent_nodes=agent_nodes,
                 adjacency=adjacency,
