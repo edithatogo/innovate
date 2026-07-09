@@ -22,6 +22,7 @@ from jax import random
 from innovate.fitters.diagnostics_contract import (
     DiagnosticsContract,
     DiagnosticsWarning,
+    IntervalConfig,
     UncertaintySummary,
     build_diagnostics_contract,
 )
@@ -310,11 +311,14 @@ class BayesianFitter:
         upper = {name: bounds[1] for name, bounds in intervals.items()}
         median = {name: stats["median"] for name, stats in summary.items()}
         samples = {name: np.asarray(values).reshape(-1) for name, values in self.posterior_samples_.items()}
-        return UncertaintySummary.posterior_summary(
+        interval = IntervalConfig(
             lower=lower,
             upper=upper,
             median=median,
             level=credible_mass,
+        )
+        return UncertaintySummary.posterior_summary(
+            interval=interval,
             samples=samples,
             note=f"{self.num_chains} chains x {self.num_samples} samples",
         )

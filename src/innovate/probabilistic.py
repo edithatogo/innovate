@@ -9,7 +9,7 @@ from typing import Any, Mapping
 
 import numpy as np
 
-from innovate.fitters.diagnostics_contract import UncertaintySummary
+from innovate.fitters.diagnostics_contract import IntervalConfig, UncertaintySummary
 
 PROBABILISTIC_SCHEMA_MAJOR_VERSION = 1
 PROBABILISTIC_SCHEMA_MINOR_VERSION = 0
@@ -266,11 +266,14 @@ class PosteriorSamplesPayload:
             median[parameter_name] = float(np.median(draws))
             summary_samples[parameter_name] = draws
 
-        return UncertaintySummary.posterior_summary(
+        interval = IntervalConfig(
             lower=lower,
             upper=upper,
             median=median,
             level=level,
+        )
+        return UncertaintySummary.posterior_summary(
+            interval=interval,
             samples=summary_samples,
             note=(
                 f"{self.draw_shape[0]} chains x {self.draw_shape[1]} draws; "
