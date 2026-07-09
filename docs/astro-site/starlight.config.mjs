@@ -104,6 +104,7 @@ export default {
         { label: 'Tutorials', link: '/tutorials/' },
         { label: 'Advanced Runtime', link: '/tutorials/advanced-runtime/' },
         { label: 'Benchmark Workflows', link: '/tutorials/benchmark-workflows/' },
+        { label: 'Kairos Simulation Adapter', link: '/tutorials/kairos-simulation-adapter/' },
         { label: 'Plugin API Stability', link: '/tutorials/plugin-api-stability/' },
       ],
     },
