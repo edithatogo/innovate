@@ -37,6 +37,7 @@ def test_in_process_remote_executor_preserves_kernel_schema_and_correlation() ->
             request_id="req-001",
             tenant_id="tenant-a",
             principal="service-user",
+            auth_scope="kernel:execute",
             trace_id="trace-001",
         ),
     )
@@ -56,7 +57,7 @@ def test_in_process_remote_executor_preserves_kernel_schema_and_correlation() ->
 def test_remote_executor_returns_structured_error_for_disallowed_operation() -> None:
     """Remote policy failures should be structured and language-binding friendly."""
     executor = InProcessRemoteExecutor(
-        policy=RemoteExecutionPolicy(eligible_operations=("discover_models",)),
+        policy=RemoteExecutionPolicy(required_auth_scope="kernel:execute", eligible_operations=("discover_models",)),
     )
     request = RemoteExecutionRequest(
         kernel_request=kernel.KernelRequest(
@@ -68,6 +69,7 @@ def test_remote_executor_returns_structured_error_for_disallowed_operation() -> 
             request_id="req-denied",
             tenant_id="tenant-a",
             principal="service-user",
+            auth_scope="kernel:execute",
         ),
     )
 
@@ -92,6 +94,7 @@ def test_remote_execution_request_round_trips_from_dict() -> None:
             request_id="req-roundtrip",
             tenant_id="tenant-a",
             principal="service-user",
+            auth_scope="kernel:execute",
         ),
     )
 

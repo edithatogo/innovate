@@ -29,7 +29,7 @@
       },
       "id": "sitemap",
       "source": "docs/astro-site/dist",
-      "status": "passed"
+      "status": "failed"
     },
     {
       "evidence": {
@@ -57,7 +57,7 @@
       },
       "id": "versioned_docs",
       "source": "docs/astro-site/dist",
-      "status": "passed"
+      "status": "failed"
     },
     {
       "evidence": {
@@ -69,7 +69,7 @@
       },
       "id": "api_generation",
       "source": "docs/astro-site/dist",
-      "status": "passed"
+      "status": "failed"
     },
     {
       "evidence": {
@@ -84,15 +84,15 @@
   "commands": [
     {
       "command": "python scripts/verify_production_docs.py --json",
-      "status": "passed"
+      "status": "failed"
     },
     {
       "command": "pnpm build && python ../../scripts/verify_production_docs.py --json",
       "status": "ci_wired"
     }
   ],
-  "evidence_date": "2026-06-30",
-  "generated_at": "2026-06-30T00:00:00Z",
+  "evidence_date": "2026-07-10",
+  "generated_at": "2026-07-10T00:00:00Z",
   "generated_by_track": "production_docs_observability_20260614",
   "generated_from": {
     "astro_config": "docs/astro-site/astro.config.mjs",
@@ -104,7 +104,7 @@
     "redirect_inventory": "docs/source/_static/astro_starlight/redirect_inventory.json",
     "route_coverage": "docs/source/_static/astro_starlight/route_coverage.json"
   },
-  "overall_status": "passed",
+  "overall_status": "failed",
   "schema_version": 1,
   "staleness": {
     "max_age_days": 30,
