@@ -183,8 +183,6 @@ class NortonBassModel(DiffusionModel):
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t, covariates)
 
-        # y is expected to be of shape (n_samples, n_generations)
-        # if y is 1D, reshape it
         if len(y.shape) == 1:
             y = y.reshape(-1, 1)
 
