@@ -283,6 +283,8 @@ def test_kernel_contract_schema_version_compatibility_helper() -> None:
     assert not kernel._is_schema_version_compatible("1.2", "1.0")
     assert not kernel._is_schema_version_compatible("2.0", "1.0")
     assert not kernel._is_schema_version_compatible("1", "1.0")
+    assert not kernel._is_schema_version_compatible("invalid", "1.0")
+    assert not kernel._is_schema_version_compatible("1.0", "invalid")
 
 
 def test_discover_models_returns_correct_response_structure() -> None:
