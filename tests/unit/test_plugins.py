@@ -73,3 +73,59 @@ def test_register_extension_validates() -> None:
 
     registry = get_registered_extensions()
     assert "test-plugin" not in registry
+
+
+def test_manifest_validation_empty_version() -> None:
+    """It should raise ValueError for an empty version."""
+    with pytest.raises(ValueError, match="version must be non-empty"):
+        ExtensionManifest(
+            name="test-plugin",
+            version="",
+            entrypoint="test.plugin:register",
+            stability="stable",
+            extension_points=("model_registry",),
+        )
+
+
+def test_manifest_validation_invalid_entrypoint() -> None:
+    """It should raise ValueError for an invalid entrypoint."""
+    with pytest.raises(ValueError, match="entrypoint must be in 'module:callable' format"):
+        ExtensionManifest(
+            name="test-plugin",
+            version="1.0.0",
+            entrypoint="test.plugin.register",
+            stability="stable",
+            extension_points=("model_registry",),
+        )
+    with pytest.raises(ValueError, match="entrypoint must be in 'module:callable' format"):
+        ExtensionManifest(
+            name="test-plugin",
+            version="1.0.0",
+            entrypoint="",
+            stability="stable",
+            extension_points=("model_registry",),
+        )
+
+
+def test_manifest_validation_empty_extension_points() -> None:
+    """It should raise ValueError for empty extension points."""
+    with pytest.raises(ValueError, match="extension_points must be non-empty"):
+        ExtensionManifest(
+            name="test-plugin",
+            version="1.0.0",
+            entrypoint="test.plugin:register",
+            stability="stable",
+            extension_points=(),
+        )
+
+
+def test_manifest_validation_unknown_extension_points() -> None:
+    """It should raise ValueError for unknown extension points."""
+    with pytest.raises(ValueError, match="Unknown extension points: unknown_point"):
+        ExtensionManifest(
+            name="test-plugin",
+            version="1.0.0",
+            entrypoint="test.plugin:register",
+            stability="stable",
+            extension_points=("model_registry", "unknown_point"),
+        )
