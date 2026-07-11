@@ -101,6 +101,16 @@ def test_model_capability_registry_exposes_stable_families():
         innovate.get_model_capability("does_not_exist")
 
 
+def test_backend_capability_registry_error_path():
+    with pytest.raises(KeyError, match="Unknown backend capability 'does_not_exist'"):
+        innovate.get_backend_capability("does_not_exist")
+
+
+def test_fitter_capability_registry_error_path():
+    with pytest.raises(KeyError, match="Unknown fitter capability 'does_not_exist'"):
+        innovate.get_fitter_capability("does_not_exist")
+
+
 def test_backends_namespace_forwards_runtime_backend_state():
     """The canonical plural namespace should mirror the runtime selector."""
     innovate.backend.use_backend("numpy")
