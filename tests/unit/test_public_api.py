@@ -114,7 +114,6 @@ def test_backend_and_fitter_capability_registries():
     with pytest.raises(KeyError, match="Unknown fitter capability"):
         innovate.get_fitter_capability("does_not_exist")
 
-
 def test_backends_namespace_forwards_runtime_backend_state():
     """The canonical plural namespace should mirror the runtime selector."""
     innovate.backend.use_backend("numpy")
