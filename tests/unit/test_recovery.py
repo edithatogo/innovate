@@ -67,23 +67,20 @@ def test_model_recovery_after_error():
     model.params_ = {}
 
     # Attempt to call predict (should fail)
-    predict_failed = False
-    try:
+    with pytest.raises(RuntimeError, match="Model has not been fitted yet"):
         model.predict([1, 2, 3])
-    except RuntimeError:
-        predict_failed = True
-
-    assert predict_failed, "Expected predict to fail with unfitted model"
 
     # Now fix the model by setting valid parameters
     model.params_ = {"p": 0.03, "q": 0.38, "m": 1000}
 
-    # The model should now work properly
-    # We won't call predict since that might trigger ODE solver
-    # Instead, verify the parameters are properly set
+    # Verify the parameters are properly set
     assert model.params_["p"] == 0.03
     assert model.params_["q"] == 0.38
     assert model.params_["m"] == 1000
+
+    # The model should now work properly and calculate predictions without raising an error
+    predictions = model.predict([1, 2, 3])
+    assert len(predictions) == 3
 
 
 def test_parameter_validation_recovery():
@@ -180,13 +177,8 @@ def test_consistent_state_after_exception():
 
     # Attempt an operation that will fail (without fitted params)
     model.params_ = {}
-    predict_failed = False
-    try:
+    with pytest.raises(RuntimeError, match="Model has not been fitted yet"):
         model.predict([1, 2, 3])
-    except RuntimeError:
-        predict_failed = True
-
-    assert predict_failed
 
     # Restore valid parameters
     model.params_ = initial_params
@@ -194,6 +186,10 @@ def test_consistent_state_after_exception():
     # Verify model is back to a valid state
     for key, expected_value in initial_params.items():
         assert model.params_[key] == expected_value
+
+    # Verify we can make predictions again
+    predictions = model.predict([1, 2, 3])
+    assert len(predictions) == 3
 
 
 if __name__ == "__main__":
