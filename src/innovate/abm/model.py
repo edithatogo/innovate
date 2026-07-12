@@ -16,9 +16,12 @@ class InnovationModel(Model):
         # Create agents
         for i in range(self.num_agents):
             agent = InnovationAgent(i, self)
-            # Add the agent to a random grid cell
-            x = self.random.randrange(self.grid.width)
-            y = self.random.randrange(self.grid.height)
+            # Add the agent to a random grid cell.
+            # We use standard pseudo-random number generation (self.random)
+            # to preserve simulation reproducibility and determinism in Mesa ABMs.
+            # This is not a cryptographic context.
+            x = self.random.randrange(self.grid.width)  # nosec B311
+            y = self.random.randrange(self.grid.height)  # nosec B311
             self.grid.place_agent(agent, (x, y))
 
     def step(self):
