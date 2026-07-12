@@ -68,3 +68,12 @@ def test_normalize_stability_tier_error() -> None:
     """It should raise ValueError for unknown stability tiers."""
     with pytest.raises(ValueError, match="Unknown stability tier 'unknown'"):
         normalize_stability_tier("unknown")
+
+
+def test_stability_tier_enum() -> None:
+    """Test that the StabilityTier enum members exist and have correct values."""
+    assert StabilityTier.STABLE == "stable"
+    assert StabilityTier.PROVISIONAL == "provisional"
+    assert StabilityTier.INTERNAL == "internal"
+
+    assert str(StabilityTier.STABLE) == "stable"
