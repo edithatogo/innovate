@@ -1,5 +1,7 @@
 """Tests for the canonical public API surface."""
 
+from typing import Mapping
+
 import pytest
 
 import innovate
@@ -99,6 +101,18 @@ def test_model_capability_registry_exposes_stable_families():
 
     with pytest.raises(KeyError, match="Unknown model capability"):
         innovate.get_model_capability("does_not_exist")
+
+
+def test_backend_and_fitter_capability_registries():
+    """Verify the backend and fitter capability registries and lookup."""
+    assert isinstance(innovate.get_backend_registry(), Mapping)
+    assert isinstance(innovate.get_fitter_registry(), Mapping)
+
+    with pytest.raises(KeyError, match="Unknown backend capability"):
+        innovate.get_backend_capability("does_not_exist")
+
+    with pytest.raises(KeyError, match="Unknown fitter capability"):
+        innovate.get_fitter_capability("does_not_exist")
 
 
 def test_backends_namespace_forwards_runtime_backend_state():
