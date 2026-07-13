@@ -68,3 +68,27 @@ def test_normalize_stability_tier_error() -> None:
     """It should raise ValueError for unknown stability tiers."""
     with pytest.raises(ValueError, match="Unknown stability tier 'unknown'"):
         normalize_stability_tier("unknown")
+
+
+def test_stability_tier_enum_values() -> None:
+    """Test that StabilityTier enum has expected values and behaves like strings."""
+    assert StabilityTier.STABLE == "stable"
+    assert StabilityTier.PROVISIONAL == "provisional"
+    assert StabilityTier.INTERNAL == "internal"
+
+    assert str(StabilityTier.STABLE) == "stable"
+
+    # Ensure all enum values are mapped in the rules
+    for tier in StabilityTier:
+        assert tier in STABILITY_LIFECYCLE_RULES
+        assert isinstance(STABILITY_LIFECYCLE_RULES[tier], str)
+
+
+def test_stability_aliases_consistency() -> None:
+    """Test that all aliases map to valid StabilityTier members."""
+    from innovate.stability import _STABILITY_ALIASES
+
+    for alias, tier in _STABILITY_ALIASES.items():
+        assert isinstance(alias, str)
+        assert isinstance(tier, StabilityTier)
+        assert alias.islower()
