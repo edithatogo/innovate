@@ -202,8 +202,11 @@ class CausalModel:
         if not isinstance(data["causal_model"], dict):
             raise PolicyEvaluationError("'causal_model' must be a dictionary")
 
-        intervention = InterventionContract(**data["intervention"])
-        causal_model = CausalModelContract(**data["causal_model"])
+        try:
+            intervention = InterventionContract(**data["intervention"])
+            causal_model = CausalModelContract(**data["causal_model"])
+        except TypeError as e:
+            raise PolicyEvaluationError(f"Invalid model specification: {e}")
         return cls(intervention=intervention, causal_model=causal_model)
 
     def to_arrow(self) -> pa.Table:
