@@ -19,7 +19,7 @@ from innovate.data.contracts import (
 
 CheckStatus = Literal["pass", "warn", "fail"]
 # Numeric ordering for validation status values; no credential is involved.
-SEVERITY_ORDER = {"pass": 0, "warn": 1, "fail": 2}
+SEVERITY_ORDER = {"pass": 0, "warn": 1, "fail": 2}  # nosec B105
 
 
 @dataclass(frozen=True, slots=True)
