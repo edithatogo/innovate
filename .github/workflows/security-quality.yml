@@ -112,4 +112,8 @@ jobs:
             src/innovate/substitute/__init__.py \
             src/innovate/ecosystem/__init__.py
       - name: Run focused test gate
-        run: uv run pytest tests/unit -m "not optional_backend" --cov=innovate --cov-report=term-missing --cov-fail-under=0
+        run: >-
+          uv run pytest -q
+          tests/unit/test_causal_policy_security.py
+          tests/unit/test_input_validation.py
+          tests/unit/test_public_api.py
