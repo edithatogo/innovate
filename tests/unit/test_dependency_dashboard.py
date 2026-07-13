@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 from scripts import dependency_dashboard
@@ -44,8 +45,11 @@ def test_dependency_dashboard_workflow_runs_and_uploads_report() -> None:
     assert "workflow_dispatch:" in workflow
     assert "schedule:" in workflow
     assert "uv run python scripts/dependency_dashboard.py" in workflow
-    assert "actions/upload-artifact@v4" in workflow
-    assert "pnpm/action-setup@v4" in workflow
-    assert "r-lib/actions/setup-r@v2" in workflow
-    assert "julia-actions/setup-julia@v2" in workflow
-    assert "actions/setup-dotnet@v5" in workflow
+    for action in (
+        "actions/upload-artifact",
+        "pnpm/action-setup",
+        "r-lib/actions/setup-r",
+        "julia-actions/setup-julia",
+        "actions/setup-dotnet",
+    ):
+        assert re.search(rf"{re.escape(action)}@[0-9a-f]{{40}}\b", workflow)

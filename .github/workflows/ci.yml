@@ -21,10 +21,12 @@ jobs:
   prose-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
 
       - name: Run Vale
-        uses: vale-cli/vale-action@v2.1.1
+        uses: vale-cli/vale-action@d89dee975228ae261d22c15adcd03578634d429c
         with:
           files: README.md,docs,conductor,specs
           separator: ","
@@ -50,10 +52,12 @@ jobs:
               --ignore=tests/unit/test_specific_modules_coverage.py
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
         with:
           enable-cache: true
 
@@ -92,7 +96,7 @@ jobs:
 
       - name: Upload coverage to Codecov
         if: matrix.python-version == '3.14'
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@04b047e8bb82a0c002c8312c1c880fbc6a999d45
         with:
           files: ./coverage.xml
           fail_ci_if_error: false
@@ -101,10 +105,12 @@ jobs:
   optional-backend-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
         with:
           enable-cache: true
 
@@ -136,10 +142,12 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
 
       - name: Set up Python
         run: uv python install 3.14
@@ -167,10 +175,12 @@ jobs:
   package:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
 
       - name: Set up Python
         run: uv python install 3.14
@@ -200,22 +210,24 @@ jobs:
       run:
         working-directory: docs/astro-site
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa
         with:
           version: 9.15.9
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: "22"
           cache: "pnpm"
           cache-dependency-path: docs/astro-site/pnpm-lock.yaml
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: "3.14"
 
@@ -235,16 +247,18 @@ jobs:
       matrix:
         rust-version: ["1.85.0", "stable"]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
 
       - name: Set up Python
         run: uv python install 3.14
 
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@master
+        uses: dtolnay/rust-toolchain@fa04a1451ff1842e2626ccb99004d0195b455a88
         with:
           toolchain: ${{ matrix.rust-version }}
           components: rustfmt, clippy
@@ -274,16 +288,18 @@ jobs:
   rust-benchmarks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
 
       - name: Set up Python
         run: uv python install 3.14
 
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
 
       - name: Validate Rust migration inventory
         working-directory: bindings/rust
@@ -336,16 +352,18 @@ jobs:
       matrix:
         node-version: ["26"]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
 
       - name: Set up Python
         run: uv python install 3.14
 
       - name: Set up Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
         with:
           node-version: ${{ matrix.node-version }}
           cache: npm
@@ -378,16 +396,18 @@ jobs:
       matrix:
         go-version: ["1.25.x", "1.26.x"]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
 
       - name: Set up Python
         run: uv python install 3.14
 
       - name: Set up Go
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16
         with:
           go-version: ${{ matrix.go-version }}
 
@@ -411,16 +431,18 @@ jobs:
       matrix:
         julia-version: ["1.12", "nightly"]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
 
       - name: Set up Python
         run: uv python install 3.14
 
       - name: Set up Julia
-        uses: julia-actions/setup-julia@v2
+        uses: julia-actions/setup-julia@4c0cb0fce8556fdb04a90347310e5db8b1f98fb9
         with:
           version: ${{ matrix.julia-version }}
 
@@ -446,22 +468,24 @@ jobs:
   r-bindings:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
 
       - name: Set up Python
         run: uv python install 3.14
 
       - name: Set up R
-        uses: r-lib/actions/setup-r@v2
+        uses: r-lib/actions/setup-r@d3c5be51b12e724e68f33216ca3c148b66d5f0b6
 
       - name: Set up TinyTeX for R manual PDF
-        uses: r-lib/actions/setup-tinytex@v2
+        uses: r-lib/actions/setup-tinytex@d3c5be51b12e724e68f33216ca3c148b66d5f0b6
 
       - name: Set up Pandoc for R vignettes
-        uses: r-lib/actions/setup-pandoc@v2
+        uses: r-lib/actions/setup-pandoc@d3c5be51b12e724e68f33216ca3c148b66d5f0b6
 
       - name: Install R binding dependencies
         run: |
@@ -489,7 +513,7 @@ jobs:
           test -s "artifacts/r-manual/${{ steps.r_metadata.outputs.package }}_${{ steps.r_metadata.outputs.version }}_manual.pdf"
 
       - name: Upload R manual PDF artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: r-manual-${{ steps.r_metadata.outputs.package }}-${{ steps.r_metadata.outputs.version }}
           path: artifacts/r-manual/${{ steps.r_metadata.outputs.package }}_${{ steps.r_metadata.outputs.version }}_manual.pdf
@@ -508,10 +532,12 @@ jobs:
           - dotnet-version: "11.0.x"
             target-framework: "net11.0"
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
 
       - name: Set up Python
         run: uv python install 3.14
@@ -520,7 +546,7 @@ jobs:
         run: uv sync
 
       - name: Set up .NET ${{ matrix.dotnet-version }}
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
 
@@ -539,10 +565,12 @@ jobs:
   type-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
 
       - name: Set up Python
         run: uv python install 3.14
@@ -568,10 +596,12 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
 
       - name: Set up Python
         run: uv python install 3.14
@@ -588,10 +618,12 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
 
       - name: Set up Python
         run: uv python install 3.14
@@ -608,10 +640,12 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
 
       - name: Set up Python
         run: uv python install 3.14
@@ -632,10 +666,12 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
 
       - name: Set up Python
         run: uv python install 3.14
@@ -653,7 +689,7 @@ jobs:
         run: uv run pytest --benchmark-only --benchmark-json=benchmark.json
 
       - name: Upload benchmark results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: benchmark-results
           path: benchmark.json
@@ -665,10 +701,12 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'schedule'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
 
       - name: Set up Python
         run: uv python install 3.14
