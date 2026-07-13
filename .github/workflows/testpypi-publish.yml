@@ -1,5 +1,8 @@
 name: Publish to TestPyPI
 
+permissions:
+  contents: read
+
 on:
   release:
     types: [published]
@@ -15,10 +18,12 @@ jobs:
       id-token: write # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
 
       - name: Set up Python
         run: uv python install 3.14
@@ -33,7 +38,7 @@ jobs:
         run: uv run twine check dist/*
 
       - name: Publish package to TestPyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN }}
