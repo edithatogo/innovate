@@ -193,19 +193,19 @@ class TestMetricsComprehensive:
         assert r2_constant == 0.0  # SS_tot = 0, function returns 0
 
     def test_mape_calculation(self):
-        """Test MAPE calculation with edge cases."""
+        """Test MAP calculation with edge cases."""
         y_true = [1, 2, 3, 4, 5]
         y_pred = [1.1, 1.8, 3.3, 3.6, 5.5]
 
-        mape = calculate_mape(y_true, y_pred)
+        map = calculate_mape(y_true, y_pred)
         expected = np.mean([10, 10, 10, 10, 10])  # Each 10% error
-        assert np.isclose(mape, expected)
+        assert np.isclose(map, expected)
 
         # Test with zeros (should handle division by zero)
         y_true_with_zero = [0, 1, 2, 3]
         y_pred_with_zero = [0.1, 1.1, 1.9, 3.1]
 
-        # MAPE with zeros should handle gracefully
+        # MAP with zeros should handle gracefully
         mape_with_zero = calculate_mape(y_true_with_zero, y_pred_with_zero)
         assert np.isfinite(mape_with_zero)
 

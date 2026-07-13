@@ -52,5 +52,5 @@ DES event-log examples into one implementation-ready track.
 
 1. Implementing a TreeAge parser or proprietary file importer.
 2. Implementing a DES engine.
-3. Making PM4Py, TreeAge, SimPy, or sibling packages base dependencies.
+3. Making PM4Py, TreeAge, simply, or sibling packages base dependencies.
 4. Promoting operational-modeling adapters to supported status.

@@ -33,4 +33,3 @@ CI evidence:
   submission and publication readiness.
 - Package-manager receipts and deferred maintainer handoffs are tracked in
   `registry_submission_receipts`.
-

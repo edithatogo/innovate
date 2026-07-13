@@ -3,30 +3,30 @@
 
 .. automodule:: innovate.models.advanced
 
-   
-   
-   
 
-   
-   
+
+
+
+
+
    .. rubric:: Functions
 
    .. autosummary::
-   
+
       abstractmethod
       dataclass
       field
       find_changepoint
-   
-   
 
-   
-   
+
+
+
+
    .. rubric:: Classes
 
    .. autosummary::
       :template: autosummary/class.rst
-   
+
       ABC
       AdvancedDiffusionModel
       AdvancedModelSummary
@@ -36,12 +36,7 @@
       ScipyFitter
       Sequence
       UncertaintySummary
-   
-   
 
-   
-   
-   
 
 
 

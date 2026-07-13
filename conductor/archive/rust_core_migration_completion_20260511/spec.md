@@ -78,4 +78,3 @@ single execution plan.
    migration track.
 4. Community submissions that depend on this migration but are not part of the
    Rust-core closure itself.
-

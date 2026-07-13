@@ -2,13 +2,13 @@
 Innovate Library - Continued Improvement Guide
 ==============================================
 
-This guide outlines additional steps and strategies to continue improving 
+This guide outlines additional steps and strategies to continue improving
 the Innovate library beyond the initial testing and optimization phase.
 
 1. Addressing Segmentation Faults
 ---------------------------------
 
-The library experiences segmentation faults primarily due to complex mathematical 
+The library experiences segmentation faults primarily due to complex mathematical
 operations, especially those involving ODE solving. Here are strategies to address this:
 
 ### ODE Solver Improvements
@@ -131,6 +131,6 @@ operations, especially those involving ODE solving. Here are strategies to addre
 - Expand plotting and visualization capabilities
 - Create more complex example applications
 
-This guide provides a roadmap for continuing to mature the Innovate library 
+This guide provides a roadmap for continuing to mature the Innovate library
 and make it more robust, performant, and user-friendly.
 """

@@ -1,6 +1,6 @@
 # Conductor Review — data_ingestion_provenance_connectors_20260625
 
-**Date:** 2026-07-09  
+**Date:** 2026-07-09
 **Scope:** Whole-track review after implementation (second pass with fixes)
 
 ## Summary
@@ -28,5 +28,5 @@ bounds, synthetic adapter reproducibility, and weak integration assertions.
 
 ## Archive status
 
-**Archived** at `conductor/archive/data_ingestion_provenance_connectors_20260625/`.  
+**Archived** at `conductor/archive/data_ingestion_provenance_connectors_20260625/`.
 Registry: `[x] Completed` with archive link. No further archive action required.

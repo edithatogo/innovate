@@ -24,7 +24,7 @@ class HypeCycleModel:
             "t_hype",  # Time of the peak of the hype
             "w_hype",  # Width of the hype
             "a_d",  # Amplitude of the disillusionment
-            "t_d",  # Time of the trough of disillusionment
+            "t_d",  # Time of the through of disillusionment
             "w_d",  # Width of the disillusionment
         ]
 

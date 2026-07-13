@@ -70,5 +70,3 @@ This case study demonstrates the use of the Lotka-Volterra model to model the co
 This case study demonstrates the use of the Hype Cycle model to model the Gartner Hype Cycle for a new health information technology. The data for this case study is from a study by the [Gartner Group](https://www.gartner.com/) on the hype cycle for a new electronic health record system. The following plot shows the Hype Cycle for the new system, with the following parameters: `k=0.1`, `t0=20`, `a_hype=1.0`, `t_hype=4`, `w_hype=2`, `a_d=0.6`, `t_d=8`, `w_d=4`.
 
 ![Hype Cycle](docs/images/hype_cycle.png)
-
-

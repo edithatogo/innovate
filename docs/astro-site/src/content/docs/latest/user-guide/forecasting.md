@@ -135,4 +135,4 @@ This includes:
 * Fitted parameter values with standard errors
 * Information criteria (AIC, BIC)
 * Forecast values with confidence intervals
-* Goodness-of-fit statistics (R², RMSE, MAPE)
+* Goodness-of-fit statistics (R², RMSE, MAP)

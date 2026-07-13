@@ -124,7 +124,7 @@ class TestUtilsModelEvaluation:
         metrics = get_fit_metrics(self.model, self.t, self.y)
 
         assert isinstance(metrics, dict)
-        expected_metrics = ["MSE", "RMSE", "MAE", "R-squared", "MAPE"]
+        expected_metrics = ["MSE", "RMSE", "MAE", "R-squared", "MAP"]
         for metric in expected_metrics:
             assert metric in metrics
             assert isinstance(metrics[metric], (int, float))
@@ -142,8 +142,8 @@ class TestUtilsModelEvaluation:
         assert metrics["MAE"] < 1e-10
         # R² should be very close to 1
         assert metrics["R-squared"] > 0.999
-        # MAPE should be very small
-        assert metrics["MAPE"] < 0.01
+        # MAP should be very small
+        assert metrics["MAP"] < 0.01
 
     def test_get_fit_metrics_poor_fit(self):
         """Test metrics with deliberately poor fit."""
@@ -156,7 +156,7 @@ class TestUtilsModelEvaluation:
         # Should have poor metrics
         assert metrics["MSE"] > 1000  # High error
         assert metrics["R-squared"] < 0.5  # Poor fit
-        assert metrics["MAPE"] > 50  # High percentage error
+        assert metrics["MAP"] > 50  # High percentage error
 
     def test_model_aic_basic(self):
         """Test AIC calculation."""
@@ -221,8 +221,8 @@ class TestUtilsModelEvaluation:
         assert np.isfinite(metrics["MSE"])
         assert np.isfinite(metrics["MAE"])
         assert np.isfinite(metrics["R-squared"])
-        # MAPE might be affected by negative values, but should not crash
-        assert "MAPE" in metrics
+        # MAP might be affected by negative values, but should not crash
+        assert "MAP" in metrics
 
 
 class TestUtilsPreprocessing:

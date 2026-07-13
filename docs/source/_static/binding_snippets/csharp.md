@@ -15,4 +15,3 @@ var predictions = await KernelBinding.PredictModelAsync(
     model,
     new PredictOptions { Horizon = 6, SchemaVersion = "1.0" });
 ```
-

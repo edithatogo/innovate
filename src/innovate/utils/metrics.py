@@ -20,7 +20,7 @@ def calculate_rmse(y_true: Sequence[float], y_pred: Sequence[float]) -> float:
 
 
 def calculate_mape(y_true: Sequence[float], y_pred: Sequence[float]) -> float:
-    """Calculates the Mean Absolute Percentage Error (MAPE)."""
+    """Calculates the Mean Absolute Percentage Error (MAP)."""
     y_true_arr = np.asarray(y_true, dtype=float)
     y_pred_arr = np.asarray(y_pred, dtype=float)
     # Avoid division by zero for true values that are zero

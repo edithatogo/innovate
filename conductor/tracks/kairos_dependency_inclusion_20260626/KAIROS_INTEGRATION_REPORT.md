@@ -2,9 +2,9 @@
 
 ## Kairos Dependency Inclusion Tracking Document
 
-**Date**: 2026-06-30  
-**Track**: kairos_dependency_inclusion_20260626  
-**Kairos Repository**: https://github.com/edithatogo/kairos  
+**Date**: 2026-06-30
+**Track**: kairos_dependency_inclusion_20260626
+**Kairos Repository**: https://github.com/edithatogo/kairos
 **Kairos Revision**: fae901558f07b7b717a676adbafbe2cdc78dea1c (2026-05-19)
 
 ### I. Kairos Source Verification

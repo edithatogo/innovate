@@ -8,7 +8,7 @@ abstract: |
   This supplementary material provides comprehensive documentation for the innovate library, including detailed examples, visualizations, and performance benchmarks that complement the main paper. The materials include Jupyter notebook examples, real-world applications using Australian health data, and detailed demonstrations of all key features of the library.
 date: "`r Sys.Date()`"
 bibliography: references.bib
-output: 
+output:
   pdf_document:
     pandoc_args: ["--number-sections", "--number-offset=0"]
   html_document:
@@ -302,13 +302,13 @@ p2, q2, m2 = 0.05, 0.4, 1200  # After break (e.g., due to policy change)
 def simulate_with_break(t, break_time, p1, q1, m1, p2, q2, m2):
     y = np.zeros_like(t)
     dt = t[1] - t[0]
-    
+
     for i in range(1, len(t)):
         if t[i] < break_time:
             p, q, m = p1, q1, m1
         else:
             p, q, m = p2, q2, m2
-            
+
         rate = (p + q * y[i-1]/m) * (m - y[i-1])
         y[i] = y[i-1] + rate * dt
         if y[i] > m:
@@ -343,7 +343,7 @@ from sklearn.mixture import GaussianMixture
 t_m = np.linspace(0, 15, 150)
 # Early adopters
 y_early = 200 * (1 - np.exp(-0.4 * t_m))
-# Mainstream adopters  
+# Mainstream adopters
 y_main = 600 * (1 - np.exp(-0.15 * (t_m - 3))) * (t_m > 3)
 # Late adopters
 y_late = 100 * (1 - np.exp(-0.05 * (t_m - 8))) * (t_m > 8)
@@ -507,13 +507,13 @@ else:
 
 # Plot extended forecast
 plt.figure(figsize=(14, 6))
-plt.plot(dates_extended[:len(dates)], y_73292_extended[:len(dates)], 
+plt.plot(dates_extended[:len(dates)], y_73292_extended[:len(dates)],
          label='MBS 73292 Historical', linewidth=2)
-plt.plot(dates_extended[:len(dates)], y_group_extended[:len(dates)], 
+plt.plot(dates_extended[:len(dates)], y_group_extended[:len(dates)],
          label='MBS Group Historical', linewidth=2)
 plt.plot(dates_extended, y_73292_extended, '--', label='MBS 73292 Forecast', alpha=0.7)
 plt.plot(dates_extended, y_group_extended, '--', label='MBS Group Forecast', alpha=0.7)
-plt.axvline(x=intersection_date, color='red', linestyle=':', 
+plt.axvline(x=intersection_date, color='red', linestyle=':',
            label=f'Predicted Intersection ({intersection_date.strftime("%Y-%m")})')
 plt.xlabel('Date')
 plt.ylabel('Utilization')
@@ -538,22 +538,22 @@ from innovate.diffuse import BassModel, GompertzModel, LogisticModel
 def benchmark_model(model_class, t_data, y_data, n_runs=10):
     times_fit = []
     times_predict = []
-    
+
     for _ in range(n_runs):
         model = model_class()
-        
+
         # Time fitting
         start_time = time.time()
         model.fit(t_data, y_data)
         fit_time = time.time() - start_time
         times_fit.append(fit_time)
-        
+
         # Time prediction
         start_time = time.time()
         _ = model.predict(t_data)
         predict_time = time.time() - start_time
         times_predict.append(predict_time)
-    
+
     return {
         'fit_mean': np.mean(times_fit),
         'fit_std': np.std(times_fit),
@@ -754,7 +754,7 @@ y_group = df['group_genomic_tests'].values
 
 models = {
     'Bass': BassModel(),
-    'Gompertz': GompertzModel(), 
+    'Gompertz': GompertzModel(),
     'Logistic': LogisticModel()
 }
 
@@ -772,7 +772,7 @@ for name, model in models.items():
         r2 = 1 - (ss_res / ss_tot) if ss_tot > 0 else 0
         # Calculate MAE
         mae = np.mean(np.abs(y_specific - y_pred))
-        
+
         results_specific[name] = {
             'model': model,
             'predictions': y_pred,
@@ -794,7 +794,7 @@ for name, model in models.items():
         r2 = 1 - (ss_res / ss_tot) if ss_tot > 0 else 0
         # Calculate MAE
         mae = np.mean(np.abs(y_group - y_pred))
-        
+
         results_group[name] = {
             'model': model,
             'predictions': y_pred,
@@ -947,18 +947,18 @@ print(f"innovate version: {__version__}")
 def reproducible_diffusion_analysis(data, model_type='Bass', forecast_periods=12):
     """
     Template function for reproducible diffusion analysis
-    
+
     Parameters:
     data: DataFrame with 'time' and 'adoption' columns
     model_type: Type of diffusion model to use
     forecast_periods: Number of periods to forecast
     """
     from innovate.diffuse import BassModel, GompertzModel, LogisticModel
-    
+
     # Prepare data
     t = data['time'].values
     y = data['adoption'].values
-    
+
     # Select and fit model
     if model_type == 'Bass':
         model = BassModel()
@@ -968,20 +968,20 @@ def reproducible_diffusion_analysis(data, model_type='Bass', forecast_periods=12
         model = LogisticModel()
     else:
         raise ValueError("Invalid model type")
-    
+
     model.fit(t, y)
-    
+
     # Generate predictions
     y_pred = model.predict(t)
-    
+
     # Calculate metrics
     mae = np.mean(np.abs(y - y_pred))
     rmse = np.sqrt(np.mean((y - y_pred)**2))
-    
+
     # Forecast
     t_forecast = np.arange(t.max() + 1, t.max() + 1 + forecast_periods)
     y_forecast = model.predict(t_forecast)
-    
+
     # Return results
     return {
         'model': model,
@@ -1011,17 +1011,17 @@ def model_diagnostics(model, t, y_actual):
     Generate model diagnostics
     """
     y_pred = model.predict(t)
-    
+
     residuals = y_actual - y_pred
-    
+
     # Calculate metrics
     mae = np.mean(np.abs(residuals))
     rmse = np.sqrt(np.mean(residuals**2))
-    mape = np.mean(np.abs(residuals / (y_actual + 1e-8))) * 100  # Add small value to avoid division by zero
-    
+    map = np.mean(np.abs(residuals / (y_actual + 1e-8))) * 100  # Add small value to avoid division by zero
+
     # Residual analysis
     plt.figure(figsize=(15, 5))
-    
+
     plt.subplot(1, 3, 1)
     plt.scatter(y_pred, residuals, alpha=0.6)
     plt.axhline(y=0, color='red', linestyle='--')
@@ -1029,7 +1029,7 @@ def model_diagnostics(model, t, y_actual):
     plt.ylabel('Residuals')
     plt.title('Residuals vs Predicted')
     plt.grid(True, alpha=0.3)
-    
+
     plt.subplot(1, 3, 2)
     plt.scatter(t, residuals, alpha=0.6)
     plt.axhline(y=0, color='red', linestyle='--')
@@ -1037,31 +1037,31 @@ def model_diagnostics(model, t, y_actual):
     plt.ylabel('Residuals')
     plt.title('Residuals vs Time')
     plt.grid(True, alpha=0.3)
-    
+
     plt.subplot(1, 3, 3)
     plt.hist(residuals, bins=20, density=True, alpha=0.7)
     plt.xlabel('Residuals')
     plt.ylabel('Density')
     plt.title('Residual Distribution')
     plt.grid(True, alpha=0.3)
-    
+
     plt.tight_layout()
     plt.show()
-    
+
     print(f"Diagnostics:")
     print(f"  MAE: {mae:.4f}")
     print(f"  RMSE: {rmse:.4f}")
-    print(f"  MAPE: {mape:.2f}%")
-    
+    print(f"  MAP: {map:.2f}%")
+
     # Check for systematic bias
     positive_resid = np.mean(residuals > 0)
     print(f"  Proportion of positive residuals: {positive_resid:.3f} (should be ~0.5)")
-    
+
     return {
         'residuals': residuals,
         'mae': mae,
         'rmse': rmse,
-        'mape': mape,
+        'map': map,
         'bias': positive_resid
     }
 

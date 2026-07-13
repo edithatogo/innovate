@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 from innovate import kernel
 from innovate.remote_execution import (
     InProcessRemoteExecutor,
@@ -24,7 +26,9 @@ def test_remote_execution_contract_documents_boundaries_and_risk_controls() -> N
     assert "JAX/XLA" in contract["backend_provenance"]["supported_runtimes"]
 
 
-def test_in_process_remote_executor_preserves_kernel_schema_and_correlation() -> None:
+def test_in_process_remote_executor_preserves_kernel_schema_and_correlation(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The local adapter should wrap kernel responses without changing the kernel ABI."""
+    monkeypatch.setenv("INNOVATE_REQUIRED_AUTH_SCOPE", "kernel:execute")
     """The local adapter should wrap kernel responses without changing the kernel ABI."""
     executor = InProcessRemoteExecutor()
     request = RemoteExecutionRequest(
@@ -38,6 +42,7 @@ def test_in_process_remote_executor_preserves_kernel_schema_and_correlation() ->
             tenant_id="tenant-a",
             principal="service-user",
             trace_id="trace-001",
+            auth_scope="kernel:execute",
         ),
     )
 
@@ -98,3 +103,42 @@ def test_remote_execution_request_round_trips_from_dict() -> None:
     restored = RemoteExecutionRequest.from_dict(request.to_dict())
 
     assert restored == request
+
+
+def test_remote_execution_policy_fails_secure_when_unconfigured(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Remote policy should deny access if auth scope environment variable is missing."""
+    monkeypatch.delenv("INNOVATE_REQUIRED_AUTH_SCOPE", raising=False)
+
+    executor = InProcessRemoteExecutor()
+    request = RemoteExecutionRequest(
+        kernel_request=kernel.KernelRequest(
+            operation=kernel.KernelOperation.DISCOVER_MODELS.value,
+            model_key=None,
+            payload={},
+        ),
+        context=RemoteExecutionContext(
+            request_id="req-secure",
+            tenant_id="tenant-a",
+            principal="service-user",
+            auth_scope="kernel:execute",
+        ),
+    )
+
+    response = executor.execute(request)
+
+    assert response.status == "error"
+    assert response.kernel_response.error is not None
+    assert response.kernel_response.error.code == kernel.KernelErrorCode.UNSUPPORTED_OPERATION.value
+    assert "remote execution auth_scope is not authorized" in response.kernel_response.error.message
+
+
+def test_remote_execution_context_does_not_default_auth_scope() -> None:
+    """Remote context from_dict must not grant permissions by default."""
+    data = {
+        "request_id": "req-1",
+        "tenant_id": "tenant-1",
+        "principal": "user",
+        # missing auth_scope
+    }
+    context = RemoteExecutionContext.from_dict(data)
+    assert context.auth_scope == ""

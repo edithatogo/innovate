@@ -74,7 +74,7 @@ def get_fit_metrics(
         # Preserve both legacy spellings used across the repo.
         "R-squared": r_squared,
         "R_squared": r_squared,
-        "MAPE": calculate_mape(y, y_pred),
+        "MAP": calculate_mape(y, y_pred),
         "SMAPE": calculate_smape(y, y_pred),
         "RSS": rss,
         "AIC": calculate_aic(n_params, n_samples, rss),

@@ -3,36 +3,31 @@
 
 .. automodule:: innovate.path_dependence.lock_in
 
-   
-   
-   
 
-   
-   
+
+
+
+
+
    .. rubric:: Functions
 
    .. autosummary::
-   
-      odeint
-   
-   
 
-   
-   
+      odeint
+
+
+
+
+
    .. rubric:: Classes
 
    .. autosummary::
       :template: autosummary/class.rst
-   
+
       Any
       LockInModel
       Sequence
-   
-   
 
-   
-   
-   
 
 
 

@@ -3,16 +3,16 @@
 
 .. automodule:: innovate.utils.model_evaluation
 
-   
-   
-   
 
-   
-   
+
+
+
+
+
    .. rubric:: Functions
 
    .. autosummary::
-   
+
       acf
       build_diagnostics_contract
       calculate_aic
@@ -33,25 +33,20 @@
       pacf
       residual_acf
       residual_pacf
-   
-   
 
-   
-   
+
+
+
+
    .. rubric:: Classes
 
    .. autosummary::
       :template: autosummary/class.rst
-   
+
       Any
       DiffusionModel
       Sequence
-   
-   
 
-   
-   
-   
 
 
 

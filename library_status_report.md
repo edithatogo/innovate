@@ -10,7 +10,7 @@ The **innovate** library is a comprehensive Python framework for modeling innova
 - **Basic Diffusion Models**: Bass, Gompertz, and Logistic models
 - **Competition Models**: Lotka-Volterra for modeling competing innovations
 - **Substitution Models**: Fisher-Pry for modeling technology replacement
-- **Advanced Parameterization**: 
+- **Advanced Parameterization**:
   - Covariate-driven parameters
   - Time-varying parameters
   - Mixture models for adopter segmentation
@@ -76,7 +76,7 @@ Component tests confirm that all library modules can be imported and instantiate
 
 ```
 ✓ Successfully imported basic diffusion models
-✓ Successfully imported competition models  
+✓ Successfully imported competition models
 ✓ Successfully imported substitution models
 ✓ Successfully imported fitters
 ✓ Successfully instantiated all models and fitters

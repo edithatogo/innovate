@@ -76,4 +76,3 @@ machine-readable status summaries to reflect the actual external state.
 2. New source-tree reorganization.
 3. New package-manager ecosystems beyond the registries listed above.
 4. Scientific model research unrelated to submission execution.
-

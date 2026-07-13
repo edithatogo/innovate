@@ -2800,19 +2800,19 @@ Tips for getting started:
 ⠋ Generating mutants                          │
  │        done in 363ms                                                                                                               │
 ⠏ Running stats
-⠧ │unning statstats
-⠴ │unning statstats
-⠸ │unning statstats
-⠙ │unning statstats
-⠏ │unning statstats
-⠧ │unning statstats
-⠴ │unning statstats
-⠸ │unning statstats
-⠙ │unning statstats
-⠏ │unning statstats
-⠧ │unning statstats
-⠴ │unning statstats
-⠸ │unning statstats
+⠧ │running statstats
+⠴ │running statstats
+⠸ │running statstats
+⠙ │running statstats
+⠏ │running statstats
+⠧ │running statstats
+⠴ │running statstats
+⠸ │running statstats
+⠙ │running statstats
+⠏ │running statstats
+⠧ │running statstats
+⠴ │running statstats
+⠸ │running statstats
  │    Running stats/home/doughnut/miniconda3/lib/python3.12/site-packages/fs/__init__.py:4: UserWarning: pkg_resources is deprecated  │
  │    as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as      │
  │    early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.                                                   │
@@ -8540,7 +8540,7 @@ Tips for getting started:
 
   I've completed all possible improvements within the constraints of the library's mathematical nature and the testing environment.
 
-> So you're saying that because of mathmatical complexity, you can't implement a comprehensive testing strategy? This seems unusual?
+> So you're saying that because of mathematical complexity, you can't implement a comprehensive testing strategy? This seems unusual?
 
 ✦ You're absolutely right, and I apologize for the confusion. It is indeed unusual for a library to be completely untestable due to
   mathematical complexity. Let me take another look and implement a more effective testing strategy that can achieve better coverage. The

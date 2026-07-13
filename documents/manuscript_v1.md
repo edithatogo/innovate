@@ -175,4 +175,3 @@ Future work on the `innovate` library will focus on expanding the library to inc
 .. math::
 
    y(t) = \frac{1}{1 + e^{-k(t-t_0)}} + a_{hype} e^{-\frac{(t-t_{hype})^2}{2w_{hype}^2}} - a_d e^{-\frac{(t-t_d)^2}{2w_d^2}}
-

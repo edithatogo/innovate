@@ -86,20 +86,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-          
+
       - name: Install dependencies
         run: |
           pip install .[dev]
           pip install pytest-benchmark
-          
+
       - name: Run performance benchmarks
         run: pytest tests/ --benchmark-only --benchmark-json benchmark-results.json
-        
+
       - name: Store benchmark results
         uses: benchmark-action/github-action-benchmark@v1
         with:
@@ -120,7 +120,7 @@ strategy:
   matrix:
     os: [ubuntu-latest, windows-latest, macos-latest]
     python-version: ["3.8", "3.9", "3.10", "3.11"]
-    
+
 runs-on: ${{ matrix.os }}
 ```
 
@@ -134,7 +134,7 @@ runs-on: ${{ matrix.os }}
   uses: pyupio/safety@master
   with:
     api-key: ${{ secrets.SAFETY_API_KEY }}
-    
+
 - name: Check for outdated dependencies
   run: pip list --outdated
 ```
@@ -150,7 +150,7 @@ runs-on: ${{ matrix.os }}
     cd docs
     make doctest
     sphinx-build -b linkcheck source build/linkcheck
-    
+
 - name: Validate API documentation
   run: |
     cd docs
@@ -176,21 +176,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        
+
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           load: true
           tags: innovate:test
-          
+
       - name: Test Docker image
         run: |
           docker run --rm innovate:test python -c "import innovate; print('Import successful')"
-          
+
       - name: Security scan container
         uses: aquasecurity/trivy-action@master
         with:
@@ -244,20 +244,20 @@ jobs:
     strategy:
       matrix:
         test-suite: [e2e, integration]
-        
+
     steps:
       - uses: actions/checkout@v5
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-          
+
       - name: Install with all dependencies
         run: |
           pip install .[dev,jax]
           pip install pytest-xdist
-          
+
       - name: Run ${{ matrix.test-suite }} tests
         run: pytest ${{ matrix.test-suite }}/ -n auto --dist worksteal
 ```
@@ -273,7 +273,7 @@ jobs:
     pip install radon
     radon cc src/ --total-average
     radon mi src/
-    
+
 - name: Check for code duplication
   run: |
     pip install pylint
@@ -294,7 +294,7 @@ jobs:
       ~/.cache/pre-commit
       ${{ env.pythonLocation }}
     key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt', 'pyproject.toml') }}
-    
+
 - name: Cache mypy cache
   uses: actions/cache@v4
   with:
@@ -348,17 +348,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-          
+
       - name: Update dependencies
         run: |
           pip install pip-tools
           pip-compile --upgrade pyproject.toml
-          
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
@@ -385,7 +385,7 @@ jobs:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-      
+
       - name: Check for changelog updates
         run: |
           # Only require changelog for non-dependabot PRs
@@ -432,7 +432,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      
+
       - name: Check for dependency conflicts
         run: |
           pip install .[dev,jax]

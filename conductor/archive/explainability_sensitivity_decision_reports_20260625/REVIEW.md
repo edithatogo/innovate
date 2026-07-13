@@ -1,6 +1,6 @@
 # Conductor Review — explainability_sensitivity_decision_reports_20260625
 
-**Date:** 2026-07-09  
+**Date:** 2026-07-09
 **Scope:** Whole-track review after implementation (second pass with fixes)
 
 ## Summary
@@ -27,5 +27,5 @@ and report-level assumptions/limitations are fail-closed for forbidden wording.
 
 ## Archive status
 
-**Archived** at `conductor/archive/explainability_sensitivity_decision_reports_20260625/`.  
+**Archived** at `conductor/archive/explainability_sensitivity_decision_reports_20260625/`.
 Registry: `[x] Completed` with archive link. No further archive action required.

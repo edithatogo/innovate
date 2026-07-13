@@ -13,4 +13,3 @@ const predictions = await predictModel(model, {
   payload: { schema_version: "1.0" },
 });
 ```
-

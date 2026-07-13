@@ -42,7 +42,7 @@ def test_hype_cycle_model_predict(hype_cycle_params):
     # Check for the peak of inflated expectations
     peak_time = t[np.argmax(visibility)]
 
-    # Check for the trough of disillusionment
+    # Check for the through of disillusionment
     # Find the minimum after the peak
     trough_time = t[np.argmin(visibility[peak_time:]) + peak_time]
 

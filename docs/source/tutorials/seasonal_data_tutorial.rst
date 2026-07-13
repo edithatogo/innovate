@@ -80,10 +80,10 @@ Now, we can fit our diffusion model to the extracted trend component. This allow
 
     # Fit the model to the trend component
     # Note: We need to remove the NaNs from the trend component
-    
+
     t_trend = t_seasonal[~np.isnan(trend)]
     y_trend = trend[~np.isnan(trend)]
-    
+
     model_for_trend = LogisticModel()
     fitter_for_trend = NumpyroFitter(model=model_for_trend, num_warmup=1000, num_samples=2000, num_chains=1)
     fitter_for_trend.fit(t_trend, y_trend)

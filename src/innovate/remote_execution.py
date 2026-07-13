@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from time import perf_counter
@@ -24,7 +25,7 @@ class RemoteExecutionContext:
     tenant_id: str
     principal: str
     trace_id: str = ""
-    auth_scope: str = "kernel:execute"
+    auth_scope: str = ""
     data_retention: str = "ephemeral"
 
     def __post_init__(self) -> None:
@@ -52,7 +53,7 @@ class RemoteExecutionContext:
             tenant_id=str(data["tenant_id"]),
             principal=str(data["principal"]),
             trace_id=str(data.get("trace_id", "")),
-            auth_scope=str(data.get("auth_scope", "kernel:execute")),
+            auth_scope=str(data.get("auth_scope", "")),
             data_retention=str(data.get("data_retention", "ephemeral")),
         )
 
@@ -69,7 +70,9 @@ class RemoteExecutionPolicy:
         kernel.KernelOperation.DIAGNOSE_MODEL.value,
     )
     local_only_by_default: tuple[str, ...] = (kernel.KernelOperation.FIT_MODEL.value,)
-    required_auth_scope: str = "kernel:execute"
+    required_auth_scope: str = field(
+        default_factory=lambda: os.getenv("INNOVATE_REQUIRED_AUTH_SCOPE", "UNCONFIGURED_DENY_ALL")
+    )
     max_payload_bytes: int = 1_000_000
     data_retention: str = "ephemeral"
 

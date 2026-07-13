@@ -14,4 +14,3 @@ predictions <- predict_model(
   payload = list(schema_version = "1.0")
 )
 ```
-

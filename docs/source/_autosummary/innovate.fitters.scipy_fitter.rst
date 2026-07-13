@@ -3,16 +3,16 @@
 
 .. automodule:: innovate.fitters.scipy_fitter
 
-   
-   
-   
 
-   
-   
+
+
+
+
+
    .. rubric:: Functions
 
    .. autosummary::
-   
+
       analyze_residuals
       curve_fit
       dataclass
@@ -20,16 +20,16 @@
       field
       least_squares
       minimize
-   
-   
 
-   
-   
+
+
+
+
    .. rubric:: Classes
 
    .. autosummary::
       :template: autosummary/class.rst
-   
+
       DiagnosticsWarning
       DiffusionModel
       FitDiagnostics
@@ -37,12 +37,7 @@
       ScipyFitter
       Sequence
       UncertaintySummary
-   
-   
 
-   
-   
-   
 
 
 

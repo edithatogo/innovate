@@ -1,7 +1,7 @@
 # Conductor Review — kairos_abm_network_simulation_migration_20260625
 
-**Date:** 2026-07-09  
-**Scope:** Whole-track review after implementation and archive  
+**Date:** 2026-07-09
+**Scope:** Whole-track review after implementation and archive
 **Review artifacts:** `/tmp/grok-review-ad6dcc0f.md`
 
 ## Summary

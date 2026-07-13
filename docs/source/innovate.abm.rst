@@ -34,4 +34,3 @@ The following example demonstrates how to use the pre-configured ABM scenarios.
 
 .. literalinclude:: ../../examples/abm_examples.py
    :language: python
-

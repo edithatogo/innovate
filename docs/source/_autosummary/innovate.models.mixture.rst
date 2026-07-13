@@ -3,21 +3,21 @@
 
 .. automodule:: innovate.models.mixture
 
-   
-   
-   
 
-   
-   
-   
 
-   
-   
+
+
+
+
+
+
+
+
    .. rubric:: Classes
 
    .. autosummary::
       :template: autosummary/class.rst
-   
+
       AdvancedDiffusionModel
       AdvancedModelSummary
       DiffusionModel
@@ -25,12 +25,7 @@
       ScipyFitter
       Sequence
       UncertaintySummary
-   
-   
 
-   
-   
-   
 
 
 

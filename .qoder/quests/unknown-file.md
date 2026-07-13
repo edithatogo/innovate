@@ -4,8 +4,8 @@
 
 The `innovate` library is a comprehensive Python framework for modeling innovation and policy diffusion dynamics. It provides a unified, modular architecture that integrates classical diffusion models, competitive dynamics, agent-based modeling, and advanced statistical techniques under a single framework.
 
-**Version**: 0.4.1  
-**License**: Apache 2.0  
+**Version**: 0.4.1
+**License**: Apache 2.0
 **Python Requirements**: >=3.8
 
 ### Core Philosophy
@@ -27,7 +27,7 @@ graph TB
         Dynamics[Dynamics Module]
         Backend[Backend Abstraction]
     end
-    
+
     subgraph "Model Categories"
         Diffuse[Single Innovation<br/>diffuse/]
         Compete[Competition<br/>compete/]
@@ -36,18 +36,18 @@ graph TB
         ABM[Agent-Based<br/>abm/]
         Causal[Counterfactual<br/>causal/]
     end
-    
+
     subgraph "Fitting & Analysis"
         Fitters[Multiple Fitters]
         Plots[Visualization]
         Utils[Utilities]
     end
-    
+
     subgraph "Backends"
         NumPy[NumPy Backend]
         JAX[JAX Backend]
     end
-    
+
     Base --> Diffuse
     Base --> Compete
     Base --> Substitute
@@ -56,12 +56,12 @@ graph TB
     Dynamics --> Compete
     Backend --> NumPy
     Backend --> JAX
-    
+
     Diffuse --> Fitters
     Compete --> Fitters
     Substitute --> Fitters
     Hype --> Fitters
-    
+
     Fitters --> Plots
 ```
 
@@ -100,7 +100,7 @@ classDiagram
         +bounds(t, y) Dict[str, tuple]
         +differential_equation(y, t, p)*
     }
-    
+
     class BassModel {
         -_params: Dict[str, float]
         -covariates: Sequence[str]
@@ -109,25 +109,25 @@ classDiagram
         +predict(t, covariates=None)
         +differential_equation(t, y, params, covariates, t_eval)
     }
-    
+
     class GompertzModel {
         -_params: Dict[str, float]
         -covariates: Sequence[str]
         +predict(t, covariates=None)
     }
-    
+
     class LogisticModel {
         -_params: Dict[str, float]
         -covariates: Sequence[str]
         +predict(t, covariates=None)
     }
-    
+
     class LotkaVolterraModel {
         -_params: Dict[str, float]
         -covariates: Sequence[str]
         +predict(t, covariates=None)
     }
-    
+
     DiffusionModel <|-- BassModel
     DiffusionModel <|-- GompertzModel
     DiffusionModel <|-- LogisticModel
@@ -144,41 +144,41 @@ classDiagram
         <<abstract>>
         +compute_growth_rate(current_adopters, total_potential, **params)*
     }
-    
+
     class ContagionSpread {
         <<abstract>>
         +differential(y: ndarray, t: float) ndarray*
     }
-    
+
     class CompetitiveInteraction {
         <<abstract>>
         +compute_interaction_rate(pop1, pop2, **params)*
     }
-    
+
     class DualInfluenceGrowth {
         +compute_growth_rate(current, potential, p, q)
     }
-    
+
     class SymmetricGrowth {
         +compute_growth_rate(current, potential, k, x0)
     }
-    
+
     class SkewedGrowth {
         +compute_growth_rate(current, potential, a, b, c)
     }
-    
+
     class SIRModel {
         +differential(y, t, beta, gamma)
     }
-    
+
     class SISModel {
         +differential(y, t, beta, gamma)
     }
-    
+
     class LotkaVolterra {
         +compute_interaction_rate(pop1, pop2, alpha)
     }
-    
+
     GrowthCurve <|-- DualInfluenceGrowth
     GrowthCurve <|-- SymmetricGrowth
     GrowthCurve <|-- SkewedGrowth
@@ -197,20 +197,20 @@ graph LR
         Current[current_backend]
         Switch[use_backend()]
     end
-    
+
     subgraph "NumPy Backend"
         NumPyOps[Array Operations]
         ScipyODE[SciPy ODE Solver]
         NumPyInterp[Interpolation]
     end
-    
+
     subgraph "JAX Backend"
         JAXOps[JAX Array Operations]
         DiffraxODE[Diffrax ODE Solver]
         JAXInterp[JAX Interpolation]
         JIT[JIT Compilation]
     end
-    
+
     Current --> NumPyOps
     Current --> JAXOps
     Switch --> Current
@@ -232,7 +232,7 @@ Models adoption through innovation (p) and imitation (q) effects:
 
 **Parameters**:
 - `p`: Innovation coefficient (external influence)
-- `q`: Imitation coefficient (internal influence)  
+- `q`: Imitation coefficient (internal influence)
 - `m`: Market potential (maximum adopters)
 
 **Advanced Features**:
@@ -248,7 +248,7 @@ Asymmetric S-curve with slower initial growth:
 - `b`: Displacement parameter
 - `c`: Growth rate parameter
 
-#### Logistic Model (SymmetricGrowth)  
+#### Logistic Model (SymmetricGrowth)
 Symmetric S-curve for balanced growth patterns:
 
 **Parameters**:
@@ -284,7 +284,7 @@ Generalized framework for N competing products:
 #### Fisher-Pry Model
 Models complete substitution between old and new technologies using logistic curves.
 
-#### Norton-Bass Model  
+#### Norton-Bass Model
 Extends Bass model for successive technology generations with overlapping lifecycles.
 
 ### Agent-Based Models
@@ -298,14 +298,14 @@ graph TB
         Grid[MultiGrid Space]
         Scheduler[Agent Scheduler]
     end
-    
+
     subgraph "Specialized ABM Models"
         Competitive[CompetitiveDiffusionModel]
         Network[NDlibModel]
         Disruption[DisruptiveInnovationModel]
         Sentiment[SentimentHypeCycleModel]
     end
-    
+
     Model --> Agent
     Model --> Grid
     Model --> Scheduler
@@ -351,29 +351,29 @@ classDiagram
     class FitterInterface {
         +fit(model, t, y, **kwargs) Self
     }
-    
+
     class ScipyFitter {
         +fit(model, t, y, p0=None, bounds=None, weights=None)
         -curve_fit integration
     }
-    
+
     class JAXFitter {
         +fit(model, t, y, **kwargs)
         -JIT compiled optimization
     }
-    
+
     class BayesianFitter {
         +fit(model, t, y, **kwargs)
         -PyMC integration
         +posterior_samples()
         +uncertainty_quantification()
     }
-    
+
     class BootstrapFitter {
         +fit(model, t, y, n_bootstrap=1000)
         +confidence_intervals()
     }
-    
+
     FitterInterface <|-- ScipyFitter
     FitterInterface <|-- JAXFitter
     FitterInterface <|-- BayesianFitter
@@ -398,10 +398,10 @@ classDiagram
 sequenceDiagram
     participant User
     participant Model
-    participant Fitter  
+    participant Fitter
     participant Backend
     participant Visualization
-    
+
     User->>Model: Initialize (BassModel, etc.)
     User->>Fitter: Select fitter (ScipyFitter, etc.)
     User->>Fitter: fit(model, time_data, adoption_data)
@@ -433,18 +433,18 @@ graph TB
         DiffusionPlot[plot_diffusion_curve]
         MultiPlot[plot_multi_product_diffusion]
     end
-    
+
     subgraph "Diagnostic Plots"
         Residuals[Residual Analysis]
         ACF[Autocorrelation Functions]
         Diagnostics[Model Diagnostics]
     end
-    
+
     subgraph "Network Plots"
         NetworkViz[Network Visualization]
         ABMPlots[ABM State Plots]
     end
-    
+
     subgraph "Comparison Plots"
         ModelComp[Model Comparison]
         Performance[Performance Metrics]
@@ -496,13 +496,13 @@ The base `DiffusionModel` class provides a template for implementing new diffusi
 class CustomModel(DiffusionModel):
     def predict(self, t):
         # Implementation required
-        
+
     def differential_equation(self, y, t, params):
         # Define your model's ODE
-        
+
     def initial_guesses(self, t, y):
         # Parameter initialization logic
-        
+
     def bounds(self, t, y):
         # Parameter bounds for optimization
 ```
@@ -536,7 +536,7 @@ class CustomGrowth(GrowthCurve):
 The library integrates seamlessly with the broader Python scientific ecosystem:
 
 - **Mesa**: Agent-based modeling framework
-- **NDlib**: Network diffusion library  
+- **NDlib**: Network diffusion library
 - **NetworkX**: Network analysis and visualization
 - **PyMC**: Bayesian statistical modeling
 - **JAX**: High-performance numerical computing
@@ -562,13 +562,13 @@ graph TB
         FitterTests[Fitter Tests]
         UtilTests[Utility Tests]
     end
-    
+
     subgraph "Integration Tests"
         E2ETests[End-to-End Tests]
         ABMTests[ABM Integration]
         BackendTests[Backend Tests]
     end
-    
+
     subgraph "Validation Tests"
         BenchmarkTests[Benchmark Tests]
         RegressionTests[Regression Tests]
@@ -586,283 +586,3 @@ graph TB
 - **Edge Cases**: Handle boundary conditions and error states
 
 The comprehensive test suite includes 25+ test modules covering all major functionality with both synthetic and real-world data validation.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

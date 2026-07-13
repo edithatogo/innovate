@@ -17,7 +17,7 @@ class NumPyBackend:
         """Convert input data to a NumPy array.
 
         Args:
-            data: Input data of any type convertable to array.
+            data: Input data of any type convertible to array.
 
         Returns
         -------

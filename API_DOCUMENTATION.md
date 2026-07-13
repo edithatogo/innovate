@@ -68,7 +68,7 @@ Where:
 
 #### Contagion Dynamics
 - **SIRModel** (`innovate.dynamics.contagion.sir.SIRModel`): Susceptible-Infected-Recovered model
-- **SISModel** (`innovate.dynamics.contagion.sis.SISModel`): Susceptible-Infected-Susceptible model  
+- **SISModel** (`innovate.dynamics.contagion.sis.SISModel`): Susceptible-Infected-Susceptible model
 - **SEIRModel** (`innovate.dynamics.contagion.seir.SEIRModel`): Susceptible-Exposed-Infected-Recovered model
 
 **Common Methods for Dynamics Models:**
@@ -169,16 +169,16 @@ class NewModel(DiffusionModel):
     def predict(self, t):
         # Implement prediction logic
         pass
-    
+
     def score(self, t, y):
         # Implement scoring logic
         pass
-    
+
     @property
     def params_(self):
         # Implement params property
         pass
-    
+
     @params_.setter
     def params_(self, value):
         # Implement params setter

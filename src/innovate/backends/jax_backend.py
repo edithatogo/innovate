@@ -10,7 +10,7 @@ class JaxBackend:
         """Convert input data to a JAX array.
 
         Args:
-            data: Input data of any type convertable to array.
+            data: Input data of any type convertible to array.
 
         Returns
         -------

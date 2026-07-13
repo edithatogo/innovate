@@ -1,7 +1,7 @@
 # Phase 0 — Kairos Dependency Inclusion Prerequisite
 
-**Track:** `kairos_abm_network_simulation_migration_20260625`  
-**Date:** 2026-07-09  
+**Track:** `kairos_abm_network_simulation_migration_20260625`
+**Date:** 2026-07-09
 **Prerequisite track:** `kairos_dependency_inclusion_20260626`
 
 ## Decision

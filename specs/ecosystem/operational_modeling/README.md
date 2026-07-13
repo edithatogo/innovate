@@ -12,7 +12,7 @@ Fixtures:
 - [des/manifest.json](./des/manifest.json): event-log, queue-metric, resource,
   pathway-state, and run metadata for DES pathway examples.
 
-These fixtures are artifact-first. They do not require TreeAge, SimPy, PM4Py,
+These fixtures are artifact-first. They do not require TreeAge, simply, PM4Py,
 or private engine state. Runtime adapters must stay behind explicit optional
 extras and follow the adapter promotion ladder before becoming experimental or
 supported integrations.

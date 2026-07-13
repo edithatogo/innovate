@@ -9,7 +9,7 @@ abstract: |
 keywords: innovation diffusion, policy modeling, health economics, python, Bass model, technology adoption
 date: "`r Sys.Date()`"
 bibliography: references.bib
-output: 
+output:
   pdf_document:
     pandoc_args: ["--number-sections", "--number-offset=0"]
   html_document:

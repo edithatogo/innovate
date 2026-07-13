@@ -3,38 +3,33 @@
 
 .. automodule:: innovate.base.base
 
-   
-   
-   
 
-   
-   
+
+
+
+
+
    .. rubric:: Functions
 
    .. autosummary::
-   
-      abstractmethod
-   
-   
 
-   
-   
+      abstractmethod
+
+
+
+
+
    .. rubric:: Classes
 
    .. autosummary::
       :template: autosummary/class.rst
-   
+
       ABC
       Any
       DiffusionModel
       Sequence
       TypeVar
-   
-   
 
-   
-   
-   
 
 
 

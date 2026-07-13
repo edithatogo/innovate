@@ -79,28 +79,28 @@ def test_cumulative_predictions_non_decreasing(time_series):
 def test_bass_model_parameters_valid(p, q, m):
     """Test that Bass model parameters remain in valid ranges after fitting"""
     t = np.linspace(0, 50, 100)
-    
+
     # Generate synthetic data with known parameters
     exp_term = np.exp(-(p + q) * t)
     y_true = m * (1 - exp_term) / (1 + (q / p) * exp_term)
-    
+
     # Add some noise
     np.random.seed(42)
     noise = np.random.normal(0, m * 0.05, len(t))
     y_noisy = np.abs(y_true + noise)  # Ensure non-negative
-    
+
     model = BassModel()
     fitter = ScipyFitter()
-    
+
     # Fit the model
     fitter.fit(model, t, y_noisy)
-    
+
     # Validate that fitted parameters are reasonable
     assert model.params_ is not None
     assert "p" in model.params_
     assert "q" in model.params_
     assert "m" in model.params_
-    
+
     # Check that parameters are positive
     assert model.params_["p"] > 0
     assert model.params_["q"] > 0
@@ -114,25 +114,25 @@ def test_model_predictions_shape_consistency(t_list, y_list):
     """Test that model predictions have the same shape as input time series"""
     t = np.array(t_list)
     y = np.array(y_list)
-    
+
     # Ensure t is sorted for proper cumulative behavior
     sorted_indices = np.argsort(t)
     t = t[sorted_indices]
     y = y[sorted_indices]
-    
+
     models = [BassModel(), GompertzModel(), LogisticModel()]
-    
+
     for model in models:
         fitter = ScipyFitter()
         # Fit the model
         fitter.fit(model, t, y)
-        
+
         # Make predictions
         predictions = model.predict(t)
-        
+
         # Check that prediction shape matches input
         assert len(predictions) == len(t)
-        
+
         # For cumulative models, check non-decreasing property (with tolerance for numerical errors)
         if isinstance(model, (BassModel, GompertzModel)):
             diffs = np.diff(predictions)
@@ -208,7 +208,7 @@ def test_bass_model_fitting_performance(benchmark):
     t, y = generate_large_dataset(size=1000)
     model = BassModel()
     fitter = ScipyFitter()
-    
+
     result = benchmark(fitter.fit, model, t, y)
     assert result is not None
 
@@ -224,7 +224,7 @@ def test_model_prediction_performance(model_class, benchmark):
         model.params_ = {"a": 1000, "b": 5, "c": 0.1}
     elif model_class == LogisticModel:
         model.params_ = {"L": 1000, "k": 0.1, "x0": 25}
-    
+
     result = benchmark(model.predict, t)
     assert len(result) == len(t)
 
@@ -234,7 +234,7 @@ def test_fitting_scaling_performance(dataset_size, benchmark):
     t, y = generate_large_dataset(size=dataset_size)
     model = BassModel()
     fitter = ScipyFitter()
-    
+
     result = benchmark(fitter.fit, model, t, y)
     assert result is not None
 ```
@@ -263,17 +263,17 @@ def test_large_dataset_fitting():
     # Create a very large dataset
     t = np.linspace(0, 1000, 50000)  # 50k data points
     y = 1000 * (1 - np.exp(-0.1 * t))  # Simple adoption curve
-    
+
     initial_memory = get_memory_usage()
     model = BassModel()
     fitter = ScipyFitter()
-    
+
     # This should complete without memory issues
     fitter.fit(model, t, y)
-    
+
     final_memory = get_memory_usage()
     memory_increase = final_memory - initial_memory
-    
+
     # Memory increase should be reasonable (less than 100MB for this operation)
     assert memory_increase < 100, f"Memory increase too high: {memory_increase}MB"
 
@@ -285,22 +285,22 @@ def test_multi_product_large_scale():
     Q_matrix = [[0.1 + i*0.01 + j*0.01 for j in range(n_products)] for i in range(n_products)]
     m_vals = [1000 + i*100 for i in range(n_products)]
     product_names = [f"Product_{i}" for i in range(n_products)]
-    
+
     initial_memory = get_memory_usage()
-    
+
     model = MultiProductDiffusionModel(
         p=p_vals,
         Q=Q_matrix,
         m=m_vals,
         names=product_names,
     )
-    
+
     time_horizon = np.arange(1, 101)
     predictions = model.predict(time_horizon)
-    
+
     final_memory = get_memory_usage()
     memory_increase = final_memory - initial_memory
-    
+
     # Check that predictions have correct dimensions
     assert predictions.shape == (100, n_products)
     # Memory increase should be reasonable
@@ -310,10 +310,10 @@ def test_concurrent_fitting():
     """Test performance when fitting multiple models concurrently"""
     import concurrent.futures
     from threading import Lock
-    
+
     # Shared lock to prevent conflicts in model fitting
     fitting_lock = Lock()
-    
+
     def fit_single_model(seed):
         with fitting_lock:
             np.random.seed(seed)
@@ -323,17 +323,17 @@ def test_concurrent_fitting():
             exp_term = np.exp(-(true_p + true_q) * t)
             y_true = true_m * (1 - exp_term) / (1 + (true_q / true_p) * exp_term)
             y_noisy = y_true + np.random.normal(0, 50, len(t))
-            
+
             model = BassModel()
             fitter = ScipyFitter()
             fitter.fit(model, t, y_noisy)
             return model.params_
-    
+
     # Test concurrent fitting of 10 models
     with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
         futures = [executor.submit(fit_single_model, i) for i in range(10)]
         results = [future.result() for future in futures]
-    
+
     # Verify all fittings completed successfully
     assert all(r is not None for r in results)
     assert all('p' in r and 'q' in r and 'm' in r for r in results)
@@ -358,10 +358,10 @@ def test_extreme_parameter_fitting():
     y = 1000000 * (1 - np.exp(-100 * t))  # Very high rate
     # Ensure y doesn't cause overflow issues
     y = np.clip(y, 0, 1e10)
-    
+
     model = BassModel()
     fitter = ScipyFitter()
-    
+
     try:
         fitter.fit(model, t, y)
         # Check that parameters are reasonable or model fails gracefully
@@ -378,10 +378,10 @@ def test_invalid_data_handling():
     # Test with constant data (no variation - problematic for fitting)
     t = np.array([1, 2, 3, 4, 5])
     y = np.array([100, 100, 100, 100, 100])  # No variation
-    
+
     model = BassModel()
     fitter = ScipyFitter()
-    
+
     try:
         fitter.fit(model, t, y)
         # Model might still fit but parameters might be odd
@@ -399,7 +399,7 @@ def test_numerical_stability():
     # Use small parameters to avoid overflow
     model = GompertzModel()
     model.params_ = {"a": 1.0, "b": 0.01, "c": 0.001}
-    
+
     try:
         pred = model.predict(t)
         # Check that predictions are finite
@@ -413,11 +413,11 @@ def test_numerical_stability():
 def test_boundary_conditions():
     """Test models at parameter boundaries"""
     t = np.linspace(0, 50, 100)
-    
+
     # Test with extremely small parameters
     model = BassModel()
     model.params_ = {"p": 1e-10, "q": 1e-10, "m": 1e-5}
-    
+
     try:
         pred = model.predict(t)
         assert np.all(np.isfinite(pred))
@@ -450,26 +450,26 @@ def test_memory_leak_detection():
     """Test for memory leaks during repeated operations"""
     # Starting memory usage
     initial_memory = get_memory_usage()
-    
+
     # Perform many fitting operations
     for i in range(100):
         t = np.linspace(0, 50, 100)
         y = 1000 * (1 - np.exp(-0.05 * t)) + np.random.normal(0, 10, len(t))
-        
+
         model = BassModel()
         fitter = ScipyFitter()
         fitter.fit(model, t, y)
-        
+
         # Trigger garbage collection periodically
         if i % 10 == 0:
             gc.collect()
-    
+
     # Allow time for garbage collection to take effect
     gc.collect()
-    
+
     final_memory = get_memory_usage()
     memory_increase = final_memory - initial_memory
-    
+
     # Memory increase should be minimal - no more than 50MB for these operations
     assert memory_increase < 50, f"Potential memory leak detected: {memory_increase}MB increase"
 
@@ -477,30 +477,30 @@ def test_numerical_stability_over_time():
     """Test that model parameters remain stable over many operations"""
     base_params = {"p": 0.03, "q": 0.38, "m": 1000}
     param_drifts = []
-    
+
     for i in range(50):
         t = np.linspace(0, 50, 100)
         # Generate synthetic data with known parameters
         exp_term = np.exp(-(base_params["p"] + base_params["q"]) * t)
         y_true = base_params["m"] * (1 - exp_term) / (1 + (base_params["q"] / base_params["p"]) * exp_term)
         y_noisy = y_true + np.random.normal(0, base_params["m"] * 0.05, len(t))
-        
+
         model = BassModel()
         fitter = ScipyFitter()
         fitter.fit(model, t, y_noisy)
-        
+
         if model.params_:
             # Calculate parameter drift from expected values
             p_drift = abs(model.params_.get("p", 0) - base_params["p"])
             q_drift = abs(model.params_.get("q", 0) - base_params["q"])
             m_drift = abs(model.params_.get("m", 0) - base_params["m"])
             param_drifts.append((p_drift, q_drift, m_drift))
-    
+
     # Check that average drift is within acceptable bounds
     avg_p_drift = np.mean([d[0] for d in param_drifts])
     avg_q_drift = np.mean([d[1] for d in param_drifts])
     avg_m_drift = np.mean([d[2] for d in param_drifts])
-    
+
     # Drift should be relatively small
     assert avg_p_drift < 0.01, f"P parameter drift too high: {avg_p_drift}"
     assert avg_q_drift < 0.1, f"Q parameter drift too high: {avg_q_drift}"
@@ -509,30 +509,30 @@ def test_numerical_stability_over_time():
 def test_long_running_fitting():
     """Test fitting over a long period of time"""
     import time
-    
+
     start_time = time.time()
-    
+
     # Run fitting operations for a longer period
     operation_count = 0
     time_limit = 30  # seconds
-    
+
     while time.time() - start_time < time_limit:
         t = np.linspace(0, 50, 200)
         y = 1000 * (1 - np.exp(-0.03 * t)) + np.random.normal(0, 20, len(t))
-        
+
         model = BassModel()
         fitter = ScipyFitter()
         fitter.fit(model, t, y)
-        
+
         operation_count += 1
-        
+
         # Verify model was fitted successfully
         assert model.params_ is not None
         assert all(param in model.params_ for param in ["p", "q", "m"])
-    
+
     # Verify that we completed a reasonable number of operations
     assert operation_count > 5, f"Too few operations completed: {operation_count}"
-    
+
     elapsed = time.time() - start_time
     print(f"Completed {operation_count} fittings in {elapsed:.2f} seconds")
 ```
@@ -552,14 +552,14 @@ def test_fitting_failure_recovery():
     """Test that model recovers gracefully from fitting failures"""
     t = np.array([1, 2, 3])  # Too small dataset for reliable fitting
     y = np.array([10, 10, 10])  # No variance - problematic for fitting
-    
+
     model = BassModel()
     original_state = model.__dict__.copy() if hasattr(model, '__dict__') else {}
     fitter = ScipyFitter()
-    
+
     try:
         fitter.fit(model, t, y)
-        # If fitting succeeds (which it might with minimal data), 
+        # If fitting succeeds (which it might with minimal data),
         # ensure params are reasonable
         if model.params_ is not None:
             assert "p" in model.params_
@@ -574,13 +574,13 @@ def test_invalid_parameter_recovery():
     """Test that models handle invalid parameters gracefully"""
     t = np.linspace(0, 50, 100)
     model = BassModel()
-    
+
     # Set invalid parameters (negative values)
     model.params_ = {"p": -0.1, "q": -0.5, "m": -100}
-    
+
     try:
         pred = model.predict(t)
-        # If prediction works with negative params, 
+        # If prediction works with negative params,
         # check if it makes mathematical sense
         # For Bass model with negative params this might produce invalid results
     except Exception:
@@ -598,7 +598,7 @@ def test_numerical_error_recovery():
     t = np.linspace(1000, 2000, 10)  # Very large time values
     model = BassModel()
     model.params_ = {"p": 1e-20, "q": 1e20, "m": 1e20}  # Extreme parameters
-    
+
     try:
         pred = model.predict(t)
         # Check if predictions are reasonable
@@ -617,11 +617,11 @@ def test_numerical_error_recovery():
 def test_state_consistency_after_errors():
     """Test that model state remains consistent after errors"""
     model = BassModel()
-    
+
     # Save original state characteristics
     has_params = hasattr(model, 'params_')
     initial_params = getattr(model, 'params_', None)
-    
+
     # Attempt operations that might cause issues
     test_cases = [
         # Case 1: Invalid data
@@ -629,7 +629,7 @@ def test_state_consistency_after_errors():
         # Case 2: Large data causing potential overflow
         (np.linspace(0, 1000, 5), np.exp(np.linspace(0, 1000, 5))),  # Large values
     ]
-    
+
     for t_test, y_test in test_cases:
         fitter = ScipyFitter()
         try:
@@ -638,16 +638,16 @@ def test_state_consistency_after_errors():
             # If fitting fails, the model should still be in a valid state
             # It may have params from previous successful fits or be None
             pass
-    
+
     # After all error attempts, model should still be usable
     # Reset to known good state to test functionality
     clean_t = np.linspace(0, 10, 20)
     clean_y = 100 * (1 - np.exp(-0.1 * clean_t))
-    
+
     clean_model = BassModel()
     clean_fitter = ScipyFitter()
     clean_fitter.fit(clean_model, clean_t, clean_y)
-    
+
     assert clean_model.params_ is not None
     assert all(param in clean_model.params_ for param in ["p", "q", "m"])
 ```
@@ -680,11 +680,11 @@ from innovate.diffuse.bass import BassModel
 def test_bass_model_edge_cases():
     """Test edge cases for Bass model to improve coverage"""
     model = BassModel()
-    
+
     # Test with minimal data
     t_minimal = np.array([1])
     y_minimal = np.array([10])
-    
+
     fitter = ScipyFitter()
     with pytest.raises(Exception):  # Fitting with single point should fail or handle gracefully
         fitter.fit(model, t_minimal, y_minimal)
@@ -692,15 +692,15 @@ def test_bass_model_edge_cases():
 def test_bass_model_error_paths():
     """Test various error handling paths"""
     model = BassModel()
-    
+
     # Test prediction before fitting
     with pytest.raises(RuntimeError):
         model.predict([1, 2, 3])
-    
-    # Test scoring before fitting  
+
+    # Test scoring before fitting
     with pytest.raises(RuntimeError):
         model.score([1, 2, 3], [10, 20, 30])
-    
+
     # Test with invalid parameters
     model.params_ = {"p": -1, "q": -1, "m": -1}  # Invalid parameters
     # This might work mathematically but results might be invalid
