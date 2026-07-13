@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 WORKFLOW = Path(".github/workflows/binding-conformance.yml")
@@ -26,7 +27,7 @@ def test_binding_conformance_workflow_uploads_evidence_artifacts() -> None:
     """CI should publish the evidence payloads maintainers need to inspect."""
     workflow = WORKFLOW.read_text(encoding="utf-8")
 
-    assert "actions/upload-artifact@v4" in workflow
+    assert re.search(r"actions/upload-artifact@[0-9a-f]{40}\b", workflow)
     for artifact in [
         "docs/source/_static/binding_conformance_inventory.json",
         "docs/source/_static/binding_golden_fixtures.json",

@@ -71,13 +71,16 @@ def test_r_workflows_build_and_upload_manual_pdf() -> None:
     publish = Path(".github/workflows/bindings-publish.yml").read_text()
 
     for workflow in (ci, publish):
-        assert "r-lib/actions/setup-r@v2" in workflow
-        assert "r-lib/actions/setup-tinytex@v2" in workflow
-        assert "r-lib/actions/setup-pandoc@v2" in workflow
+        for action in (
+            "r-lib/actions/setup-r",
+            "r-lib/actions/setup-tinytex",
+            "r-lib/actions/setup-pandoc",
+            "actions/upload-artifact",
+        ):
+            assert re.search(rf"{re.escape(action)}@[0-9a-f]{{40}}\b", workflow)
         assert 'Sys.getenv("RSPM", "https://cloud.r-project.org")' in workflow
         assert "requireNamespace" in workflow
         assert "R CMD Rd2pdf" in workflow
-        assert "actions/upload-artifact@v4" in workflow
         assert "manual.pdf" in workflow
 
     assert "R CMD check --as-cran --no-manual innovate.R_*.tar.gz" in ci
