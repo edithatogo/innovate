@@ -5,10 +5,15 @@
     ":dependencyDashboard",
     ":semanticCommits"
   ],
+  "baseBranches": ["main"],
   "schedule": ["every Monday"],
+  "prCreation": "immediate",
   "prHourlyLimit": 5,
   "prConcurrentLimit": 10,
-  "labels": ["dependencies"],
+  "rebaseWhen": "behind-base-branch",
+  "platformAutomerge": true,
+  "automergeType": "pr",
+  "labels": ["dependencies", "renovate"],
   "packageRules": [
     {
       "description": "Group all dev dependencies together",
@@ -23,24 +28,27 @@
       "groupSlug": "prod-deps"
     },
     {
-      "description": "Group GitHub Actions updates together",
+      "description": "Group GitHub Actions updates and require immutable pins",
       "matchManagers": ["github-actions"],
       "groupName": "GitHub Actions",
       "groupSlug": "github-actions",
       "pinDigests": true
     },
     {
-      "description": "Auto-merge patch updates that pass CI",
+      "description": "Auto-merge patch updates after all protected checks pass",
       "matchUpdateTypes": ["patch"],
-      "automerge": true,
-      "automergeType": "pr"
+      "automerge": true
     },
     {
-      "description": "Auto-merge minor updates for dev dependencies",
+      "description": "Auto-merge minor development updates after all protected checks pass",
       "matchUpdateTypes": ["minor", "patch"],
       "matchDepTypes": ["dev"],
-      "automerge": true,
-      "automergeType": "pr"
+      "automerge": true
+    },
+    {
+      "description": "Keep major updates review-only",
+      "matchUpdateTypes": ["major"],
+      "automerge": false
     },
     {
       "description": "Include changelogs in PR descriptions",
@@ -50,6 +58,7 @@
   ],
   "vulnerabilityAlerts": {
     "enabled": true,
-    "labels": ["security"]
+    "automerge": true,
+    "labels": ["security", "dependencies", "renovate"]
   }
 }
