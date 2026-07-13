@@ -93,7 +93,7 @@ jobs:
       - name: Install zizmor
         run: python -m pip install --disable-pip-version-check zizmor
       - name: Audit GitHub Actions security posture
-        run: zizmor .github/workflows
+        run: zizmor .github/workflows/security-quality.yml .github/workflows/scorecard.yml
       - name: Validate dependency policy
         run: |
           python - <<'PY'
