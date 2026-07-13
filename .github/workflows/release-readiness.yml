@@ -20,10 +20,12 @@ jobs:
   readiness-report:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860 # v5
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
         with:
           enable-cache: true
 
@@ -43,7 +45,7 @@ jobs:
         run: uv run nox -s release_readiness
 
       - name: Upload release-readiness-report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: release-readiness-report
           path: |
@@ -55,7 +57,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860 # v5
+        with:
+          persist-credentials: false
 
       - name: Document scheduled or manual release lane
         run: |
@@ -64,7 +68,7 @@ jobs:
             'Mutation sampling, package dry-runs, compatibility sweeps, and external audit refreshes stay out of fast PR checks.'
 
       - name: Upload release lane note
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: release-lane-checks
           path: .github/workflows/release-readiness.yml

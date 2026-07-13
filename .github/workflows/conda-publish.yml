@@ -10,13 +10,16 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860 # v5
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Set up conda environment
-        uses: conda-incubator/setup-miniconda@v3
+        uses: conda-incubator/setup-miniconda@fc2d68f6413eb2d87b895e92f8584b5b94a10167 # v3
         with:
           auto-update-conda: true
           python-version: "3.14"

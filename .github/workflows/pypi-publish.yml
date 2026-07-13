@@ -13,12 +13,17 @@ jobs:
       url: https://pypi.org/p/innovate
     permissions:
       id-token: write
+      contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860 # v5
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          enable-cache: false
 
       - name: Set up Python
         run: uv python install 3.14
@@ -33,4 +38,4 @@ jobs:
         run: uv run twine check dist/*
 
       - name: Publish package to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@716c507c5a083a216fcb67ba395f190a6ea5b106 # release/v1

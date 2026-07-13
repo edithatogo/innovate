@@ -10,8 +10,11 @@ on:
 jobs:
   update_release_draft:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
     steps:
-      - uses: release-drafter/release-drafter@v6
+      - uses: release-drafter/release-drafter@494baec14fb717efabdd8f3a3f5b7cb347bd78bb # v6
         with:
           config-name: release-drafter.yml
         env:

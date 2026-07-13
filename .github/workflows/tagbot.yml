@@ -14,6 +14,6 @@ jobs:
   tagbot:
     runs-on: ubuntu-latest
     steps:
-      - uses: JuliaRegistries/TagBot@v1
+      - uses: JuliaRegistries/TagBot@10f545465e903a74de5b26ad005a769532fcbc22 # v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

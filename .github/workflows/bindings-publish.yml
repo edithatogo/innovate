@@ -12,19 +12,21 @@ on:
         type: choice
         options: ["true", "false"]
 
-permissions:
-  contents: write
-  id-token: write
 
 jobs:
   npm-typescript:
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: bindings/typescript
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: "26"
           registry-url: https://registry.npmjs.org
@@ -48,8 +50,10 @@ jobs:
       run:
         working-directory: bindings/rust
     steps:
-      - uses: actions/checkout@v5
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860 # v5
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
         with:
           components: rustfmt, clippy
       - run: cargo fmt --check
@@ -67,17 +71,19 @@ jobs:
         if: ${{ github.event_name == 'release' || inputs.dry_run == 'false' }}
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
-        run: cargo publish
+        run: cargo publish --token "$CARGO_REGISTRY_TOKEN"
 
   r-package:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: r-lib/actions/setup-r@v2
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860 # v5
+        with:
+          persist-credentials: false
+      - uses: r-lib/actions/setup-r@1b6976fa8cb4659b87612c6aeb55a73e5f2a13cc # v2
       - name: Set up TinyTeX for R manual PDF
-        uses: r-lib/actions/setup-tinytex@v2
+        uses: r-lib/actions/setup-tinytex@9c1f618a803732c525f0a205d5be5a2abec5efd5 # v2
       - name: Set up Pandoc for R vignettes
-        uses: r-lib/actions/setup-pandoc@v2
+        uses: r-lib/actions/setup-pandoc@d1616ba6ec89db490a6e036e6a10de4e2e283c74 # v2
       - run: |
           Rscript -e 'repos <- Sys.getenv("RSPM", "https://cloud.r-project.org"); packages <- c("jsonlite", "knitr", "rmarkdown"); install.packages(packages, repos = repos); missing <- packages[!vapply(packages, requireNamespace, logical(1), quietly = TRUE)]; if (length(missing)) stop("Missing R packages: ", paste(missing, collapse = ", "))'
       - name: Read R package metadata
@@ -86,41 +92,51 @@ jobs:
           Rscript -e 'd <- read.dcf("bindings/r/DESCRIPTION")[1, ]; cat("package=", d[["Package"]], "\nversion=", d[["Version"]], "\n", sep = "")' >> "$GITHUB_OUTPUT"
       - run: R CMD build bindings/r
       - name: Build R manual PDF
+        env:
+          STEPS_R_METADATA_OUTPUTS_PACKAGE: ${{ steps.r_metadata.outputs.package }}
+          STEPS_R_METADATA_OUTPUTS_VERSION: ${{ steps.r_metadata.outputs.version }}
         run: |
           mkdir -p artifacts/r-manual
           R CMD Rd2pdf --no-preview \
-            --output="artifacts/r-manual/${{ steps.r_metadata.outputs.package }}_${{ steps.r_metadata.outputs.version }}_manual.pdf" \
+            --output="artifacts/r-manual/${STEPS_R_METADATA_OUTPUTS_PACKAGE}_${STEPS_R_METADATA_OUTPUTS_VERSION}_manual.pdf" \
             bindings/r
-          test -s "artifacts/r-manual/${{ steps.r_metadata.outputs.package }}_${{ steps.r_metadata.outputs.version }}_manual.pdf"
+          test -s "artifacts/r-manual/${STEPS_R_METADATA_OUTPUTS_PACKAGE}_${STEPS_R_METADATA_OUTPUTS_VERSION}_manual.pdf"
       - run: R CMD check --as-cran --no-manual innovate.R_*.tar.gz
       - name: Upload R package artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: r-package-source-${{ steps.r_metadata.outputs.package }}-${{ steps.r_metadata.outputs.version }}
           path: innovate.R_*.tar.gz
       - name: Upload R manual PDF artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: r-manual-${{ steps.r_metadata.outputs.package }}-${{ steps.r_metadata.outputs.version }}
           path: artifacts/r-manual/${{ steps.r_metadata.outputs.package }}_${{ steps.r_metadata.outputs.version }}_manual.pdf
       - name: Validate R release artifacts
+        env:
+          STEPS_R_METADATA_OUTPUTS_VERSION: ${{ steps.r_metadata.outputs.version }}
+          STEPS_R_METADATA_OUTPUTS_PACKAGE: ${{ steps.r_metadata.outputs.package }}
         run: |
-          test -s "innovate.R_${{ steps.r_metadata.outputs.version }}.tar.gz"
-          test -s "artifacts/r-manual/${{ steps.r_metadata.outputs.package }}_${{ steps.r_metadata.outputs.version }}_manual.pdf"
+          test -s "innovate.R_${STEPS_R_METADATA_OUTPUTS_VERSION}.tar.gz"
+          test -s "artifacts/r-manual/${STEPS_R_METADATA_OUTPUTS_PACKAGE}_${STEPS_R_METADATA_OUTPUTS_VERSION}_manual.pdf"
       - name: R-universe and CRAN publication gate
         run: |
           echo "R-universe publication is driven by the configured universe registry."
           echo "CRAN submission remains a manual maintainer release step after R CMD check --as-cran and manual PDF generation pass."
 
   julia-package:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860 # v5
+        with:
+          persist-credentials: false
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
       - name: Set up Python
         run: uv python install 3.14
-      - uses: julia-actions/setup-julia@v2
+      - uses: julia-actions/setup-julia@4c0cb0fce8556fdb04a90347310e5db8b1f98fb9 # v2
         with:
           version: "1.12"
       - run: julia --project=bindings/julia -e 'using Pkg; Pkg.instantiate(); Pkg.test()'
@@ -147,15 +163,20 @@ jobs:
           echo "A dedicated Innovate.jl repository may still be needed for Julia General AutoMerge; otherwise expect manual review."
 
   go-module:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: bindings/go
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-go@v6
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
           go-version-file: bindings/go/go.mod
+          cache: false
       - run: go test ./...
       - run: go list -m
       - name: Validate Go module release tag pattern
@@ -200,13 +221,17 @@ jobs:
           exit 1
 
   nuget-csharp:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: astral-sh/setup-uv@v8.1.0
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860 # v5
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
       - run: uv python install 3.14
       - run: uv sync
-      - uses: actions/setup-dotnet@v5
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
         with:
           dotnet-version: |
             10.0.x
