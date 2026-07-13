@@ -1,0 +1,8 @@
+🎯 **What:**
+Fixed an insecure random number generator vulnerability in `InnovationModel` agent placement.
+
+⚠️ **Risk:**
+Using Python's standard `random.randrange` (via `self.random.randrange`) is a deterministic, pseudo-random number generator. In a security context, it is predictable and unsuitable for scenarios requiring cryptographic security, potentially allowing an attacker to predict simulation states or agent positions if exposed to external inputs.
+
+🛡️ **Solution:**
+Replaced `self.random.randrange` with `secrets.randbelow` from the Python standard library. The `secrets` module provides access to the most secure source of randomness that the operating system provides, mitigating predictability risks during agent placement.
