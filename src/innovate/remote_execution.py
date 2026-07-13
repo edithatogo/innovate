@@ -23,8 +23,8 @@ class RemoteExecutionContext:
     request_id: str
     tenant_id: str
     principal: str
+    auth_scope: str
     trace_id: str = ""
-    auth_scope: str = "kernel:execute"
     data_retention: str = "ephemeral"
 
     def __post_init__(self) -> None:
@@ -51,8 +51,8 @@ class RemoteExecutionContext:
             request_id=str(data["request_id"]),
             tenant_id=str(data["tenant_id"]),
             principal=str(data["principal"]),
+            auth_scope=str(data["auth_scope"]),
             trace_id=str(data.get("trace_id", "")),
-            auth_scope=str(data.get("auth_scope", "kernel:execute")),
             data_retention=str(data.get("data_retention", "ephemeral")),
         )
 
@@ -61,6 +61,7 @@ class RemoteExecutionContext:
 class RemoteExecutionPolicy:
     """Local policy used by hosted adapters before dispatching kernel requests."""
 
+    required_auth_scope: str
     eligible_operations: tuple[str, ...] = (
         kernel.KernelOperation.DISCOVER_MODELS.value,
         kernel.KernelOperation.PREDICT_MODEL.value,
@@ -69,7 +70,6 @@ class RemoteExecutionPolicy:
         kernel.KernelOperation.DIAGNOSE_MODEL.value,
     )
     local_only_by_default: tuple[str, ...] = (kernel.KernelOperation.FIT_MODEL.value,)
-    required_auth_scope: str = "kernel:execute"
     max_payload_bytes: int = 1_000_000
     data_retention: str = "ephemeral"
 
@@ -166,7 +166,7 @@ class InProcessRemoteExecutor:
         runtime: str = "python",
         backend: str = "numpy_scipy",
     ) -> None:
-        self.policy = policy or RemoteExecutionPolicy()
+        self.policy = policy or RemoteExecutionPolicy(required_auth_scope="kernel:execute")
         self.runtime = runtime
         self.backend = backend
 
@@ -234,7 +234,7 @@ class InProcessRemoteExecutor:
 
 def describe_remote_execution_contract() -> dict[str, Any]:
     """Describe remote execution boundaries, security, and observability requirements."""
-    policy = RemoteExecutionPolicy()
+    policy = RemoteExecutionPolicy(required_auth_scope="kernel:execute")
     return {
         "schema_version": kernel.KERNEL_SCHEMA_VERSION,
         "eligible_operations": policy.eligible_operations,
