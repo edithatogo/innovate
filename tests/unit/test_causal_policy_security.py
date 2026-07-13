@@ -102,7 +102,7 @@ def test_causal_model_from_json_extra_keys_rejected():
             },
         }
     )
-    with pytest.raises(PolicyEvaluationError, match="Invalid model specification"):
+    with pytest.raises(PolicyEvaluationError, match="Unknown fields in 'intervention': malicious_key"):
         CausalModel.from_json(invalid_json)
 
 
@@ -122,5 +122,5 @@ def test_causal_model_from_json_missing_keys_rejected():
         }
     )
     # Missing "name" in intervention contract
-    with pytest.raises(PolicyEvaluationError, match="Invalid model specification"):
+    with pytest.raises(PolicyEvaluationError, match="Data validation error"):
         CausalModel.from_json(invalid_json)
