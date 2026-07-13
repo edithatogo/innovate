@@ -1,0 +1,10 @@
+🔒 [fix secure random abm]
+
+🎯 **What:** The vulnerability fixed
+Addressed an insecure random number generator vulnerability in the ABM model placement code (`src/innovate/abm/model.py`). The code previously used the standard pseudorandom generator `random.randrange()` via `mesa`'s `self.random` when calculating agent grid coordinates.
+
+⚠️ **Risk:** The potential impact if left unfixed
+While typically used for deterministic simulations, standard PRNGs are predictable and not suitable for security-sensitive contexts. Using them could potentially allow an attacker to predict or manipulate agent placements in environments where this model might be exposed to untrusted input or influence critical decisions.
+
+🛡️ **Solution:** How the fix addresses the vulnerability
+Replaced the use of `self.random.randrange()` with the cryptographically secure `secrets.randbelow()` module to compute random X and Y coordinates. While this sacrifices standard deterministic seeding capability, it meets the strict security requirement of avoiding insecure PRNGs in this context.
