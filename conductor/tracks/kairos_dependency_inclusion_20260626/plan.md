@@ -32,7 +32,7 @@
 
 ## Phase 3: Smoke Evidence and Release Truth
 
-### Phase 3 Checkpoint: [checkpoint: pending]
+### Phase 3 Checkpoint: [checkpoint: 46e210f]
 
 - [x] Task: Add Kairos build and smoke evidence
     - [x] Add a Rust/toolchain build gate proving the selected Kairos crate set builds in Innovate.
