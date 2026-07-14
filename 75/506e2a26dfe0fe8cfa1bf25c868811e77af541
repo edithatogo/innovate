@@ -1,0 +1,1 @@
+Kairos dependency inclusion track archive: Phase 4 full pytest passed; Criterion MSRV baseline conflict resolved by retaining criterion =0.5.1 for rust-version 1.85 and updating stale 0.8-only test; PR #368 required hosted checks passed and merged; registry hygiene reports zero active tracks and no link/orphan issues.
