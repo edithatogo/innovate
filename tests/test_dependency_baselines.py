@@ -220,10 +220,10 @@ class TestVitestBaseline:
 
 
 class TestRustCriterionBaseline:
-    """Verify Rust benchmark criterion is version 0.8+."""
+    """Verify Rust benchmark criterion remains compatible with Rust 1.85."""
 
     def test_cargo_criterion_version(self) -> None:
-        """Cargo.toml must specify criterion 0.8 for benchmarks."""
+        """Cargo.toml must retain the Rust 1.85-compatible Criterion pin."""
         cargo_toml_path = Path(__file__).parent.parent / "bindings" / "rust" / "Cargo.toml"
         if cargo_toml_path.exists():
             content = cargo_toml_path.read_text()
@@ -231,7 +231,9 @@ class TestRustCriterionBaseline:
             match = re.search(r'criterion\s*=\s*"([^"]+)"', content)
             if match:
                 constraint = match.group(1)
-                assert "0.8" in constraint, f"criterion should be 0.8+, got: {constraint}"
+                assert constraint in {"=0.5.1", "0.5", "0.5.1"}, (
+                    f"criterion must remain Rust 1.85-compatible, got: {constraint}"
+                )
 
 
 class TestMutmutBaseline:
