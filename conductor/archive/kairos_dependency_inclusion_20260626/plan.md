@@ -49,9 +49,9 @@
 
 ## Phase 4: Final Validation and Track Completion
 
-### Phase 4 Checkpoint: [checkpoint: pending]
+### Phase 4 Checkpoint: [checkpoint: d93f7ad]
 
-- [ ] Task: Final validation and CI gate
-    - [ ] Run full test suite and validation.
-    - [ ] Verify all CI gates pass.
-    - [ ] Commit and push.
+- [x] Task: Final validation and CI gate
+    - [x] Run full test suite and validation.
+    - [x] Verify all required CI gates pass on PR #368; optional backend job remained non-required and runner-pending at merge.
+    - [x] Commit and push.
