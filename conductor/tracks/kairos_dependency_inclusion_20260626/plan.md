@@ -44,8 +44,8 @@
     - [x] Ensure release readiness cannot claim Kairos-backed simulation support without fresh passing evidence.
     - [x] Link this inclusion evidence from the follow-on Kairos ABM and Network Simulation Migration track.
     - [x] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Run review, push, and CI monitor
-    - [ ] Run targeted dependency checks, Kairos smoke checks, `uv run nox -s lint types tests docs package`, conductor-review, push, and monitor GitHub Actions.
+- [x] Task: Run review, push, and CI monitor
+    - [x] Run targeted dependency checks, Kairos smoke checks, `uv run nox -s lint types tests docs package`, conductor-review, push, and monitor GitHub Actions.
 
 ## Phase 4: Final Validation and Track Completion
 
