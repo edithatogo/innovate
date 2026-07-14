@@ -85,6 +85,19 @@ class FitDiagnostics:
 OptimizationMethod = Literal["curve_fit", "least_squares", "nelder_mead", "lbfgsb", "differential_evolution", "auto"]
 
 
+@dataclass
+class FitContext:
+    """Context object holding parameters for fitting procedures."""
+
+    model: DiffusionModel
+    t_arr: np.ndarray
+    y_arr: np.ndarray
+    p0: list[float]
+    bounds: tuple
+    sigma: np.ndarray | None = None
+    kwargs: dict = field(default_factory=dict)
+
+
 class ScipyFitter:
     """A fitter class that uses SciPy optimization methods for model estimation.
 
@@ -194,145 +207,115 @@ class ScipyFitter:
 
     def _fit_curve_fit(
         self,
-        model: DiffusionModel,
-        t_arr: np.ndarray,
-        y_arr: np.ndarray,
-        p0: list[float],
-        bounds: tuple,
-        sigma,
-        **kwargs,
+        context: FitContext,
     ) -> tuple[np.ndarray, str, str]:
         """Fit using scipy.optimize.curve_fit."""
 
         def fit_function(t, *params):
-            model.params_ = dict(zip(model.param_names, params))
-            return model.predict(t).flatten()
+            context.model.params_ = dict(zip(context.model.param_names, params))
+            return context.model.predict(t).flatten()
 
         popt, pcov = curve_fit(
             fit_function,
-            t_arr,
-            y_arr,
-            p0=p0,
-            bounds=bounds,
-            sigma=sigma,
+            context.t_arr,
+            context.y_arr,
+            p0=context.p0,
+            bounds=context.bounds,
+            sigma=context.sigma,
             absolute_sigma=True,
             maxfev=self.maxiter * 10,
-            **kwargs,
+            **context.kwargs,
         )
         return popt, "converged", "Optimization terminated successfully"
 
     def _fit_least_squares(
         self,
-        model: DiffusionModel,
-        t_arr: np.ndarray,
-        y_arr: np.ndarray,
-        p0: list[float],
-        bounds: tuple,
-        sigma=None,
-        **kwargs,
+        context: FitContext,
     ) -> tuple[np.ndarray, str, str]:
         """Fit using scipy.optimize.least_squares with robust loss."""
 
         def residuals(params):
-            model.params_ = dict(zip(model.param_names, params))
-            return model.predict(t_arr).flatten() - y_arr
+            context.model.params_ = dict(zip(context.model.param_names, params))
+            return context.model.predict(context.t_arr).flatten() - context.y_arr
 
         result = least_squares(
             residuals,
-            p0,
-            bounds=bounds,
+            context.p0,
+            bounds=context.bounds,
             loss="huber",
             max_nfev=self.maxiter,
-            **kwargs,
+            **context.kwargs,
         )
         return result.x, "converged" if result.success else "failed", result.message
 
     def _fit_nelder_mead(
         self,
-        model: DiffusionModel,
-        t_arr: np.ndarray,
-        y_arr: np.ndarray,
-        p0: list[float],
-        bounds: tuple,
-        sigma=None,
-        **kwargs,
+        context: FitContext,
     ) -> tuple[np.ndarray, str, str]:
         """Fit using Nelder-Mead simplex method."""
 
         def objective(params):
-            model.params_ = dict(zip(model.param_names, params))
+            context.model.params_ = dict(zip(context.model.param_names, params))
             try:
-                y_pred = model.predict(t_arr).flatten()
-                return np.sum((y_arr - y_pred) ** 2)
+                y_pred = context.model.predict(context.t_arr).flatten()
+                return np.sum((context.y_arr - y_pred) ** 2)
             except Exception as e:
                 warnings.warn(f"Objective evaluation failed during Nelder-Mead optimization: {e}", stacklevel=2)
                 return 1e10
 
         result = minimize(
             objective,
-            p0,
+            context.p0,
             method="Nelder-Mead",
             options={"maxiter": self.maxiter, "adaptive": True},
-            **kwargs,
+            **context.kwargs,
         )
         return result.x, "converged" if result.success else "failed", result.message
 
     def _fit_lbfgsb(
         self,
-        model: DiffusionModel,
-        t_arr: np.ndarray,
-        y_arr: np.ndarray,
-        p0: list[float],
-        bounds: tuple,
-        sigma=None,
-        **kwargs,
+        context: FitContext,
     ) -> tuple[np.ndarray, str, str]:
         """Fit using L-BFGS-B optimizer."""
 
         def objective(params):
-            model.params_ = dict(zip(model.param_names, params))
+            context.model.params_ = dict(zip(context.model.param_names, params))
             try:
-                y_pred = model.predict(t_arr).flatten()
-                return np.sum((y_arr - y_pred) ** 2)
+                y_pred = context.model.predict(context.t_arr).flatten()
+                return np.sum((context.y_arr - y_pred) ** 2)
             except Exception as e:
                 warnings.warn(f"Objective evaluation failed during L-BFGS-B optimization: {e}", stacklevel=2)
                 return 1e10
 
-        lb, ub = bounds
+        lb, ub = context.bounds
         bounds_list = list(zip(lb, ub))
 
         result = minimize(
             objective,
-            p0,
+            context.p0,
             method="L-BFGS-B",
             bounds=bounds_list,
             options={"maxiter": self.maxiter},
-            **kwargs,
+            **context.kwargs,
         )
         return result.x, "converged" if result.success else "failed", result.message
 
     def _fit_differential_evolution(
         self,
-        model: DiffusionModel,
-        t_arr: np.ndarray,
-        y_arr: np.ndarray,
-        p0: list[float],
-        bounds: tuple,
-        sigma=None,
-        **kwargs,
+        context: FitContext,
     ) -> tuple[np.ndarray, str, str]:
         """Fit using differential evolution (global optimization)."""
 
         def objective(params):
-            model.params_ = dict(zip(model.param_names, params))
+            context.model.params_ = dict(zip(context.model.param_names, params))
             try:
-                y_pred = model.predict(t_arr).flatten()
-                return np.sum((y_arr - y_pred) ** 2)
+                y_pred = context.model.predict(context.t_arr).flatten()
+                return np.sum((context.y_arr - y_pred) ** 2)
             except Exception as e:
                 warnings.warn(f"Objective evaluation failed during differential evolution: {e}", stacklevel=2)
                 return 1e10
 
-        lb, ub = bounds
+        lb, ub = context.bounds
         # Differential evolution requires finite bounds
         LARGE_BOUND = 1e6
         bounds_list = [(max(-LARGE_BOUND, lo), min(LARGE_BOUND, hi)) for lo, hi in zip(lb, ub)]
@@ -343,7 +326,7 @@ class ScipyFitter:
             maxiter=self.maxiter,
             tol=self.tol,
             polish=True,
-            **kwargs,
+            **context.kwargs,
         )
         return result.x, "converged" if result.success else "failed", result.message
 
@@ -443,7 +426,16 @@ class ScipyFitter:
             raise ValueError(f"Unknown method '{method}'. Choose from: {list(fit_methods.keys())} or 'auto'")
 
         try:
-            popt, status, message = fit_methods[method](model, t_arr, y_arr, p0, bounds, sigma, **kwargs)
+            context = FitContext(
+                model=model,
+                t_arr=t_arr,
+                y_arr=y_arr,
+                p0=p0,
+                bounds=bounds,
+                sigma=sigma,
+                kwargs=kwargs,
+            )
+            popt, status, message = fit_methods[method](context)
             model.params_ = dict(zip(model.param_names, popt))
         except Exception as e:
             raise RuntimeError(f"Fitting failed with method '{method}': {e}")
