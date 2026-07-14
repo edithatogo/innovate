@@ -54,7 +54,60 @@ def _extract_diagnostics_payload(
     )
 
 
-def plot_residuals(  # noqa: PLR0912, PLR0915
+def _plot_residuals_subplot(
+    ax: plt.Axes,
+    t_arr: np.ndarray,
+    residuals: np.ndarray,
+    config: ResidualPlotConfig,
+    diagnostics_metadata: dict[str, object],
+) -> None:
+    """Helper to plot the residuals subplot."""
+    ax.plot(t_arr, residuals, color=config.color_residuals)
+    ax.axhline(0, linestyle="--", color="k", alpha=0.7)
+    ax.set_title("Residuals")
+    ax.set_xlabel("Time")
+    ax.set_ylabel("Residual")
+
+    if diagnostics_metadata:
+        info_bits = []
+        support_level = diagnostics_metadata.get("support_level")
+        provenance = diagnostics_metadata.get("provenance")
+        uncertainty = diagnostics_metadata.get("uncertainty")
+        if support_level:
+            info_bits.append(f"support={support_level}")
+        if provenance:
+            info_bits.append(f"provenance={provenance}")
+        if isinstance(uncertainty, dict):
+            report_type = uncertainty.get("report_type")
+            if report_type:
+                info_bits.append(f"uncertainty={report_type}")
+        if info_bits:
+            ax.text(
+                0.01,
+                0.98,
+                " | ".join(str(bit) for bit in info_bits),
+                transform=ax.transAxes,
+                fontsize=9,
+                verticalalignment="top",
+                bbox={"boxstyle": "round", "facecolor": "white", "alpha": 0.75},
+            )
+
+
+def _plot_acf_subplot(ax: plt.Axes, residuals: np.ndarray, config: ResidualPlotConfig) -> None:
+    """Helper to plot the ACF subplot."""
+    acf_lags = min(int(config.lags), max(1, len(residuals) - 1))
+    plot_acf(residuals, ax=ax, lags=acf_lags, color=config.color_acf)
+    ax.set_title("Autocorrelation Function (ACF)")
+
+
+def _plot_pacf_subplot(ax: plt.Axes, residuals: np.ndarray, config: ResidualPlotConfig) -> None:
+    """Helper to plot the PACF subplot."""
+    pacf_lags = min(int(config.lags), max(1, len(residuals) // 2))
+    plot_pacf(residuals, ax=ax, lags=pacf_lags, color=config.color_pacf)
+    ax.set_title("Partial Autocorrelation Function (PACF)")
+
+
+def plot_residuals(
     model,
     t: np.ndarray,
     y: np.ndarray,
@@ -115,49 +168,16 @@ def plot_residuals(  # noqa: PLR0912, PLR0915
     fig.suptitle(config.title, fontsize=16)
 
     # Plot residuals
-    axes[0].plot(t_arr, residuals, color=config.color_residuals)
-    axes[0].axhline(0, linestyle="--", color="k", alpha=0.7)
-    axes[0].set_title("Residuals")
-    axes[0].set_xlabel("Time")
-    axes[0].set_ylabel("Residual")
-
-    if diagnostics_metadata:
-        info_bits = []
-        support_level = diagnostics_metadata.get("support_level")
-        provenance = diagnostics_metadata.get("provenance")
-        uncertainty = diagnostics_metadata.get("uncertainty")
-        if support_level:
-            info_bits.append(f"support={support_level}")
-        if provenance:
-            info_bits.append(f"provenance={provenance}")
-        if isinstance(uncertainty, dict):
-            report_type = uncertainty.get("report_type")
-            if report_type:
-                info_bits.append(f"uncertainty={report_type}")
-        if info_bits:
-            axes[0].text(
-                0.01,
-                0.98,
-                " | ".join(str(bit) for bit in info_bits),
-                transform=axes[0].transAxes,
-                fontsize=9,
-                verticalalignment="top",
-                bbox={"boxstyle": "round", "facecolor": "white", "alpha": 0.75},
-            )
-
-    acf_lags = min(int(config.lags), max(1, len(residuals) - 1))
+    _plot_residuals_subplot(axes[0], t_arr, residuals, config, diagnostics_metadata)
 
     # Plot ACF
-    plot_acf(residuals, ax=axes[1], lags=acf_lags, color=config.color_acf)
-    axes[1].set_title("Autocorrelation Function (ACF)")
+    _plot_acf_subplot(axes[1], residuals, config)
 
     if not config.acf_only:
-        pacf_lags = min(int(config.lags), max(1, len(residuals) // 2))
         # Plot PACF
-        plot_pacf(residuals, ax=axes[2], lags=pacf_lags, color=config.color_pacf)
-        axes[2].set_title("Partial Autocorrelation Function (PACF)")
+        _plot_pacf_subplot(axes[2], residuals, config)
 
-    plt.tight_layout(rect=[0, 0, 1, 0.96])
+    plt.tight_layout(rect=(0, 0, 1, 0.96))
 
     if config.show:
         plt.show()
