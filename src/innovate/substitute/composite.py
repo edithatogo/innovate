@@ -62,7 +62,8 @@ class CompositeDiffusionModel(DiffusionModel):
         guesses = {}
         for i, model in enumerate(self.models):
             # Use the i-th column of y for the i-th model
-            y_model = y[:, i] if len(y.shape) > 1 else y
+            y_np = np.asarray(y)
+            y_model = y_np[:, i] if len(y_np.shape) > 1 else y_np
             model_guesses = model.initial_guesses(t, y_model)
             # Override market potential guess
             if "m" in model_guesses:
@@ -83,7 +84,8 @@ class CompositeDiffusionModel(DiffusionModel):
     def bounds(self, t: Sequence[float], y: Sequence[float]) -> dict[str, tuple]:
         bounds = {}
         for i, model in enumerate(self.models):
-            y_model = y[:, i] if len(y.shape) > 1 else y
+            y_np = np.asarray(y)
+            y_model = y_np[:, i] if len(y_np.shape) > 1 else y_np
             model_bounds = model.bounds(t, y_model)
             # Override market potential bounds
             if "m" in model_bounds:
@@ -112,10 +114,8 @@ class CompositeDiffusionModel(DiffusionModel):
         def ode_func(t, y):
             return self.differential_equation(t, y, self._params)
 
-        fun = ode_func
-
         sol = solve_ivp(
-            fun,
+            ode_func,
             (t[0], t[-1]),
             y0,
             t_eval=t,
@@ -173,8 +173,10 @@ class CompositeDiffusionModel(DiffusionModel):
         if not self._params:
             raise RuntimeError("Model has not been fitted yet. Call .fit() first.")
         y_pred = self.predict(t)
-        ss_res = np.sum((y - y_pred) ** 2)
-        ss_tot = np.sum((y - np.mean(y, axis=0)) ** 2)
+        y_np = np.asarray(y)
+        y_pred_np = np.asarray(y_pred)
+        ss_res = np.sum((y_np - y_pred_np) ** 2)
+        ss_tot = np.sum((y_np - np.mean(y_np, axis=0)) ** 2)
         return 1 - ss_res / ss_tot if ss_tot > 0 else 0.0
 
     @property
