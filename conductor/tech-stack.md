@@ -4,15 +4,15 @@
 
 - **Site Generator**: [Astro](https://astro.build) with [Starlight](https://starlight.astro.build)
 - **Documentation Theme**: Starlight (Astro integration)
-- **Versioned Baseline**: `astro` `^7.0.2` with `@astrojs/starlight`
-  `^0.41.0` is the active documentation baseline.
+- **Versioned Baseline**: `astro` `^7.0.5` with `@astrojs/starlight`
+  `^0.41.3` is the active documentation baseline.
 - **Markdown Processor**: `@astrojs/markdown-remark` `^7.2.0` provides the
   Astro 7-compatible `unified()` processor required by link validation.
 - **Polyglot Plugin**: [starlight-polyglot](https://github.com/edithatogo/starlight-polyglot) — auto-generates API docs from Python source code
-- **Versioning**: starlight-versions `0.9.0` is enabled with versioned content
+- **Versioning**: starlight-versions `0.9.1` is enabled with versioned content
   under `latest/`; the active build validates Astro 7 non-doc routes such as
   `/404`.
-- **Link Validation**: starlight-links-validator `0.24.1` for CI link checking
+- **Link Validation**: starlight-links-validator `0.25.2` for CI link checking
 - **Prose Linting**: Vale with the `Repo/ValueProse` style checks governance
   prose for hedging and filler wording in CI.
 - **Search**: `@astrojs/starlight-docsearch` `0.7.0` when DocSearch is
