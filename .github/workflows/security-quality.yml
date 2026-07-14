@@ -72,7 +72,7 @@ jobs:
           from pathlib import Path
           import sys
 
-          required = {".github/dependabot.yml", "SECURITY.md", "CODEOWNERS"}
+          required = {".github/dependabot.yml", ".github/renovate.json", "SECURITY.md", "CODEOWNERS"}
           missing = sorted(path for path in required if not Path(path).is_file())
           if missing:
               print("Missing repository security controls:", ", ".join(missing))
