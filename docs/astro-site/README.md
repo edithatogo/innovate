@@ -5,11 +5,11 @@ for the `innovate` repository.
 
 Baseline decisions:
 
-- `astro` `^7.0.2`
-- `@astrojs/starlight` `^0.41.0`
+- `astro` `^7.0.5`
+- `@astrojs/starlight` `^0.41.3`
 - `@astrojs/markdown-remark` `^7.2.0`
-- `starlight-versions` `0.9.0`
-- `starlight-links-validator` `0.24.1`
+- `starlight-versions` `0.9.1`
+- `starlight-links-validator` `0.25.2`
 - `@astrojs/starlight-docsearch` `0.7.0`
 - `@astrojs/sitemap` `^3.7.2`
 

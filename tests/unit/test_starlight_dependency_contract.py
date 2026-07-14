@@ -16,8 +16,8 @@ PACKAGE_PATH = Path("docs/astro-site/package.json")
 LOCKFILE_PATH = Path("docs/astro-site/pnpm-lock.yaml")
 MANIFEST_PATH = Path("docs/source/_static/astro_starlight/migration_manifest.json")
 
-EXPECTED_STARLIGHT_SPECIFIER = "^0.41.0"
-EXPECTED_MANIFEST_STARLIGHT = "0.41.0"
+EXPECTED_STARLIGHT_SPECIFIER = "^0.41.3"
+EXPECTED_MANIFEST_STARLIGHT = "0.41.3"
 
 
 def test_package_json_starlight_specifier_matches_target() -> None:
