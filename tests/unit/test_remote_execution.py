@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 from innovate import kernel
 from innovate.remote_execution import (
     InProcessRemoteExecutor,
@@ -134,3 +136,10 @@ def test_remote_execution_policy_enforces_auth_scope() -> None:
     assert response.kernel_response.error is not None
     assert response.kernel_response.error.code == kernel.KernelErrorCode.UNSUPPORTED_OPERATION.value
     assert "auth_scope is not authorized" in response.kernel_response.error.message
+
+
+def test_remote_execution_policy_dynamic_auth_scope(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The policy should use the environment variable if provided."""
+    monkeypatch.setenv("INNOVATE_REQUIRED_AUTH_SCOPE", "kernel:custom_scope")
+    policy = RemoteExecutionPolicy()
+    assert policy.required_auth_scope == "kernel:custom_scope"

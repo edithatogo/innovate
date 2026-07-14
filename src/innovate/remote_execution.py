@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from time import perf_counter
@@ -61,7 +62,9 @@ class RemoteExecutionContext:
 class RemoteExecutionPolicy:
     """Local policy used by hosted adapters before dispatching kernel requests."""
 
-    required_auth_scope: str
+    required_auth_scope: str = field(
+        default_factory=lambda: os.getenv("INNOVATE_REQUIRED_AUTH_SCOPE", "kernel:execute")
+    )
     eligible_operations: tuple[str, ...] = (
         kernel.KernelOperation.DISCOVER_MODELS.value,
         kernel.KernelOperation.PREDICT_MODEL.value,
@@ -166,7 +169,7 @@ class InProcessRemoteExecutor:
         runtime: str = "python",
         backend: str = "numpy_scipy",
     ) -> None:
-        self.policy = policy or RemoteExecutionPolicy(required_auth_scope="kernel:execute")
+        self.policy = policy or RemoteExecutionPolicy()
         self.runtime = runtime
         self.backend = backend
 
@@ -234,7 +237,7 @@ class InProcessRemoteExecutor:
 
 def describe_remote_execution_contract() -> dict[str, Any]:
     """Describe remote execution boundaries, security, and observability requirements."""
-    policy = RemoteExecutionPolicy(required_auth_scope="kernel:execute")
+    policy = RemoteExecutionPolicy()
     return {
         "schema_version": kernel.KERNEL_SCHEMA_VERSION,
         "eligible_operations": policy.eligible_operations,
