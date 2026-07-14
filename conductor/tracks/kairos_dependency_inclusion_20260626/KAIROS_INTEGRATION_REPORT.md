@@ -2,7 +2,7 @@
 
 ## Kairos Dependency Inclusion Tracking Document
 
-**Date**: 2026-06-30  
+**Date**: 2026-07-14 (fresh validation update)
 **Track**: kairos_dependency_inclusion_20260626  
 **Kairos Repository**: https://github.com/edithatogo/kairos  
 **Kairos Revision**: fae901558f07b7b717a676adbafbe2cdc78dea1c (2026-05-19)
@@ -79,7 +79,7 @@ legacy-abm = [
   - ✅ Legacy extras (mesa, ndlib) note: mesa 3.5.1+ supports Python 3.14; ndlib 5.1.1+ supports Python 3.14
 
 #### Rust Toolchain
-- **Rust Version**: 1.76+ (Kairos workspace requirement)
+- **Rust Version**: 1.85+ (Innovate binding baseline; Kairos requires 1.76+)
 - **Innovate Rust Bindings**: Requires Rust 1.85+
 - **Git Dependency Resolution**: Cargo will resolve Kairos git dependencies at build time
 
@@ -100,7 +100,7 @@ legacy-abm = [
 - Build Verification: cargo check succeeds with Kairos dependencies
 
 **Phase 3 Status**: ✅ COMPLETE - DES and ABM smoke scenarios
-- Tests: 4/4 smoke scenario tests passing
+- Tests: 4/4 smoke scenario structure/evidence tests passing
 - DES Smoke Scenario: `bindings/rust/examples/kairos_des_smoke.rs`
   * Demonstrates event queue and seeded RNG integration
   * Shows deterministic event scheduling capability
@@ -109,6 +109,30 @@ legacy-abm = [
   * Demonstrates ECS-based agent state and behavior updating
   * Shows entity store and agent type integration
   * Successfully imports kairo-ecs-abm, kairo-ecs-core, kairo-ecs-state
+
+### Fresh Local Validation (2026-07-14)
+
+The following commands were run from the Innovate repository root:
+
+```text
+uv run pytest -q tests/test_kairos_dependency.py tests/test_kairos_smoke.py
+10 passed
+
+cargo check --manifest-path bindings/rust/Cargo.toml
+Finished `dev` profile
+
+cargo run --manifest-path bindings/rust/Cargo.toml --example kairos_des_smoke
+DES smoke test PASSED
+
+cargo run --manifest-path bindings/rust/Cargo.toml --example kairos_abm_smoke
+ABM smoke test PASSED
+```
+
+These are local evidence gates. GitHub Actions and the final release-readiness
+workflow remain the external gates for the eventual merge/closeout commit.
+
+The repository gate also passed: `CI=true uv run nox -s lint types tests docs package`
+(lint, types, Python 3.14 unit tests, docs, and package; 7 minutes).
 
 ### V. Release Evidence Summary
 
@@ -138,4 +162,4 @@ legacy-abm = [
 2. **Continued Integration**:
    - Monitor Kairos repository for stability updates
    - Plan migration to published crates.io versions once available
-   - Add comprehensive model benchmarks comparing legacy vs Kairos backends)
+   - Add comprehensive model benchmarks comparing legacy vs Kairos backends
