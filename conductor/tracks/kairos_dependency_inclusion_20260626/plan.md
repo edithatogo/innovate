@@ -32,20 +32,20 @@
 
 ## Phase 3: Smoke Evidence and Release Truth
 
-### Phase 3 Checkpoint: [checkpoint: pending]
+### Phase 3 Checkpoint: [checkpoint: 46e210f]
 
-- [~] Task: Add Kairos build and smoke evidence
-    - [ ] Add a Rust/toolchain build gate proving the selected Kairos crate set builds in Innovate.
-    - [ ] Add a minimal deterministic Kairos DES smoke scenario.
-    - [ ] Add a minimal Kairos ABM smoke scenario covering ECS-style agent state and behavior update plumbing.
-    - [ ] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Update release readiness and migration evidence
-    - [ ] Record Kairos source, selected revision or versions, build status, smoke status, and bridge-crate promotion status.
-    - [ ] Ensure release readiness cannot claim Kairos-backed simulation support without fresh passing evidence.
-    - [ ] Link this inclusion evidence from the follow-on Kairos ABM and Network Simulation Migration track.
-    - [ ] Commit task changes and attach the required Conductor git note.
-- [ ] Task: Run review, push, and CI monitor
-    - [ ] Run targeted dependency checks, Kairos smoke checks, `uv run nox -s lint types tests docs package`, conductor-review, push, and monitor GitHub Actions.
+- [x] Task: Add Kairos build and smoke evidence
+    - [x] Add a Rust/toolchain build gate proving the selected Kairos crate set builds in Innovate.
+    - [x] Add a minimal deterministic Kairos DES smoke scenario.
+    - [x] Add a minimal Kairos ABM smoke scenario covering ECS-style agent state and behavior update plumbing.
+    - [x] Commit task changes and attach the required Conductor git note.
+- [x] Task: Update release readiness and migration evidence
+    - [x] Record Kairos source, selected revision or versions, build status, smoke status, and bridge-crate promotion status.
+    - [x] Ensure release readiness cannot claim Kairos-backed simulation support without fresh passing evidence.
+    - [x] Link this inclusion evidence from the follow-on Kairos ABM and Network Simulation Migration track.
+    - [x] Commit task changes and attach the required Conductor git note.
+- [x] Task: Run review, push, and CI monitor
+    - [x] Run targeted dependency checks, Kairos smoke checks, `uv run nox -s lint types tests docs package`, conductor-review, push, and monitor GitHub Actions.
 
 ## Phase 4: Final Validation and Track Completion
 
