@@ -1,8 +1,8 @@
 {
   "track_id": "kairos_dependency_inclusion_20260626",
   "type": "feature",
-  "status": "new",
+  "status": "complete",
   "created_at": "2026-06-25T14:40:53Z",
-  "updated_at": "2026-06-25T14:40:53Z",
+  "updated_at": "2026-07-14T10:18:05Z",
   "description": "Include Kairos as the actual DES/ABM migration dependency source, remove Mesa and NDLib from base runtime requirements, and establish repo-first Rust/Python build evidence."
 }
