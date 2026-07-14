@@ -1010,8 +1010,8 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "arviz", marker = "extra == 'bayesian'", specifier = ">=0.17,<1.0" },
-    { name = "arviz", marker = "extra == 'jax'", specifier = ">=0.17,<1.0" },
+    { name = "arviz", marker = "extra == 'bayesian'", specifier = ">=0.17,<2.0" },
+    { name = "arviz", marker = "extra == 'jax'", specifier = ">=0.17,<2.0" },
     { name = "blackjax", marker = "extra == 'bayesian'", specifier = ">=1.0" },
     { name = "blackjax", marker = "extra == 'jax'", specifier = ">=1.0" },
     { name = "diffrax", marker = "extra == 'bayesian'", specifier = ">=0.5" },
@@ -1027,8 +1027,8 @@ requires-dist = [
     { name = "ndlib", marker = "extra == 'legacy-abm'", specifier = ">=5.1.1,<6" },
     { name = "networkx", specifier = ">=3.6.1,<4" },
     { name = "numpy", specifier = ">=2.4.4,<3" },
-    { name = "numpyro", marker = "extra == 'bayesian'", specifier = ">=0.20.1,<0.21" },
-    { name = "numpyro", marker = "extra == 'jax'", specifier = ">=0.20.1,<0.21" },
+    { name = "numpyro", marker = "extra == 'bayesian'", specifier = ">=0.20.1,<0.22" },
+    { name = "numpyro", marker = "extra == 'jax'", specifier = ">=0.20.1,<0.22" },
     { name = "pandas", specifier = ">=3.0.2,<4" },
     { name = "pandasdmx", specifier = ">=1.9.0" },
     { name = "polars", marker = "extra == 'dataframe'", specifier = ">=1.0" },
@@ -1057,7 +1057,7 @@ dev = [
     { name = "nbqa", specifier = ">=1.7" },
     { name = "nbstripout", specifier = ">=0.7" },
     { name = "nox", specifier = ">=2025.5.1" },
-    { name = "pandera", specifier = ">=0.30.1,<0.31" },
+    { name = "pandera", specifier = ">=0.30.1,<0.33" },
     { name = "pre-commit", specifier = ">=3.6" },
     { name = "pydantic", specifier = ">=2.13.4,<3" },
     { name = "pyproject-fmt", specifier = ">=1.7" },
