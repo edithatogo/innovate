@@ -88,7 +88,7 @@ def _security_audit(pyproject: dict[str, Any]) -> dict[str, Any]:
             "dependency_count": len(_dependency_names(pyproject)),
             "scanners": [
                 "bandit",
-                "safety",
+                "pip-audit",
                 "cargo-audit",
                 "npm-audit",
             ],

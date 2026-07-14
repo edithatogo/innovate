@@ -59,7 +59,7 @@
   - `uv run ruff check .` — Lint (replaces flake8, Pylint, vulture, unimport)
   - `uv run ruff format .` — Format (replaces Black)
   - `uv run ruff check . --select I` — Import sorting (replaces isort)
-- **Pre-commit Hooks**: All commits are validated by pre-commit hooks running Ruff, basedpyright, codespell, and safety checks where configured.
+- **Pre-commit Hooks**: All commits are validated by pre-commit hooks running Ruff, basedpyright, codespell, and pip-audit checks where configured.
 - **No Legacy Tools**: Black, isort, flake8, Pylint, vulture, and unimport are not used.
 
 ## Type Safety

@@ -35,7 +35,7 @@ We prefer all communications to be in English.
 
 ## Security Measures
 
-- Dependencies are scanned for vulnerabilities using `safety` and `bandit`
+- Dependencies are scanned for vulnerabilities using `pip-audit` and `bandit`
 - All dependencies are managed via `uv` with a locked `uv.lock` file
 - Renovate manages dependency update PRs, groups non-major updates by ecosystem,
   and can automerge vulnerability fixes only after the required CI and branch
