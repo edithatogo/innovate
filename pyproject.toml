@@ -30,7 +30,7 @@ dependencies = [
   "scipy>=1.17.1,<2",
   # Data handling
   "pandas>=3.0.2,<4",
-  "pyarrow>=23.0.1,<24",
+  "pyarrow>=23.0.1,<26",
   # Statistics / econometrics
   "statsmodels>=0.14.6,<0.15",
   # Network analysis (retained for graph analysis and visualization support)
@@ -44,7 +44,7 @@ dependencies = [
   "ruptures>=1.1.9,<1.1.10",
   "pymannkendall>=1.4.3,<2",
   # Symbolic / tensor computation
-  "pytensor>=2.38.2,<3",
+  "pytensor>=2.38.2,<4",
   "pandasdmx>=1.9.0",
   "pydantic>=2.13.4",
 ]
