@@ -361,7 +361,64 @@ class ScipyFitter:
         )
         return result.x, "converged" if result.success else "failed", result.message
 
-    def fit(  # noqa: PLR0912
+    def _validate_inputs(self, t: Sequence[float], y: Sequence[float]) -> tuple[np.ndarray, np.ndarray]:
+        t_arr = np.asarray(t, dtype=float)
+        y_arr = np.asarray(y, dtype=float)
+
+        if len(t_arr) == 0 or len(y_arr) == 0:
+            raise ValueError("Time and observation arrays must not be empty")
+        if len(t_arr) != len(y_arr):
+            raise ValueError(f"Time and observation arrays must have same length, got {len(t_arr)} and {len(y_arr)}")
+        if np.any(~np.isfinite(y_arr)):
+            raise ValueError("Observation array contains non-finite values (NaN or Inf)")
+        if np.any(~np.isfinite(t_arr)):
+            raise ValueError("Time array contains non-finite values (NaN or Inf)")
+
+        return t_arr, y_arr
+
+    def _handle_multiproduct_model(
+        self,
+        model: MultiProductDiffusionModel,
+        t: Sequence[float],
+        y: Sequence[float],
+        t_arr: np.ndarray,
+        y_arr: np.ndarray,
+        bounds: tuple | None = None,
+        weights: Sequence[float] | None = None,
+        **kwargs,
+    ) -> Self:
+        if weights is not None:
+            import warnings
+
+            warnings.warn(
+                "MultiProductDiffusionModel does not support sample weights. Weights parameter will be ignored.",
+                UserWarning,
+                stacklevel=2,
+            )
+        if bounds is not None:
+            kwargs["bounds"] = bounds
+        model.fit(t, y, **kwargs)
+        if self.store_diagnostics:
+            context = DiagnosticsContext(model=model, t=t_arr, y=y_arr, method="model_builtin")
+            self.diagnostics = self._compute_diagnostics(context)
+        return self
+
+    def _get_initial_guesses(
+        self, model: DiffusionModel, t: Sequence[float], y: Sequence[float], p0: Sequence[float] | None
+    ) -> list[float]:
+        if p0 is None:
+            return list(model.initial_guesses(t, y).values())
+        return list(p0)
+
+    def _get_bounds(self, model: DiffusionModel, t: Sequence[float], y: Sequence[float], bounds: tuple | None) -> tuple:
+        if bounds is None:
+            model_bounds = model.bounds(t, y)
+            lower_bounds = [b[0] for b in model_bounds.values()]
+            upper_bounds = [b[1] for b in model_bounds.values()]
+            return (lower_bounds, upper_bounds)
+        return bounds
+
+    def fit(
         self,
         model: DiffusionModel,
         t: Sequence[float],
@@ -391,57 +448,16 @@ class ScipyFitter:
             RuntimeError: If fitting fails.
             ValueError: If inputs are invalid.
         """
-        # Input validation
-        t_arr = np.asarray(t, dtype=float)
-        y_arr = np.asarray(y, dtype=float)
-
-        if len(t_arr) == 0 or len(y_arr) == 0:
-            raise ValueError("Time and observation arrays must not be empty")
-        if len(t_arr) != len(y_arr):
-            raise ValueError(f"Time and observation arrays must have same length, got {len(t_arr)} and {len(y_arr)}")
-        if np.any(~np.isfinite(y_arr)):
-            raise ValueError("Observation array contains non-finite values (NaN or Inf)")
-        if np.any(~np.isfinite(t_arr)):
-            raise ValueError("Time array contains non-finite values (NaN or Inf)")
-
+        t_arr, y_arr = self._validate_inputs(t, y)
         sigma = 1.0 / np.sqrt(weights) if weights is not None else None
 
-        # Check for MultiProductDiffusionModel
         if isinstance(model, MultiProductDiffusionModel):
-            if weights is not None:
-                import warnings
-
-                warnings.warn(
-                    "MultiProductDiffusionModel does not support sample weights. Weights parameter will be ignored.",
-                    UserWarning,
-                    stacklevel=2,
-                )
-            if bounds is not None:
-                kwargs["bounds"] = bounds
-            model.fit(t, y, **kwargs)
-            if self.store_diagnostics:
-                context = DiagnosticsContext(model=model, t=t_arr, y=y_arr, method="model_builtin")
-                self.diagnostics = self._compute_diagnostics(context)
-            return self
+            return self._handle_multiproduct_model(model, t, y, t_arr, y_arr, bounds, weights, **kwargs)
 
         y_arr = y_arr.flatten()
+        p0_list = self._get_initial_guesses(model, t, y, p0)
+        bounds_tuple = self._get_bounds(model, t, y, bounds)
 
-        # Determine initial guesses if not provided
-        if p0 is None:
-            p0 = list(model.initial_guesses(t, y).values())
-        else:
-            p0 = list(p0)
-
-        # Determine bounds if not provided
-        if bounds is None:
-            model_bounds = model.bounds(t, y)
-            lower_bounds = [b[0] for b in model_bounds.values()]
-            upper_bounds = [b[1] for b in model_bounds.values()]
-            bounds = (lower_bounds, upper_bounds)
-        else:
-            lower_bounds, upper_bounds = bounds
-
-        # Select optimization method
         method = self.method
         if method == "auto":
             method = self._select_method(model, t_arr, y_arr)
@@ -458,12 +474,11 @@ class ScipyFitter:
             raise ValueError(f"Unknown method '{method}'. Choose from: {list(fit_methods.keys())} or 'auto'")
 
         try:
-            popt, status, message = fit_methods[method](model, t_arr, y_arr, p0, bounds, sigma, **kwargs)
+            popt, status, message = fit_methods[method](model, t_arr, y_arr, p0_list, bounds_tuple, sigma, **kwargs)
             model.params_ = dict(zip(model.param_names, popt))
         except Exception as e:
             raise RuntimeError(f"Fitting failed with method '{method}': {e}")
 
-        # Compute and store diagnostics
         if self.store_diagnostics:
             context = DiagnosticsContext(
                 model=model,
