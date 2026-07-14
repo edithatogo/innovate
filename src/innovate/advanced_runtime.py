@@ -299,7 +299,8 @@ def compose_regime_ensemble(
             raise ValueError("weights must sum to a positive value")
         weight_values = {key: value / total for key, value in weight_values.items()}
 
-    mean = [sum(aligned[key][index] * weight_values[key] for key in aligned) for index in range(len(time_values))]
+    weighted_arrays = [[value * weight_values[key] for value in aligned[key]] for key in aligned]
+    mean = [sum(values) for values in zip(*weighted_arrays, strict=True)]
     diagnostics = _score_predictions(observed, mean) if observed is not None else {}
 
     return AdvancedResult(
