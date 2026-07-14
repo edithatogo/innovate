@@ -104,7 +104,7 @@
       "id": "security_audit",
       "lane": "release",
       "owner": "security",
-      "producer": "bandit, safety, cargo audit, and npm audit where available",
+      "producer": "bandit, pip-audit, cargo audit, and npm audit where available",
       "status": "pass",
       "summary": "Offline audit manifest confirms no release-readiness evidence path requires secrets."
     },

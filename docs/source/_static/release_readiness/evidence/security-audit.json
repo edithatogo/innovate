@@ -11,7 +11,7 @@
   "requires_secrets": false,
   "scanners": [
     "bandit",
-    "safety",
+    "pip-audit",
     "cargo-audit",
     "npm-audit"
   ],

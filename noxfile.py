@@ -178,7 +178,7 @@ def security(session: nox.Session) -> None:
     """Run Bandit static analysis and Safety vulnerability scan on Python dependencies."""
     _run_uv(session, "sync", "--python", DEFAULT_PYTHON)
     _run_uv(session, "run", "bandit", "-r", "src/innovate", "-c", "pyproject.toml")
-    _run_uv(session, "run", "safety", "check")
+    _run_uv(session, "run", "pip-audit", "--strict")
 
 
 @nox.session(python=False)
