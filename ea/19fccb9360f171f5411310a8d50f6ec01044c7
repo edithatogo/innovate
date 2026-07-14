@@ -1,0 +1,1 @@
+Kairos build and smoke evidence review: uv run pytest -q tests/test_kairos_dependency.py tests/test_kairos_smoke.py (10 passed); cargo check and both kairos_des_smoke/kairos_abm_smoke examples passed; CI=true uv run nox -s lint types tests docs package passed (lint, types, Python 3.14 tests, docs, package). Registry hygiene and Ruff passed; no review findings.
