@@ -258,7 +258,7 @@ jobs:
         run: uv python install 3.14
 
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@fa04a1451ff1842e2626ccb99004d0195b455a88
+        uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
         with:
           toolchain: ${{ matrix.rust-version }}
           components: rustfmt, clippy
