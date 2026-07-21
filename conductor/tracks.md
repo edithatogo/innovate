@@ -1,5 +1,9 @@
 # Project Tracks
 
+## [ ] Track: research_software_registry_readiness_20260721
+
+[Specification and plan](./tracks/research_software_registry_readiness_20260721/)
+
 This file tracks all major tracks for the project. Each track has its own detailed plan in its respective folder.
 
 - [x] **Track: SOTA Infrastructure Overhaul** *(Completed)*
