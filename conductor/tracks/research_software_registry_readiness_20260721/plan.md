@@ -2,7 +2,7 @@
 
 ## Phase 1: Readiness and prerequisites
 
-- [ ] Confirm scope, rights, licensing, metadata, release, and persistence prerequisites in the parent issue.
+- [x] Confirm scope, rights, licensing, metadata, release, and persistence prerequisites in the parent issue.
 - [x] Capture repository-specific validation commands and baseline results.
 
 ## Phase 2: Registry deliverables
