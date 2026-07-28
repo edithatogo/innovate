@@ -17,8 +17,8 @@ class InnovationModel(Model):
         for i in range(self.num_agents):
             agent = InnovationAgent(i, self)
             # Add the agent to a random grid cell
-            x = self.random.randrange(self.grid.width)
-            y = self.random.randrange(self.grid.height)
+            x = self.random.randrange(self.grid.width)  # nosec
+            y = self.random.randrange(self.grid.height)  # nosec
             self.grid.place_agent(agent, (x, y))
 
     def step(self):
