@@ -83,3 +83,44 @@ def test_causal_model_from_json_causal_model_not_dict():
     )
     with pytest.raises(PolicyEvaluationError, match="'causal_model' must be a dictionary"):
         CausalModel.from_json(causal_model_not_dict)
+
+
+def test_causal_model_from_json_extra_keys_rejected():
+    invalid_json = json.dumps(
+        {
+            "intervention": {
+                "name": "test_intervention",
+                "timing": "post",
+                "comparator": "control",
+                "malicious_key": "injected_value",
+            },
+            "causal_model": {
+                "name": "test_causal_model",
+                "treatment_variable": "treatment",
+                "outcome_variable": "outcome",
+                "confounders": ["c1", "c2"],
+            },
+        }
+    )
+    with pytest.raises(PolicyEvaluationError, match="Unknown fields in 'intervention': malicious_key"):
+        CausalModel.from_json(invalid_json)
+
+
+def test_causal_model_from_json_missing_keys_rejected():
+    invalid_json = json.dumps(
+        {
+            "intervention": {
+                "timing": "post",
+                "comparator": "control",
+            },
+            "causal_model": {
+                "name": "test_causal_model",
+                "treatment_variable": "treatment",
+                "outcome_variable": "outcome",
+                "confounders": ["c1", "c2"],
+            },
+        }
+    )
+    # Missing "name" in intervention contract
+    with pytest.raises(PolicyEvaluationError, match="Data validation error"):
+        CausalModel.from_json(invalid_json)

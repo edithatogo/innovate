@@ -46,7 +46,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: Scan repository history for secrets
-        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7
+        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -72,7 +72,7 @@ jobs:
           from pathlib import Path
           import sys
 
-          required = {".github/dependabot.yml", "SECURITY.md", "CODEOWNERS"}
+          required = {".github/dependabot.yml", ".github/renovate.json", "SECURITY.md", "CODEOWNERS"}
           missing = sorted(path for path in required if not Path(path).is_file())
           if missing:
               print("Missing repository security controls:", ", ".join(missing))
@@ -89,7 +89,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Install uv
-        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
+        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
         with:
           enable-cache: true
       - name: Set up Python

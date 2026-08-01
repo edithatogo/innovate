@@ -622,3 +622,76 @@ class TestJSONArrowCompatibility:
         # Should be able to export results as Arrow
         table = estimator.results_to_arrow(result)
         assert table.num_rows > 0
+
+
+def test_causal_model_from_json_extra_fields():
+    """Test that `from_json` securely rejects arbitrary extra fields to prevent injection."""
+    from src.innovate.causal.policy import CausalModel, PolicyEvaluationError
+
+    # Valid causal model structure with an extra 'hack' key in intervention
+    json_str_intervention_hack = """{
+        "intervention": {
+            "name": "test",
+            "timing": "post",
+            "comparator": "control",
+            "hack": "malicious_payload"
+        },
+        "causal_model": {
+            "name": "cm",
+            "treatment_variable": "t",
+            "outcome_variable": "o",
+            "confounders": ["c"]
+        }
+    }"""
+
+    import pytest
+
+    with pytest.raises(PolicyEvaluationError) as excinfo:
+        CausalModel.from_json(json_str_intervention_hack)
+    assert "Unknown fields in 'intervention': hack" in str(excinfo.value)
+
+    # Valid causal model structure with an extra 'hack' key in causal_model
+    json_str_causal_hack = """{
+        "intervention": {
+            "name": "test",
+            "timing": "post",
+            "comparator": "control"
+        },
+        "causal_model": {
+            "name": "cm",
+            "treatment_variable": "t",
+            "outcome_variable": "o",
+            "confounders": ["c"],
+            "hack": "malicious_payload"
+        }
+    }"""
+
+    with pytest.raises(PolicyEvaluationError) as excinfo:
+        CausalModel.from_json(json_str_causal_hack)
+    assert "Unknown fields in 'causal_model': hack" in str(excinfo.value)
+
+
+def test_causal_model_from_json_invalid_types():
+    """Test that `from_json` securely enforces type checks."""
+    from src.innovate.causal.policy import CausalModel, PolicyEvaluationError
+
+    # Invalid type for 'timing'
+    json_str_invalid_type = """{
+        "intervention": {
+            "name": "test",
+            "timing": 123,
+            "comparator": "control"
+        },
+        "causal_model": {
+            "name": "cm",
+            "treatment_variable": "t",
+            "outcome_variable": "o",
+            "confounders": ["c"]
+        }
+    }"""
+
+    import pytest
+
+    with pytest.raises(PolicyEvaluationError) as excinfo:
+        CausalModel.from_json(json_str_invalid_type)
+    assert "Data validation error" in str(excinfo.value)

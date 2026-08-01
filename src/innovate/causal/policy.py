@@ -7,12 +7,14 @@ sensitivity analysis for unmeasured confounding.
 
 from __future__ import annotations
 
+import dataclasses
 import json
 from dataclasses import asdict, dataclass, field
 from typing import Any
 
 import numpy as np
 import pyarrow as pa
+from pydantic import TypeAdapter, ValidationError
 
 
 class PolicyEvaluationError(Exception):
@@ -202,8 +204,25 @@ class CausalModel:
         if not isinstance(data["causal_model"], dict):
             raise PolicyEvaluationError("'causal_model' must be a dictionary")
 
-        intervention = InterventionContract(**data["intervention"])
-        causal_model = CausalModelContract(**data["causal_model"])
+        # Validate that no unknown fields are provided for intervention
+        intervention_fields = {f.name for f in dataclasses.fields(InterventionContract)}
+        intervention_unknown = set(data["intervention"].keys()) - intervention_fields  # type: ignore
+        if intervention_unknown:
+            unknown_keys: list[str] = list(intervention_unknown)  # type: ignore
+            raise PolicyEvaluationError(f"Unknown fields in 'intervention': {', '.join(sorted(unknown_keys))}")
+
+        # Validate that no unknown fields are provided for causal_model
+        cm_fields = {f.name for f in dataclasses.fields(CausalModelContract)}
+        cm_unknown = set(data["causal_model"].keys()) - cm_fields  # type: ignore
+        if cm_unknown:
+            cm_unknown_keys: list[str] = list(cm_unknown)  # type: ignore
+            raise PolicyEvaluationError(f"Unknown fields in 'causal_model': {', '.join(sorted(cm_unknown_keys))}")
+
+        try:
+            intervention = TypeAdapter(InterventionContract).validate_python(data["intervention"])
+            causal_model = TypeAdapter(CausalModelContract).validate_python(data["causal_model"])
+        except ValidationError as e:
+            raise PolicyEvaluationError(f"Data validation error: {e}")
         return cls(intervention=intervention, causal_model=causal_model)
 
     def to_arrow(self) -> pa.Table:

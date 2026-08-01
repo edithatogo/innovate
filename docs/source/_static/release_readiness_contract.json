@@ -95,7 +95,7 @@
       "owner": "security",
       "lane": "release",
       "freshness_days": 14,
-      "producer": "bandit, safety, cargo audit, and npm audit where available",
+      "producer": "bandit, pip-audit, cargo audit, and npm audit where available",
       "artifact": "security-audit.json"
     },
     {
