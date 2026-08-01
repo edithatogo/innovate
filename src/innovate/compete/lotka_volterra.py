@@ -248,7 +248,7 @@ class LotkaVolterraModel(DiffusionModel):
         beta2_base = self._params["beta2"]
 
         rates = np.empty((len(t), 2))
-        for i in range(len(t)):
+        for i, t_val in enumerate(t):
             alpha1_t = alpha1_base
             beta1_t = beta1_base
             alpha2_t = alpha2_base
@@ -257,7 +257,7 @@ class LotkaVolterraModel(DiffusionModel):
             if covariates:
                 param_idx = 4
                 for cov_name, cov_values in covariates.items():
-                    cov_val_t = np.interp(t[i], t, cov_values)
+                    cov_val_t = np.interp(t_val, t, cov_values)
                     alpha1_t += self._params[f"beta_alpha1_{cov_name}"] * cov_val_t
                     beta1_t += self._params[f"beta_beta1_{cov_name}"] * cov_val_t
                     alpha2_t += self._params[f"beta_alpha2_{cov_name}"] * cov_val_t
