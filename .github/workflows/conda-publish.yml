@@ -3,9 +3,6 @@
 
 name: Publish Conda Package
 
-permissions:
-  contents: read
-
 on:
   release:
     types: [published]
@@ -14,13 +11,12 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+      - uses: actions/checkout@v5
         with:
-          persist-credentials: false
           fetch-depth: 0
 
       - name: Set up conda environment
-        uses: conda-incubator/setup-miniconda@fc2d68f6413eb2d87b895e92f8584b5b94a10167
+        uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
           python-version: "3.14"

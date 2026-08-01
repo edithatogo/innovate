@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import re
 from pathlib import Path
 
 
@@ -33,7 +32,7 @@ def test_governance_docs_reference_value_prose_linting() -> None:
     assert "Repo/ValueProse" in product_guidelines
     assert "Vale" in tech_stack
     assert "Run Vale" in workflow
-    assert re.search(r"vale-cli/vale-action@[0-9a-f]{40}\b", workflow)
+    assert "vale-cli/vale-action@v2.1.1" in workflow
     assert "files: README.md,docs,conductor,specs" in workflow
     assert 'separator: ","' in workflow
     assert 'vale_flags: "--minAlertLevel=suggestion"' in workflow

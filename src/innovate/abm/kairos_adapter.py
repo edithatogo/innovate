@@ -150,8 +150,7 @@ def _seeded_rng(request: KairosSimulationRequest) -> random.Random:
         mixed ^= _stable_seed_token(stream.seed.stream_id)
         mixed ^= int(stream.seed.primary) & 0xFFFFFFFF
         mixed = (mixed * 16777619) & 0xFFFFFFFF
-    # Deterministic simulation stream; this is not used for secrets or tokens.
-    return random.Random(mixed)  # nosec B311
+    return random.Random(mixed)
 
 
 def _adjacency_from_topology(request: KairosSimulationRequest) -> dict[str, list[tuple[str, float]]]:

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import re
 import tomllib
 from pathlib import Path
 from xml.etree import ElementTree
@@ -165,7 +164,7 @@ def test_python_release_workflows_validate_distribution_metadata() -> None:
     assert "uv run twine check dist/*" in ci
     assert "uv build" in pypi
     assert "uv run twine check dist/*" in pypi
-    assert re.search(r"pypa/gh-action-pypi-publish@[0-9a-f]{40}\b", pypi)
+    assert "pypa/gh-action-pypi-publish@release/v1" in pypi
     assert "repository-url: https://test.pypi.org/legacy/" in testpypi
     assert pyproject["project"]["requires-python"] == ">=3.14"
 

@@ -13,7 +13,8 @@ on:
         options: ["true", "false"]
 
 permissions:
-  contents: read
+  contents: write
+  id-token: write
 
 jobs:
   npm-typescript:
@@ -22,10 +23,8 @@ jobs:
       run:
         working-directory: bindings/typescript
     steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: "26"
           registry-url: https://registry.npmjs.org
@@ -49,10 +48,8 @@ jobs:
       run:
         working-directory: bindings/rust
     steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
-      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
       - run: cargo fmt --check
@@ -75,14 +72,12 @@ jobs:
   r-package:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
-      - uses: r-lib/actions/setup-r@d3c5be51b12e724e68f33216ca3c148b66d5f0b6
+      - uses: actions/checkout@v5
+      - uses: r-lib/actions/setup-r@v2
       - name: Set up TinyTeX for R manual PDF
-        uses: r-lib/actions/setup-tinytex@d3c5be51b12e724e68f33216ca3c148b66d5f0b6
+        uses: r-lib/actions/setup-tinytex@v2
       - name: Set up Pandoc for R vignettes
-        uses: r-lib/actions/setup-pandoc@d3c5be51b12e724e68f33216ca3c148b66d5f0b6
+        uses: r-lib/actions/setup-pandoc@v2
       - run: |
           Rscript -e 'repos <- Sys.getenv("RSPM", "https://cloud.r-project.org"); packages <- c("jsonlite", "knitr", "rmarkdown"); install.packages(packages, repos = repos); missing <- packages[!vapply(packages, requireNamespace, logical(1), quietly = TRUE)]; if (length(missing)) stop("Missing R packages: ", paste(missing, collapse = ", "))'
       - name: Read R package metadata
@@ -99,12 +94,12 @@ jobs:
           test -s "artifacts/r-manual/${{ steps.r_metadata.outputs.package }}_${{ steps.r_metadata.outputs.version }}_manual.pdf"
       - run: R CMD check --as-cran --no-manual innovate.R_*.tar.gz
       - name: Upload R package artifact
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@v4
         with:
           name: r-package-source-${{ steps.r_metadata.outputs.package }}-${{ steps.r_metadata.outputs.version }}
           path: innovate.R_*.tar.gz
       - name: Upload R manual PDF artifact
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@v4
         with:
           name: r-manual-${{ steps.r_metadata.outputs.package }}-${{ steps.r_metadata.outputs.version }}
           path: artifacts/r-manual/${{ steps.r_metadata.outputs.package }}_${{ steps.r_metadata.outputs.version }}_manual.pdf
@@ -120,14 +115,12 @@ jobs:
   julia-package:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
+      - uses: actions/checkout@v5
       - name: Install uv
-        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
+        uses: astral-sh/setup-uv@v8.1.0
       - name: Set up Python
         run: uv python install 3.14
-      - uses: julia-actions/setup-julia@4c0cb0fce8556fdb04a90347310e5db8b1f98fb9
+      - uses: julia-actions/setup-julia@v2
         with:
           version: "1.12"
       - run: julia --project=bindings/julia -e 'using Pkg; Pkg.instantiate(); Pkg.test()'
@@ -159,10 +152,8 @@ jobs:
       run:
         working-directory: bindings/go
     steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
-      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
         with:
           go-version-file: bindings/go/go.mod
       - run: go test ./...
@@ -211,13 +202,11 @@ jobs:
   nuget-csharp:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
-      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v8.1.0
       - run: uv python install 3.14
       - run: uv sync
-      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1
+      - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: |
             10.0.x
