@@ -58,13 +58,13 @@ class CompetitiveDiffusionModel(Model):
                 model=self,
                 num_innovations=num_innovations,
             )
-            x = self.random.randrange(self.grid.width)
-            y = self.random.randrange(self.grid.height)
+            x = self.random.randrange(self.grid.width)  # nosec
+            y = self.random.randrange(self.grid.height)  # nosec
             self.grid.place_agent(agent, (x, y))
 
         # Seed initial adopters for each innovation
         for i in range(self.num_innovations):
-            agent = self.random.choice(list(self.agents))
+            agent = self.random.choice(list(self.agents))  # nosec
             agent.adopted_innovation = i
 
         # Data collector - track count of adopters for each innovation
