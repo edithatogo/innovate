@@ -92,3 +92,37 @@ def test_stability_aliases_consistency() -> None:
         assert isinstance(alias, str)
         assert isinstance(tier, StabilityTier)
         assert alias.islower()
+
+
+def test_stability_tier_instantiation() -> None:
+    """Test instantiating StabilityTier directly from strings."""
+    assert StabilityTier("stable") is StabilityTier.STABLE
+    assert StabilityTier("provisional") is StabilityTier.PROVISIONAL
+    assert StabilityTier("internal") is StabilityTier.INTERNAL
+
+    with pytest.raises(ValueError, match="is not a valid StabilityTier"):
+        StabilityTier("unknown")
+
+
+def test_stability_lifecycle_rules_completeness() -> None:
+    """Test that all StabilityTier members have lifecycle rules and vice versa."""
+    # Ensure every tier has a lifecycle rule
+    for tier in StabilityTier:
+        assert tier in STABILITY_LIFECYCLE_RULES
+
+    # Ensure there are no extra rules for undefined tiers
+    for tier in STABILITY_LIFECYCLE_RULES:
+        assert isinstance(tier, StabilityTier)
+        assert tier in StabilityTier
+
+
+def test_stability_aliases_exhaustive() -> None:
+    """Test that every StabilityTier can be reached via an alias."""
+    from innovate.stability import _STABILITY_ALIASES
+
+    # Collect all unique tiers targeted by aliases
+    targeted_tiers = set(_STABILITY_ALIASES.values())
+
+    # Ensure all actual enum members are targeted
+    for tier in StabilityTier:
+        assert tier in targeted_tiers
