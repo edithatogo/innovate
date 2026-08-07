@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import dataclass, field
+import os
 from time import perf_counter
 from typing import Any, Literal, cast
 
@@ -166,7 +167,13 @@ class InProcessRemoteExecutor:
         runtime: str = "python",
         backend: str = "numpy_scipy",
     ) -> None:
-        self.policy = policy or RemoteExecutionPolicy(required_auth_scope="kernel:execute")
+        if policy is None:
+            scope = os.environ.get("INNOVATE_AUTH_SCOPE")
+            if not scope:
+                raise RuntimeError("INNOVATE_AUTH_SCOPE environment variable must be set to define remote execution authorization.")
+            self.policy = RemoteExecutionPolicy(required_auth_scope=scope)
+        else:
+            self.policy = policy
         self.runtime = runtime
         self.backend = backend
 
@@ -234,7 +241,10 @@ class InProcessRemoteExecutor:
 
 def describe_remote_execution_contract() -> dict[str, Any]:
     """Describe remote execution boundaries, security, and observability requirements."""
-    policy = RemoteExecutionPolicy(required_auth_scope="kernel:execute")
+    scope = os.environ.get("INNOVATE_AUTH_SCOPE")
+    if not scope:
+        raise RuntimeError("INNOVATE_AUTH_SCOPE environment variable must be set to describe remote execution boundaries.")
+    policy = RemoteExecutionPolicy(required_auth_scope=scope)
     return {
         "schema_version": kernel.KERNEL_SCHEMA_VERSION,
         "eligible_operations": policy.eligible_operations,

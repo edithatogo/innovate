@@ -12,7 +12,10 @@ from innovate.remote_execution import (
 )
 
 
-def test_remote_execution_contract_documents_boundaries_and_risk_controls() -> None:
+import pytest
+
+def test_remote_execution_contract_documents_boundaries_and_risk_controls(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("INNOVATE_AUTH_SCOPE", "kernel:execute")
     """The remote contract should document eligibility, security, and observability."""
     contract = describe_remote_execution_contract()
 
@@ -24,7 +27,8 @@ def test_remote_execution_contract_documents_boundaries_and_risk_controls() -> N
     assert "JAX/XLA" in contract["backend_provenance"]["supported_runtimes"]
 
 
-def test_in_process_remote_executor_preserves_kernel_schema_and_correlation() -> None:
+def test_in_process_remote_executor_preserves_kernel_schema_and_correlation(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("INNOVATE_AUTH_SCOPE", "kernel:execute")
     """The local adapter should wrap kernel responses without changing the kernel ABI."""
     executor = InProcessRemoteExecutor()
     request = RemoteExecutionRequest(
