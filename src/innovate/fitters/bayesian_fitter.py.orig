@@ -215,7 +215,7 @@ class BayesianFitter:
 
         # Create log prob function that takes array input
         def log_prob_array(position_array):
-            params_dict = dict(zip(param_names, position_array))
+            params_dict = {name: position_array[i] for i, name in enumerate(param_names)}
             return log_prob_fn(params_dict)
 
         try:
@@ -249,7 +249,7 @@ class BayesianFitter:
             samples_array = jnp.stack(all_samples)  # Shape: (num_chains, num_samples, num_params)
 
             # Convert back to parameter dictionaries (optimized via enumerate)
-            self.posterior_samples_ = dict(zip(param_names, jnp.moveaxis(samples_array, 2, 0)))
+            self.posterior_samples_ = {name: samples_array[:, :, i] for i, name in enumerate(param_names)}
 
             self.mcmc_results_ = {
                 "samples": samples_array,
