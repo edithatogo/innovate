@@ -84,7 +84,7 @@ dataframe = [
 # Legacy ABM/DES backends (mesa and ndlib) - to be replaced by Kairos
 legacy-abm = [
   "mesa>=3.5.1,<4",
-  "ndlib>=5.1.1,<6",
+  "ndlib>=5.1.1,<7",
 ]
 
 [dependency-groups]
