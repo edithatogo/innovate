@@ -52,8 +52,8 @@ class DisruptiveInnovationModel(Model):
         # Create agents
         for i in range(self.num_agents):
             agent = DisruptiveInnovationAgent(unique_id=i, model=self)
-            x = self.random.randrange(self.grid.width)
-            y = self.random.randrange(self.grid.height)
+            x = self.random.randrange(self.grid.width)  # nosec B311
+            y = self.random.randrange(self.grid.height)  # nosec B311
             self.grid.place_agent(agent, (x, y))
 
         self.datacollector = DataCollector(
