@@ -124,3 +124,15 @@ def test_causal_model_from_json_missing_keys_rejected():
     # Missing "name" in intervention contract
     with pytest.raises(PolicyEvaluationError, match="Data validation error"):
         CausalModel.from_json(invalid_json)
+
+
+def test_causal_model_from_json_input_not_string():
+    with pytest.raises(PolicyEvaluationError, match="Input must be a string"):
+        CausalModel.from_json({"key": "value"})  # type: ignore
+
+
+def test_causal_model_from_json_input_too_large():
+    # 1MB is 1_048_576 bytes. We will create a string just slightly larger.
+    large_json = '{"a": "' + "x" * 1_048_576 + '"}'
+    with pytest.raises(PolicyEvaluationError, match="Input JSON string exceeds maximum allowed length of 1MB"):
+        CausalModel.from_json(large_json)

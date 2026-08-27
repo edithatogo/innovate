@@ -186,6 +186,13 @@ class CausalModel:
     @classmethod
     def from_json(cls, json_str: str) -> CausalModel:
         """Load causal model from JSON."""
+        if not isinstance(json_str, str):
+            raise PolicyEvaluationError("Input must be a string")
+
+        # Limit input size to prevent DoS via excessively large JSON (1MB max)
+        if len(json_str) > 1_048_576:
+            raise PolicyEvaluationError("Input JSON string exceeds maximum allowed length of 1MB")
+
         try:
             data = json.loads(json_str)
         except json.JSONDecodeError as e:
