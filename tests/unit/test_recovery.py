@@ -11,7 +11,7 @@ use_backend("numpy")
 from innovate.diffuse.bass import BassModel
 
 
-def test_unfitted_model_error_handling():
+def test_unfitted_model_error_handling() -> None:
     """Test that unfitted models raise appropriate errors."""
     model = BassModel()
 
@@ -27,7 +27,7 @@ def test_unfitted_model_error_handling():
         model.score([1, 2, 3], [10, 20, 30])
 
 
-def test_invalid_parameter_handling():
+def test_invalid_parameter_handling() -> None:
     """Test how the model handles invalid parameters."""
     model = BassModel()
 
@@ -41,7 +41,7 @@ def test_invalid_parameter_handling():
     assert model.params_["m"] == 1000
 
 
-def test_extreme_parameter_handling():
+def test_extreme_parameter_handling() -> None:
     """Test model behavior with extreme parameter values."""
     model = BassModel()
 
@@ -59,7 +59,7 @@ def test_extreme_parameter_handling():
         assert model.params_[key] == value
 
 
-def test_model_recovery_after_error():
+def test_model_recovery_after_error() -> None:
     """Test that a model can recover after error conditions."""
     model = BassModel()
 
@@ -83,7 +83,7 @@ def test_model_recovery_after_error():
     assert len(predictions) == 3
 
 
-def test_parameter_validation_recovery():
+def test_parameter_validation_recovery() -> None:
     """Test recovery from invalid parameter states."""
     model = BassModel()
 
@@ -99,8 +99,12 @@ def test_parameter_validation_recovery():
     assert model.params_["q"] == 0.40
     assert model.params_["m"] == 1200
 
+    # Confirm recovery is functional
+    predictions = model.predict([1, 2, 3])
+    assert len(predictions) == 3
 
-def test_error_handling_with_different_data_types():
+
+def test_error_handling_with_different_data_types() -> None:
     """Test how the model handles different data types."""
     model = BassModel()
     model.params_ = {"p": 0.03, "q": 0.38, "m": 1000}
@@ -118,13 +122,12 @@ def test_error_handling_with_different_data_types():
     assert isinstance(t_array, np.ndarray)
 
 
-def test_model_state_preservation():
+def test_model_state_preservation() -> None:
     """Test that model state is preserved properly between operations."""
     model = BassModel()
 
     # Save initial state
     initial_covariates = model.covariates
-    initial_params = model.params_
 
     # Set parameters
     model.params_ = {"p": 0.03, "q": 0.38, "m": 1000}
@@ -138,7 +141,7 @@ def test_model_state_preservation():
     assert model.covariates == initial_covariates
 
 
-def test_recovery_from_extreme_predictions():
+def test_recovery_from_extreme_predictions() -> None:
     """Test system behavior with extreme values that might cause overflow."""
     model = BassModel()
 
@@ -150,24 +153,25 @@ def test_recovery_from_extreme_predictions():
     assert model.params_["q"] == 0.99
     assert model.params_["m"] == 1e6
 
+    # Confirm recovery is functional
+    predictions = model.predict([1, 2, 3])
+    assert len(predictions) == 3
 
-def test_error_message_clarity():
+
+def test_error_message_clarity() -> None:
     """Test that error messages are clear and actionable."""
     model = BassModel()
 
     # Unfit model should give clear error
     model.params_ = {}
-    try:
+    with pytest.raises(RuntimeError, match="Model has not been fitted yet") as excinfo:
         model.predict([1, 2, 3])
-        raise AssertionError("Expected an exception")  # Should not reach here
-    except RuntimeError as e:
-        error_msg = str(e)
-        # Check that the error message is helpful
-        assert "Model has not been fitted yet" in error_msg
-        assert "Call .fit()" in error_msg or "fitted" in error_msg
+
+    error_msg = str(excinfo.value)
+    assert "Call .fit()" in error_msg or "fitted" in error_msg
 
 
-def test_consistent_state_after_exception():
+def test_consistent_state_after_exception() -> None:
     """Test that the model maintains a consistent state after exceptions."""
     model = BassModel()
 
