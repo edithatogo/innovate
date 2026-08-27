@@ -367,3 +367,10 @@ def test_list_kernel_operations() -> None:
     operations = kernel.list_kernel_operations()
     assert isinstance(operations, tuple)
     assert "discover_models" in operations
+
+def test_is_schema_version_compatible_handles_value_error() -> None:
+    """_is_schema_version_compatible should return False when ValueError is raised."""
+    from innovate import kernel
+
+    assert kernel._is_schema_version_compatible("invalid") is False
+    assert kernel._is_schema_version_compatible("1.0", "invalid") is False
