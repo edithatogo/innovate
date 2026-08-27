@@ -5,6 +5,8 @@ import numpy as np
 from innovate.backend import current_backend as B
 from innovate.base import DiffusionModel
 
+_PREFIXES = ("p", "q", "m")
+
 
 class MultiProductDiffusionModel(DiffusionModel):
     """A generalized model for the diffusion of multiple competing products."""
@@ -65,7 +67,7 @@ class MultiProductDiffusionModel(DiffusionModel):
 
         names = []
         # Add p, q, m parameters for each product
-        for prefix in ["p", "q", "m"]:
+        for prefix in _PREFIXES:
             for i in range(self.n_products):
                 names.append(f"{prefix}{i + 1}")
 
@@ -78,7 +80,7 @@ class MultiProductDiffusionModel(DiffusionModel):
         # Add covariate-related beta parameters
         for cov in self.covariates:
             # Betas for p, q, m
-            for prefix in ["p", "q", "m"]:
+            for prefix in _PREFIXES:
                 for i in range(self.n_products):
                     names.append(f"beta_{prefix}{i + 1}_{cov}")
             # Betas for alpha
@@ -114,7 +116,7 @@ class MultiProductDiffusionModel(DiffusionModel):
 
         # Initial guesses for betas
         for cov in self.covariates:
-            for prefix in ["p", "q", "m"]:
+            for prefix in _PREFIXES:
                 for i in range(self.n_products):
                     guesses[f"beta_{prefix}{i + 1}_{cov}"] = 0.0
             for i in range(self.n_products):
@@ -143,7 +145,7 @@ class MultiProductDiffusionModel(DiffusionModel):
 
         # Bounds for betas
         for cov in self.covariates:
-            for prefix in ["p", "q", "m"]:
+            for prefix in _PREFIXES:
                 for i in range(self.n_products):
                     bounds[f"beta_{prefix}{i + 1}_{cov}"] = (-np.inf, np.inf)
             for i in range(self.n_products):
