@@ -32,7 +32,7 @@ dependencies = [
   "pandas>=3.0.2,<4",
   "pyarrow>=23.0.1,<26",
   # Statistics / econometrics
-  "statsmodels>=0.14.6,<0.15",
+  "statsmodels>=0.14.6,<0.16",
   # Network analysis (retained for graph analysis and visualization support)
   "networkx>=3.6.1,<4",  # Required for network topology analysis and graph visualization
   # Differential equations
