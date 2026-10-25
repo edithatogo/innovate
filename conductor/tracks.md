@@ -461,3 +461,10 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Explainability, Sensitivity, and Decision Reports** *(Completed)*
 *Link: [./archive/explainability_sensitivity_decision_reports_20260625/](./archive/explainability_sensitivity_decision_reports_20260625/)*
+
+---
+
+- [ ] **Track: tobac uptake and diffusion consumer qualification**
+  *Link: [./tracks/tobac_consumer_qualification_20261025/](./tracks/tobac_consumer_qualification_20261025/)*
+  **Approved planning only; implementation not authorised.** Reuses existing capability owners; downstream proof remains pending.
+  GitHub: https://github.com/edithatogo/innovate/issues/546
