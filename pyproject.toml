@@ -96,7 +96,8 @@ legacy-abm = [
 # ---------------------------------------------------------------------------
 dev = [
   # Testing
-  "pytest>=7.4",
+  # pytest-benchmark5.3 uses removed pytest9.2 _nodeid; revisit on plugin fix.
+  "pytest>=7.4,<9.2",
   "pytest-xdist>=3.5",
   "pytest-benchmark>=4.0",
   "pytest-cov>=4.1",

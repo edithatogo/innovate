@@ -32,3 +32,8 @@ optional Linux lane. Rust1.85 failed because accepted locked transitive packages
 require1.88+. Migrated the declared floor and required CI lane to1.99.1; native
 qualification is pending that exact CI run. Criterion retains its existing
 benchmark API until its own harness migration. Neither gate is waived.
+
+Temporary tooling exception: pytest9.2 breaks pytest-benchmark5.3 at node._nodeid.
+The locked candidate selects9.1.1. Owner: innovate; revisit when the benchmark
+plugin supports the public nodeid API. The actual benchmark regression is run
+before this change is committed; broader CI remains required.
