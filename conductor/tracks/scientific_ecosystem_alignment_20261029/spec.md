@@ -1,7 +1,7 @@
 # innovate delivery contract
 
 Approved by user on 29 October 2026. This bounded track implements the
-[coordinated programme](https://github.com/edithatogo/repository-standards/tree/codex/scientific-ecosystem-alignment-20261029/conductor/tracks/scientific_ecosystem_alignment_20261029); it does not replace existing native
+[coordinated programme](https://github.com/edithatogo/repository-standards/tree/7874f05132447c77f681fbca7ad5394066564aaf/conductor/tracks/scientific_ecosystem_alignment_20261029); it does not replace existing native
 acceptance or other active track owners.
 
 - Qualify Python 3.15.1 and current Arrow/Polars dependency candidates.
