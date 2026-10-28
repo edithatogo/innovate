@@ -21,3 +21,14 @@ its old-version workflow assertion failure was corrected. It is not a full-suite
 pass. Optional JAX/Polars, installed wheel, container/Conda/HPC and Rust/Kairos pin
 qualification remain open. Existing accepted scientific fixtures are unchanged.
 The updated lock is a candidate, not blanket qualification of every optional extra.
+
+Installed consumer: built wheel, exported locked base requirements, installed into
+an isolated environment outside the checkout. Python3.15.1 import origin and Arrow
+payload round trip passed without source path injection. An initial probe used an
+incorrect helper name; rerun used kernel_array_payload_from_table and passed.
+
+Hosted CI found h5py's Python3.15 source build needs HDF5 headers, now added to the
+optional Linux lane. Rust1.85 failed because accepted locked transitive packages
+require1.88+. Migrated the declared floor and required CI lane to1.99.1; native
+qualification is pending that exact CI run. Criterion retains its existing
+benchmark API until its own harness migration. Neither gate is waived.

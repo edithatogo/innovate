@@ -117,6 +117,9 @@ jobs:
       - name: Set up Python
         run: uv python install 3.15.1
 
+      - name: Install HDF5 headers for the Python 3.15 h5py source build
+        run: sudo apt-get update && sudo apt-get install -y libhdf5-dev pkg-config
+
       - name: Install optional backend dependencies
         run: uv sync --extra jax --extra bayesian
 
@@ -245,7 +248,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        rust-version: ["1.85.0", "stable"]
+        rust-version: ["1.99.1", "stable"]
     steps:
       - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
         with:

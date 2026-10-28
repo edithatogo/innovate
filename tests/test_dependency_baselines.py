@@ -220,10 +220,10 @@ class TestVitestBaseline:
 
 
 class TestRustCriterionBaseline:
-    """Verify Rust benchmark criterion remains compatible with Rust 1.85."""
+    """Verify Rust benchmark criterion retains its accepted harness API."""
 
     def test_cargo_criterion_version(self) -> None:
-        """Cargo.toml must retain the Rust 1.85-compatible Criterion pin."""
+        """Cargo.toml retains Criterion pending benchmark harness migration."""
         cargo_toml_path = Path(__file__).parent.parent / "bindings" / "rust" / "Cargo.toml"
         if cargo_toml_path.exists():
             content = cargo_toml_path.read_text()
@@ -232,7 +232,7 @@ class TestRustCriterionBaseline:
             if match:
                 constraint = match.group(1)
                 assert constraint in {"=0.5.1", "0.5", "0.5.1"}, (
-                    f"criterion must remain Rust 1.85-compatible, got: {constraint}"
+                    f"criterion must retain the accepted benchmark harness API, got: {constraint}"
                 )
 
 
