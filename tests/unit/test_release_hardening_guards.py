@@ -42,7 +42,7 @@ def _make_evidence(
     path: Path,
     status: str = "pass",
     summary: str = "All checks passed",
-    python_version: str | None = "3.14",
+    python_version: str | None = "3.15.1",
     mtime_offset_days: float = 0.0,
 ) -> dict[str, Any]:
     """Write a minimal evidence artifact and return its contents."""
@@ -285,7 +285,7 @@ class TestCoverageMutationEvidence:
         assert evidence["status"] == "pass"
         assert evidence["line_rate"] == 0.85
         assert evidence["branch_rate"] == 0.75
-        assert evidence["python_version"] == "3.14"
+        assert evidence["python_version"] == "3.15.1"
         assert "generated_at" in evidence
 
     def test_coverage_below_threshold_fails(self) -> None:

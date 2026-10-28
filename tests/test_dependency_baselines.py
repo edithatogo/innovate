@@ -3,7 +3,7 @@
 This test module verifies that the project maintains the configured
 dependency baselines as defined in the tech-stack.md and pyproject.toml:
 
-- Python 3.14 (minimum)
+- Python 3.15.1 (minimum)
 - NumPy 2.0+
 - Pydantic v2.0+
 - Polars 1.0+ (for dataframe operations)
@@ -27,16 +27,16 @@ import pytest
 
 
 class TestPythonBaseline:
-    """Verify Python runtime baseline is 3.14."""
+    """Verify Python runtime baseline is 3.15.1."""
 
     def test_python_version_requirement(self) -> None:
-        """Python version must be 3.14+."""
-        assert sys.version_info >= (3, 14), (
-            f"Expected Python 3.14+, got {sys.version_info.major}.{sys.version_info.minor}"
+        """Python version must be 3.15.1+."""
+        assert sys.version_info[:3] == (3, 15, 1), (
+            f"Expected Python 3.15.1+, got {sys.version_info.major}.{sys.version_info.minor}"
         )
 
-    def test_pyproject_requires_python_314(self) -> None:
-        """pyproject.toml requires-python must specify 3.14."""
+    def test_pyproject_requires_python_315(self) -> None:
+        """pyproject.toml requires-python must specify 3.15.1."""
         pyproject_path = Path(__file__).parent.parent / "pyproject.toml"
         content = pyproject_path.read_text()
 
@@ -45,8 +45,8 @@ class TestPythonBaseline:
         assert match, "requires-python not found in pyproject.toml"
 
         requires_python = match.group(1)
-        assert "3.14" in requires_python or ">=3.14" in requires_python, (
-            f"requires-python should specify 3.14, got: {requires_python}"
+        assert "3.15.1" in requires_python or ">=3.15.1" in requires_python, (
+            f"requires-python should specify 3.15.1, got: {requires_python}"
         )
 
 
@@ -143,14 +143,14 @@ class TestBasedPyrightConfiguration:
             "basic",
         ], "typeCheckingMode should be configured"
 
-    def test_pyproject_python_version_314(self) -> None:
-        """pyrightconfig targets Python 3.14."""
+    def test_pyproject_python_version_315(self) -> None:
+        """pyrightconfig targets Python 3.15.1."""
         pyrightconfig_path = Path(__file__).parent.parent / "pyrightconfig.json"
         if pyrightconfig_path.exists():
             config = json.loads(pyrightconfig_path.read_text())
             python_version = config.get("pythonVersion")
             if python_version:
-                assert "3.14" in str(python_version), f"pythonVersion should target 3.14, got: {python_version}"
+                assert str(python_version) == "3.15", f"pythonVersion should target 3.15.1, got: {python_version}"
 
 
 class TestAstroStarlightBaseline:

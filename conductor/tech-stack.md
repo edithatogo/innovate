@@ -33,7 +33,7 @@
 ## Runtime Components
 
 ### Language
-- Python 3.14 (primary baseline)
+- Python 3.15.1 (candidate baseline; installed qualification required)
 - Rust (native kernel, bindings target)
 - R, Julia, TypeScript, Go, C# (binding surfaces)
 
@@ -74,3 +74,8 @@ innovate/
 ├── conductor/               # Migration tracks and tech stack
 └── .github/workflows/       # CI/CD workflows
 ```
+
+## Scientific alignment candidate
+
+Python 3.15.1 and Arrow 26/Polars 2.1 are being qualified against the full
+resolved graph. This is not a completed native migration or Kairos pin advance.

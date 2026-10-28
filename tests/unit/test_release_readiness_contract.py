@@ -192,7 +192,7 @@ def test_release_readiness_contract_validation_detects_drift(tmp_path: Path) -> 
 
 
 def test_release_readiness_python_baseline_evidence_is_required(tmp_path: Path) -> None:
-    """Python baseline evidence items must prove they ran on Python 3.14."""
+    """Python baseline evidence items must prove they ran on Python 3.15.1."""
     contract = load_contract()
     evidence_dir = tmp_path / "evidence"
     evidence_dir.mkdir()
@@ -210,7 +210,7 @@ def test_release_readiness_python_baseline_evidence_is_required(tmp_path: Path) 
 
     assert report["overall_status"] == "blocked"
     assert {item["id"] for item in report["failing_evidence"]} == {missing_python_entry["id"]}
-    assert report["failing_evidence"][0]["failure_reason"] == "missing required Python 3.14 evidence"
+    assert report["failing_evidence"][0]["failure_reason"] == "missing required Python 3.15.1 evidence"
 
 
 def test_release_readiness_report_treats_non_evidence_status_as_failure(tmp_path: Path) -> None:

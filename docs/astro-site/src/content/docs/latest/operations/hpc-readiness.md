@@ -22,13 +22,13 @@ submission claim.
 
 ## Install surfaces and variants
 
-* Python package surface: build wheel and sdist, install under Python 3.14, run `python -m pip check`, and run `python -c "import innovate; print(innovate.__version__)"`.
+* Python package surface: build wheel and sdist, install under Python 3.15.1, run `python -m pip check`, and run `python -c "import innovate; print(innovate.__version__)"`.
 * Rust crate and native slices: run `cargo test --manifest-path bindings/rust/Cargo.toml`; the `variant("+rust"` path requires `cargo` and `rust`.
 * Optional JAX/XLA extras: the `variant("+jax"` path should include `py-jax` and `py-jaxlib`.
 * Language binding surfaces: Julia, R, and TypeScript smoke checks are grouped behind `variant("+bindings"`.
 * Documentation extras remain explicit with `variant("+docs"`.
 
-Dependency floors mirror the Python 3.14 lockfile: `py-numpy@2.4.4:2`,
+Dependency floors mirror the Python 3.15.1 lockfile: `py-numpy@2.4.4:2`,
 `py-scipy@1.17.1:1`, `py-pandas@3.0.2:3`, `py-pyarrow@23.0.1:23`,
 `py-statsmodels@0.14.6:0.14`, `py-mesa@3.5.1:3`, `py-networkx@3.6.1:3`,
 `py-ndlib@5.1.1:5`, `py-jitcdde@1.8.3:1`, `py-sympy@1.14:1`,
@@ -51,9 +51,9 @@ Dependency floors mirror the Python 3.14 lockfile: `py-numpy@2.4.4:2`,
   `julia --project=bindings/julia -e`, `Rscript -e`, and
   `npm test --prefix bindings/typescript`.
 
-Python 3.14-only package metadata is the intended baseline. If Spack,
+Python 3.15.1-only package metadata is the intended baseline. If Spack,
 EasyBuild, HPSF, E4S, or a downstream center cannot yet consume Python
-3.14-only packages, that limitation is an external compatibility constraint.
+3.15.1-only packages, that limitation is an external compatibility constraint.
 
 ## Evidence gates
 
