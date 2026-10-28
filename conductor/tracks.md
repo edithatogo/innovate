@@ -463,5 +463,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 *Link: [./archive/explainability_sensitivity_decision_reports_20260625/](./archive/explainability_sensitivity_decision_reports_20260625/)*
 
 ---
-- [ ] **Scientific ecosystem alignment (innovate)**
-  [Track](tracks/scientific_ecosystem_alignment_20261029/index.md) — implementation candidate is in [PR #554](https://github.com/edithatogo/innovate/pull/554); integration and native acceptance remain open. [Issue #556](https://github.com/edithatogo/innovate/issues/556).
+- [ ] **Track: Scientific ecosystem alignment (innovate)**
+  *Link: [./tracks/scientific_ecosystem_alignment_20261029/](./tracks/scientific_ecosystem_alignment_20261029/)*
+  Implementation candidate is in [PR #554](https://github.com/edithatogo/innovate/pull/554); integration and native acceptance remain open. [Issue #556](https://github.com/edithatogo/innovate/issues/556).
