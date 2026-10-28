@@ -160,7 +160,7 @@ def test_docs_workflow_uses_correct_node_and_pnpm_versions() -> None:
     workflow = Path(".github/workflows/docs.yml").read_text()
     assert "pnpm/action-setup" in workflow
     assert "setup-node" in workflow
-    assert "python-version: '3.14'" in workflow or "python-version: 3.14" in workflow
+    assert "python-version: '3.15.1'" in workflow or "python-version: 3.15.1" in workflow
     assert "pnpm build" in workflow or "pnpm" in workflow
 
 

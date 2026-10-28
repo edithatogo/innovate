@@ -7,8 +7,8 @@ from pathlib import Path
 
 import nox
 
-SUPPORTED_PYTHONS = ("3.14",)
-DEFAULT_PYTHON = "3.14"
+SUPPORTED_PYTHONS = ("3.15.1",)
+DEFAULT_PYTHON = "3.15.1"
 PYTEST_BASE_IGNORES = (
     "--ignore=tests/unit/test_bayesian_fitter_robust.py",
     "--ignore=tests/unit/test_blackjax_fitter.py",
@@ -83,7 +83,7 @@ def _pytest_args(test_targets: Sequence[str]) -> tuple[str, ...]:
 @nox.session(python=False)
 @nox.parametrize("python", SUPPORTED_PYTHONS)
 def tests(session: nox.Session, python: str) -> None:
-    """Run the required unit gate on the Python 3.14 baseline."""
+    """Run the required unit gate on the Python 3.15.1 baseline."""
     _prepare_python(session, python)
     _run_uv(
         session,

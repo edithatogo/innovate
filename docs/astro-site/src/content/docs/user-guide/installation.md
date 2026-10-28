@@ -7,7 +7,7 @@ Innovate supports multiple installation methods and runtime environments.
 
 ## System Requirements
 
-- **Python**: 3.14
+- **Python**: 3.15.1
 - **Operating System**: Linux, macOS, Windows
 - **RAM**: 4 GB minimum (16 GB recommended for large-scale simulations)
 
