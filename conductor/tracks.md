@@ -461,3 +461,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Explainability, Sensitivity, and Decision Reports** *(Completed)*
 *Link: [./archive/explainability_sensitivity_decision_reports_20260625/](./archive/explainability_sensitivity_decision_reports_20260625/)*
+
+---
+- [ ] **Track: voiage alignment follow-ups (innovate)**
+  *Link: [./tracks/voiage_alignment_followups_20261030/](./tracks/voiage_alignment_followups_20261030/)*
+  Planned; awaiting owner approval. [Issue #559](https://github.com/edithatogo/innovate/issues/559).
