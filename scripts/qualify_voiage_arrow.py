@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import sys
@@ -21,14 +22,17 @@ from innovate.diffuse.bass import BassModel
 from innovate.kernel import KernelArrayPayload
 
 
-def qualify() -> dict[str, object]:
+def qualify(*, index_install: bool = False) -> dict[str, object]:
     """Check package provenance, Arrow round-trip and finite-state decision value."""
     if sys.version_info[:3] != (3, 15, 1) or pa.__version__.split(".")[0] != "26":
         raise ValueError("This qualification requires Python 3.15.1 and PyArrow 26")
     for name, module in (("innovate", innovate), ("voiage", voiage)):
         dist = distribution(name)
         origin = json.loads(dist.read_text("direct_url.json") or "{}")
-        if "archive_info" not in origin or not origin.get("url", "").endswith(".whl"):
+        if index_install:
+            if origin or not dist.read_text("WHEEL"):
+                raise ValueError(f"{name} must be installed from the index in wheel format")
+        elif "archive_info" not in origin or not origin.get("url", "").endswith(".whl"):
             raise ValueError(f"{name} must be installed from a wheel")
         init = Path(dist.locate_file(f"{name}/__init__.py")).resolve()
         if not init.is_relative_to(Path(sys.prefix).resolve()) or init != Path(module.__file__).resolve():
@@ -76,4 +80,8 @@ def qualify() -> dict[str, object]:
 
 
 if __name__ == "__main__":
-    print(json.dumps(qualify(), indent=2))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--index-install", action="store_true", help="Check installations resolved from a package index"
+    )
+    print(json.dumps(qualify(index_install=parser.parse_args().index_install), indent=2))

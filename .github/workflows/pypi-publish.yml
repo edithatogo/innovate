@@ -4,12 +4,14 @@ permissions:
   contents: read
 
 on:
+  workflow_dispatch:
   release:
     types: [published]
 
 jobs:
   pypi-publish:
     name: Upload release to PyPI
+    if: github.event_name == 'release' || github.ref_type == 'tag'
     runs-on: ubuntu-latest
     environment:
       name: pypi
@@ -27,6 +29,22 @@ jobs:
 
       - name: Set up Python
         run: uv python install 3.15.1
+
+      - name: Verify release version matches the tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          expected=$(uv run --no-project --python 3.15.1 python -c 'import tomllib; from pathlib import Path; print("v" + tomllib.loads(Path("pyproject.toml").read_text())["project"]["version"])')
+          if [[ "$GITHUB_REF_NAME" != "$expected" ]]; then
+            echo "Expected release tag $expected, got $GITHUB_REF_NAME" >&2
+            exit 1
+          fi
+          if [[ "$GITHUB_EVENT_NAME" == workflow_dispatch ]]; then
+            oid=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$expected" --jq 'select(.object.type == "tag") | .object.sha')
+            commit=$(gh api "repos/$GITHUB_REPOSITORY/git/tags/$oid" --jq 'select(.verification.verified and .object.type == "commit") | .object.sha')
+            test "$commit" = "$(git rev-parse HEAD)"
+            gh api "repos/$GITHUB_REPOSITORY/compare/$commit...main" --jq .status | grep -Ex 'ahead|identical'
+          fi
 
       - name: Install dependencies
         run: uv sync

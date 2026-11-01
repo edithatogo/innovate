@@ -135,7 +135,7 @@ jobs:
         run: |
           grep -F 'name = "Innovate"' bindings/julia/Project.toml
           grep -F 'uuid = "ffe8f1e4-c541-43d5-9f32-550aacc4f51a"' bindings/julia/Project.toml
-          grep -F 'version = "0.5.0"' bindings/julia/Project.toml
+          julia -e 'using TOML; @assert TOML.parsefile("bindings/julia/Project.toml")["version"] == TOML.parsefile("pyproject.toml")["project"]["version"]'
           grep -F 'JSON = "0.21"' bindings/julia/Project.toml
       - name: Run Julia installed-package smoke
         env:

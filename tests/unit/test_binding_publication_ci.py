@@ -8,7 +8,7 @@ import tomllib
 from pathlib import Path
 from xml.etree import ElementTree
 
-ALIGNED_VERSION = "0.5.0"
+ALIGNED_VERSION = "0.6.0"
 PUBLICATION_DOCS = (
     Path("docs/astro-site/src/content/docs/maintainers/publication.md"),
     Path("docs/astro-site/src/content/docs/latest/maintainers/publication.md"),
