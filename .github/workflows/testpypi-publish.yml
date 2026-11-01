@@ -28,7 +28,7 @@ jobs:
           set -euo pipefail
           curl --silent --show-error --fail \
             -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=testpypi" |
+            --get --data-urlencode "audience=testpypi" "$ACTIONS_ID_TOKEN_REQUEST_URL" |
             jq -ec '{token: (.value | select(type == "string" and length > 0))}' |
             curl --silent --show-error --fail -H 'Content-Type: application/json' \
               --data-binary @- https://test.pypi.org/_/oidc/mint-token |
@@ -68,6 +68,4 @@ jobs:
       - name: Publish package to TestPyPI
         uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b
         with:
-          user: __token__
-          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
           repository-url: https://test.pypi.org/legacy/
