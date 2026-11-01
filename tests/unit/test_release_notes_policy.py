@@ -11,8 +11,8 @@ def test_changelog_and_release_policy_cover_current_version() -> None:
     changelog = Path("CHANGELOG.md").read_text()
     policy = Path("docs/astro-site/src/content/docs/maintainers/release-notes.md").read_text()
 
-    assert 'version = "0.5.0"' in pyproject
-    assert "## [0.5.0]" in changelog
+    assert 'version = "0.6.0"' in pyproject
+    assert "## [0.6.0]" in changelog
     assert "## [0.4.0]" in changelog
     assert "Release Please" in policy
     assert "Release Drafter" in policy

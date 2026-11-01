@@ -1,6 +1,6 @@
 Package: innovate.R
 Title: R Bindings Over the Functional Kernel
-Version: 0.5.0
+Version: 0.6.0
 Authors@R: c(
     person("Dylan", "Mordaunt", email = "dylan.mordaunt@vuw.ac.nz", role = c("aut", "cre"))
   )

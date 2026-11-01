@@ -70,7 +70,7 @@ def test_version_sync_write_updates_supported_manifests(tmp_path: Path) -> None:
     repo = _copy_tree(tmp_path)
     pyproject = repo / "pyproject.toml"
     text = pyproject.read_text()
-    pyproject.write_text(text.replace('version = "0.5.0"', 'version = "0.6.0"'), encoding="utf-8")
+    pyproject.write_text(text.replace('version = "0.6.0"', 'version = "0.7.0"'), encoding="utf-8")
 
     result = subprocess.run(
         ["python3", str(repo / "scripts" / "sync_versions.py"), "--write", "--root", str(repo)],
@@ -81,8 +81,8 @@ def test_version_sync_write_updates_supported_manifests(tmp_path: Path) -> None:
 
     assert result.returncode == 0, result.stdout + result.stderr
     assert "bindings/typescript/package.json" in result.stdout
-    assert json.loads((repo / "bindings/typescript/package.json").read_text())["version"] == "0.6.0"
-    assert tomllib.loads((repo / "bindings/julia/Project.toml").read_text())["version"] == "0.6.0"
-    assert tomllib.loads((repo / "bindings/rust/Cargo.toml").read_text())["package"]["version"] == "0.6.0"
-    assert "Version: 0.6.0" in (repo / "bindings/r/DESCRIPTION").read_text()
-    assert "<Version>0.6.0</Version>" in (repo / "bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj").read_text()
+    assert json.loads((repo / "bindings/typescript/package.json").read_text())["version"] == "0.7.0"
+    assert tomllib.loads((repo / "bindings/julia/Project.toml").read_text())["version"] == "0.7.0"
+    assert tomllib.loads((repo / "bindings/rust/Cargo.toml").read_text())["package"]["version"] == "0.7.0"
+    assert "Version: 0.7.0" in (repo / "bindings/r/DESCRIPTION").read_text()
+    assert "<Version>0.7.0</Version>" in (repo / "bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj").read_text()

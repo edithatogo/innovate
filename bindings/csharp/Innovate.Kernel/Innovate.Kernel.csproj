@@ -4,7 +4,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>innovate.cs</PackageId>
-    <Version>0.5.0</Version>
+    <Version>0.6.0</Version>
     <Authors>edithatogo</Authors>
     <Description>Thin .NET binding over the Innovate functional kernel contract.</Description>
     <PackageProjectUrl>https://github.com/edithatogo/innovate</PackageProjectUrl>
