@@ -28,7 +28,7 @@ submission claim.
 - Documentation extras remain explicit with `variant("+docs"`.
 
 Dependency floors mirror the Python 3.15.1 lockfile: `py-numpy@2.4.4:2`,
-`py-scipy@1.17.1:1`, `py-pandas@3.0.2:3`, `py-pyarrow@23.0.1:23`,
+`py-scipy@1.17.1:1`, `py-pandas@3.0.2:3`, `py-pyarrow@26.0.0:26`,
 `py-statsmodels@0.14.6:0.14`, `py-mesa@3.5.1:3`, `py-networkx@3.6.1:3`,
 `py-ndlib@5.1.1:5`, `py-jitcdde@1.8.3:1`, `py-sympy@1.14:1`,
 `py-ruptures@1.1.9:1.1.9`, `py-pymannkendall@1.4.3:1`, and

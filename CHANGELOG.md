@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Drafter, Commitizen, and `CHANGELOG.md` divide responsibilities.
 
 ### Fixed
+- Qualify PyArrow 26 on Python 3.15.1 for Arrow interchange with Voiage.
 - Synchronized R publication documentation with the current source vignette and
   PDF manual artifact workflow.
 

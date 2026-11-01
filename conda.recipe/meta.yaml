@@ -21,7 +21,7 @@ requirements:
     - scipy
     - pandas
     - statsmodels
-    - pyarrow
+    - pyarrow >=26.0.0,<27
     - mesa
     - networkx
     - pip

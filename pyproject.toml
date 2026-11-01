@@ -111,7 +111,7 @@ dev = [
   # Performance profiling
   "scalene>=1.5",
   # Linting & formatting (Ruff replaces Black, isort, flake8, pylint, vulture, unimport)
-  "ruff>=0.4.0",
+  "ruff>=0.15.22,<0.16",
   # Type checking
   "basedpyright>=1.39.8",
   # Security
@@ -285,6 +285,7 @@ ignore = [
 convention = "numpy"
 
 [tool.ruff.lint.isort]
+extra-standard-library = ["tomllib"]
 known-first-party = ["innovate"]
 
 [tool.ruff.format]
