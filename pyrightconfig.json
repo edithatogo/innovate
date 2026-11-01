@@ -10,7 +10,7 @@
   "defineConstant": {
     "DEBUG": true
   },
-  "pythonVersion": "3.14",
+  "pythonVersion": "3.15",
   "pythonPlatform": "All",
   "typeCheckingMode": "strict",
   "reportMissingImports": "error",

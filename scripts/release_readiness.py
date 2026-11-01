@@ -42,7 +42,7 @@ REQUIRED_EVIDENCE_IDS = {
     "reproducibility",
     "compatibility",
 }
-PYTHON_BASELINE = "3.14"
+PYTHON_BASELINE = "3.15.1"
 PYTHON_BASELINE_EVIDENCE_IDS = {
     "python_tests",
     "coverage",

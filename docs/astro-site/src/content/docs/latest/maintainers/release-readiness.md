@@ -20,7 +20,7 @@ repository in a release candidate state.
 ## State Boundaries
 
 - `release candidate`: feature work may be complete, but at least one required quality, security, provenance, reproducibility, compatibility, Rust, docs, package, or binding artifact is missing or not passing.
-- `release-ready`: every required artifact is fresh and passing, and Python test, coverage, type-check, package dry-run, and compatibility evidence identifies Python 3.14.
+- `release-ready`: every required artifact is fresh and passing, and Python test, coverage, type-check, package dry-run, and compatibility evidence identifies Python 3.15.1.
 - `public release`: a maintainer-approved tag, release artifact, and release notes exist. Release-ready status is only the prerequisite.
 - `external acceptance`: package registries, scientific communities, or HPC ecosystems have accepted the project. This remains separate from release readiness because third-party review and credentials control it.
 
@@ -28,7 +28,7 @@ Use the report as the release review input. Do not substitute registry receipts,
 HPC readiness dossiers, or external acceptance notes for the mature release
 gate.
 
-Python-owned evidence lanes include `required_python_version: "3.14"` in the
+Python-owned evidence lanes include `required_python_version: "3.15.1"` in the
 contract. A `pass` status without that baseline metadata is treated as failing
 evidence.
 

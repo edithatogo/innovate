@@ -23,7 +23,7 @@ jobs:
         uses: conda-incubator/setup-miniconda@8ee1f361103df19b6f8c8655fd3967a8ecb162d5
         with:
           auto-update-conda: true
-          python-version: "3.14"
+          python-version: "3.15.1"
           channels: conda-forge,defaults
           channel-priority: strict
 

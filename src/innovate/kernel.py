@@ -18,7 +18,7 @@ from .fitters import ScipyFitter
 from .fitters.diagnostics_contract import DiagnosticsContract, DiagnosticsWarning, UncertaintySummary
 from .fitters.residual_analysis import analyze_residuals
 
-type KernelJSONValue = str | int | float | bool | None | dict[str, KernelJSONValue] | list[KernelJSONValue]
+type KernelJSONValue = str | int | float | bool | dict[str, KernelJSONValue] | list[KernelJSONValue] | None
 
 KERNEL_SCHEMA_MAJOR_VERSION = 1
 KERNEL_SCHEMA_MINOR_VERSION = 0

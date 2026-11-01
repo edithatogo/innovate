@@ -2,7 +2,7 @@
 name = "innovate-rs"
 version = "0.5.0"
 edition = "2021"
-rust-version = "1.85"
+rust-version = "1.99.1"
 license = "Apache-2.0"
 description = "Rust bindings over the Innovate functional kernel"
 documentation = "https://docs.rs/innovate-rs"

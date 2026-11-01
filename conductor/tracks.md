@@ -461,3 +461,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Explainability, Sensitivity, and Decision Reports** *(Completed)*
 *Link: [./archive/explainability_sensitivity_decision_reports_20260625/](./archive/explainability_sensitivity_decision_reports_20260625/)*
+
+---
+- [~] **Track: Scientific ecosystem alignment (innovate)**
+*Link: [./tracks/scientific_ecosystem_alignment_20261029/](./tracks/scientific_ecosystem_alignment_20261029/)*

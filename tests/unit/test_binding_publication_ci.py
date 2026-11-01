@@ -167,7 +167,7 @@ def test_python_release_workflows_validate_distribution_metadata() -> None:
     assert "uv run twine check dist/*" in pypi
     assert re.search(r"pypa/gh-action-pypi-publish@[0-9a-f]{40}\b", pypi)
     assert "repository-url: https://test.pypi.org/legacy/" in testpypi
-    assert pyproject["project"]["requires-python"] == ">=3.14"
+    assert pyproject["project"]["requires-python"] == ">=3.15.1,<3.16"
 
 
 def test_typescript_npm_metadata_and_ci_pack_gate() -> None:
@@ -205,7 +205,7 @@ def test_rust_crates_metadata_and_package_gates() -> None:
 
     package = cargo["package"]
     assert package["license"] == "Apache-2.0"
-    assert package["rust-version"] == "1.85"
+    assert package["rust-version"] == "1.99.1"
     assert package["readme"] == "README.md"
     assert "api-bindings" in package["categories"]
     assert "kernel" in package["keywords"]

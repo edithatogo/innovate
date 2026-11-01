@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import platform
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -41,7 +42,7 @@ def build_coverage_evidence(
         "lines_valid": lines_valid,
         "branches_covered": branches_covered,
         "branches_valid": branches_valid,
-        "python_version": "3.14",
+        "python_version": platform.python_version(),
         "requires_secrets": False,
         "generated_at": _now_iso(),
         "command": "uv run nox -s coverage",
@@ -67,7 +68,7 @@ def build_mutation_evidence(
         "mutation_score": score,
         "mutants_killed": mutants_killed,
         "mutants_total": mutants_total,
-        "python_version": "3.14",
+        "python_version": platform.python_version(),
         "requires_secrets": False,
         "generated_at": _now_iso(),
         "command": "uv run nox -s mutation",
