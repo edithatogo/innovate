@@ -4,12 +4,40 @@ permissions:
   contents: read
 
 on:
+  workflow_dispatch:
+    inputs:
+      authentication_only:
+        description: Verify TestPyPI authentication without building or uploading a release
+        type: boolean
+        default: false
   release:
     types: [published]
 
 jobs:
+  authenticate:
+    name: Verify TestPyPI authentication
+    if: github.event_name == 'workflow_dispatch' && inputs.authentication_only
+    runs-on: ubuntu-latest
+    environment: testpypi
+    permissions:
+      id-token: write
+    steps:
+      - name: Exchange GitHub identity for a short-lived TestPyPI token
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --silent --show-error --fail \
+            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=testpypi" |
+            jq -ec '{token: (.value | select(type == "string" and length > 0))}' |
+            curl --silent --show-error --fail -H 'Content-Type: application/json' \
+              --data-binary @- https://test.pypi.org/_/oidc/mint-token |
+            jq -e '.success == true and (.token | startswith("pypi-"))' > /dev/null
+          echo 'TestPyPI accepted the GitHub Actions identity.'
+
   pypi-publish:
     name: Upload release to TestPyPI
+    if: github.event_name == 'release'
     runs-on: ubuntu-latest
     environment:
       name: testpypi
