@@ -4,5 +4,7 @@
   "status": "in_progress",
   "approved": true,
   "repository": "innovate",
-  "created_at": "2026-10-28T16:38:07.466754+00:00"
+  "created_at": "2026-10-28T16:38:07.466754+00:00",
+  "updated_at": "2026-11-02",
+  "acceptance_record": "reconciliation-20261102.md"
 }
