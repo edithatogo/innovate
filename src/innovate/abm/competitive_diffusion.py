@@ -1,3 +1,5 @@
+import secrets
+
 from mesa import Model
 from mesa.datacollection import DataCollector
 from mesa.space import MultiGrid
@@ -58,13 +60,13 @@ class CompetitiveDiffusionModel(Model):
                 model=self,
                 num_innovations=num_innovations,
             )
-            x = self.random.randrange(self.grid.width)
-            y = self.random.randrange(self.grid.height)
+            x = secrets.randbelow(self.grid.width)
+            y = secrets.randbelow(self.grid.height)
             self.grid.place_agent(agent, (x, y))
 
         # Seed initial adopters for each innovation
         for i in range(self.num_innovations):
-            agent = self.random.choice(list(self.agents))
+            agent = secrets.choice(list(self.agents))
             agent.adopted_innovation = i
 
         # Data collector - track count of adopters for each innovation
