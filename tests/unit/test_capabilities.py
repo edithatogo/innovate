@@ -60,3 +60,14 @@ def test_get_model_registry():
     registry = get_model_registry()
     assert "bass" in registry
     assert "logistic" in registry
+
+
+def test_get_model_capability_error_path_missing_key():
+    """Test that get_model_capability raises a KeyError and includes __cause__ when key is missing."""
+    with pytest.raises(
+        KeyError, match=r"Unknown model capability 'invalid_key'\. Available models:.*bass.*"
+    ) as exc_info:
+        get_model_capability("invalid_key")
+
+    assert exc_info.value.__cause__ is not None
+    assert isinstance(exc_info.value.__cause__, KeyError)
