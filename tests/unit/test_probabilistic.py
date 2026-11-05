@@ -2,11 +2,14 @@ import numpy as np
 import pytest
 
 from innovate.probabilistic import (
+    PROBABILISTIC_INSTALL_HINT,
+    PROBABILISTIC_SCHEMA_VERSION,
     PosteriorConfig,
     PosteriorSamplesPayload,
     ProbabilisticBackendStatus,
     ProbabilisticBackendUnavailableError,
     _module_available,
+    _validate_schema_version,
     list_probabilistic_backend_statuses,
     require_probabilistic_backend,
 )
@@ -199,3 +202,32 @@ def test_probabilistic_backend_status_to_dict() -> None:
     assert serialized["optional_dependencies"] == ["dep1", "dep2"]
     assert serialized["available"] is False
     assert "install_hint" in serialized
+
+
+def test_probabilistic_backend_unavailable_error_str() -> None:
+    error = ProbabilisticBackendUnavailableError(
+        engine="test_engine",
+        missing_dependencies=("dep1", "dep2"),
+    )
+    assert (
+        str(error)
+        == f"test_engine is unavailable; install {PROBABILISTIC_INSTALL_HINT}. Missing dependencies: dep1, dep2"
+    )
+
+
+def test_validate_schema_version_valid() -> None:
+    # Should just return the exact same string
+    result = _validate_schema_version(PROBABILISTIC_SCHEMA_VERSION)
+    assert result == PROBABILISTIC_SCHEMA_VERSION
+
+
+def test_posterior_payload_from_dict_missing_fields() -> None:
+    payload = {
+        "schema_version": PROBABILISTIC_SCHEMA_VERSION,
+        # model_key is missing
+        "parameter_names": ["a"],
+        "draw_shape": [2, 5],
+        "samples": {"a": [1.0] * 10},
+    }
+    with pytest.raises(KeyError, match="model_key"):
+        PosteriorSamplesPayload.from_dict(payload)
