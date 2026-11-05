@@ -248,7 +248,8 @@ class BayesianFitter:
             # Store results
             samples_array = jnp.stack(all_samples)  # Shape: (num_chains, num_samples, num_params)
 
-            # Convert back to parameter dictionaries (optimized via enumerate)
+            # Create dictionary mapping parameter names to their samples
+            # samples_array shape: (n_draws, n_chains, n_params)
             self.posterior_samples_ = {name: samples_array[:, :, i] for i, name in enumerate(param_names)}
 
             self.mcmc_results_ = {

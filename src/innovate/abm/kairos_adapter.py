@@ -495,8 +495,7 @@ class KairosSimulationAdapter:
                 payload={
                     "columns": ["time", *node_ids],
                     "rows": [
-                        [times[index], *[adoption_series[node][index] for node in node_ids]]
-                        for index in range(len(times))
+                        [time, *[adoption_series[node][index] for node in node_ids]] for index, time in enumerate(times)
                     ],
                 },
             ),
