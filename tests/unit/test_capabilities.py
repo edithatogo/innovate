@@ -60,3 +60,15 @@ def test_get_model_registry():
     registry = get_model_registry()
     assert "bass" in registry
     assert "logistic" in registry
+
+
+def test_get_model_capability_invalid_key_raises():
+    """Verify that get_model_capability raises a detailed KeyError for invalid keys."""
+    with pytest.raises(KeyError) as exc_info:
+        get_model_capability("invalid_model_key_123")
+
+    error_msg = str(exc_info.value)
+    assert "Unknown model capability 'invalid_model_key_123'" in error_msg
+    assert "Available models:" in error_msg
+    assert "bass" in error_msg
+    assert "logistic" in error_msg
