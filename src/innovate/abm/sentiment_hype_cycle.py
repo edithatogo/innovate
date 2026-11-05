@@ -1,3 +1,5 @@
+import secrets
+
 from mesa import Model
 from mesa.datacollection import DataCollector
 from mesa.space import MultiGrid
@@ -61,13 +63,13 @@ class SentimentHypeModel(Model):
         # Create agents
         for i in range(self.num_agents):
             agent = SentimentHypeAgent(unique_id=i, model=self)
-            x = self.random.randrange(self.grid.width)
-            y = self.random.randrange(self.grid.height)
+            x = secrets.randbelow(self.grid.width)
+            y = secrets.randbelow(self.grid.height)
             self.grid.place_agent(agent, (x, y))
 
         # Seed initial adopters and sentiment
         for _ in range(5):  # Seed 5 initial adopters
-            agent = self.random.choice(list(self.agents))
+            agent = secrets.choice(list(self.agents))
             agent.adopted = True
             agent.sentiment = 1
 
