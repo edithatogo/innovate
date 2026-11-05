@@ -26,7 +26,7 @@ def test_remote_execution_contract_documents_boundaries_and_risk_controls() -> N
 
 def test_in_process_remote_executor_preserves_kernel_schema_and_correlation() -> None:
     """The local adapter should wrap kernel responses without changing the kernel ABI."""
-    executor = InProcessRemoteExecutor()
+    executor = InProcessRemoteExecutor(policy=RemoteExecutionPolicy(required_auth_scope="kernel:execute"))
     request = RemoteExecutionRequest(
         kernel_request=kernel.KernelRequest(
             operation=kernel.KernelOperation.DISCOVER_MODELS.value,
