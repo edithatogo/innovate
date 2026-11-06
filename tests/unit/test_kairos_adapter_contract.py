@@ -91,7 +91,7 @@ def test_dependency_evidence_is_fail_closed_for_bridges() -> None:
     assert evidence.mesa_base_required is False
     assert evidence.ndlib_base_required is False
     assert evidence.claims_promoted_bridge() is False
-    assert evidence.claims_kairos_backed_simulation() is True
+    assert evidence.claims_kairos_backed_simulation() is False
     for crate in BRIDGE_KAIROS_CRATES:
         assert bridge_crate_available(crate, evidence) is False
 
@@ -123,7 +123,7 @@ def test_adapter_status_reports_honest_backend() -> None:
     status = adapter.status()
     assert status["backend"] == "kairos_contract_reference"
     assert status["bridge_promoted"] is False
-    assert status["kairos_smoke_ready"] is True
+    assert status["kairos_smoke_ready"] is False
     assert status["legacy_base_deps_present"] is False
 
 

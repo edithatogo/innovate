@@ -74,7 +74,7 @@ class TestKairosSmokeTests:
 
     def test_release_evidence_kairos_status_exists(self):
         """Test that release evidence documents Kairos integration status."""
-        track_dir = Path(__file__).parent.parent / "conductor" / "tracks" / "kairos_dependency_inclusion_20260626"
+        track_dir = Path(__file__).parent.parent / "conductor" / "archive" / "kairos_dependency_inclusion_20260626"
         integration_report = track_dir / "KAIROS_INTEGRATION_REPORT.md"
 
         assert integration_report.exists(), (

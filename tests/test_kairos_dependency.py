@@ -177,7 +177,7 @@ class TestKairosDependencyInclusion:
 
     def test_integration_report_exists(self):
         """Test that Kairos integration report document exists."""
-        track_dir = Path(__file__).parent.parent / "conductor" / "tracks" / "kairos_dependency_inclusion_20260626"
+        track_dir = Path(__file__).parent.parent / "conductor" / "archive" / "kairos_dependency_inclusion_20260626"
         report_file = track_dir / "KAIROS_INTEGRATION_REPORT.md"
 
         assert report_file.exists(), (

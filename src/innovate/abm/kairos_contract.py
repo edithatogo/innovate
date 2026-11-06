@@ -299,12 +299,19 @@ class KairosDependencyEvidence:
         return any(item.status == "promoted" for item in self.bridge_crates)
 
     def claims_kairos_backed_simulation(self) -> bool:
-        """True only with observed source, revision, core crates, and smoke files.
+        """Require a promoted native bridge as well as source prerequisites.
 
-        Fail closed: missing Cargo evidence or empty crate inventory must not
-        claim Kairos-backed simulation support.
+        Manifest entries and example files establish source prerequisites only.
+        The reference adapter cannot claim native execution from their presence.
         """
-        return bool(self.source_url and self.revision and self.core_crates and self.smoke_des and self.smoke_abm)
+        return bool(
+            self.source_url
+            and self.revision
+            and self.core_crates
+            and self.smoke_des
+            and self.smoke_abm
+            and self.claims_promoted_bridge()
+        )
 
     def to_dict(self) -> dict[str, object]:
         return {

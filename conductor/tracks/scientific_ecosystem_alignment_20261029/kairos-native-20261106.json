@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-06",
+  "source_base": "b9998addf32717438df92b23a306903e4db51620",
+  "platform": "arm64",
+  "python": "Python 3.15.1 (main, Oct 21 2026, 17:39:16) [Clang 23.1.3 ]",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)",
+  "cargo": "cargo 1.99.1 (5f94df478 2026-08-27) (Homebrew)",
+  "kairos_revision": "fae901558f07b7b717a676adbafbe2cdc78dea1c",
+  "budget": {
+    "seconds_per_command": 300,
+    "build_jobs": 2
+  },
+  "target_directory": "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-kairos-vzlyra5z",
+  "free_bytes_before": 21738692608,
+  "source_lock_tracked": false,
+  "inputs": {
+    "bindings/rust/Cargo.toml": "30176523b87e33096a5f71258dd6cbe9b77ed4fd7072348792625d0f9f50621b",
+    "bindings/rust/examples/kairos_des_smoke.rs": "33373214c3f6349b5059c8659458264a822c285f13155e41d511716e47fe46b5",
+    "bindings/rust/examples/kairos_abm_smoke.rs": "7802ad7c28d2a879d3033d9da898685b963222ac0dce3039c554ac56f4ddee2e"
+  },
+  "commands": [
+    {
+      "argv": [
+        "cargo",
+        "generate-lockfile",
+        "--manifest-path",
+        "bindings/rust/Cargo.toml"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 2.168,
+      "log_path": "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-kairos-vzlyra5z/command-0.log",
+      "log_sha256": "d7d7dec999b2464f8a79dd5f42863225a6fcfc310c287d419e204597b4b671e3",
+      "output_tail": "    Updating git repository `https://github.com/edithatogo/kairos.git`\n    Updating crates.io index\n     Locking 104 packages to highest compatible versions\n      Adding criterion v0.5.1 (available: v0.8.2)\n"
+    },
+    {
+      "argv": [
+        "cargo",
+        "run",
+        "--locked",
+        "--manifest-path",
+        "bindings/rust/Cargo.toml",
+        "--example",
+        "kairos_des_smoke"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 24.727,
+      "log_path": "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-kairos-vzlyra5z/command-1.log",
+      "log_sha256": "022411a58bb369bbfa3b13dda72b6ea7313ea39f39cbb65040541b5c373baa14",
+      "output_tail": " Downloading crates ...\n  Downloaded clap_lex v1.1.1\n  Downloaded cast v0.3.0\n  Downloaded ciborium-io v0.2.2\n  Downloaded is-terminal v0.4.17\n  Downloaded plotters-svg v0.3.7\n  Downloaded thousands v0.2.0\n  Downloaded anes v0.1.6\n  Downloaded ciborium-ll v0.2.2\n  Downloaded mintex v0.1.4\n  Downloaded plotters-backend v0.3.7\n  Downloaded rustc-hash v1.1.0\n  Downloaded criterion-plot v0.5.0\n  Downloaded dhat v0.3.3\n  Downloaded oorandom v11.1.5\n  Downloaded rustc-demangle v0.1.28\n  Downloaded tinytemplate v1.2.1\n  Downloaded addr2line v0.27.1\n  Downloaded ciborium v0.2.2\n  Downloaded clap v4.6.7\n  Downloaded backtrace v0.3.77\n  Downloaded clap_builder v4.6.7\n  Downloaded criterion v0.5.1\n  Downloaded itertools v0.10.5\n  Downloaded plotters v0.3.7\n  Downloaded gimli v0.34.0\n  Downloaded object v0.40.0\n   Compiling proc-macro2 v1.0.107\n   Compiling quote v1.0.47\n   Compiling unicode-ident v1.0.27\n   Compiling cfg-if v1.0.5\n   Compiling serde_core v1.0.229\n   Compiling libc v0.2.191\n   Compiling syn v2.0.119\n   Compiling syn v3.0.9\n   Compiling crossbeam-utils v0.8.23\n   Compiling zmij v1.0.23\n   Compiling kairo-ecs-types v0.0.0 (https://github.com/edithatogo/kairos.git?rev=fae901558f07b7b717a676adbafbe2cdc78dea1c#fae90155)\n   Compiling serde v1.0.229\n   Compiling memchr v2.8.3\n   Compiling serde_derive v1.0.229\n   Compiling once_cell v1.21.4\n   Compiling zerocopy v0.8.63\n   Compiling crossbeam-epoch v0.9.21\n   Compiling serde_json v1.0.154\n   Compiling zerocopy-derive v0.8.63\n   Compiling crossbeam-deque v0.8.8\n   Compiling itoa v1.0.18\n   Compiling autocfg v1.5.1\n   Compiling num-traits v0.2.19\n   Compiling tracing-core v0.1.36\n   Compiling rayon-core v1.13.0\n   Compiling either v1.19.0\n   Compiling smallvec v1.16.4\n   Compiling parking_lot_core v0.9.12\n   Compiling half v2.7.1\n   Compiling kairo-ecs-state v0.0.0 (https://github.com/edithatogo/kairos.git?rev=fae901558f07b7b717a676adbafbe2cdc78dea1c#fae90155)\n   Compiling kairo-ecs-core v0.0.0 (https://github.com/edithatogo/kairos.git?rev=fae901558f07b7b717a676adbafbe2cdc78dea1c#fae90155)\n   Compiling kairo-ecs-rng v0.0.0 (https://github.com/edithatogo/kairos.git?rev=fae901558f07b7b717a676adbafbe2cdc78dea1c#fae90155)\n   Compiling ciborium-io v0.2.2\n   Compiling adler2 v2.0.1\n   Compiling gimli v0.34.0\n   Compiling plotters-backend v0.3.7\n   Compiling clap_lex v1.1.1\n   Compiling scopeguard v1.2.0\n   Compiling lazy_static v1.5.1\n   Compiling anstyle v1.0.14\n   Compiling regex-syntax v0.8.11\n   Compiling addr2line v0.27.1\n   Compiling regex-automata v0.4.18\n   Compiling clap_builder v4.6.7\n   Compiling lock_api v0.4.14\n   Compiling plotters-svg v0.3.7\n   Compiling miniz_oxide v0.9.1\n   Compiling ciborium-ll v0.2.2\n   Compiling itertools v0.10.5\n   Compiling object v0.40.0\n   Compiling tracing-attributes v0.1.31\n   Compiling pin-project-lite v0.2.17\n   Compiling cast v0.3.0\n   Compiling rustc-demangle v0.1.28\n   Compiling same-file v1.0.6\n   Compiling log v0.4.35\n   Compiling tracing-log v0.2.0\n   Compiling walkdir v2.5.0\n   Compiling criterion-plot v0.5.0\n   Compiling tracing v0.1.44\n   Compiling backtrace v0.3.77\n   Compiling parking_lot v0.12.5\n   Compiling plotters v0.3.7\n   Compiling rayon v1.12.0\n   Compiling ciborium v0.2.2\n   Compiling clap v4.6.7\n   Compiling regex v1.13.1\n   Compiling sharded-slab v0.1.7\n   Compiling kairo-ecs-des v0.1.0 (https://github.com/edithatogo/kairos.git?rev=fae901558f07b7b717a676adbafbe2cdc78dea1c#fae90155)\n   Compiling kairo-ecs-abm v0.1.0 (https://github.com/edithatogo/kairos.git?rev=fae901558f07b7b717a676adbafbe2cdc78dea1c#fae90155)\n   Compiling tinytemplate v1.2.1\n   Compiling is-terminal v0.4.17\n   Compiling kairo-ecs-arrow v0.1.0 (https://github.com/edithatogo/kairos.git?rev=fae901558f07b7b717a676adbafbe2cdc78dea1c#fae90155)\n   Compiling thread_local v1.1.10\n   Compiling mintex v0.1.4\n   Compiling anes v0.1.6\n   Compiling nu-ansi-term v0.50.3\n   Compiling rustc-hash v1.1.0\n   Compiling oorandom v11.1.5\n   Compiling thousands v0.2.0\n   Compiling criterion v0.5.1\n   Compiling dhat v0.3.3\n   Compiling tracing-subscriber v0.3.23\n   Compiling innovate-rs v0.6.0 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/bindings/rust)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 24.38s\n     Running `/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-kairos-vzlyra5z/debug/examples/kairos_des_smoke`\nKairos native DES: deterministic replay and FIFO assertions passed\n"
+    },
+    {
+      "argv": [
+        "cargo",
+        "run",
+        "--locked",
+        "--manifest-path",
+        "bindings/rust/Cargo.toml",
+        "--example",
+        "kairos_abm_smoke"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.605,
+      "log_path": "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-kairos-vzlyra5z/command-2.log",
+      "log_sha256": "4f29aa019318d595e6aa01820202a1e34b11162d5d25196143fcdc5d700ffd62",
+      "output_tail": "   Compiling innovate-rs v0.6.0 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/bindings/rust)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.30s\n     Running `/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-kairos-vzlyra5z/debug/examples/kairos_abm_smoke`\nKairos native ABM: agent identity, updates and replay assertions passed\n"
+    }
+  ],
+  "native_acceptance": false,
+  "candidate_lock_sha256": "a43ae7a27fa95052d5beacf659bf4ace10d82d05902bcea9cb000911902b9bb6",
+  "free_bytes_after": 21330137088,
+  "children_peak_rss_bytes": 107347968,
+  "examples_passed": true,
+  "candidate_lock_path": "conductor/tracks/scientific_ecosystem_alignment_20261029/kairos-candidate.Cargo.lock",
+  "native_acceptance_reason": "Two native examples passed with a generated candidate lock; committed-lock policy, Python native bridge, installed consumers and hosted acceptance remain open.",
+  "library_tests": {
+    "argv": [
+      "cargo",
+      "test",
+      "--locked",
+      "--manifest-path",
+      "bindings/rust/Cargo.toml",
+      "--lib"
+    ],
+    "exit_code": 0,
+    "stdout": "\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+    "stderr_tail": "   Compiling innovate-rs v0.6.0 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/bindings/rust)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.67s\n     Running unittests src/lib.rs (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-kairos-vzlyra5z/debug/deps/innovate_rust-e72ba440bccaaab4)\n"
+  }
+}
