@@ -2,7 +2,7 @@
 
 ## Phase 1: Roadmap and Evidence Inventory
 
-- [~] Task: Build roadmap source inventory
+- [x] Task: Build roadmap source inventory (7bb918ae; reconciled 6 November 2026)
     - [x] Enumerate roadmap docs, ADRs, product vision docs, Conductor registry entries, archived tracks, and static evidence artifacts.
     - [x] Commit inventory changes and attach the required Conductor git note.
 - [x] Task: Write failing truth-ledger coverage tests
@@ -34,3 +34,8 @@
     - [x] Apply findings, rerun validation, and commit fixes.
     - [x] Push and monitor GitHub Actions until all triggered checks pass.
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Final Verification and CI' (Protocol in workflow.md)
+
+## Evidence reconciliation — 6 November 2026
+
+See [the reconciliation record](reconciliation-20261106.md). Historical
+implementation/checkpoint claims are not fresh native or human acceptance.

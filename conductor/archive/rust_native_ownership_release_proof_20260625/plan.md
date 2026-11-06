@@ -8,7 +8,7 @@
 - [x] Task: Write failing coverage tests (ac55f3d)
     - [x] Add tests that require every stable operation and model family to have native or exception status.
     - [x] Commit task changes and attach the required Conductor git note.
-- [~] Task: Conductor - Phase 1 Verification
+- [x] Task: Conductor - Phase 1 Verification (f1c4d85; retained Git note)
 
 ## Phase 1 Checkpoint: [checkpoint: f1c4d85]
 
@@ -23,7 +23,7 @@
     - [x] Documented 5 exception models with owner, rationale, fallback diagnostics, revisit condition.
     - [x] Exception documentation is structured and complete.
     - [x] Commit task changes and attach the required Conductor git note.
-- [~] Task: Conductor - Phase 2 Verification
+- [x] Task: Conductor - Phase 2 Verification (d02640c; retained Git note)
 
 ## Phase 2 Checkpoint: [checkpoint: d02640c]
 
@@ -49,3 +49,8 @@
 - [x] Task: Phase 4 Verification (d02640c)
 
 ## Phase 4 Checkpoint: [checkpoint: d02640c]
+
+## Evidence reconciliation — 6 November 2026
+
+See [the reconciliation record](reconciliation-20261106.md). Historical
+implementation/checkpoint claims are not fresh native or human acceptance.
