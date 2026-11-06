@@ -82,11 +82,11 @@ other worktrees and native operations retain their owners. This chat owns Rust
 scientific modules, thin bindings, affected tests/docs and this track's records
 on codex/reconcile-scientific-20261106. No main or shared environment promotion.
 
-- [x] Port bounded multi-generation Norton–Bass prediction, rates, fit and diagnostics; explicit historical equations and independent oracles pass (native-features-20261107.json).
-- [x] Add native optimizer convergence and local identifiability reporting to all seven fitters; local-rank and non-convergence cases pass.
-- [x] Extend Polars multi-output fitting/prediction and validate installed Python, Julia and R consumers (local macOS; packaging/platform limits remain).
+- [x] Port bounded multi-generation Norton–Bass prediction, rates, fit and diagnostics; explicit historical equations and independent oracles pass (native-features-20261107.json). 5b0df5f
+- [x] Add native optimizer convergence and local identifiability reporting to all seven fitters; local-rank and non-convergence cases pass. 5b0df5f
+- [x] Extend Polars multi-output fitting/prediction and validate installed Python, Julia and R consumers (local macOS; packaging/platform limits remain). 5b0df5f
 - [~] Continue remaining model/feature obligations: bounded Lotka–Volterra and multi-product competition now pass independent ODE/analytic and binding cases; current Kairos qualification is next.
-- [x] Review this bounded implementation, update capability/feature evidence and preserve failing full-release gates (native-features-review-20261107.md).
+- [x] Review this bounded implementation, update capability/feature evidence and preserve failing full-release gates (native-features-review-20261107.md). 5b0df5f
 
 The established native workflow uses repo-local Python 3.15.2 and focused Cargo/
 pytest selectors. Earlier Python 3.14 workflow examples are superseded by the
@@ -100,3 +100,7 @@ then remaining covariate/model/inference obligations. A bounded read on 7 Novemb
 found remote Kairos HEAD `d56863505d938feb069af88a737eb7668113d14b` while its
 separate local checkout was at `339aba155cc5ea7d393a5bd78a7947eddae26e03`. Neither
 checkout nor Innovate's dependency pins were changed by this continuation.
+
+Bounded source/evidence commit: `5b0df5fdf0bfddf540dc438264d57b54261966da`. The track remains active;
+current ownership stays with this isolated lane. No native operation remains
+in flight at this checkpoint. Next work is the uncompleted source tasks above.
