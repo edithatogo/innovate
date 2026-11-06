@@ -32,7 +32,15 @@ def test_invalid_time_contract(time):
 
 
 def test_capabilities_are_native_and_unavailable_features_fail_closed():
-    assert set(innovate.capabilities()["key"]) == {"bass", "logistic", "gompertz", "fisher_pry", "norton_bass"}
+    assert set(innovate.capabilities()["key"]) == {
+        "bass",
+        "logistic",
+        "gompertz",
+        "fisher_pry",
+        "norton_bass",
+        "lotka_volterra",
+        "multi_product",
+    }
     assert innovate.capabilities()["supports_simulation"].all()
     assert innovate.capabilities()["supports_summarize"].all()
     with pytest.raises(innovate.NativeError, match="unsupported_native_operation"):
@@ -53,3 +61,24 @@ def test_forecast_batch_can_begin_after_zero():
     frame = innovate.predict("bass", pl.DataFrame({"time": [3.0, 4.0]}), {"p": 0.03, "q": 0.35, "m": 1000.0})
     decay = math.exp(-0.38 * 3.0)
     assert frame["prediction"][0] == pytest.approx(1000.0 * (1 - decay) / (1 + 0.35 / 0.03 * decay), abs=1e-10)
+
+
+def test_unrepresentable_fit_sensitivities_fail_in_the_installed_native_library():
+    with pytest.raises(innovate.NativeError, match="finite numerical domain"):
+        innovate.execute(
+            "fit_model",
+            "logistic",
+            inputs={"time": [0.0, 1.0, 2.0, 3.0], "observed": [1e-12] * 4},
+            fit_options={"initial_parameters": {"L": 1e140, "k": 1e15, "x0": 1.0}},
+        )
+
+
+def test_empty_non_mapping_options_are_not_silently_treated_as_defaults():
+    data = pl.DataFrame({"time": [0.0, 1.0, 2.0, 3.0], "observed": [26.9, 50.0, 73.1, 88.1]})
+    for invalid in [False, [], 0]:
+        with pytest.raises(ValueError):
+            innovate.predict("logistic", data, {"L": 100.0, "k": 1.0, "x0": 1.0}, model_options=invalid)
+        with pytest.raises(ValueError):
+            innovate.fit("logistic", data, model_options=invalid)
+        with pytest.raises(ValueError):
+            innovate.fit("logistic", data, fit_options=invalid)

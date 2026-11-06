@@ -1,7 +1,11 @@
 //! Rust-owned diffusion fitting, prediction, diagnostics and execution contracts.
 #![forbid(unsafe_code)]
+mod competition;
 mod contracts;
+mod fitting;
 mod kernel;
+mod numerics;
+mod substitution;
 mod validation;
 pub use contracts::*;
 pub use kernel::KernelBinding;

@@ -223,6 +223,10 @@ pub struct KernelDiscoveryRecord {
     pub stability: String,
     pub supports_covariates: bool,
     pub supports_multivariate_output: bool,
+    #[serde(default)]
+    pub supports_rates: bool,
+    #[serde(default)]
+    pub variants: Vec<String>,
     pub supported_backends: Vec<String>,
     #[serde(default)]
     pub optional_dependencies: Vec<String>,

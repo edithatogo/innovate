@@ -43,6 +43,36 @@ def main() -> int:
     }
     if {m["key"] for m in ledger["models"]} != expected_models:
         raise ValueError("Migration ledger lost a required scientific model")
+    expected_features = {
+        "covariates_and_events",
+        "multi_generation_substitution",
+        "competitive_ecosystems",
+        "hierarchical_mixture_inference",
+        "latent_regime_models",
+        "network_policy_diffusion",
+        "kairos_des_abm",
+        "bayesian_inference",
+        "bootstrap_uncertainty",
+        "batch_fitting",
+        "preprocessing",
+        "causal_analysis",
+        "adopter_classification",
+        "data_ingestion_provenance_validation",
+        "scenario_registry_execution",
+        "explainability_sensitivity_reporting",
+        "benchmark_model_cards",
+        "plugin_contracts",
+        "remote_execution",
+        "accelerator_hpc",
+        "voiage_arrow_handoff",
+        "calibration_identifiability",
+    }
+    if {f["key"] for f in ledger["feature_areas"]} != expected_features:
+        raise ValueError("Migration ledger lost a required current or planned feature area")
+    for group in ("models", "feature_areas"):
+        items = ledger[group]
+        if len(items) != len({item["key"] for item in items}) or any(item["required"] is not True for item in items):
+            raise ValueError("Every unique model and feature obligation must remain required")
     pending = [
         item["key"]
         for group in ("models", "feature_areas")

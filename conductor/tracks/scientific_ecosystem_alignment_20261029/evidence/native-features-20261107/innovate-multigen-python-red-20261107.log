@@ -1,0 +1,27 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+__ test_polars_multi_generation_prediction_preserves_all_columns_and_identity __
+tests/native/test_multi_generation.py:24: in test_polars_multi_generation_prediction_preserves_all_columns_and_identity
+    result = innovate.predict("norton_bass", frame.lazy(), PARAMETERS, model_options=OPTIONS)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: predict() got an unexpected keyword argument 'model_options'
+_ test_multi_output_fit_roundtrip_preserves_launch_times_and_reports_convergence _
+tests/native/test_multi_generation.py:36: in test_multi_output_fit_roundtrip_preserves_launch_times_and_reports_convergence
+    fit = innovate.fit("norton_bass", data, model_options=OPTIONS, observed_columns=["first", "second"])
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: fit() got an unexpected keyword argument 'model_options'
+_____ test_signed_rates_are_derivatives_and_never_labelled_gross_incidence _____
+tests/native/test_multi_generation.py:47: in test_signed_rates_are_derivatives_and_never_labelled_gross_incidence
+    rates = innovate.predict("norton_bass", pl.DataFrame({"time": times}), PARAMETERS, model_options=OPTIONS, quantity="rate")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: predict() got an unexpected keyword argument 'model_options'
+__________ test_invalid_options_and_observation_columns_fail_clearly ___________
+tests/native/test_multi_generation.py:58: in test_invalid_options_and_observation_columns_fail_clearly
+    innovate.fit("norton_bass", data, observed_columns=["observed", "observed"])
+E   TypeError: fit() got an unexpected keyword argument 'observed_columns'
+=========================== short test summary info ============================
+FAILED tests/native/test_multi_generation.py::test_polars_multi_generation_prediction_preserves_all_columns_and_identity
+FAILED tests/native/test_multi_generation.py::test_multi_output_fit_roundtrip_preserves_launch_times_and_reports_convergence
+FAILED tests/native/test_multi_generation.py::test_signed_rates_are_derivatives_and_never_labelled_gross_incidence
+FAILED tests/native/test_multi_generation.py::test_invalid_options_and_observation_columns_fail_clearly
+4 failed in 0.41s

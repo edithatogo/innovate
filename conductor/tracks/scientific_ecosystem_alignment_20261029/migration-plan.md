@@ -63,3 +63,16 @@ fit-convergence/identifiability reporting, starting from the retained source/tes
 inventory. The ecosystem lane can then qualify the current Kairos adapter and
 scenario contract without copying scheduler internals. Continue the 38 required
 model/feature obligations; a local five-model pass does not close them.
+
+## Continued native feature checkpoint — 7 November 2026
+
+Multi-generation Norton–Bass now has explicit historical and successive-generation
+variants. Lotka–Volterra and multi-product competition add two bounded native
+families, bringing the executable set to seven. All seven fitters report optimizer
+termination and local sensitivity rank. Polars retains all prediction columns;
+Python, Julia and R consume the same native equations. Full feature obligations
+remain open, including covariates/events and the original model helper methods.
+See [continued evidence](native-features-20261107.json) and
+[review](native-features-review-20261107.md). Earlier five-model and 38-obligation
+receipts are immutable historical checkpoints; this entry supersedes their
+current-scope description without relabelling their evidence.

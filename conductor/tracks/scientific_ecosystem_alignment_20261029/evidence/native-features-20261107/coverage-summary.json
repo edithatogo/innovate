@@ -1,0 +1,354 @@
+{
+  "totals": {
+    "branches": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "functions": {
+      "count": 509,
+      "covered": 375,
+      "percent": 73.6738703339882
+    },
+    "instantiations": {
+      "count": 1081,
+      "covered": 443,
+      "percent": 40.98057354301572
+    },
+    "lines": {
+      "count": 4631,
+      "covered": 3658,
+      "percent": 78.98941913193694
+    },
+    "mcdc": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "regions": {
+      "count": 7140,
+      "covered": 6109,
+      "notcovered": 1031,
+      "percent": 85.56022408963585
+    }
+  },
+  "files": {
+    "rust/crates/innovate-core/src/competition.rs": {
+      "branches": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "mcdc": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "functions": {
+        "count": 67,
+        "covered": 57,
+        "percent": 85.07462686567165
+      },
+      "instantiations": {
+        "count": 135,
+        "covered": 57,
+        "percent": 42.22222222222222
+      },
+      "lines": {
+        "count": 441,
+        "covered": 401,
+        "percent": 90.9297052154195
+      },
+      "regions": {
+        "count": 743,
+        "covered": 677,
+        "notcovered": 66,
+        "percent": 91.1170928667564
+      }
+    },
+    "rust/crates/innovate-core/src/contracts.rs": {
+      "branches": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "mcdc": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "functions": {
+        "count": 41,
+        "covered": 21,
+        "percent": 51.21951219512195
+      },
+      "instantiations": {
+        "count": 94,
+        "covered": 28,
+        "percent": 29.78723404255319
+      },
+      "lines": {
+        "count": 332,
+        "covered": 202,
+        "percent": 60.8433734939759
+      },
+      "regions": {
+        "count": 406,
+        "covered": 247,
+        "notcovered": 159,
+        "percent": 60.83743842364532
+      }
+    },
+    "rust/crates/innovate-core/src/fitting.rs": {
+      "branches": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "mcdc": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "functions": {
+        "count": 28,
+        "covered": 22,
+        "percent": 78.57142857142857
+      },
+      "instantiations": {
+        "count": 57,
+        "covered": 23,
+        "percent": 40.350877192982445
+      },
+      "lines": {
+        "count": 219,
+        "covered": 199,
+        "percent": 90.8675799086758
+      },
+      "regions": {
+        "count": 374,
+        "covered": 342,
+        "notcovered": 32,
+        "percent": 91.44385026737967
+      }
+    },
+    "rust/crates/innovate-core/src/kernel.rs": {
+      "branches": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "mcdc": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "functions": {
+        "count": 207,
+        "covered": 135,
+        "percent": 65.21739130434783
+      },
+      "instantiations": {
+        "count": 426,
+        "covered": 143,
+        "percent": 33.568075117370896
+      },
+      "lines": {
+        "count": 2462,
+        "covered": 1796,
+        "percent": 72.94882209585703
+      },
+      "regions": {
+        "count": 3624,
+        "covered": 3017,
+        "notcovered": 607,
+        "percent": 83.2505518763797
+      }
+    },
+    "rust/crates/innovate-core/src/lib.rs": {
+      "branches": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "mcdc": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "functions": {
+        "count": 1,
+        "covered": 1,
+        "percent": 100.0
+      },
+      "instantiations": {
+        "count": 2,
+        "covered": 1,
+        "percent": 50.0
+      },
+      "lines": {
+        "count": 12,
+        "covered": 9,
+        "percent": 75.0
+      },
+      "regions": {
+        "count": 37,
+        "covered": 28,
+        "notcovered": 9,
+        "percent": 75.67567567567568
+      }
+    },
+    "rust/crates/innovate-core/src/numerics.rs": {
+      "branches": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "mcdc": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "functions": {
+        "count": 39,
+        "covered": 39,
+        "percent": 100.0
+      },
+      "instantiations": {
+        "count": 119,
+        "covered": 90,
+        "percent": 75.63025210084034
+      },
+      "lines": {
+        "count": 333,
+        "covered": 319,
+        "percent": 95.7957957957958
+      },
+      "regions": {
+        "count": 591,
+        "covered": 571,
+        "notcovered": 20,
+        "percent": 96.61590524534687
+      }
+    },
+    "rust/crates/innovate-core/src/substitution.rs": {
+      "branches": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "mcdc": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "functions": {
+        "count": 85,
+        "covered": 69,
+        "percent": 81.17647058823529
+      },
+      "instantiations": {
+        "count": 171,
+        "covered": 70,
+        "percent": 40.93567251461988
+      },
+      "lines": {
+        "count": 547,
+        "covered": 488,
+        "percent": 89.21389396709324
+      },
+      "regions": {
+        "count": 952,
+        "covered": 871,
+        "notcovered": 81,
+        "percent": 91.49159663865547
+      }
+    },
+    "rust/crates/innovate-core/src/validation.rs": {
+      "branches": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "mcdc": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "functions": {
+        "count": 36,
+        "covered": 27,
+        "percent": 75.0
+      },
+      "instantiations": {
+        "count": 72,
+        "covered": 27,
+        "percent": 37.5
+      },
+      "lines": {
+        "count": 245,
+        "covered": 207,
+        "percent": 84.48979591836735
+      },
+      "regions": {
+        "count": 347,
+        "covered": 294,
+        "notcovered": 53,
+        "percent": 84.72622478386167
+      }
+    },
+    "rust/crates/innovate-ffi/src/lib.rs": {
+      "branches": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "mcdc": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "functions": {
+        "count": 5,
+        "covered": 4,
+        "percent": 80.0
+      },
+      "instantiations": {
+        "count": 5,
+        "covered": 4,
+        "percent": 80.0
+      },
+      "lines": {
+        "count": 40,
+        "covered": 37,
+        "percent": 92.5
+      },
+      "regions": {
+        "count": 66,
+        "covered": 62,
+        "notcovered": 4,
+        "percent": 93.93939393939394
+      }
+    }
+  }
+}

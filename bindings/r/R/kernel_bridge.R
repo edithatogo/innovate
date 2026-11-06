@@ -10,6 +10,23 @@ native_library <- function() {
 
 kernel_call <- function(operation, model_key = NULL, payload = list()) {
   if (!length(payload)) payload <- structure(list(), names = character())
+  # jsonlite otherwise auto-unboxes a length-one numeric vector into a scalar.
+  # Keep schema array fields as arrays while parameter/options scalars stay scalars.
+  array_fields <- c("time", "t", "observed", "y", "values", "adoption", "share", "launch_times", "initial_values")
+  preserve_arrays <- function(value) {
+    if (!is.list(value)) return(value)
+    fields <- names(value)
+    for (i in seq_along(value)) {
+      if (!is.null(fields) && fields[[i]] %in% array_fields &&
+          is.atomic(value[[i]]) && !is.null(value[[i]]) && !is.matrix(value[[i]])) {
+        value[[i]] <- I(value[[i]])
+      } else {
+        value[i] <- list(preserve_arrays(value[[i]]))
+      }
+    }
+    value
+  }
+  payload <- preserve_arrays(payload)
   request <- jsonlite::toJSON(list(schema_version = "2.0", operation = operation,
     model_key = model_key, payload = payload), auto_unbox = TRUE, null = "null", digits = NA)
   response <- jsonlite::fromJSON(.Call(innovate_call_R, native_library(), request), simplifyVector = FALSE)

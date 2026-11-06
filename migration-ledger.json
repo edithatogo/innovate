@@ -7,7 +7,8 @@
     {
       "key": "bass",
       "status": "bounded_native",
-      "required": true
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/native-features-20261107.json"
     },
     {
       "key": "complementary_goods",
@@ -22,12 +23,14 @@
     {
       "key": "fisher_pry",
       "status": "bounded_native",
-      "required": true
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/native-features-20261107.json"
     },
     {
       "key": "gompertz",
       "status": "bounded_native",
-      "required": true
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/native-features-20261107.json"
     },
     {
       "key": "hierarchical",
@@ -47,12 +50,14 @@
     {
       "key": "logistic",
       "status": "bounded_native",
-      "required": true
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/native-features-20261107.json"
     },
     {
       "key": "lotka_volterra",
-      "status": "unavailable",
-      "required": true
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/native-features-20261107.json"
     },
     {
       "key": "mixture",
@@ -61,8 +66,9 @@
     },
     {
       "key": "multi_product",
-      "status": "unavailable",
-      "required": true
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/native-features-20261107.json"
     },
     {
       "key": "network_diffusion",
@@ -72,7 +78,8 @@
     {
       "key": "norton_bass",
       "status": "bounded_native",
-      "required": true
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/native-features-20261107.json"
     },
     {
       "key": "policy_hazard",
@@ -93,13 +100,17 @@
     },
     {
       "key": "multi_generation_substitution",
-      "status": "pending",
-      "required": true
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/native-features-20261107.json",
+      "remaining": "covariates, original threshold helpers, full parity and broader numerical qualification"
     },
     {
       "key": "competitive_ecosystems",
-      "status": "pending",
-      "required": true
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/native-features-20261107.json",
+      "remaining": "remaining ecosystem models, covariates/events, equilibrium and zero-capacity extensions"
     },
     {
       "key": "hierarchical_mixture_inference",
@@ -193,8 +204,10 @@
     },
     {
       "key": "calibration_identifiability",
-      "status": "pending",
-      "required": true
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/native-features-20261107.json",
+      "remaining": "global identifiability, calibrated uncertainty, broader noisy-data and extreme-domain validation"
     }
   ]
 }

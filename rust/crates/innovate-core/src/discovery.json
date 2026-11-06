@@ -1,7 +1,7 @@
 {
   "metadata": {
     "runtime": "rust_native",
-    "scope": "Bounded parameter-only payloads; advanced models and covariates remain unavailable pending native parity."
+    "scope": "Native scalar and multivariate deterministic fitting/prediction. Covariates, events and unported model families remain unavailable."
   },
   "models": [
     {
@@ -24,7 +24,9 @@
         "summarize_model",
         "diagnose_model"
       ],
-      "simulation_semantics": "deterministic_curve_only"
+      "simulation_semantics": "deterministic_curve_only",
+      "supports_rates": false,
+      "variants": []
     },
     {
       "family": "substitution",
@@ -46,7 +48,9 @@
         "summarize_model",
         "diagnose_model"
       ],
-      "simulation_semantics": "deterministic_curve_only"
+      "simulation_semantics": "deterministic_curve_only",
+      "supports_rates": false,
+      "variants": []
     },
     {
       "family": "diffusion",
@@ -68,7 +72,9 @@
         "summarize_model",
         "diagnose_model"
       ],
-      "simulation_semantics": "deterministic_curve_only"
+      "simulation_semantics": "deterministic_curve_only",
+      "supports_rates": false,
+      "variants": []
     },
     {
       "family": "diffusion",
@@ -90,7 +96,9 @@
         "summarize_model",
         "diagnose_model"
       ],
-      "simulation_semantics": "deterministic_curve_only"
+      "simulation_semantics": "deterministic_curve_only",
+      "supports_rates": false,
+      "variants": []
     },
     {
       "family": "substitution",
@@ -102,7 +110,7 @@
         "rust"
       ],
       "supports_covariates": false,
-      "supports_multivariate_output": false,
+      "supports_multivariate_output": true,
       "supports_simulation": true,
       "supports_summarize": true,
       "supported_operations": [
@@ -112,7 +120,60 @@
         "summarize_model",
         "diagnose_model"
       ],
-      "simulation_semantics": "deterministic_curve_only"
+      "simulation_semantics": "deterministic_curve_only",
+      "supports_rates": true,
+      "variants": [
+        "legacy_cannibalization",
+        "successive_generations"
+      ]
+    },
+    {
+      "family": "competition",
+      "import_path": "innovate_core",
+      "key": "lotka_volterra",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": true,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_ode_only",
+      "supports_rates": true,
+      "variants": []
+    },
+    {
+      "family": "competition",
+      "import_path": "innovate_core",
+      "key": "multi_product",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": true,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_ode_only",
+      "supports_rates": true,
+      "variants": []
     }
   ],
   "schema_version": "2.0"

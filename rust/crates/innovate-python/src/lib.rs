@@ -8,25 +8,40 @@ fn execute(py: Python<'_>, request: String) -> String {
 }
 
 #[pyfunction]
+#[pyo3(signature=(data, model, parameters, options=None))]
 fn predict_ipc(
     py: Python<'_>,
     data: Vec<u8>,
     model: String,
     parameters: String,
+    options: Option<String>,
 ) -> PyResult<Py<PyBytes>> {
     let output = py
         .detach(move || {
             let parameters = serde_json::from_str(&parameters).map_err(|e| e.to_string())?;
-            innovate_tabular::predict_ipc(&data, &model, parameters).map_err(|e| e.to_string())
+            let options = serde_json::from_str(options.as_deref().unwrap_or("{}"))
+                .map_err(|e| e.to_string())?;
+            innovate_tabular::predict_ipc_with_options(&data, &model, parameters, options)
+                .map_err(|e| e.to_string())
         })
         .map_err(PyValueError::new_err)?;
     Ok(PyBytes::new(py, &output).unbind())
 }
 
 #[pyfunction]
-fn fit_ipc(py: Python<'_>, data: Vec<u8>, model: String) -> PyResult<String> {
-    py.detach(move || innovate_tabular::fit_ipc(&data, &model).map_err(|e| e.to_string()))
-        .map_err(PyValueError::new_err)
+#[pyo3(signature=(data, model, options=None))]
+fn fit_ipc(
+    py: Python<'_>,
+    data: Vec<u8>,
+    model: String,
+    options: Option<String>,
+) -> PyResult<String> {
+    py.detach(move || {
+        let options =
+            serde_json::from_str(options.as_deref().unwrap_or("{}")).map_err(|e| e.to_string())?;
+        innovate_tabular::fit_ipc_with_options(&data, &model, options).map_err(|e| e.to_string())
+    })
+    .map_err(PyValueError::new_err)
 }
 
 #[pymodule]

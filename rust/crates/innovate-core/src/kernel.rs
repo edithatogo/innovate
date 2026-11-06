@@ -89,17 +89,29 @@ impl KernelBinding {
         &self,
         request: &KernelRequest,
     ) -> Result<KernelResponse, KernelBindingError> {
-        match request.model_key.as_deref().unwrap_or("") {
-            "gompertz" => gompertz_fit_native_response(request),
-            "logistic" => logistic_fit_native_response(request),
-            "bass" => bass_fit_native_response(request),
-            "fisher_pry" => fisher_pry_fit_native_response(request),
-            "norton_bass" => norton_bass_fit_native_response(request),
-            model_key => Err(KernelBindingError::unsupported_native_operation(
-                KernelOperation::FitModel,
-                format!("native fitting is not implemented for model '{model_key}'"),
-            )),
+        if request.model_key.as_deref() == Some("norton_bass") {
+            return crate::substitution::execute(request);
         }
+        let (initial, max_iterations) = crate::fitting::options(request)?;
+        let mut seed_request = request.clone();
+        if let Some(payload) = seed_request.payload.as_object_mut() {
+            payload.remove("fit_options");
+        }
+        let seed = if let Some(initial) = initial {
+            crate::fitting::seed_response(&seed_request, initial)?
+        } else {
+            match request.model_key.as_deref().unwrap_or("") {
+                "gompertz" => gompertz_fit_native_response(&seed_request),
+                "logistic" => logistic_fit_native_response(&seed_request),
+                "bass" => bass_fit_native_response(&seed_request),
+                "fisher_pry" => fisher_pry_fit_native_response(&seed_request),
+                model_key => Err(KernelBindingError::unsupported_native_operation(
+                    KernelOperation::FitModel,
+                    format!("native fitting is not implemented for model '{model_key}'"),
+                )),
+            }?
+        };
+        crate::fitting::refine(request, seed, max_iterations)
     }
 
     pub fn predict_model(
@@ -151,7 +163,7 @@ impl KernelBinding {
             "bass" => bass_summary_native_response(request),
             "gompertz" => gompertz_summary_native_response(request, false),
             "logistic" => logistic_summary_native_response(request),
-            "norton_bass" => norton_bass_summary_native_response(request, false),
+            "norton_bass" => crate::substitution::execute(request),
             "fisher_pry" => fisher_pry_summary_native_response(request, false),
             model_key => Err(KernelBindingError::unsupported_native_operation(
                 KernelOperation::SummarizeModel,
@@ -177,7 +189,7 @@ impl KernelBinding {
             "bass" => bass_diagnose_native_response(request),
             "gompertz" => gompertz_summary_native_response(request, true),
             "logistic" => logistic_diagnose_native_response(request),
-            "norton_bass" => norton_bass_summary_native_response(request, true),
+            "norton_bass" => crate::substitution::execute(request),
             "fisher_pry" => fisher_pry_summary_native_response(request, true),
             model_key => Err(KernelBindingError::unsupported_native_operation(
                 KernelOperation::DiagnoseModel,
@@ -225,7 +237,7 @@ impl KernelBinding {
             payload.insert("state".into(), json!({
                 "model_key": request.model_key,
                 "parameters": parameters,
-                "constructor_kwargs": payload.get("constructor_kwargs").cloned().unwrap_or_else(|| json!({})),
+                "constructor_kwargs": payload.get("constructor_kwargs").or_else(|| payload.get("model_kwargs")).cloned().unwrap_or_else(|| json!({})),
                 "predict_kwargs": payload.get("predict_kwargs").cloned().unwrap_or_else(|| json!({}))
             }));
             &normalized
@@ -233,6 +245,12 @@ impl KernelBinding {
             request
         };
         validate_request(request)?;
+        if matches!(
+            request.model_key.as_deref(),
+            Some("lotka_volterra" | "multi_product")
+        ) {
+            return crate::competition::execute(request);
+        }
         match request.operation {
             KernelOperation::DiscoverModels => Ok(KernelResponse {
                 schema_version: KERNEL_SCHEMA_VERSION.into(),
@@ -264,8 +282,23 @@ fn kernel_array_payload(values: &[f64]) -> Value {
 }
 
 fn fit_diagnostics(time: &[f64], observed: &[f64], predicted: &[f64], model_name: &str) -> Value {
+    fit_diagnostics_count(
+        time,
+        observed,
+        predicted,
+        model_name,
+        if model_name == "FisherPryModel" { 3 } else { 4 },
+    )
+}
+
+pub(crate) fn fit_diagnostics_count(
+    time: &[f64],
+    observed: &[f64],
+    predicted: &[f64],
+    model_name: &str,
+    parameter_count: usize,
+) -> Value {
     // Gaussian residual variance is estimated in addition to structural parameters.
-    let parameter_count = if model_name == "FisherPryModel" { 3 } else { 4 };
     let residuals: Vec<f64> = observed
         .iter()
         .zip(predicted.iter())
@@ -869,7 +902,7 @@ fn fitted_state_native_response(
         "gompertz" => gompertz_native_response(operation, request),
         "logistic" => logistic_native_response(operation, request),
         "bass" => bass_native_response(operation, request),
-        "norton_bass" => norton_bass_native_response(operation, request),
+        "norton_bass" => crate::substitution::execute(request),
         "fisher_pry" => fisher_pry_native_response(operation, request),
         _ => Err(KernelBindingError::unsupported_native_operation(
             operation,
@@ -1169,448 +1202,6 @@ fn bass_native_response(
             "model_key": model_key,
             "family": "diffusion",
             "model_name": "BassModel",
-            "runtime": "rust_native"
-        }),
-    })
-}
-
-fn norton_bass_native_response(
-    operation: KernelOperation,
-    request: &KernelRequest,
-) -> Result<KernelResponse, KernelBindingError> {
-    match operation {
-        KernelOperation::PredictModel | KernelOperation::SimulateModel => {
-            norton_bass_predict_or_simulate_response(operation, request)
-        }
-        KernelOperation::SummarizeModel => norton_bass_summary_or_diagnose_response(request, false),
-        KernelOperation::DiagnoseModel => norton_bass_summary_or_diagnose_response(request, true),
-        _ => Err(KernelBindingError::unsupported_native_operation(
-            operation,
-            format!("native {operation} is not implemented for model 'norton_bass'"),
-        )),
-    }
-}
-
-fn norton_bass_summary_native_response(
-    request: &KernelRequest,
-    diagnose_only: bool,
-) -> Result<KernelResponse, KernelBindingError> {
-    norton_bass_summary_or_diagnose_response(request, diagnose_only)
-}
-
-fn norton_bass_fit_native_response(
-    request: &KernelRequest,
-) -> Result<KernelResponse, KernelBindingError> {
-    if request.operation != KernelOperation::FitModel {
-        return Err(KernelBindingError::invalid_request(
-            request.operation,
-            "native fitting requires a fit_model request",
-        ));
-    }
-
-    let model_key = request.model_key.as_deref().unwrap_or("");
-    if model_key != "norton_bass" {
-        return Err(KernelBindingError::unsupported_native_operation(
-            KernelOperation::FitModel,
-            format!("native fitting is not implemented for model '{model_key}'"),
-        ));
-    }
-
-    let payload = request.payload.as_object().ok_or_else(|| {
-        KernelBindingError::invalid_request(
-            KernelOperation::FitModel,
-            "fit_model payload must be an object",
-        )
-    })?;
-    let inputs = object_section(payload, "inputs", KernelOperation::FitModel)?;
-    let time = numeric_array_from_aliases(inputs, &["time", "t"], KernelOperation::FitModel)?;
-    let observed = numeric_array_from_aliases(
-        inputs,
-        &["observed", "y", "values", "adoption", "share"],
-        KernelOperation::FitModel,
-    )?;
-
-    let constructor_kwargs = _fit_constructor_kwargs(payload);
-    let n_generations = constructor_kwargs
-        .and_then(|kwargs| kwargs.get("n_generations"))
-        .and_then(Value::as_u64)
-        .unwrap_or(1);
-    let has_covariates = constructor_kwargs
-        .and_then(|kwargs| kwargs.get("covariates"))
-        .is_some_and(|covariates| !covariates.as_array().is_some_and(Vec::is_empty));
-    let has_event = constructor_kwargs
-        .and_then(|kwargs| kwargs.get("t_event"))
-        .is_some_and(|value| !value.is_null());
-    let input_covariates = inputs.get("covariates").is_some();
-    let fit_options = payload.get("fit_options").and_then(Value::as_object);
-    let fitter_options = payload.get("fitter_options").and_then(Value::as_object);
-    if n_generations != 1
-        || has_covariates
-        || has_event
-        || input_covariates
-        || fit_options.is_some_and(|values| !values.is_empty())
-        || fitter_options.is_some_and(|values| !values.is_empty())
-    {
-        return Err(KernelBindingError::unsupported_native_operation(
-            KernelOperation::FitModel,
-            "native Norton-Bass fitting currently supports one generation without covariates, events, or custom fitter options",
-        ));
-    }
-
-    let fit = fit_bass_curve(&time, &observed)?;
-    let prediction_rows: Vec<Vec<f64>> = fit
-        .predictions
-        .iter()
-        .copied()
-        .map(|value| vec![value])
-        .collect();
-    let diagnostics = fit_diagnostics(&time, &observed, &fit.predictions, "NortonBassModel");
-    let state = json!({
-        "model_key": model_key,
-        "model_name": "NortonBassModel",
-        "constructor_kwargs": _copy_object_or_empty(constructor_kwargs),
-        "parameters": {
-            "p1": fit.p,
-            "q1": fit.q,
-            "m1": fit.m,
-        },
-        "predict_kwargs": {},
-    });
-
-    Ok(KernelResponse {
-        schema_version: KERNEL_SCHEMA_VERSION.to_string(),
-        operation: KernelOperation::FitModel,
-        model_key: None,
-        result: Some(json!({
-            "model_key": model_key,
-            "model_name": "NortonBassModel",
-            "family": "substitution",
-            "parameters": {
-                "p1": fit.p,
-                "q1": fit.q,
-                "m1": fit.m,
-            },
-            "predictions": {
-                "columns": ["series_1"],
-                "rows": prediction_rows,
-                "metadata": {
-                    "shape": [time.len(), 1]
-                }
-            },
-            "diagnostics": diagnostics,
-            "state": state,
-        })),
-        error: None,
-        metadata: json!({
-            "model_key": model_key,
-            "family": "substitution",
-            "model_name": "NortonBassModel",
-            "runtime": "rust_native"
-        }),
-    })
-}
-
-fn norton_bass_predict_or_simulate_response(
-    operation: KernelOperation,
-    request: &KernelRequest,
-) -> Result<KernelResponse, KernelBindingError> {
-    if request.operation != operation {
-        return Err(KernelBindingError::invalid_request(
-            request.operation,
-            format!("native {operation} requires a {operation} request"),
-        ));
-    }
-
-    let model_key = request.model_key.as_deref().unwrap_or("");
-    if model_key != "norton_bass" {
-        return Err(KernelBindingError::unsupported_native_operation(
-            operation,
-            format!("native {operation} is not implemented for model '{model_key}'"),
-        ));
-    }
-
-    let payload = request.payload.as_object().ok_or_else(|| {
-        KernelBindingError::invalid_request(
-            operation,
-            format!("{operation} payload must be an object"),
-        )
-    })?;
-    let inputs = object_section(payload, "inputs", operation)?;
-    let time = numeric_array_from_aliases(inputs, &["time", "t"], operation)?;
-    if time.iter().any(|value| !value.is_finite() || *value < 0.0) {
-        return Err(KernelBindingError::invalid_request(
-            operation,
-            "time values must be finite and non-negative for native Norton-Bass execution",
-        ));
-    }
-
-    let state = optional_object_section(payload, "state");
-    let state_model_key = state
-        .and_then(|state| state.get("model_key"))
-        .and_then(Value::as_str)
-        .unwrap_or(model_key);
-    if state_model_key != model_key {
-        return Err(KernelBindingError::invalid_request(
-            operation,
-            format!(
-                "kernel request model_key '{model_key}' does not match state model_key '{state_model_key}'"
-            ),
-        ));
-    }
-
-    let constructor_kwargs = state
-        .and_then(|state| state.get("constructor_kwargs"))
-        .and_then(Value::as_object);
-    let n_generations = constructor_kwargs
-        .and_then(|kwargs| kwargs.get("n_generations"))
-        .and_then(Value::as_u64)
-        .unwrap_or(1);
-    if n_generations != 1 {
-        return Err(KernelBindingError::unsupported_native_operation(
-            operation,
-            "native Norton-Bass execution currently supports a single generation only",
-        ));
-    }
-    let has_covariates = constructor_kwargs
-        .and_then(|kwargs| kwargs.get("covariates"))
-        .is_some_and(|covariates| !covariates.as_array().is_some_and(Vec::is_empty));
-    let has_event = constructor_kwargs
-        .and_then(|kwargs| kwargs.get("t_event"))
-        .is_some_and(|value| !value.is_null());
-    let input_covariates = inputs.get("covariates").is_some();
-    if has_covariates || has_event || input_covariates {
-        return Err(KernelBindingError::unsupported_native_operation(
-            operation,
-            "native Norton-Bass execution currently supports fitted states without covariates or event splits",
-        ));
-    }
-
-    let parameters = payload
-        .get("parameters")
-        .and_then(Value::as_object)
-        .or_else(|| {
-            state
-                .and_then(|state| state.get("parameters"))
-                .and_then(Value::as_object)
-        })
-        .ok_or_else(|| {
-            KernelBindingError::invalid_request(
-                operation,
-                "kernel requests for model execution require fitted parameters in state or parameters",
-            )
-        })?;
-
-    let p = required_f64(parameters, "p1", operation)?;
-    let q = required_f64(parameters, "q1", operation)?;
-    let m = required_f64(parameters, "m1", operation)?;
-    if !p.is_finite() || !q.is_finite() || !m.is_finite() || p <= 0.0 || q < 0.0 || m <= 0.0 {
-        return Err(KernelBindingError::invalid_request(
-            operation,
-            "native Norton-Bass parameters must be finite with p1 > 0, q1 >= 0, and m1 > 0",
-        ));
-    }
-
-    let predictions = bass_prediction_series(&time, p, q, m);
-    let rows: Vec<Vec<f64>> = predictions.into_iter().map(|value| vec![value]).collect();
-
-    Ok(KernelResponse {
-        schema_version: KERNEL_SCHEMA_VERSION.to_string(),
-        operation,
-        model_key: None,
-        result: Some(json!({
-            "columns": ["series_1"],
-            "rows": rows,
-            "metadata": {
-                "shape": [time.len(), 1]
-            }
-        })),
-        error: None,
-        metadata: json!({
-            "model_key": model_key,
-            "family": "substitution",
-            "model_name": "NortonBassModel",
-            "runtime": "rust_native"
-        }),
-    })
-}
-
-fn norton_bass_summary_or_diagnose_response(
-    request: &KernelRequest,
-    diagnose_only: bool,
-) -> Result<KernelResponse, KernelBindingError> {
-    let operation = request.operation;
-    let expected_operation = if diagnose_only {
-        KernelOperation::DiagnoseModel
-    } else {
-        KernelOperation::SummarizeModel
-    };
-    if operation != expected_operation {
-        return Err(KernelBindingError::invalid_request(
-            operation,
-            format!("native {expected_operation} requires a {expected_operation} request"),
-        ));
-    }
-
-    let model_key = request.model_key.as_deref().unwrap_or("");
-    if model_key != "norton_bass" {
-        return Err(KernelBindingError::unsupported_native_operation(
-            operation,
-            format!("native {operation} is not implemented for model '{model_key}'"),
-        ));
-    }
-
-    let payload = request.payload.as_object().ok_or_else(|| {
-        KernelBindingError::invalid_request(
-            operation,
-            format!("{operation} payload must be an object"),
-        )
-    })?;
-    let inputs = object_section(payload, "inputs", operation)?;
-    let time = optional_numeric_array_from_aliases(inputs, &["time", "t"], operation)?;
-    let observed = optional_numeric_array_from_aliases(
-        inputs,
-        &["observed", "y", "values", "adoption", "share"],
-        operation,
-    )?;
-
-    let state = object_section(payload, "state", operation)?;
-    let state_model_key = state
-        .get("model_key")
-        .and_then(Value::as_str)
-        .unwrap_or(model_key);
-    if state_model_key != model_key {
-        return Err(KernelBindingError::invalid_request(
-            operation,
-            format!(
-                "kernel request model_key '{model_key}' does not match state model_key '{state_model_key}'"
-            ),
-        ));
-    }
-
-    let constructor_kwargs = state.get("constructor_kwargs").and_then(Value::as_object);
-    let predict_kwargs = state.get("predict_kwargs").and_then(Value::as_object);
-    let n_generations = constructor_kwargs
-        .and_then(|kwargs| kwargs.get("n_generations"))
-        .and_then(Value::as_u64)
-        .unwrap_or(1);
-    if n_generations != 1 {
-        return Err(KernelBindingError::unsupported_native_operation(
-            operation,
-            "native Norton-Bass summary currently supports a single generation only",
-        ));
-    }
-    if constructor_kwargs
-        .and_then(|kwargs| kwargs.get("covariates"))
-        .is_some_and(|covariates| !covariates.as_array().is_some_and(Vec::is_empty))
-        || constructor_kwargs
-            .and_then(|kwargs| kwargs.get("t_event"))
-            .is_some_and(|value| !value.is_null())
-        || inputs.get("covariates").is_some()
-    {
-        return Err(KernelBindingError::unsupported_native_operation(
-            operation,
-            "native Norton-Bass execution currently supports fitted states without covariates or event splits",
-        ));
-    }
-
-    let parameters = state
-        .get("parameters")
-        .and_then(Value::as_object)
-        .or_else(|| payload.get("parameters").and_then(Value::as_object))
-        .ok_or_else(|| {
-            KernelBindingError::invalid_request(
-                operation,
-                "kernel requests for model execution require fitted parameters in state or parameters",
-            )
-        })?;
-
-    let p = required_f64(parameters, "p1", operation)?;
-    let q = required_f64(parameters, "q1", operation)?;
-    let m = required_f64(parameters, "m1", operation)?;
-    let (_predicted, diagnostics) = match (time.as_ref(), observed.as_ref()) {
-        (Some(times), Some(values)) => {
-            if times.len() != values.len() {
-                return Err(KernelBindingError::invalid_request(
-                    operation,
-                    "time and observed arrays must have the same length",
-                ));
-            }
-            let predicted = bass_prediction_series(times, p, q, m);
-            let diagnostics = fit_diagnostics(times, values, &predicted, "NortonBassModel");
-            (predicted, Some(diagnostics))
-        }
-        (Some(times), None) => {
-            let predicted = bass_prediction_series(times, p, q, m);
-            (predicted, None)
-        }
-        (None, Some(_)) => {
-            return Err(KernelBindingError::invalid_request(
-                operation,
-                "diagnose_model requires time and observed arrays in the inputs section",
-            ));
-        }
-        (None, None) => {
-            if diagnose_only {
-                return Err(KernelBindingError::invalid_request(
-                    operation,
-                    "diagnose_model requires time and observed arrays in the inputs section",
-                ));
-            }
-            (Vec::new(), None)
-        }
-    };
-    let state_payload = json!({
-        "model_key": model_key,
-        "model_name": "NortonBassModel",
-        "constructor_kwargs": _copy_object_or_empty(constructor_kwargs),
-        "parameters": {
-            "p1": p,
-            "q1": q,
-            "m1": m,
-        },
-        "predict_kwargs": _copy_object_or_empty(predict_kwargs),
-    });
-
-    let mut result = json!({
-        "model_key": model_key,
-        "model_name": "NortonBassModel",
-        "family": "substitution",
-        "parameter_names": ["p1", "q1", "m1"],
-        "parameters": {
-            "p1": p,
-            "q1": q,
-            "m1": m,
-        },
-        "constructor_kwargs": _copy_object_or_empty(constructor_kwargs),
-        "state": state_payload,
-    });
-    if !diagnose_only {
-        if let Some(diagnostics) = diagnostics {
-            result["diagnostics"] = diagnostics;
-        }
-    } else {
-        let diagnostics = diagnostics.ok_or_else(|| {
-            KernelBindingError::invalid_request(
-                operation,
-                "diagnose_model requires time and observed arrays in the inputs section",
-            )
-        })?;
-        result = json!({
-            "diagnostics": diagnostics,
-            "state": state_payload,
-        });
-    }
-
-    Ok(KernelResponse {
-        schema_version: KERNEL_SCHEMA_VERSION.to_string(),
-        operation,
-        model_key: None,
-        result: Some(result),
-        error: None,
-        metadata: json!({
-            "model_key": model_key,
-            "family": "substitution",
-            "model_name": "NortonBassModel",
             "runtime": "rust_native"
         }),
     })

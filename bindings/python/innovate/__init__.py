@@ -54,14 +54,24 @@ def _ipc(frame: pl.DataFrame | pl.LazyFrame) -> bytes:
     return frame.write_ipc(None).getvalue()
 
 
-def predict(model: str, data: pl.DataFrame | pl.LazyFrame, parameters: dict[str, float]) -> pl.DataFrame:
+def predict(
+    model: str,
+    data: pl.DataFrame | pl.LazyFrame,
+    parameters: dict[str, float],
+    *,
+    model_options: dict[str, Any] | None = None,
+    quantity: str = "level",
+) -> pl.DataFrame:
     """Append native predictions, preserving row order and identity columns.
 
     Requires a finite, strictly increasing numeric ``time`` column. IPC transport
     currently copies buffers; it is not claimed to be zero-copy. A LazyFrame is
     collected explicitly at the native execution boundary.
     """
-    output = _native.predict_ipc(_ipc(data), model, json.dumps(parameters, allow_nan=False))
+    options = {"model_options": model_options if model_options is not None else {}, "quantity": quantity}
+    output = _native.predict_ipc(
+        _ipc(data), model, json.dumps(parameters, allow_nan=False), json.dumps(options, allow_nan=False)
+    )
     return pl.read_ipc(io.BytesIO(output))
 
 
@@ -80,10 +90,24 @@ class FitResult:
     def diagnostics(self) -> dict[str, Any]:
         return dict(self.envelope["result"]["diagnostics"])
 
-    def predict(self, data: pl.DataFrame | pl.LazyFrame) -> pl.DataFrame:
-        return predict(self.model, data, self.parameters)
+    def predict(self, data: pl.DataFrame | pl.LazyFrame, *, quantity: str = "level") -> pl.DataFrame:
+        options = self.envelope["result"]["state"]["constructor_kwargs"]
+        return predict(self.model, data, self.parameters, model_options=options, quantity=quantity)
 
 
-def fit(model: str, data: pl.DataFrame | pl.LazyFrame) -> FitResult:
+def fit(
+    model: str,
+    data: pl.DataFrame | pl.LazyFrame,
+    *,
+    model_options: dict[str, Any] | None = None,
+    observed_columns: list[str] | None = None,
+    fit_options: dict[str, Any] | None = None,
+) -> FitResult:
     """Fit native parameters to finite ``time`` and ``observed`` columns."""
-    return FitResult(model, _decode(_native.fit_ipc(_ipc(data), model)))
+    options: dict[str, Any] = {
+        "model_options": model_options if model_options is not None else {},
+        "fit_options": fit_options if fit_options is not None else {},
+    }
+    if observed_columns is not None:
+        options["observed_columns"] = observed_columns
+    return FitResult(model, _decode(_native.fit_ipc(_ipc(data), model, json.dumps(options, allow_nan=False))))

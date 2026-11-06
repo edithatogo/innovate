@@ -120,7 +120,17 @@ pub(crate) fn validate_request(request: &KernelRequest) -> Result<(), KernelBind
         return Ok(());
     }
     let model = request.model_key.as_deref().unwrap_or("");
-    if !["bass", "logistic", "gompertz", "fisher_pry", "norton_bass"].contains(&model) {
+    if ![
+        "bass",
+        "logistic",
+        "gompertz",
+        "fisher_pry",
+        "norton_bass",
+        "lotka_volterra",
+        "multi_product",
+    ]
+    .contains(&model)
+    {
         return Err(KernelBindingError::unsupported_native_operation(
             operation,
             format!("native model '{model}' is unavailable pending migration"),
@@ -131,6 +141,61 @@ pub(crate) fn validate_request(request: &KernelRequest) -> Result<(), KernelBind
         .as_object()
         .ok_or_else(|| fail("payload must be an object"))?;
     let inputs = object_section(payload, "inputs", operation)?;
+    if ["norton_bass", "lotka_volterra", "multi_product"].contains(&model) {
+        return Ok(());
+    } // Its module validates scalar/matrix observations and generation-specific parameters.
+    if payload
+        .get("state")
+        .and_then(|s| s.get("model_key"))
+        .and_then(Value::as_str)
+        .is_some_and(|m| m != model)
+    {
+        return Err(fail("request and state model_key differ"));
+    }
+    for value in [
+        payload.get("constructor_kwargs"),
+        payload.get("model_kwargs"),
+        payload
+            .get("state")
+            .and_then(|s| s.get("constructor_kwargs")),
+    ]
+    .into_iter()
+    .flatten()
+    {
+        let options = value
+            .as_object()
+            .ok_or_else(|| fail("constructor options must be an object"))?;
+        if options.iter().any(|(k, v)| {
+            !((k == "covariates" && v.as_array().is_some_and(Vec::is_empty))
+                || (k == "t_event" && v.is_null()))
+        }) {
+            return Err(KernelBindingError::unsupported_native_operation(
+                operation,
+                "scalar model constructor options remain unavailable",
+            ));
+        }
+    }
+    for value in [
+        payload.get("fitter_options"),
+        payload.get("predict_kwargs"),
+        payload.get("state").and_then(|s| s.get("predict_kwargs")),
+    ]
+    .into_iter()
+    .flatten()
+    {
+        if !value.as_object().is_some_and(Map::is_empty) {
+            return Err(KernelBindingError::unsupported_native_operation(
+                operation,
+                "custom prediction/fitter options remain unavailable",
+            ));
+        }
+    }
+    if inputs.contains_key("covariates") {
+        return Err(KernelBindingError::unsupported_native_operation(
+            operation,
+            "scalar covariates remain unavailable",
+        ));
+    }
     if let Some(value) = inputs.get("time").or_else(|| inputs.get("t")) {
         let time = numeric_array(value, "time", operation)?;
         if time.iter().any(|v| !v.is_finite()) || time.windows(2).any(|p| p[1] <= p[0]) {

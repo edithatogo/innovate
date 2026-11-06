@@ -9,8 +9,10 @@ numerical fallback. Rust is the core library, not a fourth binding.
 
 ## Current native scope
 
-The kernel implements bounded parameter-only Bass, Logistic, Gompertz,
-Fisher–Pry and single-generation Norton–Bass fit/predict/simulate/summary paths.
+The kernel implements bounded Bass, Logistic, Gompertz, Fisher–Pry,
+multi-generation Norton–Bass, Lotka–Volterra and multi-product competition
+fit/predict/simulate/summary/diagnostics paths. Fitting reports numerical
+convergence and local sensitivity rank.
 These are development capabilities, not full scientific or release acceptance.
 Advanced model families, covariates, event splits, uncertainty, native Kairos
 simulation and the remaining areas in [the migration ledger](migration-ledger.json)
@@ -58,7 +60,9 @@ Predictions preserve row identity and never overwrite an existing prediction col
 Gompertz now uses the explicit standard curve `a * exp(-b * exp(-c * t))`;
 the earlier implementation ignored `b`. Unimplemented significance tests return
 null with `not_implemented`, never fabricated p-values. Synthetic parameter
-recovery is tested, but general identifiability and calibrated uncertainty remain open.
+recovery and independent ODE fixtures are tested. Local rank does not establish
+global identifiability or calibrated uncertainty. See the
+[native scientific conventions and examples](docs/astro-site/src/content/docs/native-migration.md).
 
 Voiage owns VOI/economic analysis; Innovate hands off adoption/scenario tables
 through Polars/Arrow. Kairos owns event scheduling, DES/ABM state and deterministic

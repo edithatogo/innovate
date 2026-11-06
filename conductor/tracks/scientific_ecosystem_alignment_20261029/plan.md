@@ -74,3 +74,29 @@ identifiability reporting, followed by current Kairos dispatch qualification.
 The branch is an isolated review packet; shared/main promotion stays with the
 integrator. No public push, hosted dispatch, publication or authentication change
 was performed. No active native test operation remains at the checkpoint.
+
+## Continued native feature migration — 7 November 2026
+
+User instruction resumes the same writing lane at 2e0b9930. Checkout is clean;
+other worktrees and native operations retain their owners. This chat owns Rust
+scientific modules, thin bindings, affected tests/docs and this track's records
+on codex/reconcile-scientific-20261106. No main or shared environment promotion.
+
+- [x] Port bounded multi-generation Norton–Bass prediction, rates, fit and diagnostics; explicit historical equations and independent oracles pass (native-features-20261107.json).
+- [x] Add native optimizer convergence and local identifiability reporting to all seven fitters; local-rank and non-convergence cases pass.
+- [x] Extend Polars multi-output fitting/prediction and validate installed Python, Julia and R consumers (local macOS; packaging/platform limits remain).
+- [~] Continue remaining model/feature obligations: bounded Lotka–Volterra and multi-product competition now pass independent ODE/analytic and binding cases; current Kairos qualification is next.
+- [x] Review this bounded implementation, update capability/feature evidence and preserve failing full-release gates (native-features-review-20261107.md).
+
+The established native workflow uses repo-local Python 3.15.2 and focused Cargo/
+pytest selectors. Earlier Python 3.14 workflow examples are superseded by the
+current technology decision and user runtime instruction.
+
+The continuation receipt records 37 Rust tests (including the coverage run),
+22 installed Python checks, 128 Julia assertions and the R native cases. Overall
+core/C ABI coverage remains below 80%; all 38 full-feature obligations remain
+release blockers. The next source task is current Kairos execution integration,
+then remaining covariate/model/inference obligations. A bounded read on 7 November
+found remote Kairos HEAD `d56863505d938feb069af88a737eb7668113d14b` while its
+separate local checkout was at `339aba155cc5ea7d393a5bd78a7947eddae26e03`. Neither
+checkout nor Innovate's dependency pins were changed by this continuation.
