@@ -4,6 +4,11 @@ description: Stability API surface and public-facing behavior.
 slug: latest/maintainers/stability
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 # `innovate.stability` Module
 
 The stability module documentation is API-oriented and currently imported as an auto-doc surface.

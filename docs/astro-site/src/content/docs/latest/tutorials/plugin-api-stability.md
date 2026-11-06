@@ -3,6 +3,11 @@ title: Plugin API and Stability Tiers
 description: Stability tiers, extension manifests, and plugin lifecycle rules.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 `innovate` treats API stability as an explicit contract instead of a social
 convention.
 

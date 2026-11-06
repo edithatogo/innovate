@@ -1,0 +1,38 @@
+{
+  "scope": "Rust core and C ABI only; not tabular, Python, or full migration coverage. No branch instrumentation.",
+  "totals": {
+    "branches": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "functions": {
+      "count": 318,
+      "covered": 197,
+      "percent": 61.94968553459119
+    },
+    "instantiations": {
+      "count": 653,
+      "covered": 205,
+      "percent": 31.393568147013784
+    },
+    "lines": {
+      "count": 3418,
+      "covered": 2444,
+      "percent": 71.50380339379754
+    },
+    "mcdc": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "regions": {
+      "count": 4952,
+      "covered": 4002,
+      "notcovered": 950,
+      "percent": 80.81583198707592
+    }
+  }
+}

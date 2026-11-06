@@ -3,6 +3,11 @@ title: Fitting Diffusion Models
 description: Learn how to fit diffusion models to adoption data using Innovate.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 Innovate provides a unified interface for fitting a wide range of diffusion models.
 
 ## Available Models

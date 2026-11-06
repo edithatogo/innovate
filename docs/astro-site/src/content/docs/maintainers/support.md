@@ -3,6 +3,11 @@ title: Support Policy
 description: Evidence-backed support policy for Innovate maintainers.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 # Support Policy
 
 Support policy names the maintained docs, registry, and issue-reporting surfaces.

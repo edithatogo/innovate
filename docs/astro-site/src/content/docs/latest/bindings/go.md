@@ -3,6 +3,11 @@ title: Go Bindings
 description: Go module adapter over the shared kernel contract.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 The Go bindings expose the stable `innovate` kernel through a thin adapter
 layer. The Go package does not reimplement model behavior; it shells out to the
 shared Python kernel bridge and normalizes the results into Go-friendly data

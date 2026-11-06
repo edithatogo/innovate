@@ -4,6 +4,11 @@ description: Per-target execution checklist for HPC registry submission.
 slug: latest/operations/hpc-submission-workflow
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 # HPC Submission Workflow
 
 The HPC workflow is now split by target:

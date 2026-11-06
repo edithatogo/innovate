@@ -1,59 +1,70 @@
 # Innovate
 
-Innovate is a contract-first diffusion modeling library. The current design centers on a stable functional kernel, Arrow interchange, optional backend implementations, and language bindings layered on top of the same core behavior.
+Innovate models innovation adoption, technology substitution and policy diffusion.
+The 0.7 development line uses a **Rust scientific core**, **Polars** tables and
+thin **Python, Julia and R** bindings. This is a breaking migration in progress.
+All current and planned scientific features remain required; unported features
+are temporarily unavailable and return explicit errors. There is no Python
+numerical fallback. Rust is the core library, not a fourth binding.
 
-The Astro/Starlight site is the active documentation surface. This README is the
-short front door.
-Markdown prose is checked in CI with Vale to keep the short-form docs clear and
-consistent.
+## Current native scope
 
-## What lives where
+The kernel implements bounded parameter-only Bass, Logistic, Gompertz,
+Fisher–Pry and single-generation Norton–Bass fit/predict/simulate/summary paths.
+These are development capabilities, not full scientific or release acceptance.
+Advanced model families, covariates, event splits, uncertainty, native Kairos
+simulation and the remaining areas in [the migration ledger](migration-ledger.json)
+still require implementation or qualification. The release gate currently fails.
+The earlier Python suite remains in Git history as migration evidence; the new
+native suite does not claim equivalent feature coverage.
 
-- `src/innovate/` contains the Python kernel, fitters, diagnostics, Arrow interchange, and stability layers.
-- `bindings/` contains the language bindings and their tests.
-- `docs/astro-site/` contains the active Astro/Starlight documentation site.
-- `docs/source/_static/` contains machine-readable release, registry, and migration evidence consumed by the Astro/Starlight site and CI.
-- `conductor/` contains the track history and archived implementation plans.
+Polars DataFrames/LazyFrames are the Python table interface. Rust reads/writes
+Arrow IPC and owns table validation and predictions. IPC currently copies buffers;
+LazyFrames collect at the native execution boundary. R/Julia currently expose
+the versioned JSON contract through a native C ABI. Their tabular IPC adapters
+and distributable native-library bundles remain open.
 
-## Core ideas
+## Development
 
-- The functional kernel is the primary surface for fitting, predicting, simulating, summarizing, and diagnosing models.
-- Arrow interchange is the stable cross-language data contract.
-- Optional backends extend the same contract without changing the public API.
-- Bindings are thin layers over the kernel, not separate model implementations.
+Use Rust/Cargo 1.99.1 and repo-local Python 3.15.2. Keep any earlier environment
+until its active operations finish. The new environment is separate:
 
-## Install
-
-```bash
-python -m pip install innovate
+```sh
+uv venv .venv-native --python 3.15.2
+UV_PROJECT_ENVIRONMENT=.venv-native uv sync --locked --python 3.15.2
+.venv-native/bin/python -c 'import sys; print(sys.version, sys.prefix)'
+cargo test --locked -p innovate-core -p innovate-tabular -p innovate-ffi -j 2
+.venv-native/bin/python -m pytest tests/native
+.venv-native/bin/python scripts/check_migration.py
 ```
-
-For optional JAX and Bayesian backends:
-
-```bash
-python -m pip install "innovate[jax,bayesian]"
-```
-
-For contributor setup from a checkout:
-
-```bash
-uv sync
-```
-
-## Quick start
 
 ```python
-from innovate import fit_model, predict_model
+import polars as pl
+from innovate import fit, predict
 
-result = fit_model(data)
-forecast = predict_model(result, horizon=12)
+forecast = predict("logistic", pl.DataFrame({"time": [0.0, 1.0, 2.0]}),
+                   {"L": 100.0, "k": 1.0, "x0": 1.0})
+result = fit("logistic", pl.DataFrame({
+    "time": [0.0, 1.0, 2.0, 3.0, 4.0, 5.0],
+    "observed": [4.7, 11.9, 26.9, 50.0, 73.1, 88.1],
+}))
 ```
 
-## Read next
+## Contracts and scientific changes
 
-- [Documentation landing page](docs/astro-site/src/content/docs/index.md)
-- [Tutorials](docs/astro-site/src/content/docs/tutorials/index.md)
-- [Bindings hub](docs/astro-site/src/content/docs/bindings/index.md)
-- [Architecture principles](docs/architecture_principles.md)
-- [Modernization roadmap](docs/architecture_modernization_roadmap.md)
-- [ADR index](docs/adr/index.md)
+The new wire schema is **2.0**. Time columns must be finite and strictly increasing;
+nulls, duplicate times and invalid parameter domains are rejected in Rust.
+Predictions preserve row identity and never overwrite an existing prediction column.
+Gompertz now uses the explicit standard curve `a * exp(-b * exp(-c * t))`;
+the earlier implementation ignored `b`. Unimplemented significance tests return
+null with `not_implemented`, never fabricated p-values. Synthetic parameter
+recovery is tested, but general identifiability and calibrated uncertainty remain open.
+
+Voiage owns VOI/economic analysis; Innovate hands off adoption/scenario tables
+through Polars/Arrow. Kairos owns event scheduling, DES/ABM state and deterministic
+replay. [The migration plan](conductor/tracks/scientific_ecosystem_alignment_20261029/migration-plan.md)
+records inspected source revisions, recommendations and remaining gates.
+
+Only Python, Julia and R bindings are maintained. TypeScript, Go and C# packages
+were removed; earlier documentation and Conductor records are historical evidence.
+Project-owned code is licensed under [Apache-2.0](LICENSE).

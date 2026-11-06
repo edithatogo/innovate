@@ -4,6 +4,11 @@ description: Eligibility and promotion policy for optional XLA execution.
 slug: latest/operations/xla-backend
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 # XLA Backend Strategy
 
 This page defines when `innovate` should prefer XLA-backed execution and how

@@ -1,9 +1,4 @@
-packages:
-  - "."
-
-allowBuilds:
-  esbuild: true
-  sharp: true
-
-overrides:
-  js-yaml: 4.2.0
+# Keep newly published packages behind the package manager's age guard.
+# Direct version candidates are qualified after the guard admits them.
+minimumReleaseAge: 1440
+minimumReleaseAgeStrict: true

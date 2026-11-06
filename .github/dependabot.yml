@@ -39,18 +39,8 @@ updates:
     open-pull-requests-limit: 10
     labels: ["dependencies", "javascript"]
 
-  - package-ecosystem: npm
-    directory: /bindings/typescript
-    schedule:
-      interval: weekly
-      day: monday
-      time: "07:30"
-      timezone: Australia/Sydney
-    open-pull-requests-limit: 10
-    labels: ["dependencies", "javascript"]
-
   - package-ecosystem: cargo
-    directory: /bindings/rust
+    directory: /
     schedule:
       interval: weekly
       day: monday

@@ -1,0 +1,22 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.21s
+     Running tests/model_oracles.rs (/tmp/innovate-scientific-core-target/debug/deps/model_oracles-5f16bc3d3ac3adae)
+
+running 1 test
+test five_model_prediction_simulation_and_fitted_forecast_oracles ... FAILED
+
+failures:
+
+---- five_model_prediction_simulation_and_fitted_forecast_oracles stdout ----
+
+thread 'five_model_prediction_simulation_and_fitted_forecast_oracles' (24522167) panicked at rust/crates/innovate-core/tests/model_oracles.rs:68:14:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "unsupported_native_operation", message: "native Bass fitting could not identify a stable market potential", operation: Some(FitModel) }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    five_model_prediction_simulation_and_fitted_forecast_oracles
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --test model_oracles`

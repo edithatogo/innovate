@@ -1,0 +1,25 @@
+[workspace]
+members = ["rust/crates/innovate-core", "rust/crates/innovate-tabular", "rust/crates/innovate-ffi", "rust/crates/innovate-python"]
+resolver = "3"
+
+[workspace.package]
+version = "0.7.0-alpha.1"
+edition = "2024"
+rust-version = "1.99.1"
+license = "Apache-2.0"
+repository = "https://github.com/edithatogo/innovate"
+
+[workspace.dependencies]
+innovate-core = { path = "rust/crates/innovate-core", version = "0.7.0-alpha.1" }
+serde = { version = "=1.0.229", features = ["derive"] }
+serde_json = "=1.0.154"
+
+[profile.dev]
+debug = 0
+
+[profile.test]
+debug = 0
+
+# Required by the exact upstream Polars source; preserve its immutable patch.
+[patch.crates-io]
+hashbrown = { git = "https://github.com/pola-rs/hashbrown", rev = "d76a6f81abd8f388676aff15068236a8d21c7e1a" }

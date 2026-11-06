@@ -3,6 +3,11 @@ title: Rust Core
 description: Rust runtime migration roadmap and ownership closure.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 # Rust core roadmap
 
 Rust owns the promoted native slices, but Rust does not own the complete core

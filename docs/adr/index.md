@@ -11,3 +11,5 @@ This directory contains Architecture Decision Records (ADRs) for durable technic
 0004-core-api-bindings-and-rust-core-trajectory
 0005-heoml-schema-placement
 ```
+
+- [ADR 0006: Rust and Polars native runtime](0006-rust-polars-native-only.md)

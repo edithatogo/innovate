@@ -4,6 +4,11 @@ description: Production documentation deployment checklist and rollback notes.
 slug: latest/maintainers/deployment-readiness
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 # Deployment Readiness
 
 This page records the Starlight production deployment checklist and rollback

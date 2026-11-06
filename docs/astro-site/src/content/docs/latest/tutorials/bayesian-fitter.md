@@ -3,6 +3,11 @@ title: Bayesian Fitting for Diffusion Models
 description: Using Bayesian inference to estimate model parameters and quantify uncertainty.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 This tutorial provides a guide to using the `NumpyroFitter` in the `innovate` library. Bayesian methods offer a powerful way to estimate the parameters of diffusion models, providing not just point estimates but entire posterior distributions that quantify uncertainty.
 
 ## Introduction to Bayesian fitting

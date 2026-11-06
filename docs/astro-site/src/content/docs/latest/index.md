@@ -17,6 +17,11 @@ hero:
 slug: latest
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
 Innovate provides a unified, contract-first framework for modelling how innovations, policies, and behaviours spread through populations over time. Built on a functional kernel with Arrow-based data interchange, it supports everything from classic Bass diffusion models to agent-based simulations and probabilistic forecasting.

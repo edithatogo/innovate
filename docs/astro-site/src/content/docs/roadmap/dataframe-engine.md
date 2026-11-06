@@ -3,6 +3,11 @@ title: DataFrame Engine Experiments
 description: Stable kernel-schema-first DataFrame engine compatibility notes.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 # DataFrame engine experiments
 
 pandas plus PyArrow remains the default Python tabular surface for Innovate.

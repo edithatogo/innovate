@@ -62,13 +62,18 @@ jobs:
         run: bash <(curl --fail --silent --show-error https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
       - name: Lint GitHub Actions workflows
         run: ./actionlint -color
-      - name: Install zizmor
-        run: python -m pip install --disable-pip-version-check zizmor
+      - name: Install uv
+        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
+      - name: Select repository-local policy environment
+        run: |
+          uv venv .venv-policy --python 3.15.2
+          .venv-policy/bin/python -c 'import sys; assert sys.version_info[:3] == (3, 15, 2)'
+          uv pip install --python .venv-policy/bin/python zizmor==1.32.0
       - name: Audit GitHub Actions security posture
-        run: zizmor .github/workflows/security-quality.yml .github/workflows/scorecard.yml
+        run: .venv-policy/bin/zizmor .github/workflows/security-quality.yml .github/workflows/scorecard.yml
       - name: Validate dependency policy
         run: |
-          python - <<'PY'
+          .venv-policy/bin/python - <<'PY'
           from pathlib import Path
           import sys
 
@@ -93,27 +98,20 @@ jobs:
         with:
           enable-cache: true
       - name: Set up Python
-        run: uv python install 3.15.1
+        run: uv python install 3.15.2
+      - name: Select native Rust compiler
+        uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
+        with:
+          toolchain: 1.99.1
       - name: Install locked development environment
-        run: uv sync --locked --python 3.15.1
+        run: uv sync --locked --python 3.15.2
       - name: Run Ruff checks
         run: |
-          uv run ruff check src tests
-          uv run ruff format --check src tests
+          uv run --no-sync ruff check bindings/python tests/native
+          uv run --no-sync ruff format --check bindings/python tests/native
       - name: Run security and type checks
         run: |
-          uv run bandit -r src/innovate -c pyproject.toml
-          uv run basedpyright --warnings \
-            src/innovate/__init__.py \
-            src/innovate/backend.py \
-            src/innovate/backends/__init__.py \
-            src/innovate/capabilities.py \
-            src/innovate/diffuse/__init__.py \
-            src/innovate/substitute/__init__.py \
-            src/innovate/ecosystem/__init__.py
-      - name: Run focused test gate
-        run: >-
-          uv run pytest -q
-          tests/unit/test_causal_policy_security.py
-          tests/unit/test_input_validation.py
-          tests/unit/test_public_api.py
+          uv run --no-sync bandit -r bindings/python/innovate -q
+          uv run --no-sync basedpyright
+      - name: Run native binding test gate
+        run: uv run --no-sync pytest tests/native

@@ -4,6 +4,11 @@ description: Route inventory and forwarder plan for the docs-site cutover.
 slug: latest/migration/redirects
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 # Redirects
 
 This page records historical source-to-Astro route mappings for the docs-site

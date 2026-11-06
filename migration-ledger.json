@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "source_commit": "56d91dd716747900465ce2d1dc8c0231aa8a337b",
+  "release_ready": false,
+  "policy": "All existing and planned scientific features are required. Unavailability is temporary and never counts as completed migration.",
+  "models": [
+    {
+      "key": "bass",
+      "status": "bounded_native",
+      "required": true
+    },
+    {
+      "key": "complementary_goods",
+      "status": "unavailable",
+      "required": true
+    },
+    {
+      "key": "composite",
+      "status": "unavailable",
+      "required": true
+    },
+    {
+      "key": "fisher_pry",
+      "status": "bounded_native",
+      "required": true
+    },
+    {
+      "key": "gompertz",
+      "status": "bounded_native",
+      "required": true
+    },
+    {
+      "key": "hierarchical",
+      "status": "unavailable",
+      "required": true
+    },
+    {
+      "key": "latent_process",
+      "status": "unavailable",
+      "required": true
+    },
+    {
+      "key": "lock_in",
+      "status": "unavailable",
+      "required": true
+    },
+    {
+      "key": "logistic",
+      "status": "bounded_native",
+      "required": true
+    },
+    {
+      "key": "lotka_volterra",
+      "status": "unavailable",
+      "required": true
+    },
+    {
+      "key": "mixture",
+      "status": "unavailable",
+      "required": true
+    },
+    {
+      "key": "multi_product",
+      "status": "unavailable",
+      "required": true
+    },
+    {
+      "key": "network_diffusion",
+      "status": "unavailable",
+      "required": true
+    },
+    {
+      "key": "norton_bass",
+      "status": "bounded_native",
+      "required": true
+    },
+    {
+      "key": "policy_hazard",
+      "status": "unavailable",
+      "required": true
+    },
+    {
+      "key": "regime_switching",
+      "status": "unavailable",
+      "required": true
+    }
+  ],
+  "feature_areas": [
+    {
+      "key": "covariates_and_events",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "multi_generation_substitution",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "competitive_ecosystems",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "hierarchical_mixture_inference",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "latent_regime_models",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "network_policy_diffusion",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "kairos_des_abm",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "bayesian_inference",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "bootstrap_uncertainty",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "batch_fitting",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "preprocessing",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "causal_analysis",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "adopter_classification",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "data_ingestion_provenance_validation",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "scenario_registry_execution",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "explainability_sensitivity_reporting",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "benchmark_model_cards",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "plugin_contracts",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "remote_execution",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "accelerator_hpc",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "voiage_arrow_handoff",
+      "status": "pending",
+      "required": true
+    },
+    {
+      "key": "calibration_identifiability",
+      "status": "pending",
+      "required": true
+    }
+  ]
+}

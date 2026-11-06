@@ -1,84 +1,23 @@
-# Initial Concept
+# Innovate product context
 
-A Python library for simplifying innovation and policy diffusion modeling.
+Innovate is a scientific library for innovation adoption, policy diffusion,
+technology substitution, competition and connected simulation. The user-selected
+0.7 architecture is a Rust core with Polars tables and Python, Julia and R
+bindings only. Arrow IPC/Parquet is the ecosystem exchange direction.
 
----
+All existing and planned models, fitting methods, uncertainty, preprocessing,
+causal/policy/scenario analysis, data provenance, reporting, plugins, benchmarks
+and remote/HPC ambitions remain required. Breaking API redesign and temporary
+unavailability are explicitly authorised during migration. Unimplemented features
+must fail clearly and stay open in the feature ledger; never use a hidden Python
+fallback or equate archived implementation tasks with scientific acceptance.
 
-# Product Vision
+Innovate owns diffusion science. Kairos owns scheduling, DES/ABM state and replay.
+Voiage owns economic/VOI analysis. Reuse their contracts and qualified installed
+consumer patterns without inheriting extra language surfaces or unproved
+accelerator/native claims.
 
-**innovate** is a comprehensive, modular Python library for modeling the diffusion, substitution, competition, and dynamics of innovations, technologies, and policies over time. It serves researchers and practitioners in economics, marketing, public policy, technology forecasting, and epidemiology.
-
-## Core Philosophy
-
-- **Modularity**: Each modeling concern is isolated into focused, composable modules
-- **Extensibility**: Clear base classes enable custom model implementations
-- **Computational Performance**: Vectorized NumPy operations with optional JAX acceleration
-- **Advanced Parameterization**: Support for covariate-driven parameters, time-varying parameters, and mixture models
-- **Contract-First Portability**: The stable API, schemas, and functional kernel define the product contract before language-specific bindings
-- **Thin Language Bindings**: R, Rust, Julia, TypeScript, Go, C#, and other bindings should expose the same kernel behavior without duplicating model logic
-- **Installable Multi-Language Packages**: Binding work should progress toward idiomatic package-manager distribution for each language, including npm, crates.io, R-universe/CRAN, Julia General, versioned Go modules, and NuGet
-- **Rust Core Trajectory**: Rust is the strategic long-term core for robust, efficient, portable execution, with Python remaining the primary ergonomic research interface
-
-## Target Users
-
-- **Academic Researchers** in economics, marketing, and public policy
-- **Data Scientists** modeling technology adoption and market dynamics
-- **Policy Analysts** simulating policy diffusion and impact
-- **Forecasters** predicting innovation lifecycles and adoption curves
-
-## Architecture
-
-The library follows a layered architecture. The current Python package provides the primary user-facing API and reference implementation, while the durable product contract is the canonical public API, capability registry, schema layer, and functional kernel. Language bindings must target that contract so behavior stays consistent across Python, R, Rust, Julia, TypeScript, Go, and C#.
-
-Bindings should be treated as product surfaces with CI and packaging obligations, not as examples alone. Each implemented binding needs language-native validation in CI and a publication path through its expected ecosystem package manager.
-
-Over time, performance-critical and portability-critical kernel components should move toward a Rust implementation. Rust should be treated as the strategic core runtime direction, not as another client binding. Python remains the preferred interactive and research-oriented interface, while Rust provides a path to stronger correctness boundaries, packaging portability, and efficient shared execution.
-
-The current Python source layout is:
-
-```
-src/innovate/
-├── base/           # Abstract base classes for all models
-├── backends/       # NumPy/JAX computational backends
-├── diffuse/        # Single-innovation adoption curves (Bass, Gompertz, Logistic)
-├── substitute/     # Technology replacement models (Fisher-Pry, Norton-Bass)
-├── compete/        # Market share competition models
-├── hype/           # Gartner Hype Cycle simulation
-├── fail/           # Failed adoption analysis
-├── adopt/          # Adopter classification
-├── dynamics/       # System dynamics (contagion, competition, growth)
-├── abm/            # Agent-Based Modeling (Mesa integration)
-├── fitters/        # Parameter estimation and curve fitting
-├── plots/          # Visualization utilities
-├── preprocess/     # Data preprocessing utilities
-├── causal/         # Causal inference tools
-├── policy/         # Policy analysis tools
-├── reduce/         # Dimensionality reduction
-├── path_dependence/# Path dependency modeling
-├── ecosystem(s)/   # Ecosystem modeling
-└── utils/          # Shared utilities
-```
-
-## Key Differentiators
-
-1. **Unified Framework**: Combines diffusion models, competition models, and ABM under one roof
-2. **Advanced Fitting**: Bayesian (NumPyro/BlackJAX), JAX-accelerated, and classical optimization
-3. **Rich Visualization**: Built-in plotting for diffusion curves, competition dynamics, and diagnostics
-4. **Production-Ready**: Comprehensive test suite, type hints, CI/CD, and documentation
-5. **Language-Neutral Kernel Contract**: Stable schemas and operations enable consistent bindings across Python, R, Rust, Julia, TypeScript, Go, and C#
-6. **Rust-Ready Core Architecture**: The long-term execution core is designed to migrate toward Rust without sacrificing Python usability
-
-## Project Status
-
-- **Version**: 0.5.0
-- **License**: Apache 2.0
-- **Build System**: setuptools
-- **Testing**: pytest with parallel execution, property-based testing, mutation testing
-- **Code Quality**: Ruff, MyPy, Pyright, Bandit
-- Documentation: Astro/Starlight site only. Release, registry, and migration
-  evidence remains as data artifacts under `docs/source/_static/`.
-- **Vision Status**: Conductor roadmap remediation tracks are complete and
-  archived. The full product vision still has future-state gates for full Rust
-  ownership and maintainer-managed external submissions; those gates must not
-  be described as complete until their evidence artifacts or external receipts
-  exist.
+The active migration is `scientific_ecosystem_alignment_20261029/migration-plan.md`.
+Current installed development coverage is bounded; `migration-ledger.json` blocks
+release until all required scientific and distribution qualification is complete.
+Project-owned code uses Apache-2.0; upstream licences and historical evidence remain.

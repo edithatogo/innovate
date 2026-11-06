@@ -1,71 +1,9 @@
-# innovate Julia bindings
+# Innovate JULIA native binding
 
-This package is the Julia-facing adapter over the Python `innovate` functional kernel. Promoted
-native slices execute in the shared kernel contract, unsupported promoted payloads return explicit
-native errors, and bridge fallback remains available only for explicitly non-native model families.
-
-## Installation
-
-For checkout development:
-
-```bash
-julia --project=bindings/julia -e 'using Pkg; Pkg.instantiate()'
-julia --project=bindings/julia bindings/julia/test/runtests.jl
-```
-
-## Invocation path
-
-The Julia package resolves the bridge entrypoint at `inst/python/kernel_bridge.py` and keeps the
-runtime boundary thin. The package shells out to the Python kernel bridge for explicitly
-non-native model families instead of duplicating model logic in Julia.
-
-## Current scaffold
-
-- Package metadata in `Project.toml`
-- Julia module in `src/Innovate.jl`
-- Contract and wrapper tests under `test/`
-- A Python bridge entrypoint under `inst/python/`
-- Stable operations for discovery, fit, predict, simulate, summarize, and diagnose
-- Schema-compatibility drift checks in `test/schema_compatibility.jl`
-
-## Backend expectations
-
-- Julia 1.12 or newer is required.
-- In a repository checkout the bridge uses `uv run python` by default.
-- In an installed-package context the bridge uses the configured Python launcher from
-  `INNOVATE_PYTHON_COMMAND`, or `python3` if no override is set.
-- The Julia package only prepends `PYTHONPATH` with the repository `src/` directory when a
-  checkout is detected.
-- Native promoted slices do not silently fall back to Python; only explicitly non-native
-  families use the bridge.
-
-## Checkout example
-
-```julia
-include(joinpath(@__DIR__, "src", "Innovate.jl"))
-
-using .Innovate
-
-request = kernel_request(operation = "discover_models")
-schema_version = kernel_schema_version()
-models = kernel_discover_models()
-```
-
-Installed-package usage is validated by the smoke test in `test/installed_package_smoke.jl`.
-
-## Compatibility
-
-The Julia bindings are intentionally thin and contract-driven. The Julia schema version is kept in
-lockstep with the Python kernel version, and the automated test suite fails if the versions drift.
-
-## Registry readiness
-
-Julia General registration from this monorepo uses:
-
-```text
-@JuliaRegistrator register subdir=bindings/julia
-```
-
-The package includes local license metadata and dependency compatibility bounds. Registry readiness
-is validated by an installed-package smoke test that can run the bridge against a configured Python
-environment with the Python `innovate` package available.
+This 0.7 development package invokes the Rust C ABI, without Python. Build the
+core with `cargo build --locked -p innovate-ffi` from the repository root and set
+`INNOVATE_NATIVE_LIBRARY` to the absolute shared-library path under `target/debug`.
+Only bounded native capabilities are currently exposed. Advanced features and
+installed native distribution bundles remain open in the root migration ledger.
+The JSON request schema is 2.0. Inputs are borrowed for the call; the wrapper
+copies response text and releases the Rust-owned result exactly once.

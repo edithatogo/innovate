@@ -1,3 +1,8 @@
+> Historical pre-0.7 API reference. These Python APIs are temporarily unavailable.
+> The current Rust/Polars API is documented in README.md and
+> docs/astro-site/src/content/docs/native-migration.md. Requirements remain in
+> migration-ledger.json; this document is not a current support claim.
+
 # Innovate Library API Documentation
 
 ## Overview

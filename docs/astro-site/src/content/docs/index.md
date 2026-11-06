@@ -1,83 +1,54 @@
 ---
-title: Innovate Documentation
-description: A Python library for simplifying innovation/policy diffusion modelling.
-template: splash
-hero:
-  title: Innovate
-  tagline: A Python library for simplifying innovation and policy diffusion modelling.
-  actions:
-    - text: Get Started
-      link: /innovate/user-guide/getting-started/
-      icon: right-arrow
-      variant: primary
-    - text: GitHub
-      link: https://github.com/edithatogo/innovate
-      icon: external
-      variant: minimal
+title: Innovate
+description: Current development API and feature migration status
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+Innovate 0.7 is a breaking development line. Rust owns computation and scientific
+validation. Python, Julia and R are the supported bindings; Polars owns tables.
+The installed Python package requires Polars and its native extension. There is
+no Python numerical fallback, pandas or xarray runtime.
 
-Innovate provides a unified, contract-first framework for modelling how innovations, policies, and behaviours spread through populations over time. Built on a functional kernel with Arrow-based data interchange, it supports everything from classic Bass diffusion models to agent-based simulations and probabilistic forecasting.
+## Current scope
 
-## What Innovate offers
+Bounded native Bass, Logistic, Gompertz, Fisher–Pry and one-generation Norton–Bass
+operations are exposed. Advanced models, covariates, events, uncertainty and
+native Kairos simulation remain migration obligations. A development test pass
+is not full scientific acceptance. Release is blocked until the feature ledger
+and installed/platform qualification gates close.
 
-<CardGrid>
-  <Card title="Diffusion Modelling" icon="globe">
-    Fit, compare, and forecast diffusion models using Bass, Gompertz, Logistic, Weibull, and other S-curve families. Supports multiple fitting methods including MLE, NLS, and Bayesian inference.
-  </Card>
-  <Card title="Agent-Based Simulation" icon="network">
-    Build and run agent-based diffusion models on networks using Mesa integration. Model peer effects, network structure, and heterogeneous adoption thresholds.
-  </Card>
-  <Card title="Multi-Backend Architecture" icon="layers">
-    Choose between NumPy, JAX, or Numba backends for numerical computation. The same API works across all backends, enabling seamless scaling from laptops to HPC clusters.
-  </Card>
-  <Card title="Arrow Interchange" icon="database">
-    All data flows through a stable Arrow-based interchange format, enabling zero-copy interoperability between Python, Rust, R, Julia, and other languages.
-  </Card>
-  <Card title="Diagnostics & Validation" icon="check-circle">
-    Comprehensive model diagnostics including residual analysis, goodness-of-fit tests, change-point detection, and cross-validation.
-  </Card>
-  <Card title="Language Bindings" icon="code">
-    The functional kernel is exposed through bindings for Rust, R, Julia, TypeScript, Go, and C#, all sharing the same core behaviour via the Arrow contract.
-  </Card>
-</CardGrid>
-
-## Quick Example
+## Python
 
 ```python
-import pandas as pd
-from innovate import fit_model, predict_model
+import polars as pl
+from innovate import predict, fit, capabilities
 
-# Load adoption data (e.g., cumulative adoptions over time)
-data = pd.DataFrame({
-    'time': range(1, 13),
-    'adoptions': [1, 3, 8, 18, 35, 60, 90, 125, 160, 195, 225, 245]
-})
-
-# Fit a Bass diffusion model
-result = fit_model(data, model='bass', method='mle')
-
-# Forecast 12 periods ahead
-forecast = predict_model(result, horizon=12)
-
-print(forecast)
+frame = pl.DataFrame({"time": [0.0, 1.0, 2.0]})
+result = predict("logistic", frame, {"L": 100.0, "k": 1.0, "x0": 1.0})
+print(result)
 ```
 
-## Key Features
+Inputs require finite, strictly increasing time. Nulls, duplicate times and
+invalid domains are rejected in Rust. IPC currently copies; LazyFrames collect
+at the execution boundary. Fit data additionally needs an `observed` column.
 
-- **Contract-first design**: Stable kernel API with backward compatibility guarantees
-- **Multiple model families**: Bass, Gompertz, Logistic, Weibull, Gumbel, and more
-- **Flexible fitting**: Maximum Likelihood, Non-linear Least Squares, Bayesian MCMC
-- **Network effects**: Agent-based simulation with peer influence and network structure
-- **Change-point detection**: Automatically detect structural breaks in diffusion patterns
-- **Cross-language**: Same models, same results, from Python to Rust to R
+## R and Julia
 
-## Next Steps
+Both call the Rust library through the C ABI and need no Python interpreter.
+Build with `cargo build --locked -p innovate-ffi`; set `INNOVATE_NATIVE_LIBRARY`
+to the resulting shared library. Julia uses JSON 1.13.4 and R uses jsonlite 2.0.0.
+Native distribution bundles and tabular IPC wrappers remain open qualification.
 
-| Topic | Link |
-|-------|------|
-| Installation guide | [Getting Started](/innovate/user-guide/getting-started/) |
-| Core concepts | [Kernel Overview](/innovate/core/kernel/) |
-| Full API reference | [Python API](/innovate/api/python/) |
-| Documentation migration | [Migration Guide](/innovate/migration/) |
+## Scientific contract
+
+Schema 2.0 makes Gompertz explicit: `a * exp(-b * exp(-c*t))`. The previous
+implementation ignored `b`. Unimplemented significance tests return null with
+`not_implemented`. Synthetic recovery checks do not establish identifiability,
+calibrated intervals or all-model parity. The full pre-migration source/test
+inventory remains recoverable from Git and is tracked by the active Conductor plan.
+
+## Ecosystem alignment
+
+Voiage owns economic/VOI calculations and consumes Polars/Arrow scenario tables.
+Kairos owns scheduling, DES/ABM state and deterministic replay. Innovate retains
+diffusion fitting and diagnostics. Do not copy the upstream scheduler or assume
+its optional languages, experimental backends or hosted proofs apply here.

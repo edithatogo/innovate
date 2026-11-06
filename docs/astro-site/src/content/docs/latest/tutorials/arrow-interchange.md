@@ -3,6 +3,11 @@ title: Arrow Interchange and Schema Layer
 description: Versioned contract for moving kernel payloads between Python and bindings.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 The Arrow interchange layer provides a versioned contract for moving kernel
 payloads, diagnostics, and structured metadata between Python, PyArrow, and
 future bindings.

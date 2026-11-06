@@ -3,6 +3,11 @@ title: Scientific and HPC Readiness Roadmap
 description: Evidence and gates for scientific and HPC packaging maturity.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 # Scientific and HPC Readiness Roadmap
 
 This roadmap keeps the public API boundary stable while it advances deployment maturity for HPC and scientific review.

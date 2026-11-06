@@ -1,3 +1,23 @@
+# Current migration technology decision — 6 November 2026
+
+The user has selected a Rust execution core with Python, Julia and R bindings
+only, Polars for tabular operations, and Arrow IPC/Parquet for exchange.
+Latest registry candidates and qualification results are tracked in
+`tracks/scientific_ecosystem_alignment_20261029/`. PyO3/Maturin replace setuptools
+for the new Python package. Native interfaces may break; all scientific features
+remain migration obligations. No pandas/xarray or implicit Python computation
+belongs in the new runtime. Rust uses edition 2024 and an explicit toolchain.
+Python uses an explicitly verified repo-local 3.15.2 interpreter.
+The retained native package uses Python Polars 2.1.0, PyO3 0.30.1 and Maturin 1.16.0;
+Rust Polars is pinned to upstream 2d74c435 with its required hashbrown patch.
+See the dependency frontier receipt for compatibility exceptions and security warnings.
+
+The earlier stack below is retained as the pre-migration baseline and does not
+supersede this decision. Migration completion requires native tests and installed
+consumer evidence, not merely manifest edits.
+
+## Pre-migration baseline
+
 # Tech Stack
 
 ## Documentation

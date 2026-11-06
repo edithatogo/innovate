@@ -1,0 +1,4625 @@
+{
+  "source_commit": "56d91dd716747900465ce2d1dc8c0231aa8a337b",
+  "policy": "All current and planned scientific features remain required. Unported features may be unavailable during this breaking migration. Source and test hashes are traceability, not parity proof.",
+  "files": [
+    {
+      "path": "bindings/csharp/.gitignore",
+      "sha256": "a5fbf9003d4d7e0c30c449141b54dec7d8764c3edc9a8d20329999e8da5bdc56",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/csharp/Innovate.Kernel.Tests/GlobalUsings.cs",
+      "sha256": "50436eb3a60162e0cfad749eddfb06f8908f821a90ca44532df946a53e071359",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj",
+      "sha256": "235bbfe64a3ad3a59cee11abeb8972aa62e40907c54b40a9fe834cf069f30c8f",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/csharp/Innovate.Kernel.Tests/KernelBridgeTests.cs",
+      "sha256": "26739253d9bc09c8ebbca6c55ea80f959da84137ba091726814be2e80e5a4c85",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/csharp/Innovate.Kernel.Tests/KernelContractTests.cs",
+      "sha256": "91adcc62943f0a41d6cc07190dc973fdc627a57ad08436bb119aa80c4128c15d",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/csharp/Innovate.Kernel.Tests/SchemaCompatibilityTests.cs",
+      "sha256": "f3727b931ec05a82562f4268ae4ef59b4b1497ce4ce486e66506a3fb41e6f5f9",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/csharp/Innovate.Kernel.Tests/fixtures/kernel_request.predict_model.json",
+      "sha256": "58bea8ced3015ba667072aec74016f48eb96b629cc53c0074b0d55f83b7d3c13",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/csharp/Innovate.Kernel.Tests/fixtures/kernel_response.error.json",
+      "sha256": "12c8ca42a8fdeb61374eccd7f016f7dfc78dd31f718cd682b14a562ff066a36a",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/csharp/Innovate.Kernel.Tests/fixtures/kernel_response.predict_model.json",
+      "sha256": "c8e4b230b01aa9160fd265ca1e881cba2c59823888a12c1a673ce11103bb9bde",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj",
+      "sha256": "45202709dd9756e1be7d67cbb9cc4e0fda5d9b1d27f09148d8934d4400716589",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/csharp/Innovate.Kernel/KernelBinding.cs",
+      "sha256": "6d02c8f471281b14d2c07727dfb464fbf03acc4fd44f9af70f5d2ec8bc2efacd",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/csharp/Innovate.Kernel/KernelBridgeException.cs",
+      "sha256": "8b59003aac7316f2d7ba1b773f2d5ca7595bb02b06371e58fa61929db984600e",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/csharp/Innovate.Kernel/KernelError.cs",
+      "sha256": "b182a00a4e3cd1fd2b3e842b0ccd83edc0cae714a0ae0c5e7f110e62ecd8463d",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/csharp/Innovate.Kernel/KernelOperation.cs",
+      "sha256": "5da518679e7b8ae59430d36e429cf25f11af8623f886cae02d45102254ef794b",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/csharp/Innovate.Kernel/KernelRequest.cs",
+      "sha256": "9f90e15646f6f6b3b5f3a9a812bb131d4263e25366c77fe2051f0348d9748ce8",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/csharp/Innovate.Kernel/KernelResponse.cs",
+      "sha256": "0988c9e58526f3167f6230e08a69334445005d6c2d8093e6fc49156d279f65f0",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/csharp/README.md",
+      "sha256": "12e0d424969ce957575061e51555d78635c748c5f4526ac5481bebd219bd8b86",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/csharp/inst/python/kernel_bridge.py",
+      "sha256": "d8f52d8740ca011f67e8672470939af5367ba0e71e77e5d6b0b73e4b1c6908ef",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "main"
+      ]
+    },
+    {
+      "path": "bindings/go/README.md",
+      "sha256": "a42ba7291aba0490d9ccf4807a51c8b35e48c17fac46c3660965f856cfc27226",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/go/bridge.go",
+      "sha256": "e79a5265272d40cbb277ae550d80880401729c24ba0ef10c5fee7b8ba3c762cd",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/go/doc.go",
+      "sha256": "b6bd7bf414024238436a92116d8712e320c1d93366410f327a701ee64db40028",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/go/example_test.go",
+      "sha256": "a0f7b264ac669f43ae42fd19db6ffa8b26b92588024943f594c58bc2f92dc14d",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/go/go.mod",
+      "sha256": "81cabe4a19816da7bd8a12d5d3f9d367e3afa28c52b63f3d8669e59f2d4a8d42",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/go/inst/python/kernel_bridge.py",
+      "sha256": "d78da9e85a278d6a371daada8d0b1d7756543ab44657a8c33dab08c789d4d939",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "main"
+      ]
+    },
+    {
+      "path": "bindings/go/kernel.go",
+      "sha256": "a76f0a05eb5373a1d6f87de0ca1a3c8073d3f7e45a4d247e993a44a355e6411d",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/go/kernel_architecture_test.go",
+      "sha256": "5c6e4c3d2484ab7a957896ca2cdd535dab616fca64ec601add7e58a67a78ddc3",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/go/kernel_compatibility_test.go",
+      "sha256": "3d65526ae78546989648bd5a8cefb3624a39f4f384bec24f8036d318f758861e",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/go/kernel_contract_test.go",
+      "sha256": "6f3240b2287e250b1ecc683d4db2a0ec94dfe3e36984f1210da56b43c707b580",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/go/kernel_wrappers_test.go",
+      "sha256": "a34702e3a9ab661d22179446179b9cd13dba1d61c4f97f26cea0d180559ae2fe",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/julia/LICENSE",
+      "sha256": "b485e6aea386e8af6311069bf452cae2105e807c18264a5091db381d11706cb6",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/julia/Manifest.toml",
+      "sha256": "f736d625a9480e09cc0e714936989bd2fb53144c73e6f26235379a68e29b69d5",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/julia/Project.toml",
+      "sha256": "81d2e5eaefa5e631d2bb3b54d800f636fed8d7859752f7ce05094ff6ff21b4ab",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/julia/README.md",
+      "sha256": "c9ca13f5fb874c7ce21504232547929ee354b65a78d16bd5dfe855b0fb67dc87",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/julia/examples/end_to_end.jl",
+      "sha256": "4fc51a23bd58e8a42b81a29972ba362bf49d3dcefcf2d08b9de43fd672be0660",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/julia/inst/python/kernel_bridge.py",
+      "sha256": "73cf39940bc7cd33c0ac0ff6d2b2381394d5f8ea5fb828740070b52df11ce6be",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "main"
+      ]
+    },
+    {
+      "path": "bindings/julia/src/Innovate.jl",
+      "sha256": "01d8119f685cc4690732549f79fa2e9553c028043751dfb2e24a1105f1b46c11",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/julia/test/contract.jl",
+      "sha256": "c6cf184b319a5f68a20e388a458eedb5c70f300fc0e1b6a901dd770f5cdb0c20",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/julia/test/installed_package_smoke.jl",
+      "sha256": "cfa24933d0dcae00b295576f48a8728b363704c4715bdfc2c6843ac9d1c49039",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/julia/test/packaging.jl",
+      "sha256": "9966aa6a9a94dd08aed1164aeb4b724a832e1a100f698f85ae3d234f200a1e20",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/julia/test/runtests.jl",
+      "sha256": "97b92528684dd71edcb6a51b6028b37efc6ec3148e2f1b7246a3e8e97d63a0cf",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/julia/test/runtime_paths.jl",
+      "sha256": "bbbf31db326e18058afb09a6c7909bb91d82ba27c0cdbde5fb7fd8f2fccde0ca",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/julia/test/schema_compatibility.jl",
+      "sha256": "dab1257738ba35a893908dfd1b5bf79030cc7e2a1eda192f93cd57d90def35ba",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/julia/test/wrappers.jl",
+      "sha256": "c79523c0c9b673c2f61ac7c43b26e659370da6b1417db29ffe30707401e603ec",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/r/.Rbuildignore",
+      "sha256": "61f9e8aea6b86ecc704530ddb7f62b1be7a8f2f7104e30259162d6e09e84f36a",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/r/DESCRIPTION",
+      "sha256": "4452ee71af437afbdbafffad0fc40b8d609ad649916174a03e958a2d5b1eee7e",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/r/NAMESPACE",
+      "sha256": "66082894910e56d09a5f88dba0487411c8df9e13a1cc9eaa4bebdfc81ac8bd02",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/r/NEWS.md",
+      "sha256": "dd9278a62c3936d5295ef729dc3000a84ce09cf4e882421bf39ecdb11de69fed",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/r/R/kernel_bridge.R",
+      "sha256": "c812d4ea2966aa49c88e1c3251be148acd4abb50a75f03fa59d4d54a8584ef2b",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/r/README.md",
+      "sha256": "e9e2433726fbcddae2e8f01975bbff7e13f7674ccfceefba0b8fe6d8073b9358",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/r/cran-comments.md",
+      "sha256": "80d64e9d60ea26124ac91e668199308d74bcc87d4f7ec1b05b5d6f9e9175b887",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/r/inst/examples/end_to_end.R",
+      "sha256": "56399930d76a31b6cebe5d3ef9b18b2f39b86523d2333116818c608468dd302a",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/r/inst/python/kernel_bridge.py",
+      "sha256": "5500a2f89457f79081df247a979a470b3582e5e635ab231435c3974c84cdce33",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "main"
+      ]
+    },
+    {
+      "path": "bindings/r/man/innovate.R-package.Rd",
+      "sha256": "b516c1228ef9fc06014aaf6d0ca7e651b35ecd5c0049fdd0a1f26095ee1d9b80",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/r/man/kernel_bridge.Rd",
+      "sha256": "92a374f69d4271e9509a9f9732b82c8985fdf2580b63eb71097de57b32581ec8",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/r/tests/run.R",
+      "sha256": "ca6004169496bde9de83253e4a31cd9eed36b27cd8af9f6315f44a4031bfd5ae",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/r/tests/test-architecture.R",
+      "sha256": "ed02836f59a74a506b22e72a847b699cd7f2fa29a42abf3496e545e945d4616a",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/r/tests/test-contract.R",
+      "sha256": "77bc09de875cb962e652b2b774778a6bb5585c1b391618c953b8d22b2b223b8a",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/r/tests/test-diagnostics.R",
+      "sha256": "c84cd7eff950596654b187fe5408d3014a6f3652d909dfdc78b5578d7897c0b1",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/r/tests/test-documentation.R",
+      "sha256": "52e28d9056d4758beeaf48a480126a9f8d97bdf953ac21931d14abd78867ef0a",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/r/tests/test-packaging.R",
+      "sha256": "fda26d67e9329778151118dac67dd8da8a9637c0aa95bca9901091b005192854",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/r/tests/test-wrappers.R",
+      "sha256": "347e34dab97c69e71eb274bbda4c1f0a9470ba11bfb0aef782dca3b811b467e4",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/r/vignettes/innovate-r-kernel.Rmd",
+      "sha256": "aa135f9e289b9252c9e68facc15c7a15ad6a68eab7647c4dc623603a87c42658",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/rust/.gitignore",
+      "sha256": "c1e953ee360e77de57f7b02f1b7880bd6a3dc22d1a69e953c2ac2c52cc52d247",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/rust/Cargo.toml",
+      "sha256": "30176523b87e33096a5f71258dd6cbe9b77ed4fd7072348792625d0f9f50621b",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/rust/README.md",
+      "sha256": "8ac913ae92c76f51ebb13722646dd55a146312e78ad30ee5fd706a3c9989f448",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/rust/benches/native_kernel.rs",
+      "sha256": "2809afec6fca14335aa63774c34b899cfd4c373983ea6747766c8bf1755550ae",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/rust/examples/kairos_abm_smoke.rs",
+      "sha256": "7802ad7c28d2a879d3033d9da898685b963222ac0dce3039c554ac56f4ddee2e",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/rust/examples/kairos_des_smoke.rs",
+      "sha256": "33373214c3f6349b5059c8659458264a822c285f13155e41d511716e47fe46b5",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/rust/examples/profile_memory_native_kernels.rs",
+      "sha256": "f048dac12ebc48a28c8c3298a19c179b9f352881a702d1eddbb3ef7dc5a5b1b4",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/rust/inst/binding_golden_fixtures.json",
+      "sha256": "7901cb4cde5678a83483f01f2767772442dfd73a251a8166291af6f832f44119",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/rust/inst/discovery_manifest.json",
+      "sha256": "5811ccf8c53e5cc719eec9b8c9c57b90c3dd9de395fd35e496d021333c941fd5",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/rust/inst/python/kernel_bridge.py",
+      "sha256": "c18663ef256b7543c31b2430f54852120df514c553f408887149ac23500b8008",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "main"
+      ]
+    },
+    {
+      "path": "bindings/rust/scripts/profile_memory_native_kernels.sh",
+      "sha256": "990e0e77d7fabbae4c48844c7a6c70b94f1e8882495bf0f2bffdbe95df7afb24",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/rust/scripts/profile_native_kernels.sh",
+      "sha256": "fbb1ea0f4fe5a41d54109645017ee98754bc697d40261f8e18fd753f95d9ad5f",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/rust/src/lib.rs",
+      "sha256": "c19e54b9051251d6fbf38333a8f407334f32f2720ddc713837ebba2dff9cb20b",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/rust/tests/architecture.rs",
+      "sha256": "2ea0662d9bef839c1a02d164ecd0c67ddcea5d2ffc4f2eefdc4575507eadefcc",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/rust/tests/end_to_end.rs",
+      "sha256": "6b8d4662c7ec7fb3fcded371f0a584dfd3fc2af95febbf8da6a4c5850c4fe7bc",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/rust/tests/native_discovery.rs",
+      "sha256": "de6da908156ba69e2d123b2f402131342b5e3a9dcb0edf46c289ce0bb7e87699",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/rust/tests/operations.rs",
+      "sha256": "2c4b0b00cd45059bd743ede0c505b29451606cb58e9e3923d6e5d807aade9dd1",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/rust/tests/scaffold.rs",
+      "sha256": "7fd445899a84ee3182441cfb25d5bdcbbb84e42dca2624d19b6c7fe89af678e6",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/rust/tests/schema_compatibility.rs",
+      "sha256": "f4239c075dc841ffb8f4c0e11536cd45c12cd5c49488b07014736a8b402ff1fe",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/typescript/.gitignore",
+      "sha256": "108d2b818b63d1f2ffaefee13455961edf1544f49ccf847396de3e85eb5ad724",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/typescript/.npmignore",
+      "sha256": "fcea47a7ac0111b6c77f2203d30897a44c94984f009d62da05aa850c046f30ec",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/typescript/README.md",
+      "sha256": "9855ced73a4dabf96fd4cf2c5e791d1b7052355a36722d4a0142043394579486",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/typescript/examples/diagnostics-workflow.ts",
+      "sha256": "586a946a4b229d3254e4e19be4fc92f8eb3fe8e164c250d00cbf70a0ac916769",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/typescript/inst/python/kernel_bridge.py",
+      "sha256": "07090333aec6dd74d97933f5804e69e4bef3fc06eb2cffd51c617da71003d8d0",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "main"
+      ]
+    },
+    {
+      "path": "bindings/typescript/package-lock.json",
+      "sha256": "632d29d77e261c9ba14925509436241f702ab227c0d47935955f28330be793da",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/typescript/package.json",
+      "sha256": "120450b010111d9648584ee84de28d1c3c2c95e8c167b72943aba8e0fa6fd061",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/typescript/scripts/check-schema-version.ts",
+      "sha256": "0ee7d5f35e73a08a666e14e73ca134e8c93fe9cb5daaba0bdfed509285b59c68",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/typescript/src/bridge.ts",
+      "sha256": "99082668aa0a84b54146a66002965f4aa94936e3ff2af31e227d36525a9bbbbb",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/typescript/src/index.ts",
+      "sha256": "173f092f11b9c11c446eff25057ab05d967d6ded87a8034b7b8c4074782aa0c3",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/typescript/src/kernel.ts",
+      "sha256": "38e485649044999b743587a8461121fc853c810e64e1105a10bcb2f184ee4e96",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/typescript/test/check-schema-version.test.ts",
+      "sha256": "767bbb9c8616c59f4619a363e21ce46b753cfc335ec6a219c424198db20ddc3a",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/typescript/test/diagnostics-workflow.test.ts",
+      "sha256": "263f603080658231ffde5110fb1efe907baded189668e6b401da3ceac4eb64dd",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/typescript/test/kernel-architecture.test.ts",
+      "sha256": "b8d5064222647ad090e8fa6e24defcc2f2888be2293ce417108c94cc39149d0c",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/typescript/test/kernel-bridge.test.ts",
+      "sha256": "75398ee54e258f36a46062901305dca3fddf1d45d9bfb5399704a2969e69f0ce",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/typescript/test/kernel-wrappers.test.ts",
+      "sha256": "da39b071f0244d742655d0b4f1654aaa5470fd33d14232d333095a2ae0af0d41",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/typescript/test/package-scaffold.test.ts",
+      "sha256": "dc03cb6cd49ebf28ececa5e428864e20ba4807526229e33d71d74e9eeabfda4e",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/typescript/test/schema-compatibility.test.ts",
+      "sha256": "5fbcf4122aa6a86f06db33d9d55e603140b4809bb504b783a0240a58cba72dcb",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/typescript/tsconfig.build.json",
+      "sha256": "15d58c1180bb8a87d6bbd887c626bddaada4e8f4307c021cc100a4b80cc49491",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/typescript/tsconfig.json",
+      "sha256": "c8b4814e2b638324333108c2bc9362a871fe98d5317c67a13152b624a768a992",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "bindings/typescript/vitest.config.ts",
+      "sha256": "eba0a9cb63da91eb8f700ed3a77876f3a973b88818fd6a6f4ed9275fe40dddd6",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "conductor/tracks/.gitkeep",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "conductor/tracks/scientific_ecosystem_alignment_20261029/continuation-20261106.md",
+      "sha256": "3919eed218b41bdebf43e089bb1b04e8adc752a66ea04410dcd5558b1b27449c",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "conductor/tracks/scientific_ecosystem_alignment_20261029/full-gate-20261106.json",
+      "sha256": "5b4467825cba38f2720c59f4f553dc0c10a1e246db08df14dc3524f170ae9bda",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "conductor/tracks/scientific_ecosystem_alignment_20261029/index.md",
+      "sha256": "23fe5b4269f8804f8d08eed2b7251d27edd1e67379fcfb77a48c7b920d0553f7",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "conductor/tracks/scientific_ecosystem_alignment_20261029/installed-adapter-20261106.json",
+      "sha256": "07ddec16a79704ef8604f3faaf64cd3564b4c951edca2a3f83ac34ef85813bfd",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "conductor/tracks/scientific_ecosystem_alignment_20261029/installed-consumer-20261106.json",
+      "sha256": "d7e7e8fbcee651cc2efca5be8b4543a800e492a84a81c4fd309d6633487a9bdd",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "conductor/tracks/scientific_ecosystem_alignment_20261029/kairos-candidate.Cargo.lock",
+      "sha256": "a43ae7a27fa95052d5beacf659bf4ace10d82d05902bcea9cb000911902b9bb6",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "conductor/tracks/scientific_ecosystem_alignment_20261029/kairos-native-20261106.json",
+      "sha256": "56ff8c3e8334dc9ec0d75b8012919f130645bcf83ae262c6dbbd9b5df2afce9c",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "conductor/tracks/scientific_ecosystem_alignment_20261029/metadata.json",
+      "sha256": "cfd7689e533a741e1ed639116fde6e5be55a61410aaab51102f89dcfe52b8fd5",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "sha256": "aecf26e42734f024cd9894f16da838cc3cbc65be13999639c6c26661a163debd",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "conductor/tracks/scientific_ecosystem_alignment_20261029/qualification.md",
+      "sha256": "5cb7b2313bc176393a9273e9b78f578d945d368c3ef03157084d8950c3deaa09",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "conductor/tracks/scientific_ecosystem_alignment_20261029/reconciliation-20261102.md",
+      "sha256": "add6bd28b4e804d5ac5d993ee884028daa33c573b6fabb60a4469ff2b79c0faf",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "conductor/tracks/scientific_ecosystem_alignment_20261029/review-20261106.md",
+      "sha256": "88c6f0888a99d522e0ad55565e6239e85d6dfc816bd6b898c38ce2ed268e7cd6",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "conductor/tracks/scientific_ecosystem_alignment_20261029/spec.md",
+      "sha256": "cabdeb7c4288b714a16e625591aee9b9187b01df953a66cde22cfbfc191f5900",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "docs/architecture_modernization_roadmap.md",
+      "sha256": "1a89465a097636ab08c47cd223b5e3098c135cb6c5a43b2c99fbcdff87ee8591",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "specs/ecosystem/README.md",
+      "sha256": "f809ae50ef533b0a7bf2611ea5236e5f547c00560c5c7dbc704c4ae55ce4b622",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "specs/ecosystem/heoml/extensions/innovate/README.md",
+      "sha256": "d033213e629504f66bec438ad1bf89631b1e047ceebba689c2481e0420fd267b",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "specs/ecosystem/lifecourse/adoption_trajectory/v1/README.md",
+      "sha256": "0f62c92fa7578369e48682398c3281c56026a8df00dfee3c669baf9a0cb47978",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "specs/ecosystem/lifecourse/adoption_trajectory/v1/adoption_trajectory.parquet",
+      "sha256": "9d5403ad92108946f7ed043c65023cdf1ba8adcec0b748b04c57f22e8247fe2d",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "specs/ecosystem/lifecourse/adoption_trajectory/v1/manifest.json",
+      "sha256": "a4a27a1d7669a50c0180bffb2ebaed10e23e66809367c68538833da2fd70786f",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "specs/ecosystem/operational_modeling/README.md",
+      "sha256": "ff234c75219fa294593181233ae2f7e51736a368943dea68acbdd64b7ac8ffdd",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "specs/ecosystem/operational_modeling/des/manifest.json",
+      "sha256": "306d72a4e12fb72be53b05edfa62db9607a92c9c7f3682a289a89054c0c3d34d",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "specs/ecosystem/operational_modeling/treeage_style/manifest.json",
+      "sha256": "5a949009d59f516b3b0e8ed8e898dfdb759b45672d506d8e9a670663ef57d657",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "specs/ecosystem/process/README.md",
+      "sha256": "2fc944433b291b5ce4502fd259440e6e45606a97d56f57048ee4a28cd0ee9ddc",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "specs/ecosystem/process/fixtures/README.md",
+      "sha256": "69d4a2706a21770090382cfebf746fca94ca5871cdf4012db65f418788770d97",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "specs/ecosystem/process/fixtures/event_log_v1/README.md",
+      "sha256": "e993498cac21564c5db24a110e4bcdc4a723d498397323e563351b9dbf009761",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "specs/ecosystem/process/fixtures/event_log_v1/bottleneck_summary.csv",
+      "sha256": "1d63466b2d112f53e477b2088b4c5d05b6134a914c44f1704b51f10e9b056e7b",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "specs/ecosystem/process/fixtures/event_log_v1/conformance_summary.json",
+      "sha256": "67dc775bba44fddef1a43d4169ab5751635962bdb72516334c383afbdde26a30",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "specs/ecosystem/process/fixtures/event_log_v1/event_log.csv",
+      "sha256": "1b75b69528f6eeecf8f6e4491055ee03be0c427d4418c3fa0b98144f0af62caf",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "specs/ecosystem/process/fixtures/event_log_v1/manifest.json",
+      "sha256": "385ef22d988b809870f5e6b5fede52c73678d515cfa735f22fd6427d68100e10",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "specs/ecosystem/process/fixtures/event_log_v1/pathway_discovery.csv",
+      "sha256": "6aab1e7aeb2d15f127c26163dd022b7d429b9cbf47e076608d8be3a3d43fab56",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "specs/ecosystem/voiage/uncertainty/diffusion_v1/README.md",
+      "sha256": "e1d403a79b878c1362b6f80507346020a42195e27435c9ab01188284e5e4a174",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "specs/ecosystem/voiage/uncertainty/diffusion_v1/adoption_trajectories.csv",
+      "sha256": "ba457afdab6a001d5fb5273cf03b20bbf0ac93189a260eaed761a541fd4fb1fb",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "specs/ecosystem/voiage/uncertainty/diffusion_v1/manifest.json",
+      "sha256": "b61feb8ed857dc1ab5f9b6d18d75091fe5b458c345cdace66338d0ae6afcbc5e",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "specs/ecosystem/voiage/uncertainty/diffusion_v1/parameter_draws.csv",
+      "sha256": "411cf641d44260a35f5359550cf36459d64ea52e2d659368f289df4231c5257d",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "src/innovate/__init__.py",
+      "sha256": "503c94018072578467e6150a8bbdab1cca3e4148826147363cd858982d5fdb05",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/abm/SIMULATION_MODEL_CARD.md",
+      "sha256": "de35310f6aff1b5016fb24e036e3c46e51d4ccf2b7ebb3b00687d035cae2d89d",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "src/innovate/abm/__init__.py",
+      "sha256": "ad714e4899ae0cb3b1261fb3b26ded909d8c976da1642df62002fae929ced4fb",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/abm/agent.py",
+      "sha256": "6c8996bda833ebbae389fa2ccf6afd8724f213d3f8f5f682b37b47212961044c",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "InnovationAgent"
+      ]
+    },
+    {
+      "path": "src/innovate/abm/competitive_diffusion.py",
+      "sha256": "ece2c956acdd52cecd6173152328d07e23d6374cb230ee0eb981695a2f163e78",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "CompetitiveDiffusionAgent",
+        "CompetitiveDiffusionModel"
+      ]
+    },
+    {
+      "path": "src/innovate/abm/disruptive_innovation.py",
+      "sha256": "f9bcd6de132acff95c0cf83d0f8fc52575934d04c1f7e8eb6276a1cc91abbded",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "DisruptiveInnovationAgent",
+        "DisruptiveInnovationModel"
+      ]
+    },
+    {
+      "path": "src/innovate/abm/kairos_adapter.py",
+      "sha256": "b3eb6f0bf8825c3d50404469e8426a7cfc498b537c927a1eeabb9746de6a12c0",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "collect_kairos_dependency_evidence",
+        "bridge_crate_available",
+        "KairosSimulationAdapter"
+      ]
+    },
+    {
+      "path": "src/innovate/abm/kairos_contract.py",
+      "sha256": "4b9abdec7449fbad87ed77acaa65f8d2f23eefc23a6e5d157bfe2c0a42d56503",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "SimulationSeed",
+        "RandomStreamConfig",
+        "TopologySpec",
+        "InterventionSpec",
+        "AgentStateSpec",
+        "SchedulerEvent",
+        "DESTrajectoryEvent",
+        "ABMBehaviorUpdate",
+        "BridgeCrateStatus",
+        "KairosDependencyEvidence",
+        "KairosSimulationRequest",
+        "PolicyNetworkTrace",
+        "TelemetryArtifact",
+        "KairosSimulationResult"
+      ]
+    },
+    {
+      "path": "src/innovate/abm/legacy.py",
+      "sha256": "7345ab67d5c2e73f3381a6605ad9bb0f9559828bd61bfc8911c38c7c3cbfdcef",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "LegacyABMDependencyError",
+        "migration_guidance",
+        "legacy_available",
+        "load_legacy_module",
+        "require_legacy_stack"
+      ]
+    },
+    {
+      "path": "src/innovate/abm/model.py",
+      "sha256": "e6101e07335e90e99628c76521cdbbe942cd2f34d0b85f0702b81599763e19d7",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "InnovationModel"
+      ]
+    },
+    {
+      "path": "src/innovate/abm/ndlib_model.py",
+      "sha256": "d3374746e4aea54e158a189e9664e70b0ba781f780be172954ea6008fbd9726d",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "NDlibModel"
+      ]
+    },
+    {
+      "path": "src/innovate/abm/sentiment_hype_cycle.py",
+      "sha256": "d24f0776650b020a411c6feec3df3d6bfef6ef8f0c31156d9d666d47075c3028",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "SentimentHypeAgent",
+        "SentimentHypeModel"
+      ]
+    },
+    {
+      "path": "src/innovate/adopt/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/adopt/categorization.py",
+      "sha256": "c087b5a732b875d13cffe9006fbab61b5e5e8c053e1b55b9b2c51d86cf55afeb",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "categorize_adopters"
+      ]
+    },
+    {
+      "path": "src/innovate/advanced_runtime.py",
+      "sha256": "928632effdf0083207907337ecf388c1561489a7fdc43a43789f4fd921d76b5f",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "AdvancedCapability",
+        "AdvancedResult",
+        "AdvancedRuntimePolicy",
+        "AdvancedBackendSelection",
+        "list_advanced_capabilities",
+        "get_advanced_capability",
+        "detect_advanced_backends",
+        "select_advanced_backend",
+        "compose_regime_ensemble",
+        "PolicyScenarioConfig",
+        "compare_policy_scenarios",
+        "update_streaming_forecast",
+        "calibrate_prediction_intervals"
+      ]
+    },
+    {
+      "path": "src/innovate/arrow_interchange.py",
+      "sha256": "f0b8f58fcb17d68b0159bffcc139be013e634b8d354bde15f8043c0be8a93009",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "describe_arrow_interchange",
+        "kernel_array_payload_to_table",
+        "kernel_array_payload_from_table",
+        "kernel_array_payload_to_dataframe",
+        "kernel_array_payload_from_dataframe",
+        "kernel_table_payload_to_table",
+        "kernel_table_payload_from_table",
+        "kernel_table_payload_to_dataframe",
+        "kernel_table_payload_from_dataframe",
+        "kernel_discovery_response_to_table",
+        "kernel_discovery_response_from_table"
+      ]
+    },
+    {
+      "path": "src/innovate/backend.py",
+      "sha256": "1b79cf0909fc4e24f61bd1dda8cb04b4e0e5f950dc65ba30fee13604b9277fa6",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "use_backend"
+      ]
+    },
+    {
+      "path": "src/innovate/backends/__init__.py",
+      "sha256": "02ebe9aa23760a70e6fcbc19ab874411e67b3cc9bf81d58aaeee8bb3c1d0702b",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/backends/jax_backend.py",
+      "sha256": "6fecdd9d2bf1a074cac0cce5b8f61933fb7c9a564d906d4d4cd517a53d3e3599",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "JaxBackend"
+      ]
+    },
+    {
+      "path": "src/innovate/backends/numpy_backend.py",
+      "sha256": "2e85ed36b12942efda0ee72318bcefdbe64d9851aa9c4a60634766052c354c1f",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "NumPyBackend"
+      ]
+    },
+    {
+      "path": "src/innovate/base/__init__.py",
+      "sha256": "3b50197462dae70f4a3ec608f37e88ababf326d3e476895f15240d55715b6f2d",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/base/base.py",
+      "sha256": "c9e0e23d1b570397e01ffa21ca3536b67c265c75df814123f937f2d53dc01f60",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "DiffusionModel"
+      ]
+    },
+    {
+      "path": "src/innovate/benchmarks/__init__.py",
+      "sha256": "51103b66f3ccab78a6f5fa324e2897812b4365a89b833419eb5ca5fe3b539e1d",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/benchmarks/automation.py",
+      "sha256": "ef442b3ec559f8ca3261b3b92e596431eb336a97cd553d904de358ae8e621fed",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "BenchmarkValidationIssue",
+        "BenchmarkAutomationReport",
+        "validate_benchmark_corpus",
+        "refresh_model_card_summaries",
+        "describe_benchmark_automation"
+      ]
+    },
+    {
+      "path": "src/innovate/benchmarks/corpus.py",
+      "sha256": "d0821d0561fd47231ac0e7fa63bbb709902e0d1ff02cb7fc6fcca32164618e40",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "BenchmarkFamily",
+        "BenchmarkCase",
+        "list_benchmark_cases",
+        "get_benchmark_case"
+      ]
+    },
+    {
+      "path": "src/innovate/benchmarks/mars_surrogate.py",
+      "sha256": "cd8d09dd27bf835c2cb39b45d2530f6acaa8ffa76e5382854086fa6127199e83",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "MarsSurrogateBenchmarkCandidate",
+        "MarsSurrogateGateIssue",
+        "MarsSurrogateGateReport",
+        "list_mars_surrogate_benchmark_candidates",
+        "validate_mars_surrogate_benchmark_gate",
+        "describe_mars_surrogate_benchmark_gate",
+        "build_mars_surrogate_gate_artifact",
+        "write_mars_surrogate_gate_artifact",
+        "main"
+      ]
+    },
+    {
+      "path": "src/innovate/benchmarks/model_cards.py",
+      "sha256": "b0fb69b45f8c2d5ed346003833ed2973011bf229613ec836a32a44cf53df5634",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "ModelCard",
+        "list_model_cards",
+        "get_model_card"
+      ]
+    },
+    {
+      "path": "src/innovate/benchmarks/runner.py",
+      "sha256": "879d01f946a929b93d7e63c0ee0f284b9e2551d512b623bfa68a58be837e3b2d",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "BenchmarkRun",
+        "BenchmarkJob",
+        "BenchmarkSuiteResult",
+        "list_benchmark_jobs",
+        "run_stable_benchmark_suite",
+        "BenchmarkRunner"
+      ]
+    },
+    {
+      "path": "src/innovate/capabilities.py",
+      "sha256": "bd77266f3dfe17a7e46de8d963046bc286bc972022932be8a45714703ac1926f",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "ModelCapability",
+        "BackendCapability",
+        "FitterCapability",
+        "get_model_registry",
+        "get_model_capability",
+        "get_backend_registry",
+        "get_backend_capability",
+        "get_fitter_registry",
+        "get_fitter_capability"
+      ]
+    },
+    {
+      "path": "src/innovate/causal/__init__.py",
+      "sha256": "39abda591b3c4a596a1be4154e0f5c594c8764c1bc1794df9fc05ce336030aea",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/causal/counterfactual.py",
+      "sha256": "c1ba3416dc0e8b21432d4e66c6992e89ff6c6336fcff33dec68a39d378cb13d6",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "CounterfactualAnalysis"
+      ]
+    },
+    {
+      "path": "src/innovate/causal/diagnostics.py",
+      "sha256": "758f4924c3295f02ccda3cc1b271110b4c5e4ec7321698b18791b5b8a1c4f5c5",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "UncertaintyMetadata",
+        "DiagnosticsSummary",
+        "CovariateBalance"
+      ]
+    },
+    {
+      "path": "src/innovate/causal/evaluation.py",
+      "sha256": "e42fd6f62c4b39fef7bf914c6ab4e6e5ad401334a198278b6e644a4bc1287a28",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "PrePostSummary",
+        "EventStudyTrajectory",
+        "CounterfactualComparison",
+        "HeterogeneousEffectsSummary"
+      ]
+    },
+    {
+      "path": "src/innovate/causal/model_card.py",
+      "sha256": "642500889412a9db6207517093c88e06fb8f5061ce631c741124fdcf9b5c4db9",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "CausalModelCard",
+        "ReleaseEvidence",
+        "AssumptionDocument"
+      ]
+    },
+    {
+      "path": "src/innovate/causal/policy.py",
+      "sha256": "9442d80ab6d0febce02a604908924122d70db97af25159e9a4243efac9d0467e",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "PolicyEvaluationError",
+        "InterventionContract",
+        "CausalModelContract",
+        "CausalModel",
+        "TreatmentEffectEstimator"
+      ]
+    },
+    {
+      "path": "src/innovate/causal/sensitivity.py",
+      "sha256": "66cce993c7c17f5b1ea9201c0682bc9103c793f78b5121e585b94a0309edad2d",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "RosenbaumBounds",
+        "EValue",
+        "SensitivityAnalysis"
+      ]
+    },
+    {
+      "path": "src/innovate/compete/__init__.py",
+      "sha256": "02035ce47e295424802737d509d20818bc49a4435fa6d1c4ee874ceaced72acc",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/compete/competition.py",
+      "sha256": "65a982f4d4873a68fb6cd5ed9327673efca71a42b57cbb5dc6cdd89e2141cd2b",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "MultiProductDiffusionModel"
+      ]
+    },
+    {
+      "path": "src/innovate/compete/lotka_volterra.py",
+      "sha256": "2ebd3df050c89cc12817576863b5eccc368b12deff23714dfdb460f0249a8567",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "LotkaVolterraModel"
+      ]
+    },
+    {
+      "path": "src/innovate/compete/multi_product.py",
+      "sha256": "e60483329965ceaf2fb0cb33afa1e9a4d5a072e56f6226f71ade1d12c80b9a68",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "MultiProductDiffusionModel"
+      ]
+    },
+    {
+      "path": "src/innovate/data/__init__.py",
+      "sha256": "10c10fff30f7cde358f8d0f82a79b9dcd717161b5689ace8caa394659caef3e5",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/data/adapters.py",
+      "sha256": "ed0c223acf0205f5b5593a2c6875b70c37dcbb99d9a7f155d465feed4fbdfb8a",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "PublicDataAdapterError",
+        "AdapterManifest",
+        "PublicDataAdapter",
+        "SyntheticAdoptionPublicAdapter",
+        "list_builtin_adapters",
+        "get_builtin_adapter"
+      ]
+    },
+    {
+      "path": "src/innovate/data/contracts.py",
+      "sha256": "68f1e71f0dabc176039735ee6f9a0abcd65cc8fb20bfb0bbfc53b6be49b4931b",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "AdoptionDataset",
+        "SubstitutionDataset",
+        "CompetitionDataset",
+        "PolicyTimingDataset",
+        "NetworkEdgeDataset",
+        "attach_provenance",
+        "dataset_from_dict"
+      ]
+    },
+    {
+      "path": "src/innovate/data/ingestion.py",
+      "sha256": "1af054f0f20a415b212a3ffbcaa663e6e882761636b0e83118b2279db0993b6e",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "polars_available",
+        "load_table",
+        "frame_to_dataset",
+        "ingest_local",
+        "ingest_polars",
+        "reproducible_artifact"
+      ]
+    },
+    {
+      "path": "src/innovate/data/integration.py",
+      "sha256": "6b6854b7f37b237372816f58bca8030077b2d488bd1de8ddf157357b58fc0d8b",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "DatasetBenchmarkLink",
+        "get_dataset_benchmark_link",
+        "list_dataset_benchmark_links",
+        "resolve_model_cards_for_dataset",
+        "dataset_to_baseline_scenario",
+        "integration_bundle"
+      ]
+    },
+    {
+      "path": "src/innovate/data/oecd.py",
+      "sha256": "5d585e8dbd519421e94dec753df31b2543ce508cc68ffdcb87b7d91486612e34",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "get_dataset"
+      ]
+    },
+    {
+      "path": "src/innovate/data/provenance.py",
+      "sha256": "30414b9a61efc62a278b00b09fcb893993117480234227cae7924cf2c32ce3ac",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "compute_payload_checksum",
+        "compute_dataset_content_checksum",
+        "DatasetProvenance"
+      ]
+    },
+    {
+      "path": "src/innovate/data/validation.py",
+      "sha256": "bda020330a17e13d5c240ee08b0832f8d47b665ba73d4cfecc3a58f05d3cb596",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "ValidationCheck",
+        "ValidationReport",
+        "validate_dataset",
+        "require_valid"
+      ]
+    },
+    {
+      "path": "src/innovate/dataframe_engines.py",
+      "sha256": "9aca6dd426a0311bb8872d28348061137f30e9d0956cc4c58b264eb7de19a95f",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "dataframe_engine_available",
+        "DataFrameEngineBenchmarkFixture",
+        "describe_dataframe_engine_experiments",
+        "kernel_table_payload_to_experimental_dataframe",
+        "kernel_table_payload_from_experimental_dataframe",
+        "build_dataframe_engine_benchmark_fixture"
+      ]
+    },
+    {
+      "path": "src/innovate/diffuse/__init__.py",
+      "sha256": "487d9c0b1a4b6dea9be50fa610474e2a0b7ea6ea894a32b72cd79f6f678c4443",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/diffuse/bass.py",
+      "sha256": "9842c21c4d4d85d7b65d1d5636f0688be52111eea2ba28a8ebaf45022265b93a",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "BassModel"
+      ]
+    },
+    {
+      "path": "src/innovate/diffuse/gompertz.py",
+      "sha256": "8dfc988ae372c1aa97c443d87a51ec87d1450209d389c47b1a17b94cf8b5c730",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "GompertzModel"
+      ]
+    },
+    {
+      "path": "src/innovate/diffuse/logistic.py",
+      "sha256": "229556a35e8e2ee547dc6f652ae83bbcde180e38b7da0c8b4e457af5d3eac1d0",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "LogisticModel"
+      ]
+    },
+    {
+      "path": "src/innovate/dynamics/__init__.py",
+      "sha256": "7af7ce82784cce369f518cbfecc0a82bf6ddbe808e66314d084c1649377bea4e",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/dynamics/base.py",
+      "sha256": "e41203332d323b5561994348016d08f68cad71bcbc00d3697ed2c8c3a9b58a25",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "GrowthCurve",
+        "ContagionSpread"
+      ]
+    },
+    {
+      "path": "src/innovate/dynamics/competition.py",
+      "sha256": "e903a5a765ef77b1fae5e02d4d87a9abf4d15bb8ea022adbf2cab4fe41dc220c",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "CompetitiveInteraction",
+        "LotkaVolterra",
+        "MarketShareAttraction",
+        "ReplicatorDynamics"
+      ]
+    },
+    {
+      "path": "src/innovate/dynamics/competition/__init__.py",
+      "sha256": "51672e3a0d2fd2c63a256a4129bcda99692c0b45722b11b0f874f108ff8653a6",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/dynamics/competition/base.py",
+      "sha256": "86fd14a4d33452fa8dd4dc1250fc1eb5c5d8102ea226ebe6f424ccb744311814",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "CompetitiveInteraction"
+      ]
+    },
+    {
+      "path": "src/innovate/dynamics/competition/lotka_volterra.py",
+      "sha256": "4953ea9210b17d69722bd8a2f0c62d9c72906c50a11e66664ffa01fafcd4604b",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "LotkaVolterraCompetition",
+        "equilibrium"
+      ]
+    },
+    {
+      "path": "src/innovate/dynamics/competition/market_share_attraction.py",
+      "sha256": "5a101b6795431a0fd6d390c19c2620cc68fca388025d1a2d1b869292419cb0ba",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "MarketShareAttraction"
+      ]
+    },
+    {
+      "path": "src/innovate/dynamics/competition/replicator_dynamics.py",
+      "sha256": "f1ea57ab33ccc5e3c96f576d5f5c8b8691584117768111da8c14db9832eec901",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "ReplicatorDynamics"
+      ]
+    },
+    {
+      "path": "src/innovate/dynamics/contagion.py",
+      "sha256": "18e72bac1e8e1ff1507529124f3a7056a9d4aaf314b5bbd40e79e6f807da0262",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "SIR",
+        "SIS",
+        "SEIR"
+      ]
+    },
+    {
+      "path": "src/innovate/dynamics/contagion/__init__.py",
+      "sha256": "bfe11dd2ef8e25bcf27d17a3e02f65011e2330eed4990db7f1ea1749821dc6f8",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/dynamics/contagion/base.py",
+      "sha256": "3abb41171f38b7de67567356c135b60e31328f2db11b80036c6ab5655f7ca144",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "ContagionSpread"
+      ]
+    },
+    {
+      "path": "src/innovate/dynamics/contagion/seir.py",
+      "sha256": "4a0ce17cd60565c9902b477f0fdc3c56d8166c3fb7043572573c3861ad3ed9bd",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "SEIRModel"
+      ]
+    },
+    {
+      "path": "src/innovate/dynamics/contagion/sir.py",
+      "sha256": "9c541f3fbff5455f68abd84db595e4552774df1e5c7953c29a8209768b22cc0d",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "SIRModel"
+      ]
+    },
+    {
+      "path": "src/innovate/dynamics/contagion/sis.py",
+      "sha256": "1bd5108497eb6e767f9c40172e26a1f52d2bc9cf56614899632cfd90fd1a9c5e",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "SISModel"
+      ]
+    },
+    {
+      "path": "src/innovate/dynamics/growth/__init__.py",
+      "sha256": "377a657f3de0ba3df47b8a3bc02bfffcd9d1649522877e184625379494dc86eb",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/dynamics/growth/base.py",
+      "sha256": "c2eb2bbccbab4689867bc3fddd67156525217c83a80e555970bb3a5893038933",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "GrowthCurve"
+      ]
+    },
+    {
+      "path": "src/innovate/dynamics/growth/dual_influence.py",
+      "sha256": "456280141788605a472e0319d8c7f480922a59dcfa662e1ca0ae9a4289690640",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "DualInfluenceGrowth"
+      ]
+    },
+    {
+      "path": "src/innovate/dynamics/growth/skewed.py",
+      "sha256": "2c0ec26f5efd756f305665b8f40e2fdf8e4cec1c2baa11c626f1bbd9a59e9b05",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "SkewedGrowth"
+      ]
+    },
+    {
+      "path": "src/innovate/dynamics/growth/symmetric.py",
+      "sha256": "cb2e07693fb0dba14684f084bf627e57f6e27ac55661a163a590530e500ecc3a",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "SymmetricGrowth"
+      ]
+    },
+    {
+      "path": "src/innovate/dynamics/system.py",
+      "sha256": "82d4f87b757b3eff33315a8c15aa47b861a99cc317551d383cccc438b9078c15",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "SystemBehavior"
+      ]
+    },
+    {
+      "path": "src/innovate/dynamics/system/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/dynamics/system/base.py",
+      "sha256": "1e494ecaf91eb9f63c70f6831453dd283f66671f031f61ce31c63fd6384f7af2",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "SystemBehavior"
+      ]
+    },
+    {
+      "path": "src/innovate/dynamics/system/hype_cycle.py",
+      "sha256": "8300df7dbdd2835312e8fa2d03d7d75c39a489b0d3c48ec7d8aa1a9b08761c3f",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "HypeCycleBehavior"
+      ]
+    },
+    {
+      "path": "src/innovate/ecosystem/__init__.py",
+      "sha256": "8253395e44e88f2eb3e0d587ce39d13bc16efa0dcdb673fbe1f321b51ac456e0",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/ecosystem/complementary_goods.py",
+      "sha256": "16a06a80ece8edd66b3b7d1f151be7f56c4d4d9e6b078ba4eaaf473f9e89140f",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "ComplementaryGoodsModel"
+      ]
+    },
+    {
+      "path": "src/innovate/ecosystems/co_evolution.py",
+      "sha256": "a0afb4e74b6e7b393345c6b1de75251e909d9854a9577f08eabb45e452a75397",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "CoEvolutionModel"
+      ]
+    },
+    {
+      "path": "src/innovate/ecosystems/platform_multi_sided_growth.py",
+      "sha256": "7cae5b9abbc76e833040a8c5dafb4114bab783c2d2ea0698b9e7e597ebed6747",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "PlatformMultiSidedGrowthModel"
+      ]
+    },
+    {
+      "path": "src/innovate/fail/analysis.py",
+      "sha256": "b1db30dc72c8670e54ede931f00dfcbeda69404b4c6ae94d0affbc694a878624",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "analyze_failure"
+      ]
+    },
+    {
+      "path": "src/innovate/fitters/__init__.py",
+      "sha256": "9f79d700ff7a1c917a60f8b709c255f2067a50e269ed01d4298ee37abd462818",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/fitters/batched_fitter.py",
+      "sha256": "ad70dbad2fb9ba37939cd8219436511b36fe74ce7c0d19bb69fa6d173660afe4",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "BatchedFitter"
+      ]
+    },
+    {
+      "path": "src/innovate/fitters/bayesian_fitter.py",
+      "sha256": "c967ea69b52b5f54765deda9a7fe0c90a1eb8ea5f6570f7b23961bda71bfe8f8",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "BayesianFitter"
+      ]
+    },
+    {
+      "path": "src/innovate/fitters/blackjax_fitter.py",
+      "sha256": "fa10f0c0ac190782531b45953c38318af0fab353d2317f45e15bc8870e952449",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "BlackJaxFitter"
+      ]
+    },
+    {
+      "path": "src/innovate/fitters/bootstrap_fitter.py",
+      "sha256": "5b762fff166e7948429d2302d7475fcd63172f85a21d9224d687a991714202f9",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "BootstrapFitter"
+      ]
+    },
+    {
+      "path": "src/innovate/fitters/curve_fitter.py",
+      "sha256": "553f51d95617c83ebf235a1b58ee08fe3708e8f4de5478f0f93c21b1beb7a957",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "CurveFitter"
+      ]
+    },
+    {
+      "path": "src/innovate/fitters/diagnostics_contract.py",
+      "sha256": "1420a3804e6a91498985dca4709351099a5ecd4f7cc81bb50e3d71dbdf0830d2",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "DiagnosticsWarning",
+        "IntervalConfig",
+        "UncertaintySummary",
+        "DiagnosticsArtifactPayload",
+        "DiagnosticsContract",
+        "build_diagnostics_contract"
+      ]
+    },
+    {
+      "path": "src/innovate/fitters/jax_fitter.py",
+      "sha256": "6df2b9a25a20a50a187a7182baa0ea6551d3f5f580951e7412584ab14aa1802a",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "JaxFitter"
+      ]
+    },
+    {
+      "path": "src/innovate/fitters/mom_fitter.py",
+      "sha256": "42da10bca3b7f09e36ce98aa307f00c7122df9742e87e22b8427cbf0279e6613",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "estimate_bass_mom",
+        "MoMFitter"
+      ]
+    },
+    {
+      "path": "src/innovate/fitters/residual_analysis.py",
+      "sha256": "0617a97e5411c393e2be3f3aef5fbb85c12b7ed72b9f88b6b85cbf50a73a1f87",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "ResidualAnalysis",
+        "analyze_residuals"
+      ]
+    },
+    {
+      "path": "src/innovate/fitters/scipy_fitter.py",
+      "sha256": "972e4839975bfe15a198d84f3ed3671e6815c599562ba5aaf35dd83a260b758e",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "FitDiagnostics",
+        "DiagnosticsContext",
+        "ScipyFitter"
+      ]
+    },
+    {
+      "path": "src/innovate/hype/delayed_hype_bass.py",
+      "sha256": "2f629fbfaecb5c1a2b442ecf611847c573cee6de11e701983187851431a11a42",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "DelayedHypeBassModel"
+      ]
+    },
+    {
+      "path": "src/innovate/hype/hype_cycle.py",
+      "sha256": "8fa0af351a05268db9f1154730333d7355256b07bd744bc6a60c6ffdfc18f3f5",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "HypeCycleModel"
+      ]
+    },
+    {
+      "path": "src/innovate/hype/hype_modified_bass.py",
+      "sha256": "de1ee2e47e3397a0f9f3eed5f779aac415bb182e8759a558d6c5d394aa5fb969",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "HypeModifiedBassModel"
+      ]
+    },
+    {
+      "path": "src/innovate/kernel.py",
+      "sha256": "71876d30645d8d6ab831aa80770f3e4c0fd13bea5725ea7cf288a71af2a3fa8d",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "KernelOperation",
+        "KernelErrorCode",
+        "KernelError",
+        "KernelArrayPayload",
+        "KernelTablePayload",
+        "KernelRequest",
+        "KernelResponse",
+        "KernelDiscoveryRecord",
+        "KernelDiscoveryResponse",
+        "list_kernel_operations",
+        "discover_models",
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ]
+    },
+    {
+      "path": "src/innovate/models/__init__.py",
+      "sha256": "e6f25a93509a0bdc6fa5f07acd77ef3260ec789c4c20c09b0df3cfcb684072bd",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/models/advanced.py",
+      "sha256": "022d6d90f3d46e280d1ecb516a29c49436c5951bd22f28544a5ebbd6ef42c6a3",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "AdvancedModelSummary",
+        "AdvancedDiffusionModel",
+        "LatentProcessDiffusionModel",
+        "RegimeSwitchingDiffusionModel"
+      ]
+    },
+    {
+      "path": "src/innovate/models/contracts.py",
+      "sha256": "5e6459ad606caabe71121bffd82319d2e11c451c71ff546693a76c03932a8290",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "NetworkDiffusionInputs",
+        "PolicyTimingInputs"
+      ]
+    },
+    {
+      "path": "src/innovate/models/hierarchical.py",
+      "sha256": "2f35a2eee90ccbf68b8a631c2b70c6503b68033db70e6fad7a32073476e78d10",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "HierarchicalModel"
+      ]
+    },
+    {
+      "path": "src/innovate/models/mixture.py",
+      "sha256": "84ba31dc0be8caa7482a2042347f04fb904a18385e0090a12e76d919705c17aa",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "MixtureModel"
+      ]
+    },
+    {
+      "path": "src/innovate/models/network.py",
+      "sha256": "b0925b9bde76b1740aaf228922c95aa60deffbef694f0aa54463d92a1c8c5cf3",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "NetworkDiffusionModel"
+      ]
+    },
+    {
+      "path": "src/innovate/models/policy.py",
+      "sha256": "eaaa760bf713f534049f38f0b8abcd96afdb9f92000c3a3244ab27d61c52b273",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "PolicyHazardDiffusionModel"
+      ]
+    },
+    {
+      "path": "src/innovate/path_dependence/__init__.py",
+      "sha256": "443860b688da6af6c8a36b073a73eb2dd0e01add5ad82223feb9d4520a5896a2",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/path_dependence/lock_in.py",
+      "sha256": "c80b2531e7d010dddca9cd7ee83b9b9b52254d21a098fce4ef356181c3e551be",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "LockInModel"
+      ]
+    },
+    {
+      "path": "src/innovate/plots/__init__.py",
+      "sha256": "284113e75e9889cd23dfdb26c7086f4a5eb2223dea4fd14d95b76a5bbfff95ce",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/plots/comparison.py",
+      "sha256": "589e40c792013c1e0fb837f61012def9e83c55a125a77b893f7b40945463eb9d",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "plot_scenario_comparison"
+      ]
+    },
+    {
+      "path": "src/innovate/plots/diagnostics.py",
+      "sha256": "628cfbdaa5c93206c5e556ea31482ae33602dd46af3ded01a7076296cd187f3b",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "ResidualPlotConfig",
+        "plot_residuals",
+        "plot_acf_only",
+        "plot_pacf_only"
+      ]
+    },
+    {
+      "path": "src/innovate/plots/network.py",
+      "sha256": "9819413a55b77950e16f623108c13276efcabd8d64f8d1dd6298ba6ed24f033d",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "plot_network_diffusion"
+      ]
+    },
+    {
+      "path": "src/innovate/plugins.py",
+      "sha256": "b6d9b0588acae10b94a73adbf97be3d4bf4ad20dd7abdc94ee292e02a56a9cb8",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "ExtensionManifest",
+        "register_extension",
+        "get_registered_extensions"
+      ]
+    },
+    {
+      "path": "src/innovate/policy/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/policy/intervention.py",
+      "sha256": "e8f5299ccf0f4f50ecd37e5874c584303357eace61168b429999883264c4c055",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "PolicyIntervention"
+      ]
+    },
+    {
+      "path": "src/innovate/preprocess/__init__.py",
+      "sha256": "0202896a90686477cd428cbf1bc9507e4d975cd1cf77968ccf5933f51bb1de89",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/preprocess/decomposition.py",
+      "sha256": "2b23b30d14f094ba1ddf2a9e4a1e13b170e65988715388aeb0dfe72ee505ecdc",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "stl_decomposition"
+      ]
+    },
+    {
+      "path": "src/innovate/preprocess/time_series.py",
+      "sha256": "55936363d9c6ad3ada30f64ae3195d483d8b976ebc1de13f37df7d4ddeb072c1",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "rolling_average",
+        "sarima_fit"
+      ]
+    },
+    {
+      "path": "src/innovate/probabilistic.py",
+      "sha256": "d4015d2af1326dbcb37122b93e2b0214f4cdb6ed52f29348a4cf6e839e537dc5",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "ProbabilisticBackendStatus",
+        "ProbabilisticBackendUnavailableError",
+        "list_probabilistic_backend_statuses",
+        "require_probabilistic_backend",
+        "PosteriorConfig",
+        "PosteriorSamplesPayload"
+      ]
+    },
+    {
+      "path": "src/innovate/reduce/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/reduce/analysis.py",
+      "sha256": "1f158ffc4c7415d165dd18d0b88debd0335c3ca2412b90386e852948e53d2c33",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "smooth_series",
+        "find_changepoint",
+        "verify_trend_decline",
+        "identify_reducing_series"
+      ]
+    },
+    {
+      "path": "src/innovate/remote_execution.py",
+      "sha256": "e47a483a3b674fd684f03a3d79d61ffcda9d47426c13c88aa645a145d02bd046",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "RemoteExecutionContext",
+        "RemoteExecutionPolicy",
+        "RemoteExecutionRequest",
+        "RemoteExecutionResponse",
+        "InProcessRemoteExecutor",
+        "describe_remote_execution_contract"
+      ]
+    },
+    {
+      "path": "src/innovate/reports/__init__.py",
+      "sha256": "d37d51c2bfcc907ec69fa5239fbef5d5feba88beec426efbe4ca2307ce618d4d",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/reports/claims.py",
+      "sha256": "49853efb6b764332114873b364f2d41e91256f051b1801770114ef6e5ebfa8ce",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "classify_claim",
+        "assert_safe_public_wording",
+        "ClaimRecord",
+        "claim_safety_summary"
+      ]
+    },
+    {
+      "path": "src/innovate/reports/explainability.py",
+      "sha256": "844b988e1c249457149f40aeeb3821d7f729fd96964f5e2d8c635faa11ba59d6",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "adoption_driver_summary",
+        "competition_effect_summary",
+        "substitution_threshold_summary",
+        "policy_component_summary",
+        "combine_explainability"
+      ]
+    },
+    {
+      "path": "src/innovate/reports/export.py",
+      "sha256": "125cb0fe4c52adc58596d6dc304fb15a769a09b07d73d59d63ca46d237b502cb",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "export_report_json",
+        "export_report_markdown",
+        "example_policy_report",
+        "example_competition_report",
+        "example_substitution_report",
+        "export_examples",
+        "report_from_mapping"
+      ]
+    },
+    {
+      "path": "src/innovate/reports/schemas.py",
+      "sha256": "f8633e51b9f00b74520ea3d55b4dcf22e6033c21c59ae1c17c2629cf22aa522d",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "DecisionReport",
+        "build_decision_report"
+      ]
+    },
+    {
+      "path": "src/innovate/reports/sensitivity.py",
+      "sha256": "7cb62f27dd54ac6950d11914c8d92f842b6abc218a9809ef96ec139c638ec6f5",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "ParameterSensitivityInput",
+        "AssumptionSensitivityInput",
+        "TimingSensitivityInput",
+        "ThresholdSensitivityInput",
+        "parameter_perturbation_summary",
+        "assumption_sensitivity_summary",
+        "intervention_timing_summary",
+        "threshold_sensitivity_summary",
+        "combine_sensitivity_summaries"
+      ]
+    },
+    {
+      "path": "src/innovate/scenario/__init__.py",
+      "sha256": "7bd1e9efb50aa1219006c5d14b9a2541c4ddb9bc887235acb9d3385dc93326fc",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/scenario/execution.py",
+      "sha256": "569b38efb758093fa99846857ac5dfca77c84b514875d93e158363e3db582c42",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "ScenarioExecution",
+        "ScenarioComparison",
+        "ScenarioExecutor",
+        "compare_scenarios"
+      ]
+    },
+    {
+      "path": "src/innovate/scenario/registry.py",
+      "sha256": "d816104734792ef4012bdbac58480132208b93aeff9b815a1404cd26e90117d3",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "ScenarioCapability",
+        "get_scenario_registry",
+        "get_scenario_capability"
+      ]
+    },
+    {
+      "path": "src/innovate/scenario/schemas.py",
+      "sha256": "f5387adfaa80077d2f8a0e988f1524994c3d11c0fe0788445bc383af713919cf",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "ScenarioBase",
+        "BaselineScenario",
+        "InterventionScenario",
+        "SubstitutionScenario",
+        "CompetitionScenario",
+        "NetworkScenario",
+        "ArtifactEnvelope"
+      ]
+    },
+    {
+      "path": "src/innovate/scenario/summaries.py",
+      "sha256": "be3780f8bfbfda5125296cf0427d23280d2f5ba5937f00926b16444f7c3808c8",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "compute_ranking",
+        "compute_incremental_effect",
+        "compute_threshold_timing",
+        "compute_uncertainty",
+        "summarize_comparison"
+      ]
+    },
+    {
+      "path": "src/innovate/stability.py",
+      "sha256": "dcb1b60f5e30ec6b65f5281b2f783875154d88e597b1289cfac264cd471876e5",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "StabilityTier",
+        "normalize_stability_tier",
+        "describe_stability_tier"
+      ]
+    },
+    {
+      "path": "src/innovate/substitute/__init__.py",
+      "sha256": "cd3c0e3d5db588334956edeafa73a94fc4aaf94b7ff1c7cc2070fe668219699f",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/substitute/composite.py",
+      "sha256": "4ae447c938251fb862492aa385984743cd0d179c38f18aaa2bf03c1b784214ea",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "CompositeDiffusionModel"
+      ]
+    },
+    {
+      "path": "src/innovate/substitute/fisher_pry.py",
+      "sha256": "ba3644e4d924c77768a02dace39a5de77f34e9525eaa8d71772d260992657999",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "FisherPryModel"
+      ]
+    },
+    {
+      "path": "src/innovate/substitute/norton_bass.py",
+      "sha256": "58722fc457abaceba01f8900069dcb5fc4309035fb405df7038666042758795b",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "NortonBassModel"
+      ]
+    },
+    {
+      "path": "src/innovate/utils/__init__.py",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "src/innovate/utils/metrics.py",
+      "sha256": "b8770ce8b8f51b5cd33b34e43447818486c113b05164fc1fa17f003ef68b6a53",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "calculate_mse",
+        "calculate_rmse",
+        "calculate_mape",
+        "calculate_mae",
+        "calculate_r_squared",
+        "calculate_smape",
+        "calculate_rss",
+        "calculate_aic",
+        "calculate_bic"
+      ]
+    },
+    {
+      "path": "src/innovate/utils/model_evaluation.py",
+      "sha256": "5cce8e3e210abc477a8ab98b34dbc2831a03651acf4a86c020d8f47749f5021c",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "model_aic",
+        "model_bic",
+        "get_fit_metrics",
+        "compare_models",
+        "find_best_model",
+        "compute_residuals",
+        "residual_acf",
+        "residual_pacf"
+      ]
+    },
+    {
+      "path": "src/innovate/utils/model_validation.py",
+      "sha256": "0e68b17ec7391648ce5a51cc07439ba5354180fbe40509a6ea189ab069e457e5",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "validate_bass_parameters",
+        "validate_logistic_parameters",
+        "validate_gompertz_parameters",
+        "validate_model_predictions"
+      ]
+    },
+    {
+      "path": "src/innovate/utils/optimization_guide.py",
+      "sha256": "408ac95985f69701de411b71808b2c954379ecc4bdd3b1b4b8549201372b171f",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "optimize_backend_operations",
+        "improve_numerical_stability",
+        "optimize_model_fitting",
+        "memory_efficient_computations",
+        "avoid_ode_segmentation_faults",
+        "suggest_safe_alternatives",
+        "benchmark_model_performance",
+        "validate_parameters_safely",
+        "suggest_parameter_bounds_safely"
+      ]
+    },
+    {
+      "path": "src/innovate/utils/preprocessing.py",
+      "sha256": "54a745e66a5b348c0232d33f1dbde070a28a4d772660feceb8a4f802f61d314e",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "ensure_datetime_index",
+        "aggregate_time_series",
+        "apply_stl_decomposition",
+        "cumulative_sum",
+        "apply_rolling_average",
+        "apply_sarima"
+      ]
+    },
+    {
+      "path": "src/innovate/utils/validation.py",
+      "sha256": "77e4f6691053a7ec0cb7a7151fd9cb7c91d18923647de78d555cb9c0b1523197",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "validate_sequence_numeric",
+        "validate_positive_numeric_sequence",
+        "validate_float",
+        "validate_probability",
+        "validate_covariates",
+        "validate_time_series",
+        "validate_covariates_dict"
+      ]
+    },
+    {
+      "path": "tests/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "tests/conftest.py",
+      "sha256": "b69963f86ce6a814d83d70048f87ce7b4281b74fa4d9faf72331de28e2b935a5",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "mock_pandasdmx",
+        "network_diffusion_scenario",
+        "policy_timing_scenario"
+      ]
+    },
+    {
+      "path": "tests/e2e/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "tests/e2e/failed_adoption_script.py",
+      "sha256": "c1c13c3f7ac479cb1ea4194b6f9e4b31ef784e902cb076fbf0dcce94172ecfda",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "run_failed_adoption_example"
+      ]
+    },
+    {
+      "path": "tests/e2e/test_failed_adoption_script.py",
+      "sha256": "3b0f67dd1543ae49dd877e9ad2fe5617d520666495e80b73306cdebd804e87e7",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_failed_adoption_script"
+      ]
+    },
+    {
+      "path": "tests/fixtures/advanced_runtime/README.md",
+      "sha256": "5df3ca33826c20c6161e388496004fdd54ff1cd5c55cd6b5664af58010ae304a",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "tests/fixtures/advanced_runtime/workflows.json",
+      "sha256": "7af2522814e8c4ca56f8384482ffc40b7073eee72446f716d18d1b3f8085c5db",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "tests/fixtures/diagnostics_artifact_payload.json",
+      "sha256": "d61c9bd074783650725cf853a1f5900859a73383cd40eb5c2d1e6665285ea9eb",
+      "migration_status": "pending_review"
+    },
+    {
+      "path": "tests/integration/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "tests/integration/test_advanced_modeling_workflows.py",
+      "sha256": "22534fc74932461ab774c54cbe9d5283906c1bb82445de9a591c2390eb84b615",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_compose_regime_ensemble_scores_and_serializes_result",
+        "test_compare_policy_scenarios_reports_auditable_effect_summary",
+        "test_update_streaming_forecast_returns_incremental_state_and_diagnostics",
+        "test_calibrate_prediction_intervals_reports_coverage_and_residuals"
+      ]
+    },
+    {
+      "path": "tests/integration/test_diffusion_pipeline.py",
+      "sha256": "d3cc8219600bff5d146644cd4b1314aa66be1f9b2ae2ede3faf9a1eac67c385c",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestDiffusionToFitPipeline",
+        "TestCrossModelComparison",
+        "TestAdoptionRatePipeline"
+      ]
+    },
+    {
+      "path": "tests/test_dependency_baselines.py",
+      "sha256": "035e643a12acb83b094c7d7fbbb1444f298d743e861f0ee48618232d4e454a3f",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestPythonBaseline",
+        "TestNumPyBaseline",
+        "TestPydanticBaseline",
+        "TestPolarsBaseline",
+        "TestBasedPyrightConfiguration",
+        "TestAstroStarlightBaseline",
+        "TestTypeScriptBaseline",
+        "TestNodeBaseline",
+        "TestVitestBaseline",
+        "TestRustCriterionBaseline",
+        "TestMutmutBaseline"
+      ]
+    },
+    {
+      "path": "tests/test_kairos_build_plumbing.py",
+      "sha256": "2cb958701ff93798a7867bc8dcc4a3c6cb4e9706a610803840a2089425c83595",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestKairosBuildPlumbing"
+      ]
+    },
+    {
+      "path": "tests/test_kairos_dependency.py",
+      "sha256": "f184a4e96252978a1464ec6e34c7635b9c447fde04d6f0afd2c1b36fc32db505",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestKairosDependencyInclusion"
+      ]
+    },
+    {
+      "path": "tests/test_kairos_smoke.py",
+      "sha256": "40d43763c45526ded64fd7b96210f93a546e03fbfb2575f4c66946cf901e5d57",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestKairosSmokeTests"
+      ]
+    },
+    {
+      "path": "tests/unit/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "migration_status": "pending_review",
+      "public_definitions": []
+    },
+    {
+      "path": "tests/unit/test_abi_binary_compatibility_strategy.py",
+      "sha256": "04a9189aedee0611e1c7e246791e703b16a214b5f2d48c8bdc1043a50435a668",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_abi_strategy_doc_is_in_starlight_navigation",
+        "test_abi_strategy_separates_api_schema_and_native_abi",
+        "test_arrow_c_data_interface_is_the_native_interchange_boundary",
+        "test_xla_internals_are_excluded_from_public_abi",
+        "test_package_manager_binary_compatibility_notes_cover_binding_targets",
+        "test_abi_track_metadata_and_registry_state_are_consistent"
+      ]
+    },
+    {
+      "path": "tests/unit/test_abm.py",
+      "sha256": "35d4056830bc0e20289f83d3dc9dd8ddaab7f75bd586c008ab5d9de0d2c7c9ee",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_innovation_model_basic",
+        "test_disruptive_innovation_model_run",
+        "test_sentiment_hype_model_run",
+        "test_competitive_diffusion_model_run"
+      ]
+    },
+    {
+      "path": "tests/unit/test_accelerator_parallel_execution_evidence.py",
+      "sha256": "d25e7b01c0aeedfd1745a429cd7187c7ce66ca8982c860243dfb6cb598bcc159",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_accelerator_parallel_execution_evidence_doc_covers_execution_modes",
+        "test_accelerator_evidence_schema_is_backend_neutral",
+        "test_evidence_schema_requires_scheduler_and_fallback_fields",
+        "test_accelerator_evidence_docs_are_linked_from_starlight_sidebar"
+      ]
+    },
+    {
+      "path": "tests/unit/test_adopt_categorization.py",
+      "sha256": "8c3693d66317d3d3cd782fbf6d4854e9fbf5c251babc4c530ffb718882f564dc",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestCategorizeAdopters"
+      ]
+    },
+    {
+      "path": "tests/unit/test_advanced_diffusion_models.py",
+      "sha256": "48855fbdf9084e11bddfb0395944bac133362aba1218aefeb33f998edb3118f3",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_canonical_advanced_exports_and_registry_metadata",
+        "test_hierarchical_model_exposes_simulate_and_summarize",
+        "test_mixture_model_exposes_simulate_and_summarize",
+        "test_latent_process_and_regime_switching_workflows_fit_predict_simulate"
+      ]
+    },
+    {
+      "path": "tests/unit/test_advanced_functionality_comprehensive.py",
+      "sha256": "bd6ccc06025747e5790065aa8aa1f3658e9821bebaddcf2cc8e1a517043ef032",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestPolicyInterventionComprehensive",
+        "TestCounterfactualAnalysis",
+        "TestComplementaryGoodsModel",
+        "TestLockInModel",
+        "TestFisherPryModelExtended",
+        "TestAdvancedModelInteractions"
+      ]
+    },
+    {
+      "path": "tests/unit/test_advanced_policy_gap_coverage.py",
+      "sha256": "1cd7de0b5a79571a2965b4bbe3139efe72315f320fa6f644d178350ea6ee96ed",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_lock_in_model_registered_in_capabilities",
+        "test_path_dependence_module_exports",
+        "test_equilibrium_method_on_lotka_volterra",
+        "test_equilibrium_method_on_multi_product",
+        "test_cross_elasticity_output_on_competition",
+        "test_threshold_diagnostics_on_substitution",
+        "test_network_diffusion_intervention_api",
+        "test_gap_inventory_exists",
+        "test_gap_inventory_covers_all_families",
+        "test_starlight_docs_for_advanced_policy"
+      ]
+    },
+    {
+      "path": "tests/unit/test_advanced_runtime_accelerator_evidence.py",
+      "sha256": "e3fa816bcf1ae75fd2f1f6ae100091c11b1291eac025f66774be2ff5f65461b5",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_accelerator_policy_records_safe_rust_to_numpy_fallback",
+        "test_advanced_runtime_performance_evidence_is_recorded"
+      ]
+    },
+    {
+      "path": "tests/unit/test_advanced_runtime_contracts.py",
+      "sha256": "d43255cb7e2da5c10444d3d68ccf302a5a09faeb7ea70fc97f5ff44cca941560",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_advanced_capability_registry_marks_stability_and_dependencies",
+        "test_advanced_capability_validation_and_lookup_errors",
+        "test_get_advanced_capability",
+        "test_get_advanced_capability_returns_correct_capability",
+        "test_advanced_result_serializes_to_stable_json_payload",
+        "test_advanced_result_rejects_unknown_stability",
+        "test_runtime_policy_requires_a_preferred_backend",
+        "test_select_advanced_backend_falls_back_when_optional_backend_missing",
+        "test_select_advanced_backend_uses_first_available_preferred_backend",
+        "test_select_advanced_backend_can_fail_closed",
+        "test_select_advanced_backend_reports_no_available_backend",
+        "test_select_advanced_backend_uses_defaults",
+        "test_detect_advanced_backends_reports_numpy_available",
+        "test_list_advanced_capabilities_deterministic_order",
+        "test_detect_advanced_backends_optional_backends",
+        "test_compare_policy_scenarios_happy_path",
+        "test_compare_policy_scenarios_zero_baseline",
+        "test_compare_policy_scenarios_length_mismatch"
+      ]
+    },
+    {
+      "path": "tests/unit/test_advanced_runtime_docs_examples.py",
+      "sha256": "1add18f8f20e6dd3b20285ff070a05fbaa623bf979a52a556e2665eb2ba2c408",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_advanced_runtime_example_executes_and_returns_payloads",
+        "test_advanced_runtime_starlight_docs_are_canonical",
+        "test_advanced_runtime_starlight_docs_exist_for_current_and_latest"
+      ]
+    },
+    {
+      "path": "tests/unit/test_advanced_runtime_ensemble.py",
+      "sha256": "ca85036fedfe85fcfdd5699770f724b7f01470d65d934b994d2124830c9f74df",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_compose_regime_ensemble_validation_and_combination"
+      ]
+    },
+    {
+      "path": "tests/unit/test_advanced_runtime_fixtures.py",
+      "sha256": "b4aeea2f3ae6171b775fa216724c08dbdcf1cf40d7b0064ce6c2a9f5d0b2b462",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_advanced_workflow_fixture_bundle_exists_and_covers_workflows",
+        "test_advanced_workflow_fixtures_are_shape_consistent",
+        "test_advanced_workflow_fixture_assumptions_are_documented"
+      ]
+    },
+    {
+      "path": "tests/unit/test_advanced_streaming_forecast.py",
+      "sha256": "f3993102ba8f2303fed3da58d324e3eeefef095e2898ca3ab0f5d0b2766d6f3f",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_update_streaming_forecast_happy_path",
+        "test_update_streaming_forecast_mismatched_previous_lengths",
+        "test_update_streaming_forecast_mismatched_new_lengths",
+        "test_update_streaming_forecast_unsorted_time",
+        "test_update_streaming_forecast_non_cumulative_observed"
+      ]
+    },
+    {
+      "path": "tests/unit/test_arrow_interchange.py",
+      "sha256": "c9cc5f1d032eb292c427f8cab1c2f75541157b4ea52ab86e154e7bc1a761776b",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_arrow_interchange_describes_the_versioned_contract",
+        "test_kernel_array_payload_round_trips_through_arrow_and_pandas",
+        "test_kernel_table_payload_round_trips_through_arrow_and_pandas",
+        "test_diagnostics_artifact_tables_round_trip_through_arrow",
+        "test_kernel_discovery_response_round_trips_through_arrow",
+        "test_arrow_interchange_rejects_tables_without_contract_metadata"
+      ]
+    },
+    {
+      "path": "tests/unit/test_astro_starlight_cutover_verification.py",
+      "sha256": "26af407a26169711d51032a83c7d0ddb118070c73f10b35a5bd6aaf5b6e2059b",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_cutover_verification_report_confirms_inventory_alignment",
+        "test_cutover_verification_report_covers_expected_routes"
+      ]
+    },
+    {
+      "path": "tests/unit/test_astro_starlight_dependency_audit.py",
+      "sha256": "8779dccfb454561812f5853cc9ecb2c49bd9985394e3bb1ffe4d1893d028e0b4",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_audit_evidence_file_exists",
+        "test_audit_records_package_manager",
+        "test_audit_records_astro_dependency",
+        "test_audit_records_starlight_mismatch",
+        "test_audit_records_all_plugin_dependencies",
+        "test_audit_records_migration_manifest_baseline",
+        "test_target_decision_artifact_exists",
+        "test_target_decision_selects_starlight_41",
+        "test_target_decision_lists_actions",
+        "test_target_decision_documents_compatibility"
+      ]
+    },
+    {
+      "path": "tests/unit/test_astro_starlight_link_validation.py",
+      "sha256": "53f00759657a316e6f36c90eb479e678ce479f2c472fc87d7cd9704aca022e56",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_link_validation_report_confirms_sidebar_routes",
+        "test_link_validation_report_covers_internal_route_links"
+      ]
+    },
+    {
+      "path": "tests/unit/test_astro_starlight_migration.py",
+      "sha256": "ff7e5e32ecf36aed0ef2248ded3e0491f77b93c1716f9e5ec60d0ec24f1d1876",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_astro_starlight_package_manifest_records_pinned_baseline",
+        "test_astro_and_starlight_config_files_record_the_scaffold",
+        "test_astro_starlight_migration_manifest_records_cutover_decisions",
+        "test_astro_starlight_inventories_stay_synchronized",
+        "test_astro_starlight_docs_page_lists_the_scaffold_artifacts",
+        "test_astro_starlight_navigation_includes_the_migration_page",
+        "test_astro_starlight_core_pages_have_migrated_content",
+        "test_astro_starlight_bindings_and_publication_pages_have_content",
+        "test_astro_starlight_maintainers_area_describes_release_notes",
+        "test_astro_starlight_redirect_route_map_describes_cutover",
+        "test_astro_starlight_archive_and_reference_pages_describe_provenance"
+      ]
+    },
+    {
+      "path": "tests/unit/test_astro_starlight_route_coverage.py",
+      "sha256": "88920fccddaf0c18d2304c5e97c8c35d0d8af04417ae91ef8997fe629f47ea60",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_route_coverage_report_is_generated_from_inventories",
+        "test_route_coverage_report_matches_astro_content_tree"
+      ]
+    },
+    {
+      "path": "tests/unit/test_astro_starlight_route_validation.py",
+      "sha256": "fb6af90cb979f747677c0bed5939381a94c69c861714722291565465a864845a",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_all_sidebar_routes_have_content_files",
+        "test_route_coverage_includes_migrated_routes",
+        "test_versioned_latest_content_exists",
+        "test_astro_site_builds_successfully",
+        "test_generated_python_api_docs_exist",
+        "test_sphinx_is_legacy_archive_only",
+        "test_custom_css_file_exists",
+        "test_version_switcher_is_configured",
+        "test_docsearch_is_gated_by_env_vars",
+        "test_sidebar_contains_core_sections",
+        "test_nox_docs_session_runs_pnpm_install_and_build",
+        "test_docs_workflow_uses_correct_node_and_pnpm_versions",
+        "test_production_docs_contract_passes"
+      ]
+    },
+    {
+      "path": "tests/unit/test_backend.py",
+      "sha256": "5e5d3ee7cac4575d9987b8264b2f7804837e2c94335823a47a0af5f98893f252",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_backend_initialization",
+        "test_use_backend_numpy",
+        "test_use_backend_jax_import_error",
+        "test_use_backend_unknown",
+        "FakeJaxBackend",
+        "test_use_backend_jax_success"
+      ]
+    },
+    {
+      "path": "tests/unit/test_backend_utils_comprehensive.py",
+      "sha256": "48954feaf1f1fb952a057b6e868f6cad687cfdb6fe62b1289fa43649ae2cd72e",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestBackendFunctionality",
+        "TestMetricsComprehensive",
+        "TestPreprocessingFunctions",
+        "TestModelEvaluationUtilities"
+      ]
+    },
+    {
+      "path": "tests/unit/test_bass_model_comprehensive.py",
+      "sha256": "8ed1cdf673b2756d6f9d99915e463f27fdbd3645bf715b974463bf65f51df21a",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestBassModelComprehensive",
+        "test_bass_model_comprehensive_integration"
+      ]
+    },
+    {
+      "path": "tests/unit/test_batched_fitter.py",
+      "sha256": "9396701e0ee4491be6f57a59111d7ac9f0359f5278c62c1f02b415abd12084ca",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "synthetic_batched_data",
+        "test_batched_fitter_fit",
+        "test_batched_fitter_predict",
+        "test_batched_fitter_jax"
+      ]
+    },
+    {
+      "path": "tests/unit/test_bayesian_fitter_robust.py",
+      "sha256": "82eb5518057547f79c412cc78f12b15be1e4ba2ebedda67c4e1c47fbd7be9587",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestBayesianFitterRobust"
+      ]
+    },
+    {
+      "path": "tests/unit/test_benchmark_automation.py",
+      "sha256": "bf1ef10c0ca87b42a6dad61d707b064f8f420aa4eefb9e105ed9d540da0f9392",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_benchmark_cases_include_required_automation_metadata",
+        "test_benchmark_corpus_validation_reports_no_issues",
+        "test_model_card_summaries_are_refreshable_and_traceable",
+        "test_default_ci_keeps_expensive_benchmarks_opt_in"
+      ]
+    },
+    {
+      "path": "tests/unit/test_benchmark_corpus.py",
+      "sha256": "833e5471b27073031c7753f38cdf37106f289c3bbad11be30739db296bf3758a",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_benchmark_corpus_exposes_stable_sorted_identifiers",
+        "test_benchmark_case_metadata_is_complete_and_reproducible",
+        "test_competition_benchmark_case_is_multivariate",
+        "test_unknown_benchmark_case_raises_key_error"
+      ]
+    },
+    {
+      "path": "tests/unit/test_benchmark_docs.py",
+      "sha256": "7b42b39972c985c5bc4f9e089dc22f90b420392b2b4bae2ce935e08362137d66",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_benchmark_docs_pages_are_present",
+        "test_benchmark_workflow_tutorial_mentions_canonical_helpers",
+        "test_docs_toctrees_include_benchmarks",
+        "test_rust_benchmark_ci_job_is_documented",
+        "test_rust_migration_inventory_is_machine_readable",
+        "test_rust_profiling_surfaces_are_packaged",
+        "test_benchmark_docs_describe_fast_and_opt_in_automation",
+        "test_benchmark_workflow_documents_promotion_dossier_capture"
+      ]
+    },
+    {
+      "path": "tests/unit/test_benchmark_runner.py",
+      "sha256": "779711fa1e70402ae24e8c7eee23a6a218f98014b53fb857c6a778f97b12e38d",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_benchmark_runner_emits_standardized_metrics_and_diagnostics"
+      ]
+    },
+    {
+      "path": "tests/unit/test_benchmark_suite.py",
+      "sha256": "ccdc5405cfd47bd67fc9b65645df3eb98be6667f4e07f4e87876143e8da62d54",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_stable_benchmark_jobs_cover_core_families",
+        "test_stable_benchmark_suite_is_serializable",
+        "test_root_api_exposes_suite_helpers"
+      ]
+    },
+    {
+      "path": "tests/unit/test_binding_conformance_ci.py",
+      "sha256": "28462df038b0af7fa3bd48d44cf0f236c43b2d895942a8da7015dc1c2801d541",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_binding_conformance_workflow_runs_shared_contract_tests",
+        "test_binding_conformance_workflow_uploads_evidence_artifacts",
+        "test_binding_conformance_ci_has_documented_local_fallback"
+      ]
+    },
+    {
+      "path": "tests/unit/test_binding_parity_docs.py",
+      "sha256": "d22ddfdeddd1b7343fd02e80b5ad12503297e27eecee8496a037ab7d3d1fc698",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_starlight_binding_parity_pages_cover_all_supported_languages",
+        "test_binding_docs_do_not_keep_stale_sphinx_cutover_claims"
+      ]
+    },
+    {
+      "path": "tests/unit/test_binding_publication_ci.py",
+      "sha256": "e523153278adef9a239ac1aa15e04a5cea4437a4d9e4444f56a2f0bf6ebdb299",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_binding_package_names_follow_language_suffix_policy",
+        "test_binding_versions_are_aligned_with_python_package_version",
+        "test_binding_publication_docs_name_registry_targets",
+        "test_ci_workflow_runs_implemented_language_bindings",
+        "test_binding_publish_workflow_has_release_gated_registry_steps",
+        "test_python_release_workflows_validate_distribution_metadata",
+        "test_typescript_npm_metadata_and_ci_pack_gate",
+        "test_rust_crates_metadata_and_package_gates",
+        "test_julia_registry_metadata_has_compat_bounds",
+        "test_julia_installed_package_smoke_gate_runs_copied_package_bridge",
+        "test_go_module_release_gate_documents_submodule_tag_pattern",
+        "test_csharp_nuget_ci_packs_every_target_framework",
+        "test_r_publish_workflow_matches_source_package_tarball_name",
+        "test_csharp_nuget_pack_includes_runtime_bridge_asset"
+      ]
+    },
+    {
+      "path": "tests/unit/test_blackjax_fitter.py",
+      "sha256": "e9db49ee5078ae03a5e0399934f3461c28a736fc73f33e22384443b6eca456d1",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_blackjax_fitter"
+      ]
+    },
+    {
+      "path": "tests/unit/test_calibrate_prediction_intervals.py",
+      "sha256": "555f080a4862a65ee2af529065fb08f96e75ec617f37b326cbccc5e22a83c8ea",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_calibrate_prediction_intervals_happy_path",
+        "test_calibrate_prediction_intervals_holdout",
+        "test_calibrate_prediction_intervals_value_errors"
+      ]
+    },
+    {
+      "path": "tests/unit/test_capabilities.py",
+      "sha256": "1c833cdc1193b1bf2b86ea6ea4b78f538140721f00db4a6b70444be947ab96e0",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_get_model_capability_error_path",
+        "test_get_backend_capability_error_path",
+        "test_get_fitter_capability_error_path",
+        "test_get_backend_registry",
+        "test_get_fitter_registry",
+        "test_stability_tier",
+        "test_get_model_registry"
+      ]
+    },
+    {
+      "path": "tests/unit/test_categorization.py",
+      "sha256": "6e8ebc1c1498a0f21d19f15d0955587d1fed4c9197bd5a156cb8792a5277c96e",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_categorize_adopters"
+      ]
+    },
+    {
+      "path": "tests/unit/test_causal_policy_docs.py",
+      "sha256": "5e7342521ed471396e9060929a6ae45d7c99c4923a61a7458186df781da77a5d",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestCausalModelCard",
+        "TestReleaseEvidence",
+        "TestAssumptionDocument",
+        "TestDocumentationExamples"
+      ]
+    },
+    {
+      "path": "tests/unit/test_causal_policy_evaluation.py",
+      "sha256": "06e44708933bc96a9bfda88d32d89311f2f8e70205a662354f53527bc9d06a8a",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestInterventionContract",
+        "TestCausalModelContract",
+        "TestPolicyEvaluationGuardrails",
+        "TestCausalModelClass",
+        "TestTreatmentEffectEstimation",
+        "TestSensitivityAnalysis",
+        "TestIntegrationWithScenarios",
+        "TestJSONArrowCompatibility",
+        "test_causal_model_from_json_extra_fields",
+        "test_causal_model_from_json_invalid_types"
+      ]
+    },
+    {
+      "path": "tests/unit/test_causal_policy_security.py",
+      "sha256": "68e500fd79191db2660eab53395569bb7a02e8b4d4c77b7a2b22f80597385131",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_causal_model_from_json_valid",
+        "test_causal_model_from_json_invalid_json_string",
+        "test_causal_model_from_json_not_a_dict",
+        "test_causal_model_from_json_missing_intervention",
+        "test_causal_model_from_json_intervention_not_dict",
+        "test_causal_model_from_json_missing_causal_model",
+        "test_causal_model_from_json_causal_model_not_dict",
+        "test_causal_model_from_json_extra_keys_rejected",
+        "test_causal_model_from_json_missing_keys_rejected"
+      ]
+    },
+    {
+      "path": "tests/unit/test_community_submission_readiness.py",
+      "sha256": "466b61a0ea210de06f5fad9cc2d7656e2cfbc4a289798932ddd8e9f68c298873",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "load_matrix",
+        "test_community_submission_matrix_covers_requested_targets",
+        "test_community_submission_targets_have_status_evidence_and_blockers",
+        "test_community_submission_docs_link_matrix_and_sequence"
+      ]
+    },
+    {
+      "path": "tests/unit/test_competition.py",
+      "sha256": "4a8cf1bf78b441f3e618d43ffe75876f0772d51d87d2320def3dac1a94d4f893",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "fitted_bass_model",
+        "fitted_fisher_pry_model",
+        "test_competition_model_init",
+        "test_competition_model_init_empty",
+        "test_multi_product_model_fit_basic",
+        "test_multi_product_model_predict_basic"
+      ]
+    },
+    {
+      "path": "tests/unit/test_complementary_goods.py",
+      "sha256": "9f65db7d8fe945f32a6840238ff3c77a7011a354b65a0e7711667481597ad64a",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "complementary_goods_data",
+        "test_complementary_goods_model_init",
+        "test_complementary_goods_model_predict",
+        "test_complementary_goods_model_fit",
+        "test_complementary_goods_model_score",
+        "test_complementary_goods_model_predict_adoption_rate"
+      ]
+    },
+    {
+      "path": "tests/unit/test_composite.py",
+      "sha256": "560f2cd481909c91d66277d30f8e7ce72cdf0d164384c118356f15415f302912",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestCompositeDiffusionModelBasic",
+        "TestCompositeDiffusionModelPredict",
+        "TestCompositeDiffusionModelScore",
+        "TestCompositeDiffusionModelEdgeCases"
+      ]
+    },
+    {
+      "path": "tests/unit/test_comprehensive_coverage.py",
+      "sha256": "b9b41a86e47d7648b15f7497a8a17e04017ca890cfc5cca885e7dbc6a2ab5895",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_bass_model_comprehensive",
+        "test_logistic_model_comprehensive",
+        "test_scipy_fitter_comprehensive",
+        "test_base_diffusion_model",
+        "test_parameter_validation",
+        "test_model_methods_without_computation",
+        "test_edge_cases"
+      ]
+    },
+    {
+      "path": "tests/unit/test_comprehensive_functionality.py",
+      "sha256": "ea2cf0332857fe332c5fd9406b98317cf53db25ab51775e27318c31c2036a746",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_bass_model_comprehensive_functionality",
+        "test_logistic_model_comprehensive_functionality",
+        "test_gompertz_model_structure",
+        "test_multiproduct_model_structure",
+        "test_scipy_fitter_functionality",
+        "test_error_handling",
+        "test_model_composition"
+      ]
+    },
+    {
+      "path": "tests/unit/test_conductor_registry_hygiene.py",
+      "sha256": "64724c58a9628c9915df6ca60f25520bf188ccc1a93c67281777ed3de2717774",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_active_track_folders_match_active_registry_entries",
+        "test_completed_registry_entries_point_to_existing_archive_folders",
+        "test_archive_folders_are_registered_or_explicitly_exempted",
+        "test_status_tool_reports_registry_hygiene_diagnostics"
+      ]
+    },
+    {
+      "path": "tests/unit/test_conductor_workflow_docs.py",
+      "sha256": "d7c44c179110c45eb9b77b126d96a9a439aefecfcdba1873f9543eba8ac8c8bd",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_python_task_runner_remains_uv_first",
+        "test_rust_profiling_stack_records_cpu_memory_and_gpu_scope",
+        "test_starlight_roadmap_track_records_versioned_plugin_baseline",
+        "test_future_astro_starlight_migration_track_records_cutover_gates",
+        "test_completed_archive_status_text_matches_metadata"
+      ]
+    },
+    {
+      "path": "tests/unit/test_counterfactual.py",
+      "sha256": "b57ee08cdc1e5953edb1a951e64bc7243bc207cbbe43b0d463d1b8f5d9794ed4",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestCounterfactualAnalysis"
+      ]
+    },
+    {
+      "path": "tests/unit/test_coverage_improvement.py",
+      "sha256": "c4c98cce13398b285f1acef7776959913d3c70b6a65c195ab66c698927d522dc",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestBaseModule",
+        "TestBassModelCoverage",
+        "TestLogisticModelCoverage",
+        "TestFitterCoverage",
+        "test_backend_module",
+        "test_all_tests_run_properly"
+      ]
+    },
+    {
+      "path": "tests/unit/test_coverage_mutation_thresholds.py",
+      "sha256": "9a8168061b1d5e9569d69b0ce630684ab718e907a3e5e81b72b1e9cdbd4723b1",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_coverage_threshold_is_80_in_release_evidence",
+        "test_mutation_threshold_is_70_in_release_evidence",
+        "test_coverage_session_has_fail_under_80",
+        "test_coverage_session_has_html_report",
+        "test_coverage_session_has_xml_report",
+        "test_coverage_session_has_threshold_check",
+        "test_mutation_session_has_threshold_check",
+        "test_coverage_threshold_in_pyproject_toml",
+        "test_mutation_config_in_pyproject_toml",
+        "test_gate_inventory_lists_correct_thresholds"
+      ]
+    },
+    {
+      "path": "tests/unit/test_critical_coverage.py",
+      "sha256": "2fe472b39d16791f7396c6be092f2366a7efa1bce5b20deee321ec94904bf32a",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestCriticalEdgeCases",
+        "TestModelSpecificEdgeCases",
+        "TestErrorRecovery"
+      ]
+    },
+    {
+      "path": "tests/unit/test_csharp_binding_docs.py",
+      "sha256": "982b4600c4985fe82659b4ade3148b54d1ed319be84f6483d116b2a318e11d81",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_csharp_binding_documentation_is_present",
+        "test_csharp_binding_docs_define_thin_contract_scope",
+        "test_bindings_hub_includes_csharp_plan",
+        "test_csharp_binding_package_scaffold_exists",
+        "test_csharp_package_metadata_is_nuget_ready"
+      ]
+    },
+    {
+      "path": "tests/unit/test_csharp_schema_fixtures.py",
+      "sha256": "42fd7a3748cf7cf720b5942dc7441293e47583bc90e1f0ee922beea5eea5998c",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_csharp_request_fixture_is_accepted_by_functional_kernel_schema",
+        "test_csharp_response_fixtures_are_accepted_by_functional_kernel_schema",
+        "test_csharp_operation_constants_match_functional_kernel_contract"
+      ]
+    },
+    {
+      "path": "tests/unit/test_curve_fitter.py",
+      "sha256": "07a0334331cb4bf5a05312fbd76084e4635604dffe789f8c0982510a9f63f4fb",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_curve_fitter_init",
+        "test_curve_fitter_fit",
+        "test_curve_fitter_fit_with_mock_model"
+      ]
+    },
+    {
+      "path": "tests/unit/test_data_ingestion_provenance.py",
+      "sha256": "0fcbc4124036e9cbb84dd4d925c3753304faa10112cee56d4a2a18a10281251d",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_provenance_fails_closed_on_unknown_license",
+        "test_adoption_contract_and_validation",
+        "test_substitution_competition_policy_network_contracts",
+        "test_attach_provenance_and_roundtrip",
+        "test_ingest_csv_and_parquet",
+        "test_frame_to_dataset_requires_provenance",
+        "test_public_adapter_pattern",
+        "test_benchmark_and_scenario_integration",
+        "test_content_checksum_stable_after_checksum_attachment",
+        "test_adoption_share_unit_requires_unit_interval",
+        "test_synthetic_adapter_is_reproducible",
+        "test_duplicate_and_unit_failures",
+        "test_load_table_missing_file",
+        "test_polars_ingest_optional"
+      ]
+    },
+    {
+      "path": "tests/unit/test_dataframe_engine_docs.py",
+      "sha256": "808f7002333efd4eeea9b2ebf3d6c27356d1f7e7b6fa1376ffa9c26862356e99",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_dataframe_engine_docs_are_published",
+        "test_dataframe_engine_docs_define_support_and_promotion_boundaries",
+        "test_polars_is_declared_as_an_optional_dataframe_dependency"
+      ]
+    },
+    {
+      "path": "tests/unit/test_dataframe_engine_experiments.py",
+      "sha256": "38d5d77d1dff4515dd0e74ed6fcd89f18b59720664a135f8cb2be0147620f38d",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_dataframe_experiment_contract_keeps_pandas_pyarrow_as_default",
+        "test_pandas_pyarrow_path_round_trips_kernel_table_payload",
+        "test_polars_path_is_optional_and_falls_back_to_pandas_when_missing",
+        "test_polars_path_can_fail_fast_when_fallback_is_disabled",
+        "test_dataframe_benchmark_fixture_records_attribution_boundaries",
+        "test_kernel_table_payload_from_experimental_dataframe_pandas",
+        "test_kernel_table_payload_from_experimental_dataframe_polars",
+        "test_kernel_table_payload_from_experimental_dataframe_type_error",
+        "test_describe_dataframe_engine_experiments_comprehensive",
+        "test_unsupported_engine_raises_value_error",
+        "test_dataframe_engine_available_returns_true_for_pandas_engines",
+        "test_dataframe_engine_available_checks_importlib_for_polars",
+        "test_dataframe_engine_available_raises_on_unsupported_engine"
+      ]
+    },
+    {
+      "path": "tests/unit/test_delayed_hype_bass.py",
+      "sha256": "5d8795406998c352c278f11ab23fa546b6bf68e3630c23b1538ae56c4e75dcc6",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "fitted_bass_model",
+        "hype_cycle_model",
+        "test_delayed_hype_bass_init",
+        "test_delayed_hype_bass_predict",
+        "test_predict_without_params"
+      ]
+    },
+    {
+      "path": "tests/unit/test_dependency_baseline.py",
+      "sha256": "8fd6ea1506c3bacc682253181fc058d612a6bb442dda8cc4b7d66c459d4766f8",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestPythonBaseline",
+        "TestNumPyBaseline",
+        "TestPydanticBaseline",
+        "TestBasedpyrightBaseline",
+        "TestTypeScriptBaseline",
+        "TestNode26Baseline",
+        "TestVitestBaseline",
+        "TestCriterionBaseline",
+        "TestMutmutBaseline",
+        "TestFrontendToolingBaseline",
+        "TestAstroBaseline"
+      ]
+    },
+    {
+      "path": "tests/unit/test_dependency_dashboard.py",
+      "sha256": "0999900b94b66b4ca149ab36e63de35810c4a4319b51283263de4d7787f33ab5",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_dependency_dashboard_covers_required_ecosystems",
+        "test_dependency_dashboard_uses_non_mutating_commands",
+        "test_dependency_dashboard_workflow_runs_and_uploads_report"
+      ]
+    },
+    {
+      "path": "tests/unit/test_diagnostics_artifact_fixture.py",
+      "sha256": "0548aca7c3b6b1e7c4999660f77632c3ee7689300c02d7c02294a7b87b56d5ba",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_diagnostics_artifact_fixture_matches_binding_contract"
+      ]
+    },
+    {
+      "path": "tests/unit/test_diagnostics_contract.py",
+      "sha256": "963bbaa8909f0314fe2781316ae3953af37bc3e2b9fa25a2f770c95bd34cd9af",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestDiagnosticsContract"
+      ]
+    },
+    {
+      "path": "tests/unit/test_docs_versioning.py",
+      "sha256": "473cd60cb614b63bba400a013cee164fdf003ad0f55eda746e2bedd8bb4ec245",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_sphinx_conf_uses_package_version_metadata"
+      ]
+    },
+    {
+      "path": "tests/unit/test_dynamics.py",
+      "sha256": "d06cf72ec20f7f95dfc9c43bc1f694494c64480288f9de860a153b3a66cd0a23",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_symmetric_growth",
+        "test_skewed_growth",
+        "test_dual_influence_growth"
+      ]
+    },
+    {
+      "path": "tests/unit/test_dynamics_base.py",
+      "sha256": "338ca3aa7b48ad4c123f9c79c997585bff76a3180c3d613465f041a8a60bdded",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestGrowthCurve",
+        "TestContagionSpread",
+        "test_abstract_classes_separation"
+      ]
+    },
+    {
+      "path": "tests/unit/test_dynamics_competition.py",
+      "sha256": "29bc2b4a38eb0442aff26bf5bf6271bed22c484c2ef186768dc6726c1452bf72",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestCompetitiveInteraction",
+        "TestLotkaVolterra",
+        "TestMarketShareAttraction",
+        "TestReplicatorDynamics",
+        "test_dynamics_competition_comprehensive"
+      ]
+    },
+    {
+      "path": "tests/unit/test_dynamics_competition_base.py",
+      "sha256": "512f8777ae2e8348fe8cc14cc995047d4789c7e54f0d1742bb9252a1ca9ee86d",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "MockCompetitiveInteraction",
+        "test_competitive_interaction_abstract_base_class",
+        "test_competitive_interaction_compute_interaction_rates",
+        "test_competitive_interaction_predict_states",
+        "test_competitive_interaction_get_parameters_schema"
+      ]
+    },
+    {
+      "path": "tests/unit/test_dynamics_competition_direct.py",
+      "sha256": "52a999e5928b58a9029d3e50b0362ee5a7d9e455dab457bfd77e98cb71911f96",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestCompetitiveInteraction",
+        "TestLotkaVolterra",
+        "TestMarketShareAttraction",
+        "TestReplicatorDynamics",
+        "test_dynamics_competition_comprehensive"
+      ]
+    },
+    {
+      "path": "tests/unit/test_dynamics_contagion_base.py",
+      "sha256": "07c7bd6f2f025eb81fe0d00f89f9feda0a6548940431dc0849bf8787a01e4c2c",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "MockContagionSpread",
+        "test_contagion_spread_abstract_base_class",
+        "test_contagion_spread_compute_spread_rate",
+        "test_contagion_spread_predict_states",
+        "test_contagion_spread_get_parameters_schema"
+      ]
+    },
+    {
+      "path": "tests/unit/test_dynamics_contagion_direct.py",
+      "sha256": "11d9bceb59ddb0a0b9ff401dfe38f1d35a28a98380f6830ed04998464e6eddec",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestSIR",
+        "TestSIS",
+        "TestSEIR",
+        "test_contagion_comprehensive"
+      ]
+    },
+    {
+      "path": "tests/unit/test_dynamics_growth_base.py",
+      "sha256": "d0bc1db647c960b0424e46ad6df415e474aa40b081985b587c422dfb02541dc6",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "MockGrowthCurve",
+        "test_growth_curve_abstract_base_class",
+        "test_growth_curve_compute_growth_rate",
+        "test_growth_curve_predict_cumulative",
+        "test_growth_curve_get_parameters_schema"
+      ]
+    },
+    {
+      "path": "tests/unit/test_dynamics_system_base.py",
+      "sha256": "2166461eef0585697cc0f566e7cfc0abc54d7633dcc76b6a1471d109c9ddea19",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "MockSystemBehavior",
+        "test_system_behavior_abstract_base_class",
+        "test_system_behavior_compute_behavior_rates",
+        "test_system_behavior_predict_states",
+        "test_system_behavior_get_parameters_schema"
+      ]
+    },
+    {
+      "path": "tests/unit/test_ecosystem_module_incubation_docs.py",
+      "sha256": "0e2107ef01036cc96a762d24c3c43a70240f31097c7ce0ab8c312dedeb593b21",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_ecosystem_module_incubation_docs_are_present",
+        "test_ecosystem_module_incubation_docs_define_roles_and_non_goals",
+        "test_ecosystem_module_incubation_docs_define_artifacts_and_heoml_boundary",
+        "test_ecosystem_module_incubation_docs_define_dependency_policy_and_promotion",
+        "test_ecosystem_module_incubation_docs_update_planning_files"
+      ]
+    },
+    {
+      "path": "tests/unit/test_edge_cases.py",
+      "sha256": "c264cdafce6d567994bd875042adaaa90a828d31f6cf558e001eaae59d84f307",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestEdgeCases",
+        "TestNumericalStability",
+        "test_model_with_event_edge_cases"
+      ]
+    },
+    {
+      "path": "tests/unit/test_edge_cases_comprehensive.py",
+      "sha256": "56f295d3501ed465a0acdfed3f75b5a902c338221922d6d620151479f7e1796c",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestEdgeCasesErrorHandling",
+        "TestBoundaryValueAnalysis"
+      ]
+    },
+    {
+      "path": "tests/unit/test_endurance.py",
+      "sha256": "dc49f865445c1ce4c936fb35c48bade58754a48bea428b6d2b9efb8422d82506",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_basic_endurance_operation",
+        "test_memory_stability_basic",
+        "test_system_stability"
+      ]
+    },
+    {
+      "path": "tests/unit/test_explainability_decision_reports.py",
+      "sha256": "0ce0b5ed1a6618b50d3c3ebb2786d845611f1b395153096898639b15c6196c12",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_claim_taxonomy_classification",
+        "test_claim_record_rejects_recommendation_language",
+        "test_causal_claim_requires_identification_assumptions",
+        "test_decision_report_envelope_and_claim_safety",
+        "test_parameter_perturbation_and_elasticity_deterministic",
+        "test_sensitivity_json_safe_when_baseline_outcome_zero",
+        "test_assumption_timing_threshold_sensitivity",
+        "test_explainability_summaries",
+        "test_json_and_markdown_export_examples"
+      ]
+    },
+    {
+      "path": "tests/unit/test_external_acceptance_deferrals.py",
+      "sha256": "6666f95111226430ad7978340c246b74ee2b0d102cf210c64fd642d7c44487d0",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "load_ledger",
+        "load_inventory",
+        "load_receipts",
+        "test_external_acceptance_ledger_covers_all_targets",
+        "test_receipts_match_submitted_registry_receipts",
+        "test_deferrals_are_owner_backed_and_receipt_gated",
+        "test_inventory_references_external_acceptance_ledger"
+      ]
+    },
+    {
+      "path": "tests/unit/test_external_acceptance_live_evidence.py",
+      "sha256": "c1f2ac5ab56d0dda8667483653601828ac06f9da8bbe77fcc83f298a5b39a8e7",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_registry_receipts_have_fresh_package_manager_live_evidence",
+        "test_submitted_receipts_carry_live_evidence_references",
+        "test_pending_external_targets_have_current_requirement_sources",
+        "test_pending_external_targets_keep_specific_owner_backed_next_actions"
+      ]
+    },
+    {
+      "path": "tests/unit/test_external_governance_sustainability.py",
+      "sha256": "cbd786dcf35e0a264650b95b30dde057f98ba8607325dd9de45bde070d8c6677",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "load_matrix",
+        "test_external_governance_dossier_is_in_starlight_navigation",
+        "test_external_governance_matrix_covers_core_governance_items",
+        "test_external_governance_dossier_links_existing_policy_files"
+      ]
+    },
+    {
+      "path": "tests/unit/test_external_submission_blocker_closure.py",
+      "sha256": "39fa04fa0f84b23b381c290bc6336e48b4661fa0aac584fa595e9356a98e2d50",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_external_submission_inventory_covers_every_required_target",
+        "test_external_submission_targets_have_closure_fields",
+        "test_registry_receipts_match_current_package_and_hpc_closure_states",
+        "test_hpc_blockers_are_current_and_do_not_hide_ready_targets",
+        "test_regenerated_packets_reference_canonical_closure_inventory",
+        "test_docs_do_not_overclaim_submission_or_acceptance_without_receipts",
+        "test_starlight_registry_mirrors_do_not_advertise_blocked_targets",
+        "test_hpc_readiness_mirrors_use_handoff_gate_language"
+      ]
+    },
+    {
+      "path": "tests/unit/test_fail_analysis.py",
+      "sha256": "bf151e629df99252f12a4fe71efd3928d9f7ff45aec36439d74643d9dcf78914",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestAnalyzeFailureComprehensive"
+      ]
+    },
+    {
+      "path": "tests/unit/test_failure_analysis.py",
+      "sha256": "7341973265910c6528a5e0f01e0a77f7bfe9695e4f5701b5fe9264fe3c0930fd",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_analyze_failure_no_failures",
+        "test_analyze_failure_one_failure",
+        "test_analyze_failure_multiple_failures",
+        "test_analyze_failure_with_time_horizon",
+        "test_analyze_failure_invalid_predictions",
+        "test_analyze_failure_invalid_threshold",
+        "test_analyze_failure_invalid_time_horizon"
+      ]
+    },
+    {
+      "path": "tests/unit/test_fisher_pry.py",
+      "sha256": "badb1ae192f99e7ac99b998b55e7b73c8cba9ae343815f5e91e958e2a739df8e",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "fisher_pry_data",
+        "test_fisher_pry_model_predict",
+        "test_fisher_pry_model_fit",
+        "test_predict_adoption_rate",
+        "test_initial_guesses",
+        "test_initial_guesses_edge_cases",
+        "test_fit_with_pandas_arrow",
+        "test_fit_non_logistic_data"
+      ]
+    },
+    {
+      "path": "tests/unit/test_fisher_pry_comprehensive.py",
+      "sha256": "133a0b04d36c76e81ed9624ed937bd48d4a5cd37fbae09fa133ca305cf2ba26e",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestFisherPryModelComprehensive",
+        "TestFisherPryModelEdgeCases"
+      ]
+    },
+    {
+      "path": "tests/unit/test_fitters.py",
+      "sha256": "52ab7677aebb13ed3f9c305b7f8120c07079a34f4aa2f2c2a10fd39551bc3163",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "synthetic_logistic_data",
+        "test_scipy_fitter",
+        "test_bootstrap_fitter",
+        "test_jax_fitter"
+      ]
+    },
+    {
+      "path": "tests/unit/test_fitters_scipy.py",
+      "sha256": "71e2ff13cdbef635dbeba45660cba3ad0af807e5c39968949442ce8c7a3fd72f",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestScipyFitter",
+        "TestScipyFitterEdgeCases"
+      ]
+    },
+    {
+      "path": "tests/unit/test_gompertz_comprehensive.py",
+      "sha256": "f795f4f3af17070a31309b6cf8f3c4866b5c3d6ad6ab82eaff5babfd3c9e953a",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestGompertzModelBasic",
+        "TestGompertzModelFitPredict",
+        "TestGompertzModelAdoptionRate",
+        "TestGompertzModelCumulativeAdoption",
+        "TestGompertzModelDifferentialEquation",
+        "TestGompertzModelEdgeCases"
+      ]
+    },
+    {
+      "path": "tests/unit/test_heoml_schema_placement_docs.py",
+      "sha256": "3581bcbadc07443d92bd46b10ee4f038a1e93fc4c75fce16739cd457dca2b72a",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_heoml_schema_placement_decision_artifacts_exist",
+        "test_heoml_schema_placement_compares_all_options",
+        "test_heoml_schema_placement_records_interim_home_and_migration_trigger",
+        "test_heoml_schema_contracts_remain_binding_friendly",
+        "test_heoml_schema_placement_adr_is_indexed"
+      ]
+    },
+    {
+      "path": "tests/unit/test_hpc_pack_packet.py",
+      "sha256": "8014670c2e7b8d892a65f305d9afca74a4a980dbcb645787b099ad65991c604f",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_hpc_pack_packet_script_exists",
+        "test_hpc_pack_packet_manifest_shape"
+      ]
+    },
+    {
+      "path": "tests/unit/test_hpc_packaging_registry_readiness.py",
+      "sha256": "fdf1ee09eaa52ed6cfb0c397f3ba4da1a0c39afeec29d051e928755528a6c8c6",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_hpc_packaging_readiness_dossier_is_in_starlight_navigation",
+        "test_hpc_packaging_readiness_maps_install_surfaces_and_dependencies",
+        "test_hpc_packaging_readiness_captures_spack_and_easybuild_prototypes",
+        "test_hpc_registry_claims_are_gated_until_evidence_exists"
+      ]
+    },
+    {
+      "path": "tests/unit/test_hpc_registry_contract.py",
+      "sha256": "7ded12beec6b5599bacf89781630317b17be007d67d7dfd4b97a063247b4bba6",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_hpc_registry_contract_is_in_primary_navigation",
+        "test_hpc_registry_contract_describes_submission_boundary",
+        "test_hpc_registry_contract_lists_evidence_and_target_gates"
+      ]
+    },
+    {
+      "path": "tests/unit/test_hpc_submission_blockers.py",
+      "sha256": "477724dbeb87e43f989797d9b7f18ef210f2ff9c5f9dafb693ee818231ae673a",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_hpc_submission_blockers_exist",
+        "test_hpc_submission_blockers_cover_all_targets"
+      ]
+    },
+    {
+      "path": "tests/unit/test_hpc_submission_packet.py",
+      "sha256": "8ef30b9fe4d6f1467c866e7f2dd80b7b6e31e6db91f3406d787151d7f61cd0fd",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "load_packet",
+        "load_workflow",
+        "load_blockers",
+        "test_hpc_submission_packet_exists",
+        "test_hpc_submission_packet_covers_all_targets",
+        "test_hpc_submission_packet_points_at_existing_evidence",
+        "test_hpc_submission_packet_has_current_external_action_boundaries",
+        "test_hpc_workflow_and_blocker_bundle_are_refreshed_for_external_acceptance"
+      ]
+    },
+    {
+      "path": "tests/unit/test_hpc_submission_templates.py",
+      "sha256": "a902bb359f026677078c0ab3096b21f07bad39d8eb29f29b5148fd012ea648c6",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_hpc_submission_templates_exist",
+        "test_hpc_submission_templates_remain_non_claiming"
+      ]
+    },
+    {
+      "path": "tests/unit/test_hpc_submission_workflow.py",
+      "sha256": "e52d0c301c5a852997ba148310da1250650507887c9125faa9d3e7b28118219c",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "load_manifest",
+        "test_hpc_submission_workflow_manifest_exists",
+        "test_hpc_submission_workflow_manifest_covers_all_targets",
+        "test_hpc_submission_workflow_commands_are_specific"
+      ]
+    },
+    {
+      "path": "tests/unit/test_hpc_submission_workflow_docs.py",
+      "sha256": "8ae72e8d24da670732a83067fdb9386b5daa82df3fb8a32e6f41a18218c8f0b1",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_hpc_submission_workflow_doc_is_in_starlight_navigation",
+        "test_hpc_submission_workflow_doc_mentions_all_targets"
+      ]
+    },
+    {
+      "path": "tests/unit/test_hype_cycle.py",
+      "sha256": "03c984efbbc594788f0530420e8b994d4dcb74e30082c61e8767ec7f4567586c",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "hype_cycle_params",
+        "test_hype_cycle_model_init",
+        "test_hype_cycle_model_predict",
+        "test_predict_without_params"
+      ]
+    },
+    {
+      "path": "tests/unit/test_hype_models.py",
+      "sha256": "53a3bf2b55504036210598490b14f054719341795e9a67bfaad773011d319ff5",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestDelayedHypeBassModel",
+        "TestHypeModifiedBassModel"
+      ]
+    },
+    {
+      "path": "tests/unit/test_hype_modified_bass.py",
+      "sha256": "75fda39c9797b1a2b92ca271ca0aa55cd3d55864306ba8835cab1f29ed0e3aa1",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "fitted_bass_model",
+        "hype_cycle_model",
+        "test_hype_modified_bass_init",
+        "test_hype_modified_bass_predict",
+        "test_predict_without_params"
+      ]
+    },
+    {
+      "path": "tests/unit/test_input_validation.py",
+      "sha256": "a6384e1b3fe761e0b054a89f4ab80381f8cbec94fa370c86ec0923214c17ed8b",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestInputValidation",
+        "test_numeric_sequence_validation"
+      ]
+    },
+    {
+      "path": "tests/unit/test_integration_abm.py",
+      "sha256": "b67623318702a6d225e5bae12f8c81f5b0d5a9dc6ec95b55745d522888508e78",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_ndlib_innovation_model_simulation",
+        "test_stl_fit_and_score_pipeline"
+      ]
+    },
+    {
+      "path": "tests/unit/test_kairos_adapter_contract.py",
+      "sha256": "b66dd881f3a99037c21913d479f2b9fff25b91245a3b8eb689882ce442e1e739",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_topology_rejects_unknown_nodes",
+        "test_request_requires_positive_horizon_and_unique_agents",
+        "test_dependency_evidence_is_fail_closed_for_bridges",
+        "test_dependency_evidence_does_not_invent_manifest_facts",
+        "test_promoted_bridge_request_stays_gated_until_dispatch_exists",
+        "test_adapter_status_reports_honest_backend",
+        "test_targeted_intervention_boosts_only_named_nodes",
+        "test_intervention_rejects_unknown_target_nodes",
+        "test_unsupported_stream_algorithm_is_rejected",
+        "test_explicit_agent_node_placement",
+        "test_random_stream_primary_seed_affects_outcomes",
+        "test_deterministic_scheduler_and_streams",
+        "test_ecs_style_agent_updates_and_final_state",
+        "test_policy_network_trace_and_telemetry_artifacts",
+        "test_different_seeds_change_outcomes",
+        "test_legacy_migration_guidance_and_fail_safe"
+      ]
+    },
+    {
+      "path": "tests/unit/test_kernel_adapters.py",
+      "sha256": "644a4c7943d9d48894b1389f36c7e77b77599d5dfde1418eb300a1b966fc7e5a",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_kernel_adapter_round_trip_for_diffusion_family",
+        "test_kernel_adapter_round_trip_for_substitution_family",
+        "test_kernel_adapter_round_trip_for_competition_family"
+      ]
+    },
+    {
+      "path": "tests/unit/test_kernel_contract.py",
+      "sha256": "08ea56395699b587c2f9722935c2b0a51598c866998e51feb65c59cd34c2988a",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_kernel_contract_exposes_versioned_operations",
+        "test_kernel_contract_round_trips_request_response_and_errors",
+        "test_kernel_contract_distinguishes_arrays_and_tabular_payloads",
+        "test_kernel_contract_rejects_unknown_operations",
+        "test_kernel_contract_validates_kernel_version_and_payload_shapes",
+        "test_kernel_contract_discovery_and_stub_operations_behave_as_documented",
+        "test_kernel_contract_round_trips_array_and_table_response_payloads",
+        "test_kernel_contract_round_trips_error_only_response_and_bare_error",
+        "test_kernel_contract_rejects_blank_schema_versions",
+        "test_kernel_contract_schema_version_compatibility_helper",
+        "test_discover_models_returns_correct_response_structure",
+        "test_discover_models_returns_valid_response",
+        "test_discover_models_empty_registry",
+        "test_list_kernel_operations"
+      ]
+    },
+    {
+      "path": "tests/unit/test_lifecourse_adoption_fixture.py",
+      "sha256": "fa93181019f4eb20a6a9b198610417726da2040e5f590123704e747d4babd4f5",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_lifecourse_adoption_fixture_manifest_defines_portable_contract",
+        "test_lifecourse_adoption_fixture_payload_matches_manifest_schema",
+        "test_lifecourse_adoption_fixture_hash_and_docs_are_current",
+        "test_lifecourse_adoption_fixture_does_not_import_lifecourse"
+      ]
+    },
+    {
+      "path": "tests/unit/test_load_stress.py",
+      "sha256": "071b90d11ad2399fc94520cb51031767156a8679512980c6159806d120ae2ae5",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_high_volume_model_creation",
+        "test_large_data_handling",
+        "test_concurrent_model_operations",
+        "test_memory_efficiency_under_load",
+        "test_parameter_boundary_conditions",
+        "test_long_running_parameter_validation",
+        "test_model_method_access_stress",
+        "test_time_series_boundary_conditions"
+      ]
+    },
+    {
+      "path": "tests/unit/test_logistic_comprehensive.py",
+      "sha256": "585799539fe3e1485bb6aeecfa727af43868099311305b97b8175f1eee318265",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestLogisticModelBasic",
+        "TestLogisticModelFitPredict",
+        "TestLogisticModelAdoptionRate",
+        "TestLogisticModelCumulativeAdoption",
+        "TestLogisticModelDifferentialEquation",
+        "TestLogisticModelEdgeCases"
+      ]
+    },
+    {
+      "path": "tests/unit/test_lotka_volterra.py",
+      "sha256": "07f068b61d3e3d68ba17e8d81fc4374035181a41fea208e27e399b6a82dba25e",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_lotka_volterra_param_names",
+        "test_lotka_volterra_initial_guesses",
+        "test_lotka_volterra_bounds",
+        "test_lotka_volterra_predict",
+        "lotka_volterra_data",
+        "test_lotka_volterra_fit",
+        "test_lotka_volterra_score",
+        "test_lotka_volterra_predict_adoption_rate"
+      ]
+    },
+    {
+      "path": "tests/unit/test_lotka_volterra_comprehensive.py",
+      "sha256": "352231bf8847b7e214c84d480b54cb2ef09527e2358662a53859c4af16939449",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestLotkaVolterraComprehensive",
+        "TestLotkaVolterraEdgeCases"
+      ]
+    },
+    {
+      "path": "tests/unit/test_mars_surrogate_benchmark_gate.py",
+      "sha256": "c5c7f9dd71928fbedb8b8b5ff271be15e420ba9f4fd98b9c41f25e1813d82a83",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_mars_is_not_a_base_or_optional_dependency_before_promotion",
+        "test_mars_surrogate_candidates_compare_reference_and_xla_paths",
+        "test_mars_surrogate_gate_validation_records_no_fast_ci_execution",
+        "test_mars_surrogate_docs_record_deferred_decision_and_thresholds"
+      ]
+    },
+    {
+      "path": "tests/unit/test_metrics.py",
+      "sha256": "3d0cccabcd2ba64564ede017f50248825363d53df2a955166f8ea29321d1f3f6",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "sample_data",
+        "test_calculate_rss",
+        "test_calculate_aic",
+        "test_calculate_bic"
+      ]
+    },
+    {
+      "path": "tests/unit/test_mixture.py",
+      "sha256": "eaa8c2aed30c37bde6189348ec99b31d6da34e5fe96d76d96186853a92b79bbd",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_mixture_model_predict",
+        "test_mixture_model_init"
+      ]
+    },
+    {
+      "path": "tests/unit/test_mixture_comprehensive.py",
+      "sha256": "31dc3f9801d7aaeab20a71321ef4e3ff533767177cb33cb88ef9b2c7fff71070",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestMixtureModelComprehensive",
+        "test_mixture_model_comprehensive_integration"
+      ]
+    },
+    {
+      "path": "tests/unit/test_model_cards.py",
+      "sha256": "611d034e6860fd6899c7617260810af58ae694a2c060367a28bcee106605aecc",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_model_cards_cover_all_stable_model_capabilities",
+        "test_model_card_schema_is_complete",
+        "test_model_card_validation_rejects_incomplete_cards"
+      ]
+    },
+    {
+      "path": "tests/unit/test_model_evaluation.py",
+      "sha256": "3e0e9239acf8c643c0014947a69b8e243cd88c788e6276f7061346040e90337e",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_model_aic_bic"
+      ]
+    },
+    {
+      "path": "tests/unit/test_models.py",
+      "sha256": "f1022e9e3ca572690230b7e9698925b13cd7c13ee41c3aaab74487288b1483bb",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "synthetic_data",
+        "test_bass_model_fit_predict",
+        "test_bass_model_score",
+        "test_gompertz_model_fit_predict",
+        "test_gompertz_model_score",
+        "test_logistic_model_fit_predict",
+        "test_logistic_model_score",
+        "test_multi_product_model_predict",
+        "test_multi_product_model_score",
+        "test_scipy_fitter_single_model",
+        "test_scipy_fitter_multi_product_model_working",
+        "test_mixture_model",
+        "test_mixture_model_weighting",
+        "test_mixture_model_api",
+        "test_hierarchical_model",
+        "test_hierarchical_model_interface",
+        "test_hierarchical_model_group_behavior"
+      ]
+    },
+    {
+      "path": "tests/unit/test_multi_product.py",
+      "sha256": "02071357afd7e6d78334362972e3812c3030744645d6aeb92f8684c317ec3cee",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_multi_product_diffusion_model_init",
+        "test_multi_product_diffusion_model_init_invalid_n_products",
+        "test_multi_product_diffusion_model_init_with_params",
+        "test_multi_product_diffusion_model_init_inconsistent_dims",
+        "test_multi_product_diffusion_model_init_inconsistent_names",
+        "test_multi_product_param_names",
+        "test_multi_product_param_names_with_covariates",
+        "test_multi_product_initial_guesses",
+        "test_multi_product_initial_guesses_with_covariates",
+        "test_multi_product_bounds",
+        "test_multi_product_bounds_with_covariates",
+        "test_multi_product_predict_without_params",
+        "test_multi_product_score_without_params",
+        "test_multi_product_predict_adoption_rate_without_params"
+      ]
+    },
+    {
+      "path": "tests/unit/test_multi_product_comprehensive.py",
+      "sha256": "a7a5b7a15a4ad01c704d15048ac2e54f8dff006c90122ddaa50c9398d34d7e94",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestMultiProductDiffusionModelComprehensive",
+        "test_multi_product_comprehensive_integration"
+      ]
+    },
+    {
+      "path": "tests/unit/test_network_policy_diffusion.py",
+      "sha256": "7ec13bf733491054d97224e10b868f19d7a1a976823c9c8bd1a87ae82df8bc2d",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_network_input_contracts_validate_and_adapt",
+        "test_policy_input_contracts_validate_and_adapt",
+        "test_network_policy_models_expose_canonical_surface",
+        "test_canonical_exports_and_capabilities_reflect_new_model_families"
+      ]
+    },
+    {
+      "path": "tests/unit/test_norton_bass.py",
+      "sha256": "9dc2fb23753cff90b95e49f9278c521a50629bbdf63a38c80a75f0a6c980d1c0",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "synthetic_norton_bass_data",
+        "test_norton_bass_model_fit"
+      ]
+    },
+    {
+      "path": "tests/unit/test_norton_bass_comprehensive.py",
+      "sha256": "c764ceea9415a8f4166db03f2887252e4fd00f559a1739a437d50d489260b2b6",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestNortonBassModelComprehensive",
+        "TestNortonBassModelEdgeCases"
+      ]
+    },
+    {
+      "path": "tests/unit/test_oecd.py",
+      "sha256": "3b7c109902e97e15d3e4ecb834c99113340a4dcad38b8f0041b645a291f513e3",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_get_dataset_happy_path",
+        "test_get_dataset_default_dates",
+        "test_get_dataset_handles_api_error"
+      ]
+    },
+    {
+      "path": "tests/unit/test_operational_modeling_fixtures.py",
+      "sha256": "e8a6e036fc82621b82d6b536b93e1ebb4262b3883c93e71b3a69574b5ad1a5d1",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_treeage_style_manifest_defines_decision_model_contract",
+        "test_treeage_style_manifest_is_artifact_first_and_small",
+        "test_des_manifest_defines_event_log_queue_metrics_and_run_metadata",
+        "test_des_events_are_deterministically_ordered_and_reference_known_resources",
+        "test_ecosystem_docs_link_operational_modeling_fixture_contracts"
+      ]
+    },
+    {
+      "path": "tests/unit/test_optimization_utils.py",
+      "sha256": "7610051ae76c35ba47cac98b141c3ef7c42d814b484a5fb7994f3f64ccb63946",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_optimization_utilities",
+        "test_parameter_validation_edge_cases",
+        "test_bounds_suggestion",
+        "test_optimization_guide_main_uses_logging"
+      ]
+    },
+    {
+      "path": "tests/unit/test_optional_backend_isolation.py",
+      "sha256": "541abcacd4bcf35b134a0d2b279f70d9987a22d2d45977856a4b3847fd586898",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_capability_registries_describe_backends_and_fitters",
+        "test_missing_optional_fitters_raise_clear_import_errors"
+      ]
+    },
+    {
+      "path": "tests/unit/test_path_dependence.py",
+      "sha256": "12cb6a155b515874c3378f5498aae947ead51cafd475e9d41e23cf1c45a97661",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "lock_in_data",
+        "test_lock_in_model_init",
+        "test_lock_in_model_predict",
+        "test_lock_in_model_fit",
+        "test_lock_in_model_score",
+        "test_lock_in_model_predict_adoption_rate"
+      ]
+    },
+    {
+      "path": "tests/unit/test_performance.py",
+      "sha256": "0a3fbab30fcfb9779824b4187c6a07b944670c5478d7acee54cb18ad6d364fd9",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_model_creation_performance",
+        "test_parameter_setting_performance",
+        "test_logistic_model_formula_performance",
+        "test_parameter_validation_performance",
+        "test_array_operations_performance",
+        "test_multiple_model_creation_performance",
+        "test_memory_usage_stability",
+        "test_backend_switching_performance"
+      ]
+    },
+    {
+      "path": "tests/unit/test_plots_diagnostics.py",
+      "sha256": "1cf354d33b96fd8c10728b861007e7cfde32392e2885594220ca498931f4b4fd",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "fitted_logistic_model",
+        "test_plot_residuals_runs_without_error",
+        "test_plot_residuals_raises_error_for_unfitted_model",
+        "test_plot_residuals_accepts_diagnostics_contract"
+      ]
+    },
+    {
+      "path": "tests/unit/test_plots_network.py",
+      "sha256": "1098dda6efae8e2f63bf0f74e3e72ef6b8892265014257c2ae5b3fa7016ace3d",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_plot_network_diffusion_basic",
+        "test_plot_network_diffusion_no_save"
+      ]
+    },
+    {
+      "path": "tests/unit/test_plugin_api_docs.py",
+      "sha256": "549933b2ac87c5f5affdd042d9e3e8565c917eaa04658ed6b127f48969dc9ee9",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_plugin_api_docs_pages_are_present",
+        "test_plugin_api_docs_describe_tiers_and_extension_points",
+        "test_docs_indices_include_plugin_contract_pages"
+      ]
+    },
+    {
+      "path": "tests/unit/test_plugin_api_stability.py",
+      "sha256": "a737f8b9eb8c26d6875310f42c771030ade94f0bad395913fa6c5ea32872bb1b",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_capabilities_expose_normalized_stability_tiers",
+        "test_extension_manifest_registers_and_validates",
+        "test_extension_manifest_rejects_unknown_extension_points",
+        "test_get_registered_extensions_immutability",
+        "test_extension_manifest_rejects_empty_name",
+        "test_extension_manifest_rejects_empty_version",
+        "test_extension_manifest_rejects_invalid_entrypoint",
+        "test_extension_manifest_rejects_empty_extension_points"
+      ]
+    },
+    {
+      "path": "tests/unit/test_plugins.py",
+      "sha256": "bb221d8d8b34e1e1c944617ac775f9f4094e0302f80c4bda132323021318e280",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "isolate_registry",
+        "test_register_extension_success",
+        "test_register_extension_duplicate_raises",
+        "test_register_extension_validates",
+        "test_manifest_validation_empty_version",
+        "test_manifest_validation_invalid_entrypoint",
+        "test_manifest_validation_empty_extension_points",
+        "test_manifest_validation_unknown_extension_points"
+      ]
+    },
+    {
+      "path": "tests/unit/test_policy.py",
+      "sha256": "e266295c8fe511166ac6cd03fb1ca46712b41a188ef044b59e7db453a72941d7",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_policy_intervention_basic",
+        "test_policy_intervention_type_error",
+        "test_policy_intervention_runtime_error_no_params"
+      ]
+    },
+    {
+      "path": "tests/unit/test_polyglot_binding_conformance.py",
+      "sha256": "6c5028a4cdde83d74a3dc5742020abb436c2f58a5891b96915303996567e10e6",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_binding_conformance_inventory_covers_all_languages",
+        "test_binding_conformance_inventory_has_required_contract_fields",
+        "test_binding_conformance_inventory_points_to_existing_files",
+        "test_binding_conformance_inventory_declares_promoted_rust_dispatch",
+        "test_rust_binding_smoke_matrix_covers_promoted_dispatch_metadata"
+      ]
+    },
+    {
+      "path": "tests/unit/test_polyglot_binding_golden_fixtures.py",
+      "sha256": "3365bf40d5e84137fb29e3d19698ae5d70e6f8dfb2d7a8fa059a3176ce5aac74",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_binding_golden_fixtures_cover_promoted_operations",
+        "test_binding_golden_fixtures_have_round_trip_payloads",
+        "test_rust_binding_uses_same_golden_fixture_bytes"
+      ]
+    },
+    {
+      "path": "tests/unit/test_polyglot_binding_hardening.py",
+      "sha256": "c00db3d0cbf124d5f52e2f4370d8dc4cdb3889c6c22b0384adf55806008b6100",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_r_julia_typescript_hardening_evidence_exists",
+        "test_r_julia_typescript_docs_snippets_are_language_specific",
+        "test_go_csharp_rust_hardening_evidence_exists",
+        "test_go_csharp_rust_docs_snippets_are_language_specific"
+      ]
+    },
+    {
+      "path": "tests/unit/test_polyglot_docs_repo_architecture.py",
+      "sha256": "cd2bcdffbaf5bb9897306c63f461ebfec94c4ae64f16c0359d43102c50cc2025",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_polyglot_architecture_page_is_in_primary_navigation",
+        "test_polyglot_architecture_defines_audience_navigation_and_ownership",
+        "test_polyglot_architecture_records_layout_and_redirect_policy",
+        "test_polyglot_architecture_proposes_target_navigation_without_source_moves",
+        "test_polyglot_navigation_links_are_stable_and_bidirectional"
+      ]
+    },
+    {
+      "path": "tests/unit/test_polyglot_registry_acceptance.py",
+      "sha256": "300215d8990b4835614911369f01de0f967b3c1afe8318639e761aff3968cd6c",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestRegistryInventory",
+        "TestRegistryStates",
+        "TestNoUndocumentedAcceptance",
+        "TestLanguageTargetCompleteness",
+        "TestMaintainerResponsibility"
+      ]
+    },
+    {
+      "path": "tests/unit/test_polyglot_registry_plan.py",
+      "sha256": "b9a414c09bfb2ecd6ddee0283dbc12084c4acb71ff2fcb716de6beadd5d31101",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_polyglot_registry_plan_is_in_primary_navigation",
+        "test_polyglot_registry_plan_distinguishes_registry_layers",
+        "test_polyglot_registry_plan_states_it_is_not_a_submission_claim"
+      ]
+    },
+    {
+      "path": "tests/unit/test_preprocess.py",
+      "sha256": "368da9dde57d4ab7ac52649066a716801df78ad9952d72be6e8cd33de5cdfa53",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "seasonal_time_series",
+        "test_stl_decomposition",
+        "test_stl_decomposition_no_datetime_index",
+        "simple_series",
+        "test_rolling_average",
+        "test_sarima_fit"
+      ]
+    },
+    {
+      "path": "tests/unit/test_preprocessing.py",
+      "sha256": "129a94559f062bc25fd3a3f444570d8150be0b4fa27cea45012ad8e553c959b0",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestSTLDecomposition",
+        "TestRollingAverage",
+        "TestSARIMAFit",
+        "TestEnsureDatetimeIndex",
+        "TestAggregateTimeSeries",
+        "TestApplySTLDecomposition",
+        "TestCumulativeSum",
+        "TestApplyRollingAverage",
+        "TestApplySARIMA"
+      ]
+    },
+    {
+      "path": "tests/unit/test_probabilistic.py",
+      "sha256": "0896077b56abab21674fdae02aae871b573211f671372e9fbffa7c90786c4af9",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_probabilistic_backend_status_dataclass",
+        "test_require_probabilistic_backend",
+        "test_list_probabilistic_backend_statuses",
+        "test_posterior_payload_validation",
+        "test_posterior_payload_from_samples",
+        "test_posterior_payload_from_samples_validation",
+        "test_posterior_payload_serialization",
+        "test_schema_version_validation",
+        "test_posterior_payload_methods",
+        "test_module_available",
+        "test_probabilistic_backend_status_to_dict"
+      ]
+    },
+    {
+      "path": "tests/unit/test_probabilistic_inference_contract.py",
+      "sha256": "ad4dbedcdeeba385a8cb1758a7a411b0b7856a5a7f75191415483e6495d5680e",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_probabilistic_backend_statuses_are_xla_first_and_optional",
+        "test_posterior_samples_payload_round_trips_and_summarizes",
+        "test_posterior_samples_payload_rejects_inconsistent_draw_shapes",
+        "test_require_probabilistic_backend_succeeds_when_available",
+        "test_missing_probabilistic_backend_error_is_structured",
+        "test_probabilistic_inference_docs_are_linked",
+        "test_probabilistic_backend_statuses_availability"
+      ]
+    },
+    {
+      "path": "tests/unit/test_process_mining_fixture_contract.py",
+      "sha256": "76f9cb30f04c0d9566b0e90a1e1ef34a0c3d3e402ba6c1d40c4cce5e8b7a15f4",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_process_mining_manifest_defines_portable_documented_contract",
+        "test_process_mining_payloads_are_small_and_internally_consistent",
+        "test_process_mining_manifest_records_interface_decisions",
+        "test_process_mining_docs_link_fixture_and_scope_limits"
+      ]
+    },
+    {
+      "path": "tests/unit/test_production_docs_observability.py",
+      "sha256": "098b5669d8250f4e62325c6153c9a1adccca60b0dde9d430ad08db6be7715519",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_production_docs_verification_contract_covers_release_routes",
+        "test_production_docs_verification_commands_are_documented_and_ci_wired",
+        "test_docsearch_gate_documents_safe_secret_boundaries",
+        "test_release_maturity_dashboard_is_evidence_backed",
+        "test_observability_and_maintenance_pages_are_evidence_linked",
+        "test_example_validation_classifies_python_and_binding_snippets",
+        "test_deployment_readiness_records_pages_workflow_and_rollback"
+      ]
+    },
+    {
+      "path": "tests/unit/test_property_based.py",
+      "sha256": "bfe533d1d3ffa38aa4512db5021c4d7a0b4521ee341db3936df2e015524a45c9",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_cumulative_predictions_non_decreasing",
+        "test_bass_model_parameters_valid",
+        "test_model_predictions_shape_consistency",
+        "test_logistic_model_bounds",
+        "test_gompertz_model_positive",
+        "test_multi_product_predictions_shape",
+        "test_bass_model_monotonicity",
+        "test_bass_model_saturation",
+        "test_bass_model_finite_values",
+        "test_gompertz_finite_values",
+        "test_logistic_finite_values"
+      ]
+    },
+    {
+      "path": "tests/unit/test_property_based_competition.py",
+      "sha256": "a1d071b787f0ac5b5c6a6aca42e361215bb50633a6c769e8e1cac7b8087381d6",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestLotkaVolterraProperties",
+        "TestFisherPryPropertiesExtended"
+      ]
+    },
+    {
+      "path": "tests/unit/test_property_based_diffusion.py",
+      "sha256": "b4c5507f89debf46be9a096b5722ac55686011bc7edc198eff343951d2f7c8ac",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestBassModelProperties",
+        "TestGompertzModelProperties",
+        "TestFisherPryProperties"
+      ]
+    },
+    {
+      "path": "tests/unit/test_property_based_safe.py",
+      "sha256": "fcf4c45dc2785573969358f5995be699adf5d05c1546db60077ad893c7fc4c0c",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_bass_model_property_basic",
+        "test_logistic_model_bounds",
+        "test_multi_product_predictions_shape",
+        "test_bass_model_finite_values",
+        "test_logistic_finite_values",
+        "test_bass_model_parameters",
+        "test_bass_model_unfitted_error",
+        "test_bass_model_saturation"
+      ]
+    },
+    {
+      "path": "tests/unit/test_prose_lint_docs.py",
+      "sha256": "d334e71afd582d846e668ed1d66ffcd7df999071787d3bc10aef1ef75ab7378f",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_value_prose_lint_style_is_defined",
+        "test_governance_docs_reference_value_prose_linting"
+      ]
+    },
+    {
+      "path": "tests/unit/test_public_api.py",
+      "sha256": "8a7dbd9aaf97771598a64b677faaeee60c8969aaa7d266907d88a9e461e43526",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_top_level_exports_resolve_to_canonical_classes",
+        "test_canonical_subpackages_export_stable_models",
+        "test_legacy_paths_remain_importable_while_canonical_paths_exist",
+        "test_model_capability_registry_exposes_stable_families",
+        "test_backend_and_fitter_capability_registries",
+        "test_backends_namespace_forwards_runtime_backend_state"
+      ]
+    },
+    {
+      "path": "tests/unit/test_python_task_matrix.py",
+      "sha256": "f4a5a20e63d0fba6037cd7ab67a0e0de6c190a489252cb72dd5f3e1395a7d3d9",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_ci_runs_required_unit_gate_on_supported_python_versions",
+        "test_pyproject_declares_nox_and_python_315_format_policy",
+        "test_pyproject_runtime_floors_match_python_315_lock_policy",
+        "test_pyproject_is_the_only_root_python_dependency_manifest",
+        "test_noxfile_exposes_expected_sessions_and_version_matrix",
+        "test_noxfile_includes_dependency_dashboard_session",
+        "test_noxfile_includes_binding_conformance_session",
+        "test_noxfile_includes_mutation_session",
+        "test_noxfile_includes_coverage_session",
+        "test_nox_default_sessions_include_all_required_gates"
+      ]
+    },
+    {
+      "path": "tests/unit/test_r_package_pdf_manual.py",
+      "sha256": "23d3965f00fc1f57c1c67e1aaa2065265b1e870076c91b2897739bd7301e6a15",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_exported_r_symbols_have_rd_aliases",
+        "test_r_package_has_package_level_manual_page",
+        "test_r_vignette_metadata_and_source_are_present",
+        "test_r_manual_policy_is_documented_for_users_and_releases",
+        "test_r_workflows_build_and_upload_manual_pdf"
+      ]
+    },
+    {
+      "path": "tests/unit/test_recovery.py",
+      "sha256": "269161f2903f770b8ae0f71be6cb4027bf1ac56d79dcc03765fce3deabf0371a",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_unfitted_model_error_handling",
+        "test_invalid_parameter_handling",
+        "test_extreme_parameter_handling",
+        "test_model_recovery_after_error",
+        "test_parameter_validation_recovery",
+        "test_error_handling_with_different_data_types",
+        "test_model_state_preservation",
+        "test_recovery_from_extreme_predictions",
+        "test_error_message_clarity",
+        "test_consistent_state_after_exception"
+      ]
+    },
+    {
+      "path": "tests/unit/test_reduce_analysis.py",
+      "sha256": "18d6e3707fc3a4069424f4f8fa83bbd4e553a72ddd28c88022771adf9b9b12bf",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestReduceAnalysis"
+      ]
+    },
+    {
+      "path": "tests/unit/test_registry_submission_execution.py",
+      "sha256": "385286080576a5ca230cc5f690c024b26c3211971576009f09474e90cd07bbae",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "load_inventory",
+        "test_registry_submission_track_is_registered",
+        "test_registry_submission_inventory_covers_package_and_hpc_targets",
+        "test_registry_submission_inventory_requires_audit_fields",
+        "test_registry_submission_docs_still_reflect_readiness_not_submission"
+      ]
+    },
+    {
+      "path": "tests/unit/test_registry_submission_receipts.py",
+      "sha256": "71d3678d82749be6589025f43f5568e0d44f700f057396d62abc0b32a6c57e11",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "load_receipts",
+        "test_registry_submission_receipts_file_exists",
+        "test_registry_submission_receipts_cover_live_targets",
+        "test_registry_submission_receipts_record_pending_targets"
+      ]
+    },
+    {
+      "path": "tests/unit/test_registry_submission_release_prerequisites.py",
+      "sha256": "812918bcc47d1be15cf5ae8897d85eea4ae39e212b4be3e8730cd0799cf6263f",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "load_prerequisites",
+        "test_release_prerequisites_fixture_exists",
+        "test_release_prerequisites_cover_all_package_targets",
+        "test_release_prerequisites_record_gates_and_access_needs"
+      ]
+    },
+    {
+      "path": "tests/unit/test_release_dry_run_evidence.py",
+      "sha256": "d4914c5cf39d7ea788e84cf41b8babd706e6f1172ce616686e2955d29e700f1d",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_release_dry_run_records_all_package_surfaces",
+        "test_release_dry_run_links_registry_docs_to_readiness_report",
+        "test_release_readiness_docs_include_final_gate_sequence"
+      ]
+    },
+    {
+      "path": "tests/unit/test_release_hardening_guards.py",
+      "sha256": "84c61c9164a80deeb858fa934ee02e52de50e591019b58d275ac875ebddab1ba",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "contract_dict",
+        "tmp_evidence_root",
+        "TestEvidenceFreshness",
+        "TestRequiredGatePresence",
+        "TestReleaseReadyFailClosed",
+        "TestCoverageMutationEvidence"
+      ]
+    },
+    {
+      "path": "tests/unit/test_release_notes_policy.py",
+      "sha256": "b97f39ea0afd7e5d71289e8d94a23376a8f69e06a430886cb62751ae6c1a4b43",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_changelog_and_release_policy_cover_current_version",
+        "test_release_drafter_policy_comment_is_defined",
+        "test_r_publication_docs_match_vignette_artifacts",
+        "test_release_policy_is_in_docs_toctree",
+        "test_release_notes_policy_mentions_version_sync_guard"
+      ]
+    },
+    {
+      "path": "tests/unit/test_release_observability_evidence.py",
+      "sha256": "c3a7242b892d122889c8ca8fd5bb46e0eabae8a071bdb46be376a6a5999153bb",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestObservabilityEvidence",
+        "TestNoxObservabilitySessions",
+        "TestStructuredLogging",
+        "TestGateInventoryObservability",
+        "TestReleaseReadinessFreshness"
+      ]
+    },
+    {
+      "path": "tests/unit/test_release_readiness_contract.py",
+      "sha256": "cd7ab1963f7e3cb678c00332b6da165a2dd7e0a5f50a9a3ed509cd918545f269",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_release_readiness_contract_declares_required_surfaces",
+        "test_release_readiness_evaluation_fails_closed_when_evidence_is_missing",
+        "test_release_readiness_statuses_block_release_ready",
+        "test_build_readiness_report_uses_committed_contract",
+        "test_release_readiness_report_passes_when_all_evidence_is_fresh",
+        "test_release_readiness_report_detects_invalid_evidence_payload",
+        "test_release_readiness_contract_validation_detects_drift",
+        "test_release_readiness_python_baseline_evidence_is_required",
+        "test_release_readiness_report_treats_non_evidence_status_as_failure",
+        "test_release_readiness_cli_writes_json_report",
+        "test_release_readiness_cli_text_path_reports_blocked_status"
+      ]
+    },
+    {
+      "path": "tests/unit/test_release_readiness_reporting.py",
+      "sha256": "87ab200170c06900a39f1610dc554e56c5d3b5ebd86cdcb301575a3a62d1428d",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_nox_exposes_release_readiness_session",
+        "test_starlight_release_readiness_doc_is_in_maintainer_navigation"
+      ]
+    },
+    {
+      "path": "tests/unit/test_release_readiness_workflow.py",
+      "sha256": "ce2ec2360e7b17cfe71071acf48cc454a925b5b065de6cb76107a9cc0519b289",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_release_readiness_workflow_exists_and_runs_local_gates",
+        "test_release_readiness_workflow_uploads_artifacts_and_splits_slow_lanes"
+      ]
+    },
+    {
+      "path": "tests/unit/test_release_reproducibility_evidence.py",
+      "sha256": "fc4102d4af9208075e511dff4f3c0cd4d59f426930218fad73b668bb695f337c",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_reproducibility_evidence_generator_writes_required_artifact",
+        "test_reproducibility_evidence_populates_release_readiness_report",
+        "test_reproducibility_cli_writes_json_summary",
+        "test_committed_reproducibility_evidence_is_present_after_generation"
+      ]
+    },
+    {
+      "path": "tests/unit/test_release_supply_chain_evidence.py",
+      "sha256": "f331ffba5f6e21c637c5532da8509af9d9543fb588cafa7a6c4c29c5ab3d2047",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_supply_chain_evidence_generator_writes_required_artifacts",
+        "test_supply_chain_evidence_populates_release_readiness_report",
+        "test_supply_chain_cli_writes_committed_evidence_root",
+        "test_committed_supply_chain_evidence_is_present_after_generation"
+      ]
+    },
+    {
+      "path": "tests/unit/test_release_version_sync.py",
+      "sha256": "9d0225c9fe752ccafa9c83495426c0c0e8272d56e71e91474ff0709a68455021",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_version_sync_check_passes_on_aligned_manifests",
+        "test_version_sync_check_fails_when_manifest_drift_exists",
+        "test_version_sync_write_updates_supported_manifests"
+      ]
+    },
+    {
+      "path": "tests/unit/test_remote_execution.py",
+      "sha256": "d2adff042c9832d73f775229082b268b03f708cb35c72f615688bbd49eaea14c",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_remote_execution_contract_documents_boundaries_and_risk_controls",
+        "test_in_process_remote_executor_preserves_kernel_schema_and_correlation",
+        "test_remote_executor_returns_structured_error_for_disallowed_operation",
+        "test_remote_execution_request_round_trips_from_dict",
+        "test_remote_execution_policy_enforces_auth_scope"
+      ]
+    },
+    {
+      "path": "tests/unit/test_remote_execution_docs.py",
+      "sha256": "7a5222d7e97575f024e52a52e8d059b4d95f595e465d3d35764cd71bc94568ad",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_remote_execution_docs_are_published_in_starlight_navigation",
+        "test_remote_execution_docs_define_contract_and_threat_model",
+        "test_roadmap_mentions_remote_execution_contract_slice"
+      ]
+    },
+    {
+      "path": "tests/unit/test_residual_diagnostics.py",
+      "sha256": "3068b2a96105f2b4998c1e2766c0c7b96a1ae658b1443ede9bf64fafa0169a5f",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_residual_functions",
+        "test_residual_analysis_summary_and_serialization",
+        "test_analyze_residuals_branch_coverage"
+      ]
+    },
+    {
+      "path": "tests/unit/test_roadmap_backlog_tracks.py",
+      "sha256": "f972421b2edffe9cad004a118f92e0ee70014e6583d57bb9e45247b3b4de7807",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_completed_roadmap_follow_on_tracks_are_archived",
+        "test_roadmap_completeness_audit_track_is_registered",
+        "test_roadmap_gap_tracks_are_registered",
+        "test_active_roadmap_track_artifacts_exist",
+        "test_completed_conductor_archive_links_have_completed_metadata",
+        "test_roadmap_primary_tracks_are_mapped_to_conductor_records",
+        "test_roadmap_goal_principles_are_mapped",
+        "test_roadmap_adr_links_are_mapped_and_resolve",
+        "test_roadmap_links_resolve",
+        "test_roadmap_status_language_separates_archive_from_active_backlog",
+        "test_xla_strategy_is_registered_and_linked_from_roadmap",
+        "test_xla_strategy_is_reflected_in_dependent_tracks"
+      ]
+    },
+    {
+      "path": "tests/unit/test_roadmap_gap_tracks.py",
+      "sha256": "fed0ddf4179cc2e2775a02ac37338171406565b20d67093f7d6a13a644b95a89",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_roadmap_gap_tracks_have_complete_conductor_artifacts",
+        "test_roadmap_gap_tracks_reference_confirmed_gap_sources",
+        "test_roadmap_gap_tracks_are_registered_and_resolvable",
+        "test_roadmap_gap_tracks_keep_ecosystem_contracts_portable",
+        "test_roadmap_gap_tracks_have_common_validation_patterns"
+      ]
+    },
+    {
+      "path": "tests/unit/test_runtime_logging_docs.py",
+      "sha256": "1843f02cb8d6e6a2d10d72b307ee58db22600601ef9b7a30e6613fc26fc7c9b0",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_runtime_logging_docs_are_present",
+        "test_runtime_logging_docs_define_the_repo_policy"
+      ]
+    },
+    {
+      "path": "tests/unit/test_rust_binding_docs.py",
+      "sha256": "923385577e6a49e43d83cc402e9982364a5177282b62a95f46804732430bc08d",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_rust_binding_readme_mentions_tracing_and_fallbacks",
+        "test_rust_binding_readme_mentions_memory_and_gpu_profiling_scope",
+        "test_rust_crate_includes_and_documents_profiling_files",
+        "test_rust_migration_inventory_docs_are_deliberately_docs_only"
+      ]
+    },
+    {
+      "path": "tests/unit/test_rust_core_migration_inventory.py",
+      "sha256": "75b04304af58eea58bfc38d54dc5e2d441b33c2cde6798b3d8fb02f5798244dd",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "load_inventory",
+        "load_dossier",
+        "load_bass_dossier",
+        "normalized_text",
+        "test_rust_migration_inventory_declares_required_fields_and_enums",
+        "test_rust_migration_inventory_covers_canonical_operations_and_mixed_ownership",
+        "test_rust_migration_inventory_records_native_and_fallback_slices",
+        "test_rust_migration_inventory_is_execution_grade_backlog",
+        "test_rust_migration_inventory_defines_operation_promotion_gates",
+        "test_rust_migration_inventory_defines_binding_smoke_contracts",
+        "test_rust_migration_inventory_records_benchmark_and_memory_evidence_commands",
+        "test_rust_migration_inventory_profiles_required_promotion_evidence_categories",
+        "test_rust_promotion_dossier_example_records_required_evidence_sections",
+        "test_rust_bass_promotion_dossier_example_records_bass_evidence",
+        "test_rust_native_benchmark_harness_includes_bass_cases",
+        "test_rust_native_operations_suite_covers_all_promoted_slices"
+      ]
+    },
+    {
+      "path": "tests/unit/test_rust_core_roadmap_docs.py",
+      "sha256": "abdbf6b32a3bba9fe3e1d964b1105c323603b49ed6f84b7f18988535ea21a4af",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "normalized_text",
+        "python_model_keys",
+        "rust_native_model_keys",
+        "migration_inventory",
+        "test_rust_core_roadmap_documentation_is_present",
+        "test_rust_core_roadmap_names_candidate_operations_and_gates",
+        "test_rust_core_roadmap_inventories_runtime_status_and_xla_fit",
+        "test_rust_core_roadmap_defines_execution_backlog_and_smoke_gates",
+        "test_rust_core_roadmap_audit_matches_current_runtime_ownership",
+        "test_rust_core_migration_inventory_matches_rust_and_python_sources",
+        "test_archived_rust_migration_track_requires_ledger_and_claim_reconciliation",
+        "test_rust_core_roadmap_explicitly_rejects_full_rust_ownership",
+        "test_rust_core_roadmap_exposes_the_remaining_ownership_gap_track",
+        "test_rust_core_roadmap_enumerates_python_bridge_fallback_inventory",
+        "test_rust_core_roadmap_captures_cpu_memory_and_gpu_promotion_evidence",
+        "test_rust_core_expansion_track_records_phase_one_inventory",
+        "test_architecture_docs_surface_rust_core_strategy",
+        "test_rust_binding_docs_surface_tracing_observability"
+      ]
+    },
+    {
+      "path": "tests/unit/test_rust_final_ownership_ledger.py",
+      "sha256": "795285a9e3c32d042ff28ecd1ed01d2508ec4fe2a418e27e4d907c013fe5f0a0",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_final_ownership_ledger_covers_all_model_families_payloads_and_operations",
+        "test_final_ownership_ledger_entries_have_owner_rationale_evidence_and_revisit_policy",
+        "test_final_ownership_ledger_preserves_current_claim_boundaries",
+        "test_stable_payload_shapes_are_fail_closed_against_unowned_entries",
+        "test_promoted_model_families_are_fail_closed_against_missing_operations",
+        "test_docs_full_ownership_claims_are_fail_closed_by_ledger",
+        "test_full_rust_ownership_validation_is_fail_closed_with_benchmark_evidence"
+      ]
+    },
+    {
+      "path": "tests/unit/test_rust_native_operation_completion.py",
+      "sha256": "d72ef3df79c5046b0b38339911b0306464eff3f79f76efa5d0d7073eb4c1a2ef",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_operation_gap_inventory_covers_every_canonical_operation",
+        "test_every_canonical_operation_slice_has_terminal_ownership_state",
+        "test_native_default_slices_have_complete_promotion_evidence",
+        "test_operation_evidence_closure_records_benchmark_and_memory_boundaries",
+        "test_binding_smoke_matrix_records_passed_and_blocked_bindings"
+      ]
+    },
+    {
+      "path": "tests/unit/test_rust_native_payload_model_coverage.py",
+      "sha256": "584ae3c2ed5e5a281c087d8ed19c061a49b9b9deca5350bccb0d1021120b4f96",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_every_python_registry_model_family_has_ownership_status",
+        "test_python_reference_model_families_are_explicit_boundaries",
+        "test_every_stable_payload_shape_has_schema_and_ownership_evidence",
+        "test_unstable_payload_shapes_are_not_marked_rust_native",
+        "test_promoted_diffusion_and_substitution_families_have_slice_evidence",
+        "test_composite_and_multi_product_families_have_explicit_bridge_boundaries",
+        "test_network_policy_ecosystem_and_advanced_families_have_reference_boundaries",
+        "test_full_rust_ownership_gate_blocks_overclaims",
+        "test_full_rust_ownership_validation_records_passed_gates_and_exclusions"
+      ]
+    },
+    {
+      "path": "tests/unit/test_rust_ownership_release_proof.py",
+      "sha256": "7f2d75266e40faf28d73adf4b4fffd63365259b30dad03f297b3296ed7f72fe1",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestOwnershipInventory",
+        "TestCanonicalOperationsExist",
+        "TestStableModelAvailability",
+        "TestRustNativeClaimsAreDocumented",
+        "TestRustOperationSignatures",
+        "TestOwnershipExceptionProcesses",
+        "TestPythonRustParity"
+      ]
+    },
+    {
+      "path": "tests/unit/test_scenario_execution.py",
+      "sha256": "97dfb6908a9da9d27a56b8b9e3b3dd5fa48f9f708a45ff87a1a56604f3ce9779",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "baseline_scenario",
+        "intervention_scenario",
+        "substitution_scenario",
+        "competition_scenario",
+        "TestScenarioExecution",
+        "TestScenarioComparison",
+        "TestScenarioExecutor",
+        "TestCompareScenarios"
+      ]
+    },
+    {
+      "path": "tests/unit/test_scenario_registry.py",
+      "sha256": "5987ef13831e83722efdbbb9d281e7eee8193b56aab86d9269c132c9fb1a92d6",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestScenarioCapability",
+        "TestScenarioRegistry"
+      ]
+    },
+    {
+      "path": "tests/unit/test_scenario_schemas.py",
+      "sha256": "349de1448f8510b76ffdfdce017b7b08ab4e720a7ebea501c402da47e609313a",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestBaselineScenario",
+        "TestInterventionScenario",
+        "TestSubstitutionScenario",
+        "TestCompetitionScenario",
+        "TestNetworkScenario",
+        "TestArtifactEnvelope"
+      ]
+    },
+    {
+      "path": "tests/unit/test_scenario_summaries.py",
+      "sha256": "fb3e246553acd8fec45b7e0db0719fb323007bf97d7d5054c095c0a95ba88d5c",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "baseline_execution",
+        "intervention_execution",
+        "TestComputeRanking",
+        "TestComputeIncrementalEffect",
+        "TestComputeThresholdTiming",
+        "TestComputeUncertainty",
+        "TestSummarizeComparison"
+      ]
+    },
+    {
+      "path": "tests/unit/test_scientific_hpc_readiness_roadmap.py",
+      "sha256": "1abe398212798aba4204863e8516b28f94cd5e42ec274dde4d62cd88cbe7b9f8",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_scientific_hpc_readiness_roadmap_is_in_starlight_navigation",
+        "test_scientific_hpc_readiness_roadmap_covers_submission_targets",
+        "test_scientific_hpc_readiness_roadmap_covers_hpc_and_abi_gaps",
+        "test_scientific_hpc_follow_on_tracks_are_registered_and_parallel_ready"
+      ]
+    },
+    {
+      "path": "tests/unit/test_scientific_submission_packet.py",
+      "sha256": "667126bc6a8fddec76b4b89191cec85a67107c70451f8febf2fce9da25096178",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "load_packet",
+        "test_scientific_submission_packet_exists_and_covers_targets",
+        "test_scientific_submission_packets_are_owner_backed",
+        "test_scientific_submission_packets_reference_existing_or_external_evidence",
+        "test_submission_dossiers_document_scientific_packet"
+      ]
+    },
+    {
+      "path": "tests/unit/test_scipy_fitter_enhanced.py",
+      "sha256": "68cb51efcb7041c6819b899fa708ff1abdce0300a42f5bb0b41cb299f6081a93",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestFitDiagnostics",
+        "TestScipyFitterMethods",
+        "TestScipyFitterDiagnostics",
+        "TestScipyFitterValidation",
+        "TestScipyFitterDifferentModels"
+      ]
+    },
+    {
+      "path": "tests/unit/test_specific_modules_coverage.py",
+      "sha256": "c66543bfad55420b7ca97ecaa98c0c495ee07e39fa35c0aab6a9e95dd0f1f20e",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestFitterCoverage",
+        "TestAdoptionCategorization",
+        "TestEcosystemModels",
+        "TestPathDependenceModels",
+        "TestHypeModels",
+        "TestFailureAnalysis",
+        "TestSubstituteModels",
+        "TestModelDynamics"
+      ]
+    },
+    {
+      "path": "tests/unit/test_stability.py",
+      "sha256": "5919a47b80521e38af1aa2bfe8484ed785f853876f0eb39a734fce90b38f66f5",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_describe_stability_tier_with_enum",
+        "test_describe_stability_tier_with_strings",
+        "test_describe_stability_tier_invalid_value",
+        "test_normalize_stability_tier_success",
+        "test_normalize_stability_tier_error",
+        "test_stability_tier_enum_values",
+        "test_stability_aliases_consistency"
+      ]
+    },
+    {
+      "path": "tests/unit/test_starlight_cutover_legacy_cleanup.py",
+      "sha256": "c7a55ec8cf7ed029312a5cdfa3c7a11e59cad8c18729d14c294c61f8fb554232",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_product_and_tech_stack_name_starlight_as_active_docs_stack",
+        "test_completed_starlight_migration_tracks_are_not_active_tracks",
+        "test_migration_manifest_records_cutover_complete_not_parallel_run",
+        "test_no_sphinx_tooling_or_active_docs_claims_remain",
+        "test_cutover_inventory_has_no_remaining_stale_work_after_cleanup",
+        "test_starlight_validation_evidence_records_routes_and_build_status"
+      ]
+    },
+    {
+      "path": "tests/unit/test_starlight_dependency_contract.py",
+      "sha256": "864af83ef5b3b6e315c0cb03f188aa7bd4bcc7a4a54a682c5194a01a42d192d1",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_package_json_starlight_specifier_matches_target",
+        "test_migration_manifest_starlight_matches_target",
+        "test_package_json_lockfile_starlight_specifiers_agree",
+        "test_lockfile_starlight_resolved_version_is_41",
+        "test_target_decision_artifact_is_present"
+      ]
+    },
+    {
+      "path": "tests/unit/test_starlight_rst_allowlist.py",
+      "sha256": "eba0a0f12d03831dea873874d0bdf3f44921c62d122e3ad506deaf0d456d5f7b",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "load_allowlist",
+        "find_all_rst_files",
+        "test_rst_allowlist_exists",
+        "test_no_active_rst_files_outside_allowlist",
+        "test_allowlist_files_exist",
+        "test_starlight_docs_structure_exists",
+        "test_rst_allowlist_has_required_structure"
+      ]
+    },
+    {
+      "path": "tests/unit/test_sync_codex_skills.py",
+      "sha256": "9c5438af6522e996ae25e99b73f2826b986d9eebbc2cafce4dec6be4e3f87049",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_discover_skill_directories_only_returns_skill_dirs",
+        "test_resolve_codex_home_prefers_explicit_and_env",
+        "test_sync_skills_copies_nested_files"
+      ]
+    },
+    {
+      "path": "tests/unit/test_utils_coverage_boost.py",
+      "sha256": "ccfb202b910764347dc62654c2060ea491746f08815eaf8e0935866c6dffd302",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestBackendFunctionality",
+        "TestUtilsModelEvaluation",
+        "TestUtilsPreprocessing",
+        "TestPreprocessTimeSeriesModule",
+        "TestEdgeCasesAndErrorHandling"
+      ]
+    },
+    {
+      "path": "tests/unit/test_validation.py",
+      "sha256": "c4790199e22cfcdd12327a60b17500b2324f19dd8ccf50356d92284d19b73d23",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "TestValidateSequenceNumeric",
+        "TestValidatePositiveNumericSequence",
+        "TestValidateFloat",
+        "TestValidateProbability",
+        "TestValidateCovariates",
+        "TestValidateTimeSeries",
+        "TestValidateCovariatesDict"
+      ]
+    },
+    {
+      "path": "tests/unit/test_vision_roadmap_truth_status.py",
+      "sha256": "d87b007a0e69cd8eff7c72119813f2af67db6aaa4f4dae240d1d1cb083b0a90b",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "normalized_text",
+        "test_vision_status_inventory_declares_future_state_boundaries",
+        "test_product_status_does_not_claim_sphinx_as_active_docs_stack",
+        "test_tech_stack_marks_starlight_as_only_active_docs_site",
+        "test_roadmap_links_archived_remediation_tracks",
+        "test_starlight_roadmap_does_not_call_archived_tracks_active",
+        "test_full_rust_core_claims_remain_disallowed_until_inventory_is_all_native",
+        "test_roadmap_truth_ledger_exists",
+        "test_roadmap_truth_ledger_covers_all_roadmap_claims",
+        "test_roadmap_truth_ledger_entries_have_required_fields",
+        "test_no_stale_or_missing_completion_claims",
+        "test_no_active_rst_outside_allowlist",
+        "test_starlight_migration_route_coverage_inventory_exists"
+      ]
+    },
+    {
+      "path": "tests/unit/test_voiage_uncertainty_fixture.py",
+      "sha256": "2b27120da430400bf7947317077f2d5a22cbaddc3b59134c6244ce20eb6efbb8",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_voiage_uncertainty_fixture_manifest_declares_portable_contract",
+        "test_voiage_uncertainty_fixture_maps_dimensions_to_voi_concepts",
+        "test_voiage_uncertainty_fixture_tables_have_stable_dimensions_and_columns",
+        "test_voiage_uncertainty_fixture_values_are_deterministic_and_joinable",
+        "test_voiage_uncertainty_fixture_is_documented_from_ecosystem_docs"
+      ]
+    },
+    {
+      "path": "tests/unit/test_xla_backend_strategy_docs.py",
+      "sha256": "e0674aaba352716e441f1ec57de1ca33d4181228b9b04d7b87d988d752a7f9f0",
+      "migration_status": "pending_review",
+      "public_definitions": [
+        "test_xla_backend_strategy_doc_exists_and_is_linked",
+        "test_xla_backend_strategy_defines_eligibility_and_rejection_rules",
+        "test_xla_backend_strategy_names_preferred_libraries",
+        "test_xla_backend_strategy_defines_promotion_gates"
+      ]
+    }
+  ]
+}

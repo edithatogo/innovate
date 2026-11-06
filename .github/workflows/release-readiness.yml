@@ -29,29 +29,11 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Set up Python
-        run: uv python install 3.15.1
+      - name: Select isolated release checker
+        run: uv venv .venv-release --python 3.15.2
 
-      - name: Install dependencies
-        run: uv sync --python 3.15.1
-
-      - name: Generate supply-chain evidence
-        run: uv run nox -s release_supply_chain
-
-      - name: Generate reproducibility evidence
-        run: uv run nox -s release_reproducibility
-
-      - name: Generate release-readiness report
-        run: uv run nox -s release_readiness
-
-      - name: Upload release-readiness-report
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: release-readiness-report
-          path: |
-            docs/source/_static/release_readiness/readiness-report.json
-            docs/source/_static/release_readiness/evidence/*.json
-          if-no-files-found: error
+      - name: Require complete native migration
+        run: .venv-release/bin/python scripts/check_migration.py --release
 
   release-lane-checks:
     runs-on: ubuntu-latest

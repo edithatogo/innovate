@@ -3,6 +3,11 @@ title: Functional Kernel Contract
 description: Language-neutral execution surface and portable kernel operations.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 The functional kernel is the language-neutral execution surface for `innovate`.
 It keeps the public contract focused on serializable envelopes and Arrow-friendly
 payloads so downstream bindings can call into the library without depending on

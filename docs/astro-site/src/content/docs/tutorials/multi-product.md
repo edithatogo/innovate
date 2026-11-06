@@ -3,6 +3,11 @@ title: Multi-Product Diffusion Model
 description: Simulating diffusion of multiple competing products.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 This tutorial demonstrates how to use the `MultiProductDiffusionModel` to simulate the diffusion of multiple competing products.
 
 ```python

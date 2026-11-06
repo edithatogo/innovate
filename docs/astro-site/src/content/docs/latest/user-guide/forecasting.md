@@ -4,6 +4,11 @@ description: Generate forecasts and predictions from fitted diffusion models.
 slug: latest/user-guide/forecasting
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 Once a model is fitted, Innovate provides several functions for generating predictions and forecasts.
 
 ## Basic Forecasting

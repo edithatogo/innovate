@@ -4,6 +4,11 @@ description: Tutorial index for the Innovate documentation.
 slug: latest/tutorials
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 # Tutorials
 
 This section hosts the tutorial surface in Starlight and is the canonical target for migration of the legacy tutorials index.

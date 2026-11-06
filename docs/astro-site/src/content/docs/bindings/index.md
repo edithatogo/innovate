@@ -1,33 +1,13 @@
 ---
-title: Bindings
-description: Language binding navigation and publication guidance.
+title: Native bindings
+description: Python, Julia and R over the Innovate Rust core
 ---
 
-# Bindings
+Only Python, Julia and R bindings are maintained for the 0.7 development line.
+Rust owns computation; it is the core library. Python uses PyO3 and Polars/Arrow
+IPC. Julia and R currently call the versioned JSON contract through the C ABI.
+Native library bundles and complete tabular adapters remain under qualification.
+See the [native migration guide](/innovate/native-migration/) for current scope.
 
-This section groups the language-specific bindings and their publication
-documentation.
-
-Current binding families:
-
-- Python as the canonical reference surface
-- Rust as the native runtime and binding target
-- R, Julia, TypeScript, Go, and C# as thin package surfaces over the shared
-  kernel contract
-
-Language-specific guides:
-
-- C# Bindings
-- Go Bindings
-- Julia Bindings
-- Rust Bindings
-
-The binding parity page links the shared conformance inventory, golden
-fixtures, hardening evidence, and registry-readiness receipts used by release
-maintainers.
-
-See also:
-
-- Binding parity
-- Publication
-- Release Notes
+TypeScript, Go and C# packages are removed. Historical Conductor and 0.6 reference
+documentation record the earlier implementation and do not establish current support.

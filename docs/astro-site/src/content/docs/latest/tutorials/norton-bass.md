@@ -3,6 +3,11 @@ title: Norton-Bass Model for Generational Substitution
 description: Simulating diffusion of successive product generations.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 This tutorial demonstrates how to use the `NortonBassModel` to simulate the diffusion of successive product generations.
 
 ```python

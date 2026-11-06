@@ -3,6 +3,11 @@ title: Shared Diagnostics Contract and Uncertainty
 description: Standardized fit output across deterministic, bootstrap, and Bayesian fitters.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 The shared diagnostics contract provides a single shape for model fit metrics,
 residual analysis, warnings, and uncertainty summaries across deterministic,
 bootstrap, and Bayesian fitters.

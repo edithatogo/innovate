@@ -1,0 +1,119 @@
+{
+  "metadata": {
+    "runtime": "rust_native",
+    "scope": "Bounded parameter-only payloads; advanced models and covariates remain unavailable pending native parity."
+  },
+  "models": [
+    {
+      "family": "diffusion",
+      "import_path": "innovate_core",
+      "key": "bass",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": false,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_curve_only"
+    },
+    {
+      "family": "substitution",
+      "import_path": "innovate_core",
+      "key": "fisher_pry",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": false,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_curve_only"
+    },
+    {
+      "family": "diffusion",
+      "import_path": "innovate_core",
+      "key": "gompertz",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": false,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_curve_only"
+    },
+    {
+      "family": "diffusion",
+      "import_path": "innovate_core",
+      "key": "logistic",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": false,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_curve_only"
+    },
+    {
+      "family": "substitution",
+      "import_path": "innovate_core",
+      "key": "norton_bass",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": false,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_curve_only"
+    }
+  ],
+  "schema_version": "2.0"
+}
