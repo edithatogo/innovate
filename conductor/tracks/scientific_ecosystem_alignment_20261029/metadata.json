@@ -5,6 +5,9 @@
   "approved": true,
   "repository": "innovate",
   "created_at": "2026-10-28T16:38:07.466754+00:00",
-  "updated_at": "2026-11-02",
-  "acceptance_record": "reconciliation-20261102.md"
+  "updated_at": "2026-11-06",
+  "acceptance_record": "reconciliation-20261102.md",
+  "continuation_record": "continuation-20261106.md",
+  "review_record": "review-20261106.md",
+  "full_repository_gate": "incomplete_unit_runtime"
 }

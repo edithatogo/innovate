@@ -131,3 +131,16 @@ Next operation for the integrator: investigate that exact numerical-test runtime
 with a measured case budget, complete the full unit/coverage gate, and resolve
 the Rust lock policy before native/runtime promotion. This is the terminal
 handoff for this lane; main, other worktrees and native owners remain unchanged.
+
+The collection diagnostic points to
+`tests/unit/test_specific_modules_coverage.py::TestFitterCoverage::test_bootstrap_fitter_basic`
+as the first node without a reported outcome in both attempts. Source inspection
+shows five bootstrap fits with no seed specified. This is a runtime diagnostic
+lead, not proof that the test or fitter is defective. Do not reduce its coverage,
+skip it for speed or change scientific behavior to turn the gate green; qualify
+a bounded reproducible case before a fitter/test-policy change.
+
+Delivery commits: `5cd07b7f` (archive reconciliation) and `1a6e2752` (Kairos
+source/examples, selected-consumer evidence and local review). This lane has not
+pushed, merged, dispatched hosted workflows, changed release state or promoted
+a dependency/runtime. The four Scenario manual gates remain pending.
