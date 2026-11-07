@@ -6244,3 +6244,9 @@ Hosted release readiness for this worktree revision remains open.
   ATE and ATT averaged 2.0036 and 2.5988, with nominal 95% coverage
   of 382/400 and 379/400. The independent case reproduced its prior
   results. Few clusters and weak overlap remain unqualified.
+
+- [x] Measure small-cluster interval calibration with 10 clusters and
+  five folds. The same 400-trial design gave normal interval coverage
+  of 368/400 for ATE and 366/400 for ATT. Applying a t(9) critical
+  value to the returned standard errors gave 380/400 and 381/400.
+  This is a synthetic comparison with caller-computed intervals.
