@@ -3377,4 +3377,4 @@ the other competition models and installed binding checks remain open.
   The CPython 3.15 Darwin arm64 wheel passed Twine and
   check-wheel-contents, and an isolated Python 3.15.2 import returned
   the expected Logistic forecast through Polars. Wheel SHA-256
-  . Other platforms and broader release acceptance remain open.
+  a0faf2951863e87545ee0a6bc08cfa903cf8317733c9e6397c1038b223caa635. Other platforms and broader release acceptance remain open.
