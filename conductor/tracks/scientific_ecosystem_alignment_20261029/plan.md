@@ -1952,3 +1952,11 @@ the other competition models and installed binding checks remain open.
   reproduced a difference of 50 and a first alternative threshold sample
   at time 1. All 35 Rust boundary tests and focused Clippy passed.
 - [ ] Qualify ranking, uncertainty bounds and richer comparison contracts.
+
+- [x] Restore opt-in execution metadata (eb7ada2a). Set
+  include_execution_metadata to retain the exact simulation payload,
+  optional scenario notes, kernel version and response metadata, Unix
+  start time and monotonic elapsed seconds. The default omits wall-clock
+  fields to preserve deterministic replay comparisons. Python 3.15,
+  Julia and R returned notes, timing and the Rust runtime marker for the
+  same Logistic case. All 35 boundary tests and focused Clippy passed.
