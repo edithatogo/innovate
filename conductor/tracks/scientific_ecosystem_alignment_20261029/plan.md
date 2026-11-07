@@ -247,3 +247,5 @@ attempt; previous stale logs are not final acceptance. No native operation remai
 live. Nine bounded families; seven remain unavailable. Next: remaining historical
 model ports, covariates/events, inference/scenarios and full distribution gates.
 Goal remains active; all 38 obligations remain required.
+
+Lock-in source/evidence commit: `37300334bf7659aa68d1ed30d7f7f60e4922b1ae`. All operations terminal; next source tasks remain above.
