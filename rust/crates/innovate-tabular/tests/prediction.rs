@@ -90,25 +90,36 @@ fn adopter_categories_use_historical_inclusive_boundaries() {
         "id" => ["a", "b", "c", "d", "e"],
     )
     .unwrap();
-    let result = innovate_tabular::categorize_adopters(frame.clone(), "adoption_rate").unwrap();
-    assert_eq!(
-        result
-            .column("category")
-            .unwrap()
-            .str()
-            .unwrap()
-            .iter()
-            .map(Option::unwrap)
-            .collect::<Vec<_>>(),
-        [
-            "Innovators",
-            "Early Adopters",
-            "Early Majority",
-            "Late Majority",
-            "Laggards"
-        ]
-    );
-    assert_eq!(result.column("id").unwrap(), frame.column("id").unwrap());
+    let tiny = f64::from_bits(1);
+    let extreme = df!(
+        "time" => [-f64::MAX, 0., tiny, 2. * tiny, f64::MAX],
+        "adoption_rate" => [0., 1., 0., 1., 0.],
+        "id" => ["a", "b", "c", "d", "e"],
+    )
+    .unwrap();
+    for frame in [frame, extreme] {
+        let result = innovate_tabular::categorize_adopters(frame.clone(), "adoption_rate").unwrap();
+        assert_eq!(
+            result
+                .column("category")
+                .unwrap()
+                .str()
+                .unwrap()
+                .iter()
+                .map(Option::unwrap)
+                .collect::<Vec<_>>(),
+            [
+                "Innovators",
+                "Early Adopters",
+                "Early Majority",
+                "Late Majority",
+                "Laggards"
+            ]
+        );
+        for name in ["id", "time", "adoption_rate"] {
+            assert_eq!(result.column(name).unwrap(), frame.column(name).unwrap());
+        }
+    }
     let negative = df!("time" => [0., 1.], "adoption_rate" => [-1., 2.]).unwrap();
     assert!(innovate_tabular::categorize_adopters(negative, "adoption_rate").is_err());
 }

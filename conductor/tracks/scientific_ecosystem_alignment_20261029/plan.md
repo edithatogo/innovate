@@ -6818,3 +6818,9 @@ Hosted release readiness for this worktree revision remains open.
   Assert that timestamps and weights round-trip exactly in addition
   to checking the categories. The two selected adopter tests passed
   with the 632f6afa wheel.
+
+- [x] Verify the Rust Polars adopter boundary on the zero-weight
+  extreme grid. The focused test checks all five categories and
+  preserves IDs, timestamps and rates on both fixtures. The first
+  link ran out of disk space. Reclaimed the discarded experimental
+  Logistic wheel and extension, then reran successfully.
