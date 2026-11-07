@@ -763,3 +763,7 @@ def test_norton_forced_rate_peak():
     assert trajectory["window"] == [0.0, 3.0]
     assert trajectory["generations"][0]["peak_time"] == 2.0
     assert trajectory["generations"][0]["peak_rate"] == pytest.approx(50 * math.exp(-0.2))
+    milestones = result["threshold_diagnostics"]["intrinsic_adoption_milestones"]
+    row = milestones["generations"][0]
+    assert row["median"] == pytest.approx(2 + (math.log(2) - 0.2) / 0.5)
+    assert row["saturation"] is None

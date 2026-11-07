@@ -866,3 +866,10 @@ fixture checks all three milestones before and between requested samples.
 All 22 multi-generation tests and focused Clippy passed. Installed binding
 checks for the milestone field and historical ODE threshold semantics remain
 open.
+
+- [x] Validate the milestone field in installed Python, Julia and R.
+  Each consumer checks the analytic median after an event and verifies null
+  saturation at the reporting horizon. The rebuilt wheel passed 56 native
+  Python tests on 3.15.2, Julia 1.13.3 passed 225 assertions in Pkg.test,
+  and installed R native conformance passed with the rebuilt Rust library.
+  [Logs](evidence/norton-milestones-20261107).

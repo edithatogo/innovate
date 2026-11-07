@@ -414,4 +414,7 @@ end
     @test trajectory["window"] == [0.,3.]
     @test row["peak_time"] == 2.
     @test row["peak_rate"] ≈ 50exp(-0.2)
+    milestones = only(result["threshold_diagnostics"]["intrinsic_adoption_milestones"]["generations"])
+    @test milestones["median"] ≈ 2 + (log(2) - 0.2) / 0.5
+    @test milestones["saturation"] === nothing
 end
