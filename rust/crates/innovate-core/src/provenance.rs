@@ -116,10 +116,20 @@ fn python_json(value: &Value, output: &mut String) {
             }
         }
         Value::Number(number) if number.is_f64() => {
-            let repr = format!("{:?}", number.as_f64().expect("floating-point number"));
-            if let Some((mantissa, exponent)) = repr.split_once('e') {
+            let number = number.as_f64().expect("floating-point number");
+            let repr = format!("{number:?}");
+            if let Some((mantissa, _)) = repr.split_once('e') {
+                let precision = mantissa
+                    .split_once('.')
+                    .map_or(0, |(_, fraction)| fraction.len());
+                let rounded = format!("{number:.precision$e}");
+                let (mantissa, exponent) = rounded.split_once('e').expect("scientific notation");
                 let exponent: i32 = exponent.parse().expect("formatted exponent");
                 write!(output, "{mantissa}e{exponent:+03}").expect("writing to String");
+            } else if let Some((_, fraction)) = repr.split_once('.') {
+                // Fixed precision rounds exact decimal ties to even, as CPython does.
+                let rounded = format!("{number:.precision$}", precision = fraction.len());
+                output.push_str(&rounded);
             } else {
                 output.push_str(&repr);
             }

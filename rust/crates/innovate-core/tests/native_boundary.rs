@@ -671,4 +671,12 @@ fn historical_dataset_digest_matches_python_json_fixture() {
         response["result"]["checksum"],
         "3655f262bf58ebfcf91ccacfcd757a2584eb6b99b5461efbff2b277c7b223cb1"
     );
+    let mut tie = request;
+    tie["payload"]["dataset"] = innovate_core::json!({"v":-887777373534812.2});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&tie.to_string())).unwrap();
+    assert_eq!(
+        response["result"]["checksum"],
+        "88e517cfdfe7027d87e6181f2e47690ab024bf1a40de5f94197036f5ab10a543"
+    );
 }

@@ -1826,3 +1826,10 @@ the other competition models and installed binding checks remain open.
   All 27 native boundary tests and focused Clippy passed.
 - [ ] Qualify broader float spelling and verify stored historical
   digests through the installed consumers.
+
+- [x] Correct decimal midpoint rounding in Python-compatible dataset
+  digests. A seeded raw-bit sample found six disagreements in the
+  initial 19,986 finite values. The corrected encoder matched CPython
+  3.15.2 on 199,886 finite values through the rebuilt C ABI. The Rust
+  regression retains a failing midpoint from the original sample.
+  All 27 boundary tests and focused Clippy passed.
