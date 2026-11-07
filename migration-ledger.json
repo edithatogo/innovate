@@ -170,8 +170,10 @@
     },
     {
       "key": "preprocessing",
-      "status": "pending",
-      "required": true
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Broader historical preprocessing parity, difficult SARIMA optimizer cases, and release acceptance"
     },
     {
       "key": "causal_analysis",
