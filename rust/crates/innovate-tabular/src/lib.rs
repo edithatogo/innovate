@@ -251,9 +251,21 @@ fn rewrite_ipc(data: &[u8], stream: bool) -> PolarsResult<Vec<u8>> {
 }
 
 fn preserve_ipc_annotations(input: &ArrowField, output: &mut ArrowField) {
-    use ArrowDataType::{FixedSizeList, LargeList, List, Struct};
+    use ArrowDataType::{
+        Binary, BinaryView, FixedSizeList, LargeBinary, LargeList, LargeUtf8, List, Struct, Utf8,
+        Utf8View,
+    };
 
-    if input.dtype == output.dtype && input.metadata.is_some() {
+    let same_logical_type = input.dtype == output.dtype
+        || matches!(
+            (&input.dtype, &output.dtype),
+            (Utf8 | LargeUtf8 | Utf8View, Utf8 | LargeUtf8 | Utf8View)
+                | (
+                    Binary | LargeBinary | BinaryView,
+                    Binary | LargeBinary | BinaryView
+                )
+        );
+    if same_logical_type && input.metadata.is_some() {
         output.metadata = input.metadata.clone();
     }
     match (&input.dtype, &mut output.dtype) {

@@ -6052,3 +6052,9 @@ Hosted release readiness for this worktree revision remains open.
   a rebuilt Python wheel. PyArrow confirmed both nested units keys,
   parent nulls and the null array element in file and stream output.
   Python stream bytes matched the Julia and R outputs exactly.
+
+- [x] Retain Arrow field annotations across string and binary layout
+  conversions that preserve the logical type. The Rust fixture verifies
+  an annotated Utf8View becomes LargeUtf8 with the annotation, Unicode
+  value and null intact. All 11 tabular tests passed. The binary branch
+  still needs its own runtime fixture.

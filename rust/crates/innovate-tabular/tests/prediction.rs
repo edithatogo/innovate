@@ -245,7 +245,7 @@ fn export_ipc_file_frames_schema_and_preserves_nulls_and_types() {
 }
 
 #[test]
-fn ipc_rewrite_keeps_annotations_for_unchanged_field_types() {
+fn ipc_rewrite_keeps_annotations_for_compatible_field_types() {
     use polars_arrow::io::ipc::write::{StreamWriter, WriteOptions};
     use std::io::Cursor;
 
@@ -253,18 +253,27 @@ fn ipc_rewrite_keeps_annotations_for_unchanged_field_types() {
 
     let values = Series::new("".into(), [Some(1_i32), None]);
     let frame = df!("duration" => [Some(1_i32), None],
-        "samples" => Series::new("samples".into(), [Some(values), None]))
+        "samples" => Series::new("samples".into(), [Some(values), None]),
+        "label" => [Some("β"), None])
     .unwrap();
-    let compat = CompatLevel::oldest();
+    let compat = CompatLevel::newest();
     let mut schema = frame.schema().to_arrow(compat);
     let field = schema.get_mut("duration").unwrap();
     let metadata = || [("units".into(), "days".into())].into_iter().collect();
     *field = field.clone().with_metadata(metadata());
+    let label = schema.get_mut("label").unwrap();
+    *label = label.clone().with_metadata(metadata());
     let LargeList(item) = &mut schema.get_mut("samples").unwrap().dtype else {
         panic!("expected a large list");
     };
     **item = item.clone().with_metadata(metadata());
     let assert_annotations = |schema: &ArrowSchema| {
+        let label = schema.get("label").unwrap();
+        assert_eq!(
+            label.dtype,
+            polars_arrow::datatypes::ArrowDataType::LargeUtf8
+        );
+        assert_eq!(label.metadata.as_deref(), Some(&metadata()));
         assert_eq!(
             schema.get("duration").unwrap().metadata.as_deref(),
             Some(&metadata())
