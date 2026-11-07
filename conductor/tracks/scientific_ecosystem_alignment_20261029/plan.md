@@ -5943,3 +5943,10 @@ Hosted release readiness for this worktree revision remains open.
   levels directly in R produced a 3.9e-5 likelihood discrepancy in the
   positive case. The checker uses the differenced reference to match
   Rust's conditional likelihood definition.
+
+- [x] Verify both integrated ARMA boundary cases through Python
+  3.15.2, Julia 1.13.3 and installed R 4.3.0. Serialize the shared
+  inputs with the R bridge's 17 significant digits. All three returned
+  exactly matching coefficients, log likelihood and 401 fitted
+  positions, including the initial null. The Python Polars helper
+  reproduced the fitted series with explicit Float64 input.
