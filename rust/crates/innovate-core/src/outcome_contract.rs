@@ -29,6 +29,23 @@ struct Parameter {
 
 /// Validate the paired Bass payload shared by JSON and Arrow consumers.
 pub fn validate_paired_outcomes(payload: &Value) -> Result<(), &'static str> {
+    let strategies = payload["strategies"]
+        .as_array()
+        .ok_or("invalid paired outcome strategies")?;
+    // Serde structs also accept positional arrays, but this contract uses named fields.
+    if strategies.iter().any(|strategy| {
+        !strategy.is_object()
+            || strategy["draws"].as_array().is_some_and(|draws| {
+                draws.iter().any(|draw| {
+                    !draw.is_object()
+                        || draw["parameters"]
+                            .as_array()
+                            .is_some_and(|parameters| parameters.iter().any(|p| !p.is_object()))
+                })
+            })
+    }) {
+        return Err("paired strategies, draws and parameters must be objects");
+    }
     let strategies: Vec<Strategy> = Vec::deserialize(&payload["strategies"])
         .map_err(|_| "invalid paired outcome strategies")?;
     let reference = strategies

@@ -277,6 +277,20 @@ fn paired_ipc_preserves_order_and_rejects_reordered_draws() {
         serde_json::from_str::<serde_json::Value>(encoded).unwrap(),
         parameters
     );
+    let mut positional = payload.clone();
+    let draw = &mut positional["strategies"][0]["draws"][0];
+    *draw = json!([
+        draw["draw_id"],
+        draw["parameters"],
+        draw["time"],
+        draw["adoption"]
+    ]);
+    assert!(
+        paired_outcomes_ipc(&positional)
+            .unwrap_err()
+            .to_string()
+            .contains("must be objects")
+    );
     let mut negative = payload.clone();
     negative["strategies"][1]["draws"][0]["adoption"][1] = json!(-0.01);
     assert!(

@@ -4182,3 +4182,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify direct Rust validation at a495bde5 through the rebuilt
   Python 3.15.2 wheel, Julia and installed R. All three produced
   equal 24-row Arrow tables and rejected the negative adoption fixture.
+- [x] Require named JSON objects for paired strategies, draws and
+  parameters. Serde can decode positional arrays as structs, which
+  could reach the Arrow writer without named fields. The exporter
+  now rejects the positional draw with a validation error. The
+  focused Rust contract and IPC tests passed.
