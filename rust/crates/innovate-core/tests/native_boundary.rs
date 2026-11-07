@@ -716,11 +716,14 @@ fn causal_summaries_match_analytic_effects() {
     let onset = &replicated["result"]["event_time"][0];
     assert_eq!(onset["supported_treated_units"], 3);
     assert_eq!(onset.get("standard_error"), Some(&json!(null)));
-    let shared = run(
-        json!({"method":"staggered_panel_att","periods":[0,1,2],"include_event_time_covariance":true,
+    let shared_request = json!({"method":"staggered_panel_att","periods":[0,1,2],"include_event_time_covariance":true,
+        "simultaneous_bands":{"draws":100,"seed":7},
         "outcomes":[[0,5,5],[0,5,5],[0,1,6],[0,1,6],[0,0,0],[0,2,4]],
-        "adoption_indices":[1,1,2,2,null,null]}),
-    );
+        "adoption_indices":[1,1,2,2,null,null]});
+    let shared = run(shared_request.clone());
+    assert_eq!(shared, run(shared_request));
+    let bands = &shared["result"]["simultaneous_bands"];
+    assert!((bands["critical_value"].as_f64().unwrap() - 2_f64.sqrt()).abs() < 1e-12);
     let se = shared["result"]["event_time"][0]["standard_error"]
         .as_f64()
         .unwrap();

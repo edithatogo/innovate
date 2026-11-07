@@ -4741,3 +4741,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify event-time covariance through rebuilt Python 3.15.2, Julia
   and installed R. Each returned the analytic matrix in event-time order.
   The Python regression also checks null entries when uncertainty is absent.
+
+- [x] Compute simultaneous staggered event-time bands using seeded
+  unit multipliers. The focused Rust test verifies replay and the
+  analytic max-t critical value. Binding runtime checks remain open.

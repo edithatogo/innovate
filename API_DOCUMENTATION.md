@@ -373,3 +373,10 @@ Set `include_event_time_covariance` to true to return the covariance
 matrix in event-time row order, for up to 128 offsets. Its diagonal
 contains squared pointwise standard errors. Entries involving an
 offset with unavailable uncertainty are null.
+
+Request `simultaneous_bands` with an integer `seed`, 100 to 10,000
+`draws` and optional `confidence` (default 0.95). The multiplier
+max-t procedure uses the same random sign for each unit across offsets
+and returns bands for offsets with positive standard errors. Other
+offsets have null intervals. These are approximate bands under
+independent units and fixed cohort weights.

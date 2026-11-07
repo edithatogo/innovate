@@ -368,6 +368,7 @@ fn independent_change_contrast(
 }
 
 fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
+    let bands = payload.get("simultaneous_bands");
     let include_covariance = payload
         .get("include_event_time_covariance")
         .map_or(Some(false), Value::as_bool)
@@ -424,8 +425,8 @@ fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
     }
     let mut event_time = Vec::with_capacity(by_offset.len());
     let mut influence_rows = Vec::new();
-    if include_covariance && by_offset.len() > 128 {
-        return Err("event-time covariance supports at most 128 offsets");
+    if (include_covariance || bands.is_some()) && by_offset.len() > 128 {
+        return Err("joint event-time inference supports at most 128 offsets");
     }
     for (period_offset, rows) in by_offset {
         let supported_units: usize = rows
@@ -492,7 +493,7 @@ fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
             .as_ref()
             .map(|row| finite(row.iter().copied().fold(0_f64, f64::hypot)))
             .transpose()?;
-        if include_covariance {
+        if include_covariance || bands.is_some() {
             influence_rows.push(influence);
         }
         event_time.push(json!({"period_offset":period_offset,"supported_cohort_att":estimate,
@@ -502,6 +503,10 @@ fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
     }
     let mut result = json!({"method":"not_yet_treated_group_time_difference_in_differences",
         "contrasts":contrasts,"event_time":event_time});
+    if let Some(options) = bands {
+        result["simultaneous_bands"] =
+            event_time_bands(options, &event_time, &influence_rows, outcomes.len())?;
+    }
     if include_covariance {
         let mut covariance = vec![vec![None; influence_rows.len()]; influence_rows.len()];
         for (i, left) in influence_rows.iter().enumerate() {
@@ -516,6 +521,83 @@ fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
         result["event_time_covariance"] = json!(covariance);
     }
     Ok(result)
+}
+
+fn event_time_bands(
+    options: &Value,
+    event_time: &[Value],
+    influence: &[Option<Vec<f64>>],
+    units: usize,
+) -> Result<Value, &'static str> {
+    use kairo_ecs_rng::{DeterministicStream, rand_distr::Uniform};
+    let draws = options["draws"]
+        .as_u64()
+        .filter(|n| (100..=10_000).contains(n))
+        .ok_or("simultaneous bands require 100 to 10000 draws")? as usize;
+    let seed = options["seed"]
+        .as_u64()
+        .ok_or("simultaneous bands require an integer seed")?;
+    let confidence = options
+        .get("confidence")
+        .map_or(Some(0.95), Value::as_f64)
+        .filter(|&value| 0. < value && value < 1.)
+        .ok_or("confidence must be between zero and one")?;
+    let usable: Vec<_> = event_time
+        .iter()
+        .zip(influence)
+        .filter_map(|(row, values)| {
+            let error = row["standard_error"].as_f64()?;
+            (error > 0.).then_some((values.as_deref()?, error))
+        })
+        .collect();
+    if usable.is_empty() {
+        return Err("simultaneous bands require an offset with positive standard error");
+    }
+    if units > 10_000_000 / draws / usable.len() {
+        return Err("simultaneous band workload exceeds 10000000 contributions");
+    }
+    let mut rng = DeterministicStream::from_run_seed(seed);
+    let coin = Uniform::new(0_u32, 2).expect("valid binary distribution");
+    let mut signs = vec![0.; units];
+    let mut maxima = Vec::with_capacity(draws);
+    for _ in 0..draws {
+        for sign in &mut signs {
+            *sign = if rng.sample(coin) == 0 { -1. } else { 1. };
+        }
+        let maximum = usable
+            .iter()
+            .map(|&(values, error)| {
+                values
+                    .iter()
+                    .zip(&signs)
+                    .map(|(value, sign)| sign * (value / error))
+                    .sum::<f64>()
+                    .abs()
+            })
+            .fold(0_f64, f64::max);
+        maxima.push(maximum);
+    }
+    maxima.sort_by(f64::total_cmp);
+    let critical = maxima[((draws as f64 * confidence).ceil() as usize).clamp(1, draws) - 1];
+    let intervals = event_time
+        .iter()
+        .map(|row| {
+            let interval = row["supported_cohort_att"]
+                .as_f64()
+                .zip(row["standard_error"].as_f64())
+                .filter(|&(_, error)| error > 0.)
+                .map(|(estimate, error)| {
+                    Ok::<_, &'static str>(json!({"lower":finite(estimate-critical*error)?,
+                    "upper":finite(estimate+critical*error)?}))
+                })
+                .transpose()?;
+            Ok(json!({"period_offset":row["period_offset"],"interval":interval}))
+        })
+        .collect::<Result<Vec<_>, &'static str>>()?;
+    Ok(
+        json!({"method":"rademacher_multiplier_max_t","confidence":confidence,"draws":draws,
+        "seed":seed,"critical_value":critical,"intervals":intervals}),
+    )
 }
 
 fn panel_event_study(payload: &Value) -> Result<Value, &'static str> {
