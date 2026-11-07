@@ -1480,3 +1480,10 @@ the other competition models and installed binding checks remain open.
   fixture with nulls for the warmup rows. All 20 native boundary tests
   and focused Clippy passed. This conditional initialization still
   requires comparison with historical SARIMAX state-space initialization.
+
+- [x] Verify the fixed-coefficient SARIMA request through the rebuilt
+  Python wheel (3.15.2), Julia (1.13.3) and installed R (4.3.0) generic
+  entry points. Each matched the stationary forecast fixture within
+  1e-10 and retained four warmup positions for combined differencing.
+  R now encodes singleton SARIMA coefficients as arrays and was verified
+  with a one-coefficient AR model and a zero-coefficient integrated model.
