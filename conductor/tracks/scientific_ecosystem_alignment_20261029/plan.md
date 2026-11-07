@@ -6740,3 +6740,9 @@ Hosted release readiness for this worktree revision remains open.
   network suite. Check cumulative probabilities at ticks 1–4
   for both constant and ramped hazards, and reject duplicate or
   out-of-range requests. All 35 network tests passed.
+
+- [x] Qualify pure imitation on a three-node path with one initial
+  adopter. Across 2,048 fixed seeds the exposed node's request rate
+  matched the analytic probability for hazard q/2 within four binomial
+  standard errors. No unexposed node requested service and no new
+  adoption occurred before the horizon. All 36 Rust network tests passed.

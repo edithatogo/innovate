@@ -574,6 +574,41 @@ fn single_agent_request_frequency_matches_exponential_hazard() {
 }
 
 #[test]
+fn seeded_contagion_request_frequency_matches_imitation_exposure() {
+    let mut payload = json!({
+        "inputs":{"time":[0,4]},
+        "parameters":{"p":0,"q":0.5,"m":3},
+        "simulation_options":{"engine":"kairos_network","population":3,
+            "initial_agents":[0],"edges":[[0,1],[1,2]],"capacity":1,
+            "service_ticks":5,"ticks_per_unit":1}
+    });
+    let kernel = KernelBinding::new();
+    let trials = 2048;
+    let mut requests = 0;
+    for seed in 0..trials {
+        payload["simulation_options"]["seed"] = json!(seed);
+        let result = kernel
+            .simulate_model("bass", payload.clone())
+            .unwrap()
+            .result
+            .unwrap();
+        let trace = result["requests"].as_array().unwrap();
+        assert!(trace.len() <= 1);
+        assert!(trace.iter().all(|event| event["agent"] == 1));
+        assert_eq!(result["counts"], json!([1, 1]));
+        requests += trace.len();
+    }
+    // Node 1 has one adopted neighbor out of two, so its hazard is q/2.
+    // Service lasts beyond the horizon and cannot activate node 2.
+    let probability = -(-1.0_f64).exp_m1();
+    let standard_error = (probability * (1. - probability) / trials as f64).sqrt();
+    assert!(
+        (requests as f64 / trials as f64 - probability).abs() < 4. * standard_error,
+        "{requests}/{trials}"
+    );
+}
+
+#[test]
 fn linear_hazard_clock_matches_analytic_crossing() {
     use kairo_ecs_rng::{DeterministicStream, rand_distr::Exp};
 
