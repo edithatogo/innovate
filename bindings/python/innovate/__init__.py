@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import io
 import json
+from collections.abc import Iterable
 from dataclasses import dataclass
 from importlib.metadata import version
 from typing import Any
@@ -17,7 +18,18 @@ import polars as pl
 from . import _native
 
 __version__ = version("innovate")
-__all__ = ["FitResult", "NativeError", "capabilities", "execute", "fit", "predict"]
+__all__ = [
+    "FitResult",
+    "NativeError",
+    "capabilities",
+    "execute",
+    "fit",
+    "fit_batch",
+    "fit_frames",
+    "predict",
+    "predict_batch",
+    "predict_frames",
+]
 
 
 class NativeError(ValueError):
@@ -137,3 +149,48 @@ def fit(
     if observed_columns is not None:
         options["observed_columns"] = observed_columns
     return FitResult(model, _decode(_native.fit_ipc(_ipc(data), model, json.dumps(options, allow_nan=False))))
+
+
+def fit_frames(
+    model: str,
+    datasets: Iterable[pl.DataFrame | pl.LazyFrame],
+    *,
+    model_options: dict[str, Any] | None = None,
+    observed_columns: list[str] | None = None,
+    fit_options: dict[str, Any] | None = None,
+) -> list[FitResult | Exception]:
+    """Fit each frame independently and keep its result or input error in order."""
+    results: list[FitResult | Exception] = []
+    for frame in datasets:
+        try:
+            results.append(
+                fit(
+                    model,
+                    frame,
+                    model_options=model_options,
+                    observed_columns=observed_columns,
+                    fit_options=fit_options,
+                )
+            )
+        except (ValueError, TypeError, pl.exceptions.PolarsError) as error:
+            results.append(error)
+    return results
+
+
+def predict_frames(
+    datasets: Iterable[tuple[FitResult | Exception, pl.DataFrame | pl.LazyFrame]],
+    *,
+    quantity: str = "level",
+    covariate_rate_columns: dict[str, str] | None = None,
+) -> list[pl.DataFrame | Exception]:
+    """Forecast each frame with its paired fit, carrying failed fits forward."""
+    results: list[pl.DataFrame | Exception] = []
+    for fitted, frame in datasets:
+        if isinstance(fitted, Exception):
+            results.append(fitted)
+            continue
+        try:
+            results.append(fitted.predict(frame, quantity=quantity, covariate_rate_columns=covariate_rate_columns))
+        except (ValueError, TypeError, pl.exceptions.PolarsError) as error:
+            results.append(error)
+    return results

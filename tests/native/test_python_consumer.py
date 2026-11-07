@@ -888,3 +888,25 @@ def test_logistic_polars_total_rate():
             quantity="rate",
             covariate_rate_columns={"unexpected": "price_slope"},
         )
+
+
+def test_polars_batch_keeps_errors_state_and_ragged_frames():
+    times = list(range(20))
+    frames = [
+        pl.DataFrame({"time": times, "observed": [capacity / (1 + math.exp(-(t - 5))) for t in times]})
+        for capacity in (100, 200)
+    ]
+    fits = innovate.fit_frames("logistic", [frames[0].lazy(), pl.DataFrame({"time": [1]}), frames[1]])
+    assert isinstance(fits[1], ValueError)
+    grids = [
+        pl.DataFrame({"time": [5], "id": ["first"]}),
+        pl.DataFrame({"time": [5]}),
+        pl.DataFrame({"time": [5, 6], "id": ["second", "third"]}),
+    ]
+    first, failed, last = innovate.predict_frames(zip(fits, grids, strict=True))
+    assert failed is fits[1]
+    assert isinstance(first, pl.DataFrame)
+    assert isinstance(last, pl.DataFrame)
+    assert first["prediction"][0] == pytest.approx(50)
+    assert last["prediction"][0] == pytest.approx(100)
+    assert last["id"].to_list() == ["second", "third"]

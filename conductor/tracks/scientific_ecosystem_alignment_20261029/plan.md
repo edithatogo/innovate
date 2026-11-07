@@ -1191,4 +1191,7 @@ the other competition models and installed binding checks remain open.
 - [x] Expose native JSON batch fitting and forecasting through Python, Julia
   and R. Focused rebuilt checks preserve the failed middle fit and return
   forecasts on independent grids.
-- [ ] Expose batch operations through the Polars frame API.
+- [x] Expose batch operations through the Polars frame API. Python
+  `fit_frames` and `predict_frames` orchestrate the existing native frame
+  entry points in input order. The installed regression covers lazy frames,
+  the failed middle fit, independent forecast lengths and identity columns.
