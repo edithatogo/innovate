@@ -853,7 +853,18 @@ fn threshold_fraction(lower: f64, threshold: f64, upper: f64) -> f64 {
 
 #[cfg(test)]
 mod tests {
-    use super::threshold_fraction;
+    use super::{ensemble_moments, threshold_fraction};
+
+    #[test]
+    fn ensemble_standard_error_resolves_adjacent_effects() {
+        let lower = 1.5_f64;
+        let upper = lower.next_up();
+        let (_, error) = ensemble_moments(&[lower, upper], upper);
+        assert!((error / ((upper - lower) / 2.) - 1.).abs() <= 2. * f64::EPSILON);
+        let (mean, error) = ensemble_moments(&[-f64::MAX, f64::MAX], f64::MAX);
+        assert_eq!(mean, 0.);
+        assert_eq!(error, f64::MAX);
+    }
 
     #[test]
     fn threshold_fraction_preserves_a_narrow_bracket() {
@@ -924,20 +935,7 @@ fn compare_ensemble(
     // Scale before squaring so finite effects near the floating-point limits
     // can still yield a representable standard error.
     let scale = differences.iter().map(|x| x.abs()).fold(0., f64::max);
-    let (mean, standard_error) = if scale == 0. {
-        (0., 0.)
-    } else {
-        let n = differences.len() as f64;
-        let mean = differences.iter().map(|x| x / scale).sum::<f64>() / n;
-        let centered_squares = differences
-            .iter()
-            .map(|x| (x / scale - mean).powi(2))
-            .sum::<f64>();
-        (
-            mean * scale,
-            (centered_squares / (n * (n - 1.))).sqrt() * scale,
-        )
-    };
+    let (mean, standard_error) = ensemble_moments(&differences, scale);
     let mut sorted = differences.clone();
     sorted.sort_unstable_by(f64::total_cmp);
     let tail = (1. - mass) / 2.;
@@ -954,6 +952,30 @@ fn compare_ensemble(
     }
     add_time_basis(&mut result, basis);
     Ok(result)
+}
+
+fn ensemble_moments(differences: &[f64], scale: f64) -> (f64, f64) {
+    if scale == 0. {
+        return (0., 0.);
+    }
+    let n = differences.len() as f64;
+    let mean = differences.iter().map(|x| x / scale).sum::<f64>() / n;
+    // Center before scaling when possible to retain differences of a few ULPs.
+    let anchor = differences[0];
+    let offset = |&x: &f64| {
+        let delta = x - anchor;
+        if delta.is_finite() {
+            delta / scale
+        } else {
+            x / scale - anchor / scale
+        }
+    };
+    let center = differences.iter().map(offset).sum::<f64>() / n;
+    let squares = differences
+        .iter()
+        .map(|x| (offset(x) - center).powi(2))
+        .sum::<f64>();
+    (mean * scale, (squares / (n * (n - 1.))).sqrt() * scale)
 }
 
 fn bootstrap_mean(

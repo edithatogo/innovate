@@ -3623,3 +3623,10 @@ Hosted release readiness for this worktree revision remains open.
   threshold at time 0.5 in every binding. Julia and R also confirmed
   the first sampled crossing remains time 1. R used raw request JSON
   to preserve the threshold token.
+
+- [x] Preserve paired ensemble standard errors for nearly equal final
+  effects by centering before scaling. The native regression resolves
+  effects one representable value apart and retains a finite standard
+  error for opposite effects at the floating-point limit. Nine scenario
+  boundary tests, formatting and focused Clippy passed. This check
+  covers the Rust core. Broader ensemble qualification remains open.
