@@ -7124,3 +7124,9 @@ Hosted release readiness for this worktree revision remains open.
   took 37.08 seconds and used 278 MiB. Removed that temporary target
   after verification. Cold compilation of the full Polars wheel and
   hosted Linux checks remain open.
+
+- [x] Give the hosted extracted-source check its own fresh Cargo
+  target directory. The Rust tests and wheel build can share that
+  directory within the job without using checkout-built artifacts.
+  The embedded shell passed bash syntax validation. Hosted execution
+  remains open.
