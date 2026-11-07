@@ -697,8 +697,14 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
             .map(|(scenario, row)| (scenario.id.as_str(), (scenario, &row["result"])))
             .collect();
         if let Some(ids) = ranking {
-            result["ranking"] = match rank_paths(&paths, &ids) {
-                Ok(rows) => json!({"metric":"final_adoption","rows":rows,"error":null}),
+            let metric = request["payload"]
+                .get("rank_metric")
+                .map_or(Some("final_adoption"), Value::as_str);
+            result["ranking"] = match metric
+                .ok_or("rank_metric must be a string")
+                .and_then(|metric| rank_paths(&paths, &ids, metric))
+            {
+                Ok(rows) => json!({"metric":metric,"rows":rows,"error":null}),
                 Err(message) => {
                     json!({"rows":null,"error":{"code":"invalid_ranking","message":message}})
                 }
@@ -736,7 +742,11 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
     envelope(result, Value::Null)
 }
 
-fn rank_paths(paths: &ScenarioPaths<'_>, ids: &[String]) -> Result<Vec<Value>, &'static str> {
+fn rank_paths(
+    paths: &ScenarioPaths<'_>,
+    ids: &[String],
+    metric: &str,
+) -> Result<Vec<Value>, &'static str> {
     if ids.len() < 2 || ids.iter().collect::<std::collections::HashSet<_>>().len() != ids.len() {
         return Err("ranking requires at least two distinct scenario IDs");
     }
@@ -748,8 +758,21 @@ fn rank_paths(paths: &ScenarioPaths<'_>, ids: &[String]) -> Result<Vec<Value>, &
         if grid.as_ref().is_some_and(|expected| expected != &time) {
             return Err("scenario ranking requires identical time grids");
         }
+        let score = match metric {
+            "final_adoption" => *values.last().unwrap(),
+            "adoption_area" if time.len() > 1 => time
+                .windows(2)
+                .zip(values.windows(2))
+                .map(|(t, y)| (t[1] - t[0]) * (0.5 * y[0] + 0.5 * y[1]))
+                .sum(),
+            "adoption_area" => return Err("adoption area requires at least two observations"),
+            _ => return Err("unknown scenario ranking metric"),
+        };
+        if !score.is_finite() {
+            return Err("scenario ranking score exceeded finite numerical domain");
+        }
         grid = Some(time);
-        scores.push((id, *values.last().unwrap()));
+        scores.push((id, score));
     }
     scores.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
     let mut place = 1;
@@ -760,7 +783,7 @@ fn rank_paths(paths: &ScenarioPaths<'_>, ids: &[String]) -> Result<Vec<Value>, &
             if index > 0 && scores[index - 1].1 != score {
                 place = index + 1;
             }
-            json!({"id":id,"place":place,"final_adoption":score})
+            json!({"id":id,"place":place,(metric):score})
         })
         .collect())
 }

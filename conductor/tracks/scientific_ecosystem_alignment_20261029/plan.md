@@ -4799,3 +4799,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify scenario grid ranking through rebuilt Python 3.15.2, Julia
   and installed R. All three returned the same tied scenario order and
   places 1, 1 and 3.
+
+- [x] Rank scenario grids by adoption area over a common horizon.
+  The Rust regression verifies trapezoidal scoring alongside existing
+  final-adoption ties and ranking error isolation. Binding checks remain open.

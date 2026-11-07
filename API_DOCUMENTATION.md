@@ -417,3 +417,8 @@ distinct scenario IDs. Scalar paths must share the same time grid and
 time basis. The result ranks final adoption in descending order.
 Ties share a place and retain request order. A ranking error leaves
 the scenario executions and pair comparisons available.
+
+Set `rank_metric` to `adoption_area` to rank by the trapezoidal area
+under each adoption path over the shared observation horizon. The
+score is measured in adoption units times time units. This metric
+requires at least two samples. The default is `final_adoption`.

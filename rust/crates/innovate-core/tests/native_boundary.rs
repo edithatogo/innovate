@@ -1620,6 +1620,15 @@ fn scenario_grid_compares_aligned_adoption_paths() {
         ranks.iter().map(|row| &row["place"]).collect::<Vec<_>>(),
         vec![&json!(1), &json!(1), &json!(3)]
     );
+    ranked["payload"]["rank_metric"] = json!("adoption_area");
+    let area = run(&ranked);
+    let values = &area["result"]["executions"][1]["result"]["values"];
+    let expected = (values[0].as_f64().unwrap() + values[1].as_f64().unwrap()) / 2.;
+    assert_eq!(area["result"]["ranking"]["metric"], "adoption_area");
+    assert_eq!(
+        area["result"]["ranking"]["rows"][0]["adoption_area"],
+        expected
+    );
     ranked["payload"]["rank_scenarios"] = json!(["base", "missing"]);
     let invalid = run(&ranked);
     assert_eq!(
