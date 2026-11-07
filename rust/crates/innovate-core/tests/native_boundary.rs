@@ -3859,12 +3859,21 @@ fn resource_comparison_requires_resource_outputs_from_both_scenarios() {
         repeat["simulation"]["simulation_options"]["seed"] = json!(43);
         payload["scenarios"].as_array_mut().unwrap().push(repeat);
     }
-    payload["comparisons"].as_array_mut().unwrap().push(json!({
-        "pairs":[{"baseline":"base","alternative":"closed"},
-                 {"baseline":"base_repeat","alternative":"closed_repeat"}],
-        "require_distinct_pair_seeds":true,"interval_mass":0.9,
-        "evaluation_metric":"resource.configured_slot_ticks"
-    }));
+    let discovery: serde_json::Value = serde_json::from_str(&innovate_core::execute_json(
+        r#"{"schema_version":"2.0","operation":"discover_scenarios","payload":{"key":"network"}}"#,
+    ))
+    .unwrap();
+    let metrics = discovery["result"]["scenarios"][0]["resource_comparison"]["ensemble_metrics"]
+        .as_array()
+        .unwrap();
+    for metric in metrics {
+        payload["comparisons"].as_array_mut().unwrap().push(json!({
+            "pairs":[{"baseline":"base","alternative":"closed"},
+                     {"baseline":"base_repeat","alternative":"closed_repeat"}],
+            "require_distinct_pair_seeds":true,"interval_mass":0.9,
+            "evaluation_metric":metric
+        }));
+    }
     let request =
         json!({"schema_version":"2.0","operation":"execute_scenario_grid","payload":payload});
     let response: serde_json::Value =
@@ -3872,10 +3881,18 @@ fn resource_comparison_requires_resource_outputs_from_both_scenarios() {
     let result = &response["result"];
     assert!(result["executions"][2]["error"].is_null(), "{response}");
     let rows = result["comparisons"].as_array().unwrap();
-    let ensemble = &rows.last().unwrap()["result"];
-    assert_eq!(ensemble["resource_metric"], "configured_slot_ticks");
-    assert_eq!(ensemble["differences"], json!([-3., -3.]));
-    assert_eq!(ensemble["mean_standard_error"], 0.);
+    let ensembles = &rows[5..];
+    assert_eq!(ensembles.len(), metrics.len());
+    for (metric, row) in metrics.iter().zip(ensembles) {
+        let key = metric.as_str().unwrap().strip_prefix("resource.").unwrap();
+        let ensemble = &row["result"];
+        let effect = rows[0]["result"]["resource_differences"][key]
+            .as_i64()
+            .unwrap() as f64;
+        assert_eq!(ensemble["resource_metric"], key, "{row}");
+        assert_eq!(ensemble["differences"], json!([effect, effect]), "{key}");
+        assert_eq!(ensemble["mean_standard_error"], 0., "{key}");
+    }
     assert_eq!(
         rows[0]["result"]["resource_differences"]["configured_slot_ticks"],
         -3

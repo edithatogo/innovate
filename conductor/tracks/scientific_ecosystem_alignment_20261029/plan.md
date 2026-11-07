@@ -5929,3 +5929,8 @@ Hosted release readiness for this worktree revision remains open.
   Python wheel (CPython 3.15.2), Julia 1.13.3 project and freshly
   installed R 4.3.0 package using the rebuilt Rust FFI library.
   All three public calls returned identical lists of 14 keys.
+
+- [x] Execute every discovered Kairos resource metric in a paired
+  ensemble. The Rust boundary fixture checks all 14 against the direct
+  comparison on a seeded two-pair schedule and verifies zero standard
+  error for identical effects across the two pairs.
