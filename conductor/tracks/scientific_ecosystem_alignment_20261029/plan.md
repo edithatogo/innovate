@@ -4625,3 +4625,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify held-out propensity scoring through rebuilt Python 3.15.2,
   Julia and installed R. Each scored saved-fit predictions with analytic
   Brier score 0.125 and log loss -(log(0.5) + 2 log(0.75))/3.
+
+- [x] Cross-fit ridge logistic propensities with caller-supplied folds.
+  The Rust fixture verifies input order and rejection of a split that
+  leaves a training complement with only one treatment arm.

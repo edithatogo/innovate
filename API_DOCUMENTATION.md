@@ -292,3 +292,9 @@ the training order. Probabilities are returned in prediction-row order.
 Use `score_propensities` with held-out binary `treatment` and aligned
 `propensities` in (0, 1). It reports mean Brier score, mean log loss,
 the observed treatment fraction and the mean predicted probability.
+
+Use `cross_fit_logistic_propensities` with the fitting inputs and
+aligned unsigned integer `folds` labels. Each of the two to 32 folds
+is scored using coefficients and scales fitted on its complement.
+The result preserves row order. Every training complement requires
+both treatment arms. The caller supplies the split design.

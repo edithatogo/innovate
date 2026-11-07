@@ -725,6 +725,20 @@ fn causal_summaries_match_analytic_effects() {
     let mut logistic = json!({"method":"fit_logistic_propensities",
         "treatment":[0,1],"covariates":[[-2],[2]],"ridge":0.25 / 3_f64.ln()});
     let fitted = run(logistic.clone());
+    let mut cross_fit = json!({"method":"cross_fit_logistic_propensities",
+        "treatment":[0,1,1,0],"covariates":[[-2],[2],[2],[-2]],
+        "folds":[9,4,9,4],"ridge":logistic["ridge"]});
+    let cross_fitted = run(cross_fit.clone());
+    for (p, expected) in cross_fitted["result"]["propensities"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .zip([0.25, 0.75, 0.75, 0.25])
+    {
+        assert!((p.as_f64().unwrap() - expected).abs() < 1e-7);
+    }
+    cross_fit["folds"] = json!([4, 9, 9, 4]);
+    assert!(run(cross_fit)["result"].is_null());
     let mut prediction = json!({"method":"predict_logistic_propensities",
         "fit":fitted["result"],"covariates":[[0],[2],[-2]]});
     let predicted = run(prediction.clone());

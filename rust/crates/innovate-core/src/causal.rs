@@ -313,6 +313,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
         Some("estimate_stratum_propensities") => estimate_stratum_propensities(payload),
         Some("fit_logistic_propensities") => fit_logistic_propensities(payload),
         Some("predict_logistic_propensities") => predict_logistic_propensities(payload),
+        Some("cross_fit_logistic_propensities") => cross_fit_logistic_propensities(payload),
         Some("score_propensities") => score_propensities(payload),
         Some("matched_treatment_contrast") => matched_treatment_contrast(payload),
         Some("intervention_contract") => intervention_contract(payload),
@@ -887,6 +888,45 @@ fn logistic_probability(logit: f64) -> f64 {
         let exp = logit.exp();
         exp / (1. + exp)
     }
+}
+
+fn cross_fit_logistic_propensities(payload: &Value) -> Result<Value, &'static str> {
+    let treatment = series(payload, "treatment")?;
+    let rows = payload["covariates"]
+        .as_array()
+        .ok_or("expected covariate rows")?;
+    let folds: Vec<u32> = serde_json::from_value(payload["folds"].clone())
+        .map_err(|_| "folds must be unsigned integer labels")?;
+    if treatment.len() != rows.len() || treatment.len() != folds.len() {
+        return Err("treatment, covariates and folds must align");
+    }
+    let labels: std::collections::BTreeSet<_> = folds.iter().copied().collect();
+    if !(2..=32).contains(&labels.len()) {
+        return Err("cross fitting requires two to 32 folds");
+    }
+    let mut propensities = vec![0.; rows.len()];
+    for label in &labels {
+        let (held_out, training): (Vec<_>, Vec<_>) =
+            (0..rows.len()).partition(|&index| folds[index] == *label);
+        let fit = fit_logistic_propensities(&json!({
+            "treatment":training.iter().map(|&i| treatment[i]).collect::<Vec<_>>(),
+            "covariates":training.iter().map(|&i| &rows[i]).collect::<Vec<_>>(),
+            "ridge":payload["ridge"],
+        }))?;
+        let predicted = predict_logistic_propensities(&json!({
+            "fit":fit,"covariates":held_out.iter().map(|&i| &rows[i]).collect::<Vec<_>>()
+        }))?;
+        for (index, probability) in held_out
+            .into_iter()
+            .zip(series(&predicted, "propensities")?)
+        {
+            propensities[index] = probability;
+        }
+    }
+    Ok(
+        json!({"method":"cross_fitted_ridge_logistic","propensities":propensities,
+        "folds":folds,"fold_count":labels.len()}),
+    )
 }
 
 fn predict_logistic_propensities(payload: &Value) -> Result<Value, &'static str> {
