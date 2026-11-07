@@ -31,6 +31,11 @@ module-name = "innovate._native"
 features = ["pyo3/extension-module"]
 include = [
     {path = "LICENSE", format = "sdist"},
+    {path = "tests/native/test_competition.py", format = "sdist"},
+    {path = "tests/native/test_multi_generation.py", format = "sdist"},
+    {path = "tests/native/test_paired_outcomes.py", format = "sdist"},
+    {path = "tests/native/test_python_consumer.py", format = "sdist"},
+    {path = "specs/ecosystem/voiage/uncertainty/diffusion_v1/*.csv", format = "sdist"},
     {path = "conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/sarima-reference/historical-initialization.json", format = "sdist"},
     {path = "conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/sarima-reference/stationary-fixed.json", format = "sdist"},
     {path = "conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/stl-reference-20261107/reference.json", format = "sdist"},

@@ -4155,3 +4155,8 @@ Hosted release readiness for this worktree revision remains open.
   and add the same locked check to scheduled and manually dispatched
   Linux CI. The local suite and actionlint passed. Hosted execution of
   the workflow remains open.
+- [x] Include the Python native consumer tests and historical paired
+  Bass CSV inputs in the source distribution. A fresh extraction
+  passed all 81 packaged consumer tests against the installed Python
+  3.15.2 wheel with matching runtime source. Repository policy and
+  benchmark receipt tests continue to run from the checkout.
