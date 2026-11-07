@@ -500,3 +500,10 @@ Historical completion labels above do not establish current full-native ownershi
 - [ ] **Track: voiage alignment follow-ups (innovate)**
   *Link: [./tracks/voiage_alignment_followups_20261030/](./tracks/voiage_alignment_followups_20261030/)*
   Planned; awaiting owner approval. [Issue #559](https://github.com/edithatogo/innovate/issues/559).
+
+---
+
+- [ ] **Track: tobac uptake and diffusion consumer qualification**
+  *Link: [./tracks/tobac_consumer_qualification_20261025/](./tracks/tobac_consumer_qualification_20261025/)*
+  **Approved planning only; implementation not authorised.** Reuses existing capability owners; downstream proof remains pending.
+  GitHub: https://github.com/edithatogo/innovate/issues/546

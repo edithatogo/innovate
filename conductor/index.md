@@ -27,3 +27,7 @@
 
 ## Hygiene
 Run `python scripts/conductor_registry_hygiene.py --json`. Planning, implementation, native execution, scientific validity and release acceptance remain distinct states.
+
+## Approved planning on implementation hold
+
+- [tobac uptake and diffusion consumer qualification](./tracks/tobac_consumer_qualification_20261025/index.md): no implementation or automatic progression authorised.
