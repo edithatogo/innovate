@@ -1654,3 +1654,11 @@ the other competition models and installed binding checks remain open.
   Analytic tests verify the bounds and grid values. R marshals singleton
   arrays for these requests. All 24 boundary tests and focused Clippy
   passed. Installed sensitivity validation is recorded above.
+
+- [x] Restore the historical parameter-override forecast comparison
+  through the native predictor. The Bass fixture doubles market size
+  and verifies a 100% increase after adoption begins. A zero baseline
+  produces a null percentage difference. All 24 boundary tests and
+  focused Clippy passed.
+- [ ] Verify forecast comparison through installed Python, Julia and R
+  and qualify additional historical counterfactual workflows.

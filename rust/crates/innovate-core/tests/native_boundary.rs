@@ -453,6 +453,12 @@ fn causal_summaries_match_analytic_effects() {
     );
     assert_eq!(groups["result"]["overall_effect"], 3.);
     assert_eq!(groups["result"]["by_group"]["a"]["ci_upper"], 3.96);
+    let forecast = run(json!({"method":"counterfactual_forecast","model":"bass",
+        "baseline":{"inputs":{"time":[0.,10.]},"parameters":{"p":0.03,"q":0.35,"m":100.}},
+        "parameter_overrides":{"m":200.}}));
+    let forecast = &forecast["result"];
+    assert!(forecast["percentage_difference"][0].is_null());
+    assert!((forecast["percentage_difference"][1].as_f64().unwrap() - 100.).abs() < 1e-10);
     let risk = run(json!({"method":"e_value","point_estimate":0.5}));
     assert!((risk["result"]["e_value"].as_f64().unwrap() - (2. + 2_f64.sqrt())).abs() < 1e-12);
     let sensitivity = run(json!({"method":"sensitivity_scenario","point_estimate":10,

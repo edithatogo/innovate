@@ -194,6 +194,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                 "method":"historical_paired_heuristic"}),
             )
         }
+        Some("counterfactual_forecast") => counterfactual_forecast(payload),
         Some("covariate_balance") => covariate_balance(payload),
         _ => Err("unknown causal summary method"),
     }
@@ -256,4 +257,61 @@ fn covariate_balance(payload: &Value) -> Result<Value, &'static str> {
         "max_smd":values.iter().copied().fold(0.,f64::max),
         "mean_smd":mean(&values).unwrap_or(0.)}),
     )
+}
+
+fn counterfactual_forecast(payload: &Value) -> Result<Value, &'static str> {
+    let model = payload["model"]
+        .as_str()
+        .ok_or("counterfactual model must be a string")?;
+    let baseline = payload["baseline"]
+        .as_object()
+        .ok_or("baseline must be a prediction request payload")?;
+    let parameters = baseline
+        .get("parameters")
+        .and_then(Value::as_object)
+        .ok_or("baseline requires explicit model parameters")?;
+    let overrides = payload["parameter_overrides"]
+        .as_object()
+        .ok_or("parameter_overrides must be an object")?;
+    let mut changed = parameters.clone();
+    for (key, value) in overrides {
+        let parameter = changed
+            .get_mut(key)
+            .ok_or("counterfactual override names an unknown parameter")?;
+        *parameter = value.clone();
+    }
+    let mut alternative = baseline.clone();
+    alternative.insert("parameters".into(), Value::Object(changed));
+    let binding = crate::KernelBinding::new();
+    let predict = |request| {
+        let result = binding
+            .predict_model(model, request)
+            .map_err(|_| "counterfactual model prediction failed validation")?
+            .result
+            .ok_or("counterfactual prediction returned no result")?;
+        series(&result, "values")
+    };
+    let baseline = predict(payload["baseline"].clone())?;
+    let counterfactual = predict(Value::Object(alternative))?;
+    if baseline.len() != counterfactual.len() {
+        return Err("counterfactual predictions must have the same length as baseline");
+    }
+    let difference: Vec<_> = baseline
+        .iter()
+        .zip(&counterfactual)
+        .map(|(before, after)| finite(after - before))
+        .collect::<Result<_, _>>()?;
+    let percentage: Vec<_> = baseline
+        .iter()
+        .zip(&difference)
+        .map(|(&before, &delta)| {
+            if before == 0. {
+                Ok(None)
+            } else {
+                finite(100. * (delta / before)).map(Some)
+            }
+        })
+        .collect::<Result<_, _>>()?;
+    Ok(json!({"baseline":baseline,"counterfactual":counterfactual,
+        "difference":difference,"percentage_difference":percentage}))
 }
