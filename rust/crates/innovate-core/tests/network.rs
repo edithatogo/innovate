@@ -952,6 +952,18 @@ fn network_checkpoint_preserves_pending_service_queue_and_schedule() {
     payload["simulation_options"]["resume_checkpoint"] = json!(malformed.to_string());
     assert!(run(payload.clone()).is_err());
 
+    let mut missing_change = state.clone();
+    assert!(
+        missing_change["applied_ticks"]
+            .as_array_mut()
+            .unwrap()
+            .pop()
+            .is_some()
+    );
+    payload["simulation_options"]["resume_checkpoint"] = json!(missing_change.to_string());
+    let error = run(payload.clone()).unwrap_err();
+    assert!(format!("{error:?}").contains("checkpoint schedule cursor omits an applied change"));
+
     let mut malformed = state;
     malformed["service_starts"][0]["scheduled_completion_tick"] = json!(u64::MAX);
     payload["simulation_options"]["resume_checkpoint"] = json!(malformed.to_string());

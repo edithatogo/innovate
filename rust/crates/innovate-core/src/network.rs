@@ -766,6 +766,13 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 restored_capacity = next_capacity;
             }
         }
+        if changes.peek().is_some_and(|(tick, _, _)| {
+            *tick < saved.now || saved.pause_tick.is_some_and(|cutoff| *tick <= cutoff)
+        }) {
+            return Err(invalid(
+                "checkpoint schedule cursor omits an applied change",
+            ));
+        }
         if saved.capacity != restored_capacity
             || saved.metrics.configured_slot_ticks
                 != restored_capacity_accounting.configured_slot_ticks

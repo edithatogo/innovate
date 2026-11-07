@@ -5867,3 +5867,8 @@ Hosted release readiness for this worktree revision remains open.
   Python, Julia and freshly installed R. A pause at tick 8 resumed
   identically to uninterrupted execution in each binding. Increasing
   the saved configured slot ticks by one caused Rust to reject resume.
+
+- [x] Reject Kairos checkpoints that omit an applied schedule change.
+  Completion pauses still permit a pending change at the same tick.
+  Tick pauses require changes through the cutoff. The truncated cursor
+  fixture was rejected and all 33 Rust network tests passed.
