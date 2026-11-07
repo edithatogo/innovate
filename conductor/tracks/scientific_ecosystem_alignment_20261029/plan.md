@@ -3693,3 +3693,6 @@ Hosted release readiness for this worktree revision remains open.
   baseline in the rebuilt Python 3.15.2 wheel, Julia and freshly
   installed R at native source 078feb6c. All three match the analytic
   first-product baseline and intervention values within 1e-8.
+- [x] Document the counterfactual prediction payload and override scopes.
+  The published-guide JSON example matches the event-introduction
+  payload verified in Python, Julia and R.

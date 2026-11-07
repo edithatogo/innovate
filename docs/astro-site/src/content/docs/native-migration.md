@@ -1207,3 +1207,36 @@ difference is exchangeable under the null. With paired simulation
 seeds, `require_distinct_pair_seeds` can check for matching effective
 seeds within pairs and distinct seeds across pairs. The study design
 must still justify sign exchangeability.
+
+## Counterfactual forecasts with parameter events
+
+Use the `counterfactual_forecast` method of `summarize_causal` to
+compare forecasts on a shared prediction grid. The baseline accepts
+the same payload as native prediction, including a saved fitted state
+or explicit parameters and constructor options.
+
+This payload adds a Lotka–Volterra parameter event at time 1 and
+compares both products at time 2.
+
+```json
+{
+  "method": "counterfactual_forecast",
+  "forecast_model": "lotka_volterra",
+  "baseline": {
+    "inputs": {"time": [2.0]},
+    "parameters": {"alpha1": 0.2, "beta1": 0.0, "alpha2": 0.1, "beta2": 0.0},
+    "constructor_kwargs": {"initial_values": [0.1, 0.2]}
+  },
+  "parameter_event_override": [{"time": 1.0, "parameters": {"alpha1": 0.4}}]
+}
+```
+
+The event override replaces the whole schedule on the alternative.
+Use an empty array to remove events. Use `parameter_overrides` for
+named model parameters, `covariate_overrides` for named values on the
+prediction grid, and `covariate_history_overrides` for named values
+on the existing constructor history grid.
+
+The result contains both trajectories and the alternative minus the
+baseline. Multi-product results include column labels and row matrices.
+Percentage differences are null where the baseline is zero.
