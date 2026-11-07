@@ -371,3 +371,27 @@ composite ports, inference/scenarios, remaining covariates/events and distributi
 qualification. No native operation remains live; full goal remains active.
 
 Policy source/evidence commit: `34a85b209efc7b2187f0948b0f319bfd07701907`. All operations terminal; remaining source tasks stay active.
+
+## Heterogeneous Kairos network/resource continuation
+
+Same writing lane resumes at 20b0f667 in the verified isolated worktree; main
+and other worktrees retain their owners. No native operation is active.
+
+- [x] Add explicit per-agent innovation/imitation multipliers and service ticks,
+  retaining homogeneous defaults, Kairos FIFO ownership and deterministic replay.
+- [x] Validate exact heterogeneous queue behavior in Rust, Python, Julia and R.
+- [x] Retain source/review evidence and remaining model/feature obligations.
+
+Historical latent-process source inspection confirms exponential residual
+smoothing, linear interpolation with endpoint continuation, clipping and batch
+cumulative maxima. Its probabilistic inference and the five remaining model
+families remain required; no capability is retired by this network extension.
+
+Heterogeneous network source/evidence commit: `6a606f5b1005e160378a5593de22886fae30f2a6`.
+74 Rust, 31 installed Python, 152 Julia assertions and R conformance pass;
+82.09% core/C ABI line coverage. Clippy, lint/types, docs (163 pages), local
+wheel install and archive metadata pass. Receipt: heterogeneous-20261107.json;
+review: heterogeneous-review-20261107.md. No native operation remains active.
+Next source task: historical latent-process smoothing/state/interpolation port,
+then regime/hierarchical/mixture/composite and richer graphs/resources. All 38
+obligations remain required, release guard still fails intentionally, goal active.
