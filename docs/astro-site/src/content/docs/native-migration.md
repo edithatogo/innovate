@@ -1367,6 +1367,14 @@ sample. The response reports the actual sample as
 `result.evaluation_time`. An off-grid time returns
 `invalid_comparison` for that row and preserves the scenario executions.
 
+Every pair must provide two successful scalar paths. If a path is
+missing, failed, or paused, the comparison returns
+`invalid_comparison` with the scenario ID and its role (baseline or
+alternative). The comparison result is null and all individual
+execution records remain available. After resolving the failed
+execution or resuming the paused scenario, compare the complete
+set of pairs.
+
 The comparison's `result.sign_flip` reports the number of assignments
 enumerated, the number with an absolute sum at least as large as the
 observed absolute sum, and their ratio as the two-sided `p_value`.

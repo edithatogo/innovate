@@ -6628,3 +6628,8 @@ Hosted release readiness for this worktree revision remains open.
   Python 3.15.2 wheel, Julia and installed R at c06a0425. All three
   returned invalid_comparison naming alternative scenario "d", a null
   estimate, and both the successful and failed execution records.
+
+- [x] Document how incomplete paired ensembles report the failing
+  scenario and preserve the individual execution results. This
+  records the behavior verified through all three bindings in
+  a333edc0.
