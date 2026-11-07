@@ -5293,3 +5293,9 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Retain the analytic narrow standardized balance case in Julia
   and R. Against rebuilt FFI, both matched the nonzero pre-match
   value, zero post-match value and null constant-covariate result.
+
+- [x] Derive raw and standardized matched balance differences from
+  the same centered numerator. Power-of-two scaling preserves exact
+  ordinary fixture values while the narrow unit case retains the
+  one-sixth-step difference. Both causal unit tests and the focused
+  causal boundary test passed.

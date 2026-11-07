@@ -1202,13 +1202,10 @@ fn stratified_treatment_contrast(payload: &Value) -> Result<Value, &'static str>
     )
 }
 
-fn standardized_balance_difference(
-    treated: &[f64],
-    control: &[f64],
-    scale: f64,
-    deviation: Option<f64>,
-) -> Option<f64> {
-    let sd = deviation?;
+fn scaled_balance_difference(treated: &[f64], control: &[f64], scale: f64) -> f64 {
+    if scale == 0. {
+        return 0.;
+    }
     let anchor = control[0];
     let centered_mean = |values: &[f64]| {
         let offsets: Vec<_> = values
@@ -1224,7 +1221,7 @@ fn standardized_balance_difference(
             .collect();
         mean(&offsets).unwrap()
     };
-    finite((centered_mean(treated) - centered_mean(control)) / sd).ok()
+    centered_mean(treated) - centered_mean(control)
 }
 
 fn pooled_scaled_deviation(treated: &[f64], control: &[f64], scale: f64) -> Option<f64> {
@@ -1398,26 +1395,27 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
                             before_control.push(value);
                         }
                     }
-                    let scale = values.iter().map(|value| value.abs()).fold(0., f64::max);
+                    let magnitude = values.iter().map(|value| value.abs()).fold(0., f64::max);
+                    let exponent = magnitude.to_bits() & f64::INFINITY.to_bits();
+                    let scale = f64::from_bits(exponent).max(f64::MIN_POSITIVE);
                     let deviation = pooled_scaled_deviation(&before_treated, &before_control, scale);
-                    let standardized = standardized_balance_difference(&treated, &control, scale, deviation);
-                    let before_standardized = standardized_balance_difference(
-                        &before_treated, &before_control, scale, deviation,
-                    );
+                    let scaled_difference = scaled_balance_difference(&treated, &control, scale);
+                    let scaled_before = scaled_balance_difference(&before_treated, &before_control, scale);
+                    let standardize = |difference| deviation.and_then(|sd| finite(difference / sd).ok());
                     let before_treated = mean(&before_treated).unwrap();
                     let before_control = mean(&before_control).unwrap();
                     let treated_mean = mean(&treated).unwrap();
                     let control_mean = mean(&control).unwrap();
-                    let difference = finite(treated_mean - control_mean)?;
-                    let before_difference = finite(before_treated - before_control)?;
+                    let difference = finite(scaled_difference * scale)?;
+                    let before_difference = finite(scaled_before * scale)?;
                     Ok((
                         name,
                         json!({"treated_mean":treated_mean,"control_mean":control_mean,
                             "mean_difference":difference,
-                            "standardized_mean_difference":standardized,
+                            "standardized_mean_difference":standardize(scaled_difference),
                             "before_matching":{"treated_mean":before_treated,"control_mean":before_control,
                                 "mean_difference":before_difference,
-                                "standardized_mean_difference":before_standardized}}),
+                                "standardized_mean_difference":standardize(scaled_before)}}),
                     ))
                 })
                 .collect::<Result<serde_json::Map<String, Value>, &'static str>>()
@@ -2252,7 +2250,7 @@ fn policy_specification(payload: &Value) -> Result<Value, &'static str> {
 
 #[cfg(test)]
 mod tests {
-    use super::{pooled_scaled_deviation, standardized_balance_difference};
+    use super::{pooled_scaled_deviation, scaled_balance_difference};
 
     #[test]
     fn pooled_deviation_resolves_adjacent_covariate_values() {
@@ -2270,7 +2268,10 @@ mod tests {
         let treated = [lower, lower, upper];
         let control = [lower, upper];
         let deviation = pooled_scaled_deviation(&treated, &control, upper);
-        let actual = standardized_balance_difference(&treated, &control, upper, deviation).unwrap();
+        let difference = scaled_balance_difference(&treated, &control, upper);
+        let raw_expected = -(upper - lower) / 6.;
+        assert!((difference * upper / raw_expected - 1.).abs() <= 2. * f64::EPSILON);
+        let actual = difference / deviation.unwrap();
         let expected = (-1. / 6.) / (7_f64 / 18.).sqrt();
         assert!((actual - expected).abs() <= 2. * f64::EPSILON);
     }
