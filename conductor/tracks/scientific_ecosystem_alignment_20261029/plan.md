@@ -6384,3 +6384,7 @@ Hosted release readiness for this worktree revision remains open.
   cluster support, degrees of freedom and insufficient-support errors.
   All 18 selected causal consumer tests passed against the rebuilt
   wheel.
+
+- [x] Retain Julia and R regression coverage for the distinct-cluster
+  guard and cluster degrees of freedom. Both focused suite sections
+  passed for ATE and ATT against the rebuilt shared library.

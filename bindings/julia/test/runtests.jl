@@ -700,6 +700,14 @@ end
     @test att["estimate"] ≈ 4
     @test att["cluster_count"] == 2
     @test att["influence_standard_error"] ≈ 2
+    for method in ("cross_fitted_stratum_ate", "cross_fitted_stratum_att")
+        request = merge(payload, Dict("method"=>method, "minimum_training_arm_clusters"=>1))
+        guarded = kernel_call("summarize_causal", nothing, request)["result"]
+        @test guarded["overlap"]["min_training_arm_clusters"] == 1
+        @test guarded["contrast"]["cluster_degrees_of_freedom"] == 1
+        request["minimum_training_arm_clusters"] = 2
+        @test_throws r"falls below minimum_training_arm_clusters" kernel_call("summarize_causal", nothing, request)
+    end
     payload["clusters"] = ["a","a","b","b"]
     @test_throws r"single cross-fitting fold" kernel_call("summarize_causal", nothing, payload)
     @test result["contrast"]["estimate"] ≈ 4

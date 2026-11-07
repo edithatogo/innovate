@@ -654,6 +654,15 @@ clustered_att_payload <- modifyList(clustered_stratum_payload, list(method="cros
 clustered_att <- kernel_call("summarize_causal", payload=clustered_att_payload)$result$contrast
 stopifnot(identical(clustered_att$estimand, "att"), isTRUE(all.equal(clustered_att$estimate, 4)),
   clustered_att$cluster_count == 2, isTRUE(all.equal(clustered_att$influence_standard_error, 2)))
+for (request in list(clustered_stratum_payload, clustered_att_payload)) {
+  request$minimum_training_arm_clusters <- 1L
+  guarded <- kernel_call("summarize_causal", payload=request)$result
+  stopifnot(guarded$overlap$min_training_arm_clusters == 1,
+    guarded$contrast$cluster_degrees_of_freedom == 1)
+  request$minimum_training_arm_clusters <- 2L
+  error <- tryCatch({kernel_call("summarize_causal", payload=request); ""}, error=conditionMessage)
+  stopifnot(grepl("falls below minimum_training_arm_clusters", error, fixed=TRUE))
+}
 clustered_stratum_payload$clusters <- c("a","a","b","b")
 split_cluster_error <- tryCatch({kernel_call("summarize_causal", payload=clustered_stratum_payload); ""}, error=conditionMessage)
 stopifnot(grepl("single cross-fitting fold", split_cluster_error, fixed=TRUE))
