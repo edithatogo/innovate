@@ -2242,3 +2242,8 @@ the other competition models and installed binding checks remain open.
   times, outcomes and absolute changes. Reject negative or nonfinite
   times. All 47 Rust boundary tests and focused Clippy passed. Binding
   qualification remains open.
+
+- [x] Qualify threshold, parameter, assumption and intervention timing
+  sensitivity in the rebuilt Python 3.15 wheel, Julia and installed R.
+  All four full result objects agreed across bindings and matched the
+  inclusive threshold counts and analytic Logistic outcomes.
