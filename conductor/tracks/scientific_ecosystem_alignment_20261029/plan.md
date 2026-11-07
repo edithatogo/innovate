@@ -5002,3 +5002,8 @@ Hosted release readiness for this worktree revision remains open.
   checkpoint and next four draws exactly matched a stream advanced
   through the corresponding four hazard distributions. The focused
   Rust integration test passed.
+
+- [x] Isolate the finite-population Kairos adoption clock so its time,
+  forcing cursor and RNG can be captured together at an event
+  boundary. All 13 Rust Kairos integration tests passed, including
+  forcing, replay and RNG checkpoint restoration.

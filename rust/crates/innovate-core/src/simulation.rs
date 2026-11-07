@@ -12,6 +12,52 @@ use kairo_ecs_rng::{
 use kairo_ecs_types::{EntityId, EventKind, ScheduleRequest, SimTime, StepOutcome};
 use serde_json::{Value, json};
 pub(crate) const REV: &str = "d56863505d938feb069af88a737eb7668113d14b";
+struct AdoptionClock {
+    rng: DeterministicStream,
+    now: u128,
+    forcing_index: usize,
+}
+
+impl AdoptionClock {
+    fn next_adoption(
+        &mut self,
+        forcing: &[(u128, f64, f64)],
+        adopted: u64,
+        population: u64,
+        ticks: u64,
+        horizon: u128,
+    ) -> Result<Option<u128>, &'static str> {
+        loop {
+            let (_, p, q) = forcing[self.forcing_index];
+            let next = forcing.get(self.forcing_index + 1).map(|row| row.0);
+            let rate = (p + q * adopted as f64 / population as f64) * (population - adopted) as f64;
+            if !rate.is_finite() {
+                return Err("simulation hazard exceeded finite domain");
+            }
+            let delta = if rate == 0. {
+                f64::INFINITY
+            } else {
+                let delay: f64 = self
+                    .rng
+                    .sample(Exp::new(rate).map_err(|_| "invalid simulation hazard")?);
+                (delay * ticks as f64).ceil().max(1.)
+            };
+            if let Some(boundary) = next.filter(|t| *t <= horizon)
+                && delta >= boundary.saturating_sub(self.now) as f64
+            {
+                self.now = boundary;
+                self.forcing_index += 1;
+                continue;
+            }
+            if !delta.is_finite() || delta > horizon.saturating_sub(self.now) as f64 {
+                return Ok(None);
+            }
+            self.now += delta as u128;
+            return Ok(Some(self.now));
+        }
+    }
+}
+
 pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBindingError> {
     if r.payload["simulation_options"]["engine"] == "kairos_network" {
         return crate::network::execute(r);
@@ -98,7 +144,6 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     let forcing =
         crate::forcing::schedule(options.get("covariate"), options.get("events"), ticks, p, q)
             .map_err(|e| invalid(&e))?;
-    let mut forcing_index = 0;
     let horizon = (*time.last().unwrap() * ticks as f64).floor() as u128;
     let mut scheduler = Scheduler::new();
     let mut abm = (engine == "kairos_abm").then(|| ABMContext::new(seed));
@@ -127,40 +172,19 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             context.attach(agent, true);
         }
     }
-    let mut rng = DeterministicStream::from_run_seed(seed);
+    let mut clock = AdoptionClock {
+        rng: DeterministicStream::from_run_seed(seed),
+        now: 0,
+        forcing_index: 0,
+    };
     let mut events = Vec::new();
-    let mut now = 0_u128;
     for adopted in initial..population {
-        let reached = loop {
-            let (_, p, q) = forcing[forcing_index];
-            let next = forcing.get(forcing_index + 1).map(|r| r.0);
-            let rate = (p + q * adopted as f64 / population as f64) * (population - adopted) as f64;
-            if !rate.is_finite() {
-                return Err(invalid("simulation hazard exceeded finite domain"));
-            }
-            let delta = if rate == 0. {
-                f64::INFINITY
-            } else {
-                let delay: f64 =
-                    rng.sample(Exp::new(rate).map_err(|_| invalid("invalid simulation hazard"))?);
-                (delay * ticks as f64).ceil().max(1.)
-            };
-            if let Some(boundary) = next.filter(|t| *t <= horizon)
-                && delta >= boundary.saturating_sub(now) as f64
-            {
-                now = boundary;
-                forcing_index += 1;
-                continue;
-            }
-            if !delta.is_finite() || delta > horizon.saturating_sub(now) as f64 {
-                break false;
-            }
-            now += delta as u128;
-            break true;
-        };
-        if !reached {
+        let Some(now) = clock
+            .next_adoption(&forcing, adopted, population, ticks, horizon)
+            .map_err(invalid)?
+        else {
             break;
-        }
+        };
         let outcome = if let Some(context) = abm.as_mut() {
             let agent = susceptible.swap_remove(
                 identity_rng.sample(
@@ -209,7 +233,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         .iter()
         .map(|n| m * (*n as f64 / population as f64))
         .collect();
-    let mut result = json!({"values":values,"counts":counts,"shape":[time.len()],"dtype":"float64","metadata":{"engine":engine,"kairos_revision":REV,"seed":seed,"population":population,"ticks_per_unit":ticks,"quantity":"adopted_level","process":"finite_population_bass_pure_birth","hazard":"(p + q*n/N)*(N-n)","time_quantization":"waiting times rounded up to at least one tick","forcing":forcing,"forcing_semantics":"right-continuous additive covariate and event deltas; boundaries precede tied adoption events","initial_adopters":initial,"kairos_dispatched_events":events.len(),"rng_checkpoint":rng.checkpoint(),"checkpoint_scope":"RNG provenance only; simulation resume is not implemented"}});
+    let mut result = json!({"values":values,"counts":counts,"shape":[time.len()],"dtype":"float64","metadata":{"engine":engine,"kairos_revision":REV,"seed":seed,"population":population,"ticks_per_unit":ticks,"quantity":"adopted_level","process":"finite_population_bass_pure_birth","hazard":"(p + q*n/N)*(N-n)","time_quantization":"waiting times rounded up to at least one tick","forcing":forcing,"forcing_semantics":"right-continuous additive covariate and event deltas; boundaries precede tied adoption events","initial_adopters":initial,"kairos_dispatched_events":events.len(),"rng_checkpoint":clock.rng.checkpoint(),"checkpoint_scope":"RNG provenance only; simulation resume is not implemented"}});
     if let Some(context) = abm.as_ref() {
         result["agents"]=json!(agents.iter().map(|id|json!({"index":id.index,"generation":id.generation,"adopted":context.get::<bool>(*id).copied().unwrap_or(false)})).collect::<Vec<_>>());
         result["metadata"]["agent_semantics"] = json!(
