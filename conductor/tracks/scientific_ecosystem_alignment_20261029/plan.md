@@ -2040,3 +2040,9 @@ the other competition models and installed binding checks remain open.
   original envelope has no simulation payload. Python 3.15, Julia and R
   round-tripped the same legacy Bass artifact. All 38 Rust boundary tests
   and focused Clippy passed. Cross-version replay qualification remains open.
+
+- [x] Preserve the validated legacy artifact's JSON values (db78ac51).
+  Validation no longer reserializes integer-valued scenario fields as
+  floats. The Rust boundary regression also retains the maximum unsigned
+  64-bit seed. All 38 boundary tests and focused Clippy passed. Binding
+  numeric representation limits for large seeds remain to be qualified.
