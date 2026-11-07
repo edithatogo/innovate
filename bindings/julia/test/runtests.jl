@@ -622,3 +622,13 @@ end
         "outcomes"=>[0,19,0,2,10,19,19], "treatment"=>treatment, "propensities"=>fit["propensities"]))["result"]
     @test weighted["estimate"] ≈ 6
 end
+
+@testset "Nearest-score matching" begin
+    payload = Dict("method"=>"matched_treatment_contrast", "outcomes"=>[0,10,12,3,99],
+        "treatment"=>[0,0,1,1,0], "scores"=>[0,2,2,1,0], "caliper"=>1)
+    result = kernel_call("summarize_causal", nothing, payload)["result"]
+    @test result["estimate"] ≈ 2.5
+    @test [pair["control_index"] for pair in result["pairs"]] == [1,0]
+    payload["caliper"] = 0.5
+    @test_throws r"requires a control within the caliper" kernel_call("summarize_causal", nothing, payload)
+end

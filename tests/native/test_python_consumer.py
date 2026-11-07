@@ -1362,3 +1362,14 @@ def test_fitted_stratum_propensity_workflow():
                                 outcomes=[0, 19, 0, 2, 10, 19, 19], treatment=treatment,
                                 propensities=fit["propensities"])["result"]
     assert weighted["estimate"] == pytest.approx(6)
+
+
+def test_nearest_score_matching():
+    payload = dict(method="matched_treatment_contrast", outcomes=[0, 10, 12, 3, 99],
+                   treatment=[0, 0, 1, 1, 0], scores=[0, 2, 2, 1, 0], caliper=1)
+    result = innovate.execute("summarize_causal", **payload)["result"]
+    assert result["estimate"] == pytest.approx(2.5)
+    assert [pair["control_index"] for pair in result["pairs"]] == [1, 0]
+    payload["caliper"] = 0.5
+    with pytest.raises(innovate.NativeError, match="requires a control within the caliper"):
+        innovate.execute("summarize_causal", **payload)

@@ -587,3 +587,12 @@ stopifnot(isTRUE(all.equal(unlist(fit$propensities), c(1/3,0.75,1/3,1/3,0.75,0.7
 weighted_fit <- kernel_call("summarize_causal", payload=list(method="propensity_weighted_contrast",
   outcomes=c(0,19,0,2,10,19,19), treatment=fit_treatment, propensities=fit$propensities))$result
 stopifnot(isTRUE(all.equal(weighted_fit$estimate, 6)))
+
+matching_payload <- list(method="matched_treatment_contrast", outcomes=c(0,10,12,3,99),
+  treatment=c(0,0,1,1,0), scores=c(0,2,2,1,0), caliper=1)
+matched <- kernel_call("summarize_causal", payload=matching_payload)$result
+stopifnot(isTRUE(all.equal(matched$estimate, 2.5)),
+  all(vapply(matched$pairs, function(pair) as.numeric(pair$control_index), numeric(1)) == c(1,0)))
+matching_payload$caliper <- 0.5
+matching_error <- tryCatch({kernel_call("summarize_causal", payload=matching_payload); ""}, error=conditionMessage)
+stopifnot(grepl("requires a control within the caliper", matching_error, fixed=TRUE))

@@ -4569,3 +4569,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Add native scalar-score nearest-neighbour ATT with replacement.
   The focused Rust fixture verifies 2.5, deterministic ties and caliper
   failure. Binding qualification and matching inference remain open.
+
+- [x] Qualify nearest-score matching through rebuilt Python 3.15.2,
+  Julia and installed R. Each returned ATT 2.5, the same zero-based
+  control indices and a clear caliper failure for an unmatched row.

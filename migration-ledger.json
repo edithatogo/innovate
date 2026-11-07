@@ -184,7 +184,7 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Qualify covariate-based propensity estimation, matching and forest estimators, uncertainty and scientific acceptance"
+      "remaining": "Qualify covariate-based propensity estimation, matching inference and forest estimators, uncertainty and scientific acceptance"
     },
     {
       "key": "adopter_classification",
