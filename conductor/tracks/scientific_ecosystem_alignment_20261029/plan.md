@@ -2955,3 +2955,9 @@ the other competition models and installed binding checks remain open.
   grid marginals. Default to 95% and accept an explicit credible mass.
   The Logistic capacity interval agrees with the normal oracle to
   within one grid step. Both focused Rust tests and Clippy passed.
+
+- [x] Verify Bayesian grid credible intervals in rebuilt Python 3.15,
+  Julia and installed R. All three returned identical results. The
+  Logistic capacity bounds [96.1097257, 103.8902743] matched independent
+  cumulative-mass quantiles. R used raw JSON. Joint interval binding
+  verification and MCMC remain open.
