@@ -781,3 +781,11 @@ end
     @test rows[1]["standard_error"] ≈ 1
     @test rows[2]["n_control"] == 1
 end
+
+@testset "Staggered long panel ATT" begin
+    payload = Dict("method"=>"staggered_long_panel_att", "unit_ids"=>["z","a","z","a","a","z"],
+        "time"=>[20,10,10,30,20,30], "outcomes"=>[11,0,10,7,5,16], "adoption_times"=>Dict("a"=>20,"z"=>30))
+    result = kernel_call("summarize_causal", nothing, payload)["result"]
+    @test result["unit_order"] == ["a","z"]
+    @test result["contrasts"][1]["estimate"] ≈ 4
+end

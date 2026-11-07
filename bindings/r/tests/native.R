@@ -734,3 +734,9 @@ for (group in c("not_yet_treated", "never_treated")) {
   stopifnot(result$n_control == if (never) 1 else 2,
     isTRUE(all.equal(result$estimate, if (never) 3 else 3.5)))
 }
+
+long_panel <- kernel_call("summarize_causal", payload=list(method="staggered_long_panel_att",
+  unit_ids=c("z","a","z","a","a","z"), time=c(20,10,10,30,20,30),
+  outcomes=c(11,0,10,7,5,16), adoption_times=list(a=20,z=30)))$result
+stopifnot(identical(unlist(long_panel$unit_order), c("a","z")),
+  isTRUE(all.equal(long_panel$contrasts[[1]]$estimate, 4)))

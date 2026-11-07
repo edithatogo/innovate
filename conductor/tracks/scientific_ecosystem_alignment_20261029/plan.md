@@ -4777,3 +4777,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Accept labeled long-format panels for staggered ATT. The Rust
   fixture sorts shuffled rows, returns the expected estimate of 4 and
   rejects duplicate unit-period keys. Binding validation remains open.
+
+- [x] Verify shuffled long-panel ATT through rebuilt Python 3.15.2,
+  Julia and installed R. Each returned sorted unit labels and ATT 4.
+  The Python fixture used Polars columns and checked duplicate rejection.

@@ -1547,3 +1547,17 @@ def test_staggered_panel_att():
         onset = innovate.execute("summarize_causal", **comparator, control_group=group)["result"]["contrasts"][0]
         assert onset["n_control"] == count
         assert onset["estimate"] == pytest.approx(estimate)
+
+
+def test_staggered_long_panel_att():
+    frame = pl.DataFrame({"unit_ids": ["z", "a", "z", "a", "a", "z"],
+                          "time": [20, 10, 10, 30, 20, 30], "outcomes": [11, 0, 10, 7, 5, 16]})
+    payload = frame.to_dict(as_series=False)
+    result = innovate.execute("summarize_causal", method="staggered_long_panel_att",
+                              **payload, adoption_times={"a": 20, "z": 30})["result"]
+    assert result["unit_order"] == ["a", "z"]
+    assert result["contrasts"][0]["estimate"] == pytest.approx(4)
+    payload["time"][0] = 10
+    with pytest.raises(innovate.NativeError, match="duplicate unit and period"):
+        innovate.execute("summarize_causal", method="staggered_long_panel_att",
+                         **payload, adoption_times={"a": 20, "z": 30})
