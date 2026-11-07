@@ -6047,3 +6047,8 @@ Hosted release readiness for this worktree revision remains open.
   units annotations, parent nulls and a null array element. Arrow.jl
   verified the values and PyArrow verified the nested annotations.
   Rebuilt Python wheel validation for these feature flags remains open.
+
+- [x] Verify the annotated struct and fixed-size array fixture through
+  a rebuilt Python wheel. PyArrow confirmed both nested units keys,
+  parent nulls and the null array element in file and stream output.
+  Python stream bytes matched the Julia and R outputs exactly.
