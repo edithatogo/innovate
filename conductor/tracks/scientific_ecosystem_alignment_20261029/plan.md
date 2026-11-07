@@ -6402,3 +6402,10 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify remote request field discovery through rebuilt Python,
   Julia and installed R. All three returned the same ordered outer
   envelope and nested kernel field lists.
+
+- [x] Expose the remote execution envelope through the single-request
+  Rust subprocess innovate-remote-worker. It reads bounded JSON on
+  stdin and writes the native response on stdout. The local process
+  check verified Logistic prediction, scope denial, malformed JSON
+  and an oversized input. The launcher must authenticate the caller
+  before supplying context. Hosted transport and isolation remain open.
