@@ -329,3 +329,29 @@ fn des_checkpoint_resumes_with_original_history_and_rng() {
     payload["simulation_options"]["seed"] = json!(43);
     assert!(run(payload).is_err());
 }
+
+#[test]
+fn abm_checkpoint_resumes_agent_identities_and_adoption_clock() {
+    let mut payload = json!({"inputs":{"time":[0,1,2,3]},
+        "parameters":{"p":1e12,"q":0,"m":6},
+        "simulation_options":{"engine":"kairos_abm","seed":42,"population":6,
+            "initial_adopters":1,"ticks_per_unit":1}});
+    let kernel = KernelBinding::new();
+    let run = |payload| kernel.simulate_model("bass", payload);
+    let expected = run(payload.clone()).unwrap().result.unwrap();
+    assert_eq!(expected["counts"], json!([1, 2, 3, 4]));
+
+    payload["simulation_options"]["pause_after_adoptions"] = json!(1);
+    let paused = run(payload.clone()).unwrap().result.unwrap();
+    let mut checkpoint = paused["checkpoint"].clone();
+    payload["simulation_options"]
+        .as_object_mut()
+        .unwrap()
+        .remove("pause_after_adoptions");
+    payload["simulation_options"]["resume_checkpoint"] = checkpoint.clone();
+    assert_eq!(run(payload.clone()).unwrap().result.unwrap(), expected);
+
+    checkpoint["agents"]["susceptible"][1] = checkpoint["agents"]["susceptible"][0].clone();
+    payload["simulation_options"]["resume_checkpoint"] = checkpoint;
+    assert!(run(payload).is_err());
+}

@@ -5032,3 +5032,11 @@ Hosted release readiness for this worktree revision remains open.
   focused Rust resume test passed. Installed R round-tripped ticks
   49148533472158968 and 67101675129204106 through its structured
   bridge and matched the uninterrupted simulation result.
+
+- [x] Extend adoption-boundary resume to homogeneous Bass ABM.
+  The checkpoint retains susceptible ordering and the identity RNG.
+  The restored trajectory matched every final agent state and the
+  uninterrupted adoption history with a nonzero initial population
+  of adopters. Duplicate susceptible indices were rejected. All 15
+  Kairos Rust integration tests passed. Binding and network resume
+  qualification remain open.

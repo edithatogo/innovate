@@ -469,7 +469,7 @@ fraction of assignments whose absolute mean is at least the observed
 absolute mean. The test assumes independent pairs and exchangeable
 signs under the null.
 
-### Kairos Bass DES checkpoints
+### Kairos Bass adoption checkpoints
 
 Set `simulation_options.pause_after_adoptions` to the cumulative number
 of new adoptions at which to pause. If that event occurs within the
@@ -482,6 +482,8 @@ with the same effective model configuration and tick horizon. Omit the
 pause option to finish, or supply a higher cumulative count to pause
 again. The completed result includes the original adoption history.
 Keep checkpoints as trusted artifacts. Version 1 supports the
-`kairos_des` Bass engine at dispatched adoption boundaries.
+`kairos_des` and homogeneous `kairos_abm` engines at dispatched adoption
+boundaries. ABM checkpoints also retain the ordered susceptible agents
+and identity RNG state.
 Event ticks in the checkpoint are decimal strings to preserve their
 full integer precision across JSON consumers.
