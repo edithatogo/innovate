@@ -3720,3 +3720,7 @@ Hosted release readiness for this worktree revision remains open.
   The public Rust counterfactual fixture retains the analytic effect
   of one-third when large opposite observations surround a small
   observation. The causal boundary test and focused Clippy passed.
+- [x] Verify the cancellation fixture through the rebuilt Python 3.15.2
+  wheel, Julia and freshly installed R using native source 958843bc.
+  All three public causal summary calls reproduced the analytic
+  one-third effect within 1e-15.
