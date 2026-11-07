@@ -7500,3 +7500,9 @@ Hosted release readiness for this worktree revision remains open.
   Pillow from #563 and #543 are absent from the active Python lock.
   Preserve the current locks and record these as superseded on this
   branch. This disposition does not close the hosted PRs.
+
+- [x] Review the seven open PRs confined to the retired TypeScript
+  binding (#542, #539, #538, #537, #531, #515 and #484). Each changes
+  only the former binding manifest or lockfile. The active Rust
+  migration tree supports Julia, Python and R, so these changes are
+  superseded on this branch. The hosted PRs remain open.
