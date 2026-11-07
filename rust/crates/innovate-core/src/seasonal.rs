@@ -1,24 +1,29 @@
 /// Local linear regression on an evenly spaced sample grid.
 pub(crate) fn loess_trend(values: &[f64], span: usize) -> Result<Vec<f64>, &'static str> {
-    weighted_loess(values, span, None)
+    weighted_loess(values, span, None, false)
 }
 
 fn weighted_loess(
     values: &[f64],
     span: usize,
     robustness: Option<&[f64]>,
+    extend: bool,
 ) -> Result<Vec<f64>, &'static str> {
     if span < 3 || span > values.len() {
         return Err("LOESS span must be between three and the series length");
     }
     let scale = values.iter().copied().map(f64::abs).fold(0., f64::max);
     if scale == 0. {
-        return Ok(vec![0.; values.len()]);
+        return Ok(vec![0.; values.len() + 2 * usize::from(extend)]);
     }
-    (0..values.len())
+    let extension = isize::from(extend);
+    (-extension..values.len() as isize + extension)
         .map(|index| {
-            let start = index.saturating_sub(span / 2).min(values.len() - span);
-            let radius = index.abs_diff(start).max(index.abs_diff(start + span - 1)) as f64;
+            let start = (index - (span / 2) as isize).max(0) as usize;
+            let start = start.min(values.len() - span);
+            let radius = index
+                .abs_diff(start as isize)
+                .max(index.abs_diff((start + span - 1) as isize)) as f64;
             let (mut weight, mut x_sum, mut y_sum, mut xx, mut xy) = (0., 0., 0., 0., 0.);
             for (offset, value) in values[start..start + span].iter().enumerate() {
                 let x = ((start + offset) as f64 - index as f64) / radius;
@@ -40,8 +45,11 @@ fn weighted_loess(
                     .flatten()
                     .enumerate()
                     .filter(|(_, w)| **w > 0.)
-                    .min_by_key(|(i, _)| i.abs_diff(index))
-                    .map_or(index, |(i, _)| i);
+                    .min_by_key(|(i, _)| (*i as isize).abs_diff(index))
+                    .map_or(
+                        index.clamp(0, values.len() as isize - 1) as usize,
+                        |(i, _)| i,
+                    );
                 return Ok(values[nearest]);
             } else {
                 y_sum / weight
@@ -81,15 +89,23 @@ pub(crate) fn decompose(
                     .step_by(period)
                     .copied()
                     .collect();
-                let smooth = weighted_loess(&samples, samples.len().min(7), Some(&phase_weights))?;
-                // Extend one cycle at each end so the centered low-pass filter
-                // can return a value at every original sample.
-                cycle[phase] = 2. * smooth[0] - smooth[1];
-                for (j, &value) in smooth.iter().enumerate() {
-                    cycle[phase + (j + 1) * period] = value;
+                let smooth = weighted_loess(
+                    &samples,
+                    samples.len().min(7),
+                    Some(&phase_weights),
+                    !robust,
+                )?;
+                let offset = usize::from(robust);
+                if robust {
+                    // Keep the robust endpoint convention while reweighting
+                    // behavior is qualified against independent references.
+                    cycle[phase] = 2. * smooth[0] - smooth[1];
+                    let n = smooth.len();
+                    cycle[phase + (n + 1) * period] = 2. * smooth[n - 1] - smooth[n - 2];
                 }
-                let n = smooth.len();
-                cycle[phase + (n + 1) * period] = 2. * smooth[n - 1] - smooth[n - 2];
+                for (j, value) in smooth.into_iter().enumerate() {
+                    cycle[phase + (j + offset) * period] = value;
+                }
             }
             let moving_average = |data: &[f64], span: usize| -> Vec<f64> {
                 data.windows(span)
@@ -103,7 +119,7 @@ pub(crate) fn decompose(
                 *season = cycle[i + period] - low;
             }
             let adjusted: Vec<_> = values.iter().zip(&seasonal).map(|(y, s)| y - s).collect();
-            trend = weighted_loess(&adjusted, trend_span, Some(&weights))?;
+            trend = weighted_loess(&adjusted, trend_span, Some(&weights), false)?;
         }
         if robust && pass < 5 {
             let absolute: Vec<_> = values

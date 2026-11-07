@@ -1351,3 +1351,11 @@ the other competition models and installed binding checks remain open.
   test cannot establish historical STL parity. Endpoint extrapolation,
   weighting behavior and option parity remain open.
   [Reference inputs, outputs and differences](evidence/stl-reference-20261107).
+
+- [x] Evaluate nonrobust phase endpoints directly with local regression.
+  The saved R STL reference now agrees within 1e-10 on all components.
+  Applying the same endpoint convention in robust mode moved the analytic
+  spike residual to 103, outside its existing tolerance, and did not close
+  the independent robust discrepancy. Robust mode retains its prior
+  endpoint convention pending parity work. Seventeen Rust boundary tests
+  and focused Clippy passed.

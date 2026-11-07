@@ -283,3 +283,28 @@ fn robust_seasonal_decomposition_keeps_an_outlier_in_the_residual() {
         serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
     assert!((response["result"]["residual"][40].as_f64().unwrap() - 100.).abs() < 0.1);
 }
+
+#[test]
+fn nonrobust_seasonal_matches_independent_stl_reference() {
+    let fixture: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../../conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/stl-reference-20261107/reference.json"
+    )).unwrap();
+    let request = innovate_core::json!({"schema_version":"2.0","operation":"preprocess_series",
+        "payload":{"method":"seasonal_decomposition","period":4,"window":13,"values":fixture["values"]}});
+    let result: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    for (key, reference_key) in [
+        ("trend", "trend"),
+        ("seasonal", "seasonal"),
+        ("residual", "remainder"),
+    ] {
+        let actual = result["result"][key].as_array().unwrap();
+        let expected = fixture["reference"]["nonrobust"][reference_key]
+            .as_array()
+            .unwrap();
+        assert_eq!(actual.len(), expected.len());
+        for (a, b) in actual.iter().zip(expected) {
+            assert!((a.as_f64().unwrap() - b.as_f64().unwrap()).abs() < 1e-10);
+        }
+    }
+}
