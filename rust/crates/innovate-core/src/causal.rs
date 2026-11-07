@@ -350,6 +350,28 @@ fn covariate_balance(payload: &Value) -> Result<Value, &'static str> {
 }
 
 fn counterfactual_forecast(payload: &Value) -> Result<Value, &'static str> {
+    if payload.as_object().is_some_and(|fields| {
+        fields.keys().any(|key| {
+            !matches!(
+                key.as_str(),
+                "method"
+                    | "forecast_model"
+                    | "model"
+                    | "baseline"
+                    | "parameter_overrides"
+                    | "covariate_overrides"
+                    | "covariate_history_overrides"
+                    | "parameter_event_override"
+            )
+        })
+    }) {
+        return Err("unknown counterfactual forecast field");
+    }
+    if let (Some(model), Some(alias)) = (payload.get("forecast_model"), payload.get("model"))
+        && model != alias
+    {
+        return Err("forecast_model and model must agree when both are supplied");
+    }
     let model = payload
         .get("forecast_model")
         .unwrap_or(&payload["model"])

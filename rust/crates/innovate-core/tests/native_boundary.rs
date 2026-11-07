@@ -544,6 +544,22 @@ fn causal_summaries_match_analytic_effects() {
     assert_eq!(scenario["result"]["time"], json!([2.]));
     assert_eq!(scenario["result"]["baseline"], json!([50.]));
     assert_eq!(scenario["result"]["counterfactual"], json!([60.]));
+    let malformed = run(
+        json!({"method":"counterfactual_forecast","forecast_model":"bass",
+        "parameter_override":{"m":200.}}),
+    );
+    assert_eq!(
+        malformed["error"]["message"],
+        "unknown counterfactual forecast field"
+    );
+    let conflicting = run(
+        json!({"method":"counterfactual_forecast","forecast_model":"bass",
+        "model":"logistic"}),
+    );
+    assert_eq!(
+        conflicting["error"]["message"],
+        "forecast_model and model must agree when both are supplied"
+    );
     let mut history = json!({"method":"counterfactual_forecast","forecast_model":"lotka_volterra",
         "baseline":{"inputs":{"time":[3.]},"state":{"model_key":"lotka_volterra",
             "parameters":{"alpha1":0.2,"beta1":0.,"alpha2":0.1,"beta2":0.,

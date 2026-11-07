@@ -3704,3 +3704,7 @@ Hosted release readiness for this worktree revision remains open.
   Julia and freshly installed R using native source 188d6f3d.
   All three returned times 1 and 2 and two aligned rows for each
   Lotka–Volterra trajectory. Scalar grid coverage remains in Rust.
+- [x] Reject unknown counterfactual forecast fields and conflicting
+  model aliases at the Rust boundary. This prevents a misspelled
+  intervention field from silently producing an unchanged trajectory.
+  The causal boundary test, formatting and focused Clippy passed.
