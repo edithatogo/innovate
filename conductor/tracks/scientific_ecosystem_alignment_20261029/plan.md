@@ -3516,3 +3516,12 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify the same three-agent case in the rebuilt Python 3.15.2 wheel,
   Julia and freshly installed R. All returned counts 2 and 3, with agent 2
   completing service at tick 2. Broader migration gates remain open.
+
+- [x] Qualify heterogeneous imitation when the effective exposure keeps
+  a weighted or unweighted agent hazard finite.
+  The half-exposed agent has coefficient 1e308 and multiplier two.
+  The weighted and unweighted Rust regressions preserve the finite
+  effective rate. All 29 network tests, formatting and focused Clippy
+  passed. The weighted fixture reproduced adoption counts 1 and 2
+  and completion at tick 2 in the rebuilt Python 3.15.2 wheel,
+  Julia and freshly installed R.

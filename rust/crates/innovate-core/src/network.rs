@@ -496,6 +496,15 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                         0.
                     } else {
                         let degree = graph.incoming[i].len();
+                        let multiplier = imitation_weights[i];
+                        let rate = imitation * multiplier;
+                        let exposed_rate = |fraction| {
+                            if rate.is_finite() {
+                                rate * fraction
+                            } else {
+                                (imitation * fraction) * multiplier
+                            }
+                        };
                         innovation * innovation_weights[i]
                             + if degree == 0 {
                                 0.
@@ -505,19 +514,18 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                                     .filter(|(j, _)| context.get::<u8>(agents[*j]) == Some(&2))
                                     .map(|(_, weight)| weight)
                                     .sum();
-                                imitation * imitation_weights[i] * (exposed / graph.totals[i])
+                                exposed_rate(exposed / graph.totals[i])
                             } else {
                                 let exposed = graph.incoming[i]
                                     .iter()
                                     .filter(|(j, _)| context.get::<u8>(agents[*j]) == Some(&2))
                                     .count() as f64;
-                                let rate = imitation * imitation_weights[i];
                                 // Preserve seeded arithmetic for existing finite unforced paths.
                                 let product = rate * exposed;
                                 if o.hazard_forcing.is_none() && product.is_finite() {
                                     product / degree as f64
                                 } else {
-                                    rate * (exposed / degree as f64)
+                                    exposed_rate(exposed / degree as f64)
                                 }
                             }
                     }
