@@ -4278,3 +4278,6 @@ Hosted release readiness for this worktree revision remains open.
   and artifact replay validation. A replay with observations beyond
   its declared horizon fails both direct execution and import. All
   ten scenario-filtered boundary tests passed.
+- [x] Verify declared network horizon errors at 3b57be07 through
+  the rebuilt Python 3.15.2 wheel, Julia and installed R. Each rejects
+  an observation at time 11 when the declared horizon is 10.
