@@ -179,6 +179,9 @@ pub fn invoke_registered_extension(
 ) -> Result<Value, &'static str> {
     let resolved = resolve(selection)?;
     let output = callback(&resolved, input)?;
+    if resolved["extension_point"] == "model_registry" {
+        return resolve_model_aliases(&output);
+    }
     if resolved["extension_point"] == "diagnostics" {
         return summarize_diagnostics(&output);
     }
@@ -223,4 +226,51 @@ pub(crate) fn summarize_diagnostics(output: &Value) -> Result<Value, &'static st
         .map(|check| &check.name)
         .collect();
     Ok(json!({"ok":failed.is_empty(),"checks":checks,"failed":failed}))
+}
+
+pub(crate) fn resolve_model_aliases(output: &Value) -> Result<Value, &'static str> {
+    #[derive(Deserialize)]
+    #[serde(deny_unknown_fields)]
+    struct Alias {
+        alias: String,
+        model_key: String,
+    }
+    let aliases: Vec<Alias> = Vec::deserialize(output)
+        .map_err(|_| "model registry extensions must return an array of aliases")?;
+    let models = crate::KernelBinding::new().discover_models_native().models;
+    let mut seen = HashSet::new();
+    let mut entries = Vec::with_capacity(aliases.len());
+    for entry in &aliases {
+        if entry.alias.trim().is_empty()
+            || entry.alias.trim() != entry.alias
+            || models.iter().any(|model| model.key == entry.alias)
+            || !seen.insert(entry.alias.as_str())
+        {
+            return Err("model aliases must be unique nonblank names distinct from native keys");
+        }
+        let capability = models
+            .iter()
+            .find(|model| model.key == entry.model_key)
+            .ok_or("model alias must target a native model key")?;
+        entries
+            .push(json!({"alias":entry.alias,"model_key":entry.model_key,"capability":capability}));
+    }
+    Ok(json!({"aliases":entries}))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::resolve_model_aliases;
+    use serde_json::json;
+
+    #[test]
+    fn resolves_native_aliases_without_shadowing() {
+        let result =
+            resolve_model_aliases(&json!([{"alias":"baseline","model_key":"bass"}])).unwrap();
+        assert_eq!(result["aliases"][0]["capability"]["key"], "bass");
+        assert!(resolve_model_aliases(&json!([{"alias":"bass","model_key":"logistic"}])).is_err());
+        assert!(
+            resolve_model_aliases(&json!([{"alias":"baseline","model_key":"missing"}])).is_err()
+        );
+    }
 }

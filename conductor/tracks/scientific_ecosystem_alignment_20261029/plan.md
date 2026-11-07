@@ -5730,3 +5730,10 @@ Hosted release readiness for this worktree revision remains open.
   assertion compares JSON object fields independently of field order.
   The first FFI link ran out of space and passed after reclaiming a
   generated test binary.
+
+- [x] Resolve model registry callback aliases against the Rust catalog.
+  The output preserves alias order and includes each target capability.
+  Rust rejects unknown targets and aliases that shadow native keys.
+  The focused Rust unit test passed. Python, Julia and R route callback
+  output through the shared operation. Binding checks and custom model
+  dispatch remain open.

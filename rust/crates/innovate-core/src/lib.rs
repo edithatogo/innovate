@@ -85,6 +85,7 @@ pub fn execute_json(input: &str) -> String {
                 | "list_extension_manifests"
                 | "resolve_extension_manifest"
                 | "summarize_extension_diagnostics"
+                | "resolve_extension_model_aliases"
                 | "dataset_checksum"
                 | "validate_dataset",
             ) => {
@@ -258,6 +259,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         }
         if value["operation"] == "unregister_extension_manifest" {
             return extensions::unregister(payload);
+        }
+        if value["operation"] == "resolve_extension_model_aliases" {
+            return extensions::resolve_model_aliases(&payload["aliases"]);
         }
         if value["operation"] == "summarize_extension_diagnostics" {
             return extensions::summarize_diagnostics(&payload["checks"]);

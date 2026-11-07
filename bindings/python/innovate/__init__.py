@@ -88,6 +88,8 @@ def invoke_registered_extension[T](
     output = callback(resolved, payload)
     if resolved["extension_point"] == "dataset_provider":
         return execute("ingest_dataset", dataset=output)["result"]
+    if resolved["extension_point"] == "model_registry":
+        return execute("resolve_extension_model_aliases", aliases=output)["result"]
     if resolved["extension_point"] == "diagnostics":
         return execute("summarize_extension_diagnostics", checks=output)["result"]
     return output

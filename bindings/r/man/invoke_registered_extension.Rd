@@ -8,4 +8,4 @@
 \item{payload}{The value passed unchanged to the callback.}
 }
 \description{Resolve a registered extension in Rust before invoking a trusted caller-supplied function.}
-\value{A validated dataset artifact for a dataset provider, a check summary for a diagnostics extension, or the callback result for other points.}
+\value{A validated dataset artifact for a dataset provider, a check summary for a diagnostics extension, resolved aliases for a model registry extension, or the callback result for other points.}
