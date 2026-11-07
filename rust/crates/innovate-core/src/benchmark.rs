@@ -1,7 +1,7 @@
 //! Reproducible synthetic smoke corpus and native fit/forecast runner.
 use serde_json::{Value, json};
 
-const CASES: [(&str, &str, &str); 7] = [
+const CASES: [(&str, &str, &str); 8] = [
     ("bass_smoke_adoption", "bass", "diffusion"),
     ("logistic_growth_smoke", "logistic", "diffusion"),
     ("fisher_pry_replacement_smoke", "fisher_pry", "substitution"),
@@ -21,19 +21,20 @@ const CASES: [(&str, &str, &str); 7] = [
         "network_diffusion",
         "network_diffusion",
     ),
+    ("policy_hazard_reference", "policy_hazard", "policy_hazard"),
 ];
 
 fn ci_policy(family: &str) -> &'static str {
     match family {
         "competition" => "scheduled",
-        "network_diffusion" => "workflow_dispatch",
+        "network_diffusion" | "policy_hazard" => "workflow_dispatch",
         _ => "fast",
     }
 }
 
 fn case_descriptor(id: &str, model: &str, family: &str) -> Value {
     json!({"case_id":id,"canonical_model_key":model,"family":family,
-        "dataset_version":match model {"lock_in"=>"native-lock-in-1","network_diffusion"=>"native-network-1",_=>"2026.04"},"source":"synthetic","ci_policy":ci_policy(family)})
+        "dataset_version":match model {"lock_in"=>"native-lock-in-1","network_diffusion"=>"native-network-1","policy_hazard"=>"native-policy-1",_=>"2026.04"},"source":"synthetic","ci_policy":ci_policy(family)})
 }
 
 fn discover() -> Value {
@@ -56,6 +57,9 @@ fn run_case(id: &str) -> Result<Value, String> {
         .iter()
         .find(|case| case.0 == id)
         .ok_or("unknown benchmark case")?;
+    if id == "policy_hazard_reference" {
+        return policy_hazard_reference(id, model, family);
+    }
     if id == "network_spillover_reference" {
         return network_spillover_reference(id, model, family);
     }
@@ -130,15 +134,63 @@ fn network_spillover_reference(id: &str, model: &str, family: &str) -> Result<Va
             [a + 0.2 * (2. * b + c) / 3., b + 0.2 * a, c]
         })
         .collect();
-    let prediction = crate::KernelBinding::new().predict_model(model, json!({
-        "inputs":{"time":time},
-        "constructor_kwargs":{"base_model":"bass","adjacency":[[0.,2.,1.],[1.,0.,0.],[0.,0.,0.]],
-            "node_labels":["A","B","isolated"]},
-        "parameters":{"spillover_strength":0.2,"node_0_p":0.03,"node_0_q":0.3,"node_0_m":100.,
-            "node_1_p":0.02,"node_1_q":0.2,"node_1_m":200.,
-            "node_2_p":0.04,"node_2_q":0.4,"node_2_m":50.}
-    })).map_err(|error| format!("benchmark prediction failed: {}", error.message))?
-      .result.ok_or("benchmark prediction returned no result")?;
+    fixed_prediction(
+        id,
+        model,
+        family,
+        json!({
+            "inputs":{"time":time},
+            "constructor_kwargs":{"base_model":"bass","adjacency":[[0.,2.,1.],[1.,0.,0.],[0.,0.,0.]],
+                "node_labels":["A","B","isolated"]},
+            "parameters":{"spillover_strength":0.2,"node_0_p":0.03,"node_0_q":0.3,"node_0_m":100.,
+                "node_1_p":0.02,"node_1_q":0.2,"node_1_m":200.,
+                "node_2_p":0.04,"node_2_q":0.4,"node_2_m":50.}
+        }),
+        json!(observed),
+    )
+}
+
+fn policy_hazard_reference(id: &str, model: &str, family: &str) -> Result<Value, String> {
+    let time = [0_f64, 2., 3., 4., 10.];
+    let mut maximum = 0_f64;
+    let observed: Vec<_> = time
+        .iter()
+        .map(|&t| {
+            let effect: f64 = [(2., 0.5), (4., -0.2)]
+                .into_iter()
+                .filter(|(start, _)| t >= *start)
+                .map(|(start, amplitude)| amplitude * (-0.5 * (t - start)).exp())
+                .sum();
+            maximum = maximum.max(100. / (1. + (-0.5 * (t - 3.)).exp()) * (1. + effect));
+            maximum
+        })
+        .collect();
+    fixed_prediction(
+        id,
+        model,
+        family,
+        json!({
+            "inputs":{"time":time},
+            "constructor_kwargs":{"base_model":"logistic","event_times":[2.,4.],"event_effects":[0.5,-0.2]},
+            "parameters":{"decay":0.5,"base_L":100.,"base_k":0.5,"base_x0":3.}
+        }),
+        json!(observed),
+    )
+}
+
+fn fixed_prediction(
+    id: &str,
+    model: &str,
+    family: &str,
+    payload: Value,
+    observed: Value,
+) -> Result<Value, String> {
+    let time = payload["inputs"]["time"].clone();
+    let prediction = crate::KernelBinding::new()
+        .predict_model(model, payload)
+        .map_err(|error| format!("benchmark prediction failed: {}", error.message))?
+        .result
+        .ok_or("benchmark prediction returned no result")?;
     Ok(
         json!({"case":case_descriptor(id,model,family),"time":time,"observed":observed,
         "fit":null,"prediction":prediction,"scope":"fixed_parameter_analytic_reference"}),
@@ -189,7 +241,7 @@ fn suite(payload: &Value) -> Result<Value, String> {
             let entries = value
                 .as_array()
                 .filter(|entries| !entries.is_empty() && entries.len() <= CASES.len())
-                .ok_or("case_ids must contain one to seven case IDs")?;
+                .ok_or("case_ids must contain one to eight case IDs")?;
             entries
                 .iter()
                 .map(|entry| {

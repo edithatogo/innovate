@@ -2363,3 +2363,9 @@ the other competition models and installed binding checks remain open.
   3.15, Julia and installed R. Complete results agreed across bindings.
   Across all four time points and three nodes, maximum absolute error
   against the analytic reference was 1.422e-13.
+
+- [x] Add a manual fixed-parameter policy hazard benchmark and link it
+  to the native card. Check positive and negative events at their exact
+  boundaries, exponential decay and the cumulative maximum against an
+  analytic Logistic reference. Five focused Rust tests and Clippy passed.
+  Binding qualification and benchmark fitting coverage remain open.
