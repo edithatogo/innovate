@@ -52,3 +52,13 @@ kernel_predict_batch <- function(model_key, datasets, workers = 1L) kernel_call(
 kernel_categorize_adopters <- function(time, rates) {
   kernel_call("categorize_adopters", payload = list(time = time, adoption_rate = rates))$result
 }
+
+kernel_categorize_fitted_adopters <- function(model_key, payload) {
+  rates <- kernel_predict_model(model_key, payload)$result$rates
+  if (is.null(rates) || !all(lengths(rates) == 1L)) {
+    stop("adopter classification requires one native rate per time", call. = FALSE)
+  }
+  time <- payload$inputs$time
+  if (is.null(time)) time <- payload$inputs$t
+  kernel_categorize_adopters(time, unlist(rates, use.names = FALSE))
+}

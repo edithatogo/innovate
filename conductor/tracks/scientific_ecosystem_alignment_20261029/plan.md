@@ -1238,3 +1238,8 @@ the other competition models and installed binding checks remain open.
   category endpoints while retaining identity columns.
 - [ ] Qualify model-derived rates for other plain diffusion curves and
   connect fitted-state classification in Julia and R.
+
+- [x] Connect fitted-state classification in installed Julia and R.
+  Both consumers fit a Logistic curve, predict native rates, and
+  reproduce the analytic midpoint rate of 25 and endpoint categories.
+  Both reject prediction outputs with multiple rate series.

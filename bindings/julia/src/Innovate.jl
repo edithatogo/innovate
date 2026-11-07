@@ -3,7 +3,7 @@ using JSON
 using Libdl
 
 export kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
-    kernel_categorize_adopters, kernel_fit_batch, kernel_predict_batch, kernel_simulate_model, kernel_summarize_model, kernel_diagnose_model
+    kernel_categorize_adopters, kernel_categorize_fitted_adopters, kernel_fit_batch, kernel_predict_batch, kernel_simulate_model, kernel_summarize_model, kernel_diagnose_model
 
 function native_library()
     path = get(ENV, "INNOVATE_NATIVE_LIBRARY", joinpath(@__DIR__, "..", "deps", "libinnovate_ffi." * Libdl.dlext))
@@ -46,4 +46,16 @@ kernel_summarize_model(model, payload) = kernel_call("summarize_model", model, p
 kernel_diagnose_model(model, payload) = kernel_call("diagnose_model", model, payload)
 kernel_categorize_adopters(time, rates) = kernel_call("categorize_adopters", nothing,
     Dict("time" => time, "adoption_rate" => rates))["result"]
+
+"""Classify one native rate series using a fitted-state prediction payload."""
+function kernel_categorize_fitted_adopters(model, payload)
+    prediction = kernel_predict_model(model, payload)["result"]
+    rates = get(prediction, "rates", nothing)
+    rates isa AbstractVector && all(row -> row isa AbstractVector && length(row) == 1, rates) ||
+        throw(ArgumentError("adopter classification requires one native rate per time"))
+    inputs = payload["inputs"]
+    time = haskey(inputs, "time") ? inputs["time"] : inputs["t"]
+    return kernel_categorize_adopters(time, only.(rates))
+end
+
 end
