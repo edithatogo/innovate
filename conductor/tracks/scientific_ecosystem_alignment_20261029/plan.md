@@ -5644,3 +5644,10 @@ Hosted release readiness for this worktree revision remains open.
   and all 112 native consumer tests passed in 59.40 seconds. Disk space
   required reclaiming a generated Julia library copy before linking.
   This is an unstripped debug wheel and local-platform evidence.
+
+- [x] Bound in-process remote observability identifiers to 256 UTF-8
+  bytes, reject control characters, and reject unknown envelope fields.
+  The native boundary test passed for valid Unicode at the byte limit,
+  oversized and multiline trace IDs, and an unsupported transport
+  field. The first debug strip ran out of space, so the test binary
+  was rebuilt without stripping. Hosted transport and identity remain open.

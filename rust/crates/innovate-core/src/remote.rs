@@ -6,6 +6,7 @@ use std::time::Instant;
 
 const REQUIRED_SCOPE: &str = "kernel:execute";
 const MAX_KERNEL_REQUEST_BYTES: usize = 1_000_000;
+const MAX_CONTEXT_IDENTIFIER_BYTES: usize = 256;
 const DATA_RETENTION: &str = "ephemeral";
 const ELIGIBLE_OPERATIONS: &[&str] = &[
     "discover_models",
@@ -20,6 +21,7 @@ pub(crate) fn describe() -> Value {
         "runtime":"rust_native","backend":"cpu","required_auth_scope":REQUIRED_SCOPE,
         "identity_verification":"caller_supplied_context","data_retention":DATA_RETENTION,
         "max_kernel_request_bytes":MAX_KERNEL_REQUEST_BYTES,
+        "max_context_identifier_bytes":MAX_CONTEXT_IDENTIFIER_BYTES,
         "eligible_operations":ELIGIBLE_OPERATIONS,"local_only_by_default":["fit_model"],
         "observability_fields":["request_id","tenant_id","principal","trace_id","operation","duration_ms","status"]})
 }
@@ -41,6 +43,16 @@ pub(crate) fn execute(payload: &Value) -> Result<Value, &'static str> {
     if payload["schema_version"] != KERNEL_SCHEMA_VERSION {
         return Err("remote envelope requires schema 2.0");
     }
+    if payload.as_object().is_none_or(|fields| {
+        fields.keys().any(|key| {
+            !matches!(
+                key.as_str(),
+                "schema_version" | "context" | "kernel_request"
+            )
+        })
+    }) {
+        return Err("remote envelope contains unsupported fields");
+    }
     let context: Context = serde_json::from_value(payload["context"].clone())
         .map_err(|_| "invalid remote execution context")?;
     if [&context.request_id, &context.tenant_id, &context.principal]
@@ -48,6 +60,19 @@ pub(crate) fn execute(payload: &Value) -> Result<Value, &'static str> {
         .any(|value| value.trim().is_empty())
     {
         return Err("remote execution requires nonblank request, tenant and principal identifiers");
+    }
+    if [
+        &context.request_id,
+        &context.tenant_id,
+        &context.principal,
+        &context.trace_id,
+    ]
+    .iter()
+    .any(|value| value.len() > MAX_CONTEXT_IDENTIFIER_BYTES || value.chars().any(char::is_control))
+    {
+        return Err(
+            "remote execution identifiers must fit in 256 bytes and exclude control characters",
+        );
     }
     let raw =
         serde_json::to_string(&payload["kernel_request"]).map_err(|_| "invalid kernel request")?;

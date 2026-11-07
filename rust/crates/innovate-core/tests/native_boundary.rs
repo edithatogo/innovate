@@ -3074,6 +3074,18 @@ fn in_process_remote_dispatch_applies_scope_and_operation_policy() {
         json!([50.])
     );
     assert_eq!(response["result"]["observability"]["trace_id"], "trace");
+    let mut malformed = request.clone();
+    malformed["payload"]["context"]["trace_id"] = json!("é".repeat(129));
+    assert_eq!(run(&malformed)["error"]["code"], "invalid_request");
+    malformed["payload"]["context"]["trace_id"] = json!("line\nbreak");
+    assert_eq!(run(&malformed)["error"]["code"], "invalid_request");
+    malformed["payload"]["context"]["trace_id"] = json!("é".repeat(128));
+    assert_eq!(run(&malformed)["result"]["status"], "ok");
+    malformed["payload"]["transport"] = json!("https");
+    assert_eq!(
+        run(&malformed)["error"]["message"],
+        "remote envelope contains unsupported fields"
+    );
     request["payload"]["context"]["auth_scope"] = json!("read");
     assert_eq!(run(&request)["result"]["status"], "error");
     request["payload"]["context"]["auth_scope"] = json!("kernel:execute");
