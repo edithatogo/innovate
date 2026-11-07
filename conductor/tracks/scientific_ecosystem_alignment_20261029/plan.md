@@ -147,9 +147,9 @@ Source/evidence commit: `897ed8e16da4a00e0a9907b11c0b617fc2a80bad`. No native op
 ## Historical model continuation
 
 Same writer/worktree resumes at 84eca121, initially clean. No ownership change.
-- [x] Port bounded Logistic additive covariates and historical independent event curves,
+- [x] Port bounded Logistic additive covariates and historical independent event curves, ec21725
       with explicit handling of the old event path ignoring covariates.
-- [x] Qualify explicit-initialized fitting, forecasts and Python/Julia/R consumers.
+- [x] Qualify explicit-initialized fitting, forecasts and Python/Julia/R consumers. ec21725
 - [ ] Continue other historical models and richer/network ABM; preserve all obligations.
 
 Initial-adopter ABM states are also implemented and tested. Evidence:
@@ -159,3 +159,5 @@ cases pass. Core/C ABI line coverage: 80.75%. All 38 obligations remain required
 Next: other historical model covariates/event splits, advanced initialization
 and rate helpers, heterogeneous/network/resource ABM, and remaining model/inference
 ports. Full scientific, platform and release qualification remain open.
+
+Source/evidence commit: `ec217253756eeed2e71e9f665ef943dc3472bffd`. No native operation remains in flight.
