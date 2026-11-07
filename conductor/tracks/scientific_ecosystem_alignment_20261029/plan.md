@@ -582,3 +582,39 @@ are not the pointwise Logistic contract), followed by richer Kairos graphs/resou
 and cross-model rate coverage, inference/uncertainty, scenario/data/reporting,
 platform/clean-source/stiff-solver and scientific qualification. Goal active;
 shared main and other writing lanes unchanged.
+
+## Active instruction reconciliation
+
+Same writer resumes at f1828333 in the verified isolated worktree; no native
+operation is active. Previous turn made committed composite/dispatch progress.
+
+- [x] Reconcile active product/workflow/style guidance and current-scope docs with
+  Rust/Polars, selected Python 3.15.2 and actual native test/typing surfaces.
+- [x] Verify runtime/manifest agreement, links, focused documentation hooks and
+  retain unfulfilled strict typing, mutation, module coverage and release obligations.
+
+The tech-stack pre-migration baseline is explicitly historical and is preserved.
+Product context already states the user-authorized architecture. Active guidance
+and README/native-scope introduction contain stale baseline/path claims. This
+corrects current operating instructions, without altering historical evidence,
+branding, user approvals, acceptance thresholds or the feature ledger.
+
+Instruction source/evidence commit: `f101fed16b023ce57a2f2684f8b63de4ca16d584`.
+Selected Python 3.15.2, runtime/manifest/configuration facts, nox sessions, local
+links, hooks and 163-page Astro build pass. No numerical source changed; composite
+8e7fd9d3 receipts are reused without a new coverage/package acceptance claim.
+Review/receipt: instruction-review-20261107.md and instruction-20261107.json.
+Strict public typing, branch/native mutation qualification, critical-module
+coverage targets and all 38 release obligations stay open. Historical stack
+preserved; current guidance no longer prescribes Python 3.14/NumPy/JAX execution.
+All operations terminal; actual source worktree and ownership unchanged.
+
+Next source task: Bass/Gompertz mechanistic covariates/events with saved forcing
+history, fixed-origin forecasts and explicit historical batch-origin options.
+Preserved Bass predicts via ODE from zero; Gompertz uses an ODE from 1e-6 with
+batch cumulative maxima. These are distinct from pointwise Logistic covariates.
+Qualify linear interpolation, exact event boundaries, conditional fit/state and
+independent references; record legacy coefficient/interpolation defects rather
+than silently treating a new equation as source parity. Continue richer Kairos
+network/resource behavior, rates, inference and distribution/scientific gates.
+Full goal remains active; no main integration, push or release performed.
