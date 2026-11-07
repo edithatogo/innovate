@@ -2890,3 +2890,9 @@ the other competition models and installed binding checks remain open.
   3.15, Julia and R. All three returned identical results on noisy
   Logistic trial 0 with 99 converged draws. Every matrix entry matched
   Python statistics.correlation within 1e-12 absolute error. R used raw JSON.
+
+- [x] Reconcile bootstrap uncertainty as bounded native. Scalar case
+  and residual refits, percentile intervals, standard errors and
+  correlation have cross-binding evidence. The noisy Logistic
+  experiments leave broader statistical calibration open. The development
+  checker passes and release remains gated by 38 required obligations.
