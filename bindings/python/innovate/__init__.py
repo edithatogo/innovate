@@ -33,6 +33,7 @@ __all__ = [
     "rolling_average",
     "seasonal_decomposition",
     "sarima_fit",
+    "bootstrap_forecast_frame",
     "treatment_contrast_frame",
     "policy_metadata_frame",
     "ingest_polars",
@@ -378,6 +379,29 @@ def sarima_fit(
         historical=historical,
     )["result"]
     return pl.Series(data.name, result["fitted"], dtype=pl.Float64)
+
+
+def bootstrap_forecast_frame(result: dict[str, Any]) -> pl.DataFrame:
+    """Convert a native bootstrap result's forecast to time-by-series rows."""
+    forecast = result["forecast"]
+    rows = []
+    for time, baseline, intervals in zip(
+        forecast["time"], forecast["baseline_rows"], forecast["pointwise_intervals"], strict=True
+    ):
+        for series, prediction, bounds in zip(forecast["columns"], baseline, intervals, strict=True):
+            lower, upper = (None, None) if bounds is None else bounds
+            rows.append((time, series, prediction, lower, upper))
+    return pl.DataFrame(
+        rows,
+        schema={
+            "time": pl.Float64,
+            "series": pl.String,
+            "baseline": pl.Float64,
+            "lower": pl.Float64,
+            "upper": pl.Float64,
+        },
+        orient="row",
+    )
 
 
 def treatment_contrast_frame(result: dict[str, Any]) -> pl.DataFrame:

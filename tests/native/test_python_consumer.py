@@ -1061,3 +1061,22 @@ def test_norton_joint_time_profile_polars_fit_and_forecast():
     forecast = fit.predict(pl.DataFrame({"time": fixture["forecast_time"], "price": price[-1]}))
     prediction_columns = [name for name in forecast.columns if name.startswith("prediction")]
     assert forecast.select(prediction_columns).row(0) == pytest.approx(fixture["forecast_rows"][0], abs=1e-3)
+
+
+def test_bootstrap_forecast_frame_preserves_series_and_null_bounds():
+    result = {
+        "forecast": {
+            "time": [15, 16],
+            "columns": ["series_1", "series_2"],
+            "baseline_rows": [[13.0, 206.0], [12.0, 210.0]],
+            "pointwise_intervals": [[[12.0, 14.0], None], [None, [208.0, 212.0]]],
+        }
+    }
+    frame = innovate.bootstrap_forecast_frame(result)
+    assert frame.rows() == [
+        (15.0, "series_1", 13.0, 12.0, 14.0),
+        (15.0, "series_2", 206.0, None, None),
+        (16.0, "series_1", 12.0, None, None),
+        (16.0, "series_2", 210.0, 208.0, 212.0),
+    ]
+    assert frame.schema["lower"] == pl.Float64

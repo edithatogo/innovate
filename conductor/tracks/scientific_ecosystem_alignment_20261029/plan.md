@@ -3259,3 +3259,8 @@ the other competition models and installed binding checks remain open.
 - [x] Add a native regression for a paired-case Logistic bootstrap
   with one failed fit and one successful forecast. The Rust test
   confirms a null interval and zero forecast failures.
+
+- [x] Expose bootstrap_forecast_frame in Python Polars. The rebuilt
+  Python 3.15.2 wheel retained series order and interval bounds from
+  the saved native Norton–Bass response. The focused consumer test
+  verified nullable Float64 bounds and Ruff passed.
