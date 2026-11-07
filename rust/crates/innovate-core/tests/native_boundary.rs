@@ -688,6 +688,12 @@ fn causal_summaries_match_analytic_effects() {
         "outcomes":[0,10,2,12],"treatment":[0,0,1,1],"propensities":[0.2,0.8,0.2,0.8]});
     let result = run(weighted.clone());
     assert!((result["result"]["estimate"].as_f64().unwrap() + 4.).abs() < 1e-12);
+    for arm in ["control", "treated"] {
+        let diagnostics = &result["result"]["weight_diagnostics"][arm];
+        assert_eq!(diagnostics["observations"], 2);
+        assert!((diagnostics["maximum_normalized_weight"].as_f64().unwrap() - 0.8).abs() < 1e-12);
+        assert!((diagnostics["effective_sample_size"].as_f64().unwrap() - 25. / 17.).abs() < 1e-12);
+    }
     weighted["propensities"][0] = json!(0);
     assert!(run(weighted)["result"].is_null());
     let mut stratified = json!({"method":"stratified_treatment_contrast",

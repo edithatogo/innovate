@@ -4532,3 +4532,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Expose supplied propensity weighting in treatment contrast discovery.
   Rebuilt Python 3.15.2, Julia and installed R each discovered the method,
   recovered the analytic estimate of -4 and rejected zero propensity.
+
+- [x] Add per-arm weight concentration diagnostics for propensity
+  weighting. The focused Rust fixture verified two observations,
+  maximum normalized weight 0.8 and effective sample size 25/17.

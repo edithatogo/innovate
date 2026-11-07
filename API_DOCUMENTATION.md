@@ -225,3 +225,7 @@ treatment propensities strictly between zero and one. The operation
 normalizes inverse probability weights separately in each arm and returns
 their weighted means and difference. This ATE point estimate requires
 valid propensities, exchangeability, positivity and consistency.
+
+The `weight_diagnostics` object reports each arm’s observation count,
+largest normalized weight and effective sample size. Effective sample
+size is the reciprocal of the sum of squared normalized weights.

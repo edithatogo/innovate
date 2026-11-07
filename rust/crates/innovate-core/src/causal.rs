@@ -773,24 +773,35 @@ fn propensity_weighted_contrast(payload: &Value) -> Result<Value, &'static str> 
         };
         arms[arm].push((outcome, probability));
     }
-    let weighted_mean = |arm: &[(f64, f64)]| -> Result<f64, &'static str> {
+    let summarize_arm = |arm: &[(f64, f64)]| -> Result<(f64, Value), &'static str> {
         let minimum = arm
             .iter()
             .map(|&(_, p)| p)
             .reduce(f64::min)
             .ok_or("propensity weighted contrast requires both treatment arms")?;
         let sum_weights = arm.iter().map(|&(_, p)| minimum / p).sum::<f64>();
-        finite(
-            arm.iter()
-                .map(|&(outcome, p)| (minimum / p / sum_weights) * outcome)
-                .sum(),
-        )
+        let mut weighted_mean = 0.;
+        let mut squared_weights = 0.;
+        for &(outcome, probability) in arm {
+            let weight = minimum / probability / sum_weights;
+            weighted_mean += weight * outcome;
+            squared_weights += weight * weight;
+        }
+        Ok((
+            finite(weighted_mean)?,
+            json!({
+                "observations":arm.len(),
+                "effective_sample_size":1. / squared_weights,
+                "maximum_normalized_weight":1. / sum_weights
+            }),
+        ))
     };
-    let control = weighted_mean(&arms[0])?;
-    let treated = weighted_mean(&arms[1])?;
+    let (control, control_diagnostics) = summarize_arm(&arms[0])?;
+    let (treated, treated_diagnostics) = summarize_arm(&arms[1])?;
     Ok(
         json!({"method":"normalized_inverse_probability_weighting","estimand":"ate",
-        "estimate":finite(treated-control)?,"treated_mean":treated,"control_mean":control}),
+        "estimate":finite(treated-control)?,"treated_mean":treated,"control_mean":control,
+        "weight_diagnostics":{"treated":treated_diagnostics,"control":control_diagnostics}}),
     )
 }
 
