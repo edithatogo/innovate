@@ -107,7 +107,7 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Other model forcing, event time and override inference, automatic multi-product and lock-in convergence, stiff solver parity, uncertainty, scenarios and resume"
+      "remaining": "Other model forcing, event time and override inference, broader automatic-start robustness beyond the qualified forced and event fixtures, stiff solver parity, uncertainty, scenarios and resume"
     },
     {
       "key": "multi_generation_substitution",
@@ -194,14 +194,14 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Historical artifact metadata and diagnostic detail parity, broader input qualification, and release acceptance"
+      "remaining": "Broader input qualification beyond the five cross-binding artifact fixtures, and release acceptance"
     },
     {
       "key": "scenario_registry_execution",
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Broader topology and substitution designs, stochastic ensemble design and bootstrap coverage qualification, cross-version replay qualification, and release parity"
+      "remaining": "Broader topology and substitution designs, broader stochastic design and calibration beyond the qualified Kairos fixtures, cross-version replay qualification, and release parity"
     },
     {
       "key": "explainability_sensitivity_reporting",
@@ -215,7 +215,7 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Benchmark suite automation and broader corpus, benchmark cases for additional models, binding and release qualification"
+      "remaining": "Broader benchmark corpus, observed-data scientific validation, and hosted release qualification"
     },
     {
       "key": "plugin_contracts",

@@ -2772,3 +2772,8 @@ the other competition models and installed binding checks remain open.
 - [x] Verify scenario translation and replay retain scheduled per-agent
   durations alongside priorities. The focused Rust test confirms the
   effective duration vector, retained schedule and exact replay result.
+
+- [x] Reconcile the migration ledger with the qualified forced fits,
+  five dataset artifact fixtures, Kairos ensemble evidence and native
+  benchmark expansion. The development checker passes. The release
+  checker still rejects the 38 required obligations pending acceptance.
