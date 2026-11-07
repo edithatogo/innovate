@@ -4081,3 +4081,9 @@ Hosted release readiness for this worktree revision remains open.
   forward and reverse comparisons retain order, rank and signed effects.
   Rust, Python 3.15.2, Julia and installed R passed the shared fixture.
   The Python Arrow readback retained the failure and both successes.
+- [x] Allow paired ensemble comparisons at an explicitly selected
+  sample on the shared grid. Report the evaluation time and retain
+  final-sample evaluation by default. An off-grid time produces a
+  comparison error while retaining all executions. The focused Rust
+  regression verifies the selected effect against analytic Logistic
+  output. Installed binding qualification for this option remains open.

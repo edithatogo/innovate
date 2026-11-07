@@ -1211,7 +1211,7 @@ fn scenario_grid_summarizes_paired_ensemble_differences() {
         .into_iter()
         .map(|(id, limit)| {
             json!({"id":id,"model_key":"logistic",
-            "simulation":{"inputs":{"time":[1.]},"parameters":{"L":limit,"k":1.,"x0":1.}}})
+            "simulation":{"inputs":{"time":[0.,1.]},"parameters":{"L":limit,"k":1.,"x0":1.}}})
         })
         .collect();
     let mut request = json!({"schema_version":"2.0","operation":"execute_scenario_grid",
@@ -1224,6 +1224,26 @@ fn scenario_grid_summarizes_paired_ensemble_differences() {
     let response = run(&request);
     let outcome = &response["result"]["comparisons"][0]["result"];
     assert_eq!(outcome["pair_count"], 2);
+    assert_eq!(outcome["evaluation_time"], 1.);
+    let mut sampled = request.clone();
+    sampled["payload"]["comparisons"][0]["evaluation_time"] = json!(0.);
+    let selected = run(&sampled);
+    let selected = &selected["result"]["comparisons"][0]["result"];
+    assert_eq!(selected["method"], "paired_empirical_sample_difference");
+    assert_eq!(selected["evaluation_time"], 0.);
+    assert!(
+        (selected["differences"][0].as_f64().unwrap() - 100. / (1. + 1_f64.exp())).abs() < 1e-12
+    );
+    sampled["payload"]["comparisons"][0]["evaluation_time"] = json!(0.5);
+    let rejected = run(&sampled);
+    assert_eq!(
+        rejected["result"]["executions"].as_array().unwrap().len(),
+        4
+    );
+    assert_eq!(
+        rejected["result"]["comparisons"][0]["error"]["code"],
+        "invalid_comparison"
+    );
     assert_eq!(outcome["sign_flip"]["assignments"], 4);
     assert_eq!(outcome["sign_flip"]["p_value"], 1.);
     let mut aligned = request.clone();

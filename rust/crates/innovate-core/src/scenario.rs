@@ -706,6 +706,7 @@ struct EnsembleComparison {
     #[serde(default)]
     require_distinct_pair_seeds: bool,
     interval_mass: f64,
+    evaluation_time: Option<f64>,
     bootstrap: Option<EnsembleBootstrap>,
     #[serde(default)]
     exact_sign_flip: bool,
@@ -903,6 +904,7 @@ fn compare_ensemble(
     let mut used = HashSet::new();
     let mut pair_seeds = HashSet::new();
     let mut grid = None;
+    let mut endpoint = None;
     let mut differences = Vec::with_capacity(comparison.pairs.len());
     for pair in &comparison.pairs {
         if !used.insert(&pair.baseline) || !used.insert(&pair.alternative) {
@@ -929,9 +931,16 @@ fn compare_ensemble(
                 return Err("seed validation requires a distinct effective seed for every pair");
             }
         }
-        let last = time.len() - 1;
+        let index = match comparison.evaluation_time {
+            Some(target) => time
+                .iter()
+                .position(|&sample| sample == target)
+                .ok_or("evaluation_time must match a sample on the shared time grid")?,
+            None => time.len() - 1,
+        };
+        endpoint = Some(time[index]);
         grid.get_or_insert(time);
-        let difference = alternative[last] - baseline[last];
+        let difference = alternative[index] - baseline[index];
         if !difference.is_finite() {
             return Err("ensemble difference must be finite");
         }
@@ -944,7 +953,12 @@ fn compare_ensemble(
     let mut sorted = differences.clone();
     sorted.sort_unstable_by(f64::total_cmp);
     let tail = (1. - mass) / 2.;
-    let mut result = json!({"method":"paired_empirical_final_difference","quantile_method":"linear",
+    let method = if comparison.evaluation_time.is_some() {
+        "paired_empirical_sample_difference"
+    } else {
+        "paired_empirical_final_difference"
+    };
+    let mut result = json!({"method":method,"quantile_method":"linear","evaluation_time":endpoint,
         "pair_count":differences.len(),"differences":differences,"interval_mass":mass,
         "mean_difference":mean,"mean_standard_error":standard_error,
         "standard_error_assumption":"independent replicate pairs",
