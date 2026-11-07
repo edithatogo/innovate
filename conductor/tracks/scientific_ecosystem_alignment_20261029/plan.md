@@ -4400,3 +4400,6 @@ Hosted release readiness for this worktree revision remains open.
   focused Python test passed against the rebuilt native extension.
   Wheel assembly hit the internal disk limit, so the check used an
   isolated import directory on the repository volume.
+- [x] Verify reciprocal edge diagnostics through Julia and installed R.
+  Both accept explicitly directed reciprocal edges and identify the
+  undirected duplicate with duplicate_keys:source_target.
