@@ -4307,3 +4307,22 @@ fn scenario_grid_paused_network_preserves_seed_and_resumes() {
         expected["result"]["executions"][0]["result"]
     );
 }
+
+#[test]
+fn empirical_intervals_keep_legacy_width_and_reject_invalid_inputs() {
+    let mut request = json!({"schema_version":"2.0","operation":"calibrate_prediction_intervals",
+        "payload":{"time":[1,2,3],"observed":[11,18,35],"predicted":[10,20,30],
+            "confidence":0.5,"holdout":[0,1,0]}});
+    let execute = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = execute(&request);
+    assert_eq!(response["result"]["lower"], json!([8., 18., 28.]));
+    assert_eq!(response["result"]["upper"], json!([12., 22., 32.]));
+    assert_eq!(response["result"]["diagnostics"]["holdout_coverage"], 1.0);
+    request["payload"]["confidence"] = json!(1.5);
+    assert_eq!(execute(&request)["error"]["code"], "invalid_request");
+    request["payload"]["confidence"] = json!(0.5);
+    request["payload"]["predicted"] = json!([10, 20]);
+    assert_eq!(execute(&request)["error"]["code"], "invalid_request");
+}

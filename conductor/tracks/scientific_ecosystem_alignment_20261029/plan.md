@@ -7548,3 +7548,10 @@ Hosted release readiness for this worktree revision remains open.
   unknown-tier rejection. PR #160 checks empirical interval output,
   confidence bounds, and input length validation. Native interval
   calibration remains open under calibration_identifiability.
+
+- [x] Port empirical prediction intervals to the shared Rust JSON
+  boundary. Preserve the historical residual quantile and holdout
+  widening, and label the resulting coverage descriptive because
+  holdout rows can affect width. The optimized boundary test passed
+  for exact bounds, invalid confidence and mismatched arrays.
+  Installed binding and independent predictive calibration remain open.

@@ -5,6 +5,7 @@ mod bayesian;
 mod benchmark;
 mod bootstrap;
 mod calendar;
+mod calibration;
 mod causal;
 mod competition;
 mod composite;
@@ -57,6 +58,7 @@ pub fn execute_json(input: &str) -> String {
             Some("fit_batch" | "predict_batch") => return execute_batch_json(value).to_string(),
             Some(
                 "preprocess_series"
+                | "calibrate_prediction_intervals"
                 | "aggregate_dates"
                 | "summarize_causal"
                 | "validate_paired_outcomes"
@@ -292,6 +294,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         }
         if value["operation"] == "bayesian_parameter_grid" {
             return bayesian::grid(payload);
+        }
+        if value["operation"] == "calibrate_prediction_intervals" {
+            return calibration::intervals(payload);
         }
         if value["operation"] == "bootstrap_fit" {
             return bootstrap::fit(payload);
