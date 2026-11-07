@@ -18,3 +18,4 @@ export(kernel_sarima_fit)
 export(kernel_call_json)
 
 export(kernel_scenario_grid_ipc)
+export(kernel_scenario_executions_ipc)

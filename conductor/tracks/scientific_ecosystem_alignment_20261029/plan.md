@@ -2080,7 +2080,7 @@ the other competition models and installed binding checks remain open.
   3.15 wheel returned the analytic Logistic value of 50. All six tabular
   tests and focused Clippy passed after removing a stale assertion that
   treated the supported rate quantity as invalid.
-- [ ] Qualify scenario Arrow result transport and Julia and R consumers.
+- [ ] Qualify Arrow transport for grid-level comparisons.
 
 - [x] Expose scenario Arrow IPC input through the C ABI to Julia and R.
   Both returned the analytic Logistic value of 50 and rejected malformed
@@ -2093,3 +2093,9 @@ the other competition models and installed binding checks remain open.
   results, artifacts and errors, including full-width seeds. Grid-level
   comparisons remain in the JSON envelope. All seven tabular tests,
   focused Clippy and the rebuilt Python 3.15 wheel smoke test passed.
+
+- [x] Expose ordered execution-row Arrow IPC export to Julia and R.
+  Polars decoded both outputs with identical ordered execution rows,
+  including a maximum-width seed and a failed scenario. Both bindings
+  rejected an invalid envelope. Locked FFI tests and Clippy passed.
+  Grid-level comparisons remain in the JSON envelope.

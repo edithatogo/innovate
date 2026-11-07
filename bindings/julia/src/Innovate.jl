@@ -2,7 +2,7 @@ module Innovate
 using JSON
 using Libdl
 
-export kernel_scenario_grid_ipc, DatasetValidationError, kernel_sarima_fit, kernel_seasonal_decomposition, kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
+export kernel_scenario_executions_ipc, kernel_scenario_grid_ipc, DatasetValidationError, kernel_sarima_fit, kernel_seasonal_decomposition, kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
     kernel_categorize_adopters, kernel_categorize_fitted_adopters, kernel_fit_batch, kernel_predict_batch, kernel_simulate_model, kernel_summarize_model, kernel_diagnose_model
 
 """A rejected dataset with its native validation report."""
@@ -33,6 +33,38 @@ function kernel_scenario_grid_ipc(data::Vector{UInt8}, payload)
     request = JSON.json(payload)
     return with_native_response(handle -> ccall(Libdl.dlsym(handle, :innovate_scenario_grid_ipc),
         Ptr{UInt8}, (Ptr{UInt8}, Csize_t, Cstring), data, length(data), request))
+end
+
+"""Encode ordered scenario execution rows as Arrow IPC file bytes."""
+function kernel_scenario_executions_ipc(response)
+    request = response isa AbstractString ? response : JSON.json(response)
+    handle = Libdl.dlopen(native_library())
+    try
+        convert = Libdl.dlsym(handle, :innovate_scenario_executions_ipc)
+        free_bytes = Libdl.dlsym(handle, :innovate_free_bytes)
+        free_text = Libdl.dlsym(handle, :innovate_free)
+        data = Ref{Ptr{UInt8}}(C_NULL)
+        len = Ref{Csize_t}(0)
+        failure = ccall(convert, Ptr{UInt8},
+            (Cstring, Ref{Ptr{UInt8}}, Ref{Csize_t}), request, data, len)
+        if failure != C_NULL
+            text = try
+                unsafe_string(failure)
+            finally
+                ccall(free_text, Cvoid, (Ptr{UInt8},), failure)
+            end
+            details = JSON.parse(text)["error"]
+            error(string(details["code"], ": ", details["message"]))
+        end
+        data[] == C_NULL && error("Native Arrow response allocation failed")
+        try
+            return copy(unsafe_wrap(Vector{UInt8}, data[], Int(len[])))
+        finally
+            ccall(free_bytes, Cvoid, (Ptr{UInt8}, Csize_t), data[], len[])
+        end
+    finally
+        Libdl.dlclose(handle)
+    end
 end
 
 function with_native_response(invoke)

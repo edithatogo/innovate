@@ -102,3 +102,65 @@ mod tests {
         unsafe { innovate_free(ptr::null_mut()) };
     }
 }
+
+/// Convert a grid response to Arrow IPC. Returns a JSON error or null on success.
+///
+/// # Safety
+/// The response must be a readable NUL-terminated string. Both out parameters
+/// must be valid writable pointers. Release successful bytes with
+/// `innovate_free_bytes` and any error string with `innovate_free`.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn innovate_scenario_executions_ipc(
+    response: *const c_char,
+    data: *mut *mut u8,
+    len: *mut usize,
+) -> *mut c_char {
+    let error = |code: &str, message: &str| {
+        owned_response(Ok(
+            serde_json::json!({"error":{"code":code,"message":message}}).to_string(),
+        ))
+    };
+    if data.is_null() || len.is_null() {
+        return error("invalid_request", "missing Arrow output pointers");
+    }
+    // SAFETY: out parameters are writable for the duration of the call.
+    unsafe {
+        *data = ptr::null_mut();
+        *len = 0;
+    }
+    if response.is_null() {
+        return error("invalid_request", "missing scenario grid response");
+    }
+    let result = std::panic::catch_unwind(|| {
+        // SAFETY: the caller provides a readable NUL-terminated string.
+        let response = unsafe { CStr::from_ptr(response) };
+        let value = serde_json::from_slice(response.to_bytes()).map_err(|err| err.to_string())?;
+        innovate_tabular::scenario_executions_ipc(&value).map_err(|err| err.to_string())
+    });
+    match result {
+        Ok(Ok(bytes)) => {
+            let bytes = bytes.into_boxed_slice();
+            // SAFETY: caller provides writable out parameters.
+            unsafe {
+                *len = bytes.len();
+                *data = Box::into_raw(bytes).cast();
+            }
+            ptr::null_mut()
+        }
+        Ok(Err(message)) => error("invalid_request", &message),
+        Err(_) => error("internal_error", "native execution panicked"),
+    }
+}
+
+/// Release an Arrow result once.
+///
+/// # Safety
+/// A non-null pointer and length must be the original pair returned by
+/// `innovate_scenario_executions_ipc`, and must still be live.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn innovate_free_bytes(data: *mut u8, len: usize) {
+    if !data.is_null() {
+        // SAFETY: caller returns the original allocation and length once.
+        drop(unsafe { Box::from_raw(ptr::slice_from_raw_parts_mut(data, len)) });
+    }
+}
