@@ -6802,3 +6802,9 @@ Hosted release readiness for this worktree revision remains open.
   Python 3.15.2 wheel, Julia and installed R. All three returned Early
   Majority, Late Majority and Laggards for the same fixture using
   native builds from 0dcce9aa.
+
+- [x] Normalize adopter-classification time using positive-weight
+  samples so distant zero-weight endpoints cannot collapse a tight
+  weighted grid. Still classify all timestamps. Four Rust adopter
+  tests passed, including a subnormal grid bracketed by ±MAX.
+  Binding verification of the new case remains open.

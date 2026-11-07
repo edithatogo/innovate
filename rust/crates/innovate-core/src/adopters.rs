@@ -13,8 +13,9 @@ pub fn classify_adopters(time: &[f64], rates: &[f64]) -> Result<Vec<&'static str
     if max_rate == 0. || rates.iter().any(|rate| *rate < 0.) {
         return Err("adoption rates must be nonnegative with positive total");
     }
-    let first = time[0];
-    let last = time[time.len() - 1];
+    let weighted_samples = time.iter().zip(rates).filter(|&(_, rate)| *rate > 0.);
+    let first = *weighted_samples.clone().next().unwrap().0;
+    let last = *weighted_samples.clone().next_back().unwrap().0;
     // Halve before subtraction when the grid spans both extremes.
     let prescale = if (last - first).is_finite() { 1. } else { 0.5 };
     let origin = first * prescale;
@@ -27,9 +28,8 @@ pub fn classify_adopters(time: &[f64], rates: &[f64]) -> Result<Vec<&'static str
         span
     };
     let scaled_time = |t: f64| (t * prescale - origin) / scale;
-    let points = time
-        .iter()
-        .zip(rates)
+    let points = weighted_samples
+        .clone()
         .map(|(&t, rate)| (scaled_time(t), rate / max_rate));
     let total: f64 = points.clone().map(|(_, weight)| weight).sum();
     let mean = points.clone().map(|(t, weight)| t * weight).sum::<f64>() / total;
@@ -41,16 +41,17 @@ pub fn classify_adopters(time: &[f64], rates: &[f64]) -> Result<Vec<&'static str
     let sd = if variance < f64::MIN_POSITIVE {
         // Square-root weights retain dispersion even when variance underflows.
         let root_max_rate = max_rate.sqrt();
-        time.iter()
-            .zip(rates)
+        weighted_samples
             .map(|(&t, rate)| (scaled_time(t) - mean) * (rate.sqrt() / root_max_rate))
             .fold(0.0_f64, f64::hypot)
             / total.sqrt()
     } else {
         variance.sqrt()
     };
-    let categories: Vec<_> = points
-        .map(|(t, _)| {
+    let categories: Vec<_> = time
+        .iter()
+        .map(|&sample| {
+            let t = scaled_time(sample);
             if t <= mean - 2. * sd {
                 "Innovators"
             } else if t <= mean - sd {
@@ -70,6 +71,25 @@ pub fn classify_adopters(time: &[f64], rates: &[f64]) -> Result<Vec<&'static str
 #[cfg(test)]
 mod tests {
     use super::classify_adopters;
+
+    #[test]
+    fn zero_weight_extremes_do_not_compress_weighted_time_grid() {
+        let tiny = f64::from_bits(1);
+        assert_eq!(
+            classify_adopters(
+                &[-f64::MAX, 0., tiny, 2. * tiny, f64::MAX],
+                &[0., 1., 0., 1., 0.]
+            )
+            .unwrap(),
+            [
+                "Innovators",
+                "Early Adopters",
+                "Early Majority",
+                "Late Majority",
+                "Laggards"
+            ]
+        );
+    }
 
     #[test]
     fn categories_preserve_variance_for_extreme_rate_ratios() {
