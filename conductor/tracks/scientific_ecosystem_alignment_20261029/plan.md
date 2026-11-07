@@ -3476,3 +3476,9 @@ the other competition models and installed binding checks remain open.
   Publication retains the scientific gate and all three paths pin the
   Rust toolchain. Actionlint, ShellCheck and the normalizer tests passed.
   Hosted execution remains open.
+
+- [x] Run the shared release build script end to end on Darwin arm64
+  with the repo-local Python 3.15.2 environment and separate output
+  directory. Source archive, locked release wheel and SBOM normalization
+  completed. Twine, wheel-content checks and a Polars forecast passed.
+  The run reused a Cargo target. Hosted execution remains open.
