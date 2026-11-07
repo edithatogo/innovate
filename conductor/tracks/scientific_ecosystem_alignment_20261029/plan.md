@@ -3771,3 +3771,8 @@ Hosted release readiness for this worktree revision remains open.
   receipt. The policy boundary test and focused Clippy passed.
   Version metadata identifies the release version. Exact build
   provenance still requires the source revision and artifact digest.
+- [x] Verify compiled kernel version readback in two local MPI rank
+  receipts. The rebuilt Python 3.15.2 wheel from d6b7e3ba produced
+  version 0.7.0-alpha.1 in both receipts and passed all three fast
+  cases across disjoint shards. Wheel SHA-256
+  f069eff573a4c489926ccb324cb7877109eb753b132dfbf60d1e89e0ed720d31.
