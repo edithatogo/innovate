@@ -703,9 +703,15 @@ stopifnot(isTRUE(all.equal(replicated_staggered[[1]]$estimate, 4)),
   isTRUE(all.equal(replicated_staggered[[1]]$standard_error, 1)), replicated_staggered[[2]]$n_control == 1)
 shared_staggered <- kernel_call("summarize_causal", payload=list(method="staggered_panel_att",
   periods=c(0,1,2), outcomes=matrix(c(0,5,5,0,5,5,0,1,6,0,1,6,0,0,0,0,2,4), nrow=6, byrow=TRUE),
-  adoption_indices=list(1L,1L,2L,2L,NULL,NULL), include_event_time_covariance=TRUE))$result
+  adoption_indices=list(1L,1L,2L,2L,NULL,NULL), include_event_time_covariance=TRUE,
+  simultaneous_bands=list(draws=100L,seed=7L)))$result
 shared_error <- shared_staggered$event_time[[1]]$standard_error
 covariance <- shared_staggered$event_time_covariance
 stopifnot(isTRUE(all.equal(unlist(covariance[[1]]), c(shared_error^2, 2*shared_error))),
   isTRUE(all.equal(unlist(covariance[[2]]), c(2*shared_error, 4))))
 stopifnot(isTRUE(all.equal(shared_error, (1/sqrt(48) + 1/sqrt(8)) * sqrt(2))))
+bands <- shared_staggered$simultaneous_bands
+interval <- bands$intervals[[2]]$interval
+stopifnot(isTRUE(all.equal(bands$critical_value, sqrt(2))),
+  isTRUE(all.equal(interval$lower, 3 - 2*sqrt(2))),
+  isTRUE(all.equal(interval$upper, 3 + 2*sqrt(2))))

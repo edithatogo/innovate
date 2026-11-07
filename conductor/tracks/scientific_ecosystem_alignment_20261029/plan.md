@@ -4745,3 +4745,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Compute simultaneous staggered event-time bands using seeded
   unit multipliers. The focused Rust test verifies replay and the
   analytic max-t critical value. Binding runtime checks remain open.
+
+- [x] Verify staggered simultaneous event-time bands through rebuilt
+  Python 3.15.2, Julia and installed R. Each reproduced the seeded
+  critical value sqrt(2) and the analytic interval endpoints.
