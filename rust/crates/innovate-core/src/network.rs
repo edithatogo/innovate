@@ -512,10 +512,12 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                                     .filter(|(j, _)| context.get::<u8>(agents[*j]) == Some(&2))
                                     .count() as f64;
                                 let rate = imitation * imitation_weights[i];
-                                if o.hazard_forcing.is_some() {
-                                    rate * (exposed / degree as f64)
+                                // Preserve seeded arithmetic for existing finite unforced paths.
+                                let product = rate * exposed;
+                                if o.hazard_forcing.is_none() && product.is_finite() {
+                                    product / degree as f64
                                 } else {
-                                    rate * exposed / degree as f64
+                                    rate * (exposed / degree as f64)
                                 }
                             }
                     }

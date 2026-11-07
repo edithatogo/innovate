@@ -826,3 +826,23 @@ fn resource_metrics_clip_service_and_queue_wait_at_horizon() {
     assert_eq!(result["metadata"]["in_service"], 1);
     assert_eq!(result["metadata"]["queue_length"], 1);
 }
+
+#[test]
+fn unweighted_imitation_preserves_finite_hazard_at_large_rates() {
+    let result = KernelBinding::new()
+        .simulate_model(
+            "bass",
+            json!({
+                "inputs":{"time":[0,2]},
+                "parameters":{"p":0,"q":1e308,"m":3},
+                "simulation_options":{"engine":"kairos_network","population":3,"seed":42,
+                    "edges":[[0,2],[1,2]],"initial_agents":[0,1],
+                    "capacity":1,"service_ticks":1,"ticks_per_unit":1}
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(result["counts"], json!([2, 3]));
+    assert_eq!(result["completions"], json!([{"tick":2,"agent":2}]));
+}

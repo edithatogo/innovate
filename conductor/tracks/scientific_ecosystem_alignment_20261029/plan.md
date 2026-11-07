@@ -3505,3 +3505,14 @@ the other competition models and installed binding checks remain open.
 The broader historical-model, ABM and migration obligations remain open.
 The packaging workflow has successful hosted evidence at earlier revisions.
 Hosted release readiness for this worktree revision remains open.
+
+## Kairos hazard numerical range
+
+- [x] Preserve finite unweighted imitation hazards when the intermediate
+  exposed-neighbour product overflows. Apply the exposure fraction first
+  in this case and retain the arithmetic of existing finite unforced paths.
+  The regression failed before the fix with an invalid hazard error.
+  All 28 Rust network tests, formatting and focused Clippy passed.
+- [x] Verify the same three-agent case in the rebuilt Python 3.15.2 wheel,
+  Julia and freshly installed R. All returned counts 2 and 3, with agent 2
+  completing service at tick 2. Broader migration gates remain open.
