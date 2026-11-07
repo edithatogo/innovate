@@ -6372,3 +6372,9 @@ Hosted release readiness for this worktree revision remains open.
   ATE averaged 2.0157 and ATT 2.6221. The paired fitted-minus-known
   ATT gap fell to 0.0158, with conditional normal coverage 366/385.
   This documents the selection trade-off for one design.
+
+- [x] Repeat the cluster guard comparison with seed 1437. Minimums
+  of one and two retained 395 and 381 trials. The paired ATT gaps
+  were -0.0136 and -0.0160, so the reduction seen with seed 912 did
+  not replicate. Conditional ATT coverage was 375/395 and 363/381.
+  The guard enforces support, with no general bias reduction established.

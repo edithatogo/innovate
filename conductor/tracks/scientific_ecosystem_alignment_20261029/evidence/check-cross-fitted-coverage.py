@@ -13,6 +13,7 @@ parser.add_argument("--weak-overlap", action="store_true")
 parser.add_argument("--minimum-training-arm-count", type=int, default=1)
 parser.add_argument("--cluster-assignment", action="store_true")
 parser.add_argument("--minimum-training-arm-clusters", type=int)
+parser.add_argument("--seed", type=int, default=912)
 args = parser.parse_args()
 if args.cluster_assignment and (args.few_clusters or args.weak_overlap):
     parser.error("cluster assignment uses the 80-cluster design with good overlap")
@@ -20,7 +21,7 @@ if args.minimum_training_arm_count < 1:
     parser.error("minimum training arm count must be positive")
 clustered = args.clustered or args.few_clusters or args.cluster_assignment
 cluster_count = 10 if args.few_clusters else 80
-rng = Random(912)
+rng = Random(args.seed)
 strata = ["low", "high"] * 400
 folds = [index // 2 % 5 for index in range(len(strata))]
 if clustered:
