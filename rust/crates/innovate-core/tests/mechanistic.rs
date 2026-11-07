@@ -50,23 +50,25 @@ fn bass_covariate_event_fit_matches_independent_reference_and_retains_history() 
     let slice = |key: &str, from: usize, to: usize| json!(&f[key].as_array().unwrap()[from..to]);
     let mut seed = f["parameters"].clone();
     seed["beta_p_dose"] = json!(0.004);
-    let fit=KernelBinding::new().fit_model("bass",json!({"inputs":{"time":slice("time",0,n),"observed":slice("observed",0,n),"covariates":{"dose":slice("dose",0,n)}},"constructor_kwargs":{"covariates":["dose"],"t_event":10.},"fit_options":{"initial_parameters":seed}})).unwrap().result.unwrap();
-    assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
-    assert!(fit["diagnostics"]["metrics"]["RSS"].as_f64().unwrap() < 1e-5);
-    let end = f["time"].as_array().unwrap().len();
-    let a=KernelBinding::new().predict_model("bass",json!({"inputs":{"time":slice("time",n,end),"covariates":{"dose":slice("dose",n,end)}},"state":fit["state"]})).unwrap().result.unwrap();
-    assert!(
-        (a["values"][end - n - 1].as_f64().unwrap() - f["observed"][end - 1].as_f64().unwrap())
-            .abs()
-            < 0.001
-    );
-    assert_eq!(
-        fit["state"]["constructor_kwargs"]["covariate_history"]["time"]
-            .as_array()
-            .unwrap()
-            .len(),
-        n
-    );
+    for fit_options in [json!({"initial_parameters":seed}), json!({})] {
+        let fit=KernelBinding::new().fit_model("bass",json!({"inputs":{"time":slice("time",0,n),"observed":slice("observed",0,n),"covariates":{"dose":slice("dose",0,n)}},"constructor_kwargs":{"covariates":["dose"],"t_event":10.},"fit_options":fit_options})).unwrap().result.unwrap();
+        assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
+        assert!(fit["diagnostics"]["metrics"]["RSS"].as_f64().unwrap() < 1e-5);
+        let end = f["time"].as_array().unwrap().len();
+        let a=KernelBinding::new().predict_model("bass",json!({"inputs":{"time":slice("time",n,end),"covariates":{"dose":slice("dose",n,end)}},"state":fit["state"]})).unwrap().result.unwrap();
+        assert!(
+            (a["values"][end - n - 1].as_f64().unwrap() - f["observed"][end - 1].as_f64().unwrap())
+                .abs()
+                < 0.001
+        );
+        assert_eq!(
+            fit["state"]["constructor_kwargs"]["covariate_history"]["time"]
+                .as_array()
+                .unwrap()
+                .len(),
+            n
+        );
+    }
 }
 #[test]
 fn explicit_legacy_layout_and_origin_are_not_silent_new_defaults() {
@@ -137,20 +139,25 @@ fn gompertz_event_fit_holds_absent_b_and_forecasts_from_saved_origin() {
             }
         })
         .collect();
-    let f=KernelBinding::new().fit_model("gompertz",json!({"inputs":{"time":t,"observed":y},"constructor_kwargs":{"t_event":2.,"initial_value":1.},"fit_options":{"initial_parameters":{"a":100.,"b":77.,"c":0.3,"a_post":200.,"b_post":99.,"c_post":0.18}}})).unwrap().result.unwrap();
-    assert_eq!(f["diagnostics"]["optimizer"]["converged"], true);
-    assert_eq!(f["parameters"]["b"], 77.);
-    assert_eq!(f["parameters"]["b_post"], 99.);
-    let a = KernelBinding::new()
-        .predict_model(
-            "gompertz",
-            json!({"inputs":{"time":[10.]},"state":f["state"]}),
-        )
-        .unwrap()
-        .result
-        .unwrap();
-    let expected = 200. * ((boundary / 200.).ln() * (-1.6_f64).exp()).exp();
-    assert!((a["values"][0].as_f64().unwrap() - expected).abs() < 0.001);
+    for (fit_options, b, b_post) in [
+        (json!({"initial_parameters":{"a":100.,"b":77.,"c":0.3,"a_post":200.,"b_post":99.,"c_post":0.18}}), 77., 99.),
+        (json!({}), 1., 1.),
+    ] {
+        let f=KernelBinding::new().fit_model("gompertz",json!({"inputs":{"time":t,"observed":y},"constructor_kwargs":{"t_event":2.,"initial_value":1.},"fit_options":fit_options})).unwrap().result.unwrap();
+        assert_eq!(f["diagnostics"]["optimizer"]["converged"], true);
+        assert_eq!(f["parameters"]["b"], b);
+        assert_eq!(f["parameters"]["b_post"], b_post);
+        let a = KernelBinding::new()
+            .predict_model(
+                "gompertz",
+                json!({"inputs":{"time":[10.]},"state":f["state"]}),
+            )
+            .unwrap()
+            .result
+            .unwrap();
+        let expected = 200. * ((boundary / 200.).ln() * (-1.6_f64).exp()).exp();
+        assert!((a["values"][0].as_f64().unwrap() - expected).abs() < 0.001);
+    }
 }
 
 #[test]

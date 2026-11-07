@@ -552,13 +552,33 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             return Err(invalid("ODE fitting needs at least four observations"));
         }
         let (initial, limit) = crate::fitting::options(r)?;
-        let seed = model
-            .parse(&initial.ok_or_else(|| {
-                invalid("ODE forcing fitting requires complete initial_parameters")
-            })?)
-            .map_err(|e| invalid(&e))?;
         let ys = y.iter().copied().fold(0., f64::max).max(1e-12);
         let ts = (time.last().unwrap() - origin).max(1.);
+        let automatic_seed = |rate: f64| -> Vec<f64> {
+            model
+                .spec
+                .iter()
+                .map(|parameter| {
+                    if !parameter.positive {
+                        0.
+                    } else if parameter.capacity {
+                        1.25 * ys
+                    } else if parameter.unused {
+                        1.
+                    } else if parameter.name == "p" || parameter.name == "p_post" {
+                        0.5 / ts
+                    } else {
+                        rate / ts
+                    }
+                })
+                .collect()
+        };
+        let seed = initial
+            .as_ref()
+            .map(|value| model.parse(value))
+            .transpose()
+            .map_err(|e| invalid(&e))?
+            .unwrap_or_else(|| automatic_seed(4.));
         let scales: Vec<_> = model
             .spec
             .iter()
@@ -587,12 +607,19 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             }
             p
         };
-        let theta = transform(&seed);
-        let starts = vec![
-            theta.clone(),
-            theta.iter().map(|t| t + 0.1).collect(),
-            theta.iter().map(|t| t - 0.1).collect(),
-        ];
+        let starts = if initial.is_some() {
+            let theta = transform(&seed);
+            vec![
+                theta.clone(),
+                theta.iter().map(|t| t + 0.1).collect(),
+                theta.iter().map(|t| t - 0.1).collect(),
+            ]
+        } else {
+            [1., 4., 8.]
+                .into_iter()
+                .map(|rate| transform(&automatic_seed(rate)))
+                .collect()
+        };
         let target: Vec<_> = y.iter().map(|v| v / ys).collect();
         let fit = least_squares(
             &target,

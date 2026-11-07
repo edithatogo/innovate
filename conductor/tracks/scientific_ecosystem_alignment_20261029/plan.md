@@ -1022,3 +1022,13 @@ the other competition models and installed binding checks remain open.
   selects index 2 and lock-in selects index 1. These focused checks use
   rebuilt Python and Rust FFI artifacts.
   [Per-start results](evidence/competition-start-reports-20261107).
+
+## Automatic starts for mechanistic Bass and Gompertz
+
+- [x] Add observation-scaled starting capacities and a deterministic rate
+  grid for mechanistic fits without explicit initial parameters. Declared
+  slopes start at zero. Unused Gompertz shape parameters default to one
+  and retain explicit caller values when provided. Both starting modes
+  pass the existing held-out forecast checks for forced Bass and fixed-event
+  Gompertz. All nine mechanistic tests and focused Clippy passed.
+- [ ] Qualify the automatic path in installed Python, Julia and R.
