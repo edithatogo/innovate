@@ -229,3 +229,7 @@ valid propensities, exchangeability, positivity and consistency.
 The `weight_diagnostics` object reports each arm’s observation count,
 largest normalized weight and effective sample size. Effective sample
 size is the reciprocal of the sum of squared normalized weights.
+
+The default `estimand` is `ate`. Set `estimand` to `att` to give
+treated observations equal weight and weight controls by their treatment
+odds, p/(1−p), before normalizing within each arm.

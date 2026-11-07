@@ -51,8 +51,8 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                  "estimands":["ate","att"],"default_estimand":"ate",
                  "uncertainty":"conditional_standard_error"},
                 {"method":"propensity_weighted_contrast","adjustment":"caller_supplied_propensities",
-                 "required_fields":["outcomes","treatment","propensities"],"optional_fields":[],
-                 "estimands":["ate"],"default_estimand":"ate"}
+                 "required_fields":["outcomes","treatment","propensities"],"optional_fields":["estimand"],
+                 "estimands":["ate","att"],"default_estimand":"ate"}
             ]
         })),
         Some("pre_post") => {
@@ -748,16 +748,21 @@ fn propensity_weighted_contrast(payload: &Value) -> Result<Value, &'static str> 
     if fields.keys().any(|key| {
         !matches!(
             key.as_str(),
-            "method" | "outcomes" | "treatment" | "propensities"
+            "method" | "outcomes" | "treatment" | "propensities" | "estimand"
         )
     }) {
         return Err(
-            "propensity weighted contrast accepts only outcomes, treatment and propensities",
+            "propensity weighted contrast accepts only outcomes, treatment, propensities and estimand",
         );
     }
     let outcomes = series(payload, "outcomes")?;
     let treatment = series(payload, "treatment")?;
     let propensities = series(payload, "propensities")?;
+    let estimand = match fields.get("estimand").map(Value::as_str) {
+        None | Some(Some("ate")) => "ate",
+        Some(Some("att")) => "att",
+        _ => return Err("weighted contrast estimand must be ate or att"),
+    };
     if outcomes.len() != treatment.len() || outcomes.len() != propensities.len() {
         return Err("outcomes, treatment and propensities must align");
     }
@@ -766,24 +771,26 @@ fn propensity_weighted_contrast(payload: &Value) -> Result<Value, &'static str> 
         if propensity <= 0. || propensity >= 1. {
             return Err("propensities must lie strictly between zero and one");
         }
-        let (arm, probability) = match flag {
-            0. => (0, 1. - propensity),
-            1. => (1, propensity),
+        let (arm, log_weight) = match (estimand, flag) {
+            ("att", 0.) => (0, propensity.ln() - (-propensity).ln_1p()),
+            ("att", 1.) => (1, 0.),
+            (_, 0.) => (0, -(-propensity).ln_1p()),
+            (_, 1.) => (1, -propensity.ln()),
             _ => return Err("treatment indicators must be binary"),
         };
-        arms[arm].push((outcome, probability));
+        arms[arm].push((outcome, log_weight));
     }
     let summarize_arm = |arm: &[(f64, f64)]| -> Result<(f64, Value), &'static str> {
-        let minimum = arm
+        let maximum = arm
             .iter()
             .map(|&(_, p)| p)
-            .reduce(f64::min)
+            .reduce(f64::max)
             .ok_or("propensity weighted contrast requires both treatment arms")?;
-        let sum_weights = arm.iter().map(|&(_, p)| minimum / p).sum::<f64>();
+        let sum_weights = arm.iter().map(|&(_, w)| (w - maximum).exp()).sum::<f64>();
         let mut weighted_mean = 0.;
         let mut squared_weights = 0.;
-        for &(outcome, probability) in arm {
-            let weight = minimum / probability / sum_weights;
+        for &(outcome, log_weight) in arm {
+            let weight = (log_weight - maximum).exp() / sum_weights;
             weighted_mean += weight * outcome;
             squared_weights += weight * weight;
         }
@@ -799,7 +806,7 @@ fn propensity_weighted_contrast(payload: &Value) -> Result<Value, &'static str> 
     let (control, control_diagnostics) = summarize_arm(&arms[0])?;
     let (treated, treated_diagnostics) = summarize_arm(&arms[1])?;
     Ok(
-        json!({"method":"normalized_inverse_probability_weighting","estimand":"ate",
+        json!({"method":"normalized_inverse_probability_weighting","estimand":estimand,
         "estimate":finite(treated-control)?,"treated_mean":treated,"control_mean":control,
         "weight_diagnostics":{"treated":treated_diagnostics,"control":control_diagnostics}}),
     )

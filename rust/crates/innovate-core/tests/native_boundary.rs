@@ -694,6 +694,14 @@ fn causal_summaries_match_analytic_effects() {
         assert!((diagnostics["maximum_normalized_weight"].as_f64().unwrap() - 0.8).abs() < 1e-12);
         assert!((diagnostics["effective_sample_size"].as_f64().unwrap() - 25. / 17.).abs() < 1e-12);
     }
+    weighted["estimand"] = json!("att");
+    let att_result = run(weighted.clone());
+    assert_eq!(att_result["result"]["estimand"], "att");
+    assert!((att_result["result"]["estimate"].as_f64().unwrap() + 41. / 17.).abs() < 1e-12);
+    assert_eq!(
+        att_result["result"]["weight_diagnostics"]["treated"]["effective_sample_size"],
+        2.
+    );
     weighted["propensities"][0] = json!(0);
     assert!(run(weighted)["result"].is_null());
     let mut stratified = json!({"method":"stratified_treatment_contrast",

@@ -4540,3 +4540,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify propensity weight concentration across rebuilt Python 3.15.2,
   Julia and installed R. Each returned 0.8 for the largest normalized
   weight and 25/17 for effective sample size in both arms.
+
+- [x] Add the propensity-weighted ATT and advertise both estimands.
+  The focused Rust fixture verified -41/17 and equal treated weights.
+  Binding runtime qualification remains open for the weighted ATT.
