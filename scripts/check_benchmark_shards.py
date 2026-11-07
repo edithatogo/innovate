@@ -18,21 +18,34 @@ def check(serial, shards):
     expected = checked_runs(serial)
     metadata = serial["metadata"]
     runner = metadata["benchmark_runner"]
+    if "mpi_shard" in runner:
+        raise ValueError("the reference receipt must come from a serial run")
+    if len({row["case_id"] for row in expected}) != len(expected):
+        raise ValueError("the serial receipt contains duplicate case IDs")
     ranks = set()
     for shard in shards:
         actual = shard["metadata"]
         config = actual["benchmark_runner"]
         if (actual["kernel_version"], config["native_extension_sha256"], config["ci_policy"]) != (
-            metadata["kernel_version"], runner["native_extension_sha256"], runner["ci_policy"]
+            metadata["kernel_version"],
+            runner["native_extension_sha256"],
+            runner["ci_policy"],
         ):
             raise ValueError("shards must match the serial kernel version, extension digest and policy")
         partition = config["mpi_shard"]
         rank = partition["rank"]
-        if partition["size"] != len(shards) or not 0 <= rank < len(shards) or rank in ranks:
+        size = partition["size"]
+        if (
+            type(size) is not int
+            or type(rank) is not int
+            or size != len(shards)
+            or not 0 <= rank < size
+            or rank in ranks
+        ):
             raise ValueError("missing, duplicate or invalid MPI rank")
         ranks.add(rank)
         rows = checked_runs(shard)
-        if rows != expected[rank::len(shards)] or partition["case_ids"] != [row["case_id"] for row in rows]:
+        if rows != expected[rank :: len(shards)] or partition["case_ids"] != [row["case_id"] for row in rows]:
             raise ValueError("MPI rank case IDs or results differ from the serial partition")
 
 

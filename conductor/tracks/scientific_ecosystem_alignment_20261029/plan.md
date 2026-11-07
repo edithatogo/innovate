@@ -3784,3 +3784,8 @@ Hosted release readiness for this worktree revision remains open.
   The checker accepted both local fast-policy shards in reversed input
   order and rejected a missing rank and a substituted extension digest.
   Ruff passed. Multi-node, scheduler and accelerator gates remain open.
+- [x] Verify all fifteen manual benchmark cases against a serial receipt.
+  Require a non-sharded reference with unique case IDs and integer
+  rank metadata. A two-rank local run passed verification and the
+  checker rejected substitution of a shard for the serial reference.
+  Ruff passed. Multi-node and scheduler execution remain open.
