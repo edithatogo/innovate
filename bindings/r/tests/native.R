@@ -463,6 +463,12 @@ dataset <- list(kind="adoption", time=c(0,1), adoption=c(1,2),
     extraction_time="2026-11-07T00:00:00Z"))
 artifact <- kernel_call("ingest_dataset", NULL, list(dataset=dataset))$result
 stopifnot(isTRUE(artifact$validation$ok), nchar(artifact$dataset$provenance$checksum) == 64)
+stopifnot(identical(kernel_call("ingest_dataset", payload=list(artifact=artifact))$result, artifact))
+modified <- artifact
+modified$dataset$adoption[[2]] <- 3
+checksum_error <- tryCatch({kernel_call("ingest_dataset", payload=list(artifact=modified)); ""},
+  error=conditionMessage)
+stopifnot(grepl("checksum does not match", checksum_error, fixed=TRUE))
 dataset$adoption <- c(1,0)
 diagnostic <- tryCatch(kernel_call("ingest_dataset", NULL, list(dataset=dataset)),
   innovate_dataset_validation_error=identity)

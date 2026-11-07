@@ -480,6 +480,10 @@ end
     result = kernel_call("ingest_dataset", nothing, Dict("dataset"=>dataset))["result"]
     @test result["validation"]["ok"]
     @test kernel_call("ingest_dataset", nothing, Dict("dataset"=>result["dataset"]))["result"] == result
+    @test kernel_call("ingest_dataset", nothing, Dict("artifact"=>result))["result"] == result
+    modified = deepcopy(result)
+    modified["dataset"]["adoption"][2] = 3.
+    @test_throws r"checksum does not match" kernel_call("ingest_dataset", nothing, Dict("artifact"=>modified))
     dataset["adoption"] = [1.,0.]
     error = try
         kernel_call("ingest_dataset", nothing, Dict("dataset"=>dataset))

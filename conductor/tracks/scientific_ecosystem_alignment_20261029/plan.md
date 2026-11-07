@@ -4377,3 +4377,6 @@ Hosted release readiness for this worktree revision remains open.
   wheel extracted for the binding check.
 - [x] Retain direct artifact re-ingestion and tamper detection in the
   packaged Python regression. The rebuilt wheel extraction passed.
+- [x] Retain direct artifact integrity checks in Julia and R native
+  tests. Both reproduced the checksummed artifact and rejected a
+  changed adoption value. The affected binding checks passed locally.
