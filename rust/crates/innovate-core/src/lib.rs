@@ -63,6 +63,8 @@ pub fn execute_json(input: &str) -> String {
                 | "discover_model_cards"
                 | "validate_provenance"
                 | "validate_extension_manifests"
+                | "register_extension_manifest"
+                | "list_extension_manifests"
                 | "dataset_checksum"
                 | "validate_dataset",
             ) => {
@@ -217,6 +219,12 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         }
         if value["operation"] == "dataset_checksum" {
             return provenance::checksum(payload);
+        }
+        if value["operation"] == "register_extension_manifest" {
+            return extensions::register(payload);
+        }
+        if value["operation"] == "list_extension_manifests" {
+            return extensions::registered();
         }
         if value["operation"] == "validate_extension_manifests" {
             return extensions::validate(payload);

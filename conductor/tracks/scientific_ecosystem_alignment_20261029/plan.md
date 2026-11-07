@@ -2788,3 +2788,9 @@ the other competition models and installed binding checks remain open.
   Python 3.15 wheel, Julia and installed R. All three returned identical
   normalized manifests, including the provisional tier and empty requires
   array. R used the raw JSON entry point. Registry lifecycle remains open.
+
+- [x] Restore process-local extension manifest registration and listing.
+  The native registry shares validation rules with batch validation,
+  returns a name-ordered snapshot, and rejects duplicate registration
+  without replacing the first manifest. Two focused tests and Clippy
+  passed. Installed registration lifecycle checks remain open.

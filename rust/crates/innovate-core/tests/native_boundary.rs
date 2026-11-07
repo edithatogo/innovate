@@ -2090,3 +2090,28 @@ fn extension_manifest_validation_normalizes_tiers_and_rejects_duplicate_names() 
     invalid["extension_points"] = json!(["unknown"]);
     assert_eq!(run(json!([invalid]))["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn extension_registry_rejects_duplicate_registration_without_replacement() {
+    let run = |operation, payload| {
+        let request = json!({"schema_version":"2.0","operation":operation,"payload":payload});
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    let mut manifest = json!({"name":"registry-fixture","version":"1","entrypoint":"example:register",
+        "stability":"experimental","extension_points":["diagnostics"]});
+    let result = run("register_extension_manifest", json!({"manifest":manifest}));
+    assert_eq!(result["result"]["manifest"]["stability"], "provisional");
+    manifest["version"] = json!("2");
+    let duplicate = run("register_extension_manifest", json!({"manifest":manifest}));
+    assert_eq!(duplicate["error"]["code"], "invalid_request");
+    let listed = run("list_extension_manifests", json!({}));
+    assert!(
+        listed["result"]["manifests"]
+            .as_array()
+            .unwrap()
+            .contains(&result["result"]["manifest"])
+    );
+}
