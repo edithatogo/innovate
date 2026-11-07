@@ -834,3 +834,59 @@ fn scenario_grid_runs_in_order_and_retains_individual_errors() {
     request["payload"]["scenarios"][1]["id"] = json!("baseline");
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn scenario_grid_validates_and_retains_historical_specs() {
+    let base = json!({"name":"study","description":"","time_horizon":5.,
+        "time_unit":"year","reference_year":2026,"market_size":100.,"initial_adoption":0.});
+    for (details, bad_field, bad_value) in [
+        (
+            json!({"scenario_type":"baseline"}),
+            "time_horizon",
+            json!(0),
+        ),
+        (
+            json!({"scenario_type":"intervention","intervention_type":"policy",
+            "intervention_start_time":1.,"intervention_magnitude":0.2}),
+            "intervention_start_time",
+            json!(-1),
+        ),
+        (
+            json!({"scenario_type":"substitution","incumbent_name":"A","entrant_name":"B",
+            "substitution_rate":0.4}),
+            "substitution_rate",
+            json!(1.1),
+        ),
+        (
+            json!({"scenario_type":"competition","num_competitors":2,
+            "competitor_names":["A","B"],"market_share_initial":[0.4,0.6]}),
+            "market_share_initial",
+            json!([0.3, 0.6]),
+        ),
+        (
+            json!({"scenario_type":"network","network_type":"custom","num_nodes":3,
+            "average_degree":1.}),
+            "num_nodes",
+            json!(0),
+        ),
+    ] {
+        let mut spec = base.clone();
+        spec.as_object_mut()
+            .unwrap()
+            .extend(details.as_object().unwrap().clone());
+        let mut request = json!({"schema_version":"2.0","operation":"execute_scenario_grid",
+            "payload":{"scenarios":[{"id":"test","model_key":"logistic","specification":spec,
+                "simulation":{"inputs":{"time":[1.]},"parameters":{"L":100.,"k":1.,"x0":1.}}}]}});
+        let run = |request: &serde_json::Value| -> serde_json::Value {
+            serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+        };
+        let response = run(&request);
+        assert_eq!(response["result"]["executions"][0]["specification"], spec);
+        assert_eq!(
+            response["result"]["executions"][0]["result"]["values"][0],
+            50.
+        );
+        request["payload"]["scenarios"][0]["specification"][bad_field] = bad_value;
+        assert_eq!(run(&request)["error"]["code"], "invalid_request");
+    }
+}
