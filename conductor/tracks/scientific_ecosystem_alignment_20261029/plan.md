@@ -4255,3 +4255,7 @@ Hosted release readiness for this worktree revision remains open.
   28d0278a through the rebuilt Python 3.15.2 wheel, Julia and installed
   R. All returned counts [0, 0, 0, 2, 3] and reproduced the complete
   simulation result from the generated replay request.
+- [x] Verify degree validation around the edgeless custom scenario.
+  The Rust boundary rejects a zero-degree declaration with an explicit
+  edge, a negative degree and a zero-degree ring. The valid custom
+  graph still executes and replays.

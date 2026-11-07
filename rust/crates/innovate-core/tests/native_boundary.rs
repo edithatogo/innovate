@@ -2595,6 +2595,19 @@ fn kairos_scenario_replay_retains_scheduled_retry_clear() {
         row["result"]
     );
 
+    let mut invalid = closed.clone();
+    invalid["payload"]["scenarios"][0]["simulation"]["simulation_options"]["edges"] =
+        json!([[0, 1]]);
+    assert_eq!(
+        run(&invalid)["error"]["message"],
+        "scenario 'retry': average_degree does not match the initial explicit graph"
+    );
+    invalid["payload"]["scenarios"][0]["specification"]["average_degree"] = json!(-1);
+    assert_eq!(run(&invalid)["error"]["code"], "invalid_request");
+    invalid["payload"]["scenarios"][0]["specification"]["average_degree"] = json!(0);
+    invalid["payload"]["scenarios"][0]["specification"]["network_type"] = json!("ring");
+    assert_eq!(run(&invalid)["error"]["code"], "invalid_request");
+
     let mut paired = request;
     let mut alternative = closed["payload"]["scenarios"][0].clone();
     alternative["id"] = json!("closed");
