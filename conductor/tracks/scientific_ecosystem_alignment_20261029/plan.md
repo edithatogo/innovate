@@ -4326,3 +4326,7 @@ Hosted release readiness for this worktree revision remains open.
   Parquet and Arrow IPC. All three generate stable event IDs, retain
   signed effects and reproduce the checksummed artifact on re-ingestion.
   The three packaged Python regression cases passed.
+- [x] Verify explicit local format selection on a file with a neutral
+  extension. Polars reads the Parquet input and ingestion appends the
+  load step while preserving upstream Unicode metadata and the caller's
+  provenance object. The focused Python ingestion regressions passed.

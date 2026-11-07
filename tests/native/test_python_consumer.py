@@ -1173,3 +1173,21 @@ def test_local_ingestion_defaults_optional_policy_labels(tmp_path, suffix):
     assert artifact["dataset"]["event_labels"] == ["event_0", "event_1"]
     assert artifact["dataset"]["event_effects"] == [0.0, -0.5]
     assert innovate.execute("ingest_dataset", dataset=artifact["dataset"])["result"] == artifact
+
+
+def test_local_ingestion_explicit_format_preserves_upstream_provenance(tmp_path):
+    path = tmp_path / "observations.data"
+    pl.DataFrame({"time": [0, 1], "adoption": [1, 2]}).write_parquet(path)
+    provenance = {
+        "source": "synthetic",
+        "license": "CC-BY-4.0",
+        "extraction_time": "2026-11-07T00:00:00Z",
+        "transform_steps": ["normalize"],
+        "extra": {"cohort": "α"},
+    }
+    artifact = innovate.ingest_local(path, "adoption", provenance=provenance, format=".PARQUET")
+    actual = artifact["dataset"]["provenance"]
+    assert actual["transform_steps"] == ["normalize", "load:observations.data"]
+    assert actual["extra"] == {"cohort": "α", "path": str(path), "format": "parquet"}
+    assert provenance["transform_steps"] == ["normalize"]
+    assert provenance["extra"] == {"cohort": "α"}
