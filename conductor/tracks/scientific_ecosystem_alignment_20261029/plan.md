@@ -5214,3 +5214,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Pass locked all-target Clippy for the Rust core and Polars
   crates with warnings denied. Use fixed-size chunks in the exact
   sign-flip calibration test. The focused test and formatting passed.
+
+- [x] Advertise checkpoint controls through native scenario discovery.
+  Baseline and intervention identify adoption-count and tick pauses.
+  Network identifies completion-count and tick pauses. The focused
+  Rust discovery test verified the family-specific capabilities.

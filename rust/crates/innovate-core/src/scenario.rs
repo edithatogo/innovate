@@ -1458,6 +1458,19 @@ pub(crate) fn discover(request: &Value) -> Value {
                     "requires":["shared_observation_grid","shared_tick_resolution","shared_horizon"]
                 });
             }
+            let event_pause = match family {
+                "baseline" | "intervention" => Some("pause_after_adoptions"),
+                "network" => Some("pause_after_completions"),
+                _ => None,
+            };
+            if let Some(event_pause) = event_pause {
+                capability["checkpoint_resume"] = json!({
+                    "pause_options":[event_pause,"pause_at_tick"],
+                    "resume_option":"resume_checkpoint",
+                    "request_section":"simulation_options",
+                    "paused_result_status":"paused"
+                });
+            }
             if family == "competition" {
                 capability["specification_translation"] = json!({
                     "option":"apply_specifications","model_key":"multi_product"

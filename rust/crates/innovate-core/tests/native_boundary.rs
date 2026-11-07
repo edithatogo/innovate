@@ -1890,6 +1890,15 @@ fn scenario_discovery_lists_and_resolves_native_families() {
         rows[4]["resource_comparison"]["option"],
         "compare_resources"
     );
+    assert_eq!(
+        rows[0]["checkpoint_resume"]["pause_options"],
+        json!(["pause_after_adoptions", "pause_at_tick"])
+    );
+    assert_eq!(
+        rows[4]["checkpoint_resume"]["pause_options"],
+        json!(["pause_after_completions", "pause_at_tick"])
+    );
+    assert!(rows[2].get("checkpoint_resume").is_none());
     assert!(rows[0].get("resource_comparison").is_none());
     let keys: Vec<_> = rows
         .iter()
