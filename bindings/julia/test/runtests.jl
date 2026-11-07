@@ -223,3 +223,12 @@ end
     @test a["counts"]==[1,1,3]
     @test [entry["tick"] for entry in a["completions"]]==[6,9]
 end
+
+@testset "Kairos queue limit and retry" begin
+    options=Dict("engine"=>"kairos_network","population"=>2,"seed"=>42,"edges"=>[],"capacity"=>1,"service_ticks"=>5,"ticks_per_unit"=>1,"max_queue_length"=>0,"retry"=>Dict("delay_ticks"=>4,"max_retries"=>1))
+    payload=Dict("inputs"=>Dict("time"=>[0.,6.,12.]),"parameters"=>Dict("p"=>1e12,"q"=>0.,"m"=>2.),"simulation_options"=>options)
+    result=kernel_simulate_model("bass",payload)["result"]
+    @test result["counts"]==[0,1,2]
+    @test only(result["balks"])["tick"]==2
+    @test only(result["retry_eligibility"])["tick"]==6
+end

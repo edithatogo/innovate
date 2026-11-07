@@ -357,3 +357,55 @@ fn scheduled_capacity_pauses_admission_and_reopens_waiting_service() {
             .is_err()
     );
 }
+
+#[test]
+fn retry_restores_hazard_after_balking_or_expiry() {
+    let mut payload = json!({
+        "inputs":{"time":[0.,6.,12.]},
+        "parameters":{"p":1e12,"q":0.,"m":2.},
+        "simulation_options":{"engine":"kairos_network","population":2,"seed":42,
+            "edges":[],"capacity":1,"service_ticks":5,"ticks_per_unit":1,
+            "max_queue_length":0,"retry":{"delay_ticks":4,"max_retries":1}}
+    });
+    let run = |p| {
+        KernelBinding::new()
+            .simulate_model("bass", p)
+            .unwrap()
+            .result
+            .unwrap()
+    };
+    let result = run(payload.clone());
+    let waiter = &result["requests"][1]["agent"];
+    assert_eq!(result["counts"], json!([0, 1, 2]));
+    assert_eq!(result["balks"], json!([{"tick":2,"agent":waiter}]));
+    assert_eq!(
+        result["retry_eligibility"],
+        json!([{"tick":6,"agent":waiter}])
+    );
+    assert_eq!(result["completions"][1], json!({"tick":12,"agent":waiter}));
+
+    payload["simulation_options"]["max_queue_length"] = json!(1);
+    payload["simulation_options"]["max_wait_ticks"] = json!(2);
+    payload["simulation_options"]["retry"]["delay_ticks"] = json!(2);
+    let expired = run(payload.clone());
+    assert_eq!(expired["abandonments"], json!([{"tick":4,"agent":waiter}]));
+    assert_eq!(expired["balks"], json!([]));
+    assert_eq!(expired["completions"], result["completions"]);
+
+    payload["simulation_options"]["max_queue_length"] = json!(0);
+    payload["simulation_options"]["retry"]["delay_ticks"] = json!(1);
+    let exhausted = run(payload.clone());
+    assert_eq!(exhausted["counts"], json!([0, 1, 1]));
+    assert_eq!(exhausted["balks"].as_array().unwrap().len(), 2);
+    assert_eq!(exhausted["retry_eligibility"].as_array().unwrap().len(), 1);
+    assert_eq!(
+        exhausted["agents"][waiter.as_u64().unwrap() as usize]["state"],
+        "withdrawn"
+    );
+    payload["simulation_options"]["retry"]["max_retries"] = json!(17);
+    assert!(
+        KernelBinding::new()
+            .simulate_model("bass", payload)
+            .is_err()
+    );
+}

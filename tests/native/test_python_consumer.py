@@ -473,3 +473,27 @@ def test_kairos_wait_expiry():
     )["result"]
     assert result["counts"] == [0, 1, 2]
     assert [entry["tick"] for entry in result["abandonments"]] == [7]
+
+
+
+def test_kairos_queue_retry():
+    result = innovate.execute(
+        "simulate_model",
+        "bass",
+        inputs={"time": [0.0, 6.0, 12.0]},
+        parameters={"p": 1e12, "q": 0.0, "m": 2.0},
+        simulation_options={
+            "engine": "kairos_network",
+            "population": 2,
+            "seed": 42,
+            "edges": [],
+            "capacity": 1,
+            "service_ticks": 5,
+            "ticks_per_unit": 1,
+            "max_queue_length": 0,
+            "retry": {"delay_ticks": 4, "max_retries": 1},
+        },
+    )["result"]
+    assert result["counts"] == [0, 1, 2]
+    assert [entry["tick"] for entry in result["balks"]] == [2]
+    assert [entry["tick"] for entry in result["retry_eligibility"]] == [6]

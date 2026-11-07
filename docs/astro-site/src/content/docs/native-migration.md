@@ -732,9 +732,8 @@ schedule ticks applied through the requested horizon.
 
 Set `max_wait_ticks` to a positive integer up to 10^12 to give every
 queued agent a deadline. An agent who starts service at that tick keeps
-the slot. Other expired agents leave permanently, appear in `abandonments`
-and finish in the `withdrawn` state. They neither transmit nor request
-again. Without a deadline, agents keep waiting for service.
+the slot. Other expired agents appear in `abandonments` and enter `withdrawn`
+unless a retry is configured. Without a deadline, agents keep waiting for service.
 
 
 A schedule change may also set `capacity` between zero and the population.
@@ -744,3 +743,13 @@ or exceeds the new limit. At a shared tick, existing completion handoffs
 and waiting deadlines are processed before the scheduled capacity change.
 The result reports the initial `capacity`, `current_capacity`,
 `in_service`, and nonnegative `available` slots.
+
+
+Set `max_queue_length` to limit the number of waiting agents. Zero permits
+immediate service only. Requests that find all slots and queue places occupied
+appear in `balks`. By default those agents withdraw. Optional `retry` sets
+positive `delay_ticks` (up to 10^12) and `max_retries` (1–16 per agent) for both
+balks and waiting expiry. After cooldown the agent becomes susceptible again
+and competes through the same hazard as other eligible agents. It does not
+retain its previous queue position. `retry_eligibility` records the cooldown
+end, and `requests` records all attempts, including balks.

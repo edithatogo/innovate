@@ -213,3 +213,9 @@ weighted_result <- kernel_simulate_model("bass",weighted_network)$result
 stopifnot(all(unlist(weighted_result$counts)==c(1,1,3)),all(vapply(weighted_result$completions,function(e)e$tick,numeric(1))==c(6,9)))
 stopifnot(all(unlist(weighted_result$metadata$agent_priorities)==c(-2,0,3)),weighted_result$metadata$current_capacity==2)
 cat("R directed weighted Kairos resource and priorities passed\n")
+
+retry_options <- list(engine="kairos_network",population=2,seed=42,edges=list(),capacity=1,service_ticks=5,ticks_per_unit=1,max_queue_length=0,retry=list(delay_ticks=4,max_retries=1))
+retry_payload <- list(inputs=list(time=c(0,6,12)),parameters=list(p=1e12,q=0,m=2),simulation_options=retry_options)
+retry_result <- kernel_simulate_model("bass",retry_payload)$result
+stopifnot(all(unlist(retry_result$counts)==c(0,1,2)),length(retry_result$balks)==1,retry_result$balks[[1]]$tick==2,length(retry_result$retry_eligibility)==1,retry_result$retry_eligibility[[1]]$tick==6)
+cat("R Kairos queue limit and retry passed\n")

@@ -38,8 +38,18 @@ struct Options {
     #[serde(default)]
     agent_priorities: Option<Vec<i32>>,
     max_wait_ticks: Option<u64>,
+    max_queue_length: Option<usize>,
+    retry: Option<Retry>,
+
     #[serde(default)]
     schedule: Vec<Change>,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct Retry {
+    delay_ticks: u64,
+    max_retries: u8,
 }
 
 #[derive(Deserialize)]
@@ -134,6 +144,14 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         return Err(invalid(
             "invalid engine/population/capacity/service/tick bounds",
         ));
+    }
+    if o.max_queue_length.is_some_and(|limit| limit > o.population)
+        || o.retry.as_ref().is_some_and(|retry| {
+            !(1..=1_000_000_000_000).contains(&retry.delay_ticks)
+                || !(1..=16).contains(&retry.max_retries)
+        })
+    {
+        return Err(invalid("invalid queue length or retry policy"));
     }
     let innovation_weights = o
         .innovation_multipliers
@@ -267,7 +285,19 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     let mut reneging = RenegingQueue::new();
     let mut deadlines = vec![None; o.population];
     let mut abandoned = Vec::new();
-    let mut withdrawn_in_queue = 0;
+    let mut balks = Vec::new();
+    let mut retries = Vec::new();
+    let mut retry_at = vec![None; o.population];
+    let mut retry_counts = vec![0; o.population];
+    let next_retry = |index: usize, now: u128, counts: &mut [u8]| {
+        let policy = o.retry.as_ref()?;
+        if counts[index] >= policy.max_retries {
+            return None;
+        }
+        counts[index] += 1;
+        Some(now + u128::from(policy.delay_ticks))
+    };
+    let mut waiting_since = vec![None; o.population];
     let mut rng = DeterministicStream::from_run_seed(o.seed);
     let mut now = 0_u128;
     let horizon = (time.last().unwrap() * o.ticks_per_unit as f64).floor() as u128;
@@ -333,10 +363,17 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             .copied()
             .min()
             .filter(|t| *t <= horizon);
+        let wake = retry_at
+            .iter()
+            .flatten()
+            .copied()
+            .min()
+            .filter(|t| *t <= horizon);
         let process_completion = completion.is_some_and(|t| {
             attempt.is_none_or(|a| t <= a)
                 && boundary.is_none_or(|b| t <= b)
                 && expiry.is_none_or(|e| t <= e)
+                && wake.is_none_or(|w| t <= w)
         });
         if process_completion {
             let StepOutcome::Dispatched(event) = context.step() else {
@@ -353,18 +390,41 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             completed.push(now);
             trace.push(json!({"tick":now,"agent":id.index}));
             in_service -= 1;
-        } else if let Some(tick) =
-            expiry.filter(|t| boundary.is_none_or(|b| *t <= b) && attempt.is_none_or(|a| *t <= a))
-        {
+        } else if let Some(tick) = expiry.filter(|t| {
+            boundary.is_none_or(|b| *t <= b)
+                && attempt.is_none_or(|a| *t <= a)
+                && wake.is_none_or(|w| *t <= w)
+        }) {
             now = tick;
             for id in reneging.expire_reneged(SimTime::from_ticks(now)) {
                 if deadlines[id.index as usize].take().is_some() {
-                    context.attach(id, 3_u8);
+                    let index = id.index as usize;
+                    retry_at[index] = next_retry(index, now, &mut retry_counts);
+                    context.attach(
+                        id,
+                        if retry_at[index].is_some() {
+                            4_u8
+                        } else {
+                            3_u8
+                        },
+                    );
                     abandoned.push(json!({"tick":now,"agent":id.index}));
-                    withdrawn_in_queue += 1;
+                    waiting_since[index] = None;
                 }
             }
-        } else if let Some(tick) = boundary.filter(|t| attempt.is_none_or(|a| *t <= a)) {
+            let mut waiting: Vec<_> = waiting_since
+                .iter()
+                .enumerate()
+                .filter_map(|(index, tick)| tick.map(|tick| (tick, index)))
+                .collect();
+            waiting.sort_unstable();
+            resource = PriorityResource::new("adoption_waiters", 0);
+            for (tick, index) in waiting {
+                resource.request(agents[index], priorities[index], SimTime::from_ticks(tick));
+            }
+        } else if let Some(tick) =
+            boundary.filter(|t| attempt.is_none_or(|a| *t <= a) && wake.is_none_or(|w| *t <= w))
+        {
             let (_, replacement, duration, new_capacity) =
                 changes.next().expect("boundary comes from schedule");
             now = tick;
@@ -376,6 +436,15 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             }
             capacity = new_capacity.unwrap_or(capacity);
             applied_ticks.push(tick);
+        } else if let Some(tick) = wake.filter(|t| attempt.is_none_or(|a| *t <= a)) {
+            now = tick;
+            for (index, at) in retry_at.iter_mut().enumerate() {
+                if *at == Some(tick) {
+                    *at = None;
+                    context.attach(agents[index], 0_u8);
+                    retries.push(json!({"tick":now,"agent":agents[index].index}));
+                }
+            }
         } else if let Some(at) = attempt {
             now = at;
             let draw: f64 = rng
@@ -398,7 +467,24 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 return Err(invalid("unexpected request dispatch"));
             }
             requests.push(json!({"tick":now,"agent":id.index}));
+            if in_service >= capacity
+                && o.max_queue_length
+                    .is_some_and(|limit| resource.queue_length() >= limit)
+            {
+                retry_at[index] = next_retry(index, now, &mut retry_counts);
+                context.attach(
+                    id,
+                    if retry_at[index].is_some() {
+                        4_u8
+                    } else {
+                        3_u8
+                    },
+                );
+                balks.push(json!({"tick":now,"agent":id.index}));
+                continue;
+            }
             context.attach(id, 1_u8);
+            waiting_since[index] = Some(now);
             resource.request(id, priorities[index], SimTime::from_ticks(now));
             if let Some(wait) = o.max_wait_ticks.filter(|_| in_service >= capacity) {
                 deadlines[index] = Some(now + u128::from(wait));
@@ -416,11 +502,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 break;
             };
             let index = next.index as usize;
-            // The pinned priority resource has no queue removal API.
-            if context.get::<u8>(next) == Some(&3) {
-                withdrawn_in_queue -= 1;
-                continue;
-            }
+            waiting_since[index] = None;
             deadlines[index] = None;
             context.schedule_behaviour(
                 next,
@@ -430,7 +512,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             in_service += 1;
         }
     }
-    let queue_length = resource.queue_length() - withdrawn_in_queue;
+    let queue_length = resource.queue_length();
     let available = capacity.saturating_sub(in_service);
     let counts: Vec<_> = time
         .iter()
@@ -444,14 +526,14 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         .iter()
         .map(|n| market * (*n as f64 / o.population as f64))
         .collect();
-    let states:Vec<_>=agents.iter().map(|id|json!({"index":id.index,"generation":id.generation,"state":match context.get::<u8>(*id){Some(0)=>"susceptible",Some(1)=>"pending",Some(3)=>"withdrawn",_=>"adopted"}})).collect();
+    let states:Vec<_>=agents.iter().map(|id|json!({"index":id.index,"generation":id.generation,"state":match context.get::<u8>(*id){Some(0)=>"susceptible",Some(1)=>"pending",Some(3)=>"withdrawn",Some(4)=>"cooldown",_=>"adopted"}})).collect();
     Ok(KernelResponse {
         schema_version: KERNEL_SCHEMA_VERSION.into(),
         operation: op,
         model_key: r.model_key.clone(),
         error: None,
         result: Some(
-            json!({"values":values,"counts":counts,"agents":states,"requests":requests,"completions":trace,"abandonments":abandoned,"metadata":{"engine":"kairos_network","kairos_revision":crate::simulation::REV,"seed":o.seed,"population":o.population,"capacity":o.capacity,"current_capacity":capacity,"in_service":in_service,"service_ticks":o.service_ticks,"ticks_per_unit":o.ticks_per_unit,"queue_length":queue_length,"available":available,"agent_priorities":priorities,"max_wait_ticks":o.max_wait_ticks,"innovation_multipliers":innovation_weights,"imitation_multipliers":imitation_weights,"agent_service_ticks":service,"directed":o.directed,"weighted":graph.weighted,"applied_schedule_ticks":applied_ticks,"service_override_ticks":service_override,"hazard":if graph.weighted {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted incoming weight/total incoming weight), zero imitation without incoming edges"} else {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted neighbors/degree), zero imitation at degree zero"},"resource_semantics":"Nonpreemptive priority, FIFO ties; adoption occurs at service completion; pending agents do not transmit","rng_checkpoint":rng.checkpoint()}}),
+            json!({"values":values,"counts":counts,"agents":states,"requests":requests,"completions":trace,"abandonments":abandoned,"balks":balks,"retry_eligibility":retries,"metadata":{"engine":"kairos_network","kairos_revision":crate::simulation::REV,"seed":o.seed,"population":o.population,"capacity":o.capacity,"current_capacity":capacity,"in_service":in_service,"service_ticks":o.service_ticks,"ticks_per_unit":o.ticks_per_unit,"queue_length":queue_length,"available":available,"agent_priorities":priorities,"max_wait_ticks":o.max_wait_ticks,"max_queue_length":o.max_queue_length,"innovation_multipliers":innovation_weights,"imitation_multipliers":imitation_weights,"agent_service_ticks":service,"directed":o.directed,"weighted":graph.weighted,"applied_schedule_ticks":applied_ticks,"service_override_ticks":service_override,"hazard":if graph.weighted {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted incoming weight/total incoming weight), zero imitation without incoming edges"} else {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted neighbors/degree), zero imitation at degree zero"},"resource_semantics":"Nonpreemptive priority, FIFO ties; adoption occurs at service completion; pending agents do not transmit","rng_checkpoint":rng.checkpoint()}}),
         ),
         metadata: json!({"runtime":"rust_native","engine":"kairos_network"}),
     })
