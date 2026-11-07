@@ -3416,3 +3416,11 @@ the other competition models and installed binding checks remain open.
   toolchain lacked llvm-profdata. Workspace line coverage was 87.55%
   (15,403 of 17,594), including the unexercised PyO3 crate. Installed
   binding coverage and release acceptance remain separate.
+
+- [x] Audit locked runtime dependencies at c6aa51f5. PyPI audit
+  reported no known vulnerabilities for Polars and its runtime
+  package, both 2.1.0. Cargo audit reported zero vulnerabilities
+  against RustSec database 309392b18f6b17022f82c701f300433126901068
+  and retained the bincode unmaintained warning RUSTSEC-2025-0141.
+  Cargo tree showed no reverse dependency in the all-features,
+  all-targets workspace graph. Broader supply-chain gates remain open.
