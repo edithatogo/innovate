@@ -1,0 +1,13 @@
+Check YAML...........................................(no files to check)Skipped
+Check TOML...........................................(no files to check)Skipped
+Check merge conflicts....................................................Passed
+Check large files........................................................Passed
+End of file..............................................................Passed
+Trailing whitespace......................................................Passed
+Ruff.................................................(no files to check)Skipped
+Ruff format..........................................(no files to check)Skipped
+Native binding types.................................(no files to check)Skipped
+Spelling.................................................................Passed
+Strip notebook output................................(no files to check)Skipped
+Python security......................................(no files to check)Skipped
+Lint GitHub Actions workflow files...................(no files to check)Skipped

@@ -10,12 +10,16 @@ no Python numerical fallback, pandas or xarray runtime.
 
 ## Current scope
 
-Eleven native model families expose deterministic fitting, prediction, simulation,
-summary and diagnostics: Bass, Logistic, Gompertz, Fisher–Pry, Norton–Bass,
-Lotka–Volterra, multi-product competition, complementary goods and lock-in. Their support remains bounded.
-Covariates, events, uncertainty, other model families and full Kairos simulation
-remain required migration work. Discovery describes the executable subset;
-release stays blocked by the full model and feature ledger.
+All sixteen model families expose bounded native fitting, prediction, simulation,
+summary and diagnostics paths: Bass, Logistic, Gompertz, Fisher–Pry, Norton–Bass,
+Lotka–Volterra, multi-product competition, complementary goods, lock-in,
+network diffusion, policy diffusion, latent process, regime switching,
+hierarchical, mixture and composite. Operation metadata distinguishes point
+simulation, stochastic Kairos engines, supported rate outputs and named variants.
+Logistic covariates/events and other specific extensions are described below;
+full covariates/events across models, inference, uncertainty, richer Kairos and
+all remaining scientific/distribution obligations stay required. Discovery is
+the executable subset, and all 38 ledger obligations still block release.
 
 ## Polars fitting and prediction
 

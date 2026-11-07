@@ -182,42 +182,62 @@ Before marking any task complete, verify:
 ## Development Commands
 
 ### Setup
+
+For a new checkout, follow [README development setup](../README.md#development).
+Reuse the owned `.venv-native` environment when present. Before changing an
+existing environment, verify its owner and that no active operation uses it.
+Verify the actual selected interpreter; a manifest alone is not runtime proof.
+
 ```bash
-uv sync
+.venv-native/bin/python -c 'import sys; print(sys.version, sys.prefix)'
+.venv-native/bin/python scripts/check_migration.py
 ```
+
+Current qualification uses Python 3.15.2 and Rust/Cargo 1.99.1. Keep older
+historical environments intact until their owners finish; they are not active
+compatibility runners. Use uv for Python dependency/lock changes in the selected
+owned environment, Cargo for Rust, and pnpm for documentation.
 
 ### Daily Development
+
 ```bash
-uv run pytest                    # Run all tests
-uv run pytest -m unit            # Run unit tests only (fast feedback)
-uv run ruff check .              # Lint
-uv run ruff format .             # Format
-uv run basedpyright src/         # Type check
-uv run nox --list                # Show Python task sessions
-uv run nox -s tests              # Run required unit gate on Python 3.14
-uv run scalene src/innovate/     # Profile performance
+.venv-native/bin/python -m pytest tests/native/test_python_consumer.py
+.venv-native/bin/nox -s lint types
+cargo test --locked -p innovate-core --test composite
+.venv-native/bin/nox --list
 ```
 
-`uv` is the canonical Python dependency manager and command runner for this
-repository. `nox` provides the Python task layer for repeatable local and CI
-checks, including the required Python 3.14 unit-test baseline.
+Select the actually affected test file/node or Cargo target during edits; the
+examples above demonstrate selectors, not a requirement to rerun those same
+models for every change. Pytest cache remains enabled. Full native/installed
+consumer gates belong at coherent milestones, with unchanged receipts reused.
+Nox uses the explicitly selected repo-local interpreter and configured check
+scope; current standard-mode typing is not strict-mode acceptance.
 
 Runtime code should prefer named loggers and structured error payloads over
 ad hoc `print` calls. `print` remains acceptable for tests, examples, and
 explicitly human-facing scripts.
 
 ### Before Committing
+
+Run affected checks for ordinary edits and reuse unchanged source-bound receipts.
+At a coherent source milestone, run the full development gate below; retain
+separate coverage, security, clean-package/platform and release gates. Do not
+rerun unchanged numerical suites solely for documentation edits.
+
 ```bash
-uv run nox -s lint types tests docs package
+.venv-native/bin/nox -s lint types tests native docs package
 ```
 
 ## Testing Requirements
 
 ### Test Structure
-The test suite is organized into three tiers:
-- **Unit Tests** (`tests/unit/`): Test individual functions/classes in isolation. Marked with `@pytest.mark.unit`.
-- **Integration Tests** (`tests/integration/`): Test interactions between modules. Marked with `@pytest.mark.integration`.
-- **End-to-End Tests** (`tests/e2e/`): Test complete user workflows from start to finish. Marked with `@pytest.mark.e2e`.
+
+Native Rust unit/numerical tests live under their crates and `rust/crates/*/tests`.
+Python installed-consumer/policy tests use `tests/native`. Julia/R conformance
+uses `bindings/julia/test` and `bindings/r/tests`. The retired Python-only test
+tiers remain in Git history as parity evidence, not current runner paths.
+Integration and end-to-end requirements below apply across these native surfaces.
 
 ### Unit Testing
 - Every module must have corresponding tests.
@@ -240,19 +260,30 @@ The test suite is organized into three tiers:
 - Define custom strategies for adoption curves, parameter sets, and time series data.
 
 ### Mutation Testing
-- Run `mutmut` periodically (weekly CI job) to assess test quality.
-- Target: >70% mutation score.
-- Write additional tests to kill surviving mutants.
+- Qualify mutation testing for the Rust scientific implementation; Python-only
+  mutation results do not cover Rust computation.
+- Preserve the >70% mutation-score target and weekly CI requirement. Report the
+  missing native runner/schedule as an open qualification gate until proven.
+- Write behavioral tests for surviving mutants; do not suppress them for speed.
 
 ### Coverage Measurement
-- Run coverage on every CI execution: `pytest --cov=innovate --cov-report=xml --cov-report=term-missing`
-- Target: >80% overall, >90% for core modules (diffuse, substitute, compete, fitters).
-- Measure both line and branch coverage.
+
+- Measure Rust scientific/C ABI coverage with the qualified native coverage route;
+  measure binding behavior separately with installed consumers.
+- Preserve >80% overall coverage and the >90% critical-module target. Line, branch
+  and mutation evidence are distinct; do not infer branch/mutation coverage from
+  the current line-only receipts.
+- Keep full CI coverage gates at milestones and bind reports to actual source.
+  Focused runs/cached results must retain their exact scope and cannot stand in
+  for clean-package, platform or complete scientific acceptance.
 
 ### Performance Profiling
-- Use **Scalene** for CPU, memory, and GPU profiling: `scalene src/innovate/ --cli`
-- Use `pytest-benchmark` for microbenchmarks tracked in CI.
-- Profile critical paths before and after optimization changes.
+
+- Profile Rust numerical hot paths, allocations and Polars/Arrow conversion costs
+  with qualified native tools; profile binding overhead separately.
+- Preserve reproducible microbenchmark and before/after profiling requirements.
+- Qualify accelerator/HPC execution independently. Retired NumPy/JAX or Scalene
+  numerical routes are not active fallbacks or native-performance proof.
 
 ## Code Review Process
 
@@ -291,7 +322,7 @@ Before committing any changes:
 
 5. **Performance**
    - Database queries optimized
-   - Vectorized operations used (NumPy/JAX)
+   - Native batches/Polars operations avoid unnecessary binding loops
    - No unnecessary allocations
 
 ## Commit Guidelines
@@ -321,8 +352,8 @@ Before committing any changes:
 git commit -m "feat(diffuse): Add covariate-driven Bass model fitting"
 git commit -m "fix(compete): Correct equilibrium calculation in Lotka-Volterra"
 git commit -m "test(fitters): Add property-based tests for curve fitting"
-git commit -m "ci: Consolidate workflows into single pipeline"
-git commit -m "perf(substitute): Vectorize Fisher-Pry prediction with JAX"
+git commit -m "ci: Qualify native binding conformance workflows"
+git commit -m "perf(substitute): Reduce Rust forecast allocations"
 ```
 
 ## Definition of Done

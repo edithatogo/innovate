@@ -9,17 +9,24 @@ numerical fallback. Rust is the core library, not a fourth binding.
 
 ## Current native scope
 
-The kernel implements bounded Bass, Logistic, Gompertz, Fisher–Pry,
-multi-generation Norton–Bass, Lotka–Volterra, multi-product competition and complementary goods
-fit/predict/simulate/summary/diagnostics paths. Fitting reports numerical
-convergence and local sensitivity rank.
-These are development capabilities, not full scientific or release acceptance.
-Advanced model families, covariates, event splits, uncertainty, full Kairos
-simulation and the remaining areas in [the migration ledger](migration-ledger.json)
-still require implementation or qualification. Bass now has a bounded native
-Kairos DES birth-process simulation with explicit seeds and tick resolution. The release gate currently fails.
-The earlier Python suite remains in Git history as migration evidence; the new
-native suite does not claim equivalent feature coverage.
+All sixteen model families now have bounded Rust implementations: Bass, Logistic,
+Gompertz, Fisher–Pry, Norton–Bass, Lotka–Volterra, multi-product competition,
+complementary goods, lock-in, network diffusion, policy diffusion, latent process,
+regime switching, hierarchical, mixture and composite. Discovery describes the
+currently executable operations and variants; the
+[native migration guide](docs/astro-site/src/content/docs/native-migration.md)
+records their scientific conventions, initial-state semantics and limits.
+
+Current extensions include Logistic covariates/event curves, native scalar
+precision weighting, Gaussian mixture EM, coupled composite ODE levels/rates,
+and bounded Kairos DES/ABM/network-resource simulation. Full family capability,
+covariates/events across other models, uncertainty/inference, richer Kairos and
+the remaining areas in [the migration ledger](migration-ledger.json) still require
+implementation or qualification. All 38 obligations remain required and the
+release gate intentionally fails. Local numerical convergence, rank and consumer
+checks are development evidence, not full scientific or release acceptance.
+The earlier Python suite remains in Git history as migration evidence; the native
+suite does not claim equivalent feature coverage.
 
 Polars DataFrames/LazyFrames are the Python table interface. Rust reads/writes
 Arrow IPC and owns table validation and predictions. IPC currently copies buffers;
@@ -30,7 +37,9 @@ and distributable native-library bundles remain open.
 ## Development
 
 Use Rust/Cargo 1.99.1 and repo-local Python 3.15.2. Keep any earlier environment
-until its active operations finish. The new environment is separate:
+until its active operations finish. Create the separate environment only for a
+new checkout; reuse an existing owned environment and finish its active jobs
+before changing dependencies:
 
 ```sh
 uv venv .venv-native --python 3.15.2
