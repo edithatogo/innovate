@@ -6735,3 +6735,8 @@ Hosted release readiness for this worktree revision remains open.
   in all three bindings. Python verified all eight cumulative
   frequencies within four binomial standard errors of the analytic
   CDF. Reused the unchanged 4947d6b4 native builds.
+
+- [x] Preserve the full analytic request-time check in the Rust
+  network suite. Check cumulative probabilities at ticks 1–4
+  for both constant and ramped hazards, and reject duplicate or
+  out-of-range requests. All 35 network tests passed.

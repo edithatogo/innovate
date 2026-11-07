@@ -537,7 +537,7 @@ fn single_agent_request_frequency_matches_exponential_hazard() {
         if !forcing.is_null() {
             payload["simulation_options"]["hazard_forcing"] = forcing.clone();
         }
-        let mut requests = 0;
+        let mut histogram = [0; 5];
         for seed in 0..trials {
             payload["simulation_options"]["seed"] = json!(seed);
             let result = kernel
@@ -545,16 +545,31 @@ fn single_agent_request_frequency_matches_exponential_hazard() {
                 .unwrap()
                 .result
                 .unwrap();
-            requests += result["requests"].as_array().unwrap().len();
+            let requests = result["requests"].as_array().unwrap();
+            assert!(requests.len() <= 1);
+            if let Some(request) = requests.first() {
+                let tick = request["tick"].as_u64().unwrap() as usize;
+                assert!((1..=4).contains(&tick));
+                histogram[tick] += 1;
+            }
         }
-        // Both designs have cumulative hazard one at tick four.
-        let probability = 1.0 - (-1.0_f64).exp();
-        let observed = requests as f64 / trials as f64;
-        let standard_error = (probability * (1.0 - probability) / trials as f64).sqrt();
-        assert!(
-            (observed - probability).abs() < 4.0 * standard_error,
-            "forcing {forcing}: {requests}/{trials}"
-        );
+        let mut requests = 0;
+        for (tick, count) in histogram.into_iter().enumerate().skip(1) {
+            requests += count;
+            let t = tick as f64;
+            let hazard = if forcing.is_null() {
+                t / 4.
+            } else {
+                t * t / 16.
+            };
+            let probability = -(-hazard).exp_m1();
+            let observed = requests as f64 / trials as f64;
+            let standard_error = (probability * (1.0 - probability) / trials as f64).sqrt();
+            assert!(
+                (observed - probability).abs() < 4.0 * standard_error,
+                "forcing {forcing}, tick {tick}: {requests}/{trials}"
+            );
+        }
     }
 }
 
