@@ -2697,3 +2697,10 @@ the other competition models and installed binding checks remain open.
   after changing saved capacity from 100 to 120. Python and Julia
   agree exactly, and R agrees within 1e-12. The R list request omitted
   optional empty option objects.
+
+- [x] Support named covariate history overrides on saved-state
+  counterfactual forecasts. Preserve the saved time grid and apply
+  replacement values only to the alternative. An analytic forced
+  Lotka–Volterra fixture verifies the resulting trajectories and
+  rejects a length mismatch. Focused Rust and Clippy passed.
+  Installed binding verification remains open.

@@ -389,6 +389,18 @@ fn counterfactual_forecast(payload: &Value) -> Result<Value, &'static str> {
             "counterfactual override names an unknown covariate",
         )?;
     }
+    if let Some(overrides) = payload.get("covariate_history_overrides") {
+        let history = alternative
+            .get_mut("state")
+            .and_then(|state| state.pointer_mut("/constructor_kwargs/covariate_history/values"))
+            .and_then(Value::as_object_mut)
+            .ok_or("baseline requires fitted state with named covariate history")?;
+        apply_overrides(
+            history,
+            overrides,
+            "counterfactual override names an unknown historical covariate",
+        )?;
+    }
     let binding = crate::KernelBinding::new();
     let predict = |request| {
         binding
