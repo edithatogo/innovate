@@ -1577,4 +1577,7 @@ the other competition models and installed binding checks remain open.
   retain their assigned deadlines. A regression shows a later arrival
   expiring at tick 5 under the new limit while the earlier waiter is
   admitted. All 21 network tests and focused Clippy passed.
-- [ ] Verify scheduled wait deadlines through Python, Julia and R.
+- [x] Verify scheduled wait deadlines through the rebuilt Python wheel,
+  Julia and installed R. Counts, requests, abandonments and completions
+  matched exactly. The later waiter expired at tick 5 and the original
+  waiter completed under its retained deadline.
