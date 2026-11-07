@@ -6230,3 +6230,10 @@ Hosted release readiness for this worktree revision remains open.
   outcome inputs were correct, respectively. Coverage was 0 of 400
   when both were wrong. Nuisance inputs were fixed, so this check
   does not qualify uncertainty from fitted nuisance models.
+
+- [x] Check fitted nuisance uncertainty on a two-stratum synthetic
+  design with heterogeneous effects and five held-out folds. Across
+  400 trials of 800 units, cross-fitted ATE averaged 1.9985 (truth 2.0)
+  and ATT averaged 2.5973 (truth 2.6). Nominal 95% Wald coverage was
+  390/400 and 386/400, respectively. The reproducible check uses the
+  optimized Python wheel and independent units with good overlap.
