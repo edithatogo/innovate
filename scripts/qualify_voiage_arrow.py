@@ -70,6 +70,19 @@ def qualify() -> dict[str, object]:
         raise ValueError("fixture decisions must switch across scenarios")
     if not isclose(observed, expected, rel_tol=1e-12, abs_tol=1e-12):
         raise ValueError("Voiage EVPI oracle mismatch")
+    # Four equally likely draws encode a 3:1 empirical scenario distribution.
+    # Voiage 3.1.0 EVPI consumes draws without a separate weight argument.
+    weighted = restored[[0, 0, 0, 1]]
+    weighted_data = innovate.export_ipc_file(weighted)
+    weighted_restored = pl.read_ipc(io.BytesIO(weighted_data))
+    if not weighted_restored.equals(weighted):
+        raise ValueError("Arrow IPC changed empirical scenario multiplicities")
+    if (3 * values[0] + values[1]) / 4 >= alternative:
+        raise ValueError("weighted fixture must prefer the alternative")
+    weighted_expected = (values[1] - alternative) / 4
+    weighted_observed = float(evpi(ValueArray.from_polars(weighted_restored)))
+    if not isclose(weighted_observed, weighted_expected, rel_tol=1e-12, abs_tol=1e-12):
+        raise ValueError("Voiage empirical-weight EVPI oracle mismatch")
     return {
         "python": sys.version.split()[0],
         "innovate": version("innovate"),
@@ -78,6 +91,9 @@ def qualify() -> dict[str, object]:
         "arrow_ipc_sha256": hashlib.sha256(data).hexdigest(),
         "reference_evpi": expected,
         "installed_evpi": observed,
+        "weighted_arrow_ipc_sha256": hashlib.sha256(weighted_data).hexdigest(),
+        "weighted_reference_evpi": weighted_expected,
+        "weighted_installed_evpi": weighted_observed,
         "scope": "Synthetic CPU scenario handoff only; not full scientific/HPC/clinical acceptance",
     }
 

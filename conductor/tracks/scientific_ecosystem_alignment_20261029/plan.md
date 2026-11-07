@@ -7341,3 +7341,8 @@ Hosted release readiness for this worktree revision remains open.
   wheel passed import-origin, native scenario and Arrow round-trip
   checks. Voiage EVPI was 5.641720719927868 against the analytic
   5.641720719927869. Broader workflows and hosted qualification remain open.
+
+- [x] Qualify a 3:1 empirical scenario distribution through Arrow IPC
+  and Voiage. Replicated draws encode the weights for Voiage 3.1.0.
+  The preferred strategy switched as expected and EVPI matched the
+  analytic reference (3.7317144196428957) using the optimized wheel.
