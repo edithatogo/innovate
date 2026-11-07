@@ -3345,3 +3345,10 @@ the other competition models and installed binding checks remain open.
 - [x] Run the Julia binding suite and freshly installed R native
   test script at `e86679c5` against the rebuilt locked Rust FFI library.
   Both suites exited successfully. Package release gates remain open.
+
+- [x] Repair the R source-package check. Bundle byte-identical copies
+  of the seven Rust reference fixtures used by the R tests, document
+  the exported helpers, and retain Apache-2.0 in installed licenses.
+  R 4.3.0 on Darwin arm64 built the tarball with vignettes and
+  R CMD check --no-manual returned Status: OK against the locked
+  external Rust FFI library. Distribution of that library remains separate.

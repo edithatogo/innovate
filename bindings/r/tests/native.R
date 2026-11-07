@@ -1,3 +1,6 @@
+fixture_dir <- if (dir.exists("fixtures")) "fixtures" else "bindings/r/tests/fixtures"
+fixture_path <- function(name) file.path(fixture_dir, name)
+
 library(innovate.R)
 payload <- list(inputs=list(time=c(0,1,2)), parameters=list(L=100,k=1,x0=1))
 x <- kernel_predict_model("logistic", payload)
@@ -227,7 +230,7 @@ nb_forecast <- kernel_predict_model("norton_bass",list(inputs=list(time=3),state
 stopifnot(abs(nb_result$rows[[3]][[1]]-30*exp(-0.3))<1e-5,abs(nb_forecast$rows[[1]][[1]]-50*exp(-0.5))<1e-5)
 cat("R Norton Bass forcing history passed\n")
 
-lv_fixture <- jsonlite::fromJSON("rust/crates/innovate-core/tests/fixtures/lotka_forcing_scipy.json",simplifyVector=FALSE)
+lv_fixture <- jsonlite::fromJSON(fixture_path("lotka_forcing_scipy.json"),simplifyVector=FALSE)
 lv_start <- lv_fixture$parameters
 lv_start$alpha1 <- 0.29
 lv_start$beta_beta1_price <- -0.025
@@ -240,7 +243,7 @@ for (lv_options in list(list(initial_parameters=lv_start,max_iterations=150),lis
 cat("R interacting Lotka forcing fit and history passed\n")
 
 mp_fixture <- jsonlite::fromJSON(
-  "rust/crates/innovate-core/tests/fixtures/multi_forcing_scipy.json", simplifyVector=FALSE
+  fixture_path("multi_forcing_scipy.json"), simplifyVector=FALSE
 )
 for (layout in c("corrected", "historical")) {
   mp_payload <- list(
@@ -271,7 +274,7 @@ stopifnot(mp_fit$diagnostics$optimizer$converged,
 cat("R multi product forcing layouts, fit and forecast passed\n")
 
 cg_fixture <- jsonlite::fromJSON(
-  "rust/crates/innovate-core/tests/fixtures/complementary_forcing_scipy.json", simplifyVector=FALSE
+  fixture_path("complementary_forcing_scipy.json"), simplifyVector=FALSE
 )
 cg_start <- cg_fixture$parameters
 cg_start$k1 <- 0.29
@@ -292,7 +295,7 @@ for (cg_options in list(list(initial_parameters=cg_start,max_iterations=150),lis
 cat("R complementary goods forcing fit and history passed\n")
 
 li_fixture <- jsonlite::fromJSON(
-  "rust/crates/innovate-core/tests/fixtures/lock_forcing_scipy.json", simplifyVector=FALSE
+  fixture_path("lock_forcing_scipy.json"), simplifyVector=FALSE
 )
 li_start <- li_fixture$parameters
 li_start$alpha1 <- 0.29
@@ -319,7 +322,7 @@ stopifnot(all(vapply(li_projected$rows,function(row)row[[1]],numeric(1))==c(95,9
 cat("R lock in forcing fit, forecast and capacity projection passed\n")
 
 event_fixture <- jsonlite::fromJSON(
-  "rust/crates/innovate-core/tests/fixtures/ecosystem_events_scipy.json", simplifyVector=FALSE
+  fixture_path("ecosystem_events_scipy.json"), simplifyVector=FALSE
 )
 for (model in c("lotka_volterra", "complementary_goods", "lock_in", "multi_product")) {
   event_case <- event_fixture$cases[[model]]
@@ -353,7 +356,7 @@ cat("R ecosystem parameter events, fit and singleton scalar time passed\n")
 
 for (fixture_name in c("norton_events_scipy.json","successive_forcing_scipy.json")) for (explicit_start in c(TRUE,FALSE)) {
   nb_event_fixture <- jsonlite::fromJSON(
-    file.path("rust/crates/innovate-core/tests/fixtures",fixture_name), simplifyVector=FALSE
+    fixture_path(fixture_name), simplifyVector=FALSE
   )
   nb_fit_options <- list(max_iterations=200)
   if (explicit_start) {

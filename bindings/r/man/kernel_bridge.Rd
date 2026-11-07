@@ -10,6 +10,15 @@
 \alias{kernel_simulate_model}
 \alias{kernel_summarize_model}
 \alias{kernel_diagnose_model}
+\alias{kernel_fit_batch}
+\alias{kernel_predict_batch}
+\alias{kernel_categorize_adopters}
+\alias{kernel_categorize_fitted_adopters}
+\alias{kernel_cumulative_sum}
+\alias{kernel_rolling_average}
+\alias{kernel_aggregate_dates}
+\alias{kernel_seasonal_decomposition}
+\alias{kernel_sarima_fit}
 \title{Invoke the Innovate Rust kernel}
 \description{Native schema 2.0 requests with structured errors. No Python runtime is required.}
 \usage{
@@ -35,4 +44,8 @@ kernel_diagnose_model(model_key, payload)
 \item{raw}{Return the successful response as JSON text to retain exact integer tokens and array shapes.}
 }
 \value{A parsed native response, or JSON text when requested. Scenario execution and comparison exports return raw Arrow IPC bytes. Native errors raise an R error.}
-\details{Set INNOVATE_NATIVE_LIBRARY to the installed native shared library. Advanced features and native distribution packaging remain under development.}
+\details{The batch functions take a model key, an ordered list of datasets
+and a worker count. Adopter categorization takes aligned times and rates
+or a fitted-model payload. Preprocessing helpers provide cumulative sums,
+rolling averages, date aggregation, seasonal decomposition and SARIMA
+fitted values. Set INNOVATE_NATIVE_LIBRARY to the installed native shared library. Advanced features and native distribution packaging remain under development.}
