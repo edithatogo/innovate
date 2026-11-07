@@ -3640,3 +3640,45 @@ fn kairos_scenario_artifact_replays_continuous_hazard_wakeup() {
         row["result"]
     );
 }
+
+#[test]
+fn scenario_grid_paused_network_preserves_seed_and_resumes() {
+    let mut request: serde_json::Value =
+        serde_json::from_str(include_str!("fixtures/kairos_hazard_replay.json")).unwrap();
+    let run = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let expected = run(&request);
+    let mut other = request["payload"]["scenarios"][0].clone();
+    other["id"] = json!("other");
+    request["payload"]["scenarios"]
+        .as_array_mut()
+        .unwrap()
+        .push(other);
+    request["payload"]["rank_scenarios"] = json!(["wake", "other"]);
+    let options = "/payload/scenarios/0/simulation/simulation_options";
+    request.pointer_mut(options).unwrap()["pause_at_tick"] = json!(2);
+    let paused = run(&request);
+    let row = &paused["result"]["executions"][0];
+    assert_eq!(row["result"]["status"], "paused", "{paused}");
+    assert_eq!(row["artifact"]["seed"], 42);
+    assert_eq!(
+        paused["result"]["ranking"]["error"]["message"],
+        "comparison requires a completed simulation; resume the paused scenario"
+    );
+    let mut resume = row["artifact"]["replay_request"].clone();
+    let resume_options = resume
+        .pointer_mut(options)
+        .unwrap()
+        .as_object_mut()
+        .unwrap();
+    resume_options.remove("pause_at_tick");
+    resume_options.insert(
+        "resume_checkpoint".into(),
+        row["result"]["checkpoint"].clone(),
+    );
+    assert_eq!(
+        run(&resume)["result"]["executions"][0]["result"],
+        expected["result"]["executions"][0]["result"]
+    );
+}

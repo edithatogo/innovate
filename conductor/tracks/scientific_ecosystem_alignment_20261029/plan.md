@@ -4997,7 +4997,7 @@ Hosted release readiness for this worktree revision remains open.
   The network checkpoint restores pending services, retries, deadlines,
   policy state and accounting. Python, Julia and R passed the scoped
   round-trip fixtures recorded below.
-- [ ] Qualify time-based pauses between dispatched events, including
+- [x] Qualify time-based pauses between dispatched events, including
   an outstanding hazard draw or integrated budget. Broader scenario
   and scientific qualification remains open.
 
@@ -5145,3 +5145,9 @@ Hosted release readiness for this worktree revision remains open.
   suites. The focused Python test, six Julia assertions and installed
   R checks reproduced the uninterrupted result for every engine.
   Python used the rebuilt native extension from the wheel build.
+
+- [x] Preserve the seed on paused scenario artifacts and give a
+  resume diagnostic when ranking or comparing a paused scalar path.
+  The translated network scenario paused under continuous forcing
+  and resumed through its saved request to the uninterrupted result.
+  The focused Rust boundary test passed.

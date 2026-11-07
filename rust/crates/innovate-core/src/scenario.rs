@@ -658,9 +658,16 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
                         metadata["kernel"] = kernel;
                         if row["error"].is_null() {
                             let timestamp = chrono::DateTime::<chrono::Utc>::from(start).to_rfc3339();
+                            let seed = row["result"]["metadata"].get("seed").unwrap_or_else(|| {
+                                if row["result"]["status"] == "paused" {
+                                    &scenario.simulation["simulation_options"]["seed"]
+                                } else {
+                                    &Value::Null
+                                }
+                            });
                             row["artifact"] = json!({
                                 "scenario":scenario.specification,
-                                "seed":row["result"]["metadata"]["seed"],
+                                "seed":seed,
                                 "model_type":scenario.model_key,
                                 "version":env!("CARGO_PKG_VERSION"),
                                 "notes":scenario.notes,
@@ -885,6 +892,9 @@ fn add_time_basis(result: &mut Value, basis: Option<(&str, i64)>) {
 
 fn scalar_path(paths: &ScenarioPaths<'_>, id: &str) -> Result<(Vec<f64>, Vec<f64>), &'static str> {
     let (scenario, result) = paths.get(id).ok_or("unknown scenario ID")?;
+    if result["status"] == "paused" {
+        return Err("comparison requires a completed simulation; resume the paused scenario");
+    }
     let inputs = &scenario.simulation["inputs"];
     let time = inputs.get("time").unwrap_or(&inputs["t"]);
     let time: Vec<f64> = serde_json::from_value(time.clone())

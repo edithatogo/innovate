@@ -149,7 +149,7 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/kairos-continuous-hazards-20261107/julia.log",
-      "remaining": "Event-boundary resume has local Rust and three-binding evidence in the track plan. Time-based pauses, broader scenario integration and scientific qualification remain open."
+      "remaining": "Event- and tick-boundary resume have local Rust and three-binding evidence in the track plan. Broader scenario integration and scientific qualification remain open."
     },
     {
       "key": "bayesian_inference",
