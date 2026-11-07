@@ -6868,3 +6868,9 @@ Hosted release readiness for this worktree revision remains open.
   preserved the malformed middle-row error and matched direct fitted
   predictions. The test reads both scalar values and Norton–Bass
   generation rows. The focused Rust oracle passed.
+
+- [x] Verify the five-model ragged predict_batch fixtures through
+  Python 3.15.2, Julia and installed R. Each binding returned
+  identical results at worker settings 1 and 32, retained the middle
+  error, and matched direct forecasts on both time grids. Reused the
+  unchanged 8926c30c native runtime sources.
