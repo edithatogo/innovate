@@ -5994,3 +5994,9 @@ Hosted release readiness for this worktree revision remains open.
   but exposed no metadata. The Polars file writer stores custom
   schema metadata in the footer and omits it from the leading schema
   message consumed by Arrow.jl. Julia metadata readback remains open.
+
+- [x] Qualify a provenance-bearing stream for Arrow.jl 2.8.1. Convert
+  an Innovate IPC file batch by batch with the footer schema and verify
+  Julia reads the Unicode schema metadata, Int32 IDs and nullable
+  values from the stream. Document the conversion. Direct file
+  metadata readback remains open.

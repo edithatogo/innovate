@@ -61,6 +61,24 @@ using Innovate
 write("policy-julia.arrow", export_ipc_file(read("policy-polars.arrow")))
 ```
 
+If Julia also needs custom schema metadata, send an IPC stream with
+the metadata in its schema message. Arrow.jl 2.8.1 reads the leading
+schema and does not expose metadata stored only in the file footer by
+the Polars-backed exporter. For an existing Innovate IPC file with
+custom metadata, a PyArrow file-to-stream conversion preserves it:
+
+```python
+import pyarrow as pa
+
+with pa.ipc.open_file("policy-julia.arrow") as source:
+    with pa.ipc.new_stream("policy-metadata.stream", source.schema) as stream:
+        for index in range(source.num_record_batches):
+            stream.write_batch(source.get_batch(index))
+```
+
+Assign `table = Arrow.Table("policy-metadata.stream")` and read
+the schema metadata with `Arrow.getmetadata(table)`.
+
 For local bundled-library testing, stage a copy of the Julia package and
 place the locked Rust shared library in its `deps` directory under the
 name produced by Cargo, such as `libinnovate_ffi.so` or `innovate_ffi.dll`.
