@@ -1526,3 +1526,10 @@ def test_staggered_panel_att():
     )
     sparse = innovate.execute("summarize_causal", **payload, include_event_time_covariance=True)["result"]
     assert sparse["event_time_covariance"] == [[None, None], [None, None]]
+    balanced = innovate.execute(
+        "summarize_causal", **{**payload, "outcomes": [[0, 5, 7], [0, 7, 9], [10, 12, 16], [10, 12, 16]],
+                               "adoption_indices": [1, 1, 2, None]}, balanced_horizon=1,
+    )["result"]
+    assert balanced["balanced_event_time"] == {"horizon": 1, "included_cohorts": 1, "excluded_cohorts": 1}
+    assert [row["supported_cohort_att"] for row in balanced["event_time"]] == pytest.approx([4, 2])
+    assert balanced["contrasts"] == replicated["contrasts"]

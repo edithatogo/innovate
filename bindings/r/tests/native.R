@@ -715,3 +715,9 @@ interval <- bands$intervals[[2]]$interval
 stopifnot(isTRUE(all.equal(bands$critical_value, sqrt(2))),
   isTRUE(all.equal(interval$lower, 3 - 2*sqrt(2))),
   isTRUE(all.equal(interval$upper, 3 + 2*sqrt(2))))
+balanced_staggered <- kernel_call("summarize_causal", payload=list(method="staggered_panel_att",
+  periods=c(0,1,2), outcomes=matrix(c(0,5,7,0,7,9,10,12,16,10,12,16), nrow=4, byrow=TRUE),
+  adoption_indices=list(1L,1L,2L,NULL), balanced_horizon=1L))$result
+stopifnot(balanced_staggered$balanced_event_time$excluded_cohorts == 1,
+  isTRUE(all.equal(vapply(balanced_staggered$event_time, function(row) as.numeric(row$supported_cohort_att), numeric(1)), c(4,2))),
+  identical(balanced_staggered$contrasts, replicated_staggered))

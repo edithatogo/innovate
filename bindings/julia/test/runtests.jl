@@ -762,6 +762,10 @@ end
     @test bands["intervals"][2]["interval"]["lower"] ≈ 3 - 2*sqrt(2)
     @test bands["intervals"][2]["interval"]["upper"] ≈ 3 + 2*sqrt(2)
     @test onset["standard_error"] ≈ (1/sqrt(48) + 1/sqrt(8)) * sqrt(2)
+    balanced = kernel_call("summarize_causal", nothing, merge(replicated, Dict("balanced_horizon"=>1)))["result"]
+    @test balanced["balanced_event_time"]["excluded_cohorts"] == 1
+    @test [row["supported_cohort_att"] for row in balanced["event_time"]] ≈ [4,2]
+    @test balanced["contrasts"] == rows
     @test rows[1]["estimate"] ≈ 4
     @test rows[1]["standard_error"] ≈ 1
     @test rows[2]["n_control"] == 1

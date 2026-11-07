@@ -4753,3 +4753,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Add a balanced event-time horizon for staggered ATT. The Rust
   fixture holds cohort composition fixed and recovers 4 at onset and
   2 at the next offset, with one cohort excluded. Binding checks remain open.
+
+- [x] Verify balanced event-time horizons through rebuilt Python 3.15.2,
+  Julia and installed R. Each returned onset ATT 4 and next-offset ATT 2,
+  excluded one cohort from the summary and preserved all cohort-period rows.
