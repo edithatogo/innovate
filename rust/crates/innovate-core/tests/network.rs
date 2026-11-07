@@ -530,24 +530,32 @@ fn single_agent_request_frequency_matches_exponential_hazard() {
     });
     let kernel = KernelBinding::new();
     let trials = 2048;
-    let mut requests = 0;
-    for seed in 0..trials {
-        payload["simulation_options"]["seed"] = json!(seed);
-        let result = kernel
-            .simulate_model("bass", payload.clone())
-            .unwrap()
-            .result
-            .unwrap();
-        requests += result["requests"].as_array().unwrap().len();
+    for forcing in [
+        serde_json::Value::Null,
+        json!({"time":[0,4],"innovation":[0,2],"imitation":[1,1]}),
+    ] {
+        if !forcing.is_null() {
+            payload["simulation_options"]["hazard_forcing"] = forcing.clone();
+        }
+        let mut requests = 0;
+        for seed in 0..trials {
+            payload["simulation_options"]["seed"] = json!(seed);
+            let result = kernel
+                .simulate_model("bass", payload.clone())
+                .unwrap()
+                .result
+                .unwrap();
+            requests += result["requests"].as_array().unwrap().len();
+        }
+        // Both designs have cumulative hazard one at tick four.
+        let probability = 1.0 - (-1.0_f64).exp();
+        let observed = requests as f64 / trials as f64;
+        let standard_error = (probability * (1.0 - probability) / trials as f64).sqrt();
+        assert!(
+            (observed - probability).abs() < 4.0 * standard_error,
+            "forcing {forcing}: {requests}/{trials}"
+        );
     }
-    // Rounding a waiting time up to a tick preserves its CDF at integer ticks.
-    let probability = 1.0 - (-1.0_f64).exp();
-    let observed = requests as f64 / trials as f64;
-    let standard_error = (probability * (1.0 - probability) / trials as f64).sqrt();
-    assert!(
-        (observed - probability).abs() < 4.0 * standard_error,
-        "{requests}/{trials}"
-    );
 }
 
 #[test]

@@ -6721,3 +6721,9 @@ Hosted release readiness for this worktree revision remains open.
   The focused Rust test passed across 2,048 fixed seeds within four
   binomial standard errors. This checks the request clock for one
   constant-hazard design.
+
+- [x] Extend the single-agent Kairos probability check to linear
+  forcing. The innovation multiplier ramps from zero to two over four
+  ticks, giving cumulative hazard one at the horizon. Both the
+  constant and ramped designs passed the analytic CDF check across
+  2,048 fixed seeds each in the focused Rust test.
