@@ -917,3 +917,11 @@ multipliers. The native fixture checks zero-hazard wakeup, rounded request
 and completion times, and seeded replay. All 16 network tests and focused
 Clippy passed. Analytic clock qualification and installed binding checks
 remain open.
+
+- [x] Verify the continuous clock against an analytic linear hazard ramp
+  and exercise zero-hazard wakeup in installed Python, Julia and R.
+  The seeded unit exponential budget and cumulative hazard p*t²/2 locate
+  the crossing at 0.435 model units, dispatched at tick 44. All 17 Rust
+  network tests and focused Clippy passed. The wheel passed 59 Python
+  tests, Julia Pkg.test passed 231 assertions, and installed R native
+  conformance passed. [Logs](evidence/kairos-continuous-hazards-20261107).

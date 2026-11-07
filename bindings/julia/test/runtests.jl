@@ -440,3 +440,13 @@ end
     @test result["requests"] == [Dict("tick"=>1,"agent"=>0),Dict("tick"=>3,"agent"=>1)]
     @test first(result["completions"]) == Dict("tick"=>5,"agent"=>0)
 end
+
+@testset "Continuous Kairos hazard wakeup" begin
+    forcing = Dict("time"=>[0,2,3],"innovation"=>[0,0,1],"imitation"=>[1,1,1])
+    options = Dict("engine"=>"kairos_network","population"=>1,"seed"=>42,"edges"=>[],
+        "capacity"=>1,"service_ticks"=>1,"ticks_per_unit"=>1,"hazard_forcing"=>forcing)
+    result = kernel_simulate_model("bass", Dict("inputs"=>Dict("time"=>[0,2,3,4]),
+        "parameters"=>Dict("p"=>1e12,"q"=>0,"m"=>1),"simulation_options"=>options))["result"]
+    @test result["requests"] == [Dict("tick"=>3,"agent"=>0)]
+    @test result["counts"] == [0,0,0,1]
+end

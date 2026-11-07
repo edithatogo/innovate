@@ -410,3 +410,14 @@ stopifnot(all(vapply(scheduled_agents$requests,function(x) x$tick,numeric(1))==c
           all(vapply(scheduled_agents$requests,function(x) x$agent,numeric(1))==c(0,1)),
           scheduled_agents$completions[[1]]$tick==5,scheduled_agents$completions[[1]]$agent==0)
 cat("R scheduled Kairos agent hazards passed\n")
+
+continuous_hazard <- kernel_simulate_model("bass", list(
+  inputs=list(time=c(0,2,3,4)),parameters=list(p=1e12,q=0,m=1),
+  simulation_options=list(engine="kairos_network",population=1,seed=42,edges=list(),
+    capacity=1,service_ticks=1,ticks_per_unit=1,
+    hazard_forcing=list(time=c(0,2,3),innovation=c(0,0,1),imitation=c(1,1,1)))
+))$result
+stopifnot(length(continuous_hazard$requests)==1,continuous_hazard$requests[[1]]$tick==3,
+          continuous_hazard$requests[[1]]$agent==0,
+          all(unlist(continuous_hazard$counts)==c(0,0,0,1)))
+cat("R continuous Kairos hazard wakeup passed\n")

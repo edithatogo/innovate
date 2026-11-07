@@ -501,3 +501,28 @@ fn continuous_hazard_can_wake_from_zero_and_replays() {
             .unwrap()
     );
 }
+
+#[test]
+fn linear_hazard_clock_matches_analytic_crossing() {
+    use kairo_ecs_rng::{DeterministicStream, rand_distr::Exp};
+
+    let mut rng = DeterministicStream::from_run_seed(42);
+    let budget: f64 = rng.sample(Exp::new(1.).unwrap());
+    // With the ramp factor t, cumulative hazard is p*t^2/2.
+    let crossing = 0.435_f64;
+    let p = 2. * budget / crossing.powi(2);
+    let payload = json!({
+        "inputs":{"time":[0.,0.43,0.44,0.45]},
+        "parameters":{"p":p,"q":0.,"m":1.},
+        "simulation_options":{"engine":"kairos_network","population":1,"seed":42,
+            "edges":[],"capacity":1,"service_ticks":1,"ticks_per_unit":100,
+            "hazard_forcing":{"time":[0.,1.],"innovation":[0.,1.],"imitation":[1.,1.]}}
+    });
+    let result = KernelBinding::new()
+        .simulate_model("bass", payload)
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(result["requests"], json!([{"tick":44,"agent":0}]));
+    assert_eq!(result["counts"], json!([0, 0, 0, 1]));
+}

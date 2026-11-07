@@ -811,3 +811,28 @@ def test_kairos_scheduled_agent_hazards():
     )["result"]
     assert result["requests"] == [{"tick": 1, "agent": 0}, {"tick": 3, "agent": 1}]
     assert result["completions"][0] == {"tick": 5, "agent": 0}
+
+
+def test_kairos_continuous_hazard_wakeup():
+    result = innovate.execute(
+        "simulate_model",
+        "bass",
+        inputs={"time": [0, 2, 3, 4]},
+        parameters={"p": 1e12, "q": 0, "m": 1},
+        simulation_options={
+            "engine": "kairos_network",
+            "population": 1,
+            "seed": 42,
+            "edges": [],
+            "capacity": 1,
+            "service_ticks": 1,
+            "ticks_per_unit": 1,
+            "hazard_forcing": {
+                "time": [0, 2, 3],
+                "innovation": [0, 0, 1],
+                "imitation": [1, 1, 1],
+            },
+        },
+    )["result"]
+    assert result["requests"] == [{"tick": 3, "agent": 0}]
+    assert result["counts"] == [0, 0, 0, 1]
