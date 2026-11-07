@@ -451,3 +451,24 @@ def test_directed_weighted_kairos_resource():
     assert result["counts"] == [1, 1, 3]
     assert [entry["tick"] for entry in result["completions"]] == [6, 9]
     assert result["metadata"]["agent_priorities"] == [-2, 0, 3]
+
+
+def test_kairos_wait_expiry():
+    result = innovate.execute(
+        "simulate_model",
+        "bass",
+        inputs={"time": [0.0, 7.0, 11.0]},
+        parameters={"p": 1e12, "q": 0.0, "m": 3.0},
+        simulation_options={
+            "engine": "kairos_network",
+            "population": 3,
+            "seed": 42,
+            "edges": [],
+            "capacity": 1,
+            "service_ticks": 5,
+            "ticks_per_unit": 1,
+            "max_wait_ticks": 4,
+        },
+    )["result"]
+    assert result["counts"] == [0, 1, 2]
+    assert [entry["tick"] for entry in result["abandonments"]] == [7]

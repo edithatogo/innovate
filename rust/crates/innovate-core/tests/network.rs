@@ -283,3 +283,43 @@ fn priority_reorders_waiters_without_preempting_service() {
             .is_err()
     );
 }
+
+#[test]
+fn waiting_deadline_withdraws_only_agents_that_miss_service() {
+    let mut payload = json!({
+        "inputs":{"time":[0.,6.,7.,11.]},
+        "parameters":{"p":1e12,"q":0.,"m":3.},
+        "simulation_options":{"engine":"kairos_network","population":3,"seed":42,
+            "edges":[],"capacity":1,"service_ticks":5,"ticks_per_unit":1,"max_wait_ticks":4}
+    });
+    let run = |p| {
+        KernelBinding::new()
+            .simulate_model("bass", p)
+            .unwrap()
+            .result
+            .unwrap()
+    };
+    let result = run(payload.clone());
+    let arrivals = result["requests"].as_array().unwrap();
+    assert_eq!(result["counts"], json!([0, 1, 1, 2]));
+    assert_eq!(
+        result["completions"][1],
+        json!({"agent":arrivals[1]["agent"],"tick":11})
+    );
+    assert_eq!(
+        result["abandonments"],
+        json!([{"agent":arrivals[2]["agent"],"tick":7}])
+    );
+    assert_eq!(result["metadata"]["queue_length"], 0);
+    assert_eq!(result["metadata"]["available"], 1);
+    payload["inputs"]["time"] = json!([7.]);
+    let pending = run(payload.clone());
+    assert_eq!(pending["metadata"]["available"], 0);
+    assert_eq!(pending["metadata"]["queue_length"], 0);
+    payload["simulation_options"]["max_wait_ticks"] = json!(0);
+    assert!(
+        KernelBinding::new()
+            .simulate_model("bass", payload)
+            .is_err()
+    );
+}

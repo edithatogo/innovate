@@ -290,7 +290,7 @@ waiting in the service queue. Each duration is an integer in 1–10^12. Defaults
 the homogeneous engine and RNG stream. Metadata retains the effective arrays.
 
 The network engine currently rejects mechanistic covariate/event forcing and
-arbitrary hazard functions. Capacity changes, abandonment and resume remain open.
+arbitrary hazard functions. Capacity changes and resume remain open.
 The separate `network_diffusion` family has its own scientific qualification.
 
 ## Historical lock-in
@@ -728,3 +728,10 @@ for the run. At a shared tick, completions and their queue handoffs run before
 the change. The new graph governs subsequent request draws, and services
 already underway finish at their original times. The result lists the
 schedule ticks applied through the requested horizon.
+
+
+Set `max_wait_ticks` to a positive integer up to 10^12 to give every
+queued agent a deadline. An agent who starts service at that tick keeps
+the slot. Other expired agents leave permanently, appear in `abandonments`
+and finish in the `withdrawn` state. They neither transmit nor request
+again. Without a deadline, agents keep waiting for service.

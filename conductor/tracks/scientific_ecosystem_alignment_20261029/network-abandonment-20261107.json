@@ -1,0 +1,26 @@
+{
+  "status": "bounded_local_checkpoint",
+  "release_ready": false,
+  "related_evidence": [
+    "network-priority-20261107.json"
+  ],
+  "results": {
+    "rust_network_tests": 11,
+    "installed_python_tests": 40,
+    "julia_assertions": 180,
+    "R": "native conformance and waiting deadline passed",
+    "clippy": "workspace all targets passed"
+  },
+  "semantics": "Completion and handoff win tied deadlines. Expiry permanently withdraws remaining waiters and precedes scheduled changes and request draws. The existing event loop resamples the tentative request after a deadline boundary. Native priority queue entries are skipped when released if they have expired.",
+  "remaining": "Scheduled capacity, balking, optional retries, forcing interoperability, resume and scientific qualification",
+  "logs": {
+    "clippy.log": "b194960fc7875fd32f7789734277cc6d20b08a6e30eab4895e853b6c80fdc0c3",
+    "ffi.log": "13f0e71928cff73e5db68154a472b4b4c3acd8a504bae0e9f8dad649c0bac7fb",
+    "install.log": "3d7adb9eaea0b6a1ddd58073f6c8636ce8526ee587266db93a89560c8c694a0d",
+    "julia-final.log": "fb1e2b4a635ac9f0fc2ba6847431beaf2ad4bd2ba2478c7c935feef72e202fb6",
+    "python-final.log": "b1caae85ec31d08a00b70488af9cc30676ea609b8012c2800620e199adf3bcb2",
+    "r-final.log": "1d273b68bf6ddb63cb1e51f44becda602ec047969b7b3835f34f056c88ed1231",
+    "rust.log": "b10c2a1dc7ec35257809d5471fe934bc8d516816ba43b8b9acaab6ff3da38813",
+    "wheel.log": "b47afae0ad08fac59b50e3fb6ca3dcc7a6c62b5ce36e8add116bcd3774fac026"
+  }
+}

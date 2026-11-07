@@ -87,6 +87,10 @@ end
     a=kernel_simulate_model("bass",p)["result"]
     @test a["counts"]==[0,0,3]
     @test [e["tick"] for e in a["completions"]]==[6,11,16]
+    p["simulation_options"]["max_wait_ticks"]=4
+    expired=kernel_simulate_model("bass",p)["result"]
+    @test expired["counts"]==[0,0,2]
+    @test only(expired["abandonments"])["tick"]==7
     p=Dict("inputs"=>Dict("time"=>[0.,3.]),"parameters"=>Dict("k1"=>0.3,"k2"=>0.4,"c1"=>0.,"c2"=>0.),"constructor_kwargs"=>Dict("initial_values"=>[0.05,0.02]))
     @test isapprox(kernel_predict_model("complementary_goods",p)["result"]["rows"][2][1],1/(1+19*exp(-0.9));atol=1e-8)
 end

@@ -83,6 +83,11 @@ cat("R historical Logistic and initial ABM conformance passed\n")
 network_payload <- list(inputs=list(time=c(0,5,20)),parameters=list(p=1e12,q=0,m=3),simulation_options=list(engine="kairos_network",population=3,seed=42,edges=list(),capacity=1,service_ticks=5,ticks_per_unit=1))
 net <- kernel_simulate_model("bass",network_payload)$result
 stopifnot(all(unlist(net$counts)==c(0,0,3)),all(vapply(net$completions,function(e)e$tick,numeric(1))==c(6,11,16)))
+wait_payload <- network_payload
+wait_payload$simulation_options$max_wait_ticks <- 4
+expired <- kernel_simulate_model("bass",wait_payload)$result
+stopifnot(all(unlist(expired$counts)==c(0,0,2)),length(expired$abandonments)==1,expired$abandonments[[1]]$tick==7)
+cat("R Kairos waiting deadline passed\n")
 cg <- kernel_predict_model("complementary_goods",list(inputs=list(time=c(0,3)),parameters=list(k1=0.3,k2=0.4,c1=0,c2=0),constructor_kwargs=list(initial_values=c(0.05,0.02))))$result
 stopifnot(abs(cg$rows[[2]][[1]]-1/(1+19*exp(-0.9)))<1e-8)
 cat("R complementary goods and network FIFO conformance passed\n")
