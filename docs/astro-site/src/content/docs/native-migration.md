@@ -1187,9 +1187,18 @@ mpirun -n 2 .venv-native/bin/python scripts/run_native_benchmarks.py \
 ```
 
 Each receipt records its rank, world size, and selected case IDs.
-The runner refuses to overwrite rank receipts. To verify coverage,
-compare the combined case IDs and result rows with a serial run of
-the same policy. The worker budget applies per rank. Local runs
+The runner refuses to overwrite rank receipts. Verify the shard set
+against a serial run of the same policy and installed build.
+
+```bash
+.venv-native/bin/python scripts/run_native_benchmarks.py --policy fast \
+  --output "$receipt_dir/serial.json"
+.venv-native/bin/python scripts/check_benchmark_shards.py \
+  "$receipt_dir/serial.json" "$receipt_dir"/rank-*.json
+```
+
+The verifier checks rank coverage, case order and results, kernel
+version, and native extension digest. The worker budget applies per rank. Local runs
 qualified both fast and scheduled case selections. Multi-node
 execution and scheduler allocation still require qualification.
 

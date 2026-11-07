@@ -3780,3 +3780,7 @@ Hosted release readiness for this worktree revision remains open.
   benchmark receipt. Both local MPI rank receipts matched an independent
   digest of the installed extension from d6b7e3ba and passed all three
   fast cases. Ruff passed. The digest identifies the extension binary.
+- [x] Add a serial-versus-MPI receipt verifier and document its use.
+  The checker accepted both local fast-policy shards in reversed input
+  order and rejected a missing rank and a substituted extension digest.
+  Ruff passed. Multi-node, scheduler and accelerator gates remain open.
