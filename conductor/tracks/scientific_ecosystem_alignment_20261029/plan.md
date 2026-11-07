@@ -6904,3 +6904,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Document the native batch contract and the Polars frame helpers.
   The guide's ragged forecast example passed through the Python
   wheel's public predict_batch helper.
+
+- [x] Verify Polars forecast batch isolation when a lazy query fails
+  during collection. The installed-wheel regression retains the
+  column error and still returns the subsequent lazy frame forecast
+  with the same values and row identity.

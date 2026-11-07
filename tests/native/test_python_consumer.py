@@ -942,6 +942,12 @@ def test_polars_batch_keeps_errors_state_and_ragged_frames():
     assert last["prediction"][0] == pytest.approx(100)
     assert last["id"].to_list() == ["second", "third"]
 
+    invalid_query = grids[0].lazy().select("absent")
+    failed, recovered = innovate.predict_frames([(fits[0], invalid_query), (fits[2], grids[2].lazy())])
+    assert isinstance(failed, pl.exceptions.ColumnNotFoundError)
+    assert isinstance(recovered, pl.DataFrame)
+    assert recovered.equals(last)
+
 
 def test_fitted_logistic_adopter_categories_use_native_rates():
     time = list(range(21))
