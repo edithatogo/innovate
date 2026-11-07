@@ -6296,3 +6296,8 @@ Hosted release readiness for this worktree revision remains open.
   minimum-training-arm option cannot silently use the default.
   The focused Rust causal boundary test verified rejection and
   retained the valid ATE and ATT cases.
+
+- [x] Verify rejection of misspelled cross-fitted options through the
+  rebuilt Python wheel, Julia and installed R. Both estimands accepted
+  the valid request and surfaced the native unsupported-field error
+  for minimum_training_arms_count in all three consumers.
