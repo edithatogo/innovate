@@ -422,3 +422,8 @@ Set `rank_metric` to `adoption_area` to rank by the trapezoidal area
 under each adoption path over the shared observation horizon. The
 score is measured in adoption units times time units. This metric
 requires at least two samples. The default is `final_adoption`.
+
+Set `rank_metric` to `time_to_threshold` and supply a numeric
+`rank_threshold` to rank earlier crossings first. Crossing times use
+linear interpolation between adjacent samples. Paths that never
+reach the threshold are listed last with null times and places.

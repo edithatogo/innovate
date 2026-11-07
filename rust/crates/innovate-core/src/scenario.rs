@@ -700,15 +700,17 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
             let metric = request["payload"]
                 .get("rank_metric")
                 .map_or(Some("final_adoption"), Value::as_str);
-            result["ranking"] = match metric
-                .ok_or("rank_metric must be a string")
-                .and_then(|metric| rank_paths(&paths, &ids, metric))
-            {
-                Ok(rows) => json!({"metric":metric,"rows":rows,"error":null}),
-                Err(message) => {
-                    json!({"rows":null,"error":{"code":"invalid_ranking","message":message}})
-                }
-            };
+            result["ranking"] =
+                match metric
+                    .ok_or("rank_metric must be a string")
+                    .and_then(|metric| {
+                        rank_paths(&paths, &ids, metric, &request["payload"]["rank_threshold"])
+                    }) {
+                    Ok(rows) => json!({"metric":metric,"rows":rows,"error":null}),
+                    Err(message) => {
+                        json!({"rows":null,"error":{"code":"invalid_ranking","message":message}})
+                    }
+                };
         }
         if let Some(comparisons) = comparisons {
             let rows: Vec<_> = comparisons
@@ -746,11 +748,21 @@ fn rank_paths(
     paths: &ScenarioPaths<'_>,
     ids: &[String],
     metric: &str,
+    threshold: &Value,
 ) -> Result<Vec<Value>, &'static str> {
     if ids.len() < 2 || ids.iter().collect::<std::collections::HashSet<_>>().len() != ids.len() {
         return Err("ranking requires at least two distinct scenario IDs");
     }
     common_time_basis(paths, ids.iter().map(String::as_str))?;
+    let threshold = if metric == "time_to_threshold" {
+        Some(
+            threshold
+                .as_f64()
+                .ok_or("time_to_threshold requires numeric rank_threshold")?,
+        )
+    } else {
+        None
+    };
     let mut grid = None;
     let mut scores = Vec::with_capacity(ids.len());
     for id in ids {
@@ -759,22 +771,30 @@ fn rank_paths(
             return Err("scenario ranking requires identical time grids");
         }
         let score = match metric {
-            "final_adoption" => *values.last().unwrap(),
-            "adoption_area" if time.len() > 1 => time
-                .windows(2)
-                .zip(values.windows(2))
-                .map(|(t, y)| (t[1] - t[0]) * (0.5 * y[0] + 0.5 * y[1]))
-                .sum(),
+            "final_adoption" => values.last().copied(),
+            "adoption_area" if time.len() > 1 => Some(
+                time.windows(2)
+                    .zip(values.windows(2))
+                    .map(|(t, y)| (t[1] - t[0]) * (0.5 * y[0] + 0.5 * y[1]))
+                    .sum(),
+            ),
+            "time_to_threshold" => interpolated_crossing(&time, &values, threshold.unwrap()),
             "adoption_area" => return Err("adoption area requires at least two observations"),
             _ => return Err("unknown scenario ranking metric"),
         };
-        if !score.is_finite() {
+        if score.is_some_and(|value| !value.is_finite()) {
             return Err("scenario ranking score exceeded finite numerical domain");
         }
         grid = Some(time);
         scores.push((id, score));
     }
-    scores.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
+    scores.sort_by(|a, b| match (a.1, b.1) {
+        (Some(a), Some(b)) if threshold.is_some() => a.partial_cmp(&b).unwrap(),
+        (Some(a), Some(b)) => b.partial_cmp(&a).unwrap(),
+        (Some(_), None) => std::cmp::Ordering::Less,
+        (None, Some(_)) => std::cmp::Ordering::Greater,
+        (None, None) => std::cmp::Ordering::Equal,
+    });
     let mut place = 1;
     Ok(scores
         .iter()
@@ -783,7 +803,7 @@ fn rank_paths(
             if index > 0 && scores[index - 1].1 != score {
                 place = index + 1;
             }
-            json!({"id":id,"place":place,(metric):score})
+            json!({"id":id,"place":score.map(|_| place),(metric):score})
         })
         .collect())
 }
@@ -944,19 +964,10 @@ fn compare_paths(
         result["threshold_timing"] =
             json!({"baseline":first_sample(&baseline),"alternative":first_sample(&alternative)});
         if comparison.interpolate_threshold {
-            let crossing = |values: &[f64]| {
-                let index = values.iter().position(|&value| value >= threshold)?;
-                if index == 0 || values[index] == threshold {
-                    return Some(time[index]);
-                }
-                let lower = values[index - 1];
-                let upper = values[index];
-                let fraction = threshold_fraction(lower, threshold, upper);
-                Some(time[index - 1] * (1. - fraction) + time[index] * fraction)
-            };
             result["interpolated_threshold_timing"] = json!({
                 "method":"linear_between_samples",
-                "baseline":crossing(&baseline),"alternative":crossing(&alternative)
+                "baseline":interpolated_crossing(&time, &baseline, threshold),
+                "alternative":interpolated_crossing(&time, &alternative, threshold)
             });
         }
     }
@@ -1016,6 +1027,15 @@ fn compare_resource_totals(baseline: &Value, alternative: &Value) -> Result<Valu
         result[metric] = json!(count(alternative)? - count(baseline)?);
     }
     Ok(result)
+}
+
+fn interpolated_crossing(time: &[f64], values: &[f64], threshold: f64) -> Option<f64> {
+    let index = values.iter().position(|&value| value >= threshold)?;
+    if index == 0 || values[index] == threshold {
+        return Some(time[index]);
+    }
+    let fraction = threshold_fraction(values[index - 1], threshold, values[index]);
+    Some(time[index - 1] * (1. - fraction) + time[index] * fraction)
 }
 
 fn threshold_fraction(lower: f64, threshold: f64, upper: f64) -> f64 {

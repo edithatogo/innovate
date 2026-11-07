@@ -1629,6 +1629,14 @@ fn scenario_grid_compares_aligned_adoption_paths() {
         area["result"]["ranking"]["rows"][0]["adoption_area"],
         expected
     );
+    ranked["payload"]["rank_metric"] = json!("time_to_threshold");
+    ranked["payload"]["rank_threshold"] = json!(75.);
+    let threshold = run(&ranked);
+    let rows = &threshold["result"]["ranking"]["rows"];
+    assert_eq!(rows[0]["time_to_threshold"], 1.);
+    assert_eq!(rows[1]["place"], 1);
+    assert!(rows[2]["time_to_threshold"].is_null());
+    assert!(rows[2]["place"].is_null());
     ranked["payload"]["rank_scenarios"] = json!(["base", "missing"]);
     let invalid = run(&ranked);
     assert_eq!(
