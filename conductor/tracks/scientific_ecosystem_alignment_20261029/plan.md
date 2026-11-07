@@ -1879,8 +1879,13 @@ the other competition models and installed binding checks remain open.
   Rust owns validation and checksums.
 - [x] Verify the structured artifact in Julia and R, source provenance
   enrichment, and schema version and product label checks.
-- [ ] Qualify historical artifact metadata and diagnostic details across
-  all kinds and retain broader input and release qualification.
+- [x] Qualify artifact metadata and diagnostic details on fixtures for all
+  five historical dataset kinds. Python 3.15.2 ingested local Polars CSV
+  tables with Unicode provenance metadata. Julia and installed R
+  re-ingested each artifact and reproduced the complete dataset, digest,
+  provenance and validation report. Policy timing retained its
+  event_time_order warning. R used raw JSON to retain numeric tokens.
+- [ ] Complete broader dataset input and release qualification.
 
 - [x] Verify re-ingestion of a Python-produced dataset artifact in Julia
   and installed R. Both reproduce the artifact and reject a changed
