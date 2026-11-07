@@ -6596,3 +6596,8 @@ Hosted release readiness for this worktree revision remains open.
   Julia and the installed R wrapper. For the common threshold of 1,000,
   all three returned the threshold and null scores and places for both
   paths. The wheel and FFI library were rebuilt from 8b9c4fa0.
+
+- [x] Document the native scenario ranking contract, including grid
+  requirements, score direction, interpolation, ties, and the verified
+  threshold and time-basis fields. The release verifier still reports
+  38 open model and feature obligations.

@@ -1224,6 +1224,22 @@ Zero rates retain the historical zero values with a degenerate status.
 These are baseline heuristics. Thresholds under forcing, interactions and
 interventions require separate trajectory analysis.
 
+## Scenario grid rankings
+
+In `execute_scenario_grid`, pass `rank_scenarios` with at least two
+distinct scenario IDs. Each selected scenario must return a completed
+scalar path on the same strictly increasing time grid. When supplied,
+scenario specifications must agree on the time unit and reference year.
+The response includes those values in `ranking.time_basis`.
+
+Set `rank_metric` to `final_adoption` (the default) to rank by the last
+sample or `adoption_area` to rank by trapezoidal area over the common
+grid. Both put larger scores first. For `time_to_threshold`, supply
+`rank_threshold`. This ranks earlier crossings first, interpolating
+between samples, and reports the requested value in `ranking.threshold`.
+Paths that never reach it have null scores and places. Equal scores share
+a place, and ranking errors leave the individual executions available.
+
 ## Execution modes
 
 Call `discover_execution_modes` to inspect the native execution modes.
