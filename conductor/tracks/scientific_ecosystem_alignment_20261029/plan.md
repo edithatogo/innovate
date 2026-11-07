@@ -6413,3 +6413,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Retain subprocess conformance in the Rust suite. Two locked
   integration tests verify native prediction, structured policy
   denial, invalid JSON and the raw envelope size limit.
+
+- [x] Verify the source archive contains the Rust remote worker and
+  process tests. Both tests passed from a fresh extraction and Cargo
+  target using the packaged lock, which matched the checkout lock.
