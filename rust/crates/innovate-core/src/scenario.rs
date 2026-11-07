@@ -562,15 +562,16 @@ pub(crate) fn discover(request: &Value) -> Value {
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
-struct LegacyArtifact {
-    scenario: ScenarioSpecification,
+struct ImportedArtifact {
+    scenario: Option<ScenarioSpecification>,
     #[serde(rename = "seed")]
-    _seed: i128,
+    seed: Option<i128>,
     model_type: String,
     version: String,
     #[serde(rename = "notes")]
     _notes: Option<String>,
     timestamp: String,
+    replay_request: Option<Value>,
 }
 
 pub(crate) fn import_artifact(request: &Value) -> Value {
@@ -588,11 +589,13 @@ pub(crate) fn import_artifact(request: &Value) -> Value {
         return invalid("import_scenario_artifact requires schema 2.0");
     }
     let original = &request["payload"]["artifact"];
-    let artifact = match LegacyArtifact::deserialize(original) {
+    let artifact = match ImportedArtifact::deserialize(original) {
         Ok(artifact) => artifact,
-        Err(error) => return invalid(&format!("invalid legacy artifact: {error}")),
+        Err(error) => return invalid(&format!("invalid scenario artifact: {error}")),
     };
-    if let Err(message) = artifact.scenario.validate() {
+    if let Some(specification) = &artifact.scenario
+        && let Err(message) = specification.validate()
+    {
         return invalid(message);
     }
     if artifact.model_type.trim().is_empty() || artifact.version.trim().is_empty() {
@@ -601,9 +604,63 @@ pub(crate) fn import_artifact(request: &Value) -> Value {
     if chrono::DateTime::parse_from_rfc3339(&artifact.timestamp).is_err() {
         return invalid("legacy artifact timestamp must be RFC 3339 with a time offset");
     }
+    let (format, reason) = if let Some(replay) = &artifact.replay_request {
+        let reason = match validate_replay(original, &artifact, replay) {
+            Ok(reason) => reason,
+            Err(error) => return invalid(error),
+        };
+        ("native_scenario_envelope", reason)
+    } else {
+        if artifact.scenario.is_none() || artifact.seed.is_none() {
+            return invalid("legacy artifact requires scenario and seed");
+        }
+        (
+            "legacy_scenario_envelope",
+            Some("legacy artifact has no simulation payload"),
+        )
+    };
     envelope(
-        json!({"artifact":original,"format":"legacy_scenario_envelope",
-        "replay_available":false,"replay_reason":"legacy artifact has no simulation payload"}),
+        json!({"artifact":original,"format":format,
+        "replay_available":reason.is_none(),"replay_reason":reason}),
         Value::Null,
     )
+}
+
+fn validate_replay(
+    original: &Value,
+    artifact: &ImportedArtifact,
+    replay: &Value,
+) -> Result<Option<&'static str>, &'static str> {
+    if replay["operation"] != "execute_scenario_grid" {
+        return Err("artifact replay must use execute_scenario_grid");
+    }
+    let schema = replay["schema_version"]
+        .as_str()
+        .filter(|version| !version.is_empty())
+        .ok_or("artifact replay requires a schema version")?;
+    if schema != KERNEL_SCHEMA_VERSION {
+        return Ok(Some("artifact replay uses an unsupported kernel schema"));
+    }
+    let payload = &replay["payload"];
+    let entries = payload["scenarios"]
+        .as_array()
+        .filter(|entries| entries.len() == 1)
+        .ok_or("artifact replay must contain exactly one scenario")?;
+    let entry =
+        Scenario::deserialize(&entries[0]).map_err(|_| "invalid artifact replay scenario")?;
+    if entry.id.trim().is_empty()
+        || !entry.simulation.is_object()
+        || entry.model_key != artifact.model_type
+        || entries[0]["specification"] != original["scenario"]
+        || entries[0]["notes"] != original["notes"]
+    {
+        return Err("artifact replay scenario does not match the envelope");
+    }
+    if let Some(seed) = entry.simulation["simulation_options"].get("seed")
+        && seed != &original["seed"]
+    {
+        return Err("artifact replay seed does not match the envelope");
+    }
+    Ok((artifact.version != env!("CARGO_PKG_VERSION"))
+        .then_some("artifact was created by a different kernel version"))
 }

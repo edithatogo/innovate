@@ -850,6 +850,14 @@ fn scenario_grid_runs_in_order_and_retains_individual_errors() {
     assert!(artifact["timestamp"].as_str().unwrap().ends_with("+00:00"));
     assert!(artifact["seed"].is_null());
     assert!(rows[1].get("artifact").is_none());
+    let mut import = json!({"schema_version":"2.0","operation":"import_scenario_artifact",
+        "payload":{"artifact":artifact}});
+    assert_eq!(run(&import)["result"]["replay_available"], true);
+    import["payload"]["artifact"]["version"] = json!("0.0.1");
+    assert_eq!(run(&import)["result"]["replay_available"], false);
+    import["payload"]["artifact"]["replay_request"]["payload"]["scenarios"][0]["model_key"] =
+        json!("bass");
+    assert_eq!(run(&import)["error"]["code"], "invalid_request");
     let replay = run(&artifact["replay_request"]);
     assert_eq!(
         replay["result"]["executions"][0]["result"],
