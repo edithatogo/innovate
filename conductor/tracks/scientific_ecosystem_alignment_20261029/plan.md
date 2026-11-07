@@ -7458,3 +7458,8 @@ Hosted release readiness for this worktree revision remains open.
   and trace identifiers on success and trace correlation on denial.
   The focused locked Rust test and cargo fmt check passed. This
   covers caller-supplied context at the subprocess boundary.
+
+- [x] Verify the optimized worker rejects blank request IDs, multibyte
+  tenant IDs over the byte limit, and control characters in principal
+  or trace IDs. The focused release-profile test passed. The debug
+  cache selected an older test binary and ran zero matching tests.

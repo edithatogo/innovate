@@ -98,3 +98,25 @@ fn worker_describes_its_transport_without_reading_input() {
     assert_eq!(contract["max_kernel_request_bytes"], 1_000_000);
     assert_eq!(contract["identity_verification"], "caller_supplied_context");
 }
+
+#[test]
+fn worker_rejects_invalid_context_identifiers() {
+    for (field, value) in [
+        ("request_id", " ".to_owned()),
+        ("tenant_id", "é".repeat(129)),
+        ("principal", "spoof\nrecord".to_owned()),
+        ("trace_id", "trace\tspoof".to_owned()),
+    ] {
+        let mut envelope = json!({
+            "schema_version":"2.0",
+            "context":{"request_id":"r","tenant_id":"t","principal":"p","auth_scope":"kernel:execute"},
+            "kernel_request":{"schema_version":"2.0","operation":"discover_models"}
+        });
+        envelope["context"][field] = json!(value);
+        let output = run(envelope.to_string().as_bytes());
+        assert!(output.status.success());
+        let response: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert!(response["result"].is_null(), "{field}");
+        assert_eq!(response["error"]["code"], "invalid_request", "{field}");
+    }
+}
