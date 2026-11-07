@@ -457,7 +457,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         // Accumulate tiny window terms before rounding them to subnormal units.
         let mut tiny_sum = 0.;
         let mut add_sample = |value: f64, window: Option<usize>| {
-            let Some(window) = window else { return add(value) };
+            let Some(window) = window else {
+                return add(value);
+            };
             const SCALE: f64 = (1_u64 << 52) as f64;
             let term = value / window as f64;
             let current = if term.abs() < f64::MIN_POSITIVE {

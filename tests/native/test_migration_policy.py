@@ -71,7 +71,10 @@ def test_migration_policy_rejects_feature_loss(tmp_path, monkeypatch, mutation):
     (tmp_path / "pyproject.toml").write_text((ROOT / "pyproject.toml").read_text())
     monkeypatch.setattr(module, "ROOT", tmp_path)
     monkeypatch.setattr("sys.argv", ["check_migration.py"])
-    expected = "(lost|required|Missing migration evidence|Empty migration evidence|Invalid migration status|release_ready|Missing required binding|Unsupported language binding)"
+    expected = (
+        "(lost|required|Missing migration evidence|Empty migration evidence|"
+        "Invalid migration status|release_ready|Missing required binding|Unsupported language binding)"
+    )
     if mutation == "qualified_with_remaining_work":
         expected = "Qualified migration obligation still has remaining work"
     with pytest.raises(ValueError, match=expected):
