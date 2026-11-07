@@ -1,46 +1,41 @@
-# Model and feature validation matrix
+# Innovation model and feature validation matrix
 
-Status: candidate acquisition/evaluation plan, not an acquired or qualified corpus. Exact source versions, licensing, available fields, temporal coverage and preprocessing must be audited before inclusion. Use independent known-truth simulations alongside every empirical comparison.
+Revised 7 November 2026. Candidate datasets are not presumed acquired, licensed or analytically qualified. Raw values were not inspected by this planning revision. Every model uses known-truth/independent mathematical verification as well as relevant empirical prediction. Native execution, algorithm correctness, empirical validity and causal identification remain separate.
 
-## Model families
-
-| Model/feature | Candidate empirical sources | Verification and external-evaluation requirements |
+| Model/capability | Candidate data/oracle | Required evaluation |
 |---|---|---|
-| Bass, logistic, Gompertz; symmetric/skewed growth | NBER CHAT; Australian Clean Energy Regulator installation data | Analytic/independent reference parity; early-stage rolling forecasts; uncertain saturation; distinguish usage from adoption. |
-| Hierarchical, mixture and heterogeneous adoption | CHAT country–technology panels; CER postcode panels; English prescribing by practice | Known-group/mixture recovery; partial pooling; held-out groups; latent-class uncertainty rather than asserted true classes. |
-| Fisher–Pry substitution | Historical merchant-marine wood/metal data in R diffusion; IEA EV sales/stocks | Correct denominator and limiting cases; sales shares are not installed-stock shares. |
-| Multi-generation Norton–Bass | Four IBM computer generations in R diffusion; qualified generation-resolved sources | Multi-generation parameter/state recovery and reference reproduction; small historical fixtures alone do not establish generality. |
-| Multi-product, Lotka–Volterra, composite and market-share models | DIMORA energy competition data; therapeutic-class prescribing shares | Joint constraints and interaction recovery in simulation; held-out joint prediction; do not infer causal competition from co-trending shares. |
-| Complementary goods, platforms and co-evolution | IEA EV/charging series; compatible solar/battery series | Coupled-state verification, lagged prediction and confounding sensitivity; separate complementary association from causal effect. |
-| Latent-process, regime-switching, time-varying and streaming models | CER revisions/vintages; DIMORA shock examples; dated prescribing panels | Known change points, drift and missingness; real-time vintages; batch/incremental parity; no future revision leakage. |
-| Network diffusion and ABM | Diffusion of Microfinance network/participation data; SNAP MemeTracker; suitable temporal contact networks | Known-network recovery, independent simulation and temporal holdouts; network/contact observations are not complete transmission truth. |
-| Policy hazard/event history | State Policy Innovation and Diffusion; Correlates of State Policy Project | Censoring, staggered timing and risk-set tests; adoption hazard is not policy effectiveness. |
-| Causal policy effects | ACIC known-potential-outcome tasks plus independently generated longitudinal/interference designs | Bias, coverage, overlap, confounding and heterogeneous-effect recovery for the exact estimand; ACIC alone does not cover all designs. |
-| Hype, attention, failure and lock-in | Claim/evidence corpora from Sumner et al.; Wikimedia/GDELT/qualified search series paired with utilisation | Follow the separate hype protocol; attention is not unsupported optimism; failure/lock-in definitions require independent justification. |
-| SIR/SIS/SEIR and contagion | Applicable sbibm tasks; SocioPatterns with simulated outcomes | Analytic/known-truth inference and conservation; contact data alone do not validate infection/adoption effects. |
-| Adopter categorisation | Individually timed adoption where rights permit, plus synthetic cohorts | Verify declared classification thresholds; do not treat conventional categories as discovered behavioural mechanisms. |
+| Bass/logistic/Gompertz and growth | NBER CHAT; CER installations; analytic and independent package references | Parameter/prediction recovery, constraints, early/pre-inflection rolling forecasts and uncertain saturation. |
+| Hierarchical/mixture/transfer | Country-technology and postcode panels; synthetic known group structure | Partial-pooling limits, calibration, held-out groups/technologies and failed-transfer diagnostics. |
+| Fisher–Pry | R diffusion historical wood/metal merchant marine; IEA EV sales/stocks | Correct denominator, shares and limits; sales versus installed stock not conflated. |
+| Multi-generation Norton–Bass | R diffusion IBM-generation fixture plus qualified generation-resolved panels | Multi-generation accounting, entry timing, transfer constraints and external forecasts; historical small fixtures are not universal validation. |
+| Competition/substitution/cannibalisation | DIMORA competition/energy examples; qualified therapeutic-class utilisation | Joint shares/flows, product relabelling, zero-interaction limits, source-supported competitors and unidentified interactions. |
+| Repeat use/switching/abandonment | Existing exact PBS objects via Atlas plus independent synthetic transactions; a non-medical repeat-use panel | Active-stock balance, observation intensity, persistence/switching identifiability and empirical volume forecasts; prescriptions are not new patients. |
+| Complements/platforms | IEA EV/charging; compatible solar/battery panels | Independent coupled-system limits, cross-effects, lags and confounding sensitivity. |
+| Regimes/latent process/market potential | Dated CER/PBS vintages; DIMORA shock cases | Known change points, no-change negatives, revision leakage, discontinuity handling and forecast robustness. |
+| Policy diffusion/event history | SPID and Correlates of State Policy | Risk sets, censoring, policy-adoption timing and held-out jurisdictions; adoption hazard is not effectiveness. |
+| Networks/ABM | Microfinance networks; MemeTracker or appropriate temporal networks | Independent small-state simulation, node invariance, known topology and held-out prediction; contact/links are not transmission truth. |
+| Hype composite and effects | Published hype-equation fixtures, synthetic no/one/multiple-cycle cases; qualified attention/expectation series paired with adoption/utilisation | Total-curve and component identifiability; joint fit; native Bayesian calibration; effect/no-effect/reverse-feedback cases; held-out incremental prediction. Claim exaggeration is not the defining construct or prerequisite. |
+| Structural demand/strategic innovation | Analytic logit/timing games; PyBLP reference cases; game-provider fixtures | Choice probabilities/elasticities, price endogeneity assumptions, equilibrium residual/exploitability and selection sensitivity. |
+| General game solver | Reimbursement incubator and reconciled Kairos S01–S04; analytic games and isolated Gambit/OpenSpiel | Backward induction, dominance, matching pennies, CE inequalities, multiple/degenerate equilibria and explicit unsupported dimensions. Provider owns solver; Innovate owns innovation-specific game construction. |
+| Path dependence/lock-in/failure | Independent multi-stable dynamics and carefully defined observed cessation/failure panels | Bidirectional sweeps, hysteresis and alternative explanations; conventional labels are not inferred behaviour. |
+| SIR/SIS/SEIR/contagion | Analytic limits, relevant sbibm tasks and temporal contacts with simulated outcomes | Conservation, known-truth inference and censoring; contact data alone do not validate outcomes. |
+| Adopter categories | Individually timed adoption where permitted and synthetic cohorts | Reproduce explicit thresholds without claiming discovered behavioural classes. |
 
-## Cross-cutting features
+## Cross-cutting acceptance
 
-| Feature | Test material and acceptance |
-|---|---|
-| Optimisation, ODEs and gradients | Analytic/high-precision references, independent generators, parameter constraints, extreme scales and finite-difference/autodiff agreement. |
-| Posterior inference | Simulation-based calibration, known/reference posteriors, multimodality, invalid fits and misspecification; distinguish uncertainty types and expose non-convergence. |
-| Bootstrap/prediction intervals | Repeated simulations with serial dependence, heteroscedasticity and sparse observations; coverage plus width, not coverage alone. |
-| Kairos simulation | Analytic queue/birth–death fixtures, resource conservation, independent engines, reproducible random streams and event-order/replay tests. |
-| Ensembles and streaming | Frozen data vintages, controlled drift and revisions, out-of-sample calibration and incremental/batch agreement. |
-| MARS/neural/other surrogates | Held-out full-simulator runs, difficult regimes, extrapolation checks, decision rankings and accuracy–cost trade-offs. |
-| Arrow, native kernels and language bindings | Golden valid/invalid schemas, units, nulls, categories, draw IDs, ownership/lifetimes and errors; installed native consumers without Python. |
-| Reports, provenance and release claims | Known results plus missing/invalid evidence; displayed values, traceability and limitations must survive export; capability claims need executable receipts. |
+- Likelihoods/gradients/optimisers: independent formulas and finite differences, extreme scales, invalid input and named algorithm semantics.
+- Uncertainty: simulation-based calibration, repeated coverage, prior/posterior predictive checks, failed fits retained and uncertainty types distinct.
+- Kairos: one native clock/state/RNG, analytic resources, event/replay/branching contracts, real installed engine identity.
+- Polars/Arrow/bindings: explicit field binding, schemas, units, missingness, joint draws, ownership/lifetimes and unsupported errors; supported installs without pandas/xarray and native operation without Python.
+- Performance: equivalent work/precision, warm/cold end-to-end time, memory and actual device evidence; report slowdowns and crossover.
+- Voiage: coherent utility/perspective/study design, preserved draw dependence, independent small decision oracle and no cyclic core imports.
+- Surrogates: held-out full simulations, extrapolation detection and decision-preservation/resource benefit before promotion.
+- Claims/release: generated current capability records; historical or missing receipts cannot promote unsupported science/native execution.
 
-## Existing estate to audit and reuse
+## Initial empirical programme
 
-Candidate Hugging Face sources: `edithatogo/australian-pbs-utilisation-archive`, `edithatogo/australian-pbs-source-archive`, `edithatogo/australian-mbs-source-archive`, and `edithatogo/reimbursement-atlas`. Verify live repository, revision, rights and actual coverage before use. A funding schedule is not utilisation, regulatory approval or clinical effectiveness. Preserve upstream acquisition records rather than building competing source archives here.
+Start with CHAT, CER and the qualified PBS utilisation panel, retaining IBM/DIMORA reproduction fixtures. Medicines M01–M05 and hype H01–H06 are detailed in the [taskbook](../innovation-taskbook-20261107.md). Record source rights, temporal grain, vintage, units and mapping validity before freezing splits. Compare strong simple/statistical and specialist baselines, equalise tuning information/budget, and disclose pretrained-model contamination risk where relevant.
 
-Code/protocols remain in GitHub; distribute only rights-permitted derived benchmark data, manifests and splits through the relevant Hugging Face repositories. Use immutable paper-specific snapshots and persistent identifiers. Restricted text/data stays with its source; share identifiers, permitted annotations and reproducible acquisition instructions instead.
+Use rolling origins, early-stage and held-out-technology/region splits, proper predictive scores, calibrated intervals, failure rates and computational costs. Bootstrap/resampling must respect dependence across origins and series. Do not choose models, saturation, normalisation or cohort eligibility using future outcomes.
 
-## Initial comparison protocol
-
-Start with technology (CHAT), energy (CER) and healthcare (PBS plus appropriately harmonised English prescribing). Retain small IBM/DIMORA reference reproductions. Register source vintages, units, inclusion rules, rolling forecast origins, horizons, tuning budgets and baselines before confirmation. Include pre-inflection and held-out technology/region tasks, count-based and cumulative evaluation where appropriate, probabilistic scores, calibration, failure rates and computational cost. Do not estimate saturation or select model families using future observations.
-
-External source starting points: https://www.nber.org/research/data/cross-country-historical-adoption-technology ; https://cer.gov.au/markets/reports-and-data/small-scale-installation-postcode-data ; https://www.iea.org/data-and-statistics/data-tools/global-ev-data-explorer ; https://cran.r-universe.dev/diffusion/doc/manual.html ; https://cran.r-universe.dev/DIMORA/doc/manual.html ; https://openprescribing.net/ ; https://web.stanford.edu/~jacksonm/Data ; https://snap.stanford.edu/data/ ; https://sites.psu.edu/spap/spid-data/ ; https://github.com/sbi-benchmark/sbibm . These links identify candidates, not acceptance receipts.
+Sources: https://www.nber.org/research/data/cross-country-historical-adoption-technology ; https://cer.gov.au/markets/reports-and-data/small-scale-installation-postcode-data ; https://www.iea.org/data-and-statistics/data-tools/global-ev-data-explorer ; https://cran.r-universe.dev/diffusion/doc/manual.html ; https://cran.r-universe.dev/DIMORA/doc/manual.html ; https://web.stanford.edu/~jacksonm/Data ; https://snap.stanford.edu/data/ ; https://sites.psu.edu/spap/spid-data/ ; https://github.com/sbi-benchmark/sbibm ; https://pyblp.readthedocs.io/ . Audit exact editions and rights; these URLs are candidate starting points, not acquisition receipts.

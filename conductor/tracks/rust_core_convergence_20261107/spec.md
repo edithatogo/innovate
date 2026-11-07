@@ -1,23 +1,13 @@
-# Rust-core convergence specification
+# Mandatory Rust-core convergence
 
-## Current versus target
+This revised contract supersedes earlier optional-native/Python-reference-production choices. Innovate remains a broad innovation modelling library. All supported scientific computation executes Rust; host languages are interfaces. The current source is not claimed compliant until the tasks pass.
 
-The current library contains bounded native deterministic slices alongside Python-owned models, payloads and subprocess bridges. The requested target is a binding-independent Rust scientific core. No current full-native claim is approved.
+Build binding-independent `innovate-core`, `innovate-data` (Polars), `innovate-arrow`, optional `innovate-kairos` and `innovate-games`; direct bindings call the same native implementation. No Python subprocess or alternative host mathematical/simulation runtime is a supported fallback. Explicitly error on unported operations.
 
-Extract `crates/innovate-core` for domain types, model semantics, estimation and diagnostics; `crates/innovate-arrow` for interchange; and optional `crates/innovate-kairos` for simulation integration. Keep direct Python/PyO3 and versioned native FFI adapters under `bindings/`. These are proposed paths, not existing delivered crates.
+Pandas and xarray support ends in the next breaking API: no public input contract, runtime import, hidden conversion, direct or transitive supported-extra dependency. Old releases remain historical, not an ongoing compatibility engine. NumPy arrays may be boundary buffers only where specified; NumPy/JAX calculation is not a production model backend. External references use isolated test environments.
 
-Python owns convenience, notebooks and plotting, not a duplicate production implementation of stable native mathematics. Explicit external inference backends are allowed but must identify their runtime and cannot count towards native completion. Existing APIs receive a versioned migration path rather than silent removal.
+Kairos's current native-only policy and one clock/state/RNG contract govern simulation. Data/adapters remain optional so deterministic modelling does not build unrelated simulation/GPU stacks. Follow exact shared Polars Git/root-patch constraints until a replacement is qualified; do not equate package version strings across Arrow ecosystems.
 
-## Native acceptance
+Native acceptance requires Python-absent execution, actual dispatch evidence, independent numerical references, installed consumers and honest supported model-operation-payload scope. Direct native FFI owns lifetime/error semantics. Every stable claim is generated from current evidence, not historical ledger titles.
 
-Every stable native model-operation-payload combination executes with Python absent. Python interfaces dispatch to the same Rust core used by native consumers. Unsupported combinations produce structured errors; no undisclosed Python subprocess fallback. Test actual dispatch, not only matching output.
-
-Use typed counts/stocks/rates/shares, units, time grids, observation likelihoods, constraints and inference states. Arrow is the interchange contract; internal numerical representations may differ. Kairos dependencies are optional so basic deterministic forecasting does not build an entire simulation stack.
-
-## Dependency strategy
-
-Inspect `repository-standards` and Voiage's current native interfaces before implementation. Qualify maintained candidates such as argmin, Diffsol and nuts-rs against required algorithms, licensing, maintenance, packaging and numerical oracles. Do not adopt a candidate or change a pin on name alone. Preserve Python/R references as test-oracle dependencies, not hidden native runtime dependencies.
-
-## Scope control
-
-Prioritise a verified Python/Rust stable surface, retaining supported binding commitments through compatibility tests. GPU, HPC and further package-manager work remain evidence-gated follow-ons, not prerequisites for every numerical correction. The existing alignment track retains responsibility for accepted upstream pins and unfinished external/native qualification.
+Tasks R01–R10 in `../../innovation-taskbook-20261107.md` are authoritative. Cross-cutting correctness tasks I01–I04 and release tasks Q01–Q05 apply. No implementation or pin qualification is claimed by this specification.

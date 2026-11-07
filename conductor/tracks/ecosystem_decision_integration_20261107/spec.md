@@ -1,11 +1,13 @@
-# Ecosystem decision integration specification
+# Ecosystem integration and capability promotion
 
-Innovate estimates adoption; Kairos simulates operational delivery; an application economic model translates joint trajectories into costs/outcomes; Voiage evaluates decision uncertainty and research value. Do not duplicate a scheduler, generic economic model or VOI estimator inside Innovate.
+Innovate consumes Kairos's native runtime, supplying innovation behaviours. Kairos owns one clock, state, event ordering and simulation RNG. Voiage consumes Innovate outputs through an optional adapter and explicit economic/utility mapping; no bidirectional core dependency is allowed. Selected study/policy artefacts may feed back through application orchestration.
 
-The first end-to-end fixture separates latent willingness/eligibility, attempted uptake, delivery capacity, observed utilisation and continuing use/abandonment. Test whether adoption and capacity are identifiable from the available measurements. Return sensitivity bounds when they are not.
+Preserve joint draw IDs/dependence, units, strategy/product/region/time keys, population, discount basis, fit validity and provenance. Prescriptions are not utilities. An EVSI calculation needs a coherent study observation model.
 
-Preserve joint draws, scenario/strategy identifiers, units, time basis, population denominators, simulation seeds, fit status, intervention assumptions and provenance through Arrow interchange. Correlated adoption/effectiveness/cost/capacity uncertainty must remain correlated.
+`vop_poc_nz` is a proof of concept, not the authoritative general economic framework. Inventory and verify its reusable perspective/equity/VOI/decision capabilities in Voiage, leaving NZ empirical scenarios and application assumptions in the POC. Simulation/adoption capabilities go to Kairos/Innovate rather than indiscriminately moving all code into Voiage.
 
-Evaluate diffusion-only, capacity-only, loosely coupled and joint alternatives. Primary decision outcomes include expected net benefit and regret, not only forecast error. VOI calculations must correspond to a coherent observation/research design, not generic reductions in parameter variance.
+`tobac`, CareOps, reimbursement games and other applications should promote generic methods to the corresponding provider, preserving domain-specific models/evidence. Require independent oracles, compatible public contracts and actual consumer migration; copied code and renamed folders do not satisfy promotion.
 
-Use `careops-sim` for healthcare operational examples and `tobac`/`vop_poc_nz` where their scientific scope and current contracts match. Qualify exact versions before use. MARS or another maintained surrogate remains optional until it preserves decision rankings, uncertainty and worthwhile computational savings on held-out full-simulator runs.
+The additional game library consolidates existing reusable solver seeds and Kairos overlap. UOGTO owns semantics, Kairos optional simulation execution, the game runtime generic solvers, Innovate innovation-market game construction, and the reimbursement repo domain assumptions.
+
+Tasks E01–E05 and G01–G04 define executable handoffs. Exact pins and provider receipts are required; no provider is assumed mature from its README alone.

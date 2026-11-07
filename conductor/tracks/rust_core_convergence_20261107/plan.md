@@ -1,42 +1,36 @@
 # Rust-Core Convergence Implementation Plan
 
-> For agentic workers: use superpowers:executing-plans or superpowers:subagent-driven-development task by task.
+> For agentic workers: execute named packets using superpowers:executing-plans or superpowers:subagent-driven-development. Do not invent fallback engines.
 
-**Goal:** Make Rust authoritative for the declared stable scientific scope.
+**Goal:** Native-only innovation computation and supported Polars/Arrow interfaces without pandas/xarray.
 
-**Architecture:** Incrementally extract the existing native code into a core independent of bindings; invert language dispatch without discarding independent references.
+**Architecture:** Binding-independent Rust crates, optional adapters and direct native interfaces.
 
-**Tech Stack:** Cargo workspace, qualified numerical crates, Arrow, optional Kairos, PyO3 and versioned FFI.
+**Tech Stack:** Qualified Rust/Polars/Arrow, PyO3/FFI and Kairos.
 
 **Spec:** [spec.md](spec.md).
 
-## Global constraints
+## Global Constraints
 
-Preserve supported behaviour through an explicit migration. Coordinate pins with the existing alignment owner. Native promotion requires the integrity track's relevant acceptance tests.
+Follow [execution contract](../../execution-contract-20261107.md), [candidate qualification](../../dependency-candidates-20261107.md) and the mandatory support retirement. Every new operation needs an independent oracle and installed execution.
 
-## Review focus
+## Review Focus
 
-Python-free execution, hidden subprocess fallback, Arrow ownership/lifetimes, unsupported rich payloads and cross-language error semantics each require explicit tests.
+Python subprocess fallback; pandas/xarray transitive extras; malformed/lifetime-unsafe Arrow buffers; unqualified Git/root patches; model names overstating native payload coverage.
 
-## Task 1 — Ownership inventory and first extraction
+## Executable packets
 
-Files: `bindings/rust/src/lib.rs`, `bindings/rust/Cargo.toml`, `src/innovate/kernel.py`, `docs/source/_static/rust_final_ownership_ledger.json`; proposed `Cargo.toml`, `crates/innovate-core/`, `crates/innovate-arrow/`.
+The exact paths, interfaces, tests/assertions and commands are in the [taskbook](../../innovation-taskbook-20261107.md). Record receipts here only after implementation; no competing abbreviated task definition.
 
-- [ ] Inventory model x operation x payload x backend ownership and reconcile historical ledgers with actual dispatch.
-- [ ] Write a Python-absent installed-native test and independent numerical parity tests for one bounded deterministic slice; run them before extraction.
-- [ ] Extract that slice and its domain/error types into the core; rerun tests and commit without claiming other slices are native.
+- [ ] R08 — qualify common dependency closure; do not overwrite alignment owners' pins without coordination.
+- [ ] R01 — extract a binding-independent native workspace and first model slice.
+- [ ] R02 — typed observation and parameter contracts.
+- [ ] R03 — native Polars ingestion and explicit column bindings.
+- [ ] R04 — Arrow/joint-draw schema and ownership.
+- [ ] R05 — direct Python native dispatch and installed-wheel test.
+- [ ] R06 — cease supported pandas/xarray and host-engine paths.
+- [ ] R07 — CLI and Python-absent consumer.
+- [ ] R09 — direct FFI and each existing binding's accepted scope.
+- [ ] R10 — executable capability matrix.
 
-## Task 2 — Invert bindings and isolate simulation
-
-Files: proposed `bindings/python/`, `bindings/ffi/`, `crates/innovate-kairos/`; existing `bindings/rust/inst/python/kernel_bridge.py`, `src/innovate/abm/kairos_adapter.py` and language contract tests.
-
-- [ ] Write dispatch tests that detect a Python subprocess and reject unsupported native requests.
-- [ ] Implement direct native dispatch for the accepted slice; feature-gate Kairos and retain explicitly named external reference paths.
-- [ ] Test installed Python and native consumers, Arrow round trips, resource ownership, errors and package isolation; commit.
-
-## Task 3 — Expand with evidence
-
-- [ ] Qualify numerical dependencies with accuracy, memory, warm/cold runtime and maintenance/licence receipts before pinning.
-- [ ] Promote remaining stable slices one at a time, including covariates, event splits and uncertainty only after their semantics are verified.
-- [ ] Add root `cargo test --workspace --locked` only once the workspace exists; retain current manifest-specific tests during migration.
-- [ ] Generate capability claims from executable evidence, run required repository gates and review installed consumers before archival. Full-native status remains false while any advertised stable native combination depends on Python.
+Do not archive until relevant I/Q gates and current installed-consumer evidence pass. Source extraction alone is not full Rust ownership.

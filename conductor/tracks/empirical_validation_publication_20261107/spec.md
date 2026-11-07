@@ -1,13 +1,13 @@
-# Empirical validation and publication specification
+# Innovation validation and publication specification
 
-Build a versioned benchmark that separates mathematical verification, external prediction, causal identification and decision usefulness. The existing synthetic corpus remains valuable and must not be replaced by real-world datasets with no known truth.
+Build a versioned programme distinguishing mathematical verification, native execution, predictive validation, causal identification and decision usefulness. Retain existing synthetic fixtures and add independent references; real observations without known truth cannot replace verification.
 
-Begin with CHAT, Australian CER installation data, PBS utilisation and English prescribing, plus compact IBM-generation and DIMORA reproduction fixtures. Add network/policy sources when their corresponding models pass verification. The [matrix](../../research/validation-matrix-20261107.md) is a candidate acquisition map, not a claim that files have been acquired, harmonised or licensed for redistribution.
+Use the [validation matrix](../../research/validation-matrix-20261107.md), [medicines source plan](../../research/medicines-utilisation-20261107.md) and [corrected hype-impact protocol](../../research/healthcare-hype-protocol-20261107.md). General innovation remains the scope. Candidate sources include CHAT, CER, IBM/DIMORA, qualified PBS utilisation and policy/network panels; exact revisions, rights, temporal grain and semantic qualification precede modelling.
 
-Compare naive/statistical forecasts, classical diffusion implementations, Bayesian diffusion and suitable current forecasting models. Freeze versions and equalise information and tuning budgets. Record pretrained-model contamination risk and add prospective holdouts where possible. Evaluate rolling origins, pre-inflection forecasts and held-out regions/technologies; never infer market potential from the test period.
+Compare strong naive/statistical and specialist diffusion/demand/hype methods with frozen information/tuning budgets. Preregister confirmatory horizons/origins and held-out technologies; report calibration, proper scores, failure, memory and time. No future saturation, revised-vintage leakage, or relabelling scripts as unique patients.
 
-Report point and probabilistic accuracy, calibration, interval width, failure rate, memory and runtime. Use uncertainty estimates respecting dependence across origins/series. Repeated prescriptions are not new adopters, installed stocks are not sales, and publication counts are not evidence strength.
+Reusable medicine observations and repeat-use models belong in Innovate; source acquisition/terminology belong Atlas; clinical/economic scenario assumptions stay application-owned. Public benchmark derivatives require lawful redistribution; GitHub stores code/contracts, owner-controlled Hugging Face archives hold permitted data.
 
-Reuse the user's existing source archives and dataset cards where their exact revision, licence, coverage and schemas pass audit. Keep source provenance upstream and benchmark derivatives separately versioned. No patient-level data is required for the initial study.
+The native hardened release must pass Q01–Q05: runtime and FFI safety, actual platform consumers, pandas/xarray-free supported closure, supply-chain evidence, current scientific claims and exact-artifact acceptance. Plans/docs/import checks alone do not satisfy these gates.
 
-JOSS is the initial software target after a delivered stable scope and genuine research use. Separate the forecasting comparison, reusable data descriptor and novel decision-method papers. External adoption/independent replication must be demonstrated, not simulated through agent-generated assertions.
+The JOSS software paper follows a delivered stable scope and real research use. Forecasting, innovation/competition/hype, medicines application, decision and dataset papers are distinct contributions with their own evidence. Check current venue rules and AI disclosure at submission. No external publication is authorised by this plan.

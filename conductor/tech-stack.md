@@ -1,116 +1,44 @@
-# Current migration technology decision — 6 November 2026
-
-The user has selected a Rust execution core with Python, Julia and R bindings
-only, Polars for tabular operations, and Arrow IPC/Parquet for exchange.
-Latest registry candidates and qualification results are tracked in
-`tracks/scientific_ecosystem_alignment_20261029/`. PyO3/Maturin replace setuptools
-for the new Python package. Native interfaces may break; all scientific features
-remain migration obligations. No pandas/xarray or implicit Python computation
-belongs in the new runtime. Rust uses edition 2024 and an explicit toolchain.
-Python uses an explicitly verified repo-local 3.15.2 interpreter.
-The retained native package uses Python Polars 2.1.0, PyO3 0.30.1 and Maturin 1.16.0;
-Rust Polars is pinned to upstream 2d74c435 with its required hashbrown patch.
-See the dependency frontier receipt for compatibility exceptions and security warnings.
-
-The earlier stack below is retained as the pre-migration baseline and does not
-supersede this decision. Migration completion requires native tests and installed
-consumer evidence, not merely manifest edits.
-
-## Pre-migration baseline
-
 # Tech Stack
 
-## Documentation
+## Mandatory target: Rust scientific core and Polars
 
-- **Site Generator**: [Astro](https://astro.build) with [Starlight](https://starlight.astro.build)
-- **Documentation Theme**: Starlight (Astro integration)
-- **Versioned Baseline**: `astro` `^7.0.5` with `@astrojs/starlight`
-  `^0.41.3` is the active documentation baseline.
-- **Markdown Processor**: `@astrojs/markdown-remark` `^7.2.0` provides the
-  Astro 7-compatible `unified()` processor required by link validation.
-- **Polyglot Plugin**: [starlight-polyglot](https://github.com/edithatogo/starlight-polyglot) — auto-generates API docs from Python source code
-- **Versioning**: starlight-versions `0.9.1` is enabled with versioned content
-  under `latest/`; the active build validates Astro 7 non-doc routes such as
-  `/404`.
-- **Link Validation**: starlight-links-validator `0.25.2` for CI link checking
-- **Prose Linting**: Vale with the `Repo/ValueProse` style checks governance
-  prose for hedging and filler wording in CI.
-- **Search**: `@astrojs/starlight-docsearch` `0.7.0` when DocSearch is
-  selected; `@astrojs/sitemap` is the sitemap integration baseline.
-- **Deployment**: GitHub Pages via GitHub Actions
-- **Migration Track**: Astro/Starlight Documentation Site Migration records
-  cutover gates, route inventory, and redirect inventory.
-- **Build Gate**: `pnpm build && pnpm check` passes for the active
-  Astro/Starlight site with `starlight-polyglot` Python generation and
-  `starlight-links-validator` enabled.
+The maintainer's 7 November 2026 direction replaces the Python-first migration trajectory. Supported scientific model evaluation, inference and simulation execute Rust. Python, Julia and R bindings marshal native calls, configure jobs and present results. Missing native capability returns an explicit error.
+
+Polars is the supported tabular computation surface; Arrow/Parquet plus typed metadata is the interchange boundary. Pandas/xarray APIs, production imports, hidden conversions and transitive supported-extra dependencies are retired in the next breaking release. Separate external test-oracle environments may use established scientific packages, but are unreachable from production dispatch. The development branch has a bounded native runtime. Release qualification is tracked in the migration ledger.
+
+Target paths: `crates/innovate-core`, `crates/innovate-data`, `crates/innovate-arrow`, optional `crates/innovate-kairos` and `crates/innovate-games`, direct Python/PyO3 and versioned native FFI bindings. Minimal numerical kernels may use native dense arrays; they need not materialise a dataframe.
+
+## Dependencies and tooling
+
+Use [dated dependency candidates](dependency-candidates-20261107.md). Rust 1.99.1 and Python 3.15.2 interface/tooling are starting qualification targets, not fabricated completed upgrades. Match Kairos's exact accepted Polars/Arrow dependency closure or qualify a newer replacement with its consumers. Retain required root patches and package-publication constraints. Arrow Rust, Polars Rust/Python and PyArrow are separate release lines.
+
+Separate core, bindings, optional backend, build, isolated test-oracle and development dependencies. Qualify maintained numerical tools before replacing custom code. No production JAX/NumPy/BlackJAX/Mesa execution fallback; GPU acceleration must still satisfy native execution and actual hardware evidence.
+
+Python dependency management remains `uv`-first, with **nox** — Python task orchestration for repeatable local and CI sessions. Rust uses Cargo and an exact toolchain/lock; no undeclared latest or rolling Git main. `scripts/sync_versions.py` remains the package-version synchronisation utility.
+
+## Simulation and ecosystem
+
+Kairos owns simulation time, events, state, resources and simulation RNG. Innovate owns innovation model semantics and behaviours. Optional game adapters consume the single generic game-runtime capability, not duplicate solvers. Voiage consumes exported joint uncertainty through explicit decision bindings; application artefacts may feed selected designs back without mutual core dependencies.
 
 ## Documentation
 
-- Astro/Starlight under `docs/astro-site` is the only documentation site.
-- Release, registry, and migration evidence remains as static data under
-  `docs/source/_static/` for CI and site consumption.
+Astro/Starlight under `docs/astro-site` is the only documentation site.
 
-## Runtime Components
+- **Site Generator**: Astro with Starlight; `docs/astro-site` is the active site.
+- **Versioned Baseline**: existing `astro` `^7.0.5`, `@astrojs/starlight` `^0.41.3`, and `@astrojs/markdown-remark` `^7.2.0` records are historical/current-manifest observations, not an instruction to freeze obsolete versions.
+- **Polyglot Plugin**: starlight-polyglot; versioned pages use starlight-versions `0.9.1`; link tooling includes starlight-links-validator `0.25.2`.
+- **Search**: `@astrojs/starlight-docsearch` `0.7.0` remains a separately qualified integration; `@astrojs/sitemap` supplies the sitemap integration.
+- **Migration Record**: Astro/Starlight Documentation Site Migration retains historical cutover and route evidence.
+- **Prose Linting**: Vale with Repo/ValueProse; dependency updates require their own build evidence.
+- **Build Gate**: run `pnpm build && pnpm check` in the actual docs workspace; do not claim it ran from this plan.
+- Static historical release evidence under `docs/source/_static/` remains source data, not current acceptance by itself.
 
-### Language
-- Python 3.15.1 (candidate baseline; installed qualification required)
-- Rust (native kernel, bindings target)
-- R, Julia, TypeScript, Go, C# (binding surfaces)
+## Historical Rust ownership records
 
-### Package Management
-- **Python**: uv (primary), pip, conda. Python dependency management remains `uv`-first, with **nox** — Python task orchestration for repeatable local and CI sessions.
-- **Node.js**: pnpm (docs site dependencies)
-- **TypeScript Binding Toolchain**: Node.js 26 with TypeScript `^6.0.3`,
-  Vitest `^4.1.9`, `@vitest/coverage-v8` `^4.1.9`, and `@types/node`
-  `^26.0.0` is the next-release binding baseline.
-- **Version Sync**: `scripts/sync_versions.py` keeps package metadata aligned.
+Retain archived closure evidence under `Rust Core Full Native Migration and Ownership Closure` and `Rust Core Migration Completion and Polyglot Claim Closure`. These historical records do not establish present full native ownership. The [Rust-core convergence track](tracks/rust_core_convergence_20261107/index.md) owns the remaining acceptance.
 
-### Acceleration and Native Runtime
+For historical profiling context, **cargo-flamegraph** and **DHAT** are recorded Rust profiling tools. Historical **XLA-Backed Libraries** include JAX, NumPyro, BlackJAX, TensorFlow Probability and Diffrax. JAX/XLA device profilers retain their role in isolated external-reference comparisons until Rust owns a promoted native GPU execution backend. This preserves historical traceability, not permission for a supported non-Rust production engine. All performance claims require current measured evidence.
 
-- **XLA-Backed Libraries**: JAX, NumPyro, BlackJAX, TensorFlow Probability, and
-  Diffrax are the preferred XLA-backed options when accelerator evidence
-  justifies promotion.
-- **Rust Profiling**: **cargo-flamegraph** captures CPU hot paths and **DHAT**
-  captures memory evidence for promoted native slices.
-- **GPU Profiling**: JAX/XLA device profilers remain the GPU evidence source
-  until Rust owns a promoted native GPU execution backend.
-- **Rust Ownership Boundary**: archived closure evidence under `Rust Core Full Native Migration and Ownership Closure` and `Rust Core Migration Completion and Polyglot Claim Closure` records bounded historical work, not complete present-day native ownership. The current source remains hybrid; the [Rust-core convergence track](tracks/rust_core_convergence_20261107/index.md) defines remaining native acceptance without superseding the scientific alignment owner's pins or gates.
+## Delivery
 
-### CI/CD
-- GitHub Actions (CI, docs deployment, package publishing)
-- pnpm/action-setup (Node.js dependency management)
-
-## Repository Structure
-
-```
-innovate/
-├── docs/
-│   ├── astro-site/          # Starlight documentation site
-│   │   ├── src/content/docs/ # Markdown/MDX documentation
-│   │   ├── astro.config.mjs  # Astro configuration
-│   │   └── public/           # Static assets
-│   └── source/_static/      # CI evidence consumed by docs and release gates
-├── src/innovate/            # Python library source
-├── conductor/               # Migration tracks and tech stack
-└── .github/workflows/       # CI/CD workflows
-```
-
-## Scientific alignment candidate
-
-Python 3.15.1 and Arrow 26/Polars 2.1 are being qualified against the full
-resolved graph. This is not a completed native migration or Kairos pin advance.
-
-## Approved target architecture — 7 November 2026
-
-The user requires a Rust core. The planned structure is a binding-independent
-`crates/innovate-core`, `crates/innovate-arrow`, optional `crates/innovate-kairos`,
-and direct native binding adapters. These paths are a target, not an assertion
-that the crates exist today. Python remains a research interface; external
-Python inference backends must be labelled and cannot count as native delivery.
-
-Separate core, binding, backend, build, test-oracle and tooling dependencies.
-Qualify maintained optimisation/ODE/inference candidates before adoption; no
-version pins change in this planning update. Align scientific artefacts with
-repository-standards and Voiage while retaining independent numerical oracles.
-See the [programme](frontier-programme-20261107.md) for ownership, evidence gates,
-research sequencing and limits on current claims.
+Follow the [programme](frontier-programme-20261107.md), [taskbook](innovation-taskbook-20261107.md), [execution contract](execution-contract-20261107.md) and [release gates](release-gates-20261107.md). No runtime dependency pins are modified by this planning revision.

@@ -1,42 +1,30 @@
 # Scientific Integrity Implementation Plan
 
-> For agentic workers: use superpowers:executing-plans or superpowers:subagent-driven-development task by task.
+> For agentic workers: execute the named taskbook packets with failing tests, minimum changes, review and receipts.
 
-**Goal:** Prevent failed or unsupported calculations from appearing as valid scientific results.
+**Goal:** No failed/unsupported model calculation may appear as valid scientific evidence.
 
-**Architecture:** Share typed inference status and diagnostics across fitters, kernel payloads and reports. Retain independent reference estimators for validation.
+**Architecture:** Typed inference status and honest method dispatch across native results and bindings; legacy safety repairs precede retirement.
 
-**Tech Stack:** Existing Python/JAX/BlackJAX reference paths and the qualified Rust core.
+**Tech Stack:** Rust scientific core and isolated independent references.
 
-**Spec:** [spec.md](spec.md).
+**Spec:** [spec.md](spec.md), updated by the mandatory [product contract](../../product.md).
 
-## Global constraints
+## Global Constraints
 
-Follow the [programme](../../frontier-programme-20261107.md); no dependency upgrades or public API removals without a versioned migration. Planning completion is not implementation acceptance.
+The previous Python/JAX production-backend direction is superseded. I01/I02 repair misleading current behaviour but do not authorise maintaining a parallel host engine after native migration.
 
-## Review focus
+## Review Focus
 
-Failed refits must not retain old posteriors. Empty groups and non-finite values must fail clearly. Unsupported method strings must not select naive estimates. Confounding must not be hidden by result labels. Reports must preserve invalid status.
+Failed refit retaining old posterior; synthetic fallback uncertainty; ignored confounders/method selectors; untested gradients; calibration failures hidden from denominators.
 
-## Task 1 — Fail-closed uncertainty
+## Executable packets
 
-Files: `src/innovate/fitters/bayesian_fitter.py`, `src/innovate/fitters/blackjax_fitter.py`, `src/innovate/fitters/diagnostics_contract.py`, `src/innovate/probabilistic.py`; new `tests/unit/test_inference_failure_semantics.py`.
+Read [taskbook](../../innovation-taskbook-20261107.md).
 
-- [ ] Write regressions forcing warmup/sampling failure and a successful-fit-then-failed-refit sequence; assert no posterior samples or credible intervals are returned.
-- [ ] Run the focused tests and record the expected failures before changing code.
-- [ ] Introduce versioned status semantics and remove synthetic-posterior fallback; make explicitly requested point estimates distinguishable.
-- [ ] Verify status propagation through kernel, Arrow and report consumers; commit the tested slice.
+- [ ] I01 — fail-closed inference and stale-result tests.
+- [ ] I02 — descriptive/causal method dispatch and explicit unsupported errors.
+- [ ] I03 — native status/log-density/gradient contracts.
+- [ ] I04 — simulation-based calibration and repeated coverage harness. The executable run additionally requires R07's installed native executable; harness unit tests can precede it.
 
-## Task 2 — Honest causal dispatch
-
-Files: `src/innovate/causal/policy.py`, `src/innovate/causal/evaluation.py`, `src/innovate/reports/claims.py`; new `tests/unit/test_causal_estimator_dispatch.py`.
-
-- [ ] Test unsupported methods, no overlap, absent groups and a confounded known-truth fixture. Assert an explicit rejection or a verified adjusted result, never silent naive substitution.
-- [ ] Run the failing regressions; then implement descriptive/causal separation and supported dispatch.
-- [ ] Compare supported estimators with independent reference software and document assumptions; commit.
-
-## Task 3 — Numerical and release qualification
-
-- [ ] Add independent likelihood/gradient references, parameter-recovery cases, simulation-based calibration and interval-coverage experiments with prespecified tolerances.
-- [ ] Run `uv run pytest tests/unit/test_inference_failure_semantics.py tests/unit/test_causal_estimator_dispatch.py` and the affected existing fitter/kernel/report suites.
-- [ ] Review invalid-result handling across bindings, run required repository gates and record exact commits, commands, seeds and results before archival.
+Review status through Arrow/kernel/reports. No invalid posterior is promoted merely because a type/schema test passes.

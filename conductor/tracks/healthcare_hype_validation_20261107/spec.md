@@ -1,19 +1,11 @@
-# Healthcare hype evaluation specification
+# Hype effects and composite fitting
 
-## Question
+The maintainer clarified that hype means its impact on innovation, not whether claims exceed evidence. This replaces the earlier central claim-exaggeration construct. Healthcare/medicines are an application of a general innovation capability; reviewer-based exaggeration coding is not a prerequisite.
 
-Do attention and claims that exceed contemporaneously available evidence improve forecasts of healthcare utilisation, and under what conditions? A secondary question is whether flexible models outperform an imposed hype-cycle shape. Do not assume popularity is hype or that all innovations have a peak, trough and plateau.
+Implement an additive composite expectation/attention mean with free baseline/maturity amplitude and positive/negative pulses, explicit observation likelihood, joint constrained fitting and optional native hierarchical Bayesian inference. Validate total-curve extrema rather than assuming component centres are extrema. Replace hard-clipping artefacts with an appropriate latent/observation link. Ordered-cycle and unrestricted/no-cycle/multiple-wave families are separate.
 
-## Current adequacy audit
+Model hype's impact through separately identifiable effects on innovation, imitation, switching and cessation, allowing inhibition as well as acceleration. Keep active use distinct from irreversible cumulative first adoption. Clarify delayed forcing versus genuine delayed state. Joint feedback is experimental until identifiability and observations support it.
 
-At `b9998ad`, `hype/hype_cycle.py` adds a fixed-scale logistic term to positive/negative Gaussian pulses and clips the result at zero; it supplies prediction from assigned parameters, not a complete empirical measurement/inference workflow. `hype/hype_modified_bass.py` multiplies both Bass p and q by the same nonnegative `1 + visibility`, allowing only acceleration relative to its baseline. This is a time-rescaling restriction, not separate identified mechanisms for innovation and imitation.
+Current `hype_cycle.py` fixes maturity scale to 0.5 and clips a logistic-plus-Gaussians sum; existing hype-modified Bass applies a shared nonnegative multiplier to p/q. These restricted baselines do not establish empirical effect validity. Bayesian priors do not cure non-identifiability.
 
-`hype/delayed_hype_bass.py` time-shifts an external visibility function; its displayed equation contains current adoption state, not delayed adoption state. It also does not apply the non-delayed model's clipping rule. Verify equivalence and boundary behaviour before deciding whether a DDE solver is necessary. `abm/sentiment_hype_cycle.py` uses illustrative sentiment/adoption thresholds, fixed initial sentiment and irreversible adoption; it is not an estimated model of expectations and evidence.
-
-These modules are candidates for illustrative simulation or restricted baselines, not currently adequate for a confirmatory clinical-hype or causal study. This is a source audit, not a newly executed full-package test.
-
-## Required separation
-
-Measure attention, claim strength/evidence alignment, evidence maturity/quality and observed utilisation separately. Pair claims with source evidence available at that date. Trial/publication counts, sentiment, regulatory approval and dispensing volume are not interchangeable proxies for clinical benefit or unsupported claims.
-
-An initial descriptive/measurement study can proceed after source and annotation qualification. Prediction requires leakage-safe evaluation and calibrated inference. Causal claims require a separately defensible design. The [protocol](../../research/healthcare-hype-protocol-20261107.md) defines the staged study and stop rules.
+Use [the revised protocol](../../research/healthcare-hype-protocol-20261107.md) and H01–H06 in [the taskbook](../../innovation-taskbook-20261107.md). Numerical correctness, curve fit, forecast improvement and causal identification receive separate evidence. Known published hype fitting work is a comparator, not ignored prior art.
