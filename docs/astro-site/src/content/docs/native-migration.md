@@ -1352,3 +1352,23 @@ on the existing constructor history grid.
 The result contains both trajectories and the alternative minus the
 baseline. Multi-product results include column labels and row matrices.
 Percentage differences are null where the baseline is zero.
+
+## Re-ingesting a dataset artifact
+
+Keep the dataset and its `checksum_encoding` together. Pass the
+recorded encoding when re-ingesting the artifact so Rust verifies
+the digest using the same serialization rules.
+
+```python
+from innovate import execute
+
+verified = execute(
+    "ingest_dataset",
+    dataset=artifact["dataset"],
+    encoding=artifact["checksum_encoding"],
+)["result"]
+```
+
+Use `python_sorted_json_v1` for artifacts explicitly recorded with the
+historical Python encoding. New requests default to `rust_sorted_json_v1`.
+The encoding can affect digests for Unicode strings and numeric values.

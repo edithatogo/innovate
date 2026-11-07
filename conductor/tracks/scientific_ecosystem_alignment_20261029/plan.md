@@ -4352,3 +4352,6 @@ Hosted release readiness for this worktree revision remains open.
   from the Rust default. Re-ingestion reproduces the legacy artifact
   with the recorded encoding and rejects the mismatched default.
   All five focused Rust dataset tests passed.
+- [x] Document re-ingestion with the artifact's recorded checksum
+  encoding. The guide example reproduced a Unicode artifact using
+  python_sorted_json_v1 through the installed Python wheel.
