@@ -6962,3 +6962,8 @@ Hosted release readiness for this worktree revision remains open.
   buckets, a duplicate observation still adds to the original sum.
   A new bucket at the same observation count fails. Both Rust
   calendar tests passed.
+
+- [x] Verify the weekly limit through the rebuilt Python 3.15.2
+  wheel for ISO dates and UTC timestamps. Both accepted 100,000
+  occupied buckets plus a duplicate and rejected 100,001 distinct
+  buckets with the documented limit diagnostic.
