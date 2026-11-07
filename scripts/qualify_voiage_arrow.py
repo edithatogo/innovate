@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import io
 import json
@@ -9,6 +10,7 @@ import sys
 from importlib.metadata import distribution, version
 from math import exp, isclose
 from pathlib import Path
+from zipfile import ZipFile
 
 import polars as pl
 import voiage
@@ -19,7 +21,7 @@ import innovate
 from innovate import _native
 
 
-def qualify() -> dict[str, object]:
+def qualify(wheel: Path | None = None) -> dict[str, object]:
     if sys.version_info[:3] != (3, 15, 2):
         raise ValueError("qualification requires repo-local Python 3.15.2")
     record_hashes = {}
@@ -39,6 +41,16 @@ def qualify() -> dict[str, object]:
         raise ValueError("Innovate native extension import origin is shadowed")
     with native_path.open("rb") as native_binary:
         native_sha256 = hashlib.file_digest(native_binary, "sha256").hexdigest()
+    artifact = {}
+    if wheel is not None:
+        with ZipFile(wheel) as archive:
+            for module_path in (Path(innovate.__file__), native_path):
+                with archive.open(f"innovate/{module_path.name}") as member, module_path.open("rb") as installed:
+                    member_digest = hashlib.file_digest(member, "sha256").digest()
+                    if member_digest != hashlib.file_digest(installed, "sha256").digest():
+                        raise ValueError(f"installed {module_path.name} differs from the supplied wheel")
+        with wheel.open("rb") as package:
+            artifact["innovate_wheel_sha256"] = hashlib.file_digest(package, "sha256").hexdigest()
     rates = (0.01, 0.08)
     scenarios = [
         {
@@ -95,6 +107,7 @@ def qualify() -> dict[str, object]:
     if not isclose(weighted_observed, weighted_expected, rel_tol=1e-12, abs_tol=1e-12):
         raise ValueError("Voiage empirical-weight EVPI oracle mismatch")
     return {
+        **artifact,
         "python": sys.version.split()[0],
         "innovate": version("innovate"),
         "voiage": version("voiage"),
@@ -112,4 +125,6 @@ def qualify() -> dict[str, object]:
 
 
 if __name__ == "__main__":
-    print(json.dumps(qualify(), indent=2))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--wheel", type=Path, help="Innovate wheel used for the installed consumer")
+    print(json.dumps(qualify(parser.parse_args().wheel), indent=2))

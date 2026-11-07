@@ -94,7 +94,7 @@ jobs:
           uv venv "$consumer" --python .venv-release/bin/python
           uv pip install --only-binary :all: --python "$consumer/bin/python" dist/*.whl voiage==3.1.0
           uv pip check --python "$consumer/bin/python"
-          "$consumer/bin/python" scripts/qualify_voiage_arrow.py > dist/voiage-qualification.json
+          "$consumer/bin/python" scripts/qualify_voiage_arrow.py --wheel dist/*.whl > dist/voiage-qualification.json
       - name: Retain Voiage qualification receipt
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:

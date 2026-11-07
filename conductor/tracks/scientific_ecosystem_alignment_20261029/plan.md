@@ -7366,3 +7366,9 @@ Hosted release readiness for this worktree revision remains open.
   scikit-learn. The default cache ran out of space, so the successful
   run used a checkout-local cache. This checks Linux wheel availability.
   Hosted installation and execution remain open.
+
+- [x] Bind the hosted Voiage receipt to the Innovate wheel archive.
+  Compare its wrapper and native extension with the loaded files and
+  record the archive SHA-256. The current optimized wheel passed,
+  and an older wheel with the same version was rejected. Ruff and
+  Actionlint passed. Hosted execution remains open.
