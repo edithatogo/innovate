@@ -925,3 +925,7 @@ remain open.
   network tests and focused Clippy passed. The wheel passed 59 Python
   tests, Julia Pkg.test passed 231 assertions, and installed R native
   conformance passed. [Logs](evidence/kairos-continuous-hazards-20261107).
+
+- [x] Validate effective hazards without evaluating the unused unforced sum. (286bf0be)
+  The regression uses a finite attenuated hazard whose unforced population
+  sum would overflow. All 18 Rust network tests and focused Clippy passed.
