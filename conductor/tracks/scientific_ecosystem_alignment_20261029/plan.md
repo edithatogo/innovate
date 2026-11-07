@@ -1671,4 +1671,7 @@ the other competition models and installed binding checks remain open.
   on the baseline prediction grid. The Logistic fixture changes only
   price and moves the midpoint prediction from 50 to 60. All 24 Rust
   boundary tests and focused Clippy passed.
-- [ ] Verify covariate overrides through installed Python, Julia and R.
+- [x] Verify covariate overrides through the rebuilt Python wheel, Julia
+  and installed R. The same Logistic scenario returns 50 at baseline,
+  60 after replacing price, and a difference of 10. The R check uses
+  a scalar input for the one-element time and covariate arrays.
