@@ -3921,3 +3921,7 @@ Hosted release readiness for this worktree revision remains open.
   times were within one adoption unit of the analytic trajectory.
   All five fit-quality tests and focused Clippy passed. This is
   point-forecast evidence for one deterministic perturbation fixture.
+- [x] Verify the perturbed Logistic fit and saved-state holdout
+  through Python 3.15.2, Julia and installed R. All three reported
+  local rank three and nine predictions within one adoption unit.
+  Reused native builds at 2a5d2c0e with identical runtime source.
