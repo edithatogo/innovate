@@ -4101,3 +4101,8 @@ Hosted release readiness for this worktree revision remains open.
   eight columns and 24 rows and retained the missing perspective
   values. Document the native file path in the Julia binding guide.
   Direct readback of files written by Python Polars remains separate.
+- [x] Decode the R binding's paired Bass export using R Arrow 20.0.0.2.
+  The checker matched all 24 historical scenario, draw, time and
+  adoption rows, with missing perspectives and fixture provenance
+  preserved. The macOS binary was built under R 4.3.3 and ran under
+  R 4.3.0. Hosted consumer qualification remains open.
