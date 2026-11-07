@@ -4160,3 +4160,8 @@ Hosted release readiness for this worktree revision remains open.
   passed all 81 packaged consumer tests against the installed Python
   3.15.2 wheel with matching runtime source. Repository policy and
   benchmark receipt tests continue to run from the checkout.
+- [x] Build and install a Python 3.15.2 wheel from the extracted
+  source distribution and pass all 81 packaged consumer tests.
+  The local wheel build reused Cargo artifacts. Extend scheduled and
+  manually dispatched Linux CI to build and test from the extraction.
+  Actionlint passed locally. Hosted execution remains open.
