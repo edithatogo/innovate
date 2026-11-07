@@ -3041,3 +3041,10 @@ the other competition models and installed binding checks remain open.
   The grid recovered analytic posterior mean 98 and variance 2 within
   1e-10. The 4,000-draw chain returned mean 98.0372 and variance 1.8989.
   Nine focused Rust tests and Clippy passed.
+
+- [x] Schedule Kairos retry policy changes. A replacement sets delay
+  and retry budget for future balks and abandonments. Explicit null
+  disables future retries, and already scheduled wakes keep their
+  original time. Python 3.15.2, Julia and R agreed exactly on a cleared
+  policy fixture with a wake at tick 6 and completion at tick 12.
+  All 26 Rust network tests and focused Clippy passed.

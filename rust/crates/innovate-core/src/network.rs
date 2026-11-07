@@ -46,11 +46,18 @@ struct Options {
     schedule: Vec<Change>,
 }
 
-#[derive(Deserialize)]
+#[derive(Clone, Copy, Deserialize)]
 #[serde(deny_unknown_fields)]
 struct Retry {
     delay_ticks: u64,
     max_retries: u8,
+}
+
+impl Retry {
+    fn invalid(&self) -> bool {
+        !(1..=1_000_000_000_000).contains(&self.delay_ticks)
+            || !(1..=16).contains(&self.max_retries)
+    }
 }
 
 #[derive(Deserialize)]
@@ -67,6 +74,8 @@ struct Change {
     max_wait_ticks: Option<Option<u64>>,
     #[serde(default, deserialize_with = "queue_policy_change")]
     max_queue_length: Option<Option<usize>>,
+    #[serde(default, deserialize_with = "queue_policy_change")]
+    retry: Option<Option<Retry>>,
     p: Option<f64>,
     q: Option<f64>,
     innovation_multipliers: Option<Vec<f64>>,
@@ -251,10 +260,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         ));
     }
     if o.max_queue_length.is_some_and(|limit| limit > o.population)
-        || o.retry.as_ref().is_some_and(|retry| {
-            !(1..=1_000_000_000_000).contains(&retry.delay_ticks)
-                || !(1..=16).contains(&retry.max_retries)
-        })
+        || o.retry.as_ref().is_some_and(Retry::invalid)
     {
         return Err(invalid("invalid queue length or retry policy"));
     }
@@ -346,6 +352,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                             && change.agent_priorities.is_none()
                             && change.max_queue_length.is_none()
                             && change.max_wait_ticks.is_none()
+                            && change.retry.is_none()
                             && change.p.is_none()
                             && change.q.is_none()
                             && change.innovation_multipliers.is_none()
@@ -365,6 +372,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 })
                 || change.capacity.is_some_and(|cap| cap > o.population as u64)
                 || change.max_wait_ticks.flatten().is_some_and(|wait| !(1..=1_000_000_000_000).contains(&wait))
+                || change.retry.flatten().as_ref().is_some_and(Retry::invalid)
                 || change.max_queue_length.flatten().is_some_and(|limit| limit > o.population)
                 || change
                     .service_ticks
@@ -422,8 +430,9 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     let mut retries = Vec::new();
     let mut retry_at = vec![None; o.population];
     let mut retry_counts = vec![0; o.population];
-    let next_retry = |index: usize, now: u128, counts: &mut [u8]| {
-        let policy = o.retry.as_ref()?;
+    let mut retry_policy = o.retry;
+    let next_retry = |policy: Option<Retry>, index: usize, now: u128, counts: &mut [u8]| {
+        let policy = policy?;
         if counts[index] >= policy.max_retries {
             return None;
         }
@@ -599,7 +608,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             for id in reneging.expire_reneged(SimTime::from_ticks(now)) {
                 if deadlines[id.index as usize].take().is_some() {
                     let index = id.index as usize;
-                    retry_at[index] = next_retry(index, now, &mut retry_counts);
+                    retry_at[index] = next_retry(retry_policy, index, now, &mut retry_counts);
                     context.attach(
                         id,
                         if retry_at[index].is_some() {
@@ -627,6 +636,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 service.clone_from(values);
                 service_override = None;
             }
+            retry_policy = change.retry.unwrap_or(retry_policy);
             capacity = change.capacity.unwrap_or(capacity);
             max_wait_ticks = change.max_wait_ticks.unwrap_or(max_wait_ticks);
             max_queue_length = change.max_queue_length.unwrap_or(max_queue_length);
@@ -677,7 +687,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             if in_service >= capacity
                 && max_queue_length.is_some_and(|limit| resource.queue_length() >= limit)
             {
-                retry_at[index] = next_retry(index, now, &mut retry_counts);
+                retry_at[index] = next_retry(retry_policy, index, now, &mut retry_counts);
                 context.attach(
                     id,
                     if retry_at[index].is_some() {

@@ -747,3 +747,45 @@ fn scheduled_agent_durations_replace_scalar_override_at_admission() {
     payload["simulation_options"]["schedule"][1]["service_ticks"] = json!(4);
     assert!(kernel.simulate_model("bass", payload).is_err());
 }
+
+#[test]
+fn scheduled_retry_preserves_pending_wake_after_policy_clears() {
+    let mut payload = json!({
+        "inputs":{"time":[0.,6.,12.]},
+        "parameters":{"p":1e12,"q":0.,"m":2.},
+        "simulation_options":{"engine":"kairos_network","population":2,"seed":42,
+            "edges":[],"capacity":1,"service_ticks":5,"ticks_per_unit":1,
+            "max_queue_length":0,"retry":{"delay_ticks":4,"max_retries":1},
+            "schedule":[{"tick":3,"retry":null}]}
+    });
+    let kernel = KernelBinding::new();
+    let result = kernel
+        .simulate_model("bass", payload.clone())
+        .unwrap()
+        .result
+        .unwrap();
+    let waiter = &result["requests"][1]["agent"];
+    assert_eq!(result["balks"], json!([{"tick":2,"agent":waiter}]));
+    assert_eq!(
+        result["retry_eligibility"],
+        json!([{"tick":6,"agent":waiter}])
+    );
+    assert_eq!(result["completions"][1], json!({"tick":12,"agent":waiter}));
+    assert_eq!(result["metadata"]["applied_schedule_ticks"], json!([3]));
+
+    payload["simulation_options"]["retry"] = json!({"delay_ticks":1,"max_retries":2});
+    let cleared = kernel
+        .simulate_model("bass", payload.clone())
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(
+        cleared["retry_eligibility"],
+        json!([{"tick":3,"agent":waiter}])
+    );
+    assert_eq!(cleared["balks"][1], json!({"tick":4,"agent":waiter}));
+    assert_eq!(cleared["counts"], json!([0, 1, 1]));
+
+    payload["simulation_options"]["schedule"][0]["retry"]["delay_ticks"] = json!(0);
+    assert!(kernel.simulate_model("bass", payload).is_err());
+}
