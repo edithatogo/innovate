@@ -4322,3 +4322,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Retain horizon resource count assertions in Julia and R native
   tests. Both shorten the existing fixture to tick seven and verify
   one additional waiter and two additional agents in service.
+- [x] Qualify local policy timing inputs without event labels in CSV,
+  Parquet and Arrow IPC. All three generate stable event IDs, retain
+  signed effects and reproduce the checksummed artifact on re-ingestion.
+  The three packaged Python regression cases passed.

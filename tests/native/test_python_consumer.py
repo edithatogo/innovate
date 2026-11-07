@@ -1157,3 +1157,19 @@ def test_kairos_resource_comparison_arrow_preserves_signed_totals():
     totals = row["result"]["resource_differences"]
     assert totals["waiting_at_horizon"] == 1
     assert totals["in_service_at_horizon"] == 2
+
+
+@pytest.mark.parametrize("suffix", ["csv", "parquet", "ipc"])
+def test_local_ingestion_defaults_optional_policy_labels(tmp_path, suffix):
+    frame = pl.DataFrame({"event_times": [0, 2], "event_effects": [0.0, -0.5]})
+    path = tmp_path / f"policy.{suffix}"
+    getattr(frame, f"write_{suffix}")(path)
+    provenance = {
+        "source": "synthetic",
+        "license": "CC-BY-4.0",
+        "extraction_time": "2026-11-07T00:00:00Z",
+    }
+    artifact = innovate.ingest_local(path, "policy_timing", provenance=provenance)
+    assert artifact["dataset"]["event_labels"] == ["event_0", "event_1"]
+    assert artifact["dataset"]["event_effects"] == [0.0, -0.5]
+    assert innovate.execute("ingest_dataset", dataset=artifact["dataset"])["result"] == artifact
