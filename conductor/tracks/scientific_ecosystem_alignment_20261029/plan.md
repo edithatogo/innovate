@@ -1385,3 +1385,13 @@ the other competition models and installed binding checks remain open.
   and retain the analytic spike test when evaluating the resulting
   behavior.
   [R STL source](https://github.com/wch/r-source/blob/R-4-3-branch/src/library/stats/src/stl.f).
+
+- [x] Test the combined R-compatible robust rules through installed R.
+  Direct phase extension, observed-value fallback inside the series,
+  adjacent smooth fallback outside it, the weighted spread threshold,
+  and the R bisquare cutoffs reduced maximum robust discrepancy from
+  100.08 to 1.41e-10 on the saved fixture. The combined prototype
+  failed the existing analytic spike-recovery test when applied to the
+  default. Restored the default. Add explicit historical compatibility
+  semantics so both the independent parity fixture and the analytic
+  spike-recovery test can be enforced.
