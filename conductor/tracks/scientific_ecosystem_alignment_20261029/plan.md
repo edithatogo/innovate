@@ -5403,3 +5403,8 @@ Hosted release readiness for this worktree revision remains open.
   probabilities and fold provenance. Four Rust causal unit tests passed.
   The standard errors still condition on the selected pairs. Score-fit
   uncertainty and binding qualification for this input remain open.
+
+- [x] Verify the `fit_scores` matching input through rebuilt Python
+  3.15.2 and the Julia and installed R bindings against a rebuilt Rust
+  FFI library. Each reproduced a matched estimate of 5 and four held-out
+  propensity scores of 0.5. These fixtures exercise the binding contract.

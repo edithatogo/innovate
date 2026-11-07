@@ -934,3 +934,13 @@ end
     @test result["conditional_standard_error"] ≈ sqrt(5.5)
     @test result["adjusted_standard_error"] ≈ sqrt(7)
 end
+
+@testset "Matching with fitted scores" begin
+    result = kernel_call("summarize_causal", nothing, Dict(
+        "method"=>"matched_treatment_contrast", "outcomes"=>[0,4,2,6],
+        "treatment"=>[0,1,0,1], "caliper"=>0,
+        "fit_scores"=>Dict("covariates"=>[[0] for _ in 1:4], "folds"=>[1,1,2,2],
+            "ridge"=>1)))["result"]
+    @test result["estimate"] == 5
+    @test result["score_fit"]["propensities"] == fill(0.5,4)
+end

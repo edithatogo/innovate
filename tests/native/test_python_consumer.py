@@ -1763,3 +1763,13 @@ def test_paused_scenario_polars_export_preserves_checkpoint():
     assert frame["scenario_id"].to_list() == ["complete", "paused"]
     assert frame["successful"].to_list() == [True, False]
     assert [json.loads(row) for row in frame["execution_json"]] == response["result"]["executions"]
+
+
+def test_matching_with_fitted_scores():
+    result = innovate.execute(
+        "summarize_causal", method="matched_treatment_contrast",
+        outcomes=[0, 4, 2, 6], treatment=[0, 1, 0, 1], caliper=0,
+        fit_scores={"covariates": [[0]] * 4, "folds": [1, 1, 2, 2], "ridge": 1},
+    )["result"]
+    assert result["estimate"] == 5
+    assert result["score_fit"]["propensities"] == [0.5] * 4

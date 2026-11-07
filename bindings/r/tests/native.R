@@ -874,3 +874,10 @@ stopifnot(fitted_covariance$estimate == 5, fitted_covariance$adjusted_estimate =
     c(0,-1.5,1,0.5,2,0.5,3,0.5)),
   isTRUE(all.equal(fitted_covariance$conditional_standard_error, sqrt(5.5))),
   isTRUE(all.equal(fitted_covariance$adjusted_standard_error, sqrt(7))))
+
+fitted_scores <- kernel_call("summarize_causal", payload=list(
+  method="matched_treatment_contrast", outcomes=c(0,4,2,6),
+  treatment=c(0,1,0,1), caliper=0,
+  fit_scores=list(covariates=rep(list(list(0)),4), folds=c(1,1,2,2), ridge=1)))$result
+stopifnot(fitted_scores$estimate == 5,
+  identical(unlist(fitted_scores$score_fit$propensities), rep(0.5,4)))
