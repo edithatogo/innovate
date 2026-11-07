@@ -7493,3 +7493,10 @@ Hosted release readiness for this worktree revision remains open.
   unsupported_operation denial and preserved the trace ID. Only the
   measured duration was excluded from comparison. This exercises local
   policy enforcement with caller-supplied identity.
+
+- [x] Reconcile the latest dependency PRs against the migration locks.
+  PRs #562, #545, #544, #550 and #549 target older versions than the
+  current locks. PR #548 matches @astrojs/check 0.9.12. Tornado and
+  Pillow from #563 and #543 are absent from the active Python lock.
+  Preserve the current locks and record these as superseded on this
+  branch. This disposition does not close the hosted PRs.
