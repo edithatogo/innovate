@@ -1844,3 +1844,8 @@ the other competition models and installed binding checks remain open.
   focused Clippy passed.
 - [ ] Restore diagnostics for the other historical dataset kinds
   and verify the installed consumers.
+
+- [x] Restore substitution diagnostics for aligned, rectangular share
+  matrices, numeric entries, share units and total market share.
+  The Rust regression rejects a combined share above one even when
+  each product share is valid. All 29 boundary tests and focused Clippy passed.

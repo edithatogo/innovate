@@ -705,3 +705,15 @@ fn adoption_diagnostics_report_multiple_dataset_failures() {
         );
     }
 }
+
+#[test]
+fn substitution_diagnostics_check_joint_market_share() {
+    let request = innovate_core::json!({"schema_version":"2.0","operation":"validate_dataset",
+        "payload":{"kind":"substitution","time":[0,1],"share":[[0.5,0.5],[0.7,0.5]]}});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert_eq!(
+        response["result"]["failed"],
+        innovate_core::json!(["share_sum"])
+    );
+}
