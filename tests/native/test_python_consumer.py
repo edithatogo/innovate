@@ -1568,7 +1568,7 @@ def test_staggered_long_panel_att():
 def test_scenario_grid_ranking():
     scenarios = [
         {"id": key, "model_key": "logistic", "simulation": {
-            "inputs": {"time": [1, 2]}, "parameters": {"L": capacity, "k": 1, "x0": 1},
+            "inputs": {"time": [1, 2, 4]}, "parameters": {"L": capacity, "k": 1, "x0": 1},
         }}
         for key, capacity in [("base", 100), ("alt", 200), ("tie", 200)]
     ]
@@ -1577,3 +1577,8 @@ def test_scenario_grid_ranking():
     assert [(row["id"], row["place"]) for row in result["ranking"]["rows"]] == [(
         "tie", 1), ("alt", 1), ("base", 3),
     ]
+    area = innovate.execute("execute_scenario_grid", scenarios=scenarios,
+                            rank_scenarios=["tie", "base", "alt"], rank_metric="adoption_area")["result"]
+    first, second, third = area["executions"][1]["result"]["values"]
+    assert area["ranking"]["metric"] == "adoption_area"
+    assert area["ranking"]["rows"][0]["adoption_area"] == pytest.approx((first + second) / 2 + second + third)

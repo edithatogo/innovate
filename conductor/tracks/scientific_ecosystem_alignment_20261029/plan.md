@@ -4803,3 +4803,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Rank scenario grids by adoption area over a common horizon.
   The Rust regression verifies trapezoidal scoring alongside existing
   final-adoption ties and ranking error isolation. Binding checks remain open.
+
+- [x] Verify adoption-area ranking through rebuilt Python 3.15.2, Julia
+  and installed R. All three matched the analytic trapezoidal area on
+  an uneven time grid and retained the final-adoption tie checks.

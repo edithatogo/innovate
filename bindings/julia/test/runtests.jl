@@ -792,9 +792,14 @@ end
 
 @testset "Scenario grid ranking" begin
     scenarios = [Dict("id"=>id, "model_key"=>"logistic", "simulation"=>Dict(
-        "inputs"=>Dict("time"=>[1,2]), "parameters"=>Dict("L"=>capacity,"k"=>1,"x0"=>1)))
+        "inputs"=>Dict("time"=>[1,2,4]), "parameters"=>Dict("L"=>capacity,"k"=>1,"x0"=>1)))
         for (id,capacity) in [("base",100),("alt",200),("tie",200)]]
     result = kernel_call("execute_scenario_grid", nothing,
         Dict("scenarios"=>scenarios, "rank_scenarios"=>["tie","base","alt"]))["result"]
     @test [(row["id"],row["place"]) for row in result["ranking"]["rows"]] == [("tie",1),("alt",1),("base",3)]
+    area = kernel_call("execute_scenario_grid", nothing, Dict("scenarios"=>scenarios,
+        "rank_scenarios"=>["tie","base","alt"], "rank_metric"=>"adoption_area"))["result"]
+    first, second, third = area["executions"][2]["result"]["values"]
+    @test area["ranking"]["metric"] == "adoption_area"
+    @test area["ranking"]["rows"][1]["adoption_area"] ≈ (first + second)/2 + second + third
 end
