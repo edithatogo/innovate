@@ -10,7 +10,10 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--clustered", action="store_true")
 parser.add_argument("--few-clusters", action="store_true", help="Compare normal and t(9) intervals")
 parser.add_argument("--weak-overlap", action="store_true")
+parser.add_argument("--minimum-training-arm-count", type=int, default=1)
 args = parser.parse_args()
+if args.minimum_training_arm_count < 1:
+    parser.error("minimum training arm count must be positive")
 clustered = args.clustered or args.few_clusters
 cluster_count = 10 if args.few_clusters else 80
 rng = Random(912)
@@ -30,6 +33,7 @@ methods = {"ate": 2.0, "att": 3 - 2 * low_probability}
 estimates = {key: [] for key in methods}
 covered = dict.fromkeys(methods, 0)
 failed = dict.fromkeys(methods, 0)
+guarded = dict.fromkeys(methods, 0)
 covered_t = dict.fromkeys(methods, 0)
 for _ in range(400):
     treatment = [int(rng.random() < p) for p in probabilities]
@@ -51,12 +55,16 @@ for _ in range(400):
                 treatment=treatment,
                 strata=strata,
                 folds=folds,
+                minimum_training_arm_count=args.minimum_training_arm_count,
                 **cluster_options,
             )["result"]["contrast"]
         except NativeError as error:
-            if not args.weak_overlap or "requires both arms" not in str(error):
+            if args.weak_overlap and "requires both arms" in str(error):
+                failed[key] += 1
+            elif args.weak_overlap and "falls below minimum_training_arm_count" in str(error):
+                guarded[key] += 1
+            else:
                 raise
-            failed[key] += 1
             continue
         estimate = result["estimate"]
         estimates[key].append(estimate)
@@ -70,7 +78,7 @@ for key, truth in methods.items():
     average = mean(estimates[key])
     successful = len(estimates[key])
     print(f"{key}: mean {average:.6f}, 95% coverage {covered[key]}/{successful}, "
-          f"missing-arm failures {failed[key]}/400")
+          f"missing-arm failures {failed[key]}/400, guard rejections {guarded[key]}/400")
     if args.weak_overlap:
         assert 0 < failed[key] < 400
         continue

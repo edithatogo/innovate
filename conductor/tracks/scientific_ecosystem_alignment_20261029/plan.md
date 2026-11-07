@@ -6284,3 +6284,10 @@ Hosted release readiness for this worktree revision remains open.
   diagnostic names in native causal method discovery for both
   cross-fitted estimands. The Rust causal boundary test verifies
   both discovery entries.
+
+- [x] Measure the guard's acceptance trade-off at propensities 0.01
+  and 0.99 using the rebuilt Python wheel. Minimum arm counts of
+  one, two and three retained 297, 166 and 52 of 400 trials. The
+  minimum of two gave conditional coverage of 160/166 for ATE and
+  153/166 for ATT. These results describe selected successful trials
+  and do not establish a universal cutoff or weak-overlap acceptance.
