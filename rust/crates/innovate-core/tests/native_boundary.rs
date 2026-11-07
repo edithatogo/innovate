@@ -965,6 +965,19 @@ fn scenario_grid_compares_aligned_adoption_paths() {
     assert_eq!(row["ranking"]["baseline_place"], 2);
     assert_eq!(row["ranking"]["alternative_place"], 1);
     assert_eq!(row["ranking"]["tie"], false);
+    let mut interpolated = request.clone();
+    interpolated["payload"]["comparisons"][0]["threshold"] = json!(60.);
+    interpolated["payload"]["comparisons"][0]["interpolate_threshold"] = json!(true);
+    let interpolated = run(&interpolated);
+    let result = &interpolated["result"]["comparisons"][0]["result"];
+    assert_eq!(
+        result["threshold_timing"],
+        json!({"baseline":2.,"alternative":1.})
+    );
+    let crossing = &result["interpolated_threshold_timing"];
+    assert_eq!(crossing["alternative"], 1.);
+    assert!((crossing["baseline"].as_f64().unwrap() - (1. + 10. / (baseline - 50.))).abs() < 1e-12);
+
     let mut tied = request.clone();
     tied["payload"]["scenarios"][1]["simulation"]["parameters"]["L"] = json!(100.);
     let tied = run(&tied);

@@ -684,6 +684,8 @@ struct Comparison {
     baseline: String,
     alternative: String,
     threshold: Option<f64>,
+    #[serde(default)]
+    interpolate_threshold: bool,
     relative_margin: Option<f64>,
 }
 
@@ -816,6 +818,24 @@ fn compare_paths(
         };
         result["threshold_timing"] =
             json!({"baseline":first_sample(&baseline),"alternative":first_sample(&alternative)});
+        if comparison.interpolate_threshold {
+            let crossing = |values: &[f64]| {
+                let index = values.iter().position(|&value| value >= threshold)?;
+                if index == 0 || values[index] == threshold {
+                    return Some(time[index]);
+                }
+                let lower = values[index - 1];
+                let upper = values[index];
+                let scale = lower.abs().max(upper.abs());
+                let fraction =
+                    (threshold / scale - lower / scale) / (upper / scale - lower / scale);
+                Some(time[index - 1] * (1. - fraction) + time[index] * fraction)
+            };
+            result["interpolated_threshold_timing"] = json!({
+                "method":"linear_between_samples",
+                "baseline":crossing(&baseline),"alternative":crossing(&alternative)
+            });
+        }
     }
     Ok(result)
 }

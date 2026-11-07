@@ -2527,3 +2527,10 @@ the other competition models and installed binding checks remain open.
   Julia and installed R. All three returned places 2 and 1 for unequal
   final adoption, and shared first place with the tie flag for equal
   values. Historical final-adoption scores matched the analytic values.
+
+- [x] Add opt-in linear threshold timing for pair comparisons. Set
+  interpolate_threshold with a threshold to report the first crossing
+  between samples alongside the existing sampled timing. A path already
+  at or above the threshold reports its first sample, and a path that
+  never reaches it reports null. The focused Rust comparison test and
+  Clippy passed. Binding qualification for this option remains open.
