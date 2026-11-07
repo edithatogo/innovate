@@ -5862,3 +5862,8 @@ Hosted release readiness for this worktree revision remains open.
   configured slot ticks from the applied schedule before resuming
   Kairos network checkpoints. Tampered accounting fields were rejected.
   All 33 Rust network tests passed.
+
+- [x] Verify Kairos checkpoint capacity accounting through rebuilt
+  Python, Julia and freshly installed R. A pause at tick 8 resumed
+  identically to uninterrupted execution in each binding. Increasing
+  the saved configured slot ticks by one caused Rust to reject resume.
