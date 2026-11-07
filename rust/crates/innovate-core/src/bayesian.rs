@@ -31,6 +31,7 @@ pub(crate) fn grid(payload: &Value) -> Result<Value, &'static str> {
     if axes.len() == 2 && axes[0].0 == axes[1].0 {
         return Err("posterior axes must name distinct parameters");
     }
+    let priors = GaussianPriors::parse(payload, axes.iter().map(|(name, _)| *name))?;
     let cells = axes.iter().map(|(_, grid)| grid.len()).product::<usize>();
     if cells > 10_000 {
         return Err("posterior grid exceeds 10000 cells");
@@ -51,7 +52,7 @@ pub(crate) fn grid(payload: &Value) -> Result<Value, &'static str> {
             prediction["parameters"][*name] = json!(grid[cell % stride]);
         }
         let log_weight = log_likelihood(&kernel, model, &prediction, &observed, sigma)?;
-        log_weights.push(log_weight);
+        log_weights.push(log_weight + priors.log_density(&prediction));
     }
     let peak = log_weights
         .iter()
@@ -67,7 +68,7 @@ pub(crate) fn grid(payload: &Value) -> Result<Value, &'static str> {
     let total: f64 = weights.iter().sum();
     weights.iter_mut().for_each(|weight| *weight /= total);
     let mut result = json!({"posterior_mass":weights,
-        "method":"midpoint_grid_quadrature","prior":"uniform_within_bounds","likelihood":"independent_gaussian_known_sd"});
+        "method":"midpoint_grid_quadrature","prior":priors.label(),"likelihood":"independent_gaussian_known_sd"});
     let mut means = Vec::with_capacity(axes.len());
     let mut intervals = Vec::with_capacity(axes.len());
     let tail = (1. - credible_mass) / 2.;
@@ -158,6 +159,60 @@ fn observations(payload: &Value) -> Result<(f64, Vec<f64>), &'static str> {
     Ok((sigma, observed))
 }
 
+struct GaussianPriors<'a>(Vec<(&'a str, f64, f64)>);
+
+impl<'a> GaussianPriors<'a> {
+    fn parse(
+        payload: &'a Value,
+        names: impl Iterator<Item = &'a str>,
+    ) -> Result<Self, &'static str> {
+        let Some(priors) = payload.get("gaussian_priors") else {
+            return Ok(Self(Vec::new()));
+        };
+        let priors = priors
+            .as_object()
+            .ok_or("gaussian_priors must be a parameter map")?;
+        let names: Vec<_> = names.collect();
+        let entries = priors
+            .iter()
+            .map(|(name, prior)| {
+                if !names.contains(&name.as_str()) {
+                    return Err("Gaussian prior must name a sampled parameter");
+                }
+                let mean = prior["mean"]
+                    .as_f64()
+                    .ok_or("Gaussian prior mean must be finite")?;
+                let sd = prior["sd"]
+                    .as_f64()
+                    .filter(|sd| *sd > 0.)
+                    .ok_or("Gaussian prior sd must be finite and positive")?;
+                Ok((name.as_str(), mean, sd))
+            })
+            .collect::<Result<Vec<_>, _>>()?;
+        Ok(Self(entries))
+    }
+
+    fn label(&self) -> &'static str {
+        if self.0.is_empty() {
+            "uniform_within_bounds"
+        } else {
+            "independent_gaussian_or_uniform_within_bounds"
+        }
+    }
+
+    fn log_density(&self, prediction: &Value) -> f64 {
+        self.0
+            .iter()
+            .map(|(name, mean, sd)| {
+                let value = prediction["parameters"][*name]
+                    .as_f64()
+                    .expect("evaluated parameter");
+                -0.5 * ((value - mean) / sd).powi(2)
+            })
+            .sum()
+    }
+}
+
 fn log_likelihood(
     kernel: &crate::KernelBinding,
     model: &str,
@@ -238,6 +293,7 @@ pub(crate) fn sample(payload: &Value) -> Result<Value, &'static str> {
         bounds.push(lower..=upper);
         steps.push(step);
     }
+    let priors = GaussianPriors::parse(payload, names.iter().copied())?;
     let draws = payload["draws"]
         .as_u64()
         .filter(|n| (2..=10_000).contains(n))
@@ -251,7 +307,8 @@ pub(crate) fn sample(payload: &Value) -> Result<Value, &'static str> {
         .ok_or("seed must be an unsigned integer")?;
     let (sigma, observed) = observations(payload)?;
     let kernel = crate::KernelBinding::new();
-    let mut current_log = log_likelihood(&kernel, model, &prediction, &observed, sigma)?;
+    let mut current_log = log_likelihood(&kernel, model, &prediction, &observed, sigma)?
+        + priors.log_density(&prediction);
     if !current_log.is_finite() {
         return Err("initial log likelihood must be finite");
     }
@@ -272,7 +329,8 @@ pub(crate) fn sample(payload: &Value) -> Result<Value, &'static str> {
             for (name, value) in names.iter().zip(&proposed) {
                 prediction["parameters"][*name] = json!(value);
             }
-            let proposed_log = log_likelihood(&kernel, model, &prediction, &observed, sigma)?;
+            let proposed_log = log_likelihood(&kernel, model, &prediction, &observed, sigma)?
+                + priors.log_density(&prediction);
             let acceptance: f64 = rng.sample(unit);
             if proposed_log.is_finite() && acceptance.ln() < proposed_log - current_log {
                 std::mem::swap(&mut current, &mut proposed);
@@ -298,7 +356,7 @@ pub(crate) fn sample(payload: &Value) -> Result<Value, &'static str> {
     let mut result = json!({
         "seed":seed,"draws":draws,"warmup":warmup,"accepted":accepted,
         "acceptance_rate":accepted as f64 / draws as f64,
-        "method":"random_walk_metropolis","prior":"uniform_within_bounds",
+        "method":"random_walk_metropolis","prior":priors.label(),
         "likelihood":"independent_gaussian_known_sd"
     });
     if joint {

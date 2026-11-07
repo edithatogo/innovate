@@ -2395,3 +2395,22 @@ fn bayesian_metropolis_chains_diagnoses_each_joint_parameter() {
     request["payload"]["chains"][1]["seed"] = json!(17);
     assert!(execute(&request)["error"].is_object());
 }
+
+#[test]
+fn bayesian_gaussian_prior_combines_with_gaussian_likelihood() {
+    let mut request = json!({"schema_version":"2.0","operation":"bayesian_parameter_grid",
+        "payload":{"forecast_model":"logistic","parameter":"L","bounds":[80.,120.],
+            "points":401,"noise_sd":1.,"observed":[50.],
+            "gaussian_priors":{"L":{"mean":96.,"sd":2.}},
+            "prediction":{"inputs":{"time":[2.]},"parameters":{"L":100.,"k":0.5,"x0":2.}}}});
+    let execute = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = execute(&request);
+    let result = &response["result"];
+    assert!((result["posterior_mean"].as_f64().unwrap() - 98.).abs() < 1e-10);
+    request["payload"]["gaussian_priors"]["L"]["sd"] = json!(0);
+    assert!(execute(&request)["error"].is_object());
+    request["payload"]["gaussian_priors"] = json!({"k":{"mean":0.5,"sd":1}});
+    assert!(execute(&request)["error"].is_object());
+}

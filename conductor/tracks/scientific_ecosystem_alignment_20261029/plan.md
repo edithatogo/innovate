@@ -3032,3 +3032,12 @@ the other competition models and installed binding checks remain open.
   99.77954, 0.502851 and -0.77315, within 0.2, 0.015 and 0.04.
   Both R-hats were below 1.004 and both bulk ESS values exceeded 2,000.
   Broader model and prior calibration remain open.
+
+- [x] Share optional independent Gaussian priors between quadrature and
+  Metropolis. The gaussian_priors map specifies mean and positive sd
+  per sampled parameter. Bounds truncate each prior, and unspecified
+  axes use uniform priors. Python 3.15.2, Julia and R agreed exactly on
+  the Logistic capacity fixture with Gaussian prior mean 96 and sd 2.
+  The grid recovered analytic posterior mean 98 and variance 2 within
+  1e-10. The 4,000-draw chain returned mean 98.0372 and variance 1.8989.
+  Nine focused Rust tests and Clippy passed.
