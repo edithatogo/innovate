@@ -522,3 +522,7 @@ for each covariate over retained pairs. A reused control contributes
 once per retained pair.
 Each covariate also includes `before_matching` means and their
 difference over the original treatment and control groups.
+Both standardized mean differences divide the signed difference by
+the same pooled pre-match sample standard deviation. The standardized
+values are null when either original group has fewer than two rows,
+the pooled spread is zero, or the result exceeds the finite range.

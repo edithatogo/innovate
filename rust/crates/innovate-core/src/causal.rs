@@ -1202,6 +1202,23 @@ fn stratified_treatment_contrast(payload: &Value) -> Result<Value, &'static str>
     )
 }
 
+fn pooled_scaled_deviation(treated: &[f64], control: &[f64], scale: f64) -> Option<f64> {
+    if scale == 0. || treated.len() < 2 || control.len() < 2 {
+        return None;
+    }
+    let squared_deviations = |values: &[f64]| {
+        let center = mean(values).unwrap() / scale;
+        values
+            .iter()
+            .map(|value| (value / scale - center).powi(2))
+            .sum::<f64>()
+    };
+    let deviation = ((squared_deviations(treated) + squared_deviations(control))
+        / (treated.len() + control.len() - 2) as f64)
+        .sqrt();
+    (deviation > 0.).then_some(deviation)
+}
+
 fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     let fields = payload
         .as_object()
@@ -1347,16 +1364,25 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
                             before_control.push(value);
                         }
                     }
+                    let scale = values.iter().map(|value| value.abs()).fold(0., f64::max);
+                    let deviation = pooled_scaled_deviation(&before_treated, &before_control, scale);
+                    let standardize = |difference: f64| {
+                        deviation.and_then(|sd| finite((difference / scale) / sd).ok())
+                    };
                     let before_treated = mean(&before_treated).unwrap();
                     let before_control = mean(&before_control).unwrap();
                     let treated_mean = mean(&treated).unwrap();
                     let control_mean = mean(&control).unwrap();
+                    let difference = finite(treated_mean - control_mean)?;
+                    let before_difference = finite(before_treated - before_control)?;
                     Ok((
                         name,
                         json!({"treated_mean":treated_mean,"control_mean":control_mean,
-                "mean_difference":finite(treated_mean - control_mean)?,
-                "before_matching":{"treated_mean":before_treated,"control_mean":before_control,
-                    "mean_difference":finite(before_treated - before_control)?}}),
+                            "mean_difference":difference,
+                            "standardized_mean_difference":standardize(difference),
+                            "before_matching":{"treated_mean":before_treated,"control_mean":before_control,
+                                "mean_difference":before_difference,
+                                "standardized_mean_difference":standardize(before_difference)}}),
                     ))
                 })
                 .collect::<Result<serde_json::Map<String, Value>, &'static str>>()

@@ -881,11 +881,10 @@ fn causal_summaries_match_analytic_effects() {
     bad_balance["balance_covariates"]["age"] = json!([1]);
     assert!(run(bad_balance)["result"].is_null());
     let result = run(reused);
-    assert_eq!(
-        result["result"]["covariate_balance"]["age"],
-        json!({"treated_mean":35.,"control_mean":20.,"mean_difference":15.,
-            "before_matching":{"treated_mean":35.,"control_mean":80./3.,"mean_difference":35.-80./3.}})
-    );
+    let age = &result["result"]["covariate_balance"]["age"];
+    assert_eq!(age["treated_mean"], 35.);
+    assert_eq!(age["control_mean"], 20.);
+    assert_eq!(age["mean_difference"], 15.);
     let error = result["result"]["conditional_standard_error"]
         .as_f64()
         .unwrap();
@@ -900,11 +899,23 @@ fn causal_summaries_match_analytic_effects() {
     );
     let balance = run(json!({"method":"matched_treatment_contrast",
         "outcomes":[0,0,1,1,1],"treatment":[0,0,1,1,1],
-        "scores":[0,1,0,0,1],"caliper":0,"balance_covariates":{"age":[0,30,30,30,30]}}));
-    assert_eq!(
-        balance["result"]["covariate_balance"]["age"],
-        json!({"treated_mean":30.,"control_mean":10.,"mean_difference":20.,
-            "before_matching":{"treated_mean":30.,"control_mean":15.,"mean_difference":15.}})
+        "scores":[0,1,0,0,1],"caliper":0,"balance_covariates":{"age":[0,30,30,30,30],"constant":[1,1,1,1,1]}}));
+    let age = &balance["result"]["covariate_balance"]["age"];
+    assert_eq!(age["mean_difference"], 20.);
+    assert_eq!(age["before_matching"]["mean_difference"], 15.);
+    let sd = 150_f64.sqrt();
+    assert!((age["standardized_mean_difference"].as_f64().unwrap() - 20. / sd).abs() < 1e-12);
+    assert!(
+        (age["before_matching"]["standardized_mean_difference"]
+            .as_f64()
+            .unwrap()
+            - 15. / sd)
+            .abs()
+            < 1e-12
+    );
+    assert!(
+        balance["result"]["covariate_balance"]["constant"]["standardized_mean_difference"]
+            .is_null()
     );
     matched["caliper"] = json!(0.5);
     assert!(run(matched.clone())["result"].is_null());

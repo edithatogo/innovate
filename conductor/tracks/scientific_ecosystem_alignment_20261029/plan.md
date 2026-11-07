@@ -5257,3 +5257,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify pre-match and matched covariate means through rebuilt
   Python 3.15.2, Julia and installed R. All three recovered the
   increase in the analytic fixture's mean difference from 15 to 20.
+
+- [x] Report signed standardized covariate balance before and after
+  matching with a shared pooled pre-match denominator. The analytic
+  Rust fixture matched 15/sqrt(150) and 20/sqrt(150), and returned
+  null for a constant covariate. Binding qualification remains open.
