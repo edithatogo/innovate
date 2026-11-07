@@ -2122,6 +2122,11 @@ fn benchmark_ci_policy_selects_fast_cases_without_running_scheduled_fits() {
         serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
     };
     let response = run(json!({"ci_policy":"fast","workers":2}));
+    assert_eq!(
+        response["metadata"]["kernel_version"],
+        env!("CARGO_PKG_VERSION")
+    );
+
     let rows = response["result"]["runs"].as_array().unwrap();
     let ids: Vec<_> = rows
         .iter()

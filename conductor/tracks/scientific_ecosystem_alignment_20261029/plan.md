@@ -3766,3 +3766,8 @@ Hosted release readiness for this worktree revision remains open.
   native status and retain multi-node, scheduler, accelerator and
   release obligations. Development policy passes. The release check
   continues to block all 38 open obligations, including accelerator/HPC.
+- [x] Include the compiled Rust kernel version in native benchmark
+  response metadata, which the benchmark runner retains in each
+  receipt. The policy boundary test and focused Clippy passed.
+  Version metadata identifies the release version. Exact build
+  provenance still requires the source revision and artifact digest.

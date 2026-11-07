@@ -619,5 +619,5 @@ pub(crate) fn execute(request: &Value) -> Value {
         ),
     };
     json!({"schema_version":crate::KERNEL_SCHEMA_VERSION,"operation":operation,
-        "result":result,"error":error,"metadata":{"runtime":"rust_native"}})
+        "result":result,"error":error,"metadata":{"runtime":"rust_native","kernel_version":env!("CARGO_PKG_VERSION")}})
 }
