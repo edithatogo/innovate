@@ -3755,3 +3755,9 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Document MPI case sharding, rank receipts and per-rank worker
   budgets in the native migration guide. The example ran locally
   under Open MPI and produced both expected receipts.
+- [x] Qualify local two-rank sharding for the manual benchmark policy.
+  The ranks passed eight and seven distinct cases, and all fifteen
+  result rows matched serial execution exactly. The Python 3.15.2
+  run used the native wheel from 958843bc and runner at c6bb97b7.
+  Local sharding now covers all three policies. Hosted scheduler,
+  multi-node and accelerator qualification remain open.
