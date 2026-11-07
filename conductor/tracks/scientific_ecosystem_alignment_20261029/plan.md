@@ -7215,3 +7215,8 @@ Hosted release readiness for this worktree revision remains open.
   Polars prediction and row identity before retaining artifacts.
   Actionlint passed and the smoke test passed on the local debug
   wheel. Hosted release execution remains open.
+
+- [x] Check module origins before the release wheel smoke test.
+  Require both the Python wrapper and Rust extension to resolve
+  inside the isolated installation. The assertion passed on the
+  local extracted wheel, and Actionlint passed. Hosted readback is open.
