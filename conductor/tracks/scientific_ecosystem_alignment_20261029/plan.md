@@ -7184,3 +7184,9 @@ Hosted release readiness for this worktree revision remains open.
   the earlier temporary source install and set TMPDIR to the staging
   volume. A fresh binary install then passed the month-start smoke
   check with INNOVATE_NATIVE_LIBRARY unset.
+
+- [x] Verify the local R binary archive preserves native library bytes.
+  The staged input, archive member and installed library were
+  byte-identical (SHA-256 e0c1dc33a8f7829d75c47100fadc944bf231a1b8b2b3936feacf0421739bcdce).
+  The installed Apache licence also matched the root file. The archive
+  SHA-256 was 1d1e948d8498fae7f317e2bcd55abfb5538153764d92fc7cf877923183a497f9.
