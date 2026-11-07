@@ -1157,5 +1157,10 @@ the other competition models and installed binding checks remain open.
   outcome scale. The independent historical fixture excludes an outlier
   in both outputs and preserves the held-out forecast within 1e-3.
   All 24 multi-generation Rust tests and focused Clippy passed.
-- [ ] Qualify weights for historical and successive variants in installed
+- [x] Qualify weights for historical and successive variants in installed
   Python, Julia and R.
+  Focused rebuilt binding checks used explicit starts and excluded a
+  zero-weight outlier in both generations. Each fit converged with
+  normalized weighted RSS below 1e-8 and held-out error below 1e-3.
+  Python used the Polars fit entry point.
+  [Fixtures and results](evidence/norton-weights-20261107).
