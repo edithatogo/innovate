@@ -3562,3 +3562,14 @@ Hosted release readiness for this worktree revision remains open.
   helper using the FFI library from the same source. All 300 fitted
   positions per case match the installed R binding within 1e-10,
   including agreement on missing positions.
+
+## Nested Arrow IPC handoff to Julia
+
+- [x] Qualify the Julia-side Rust IPC rewriter with a two-chunk
+  Polars 2.1.0 file. Arrow.jl 2.8.1 read the rewritten file with the
+  same column types and values as the direct Polars stream. Verified
+  Int32 IDs, nullable Float64 list elements, null and empty lists,
+  and Unicode, missing and empty labels. The Arrow reader represents
+  the ID column as Union{Missing, Int32} on both paths.
+- [ ] Direct readback of the untouched Python Polars IPC file remains
+  open. Arrow.jl 2.8.1 returned an empty column set for this fixture.
