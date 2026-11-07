@@ -6095,3 +6095,13 @@ Hosted release readiness for this worktree revision remains open.
   released Arrow.jl environment. The 3.0 candidate passed all eight
   checks, and released 2.8.1 failed the column-name comparison. The
   default native rewrite mode passed all eight checks on 2.8.1.
+
+- [x] Reconcile the Kairos provider contract against the Rust cutover
+  workspace. The locked core resolves all five Kairos crates at
+  d56863505d938feb069af88a737eb7668113d14b. Bass uses Scheduler,
+  ABMContext and DeterministicStream; network resource execution also
+  uses PriorityResource and RenegingQueue from kairo-ecs-des.
+  The locked Kairos test target passed all 16 tests, including actual
+  tie and cancellation dispatch, missing component read, component
+  mutation, deterministic RNG, replay and fail-closed engine selection.
+  The separate runtime boundary track's installed acceptance stays open.
