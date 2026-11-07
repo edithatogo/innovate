@@ -5184,3 +5184,9 @@ Hosted release readiness for this worktree revision remains open.
   Python Polars. The extracted Python 3.15.2 wheel preserved both
   execution rows and the checkpoint exactly, with success flags
   true and false respectively. The focused consumer test passed.
+
+- [x] Verify Julia and R Arrow readback for mixed completed and
+  paused scenario rows. Both preserved row order, success flags and
+  checkpoint content. Exact equality of all R row fields required
+  passing the native JSON response directly because re-encoding the
+  decoded R list changed its representation.
