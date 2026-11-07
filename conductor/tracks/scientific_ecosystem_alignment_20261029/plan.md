@@ -2758,3 +2758,9 @@ the other competition models and installed binding checks remain open.
   service retains its completion time and queued agents use the new
   durations. All 25 Rust network tests and focused Clippy passed.
   Binding verification remains open.
+
+- [x] Qualify scheduled per-agent service durations in the rebuilt Python
+  3.15 wheel, Julia and installed R. Complete responses agreed exactly.
+  Active service finished at tick 6. Waiters used the new durations and
+  completed at ticks 8 and 12. The scalar override was cleared. R used
+  raw JSON to preserve the empty edge array.
