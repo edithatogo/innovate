@@ -3985,3 +3985,7 @@ Hosted release readiness for this worktree revision remains open.
   that subsequently balk. Initial adopters do not count as dispatches.
   The single-adoption network fixture reports two dispatched events.
   All 39 locked Kairos and network tests passed.
+- [x] Verify network dispatch counts in the rebuilt Python 3.15.2 wheel,
+  Julia and freshly installed R at f73933fe. The same seeded network
+  reports two Kairos dispatches for one request and one completion
+  in all three bindings.
