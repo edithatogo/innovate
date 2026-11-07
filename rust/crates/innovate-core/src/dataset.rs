@@ -1,4 +1,5 @@
 use serde_json::{Value, json};
+use std::borrow::Cow;
 
 pub(crate) fn validate(payload: &Value) -> Result<Value, &'static str> {
     if payload
@@ -444,23 +445,21 @@ fn ingest(payload: &Value) -> Result<Value, Value> {
             .map(|source| ("weight", json!(vec![1.0; source.len()]))),
         _ => None,
     };
-    let normalized;
     let dataset = if let Some((field, values)) = default {
         let mut updated = dataset.clone();
         updated[field] = values;
-        normalized = updated;
-        &normalized
+        Cow::Owned(updated)
     } else {
-        dataset
+        Cow::Borrowed(dataset)
     };
-    let digest = crate::provenance::checksum(dataset, encoding).map_err(ingestion_error)?;
-    let report = validate(dataset).map_err(ingestion_error)?;
+    let digest = crate::provenance::checksum(&dataset, encoding).map_err(ingestion_error)?;
+    let report = validate(&dataset).map_err(ingestion_error)?;
     if report["ok"] != true {
         let mut error = ingestion_error("dataset diagnostics failed");
         error["validation"] = report;
         return Err(error);
     }
-    let mut dataset = dataset.clone();
+    let mut dataset = dataset.into_owned();
     dataset["provenance"]["checksum"] = digest["checksum"].clone();
     Ok(json!({
         "artifact_kind":"innovate.dataset",

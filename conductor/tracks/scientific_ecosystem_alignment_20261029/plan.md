@@ -4454,3 +4454,6 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Document default normalization before checksumming and strict
   verification of checksummed inputs. All eight focused dataset tests
   passed against the documented behavior.
+- [x] Reuse the normalized dataset when stamping an ingestion artifact.
+  Inputs with no defaults stay borrowed through verification. All
+  eight focused Rust dataset tests passed.
