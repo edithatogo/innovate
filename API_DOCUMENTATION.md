@@ -541,3 +541,11 @@ The sparse `outcome_weights` rows contain a zero-based input index
 and its coefficient in the unadjusted estimate. Each matched
 treated observation contributes one pair's weight. Each control
 contributes the negative sum of its reuse weights.
+
+With `outcome_variances`, optionally supply
+`outcome_covariance_factors` as an array of row-aligned loading
+vectors. The variances describe independent residual variation.
+Each loading vector adds its outer product to the outcome covariance
+and contributes the square of its mean paired loading difference to
+the conditional variance. Matches, loadings and any control
+predictions are treated as fixed.

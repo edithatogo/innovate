@@ -5340,3 +5340,9 @@ Hosted release readiness for this worktree revision remains open.
   conditional standard error from the exported weights in rebuilt
   Python 3.15.2, Julia and installed R. Each matched the native result
   for a reused control.
+
+- [x] Propagate caller-supplied shared outcome variation through
+  fixed matching. The Rust fixture canceled a common factor and
+  added four units of variance for a treatment-only factor, yielding
+  sqrt(8.5) with reused controls. Misaligned factors were rejected.
+  Binding checks and fitted-model uncertainty remain open.

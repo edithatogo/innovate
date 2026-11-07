@@ -898,6 +898,15 @@ fn causal_summaries_match_analytic_effects() {
     let mut bad_balance = reused.clone();
     bad_balance["balance_covariates"]["age"] = json!([1]);
     assert!(run(bad_balance)["result"].is_null());
+    let mut correlated = reused.clone();
+    correlated["outcome_covariance_factors"] = json!([[7, 7, 7, 7, 7], [0, 0, 2, 2, 0]]);
+    let correlated_result = run(correlated.clone());
+    let se = correlated_result["result"]["conditional_standard_error"]
+        .as_f64()
+        .unwrap();
+    assert!((se - 8.5_f64.sqrt()).abs() < 1e-12);
+    correlated["outcome_covariance_factors"] = json!([[1, 2]]);
+    assert!(run(correlated)["result"].is_null());
     let result = run(reused);
     assert_eq!(
         result["result"]["outcome_weights"],

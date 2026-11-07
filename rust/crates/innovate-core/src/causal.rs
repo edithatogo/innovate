@@ -55,12 +55,13 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                  "estimands":["ate","att"],"default_estimand":"ate",
                  "uncertainty":"fixed_propensity_standard_error"},
                 {"method":"matched_treatment_contrast","adjustment":"nearest_score_with_replacement",
-                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":["allow_partial","outcome_variances","balance_covariates","control_predictions"],
+                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":["allow_partial","outcome_variances","balance_covariates","control_predictions","outcome_covariance_factors"],
                  "estimands":["att"],"default_estimand":"att",
                  "partial_estimand":"matched_subset_att",
                  "uncertainty":"conditional_standard_error",
                  "uncertainty_requires":["outcome_variances"],
-                 "uncertainty_assumptions":["fixed_matched_pairs","independent_outcomes"]},
+                 "uncertainty_assumptions":["fixed_matched_pairs","independent_outcomes"],
+                 "correlated_uncertainty_option":"outcome_covariance_factors"},
                 {"method":"augmented_treatment_contrast","adjustment":"caller_supplied_nuisance_predictions",
                  "required_fields":["outcomes","treatment","propensities","control_predictions"],
                  "required_fields_by_estimand":{"ate":["treated_predictions"],"att":[]},
@@ -1266,6 +1267,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
                 | "outcome_variances"
                 | "balance_covariates"
                 | "control_predictions"
+                | "outcome_covariance_factors"
         )
     }) {
         return Err("matched contrast received an unsupported field");
@@ -1285,6 +1287,22 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
         values.len() != outcomes.len() || values.iter().any(|&variance| variance < 0.)
     }) {
         return Err("outcome variances must be nonnegative and align with outcomes");
+    }
+    let covariance_factors: Option<Vec<Vec<f64>>> = fields
+        .get("outcome_covariance_factors")
+        .map(|value| {
+            serde_json::from_value(value.clone())
+                .map_err(|_| "outcome covariance factors must be numeric arrays")
+        })
+        .transpose()?;
+    if covariance_factors.as_ref().is_some_and(|factors| {
+        outcome_variances.is_none()
+            || factors.is_empty()
+            || factors.iter().any(|factor| factor.len() != outcomes.len())
+    }) {
+        return Err(
+            "outcome covariance factors require outcome variances and aligned factor arrays",
+        );
     }
     let control_predictions = fields
         .contains_key("control_predictions")
@@ -1396,13 +1414,25 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
         .values()
         .map(|&count| (count as f64 / pairs.len() as f64).powi(2))
         .sum::<f64>();
-    let conditional_standard_error = outcome_variances.map(|variances| {
-        outcome_weights
-            .iter()
-            .fold(0_f64, |error, &(index, weight)| {
-                error.hypot(weight * variances[index].sqrt())
-            })
-    });
+    let conditional_standard_error = outcome_variances
+        .map(|variances| {
+            let mut error = outcome_weights
+                .iter()
+                .fold(0_f64, |error, &(index, weight)| {
+                    error.hypot(weight * variances[index].sqrt())
+                });
+            if let Some(factors) = &covariance_factors {
+                for factor in factors {
+                    let effects: Vec<_> = pairs
+                        .iter()
+                        .map(|pair| finite(factor[pair.treated_index] - factor[pair.control_index]))
+                        .collect::<Result<_, _>>()?;
+                    error = error.hypot(mean(&effects).unwrap());
+                }
+            }
+            finite(error)
+        })
+        .transpose()?;
     let balance = balance_covariates
         .map(|columns| {
             columns
