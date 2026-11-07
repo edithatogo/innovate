@@ -5007,3 +5007,9 @@ Hosted release readiness for this worktree revision remains open.
   forcing cursor and RNG can be captured together at an event
   boundary. All 13 Rust Kairos integration tests passed, including
   forcing, replay and RNG checkpoint restoration.
+
+- [x] Verify internal adoption-clock continuation after serializing
+  the tick, forcing cursor and RNG at a dispatched event boundary.
+  The restored clock matched the uninterrupted ticks and final RNG
+  checkpoint after crossing a zero-hazard interval. The focused Rust
+  unit test passed. Public simulation checkpoint restore remains open.

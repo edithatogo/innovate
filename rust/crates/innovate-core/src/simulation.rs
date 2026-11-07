@@ -249,3 +249,37 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         metadata: json!({"runtime":"rust_native","engine":engine}),
     })
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn adoption_clock_continues_across_a_serialized_event_boundary() {
+        let forcing = [(0, 1e12, 0.), (2, 0., 0.), (5, 1e12, 0.)];
+        let mut clock = AdoptionClock {
+            rng: DeterministicStream::from_run_seed(42),
+            now: 0,
+            forcing_index: 0,
+        };
+        let next = |clock: &mut AdoptionClock, adopted| {
+            clock.next_adoption(&forcing, adopted, 4, 1, 10).unwrap()
+        };
+        assert_eq!(next(&mut clock, 0), Some(1));
+        assert_eq!(next(&mut clock, 1), Some(6));
+
+        let bytes =
+            serde_json::to_vec(&(clock.now, clock.forcing_index, clock.rng.checkpoint())).unwrap();
+        let (now, forcing_index, checkpoint) = serde_json::from_slice(&bytes).unwrap();
+        let mut restored = AdoptionClock {
+            rng: DeterministicStream::restore(&checkpoint).unwrap(),
+            now,
+            forcing_index,
+        };
+        for adopted in 2..4 {
+            assert_eq!(next(&mut restored, adopted), next(&mut clock, adopted));
+        }
+        assert_eq!(restored.now, 8);
+        assert_eq!(restored.rng.checkpoint(), clock.rng.checkpoint());
+    }
+}
