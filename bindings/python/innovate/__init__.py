@@ -306,7 +306,12 @@ def rolling_average(data: pl.Series, window: int) -> pl.Series:
     """Return trailing means after a full window of observations is available."""
     if window < 1:
         raise ValueError("window must be positive")
-    return data.rolling_mean(window_size=window, min_samples=window)
+    result = data.rolling_mean(window_size=window, min_samples=window)
+    if result.is_infinite().any() and data.is_finite().all() and not data.null_count():
+        # A finite mean can overflow Polars' intermediate window sum.
+        values = execute("preprocess_series", method="rolling_average", window=window, values=data.to_list())
+        return pl.Series(data.name, values["result"]["values"], dtype=result.dtype)
+    return result
 
 
 def aggregate_weekly(

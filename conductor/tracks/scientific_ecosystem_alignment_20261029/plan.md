@@ -6982,3 +6982,10 @@ Hosted release readiness for this worktree revision remains open.
   rebuilt Python 3.15.2 wheel, Julia and installed R. All three
   returned null, the smallest positive binary64 value, and zero
   for the three fixture positions at c0f25c5c.
+
+- [x] Recover finite Polars rolling averages when an intermediate
+  window sum overflows. The Python helper delegates finite, non-null
+  input to the Rust operation when Polars returns an infinite mean.
+  Verified the maximum and minimum positive binary64 fixtures, series
+  name preservation and a null-containing window with the source
+  wrapper and existing native extension.
