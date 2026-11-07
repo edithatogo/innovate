@@ -716,14 +716,20 @@ fn causal_summaries_match_analytic_effects() {
     let onset = &replicated["result"]["event_time"][0];
     assert_eq!(onset["supported_treated_units"], 3);
     assert_eq!(onset.get("standard_error"), Some(&json!(null)));
-    let shared = run(json!({"method":"staggered_panel_att","periods":[0,1,2],
+    let shared = run(
+        json!({"method":"staggered_panel_att","periods":[0,1,2],"include_event_time_covariance":true,
         "outcomes":[[0,5,5],[0,5,5],[0,1,6],[0,1,6],[0,0,0],[0,2,4]],
-        "adoption_indices":[1,1,2,2,null,null]}));
+        "adoption_indices":[1,1,2,2,null,null]}),
+    );
     let se = shared["result"]["event_time"][0]["standard_error"]
         .as_f64()
         .unwrap();
     let expected = (1. / 48_f64.sqrt() + 1. / 8_f64.sqrt()) * 2_f64.sqrt();
     assert!((se - expected).abs() < 1e-12);
+    let covariance = &shared["result"]["event_time_covariance"];
+    assert!((covariance[0][0].as_f64().unwrap() - se * se).abs() < 1e-12);
+    assert!((covariance[0][1].as_f64().unwrap() - 2. * se).abs() < 1e-12);
+    assert_eq!(covariance[0][1], covariance[1][0]);
     assert!((onset["supported_cohort_att"].as_f64().unwrap() - 8. / 3.).abs() < 1e-12);
     assert_eq!(row["estimate"], 4.);
     assert!((row["standard_error"].as_f64().unwrap() - 1.).abs() < 1e-12);

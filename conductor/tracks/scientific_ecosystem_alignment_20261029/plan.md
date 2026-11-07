@@ -4733,3 +4733,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify shared-control event-time uncertainty through rebuilt
   Python 3.15.2, Julia and installed R. All three reproduce the analytic
   standard error and return null when a contributing arm is a singleton.
+
+- [x] Return opt-in event-time covariance for staggered ATT. The Rust
+  fixture verifies the pointwise variance on the diagonal and symmetric
+  nonzero covariance across offsets. Binding and simultaneous bands remain open.

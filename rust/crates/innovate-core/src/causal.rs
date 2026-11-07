@@ -368,6 +368,10 @@ fn independent_change_contrast(
 }
 
 fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
+    let include_covariance = payload
+        .get("include_event_time_covariance")
+        .map_or(Some(false), Value::as_bool)
+        .ok_or("include_event_time_covariance must be boolean")?;
     let periods = series(payload, "periods")?;
     let outcomes: Vec<Vec<f64>> = serde_json::from_value(payload["outcomes"].clone())
         .map_err(|_| "outcomes must be a numeric unit-by-period matrix")?;
@@ -419,6 +423,10 @@ fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
         }
     }
     let mut event_time = Vec::with_capacity(by_offset.len());
+    let mut influence_rows = Vec::new();
+    if include_covariance && by_offset.len() > 128 {
+        return Err("event-time covariance supports at most 128 offsets");
+    }
     for (period_offset, rows) in by_offset {
         let supported_units: usize = rows
             .iter()
@@ -440,7 +448,7 @@ fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
                 )
             })
             .transpose()?;
-        let standard_error = if supported_cohorts > 0
+        let influence = if supported_cohorts > 0
             && rows.iter().all(|&(estimate, treated, _, control)| {
                 estimate.is_none() || (treated > 1 && control > 1)
             }) {
@@ -476,19 +484,38 @@ fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
                     }
                 }
             }
-            Some(finite(influence.into_iter().fold(0_f64, f64::hypot))?)
+            Some(influence)
         } else {
             None
         };
+        let standard_error = influence
+            .as_ref()
+            .map(|row| finite(row.iter().copied().fold(0_f64, f64::hypot)))
+            .transpose()?;
+        if include_covariance {
+            influence_rows.push(influence);
+        }
         event_time.push(json!({"period_offset":period_offset,"supported_cohort_att":estimate,
             "standard_error":standard_error,
             "supported_cohorts":supported_cohorts,"unsupported_cohorts":rows.len()-supported_cohorts,
             "supported_treated_units":supported_units}));
     }
-    Ok(
-        json!({"method":"not_yet_treated_group_time_difference_in_differences",
-        "contrasts":contrasts,"event_time":event_time}),
-    )
+    let mut result = json!({"method":"not_yet_treated_group_time_difference_in_differences",
+        "contrasts":contrasts,"event_time":event_time});
+    if include_covariance {
+        let mut covariance = vec![vec![None; influence_rows.len()]; influence_rows.len()];
+        for (i, left) in influence_rows.iter().enumerate() {
+            for (j, right) in influence_rows.iter().enumerate().take(i + 1) {
+                if let Some((left, right)) = left.as_ref().zip(right.as_ref()) {
+                    let value = finite(left.iter().zip(right).map(|(a, b)| a * b).sum())?;
+                    covariance[i][j] = Some(value);
+                    covariance[j][i] = Some(value);
+                }
+            }
+        }
+        result["event_time_covariance"] = json!(covariance);
+    }
+    Ok(result)
 }
 
 fn panel_event_study(payload: &Value) -> Result<Value, &'static str> {

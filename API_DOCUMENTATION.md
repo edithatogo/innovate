@@ -361,11 +361,15 @@ fewer than two units. Each row uses its own eligible control set.
 The `event_time` summary groups cohort estimates by the number of
 observed period steps since adoption. It weights supported cohorts
 by their treated counts and reports how many cohorts lack controls.
-A step with no supported cohorts has a null estimate. The summary
-does not report joint uncertainty across cohort-period estimates.
+A step with no supported cohorts has a null estimate.
 
 Each event-time row also reports a pointwise standard error for
 independent units and fixed cohort weights. Contributions from the
 same unit are summed before squaring, including when a unit appears
 in multiple comparison sets. The standard error is null if any
 contributing cohort has a singleton arm.
+
+Set `include_event_time_covariance` to true to return the covariance
+matrix in event-time row order, for up to 128 offsets. Its diagonal
+contains squared pointwise standard errors. Entries involving an
+offset with unavailable uncertainty are null.
