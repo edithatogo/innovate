@@ -64,6 +64,9 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
         .map_err(|_| "baseline fit failed")?
         .result
         .ok_or("baseline fit returned no result")?;
+    if baseline["diagnostics"]["identifiability"]["status"] == "rank_deficient" {
+        return Err("parameter bootstrap requires a baseline fit without detected rank deficiency");
+    }
     let forecast_inputs = payload.get("forecast_inputs");
     let predict = |inputs: &Value, fit: &Value| -> Option<(Vec<String>, Vec<Vec<f64>>)> {
         let result = kernel

@@ -203,3 +203,20 @@ fn saturated_logistic_fit_reports_unidentified_rate_and_midpoint() {
     );
     assert_eq!(diagnostics["uncertainty"]["report_type"], "point_estimate");
 }
+
+#[test]
+fn saturated_logistic_bootstrap_rejects_unidentified_parameters() {
+    let request = json!({
+        "schema_version":"2.0","operation":"bootstrap_fit",
+        "payload":{"fit_model":"logistic","draws":4,"seed":42,
+            "fit":{"inputs":{"time":(0..8).collect::<Vec<_>>(),"observed":vec![100.;8]},
+                "fit_options":{"initial_parameters":{"L":100.,"k":1.,"x0":-100.}}}}
+    });
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert!(response["result"].is_null());
+    assert_eq!(
+        response["error"]["message"],
+        "parameter bootstrap requires a baseline fit without detected rank deficiency"
+    );
+}

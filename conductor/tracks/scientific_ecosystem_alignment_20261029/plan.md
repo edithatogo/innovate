@@ -6495,3 +6495,9 @@ Hosted release readiness for this worktree revision remains open.
   Julia and installed R. All three reported rank one, excluded
   rate and midpoint sensitivity columns and labelled uncertainty
   as a point estimate.
+
+- [x] Reject parameter bootstrap when the baseline fit explicitly
+  reports rank deficiency. The saturated Logistic fixture previously
+  returned nearly zero-width intervals for its unidentified rate and
+  midpoint. The new regression verifies rejection and both existing
+  bootstrap boundary tests passed.
