@@ -3122,3 +3122,34 @@ fn edgeless_dataset_ingests_and_replays() {
         "column_alignment"
     );
 }
+
+#[test]
+fn dataset_ingestion_defaults_match_explicit_values() {
+    let run = |mut dataset: serde_json::Value| {
+        dataset["provenance"] = json!({"source":"synthetic","license":"CC-BY-4.0",
+            "extraction_time":"2026-11-07T00:00:00Z"});
+        let request = json!({"schema_version":"2.0","operation":"ingest_dataset","payload":{"dataset":dataset}});
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    for (mut dataset, key, values) in [
+        (
+            json!({"kind":"policy_timing","event_times":[0,2],"event_effects":[0,-0.5]}),
+            "event_labels",
+            json!(["event_0", "event_1"]),
+        ),
+        (
+            json!({"kind":"network_edges","source":["a"],"target":["b"]}),
+            "weight",
+            json!([1.0]),
+        ),
+    ] {
+        let implicit = run(dataset.clone());
+        assert!(implicit["error"].is_null(), "{implicit}");
+        assert_eq!(implicit["result"]["dataset"][key], values);
+        dataset[key] = values;
+        assert_eq!(run(dataset), implicit);
+    }
+}

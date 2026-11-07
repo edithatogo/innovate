@@ -4442,3 +4442,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify Rust-generated policy labels and edge weights through
   Julia and installed R. Both reproduced the normalized artifacts.
   R used raw JSON for the edge replay to preserve the 1.0 token.
+- [x] Verify that omitted and explicit policy labels or unit edge
+  weights yield identical artifacts and checksums in Rust.
