@@ -4434,3 +4434,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Run the complete Julia and installed R native suites at 4bb81f78.
   Both passed with the shared library rebuilt from the current Rust
   source. Temporary files were staged on the repository volume.
+- [x] Generate optional policy labels and unit edge weights in Rust
+  before checksumming. The Python Polars adapter supplies explicit
+  columns when present. Seven Rust dataset checks and six focused
+  Python cases passed with the rebuilt extension. Julia and R checks
+  for the new defaults remain open.

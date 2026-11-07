@@ -490,19 +490,13 @@ def ingest_polars(
         dataset.update(
             event_times=column("event_times", pl.Float64),
             event_effects=column("event_effects", pl.Float64),
-            event_labels=(
-                column("event_labels", pl.String)
-                if "event_labels" in frame.columns
-                else [f"event_{i}" for i in range(frame.height)]
-            ),
         )
+        if "event_labels" in frame.columns:
+            dataset["event_labels"] = column("event_labels", pl.String)
     elif kind == "network_edges":
-        dataset.update(
-            source=column("source", pl.String),
-            target=column("target", pl.String),
-            weight=column("weight", pl.Float64) if "weight" in frame.columns else [1.0] * frame.height,
-            directed=directed,
-        )
+        dataset.update(source=column("source", pl.String), target=column("target", pl.String), directed=directed)
+        if "weight" in frame.columns:
+            dataset["weight"] = column("weight", pl.Float64)
     else:
         raise ValueError(f"unsupported dataset kind: {kind}")
     return execute("ingest_dataset", dataset=dataset)["result"]
