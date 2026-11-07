@@ -3573,3 +3573,12 @@ Hosted release readiness for this worktree revision remains open.
   the ID column as Union{Missing, Int32} on both paths.
 - [ ] Direct readback of the untouched Python Polars IPC file remains
   open. Arrow.jl 2.8.1 returned an empty column set for this fixture.
+
+## CSV identifier fidelity
+
+- [x] Read competition identifiers, policy event labels and network
+  endpoints as strings at the Python Polars CSV boundary. The network
+  regression previously collapsed 001 and 1 into a duplicate edge.
+  The rebuilt Python 3.15.2 wheel passed all three selected ingestion
+  tests and Ruff passed. Julia and installed R re-ingested the network
+  artifact with its original identifiers and checksum.

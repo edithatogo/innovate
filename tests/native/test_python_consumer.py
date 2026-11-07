@@ -1082,3 +1082,18 @@ def test_bootstrap_forecast_frame_preserves_series_and_null_bounds():
         (16.0, "series_2", 210.0, 208.0, 212.0),
     ]
     assert frame.schema["lower"] == pl.Float64
+
+
+def test_csv_network_ingestion_preserves_distinct_textual_ids(tmp_path):
+    path = tmp_path / "network.csv"
+    path.write_text("source,target,weight\n001,002,1\n1,002,2\n")
+    provenance = {
+        "source": "synthetic",
+        "license": "CC-BY-4.0",
+        "extraction_time": "2026-11-07T00:00:00Z",
+    }
+    artifact = innovate.ingest_local(path, "network_edges", provenance=provenance)
+    assert artifact["dataset"]["source"] == ["001", "1"]
+    assert artifact["dataset"]["target"] == ["002", "002"]
+    assert artifact["dataset"]["weight"] == [1.0, 2.0]
+    assert innovate.execute("ingest_dataset", dataset=artifact["dataset"])["result"] == artifact

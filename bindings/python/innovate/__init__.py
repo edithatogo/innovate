@@ -517,7 +517,12 @@ def ingest_local(
         raise FileNotFoundError(path)
     file_format = (format or path.suffix).lstrip(".").lower()
     if file_format in {"csv", "txt"}:
-        frame = pl.read_csv(path)
+        identifier_columns = {
+            "competition": ("unit_id", "product_id"),
+            "policy_timing": ("event_labels",),
+            "network_edges": ("source", "target"),
+        }.get(kind, ())
+        frame = pl.read_csv(path, schema_overrides={name: pl.String for name in identifier_columns})
     elif file_format in {"parquet", "pq"}:
         frame = pl.read_parquet(path)
     elif file_format in {"arrow", "feather", "ipc"}:
