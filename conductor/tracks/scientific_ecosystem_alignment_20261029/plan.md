@@ -1372,3 +1372,16 @@ the other competition models and installed binding checks remain open.
   zero weight to the spike but reports a zero spike residual. Investigate
   local fits with no positive weights before changing the Rust endpoint
   convention or adopting this fixture as a robust outlier-recovery oracle.
+
+- [x] Trace the robust fallback in the R 4.3 STL source. When a local
+  window has no positive weight, R uses the input at that index for an
+  in-series fit and the adjacent smoothed value for a phase extension.
+  Rust instead finds the nearest positive-weight observation. R also
+  suppresses slope estimation when the weighted coordinate standard
+  deviation is at most 0.001 times the series coordinate range. An
+  isolated Rust change to reject numerically degenerate slopes failed
+  the existing analytic spike-recovery test and was reverted. Qualify
+  the fallback and slope rules together against the independent fixture
+  and retain the analytic spike test when evaluating the resulting
+  behavior.
+  [R STL source](https://github.com/wch/r-source/blob/R-4-3-branch/src/library/stats/src/stl.f).
