@@ -1260,6 +1260,28 @@ version, and native extension digest. The worker budget applies per rank. Local 
 qualified both fast and scheduled case selections. Multi-node
 execution and scheduler allocation still require qualification.
 
+## Run a native remote worker subprocess
+
+Build the single-request worker with
+`cargo build --locked -p innovate-core --bin innovate-remote-worker`.
+Pass one remote execution envelope on standard input and close the input.
+
+```bash
+target/debug/innovate-remote-worker <<'JSON'
+{"schema_version":"2.0","context":{"request_id":"demo","tenant_id":"local","principal":"example","auth_scope":"kernel:execute"},"kernel_request":{"schema_version":"2.0","operation":"predict_model","model_key":"logistic","payload":{"inputs":{"time":[1]},"parameters":{"L":100,"k":1,"x0":1}}}}
+JSON
+```
+
+The worker exits zero when it emits a JSON response. Check the response's
+`error` and the nested `result.kernel_response.error` before consuming a
+result. Malformed JSON and raw input over 2,000,000 bytes produce a
+diagnostic on standard error and a nonzero exit status. The kernel
+also limits the encoded nested request to 1,000,000 bytes.
+
+A transport must authenticate the caller and construct the context
+before invoking the worker. Hosted transport and tenant isolation
+require separate qualification.
+
 ## Comparing Kairos resource use
 
 Add a pair like this to an `execute_scenario_grid` request with two

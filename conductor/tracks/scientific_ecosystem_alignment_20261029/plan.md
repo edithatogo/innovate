@@ -6417,3 +6417,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify the source archive contains the Rust remote worker and
   process tests. Both tests passed from a fresh extraction and Cargo
   target using the packaged lock, which matched the checkout lock.
+
+- [x] Document the native remote subprocess request and exit contract.
+  The exact guide example ran against the local worker and returned
+  the expected Logistic prediction.
