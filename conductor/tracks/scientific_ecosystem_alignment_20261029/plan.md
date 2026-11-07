@@ -2679,3 +2679,9 @@ the other competition models and installed binding checks remain open.
   regression passed both independent event fixtures. Held-out errors
   were 9.72e-9 for multi-product and 7.15e-10 for lock-in. Focused
   Clippy passed. Julia and R event-start qualification remains open.
+
+- [x] Qualify event-aware automatic starts in Julia and installed R
+  with the C ABI rebuilt from 9351e28d. Both fixtures converged within
+  the 200-iteration trajectory budget. Held-out errors were below 1e-8
+  for multi-product and 1e-9 for lock-in in both bindings, consistent
+  with Python 3.15.2. This covers the two fixed-event reference cases.
