@@ -5987,3 +5987,10 @@ Hosted release readiness for this worktree revision remains open.
   verifies a Unicode provenance value alongside nullable typed columns
   and the leading schema message. All ten tabular boundary tests passed.
   Field-level metadata and consumer readback remain separate checks.
+
+- [x] Verify the schema metadata rewrite through rebuilt Python and
+  Julia and installed R. PyArrow read the Unicode provenance key from
+  the footer of all three files. Arrow.jl read the values and nulls
+  but exposed no metadata. The Polars file writer stores custom
+  schema metadata in the footer and omits it from the leading schema
+  message consumed by Arrow.jl. Julia metadata readback remains open.
