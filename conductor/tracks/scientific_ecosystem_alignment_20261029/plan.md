@@ -1098,4 +1098,8 @@ the other competition models and installed binding checks remain open.
   residuals and their local Jacobian. Report weighted loss separately from
   descriptive metrics. The independent forced Bass fixture fits despite a
   zero-weight outlier of 1e100. Fourteen Rust tests and focused Clippy passed.
-- [ ] Qualify weighted mechanistic fits in installed Python, Julia and R.
+- [x] Qualify weighted mechanistic fits in installed Python, Julia and R.
+  Focused checks against rebuilt native artifacts confirmed convergence,
+  40 positive observations and normalized weighted RSS below 1e-5 in all
+  three bindings. Python used the Polars fit entry point.
+  [Fixture and results](evidence/mechanistic-weights-20261107).
