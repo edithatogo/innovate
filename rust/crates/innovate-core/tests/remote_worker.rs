@@ -17,7 +17,7 @@ fn run(input: &[u8]) -> Output {
 fn worker_returns_native_results_and_policy_denials() {
     let mut envelope = json!({
         "schema_version":"2.0",
-        "context":{"request_id":"r","tenant_id":"t","principal":"p","auth_scope":"kernel:execute"},
+        "context":{"request_id":"r","tenant_id":"t","principal":"p","auth_scope":"kernel:execute","trace_id":"trace-1"},
         "kernel_request":{"schema_version":"2.0","operation":"predict_model","model_key":"logistic",
             "payload":{"inputs":{"time":[1]},"parameters":{"L":100,"k":1,"x0":1}}}
     });
@@ -25,6 +25,12 @@ fn worker_returns_native_results_and_policy_denials() {
     assert!(output.status.success());
     assert!(output.stderr.is_empty());
     let response: Value = serde_json::from_slice(&output.stdout).unwrap();
+    let observability = &response["result"]["observability"];
+    assert_eq!(observability["request_id"], "r");
+    assert_eq!(observability["tenant_id"], "t");
+    assert_eq!(observability["principal"], "p");
+    assert_eq!(observability["trace_id"], "trace-1");
+    assert_eq!(observability["status"], "ok");
     assert_eq!(
         response["result"]["kernel_response"]["result"]["values"],
         json!([50.])
@@ -35,6 +41,8 @@ fn worker_returns_native_results_and_policy_denials() {
     assert!(output.status.success());
     let response: Value = serde_json::from_slice(&output.stdout).unwrap();
     assert_eq!(response["result"]["status"], "error");
+    assert_eq!(response["result"]["observability"]["trace_id"], "trace-1");
+    assert_eq!(response["result"]["observability"]["status"], "error");
     assert_eq!(
         response["result"]["kernel_response"]["error"]["code"],
         "unsupported_operation"

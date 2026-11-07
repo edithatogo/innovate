@@ -7453,3 +7453,8 @@ Hosted release readiness for this worktree revision remains open.
   the hosted container contract check. The assertion passed against
   the local optimized worker, and Actionlint passed. Authenticated
   transport and tenant isolation remain open.
+
+- [x] Verify the worker subprocess preserves request, tenant, principal
+  and trace identifiers on success and trace correlation on denial.
+  The focused locked Rust test and cargo fmt check passed. This
+  covers caller-supplied context at the subprocess boundary.
