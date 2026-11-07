@@ -264,10 +264,10 @@ fn apply_network_specification(
     average_degree: f64,
     initial_adoption: f64,
 ) -> Result<(), &'static str> {
-    if network_type != "custom"
+    if !matches!(network_type, "custom" | "ring")
         || options.get("engine").and_then(Value::as_str) != Some("kairos_network")
     {
-        return Err("network translation requires custom topology and kairos_network");
+        return Err("network translation requires custom or ring topology and kairos_network");
     }
     if nodes > 1000
         || options
@@ -275,6 +275,22 @@ fn apply_network_specification(
             .is_some_and(|value| value.as_u64() != Some(nodes as u64))
     {
         return Err("network population must match num_nodes and be in 1..=1000");
+    }
+    if network_type == "ring" {
+        if nodes < 3
+            || average_degree != 2.
+            || options.contains_key("edges")
+            || options.contains_key("edge_weights")
+            || options
+                .get("directed")
+                .is_some_and(|value| value.as_bool() != Some(false))
+        {
+            return Err(
+                "ring topology requires at least three nodes, degree two, and no explicit edges, weights or directed mode",
+            );
+        }
+        let edges: Vec<_> = (0..nodes).map(|node| [node, (node + 1) % nodes]).collect();
+        options.insert("edges".into(), json!(edges));
     }
     let edges = options
         .get("edges")
@@ -780,7 +796,7 @@ pub(crate) fn discover(request: &Value) -> Value {
             if family == "network" {
                 capability["specification_translation"] = json!({
                     "option":"apply_specifications","model_key":"bass",
-                    "engines":["kairos_network"],"network_types":["custom"]
+                    "engines":["kairos_network"],"network_types":["custom","ring"]
                 });
             }
             if family == "competition" {

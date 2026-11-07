@@ -2155,3 +2155,11 @@ the other competition models and installed binding checks remain open.
 - [x] Qualify competition specification translation in Python 3.15,
   Julia and installed R. Each returned 25 and 75 initial adopters in
   competitor order and replayed the resolved artifact exactly.
+
+- [x] Generate undirected degree-two ring networks from a Kairos Bass
+  scenario specification. Reject conflicting explicit edges, weights or
+  directed mode. Replay retains generated edges. All 64 targeted Rust
+  tests and focused Clippy passed. Other generators remain open.
+- [ ] Define substitution-rate dynamics before translating historical
+  substitution specifications. Norton-Bass exposes generation diffusion
+  parameters, with no direct replacement-rate parameter.

@@ -1193,6 +1193,26 @@ fn custom_network_specification_checks_topology_and_initial_agents() {
         run(&row["artifact"]["replay_request"])["result"]["executions"][0]["result"],
         row["result"]
     );
+    let mut ring = request.clone();
+    let scenario = &mut ring["payload"]["scenarios"][0];
+    scenario["specification"]["network_type"] = json!("ring");
+    scenario["specification"]["average_degree"] = json!(2.);
+    scenario["simulation"]["simulation_options"]
+        .as_object_mut()
+        .unwrap()
+        .remove("edges");
+    let response = run(&ring);
+    let row = &response["result"]["executions"][0];
+    assert_eq!(row["result"]["counts"], json!([1, 1]));
+    let replay = &row["artifact"]["replay_request"];
+    assert_eq!(
+        replay["payload"]["scenarios"][0]["simulation"]["simulation_options"]["edges"],
+        json!([[0, 1], [1, 2], [2, 3], [3, 0]])
+    );
+    assert_eq!(
+        run(replay)["result"]["executions"][0]["result"],
+        row["result"]
+    );
     request["payload"]["scenarios"][0]["specification"]["average_degree"] = json!(1);
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
 }
