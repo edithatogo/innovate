@@ -7319,3 +7319,11 @@ Hosted release readiness for this worktree revision remains open.
   the freshly installed R source-package suite both exited zero.
   The installed R library matched the tested debug library byte for
   byte. Optimized and hosted distribution checks remain open.
+
+- [x] Build the optimized macOS arm64 FFI library at f066d7d9 and pass
+  the complete staged Julia suite and installed R binary-package suite
+  with INNOVATE_NATIVE_LIBRARY unset. R needed TMPDIR on the staging
+  volume. Its installed library matched the Cargo output byte for byte.
+  Library SHA-256 is
+  `113f75e3e0962381af0e7017f18c427dace8bd5d43ac1ffcfb75b8a39fff983f`.
+  Hosted distribution acceptance remains open.
