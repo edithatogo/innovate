@@ -1,7 +1,9 @@
 """Installed consumers must exercise native code without legacy scientific packages."""
 
 import importlib.util
+import json
 import math
+from pathlib import Path
 
 import polars as pl
 import pytest
@@ -399,3 +401,26 @@ def test_composite_polars_levels_rates_and_fitted_origin():
     )
     assert fit.diagnostics["optimizer"]["converged"]
     assert fit.predict(pl.DataFrame({"time": [30.0]}))["prediction"][0] > 99.5
+
+
+def test_bass_mechanistic_covariate_event_fit_and_history_forecast():
+    fixture = json.loads(
+        (
+            Path(__file__).resolve().parents[2] / "rust/crates/innovate-core/tests/fixtures/mechanistic_scipy.json"
+        ).read_text()
+    )
+    n = fixture["training_rows"]
+    parameters = fixture["parameters"].copy()
+    parameters["beta_p_dose"] = 0.004
+    fit = innovate.fit(
+        "bass",
+        pl.DataFrame({"time": fixture["time"][:n], "observed": fixture["observed"][:n], "dose": fixture["dose"][:n]}),
+        model_options={"covariates": ["dose"], "t_event": 10.0},
+        fit_options={"initial_parameters": parameters},
+    )
+    assert fit.diagnostics["optimizer"]["converged"]
+    replay = fit.predict(pl.DataFrame({"time": fixture["time"][:n], "dose": fixture["dose"][:n]}))
+    assert replay["prediction"].to_list() == pytest.approx(fit.envelope["result"]["predictions"]["values"], abs=1e-7)
+    future = pl.DataFrame({"time": fixture["time"][n:], "dose": fixture["dose"][n:]})
+    assert fit.predict(future)["prediction"][-1] == pytest.approx(fixture["observed"][-1], abs=0.001)
+    assert fit.predict(future, quantity="rate")["rate"][-1] == pytest.approx(fixture["rates"][-1], abs=0.001)

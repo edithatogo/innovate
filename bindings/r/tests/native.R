@@ -181,3 +181,22 @@ y <- 100*(1-exp(-0.38*time))/(1+0.35/0.03*exp(-0.38*time))
 f <- kernel_fit_model("composite",list(inputs=list(time=time,observed=y),constructor_kwargs=list(components="bass"),fit_options=list(initial_parameters=list(p_1=0.025,q_1=0.32,m_1=110))))$result
 stopifnot(f$diagnostics$optimizer$converged,kernel_predict_model("composite",list(inputs=list(time=30),state=f$state))$result$rows[[1]][[1]]>99.5)
 cat("R composite matrix rates and singleton fitted origin passed\n")
+p <- list(inputs=list(time=c(0,1,2,4),covariates=list(dose=c(0,1,2,4))),constructor_kwargs=list(covariates="dose"),parameters=list(p=0.1,q=0,m=100,beta_p_dose=0.02,beta_q_dose=0,beta_m_dose=0))
+a <- kernel_predict_model("bass",p)$result
+stopifnot(abs(a$values[[4]]-100*(1-exp(-0.56)))<1e-7)
+a <- kernel_predict_model("bass",list(inputs=list(time=c(5,6),covariates=list(dose=c(5,6))),state=a$state))$result
+stopifnot(abs(a$values[[2]]-100*(1-exp(-0.96)))<1e-7)
+p <- list(inputs=list(time=1),constructor_kwargs=list(covariates="dose",covariate_history=list(time=0,values=list(dose=0))),parameters=list(p=0.1,q=0,m=100,beta_p_dose=0.02,beta_q_dose=0,beta_m_dose=0))
+stopifnot(abs(kernel_predict_model("bass",p)$result$values[[1]]-100*(1-exp(-0.1)))<1e-7)
+time <- seq(0,8,0.5)
+boundary <- 100*exp(log(0.01)*exp(-0.6))
+y <- ifelse(time<2,100*exp(log(0.01)*exp(-0.3*time)),200*exp(log(boundary/200)*exp(-0.2*(time-2))))
+f <- kernel_fit_model("gompertz",list(inputs=list(time=time,observed=y),constructor_kwargs=list(t_event=2,initial_value=1),fit_options=list(initial_parameters=list(a=100,b=77,c=0.3,a_post=200,b_post=99,c_post=0.18))))$result
+stopifnot(f$diagnostics$optimizer$converged,abs(kernel_predict_model("gompertz",list(inputs=list(time=10),state=f$state))$result$values[[1]]-200*exp(log(boundary/200)*exp(-1.6)))<0.001)
+cat("R mechanistic covariates, events, history and fit passed\n")
+time <- seq(0,5,0.5);dose <- 1+sin(0.7*time)
+p <- list(inputs=list(time=time,covariates=list(dose=dose)),constructor_kwargs=list(covariates="dose"),parameters=list(p=0.1,q=0,m=100,beta_p_dose=0.02,beta_q_dose=0,beta_m_dose=0))
+a <- kernel_predict_model("bass",p)$result
+b <- kernel_predict_model("bass",list(inputs=p$inputs,state=a$state))$result
+stopifnot(max(abs(unlist(a$values)-unlist(b$values)))<1e-7)
+cat("R nontrivial forcing history replays without revision\n")

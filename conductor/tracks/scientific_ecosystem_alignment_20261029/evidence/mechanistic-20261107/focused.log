@@ -1,0 +1,17 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.46s
+     Running tests/mechanistic.rs (target/debug/deps/mechanistic-00570a964e0093e4)
+
+running 9 tests
+test forcing_numbers_survive_exact_json_round_trip ... ok
+test signed_zero_control_and_query_times_are_the_same_boundary ... ok
+test invalid_forcing_and_historical_revisions_fail_explicitly ... ok
+test bass_linear_innovation_covariate_and_saved_history_match_exact_solution ... ok
+test gompertz_linear_rate_covariate_matches_exact_solution_and_ignores_b_terms ... ok
+test explicit_legacy_layout_and_origin_are_not_silent_new_defaults ... ok
+test gompertz_event_has_continuous_state_and_right_hand_rate ... ok
+test gompertz_event_fit_holds_absent_b_and_forecasts_from_saved_origin ... ok
+test bass_covariate_event_fit_matches_independent_reference_and_retains_history ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s
+

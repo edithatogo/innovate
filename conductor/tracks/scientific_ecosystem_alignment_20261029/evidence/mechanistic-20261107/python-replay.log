@@ -1,0 +1,14 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________ test_bass_mechanistic_covariate_event_fit_and_history_forecast ________
+tests/native/test_python_consumer.py:422: in test_bass_mechanistic_covariate_event_fit_and_history_forecast
+    replay = fit.predict(pl.DataFrame({"time": fixture["time"][:n], "dose": fixture["dose"][:n]}))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv-native/lib/python3.15/site-packages/innovate/__init__.py:95: in predict
+    return predict(self.model, data, self.parameters, model_options=options, quantity=quantity)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv-native/lib/python3.15/site-packages/innovate/__init__.py:72: in predict
+    output = _native.predict_ipc(
+E   ValueError: invalid_request for predict_model: covariate history revision requires an explicit new history/state
+=========================== short test summary info ============================
+FAILED tests/native/test_python_consumer.py::test_bass_mechanistic_covariate_event_fit_and_history_forecast

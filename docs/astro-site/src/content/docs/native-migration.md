@@ -16,7 +16,8 @@ Lotka–Volterra, multi-product competition, complementary goods, lock-in,
 network diffusion, policy diffusion, latent process, regime switching,
 hierarchical, mixture and composite. Operation metadata distinguishes point
 simulation, stochastic Kairos engines, supported rate outputs and named variants.
-Logistic covariates/events and other specific extensions are described below;
+Pointwise Logistic and mechanistic Bass/Gompertz covariates/events, plus other
+specific extensions, are described below;
 full covariates/events across models, inference, uncertainty, richer Kairos and
 all remaining scientific/distribution obligations stay required. Discovery is
 the executable subset, and all 38 ledger obligations still block release.
@@ -640,3 +641,72 @@ Competitive and historical covariate/event fitters reject that option until they
 apply it; the shared-parser regression checks that weights cannot be ignored.
 All sixteen model families now have bounded native support. Every original and
 planned feature remains a release obligation, and the ledger still blocks release.
+
+## Mechanistic Bass/Gompertz covariates and events
+
+Declaring `covariates`, `t_event` or `prediction_mode` for Bass/Gompertz selects
+an ODE execution variant. Plain requests without those options retain the current
+closed-form scalar contract. `ode_fixed` is the ODE default: initial time zero,
+Bass initial value zero, Gompertz initial value 1e-6. Override `initial_time` and
+`initial_value` explicitly. `ode_historical_batch` instead uses those historical
+initial values at each requested batch start and rejects custom initial settings.
+Gompertz ODE `b` does not set the initial value; it is absent from the RHS, unlike
+the plain scalar closed-form shape parameter.
+
+Each declared covariate requires `beta_p_name`, `beta_q_name`, `beta_m_name` for
+Bass, or `beta_a_name`, `beta_b_name`, `beta_c_name` for Gompertz. Coefficients
+linearly modify the corresponding parameters using linearly interpolated controls
+with endpoint hold. An optional finite `t_event` switches to required `*_post`
+base parameters at that exact time. State remains continuous; returned event
+rates use the right-hand regime. Integration stops at controls and event
+boundaries, and each event segment uses its own fixed regime at the endpoint.
+Gompertz `b`, `b_post` and `beta_b_*` remain named but do not enter the ODE; fitting
+holds them fixed and reports their structural absence.
+
+`coefficient_layout="corrected"` uses the shared named beta block in both regimes.
+Explicit `historical` reproduces the old pre-event indexing that could read post
+parameters as coefficients. This is separate from origin behavior. The old
+Gompertz scalar interpolation-grid failure is corrected, not asserted as working
+legacy covariate parity. The default `effective_domain="physical"` requires
+finite nonnegative effective innovation/imitation or Gompertz growth, and positive
+capacity. Explicit `historical` allows signed effective coefficients and returns
+zero own-growth for nonpositive capacity, preserving the old boundary convention.
+Base parameter domains remain validated in both modes.
+
+Forcing state is `covariate_history={"time": [...], "values": {"name": [...]}}`.
+It must cover the initial time and match declared names with finite aligned
+values. Fit retains the full training forcing. Forecast controls append new
+knots; overlapping controls must exactly match the saved interpolation. Revision
+requires an explicit replacement history/state. JSON floating-point round trips
+are qualified bit-for-bit with the pinned serializer's `float_roundtrip` feature;
+unchanged controls are not mistaken for revisions because of parser rounding.
+R preserves singleton named history values.
+
+Python Polars fits/forecasts use declared covariate columns. Supply every new
+control knot needed between the saved history and forecast endpoint: one future
+point defines one linear segment from the saved last control, not an unobserved
+sequence of intermediate controls. JSON callers may omit new controls to hold
+saved endpoints. Prediction returns an updated `state` for explicit carry-forward;
+Polars `FitResult.predict` returns a table and does not mutate its fitted history.
+Use the native JSON result/state or a full future-control table when advancing
+multiple forecast batches. Past queries reuse saved forcing rather than rewriting
+it. Controls, initial conditions and their uncertainty are treated as fixed inputs.
+
+`projection="raw"` is the default. Optional `cumulative_max` reproduces sample
+maximum projection: historical batch mode uses requested samples only; fixed
+mode includes saved forcing knots, event and query samples. This is a discrete
+reporting-grid maximum, not a continuous-time maximum, so a new query sample can
+expose an unseen peak. `raw_values` remain inspectable. Rates are the signed
+underlying ODE RHS at raw state, not derivatives of a projected report. Request
+Polars `quantity="rate"` only with the ODE variant; the plain scalar rate API
+remains separately unqualified.
+
+Advanced fitting requires complete `fit_options.initial_parameters`, optimizes
+active coefficients with native least squares, and retains local rank/convergence
+reports. Information criteria and calibrated uncertainty remain unavailable;
+precision weights are explicitly rejected by this variant until implemented.
+Closed-form Bass/Gompertz forcing/event cases and a separately integrated SciPy
+DOP853 fit/forecast reference pass. The explicit RK4 solver's stiff/LSODA workload
+parity, automatic initialization, multiple events, further model families, forcing
+interoperability with richer Kairos networks, stochastic paths and full scientific
+qualification remain required. No numerical binding fallback is used.

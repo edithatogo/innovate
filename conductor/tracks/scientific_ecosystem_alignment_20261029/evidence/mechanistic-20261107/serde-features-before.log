@@ -1,0 +1,15 @@
+serde_json v1.0.154
+├── serde_json feature "default"
+│   ├── innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+│   │   └── innovate-core feature "default" (command-line)
+│   │       ├── innovate-ffi v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-ffi)
+│   │       │   └── innovate-ffi feature "default" (command-line)
+│   │       ├── innovate-python v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-python)
+│   │       │   └── innovate-python feature "default" (command-line)
+│   │       └── innovate-tabular v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-tabular)
+│   │           └── innovate-tabular feature "default" (command-line)
+│   │               └── innovate-python v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-python) (*)
+│   ├── innovate-python v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-python) (*)
+│   └── innovate-tabular v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-tabular) (*)
+└── serde_json feature "std"
+    └── serde_json feature "default" (*)

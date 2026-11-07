@@ -71,7 +71,7 @@ fn direct_parameter_payloads_work_for_bass_and_reject_ambiguous_state() {
 }
 
 #[test]
-fn unavailable_covariates_never_fall_back_after_all_model_families_are_ported() {
+fn undeclared_covariates_never_fall_back_after_all_model_families_are_ported() {
     let error=KernelBinding::new().predict_model("bass",json!({"inputs":{"time":[0.],"covariates":{"price":[1.]}},"parameters":{"p":0.03,"q":0.35,"m":100.}})).unwrap_err();
     assert_eq!(error.code, "unsupported_native_operation");
 }

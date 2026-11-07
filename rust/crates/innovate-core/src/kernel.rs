@@ -244,6 +244,9 @@ impl KernelBinding {
         } else {
             request
         };
+        if crate::mechanistic::selected(request) {
+            return crate::mechanistic::execute(request);
+        }
         if crate::historical::selected(request) {
             return crate::historical::execute(request);
         }

@@ -188,3 +188,23 @@ end
     @test f["diagnostics"]["optimizer"]["converged"]
     @test kernel_predict_model("composite",Dict("inputs"=>Dict("time"=>[30.]),"state"=>f["state"]))["result"]["rows"][1][1]>99.5
 end
+@testset "Mechanistic ODE covariates and events" begin
+    p=Dict("inputs"=>Dict("time"=>[0.,1.,2.,4.],"covariates"=>Dict("dose"=>[0.,1.,2.,4.])),"constructor_kwargs"=>Dict("covariates"=>["dose"]),"parameters"=>Dict("p"=>0.1,"q"=>0.,"m"=>100.,"beta_p_dose"=>0.02,"beta_q_dose"=>0.,"beta_m_dose"=>0.))
+    a=kernel_predict_model("bass",p)["result"]
+    @test isapprox(a["values"][4],100*(1-exp(-0.56));atol=1e-7)
+    a=kernel_predict_model("bass",Dict("inputs"=>Dict("time"=>[5.,6.],"covariates"=>Dict("dose"=>[5.,6.])),"state"=>a["state"]))["result"]
+    @test isapprox(a["values"][2],100*(1-exp(-0.96));atol=1e-7)
+    time=collect(0.:0.5:8.)
+    boundary=100*exp(log(0.01)*exp(-0.6))
+    y=[t<2 ? 100*exp(log(0.01)*exp(-0.3*t)) : 200*exp(log(boundary/200)*exp(-0.2*(t-2))) for t in time]
+    f=kernel_fit_model("gompertz",Dict("inputs"=>Dict("time"=>time,"observed"=>y),"constructor_kwargs"=>Dict("t_event"=>2.,"initial_value"=>1.),"fit_options"=>Dict("initial_parameters"=>Dict("a"=>100.,"b"=>77.,"c"=>0.3,"a_post"=>200.,"b_post"=>99.,"c_post"=>0.18))))["result"]
+    @test f["diagnostics"]["optimizer"]["converged"]
+    @test isapprox(kernel_predict_model("gompertz",Dict("inputs"=>Dict("time"=>[10.]),"state"=>f["state"]))["result"]["values"][1],200*exp(log(boundary/200)*exp(-1.6));atol=0.001)
+end
+@testset "Floating forcing replay" begin
+    time=collect(0.:0.5:5.);dose=[1+sin(0.7*t) for t in time]
+    p=Dict("inputs"=>Dict("time"=>time,"covariates"=>Dict("dose"=>dose)),"constructor_kwargs"=>Dict("covariates"=>["dose"]),"parameters"=>Dict("p"=>0.1,"q"=>0.,"m"=>100.,"beta_p_dose"=>0.02,"beta_q_dose"=>0.,"beta_m_dose"=>0.))
+    a=kernel_predict_model("bass",p)["result"]
+    b=kernel_predict_model("bass",Dict("inputs"=>p["inputs"],"state"=>a["state"]))["result"]
+    @test all(isapprox.(a["values"],b["values"];atol=1e-7))
+end

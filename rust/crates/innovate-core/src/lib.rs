@@ -9,6 +9,7 @@ mod hierarchical;
 mod historical;
 mod kernel;
 mod latent;
+mod mechanistic;
 mod mixture;
 mod network;
 mod numerics;

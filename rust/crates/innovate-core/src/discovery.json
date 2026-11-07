@@ -13,7 +13,7 @@
       "supported_backends": [
         "rust"
       ],
-      "supports_covariates": false,
+      "supports_covariates": true,
       "supports_multivariate_output": false,
       "supports_simulation": true,
       "supports_summarize": true,
@@ -26,7 +26,10 @@
       ],
       "simulation_semantics": "deterministic_curve_or_finite_population_DES_ABM",
       "supports_rates": false,
-      "variants": [],
+      "variants": [
+        "ode_fixed",
+        "ode_historical_batch"
+      ],
       "simulation_engines": [
         "deterministic_curve",
         "kairos_des",
@@ -70,7 +73,7 @@
       "supported_backends": [
         "rust"
       ],
-      "supports_covariates": false,
+      "supports_covariates": true,
       "supports_multivariate_output": false,
       "supports_simulation": true,
       "supports_summarize": true,
@@ -83,7 +86,10 @@
       ],
       "simulation_semantics": "deterministic_curve_only",
       "supports_rates": false,
-      "variants": [],
+      "variants": [
+        "ode_fixed",
+        "ode_historical_batch"
+      ],
       "simulation_engines": [
         "deterministic_curve"
       ]

@@ -17,7 +17,8 @@ currently executable operations and variants; the
 [native migration guide](docs/astro-site/src/content/docs/native-migration.md)
 records their scientific conventions, initial-state semantics and limits.
 
-Current extensions include Logistic covariates/event curves, native scalar
+Current extensions include pointwise Logistic and mechanistic Bass/Gompertz
+covariates/events with saved forcing history, native scalar
 precision weighting, Gaussian mixture EM, coupled composite ODE levels/rates,
 and bounded Kairos DES/ABM/network-resource simulation. Full family capability,
 covariates/events across other models, uncertainty/inference, richer Kairos and

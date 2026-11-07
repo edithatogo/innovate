@@ -106,8 +106,8 @@
       "key": "covariates_and_events",
       "status": "bounded_native",
       "required": true,
-      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/historical-logistic-20261107.json",
-      "remaining": "Other historical models, interpolation/event fitting initialization and rate helpers; heterogeneous/network/resource ABM, scenarios and resume remain required"
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/mechanistic-20261107.json",
+      "remaining": "Other historical model forcing, multiple events, automatic initialization, weighted conditional fits, stiff solver parity, Kairos forcing interoperability, scenarios and resume remain required"
     },
     {
       "key": "multi_generation_substitution",

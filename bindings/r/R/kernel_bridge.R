@@ -17,7 +17,7 @@ kernel_call <- function(operation, model_key = NULL, payload = list()) {
     if (!is.list(value)) return(value)
     fields <- names(value)
     for (i in seq_along(value)) {
-      if (!is.null(fields) && fields[[i]] %in% c("covariates", "observed", "y") && is.list(value[[i]]) &&
+      if (!is.null(fields) && fields[[i]] %in% c("covariates", "observed", "y", "values") && is.list(value[[i]]) &&
           !is.null(names(value[[i]]))) {
         value[[i]] <- lapply(value[[i]], function(x) if (is.atomic(x) && !is.null(x)) I(x) else x)
       } else if (!is.null(fields) && fields[[i]] %in% array_fields &&
