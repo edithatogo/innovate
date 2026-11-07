@@ -6649,3 +6649,9 @@ Hosted release readiness for this worktree revision remains open.
   compare the complete resumed response with its uninterrupted run.
   All 64 comparisons matched, including the event traces and resource
   metrics. The existing slot and queue conservation checks also passed.
+
+- [x] Verify all 64 scheduled Kairos checkpoint replays through the
+  Python 3.15.2 wheel, Julia and installed R. Each binding returned
+  identical full results for resumed and uninterrupted runs across
+  seeds 0–31 at ticks 4 and 8. Reused the 4947d6b4 native builds after
+  checking that runtime source, bindings and Cargo inputs were unchanged.
