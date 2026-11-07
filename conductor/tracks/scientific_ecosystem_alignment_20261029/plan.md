@@ -6039,3 +6039,11 @@ Hosted release readiness for this worktree revision remains open.
   list child alongside null list and element values in file and stream
   output. All 11 Rust tabular boundary tests passed. Struct and
   fixed-size list consumer readback remain to be qualified.
+
+- [x] Enable Polars struct and fixed-size array support for IPC rewrite.
+  The annotated struct input previously panicked during DataFrame
+  construction. All 11 Rust tabular tests passed with both features.
+  Julia and R produced byte-identical streams containing both nested
+  units annotations, parent nulls and a null array element. Arrow.jl
+  verified the values and PyArrow verified the nested annotations.
+  Rebuilt Python wheel validation for these feature flags remains open.
