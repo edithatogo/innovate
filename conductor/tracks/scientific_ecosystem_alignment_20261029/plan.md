@@ -1902,3 +1902,9 @@ the other competition models and installed binding checks remain open.
   can identify rejected checks without submitting the dataset twice.
   The rebuilt Python wheel exposes the report on NativeError.
   All 32 boundary tests and focused Clippy passed.
+
+- [x] Preserve ingestion diagnostic reports in Julia and R errors.
+  Julia raises DatasetValidationError and R signals
+  innovate_dataset_validation_error for failed reports. Both bindings
+  retain the native invalid_request code and the failed monotonicity
+  check on the same rejected dataset used in Python.

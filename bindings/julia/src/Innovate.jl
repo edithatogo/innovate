@@ -2,8 +2,17 @@ module Innovate
 using JSON
 using Libdl
 
-export kernel_sarima_fit, kernel_seasonal_decomposition, kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
+export DatasetValidationError, kernel_sarima_fit, kernel_seasonal_decomposition, kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
     kernel_categorize_adopters, kernel_categorize_fitted_adopters, kernel_fit_batch, kernel_predict_batch, kernel_simulate_model, kernel_summarize_model, kernel_diagnose_model
+
+"""A rejected dataset with its native validation report."""
+struct DatasetValidationError <: Exception
+    code::String
+    message::String
+    validation::Dict{String,Any}
+end
+
+Base.showerror(io::IO, err::DatasetValidationError) = print(io, err.code, ": ", err.message)
 
 function native_library()
     path = get(ENV, "INNOVATE_NATIVE_LIBRARY", joinpath(@__DIR__, "..", "deps", "libinnovate_ffi." * Libdl.dlext))
@@ -28,7 +37,11 @@ function kernel_call(operation::AbstractString, model_key=nothing, payload=Dict{
         end
         result = JSON.parse(text; dicttype=Dict{String,Any})
         if get(result, "error", nothing) !== nothing
-            error(string(result["error"]["code"], ": ", result["error"]["message"]))
+            details = result["error"]
+            if haskey(details, "validation")
+                throw(DatasetValidationError(details["code"], details["message"], details["validation"]))
+            end
+            error(string(details["code"], ": ", details["message"]))
         end
         return result
     finally

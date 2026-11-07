@@ -61,7 +61,15 @@ kernel_call_json <- function(request) {
     stop("request must be a single JSON string", call. = FALSE)
   }
   response <- jsonlite::fromJSON(.Call(innovate_call_R, native_library(), request), simplifyVector = FALSE)
-  if (!is.null(response$error)) stop(sprintf("%s: %s", response$error$code, response$error$message), call. = FALSE)
+  if (!is.null(response$error)) {
+    details <- response$error
+    message <- sprintf("%s: %s", details$code, details$message)
+    if (!is.null(details$validation)) {
+      stop(errorCondition(message, class = "innovate_dataset_validation_error",
+        code = details$code, validation = details$validation))
+    }
+    stop(message, call. = FALSE)
+  }
   response
 }
 
