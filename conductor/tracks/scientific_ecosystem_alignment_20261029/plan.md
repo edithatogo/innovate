@@ -907,3 +907,13 @@ integration remain open.
   uninterrupted completion. The rebuilt wheel passed 58 Python native tests,
   Julia Pkg.test passed 229 assertions, and installed R conformance passed.
   [Logs](evidence/kairos-agent-hazards-20261107).
+
+## Continuous Kairos hazard forcing
+
+- [x] Integrate time-varying innovation and imitation hazards between deterministic scheduler events. (f128fbe8)
+
+The opt-in linear hazard factors compose with scheduled rates and agent
+multipliers. The native fixture checks zero-hazard wakeup, rounded request
+and completion times, and seeded replay. All 16 network tests and focused
+Clippy passed. Analytic clock qualification and installed binding checks
+remain open.
