@@ -732,3 +732,12 @@ end
     @test post["estimate"] ≈ 4
     @test post["standard_error"] ≈ 1
 end
+
+@testset "Staggered panel ATT" begin
+    payload = Dict("method"=>"staggered_panel_att", "periods"=>[0,1,2],
+        "outcomes"=>[[0,5,7],[10,11,16]], "adoption_indices"=>[1,2])
+    first, second, third = kernel_call("summarize_causal", nothing, payload)["result"]["contrasts"]
+    @test first["estimate"] ≈ 4
+    @test first["n_control"] == 1
+    @test all(row -> isnothing(row["estimate"]) && row["n_control"] == 0, (second,third))
+end

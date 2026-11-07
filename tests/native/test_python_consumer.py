@@ -1485,3 +1485,12 @@ def test_balanced_panel_event_study():
     assert reference["reference"] is True
     assert post["estimate"] == pytest.approx(4)
     assert post["standard_error"] == pytest.approx(1)
+
+
+def test_staggered_panel_att():
+    payload = dict(method="staggered_panel_att", periods=[0, 1, 2],
+                   outcomes=[[0, 5, 7], [10, 11, 16]], adoption_indices=[1, 2])
+    first, second, third = innovate.execute("summarize_causal", **payload)["result"]["contrasts"]
+    assert first["estimate"] == pytest.approx(4)
+    assert first["n_control"] == 1
+    assert all(row["estimate"] is None and row["n_control"] == 0 for row in (second, third))

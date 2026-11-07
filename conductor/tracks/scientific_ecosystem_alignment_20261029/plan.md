@@ -4705,3 +4705,7 @@ Hosted release readiness for this worktree revision remains open.
   controls. The Rust fixture recovers 4 before the comparison cohort
   adopts and preserves null estimates after overlap ends. Binding and
   staggered inference qualification remain open.
+
+- [x] Verify staggered cohort-period ATT through rebuilt Python 3.15.2,
+  Julia and installed R. Each returned estimate 4 while the comparison
+  cohort remained untreated and preserved nulls once no controls remained.

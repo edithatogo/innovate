@@ -681,3 +681,11 @@ panel_event <- kernel_call("summarize_causal", payload=list(method="panel_event_
   control=matrix(c(0,1,3,4,5,7), nrow=2, byrow=TRUE)))$result$contrasts
 stopifnot(panel_event[[1]]$estimate == 0, isTRUE(panel_event[[2]]$reference),
   isTRUE(all.equal(panel_event[[3]]$estimate, 4)), isTRUE(all.equal(panel_event[[3]]$standard_error, 1)))
+
+staggered <- kernel_call("summarize_causal", payload=list(method="staggered_panel_att",
+  periods=c(0,1,2), outcomes=matrix(c(0,5,7,10,11,16), nrow=2, byrow=TRUE),
+  adoption_indices=c(1L,2L)))$result$contrasts
+stopifnot(staggered[[1]]$estimate == 4, staggered[[1]]$n_control == 1,
+  all(vapply(staggered[2:3], function(row) {
+    "estimate" %in% names(row) && is.null(row$estimate) && row$n_control == 0
+  }, logical(1))))
