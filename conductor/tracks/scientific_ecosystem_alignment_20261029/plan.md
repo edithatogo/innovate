@@ -2341,3 +2341,9 @@ the other competition models and installed binding checks remain open.
   Leave benchmark case IDs empty where no runnable corpus case is assigned.
   Discovery now returns a description for all 16 models. The focused
   Rust test and Clippy passed. New native benchmark cases remain open.
+
+- [x] Add a runnable network diffusion benchmark with two analytic Bass
+  node trajectories and zero spillover. Link it to the native model card
+  and resolve its dataset version in corpus validation. Classify it as
+  manual. Five focused Rust tests and Clippy passed. Nonzero spillover
+  benchmark coverage and installed binding qualification remain open.

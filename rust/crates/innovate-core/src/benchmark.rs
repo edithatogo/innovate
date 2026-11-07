@@ -1,7 +1,7 @@
 //! Reproducible synthetic smoke corpus and native fit/forecast runner.
 use serde_json::{Value, json};
 
-const CASES: [(&str, &str, &str); 5] = [
+const CASES: [(&str, &str, &str); 6] = [
     ("bass_smoke_adoption", "bass", "diffusion"),
     ("logistic_growth_smoke", "logistic", "diffusion"),
     ("fisher_pry_replacement_smoke", "fisher_pry", "substitution"),
@@ -11,19 +11,24 @@ const CASES: [(&str, &str, &str); 5] = [
         "competition",
     ),
     ("lock_in_smoke", "lock_in", "competition"),
+    (
+        "network_diffusion_smoke",
+        "network_diffusion",
+        "network_diffusion",
+    ),
 ];
 
 fn ci_policy(family: &str) -> &'static str {
-    if family == "competition" {
-        "scheduled"
-    } else {
-        "fast"
+    match family {
+        "competition" => "scheduled",
+        "network_diffusion" => "workflow_dispatch",
+        _ => "fast",
     }
 }
 
 fn case_descriptor(id: &str, model: &str, family: &str) -> Value {
     json!({"case_id":id,"canonical_model_key":model,"family":family,
-        "dataset_version":if model == "lock_in" {"native-lock-in-1"} else {"2026.04"},"source":"synthetic","ci_policy":ci_policy(family)})
+        "dataset_version":match model {"lock_in"=>"native-lock-in-1","network_diffusion"=>"native-network-1",_=>"2026.04"},"source":"synthetic","ci_policy":ci_policy(family)})
 }
 
 fn discover() -> Value {
@@ -46,6 +51,26 @@ fn run_case(id: &str) -> Result<Value, String> {
         .iter()
         .find(|case| case.0 == id)
         .ok_or("unknown benchmark case")?;
+    if model == "network_diffusion" {
+        let time: Vec<f64> = (0..26).map(f64::from).collect();
+        let bass = |t: f64, p: f64, q: f64, m: f64| {
+            let decay = (-(p + q) * t).exp();
+            m * (1. - decay) / (1. + (q / p) * decay)
+        };
+        let observed: Vec<_> = time
+            .iter()
+            .map(|&t| [bass(t, 0.03, 0.3, 100.), bass(t, 0.02, 0.2, 200.)])
+            .collect();
+        return fit_and_forecast(
+            id,
+            model,
+            family,
+            json!({
+                "inputs":{"time":time,"observed":observed},
+                "constructor_kwargs":{"adjacency":[[0.,1.],[1.,0.]],"orientation":"time_node","spillover_strength":0.}
+            }),
+        );
+    }
     if model == "lock_in" {
         let fixture: Value =
             serde_json::from_str(include_str!("../tests/fixtures/lock_in_scipy.json"))
@@ -54,9 +79,10 @@ fn run_case(id: &str) -> Result<Value, String> {
             id,
             model,
             family,
-            &fixture["time"],
-            &fixture["rows"],
-            Some(&fixture["parameters"]),
+            json!({
+                "inputs":{"time":fixture["time"],"observed":fixture["rows"]},
+                "fit_options":{"initial_parameters":fixture["parameters"]}
+            }),
         );
     }
     let time: Vec<f64> = (0..12).map(f64::from).collect();
@@ -73,21 +99,17 @@ fn run_case(id: &str) -> Result<Value, String> {
             _ => json!([700. * sigmoid(t, 0.65, 5.), 300. * sigmoid(t, 0.45, 6.5)]),
         })
         .collect();
-    fit_and_forecast(id, model, family, &json!(time), &json!(observed), None)
+    fit_and_forecast(
+        id,
+        model,
+        family,
+        json!({"inputs":{"time":time,"observed":observed}}),
+    )
 }
 
-fn fit_and_forecast(
-    id: &str,
-    model: &str,
-    family: &str,
-    time: &Value,
-    observed: &Value,
-    initial_parameters: Option<&Value>,
-) -> Result<Value, String> {
-    let mut payload = json!({"inputs":{"time":time,"observed":observed}});
-    if let Some(parameters) = initial_parameters {
-        payload["fit_options"] = json!({"initial_parameters":parameters});
-    }
+fn fit_and_forecast(id: &str, model: &str, family: &str, payload: Value) -> Result<Value, String> {
+    let time = payload["inputs"]["time"].clone();
+    let observed = payload["inputs"]["observed"].clone();
     let kernel = crate::KernelBinding::new();
     let fit = kernel
         .fit_model(model, payload)
@@ -129,7 +151,7 @@ fn suite(payload: &Value) -> Result<Value, String> {
             let entries = value
                 .as_array()
                 .filter(|entries| !entries.is_empty() && entries.len() <= CASES.len())
-                .ok_or("case_ids must contain one to five case IDs")?;
+                .ok_or("case_ids must contain one to six case IDs")?;
             entries
                 .iter()
                 .map(|entry| {
@@ -190,7 +212,10 @@ fn validate_corpus() -> Result<Value, String> {
     let mut summaries = serde_json::Map::new();
     for card in cards {
         let key = card["model_key"].as_str().expect("discovered model key");
-        let Some(identifiers) = card["historical_benchmark_card"]["benchmark_case_ids"].as_array()
+        let Some(identifiers) = card["historical_benchmark_card"]["benchmark_case_ids"]
+            .as_array()
+            .or_else(|| card["native_model_card"]["benchmark_case_ids"].as_array())
+            .filter(|ids| !ids.is_empty())
         else {
             continue;
         };

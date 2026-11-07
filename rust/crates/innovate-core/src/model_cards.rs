@@ -65,5 +65,5 @@ fn native_description(key: &str) -> Option<Value> {
         _ => return None,
     };
     Some(json!({"summary":summary,"limitations":[limitation],
-        "native_test_target":reference,"benchmark_case_ids":[]}))
+        "native_test_target":reference,"benchmark_case_ids":if key == "network_diffusion" { vec!["network_diffusion_smoke"] } else { vec![] }}))
 }

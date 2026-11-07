@@ -1575,7 +1575,10 @@ fn model_cards_distinguish_native_capabilities_from_historical_benchmarks() {
         card["native_model_card"]["native_test_target"],
         "network_diffusion"
     );
-    assert_eq!(card["native_model_card"]["benchmark_case_ids"], json!([]));
+    assert_eq!(
+        card["native_model_card"]["benchmark_case_ids"],
+        json!(["network_diffusion_smoke"])
+    );
     assert_eq!(
         run(json!({"key":"unknown"}))["error"]["code"],
         "invalid_request"
@@ -1590,9 +1593,9 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
     };
     let discovery = run("discover_benchmark_cases", json!({}));
     let cases = discovery["result"]["cases"].as_array().unwrap();
-    assert_eq!(cases.len(), 5);
+    assert_eq!(cases.len(), 6);
     let suite = run("run_benchmark_suite", json!({"workers":2}));
-    assert_eq!(suite["result"]["succeeded"], 5, "{suite}");
+    assert_eq!(suite["result"]["succeeded"], 6, "{suite}");
     assert_eq!(suite["result"]["failed"], 0);
     let rows = suite["result"]["runs"].as_array().unwrap();
     for (case, row) in cases.iter().zip(rows) {
@@ -1601,7 +1604,10 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
         assert_eq!(&result["case"], case);
         let sample_count = result["observed"].as_array().unwrap().len();
         assert!(sample_count > 0);
-        let key = if case["family"] == "competition" {
+        let key = if matches!(
+            case["family"].as_str(),
+            Some("competition" | "network_diffusion")
+        ) {
             "rows"
         } else {
             "values"
@@ -1640,7 +1646,19 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
                 assert!((actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-5);
             }
         }
-        assert!(result["fit"]["diagnostics"].is_object());
+        if row["case_id"] == "network_diffusion_smoke" {
+            assert_eq!(
+                result["fit"]["node_diagnostics"].as_array().unwrap().len(),
+                2
+            );
+            let expected = result["observed"][25].as_array().unwrap();
+            let actual = result["prediction"]["rows"][25].as_array().unwrap();
+            for (a, b) in actual.iter().zip(expected) {
+                assert!((a.as_f64().unwrap() - b.as_f64().unwrap()).abs() < 1e-5);
+            }
+        } else {
+            assert!(result["fit"]["diagnostics"].is_object());
+        }
     }
 }
 
@@ -1669,7 +1687,7 @@ fn benchmark_validation_resolves_all_historical_case_references() {
         serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
     let report = &response["result"];
     assert_eq!(report["ok"], true);
-    assert_eq!(report["summary"]["case_count"], 5);
+    assert_eq!(report["summary"]["case_count"], 6);
     assert_eq!(
         report["model_card_summaries"]["bass"]["freshness"]["status"],
         "current"
@@ -1712,8 +1730,8 @@ fn benchmark_ci_policy_selects_fast_cases_without_running_scheduled_fits() {
     );
     assert_eq!(response["result"]["succeeded"], 3);
     assert_eq!(
-        run(json!({"ci_policy":"workflow_dispatch"}))["result"]["runs"],
-        json!([])
+        run(json!({"ci_policy":"workflow_dispatch"}))["result"]["runs"][0]["case_id"],
+        "network_diffusion_smoke"
     );
     assert_eq!(
         run(json!({"ci_policy":"fast","case_ids":["bass_smoke_adoption"]}))["error"]["code"],
