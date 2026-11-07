@@ -60,6 +60,7 @@ jobs:
         run: |
           git archive HEAD Dockerfile pyproject.toml uv.lock Cargo.toml Cargo.lock README.md LICENSE rust bindings/python |
             docker build --target remote-worker -t innovate-remote-worker:ci -
+          test "$(docker image inspect --format '{{.Config.User}}' innovate-remote-worker:ci)" = 65532:65532
           worker=(docker run --rm -i --network none --read-only --cap-drop ALL innovate-remote-worker:ci)
           "${worker[@]}" --describe |
             jq -e '.result.worker_transport == "stdin_stdout" and .result.max_raw_envelope_bytes == 2000000'

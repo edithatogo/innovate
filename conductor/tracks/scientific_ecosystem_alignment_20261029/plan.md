@@ -7390,3 +7390,8 @@ Hosted release readiness for this worktree revision remains open.
   corresponding native worker test passed from the source archive,
   and Actionlint passed. Docker CLI is absent locally, so the
   container check still needs a hosted run.
+
+- [x] Verify the worker image declares UID and GID 65532 in hosted CI
+  before the read-only, network-disabled execution checks. Actionlint
+  passed. The local Colima VM is stopped, and image execution remains
+  pending on the hosted runner.
