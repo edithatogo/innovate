@@ -423,7 +423,10 @@ fn ingest(payload: &Value) -> Result<Value, Value> {
     if !dataset["provenance"].is_object() {
         return Err(ingestion_error("ingestion requires dataset provenance"));
     }
-    let default = match (payload.get("artifact").is_none(), dataset["kind"].as_str()) {
+    let unsigned = dataset["provenance"]["checksum"]
+        .as_str()
+        .is_none_or(str::is_empty);
+    let default = match (unsigned, dataset["kind"].as_str()) {
         (true, Some("policy_timing")) if dataset.get("event_labels").is_none() => {
             dataset["event_times"].as_array().map(|times| {
                 (

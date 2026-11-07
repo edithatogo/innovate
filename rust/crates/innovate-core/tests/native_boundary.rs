@@ -3126,8 +3126,10 @@ fn edgeless_dataset_ingests_and_replays() {
 #[test]
 fn dataset_ingestion_defaults_match_explicit_values() {
     let run = |mut dataset: serde_json::Value| {
-        dataset["provenance"] = json!({"source":"synthetic","license":"CC-BY-4.0",
-            "extraction_time":"2026-11-07T00:00:00Z"});
+        if dataset.get("provenance").is_none() {
+            dataset["provenance"] = json!({"source":"synthetic","license":"CC-BY-4.0",
+                "extraction_time":"2026-11-07T00:00:00Z"});
+        }
         let request = json!({"schema_version":"2.0","operation":"ingest_dataset","payload":{"dataset":dataset}});
         serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
             &request.to_string(),
@@ -3153,6 +3155,10 @@ fn dataset_ingestion_defaults_match_explicit_values() {
         assert_eq!(run(dataset), implicit);
         let mut artifact = implicit["result"].clone();
         artifact["dataset"].as_object_mut().unwrap().remove(key);
+        assert_eq!(
+            run(artifact["dataset"].clone())["error"]["code"],
+            "invalid_request"
+        );
         let request = json!({"schema_version":"2.0","operation":"ingest_dataset","payload":{"artifact":artifact}});
         let response: serde_json::Value =
             serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();

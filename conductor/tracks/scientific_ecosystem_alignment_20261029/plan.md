@@ -4448,3 +4448,6 @@ Hosted release readiness for this worktree revision remains open.
   fields. Ingestion fills omitted fields for bare datasets only.
   Removing labels or weights from a checksummed artifact now fails
   verification. All eight focused Rust dataset tests passed.
+- [x] Verify checksummed datasets supplied without an artifact envelope
+  also reject removed labels or weights. Defaults apply only when the
+  incoming dataset supplies no checksum. The focused Rust test passed.
