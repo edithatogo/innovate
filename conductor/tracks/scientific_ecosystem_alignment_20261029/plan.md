@@ -7037,3 +7037,9 @@ Hosted release readiness for this worktree revision remains open.
   previous higher-likelihood solutions on the positive-root cases.
   All eight comparisons were within 1e-6 or above the single-start R
   reference. Python and Julia checks of these cases remain open.
+
+- [x] Verify all eight cancellation fits through the rebuilt Python
+  3.15.2 wheel and Julia against installed R's native results. On
+  the same 500 observations per case, coefficients, fitted values,
+  residuals and likelihoods matched within 1e-10, with identical
+  missing positions, using native source 9ff71b49.
