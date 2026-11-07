@@ -681,14 +681,20 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
         }
         if initial.is_none()
             && model.history.is_some()
-            && model.events.is_empty()
             && matches!(model.key.as_str(), "multi_product" | "lock_in")
         {
             let intervals: Vec<_> = time
                 .windows(2)
                 .zip(observed.windows(2))
                 .zip(factors.windows(2))
-                .filter(|(_, weights)| weights.iter().all(|weight| *weight > 0.))
+                .filter(|((times, _), weights)| {
+                    weights.iter().all(|weight| *weight > 0.)
+                        && model
+                            .events
+                            .boundary_left_regime(times[1])
+                            .unwrap_or_else(|| model.regime(times[1]))
+                            == model.regime(times[0])
+                })
                 .collect();
             let changes: Vec<_> = intervals
                 .iter()
@@ -705,8 +711,19 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
                         Ok(intervals
                             .iter()
                             .flat_map(|((times, rows), _)| {
-                                let left = model.derivative(times[0], &rows[0], &parameters);
-                                let right = model.derivative(times[1], &rows[1], &parameters);
+                                let regime = model.regime(times[0]);
+                                let left = model.derivative_in_regime(
+                                    times[0],
+                                    &rows[0],
+                                    &parameters,
+                                    regime,
+                                );
+                                let right = model.derivative_in_regime(
+                                    times[1],
+                                    &rows[1],
+                                    &parameters,
+                                    regime,
+                                );
                                 left.into_iter().zip(right).map(|(a, b)| {
                                     (a / yscale + b / yscale) * (0.5 * (times[1] - times[0]))
                                 })

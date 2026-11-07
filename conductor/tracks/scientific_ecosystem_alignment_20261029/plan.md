@@ -2671,3 +2671,11 @@ the other competition models and installed binding checks remain open.
   existing 200 trajectory iterations. Held-out errors were 7.70e-8
   and 4.06e-9 in both bindings, in line with Python 3.15.2. Automatic
   starts with parameter events remain a separate qualification case.
+
+- [x] Extend the forced competition initializer to fixed parameter events.
+  Exclude intervals crossing an interior event and evaluate an event at
+  the right endpoint using its left-hand regime. The trajectory solver
+  still integrates all observations. Python 3.15.2 and the Rust
+  regression passed both independent event fixtures. Held-out errors
+  were 9.72e-9 for multi-product and 7.15e-10 for lock-in. Focused
+  Clippy passed. Julia and R event-start qualification remains open.

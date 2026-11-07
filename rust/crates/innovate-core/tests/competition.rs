@@ -729,6 +729,8 @@ fn forced_automatic_starts_converge_and_recover_held_out_trajectories() {
         serde_json::from_str(include_str!("fixtures/multi_forcing_scipy.json")).unwrap();
     let lock: Value =
         serde_json::from_str(include_str!("fixtures/lock_forcing_scipy.json")).unwrap();
+    let events: Value =
+        serde_json::from_str(include_str!("fixtures/ecosystem_events_scipy.json")).unwrap();
     let kernel = KernelBinding::new();
     for (model, fixture, reference, options) in [
         (
@@ -742,6 +744,18 @@ fn forced_automatic_starts_converge_and_recover_held_out_trajectories() {
             &lock,
             &lock,
             json!({"initial_values":lock["initial"],"covariates":["price"]}),
+        ),
+        (
+            "multi_product",
+            &events,
+            &events["cases"]["multi_product"],
+            events["cases"]["multi_product"]["constructor_kwargs"].clone(),
+        ),
+        (
+            "lock_in",
+            &events,
+            &events["cases"]["lock_in"],
+            events["cases"]["lock_in"]["constructor_kwargs"].clone(),
         ),
     ] {
         let fit = kernel.fit_model(model, json!({
