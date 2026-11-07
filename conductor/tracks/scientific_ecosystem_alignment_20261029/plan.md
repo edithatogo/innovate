@@ -5594,3 +5594,9 @@ Hosted release readiness for this worktree revision remains open.
   the scenario registry at bounded native status, with cross-version
   replay and release parity still open. The verifier reports 38 open
   release obligations.
+
+- [x] Reject unsupported top-level fields in embedded current-schema
+  scenario replay requests. The scenario boundary fixture rejects an
+  injected request-level model key, preserves same-version replay, and
+  still classifies different kernel versions as unavailable. All 13
+  scenario boundary tests passed. Cross-version replay remains open.

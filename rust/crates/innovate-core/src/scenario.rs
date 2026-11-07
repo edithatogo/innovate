@@ -1613,6 +1613,13 @@ fn validate_replay(
     if schema != KERNEL_SCHEMA_VERSION {
         return Ok(Some("artifact replay uses an unsupported kernel schema"));
     }
+    if replay.as_object().is_none_or(|fields| {
+        fields
+            .keys()
+            .any(|key| !matches!(key.as_str(), "schema_version" | "operation" | "payload"))
+    }) {
+        return Err("artifact replay request contains unsupported fields");
+    }
     let payload = replay["payload"]
         .as_object()
         .filter(|payload| payload.len() == 1 && payload.contains_key("scenarios"))
