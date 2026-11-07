@@ -7423,3 +7423,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Validate every input wheel member against RECORD before normalizing
   its SBOM. A corrupted payload now fails before output is created.
   The three focused tests and Ruff passed under Python 3.15.2.
+
+- [x] Run the stricter RECORD validator on the retained independent
+  Maturin macOS arm64 wheel. Normalization, Twine and
+  check-wheel-contents passed. This verifies compatibility with
+  actual Maturin output from the earlier independent build.
