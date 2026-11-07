@@ -639,3 +639,61 @@ def test_lock_in_capacity_projection_recovers_retained_state():
     assert [row[0] for row in result["rows"]] == [95.0, 90.0, 80.0, 95.0]
     assert result["rates"] == [[0.0, 0.0]] * 4
     assert result["metadata"]["projection"] == "historical_clip_to_current_capacity"
+
+
+@pytest.mark.parametrize("model", ["lotka_volterra", "complementary_goods", "lock_in", "multi_product"])
+def test_ecosystem_fixed_events_and_saved_forecast(model):
+    fixture = json.loads(
+        (Path(__file__).parents[2] / "rust/crates/innovate-core/tests/fixtures/ecosystem_events_scipy.json").read_text()
+    )
+    case = fixture["cases"][model]
+    result = innovate.execute(
+        "predict_model",
+        model,
+        inputs={"time": fixture["time"], "covariates": fixture["covariates"]},
+        parameters=case["parameters"],
+        constructor_kwargs=case["constructor_kwargs"],
+    )["result"]
+    assert result["rows"][-1] == pytest.approx(case["rows"][-1], abs=1e-5)
+    event_index = fixture["time"].index(2.125)
+    assert result["rates"][event_index] == pytest.approx(case["rates"][event_index], abs=1e-5)
+    future = innovate.execute(
+        "predict_model",
+        model,
+        inputs={"time": fixture["forecast_time"]},
+        state=result["state"],
+    )["result"]
+    assert future["rows"][0] == pytest.approx(case["forecast_rows"][0], abs=1e-5)
+
+
+def test_ecosystem_fixed_event_polars_fit():
+    fixture = json.loads(
+        (Path(__file__).parents[2] / "rust/crates/innovate-core/tests/fixtures/ecosystem_events_scipy.json").read_text()
+    )
+    case = fixture["cases"]["lotka_volterra"]
+    data = pl.DataFrame(
+        {
+            "time": fixture["time"],
+            "price": fixture["covariates"]["price"],
+            "first": [row[0] for row in case["rows"]],
+            "second": [row[1] for row in case["rows"]],
+        }
+    )
+    fit = innovate.fit(
+        "lotka_volterra",
+        data,
+        observed_columns=["first", "second"],
+        model_options=case["constructor_kwargs"],
+        fit_options={"initial_parameters": dict(case["parameters"], alpha1=0.29), "max_iterations": 200},
+    )
+    assert fit.diagnostics["optimizer"]["converged"]
+    assert not fit.diagnostics["parameter_events"]["parameters_estimated"]
+    future = fit.predict(
+        pl.DataFrame(
+            {
+                "time": fixture["forecast_time"],
+                "price": [fixture["covariates"]["price"][-1]],
+            }
+        )
+    )
+    assert [future["prediction_1"][0], future["prediction_2"][0]] == pytest.approx(case["forecast_rows"][0], abs=1e-4)

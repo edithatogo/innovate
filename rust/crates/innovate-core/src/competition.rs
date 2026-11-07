@@ -5,7 +5,16 @@ use crate::validation::{numeric_array, numeric_array_from_aliases, object_sectio
 use crate::{
     KERNEL_SCHEMA_VERSION, KernelBindingError, KernelOperation, KernelRequest, KernelResponse,
 };
+use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value, json};
+use std::{borrow::Cow, collections::BTreeMap};
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+struct ParameterEvent {
+    time: f64,
+    parameters: BTreeMap<String, f64>,
+}
 
 struct Model {
     key: String,
@@ -15,6 +24,8 @@ struct Model {
     covariates: Vec<String>,
     history: Option<History>,
     historical_layout: bool,
+    events: Vec<ParameterEvent>,
+    overrides: Vec<Vec<(usize, f64)>>,
     origin: f64,
     initial: Vec<f64>,
     conditioned_initial: bool,
@@ -47,6 +58,9 @@ impl Model {
                 });
             }
         }
+        if !self.events.is_empty() {
+            out["parameter_events"] = json!(self.events);
+        }
         out
     }
     fn parameters(&self, v: &Value, op: KernelOperation) -> Result<Vec<f64>, KernelBindingError> {
@@ -76,7 +90,23 @@ impl Model {
                 .collect(),
         )
     }
-    fn lock_in_capacity(&self, t: f64, parameters: &[f64]) -> f64 {
+    fn regime(&self, t: f64) -> usize {
+        self.events.partition_point(|event| event.time <= t)
+    }
+    fn regime_parameters<'a>(&self, parameters: &'a [f64], regime: usize) -> Cow<'a, [f64]> {
+        if regime == 0 {
+            return Cow::Borrowed(parameters);
+        }
+        let mut effective = parameters.to_vec();
+        for overrides in &self.overrides[..regime] {
+            for &(index, value) in overrides {
+                effective[index] = value;
+            }
+        }
+        Cow::Owned(effective)
+    }
+    fn lock_in_capacity(&self, t: f64, parameters: &[f64], regime: usize) -> f64 {
+        let parameters = self.regime_parameters(parameters, regime);
         parameters[6]
             + self.history.as_ref().map_or(0., |history| {
                 self.covariates
@@ -90,6 +120,16 @@ impl Model {
     }
 
     fn derivative(&self, t: f64, y: &[f64], parameters: &[f64]) -> Vec<f64> {
+        self.derivative_in_regime(t, y, parameters, self.regime(t))
+    }
+    fn derivative_in_regime(
+        &self,
+        t: f64,
+        y: &[f64],
+        parameters: &[f64],
+        regime: usize,
+    ) -> Vec<f64> {
+        let parameters = self.regime_parameters(parameters, regime);
         if let Some(history) = &self.history {
             let mut effective = parameters[..self.base_count].to_vec();
             for (name, coefficients) in self
@@ -114,7 +154,7 @@ impl Model {
             }
             self.base_derivative(y, &effective)
         } else {
-            self.base_derivative(y, parameters)
+            self.base_derivative(y, &parameters)
         }
     }
     fn base_derivative(&self, y: &[f64], p: &[f64]) -> Vec<f64> {
@@ -156,9 +196,9 @@ impl Model {
             .collect()
     }
     fn predict(&self, time: &[f64], p: &[f64]) -> Result<Vec<Vec<f64>>, String> {
+        let end = *time.last().ok_or("time must not be empty")?;
         let mut grid = time.to_vec();
         if let Some(history) = &self.history {
-            let end = *time.last().ok_or("time must not be empty")?;
             grid.extend(
                 history
                     .time
@@ -166,29 +206,66 @@ impl Model {
                     .copied()
                     .filter(|t| *t > self.origin && *t < end),
             );
-            grid.sort_by(f64::total_cmp);
-            grid.dedup_by(|a, b| *a == *b);
         }
+        grid.extend(
+            self.events
+                .iter()
+                .map(|event| event.time)
+                .filter(|t| *t > self.origin && *t <= end),
+        );
+        grid.sort_by(f64::total_cmp);
+        grid.dedup_by(|a, b| *a == *b);
         if self.key == "lock_in"
             && std::iter::once(self.origin)
                 .chain(grid.iter().copied())
                 .any(|t| {
-                    let capacity = self.lock_in_capacity(t, p);
+                    let capacity = self.lock_in_capacity(t, p, self.regime(t));
                     !capacity.is_finite() || capacity <= 0.
                 })
         {
             return Err("lock-in effective capacity must stay finite and positive".into());
         }
-        let states = integrate(&grid, self.origin, &self.initial, |t, y| {
-            self.derivative(t, y, p)
-        })?;
+        let mut states = Vec::with_capacity(grid.len());
+        let mut start = self.origin;
+        let mut current = self.initial.clone();
+        let mut cursor = 0;
+        let mut regime = self.regime(start);
+        while cursor < grid.len() {
+            let boundary = self
+                .events
+                .get(regime)
+                .map_or(end, |event| event.time.min(end));
+            let stop = grid.partition_point(|t| *t <= boundary);
+            let interval = &grid[cursor..stop];
+            if self.key == "lock_in"
+                && std::iter::once(start)
+                    .chain(interval.iter().copied())
+                    .any(|t| {
+                        let capacity = self.lock_in_capacity(t, p, regime);
+                        !capacity.is_finite() || capacity <= 0.
+                    })
+            {
+                return Err("lock-in effective capacity must stay finite and positive".into());
+            }
+            let segment = integrate(interval, start, &current, |t, y| {
+                self.derivative_in_regime(t, y, p, regime)
+            })?;
+            current = segment
+                .last()
+                .ok_or("event interval has no boundary state")?
+                .clone();
+            states.extend(segment);
+            start = boundary;
+            cursor = stop;
+            regime += 1;
+        }
         let mut rows: Vec<_> = time
             .iter()
             .map(|t| states[grid.partition_point(|v| v < t)].clone())
             .collect();
         if self.key == "lock_in" {
             for (&t, row) in time.iter().zip(&mut rows) {
-                let market = self.lock_in_capacity(t, p);
+                let market = self.lock_in_capacity(t, p, self.regime(t));
                 for value in row {
                     *value = value.clamp(0., market);
                 }
@@ -217,6 +294,7 @@ impl Model {
             "metadata":{"shape":[time.len(),self.n],"quantity":if self.key=="lotka_volterra" {"technology_share"}else{"product_level"},
             "rate_semantics":if self.key=="lock_in" {"historical RHS at clipped levels; not derivative of output clipping or gross incidence"} else {"signed derivative of each level; not gross incidence"},"warnings":warnings,
             "normalization":"separate product potentials; rows are not constrained to sum to one",
+            "parameter_event_semantics":"persistent fixed overrides; continuous integrated state; right-hand rates; shared covariate history",
             "projection":if self.key=="lock_in" {"historical_clip_to_current_capacity"} else {"none"},
             "coefficient_layout":if self.historical_layout {"historical"} else {"corrected"}}}),
         )
@@ -250,6 +328,7 @@ fn model(
             "covariates",
             "covariate_history",
             "coefficient_layout",
+            "parameter_events",
         ]
         .contains(&key.as_str())
     }) {
@@ -445,6 +524,45 @@ fn model(
         .transpose()?;
     let history = History::merge(history, &covariates, time, inputs.get("covariates"), origin)
         .map_err(|e| invalid(op, e))?;
+    let events: Vec<ParameterEvent> = kw
+        .get("parameter_events")
+        .map(|value| {
+            serde_json::from_value(value.clone()).map_err(|_| {
+                invalid(
+                    op,
+                    "parameter_events must contain times and named parameter overrides",
+                )
+            })
+        })
+        .transpose()?
+        .unwrap_or_default();
+    if events.len() > 32
+        || events
+            .iter()
+            .any(|event| !event.time.is_finite() || event.time < 0. || event.parameters.is_empty())
+        || events.windows(2).any(|pair| pair[0].time >= pair[1].time)
+    {
+        return Err(invalid(
+            op,
+            "parameter_events requires at most 32 nonempty changes at finite increasing nonnegative times",
+        ));
+    }
+    let overrides = events
+        .iter()
+        .map(|event| {
+            event.parameters.iter().map(|(name, &value)| {
+                let index = names.iter().position(|candidate| candidate == name)
+                    .ok_or_else(|| invalid(op, format!("unknown event parameter '{name}'")))?;
+                let invalid_base = index < base_count
+                    && (value < 0. || (name.starts_with('m') && value == 0.));
+                if !value.is_finite() || invalid_base {
+                    return Err(invalid(op, "event base parameters must retain their physical domain and beta coefficients must be finite"));
+                }
+                Ok((index, value))
+            }).collect::<Result<Vec<_>, KernelBindingError>>()
+        })
+        .collect::<Result<Vec<_>, _>>()?;
+
     Ok(Model {
         key,
         n,
@@ -453,6 +571,8 @@ fn model(
         covariates,
         history,
         historical_layout,
+        events,
+        overrides,
         origin,
         initial,
         conditioned_initial,
@@ -510,7 +630,11 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
             .names
             .iter()
             .map(|name| {
-                if model.key == "lock_in" && model.history.is_none() && name == "m" {
+                if model.key == "lock_in"
+                    && model.history.is_none()
+                    && model.events.is_empty()
+                    && name == "m"
+                {
                     yscale
                 } else {
                     0.
@@ -550,7 +674,11 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
         let mut starts = Vec::new();
         if let Some(initial) = initial {
             let parameters = model.parameters(&initial, op)?;
-            if model.key == "lock_in" && model.history.is_none() && parameters[6] < yscale {
+            if model.key == "lock_in"
+                && model.history.is_none()
+                && model.events.is_empty()
+                && parameters[6] < yscale
+            {
                 return Err(invalid(
                     op,
                     "initial market potential must be at least the maximum observed value across both series",
@@ -574,7 +702,11 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
                 .iter()
                 .enumerate()
                 .map(|(i, name)| {
-                    if model.key == "lock_in" && model.history.is_none() && name == "m" {
+                    if model.key == "lock_in"
+                        && model.history.is_none()
+                        && model.events.is_empty()
+                        && name == "m"
+                    {
                         yscale * 1.5
                     } else if name.starts_with('m') {
                         observed
@@ -639,7 +771,7 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
         KernelOperation::PredictModel | KernelOperation::SimulateModel
     ) {
         let mut predictions = predictions;
-        if model.history.is_some() {
+        if model.history.is_some() || !model.events.is_empty() {
             predictions["state"] = state;
         }
         predictions
@@ -665,9 +797,17 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
                 model.names.len(),
             );
             d["initial_condition"] = json!({"source":if model.conditioned_initial {"first_observed_row"} else {"explicit_or_zero"},"excluded_conditioning_rows":offset,"uncertainty_propagated":false});
-            if model.key == "lock_in" {
+            if model.key == "lock_in" && model.events.is_empty() {
                 d["structural_identifiability"] = json!({"status":"interior_parameter_confounding","scope":"unclipped_interior_trajectories","rank_upper_bound":model.names.len()-1,"parameters":model.names.len(),"reason":"a common capacity and feedback scaling preserves the unclipped interior RHS; clipping can add boundary information"});
                 d["warnings"].as_array_mut().unwrap().push(json!("Interior trajectories cannot identify free m separately from beta/gamma combinations; clipping-boundary information requires separate qualification"));
+            }
+            if model.key == "lock_in" && !model.events.is_empty() {
+                d["structural_identifiability"] = json!({"status":"requires_event_specific_analysis","parameters":model.names.len(),
+                    "rank_upper_bound":null,"reason":"fixed event overrides can break shared interior scaling; local numerical rank alone is insufficient"});
+                d["warnings"].as_array_mut().unwrap().push(json!("Fixed event parameter constraints require event-specific structural identifiability analysis"));
+            }
+            if !model.events.is_empty() {
+                d["parameter_events"] = json!({"count":model.events.len(),"parameters_estimated":false,"state_reset":false});
             }
             if let Some((optimizer, identifiability)) = quality {
                 if optimizer["converged"] != true {

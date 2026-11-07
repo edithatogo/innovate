@@ -106,8 +106,8 @@
       "key": "covariates_and_events",
       "status": "bounded_native",
       "required": true,
-      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/mechanistic-20261107.json",
-      "remaining": "Other historical model forcing, multiple events, automatic initialization, weighted conditional fits, stiff solver parity, Kairos forcing interoperability, scenarios and resume remain required"
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/ecosystem-events-20261107.json",
+      "remaining": "Other model forcing, event time/override inference, automatic initialization, weighted conditional fits, stiff solver parity, Kairos forcing interoperability, uncertainty, scenarios and resume remain required"
     },
     {
       "key": "multi_generation_substitution",
@@ -120,8 +120,8 @@
       "key": "competitive_ecosystems",
       "status": "bounded_native",
       "required": true,
-      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/lock-forcing-20261107.json",
-      "remaining": "Event splits, equilibrium helpers, calibrated uncertainty and wider numerical qualification remain required"
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/ecosystem-events-20261107.json",
+      "remaining": "Event inference, equilibrium helpers, calibrated uncertainty and wider numerical qualification remain required"
     },
     {
       "key": "hierarchical_mixture_inference",

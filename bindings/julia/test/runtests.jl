@@ -338,3 +338,32 @@ end
     ))["result"]
     @test [row[1] for row in result["rows"]] == [95.,90.,80.,95.]
 end
+
+@testset "Fixed ecosystem parameter events" begin
+    fixture = Innovate.JSON.parsefile(
+        joinpath(@__DIR__, "../../../rust/crates/innovate-core/tests/fixtures/ecosystem_events_scipy.json");
+        dicttype=Dict{String,Any},
+    )
+    for model in ["lotka_volterra", "complementary_goods", "lock_in", "multi_product"]
+        case = fixture["cases"][model]
+        result = kernel_predict_model(model, Dict(
+            "inputs"=>Dict("time"=>fixture["time"], "covariates"=>fixture["covariates"]),
+            "parameters"=>case["parameters"], "constructor_kwargs"=>case["constructor_kwargs"],
+        ))["result"]
+        @test maximum(abs.(result["rows"][end].-case["rows"][end])) < 1e-5
+        future = kernel_predict_model(
+            model, Dict("inputs"=>Dict("time"=>fixture["forecast_time"]), "state"=>result["state"]),
+        )["result"]
+        @test maximum(abs.(future["rows"][1].-case["forecast_rows"][1])) < 1e-5
+    end
+    case = fixture["cases"]["lotka_volterra"]
+    start = copy(case["parameters"])
+    start["alpha1"] = 0.29
+    fit = kernel_fit_model("lotka_volterra", Dict(
+        "inputs"=>Dict("time"=>fixture["time"], "covariates"=>fixture["covariates"], "observed"=>case["rows"]),
+        "constructor_kwargs"=>case["constructor_kwargs"],
+        "fit_options"=>Dict("initial_parameters"=>start, "max_iterations"=>200),
+    ))["result"]
+    @test fit["diagnostics"]["optimizer"]["converged"]
+    @test !fit["diagnostics"]["parameter_events"]["parameters_estimated"]
+end

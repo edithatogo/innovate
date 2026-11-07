@@ -222,6 +222,8 @@ pub struct KernelDiscoveryRecord {
     pub import_path: String,
     pub stability: String,
     pub supports_covariates: bool,
+    #[serde(default)]
+    pub supports_parameter_events: bool,
     pub supports_multivariate_output: bool,
     #[serde(default)]
     pub supports_rates: bool,

@@ -438,3 +438,205 @@ fn multi_product_covariate_fit_preserves_signed_coefficients() {
         );
     }
 }
+
+#[test]
+fn fixed_parameter_events_split_exactly_and_use_right_hand_rates() {
+    let discovered = KernelBinding::new().discover_models().unwrap();
+    for model in discovered.models {
+        assert_eq!(
+            model.supports_parameter_events,
+            [
+                "lotka_volterra",
+                "complementary_goods",
+                "lock_in",
+                "multi_product"
+            ]
+            .contains(&model.key.as_str())
+        );
+    }
+    let payload = json!({
+        "inputs":{"time":[0.,1.,2.,3.]},
+        "parameters":{"alpha1":0.2,"beta1":0.,"alpha2":0.1,"beta2":0.},
+        "constructor_kwargs":{"initial_values":[0.1,0.2],
+            "parameter_events":[{"time":1.,"parameters":{"alpha1":0.4}},
+                                {"time":2.,"parameters":{"alpha1":0.}}]}
+    });
+    let result = KernelBinding::new()
+        .predict_model("lotka_volterra", payload)
+        .unwrap()
+        .result
+        .unwrap();
+    let at_one = 1. / (1. + 9. * (-0.2_f64).exp());
+    let at_two = 1. / (1. + 9. * (-0.6_f64).exp());
+    assert!((result["rows"][1][0].as_f64().unwrap() - at_one).abs() < 1e-8);
+    assert!((result["rows"][2][0].as_f64().unwrap() - at_two).abs() < 1e-8);
+    assert!((result["rows"][3][0].as_f64().unwrap() - at_two).abs() < 1e-8);
+    assert!((result["rates"][1][0].as_f64().unwrap() - 0.4 * at_one * (1. - at_one)).abs() < 1e-8);
+    assert_eq!(result["rates"][2][0], 0.);
+    let forecast = KernelBinding::new()
+        .predict_model(
+            "lotka_volterra",
+            json!({
+                "inputs":{"time":[4.]},"state":result["state"]
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    assert!((forecast["rows"][0][0].as_f64().unwrap() - at_two).abs() < 1e-8);
+}
+
+#[test]
+fn fixed_events_before_origin_apply_and_invalid_events_are_rejected() {
+    let mut payload = json!({
+        "inputs":{"time":[1.,2.]},
+        "parameters":{"alpha1":0.2,"beta1":0.,"alpha2":0.1,"beta2":0.},
+        "constructor_kwargs":{"initial_time":1.,"initial_values":[0.1,0.2],
+            "parameter_events":[{"time":0.,"parameters":{"alpha1":0.4}}]}
+    });
+    let result = KernelBinding::new()
+        .predict_model("lotka_volterra", payload.clone())
+        .unwrap()
+        .result
+        .unwrap();
+    assert!(
+        (result["rows"][1][0].as_f64().unwrap() - 1. / (1. + 9. * (-0.4_f64).exp())).abs() < 1e-8
+    );
+    for invalid in [
+        json!([{"time":-1.,"parameters":{"alpha1":0.4}}]),
+        json!([{"time":1.,"parameters":{}}]),
+        json!([{"time":1.,"parameters":{"unknown":0.4}}]),
+        json!([{"time":1.,"parameters":{"alpha1":-0.4}}]),
+        json!([{"time":1.,"parameters":{"alpha1":0.4}},{"time":1.,"parameters":{"alpha1":0.2}}]),
+    ] {
+        payload["constructor_kwargs"]["parameter_events"] = invalid;
+        assert!(
+            KernelBinding::new()
+                .predict_model("lotka_volterra", payload.clone())
+                .is_err()
+        );
+    }
+}
+
+#[test]
+fn ecosystem_events_compose_with_controls_and_preserve_lock_in_projection() {
+    let binding = KernelBinding::new();
+    let result = binding
+        .predict_model(
+            "complementary_goods",
+            json!({
+                "inputs":{"time":[0.,1.,2.],"covariates":{"price":[0.,1.,2.]}},
+                "parameters":{"k1":0.2,"k2":0.1,"c1":0.,"c2":0.,
+                    "beta_k1_price":0.1,"beta_k2_price":0.,"beta_c1_price":0.,"beta_c2_price":0.},
+                "constructor_kwargs":{"initial_values":[0.1,0.2],"covariates":["price"],
+                    "parameter_events":[{"time":1.,"parameters":{"k1":0.4,"beta_k1_price":-0.1}}]}
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    assert!(
+        (result["rows"][2][0].as_f64().unwrap() - 1. / (1. + 9. * (-0.5_f64).exp())).abs() < 1e-8
+    );
+    let projected = binding.predict_model("lock_in",json!({
+        "inputs":{"time":[0.,1.,2.,3.]},
+        "parameters":{"alpha1":0.,"alpha2":0.,"beta1":0.,"beta2":0.,"gamma1":0.,"gamma2":0.,"m":100.},
+        "constructor_kwargs":{"initial_values":[95.,0.],
+            "parameter_events":[{"time":1.,"parameters":{"m":90.}},
+                {"time":2.,"parameters":{"m":80.}},{"time":3.,"parameters":{"m":100.}}]}
+    })).unwrap().result.unwrap();
+    assert_eq!(
+        projected["rows"],
+        json!([[95., 0.], [90., 0.], [80., 0.], [95., 0.]])
+    );
+    assert_eq!(
+        projected["rates"],
+        json!([[0., 0.], [0., 0.], [0., 0.], [0., 0.]])
+    );
+}
+
+#[test]
+fn ecosystem_events_match_independent_references_and_conditional_fit() {
+    let fixture: Value =
+        serde_json::from_str(include_str!("fixtures/ecosystem_events_scipy.json")).unwrap();
+    let binding = KernelBinding::new();
+    for model in [
+        "lotka_volterra",
+        "complementary_goods",
+        "lock_in",
+        "multi_product",
+    ] {
+        let case = &fixture["cases"][model];
+        let result = binding
+            .predict_model(
+                model,
+                json!({
+                    "inputs":{"time":fixture["time"],"covariates":fixture["covariates"]},
+                    "parameters":case["parameters"],"constructor_kwargs":case["constructor_kwargs"]
+                }),
+            )
+            .unwrap()
+            .result
+            .unwrap();
+        for quantity in ["rows", "rates"] {
+            for (actual, expected) in result[quantity]
+                .as_array()
+                .unwrap()
+                .iter()
+                .zip(case[quantity].as_array().unwrap())
+            {
+                for (actual, expected) in actual
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .zip(expected.as_array().unwrap())
+                {
+                    assert!(
+                        (actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-5,
+                        "{model} {quantity}"
+                    );
+                }
+            }
+        }
+        let forecast = binding
+            .predict_model(
+                model,
+                json!({
+                    "inputs":{"time":fixture["forecast_time"]},"state":result["state"]
+                }),
+            )
+            .unwrap()
+            .result
+            .unwrap();
+        for (actual, expected) in forecast["rows"][0]
+            .as_array()
+            .unwrap()
+            .iter()
+            .zip(case["forecast_rows"][0].as_array().unwrap())
+        {
+            assert!((actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-5);
+        }
+    }
+    for model in ["lotka_volterra", "lock_in"] {
+        let case = &fixture["cases"][model];
+        let mut start = case["parameters"].clone();
+        start["alpha1"] = json!(0.29);
+        let fit = binding.fit_model(model,json!({
+            "inputs":{"time":fixture["time"],"covariates":fixture["covariates"],"observed":case["rows"]},
+            "constructor_kwargs":case["constructor_kwargs"],
+            "fit_options":{"initial_parameters":start,"max_iterations":200}
+        })).unwrap().result.unwrap();
+        assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
+        assert!(fit["diagnostics"]["metrics"]["RSS"].as_f64().unwrap() < 1e-8);
+        assert_eq!(
+            fit["diagnostics"]["parameter_events"]["parameters_estimated"],
+            false
+        );
+        if model == "lock_in" {
+            assert_eq!(
+                fit["diagnostics"]["structural_identifiability"]["status"],
+                "requires_event_specific_analysis"
+            );
+        }
+    }
+}

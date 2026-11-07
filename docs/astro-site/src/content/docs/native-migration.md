@@ -881,3 +881,37 @@ conditional fitting and a held-out forecast. Additional tests cover capacity
 decline/recovery, invalid capacity and forced fits with a small base m.
 Event splits, initial-state and control uncertainty, calibrated parameter
 inference and wider scientific qualification remain required.
+
+### Fixed parameter events for ecosystem ODEs
+
+Lotka–Volterra, multi-product, complementary-goods and lock-in models accept
+`parameter_events` in their constructor options. For example,
+`[{"time":3.0,"parameters":{"alpha1":0.4}},{"time":6.0,"parameters":{"alpha1":0.2}}]`
+changes Lotka–Volterra growth at two known times. Each override persists until
+another event changes the same parameter. Other parameters retain their active
+values. Events can also override declared beta coefficients, and compose with
+the existing linear control history. Discovery advertises
+`supports_parameter_events` for these four models.
+
+Provide at most 32 events at finite, strictly increasing nonnegative times.
+Each event must contain at least one existing named parameter. Base parameter
+overrides retain the model's base domains, while beta coefficients may be
+signed. Events at or before the initial time select the active parameters at
+that initial state. The initial state itself remains the supplied or fitted
+conditioning value.
+
+The solver splits exactly at event boundaries, carrying the integrated state
+continuously. Boundary states use the pre-event integration and reported rates
+use the parameters active on the right. For lock-in, a capacity jump may change
+the clipped report immediately while retaining the integrated trajectory.
+Both sides of each used lock-in interval require positive finite capacity.
+Saved state retains the complete event list for forecasts.
+
+These are fixed interventions. Conditional fitting estimates the original
+parameter map while keeping overrides fixed, and diagnostics explicitly record
+that distinction. Fixed overrides can change structural identifiability, so
+lock-in reports the need for event-specific analysis instead of reusing its
+unforced confounding rank bound. Estimating event times, estimating override
+values and calibrated intervention uncertainty remain required inference work.
+Independent DOP853 references cover two off-grid events, control composition,
+signed rates and saved-state forecasts for all four models.

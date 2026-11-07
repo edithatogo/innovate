@@ -313,3 +313,36 @@ li_projected <- kernel_predict_model("lock_in", list(
 ))$result
 stopifnot(all(vapply(li_projected$rows,function(row)row[[1]],numeric(1))==c(95,90,80,95)))
 cat("R lock in forcing fit, forecast and capacity projection passed\n")
+
+event_fixture <- jsonlite::fromJSON(
+  "rust/crates/innovate-core/tests/fixtures/ecosystem_events_scipy.json", simplifyVector=FALSE
+)
+for (model in c("lotka_volterra", "complementary_goods", "lock_in", "multi_product")) {
+  event_case <- event_fixture$cases[[model]]
+  event_result <- kernel_predict_model(model, list(
+    inputs=list(time=unlist(event_fixture$time),covariates=list(price=unlist(event_fixture$covariates$price))),
+    parameters=event_case$parameters,constructor_kwargs=event_case$constructor_kwargs
+  ))$result
+  stopifnot(max(abs(unlist(tail(event_result$rows,1))-unlist(tail(event_case$rows,1))))<1e-5)
+  event_future <- kernel_predict_model(
+    model,list(inputs=list(time=unlist(event_fixture$forecast_time)),state=event_result$state)
+  )$result
+  stopifnot(max(abs(unlist(event_future$rows)-unlist(event_case$forecast_rows)))<1e-5)
+}
+event_case <- event_fixture$cases$lotka_volterra
+event_start <- event_case$parameters
+event_start$alpha1 <- 0.29
+event_fit <- kernel_fit_model("lotka_volterra", list(
+  inputs=list(time=unlist(event_fixture$time),covariates=list(price=unlist(event_fixture$covariates$price)),
+              observed=event_case$rows),
+  constructor_kwargs=event_case$constructor_kwargs,
+  fit_options=list(initial_parameters=event_start,max_iterations=200)
+))$result
+stopifnot(event_fit$diagnostics$optimizer$converged,!event_fit$diagnostics$parameter_events$parameters_estimated)
+single_event <- kernel_predict_model("lotka_volterra", list(
+  inputs=list(time=c(0,2)),parameters=list(alpha1=0.2,beta1=0,alpha2=0.1,beta2=0),
+  constructor_kwargs=list(initial_values=c(0.1,0.2),
+    parameter_events=list(list(time=1,parameters=list(alpha1=0.4))))
+))$result
+stopifnot(abs(single_event$rows[[2]][[1]]-1/(1+9*exp(-0.6)))<1e-8)
+cat("R ecosystem parameter events, fit and singleton scalar time passed\n")

@@ -1,0 +1,9 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.26s
+     Running tests/competition.rs (target/debug/deps/competition-695326af62d00e43)
+
+running 1 test
+test ecosystem_events_match_independent_references_and_conditional_fit ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.42s
+

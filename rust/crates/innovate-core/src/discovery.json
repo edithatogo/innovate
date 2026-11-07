@@ -176,7 +176,8 @@
       "variants": [],
       "simulation_engines": [
         "deterministic_curve"
-      ]
+      ],
+      "supports_parameter_events": true
     },
     {
       "family": "competition",
@@ -203,7 +204,8 @@
       "variants": [],
       "simulation_engines": [
         "deterministic_curve"
-      ]
+      ],
+      "supports_parameter_events": true
     },
     {
       "family": "competition",
@@ -230,7 +232,8 @@
       "variants": [],
       "simulation_engines": [
         "deterministic_curve"
-      ]
+      ],
+      "supports_parameter_events": true
     },
     {
       "family": "competition",
@@ -257,7 +260,8 @@
       "variants": [],
       "simulation_engines": [
         "deterministic_curve"
-      ]
+      ],
+      "supports_parameter_events": true
     },
     {
       "family": "network_diffusion",
