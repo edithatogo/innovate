@@ -5381,3 +5381,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify fitted-stratum matching through rebuilt Python 3.15.2,
   Julia and installed R. All three returned adjusted effect 6 and
   adjusted standard error sqrt(3) with the same fixed matching design.
+
+- [x] Center the fitted outcome contrast before accumulation so a
+  shared shift cancels despite fractional-weight rounding. The Rust
+  unit fixture canceled a maximum-magnitude common loading. All three
+  causal unit tests and the focused causal boundary test passed.

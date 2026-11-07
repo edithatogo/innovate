@@ -1327,10 +1327,21 @@ fn weighted_outcome_contrast(
     if scale == 0. {
         return Ok(0.);
     }
+    // A contrast has zero total weight. Center first so a common shift
+    // cancels even when the stored weights sum to a rounding residual.
+    let anchor = values[weights[0].0];
     finite(
         weights
             .iter()
-            .map(|&(index, weight)| weight * (values[index] / scale))
+            .map(|&(index, weight)| {
+                let offset = values[index] - anchor;
+                let scaled_offset = if offset.is_finite() {
+                    offset / scale
+                } else {
+                    values[index] / scale - anchor / scale
+                };
+                weight * scaled_offset
+            })
             .sum::<f64>()
             * scale,
     )
@@ -2446,7 +2457,7 @@ fn policy_specification(payload: &Value) -> Result<Value, &'static str> {
 
 #[cfg(test)]
 mod tests {
-    use super::{pooled_scaled_deviation, scaled_balance_difference};
+    use super::{pooled_scaled_deviation, scaled_balance_difference, weighted_outcome_contrast};
 
     #[test]
     fn pooled_deviation_resolves_adjacent_covariate_values() {
@@ -2470,5 +2481,10 @@ mod tests {
         let actual = difference / deviation.unwrap();
         let expected = (-1. / 6.) / (7_f64 / 18.).sqrt();
         assert!((actual - expected).abs() <= 2. * f64::EPSILON);
+    }
+    #[test]
+    fn fitted_outcome_contrast_cancels_a_common_loading() {
+        let weights = [(0, -1.), (1, 1. / 3.), (2, 1. / 3.), (3, 1. / 3.)];
+        assert_eq!(weighted_outcome_contrast(&[f64::MAX; 4], &weights), Ok(0.));
     }
 }
