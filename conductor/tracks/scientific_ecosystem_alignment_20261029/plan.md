@@ -4928,3 +4928,8 @@ Hosted release readiness for this worktree revision remains open.
   The structured bridge now requests 17 significant digits for
   JSON serialization. A clean R package install passed the full native
   consumer file, including exact timestamp readback for both grids.
+
+- [x] Retain automated Python and Julia consumer regressions for the
+  narrow and overflowing adopter time grids, matching the installed R
+  fixture. The focused Python test and all four Julia assertions
+  passed, including exact timestamp readback and all category labels.

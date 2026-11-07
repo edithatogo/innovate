@@ -843,3 +843,14 @@ end
     @test inference["bootstrap"]["mean_interval"] ≈ [-effect,effect]
     @test inference["bootstrap"]["seed"] == 42
 end
+
+@testset "Adopter classification on irregular grids" begin
+    origin = 1.5
+    largest = floatmax(Float64)
+    for time in ([origin, nextfloat(origin), nextfloat(origin, 4)], [-largest, -largest / 2, largest])
+        result = kernel_call("categorize_adopters", nothing,
+            Dict("time"=>time, "adoption_rate"=>[1,2,1]))["result"]
+        @test result["time"] == time
+        @test result["category"] == ["Early Adopters", "Early Majority", "Laggards"]
+    end
+end

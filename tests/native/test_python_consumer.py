@@ -1645,3 +1645,15 @@ def test_scenario_grid_ranking():
     assert inference["sign_flip"]["p_value"] == 1
     assert inference["bootstrap"]["mean_interval"] == pytest.approx([-100, 100])
     assert inference["bootstrap"]["seed"] == 42
+
+
+def test_adopter_classification_preserves_irregular_time_grids():
+    origin = 1.5
+    largest = float.fromhex("0x1.fffffffffffffp+1023")
+    for time in (
+        [origin, math.nextafter(origin, math.inf), origin + 4 * math.ulp(origin)],
+        [-largest, -largest / 2, largest],
+    ):
+        result = innovate.execute("categorize_adopters", time=time, adoption_rate=[1, 2, 1])["result"]
+        assert result["time"] == time
+        assert result["category"] == ["Early Adopters", "Early Majority", "Laggards"]
