@@ -3667,6 +3667,10 @@ fn scenario_grid_paused_network_preserves_seed_and_resumes() {
         "comparison requires a completed simulation; resume the paused scenario"
     );
     let mut resume = row["artifact"]["replay_request"].clone();
+    assert_eq!(
+        run(&resume)["result"]["executions"][0]["result"],
+        row["result"]
+    );
     let resume_options = resume
         .pointer_mut(options)
         .unwrap()

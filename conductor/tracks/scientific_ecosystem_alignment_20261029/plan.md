@@ -5151,3 +5151,7 @@ Hosted release readiness for this worktree revision remains open.
   The translated network scenario paused under continuous forcing
   and resumed through its saved request to the uninterrupted result.
   The focused Rust boundary test passed.
+
+- [x] Verify the saved paused scenario request reproduces the
+  identical checkpoint string before continuing. The focused Rust
+  boundary regression passed for continuous network forcing.
