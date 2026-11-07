@@ -2915,6 +2915,8 @@ fn resource_comparison_requires_resource_outputs_from_both_scenarios() {
     let mut permanently_closed = payload["scenarios"][1].clone();
     permanently_closed["id"] = json!("never_open");
     permanently_closed["simulation"]["simulation_options"]["schedule"] = json!([]);
+    permanently_closed["simulation"]["simulation_options"]["max_queue_length"] = json!(1);
+    permanently_closed["simulation"]["simulation_options"]["max_wait_ticks"] = json!(5);
     payload["scenarios"]
         .as_array_mut()
         .unwrap()
@@ -2945,8 +2947,9 @@ fn resource_comparison_requires_resource_outputs_from_both_scenarios() {
     assert!(rows[1]["result"].is_null());
     assert!(rows[2]["error"].is_null());
     assert!(rows[2]["result"].get("resource_differences").is_none());
-    assert_eq!(
-        rows[3]["result"]["resource_differences"]["completed_services"],
-        -3
-    );
+    let closed = &rows[3]["result"]["resource_differences"];
+    assert_eq!(closed["completed_services"], -3);
+    assert_eq!(closed["balked_requests"], 2);
+    assert_eq!(closed["abandoned_requests"], 1);
+    assert_eq!(closed["abandoned_wait_ticks"], 5);
 }

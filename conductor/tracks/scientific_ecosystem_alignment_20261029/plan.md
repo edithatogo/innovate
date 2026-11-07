@@ -4301,3 +4301,7 @@ Hosted release readiness for this worktree revision remains open.
   rebuilt Python 3.15.2 wheel, Julia and installed R. The permanently
   closed alternative reports three fewer completions and no difference
   in balks or abandonments. Python also verifies Arrow readback.
+- [x] Distinguish balks from abandonments in the Rust resource
+  comparison regression. A closed resource with one queue place
+  produces two extra balks, one extra abandonment and five extra
+  abandoned wait ticks compared with the open baseline.
