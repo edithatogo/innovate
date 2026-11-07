@@ -702,6 +702,8 @@ enum ComparisonRequest {
 #[serde(deny_unknown_fields)]
 struct EnsembleComparison {
     pairs: Vec<ReplicatePair>,
+    #[serde(default)]
+    require_distinct_pair_seeds: bool,
     interval_mass: f64,
     bootstrap: Option<EnsembleBootstrap>,
 }
@@ -856,6 +858,7 @@ fn compare_ensemble(
             .flat_map(|pair| [pair.baseline.as_str(), pair.alternative.as_str()]),
     )?;
     let mut used = HashSet::new();
+    let mut pair_seeds = HashSet::new();
     let mut grid = None;
     let mut differences = Vec::with_capacity(comparison.pairs.len());
     for pair in &comparison.pairs {
@@ -866,6 +869,22 @@ fn compare_ensemble(
         let (alternative_time, alternative) = scalar_path(paths, &pair.alternative)?;
         if time != alternative_time || grid.as_ref().is_some_and(|expected| expected != &time) {
             return Err("ensemble comparisons require identical time grids across all replicates");
+        }
+        if comparison.require_distinct_pair_seeds {
+            let seed = |id: &str| {
+                paths
+                    .get(id)
+                    .and_then(|(_, result)| result["metadata"]["seed"].as_u64())
+            };
+            let baseline_seed = seed(&pair.baseline).ok_or(
+                "seed validation requires an effective seed for both scenarios in each pair",
+            )?;
+            if seed(&pair.alternative) != Some(baseline_seed) {
+                return Err("seed validation requires the same effective seed within each pair");
+            }
+            if !pair_seeds.insert(baseline_seed) {
+                return Err("seed validation requires a distinct effective seed for every pair");
+            }
         }
         let last = time.len() - 1;
         grid.get_or_insert(time);
@@ -902,6 +921,9 @@ fn compare_ensemble(
         "median_difference":linear_quantile(&sorted, 0.5),"empirical_interval":[linear_quantile(&sorted, tail),linear_quantile(&sorted, 1.-tail)]});
     if let Some(options) = &comparison.bootstrap {
         result["bootstrap"] = bootstrap_mean(&differences, options, scale, mass)?;
+    }
+    if comparison.require_distinct_pair_seeds {
+        result["seed_design"] = json!("matched_within_pair_distinct_between_pairs");
     }
     add_time_basis(&mut result, basis);
     Ok(result)

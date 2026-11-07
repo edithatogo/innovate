@@ -161,7 +161,7 @@ fn scenario_ensemble_replays_and_recovers_innovation_mean() {
     }
     let mut request = json!({"schema_version":"2.0","operation":"execute_scenario_grid",
         "payload":{"workers":4,"scenarios":scenarios,
-            "comparisons":[{"pairs":pairs,"interval_mass":0.9}]}});
+            "comparisons":[{"pairs":pairs,"interval_mass":0.9,"require_distinct_pair_seeds":true}]}});
     let run = |request: &serde_json::Value| -> serde_json::Value {
         serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
     };
@@ -169,6 +169,27 @@ fn scenario_ensemble_replays_and_recovers_innovation_mean() {
     request["payload"]["workers"] = json!(1);
     assert_eq!(run(&request), response);
     let summary = &response["result"]["comparisons"][0]["result"];
+    assert_eq!(
+        summary["seed_design"],
+        "matched_within_pair_distinct_between_pairs"
+    );
+    for index in [2, 3] {
+        request["payload"]["scenarios"][index]["simulation"]["simulation_options"]["seed"] =
+            json!(0);
+        let comparison = &run(&request)["result"]["comparisons"][0];
+        assert_eq!(comparison["error"]["code"], "invalid_comparison");
+        let expected = if index == 2 {
+            "same effective seed"
+        } else {
+            "distinct effective seed"
+        };
+        assert!(
+            comparison["error"]["message"]
+                .as_str()
+                .unwrap()
+                .contains(expected)
+        );
+    }
     let differences = summary["differences"].as_array().unwrap();
     assert_eq!(differences.len(), replicates);
     let mean = differences

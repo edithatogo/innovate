@@ -2540,3 +2540,11 @@ the other competition models and installed binding checks remain open.
   crossing between samples, returned the first sample for a path
   already above threshold, and returned null for unreached thresholds.
   The existing sampled timing agreed across the three bindings.
+
+- [x] Add opt-in effective-seed validation for paired stochastic ensembles.
+  require_distinct_pair_seeds requires matching seeds within each pair and
+  distinct seeds between pairs. Invalid comparisons retain scenario results.
+  The 128-pair Kairos regression verifies the accepted design, within-pair
+  mismatch and cross-pair reuse. All ten Kairos tests and Clippy passed.
+  Seed checks validate assignment only. Binding and inference qualification
+  remain open.
