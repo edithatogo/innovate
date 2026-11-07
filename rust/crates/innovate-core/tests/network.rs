@@ -952,6 +952,15 @@ fn network_checkpoint_preserves_pending_service_queue_and_schedule() {
     payload["simulation_options"]["resume_checkpoint"] = json!(malformed.to_string());
     assert!(run(payload.clone()).is_err());
 
+    let mut wrong_completion = state.clone();
+    wrong_completion["trace"][0]["tick"] = json!(0);
+    payload["simulation_options"]["resume_checkpoint"] = json!(wrong_completion.to_string());
+    let error = run(payload.clone()).unwrap_err();
+    assert!(
+        format!("{error:?}")
+            .contains("checkpoint completion trace does not match service and agent state")
+    );
+
     let mut missing_change = state.clone();
     assert!(
         missing_change["applied_ticks"]

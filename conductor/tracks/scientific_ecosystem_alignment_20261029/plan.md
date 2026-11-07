@@ -5877,3 +5877,8 @@ Hosted release readiness for this worktree revision remains open.
   change both occur at tick 6. A completion-count pause leaves the
   capacity change pending, while a tick pause records it as applied.
   Both resumed runs matched uninterrupted execution in the Rust fixture.
+
+- [x] Verify Kairos checkpoint completions against their scheduled
+  service ends and adopted-agent state. Reject duplicate service
+  starts and inconsistent public completion traces. All 34 Rust
+  network tests passed, including the altered completion timestamp.

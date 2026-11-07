@@ -749,6 +749,46 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 "checkpoint service trace does not match resource accounting",
             ));
         }
+        let mut scheduled_completions = vec![None; o.population];
+        for entry in &saved.service_starts {
+            if initial.contains(&entry.agent)
+                || scheduled_completions[entry.agent]
+                    .replace(entry.scheduled_completion_tick)
+                    .is_some()
+            {
+                return Err(invalid(
+                    "checkpoint has duplicate or initial-agent service starts",
+                ));
+            }
+        }
+        let mut adopted = initial.clone();
+        if saved.trace.len() != saved.completed.len()
+            || saved
+                .trace
+                .iter()
+                .zip(&saved.completed)
+                .any(|(event, &tick)| {
+                    let Some(agent) = event["agent"]
+                        .as_u64()
+                        .and_then(|index| usize::try_from(index).ok())
+                        .filter(|&index| index < o.population)
+                    else {
+                        return true;
+                    };
+                    event["tick"].as_u64().map(u128::from) != Some(tick)
+                        || scheduled_completions[agent] != Some(tick)
+                        || !adopted.insert(agent)
+                })
+            || saved
+                .states
+                .iter()
+                .enumerate()
+                .any(|(index, &state)| (state == 2) != adopted.contains(&index))
+        {
+            return Err(invalid(
+                "checkpoint completion trace does not match service and agent state",
+            ));
+        }
         let mut restored_capacity = o.capacity;
         let mut restored_capacity_accounting = ResourceAccounting::default();
         for &tick in &saved.applied_ticks {
