@@ -3599,3 +3599,12 @@ Hosted release readiness for this worktree revision remains open.
   Julia and freshly installed R using native builds from 7d9677b1.
   Both fixtures returned nonnegative:adoption as the sole failed
   diagnostic in each binding's structured ingestion error.
+
+## Workspace and binding regression checkpoint
+
+- [x] At source 87011793, the locked Rust workspace passed (257 tests).
+  The installed Python 3.15.2 wheel passed all 86 tests under tests/native,
+  Julia passed 253 assertions, and installed R passed native.R. The
+  binding builds are from 7d9677b1, which has identical native and binding
+  source. The development migration policy passes and the release gate
+  still rejects 38 open scientific and acceptance obligations.
