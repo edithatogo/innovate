@@ -2006,6 +2006,10 @@ fn scenario_grid_summarizes_paired_ensemble_differences() {
         failed_result["comparisons"][0]["error"]["code"],
         "invalid_comparison"
     );
+    assert_eq!(
+        failed_result["comparisons"][0]["error"]["message"],
+        "alternative scenario \"d\": comparison requires a successful scalar simulation"
+    );
     assert!(failed_result["comparisons"][0]["result"].is_null());
     assert!(failed_result["executions"][0]["error"].is_null());
     assert!(failed_result["executions"][3]["error"].is_object());

@@ -726,7 +726,7 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
                     let (mut row, outcome) = match comparison {
                         ComparisonRequest::Pair(pair) => (
                             json!({"baseline":pair.baseline,"alternative":pair.alternative}),
-                            compare_paths(&paths, pair),
+                            compare_paths(&paths, pair).map_err(str::to_owned),
                         ),
                         ComparisonRequest::Ensemble(ensemble) => (
                             json!({"pairs":ensemble.pairs}),
@@ -1228,27 +1228,27 @@ fn exact_resource_effect(difference: i64) -> Result<f64, &'static str> {
 fn compare_ensemble(
     paths: &ScenarioPaths<'_>,
     comparison: &EnsembleComparison,
-) -> Result<Value, &'static str> {
+) -> Result<Value, String> {
     let mass = comparison.interval_mass;
     let resource_metric = comparison
         .evaluation_metric
         .as_deref()
         .and_then(|metric| metric.strip_prefix("resource."));
     if resource_metric.is_some() && comparison.evaluation_time.is_some() {
-        return Err("resource metrics cannot be combined with evaluation_time");
+        return Err("resource metrics cannot be combined with evaluation_time".into());
     }
     let mut resource_basis = None;
     let compare_area = match comparison.evaluation_metric.as_deref() {
         None => false,
         Some("adoption_area") if comparison.evaluation_time.is_none() => true,
         Some("adoption_area") => {
-            return Err("adoption_area cannot be combined with evaluation_time");
+            return Err("adoption_area cannot be combined with evaluation_time".into());
         }
         Some(_) if resource_metric.is_some() => false,
-        Some(_) => return Err("unknown ensemble evaluation metric"),
+        Some(_) => return Err("unknown ensemble evaluation metric".into()),
     };
     if mass <= 0. || mass >= 1. || comparison.pairs.len() < 2 {
-        return Err("ensemble requires at least two pairs and interval_mass in (0, 1)");
+        return Err("ensemble requires at least two pairs and interval_mass in (0, 1)".into());
     }
     let basis = common_time_basis(
         paths,
@@ -1266,19 +1266,23 @@ fn compare_ensemble(
     let summarize_path = comparison.include_path_summary || comparison.include_path_covariance;
     for pair in &comparison.pairs {
         if !used.insert(&pair.baseline) || !used.insert(&pair.alternative) {
-            return Err("each scenario ID can appear only once per ensemble");
+            return Err("each scenario ID can appear only once per ensemble".into());
         }
-        let (time, baseline) = scalar_path(paths, &pair.baseline)?;
-        let (alternative_time, alternative) = scalar_path(paths, &pair.alternative)?;
+        let (time, baseline) = scalar_path(paths, &pair.baseline)
+            .map_err(|message| format!("baseline scenario {:?}: {message}", pair.baseline))?;
+        let (alternative_time, alternative) = scalar_path(paths, &pair.alternative)
+            .map_err(|message| format!("alternative scenario {:?}: {message}", pair.alternative))?;
         if time != alternative_time || grid.as_ref().is_some_and(|expected| expected != &time) {
-            return Err("ensemble comparisons require identical time grids across all replicates");
+            return Err(
+                "ensemble comparisons require identical time grids across all replicates".into(),
+            );
         }
         if summarize_path {
             if comparison.include_path_covariance && time.len() > 128 {
-                return Err("ensemble path covariance supports at most 128 sample times");
+                return Err("ensemble path covariance supports at most 128 sample times".into());
             }
             if time.len() > 1_000_000 / comparison.pairs.len() {
-                return Err("ensemble path summary exceeds 1000000 paired samples");
+                return Err("ensemble path summary exceeds 1000000 paired samples".into());
             }
             if path_differences.is_empty() {
                 path_differences.resize_with(time.len(), Vec::new);
@@ -1288,7 +1292,7 @@ fn compare_ensemble(
             {
                 let difference = alternative - baseline;
                 if !difference.is_finite() {
-                    return Err("ensemble path difference must be finite");
+                    return Err("ensemble path difference must be finite".into());
                 }
                 values.push(difference);
             }
@@ -1303,10 +1307,14 @@ fn compare_ensemble(
                 "seed validation requires an effective seed for both scenarios in each pair",
             )?;
             if seed(&pair.alternative) != Some(baseline_seed) {
-                return Err("seed validation requires the same effective seed within each pair");
+                return Err(
+                    "seed validation requires the same effective seed within each pair".into(),
+                );
             }
             if !pair_seeds.insert(baseline_seed) {
-                return Err("seed validation requires a distinct effective seed for every pair");
+                return Err(
+                    "seed validation requires a distinct effective seed for every pair".into(),
+                );
             }
         }
         let index = match comparison.evaluation_time {
@@ -1327,12 +1335,13 @@ fn compare_ensemble(
             );
             if resource_basis.as_ref().is_some_and(|basis| basis != &units) {
                 return Err(
-                    "resource ensemble requires matching tick resolution and horizon across pairs",
+                    "resource ensemble requires matching tick resolution and horizon across pairs"
+                        .into(),
                 );
             }
             resource_basis = Some(units);
             if matches!(metric, "ticks_per_unit" | "horizon_ticks") {
-                return Err("unknown ensemble resource metric");
+                return Err("unknown ensemble resource metric".into());
             }
             let difference = totals[metric]
                 .as_i64()
@@ -1351,7 +1360,7 @@ fn compare_ensemble(
         };
         grid.get_or_insert(time);
         if !difference.is_finite() {
-            return Err("ensemble difference must be finite");
+            return Err("ensemble difference must be finite".into());
         }
         differences.push(difference);
     }
@@ -1402,7 +1411,7 @@ fn compare_ensemble(
             for (j, right) in centered.iter().enumerate().take(i + 1) {
                 let value = left.iter().zip(right).map(|(a, b)| a * b).sum::<f64>();
                 if !value.is_finite() {
-                    return Err("ensemble path covariance exceeded finite numerical domain");
+                    return Err("ensemble path covariance exceeded finite numerical domain".into());
                 }
                 covariance[i][j] = value;
                 covariance[j][i] = value;

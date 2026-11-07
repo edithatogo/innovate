@@ -6618,3 +6618,8 @@ Hosted release readiness for this worktree revision remains open.
   and preserves individual execution results. The focused Rust
   boundary test injected an unsupported model into the second pair
   and confirmed that no partial ensemble estimate was returned.
+
+- [x] Identify the scenario ID and pair role when an ensemble cannot
+  read a scalar path. The comparison still returns invalid_comparison
+  and retains all individual executions. All 13 Rust scenario boundary
+  tests passed. Binding readback of the revised message remains open.
