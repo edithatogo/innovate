@@ -30,3 +30,18 @@ The current contract supports replay from the request and seed.
   the built Python wheel, Julia and installed R. Compare the sampled
   counts and dispatch metadata and check unsupported-engine rejection.
   Scope durable test changes to the three binding suites.
+
+## Verification on the migrated workspace
+
+- The locked FFI regression at `30afd938` sends both requests through
+  `innovate_call`. The seeded DES request returns counts [0, 1] and
+  one dispatch. The unknown engine returns an error and a null result.
+  Both response allocations are released.
+- The installed-consumer check at `ae78919b` exercised the same
+  requests through Python 3.15.2, Julia and R against runtime source
+  `f73933fe`. All three reproduced the counts and dispatch and raised
+  the native invalid-request error for the unknown engine.
+- The scheduler tie/cancel fixture at `0d664bdb` and ABM state and
+  random-stream fixture at `0afbb148` run against the locked root
+  workspace. These are local runtime checks. The imported track
+  retains its formal dependency and integration gates.
