@@ -684,6 +684,13 @@ end
         "outcomes"=>[0,4,2,6], "treatment"=>[0,1,0,1], "strata"=>fill("a",4), "folds"=>[1,2,2,1]))["result"]
     @test result["control_predictions"] == [2,0,0,2]
     @test result["treated_predictions"] == [4,6,6,4]
+    payload = Dict("method"=>"cross_fitted_stratum_ate", "outcomes"=>[0,4,2,6],
+        "treatment"=>[0,1,0,1], "strata"=>fill("a",4), "folds"=>[1,2,2,1], "clusters"=>["a","b","b","a"])
+    clustered = kernel_call("summarize_causal", nothing, payload)["result"]["contrast"]
+    @test clustered["cluster_count"] == 2
+    @test clustered["influence_standard_error"] ≈ 2
+    payload["clusters"] = ["a","a","b","b"]
+    @test_throws r"single cross-fitting fold" kernel_call("summarize_causal", nothing, payload)
     @test result["contrast"]["estimate"] ≈ 4
 end
 

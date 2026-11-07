@@ -1428,6 +1428,11 @@ def test_cross_fitted_stratum_ate():
     result = innovate.execute("summarize_causal", **payload)["result"]
     assert result["control_predictions"] == [2, 0, 0, 2]
     assert result["treated_predictions"] == [4, 6, 6, 4]
+    clustered = innovate.execute("summarize_causal", **payload, clusters=["a", "b", "b", "a"])["result"]["contrast"]
+    assert clustered["cluster_count"] == 2
+    assert clustered["influence_standard_error"] == pytest.approx(2)
+    with pytest.raises(innovate.NativeError, match="single cross-fitting fold"):
+        innovate.execute("summarize_causal", **payload, clusters=["a", "a", "b", "b"])
     assert result["contrast"]["estimate"] == pytest.approx(4)
 
 

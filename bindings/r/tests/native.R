@@ -645,6 +645,13 @@ stratum_ate <- kernel_call("summarize_causal", payload=list(method="cross_fitted
 stopifnot(isTRUE(all.equal(unlist(stratum_ate$control_predictions), c(2,0,0,2))),
   isTRUE(all.equal(unlist(stratum_ate$treated_predictions), c(4,6,6,4))),
   isTRUE(all.equal(stratum_ate$contrast$estimate, 4)))
+clustered_stratum_payload <- list(method="cross_fitted_stratum_ate", outcomes=c(0,4,2,6),
+  treatment=c(0,1,0,1), strata=rep("a",4), folds=c(1L,2L,2L,1L), clusters=c("a","b","b","a"))
+clustered_stratum <- kernel_call("summarize_causal", payload=clustered_stratum_payload)$result$contrast
+stopifnot(clustered_stratum$cluster_count == 2, isTRUE(all.equal(clustered_stratum$influence_standard_error, 2)))
+clustered_stratum_payload$clusters <- c("a","a","b","b")
+split_cluster_error <- tryCatch({kernel_call("summarize_causal", payload=clustered_stratum_payload); ""}, error=conditionMessage)
+stopifnot(grepl("single cross-fitting fold", split_cluster_error, fixed=TRUE))
 
 stratum_payload <- list(outcomes=rep(c(0,0,2,10,19,19,19),2),
   treatment=rep(c(0,0,1,0,1,1,1),2), strata=rep(c(rep("low",3),rep("high",4)),2),

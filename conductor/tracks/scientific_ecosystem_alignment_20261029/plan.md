@@ -4684,3 +4684,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Pass cluster labels through cross-fitted stratum ATE and ATT.
   The focused Rust test verifies the clustered ATE standard error of 2
   and rejects clusters split across folds. Binding checks remain open.
+
+- [x] Verify clustered cross-fitted ATE through rebuilt Python 3.15.2,
+  Julia and installed R. Each returned standard error 2 and rejected
+  clusters assigned to more than one fold.
