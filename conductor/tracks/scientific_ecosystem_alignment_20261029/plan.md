@@ -6835,3 +6835,8 @@ Hosted release readiness for this worktree revision remains open.
   times 0–4 give exact mean 2 and variance 1. Binary rate scaling
   preserves those ties for this fixture. All five Rust adopter tests
   passed. Full enumeration and binding requalification remain open.
+
+- [x] Exhaustively compare the rebuilt Python wheel with the exact
+  adopter oracle on times 0–4 and weights 0–4. All 3,124 nonzero
+  vectors matched at every timestamp. Retained the enumeration in
+  the installed-wheel test alongside the 512 irregular grids.
