@@ -6840,3 +6840,8 @@ Hosted release readiness for this worktree revision remains open.
   adopter oracle on times 0–4 and weights 0–4. All 3,124 nonzero
   vectors matched at every timestamp. Retained the enumeration in
   the installed-wheel test alongside the 512 irregular grids.
+
+- [x] Requalify binary rate scaling through Julia and installed R.
+  Both matched all 15,620 labels from the exact rational oracle
+  across 3,124 nonzero weight vectors on times 0–4, with a locked
+  FFI build from the same runtime source as the Python wheel.
