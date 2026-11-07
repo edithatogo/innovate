@@ -1,7 +1,7 @@
 //! Reproducible synthetic smoke corpus and native fit/forecast runner.
 use serde_json::{Value, json};
 
-const CASES: [(&str, &str, &str); 12] = [
+const CASES: [(&str, &str, &str); 13] = [
     ("bass_smoke_adoption", "bass", "diffusion"),
     ("logistic_growth_smoke", "logistic", "diffusion"),
     ("fisher_pry_replacement_smoke", "fisher_pry", "substitution"),
@@ -30,6 +30,7 @@ const CASES: [(&str, &str, &str); 12] = [
     ),
     ("latent_process_fit", "latent_process", "latent_process"),
     ("regime_switching_reference", "regime_switching", "regime"),
+    ("regime_switching_fit", "regime_switching", "regime"),
 ];
 
 fn ci_policy(family: &str) -> &'static str {
@@ -65,6 +66,22 @@ fn run_case(id: &str) -> Result<Value, String> {
         .iter()
         .find(|case| case.0 == id)
         .ok_or("unknown benchmark case")?;
+    if id == "regime_switching_fit" {
+        let time: Vec<f64> = (0..30).map(f64::from).collect();
+        let observed: Vec<_> = time
+            .iter()
+            .map(|&t| 100. / (1. + (-0.4 * (t - 8.)).exp()))
+            .collect();
+        return fit_and_forecast(
+            id,
+            model,
+            family,
+            json!({
+                "inputs":{"time":time,"observed":observed},
+                "constructor_kwargs":{"base_model":"logistic","prediction_mode":"fixed_time"}
+            }),
+        );
+    }
     if id == "regime_switching_reference" {
         let time = [0_f64, 1., 2.5, 4., 7.];
         let observed: Vec<_> = time
