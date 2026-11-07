@@ -5651,3 +5651,9 @@ Hosted release readiness for this worktree revision remains open.
   oversized and multiline trace IDs, and an unsupported transport
   field. The first debug strip ran out of space, so the test binary
   was rebuilt without stripping. Hosted transport and identity remain open.
+
+- [x] Enforce the in-process remote request limit while encoding the
+  embedded request. The Rust test accepts exactly one million encoded
+  bytes and rejects excess bytes introduced by JSON escaping. The remote
+  dispatch boundary test also passed. Hosted transport must separately
+  enforce limits before decoding requests.

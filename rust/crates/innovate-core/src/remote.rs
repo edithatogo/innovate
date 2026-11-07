@@ -74,13 +74,9 @@ pub(crate) fn execute(payload: &Value) -> Result<Value, &'static str> {
             "remote execution identifiers must fit in 256 bytes and exclude control characters",
         );
     }
-    let raw =
-        serde_json::to_string(&payload["kernel_request"]).map_err(|_| "invalid kernel request")?;
-    if raw.len() > MAX_KERNEL_REQUEST_BYTES {
-        return Err("remote kernel request exceeds 1000000 bytes");
-    }
+    let raw = bounded_kernel_json(&payload["kernel_request"])?;
     let request: KernelRequest =
-        serde_json::from_str(&raw).map_err(|_| "invalid kernel request")?;
+        serde_json::from_slice(&raw).map_err(|_| "invalid kernel request")?;
     if request.schema_version != KERNEL_SCHEMA_VERSION {
         return Err("remote kernel request requires schema 2.0");
     }
@@ -106,7 +102,10 @@ pub(crate) fn execute(payload: &Value) -> Result<Value, &'static str> {
             "model_key":request.model_key,"result":null,
             "error":{"code":"unsupported_operation","message":message}})
     } else {
-        serde_json::from_str(&crate::execute_json(&raw)).map_err(|_| "invalid native response")?
+        serde_json::from_str(&crate::execute_json(
+            std::str::from_utf8(&raw).map_err(|_| "invalid kernel request")?,
+        ))
+        .map_err(|_| "invalid native response")?
     };
     let status = if kernel_response["error"].is_null() {
         "ok"
@@ -121,4 +120,43 @@ pub(crate) fn execute(payload: &Value) -> Result<Value, &'static str> {
             "principal":context.principal,"trace_id":context.trace_id,"operation":operation,
             "duration_ms":started.elapsed().as_secs_f64()*1000.,"status":status}}),
     )
+}
+
+fn bounded_kernel_json(request: &Value) -> Result<Vec<u8>, &'static str> {
+    struct Buffer(Vec<u8>);
+
+    impl std::io::Write for Buffer {
+        fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+            if bytes.len() > MAX_KERNEL_REQUEST_BYTES - self.0.len() {
+                return Err(std::io::ErrorKind::FileTooLarge.into());
+            }
+            self.0.extend_from_slice(bytes);
+            Ok(bytes.len())
+        }
+
+        fn flush(&mut self) -> std::io::Result<()> {
+            Ok(())
+        }
+    }
+
+    let mut buffer = Buffer(Vec::new());
+    serde_json::to_writer(&mut buffer, request)
+        .map_err(|_| "remote kernel request exceeds 1000000 bytes")?;
+    Ok(buffer.0)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn bounds_encoded_json_including_escape_bytes() {
+        let exact = json!("\n".repeat((MAX_KERNEL_REQUEST_BYTES - 2) / 2));
+        assert_eq!(
+            bounded_kernel_json(&exact).unwrap().len(),
+            MAX_KERNEL_REQUEST_BYTES
+        );
+        let oversized = json!("\n".repeat(MAX_KERNEL_REQUEST_BYTES / 2));
+        assert!(bounded_kernel_json(&oversized).is_err());
+    }
 }
