@@ -1994,3 +1994,9 @@ the other competition models and installed binding checks remain open.
   empirical bounds (approximately 56 to 73). The R comparison used
   17-digit formatting to preserve decoded numeric precision.
   All 10 Kairos tests and focused Clippy passed.
+
+- [x] Report the paired mean effect and its standard error (e9250428).
+  The standard error uses sample variance and assumes independent
+  replicate pairs. Python 3.15, Julia and installed R reproduced a mean
+  of 12.5 and standard error of 37.5 for effects 50 and -25. All 37
+  boundary tests, 10 Kairos tests and focused Clippy passed.
