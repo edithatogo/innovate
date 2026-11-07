@@ -3002,3 +3002,11 @@ the other competition models and installed binding checks remain open.
   The folded value 1.975023797027019 matched an independent base-R
   rank and normal-quantile calculation within 1e-12. Six focused Rust
   tests and Clippy passed. Effective sample size remains open.
+
+- [x] Add bulk and 5%/95% tail effective sample sizes for split
+  posterior marginal chains using the truncated initial monotone
+  sequence. Report null for zero within-split variance. Python 3.15.2,
+  Julia and R agreed exactly on a 320-draw autocorrelated fixture.
+  Bulk ESS 23.66891870454829 and both tail estimates agreed within
+  1e-10 with an independent base-R autocovariance calculation.
+  Seven focused Rust tests and Clippy passed.

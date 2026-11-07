@@ -313,8 +313,7 @@ pub(crate) fn sample(payload: &Value) -> Result<Value, &'static str> {
     Ok(result)
 }
 
-/// Classical split R-hat for equal-length chains of one posterior marginal.
-pub(crate) fn split_rhat(payload: &Value) -> Result<Value, &'static str> {
+fn diagnostic_chains(payload: &Value) -> Result<Vec<Vec<f64>>, &'static str> {
     let chains = payload["chains"]
         .as_array()
         .filter(|chains| (2..=16).contains(&chains.len()))
@@ -324,7 +323,7 @@ pub(crate) fn split_rhat(payload: &Value) -> Result<Value, &'static str> {
         .map(Vec::len)
         .filter(|draws| (4..=10_000).contains(draws))
         .ok_or("split R-hat requires 4 to 10000 draws per chain")?;
-    let chains = chains
+    chains
         .iter()
         .map(|chain| {
             chain
@@ -335,7 +334,12 @@ pub(crate) fn split_rhat(payload: &Value) -> Result<Value, &'static str> {
                 .map(|value| value.as_f64().ok_or("chain draws must be finite numbers"))
                 .collect::<Result<Vec<_>, _>>()
         })
-        .collect::<Result<Vec<_>, _>>()?;
+        .collect()
+}
+
+pub(crate) fn split_rhat(payload: &Value) -> Result<Value, &'static str> {
+    let chains = diagnostic_chains(payload)?;
+    let draws = chains[0].len();
     let half = draws / 2;
     let splits: Vec<_> = chains
         .iter()
@@ -380,6 +384,10 @@ pub(crate) fn split_rhat(payload: &Value) -> Result<Value, &'static str> {
 }
 
 fn ranked_rhat(values: &[f64], half: usize) -> Result<Option<f64>, &'static str> {
+    split_rhat_moments(&rank_scores(values).chunks_exact(half).collect::<Vec<_>>())
+}
+
+fn rank_scores(values: &[f64]) -> Vec<f64> {
     let mut order: Vec<_> = (0..values.len()).collect();
     order.sort_unstable_by(|a, b| values[*a].total_cmp(&values[*b]));
     let mut scores = vec![0.; values.len()];
@@ -397,7 +405,7 @@ fn ranked_rhat(values: &[f64], half: usize) -> Result<Option<f64>, &'static str>
         }
         start = end;
     }
-    split_rhat_moments(&scores.chunks_exact(half).collect::<Vec<_>>())
+    scores
 }
 
 fn normal_quantile(probability: f64) -> f64 {
@@ -447,4 +455,86 @@ fn split_rhat_moments(splits: &[&[f64]]) -> Result<Option<f64>, &'static str> {
         return Err("split R-hat exceeds finite numerical domain");
     }
     Ok(Some(rhat))
+}
+
+/// Bulk and tail ESS using Geyer's truncated initial monotone sequence.
+pub(crate) fn effective_sample_size(payload: &Value) -> Result<Value, &'static str> {
+    let chains = diagnostic_chains(payload)?;
+    let draws = chains[0].len();
+    let half = draws / 2;
+    if half < 3 {
+        return Err("effective sample size requires at least six draws per chain");
+    }
+    let pooled: Vec<_> = chains
+        .iter()
+        .flat_map(|chain| chain[..half].iter().chain(&chain[draws - half..]))
+        .copied()
+        .collect();
+    let bulk = paired_ess(&rank_scores(&pooled), half);
+    let mut ordered = pooled.clone();
+    ordered.sort_unstable_by(f64::total_cmp);
+    let indicator_ess = |probability: f64| {
+        let index = probability * (ordered.len() - 1) as f64;
+        let lower = index.floor() as usize;
+        let fraction = index.fract();
+        let cutoff = ordered[lower] * (1. - fraction) + ordered[lower + 1] * fraction;
+        let indicators: Vec<_> = pooled
+            .iter()
+            .map(|value| f64::from(*value <= cutoff))
+            .collect();
+        paired_ess(&indicators, half)
+    };
+    let lower = indicator_ess(0.05);
+    let upper = indicator_ess(0.95);
+    Ok(json!({"method":"split_initial_monotone_sequence",
+        "bulk_ess":bulk,"lower_tail_ess":lower,"upper_tail_ess":upper,
+        "tail_ess":lower.zip(upper).map(|(lower,upper)| lower.min(upper)),
+        "draws_used":pooled.len(),"draws_per_split":half}))
+}
+
+fn paired_ess(values: &[f64], half: usize) -> Option<f64> {
+    let n = half as f64;
+    let means: Vec<_> = values
+        .chunks_exact(half)
+        .map(|chain| chain.iter().sum::<f64>() / n)
+        .collect();
+    let m = means.len() as f64;
+    let grand_mean = means.iter().sum::<f64>() / m;
+    let centered: Vec<_> = values
+        .chunks_exact(half)
+        .zip(&means)
+        .flat_map(|(chain, mean)| chain.iter().map(move |value| value - mean))
+        .collect();
+    let autocovariance = |lag| {
+        centered
+            .chunks_exact(half)
+            .flat_map(|chain| chain.iter().zip(&chain[lag..]))
+            .map(|(left, right)| left * right)
+            .sum::<f64>()
+            / values.len() as f64
+    };
+    let within = autocovariance(0) * n / (n - 1.);
+    if within == 0. {
+        return None;
+    }
+    let variance = within * (n - 1.) / n
+        + means
+            .iter()
+            .map(|mean| (mean - grand_mean).powi(2))
+            .sum::<f64>()
+            / (m - 1.);
+    let rho = |lag| 1. - (within - autocovariance(lag)) / variance;
+    let mut previous = 1. + rho(1);
+    let mut sum = previous.max(0.);
+    for lag in (2..half - 1).step_by(2) {
+        let pair = rho(lag) + rho(lag + 1);
+        if pair <= 0. || previous <= 0. {
+            break;
+        }
+        previous = previous.min(pair);
+        sum += previous;
+    }
+    let count = values.len() as f64;
+    let tau = (2. * sum - 1.).max(1. / count.log10());
+    Some(count / tau)
 }

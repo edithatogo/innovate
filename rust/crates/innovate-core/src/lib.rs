@@ -71,6 +71,7 @@ pub fn execute_json(input: &str) -> String {
                 | "bayesian_parameter_grid"
                 | "bayesian_metropolis"
                 | "bayesian_split_rhat"
+                | "bayesian_effective_sample_size"
                 | "validate_extension_manifests"
                 | "register_extension_manifest"
                 | "list_extension_manifests"
@@ -237,6 +238,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         }
         if value["operation"] == "validate_extension_manifests" {
             return extensions::validate(payload);
+        }
+        if value["operation"] == "bayesian_effective_sample_size" {
+            return bayesian::effective_sample_size(payload);
         }
         if value["operation"] == "bayesian_split_rhat" {
             return bayesian::split_rhat(payload);

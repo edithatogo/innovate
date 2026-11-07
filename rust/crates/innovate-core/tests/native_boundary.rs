@@ -2345,3 +2345,25 @@ fn bayesian_ranked_split_rhat_detects_chain_scale_difference() {
     assert!((result["folded_rhat"].as_f64().unwrap() - 1.97502379702702).abs() < 1e-12);
     assert_eq!(result["rhat"], result["folded_rhat"]);
 }
+
+#[test]
+fn bayesian_effective_sample_size_distinguishes_persistence_and_stuck_chains() {
+    let diagnose = |chains| {
+        let request = json!({"schema_version":"2.0","operation":"bayesian_effective_sample_size",
+            "payload":{"chains":chains}});
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    let persistent: Vec<_> = (0..80).map(|draw| (draw / 10) % 2).collect();
+    let alternating: Vec<_> = (0..80).map(|draw| draw % 2).collect();
+    let slow = diagnose(json!([persistent, persistent]));
+    let fast = diagnose(json!([alternating, alternating]));
+    assert_eq!(slow["result"]["draws_used"], 160);
+    assert!(slow["result"]["bulk_ess"].as_f64().unwrap() < 80.);
+    assert!(fast["result"]["bulk_ess"].as_f64().unwrap() > 160.);
+    let stuck = diagnose(json!([vec![0; 80], vec![1; 80]]));
+    assert!(stuck["error"].is_null());
+    assert!(stuck["result"]["bulk_ess"].is_null());
+}
