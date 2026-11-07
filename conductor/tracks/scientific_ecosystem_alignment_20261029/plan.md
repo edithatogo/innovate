@@ -4439,3 +4439,6 @@ Hosted release readiness for this worktree revision remains open.
   columns when present. Seven Rust dataset checks and six focused
   Python cases passed with the rebuilt extension. Julia and R checks
   for the new defaults remain open.
+- [x] Verify Rust-generated policy labels and edge weights through
+  Julia and installed R. Both reproduced the normalized artifacts.
+  R used raw JSON for the edge replay to preserve the 1.0 token.
