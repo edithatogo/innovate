@@ -986,6 +986,15 @@ fn causal_summaries_match_analytic_effects() {
     assert_eq!(methods[0]["adjustment"], "none");
     assert_eq!(methods[1]["method"], stratified["method"]);
     assert_eq!(methods[1]["estimands"], json!(["ate", "att"]));
+    assert_eq!(methods[3]["partial_estimand"], "matched_subset_att");
+    assert_eq!(
+        methods[3]["uncertainty_requires"],
+        json!(["outcome_variances"])
+    );
+    assert_eq!(
+        methods[3]["uncertainty_assumptions"],
+        json!(["fixed_matched_pairs", "independent_outcomes"])
+    );
     assert_eq!(
         methods[4]["required_fields_by_estimand"]["ate"],
         json!(["treated_predictions"])

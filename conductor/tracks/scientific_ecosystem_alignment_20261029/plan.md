@@ -5224,3 +5224,8 @@ Hosted release readiness for this worktree revision remains open.
   Julia and installed R. The focused checks recovered the distinct
   adoption and service-completion pause controls. Sequential builds
   after cleaning generated artifacts resolved the initial disk limit.
+
+- [x] Advertise the partial matching estimand and the assumptions for
+  fixed-match uncertainty through causal discovery. The focused Rust
+  test verified the required outcome variances and independence
+  assumptions. Broader matching inference remains open.
