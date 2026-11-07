@@ -1,0 +1,84 @@
+{
+  "status": "bounded_local_checkpoint",
+  "base_commit": "1019e3b72437c4b34d1f78c2a5a9b29d9023e700",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "related_evidence": [
+    "lotka-forcing-20261107.json",
+    "native-features-20261107.json"
+  ],
+  "results": {
+    "rust_tests": 134,
+    "rust_scope": "full core/C ABI coverage run plus 4 Polars tests",
+    "installed_python_tests": 44,
+    "julia_assertions": 195,
+    "R": "full native conformance including both coefficient layouts, fit and held-out forecast passed",
+    "clippy": "workspace all targets passed",
+    "hooks": "affected files passed",
+    "docs_pages": 163,
+    "package": "local wheel/source metadata, wheel contents and exact scientific module/test/fixture inclusion passed"
+  },
+  "oracle": {
+    "python": "3.15.2",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "method": "DOP853, split at every control knot, rtol=1e-12 atol=1e-13"
+  },
+  "coverage": {
+    "count": 9752,
+    "covered": 8326,
+    "percent": 85.37735849056604
+  },
+  "module_coverage": {
+    "competition.rs": {
+      "count": 651,
+      "covered": 602,
+      "percent": 92.47311827956989
+    },
+    "numerics.rs": {
+      "count": 333,
+      "covered": 320,
+      "percent": 96.09609609609608
+    }
+  },
+  "regression": "Original held-out forecast tolerance retained. Absolute objective stop failed, relative objective improvement passes. See fit-red.log, scaled-fit.log and refined-fit.log.",
+  "remaining": "Other ecosystem forcing, event splits, automatic starts, weights, uncertainty, branch/mutation, platform and scientific/release qualification",
+  "source_sha256": {
+    "bindings/julia/test/runtests.jl": "d603a53a1315eabae3b8f793376e38fdf0358d086e768e742e19c92c477e8778",
+    "bindings/r/tests/native.R": "102fcac44526d875aaa724926ee7c589ebfb83dcedd6d978084d0ff1696afa43",
+    "docs/astro-site/src/content/docs/native-migration.md": "77a5d18f82b903387d855bbcfacd8c80999cae871044ecca4c66cc23079de13b",
+    "migration-ledger.json": "9cdc410abe95a7dba609cd3a6ed542a4ad427d344b719aa07970e26455c075d5",
+    "rust/crates/innovate-core/src/competition.rs": "07550d3da00c63b0673f2121a2115d7ea9df1965be8f2ece6e5767486e261f3f",
+    "rust/crates/innovate-core/src/discovery.json": "242695bdff906e9522941ea5591cfdb9cfdccd60b9abfd8c58ebd16291afab1d",
+    "rust/crates/innovate-core/src/numerics.rs": "c96a5091305b2b05d765465ba5ad86a4567be4ccf638458f1e52900c51fd4603",
+    "rust/crates/innovate-core/tests/competition.rs": "03e68694c2743ccc18a33b40d10881073f6b627eb219a5901ae119cd612449d9",
+    "tests/native/test_python_consumer.py": "37a401a48476e9d1aa1ca002d5f9118121362a447b08ced387bdc025a69a0880",
+    "rust/crates/innovate-core/tests/fixtures/multi_forcing_scipy.json": "0d9716cec7b8428bb9658dccba9608146ab7922d1ee3020b196c35b8f594f278"
+  },
+  "logs": {
+    "clippy.log": "d7cd79764f22b3b2c47cc8c387de7ee5302cc5b592bb1dc36ba15e79969f571f",
+    "coverage.log": "46fc5e6a1c61704b0e000af909361657e1b08ed045527e2363d21a48b5cf430a",
+    "docs.log": "1f3ea855f2ae5cb6c9ecfe319e0fb54178ae3f589cc2945c06e96ca7e2116e85",
+    "ffi.log": "8351ba12c74960d12e3631d79d248dbee51b0f97fe395110db961909f9111bfa",
+    "fit-red.log": "e09adf5ecfe20463110dfd91c4f459821afa30b81f105c29892cea85471f0bfc",
+    "green.log": "ba1ba17e4226ece359f4961ae83e1b69019a4004e95b9ee1123a4a3aaada6c15",
+    "hooks.log": "7523d6b940ad7d7e49ea93ff33ac60ceb273c50cb6ae677030a5b65df95de21b",
+    "install.log": "45eb5e7f63ff698e4c0c072c87c3a053c4a51c75f499625ec8a6ec6fb2440a72",
+    "julia.log": "fa3699f3f8ae4b217897c7bbb8411d2f8c1becf2d6e128be8fd077b8eaadd4a5",
+    "oracle-fit.log": "4e5adc3fcc8333b5ccc142e706b175257160cef92122adb105692db3f59cb41f",
+    "package.log": "3366b46405d373ab2171982bbfde801b446bc68d874cfce39747a1c9752db399",
+    "python.log": "70bd93f29a65727e5cc0991aac37bb59b433f6d667824853361ad51e262a38ec",
+    "r.log": "95fc8c7e9069a165966d04416bc3ce319f25e68baed99e1ece95ec9ea0674a5c",
+    "red.log": "12ef8d208e33ab55432c027d61be1860e3956bb22098e24feac2ccb2c92e8a3e",
+    "refined-fit.log": "d9f62023d69083f46b4df57dfc4eac7deffc5e34324cb43ec382092d7472aac4",
+    "scaled-fit.log": "3a4b10e22ae77e4e1e9816e3446ead7c876af71c14bff266b821189c1038f595",
+    "sdist.log": "30c68c51f46325475ad07325a8a5d91f2fc951e053e002736a08ea461149642b",
+    "tabular.log": "4d5c336133e036f3e7207c1fe6ab6a1a60e62f00925aa57eda250d1e27997b53",
+    "wheel.log": "481042d1e58bba0729e1ad3fed85b39cba319fb9c8ef120041321cfbb53f59e1"
+  },
+  "oracle_generator_sha256": "ba490dadf174c2245bb72bc5972c62a0c459340e3c69714342cba050091722cd",
+  "artifacts": {
+    "innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "dcc29a98c43741adea351bac049f2fcd0c374fe37e4468de3e230450d4aac67a",
+    "innovate-0.7.0a1.tar.gz": "ea0f2a3532b4e57e708858aff3bee0520cf92d407559b393918962bc160674f7"
+  }
+}

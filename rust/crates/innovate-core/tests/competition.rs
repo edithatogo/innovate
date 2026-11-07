@@ -312,3 +312,129 @@ fn interacting_lotka_forcing_fits_independent_reference_and_forecasts() {
     }));
     assert!(missing_start.is_err());
 }
+
+#[test]
+fn multi_product_forcing_layouts_are_explicit_and_capacity_zero_is_safe() {
+    let mut payload = json!({
+        "inputs":{"time":[0.],"covariates":{"price":[1.]}},
+        "parameters":{"p1":0.1,"p2":0.2,"q1":0.3,"q2":0.4,"m1":100.,"m2":200.,"alpha_1_2":0.,"alpha_2_1":0.,
+            "beta_p1_price":0.01,"beta_p2_price":0.02,"beta_q1_price":0.03,"beta_q2_price":0.04,
+            "beta_m1_price":1.,"beta_m2_price":2.,"beta_alpha_1_2_price":0.1,"beta_alpha_2_1_price":0.2},
+        "constructor_kwargs":{"n_products":2,"initial_values":[10.,20.],"covariates":["price"]}
+    });
+    let run = |payload| {
+        KernelBinding::new()
+            .predict_model("multi_product", payload)
+            .unwrap()
+            .result
+            .unwrap()
+    };
+    let corrected = run(payload.clone());
+    let first = (0.11 + 0.33 * 10. / 101.) * (101. - 10. - 0.1 * 20.);
+    assert!((corrected["rates"][0][0].as_f64().unwrap() - first).abs() < 1e-10);
+    payload["constructor_kwargs"]["coefficient_layout"] = json!("historical");
+    let historical = run(payload.clone());
+    let first = (0.11 + 0.32 * 10. / 100.03) * (100.03 - 10. - 0.1 * 20.);
+    assert!((historical["rates"][0][0].as_f64().unwrap() - first).abs() < 1e-10);
+    assert_ne!(historical["rates"], corrected["rates"]);
+    payload["constructor_kwargs"]["coefficient_layout"] = json!("corrected");
+    payload["parameters"]["beta_m1_price"] = json!(-100.);
+    assert_eq!(run(payload.clone())["rates"][0][0], 0.);
+    payload["constructor_kwargs"]["coefficient_layout"] = json!("unknown");
+    assert!(
+        KernelBinding::new()
+            .predict_model("multi_product", payload)
+            .is_err()
+    );
+}
+
+#[test]
+fn multi_product_forcing_layouts_match_independent_scipy_and_saved_forecasts() {
+    let fixture: Value =
+        serde_json::from_str(include_str!("fixtures/multi_forcing_scipy.json")).unwrap();
+    let binding = KernelBinding::new();
+    for layout in ["corrected", "historical"] {
+        let result = binding.predict_model("multi_product",json!({
+            "inputs":{"time":fixture["time"],"covariates":fixture["covariates"]},
+            "parameters":fixture["parameters"],
+            "constructor_kwargs":{"n_products":2,"covariates":["price"],"coefficient_layout":layout}
+        })).unwrap().result.unwrap();
+        for quantity in ["rows", "rates"] {
+            for (actual, expected) in result[quantity]
+                .as_array()
+                .unwrap()
+                .iter()
+                .zip(fixture["cases"][layout][quantity].as_array().unwrap())
+            {
+                for (actual, expected) in actual
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .zip(expected.as_array().unwrap())
+                {
+                    assert!(
+                        (actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-5,
+                        "{layout} {quantity}"
+                    );
+                }
+            }
+        }
+        let forecast = binding
+            .predict_model(
+                "multi_product",
+                json!({
+                    "inputs":{"time":fixture["forecast_time"]},"state":result["state"]
+                }),
+            )
+            .unwrap()
+            .result
+            .unwrap();
+        for (actual, expected) in forecast["rows"][0].as_array().unwrap().iter().zip(
+            fixture["cases"][layout]["forecast_rows"][0]
+                .as_array()
+                .unwrap(),
+        ) {
+            assert!((actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-5);
+        }
+        assert_eq!(
+            forecast["state"]["constructor_kwargs"]["coefficient_layout"],
+            layout
+        );
+    }
+}
+
+#[test]
+fn multi_product_covariate_fit_preserves_signed_coefficients() {
+    let fixture: Value =
+        serde_json::from_str(include_str!("fixtures/multi_forcing_scipy.json")).unwrap();
+    let mut start = fixture["parameters"].clone();
+    start["p1"] = json!(0.0305);
+    let result = KernelBinding::new().fit_model("multi_product",json!({
+        "inputs":{"time":fixture["time"],"covariates":fixture["covariates"],"observed":fixture["cases"]["corrected"]["rows"]},
+        "constructor_kwargs":{"n_products":2,"covariates":["price"]},
+        "fit_options":{"initial_parameters":start,"max_iterations":200}
+    })).unwrap().result.unwrap();
+    assert_eq!(result["diagnostics"]["optimizer"]["converged"], true);
+    assert!(result["diagnostics"]["metrics"]["RSS"].as_f64().unwrap() < 1e-8);
+    assert_eq!(result["parameters"].as_object().unwrap().len(), 16);
+    let forecast = KernelBinding::new()
+        .predict_model(
+            "multi_product",
+            json!({
+                "inputs":{"time":fixture["forecast_time"]},"state":result["state"]
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    for (actual, expected) in forecast["rows"][0].as_array().unwrap().iter().zip(
+        fixture["cases"]["corrected"]["forecast_rows"][0]
+            .as_array()
+            .unwrap(),
+    ) {
+        assert!(
+            (actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-3,
+            "actual={actual} expected={expected} fit={result}"
+        );
+    }
+}

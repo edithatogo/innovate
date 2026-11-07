@@ -120,8 +120,8 @@
       "key": "competitive_ecosystems",
       "status": "bounded_native",
       "required": true,
-      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/lotka-forcing-20261107.json",
-      "remaining": "Multi-product and other ecosystem covariates/events, equilibrium/zero-capacity helpers, uncertainty and wider numerical qualification remain required"
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/multi-forcing-20261107.json",
+      "remaining": "Other ecosystem covariates, event splits, equilibrium helpers, uncertainty and wider numerical qualification remain required"
     },
     {
       "key": "hierarchical_mixture_inference",

@@ -1,0 +1,24 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 3.14s
+     Running tests/competition.rs (target/debug/deps/competition-695326af62d00e43)
+
+running 3 tests
+test multi_product_forcing_layouts_are_explicit_and_capacity_zero_is_safe ... ok
+test multi_product_forcing_layouts_match_independent_scipy_and_saved_forecasts ... ok
+test multi_product_covariate_fit_preserves_signed_coefficients ... FAILED
+
+failures:
+
+---- multi_product_covariate_fit_preserves_signed_coefficients stdout ----
+
+thread 'multi_product_covariate_fit_preserves_signed_coefficients' (27694581) panicked at rust/crates/innovate-core/tests/competition.rs:435:9:
+assertion failed: (actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-3
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    multi_product_covariate_fit_preserves_signed_coefficients
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 7 filtered out; finished in 1.32s
+
+error: test failed, to rerun pass `-p innovate-core --test competition`

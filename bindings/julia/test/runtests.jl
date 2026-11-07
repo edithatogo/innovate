@@ -254,3 +254,35 @@ end
     forecast=kernel_predict_model("lotka_volterra",Dict("inputs"=>Dict("time"=>fixture["forecast_time"]),"state"=>fit["state"]))["result"]
     @test maximum(abs.(forecast["rows"][1].-fixture["forecast_rows"][1]))<1e-5
 end
+
+@testset "Multi product forcing layouts and conditional fit" begin
+    fixture = Innovate.JSON.parsefile(
+        joinpath(@__DIR__, "../../../rust/crates/innovate-core/tests/fixtures/multi_forcing_scipy.json");
+        dicttype=Dict{String,Any},
+    )
+    for layout in ["corrected", "historical"]
+        payload = Dict(
+            "inputs"=>Dict("time"=>fixture["time"], "covariates"=>fixture["covariates"]),
+            "parameters"=>fixture["parameters"],
+            "constructor_kwargs"=>Dict("n_products"=>2, "covariates"=>["price"], "coefficient_layout"=>layout),
+        )
+        result = kernel_predict_model("multi_product", payload)["result"]
+        @test maximum(abs.(result["rows"][end].-fixture["cases"][layout]["rows"][end])) < 1e-5
+        forecast = kernel_predict_model(
+            "multi_product", Dict("inputs"=>Dict("time"=>fixture["forecast_time"]), "state"=>result["state"]),
+        )["result"]
+        @test maximum(abs.(forecast["rows"][1].-fixture["cases"][layout]["forecast_rows"][1])) < 1e-5
+    end
+    start = copy(fixture["parameters"])
+    start["p1"] = 0.0305
+    fit = kernel_fit_model("multi_product", Dict(
+        "inputs"=>Dict("time"=>fixture["time"], "covariates"=>fixture["covariates"], "observed"=>fixture["cases"]["corrected"]["rows"]),
+        "constructor_kwargs"=>Dict("n_products"=>2, "covariates"=>["price"]),
+        "fit_options"=>Dict("initial_parameters"=>start, "max_iterations"=>200),
+    ))["result"]
+    @test fit["diagnostics"]["optimizer"]["converged"]
+    forecast = kernel_predict_model(
+        "multi_product", Dict("inputs"=>Dict("time"=>fixture["forecast_time"]), "state"=>fit["state"]),
+    )["result"]
+    @test maximum(abs.(forecast["rows"][1].-fixture["cases"]["corrected"]["forecast_rows"][1])) < 1e-3
+end

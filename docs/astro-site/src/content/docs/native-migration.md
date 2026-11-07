@@ -802,3 +802,29 @@ The independent reference uses SciPy DOP853 with every control knot split into
 its own integration interval. Event splits, automatic forcing initialization,
 weighted fits, initial-state uncertainty and broader scientific qualification
 remain required work.
+
+### Historical multi-product covariates
+
+The multi-product model accepts declared controls with one named coefficient
+for every base parameter and control. For a control named `price`, examples
+include `beta_p1_price`, `beta_q2_price`, `beta_m1_price` and
+`beta_alpha_1_2_price`. The default `coefficient_layout="corrected"`
+adds each coefficient to its named parameter. The explicit `"historical"`
+layout preserves the old flat indexing, which read the p/q/m coefficients in
+product triples even though their names were listed in p, q and m groups.
+Interaction coefficients retain their named order in both layouts. Saved
+history and state retain the chosen layout.
+
+Controls use linear interpolation with endpoint holds, and integration splits
+at every control knot. Effective coefficients may be signed. A product whose
+effective capacity is nonpositive has zero derivative, as in the historical
+equations. Conditional fitting requires complete initial parameters and reports
+local identifiability. Coefficients scale with the units of their corresponding
+base parameter during optimization. The shared optimizer now tests relative
+objective improvement so a small residual alone does not trigger the previous
+absolute-improvement stop.
+
+Independent SciPy references cover interacting trajectories, signed rates and
+forecasts in both layouts. A perturbed conditional fit is checked against a
+held-out forecast. Automatic starts, event splits, constrained scientific
+domains, weighted fits and uncertainty remain required qualification work.

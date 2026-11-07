@@ -197,7 +197,7 @@ where
                     prediction = candidate_prediction;
                     error = candidate_error;
                     damping = (damping * 0.25).max(1e-12);
-                    if improvement < 1e-14 * (1.0 + error) {
+                    if improvement < 1e-12 * (error + improvement) {
                         converged = true;
                         reason = "objective_tolerance";
                         break;

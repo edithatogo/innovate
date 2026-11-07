@@ -14,6 +14,7 @@ struct Model {
     base_count: usize,
     covariates: Vec<String>,
     history: Option<History>,
+    historical_layout: bool,
     origin: f64,
     initial: Vec<f64>,
     conditioned_initial: bool,
@@ -38,6 +39,13 @@ impl Model {
         if let Some(history) = &self.history {
             out["covariates"] = json!(self.covariates);
             out["covariate_history"] = json!(history);
+            if self.key == "multi_product" {
+                out["coefficient_layout"] = json!(if self.historical_layout {
+                    "historical"
+                } else {
+                    "corrected"
+                });
+            }
         }
         out
     }
@@ -77,8 +85,13 @@ impl Model {
                 .zip(parameters[self.base_count..].chunks_exact(self.base_count))
             {
                 let value = history.at(name, t);
-                for (parameter, coefficient) in effective.iter_mut().zip(coefficients) {
-                    *parameter += coefficient * value;
+                for (index, parameter) in effective.iter_mut().enumerate() {
+                    let coefficient_index = if self.historical_layout && index < 3 * self.n {
+                        3 * (index % self.n) + index / self.n
+                    } else {
+                        index
+                    };
+                    *parameter += coefficients[coefficient_index] * value;
                 }
             }
             if effective.iter().any(|value| !value.is_finite()) {
@@ -114,6 +127,9 @@ impl Model {
         }
         (0..self.n)
             .map(|i| {
+                if p[2 * self.n + i] <= 0. {
+                    return 0.;
+                }
                 let interactions: f64 = (0..self.n)
                     .filter(|&j| j != i)
                     .enumerate()
@@ -172,7 +188,8 @@ impl Model {
             json!({"columns":(1..=self.n).map(|i|format!("series_{i}")).collect::<Vec<_>>(),"rows":rows,"rates":rates,
             "metadata":{"shape":[time.len(),self.n],"quantity":if self.key=="lotka_volterra" {"technology_share"}else{"product_level"},
             "rate_semantics":if self.key=="lock_in" {"historical RHS at clipped levels; not derivative of output clipping or gross incidence"} else {"signed derivative of each level; not gross incidence"},"warnings":warnings,
-            "normalization":"separate product potentials; rows are not constrained to sum to one"}}),
+            "normalization":"separate product potentials; rows are not constrained to sum to one",
+            "coefficient_layout":if self.historical_layout {"historical"} else {"corrected"}}}),
         )
     }
 }
@@ -203,6 +220,7 @@ fn model(
             "initial_values",
             "covariates",
             "covariate_history",
+            "coefficient_layout",
         ]
         .contains(&key.as_str())
     }) {
@@ -229,12 +247,25 @@ fn model(
             "covariates must contain at most 32 distinct nonempty names",
         ));
     }
-    if key != "lotka_volterra" && (!covariates.is_empty() || kw.contains_key("covariate_history")) {
+    if !["lotka_volterra", "multi_product"].contains(&key.as_str())
+        && (!covariates.is_empty() || kw.contains_key("covariate_history"))
+    {
         return Err(KernelBindingError::unsupported_native_operation(
             op,
-            "forcing is currently supported for Lotka Volterra only",
+            "forcing is currently supported for Lotka Volterra and multi-product only",
         ));
     }
+    let historical_layout = match kw.get("coefficient_layout").and_then(Value::as_str) {
+        Some("historical") if key == "multi_product" => true,
+        Some("corrected") if key == "multi_product" => false,
+        None if !kw.contains_key("coefficient_layout") => false,
+        _ => {
+            return Err(invalid(
+                op,
+                "coefficient_layout requires corrected or historical on multi_product",
+            ));
+        }
+    };
     if ["lotka_volterra", "complementary_goods", "lock_in"].contains(&key.as_str())
         && kw.contains_key("n_products")
     {
@@ -400,6 +431,7 @@ fn model(
         base_count,
         covariates,
         history,
+        historical_layout,
         origin,
         initial,
         conditioned_initial,
@@ -441,15 +473,12 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
             ));
         }
         let tscale = (time[time.len() - 1] - model.origin).max(1.);
-        let scales: Vec<_> = model
-            .names
-            .iter()
-            .map(|name| {
-                if name.starts_with("beta_") {
-                    1.
-                } else if name.starts_with('m') {
+        let scales: Vec<_> = (0..model.names.len())
+            .map(|index| {
+                let base_name = &model.names[index % model.base_count];
+                if base_name.starts_with('m') {
                     yscale
-                } else if name.starts_with("alpha_") {
+                } else if base_name.starts_with("alpha_") {
                     1.
                 } else {
                     1. / tscale

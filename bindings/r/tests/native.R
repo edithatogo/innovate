@@ -236,3 +236,34 @@ lv_fit <- kernel_fit_model("lotka_volterra",lv_payload)$result
 lv_forecast <- kernel_predict_model("lotka_volterra",list(inputs=list(time=unlist(lv_fixture$forecast_time)),state=lv_fit$state))$result
 stopifnot(lv_fit$diagnostics$optimizer$converged,max(abs(unlist(lv_forecast$rows)-unlist(lv_fixture$forecast_rows)))<1e-5)
 cat("R interacting Lotka forcing fit and history passed\n")
+
+mp_fixture <- jsonlite::fromJSON(
+  "rust/crates/innovate-core/tests/fixtures/multi_forcing_scipy.json", simplifyVector=FALSE
+)
+for (layout in c("corrected", "historical")) {
+  mp_payload <- list(
+    inputs=list(time=unlist(mp_fixture$time), covariates=list(price=unlist(mp_fixture$covariates$price))),
+    parameters=mp_fixture$parameters,
+    constructor_kwargs=list(n_products=2, covariates="price", coefficient_layout=layout)
+  )
+  mp_result <- kernel_predict_model("multi_product", mp_payload)$result
+  stopifnot(max(abs(unlist(tail(mp_result$rows, 1))-unlist(tail(mp_fixture$cases[[layout]]$rows, 1))))<1e-5)
+  mp_forecast <- kernel_predict_model(
+    "multi_product", list(inputs=list(time=unlist(mp_fixture$forecast_time)), state=mp_result$state)
+  )$result
+  stopifnot(max(abs(unlist(mp_forecast$rows)-unlist(mp_fixture$cases[[layout]]$forecast_rows)))<1e-5)
+}
+mp_start <- mp_fixture$parameters
+mp_start$p1 <- 0.0305
+mp_fit <- kernel_fit_model("multi_product", list(
+  inputs=list(time=unlist(mp_fixture$time), covariates=list(price=unlist(mp_fixture$covariates$price)),
+              observed=mp_fixture$cases$corrected$rows),
+  constructor_kwargs=list(n_products=2, covariates="price"),
+  fit_options=list(initial_parameters=mp_start, max_iterations=200)
+))$result
+mp_forecast <- kernel_predict_model(
+  "multi_product", list(inputs=list(time=unlist(mp_fixture$forecast_time)), state=mp_fit$state)
+)$result
+stopifnot(mp_fit$diagnostics$optimizer$converged,
+          max(abs(unlist(mp_forecast$rows)-unlist(mp_fixture$cases$corrected$forecast_rows)))<1e-3)
+cat("R multi product forcing layouts, fit and forecast passed\n")

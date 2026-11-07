@@ -560,3 +560,58 @@ def test_lotka_forcing_polars_fit_and_forecast():
         state=fitted.envelope["result"]["state"],
     )["result"]
     assert forecast["rows"][0] == pytest.approx(fixture["forecast_rows"][0], abs=1e-5)
+
+
+def test_multi_product_forcing_layouts_and_polars_fit():
+    fixture = json.loads(
+        (Path(__file__).parents[2] / "rust/crates/innovate-core/tests/fixtures/multi_forcing_scipy.json").read_text()
+    )
+    for layout in ["corrected", "historical"]:
+        result = innovate.execute(
+            "predict_model",
+            "multi_product",
+            inputs={"time": fixture["time"], "covariates": fixture["covariates"]},
+            parameters=fixture["parameters"],
+            constructor_kwargs={
+                "n_products": 2,
+                "covariates": ["price"],
+                "coefficient_layout": layout,
+            },
+        )["result"]
+        assert result["rows"][-1] == pytest.approx(fixture["cases"][layout]["rows"][-1], abs=1e-5)
+        forecast = innovate.execute(
+            "predict_model",
+            "multi_product",
+            inputs={"time": fixture["forecast_time"]},
+            state=result["state"],
+        )["result"]
+        assert forecast["rows"][0] == pytest.approx(fixture["cases"][layout]["forecast_rows"][0], abs=1e-5)
+    rows = fixture["cases"]["corrected"]["rows"]
+    data = pl.DataFrame(
+        {
+            "time": fixture["time"],
+            "price": fixture["covariates"]["price"],
+            "first": [row[0] for row in rows],
+            "second": [row[1] for row in rows],
+        }
+    )
+    start = dict(fixture["parameters"], p1=0.0305)
+    fit = innovate.fit(
+        "multi_product",
+        data,
+        observed_columns=["first", "second"],
+        model_options={"n_products": 2, "covariates": ["price"]},
+        fit_options={"initial_parameters": start, "max_iterations": 200},
+    )
+    assert fit.diagnostics["optimizer"]["converged"]
+    future = fit.predict(
+        pl.DataFrame(
+            {
+                "time": fixture["forecast_time"],
+                "price": [fixture["covariates"]["price"][-1]],
+            }
+        )
+    )
+    assert [future["prediction_1"][0], future["prediction_2"][0]] == pytest.approx(
+        fixture["cases"]["corrected"]["forecast_rows"][0], abs=1e-3
+    )
