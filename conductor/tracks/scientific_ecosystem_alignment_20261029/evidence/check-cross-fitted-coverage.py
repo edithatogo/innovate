@@ -40,6 +40,8 @@ covered = dict.fromkeys(methods, 0)
 failed = dict.fromkeys(methods, 0)
 guarded = dict.fromkeys(methods, 0)
 covered_t = dict.fromkeys(methods, 0)
+oracle_att = []
+paired_att_gap = []
 for _ in range(400):
     if args.cluster_assignment:
         assigned = [int(rng.random() < p) for p in probabilities[:: len(strata) // cluster_count]]
@@ -77,6 +79,24 @@ for _ in range(400):
             continue
         assert result["cluster_degrees_of_freedom"] == (cluster_count - 1 if clustered else None)
         estimate = result["estimate"]
+        if args.cluster_assignment and key == "att":
+            oracle = execute(
+                "summarize_causal",
+                method="augmented_treatment_contrast",
+                estimand="att",
+                outcomes=outcomes,
+                treatment=treatment,
+                propensities=probabilities,
+                control_predictions=baseline,
+                **cluster_options,
+            )["result"]["estimate"]
+            reference = sum(
+                (y - y0) if flag else (y0 - y) * p / (1 - p)
+                for y, y0, flag, p in zip(outcomes, baseline, treatment, probabilities, strict=True)
+            ) / sum(treatment)
+            assert abs(oracle - reference) < 1e-12
+            oracle_att.append(oracle)
+            paired_att_gap.append(estimate - oracle)
         estimates[key].append(estimate)
         distance = abs(estimate - truth)
         error = result["influence_standard_error"]
@@ -100,3 +120,8 @@ for key, truth in methods.items():
         print(f"{key}: t(9) coverage {covered_t[key]}/400")
     else:
         assert 360 <= covered[key] <= 395
+
+if args.cluster_assignment:
+    print(f"ATT known-nuisance mean {mean(oracle_att):.6f}, "
+          f"paired fitted-minus-known gap {mean(paired_att_gap):.6f}")
+    assert len(oracle_att) == len(estimates["att"])

@@ -6328,3 +6328,11 @@ Hosted release readiness for this worktree revision remains open.
   trials. ATE averaged 2.0322 against 2.0. ATT averaged 2.6754
   against 2.6 and missed the prior 0.04 bias tolerance. Cluster-assigned
   ATT point-estimate qualification remains open.
+
+- [x] Compare cluster-assigned ATT with a known-nuisance reference on
+  the same 398 accepted trials. Native supplied-nuisance ATT matched
+  the independently computed score within 1e-12 in every trial.
+  Its mean was 2.6085 against the target 2.6. The paired fitted-minus-
+  known gap was 0.0669, isolating most of the observed gap to fitted
+  nuisance inputs on this design. General cluster-assigned inference
+  remains open.
