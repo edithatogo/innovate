@@ -52,7 +52,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
             let percent_change = if counterfactual == 0. {
                 0.
             } else {
-                finite(100. * (effect / counterfactual))?
+                finite(percentage(effect, counterfactual))?
             };
             Ok(
                 json!({"actual_mean":actual,"counterfactual_mean":counterfactual,
@@ -485,6 +485,30 @@ fn counterfactual_forecast(payload: &Value) -> Result<Value, &'static str> {
     )
 }
 
+fn percentage(delta: f64, baseline: f64) -> f64 {
+    let ratio = delta / baseline;
+    if ratio.abs() < f64::MIN_POSITIVE {
+        // Scale first when division would lose subnormal precision.
+
+        (100. * delta) / baseline
+    } else {
+        100. * ratio
+    }
+}
+
+#[cfg(test)]
+mod percentage_tests {
+    use super::percentage;
+
+    #[test]
+    fn preserves_representable_percentages_when_the_ratio_underflows() {
+        let smallest = f64::from_bits(1);
+        assert_eq!(percentage(smallest, 4.), 25. * smallest);
+        assert_eq!(percentage(-smallest, 4.), -25. * smallest);
+        assert_eq!(percentage(f64::MAX, f64::MAX), 100.);
+    }
+}
+
 type ForecastDifference = (Vec<f64>, Vec<Option<f64>>);
 
 pub(crate) fn compare_values(
@@ -506,7 +530,7 @@ pub(crate) fn compare_values(
             if before == 0. {
                 Ok(None)
             } else {
-                finite(100. * (delta / before)).map(Some)
+                finite(percentage(delta, before)).map(Some)
             }
         })
         .collect::<Result<_, _>>()?;

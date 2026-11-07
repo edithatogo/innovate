@@ -3712,3 +3712,7 @@ Hosted release readiness for this worktree revision remains open.
   rebuilt Python 3.15.2 wheel, Julia and freshly installed R at
   5c5c9a2b. All three surfaced the native unknown-field error.
   The conflicting-alias regression is verified at the Rust boundary.
+- [x] Preserve representable percentages when the intermediate ratio
+  underflows. The Rust unit fixture checks both signs of the smallest
+  subnormal effect and an ordinary percentage at the maximum finite
+  scale. The causal boundary test and focused Clippy passed.
