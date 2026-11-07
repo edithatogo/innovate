@@ -4337,3 +4337,6 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify that the rebuilt Python wheel raises NativeError with
   invalid_request for positional provenance in dataset checksum.
   The focused packaged regression and Ruff passed.
+- [x] Verify malformed provenance checksum errors through Julia and
+  installed R with the rebuilt Rust library. Both returned
+  invalid_request with the named-object requirement.
