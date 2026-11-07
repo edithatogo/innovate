@@ -130,10 +130,10 @@ Same writing lane resumes at 3cc10543 with a clean checkout. Other checkouts and
 native owners remain untouched. Scope: native ABM state, covariate/event ports,
 three binding consumers and this track's records; all existing obligations remain.
 
-- [x] Integrate Kairos agent identities/components with homogeneous adoption events.
-- [x] Validate agent conservation, replay and DES-count equivalence.
+- [x] Integrate Kairos agent identities/components with homogeneous adoption events. 897ed8e
+- [x] Validate agent conservation, replay and DES-count equivalence. 897ed8e
 - [~] Port covariate/event scientific semantics: simulation-only additive forcing and independent binomial oracles pass; historical interpolation/fitting and event-split curves remain.
-- [x] Validate Python/Julia/R for this bounded port; retain evidence and reconcile remaining work.
+- [x] Validate Python/Julia/R for this bounded port; retain evidence and reconcile remaining work. 897ed8e
 
 Evidence: abm-forcing-20261107.json; review: abm-forcing-review-20261107.md.
 45 Rust tests, 24 installed Python checks, 135 Julia assertions and R cases pass.
@@ -141,3 +141,5 @@ Core/C ABI line coverage is 80.18%; full scientific/platform gates remain open.
 One active track remains in both the registry and active track directories.
 Next source work: historical covariate interpolation/fitting and event-split
 curves, heterogeneous/network ABM, then remaining model/inference obligations.
+
+Source/evidence commit: `897ed8e16da4a00e0a9907b11c0b617fc2a80bad`. No native operation remains in flight.
