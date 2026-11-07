@@ -105,8 +105,15 @@ fn apply_specification(scenario: &mut Scenario) -> Result<(), &'static str> {
         .specification
         .as_ref()
         .ok_or("scenario specification is required")?;
-    if scenario.model_key != "bass" || !matches!(spec.kind, ScenarioKind::Baseline) {
-        return Err("specification translation currently supports baseline Bass scenarios");
+    if scenario.model_key != "bass"
+        || !matches!(
+            spec.kind,
+            ScenarioKind::Baseline | ScenarioKind::Intervention { .. }
+        )
+    {
+        return Err(
+            "specification translation currently supports baseline and intervention Bass scenarios",
+        );
     }
     let simulation = scenario
         .simulation
@@ -120,7 +127,7 @@ fn apply_specification(scenario: &mut Scenario) -> Result<(), &'static str> {
         options.get("engine").and_then(Value::as_str),
         Some("kairos_abm" | "kairos_des")
     ) {
-        return Err("baseline Bass translation requires kairos_abm or kairos_des");
+        return Err("Bass scenario translation requires kairos_abm or kairos_des");
     }
     let population = options
         .get("population")
@@ -135,10 +142,35 @@ fn apply_specification(scenario: &mut Scenario) -> Result<(), &'static str> {
         return Err("initial_adopters conflicts with the scenario specification");
     }
     options.insert("initial_adopters".into(), json!(initial));
+    if let ScenarioKind::Intervention {
+        intervention_type,
+        intervention_start_time,
+        intervention_magnitude,
+    } = &spec.kind
+    {
+        if *intervention_start_time > spec.time_horizon {
+            return Err("intervention must start within the scenario time horizon");
+        }
+        let (delta_p, delta_q) = match intervention_type.as_str() {
+            "innovation_delta" => (*intervention_magnitude, 0.),
+            "imitation_delta" => (0., *intervention_magnitude),
+            _ => return Err("Bass intervention type must be innovation_delta or imitation_delta"),
+        };
+        if options.contains_key("events") {
+            return Err("explicit events conflict with scenario intervention translation");
+        }
+        options.insert(
+            "events".into(),
+            json!([{
+                "time":intervention_start_time,"delta_p":delta_p,"delta_q":delta_q
+            }]),
+        );
+    }
+
     let parameters = simulation
         .get_mut("parameters")
         .and_then(Value::as_object_mut)
-        .ok_or("baseline Bass translation requires explicit parameters")?;
+        .ok_or("Bass scenario translation requires explicit parameters")?;
     if parameters
         .get("m")
         .is_some_and(|value| value.as_f64() != Some(spec.market_size))
@@ -616,11 +648,15 @@ pub(crate) fn discover(request: &Value) -> Value {
             let mut capability = json!({"key":family,"scenario_type":family,"stability":"experimental",
                 "operation":"execute_scenario_grid","execution_input":"explicit_simulation_payload",
                 "transport":"json","bindings":["rust","python","julia","r"]});
-            if family == "baseline" {
+            if matches!(family, "baseline" | "intervention") {
                 capability["specification_translation"] = json!({
                     "option":"apply_specifications","model_key":"bass",
                     "engines":["kairos_abm","kairos_des"]
                 });
+                if family == "intervention" {
+                    capability["specification_translation"]["intervention_types"] =
+                        json!(["innovation_delta","imitation_delta"]);
+                }
             }
             capability
         })

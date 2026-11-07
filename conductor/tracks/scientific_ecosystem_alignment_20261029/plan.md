@@ -2119,3 +2119,11 @@ the other competition models and installed binding checks remain open.
   25% initial adoption in 20 agents gave five initial adopters and
   50 adoption units in a market of 200. All 39 boundary tests and
   focused Clippy passed. Other families remain open.
+
+- [x] Translate Bass intervention specifications into additive Kairos
+  innovation or imitation events. Reject unsupported intervention types,
+  events outside the declared horizon and competing explicit event lists.
+  Discovery advertises both supported delta types. The Rust fixture pauses
+  innovation at time zero and replays the resolved event exactly. All 50
+  targeted Rust tests and focused Clippy passed. Binding qualification
+  for intervention translation remains open.

@@ -1076,7 +1076,11 @@ fn scenario_discovery_lists_and_resolves_native_families() {
         rows[0]["specification_translation"]["engines"],
         json!(["kairos_abm", "kairos_des"])
     );
-    assert!(rows[1].get("specification_translation").is_none());
+    assert_eq!(
+        rows[1]["specification_translation"]["intervention_types"][0],
+        "innovation_delta"
+    );
+    assert!(rows[2].get("specification_translation").is_none());
     let keys: Vec<_> = rows
         .iter()
         .map(|row| row["key"].as_str().unwrap())
@@ -1136,5 +1140,32 @@ fn baseline_scenario_supplies_bass_market_and_initial_adopters() {
     let replay = run(&row["artifact"]["replay_request"]);
     assert_eq!(replay["result"]["executions"][0]["result"], row["result"]);
     request["payload"]["scenarios"][0]["simulation"]["parameters"]["m"] = json!(201);
+    assert_eq!(run(&request)["error"]["code"], "invalid_request");
+}
+
+#[test]
+fn bass_intervention_specification_translates_to_kairos_event() {
+    let mut request = json!({"schema_version":"2.0","operation":"execute_scenario_grid",
+    "payload":{"apply_specifications":true,"include_execution_metadata":true,"scenarios":[{
+        "id":"pause","model_key":"bass",
+        "specification":{"scenario_type":"intervention","name":"pause","description":"",
+            "time_horizon":5,"time_unit":"year","reference_year":2026,"market_size":100,
+            "initial_adoption":0,"intervention_type":"innovation_delta",
+            "intervention_start_time":0,"intervention_magnitude":-0.2},
+        "simulation":{"inputs":{"time":[0,5]},"parameters":{"p":0.2,"q":0},
+            "simulation_options":{"engine":"kairos_abm","seed":42,"population":100}}
+    }]}});
+    let run = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = run(&request);
+    let row = &response["result"]["executions"][0];
+    assert_eq!(row["result"]["counts"], json!([0, 0]));
+    let replay = &row["artifact"]["replay_request"];
+    assert_eq!(
+        run(replay)["result"]["executions"][0]["result"],
+        row["result"]
+    );
+    request["payload"]["scenarios"][0]["specification"]["intervention_type"] = json!("policy");
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
 }
