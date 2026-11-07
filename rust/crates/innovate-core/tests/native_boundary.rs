@@ -383,6 +383,28 @@ fn sarima_fit_matches_independent_ar1_maximum_likelihood() {
 }
 
 #[test]
+fn sarima_near_unit_ar1_matches_exact_stationary_likelihood() {
+    let reference: serde_json::Value =
+        serde_json::from_str(include_str!("fixtures/sarima_near_unit_ar1.json")).unwrap();
+    let request = json!({"schema_version":"2.0","operation":"preprocess_series",
+        "payload":{"method":"sarima_fit","order":[1,0,0],"seasonal_order":[0,0,0,0],
+            "values":reference["values"]}});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    let fit = &response["result"];
+    assert!(
+        (fit["coefficients"][0].as_f64().unwrap() - reference["coefficient"].as_f64().unwrap())
+            .abs()
+            < 2e-6
+    );
+    assert!(
+        (fit["log_likelihood"].as_f64().unwrap() - reference["log_likelihood"].as_f64().unwrap())
+            .abs()
+            < 1e-8
+    );
+}
+
+#[test]
 fn historical_sarima_retains_sarimax_initial_predictions() {
     let fixture: serde_json::Value = serde_json::from_str(include_str!(
         "../../../../conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/sarima-reference/historical-initialization.json"

@@ -2606,3 +2606,11 @@ the other competition models and installed binding checks remain open.
   R suites. Both focused binding checks passed. Nine focused Rust
   preprocessing regressions passed. Broader SARIMA optimizer
   qualification remains tracked separately above.
+
+- [x] Qualify stationary AR(1) likelihood on 500 seeded observations
+  generated with coefficient 0.985 and initial value zero. The realized
+  maximum is near 0.958185, reproduced by Rust within 2e-6 and log
+  likelihood within 1e-8. R stats::arima reported nonconvergence near
+  0.999775, so the independent reference maximizes the exact concentrated
+  Gaussian likelihood with R optimize. Five focused Rust tests passed.
+  Broader difficult mixed-order optimizer cases remain open.
