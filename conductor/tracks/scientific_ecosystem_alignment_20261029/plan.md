@@ -1110,3 +1110,12 @@ the other competition models and installed binding checks remain open.
   level within 0.001. Python used the Polars fit and forecast entry points.
   These focused checks reuse the native artifacts from the Bass weight checkpoint.
   [Fixture and results](evidence/gompertz-weights-20261107).
+
+## Weighted historical Logistic fitting
+
+- [x] Apply normalized weights to the objective and local rank. Automatic
+  starts use positive-weight observations for capacity and midpoint
+  initialization. The analytic event fixture excludes an interior outlier
+  of 1e100 and preserves the held-out forecast within 0.001. All eleven
+  focused Rust tests and Clippy passed.
+- [ ] Qualify installed Python, Julia and R weighted historical Logistic fits.

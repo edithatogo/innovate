@@ -134,3 +134,45 @@ fn logistic_total_rate_includes_control_slopes_and_event_policy() {
     payload["inputs"]["covariate_rates"] = json!({"price":[1.]});
     assert!(binding.predict_model("logistic", payload).is_err());
 }
+
+#[test]
+fn weighted_event_fit_ignores_outlier_and_keeps_held_out_forecast() {
+    let time: Vec<f64> = (0..30).map(f64::from).collect();
+    let mut observed: Vec<_> = time
+        .iter()
+        .map(|&t| {
+            if t < 12. {
+                100. / (1. + (-0.5 * (t - 5.)).exp())
+            } else {
+                200. / (1. + (-0.3 * (t - 18.)).exp())
+            }
+        })
+        .collect();
+    observed[13] = 1e100;
+    let mut weights = vec![2.; time.len()];
+    weights[13] = 0.;
+    let binding = KernelBinding::new();
+    let fit = binding
+        .fit_model(
+            "logistic",
+            json!({
+                "inputs":{"time":time,"observed":observed},"constructor_kwargs":{"t_event":12.},
+                "fit_options":{"weights":weights}
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
+    assert_eq!(fit["diagnostics"]["weighting"]["positive_observations"], 29);
+    assert!(fit["diagnostics"]["metrics"]["AIC"].is_null());
+    let p = binding
+        .predict_model(
+            "logistic",
+            json!({"inputs":{"time":[35.]},"state":fit["state"]}),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    assert!((p["values"][0].as_f64().unwrap() - 200. / (1. + (-5.1_f64).exp())).abs() < 0.001);
+}

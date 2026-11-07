@@ -220,6 +220,23 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         };
         Ok((a[0] * fraction, slope))
     };
+    let weights = if op == KernelOperation::FitModel {
+        let active = if event.is_some() && mode == "historical_ignored" {
+            6
+        } else {
+            names.len()
+        };
+        crate::fitting::weights(r, time.len(), active.max(4))?
+    } else {
+        None
+    };
+    let max_weight = weights
+        .as_ref()
+        .map_or(1., |w| w.iter().copied().fold(0., f64::max));
+    let factors: Vec<_> = weights.as_ref().map_or_else(
+        || vec![1.; time.len()],
+        |w| w.iter().map(|v| v.sqrt() / max_weight.sqrt()).collect(),
+    );
     let mut quality = None;
     let params = if op == KernelOperation::FitModel {
         let observed = numeric_array_from_aliases(input, &["observed", "y"], op)?;
@@ -231,8 +248,14 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 "fitting needs four aligned finite nonnegative observations",
             ));
         }
-        let (initial, limit) = crate::fitting::options(r)?;
-        let ys = observed.iter().copied().fold(0_f64, f64::max).max(1e-12);
+        let (initial, limit) = crate::fitting::scalar_options(r)?;
+        let ys = observed
+            .iter()
+            .zip(&factors)
+            .filter(|(_, w)| **w > 0.)
+            .map(|(y, _)| *y)
+            .fold(0., f64::max)
+            .max(1e-12);
         let ts = time.iter().copied().map(f64::abs).fold(1_f64, f64::max);
         let scale: Vec<_> = names
             .iter()
@@ -263,28 +286,36 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         let starts = if let Some(initial) = initial {
             vec![transform(&parse(&initial)?)]
         } else {
-            let segment = |times: &[f64], levels: &[f64], rate: f64| {
-                let capacity = levels.iter().copied().fold(0., f64::max).max(ys * 0.1) * 1.1;
-                let midpoint = times
-                    .iter()
-                    .zip(levels)
-                    .min_by(|(_, a), (_, b)| {
-                        ((*a - capacity * 0.5).abs()).total_cmp(&((*b - capacity * 0.5).abs()))
+            let segment = |range: std::ops::Range<usize>, rate: f64| {
+                let mut eligible = range.filter(|&i| factors[i] > 0.);
+                let capacity = eligible
+                    .clone()
+                    .map(|i| observed[i])
+                    .fold(0., f64::max)
+                    .max(ys * 0.1)
+                    * 1.1;
+                let midpoint = eligible
+                    .clone()
+                    .min_by(|&a, &b| {
+                        (observed[a] - capacity * 0.5)
+                            .abs()
+                            .total_cmp(&(observed[b] - capacity * 0.5).abs())
                     })
-                    .map_or(time[0], |(&t, _)| t);
-                let span = times
-                    .first()
-                    .zip(times.last())
-                    .map_or(ts, |(first, last)| (last - first).max(1.));
+                    .map_or(time[0], |i| time[i]);
+                let span = eligible
+                    .clone()
+                    .next()
+                    .zip(eligible.next_back())
+                    .map_or(ts, |(first, last)| (time[last] - time[first]).max(1.));
                 [capacity, rate / span, midpoint]
             };
             let split = event.map_or(time.len(), |e| time.partition_point(|t| *t < e));
             [2., 5., 10.]
                 .into_iter()
                 .map(|rate| {
-                    let mut p = segment(&time[..split], &observed[..split], rate).to_vec();
+                    let mut p = segment(0..split, rate).to_vec();
                     if event.is_some() {
-                        p.extend(segment(&time[split..], &observed[split..], rate));
+                        p.extend(segment(split..time.len(), rate));
                     }
                     p.resize(names.len(), 0.);
                     transform(&p)
@@ -298,13 +329,17 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 .collect::<Vec<_>>()
         };
         let fit = crate::numerics::least_squares(
-            &observed.iter().map(|y| y / ys).collect::<Vec<_>>(),
+            &observed
+                .iter()
+                .zip(&factors)
+                .map(|(y, w)| (y * w) / ys)
+                .collect::<Vec<_>>(),
             &starts,
             |v| {
                 let p = untransform(v);
                 time.iter()
                     .enumerate()
-                    .map(|(i, &t)| point(&p, i, t).map(|(y, _)| y / ys))
+                    .map(|(i, &t)| point(&p, i, t).map(|(y, _)| (y * factors[i]) / ys))
                     .collect()
             },
             limit,
@@ -359,6 +394,25 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 "LogisticModel",
                 names.len() + 1,
             );
+            if weights.is_some() {
+                let weighted_rss: f64 = y
+                    .iter()
+                    .zip(&values)
+                    .zip(&factors)
+                    .map(|((y, prediction), factor)| (y * factor - prediction * factor).powi(2))
+                    .sum();
+                d["metrics"]["AIC"] = Value::Null;
+                d["metrics"]["BIC"] = Value::Null;
+                d["information_criteria"] =
+                    json!({"available":false,"reason":"weighted likelihood not qualified"});
+                d["weighting"] = json!({
+                    "maximum_weight": max_weight,
+                    "positive_observations": factors.iter().filter(|w| **w > 0.).count(),
+                    "weighted_rss_normalized_by_max": weighted_rss,
+                    "rank_semantics": "weighted local Jacobian; zero-weight residuals excluded",
+                    "descriptive_metrics": "unweighted"
+                });
+            }
             if let Some((optimizer, rank)) = quality {
                 if optimizer["converged"] != true {
                     d["warnings"]
