@@ -5027,3 +5027,8 @@ Hosted release readiness for this worktree revision remains open.
   now binds the effective Rust configuration across consumers.
   Each binding matched its uninterrupted result after one pause.
   Large tick values and multi-engine resume remain open.
+
+- [x] Preserve large DES checkpoint ticks as decimal strings. The
+  focused Rust resume test passed. Installed R round-tripped ticks
+  49148533472158968 and 67101675129204106 through its structured
+  bridge and matched the uninterrupted simulation result.

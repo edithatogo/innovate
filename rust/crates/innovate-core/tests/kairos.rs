@@ -313,12 +313,12 @@ fn des_checkpoint_resumes_with_original_history_and_rng() {
     payload["simulation_options"]["pause_after_adoptions"] = json!(1);
     let paused = run(payload.clone()).unwrap().result.unwrap();
     assert_eq!(paused["status"], "paused");
-    assert_eq!(paused["checkpoint"]["events"], json!([1]));
+    assert_eq!(paused["checkpoint"]["events"], json!(["1"]));
 
     payload["simulation_options"]["pause_after_adoptions"] = json!(2);
     payload["simulation_options"]["resume_checkpoint"] = paused["checkpoint"].clone();
     let paused_again = run(payload.clone()).unwrap().result.unwrap();
-    assert_eq!(paused_again["checkpoint"]["events"], json!([1, 2]));
+    assert_eq!(paused_again["checkpoint"]["events"], json!(["1", "2"]));
 
     payload["simulation_options"]
         .as_object_mut()

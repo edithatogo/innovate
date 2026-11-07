@@ -24,7 +24,7 @@ struct AdoptionClock {
 struct DesCheckpoint {
     version: u32,
     configuration: String,
-    events: Vec<u64>,
+    events: Vec<String>,
     rng: RngCheckpoint,
 }
 
@@ -215,14 +215,20 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     if let Some(resume) = resume {
         let saved: DesCheckpoint = serde_json::from_value(resume.clone())
             .map_err(|_| invalid("invalid DES checkpoint format"))?;
+        let saved_events = saved
+            .events
+            .iter()
+            .map(|tick| tick.parse::<u64>())
+            .collect::<Result<Vec<_>, _>>()
+            .map_err(|_| invalid("invalid DES checkpoint event tick"))?;
         if saved.version != 1
             || Some(&saved.configuration) != checkpoint_configuration.as_ref()
-            || saved.events.is_empty()
-            || saved.events.len() as u64 >= population - initial
-            || saved.events[0] == 0
-            || saved.events.windows(2).any(|pair| pair[0] >= pair[1])
-            || u128::from(*saved.events.last().unwrap()) > horizon
-            || pause.is_some_and(|count| count <= saved.events.len() as u64)
+            || saved_events.is_empty()
+            || saved_events.len() as u64 >= population - initial
+            || saved_events[0] == 0
+            || saved_events.windows(2).any(|pair| pair[0] >= pair[1])
+            || u128::from(*saved_events.last().unwrap()) > horizon
+            || pause.is_some_and(|count| count <= saved_events.len() as u64)
             || saved.rng.seed != clock.rng.checkpoint().seed
             || saved.rng.stream_id != clock.rng.checkpoint().stream_id
         {
@@ -230,7 +236,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 "DES checkpoint is incompatible with this simulation",
             ));
         }
-        events.extend(saved.events.into_iter().map(u128::from));
+        events.extend(saved_events.into_iter().map(u128::from));
         clock.now = *events.last().unwrap();
         clock.forcing_index = forcing.partition_point(|row| row.0 <= clock.now) - 1;
         clock.rng = DeterministicStream::restore(&saved.rng)
@@ -288,7 +294,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         let checkpoint = DesCheckpoint {
             version: 1,
             configuration: checkpoint_configuration.unwrap(),
-            events: events.into_iter().map(|tick| tick as u64).collect(),
+            events: events.into_iter().map(|tick| tick.to_string()).collect(),
             rng: clock.rng.checkpoint(),
         };
         return Ok(KernelResponse {

@@ -483,3 +483,5 @@ pause option to finish, or supply a higher cumulative count to pause
 again. The completed result includes the original adoption history.
 Keep checkpoints as trusted artifacts. Version 1 supports the
 `kairos_des` Bass engine at dispatched adoption boundaries.
+Event ticks in the checkpoint are decimal strings to preserve their
+full integer precision across JSON consumers.
