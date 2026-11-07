@@ -227,3 +227,60 @@ fn export_ipc_file_frames_schema_and_preserves_nulls_and_types() {
         .unwrap();
     assert_eq!(decoded, frame);
 }
+
+#[test]
+fn paired_ipc_preserves_order_and_rejects_reordered_draws() {
+    use innovate_tabular::paired_outcomes_ipc;
+    use std::io::Cursor;
+
+    let parameters = json!([
+        {"name":"m","value":100,"unit":"people"},
+        {"name":"p","value":0.03,"unit":"year^-1"},
+        {"name":"q","value":0.3,"unit":"year^-1"}
+    ]);
+    let strategy = |id, value| {
+        json!({
+            "scenario_id":id,"time_unit":"year","provenance":"synthetic",
+            "draws":[
+                {"draw_id":9,"time":[0,1],"adoption":[0,value],"parameters":parameters},
+                {"draw_id":2,"time":[0,1],"adoption":[0,2],"parameters":parameters}
+            ]
+        })
+    };
+    let mut payload = json!({"strategies":[strategy("baseline",3),strategy("alternative",4)]});
+    let bytes = paired_outcomes_ipc(&payload).unwrap();
+    let frame = IpcReader::new(Cursor::new(bytes)).finish().unwrap();
+    assert_eq!(frame.height(), 8);
+    let draws = frame.column("draw_id").unwrap().u64().unwrap();
+    assert!(draws.into_no_null_iter().eq([9, 9, 2, 2, 9, 9, 2, 2]));
+    assert_eq!(
+        frame.column("adoption").unwrap().f64().unwrap().get(5),
+        Some(4.0)
+    );
+    assert_eq!(
+        frame.column("scenario_id").unwrap().str().unwrap().get(4),
+        Some("alternative")
+    );
+    assert_eq!(frame.column("perspective").unwrap().null_count(), 8);
+    let encoded = frame
+        .column("parameters_json")
+        .unwrap()
+        .str()
+        .unwrap()
+        .get(5)
+        .unwrap();
+    assert_eq!(
+        serde_json::from_str::<serde_json::Value>(encoded).unwrap(),
+        parameters
+    );
+    payload["strategies"][1]["draws"]
+        .as_array_mut()
+        .unwrap()
+        .swap(0, 1);
+    assert!(
+        paired_outcomes_ipc(&payload)
+            .unwrap_err()
+            .to_string()
+            .contains("matching ordered draw IDs")
+    );
+}

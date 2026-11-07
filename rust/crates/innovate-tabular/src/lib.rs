@@ -329,7 +329,7 @@ pub fn scenario_executions_ipc(response: &Value) -> PolarsResult<Vec<u8>> {
     }
     let mut frame = df!("scenario_id" => ids, "model_key" => models,
         "successful" => successful, "execution_json" => encoded)?;
-    write_scenario_ipc(&mut frame)
+    write_ipc_file(&mut frame)
 }
 
 /// Encode ordered pair and ensemble comparisons, preserving nested outcomes.
@@ -353,7 +353,7 @@ pub fn scenario_comparisons_ipc(response: &Value) -> PolarsResult<Vec<u8>> {
     let indices: Vec<_> = (0..rows.len() as u64).collect();
     let mut frame = df!("comparison_index" => indices, "kind" => kinds,
         "successful" => successful, "comparison_json" => encoded)?;
-    write_scenario_ipc(&mut frame)
+    write_ipc_file(&mut frame)
 }
 
 fn scenario_rows<'a>(response: &'a Value, field: &str) -> PolarsResult<&'a [Value]> {
@@ -366,10 +366,56 @@ fn scenario_rows<'a>(response: &'a Value, field: &str) -> PolarsResult<&'a [Valu
         .ok_or_else(|| polars_err!(SchemaMismatch: "missing scenario {field} rows"))
 }
 
-fn write_scenario_ipc(frame: &mut DataFrame) -> PolarsResult<Vec<u8>> {
+fn write_ipc_file(frame: &mut DataFrame) -> PolarsResult<Vec<u8>> {
     let mut bytes = Vec::new();
     IpcWriter::new(&mut bytes)
         .with_compat_level(CompatLevel::oldest())
         .finish(frame)?;
     Ok(bytes)
+}
+
+/// Encode validated paired Bass trajectories in strategy, draw and time order.
+/// Parameter arrays retain their original names, values, units and order as JSON.
+pub fn paired_outcomes_ipc(payload: &Value) -> PolarsResult<Vec<u8>> {
+    let request = json!({
+        "schema_version": "2.0", "operation": "validate_paired_outcomes", "payload": payload
+    });
+    let response: Value = serde_json::from_str(&innovate_core::execute_json(&request.to_string()))
+        .map_err(|error| polars_err!(ComputeError: "{error}"))?;
+    if !response["error"].is_null() {
+        polars_bail!(ComputeError: "{}", response["error"]["message"]);
+    }
+
+    let mut ids = Vec::new();
+    let mut draws = Vec::new();
+    let mut time_units = Vec::new();
+    let mut perspectives = Vec::new();
+    let mut provenance = Vec::new();
+    let mut parameters = Vec::new();
+    let mut times = Vec::new();
+    let mut adoption = Vec::new();
+    // The native validator established these field types and trajectory lengths.
+    for strategy in response["result"]["strategies"].as_array().unwrap() {
+        for draw in strategy["draws"].as_array().unwrap() {
+            let parameter_json = draw["parameters"].to_string();
+            let time = draw["time"].as_array().unwrap();
+            let values = draw["adoption"].as_array().unwrap();
+            for (time, value) in time.iter().zip(values) {
+                ids.push(strategy["scenario_id"].as_str().unwrap());
+                draws.push(draw["draw_id"].as_u64().unwrap());
+                time_units.push(strategy["time_unit"].as_str().unwrap());
+                perspectives.push(strategy["perspective"].as_str());
+                provenance.push(strategy["provenance"].as_str().unwrap());
+                parameters.push(parameter_json.clone());
+                times.push(time.as_f64().unwrap());
+                adoption.push(value.as_f64().unwrap());
+            }
+        }
+    }
+    let mut frame = df!(
+        "scenario_id" => ids, "draw_id" => draws, "time_unit" => time_units,
+        "perspective" => perspectives, "provenance" => provenance,
+        "parameters_json" => parameters, "time" => times, "adoption" => adoption
+    )?;
+    write_ipc_file(&mut frame)
 }

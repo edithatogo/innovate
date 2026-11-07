@@ -4045,3 +4045,9 @@ Hosted release readiness for this worktree revision remains open.
   rejected a reversed draw sequence with `invalid_request`. R comparison
   used parsed JSON equality, preserving array order and ignoring object key
   order. This verifies the JSON bridge. Arrow export remains open.
+- [x] Encode validated paired Bass trajectories as Arrow IPC in the Rust
+  tabular crate. Rows follow strategy, draw and time order, with nullable
+  perspective and the original parameter arrays encoded as JSON. The
+  Polars round-trip regression checks identity, adoption and parameter
+  values and rejects reordered draws before export. All ten tabular tests
+  passed. Host export adapters and downstream acceptance remain open.
