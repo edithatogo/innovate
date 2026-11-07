@@ -3630,3 +3630,9 @@ Hosted release readiness for this worktree revision remains open.
   error for opposite effects at the floating-point limit. Nine scenario
   boundary tests, formatting and focused Clippy passed. This check
   covers the Rust core. Broader ensemble qualification remains open.
+- [x] Verify the adjacent-effects fixture through the public scenario grid
+  in the rebuilt Python 3.15.2 wheel, Julia and freshly installed R.
+  Two Logistic pairs produced final effects 1.5 and 1.5000000000000002.
+  Each binding returned standard error 1.1102230246251564e-16, within
+  four machine epsilons relative to the analytic half-gap. R received
+  raw request JSON to retain the adjacent floating-point tokens.
