@@ -646,3 +646,10 @@ end
     @test partial["unmatched_treated_indices"] == [3]
     @test_throws r"requires a control within the caliper" kernel_call("summarize_causal", nothing, payload)
 end
+
+@testset "Ridge logistic propensity fit" begin
+    fit = kernel_call("summarize_causal", nothing, Dict("method"=>"fit_logistic_propensities",
+        "treatment"=>[0,1], "covariates"=>[[-2],[2]], "ridge"=>0.25/log(3)))["result"]
+    @test isapprox(fit["propensities"], [0.25,0.75]; atol=1e-7)
+    @test fit["covariate_scales"] == [2]
+end

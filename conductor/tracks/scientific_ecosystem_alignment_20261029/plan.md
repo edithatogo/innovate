@@ -4605,3 +4605,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Fit ridge logistic treatment propensities for numeric covariates.
   The Rust fixture verifies analytic probabilities 0.25 and 0.75 and
   rejects a single treatment arm. Binding checks and fitted inference remain open.
+
+- [x] Verify ridge logistic propensity fitting through rebuilt Python
+  3.15.2, Julia and installed R. All three preserved the single-column
+  matrix and recovered probabilities 0.25 and 0.75 with scale 2.

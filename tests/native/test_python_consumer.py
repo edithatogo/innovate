@@ -1387,3 +1387,10 @@ def test_nearest_score_matching():
     assert partial["unmatched_treated_indices"] == [3]
     with pytest.raises(innovate.NativeError, match="requires a control within the caliper"):
         innovate.execute("summarize_causal", **payload)
+
+
+def test_ridge_logistic_propensity_fit():
+    fit = innovate.execute("summarize_causal", method="fit_logistic_propensities",
+                           treatment=[0, 1], covariates=[[-2], [2]], ridge=0.25 / math.log(3))["result"]
+    assert fit["propensities"] == pytest.approx([0.25, 0.75], abs=1e-7)
+    assert fit["covariate_scales"] == [2]
