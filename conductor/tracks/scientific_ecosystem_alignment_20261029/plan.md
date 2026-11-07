@@ -5829,3 +5829,9 @@ Hosted release readiness for this worktree revision remains open.
   wheel. A repeated rank preserved the existing receipt digest, and
   staging directories were removed. Filesystems must support hard
   links. Scheduler-backed and multi-node verification remain open.
+
+- [x] Retain the Slurm CPU budget separately from the capped native
+  worker request in benchmark receipts. A synthetic environment with
+  128 CPUs recorded 128 allocated and 32 requested, and all three
+  fast cases passed with the retained wheel. Ruff passed. A real
+  Slurm allocation remains unverified.

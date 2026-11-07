@@ -27,6 +27,7 @@ def main() -> int:
     args = parser.parse_args()
 
     count = args.workers if args.workers is not None else 1
+    allocated_cpus = None
     if args.slurm_allocation:
         allocated = os.environ.get("SLURM_CPUS_PER_TASK", "")
         try:
@@ -36,6 +37,7 @@ def main() -> int:
         if count < 1:
             parser.error("--slurm-allocation requires a positive integer SLURM_CPUS_PER_TASK")
         modes = execute("discover_execution_modes")["result"]
+        allocated_cpus = count
         count = min(count, modes["local_cpu"]["max_workers"])
     payload = {"workers": count}
     shard = None
@@ -79,6 +81,7 @@ def main() -> int:
     response["metadata"]["benchmark_runner"] = {
         "native_extension_sha256": native_extension_sha256,
         "requested_workers": count,
+        "slurm_allocated_cpus_per_task": allocated_cpus,
         "worker_budget_source": "SLURM_CPUS_PER_TASK" if args.slurm_allocation else "command_line",
         "ci_policy": args.policy,
         "kernel_elapsed_seconds": elapsed,
