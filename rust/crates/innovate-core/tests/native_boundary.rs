@@ -686,6 +686,19 @@ fn causal_summaries_match_analytic_effects() {
     assert!(run(adjusted)["result"].is_null());
     let mut weighted = json!({"method":"propensity_weighted_contrast",
         "outcomes":[0,10,2,12],"treatment":[0,0,1,1],"propensities":[0.2,0.8,0.2,0.8]});
+    let mut fit = json!({"method":"estimate_stratum_propensities",
+        "treatment":[0,1,0,1,0,1,1],"strata":["low","high","low","low","high","high","high"]});
+    let result = run(fit.clone());
+    assert_eq!(
+        result["result"]["propensities"],
+        json!([1. / 3., 0.75, 1. / 3., 1. / 3., 0.75, 0.75, 0.75])
+    );
+    let composed = run(json!({"method":"propensity_weighted_contrast",
+        "outcomes":[0,19,0,2,10,19,19],"treatment":fit["treatment"],
+        "propensities":result["result"]["propensities"]}));
+    assert!((composed["result"]["estimate"].as_f64().unwrap() - 6.).abs() < 1e-12);
+    fit["strata"][6] = json!("single_arm");
+    assert!(run(fit)["result"].is_null());
     let result = run(weighted.clone());
     assert!((result["result"]["estimate"].as_f64().unwrap() + 4.).abs() < 1e-12);
     let error = result["result"]["fixed_propensity_standard_error"]

@@ -4556,3 +4556,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify fixed-propensity sampling error through rebuilt Python
   3.15.2, Julia and installed R. Each returned sqrt(20.48) and null
   for singleton arms. Fitted-propensity inference remains open.
+
+- [x] Estimate empirical propensities by caller-supplied stratum.
+  The Rust regression checks input ordering, rejects absent overlap,
+  and verifies that feeding the fitted probabilities into weighted ATE
+  recovers the stratified estimate of 6. Binding qualification remains open.

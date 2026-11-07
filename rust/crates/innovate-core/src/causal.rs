@@ -306,6 +306,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
         Some("treatment_contrast") => treatment_contrast(payload),
         Some("stratified_treatment_contrast") => stratified_treatment_contrast(payload),
         Some("propensity_weighted_contrast") => propensity_weighted_contrast(payload),
+        Some("estimate_stratum_propensities") => estimate_stratum_propensities(payload),
         Some("intervention_contract") => intervention_contract(payload),
         Some("policy_specification") => policy_specification(payload),
         Some("policy_evidence") => policy_evidence(payload),
@@ -738,6 +739,52 @@ fn stratified_treatment_contrast(payload: &Value) -> Result<Value, &'static str>
         "conditional_standard_error":conditional_standard_error.map(finite).transpose()?,
         "excluded_control_observations":excluded_control_observations,
         "estimand":if att { "att" } else { "ate" },"by_stratum":by_stratum}),
+    )
+}
+
+fn estimate_stratum_propensities(payload: &Value) -> Result<Value, &'static str> {
+    let treatment = series(payload, "treatment")?;
+    let strata: Vec<String> = serde_json::from_value(payload["strata"].clone())
+        .map_err(|_| "strata must contain string labels")?;
+    if treatment.is_empty() || treatment.len() != strata.len() {
+        return Err("treatment and strata must be nonempty and aligned");
+    }
+    let mut counts = std::collections::BTreeMap::<&str, (usize, usize)>::new();
+    for (label, flag) in strata.iter().zip(treatment) {
+        if label.trim().is_empty() {
+            return Err("stratum labels must be nonblank");
+        }
+        let (treated, control) = counts.entry(label).or_default();
+        match flag {
+            0. => *control += 1,
+            1. => *treated += 1,
+            _ => return Err("treatment indicators must be binary"),
+        }
+    }
+    if counts
+        .values()
+        .any(|&(treated, control)| treated == 0 || control == 0)
+    {
+        return Err("propensity estimation requires both arms in every stratum");
+    }
+    let by_stratum: serde_json::Map<String, Value> = counts
+        .into_iter()
+        .map(|(label, (treated, control))| {
+            (
+                label.to_owned(),
+                json!({
+                    "propensity":treated as f64 / (treated + control) as f64,
+                    "n_treated":treated,"n_control":control
+                }),
+            )
+        })
+        .collect();
+    let propensities: Vec<_> = strata
+        .iter()
+        .map(|label| &by_stratum[label]["propensity"])
+        .collect();
+    Ok(
+        json!({"method":"empirical_stratum_frequency","propensities":propensities,"by_stratum":by_stratum}),
     )
 }
 

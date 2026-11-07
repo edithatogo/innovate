@@ -239,3 +239,10 @@ for independent observations and a fixed propensity function. It
 combines squared weighted residuals with an arm-specific n/(n−1)
 correction. It is null when either arm has fewer than two observations.
 Uncertainty from fitting the propensity function requires separate inference.
+
+Call `summarize_causal` with method `estimate_stratum_propensities`
+and aligned `treatment` and `strata` arrays to estimate treatment
+probabilities from observed arm frequencies. It returns probabilities
+in input order and arm counts by stratum. Every stratum requires both
+arms. When those fitted probabilities feed the weighted contrast, its
+fixed-propensity standard error does not account for the fitting step.
