@@ -18,6 +18,7 @@ ROOT = Path(__file__).parents[2]
         "duplicate_feature",
         "missing_evidence",
         "invalid_status",
+        "qualified_with_remaining_work",
         "nonboolean_release",
         "premature_release",
     ],
@@ -44,6 +45,8 @@ def test_migration_policy_rejects_feature_loss(tmp_path, monkeypatch, mutation):
         ledger["feature_areas"][0]["required"] = False
     elif mutation == "missing_evidence":
         del ledger["models"][0]["evidence"]
+    elif mutation == "qualified_with_remaining_work":
+        ledger["models"][0].update(status="qualified", remaining="Scientific parity open")
     elif mutation == "invalid_status":
         ledger["models"][0]["status"] = "complete"
     else:
@@ -52,7 +55,8 @@ def test_migration_policy_rejects_feature_loss(tmp_path, monkeypatch, mutation):
     (tmp_path / "pyproject.toml").write_text((ROOT / "pyproject.toml").read_text())
     monkeypatch.setattr(module, "ROOT", tmp_path)
     monkeypatch.setattr("sys.argv", ["check_migration.py"])
-    with pytest.raises(
-        ValueError, match="(lost|required|Missing migration evidence|Invalid migration status|release_ready)"
-    ):
+    expected = "(lost|required|Missing migration evidence|Invalid migration status|release_ready)"
+    if mutation == "qualified_with_remaining_work":
+        expected = "Qualified migration obligation still has remaining work"
+    with pytest.raises(ValueError, match=expected):
         module.main()

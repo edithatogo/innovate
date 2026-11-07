@@ -4975,3 +4975,6 @@ Hosted release readiness for this worktree revision remains open.
   ledger passed the release check and the same ledger with one open
   qualification item was rejected. The real development ledger passed
   validation and the release check still returned 1 for 38 obligations.
+
+- [x] Retain the contradictory-ledger regression in the migration
+  policy suite. All nine cases passed under repo-local Python 3.15.2.
