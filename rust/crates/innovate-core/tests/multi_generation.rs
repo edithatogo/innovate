@@ -360,7 +360,7 @@ fn historical_norton_events_preserve_continuous_generations_and_controls() {
 }
 
 #[test]
-fn scalar_norton_events_bypass_closed_form_and_successive_variant_stays_explicit() {
+fn scalar_norton_events_extend_to_both_variants() {
     let mut payload = json!({
         "inputs":{"time":[0.,1.,2.]},
         "parameters":{"p1":0.1,"q1":0.,"m1":100.},
@@ -376,10 +376,13 @@ fn scalar_norton_events_bypass_closed_form_and_successive_variant_stays_explicit
     assert!((result["rows"][2][0].as_f64().unwrap() - 100. * (1. - (-0.2_f64).exp())).abs() < 1e-6);
     assert_eq!(result["rates"][1][0], 0.);
     payload["constructor_kwargs"]["variant"] = json!("successive_generations");
+    let successive = KernelBinding::new()
+        .predict_model("norton_bass", payload)
+        .unwrap()
+        .result
+        .unwrap();
     assert!(
-        KernelBinding::new()
-            .predict_model("norton_bass", payload)
-            .is_err()
+        (successive["rows"][2][0].as_f64().unwrap() - 100. * (1. - (-0.2_f64).exp())).abs() < 1e-6
     );
 }
 
@@ -446,4 +449,215 @@ fn historical_norton_events_match_independent_reference_and_fit() {
             "actual={actual} expected={expected} fit={fit}"
         );
     }
+}
+
+#[test]
+fn successive_controls_include_capacity_slopes_and_launch_rates() {
+    let result = KernelBinding::new()
+        .predict_model(
+            "norton_bass",
+            json!({
+                "inputs":{"time":[0.,1.,2.,3.],"covariates":{"price":[0.,1.,2.,3.]}},
+                "parameters":{"p1":0.1,"q1":0.,"m1":100.,"p2":0.1,"q2":0.,"m2":200.,
+                    "beta_p1_price":0.05,"beta_q1_price":0.,"beta_m1_price":10.,
+                    "beta_p2_price":0.05,"beta_q2_price":0.,"beta_m2_price":-5.},
+                "constructor_kwargs":{"n_generations":2,"variant":"successive_generations",
+                    "launch_times":[0.,1.],"covariates":["price"]}
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    let first = 1. - (-0.3_f64).exp();
+    let second = 1. - (-0.175_f64).exp();
+    let first_rate = 0.2 * (1. - first);
+    let second_rate = 0.2 * (1. - second);
+    let inherited = 120. * first;
+    let inherited_rate = 120. * first_rate + 10. * first;
+    let expected = [inherited * (1. - second), second * (190. + inherited)];
+    let rates = [
+        inherited_rate * (1. - second) - inherited * second_rate,
+        second_rate * (190. + inherited) + second * (-5. + inherited_rate),
+    ];
+    for index in 0..2 {
+        assert!((result["rows"][2][index].as_f64().unwrap() - expected[index]).abs() < 1e-5);
+        assert!((result["rates"][2][index].as_f64().unwrap() - rates[index]).abs() < 1e-5);
+    }
+    assert_eq!(result["rows"][1][1], 0.);
+    let forecast = KernelBinding::new()
+        .predict_model(
+            "norton_bass",
+            json!({
+                "inputs":{"time":[4.]},"state":result["state"]
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    let first = 1. - (-0.775_f64).exp();
+    let second = 1. - (-0.65_f64).exp();
+    assert!((forecast["rows"][0][0].as_f64().unwrap() - 130. * first * (1. - second)).abs() < 1e-5);
+}
+
+#[test]
+fn successive_forcing_matches_independent_fraction_reference_and_fit() {
+    let fixture: Value =
+        serde_json::from_str(include_str!("fixtures/successive_forcing_scipy.json")).unwrap();
+    let binding = KernelBinding::new();
+    let result = binding.predict_model("norton_bass",json!({
+        "inputs":{"time":fixture["time"],"covariates":fixture["covariates"]},
+        "parameters":fixture["parameters"],"constructor_kwargs":fixture["constructor_kwargs"]
+    })).unwrap().result.unwrap();
+    for quantity in ["rows", "rates"] {
+        for (actual, expected) in result[quantity]
+            .as_array()
+            .unwrap()
+            .iter()
+            .zip(fixture[quantity].as_array().unwrap())
+        {
+            for (actual, expected) in actual
+                .as_array()
+                .unwrap()
+                .iter()
+                .zip(expected.as_array().unwrap())
+            {
+                assert!(
+                    (actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-5,
+                    "{quantity} actual={actual} expected={expected}"
+                );
+            }
+        }
+    }
+    let mut start = fixture["parameters"].clone();
+    start["p1"] = json!(0.0305);
+    let fit = binding.fit_model("norton_bass",json!({
+        "inputs":{"time":fixture["time"],"covariates":fixture["covariates"],"observed":fixture["rows"]},
+        "constructor_kwargs":fixture["constructor_kwargs"],
+        "fit_options":{"initial_parameters":start,"max_iterations":200}
+    })).unwrap().result.unwrap();
+    assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
+    assert!(fit["diagnostics"]["metrics"]["RSS"].as_f64().unwrap() < 1e-8);
+    let forecast = binding
+        .predict_model(
+            "norton_bass",
+            json!({
+                "inputs":{"time":fixture["forecast_time"]},"state":fit["state"]
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    for (actual, expected) in forecast["rows"][0]
+        .as_array()
+        .unwrap()
+        .iter()
+        .zip(fixture["forecast_rows"][0].as_array().unwrap())
+    {
+        assert!(
+            (actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-3,
+            "actual={actual} expected={expected} fit={fit}"
+        );
+    }
+}
+
+#[test]
+fn successive_capacity_events_jump_levels_and_invalid_hazards_are_rejected() {
+    let mut payload = json!({
+        "inputs":{"time":[0.,1.,2.]},
+        "parameters":{"p1":0.1,"q1":0.,"m1":100.},
+        "constructor_kwargs":{"variant":"successive_generations","n_generations":1,
+            "parameter_events":[{"time":1.,"parameters":{"m1":200.}}]}
+    });
+    let result = KernelBinding::new()
+        .predict_model("norton_bass", payload.clone())
+        .unwrap()
+        .result
+        .unwrap();
+    assert!((result["rows"][1][0].as_f64().unwrap() - 200. * (1. - (-0.1_f64).exp())).abs() < 1e-6);
+    assert!((result["rates"][1][0].as_f64().unwrap() - 20. * (-0.1_f64).exp()).abs() < 1e-6);
+    payload["constructor_kwargs"]["covariates"] = json!(["price"]);
+    payload["inputs"]["covariates"] = json!({"price":[0.,1.,2.]});
+    payload["parameters"]["beta_p1_price"] = json!(-0.2);
+    payload["parameters"]["beta_q1_price"] = json!(0.);
+    payload["parameters"]["beta_m1_price"] = json!(0.);
+    assert!(
+        KernelBinding::new()
+            .predict_model("norton_bass", payload.clone())
+            .is_err()
+    );
+    payload["constructor_kwargs"]["launch_times"] = json!([5.]);
+    payload["inputs"] = json!({"time":[0.,1.],"covariates":{"price":[0.,1.]}});
+    let unlaunched = KernelBinding::new()
+        .predict_model("norton_bass", payload)
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(unlaunched["rows"], json!([[0.], [0.]]));
+    assert_eq!(unlaunched["rates"], json!([[0.], [0.]]));
+}
+
+#[test]
+fn capacity_rate_scaling_avoids_unrepresentable_intermediate_control_slopes() {
+    let binding = KernelBinding::new();
+    for beta in [0., 1e-308] {
+        let result = binding.predict_model("norton_bass",json!({
+            "inputs":{"time":[0.,0.5,1.],"covariates":{"price":[-1e308,0.,1e308]}},
+            "parameters":{"p1":0.1,"q1":0.,"m1":100.,
+                "beta_p1_price":0.,"beta_q1_price":0.,"beta_m1_price":beta},
+            "constructor_kwargs":{"n_generations":1,"variant":"successive_generations","covariates":["price"]}
+        })).unwrap().result.unwrap();
+        let fraction = 1. - (-0.05_f64).exp();
+        let capacity_rate = if beta == 0. { 0. } else { 2. };
+        assert!((result["rows"][1][0].as_f64().unwrap() - 100. * fraction).abs() < 1e-6);
+        assert!(
+            (result["rates"][1][0].as_f64().unwrap()
+                - (10. * (1. - fraction) + capacity_rate * fraction))
+                .abs()
+                < 1e-6
+        );
+    }
+    let result = binding.predict_model("norton_bass",json!({
+        "inputs":{"time":[0.,1.,2.]},
+        "parameters":{"p1":0.1,"q1":0.,"m1":100.,
+            "beta_p1_price":0.,"beta_q1_price":0.,"beta_m1_price":1e308},
+        "constructor_kwargs":{"n_generations":1,"variant":"successive_generations","covariates":["price"],
+            "covariate_history":{"time":[0.,1e308],"values":{"price":[0.,1e-308]}},
+            "parameter_events":[{"time":1.,"parameters":{"p1":0.}}]}
+    })).unwrap().result.unwrap();
+    let rate = result["rates"][2][0].as_f64().unwrap();
+    assert!(rate > 0.);
+    assert!((rate / 1e-308 - (1. - (-0.1_f64).exp())).abs() < 1e-6);
+}
+
+#[test]
+fn successive_control_history_can_start_at_the_first_launch() {
+    let result = KernelBinding::new()
+        .predict_model(
+            "norton_bass",
+            json!({
+                "inputs":{"time":[2.,3.],"covariates":{"price":[0.,0.]}},
+                "parameters":{"p1":0.1,"q1":0.,"m1":100.,
+                    "beta_p1_price":0.,"beta_q1_price":0.,"beta_m1_price":0.},
+                "constructor_kwargs":{"n_generations":1,"variant":"successive_generations",
+                    "launch_times":[2.],"covariates":["price"]}
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(result["rows"][0][0], 0.);
+    assert!((result["rows"][1][0].as_f64().unwrap() - 100. * (1. - (-0.1_f64).exp())).abs() < 1e-6);
+}
+
+#[test]
+fn capacity_event_uses_each_intervals_active_control_derivative() {
+    let result = KernelBinding::new().predict_model("norton_bass",json!({
+        "inputs":{"time":[0.,1.,1.5],"covariates":{"price":[0.,1.,1e308]}},
+        "parameters":{"p1":0.1,"q1":0.,"m1":100.,
+            "beta_p1_price":0.,"beta_q1_price":0.,"beta_m1_price":1.},
+        "constructor_kwargs":{"n_generations":1,"variant":"successive_generations","covariates":["price"],
+            "parameter_events":[{"time":1.,"parameters":{"beta_m1_price":0.}}]}
+    })).unwrap().result.unwrap();
+    assert!((result["rows"][1][0].as_f64().unwrap() - 100. * (1. - (-0.1_f64).exp())).abs() < 1e-6);
+    assert!((result["rates"][1][0].as_f64().unwrap() - 10. * (-0.1_f64).exp()).abs() < 1e-6);
 }

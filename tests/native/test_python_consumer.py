@@ -699,9 +699,10 @@ def test_ecosystem_fixed_event_polars_fit():
     assert [future["prediction_1"][0], future["prediction_2"][0]] == pytest.approx(case["forecast_rows"][0], abs=1e-4)
 
 
-def test_norton_fixed_events_polars_fit_and_forecast():
+@pytest.mark.parametrize("fixture_name", ["norton_events_scipy.json", "successive_forcing_scipy.json"])
+def test_norton_event_variants_polars_fit_and_forecast(fixture_name):
     fixture = json.loads(
-        (Path(__file__).parents[2] / "rust/crates/innovate-core/tests/fixtures/norton_events_scipy.json").read_text()
+        (Path(__file__).parents[2] / "rust/crates/innovate-core/tests/fixtures" / fixture_name).read_text()
     )
     data = pl.DataFrame(
         {

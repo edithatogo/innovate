@@ -188,9 +188,6 @@ fn options(request: &KernelRequest, inputs: &Map<String, Value>) -> Result<Model
             "covariates must contain at most 32 distinct nonempty names",
         ));
     }
-    if variant != "legacy_cannibalization" && !covariates.is_empty() {
-        return Err(invalid(op, "covariates require legacy_cannibalization"));
-    }
     let history = kw
         .get("covariate_history")
         .map(|value| {
@@ -211,12 +208,6 @@ fn options(request: &KernelRequest, inputs: &Map<String, Value>) -> Result<Model
     }
     let events = ParameterEvents::parse(kw.get("parameter_events"), &names, 3 * n)
         .map_err(|error| invalid(op, error))?;
-    if variant != "legacy_cannibalization" && !events.is_empty() {
-        return Err(invalid(
-            op,
-            "parameter_events require legacy_cannibalization",
-        ));
-    }
     Ok(Model {
         n,
         variant,
@@ -336,6 +327,159 @@ impl Model {
             })
             .collect()
     }
+    fn successive_coefficients(
+        &self,
+        t: f64,
+        active: &[f64],
+        generation: usize,
+    ) -> Result<[f64; 3], String> {
+        let offset = 3 * generation;
+        let mut coefficients = [active[offset], active[offset + 1], active[offset + 2]];
+        if let Some(history) = &self.history {
+            for (index, name) in self.covariates.iter().enumerate() {
+                let start = 3 * self.n * (index + 1) + offset;
+                let beta = &active[start..start + 3];
+                for (coefficient, beta) in coefficients.iter_mut().zip(beta) {
+                    *coefficient += beta * history.at(name, t);
+                }
+            }
+        }
+        if coefficients
+            .iter()
+            .any(|value| !value.is_finite() || *value < 0.)
+            || coefficients[2] == 0.
+        {
+            return Err("successive-generation effective p/q must be finite nonnegative and m finite positive".into());
+        }
+        Ok(coefficients)
+    }
+
+    fn successive_market_rate(&self, t: f64, active: &[f64], generation: usize) -> f64 {
+        self.history.as_ref().map_or(0., |history| {
+            self.covariates
+                .iter()
+                .enumerate()
+                .map(|(index, name)| {
+                    let beta = active[3 * self.n * (index + 1) + 3 * generation + 2];
+                    history.scaled_slope(name, t, beta)
+                })
+                .sum()
+        })
+    }
+
+    fn predict_successive_forced(
+        &self,
+        time: &[f64],
+        parameters: &[f64],
+    ) -> Result<Trajectory, String> {
+        let end = *time.last().ok_or("time must not be empty")?;
+        let mut grid = time.to_vec();
+        if let Some(history) = &self.history {
+            grid.extend(
+                history
+                    .time
+                    .iter()
+                    .copied()
+                    .filter(|t| *t >= 0. && *t <= end),
+            );
+        }
+        grid.extend(self.launches.iter().copied().filter(|t| *t <= end));
+        grid.extend(self.events.times().filter(|t| *t <= end));
+        grid.sort_by(f64::total_cmp);
+        grid.dedup_by(|left, right| *left == *right);
+        let mut log_survival = vec![vec![0.; self.n]; time.len()];
+        for (generation, &launch) in self.launches.iter().enumerate() {
+            let active_times: Vec<_> = grid.iter().copied().filter(|t| *t >= launch).collect();
+            if active_times.is_empty() {
+                continue;
+            }
+            for &t in &active_times {
+                let regime = self.events.regime(t);
+                let left = self.events.boundary_left_regime(t).filter(|_| t > launch);
+                for side in std::iter::once(regime).chain(left) {
+                    let active = self.events.parameters(parameters, side);
+                    self.successive_coefficients(t, &active, generation)?;
+                }
+            }
+            // Log survival keeps the launched Bass fraction in [0, 1].
+            let states =
+                self.events
+                    .integrate(&active_times, launch, &[0.], |t, state, regime| {
+                        let active = self.events.parameters(parameters, regime);
+                        let derivative = self
+                            .successive_coefficients(t, &active, generation)
+                            .map(|[p, q, _]| {
+                                let fraction = -(-state[0]).exp_m1();
+                                p + q * fraction
+                            })
+                            .unwrap_or(f64::NAN);
+                        vec![derivative]
+                    })?;
+            for (index, &t) in time.iter().enumerate() {
+                if t >= launch {
+                    log_survival[index][generation] =
+                        states[active_times.partition_point(|point| *point < t)][0];
+                }
+            }
+        }
+        let mut rows = Vec::with_capacity(time.len());
+        let mut rates = Vec::with_capacity(time.len());
+        for (&t, state) in time.iter().zip(&log_survival) {
+            let active = self.events.parameters(parameters, self.events.regime(t));
+            let mut quantities = Vec::with_capacity(self.n);
+            for (generation, (&launch, &value)) in self.launches.iter().zip(state).enumerate() {
+                if t < launch {
+                    quantities.push((0., 0., 0., 0.));
+                    continue;
+                }
+                let [p, q, market] = self.successive_coefficients(t, &active, generation)?;
+                // Capacity derivatives belong to the right-hand report, not the fraction ODE.
+                let market_rate = self.successive_market_rate(t, &active, generation);
+                if !market_rate.is_finite() {
+                    return Err(
+                        "successive-generation capacity slope exceeded the finite numerical domain"
+                            .into(),
+                    );
+                }
+                let fraction = -(-value).exp_m1();
+                let fraction_rate = (p + q * fraction) * (-value).exp();
+                quantities.push((fraction, fraction_rate, market, market_rate));
+            }
+            let mut levels = Vec::with_capacity(self.n);
+            let mut derivatives = Vec::with_capacity(self.n);
+            let mut inherited = 0.;
+            let mut inherited_rate = 0.;
+            for (generation, &(fraction, fraction_rate, market, market_rate)) in
+                quantities.iter().enumerate()
+            {
+                let level = fraction * (market + inherited);
+                let rate = fraction_rate * (market + inherited)
+                    + fraction * (market_rate + inherited_rate);
+                let (next, next_rate, _, _) = quantities
+                    .get(generation + 1)
+                    .copied()
+                    .unwrap_or((0., 0., 0., 0.));
+                levels.push(level * (1. - next));
+                derivatives.push(rate * (1. - next) - level * next_rate);
+                inherited = level;
+                inherited_rate = rate;
+            }
+            rows.push(levels);
+            rates.push(derivatives);
+        }
+        if rows
+            .iter()
+            .chain(&rates)
+            .flatten()
+            .any(|value| !value.is_finite())
+        {
+            return Err(
+                "successive-generation prediction exceeded the finite numerical domain".into(),
+            );
+        }
+        Ok((rows, rates))
+    }
+
     fn predict(&self, time: &[f64], p: &[f64]) -> Result<Trajectory, String> {
         if self.variant == "legacy_cannibalization" {
             let rows: Vec<Vec<f64>> = if self.history.is_none()
@@ -382,6 +526,9 @@ impl Model {
             }
             return Ok((rows, rates));
         }
+        if self.history.is_some() || !self.events.is_empty() {
+            return self.predict_successive_forced(time, p);
+        }
         let mut rows = Vec::new();
         let mut rates = Vec::new();
         for &t in time {
@@ -423,7 +570,7 @@ impl Model {
         Ok(
             json!({"columns":(1..=self.n).map(|i|format!("series_{i}")).collect::<Vec<_>>(),"rows":rows,"rates":rates,
             "metadata":{"shape":[time.len(),self.n],"variant":self.variant,"quantity":"generation_level",
-            "rate_semantics":"signed derivative of generation level; not gross incidence", "launch_derivative":"right_hand", "parameter_event_semantics":"persistent fixed overrides; continuous historical ODE state; right-hand rates", "warnings":warnings}}),
+            "rate_semantics":"signed derivative of generation level; not gross incidence", "launch_derivative":"right_hand", "parameter_event_semantics":if self.variant=="successive_generations" {"continuous launched fractions; capacity overrides can jump levels; right-hand rates exclude jump impulses"} else {"persistent fixed overrides; continuous historical ODE state; right-hand rates"}, "warnings":warnings}}),
         )
     }
 }
@@ -513,12 +660,17 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
             "time must be finite, nonnegative and strictly increasing",
         ));
     }
+    let forcing_origin = if model.variant == "successive_generations" {
+        model.launches[0]
+    } else {
+        model.origin
+    };
     model.history = History::merge(
         model.history.take(),
         &model.covariates,
         &time,
         inputs.get("covariates"),
-        model.origin,
+        forcing_origin,
     )
     .map_err(|e| invalid(op, e))?;
     let mut optimizer = None;

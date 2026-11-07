@@ -368,22 +368,24 @@ end
     @test !fit["diagnostics"]["parameter_events"]["parameters_estimated"]
 end
 
-@testset "Historical Norton fixed events" begin
-    fixture = Innovate.JSON.parsefile(
-        joinpath(@__DIR__, "../../../rust/crates/innovate-core/tests/fixtures/norton_events_scipy.json");
-        dicttype=Dict{String,Any},
-    )
-    start = copy(fixture["parameters"])
-    start["p1"] = 0.0305
-    fit = kernel_fit_model("norton_bass", Dict(
-        "inputs"=>Dict("time"=>fixture["time"], "covariates"=>fixture["covariates"], "observed"=>fixture["rows"]),
-        "constructor_kwargs"=>fixture["constructor_kwargs"],
-        "fit_options"=>Dict("initial_parameters"=>start, "max_iterations"=>200),
-    ))["result"]
-    @test fit["diagnostics"]["optimizer"]["converged"]
-    @test !fit["diagnostics"]["parameter_events"]["parameters_estimated"]
-    forecast = kernel_predict_model(
-        "norton_bass", Dict("inputs"=>Dict("time"=>fixture["forecast_time"]), "state"=>fit["state"]),
-    )["result"]
-    @test maximum(abs.(forecast["rows"][1].-fixture["forecast_rows"][1])) < 1e-3
+@testset "Norton fixed event variants" begin
+    for fixture_name in ["norton_events_scipy.json", "successive_forcing_scipy.json"]
+        fixture = Innovate.JSON.parsefile(
+            joinpath(@__DIR__, "../../../rust/crates/innovate-core/tests/fixtures", fixture_name);
+            dicttype=Dict{String,Any},
+        )
+        start = copy(fixture["parameters"])
+        start["p1"] = 0.0305
+        fit = kernel_fit_model("norton_bass", Dict(
+            "inputs"=>Dict("time"=>fixture["time"], "covariates"=>fixture["covariates"], "observed"=>fixture["rows"]),
+            "constructor_kwargs"=>fixture["constructor_kwargs"],
+            "fit_options"=>Dict("initial_parameters"=>start, "max_iterations"=>200),
+        ))["result"]
+        @test fit["diagnostics"]["optimizer"]["converged"]
+        @test !fit["diagnostics"]["parameter_events"]["parameters_estimated"]
+        forecast = kernel_predict_model(
+            "norton_bass", Dict("inputs"=>Dict("time"=>fixture["forecast_time"]), "state"=>fit["state"]),
+        )["result"]
+        @test maximum(abs.(forecast["rows"][1].-fixture["forecast_rows"][1])) < 1e-3
+    end
 end

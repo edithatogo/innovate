@@ -113,8 +113,8 @@
       "key": "multi_generation_substitution",
       "status": "bounded_native",
       "required": true,
-      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/norton-events-20261107.json",
-      "remaining": "Successive-generation covariates/events, event inference, original threshold helpers, uncertainty, full parity and broader numerical qualification"
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/successive-forcing-20261107.json",
+      "remaining": "Launch/event inference, original threshold helpers, uncertainty, full parity and broader numerical qualification"
     },
     {
       "key": "competitive_ecosystems",

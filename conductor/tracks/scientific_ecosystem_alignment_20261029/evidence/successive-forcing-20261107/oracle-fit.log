@@ -1,0 +1,12 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.41s
+     Running tests/multi_generation.rs (target/debug/deps/multi_generation-fe12158b80170882)
+
+running 4 tests
+test successive_generation_closed_form_launches_and_conservation ... ok
+test successive_capacity_events_jump_levels_and_invalid_hazards_are_rejected ... ok
+test successive_controls_include_capacity_slopes_and_launch_rates ... ok
+test successive_forcing_matches_independent_fraction_reference_and_fit ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 12 filtered out; finished in 0.30s
+

@@ -88,6 +88,41 @@ impl History {
         }
         Ok(())
     }
+    pub(crate) fn scaled_slope(&self, name: &str, t: f64, coefficient: f64) -> f64 {
+        if coefficient == 0. {
+            return 0.;
+        }
+        let index = self.time.partition_point(|value| *value <= t);
+        if index == 0 || index == self.time.len() {
+            return 0.;
+        }
+        let values = &self.values[name];
+        let width = self.time[index] - self.time[index - 1];
+        let difference = values[index] - values[index - 1];
+        if difference == 0. {
+            return 0.;
+        }
+        let slope = if difference.is_finite() {
+            difference / width
+        } else {
+            values[index] / width - values[index - 1] / width
+        };
+        if slope.is_finite() && slope != 0. {
+            return coefficient * slope;
+        }
+        // Reorder scaling when an intermediate slope overflows or underflows.
+        let scaled_difference = if difference.is_finite() {
+            coefficient * difference
+        } else {
+            coefficient * values[index] - coefficient * values[index - 1]
+        };
+        let result = scaled_difference / width;
+        if result.is_finite() && scaled_difference != 0. {
+            return result;
+        }
+        (coefficient / width) * difference
+    }
+
     pub(crate) fn at(&self, name: &str, t: f64) -> f64 {
         let i = self.time.partition_point(|v| *v <= t);
         let v = &self.values[name];

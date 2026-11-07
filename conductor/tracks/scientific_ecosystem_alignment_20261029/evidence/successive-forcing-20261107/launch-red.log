@@ -1,0 +1,22 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.04s
+     Running tests/multi_generation.rs (target/debug/deps/multi_generation-fe12158b80170882)
+
+running 1 test
+test successive_control_history_can_start_at_the_first_launch ... FAILED
+
+failures:
+
+---- successive_control_history_can_start_at_the_first_launch stdout ----
+
+thread 'successive_control_history_can_start_at_the_first_launch' (28254135) panicked at rust/crates/innovate-core/tests/multi_generation.rs:645:10:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "invalid_request", message: "covariate history must cover the initial time; provide origin data or explicit history", operation: Some(PredictModel) }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    successive_control_history_can_start_at_the_first_launch
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 17 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --test multi_generation`

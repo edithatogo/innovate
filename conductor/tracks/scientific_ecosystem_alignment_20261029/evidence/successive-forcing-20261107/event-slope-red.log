@@ -1,0 +1,22 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.37s
+     Running tests/multi_generation.rs (target/debug/deps/multi_generation-fe12158b80170882)
+
+running 1 test
+test capacity_event_uses_each_intervals_active_control_derivative ... FAILED
+
+failures:
+
+---- capacity_event_uses_each_intervals_active_control_derivative stdout ----
+
+thread 'capacity_event_uses_each_intervals_active_control_derivative' (28279653) panicked at rust/crates/innovate-core/tests/multi_generation.rs:660:9:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "invalid_request", message: "successive-generation effective p/q must be finite nonnegative and m finite positive; capacity slopes must be finite", operation: Some(PredictModel) }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    capacity_event_uses_each_intervals_active_control_derivative
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 18 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --test multi_generation`

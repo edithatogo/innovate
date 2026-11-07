@@ -777,9 +777,9 @@ endpoint values hold. The returned `state` carries the history for later
 forecasts, and overlapping input values must agree with that saved history.
 Integration includes all control knots. Conditional least squares requires
 complete `initial_parameters`, including every beta coefficient. The
-`successive_generations` variant still requires its original unforced controls.
-Event splits, automatic forcing-fit initialization, uncertainty and broader
-independent fitting qualification remain open.
+`successive_generations` variant has the fraction-space forcing semantics
+described below. Event inference, automatic forcing-fit initialization,
+uncertainty and broader independent fitting qualification remain open.
 
 ### Historical Lotka–Volterra covariates
 
@@ -927,14 +927,46 @@ the active right-hand parameters. Control history and the complete event list
 persist in saved state for forecasts.
 
 Event validation and continuous-state segmentation now share one Rust
-implementation across the ecosystem and historical Norton–Bass models.
-Norton–Bass discovery advertises fixed-event support for its historical ODE
-variant. The unforced `successive_generations` variant retains its existing
-launch and closed-form conventions. Its forcing and event extensions remain
-required migration work.
+implementation across the ecosystem and Norton–Bass models. Both Norton–Bass
+variants accept fixed events. Unforced successive generations retain their
+existing launch and closed-form conventions.
 
 An analytic two-generation case verifies cumulative hazard, boundary rates
 and forecasts after a coefficient override. An independent interacting DOP853
 reference covers two off-grid events and a perturbed conditional fit. Event
 times and overrides are fixed inputs. Estimating them, propagating uncertainty
 and wider scientific qualification remain required.
+
+
+### Successive-generation controls and events
+
+The `successive_generations` variant now accepts declared controls and fixed
+parameter events. Each generation starts with zero fraction at its entry in
+`launch_times`. Control history must cover the first launch. From each launch
+onward, effective innovation and imitation
+must be finite and nonnegative, and capacity must be finite and positive.
+Control coefficients may be signed when those effective domains hold.
+Pre-launch levels and rates are zero.
+
+The forced path integrates log survival `u`, with fraction `F=1-exp(-u)`
+and `du/dt=p(t)+q(t)*F`. This keeps fractions in their physical range.
+All launch, control and event boundaries split integration. Events carry the
+fraction continuously. The successive market inheritance equations then map
+those fractions to reported generation levels.
+
+Reported rates include the derivative of effective capacity, including its
+contribution to inherited markets. At control knots they use the right-hand
+slope, and after the last control knot the endpoint hold has zero slope.
+Capacity derivatives are evaluated for the report at each requested time.
+The calculation reorders scaling if an intermediate control slope overflows
+or underflows, so a representable capacity rate can still be returned.
+A fixed capacity override can jump reported levels while fractions remain
+continuous. Rates describe the right-hand evolution between events and exclude
+impulses from those jumps. Metadata states this convention.
+
+The analytic case checks two launch times, variable capacity, rate terms and
+an endpoint-held forecast. The independent reference integrates fractions
+directly with DOP853, while Rust integrates log survival. It covers an off-grid
+launch, two events, conditional fitting and a held-out forecast. Launch times
+and interventions remain fixed inputs. Their inference, calibrated uncertainty,
+automatic initialization and wider scientific qualification remain required.
