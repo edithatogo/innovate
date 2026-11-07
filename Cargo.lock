@@ -1271,6 +1271,7 @@ version = "0.7.0-alpha.1"
 dependencies = [
  "innovate-core",
  "polars",
+ "polars-arrow",
  "serde_json",
 ]
 

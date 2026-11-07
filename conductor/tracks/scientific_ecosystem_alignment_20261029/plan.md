@@ -6019,3 +6019,10 @@ Hosted release readiness for this worktree revision remains open.
   file/stream input and output combinations. Schema provenance and
   values survived. Documented the boundary; preserving field metadata
   remains open.
+
+- [x] Retain top-level Arrow field annotations on IPC rewrite when
+  the input and output field types match. Use the IPC writers from the
+  existing pinned Polars Arrow dependency. All 11 Rust tabular tests
+  passed, including nullable Int32 durations with a units annotation
+  through file and stream exports. Nested and type-changing annotation
+  fidelity and rebuilt binding readback remain open.

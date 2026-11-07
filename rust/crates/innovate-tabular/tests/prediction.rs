@@ -245,6 +245,43 @@ fn export_ipc_file_frames_schema_and_preserves_nulls_and_types() {
 }
 
 #[test]
+fn ipc_rewrite_keeps_annotations_for_unchanged_field_types() {
+    use polars_arrow::io::ipc::write::{StreamWriter, WriteOptions};
+    use std::io::Cursor;
+
+    let frame = df!("duration" => [Some(1_i32), None]).unwrap();
+    let compat = CompatLevel::oldest();
+    let mut schema = frame.schema().to_arrow(compat);
+    let field = schema.get_mut("duration").unwrap();
+    *field = field
+        .clone()
+        .with_metadata([("units".into(), "days".into())].into_iter().collect());
+    let mut source = Vec::new();
+    let mut writer = StreamWriter::new(&mut source, WriteOptions { compression: None });
+    writer.start(&schema, None).unwrap();
+    for batch in frame.iter_chunks(compat, true) {
+        writer.write(&batch, None).unwrap();
+    }
+    writer.finish().unwrap();
+
+    let file = innovate_tabular::export_ipc_file(&source).unwrap();
+    let mut reader = IpcReader::new(Cursor::new(&file));
+    assert_eq!(
+        reader.schema().unwrap().get("duration"),
+        schema.get("duration")
+    );
+    for input in [source, file] {
+        let stream = innovate_tabular::export_ipc_stream(&input).unwrap();
+        let mut reader = IpcStreamReader::new(Cursor::new(stream));
+        assert_eq!(
+            reader.arrow_schema().unwrap().get("duration"),
+            schema.get("duration")
+        );
+        assert_eq!(reader.finish().unwrap(), frame);
+    }
+}
+
+#[test]
 fn paired_ipc_preserves_order_and_rejects_reordered_draws() {
     use innovate_tabular::paired_outcomes_ipc;
     use std::io::Cursor;

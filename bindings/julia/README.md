@@ -65,9 +65,10 @@ Use the native stream exporter when Julia needs custom schema metadata.
 Arrow.jl 2.8.1 reads the leading schema. The file exporter stores custom
 schema metadata in the footer, while the stream exporter puts it in the
 leading message. Both exporters preserve schema-level metadata.
-Column-level annotations such as field units are dropped during the
-Polars DataFrame round trip. Carry required units as explicit data or
-schema-level metadata when using these exporters.
+Column-level annotations such as field units survive when the Arrow
+field type stays the same. For fields whose type changes during
+compatibility conversion, carry required annotations as explicit
+data or schema-level metadata.
 
 ```julia
 using Innovate, Arrow

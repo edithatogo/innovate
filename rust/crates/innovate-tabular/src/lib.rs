@@ -2,6 +2,7 @@
 #![forbid(unsafe_code)]
 use innovate_core::{KernelBinding, KernelRequest, json};
 use polars::prelude::*;
+use polars_arrow::io::ipc::write::{FileWriter, StreamWriter, WriteOptions};
 use serde_json::Value;
 use std::io::Cursor;
 
@@ -203,28 +204,50 @@ pub fn export_ipc_stream(data: &[u8]) -> PolarsResult<Vec<u8>> {
 }
 
 fn rewrite_ipc(data: &[u8], stream: bool) -> PolarsResult<Vec<u8>> {
-    let (mut frame, metadata) = if data.starts_with(b"ARROW1") {
+    let (mut frame, input_schema, metadata) = if data.starts_with(b"ARROW1") {
         let mut reader = IpcReader::new(Cursor::new(data));
+        let schema = reader.schema()?;
         let metadata = reader.custom_metadata()?;
-        (reader.finish()?, metadata)
+        (reader.finish()?, schema, metadata)
     } else {
         let mut reader = IpcStreamReader::new(Cursor::new(data));
+        let schema = reader.arrow_schema()?.into();
         let metadata = reader.custom_metadata()?;
-        (reader.finish()?, metadata)
+        (reader.finish()?, schema, metadata)
     };
+    let compat = CompatLevel::oldest();
+    let mut schema = frame.schema().to_arrow(compat);
+    for (name, field) in schema.iter_mut() {
+        if let Some(input) = input_schema.get(name.as_str())
+            && input.dtype == field.dtype
+            && input.metadata.is_some()
+        {
+            field.metadata = input.metadata.clone();
+        }
+    }
+    frame.align_chunks_par();
     let mut bytes = Vec::new();
+    let options = WriteOptions { compression: None };
     if stream {
-        let mut writer = IpcStreamWriter::new(&mut bytes).with_compat_level(CompatLevel::oldest());
+        let mut writer = StreamWriter::new(&mut bytes, options);
         if let Some(metadata) = metadata {
             writer.set_custom_schema_metadata(metadata);
         }
-        writer.finish(&mut frame)?;
+        writer.start(&schema, None)?;
+        for batch in frame.iter_chunks(compat, true) {
+            writer.write(&batch, None)?;
+        }
+        writer.finish()?;
     } else {
-        let mut writer = IpcWriter::new(&mut bytes).with_compat_level(CompatLevel::oldest());
+        let mut writer = FileWriter::new(&mut bytes, schema.into(), None, options);
         if let Some(metadata) = metadata {
             writer.set_custom_schema_metadata(metadata);
         }
-        writer.finish(&mut frame)?;
+        writer.start()?;
+        for batch in frame.iter_chunks(compat, true) {
+            writer.write(&batch, None)?;
+        }
+        writer.finish()?;
     }
     Ok(bytes)
 }
