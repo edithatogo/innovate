@@ -4544,3 +4544,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Add the propensity-weighted ATT and advertise both estimands.
   The focused Rust fixture verified -41/17 and equal treated weights.
   Binding runtime qualification remains open for the weighted ATT.
+
+- [x] Qualify supplied-propensity ATT through rebuilt Python 3.15.2,
+  Julia and installed R. All three advertised both estimands and
+  returned -41/17 with a maximum treated weight of 0.5.

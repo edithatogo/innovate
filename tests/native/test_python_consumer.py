@@ -1338,6 +1338,10 @@ def test_discover_treatment_contrasts():
         assert diagnostics["observations"] == 2
         assert diagnostics["maximum_normalized_weight"] == pytest.approx(0.8)
         assert diagnostics["effective_sample_size"] == pytest.approx(25 / 17)
+    assert weighted["estimands"] == ["ate", "att"]
+    att = innovate.execute("summarize_causal", **payload, estimand="att")["result"]
+    assert att["estimate"] == pytest.approx(-41 / 17)
+    assert att["weight_diagnostics"]["treated"]["maximum_normalized_weight"] == 0.5
     payload["propensities"][0] = 0
     with pytest.raises(innovate.NativeError, match="strictly between zero and one"):
         innovate.execute("summarize_causal", **payload)

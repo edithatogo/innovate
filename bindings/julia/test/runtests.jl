@@ -602,6 +602,10 @@ end
         @test diagnostics["maximum_normalized_weight"] ≈ 0.8
         @test diagnostics["effective_sample_size"] ≈ 25/17
     end
+    @test weighted["estimands"] == ["ate", "att"]
+    att = kernel_call("summarize_causal", nothing, merge(payload, Dict("estimand"=>"att")))["result"]
+    @test att["estimate"] ≈ -41/17
+    @test att["weight_diagnostics"]["treated"]["maximum_normalized_weight"] == 0.5
     payload["propensities"][1] = 0
     @test_throws r"strictly between zero and one" kernel_call("summarize_causal", nothing, payload)
 end

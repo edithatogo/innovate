@@ -567,6 +567,10 @@ for (arm in c("treated", "control")) {
     isTRUE(all.equal(diagnostics$maximum_normalized_weight, 0.8)),
     isTRUE(all.equal(diagnostics$effective_sample_size, 25/17)))
 }
+stopifnot(identical(unlist(weighted$estimands), c("ate", "att")))
+att <- kernel_call("summarize_causal", payload=c(weighted_payload, list(estimand="att")))$result
+stopifnot(isTRUE(all.equal(att$estimate, -41/17)),
+  att$weight_diagnostics$treated$maximum_normalized_weight == 0.5)
 weighted_payload$propensities[1] <- 0
 weighted_error <- tryCatch({kernel_call("summarize_causal", payload=weighted_payload); ""}, error=conditionMessage)
 stopifnot(grepl("strictly between zero and one", weighted_error, fixed=TRUE))
