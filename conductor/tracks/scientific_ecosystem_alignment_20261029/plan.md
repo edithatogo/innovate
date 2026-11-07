@@ -3352,3 +3352,9 @@ the other competition models and installed binding checks remain open.
   R 4.3.0 on Darwin arm64 built the tarball with vignettes and
   R CMD check --no-manual returned Status: OK against the locked
   external Rust FFI library. Distribution of that library remains separate.
+
+- [x] Verify local bundled R library discovery. Stage the locked
+  Darwin arm64 debug dylib under inst/lib, build a binary package,
+  install its archive into a second library, and unset the environment
+  override. R 4.3.0 resolved the bundled dylib and returned the expected
+  Logistic forecast. Release builds and other platforms remain open.
