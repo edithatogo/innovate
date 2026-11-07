@@ -2286,3 +2286,11 @@ the other competition models and installed binding checks remain open.
   case IDs are descriptive evidence and do not imply a native benchmark
   run. All 52 Rust boundary tests and Clippy passed. Corpus, runner,
   additional cards and binding qualification remain open.
+
+- [x] Restore the four historical synthetic smoke cases and native
+  fit/forecast execution. Discovery retains case IDs, model keys and
+  dataset version. Runs return observations, native fit diagnostics and
+  predictions from fitted state. Scalar cases match their generating
+  curves. The competition case verifies execution and output shape. All
+  53 Rust boundary tests and Clippy passed. Suite automation, bindings
+  and release qualification remain open.

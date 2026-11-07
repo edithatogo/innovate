@@ -1567,3 +1567,43 @@ fn model_cards_distinguish_native_capabilities_from_historical_benchmarks() {
         "invalid_request"
     );
 }
+
+#[test]
+fn native_benchmark_runs_the_historical_synthetic_corpus() {
+    let run = |operation, payload| -> serde_json::Value {
+        let request = json!({"schema_version":"2.0","operation":operation,"payload":payload});
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let discovery = run("discover_benchmark_cases", json!({}));
+    let cases = discovery["result"]["cases"].as_array().unwrap();
+    assert_eq!(cases.len(), 4);
+    for case in cases {
+        let response = run("run_benchmark_case", json!({"case_id":case["case_id"]}));
+        assert!(response["error"].is_null(), "{response}");
+        let result = &response["result"];
+        assert_eq!(&result["case"], case);
+        assert_eq!(result["observed"].as_array().unwrap().len(), 12);
+        let key = if case["family"] == "competition" {
+            "rows"
+        } else {
+            "values"
+        };
+        assert_eq!(result["prediction"][key].as_array().unwrap().len(), 12);
+        if key == "values" {
+            let observed = result["observed"].as_array().unwrap();
+            for (prediction, reference) in result["prediction"][key]
+                .as_array()
+                .unwrap()
+                .iter()
+                .zip(observed)
+            {
+                let reference = reference.as_f64().unwrap();
+                assert!(
+                    (prediction.as_f64().unwrap() - reference).abs()
+                        < 1e-5 * reference.abs().max(1.)
+                );
+            }
+        }
+        assert!(result["fit"]["diagnostics"].is_object());
+    }
+}
