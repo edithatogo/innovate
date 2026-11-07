@@ -3229,3 +3229,10 @@ the other competition models and installed binding checks remain open.
   first observed row. Python 3.15.2, Julia and R agreed exactly on
   all four refits with one conditioned row and 50 residual pool rows.
   The scalar regression and focused Clippy passed.
+
+- [x] Bootstrap pointwise forecast intervals from refitted states.
+  Accept up to 100 forecast times and report prediction failures
+  separately from failed fits. Python 3.15.2, Julia and R agreed
+  exactly on twelve Logistic forecasts at three held-out times.
+  Independent Logistic predictions and percentile calculations matched
+  every bound within 1e-10. The focused Rust regression and Clippy passed.

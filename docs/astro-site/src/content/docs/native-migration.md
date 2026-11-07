@@ -241,6 +241,13 @@ Centered residual resampling centers each series and samples the entire
 residual row together. If the first observed row sets the initial
 condition, it is retained and excluded from the residual pool.
 
+Pass `forecast_inputs` to predict on up to 100 times from each refitted
+state. The forecast includes the baseline rows and pointwise percentile
+intervals in time-by-series order. These intervals describe variation
+among the refitted mean paths. Forecast failures are counted separately
+among successful fits, and fewer than two forecast draws yield null bounds.
+
+
 
 Norton–Bass, Lotka–Volterra, complementary goods, lock-in and multi-product
 fits accept the same candidate list with a zero-based `event_index`

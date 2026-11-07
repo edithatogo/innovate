@@ -64,6 +64,34 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
         .map_err(|_| "baseline fit failed")?
         .result
         .ok_or("baseline fit returned no result")?;
+    let forecast_inputs = payload.get("forecast_inputs");
+    let predict = |inputs: &Value, fit: &Value| -> Option<Vec<Vec<f64>>> {
+        let result = kernel
+            .predict_model(model, json!({"inputs":inputs,"state":fit["state"]}))
+            .ok()?
+            .result?;
+        if scalar {
+            let values: Vec<f64> = serde_json::from_value(result["values"].clone()).ok()?;
+            Some(values.into_iter().map(|value| vec![value]).collect())
+        } else {
+            serde_json::from_value(result["rows"].clone()).ok()
+        }
+    };
+    let baseline_forecast = if let Some(inputs) = forecast_inputs {
+        let count = inputs["time"]
+            .as_array()
+            .filter(|time| (1..=100).contains(&time.len()))
+            .ok_or("forecast_inputs requires 1 to 100 time samples")?
+            .len();
+        Some(
+            predict(inputs, &baseline)
+                .filter(|rows| rows.len() == count)
+                .ok_or("baseline forecast failed")?,
+        )
+    } else {
+        None
+    };
+    let mut forecast_draws = Vec::new();
     let profile = ["event_profile", "launch_profile", "joint_time_profile"]
         .into_iter()
         .find(|key| baseline[*key].is_object());
@@ -173,6 +201,17 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
                 .ok_or("bootstrap refit did not select a valid event candidate")?;
             *index += 1;
         }
+        if let Some((inputs, baseline)) = forecast_inputs.zip(baseline_forecast.as_ref())
+            && let Some(rows) = predict(inputs, &fit).filter(|rows| {
+                rows.len() == baseline.len()
+                    && rows
+                        .iter()
+                        .zip(baseline)
+                        .all(|(row, reference)| row.len() == reference.len())
+            })
+        {
+            forecast_draws.push(rows);
+        }
         succeeded += 1;
     }
     let tail = (1. - interval_mass) / 2.;
@@ -226,6 +265,32 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
         "interval_method":"percentile","interval_mass":interval_mass,"parameter_intervals":intervals,
         "parameter_standard_errors":standard_errors,
         "parameter_correlation":correlation(&estimates, succeeded)});
+    if let Some(baseline) = baseline_forecast {
+        let intervals: Vec<Vec<_>> = baseline
+            .iter()
+            .enumerate()
+            .map(|(i, row)| {
+                (0..row.len())
+                    .map(|j| {
+                        if forecast_draws.len() < 2 {
+                            return None;
+                        }
+                        let mut values: Vec<_> =
+                            forecast_draws.iter().map(|draw| draw[i][j]).collect();
+                        values.sort_unstable_by(f64::total_cmp);
+                        Some([
+                            crate::numerics::linear_quantile(&values, tail),
+                            crate::numerics::linear_quantile(&values, 1. - tail),
+                        ])
+                    })
+                    .collect()
+            })
+            .collect();
+        result["forecast"] = json!({"time":forecast_inputs.expect("forecast inputs")["time"],
+            "baseline_rows":baseline,"pointwise_intervals":intervals,
+            "succeeded":forecast_draws.len(),"failed":succeeded-forecast_draws.len() as u64,
+            "interval_method":"percentile_of_refitted_mean_paths","interval_mass":interval_mass});
+    }
     if let Some((_, _, residuals, offset)) = &residual_design {
         result["residual_design"] = json!({"pool_rows":residuals.len(),"conditioning_rows":offset});
     }
