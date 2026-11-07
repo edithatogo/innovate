@@ -1236,6 +1236,24 @@ fn custom_network_specification_checks_topology_and_initial_agents() {
         run(replay)["result"]["executions"][0]["result"],
         row["result"]
     );
+    let mut scale_free = random.clone();
+    let spec = &mut scale_free["payload"]["scenarios"][0]["specification"];
+    spec["network_type"] = json!("scale_free");
+    spec["average_degree"] = json!(1.5);
+    let output = run(&scale_free);
+    let row = &output["result"]["executions"][0];
+    let replay = &row["artifact"]["replay_request"];
+    let edges = replay["payload"]["scenarios"][0]["simulation"]["simulation_options"]["edges"]
+        .as_array()
+        .unwrap();
+    assert_eq!(edges.len(), 3);
+    for node in 1..4 {
+        assert_eq!(edges.iter().filter(|edge| edge[1] == node).count(), 1);
+    }
+    assert_eq!(
+        run(replay)["result"]["executions"][0]["result"],
+        row["result"]
+    );
     random["payload"]["scenarios"][0]["specification"]["average_degree"] = json!(2.1);
     assert_eq!(run(&random)["error"]["code"], "invalid_request");
     request["payload"]["scenarios"][0]["specification"]["average_degree"] = json!(1);

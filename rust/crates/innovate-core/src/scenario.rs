@@ -286,8 +286,10 @@ fn apply_network_specification(
     average_degree: f64,
     initial_adoption: f64,
 ) -> Result<(), &'static str> {
-    if !matches!(network_type, "custom" | "ring" | "random_fixed_edges")
-        || options.get("engine").and_then(Value::as_str) != Some("kairos_network")
+    if !matches!(
+        network_type,
+        "custom" | "ring" | "random_fixed_edges" | "scale_free"
+    ) || options.get("engine").and_then(Value::as_str) != Some("kairos_network")
     {
         return Err("network translation requires a supported topology and kairos_network");
     }
@@ -314,7 +316,7 @@ fn apply_network_specification(
         let edges: Vec<_> = (0..nodes).map(|node| [node, (node + 1) % nodes]).collect();
         options.insert("edges".into(), json!(edges));
     }
-    if network_type == "random_fixed_edges" {
+    if matches!(network_type, "random_fixed_edges" | "scale_free") {
         if options.contains_key("edges")
             || options.contains_key("edge_weights")
             || options
@@ -322,13 +324,13 @@ fn apply_network_specification(
                 .is_some_and(|value| value.as_bool() != Some(false))
         {
             return Err(
-                "random_fixed_edges requires undirected mode without explicit edges or weights",
+                "seeded topology requires undirected mode without explicit edges or weights",
             );
         }
         let seed = options
             .remove("topology_seed")
             .and_then(|value| value.as_u64())
-            .ok_or("random_fixed_edges requires an unsigned topology_seed")?;
+            .ok_or("seeded topology requires an unsigned topology_seed")?;
         let edge_count = (average_degree * nodes as f64 / 2.).round() as usize;
         let max_edges = nodes * (nodes - 1) / 2;
         if edge_count == 0
@@ -337,7 +339,15 @@ fn apply_network_specification(
         {
             return Err("average_degree must specify a feasible whole number of undirected edges");
         }
-        options.insert("edges".into(), json!(random_edges(nodes, edge_count, seed)));
+        let edges = if network_type == "scale_free" {
+            let links = (1..nodes.min(33))
+                .find(|&links| links * nodes - links * (links + 1) / 2 == edge_count)
+                .ok_or("scale_free mean degree must match a clique-seeded graph with 1..=32 links per new node")?;
+            preferential_edges(nodes, links, seed)
+        } else {
+            random_edges(nodes, edge_count, seed)
+        };
+        options.insert("edges".into(), json!(edges));
     }
     let edges = options
         .get("edges")
@@ -378,6 +388,45 @@ fn random_edges(nodes: usize, count: usize, seed: u64) -> Vec<[usize; 2]> {
     candidates.truncate(count);
     candidates.sort_unstable();
     candidates
+}
+
+fn preferential_edges(nodes: usize, links: usize, seed: u64) -> Vec<[usize; 2]> {
+    use kairo_ecs_rng::{DeterministicStream, rand_distr::Uniform};
+
+    let clique = links + 1;
+    let mut edges: Vec<_> = (0..clique)
+        .flat_map(|a| ((a + 1)..clique).map(move |b| [a, b]))
+        .collect();
+    let mut degrees = vec![links; clique];
+    let mut rng = DeterministicStream::from_run_seed(seed);
+    for node in clique..nodes {
+        let mut chosen = Vec::with_capacity(links);
+        let mut total: usize = degrees.iter().sum();
+        for _ in 0..links {
+            let mut draw = rng.sample(Uniform::new(0, total).expect("positive available degree"));
+            let target = degrees
+                .iter()
+                .position(|&degree| {
+                    if draw < degree {
+                        true
+                    } else {
+                        draw -= degree;
+                        false
+                    }
+                })
+                .expect("draw is within available degree");
+            let degree = std::mem::take(&mut degrees[target]);
+            total -= degree;
+            chosen.push((target, degree));
+            edges.push([target, node]);
+        }
+        for (target, degree) in chosen {
+            degrees[target] = degree + 1;
+        }
+        degrees.push(links);
+    }
+    edges.sort_unstable();
+    edges
 }
 
 fn simulate_scenario(
@@ -919,7 +968,7 @@ pub(crate) fn discover(request: &Value) -> Value {
             if family == "network" {
                 capability["specification_translation"] = json!({
                     "option":"apply_specifications","model_key":"bass",
-                    "engines":["kairos_network"],"network_types":["custom","ring","random_fixed_edges"]
+                    "engines":["kairos_network"],"network_types":["custom","ring","random_fixed_edges","scale_free"]
                 });
             }
             if family == "competition" {

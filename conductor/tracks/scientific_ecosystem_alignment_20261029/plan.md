@@ -2190,3 +2190,9 @@ the other competition models and installed binding checks remain open.
   installed R. Topology seed 77 produced edges (0,1), (0,2), (0,3) and
   (1,2) in all three. Resolved replay requests agreed across bindings and
   each replay reproduced its original seeded contagion result exactly.
+
+- [x] Generate seeded scale_free networks by clique-seeded preferential
+  attachment. Each new node selects distinct prior nodes in proportion
+  to their degrees. Accept only mean degrees compatible with 1 to 32
+  links per new node and retain the resolved graph for replay. All 65
+  targeted Rust tests and Clippy passed. Binding qualification remains open.
