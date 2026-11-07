@@ -72,10 +72,18 @@ kernel_scenario_grid_ipc <- function(data, payload) {
 }
 
 kernel_scenario_executions_ipc <- function(response) {
+  scenario_output(response, innovate_scenario_executions_ipc_R)
+}
+
+kernel_scenario_comparisons_ipc <- function(response) {
+  scenario_output(response, innovate_scenario_comparisons_ipc_R)
+}
+
+scenario_output <- function(response, symbol) {
   if (is.list(response)) {
     response <- jsonlite::toJSON(response, auto_unbox = TRUE, null = "null", digits = NA)
   }
-  output <- .Call(innovate_scenario_executions_ipc_R, native_library(), response)
+  output <- .Call(symbol, native_library(), response)
   if (is.raw(output)) output else decode_kernel_response(output)
 }
 

@@ -115,6 +115,44 @@ pub unsafe extern "C" fn innovate_scenario_executions_ipc(
     data: *mut *mut u8,
     len: *mut usize,
 ) -> *mut c_char {
+    // SAFETY: forwarded caller contract.
+    unsafe {
+        scenario_output(
+            response,
+            data,
+            len,
+            innovate_tabular::scenario_executions_ipc,
+        )
+    }
+}
+
+/// Convert ordered grid comparisons to Arrow IPC.
+///
+/// # Safety
+/// Same pointer and ownership contract as `innovate_scenario_executions_ipc`.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn innovate_scenario_comparisons_ipc(
+    response: *const c_char,
+    data: *mut *mut u8,
+    len: *mut usize,
+) -> *mut c_char {
+    // SAFETY: forwarded caller contract.
+    unsafe {
+        scenario_output(
+            response,
+            data,
+            len,
+            innovate_tabular::scenario_comparisons_ipc,
+        )
+    }
+}
+
+unsafe fn scenario_output<E: std::fmt::Display>(
+    response: *const c_char,
+    data: *mut *mut u8,
+    len: *mut usize,
+    convert: fn(&serde_json::Value) -> Result<Vec<u8>, E>,
+) -> *mut c_char {
     let error = |code: &str, message: &str| {
         owned_response(Ok(
             serde_json::json!({"error":{"code":code,"message":message}}).to_string(),
@@ -135,7 +173,7 @@ pub unsafe extern "C" fn innovate_scenario_executions_ipc(
         // SAFETY: the caller provides a readable NUL-terminated string.
         let response = unsafe { CStr::from_ptr(response) };
         let value = serde_json::from_slice(response.to_bytes()).map_err(|err| err.to_string())?;
-        innovate_tabular::scenario_executions_ipc(&value).map_err(|err| err.to_string())
+        convert(&value).map_err(|err| err.to_string())
     });
     match result {
         Ok(Ok(bytes)) => {
@@ -156,7 +194,7 @@ pub unsafe extern "C" fn innovate_scenario_executions_ipc(
 ///
 /// # Safety
 /// A non-null pointer and length must be the original pair returned by
-/// `innovate_scenario_executions_ipc`, and must still be live.
+/// a scenario Arrow export, and must still be live.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn innovate_free_bytes(data: *mut u8, len: usize) {
     if !data.is_null() {

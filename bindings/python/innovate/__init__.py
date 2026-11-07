@@ -22,6 +22,7 @@ __version__ = version("innovate")
 __all__ = [
     "execute_scenario_grid",
     "scenario_executions",
+    "scenario_comparisons",
     "FitResult",
     "NativeError",
     "categorize_adopters",
@@ -99,6 +100,11 @@ def execute_scenario_grid(data: pl.DataFrame | pl.LazyFrame, **payload: Any) -> 
 def scenario_executions(response: dict[str, Any]) -> pl.DataFrame:
     """Return ordered grid execution rows, with nested fields stored as JSON."""
     return pl.read_ipc(io.BytesIO(_native.scenario_executions_ipc(json.dumps(response, allow_nan=False))))
+
+
+def scenario_comparisons(response: dict[str, Any]) -> pl.DataFrame:
+    """Return ordered pair and ensemble comparisons, with nested fields stored as JSON."""
+    return pl.read_ipc(io.BytesIO(_native.scenario_comparisons_ipc(json.dumps(response, allow_nan=False))))
 
 
 def predict(

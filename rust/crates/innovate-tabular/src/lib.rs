@@ -290,12 +290,7 @@ pub fn scenario_grid_ipc(data: &[u8], mut payload: Value) -> PolarsResult<String
 /// Encode the ordered execution rows of a successful grid envelope as Arrow IPC.
 /// Nested results, artifacts and errors retain their full JSON representation.
 pub fn scenario_executions_ipc(response: &Value) -> PolarsResult<Vec<u8>> {
-    if response["operation"] != "execute_scenario_grid" || !response["error"].is_null() {
-        polars_bail!(SchemaMismatch: "expected a successful scenario grid envelope");
-    }
-    let rows = response["result"]["executions"]
-        .as_array()
-        .ok_or_else(|| polars_err!(SchemaMismatch: "missing scenario execution rows"))?;
+    let rows = scenario_rows(response, "executions")?;
     let mut ids = Vec::with_capacity(rows.len());
     let mut models = Vec::with_capacity(rows.len());
     let mut successful = Vec::with_capacity(rows.len());
@@ -316,7 +311,45 @@ pub fn scenario_executions_ipc(response: &Value) -> PolarsResult<Vec<u8>> {
     }
     let mut frame = df!("scenario_id" => ids, "model_key" => models,
         "successful" => successful, "execution_json" => encoded)?;
+    write_scenario_ipc(&mut frame)
+}
+
+/// Encode ordered pair and ensemble comparisons, preserving nested outcomes.
+pub fn scenario_comparisons_ipc(response: &Value) -> PolarsResult<Vec<u8>> {
+    let rows = scenario_rows(response, "comparisons")?;
+    let mut kinds = Vec::with_capacity(rows.len());
+    let mut successful = Vec::with_capacity(rows.len());
+    let mut encoded = Vec::with_capacity(rows.len());
+    for row in rows {
+        let kind = if row["pairs"].is_array() {
+            "ensemble"
+        } else if row["baseline"].is_string() && row["alternative"].is_string() {
+            "pair"
+        } else {
+            polars_bail!(SchemaMismatch: "invalid scenario comparison row");
+        };
+        kinds.push(kind);
+        successful.push(row["error"].is_null());
+        encoded.push(row.to_string());
+    }
+    let indices: Vec<_> = (0..rows.len() as u64).collect();
+    let mut frame = df!("comparison_index" => indices, "kind" => kinds,
+        "successful" => successful, "comparison_json" => encoded)?;
+    write_scenario_ipc(&mut frame)
+}
+
+fn scenario_rows<'a>(response: &'a Value, field: &str) -> PolarsResult<&'a [Value]> {
+    if response["operation"] != "execute_scenario_grid" || !response["error"].is_null() {
+        polars_bail!(SchemaMismatch: "expected a successful scenario grid envelope");
+    }
+    response["result"][field]
+        .as_array()
+        .map(Vec::as_slice)
+        .ok_or_else(|| polars_err!(SchemaMismatch: "missing scenario {field} rows"))
+}
+
+fn write_scenario_ipc(frame: &mut DataFrame) -> PolarsResult<Vec<u8>> {
     let mut bytes = Vec::new();
-    IpcWriter::new(&mut bytes).finish(&mut frame)?;
+    IpcWriter::new(&mut bytes).finish(frame)?;
     Ok(bytes)
 }

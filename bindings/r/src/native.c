@@ -51,14 +51,14 @@ SEXP innovate_scenario_grid_ipc_R(SEXP library, SEXP payload, SEXP data) {
     return call_kernel(library, payload, data);
 }
 
-SEXP innovate_scenario_executions_ipc_R(SEXP library, SEXP response) {
+static SEXP scenario_output(SEXP library, SEXP response, const char *symbol) {
     if (TYPEOF(library) != STRSXP || XLENGTH(library) != 1 || STRING_ELT(library, 0) == NA_STRING ||
         TYPEOF(response) != STRSXP || XLENGTH(response) != 1 || STRING_ELT(response, 0) == NA_STRING)
         Rf_error("library and response must be scalar strings");
     void *handle = OPEN(CHAR(STRING_ELT(library, 0)));
     if (!handle) Rf_error("unable to load the Innovate native library");
     char *(*convert)(const char *, unsigned char **, size_t *) =
-        (char *(*)(const char *, unsigned char **, size_t *)) SYMBOL(handle, "innovate_scenario_executions_ipc");
+        (char *(*)(const char *, unsigned char **, size_t *)) SYMBOL(handle, symbol);
     void (*free_bytes)(unsigned char *, size_t) =
         (void (*)(unsigned char *, size_t)) SYMBOL(handle, "innovate_free_bytes");
     void (*free_text)(char *) = (void (*)(char *)) SYMBOL(handle, "innovate_free");
@@ -88,10 +88,19 @@ SEXP innovate_scenario_executions_ipc_R(SEXP library, SEXP response) {
     return result;
 }
 
+SEXP innovate_scenario_executions_ipc_R(SEXP library, SEXP response) {
+    return scenario_output(library, response, "innovate_scenario_executions_ipc");
+}
+
+SEXP innovate_scenario_comparisons_ipc_R(SEXP library, SEXP response) {
+    return scenario_output(library, response, "innovate_scenario_comparisons_ipc");
+}
+
 static const R_CallMethodDef methods[] = {
     {"innovate_call_R", (DL_FUNC) &innovate_call_R, 2},
     {"innovate_scenario_grid_ipc_R", (DL_FUNC) &innovate_scenario_grid_ipc_R, 3},
     {"innovate_scenario_executions_ipc_R", (DL_FUNC) &innovate_scenario_executions_ipc_R, 2},
+    {"innovate_scenario_comparisons_ipc_R", (DL_FUNC) &innovate_scenario_comparisons_ipc_R, 2},
     {NULL, NULL, 0}
 };
 

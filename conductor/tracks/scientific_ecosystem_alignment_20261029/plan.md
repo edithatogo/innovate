@@ -2080,7 +2080,7 @@ the other competition models and installed binding checks remain open.
   3.15 wheel returned the analytic Logistic value of 50. All six tabular
   tests and focused Clippy passed after removing a stale assertion that
   treated the supported rate quantity as invalid.
-- [ ] Qualify Arrow transport for grid-level comparisons.
+- [x] Qualify Arrow transport for grid-level comparisons.
 
 - [x] Expose scenario Arrow IPC input through the C ABI to Julia and R.
   Both returned the analytic Logistic value of 50 and rejected malformed
@@ -2099,3 +2099,9 @@ the other competition models and installed binding checks remain open.
   including a maximum-width seed and a failed scenario. Both bindings
   rejected an invalid envelope. Locked FFI tests and Clippy passed.
   Grid-level comparisons remain in the JSON envelope.
+
+- [x] Export grid comparison rows as Arrow IPC from Rust, Python, Julia
+  and R. Ordered indices, comparison kind and status are typed columns.
+  Nested pair and ensemble outcomes remain intact in comparison_json.
+  The three installed consumers produced equal Polars tables for a pair
+  result and an ensemble error. Eight tabular tests and Clippy passed.

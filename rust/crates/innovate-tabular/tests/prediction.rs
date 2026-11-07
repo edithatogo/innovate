@@ -165,3 +165,32 @@ fn scenario_arrow_execution_rows_preserve_nested_data_and_order() {
         );
     }
 }
+
+#[test]
+fn scenario_arrow_comparisons_preserve_pair_and_ensemble_rows() {
+    let rows = json!([
+        {"baseline":"a","alternative":"b","result":{"difference":[2.5]},"error":null},
+        {"pairs":[{"baseline":"a","alternative":"b"}],"result":null,"error":{"code":"invalid_comparison"}}
+    ]);
+    let response = json!({"operation":"execute_scenario_grid","error":null,
+        "result":{"comparisons":rows}});
+    let bytes = innovate_tabular::scenario_comparisons_ipc(&response).unwrap();
+    let frame = IpcReader::new(std::io::Cursor::new(bytes))
+        .finish()
+        .unwrap();
+    assert_eq!(
+        frame.column("kind").unwrap().str().unwrap().get(1),
+        Some("ensemble")
+    );
+    assert_eq!(
+        frame.column("successful").unwrap().bool().unwrap().get(1),
+        Some(false)
+    );
+    let encoded = frame.column("comparison_json").unwrap().str().unwrap();
+    for (index, row) in rows.as_array().unwrap().iter().enumerate() {
+        assert_eq!(
+            &serde_json::from_str::<serde_json::Value>(encoded.get(index).unwrap()).unwrap(),
+            row
+        );
+    }
+}

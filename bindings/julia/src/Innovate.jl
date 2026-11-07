@@ -2,7 +2,7 @@ module Innovate
 using JSON
 using Libdl
 
-export kernel_scenario_executions_ipc, kernel_scenario_grid_ipc, DatasetValidationError, kernel_sarima_fit, kernel_seasonal_decomposition, kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
+export kernel_scenario_comparisons_ipc, kernel_scenario_executions_ipc, kernel_scenario_grid_ipc, DatasetValidationError, kernel_sarima_fit, kernel_seasonal_decomposition, kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
     kernel_categorize_adopters, kernel_categorize_fitted_adopters, kernel_fit_batch, kernel_predict_batch, kernel_simulate_model, kernel_summarize_model, kernel_diagnose_model
 
 """A rejected dataset with its native validation report."""
@@ -36,11 +36,16 @@ function kernel_scenario_grid_ipc(data::Vector{UInt8}, payload)
 end
 
 """Encode ordered scenario execution rows as Arrow IPC file bytes."""
-function kernel_scenario_executions_ipc(response)
+kernel_scenario_executions_ipc(response) = scenario_output(response, :innovate_scenario_executions_ipc)
+
+"""Encode ordered scenario comparison rows as Arrow IPC file bytes."""
+kernel_scenario_comparisons_ipc(response) = scenario_output(response, :innovate_scenario_comparisons_ipc)
+
+function scenario_output(response, symbol)
     request = response isa AbstractString ? response : JSON.json(response)
     handle = Libdl.dlopen(native_library())
     try
-        convert = Libdl.dlsym(handle, :innovate_scenario_executions_ipc)
+        convert = Libdl.dlsym(handle, symbol)
         free_bytes = Libdl.dlsym(handle, :innovate_free_bytes)
         free_text = Libdl.dlsym(handle, :innovate_free)
         data = Ref{Ptr{UInt8}}(C_NULL)
