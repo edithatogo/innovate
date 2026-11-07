@@ -1196,3 +1196,30 @@ fn custom_network_specification_checks_topology_and_initial_agents() {
     request["payload"]["scenarios"][0]["specification"]["average_degree"] = json!(1);
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn competition_specification_allocates_initial_adopters_in_competitor_order() {
+    let mut request = json!({"schema_version":"2.0","operation":"execute_scenario_grid",
+    "payload":{"apply_specifications":true,"include_execution_metadata":true,"scenarios":[{
+        "id":"competition","model_key":"multi_product",
+        "specification":{"scenario_type":"competition","name":"study","description":"",
+            "time_horizon":5,"time_unit":"year","reference_year":2026,"market_size":200,
+            "initial_adoption":0.5,"num_competitors":2,"competitor_names":["a","b"],
+            "market_share_initial":[0.25,0.75]},
+        "simulation":{"inputs":{"time":[0,5]},"parameters":{"p1":0,"p2":0,"q1":0,
+            "q2":0,"m1":100,"m2":100,"alpha_1_2":0,"alpha_2_1":0}}
+    }]}});
+    let run = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = run(&request);
+    let row = &response["result"]["executions"][0];
+    assert_eq!(row["result"]["rows"], json!([[25., 75.], [25., 75.]]));
+    assert_eq!(
+        run(&row["artifact"]["replay_request"])["result"]["executions"][0]["result"],
+        row["result"]
+    );
+    request["payload"]["scenarios"][0]["simulation"]["constructor_kwargs"] =
+        json!({"n_products":3});
+    assert_eq!(run(&request)["error"]["code"], "invalid_request");
+}

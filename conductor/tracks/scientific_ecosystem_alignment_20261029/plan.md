@@ -2144,3 +2144,10 @@ the other competition models and installed binding checks remain open.
   Julia and installed R. A four-node graph with one edge and one initial
   adopter returned 50 adoption units in a market of 200. All three
   bindings replayed the resolved artifact to an identical result.
+
+- [x] Translate competition specifications to the multi_product model.
+  Allocate market size times initial adoption in the declared competitor
+  order using initial shares. Derive n_products, reject conflicting
+  constructor fields and retain resolved initial values for replay.
+  Product-specific dynamics and market potentials remain explicit. All 57
+  targeted Rust tests and Clippy passed. Binding qualification remains open.

@@ -105,6 +105,20 @@ fn apply_specification(scenario: &mut Scenario) -> Result<(), &'static str> {
         .specification
         .as_ref()
         .ok_or("scenario specification is required")?;
+    if let ScenarioKind::Competition {
+        num_competitors,
+        market_share_initial,
+        ..
+    } = &spec.kind
+    {
+        return apply_competition_specification(
+            &mut scenario.simulation,
+            &scenario.model_key,
+            *num_competitors,
+            market_share_initial,
+            spec.market_size * spec.initial_adoption,
+        );
+    }
     if scenario.model_key != "bass"
         || !matches!(
             spec.kind,
@@ -195,6 +209,51 @@ fn apply_specification(scenario: &mut Scenario) -> Result<(), &'static str> {
         return Err("Bass market size conflicts with the scenario specification");
     }
     parameters.insert("m".into(), json!(spec.market_size));
+    Ok(())
+}
+
+fn apply_competition_specification(
+    simulation: &mut Value,
+    model: &str,
+    competitors: usize,
+    shares: &[f64],
+    initial_market: f64,
+) -> Result<(), &'static str> {
+    if model != "multi_product" || !(1..=32).contains(&competitors) {
+        return Err("competition translation requires multi_product with 1..=32 competitors");
+    }
+    let simulation = simulation
+        .as_object_mut()
+        .ok_or("simulation must be an object")?;
+    if simulation.contains_key("state") {
+        return Err("competition translation requires explicit parameters instead of fitted state");
+    }
+    let constructor = simulation
+        .entry("constructor_kwargs")
+        .or_insert_with(|| json!({}));
+    let constructor = constructor
+        .as_object_mut()
+        .ok_or("constructor_kwargs must be an object")?;
+    if constructor
+        .get("n_products")
+        .is_some_and(|n| n.as_u64() != Some(competitors as u64))
+    {
+        return Err("n_products conflicts with the scenario specification");
+    }
+    let initial: Vec<_> = shares.iter().map(|share| initial_market * share).collect();
+    if let Some(values) = constructor.get("initial_values")
+        && !values.as_array().is_some_and(|values| {
+            values.len() == initial.len()
+                && values
+                    .iter()
+                    .zip(&initial)
+                    .all(|(given, expected)| given.as_f64() == Some(*expected))
+        })
+    {
+        return Err("initial_values conflict with the scenario specification");
+    }
+    constructor.insert("n_products".into(), json!(competitors));
+    constructor.insert("initial_values".into(), json!(initial));
     Ok(())
 }
 
@@ -722,6 +781,11 @@ pub(crate) fn discover(request: &Value) -> Value {
                 capability["specification_translation"] = json!({
                     "option":"apply_specifications","model_key":"bass",
                     "engines":["kairos_network"],"network_types":["custom"]
+                });
+            }
+            if family == "competition" {
+                capability["specification_translation"] = json!({
+                    "option":"apply_specifications","model_key":"multi_product"
                 });
             }
             capability
