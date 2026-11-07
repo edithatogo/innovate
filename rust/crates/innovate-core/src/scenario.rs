@@ -1250,13 +1250,6 @@ fn compare_ensemble(
     if mass <= 0. || mass >= 1. || comparison.pairs.len() < 2 {
         return Err("ensemble requires at least two pairs and interval_mass in (0, 1)".into());
     }
-    let basis = common_time_basis(
-        paths,
-        comparison
-            .pairs
-            .iter()
-            .flat_map(|pair| [pair.baseline.as_str(), pair.alternative.as_str()]),
-    )?;
     let mut used = HashSet::new();
     let mut pair_seeds = HashSet::new();
     let mut grid = None;
@@ -1364,6 +1357,13 @@ fn compare_ensemble(
         }
         differences.push(difference);
     }
+    let basis = common_time_basis(
+        paths,
+        comparison
+            .pairs
+            .iter()
+            .flat_map(|pair| [pair.baseline.as_str(), pair.alternative.as_str()]),
+    )?;
     // Scale before squaring so finite effects near the floating-point limits
     // can still yield a representable standard error.
     let scale = differences.iter().map(|x| x.abs()).fold(0., f64::max);

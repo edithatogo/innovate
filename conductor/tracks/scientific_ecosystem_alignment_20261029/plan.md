@@ -6633,3 +6633,8 @@ Hosted release readiness for this worktree revision remains open.
   scenario and preserve the individual execution results. This
   records the behavior verified through all three bindings in
   a333edc0.
+
+- [x] Preserve the scenario role and ID for an unknown ensemble member.
+  Check the common time basis after resolving paired scalar paths,
+  so an unknown ID receives the same contextual diagnostic as a
+  failed execution. All 13 Rust scenario boundary tests passed.

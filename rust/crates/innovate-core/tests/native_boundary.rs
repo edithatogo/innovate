@@ -2013,6 +2013,12 @@ fn scenario_grid_summarizes_paired_ensemble_differences() {
     assert!(failed_result["comparisons"][0]["result"].is_null());
     assert!(failed_result["executions"][0]["error"].is_null());
     assert!(failed_result["executions"][3]["error"].is_object());
+    let mut unknown = request.clone();
+    unknown["payload"]["comparisons"][0]["pairs"][1]["alternative"] = json!("missing");
+    assert_eq!(
+        run(&unknown)["result"]["comparisons"][0]["error"]["message"],
+        "alternative scenario \"missing\": unknown scenario ID"
+    );
     let mut path_request = request.clone();
     path_request["payload"]["comparisons"][0]["include_path_summary"] = json!(true);
     path_request["payload"]["comparisons"][0]["include_path_covariance"] = json!(true);
