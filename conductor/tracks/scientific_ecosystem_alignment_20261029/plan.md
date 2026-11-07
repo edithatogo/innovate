@@ -4227,3 +4227,8 @@ Hosted release readiness for this worktree revision remains open.
   totals, horizon and tick resolution. The same export retains the
   incompatible pair's error and null result. The focused installed
   wheel test and Ruff passed.
+- [x] Verify the shared resource comparison fixture at the Rust request
+  boundary. A successful Logistic execution can be compared by adoption
+  but cannot supply resource totals. The resource comparison fails
+  independently while the ordinary comparison succeeds. The focused
+  boundary regression passed.

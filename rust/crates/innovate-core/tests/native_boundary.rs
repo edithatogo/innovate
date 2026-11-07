@@ -2820,3 +2820,33 @@ fn scenario_comparisons_preserve_order_after_failed_simulation() {
         comparisons[2]["result"]["relative_margin_bounds"]["alternative"]
     );
 }
+
+#[test]
+fn resource_comparison_requires_resource_outputs_from_both_scenarios() {
+    let mut payload: serde_json::Value =
+        serde_json::from_str(include_str!("fixtures/kairos_resource_comparisons.json")).unwrap();
+    payload["scenarios"][2] = json!({"id":"bad","model_key":"logistic",
+        "simulation":{"inputs":{"time":[0,6,7,9,11]},"parameters":{"L":100,"k":1,"x0":1}}});
+    payload["comparisons"]
+        .as_array_mut()
+        .unwrap()
+        .push(json!({"baseline":"base","alternative":"bad"}));
+    let request =
+        json!({"schema_version":"2.0","operation":"execute_scenario_grid","payload":payload});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    let result = &response["result"];
+    assert!(result["executions"][2]["error"].is_null(), "{response}");
+    let rows = result["comparisons"].as_array().unwrap();
+    assert_eq!(
+        rows[0]["result"]["resource_differences"]["configured_slot_ticks"],
+        -3
+    );
+    assert_eq!(
+        rows[1]["error"]["message"],
+        "resource comparison requires two Kairos network resource results"
+    );
+    assert!(rows[1]["result"].is_null());
+    assert!(rows[2]["error"].is_null());
+    assert!(rows[2]["result"].get("resource_differences").is_none());
+}
