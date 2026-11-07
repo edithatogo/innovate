@@ -6638,3 +6638,8 @@ Hosted release readiness for this worktree revision remains open.
   Check the common time basis after resolving paired scalar paths,
   so an unknown ID receives the same contextual diagnostic as a
   failed execution. All 13 Rust scenario boundary tests passed.
+
+- [x] Verify unknown ensemble scenario IDs through the Python 3.15.2
+  wheel, Julia and installed R with native builds from 4947d6b4.
+  All three returned the same invalid_comparison message naming the
+  missing alternative, a null comparison, and all three executions.
