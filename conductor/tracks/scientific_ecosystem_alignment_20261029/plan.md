@@ -4076,3 +4076,8 @@ Hosted release readiness for this worktree revision remains open.
   All 78 Rust boundary tests passed. Python 3.15.2, Julia and installed
   R matched the first product's analytic baseline and counterfactual
   within 1e-8 using the existing native artifacts.
+- [x] Verify comparison failure isolation in a parallel scenario grid.
+  A failed Logistic simulation invalidates its own comparison while
+  forward and reverse comparisons retain order, rank and signed effects.
+  Rust, Python 3.15.2, Julia and installed R passed the shared fixture.
+  The Python Arrow readback retained the failure and both successes.

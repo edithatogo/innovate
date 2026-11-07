@@ -2729,3 +2729,33 @@ fn counterfactual_combines_history_and_event_overrides() {
         assert!(result["difference"][row][1].as_f64().unwrap().abs() < 1e-8);
     }
 }
+
+#[test]
+fn scenario_comparisons_preserve_order_after_failed_simulation() {
+    let response: serde_json::Value = serde_json::from_str(&innovate_core::execute_json(
+        include_str!("fixtures/scenario_comparison_isolation.json"),
+    ))
+    .unwrap();
+    assert!(response["error"].is_null(), "{response}");
+    let executions = response["result"]["executions"].as_array().unwrap();
+    assert_eq!(executions[1]["id"], "bad");
+    assert!(!executions[1]["error"].is_null());
+    let comparisons = response["result"]["comparisons"].as_array().unwrap();
+    assert_eq!(comparisons[0]["alternative"], "bad");
+    assert_eq!(comparisons[0]["error"]["code"], "invalid_comparison");
+    assert!(comparisons[0]["result"].is_null());
+    for (row, places, effect) in [
+        (&comparisons[1], [2, 1], 50.),
+        (&comparisons[2], [1, 2], -50.),
+    ] {
+        assert!(row["error"].is_null());
+        let result = &row["result"];
+        assert_eq!(result["ranking"]["baseline_place"], places[0]);
+        assert_eq!(result["ranking"]["alternative_place"], places[1]);
+        assert_eq!(result["difference"][0], effect);
+    }
+    assert_eq!(
+        comparisons[1]["result"]["relative_margin_bounds"]["baseline"],
+        comparisons[2]["result"]["relative_margin_bounds"]["alternative"]
+    );
+}
