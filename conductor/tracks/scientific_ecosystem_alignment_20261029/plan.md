@@ -6623,3 +6623,8 @@ Hosted release readiness for this worktree revision remains open.
   read a scalar path. The comparison still returns invalid_comparison
   and retains all individual executions. All 13 Rust scenario boundary
   tests passed. Binding readback of the revised message remains open.
+
+- [x] Verify incomplete ensemble error context through the rebuilt
+  Python 3.15.2 wheel, Julia and installed R at c06a0425. All three
+  returned invalid_comparison naming alternative scenario "d", a null
+  estimate, and both the successful and failed execution records.
