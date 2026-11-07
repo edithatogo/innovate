@@ -6191,3 +6191,10 @@ Hosted release readiness for this worktree revision remains open.
   libraries and frameworks, with no build-directory dependency paths.
   The binary was built with SDK 27.2. Runtime validation on macOS 11
   and hosted platform acceptance remain open.
+
+- [x] Stage the new source archive separately in the release wheel
+  script so an older archive in the output directory cannot be picked
+  up. Resolve relative environment and output arguments before changing
+  directories. Shell syntax and a staging test passed using real sdist
+  generation with wheel build and normalization stubs. Hosted release
+  build qualification remains open.

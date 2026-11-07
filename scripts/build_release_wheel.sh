@@ -4,13 +4,19 @@ SOURCE_DATE_EPOCH="$(git show -s --format=%ct HEAD)"
 export SOURCE_DATE_EPOCH
 environment="${1:-$PWD/.venv-release}"
 output="${2:-$PWD/dist}"
+environment="$(cd "$environment" && pwd)"
+mkdir -p "$output"
+output="$(cd "$output" && pwd)"
 python="$environment/bin/python"
 maturin="$environment/bin/maturin"
 staging="$(mktemp -d)"
 trap 'rm -rf "$staging"' EXIT
-"$maturin" sdist --out "$output"
-mkdir "$staging/source"
-tar -xzf "$output"/innovate-*.tar.gz -C "$staging/source"
+mkdir "$staging/sdist" "$staging/source"
+"$maturin" sdist --out "$staging/sdist"
+archives=("$staging"/sdist/innovate-*.tar.gz)
+test "${#archives[@]}" -eq 1
+test -f "${archives[0]}"
+tar -xzf "${archives[0]}" -C "$staging/source"
 source_root=("$staging"/source/innovate-*)
 test "${#source_root[@]}" -eq 1
 (
@@ -20,3 +26,4 @@ test "${#source_root[@]}" -eq 1
 for wheel in "$staging"/wheels/*.whl; do
   "$python" scripts/normalize_wheel_sbom.py "$wheel" "${source_root[0]}" "$output/${wheel##*/}"
 done
+cp "${archives[0]}" "$output/"
