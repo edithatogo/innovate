@@ -6529,3 +6529,10 @@ Hosted release readiness for this worktree revision remains open.
   trials returned intervals, and each parameter was covered in
   34 trials at nominal 95% mass. This limited study shows
   undercoverage on the tested design; calibration remains open.
+
+- [x] Compare centered residual resampling on the same sparse-transition
+  Logistic datasets. One baseline failed convergence. Of 1,248 refits
+  on the other 39 datasets, none was rank-deficient. Nominal 95% coverage
+  was 26/39 for capacity, 31/39 for rate and 29/39 for midpoint. Keeping
+  the time grid fixed removed rank failures on this design, while
+  interval calibration remained below nominal.
