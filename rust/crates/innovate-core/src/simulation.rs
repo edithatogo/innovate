@@ -32,6 +32,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             "population",
             "seed",
             "ticks_per_unit",
+            "initial_adopters",
             "covariate",
             "events",
         ]
@@ -52,6 +53,15 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         .and_then(Value::as_u64)
         .filter(|n| *n > 0 && *n <= 100000)
         .ok_or_else(|| invalid("population must be in 1..=100000"))?;
+    let initial = options
+        .get("initial_adopters")
+        .map(|v| {
+            v.as_u64()
+                .filter(|n| *n <= population)
+                .ok_or_else(|| invalid("initial_adopters must be in 0..=population"))
+        })
+        .transpose()?
+        .unwrap_or(0);
     let ticks = options
         .get("ticks_per_unit")
         .map(|v| {
@@ -106,10 +116,18 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         EntityId::new(0, 0),
         "innovate.adoption_identity",
     );
+    if let Some(context) = abm.as_mut() {
+        for _ in 0..initial {
+            let agent = susceptible.swap_remove(identity_rng.sample(
+                Uniform::new(0, susceptible.len()).map_err(|_| invalid("empty population"))?,
+            ));
+            context.attach(agent, true);
+        }
+    }
     let mut rng = DeterministicStream::from_run_seed(seed);
     let mut events = Vec::new();
     let mut now = 0_u128;
-    for adopted in 0..population {
+    for adopted in initial..population {
         let reached = loop {
             let (_, p, q) = forcing[forcing_index];
             let next = forcing.get(forcing_index + 1).map(|r| r.0);
@@ -180,13 +198,15 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     }
     let counts: Vec<_> = time
         .iter()
-        .map(|t| events.partition_point(|e| *e <= (*t * ticks as f64).floor() as u128) as u64)
+        .map(|t| {
+            events.partition_point(|e| *e <= (*t * ticks as f64).floor() as u128) as u64 + initial
+        })
         .collect();
     let values: Vec<_> = counts
         .iter()
         .map(|n| m * (*n as f64 / population as f64))
         .collect();
-    let mut result = json!({"values":values,"counts":counts,"shape":[time.len()],"dtype":"float64","metadata":{"engine":engine,"kairos_revision":REV,"seed":seed,"population":population,"ticks_per_unit":ticks,"quantity":"adopted_level","process":"finite_population_bass_pure_birth","hazard":"(p + q*n/N)*(N-n)","time_quantization":"waiting times rounded up to at least one tick","forcing":forcing,"forcing_semantics":"right-continuous additive covariate and event deltas; boundaries precede tied adoption events","initial_adopters":0,"rng_checkpoint":rng.checkpoint(),"checkpoint_scope":"RNG provenance only; simulation resume is not implemented"}});
+    let mut result = json!({"values":values,"counts":counts,"shape":[time.len()],"dtype":"float64","metadata":{"engine":engine,"kairos_revision":REV,"seed":seed,"population":population,"ticks_per_unit":ticks,"quantity":"adopted_level","process":"finite_population_bass_pure_birth","hazard":"(p + q*n/N)*(N-n)","time_quantization":"waiting times rounded up to at least one tick","forcing":forcing,"forcing_semantics":"right-continuous additive covariate and event deltas; boundaries precede tied adoption events","initial_adopters":initial,"rng_checkpoint":rng.checkpoint(),"checkpoint_scope":"RNG provenance only; simulation resume is not implemented"}});
     if let Some(context) = abm.as_ref() {
         result["agents"]=json!(agents.iter().map(|id|json!({"index":id.index,"generation":id.generation,"adopted":context.get::<bool>(*id).copied().unwrap_or(false)})).collect::<Vec<_>>());
         result["metadata"]["agent_semantics"] = json!(

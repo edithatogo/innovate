@@ -1,0 +1,12 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 0.58s
+     Running tests/historical_logistic.rs (target/debug/deps/historical_logistic-9f0e4e5cc8789903)
+
+running 5 tests
+test advanced_shapes_and_options_fail_clearly ... ok
+test historical_logistic_covariates_and_event_boundary_match_closed_forms ... ok
+test historical_event_covariate_policy_is_explicit ... ok
+test additive_covariate_fit_recovers_independent_curve ... ok
+test historical_event_fit_forecasts_and_reports_rank ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

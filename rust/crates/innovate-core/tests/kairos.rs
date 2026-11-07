@@ -126,3 +126,19 @@ fn malformed_forcing_and_colliding_boundaries_are_errors() {
     let p = json!({"inputs":{"time":[5.]},"parameters":{"p":0.2,"q":0.,"m":100.},"simulation_options":{"engine":"kairos_abm","seed":1,"population":10,"ticks_per_unit":1,"events":[{"time":0.1,"delta_p":0.,"delta_q":0.},{"time":0.2,"delta_p":0.,"delta_q":0.}]}});
     assert!(KernelBinding::new().simulate_model("bass", p).is_err());
 }
+#[test]
+fn abm_initial_adoption_is_conserved_at_zero_and_saturation() {
+    for initial in [20, 100] {
+        let r=KernelBinding::new().simulate_model("bass",json!({"inputs":{"time":[0.,20.]},"parameters":{"p":0.2,"q":0.3,"m":100.},"simulation_options":{"engine":"kairos_abm","seed":42,"population":100,"initial_adopters":initial}})).unwrap().result.unwrap();
+        assert_eq!(r["counts"][0], initial);
+        assert_eq!(
+            r["agents"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .filter(|a| a["adopted"] == true)
+                .count() as u64,
+            r["counts"][1].as_u64().unwrap()
+        );
+    }
+}

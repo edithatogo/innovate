@@ -51,7 +51,7 @@
       "key": "logistic",
       "status": "bounded_native",
       "required": true,
-      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/native-features-20261107.json"
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/historical-logistic-20261107.json"
     },
     {
       "key": "lotka_volterra",
@@ -97,8 +97,8 @@
       "key": "covariates_and_events",
       "status": "bounded_native",
       "required": true,
-      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/abm-forcing-20261107.json",
-      "remaining": "Historical model-specific covariate interpolation/fitting and event-split curves; heterogeneous/network/resource ABM, scenarios and resume remain required"
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/historical-logistic-20261107.json",
+      "remaining": "Other historical models, interpolation/event fitting initialization and rate helpers; heterogeneous/network/resource ABM, scenarios and resume remain required"
     },
     {
       "key": "multi_generation_substitution",
@@ -133,8 +133,8 @@
       "key": "kairos_des_abm",
       "status": "bounded_native",
       "required": true,
-      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/abm-forcing-20261107.json",
-      "remaining": "Historical model-specific covariate interpolation/fitting and event-split curves; heterogeneous/network/resource ABM, scenarios and resume remain required"
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/historical-logistic-20261107.json",
+      "remaining": "Other historical models, interpolation/event fitting initialization and rate helpers; heterogeneous/network/resource ABM, scenarios and resume remain required"
     },
     {
       "key": "bayesian_inference",

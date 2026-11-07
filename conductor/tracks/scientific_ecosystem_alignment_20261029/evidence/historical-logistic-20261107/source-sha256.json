@@ -1,0 +1,16 @@
+{
+  "bindings/julia/test/runtests.jl": "cd4134336daf89c967d0be4535e36b4450bef2a8bcbb4c6e9a6074086942e6b7",
+  "bindings/r/R/kernel_bridge.R": "7b7ff775cedd50ba8c453f5a81e86f040b6aeb455346aa26897bf03880b28b86",
+  "bindings/r/tests/native.R": "cb5f76737233596461ccee675eecd86f31a4692ed67794b39149930ab1c0ec75",
+  "docs/astro-site/src/content/docs/native-migration.md": "c226fc82db3317b6f1f3b48802c64376a0f359919a82d88f61cba49c63c5f483",
+  "migration-ledger.json": "7331e4f8fbcdbce791d2218e2f3888fc494e1fca409ec5a87afb3bbc368079e2",
+  "rust/crates/innovate-core/src/discovery.json": "350b11d0c89fa9280aab5bbc4db94090790685bffc8e600a803c003ed7470d9f",
+  "rust/crates/innovate-core/src/historical.rs": "23532e7bebc6fdce1c23043b7fc3ee40d3c02002b7060a562b744e7cb48accbd",
+  "rust/crates/innovate-core/src/kernel.rs": "eb1c876481848ef57de26ba09bef0ac9428d706f3d5979e9ae4999317d92e416",
+  "rust/crates/innovate-core/src/lib.rs": "c52f22ff972c389d2d569f7a3600b78fdcda91737d4f23a20864c6b5222c28db",
+  "rust/crates/innovate-core/src/simulation.rs": "c230500308076615da63d85c4cf71b979966874f6f8eb21c1e581f2510516037",
+  "rust/crates/innovate-core/tests/historical_logistic.rs": "d560c71cfa02f6ce5513e9eca7a0b16d4b9aa3e53facdab871b7bff9e43bec6e",
+  "rust/crates/innovate-core/tests/kairos.rs": "fab8c72a2b13c140c241ab0d4dc7ddc5dd5bf7b826e31f26ce26116ff7f9e595",
+  "rust/crates/innovate-tabular/src/lib.rs": "fbdb1cf2e88897e08d1332e0be444c806537417933a50fd813b366de9d4d7ca5",
+  "tests/native/test_python_consumer.py": "9b67d5996e8f7d647693485ac1d512add63bfdcc3de56a275cda7c2f61f51b0d"
+}

@@ -117,3 +117,24 @@ def test_kairos_abm_forcing_retains_agents_and_restarts_adoption():
     assert r["counts"][3] > 0
     assert len(r["agents"]) == 100
     assert sum(a["adopted"] for a in r["agents"]) == r["counts"][-1]
+
+
+def test_historical_logistic_polars_covariates_and_event_fit():
+    frame = pl.DataFrame({"time": [0.0, 1.0, 2.0], "price": [0.0, 1.0, 2.0]})
+    p = {"L": 100.0, "k": 0.5, "x0": 2.0, "beta_L_price": 10.0, "beta_k_price": 0.1, "beta_x0_price": 0.2}
+    a = innovate.predict("logistic", frame, p, model_options={"covariates": ["price"]})
+    assert a["prediction"][1] == pytest.approx(110 / (1 + math.exp(0.72)))
+    t = [float(i) for i in range(30)]
+    y = [100 / (1 + math.exp(-0.5 * (x - 5))) if x < 12 else 200 / (1 + math.exp(-0.3 * (x - 18))) for x in t]
+    fit = innovate.fit(
+        "logistic",
+        pl.DataFrame({"time": t, "observed": y}),
+        model_options={"t_event": 12.0},
+        fit_options={
+            "initial_parameters": {"L": 110.0, "k": 0.4, "x0": 6.0, "L_post": 220.0, "k_post": 0.4, "x0_post": 17.0}
+        },
+    )
+    assert fit.diagnostics["optimizer"]["converged"]
+    assert fit.predict(pl.DataFrame({"time": [35.0]}))["prediction"][0] == pytest.approx(
+        200 / (1 + math.exp(-5.1)), abs=0.001
+    )

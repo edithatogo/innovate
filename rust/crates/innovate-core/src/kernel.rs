@@ -244,6 +244,9 @@ impl KernelBinding {
         } else {
             request
         };
+        if crate::historical::selected(request) {
+            return crate::historical::execute(request);
+        }
         validate_request(request)?;
         if request.payload.get("simulation_options").is_some() {
             return crate::simulation::execute(request);

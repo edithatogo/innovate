@@ -54,6 +54,22 @@ fn inputs(frame: &DataFrame, observed: &[String]) -> PolarsResult<Value> {
     Ok(input)
 }
 
+fn model_inputs(frame: &DataFrame, observed: &[String], kwargs: &Value) -> PolarsResult<Value> {
+    let mut input = inputs(frame, observed)?;
+    if let Some(names) = kwargs.get("covariates") {
+        let names: Vec<String> = serde_json::from_value(names.clone())
+            .map_err(|_| polars_err!(SchemaMismatch:"covariates must be column names"))?;
+        if !names.is_empty() {
+            let mut values = serde_json::Map::new();
+            for name in names {
+                values.insert(name.clone(), json!(numbers(frame, &name)?));
+            }
+            input["covariates"] = Value::Object(values);
+        }
+    }
+    Ok(input)
+}
+
 pub fn predict(frame: DataFrame, model: &str, parameters: Value) -> PolarsResult<DataFrame> {
     predict_with_options(frame, model, parameters, json!({}))
 }
@@ -88,9 +104,11 @@ pub fn predict_with_options(
         .get("model_options")
         .cloned()
         .unwrap_or_else(|| json!({}));
-    let state = json!({"model_key":model, "parameters":parameters, "constructor_kwargs":kwargs, "predict_kwargs":{}});
-    let request =
-        KernelRequest::predict_model(model, json!({"inputs":inputs(&frame,&[])?, "state":state}));
+    let state = json!({"model_key":model, "parameters":parameters, "constructor_kwargs":kwargs.clone(), "predict_kwargs":{}});
+    let request = KernelRequest::predict_model(
+        model,
+        json!({"inputs":model_inputs(&frame,&[],&kwargs)?, "state":state}),
+    );
     let response = KernelBinding::new()
         .invoke(&request)
         .map_err(|e| polars_err!(ComputeError: "{e}"))?;
@@ -188,7 +206,7 @@ pub fn fit_ipc_with_options(data: &[u8], model: &str, options: Value) -> PolarsR
     }
     let request = KernelRequest::fit_model(
         model,
-        json!({"inputs": inputs(&frame,&columns)?,
+        json!({"inputs": model_inputs(&frame,&columns,options.get("model_options").unwrap_or(&json!({})))?,
         "constructor_kwargs":options.get("model_options").cloned().unwrap_or_else(||json!({})),
         "fit_options":options.get("fit_options").cloned().unwrap_or_else(||json!({}))}),
     );

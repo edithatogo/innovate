@@ -143,3 +143,19 @@ Next source work: historical covariate interpolation/fitting and event-split
 curves, heterogeneous/network ABM, then remaining model/inference obligations.
 
 Source/evidence commit: `897ed8e16da4a00e0a9907b11c0b617fc2a80bad`. No native operation remains in flight.
+
+## Historical model continuation
+
+Same writer/worktree resumes at 84eca121, initially clean. No ownership change.
+- [x] Port bounded Logistic additive covariates and historical independent event curves,
+      with explicit handling of the old event path ignoring covariates.
+- [x] Qualify explicit-initialized fitting, forecasts and Python/Julia/R consumers.
+- [ ] Continue other historical models and richer/network ABM; preserve all obligations.
+
+Initial-adopter ABM states are also implemented and tested. Evidence:
+historical-logistic-20261107.json; review: historical-logistic-review-20261107.md.
+51 Rust tests, 25 installed Python checks, 137 Julia assertions and R native
+cases pass. Core/C ABI line coverage: 80.75%. All 38 obligations remain required.
+Next: other historical model covariates/event splits, advanced initialization
+and rate helpers, heterogeneous/network/resource ABM, and remaining model/inference
+ports. Full scientific, platform and release qualification remain open.

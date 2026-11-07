@@ -202,3 +202,34 @@ This simulation contract does not replace the historical model-specific linear
 covariate interpolation, fitting, market-potential effects or event-split curves.
 Those ports remain required. Python, Julia and R accept the same JSON payload;
 Polars can construct trajectory tables from returned native counts and levels.
+
+## Historical Logistic covariates and event curves
+
+Logistic now supports `model_options={"covariates": ["price"]}`. The Polars
+`price` column supplies values aligned with `time`. Native JSON uses
+`inputs.covariates.price`. Parameters add `beta_L_price`, `beta_k_price` and
+`beta_x0_price` to the corresponding base parameters at each observation.
+Multiple declared covariates are additive. Effective L and k must stay positive;
+all inputs and coefficients must be finite. Forecasts need future covariate values.
+
+`t_event` selects independent pre/post curves using `L_post`, `k_post`,
+`x0_post` at and after the event. These historical curves can jump at the event;
+continuity is not imposed. If covariates and an event are combined,
+`event_covariates="historical_ignored"` preserves the original behavior: the
+event branch ignores covariates. Metadata records that mode; fit diagnostics warn
+that its coefficients are unidentifiable. Select `event_covariates="additive"`
+to apply the same covariate coefficients to both segments in the redesigned API.
+
+Advanced fits currently require complete `fit_options.initial_parameters`,
+including post-event and covariate coefficients. Rust reports convergence and
+local rank; rank deficiency does not establish parameter uniqueness. Default
+initialization, analytic time-varying adoption-rate helpers and the other models'
+historical interpolation/event semantics remain required migration work. This
+port preserves the Logistic pointwise curve contract; it is not an ODE forcing
+or interpolation rule. Historical source: pre-migration commit `56d91dd7`.
+
+Both Kairos simulation engines also accept `initial_adopters` from zero through
+population. ABM initial adopters are selected through its separate identity
+stream and retained as adopted components. Counts include these agents at time
+zero; `result.agents` still describes the final requested time. This does not
+supply network or heterogeneous agent hazards.

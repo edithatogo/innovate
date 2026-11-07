@@ -75,3 +75,8 @@ abm_payload <- list(inputs=list(time=c(0,1,3,5)),parameters=list(p=0.2,q=0.3,m=1
 abm <- kernel_simulate_model("bass",abm_payload)$result
 stopifnot(all(unlist(abm$counts)[1:3]==0),abm$counts[[4]]>0,length(abm$agents)==100,sum(vapply(abm$agents,function(a)a$adopted,logical(1)))==abm$counts[[4]])
 cat("R ABM covariate forcing and agent conservation passed\n")
+historical <- kernel_predict_model("logistic",list(inputs=list(time=c(1),covariates=list(price=c(1))),parameters=list(L=100,k=0.5,x0=2,beta_L_price=10,beta_k_price=0.1,beta_x0_price=0.2),constructor_kwargs=list(covariates=list("price"))))$result
+stopifnot(abs(historical$values[[1]]-110/(1+exp(0.72)))<1e-10)
+initial_payload <- list(inputs=list(time=c(0,20)),parameters=list(p=0.2,q=0.3,m=100),simulation_options=list(engine="kairos_abm",seed=42,population=100,initial_adopters=20))
+stopifnot(kernel_simulate_model("bass",initial_payload)$result$counts[[1]]==20)
+cat("R historical Logistic and initial ABM conformance passed\n")

@@ -4,6 +4,7 @@ mod competition;
 mod contracts;
 mod fitting;
 mod forcing;
+mod historical;
 mod kernel;
 mod numerics;
 mod simulation;

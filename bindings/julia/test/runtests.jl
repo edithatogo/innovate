@@ -76,3 +76,9 @@ end
     @test length(a["agents"])==100
     @test count(x->x["adopted"],a["agents"])==a["counts"][4]
 end
+@testset "Historical Logistic and initial ABM" begin
+    p=Dict("inputs"=>Dict("time"=>[1.],"covariates"=>Dict("price"=>[1.])),"parameters"=>Dict("L"=>100.,"k"=>0.5,"x0"=>2.,"beta_L_price"=>10.,"beta_k_price"=>0.1,"beta_x0_price"=>0.2),"constructor_kwargs"=>Dict("covariates"=>["price"]))
+    @test isapprox(kernel_predict_model("logistic",p)["result"]["values"][1],110/(1+exp(0.72));atol=1e-10)
+    p=Dict("inputs"=>Dict("time"=>[0.,20.]),"parameters"=>Dict("p"=>0.2,"q"=>0.3,"m"=>100.),"simulation_options"=>Dict("engine"=>"kairos_abm","seed"=>42,"population"=>100,"initial_adopters"=>20))
+    @test kernel_simulate_model("bass",p)["result"]["counts"][1]==20
+end
