@@ -5781,3 +5781,10 @@ Hosted release readiness for this worktree revision remains open.
   Python, Julia and freshly installed R. All three round-tripped the
   dataset artifact, imported a current scenario envelope with replay
   available, and rejected an unsigned dataset from a serializer.
+
+- [x] Add Windows to the existing Julia and R native consumer CI job.
+  The matrix selects the Rust shared-library filename for each platform
+  and uses Bash for inline scripts and R installation. Both runners
+  execute the full consumer suites, including the extension registry
+  and dataset-provider checks. Actionlint and Ruff passed locally.
+  Hosted results remain open.
