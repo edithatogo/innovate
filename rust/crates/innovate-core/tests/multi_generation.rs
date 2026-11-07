@@ -721,3 +721,24 @@ fn forced_successive_milestones_resolve_between_requested_samples() {
         assert!((row[key].as_f64().unwrap() - expected).abs() < 1e-7);
     }
 }
+
+#[test]
+fn historical_milestones_use_fixed_base_market_even_after_capacity_override() {
+    let response = KernelBinding::new()
+        .summarize_model("norton_bass", json!({
+            "inputs":{"time":[1.,2.,3.]},
+            "parameters":{"p1":0.1,"q1":0.,"m1":100.},
+            "constructor_kwargs":{
+                "initial_time":1.,"initial_values":[12.],
+                "parameter_events":[{"time":2.,"parameters":{"m1":1000.}}]
+            }
+        }))
+        .unwrap().result.unwrap();
+    let diagnostic = &response["threshold_diagnostics"]["net_level_milestones"];
+    let row = &diagnostic["generations"][0];
+    assert_eq!(diagnostic["window"], json!([1.,3.]));
+    assert_eq!(row["reference_market"], 100.);
+    assert_eq!(row["takeoff"], 1.);
+    assert_eq!(row["median"], 3.);
+    assert_eq!(row["saturation"], 3.);
+}
