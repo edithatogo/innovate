@@ -1200,3 +1200,11 @@ the other competition models and installed binding checks remain open.
   isolates an invalid dataset between two successful predictions. All nine
   native boundary tests passed. Record batch fitting as bounded native in
   the release ledger, with broader model and workload qualification open.
+
+- [x] Allow opt-in parallel native JSON batches via `payload.workers`
+  (1–32, default 1). Contiguous work chunks rejoin in original order.
+  The regression compares complete serial and parallel envelopes,
+  including a failed middle dataset, and rejects an invalid worker count.
+  All nine native boundary tests and focused Clippy passed.
+- [ ] Qualify parallel workloads in the installed bindings and measure
+  throughput across representative model families.

@@ -57,7 +57,7 @@ fn execute_batch_json(value: serde_json::Value) -> serde_json::Value {
     let invalid = || {
         json!({"schema_version":KERNEL_SCHEMA_VERSION,"operation":operation,
         "model_key":model,"result":null,"error":{"code":"invalid_request",
-        "message":"batch requires schema 2.0, a model key and an array of datasets"},
+        "message":"batch requires schema 2.0, a model key, an array of datasets and optional workers in 1..=32"},
         "metadata":{"runtime":"rust_native"}})
     };
     let Some(model_key) = model.as_str().filter(|key| !key.is_empty()) else {
@@ -69,11 +69,34 @@ fn execute_batch_json(value: serde_json::Value) -> serde_json::Value {
     if value["schema_version"] != KERNEL_SCHEMA_VERSION {
         return invalid();
     }
+    let workers = match value["payload"].get("workers") {
+        None => 1,
+        Some(workers) => match workers.as_u64().filter(|n| (1..=32).contains(n)) {
+            Some(n) => n as usize,
+            None => return invalid(),
+        },
+    };
     let binding = KernelBinding::new();
-    let results = if operation == "fit_batch" {
-        binding.fit_batch(model_key, datasets.iter().cloned())
+    let run = |batch: &[serde_json::Value]| {
+        if operation == "fit_batch" {
+            binding.fit_batch(model_key, batch.iter().cloned())
+        } else {
+            binding.predict_batch(model_key, batch.iter().cloned())
+        }
+    };
+    let results = if workers == 1 || datasets.len() <= 1 {
+        run(datasets)
     } else {
-        binding.predict_batch(model_key, datasets.iter().cloned())
+        std::thread::scope(|scope| {
+            let chunks = datasets.chunks(datasets.len().div_ceil(workers));
+            let handles: Vec<_> = chunks
+                .map(|chunk| scope.spawn(move || run(chunk)))
+                .collect();
+            handles
+                .into_iter()
+                .flat_map(|handle| handle.join().expect("batch worker panicked"))
+                .collect()
+        })
     };
     let rows: Vec<_> = results
         .into_iter()

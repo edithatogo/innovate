@@ -129,6 +129,11 @@ fn batch_json_validates_envelope_and_isolates_bad_datasets() {
     assert_eq!(rows[0]["result"]["values"], json!([50.]));
     assert_eq!(rows[1]["error"]["code"], "invalid_request");
     assert_eq!(rows[2]["result"]["values"].as_array().unwrap().len(), 2);
+    request["payload"]["workers"] = json!(2);
+    assert_eq!(execute(request.clone()), response);
+    request["payload"]["workers"] = json!(33);
+    assert_eq!(execute(request.clone())["error"]["code"], "invalid_request");
+    request["payload"]["workers"] = json!(2);
     request["schema_version"] = json!("1.0");
     assert_eq!(execute(request.clone())["error"]["code"], "invalid_request");
     request["schema_version"] = json!("2.0");
