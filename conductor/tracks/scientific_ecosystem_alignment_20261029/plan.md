@@ -1007,3 +1007,9 @@ the other competition models and installed binding checks remain open.
   The convergence and forecast gates remain open. Keep the current defaults
   and tolerances while improving initialization or optimizer behavior.
   [Reproduction and results](evidence/competition-start-diagnostics-20261107).
+
+- [x] Expose individual multistart outcomes and the selected zero-based start
+  index in solver diagnostics. The competition fixture verifies that the
+  selected loss is the lowest reported loss. All 14 competition tests and
+  focused Clippy passed. Automatic multi-product and lock-in convergence
+  remain open.

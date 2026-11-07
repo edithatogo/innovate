@@ -313,6 +313,13 @@ fn interacting_lotka_forcing_fits_independent_reference_and_forecasts() {
     let fit = automatic.unwrap().result.unwrap();
     assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
     assert!(fit["diagnostics"]["metrics"]["RSS"].as_f64().unwrap() < 1e-10);
+    let optimizer = &fit["diagnostics"]["optimizer"];
+    let reports = optimizer["start_reports"].as_array().unwrap();
+    assert_eq!(reports.len(), 3);
+    let selected = optimizer["selected_start_index"].as_u64().unwrap() as usize;
+    assert_eq!(reports[selected]["scaled_rss"], optimizer["scaled_rss"]);
+    assert!(reports.iter().filter_map(|r| r["scaled_rss"].as_f64())
+        .all(|rss| rss >= optimizer["scaled_rss"].as_f64().unwrap()));
 }
 
 #[test]

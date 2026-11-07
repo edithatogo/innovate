@@ -141,13 +141,17 @@ where
         }
     };
     let mut best: Option<Candidate> = None;
-    for start in starts {
+    let mut start_reports = Vec::with_capacity(starts.len());
+    let mut selected_start = 0;
+    for (index, start) in starts.iter().enumerate() {
         let mut theta = start.clone();
         let Ok(mut prediction) = evaluate(&theta) else {
+            start_reports.push(json!({"termination":"invalid_initial_prediction"}));
             continue;
         };
         let mut error = loss(&prediction);
         if !error.is_finite() {
+            start_reports.push(json!({"termination":"nonfinite_initial_loss"}));
             continue;
         }
         let mut damping = 1e-3_f64;
@@ -217,7 +221,14 @@ where
                 break;
             }
         }
+        start_reports.push(json!({
+            "iterations": iterations,
+            "converged": converged,
+            "termination": reason,
+            "scaled_rss": error
+        }));
         if best.as_ref().is_none_or(|b| error < b.error) {
+            selected_start = index;
             best = Some(Candidate {
                 error,
                 parameters: theta,
@@ -253,7 +264,7 @@ where
         identifiability,
         report: json!({"method":"deterministic_multistart_damped_least_squares",
         "converged":converged,"termination":reason,"iterations":iterations,"max_iterations":max_iterations,
-        "starts":starts.len(),"scaled_rss":error,"gradient_max_abs":gradient,
+        "starts":starts.len(),"start_reports":start_reports,"selected_start_index":selected_start,"scaled_rss":error,"gradient_max_abs":gradient,
         "interpretation":"numerical termination only; not a global optimum or statistical acceptance"}),
     })
 }
