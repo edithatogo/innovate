@@ -494,3 +494,10 @@ Keep the returned checkpoint string intact and supply it as
 `resume_checkpoint` with the original network request and time grid.
 Omit the pause option to finish. The checkpoint preserves pending
 service, waiting deadlines, retry state and resource accounting.
+
+For `kairos_des` or `kairos_abm`, set `pause_at_tick` to a
+nonnegative integer below the final tick horizon. The checkpoint
+includes decisions through that tick and can be returned before the
+first adoption. Use either the tick cutoff or the adoption count per
+request. To pause again by tick, supply a cutoff later than the one
+in the saved checkpoint.

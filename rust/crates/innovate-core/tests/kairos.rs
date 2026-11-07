@@ -355,3 +355,37 @@ fn abm_checkpoint_resumes_agent_identities_and_adoption_clock() {
     payload["simulation_options"]["resume_checkpoint"] = checkpoint;
     assert!(run(payload).is_err());
 }
+
+#[test]
+fn tick_pause_before_first_adoption_preserves_forced_des_and_abm() {
+    let kernel = KernelBinding::new();
+    let run = |payload| {
+        kernel
+            .simulate_model("bass", payload)
+            .unwrap()
+            .result
+            .unwrap()
+    };
+    for engine in ["kairos_des", "kairos_abm"] {
+        let mut payload = json!({"inputs":{"time":[0,2,3,5,10]},
+            "parameters":{"p":0,"q":0,"m":4},
+            "simulation_options":{"engine":engine,"seed":42,"population":4,"ticks_per_unit":1,
+                "events":[{"time":2,"delta_p":1e-5,"delta_q":0},{"time":5,"delta_p":1e12,"delta_q":0}]}});
+        let expected = run(payload.clone());
+        payload["simulation_options"]["pause_at_tick"] = json!(3);
+        let paused = run(payload.clone());
+        assert_eq!(paused["status"], "paused");
+        assert_eq!(paused["checkpoint"]["events"], json!([]));
+        assert_eq!(paused["checkpoint"]["cutoff"]["clock_tick"], "2");
+        payload["simulation_options"]["resume_checkpoint"] = paused["checkpoint"].clone();
+        payload["simulation_options"]["pause_at_tick"] = json!(6);
+        let paused_again = run(payload.clone());
+        assert_eq!(paused_again["checkpoint"]["events"], json!(["6"]));
+        payload["simulation_options"]
+            .as_object_mut()
+            .unwrap()
+            .remove("pause_at_tick");
+        payload["simulation_options"]["resume_checkpoint"] = paused_again["checkpoint"].clone();
+        assert_eq!(run(payload), expected);
+    }
+}

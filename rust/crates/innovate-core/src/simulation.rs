@@ -28,6 +28,15 @@ struct AdoptionCheckpoint {
     rng: RngCheckpoint,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     agents: Option<AgentCheckpoint>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    cutoff: Option<TickCutoff>,
+}
+
+#[derive(serde::Deserialize, serde::Serialize)]
+#[serde(deny_unknown_fields)]
+struct TickCutoff {
+    requested_tick: String,
+    clock_tick: String,
 }
 
 #[derive(serde::Deserialize, serde::Serialize)]
@@ -116,6 +125,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             "covariate",
             "events",
             "pause_after_adoptions",
+            "pause_at_tick",
             "resume_checkpoint",
         ]
         .contains(&k.as_str())
@@ -191,8 +201,25 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 })
         })
         .transpose()?;
+    let pause_tick = options
+        .get("pause_at_tick")
+        .map(|value| {
+            value
+                .as_u64()
+                .map(u128::from)
+                .filter(|&tick| tick < horizon)
+                .ok_or_else(|| {
+                    invalid("pause_at_tick must be a nonnegative integer below the horizon")
+                })
+        })
+        .transpose()?;
+    if pause.is_some() && pause_tick.is_some() {
+        return Err(invalid(
+            "choose either pause_after_adoptions or pause_at_tick",
+        ));
+    }
     let resume = options.get("resume_checkpoint");
-    let checkpoint_configuration = (pause.is_some() || resume.is_some()).then(|| {
+    let checkpoint_configuration = (pause.is_some() || pause_tick.is_some() || resume.is_some()).then(|| {
         let mut configuration = json!({"kairos_revision":REV,"seed":seed,"population":population,"initial":initial,
             "ticks_per_unit":ticks,"forcing":forcing,"market_size":m,"horizon":horizon});
         if engine == "kairos_abm" {
@@ -242,13 +269,29 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             .map(|tick| tick.parse::<u64>())
             .collect::<Result<Vec<_>, _>>()
             .map_err(|_| invalid("invalid adoption checkpoint event tick"))?;
+        let last_event = saved_events.last().copied().map_or(0, u128::from);
+        let (clock_tick, saved_tick) = if let Some(cutoff) = saved.cutoff {
+            let parse = |tick: &str| {
+                tick.parse::<u64>()
+                    .map(u128::from)
+                    .map_err(|_| invalid("invalid adoption checkpoint cutoff"))
+            };
+            (parse(&cutoff.clock_tick)?, parse(&cutoff.requested_tick)?)
+        } else {
+            if saved_events.is_empty() || saved_events.len() as u64 >= population - initial {
+                return Err(invalid("invalid adoption checkpoint event count"));
+            }
+            (last_event, last_event)
+        };
         if saved.version != 1
             || Some(&saved.configuration) != checkpoint_configuration.as_ref()
-            || saved_events.is_empty()
-            || saved_events.len() as u64 >= population - initial
-            || saved_events[0] == 0
+            || saved_events.len() as u64 > population - initial
+            || saved_events.first() == Some(&0)
+            || clock_tick < last_event
+            || saved_tick < clock_tick
+            || saved_tick > horizon
+            || pause_tick.is_some_and(|tick| tick <= saved_tick)
             || saved_events.windows(2).any(|pair| pair[0] >= pair[1])
-            || u128::from(*saved_events.last().unwrap()) > horizon
             || pause.is_some_and(|count| count <= saved_events.len() as u64)
             || saved.rng.seed != clock.rng.checkpoint().seed
             || saved.rng.stream_id != clock.rng.checkpoint().stream_id
@@ -289,14 +332,14 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             _ => return Err(invalid("checkpoint agent state does not match engine")),
         }
         events.extend(saved_events.into_iter().map(u128::from));
-        clock.now = *events.last().unwrap();
+        clock.now = clock_tick;
         clock.forcing_index = forcing.partition_point(|row| row.0 <= clock.now) - 1;
         clock.rng = DeterministicStream::restore(&saved.rng)
             .map_err(|_| invalid("invalid adoption checkpoint RNG state"))?;
     }
     for adopted in initial + events.len() as u64..population {
         let Some(now) = clock
-            .next_adoption(&forcing, adopted, population, ticks, horizon, None)
+            .next_adoption(&forcing, adopted, population, ticks, horizon, pause_tick)
             .map_err(invalid)?
         else {
             break;
@@ -342,10 +385,14 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             }
         }
     }
-    if pause == Some(events.len() as u64) {
+    if pause_tick.is_some() || pause == Some(events.len() as u64) {
         let checkpoint = AdoptionCheckpoint {
             version: 1,
             configuration: checkpoint_configuration.unwrap(),
+            cutoff: pause_tick.map(|tick| TickCutoff {
+                requested_tick: tick.to_string(),
+                clock_tick: clock.now.to_string(),
+            }),
             events: events.into_iter().map(|tick| tick.to_string()).collect(),
             rng: clock.rng.checkpoint(),
             agents: abm.as_ref().map(|_| AgentCheckpoint {

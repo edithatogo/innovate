@@ -5126,3 +5126,9 @@ Hosted release readiness for this worktree revision remains open.
   matched the uninterrupted event tick and RNG checkpoint. Both
   clock unit tests and all 15 Kairos integration tests passed.
   Public tick-cutoff requests remain open.
+
+- [x] Expose tick-based checkpoints for Bass DES and homogeneous ABM.
+  The Rust fixture paused before the first adoption, paused again at
+  an adoption after a forcing change, and reproduced the uninterrupted
+  results for both engines. All 16 Kairos integration tests passed.
+  Binding requalification and network tick cutoffs remain open.
