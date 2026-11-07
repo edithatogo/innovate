@@ -1836,3 +1836,11 @@ the other competition models and installed binding checks remain open.
   3.15.2 on 199,886 finite values through the rebuilt C ABI. The Rust
   regression retains a failing midpoint from the original sample.
   All 27 boundary tests and focused Clippy passed.
+
+- [x] Restore adoption dataset diagnostics for column alignment,
+  missingness, ordered and unique time keys, monotonicity, units,
+  share bounds and denominators. The Rust fixture reports five
+  independent failures in one dataset. All 28 boundary tests and
+  focused Clippy passed.
+- [ ] Restore diagnostics for the other historical dataset kinds
+  and verify the installed consumers.

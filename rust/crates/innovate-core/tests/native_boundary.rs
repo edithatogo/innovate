@@ -680,3 +680,28 @@ fn historical_dataset_digest_matches_python_json_fixture() {
         "88e517cfdfe7027d87e6181f2e47690ab024bf1a40de5f94197036f5ab10a543"
     );
 }
+
+#[test]
+fn adoption_diagnostics_report_multiple_dataset_failures() {
+    let request = innovate_core::json!({"schema_version":"2.0","operation":"validate_dataset",
+        "payload":{"kind":"adoption","unit":"share","time":[0,0,2],"adoption":[0.2,1.2,0.5],
+            "denominator":[1,1,1]}});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    let result = &response["result"];
+    assert_eq!(result["ok"], false);
+    for name in [
+        "time_alignment",
+        "duplicate_keys:time",
+        "share_bounds:adoption",
+        "monotonicity:adoption",
+        "denominator_consistency",
+    ] {
+        assert!(
+            result["failed"]
+                .as_array()
+                .unwrap()
+                .contains(&innovate_core::json!(name))
+        );
+    }
+}

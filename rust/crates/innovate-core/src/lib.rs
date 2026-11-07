@@ -6,6 +6,7 @@ mod causal;
 mod competition;
 mod composite;
 mod contracts;
+mod dataset;
 mod events;
 mod fitting;
 mod forcing;
@@ -45,7 +46,8 @@ pub fn execute_json(input: &str) -> String {
                 | "aggregate_dates"
                 | "summarize_causal"
                 | "validate_provenance"
-                | "dataset_checksum",
+                | "dataset_checksum"
+                | "validate_dataset",
             ) => {
                 return execute_preprocessing_json(&value).to_string();
             }
@@ -181,6 +183,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         let payload = &value["payload"];
         if value["operation"] == "aggregate_dates" {
             return calendar::aggregate(payload);
+        }
+        if value["operation"] == "validate_dataset" {
+            return dataset::validate(payload);
         }
         if value["operation"] == "dataset_checksum" {
             return provenance::checksum(payload);
