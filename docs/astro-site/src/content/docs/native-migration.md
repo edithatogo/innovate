@@ -1355,20 +1355,15 @@ Percentage differences are null where the baseline is zero.
 
 ## Re-ingesting a dataset artifact
 
-Keep the dataset and its `checksum_encoding` together. Pass the
-recorded encoding when re-ingesting the artifact so Rust verifies
-the digest using the same serialization rules.
+Pass the complete artifact so Rust can verify the checksum with its
+recorded encoding and recompute dataset diagnostics.
 
 ```python
 from innovate import execute
 
-verified = execute(
-    "ingest_dataset",
-    dataset=artifact["dataset"],
-    encoding=artifact["checksum_encoding"],
-)["result"]
+verified = execute("ingest_dataset", artifact=artifact)["result"]
 ```
 
-Use `python_sorted_json_v1` for artifacts explicitly recorded with the
-historical Python encoding. New requests default to `rust_sorted_json_v1`.
-The encoding can affect digests for Unicode strings and numeric values.
+This works for artifacts recorded with either `python_sorted_json_v1`
+or `rust_sorted_json_v1`. For a bare dataset, pass `dataset` and an optional
+`encoding`. The default for a bare dataset is `rust_sorted_json_v1`.

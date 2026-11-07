@@ -4372,3 +4372,6 @@ Hosted release readiness for this worktree revision remains open.
   Python 3.15.2, Julia and installed R. All reproduced the legacy
   artifact and rejected modified adoption data. Python imported
   the rebuilt wheel from an isolated extraction after disk exhaustion.
+- [x] Document direct dataset artifact re-ingestion. The guide example
+  reproduced the historical Unicode artifact with the rebuilt Python
+  wheel extracted for the binding check.
