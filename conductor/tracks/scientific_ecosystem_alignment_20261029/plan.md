@@ -4944,3 +4944,8 @@ Hosted release readiness for this worktree revision remains open.
   through rebuilt Python 3.15.2 and Julia and the installed R bridge.
   All three returned the four expected categories on both the original
   and translated grids. Python loaded the rebuilt extension directly.
+
+- [x] Retain the inclusive finite-span boundary case in all three
+  native consumer suites. The focused Python, Julia and installed R
+  checks passed for the original and translated grids and retained
+  the adjacent and overflowing timestamp checks.

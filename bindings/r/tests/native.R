@@ -800,3 +800,10 @@ for (time in list(c(1.5, 1.5 + 2^-52, 1.5 + 4 * 2^-52),
   stopifnot(identical(unlist(categories$time), time),
     identical(unlist(categories$category), c("Early Adopters", "Early Majority", "Laggards")))
 }
+
+for (origin in c(0, 1024)) {
+  categories <- kernel_call("categorize_adopters",
+    payload=list(time=origin + 0:3, adoption_rate=c(0, 1, 0, 1)))$result$category
+  stopifnot(identical(unlist(categories),
+    c("Innovators", "Early Adopters", "Early Majority", "Late Majority")))
+}

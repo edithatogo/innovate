@@ -853,4 +853,9 @@ end
         @test result["time"] == time
         @test result["category"] == ["Early Adopters", "Early Majority", "Laggards"]
     end
+    for origin in (0, 1024)
+        result = kernel_call("categorize_adopters", nothing,
+            Dict("time"=>collect(origin:origin+3), "adoption_rate"=>[0,1,0,1]))["result"]
+        @test result["category"] == ["Innovators", "Early Adopters", "Early Majority", "Late Majority"]
+    end
 end

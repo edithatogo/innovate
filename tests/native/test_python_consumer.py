@@ -1657,3 +1657,8 @@ def test_adopter_classification_preserves_irregular_time_grids():
         result = innovate.execute("categorize_adopters", time=time, adoption_rate=[1, 2, 1])["result"]
         assert result["time"] == time
         assert result["category"] == ["Early Adopters", "Early Majority", "Laggards"]
+
+    for origin in (0, 1024):
+        time = list(range(origin, origin + 4))
+        result = innovate.execute("categorize_adopters", time=time, adoption_rate=[0, 1, 0, 1])["result"]
+        assert result["category"] == ["Innovators", "Early Adopters", "Early Majority", "Late Majority"]
