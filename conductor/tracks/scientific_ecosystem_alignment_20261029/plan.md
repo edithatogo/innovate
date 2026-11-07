@@ -4344,3 +4344,6 @@ Hosted release readiness for this worktree revision remains open.
   mismatches. A supplied nonempty digest must be 64 hexadecimal
   characters. Uppercase SHA-256 remains valid. All five focused Rust
   dataset tests passed, including timestamp and tamper behavior.
+- [x] Reject malformed supplied dataset digests before sorting,
+  serializing or hashing content. The five focused Rust dataset
+  tests passed, including valid uppercase digest and tamper checks.
