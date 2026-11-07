@@ -1070,5 +1070,8 @@ the other competition models and installed binding checks remain open.
   control slopes. The chain rule includes capacity, growth and midpoint
   effects in the active event branch. Six Rust tests and focused Clippy
   passed.
-- [ ] Qualify total rates in installed bindings and expose control slopes
+- [x] Qualify total rates in installed bindings and expose control slopes
   through the Polars frame path.
+  The Polars API maps declared controls to explicit slope columns.
+  Focused rebuilt Python, Julia and R checks all returned rate 10 for
+  the same analytic case. Both Python Logistic Polars tests passed.

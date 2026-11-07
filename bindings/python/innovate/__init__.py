@@ -61,6 +61,7 @@ def predict(
     *,
     model_options: dict[str, Any] | None = None,
     quantity: str = "level",
+    covariate_rate_columns: dict[str, str] | None = None,
 ) -> pl.DataFrame:
     """Append native predictions, preserving row order and identity columns.
 
@@ -69,6 +70,8 @@ def predict(
     collected explicitly at the native execution boundary.
     """
     options = {"model_options": model_options if model_options is not None else {}, "quantity": quantity}
+    if covariate_rate_columns is not None:
+        options["covariate_rate_columns"] = covariate_rate_columns
     output = _native.predict_ipc(
         _ipc(data), model, json.dumps(parameters, allow_nan=False), json.dumps(options, allow_nan=False)
     )
@@ -90,9 +93,22 @@ class FitResult:
     def diagnostics(self) -> dict[str, Any]:
         return dict(self.envelope["result"]["diagnostics"])
 
-    def predict(self, data: pl.DataFrame | pl.LazyFrame, *, quantity: str = "level") -> pl.DataFrame:
+    def predict(
+        self,
+        data: pl.DataFrame | pl.LazyFrame,
+        *,
+        quantity: str = "level",
+        covariate_rate_columns: dict[str, str] | None = None,
+    ) -> pl.DataFrame:
         options = self.envelope["result"]["state"]["constructor_kwargs"]
-        return predict(self.model, data, self.parameters, model_options=options, quantity=quantity)
+        return predict(
+            self.model,
+            data,
+            self.parameters,
+            model_options=options,
+            quantity=quantity,
+            covariate_rate_columns=covariate_rate_columns,
+        )
 
 
 def fit(

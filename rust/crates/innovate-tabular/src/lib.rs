@@ -85,7 +85,7 @@ pub fn predict_with_options(
         .ok_or_else(|| polars_err!(SchemaMismatch:"options must be an object"))?;
     if options
         .keys()
-        .any(|k| !["model_options", "quantity"].contains(&k.as_str()))
+        .any(|k| !["model_options", "quantity", "covariate_rate_columns"].contains(&k.as_str()))
     {
         polars_bail!(SchemaMismatch:"unknown prediction option");
     }
@@ -105,10 +105,23 @@ pub fn predict_with_options(
         .cloned()
         .unwrap_or_else(|| json!({}));
     let state = json!({"model_key":model, "parameters":parameters, "constructor_kwargs":kwargs.clone(), "predict_kwargs":{}});
-    let request = KernelRequest::predict_model(
-        model,
-        json!({"inputs":model_inputs(&frame,&[],&kwargs)?, "state":state}),
-    );
+    let mut input = model_inputs(&frame, &[], &kwargs)?;
+    if let Some(columns) = options.get("covariate_rate_columns") {
+        if model != "logistic" || quantity != "rate" || !input["covariates"].is_object() {
+            polars_bail!(SchemaMismatch:"covariate_rate_columns requires Logistic rate predictions with declared controls");
+        }
+        let columns = columns.as_object()
+            .ok_or_else(|| polars_err!(SchemaMismatch:"covariate_rate_columns must map controls to column names"))?;
+        let mut rates = serde_json::Map::new();
+        for (name, column) in columns {
+            let column = column.as_str().ok_or_else(
+                || polars_err!(SchemaMismatch:"covariate rate column names must be strings"),
+            )?;
+            rates.insert(name.clone(), json!(numbers(&frame, column)?));
+        }
+        input["covariate_rates"] = Value::Object(rates);
+    }
+    let request = KernelRequest::predict_model(model, json!({"inputs":input, "state":state}));
     let response = KernelBinding::new()
         .invoke(&request)
         .map_err(|e| polars_err!(ComputeError: "{e}"))?;

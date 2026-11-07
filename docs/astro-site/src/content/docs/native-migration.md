@@ -225,6 +225,13 @@ event branch ignores covariates. Metadata records that mode; fit diagnostics war
 that its coefficients are unidentifiable. Select `event_covariates="additive"`
 to apply the same covariate coefficients to both segments in the redesigned API.
 
+Rate predictions hold controls fixed by default. To include their local
+time derivatives, supply `inputs.covariate_rates` in native JSON or use
+`quantity="rate"` and `covariate_rate_columns={"price": "price_slope"}` in
+Python's Polars prediction API. Supply one aligned slope column per declared
+control. At an event boundary the post-event curve determines the reported
+rate, with jump impulses excluded.
+
 Advanced fits accept complete `fit_options.initial_parameters` or generate
 starts from the observed levels and time span of each event segment. Automatic
 starts set covariate coefficients to zero. Rust reports convergence and local

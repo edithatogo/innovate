@@ -857,3 +857,16 @@ def test_kairos_continuous_hazard_wakeup():
     )["result"]
     assert result["requests"] == [{"tick": 3, "agent": 0}]
     assert result["counts"] == [0, 0, 0, 1]
+
+
+def test_logistic_polars_total_rate():
+    frame = pl.DataFrame({"time": [2.0], "price": [1.0], "price_slope": [2.0]})
+    result = innovate.predict(
+        "logistic",
+        frame,
+        {"L": 200, "k": 1, "x0": 1.5, "beta_L_price": 10, "beta_k_price": 0.2, "beta_x0_price": 0.5},
+        model_options={"covariates": ["price"]},
+        quantity="rate",
+        covariate_rate_columns={"price": "price_slope"},
+    )
+    assert result["rate"].to_list() == [10.0]
