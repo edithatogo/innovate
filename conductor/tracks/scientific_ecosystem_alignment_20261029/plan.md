@@ -1303,3 +1303,7 @@ the other competition models and installed binding checks remain open.
 - [x] Use compensated accumulation for native preprocessing. The
   rolling-window regression recovers the average of [1, 3] after 1e100
   leaves the window. All twelve native boundary tests passed.
+
+- [x] Verify the compensated rolling average through the rebuilt Rust FFI
+  in Julia and R and retain the case in both native test suites. Both
+  report a null warmup value, then 5e99 and 2.

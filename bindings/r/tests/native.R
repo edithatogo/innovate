@@ -428,3 +428,7 @@ stopifnot(length(continuous_hazard$requests)==1,continuous_hazard$requests[[1]]$
           continuous_hazard$requests[[1]]$agent==0,
           all(unlist(continuous_hazard$counts)==c(0,0,0,1)))
 cat("R continuous Kairos hazard wakeup passed\n")
+
+rolling <- kernel_rolling_average(c(1e100, 1, 3), 2L)
+stopifnot(is.null(rolling[[1]]), abs(rolling[[2]] / 5e99 - 1) < 1e-14, rolling[[3]] == 2)
+cat("R compensated rolling average passed\n")

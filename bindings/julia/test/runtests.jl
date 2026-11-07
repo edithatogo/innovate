@@ -458,3 +458,7 @@ end
     @test result["requests"] == [Dict("tick"=>3,"agent"=>0)]
     @test result["counts"] == [0,0,0,1]
 end
+
+@testset "Compensated rolling average" begin
+    @test kernel_rolling_average([1e100, 1., 3.], 2) == [nothing, 5e99, 2.]
+end
