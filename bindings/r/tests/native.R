@@ -616,3 +616,6 @@ logistic_fit <- kernel_call("summarize_causal", payload=list(method="fit_logisti
   treatment=c(0,1), covariates=matrix(c(-2,2), ncol=1), ridge=0.25/log(3)))$result
 stopifnot(isTRUE(all.equal(unlist(logistic_fit$propensities), c(0.25,0.75), tolerance=1e-7)),
   identical(as.numeric(unlist(logistic_fit$covariate_scales)), 2))
+logistic_prediction <- kernel_call("summarize_causal", payload=list(method="predict_logistic_propensities",
+  fit=logistic_fit, covariates=matrix(c(0,2,-2), ncol=1)))$result
+stopifnot(isTRUE(all.equal(unlist(logistic_prediction$propensities), c(0.5,0.75,0.25), tolerance=1e-7)))

@@ -4613,3 +4613,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Score held-out covariate rows with saved ridge logistic fits.
   The focused Rust test recovers 0.5, 0.75 and 0.25 in requested order
   and rejects an invalid saved scale. Binding validation remains open.
+
+- [x] Verify saved logistic propensity fit replay through rebuilt Python
+  3.15.2, Julia and installed R. Each returned 0.5, 0.75 and 0.25 in
+  the requested held-out row order.

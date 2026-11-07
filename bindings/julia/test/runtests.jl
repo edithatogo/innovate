@@ -652,4 +652,7 @@ end
         "treatment"=>[0,1], "covariates"=>[[-2],[2]], "ridge"=>0.25/log(3)))["result"]
     @test isapprox(fit["propensities"], [0.25,0.75]; atol=1e-7)
     @test fit["covariate_scales"] == [2]
+    prediction = kernel_call("summarize_causal", nothing, Dict("method"=>"predict_logistic_propensities",
+        "fit"=>fit, "covariates"=>[[0],[2],[-2]]))["result"]
+    @test isapprox(prediction["propensities"], [0.5,0.75,0.25]; atol=1e-7)
 end
