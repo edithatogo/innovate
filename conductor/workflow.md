@@ -1,5 +1,15 @@
 # Project Workflow
 
+## Proportional consumer-track execution — 7 November 2026
+
+For `kairos_runtime_boundary_20261107`, one bounded plan entry and its PR/commit
+results are the canonical record. Routine authorized work needs focused checks,
+not a new human approval, per-task git note or duplicated evidence dossier.
+Batch review at public-interface, numerical/replay and installed-consumer
+milestones. Keep required hosted gates, real failure reporting and scientific
+acceptance; an independent reviewer may be an agent. These scoped rules refine
+the older generic per-task ceremony below without changing other active work.
+
 ## Guiding Principles
 
 1. **The Plan is the Source of Truth:** All work must be tracked in `plan.md`
