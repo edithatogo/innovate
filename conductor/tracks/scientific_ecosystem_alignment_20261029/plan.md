@@ -618,3 +618,19 @@ independent references; record legacy coefficient/interpolation defects rather
 than silently treating a new equation as source parity. Continue richer Kairos
 network/resource behavior, rates, inference and distribution/scientific gates.
 Full goal remains active; no main integration, push or release performed.
+
+## Mechanistic Bass/Gompertz forcing continuation
+
+- [x] Add declared ODE covariates, event segmentation, saved forcing history and
+  fixed-origin forecasts, preserving explicit historical-origin/layout options.
+- [x] Qualify analytic/independent references, conditional fitting and Python/Julia/R.
+- [x] Review and retain local evidence, solver and full-feature limitations.
+
+Same writer/worktree continues at 6afb62c7. No native operation was live before
+this source change. Default corrected coefficient layout uses shared named beta
+coefficients in both event regimes. Historical layout remains explicit because
+old pre-event indexing could read post parameters as coefficients. Gompertz's old
+scalar interpolation-grid bug is not promoted as working covariate support.
+
+Source: 44e56a76. Local qualification: 120 Rust tests, 38 Python tests,
+175 Julia assertions and R conformance. All 38 release obligations remain.
