@@ -4293,3 +4293,7 @@ Hosted release readiness for this worktree revision remains open.
   regression suites. The rebuilt Python 3.15.2 wheel, Julia and installed
   R all reported one additional concurrent service for the alternative.
   Python verified the value after Arrow export.
+- [x] Include completed services, balked requests and abandoned
+  requests as signed event counts in Kairos resource comparisons.
+  The focused Rust test verifies three fewer completed services when
+  a resource stays closed throughout the scenario.

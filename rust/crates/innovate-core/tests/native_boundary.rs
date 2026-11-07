@@ -2912,6 +2912,17 @@ fn resource_comparison_requires_resource_outputs_from_both_scenarios() {
         .as_array_mut()
         .unwrap()
         .push(json!({"baseline":"base","alternative":"bad"}));
+    let mut permanently_closed = payload["scenarios"][1].clone();
+    permanently_closed["id"] = json!("never_open");
+    permanently_closed["simulation"]["simulation_options"]["schedule"] = json!([]);
+    payload["scenarios"]
+        .as_array_mut()
+        .unwrap()
+        .push(permanently_closed);
+    payload["comparisons"]
+        .as_array_mut()
+        .unwrap()
+        .push(json!({"baseline":"base","alternative":"never_open","compare_resources":true}));
     let request =
         json!({"schema_version":"2.0","operation":"execute_scenario_grid","payload":payload});
     let response: serde_json::Value =
@@ -2934,4 +2945,8 @@ fn resource_comparison_requires_resource_outputs_from_both_scenarios() {
     assert!(rows[1]["result"].is_null());
     assert!(rows[2]["error"].is_null());
     assert!(rows[2]["result"].get("resource_differences").is_none());
+    assert_eq!(
+        rows[3]["result"]["resource_differences"]["completed_services"],
+        -3
+    );
 }

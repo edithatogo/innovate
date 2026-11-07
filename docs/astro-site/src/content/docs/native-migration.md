@@ -1273,7 +1273,9 @@ The pair must share an observation grid, tick resolution and horizon.
 `result.resource_differences` reports alternative minus baseline for
 configured, occupied, idle and over-capacity slot-ticks and for admitted,
 abandoned and pending wait ticks. It reports differences in peak queue
-length and peak concurrent service as agent counts. The object also reports the shared
+length and peak concurrent service as agent counts, and differences in completed
+services, balked requests and abandoned requests as event counts. The object
+also reports the shared
 `ticks_per_unit` and `horizon_ticks`. A mismatch returns
 `invalid_comparison` for that pair while retaining the scenario executions.
 

@@ -922,6 +922,19 @@ fn compare_resource_totals(baseline: &Value, alternative: &Value) -> Result<Valu
         let read = |metrics: &Value| metrics[key].as_i64().ok_or("invalid resource metric");
         result[key] = json!(read(alternative_metrics)? - read(baseline_metrics)?);
     }
+    for (field, metric) in [
+        ("completions", "completed_services"),
+        ("balks", "balked_requests"),
+        ("abandonments", "abandoned_requests"),
+    ] {
+        let count = |outcome: &Value| {
+            outcome[field]
+                .as_array()
+                .map(|events| events.len() as i64)
+                .ok_or("invalid resource event trace")
+        };
+        result[metric] = json!(count(alternative)? - count(baseline)?);
+    }
     Ok(result)
 }
 
