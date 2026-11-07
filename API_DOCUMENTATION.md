@@ -455,3 +455,16 @@ confidence bands for the mean path require a separate inference procedure.
 If a covariance request exceeds 128 samples, its comparison row
 returns `invalid_comparison`. For a longer path, request
 `include_path_summary` alone, subject to the pair-by-time limit.
+
+For inference on the selected paired effect, supply `bootstrap` with
+`draws` and an unsigned integer `seed`. The Rust engine resamples
+whole pair differences with replacement and returns the percentile
+interval for the mean in `bootstrap.mean_interval`. It uses the
+comparison's `interval_mass`, assumes independent replicate pairs,
+and allows 2 to 10,000 draws with at most ten million sampled pairs.
+
+Set `exact_sign_flip` to enumerate the sign assignments of up to
+16 pair differences. The two-sided `sign_flip.p_value` is the
+fraction of assignments whose absolute mean is at least the observed
+absolute mean. The test assumes independent pairs and exchangeable
+signs under the null.

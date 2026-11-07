@@ -1634,3 +1634,14 @@ def test_scenario_grid_ranking():
                                  comparisons=[comparison])["result"]["comparisons"][0]["result"]
     assert len(summary["path_summary"]["rows"]) == 129
     assert "path_covariance" not in summary
+
+    comparison.pop("include_path_summary")
+    comparison.update(interval_mass=0.9, exact_sign_flip=True,
+                      bootstrap={"draws": 1000, "seed": 42})
+    inference = innovate.execute("execute_scenario_grid", scenarios=scenarios,
+                                   comparisons=[comparison])["result"]["comparisons"][0]["result"]
+    assert inference["sign_flip"]["assignments"] == 4
+    assert inference["sign_flip"]["extreme_assignments"] == 4
+    assert inference["sign_flip"]["p_value"] == 1
+    assert inference["bootstrap"]["mean_interval"] == pytest.approx([-100, 100])
+    assert inference["bootstrap"]["seed"] == 42

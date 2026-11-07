@@ -4864,3 +4864,8 @@ Hosted release readiness for this worktree revision remains open.
   The focused Python grid test and all 16 Julia grid assertions passed.
   The R grid assertions exited successfully. Maturin built the wheel,
   and the Python fixture loaded the extension directly from the build.
+
+- [x] Document the paired percentile and exact sign-flip options,
+  assumptions and limits. The focused Python 3.15.2 grid fixture
+  passed with four extreme assignments out of four for a zero
+  observed mean and the expected seeded percentile endpoints.
