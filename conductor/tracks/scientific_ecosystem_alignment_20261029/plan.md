@@ -5607,3 +5607,9 @@ Hosted release readiness for this worktree revision remains open.
   original fields. All 301 unit and integration tests passed across
   the initial and resumed runs. Development policy validation passed
   with 38 release obligations still open.
+
+- [x] Rebuild the native Python extension from faa2fc4a and run the
+  entire native Python consumer test file on repo-local Python 3.15.2.
+  All 112 tests passed in 60.65 seconds. The debug extension was loaded
+  through the worktree test environment. Clean distribution evidence
+  and the corresponding full Julia and R runs remain separate gates.
