@@ -2,7 +2,7 @@ module Innovate
 using JSON
 using Libdl
 
-export export_ipc_file, kernel_paired_outcomes_ipc, kernel_scenario_comparisons_ipc, kernel_scenario_executions_ipc, kernel_scenario_grid_ipc, DatasetValidationError, kernel_sarima_fit, kernel_seasonal_decomposition, kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
+export invoke_registered_extension, export_ipc_file, kernel_paired_outcomes_ipc, kernel_scenario_comparisons_ipc, kernel_scenario_executions_ipc, kernel_scenario_grid_ipc, DatasetValidationError, kernel_sarima_fit, kernel_seasonal_decomposition, kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
     kernel_categorize_adopters, kernel_categorize_fitted_adopters, kernel_fit_batch, kernel_predict_batch, kernel_simulate_model, kernel_summarize_model, kernel_diagnose_model
 
 """A rejected dataset with its native validation report."""
@@ -26,6 +26,12 @@ function kernel_call(operation::AbstractString, model_key=nothing, payload=Dict{
         "model_key" => model_key, "payload" => payload))
     return with_native_response(handle -> ccall(Libdl.dlsym(handle, :innovate_call),
         Ptr{UInt8}, (Cstring,), request))
+end
+
+"""Resolve a registry snapshot and invoke a trusted caller-supplied callback."""
+function invoke_registered_extension(callback, selection, payload)
+    resolved = kernel_call("resolve_extension_manifest", nothing, selection)["result"]
+    return callback(resolved, payload)
 end
 
 """Execute a scenario grid on a shared time column in Arrow IPC file or stream bytes."""

@@ -174,3 +174,8 @@ export_ipc_file <- function(data) {
   if (!is.raw(data)) stop("data must be raw IPC bytes", call. = FALSE)
   scenario_output(data, innovate_export_ipc_file_R)
 }
+
+invoke_registered_extension <- function(callback, selection, payload) {
+  resolved <- kernel_call("resolve_extension_manifest", payload = selection)$result
+  callback(resolved, payload)
+}

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import io
 import json
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from importlib.metadata import version
 from pathlib import Path
@@ -42,6 +42,7 @@ __all__ = [
     "ingest_local",
     "capabilities",
     "execute",
+    "invoke_registered_extension",
     "fit",
     "fit_batch",
     "fit_frames",
@@ -69,8 +70,22 @@ def _decode(response: str) -> dict[str, Any]:
 
 def execute(operation: str, model: str | None = None, **payload: Any) -> dict[str, Any]:
     """Execute a versioned native request; advanced payloads may be unavailable."""
+    return _execute_payload(operation, model, payload)
+
+
+def _execute_payload(operation: str, model: str | None, payload: dict[str, Any]) -> dict[str, Any]:
     request = {"schema_version": "2.0", "operation": operation, "model_key": model, "payload": payload}
     return _decode(_native.execute(json.dumps(request, allow_nan=False)))
+
+
+def invoke_registered_extension[T](
+    callback: Callable[[dict[str, Any], Any], T],
+    selection: dict[str, Any],
+    payload: Any,
+) -> T:
+    """Resolve a registry snapshot and invoke a trusted caller-supplied callback."""
+    resolved = _execute_payload("resolve_extension_manifest", None, selection)["result"]
+    return callback(resolved, payload)
 
 
 def fit_batch(model: str, datasets: list[dict[str, Any]], *, workers: int = 1) -> list[dict[str, Any]]:

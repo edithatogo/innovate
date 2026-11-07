@@ -5687,3 +5687,10 @@ Hosted release readiness for this worktree revision remains open.
   the callback. A stale selection never invokes it. Both Rust extension
   boundary tests passed. Binding callback APIs and per-point payload
   contracts remain open.
+
+- [x] Expose trusted caller-supplied extension callbacks in Python,
+  Julia and R. The bindings resolve the selection through Rust and
+  pass its snapshot and the original payload to the callback. All
+  three runtime checks invoked a valid callback and rejected a stale
+  version before invocation. Python also rejected an extra model key.
+  Per-point payload contracts and hosted qualification remain open.
