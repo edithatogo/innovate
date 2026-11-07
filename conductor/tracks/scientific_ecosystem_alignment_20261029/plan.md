@@ -7332,3 +7332,12 @@ Hosted release readiness for this worktree revision remains open.
   Julia and R matrix on Linux, macOS and Windows. Actionlint passed.
   The optimized macOS artifact passed both local suites. Hosted
   execution remains open.
+
+- [x] Requalify the synthetic Voiage Arrow handoff against the optimized
+  Innovate wheel built at 80500bdb. Installed that wheel in a separate
+  Python 3.15.2 environment with the existing Voiage 3.1.0 and
+  Polars 2.1.0 dependencies. The earlier Innovate install lacked
+  execute_scenario_grid despite sharing the 0.7.0a1 version. The new
+  wheel passed import-origin, native scenario and Arrow round-trip
+  checks. Voiage EVPI was 5.641720719927868 against the analytic
+  5.641720719927869. Broader workflows and hosted qualification remain open.
