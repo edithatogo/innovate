@@ -208,7 +208,7 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Decision report export and release parity"
+      "remaining": "Decision report Markdown export, binding qualification and release parity"
     },
     {
       "key": "benchmark_model_cards",

@@ -2263,3 +2263,9 @@ the other competition models and installed binding checks remain open.
 - [x] Qualify all four explainability summaries and ordered report
   composition in the rebuilt Python 3.15 wheel, Julia and installed R.
   The complete combined report matched across the three bindings.
+
+- [x] Restore decision-report schema 1.0 JSON export in Rust. Preserve
+  report blocks and evidence references, derive interpretation and claim
+  counts, and enforce historical claim wording and causal assumption
+  checks. The title is also checked for unsupported wording. All 50 Rust
+  boundary tests and Clippy passed. Markdown and binding tests remain open.

@@ -1484,3 +1484,30 @@ fn combined_reports_preserve_order_and_require_explicit_determinism() {
     );
     assert_eq!(invalid["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn decision_report_exports_claim_boundaries_and_rejects_unsupported_wording() {
+    let run = |payload| -> serde_json::Value {
+        let request =
+            json!({"schema_version":"2.0","operation":"export_decision_report","payload":payload});
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let mut payload = json!({"title":"Policy scenario","workflow":"policy",
+        "claims":[{"claim_type":"Simulation","statement":"Adoption rises in the simulated scenario."}],
+        "sensitivity":{"blocks":[{"kind":"threshold_sensitivity"}]}});
+    let response = run(payload.clone());
+    let report = &response["result"];
+    assert_eq!(report["schema_version"], "1.0");
+    assert_eq!(report["claim_safety"]["claim_counts"]["simulation"], 1);
+    assert_eq!(report["claim_safety"]["recommendations_allowed"], false);
+    assert_eq!(report["sensitivity"], payload["sensitivity"]);
+    payload["claims"][0]["claim_type"] = json!("causal");
+    assert_eq!(run(payload.clone())["error"]["code"], "invalid_request");
+    payload["claims"][0]["assumptions"] = json!(["exchangeability"]);
+    assert_eq!(
+        run(payload.clone())["result"]["claim_safety"]["contains_causal_claims"],
+        true
+    );
+    payload["claims"][0]["statement"] = json!("You should implement this policy.");
+    assert_eq!(run(payload)["error"]["code"], "invalid_request");
+}

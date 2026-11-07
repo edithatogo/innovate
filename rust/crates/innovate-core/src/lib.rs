@@ -22,6 +22,7 @@ mod numerics;
 mod policy;
 mod provenance;
 mod regime;
+mod report;
 mod sarima;
 mod scenario;
 mod seasonal;
@@ -54,6 +55,7 @@ pub fn execute_json(input: &str) -> String {
                 | "intervention_timing"
                 | "summarize_explainability"
                 | "combine_report_blocks"
+                | "export_decision_report"
                 | "validate_provenance"
                 | "dataset_checksum"
                 | "validate_dataset",
@@ -166,6 +168,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             return Err("analysis request requires schema 2.0");
         }
         let payload = &value["payload"];
+        if value["operation"] == "export_decision_report" {
+            return report::export(payload);
+        }
         if value["operation"] == "combine_report_blocks" {
             return explainability::combine_blocks(payload);
         }
