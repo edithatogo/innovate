@@ -6449,3 +6449,8 @@ Hosted release readiness for this worktree revision remains open.
   The child reports a write failure and exits one when its caller
   closes stdout before submitting a request. All three process
   regressions passed.
+
+- [x] Include the remote worker process tests in the scheduled
+  extracted-source CI check. Focused locked Clippy for the worker and
+  integration test passed with warnings denied. Hosted execution
+  of the updated source-package step remains open.

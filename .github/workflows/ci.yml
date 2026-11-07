@@ -46,7 +46,7 @@ jobs:
           uv run --no-sync maturin sdist --out "$staging"
           tar -xzf "$staging"/*.tar.gz -C "$staging"
           cd "$staging"/innovate-*/
-          cargo test --locked -p innovate-core --test native_boundary -j 2
+          cargo test --locked -p innovate-core --test native_boundary --test remote_worker -j 2
           python="$GITHUB_WORKSPACE/.venv/bin/python"
           CARGO_BUILD_JOBS=2 "$GITHUB_WORKSPACE/.venv/bin/maturin" build --locked -i "$python" -o "$staging/wheel"
           uv pip install --python "$python" --no-deps --target "$staging/installed" "$staging"/wheel/*.whl
