@@ -2691,3 +2691,9 @@ the other competition models and installed binding checks remain open.
   baseline and state options. The native Logistic fixture returns
   50 and 60 and rejects an unknown override. Focused Rust and Clippy
   passed. Binding qualification remains open.
+
+- [x] Qualify saved-state counterfactuals in the rebuilt Python 3.15.2
+  wheel, Julia and installed R. Both Logistic samples show a 20% uplift
+  after changing saved capacity from 100 to 120. Python and Julia
+  agree exactly, and R agrees within 1e-12. The R list request omitted
+  optional empty option objects.
