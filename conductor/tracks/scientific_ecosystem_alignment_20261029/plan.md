@@ -5046,3 +5046,8 @@ Hosted release readiness for this worktree revision remains open.
   the identity RNG stream ID. The checkpoint now carries the identity
   RNG record as an opaque JSON string. Each binding reproduced the
   full uninterrupted result. The three Rust checkpoint tests passed.
+
+- [x] Consolidate Kairos network resource accounting for a future
+  event-boundary checkpoint. The state now owns the accumulated
+  occupancy, capacity, wait totals and the ticks needed to extend
+  those totals. All 29 Rust network integration tests passed.

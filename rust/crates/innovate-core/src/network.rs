@@ -12,6 +12,27 @@ use kairo_ecs_rng::{
 use kairo_ecs_types::{EventKind, SimTime, StepOutcome};
 use serde::Deserialize;
 use serde_json::json;
+#[derive(Default)]
+struct ResourceAccounting {
+    occupied_slot_ticks: u128,
+    over_capacity_slot_ticks: u128,
+    last_resource_change: u128,
+    peak_queue_length: usize,
+    peak_in_service: u64,
+    configured_slot_ticks: u128,
+    last_capacity_change: u128,
+    admitted_wait_ticks: u128,
+    abandoned_wait_ticks: u128,
+}
+
+impl ResourceAccounting {
+    fn record_over_capacity(&mut self, tick: u128, in_service: u64, capacity: u64) {
+        self.over_capacity_slot_ticks +=
+            (tick - self.last_resource_change) * u128::from(in_service.saturating_sub(capacity));
+        self.last_resource_change = tick;
+    }
+}
+
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 struct Options {
@@ -456,20 +477,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     let mut rng = DeterministicStream::from_run_seed(o.seed);
     let mut now = 0_u128;
     let horizon = (time.last().unwrap() * o.ticks_per_unit as f64).floor() as u128;
-    let mut occupied_slot_ticks = 0;
-    let mut over_capacity_slot_ticks = 0;
-    let mut last_resource_change = 0;
-    let mut record_over_capacity = |tick, in_service: u64, capacity| {
-        over_capacity_slot_ticks +=
-            (tick - last_resource_change) * u128::from(in_service.saturating_sub(capacity));
-        last_resource_change = tick;
-    };
-    let mut peak_queue_length = 0;
-    let mut peak_in_service = 0;
-    let mut configured_slot_ticks = 0;
-    let mut last_capacity_change = 0;
-    let mut admitted_wait_ticks = 0;
-    let mut abandoned_wait_ticks = 0;
+    let mut metrics = ResourceAccounting::default();
     let mut completed = Vec::new();
     let mut trace = Vec::new();
     let mut requests = Vec::new();
@@ -622,7 +630,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             context.attach(id, 2_u8);
             completed.push(now);
             trace.push(json!({"tick":now,"agent":id.index}));
-            record_over_capacity(now, in_service, capacity);
+            metrics.record_over_capacity(now, in_service, capacity);
             in_service -= 1;
         } else if let Some(tick) = expiry.filter(|t| {
             boundary.is_none_or(|b| *t <= b)
@@ -646,7 +654,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                     let queued_at = waiting_since[index]
                         .take()
                         .ok_or_else(|| invalid("expired agent has no queue entry"))?;
-                    abandoned_wait_ticks += now - queued_at;
+                    metrics.abandoned_wait_ticks += now - queued_at;
                 }
             }
             resource = rebuild_waiters(&waiting_since, &priorities);
@@ -666,9 +674,10 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             }
             retry_policy = change.retry.unwrap_or(retry_policy);
             if let Some(new_capacity) = change.capacity {
-                configured_slot_ticks += (now - last_capacity_change) * u128::from(capacity);
-                last_capacity_change = now;
-                record_over_capacity(now, in_service, capacity);
+                metrics.configured_slot_ticks +=
+                    (now - metrics.last_capacity_change) * u128::from(capacity);
+                metrics.last_capacity_change = now;
+                metrics.record_over_capacity(now, in_service, capacity);
                 capacity = new_capacity;
             }
             max_wait_ticks = change.max_wait_ticks.unwrap_or(max_wait_ticks);
@@ -757,35 +766,36 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             deadlines[index] = None;
             let duration = service_override.unwrap_or(service[index]);
             let completion_tick = now + u128::from(duration);
-            occupied_slot_ticks += completion_tick.min(horizon) - now;
-            admitted_wait_ticks += now - queued_at;
+            metrics.occupied_slot_ticks += completion_tick.min(horizon) - now;
+            metrics.admitted_wait_ticks += now - queued_at;
             service_starts.push(json!({"agent":next.index,"tick":now,
                 "request_tick":queued_at,"wait_ticks":now-queued_at,
                 "service_ticks":duration,"scheduled_completion_tick":completion_tick}));
             context.schedule_behaviour(next, 2, SimTime::from_ticks(completion_tick));
-            record_over_capacity(now, in_service, capacity);
+            metrics.record_over_capacity(now, in_service, capacity);
             in_service += 1;
         }
-        peak_queue_length = peak_queue_length.max(resource.queue_length());
-        peak_in_service = peak_in_service.max(in_service);
+        metrics.peak_queue_length = metrics.peak_queue_length.max(resource.queue_length());
+        metrics.peak_in_service = metrics.peak_in_service.max(in_service);
     }
-    configured_slot_ticks += (horizon - last_capacity_change) * u128::from(capacity);
+    metrics.configured_slot_ticks +=
+        (horizon - metrics.last_capacity_change) * u128::from(capacity);
     let pending_wait_ticks: u128 = waiting_since
         .iter()
         .flatten()
         .map(|tick| horizon - tick)
         .sum();
-    record_over_capacity(horizon, in_service, capacity);
+    metrics.record_over_capacity(horizon, in_service, capacity);
     let resource_metrics = json!({
         "horizon_ticks":horizon,
-        "peak_queue_length":peak_queue_length,
-        "peak_in_service":peak_in_service,
-        "occupied_slot_ticks":occupied_slot_ticks,
-        "configured_slot_ticks":configured_slot_ticks,
-        "over_capacity_slot_ticks":over_capacity_slot_ticks,
-        "idle_slot_ticks":configured_slot_ticks + over_capacity_slot_ticks - occupied_slot_ticks,
-        "admitted_wait_ticks":admitted_wait_ticks,
-        "abandoned_wait_ticks":abandoned_wait_ticks,
+        "peak_queue_length":metrics.peak_queue_length,
+        "peak_in_service":metrics.peak_in_service,
+        "occupied_slot_ticks":metrics.occupied_slot_ticks,
+        "configured_slot_ticks":metrics.configured_slot_ticks,
+        "over_capacity_slot_ticks":metrics.over_capacity_slot_ticks,
+        "idle_slot_ticks":metrics.configured_slot_ticks + metrics.over_capacity_slot_ticks - metrics.occupied_slot_ticks,
+        "admitted_wait_ticks":metrics.admitted_wait_ticks,
+        "abandoned_wait_ticks":metrics.abandoned_wait_ticks,
         "pending_wait_ticks":pending_wait_ticks
     });
     let queue_length = resource.queue_length();
