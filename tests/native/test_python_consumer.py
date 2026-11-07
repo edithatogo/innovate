@@ -1251,3 +1251,18 @@ def test_polars_ingestion_distinguishes_directed_and_undirected_edges():
     with pytest.raises(innovate.NativeError, match="dataset diagnostics failed") as exc:
         innovate.ingest_polars(frame, "network_edges", provenance=provenance, directed=False)
     assert exc.value.validation["failed"] == ["duplicate_keys:source_target"]
+
+
+def test_edgeless_polars_dataset_round_trips():
+    frame = pl.DataFrame(schema={"source": pl.String, "target": pl.String})
+    artifact = innovate.ingest_polars(
+        frame,
+        "network_edges",
+        provenance={
+            "source": "synthetic",
+            "license": "CC-BY-4.0",
+            "extraction_time": "2026-11-07T00:00:00Z",
+        },
+    )
+    assert artifact["dataset"]["source"] == artifact["dataset"]["target"] == artifact["dataset"]["weight"] == []
+    assert innovate.execute("ingest_dataset", artifact=artifact)["result"] == artifact

@@ -4414,6 +4414,6 @@ Hosted release readiness for this worktree revision remains open.
   column lengths. Node identity still comes from the scenario.
 - [x] Verify edgeless dataset ingestion and artifact replay through Julia
   and installed R against the rebuilt Rust library.
-- [ ] Verify the edgeless Polars path with a rebuilt Python binding.
-  The wheel build failed while stripping the native binary due to
-  insufficient disk space.
+- [x] Verify the edgeless Polars path with a rebuilt Python 3.15.2 binding.
+  Staging on the repository volume allowed wheel assembly. The focused
+  regression imported the rebuilt extension and verified artifact replay.
