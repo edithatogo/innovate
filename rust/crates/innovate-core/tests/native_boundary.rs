@@ -329,6 +329,9 @@ fn stationary_sarima_filter_matches_independent_one_step_forecasts() {
     });
     let result: serde_json::Value =
         serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    let likelihood = result["result"]["log_likelihood"].as_f64().unwrap();
+    let expected = fixture["log_likelihood"].as_f64().unwrap();
+    assert!((likelihood - expected).abs() < 1e-10);
     for field in ["fitted", "residual"] {
         let actual = result["result"][field].as_array().unwrap();
         let expected = fixture[field].as_array().unwrap();

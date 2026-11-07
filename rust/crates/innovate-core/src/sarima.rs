@@ -57,8 +57,11 @@ pub(crate) fn filter(
         }
         differences.truncate(differences.len() - lag);
     }
-    let (predictions, innovations) =
-        stationary_filter(&differences, [p, 0, q], [sp, 0, sq, period], coefficients)?;
+    let FilterOutput {
+        predictions,
+        innovations,
+        log_likelihood,
+    } = stationary_filter(&differences, [p, 0, q], [sp, 0, sq, period], coefficients)?;
     let mut fitted = vec![None; warmup];
     let mut residual = vec![None; warmup];
     for ((&observed, differenced), (prediction, innovation)) in values[warmup..]
@@ -73,10 +76,16 @@ pub(crate) fn filter(
         fitted.push(Some(prediction));
         residual.push(Some(innovation));
     }
-    Ok(serde_json::json!({"fitted": fitted, "residual": residual}))
+    Ok(
+        serde_json::json!({"fitted": fitted, "residual": residual, "log_likelihood": log_likelihood}),
+    )
 }
 
-type FilterOutput = (Vec<f64>, Vec<f64>);
+struct FilterOutput {
+    predictions: Vec<f64>,
+    innovations: Vec<f64>,
+    log_likelihood: Option<f64>,
+}
 
 fn stationary_filter(
     values: &[f64],
@@ -159,6 +168,9 @@ fn stationary_filter(
     let mut state = vec![0.; n];
     let mut fitted = Vec::with_capacity(values.len());
     let mut residual = Vec::with_capacity(values.len());
+    let scale = values.iter().copied().map(f64::abs).fold(0., f64::max);
+    let mut standardized_sum = 0.;
+    let mut log_variance_sum = 0.;
     for &value in values {
         let prediction = state[0];
         let innovation = value - prediction;
@@ -166,6 +178,10 @@ fn stationary_filter(
         if !innovation.is_finite() || !variance.is_finite() || variance <= 0. {
             return Err("SARIMA filter exceeded its finite numerical domain");
         }
+        if scale > 0. {
+            standardized_sum += (innovation / scale).powi(2) / variance;
+        }
+        log_variance_sum += variance.ln();
         fitted.push(prediction);
         residual.push(innovation);
         for i in 0..n {
@@ -190,5 +206,14 @@ fn stationary_filter(
         propagate(&covariance, &mut next);
         std::mem::swap(&mut covariance, &mut next);
     }
-    Ok((fitted, residual))
+    // Concentrate out the common innovation variance.
+    let count = values.len() as f64;
+    let log_variance = (standardized_sum / count).ln() + 2. * scale.ln();
+    let likelihood =
+        -0.5 * (count * (1. + std::f64::consts::TAU.ln() + log_variance) + log_variance_sum);
+    Ok(FilterOutput {
+        predictions: fitted,
+        innovations: residual,
+        log_likelihood: likelihood.is_finite().then_some(likelihood),
+    })
 }

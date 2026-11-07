@@ -1487,3 +1487,10 @@ the other competition models and installed binding checks remain open.
   1e-10 and retained four warmup positions for combined differencing.
   R now encodes singleton SARIMA coefficients as arrays and was verified
   with a one-coefficient AR model and a zero-coefficient integrated model.
+
+- [x] Compute the concentrated Gaussian likelihood from SARIMA
+  innovations and their prediction variances. The stationary fixture
+  agrees with R logLik within 1e-10. Differenced requests use the
+  likelihood conditional on the warmup observations. Degenerate
+  likelihoods return null while fitted values remain available.
+  All 20 native boundary tests and focused Clippy passed.
