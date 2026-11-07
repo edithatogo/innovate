@@ -7043,3 +7043,10 @@ Hosted release readiness for this worktree revision remains open.
   the same 500 observations per case, coefficients, fitted values,
   residuals and likelihoods matched within 1e-10, with identical
   missing positions, using native source 9ff71b49.
+
+- [x] Extend the cancellation oracle to five independent R ML
+  starts. Six cases matched within 6e-8. Both seed 123 cases exposed
+  stronger R basins, with native likelihood shortfalls of 1.061299
+  and 0.362453 for negative and positive generating roots. Reproduce
+  with check-cancellation-starts.R --multiple-starts. These two
+  basins remain open for optimizer improvement.
