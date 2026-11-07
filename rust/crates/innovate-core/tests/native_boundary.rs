@@ -247,3 +247,23 @@ fn loess_trend_recovers_linear_values_at_interior_and_edges() {
         assert!((estimate.as_f64().unwrap() - (1. + 2. * index as f64)).abs() < 1e-12);
     }
 }
+
+#[test]
+fn seasonal_decomposition_recovers_linear_trend_and_periodic_signal() {
+    let pattern = [-3., 2., 1., 0.];
+    let values: Vec<_> = (0..32)
+        .map(|i| 10. + i as f64 * 0.5 + pattern[i % 4])
+        .collect();
+    let request = innovate_core::json!({
+        "schema_version":"2.0","operation":"preprocess_series",
+        "payload":{"method":"seasonal_decomposition","period":4,"window":9,"values":values}
+    });
+    let envelope: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    let result = &envelope["result"];
+    for i in 0..values.len() {
+        assert!((result["trend"][i].as_f64().unwrap() - (10. + i as f64 * 0.5)).abs() < 1e-10);
+        assert!((result["seasonal"][i].as_f64().unwrap() - pattern[i % 4]).abs() < 1e-10);
+        assert!(result["residual"][i].as_f64().unwrap().abs() < 1e-10);
+    }
+}

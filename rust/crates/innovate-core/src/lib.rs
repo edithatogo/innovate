@@ -182,6 +182,15 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
                 .ok_or("LOESS requires an integer window")?;
             return Ok(json!({"values":seasonal::loess_trend(&values, span)?}));
         }
+        if payload["method"] == "seasonal_decomposition" {
+            let integer = |key: &str| {
+                payload[key]
+                    .as_u64()
+                    .and_then(|n| usize::try_from(n).ok())
+                    .ok_or("seasonal decomposition requires integer period and window")
+            };
+            return seasonal::decompose(&values, integer("period")?, integer("window")?);
+        }
         let window = match payload["method"].as_str() {
             Some("cumulative_sum") => None,
             Some("rolling_average") => Some(

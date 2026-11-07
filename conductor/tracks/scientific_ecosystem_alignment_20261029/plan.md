@@ -1320,3 +1320,10 @@ the other competition models and installed binding checks remain open.
   fixture reproduces a linear series at its edges and interior. Fourteen
   native boundary tests and focused Clippy passed. STL seasonal subseries,
   low-pass filtering and robust iterations remain open.
+
+- [x] Implement the seasonal decomposition inner loop with phase
+  subseries smoothing, endpoint extension and centered low-pass filtering.
+  An analytic linear-plus-periodic fixture recovers all three components
+  within 1e-10. Fifteen Rust boundary tests and focused Clippy passed.
+  Robust reweighting, historical STL option parity and installed binding
+  qualification remain open.
