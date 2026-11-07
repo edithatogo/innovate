@@ -1,5 +1,6 @@
 //! Rust-owned diffusion fitting, prediction, diagnostics and execution contracts.
 #![forbid(unsafe_code)]
+mod adopters;
 mod competition;
 mod composite;
 mod contracts;
@@ -20,6 +21,7 @@ mod simulation;
 mod spillover;
 mod substitution;
 mod validation;
+pub use adopters::classify_adopters;
 pub use contracts::*;
 pub use kernel::KernelBinding;
 pub use serde_json::json;
@@ -30,12 +32,12 @@ pub fn execute_json(input: &str) -> String {
     let result = serde_json::from_str::<KernelRequest>(input);
     if result.is_err()
         && let Ok(value) = serde_json::from_str::<serde_json::Value>(input)
-        && matches!(
-            value["operation"].as_str(),
-            Some("fit_batch" | "predict_batch")
-        )
     {
-        return execute_batch_json(value).to_string();
+        match value["operation"].as_str() {
+            Some("fit_batch" | "predict_batch") => return execute_batch_json(value).to_string(),
+            Some("categorize_adopters") => return execute_adopters_json(&value).to_string(),
+            _ => {}
+        }
     }
     let response = match result {
         Ok(request) => match KernelBinding::new().invoke(&request) {
@@ -130,4 +132,29 @@ fn execute_batch_json(value: serde_json::Value) -> serde_json::Value {
         .collect();
     json!({"schema_version":KERNEL_SCHEMA_VERSION,"operation":operation,"model_key":model,
         "result":{"datasets":rows},"error":null,"metadata":{"runtime":"rust_native"}})
+}
+
+fn execute_adopters_json(value: &serde_json::Value) -> serde_json::Value {
+    let result = (|| {
+        if value["schema_version"] != KERNEL_SCHEMA_VERSION {
+            return Err("categorize_adopters requires schema 2.0");
+        }
+        let parse = |key: &str| {
+            serde_json::from_value::<Vec<f64>>(value["payload"][key].clone())
+                .map_err(|_| "categorize_adopters requires numeric time and adoption_rate arrays")
+        };
+        let time = parse("time")?;
+        let rates = parse("adoption_rate")?;
+        let labels = classify_adopters(&time, &rates)?;
+        Ok(json!({"time":time,"adoption_rate":rates,"category":labels}))
+    })();
+    let (result, error) = match result {
+        Ok(result) => (result, serde_json::Value::Null),
+        Err(message) => (
+            serde_json::Value::Null,
+            json!({"code":"invalid_request","message":message}),
+        ),
+    };
+    json!({"schema_version":KERNEL_SCHEMA_VERSION,"operation":"categorize_adopters",
+        "model_key":null,"result":result,"error":error,"metadata":{"runtime":"rust_native"}})
 }

@@ -21,6 +21,7 @@ __version__ = version("innovate")
 __all__ = [
     "FitResult",
     "NativeError",
+    "categorize_adopters",
     "capabilities",
     "execute",
     "fit",
@@ -194,3 +195,12 @@ def predict_frames(
         except (ValueError, TypeError, pl.exceptions.PolarsError) as error:
             results.append(error)
     return results
+
+
+def categorize_adopters(data: pl.DataFrame | pl.LazyFrame, *, rate_column: str = "adoption_rate") -> pl.DataFrame:
+    """Append historical adopter categories using supplied nonnegative rates."""
+    frame = data.collect() if isinstance(data, pl.LazyFrame) else data
+    if "category" in frame.columns:
+        raise ValueError("category column already exists")
+    result = execute("categorize_adopters", time=frame["time"].to_list(), adoption_rate=frame[rate_column].to_list())
+    return frame.with_columns(pl.Series("category", result["result"]["category"]))

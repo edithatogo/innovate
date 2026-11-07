@@ -1227,5 +1227,7 @@ the other competition models and installed binding checks remain open.
   original row identity. Reject negative rates and zero total weight.
   The fixture covers all five categories and weights whose raw sum would
   overflow. All five tabular tests and Clippy passed.
-- [ ] Expose classification through Python, Julia and R and connect the
+- [x] Expose classification through Python, Julia and R. All installed
+  bindings returned the five historical labels on the extreme-weight fixture.
+- [ ] Connect the
   fitted model adoption-rate path where scientifically valid.

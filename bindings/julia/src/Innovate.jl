@@ -3,7 +3,7 @@ using JSON
 using Libdl
 
 export kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
-    kernel_fit_batch, kernel_predict_batch, kernel_simulate_model, kernel_summarize_model, kernel_diagnose_model
+    kernel_categorize_adopters, kernel_fit_batch, kernel_predict_batch, kernel_simulate_model, kernel_summarize_model, kernel_diagnose_model
 
 function native_library()
     path = get(ENV, "INNOVATE_NATIVE_LIBRARY", joinpath(@__DIR__, "..", "deps", "libinnovate_ffi." * Libdl.dlext))
@@ -44,4 +44,6 @@ kernel_predict_batch(model, datasets; workers=1) = kernel_call("predict_batch", 
 kernel_simulate_model(model, payload) = kernel_call("simulate_model", model, payload)
 kernel_summarize_model(model, payload) = kernel_call("summarize_model", model, payload)
 kernel_diagnose_model(model, payload) = kernel_call("diagnose_model", model, payload)
+kernel_categorize_adopters(time, rates) = kernel_call("categorize_adopters", nothing,
+    Dict("time" => time, "adoption_rate" => rates))["result"]
 end
