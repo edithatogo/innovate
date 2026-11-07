@@ -1375,3 +1375,23 @@ fn parameter_sensitivity_perturbs_independently_and_reports_elasticity() {
     assert_eq!(rows[1]["outcome"], 40.);
     assert_eq!(rows[2]["outcome"], 50.);
 }
+
+#[test]
+fn assumption_sensitivity_evaluates_explicit_event_options() {
+    let mut request = json!({"schema_version":"2.0","operation":"assumption_sensitivity",
+        "payload":{"model_key":"logistic","prediction":{"inputs":{"time":[2.]},
+            "parameters":{"L":100.,"k":1.,"x0":2.,"L_post":200.,"k_post":1.,"x0_post":2.},
+            "constructor_kwargs":{"t_event":2.}},
+            "inputs":[{"name":"t_event","alternatives":[3.,1.]}]}});
+    let run = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = run(&request);
+    let rows = response["result"]["rows"].as_array().unwrap();
+    assert_eq!(rows[0]["baseline_outcome"], 100.);
+    assert_eq!(rows[0]["outcome"], 50.);
+    assert_eq!(rows[0]["absolute_change"], -50.);
+    assert_eq!(rows[1]["outcome"], 100.);
+    request["payload"]["inputs"][0]["name"] = json!("unknown");
+    assert_eq!(run(&request)["error"]["code"], "invalid_request");
+}

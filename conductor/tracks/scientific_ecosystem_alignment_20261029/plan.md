@@ -2230,3 +2230,9 @@ the other competition models and installed binding checks remain open.
   change, relative change and elasticity. The Logistic fixture verifies
   independent perturbations. All 45 Rust boundary tests and focused
   Clippy passed. Binding and wider report qualification remain open.
+
+- [x] Restore assumption sensitivity for explicit constructor options.
+  Evaluate each alternative against the same final scalar baseline.
+  The Logistic fixture moves an event across the final observation and
+  checks both pre-event and post-event outcomes. All 46 Rust boundary
+  tests and focused Clippy passed. Binding qualification remains open.

@@ -82,16 +82,7 @@ pub(crate) fn perturb_parameters(payload: &Value) -> Result<Value, &'static str>
             return Err("parameter sensitivity requires an existing numeric parameter");
         }
     }
-    let kernel = crate::KernelBinding::new();
-    let outcome = |prediction: &Value| {
-        kernel
-            .predict_model(&request.model_key, prediction.clone())
-            .map_err(|_| "parameter sensitivity model prediction failed")?
-            .result
-            .and_then(|result| result["values"].as_array()?.last()?.as_f64())
-            .ok_or("parameter sensitivity requires a scalar prediction path")
-    };
-    let baseline_outcome = outcome(&request.prediction)?;
+    let baseline_outcome = final_prediction(&request.model_key, &request.prediction)?;
     let mut rows = Vec::new();
     for input in request.inputs {
         let original = request.prediction["parameters"][&input.name].clone();
@@ -102,7 +93,7 @@ pub(crate) fn perturb_parameters(payload: &Value) -> Result<Value, &'static str>
                 return Err("perturbed parameter must be finite");
             }
             request.prediction["parameters"][&input.name] = json!(value);
-            let alternative = outcome(&request.prediction)?;
+            let alternative = final_prediction(&request.model_key, &request.prediction)?;
             let change = alternative - baseline_outcome;
             if !change.is_finite() {
                 return Err("absolute outcome change must be finite");
@@ -122,6 +113,71 @@ pub(crate) fn perturb_parameters(payload: &Value) -> Result<Value, &'static str>
     }
     Ok(
         json!({"kind":"parameter_perturbation","rows":rows,"deterministic":true,
+        "outcome":"final_scalar_prediction"}),
+    )
+}
+
+fn final_prediction(model: &str, prediction: &Value) -> Result<f64, &'static str> {
+    crate::KernelBinding::new()
+        .predict_model(model, prediction.clone())
+        .map_err(|_| "sensitivity model prediction failed")?
+        .result
+        .and_then(|result| result["values"].as_array()?.last()?.as_f64())
+        .ok_or("sensitivity requires a scalar prediction path")
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct AssumptionRequest {
+    model_key: String,
+    prediction: Value,
+    inputs: Vec<Assumption>,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct Assumption {
+    name: String,
+    alternatives: Vec<Value>,
+}
+
+pub(crate) fn assumptions(payload: &Value) -> Result<Value, &'static str> {
+    let mut request = AssumptionRequest::deserialize(payload).map_err(
+        |_| "assumption sensitivity requires model_key, prediction and named alternatives",
+    )?;
+    if request.prediction.get("state").is_some() {
+        return Err("assumption sensitivity requires an explicit prediction payload");
+    }
+    let options = request.prediction["constructor_kwargs"]
+        .as_object()
+        .ok_or("assumption sensitivity requires explicit constructor_kwargs")?;
+    if request
+        .inputs
+        .iter()
+        .any(|input| !options.contains_key(&input.name))
+    {
+        return Err("assumption sensitivity requires existing constructor options");
+    }
+    let baseline_outcome = final_prediction(&request.model_key, &request.prediction)?;
+    let mut rows = Vec::new();
+    for input in request.inputs {
+        let baseline = request.prediction["constructor_kwargs"][&input.name].clone();
+        for alternative in input.alternatives {
+            request.prediction["constructor_kwargs"][&input.name] = alternative.clone();
+            let outcome = final_prediction(&request.model_key, &request.prediction)?;
+            let change = outcome - baseline_outcome;
+            if !change.is_finite() {
+                return Err("absolute outcome change must be finite");
+            }
+            rows.push(
+                json!({"assumption":input.name,"baseline":baseline,"alternative":alternative,
+                "baseline_outcome":baseline_outcome,"outcome":outcome,"absolute_change":change}),
+            );
+        }
+        request.prediction["constructor_kwargs"][&input.name] = baseline;
+    }
+    Ok(
+        json!({"kind":"assumption_sensitivity","rows":rows,"deterministic":true,
         "outcome":"final_scalar_prediction"}),
     )
 }
