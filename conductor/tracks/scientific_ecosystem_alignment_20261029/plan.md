@@ -2828,3 +2828,11 @@ the other competition models and installed binding checks remain open.
   identical parameter draws and 90% percentile bounds in all bindings.
   The capacity interval collapsed to 100.000000000053 on noiseless data.
   R used raw JSON. Sampling coverage remains open.
+
+- [x] Measure scalar case-bootstrap coverage on noisy Logistic data.
+  Run 100 trials at times 0..23 with L=100, k=0.4, x0=10, Gaussian
+  noise SD 0.5 from Python Random(2431), and 100 draws seeded 3000+trial.
+  All observed values stayed positive. Nominal 90% capacity intervals
+  covered 81/100, mean width 0.7462212, with 53/10000 failed refits.
+  The initial SD 1 probe hit a baseline validation failure. This
+  fixed-grid experiment does not establish general calibration.
