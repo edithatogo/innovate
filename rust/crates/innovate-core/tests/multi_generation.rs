@@ -679,3 +679,22 @@ fn threshold_summary_uses_the_named_generation_parameters() {
     assert_eq!(rows[1]["status"], "degenerate_rates");
     assert_eq!(rows[1]["saturation"], 0.);
 }
+
+#[test]
+fn forced_threshold_summary_reports_sampled_net_rate_peaks() {
+    let response = KernelBinding::new()
+        .summarize_model("norton_bass", json!({
+            "inputs":{"time":[0.,1.,2.,3.]},
+            "parameters":{"p1":0.1,"q1":0.,"m1":100.,"p2":0.1,"q2":0.,"m2":100.},
+            "constructor_kwargs":{
+                "n_generations":2,"variant":"successive_generations","launch_times":[0.,4.],
+                "parameter_events":[{"time":2.,"parameters":{"p1":0.5}}]
+            }
+        }))
+        .unwrap().result.unwrap();
+    let trajectory = &response["threshold_diagnostics"]["trajectory"];
+    assert_eq!(trajectory["window"], json!([0.,3.]));
+    assert_eq!(trajectory["generations"][0]["peak_time"], 2.);
+    assert_eq!(trajectory["generations"][0]["peak_rate"], response["predictions"]["rates"][2][0]);
+    assert_eq!(trajectory["generations"][1]["status"], "no_active_samples");
+}

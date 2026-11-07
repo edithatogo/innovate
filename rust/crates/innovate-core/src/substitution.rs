@@ -330,6 +330,41 @@ impl Model {
         })
     }
 
+    fn trajectory_rate_peaks(&self, time: &[f64], rates: &[Vec<f64>]) -> Value {
+        let generations: Vec<_> = (0..self.n)
+            .map(|index| {
+                let reference = if self.variant == "successive_generations" {
+                    self.launches[index]
+                } else {
+                    self.origin
+                };
+                let peak = time
+                    .iter()
+                    .copied()
+                    .zip(rates)
+                    .skip_while(|(t, _)| *t < reference)
+                    .map(|(t, row)| (t, row[index]))
+                    .reduce(|best, sample| if sample.1 > best.1 { sample } else { best });
+                match peak {
+                    Some((t, rate)) => json!({
+                        "generation": index + 1,
+                        "status": "sampled",
+                        "peak_time": t,
+                        "peak_rate": rate
+                    }),
+                    None => json!({"generation": index + 1, "status": "no_active_samples"}),
+                }
+            })
+            .collect();
+        json!({
+            "method": "maximum_signed_generation_rate_on_requested_grid",
+            "event_side": "right_hand_excluding_jump_impulses",
+            "tie_break": "earliest_sample",
+            "window": [time.first(), time.last()],
+            "generations": generations
+        })
+    }
+
     fn kwargs(&self) -> Value {
         let mut kwargs = json!({"n_generations":self.n,"variant":self.variant,"launch_times":self.launches,"initial_time":self.origin,"initial_values":self.initial});
         if let Some(history) = &self.history {
@@ -605,8 +640,7 @@ impl Model {
         }
         Ok((rows, rates))
     }
-    fn prediction_value(&self, time: &[f64], p: &[f64]) -> Result<Value, String> {
-        let (rows, rates) = self.predict(time, p)?;
+    fn prediction_value(&self, time: &[f64], rows: &[Vec<f64>], rates: &[Vec<f64>]) -> Value {
         let warnings = if rows.iter().flatten().any(|x| *x < 0.0) {
             vec![
                 "Historical cannibalization equations produced negative levels; inspect the model/market assumptions",
@@ -614,11 +648,9 @@ impl Model {
         } else {
             vec![]
         };
-        Ok(
-            json!({"columns":(1..=self.n).map(|i|format!("series_{i}")).collect::<Vec<_>>(),"rows":rows,"rates":rates,
+        json!({"columns":(1..=self.n).map(|i|format!("series_{i}")).collect::<Vec<_>>(),"rows":rows,"rates":rates,
             "metadata":{"shape":[time.len(),self.n],"variant":self.variant,"quantity":"generation_level",
-            "rate_semantics":"signed derivative of generation level; not gross incidence", "launch_derivative":"right_hand", "parameter_event_semantics":if self.variant=="successive_generations" {"continuous launched fractions; capacity overrides can jump levels; right-hand rates exclude jump impulses"} else {"persistent fixed overrides; continuous historical ODE state; right-hand rates"}, "warnings":warnings}}),
-        )
+            "rate_semantics":"signed derivative of generation level; not gross incidence", "launch_derivative":"right_hand", "parameter_event_semantics":if self.variant=="successive_generations" {"continuous launched fractions; capacity overrides can jump levels; right-hand rates exclude jump impulses"} else {"persistent fixed overrides; continuous historical ODE state; right-hand rates"}, "warnings":warnings}})
     }
 }
 
@@ -844,9 +876,8 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
             .ok_or_else(|| invalid(op, "parameters are required"))?;
         parameters(value, &model, op)?
     };
-    let predictions = model
-        .prediction_value(&time, &p)
-        .map_err(|e| invalid(op, e))?;
+    let (predicted, rates) = model.predict(&time, &p).map_err(|e| invalid(op, e))?;
+    let predictions = model.prediction_value(&time, &predicted, &rates);
     let state = json!({"model_key":"norton_bass","model_name":"NortonBassModel","parameters":parameter_value(&p, &model),"constructor_kwargs":model.kwargs(),"predict_kwargs":{}});
     let result = match op {
         KernelOperation::PredictModel | KernelOperation::SimulateModel => {
@@ -859,12 +890,15 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
         _ => {
             let mut result = json!({"model_key":"norton_bass","model_name":"NortonBassModel","family":"substitution","parameters":parameter_value(&p, &model),"state":state,"predictions":predictions});
             result["threshold_diagnostics"] = model.threshold_diagnostics(&p);
+            if model.history.is_some() || !model.events.is_empty() {
+                result["threshold_diagnostics"]["trajectory"] =
+                    model.trajectory_rate_peaks(&time, &rates);
+            }
             if op != KernelOperation::SummarizeModel
                 || inputs.contains_key("observed")
                 || inputs.contains_key("y")
             {
                 let observed = observations(inputs, model.n, time.len(), op)?;
-                let (predicted, _) = model.predict(&time, &p).map_err(|e| invalid(op, e))?;
                 let mut d = diagnostics(&time, &observed, &predicted, "NortonBassModel", p.len());
                 if !model.events.is_empty() {
                     d["parameter_events"] = json!({"count":model.events.len(),"parameters_estimated":false,"state_reset":false});
