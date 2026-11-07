@@ -6967,3 +6967,8 @@ Hosted release readiness for this worktree revision remains open.
   wheel for ISO dates and UTC timestamps. Both accepted 100,000
   occupied buckets plus a duplicate and rejected 100,001 distinct
   buckets with the documented limit diagnostic.
+
+- [x] Verify the weekly limit through Julia and installed R using the
+  locked FFI build at b78013fd. For dates and UTC timestamps, each
+  accepted 100,000 buckets plus a duplicate and rejected 100,001
+  distinct buckets. This matches the Python wheel evidence.
