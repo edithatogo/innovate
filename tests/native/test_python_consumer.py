@@ -438,6 +438,7 @@ def test_directed_weighted_kairos_resource():
         "capacity": 1,
         "service_ticks": 5,
         "ticks_per_unit": 1,
+        "schedule": [{"tick": 6, "edges": [[1, 2]], "service_ticks": 2}],
     }
     result = innovate.execute(
         "simulate_model",
@@ -446,5 +447,5 @@ def test_directed_weighted_kairos_resource():
         parameters={"p": 0.0, "q": 1e12, "m": 3.0},
         simulation_options=options,
     )["result"]
-    assert result["counts"] == [1, 1, 2]
-    assert result["completions"][0]["tick"] == 6
+    assert result["counts"] == [1, 1, 3]
+    assert [entry["tick"] for entry in result["completions"]] == [6, 9]

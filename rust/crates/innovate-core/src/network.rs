@@ -35,6 +35,70 @@ struct Options {
     imitation_multipliers: Option<Vec<f64>>,
     #[serde(default)]
     agent_service_ticks: Option<Vec<u64>>,
+    #[serde(default)]
+    schedule: Vec<Change>,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct Change {
+    tick: u64,
+    edges: Option<Vec<[usize; 2]>>,
+    edge_weights: Option<Vec<f64>>,
+    service_ticks: Option<u64>,
+}
+
+struct Graph {
+    incoming: Vec<Vec<(usize, f64)>>,
+    totals: Vec<f64>,
+    weighted: bool,
+}
+
+impl Graph {
+    fn new(
+        population: usize,
+        directed: bool,
+        edges: &[[usize; 2]],
+        weights: Option<&[f64]>,
+    ) -> Result<Self, &'static str> {
+        let mut incoming = vec![Vec::new(); population];
+        let mut unique = std::collections::HashSet::new();
+        if weights.is_some_and(|weights| {
+            weights.len() != edges.len() || weights.iter().any(|w| !w.is_finite() || *w <= 0.)
+        }) {
+            return Err("edge_weights must contain one finite positive weight per edge");
+        }
+        for (index, &[a, b]) in edges.iter().enumerate() {
+            let key = if directed {
+                (a, b)
+            } else {
+                (a.min(b), a.max(b))
+            };
+            if a >= population || b >= population || a == b || !unique.insert(key) {
+                return Err("edges must be unique non-self pairs within population");
+            }
+            let weight = weights.map_or(1., |w| w[index]);
+            incoming[b].push((a, weight));
+            if !directed {
+                incoming[a].push((b, weight));
+            }
+        }
+        let mut totals = vec![0.; population];
+        if weights.is_some() {
+            for (neighbors, total) in incoming.iter_mut().zip(&mut totals) {
+                let scale = neighbors.iter().map(|(_, w)| *w).fold(0., f64::max);
+                for (_, weight) in neighbors {
+                    *weight /= scale;
+                    *total += *weight;
+                }
+            }
+        }
+        Ok(Self {
+            incoming,
+            totals,
+            weighted: weights.is_some(),
+        })
+    }
 }
 fn ticks() -> u64 {
     1000000
@@ -107,42 +171,58 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     let innovation = required_f64(p, "p", op)?;
     let imitation = required_f64(p, "q", op)?;
     let market = required_f64(p, "m", op)?;
-    let mut adjacency = vec![Vec::new(); o.population];
-    let mut unique = std::collections::HashSet::new();
-    if o.edge_weights.as_ref().is_some_and(|weights| {
-        weights.len() != o.edges.len() || weights.iter().any(|w| !w.is_finite() || *w <= 0.)
-    }) {
+    let mut graph = Graph::new(
+        o.population,
+        o.directed,
+        &o.edges,
+        o.edge_weights.as_deref(),
+    )
+    .map_err(invalid)?;
+    if o.schedule.len() > 64
+        || o.schedule.windows(2).any(|w| w[0].tick >= w[1].tick)
+        || o.schedule
+            .iter()
+            .map(|c| c.edges.as_ref().map_or(0, Vec::len))
+            .sum::<usize>()
+            > 1_000_000
+    {
         return Err(invalid(
-            "edge_weights must contain one finite positive weight per edge",
+            "schedule requires at most 64 strictly increasing changes and at most 1000000 replacement edges",
         ));
     }
-    for (index, &[a, b]) in o.edges.iter().enumerate() {
-        let key = if o.directed {
-            (a, b)
-        } else {
-            (a.min(b), a.max(b))
-        };
-        if a >= o.population || b >= o.population || a == b || !unique.insert(key) {
-            return Err(invalid(
-                "edges must be unique non-self pairs within population",
-            ));
-        }
-        let weight = o.edge_weights.as_ref().map_or(1., |w| w[index]);
-        adjacency[b].push((a, weight));
-        if !o.directed {
-            adjacency[a].push((b, weight));
-        }
-    }
-    let mut totals = vec![0.; o.population];
-    if o.edge_weights.is_some() {
-        for (neighbors, total) in adjacency.iter_mut().zip(&mut totals) {
-            let scale = neighbors.iter().map(|(_, w)| *w).fold(0., f64::max);
-            for (_, weight) in neighbors {
-                *weight /= scale;
-                *total += *weight;
+    let changes = o
+        .schedule
+        .iter()
+        .map(|change| {
+            if change.tick == 0
+                || change.tick > 1_000_000_000_000_000
+                || (change.edges.is_none()
+                    && (change.edge_weights.is_some() || change.service_ticks.is_none()))
+                || change
+                    .service_ticks
+                    .is_some_and(|ticks| !(1..=1_000_000_000_000).contains(&ticks))
+            {
+                return Err(invalid("invalid scheduled tick, graph or service duration"));
             }
-        }
-    }
+            let replacement = change
+                .edges
+                .as_ref()
+                .map(|edges| {
+                    Graph::new(
+                        o.population,
+                        o.directed,
+                        edges,
+                        change.edge_weights.as_deref(),
+                    )
+                    .map_err(invalid)
+                })
+                .transpose()?;
+            Ok((u128::from(change.tick), replacement, change.service_ticks))
+        })
+        .collect::<Result<Vec<_>, _>>()?;
+    let mut changes = changes.into_iter().peekable();
+    let mut applied_ticks = Vec::new();
+    let mut service_override = None;
     let mut initial = std::collections::HashSet::new();
     if o.initial_agents
         .iter()
@@ -171,21 +251,21 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 if context.get::<u8>(agents[i]) != Some(&0) {
                     0.
                 } else {
-                    let degree = adjacency[i].len();
+                    let degree = graph.incoming[i].len();
                     innovation * innovation_weights[i]
                         + if degree == 0 {
                             0.
-                        } else if o.edge_weights.is_some() {
-                            let exposed: f64 = adjacency[i]
+                        } else if graph.weighted {
+                            let exposed: f64 = graph.incoming[i]
                                 .iter()
                                 .filter(|(j, _)| context.get::<u8>(agents[*j]) == Some(&2))
                                 .map(|(_, weight)| weight)
                                 .sum();
-                            imitation * imitation_weights[i] * (exposed / totals[i])
+                            imitation * imitation_weights[i] * (exposed / graph.totals[i])
                         } else {
                             imitation
                                 * imitation_weights[i]
-                                * adjacency[i]
+                                * graph.incoming[i]
                                     .iter()
                                     .filter(|(j, _)| context.get::<u8>(agents[*j]) == Some(&2))
                                     .count() as f64
@@ -214,7 +294,12 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             .peek_next()
             .map(|e| e.at.ticks())
             .filter(|t| *t <= horizon);
-        let process_completion = completion.is_some_and(|t| attempt.is_none_or(|a| t <= a));
+        let boundary = changes
+            .peek()
+            .map(|(tick, _, _)| *tick)
+            .filter(|t| *t <= horizon);
+        let process_completion = completion
+            .is_some_and(|t| attempt.is_none_or(|a| t <= a) && boundary.is_none_or(|b| t <= b));
         if process_completion {
             let StepOutcome::Dispatched(event) = context.step() else {
                 return Err(invalid("missing completion event"));
@@ -233,9 +318,21 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 context.schedule_behaviour(
                     next,
                     2,
-                    SimTime::from_ticks(now + service[next.index as usize] as u128),
+                    SimTime::from_ticks(
+                        now + u128::from(service_override.unwrap_or(service[next.index as usize])),
+                    ),
                 );
             }
+        } else if let Some(tick) = boundary.filter(|t| attempt.is_none_or(|a| *t <= a)) {
+            let (_, replacement, duration) = changes.next().expect("boundary comes from schedule");
+            now = tick;
+            if let Some(replacement) = replacement {
+                graph = replacement;
+            }
+            if duration.is_some() {
+                service_override = duration;
+            }
+            applied_ticks.push(tick);
         } else if let Some(at) = attempt {
             now = at;
             let draw: f64 = rng
@@ -263,7 +360,9 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 context.schedule_behaviour(
                     id,
                     2,
-                    SimTime::from_ticks(now + service[index] as u128),
+                    SimTime::from_ticks(
+                        now + u128::from(service_override.unwrap_or(service[index])),
+                    ),
                 );
             }
         } else {
@@ -289,7 +388,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         model_key: r.model_key.clone(),
         error: None,
         result: Some(
-            json!({"values":values,"counts":counts,"agents":states,"requests":requests,"completions":trace,"metadata":{"engine":"kairos_network","kairos_revision":crate::simulation::REV,"seed":o.seed,"population":o.population,"capacity":o.capacity,"service_ticks":o.service_ticks,"ticks_per_unit":o.ticks_per_unit,"queue_length":resource.queue_length(),"available":resource.available_count(),"innovation_multipliers":innovation_weights,"imitation_multipliers":imitation_weights,"agent_service_ticks":service,"directed":o.directed,"weighted":o.edge_weights.is_some(),"hazard":if o.edge_weights.is_some() {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted incoming weight/total incoming weight), zero imitation without incoming edges"} else {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted neighbors/degree), zero imitation at degree zero"},"resource_semantics":"FIFO; adoption occurs at service completion; pending agents do not transmit","rng_checkpoint":rng.checkpoint()}}),
+            json!({"values":values,"counts":counts,"agents":states,"requests":requests,"completions":trace,"metadata":{"engine":"kairos_network","kairos_revision":crate::simulation::REV,"seed":o.seed,"population":o.population,"capacity":o.capacity,"service_ticks":o.service_ticks,"ticks_per_unit":o.ticks_per_unit,"queue_length":resource.queue_length(),"available":resource.available_count(),"innovation_multipliers":innovation_weights,"imitation_multipliers":imitation_weights,"agent_service_ticks":service,"directed":o.directed,"weighted":graph.weighted,"applied_schedule_ticks":applied_ticks,"service_override_ticks":service_override,"hazard":if graph.weighted {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted incoming weight/total incoming weight), zero imitation without incoming edges"} else {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted neighbors/degree), zero imitation at degree zero"},"resource_semantics":"FIFO; adoption occurs at service completion; pending agents do not transmit","rng_checkpoint":rng.checkpoint()}}),
         ),
         metadata: json!({"runtime":"rust_native","engine":"kairos_network"}),
     })

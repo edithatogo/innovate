@@ -200,3 +200,47 @@ fn directed_weights_control_exposure_without_overflow() {
         );
     }
 }
+
+#[test]
+fn scheduled_graph_and_service_changes_take_effect_at_boundaries() {
+    let mut payload = json!({
+        "inputs":{"time":[0.,2.,7.,8.,10.,11.]},
+        "parameters":{"p":0.,"q":1e12,"m":3.},
+        "simulation_options":{
+            "engine":"kairos_network","population":3,"seed":42,"directed":true,
+            "edges":[],"initial_agents":[0],"capacity":1,"service_ticks":5,
+            "ticks_per_unit":1,"schedule":[
+                {"tick":2,"edges":[[0,1]],"edge_weights":[2.]},
+                {"tick":8,"edges":[[1,2]],"service_ticks":2}
+            ]
+        }
+    });
+    let r = KernelBinding::new()
+        .simulate_model("bass", payload.clone())
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(r["counts"], json!([1, 1, 1, 2, 2, 3]));
+    assert_eq!(
+        r["requests"],
+        json!([{"tick":3,"agent":1},{"tick":9,"agent":2}])
+    );
+    assert_eq!(
+        r["completions"],
+        json!([{"tick":8,"agent":1},{"tick":11,"agent":2}])
+    );
+    assert_eq!(r["metadata"]["applied_schedule_ticks"], json!([2, 8]));
+    for invalid in [
+        json!([{"tick":0,"edges":[]}]),
+        json!([{"tick":2,"service_ticks":2},{"tick":2,"edges":[]}]),
+        json!([{"tick":20,"edge_weights":[1.]}]),
+        json!([{"tick":20,"edges":[[0,3]]}]),
+    ] {
+        payload["simulation_options"]["schedule"] = invalid;
+        assert!(
+            KernelBinding::new()
+                .simulate_model("bass", payload.clone())
+                .is_err()
+        );
+    }
+}

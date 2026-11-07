@@ -720,3 +720,12 @@ edge order. Imitation uses the completed adopters' share of incoming weight;
 isolated agents have zero imitation exposure. Pending agents still do not
 transmit and adoption still occurs at FIFO service completion. Unweighted
 undirected requests retain their original simulation traces.
+
+A Kairos network can also take a `schedule` of up to 64 changes at strictly
+increasing positive integer ticks. Each change can replace the entire contact
+graph with `edges` and optional `edge_weights`, set a new `service_ticks`
+duration for subsequent service starts, or do both. Direction stays fixed
+for the run. At a shared tick, completions and their FIFO handoffs run before
+the change. The new graph governs subsequent request draws, and services
+already underway finish at their original times. The result lists the
+schedule ticks applied through the requested horizon.
