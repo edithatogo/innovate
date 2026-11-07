@@ -2287,3 +2287,28 @@ fn bayesian_metropolis_replays_and_recovers_logistic_capacity() {
     assert!((fit["posterior_mean"].as_f64().unwrap() - 100.).abs() < 0.25);
     assert!((0.2..0.9).contains(&fit["acceptance_rate"].as_f64().unwrap()));
 }
+
+#[test]
+fn bayesian_metropolis_retains_ordered_joint_draws() {
+    let execute = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let mut request = json!({"schema_version":"2.0","operation":"bayesian_metropolis",
+        "payload":{"forecast_model":"logistic","axes":[
+            {"parameter":"L","bounds":[80.,120.],"proposal_step":4.},
+            {"parameter":"k","bounds":[0.1,0.9],"proposal_step":0.08}],
+            "draws":200,"warmup":50,"seed":42,"noise_sd":1.,"observed":[50.],
+            "prediction":{"inputs":{"time":[2.]},"parameters":{"L":100.,"k":0.5,"x0":2.}}}});
+    let response = execute(&request);
+    let result = &response["result"];
+    assert_eq!(result["parameters"], json!(["L", "k"]));
+    let rows = result["samples"].as_array().unwrap();
+    assert_eq!(rows.len(), 200);
+    for row in rows {
+        assert!((80.0..=120.0).contains(&row[0].as_f64().unwrap()));
+        assert!((0.1..=0.9).contains(&row[1].as_f64().unwrap()));
+    }
+    assert_ne!(rows.first(), rows.last());
+    request["payload"]["axes"][1]["parameter"] = json!("L");
+    assert!(execute(&request)["error"].is_object());
+}

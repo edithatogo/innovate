@@ -2978,3 +2978,12 @@ the other competition models and installed binding checks remain open.
   The full results agreed exactly on the 4,000 retained Logistic draws,
   posterior mean 100.13797081088984 and 2,543 acceptances (0.63575).
   R used raw JSON. Joint sampling and convergence diagnostics remain open.
+
+- [x] Extend seeded Metropolis to 2–16 distinct parameter axes with
+  per-axis bounds and proposal scales. Return one ordered vector per
+  retained draw. The rebuilt Python 3.15.2 wheel, Julia and installed R
+  returned identical 4,000-draw Logistic results for L and k, with
+  61.3% acceptance. Independent means and transition counts agreed,
+  duplicate axes were rejected, and the previous scalar response
+  replayed exactly. Four focused Rust tests and Clippy passed.
+  Multi-chain diagnostics and broader posterior calibration remain open.

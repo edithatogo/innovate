@@ -190,27 +190,54 @@ pub(crate) fn sample(payload: &Value) -> Result<Value, &'static str> {
     let model = payload["forecast_model"]
         .as_str()
         .ok_or("forecast_model is required")?;
-    let name = payload["parameter"]
-        .as_str()
-        .ok_or("parameter is required")?;
     let mut prediction = payload["prediction"].clone();
-    let mut current = prediction["parameters"][name]
-        .as_f64()
-        .ok_or("initial parameter is required")?;
-    let [lower, upper]: [f64; 2] = serde_json::from_value(payload["bounds"].clone())
-        .map_err(|_| "bounds must contain two finite numbers")?;
-    if !lower.is_finite()
-        || !upper.is_finite()
-        || lower >= upper
-        || current < lower
-        || current > upper
-    {
-        return Err("initial parameter must lie inside finite increasing bounds");
+    let joint = payload.get("axes").is_some();
+    let axes = match payload.get("axes") {
+        Some(axes) => {
+            if ["parameter", "bounds", "proposal_step"]
+                .iter()
+                .any(|key| payload.get(key).is_some())
+            {
+                return Err("provide axes or a single sampling parameter");
+            }
+            axes.as_array()
+                .filter(|axes| (2..=16).contains(&axes.len()))
+                .ok_or("joint sampling requires 2 to 16 axes")?
+                .iter()
+                .collect::<Vec<_>>()
+        }
+        None => vec![payload],
+    };
+    let mut names = Vec::with_capacity(axes.len());
+    let mut current = Vec::with_capacity(axes.len());
+    let mut bounds = Vec::with_capacity(axes.len());
+    let mut steps = Vec::with_capacity(axes.len());
+    for axis in axes {
+        let name = axis["parameter"].as_str().ok_or("parameter is required")?;
+        if names.contains(&name) {
+            return Err("sampling axes must name distinct parameters");
+        }
+        let initial = prediction["parameters"][name]
+            .as_f64()
+            .ok_or("initial parameter is required")?;
+        let [lower, upper]: [f64; 2] = serde_json::from_value(axis["bounds"].clone())
+            .map_err(|_| "bounds must contain two finite numbers")?;
+        if !lower.is_finite()
+            || !upper.is_finite()
+            || lower >= upper
+            || !(lower..=upper).contains(&initial)
+        {
+            return Err("initial parameter must lie inside finite increasing bounds");
+        }
+        let step = axis["proposal_step"]
+            .as_f64()
+            .filter(|step| step.is_finite() && *step > 0.)
+            .ok_or("proposal_step must be finite and positive")?;
+        names.push(name);
+        current.push(initial);
+        bounds.push(lower..=upper);
+        steps.push(step);
     }
-    let step = payload["proposal_step"]
-        .as_f64()
-        .filter(|step| step.is_finite() && *step > 0.)
-        .ok_or("proposal_step must be finite and positive")?;
     let draws = payload["draws"]
         .as_u64()
         .filter(|n| (2..=10_000).contains(n))
@@ -232,33 +259,56 @@ pub(crate) fn sample(payload: &Value) -> Result<Value, &'static str> {
     let unit = Uniform::new(0., 1.).expect("valid uniform range");
     let mut samples = Vec::with_capacity(draws as usize);
     let mut accepted = 0;
+    let mut proposed = current.clone();
     for iteration in 0..(warmup + draws) {
-        let proposed = current + step * (2. * rng.sample(unit) - 1.);
-        if proposed.is_finite() && (lower..=upper).contains(&proposed) {
-            prediction["parameters"][name] = json!(proposed);
+        for ((candidate, value), step) in proposed.iter_mut().zip(&current).zip(&steps) {
+            *candidate = value + step * (2. * rng.sample(unit) - 1.);
+        }
+        if proposed
+            .iter()
+            .zip(&bounds)
+            .all(|(value, bound)| bound.contains(value))
+        {
+            for (name, value) in names.iter().zip(&proposed) {
+                prediction["parameters"][*name] = json!(value);
+            }
             let proposed_log = log_likelihood(&kernel, model, &prediction, &observed, sigma)?;
             let acceptance: f64 = rng.sample(unit);
             if proposed_log.is_finite() && acceptance.ln() < proposed_log - current_log {
-                current = proposed;
+                std::mem::swap(&mut current, &mut proposed);
                 current_log = proposed_log;
                 accepted += u64::from(iteration >= warmup);
             }
         }
         if iteration >= warmup {
-            samples.push(current);
+            samples.push(current.clone());
         }
     }
-    let mean = samples
-        .iter()
-        .map(|value| value / draws as f64)
-        .sum::<f64>();
-    if !mean.is_finite() {
+    let means = (0..names.len())
+        .map(|axis| {
+            samples
+                .iter()
+                .map(|row| row[axis] / draws as f64)
+                .sum::<f64>()
+        })
+        .collect::<Vec<_>>();
+    if means.iter().any(|mean| !mean.is_finite()) {
         return Err("posterior mean exceeds finite numerical domain");
     }
-    Ok(
-        json!({"parameter":name,"samples":samples,"posterior_mean":mean,"seed":seed,
-        "draws":draws,"warmup":warmup,"accepted":accepted,"acceptance_rate":accepted as f64 / draws as f64,
+    let mut result = json!({
+        "seed":seed,"draws":draws,"warmup":warmup,"accepted":accepted,
+        "acceptance_rate":accepted as f64 / draws as f64,
         "method":"random_walk_metropolis","prior":"uniform_within_bounds",
-        "likelihood":"independent_gaussian_known_sd"}),
-    )
+        "likelihood":"independent_gaussian_known_sd"
+    });
+    if joint {
+        result["parameters"] = json!(names);
+        result["samples"] = json!(samples);
+        result["posterior_means"] = json!(means);
+    } else {
+        result["parameter"] = json!(names[0]);
+        result["samples"] = json!(samples.iter().map(|row| row[0]).collect::<Vec<_>>());
+        result["posterior_mean"] = json!(means[0]);
+    }
+    Ok(result)
 }
