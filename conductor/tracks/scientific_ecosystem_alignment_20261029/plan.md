@@ -2704,3 +2704,9 @@ the other competition models and installed binding checks remain open.
   Lotka–Volterra fixture verifies the resulting trajectories and
   rejects a length mismatch. Focused Rust and Clippy passed.
   Installed binding verification remains open.
+
+- [x] Qualify saved covariate history overrides in the rebuilt Python
+  3.15.2 wheel, Julia and installed R. Complete results agreed exactly.
+  The first Lotka–Volterra trajectory was 0.2319693167 at baseline
+  and 0.1683698760 under the replacement, matching the analytic oracle
+  within 1e-8. R used the raw JSON entry point.
