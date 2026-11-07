@@ -6105,3 +6105,11 @@ Hosted release readiness for this worktree revision remains open.
   tie and cancellation dispatch, missing component read, component
   mutation, deterministic RNG, replay and fail-closed engine selection.
   The separate runtime boundary track's installed acceptance stays open.
+
+- [x] Qualify Kairos main candidate e76b97be2ea3712645933d903822ff6381c8883e
+  in an isolated source snapshot. The upstream comparison shows only
+  FFI code changes under crates, outside the consumed core APIs. The
+  candidate lock resolved six Kairos crates including transitive state.
+  After clearing generated Innovate core build caches to recover from a
+  full disk, the locked retry passed 16 Kairos and 34 network tests.
+  Installed-consumer acceptance remains required before pin promotion.
