@@ -7057,3 +7057,8 @@ Hosted release readiness for this worktree revision remains open.
   fixtures. The seed 123 likelihood shortfalls fell to 5.38e-9 and
   3.48e-8. The comparison now enforces its bound against the selected
   reference. Python and Julia readback of the revised search remains open.
+
+- [x] Verify all eight revised cancellation fits through the rebuilt
+  Python 3.15.2 wheel and Julia against the installed R binding.
+  Coefficients, fitted values, residuals and likelihoods matched within
+  1e-10, with identical missing positions, using source 75222e1f.
