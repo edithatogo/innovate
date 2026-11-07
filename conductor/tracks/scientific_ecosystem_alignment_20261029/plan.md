@@ -3019,3 +3019,16 @@ the other competition models and installed binding checks remain open.
   chains with 16,000 total draws, R-hat 1.000997 and bulk ESS 2796.26.
   Eight focused Rust tests and Clippy passed, including joint diagnostic
   ordering, deterministic replay and duplicate seed rejection.
+
+- [x] Calibrate joint Metropolis against a 100-by-100 midpoint grid
+  for Logistic capacity L and rate k. Use x0=2, observations 50 and 62
+  at times 2 and 3, Gaussian noise SD 2, uniform bounds [80,120] and
+  [0.1,0.9], and proposal half-widths 6 and 0.22. Seeds 41–44 start
+  at (84,0.2), (92,0.7), (109,0.25) and (117,0.8), with 2,000 warmup
+  and 10,000 retained draws each. Python 3.15.2, Julia and R returned
+  identical grid and chain results. Independently calculated Gaussian
+  weights matched every grid mass within 1e-14. Pooled means and
+  correlation were 99.84115, 0.502064 and -0.76662 versus grid values
+  99.77954, 0.502851 and -0.77315, within 0.2, 0.015 and 0.04.
+  Both R-hats were below 1.004 and both bulk ESS values exceeded 2,000.
+  Broader model and prior calibration remain open.
