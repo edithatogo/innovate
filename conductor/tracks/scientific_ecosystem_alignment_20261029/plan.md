@@ -2275,3 +2275,8 @@ the other competition models and installed binding checks remain open.
   and claim-safety metadata. Escape Markdown control characters in user
   text and render line breaks as spaces. All 51 Rust boundary tests and
   Clippy passed. Binding verification and release parity remain open.
+
+- [x] Qualify schema 1.0 JSON and Markdown decision reports in the rebuilt
+  Python 3.15 wheel, Julia and installed R. Both complete output objects
+  matched across bindings. Each rejected a causal claim without an
+  identification assumption. Release parity remains open.
