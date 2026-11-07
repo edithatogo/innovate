@@ -1,4 +1,4 @@
-//! Paired case resampling for weighted scalar model fits.
+//! Case and centered residual resampling for scalar model fits.
 use kairo_ecs_rng::{DeterministicStream, rand_distr::Uniform};
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
@@ -10,6 +10,16 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
     if !matches!(model, "bass" | "logistic" | "gompertz" | "fisher_pry") {
         return Err("bootstrap requires a supported scalar model");
     }
+    let method = payload
+        .get("method")
+        .map_or(Some("paired_case_resampling"), Value::as_str)
+        .filter(|method| {
+            matches!(
+                *method,
+                "paired_case_resampling" | "centered_residual_resampling"
+            )
+        })
+        .ok_or("unknown bootstrap resampling method")?;
     let draws = payload["draws"]
         .as_u64()
         .filter(|n| (2..=200).contains(n))
@@ -48,16 +58,45 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
         .map_err(|_| "baseline fit failed")?
         .result
         .ok_or("baseline fit returned no result")?;
+    let residual_design = if method == "centered_residual_resampling" {
+        if baseline["diagnostics"]["optimizer"]["converged"] != true {
+            return Err("residual bootstrap requires a converged baseline fit");
+        }
+        let fitted: Vec<f64> = serde_json::from_value(baseline["predictions"]["values"].clone())
+            .map_err(|_| "residual bootstrap requires scalar fitted values")?;
+        let observed: Vec<f64> = serde_json::from_value(fit["inputs"]["observed"].clone())
+            .map_err(|_| "residual bootstrap requires inputs.observed")?;
+        if fitted.len() != time.len() || observed.len() != time.len() {
+            return Err("residual bootstrap requires aligned fitted and observed values");
+        }
+        let mut residuals: Vec<_> = observed.iter().zip(&fitted).map(|(y, f)| y - f).collect();
+        let mean = residuals.iter().map(|r| r / time.len() as f64).sum::<f64>();
+        residuals.iter_mut().for_each(|r| *r -= mean);
+        Some((fitted, residuals))
+    } else {
+        None
+    };
     let range = Uniform::new(0, time.len()).expect("validated nonempty time");
     let mut rng = DeterministicStream::from_run_seed(seed);
     let mut estimates = BTreeMap::<String, Vec<f64>>::new();
     let mut succeeded = 0;
     for _ in 0..draws {
-        let mut weights = vec![0; time.len()];
-        for _ in time {
-            weights[rng.sample(range)] += 1;
+        if let Some((fitted, residuals)) = &residual_design {
+            let synthetic: Vec<_> = fitted
+                .iter()
+                .map(|f| f + residuals[rng.sample(range)])
+                .collect();
+            if synthetic.iter().any(|value| !value.is_finite()) {
+                continue;
+            }
+            sample["inputs"]["observed"] = json!(synthetic);
+        } else {
+            let mut weights = vec![0; time.len()];
+            for _ in time {
+                weights[rng.sample(range)] += 1;
+            }
+            sample["fit_options"]["weights"] = json!(weights);
         }
-        sample["fit_options"]["weights"] = json!(weights);
         let Some(fit) = kernel
             .fit_model(model, sample.clone())
             .ok()
@@ -100,10 +139,8 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
             (name, bounds)
         })
         .collect();
-    Ok(
-        json!({"method":"paired_case_resampling","seed":seed,"draws":draws,
+    Ok(json!({"method":method,"seed":seed,"draws":draws,
         "succeeded":succeeded,"failed":draws-succeeded,
         "baseline_parameters":baseline["parameters"],"estimates":estimates,
-        "interval_method":"percentile","interval_mass":interval_mass,"parameter_intervals":intervals}),
-    )
+        "interval_method":"percentile","interval_mass":interval_mass,"parameter_intervals":intervals}))
 }

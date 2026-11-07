@@ -2141,4 +2141,17 @@ fn bootstrap_scalar_fit_replays_and_accounts_for_failed_draws() {
     for estimate in fit["estimates"]["L"].as_array().unwrap() {
         assert!((estimate.as_f64().unwrap() - 100.).abs() < 1e-3);
     }
+    let mut residual = request;
+    residual["payload"]["method"] = json!("centered_residual_resampling");
+    let response = innovate_core::execute_json(&residual.to_string());
+    assert_eq!(response, innovate_core::execute_json(&residual.to_string()));
+    let result: serde_json::Value = serde_json::from_str(&response).unwrap();
+    assert_eq!(result["result"]["method"], "centered_residual_resampling");
+    assert_eq!(result["result"]["succeeded"], 8);
+    for bound in result["result"]["parameter_intervals"]["L"]
+        .as_array()
+        .unwrap()
+    {
+        assert!((bound.as_f64().unwrap() - 100.).abs() < 1e-3);
+    }
 }

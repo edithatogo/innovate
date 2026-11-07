@@ -2836,3 +2836,9 @@ the other competition models and installed binding checks remain open.
   covered 81/100, mean width 0.7462212, with 53/10000 failed refits.
   The initial SD 1 probe hit a baseline validation failure. This
   fixed-grid experiment does not establish general calibration.
+
+- [x] Add centered residual resampling for fixed-grid scalar bootstrap.
+  Resample centered residuals around converged baseline fitted values,
+  retain the original time grid, and count failed synthetic refits.
+  Focused Rust replay and interval checks and Clippy passed. This
+  method assumes exchangeable residuals. Coverage and bindings remain open.
