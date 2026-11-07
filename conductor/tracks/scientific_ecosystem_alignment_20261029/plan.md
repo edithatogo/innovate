@@ -1723,7 +1723,9 @@ the other competition models and installed binding checks remain open.
   observed arm sizes and avoids empty arms. The historical pooled
   resampling scheme remains a separate parity obligation. All 24
   native boundary tests and focused Clippy passed.
-- [ ] Verify treatment contrasts and bootstrap intervals across bindings.
+- [x] Verify pooled and stratified intervals through the rebuilt Python
+  wheel, Julia and installed R. Both schemes return the analytic bounds
+  of 3. The three bindings agree exactly on draw accounting and results.
 
 - [x] Restore pooled treatment/outcome bootstrap resampling as an
   explicit scheme. Empty-arm draws are counted and omitted from the
