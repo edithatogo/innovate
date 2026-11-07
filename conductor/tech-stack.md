@@ -54,7 +54,7 @@
   captures memory evidence for promoted native slices.
 - **GPU Profiling**: JAX/XLA device profilers remain the GPU evidence source
   until Rust owns a promoted native GPU execution backend.
-- **Rust Ownership Boundary**: archived closure records describe bounded historical work, not complete present-day native ownership. The current source remains hybrid; the [Rust-core convergence track](tracks/rust_core_convergence_20261107/index.md) defines remaining native acceptance without superseding the scientific alignment owner's pins or gates.
+- **Rust Ownership Boundary**: archived closure evidence under `Rust Core Full Native Migration and Ownership Closure` and `Rust Core Migration Completion and Polyglot Claim Closure` records bounded historical work, not complete present-day native ownership. The current source remains hybrid; the [Rust-core convergence track](tracks/rust_core_convergence_20261107/index.md) defines remaining native acceptance without superseding the scientific alignment owner's pins or gates.
 
 ### CI/CD
 - GitHub Actions (CI, docs deployment, package publishing)
