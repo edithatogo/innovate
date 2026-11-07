@@ -533,12 +533,10 @@ fn successive_forcing_matches_independent_fraction_reference_and_fit() {
             }
         }
     }
-    let mut start = fixture["parameters"].clone();
-    start["p1"] = json!(0.0305);
     let fit = binding.fit_model("norton_bass",json!({
         "inputs":{"time":fixture["time"],"covariates":fixture["covariates"],"observed":fixture["rows"]},
         "constructor_kwargs":fixture["constructor_kwargs"],
-        "fit_options":{"initial_parameters":start,"max_iterations":200}
+        "fit_options":{"max_iterations":200}
     })).unwrap().result.unwrap();
     assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
     assert!(fit["diagnostics"]["metrics"]["RSS"].as_f64().unwrap() < 1e-8);

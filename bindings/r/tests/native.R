@@ -347,17 +347,20 @@ single_event <- kernel_predict_model("lotka_volterra", list(
 stopifnot(abs(single_event$rows[[2]][[1]]-1/(1+9*exp(-0.6)))<1e-8)
 cat("R ecosystem parameter events, fit and singleton scalar time passed\n")
 
-for (fixture_name in c("norton_events_scipy.json","successive_forcing_scipy.json")) {
+for (fixture_name in c("norton_events_scipy.json","successive_forcing_scipy.json")) for (explicit_start in c(TRUE,FALSE)) {
   nb_event_fixture <- jsonlite::fromJSON(
     file.path("rust/crates/innovate-core/tests/fixtures",fixture_name), simplifyVector=FALSE
   )
-  nb_event_start <- nb_event_fixture$parameters
-  nb_event_start$p1 <- 0.0305
+  nb_fit_options <- list(max_iterations=200)
+  if (explicit_start) {
+    nb_fit_options$initial_parameters <- nb_event_fixture$parameters
+    nb_fit_options$initial_parameters$p1 <- 0.0305
+  }
   nb_event_fit <- kernel_fit_model("norton_bass", list(
     inputs=list(time=unlist(nb_event_fixture$time),covariates=list(price=unlist(nb_event_fixture$covariates$price)),
                 observed=nb_event_fixture$rows),
     constructor_kwargs=nb_event_fixture$constructor_kwargs,
-    fit_options=list(initial_parameters=nb_event_start,max_iterations=200)
+    fit_options=nb_fit_options
   ))$result
   nb_event_forecast <- kernel_predict_model(
     "norton_bass",list(inputs=list(time=unlist(nb_event_fixture$forecast_time)),state=nb_event_fit$state)

@@ -700,7 +700,8 @@ def test_ecosystem_fixed_event_polars_fit():
 
 
 @pytest.mark.parametrize("fixture_name", ["norton_events_scipy.json", "successive_forcing_scipy.json"])
-def test_norton_event_variants_polars_fit_and_forecast(fixture_name):
+@pytest.mark.parametrize("explicit_start", [True, False])
+def test_norton_event_variants_polars_fit_and_forecast(fixture_name, explicit_start):
     fixture = json.loads(
         (Path(__file__).parents[2] / "rust/crates/innovate-core/tests/fixtures" / fixture_name).read_text()
     )
@@ -712,12 +713,15 @@ def test_norton_event_variants_polars_fit_and_forecast(fixture_name):
             "second": [row[1] for row in fixture["rows"]],
         }
     )
+    fit_options: dict[str, object] = {"max_iterations": 200}
+    if explicit_start:
+        fit_options["initial_parameters"] = dict(fixture["parameters"], p1=0.0305)
     fit = innovate.fit(
         "norton_bass",
         data,
         observed_columns=["first", "second"],
         model_options=fixture["constructor_kwargs"],
-        fit_options={"initial_parameters": dict(fixture["parameters"], p1=0.0305), "max_iterations": 200},
+        fit_options=fit_options,
     )
     assert fit.diagnostics["optimizer"]["converged"]
     assert not fit.diagnostics["parameter_events"]["parameters_estimated"]

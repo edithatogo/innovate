@@ -1,0 +1,297 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on build directory
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 3.27s
+     Running unittests src/lib.rs (target/debug/deps/innovate_core-c2f402ac4f8bbedf)
+
+running 2 tests
+test numerics::tests::unrepresentable_sensitivities_never_report_convergence ... ok
+test regime::tests::native_grid_matches_independent_ruptures_fixtures ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/competition.rs (target/debug/deps/competition-695326af62d00e43)
+
+running 14 tests
+test competitive_domain_and_unsupported_covariates_are_explicit_errors ... ok
+test fixed_parameter_events_split_exactly_and_use_right_hand_rates ... ok
+test fixed_events_before_origin_apply_and_invalid_events_are_rejected ... ok
+test competitive_native_odes_match_independent_scipy_and_forecast_from_saved_origin ... ok
+test ecosystem_events_compose_with_controls_and_preserve_lock_in_projection ... ok
+test lotka_volterra_forcing_matches_integrated_logistic_growth_and_saved_history ... ok
+test multi_product_forcing_layouts_are_explicit_and_capacity_zero_is_safe ... ok
+test competitive_fit_reports_limits_and_rejects_invalid_data ... ok
+test multi_product_forcing_layouts_match_independent_scipy_and_saved_forecasts ... ok
+test interacting_lotka_forcing_fits_independent_reference_and_forecasts ... ok
+test lotka_volterra_fits_without_seed_and_decoupled_products_match_bass ... ok
+test ecosystem_events_match_independent_references_and_conditional_fit ... ok
+test multi_product_covariate_fit_preserves_signed_coefficients ... ok
+test competitive_fits_report_quality_and_keep_the_initial_condition_for_forecasts ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.36s
+
+     Running tests/complementary.rs (target/debug/deps/complementary-3160ac30bf185f7f)
+
+running 4 tests
+test decoupled_complementary_goods_match_logistic_and_allow_levels_above_one ... ok
+test complementary_controls_preserve_signed_effects_and_saved_history ... ok
+test complementary_forcing_fits_independent_reference_and_forecasts ... ok
+test complementary_equations_match_independent_scipy_and_fit ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+
+     Running tests/composite.rs (target/debug/deps/composite-ea4133d3be3c91d2)
+
+running 8 tests
+test composite_invalid_shapes_origins_domains_and_unknown_options_fail ... ok
+test signed_negative_levels_are_returned_and_fisher_pry_ode_has_a_native_adapter ... ok
+test heterogeneous_signed_interactions_match_independent_scipy_and_absent_parameters_stay_fixed ... ok
+test independent_composite_growth_matches_closed_forms_and_rhs_rates ... ok
+test historical_batch_reset_is_explicit_and_fixed_origin_batches_match ... ok
+test stimulated_capacity_fit_can_use_positive_bounds_or_explicit_historical_floors ... ok
+test composite_fit_retains_conditioned_initial_state_and_forecasts_from_origin ... ok
+test coupled_fit_estimates_signed_interactions_and_reports_absent_parameters ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.99s
+
+     Running tests/fit_quality.rs (target/debug/deps/fit_quality-37ba79351f33708d)
+
+running 4 tests
+test custom_seeds_cannot_bypass_option_or_observation_validation ... ok
+test excessive_initial_parameter_scale_is_a_structured_error_not_false_convergence ... ok
+test custom_initial_parameters_and_iteration_limits_are_honored ... ok
+test scalar_native_models_report_actual_optimizer_termination_and_local_rank ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/hierarchical.rs (target/debug/deps/hierarchical-85673376db6bd4c9)
+
+running 6 tests
+test invalid_groups_parameters_and_observation_shapes_fail_closed ... ok
+test large_constant_diagnostics_do_not_invent_explained_variation ... ok
+test historical_and_centered_group_predictions_retain_distinct_parameter_meanings ... ok
+test shared_observations_fit_once_with_zero_group_offsets ... ok
+test historical_group_mapping_keeps_absolute_estimates_and_adds_global_means ... ok
+test centered_group_fits_recover_independent_curves_and_saved_group_output ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/historical_logistic.rs (target/debug/deps/historical_logistic-5187bf940fa2a1bb)
+
+running 5 tests
+test advanced_shapes_and_options_fail_clearly ... ok
+test historical_event_covariate_policy_is_explicit ... ok
+test historical_logistic_covariates_and_event_boundary_match_closed_forms ... ok
+test historical_event_fit_forecasts_and_reports_rank ... ok
+test additive_covariate_fit_recovers_independent_curve ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/kairos.rs (target/debug/deps/kairos-81b100966e110aaf)
+
+running 9 tests
+test finite_domain_and_option_guards_are_enforced ... ok
+test unsupported_or_malformed_engines_never_silently_use_a_curve ... ok
+test malformed_forcing_and_colliding_boundaries_are_errors ... ok
+test native_kairos_replays_and_does_not_depend_on_sampling_grid ... ok
+test covariates_and_events_can_pause_and_restart_pressure ... ok
+test abm_initial_adoption_is_conserved_at_zero_and_saturation ... ok
+test abm_agents_are_conserved_replayable_and_match_homogeneous_des ... ok
+test innovation_only_ensemble_matches_binomial_mean ... ok
+test forced_innovation_ensemble_matches_integrated_hazard ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/latent.rs (target/debug/deps/latent-523359059bcfef75)
+
+running 5 tests
+test invalid_latent_arrays_and_parameter_domains_fail ... ok
+test saved_latent_state_interpolates_and_extends_endpoints ... ok
+test latent_invalid_parameters_unsupported_options_and_overflow_fail ... ok
+test latent_summary_clipping_and_singleton_increment_preserve_history ... ok
+test fitted_latent_state_matches_independent_residual_recursion_and_forecast ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/lock_in.rs (target/debug/deps/lock_in-1f2cba18df16ae89)
+
+running 8 tests
+test historical_lock_in_clips_reported_levels ... ok
+test lock_in_fitter_rejects_initial_market_below_either_observed_series ... ok
+test forced_lock_in_projects_to_current_capacity_without_resetting_raw_state ... ok
+test historical_lock_in_matches_independent_ode_reference ... ok
+test lock_in_forecasts_from_saved_origin_and_labels_historical_rates ... ok
+test forced_market_baseline_can_be_below_observed_levels ... ok
+test lock_in_forcing_matches_independent_reference_and_retains_confounding ... ok
+test lock_in_fitting_preserves_trajectories_and_reports_structural_ambiguity ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.27s
+
+     Running tests/mechanistic.rs (target/debug/deps/mechanistic-00570a964e0093e4)
+
+running 9 tests
+test forcing_numbers_survive_exact_json_round_trip ... ok
+test invalid_forcing_and_historical_revisions_fail_explicitly ... ok
+test gompertz_event_has_continuous_state_and_right_hand_rate ... ok
+test signed_zero_control_and_query_times_are_the_same_boundary ... ok
+test bass_linear_innovation_covariate_and_saved_history_match_exact_solution ... ok
+test explicit_legacy_layout_and_origin_are_not_silent_new_defaults ... ok
+test gompertz_linear_rate_covariate_matches_exact_solution_and_ignores_b_terms ... ok
+test gompertz_event_fit_holds_absent_b_and_forecasts_from_saved_origin ... ok
+test bass_covariate_event_fit_matches_independent_reference_and_retains_history ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.39s
+
+     Running tests/mixture.rs (target/debug/deps/mixture-0d9542e2a78e668b)
+
+running 6 tests
+test invalid_mixture_options_weights_and_noise_fail_closed ... ok
+test mixture_prediction_and_posterior_responsibilities_match_closed_forms ... ok
+test failed_component_updates_are_rolled_back_and_never_report_convergence ... ok
+test historical_adoption_mode_preserves_normalized_level_responsibilities ... ok
+test gaussian_em_updates_likelihood_and_saves_component_state ... ok
+test gaussian_default_initialization_recovers_separated_components_without_a_warm_start ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/model_oracles.rs (target/debug/deps/model_oracles-99033ea15e2dc419)
+
+running 1 test
+test five_model_prediction_simulation_and_fitted_forecast_oracles ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/multi_generation.rs (target/debug/deps/multi_generation-fe12158b80170882)
+
+running 23 tests
+test capacity_rate_scaling_avoids_unrepresentable_intermediate_control_slopes ... ok
+test covariate_history_drives_both_historical_generations_and_replays ... ok
+test historical_norton_events_preserve_continuous_generations_and_controls ... ok
+test historical_milestones_use_fixed_base_market_even_after_capacity_override ... ok
+test capacity_event_uses_each_intervals_active_control_derivative ... ok
+test forced_threshold_summary_reports_sampled_net_rate_peaks ... ok
+test invalid_shapes_parameters_and_unknown_options_are_rejected ... ok
+test forced_successive_milestones_resolve_between_requested_samples ... ok
+test legacy_three_generation_ode_matches_independent_scipy_oracle ... ok
+test scalar_norton_events_extend_to_both_variants ... ok
+test legacy_origin_is_explicit_and_forecast_batching_does_not_reset_state ... ok
+test successive_capacity_events_jump_levels_and_invalid_hazards_are_rejected ... ok
+test successive_control_history_can_start_at_the_first_launch ... ok
+test successive_controls_include_capacity_slopes_and_launch_rates ... ok
+test successive_generation_closed_form_launches_and_conservation ... ok
+test threshold_summary_uses_the_named_generation_parameters ... ok
+test unknown_generation_parameters_and_nonfinite_domains_do_not_silently_disappear ... ok
+test convergence_limits_and_unobserved_generations_are_reported_without_overclaiming ... ok
+test multi_output_fit_reports_convergence_and_predicts_held_out_times ... ok
+test historical_norton_events_match_independent_reference_and_fit ... ok
+test conditional_covariate_fit_retains_all_named_coefficients ... ok
+test legacy_fit_recovers_independent_ode_fixture_and_rates_keep_their_sign ... ok
+test successive_forcing_matches_independent_fraction_reference_and_fit ... ok
+
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 26.62s
+
+     Running tests/native_boundary.rs (target/debug/deps/native_boundary-ab434355497941ab)
+
+running 7 tests
+test dispatch_rejects_unknown_schema_versions ... ok
+test empty_model_is_a_structured_error_not_a_panic ... ok
+test unknown_models_never_fall_back_to_python ... ok
+test undeclared_covariates_never_fall_back_after_all_model_families_are_ported ... ok
+test discovery_does_not_advertise_unported_models ... ok
+test dispatch_is_native_without_a_python_launcher ... ok
+test direct_parameter_payloads_work_for_bass_and_reject_ambiguous_state ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/network.rs (target/debug/deps/network-38f2f2a4df910663)
+
+running 19 tests
+test linear_hazard_clock_matches_analytic_crossing ... ok
+test continuous_forcing_validates_effective_hazard_instead_of_unforced_total ... ok
+test heterogeneous_vectors_reject_invalid_domains ... ok
+test continuous_hazard_can_wake_from_zero_and_replays ... ok
+test continuous_hazard_scales_agent_weights_before_aggregation ... ok
+test heterogeneous_service_uses_the_queued_agents_duration ... ok
+test imitation_weights_control_seeded_contagion ... ok
+test fifo_service_has_exact_capacity_limited_completion_times ... ok
+test pending_agents_are_not_counted_as_adopted ... ok
+test malformed_networks_resources_and_initial_nodes_are_rejected ... ok
+test directed_weights_control_exposure_without_overflow ... ok
+test scheduled_hazards_enable_and_disable_requests_without_interrupting_service ... ok
+test priority_reorders_waiters_without_preempting_service ... ok
+test contacts_control_pure_contagion_and_replay ... ok
+test waiting_deadline_withdraws_only_agents_that_miss_service ... ok
+test schedule_retargets_innovation_without_resetting_service ... ok
+test retry_restores_hazard_after_balking_or_expiry ... ok
+test scheduled_capacity_pauses_admission_and_reopens_waiting_service ... ok
+test scheduled_graph_and_service_changes_take_effect_at_boundaries ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/network_diffusion.rs (target/debug/deps/network_diffusion-95c0aaeb19f0f16e)
+
+running 5 tests
+test graph_shape_and_unknown_options_are_rejected ... ok
+test finite_high_weight_graphs_keep_finite_summary_means ... ok
+test historical_summary_retains_coordinates_and_graph_statistics_without_times ... ok
+test historical_weighted_spillover_preserves_isolated_nodes_and_matrix_shape ... ok
+test independent_node_fits_retain_state_and_forecast ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/policy.rs (target/debug/deps/policy-550927fac0d965ce)
+
+running 4 tests
+test invalid_event_shapes_decay_and_unknown_fields_fail ... ok
+test policy_events_use_exact_boundaries_decay_and_historical_cumulative_max ... ok
+test no_time_policy_summary_retains_events_and_clips_negative_multipliers ... ok
+test historical_policy_fit_holds_decay_and_preserves_forecast_state ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/regime.rs (target/debug/deps/regime-226966b47fcd7699)
+
+running 6 tests
+test malformed_regime_state_and_options_fail_closed ... ok
+test historical_index_split_retains_batch_dependent_offset_and_singletons ... ok
+test fixed_time_switch_is_continuous_and_does_not_reset_on_forecast_batches ... ok
+test two_point_fisher_pry_fit_is_identified_but_has_no_residual_degrees_of_freedom ... ok
+test fitted_regimes_retain_fixed_boundary_and_segment_parameters ... ok
+test automatic_detection_and_short_single_regime_are_explicit ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/scientific_contract.rs (target/debug/deps/scientific_contract-2b7c9b746f91ee17)
+
+running 7 tests
+test gompertz_uses_all_three_parameters ... ok
+test invalid_parameters_and_unsorted_times_fail_before_computation ... ok
+test bass_forecasts_use_absolute_time_without_needing_the_origin_in_every_batch ... ok
+test diagnostics_do_not_fabricate_uncomputed_significance_tests ... ok
+test bass_fit_recovers_parameters_on_irregular_times_and_rescaled_units ... ok
+test information_criteria_use_consistent_gaussian_parameter_counts ... ok
+test native_fits_recover_synthetic_logistic_and_gompertz_parameters ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/weighted.rs (target/debug/deps/weighted-01977fd9abefc12a)
+
+running 4 tests
+test invalid_weights_and_insufficient_positive_support_fail ... ok
+test non_scalar_and_event_fitters_reject_weights_until_they_apply_them ... ok
+test weighted_logistic_matches_independent_scipy_reference ... ok
+test zero_weights_exclude_outliers_and_common_weight_scaling_is_invariant ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+   Doc-tests innovate_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+    Checking innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `dev` profile [unoptimized] target(s) in 1.84s

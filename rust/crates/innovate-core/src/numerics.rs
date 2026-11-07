@@ -16,7 +16,7 @@ struct Candidate {
     reason: &'static str,
 }
 
-fn jacobian<F>(theta: &[f64], evaluate: &F) -> Result<Vec<Vec<f64>>, String>
+fn jacobian<F>(theta: &[f64], prediction: &[f64], evaluate: &F) -> Result<Vec<Vec<f64>>, String>
 where
     F: Fn(&[f64]) -> Result<Vec<f64>, String>,
 {
@@ -27,16 +27,22 @@ where
         let mut minus = theta.to_vec();
         plus[j] += step;
         minus[j] -= step;
-        let a = evaluate(&plus)?;
-        let b = evaluate(&minus)?;
-        if a.len() != b.len() || a.iter().chain(&b).any(|x| !x.is_finite()) {
+        let plus = evaluate(&plus);
+        let minus = evaluate(&minus);
+        // Near a domain boundary, differentiate from the feasible side.
+        let (a, b, width) = match (&plus, &minus) {
+            (Ok(a), Ok(b)) => (a.as_slice(), b.as_slice(), 2. * step),
+            (Ok(a), Err(_)) => (a.as_slice(), prediction, step),
+            (Err(_), Ok(b)) => (prediction, b.as_slice(), step),
+            (Err(error), Err(_)) => return Err(error.clone()),
+        };
+        if a.len() != prediction.len()
+            || b.len() != prediction.len()
+            || a.iter().chain(b).any(|x| !x.is_finite())
+        {
             return Err("Jacobian shape or finite-value violation".into());
         }
-        let column: Vec<f64> = a
-            .iter()
-            .zip(b)
-            .map(|(a, b)| (a - b) / (2.0 * step))
-            .collect();
+        let column: Vec<f64> = a.iter().zip(b).map(|(a, b)| (a - b) / width).collect();
         if column.iter().any(|v| !v.is_finite()) {
             return Err("Jacobian exceeded the finite numerical domain".into());
         }
@@ -150,7 +156,7 @@ where
         let mut iterations = 0;
         for iteration in 0..max_iterations {
             iterations = iteration + 1;
-            let columns = jacobian(&theta, &evaluate)?;
+            let columns = jacobian(&theta, &prediction, &evaluate)?;
             let n = theta.len();
             let mut normal = vec![vec![0.0; n]; n];
             let mut rhs = vec![0.0; n];
@@ -230,7 +236,7 @@ where
         converged,
         reason,
     } = best.ok_or("no finite optimizer candidate")?;
-    let columns = jacobian(&parameters, &evaluate)?;
+    let columns = jacobian(&parameters, &predictions, &evaluate)?;
     let gradient = columns
         .iter()
         .map(|c| {

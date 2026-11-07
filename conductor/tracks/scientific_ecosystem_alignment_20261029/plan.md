@@ -957,3 +957,12 @@ when a forced fit has no explicit start. The regression fits a historical
 trajectory without start parameters and reaches RSS below 1e-8. All 23
 multi-generation tests and focused Clippy passed. Installed consumer checks
 and broader independent qualification of automatic forced fits remain open.
+
+- [x] Qualify explicit and automatic starts against independent two-generation
+  historical and successive-generation reference trajectories in all three
+  installed bindings. Both cases retain fixed events and meet the existing
+  held-out forecast tolerance. The automatic successive fit reached a feasible
+  domain boundary during differentiation. The shared solver now uses the
+  available one-sided difference when one probe fails, while preserving
+  central differences in the interior. Full core tests and Clippy passed.
+  [Validation logs](evidence/norton-automatic-starts-20261107).
