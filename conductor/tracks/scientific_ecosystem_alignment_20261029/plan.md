@@ -7443,3 +7443,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Check the worker image for the bundled licence and absence of
   Python executables on PATH before the hosted native protocol tests.
   Actionlint passed. Hosted container execution remains open.
+
+- [x] Run the four native worker subprocess tests against the locked
+  optimized macOS arm64 build at 34937fde. All passed, covering
+  transport discovery, policy denials, invalid framing and a closed
+  response pipe. Hosted transport and tenant isolation remain open.
