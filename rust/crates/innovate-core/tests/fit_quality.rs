@@ -30,6 +30,19 @@ fn scalar_native_models_report_actual_optimizer_termination_and_local_rank() {
             fit["diagnostics"]["optimizer"]["converged"], true,
             "{model}: {fit}"
         );
+        let optimizer = &fit["diagnostics"]["optimizer"];
+        let selected = optimizer["selected_start_index"].as_u64().unwrap() as usize;
+        let start = &optimizer["start_reports"][selected];
+        assert_eq!(start["scaled_rss"], optimizer["scaled_rss"]);
+        assert!(
+            start["initial_scaled_rss"].as_f64().unwrap() >= start["scaled_rss"].as_f64().unwrap()
+        );
+        for key in [
+            "initial_transformed_parameters",
+            "final_transformed_parameters",
+        ] {
+            assert_eq!(start[key].as_array().unwrap().len(), count);
+        }
         assert_eq!(fit["diagnostics"]["identifiability"]["rank"], count);
         assert_eq!(
             fit["diagnostics"]["uncertainty"]["report_type"],

@@ -3906,3 +3906,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Document multistart report ordering, transformed coordinates,
   objective gaps and rejected-start errors. The three Rust fixtures
   covering those fields passed.
+- [x] Verify selected-start coordinates and objective reporting on the
+  public Rust fitting paths for Bass, Logistic, Gompertz and Fisher–Pry.
+  The selected start matches the optimizer's final loss, its initial
+  loss is at least as high, and both coordinate vectors match the
+  fitted parameter count. All four fit-quality tests passed.
