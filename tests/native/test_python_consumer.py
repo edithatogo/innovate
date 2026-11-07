@@ -1380,6 +1380,13 @@ def test_nearest_score_matching():
                               outcome_variances=[1, 4, 1, 1, 1])["result"]
     assert reused["conditional_standard_error"] == pytest.approx(4.5**0.5)
     assert reused["control_diagnostics"] == {"unique_controls": 1, "effective_sample_size": 1}
+    correlated = innovate.execute(
+        "summarize_causal", **{**payload, "scores": [0, 2, 2, 2, 0]},
+        outcome_variances=[1, 4, 1, 1, 1],
+        outcome_covariance_factors=[[7] * 5, [0, 0, 2, 2, 0]],
+    )["result"]
+    assert correlated["conditional_standard_error"] == pytest.approx(math.sqrt(8.5))
+    assert correlated["uncertainty_model"] == {"model": "diagonal_plus_factors", "factor_count": 2}
     payload["caliper"] = 0.5
     partial = innovate.execute("summarize_causal", **payload, allow_partial=True)["result"]
     assert partial["estimand"] == "matched_subset_att"

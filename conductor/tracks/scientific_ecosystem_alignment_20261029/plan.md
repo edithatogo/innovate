@@ -5354,3 +5354,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Identify the matched conditional uncertainty model and factor
   count in the result. The focused Rust fixture distinguishes the
   independent and two-factor cases while retaining both analytic errors.
+
+- [x] Retain the correlated standard error and uncertainty model in
+  Python's matching consumer test. The rebuilt Python 3.15.2
+  extension returned sqrt(8.5) and reported two covariance factors.
