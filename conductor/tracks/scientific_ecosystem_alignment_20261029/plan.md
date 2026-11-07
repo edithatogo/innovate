@@ -680,3 +680,12 @@ balking, optional retries and forcing interoperability remain open.
 Source: 265d36ef. Twelve focused Rust tests, 40 installed
 Python tests, 181 Julia assertions and R conformance passed. Balking, optional
 retries, historical model forcing and release qualification remain open.
+
+## Kairos queue entry and retry policies
+
+- [x] Bound waiting queues and restore susceptibility after optional cooldown.
+- [x] Verify balking, expiry, retry exhaustion and Python, Julia and R traces.
+
+Source: 769602e5. Thirteen focused Rust tests, 41 installed
+Python tests, 184 Julia assertions and R conformance passed. Forcing
+interoperability, historical model extensions and release qualification remain open.
