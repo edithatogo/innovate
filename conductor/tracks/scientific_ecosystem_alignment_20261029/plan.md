@@ -3010,3 +3010,12 @@ the other competition models and installed binding checks remain open.
   Bulk ESS 23.66891870454829 and both tail estimates agreed within
   1e-10 with an independent base-R autocovariance calculation.
   Seven focused Rust tests and Clippy passed.
+
+- [x] Combine native Metropolis and marginal diagnostics in
+  bayesian_metropolis_chains. Require distinct explicit seeds and
+  initial values for every sampled parameter. Return each chain and
+  per-parameter split R-hat and effective sample size. Python 3.15.2,
+  Julia and R agreed exactly on four dispersed Logistic capacity
+  chains with 16,000 total draws, R-hat 1.000997 and bulk ESS 2796.26.
+  Eight focused Rust tests and Clippy passed, including joint diagnostic
+  ordering, deterministic replay and duplicate seed rejection.

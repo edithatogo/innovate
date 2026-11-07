@@ -2367,3 +2367,31 @@ fn bayesian_effective_sample_size_distinguishes_persistence_and_stuck_chains() {
     assert!(stuck["error"].is_null());
     assert!(stuck["result"]["bulk_ess"].is_null());
 }
+
+#[test]
+fn bayesian_metropolis_chains_diagnoses_each_joint_parameter() {
+    let mut request = json!({"schema_version":"2.0","operation":"bayesian_metropolis_chains",
+        "payload":{"forecast_model":"logistic","axes":[
+            {"parameter":"L","bounds":[80.,120.],"proposal_step":4.},
+            {"parameter":"k","bounds":[0.1,0.9],"proposal_step":0.08}],
+            "draws":200,"warmup":50,"noise_sd":1.,"observed":[50.],
+            "chains":[{"seed":17,"initial":{"L":95.,"k":0.4}},
+                      {"seed":42,"initial":{"L":105.,"k":0.6}}],
+            "prediction":{"inputs":{"time":[2.]},"parameters":{"x0":2.}}}});
+    let execute = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = execute(&request);
+    assert_eq!(response, execute(&request));
+    let result = &response["result"];
+    assert_eq!(result["chains"][0]["initial"]["L"], 95.);
+    assert_eq!(result["chains"][1]["initial"]["L"], 105.);
+    for (axis, parameter) in ["L", "k"].into_iter().enumerate() {
+        let diagnostic = &result["diagnostics"][axis];
+        assert_eq!(diagnostic["parameter"], parameter);
+        assert!(diagnostic["split_rhat"]["rhat"].is_number());
+        assert_eq!(diagnostic["effective_sample_size"]["draws_used"], 400);
+    }
+    request["payload"]["chains"][1]["seed"] = json!(17);
+    assert!(execute(&request)["error"].is_object());
+}

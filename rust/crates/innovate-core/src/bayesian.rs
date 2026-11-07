@@ -538,3 +538,86 @@ fn paired_ess(values: &[f64], half: usize) -> Option<f64> {
     let tau = (2. * sum - 1.).max(1. / count.log10());
     Some(count / tau)
 }
+
+/// Run independent, explicitly initialized chains and diagnose each marginal.
+pub(crate) fn sample_chains(payload: &Value) -> Result<Value, &'static str> {
+    let specs = payload["chains"]
+        .as_array()
+        .filter(|chains| (2..=16).contains(&chains.len()))
+        .ok_or("Metropolis requires 2 to 16 chains")?;
+    if payload.get("seed").is_some() {
+        return Err("provide seeds on individual chains");
+    }
+    if payload["draws"].as_u64().is_none_or(|draws| draws < 6) {
+        return Err("multi-chain sampling requires at least six draws per chain");
+    }
+    let parameter_names = match payload.get("axes") {
+        Some(axes) => axes
+            .as_array()
+            .ok_or("axes must be an array")?
+            .iter()
+            .map(|axis| axis["parameter"].as_str().ok_or("parameter is required"))
+            .collect::<Result<Vec<_>, _>>()?,
+        None => vec![
+            payload["parameter"]
+                .as_str()
+                .ok_or("parameter is required")?,
+        ],
+    };
+    let mut request = payload.clone();
+    let mut seeds = std::collections::HashSet::new();
+    let mut results = Vec::with_capacity(specs.len());
+    for spec in specs {
+        let seed = spec["seed"]
+            .as_u64()
+            .ok_or("chain seed must be an unsigned integer")?;
+        if !seeds.insert(seed) {
+            return Err("chain seeds must be distinct");
+        }
+        let initial = spec["initial"]
+            .as_object()
+            .ok_or("chain initial values are required")?;
+        if initial.len() != parameter_names.len()
+            || parameter_names
+                .iter()
+                .any(|name| !initial.contains_key(*name))
+        {
+            return Err("chain initial values must match sampled parameters");
+        }
+        let parameters = request["prediction"]["parameters"]
+            .as_object_mut()
+            .ok_or("explicit prediction parameters are required")?;
+        for (name, value) in initial {
+            parameters.insert(name.clone(), value.clone());
+        }
+        request["seed"] = json!(seed);
+        let mut result = sample(&request)?;
+        result["initial"] = spec["initial"].clone();
+        results.push(result);
+    }
+    let joint = payload.get("axes").is_some();
+    let mut diagnostics = Vec::with_capacity(parameter_names.len());
+    for (axis, name) in parameter_names.iter().enumerate() {
+        let chains: Vec<Vec<_>> = results
+            .iter()
+            .map(|chain| {
+                chain["samples"]
+                    .as_array()
+                    .expect("sampler returns draws")
+                    .iter()
+                    .map(|draw| {
+                        if joint {
+                            draw[axis].clone()
+                        } else {
+                            draw.clone()
+                        }
+                    })
+                    .collect()
+            })
+            .collect();
+        let input = json!({"chains":chains,"method":"rank_normalized_split_rhat"});
+        diagnostics.push(json!({"parameter":name,"split_rhat":split_rhat(&input)?,
+            "effective_sample_size":effective_sample_size(&input)?}));
+    }
+    Ok(json!({"parameters":parameter_names,"chains":results,"diagnostics":diagnostics}))
+}
