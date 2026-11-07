@@ -7154,3 +7154,10 @@ Hosted release readiness for this worktree revision remains open.
   and frameworks. The Python extension reports deployment target
   11.0, consistent with the wheel tag. This is a local link audit;
   runtime checks on older macOS versions remain open.
+
+- [x] Verify local Julia and R bundled-library discovery from isolated
+  package staging. Both loaded the bundled arm64 library with
+  INNOVATE_NATIVE_LIBRARY unset and returned the expected month-start
+  aggregation. Julia and R licence files matched the root Apache-2.0
+  licence. The run used a staged Julia project and a fresh R install,
+  and does not establish hosted distribution acceptance.
