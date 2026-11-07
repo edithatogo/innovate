@@ -839,6 +839,22 @@ fn causal_summaries_match_analytic_effects() {
         run(guarded)["error"]["message"],
         "minimum_training_arm_count must be a positive integer"
     );
+    let mut cluster_guard = cross_fitted.clone();
+    cluster_guard["minimum_training_arm_clusters"] = json!(2);
+    assert_eq!(
+        run(cluster_guard.clone())["error"]["message"],
+        "minimum_training_arm_clusters requires cluster labels"
+    );
+    cluster_guard["clusters"] = json!(["a", "b", "b", "a"]);
+    assert_eq!(
+        run(cluster_guard.clone())["error"]["message"],
+        "a held-out stratum falls below minimum_training_arm_clusters"
+    );
+    cluster_guard["minimum_training_arm_clusters"] = json!(1);
+    assert_eq!(
+        run(cluster_guard)["result"]["overlap"]["min_training_arm_clusters"],
+        1
+    );
     let mut misspelled = cross_fitted.clone();
     misspelled["minimum_training_arms_count"] = json!(2);
     assert_eq!(
@@ -1140,7 +1156,11 @@ fn causal_summaries_match_analytic_effects() {
     for method in &methods[5..7] {
         assert_eq!(
             method["optional_fields"],
-            json!(["clusters", "minimum_training_arm_count"])
+            json!([
+                "clusters",
+                "minimum_training_arm_count",
+                "minimum_training_arm_clusters"
+            ])
         );
         assert_eq!(
             method["overlap_diagnostics"],

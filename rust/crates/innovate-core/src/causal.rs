@@ -70,11 +70,11 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                  "optional_fields":["estimand","clusters"],"estimands":["ate","att"],"default_estimand":"ate",
                  "uncertainty":"influence_standard_error"},
                 {"method":"cross_fitted_stratum_ate","adjustment":"cross_fitted_strata",
-                 "required_fields":["outcomes","treatment","strata","folds"],"optional_fields":["clusters","minimum_training_arm_count"],
+                 "required_fields":["outcomes","treatment","strata","folds"],"optional_fields":["clusters","minimum_training_arm_count","minimum_training_arm_clusters"],
                  "overlap_diagnostics":["min_training_arm_count","min_training_arm_clusters","min_propensity","max_propensity"],
                  "estimands":["ate"],"default_estimand":"ate"},
                 {"method":"cross_fitted_stratum_att","adjustment":"cross_fitted_strata",
-                 "required_fields":["outcomes","treatment","strata","folds"],"optional_fields":["clusters","minimum_training_arm_count"],
+                 "required_fields":["outcomes","treatment","strata","folds"],"optional_fields":["clusters","minimum_training_arm_count","minimum_training_arm_clusters"],
                  "overlap_diagnostics":["min_training_arm_count","min_training_arm_clusters","min_propensity","max_propensity"],
                  "estimands":["att"],"default_estimand":"att"}
             ]
@@ -2152,6 +2152,7 @@ fn cross_fitted_stratum_contrast(payload: &Value, estimand: &str) -> Result<Valu
                 | "folds"
                 | "clusters"
                 | "minimum_training_arm_count"
+                | "minimum_training_arm_clusters"
         )
     }) {
         return Err("cross-fitted contrast received an unsupported field");
@@ -2166,6 +2167,18 @@ fn cross_fitted_stratum_contrast(payload: &Value, estimand: &str) -> Result<Valu
         })
         .transpose()?
         .unwrap_or(1);
+    let required_arm_clusters = payload
+        .get("minimum_training_arm_clusters")
+        .map(|value| {
+            value
+                .as_u64()
+                .filter(|&count| count > 0)
+                .ok_or("minimum_training_arm_clusters must be a positive integer")
+        })
+        .transpose()?;
+    if required_arm_clusters.is_some() && payload.get("clusters").is_none() {
+        return Err("minimum_training_arm_clusters requires cluster labels");
+    }
     let outcomes = series(payload, "outcomes")?;
     let treatment = series(payload, "treatment")?;
     let strata: Vec<String> = serde_json::from_value(payload["strata"].clone())
@@ -2255,6 +2268,11 @@ fn cross_fitted_stratum_contrast(payload: &Value, estimand: &str) -> Result<Valu
     }
     if (min_training_arm_count as u64) < required_arm_count {
         return Err("a held-out stratum falls below minimum_training_arm_count");
+    }
+    if let (Some(observed), Some(required)) = (min_training_arm_clusters, required_arm_clusters)
+        && (observed as u64) < required
+    {
+        return Err("a held-out stratum falls below minimum_training_arm_clusters");
     }
     let mut request = json!({
         "outcomes":outcomes,"treatment":treatment,"propensities":propensities,

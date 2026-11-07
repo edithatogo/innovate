@@ -6354,3 +6354,9 @@ Hosted release readiness for this worktree revision remains open.
   Julia and installed R. Both cross-fitted estimands reported a
   minimum of two training rows but only one distinct cluster in
   the repeated-cluster fixture.
+
+- [x] Add optional minimum_training_arm_clusters to cross-fitted ATE
+  and ATT and advertise it in discovery. It requires cluster labels
+  and rejects the full estimate if a used training arm has fewer
+  distinct clusters than requested. The Rust boundary test passed
+  for missing labels, insufficient clusters and an accepted minimum.
