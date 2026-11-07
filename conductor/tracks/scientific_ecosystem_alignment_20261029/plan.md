@@ -6676,3 +6676,10 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Correct the network engine guide to describe supported checkpoint
   pause, resume and transfer. Distinguish the resumable checkpoint
   string from RNG metadata and scope transfer evidence to a common build.
+
+- [x] Qualify checkpoint replay when continuous hazard forcing overlaps
+  scheduled topology, capacity and service duration changes. The mixed
+  fixture changes edges and capacity at tick 4 and capacity and service
+  duration at tick 8. All 693 mixed-fixture replays matched the full
+  uninterrupted result in the Rust network test. The 693 unscheduled
+  cases also passed. Binding readback of the mixed fixture remains open.

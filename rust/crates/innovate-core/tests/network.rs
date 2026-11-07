@@ -1031,23 +1031,32 @@ fn network_checkpoint_continues_continuous_hazard_forcing() {
             .result
             .unwrap()
     };
-    for seed in (0..32).chain(std::iter::once(42)) {
-        payload["simulation_options"]["seed"] = json!(seed);
-        let expected = run(payload.clone());
-        assert!(expected["completions"].as_array().unwrap().len() > 1);
-        for (option, boundary) in std::iter::once(("pause_after_completions", 1))
-            .chain((0..20).map(|tick| ("pause_at_tick", tick)))
-        {
-            let mut request = payload.clone();
-            request["simulation_options"][option] = json!(boundary);
-            let paused = run(request.clone());
-            assert_eq!(paused["status"], "paused", "seed {seed}, {option}={boundary}");
-            request["simulation_options"]
-                .as_object_mut()
-                .unwrap()
-                .remove(option);
-            request["simulation_options"]["resume_checkpoint"] = paused["checkpoint"].clone();
-            assert_eq!(run(request), expected, "seed {seed}, {option}={boundary}");
+    for schedule in [
+        json!([]),
+        json!([
+            {"tick":4,"capacity":1,"edges":[[0,5],[2,3]]},
+            {"tick":8,"capacity":2,"service_ticks":2}
+        ]),
+    ] {
+        payload["simulation_options"]["schedule"] = schedule;
+        for seed in (0..32).chain(std::iter::once(42)) {
+            payload["simulation_options"]["seed"] = json!(seed);
+            let expected = run(payload.clone());
+            assert!(expected["completions"].as_array().unwrap().len() > 1);
+            for (option, boundary) in std::iter::once(("pause_after_completions", 1))
+                .chain((0..20).map(|tick| ("pause_at_tick", tick)))
+            {
+                let mut request = payload.clone();
+                request["simulation_options"][option] = json!(boundary);
+                let paused = run(request.clone());
+                assert_eq!(paused["status"], "paused", "seed {seed}, {option}={boundary}");
+                request["simulation_options"]
+                    .as_object_mut()
+                    .unwrap()
+                    .remove(option);
+                request["simulation_options"]["resume_checkpoint"] = paused["checkpoint"].clone();
+                assert_eq!(run(request), expected, "seed {seed}, {option}={boundary}");
+            }
         }
     }
 }
