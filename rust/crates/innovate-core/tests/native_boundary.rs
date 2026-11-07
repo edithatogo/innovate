@@ -405,26 +405,37 @@ fn sarima_near_unit_ar1_matches_exact_stationary_likelihood() {
 }
 
 #[test]
-fn sarima_mixed_ar1_ma1_matches_independent_likelihood() {
-    let reference: serde_json::Value =
-        serde_json::from_str(include_str!("fixtures/sarima_mixed_ar1_ma1.json")).unwrap();
-    let request = json!({"schema_version":"2.0","operation":"preprocess_series",
-        "payload":{"method":"sarima_fit","order":[1,0,1],"seasonal_order":[0,0,0,0],
+fn sarima_mixed_fits_match_independent_likelihood() {
+    for (fixture, seasonal_order) in [
+        (
+            include_str!("fixtures/sarima_mixed_ar1_ma1.json"),
+            [0, 0, 0, 0],
+        ),
+        (
+            include_str!("fixtures/sarima_mixed_seasonal.json"),
+            [1, 0, 0, 4],
+        ),
+    ] {
+        let reference: serde_json::Value = serde_json::from_str(fixture).unwrap();
+        let request = json!({"schema_version":"2.0","operation":"preprocess_series",
+        "payload":{"method":"sarima_fit","order":[1,0,1],"seasonal_order":seasonal_order,
             "values":reference["values"]}});
-    let response: serde_json::Value =
-        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
-    let fit = &response["result"];
-    let actual = fit["coefficients"].as_array().unwrap();
-    let expected = reference["coefficients"].as_array().unwrap();
-    assert_eq!(actual.len(), expected.len());
-    for (actual, expected) in actual.iter().zip(expected) {
-        assert!((actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 2e-5);
-    }
-    assert!(
-        (fit["log_likelihood"].as_f64().unwrap() - reference["log_likelihood"].as_f64().unwrap())
+        let response: serde_json::Value =
+            serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+        let fit = &response["result"];
+        let actual = fit["coefficients"].as_array().unwrap();
+        let expected = reference["coefficients"].as_array().unwrap();
+        assert_eq!(actual.len(), expected.len());
+        for (actual, expected) in actual.iter().zip(expected) {
+            assert!((actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 2e-5);
+        }
+        assert!(
+            (fit["log_likelihood"].as_f64().unwrap()
+                - reference["log_likelihood"].as_f64().unwrap())
             .abs()
-            < 2e-7
-    );
+                < 2e-7
+        );
+    }
 }
 
 #[test]

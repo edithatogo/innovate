@@ -2621,3 +2621,9 @@ the other competition models and installed binding checks remain open.
   estimated coefficients within 8.16e-6 and likelihood within 9.26e-8.
   Six focused Rust SARIMA tests and Clippy passed. Broader mixed
   seasonal and near-cancellation cases remain open.
+
+- [x] Qualify stationary SARIMA(1,0,1)(1,0,0)[4] against R exact ML
+  on 360 observations. Seed 482 generates a series with AR 0.6, MA
+  -0.45 and seasonal AR 0.4. Rust matches estimated coefficients
+  within 1.41e-5 and log likelihood within 8.67e-10. Six focused Rust
+  SARIMA tests and Clippy passed. Near-cancellation remains open.
