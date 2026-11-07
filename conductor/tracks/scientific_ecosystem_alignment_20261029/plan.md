@@ -4406,3 +4406,6 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Flag self-loops in network edge diagnostics as incompatible
   with Kairos network simulation. Generic datasets retain their
   self-loop data. The focused Rust edge regression passed.
+- [x] Verify ingestion retains self-loop edges and regenerates their
+  Kairos compatibility warning when re-ingesting the checksummed
+  artifact. The focused Rust edge test passed.

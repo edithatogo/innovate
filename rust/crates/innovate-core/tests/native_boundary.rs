@@ -976,6 +976,25 @@ fn edge_diagnostics_detect_duplicate_ordered_pairs_and_negative_weights() {
         response["result"]["warnings"],
         json!(["self_loops:kairos_network"])
     );
+    let mut dataset = reciprocal["payload"].clone();
+    dataset["provenance"] =
+        json!({"source":"survey","license":"CC-BY-4.0","extraction_time":"2026-11-07T00:00:00Z"});
+    let ingest = |payload| {
+        let request =
+            json!({"schema_version":"2.0","operation":"ingest_dataset","payload":payload});
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    let response = ingest(json!({"dataset":dataset}));
+    let artifact = &response["result"];
+    assert_eq!(
+        artifact["validation"]["warnings"],
+        json!(["self_loops:kairos_network"])
+    );
+    assert_eq!(artifact["dataset"]["target"], dataset["target"]);
+    assert_eq!(ingest(json!({"artifact":artifact}))["result"], *artifact);
 }
 
 #[test]
