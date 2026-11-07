@@ -3650,3 +3650,7 @@ Hosted release readiness for this worktree revision remains open.
   wheel, Julia and freshly installed R. All three returned p-values 1
   and 0.5 for the same two Logistic comparisons. Python also verified
   the four assignments and extreme counts of four and two.
+- [x] Document the exact sign-flip comparison request, output,
+  two-to-sixteen-pair limit and inference assumptions in the native
+  migration guide. The example uses the two-pair case already checked
+  in all three bindings.

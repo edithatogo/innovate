@@ -1173,3 +1173,37 @@ Within a Slurm allocation, run the native benchmark runner with
 `SLURM_CPUS_PER_TASK` as the worker budget, capped at the native limit.
 This option consumes an existing allocation. The runner remains a
 single-process workload with local CPU workers.
+
+## Exact sign-flip inference for paired scenarios
+
+Add this comparison to the `comparisons` array in an
+`execute_scenario_grid` request. Each ID refers to a scenario in the
+same grid.
+
+```json
+{
+  "pairs": [
+    {"baseline": "control-1", "alternative": "policy-1"},
+    {"baseline": "control-2", "alternative": "policy-2"}
+  ],
+  "interval_mass": 0.95,
+  "exact_sign_flip": true
+}
+```
+
+Use two to sixteen pairs, with each scenario ID appearing once in the
+comparison. The scalar paths must share a time grid and use comparable
+units. The test uses alternative minus baseline at the final sample.
+
+The comparison's `result.sign_flip` reports the number of assignments
+enumerated, the number with an absolute sum at least as large as the
+observed absolute sum, and their ratio as the two-sided `p_value`.
+For final effects of 50 and 25, two of the four assignments are at least
+as extreme, so the p-value is 0.5. The `interval_mass` still controls
+the descriptive empirical interval.
+
+Use this test when pairs are independent and the sign of each paired
+difference is exchangeable under the null. With paired simulation
+seeds, `require_distinct_pair_seeds` can check for matching effective
+seeds within pairs and distinct seeds across pairs. The study design
+must still justify sign exchangeability.
