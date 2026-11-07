@@ -921,6 +921,8 @@ fn network_checkpoint_preserves_pending_service_queue_and_schedule() {
         .remove("pause_after_completions");
     payload["simulation_options"]["resume_checkpoint"] = paused["checkpoint"].clone();
     assert_eq!(run(payload.clone()).unwrap().result.unwrap(), expected);
+    payload["parameters"]["p"] = json!(1_000_000_000_000_u64);
+    assert_eq!(run(payload.clone()).unwrap().result.unwrap(), expected);
     payload["simulation_options"]["seed"] = json!(43);
     assert!(run(payload).is_err());
 }

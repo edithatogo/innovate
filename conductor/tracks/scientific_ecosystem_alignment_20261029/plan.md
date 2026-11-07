@@ -5091,3 +5091,10 @@ Hosted release readiness for this worktree revision remains open.
   exactly, including the queue, service and policy traces. The Rust
   integration test also passed with the shared fixture. This verifies
   round-trips within each binding.
+
+- [x] Exchange a Python-generated network checkpoint with Julia and
+  installed R. R initially rejected the configuration because an exact
+  integral float was serialized as an integer. Normalize exact integral
+  JSON floats within the binary64 safe-integer range for fingerprinting.
+  Both consumers then reproduced their uninterrupted result, and the
+  focused Rust regression passed with the alternate numeric encoding.

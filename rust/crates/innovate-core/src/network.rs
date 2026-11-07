@@ -13,6 +13,22 @@ use kairo_ecs_types::{EntityId, EventKind, SimTime, StepOutcome};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
+fn normalize_checkpoint_numbers(value: &mut Value) {
+    match value {
+        Value::Array(values) => values.iter_mut().for_each(normalize_checkpoint_numbers),
+        Value::Object(values) => values.values_mut().for_each(normalize_checkpoint_numbers),
+        Value::Number(number) if number.is_f64() => {
+            if let Some(real) = number.as_f64()
+                && real.fract() == 0.
+                && real.abs() <= (1_u64 << 53) as f64
+            {
+                *number = (real as i64).into();
+            }
+        }
+        _ => {}
+    }
+}
+
 #[derive(Deserialize, Serialize)]
 struct ServiceStart {
     agent: usize,
@@ -392,12 +408,13 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         .transpose()?;
     let resume = options_map.remove("resume_checkpoint");
     let configuration = (pause.is_some() || resume.is_some()).then(|| {
-        let config = json!([
+        let mut config = json!([
             crate::simulation::REV,
             options,
             payload["inputs"],
             payload["state"]["parameters"]
         ]);
+        normalize_checkpoint_numbers(&mut config);
         Sha256::digest(config.to_string())
             .iter()
             .map(|byte| format!("{byte:02x}"))
