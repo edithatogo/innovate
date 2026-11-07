@@ -1310,6 +1310,11 @@ fn scenario_discovery_lists_and_resolves_native_families() {
         rows[2]["specification_translation"]["model_key"],
         "fixed_pool_replacement"
     );
+    assert_eq!(
+        rows[4]["resource_comparison"]["option"],
+        "compare_resources"
+    );
+    assert!(rows[0].get("resource_comparison").is_none());
     let keys: Vec<_> = rows
         .iter()
         .map(|row| row["key"].as_str().unwrap())

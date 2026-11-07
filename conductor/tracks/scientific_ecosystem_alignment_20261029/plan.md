@@ -4239,3 +4239,6 @@ Hosted release readiness for this worktree revision remains open.
   suites. Julia reads the shared Rust fixture. R ships an identical
   fixture under its package tests. Both focused checks preserved the
   negative capacity difference and rejected the incompatible pair.
+- [x] Expose Kairos resource comparison discovery on the network
+  scenario family. Discovery identifies the option, engine, direction
+  and alignment requirements. The focused Rust registry test passed.

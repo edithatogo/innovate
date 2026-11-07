@@ -1152,6 +1152,11 @@ pub(crate) fn discover(request: &Value) -> Value {
                     "option":"apply_specifications","model_key":"bass",
                     "engines":["kairos_network"],"network_types":["custom","ring","random_fixed_edges","scale_free"]
                 });
+                capability["resource_comparison"] = json!({
+                    "option":"compare_resources","engine":"kairos_network",
+                    "difference":"alternative_minus_baseline",
+                    "requires":["shared_observation_grid","shared_tick_resolution","shared_horizon"]
+                });
             }
             if family == "competition" {
                 capability["specification_translation"] = json!({
