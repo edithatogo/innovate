@@ -99,28 +99,30 @@ fn complementary_forcing_fits_independent_reference_and_forecasts() {
     let mut start = fixture["parameters"].clone();
     start["k1"] = json!(0.29);
     start["beta_c2_price"] = json!(-0.007);
-    let fit = binding.fit_model("complementary_goods",json!({
-        "inputs":{"time":fixture["time"],"covariates":fixture["covariates"],"observed":fixture["rows"]},
-        "constructor_kwargs":options,"fit_options":{"initial_parameters":start,"max_iterations":150}
-    })).unwrap().result.unwrap();
-    assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
-    assert!(fit["diagnostics"]["metrics"]["RSS"].as_f64().unwrap() < 1e-10);
-    let forecast = binding
-        .predict_model(
-            "complementary_goods",
-            json!({
-                "inputs":{"time":fixture["forecast_time"]},"state":fit["state"]
-            }),
-        )
-        .unwrap()
-        .result
-        .unwrap();
-    for (actual, expected) in forecast["rows"][0]
-        .as_array()
-        .unwrap()
-        .iter()
-        .zip(fixture["forecast_rows"][0].as_array().unwrap())
-    {
-        assert!((actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-5);
+    for fit_options in [json!({"initial_parameters":start,"max_iterations":150}), json!({"max_iterations":150})] {
+        let fit = binding.fit_model("complementary_goods",json!({
+            "inputs":{"time":fixture["time"],"covariates":fixture["covariates"],"observed":fixture["rows"]},
+            "constructor_kwargs":options,"fit_options":fit_options
+        })).unwrap().result.unwrap();
+        assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
+        assert!(fit["diagnostics"]["metrics"]["RSS"].as_f64().unwrap() < 1e-10);
+        let forecast = binding
+            .predict_model(
+                "complementary_goods",
+                json!({
+                    "inputs":{"time":fixture["forecast_time"]},"state":fit["state"]
+                }),
+            )
+            .unwrap()
+            .result
+            .unwrap();
+        for (actual, expected) in forecast["rows"][0]
+            .as_array()
+            .unwrap()
+            .iter()
+            .zip(fixture["forecast_rows"][0].as_array().unwrap())
+        {
+            assert!((actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-5);
+        }
     }
 }

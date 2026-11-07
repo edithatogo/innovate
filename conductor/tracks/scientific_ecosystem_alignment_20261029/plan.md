@@ -976,3 +976,12 @@ covariate slopes when no explicit start is supplied. The independent
 interacting Lotka–Volterra case converges below RSS 1e-10. All 14 competition
 tests and focused Clippy passed. Independent automatic-start validation for
 the other competition models and installed binding checks remain open.
+
+- [x] Verify automatic complementary-goods fitting against the independent
+  forced trajectory and held-out forecast. The explicit-start case continues
+  to run with the same oracles. All four complementary tests and Clippy passed.
+- [ ] Improve automatic multi-product and lock-in starts or optimization.
+  Both independent forced fixtures returned non-converged automatic fits
+  at their existing 200-iteration budget. Alternative base seeds were
+  investigated and discarded. The explicit-start conformance checks remain
+  in place, and automatic-start qualification remains open for these models.
