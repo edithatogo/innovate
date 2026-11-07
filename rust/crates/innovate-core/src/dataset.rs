@@ -321,13 +321,17 @@ fn validate_edges(payload: &Value) -> Result<Value, &'static str> {
         .iter()
         .chain(target)
         .all(|v| v.as_str().is_some_and(|s| !s.trim().is_empty()));
+    let directed = match payload.get("directed") {
+        Some(value) => value.as_bool().ok_or("directed must be a boolean")?,
+        None => true, // Preserve ordered keys for historical datasets without this field.
+    };
     let mut seen = std::collections::HashSet::new();
     let unique = aligned
         && labels
-        && source
-            .iter()
-            .zip(target)
-            .all(|(a, b)| seen.insert((a.as_str(), b.as_str())));
+        && source.iter().zip(target).all(|(a, b)| {
+            let (a, b) = (a.as_str(), b.as_str());
+            seen.insert(if directed || a <= b { (a, b) } else { (b, a) })
+        });
     let unit = payload.get("unit").map_or(Some("weight"), Value::as_str);
     let checks = [
         (
@@ -353,7 +357,11 @@ fn validate_edges(payload: &Value) -> Result<Value, &'static str> {
         (
             "duplicate_keys:source_target",
             unique,
-            "ordered source and target pairs must be unique",
+            if directed {
+                "ordered source and target pairs must be unique"
+            } else {
+                "undirected source and target pairs must be unique"
+            },
         ),
         (
             "unit_compatibility:network_edges",

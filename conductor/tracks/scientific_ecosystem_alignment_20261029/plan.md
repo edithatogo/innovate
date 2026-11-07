@@ -4392,3 +4392,6 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Extend the historical checksum oracle with signed and unsigned
   integer extremes and nested Unicode keys spanning the BMP and
   supplementary planes. The packaged Python regression passed.
+- [x] Validate reversed duplicate edges when directed is explicitly false.
+  Directed datasets retain reciprocal edges, and legacy datasets without
+  the flag retain ordered keys. The focused Rust edge test passed.

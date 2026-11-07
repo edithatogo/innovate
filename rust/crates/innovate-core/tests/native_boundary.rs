@@ -958,6 +958,16 @@ fn edge_diagnostics_detect_duplicate_ordered_pairs_and_negative_weights() {
         response["result"]["failed"],
         innovate_core::json!(["weight_bounds", "duplicate_keys:source_target"])
     );
+    let mut reciprocal = request;
+    reciprocal["payload"]["source"] = json!(["a", "b"]);
+    reciprocal["payload"]["target"] = json!(["b", "a"]);
+    reciprocal["payload"]["weight"] = json!([1, 1]);
+    for directed in [true, false] {
+        reciprocal["payload"]["directed"] = json!(directed);
+        let response: serde_json::Value =
+            serde_json::from_str(&innovate_core::execute_json(&reciprocal.to_string())).unwrap();
+        assert_eq!(response["result"]["ok"], directed);
+    }
 }
 
 #[test]
