@@ -6263,3 +6263,8 @@ Hosted release readiness for this worktree revision remains open.
   the held-out propensity range. The analytic Rust boundary fixture
   verified a minimum arm count of one and a propensity range of
   [0.5, 0.5]. Weak-overlap interval qualification remains open.
+
+- [x] Verify the cross-fitted overlap diagnostics through the rebuilt
+  Python wheel and the Julia and installed R bindings. Both ATE and
+  ATT reported one observation in the smallest training arm and a
+  held-out propensity range of [1/3, 2/3] for the asymmetric fixture.
