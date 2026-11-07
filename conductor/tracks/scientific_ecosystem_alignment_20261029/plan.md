@@ -643,3 +643,12 @@ Source: 44e56a76. Local qualification: 120 Rust tests, 38 Python tests,
 Source: f78f1217. Eight focused Rust network tests, 39 installed Python tests,
 177 Julia assertions and R conformance passed. Scheduled graph/resource
 changes and remaining historical forcing are still open.
+
+## Scheduled Kairos contacts and service duration
+
+- [x] Implement validated graph replacements and service duration overrides.
+- [x] Verify event ordering and the installed Python, Julia and R consumers.
+
+Source: 55c6331c. Nine focused Rust network tests, 39 Python
+tests, 177 Julia assertions and R conformance passed. Capacity changes, priority,
+abandonment, forcing interoperability and historical model extensions remain open.
