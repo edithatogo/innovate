@@ -6550,3 +6550,11 @@ Hosted release readiness for this worktree revision remains open.
   absolute coefficient difference. This isolates a termination
   discrepancy on this fixture. Bootstrap acceptance and calibration
   remain open.
+
+- [x] Test whether subtracting rounded residual sums causes trial 39's
+  damping limit. Replacing the objective comparison with the summed
+  factored differences of squared residuals passed all seven Rust
+  numerics unit tests. A freshly rebuilt Python wheel still reproduced
+  the same damping limit and reference gaps on trial 39. The
+  experimental comparison was removed. A change to termination needs
+  evidence beyond avoiding cancellation in the total loss.
