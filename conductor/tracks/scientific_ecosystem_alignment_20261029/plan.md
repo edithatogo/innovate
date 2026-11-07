@@ -2008,3 +2008,11 @@ the other competition models and installed binding checks remain open.
   a common basis. Python 3.15, Julia and installed R all rejected a
   year-versus-month comparison while preserving both execution results.
   All 37 Rust boundary tests and focused Clippy passed.
+
+- [x] Add an opt-in seeded percentile bootstrap for the paired mean
+  effect (38eafde3). Resampling draws entire pair differences with
+  replacement and assumes independent pairs. The grid retains the
+  empirical interval separately and bounds bootstrap workload.
+  Python 3.15, Julia and installed R reproduced [12.5, 50] with
+  seed 42 and 1,000 resamples. All 47 targeted Rust tests and focused
+  Clippy passed. Broader coverage and stochastic designs remain open.
