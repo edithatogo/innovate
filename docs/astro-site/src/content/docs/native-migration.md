@@ -95,10 +95,12 @@ equilibrium helpers and complete original feature parity remain open.
 ## Calendar aggregation
 
 Use `aggregate_dates` with aligned `dates` and `values` arrays and a
-`frequency` of `D`, `W`, `M`, `ME`, or `MS`. Daily and monthly
+`frequency` of `D`, `W`, `M`, `ME`, `MS`, `QS`, `QE`, `YS`, or `YE`. Daily, monthly, quarterly and annual
 aggregation fills missing periods between the first and last observed
 buckets with zero. Use `MS` for month-start labels or `M` and `ME`
-for month-end labels. Weekly aggregation uses seven-day windows
+for month-end labels. Use `QS` and `QE` for calendar-quarter start
+and end labels, and `YS` and `YE` for calendar-year start and end
+labels. Weekly aggregation uses seven-day windows
 anchored to the earliest observation and returns occupied buckets.
 
 Use ISO calendar dates, naive timestamps, or offset timestamps

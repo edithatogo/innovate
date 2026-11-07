@@ -6930,3 +6930,8 @@ Hosted release readiness for this worktree revision remains open.
   (QS, QE, YS and YE), with zero-filled gaps. The focused Rust tests
   passed for quarter labels across a year boundary and annual labels.
   Binding readback remains open.
+
+- [x] Verify QS, QE, YS and YE through the rebuilt Python 3.15.2 wheel,
+  Julia and installed R using native source 66336cb5. All four cases
+  matched expected labels and sums, including zero-filled quarters.
+  Updated the native guide with the supported frequencies.
