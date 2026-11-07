@@ -3945,3 +3945,7 @@ Hosted release readiness for this worktree revision remains open.
   analytic share curve. The Rust fit converged with local rank two
   and predicted all nine held-out shares within one percentage point.
   All eight fit-quality tests passed.
+- [x] Verify the perturbed Fisher–Pry fit and saved-state holdout in
+  Python 3.15.2, Julia and installed R. All three converged with local
+  rank two and forecast all nine shares within one percentage point.
+  Reused builds from 2a5d2c0e with identical runtime source.
