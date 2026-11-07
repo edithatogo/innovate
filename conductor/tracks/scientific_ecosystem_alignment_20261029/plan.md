@@ -2817,3 +2817,8 @@ the other competition models and installed binding checks remain open.
   original ordered grid. Return baseline parameters, converged parameter
   draws and failed-draw counts. Focused Rust replay and Clippy passed.
   Interval summaries, broader model coverage and binding checks remain open.
+
+- [x] Summarize scalar bootstrap draws with linear percentile intervals.
+  Default to 95% mass, accept an explicit mass in (0,1), and return null
+  for parameters with fewer than two converged draws. Reuse the scenario
+  quantile implementation. Focused Rust and Clippy passed.

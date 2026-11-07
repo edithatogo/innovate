@@ -1,3 +1,4 @@
+use crate::numerics::linear_quantile;
 use crate::{KERNEL_SCHEMA_VERSION, KernelBinding, batch_workers, run_ordered_chunks};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
@@ -927,12 +928,6 @@ fn compare_ensemble(
     }
     add_time_basis(&mut result, basis);
     Ok(result)
-}
-
-fn linear_quantile(sorted: &[f64], probability: f64) -> f64 {
-    let rank = probability * (sorted.len() - 1) as f64;
-    sorted[rank.floor() as usize] * (1. - rank.fract())
-        + sorted[rank.ceil() as usize] * rank.fract()
 }
 
 fn bootstrap_mean(
