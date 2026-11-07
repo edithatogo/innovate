@@ -1450,3 +1450,37 @@ fn native_explainability_restores_four_descriptive_summaries() {
         "invalid_request"
     );
 }
+
+#[test]
+fn combined_reports_preserve_order_and_require_explicit_determinism() {
+    let run = |operation, payload| -> serde_json::Value {
+        let request = json!({"schema_version":"2.0","operation":operation,"payload":payload});
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let threshold = run(
+        "threshold_sensitivity",
+        json!({"outcome_values":[1,2],
+        "inputs":[{"name":"adoption","metric":"level","thresholds":[2]}]}),
+    );
+    let policy = run(
+        "summarize_explainability",
+        json!({"method":"policy_components",
+        "components":{"access":2}}),
+    );
+    let blocks = json!([threshold["result"], policy["result"]]);
+    let result = run("combine_report_blocks", json!({"blocks":blocks}));
+    assert_eq!(
+        result["result"],
+        json!({"blocks":blocks,"deterministic":true})
+    );
+    let mixed = run(
+        "combine_report_blocks",
+        json!({"blocks":[blocks[0],{"kind":"external"}]}),
+    );
+    assert_eq!(mixed["result"]["deterministic"], false);
+    let invalid = run(
+        "combine_report_blocks",
+        json!({"blocks":[{"deterministic":"true"}]}),
+    );
+    assert_eq!(invalid["error"]["code"], "invalid_request");
+}

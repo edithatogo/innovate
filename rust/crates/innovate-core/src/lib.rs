@@ -53,6 +53,7 @@ pub fn execute_json(input: &str) -> String {
                 | "assumption_sensitivity"
                 | "intervention_timing"
                 | "summarize_explainability"
+                | "combine_report_blocks"
                 | "validate_provenance"
                 | "dataset_checksum"
                 | "validate_dataset",
@@ -165,6 +166,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             return Err("analysis request requires schema 2.0");
         }
         let payload = &value["payload"];
+        if value["operation"] == "combine_report_blocks" {
+            return explainability::combine_blocks(payload);
+        }
         if value["operation"] == "summarize_explainability" {
             return explainability::summarize(payload);
         }

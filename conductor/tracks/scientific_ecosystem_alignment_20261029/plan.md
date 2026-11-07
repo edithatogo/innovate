@@ -2253,3 +2253,9 @@ the other competition models and installed binding checks remain open.
   indices and policy decomposition. Equal-magnitude policy components
   resolve by name for deterministic JSON-object transport. All 48 boundary
   tests and Clippy passed. Binding and combined-report qualification remain open.
+
+- [x] Restore ordered composition of sensitivity and explainability
+  blocks via combine_report_blocks. Preserve nested values and compute
+  the combined determinism flag. Missing flags count as false and
+  nonboolean flags are rejected. All 49 Rust boundary tests and focused
+  Clippy passed. Installed binding qualification remains open.

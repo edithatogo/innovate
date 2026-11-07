@@ -125,3 +125,22 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
         }
     }
 }
+
+/// Preserve report block order and propagate their declared determinism.
+pub(crate) fn combine_blocks(payload: &Value) -> Result<Value, &'static str> {
+    let blocks = payload["blocks"]
+        .as_array()
+        .ok_or("report blocks must be an array")?;
+    let mut deterministic = true;
+    for block in blocks {
+        let block = block
+            .as_object()
+            .ok_or("each report block must be an object")?;
+        match block.get("deterministic") {
+            Some(Value::Bool(value)) => deterministic &= value,
+            None => deterministic = false,
+            Some(_) => return Err("block deterministic flag must be a boolean"),
+        }
+    }
+    Ok(json!({"blocks":blocks,"deterministic":deterministic}))
+}
