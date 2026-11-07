@@ -525,6 +525,15 @@ fn causal_summaries_match_analytic_effects() {
     let forecast = &forecast["result"];
     assert!(forecast["percentage_difference"][0].is_null());
     assert!((forecast["percentage_difference"][1].as_f64().unwrap() - 100.).abs() < 1e-10);
+    let mut saved = json!({"method":"counterfactual_forecast","forecast_model":"logistic",
+        "baseline":{"inputs":{"time":[2.]},"state":{"model_key":"logistic",
+            "parameters":{"L":100.,"k":0.5,"x0":2.},"constructor_kwargs":{},"predict_kwargs":{}}},
+        "parameter_overrides":{"L":120.}});
+    let state_forecast = run(saved.clone());
+    assert_eq!(state_forecast["result"]["baseline"], json!([50.]));
+    assert_eq!(state_forecast["result"]["counterfactual"], json!([60.]));
+    saved["parameter_overrides"] = json!({"unknown":120.});
+    assert_eq!(run(saved)["error"]["code"], "invalid_request");
     let scenario = run(
         json!({"method":"counterfactual_forecast","forecast_model":"logistic",
         "baseline":{"inputs":{"time":[2.],"covariates":{"price":[0.]}},

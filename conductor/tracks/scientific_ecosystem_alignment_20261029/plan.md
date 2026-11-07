@@ -2685,3 +2685,9 @@ the other competition models and installed binding checks remain open.
   the 200-iteration trajectory budget. Held-out errors were below 1e-8
   for multi-product and 1e-9 for lock-in in both bindings, consistent
   with Python 3.15.2. This covers the two fixed-event reference cases.
+
+- [x] Accept fitted model state for counterfactual forecasts. Parameter
+  overrides modify a copy of the saved parameters, preserving the
+  baseline and state options. The native Logistic fixture returns
+  50 and 60 and rejects an unknown override. Focused Rust and Clippy
+  passed. Binding qualification remains open.

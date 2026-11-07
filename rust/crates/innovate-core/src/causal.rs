@@ -358,19 +358,21 @@ fn counterfactual_forecast(payload: &Value) -> Result<Value, &'static str> {
     let baseline = payload["baseline"]
         .as_object()
         .ok_or("baseline must be a prediction request payload")?;
-    let parameters = baseline
-        .get("parameters")
-        .and_then(Value::as_object)
-        .ok_or("baseline requires explicit model parameters")?;
     let mut alternative = baseline.clone();
     if let Some(overrides) = payload.get("parameter_overrides") {
-        let mut changed = parameters.clone();
+        let parameters = if let Some(state) = alternative.get_mut("state") {
+            state.get_mut("parameters")
+        } else {
+            alternative.get_mut("parameters")
+        };
+        let parameters = parameters
+            .and_then(Value::as_object_mut)
+            .ok_or("baseline requires model parameters or fitted state")?;
         apply_overrides(
-            &mut changed,
+            parameters,
             overrides,
             "counterfactual override names an unknown parameter",
         )?;
-        alternative.insert("parameters".into(), Value::Object(changed));
     }
     if let Some(overrides) = payload.get("covariate_overrides") {
         let inputs = alternative
