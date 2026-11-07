@@ -488,6 +488,21 @@ fn causal_summaries_match_analytic_effects() {
     let reversed = run(json!({"method":"uncertainty_interval","estimand":"ATE",
         "point_estimate":0,"ci_lower":1,"ci_upper":-1}));
     assert_eq!(reversed["error"]["code"], "invalid_request");
+    let card = run(
+        json!({"method":"model_card","name":"Adoption","description":"Policy comparison",
+        "estimand":"ATT","assumptions":["Parallel trends"],"date_created":"2026-11-07"}),
+    );
+    assert_eq!(card["result"]["version"], "1.0");
+    assert_eq!(card["result"]["date_created"], "2026-11-07");
+    assert_eq!(card["result"]["assumptions"], json!(["Parallel trends"]));
+    let assumption = run(
+        json!({"method":"assumption_document","assumption_name":"Parallel trends",
+        "mathematical_statement":"Equal expected changes","intuitive_explanation":"Common trend"}),
+    );
+    assert!(assumption["result"]["assumption"]["how_checked"].is_null());
+    let markdown = assumption["result"]["markdown"].as_str().unwrap();
+    assert!(markdown.contains("### Parallel trends\n\n"));
+    assert!(!markdown.contains("How checked"));
     let evidence = run(json!({"method":"release_evidence","claim":"Effect changed",
         "supporting_evidence":["record"],"caveats":["limitation"]}));
     assert_eq!(evidence["result"]["checks_passed"], false);

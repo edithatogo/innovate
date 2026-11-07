@@ -1,5 +1,6 @@
 //! Descriptive summaries of supplied outcomes and effect estimates.
 
+use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 
 fn series(payload: &Value, key: &str) -> Result<Vec<f64>, &'static str> {
@@ -232,6 +233,52 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
             )
         }
         Some("counterfactual_forecast") => counterfactual_forecast(payload),
+        Some("model_card") => {
+            let card: ModelCard = serde_json::from_value(payload.clone())
+                .map_err(|_| "invalid causal model card fields")?;
+            if [&card.name, &card.description, &card.estimand, &card.version]
+                .iter()
+                .any(|v| v.trim().is_empty())
+            {
+                return Err("model card name, description, estimand and version must be nonempty");
+            }
+            Ok(json!(card))
+        }
+        Some("assumption_document") => {
+            let assumption: AssumptionDocument = serde_json::from_value(payload.clone())
+                .map_err(|_| "invalid causal assumption fields")?;
+            if [
+                &assumption.assumption_name,
+                &assumption.mathematical_statement,
+                &assumption.intuitive_explanation,
+            ]
+            .iter()
+            .any(|v| v.trim().is_empty())
+            {
+                return Err("assumption name, statement and explanation must be nonempty");
+            }
+            let mut markdown = format!("### {}\n\n", assumption.assumption_name);
+            for (label, value) in [
+                (
+                    "Mathematical statement",
+                    Some(assumption.mathematical_statement.as_str()),
+                ),
+                (
+                    "Intuitive explanation",
+                    Some(assumption.intuitive_explanation.as_str()),
+                ),
+                ("How checked", assumption.how_checked.as_deref()),
+                (
+                    "Sensitivity to violation",
+                    assumption.sensitivity_to_violation.as_deref(),
+                ),
+            ] {
+                if let Some(value) = value.filter(|v| !v.trim().is_empty()) {
+                    markdown.push_str(&format!("**{label}**\n\n{value}\n\n"));
+                }
+            }
+            Ok(json!({"assumption":assumption,"markdown":markdown}))
+        }
         Some("release_evidence") => release_evidence(payload),
         Some("covariate_balance") => covariate_balance(payload),
         _ => Err("unknown causal summary method"),
@@ -456,4 +503,33 @@ fn release_evidence(payload: &Value) -> Result<Value, &'static str> {
         "sensitivity_analysis_conducted":sensitivity,"evidence_level":level,
         "checks_passed":issues.is_empty(),"issues":issues}),
     )
+}
+
+#[derive(Deserialize, Serialize)]
+struct ModelCard {
+    name: String,
+    description: String,
+    estimand: String,
+    #[serde(default)]
+    assumptions: Vec<String>,
+    #[serde(default)]
+    limitations: Vec<String>,
+    #[serde(default)]
+    data_sources: Vec<String>,
+    date_created: Option<String>,
+    #[serde(default = "model_card_version")]
+    version: String,
+}
+
+fn model_card_version() -> String {
+    "1.0".into()
+}
+
+#[derive(Deserialize, Serialize)]
+struct AssumptionDocument {
+    assumption_name: String,
+    mathematical_statement: String,
+    intuitive_explanation: String,
+    how_checked: Option<String>,
+    sensitivity_to_violation: Option<String>,
 }

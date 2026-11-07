@@ -1702,4 +1702,8 @@ the other competition models and installed binding checks remain open.
   and installed R. All three report one issue for the medium-evidence
   fixture without sensitivity analysis and pass when it is recorded.
   R also exercised singleton evidence and caveat arrays.
-- [ ] Restore the remaining historical model-card reporting fields.
+- [x] Restore causal model cards and assumption records with structured
+  JSON and Markdown assumption output. The card preserves a supplied
+  creation date and uses null when omitted for reproducible output.
+  All 24 Rust boundary tests and focused Clippy passed.
+- [ ] Verify model-card and assumption requests through the three bindings.
