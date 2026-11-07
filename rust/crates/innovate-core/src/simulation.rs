@@ -11,6 +11,7 @@ use kairo_ecs_rng::{
 };
 use kairo_ecs_types::{EntityId, EventKind, ScheduleRequest, SimTime, StepOutcome};
 use serde_json::{Value, json};
+use sha2::{Digest, Sha256};
 pub(crate) const REV: &str = "d56863505d938feb069af88a737eb7668113d14b";
 struct AdoptionClock {
     rng: DeterministicStream,
@@ -22,7 +23,7 @@ struct AdoptionClock {
 #[serde(deny_unknown_fields)]
 struct DesCheckpoint {
     version: u32,
-    configuration: Value,
+    configuration: String,
     events: Vec<u64>,
     rng: RngCheckpoint,
 }
@@ -174,8 +175,9 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         return Err(invalid("event-boundary checkpointing requires kairos_des"));
     }
     let checkpoint_configuration = (pause.is_some() || resume.is_some()).then(|| {
-        json!({"kairos_revision":REV,"seed":seed,"population":population,"initial":initial,
-            "ticks_per_unit":ticks,"forcing":forcing,"market_size":m,"horizon":horizon})
+        let configuration = json!({"kairos_revision":REV,"seed":seed,"population":population,"initial":initial,
+            "ticks_per_unit":ticks,"forcing":forcing,"market_size":m,"horizon":horizon});
+        Sha256::digest(configuration.to_string()).iter().map(|byte| format!("{byte:02x}")).collect()
     });
     let mut scheduler = Scheduler::new();
     let mut abm = (engine == "kairos_abm").then(|| ABMContext::new(seed));

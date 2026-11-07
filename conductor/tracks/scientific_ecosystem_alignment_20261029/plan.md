@@ -5020,3 +5020,10 @@ Hosted release readiness for this worktree revision remains open.
   binds effective forcing, population, tick scale, horizon and Kairos
   revision. Cross-binding qualification, ABM and network resume remain
   open.
+
+- [x] Round-trip the Bass DES checkpoint through Python 3.15.2,
+  Julia and installed R. R's JSON round-trip changed the numeric
+  representation of the configuration object. A SHA-256 string
+  now binds the effective Rust configuration across consumers.
+  Each binding matched its uninterrupted result after one pause.
+  Large tick values and multi-engine resume remain open.
