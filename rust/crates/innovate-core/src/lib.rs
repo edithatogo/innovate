@@ -190,7 +190,7 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
                 .map_err(|_| "SARIMA seasonal_order must contain four nonnegative integers")?;
             let coefficients: Vec<f64> = serde_json::from_value(payload["coefficients"].clone())
                 .map_err(|_| "SARIMA coefficients must be a numeric array")?;
-            return sarima::stationary_filter(&values, order, seasonal_order, &coefficients);
+            return sarima::filter(&values, order, seasonal_order, &coefficients);
         }
         if payload["method"] == "seasonal_decomposition" {
             let integer = |key: &str| {

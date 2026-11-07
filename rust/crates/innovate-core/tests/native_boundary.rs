@@ -339,3 +339,24 @@ fn stationary_sarima_filter_matches_independent_one_step_forecasts() {
         }
     }
 }
+
+#[test]
+fn sarima_combined_differencing_preserves_observation_alignment() {
+    // A linear trend plus a repeating seasonal effect has zero combined
+    // differences except at the isolated shock and its lagged echoes.
+    let request = innovate_core::json!({
+        "schema_version":"2.0", "operation":"preprocess_series",
+        "payload":{"method":"sarima_filter","order":[0,1,0],"seasonal_order":[0,1,0,3],
+                   "coefficients":[],"values":[2,5,3,5,8,6,8,21,9,11,14,12]}
+    });
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert_eq!(
+        response["result"]["residual"],
+        innovate_core::json!([null, null, null, null, 0., 0., 0., 10., -10., 0., -10., 10.])
+    );
+    assert_eq!(
+        response["result"]["fitted"],
+        innovate_core::json!([null, null, null, null, 8., 6., 8., 11., 19., 11., 24., 2.])
+    );
+}

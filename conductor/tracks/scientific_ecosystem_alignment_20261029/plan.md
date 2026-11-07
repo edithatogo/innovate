@@ -1473,3 +1473,10 @@ the other competition models and installed binding checks remain open.
   residuals are standardized by the prediction variance. The independent
   fixture agrees within 1e-10 at all 40 observations. All 19 native
   boundary tests and focused Clippy passed.
+
+- [x] Support ordinary and seasonal differencing in the fixed-coefficient
+  Rust SARIMA request, reconstructing fitted values on the observation
+  scale. Combined differencing passed an analytic trend/seasonal/shock
+  fixture with nulls for the warmup rows. All 20 native boundary tests
+  and focused Clippy passed. This conditional initialization still
+  requires comparison with historical SARIMAX state-space initialization.

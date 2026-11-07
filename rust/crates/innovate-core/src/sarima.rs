@@ -34,7 +34,7 @@ fn stationary(coefficients: &[f64]) -> bool {
     true
 }
 
-pub(crate) fn stationary_filter(
+pub(crate) fn filter(
     values: &[f64],
     order: [usize; 3],
     seasonal_order: [usize; 4],
@@ -42,9 +42,50 @@ pub(crate) fn stationary_filter(
 ) -> Result<serde_json::Value, &'static str> {
     let [p, d, q] = order;
     let [sp, sd, sq, period] = seasonal_order;
-    if d != 0 || sd != 0 {
-        return Err("stationary SARIMA filtering requires zero differencing orders");
+    if sd > 0 && period < 2 {
+        return Err("seasonal differencing requires a period of at least two");
     }
+    let warmup = sd
+        .checked_mul(period)
+        .and_then(|lag| lag.checked_add(d))
+        .filter(|lag| *lag <= 64 && *lag < values.len())
+        .ok_or("SARIMA differencing requires observations beyond a warmup of at most 64 samples")?;
+    let mut differences = values.to_vec();
+    for lag in std::iter::repeat_n(1, d).chain(std::iter::repeat_n(period, sd)) {
+        for i in 0..differences.len() - lag {
+            differences[i] = differences[i + lag] - differences[i];
+        }
+        differences.truncate(differences.len() - lag);
+    }
+    let (predictions, innovations) =
+        stationary_filter(&differences, [p, 0, q], [sp, 0, sq, period], coefficients)?;
+    let mut fitted = vec![None; warmup];
+    let mut residual = vec![None; warmup];
+    for ((&observed, differenced), (prediction, innovation)) in values[warmup..]
+        .iter()
+        .zip(differences)
+        .zip(predictions.into_iter().zip(innovations))
+    {
+        let prediction = prediction + (observed - differenced);
+        if !prediction.is_finite() {
+            return Err("SARIMA reconstructed prediction exceeded its finite numerical domain");
+        }
+        fitted.push(Some(prediction));
+        residual.push(Some(innovation));
+    }
+    Ok(serde_json::json!({"fitted": fitted, "residual": residual}))
+}
+
+type FilterOutput = (Vec<f64>, Vec<f64>);
+
+fn stationary_filter(
+    values: &[f64],
+    order: [usize; 3],
+    seasonal_order: [usize; 4],
+    coefficients: &[f64],
+) -> Result<FilterOutput, &'static str> {
+    let [p, _, q] = order;
+    let [sp, _, sq, period] = seasonal_order;
     if (sp != 0 || sq != 0) && period < 2 {
         return Err("seasonal AR or MA terms require a period of at least two");
     }
@@ -149,5 +190,5 @@ pub(crate) fn stationary_filter(
         propagate(&covariance, &mut next);
         std::mem::swap(&mut covariance, &mut next);
     }
-    Ok(serde_json::json!({"fitted": fitted, "residual": residual}))
+    Ok((fitted, residual))
 }
