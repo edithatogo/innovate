@@ -5620,3 +5620,10 @@ Hosted release readiness for this worktree revision remains open.
   at the paired-outcomes IPC helper. A fresh R CMD INSTALL into an
   isolated library resolved the mismatch and the full rerun passed.
   This qualifies the worktree bindings with an explicit FFI path.
+
+- [x] Verify Julia bundled FFI discovery on 22ac2f49 in a staged package
+  with INNOVATE_NATIVE_LIBRARY unset. The initial standalone stage
+  lacked repository-relative test fixtures. Mirroring the source
+  layout with copied Rust test fixtures resolved that test dependency.
+  The complete Julia 1.13.3 suite passed with the debug library staged
+  in deps. This is a local bundle check using the existing Julia depot.
