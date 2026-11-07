@@ -1164,3 +1164,8 @@ the other competition models and installed binding checks remain open.
   normalized weighted RSS below 1e-8 and held-out error below 1e-3.
   Python used the Polars fit entry point.
   [Fixtures and results](evidence/norton-weights-20261107).
+
+- [x] Synchronize the weighted-fit migration guide with the verified
+  model coverage, row-wise weighting and initial-state conditioning.
+  The site built 163 pages with all internal links valid, and the
+  rendered guide contains the updated multi-output contract.

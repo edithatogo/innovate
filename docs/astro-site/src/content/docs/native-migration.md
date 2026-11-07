@@ -643,9 +643,13 @@ stiff-system/BDF workload parity, nested models, covariates/events, uncertainty,
 stochastic paths, weighted composite fitting and scientific qualification remain
 required. Simulation currently returns the deterministic ODE path.
 
-Scalar precision weighting remains restricted to the four plain scalar fitters.
-Competitive and historical covariate/event fitters reject that option until they
-apply it; the shared-parser regression checks that weights cannot be ignored.
+Mechanistic Bass and Gompertz, historical Logistic, Norton–Bass, and the
+competition models also accept `fit_options.weights`. For multi-output fits,
+one weight per time row applies to every output. Zero-weight rows contribute
+no residuals. In competition fits, a row used to condition the initial state
+still sets that state and is excluded from the weighted residual objective.
+Weighted loss and local rank are reported separately from unweighted descriptive
+metrics. Information criteria are unavailable for weighted fits.
 All sixteen model families now have bounded native support. Every original and
 planned feature remains a release obligation, and the ledger still blocks release.
 
@@ -834,7 +838,7 @@ starts from a deterministic base rate grid with zero covariate slopes. Each
 fit reports local identifiability and conditions on the forcing and initial state.
 
 The independent reference uses SciPy DOP853 with every control knot split into
-its own integration interval. Weighted fits, initial-state uncertainty and
+its own integration interval. Initial-state uncertainty and
 broader scientific qualification
 remain required work.
 
@@ -862,7 +866,7 @@ absolute-improvement stop.
 Independent SciPy references cover interacting trajectories, signed rates and
 forecasts in both layouts. A perturbed conditional fit is checked against a
 held-out forecast. Automatic starts, event splits, constrained scientific
-domains, weighted fits and uncertainty remain required qualification work.
+domains and uncertainty remain required qualification work.
 
 ### Complementary goods covariates
 
