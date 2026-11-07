@@ -1390,6 +1390,7 @@ def test_nearest_score_matching():
 
 
 def test_matching_standardized_balance():
+    adjacent = math.nextafter(1.5, math.inf)
     balance = innovate.execute(
         "summarize_causal",
         method="matched_treatment_contrast",
@@ -1397,12 +1398,17 @@ def test_matching_standardized_balance():
         treatment=[0, 0, 1, 1, 1],
         scores=[0, 1, 0, 0, 1],
         caliper=0,
-        balance_covariates={"age": [0, 30, 30, 30, 30], "constant": [1] * 5},
+        balance_covariates={
+            "age": [0, 30, 30, 30, 30],
+            "constant": [1] * 5,
+            "narrow": [1.5, adjacent, 1.5, adjacent, 1.5],
+        },
     )["result"]["covariate_balance"]
     age = balance["age"]
     assert age["before_matching"]["standardized_mean_difference"] == pytest.approx(15 / math.sqrt(150))
     assert age["standardized_mean_difference"] == pytest.approx(20 / math.sqrt(150))
     assert balance["constant"]["standardized_mean_difference"] is None
+    assert math.isfinite(balance["narrow"]["standardized_mean_difference"])
 
 
 def test_ridge_logistic_propensity_fit():

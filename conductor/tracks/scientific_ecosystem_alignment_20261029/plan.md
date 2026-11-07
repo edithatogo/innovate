@@ -5275,3 +5275,8 @@ Hosted release readiness for this worktree revision remains open.
   values by subtracting an anchor before scaling. The Rust unit
   regression matched the analytic spread within two machine epsilons,
   and the focused causal boundary test passed.
+
+- [x] Retain an adjacent-value case in the Python matched-balance
+  regression. The rebuilt native extension returned a finite
+  standardized difference for the narrow covariate and null for
+  the constant covariate. The focused Python 3.15.2 test passed.
