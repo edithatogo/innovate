@@ -6223,3 +6223,10 @@ Hosted release readiness for this worktree revision remains open.
   outcomes correct and 4.4191 with both wrong (analytic limit 4.4).
   The reproducible checker used the optimized Python wheel. This
   qualifies the point estimate on this design.
+
+- [x] Check the augmented ATE influence standard error on the same
+  synthetic design. Nominal 95% Wald intervals covered the effect in
+  381, 380 and 379 of 400 trials when both, only propensity, or only
+  outcome inputs were correct, respectively. Coverage was 0 of 400
+  when both were wrong. Nuisance inputs were fixed, so this check
+  does not qualify uncertainty from fitted nuisance models.
