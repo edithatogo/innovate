@@ -6433,3 +6433,9 @@ Hosted release readiness for this worktree revision remains open.
   runs a native prediction with networking disabled, a read-only
   filesystem and dropped capabilities. Workflow YAML and shell syntax
   were checked locally. Hosted execution remains open.
+
+- [x] Reconcile container qualification prerequisites with the local
+  host. Apple container is installed but its API service is stopped
+  and its build plugin requires that service. The host data volume
+  had under 500 MiB free. Record the verified subprocess and source
+  package separately from the pending Linux container smoke check.

@@ -233,7 +233,7 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Hosted transport, authenticated identity and tenant isolation, operational observability, and release acceptance"
+      "remaining": "The locked subprocess and source-package tests passed locally. The worker container smoke check awaits a Linux runner. Hosted transport, authenticated identity and tenant isolation, operational observability, and release acceptance remain open."
     },
     {
       "key": "accelerator_hpc",
