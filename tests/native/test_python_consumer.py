@@ -1674,9 +1674,11 @@ def test_kairos_tick_checkpoint_resume():
             }
         expected = innovate.execute("simulate_model", "bass", **payload)["result"]
         options = payload["simulation_options"]
-        options["pause_at_tick"] = 6
-        paused = innovate.execute("simulate_model", "bass", **payload)["result"]
-        assert paused["status"] == "paused"
-        del options["pause_at_tick"]
-        options["resume_checkpoint"] = paused["checkpoint"]
-        assert innovate.execute("simulate_model", "bass", **payload)["result"] == expected
+        for tick in (0, 4, 6):
+            options["pause_at_tick"] = tick
+            paused = innovate.execute("simulate_model", "bass", **payload)["result"]
+            assert paused["status"] == "paused"
+            del options["pause_at_tick"]
+            options["resume_checkpoint"] = paused["checkpoint"]
+            assert innovate.execute("simulate_model", "bass", **payload)["result"] == expected
+            del options["resume_checkpoint"]

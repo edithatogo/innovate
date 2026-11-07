@@ -5171,3 +5171,7 @@ Hosted release readiness for this worktree revision remains open.
   3.15.2, Julia and installed R reproduced the full uninterrupted
   result for each engine against rebuilt native artifacts. Rust
   retains the network cutoff sweep beginning at tick zero.
+
+- [x] Retain tick zero, four and six in every binding regression.
+  Python, Julia and installed R matched uninterrupted results for all
+  three engines at each cutoff. Julia passed 18 focused assertions.

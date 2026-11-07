@@ -875,11 +875,14 @@ end
         end
         expected = kernel_simulate_model("bass", payload)["result"]
         options = payload["simulation_options"]
-        options["pause_at_tick"] = 6
-        paused = kernel_simulate_model("bass", payload)["result"]
-        @test paused["status"] == "paused"
-        delete!(options, "pause_at_tick")
-        options["resume_checkpoint"] = paused["checkpoint"]
-        @test kernel_simulate_model("bass", payload)["result"] == expected
+        for tick in (0, 4, 6)
+            options["pause_at_tick"] = tick
+            paused = kernel_simulate_model("bass", payload)["result"]
+            @test paused["status"] == "paused"
+            delete!(options, "pause_at_tick")
+            options["resume_checkpoint"] = paused["checkpoint"]
+            @test kernel_simulate_model("bass", payload)["result"] == expected
+            delete!(options, "resume_checkpoint")
+        end
     end
 end
