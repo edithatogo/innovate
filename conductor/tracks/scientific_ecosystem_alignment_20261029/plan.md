@@ -2438,3 +2438,10 @@ the other competition models and installed binding checks remain open.
   identical results. Installed R agreed within 1e-14 after serialization.
   This exercises independent group fits with centered offsets. Partial
   pooling and uncertainty remain separate obligations.
+
+- [x] Add and qualify mixture_reference. Check the native weighted trajectory
+  against a closed-form sum of two logistic components at five times. The
+  native result matched exactly on this host. Five focused Rust tests and
+  Clippy passed. The rebuilt Python 3.15.2 wheel and Julia returned identical
+  results, and installed R agreed within 1e-14 after serialization.
+  Gaussian mixture fitting remains open in the benchmark corpus.
