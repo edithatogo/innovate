@@ -4179,3 +4179,6 @@ Hosted release readiness for this worktree revision remains open.
   The exporter validates the in-memory payload and writes from it
   without serializing a kernel request or reparsing a response.
   The core contract and all ten tabular tests passed.
+- [x] Verify direct Rust validation at a495bde5 through the rebuilt
+  Python 3.15.2 wheel, Julia and installed R. All three produced
+  equal 24-row Arrow tables and rejected the negative adoption fixture.
