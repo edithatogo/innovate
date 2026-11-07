@@ -2335,3 +2335,9 @@ the other competition models and installed binding checks remain open.
   artifact. Existing test gates remain enabled. The repo-local Python
   3.15 CLI ran both scheduled cases successfully from a rebuilt wheel.
   Actionlint and Ruff passed. Hosted execution remains unverified.
+
+- [x] Describe all six native models without historical benchmark cards.
+  Include model-specific limitations and the existing Rust test target.
+  Leave benchmark case IDs empty where no runnable corpus case is assigned.
+  Discovery now returns a description for all 16 models. The focused
+  Rust test and Clippy passed. New native benchmark cases remain open.

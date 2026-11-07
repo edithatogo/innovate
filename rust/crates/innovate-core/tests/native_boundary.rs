@@ -1562,6 +1562,20 @@ fn model_cards_distinguish_native_capabilities_from_historical_benchmarks() {
             .count(),
         10
     );
+    assert!(
+        cards
+            .iter()
+            .all(|card| card["historical_benchmark_card"].is_object()
+                || card["native_model_card"].is_object())
+    );
+    let network = run(json!({"key":"network_diffusion"}));
+    let card = &network["result"]["cards"][0];
+    assert!(card["historical_benchmark_card"].is_null());
+    assert_eq!(
+        card["native_model_card"]["native_test_target"],
+        "network_diffusion"
+    );
+    assert_eq!(card["native_model_card"]["benchmark_case_ids"], json!([]));
     assert_eq!(
         run(json!({"key":"unknown"}))["error"]["code"],
         "invalid_request"
