@@ -102,6 +102,21 @@ The deterministic multi-start damped least-squares optimizer uses positive log
 parameters, so exact zero parameter estimates are not part of this fitter.
 A failed convergence flag is returned with warnings, not hidden.
 
+The `optimizer.start_reports` array follows attempted-start order.
+`selected_start_index` is zero-based. Each attempt records its initial
+transformed coordinates and termination reason. Finite starts also
+report their final transformed coordinates and initial and final scaled
+residual sums of squares. A start rejected by the initial predictor
+records the prediction error.
+
+`converged_starts` counts starts that met a numerical stopping criterion.
+`alternative_start_scaled_rss_gap` is the best other finite start's final
+loss minus the selected start's final loss. It is null when no other
+finite result exists. Compare the final coordinates when the gap is
+small. Two starts can have the same objective at different coordinates,
+as in a squared-parameter model evaluated at −1 and 1. The coordinates
+are in the optimizer's parameterization.
+
 Local identifiability uses a column-scaled, pivoted QR of finite-difference
 sensitivities, with relative rank tolerance `1e-7`. The reported QR diagonal
 ratio is not an SVD condition number. Full local rank does not establish global

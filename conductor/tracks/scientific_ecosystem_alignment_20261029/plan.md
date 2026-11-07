@@ -3903,3 +3903,6 @@ Hosted release readiness for this worktree revision remains open.
   An attempted fallback after invalid sensitivities failed the existing
   extreme-seed fit-quality gate, so the committed change is diagnostic
   only. Three multistart tests, four fit-quality tests and Clippy passed.
+- [x] Document multistart report ordering, transformed coordinates,
+  objective gaps and rejected-start errors. The three Rust fixtures
+  covering those fields passed.
