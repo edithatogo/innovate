@@ -7161,3 +7161,8 @@ Hosted release readiness for this worktree revision remains open.
   aggregation. Julia and R licence files matched the root Apache-2.0
   licence. The run used a staged Julia project and a fresh R install,
   and does not establish hosted distribution acceptance.
+
+- [x] Run the complete R native conformance script against the
+  isolated install with bundled library discovery. The script
+  exited zero on local arm64 macOS with INNOVATE_NATIVE_LIBRARY
+  unset. Hosted distribution checks remain open.
