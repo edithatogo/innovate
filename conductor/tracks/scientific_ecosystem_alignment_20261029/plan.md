@@ -7166,3 +7166,10 @@ Hosted release readiness for this worktree revision remains open.
   isolated install with bundled library discovery. The script
   exited zero on local arm64 macOS with INNOVATE_NATIVE_LIBRARY
   unset. Hosted distribution checks remain open.
+
+- [x] Run the full Julia 1.13.3 native suite with bundled arm64
+  library discovery. The initial staged package lacked shared Rust
+  reference fixtures. Staged the tracked fixtures at the test suite's
+  expected relative path and reran successfully with
+  INNOVATE_NATIVE_LIBRARY unset. This qualifies the staged test
+  layout and local runtime. Hosted package checks remain open.
