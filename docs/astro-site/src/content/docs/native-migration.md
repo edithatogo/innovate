@@ -1174,6 +1174,25 @@ Within a Slurm allocation, run the native benchmark runner with
 This option consumes an existing allocation. The runner remains a
 single-process workload with local CPU workers.
 
+To split independent benchmark cases across Open MPI ranks, run from
+the repository root with the repo-local Python environment and native
+wheel installed. Choose a rank count no greater than the number of
+cases in the selected policy.
+
+```bash
+receipt_dir=$(mktemp -d)
+mpirun -n 2 .venv-native/bin/python scripts/run_native_benchmarks.py \
+  --mpi-shard --policy fast --workers 1 \
+  --output "$receipt_dir/rank-{rank}.json"
+```
+
+Each receipt records its rank, world size, and selected case IDs.
+The runner refuses to overwrite rank receipts. To verify coverage,
+compare the combined case IDs and result rows with a serial run of
+the same policy. The worker budget applies per rank. Local runs
+qualified both fast and scheduled case selections. Multi-node
+execution and scheduler allocation still require qualification.
+
 ## Exact sign-flip inference for paired scenarios
 
 Add this comparison to the `comparisons` array in an

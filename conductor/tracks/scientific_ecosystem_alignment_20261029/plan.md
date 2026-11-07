@@ -3752,3 +3752,6 @@ Hosted release readiness for this worktree revision remains open.
   bytes on Darwin arm64. Runner source was 05d143e5 with the unchanged
   native wheel from 958843bc. The scheduled policy selected the cases
   locally. Actual scheduler allocation and multi-node tests remain open.
+- [x] Document MPI case sharding, rank receipts and per-rank worker
+  budgets in the native migration guide. The example ran locally
+  under Open MPI and produced both expected receipts.
