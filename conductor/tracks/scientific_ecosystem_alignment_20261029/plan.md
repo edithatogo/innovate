@@ -4223,3 +4223,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Document the opt-in Kairos resource comparison and signed units
   in the native guide. The documented pair ran through the installed
   wheel and returned the verified minus-three configured slot-ticks.
+- [x] Retain a Python Arrow regression for signed Kairos comparison
+  totals, horizon and tick resolution. The same export retains the
+  incompatible pair's error and null result. The focused installed
+  wheel test and Ruff passed.

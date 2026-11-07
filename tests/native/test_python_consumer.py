@@ -1132,3 +1132,18 @@ def test_csv_ingestion_preserves_distinct_textual_ids(tmp_path, kind, csv, expec
     with pytest.raises(innovate.NativeError) as exc:
         innovate.ingest_local(path, kind, provenance=provenance)
     assert "identifier_labels" in exc.value.validation["failed"]
+
+
+def test_kairos_resource_comparison_arrow_preserves_signed_totals():
+    fixture = Path(__file__).parents[2] / "rust/crates/innovate-core/tests/fixtures/kairos_resource_comparisons.json"
+    response = innovate.execute("execute_scenario_grid", **json.loads(fixture.read_text()))
+    frame = innovate.scenario_comparisons(response)
+    assert frame["comparison_index"].to_list() == [0, 1]
+    assert frame["successful"].to_list() == [True, False]
+    success, failure = map(json.loads, frame["comparison_json"])
+    metrics = success["result"]["resource_differences"]
+    assert metrics["configured_slot_ticks"] == -3
+    assert metrics["horizon_ticks"] == 11
+    assert metrics["ticks_per_unit"] == 1
+    assert failure["error"]["code"] == "invalid_comparison"
+    assert failure["result"] is None
