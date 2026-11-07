@@ -1744,3 +1744,11 @@ the other competition models and installed binding checks remain open.
 - [x] Qualify both policy contracts in the rebuilt Python wheel, Julia
   and installed R. Each retained the singleton spillover and confounder
   lists and rejected high risk without sensitivity analysis.
+
+- [x] Restore the treatment contrast Arrow result schema through a
+  Polars frame projection. The rebuilt Python wheel round-tripped
+  Float64 estimates and interval bounds plus Int32 draw counts through
+  Arrow IPC read by PyArrow 26. Absent intervals retain null bounds
+  and zero draws.
+- [ ] Restore causal model metadata and evidence handoff, and qualify
+  other Arrow consumers.

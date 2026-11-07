@@ -28,6 +28,7 @@ __all__ = [
     "rolling_average",
     "seasonal_decomposition",
     "sarima_fit",
+    "treatment_contrast_frame",
     "capabilities",
     "execute",
     "fit",
@@ -330,3 +331,22 @@ def sarima_fit(
         historical=historical,
     )["result"]
     return pl.Series(data.name, result["fitted"], dtype=pl.Float64)
+
+
+def treatment_contrast_frame(result: dict[str, Any]) -> pl.DataFrame:
+    """Project a native treatment contrast into the historical Arrow result schema."""
+    interval = result["bootstrap"]
+    return pl.DataFrame(
+        {
+            "estimate": [result["overall"]["estimate"]],
+            "ci_lower": [interval["ci_lower"] if interval is not None else None],
+            "ci_upper": [interval["ci_upper"] if interval is not None else None],
+            "n_bootstrap": [interval["n_bootstrap"] if interval is not None else 0],
+        },
+        schema={
+            "estimate": pl.Float64,
+            "ci_lower": pl.Float64,
+            "ci_upper": pl.Float64,
+            "n_bootstrap": pl.Int32,
+        },
+    )
