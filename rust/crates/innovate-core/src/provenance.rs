@@ -57,10 +57,10 @@ pub(crate) fn validate(payload: &Value) -> Result<Value, &'static str> {
     Ok(json!(provenance))
 }
 
-pub(crate) fn checksum(payload: &Value) -> Result<Value, &'static str> {
+pub(crate) fn checksum(dataset: &Value, encoding: Option<&Value>) -> Result<Value, &'static str> {
     use sha2::{Digest, Sha256};
 
-    let mut content = payload["dataset"].clone();
+    let mut content = dataset.clone();
     if !content.is_object() {
         return Err("dataset checksum requires a dataset object");
     }
@@ -84,9 +84,7 @@ pub(crate) fn checksum(payload: &Value) -> Result<Value, &'static str> {
         return Err("dataset provenance checksum must be a 64-digit SHA-256 hex string");
     }
     content.sort_all_objects();
-    let encoding = payload
-        .get("encoding")
-        .map_or(Some("rust_sorted_json_v1"), Value::as_str);
+    let encoding = encoding.map_or(Some("rust_sorted_json_v1"), Value::as_str);
     let (bytes, encoding) = match encoding {
         Some("rust_sorted_json_v1") => (
             serde_json::to_vec(&content).map_err(|_| "dataset checksum serialization failed")?,

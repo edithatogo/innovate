@@ -392,8 +392,7 @@ fn ingestion_error(message: &str) -> Value {
 }
 
 fn ingest(payload: &Value) -> Result<Value, Value> {
-    let replay;
-    let payload = if let Some(artifact) = payload.get("artifact") {
+    let (dataset, encoding) = if let Some(artifact) = payload.get("artifact") {
         if payload.get("dataset").is_some() || payload.get("encoding").is_some() {
             return Err(ingestion_error(
                 "artifact cannot be combined with dataset or encoding",
@@ -409,22 +408,21 @@ fn ingest(payload: &Value) -> Result<Value, Value> {
                 "dataset artifact requires its kind, checksum and checksum encoding",
             ));
         }
-        replay = json!({"dataset":artifact["dataset"],"encoding":artifact["checksum_encoding"]});
-        &replay
+        (&artifact["dataset"], artifact.get("checksum_encoding"))
     } else {
-        payload
+        (&payload["dataset"], payload.get("encoding"))
     };
-    let mut dataset = payload["dataset"].clone();
     if !dataset["provenance"].is_object() {
         return Err(ingestion_error("ingestion requires dataset provenance"));
     }
-    let digest = crate::provenance::checksum(payload).map_err(ingestion_error)?;
-    let report = validate(&dataset).map_err(ingestion_error)?;
+    let digest = crate::provenance::checksum(dataset, encoding).map_err(ingestion_error)?;
+    let report = validate(dataset).map_err(ingestion_error)?;
     if report["ok"] != true {
         let mut error = ingestion_error("dataset diagnostics failed");
         error["validation"] = report;
         return Err(error);
     }
+    let mut dataset = dataset.clone();
     dataset["provenance"]["checksum"] = digest["checksum"].clone();
     Ok(json!({
         "artifact_kind":"innovate.dataset",

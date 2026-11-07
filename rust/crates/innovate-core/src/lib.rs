@@ -247,7 +247,7 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             return dataset::validate(payload);
         }
         if value["operation"] == "dataset_checksum" {
-            return provenance::checksum(payload);
+            return provenance::checksum(&payload["dataset"], payload.get("encoding"));
         }
         if value["operation"] == "register_extension_manifest" {
             return extensions::register(payload);

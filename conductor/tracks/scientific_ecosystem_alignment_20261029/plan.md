@@ -4382,3 +4382,7 @@ Hosted release readiness for this worktree revision remains open.
   changed adoption value. The affected binding checks passed locally.
 - [x] Verify artifact re-ingestion replaces a stale validation report
   with freshly computed diagnostics. The focused Rust test passed.
+- [x] Verify artifacts directly from borrowed dataset and encoding fields
+  without cloning a synthetic ingestion request. Copy the returned
+  dataset only after verification and diagnostics. All five focused
+  Rust dataset boundary tests passed.
