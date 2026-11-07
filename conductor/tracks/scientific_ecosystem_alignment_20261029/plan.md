@@ -3482,3 +3482,8 @@ the other competition models and installed binding checks remain open.
   directory. Source archive, locked release wheel and SBOM normalization
   completed. Twine, wheel-content checks and a Polars forecast passed.
   The run reused a Cargo target. Hosted execution remains open.
+
+- [x] Configure the read-only release-readiness lane to retain
+  validated source archives, normalized wheels and SHA-256 sums
+  under the tested commit ID. Actionlint passed. Hosted execution
+  and artifact readback remain open.
