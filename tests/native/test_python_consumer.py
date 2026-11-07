@@ -1324,7 +1324,14 @@ def test_native_stratified_treatment_contrast(estimand, estimate, weight):
 
 def test_discover_treatment_contrasts():
     result = innovate.execute("summarize_causal", method="describe_treatment_contrasts")["result"]
-    descriptive, adjusted = result["contrasts"]
+    descriptive, adjusted, weighted = result["contrasts"]
     assert descriptive["adjustment"] == "none"
     assert adjusted["required_fields"] == ["outcomes", "treatment", "strata"]
     assert adjusted["estimands"] == ["ate", "att"]
+    assert weighted["required_fields"] == ["outcomes", "treatment", "propensities"]
+    payload = dict(method=weighted["method"], outcomes=[0, 10, 2, 12],
+                   treatment=[0, 0, 1, 1], propensities=[0.2, 0.8, 0.2, 0.8])
+    assert innovate.execute("summarize_causal", **payload)["result"]["estimate"] == pytest.approx(-4)
+    payload["propensities"][0] = 0
+    with pytest.raises(innovate.NativeError, match="strictly between zero and one"):
+        innovate.execute("summarize_causal", **payload)

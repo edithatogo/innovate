@@ -49,7 +49,10 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                 {"method":"stratified_treatment_contrast","adjustment":"caller_supplied_strata",
                  "required_fields":["outcomes","treatment","strata"],"optional_fields":["estimand"],
                  "estimands":["ate","att"],"default_estimand":"ate",
-                 "uncertainty":"conditional_standard_error"}
+                 "uncertainty":"conditional_standard_error"},
+                {"method":"propensity_weighted_contrast","adjustment":"caller_supplied_propensities",
+                 "required_fields":["outcomes","treatment","propensities"],"optional_fields":[],
+                 "estimands":["ate"],"default_estimand":"ate"}
             ]
         })),
         Some("pre_post") => {

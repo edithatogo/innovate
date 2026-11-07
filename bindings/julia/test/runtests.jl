@@ -587,8 +587,14 @@ end
 
 @testset "Treatment contrast discovery" begin
     result = kernel_call("summarize_causal", nothing, Dict("method"=>"describe_treatment_contrasts"))["result"]
-    descriptive, adjusted = result["contrasts"]
+    descriptive, adjusted, weighted = result["contrasts"]
     @test descriptive["adjustment"] == "none"
     @test adjusted["required_fields"] == ["outcomes", "treatment", "strata"]
     @test adjusted["estimands"] == ["ate", "att"]
+    @test weighted["required_fields"] == ["outcomes", "treatment", "propensities"]
+    payload = Dict("method"=>weighted["method"], "outcomes"=>[0,10,2,12],
+        "treatment"=>[0,0,1,1], "propensities"=>[0.2,0.8,0.2,0.8])
+    @test kernel_call("summarize_causal", nothing, payload)["result"]["estimate"] ≈ -4
+    payload["propensities"][1] = 0
+    @test_throws r"strictly between zero and one" kernel_call("summarize_causal", nothing, payload)
 end

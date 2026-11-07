@@ -555,3 +555,11 @@ contrast_methods <- kernel_call("summarize_causal", payload=list(method="describ
 stopifnot(identical(contrast_methods[[1]]$adjustment, "none"),
   identical(unlist(contrast_methods[[2]]$required_fields), c("outcomes", "treatment", "strata")),
   identical(unlist(contrast_methods[[2]]$estimands), c("ate", "att")))
+weighted <- contrast_methods[[3]]
+stopifnot(identical(unlist(weighted$required_fields), c("outcomes", "treatment", "propensities")))
+weighted_payload <- list(method=weighted$method, outcomes=c(0,10,2,12),
+  treatment=c(0,0,1,1), propensities=c(0.2,0.8,0.2,0.8))
+stopifnot(isTRUE(all.equal(kernel_call("summarize_causal", payload=weighted_payload)$result$estimate, -4)))
+weighted_payload$propensities[1] <- 0
+weighted_error <- tryCatch({kernel_call("summarize_causal", payload=weighted_payload); ""}, error=conditionMessage)
+stopifnot(grepl("strictly between zero and one", weighted_error, fixed=TRUE))

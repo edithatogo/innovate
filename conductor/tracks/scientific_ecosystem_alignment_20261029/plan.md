@@ -4528,3 +4528,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Add normalized inverse-probability weighting for supplied propensities.
   The Rust analytic fixture returns -4 and rejects a zero propensity.
   Propensity estimation, uncertainty, discovery and binding checks remain open.
+
+- [x] Expose supplied propensity weighting in treatment contrast discovery.
+  Rebuilt Python 3.15.2, Julia and installed R each discovered the method,
+  recovered the analytic estimate of -4 and rejected zero propensity.
