@@ -1,7 +1,7 @@
 //! Reproducible synthetic smoke corpus and native fit/forecast runner.
 use serde_json::{Value, json};
 
-const CASES: [(&str, &str, &str); 11] = [
+const CASES: [(&str, &str, &str); 12] = [
     ("bass_smoke_adoption", "bass", "diffusion"),
     ("logistic_growth_smoke", "logistic", "diffusion"),
     ("fisher_pry_replacement_smoke", "fisher_pry", "substitution"),
@@ -29,19 +29,20 @@ const CASES: [(&str, &str, &str); 11] = [
         "latent_process",
     ),
     ("latent_process_fit", "latent_process", "latent_process"),
+    ("regime_switching_reference", "regime_switching", "regime"),
 ];
 
 fn ci_policy(family: &str) -> &'static str {
     match family {
         "competition" => "scheduled",
-        "network_diffusion" | "policy_hazard" | "latent_process" => "workflow_dispatch",
+        "network_diffusion" | "policy_hazard" | "latent_process" | "regime" => "workflow_dispatch",
         _ => "fast",
     }
 }
 
 fn case_descriptor(id: &str, model: &str, family: &str) -> Value {
     json!({"case_id":id,"canonical_model_key":model,"family":family,
-        "dataset_version":match model {"lock_in"=>"native-lock-in-1","network_diffusion"=>"native-network-1","policy_hazard"=>"native-policy-1","latent_process"=>"native-latent-1",_=>"2026.04"},"source":"synthetic","ci_policy":ci_policy(family)})
+        "dataset_version":match model {"lock_in"=>"native-lock-in-1","network_diffusion"=>"native-network-1","policy_hazard"=>"native-policy-1","latent_process"=>"native-latent-1","regime_switching"=>"native-regime-1",_=>"2026.04"},"source":"synthetic","ci_policy":ci_policy(family)})
 }
 
 fn discover() -> Value {
@@ -64,6 +65,31 @@ fn run_case(id: &str) -> Result<Value, String> {
         .iter()
         .find(|case| case.0 == id)
         .ok_or("unknown benchmark case")?;
+    if id == "regime_switching_reference" {
+        let time = [0_f64, 1., 2.5, 4., 7.];
+        let observed: Vec<_> = time
+            .iter()
+            .map(|&t| {
+                if t < 2.5 {
+                    100. / (1. + (2.5 - t).exp())
+                } else {
+                    200. / (1. + (0.5 * (2.5 - t)).exp()) - 50.
+                }
+            })
+            .collect();
+        return fixed_prediction(
+            id,
+            model,
+            family,
+            json!({
+                "inputs":{"time":time},
+                "constructor_kwargs":{"base_model":"logistic","prediction_mode":"fixed_time","split_time":2.5},
+                "parameters":{"changepoint_index":2,"regime_0_L":100.,"regime_0_k":1.,"regime_0_x0":2.5,
+                    "regime_1_L":200.,"regime_1_k":0.5,"regime_1_x0":2.5}
+            }),
+            json!(observed),
+        );
+    }
     if id == "latent_process_fit" {
         let time: Vec<f64> = (0..21).map(f64::from).collect();
         let observed: Vec<_> = time
@@ -306,7 +332,7 @@ fn suite(payload: &Value) -> Result<Value, String> {
             let entries = value
                 .as_array()
                 .filter(|entries| !entries.is_empty() && entries.len() <= CASES.len())
-                .ok_or("case_ids must contain one to eleven case IDs")?;
+                .ok_or_else(|| format!("case_ids must contain 1 to {} case IDs", CASES.len()))?;
             entries
                 .iter()
                 .map(|entry| {
