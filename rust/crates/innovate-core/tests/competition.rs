@@ -848,6 +848,8 @@ fn lotka_volterra_profiles_event_time_and_override() {
         case["constructor_kwargs"]["parameter_events"]
     );
     let profile = &result["event_profile"];
+    assert_eq!(profile["selected_index"], 4);
+    assert_eq!(profile["selected"], profile["candidates"][4]);
     assert_eq!(profile["override_parameter"], "alpha1");
     assert_eq!(profile["candidates"].as_array().unwrap().len(), 6);
     assert!(profile["candidates"][4]["objective"].as_f64().unwrap() < 1e-8);

@@ -665,7 +665,7 @@ pub(crate) fn profile_event(
                 row.insert("converged".into(), json!(converged));
                 if let Some(score) = score.filter(|score| converged && *score < best_score) {
                     best_score = score;
-                    best = Some(response);
+                    best = Some((response, profile.len()));
                 }
             }
             Err(failure) => {
@@ -674,9 +674,11 @@ pub(crate) fn profile_event(
         }
         profile.push(row);
     }
-    let mut response = best.ok_or_else(|| error("no candidate produced a converged finite fit"))?;
+    let (mut response, selected) =
+        best.ok_or_else(|| error("no candidate produced a converged finite fit"))?;
     response.result.as_mut().expect("fit result")[profile_key] = json!({
         "method":"discrete_profile_least_squares","candidates":profile,
+        "selected_index":selected,"selected":profile[selected],
         "tie_break":if joint {"earliest_launch_then_event"} else {"earliest_candidate"}
     });
     if let Some(index) = event_index {

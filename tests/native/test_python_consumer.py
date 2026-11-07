@@ -1055,7 +1055,8 @@ def test_norton_joint_time_profile_polars_fit_and_forecast():
     profile = fit.joint_time_profile
     assert profile is not None
     assert len(profile["candidates"]) == 9
-    best = min((row for row in profile["candidates"] if row.get("converged")), key=lambda row: row["objective"])
+    best = profile["selected"]
+    assert best == profile["candidates"][profile["selected_index"]]
     assert (best["launch_time"], best["t_event"]) == (3.125, 2.125)
     forecast = fit.predict(pl.DataFrame({"time": fixture["forecast_time"], "price": price[-1]}))
     prediction_columns = [name for name in forecast.columns if name.startswith("prediction")]

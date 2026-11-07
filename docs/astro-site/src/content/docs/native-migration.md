@@ -225,7 +225,8 @@ squares, and keeps the earlier candidate on a tie. Weighted fits use the
 normalized weighted residual sum of squares and skip candidates with
 fewer than three positive-weight observations on either side. The fitted state stores the
 selected `t_event`, and `event_profile` reports the candidate scores and
-convergence. The search is limited to the supplied times.
+convergence. Each profile includes the winning row as `selected` and
+its zero-based `selected_index`. The search is limited to the supplied times.
 
 Norton–Bass, Lotka–Volterra, complementary goods, lock-in and multi-product
 fits accept the same candidate list with a zero-based `event_index`

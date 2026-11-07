@@ -3190,3 +3190,8 @@ the other competition models and installed binding checks remain open.
   event-time and override fit. Python 3.15.2, Julia and R returned
   identical results using retained covariate history, and both
   held-out series matched the independent SciPy fixture within 3e-11.
+
+- [x] Return the selected row and zero-based index in native timing
+  profiles. Python 3.15.2, Julia and R agreed on the Lotka–Volterra
+  event and override selection. The Rust regression, two Python Polars
+  profile consumer tests and focused Clippy passed.
