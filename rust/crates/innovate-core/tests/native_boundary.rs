@@ -519,6 +519,22 @@ fn month_start_aggregation_preserves_empty_months() {
 }
 
 #[test]
+fn calendar_quarters_and_years_preserve_labels_and_gaps() {
+    for (frequency, dates, values) in [
+        ("QS", json!(["2023-10-01","2024-01-01","2024-04-01","2024-07-01"]), json!([2.,0.,0.,3.])),
+        ("QE", json!(["2023-12-31","2024-03-31","2024-06-30","2024-09-30"]), json!([2.,0.,0.,3.])),
+        ("YS", json!(["2023-01-01","2024-01-01"]), json!([2.,3.])),
+        ("YE", json!(["2023-12-31","2024-12-31"]), json!([2.,3.])),
+    ] {
+        let request = json!({"schema_version":"2.0","operation":"aggregate_dates",
+            "payload":{"frequency":frequency,"dates":["2024-07-01","2023-12-31"],"values":[3,2]}});
+        let response: serde_json::Value =
+            serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+        assert_eq!(response["result"], json!({"dates":dates,"values":values}), "{frequency}");
+    }
+}
+
+#[test]
 fn offset_timestamp_weekly_buckets_use_elapsed_time() {
     let request = innovate_core::json!({
         "schema_version":"2.0", "operation":"aggregate_dates",

@@ -6925,3 +6925,8 @@ Hosted release readiness for this worktree revision remains open.
   and UTC conversion. The Python wheel verified that local midnight
   on March 1 at +01:00 lands in the February bucket, while UTC midnight
   lands in March.
+
+- [x] Restore calendar-quarter and calendar-year start/end frequencies
+  (QS, QE, YS and YE), with zero-filled gaps. The focused Rust tests
+  passed for quarter labels across a year boundary and annual labels.
+  Binding readback remains open.

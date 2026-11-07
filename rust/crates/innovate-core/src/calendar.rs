@@ -11,8 +11,8 @@ pub(crate) fn aggregate(payload: &Value) -> Result<Value, &'static str> {
         return Err("dates and values must be aligned");
     }
     let frequency = payload["frequency"].as_str().unwrap_or("");
-    if !["D", "W", "M", "ME", "MS"].contains(&frequency) {
-        return Err("frequency must be D, W, M, ME or MS");
+    if !["D", "W", "M", "ME", "MS", "QS", "QE", "YS", "YE"].contains(&frequency) {
+        return Err("frequency must be D, W, M, ME, MS, QS, QE, YS or YE");
     }
     if dates
         .iter()
@@ -100,8 +100,13 @@ fn aggregate_dates(
     values: Vec<f64>,
     frequency: &str,
 ) -> Result<Value, &'static str> {
-    let month_end = matches!(frequency, "M" | "ME");
-    let monthly = month_end || frequency == "MS";
+    let period_end = matches!(frequency, "M" | "ME" | "QE" | "YE");
+    let months = match frequency {
+        "M" | "ME" | "MS" => 1,
+        "QS" | "QE" => 3,
+        "YS" | "YE" => 12,
+        _ => 0,
+    };
     let Some(&first) = dates.iter().min() else {
         return Ok(json!({"dates":[],"values":[]}));
     };
@@ -109,7 +114,9 @@ fn aggregate_dates(
     for (date, value) in dates.into_iter().zip(values) {
         let bucket = match frequency {
             "W" => first.checked_add_days(Days::new((date - first).num_days() as u64 / 7 * 7)),
-            "M" | "ME" | "MS" => date.with_day(1),
+            _ if months > 0 => {
+                NaiveDate::from_ymd_opt(date.year(), date.month0() / months * months + 1, 1)
+            }
             _ => Some(date),
         }
         .ok_or("calendar bucket outside supported date range")?;
@@ -130,14 +137,14 @@ fn aggregate_dates(
             if labels.len() == 100_000 {
                 return Err("calendar output exceeds 100000 periods");
             }
-            let next = if monthly {
-                date.checked_add_months(Months::new(1))
+            let next = if months > 0 {
+                date.checked_add_months(Months::new(months))
             } else {
                 date.succ_opt()
             };
-            let label = if month_end {
+            let label = if period_end {
                 next.and_then(|d| d.pred_opt())
-                    .ok_or("month end outside supported date range")?
+                    .ok_or("calendar period end outside supported date range")?
             } else {
                 date
             };
