@@ -6845,3 +6845,7 @@ Hosted release readiness for this worktree revision remains open.
   Both matched all 15,620 labels from the exact rational oracle
   across 3,124 nonzero weight vectors on times 0–4, with a locked
   FFI build from the same runtime source as the Python wheel.
+
+- [x] Document adopter classification in the native guide. Explain
+  sample weighting on irregular grids, inclusive historical boundaries,
+  zero-weight samples, and the Polars and JSON entry points.

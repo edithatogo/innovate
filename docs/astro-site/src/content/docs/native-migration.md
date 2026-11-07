@@ -92,6 +92,25 @@ Conditional fit statistics exclude the initial observation used to set that
 state, and do not propagate its measurement uncertainty. Covariates, events,
 equilibrium helpers and complete original feature parity remain open.
 
+## Adopter categories
+
+Use `categorize_adopters` with strictly increasing finite timestamps
+and aligned nonnegative adoption rates with positive total weight.
+Each rate weights its sample. The spacing between samples does not
+multiply the weight, so changing the sampling grid can change the
+categories. Zero-weight samples receive labels without contributing
+to the weighted moments.
+
+The five historical categories use inclusive upper boundaries at the
+weighted mean minus two standard deviations, the mean minus one
+standard deviation, the mean, and the mean plus one standard deviation.
+Samples beyond the last boundary are Laggards.
+
+In Python, `innovate.categorize_adopters(frame)` adds a category column
+to a Polars frame and preserves its existing rows and columns. Julia
+and R can call `kernel_call` with operation `categorize_adopters` and
+payload fields `time` and `adoption_rate`.
+
 ## Fit quality and numerical limits
 
 All seven fitters report actual numerical termination, iterations and scaled
