@@ -4921,7 +4921,10 @@ Hosted release readiness for this worktree revision remains open.
   extracted Python wheel, Julia and R's raw JSON entry point. Both
   grids returned Early Adopters, Early Majority and Laggards.
   The Rust Polars historical inclusive-boundary regression also passed.
-- [ ] Preserve adjacent binary64 timestamps in R's structured request
+- [x] Preserve adjacent binary64 timestamps in R's structured request
   path. The ordinary R helper collapsed the narrow grid during JSON
   serialization. The raw JSON entry point accepted the same grid when
   formatted with 17 significant digits.
+  The structured bridge now requests 17 significant digits for
+  JSON serialization. A clean R package install passed the full native
+  consumer file, including exact timestamp readback for both grids.

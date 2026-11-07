@@ -791,3 +791,12 @@ effect <- endpoint$differences[[1]]
 stopifnot(inference$sign_flip$assignments == 4, inference$sign_flip$extreme_assignments == 4,
   inference$sign_flip$p_value == 1, inference$bootstrap$seed == 42,
   isTRUE(all.equal(unlist(inference$bootstrap$mean_interval), c(-effect,effect))))
+
+# The structured request must preserve adjacent binary64 timestamps.
+for (time in list(c(1.5, 1.5 + 2^-52, 1.5 + 4 * 2^-52),
+                 c(-.Machine$double.xmax, -.Machine$double.xmax / 2, .Machine$double.xmax))) {
+  categories <- kernel_call("categorize_adopters",
+    payload=list(time=time, adoption_rate=c(1, 2, 1)))$result
+  stopifnot(identical(unlist(categories$time), time),
+    identical(unlist(categories$category), c("Early Adopters", "Early Majority", "Laggards")))
+}

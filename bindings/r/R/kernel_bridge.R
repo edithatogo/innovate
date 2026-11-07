@@ -51,7 +51,7 @@ kernel_call <- function(operation, model_key = NULL, payload = list()) {
   }
   payload <- preserve_arrays(payload)
   request <- jsonlite::toJSON(list(schema_version = "2.0", operation = operation,
-    model_key = model_key, payload = payload), auto_unbox = TRUE, null = "null", digits = NA)
+    model_key = model_key, payload = payload), auto_unbox = TRUE, null = "null", digits = I(17))
   kernel_call_json(request)
 }
 
@@ -71,7 +71,7 @@ kernel_call_json <- function(request, raw = FALSE) {
 }
 
 kernel_scenario_grid_ipc <- function(data, payload) {
-  request <- jsonlite::toJSON(payload, auto_unbox = TRUE, null = "null", digits = NA)
+  request <- jsonlite::toJSON(payload, auto_unbox = TRUE, null = "null", digits = I(17))
   decode_kernel_response(.Call(innovate_scenario_grid_ipc_R, native_library(), request, data))
 }
 
@@ -89,7 +89,7 @@ kernel_paired_outcomes_ipc <- function(payload) {
 
 scenario_output <- function(response, symbol) {
   if (is.list(response)) {
-    response <- jsonlite::toJSON(response, auto_unbox = TRUE, null = "null", digits = NA)
+    response <- jsonlite::toJSON(response, auto_unbox = TRUE, null = "null", digits = I(17))
   }
   output <- .Call(symbol, native_library(), response)
   if (is.raw(output)) output else decode_kernel_response(output)
