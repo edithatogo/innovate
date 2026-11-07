@@ -6773,3 +6773,9 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify common edge-weight scaling through Python 3.15.2, Julia
   and installed R. Each binding passed all 256 full-response comparisons
   on the three-node fixture. Reused unchanged 4947d6b4 native builds.
+
+- [x] Check directed imitation against the analytic request probability
+  on the three-node path. The exposed node's outgoing edge carries
+  weight three, but only its adopted incoming neighbor contributes
+  to exposure, giving hazard q and cumulative hazard two at tick four.
+  The 2,048-seed Rust check passed alongside all 37 network tests.

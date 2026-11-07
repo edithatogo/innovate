@@ -584,7 +584,12 @@ fn seeded_contagion_request_frequency_matches_imitation_exposure() {
     });
     let kernel = KernelBinding::new();
     let trials = 2048;
-    for (weights, exposure) in [(None, 0.5), (Some([1, 3]), 0.25)] {
+    for (directed, weights, exposure) in [
+        (false, None, 0.5),
+        (false, Some([1, 3]), 0.25),
+        (true, Some([1, 3]), 1.0),
+    ] {
+        payload["simulation_options"]["directed"] = json!(directed);
         if let Some(weights) = weights {
             payload["simulation_options"]["edge_weights"] = json!(weights);
         }
