@@ -453,6 +453,15 @@ fn causal_summaries_match_analytic_effects() {
     );
     assert_eq!(groups["result"]["overall_effect"], 3.);
     assert_eq!(groups["result"]["by_group"]["a"]["ci_upper"], 3.96);
+    let balance = run(json!({"method":"covariate_balance","threshold":0.5,
+        "treated_covariates":{"shift":[1,3],"same":[1,3],"unmatched":[2,4]},
+        "control_covariates":{"shift":[0,2],"same":[1,3]}}));
+    let result = &balance["result"];
+    let shift = result["smd_by_covariate"]["shift"].as_f64().unwrap();
+    assert!((shift - 1. / 2_f64.sqrt()).abs() < 1e-12);
+    assert_eq!(result["n_balanced"], 1);
+    assert_eq!(result["n_total"], 2);
+    assert_eq!(result["all_balanced"], false);
     let invalid = run(
         json!({"method":"heterogeneous_effects","group_labels":["a","a"],
                             "effects":[2,4],"standard_errors":[1,0]}),

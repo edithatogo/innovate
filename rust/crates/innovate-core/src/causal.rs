@@ -120,6 +120,59 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                       "max_effect":max,"min_effect":min,"effect_range":finite(max-min)?}),
             )
         }
+        Some("covariate_balance") => covariate_balance(payload),
         _ => Err("unknown causal summary method"),
     }
+}
+
+fn covariate_balance(payload: &Value) -> Result<Value, &'static str> {
+    let treated = payload["treated_covariates"]
+        .as_object()
+        .ok_or("treated_covariates must be an object")?;
+    let control = payload["control_covariates"]
+        .as_object()
+        .ok_or("control_covariates must be an object")?;
+    let threshold = payload
+        .get("threshold")
+        .map_or(Some(0.1), Value::as_f64)
+        .filter(|v| (0. ..=1.).contains(v))
+        .ok_or("balance threshold must be between zero and one")?;
+    let mut scores = std::collections::BTreeMap::new();
+    for key in treated.keys().filter(|key| control.contains_key(*key)) {
+        let mut a = series(&payload["treated_covariates"], key)?;
+        let mut b = series(&payload["control_covariates"], key)?;
+        if a.len() < 2 || b.len() < 2 {
+            return Err("covariate balance requires at least two observations in each group");
+        }
+        let scale = a.iter().chain(&b).copied().map(f64::abs).fold(0., f64::max);
+        if scale > 0. {
+            for value in a.iter_mut().chain(&mut b) {
+                *value /= scale;
+            }
+        }
+        let mean_a = mean(&a).expect("validated group length");
+        let mean_b = mean(&b).expect("validated group length");
+        let squared = |values: &[f64], average: f64| {
+            values
+                .iter()
+                .map(|&value| (value - average).powi(2))
+                .sum::<f64>()
+        };
+        let pooled =
+            ((squared(&a, mean_a) + squared(&b, mean_b)) / (a.len() + b.len() - 2) as f64).sqrt();
+        let score = if pooled > 0. {
+            ((mean_a - mean_b).abs() / pooled).min(1.)
+        } else {
+            0.
+        };
+        scores.insert(key, score);
+    }
+    let values: Vec<_> = scores.values().copied().collect();
+    let balanced = values.iter().filter(|&&score| score <= threshold).count();
+    Ok(
+        json!({"smd_by_covariate":scores,"n_balanced":balanced,"n_total":values.len(),
+        "all_balanced":balanced == values.len(),
+        "max_smd":values.iter().copied().fold(0.,f64::max),
+        "mean_smd":mean(&values).unwrap_or(0.)}),
+    )
 }

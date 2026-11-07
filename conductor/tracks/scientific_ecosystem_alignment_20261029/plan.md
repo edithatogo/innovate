@@ -1627,3 +1627,11 @@ the other competition models and installed binding checks remain open.
   singleton arrays for this operation. Record bounded native status
   in the migration ledger.
 - [ ] Qualify the broader historical and planned causal workflows.
+
+- [x] Port historical covariate balance summaries with pooled sample
+  variance and absolute standardized mean differences clipped at one.
+  Shared covariates are compared, and the historical zero-variance
+  score is retained. Compared groups require at least two observations.
+  The analytic fixture verifies the pooled variance and threshold
+  counts. All 24 Rust boundary tests and focused Clippy passed.
+- [ ] Verify covariate balance through installed Python, Julia and R.
