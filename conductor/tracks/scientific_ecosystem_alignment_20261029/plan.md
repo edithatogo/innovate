@@ -7414,3 +7414,8 @@ Hosted release readiness for this worktree revision remains open.
   Actionlint passed. Earlier independent builds were byte-identical
   after normalization. That evidence applies to the earlier source
   revision, while current independent wheel validation remains open.
+
+- [x] Verify the optimized 80500bdb wheel against its embedded RECORD.
+  Every ZIP member appeared exactly once in RECORD. All eight payload
+  SHA-256 digests and sizes matched, including the normalized SBOM.
+  RECORD itself had empty digest and size fields as required.
