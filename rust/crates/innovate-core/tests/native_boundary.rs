@@ -200,3 +200,32 @@ fn rolling_average_recovers_small_terms_after_large_value_exits() {
         innovate_core::json!([null, 5e99, 2.])
     );
 }
+
+#[test]
+fn calendar_aggregation_fills_days_and_months_but_skips_empty_weeks() {
+    let aggregate = |dates, frequency| {
+        let request = innovate_core::json!({"schema_version":"2.0","operation":"aggregate_dates",
+            "payload":{"dates":dates,"values":[3,2],"frequency":frequency}});
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    let daily = aggregate(["2024-01-03", "2024-01-01"], "D");
+    assert_eq!(
+        daily["result"]["values"],
+        innovate_core::json!([2., 0., 3.])
+    );
+    let weekly = aggregate(["2024-01-23", "2024-01-02"], "W");
+    assert_eq!(
+        weekly["result"]["dates"],
+        innovate_core::json!(["2024-01-02", "2024-01-23"])
+    );
+    let monthly = aggregate(["2024-03-31", "2024-01-02"], "M");
+    assert_eq!(monthly["result"]["dates"][1], "2024-02-29");
+    assert_eq!(monthly["result"]["values"][1], 0.);
+    assert_eq!(
+        aggregate(["2024-02-30", "2024-01-02"], "M")["error"]["code"],
+        "invalid_request"
+    );
+}

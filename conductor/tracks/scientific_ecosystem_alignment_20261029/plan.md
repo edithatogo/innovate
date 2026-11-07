@@ -1307,3 +1307,10 @@ the other competition models and installed binding checks remain open.
 - [x] Verify the compensated rolling average through the rebuilt Rust FFI
   in Julia and R and retain the case in both native test suites. Both
   report a null warmup value, then 5e99 and 2.
+
+- [x] Expose calendar-date aggregation in Julia and R using the Rust
+  kernel and the existing locked Chrono version. Daily and monthly
+  buckets fill gaps, while weekly buckets are anchored at the earliest
+  date and omit empty periods. Installed Julia and R checks match the
+  leap-year Polars fixture. Thirteen Rust boundary tests and Clippy passed.
+  Datetime and timezone-aware aggregation in these bindings remains open.

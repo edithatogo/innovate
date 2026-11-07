@@ -1,6 +1,7 @@
 //! Rust-owned diffusion fitting, prediction, diagnostics and execution contracts.
 #![forbid(unsafe_code)]
 mod adopters;
+mod calendar;
 mod competition;
 mod composite;
 mod contracts;
@@ -35,7 +36,9 @@ pub fn execute_json(input: &str) -> String {
     {
         match value["operation"].as_str() {
             Some("fit_batch" | "predict_batch") => return execute_batch_json(value).to_string(),
-            Some("preprocess_series") => return execute_preprocessing_json(&value).to_string(),
+            Some("preprocess_series" | "aggregate_dates") => {
+                return execute_preprocessing_json(&value).to_string();
+            }
             Some("categorize_adopters") => return execute_adopters_json(&value).to_string(),
             _ => {}
         }
@@ -166,6 +169,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             return Err("preprocess_series requires schema 2.0");
         }
         let payload = &value["payload"];
+        if value["operation"] == "aggregate_dates" {
+            return calendar::aggregate(payload);
+        }
         let values = serde_json::from_value::<Vec<f64>>(payload["values"].clone())
             .map_err(|_| "preprocess_series requires a numeric values array")?;
         let window = match payload["method"].as_str() {
@@ -218,6 +224,6 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             json!({"code":"invalid_request","message":message}),
         ),
     };
-    json!({"schema_version":KERNEL_SCHEMA_VERSION,"operation":"preprocess_series",
+    json!({"schema_version":KERNEL_SCHEMA_VERSION,"operation":value["operation"],
         "model_key":null,"result":result,"error":error,"metadata":{"runtime":"rust_native"}})
 }
