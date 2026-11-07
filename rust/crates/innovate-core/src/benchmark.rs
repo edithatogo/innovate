@@ -1,7 +1,7 @@
 //! Reproducible synthetic smoke corpus and native fit/forecast runner.
 use serde_json::{Value, json};
 
-const CASES: [(&str, &str, &str); 4] = [
+const CASES: [(&str, &str, &str); 5] = [
     ("bass_smoke_adoption", "bass", "diffusion"),
     ("logistic_growth_smoke", "logistic", "diffusion"),
     ("fisher_pry_replacement_smoke", "fisher_pry", "substitution"),
@@ -10,11 +10,12 @@ const CASES: [(&str, &str, &str); 4] = [
         "multi_product",
         "competition",
     ),
+    ("lock_in_smoke", "lock_in", "competition"),
 ];
 
 fn case_descriptor(id: &str, model: &str, family: &str) -> Value {
     json!({"case_id":id,"canonical_model_key":model,"family":family,
-        "dataset_version":"2026.04","source":"synthetic"})
+        "dataset_version":if model == "lock_in" {"native-lock-in-1"} else {"2026.04"},"source":"synthetic"})
 }
 
 fn discover() -> Value {
@@ -37,6 +38,19 @@ fn run_case(id: &str) -> Result<Value, String> {
         .iter()
         .find(|case| case.0 == id)
         .ok_or("unknown benchmark case")?;
+    if model == "lock_in" {
+        let fixture: Value =
+            serde_json::from_str(include_str!("../tests/fixtures/lock_in_scipy.json"))
+                .expect("embedded independent lock-in reference");
+        return fit_and_forecast(
+            id,
+            model,
+            family,
+            &fixture["time"],
+            &fixture["rows"],
+            Some(&fixture["parameters"]),
+        );
+    }
     let time: Vec<f64> = (0..12).map(f64::from).collect();
     let sigmoid = |t: f64, rate: f64, center: f64| 1. / (1. + (-rate * (t - center)).exp());
     let observed: Vec<Value> = time
@@ -51,9 +65,24 @@ fn run_case(id: &str) -> Result<Value, String> {
             _ => json!([700. * sigmoid(t, 0.65, 5.), 300. * sigmoid(t, 0.45, 6.5)]),
         })
         .collect();
+    fit_and_forecast(id, model, family, &json!(time), &json!(observed), None)
+}
+
+fn fit_and_forecast(
+    id: &str,
+    model: &str,
+    family: &str,
+    time: &Value,
+    observed: &Value,
+    initial_parameters: Option<&Value>,
+) -> Result<Value, String> {
+    let mut payload = json!({"inputs":{"time":time,"observed":observed}});
+    if let Some(parameters) = initial_parameters {
+        payload["fit_options"] = json!({"initial_parameters":parameters});
+    }
     let kernel = crate::KernelBinding::new();
     let fit = kernel
-        .fit_model(model, json!({"inputs":{"time":time,"observed":observed}}))
+        .fit_model(model, payload)
         .map_err(|error| format!("benchmark fit failed: {}", error.message))?
         .result
         .ok_or("benchmark fit returned no result")?;
@@ -76,7 +105,7 @@ fn suite(payload: &Value) -> Result<Value, String> {
             let entries = value
                 .as_array()
                 .filter(|entries| !entries.is_empty() && entries.len() <= CASES.len())
-                .ok_or("case_ids must contain one to four case IDs")?;
+                .ok_or("case_ids must contain one to five case IDs")?;
             entries
                 .iter()
                 .map(|entry| {

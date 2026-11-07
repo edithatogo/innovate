@@ -2311,3 +2311,10 @@ the other competition models and installed binding checks remain open.
   as errors. Bass resolves to 2026.04 and lock-in remains stale because its
   smoke case is absent. The focused Rust regression and Clippy passed.
   Corpus completion, scheduling policy and binding qualification remain open.
+
+- [x] Add the missing lock_in_smoke case using the existing independent
+  SciPy fixture under dataset version native-lock-in-1. Its native fit
+  starts from the fixture parameters and reproduces both trajectories
+  within 1e-5. All ten historical cards now resolve to five corpus cases.
+  Four focused benchmark tests and Clippy passed. Scheduling, wider card
+  coverage and release qualification remain open.

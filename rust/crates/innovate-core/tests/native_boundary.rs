@@ -1576,22 +1576,26 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
     };
     let discovery = run("discover_benchmark_cases", json!({}));
     let cases = discovery["result"]["cases"].as_array().unwrap();
-    assert_eq!(cases.len(), 4);
+    assert_eq!(cases.len(), 5);
     let suite = run("run_benchmark_suite", json!({"workers":2}));
-    assert_eq!(suite["result"]["succeeded"], 4, "{suite}");
+    assert_eq!(suite["result"]["succeeded"], 5, "{suite}");
     assert_eq!(suite["result"]["failed"], 0);
     let rows = suite["result"]["runs"].as_array().unwrap();
     for (case, row) in cases.iter().zip(rows) {
         assert_eq!(row["case_id"], case["case_id"]);
         let result = &row["result"];
         assert_eq!(&result["case"], case);
-        assert_eq!(result["observed"].as_array().unwrap().len(), 12);
+        let sample_count = result["observed"].as_array().unwrap().len();
+        assert!(sample_count > 0);
         let key = if case["family"] == "competition" {
             "rows"
         } else {
             "values"
         };
-        assert_eq!(result["prediction"][key].as_array().unwrap().len(), 12);
+        assert_eq!(
+            result["prediction"][key].as_array().unwrap().len(),
+            sample_count
+        );
         if key == "values" {
             let observed = result["observed"].as_array().unwrap();
             for (prediction, reference) in result["prediction"][key]
@@ -1605,6 +1609,21 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
                     (prediction.as_f64().unwrap() - reference).abs()
                         < 1e-5 * reference.abs().max(1.)
                 );
+            }
+        }
+        if row["case_id"] == "lock_in_smoke" {
+            let observed = result["observed"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .flat_map(|row| row.as_array().unwrap());
+            let predicted = result["prediction"]["rows"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .flat_map(|row| row.as_array().unwrap());
+            for (actual, expected) in predicted.zip(observed) {
+                assert!((actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-5);
             }
         }
         assert!(result["fit"]["diagnostics"].is_object());
@@ -1630,13 +1649,13 @@ fn benchmark_suite_retains_failures_in_request_order() {
 }
 
 #[test]
-fn benchmark_validation_reports_unresolved_historical_case_references() {
+fn benchmark_validation_resolves_all_historical_case_references() {
     let request = json!({"schema_version":"2.0","operation":"validate_benchmark_corpus"});
     let response: serde_json::Value =
         serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
     let report = &response["result"];
-    assert_eq!(report["ok"], false);
-    assert_eq!(report["summary"]["case_count"], 4);
+    assert_eq!(report["ok"], true);
+    assert_eq!(report["summary"]["case_count"], 5);
     assert_eq!(
         report["model_card_summaries"]["bass"]["freshness"]["status"],
         "current"
@@ -1647,14 +1666,11 @@ fn benchmark_validation_reports_unresolved_historical_case_references() {
     );
     assert_eq!(
         report["model_card_summaries"]["lock_in"]["freshness"]["status"],
-        "stale"
+        "current"
     );
-    assert!(
-        report["issues"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .any(|issue| issue["identifier"] == "lock_in"
-                && issue["code"] == "unknown_benchmark_case")
+    assert_eq!(report["issues"], json!([]));
+    assert_eq!(
+        report["model_card_summaries"]["lock_in"]["benchmark_case_versions"]["lock_in_smoke"],
+        "native-lock-in-1"
     );
 }
