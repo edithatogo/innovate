@@ -1014,6 +1014,24 @@ fn scenario_grid_summarizes_paired_ensemble_differences() {
     assert_eq!(outcome["mean_difference"], 12.5);
     assert_eq!(outcome["mean_standard_error"], 37.5);
     assert_eq!(outcome["empirical_interval"], json!([-6.25, 31.25]));
+
+    // Enumerating the four equally likely ordered draws from effects
+    // {-25, 50} gives means {-25, 12.5, 12.5, 50}. Check quantiles
+    // strictly inside the probability masses, away from finite-draw ties.
+    request["payload"]["comparisons"][0]["interval_mass"] = json!(0.9);
+    request["payload"]["comparisons"][0]["bootstrap"]["draws"] = json!(10_000);
+    let expanded = run(&request);
+    assert_eq!(
+        expanded["result"]["comparisons"][0]["result"]["bootstrap"]["mean_interval"],
+        json!([-25., 50.])
+    );
+    request["payload"]["scenarios"][3]["simulation"]["parameters"]["L"] = json!(400.);
+    let constant = run(&request);
+    assert_eq!(
+        constant["result"]["comparisons"][0]["result"]["bootstrap"]["mean_interval"],
+        json!([50., 50.])
+    );
+
     request["payload"]["comparisons"][0]["pairs"][1]["baseline"] = json!("a");
     assert_eq!(
         run(&request)["result"]["comparisons"][0]["error"]["code"],
