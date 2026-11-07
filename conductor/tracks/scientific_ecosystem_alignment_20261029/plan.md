@@ -6215,3 +6215,11 @@ Hosted release readiness for this worktree revision remains open.
   payload hash and size matches. The CycloneDX SBOM uses the canonical
   file:///source/ prefix and contains none of the checked local
   temporary, workspace or home path prefixes.
+
+- [x] Verify double robustness of the supplied-nuisance augmented ATE
+  on a seeded two-stratum synthetic design with true effect 2. Across
+  400 trials of 400 units, means were 2.0010 with both nuisance models
+  correct, 2.0318 with only propensities correct, 1.9994 with only
+  outcomes correct and 4.4191 with both wrong (analytic limit 4.4).
+  The reproducible checker used the optimized Python wheel. This
+  qualifies the point estimate on this design.
