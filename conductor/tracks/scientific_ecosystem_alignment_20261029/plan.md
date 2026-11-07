@@ -7353,3 +7353,9 @@ Hosted release readiness for this worktree revision remains open.
   Both EVPI cases passed in the installed Python 3.15.2 environment,
   and Ruff passed. These digests identify installed metadata and the
   loaded binary. They do not attest a Voiage archive or hosted build.
+
+- [x] Add a wheel-only Voiage 3.1.0 consumer check to the hosted dry
+  run after core artifact retention. Use a separate environment and
+  retain a separate qualification receipt. Actionlint, dependency
+  consistency and the installed local consumer passed. Hosted
+  resolution and execution remain open.
