@@ -7272,3 +7272,14 @@ Hosted release readiness for this worktree revision remains open.
   against the same staged optimized Python wheel. All seven tests
   passed, bringing local installed-consumer coverage to 121 cases.
   Added these files to the hosted dry run. Actionlint passed.
+
+- [x] Verify packaging metadata for the optimized macOS wheel and its
+  source distribution from 80500bdb. Twine accepted both archives and
+  check-wheel-contents accepted the wheel. Both bundled licences
+  matched the root Apache-2.0 text byte for byte. Wheel metadata
+  declares Python >=3.15.2,<3.16, Polars 2.1.0 and the optional
+  PyArrow 26.0.1 extra. The embedded CycloneDX 1.5 document parsed with
+  389 components, including Polars, PyO3 and Kairos ABM.
+  Source distribution SHA-256 is
+  `e305328e03b198f728cd08a78fc6ac574e98cd80cd7bdfe9431a1d58a5448ee2`.
+  Vulnerability coverage and hosted artifacts have separate gates.
