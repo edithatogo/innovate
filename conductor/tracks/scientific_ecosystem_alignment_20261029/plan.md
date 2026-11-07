@@ -3789,3 +3789,7 @@ Hosted release readiness for this worktree revision remains open.
   rank metadata. A two-rank local run passed verification and the
   checker rejected substitution of a shard for the serial reference.
   Ruff passed. Multi-node and scheduler execution remain open.
+- [x] Verify MPI policy completeness against discovery from the installed
+  kernel whose extension digest matches the serial receipt. The local
+  fast policy passed and the checker rejected a consistent truncation
+  of both serial and rank receipts. Ruff passed.

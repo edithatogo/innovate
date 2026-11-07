@@ -1,8 +1,11 @@
 """Verify MPI benchmark receipts against a serial receipt from the same build."""
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
+
+from innovate import _native, execute
 
 
 def check(serial, shards):
@@ -22,6 +25,15 @@ def check(serial, shards):
         raise ValueError("the reference receipt must come from a serial run")
     if len({row["case_id"] for row in expected}) != len(expected):
         raise ValueError("the serial receipt contains duplicate case IDs")
+    with Path(_native.__file__).open("rb") as extension:
+        digest = hashlib.file_digest(extension, "sha256").hexdigest()
+    if digest != runner["native_extension_sha256"]:
+        raise ValueError("the installed native extension must match the serial receipt")
+    catalog = execute("discover_benchmark_cases")
+    policy = runner["ci_policy"]
+    case_ids = [case["case_id"] for case in catalog["result"]["cases"] if policy is None or case["ci_policy"] == policy]
+    if [row["case_id"] for row in expected] != case_ids:
+        raise ValueError("the serial receipt does not cover the complete benchmark policy")
     ranks = set()
     for shard in shards:
         actual = shard["metadata"]
