@@ -6700,3 +6700,10 @@ Hosted release readiness for this worktree revision remains open.
   Python 3.15.2 wheel, the tick-by-tick sum of configured capacity
   and active service intervals matched all totals for 33 seeds at
   horizons 4, 8 and 20 (99 runs), including both schedule boundaries.
+
+- [x] Reconstruct Kairos adoption counts from service completions at
+  every sample in both continuous-hazard replay variants. The Rust
+  regression passed for all 66 seed/configuration combinations.
+  A separate Python wheel check with one initial adopter passed all
+  33 mixed-fixture runs and found no duplicate completions or service
+  completion for the initial adopter.

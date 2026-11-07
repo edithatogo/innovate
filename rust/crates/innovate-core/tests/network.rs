@@ -1042,6 +1042,23 @@ fn network_checkpoint_continues_continuous_hazard_forcing() {
         for seed in (0..32).chain(std::iter::once(42)) {
             payload["simulation_options"]["seed"] = json!(seed);
             let expected = run(payload.clone());
+            let completions = expected["completions"].as_array().unwrap();
+            for (sample, time) in payload["inputs"]["time"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .enumerate()
+            {
+                let tick = time.as_u64().unwrap();
+                let completed = completions
+                    .iter()
+                    .filter(|event| event["tick"].as_u64().unwrap() <= tick)
+                    .count();
+                assert_eq!(
+                    expected["counts"][sample], completed,
+                    "seed {seed}, tick {tick}"
+                );
+            }
             assert!(expected["completions"].as_array().unwrap().len() > 1);
             for (option, boundary) in std::iter::once(("pause_after_completions", 1))
                 .chain((0..20).map(|tick| ("pause_at_tick", tick)))
