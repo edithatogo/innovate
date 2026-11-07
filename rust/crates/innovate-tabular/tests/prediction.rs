@@ -144,7 +144,8 @@ fn arrow_scenario_grid_supplies_time_and_rejects_conflicting_times() {
 fn scenario_arrow_execution_rows_preserve_nested_data_and_order() {
     let rows = json!([
         {"id":"a","model_key":"bass","result":{"counts":[1,2],"metadata":{"seed":u64::MAX}},"error":null},
-        {"id":"b","model_key":"unknown","result":null,"error":{"code":"unsupported_native_operation"}}
+        {"id":"b","model_key":"unknown","result":null,"error":{"code":"unsupported_native_operation"}},
+        {"id":"c","model_key":"bass","result":{"status":"paused","checkpoint":"opaque"},"error":null}
     ]);
     let envelope = json!({"operation":"execute_scenario_grid","error":null,
         "result":{"executions":rows}});
@@ -157,8 +158,14 @@ fn scenario_arrow_execution_rows_preserve_nested_data_and_order() {
         Some("a")
     );
     assert_eq!(
-        frame.column("successful").unwrap().bool().unwrap().get(1),
-        Some(false)
+        frame
+            .column("successful")
+            .unwrap()
+            .bool()
+            .unwrap()
+            .iter()
+            .collect::<Vec<_>>(),
+        [Some(true), Some(false), Some(false)]
     );
     for (index, row) in rows.as_array().unwrap().iter().enumerate() {
         let encoded = frame

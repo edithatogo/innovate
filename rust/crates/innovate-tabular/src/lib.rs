@@ -324,7 +324,7 @@ pub fn scenario_executions_ipc(response: &Value) -> PolarsResult<Vec<u8>> {
                 .as_str()
                 .ok_or_else(|| polars_err!(SchemaMismatch: "missing scenario model key"))?,
         );
-        successful.push(row["error"].is_null());
+        successful.push(row["error"].is_null() && row["result"]["status"] != "paused");
         encoded.push(row.to_string());
     }
     let mut frame = df!("scenario_id" => ids, "model_key" => models,

@@ -5175,3 +5175,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Retain tick zero, four and six in every binding regression.
   Python, Julia and installed R matched uninterrupted results for all
   three engines at each cutoff. Julia passed 18 focused assertions.
+
+- [x] Distinguish paused executions in Arrow scenario exports.
+  The focused Rust Polars test preserved the checkpoint and row order
+  while marking only the completed execution successful.

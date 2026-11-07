@@ -506,3 +506,7 @@ The network engine also accepts `pause_at_tick` below its horizon.
 It processes events through that tick and saves the state needed to
 reproduce the next hazard draw. Use either the tick cutoff or the
 completion count per request.
+
+In the Arrow scenario execution export, `successful` denotes a
+completed execution without an error. A paused row retains its
+checkpoint and status in `execution_json`.
