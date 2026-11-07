@@ -37,6 +37,12 @@ def test_historical_draws_round_trip_and_reject_reordering():
 
     assert [len(strategy["draws"]) for strategy in strategies] == [3, 3]
     assert innovate.execute("validate_paired_outcomes", strategies=strategies)["result"] == {"strategies": strategies}
+    exported = innovate.paired_outcomes({"strategies": strategies})
+    keys = ["scenario_id", "draw_id", "time", "adoption"]
+    assert exported.select(keys).rows() == trajectories.select(keys).rows()
+
     strategies[1]["draws"].reverse()
+    with pytest.raises(ValueError, match="matching ordered draw IDs"):
+        innovate.paired_outcomes({"strategies": strategies})
     with pytest.raises(innovate.NativeError, match="matching ordered draw IDs"):
         innovate.execute("validate_paired_outcomes", strategies=strategies)

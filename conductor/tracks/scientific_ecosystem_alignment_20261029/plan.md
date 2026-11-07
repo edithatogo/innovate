@@ -4056,3 +4056,12 @@ Hosted release readiness for this worktree revision remains open.
   Polars decoded the same 24 historical rows from each binding, and
   all rejected a reversed draw sequence. R used JSON text to preserve
   the original numeric tokens. Downstream consumer acceptance is open.
+- [x] Exercise downstream consumption of the historical paired Bass
+  export. The installed Python wheel regression compares all 24
+  trajectory keys and adoption values with the fixture and rejects
+  reordered draws. Separately, Polars decoded the Julia IPC file and
+  pivoted the terminal rows on draw ID. Voiage 3.1.0 computed EVPI of
+  0.001 for three paired draws using a synthetic 0.021 alternative
+  offset, matching the independent rational-arithmetic oracle to
+  1e-12. This qualifies one consumer example. A production valuation
+  adapter and supported-version matrix remain open.
