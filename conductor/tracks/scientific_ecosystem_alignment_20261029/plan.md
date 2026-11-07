@@ -5331,3 +5331,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Expose sparse outcome coefficients for matched ATT. The
   focused Rust fixture verified two treated weights of 0.5 and a
   reused control weight of -1. Binding checks remain open.
+
+- [x] Use the reported sparse outcome weights to compute conditional
+  matching uncertainty. The analytic Rust fixture still recovered
+  sqrt(4.5) under independent outcomes with one reused control.

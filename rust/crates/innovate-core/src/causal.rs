@@ -1335,7 +1335,6 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     let mut unmatched_treated_indices = Vec::new();
     let mut control_uses = std::collections::BTreeMap::<usize, usize>::new();
     let mut max_score_distance = 0_f64;
-    let mut treated_error = 0_f64;
     for i in (0..scores.len()).filter(|&i| treatment[i] == 1.) {
         let right = controls.partition_point(|&j| scores[j] < scores[i]);
         let nearest = right
@@ -1356,9 +1355,6 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
         max_score_distance = max_score_distance.max(distance);
         differences.push(finite(outcomes[i] - outcomes[control])?);
         *control_uses.entry(control).or_default() += 1;
-        if let Some(variances) = &outcome_variances {
-            treated_error = treated_error.hypot(variances[i].sqrt());
-        }
         pairs.push(MatchPair {
             treated_index: i,
             control_index: control,
@@ -1401,11 +1397,10 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
         .map(|&count| (count as f64 / pairs.len() as f64).powi(2))
         .sum::<f64>();
     let conditional_standard_error = outcome_variances.map(|variances| {
-        let n = pairs.len() as f64;
-        control_uses
+        outcome_weights
             .iter()
-            .fold(treated_error / n, |error, (&index, &count)| {
-                error.hypot(count as f64 / n * variances[index].sqrt())
+            .fold(0_f64, |error, &(index, weight)| {
+                error.hypot(weight * variances[index].sqrt())
             })
     });
     let balance = balance_covariates
