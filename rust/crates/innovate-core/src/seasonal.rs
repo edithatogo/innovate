@@ -96,16 +96,18 @@ pub(crate) fn decompose(
     trend_span: usize,
     robust: bool,
     historical: bool,
+    iterations: (usize, usize),
 ) -> Result<serde_json::Value, &'static str> {
     if period < 2 || period > values.len() / 3 {
         return Err("seasonal period must leave at least three complete cycles");
     }
+    let (inner_iterations, outer_iterations) = iterations;
     let extrapolate = robust && !historical;
     let mut trend = vec![0.; values.len()];
     let mut seasonal = vec![0.; values.len()];
     let mut weights = vec![1.; values.len()];
-    for pass in 0..if robust { 6 } else { 1 } {
-        for _ in 0..5 {
+    for pass in 0..=outer_iterations {
+        for _ in 0..inner_iterations {
             let mut cycle = vec![0.; values.len() + 2 * period];
             for phase in 0..period {
                 let samples: Vec<_> = (phase..values.len())
@@ -149,7 +151,7 @@ pub(crate) fn decompose(
             let adjusted: Vec<_> = values.iter().zip(&seasonal).map(|(y, s)| y - s).collect();
             trend = weighted_loess(&adjusted, trend_span, Some(&weights), false, historical)?;
         }
-        if robust && pass < 5 {
+        if pass < outer_iterations {
             let absolute: Vec<_> = values
                 .iter()
                 .zip(&trend)

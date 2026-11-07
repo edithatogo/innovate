@@ -1404,3 +1404,12 @@ the other competition models and installed binding checks remain open.
   Python wheel (CPython 3.15.2), Julia project (1.13.3), and installed R
   package (4.3.0) each match the robust reference within 1e-9.
 - [ ] Qualify the remaining historical STL options.
+
+- [x] Add bounded inner and outer STL iteration controls to the native
+  preprocessing request. The installed R generic bridge agreed with
+  stats::stl within 1.56e-11 across nine combinations of inner counts
+  1/2/5 and outer counts 0/1/3. All 18 native boundary tests and focused
+  Clippy passed.
+- [ ] Expose the iteration controls in the typed binding helpers and
+  qualify historical span, degree and jump options. The pre-migration
+  Python STL wrapper forwarded constructor keyword options.

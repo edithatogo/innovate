@@ -195,12 +195,26 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             let historical = payload.get("historical").map_or(Ok(false), |v| {
                 v.as_bool().ok_or("historical must be boolean")
             })?;
+            let iterations = |key: &str, default, minimum| {
+                payload.get(key).map_or(Ok(default), |value| {
+                    value.as_u64()
+                        .filter(|n| (minimum..=100).contains(n))
+                        .map(|n| n as usize)
+                        .ok_or("STL iteration counts must be integers within bounds (inner 1–100, outer 0–100)")
+                })
+            };
+            let inner = iterations("inner_iterations", 5, 1)?;
+            let outer = iterations("outer_iterations", if robust { 5 } else { 0 }, 0)?;
+            if !robust && outer > 0 {
+                return Err("positive outer_iterations require robust mode");
+            }
             return seasonal::decompose(
                 &values,
                 integer("period")?,
                 integer("window")?,
                 robust,
                 historical,
+                (inner, outer),
             );
         }
         let window = match payload["method"].as_str() {
