@@ -38,7 +38,7 @@ def qualify() -> dict[str, object]:
             raise ValueError("native Bass analytic oracle mismatch")
         values.append(value)
     payoffs = pl.DataFrame({"diffusion": values, "alternative": [16.0, 16.0]})
-    data = payoffs.write_ipc(None).getvalue()
+    data = innovate.export_ipc_file(payoffs)
     restored = pl.read_ipc(io.BytesIO(data))
     if not restored.equals(payoffs):
         raise ValueError("Arrow IPC changed scenario payoff data")

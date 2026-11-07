@@ -2896,3 +2896,8 @@ the other competition models and installed binding checks remain open.
   correlation have cross-binding evidence. The noisy Logistic
   experiments leave broader statistical calibration open. The development
   checker passes and release remains gated by 38 required obligations.
+
+- [x] Qualify the native Polars IPC exporter through installed Voiage 3.1.0.
+  The isolated Python 3.15.2 environment round-tripped the payoff table
+  and returned EVPI 5.641720719927868 against 5.641720719927869.
+  Record bounded native evidence while retaining broader release gates.
