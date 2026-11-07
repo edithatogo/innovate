@@ -10,6 +10,7 @@ mod contracts;
 mod dataset;
 mod events;
 mod explainability;
+mod extensions;
 mod fitting;
 mod forcing;
 mod hierarchical;
@@ -61,6 +62,7 @@ pub fn execute_json(input: &str) -> String {
                 | "export_decision_report_markdown"
                 | "discover_model_cards"
                 | "validate_provenance"
+                | "validate_extension_manifests"
                 | "dataset_checksum"
                 | "validate_dataset",
             ) => {
@@ -215,6 +217,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         }
         if value["operation"] == "dataset_checksum" {
             return provenance::checksum(payload);
+        }
+        if value["operation"] == "validate_extension_manifests" {
+            return extensions::validate(payload);
         }
         if value["operation"] == "validate_provenance" {
             return provenance::validate(payload);

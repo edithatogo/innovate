@@ -2777,3 +2777,9 @@ the other competition models and installed binding checks remain open.
   five dataset artifact fixtures, Kairos ensemble evidence and native
   benchmark expansion. The development checker passes. The release
   checker still rejects the 38 required obligations pending acceptance.
+
+- [x] Restore native declarative plugin manifest validation through
+  validate_extension_manifests. Normalize historical stability aliases,
+  validate the four historical extension points, and reject duplicate
+  names in a submitted registry. Focused Rust and Clippy passed.
+  Persistent registration and installed binding checks remain open.

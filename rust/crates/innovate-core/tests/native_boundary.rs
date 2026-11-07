@@ -2066,3 +2066,27 @@ fn benchmark_ci_policy_selects_fast_cases_without_running_scheduled_fits() {
         "invalid_request"
     );
 }
+
+#[test]
+fn extension_manifest_validation_normalizes_tiers_and_rejects_duplicate_names() {
+    let manifest = json!({"name":"example","version":"1","entrypoint":"example:register",
+        "stability":"Beta","extension_points":["diagnostics"]});
+    let run = |manifests| {
+        let request = json!({"schema_version":"2.0","operation":"validate_extension_manifests",
+            "payload":{"manifests":manifests}});
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    let result = run(json!([manifest]));
+    assert_eq!(result["result"]["manifests"][0]["stability"], "provisional");
+    assert_eq!(result["result"]["manifests"][0]["requires"], json!([]));
+    assert_eq!(
+        run(json!([manifest, manifest]))["error"]["code"],
+        "invalid_request"
+    );
+    let mut invalid = manifest;
+    invalid["extension_points"] = json!(["unknown"]);
+    assert_eq!(run(json!([invalid]))["error"]["code"], "invalid_request");
+}
