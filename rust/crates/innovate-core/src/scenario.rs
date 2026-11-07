@@ -283,6 +283,33 @@ struct ReplicatePair {
     alternative: String,
 }
 
+fn common_time_basis<'a>(
+    paths: &ScenarioPaths<'a>,
+    ids: impl IntoIterator<Item = &'a str>,
+) -> Result<Option<(&'a str, i64)>, &'static str> {
+    let mut common = None;
+    for id in ids {
+        let (scenario, _) = paths.get(id).ok_or("unknown scenario ID")?;
+        let basis = scenario
+            .specification
+            .as_ref()
+            .map(|spec| (spec.time_unit.as_str(), spec.reference_year));
+        if common.is_some_and(|expected| expected != basis) {
+            return Err(
+                "scenario comparisons require matching time units and reference years when specified",
+            );
+        }
+        common = Some(basis);
+    }
+    Ok(common.flatten())
+}
+
+fn add_time_basis(result: &mut Value, basis: Option<(&str, i64)>) {
+    if let Some((unit, year)) = basis {
+        result["time_basis"] = json!({"time_unit":unit,"reference_year":year});
+    }
+}
+
 fn scalar_path(paths: &ScenarioPaths<'_>, id: &str) -> Result<(Vec<f64>, Vec<f64>), &'static str> {
     let (scenario, result) = paths.get(id).ok_or("unknown scenario ID")?;
     let inputs = &scenario.simulation["inputs"];
@@ -304,6 +331,13 @@ fn compare_paths(
     paths: &ScenarioPaths<'_>,
     comparison: &Comparison,
 ) -> Result<Value, &'static str> {
+    let basis = common_time_basis(
+        paths,
+        [
+            comparison.baseline.as_str(),
+            comparison.alternative.as_str(),
+        ],
+    )?;
     let (time, baseline) = scalar_path(paths, &comparison.baseline)?;
     let (alternative_time, alternative) = scalar_path(paths, &comparison.alternative)?;
     if time != alternative_time {
@@ -312,6 +346,7 @@ fn compare_paths(
     let (difference, percentage_change) = crate::causal::compare_values(&baseline, &alternative)?;
     let mut result =
         json!({"time":time,"difference":difference,"percentage_change":percentage_change});
+    add_time_basis(&mut result, basis);
     let last = time.len() - 1;
     let (baseline_final, alternative_final) = (baseline[last], alternative[last]);
     result["ranking"] = json!({"metric":"final_adoption",
@@ -355,6 +390,13 @@ fn compare_ensemble(
     if mass <= 0. || mass >= 1. || comparison.pairs.len() < 2 {
         return Err("ensemble requires at least two pairs and interval_mass in (0, 1)");
     }
+    let basis = common_time_basis(
+        paths,
+        comparison
+            .pairs
+            .iter()
+            .flat_map(|pair| [pair.baseline.as_str(), pair.alternative.as_str()]),
+    )?;
     let mut used = HashSet::new();
     let mut grid = None;
     let mut differences = Vec::with_capacity(comparison.pairs.len());
@@ -400,13 +442,13 @@ fn compare_ensemble(
             + sorted[rank.ceil() as usize] * rank.fract()
     };
     let tail = (1. - mass) / 2.;
-    Ok(
-        json!({"method":"paired_empirical_final_difference","quantile_method":"linear",
+    let mut result = json!({"method":"paired_empirical_final_difference","quantile_method":"linear",
         "pair_count":differences.len(),"differences":differences,"interval_mass":mass,
         "mean_difference":mean,"mean_standard_error":standard_error,
         "standard_error_assumption":"independent replicate pairs",
-        "median_difference":quantile(0.5),"empirical_interval":[quantile(tail),quantile(1.-tail)]}),
-    )
+        "median_difference":quantile(0.5),"empirical_interval":[quantile(tail),quantile(1.-tail)]});
+    add_time_basis(&mut result, basis);
+    Ok(result)
 }
 
 const SCENARIO_FAMILIES: [&str; 5] = [

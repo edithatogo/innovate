@@ -948,6 +948,31 @@ fn scenario_grid_compares_aligned_adoption_paths() {
         json!({"baseline":null,"alternative":1.})
     );
 
+    let spec = json!({"scenario_type":"baseline","name":"study","description":"",
+        "time_horizon":5.,"time_unit":"year","reference_year":2026,
+        "market_size":100.,"initial_adoption":0.});
+    request["payload"]["scenarios"][0]["specification"] = spec.clone();
+    assert_eq!(
+        run(&request)["result"]["comparisons"][0]["error"]["code"],
+        "invalid_comparison"
+    );
+    request["payload"]["scenarios"][1]["specification"] = spec;
+    assert_eq!(
+        run(&request)["result"]["comparisons"][0]["result"]["time_basis"],
+        json!({"time_unit":"year","reference_year":2026})
+    );
+    request["payload"]["scenarios"][1]["specification"]["time_unit"] = json!("month");
+    assert_eq!(
+        run(&request)["result"]["comparisons"][0]["error"]["code"],
+        "invalid_comparison"
+    );
+    request["payload"]["scenarios"][1]["specification"]["time_unit"] = json!("year");
+    request["payload"]["scenarios"][1]["specification"]["reference_year"] = json!(2027);
+    assert_eq!(
+        run(&request)["result"]["comparisons"][0]["error"]["code"],
+        "invalid_comparison"
+    );
+    request["payload"]["scenarios"][1]["specification"]["reference_year"] = json!(2026);
     request["payload"]["scenarios"][1]["simulation"]["inputs"]["time"] = json!([1., 3.]);
     let response = run(&request);
     assert_eq!(
