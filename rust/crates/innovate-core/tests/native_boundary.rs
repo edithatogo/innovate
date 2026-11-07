@@ -381,3 +381,26 @@ fn sarima_fit_matches_independent_ar1_maximum_likelihood() {
     assert!((result["coefficients"][0].as_f64().unwrap() - 0.8077160397020451).abs() < 2e-6);
     assert!((result["log_likelihood"].as_f64().unwrap() + 27.279117220748503).abs() < 1e-9);
 }
+
+#[test]
+fn historical_sarima_retains_sarimax_initial_predictions() {
+    let fixture: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../../conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/sarima-reference/historical-initialization.json"
+    )).unwrap();
+    for case in fixture["cases"].as_array().unwrap() {
+        let request = innovate_core::json!({
+            "schema_version":"2.0", "operation":"preprocess_series",
+            "payload":{"method":"sarima_filter","historical":true,"values":fixture["values"],
+                       "order":case["order"],"seasonal_order":case["seasonal_order"],
+                       "coefficients":case["coefficients"]}
+        });
+        let response: serde_json::Value =
+            serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+        let fitted = response["result"]["fitted"].as_array().unwrap();
+        let expected = case["fitted"].as_array().unwrap();
+        assert_eq!(fitted.len(), expected.len());
+        for (actual, expected) in fitted.iter().zip(expected) {
+            assert!((actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-8);
+        }
+    }
+}

@@ -1529,3 +1529,13 @@ the other competition models and installed binding checks remain open.
 - [ ] Implement historical SARIMAX initialization semantics and compare
   every fitted value against the two fixtures before qualifying the
   estimated historical path.
+
+- [x] Add opt-in historical SARIMA state-space initialization in Rust.
+  The differencing states start with diffuse variance and the ARMA
+  states with stationary covariance. Fitted values include the
+  warmup rows, which are excluded from the concentrated likelihood.
+  Both fixed-coefficient historical fixtures agree within 1e-8 at
+  every observation. All 22 native boundary tests and focused Clippy
+  passed.
+- [ ] Qualify historical coefficient estimation and expose the
+  initialization option through the three fitting helpers.

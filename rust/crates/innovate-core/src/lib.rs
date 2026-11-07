@@ -199,7 +199,16 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
                         .map_err(|_| "SARIMA coefficients must be a numeric array")?,
                 )
             };
-            return sarima::filter(&values, order, seasonal_order, coefficients.as_deref());
+            let historical = payload.get("historical").map_or(Ok(false), |v| {
+                v.as_bool().ok_or("historical must be boolean")
+            })?;
+            return sarima::filter(
+                &values,
+                order,
+                seasonal_order,
+                coefficients.as_deref(),
+                historical,
+            );
         }
         if payload["method"] == "seasonal_decomposition" {
             let integer = |key: &str| {

@@ -39,6 +39,7 @@ pub(crate) fn filter(
     order: [usize; 3],
     seasonal_order: [usize; 4],
     coefficients: Option<&[f64]>,
+    historical: bool,
 ) -> Result<serde_json::Value, &'static str> {
     let [p, d, q] = order;
     let [sp, sd, sq, period] = seasonal_order;
@@ -63,10 +64,21 @@ pub(crate) fn filter(
     let coefficients = match coefficients {
         Some(coefficients) => coefficients,
         None => {
-            estimated = estimate(&differences, order, seasonal_order)?;
+            estimated = if historical {
+                estimate(values, [p, d, q], [sp, sd, sq, period], warmup)?
+            } else {
+                estimate(&differences, order, seasonal_order, 0)?
+            };
             &estimated
         }
     };
+    if historical && warmup > 0 {
+        let output = state_filter(values, [p, d, q], [sp, sd, sq, period], coefficients)?;
+        return Ok(serde_json::json!({
+            "fitted": output.predictions, "residual": output.innovations,
+            "log_likelihood": output.log_likelihood, "coefficients": coefficients
+        }));
+    }
     let FilterOutput {
         predictions,
         innovations,
@@ -95,23 +107,24 @@ fn estimate(
     values: &[f64],
     order: [usize; 3],
     seasonal_order: [usize; 4],
+    burn: usize,
 ) -> Result<Vec<f64>, &'static str> {
     let [p, _, q] = order;
     let [sp, _, sq, _] = seasonal_order;
     let count = [p, q, sp, sq].into_iter().try_fold(0usize, usize::checked_add)
-        .filter(|count| *count <= 64 && *count < values.len())
+        .filter(|count| *count <= 64 && *count < values.len() - burn)
         .ok_or("SARIMA estimation requires more observations than coefficients and at most 64 coefficients")?;
     let score = |coefficients: &[f64]| {
         let invertible = |terms: &[f64]| stationary(&terms.iter().map(|v| -v).collect::<Vec<_>>());
         if !invertible(&coefficients[p..p + q]) || !invertible(&coefficients[p + q + sp..]) {
             return None;
         }
-        stationary_filter(values, order, seasonal_order, coefficients)
+        state_filter(values, order, seasonal_order, coefficients)
             .ok()?
             .log_likelihood
     };
     let mut best = vec![0.; count];
-    let initial = stationary_filter(values, order, seasonal_order, &best)?;
+    let initial = state_filter(values, order, seasonal_order, &best)?;
     let mut likelihood = initial
         .log_likelihood
         .ok_or("SARIMA likelihood is degenerate")?;
@@ -154,8 +167,17 @@ fn stationary_filter(
     seasonal_order: [usize; 4],
     coefficients: &[f64],
 ) -> Result<FilterOutput, &'static str> {
-    let [p, _, q] = order;
-    let [sp, _, sq, period] = seasonal_order;
+    state_filter(values, order, seasonal_order, coefficients)
+}
+
+fn state_filter(
+    values: &[f64],
+    order: [usize; 3],
+    seasonal_order: [usize; 4],
+    coefficients: &[f64],
+) -> Result<FilterOutput, &'static str> {
+    let [p, d, q] = order;
+    let [sp, sd, sq, period] = seasonal_order;
     if (sp != 0 || sq != 0) && period < 2 {
         return Err("seasonal AR or MA terms require a period of at least two");
     }
@@ -226,49 +248,95 @@ fn stationary_filter(
         return Err("SARIMA stationary covariance did not converge");
     }
 
+    let burn = d + sd * period;
+    let stationary_size = n;
+    let n = n + burn;
+    let mut transition = vec![Vec::new(); n];
+    let mut design: Vec<_> = (0..d).collect();
+    design.extend((1..=sd).map(|season| d + season * period - 1));
+    for (row, terms) in transition.iter_mut().take(d).enumerate() {
+        terms.extend((row..d).map(|column| (column, 1.)));
+        terms.extend(design[d..].iter().map(|&column| (column, 1.)));
+        terms.push((burn, 1.));
+    }
+    for season in 0..sd {
+        let start = d + season * period;
+        transition[start].push((start + period - 1, 1.));
+        transition[start].push((burn, 1.));
+        if season + 1 < sd {
+            transition[start].push((start + 2 * period - 1, 1.));
+        }
+        for (offset, terms) in transition[start + 1..start + period].iter_mut().enumerate() {
+            terms.push((start + offset, 1.));
+        }
+    }
+    design.push(burn);
+    for (i, &coefficient) in phi.iter().enumerate() {
+        transition[burn + i].push((burn, coefficient));
+        if i + 1 < stationary_size {
+            transition[burn + i].push((burn + i + 1, 1.));
+        }
+    }
+    let mut initial = vec![0.; n * n];
+    for i in 0..burn {
+        initial[i * n + i] = 1e6;
+    }
+    for i in 0..stationary_size {
+        for j in 0..stationary_size {
+            initial[(burn + i) * n + burn + j] = covariance[i * stationary_size + j];
+        }
+    }
+    let mut covariance = initial;
+    let mut next = vec![0.; n * n];
+    let noise: Vec<_> = std::iter::repeat_n(0., burn).chain(noise).collect();
+    let mut projected = vec![0.; n];
     let mut state = vec![0.; n];
     let mut fitted = Vec::with_capacity(values.len());
     let mut residual = Vec::with_capacity(values.len());
     let scale = values.iter().copied().map(f64::abs).fold(0., f64::max);
     let mut standardized_sum = 0.;
     let mut log_variance_sum = 0.;
-    for &value in values {
-        let prediction = state[0];
+    for (index, &value) in values.iter().enumerate() {
+        let prediction: f64 = design.iter().map(|&i| state[i]).sum();
         let innovation = value - prediction;
-        let variance = covariance[0];
+        for (row, projection) in projected.iter_mut().enumerate() {
+            *projection = design.iter().map(|&j| covariance[row * n + j]).sum();
+        }
+        let variance: f64 = design.iter().map(|&i| projected[i]).sum();
         if !innovation.is_finite() || !variance.is_finite() || variance <= 0. {
             return Err("SARIMA filter exceeded its finite numerical domain");
         }
-        if scale > 0. {
-            standardized_sum += (innovation / scale).powi(2) / variance;
+        if index >= burn {
+            if scale > 0. {
+                standardized_sum += (innovation / scale).powi(2) / variance;
+            }
+            log_variance_sum += variance.ln();
         }
-        log_variance_sum += variance.ln();
         fitted.push(prediction);
         residual.push(innovation);
         for i in 0..n {
-            state[i] += (covariance[i * n] / variance) * innovation;
-        }
-        for i in 0..n {
-            for j in (i..n).rev() {
-                let updated =
-                    covariance[i * n + j] - (covariance[i * n] / variance) * covariance[j * n];
-                covariance[i * n + j] = updated;
+            state[i] += (projected[i] / variance) * innovation;
+            for j in 0..n {
+                covariance[i * n + j] -= (projected[i] / variance) * projected[j];
             }
         }
-        for i in 0..n {
-            for j in 0..i {
-                covariance[i * n + j] = covariance[j * n + i];
+        let previous = state.clone();
+        for (i, left) in transition.iter().enumerate() {
+            state[i] = left.iter().map(|&(k, weight)| weight * previous[k]).sum();
+            for (j, right) in transition.iter().enumerate() {
+                let mut value = noise[i] * noise[j];
+                for &(k, a) in left {
+                    for &(l, b) in right {
+                        value += a * b * covariance[k * n + l];
+                    }
+                }
+                next[i * n + j] = value;
             }
         }
-        let observed_state = state[0];
-        for i in 0..n {
-            state[i] = phi[i] * observed_state + state.get(i + 1).copied().unwrap_or(0.);
-        }
-        propagate(&covariance, &mut next);
         std::mem::swap(&mut covariance, &mut next);
     }
     // Concentrate out the common innovation variance.
-    let count = values.len() as f64;
+    let count = (values.len() - burn) as f64;
     let log_variance = (standardized_sum / count).ln() + 2. * scale.ln();
     let likelihood =
         -0.5 * (count * (1. + std::f64::consts::TAU.ln() + log_variance) + log_variance_sum);
