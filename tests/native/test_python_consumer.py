@@ -1148,3 +1148,12 @@ def test_kairos_resource_comparison_arrow_preserves_signed_totals():
     assert metrics["ticks_per_unit"] == 1
     assert failure["error"]["code"] == "invalid_comparison"
     assert failure["result"] is None
+
+    payload = json.loads(fixture.read_text())
+    for scenario in payload["scenarios"]:
+        scenario["simulation"]["inputs"]["time"] = [0, 7]
+    response = innovate.execute("execute_scenario_grid", **payload)
+    row = json.loads(innovate.scenario_comparisons(response)["comparison_json"][0])
+    totals = row["result"]["resource_differences"]
+    assert totals["waiting_at_horizon"] == 1
+    assert totals["in_service_at_horizon"] == 2

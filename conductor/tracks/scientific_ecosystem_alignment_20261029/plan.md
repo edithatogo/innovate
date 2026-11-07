@@ -4316,3 +4316,6 @@ Hosted release readiness for this worktree revision remains open.
   3.15.2 wheel, Julia and installed R at 50e49a55. All report one
   additional waiter and two additional agents in service. The Python
   check reads the comparison back from Arrow.
+- [x] Retain horizon queue and service counts in the packaged Python
+  Arrow regression. At reopening the exported comparison preserves
+  one additional waiter and two additional agents in service.
