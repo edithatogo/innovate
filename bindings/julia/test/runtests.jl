@@ -233,3 +233,12 @@ end
     @test only(result["balks"])["tick"]==2
     @test only(result["retry_eligibility"])["tick"]==6
 end
+
+@testset "Norton Bass forcing history" begin
+    parameters=Dict("p1"=>0.1,"q1"=>0.,"m1"=>100.,"p2"=>0.1,"q2"=>0.,"m2"=>100.,"beta_p1_price"=>0.05,"beta_q1_price"=>0.,"beta_m1_price"=>0.,"beta_p2_price"=>0.05,"beta_q2_price"=>0.,"beta_m2_price"=>0.)
+    payload=Dict("inputs"=>Dict("time"=>[0.,1.,2.],"covariates"=>Dict("price"=>[0.,1.,2.])),"parameters"=>parameters,"constructor_kwargs"=>Dict("n_generations"=>2,"covariates"=>["price"]))
+    result=kernel_predict_model("norton_bass",payload)["result"]
+    @test isapprox(result["rows"][3][1],30*exp(-0.3);atol=1e-5)
+    forecast=kernel_predict_model("norton_bass",Dict("inputs"=>Dict("time"=>[3.]),"state"=>result["state"]))["result"]
+    @test isapprox(forecast["rows"][1][1],50*exp(-0.5);atol=1e-5)
+end

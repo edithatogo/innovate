@@ -219,3 +219,10 @@ retry_payload <- list(inputs=list(time=c(0,6,12)),parameters=list(p=1e12,q=0,m=2
 retry_result <- kernel_simulate_model("bass",retry_payload)$result
 stopifnot(all(unlist(retry_result$counts)==c(0,1,2)),length(retry_result$balks)==1,retry_result$balks[[1]]$tick==2,length(retry_result$retry_eligibility)==1,retry_result$retry_eligibility[[1]]$tick==6)
 cat("R Kairos queue limit and retry passed\n")
+
+nb_parameters <- list(p1=0.1,q1=0,m1=100,p2=0.1,q2=0,m2=100,beta_p1_price=0.05,beta_q1_price=0,beta_m1_price=0,beta_p2_price=0.05,beta_q2_price=0,beta_m2_price=0)
+nb_payload <- list(inputs=list(time=c(0,1,2),covariates=list(price=c(0,1,2))),parameters=nb_parameters,constructor_kwargs=list(n_generations=2,covariates="price"))
+nb_result <- kernel_predict_model("norton_bass",nb_payload)$result
+nb_forecast <- kernel_predict_model("norton_bass",list(inputs=list(time=3),state=nb_result$state))$result
+stopifnot(abs(nb_result$rows[[3]][[1]]-30*exp(-0.3))<1e-5,abs(nb_forecast$rows[[1]][[1]]-50*exp(-0.5))<1e-5)
+cat("R Norton Bass forcing history passed\n")

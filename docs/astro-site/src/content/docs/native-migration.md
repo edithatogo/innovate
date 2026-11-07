@@ -761,3 +761,22 @@ until replaced again and still uses each agent's multiplier. This supports
 piecewise constant interventions, including turning a hazard off. It leaves
 active service and queue positions intact. The result reports `current_p`
 and `current_q` at the requested horizon.
+
+### Historical Norton–Bass covariates
+
+The `legacy_cannibalization` variant accepts declared `covariates` and named
+`beta_p1_price`, `beta_q1_price`, `beta_m1_price` coefficients for each
+generation and declared control. The effective p, q and m are additive linear
+functions of the controls. This preserves the historical signed coefficient
+semantics, including zero derivative where effective market capacity is
+nonpositive. Signed rates can arise through cannibalization or forcing.
+
+Controls use the same linearly interpolated `covariate_history` as mechanistic
+Bass and Gompertz. History must cover the initial time. Outside its grid,
+endpoint values hold. The returned `state` carries the history for later
+forecasts, and overlapping input values must agree with that saved history.
+Integration includes all control knots. Conditional least squares requires
+complete `initial_parameters`, including every beta coefficient. The
+`successive_generations` variant still requires its original unforced controls.
+Event splits, automatic forcing-fit initialization, uncertainty and broader
+independent fitting qualification remain open.

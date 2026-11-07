@@ -1,0 +1,33 @@
+{
+  "status": "bounded_local_checkpoint",
+  "release_ready": false,
+  "related_evidence": [
+    "mechanistic-20261107.json",
+    "native-features-20261107.json"
+  ],
+  "results": {
+    "unique_focused_rust_tests": 26,
+    "accounting": "10 multi-generation, 9 mechanistic and 7 native boundary tests; perturbed fit rerun counted once",
+    "installed_python_tests": 42,
+    "julia_assertions": 187,
+    "R": "native conformance and Norton Bass history passed",
+    "docs_pages": 163,
+    "clippy": "workspace all targets passed"
+  },
+  "oracle": "Analytic two-generation cumulative hazard solution with linear forcing and endpoint holds. Conditional fit uses synthetic native observations and perturbed starting parameters.",
+  "remaining": "Successive-generation forcing, events, automatic fit starts, weighted fits, uncertainty, independent fitting and scientific qualification",
+  "logs": {
+    "clippy-final.log": "f2881c7e60f0ae94162dcaedf33f366cd0e4b0581aeda02214faa7163eb13535",
+    "clippy.log": "dd6200825bca65a60d0994f3bc8a8db3738818c8c4319d7b509e7cfb15d7c37d",
+    "docs.log": "6c3c51b3c5e95c9967bdacafdabc45ad17864d5b784dbf732b766f7ede211873",
+    "ffi.log": "ff10e2b336192300650e49e547dc8a9265611e1a61bfae4a934afe44d2cb133a",
+    "fit.log": "609eb3457390d9a0e19377daff0156cf0dfaa72d4a6a9f33ba4f527ec0366621",
+    "install.log": "1f4ec8e2425369c97e7148bd3b34de7fd1cec8892f661bd094feb46fe5904b48",
+    "julia.log": "d48d29268ec173ddeb04e1636a31d1dbf20b0c22234b0a7198c9b9549948b513",
+    "perturbed-fit.log": "628cea1d5e328c676720ce043a86df841f35205b020c9f5ba6bb5f9b6e123c34",
+    "python.log": "45e00f2cc162072e381af0198bc09a54daa73544fa9cd47b4ed25760a061c4aa",
+    "r.log": "3b4ea1e89ece67f326e6c455cb5c7dd62075014d5de3dfe22a12f556ffaa33e6",
+    "rust.log": "c65490f96235fa0ede2b8dc0f42f7f934d60c1dfda6a45f34ca87d44631667ef",
+    "wheel.log": "bb7f5604866ff9c1125997ef8121c9789a644f0b2fad6141d5c89cb1d80ab9de"
+  }
+}

@@ -1,4 +1,5 @@
 //! Multi-generation substitution. Historical ODE and successive-generation semantics are explicit.
+use crate::mechanistic::History;
 use crate::numerics::{integrate, least_squares};
 use crate::validation::{numeric_array, numeric_array_from_aliases, object_section, required_f64};
 use crate::{
@@ -15,6 +16,8 @@ struct Model {
     launches: Vec<f64>,
     origin: f64,
     initial: Vec<f64>,
+    covariates: Vec<String>,
+    history: Option<History>,
 }
 fn invalid(op: KernelOperation, message: impl Into<String>) -> Error {
     Error::invalid_request(op, message)
@@ -37,16 +40,15 @@ fn options(request: &KernelRequest, inputs: &Map<String, Value>) -> Result<Model
             .ok_or_else(|| invalid(op, "constructor_kwargs must be an object"))?,
         None => &empty,
     };
-    for (key, value) in kw {
-        if key == "covariates" && value.as_array().is_some_and(Vec::is_empty) {
-            continue;
-        }
+    for key in kw.keys() {
         if ![
             "n_generations",
             "variant",
             "launch_times",
             "initial_time",
             "initial_values",
+            "covariates",
+            "covariate_history",
         ]
         .contains(&key.as_str())
         {
@@ -55,12 +57,6 @@ fn options(request: &KernelRequest, inputs: &Map<String, Value>) -> Result<Model
                 format!("Norton-Bass option '{key}' is not implemented"),
             ));
         }
-    }
-    if inputs.contains_key("covariates") {
-        return Err(Error::unsupported_native_operation(
-            op,
-            "Norton-Bass covariates remain a migration obligation",
-        ));
     }
     if p.get("state")
         .and_then(|s| s.get("model_key"))
@@ -171,12 +167,42 @@ fn options(request: &KernelRequest, inputs: &Map<String, Value>) -> Result<Model
             "initial state applies to legacy_cannibalization only",
         ));
     }
+    let covariates: Vec<String> = kw
+        .get("covariates")
+        .map(|value| {
+            serde_json::from_value(value.clone())
+                .map_err(|_| invalid(op, "covariates must be an array of names"))
+        })
+        .transpose()?
+        .unwrap_or_default();
+    let distinct: std::collections::HashSet<_> = covariates.iter().collect();
+    if covariates.len() > 32
+        || distinct.len() != covariates.len()
+        || covariates.iter().any(|n| n.trim().is_empty())
+    {
+        return Err(invalid(
+            op,
+            "covariates must contain at most 32 distinct nonempty names",
+        ));
+    }
+    if variant != "legacy_cannibalization" && !covariates.is_empty() {
+        return Err(invalid(op, "covariates require legacy_cannibalization"));
+    }
+    let history = kw
+        .get("covariate_history")
+        .map(|value| {
+            serde_json::from_value(value.clone())
+                .map_err(|_| invalid(op, "invalid covariate_history"))
+        })
+        .transpose()?;
     Ok(Model {
         n,
         variant,
         launches,
         origin,
         initial,
+        covariates,
+        history,
     })
 }
 
@@ -184,10 +210,10 @@ fn parameters(value: &Value, model: &Model, op: KernelOperation) -> Result<Vec<f
     let p = value
         .as_object()
         .ok_or_else(|| invalid(op, "parameters must be an object"))?;
-    if p.len() != 3 * model.n {
+    if p.len() != 3 * model.n * (1 + model.covariates.len()) {
         return Err(invalid(
             op,
-            "parameters must contain exactly p_i, q_i, m_i for each generation",
+            "parameters must contain exactly p_i, q_i, m_i and declared beta coefficients",
         ));
     }
     let mut result = Vec::new();
@@ -203,13 +229,31 @@ fn parameters(value: &Value, model: &Model, op: KernelOperation) -> Result<Vec<f
             result.push(value);
         }
     }
+    for name in &model.covariates {
+        for i in 1..=model.n {
+            for key in ['p', 'q', 'm'] {
+                result.push(required_f64(p, &format!("beta_{key}{i}_{name}"), op)?);
+            }
+        }
+    }
     Ok(result)
 }
-fn parameter_value(p: &[f64]) -> Value {
+fn parameter_value(p: &[f64], model: &Model) -> Value {
     let mut out = Map::new();
-    for (i, p) in p.as_chunks::<3>().0.iter().enumerate() {
+    for (i, p) in p[..3 * model.n].as_chunks::<3>().0.iter().enumerate() {
         for (key, value) in ['p', 'q', 'm'].into_iter().zip(p) {
             out.insert(format!("{key}{}", i + 1), json!(value));
+        }
+    }
+    let mut betas = p[3 * model.n..].iter();
+    for name in &model.covariates {
+        for i in 1..=model.n {
+            for key in ['p', 'q', 'm'] {
+                out.insert(
+                    format!("beta_{key}{i}_{name}"),
+                    json!(betas.next().unwrap()),
+                );
+            }
         }
     }
     Value::Object(out)
@@ -226,31 +270,78 @@ fn fraction(t: f64, p: f64, q: f64) -> (f64, f64) {
 }
 impl Model {
     fn kwargs(&self) -> Value {
-        json!({"n_generations":self.n,"variant":self.variant,"launch_times":self.launches,"initial_time":self.origin,"initial_values":self.initial})
+        let mut kwargs = json!({"n_generations":self.n,"variant":self.variant,"launch_times":self.launches,"initial_time":self.origin,"initial_values":self.initial});
+        if let Some(history) = &self.history {
+            kwargs["covariates"] = json!(self.covariates);
+            kwargs["covariate_history"] = json!(history);
+        }
+        kwargs
     }
-    fn derivative(&self, y: &[f64], p: &[f64]) -> Vec<f64> {
+    fn derivative(&self, t: f64, y: &[f64], p: &[f64]) -> Vec<f64> {
+        let controls: Vec<_> = self
+            .history
+            .iter()
+            .flat_map(|history| self.covariates.iter().map(move |name| history.at(name, t)))
+            .collect();
         (0..self.n)
             .map(|i| {
-                (p[3 * i] + p[3 * i + 1] * y[i] / p[3 * i + 2])
-                    * (p[3 * i + 2] - y[i..].iter().sum::<f64>())
+                let mut coefficients = [p[3 * i], p[3 * i + 1], p[3 * i + 2]];
+                for (control, betas) in controls
+                    .iter()
+                    .zip(p[3 * self.n..].chunks_exact(3 * self.n))
+                {
+                    for (coefficient, beta) in coefficients.iter_mut().zip(&betas[3 * i..3 * i + 3])
+                    {
+                        *coefficient += beta * control;
+                    }
+                }
+                let [innovation, imitation, market] = coefficients;
+                if coefficients.iter().any(|v| !v.is_finite()) {
+                    return f64::NAN;
+                }
+                if market <= 0. {
+                    return 0.;
+                }
+                (innovation + imitation * y[i] / market) * (market - y[i..].iter().sum::<f64>())
             })
             .collect()
     }
     fn predict(&self, time: &[f64], p: &[f64]) -> Result<Trajectory, String> {
         if self.variant == "legacy_cannibalization" {
-            let rows = if self.n == 1 && self.initial[0] == 0.0 {
-                if time.iter().any(|t| *t < self.origin) {
-                    return Err("time precedes initial_time".into());
-                }
-                time.iter()
-                    .map(|t| vec![p[2] * fraction(t - self.origin, p[0], p[1]).0])
-                    .collect()
-            } else {
-                integrate(time, self.origin, &self.initial, |_, y| {
-                    self.derivative(y, p)
-                })?
-            };
-            let rates: Vec<Vec<f64>> = rows.iter().map(|y| self.derivative(y, p)).collect();
+            let rows: Vec<Vec<f64>> =
+                if self.history.is_none() && self.n == 1 && self.initial[0] == 0.0 {
+                    if time.iter().any(|t| *t < self.origin) {
+                        return Err("time precedes initial_time".into());
+                    }
+                    time.iter()
+                        .map(|t| vec![p[2] * fraction(t - self.origin, p[0], p[1]).0])
+                        .collect()
+                } else {
+                    let mut grid = time.to_vec();
+                    if let Some(history) = &self.history {
+                        let end = time.last().copied().unwrap_or(self.origin);
+                        grid.extend(
+                            history
+                                .time
+                                .iter()
+                                .copied()
+                                .filter(|t| *t > self.origin && *t < end),
+                        );
+                        grid.sort_by(f64::total_cmp);
+                        grid.dedup_by(|a, b| *a == *b);
+                    }
+                    let states = integrate(&grid, self.origin, &self.initial, |t, y| {
+                        self.derivative(t, y, p)
+                    })?;
+                    time.iter()
+                        .map(|t| states[grid.partition_point(|v| v < t)].clone())
+                        .collect()
+                };
+            let rates: Vec<Vec<f64>> = time
+                .iter()
+                .zip(&rows)
+                .map(|(&t, y)| self.derivative(t, y, p))
+                .collect();
             if rows.iter().chain(&rates).flatten().any(|x| !x.is_finite()) {
                 return Err("prediction exceeded the finite numerical domain".into());
             }
@@ -379,7 +470,7 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
         .as_object()
         .ok_or_else(|| invalid(op, "payload must be an object"))?;
     let inputs = object_section(payload, "inputs", op)?;
-    let model = options(request, inputs)?;
+    let mut model = options(request, inputs)?;
     let time = numeric_array_from_aliases(inputs, &["time", "t"], op)?;
     if time.iter().any(|t| !t.is_finite() || *t < 0.0) || time.windows(2).any(|t| t[1] <= t[0]) {
         return Err(invalid(
@@ -387,6 +478,14 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
             "time must be finite, nonnegative and strictly increasing",
         ));
     }
+    model.history = History::merge(
+        model.history.take(),
+        &model.covariates,
+        &time,
+        inputs.get("covariates"),
+        model.origin,
+    )
+    .map_err(|e| invalid(op, e))?;
     let mut optimizer = None;
     let mut identifiability = None;
     let p = if op == KernelOperation::FitModel {
@@ -436,6 +535,9 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
             p.iter()
                 .enumerate()
                 .map(|(i, p)| {
+                    if i >= 3 * model.n {
+                        return *p;
+                    }
                     (if i % 3 == 2 { p / y_scale } else { p * t_scale })
                         .max(1e-12)
                         .ln()
@@ -447,6 +549,9 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
                 .iter()
                 .enumerate()
                 .map(|(i, t)| {
+                    if i >= 3 * model.n {
+                        return *t;
+                    }
                     if i % 3 == 2 {
                         t.exp() * y_scale
                     } else {
@@ -459,7 +564,17 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
         if let Some(v) = fit_options.and_then(|o| o.get("initial_parameters")) {
             starts.push(transform(parameters(v, &model, op)?));
         }
-        for p0 in [0.1, 0.5, 1.0] {
+        if model.history.is_some() && starts.is_empty() {
+            return Err(invalid(
+                op,
+                "covariate fitting requires complete initial_parameters",
+            ));
+        }
+        for p0 in if model.history.is_none() {
+            &[0.1, 0.5, 1.0][..]
+        } else {
+            &[]
+        } {
             for q0 in [1.0, 5.0, 10.0] {
                 let mut start = Vec::new();
                 for i in 0..model.n {
@@ -498,19 +613,24 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
     let predictions = model
         .prediction_value(&time, &p)
         .map_err(|e| invalid(op, e))?;
-    let state = json!({"model_key":"norton_bass","model_name":"NortonBassModel","parameters":parameter_value(&p),"constructor_kwargs":model.kwargs(),"predict_kwargs":{}});
+    let state = json!({"model_key":"norton_bass","model_name":"NortonBassModel","parameters":parameter_value(&p, &model),"constructor_kwargs":model.kwargs(),"predict_kwargs":{}});
     let result = match op {
-        KernelOperation::PredictModel | KernelOperation::SimulateModel => predictions,
+        KernelOperation::PredictModel | KernelOperation::SimulateModel => {
+            let mut predictions = predictions;
+            if model.history.is_some() {
+                predictions["state"] = state;
+            }
+            predictions
+        }
         _ => {
-            let mut result = json!({"model_key":"norton_bass","model_name":"NortonBassModel","family":"substitution","parameters":parameter_value(&p),"state":state,"predictions":predictions});
+            let mut result = json!({"model_key":"norton_bass","model_name":"NortonBassModel","family":"substitution","parameters":parameter_value(&p, &model),"state":state,"predictions":predictions});
             if op != KernelOperation::SummarizeModel
                 || inputs.contains_key("observed")
                 || inputs.contains_key("y")
             {
                 let observed = observations(inputs, model.n, time.len(), op)?;
                 let (predicted, _) = model.predict(&time, &p).map_err(|e| invalid(op, e))?;
-                let mut d =
-                    diagnostics(&time, &observed, &predicted, "NortonBassModel", 3 * model.n);
+                let mut d = diagnostics(&time, &observed, &predicted, "NortonBassModel", p.len());
                 if let Some(report) = optimizer {
                     if report["converged"] != true {
                         d["warnings"]

@@ -498,3 +498,35 @@ def test_kairos_queue_retry():
     assert result["counts"] == [0, 1, 2]
     assert [entry["tick"] for entry in result["balks"]] == [2]
     assert [entry["tick"] for entry in result["retry_eligibility"]] == [6]
+
+
+def test_norton_bass_covariate_history():
+    parameters = {
+        "p1": 0.1,
+        "q1": 0.0,
+        "m1": 100.0,
+        "p2": 0.1,
+        "q2": 0.0,
+        "m2": 100.0,
+        "beta_p1_price": 0.05,
+        "beta_q1_price": 0.0,
+        "beta_m1_price": 0.0,
+        "beta_p2_price": 0.05,
+        "beta_q2_price": 0.0,
+        "beta_m2_price": 0.0,
+    }
+    result = innovate.execute(
+        "predict_model",
+        "norton_bass",
+        inputs={"time": [0.0, 1.0, 2.0], "covariates": {"price": [0.0, 1.0, 2.0]}},
+        parameters=parameters,
+        constructor_kwargs={"n_generations": 2, "covariates": ["price"]},
+    )["result"]
+    forecast = innovate.execute(
+        "predict_model",
+        "norton_bass",
+        inputs={"time": [3.0]},
+        state=result["state"],
+    )["result"]
+    assert result["rows"][2] == pytest.approx([100 * 0.3 * math.exp(-0.3), 100 * (1 - math.exp(-0.3))], abs=1e-5)
+    assert forecast["rows"][0][0] == pytest.approx(50 * math.exp(-0.5), abs=1e-5)

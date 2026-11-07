@@ -9,11 +9,67 @@ use serde_json::{Map, Value, json};
 use std::collections::BTreeMap;
 #[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
-struct History {
-    time: Vec<f64>,
+pub(crate) struct History {
+    pub(crate) time: Vec<f64>,
     values: BTreeMap<String, Vec<f64>>,
 }
 impl History {
+    pub(crate) fn merge(
+        mut history: Option<Self>,
+        names: &[String],
+        time: &[f64],
+        values: Option<&Value>,
+        origin: f64,
+    ) -> Result<Option<Self>, String> {
+        if let Some(existing) = &history {
+            existing.validate(names)?;
+        }
+        if let Some(values) = values {
+            let incoming = Self {
+                time: time.to_vec(),
+                values: serde_json::from_value(values.clone())
+                    .map_err(|_| "covariates must map names to numeric arrays")?,
+            };
+            incoming.validate(names)?;
+            if let Some(existing) = &mut history {
+                let last = *existing.time.last().unwrap();
+                for (i, &t) in time.iter().enumerate() {
+                    if t <= last {
+                        if names
+                            .iter()
+                            .any(|name| existing.at(name, t) != incoming.values[name][i])
+                        {
+                            return Err(
+                                "covariate history revision requires an explicit new history/state"
+                                    .into(),
+                            );
+                        }
+                    } else {
+                        existing.time.push(t);
+                        for name in names {
+                            existing
+                                .values
+                                .get_mut(name)
+                                .unwrap()
+                                .push(incoming.values[name][i]);
+                        }
+                    }
+                }
+                existing.validate(names)?;
+            } else {
+                history = Some(incoming);
+            }
+        }
+        if names.is_empty() {
+            if history.is_some() {
+                return Err("forcing history requires declared covariates".into());
+            }
+        } else if history.as_ref().is_none_or(|h| h.time[0] > origin) {
+            return Err("covariate history must cover the initial time; provide origin data or explicit history".into());
+        }
+        Ok(history)
+    }
+
     fn validate(&self, names: &[String]) -> Result<(), String> {
         if self.time.is_empty()
             || self.time.iter().any(|v| !v.is_finite())
@@ -32,7 +88,7 @@ impl History {
         }
         Ok(())
     }
-    fn at(&self, name: &str, t: f64) -> f64 {
+    pub(crate) fn at(&self, name: &str, t: f64) -> f64 {
         let i = self.time.partition_point(|v| *v <= t);
         let v = &self.values[name];
         if i == 0 {
@@ -386,54 +442,14 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         o.initial_time = Some(origin);
         o.initial_value = Some(initial);
     }
-    let mut forcing = o.covariate_history.clone();
-    if let Some(h) = &forcing {
-        h.validate(&o.covariates).map_err(|e| invalid(&e))?;
-    }
-    if let Some(values) = input.get("covariates") {
-        let incoming: BTreeMap<String, Vec<f64>> = serde_json::from_value(values.clone())
-            .map_err(|_| invalid("covariates must map names to numeric arrays"))?;
-        let update = History {
-            time: time.clone(),
-            values: incoming,
-        };
-        update.validate(&o.covariates).map_err(|e| invalid(&e))?;
-        if let Some(history) = &mut forcing {
-            let last = *history.time.last().unwrap();
-            for (i, t) in time.iter().enumerate() {
-                if *t <= last {
-                    if o.covariates
-                        .iter()
-                        .any(|name| history.at(name, *t) != update.values[name][i])
-                    {
-                        return Err(invalid(
-                            "covariate history revision requires an explicit new history/state",
-                        ));
-                    }
-                } else {
-                    history.time.push(*t);
-                    for name in &o.covariates {
-                        history
-                            .values
-                            .get_mut(name)
-                            .unwrap()
-                            .push(update.values[name][i]);
-                    }
-                }
-            }
-        } else {
-            forcing = Some(update);
-        }
-    }
-    if o.covariates.is_empty() {
-        if forcing.is_some() {
-            return Err(invalid("forcing history requires declared covariates"));
-        }
-    } else if forcing.as_ref().is_none_or(|h| h.time[0] > origin) {
-        return Err(invalid(
-            "covariate history must cover the initial time; provide origin data or explicit history",
-        ));
-    }
+    let forcing = History::merge(
+        o.covariate_history.take(),
+        &o.covariates,
+        &time,
+        input.get("covariates"),
+        origin,
+    )
+    .map_err(|e| invalid(&e))?;
     o.covariate_history = forcing.clone();
     let mut spec = vec![];
     for name in base {

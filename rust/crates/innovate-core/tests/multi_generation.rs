@@ -236,3 +236,92 @@ fn legacy_origin_is_explicit_and_forecast_batching_does_not_reset_state() {
     }
     assert!(KernelBinding::new().predict_model("norton_bass",json!({"inputs":{"time":[0.,1.]},"parameters":{"p1":0.03,"q1":0.2,"m1":100.},"constructor_kwargs":{"initial_time":2.}})).is_err());
 }
+
+#[test]
+fn covariate_history_drives_both_historical_generations_and_replays() {
+    let binding = KernelBinding::new();
+    let parameters = json!({"p1":0.1,"q1":0.,"m1":100.,"p2":0.1,"q2":0.,"m2":100.,
+        "beta_p1_price":0.05,"beta_q1_price":0.,"beta_m1_price":0.,
+        "beta_p2_price":0.05,"beta_q2_price":0.,"beta_m2_price":0.});
+    let options = json!({"n_generations":2,"covariates":["price"]});
+    let result = binding
+        .predict_model(
+            "norton_bass",
+            json!({
+                "inputs":{"time":[0.,1.,2.],"covariates":{"price":[0.,1.,2.]}},
+                "constructor_kwargs":options,"parameters":parameters
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    let replay = binding
+        .predict_model(
+            "norton_bass",
+            json!({
+                "inputs":{"time":[3.]},"state":result["state"]
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    let check = |row: &serde_json::Value, hazard: f64| {
+        let decay = (-hazard).exp();
+        assert!((row[0].as_f64().unwrap() - 100. * hazard * decay).abs() < 1e-5);
+        assert!((row[1].as_f64().unwrap() - 100. * (1. - decay)).abs() < 1e-5);
+    };
+    check(&result["rows"][2], 0.3);
+    check(&replay["rows"][0], 0.5);
+    assert!((result["rates"][2][1].as_f64().unwrap() - 20. * (-0.3_f64).exp()).abs() < 1e-5);
+    assert!(
+        binding
+            .predict_model(
+                "norton_bass",
+                json!({
+                    "inputs":{"time":[1.],"covariates":{"price":[0.]}},
+                    "state":result["state"]
+                })
+            )
+            .is_err()
+    );
+}
+
+#[test]
+fn conditional_covariate_fit_retains_all_named_coefficients() {
+    let binding = KernelBinding::new();
+    let time: Vec<f64> = (0..16).map(|i| i as f64).collect();
+    let values: Vec<f64> = time.iter().map(|t| (t / 3.).sin()).collect();
+    let parameters = json!({"p1":0.03,"q1":0.3,"m1":100.,
+        "beta_p1_price":0.005,"beta_q1_price":0.02,"beta_m1_price":2.});
+    let options = json!({"n_generations":1,"covariates":["price"]});
+    let inputs = json!({"time":time,"covariates":{"price":values}});
+    let generated = binding
+        .predict_model(
+            "norton_bass",
+            json!({
+                "inputs":inputs,"constructor_kwargs":options,"parameters":parameters
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    let mut training = inputs;
+    training["observed"] = generated["rows"].clone();
+    let mut start = parameters.clone();
+    start["p1"] = json!(0.032);
+    start["beta_p1_price"] = json!(0.0045);
+    let fit = binding
+        .fit_model(
+            "norton_bass",
+            json!({
+                "inputs":training,"constructor_kwargs":options,
+                "fit_options":{"initial_parameters":start,"max_iterations":150}
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
+    assert_eq!(fit["parameters"].as_object().unwrap().len(), 6);
+    assert!(fit["diagnostics"]["metrics"]["RSS"].as_f64().unwrap() < 1e-10);
+}
