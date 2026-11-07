@@ -752,3 +752,18 @@ forecast pass. Competition line coverage is 92.47 percent from focused tests.
 The unchanged optimizer retains prior full-suite evidence. Docs build 163 pages
 and local package checks pass. Lock-in forcing, event splits, uncertainty and
 scientific/release qualification remain required. Same isolated lane continues.
+
+## Lock in covariate and capacity forcing
+
+- [x] Extend growth, feedback, competition and capacity through shared history.
+- [x] Preserve clipping and qualify dynamic-capacity fits and diagnostics.
+- [x] Verify independent references, Python/Julia/R and retained limitations.
+
+Source: a5701060. Local qualification passed 27 affected Rust and bridge tests,
+47 installed Python tests, 201 Julia assertions and R conformance. Independent
+trajectories/rates, perturbed fitting and a held-out forecast pass. Capacity
+decline/recovery and forced fits with a small base m have regression coverage.
+Competition line coverage is 93.31 percent from focused tests. Docs build 163
+pages and local package checks pass. Rates retain the clipped RHS convention,
+and structural confounding remains explicit. Events, uncertainty, automatic
+starts and scientific/release qualification remain required. Same lane continues.
