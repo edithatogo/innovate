@@ -694,6 +694,13 @@ fn causal_summaries_match_analytic_effects() {
     assert!((contrasts[2]["standard_error"].as_f64().unwrap() - 1.).abs() < 1e-12);
     panel["periods"] = json!([-2, -2, 0]);
     assert!(run(panel)["result"].is_null());
+    let result = run(json!({"method":"staggered_panel_att","periods":[0,1,2],
+        "outcomes":[[0,5,7],[10,11,16]],"adoption_indices":[1,2]}));
+    let rows = result["result"]["contrasts"].as_array().unwrap();
+    assert_eq!(rows[0]["estimate"], 4.);
+    assert_eq!(rows[0]["n_control"], 1);
+    assert_eq!(rows[1]["estimate"], serde_json::Value::Null);
+    assert_eq!(rows[2]["n_control"], 0);
     let mut augmented = json!({"method":"augmented_treatment_contrast","outcomes":[0,4],
         "treatment":[0,1],"propensities":[0.5,0.5],"treated_predictions":[2,2],
         "control_predictions":[0,0]});

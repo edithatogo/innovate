@@ -99,6 +99,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
             )
         }
         Some("panel_event_study") => panel_event_study(payload),
+        Some("staggered_panel_att") => staggered_panel_att(payload),
         Some("event_study") => {
             let periods = series(payload, "periods")?;
             let effects = series(payload, "coefficients")?;
@@ -339,6 +340,58 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
         Some("covariate_balance") => covariate_balance(payload),
         _ => Err("unknown causal summary method"),
     }
+}
+
+fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
+    let periods = series(payload, "periods")?;
+    let outcomes: Vec<Vec<f64>> = serde_json::from_value(payload["outcomes"].clone())
+        .map_err(|_| "outcomes must be a numeric unit-by-period matrix")?;
+    let adoption: Vec<Option<usize>> = serde_json::from_value(payload["adoption_indices"].clone())
+        .map_err(|_| "adoption indices must be integers or null")?;
+    if periods.len() < 2
+        || periods.windows(2).any(|pair| pair[0] >= pair[1])
+        || outcomes.len() != adoption.len()
+        || outcomes.iter().any(|row| row.len() != periods.len())
+        || adoption
+            .iter()
+            .flatten()
+            .any(|&index| index == 0 || index >= periods.len())
+    {
+        return Err(
+            "staggered ATT requires aligned panels and adoption indices with an observed baseline",
+        );
+    }
+    let cohorts: std::collections::BTreeSet<_> = adoption.iter().flatten().copied().collect();
+    if cohorts.is_empty() {
+        return Err("staggered ATT requires at least one adoption cohort");
+    }
+    let mut contrasts = Vec::new();
+    for cohort in cohorts {
+        let baseline = cohort - 1;
+        for period in cohort..periods.len() {
+            let mut treated = Vec::new();
+            let mut control = Vec::new();
+            for (row, &index) in outcomes.iter().zip(&adoption) {
+                if index == Some(cohort) {
+                    treated.push(finite(row[period] - row[baseline])?);
+                } else if index.is_none_or(|index| index > period) {
+                    control.push(finite(row[period] - row[baseline])?);
+                }
+            }
+            let estimate = mean(&treated)
+                .zip(mean(&control))
+                .map(|(treated, control)| finite(treated - control))
+                .transpose()?;
+            contrasts.push(
+                json!({"cohort_period":periods[cohort],"period":periods[period],
+                "baseline_period":periods[baseline],"estimate":estimate,
+                "n_treated":treated.len(),"n_control":control.len()}),
+            );
+        }
+    }
+    Ok(
+        json!({"method":"not_yet_treated_group_time_difference_in_differences","contrasts":contrasts}),
+    )
 }
 
 fn panel_event_study(payload: &Value) -> Result<Value, &'static str> {

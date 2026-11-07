@@ -4700,3 +4700,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify balanced-panel event study through rebuilt Python 3.15.2,
   Julia and installed R. All three preserved unit-by-period ordering,
   flagged the reference period and returned estimate 4 and error 1.
+
+- [x] Estimate staggered cohort-period ATT using not-yet-treated
+  controls. The Rust fixture recovers 4 before the comparison cohort
+  adopts and preserves null estimates after overlap ends. Binding and
+  staggered inference qualification remain open.

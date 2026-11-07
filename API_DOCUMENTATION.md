@@ -346,3 +346,10 @@ mean change from the treated mean change relative to the baseline.
 Standard errors use independent units and are null for singleton arms.
 These are pointwise estimates for a common treatment timing design.
 Causal interpretation requires parallel trends and no anticipation.
+
+Use `staggered_panel_att` with `periods`, a unit-by-period `outcomes`
+matrix, and zero-based `adoption_indices`. Use null for never-treated
+units. Each cohort uses its last pre-adoption observation as baseline
+and compares changes with units untreated through the target period.
+Rows with no eligible controls return a null estimate and zero controls.
+Interpretation requires parallel trends and no anticipation.
