@@ -1260,3 +1260,9 @@ the other competition models and installed binding checks remain open.
   representable range. The native regression checks the origin and
   transition midpoint for p=1e-200 and q=1e200. Eleven boundary tests
   and focused Clippy passed. Installed edge-case checks remain open.
+
+- [x] Verify extreme plain Bass predictions in installed Python, Julia and R.
+  With p=1e-200 and q=1e200, all three return midpoint level 0.5 and
+  rate q/4 within 1e-11 (absolute for level, relative for rate).
+  Python and Julia reproduce the origin rate exactly. R's JSON round trip
+  differs by 4.44e-16 relative and passes the 1e-11 rate tolerance.
