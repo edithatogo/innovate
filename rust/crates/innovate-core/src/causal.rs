@@ -61,7 +61,8 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                  "uncertainty":"conditional_standard_error",
                  "uncertainty_requires":["outcome_variances"],
                  "uncertainty_assumptions":["fixed_matched_pairs","independent_outcomes"],
-                 "correlated_uncertainty_option":"outcome_covariance_factors"},
+                 "correlated_uncertainty_option":"outcome_covariance_factors",
+                 "alternative_to_scores":"fit_scores"},
                 {"method":"augmented_treatment_contrast","adjustment":"caller_supplied_nuisance_predictions",
                  "required_fields":["outcomes","treatment","propensities","control_predictions"],
                  "required_fields_by_estimand":{"ate":["treated_predictions"],"att":[]},
@@ -1358,6 +1359,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
                 | "outcomes"
                 | "treatment"
                 | "scores"
+                | "fit_scores"
                 | "caliper"
                 | "allow_partial"
                 | "outcome_variances"
@@ -1375,7 +1377,28 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
         .ok_or("allow_partial must be boolean")?;
     let outcomes = series(payload, "outcomes")?;
     let treatment = series(payload, "treatment")?;
-    let scores = series(payload, "scores")?;
+    let score_fit = if let Some(fit) = fields.get("fit_scores") {
+        if fields.contains_key("scores") {
+            return Err("choose either fit_scores or scores");
+        }
+        let fit = fit.as_object().ok_or("fit_scores must be an object")?;
+        if fit
+            .keys()
+            .any(|key| !matches!(key.as_str(), "covariates" | "folds" | "ridge"))
+        {
+            return Err("fit_scores received an unsupported field");
+        }
+        Some(cross_fit_logistic_propensities(&json!({
+            "treatment": treatment, "covariates": fit.get("covariates"),
+            "folds": fit.get("folds"), "ridge": fit.get("ridge"),
+        }))?)
+    } else {
+        None
+    };
+    let scores = match &score_fit {
+        Some(fit) => series(fit, "propensities")?,
+        None => series(payload, "scores")?,
+    };
     let outcome_variances = fields
         .contains_key("outcome_variances")
         .then(|| series(payload, "outcome_variances"))
@@ -1629,7 +1652,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
         json!({"method":"nearest_score_with_replacement","estimand":estimand,"estimate":estimate,"adjusted_estimate":adjusted_estimate,"pairs":pairs,
             "unmatched_treated_indices":unmatched_treated_indices,
             "conditional_standard_error":conditional_standard_error,"uncertainty_model":uncertainty_model,
-            "covariate_balance":balance,
+            "covariate_balance":balance,"score_fit":score_fit,
             "outcome_weights":outcome_weights,"adjusted_outcome_weights":adjusted_outcome_weights,
             "adjusted_standard_error":adjusted_standard_error,
             "match_diagnostics":{"caliper":caliper,"max_score_distance":max_score_distance,
@@ -2457,7 +2480,10 @@ fn policy_specification(payload: &Value) -> Result<Value, &'static str> {
 
 #[cfg(test)]
 mod tests {
-    use super::{pooled_scaled_deviation, scaled_balance_difference, weighted_outcome_contrast};
+    use super::{
+        matched_treatment_contrast, pooled_scaled_deviation, scaled_balance_difference,
+        weighted_outcome_contrast,
+    };
 
     #[test]
     fn pooled_deviation_resolves_adjacent_covariate_values() {
@@ -2486,5 +2512,23 @@ mod tests {
     fn fitted_outcome_contrast_cancels_a_common_loading() {
         let weights = [(0, -1.), (1, 1. / 3.), (2, 1. / 3.), (3, 1. / 3.)];
         assert_eq!(weighted_outcome_contrast(&[f64::MAX; 4], &weights), Ok(0.));
+    }
+    #[test]
+    fn matching_uses_held_out_logistic_scores() {
+        let mut payload = serde_json::json!({
+            "outcomes": [0, 4, 2, 6], "treatment": [0, 1, 0, 1], "caliper": 0,
+            "fit_scores": {"covariates": [[0], [0], [0], [0]], "folds": [1, 1, 2, 2], "ridge": 1}
+        });
+        let result = matched_treatment_contrast(&payload).unwrap();
+        assert_eq!(
+            result["score_fit"]["propensities"],
+            serde_json::json!([0.5, 0.5, 0.5, 0.5])
+        );
+        assert_eq!(result["estimate"].as_f64(), Some(5.));
+        payload["scores"] = serde_json::json!([0, 0, 0, 0]);
+        assert_eq!(
+            matched_treatment_contrast(&payload),
+            Err("choose either fit_scores or scores")
+        );
     }
 }

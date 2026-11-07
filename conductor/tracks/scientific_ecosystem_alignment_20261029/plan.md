@@ -5396,3 +5396,10 @@ Hosted release readiness for this worktree revision remains open.
   through Julia and the installed R binding against a rebuilt Rust FFI
   library. Both bindings reproduced the Python estimates, outcome weights
   and standard errors.
+
+- [x] Run cross-fitted ridge-logistic propensity estimation directly in
+  native matching. Supply covariate rows, folds and a positive ridge via
+  `fit_scores` in place of `scores`. The result includes the held-out
+  probabilities and fold provenance. Four Rust causal unit tests passed.
+  The standard errors still condition on the selected pairs. Score-fit
+  uncertainty and binding qualification for this input remain open.
