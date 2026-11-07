@@ -839,6 +839,12 @@ fn causal_summaries_match_analytic_effects() {
         run(guarded)["error"]["message"],
         "minimum_training_arm_count must be a positive integer"
     );
+    let mut misspelled = cross_fitted.clone();
+    misspelled["minimum_training_arms_count"] = json!(2);
+    assert_eq!(
+        run(misspelled)["error"]["message"],
+        "cross-fitted contrast received an unsupported field"
+    );
     let matched_with_fitted_controls = run(json!({
         "method":"matched_treatment_contrast",
         "outcomes":cross_fitted["outcomes"],"treatment":cross_fitted["treatment"],

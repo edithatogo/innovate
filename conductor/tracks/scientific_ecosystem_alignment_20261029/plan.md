@@ -6291,3 +6291,8 @@ Hosted release readiness for this worktree revision remains open.
   minimum of two gave conditional coverage of 160/166 for ATE and
   153/166 for ATT. These results describe selected successful trials
   and do not establish a universal cutoff or weak-overlap acceptance.
+
+- [x] Reject unknown cross-fitted contrast fields so a misspelled
+  minimum-training-arm option cannot silently use the default.
+  The focused Rust causal boundary test verified rejection and
+  retained the valid ATE and ATT cases.

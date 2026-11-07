@@ -2139,6 +2139,23 @@ fn estimate_stratum_propensities(payload: &Value) -> Result<Value, &'static str>
 }
 
 fn cross_fitted_stratum_contrast(payload: &Value, estimand: &str) -> Result<Value, &'static str> {
+    let fields = payload
+        .as_object()
+        .ok_or("expected a cross-fitted contrast object")?;
+    if fields.keys().any(|key| {
+        !matches!(
+            key.as_str(),
+            "method"
+                | "outcomes"
+                | "treatment"
+                | "strata"
+                | "folds"
+                | "clusters"
+                | "minimum_training_arm_count"
+        )
+    }) {
+        return Err("cross-fitted contrast received an unsupported field");
+    }
     let required_arm_count = payload
         .get("minimum_training_arm_count")
         .map(|value| {
