@@ -4312,3 +4312,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Compare agents waiting and in service at the shared horizon.
   The focused Rust scenario test ends at reopening and verifies
   one additional waiter and two additional agents in service.
+- [x] Verify resource counts at the horizon through the rebuilt Python
+  3.15.2 wheel, Julia and installed R at 50e49a55. All report one
+  additional waiter and two additional agents in service. The Python
+  check reads the comparison back from Arrow.
