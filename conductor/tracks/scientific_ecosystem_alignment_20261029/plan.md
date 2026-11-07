@@ -5358,3 +5358,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Retain the correlated standard error and uncertainty model in
   Python's matching consumer test. The rebuilt Python 3.15.2
   extension returned sqrt(8.5) and reported two covariance factors.
+
+- [x] Retain the correlated matching fixture in Julia and R.
+  Both installed consumers recovered sqrt(8.5) and identified
+  the two-factor covariance model with rebuilt FFI.

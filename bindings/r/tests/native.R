@@ -854,3 +854,11 @@ matched <- kernel_call("summarize_causal", payload=c(observations, list(
   control_predictions=fit$control_predictions)))$result
 stopifnot(matched$estimate == 5, matched$adjusted_estimate == 6,
   is.null(matched$conditional_standard_error))
+
+correlated_payload <- list(method="matched_treatment_contrast", outcomes=c(0,10,12,3,99),
+  treatment=c(0,0,1,1,0), scores=c(0,2,2,2,0), caliper=1,
+  outcome_variances=c(1,4,1,1,1), outcome_covariance_factors=list(rep(7,5),c(0,0,2,2,0)))
+correlated <- kernel_call("summarize_causal", payload=correlated_payload)$result
+stopifnot(isTRUE(all.equal(correlated$conditional_standard_error, sqrt(8.5))),
+  correlated$uncertainty_model$model == "diagonal_plus_factors",
+  correlated$uncertainty_model$factor_count == 2)

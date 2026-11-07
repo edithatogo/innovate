@@ -911,3 +911,12 @@ end
     @test matched["adjusted_estimate"] == 6
     @test isnothing(matched["conditional_standard_error"])
 end
+
+@testset "Correlated matched uncertainty" begin
+    payload = Dict("method"=>"matched_treatment_contrast", "outcomes"=>[0,10,12,3,99],
+        "treatment"=>[0,0,1,1,0], "scores"=>[0,2,2,2,0], "caliper"=>1,
+        "outcome_variances"=>[1,4,1,1,1], "outcome_covariance_factors"=>[fill(7,5),[0,0,2,2,0]])
+    matched = kernel_call("summarize_causal", nothing, payload)["result"]
+    @test matched["conditional_standard_error"] ≈ sqrt(8.5)
+    @test matched["uncertainty_model"] == Dict("model"=>"diagonal_plus_factors", "factor_count"=>2)
+end
