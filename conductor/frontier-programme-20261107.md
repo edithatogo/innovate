@@ -1,59 +1,62 @@
-# Scientific frontier programme — 7 November 2026
+# Innovation capability programme — revised 7 November 2026
 
-## Status and authority
+## Authority and scope correction
 
-The user authorised recording the recommendations in Conductor. This is a planning change, not implementation, native qualification, a completed study, or permission to publish packages or submit manuscripts. All new implementation tasks remain open.
+This revision incorporates the maintainer's explicit direction: preserve innovation modelling and prediction as the product, require a Rust core and Polars, cease pandas/xarray support, align with current Kairos, and study hype's effects rather than make claim exaggeration the central construct. It supersedes conflicting choices in the initial PR #570 planning packet. This is an approved implementation direction; implementation, model qualification and release acceptance remain open.
 
-Source baseline: `b9998addf32717438df92b23a306903e4db51620`. Inspection found a hybrid Python/Rust library, not a fully Rust-owned scientific core. Historical completed tracks remain historical records; their titles are not evidence that all current operations, payloads and model families are native or statistically validated.
+Reviewed Innovate planning base: `40c00f98d929c8109dd5a709ca9fb3ef44b443ab`. Existing `scientific_ecosystem_alignment_20261029` keeps its historical evidence and pin ownership; new requirements override future architecture choices, not historical receipts. Reconcile overlap with open plans before assigning work.
 
-The existing [scientific ecosystem alignment track](tracks/scientific_ecosystem_alignment_20261029/index.md) retains its owner, accepted pins, installed-consumer evidence and unfinished gates. Reuse its [2 November reconciliation](tracks/scientific_ecosystem_alignment_20261029/reconciliation-20261102.md). Reconcile overlapping open PRs before implementing; do not silently duplicate or supersede them.
+## Stable purpose
 
-## Objective and alternatives
+Policy/technology diffusion, adoption, competition, substitution, complements, expectations/hype, failure and strategic innovation are in scope. Medicines utilisation is the first substantial multi-mechanism application, not a reason to turn Innovate into a clinical library or a misinformation classifier.
 
-Reach the frontier through scientific correctness, a genuine native core and independent comparative validation. Investigate beyond-frontier contributions through adoption–capacity coupling and joint implementation/research decisions. Novelty and superiority remain hypotheses to test.
+## Architecture decision
 
-Retaining Python as the authoritative core conflicts with the requested architecture. A wholesale rewrite would discard useful reference behaviour and expand risk. The selected direction is incremental inversion: extract validated Rust model-operation slices, make language bindings call them, and retain independent reference implementations as test oracles or explicitly named external backends.
+Chosen: a binding-independent Rust core, Polars data layer, Arrow interchange and optional native adapters. Rejected: a Python-first kernel with selected Rust speedups; a monolith containing a second scheduler, VOI engine and game solver; and a wholesale rewrite without independent reference tests. Incremental native extraction preserves scientific references while retiring unsupported production paths.
 
-## Registered work
+Target components: `crates/innovate-core`, `crates/innovate-data`, `crates/innovate-arrow`, optional `crates/innovate-kairos`, optional `crates/innovate-games`, and direct bindings. These paths are proposed until corresponding tasks pass. Rust compiled to native or Wasm counts as Rust execution only for the capabilities actually qualified.
 
-| Track | Priority | Dependency and independently useful outcome |
+## Directed ownership
+
+| Capability | Owner | Integration |
 |---|---|---|
-| [Scientific integrity](tracks/scientific_integrity_20261107/index.md) | P0 | Repair invalid uncertainty/causal semantics; no dependency on a full rewrite. |
-| [Rust-core convergence](tracks/rust_core_convergence_20261107/index.md) | P0 | Extract the native core; promotion requires integrity tests and existing alignment gates. |
-| [Empirical validation and publication](tracks/empirical_validation_publication_20261107/index.md) | P1 | Acquire/version data now; publish numerical claims only after relevant correctness gates. |
-| [Advanced diffusion methods](tracks/advanced_diffusion_frontier_20261107/index.md) | P2 | Promote one independently validated model/likelihood/inference slice at a time. |
-| [Ecosystem decision integration](tracks/ecosystem_decision_integration_20261107/index.md) | P2 | Preserve joint uncertainty across Innovate, Kairos, economic models and Voiage. |
-| [Healthcare hype evaluation](tracks/healthcare_hype_validation_20261107/index.md) | P1 research | Begin source/construct audits now; fitted scientific claims require the appropriate integrity and model gates. |
+| Innovation dynamics, observation models, fit/predict and innovation-specific game construction | Innovate | Consumes native Kairos and optional generic game runtime; exports uncertainty-preserving forecasts. |
+| Simulation clock/events/state/resources/RNG/replay | Kairos | No reverse dependency on Innovate or applications; no host substitute. |
+| Generic game definitions, equilibrium/regret/learning algorithms | One extracted game-runtime library | Reconcile `uogto-game-core`, `uogto-game-solve` and Kairos game crates before promotion; static solvers need no simulator. |
+| Semantic game vocabulary/conformance | UOGTO | Semantic dependency, not an equilibrium implementation. |
+| VOI, perspective/equity/decision evaluation and generic VOP capability | Voiage | Optional Innovate consumer adapter; application supplies utility/economic mapping. |
+| Spline surrogate fitting/replay | MARS | Optional, measured decision-preservation gate. |
+| Medicines source acquisition, terminology and reviewed funding evidence | Global Medicines Atlas / Reimbursement Atlas | Innovate consumes pinned, qualified projections; no duplicate data lake. |
+| NZ proof of concept | vop_poc_nz | Empirical scenarios/tutorials; reusable methods promoted to Voiage. |
+| Tobacco, reimbursement and healthcare operational studies | tobac / new-drug-reimbursement-game / careops-sim | Domain assumptions and validation; generic capabilities move upstream. |
 
-## Shared contracts and ownership
+The additional library is a consolidation/extraction of an existing game-runtime incubator, not a new economics umbrella or generic orchestration framework. Its name/repository can be settled at extraction; the existing `uogto-game-*` crate names are the starting point. No new repository is created by this planning change.
 
-Innovate owns adoption dynamics, observation likelihoods, estimation and diagnostics. Kairos owns simulation time, event ordering, agent/resource state and simulation random streams. Voiage owns value-of-information and decision-uncertainty calculations. Application repositories own clinical pathways, costs, utilities and valuation. MARS is an optional surrogate, promoted only after accuracy/cost and decision-preservation evidence.
+## Existing six tracks, revised rather than duplicated
 
-Align with `edithatogo/repository-standards` and Voiage's native separation, but inspect and pin the relevant versions before implementation. Do not assume another repository has completed its own native migration. `careops-sim`, `tobac` and `vop_poc_nz` are candidate application consumers, not dependencies of the generic numerical core.
+| Track | Taskbook IDs | Acceptance emphasis |
+|---|---|---|
+| Scientific integrity | I01–I04 | No fabricated posteriors or unimplemented causal methods disguised as results. |
+| Rust-core convergence | R01–R10 | Native-only execution; Polars/Arrow; pandas/xarray-free supported closure; qualified pins. |
+| Empirical validation/publication | M01–M05, V01–V05, Q01–Q05 | Medicines and cross-domain evidence, independent oracles, packages and hardened release. |
+| Advanced diffusion frontier | A01–A08, G01–G04 | Actual innovation capabilities, established methods and falsifiable new research. |
+| Ecosystem decision integration | E01–E05 | Actual Kairos execution, joint draws, Voiage/VOP/application promotion and no cycles. |
+| Healthcare hype evaluation | H01–H06 | General composite hype and uptake effects; healthcare application. Claim auditing is not a prerequisite. |
 
-Typed interchange must retain units, denominators, observation type, time basis, missingness, censoring, model/data/software versions, draw/scenario/strategy/product/region/time identifiers, fit status and provenance. Preserve correlated joint draws; do not independently resample marginal intervals. Arrow is an interchange boundary, not a mandate for Arrow tables inside every numerical operation. Dataframe and accelerator adapters remain optional.
+The [taskbook](innovation-taskbook-20261107.md) is the authoritative granular work definition. Track plans select IDs and record completion receipts; do not maintain competing checklists. Work starts with integrity and native contracts; source auditing and literature/comparator review can proceed in parallel. No estimated calendar completion is substituted for evidence.
 
-## Evidence and release rules
+## Frontier and beyond-frontier
 
-1. Distinguish verification, predictive validation, causal identification and decision utility. A passing schema test does not establish any of the latter three.
-2. A native claim requires execution without Python installed, runtime-dispatch evidence and installed consumers. Unsupported native requests fail explicitly; no undisclosed subprocess fallback.
-3. Inference failure cannot produce posterior-labelled draws. Unsupported estimators cannot silently return unadjusted contrasts.
-4. Freeze tolerances, comparison methods, data splits and computational budgets before inspecting final benchmark results. Separate exploratory tuning from confirmation.
-5. Record failures, exclusions, resource consumption and negative findings. Native parity tests use an independent mathematical oracle, not fixtures generated solely by the same implementation.
-6. Generate capability/claim summaries from executable evidence. Do not close an implementation track because plans, manifests or documentation exist.
+Frontier delivery means correct, competitive, reproducible model implementations: heterogeneous early-stage diffusion, multi-generation competition, repeat-use switching, calibrated hype effects and native cross-language operation. Beyond-frontier research targets joint expectations/adoption feedback, strategically endogenous innovation, demand–capacity separation, path dependence and transfer, and learning/implementation decisions. Each must beat or explain failure against named alternatives on held-out data. The [research register](research/innovation-frontier-questions-20261107.md) separates known methods, integration gaps and unresolved hypotheses.
 
-## Agent delivery and integration
+## Dependency alignment
 
-The integrator owns shared schemas, dependency pins and root manifests. Independent workers may implement bounded model slices, source adapters and benchmark runners on separate branches after reading both spec and plan. Every implementation task follows failing regression, minimal implementation, review, focused verification and installed-consumer acceptance. Integration proceeds by evidence, not calendar promises; human evidence annotation and external review are not accelerated by assigning more coding agents.
+Follow [dependency qualification](dependency-candidates-20261107.md) and repository-standards. Use newest released/prerelease/pinned-development candidates first, but only exact-source qualified candidates can ship. Shared semantic/RNG/Arrow contracts matter more than identical unrelated package version numbers. No rolling main dependencies, unrecorded fallback, blind upgrades or automatic publication.
 
-Before merging a slice, run its focused tests plus the repository's required gates. Use `python scripts/conductor_registry_hygiene.py --json` for Conductor structure. Archive only after numerical, native, consumer and documentation gates relevant to the claim pass. Do not waive existing native/HPC gates or imply scheduler/cluster acceptance from local CPU tests.
+## Release and research outputs
 
-## Research outputs
+Mandatory gates: scientific validity for the declared scope; native dispatch proof; supported installs without pandas/xarray; clean cross-platform consumers; reproducible benchmarks; supply-chain/security evidence; migration documentation and honest unsupported capabilities. See [release gates](release-gates-20261107.md).
 
-The [validation matrix](research/validation-matrix-20261107.md) maps model/features to candidate data and tests. The [healthcare hype protocol](research/healthcare-hype-protocol-20261107.md) defines a separate, falsifiable study.
+Initial software paper: JOSS after real research use and declared-scope acceptance. Forecast comparison: International Journal of Forecasting. Innovation/competition/hype contribution: Technological Forecasting and Social Change or Technovation; a medicines application may fit a pharmacoepidemiology journal. Decision-method work: Medical Decision Making. Reusable benchmark: Scientific Data. Venue requirements and AI disclosure are checked at submission; publication is not authorised by a completed software task.
 
-Target JOSS first for the delivered software scope and real research use; International Journal of Forecasting for comparative predictive evaluation; Technological Forecasting and Social Change for a substantive diffusion/policy contribution; Scientific Data for a reusable benchmark; JASSS for network/agent methods; Medical Decision Making for adoption–capacity–VOI decisions. For the hype measurement study, prefer JMIR Infodemiology, with JMIR for a broader validated contribution. These are targets, not acceptance forecasts.
-
-Check each journal's current requirements at submission. JOSS requires actual research use and AI-assistance disclosure and restricts AI-mediated author–editor/reviewer conversations. Authors must handle those interactions themselves in accordance with policy. Do not submit or claim independent human review through an agent.
-
-No paid compute, private clinical data ingestion, credential changes, external repository mutations, package publication or manuscript submission is authorised by this planning update.
+No protected-branch merge, external package publication, manuscript submission, paid compute, private-data transfer or undeclared application migration is implied. One accountable maintainer is supported; automated review must not invent a second human reviewer.

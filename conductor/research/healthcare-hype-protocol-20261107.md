@@ -1,71 +1,53 @@
-# Healthcare attention, evidence and adoption — study concept
+# Hype effects on innovation, with a medicines-utilisation application
 
-Date: 7 November 2026. Status: proposed protocol; no data collection, statistical validation, ethics determination or preregistration is claimed.
+Revision: 7 November 2026, following explicit maintainer clarification. This replaces the earlier claim-exaggeration-centred protocol. Hype is the trajectory and influence of attention, expectations, enthusiasm and disappointment; unsupported claims are neither its definition nor a prerequisite for this study. No empirical analysis or model validation is claimed yet.
 
-## Scientific question
+## Questions
 
-When do healthcare claims exceed the evidence available at the time, and does that mismatch help predict subsequent utilisation beyond evidence, reimbursement, supply and existing adoption trends? Test the prevalence and predictive usefulness of cycle-shaped dynamics rather than fitting every technology into a predetermined cycle.
+1. Which composite or dynamic expectation models fit and forecast observed attention/expectation trajectories, including no-cycle and repeated-wave cases?
+2. Does hype improve prediction of innovation adoption, use, switching or abandonment beyond a no-hype model and relevant access/price/availability variables?
+3. Under what measurements and designs can the effect of hype be distinguished from adoption-driven attention and shared shocks?
+4. How does hype interact with competing products, capacity constraints and strategic launch/investment decisions?
 
-Keep four constructs separate: attention volume; strength/scope/certainty of claims; quality and maturity of supporting evidence; and observed utilisation. High attention can reflect real benefit, safety concerns or public interest. Low uptake can reflect price, access or capacity. Neither is sufficient evidence of hype.
+The first two are predictive questions. Model-conditional scenarios are not empirical causal effects. A causal claim requires an additional identification design; lagged correlation alone is insufficient.
 
-## Prior art and potential contribution
+## Composite baseline and the current shape problem
 
-Sumner et al. (2014, BMJ, DOI 10.1136/bmj.g7015) linked exaggeration in academic press releases and news using paired research sources. Sumner et al. (2016, PLOS ONE, DOI 10.1371/journal.pone.0168217) extended this to journal press releases and caveats. Bratton et al. (2019, Wellcome Open Research, DOI 10.12688/wellcomeopenres.15486.2) replicated some but not all associations. Reuse their construct distinctions and check availability/licensing of supplementary corpora. Do not claim the first healthcare-hype study.
+The current `src/innovate/hype/hype_cycle.py` is `0.5*logistic + positive Gaussian - negative Gaussian`, clipped at zero. It fixes the maturity scale, does not constrain component ordering/widths, and provides assigned-parameter prediction rather than a complete fit. The extrema of the sum do not occur automatically at the Gaussian centres. Hard clipping can flatten the trough and remove useful gradient information. Do not patch a desired appearance with arbitrary clipping.
 
-The proposed contribution is a dated, uncertainty-aware linkage between claim/evidence alignment and later utilisation, evaluated across technologies with temporal holdouts and alternatives to a fixed cycle. Failure to find predictive value is an informative result.
+Target latent mean:
 
-## Feasible first cohort
+`h(t) = b + L*sigmoid(k*(t-t0)) + A*exp(-(t-mu_p)^2/(2*w_p^2)) - D*exp(-(t-mu_d)^2/(2*w_d^2))`.
 
-Begin with a source-availability pilot in medicines, where repeated utilisation is measurable. Candidate classes include GLP-1 receptor agonists, SGLT2 inhibitors, PCSK9 inhibitors and CGRP-targeted treatments. These are candidate comparators, not a declaration that any class is overhyped. Select the final intervention/indication/geography units using preregistered coverage rules, not visible peak shapes or fame. Include less-prominent and discontinued/unsuccessful candidates where ascertainable to reduce selection and survival bias.
+Fit components jointly. Use training-only time scaling, positive width/growth transforms and optional `mu_d = mu_p + softplus(delta)` only for the explicitly cycle-ordered family. Free baseline and plateau replace the fixed 0.5. A general wave model may omit ordering, add pulses or shrink amplitudes to zero. This is an additive composite mean, not a finite-mixture likelihood.
 
-Claim/evidence coding should be indication-specific. Aggregate dispensing may not reveal indication, new starters or unique patients; do not manufacture those fields. Use a coarser utilisation estimand, obtain suitable data, or exclude that comparison. Clinical AI, genomics, psychedelics and devices are later cohorts when comparable uptake data exist, not prerequisites for the pilot.
+Select an observation model: Student-t/Gaussian for a continuous expectation index; count likelihood with a log/softplus link for counts; a justified bounded model for bounded observations. A negative latent deviation is permitted even when observed counts are nonnegative. Do not fit a normalised search index as an absolute count.
 
-## Data layers and qualification
+A constrained multistart likelihood fit is the baseline. Conditional variable projection of amplitudes is permitted for identity-link Gaussian least squares only; do not apply its linearity argument to a nonlinear count link. Native Bayesian HMC/NUTS with hierarchical partial pooling can quantify uncertainty across technologies and regularise sparse data. It does not resolve structural non-identifiability or prove a cycle. Require priors expressed on scaled time/amplitude, prior-predictive checks, independent log-density/gradient oracles, convergence and posterior-predictive diagnostics. Failed sampling produces no fabricated posterior.
 
-| Layer | Candidate sources | Required caveats |
-|---|---|---|
-| Attention | Wikimedia pageviews; GDELT; appropriately licensed/search-accessible Google Trends | Wikipedia language is not country of exposure; searches are normalised/sampled, not absolute counts; GDELT historical availability varies by product/mode and must be probed and frozen. |
-| Claims | Dated research articles, press releases and news with source linkage | Retain document version, claim span, stated population/intervention/outcome, effect magnitude, uncertainty and availability claims. Respect text copyright and syndication. |
-| Evidence | PubMed/Europe PMC, registered-trial histories, systematic reviews and contemporaneous assessments | Counts and trial phase are not proof of benefit. Code design, bias, precision, population relevance, replication and conflicts. Do not use later evidence to label earlier claims without a separate retrospective estimand. |
-| Regulation/funding/access | Dated TGA/FDA, PBS/PBAC and relevant reimbursement records | Approval, reimbursement, supply and appropriateness differ. Historical status needs dated evidence, not today's record substituted into past months. |
-| Utilisation | Qualified PBS utilisation archives, AIHW/Services Australia series, English prescribing where harmonisable | Repeated scripts are not new adopters; public counts may omit private/off-label use. Revisions, processing-versus-supply date and indication ambiguity must be retained. |
+## From a hype curve to its impact
 
-Use public aggregate data first; seek the appropriate institutional determination before research involving restricted records or identifiable people. Do not make allegations about individuals or companies from model scores. Publish evidence-based estimates with uncertainty and accessible correction mechanisms.
+Replace the existing common multiplier of Bass p and q with separately estimable effects where data support them:
 
-## Annotation and measurement
+`log p_j(t) = alpha_pj + beta_pj*h_j(t-lag_p) + x_j(t)'gamma_p`;
+`log q_j(t) = alpha_qj + beta_qj*h_j(t-lag_q) + x_j(t)'gamma_q`.
 
-Pilot a stratified sample of paired claims and contemporaneous evidence. Use independent reviewers, an explicit codebook, blinded adjudication and agreement/uncertainty reporting. Distinguish supported, overstated, contradicted and indeterminate claims; retain separate dimensions for causality, magnitude, population generalisation, certainty and time-to-availability. A source paper itself can contain overstatement and is not an infallible reference.
+Coefficients can be positive or negative. Cumulative first-adopter counts remain nondecreasing; cessation belongs in an active-use/abandonment state, not a negative cumulative-adoption derivative. Competing-product attention can enter via prespecified cross-effects. Begin with exogenous observed hype; introduce joint hype/adoption feedback only after known-truth identifiability tests and appropriate additional measurements.
 
-A proposed initial feasibility sample is 400 paired claims, split into development and locked temporal/technology holdouts; this is a workload proposal, not a powered sample-size calculation. Final size, strata and precision targets follow the pilot and are frozen before confirmation. Estimate prevalence using sampling weights where sampling is unequal. Any automated text classifier must be evaluated against held-out human labels with leakage controls, calibration, abstention and error analysis. Carry label uncertainty into downstream models; do not replace expert evidence assessment with an unvalidated language-model score.
+Verify whether the existing delayed model is merely external forcing `h(t-delay)` or a genuine delayed-state equation before changing its solver. A delayed input does not by itself require a delay differential equation solver.
 
-## Analysis stages
+## Data and study design
 
-A. Measurement/descriptive study: source coverage, reliability of claim/evidence alignment, attention profiles and dated evidence changes. This stage does not require the whole Rust migration.
+Use medicines as an application of the generic method. The [medicines plan](medicines-utilisation-20261107.md) records exact existing PBS archive objects and qualification gaps. Candidate attention measures include pageviews, news and appropriately sourced search/expectation surveys. Attention is a proxy, not a direct measurement of expectations; use multiple indicators or sensitivity analysis and label the construct honestly.
 
-B. Predictive study: compare naive/autoregressive baselines, standard diffusion without attention, flexible distributed-lag/GAM or state-space models, the existing restricted cycle model and any new mechanistic model. Use blocked temporal validation and held-out technologies. Test whether added variables improve proper predictive scores and calibration, not just in-sample R-squared.
+Select technologies from source coverage and a prespecified sampling frame, not observed peaks. Include quiet trajectories and repeated waves. Match geography, observation dates and temporal resolution; preserve revisions and ascertainment changes. The core study does not require manually grading whether claims are exaggerated. Evidence, regulatory, reimbursement, supply and price events may be covariates when appropriately dated and sourced.
 
-C. Mechanistic extension: allow no peak, repeated peaks and inhibition; separate identifiable effects on innovation and imitation; represent abandonment separately from cumulative first adoption. Include an observation model and explicit access/capacity constraints where supported. Verify synthetic known-truth and no-effect/common-cause cases before empirical interpretation.
+Pilot models on known synthetic cases first: monotone maturity only, one peak/trough, repeated peaks, inhibitory hype, lagged response, no effect, reverse feedback, shared shocks, product substitution and capacity-limited utilisation. Then compare frozen temporal and held-out-technology forecasts against no-hype diffusion, naive/autoregressive, spline/GAM or state-space alternatives and existing published hype models. Estimate incremental proper-score improvement, calibration, peak/trough timing uncertainty, false-cycle detection and failure rate. Avoid selecting the final model on the held-out cohort.
 
-D. Causal/decision extension: only with a defensible identified design and a clearly stated estimand. Regulatory changes and press releases are not automatically exogenous shocks. Lagged association or Granger predictability is not evidence that hype caused prescribing. Kairos and Voiage become useful for downstream capacity/research decisions only after the upstream constructs and uncertainty are qualified.
+## Primary prior art and proposed outputs
 
-## Prespecified safeguards and stopping rules
+Shi and Herniman, The role of expectation in innovation evolution: Exploring hype cycles, DOI 10.1016/j.technovation.2022.102459, connects expectations and diffusion. Silvestrini et al., Rate equation leading to hype-type evolution curves, DOI 10.1016/j.techfore.2016.11.013, reports quantitative fitting and uncertainty code. Therefore neither quantitative hype modelling nor parameter fitting is claimed as new. Check accessible implementations/licences before reusing or describing an implementation gap.
 
-Freeze cohort, synonyms, source queries, vintages, event dates, outcomes, comparison methods and analysis windows. Address common causes, reverse causation, multiple testing, changing media coverage, duplicate stories and outcome-dependent selection. Do not combine arbitrary standardised scores into a purported universal hype index without measurement validation. Do not infer cost/waste from attention alone.
+Initial contribution: a verified composite/dynamic fitting toolkit and an out-of-sample study of hype's incremental impact on innovation utilisation. Primary venue candidates are Technological Forecasting and Social Change, Technovation, or International Journal of Forecasting for a substantial methodological comparison. A medicines-specific result can be submitted separately to an appropriate pharmacoepidemiology venue. Claims about novelty, superiority or causal impact require their own evidence.
 
-If claim/evidence coding is unreliable, report a measurement/feasibility result and stop the latent-hype analysis. If uptake cannot be harmonised, report attention/evidence results only. If parameters cannot be recovered in synthetic tests, use a simpler model or bounds. If attention adds no held-out value, report that result rather than searching for a favourable cycle.
-
-## Outputs and venues
-
-First output: measurement/feasibility and predictive protocol, then a confirmatory study. Prefer JMIR Infodemiology for the information-quality/attention study; consider JMIR for a broader externally validated digital-health information contribution. Use International Journal of Forecasting for a substantial forecasting-method result and Medical Decision Making for a later implementation/research-decision contribution. Keep the JOSS software paper separate. Assess current journal requirements and disclose AI assistance; no submission is authorised here.
-
-## Sources checked for this planning update
-
-- https://pubmed.ncbi.nlm.nih.gov/25498121/ — primary paired-source study.
-- https://pubmed.ncbi.nlm.nih.gov/27978540/ — journal press releases/caveats study.
-- https://pubmed.ncbi.nlm.nih.gov/31728413/ — replication with mixed findings.
-- https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/reference/page-views.html — pageview endpoints start July 2015.
-- https://support.google.com/trends/answer/4365533?hl=en — sampling and 0–100 normalisation; low-volume censoring.
-- https://gdeltproject.org/data.html and https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/ — product documentation; exact historical retrieval remains an acquisition test.
-- https://www.aihw.gov.au/reports/medicines/pbs-monthly-data/contents/technical-notes — date-of-supply series and revision caveats.
-- https://infodemiology.jmir.org/about-journal/focus-and-scope and https://www.jmir.org/about-journal/focus-and-scope — venue scope.
-- https://joss.readthedocs.io/en/latest/submitting.html — software submission and AI-use requirements.
+Stop or simplify when the data do not distinguish mechanisms. Report null predictive results, poor identifiability and cases where a simpler model is better. Native migration and empirical validity remain separate gates.

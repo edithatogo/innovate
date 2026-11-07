@@ -1,43 +1,41 @@
-# Empirical Validation and Publication Implementation Plan
+# Validation and Hardened Release Implementation Plan
 
-> For agentic workers: use superpowers:executing-plans or superpowers:subagent-driven-development task by task.
+> For agentic workers: execute ready packets from the taskbook. Keep source rights, mathematical verification, prediction and release acceptance distinct.
 
-**Goal:** Produce inspectable comparative evidence and a submission-ready software/research package.
+**Goal:** Reproducible medicines and cross-domain validation through a native hardened release and scoped publications.
 
-**Architecture:** Versioned source manifests and adapters feed frozen benchmark jobs; evaluation artefacts retain all preprocessing, fitting and computational provenance.
+**Architecture:** Qualified source projections -> native models -> frozen benchmarks -> installed artefacts and truthful claims.
 
-**Tech Stack:** Existing benchmark runner, Arrow/Parquet, native model interfaces and independent reference packages.
+**Tech Stack:** Rust, Polars/Arrow, existing Atlas/Hugging Face archives, isolated references and current CI.
 
-**Spec:** [spec.md](spec.md).
+**Spec:** [spec.md](spec.md), [medicines plan](../../research/medicines-utilisation-20261107.md), [release gates](../../release-gates-20261107.md).
 
-## Global constraints
+## Global Constraints
 
-No source is accepted without rights, coverage and measurement checks. Freeze analysis choices before confirmation; numerical claims require the integrity gates.
+No duplicate data acquisition in Innovate. Raw-byte replay is not semantic qualification. No pandas/xarray runtime. Software publication, journal submission and data release need separate authorisation.
 
-## Review focus
+## Review Focus
 
-Revision leakage, sales/stock confusion, repeat prescriptions, foundation-model training overlap and correlated forecast errors each need protocol controls and tests.
+As-of leakage; script/patient confusion; summary/detail double counting; correlated forecast errors; a green metadata job misrepresented as native or empirical validity.
 
-## Task 1 — Acquire and qualify data
+## Executable packets
 
-Files: `src/innovate/benchmarks/corpus.py`, `src/innovate/benchmarks/automation.py`, `src/innovate/data/provenance.py`; proposed `benchmarks/manifests/` and `tests/unit/test_benchmark_source_contracts.py`.
+Read [taskbook](../../innovation-taskbook-20261107.md).
 
-- [ ] Audit the matrix sources and existing Hugging Face archives; record exact revisions, licences, units, denominator, temporal grain, missingness, revision policy and exclusions.
-- [ ] Write failing tests for duplicate records, revised-vintage leakage, incorrect stock/flow mapping and missing provenance.
-- [ ] Implement minimal adapters and immutable manifests; verify fixtures without live-network dependency in fast CI; commit.
+- [ ] M01 — exact six-object PBS manifest and receipts.
+- [ ] M02 — source-faithful qualified Polars projection.
+- [ ] M03 — temporal mapping, panel grain and coverage.
+- [ ] M04 — generic utilisation identifiability/observation fixture.
+- [ ] M05 — frozen medicines forecasting cohort.
+- [ ] V01 — independent model-oracle registry.
+- [ ] V02 — leakage-safe benchmark runner.
+- [ ] V03 — cross-domain and early-stage validation.
+- [ ] V04 — accuracy-controlled performance evaluation.
+- [ ] Q01 — input/property/fuzz/FFI safety.
+- [ ] Q02 — actual native/no-legacy installed CI matrix.
+- [ ] Q03 — supply-chain and distributable-artifact evidence.
+- [ ] Q04 — executable scientific/docs release truth.
+- [ ] V05 — clean reproduction and distinct publication packages.
+- [ ] Q05 — beta, RC and exact-artefact stable acceptance.
 
-## Task 2 — Freeze and execute comparisons
-
-Files: `src/innovate/benchmarks/runner.py`, `src/innovate/benchmarks/model_cards.py`; proposed `benchmarks/protocols/` and `tests/integration/test_external_benchmark_workflow.py`.
-
-- [ ] Prespecify cohorts, horizons, rolling origins, held-out groups, baselines, scores, uncertainty analysis and compute limits.
-- [ ] Write leakage and failure-accounting tests; implement reproducible jobs only after recording failing tests.
-- [ ] Run pilot checks, then freeze a distinct confirmatory set. Record all methods, failures, exclusions, calibration and costs; retain negative findings.
-
-## Task 3 — Reproduction and publications
-
-Files: existing `paper.qmd`, `references.bib`, `CITATION.cff`; proposed publication-specific manuscript directories and release manifests.
-
-- [ ] Obtain a clean installed-consumer reproduction independent of the development checkout; distinguish agent review from human/external replication.
-- [ ] Prepare the scoped JOSS paper and AI disclosure, then separate forecasting/data/decision manuscripts according to the programme.
-- [ ] Run focused tests, benchmark reproducibility checks and required repository gates. User/authors handle external submission and editorial correspondence; no submission occurs merely by completing this plan.
+Complete relevant native/integrity/consumer prerequisites before promotion. Real research use supports JOSS; forecast and innovation/hype studies require their own comparative evidence. Data/venue claims remain scoped.

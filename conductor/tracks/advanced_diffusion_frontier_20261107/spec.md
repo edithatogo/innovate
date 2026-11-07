@@ -1,11 +1,11 @@
-# Advanced diffusion methods specification
+# Innovation frontier specification
 
-Use five separable concerns: dynamics, observation model, parameter constraints, inference and diagnostics. Do not label a wrapper hierarchical, network-aware or Bayesian without validating the associated statistical mechanism.
+Preserve policy diffusion as the origin and extend general innovation models for heterogeneous adoption, competition, substitution, complements, entry/exit, repeat use, switching, abandonment, expectations and strategic behaviour. Healthcare is one application.
 
-Priority slices are: appropriate count/proportion/continuous observation models; uncertain market potential and hierarchical partial pooling; time-varying and regime-switching adoption; multi-generation substitution and competing adoption/abandonment; temporal-network exposure; and policy-hazard models with censoring and explicit intervention assumptions.
+Separate dynamics, observation likelihood, constraints, inference and diagnostics. Implement real hierarchical/competitive/network mechanisms, not labels around independent curves. Native established methods are verified against independent references; novelty is a separately tested research claim.
 
-Each model must state identifiable quantities, data requirements, parameter constraints, limiting cases and expected failure modes. Where sparse data cannot identify demand, network effects or saturation, provide sensitivity analysis or bounds rather than false precision. Transport to new technologies must detect failed transfer.
+Tasks A01–A08 implement scientific model slices. G01–G04 consolidate generic game capability outside Innovate, then add innovation-specific market/timing games here. The existing `uogto-game-core`/`uogto-game-solve` incubator and Kairos game crates must be reconciled; no duplicate equilibrium solver or scheduler.
 
-Beyond-frontier research candidates are joint adoption–capacity inference, uncertainty-preserving implementation/learning decisions and reliable cross-technology transfer. Neural/simulation-based inference and surrogates are optional hypotheses, not novelty claims by themselves. Promotion requires comparison with mechanistic, hierarchical and flexible statistical alternatives on held-out tasks.
+The [research register](../../research/innovation-frontier-questions-20261107.md) distinguishes existing software (DIMORA, PyBLP and OpenSpiel) from useful native integration and unresolved hypotheses. Audit publication/code/licence before asserting an implementation does not exist.
 
-Keep causal estimation and forecasting labels distinct. Do not infer intervention effects from a network coefficient, change point or attention correlation without a defensible identification design.
+Native scope requires R/I gates. Forecasting, structural estimation and causal effects must retain their different assumptions and validation. Non-identifiable models report bounds/diagnostics or remain experimental.
