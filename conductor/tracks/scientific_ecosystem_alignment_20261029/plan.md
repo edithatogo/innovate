@@ -3724,3 +3724,14 @@ Hosted release readiness for this worktree revision remains open.
   wheel, Julia and freshly installed R using native source 958843bc.
   All three public causal summary calls reproduced the analytic
   one-third effect within 1e-15.
+
+## Local MPI launcher qualification
+
+- [x] Launch the fast native benchmark policy in two independent
+  processes using Open MPI 5.0.11 on Darwin arm64. Both ranks used
+  one worker, Python 3.15.2 and the wheel from native source 958843bc.
+  Each passed three cases and produced identical benchmark results.
+  Kernel elapsed times were 9.17 and 9.18 ms, with process peak RSS
+  of 66,060,288 and 66,289,664 bytes. This verifies rank-local
+  execution and separate receipt output. Cross-rank computation,
+  scheduler allocation and accelerator qualification remain open.
