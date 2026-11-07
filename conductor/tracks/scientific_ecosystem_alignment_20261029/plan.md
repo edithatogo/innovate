@@ -1410,6 +1410,10 @@ the other competition models and installed binding checks remain open.
   stats::stl within 1.56e-11 across nine combinations of inner counts
   1/2/5 and outer counts 0/1/3. All 18 native boundary tests and focused
   Clippy passed.
-- [ ] Expose the iteration controls in the typed binding helpers and
-  qualify historical span, degree and jump options. The pre-migration
+- [x] Expose iteration controls in Python, Julia and R helpers. At two
+  inner and three outer passes the rebuilt Python wheel and Julia
+  project each agreed with their generic native entry point and
+  differed from the defaults. Installed R agreed with stats::stl
+  within 1.56e-11.
+- [ ] Qualify historical span, degree and jump options. The pre-migration
   Python STL wrapper forwarded constructor keyword options.

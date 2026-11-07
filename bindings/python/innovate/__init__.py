@@ -265,7 +265,14 @@ def aggregate_time_series(
 
 
 def seasonal_decomposition(
-    data: pl.Series, *, period: int, trend_span: int, robust: bool = False, historical: bool = False
+    data: pl.Series,
+    *,
+    period: int,
+    trend_span: int,
+    robust: bool = False,
+    historical: bool = False,
+    inner_iterations: int = 5,
+    outer_iterations: int | None = None,
 ) -> pl.DataFrame:
     """Decompose evenly spaced samples with the native seasonal smoother.
 
@@ -279,5 +286,7 @@ def seasonal_decomposition(
         window=trend_span,
         robust=robust,
         historical=historical,
+        inner_iterations=inner_iterations,
+        outer_iterations=(5 if robust else 0) if outer_iterations is None else outer_iterations,
     )["result"]
     return pl.DataFrame(result)
