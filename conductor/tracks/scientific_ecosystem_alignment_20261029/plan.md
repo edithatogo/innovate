@@ -4129,3 +4129,7 @@ Hosted release readiness for this worktree revision remains open.
   The no-excess retry fixture reports two idle slot-ticks. All 29
   network tests and the focused replay test passed. Installed binding
   checks for the new field remain open.
+- [x] Verify idle slot-ticks at native source aad3a161 through a rebuilt
+  Python 3.15.2 wheel, Julia and installed R. Each reported one idle
+  slot-tick and verified that occupied plus idle equals configured
+  plus over-capacity in the scheduled closure fixture.
