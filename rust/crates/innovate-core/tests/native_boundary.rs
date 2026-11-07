@@ -853,6 +853,9 @@ fn scenario_grid_runs_in_order_and_retains_individual_errors() {
     let mut import = json!({"schema_version":"2.0","operation":"import_scenario_artifact",
         "payload":{"artifact":artifact}});
     assert_eq!(run(&import)["result"]["replay_available"], true);
+    let mut modified = import.clone();
+    modified["payload"]["artifact"]["replay_request"]["payload"]["workers"] = json!(0);
+    assert_eq!(run(&modified)["error"]["code"], "invalid_request");
     import["payload"]["artifact"]["version"] = json!("0.0.1");
     assert_eq!(run(&import)["result"]["replay_available"], false);
     import["payload"]["artifact"]["replay_request"]["payload"]["scenarios"][0]["model_key"] =

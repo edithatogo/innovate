@@ -2061,3 +2061,9 @@ the other competition models and installed binding checks remain open.
   produce an invalid request. Python 3.15, Julia and R verified the
   same-version and changed-version cases. All 38 Rust boundary tests
   and focused Clippy passed. Numerical parity across releases remains open.
+
+- [x] Reject grid options injected into an embedded single-scenario replay
+  request. Native imports accept the emitted scenarios-only payload.
+  A regression covers a worker override that previously passed import
+  but failed when replayed. All 38 Rust boundary tests and focused
+  Clippy passed.

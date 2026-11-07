@@ -599,10 +599,10 @@ pub(crate) fn import_artifact(request: &Value) -> Value {
         return invalid(message);
     }
     if artifact.model_type.trim().is_empty() || artifact.version.trim().is_empty() {
-        return invalid("legacy artifact requires nonblank model_type and version");
+        return invalid("scenario artifact requires nonblank model_type and version");
     }
     if chrono::DateTime::parse_from_rfc3339(&artifact.timestamp).is_err() {
-        return invalid("legacy artifact timestamp must be RFC 3339 with a time offset");
+        return invalid("scenario artifact timestamp must be RFC 3339 with a time offset");
     }
     let (format, reason) = if let Some(replay) = &artifact.replay_request {
         let reason = match validate_replay(original, &artifact, replay) {
@@ -641,7 +641,10 @@ fn validate_replay(
     if schema != KERNEL_SCHEMA_VERSION {
         return Ok(Some("artifact replay uses an unsupported kernel schema"));
     }
-    let payload = &replay["payload"];
+    let payload = replay["payload"]
+        .as_object()
+        .filter(|payload| payload.len() == 1 && payload.contains_key("scenarios"))
+        .ok_or("artifact replay payload must contain only scenarios")?;
     let entries = payload["scenarios"]
         .as_array()
         .filter(|entries| entries.len() == 1)
