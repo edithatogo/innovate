@@ -5434,3 +5434,9 @@ Hosted release readiness for this worktree revision remains open.
   so changes in the target subset remain visible. The Rust fixture
   recovered effects 4 and 2 after switching the selected control.
   Native score draw generation and binding qualification remain open.
+
+- [x] Preserve conditional outcome errors per score draw and report an
+  equal-weight mixture standard deviation when all draws target the
+  same treated subset and supply conditional errors. The analytic
+  fixture combined between-draw variance 1 and mean conditional
+  variance 4 to recover sqrt(5). Six focused Rust causal tests passed.

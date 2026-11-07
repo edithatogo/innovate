@@ -1712,9 +1712,38 @@ fn matching_score_sensitivity(
             "estimand": result["estimand"],
             "unmatched_treated_indices": result["unmatched_treated_indices"],
             "pairs": result["pairs"],
+            "conditional_standard_error": result["conditional_standard_error"],
+            "adjusted_standard_error": result["adjusted_standard_error"],
         }));
     }
-    Ok(json!({"method": "rematch_caller_supplied_score_draws", "draws": results}))
+    let same_treated_subset = results
+        .iter()
+        .all(|draw| draw["unmatched_treated_indices"] == results[0]["unmatched_treated_indices"]);
+    let spread = |estimate: &str, error: &str| -> Option<f64> {
+        if !same_treated_subset {
+            return None;
+        }
+        let estimates: Vec<_> = results
+            .iter()
+            .map(|draw| draw[estimate].as_f64())
+            .collect::<Option<_>>()?;
+        let center = mean(&estimates)?;
+        let scale = (results.len() as f64).sqrt();
+        let mut deviation = 0_f64;
+        for (draw, estimate) in results.iter().zip(estimates) {
+            deviation = deviation
+                .hypot(estimate / scale - center / scale)
+                .hypot(draw[error].as_f64()? / scale);
+        }
+        finite(deviation).ok()
+    };
+    Ok(json!({
+        "method": "rematch_caller_supplied_score_draws",
+        "same_treated_subset": same_treated_subset,
+        "mixture_standard_deviation": spread("estimate", "conditional_standard_error"),
+        "adjusted_mixture_standard_deviation": spread("adjusted_estimate", "adjusted_standard_error"),
+        "draws": results,
+    }))
 }
 
 fn score_propensities(payload: &Value) -> Result<Value, &'static str> {
@@ -2622,13 +2651,21 @@ mod tests {
         let payload = serde_json::json!({
             "outcomes": [0, 4, 2], "treatment": [0, 1, 0],
             "caliper": 0, "scores": [0, 0, 1],
-            "score_draws": [[0, 0, 1], [1, 0, 0]]
+            "score_draws": [[0, 0, 1], [1, 0, 0]],
+            "outcome_variances": [0, 1, 6]
         });
         let result = matched_treatment_contrast(&payload).unwrap();
         assert_eq!(result["estimate"].as_f64(), Some(4.));
         let draws = &result["score_sensitivity"]["draws"];
         assert_eq!(draws[0]["estimate"].as_f64(), Some(4.));
         assert_eq!(draws[1]["estimate"].as_f64(), Some(2.));
+        assert_eq!(draws[0]["conditional_standard_error"].as_f64(), Some(1.));
+        let second_error = draws[1]["conditional_standard_error"].as_f64().unwrap();
+        assert!((second_error - 7_f64.sqrt()).abs() <= 2. * f64::EPSILON);
+        let spread = result["score_sensitivity"]["mixture_standard_deviation"]
+            .as_f64()
+            .unwrap();
+        assert!((spread - 5_f64.sqrt()).abs() < 1e-14);
         assert_eq!(draws[1]["pairs"][0]["control_index"].as_u64(), Some(2));
     }
 }
