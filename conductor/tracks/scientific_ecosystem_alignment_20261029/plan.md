@@ -4202,3 +4202,6 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify initially closed Kairos resources at 3f05ef36 with the
   rebuilt Python 3.15.2 wheel, Julia and installed R. All three
   reported counts [0, 0, 0, 2, 3] and completions at ticks 9, 9 and 11.
+- [x] Document initially closed Kairos resources in the native guide.
+  The installed Python wheel ran the guide's JSON options and matched
+  the documented completion ticks 9, 9 and 11.

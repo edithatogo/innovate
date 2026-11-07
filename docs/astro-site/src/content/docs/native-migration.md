@@ -896,13 +896,30 @@ the slot. Other expired agents appear in `abandonments` and enter `withdrawn`
 unless a retry is configured. Without a deadline, agents keep waiting for service.
 
 
-A schedule change may also set `capacity` between zero and the population.
+Initial and scheduled `capacity` can range from zero to the population.
 An increase immediately admits eligible waiters in priority order. A decrease
 allows active services to finish and pauses admissions while occupancy meets
 or exceeds the new limit. At a shared tick, existing completion handoffs
 and waiting deadlines are processed before the scheduled capacity change.
 The result reports the initial `capacity`, `current_capacity`,
 `in_service`, and nonnegative `available` slots.
+
+This `simulation_options` example starts closed and opens two slots at
+tick 7. With three agents, Bass parameters `p=1e12, q=0, m=3` and
+observations through tick 11, services complete at ticks 9, 9 and 11.
+
+```json
+{
+  "engine": "kairos_network",
+  "population": 3,
+  "seed": 42,
+  "edges": [],
+  "capacity": 0,
+  "service_ticks": 5,
+  "ticks_per_unit": 1,
+  "schedule": [{"tick": 7, "capacity": 2, "service_ticks": 2}]
+}
+```
 
 
 Set `max_queue_length` to limit the number of waiting agents. Zero permits
