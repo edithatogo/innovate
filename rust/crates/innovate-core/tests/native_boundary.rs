@@ -527,6 +527,17 @@ fn causal_summaries_match_analytic_effects() {
         bootstrap["result"]["bootstrap"]["method"],
         "stratified_percentile"
     );
+    let pooled_request = json!({"method":"treatment_contrast","outcomes":[2,5],
+        "treatment":[0,1],"bootstrap":{"draws":100,"seed":42,"scheme":"pooled"}});
+    let pooled = run(pooled_request.clone());
+    assert_eq!(pooled, run(pooled_request));
+    let draws = &pooled["result"]["bootstrap"];
+    assert_eq!(draws["method"], "pooled_percentile");
+    assert_eq!(draws["ci_lower"], 3.);
+    assert_eq!(draws["ci_upper"], 3.);
+    let discarded = draws["empty_arm_draws"].as_u64().unwrap();
+    assert!(discarded > 0);
+    assert_eq!(discarded + draws["valid_draws"].as_u64().unwrap(), 100);
     let risk = run(json!({"method":"e_value","point_estimate":0.5}));
     assert!((risk["result"]["e_value"].as_f64().unwrap() - (2. + 2_f64.sqrt())).abs() < 1e-12);
     let sensitivity = run(json!({"method":"sensitivity_scenario","point_estimate":10,

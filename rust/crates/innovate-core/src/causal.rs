@@ -617,33 +617,66 @@ fn bootstrap_contrast(
     if (treated.len() + control.len()) > 10_000_000 / draws {
         return Err("bootstrap workload exceeds 10000000 sampled outcomes");
     }
+    let scheme = options
+        .get("scheme")
+        .map_or(Some("stratified"), Value::as_str);
     let mut rng = DeterministicStream::from_run_seed(seed);
-    let treated_index = Uniform::new(0, treated.len()).map_err(|_| "empty treated arm")?;
-    let control_index = Uniform::new(0, control.len()).map_err(|_| "empty control arm")?;
-    let mut sample_mean = |values: &[f64], index| {
-        let sample: Vec<_> = (0..values.len())
-            .map(|_| values[rng.sample(index)])
-            .collect();
-        mean(&sample).expect("bootstrap arm is nonempty")
-    };
     let mut estimates = Vec::with_capacity(draws);
-    for _ in 0..draws {
-        estimates.push(finite(
-            sample_mean(treated, treated_index) - sample_mean(control, control_index),
-        )?);
-    }
+    let method = match scheme {
+        Some("stratified") => {
+            let treated_index = Uniform::new(0, treated.len()).map_err(|_| "empty treated arm")?;
+            let control_index = Uniform::new(0, control.len()).map_err(|_| "empty control arm")?;
+            let mut sample_mean = |values: &[f64], index| {
+                let sample: Vec<_> = (0..values.len())
+                    .map(|_| values[rng.sample(index)])
+                    .collect();
+                mean(&sample).expect("bootstrap arm is nonempty")
+            };
+            for _ in 0..draws {
+                estimates.push(finite(
+                    sample_mean(treated, treated_index) - sample_mean(control, control_index),
+                )?);
+            }
+            "stratified_percentile"
+        }
+        Some("pooled") => {
+            let size = treated.len() + control.len();
+            let indices = Uniform::new(0, size).map_err(|_| "empty pooled sample")?;
+            let mut treated_sample = Vec::new();
+            let mut control_sample = Vec::new();
+            for _ in 0..draws {
+                treated_sample.clear();
+                control_sample.clear();
+                for _ in 0..size {
+                    let index = rng.sample(indices);
+                    if index < treated.len() {
+                        treated_sample.push(treated[index]);
+                    } else {
+                        control_sample.push(control[index - treated.len()]);
+                    }
+                }
+                if let (Some(a), Some(b)) = (mean(&treated_sample), mean(&control_sample)) {
+                    estimates.push(finite(a - b)?);
+                }
+            }
+            "pooled_percentile"
+        }
+        _ => return Err("bootstrap scheme must be stratified or pooled"),
+    };
     estimates.sort_by(f64::total_cmp);
     let percentile = |probability: f64| {
-        let index = probability * (draws - 1) as f64;
+        if estimates.len() < 2 {
+            return Ok(None);
+        }
+        let index = probability * (estimates.len() - 1) as f64;
         let lower = index.floor() as usize;
         let upper = index.ceil() as usize;
         let fraction = index.fract();
-        (1. - fraction) * estimates[lower] + fraction * estimates[upper]
+        finite((1. - fraction) * estimates[lower] + fraction * estimates[upper]).map(Some)
     };
     let tail = (1. - confidence) / 2.;
-    Ok(
-        json!({"method":"stratified_percentile","seed":seed,"n_bootstrap":draws,
-        "confidence":confidence,"ci_lower":finite(percentile(tail))?,
-        "ci_upper":finite(percentile(1. - tail))?}),
-    )
+    Ok(json!({"method":method,"seed":seed,"n_bootstrap":draws,
+        "valid_draws":estimates.len(),"empty_arm_draws":draws - estimates.len(),
+        "confidence":confidence,"ci_lower":percentile(tail)?,
+        "ci_upper":percentile(1. - tail)?}))
 }
