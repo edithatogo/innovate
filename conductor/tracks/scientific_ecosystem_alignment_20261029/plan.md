@@ -4906,3 +4906,7 @@ Hosted release readiness for this worktree revision remains open.
   against the rebuilt Rust FFI library from 9c91630b. Both runners
   exited successfully. Together with the extracted Python wheel run,
   this covers the three local consumer suites on the same native source.
+
+- [x] Run the complete locked Rust core suite on 03bb7474, whose
+  source matches the three local consumer runs. All 273 unit and
+  integration tests passed with zero failures or ignored tests.
