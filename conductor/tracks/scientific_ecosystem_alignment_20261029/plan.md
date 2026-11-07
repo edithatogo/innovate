@@ -2000,3 +2000,11 @@ the other competition models and installed binding checks remain open.
   replicate pairs. Python 3.15, Julia and installed R reproduced a mean
   of 12.5 and standard error of 37.5 for effects 50 and -25. All 37
   boundary tests, 10 Kairos tests and focused Clippy passed.
+
+- [x] Enforce a common declared time basis for pair and ensemble
+  comparisons (972fada2). If any scenario has a specification, every
+  compared scenario must agree on time unit and reference year. Matching
+  comparisons report that basis. Without specifications, callers supply
+  a common basis. Python 3.15, Julia and installed R all rejected a
+  year-versus-month comparison while preserving both execution results.
+  All 37 Rust boundary tests and focused Clippy passed.
