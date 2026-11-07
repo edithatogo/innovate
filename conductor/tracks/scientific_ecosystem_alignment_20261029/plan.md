@@ -1752,3 +1752,10 @@ the other competition models and installed binding checks remain open.
   and zero draws.
 - [ ] Restore causal model metadata and evidence handoff, and qualify
   other Arrow consumers.
+
+- [x] Restore policy metadata and causal evidence handoff using the
+  native intervention and causal model validators. The rebuilt Python
+  wheel preserved assumptions and estimand fields, and PyArrow read
+  the Polars IPC metadata row with an Int32 confounder count.
+  All 24 Rust boundary tests and focused Clippy passed.
+- [ ] Verify policy evidence in Julia and R and qualify Arrow consumers.

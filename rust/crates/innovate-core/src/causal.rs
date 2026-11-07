@@ -281,6 +281,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
         }
         Some("treatment_contrast") => treatment_contrast(payload),
         Some("intervention_contract") => intervention_contract(payload),
+        Some("policy_evidence") => policy_evidence(payload),
         Some("causal_model_contract") => causal_model_contract(payload),
         Some("release_evidence") => release_evidence(payload),
         Some("covariate_balance") => covariate_balance(payload),
@@ -779,4 +780,26 @@ fn causal_model_contract(payload: &Value) -> Result<Value, &'static str> {
         return Err("high risk of unobserved confounding requires sensitivity analysis");
     }
     Ok(json!(contract))
+}
+
+fn policy_evidence(payload: &Value) -> Result<Value, &'static str> {
+    let intervention = intervention_contract(&payload["intervention"])?;
+    let model = causal_model_contract(&payload["causal_model"])?;
+    let confounders = model["confounders"]
+        .as_array()
+        .expect("validated confounder list");
+    Ok(json!({
+        "metadata": {
+            "intervention_name":intervention["name"],"model_name":model["name"],
+            "treatment_variable":model["treatment_variable"],"outcome_variable":model["outcome_variable"],
+            "n_confounders":confounders.len()
+        },
+        "evidence": {
+            "assumptions":model["identifying_assumptions"],
+            "estimand":{"treatment":model["treatment_variable"],"outcome":model["outcome_variable"],
+                "confounders":confounders},
+            "limitations":{"unobserved_confounding":"Not addressed without sensitivity analysis",
+                "overlap_assumption":"Assumes positive probability of treatment assignment"}
+        }
+    }))
 }

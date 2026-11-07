@@ -29,6 +29,7 @@ __all__ = [
     "seasonal_decomposition",
     "sarima_fit",
     "treatment_contrast_frame",
+    "policy_metadata_frame",
     "capabilities",
     "execute",
     "fit",
@@ -348,5 +349,19 @@ def treatment_contrast_frame(result: dict[str, Any]) -> pl.DataFrame:
             "ci_lower": pl.Float64,
             "ci_upper": pl.Float64,
             "n_bootstrap": pl.Int32,
+        },
+    )
+
+
+def policy_metadata_frame(result: dict[str, Any]) -> pl.DataFrame:
+    """Project native policy evidence into the historical model metadata schema."""
+    return pl.DataFrame(
+        [result["metadata"]],
+        schema={
+            "intervention_name": pl.String,
+            "model_name": pl.String,
+            "treatment_variable": pl.String,
+            "outcome_variable": pl.String,
+            "n_confounders": pl.Int32,
         },
     )
