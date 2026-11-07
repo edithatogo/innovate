@@ -6209,3 +6209,9 @@ Hosted release readiness for this worktree revision remains open.
   arm64 wheel produced by the staged release script after SBOM
   normalization. All passed on the local CPython 3.15.2 runtime.
   Hosted platform and scientific acceptance remain open.
+
+- [x] Validate the optimized wheel's normalized SBOM and RECORD.
+  Every non-directory member is represented once in RECORD and each
+  payload hash and size matches. The CycloneDX SBOM uses the canonical
+  file:///source/ prefix and contains none of the checked local
+  temporary, workspace or home path prefixes.
