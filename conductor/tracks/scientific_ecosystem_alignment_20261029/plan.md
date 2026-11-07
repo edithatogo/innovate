@@ -5051,3 +5051,8 @@ Hosted release readiness for this worktree revision remains open.
   event-boundary checkpoint. The state now owns the accumulated
   occupancy, capacity, wait totals and the ticks needed to extend
   those totals. All 29 Rust network integration tests passed.
+
+- [x] Group network wait and retry state for checkpoint capture.
+  Queue arrival times, active deadlines, retry wake ticks and retry
+  counts now share one owner. Kairos still orders and admits waiters.
+  All 29 Rust network integration tests passed.

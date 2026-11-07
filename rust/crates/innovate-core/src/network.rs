@@ -12,6 +12,34 @@ use kairo_ecs_rng::{
 use kairo_ecs_types::{EventKind, SimTime, StepOutcome};
 use serde::Deserialize;
 use serde_json::json;
+struct QueueState {
+    waiting_since: Vec<Option<u128>>,
+    deadlines: Vec<Option<u128>>,
+    retry_at: Vec<Option<u128>>,
+    retry_counts: Vec<u8>,
+}
+
+impl QueueState {
+    fn new(population: usize) -> Self {
+        Self {
+            waiting_since: vec![None; population],
+            deadlines: vec![None; population],
+            retry_at: vec![None; population],
+            retry_counts: vec![0; population],
+        }
+    }
+
+    fn schedule_retry(&mut self, policy: Option<Retry>, index: usize, now: u128) {
+        self.retry_at[index] = policy.and_then(|policy| {
+            if self.retry_counts[index] >= policy.max_retries {
+                return None;
+            }
+            self.retry_counts[index] += 1;
+            Some(now + u128::from(policy.delay_ticks))
+        });
+    }
+}
+
 #[derive(Default)]
 struct ResourceAccounting {
     occupied_slot_ticks: u128,
@@ -444,22 +472,12 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     let mut max_queue_length = o.max_queue_length;
     let mut in_service = 0_u64;
     let mut reneging = RenegingQueue::new();
-    let mut deadlines = vec![None; o.population];
+    let mut queue = QueueState::new(o.population);
     let mut service_starts = Vec::new();
     let mut abandoned = Vec::new();
     let mut balks = Vec::new();
     let mut retries = Vec::new();
-    let mut retry_at = vec![None; o.population];
-    let mut retry_counts = vec![0; o.population];
     let mut retry_policy = o.retry;
-    let next_retry = |policy: Option<Retry>, index: usize, now: u128, counts: &mut [u8]| {
-        let policy = policy?;
-        if counts[index] >= policy.max_retries {
-            return None;
-        }
-        counts[index] += 1;
-        Some(now + u128::from(policy.delay_ticks))
-    };
     let rebuild_waiters = |waiting_since: &[Option<u128>], priorities: &[i32]| {
         let mut waiting: Vec<_> = waiting_since
             .iter()
@@ -473,7 +491,6 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         }
         resource
     };
-    let mut waiting_since = vec![None; o.population];
     let mut rng = DeterministicStream::from_run_seed(o.seed);
     let mut now = 0_u128;
     let horizon = (time.last().unwrap() * o.ticks_per_unit as f64).floor() as u128;
@@ -491,13 +508,15 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             .peek()
             .map(|(tick, _, _)| *tick)
             .filter(|t| *t <= horizon);
-        let expiry = deadlines
+        let expiry = queue
+            .deadlines
             .iter()
             .flatten()
             .copied()
             .min()
             .filter(|t| *t <= horizon);
-        let wake = retry_at
+        let wake = queue
+            .retry_at
             .iter()
             .flatten()
             .copied()
@@ -639,25 +658,25 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         }) {
             now = tick;
             for id in reneging.expire_reneged(SimTime::from_ticks(now)) {
-                if deadlines[id.index as usize].take().is_some() {
+                if queue.deadlines[id.index as usize].take().is_some() {
                     let index = id.index as usize;
-                    retry_at[index] = next_retry(retry_policy, index, now, &mut retry_counts);
+                    queue.schedule_retry(retry_policy, index, now);
                     context.attach(
                         id,
-                        if retry_at[index].is_some() {
+                        if queue.retry_at[index].is_some() {
                             4_u8
                         } else {
                             3_u8
                         },
                     );
                     abandoned.push(json!({"tick":now,"agent":id.index}));
-                    let queued_at = waiting_since[index]
+                    let queued_at = queue.waiting_since[index]
                         .take()
                         .ok_or_else(|| invalid("expired agent has no queue entry"))?;
                     metrics.abandoned_wait_ticks += now - queued_at;
                 }
             }
-            resource = rebuild_waiters(&waiting_since, &priorities);
+            resource = rebuild_waiters(&queue.waiting_since, &priorities);
         } else if let Some(tick) =
             boundary.filter(|t| attempt.is_none_or(|a| *t <= a) && wake.is_none_or(|w| *t <= w))
         {
@@ -692,12 +711,12 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             }
             if let Some(values) = &change.agent_priorities {
                 priorities.clone_from(values);
-                resource = rebuild_waiters(&waiting_since, &priorities);
+                resource = rebuild_waiters(&queue.waiting_since, &priorities);
             }
             applied_ticks.push(tick);
         } else if let Some(tick) = wake.filter(|t| attempt.is_none_or(|a| *t <= a)) {
             now = tick;
-            for (index, at) in retry_at.iter_mut().enumerate() {
+            for (index, at) in queue.retry_at.iter_mut().enumerate() {
                 if *at == Some(tick) {
                     *at = None;
                     context.attach(agents[index], 0_u8);
@@ -729,10 +748,10 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             if in_service >= capacity
                 && max_queue_length.is_some_and(|limit| resource.queue_length() >= limit)
             {
-                retry_at[index] = next_retry(retry_policy, index, now, &mut retry_counts);
+                queue.schedule_retry(retry_policy, index, now);
                 context.attach(
                     id,
-                    if retry_at[index].is_some() {
+                    if queue.retry_at[index].is_some() {
                         4_u8
                     } else {
                         3_u8
@@ -742,10 +761,10 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 continue;
             }
             context.attach(id, 1_u8);
-            waiting_since[index] = Some(now);
+            queue.waiting_since[index] = Some(now);
             resource.request(id, priorities[index], SimTime::from_ticks(now));
             if let Some(wait) = max_wait_ticks.filter(|_| in_service >= capacity) {
-                deadlines[index] = Some(now + u128::from(wait));
+                queue.deadlines[index] = Some(now + u128::from(wait));
                 reneging.request_with_deadline(
                     id,
                     SimTime::from_ticks(now),
@@ -760,10 +779,10 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 break;
             };
             let index = next.index as usize;
-            let queued_at = waiting_since[index]
+            let queued_at = queue.waiting_since[index]
                 .take()
                 .ok_or_else(|| invalid("service admission has no queue entry"))?;
-            deadlines[index] = None;
+            queue.deadlines[index] = None;
             let duration = service_override.unwrap_or(service[index]);
             let completion_tick = now + u128::from(duration);
             metrics.occupied_slot_ticks += completion_tick.min(horizon) - now;
@@ -780,7 +799,8 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     }
     metrics.configured_slot_ticks +=
         (horizon - metrics.last_capacity_change) * u128::from(capacity);
-    let pending_wait_ticks: u128 = waiting_since
+    let pending_wait_ticks: u128 = queue
+        .waiting_since
         .iter()
         .flatten()
         .map(|tick| horizon - tick)
