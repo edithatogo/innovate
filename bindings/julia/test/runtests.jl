@@ -91,6 +91,12 @@ end
     @test a["resource_metrics"]["peak_in_service"] == 1
     @test a["resource_metrics"]["idle_slot_ticks"] == 5
     @test a["resource_metrics"]["over_capacity_slot_ticks"] == 0
+    closure = deepcopy(p)
+    closure["simulation_options"]["schedule"] = [Dict("tick"=>3,"capacity"=>0)]
+    closed = kernel_simulate_model("bass",closure)["result"]
+    @test closed["resource_metrics"]["idle_slot_ticks"] == 1
+    @test closed["resource_metrics"]["over_capacity_slot_ticks"] == 3
+    @test only(closed["completions"])["tick"] == 6
     p["simulation_options"]["max_wait_ticks"]=4
     expired=kernel_simulate_model("bass",p)["result"]
     @test expired["counts"]==[0,0,2]

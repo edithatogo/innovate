@@ -88,6 +88,12 @@ net <- kernel_simulate_model("bass",network_payload)$result
 stopifnot(net$resource_metrics$peak_queue_length == 2, net$resource_metrics$peak_in_service == 1)
 stopifnot(net$resource_metrics$idle_slot_ticks == 5, net$resource_metrics$over_capacity_slot_ticks == 0)
 stopifnot(all(unlist(net$counts)==c(0,0,3)),all(vapply(net$completions,function(e)e$tick,numeric(1))==c(6,11,16)))
+closure_payload <- network_payload
+closure_payload$simulation_options$schedule <- list(list(tick=3,capacity=0))
+closed <- kernel_simulate_model("bass",closure_payload)$result
+stopifnot(closed$resource_metrics$idle_slot_ticks == 1,
+          closed$resource_metrics$over_capacity_slot_ticks == 3,
+          length(closed$completions) == 1, closed$completions[[1]]$tick == 6)
 wait_payload <- network_payload
 wait_payload$simulation_options$max_wait_ticks <- 4
 expired <- kernel_simulate_model("bass",wait_payload)$result

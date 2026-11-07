@@ -192,6 +192,25 @@ def test_network_resource_and_complementary_native_consumers():
     assert r["resource_metrics"]["peak_in_service"] == 1
     assert r["resource_metrics"]["idle_slot_ticks"] == 5
     assert r["resource_metrics"]["over_capacity_slot_ticks"] == 0
+    closed = innovate.execute(
+        "simulate_model",
+        "bass",
+        inputs={"time": [0, 5, 20]},
+        parameters={"p": 1e12, "q": 0, "m": 3},
+        simulation_options={
+            "engine": "kairos_network",
+            "population": 3,
+            "seed": 42,
+            "edges": [],
+            "capacity": 1,
+            "service_ticks": 5,
+            "ticks_per_unit": 1,
+            "schedule": [{"tick": 3, "capacity": 0}],
+        },
+    )["result"]
+    assert closed["resource_metrics"]["idle_slot_ticks"] == 1
+    assert closed["resource_metrics"]["over_capacity_slot_ticks"] == 3
+    assert [event["tick"] for event in closed["completions"]] == [6]
     a = innovate.predict(
         "complementary_goods",
         pl.DataFrame({"time": [0.0, 3.0]}),
@@ -1018,12 +1037,7 @@ def test_ingest_local_ipc_stream_preserves_dataset_and_provenance(tmp_path, suff
 
 def test_logistic_event_profile_polars_fit_and_saved_split_prediction():
     time = list(range(24))
-    observed = [
-        100 / (1 + math.exp(-0.5 * (t - 5)))
-        if t < 12
-        else 200 / (1 + math.exp(-0.4 * (t - 17)))
-        for t in time
-    ]
+    observed = [100 / (1 + math.exp(-0.5 * (t - 5))) if t < 12 else 200 / (1 + math.exp(-0.4 * (t - 17))) for t in time]
     frame = pl.DataFrame({"time": time, "observed": observed})
     fit = innovate.fit("logistic", frame.lazy(), model_options={"event_candidates": [10, 12, 14]})
     profile = fit.event_profile
@@ -1089,12 +1103,17 @@ def test_bootstrap_forecast_frame_preserves_series_and_null_bounds():
 @pytest.mark.parametrize(
     ("kind", "csv", "expected"),
     [
-        ("network_edges", "source,target,weight\n001,002,1\n1,002,2\n",
-         {"source": ["001", "1"], "target": ["002", "002"], "weight": [1.0, 2.0]}),
-        ("competition", "time,value,unit_id,product_id\n0,1,001,002\n0,2,1,002\n",
-         {"unit_id": ["001", "1"], "product_id": ["002", "002"]}),
-        ("policy_timing", "event_times,event_effects,event_labels\n0,1,001\n0,2,1\n",
-         {"event_labels": ["001", "1"]}),
+        (
+            "network_edges",
+            "source,target,weight\n001,002,1\n1,002,2\n",
+            {"source": ["001", "1"], "target": ["002", "002"], "weight": [1.0, 2.0]},
+        ),
+        (
+            "competition",
+            "time,value,unit_id,product_id\n0,1,001,002\n0,2,1,002\n",
+            {"unit_id": ["001", "1"], "product_id": ["002", "002"]},
+        ),
+        ("policy_timing", "event_times,event_effects,event_labels\n0,1,001\n0,2,1\n", {"event_labels": ["001", "1"]}),
     ],
 )
 def test_csv_ingestion_preserves_distinct_textual_ids(tmp_path, kind, csv, expected):

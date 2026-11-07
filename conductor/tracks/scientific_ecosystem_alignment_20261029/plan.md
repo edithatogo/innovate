@@ -4142,3 +4142,8 @@ Hosted release readiness for this worktree revision remains open.
   R native suites that CI invokes. The fixed-capacity FIFO fixture
   reports five idle and zero excess slot-ticks in each binding.
   The affected sections passed locally with the installed artifacts.
+- [x] Cover scheduled closure in the binding suites used by CI. At
+  zero capacity after tick three, the active service completes at
+  tick six. Each binding reports one idle slot-tick, three excess
+  slot-ticks, and a single completion. The affected checks passed
+  locally in Python, Julia and installed R.
