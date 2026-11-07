@@ -799,5 +799,10 @@ fn dataset_ingestion_stamps_valid_artifacts_and_rejects_invalid_inputs() {
     changed["adoption"][1] = innovate_core::json!(3);
     assert_eq!(run(changed)["error"]["code"], "invalid_request");
     data["adoption"][1] = innovate_core::json!(0);
-    assert_eq!(run(data)["error"]["code"], "invalid_request");
+    let error = run(data)["error"].clone();
+    assert_eq!(error["code"], "invalid_request");
+    assert_eq!(
+        error["validation"]["failed"],
+        innovate_core::json!(["monotonicity:adoption"])
+    );
 }

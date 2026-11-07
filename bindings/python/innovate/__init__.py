@@ -49,6 +49,7 @@ class NativeError(ValueError):
 
     def __init__(self, error: dict[str, Any]):
         self.code = str(error["code"])
+        self.validation: dict[str, Any] | None = error.get("validation")
         super().__init__(f"{self.code}: {error['message']}")
 
 

@@ -1897,3 +1897,8 @@ the other competition models and installed binding checks remain open.
   R verifies singleton substitution and edge artifacts, including the
   distinction between the edge source column and provenance source.
   All 32 Rust boundary tests and focused Clippy passed.
+
+- [x] Return failed diagnostic reports in ingestion errors so callers
+  can identify rejected checks without submitting the dataset twice.
+  The rebuilt Python wheel exposes the report on NativeError.
+  All 32 boundary tests and focused Clippy passed.

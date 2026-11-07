@@ -366,15 +366,35 @@ fn validate_edges(payload: &Value) -> Result<Value, &'static str> {
     )
 }
 
-pub(crate) fn ingest(payload: &Value) -> Result<Value, &'static str> {
+pub(crate) fn ingest_request(request: &Value) -> Value {
+    let result = if request["schema_version"] == crate::KERNEL_SCHEMA_VERSION {
+        ingest(&request["payload"])
+    } else {
+        Err(ingestion_error("ingest_dataset requires schema 2.0"))
+    };
+    let (result, error) = match result {
+        Ok(artifact) => (artifact, Value::Null),
+        Err(error) => (Value::Null, error),
+    };
+    json!({"schema_version":crate::KERNEL_SCHEMA_VERSION,"operation":"ingest_dataset",
+        "model_key":null,"result":result,"error":error,"metadata":{"runtime":"rust_native"}})
+}
+
+fn ingestion_error(message: &str) -> Value {
+    json!({"code":"invalid_request","message":message})
+}
+
+fn ingest(payload: &Value) -> Result<Value, Value> {
     let mut dataset = payload["dataset"].clone();
     if !dataset["provenance"].is_object() {
-        return Err("ingestion requires dataset provenance");
+        return Err(ingestion_error("ingestion requires dataset provenance"));
     }
-    let digest = crate::provenance::checksum(payload)?;
-    let report = validate(&dataset)?;
+    let digest = crate::provenance::checksum(payload).map_err(ingestion_error)?;
+    let report = validate(&dataset).map_err(ingestion_error)?;
     if report["ok"] != true {
-        return Err("dataset diagnostics failed; inspect validate_dataset for details");
+        let mut error = ingestion_error("dataset diagnostics failed");
+        error["validation"] = report;
+        return Err(error);
     }
     dataset["provenance"]["checksum"] = digest["checksum"].clone();
     Ok(json!({
