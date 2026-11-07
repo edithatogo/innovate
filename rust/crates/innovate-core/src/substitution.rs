@@ -449,10 +449,51 @@ impl Model {
         })
     }
 
+    fn intrinsic_milestones(
+        &self,
+        times: &[f64],
+        states: &[Vec<f64>],
+        derivative: impl Fn(f64, &[f64], usize) -> Vec<f64>,
+        generation: usize,
+    ) -> Result<Value, String> {
+        let mut row =
+            json!({"generation": generation + 1, "reference_time": self.launches[generation]});
+        for (name, target) in [("takeoff", 0.1_f64), ("median", 0.5), ("saturation", 0.9)] {
+            let level = -(-target).ln_1p();
+            let crossing = states.iter().position(|state| state[0] >= level);
+            let Some(index) = crossing else {
+                row[name] = Value::Null;
+                continue;
+            };
+            // A positive milestone cannot be met by the zero state at launch.
+            let origin = times[index - 1];
+            let initial = &states[index - 1];
+            let mut lower = origin;
+            let mut upper = times[index];
+            for _ in 0..48 {
+                let midpoint = lower.midpoint(upper);
+                if midpoint == lower || midpoint == upper {
+                    break;
+                }
+                let state = self
+                    .events
+                    .integrate(&[midpoint], origin, initial, &derivative)?;
+                if state[0][0] >= level {
+                    upper = midpoint;
+                } else {
+                    lower = midpoint;
+                }
+            }
+            row[name] = json!(upper);
+        }
+        Ok(row)
+    }
+
     fn predict_successive_forced(
         &self,
         time: &[f64],
         parameters: &[f64],
+        mut milestones: Option<&mut Vec<Value>>,
     ) -> Result<Trajectory, String> {
         let end = *time.last().ok_or("time must not be empty")?;
         let mut grid = time.to_vec();
@@ -472,9 +513,6 @@ impl Model {
         let mut log_survival = vec![vec![0.; self.n]; time.len()];
         for (generation, &launch) in self.launches.iter().enumerate() {
             let active_times: Vec<_> = grid.iter().copied().filter(|t| *t >= launch).collect();
-            if active_times.is_empty() {
-                continue;
-            }
             for &t in &active_times {
                 let regime = self.events.regime(t);
                 let left = self.events.boundary_left_regime(t).filter(|_| t > launch);
@@ -484,19 +522,28 @@ impl Model {
                 }
             }
             // Log survival keeps the launched Bass fraction in [0, 1].
-            let states =
+            let derivative = |t, state: &[f64], regime| {
+                let active = self.events.parameters(parameters, regime);
+                let rate = self
+                    .successive_coefficients(t, &active, generation)
+                    .map(|[p, q, _]| p + q * -(-state[0]).exp_m1())
+                    .unwrap_or(f64::NAN);
+                vec![rate]
+            };
+            let states = if active_times.is_empty() {
+                Vec::new()
+            } else {
                 self.events
-                    .integrate(&active_times, launch, &[0.], |t, state, regime| {
-                        let active = self.events.parameters(parameters, regime);
-                        let derivative = self
-                            .successive_coefficients(t, &active, generation)
-                            .map(|[p, q, _]| {
-                                let fraction = -(-state[0]).exp_m1();
-                                p + q * fraction
-                            })
-                            .unwrap_or(f64::NAN);
-                        vec![derivative]
-                    })?;
+                    .integrate(&active_times, launch, &[0.], derivative)?
+            };
+            if let Some(rows) = &mut milestones {
+                rows.push(self.intrinsic_milestones(
+                    &active_times,
+                    &states,
+                    derivative,
+                    generation,
+                )?);
+            }
             for (index, &t) in time.iter().enumerate() {
                 if t >= launch {
                     log_survival[index][generation] =
@@ -609,7 +656,7 @@ impl Model {
             return Ok((rows, rates));
         }
         if self.history.is_some() || !self.events.is_empty() {
-            return self.predict_successive_forced(time, p);
+            return self.predict_successive_forced(time, p, None);
         }
         let mut rows = Vec::new();
         let mut rates = Vec::new();
@@ -876,7 +923,19 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
             .ok_or_else(|| invalid(op, "parameters are required"))?;
         parameters(value, &model, op)?
     };
-    let (predicted, rates) = model.predict(&time, &p).map_err(|e| invalid(op, e))?;
+    let mut milestones = Vec::new();
+    let forced = model.history.is_some() || !model.events.is_empty();
+    let (predicted, rates) = if forced
+        && model.variant == "successive_generations"
+        && !matches!(
+            op,
+            KernelOperation::PredictModel | KernelOperation::SimulateModel
+        ) {
+        model.predict_successive_forced(&time, &p, Some(&mut milestones))
+    } else {
+        model.predict(&time, &p)
+    }
+    .map_err(|e| invalid(op, e))?;
     let predictions = model.prediction_value(&time, &predicted, &rates);
     let state = json!({"model_key":"norton_bass","model_name":"NortonBassModel","parameters":parameter_value(&p, &model),"constructor_kwargs":model.kwargs(),"predict_kwargs":{}});
     let result = match op {
@@ -890,9 +949,18 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
         _ => {
             let mut result = json!({"model_key":"norton_bass","model_name":"NortonBassModel","family":"substitution","parameters":parameter_value(&p, &model),"state":state,"predictions":predictions});
             result["threshold_diagnostics"] = model.threshold_diagnostics(&p);
-            if model.history.is_some() || !model.events.is_empty() {
+            if forced {
                 result["threshold_diagnostics"]["trajectory"] =
                     model.trajectory_rate_peaks(&time, &rates);
+            }
+            if !milestones.is_empty() {
+                result["threshold_diagnostics"]["intrinsic_adoption_milestones"] = json!({
+                    "quantity": "intrinsic_launched_fraction",
+                    "time_basis": "absolute_model_time",
+                    "evaluated_through": time.last(),
+                    "fractions": {"takeoff": 0.1, "median": 0.5, "saturation": 0.9},
+                    "generations": milestones
+                });
             }
             if op != KernelOperation::SummarizeModel
                 || inputs.contains_key("observed")

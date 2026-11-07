@@ -697,4 +697,27 @@ fn forced_threshold_summary_reports_sampled_net_rate_peaks() {
     assert_eq!(trajectory["generations"][0]["peak_time"], 2.);
     assert_eq!(trajectory["generations"][0]["peak_rate"], response["predictions"]["rates"][2][0]);
     assert_eq!(trajectory["generations"][1]["status"], "no_active_samples");
+    let milestones = &response["threshold_diagnostics"]["intrinsic_adoption_milestones"];
+    assert_eq!(milestones["generations"][1]["reference_time"], 4.);
+    assert!(milestones["generations"][1]["takeoff"].is_null());
+    assert!(milestones["generations"][0]["saturation"].is_null());
+}
+
+#[test]
+fn forced_successive_milestones_resolve_between_requested_samples() {
+    let result = KernelBinding::new()
+        .summarize_model("norton_bass", json!({
+            "inputs":{"time":[3.,7.]},
+            "parameters":{"p1":0.1,"q1":0.,"m1":100.},
+            "constructor_kwargs":{
+                "variant":"successive_generations","launch_times":[1.],
+                "parameter_events":[{"time":2.,"parameters":{"p1":0.5,"m1":300.}}]
+            }
+        }))
+        .unwrap().result.unwrap();
+    let row = &result["threshold_diagnostics"]["intrinsic_adoption_milestones"]["generations"][0];
+    for (key, fraction) in [("takeoff", 0.1_f64), ("median", 0.5), ("saturation", 0.9)] {
+        let expected = 2. + (-(-fraction).ln_1p() - 0.1) / 0.5;
+        assert!((row[key].as_f64().unwrap() - expected).abs() < 1e-7);
+    }
 }
