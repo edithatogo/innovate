@@ -2305,3 +2305,9 @@ the other competition models and installed binding checks remain open.
   Python 3.15 wheel, Julia and installed R. All returned identical Bass
   card and ordered suite results for Logistic, Bass and an unknown case.
   The unknown case remained a row error while both fits succeeded.
+
+- [x] Restore fast benchmark card freshness reporting. Resolve historical
+  card case IDs against native dataset versions and flag missing references
+  as errors. Bass resolves to 2026.04 and lock-in remains stale because its
+  smoke case is absent. The focused Rust regression and Clippy passed.
+  Corpus completion, scheduling policy and binding qualification remain open.

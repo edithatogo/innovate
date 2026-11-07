@@ -119,12 +119,60 @@ fn suite(payload: &Value) -> Result<Value, String> {
     )
 }
 
+fn validate_corpus() -> Result<Value, String> {
+    let cards = crate::model_cards::discover(&json!({}))?;
+    let cards = cards["cards"]
+        .as_array()
+        .expect("model card discovery returns an array");
+    let case_versions: std::collections::BTreeMap<_, _> = CASES
+        .iter()
+        .map(|&(id, model, family)| {
+            (
+                id,
+                case_descriptor(id, model, family)["dataset_version"].clone(),
+            )
+        })
+        .collect();
+    let mut issues = Vec::new();
+    let mut summaries = serde_json::Map::new();
+    for card in cards {
+        let key = card["model_key"].as_str().expect("discovered model key");
+        let Some(identifiers) = card["historical_benchmark_card"]["benchmark_case_ids"].as_array()
+        else {
+            continue;
+        };
+        let mut versions = serde_json::Map::new();
+        for id in identifiers {
+            let id = id.as_str().expect("embedded benchmark ID");
+            if let Some(version) = case_versions.get(id) {
+                versions.insert(id.to_owned(), version.clone());
+            } else {
+                issues.push(json!({"code":"unknown_benchmark_case","scope":"model_card",
+                    "identifier":key,"severity":"error","message":format!("Missing benchmark case '{id}'.")}));
+            }
+        }
+        let status = if versions.len() == identifiers.len() {
+            "current"
+        } else {
+            "stale"
+        };
+        summaries.insert(key.to_owned(), json!({"model_key":key,"benchmark_case_ids":identifiers,
+            "benchmark_case_versions":versions,"supported_backends":card["native_capability"]["supported_backends"],
+            "freshness":{"status":status,"rule":"all referenced benchmark cases must exist with dataset versions"}}));
+    }
+    Ok(json!({"ok":issues.is_empty(),"issues":issues,
+        "summary":{"case_count":case_versions.len(),"model_card_count":summaries.len()},
+        "model_card_summaries":summaries}))
+}
+
 pub(crate) fn execute(request: &Value) -> Value {
     let operation = &request["operation"];
     let result = if request["schema_version"] != crate::KERNEL_SCHEMA_VERSION {
         Err("benchmark request requires schema 2.0".into())
     } else if operation == "discover_benchmark_cases" {
         Ok(discover())
+    } else if operation == "validate_benchmark_corpus" {
+        validate_corpus()
     } else if operation == "run_benchmark_suite" {
         suite(&request["payload"])
     } else {

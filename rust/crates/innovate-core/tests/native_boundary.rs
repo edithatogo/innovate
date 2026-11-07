@@ -1628,3 +1628,33 @@ fn benchmark_suite_retains_failures_in_request_order() {
         "logistic_growth_smoke"
     );
 }
+
+#[test]
+fn benchmark_validation_reports_unresolved_historical_case_references() {
+    let request = json!({"schema_version":"2.0","operation":"validate_benchmark_corpus"});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    let report = &response["result"];
+    assert_eq!(report["ok"], false);
+    assert_eq!(report["summary"]["case_count"], 4);
+    assert_eq!(
+        report["model_card_summaries"]["bass"]["freshness"]["status"],
+        "current"
+    );
+    assert_eq!(
+        report["model_card_summaries"]["bass"]["benchmark_case_versions"]["bass_smoke_adoption"],
+        "2026.04"
+    );
+    assert_eq!(
+        report["model_card_summaries"]["lock_in"]["freshness"]["status"],
+        "stale"
+    );
+    assert!(
+        report["issues"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|issue| issue["identifier"] == "lock_in"
+                && issue["code"] == "unknown_benchmark_case")
+    );
+}

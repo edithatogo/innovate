@@ -68,7 +68,12 @@ pub fn execute_json(input: &str) -> String {
             }
             Some("ingest_dataset") => return dataset::ingest_request(&value).to_string(),
             Some("execute_scenario_grid") => return scenario::execute_grid(&value).to_string(),
-            Some("discover_benchmark_cases" | "run_benchmark_case" | "run_benchmark_suite") => {
+            Some(
+                "discover_benchmark_cases"
+                | "run_benchmark_case"
+                | "run_benchmark_suite"
+                | "validate_benchmark_corpus",
+            ) => {
                 return benchmark::execute(&value).to_string();
             }
             Some("discover_scenarios") => return scenario::discover(&value).to_string(),
