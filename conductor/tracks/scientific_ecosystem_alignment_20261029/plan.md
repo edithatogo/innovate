@@ -7001,3 +7001,8 @@ Hosted release readiness for this worktree revision remains open.
   extreme inputs. All 126 signed constant-window cases for lengths
   2–64 returned finite means within one ulp. All three focused Rust
   rolling tests passed. Binding readback remains open.
+
+- [x] Verify all 126 signed maximum-magnitude rolling windows through
+  the rebuilt Python 3.15.2 wheel, Julia and installed R. Every result
+  retained nulls for incomplete windows and a mean within one ulp
+  for the complete window, using native builds from 446ee021.
