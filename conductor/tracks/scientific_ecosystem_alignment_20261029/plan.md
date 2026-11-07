@@ -2067,3 +2067,8 @@ the other competition models and installed binding checks remain open.
   A regression covers a worker override that previously passed import
   but failed when replayed. All 38 Rust boundary tests and focused
   Clippy passed.
+
+- [x] Require agreement between the artifact seed and the replay seed.
+  A recorded seed requires a matching unsigned integer in replay
+  options. Deterministic artifacts may omit the seed from both places.
+  All 48 Rust boundary and Kairos tests and focused Clippy passed.

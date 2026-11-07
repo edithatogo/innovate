@@ -659,9 +659,11 @@ fn validate_replay(
     {
         return Err("artifact replay scenario does not match the envelope");
     }
-    if let Some(seed) = entry.simulation["simulation_options"].get("seed")
-        && seed != &original["seed"]
-    {
+    let seed_matches = match entry.simulation["simulation_options"].get("seed") {
+        Some(seed) => seed.is_u64() && seed == &original["seed"],
+        None => artifact.seed.is_none(),
+    };
+    if !seed_matches {
         return Err("artifact replay seed does not match the envelope");
     }
     Ok((artifact.version != env!("CARGO_PKG_VERSION"))
