@@ -5501,3 +5501,8 @@ Hosted release readiness for this worktree revision remains open.
   deterministic offsets, so propagate each rematch's existing outcome
   variance into its adjusted standard error and the adjusted mixture.
   The analytic fixture verified adjusted spread 2. Ten causal tests passed.
+
+- [x] Verify fixed-prediction uncertainty through rebuilt Python,
+  Julia and installed R. Each returned adjusted mixture spread 2
+  and unadjusted spread sqrt(5). Focused refit, insufficient-draw
+  and seeded bootstrap checks also passed in all three consumers.

@@ -952,11 +952,13 @@ end
     sensitivity = kernel_call("summarize_causal", nothing, Dict(
         "method"=>"matched_treatment_contrast", "outcomes"=>[0,4,2],
         "treatment"=>[0,1,0], "scores"=>[0,0,1], "caliper"=>0,
-        "score_draws"=>[[0,0,1],[1,0,0]], "outcome_variances"=>[0,1,6]
+        "score_draws"=>[[0,0,1],[1,0,0]], "outcome_variances"=>[0,1,6],
+        "control_predictions"=>[0,0,2]
     ))["result"]["score_sensitivity"]
     @test [draw["estimate"] for draw in sensitivity["draws"]] == [4,2]
     @test sensitivity["same_treated_subset"]
     @test sensitivity["mixture_standard_deviation"] ≈ sqrt(5)
+    @test sensitivity["adjusted_mixture_standard_deviation"] ≈ 2
 end
 
 @testset "Matching score refits" begin

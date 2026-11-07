@@ -888,10 +888,11 @@ stopifnot(fitted_scores$match_diagnostics$minimum_runner_up_distance_gap == 0)
 score_mixture <- kernel_call("summarize_causal", payload=list(
   method="matched_treatment_contrast", outcomes=c(0,4,2), treatment=c(0,1,0),
   scores=c(0,0,1), caliper=0, score_draws=list(c(0,0,1), c(1,0,0)),
-  outcome_variances=c(0,1,6)))$result$score_sensitivity
+  outcome_variances=c(0,1,6), control_predictions=c(0,0,2)))$result$score_sensitivity
 stopifnot(all(vapply(score_mixture$draws, function(draw) draw$estimate, numeric(1)) == c(4,2)),
   isTRUE(score_mixture$same_treated_subset),
-  isTRUE(all.equal(score_mixture$mixture_standard_deviation, sqrt(5))))
+  isTRUE(all.equal(score_mixture$mixture_standard_deviation, sqrt(5))),
+  isTRUE(all.equal(score_mixture$adjusted_mixture_standard_deviation, 2)))
 
 score_refits <- kernel_call("summarize_causal", payload=list(
   method="matched_treatment_contrast", outcomes=c(0,4,2,6,8,12,10,14),

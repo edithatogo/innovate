@@ -1783,10 +1783,12 @@ def test_matching_score_draw_mixture():
         "summarize_causal", method="matched_treatment_contrast",
         outcomes=[0, 4, 2], treatment=[0, 1, 0], scores=[0, 0, 1], caliper=0,
         score_draws=[[0, 0, 1], [1, 0, 0]], outcome_variances=[0, 1, 6],
+        control_predictions=[0, 0, 2],
     )["result"]["score_sensitivity"]
     assert [draw["estimate"] for draw in sensitivity["draws"]] == [4, 2]
     assert sensitivity["same_treated_subset"]
     assert sensitivity["mixture_standard_deviation"] == pytest.approx(math.sqrt(5))
+    assert sensitivity["adjusted_mixture_standard_deviation"] == pytest.approx(2)
 
 
 def test_matching_score_refits():
