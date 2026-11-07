@@ -568,6 +568,11 @@ end
         result = kernel_call("summarize_causal", nothing, payload)["result"]
         @test result["estimate"] ≈ estimate
         @test result["by_stratum"]["low"]["weight"] ≈ weight
+        @test haskey(result, "conditional_standard_error") && isnothing(result["conditional_standard_error"])
+        replicated = merge(payload, Dict("outcomes"=>[0,2,4,6,10,10,12,12],
+            "treatment"=>repeat([0,0,1,1],2), "strata"=>repeat(["low","high"],inner=4)))
+        result = kernel_call("summarize_causal", nothing, replicated)["result"]
+        @test result["conditional_standard_error"] ≈ sqrt(0.5)
         payload["strata"][end] = "unsupported"
         @test_throws r"each stratum requires treated and control observations" kernel_call("summarize_causal", nothing, payload)
     end

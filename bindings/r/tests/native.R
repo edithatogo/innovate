@@ -534,6 +534,11 @@ for (estimand in c("ate", "att")) {
   contrast <- kernel_call("summarize_causal", payload=stratified)$result
   stopifnot(isTRUE(all.equal(contrast$estimate, estimate)),
     isTRUE(all.equal(contrast$by_stratum$low$weight, weight)))
+  stopifnot("conditional_standard_error" %in% names(contrast), is.null(contrast$conditional_standard_error))
+  replicated <- modifyList(stratified, list(outcomes=c(0,2,4,6,10,10,12,12),
+    treatment=rep(c(0,0,1,1), 2), strata=rep(c("low","high"), each=4)))
+  result <- kernel_call("summarize_causal", payload=replicated)$result
+  stopifnot(isTRUE(all.equal(result$conditional_standard_error, sqrt(0.5))))
   stratified$strata[7] <- "unsupported"
   contrast_error <- tryCatch({kernel_call("summarize_causal", payload=stratified); ""}, error=conditionMessage)
   stopifnot(grepl("each stratum requires treated and control observations", contrast_error, fixed=TRUE))

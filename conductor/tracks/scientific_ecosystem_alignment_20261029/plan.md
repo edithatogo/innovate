@@ -4505,3 +4505,7 @@ Hosted release readiness for this worktree revision remains open.
   independent observations and fixed weights. The analytic Rust fixture
   verifies squared weighting across strata and a null result for a
   singleton arm. Binding runtime checks remain open for this field.
+
+- [x] Verify stratified conditional standard errors through rebuilt
+  Python 3.15.2, Julia and installed R. Both estimands returned the
+  analytic sqrt(0.5) with replicated arms and null with singleton arms.

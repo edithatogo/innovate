@@ -1304,6 +1304,13 @@ def test_native_stratified_treatment_contrast(estimand, estimate, weight):
     result = innovate.execute("summarize_causal", **payload)["result"]
     assert result["estimate"] == pytest.approx(estimate)
     assert result["by_stratum"]["low"]["weight"] == pytest.approx(weight)
+    assert result["conditional_standard_error"] is None
+    replicated = innovate.execute(
+        "summarize_causal", method="stratified_treatment_contrast", estimand=estimand,
+        outcomes=[0, 2, 4, 6, 10, 10, 12, 12], treatment=[0, 0, 1, 1] * 2,
+        strata=["low"] * 4 + ["high"] * 4,
+    )["result"]
+    assert replicated["conditional_standard_error"] == pytest.approx(2**-0.5)
     payload["strata"][-1] = "unsupported"
     with pytest.raises(innovate.NativeError, match="each stratum requires treated and control observations"):
         innovate.execute("summarize_causal", **payload)
