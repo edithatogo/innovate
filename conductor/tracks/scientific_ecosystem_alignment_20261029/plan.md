@@ -1860,4 +1860,7 @@ the other competition models and installed binding checks remain open.
   catches both a duplicate ordered pair and a negative weight while
   allowing the reverse pair. All 31 native boundary tests and focused
   Clippy passed.
-- [ ] Verify all five dataset report kinds in installed consumers.
+- [x] Verify all five dataset report kinds in the rebuilt Python wheel,
+  Julia and installed R. Reports agree on valid adoption and competition
+  rows, excessive total share, unsorted policy timing and negative
+  edge weights. R preserves singleton columns for this operation.

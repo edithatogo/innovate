@@ -24,6 +24,10 @@ kernel_call <- function(operation, model_key = NULL, payload = list()) {
       "assumptions", "limitations", "data_sources", "outcomes", "treatment", "spillover_regions",
       "confounders", "effect_modifiers")
   }
+  if (identical(operation, "validate_dataset")) {
+    array_fields <- c(array_fields, "denominator", "value", "unit_id", "product_id",
+      "source", "target", "weight")
+  }
   preserve_arrays <- function(value) {
     if (!is.list(value)) return(value)
     fields <- names(value)
