@@ -389,12 +389,17 @@ fn counterfactual_forecast(payload: &Value) -> Result<Value, &'static str> {
             "counterfactual override names an unknown covariate",
         )?;
     }
+    let mut options = if let Some(state) = alternative.get_mut("state") {
+        state.get_mut("constructor_kwargs")
+    } else {
+        alternative.get_mut("constructor_kwargs")
+    };
     if let Some(overrides) = payload.get("covariate_history_overrides") {
-        let history = alternative
-            .get_mut("state")
-            .and_then(|state| state.pointer_mut("/constructor_kwargs/covariate_history/values"))
+        let history = options
+            .as_deref_mut()
+            .and_then(|options| options.pointer_mut("/covariate_history/values"))
             .and_then(Value::as_object_mut)
-            .ok_or("baseline requires fitted state with named covariate history")?;
+            .ok_or("baseline requires named covariate history")?;
         apply_overrides(
             history,
             overrides,
@@ -405,11 +410,6 @@ fn counterfactual_forecast(payload: &Value) -> Result<Value, &'static str> {
         if !events.is_array() {
             return Err("parameter_event_override must be an array");
         }
-        let options = if let Some(state) = alternative.get_mut("state") {
-            state.get_mut("constructor_kwargs")
-        } else {
-            alternative.get_mut("constructor_kwargs")
-        };
         let schedule = options
             .and_then(|options| options.get_mut("parameter_events"))
             .ok_or("baseline requires a parameter event schedule")?;

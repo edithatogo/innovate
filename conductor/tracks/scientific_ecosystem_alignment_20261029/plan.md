@@ -3674,3 +3674,8 @@ Hosted release readiness for this worktree revision remains open.
   rebuilt Python 3.15.2 wheel, Julia and freshly installed R. All three
   reproduced the analytic baseline and event-free counterfactual for
   the first product within 1e-8. R used raw JSON for the empty schedule.
+- [x] Allow counterfactual covariate history replacement on explicit
+  prediction requests. The Lotka–Volterra fixture verifies identical
+  results for explicit and saved-state forecasts against the analytic
+  contrast. The causal boundary test and focused Clippy passed.
+  Installed binding checks for explicit histories remain open.

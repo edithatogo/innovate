@@ -556,6 +556,15 @@ fn causal_summaries_match_analytic_effects() {
         let expected = 1. / (1. + 9. * exponent.exp());
         assert!((compared["result"][key][0][0].as_f64().unwrap() - expected).abs() < 1e-8);
     }
+    let mut explicit = history.clone();
+    let baseline = explicit["baseline"].as_object_mut().unwrap();
+    let state = baseline.remove("state").unwrap();
+    baseline.insert("parameters".into(), state["parameters"].clone());
+    baseline.insert(
+        "constructor_kwargs".into(),
+        state["constructor_kwargs"].clone(),
+    );
+    assert_eq!(run(explicit)["result"], compared["result"]);
     history["covariate_history_overrides"]["price"] = json!([0.]);
     assert_eq!(run(history)["error"]["code"], "invalid_request");
     let mut events = json!({"method":"counterfactual_forecast","forecast_model":"lotka_volterra",
