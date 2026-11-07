@@ -6170,3 +6170,10 @@ Hosted release readiness for this worktree revision remains open.
   promotion and scenario replay validation changes. All 322 tests
   passed with incremental compilation disabled. This verifies local
   Rust workspace behavior. Release and scientific acceptance remain open.
+
+- [x] Run the native Python, Julia and R conformance suites after the
+  Kairos pin and artifact replay changes. All 130 Python native tests
+  passed against the rebuilt CPython 3.15.2 wheel. The Julia project
+  suite and the installed R package's native.R suite both exited zero
+  with the rebuilt Rust shared library. Hosted and scientific
+  acceptance remain open.
