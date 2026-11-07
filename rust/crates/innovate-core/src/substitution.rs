@@ -807,7 +807,6 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
         .as_object()
         .ok_or_else(|| invalid(op, "payload must be an object"))?;
     let inputs = object_section(payload, "inputs", op)?;
-    let mut model = options(request, inputs)?;
     let time = numeric_array_from_aliases(inputs, &["time", "t"], op)?;
     if time.iter().any(|t| !t.is_finite() || *t < 0.0) || time.windows(2).any(|t| t[1] <= t[0]) {
         return Err(invalid(
@@ -815,6 +814,15 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
             "time must be finite, nonnegative and strictly increasing",
         ));
     }
+    if let Some(options) = payload
+        .get("constructor_kwargs")
+        .or_else(|| payload.get("model_kwargs"))
+        .and_then(Value::as_object)
+        .filter(|options| options.contains_key("event_candidates"))
+    {
+        return crate::historical::profile_event(request, options, &time, execute);
+    }
+    let mut model = options(request, inputs)?;
     let forcing_origin = if model.variant == "successive_generations" {
         model.launches[0]
     } else {

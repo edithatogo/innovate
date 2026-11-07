@@ -3139,3 +3139,11 @@ the other competition models and installed binding checks remain open.
   independent SciPy fixture within 0.001. The Python Polars consumer
   regression now covers candidate selection, training replay and
   held-out prediction alongside fixed-split fits. Four selected tests passed.
+
+- [x] Profile one Norton–Bass parameter event by zero-based index.
+  Refit base parameters at each candidate and retain the selected
+  event list, fixed overrides, and other event times. Python 3.15.2,
+  Julia and R agreed exactly on the SciPy fixture and selected 2.125
+  with RSS 2.94e-14 while retaining the event at 5.375. The focused
+  Rust regression and Clippy passed. Joint event and launch inference
+  and uncertainty remain open.

@@ -227,6 +227,11 @@ fewer than three positive-weight observations on either side. The fitted state s
 selected `t_event`, and `event_profile` reports the candidate scores and
 convergence. The search is limited to the supplied times.
 
+Norton–Bass accepts the same candidate list with a zero-based `event_index`
+into `parameter_events`. The fitter varies that event's time while preserving
+its overrides, the other events, and the launch schedule. The selected event
+list is stored in the fitted state.
+
 `t_event` selects independent pre/post curves using `L_post`, `k_post`,
 `x0_post` at and after the event. These historical curves can jump at the event;
 continuity is not imposed. If covariates and an event are combined,

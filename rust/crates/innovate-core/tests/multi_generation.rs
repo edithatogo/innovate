@@ -811,3 +811,38 @@ fn weighted_norton_fit_excludes_both_outputs_and_preserves_forecast() {
         assert!((actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-3);
     }
 }
+
+#[test]
+fn norton_bass_profiles_one_event_and_retains_other_events() {
+    let fixture: Value =
+        serde_json::from_str(include_str!("fixtures/norton_events_scipy.json")).unwrap();
+    let mut options = fixture["constructor_kwargs"].clone();
+    options["event_candidates"] = json!([2., 2.125, 2.25]);
+    options["event_index"] = json!(0);
+    let mut start = fixture["parameters"].clone();
+    start["p1"] = json!(0.0305);
+    let mut payload = json!({
+        "inputs":{"time":fixture["time"],"covariates":fixture["covariates"],"observed":fixture["rows"]},
+        "constructor_kwargs":options,
+        "fit_options":{"initial_parameters":start,"max_iterations":200}
+    });
+    let kernel = KernelBinding::new();
+    let result = kernel
+        .fit_model("norton_bass", payload.clone())
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(result["event_profile"]["event_index"], 0);
+    assert_eq!(
+        result["state"]["constructor_kwargs"]["parameter_events"],
+        fixture["constructor_kwargs"]["parameter_events"]
+    );
+    assert!(
+        result["event_profile"]["candidates"][1]["objective"]
+            .as_f64()
+            .unwrap()
+            < 1e-8
+    );
+    payload["constructor_kwargs"]["event_index"] = json!(2);
+    assert!(kernel.fit_model("norton_bass", payload).is_err());
+}

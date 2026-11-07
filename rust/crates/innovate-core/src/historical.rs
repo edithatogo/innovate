@@ -487,6 +487,25 @@ pub(crate) fn profile_event(
     let mut trial = request.clone();
     let mut fixed = options.clone();
     fixed.remove("event_candidates");
+    let event_index = if request.model_key.as_deref() == Some("norton_bass") {
+        let index = fixed
+            .remove("event_index")
+            .and_then(|index| index.as_u64())
+            .and_then(|index| usize::try_from(index).ok())
+            .ok_or_else(|| {
+                error("Norton–Bass event profiling requires a zero-based event_index")
+            })?;
+        if !fixed
+            .get("parameter_events")
+            .and_then(|events| events.get(index))
+            .is_some_and(Value::is_object)
+        {
+            return Err(error("event_index must select an existing parameter event"));
+        }
+        Some(index)
+    } else {
+        None
+    };
     let mut profile = Vec::with_capacity(times.len());
     let mut best = None;
     let mut best_score = f64::INFINITY;
@@ -505,7 +524,13 @@ pub(crate) fn profile_event(
                 continue;
             }
         }
-        fixed.insert("t_event".into(), json!(time_candidate));
+        if let Some(index) = event_index {
+            fixed
+                .get_mut("parameter_events")
+                .expect("validated event list")[index]["time"] = json!(time_candidate);
+        } else {
+            fixed.insert("t_event".into(), json!(time_candidate));
+        }
         trial.payload["constructor_kwargs"] = json!(fixed);
         match fit(&trial) {
             Ok(response) => {
@@ -536,5 +561,9 @@ pub(crate) fn profile_event(
         "method":"discrete_profile_least_squares","candidates":profile,
         "tie_break":"earliest_candidate"
     });
+    if let Some(index) = event_index {
+        response.result.as_mut().expect("fit result")["event_profile"]["event_index"] =
+            json!(index);
+    }
     Ok(response)
 }
