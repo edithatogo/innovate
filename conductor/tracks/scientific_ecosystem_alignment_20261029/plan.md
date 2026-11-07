@@ -7408,3 +7408,9 @@ Hosted release readiness for this worktree revision remains open.
   archives byte for byte. This verifies checkout-path independence on
   the same host. The temporary worktree was removed after comparison.
   Optimized wheel reproducibility remains open.
+
+- [x] Run the existing SBOM normalization regressions in the hosted
+  release dry run before packaging. Both tests passed locally and
+  Actionlint passed. Earlier independent builds were byte-identical
+  after normalization. That evidence applies to the earlier source
+  revision, while current independent wheel validation remains open.

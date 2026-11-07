@@ -49,6 +49,8 @@ jobs:
           toolchain: 1.99.1
       - run: uv venv .venv-release --python 3.15.2
       - run: UV_PROJECT_ENVIRONMENT=.venv-release uv sync --locked --no-install-project --python .venv-release/bin/python
+      - name: Verify wheel SBOM normalization
+        run: .venv-release/bin/python -m pytest tests/unit/test_normalize_wheel_sbom.py
       - name: Validate release packaging without publishing
         env:
           CARGO_BUILD_JOBS: '2'
