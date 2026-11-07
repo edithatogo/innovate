@@ -1769,3 +1769,10 @@ the other competition models and installed binding checks remain open.
 - [ ] Qualify the R Arrow IPC consumer and investigate Arrow.jl file
   compatibility. Arrow.jl returned empty column sets for the Polars
   IPC files even with compression disabled and oldest compatibility.
+
+- [x] Isolate the Julia IPC file issue to the tested writer path.
+  PyArrow 26 rewrote each qualified Polars stream to an IPC file.
+  Arrow.jl 2.8.1 read the files and matched the stream column names,
+  element types, values and nulls. The equivalent Polars-written
+  files yielded empty column sets. Use the qualified Polars stream
+  path for direct Julia exchange.
