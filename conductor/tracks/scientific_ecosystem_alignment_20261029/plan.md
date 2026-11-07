@@ -2105,3 +2105,11 @@ the other competition models and installed binding checks remain open.
   Nested pair and ensemble outcomes remain intact in comparison_json.
   The three installed consumers produced equal Polars tables for a pair
   result and an ensemble error. Eight tabular tests and Clippy passed.
+
+- [x] Translate baseline Bass specifications when apply_specifications
+  is enabled. Kairos ABM and DES use the declared market size and the
+  initial adoption fraction times the explicit agent population, rounded
+  to the nearest agent with halves rounded up. Conflicting explicit fields
+  fail. Replay stores resolved inputs. All 49 targeted Rust tests and
+  Clippy passed. Other scenario families and binding qualification remain
+  open.

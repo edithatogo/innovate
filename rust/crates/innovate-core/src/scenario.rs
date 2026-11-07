@@ -100,6 +100,55 @@ impl ScenarioSpecification {
     }
 }
 
+fn apply_specification(scenario: &mut Scenario) -> Result<(), &'static str> {
+    let spec = scenario
+        .specification
+        .as_ref()
+        .ok_or("scenario specification is required")?;
+    if scenario.model_key != "bass" || !matches!(spec.kind, ScenarioKind::Baseline) {
+        return Err("specification translation currently supports baseline Bass scenarios");
+    }
+    let simulation = scenario
+        .simulation
+        .as_object_mut()
+        .ok_or("simulation must be an object")?;
+    let options = simulation
+        .get_mut("simulation_options")
+        .and_then(Value::as_object_mut)
+        .ok_or("specification translation requires Kairos simulation_options")?;
+    if !matches!(
+        options.get("engine").and_then(Value::as_str),
+        Some("kairos_abm" | "kairos_des")
+    ) {
+        return Err("baseline Bass translation requires kairos_abm or kairos_des");
+    }
+    let population = options
+        .get("population")
+        .and_then(Value::as_u64)
+        .filter(|n| (1..=100_000).contains(n))
+        .ok_or("population must be in 1..=100000")?;
+    let initial = (spec.initial_adoption * population as f64).round() as u64;
+    if options
+        .get("initial_adopters")
+        .is_some_and(|value| value.as_u64() != Some(initial))
+    {
+        return Err("initial_adopters conflicts with the scenario specification");
+    }
+    options.insert("initial_adopters".into(), json!(initial));
+    let parameters = simulation
+        .get_mut("parameters")
+        .and_then(Value::as_object_mut)
+        .ok_or("baseline Bass translation requires explicit parameters")?;
+    if parameters
+        .get("m")
+        .is_some_and(|value| value.as_f64() != Some(spec.market_size))
+    {
+        return Err("Bass market size conflicts with the scenario specification");
+    }
+    parameters.insert("m".into(), json!(spec.market_size));
+    Ok(())
+}
+
 pub(crate) fn execute_grid(request: &Value) -> Value {
     let envelope = |result: Value, error: Value| {
         json!({"schema_version":KERNEL_SCHEMA_VERSION,"operation":"execute_scenario_grid",
@@ -122,7 +171,12 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
         Some(Value::Bool(enabled)) => *enabled,
         Some(_) => return invalid("include_execution_metadata must be a boolean"),
     };
-    let scenarios: Vec<Scenario> =
+    let apply_specifications = match request["payload"].get("apply_specifications") {
+        None => false,
+        Some(Value::Bool(enabled)) => *enabled,
+        Some(_) => return invalid("apply_specifications must be a boolean"),
+    };
+    let mut scenarios: Vec<Scenario> =
         match serde_json::from_value(request["payload"]["scenarios"].clone()) {
             Ok(scenarios) => scenarios,
             Err(error) => return invalid(&format!("invalid scenario grid: {error}")),
@@ -142,6 +196,13 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
             && let Err(message) = specification.validate()
         {
             return invalid(&format!("scenario '{}': {message}", scenario.id));
+        }
+    }
+    if apply_specifications {
+        for scenario in &mut scenarios {
+            if let Err(message) = apply_specification(scenario) {
+                return invalid(&format!("scenario '{}': {message}", scenario.id));
+            }
         }
     }
     let comparisons: Option<Vec<ComparisonRequest>> = match request["payload"].get("comparisons") {

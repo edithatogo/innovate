@@ -1109,3 +1109,27 @@ fn imports_legacy_scenario_artifacts_without_inventing_replay_inputs() {
     request["payload"]["artifact"]["timestamp"] = json!("2026-01-01");
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn baseline_scenario_supplies_bass_market_and_initial_adopters() {
+    let mut request = json!({"schema_version":"2.0","operation":"execute_scenario_grid",
+    "payload":{"apply_specifications":true,"include_execution_metadata":true,"scenarios":[{
+        "id":"baseline","model_key":"bass",
+        "specification":{"scenario_type":"baseline","name":"study","description":"",
+            "time_horizon":5,"time_unit":"year","reference_year":2026,
+            "market_size":200,"initial_adoption":0.25},
+        "simulation":{"inputs":{"time":[0,5]},"parameters":{"p":0,"q":0},
+            "simulation_options":{"engine":"kairos_abm","seed":42,"population":20}}
+    }]}});
+    let run = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = run(&request);
+    let row = &response["result"]["executions"][0];
+    assert_eq!(row["result"]["counts"], json!([5, 5]));
+    assert_eq!(row["result"]["values"], json!([50., 50.]));
+    let replay = run(&row["artifact"]["replay_request"]);
+    assert_eq!(replay["result"]["executions"][0]["result"], row["result"]);
+    request["payload"]["scenarios"][0]["simulation"]["parameters"]["m"] = json!(201);
+    assert_eq!(run(&request)["error"]["code"], "invalid_request");
+}
