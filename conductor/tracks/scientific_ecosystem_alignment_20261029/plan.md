@@ -4652,3 +4652,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Compose cross-fitted stratum nuisance estimates with augmented ATE.
   The Rust fixture verifies complement-only outcome predictions, ATE 4
   and failure when a training complement lacks overlap. Binding checks remain open.
+
+- [x] Verify cross-fitted stratum ATE through rebuilt Python 3.15.2,
+  Julia and installed R. Each reproduced both sets of held-out
+  predictions in input order and the augmented estimate of 4.

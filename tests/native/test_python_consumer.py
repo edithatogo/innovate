@@ -1420,3 +1420,12 @@ def test_augmented_treatment_contrast():
     assert att["estimand"] == "att"
     assert att["estimate"] == pytest.approx(2)
     assert att["influence_standard_error"] == pytest.approx(2)
+
+
+def test_cross_fitted_stratum_ate():
+    payload = dict(method="cross_fitted_stratum_ate", outcomes=[0, 4, 2, 6],
+                   treatment=[0, 1, 0, 1], strata=["a"] * 4, folds=[1, 2, 2, 1])
+    result = innovate.execute("summarize_causal", **payload)["result"]
+    assert result["control_predictions"] == [2, 0, 0, 2]
+    assert result["treated_predictions"] == [4, 6, 6, 4]
+    assert result["contrast"]["estimate"] == pytest.approx(4)

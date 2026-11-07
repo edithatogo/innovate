@@ -639,3 +639,9 @@ augmented_att <- kernel_call("summarize_causal", payload=list(method="augmented_
   control_predictions=c(0,1)))$result
 stopifnot(identical(augmented_att$estimand, "att"), isTRUE(all.equal(augmented_att$estimate, 2)),
   isTRUE(all.equal(augmented_att$influence_standard_error, 2)))
+
+stratum_ate <- kernel_call("summarize_causal", payload=list(method="cross_fitted_stratum_ate",
+  outcomes=c(0,4,2,6), treatment=c(0,1,0,1), strata=rep("a",4), folds=c(1L,2L,2L,1L)))$result
+stopifnot(isTRUE(all.equal(unlist(stratum_ate$control_predictions), c(2,0,0,2))),
+  isTRUE(all.equal(unlist(stratum_ate$treated_predictions), c(4,6,6,4))),
+  isTRUE(all.equal(stratum_ate$contrast$estimate, 4)))
