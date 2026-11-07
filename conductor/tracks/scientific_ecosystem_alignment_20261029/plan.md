@@ -5233,3 +5233,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Report the caliper, largest retained score distance and matched
   treated fraction. The focused Rust causal test verified full matching
   and partial matching with half the treated observations retained.
+
+- [x] Verify retained-match diagnostics through rebuilt Python
+  3.15.2, Julia and installed R. All three returned a caliper of
+  0.5, maximum retained distance zero and matched treated fraction
+  0.5 on the same partial ATT fixture.
