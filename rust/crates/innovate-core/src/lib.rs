@@ -449,6 +449,11 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             sum = next;
             sum + correction
         };
+        let rolling_scale = if window.is_some() && values.iter().any(|v| v.abs() > f64::MAX / 2.) {
+            0.5
+        } else {
+            1.
+        };
         // Accumulate tiny window terms before rounding them to subnormal units.
         let mut tiny_sum = 0.;
         let mut add_sample = |value: f64, window: Option<usize>| {
@@ -459,9 +464,10 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
                 tiny_sum += (value * SCALE) / window as f64;
                 add(0.)
             } else {
-                add(term)
+                add(term * rolling_scale)
             };
-            current + tiny_sum / SCALE
+            // A mean of finite inputs cannot exceed the binary64 range.
+            (current / rolling_scale).clamp(-f64::MAX, f64::MAX) + tiny_sum / SCALE
         };
         let mut output = Vec::with_capacity(values.len());
         for (index, value) in values.iter().copied().enumerate() {

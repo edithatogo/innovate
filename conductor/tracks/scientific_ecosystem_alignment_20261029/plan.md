@@ -6994,3 +6994,10 @@ Hosted release readiness for this worktree revision remains open.
   averages. The rebuilt wheel passed the focused preprocessing test,
   preserving the series name, dtype and expected values at both
   binary64 extremes.
+
+- [x] Prevent intermediate overflow in extreme native rolling windows.
+  Before the fix, a three-sample window at maximum binary64 magnitude
+  could fail. The compensated accumulator now reserves headroom for
+  extreme inputs. All 126 signed constant-window cases for lengths
+  2–64 returned finite means within one ulp. All three focused Rust
+  rolling tests passed. Binding readback remains open.
