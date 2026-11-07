@@ -749,6 +749,11 @@ end
     result = kernel_call("summarize_causal", nothing, replicated)["result"]
     rows = result["contrasts"]
     @test result["event_time"][1]["supported_cohort_att"] ≈ 8/3
+    @test isnothing(result["event_time"][1]["standard_error"])
+    shared = merge(payload, Dict("outcomes"=>[[0,5,5],[0,5,5],[0,1,6],[0,1,6],[0,0,0],[0,2,4]],
+        "adoption_indices"=>[1,1,2,2,nothing,nothing]))
+    onset = kernel_call("summarize_causal", nothing, shared)["result"]["event_time"][1]
+    @test onset["standard_error"] ≈ (1/sqrt(48) + 1/sqrt(8)) * sqrt(2)
     @test rows[1]["estimate"] ≈ 4
     @test rows[1]["standard_error"] ≈ 1
     @test rows[2]["n_control"] == 1

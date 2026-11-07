@@ -1507,3 +1507,9 @@ def test_staggered_panel_att():
     assert replicated["contrasts"][0]["standard_error"] == pytest.approx(1)
     assert replicated["contrasts"][1]["n_control"] == 1
     assert replicated["event_time"][0]["supported_cohort_att"] == pytest.approx(8 / 3)
+    assert replicated["event_time"][0]["standard_error"] is None
+    shared = innovate.execute(
+        "summarize_causal", **{**payload, "outcomes": [[0, 5, 5]] * 2 + [[0, 1, 6]] * 2 + [[0, 0, 0], [0, 2, 4]],
+                               "adoption_indices": [1, 1, 2, 2, None, None]},
+    )["result"]["event_time"][0]
+    assert shared["standard_error"] == pytest.approx((1 / math.sqrt(48) + 1 / math.sqrt(8)) * math.sqrt(2))

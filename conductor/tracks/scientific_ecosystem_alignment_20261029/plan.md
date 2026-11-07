@@ -4729,3 +4729,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Report event-time standard errors that account for reused units.
   The Rust fixture verifies the shared-control covariance contribution
   and null for singleton arms. Binding and simultaneous inference remain open.
+
+- [x] Verify shared-control event-time uncertainty through rebuilt
+  Python 3.15.2, Julia and installed R. All three reproduce the analytic
+  standard error and return null when a contributing arm is a singleton.
