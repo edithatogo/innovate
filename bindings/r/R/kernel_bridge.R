@@ -51,6 +51,14 @@ kernel_call <- function(operation, model_key = NULL, payload = list()) {
   payload <- preserve_arrays(payload)
   request <- jsonlite::toJSON(list(schema_version = "2.0", operation = operation,
     model_key = model_key, payload = payload), auto_unbox = TRUE, null = "null", digits = NA)
+  kernel_call_json(request)
+}
+
+# Send an existing JSON envelope without re-encoding numbers or arrays.
+kernel_call_json <- function(request) {
+  if (!is.character(request) || length(request) != 1L || is.na(request)) {
+    stop("request must be a single JSON string", call. = FALSE)
+  }
   response <- jsonlite::fromJSON(.Call(innovate_call_R, native_library(), request), simplifyVector = FALSE)
   if (!is.null(response$error)) stop(sprintf("%s: %s", response$error$code, response$error$message), call. = FALSE)
   response

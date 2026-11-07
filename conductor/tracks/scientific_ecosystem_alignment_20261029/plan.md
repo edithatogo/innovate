@@ -1879,3 +1879,9 @@ the other competition models and installed binding checks remain open.
   Rust owns validation and checksums.
 - [ ] Verify structured ingestion in Julia and R and qualify provenance
   enrichment and historical ingestion schema details.
+
+- [x] Verify re-ingestion of a Python-produced dataset artifact in Julia
+  and installed R. Both reproduce the artifact and reject a changed
+  value under its retained checksum. R exposes kernel_call_json to keep
+  the original numeric tokens because list serialization can rewrite
+  whole-valued floats as integers.
