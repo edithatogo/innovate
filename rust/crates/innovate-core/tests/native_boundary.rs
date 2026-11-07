@@ -1146,13 +1146,21 @@ fn scenario_grid_summarizes_paired_ensemble_differences() {
     let mut request = json!({"schema_version":"2.0","operation":"execute_scenario_grid",
         "payload":{"workers":2,"scenarios":simulations,
             "comparisons":[{"pairs":[{"baseline":"a","alternative":"b"},
-                {"baseline":"c","alternative":"d"}],"interval_mass":0.5,"bootstrap":{"draws":1000,"seed":42}}]}});
+                {"baseline":"c","alternative":"d"}],"interval_mass":0.5,"exact_sign_flip":true,"bootstrap":{"draws":1000,"seed":42}}]}});
     let run = |request: &serde_json::Value| -> serde_json::Value {
         serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
     };
     let response = run(&request);
     let outcome = &response["result"]["comparisons"][0]["result"];
     assert_eq!(outcome["pair_count"], 2);
+    assert_eq!(outcome["sign_flip"]["assignments"], 4);
+    assert_eq!(outcome["sign_flip"]["p_value"], 1.);
+    let mut aligned = request.clone();
+    aligned["payload"]["comparisons"][0]["pairs"][1] = json!({"baseline":"d","alternative":"c"});
+    assert_eq!(
+        run(&aligned)["result"]["comparisons"][0]["result"]["sign_flip"]["p_value"],
+        0.5
+    );
     assert_eq!(outcome["bootstrap"]["mean_interval"], json!([12.5, 50.]));
     assert_eq!(outcome["bootstrap"]["method"], "paired_percentile");
     assert_eq!(run(&request), response);

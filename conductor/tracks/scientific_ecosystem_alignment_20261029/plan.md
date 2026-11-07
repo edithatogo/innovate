@@ -3636,3 +3636,13 @@ Hosted release readiness for this worktree revision remains open.
   Each binding returned standard error 1.1102230246251564e-16, within
   four machine epsilons relative to the analytic half-gap. R received
   raw request JSON to retain the adjacent floating-point tokens.
+
+## Paired ensemble sign-flip inference
+
+- [x] Add optional exact_sign_flip inference for two through sixteen
+  pairs. Enumerate every sign assignment to final paired differences
+  and report the two-sided tail proportion, including ties. Inference
+  assumes independent pairs and exchangeable signs under the null.
+  The public Rust scenario boundary returns p = 1 for effects 50 and
+  -25 and p = 0.5 for effects 50 and 25. Focused Clippy passed.
+  Installed Python, Julia and R validation remains open.

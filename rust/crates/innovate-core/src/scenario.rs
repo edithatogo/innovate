@@ -707,6 +707,8 @@ struct EnsembleComparison {
     require_distinct_pair_seeds: bool,
     interval_mass: f64,
     bootstrap: Option<EnsembleBootstrap>,
+    #[serde(default)]
+    exact_sign_flip: bool,
 }
 
 #[derive(Deserialize)]
@@ -944,6 +946,9 @@ fn compare_ensemble(
         "mean_difference":mean,"mean_standard_error":standard_error,
         "standard_error_assumption":"independent replicate pairs",
         "median_difference":linear_quantile(&sorted, 0.5),"empirical_interval":[linear_quantile(&sorted, tail),linear_quantile(&sorted, 1.-tail)]});
+    if comparison.exact_sign_flip {
+        result["sign_flip"] = exact_sign_flip(&differences, scale)?;
+    }
     if let Some(options) = &comparison.bootstrap {
         result["bootstrap"] = bootstrap_mean(&differences, options, scale, mass)?;
     }
@@ -976,6 +981,31 @@ fn ensemble_moments(differences: &[f64], scale: f64) -> (f64, f64) {
         .map(|x| (offset(x) - center).powi(2))
         .sum::<f64>();
     (mean * scale, (squares / (n * (n - 1.))).sqrt() * scale)
+}
+
+fn exact_sign_flip(differences: &[f64], scale: f64) -> Result<Value, &'static str> {
+    if differences.len() > 16 {
+        return Err("exact sign-flip inference supports at most 16 pairs");
+    }
+    let divisor = if scale == 0. { 1. } else { scale };
+    let values: Vec<_> = differences.iter().map(|x| x / divisor).collect();
+    let observed = values.iter().sum::<f64>().abs();
+    let assignments = 1usize << values.len();
+    let extreme = (0..assignments)
+        .filter(|mask| {
+            let sum: f64 = values
+                .iter()
+                .enumerate()
+                .map(|(i, &x)| if mask & (1 << i) == 0 { x } else { -x })
+                .sum();
+            sum.abs() >= observed
+        })
+        .count();
+    Ok(
+        json!({"method":"exact_two_sided_sign_flip","assignments":assignments,
+        "extreme_assignments":extreme,"p_value":extreme as f64 / assignments as f64,
+        "assumption":"independent pairs with exchangeable signs under the null"}),
+    )
 }
 
 fn bootstrap_mean(
