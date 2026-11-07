@@ -2469,3 +2469,11 @@ the other competition models and installed binding checks remain open.
   Clippy passed. The rebuilt Python 3.15.2 wheel and Julia agreed exactly,
   and installed R agreed within 1e-14 after serialization. This isolates
   directional coupling. Composite fitting still needs corpus coverage.
+
+- [x] Add and qualify composite_fit. The synthetic single-component Bass
+  case recovers parameters from perturbed starts, verifies one excluded
+  conditioning row, and forecasts from saved state. Maximum error over
+  25 values was 2.135e-10. Five focused Rust tests and Clippy passed.
+  The rebuilt Python 3.15.2 wheel and Julia returned identical results.
+  Installed R agreed within 1e-14 after serialization. Joint estimation
+  of coupled components remains open.

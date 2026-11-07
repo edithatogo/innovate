@@ -1593,9 +1593,9 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
     };
     let discovery = run("discover_benchmark_cases", json!({}));
     let cases = discovery["result"]["cases"].as_array().unwrap();
-    assert_eq!(cases.len(), 18);
+    assert_eq!(cases.len(), 19);
     let suite = run("run_benchmark_suite", json!({"workers":2}));
-    assert_eq!(suite["result"]["succeeded"], 18, "{suite}");
+    assert_eq!(suite["result"]["succeeded"], 19, "{suite}");
     assert_eq!(suite["result"]["failed"], 0);
     let rows = suite["result"]["runs"].as_array().unwrap();
     for (case, row) in cases.iter().zip(rows) {
@@ -1635,6 +1635,26 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
                         < 1e-5 * reference.abs().max(1.)
                 );
             }
+        }
+        if row["case_id"] == "composite_fit" {
+            let fit = &result["fit"];
+            assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
+            assert_eq!(
+                fit["diagnostics"]["initial_condition"]["excluded_conditioning_rows"],
+                1
+            );
+            for (parameter, expected) in [("p_1", 0.03), ("q_1", 0.35), ("m_1", 100.)] {
+                assert!((fit["parameters"][parameter].as_f64().unwrap() - expected).abs() < 1e-5);
+            }
+            for (row, expected) in result["prediction"]["rows"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .zip(result["observed"].as_array().unwrap())
+            {
+                assert!((row[0].as_f64().unwrap() - expected[0].as_f64().unwrap()).abs() < 1e-5);
+            }
+            continue;
         }
         if case["family"] == "composite" {
             assert!(result["fit"].is_null());
@@ -1827,7 +1847,7 @@ fn benchmark_validation_resolves_all_historical_case_references() {
         serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
     let report = &response["result"];
     assert_eq!(report["ok"], true);
-    assert_eq!(report["summary"]["case_count"], 18);
+    assert_eq!(report["summary"]["case_count"], 19);
     assert_eq!(
         report["model_card_summaries"]["bass"]["freshness"]["status"],
         "current"
