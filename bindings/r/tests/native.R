@@ -883,3 +883,4 @@ stopifnot(fitted_scores$estimate == 5,
   identical(unlist(fitted_scores$score_fit$propensities), rep(0.5,4)))
 stopifnot(fitted_scores$score_uncertainty_scope == "conditional_on_fitted_scores_and_pairs",
   fitted_scores$match_diagnostics$minimum_matched_caliper_slack == 0)
+stopifnot(fitted_scores$match_diagnostics$minimum_runner_up_distance_gap == 0)

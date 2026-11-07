@@ -945,4 +945,5 @@ end
     @test result["score_fit"]["propensities"] == fill(0.5,4)
     @test result["score_uncertainty_scope"] == "conditional_on_fitted_scores_and_pairs"
     @test result["match_diagnostics"]["minimum_matched_caliper_slack"] == 0
+    @test result["match_diagnostics"]["minimum_runner_up_distance_gap"] == 0
 end

@@ -5423,3 +5423,8 @@ Hosted release readiness for this worktree revision remains open.
   alternative across accepted pairs, alongside the caliper slack. Rust
   tests verified positive separation and zero separation for duplicate
   scores and equidistant controls. This is a score sensitivity diagnostic.
+
+- [x] Verify that Python, Julia and installed R expose a zero runner-up
+  gap when two controls have the same fitted score. All three passed
+  against rebuilt libraries. Local disk capacity required reusing the
+  FFI build space for the Python link after the Julia and R checks.

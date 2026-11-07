@@ -1775,3 +1775,4 @@ def test_matching_with_fitted_scores():
     assert result["score_fit"]["propensities"] == [0.5] * 4
     assert result["score_uncertainty_scope"] == "conditional_on_fitted_scores_and_pairs"
     assert result["match_diagnostics"]["minimum_matched_caliper_slack"] == 0
+    assert result["match_diagnostics"]["minimum_runner_up_distance_gap"] == 0
