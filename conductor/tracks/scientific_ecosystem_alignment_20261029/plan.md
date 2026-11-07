@@ -4334,3 +4334,6 @@ Hosted release readiness for this worktree revision remains open.
   generation. The native validation and checksum operations now
   require named provenance fields. Existing object encoding is
   preserved. All five dataset-filtered Rust boundary tests passed.
+- [x] Verify that the rebuilt Python wheel raises NativeError with
+  invalid_request for positional provenance in dataset checksum.
+  The focused packaged regression and Ruff passed.

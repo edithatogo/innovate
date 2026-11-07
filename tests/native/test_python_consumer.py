@@ -1191,3 +1191,10 @@ def test_local_ingestion_explicit_format_preserves_upstream_provenance(tmp_path)
     assert actual["extra"] == {"cohort": "α", "path": str(path), "format": "parquet"}
     assert provenance["transform_steps"] == ["normalize"]
     assert provenance["extra"] == {"cohort": "α"}
+
+
+def test_dataset_checksum_rejects_positional_provenance():
+    positional = ["survey", "CC-BY-4.0", "2026-11-07T00:00:00Z", [], "1.0", "", "", {}]
+    with pytest.raises(innovate.NativeError, match="dataset provenance must be an object") as exc:
+        innovate.execute("dataset_checksum", dataset={"provenance": positional})
+    assert exc.value.code == "invalid_request"
