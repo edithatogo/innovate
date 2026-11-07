@@ -45,6 +45,7 @@ impl AdoptionClock {
         population: u64,
         ticks: u64,
         horizon: u128,
+        pause_tick: Option<u128>,
     ) -> Result<Option<u128>, &'static str> {
         loop {
             let (_, p, q) = forcing[self.forcing_index];
@@ -53,6 +54,7 @@ impl AdoptionClock {
             if !rate.is_finite() {
                 return Err("simulation hazard exceeded finite domain");
             }
+            let before_draw = pause_tick.map(|_| self.rng.checkpoint());
             let delta = if rate == 0. {
                 f64::INFINITY
             } else {
@@ -61,9 +63,19 @@ impl AdoptionClock {
                     .sample(Exp::new(rate).map_err(|_| "invalid simulation hazard")?);
                 (delay * ticks as f64).ceil().max(1.)
             };
-            if let Some(boundary) = next.filter(|t| *t <= horizon)
-                && delta >= boundary.saturating_sub(self.now) as f64
-            {
+            let boundary = next
+                .filter(|tick| *tick <= horizon && delta >= tick.saturating_sub(self.now) as f64);
+            if let Some(pause_tick) = pause_tick {
+                let cutoff = pause_tick.saturating_sub(self.now);
+                let crosses_pause =
+                    boundary.map_or(delta > cutoff as f64, |tick| tick > pause_tick);
+                if crosses_pause {
+                    self.rng = DeterministicStream::restore(&before_draw.unwrap())
+                        .map_err(|_| "could not restore the pending hazard draw")?;
+                    return Ok(None);
+                }
+            }
+            if let Some(boundary) = boundary {
                 self.now = boundary;
                 self.forcing_index += 1;
                 continue;
@@ -284,7 +296,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     }
     for adopted in initial + events.len() as u64..population {
         let Some(now) = clock
-            .next_adoption(&forcing, adopted, population, ticks, horizon)
+            .next_adoption(&forcing, adopted, population, ticks, horizon, None)
             .map_err(invalid)?
         else {
             break;
@@ -386,6 +398,34 @@ mod tests {
     use super::*;
 
     #[test]
+    fn clock_pause_preserves_the_draw_before_a_future_forcing_boundary() {
+        let forcing = [(0, 0., 0.), (2, 1e-5, 0.), (5, 1e12, 0.)];
+        let start = || AdoptionClock {
+            rng: DeterministicStream::from_run_seed(42),
+            now: 0,
+            forcing_index: 0,
+        };
+        let mut paused = start();
+        assert_eq!(
+            paused
+                .next_adoption(&forcing, 0, 4, 1, 10, Some(3))
+                .unwrap(),
+            None
+        );
+        assert_eq!(paused.now, 2);
+        let mut uninterrupted = start();
+        let expected = uninterrupted
+            .next_adoption(&forcing, 0, 4, 1, 10, None)
+            .unwrap();
+        assert_eq!(expected, Some(6));
+        assert_eq!(
+            paused.next_adoption(&forcing, 0, 4, 1, 10, None).unwrap(),
+            expected
+        );
+        assert_eq!(paused.rng.checkpoint(), uninterrupted.rng.checkpoint());
+    }
+
+    #[test]
     fn adoption_clock_continues_across_a_serialized_event_boundary() {
         let forcing = [(0, 1e12, 0.), (2, 0., 0.), (5, 1e12, 0.)];
         let mut clock = AdoptionClock {
@@ -394,7 +434,9 @@ mod tests {
             forcing_index: 0,
         };
         let next = |clock: &mut AdoptionClock, adopted| {
-            clock.next_adoption(&forcing, adopted, 4, 1, 10).unwrap()
+            clock
+                .next_adoption(&forcing, adopted, 4, 1, 10, None)
+                .unwrap()
         };
         assert_eq!(next(&mut clock, 0), Some(1));
         assert_eq!(next(&mut clock, 1), Some(6));

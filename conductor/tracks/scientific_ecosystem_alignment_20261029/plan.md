@@ -5119,3 +5119,10 @@ Hosted release readiness for this worktree revision remains open.
   ramp and nonzero imitation on a six-agent graph. The resumed run
   matched the uninterrupted event traces, resource accounting and RNG
   state. All three focused Rust network checkpoint tests passed.
+
+- [x] Preserve the internal Bass hazard draw at a tick cutoff.
+  The clock restores the pre-draw RNG state if the next decision
+  crosses the cutoff. Continuing across a future forcing boundary
+  matched the uninterrupted event tick and RNG checkpoint. Both
+  clock unit tests and all 15 Kairos integration tests passed.
+  Public tick-cutoff requests remain open.
