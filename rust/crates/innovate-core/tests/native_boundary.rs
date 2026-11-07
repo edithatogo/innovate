@@ -1763,6 +1763,19 @@ fn scenario_grid_summarizes_paired_ensemble_differences() {
     let outcome = &response["result"]["comparisons"][0]["result"];
     assert_eq!(outcome["pair_count"], 2);
     assert_eq!(outcome["evaluation_time"], 1.);
+    let mut path_request = request.clone();
+    path_request["payload"]["comparisons"][0]["include_path_summary"] = json!(true);
+    let path_result = run(&path_request);
+    let rows = &path_result["result"]["comparisons"][0]["result"]["path_summary"]["rows"];
+    assert_eq!(rows[0]["time"], 0.);
+    assert_eq!(rows[1]["time"], 1.);
+    for field in [
+        "mean_difference",
+        "mean_standard_error",
+        "empirical_interval",
+    ] {
+        assert_eq!(rows[1][field], outcome[field]);
+    }
     let mut area = request.clone();
     area["payload"]["comparisons"][0]["evaluation_metric"] = json!("adoption_area");
     let result = run(&area);

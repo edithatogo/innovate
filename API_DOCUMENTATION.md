@@ -433,3 +433,8 @@ comparison to integrate each alternative-minus-baseline path over
 the common horizon before computing the empirical summary. The
 response includes `evaluation_horizon`. This metric and
 `evaluation_time` are mutually exclusive.
+
+Set `include_path_summary` on a paired ensemble comparison to obtain
+the mean difference, standard error and empirical interval at each
+shared sample time. These are pointwise summaries. The request is
+limited to one million pair-by-time samples.

@@ -4823,3 +4823,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify paired adoption-area comparisons through rebuilt Python
   3.15.2, Julia and installed R. All three reproduced opposite area
   differences, a zero mean and the shared evaluation horizon.
+
+- [x] Report pointwise paired ensemble path uncertainty. Four Rust
+  scenario-grid tests passed, including equality with the existing
+  endpoint summary at the final sample. Binding checks remain open.

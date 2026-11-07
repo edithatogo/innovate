@@ -833,6 +833,8 @@ struct EnsembleComparison {
     interval_mass: f64,
     evaluation_time: Option<f64>,
     evaluation_metric: Option<String>,
+    #[serde(default)]
+    include_path_summary: bool,
     bootstrap: Option<EnsembleBootstrap>,
     #[serde(default)]
     exact_sign_flip: bool,
@@ -1114,6 +1116,7 @@ fn compare_ensemble(
     let mut grid = None;
     let mut endpoint = None;
     let mut differences = Vec::with_capacity(comparison.pairs.len());
+    let mut path_differences = Vec::<Vec<f64>>::new();
     for pair in &comparison.pairs {
         if !used.insert(&pair.baseline) || !used.insert(&pair.alternative) {
             return Err("each scenario ID can appear only once per ensemble");
@@ -1122,6 +1125,23 @@ fn compare_ensemble(
         let (alternative_time, alternative) = scalar_path(paths, &pair.alternative)?;
         if time != alternative_time || grid.as_ref().is_some_and(|expected| expected != &time) {
             return Err("ensemble comparisons require identical time grids across all replicates");
+        }
+        if comparison.include_path_summary {
+            if time.len() > 1_000_000 / comparison.pairs.len() {
+                return Err("ensemble path summary exceeds 1000000 paired samples");
+            }
+            if path_differences.is_empty() {
+                path_differences.resize_with(time.len(), Vec::new);
+            }
+            for ((values, &alternative), &baseline) in
+                path_differences.iter_mut().zip(&alternative).zip(&baseline)
+            {
+                let difference = alternative - baseline;
+                if !difference.is_finite() {
+                    return Err("ensemble path difference must be finite");
+                }
+                values.push(difference);
+            }
         }
         if comparison.require_distinct_pair_seeds {
             let seed = |id: &str| {
@@ -1185,6 +1205,16 @@ fn compare_ensemble(
     if compare_area {
         let time = grid.as_ref().unwrap();
         result["evaluation_horizon"] = json!([time[0], time[time.len() - 1]]);
+    }
+    if comparison.include_path_summary {
+        let rows: Vec<_> = grid.as_ref().unwrap().iter().zip(path_differences).map(|(&time, mut values)| {
+            let scale = values.iter().map(|x| x.abs()).fold(0., f64::max);
+            let (mean, error) = ensemble_moments(&values, scale);
+            values.sort_unstable_by(f64::total_cmp);
+            json!({"time":time,"mean_difference":mean,"mean_standard_error":error,
+                "empirical_interval":[linear_quantile(&values, tail),linear_quantile(&values, 1.-tail)]})
+        }).collect();
+        result["path_summary"] = json!({"method":"pointwise_paired_empirical","rows":rows});
     }
     if comparison.exact_sign_flip {
         result["sign_flip"] = exact_sign_flip(&differences, scale)?;
