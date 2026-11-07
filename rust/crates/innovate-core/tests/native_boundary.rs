@@ -2140,6 +2140,13 @@ fn benchmark_ci_policy_selects_fast_cases_without_running_scheduled_fits() {
             "fisher_pry_replacement_smoke"
         ]
     );
+    let selected = run(json!({"case_ids":[ids[2],"unknown_case",ids[0]],"workers":3}));
+    let selected = selected["result"]["runs"].as_array().unwrap();
+    assert_eq!(selected.len(), 3);
+    assert_eq!(selected[0], rows[2]);
+    assert_eq!(selected[1]["case_id"], "unknown_case");
+    assert!(selected[1]["error"].is_object());
+    assert_eq!(selected[2], rows[0]);
     for workers in [1, 32] {
         assert_eq!(
             run(json!({"ci_policy":"fast","workers":workers}))["result"],

@@ -3820,3 +3820,7 @@ Hosted release readiness for this worktree revision remains open.
   execution-mode discovery for external launchers. Rust discovery and
   policy boundary tests passed. Scheduler, accelerator and distributed
   kernel qualification remain open.
+- [x] Verify explicit benchmark selection order with three workers and
+  an unknown case between two valid cases selected in reverse catalog
+  order. The native response retained the error in its input position
+  and matched both successful rows to the policy run.
