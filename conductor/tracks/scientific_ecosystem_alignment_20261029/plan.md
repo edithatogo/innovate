@@ -2127,3 +2127,8 @@ the other competition models and installed binding checks remain open.
   innovation at time zero and replays the resolved event exactly. All 50
   targeted Rust tests and focused Clippy passed. Binding qualification
   for intervention translation remains open.
+
+- [x] Qualify translated Bass interventions in the rebuilt Python 3.15
+  wheel, Julia and installed R. Innovation and imitation cancellations
+  both held adoption at five agents through time five in Kairos ABM and
+  DES. Each binding replayed all four resolved artifacts exactly.
