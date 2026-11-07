@@ -1567,4 +1567,8 @@ the other competition models and installed binding checks remain open.
   preserves an existing waiter and blocks later arrivals while service
   is full. The result reports the effective limit alongside the initial
   limit. All 20 network tests and focused Clippy passed.
-- [ ] Verify scheduled queue limits through installed Python, Julia and R.
+- [x] Verify scheduled queue limits through the rebuilt Python wheel,
+  Julia project and installed R package. All three returned matching
+  counts, requests, balks and completions. The later arrival balked
+  at tick 4, the existing waiter completed, and the effective
+  queue limit was zero.
