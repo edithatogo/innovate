@@ -4380,3 +4380,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Retain direct artifact integrity checks in Julia and R native
   tests. Both reproduced the checksummed artifact and rejected a
   changed adoption value. The affected binding checks passed locally.
+- [x] Verify artifact re-ingestion replaces a stale validation report
+  with freshly computed diagnostics. The focused Rust test passed.

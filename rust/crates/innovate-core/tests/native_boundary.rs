@@ -1019,6 +1019,9 @@ fn dataset_ingestion_stamps_valid_artifacts_and_rejects_invalid_inputs() {
         .unwrap()
     };
     assert_eq!(replay(json!({"artifact":legacy}))["result"], *legacy);
+    let mut stale = legacy.clone();
+    stale["validation"] = json!({"ok":false,"failed":["obsolete"]});
+    assert_eq!(replay(json!({"artifact":stale}))["result"], *legacy);
     assert_eq!(
         replay(json!({"artifact":legacy,"encoding":"rust_sorted_json_v1"}))["error"]["code"],
         "invalid_request"
