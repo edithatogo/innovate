@@ -4359,3 +4359,7 @@ Hosted release readiness for this worktree revision remains open.
   suite. The Unicode fixture reproduces its artifact with the recorded
   Python encoding and rejects a checksum mismatch under the default.
   The focused test and Ruff passed using the existing native wheel.
+- [x] Verify historical checksum re-ingestion through Julia and
+  installed R against native source 7d9393ef. Both reproduced the
+  Unicode artifact with its recorded encoding and rejected the
+  mismatch under the Rust default.
