@@ -4019,3 +4019,7 @@ Hosted release readiness for this worktree revision remains open.
   returned schema 2.0, counts zero and one, and one Kairos dispatch.
   An unsupported engine returned a structured error and null result.
   Both owned responses were released. Both locked FFI tests passed.
+- [x] Verify I05 installed consumers with the same Bass DES fixture.
+  Python 3.15.2, Julia and installed R returned counts [0, 1] and
+  one dispatch, and all three rejected the unknown engine.
+  Reused f73933fe artifacts with identical runtime source.
