@@ -1960,3 +1960,10 @@ the other competition models and installed binding checks remain open.
   fields to preserve deterministic replay comparisons. Python 3.15,
   Julia and R returned notes, timing and the Rust runtime marker for the
   same Logistic case. All 35 boundary tests and focused Clippy passed.
+
+- [x] Restore historical scenario family listing and keyed lookup via
+  discover_scenarios (7425c1ee). Rust publishes the five schema families
+  with current transport, binding and execution requirements. An unknown
+  key returns the available families. The rebuilt Python 3.15 wheel,
+  Julia and installed R all listed five families and resolved network to
+  the same row. All 36 Rust boundary tests and focused Clippy passed.
