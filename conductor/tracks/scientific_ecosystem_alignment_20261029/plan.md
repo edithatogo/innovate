@@ -1219,3 +1219,13 @@ the other competition models and installed binding checks remain open.
   one structured error per affected dataset, and other chunks retain
   their results. All nine native boundary tests and focused Clippy passed.
   The operating-system failure paths were reviewed but not fault-injected.
+
+## Native adopter classification
+
+- [x] Restore the historical five adopter categories in Rust Polars from
+  sample-weighted adoption time moments. Keep inclusive boundaries and
+  original row identity. Reject negative rates and zero total weight.
+  The fixture covers all five categories and weights whose raw sum would
+  overflow. All five tabular tests and Clippy passed.
+- [ ] Expose classification through Python, Julia and R and connect the
+  fitted model adoption-rate path where scientifically valid.

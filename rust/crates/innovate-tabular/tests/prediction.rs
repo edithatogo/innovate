@@ -82,3 +82,34 @@ fn invalid_quantities_and_input_types_fail_without_silent_defaults() {
         assert!(predict(frame, "logistic", json!({"L":1.,"k":1.,"x0":1.})).is_err());
     }
 }
+
+#[test]
+fn adopter_categories_use_historical_inclusive_boundaries() {
+    let frame = df!(
+        "time" => [-2., -1., 0., 1., 2.],
+        "adoption_rate" => [0., 1e308, 0., 1e308, 0.],
+        "id" => ["a", "b", "c", "d", "e"],
+    )
+    .unwrap();
+    let result = innovate_tabular::categorize_adopters(frame.clone(), "adoption_rate").unwrap();
+    assert_eq!(
+        result
+            .column("category")
+            .unwrap()
+            .str()
+            .unwrap()
+            .iter()
+            .map(Option::unwrap)
+            .collect::<Vec<_>>(),
+        [
+            "Innovators",
+            "Early Adopters",
+            "Early Majority",
+            "Late Majority",
+            "Laggards"
+        ]
+    );
+    assert_eq!(result.column("id").unwrap(), frame.column("id").unwrap());
+    let negative = df!("time" => [0., 1.], "adoption_rate" => [-1., 2.]).unwrap();
+    assert!(innovate_tabular::categorize_adopters(negative, "adoption_rate").is_err());
+}

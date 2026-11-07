@@ -235,3 +235,49 @@ pub fn fit_ipc_with_options(data: &[u8], model: &str, options: Value) -> PolarsR
         &serde_json::to_string(&request).expect("serializable request"),
     ))
 }
+
+/// Assigns historical adopter categories using sample-weighted adoption times.
+pub fn categorize_adopters(mut frame: DataFrame, rate_column: &str) -> PolarsResult<DataFrame> {
+    let time = numbers(&frame, "time")?;
+    let rates = numbers(&frame, rate_column)?;
+    if time.windows(2).any(|pair| pair[0] >= pair[1]) {
+        polars_bail!(ComputeError: "time must be strictly increasing");
+    }
+    let max_rate = rates.iter().copied().fold(0., f64::max);
+    if max_rate == 0. || rates.iter().any(|rate| *rate < 0.) {
+        polars_bail!(ComputeError: "adoption rates must be nonnegative with positive total");
+    }
+    let time_scale = time.iter().copied().map(f64::abs).fold(1., f64::max);
+    let points = time
+        .iter()
+        .zip(&rates)
+        .map(|(t, rate)| (t / time_scale, rate / max_rate));
+    let total: f64 = points.clone().map(|(_, weight)| weight).sum();
+    let mean = points.clone().map(|(t, weight)| t * weight).sum::<f64>() / total;
+    let sd = (points
+        .clone()
+        .map(|(t, weight)| (t - mean).powi(2) * weight)
+        .sum::<f64>()
+        / total)
+        .sqrt();
+    let categories: Vec<_> = points
+        .map(|(t, _)| {
+            if t <= mean - 2. * sd {
+                "Innovators"
+            } else if t <= mean - sd {
+                "Early Adopters"
+            } else if t <= mean {
+                "Early Majority"
+            } else if t <= mean + sd {
+                "Late Majority"
+            } else {
+                "Laggards"
+            }
+        })
+        .collect();
+    if frame.column("category").is_ok() {
+        polars_bail!(Duplicate: "category column already exists");
+    }
+    frame.with_column(Series::new("category".into(), categories).into())?;
+    Ok(frame)
+}
