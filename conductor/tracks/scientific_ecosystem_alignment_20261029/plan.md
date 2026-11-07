@@ -4015,3 +4015,7 @@ Hosted release readiness for this worktree revision remains open.
   runtime evidence to imported I05. The contract names separate
   bridge and installed-consumer verification leaves. The locked
   innovate-ffi suite passed.
+- [x] Verify the I05 C ABI bridge leaf. A seeded Bass DES request
+  returned schema 2.0, counts zero and one, and one Kairos dispatch.
+  An unsupported engine returned a structured error and null result.
+  Both owned responses were released. Both locked FFI tests passed.

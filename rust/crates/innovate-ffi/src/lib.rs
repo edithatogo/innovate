@@ -80,6 +80,38 @@ pub unsafe extern "C" fn innovate_free(response: *mut c_char) {
 mod tests {
     use super::*;
     #[test]
+    fn bass_dispatch_and_unknown_engine_cross_the_c_abi() {
+        for engine in ["kairos_des", "unknown"] {
+            let request = CString::new(serde_json::json!({
+                "schema_version":"2.0","operation":"simulate_model","model_key":"bass",
+                "payload":{"inputs":{"time":[0,1]},"parameters":{"p":1e12,"q":0,"m":1},
+                    "simulation_options":{"engine":engine,"population":1,"seed":42,"ticks_per_unit":1}}
+            }).to_string()).unwrap();
+            // SAFETY: the input is live and NUL-terminated throughout the call.
+            let out = unsafe { innovate_call(request.as_ptr()) };
+            assert!(!out.is_null());
+            // SAFETY: parse the live result before returning ownership to Rust.
+            let parsed = unsafe {
+                serde_json::from_slice::<serde_json::Value>(CStr::from_ptr(out).to_bytes())
+            };
+            unsafe { innovate_free(out) };
+            let response = parsed.unwrap();
+            assert_eq!(response["schema_version"], "2.0");
+            if engine == "kairos_des" {
+                assert!(response["error"].is_null());
+                assert_eq!(response["result"]["counts"], serde_json::json!([0, 1]));
+                assert_eq!(
+                    response["result"]["metadata"]["kairos_dispatched_events"],
+                    1
+                );
+            } else {
+                assert!(response["result"].is_null());
+                assert!(response["error"]["code"].is_string());
+            }
+        }
+    }
+
+    #[test]
     fn invalid_null_utf8_and_valid_requests_are_owned_and_released() {
         let valid =
             CString::new(r#"{"schema_version":"2.0","operation":"discover_models"}"#).unwrap();
