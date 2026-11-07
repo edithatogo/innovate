@@ -3811,3 +3811,8 @@ Hosted release readiness for this worktree revision remains open.
   receipts. Simulated matching tasks passed serial verification and
   a receipt from a different step was rejected. Ruff passed.
   Live scheduler qualification remains open.
+- [x] Retain a native consumer regression for Slurm receipt validation.
+  The runner and verifier accept reversed receipt order for one simulated
+  step and reject a matching case from another step. The installed Python
+  3.15.2 test and Ruff passed. No local Slurm executable or Lima guest
+  was available for live allocation evidence.
