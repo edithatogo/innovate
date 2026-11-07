@@ -853,3 +853,16 @@ trajectory field remain open.
   depot with General installed from the package server. The sandbox selected
   JSON 1.13.4 and passed all 223 assertions. The earlier failure used a stale
   General snapshot. [Package runner receipt](evidence/norton-forced-peak-20261107/julia-clean-pkg-test.log).
+
+## Forced successive-generation adoption milestones
+
+- [x] Locate the 10%, 50% and 90% intrinsic adoption crossings under forcing. (60cf3625)
+
+The diagnostic integrates from launch, locates crossings between output
+samples, and returns null for milestones beyond the requested horizon. It
+uses the intrinsic launched fraction, so capacity jumps and cannibalization
+of net levels do not define crossings. The independent piecewise exponential
+fixture checks all three milestones before and between requested samples.
+All 22 multi-generation tests and focused Clippy passed. Installed binding
+checks for the milestone field and historical ODE threshold semantics remain
+open.
