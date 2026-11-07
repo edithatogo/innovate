@@ -103,6 +103,11 @@ and end labels, and `YS` and `YE` for calendar-year start and end
 labels. Weekly aggregation uses seven-day windows
 anchored to the earliest observation and returns occupied buckets.
 
+For quarter and year frequencies, set `fiscal_start_month` to an
+integer from 1 through 12 to shift the calendar. It defaults to
+January. For example, `YE` with `fiscal_start_month: 7` labels
+each fiscal year on June 30.
+
 Use ISO calendar dates, naive timestamps, or offset timestamps
 consistently within a request. Offset timestamps are converted to UTC
 before bucketing. For example, `2024-03-01T00:00:00+01:00` falls in

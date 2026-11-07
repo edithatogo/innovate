@@ -6940,3 +6940,8 @@ Hosted release readiness for this worktree revision remains open.
   and year aggregation. The Rust boundary tests passed for a July
   fiscal year, the June/July transition, a zero-filled year and
   rejection of month 13. Binding readback remains open.
+
+- [x] Verify July fiscal-year ends and February fiscal-quarter starts
+  through the rebuilt Python 3.15.2 wheel, Julia and installed R.
+  All three matched the expected labels, boundary assignments and
+  zero-filled gaps with native builds from a7426dab.
