@@ -2,7 +2,7 @@ module Innovate
 using JSON
 using Libdl
 
-export export_ipc_file, kernel_scenario_comparisons_ipc, kernel_scenario_executions_ipc, kernel_scenario_grid_ipc, DatasetValidationError, kernel_sarima_fit, kernel_seasonal_decomposition, kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
+export export_ipc_file, kernel_paired_outcomes_ipc, kernel_scenario_comparisons_ipc, kernel_scenario_executions_ipc, kernel_scenario_grid_ipc, DatasetValidationError, kernel_sarima_fit, kernel_seasonal_decomposition, kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
     kernel_categorize_adopters, kernel_categorize_fitted_adopters, kernel_fit_batch, kernel_predict_batch, kernel_simulate_model, kernel_summarize_model, kernel_diagnose_model
 
 """A rejected dataset with its native validation report."""
@@ -40,6 +40,9 @@ kernel_scenario_executions_ipc(response) = scenario_output(response, :innovate_s
 
 """Encode ordered scenario comparison rows as Arrow IPC file bytes."""
 kernel_scenario_comparisons_ipc(response) = scenario_output(response, :innovate_scenario_comparisons_ipc)
+
+"""Validate paired Bass trajectories and return Arrow IPC file bytes."""
+kernel_paired_outcomes_ipc(payload) = scenario_output(payload, :innovate_paired_outcomes_ipc)
 
 function scenario_output(response, symbol)
     request = response isa AbstractString ? response : JSON.json(response)

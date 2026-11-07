@@ -4051,3 +4051,8 @@ Hosted release readiness for this worktree revision remains open.
   Polars round-trip regression checks identity, adoption and parameter
   values and rejects reordered draws before export. All ten tabular tests
   passed. Host export adapters and downstream acceptance remain open.
+- [x] Verify paired Bass Arrow export through a rebuilt Python 3.15.2
+  wheel, Julia and a freshly installed R package on Darwin arm64.
+  Polars decoded the same 24 historical rows from each binding, and
+  all rejected a reversed draw sequence. R used JSON text to preserve
+  the original numeric tokens. Downstream consumer acceptance is open.

@@ -98,6 +98,17 @@ fn scenario_comparisons_ipc(py: Python<'_>, response: String) -> PyResult<Py<PyB
     Ok(PyBytes::new(py, &bytes).unbind())
 }
 
+#[pyfunction]
+fn paired_outcomes_ipc(py: Python<'_>, payload: String) -> PyResult<Py<PyBytes>> {
+    let bytes = py
+        .detach(move || {
+            let payload = serde_json::from_str(&payload).map_err(|error| error.to_string())?;
+            innovate_tabular::paired_outcomes_ipc(&payload).map_err(|error| error.to_string())
+        })
+        .map_err(PyValueError::new_err)?;
+    Ok(PyBytes::new(py, &bytes).unbind())
+}
+
 #[pymodule]
 fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(execute, module)?)?;
@@ -108,6 +119,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(scenario_grid_ipc, module)?)?;
     module.add_function(wrap_pyfunction!(scenario_executions_ipc, module)?)?;
     module.add_function(wrap_pyfunction!(scenario_comparisons_ipc, module)?)?;
+    module.add_function(wrap_pyfunction!(paired_outcomes_ipc, module)?)?;
     module.add("__version__", env!("CARGO_PKG_VERSION"))?;
     Ok(())
 }

@@ -102,6 +102,11 @@ SEXP innovate_scenario_comparisons_ipc_R(SEXP library, SEXP response) {
     return scenario_output(library, response, "innovate_scenario_comparisons_ipc");
 }
 
+SEXP innovate_paired_outcomes_ipc_R(SEXP library, SEXP payload) {
+    return scenario_output(library, payload, "innovate_paired_outcomes_ipc");
+}
+
+
 SEXP innovate_export_ipc_file_R(SEXP library, SEXP input) {
     return scenario_output(library, input, "innovate_export_ipc_file");
 }
@@ -111,6 +116,7 @@ static const R_CallMethodDef methods[] = {
     {"innovate_call_R", (DL_FUNC) &innovate_call_R, 2},
     {"innovate_scenario_grid_ipc_R", (DL_FUNC) &innovate_scenario_grid_ipc_R, 3},
     {"innovate_scenario_executions_ipc_R", (DL_FUNC) &innovate_scenario_executions_ipc_R, 2},
+    {"innovate_paired_outcomes_ipc_R", (DL_FUNC) &innovate_paired_outcomes_ipc_R, 2},
     {"innovate_scenario_comparisons_ipc_R", (DL_FUNC) &innovate_scenario_comparisons_ipc_R, 2},
     {NULL, NULL, 0}
 };

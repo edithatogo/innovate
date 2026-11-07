@@ -24,6 +24,7 @@ __all__ = [
     "export_ipc_file",
     "scenario_executions",
     "scenario_comparisons",
+    "paired_outcomes",
     "FitResult",
     "NativeError",
     "categorize_adopters",
@@ -112,6 +113,11 @@ def scenario_executions(response: dict[str, Any]) -> pl.DataFrame:
 def scenario_comparisons(response: dict[str, Any]) -> pl.DataFrame:
     """Return ordered pair and ensemble comparisons, with nested fields stored as JSON."""
     return pl.read_ipc(io.BytesIO(_native.scenario_comparisons_ipc(json.dumps(response, allow_nan=False))))
+
+
+def paired_outcomes(payload: dict[str, Any]) -> pl.DataFrame:
+    """Validate paired Bass trajectories and return ordered adoption rows."""
+    return pl.read_ipc(io.BytesIO(_native.paired_outcomes_ipc(json.dumps(payload, allow_nan=False))))
 
 
 def predict(

@@ -179,6 +179,20 @@ pub unsafe extern "C" fn innovate_scenario_comparisons_ipc(
     }
 }
 
+/// Convert validated paired Bass outcomes to Arrow IPC.
+///
+/// # Safety
+/// Same pointer and ownership contract as `innovate_scenario_executions_ipc`.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn innovate_paired_outcomes_ipc(
+    payload: *const c_char,
+    data: *mut *mut u8,
+    len: *mut usize,
+) -> *mut c_char {
+    // SAFETY: forwarded caller contract.
+    unsafe { scenario_output(payload, data, len, innovate_tabular::paired_outcomes_ipc) }
+}
+
 unsafe fn scenario_output<E: std::fmt::Display>(
     response: *const c_char,
     data: *mut *mut u8,
@@ -189,7 +203,7 @@ unsafe fn scenario_output<E: std::fmt::Display>(
     unsafe {
         arrow_output(data, len, || {
             if response.is_null() {
-                return Err("missing scenario grid response".into());
+                return Err("missing Arrow export input".into());
             }
             let response = CStr::from_ptr(response);
             let value =
