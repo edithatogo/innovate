@@ -7312,3 +7312,10 @@ Hosted release readiness for this worktree revision remains open.
   Library SHA-256 is
   `0c9fa617589c78b52395f6dad84c31841ffdc9dc4049513c6a881b8a9a8e96a7`.
   Optimized and bundled-artifact validation for this source remains open.
+
+- [x] Verify current-source bundled-library discovery on macOS arm64.
+  Staged tracked Julia and R sources and the shared test fixtures.
+  With INNOVATE_NATIVE_LIBRARY unset, the complete Julia suite and
+  the freshly installed R source-package suite both exited zero.
+  The installed R library matched the tested debug library byte for
+  byte. Optimized and hosted distribution checks remain open.
