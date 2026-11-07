@@ -2151,3 +2151,7 @@ the other competition models and installed binding checks remain open.
   constructor fields and retain resolved initial values for replay.
   Product-specific dynamics and market potentials remain explicit. All 57
   targeted Rust tests and Clippy passed. Binding qualification remains open.
+
+- [x] Qualify competition specification translation in Python 3.15,
+  Julia and installed R. Each returned 25 and 75 initial adopters in
+  competitor order and replayed the resolved artifact exactly.
