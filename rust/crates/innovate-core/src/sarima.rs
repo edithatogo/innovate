@@ -128,6 +128,16 @@ fn estimate(
     let mut likelihood = initial
         .log_likelihood
         .ok_or("SARIMA likelihood is degenerate")?;
+    let joint_moves: Vec<_> = if count <= 8 {
+        (0..count)
+            .flat_map(|left| (left + 1..count).map(move |right| (left, right)))
+            .collect()
+    } else {
+        [p..p + q, p + q + sp..count]
+            .into_iter()
+            .flat_map(|terms| (terms.start..terms.end.saturating_sub(1)).map(|i| (i, i + 1)))
+            .collect()
+    };
     let mut step = 0.25;
     // Refine a deterministic coordinate search over stationary and invertible models.
     for _ in 0..2048 {
@@ -145,22 +155,21 @@ fn estimate(
             best[index] = selected;
         }
         if best == base {
-            // Opposite changes to adjacent MA terms can improve likelihood
-            // along an invertibility boundary where individual moves stall.
+            // Search joint moves when correlated coefficients stall the coordinate sweep.
             let mut trial = base.clone();
-            for terms in [p..p + q, p + q + sp..count] {
-                for index in terms.start..terms.end.saturating_sub(1) {
-                    for direction in [-1., 1.] {
-                        trial[index] = base[index] + direction * step;
-                        trial[index + 1] = base[index + 1] - direction * step;
+            for &(left, right) in &joint_moves {
+                for left_direction in [-1., 1.] {
+                    for right_direction in [-1., 1.] {
+                        trial[left] = base[left] + left_direction * step;
+                        trial[right] = base[right] + right_direction * step;
                         if let Some(candidate) = score(&trial).filter(|v| *v > likelihood) {
                             likelihood = candidate;
                             best.clone_from(&trial);
                         }
                     }
-                    trial[index] = base[index];
-                    trial[index + 1] = base[index + 1];
                 }
+                trial[left] = base[left];
+                trial[right] = base[right];
             }
             if best != base {
                 continue;

@@ -5546,3 +5546,10 @@ Hosted release readiness for this worktree revision remains open.
   Rust was lower by 0.02036 and maximum coefficient deviation was
   0.04254. Both R fits converged. The comparison script is
   compare-seasonal-boundaries.R. Optimizer qualification remains open.
+
+- [x] Add paired coefficient moves when a SARIMA coordinate sweep stalls.
+  Search all pairs for fits of up to eight coefficients and adjacent MA
+  pairs above that limit. On the negative seasonal reference, the log
+  likelihood shortfall fell from 0.02036 to 0.0000991 and the maximum
+  coefficient error fell from 0.04254 to 0.00296. Existing mixed seasonal
+  and mixed near-unit-root R checks passed. The residual gap remains open.
