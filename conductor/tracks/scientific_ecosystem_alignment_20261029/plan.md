@@ -422,3 +422,41 @@ changepoint detection and both segment estimators need native qualification.
 Hierarchical/mixture/composite, uncertainty/inference, covariates/events, richer
 Kairos graph/resource behavior and distribution qualification remain required.
 Goal remains active; no main integration, push or hosted acceptance asserted.
+
+## Regime-switching continuation
+
+Same writer resumes at 9dfd1123 in the clean isolated worktree; no active native
+operation. Prior goal turn made committed latent-process progress.
+
+- [x] Port two-regime fitting and explicit historical batch-index prediction;
+  qualify native penalized L2 grid changepoint detection and fixed-time forecasts.
+- [x] Validate saved regime state through Python, Julia and R.
+- [x] Complete local review, coverage, docs/package evidence and ledger update.
+
+Historical detection uses ruptures Pelt L2, min_size=2, jump=5, penalty=3;
+the wrapper takes the first detected boundary or falls back to the midpoint.
+The native implementation will independently minimize the same grid objective
+without copying upstream source; detector algorithm/tie semantics stay explicit.
+Every remaining model/feature obligation remains required.
+
+Regime source/evidence commit: `529d8df06720a16ae4af880e33d3d90cc3623672`.
+86 Rust tests, 33 installed Python, 159 Julia assertions and R conformance pass.
+Core/C ABI line coverage 83.22%; regime module 89.02%. Clippy, lint/types,
+docs (163 pages) and local package metadata/source inclusion pass. Receipt and
+review: regime-20261107.json and regime-review-20261107.md. Native grid detector
+qualifies seven external reference fixtures; arbitrary ties/performance, other
+objectives/search methods and full scientific acceptance remain open.
+
+Explicit fit-time boundary ignoring was caught and fixed; exact times between
+samples persist. Identified two-point Fisher–Pry fitting now preserves the
+historical short-regime path, with no residual degrees of freedom and no AIC/BIC.
+No rank or unsupported-family gates were removed. All operations are terminal.
+Thirteen bounded native families; hierarchical, mixture and composite remain
+unavailable. All 38 obligations remain required; release guard still fails.
+
+Next: hierarchical wrapper, preserving the historical distinction between
+group-series fits and shared-series fits, global/group parameter aggregation
+and group forecasts, while qualifying statistical limitations explicitly.
+Then mixture/composite, inference/uncertainty/scenarios, remaining covariates
+and richer Kairos graphs/resources, distribution and scientific qualification.
+Full goal remains active; shared main and other writing lanes remain untouched.
