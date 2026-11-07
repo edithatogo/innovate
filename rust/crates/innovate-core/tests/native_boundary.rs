@@ -587,7 +587,22 @@ fn causal_summaries_match_analytic_effects() {
         "constructor_kwargs".into(),
         state["constructor_kwargs"].clone(),
     );
-    assert_eq!(run(explicit)["result"], compared["result"]);
+    assert_eq!(run(explicit.clone())["result"], compared["result"]);
+    let schedule = explicit["baseline"]["constructor_kwargs"]
+        .as_object_mut()
+        .unwrap()
+        .remove("parameter_events")
+        .unwrap();
+    explicit["parameter_event_override"] = schedule;
+    let reversed = run(explicit);
+    assert_eq!(
+        reversed["result"]["baseline"],
+        compared["result"]["counterfactual"]
+    );
+    assert_eq!(
+        reversed["result"]["counterfactual"],
+        compared["result"]["baseline"]
+    );
     events["parameter_event_override"] = json!([{"time":1.,"parameters":{"unknown":0.4}}]);
     assert_eq!(run(events)["error"]["code"], "invalid_request");
     let products = run(

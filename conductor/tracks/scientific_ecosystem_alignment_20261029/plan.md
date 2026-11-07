@@ -3684,3 +3684,8 @@ Hosted release readiness for this worktree revision remains open.
   native source 8436bf99. All three matched the analytic first-product
   baseline and zero-price-history counterfactual within 1e-8. R used
   raw JSON to preserve the single forecast observation and covariate name.
+- [x] Allow a counterfactual to introduce parameter events when the
+  baseline constructor options have no schedule. The Lotka–Volterra
+  fixture verifies that adding the intervention reverses the baseline
+  and alternative trajectories of the existing event-removal case.
+  The Rust causal boundary test and focused Clippy passed.
