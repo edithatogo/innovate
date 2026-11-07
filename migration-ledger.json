@@ -107,14 +107,14 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Other model forcing, event time and override inference, broader automatic-start robustness beyond the qualified forced and event fixtures, stiff solver parity, uncertainty, scenarios and resume"
+      "remaining": "Broader model forcing, continuous event time and override inference, optimizer robustness, stiff solver parity, uncertainty calibration, scenarios and resume"
     },
     {
       "key": "multi_generation_substitution",
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Launch and event inference, continuous-time historical crossings and peak location, uncertainty, full parity and broader numerical qualification"
+      "remaining": "Continuous launch and event inference beyond supplied candidates, continuous-time historical crossings and peak location, uncertainty calibration, full parity and broader numerical qualification"
     },
     {
       "key": "competitive_ecosystems",
@@ -163,7 +163,7 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Broader model coverage, statistical calibration beyond the noisy Logistic trials, and release acceptance"
+      "remaining": "Broader model coverage, calibration of parameter and mean-path intervals and event selection frequencies, and release acceptance"
     },
     {
       "key": "batch_fitting",

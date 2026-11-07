@@ -3269,3 +3269,8 @@ the other competition models and installed binding checks remain open.
   Python 3.15.2 Polars round-tripped the native Norton–Bass table and
   the single-refit Logistic table. Julia Arrow and R Arrow preserved
   the two series' order and the Logistic null Float64 bounds.
+
+- [x] Reconcile the remaining covariate/event, substitution and
+  bootstrap ledger work with the discrete timing and mean-path
+  interval evidence. Development validation passed. Release still
+  fails closed with all 38 required obligations, including these three.
