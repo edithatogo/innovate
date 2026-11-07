@@ -3096,3 +3096,10 @@ the other competition models and installed binding checks remain open.
   a Polars file and a stream, and rejected malformed bytes. Python
   Polars verified all four outputs against the qualified Python
   exporter. Rust FFI tests and focused Clippy passed.
+
+- [x] Reconcile Bayesian inference as bounded native in the migration
+  ledger. Document the supported likelihood, priors, quadrature and
+  multi-chain call. The published example executed in Python 3.15.2
+  and recovered the reference posterior mean within 0.15. The
+  development checker passed and release still lists all 38 gates,
+  including Bayesian inference.

@@ -106,7 +106,7 @@ Local identifiability uses a column-scaled, pivoted QR of finite-difference
 sensitivities, with relative rank tolerance `1e-7`. The reported QR diagonal
 ratio is not an SVD condition number. Full local rank does not establish global
 uniqueness, calibrated uncertainty or scientific validity. These are point
-estimates; Bayesian inference and bootstrap intervals remain required work.
+estimates. Separate operations provide bounded Bayesian inference and bootstrap intervals.
 
 ODE models use adaptive step-doubling RK4 with Richardson correction, absolute
 and relative tolerances `1e-10`, and an explicit step budget. Stiff/extreme cases
@@ -463,6 +463,46 @@ probabilistic regime inference, other changepoint objectives/search methods,
 full nested base composition, base covariates and complete small-sample scientific
 qualification remain required. Simulation currently returns a labelled
 deterministic point path.
+
+## Bayesian inference for scalar forecasts
+
+Quadrature and Metropolis use aligned scalar observations with independent
+Gaussian errors and a known positive `noise_sd`. The bounds define the
+support. The optional `gaussian_priors` map takes a mean and positive standard
+deviation for each specified parameter. Parameters omitted from the map have
+uniform priors within their bounds.
+
+```python
+from innovate import execute
+
+fit = execute(
+    "bayesian_metropolis_chains",
+    forecast_model="logistic",
+    parameter="L",
+    bounds=[80, 120],
+    proposal_step=4,
+    gaussian_priors={"L": {"mean": 96, "sd": 2}},
+    noise_sd=1,
+    observed=[50],
+    prediction={"inputs": {"time": [2]}, "parameters": {"k": 0.5, "x0": 2}},
+    draws=4000,
+    warmup=1000,
+    chains=[
+        {"seed": 41, "initial": {"L": 83}},
+        {"seed": 42, "initial": {"L": 94}},
+        {"seed": 43, "initial": {"L": 106}},
+        {"seed": 44, "initial": {"L": 118}},
+    ],
+)["result"]
+```
+
+The result includes each chain's retained draws and per-parameter rank-normalized
+split R-hat and bulk and tail effective sample sizes. To sample jointly, supply
+two to sixteen ordered `axes` entries, each with `parameter`, `bounds`, and
+`proposal_step`, and initialize every sampled parameter in each chain.
+`bayesian_parameter_grid` instead uses `points` per axis for one or two axes,
+with at most 10,000 cells, and returns normalized masses and credible intervals.
+Julia and R accept the same operation and payload through their kernel bridges.
 
 ## Hierarchical grouped point models
 

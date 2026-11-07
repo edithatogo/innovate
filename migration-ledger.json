@@ -153,8 +153,10 @@
     },
     {
       "key": "bayesian_inference",
-      "status": "pending",
-      "required": true
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Broader model, prior and likelihood calibration, historical workflow parity and release acceptance"
     },
     {
       "key": "bootstrap_uncertainty",
