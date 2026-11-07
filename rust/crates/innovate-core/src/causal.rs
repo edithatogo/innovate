@@ -808,6 +808,15 @@ fn policy_evidence(payload: &Value) -> Result<Value, &'static str> {
 fn policy_specification(payload: &Value) -> Result<Value, &'static str> {
     let intervention = intervention_contract(&payload["intervention"])?;
     let causal_model = causal_model_contract(&payload["causal_model"])?;
+    for (key, normalized) in [
+        ("intervention", &intervention),
+        ("causal_model", &causal_model),
+    ] {
+        let supplied = payload[key].as_object().expect("validated policy contract");
+        if supplied.keys().any(|field| normalized.get(field).is_none()) {
+            return Err("policy specification contains unknown contract fields");
+        }
+    }
     let declared = payload
         .get("n_obs")
         .filter(|value| !value.is_null())

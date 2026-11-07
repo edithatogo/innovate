@@ -1792,3 +1792,10 @@ the other competition models and installed binding checks remain open.
   a ragged dataset. All 24 boundary tests and focused Clippy passed.
 - [ ] Qualify policy specification round trips through installed bindings
   and compare strict field validation with the historical JSON loader.
+
+- [x] Reject unknown nested fields in policy specification imports,
+  as the historical JSON loader did. The installed R package also
+  round-trips a one-observation specification, preserving the count
+  without including data columns in the export. All 24 Rust boundary
+  tests and focused Clippy passed.
+- [ ] Verify policy specification round trips in rebuilt Python and Julia.
