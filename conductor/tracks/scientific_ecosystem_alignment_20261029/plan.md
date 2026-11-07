@@ -4916,3 +4916,12 @@ Hosted release readiness for this worktree revision remains open.
   narrow translated grid and a grid whose raw endpoint span overflows.
   Classification still weights the supplied samples. Binding
   requalification remains open.
+
+- [x] Verify the irregular adopter grids on 59b0e856 through the
+  extracted Python wheel, Julia and R's raw JSON entry point. Both
+  grids returned Early Adopters, Early Majority and Laggards.
+  The Rust Polars historical inclusive-boundary regression also passed.
+- [ ] Preserve adjacent binary64 timestamps in R's structured request
+  path. The ordinary R helper collapsed the narrow grid during JSON
+  serialization. The raw JSON entry point accepted the same grid when
+  formatted with 17 significant digits.
