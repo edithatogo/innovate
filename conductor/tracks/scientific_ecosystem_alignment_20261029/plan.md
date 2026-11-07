@@ -3409,3 +3409,10 @@ the other competition models and installed binding checks remain open.
   Python 3.15.2. The binding covered 160 of 199 statements
   (80.40%), clearing the explicit 80% threshold. Rust coverage and
   broader release evidence remain separate.
+
+- [x] Measure locked Rust workspace line coverage at 57cb0ff9. The
+  instrumented suite passed all 254 tests. Report generation reused
+  the collected profiles with Homebrew LLVM 23.1.4 after the default
+  toolchain lacked llvm-profdata. Workspace line coverage was 87.55%
+  (15,403 of 17,594), including the unexercised PyO3 crate. Installed
+  binding coverage and release acceptance remain separate.
