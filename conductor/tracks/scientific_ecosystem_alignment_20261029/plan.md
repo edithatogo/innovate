@@ -5636,3 +5636,11 @@ Hosted release readiness for this worktree revision remains open.
   R consumer suite passed with INNOVATE_NATIVE_LIBRARY unset and the
   package path verified. Other platforms and release distribution
   qualification remain open.
+
+- [x] Build a locked local macOS ARM64 CPython 3.15 wheel from 46f48aeb
+  and install it into a fresh Python 3.15.2 environment.
+  Wheel SHA-256: c3cd2619c82ea9027e6536ba2ffe0c6002f9fb154308ba674c90a718ab5a909d.
+  With PYTHONPATH unset, the extension loaded from the installed wheel
+  and all 112 native consumer tests passed in 59.40 seconds. Disk space
+  required reclaiming a generated Julia library copy before linking.
+  This is an unstripped debug wheel and local-platform evidence.
