@@ -48,6 +48,7 @@ pub fn execute_json(input: &str) -> String {
                 | "aggregate_dates"
                 | "summarize_causal"
                 | "threshold_sensitivity"
+                | "parameter_sensitivity"
                 | "validate_provenance"
                 | "dataset_checksum"
                 | "validate_dataset",
@@ -162,6 +163,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         let payload = &value["payload"];
         if value["operation"] == "threshold_sensitivity" {
             return sensitivity::thresholds(payload);
+        }
+        if value["operation"] == "parameter_sensitivity" {
+            return sensitivity::perturb_parameters(payload);
         }
         if value["operation"] == "aggregate_dates" {
             return calendar::aggregate(payload);

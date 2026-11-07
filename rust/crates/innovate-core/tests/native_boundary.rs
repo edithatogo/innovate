@@ -1360,3 +1360,18 @@ fn threshold_sensitivity_counts_equal_outcomes_and_preserves_threshold_order() {
     request["payload"]["outcome_values"] = json!([]);
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn parameter_sensitivity_perturbs_independently_and_reports_elasticity() {
+    let request = json!({"schema_version":"2.0","operation":"parameter_sensitivity",
+        "payload":{"model_key":"logistic","prediction":{"inputs":{"time":[0.,1.]},
+            "parameters":{"L":100.,"k":1.,"x0":1.}},
+            "inputs":[{"name":"L","deltas":[20.,-20.]},{"name":"k","deltas":[1.]}]}});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    let rows = response["result"]["rows"].as_array().unwrap();
+    assert_eq!(rows[0]["outcome"], 60.);
+    assert_eq!(rows[0]["elasticity"], 1.);
+    assert_eq!(rows[1]["outcome"], 40.);
+    assert_eq!(rows[2]["outcome"], 50.);
+}

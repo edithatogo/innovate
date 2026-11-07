@@ -2224,3 +2224,9 @@ the other competition models and installed binding checks remain open.
   inclusive counts, threshold order, proportions and outcome summaries.
   All 44 boundary tests and Clippy passed. Other report families and
   binding qualification remain open.
+
+- [x] Restore parameter perturbation reports for final scalar native
+  predictions. Perturb one explicit parameter at a time and report absolute
+  change, relative change and elasticity. The Logistic fixture verifies
+  independent perturbations. All 45 Rust boundary tests and focused
+  Clippy passed. Binding and wider report qualification remain open.
