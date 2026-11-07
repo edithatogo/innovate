@@ -1313,7 +1313,7 @@ the other competition models and installed binding checks remain open.
   buckets fill gaps, while weekly buckets are anchored at the earliest
   date and omit empty periods. Installed Julia and R checks match the
   leap-year Polars fixture. Thirteen Rust boundary tests and Clippy passed.
-  Datetime and timezone-aware aggregation in these bindings remains open.
+  Timestamp and offset handling are verified in the checks below.
 
 - [x] Implement a native local-linear tricube smoother on evenly spaced
   samples as a building block for seasonal decomposition. The boundary
@@ -1606,3 +1606,10 @@ the other competition models and installed binding checks remain open.
   Both matched the exact boundary fixture with explicit offsets.
   Julia DateTime retains wall time, and R POSIXt is formatted in UTC
   with microsecond precision before dispatch.
+
+
+- [x] Verify UTC day and month-end buckets through Julia and installed R.
+  Brisbane March 1 at 00:30 falls in the February 29 UTC bucket. Both
+  bindings returned daily sums 2/0/3 with the missing day filled and
+  month-end sums 2/3 labelled February 29 and March 31. Julia used
+  offset-bearing ISO strings and R used Brisbane POSIXct inputs.
