@@ -2396,3 +2396,11 @@ the other competition models and installed binding checks remain open.
   Julia and installed R. Complete benchmark results agreed across the
   three bindings and all seven predictions matched the analytic reference
   exactly on this host. Latent fitting benchmark coverage remains open.
+
+- [x] Add and qualify latent_process_fit. The benchmark checks the fitted
+  residuals against an independent smoothing recurrence and replays predictions
+  from saved state. Five focused Rust tests, formatting and Clippy passed.
+  The rebuilt Python 3.15.2 wheel and Julia returned identical results.
+  Installed R matched within 1e-14 after JSON serialization. This benchmark
+  covers the synthetic fit with fixed smoothing. Broader historical-model
+  qualification and richer Kairos network/resource workflows remain open.
