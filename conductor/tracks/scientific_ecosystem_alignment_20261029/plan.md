@@ -6360,3 +6360,8 @@ Hosted release readiness for this worktree revision remains open.
   and rejects the full estimate if a used training arm has fewer
   distinct clusters than requested. The Rust boundary test passed
   for missing labels, insufficient clusters and an accepted minimum.
+
+- [x] Verify the distinct-cluster guard in rebuilt Python, Julia and
+  installed R. Both estimands accepted a minimum of one and rejected
+  two when the smallest arm had two rows from one cluster. Document
+  the difference between row-count and distinct-cluster requirements.

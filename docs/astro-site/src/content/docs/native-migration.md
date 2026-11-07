@@ -1350,6 +1350,12 @@ rejects the full estimate without dropping any strata. Choose the
 minimum as part of the analysis design. A passing guard establishes
 only that the requested count was met.
 
+With cluster labels, `min_training_arm_clusters` reports the smallest
+number of distinct clusters in a training arm. Use
+`minimum_training_arm_clusters` to require a positive minimum. Multiple
+rows from the same cluster count once per arm. Both minimums apply when
+supplied together.
+
 ## Counterfactual forecasts with parameter events
 
 Use the `counterfactual_forecast` method of `summarize_causal` to
