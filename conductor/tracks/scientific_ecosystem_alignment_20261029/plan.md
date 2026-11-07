@@ -2024,3 +2024,12 @@ the other competition models and installed binding checks remain open.
   Identical effects of 50 produced a point interval. The focused Rust
   regression and Clippy passed. This checks conditional resampling
   behavior. Repeated-sampling coverage remains open.
+
+- [x] Export historical scenario artifact fields and a native replay
+  request for successful executions when metadata is enabled (aa2a748c).
+  The envelope records model, version, UTC timestamp, notes, optional
+  specification and the effective seed reported by stochastic engines.
+  Python 3.15, Julia and installed R each replayed a seeded Kairos ABM
+  artifact to an identical result. All 37 boundary tests and focused
+  Clippy passed. Legacy artifact import and cross-version replay remain
+  open.

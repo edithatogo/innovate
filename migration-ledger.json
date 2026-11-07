@@ -201,7 +201,7 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Scenario Arrow transport and specification-to-model translation, stochastic ensemble design and bootstrap coverage qualification, historical artifact envelope qualification, and release parity"
+      "remaining": "Scenario Arrow transport and specification-to-model translation, stochastic ensemble design and bootstrap coverage qualification, legacy artifact import and cross-version replay qualification, and release parity"
     },
     {
       "key": "explainability_sensitivity_reporting",
