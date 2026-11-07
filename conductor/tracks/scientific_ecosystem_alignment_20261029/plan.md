@@ -4412,3 +4412,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Allow aligned empty edge columns for edgeless graphs. The Rust
   ingestion regression verifies checksum replay and rejects unequal
   column lengths. Node identity still comes from the scenario.
+- [x] Verify edgeless dataset ingestion and artifact replay through Julia
+  and installed R against the rebuilt Rust library.
+- [ ] Verify the edgeless Polars path with a rebuilt Python binding.
+  The wheel build failed while stripping the native binary due to
+  insufficient disk space.
