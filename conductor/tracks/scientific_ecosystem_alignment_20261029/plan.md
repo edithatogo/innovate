@@ -1543,3 +1543,10 @@ the other competition models and installed binding checks remain open.
   statsmodels fitted values within 1e-4. The native Python request
   differed by 5.42e-6 in the estimated AR coefficient and 3.97e-9 in
   log likelihood. Broader mixed-order historical qualification remains open.
+
+- [x] Qualify one historical mixed SARIMA(1,1,1)(1,1,1)[4] estimated
+  fit on 405 observations against statsmodels. The Python wheel
+  matched coefficients within 6.86e-5, fitted values within 8.86e-5
+  including warmup, and likelihood within 1.80e-7. The checker separates
+  reference generation from native validation. Optimizer behavior
+  across higher orders and difficult parameter regions remains open.
