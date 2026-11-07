@@ -2115,3 +2115,25 @@ fn extension_registry_rejects_duplicate_registration_without_replacement() {
             .contains(&result["result"]["manifest"])
     );
 }
+
+#[test]
+fn bootstrap_scalar_fit_replays_and_accounts_for_failed_draws() {
+    let time: Vec<f64> = (0..12).map(f64::from).collect();
+    let observed: Vec<_> = time
+        .iter()
+        .map(|t| 100. / (1. + (-0.5 * (t - 5.)).exp()))
+        .collect();
+    let request = json!({"schema_version":"2.0","operation":"bootstrap_fit",
+        "payload":{"fit_model":"logistic","draws":8,"seed":42,
+        "fit":{"inputs":{"time":time,"observed":observed}}}});
+    let response = innovate_core::execute_json(&request.to_string());
+    assert_eq!(response, innovate_core::execute_json(&request.to_string()));
+    let result: serde_json::Value = serde_json::from_str(&response).unwrap();
+    let fit = &result["result"];
+    let succeeded = fit["succeeded"].as_u64().unwrap();
+    assert!(succeeded > 0);
+    assert_eq!(succeeded + fit["failed"].as_u64().unwrap(), 8);
+    for estimate in fit["estimates"]["L"].as_array().unwrap() {
+        assert!((estimate.as_f64().unwrap() - 100.).abs() < 1e-3);
+    }
+}

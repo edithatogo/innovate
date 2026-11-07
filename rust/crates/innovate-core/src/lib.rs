@@ -2,6 +2,7 @@
 #![forbid(unsafe_code)]
 mod adopters;
 mod benchmark;
+mod bootstrap;
 mod calendar;
 mod causal;
 mod competition;
@@ -62,6 +63,7 @@ pub fn execute_json(input: &str) -> String {
                 | "export_decision_report_markdown"
                 | "discover_model_cards"
                 | "validate_provenance"
+                | "bootstrap_fit"
                 | "validate_extension_manifests"
                 | "register_extension_manifest"
                 | "list_extension_manifests"
@@ -228,6 +230,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         }
         if value["operation"] == "validate_extension_manifests" {
             return extensions::validate(payload);
+        }
+        if value["operation"] == "bootstrap_fit" {
+            return bootstrap::fit(payload);
         }
         if value["operation"] == "validate_provenance" {
             return provenance::validate(payload);

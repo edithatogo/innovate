@@ -2811,3 +2811,9 @@ the other competition models and installed binding checks remain open.
   Manifest validation and the process-local registry have macOS binding
   evidence. Hosted lifecycle and extension-point execution remain open.
   Development policy passes and all 38 required obligations still gate release.
+
+- [x] Restore seeded scalar case bootstrap refits through bootstrap_fit.
+  Encode duplicated observations as integer fit weights, retaining the
+  original ordered grid. Return baseline parameters, converged parameter
+  draws and failed-draw counts. Focused Rust replay and Clippy passed.
+  Interval summaries, broader model coverage and binding checks remain open.
