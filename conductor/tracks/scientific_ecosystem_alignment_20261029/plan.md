@@ -7506,3 +7506,11 @@ Hosted release readiness for this worktree revision remains open.
   only the former binding manifest or lockfile. The active Rust
   migration tree supports Julia, Python and R, so these changes are
   superseded on this branch. The hosted PRs remain open.
+
+- [x] Review remote-policy PRs #449, #445 and #378 against Rust dispatch.
+  They configure the retired Python executor policy or move its scope
+  name to environment variables. The Rust worker requires an explicit
+  context and enforces the protocol scope kernel:execute. Its contract
+  identifies that context as caller-supplied. Preserve the requirement
+  for trusted hosted identity and tenant isolation in the migration
+  ledger. The hosted PRs remain open.
