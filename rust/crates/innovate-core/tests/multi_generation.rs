@@ -854,13 +854,13 @@ fn norton_bass_profiles_later_launch_and_preserves_events() {
     let mut options = fixture["constructor_kwargs"].clone();
     options["launch_candidates"] = json!([3., 3.125, 3.25]);
     options["launch_index"] = json!(1);
-    let payload = json!({
+    let mut payload = json!({
         "inputs":{"time":fixture["time"],"covariates":fixture["covariates"],"observed":fixture["rows"]},
         "constructor_kwargs":options,
         "fit_options":{"initial_parameters":fixture["parameters"],"max_iterations":200}
     });
     let result = KernelBinding::new()
-        .fit_model("norton_bass", payload)
+        .fit_model("norton_bass", payload.clone())
         .unwrap()
         .result
         .unwrap();
@@ -877,4 +877,18 @@ fn norton_bass_profiles_later_launch_and_preserves_events() {
             .unwrap()
             < 1e-8
     );
+
+    payload["constructor_kwargs"]["event_candidates"] = json!([2., 2.125, 2.25]);
+    payload["constructor_kwargs"]["event_index"] = json!(0);
+    let joint = KernelBinding::new()
+        .fit_model("norton_bass", payload)
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(&joint["state"]["constructor_kwargs"], state);
+    let profile = &joint["joint_time_profile"];
+    assert_eq!(profile["launch_index"], 1);
+    assert_eq!(profile["event_index"], 0);
+    assert_eq!(profile["candidates"].as_array().unwrap().len(), 9);
+    assert!(profile["candidates"][4]["objective"].as_f64().unwrap() < 1e-8);
 }

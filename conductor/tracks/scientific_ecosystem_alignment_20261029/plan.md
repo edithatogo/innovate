@@ -3154,3 +3154,10 @@ the other competition models and installed binding checks remain open.
   independent forcing fixture, selecting 3.125 with RSS 8.30e-19.
   Both focused profile tests and Clippy passed. Joint launch/event
   inference and uncertainty remain open.
+
+- [x] Profile one Norton–Bass launch and one event jointly over up to
+  16 candidate pairs. The fitted state retains the winning pair and
+  the other event. Python 3.15.2, Julia and R returned identical
+  results on the nine-pair fixture, recovering launch 3.125 and event
+  2.125 with RSS 8.30e-19. Both focused Rust tests and Clippy passed.
+  Continuous-time search, wider timing inference and uncertainty remain open.

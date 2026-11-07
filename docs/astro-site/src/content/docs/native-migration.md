@@ -235,8 +235,10 @@ list is stored in the fitted state.
 For successive-generation Norton–Bass, use `launch_candidates` with a
 zero-based `launch_index` greater than zero to profile one later launch.
 The selected launch is stored in `launch_times`, and the candidate
-scores appear in `launch_profile`. Event and launch profiles are separate
-fits.
+scores appear in `launch_profile`. To fit a launch and an event together,
+provide both candidate lists and indices. The fitter evaluates up to 16
+launch/event pairs and returns their scores in `joint_time_profile`.
+Ties favor the earlier launch, then the earlier event.
 
 `t_event` selects independent pre/post curves using `L_post`, `k_post`,
 `x0_post` at and after the event. These historical curves can jump at the event;
