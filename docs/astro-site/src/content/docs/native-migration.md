@@ -908,7 +908,9 @@ horizon. Configured slot-ticks integrate scheduled capacity over the same
 interval. Occupied slot-ticks can exceed configured slot-ticks when service
 continues through a closure. Queue wait is split into admitted, abandoned,
 and still waiting at the horizon. Balks and retry cooldown do not count as
-queue wait.
+queue wait. The peaks `peak_queue_length` and `peak_in_service` count
+waiting agents and concurrent service after dispatch. An immediate service
+start contributes to concurrent service without adding to the queue peak.
 
 
 A scheduled change can replace either Bass hazard coefficient using `p` or

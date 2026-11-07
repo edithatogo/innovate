@@ -458,6 +458,8 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     let mut now = 0_u128;
     let horizon = (time.last().unwrap() * o.ticks_per_unit as f64).floor() as u128;
     let mut occupied_slot_ticks = 0;
+    let mut peak_queue_length = 0;
+    let mut peak_in_service = 0;
     let mut configured_slot_ticks = 0;
     let mut last_capacity_change = 0;
     let mut admitted_wait_ticks = 0;
@@ -745,6 +747,8 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             context.schedule_behaviour(next, 2, SimTime::from_ticks(completion_tick));
             in_service += 1;
         }
+        peak_queue_length = peak_queue_length.max(resource.queue_length());
+        peak_in_service = peak_in_service.max(in_service);
     }
     configured_slot_ticks += (horizon - last_capacity_change) * u128::from(capacity);
     let pending_wait_ticks: u128 = waiting_since
@@ -754,6 +758,8 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         .sum();
     let resource_metrics = json!({
         "horizon_ticks":horizon,
+        "peak_queue_length":peak_queue_length,
+        "peak_in_service":peak_in_service,
         "occupied_slot_ticks":occupied_slot_ticks,
         "configured_slot_ticks":configured_slot_ticks,
         "admitted_wait_ticks":admitted_wait_ticks,

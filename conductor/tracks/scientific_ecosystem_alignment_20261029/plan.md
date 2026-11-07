@@ -3487,3 +3487,21 @@ the other competition models and installed binding checks remain open.
   validated source archives, normalized wheels and SHA-256 sums
   under the tested commit ID. Actionlint passed. Hosted execution
   and artifact readback remain open.
+
+## Kairos resource peaks and historical binding regression
+
+- [x] Return peak queue depth and peak concurrent service after resource
+  dispatch. Immediate admission contributes only to concurrent service.
+  The horizon and replay fixtures also verify the existing slot-time and
+  wait-time totals.
+- [x] Verify both peaks on the same seeded FIFO case in the rebuilt Python
+  3.15.2 wheel, Julia and freshly installed R. The fixture reaches two
+  waiting agents and one agent in service. All 27 network and 74 native
+  boundary tests passed. Formatting and focused Clippy passed.
+- [x] Recheck existing historical and forcing paths on the rebuilt core.
+  The selected Python slice passed 13 tests. Julia and installed R passed
+  their native conformance suites.
+
+The broader historical-model, ABM and migration obligations remain open.
+The packaging workflow has successful hosted evidence at earlier revisions.
+Hosted release readiness for this worktree revision remains open.

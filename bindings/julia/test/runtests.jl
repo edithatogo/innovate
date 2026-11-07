@@ -87,6 +87,8 @@ end
     a=kernel_simulate_model("bass",p)["result"]
     @test a["counts"]==[0,0,3]
     @test [e["tick"] for e in a["completions"]]==[6,11,16]
+    @test a["resource_metrics"]["peak_queue_length"] == 2
+    @test a["resource_metrics"]["peak_in_service"] == 1
     p["simulation_options"]["max_wait_ticks"]=4
     expired=kernel_simulate_model("bass",p)["result"]
     @test expired["counts"]==[0,0,2]

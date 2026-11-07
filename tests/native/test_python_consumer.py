@@ -188,6 +188,8 @@ def test_network_resource_and_complementary_native_consumers():
     )["result"]
     assert r["counts"] == [0, 0, 3]
     assert [e["tick"] for e in r["completions"]] == [6, 11, 16]
+    assert r["resource_metrics"]["peak_queue_length"] == 2
+    assert r["resource_metrics"]["peak_in_service"] == 1
     a = innovate.predict(
         "complementary_goods",
         pl.DataFrame({"time": [0.0, 3.0]}),
