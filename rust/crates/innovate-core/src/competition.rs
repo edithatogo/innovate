@@ -618,8 +618,8 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
         };
         let (initial, limit) = crate::fitting::scalar_options(request)?;
         let mut starts = Vec::new();
-        if let Some(initial) = initial {
-            let parameters = model.parameters(&initial, op)?;
+        if let Some(ref initial) = initial {
+            let parameters = model.parameters(initial, op)?;
             if model.key == "lock_in"
                 && model.history.is_none()
                 && model.events.is_empty()
@@ -678,6 +678,46 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
                 .collect();
             p.resize(model.names.len(), 0.);
             starts.push(transform(p));
+        }
+        if initial.is_none()
+            && model.history.is_some()
+            && model.events.is_empty()
+            && matches!(model.key.as_str(), "multi_product" | "lock_in")
+        {
+            let intervals: Vec<_> = time
+                .windows(2)
+                .zip(observed.windows(2))
+                .zip(factors.windows(2))
+                .filter(|(_, weights)| weights.iter().all(|weight| *weight > 0.))
+                .collect();
+            let changes: Vec<_> = intervals
+                .iter()
+                .flat_map(|((_, rows), _)| {
+                    rows[0].iter().zip(&rows[1]).map(|(a, b)| (b - a) / yscale)
+                })
+                .collect();
+            if changes.len() >= model.names.len()
+                && let Ok(seed) = least_squares(
+                    &changes,
+                    &starts,
+                    |theta| {
+                        let parameters = untransform(theta);
+                        Ok(intervals
+                            .iter()
+                            .flat_map(|((times, rows), _)| {
+                                let left = model.derivative(times[0], &rows[0], &parameters);
+                                let right = model.derivative(times[1], &rows[1], &parameters);
+                                left.into_iter().zip(right).map(|(a, b)| {
+                                    (a / yscale + b / yscale) * (0.5 * (times[1] - times[0]))
+                                })
+                            })
+                            .collect())
+                    },
+                    limit.min(100),
+                )
+            {
+                starts.push(seed.parameters);
+            }
         }
         let scaled = |rows: &[Vec<f64>]| -> Vec<f64> {
             rows.iter()

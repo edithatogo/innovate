@@ -722,3 +722,59 @@ fn automatic_starts_converge_on_unforced_multi_product_and_lock_in() {
         );
     }
 }
+
+#[test]
+fn forced_automatic_starts_converge_and_recover_held_out_trajectories() {
+    let multi: Value =
+        serde_json::from_str(include_str!("fixtures/multi_forcing_scipy.json")).unwrap();
+    let lock: Value =
+        serde_json::from_str(include_str!("fixtures/lock_forcing_scipy.json")).unwrap();
+    let kernel = KernelBinding::new();
+    for (model, fixture, reference, options) in [
+        (
+            "multi_product",
+            &multi,
+            &multi["cases"]["corrected"],
+            json!({"n_products":2,"covariates":["price"]}),
+        ),
+        (
+            "lock_in",
+            &lock,
+            &lock,
+            json!({"initial_values":lock["initial"],"covariates":["price"]}),
+        ),
+    ] {
+        let fit = kernel.fit_model(model, json!({
+            "inputs":{"time":fixture["time"],"observed":reference["rows"],"covariates":fixture["covariates"]},
+            "constructor_kwargs":options,"fit_options":{"max_iterations":200}
+        })).unwrap().result.unwrap();
+        assert_eq!(
+            fit["diagnostics"]["optimizer"]["converged"], true,
+            "{model}"
+        );
+        let forecast = kernel
+            .predict_model(
+                model,
+                json!({
+                    "inputs":{"time":fixture["forecast_time"]},"state":fit["state"]
+                }),
+            )
+            .unwrap()
+            .result
+            .unwrap();
+        let rows = forecast["rows"].as_array().unwrap();
+        let expected = reference["forecast_rows"].as_array().unwrap();
+        assert_eq!(rows.len(), expected.len());
+        for (row, expected) in rows.iter().zip(expected) {
+            let row = row.as_array().unwrap();
+            let expected = expected.as_array().unwrap();
+            assert_eq!(row.len(), expected.len());
+            for (actual, expected) in row.iter().zip(expected) {
+                assert!(
+                    (actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-3,
+                    "{model}"
+                );
+            }
+        }
+    }
+}

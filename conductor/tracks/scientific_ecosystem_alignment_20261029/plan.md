@@ -2657,3 +2657,12 @@ the other competition models and installed binding checks remain open.
   Neither fit converged. Maximum held-out errors were 0.22728 for
   multi-product and 0.08580 for lock-in, both above 1e-3. Discard the
   experimental solver change. Forced initialization remains open.
+
+- [x] Add a covariate-aware automatic start for forced multi-product
+  and lock-in fits without parameter events. Fit approximate changes
+  from trapezoidal ODE rates at observed endpoints, then use the result
+  as an extra start for the existing trajectory solver. The new start
+  converged in 195 and 185 trajectory iterations, respectively, with
+  held-out errors 7.70e-8 and 4.06e-9. The rebuilt Python 3.15.2 wheel,
+  focused Rust regression and Clippy passed. Julia and R verification
+  for the new start remains open.
