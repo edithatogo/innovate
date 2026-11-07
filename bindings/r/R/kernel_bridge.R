@@ -63,7 +63,15 @@ kernel_call_json <- function(request, raw = FALSE) {
   if (!is.logical(raw) || length(raw) != 1L || is.na(raw)) {
     stop("raw must be a single logical value", call. = FALSE)
   }
-  response_json <- .Call(innovate_call_R, native_library(), request)
+  decode_kernel_response(.Call(innovate_call_R, native_library(), request), raw)
+}
+
+kernel_scenario_grid_ipc <- function(data, payload) {
+  request <- jsonlite::toJSON(payload, auto_unbox = TRUE, null = "null", digits = NA)
+  decode_kernel_response(.Call(innovate_scenario_grid_ipc_R, native_library(), request, data))
+}
+
+decode_kernel_response <- function(response_json, raw = FALSE) {
   response <- jsonlite::fromJSON(response_json, simplifyVector = FALSE)
   if (!is.null(response$error)) {
     details <- response$error

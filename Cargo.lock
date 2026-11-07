@@ -1250,6 +1250,8 @@ name = "innovate-ffi"
 version = "0.7.0-alpha.1"
 dependencies = [
  "innovate-core",
+ "innovate-tabular",
+ "serde_json",
 ]
 
 [[package]]

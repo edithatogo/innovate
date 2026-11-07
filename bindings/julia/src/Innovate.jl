@@ -2,7 +2,7 @@ module Innovate
 using JSON
 using Libdl
 
-export DatasetValidationError, kernel_sarima_fit, kernel_seasonal_decomposition, kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
+export kernel_scenario_grid_ipc, DatasetValidationError, kernel_sarima_fit, kernel_seasonal_decomposition, kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
     kernel_categorize_adopters, kernel_categorize_fitted_adopters, kernel_fit_batch, kernel_predict_batch, kernel_simulate_model, kernel_summarize_model, kernel_diagnose_model
 
 """A rejected dataset with its native validation report."""
@@ -24,11 +24,22 @@ end
 function kernel_call(operation::AbstractString, model_key=nothing, payload=Dict{String,Any}())
     request = JSON.json(Dict("schema_version" => "2.0", "operation" => operation,
         "model_key" => model_key, "payload" => payload))
+    return with_native_response(handle -> ccall(Libdl.dlsym(handle, :innovate_call),
+        Ptr{UInt8}, (Cstring,), request))
+end
+
+"""Execute a scenario grid on a shared time column in Arrow IPC file bytes."""
+function kernel_scenario_grid_ipc(data::Vector{UInt8}, payload)
+    request = JSON.json(payload)
+    return with_native_response(handle -> ccall(Libdl.dlsym(handle, :innovate_scenario_grid_ipc),
+        Ptr{UInt8}, (Ptr{UInt8}, Csize_t, Cstring), data, length(data), request))
+end
+
+function with_native_response(invoke)
     handle = Libdl.dlopen(native_library())
     try
-        call = Libdl.dlsym(handle, :innovate_call)
         release = Libdl.dlsym(handle, :innovate_free)
-        response = ccall(call, Ptr{UInt8}, (Cstring,), request)
+        response = invoke(handle)
         response == C_NULL && error("Native response allocation failed")
         text = try
             unsafe_string(response)

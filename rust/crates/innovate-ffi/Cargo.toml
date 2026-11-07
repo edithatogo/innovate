@@ -12,3 +12,5 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 innovate-core.workspace = true
+innovate-tabular = { path = "../innovate-tabular" }
+serde_json.workspace = true

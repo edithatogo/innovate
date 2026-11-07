@@ -1,6 +1,7 @@
 \name{kernel_call}
 \alias{kernel_call}
 \alias{kernel_call_json}
+\alias{kernel_scenario_grid_ipc}
 \alias{kernel_discover_models}
 \alias{kernel_fit_model}
 \alias{kernel_predict_model}
@@ -12,6 +13,7 @@
 \usage{
 kernel_call(operation, model_key = NULL, payload = list())
 kernel_call_json(request, raw = FALSE)
+kernel_scenario_grid_ipc(data, payload)
 kernel_discover_models()
 kernel_fit_model(model_key, payload)
 kernel_predict_model(model_key, payload)
@@ -23,6 +25,7 @@ kernel_diagnose_model(model_key, payload)
 \item{operation}{A canonical Rust kernel operation.}
 \item{model_key}{A model key returned by native discovery.}
 \item{payload}{Named list of inputs, parameters or fitted state.}
+\item{data}{A raw vector containing an Arrow IPC file with a numeric time column.}
 \item{request}{A single JSON request string, passed unchanged to Rust.}
 \item{raw}{Return the successful response as JSON text to retain exact integer tokens and array shapes.}
 }

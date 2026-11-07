@@ -2081,3 +2081,8 @@ the other competition models and installed binding checks remain open.
   tests and focused Clippy passed after removing a stale assertion that
   treated the supported rate quantity as invalid.
 - [ ] Qualify scenario Arrow result transport and Julia and R consumers.
+
+- [x] Expose scenario Arrow IPC input through the C ABI to Julia and R.
+  Both returned the analytic Logistic value of 50 and rejected malformed
+  IPC from the shared fixture. The rebuilt installed R package, locked
+  FFI test and focused Clippy passed. Result transport remains JSON.
