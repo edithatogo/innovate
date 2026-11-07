@@ -4263,3 +4263,6 @@ Hosted release readiness for this worktree revision remains open.
   simple graph bound of node count minus one. This applies before
   execution or artifact import. All ten scenario-filtered Rust
   boundary tests passed, including a two-node degree-two rejection.
+- [x] Exercise network degree bounds during legacy scenario artifact
+  import. The focused Rust test preserves a zero-degree custom artifact
+  without inventing replay inputs and rejects degree two on two nodes.

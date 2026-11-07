@@ -1349,6 +1349,31 @@ fn imports_legacy_scenario_artifacts_without_inventing_replay_inputs() {
     let response = run(&request);
     assert_eq!(response["result"]["artifact"], artifact);
     assert_eq!(response["result"]["replay_available"], false);
+    let mut network = request.clone();
+    let specification = network["payload"]["artifact"]["scenario"]
+        .as_object_mut()
+        .unwrap();
+    specification.extend(
+        json!({"scenario_type":"network","network_type":"custom",
+        "num_nodes":2,"average_degree":0})
+        .as_object()
+        .unwrap()
+        .clone(),
+    );
+    let imported = run(&network);
+    assert_eq!(imported["result"]["replay_available"], false);
+    assert_eq!(
+        imported["result"]["artifact"],
+        network["payload"]["artifact"]
+    );
+    network["payload"]["artifact"]["scenario"]["average_degree"] = json!(2);
+    let rejected = run(&network);
+    assert_eq!(rejected["error"]["code"], "invalid_request");
+    assert_eq!(
+        rejected["error"]["message"],
+        "average_degree cannot exceed num_nodes minus one"
+    );
+
     request["payload"]["artifact"]["timestamp"] = json!("2026-01-01");
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
 }
