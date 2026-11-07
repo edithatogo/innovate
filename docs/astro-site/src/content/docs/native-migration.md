@@ -251,9 +251,16 @@ convergence. Each profile includes the winning row as `selected` and
 its zero-based `selected_index`. The search is limited to the supplied times.
 For scalar event-profile fits, `bootstrap_fit` repeats the candidate
 search on each resample. Its `event_selection` reports the baseline
-selection and each candidate's count and frequency among converged
+selection and each candidate's count and frequency among accepted
 refits. These frequencies describe selection stability on the supplied
 grid. They are separate from the percentile intervals on curve parameters.
+
+A baseline fit with detected rank deficiency cannot produce parameter
+bootstrap intervals. If a converged refit reports rank deficiency,
+the bootstrap excludes it and records it under
+`failure_counts.rank_deficient`. The percentile intervals describe the
+accepted refits. Check the failure counts when interpreting those
+intervals, especially when resampling can remove transition observations.
 
 For Norton–Bass and the competitive ecosystem models, paired case
 resampling applies the same sampled row weights to all observed series.

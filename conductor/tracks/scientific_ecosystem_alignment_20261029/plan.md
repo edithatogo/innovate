@@ -6516,3 +6516,8 @@ Hosted release readiness for this worktree revision remains open.
   Python, Julia and installed R. The same seeded Logistic fixture
   reported 88 successful draws, 12 rank-deficient draws and zero
   failures in every other category across all three bindings.
+
+- [x] Document baseline rank rejection, rank-deficient refit counts
+  and the accepted-refit basis of bootstrap intervals and event
+  frequencies. Both selected Python bootstrap tests passed against
+  the rebuilt wheel.
