@@ -13,18 +13,20 @@ pub fn classify_adopters(time: &[f64], rates: &[f64]) -> Result<Vec<&'static str
     if max_rate == 0. || rates.iter().any(|rate| *rate < 0.) {
         return Err("adoption rates must be nonnegative with positive total");
     }
-    let origin = time[0];
-    let span = time[time.len() - 1] - origin;
-    let scaled_time = |t: f64| {
-        if span == 0. {
-            0.
-        } else if span.is_finite() {
-            (t - origin) / span
-        } else {
-            // Halve before subtraction when the grid spans both extremes.
-            (t / 2. - origin / 2.) / (time[time.len() - 1] / 2. - origin / 2.)
-        }
+    let first = time[0];
+    let last = time[time.len() - 1];
+    // Halve before subtraction when the grid spans both extremes.
+    let prescale = if (last - first).is_finite() { 1. } else { 0.5 };
+    let origin = first * prescale;
+    let span = last * prescale - origin;
+    // For finite spans, use a power of two to avoid rounding exact boundary ties.
+    let exponent = span.to_bits() & f64::INFINITY.to_bits();
+    let scale = if prescale == 1. {
+        f64::from_bits(exponent).max(f64::MIN_POSITIVE)
+    } else {
+        span
     };
+    let scaled_time = |t: f64| (t * prescale - origin) / scale;
     let points = time
         .iter()
         .zip(rates)
@@ -58,6 +60,22 @@ pub fn classify_adopters(time: &[f64], rates: &[f64]) -> Result<Vec<&'static str
 #[cfg(test)]
 mod tests {
     use super::classify_adopters;
+
+    #[test]
+    fn categories_include_exact_boundaries_on_nonbinary_span() {
+        let expected = [
+            "Innovators",
+            "Early Adopters",
+            "Early Majority",
+            "Late Majority",
+        ];
+        for time in [[0., 1., 2., 3.], [1024., 1025., 1026., 1027.]] {
+            assert_eq!(
+                classify_adopters(&time, &[0., 1., 0., 1.]).unwrap(),
+                expected
+            );
+        }
+    }
 
     #[test]
     fn categories_preserve_irregular_grid_at_large_origin() {

@@ -4933,3 +4933,9 @@ Hosted release readiness for this worktree revision remains open.
   narrow and overflowing adopter time grids, matching the installed R
   fixture. The focused Python test and all four Julia assertions
   passed, including exact timestamp readback and all category labels.
+
+- [x] Preserve inclusive category boundaries on finite nonbinary
+  spans. Power-of-two scaling recovered the exact thresholds for
+  weights [0, 1, 0, 1] on both the original and translated grids.
+  Both focused Rust core tests and the Polars historical boundary test
+  passed, including the previously qualified overflowing-span fixture.
