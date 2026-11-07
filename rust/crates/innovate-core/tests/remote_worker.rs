@@ -21,7 +21,10 @@ fn worker_returns_native_results_and_policy_denials() {
         "kernel_request":{"schema_version":"2.0","operation":"predict_model","model_key":"logistic",
             "payload":{"inputs":{"time":[1]},"parameters":{"L":100,"k":1,"x0":1}}}
     });
-    let output = run(envelope.to_string().as_bytes());
+    let mut framed = envelope.to_string().into_bytes();
+    // JSON trailing whitespace counts toward the transport limit.
+    framed.resize(2_000_000, b' ');
+    let output = run(&framed);
     assert!(output.status.success());
     assert!(output.stderr.is_empty());
     let response: Value = serde_json::from_slice(&output.stdout).unwrap();

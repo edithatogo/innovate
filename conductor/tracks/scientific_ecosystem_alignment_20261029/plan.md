@@ -7477,3 +7477,7 @@ Hosted release readiness for this worktree revision remains open.
   Actionlint passed and the optimized local worker suite covered
   the same payload. No remote migration branch or PR exists yet,
   so hosted execution of this revision remains open.
+
+- [x] Verify the optimized worker accepts a valid envelope at exactly
+  2,000,000 raw bytes and rejects an input one byte over. All five
+  optimized worker tests and the formatting check passed.
