@@ -1,7 +1,7 @@
 //! Reproducible synthetic smoke corpus and native fit/forecast runner.
 use serde_json::{Value, json};
 
-const CASES: [(&str, &str, &str); 17] = [
+const CASES: [(&str, &str, &str); 18] = [
     ("bass_smoke_adoption", "bass", "diffusion"),
     ("logistic_growth_smoke", "logistic", "diffusion"),
     ("fisher_pry_replacement_smoke", "fisher_pry", "substitution"),
@@ -35,6 +35,7 @@ const CASES: [(&str, &str, &str); 17] = [
     ("mixture_reference", "mixture", "mixture"),
     ("mixture_gaussian_fit", "mixture", "mixture"),
     ("composite_reference", "composite", "composite"),
+    ("composite_coupled_reference", "composite", "composite"),
 ];
 
 fn ci_policy(family: &str) -> &'static str {
@@ -71,6 +72,23 @@ fn run_case(id: &str) -> Result<Value, String> {
         .iter()
         .find(|case| case.0 == id)
         .ok_or("unknown benchmark case")?;
+    if id == "composite_coupled_reference" {
+        let time = [0_f64, 1., 3., 7.];
+        // Zero intrinsic growth leaves y0 constant and y1' = 0.25 * y0.
+        let observed: Vec<_> = time.iter().map(|&t| [4., 2. + t]).collect();
+        return fixed_prediction(
+            id,
+            model,
+            family,
+            json!({
+                "inputs":{"time":time},
+                "constructor_kwargs":{"components":["logistic","logistic"],"initial_values":[4.,2.]},
+                "parameters":{"L_1":100.,"k_1":0.,"x0_1":0.,"L_2":100.,"k_2":0.,"x0_2":0.,
+                    "alpha_1_2":0.,"alpha_2_1":-0.25}
+            }),
+            json!(observed),
+        );
+    }
     if id == "composite_reference" {
         let time = [0_f64, 3., 10., 20.];
         let observed: Vec<_> = time

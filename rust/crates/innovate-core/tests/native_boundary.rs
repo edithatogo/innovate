@@ -1593,9 +1593,9 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
     };
     let discovery = run("discover_benchmark_cases", json!({}));
     let cases = discovery["result"]["cases"].as_array().unwrap();
-    assert_eq!(cases.len(), 17);
+    assert_eq!(cases.len(), 18);
     let suite = run("run_benchmark_suite", json!({"workers":2}));
-    assert_eq!(suite["result"]["succeeded"], 17, "{suite}");
+    assert_eq!(suite["result"]["succeeded"], 18, "{suite}");
     assert_eq!(suite["result"]["failed"], 0);
     let rows = suite["result"]["runs"].as_array().unwrap();
     for (case, row) in cases.iter().zip(rows) {
@@ -1636,7 +1636,7 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
                 );
             }
         }
-        if row["case_id"] == "composite_reference" {
+        if case["family"] == "composite" {
             assert!(result["fit"].is_null());
             for (actual, expected) in result["prediction"]["rows"]
                 .as_array()
@@ -1651,6 +1651,9 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
                             < 1e-6
                     );
                 }
+            }
+            if row["case_id"] == "composite_coupled_reference" {
+                assert_eq!(result["prediction"]["rates"], json!(vec![[0., 1.]; 4]));
             }
             continue;
         }
@@ -1824,7 +1827,7 @@ fn benchmark_validation_resolves_all_historical_case_references() {
         serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
     let report = &response["result"];
     assert_eq!(report["ok"], true);
-    assert_eq!(report["summary"]["case_count"], 17);
+    assert_eq!(report["summary"]["case_count"], 18);
     assert_eq!(
         report["model_card_summaries"]["bass"]["freshness"]["status"],
         "current"

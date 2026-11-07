@@ -2461,3 +2461,11 @@ the other competition models and installed binding checks remain open.
   wheel and Julia agreed exactly. Installed R agreed within 1e-14 after
   serialization. The reference uses fixed initial values and zero coupling.
   Coupled cases and fitting remain open in the benchmark corpus.
+
+- [x] Add and qualify composite_coupled_reference. With zero intrinsic
+  growth and one directional interaction, the analytic trajectories
+  are constant and linear. All eight component values and eight rate
+  values matched exactly on this host. Five focused Rust tests and
+  Clippy passed. The rebuilt Python 3.15.2 wheel and Julia agreed exactly,
+  and installed R agreed within 1e-14 after serialization. This isolates
+  directional coupling. Composite fitting still needs corpus coverage.
