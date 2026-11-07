@@ -7395,3 +7395,10 @@ Hosted release readiness for this worktree revision remains open.
   before the read-only, network-disabled execution checks. Actionlint
   passed. The local Colima VM is stopped, and image execution remains
   pending on the hosted runner.
+
+- [x] Rebuild the 0ce226b7 source archive twice with Maturin 1.16.0
+  and SOURCE_DATE_EPOCH set to the commit timestamp. The two archives
+  matched byte for byte. SHA-256 is
+  `4bdc29ddced4739baf77b910d6d97fdeaeeef889c80348bb9fa3d701c2085f62`.
+  This establishes same-checkout source archive repeatability.
+  Independent optimized wheel reproducibility remains open.
