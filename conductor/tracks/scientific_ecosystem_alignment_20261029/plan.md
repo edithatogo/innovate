@@ -1339,8 +1339,9 @@ the other competition models and installed binding checks remain open.
   within 0.1. All 16 native boundary tests and focused Clippy passed.
 - [x] Expose and verify robust mode in Python, Julia and R. Each rebuilt
   binding retained the 100-unit spike within 0.1 in the residual.
-- [ ] Qualify
-  historical STL option parity against an independent reference.
+- [x] Qualify historical STL against independent R fixtures for the
+  tested configurations. See the robust, mixed smoother and partial
+  cycle checks below.
 
 - [x] Measure component agreement with independent R stats::stl on a
   deterministic perturbed periodic series with a 100-unit spike. Reference
@@ -1403,7 +1404,8 @@ the other competition models and installed binding checks remain open.
 - [x] Expose historical STL mode in Python, Julia and R. The installed
   Python wheel (CPython 3.15.2), Julia project (1.13.3), and installed R
   package (4.3.0) each match the robust reference within 1e-9.
-- [ ] Qualify the remaining historical STL options.
+- [x] Qualify configurable historical STL iterations, spans, degrees
+  and jumps on the reference configurations below.
 
 - [x] Add bounded inner and outer STL iteration controls to the native
   preprocessing request. The installed R generic bridge agreed with
@@ -1462,9 +1464,9 @@ the other competition models and installed binding checks remain open.
   one-step fitted values. The historical Python wrapper estimated a
   no-trend SARIMAX model and returned fitted values in input order.
   [Reference generator and fixture](evidence/sarima-reference).
-- [ ] Implement Rust SARIMA filtering against the fixed-coefficient
-  reference, then restore parameter estimation, differenced orders,
-  and fitted-value parity against the historical SARIMAX contract.
+- [x] Implement fixed-coefficient filtering, differenced orders and
+  parameter estimation in Rust. The stationary, integrated and mixed
+  reference checks below define the verified scope.
 
 - [x] Add stationary fixed-coefficient SARIMA filtering to the Rust
   preprocessing request. Multiplicative AR/MA polynomials, stationary
@@ -1499,8 +1501,10 @@ the other competition models and installed binding checks remain open.
   coordinate search and the concentrated likelihood. The AR(1) estimate
   matches R within 2e-6 and its log likelihood within 1e-9. All 21 native
   boundary tests and focused Clippy passed.
-- [ ] Qualify mixed seasonal AR/MA estimation and optimizer robustness,
-  then expose fitting through Python, Julia and R convenience APIs.
+- [x] Qualify the mixed seasonal AR/MA fixture and the three higher-order
+  optimizer cases below. Verify the Python, Julia and R fitting APIs.
+- [ ] Extend optimizer qualification to difficult parameter regions
+  beyond the recorded cases.
 
 - [x] Compare a mixed SARIMA(1,0,1)(1,0,1)[4] likelihood fit on 240
   simulated observations with R maximum likelihood. The installed R
@@ -1526,9 +1530,9 @@ the other competition models and installed binding checks remain open.
   burn rows, where the native conditional path currently returns null.
   The reference uses the retained historical environment only to
   generate evidence.
-- [ ] Implement historical SARIMAX initialization semantics and compare
-  every fitted value against the two fixtures before qualifying the
-  estimated historical path.
+- [x] Implement historical SARIMAX initialization and compare every
+  fitted value against both fixed-coefficient fixtures. Verify the
+  estimated integrated and mixed historical cases below.
 
 - [x] Add opt-in historical SARIMA state-space initialization in Rust.
   The differencing states start with diffuse variance and the ARMA
