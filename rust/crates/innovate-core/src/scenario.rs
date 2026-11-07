@@ -10,6 +10,8 @@ struct Scenario {
     id: String,
     model_key: String,
     simulation: Value,
+    #[serde(skip)]
+    submitted_simulation: Option<Value>,
     notes: Option<String>,
     specification: Option<ScenarioSpecification>,
 }
@@ -540,6 +542,9 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
     }
     if apply_specifications {
         for scenario in &mut scenarios {
+            if include_metadata {
+                scenario.submitted_simulation = Some(scenario.simulation.clone());
+            }
             if let Err(message) = apply_specification(scenario) {
                 return invalid(&format!("scenario '{}': {message}", scenario.id));
             }
@@ -568,6 +573,9 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
                 "started_at_unix_seconds":null,
                 "elapsed_seconds":null,
             });
+            if let Some(submitted) = &scenario.submitted_simulation {
+                row["execution_metadata"]["submitted_simulation"] = submitted.clone();
+            }
         }
         row
     };

@@ -1222,6 +1222,20 @@ fn custom_network_specification_checks_topology_and_initial_agents() {
     scenario["simulation"]["simulation_options"]["topology_seed"] = json!(77);
     let response = run(&random);
     let row = &response["result"]["executions"][0];
+    let metadata = &row["execution_metadata"];
+    assert_eq!(
+        metadata["submitted_simulation"],
+        random["payload"]["scenarios"][0]["simulation"]
+    );
+    assert_eq!(
+        metadata["submitted_simulation"]["simulation_options"]["topology_seed"],
+        77
+    );
+    assert!(
+        metadata["simulation"]["simulation_options"]
+            .get("topology_seed")
+            .is_none()
+    );
     let replay = &row["artifact"]["replay_request"];
     let edges = replay["payload"]["scenarios"][0]["simulation"]["simulation_options"]["edges"]
         .as_array()

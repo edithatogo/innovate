@@ -2201,3 +2201,9 @@ the other competition models and installed binding checks remain open.
   All three resolved the same seven distinct edges for a five-node graph
   with two attachments per new node and topology seed 77. Each replay
   reproduced the original seeded contagion result exactly.
+
+- [x] Preserve submitted simulation inputs alongside resolved inputs in
+  opt-in execution metadata when applying specifications. The regression
+  verifies that the topology seed is retained in submitted_simulation
+  and excluded from the resolved kernel payload. All 43 boundary tests
+  and Clippy passed.
