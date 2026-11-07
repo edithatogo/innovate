@@ -375,6 +375,23 @@ fn compare_ensemble(
         }
         differences.push(difference);
     }
+    // Scale before squaring so finite effects near the floating-point limits
+    // can still yield a representable standard error.
+    let scale = differences.iter().map(|x| x.abs()).fold(0., f64::max);
+    let (mean, standard_error) = if scale == 0. {
+        (0., 0.)
+    } else {
+        let n = differences.len() as f64;
+        let mean = differences.iter().map(|x| x / scale).sum::<f64>() / n;
+        let centered_squares = differences
+            .iter()
+            .map(|x| (x / scale - mean).powi(2))
+            .sum::<f64>();
+        (
+            mean * scale,
+            (centered_squares / (n * (n - 1.))).sqrt() * scale,
+        )
+    };
     let mut sorted = differences.clone();
     sorted.sort_unstable_by(f64::total_cmp);
     let quantile = |probability: f64| {
@@ -386,6 +403,8 @@ fn compare_ensemble(
     Ok(
         json!({"method":"paired_empirical_final_difference","quantile_method":"linear",
         "pair_count":differences.len(),"differences":differences,"interval_mass":mass,
+        "mean_difference":mean,"mean_standard_error":standard_error,
+        "standard_error_assumption":"independent replicate pairs",
         "median_difference":quantile(0.5),"empirical_interval":[quantile(tail),quantile(1.-tail)]}),
     )
 }

@@ -977,6 +977,8 @@ fn scenario_grid_summarizes_paired_ensemble_differences() {
     let outcome = &response["result"]["comparisons"][0]["result"];
     assert_eq!(outcome["pair_count"], 2);
     assert_eq!(outcome["median_difference"], 12.5);
+    assert_eq!(outcome["mean_difference"], 12.5);
+    assert_eq!(outcome["mean_standard_error"], 37.5);
     assert_eq!(outcome["empirical_interval"], json!([-6.25, 31.25]));
     request["payload"]["comparisons"][0]["pairs"][1]["baseline"] = json!("a");
     assert_eq!(
