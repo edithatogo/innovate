@@ -6707,3 +6707,10 @@ Hosted release readiness for this worktree revision remains open.
   A separate Python wheel check with one initial adopter passed all
   33 mixed-fixture runs and found no duplicate completions or service
   completion for the initial adopter.
+
+- [x] Verify adoption counts and levels through Julia and installed R
+  with one initial adopter on the combined Kairos fixture. All 33
+  seeds in each binding matched initial adoption plus completions at
+  every sample. Neither binding reported a duplicate completion or
+  a service completion for the initial adopter. Native builds were
+  reused from 4947d6b4 after checking unchanged build inputs.
