@@ -6135,3 +6135,10 @@ Hosted release readiness for this worktree revision remains open.
   prior scientific output equality, allowing only the provider
   provenance field to differ. The locked focused test passed after
   rebuilding without incremental compilation.
+
+- [x] Import and replay a complete continuous-hazard network artifact
+  emitted by the previous Kairos wheel. Python, Julia and R accepted
+  the original JSON and reproduced the previous scientific output with
+  the provider provenance updated. In R, use kernel_call_json for the
+  original envelopes. Re-encoding the parsed artifact through
+  kernel_call failed the embedded-payload equality check.
