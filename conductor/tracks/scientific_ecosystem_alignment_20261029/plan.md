@@ -5518,3 +5518,10 @@ Hosted release readiness for this worktree revision remains open.
   true predictions covered 477/500 (mean error -0.0334). Estimated
   predictions treated as fixed covered 451/500 (mean error -0.0202).
   Propagation of prediction-fit covariance remains open.
+
+- [x] Propagate caller-supplied covariance factors for externally fitted
+  control predictions whose errors are independent of outcome errors.
+  Each rematch applies its contrast weights to the prediction factors.
+  The Rust fixture canceled a common loading and recovered adjusted
+  mixture spread sqrt(6), with raw spread still sqrt(5). Eleven causal
+  tests passed. Binding checks and coverage with these factors remain open.

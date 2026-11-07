@@ -55,7 +55,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                  "estimands":["ate","att"],"default_estimand":"ate",
                  "uncertainty":"fixed_propensity_standard_error"},
                 {"method":"matched_treatment_contrast","adjustment":"nearest_score_with_replacement",
-                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":["allow_partial","outcome_variances","balance_covariates","control_predictions","outcome_covariance_factors","fit_controls","score_draws","score_refit_omit_indices","score_bootstrap"],
+                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":["allow_partial","outcome_variances","balance_covariates","control_predictions","independent_control_prediction_covariance_factors","outcome_covariance_factors","fit_controls","score_draws","score_refit_omit_indices","score_bootstrap"],
                  "estimands":["att"],"default_estimand":"att",
                  "partial_estimand":"matched_subset_att",
                  "uncertainty":"conditional_standard_error",
@@ -1372,6 +1372,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
                 | "outcome_variances"
                 | "balance_covariates"
                 | "control_predictions"
+                | "independent_control_prediction_covariance_factors"
                 | "fit_controls"
                 | "outcome_covariance_factors"
         )
@@ -1444,6 +1445,23 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
         .is_some_and(|values| values.len() != outcomes.len())
     {
         return Err("control predictions must align with outcomes");
+    }
+    let prediction_factors: Option<Vec<Vec<f64>>> = fields
+        .get("independent_control_prediction_covariance_factors")
+        .map(|value| {
+            serde_json::from_value(value.clone())
+                .map_err(|_| "control prediction covariance factors must be numeric arrays")
+        })
+        .transpose()?;
+    if prediction_factors.as_ref().is_some_and(|factors| {
+        control_predictions.is_none()
+            || outcome_variances.is_none()
+            || factors.is_empty()
+            || factors.iter().any(|factor| factor.len() != outcomes.len())
+    }) {
+        return Err(
+            "control prediction covariance factors require fixed predictions, outcome variances and aligned factor arrays",
+        );
     }
     let fit_controls: Option<MatchingControlFit> = fields
         .get("fit_controls")
@@ -1623,9 +1641,16 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
             finite(error)
         })
         .transpose()?;
-    // Caller-supplied predictions are fixed offsets in the outcome contrast.
+    // Independent prediction errors contribute a separate covariance term.
     let adjusted_standard_error = if control_predictions.is_some() {
         conditional_standard_error
+            .map(|mut error| {
+                for factor in prediction_factors.iter().flatten() {
+                    error = error.hypot(weighted_outcome_contrast(factor, &outcome_weights)?);
+                }
+                finite(error)
+            })
+            .transpose()?
     } else {
         adjusted_standard_error
     };
@@ -2886,5 +2911,22 @@ mod tests {
         assert_eq!(draws.len(), 8);
         assert!(draws.iter().any(|draw| draw["pairs"] != draws[0]["pairs"]));
         assert!(sensitivity["mixture_standard_deviation"].is_number());
+    }
+    #[test]
+    fn matching_propagates_independent_prediction_covariance() {
+        let payload = serde_json::json!({
+            "outcomes": [0, 4, 2], "treatment": [0, 1, 0],
+            "caliper": 0, "scores": [0, 0, 1], "score_draws": [[0, 0, 1], [1, 0, 0]],
+            "outcome_variances": [0, 1, 6], "control_predictions": [0, 0, 2],
+            "independent_control_prediction_covariance_factors": [[9, 9, 9], [0, 0, 2]]
+        });
+        let result = matched_treatment_contrast(&payload).unwrap();
+        let sensitivity = &result["score_sensitivity"];
+        let adjusted = sensitivity["adjusted_mixture_standard_deviation"]
+            .as_f64()
+            .unwrap();
+        let raw = sensitivity["mixture_standard_deviation"].as_f64().unwrap();
+        assert!((adjusted - 6_f64.sqrt()).abs() < 1e-14);
+        assert!((raw - 5_f64.sqrt()).abs() < 1e-14);
     }
 }
