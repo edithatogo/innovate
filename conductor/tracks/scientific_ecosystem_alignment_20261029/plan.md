@@ -1341,3 +1341,13 @@ the other competition models and installed binding checks remain open.
   binding retained the 100-unit spike within 0.1 in the residual.
 - [ ] Qualify
   historical STL option parity against an independent reference.
+
+- [x] Measure component agreement with independent R stats::stl on a
+  deterministic perturbed periodic series with a 100-unit spike. Reference
+  configuration uses period 4, spans 7/13/5, local degrees 1, jumps 1 and
+  five inner iterations. Robust mode uses five outer iterations.
+  Nonrobust maximum component discrepancy is 0.001193. Robust discrepancy
+  is much larger (100.0763 for residuals), so the existing analytic outlier
+  test cannot establish historical STL parity. Endpoint extrapolation,
+  weighting behavior and option parity remain open.
+  [Reference inputs, outputs and differences](evidence/stl-reference-20261107).
