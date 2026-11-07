@@ -5963,3 +5963,9 @@ Hosted release readiness for this worktree revision remains open.
   fixture through installed R matched the converged R reference within
   1.6e-9 in likelihood and 2.2e-5 in coefficients. All six SARIMA
   boundary tests passed.
+
+- [x] Verify the coupled-search recovery through a rebuilt Python 3.15.2
+  wheel, Julia 1.13.3 and installed R 4.3.0. The shared 800-observation
+  input, serialized at 17 significant digits, yielded identical
+  coefficients, all 800 fitted values and log likelihood across the
+  three public entry points.
