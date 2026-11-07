@@ -4011,3 +4011,7 @@ Hosted release readiness for this worktree revision remains open.
   tests pass in that configuration. The separate innovate-tabular
   package passed all nine prediction and IPC tests. This verifies the
   package split on Darwin arm64.
+- [x] Map the native Bass operation, schema, C ABI ownership and
+  runtime evidence to imported I05. The contract names separate
+  bridge and installed-consumer verification leaves. The locked
+  innovate-ffi suite passed.
