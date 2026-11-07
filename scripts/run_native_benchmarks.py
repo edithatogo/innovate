@@ -1,13 +1,14 @@
 """Run a native benchmark policy and write its complete result as JSON."""
 
 import argparse
+import hashlib
 import json
 import os
 import platform
 from pathlib import Path
 from time import perf_counter
 
-from innovate import execute
+from innovate import _native, execute
 
 
 def main() -> int:
@@ -59,7 +60,10 @@ def main() -> int:
 
         peak_rss = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
         peak_rss_bytes = peak_rss if system == "Darwin" else peak_rss * 1024
+    with Path(_native.__file__).open("rb") as extension:
+        native_extension_sha256 = hashlib.file_digest(extension, "sha256").hexdigest()
     response["metadata"]["benchmark_runner"] = {
+        "native_extension_sha256": native_extension_sha256,
         "requested_workers": count,
         "worker_budget_source": "SLURM_CPUS_PER_TASK" if args.slurm_allocation else "command_line",
         "ci_policy": args.policy,

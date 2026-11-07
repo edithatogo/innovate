@@ -3776,3 +3776,7 @@ Hosted release readiness for this worktree revision remains open.
   version 0.7.0-alpha.1 in both receipts and passed all three fast
   cases across disjoint shards. Wheel SHA-256
   f069eff573a4c489926ccb324cb7877109eb753b132dfbf60d1e89e0ed720d31.
+- [x] Record SHA-256 of the imported Python native extension in each
+  benchmark receipt. Both local MPI rank receipts matched an independent
+  digest of the installed extension from d6b7e3ba and passed all three
+  fast cases. Ruff passed. The digest identifies the extension binary.
