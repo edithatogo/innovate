@@ -5532,3 +5532,10 @@ Hosted release readiness for this worktree revision remains open.
   the known slope-error loading x/sqrt(5). Coverage was 473/500
   compared with 451/500 when the predictions were treated as fixed.
   This evidence is limited to the specified independent Gaussian fit.
+
+- [x] Extend SARIMA optimizer evidence to mixed ARMA(1,1) fits near
+  positive and negative stationarity boundaries. With simulated AR
+  coefficients +/-0.985 and MA coefficient 0.6, the Rust likelihood
+  through installed R agreed with stats::arima within 1e-6 in both cases.
+  The reproducible checker is check-mixed-near-unit-root.R. The release
+  verifier still reports 38 open obligations.
