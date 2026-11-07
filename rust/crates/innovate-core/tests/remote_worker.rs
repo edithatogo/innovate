@@ -58,6 +58,14 @@ fn worker_rejects_invalid_framing_without_writing_a_response() {
             "invalid remote envelope JSON",
         ),
         (
+            br#"{"context":{"tenant_id":"t","tenant_\u0069d":"other"}}"#.to_vec(),
+            "invalid remote envelope JSON",
+        ),
+        (
+            br#"{"kernel_request":{"payload":[{"a":null,"a":true}]}}"#.to_vec(),
+            "invalid remote envelope JSON",
+        ),
+        (
             br#"{"context":{},"context":{}}"#.to_vec(),
             "invalid remote envelope JSON",
         ),

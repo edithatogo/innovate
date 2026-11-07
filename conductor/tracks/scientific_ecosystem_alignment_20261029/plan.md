@@ -7468,3 +7468,7 @@ Hosted release readiness for this worktree revision remains open.
   duplicate auth_scope fields and repeated envelope context. Rejection
   preserves the malformed-input exit code and empty stdout. All five
   optimized worker tests and the formatting check passed.
+
+- [x] Verify duplicate worker keys are rejected after Unicode escape
+  decoding and inside objects nested in arrays. The complete optimized
+  worker suite passed, including successful native dispatch.
