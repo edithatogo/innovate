@@ -123,6 +123,14 @@ fn noisy_gompertz_fit_recovers_the_held_out_trajectory() {
     assert_held_out_trajectory("gompertz", |t| 120. * (-4. * (-0.16 * t).exp()).exp());
 }
 
+#[test]
+fn noisy_bass_fit_recovers_the_held_out_trajectory() {
+    assert_held_out_trajectory("bass", |t| {
+        let decay = (-0.24 * t).exp();
+        120. * (1. - decay) / (1. + 7. * decay)
+    });
+}
+
 fn assert_held_out_trajectory(model: &str, truth: impl Fn(f64) -> f64) {
     let time: Vec<_> = (0..31).map(f64::from).collect();
     let errors = [0.8, -1.1, 0.4, -0.6, 1.3, -0.3];
