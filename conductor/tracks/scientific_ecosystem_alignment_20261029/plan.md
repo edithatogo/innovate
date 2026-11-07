@@ -6301,3 +6301,8 @@ Hosted release readiness for this worktree revision remains open.
   rebuilt Python wheel, Julia and installed R. Both estimands accepted
   the valid request and surfaced the native unsupported-field error
   for minimum_training_arms_count in all three consumers.
+
+- [x] Return cluster_degrees_of_freedom for caller-computed intervals
+  on clustered augmented and cross-fitted contrasts. It equals the
+  number of clusters minus one and is null without clusters. The Rust
+  boundary test verified one degree of freedom for two clusters.

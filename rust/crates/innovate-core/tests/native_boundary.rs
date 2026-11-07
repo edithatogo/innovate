@@ -873,6 +873,7 @@ fn causal_summaries_match_analytic_effects() {
     cross_fitted["clusters"] = json!(["a", "b", "b", "a"]);
     let result = run(cross_fitted.clone());
     assert_eq!(result["result"]["contrast"]["cluster_count"], 2);
+    assert_eq!(result["result"]["contrast"]["cluster_degrees_of_freedom"], 1);
     assert!(
         (result["result"]["contrast"]["influence_standard_error"]
             .as_f64()

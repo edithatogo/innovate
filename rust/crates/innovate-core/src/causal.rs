@@ -2355,7 +2355,7 @@ fn augmented_treatment_contrast(payload: &Value) -> Result<Value, &'static str> 
     Ok(
         json!({"method":"augmented_inverse_probability_weighting","estimand":if att { "att" } else { "ate" },
         "estimate":estimate,"influence_standard_error":finite(standard_error)?,"observations":n,
-        "cluster_count":cluster_count}),
+        "cluster_count":cluster_count,"cluster_degrees_of_freedom":cluster_count.map(|count| count - 1)}),
     )
 }
 
