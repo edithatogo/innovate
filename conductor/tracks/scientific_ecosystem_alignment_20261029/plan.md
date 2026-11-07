@@ -6746,3 +6746,9 @@ Hosted release readiness for this worktree revision remains open.
   matched the analytic probability for hazard q/2 within four binomial
   standard errors. No unexposed node requested service and no new
   adoption occurred before the horizon. All 36 Rust network tests passed.
+
+- [x] Verify the pure-imitation fixture through Python 3.15.2, Julia
+  and installed R. All 2,048 seeds agreed per seed on request timing
+  or absence, agent identity and unchanged adoption counts. The
+  1,273 requests (62.16%) agree with the 63.21% analytic probability
+  within the Rust test's bound. Reused unchanged 4947d6b4 builds.
