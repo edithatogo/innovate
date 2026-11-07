@@ -1766,9 +1766,14 @@ the other competition models and installed binding checks remain open.
   Use write_ipc_stream with uncompressed output and the oldest Polars
   compatibility level. The reader preserves Int32 counts, Float64
   estimates, metadata strings, and missing interval bounds.
-- [ ] Qualify the R Arrow IPC consumer and investigate Arrow.jl file
-  compatibility. Arrow.jl returned empty column sets for the Polars
-  IPC files even with compression disabled and oldest compatibility.
+- [x] Verify R Arrow IPC readback. R 4.3.0 with the available
+  macOS ARM64 Arrow 20.0.0.2 binary read the Polars streams, the
+  uncompressed oldest-compatibility Polars files, and the PyArrow files.
+  All preserved metadata, Int32 counts, Float64 estimates and null bounds.
+  The Arrow binary reports that it was built under R 4.3.3.
+- [ ] Investigate Arrow.jl file compatibility. Arrow.jl returned empty
+  column sets for the Polars IPC files even with compression disabled
+  and oldest compatibility.
 
 - [x] Isolate the Julia IPC file issue to the tested writer path.
   PyArrow 26 rewrote each qualified Polars stream to an IPC file.
