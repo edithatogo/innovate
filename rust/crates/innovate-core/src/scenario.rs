@@ -916,6 +916,8 @@ fn compare_resource_totals(baseline: &Value, alternative: &Value) -> Result<Valu
         "admitted_wait_ticks",
         "abandoned_wait_ticks",
         "pending_wait_ticks",
+        "peak_queue_length",
+        "peak_in_service",
     ] {
         let read = |metrics: &Value| metrics[key].as_i64().ok_or("invalid resource metric");
         result[key] = json!(read(alternative_metrics)? - read(baseline_metrics)?);

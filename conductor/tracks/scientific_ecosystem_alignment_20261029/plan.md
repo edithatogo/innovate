@@ -4285,3 +4285,7 @@ Hosted release readiness for this worktree revision remains open.
   and totals across scheduled closure and reopening at a fixed horizon.
   All 29 network and 12 Kairos tests passed. The public kernel requires
   a strictly increasing observation grid.
+- [x] Include peak queue and concurrent service differences in Kairos
+  resource comparisons. These differences are agent counts. The
+  focused Rust regression verifies one additional concurrent service
+  for the two-slot reopening alternative.

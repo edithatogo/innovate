@@ -2924,6 +2924,10 @@ fn resource_comparison_requires_resource_outputs_from_both_scenarios() {
         -3
     );
     assert_eq!(
+        rows[0]["result"]["resource_differences"]["peak_in_service"],
+        1
+    );
+    assert_eq!(
         rows[1]["error"]["message"],
         "resource comparison requires two Kairos network resource results"
     );
