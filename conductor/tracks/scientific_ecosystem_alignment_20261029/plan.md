@@ -634,3 +634,12 @@ scalar interpolation-grid bug is not promoted as working covariate support.
 
 Source: 44e56a76. Local qualification: 120 Rust tests, 38 Python tests,
 175 Julia assertions and R conformance. All 38 release obligations remain.
+
+## Directed and weighted Kairos resource network
+
+- [x] Support directed and weighted exposure while preserving legacy replay.
+- [x] Qualify direction, numerical scaling, FIFO and the three bindings.
+
+Source: f78f1217. Eight focused Rust network tests, 39 installed Python tests,
+177 Julia assertions and R conformance passed. Scheduled graph/resource
+changes and remaining historical forcing are still open.
