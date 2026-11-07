@@ -1435,5 +1435,7 @@ the other competition models and installed binding checks remain open.
   smoother in Rust. Four mixed degree/jump configurations matched
   stats::stl through installed R within 6.37e-12, including off-grid
   terminal points. All 18 native boundary tests and focused Clippy passed.
-- [ ] Expose degree and jump controls in the three binding helpers and
-  validate each against the independent reference.
+- [x] Expose degree and jump controls in the three binding helpers.
+  The rebuilt Python wheel, Julia project, and installed R package
+  matched stats::stl within 6.37e-12 at seasonal/trend/low-pass degrees
+  0/1/0 and jumps 2/3/5 with robust reweighting.

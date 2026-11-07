@@ -67,10 +67,14 @@ kernel_aggregate_dates(dates, values, frequency) = kernel_call("aggregate_dates"
     Dict("dates" => string.(dates), "values" => values, "frequency" => frequency))["result"]
 
 kernel_seasonal_decomposition(values, period, trend_span; robust=false, historical=false,
-    inner_iterations=5, outer_iterations=robust ? 5 : 0, seasonal_span=nothing, low_pass_span=nothing) = kernel_call("preprocess_series", nothing,
+    inner_iterations=5, outer_iterations=robust ? 5 : 0, seasonal_span=nothing, low_pass_span=nothing,
+    seasonal_degree=1, seasonal_jump=1, trend_degree=1, trend_jump=1, low_pass_degree=1, low_pass_jump=1) = kernel_call("preprocess_series", nothing,
     Dict("method" => "seasonal_decomposition", "values" => values, "period" => period,
         "window" => trend_span, "robust" => robust, "historical" => historical,
         "inner_iterations" => inner_iterations, "outer_iterations" => outer_iterations,
-        "seasonal_span" => seasonal_span, "low_pass_span" => low_pass_span))["result"]
+        "seasonal_span" => seasonal_span, "low_pass_span" => low_pass_span,
+        "seasonal_degree" => seasonal_degree, "seasonal_jump" => seasonal_jump,
+        "trend_degree" => trend_degree, "trend_jump" => trend_jump,
+        "low_pass_degree" => low_pass_degree, "low_pass_jump" => low_pass_jump))["result"]
 
 end
