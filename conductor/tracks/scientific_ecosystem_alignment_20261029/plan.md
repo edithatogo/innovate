@@ -4005,3 +4005,9 @@ Hosted release readiness for this worktree revision remains open.
   and verifies the same identity, value and RNG checkpoint on replay.
   All twelve locked Kairos tests passed. This supplies runtime evidence
   for the state and RNG portion of imported leaf I04.
+- [x] Verify the root workspace split against imported I06. The locked
+  innovate-core normal and build dependency tree with default features
+  disabled contains no Arrow or Polars packages, and all 12 Kairos
+  tests pass in that configuration. The separate innovate-tabular
+  package passed all nine prediction and IPC tests. This verifies the
+  package split on Darwin arm64.
