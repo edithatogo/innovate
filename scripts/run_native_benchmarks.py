@@ -18,9 +18,11 @@ def main() -> int:
     workers.add_argument("--workers", type=int)
     workers.add_argument("--slurm-allocation", action="store_true",
                          help="Use SLURM_CPUS_PER_TASK as the local worker budget.")
-    parser.add_argument("--mpi-shard", action="store_true", help="Select cases for this Open MPI rank.")
+    launchers = parser.add_mutually_exclusive_group()
+    launchers.add_argument("--mpi-shard", action="store_true", help="Select cases for this Open MPI rank.")
+    launchers.add_argument("--slurm-shard", action="store_true", help="Select cases for this Slurm task.")
     parser.add_argument("--output", type=Path, required=True,
-                        help="Receipt path. With --mpi-shard, {rank} in the filename expands to the rank.")
+                        help="Receipt path. For sharded runs, {rank} in the filename expands to the rank.")
     args = parser.parse_args()
 
     count = args.workers if args.workers is not None else 1
@@ -36,18 +38,23 @@ def main() -> int:
         count = min(count, modes["local_cpu"]["max_workers"])
     payload = {"workers": count}
     shard = None
-    if args.mpi_shard:
+    if args.mpi_shard or args.slurm_shard:
+        rank_key, size_key = (
+            ("OMPI_COMM_WORLD_RANK", "OMPI_COMM_WORLD_SIZE")
+            if args.mpi_shard else ("SLURM_PROCID", "SLURM_STEP_NUM_TASKS")
+        )
         try:
-            rank = int(os.environ["OMPI_COMM_WORLD_RANK"])
-            size = int(os.environ["OMPI_COMM_WORLD_SIZE"])
+            rank = int(os.environ[rank_key])
+            size = int(os.environ[size_key])
         except (KeyError, ValueError):
-            parser.error("--mpi-shard requires Open MPI rank and size")
+            parser.error(f"sharding requires integer {rank_key} and {size_key}")
         cases = execute("discover_benchmark_cases")["result"]["cases"]
         ids = [case["case_id"] for case in cases if args.policy is None or case["ci_policy"] == args.policy]
         if not (0 <= rank < size <= len(ids)):
-            parser.error("--mpi-shard requires a valid rank and at least one case per rank")
+            parser.error("sharding requires a valid rank and at least one case per rank")
         payload["case_ids"] = ids[rank::size]
-        shard = {"rank": rank, "size": size, "case_ids": payload["case_ids"]}
+        shard = {"rank": rank, "size": size, "case_ids": payload["case_ids"],
+                 "launcher": "open_mpi" if args.mpi_shard else "slurm"}
     elif args.policy is not None:
         payload["ci_policy"] = args.policy
     started = perf_counter()
@@ -82,7 +89,7 @@ def main() -> int:
         with output.open("x" if shard is not None else "w", encoding="utf-8") as stream:
             stream.write(receipt)
     except FileExistsError:
-        parser.error(f"MPI receipt already exists: {output}; use a fresh path for each rank")
+        parser.error(f"Shard receipt already exists: {output}; use a fresh path for each rank")
     result = response["result"]
     print(f"Benchmark suite: {result['succeeded']} succeeded, {result['failed']} failed")
     return int(result["failed"] > 0 or not result["runs"])

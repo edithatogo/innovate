@@ -3793,3 +3793,9 @@ Hosted release readiness for this worktree revision remains open.
   kernel whose extension digest matches the serial receipt. The local
   fast policy passed and the checker rejected a consistent truncation
   of both serial and rank receipts. Ruff passed.
+- [x] Add opt-in Slurm task sharding based on step rank and size.
+  The runner shares case selection and receipt protection with MPI,
+  identifies the launcher, and accepts the existing per-task worker
+  budget. Injected Slurm step variables covered all three fast cases
+  with two tasks and matched the serial receipt. Ruff passed.
+  The local host has no srun executable. Live Slurm qualification remains open.
