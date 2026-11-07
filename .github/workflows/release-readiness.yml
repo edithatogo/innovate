@@ -56,7 +56,7 @@ jobs:
           bash scripts/build_release_wheel.sh
           .venv-release/bin/twine check dist/*
           .venv-release/bin/check-wheel-contents dist/*.whl
-          (cd dist && sha256sum *.tar.gz *.whl > SHA256SUMS)
+          (cd dist && sha256sum ./*.tar.gz ./*.whl > SHA256SUMS)
       - name: Retain validated dry-run artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
