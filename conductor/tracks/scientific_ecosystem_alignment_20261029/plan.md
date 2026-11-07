@@ -3663,3 +3663,10 @@ Hosted release readiness for this worktree revision remains open.
   without a threshold. The Rust boundary returns a comparison error
   and retains the scenario executions. The targeted test and Clippy
   passed.
+
+- [x] Allow counterfactual event schedule replacement on explicit
+  prediction requests as well as fitted states. The Rust Lotka–Volterra
+  fixture removes the intervention from both baseline representations
+  and verifies identical contrasts against the analytic trajectories.
+  The causal boundary test and focused Clippy passed. Installed
+  binding checks for the explicit request remain open.

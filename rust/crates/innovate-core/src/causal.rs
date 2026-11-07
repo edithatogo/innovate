@@ -405,10 +405,14 @@ fn counterfactual_forecast(payload: &Value) -> Result<Value, &'static str> {
         if !events.is_array() {
             return Err("parameter_event_override must be an array");
         }
-        let schedule = alternative
-            .get_mut("state")
-            .and_then(|state| state.pointer_mut("/constructor_kwargs/parameter_events"))
-            .ok_or("baseline requires a saved parameter event schedule")?;
+        let options = if let Some(state) = alternative.get_mut("state") {
+            state.get_mut("constructor_kwargs")
+        } else {
+            alternative.get_mut("constructor_kwargs")
+        };
+        let schedule = options
+            .and_then(|options| options.get_mut("parameter_events"))
+            .ok_or("baseline requires a parameter event schedule")?;
         *schedule = events.clone();
     }
     let binding = crate::KernelBinding::new();
