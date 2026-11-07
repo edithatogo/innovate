@@ -7526,3 +7526,7 @@ Hosted release readiness for this worktree revision remains open.
   Keep seeded Kairos simulation streams so checkpoints can replay.
   All 17 optimized Kairos tests passed, including replay and ensemble
   checks. Hosted PR status is separate.
+
+- [x] Apply the exact Release Please pin from PR #385 and pass
+  Actionlint. PRs #388 and #389 target action invocations absent
+  from the migration workflows. The hosted PRs remain open.
