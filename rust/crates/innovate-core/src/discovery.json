@@ -214,7 +214,7 @@
       "supported_backends": [
         "rust"
       ],
-      "supports_covariates": false,
+      "supports_covariates": true,
       "supports_multivariate_output": true,
       "supports_simulation": true,
       "supports_summarize": true,

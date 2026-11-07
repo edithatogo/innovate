@@ -1,0 +1,68 @@
+{
+  "status": "bounded_local_checkpoint",
+  "base_commit": "9f6ee673f4df8fc393fd1914f8c5cfd262867ba0",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "related_evidence": [
+    "multi-forcing-20261107.json",
+    "lotka-forcing-20261107.json"
+  ],
+  "results": {
+    "focused_rust_tests": 24,
+    "rust_scope": "competitive, complementary, lock-in and C ABI/Polars tests",
+    "installed_python_tests": 45,
+    "julia_assertions": 197,
+    "R": "full conformance and independent complementary forcing fit/forecast passed",
+    "clippy": "workspace all targets passed",
+    "docs_pages": 163,
+    "hooks": "affected files passed",
+    "package": "local metadata, wheel contents and exact Rust module/test/fixture inclusion passed"
+  },
+  "reused_evidence": "Unchanged optimizer and unrelated core modules retain full-suite evidence from multi-forcing-20261107.json. Current Rust coverage is focused.",
+  "competition_coverage": {
+    "count": 651,
+    "covered": 602,
+    "percent": 92.47311827956989
+  },
+  "oracle": {
+    "python": "3.15.2",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "method": "DOP853, split at every control knot, rtol=1e-12 atol=1e-13"
+  },
+  "remaining": "Lock-in forcing, events, initialization, uncertainty, branch/mutation, platform and scientific/release qualification",
+  "source_sha256": {
+    "bindings/julia/test/runtests.jl": "2c06a319f73579aca6833bfcc6991cb0708e8b10decb7d50444d0681d8bb6f49",
+    "bindings/r/tests/native.R": "c240b21e8997c863e754ef91e9796affe9e2488e68be2f8527eef2ff6973552b",
+    "docs/astro-site/src/content/docs/native-migration.md": "58fd44d8389433f551d9437bfebdf46a1c8e2fd20d855424916f3503f6e99ed5",
+    "migration-ledger.json": "6fbad988657e0748c4948c2119215c1f5ce885d8f38194f196f4e9ae5115221a",
+    "rust/crates/innovate-core/src/competition.rs": "6955a9d2b79de43d84962bbce5c2b46ca28f62b15a0cdb2dea6e0d031ad4bc9d",
+    "rust/crates/innovate-core/src/discovery.json": "6f3844761f03b2a0c4143956a3a614ec3d58ab1ba85fd924c11aba3c1e064ddc",
+    "rust/crates/innovate-core/tests/complementary.rs": "387f68f5d924b7f4a75d84850a4a5ca248ff98c47bf35c3cd39d7214fdac5861",
+    "tests/native/test_python_consumer.py": "7add7049ac6fae45b928c3886e4c2473eeb13883dcfcc9b86213455316feb6d7",
+    "rust/crates/innovate-core/tests/fixtures/complementary_forcing_scipy.json": "a1ed528434f055d0bb26732f6f9eed01b696e6a1ae058ce19e549359b565f49d"
+  },
+  "logs": {
+    "bridges.log": "b9c5a55babf654beb625921937d43beae9e6051e397fbcd2a949cce65fff9447",
+    "clippy.log": "a46bf41f180afdb837ba8a47805c590a94e14f8e53eaaae67d9f63f2a2759c8e",
+    "coverage.log": "70fd4f5e2fbfd07c331fc377cf625ab15c9c24fe61b0467cd574175c302a3fac",
+    "docs.log": "3ee981b5c6c5b3efa5541427af0a446d71a9e6a74cec4de1f2a42cc1f049e0ed",
+    "ffi.log": "d8978b9be40061b526292304fa15f21bcca9b437fba884cfcafeb10a6b0c750f",
+    "green.log": "ca265747f64a9bf6a73924cc239035a2518bca642267133206602531627a4c98",
+    "hooks.log": "7523d6b940ad7d7e49ea93ff33ac60ceb273c50cb6ae677030a5b65df95de21b",
+    "install.log": "b7da84262524a46fbc354750afe91b9dd5aef8b10ca2f1b28413b66d3ba3705c",
+    "julia.log": "cfcc1b8267aac4a626e27d596b25ef56aeebe076fdf9e00fe463e69e301b056a",
+    "package.log": "b7d866c5d0cdc332652136b2a38c4efb25bfcc3504a9c3ff449618d6add3cca8",
+    "python.log": "b2c6720453f06d35157bf6fc9703ffce184bf1d11bc189b38e5a9b17338d728b",
+    "r.log": "6654b596cc75416253f60302f9e05c94ff449de757889230d24d3648321f647e",
+    "red.log": "ad226870820b1606515e7c6a9a115629995862454c512e91832551946848944c",
+    "rust.log": "6ecd3c21efb88235d49c520fe365f78a4b8ef78db13dfef71b98b6e24204e07b",
+    "sdist.log": "fae3b43af5e6fc6d145ba2ae523b30b8172716e1d0b48fe88477e9447195a833",
+    "wheel.log": "dc39b1725c0615e5e414ee2a77beb732316f29a4af3a56643d39d8ffa5133350"
+  },
+  "oracle_generator_sha256": "b1ec591f6ab74befb72ecefaf25b36e28d35355f7533be349bd9ea04bc619d1a",
+  "artifacts": {
+    "innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "f7a830e4290181c286e41876d4c1350343a2b88e826d067b450fcf4944c15acf",
+    "innovate-0.7.0a1.tar.gz": "9bba447ac787e62f5f33935edfd169229558825988df61300e4307c6ed4d9dec"
+  }
+}

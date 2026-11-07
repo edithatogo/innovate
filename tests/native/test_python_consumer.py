@@ -532,9 +532,16 @@ def test_norton_bass_covariate_history():
     assert forecast["rows"][0][0] == pytest.approx(50 * math.exp(-0.5), abs=1e-5)
 
 
-def test_lotka_forcing_polars_fit_and_forecast():
+@pytest.mark.parametrize(
+    "model,fixture_name,start_override",
+    [
+        ("lotka_volterra", "lotka_forcing_scipy.json", {"alpha1": 0.29, "beta_beta1_price": -0.025}),
+        ("complementary_goods", "complementary_forcing_scipy.json", {"k1": 0.29, "beta_c2_price": -0.007}),
+    ],
+)
+def test_ecosystem_forcing_polars_fit_and_forecast(model, fixture_name, start_override):
     fixture = json.loads(
-        (Path(__file__).parents[2] / "rust/crates/innovate-core/tests/fixtures/lotka_forcing_scipy.json").read_text()
+        (Path(__file__).parents[2] / "rust/crates/innovate-core/tests/fixtures" / fixture_name).read_text()
     )
     data = pl.DataFrame(
         {
@@ -544,9 +551,9 @@ def test_lotka_forcing_polars_fit_and_forecast():
             "second": [row[1] for row in fixture["rows"]],
         }
     )
-    start = dict(fixture["parameters"], alpha1=0.29, beta_beta1_price=-0.025)
+    start = dict(fixture["parameters"], **start_override)
     fitted = innovate.fit(
-        "lotka_volterra",
+        model,
         data,
         observed_columns=["first", "second"],
         model_options={"initial_values": fixture["initial"], "covariates": ["price"]},
@@ -555,7 +562,7 @@ def test_lotka_forcing_polars_fit_and_forecast():
     assert fitted.diagnostics["optimizer"]["converged"]
     forecast = innovate.execute(
         "predict_model",
-        "lotka_volterra",
+        model,
         inputs={"time": fixture["forecast_time"]},
         state=fitted.envelope["result"]["state"],
     )["result"]

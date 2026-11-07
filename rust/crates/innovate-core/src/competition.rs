@@ -247,12 +247,12 @@ fn model(
             "covariates must contain at most 32 distinct nonempty names",
         ));
     }
-    if !["lotka_volterra", "multi_product"].contains(&key.as_str())
+    if !["lotka_volterra", "multi_product", "complementary_goods"].contains(&key.as_str())
         && (!covariates.is_empty() || kw.contains_key("covariate_history"))
     {
         return Err(KernelBindingError::unsupported_native_operation(
             op,
-            "forcing is currently supported for Lotka Volterra and multi-product only",
+            "lock-in covariate forcing remains a migration obligation",
         ));
     }
     let historical_layout = match kw.get("coefficient_layout").and_then(Value::as_str) {

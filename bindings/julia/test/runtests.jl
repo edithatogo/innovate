@@ -286,3 +286,23 @@ end
     )["result"]
     @test maximum(abs.(forecast["rows"][1].-fixture["cases"]["corrected"]["forecast_rows"][1])) < 1e-3
 end
+
+@testset "Complementary goods forcing fit and history" begin
+    fixture = Innovate.JSON.parsefile(
+        joinpath(@__DIR__, "../../../rust/crates/innovate-core/tests/fixtures/complementary_forcing_scipy.json");
+        dicttype=Dict{String,Any},
+    )
+    start = copy(fixture["parameters"])
+    start["k1"] = 0.29
+    start["beta_c2_price"] = -0.007
+    fit = kernel_fit_model("complementary_goods", Dict(
+        "inputs"=>Dict("time"=>fixture["time"], "covariates"=>fixture["covariates"], "observed"=>fixture["rows"]),
+        "constructor_kwargs"=>Dict("initial_values"=>fixture["initial"], "covariates"=>["price"]),
+        "fit_options"=>Dict("initial_parameters"=>start, "max_iterations"=>150),
+    ))["result"]
+    @test fit["diagnostics"]["optimizer"]["converged"]
+    forecast = kernel_predict_model(
+        "complementary_goods", Dict("inputs"=>Dict("time"=>fixture["forecast_time"]), "state"=>fit["state"]),
+    )["result"]
+    @test maximum(abs.(forecast["rows"][1].-fixture["forecast_rows"][1])) < 1e-5
+end

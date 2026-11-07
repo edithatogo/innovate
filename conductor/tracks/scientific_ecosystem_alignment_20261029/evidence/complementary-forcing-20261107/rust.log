@@ -1,0 +1,12 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 0.44s
+     Running tests/complementary.rs (target/debug/deps/complementary-3160ac30bf185f7f)
+
+running 4 tests
+test decoupled_complementary_goods_match_logistic_and_allow_levels_above_one ... ok
+test complementary_controls_preserve_signed_effects_and_saved_history ... ok
+test complementary_forcing_fits_independent_reference_and_forecasts ... ok
+test complementary_equations_match_independent_scipy_and_fit ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+

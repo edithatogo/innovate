@@ -828,3 +828,24 @@ Independent SciPy references cover interacting trajectories, signed rates and
 forecasts in both layouts. A perturbed conditional fit is checked against a
 held-out forecast. Automatic starts, event splits, constrained scientific
 domains, weighted fits and uncertainty remain required qualification work.
+
+### Complementary goods covariates
+
+The complementary-goods equations now accept the shared declared-control
+contract. A control named `price` has `beta_k1_price`, `beta_k2_price`,
+`beta_c1_price` and `beta_c2_price` coefficients, added to intrinsic growth
+and the two cross-product effects. Base parameters are nonnegative, while
+control effects may be signed. Effective cross-product effects can therefore
+represent inhibition during part of a scenario.
+
+Controls use linear interpolation with endpoint holds. Saved state carries
+the initial values, origin and forcing history for forecasts. An overlapping
+control value must agree with the saved history. Conditional fitting uses
+complete explicit initial parameters and reports local identifiability.
+The Polars fit path reads controls from declared frame columns.
+
+This extends the original complementary-goods equations, whose historical
+implementation had no covariate path. Analytic uncoupled growth and an
+independent interacting SciPy reference verify levels, rates, conditional fit
+and a held-out forecast. Event splits, automatic forcing-fit starts, uncertainty
+and broader scientific qualification remain required.
