@@ -6409,3 +6409,7 @@ Hosted release readiness for this worktree revision remains open.
   check verified Logistic prediction, scope denial, malformed JSON
   and an oversized input. The launcher must authenticate the caller
   before supplying context. Hosted transport and isolation remain open.
+
+- [x] Retain subprocess conformance in the Rust suite. Two locked
+  integration tests verify native prediction, structured policy
+  denial, invalid JSON and the raw envelope size limit.
