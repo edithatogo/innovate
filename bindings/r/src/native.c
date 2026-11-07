@@ -61,7 +61,8 @@ SEXP innovate_scenario_grid_ipc_R(SEXP library, SEXP payload, SEXP data) {
 }
 
 static SEXP scenario_output(SEXP library, SEXP response, const char *symbol) {
-    int binary = strcmp(symbol, "innovate_export_ipc_file") == 0;
+    int binary = strcmp(symbol, "innovate_export_ipc_file") == 0 ||
+                 strcmp(symbol, "innovate_export_ipc_stream") == 0;
     if (TYPEOF(library) != STRSXP || XLENGTH(library) != 1 || STRING_ELT(library, 0) == NA_STRING)
         Rf_error("library must be a scalar string");
     if (binary ? TYPEOF(response) != RAWSXP :
@@ -120,8 +121,13 @@ SEXP innovate_export_ipc_file_R(SEXP library, SEXP input) {
     return scenario_output(library, input, "innovate_export_ipc_file");
 }
 
+SEXP innovate_export_ipc_stream_R(SEXP library, SEXP input) {
+    return scenario_output(library, input, "innovate_export_ipc_stream");
+}
+
 static const R_CallMethodDef methods[] = {
     {"innovate_export_ipc_file_R", (DL_FUNC) &innovate_export_ipc_file_R, 2},
+    {"innovate_export_ipc_stream_R", (DL_FUNC) &innovate_export_ipc_stream_R, 2},
     {"innovate_call_R", (DL_FUNC) &innovate_call_R, 2},
     {"innovate_scenario_grid_ipc_R", (DL_FUNC) &innovate_scenario_grid_ipc_R, 3},
     {"innovate_scenario_executions_ipc_R", (DL_FUNC) &innovate_scenario_executions_ipc_R, 2},

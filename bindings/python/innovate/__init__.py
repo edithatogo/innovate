@@ -23,6 +23,7 @@ __all__ = [
     "staggered_att_polars",
     "execute_scenario_grid",
     "export_ipc_file",
+    "export_ipc_stream",
     "scenario_executions",
     "scenario_comparisons",
     "paired_outcomes",
@@ -121,6 +122,11 @@ def _ipc(frame: pl.DataFrame | pl.LazyFrame) -> bytes:
 def export_ipc_file(data: pl.DataFrame | pl.LazyFrame | bytes) -> bytes:
     """Export a Polars frame or IPC file or stream bytes as interoperable IPC file bytes."""
     return _native.export_ipc_file(data if isinstance(data, bytes) else _ipc(data))
+
+
+def export_ipc_stream(data: pl.DataFrame | pl.LazyFrame | bytes) -> bytes:
+    """Export a Polars frame or IPC file or stream bytes as a stream carrying schema metadata."""
+    return _native.export_ipc_stream(data if isinstance(data, bytes) else _ipc(data))
 
 
 def execute_scenario_grid(data: pl.DataFrame | pl.LazyFrame, **payload: Any) -> dict[str, Any]:

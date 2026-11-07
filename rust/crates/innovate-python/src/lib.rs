@@ -11,6 +11,16 @@ fn export_ipc_file(py: Python<'_>, data: Vec<u8>) -> PyResult<Py<PyBytes>> {
 }
 
 #[pyfunction]
+fn export_ipc_stream(py: Python<'_>, data: Vec<u8>) -> PyResult<Py<PyBytes>> {
+    let bytes = py
+        .detach(move || {
+            innovate_tabular::export_ipc_stream(&data).map_err(|error| error.to_string())
+        })
+        .map_err(PyValueError::new_err)?;
+    Ok(PyBytes::new(py, &bytes).unbind())
+}
+
+#[pyfunction]
 fn execute(py: Python<'_>, request: String) -> String {
     py.detach(move || innovate_core::execute_json(&request))
 }
@@ -113,6 +123,7 @@ fn paired_outcomes_ipc(py: Python<'_>, payload: String) -> PyResult<Py<PyBytes>>
 fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(execute, module)?)?;
     module.add_function(wrap_pyfunction!(export_ipc_file, module)?)?;
+    module.add_function(wrap_pyfunction!(export_ipc_stream, module)?)?;
     module.add_function(wrap_pyfunction!(predict_ipc, module)?)?;
     module.add_function(wrap_pyfunction!(fit_ipc, module)?)?;
     module.add_function(wrap_pyfunction!(categorize_adopters_ipc, module)?)?;

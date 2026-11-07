@@ -6006,3 +6006,9 @@ Hosted release readiness for this worktree revision remains open.
   The Rust round-trip fixture and Arrow.jl 2.8.1 verified file and stream
   inputs with Unicode provenance, Int32 IDs and nullable Float64 values.
   Direct file metadata readback remains open.
+
+- [x] Expose the native IPC stream exporter through Python and R.
+  A rebuilt Python 3.15.2 wheel and a freshly compiled R package
+  returned byte-identical streams for the provenance-bearing IPC file.
+  Arrow.jl read the Unicode schema metadata, IDs and nullable values
+  from that stream.
