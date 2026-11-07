@@ -1283,3 +1283,8 @@ the other competition models and installed binding checks remain open.
   sample order, warmup nulls and rejection of a zero window.
 - [ ] Restore timestamp aggregation, decomposition and seasonal model
   preprocessing, and qualify Julia and R consumer paths.
+
+- [x] Restore historical weekly sums in Polars with fixed 168-hour
+  left-closed buckets anchored at the earliest timestamp. The installed
+  regression uses unsorted dates, an exact boundary and an empty week.
+  Daily and monthly aggregation and seasonal preprocessing remain open.

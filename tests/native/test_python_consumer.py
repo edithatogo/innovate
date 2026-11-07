@@ -949,3 +949,12 @@ def test_polars_preprocessing_preserves_order_and_full_window():
     assert innovate.rolling_average(series, 3).to_list() == [None, None, 3.0, 5.0]
     with pytest.raises(ValueError, match="window must be positive"):
         innovate.rolling_average(series, 0)
+
+
+def test_weekly_polars_aggregation_uses_first_timestamp_and_omits_empty_weeks():
+    from datetime import date
+
+    days = [date(2026, 1, d) for d in (13, 6, 12, 27)]
+    result = innovate.aggregate_weekly(pl.DataFrame({"time": days, "y": [3, 1, 2, 4]}).lazy(), ["y"])
+    assert result["time"].to_list() == [date(2026, 1, d) for d in (6, 13, 27)]
+    assert result["y"].to_list() == [3, 3, 4]

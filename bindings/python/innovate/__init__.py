@@ -22,6 +22,8 @@ __all__ = [
     "FitResult",
     "NativeError",
     "categorize_adopters",
+    "aggregate_weekly",
+
     "cumulative_sum",
     "rolling_average",
 
@@ -220,3 +222,24 @@ def rolling_average(data: pl.Series, window: int) -> pl.Series:
     if window < 1:
         raise ValueError("window must be positive")
     return data.rolling_mean(window_size=window, min_samples=window)
+
+
+def aggregate_weekly(
+    data: pl.DataFrame | pl.LazyFrame, value_columns: list[str], *, time_column: str = "time"
+) -> pl.DataFrame:
+    """Sum numeric columns in fixed seven-day windows anchored at the first timestamp."""
+    frame = data.collect() if isinstance(data, pl.LazyFrame) else data
+    timestamps = frame[time_column]
+    if not timestamps.dtype.is_temporal() or timestamps.dtype.base_type() not in (pl.Date, pl.Datetime):
+        raise ValueError("weekly aggregation requires Date or Datetime timestamps")
+    if timestamps.null_count():
+        raise ValueError("weekly aggregation timestamps must not contain nulls")
+    if not value_columns or len(set(value_columns)) != len(value_columns):
+        raise ValueError("value_columns must contain distinct numeric columns")
+    if any(not frame[name].dtype.is_numeric() for name in value_columns):
+        raise ValueError("weekly aggregation values must be numeric")
+    return (
+        frame.sort(time_column)
+        .group_by_dynamic(time_column, every="168h", start_by="datapoint", closed="left")
+        .agg(pl.col(value_columns).sum())
+    )
