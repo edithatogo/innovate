@@ -5335,3 +5335,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Use the reported sparse outcome weights to compute conditional
   matching uncertainty. The analytic Rust fixture still recovered
   sqrt(4.5) under independent outcomes with one reused control.
+
+- [x] Reconstruct the matched estimate and independent-outcome
+  conditional standard error from the exported weights in rebuilt
+  Python 3.15.2, Julia and installed R. Each matched the native result
+  for a reused control.
