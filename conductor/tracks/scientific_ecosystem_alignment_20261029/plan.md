@@ -2213,3 +2213,9 @@ the other competition models and installed binding checks remain open.
   JSON value agreement. The regression rejects a missing topology seed.
   Keep JSON numeric types intact during transport, using raw R JSON where
   needed. All 43 Rust boundary tests and focused Clippy passed.
+
+- [x] Qualify translated artifact provenance in the rebuilt Python 3.15
+  wheel, Julia and installed R. Python and R exports agreed on submitted
+  inputs and resolved replay requests. All three accepted intact artifacts.
+  Julia and R rejected removal of the topology seed. R used raw JSON to
+  preserve integer and floating-point representations through import.
