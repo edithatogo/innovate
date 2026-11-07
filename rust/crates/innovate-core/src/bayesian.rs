@@ -312,3 +312,69 @@ pub(crate) fn sample(payload: &Value) -> Result<Value, &'static str> {
     }
     Ok(result)
 }
+
+/// Classical split R-hat for equal-length chains of one posterior marginal.
+pub(crate) fn split_rhat(payload: &Value) -> Result<Value, &'static str> {
+    let chains = payload["chains"]
+        .as_array()
+        .filter(|chains| (2..=16).contains(&chains.len()))
+        .ok_or("split R-hat requires 2 to 16 chains")?;
+    let draws = chains[0]
+        .as_array()
+        .map(Vec::len)
+        .filter(|draws| (4..=10_000).contains(draws))
+        .ok_or("split R-hat requires 4 to 10000 draws per chain")?;
+    let chains = chains
+        .iter()
+        .map(|chain| {
+            chain
+                .as_array()
+                .filter(|chain| chain.len() == draws)
+                .ok_or("chains must have equal draw counts")?
+                .iter()
+                .map(|value| value.as_f64().ok_or("chain draws must be finite numbers"))
+                .collect::<Result<Vec<_>, _>>()
+        })
+        .collect::<Result<Vec<_>, _>>()?;
+    let half = draws / 2;
+    let n = half as f64;
+    let splits = chains
+        .iter()
+        .flat_map(|chain| [&chain[..half], &chain[draws - half..]]);
+    let mut means = Vec::with_capacity(2 * chains.len());
+    let mut variances = Vec::with_capacity(2 * chains.len());
+    // Shift before computing moments to retain precision for chains far from zero.
+    let origin = chains[0][0];
+    for split in splits {
+        let mean = split.iter().map(|value| (value - origin) / n).sum::<f64>();
+        let variance = split
+            .iter()
+            .map(|value| ((value - origin) - mean).powi(2) / (n - 1.))
+            .sum::<f64>();
+        means.push(mean);
+        variances.push(variance);
+    }
+    let m = means.len() as f64;
+    let within = variances.iter().sum::<f64>() / m;
+    let center = means.iter().sum::<f64>() / m;
+    let between_per_draw = means
+        .iter()
+        .map(|mean| (mean - center).powi(2) / (m - 1.))
+        .sum::<f64>();
+    if !within.is_finite() || !between_per_draw.is_finite() {
+        return Err("split R-hat moments exceed finite numerical domain");
+    }
+    let (rhat, status) = if within == 0. {
+        (None, "zero_within_split_variance")
+    } else {
+        let rhat = ((n - 1.) / n + between_per_draw / within).sqrt();
+        if !rhat.is_finite() {
+            return Err("split R-hat exceeds finite numerical domain");
+        }
+        (Some(rhat), "computed")
+    };
+    Ok(
+        json!({"method":"classical_split_rhat","rhat":rhat,"status":status,
+        "chains":chains.len(),"draws_per_chain":draws,"draws_per_split":half}),
+    )
+}

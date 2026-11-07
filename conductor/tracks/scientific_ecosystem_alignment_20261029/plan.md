@@ -2987,3 +2987,10 @@ the other competition models and installed binding checks remain open.
   duplicate axes were rejected, and the previous scalar response
   replayed exactly. Four focused Rust tests and Clippy passed.
   Multi-chain diagnostics and broader posterior calibration remain open.
+
+- [x] Add classical split R-hat for equal-length posterior marginal
+  chains. Report undefined diagnostics for zero within-split variance
+  and reject unequal chain lengths. Python 3.15.2, Julia and R agreed
+  exactly on the drifting five-draw fixture and matched sqrt(19/6).
+  Five focused Rust tests and Clippy passed. Rank-normalized folded
+  diagnostics and effective sample size remain open.

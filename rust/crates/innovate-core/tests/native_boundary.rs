@@ -2312,3 +2312,22 @@ fn bayesian_metropolis_retains_ordered_joint_draws() {
     request["payload"]["axes"][1]["parameter"] = json!("L");
     assert!(execute(&request)["error"].is_object());
 }
+
+#[test]
+fn bayesian_classical_split_rhat_detects_drift_and_stuck_chains() {
+    let diagnose = |chains| {
+        let request = json!({"schema_version":"2.0","operation":"bayesian_split_rhat",
+            "payload":{"chains":chains}});
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    let drifting = diagnose(json!([[0, 2, 999, 4, 6], [4, 6, 999, 0, 2]]));
+    let rhat = drifting["result"]["rhat"].as_f64().unwrap();
+    assert!((rhat - (19_f64 / 6.).sqrt()).abs() < 1e-12);
+    let stuck = diagnose(json!([[0, 0, 0, 0], [1, 1, 1, 1]]));
+    assert_eq!(stuck["result"]["status"], "zero_within_split_variance");
+    assert!(stuck["result"]["rhat"].is_null());
+    assert!(diagnose(json!([[0, 0, 0, 0], [0, 0, 0]]))["error"].is_object());
+}
