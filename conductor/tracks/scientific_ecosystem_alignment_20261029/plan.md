@@ -7050,3 +7050,10 @@ Hosted release readiness for this worktree revision remains open.
   and 0.362453 for negative and positive generating roots. Reproduce
   with check-cancellation-starts.R --multiple-starts. These two
   basins remain open for optimizer improvement.
+
+- [x] Refine both signs of the near-cancellation ridge independently,
+  with additional moderate starts and an invertibility-boundary probe.
+  The five-start R oracle now agrees within 6e-8 across all eight
+  fixtures. The seed 123 likelihood shortfalls fell to 5.38e-9 and
+  3.48e-8. The comparison now enforces its bound against the selected
+  reference. Python and Julia readback of the revised search remains open.

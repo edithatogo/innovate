@@ -123,27 +123,30 @@ fn estimate(
             .ok()?
             .log_likelihood
     };
-    let mut best = vec![0.; count];
-    let initial = state_filter(values, order, seasonal_order, &best)?;
-    let initial_likelihood = initial
+    let origin = vec![0.; count];
+    let initial_likelihood = state_filter(values, order, seasonal_order, &origin)?
         .log_likelihood
         .ok_or("SARIMA likelihood is degenerate")?;
-    let mut likelihood = initial_likelihood;
     let retry_cancellation = p == 1 && q == 1 && sp == 0 && sq == 0;
+    let mut starts = vec![(origin, initial_likelihood)];
     if retry_cancellation {
-        // Probe both near-cancellation ridges before local refinement.
         for sign in [-1., 1.] {
-            for (ar, ma) in [(0.95, 0.93), (0.98, 0.96), (0.995, 0.985)] {
-                let candidate = [sign * ar, -sign * ma];
-                if let Some(candidate_score) = score(&candidate).filter(|v| *v > likelihood) {
-                    best.copy_from_slice(&candidate);
-                    likelihood = candidate_score;
-                }
+            // Search both signs independently: an initially weaker ridge can
+            // lead to the better solution after refinement.
+            let ridge = [(0.95, 0.93), (0.98, 0.96), (0.995, 0.985), (0.97, 0.999)]
+                .into_iter()
+                .filter_map(|(ar, ma)| {
+                    let candidate = vec![sign * ar, -sign * ma];
+                    score(&candidate).map(|likelihood| (candidate, likelihood))
+                })
+                .max_by(|a, b| a.1.total_cmp(&b.1));
+            starts.extend(ridge);
+            let moderate = vec![sign * 0.55, -sign * 0.64];
+            if let Some(likelihood) = score(&moderate) {
+                starts.push((moderate, likelihood));
             }
         }
     }
-    let restart = best.clone();
-    let restart_likelihood = likelihood;
     let search_all_pairs = sp > 0 && sq > 0 && count <= 8;
     let joint_moves: Vec<_> = if search_all_pairs {
         (0..count)
@@ -225,15 +228,9 @@ fn estimate(
         }
         None
     };
-    let origin_fit = refine(vec![0.; count], initial_likelihood);
-    let ridge_fit = if restart_likelihood > initial_likelihood {
-        refine(restart, restart_likelihood)
-    } else {
-        None
-    };
-    origin_fit
+    starts
         .into_iter()
-        .chain(ridge_fit)
+        .filter_map(|(start, likelihood)| refine(start, likelihood))
         .max_by(|a, b| a.1.total_cmp(&b.1))
         .map(|(parameters, _)| parameters)
         .ok_or("SARIMA parameter estimation did not converge")
