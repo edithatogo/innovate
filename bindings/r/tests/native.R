@@ -926,3 +926,21 @@ score_bootstrap <- run_score_bootstrap()
 stopifnot(identical(score_bootstrap, run_score_bootstrap()),
   score_bootstrap$seed == 17, length(score_bootstrap$draws) == 8,
   score_bootstrap$mixture_standard_deviation > 0)
+
+local({
+  selection <- list(name="provider-fixture", expected_version="1", extension_point="dataset_provider")
+  manifest <- list(name=selection$name, version="1", entrypoint="fixture:provide",
+    stability="stable", extension_points=list("dataset_provider"))
+  kernel_call("register_extension_manifest", payload=list(manifest=manifest))
+  tryCatch({
+    dataset <- list(kind="adoption", time=c(0,1), adoption=c(1,2),
+      provenance=list(source="fixture", license="CC-BY-4.0", extraction_time="2026-11-07T00:00:00Z"))
+    artifact <- invoke_registered_extension(function(resolved, data) data, selection, dataset)
+    stopifnot(isTRUE(artifact$validation$ok), artifact$dataset$provenance$checksum ==
+      "fada5d71f8981fa746be73b26de45ad470fa4e74f6a7d7a48234f4f50de0a76a")
+    failure <- tryCatch(invoke_registered_extension(function(...) list(kind="adoption"),
+      selection, NULL), error=conditionMessage)
+    stopifnot(grepl("requires dataset provenance", failure, fixed=TRUE))
+  }, finally=kernel_call("unregister_extension_manifest",
+    payload=list(name=selection$name, expected_version="1")))
+})

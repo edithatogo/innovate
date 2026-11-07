@@ -1826,3 +1826,23 @@ def test_matching_score_bootstrap():
     assert result == innovate.execute("summarize_causal", **payload)["result"]["score_sensitivity"]
     assert result["seed"] == 17 and len(result["draws"]) == 8
     assert result["mixture_standard_deviation"] > 0
+
+
+def test_extension_dataset_provider():
+    selection = dict(name="provider-fixture", expected_version="1", extension_point="dataset_provider")
+    innovate.execute("register_extension_manifest", manifest=dict(
+        name=selection["name"], version="1", entrypoint="fixture:provide",
+        stability="stable", extension_points=["dataset_provider"],
+    ))
+    try:
+        dataset = dict(kind="adoption", time=[0, 1], adoption=[1, 2],
+            provenance=dict(source="fixture", license="CC-BY-4.0", extraction_time="2026-11-07T00:00:00Z"))
+        artifact = innovate.invoke_registered_extension(lambda _, data: data, selection, dataset)
+        assert artifact["validation"]["ok"]
+        assert artifact["dataset"]["provenance"]["checksum"] == (
+            "fada5d71f8981fa746be73b26de45ad470fa4e74f6a7d7a48234f4f50de0a76a"
+        )
+        with pytest.raises(innovate.NativeError, match="requires dataset provenance"):
+            innovate.invoke_registered_extension(lambda *_: {"kind": "adoption"}, selection, None)
+    finally:
+        innovate.execute("unregister_extension_manifest", name=selection["name"], expected_version="1")

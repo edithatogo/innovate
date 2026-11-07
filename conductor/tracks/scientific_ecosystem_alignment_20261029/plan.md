@@ -5707,3 +5707,8 @@ Hosted release readiness for this worktree revision remains open.
   a valid dataset artifact with checksum
   fada5d71f8981fa746be73b26de45ad470fa4e74f6a7d7a48234f4f50de0a76a
   and rejected callback output without dataset provenance.
+
+- [x] Retain dataset-provider contract regression checks in all three
+  native consumer suites. The focused Python, Julia and R checks passed
+  with the same checksum and invalid-output rejection. Each test removes
+  its registration after execution.

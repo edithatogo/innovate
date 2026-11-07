@@ -996,3 +996,23 @@ end
     @test result["seed"] == 17 && length(result["draws"]) == 8
     @test result["mixture_standard_deviation"] > 0
 end
+
+@testset "Extension dataset provider" begin
+    selection = Dict("name"=>"provider-fixture", "expected_version"=>"1", "extension_point"=>"dataset_provider")
+    manifest = Dict("name"=>selection["name"], "version"=>"1", "entrypoint"=>"fixture:provide",
+        "stability"=>"stable", "extension_points"=>["dataset_provider"])
+    kernel_call("register_extension_manifest", nothing, Dict("manifest"=>manifest))
+    try
+        dataset = Dict("kind"=>"adoption", "time"=>[0,1], "adoption"=>[1,2],
+            "provenance"=>Dict("source"=>"fixture", "license"=>"CC-BY-4.0",
+                "extraction_time"=>"2026-11-07T00:00:00Z"))
+        artifact = invoke_registered_extension((_, data) -> data, selection, dataset)
+        @test artifact["validation"]["ok"]
+        @test artifact["dataset"]["provenance"]["checksum"] ==
+            "fada5d71f8981fa746be73b26de45ad470fa4e74f6a7d7a48234f4f50de0a76a"
+        @test_throws ErrorException invoke_registered_extension((_, _) -> Dict("kind"=>"adoption"), selection, nothing)
+    finally
+        kernel_call("unregister_extension_manifest", nothing,
+            Dict("name"=>selection["name"], "expected_version"=>"1"))
+    end
+end
