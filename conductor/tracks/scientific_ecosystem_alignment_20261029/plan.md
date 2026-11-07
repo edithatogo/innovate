@@ -3403,3 +3403,9 @@ the other competition models and installed binding checks remain open.
   SHA-256 61fc91c8da5424edb4031574789411d971cbb247b1e96d33f56647cf40c21caf.
   Development validation passed. The release gate still reports all
   38 open obligations, and hosted distribution evidence remains open.
+
+- [x] Measure Python binding coverage against the verified Darwin
+  arm64 release wheel. All 83 native consumer tests passed on
+  Python 3.15.2. The binding covered 160 of 199 statements
+  (80.40%), clearing the explicit 80% threshold. Rust coverage and
+  broader release evidence remain separate.
