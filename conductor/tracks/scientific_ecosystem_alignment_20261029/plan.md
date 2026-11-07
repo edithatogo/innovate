@@ -5835,3 +5835,9 @@ Hosted release readiness for this worktree revision remains open.
   128 CPUs recorded 128 allocated and 32 requested, and all three
   fast cases passed with the retained wheel. Ruff passed. A real
   Slurm allocation remains unverified.
+
+- [x] Verify recorded Slurm worker requests against the allocation and
+  native cap while accepting legacy receipts without the allocation
+  field. Three simulated Slurm ranks matched serial results using the
+  retained wheel. The verifier rejected a receipt changed from 32
+  requested workers to 33. Real scheduler evidence remains open.

@@ -34,6 +34,20 @@ def check(serial, shards):
     case_ids = [case["case_id"] for case in catalog["result"]["cases"] if policy is None or case["ci_policy"] == policy]
     if [row["case_id"] for row in expected] != case_ids:
         raise ValueError("the serial receipt does not cover the complete benchmark policy")
+    max_workers = execute("discover_execution_modes")["result"]["local_cpu"]["max_workers"]
+
+    def check_worker_budget(config):
+        if "slurm_allocated_cpus_per_task" not in config:
+            return  # Older receipts did not retain the uncapped allocation.
+        allocated = config["slurm_allocated_cpus_per_task"]
+        if config["worker_budget_source"] == "SLURM_CPUS_PER_TASK":
+            if (type(allocated) is not int or allocated < 1
+                    or config["requested_workers"] != min(allocated, max_workers)):
+                raise ValueError("Slurm worker request does not match the capped allocation")
+        elif allocated is not None:
+            raise ValueError("only Slurm worker budgets may record allocated CPUs")
+
+    check_worker_budget(runner)
     ranks = set()
     launchers = set()
     slurm_steps = set()
@@ -46,6 +60,7 @@ def check(serial, shards):
             runner["ci_policy"],
         ):
             raise ValueError("shards must match the serial kernel version, extension digest and policy")
+        check_worker_budget(config)
         partition = config["mpi_shard"]
         # Receipts before Slurm support were always produced by Open MPI.
         launcher = partition.get("launcher", "open_mpi")
