@@ -58,7 +58,7 @@ jobs:
         timeout-minutes: 15
         shell: bash
         run: |
-          git archive HEAD Dockerfile pyproject.toml uv.lock Cargo.toml Cargo.lock README.md LICENSE rust bindings/python |
+          git archive HEAD Dockerfile Cargo.toml Cargo.lock LICENSE rust |
             docker build --target remote-worker -t innovate-remote-worker:ci -
           test "$(docker image inspect --format '{{.Config.User}}' innovate-remote-worker:ci)" = 65532:65532
           worker=(docker run --rm -i --network none --read-only --cap-drop ALL innovate-remote-worker:ci)

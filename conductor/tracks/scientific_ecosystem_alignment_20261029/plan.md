@@ -7433,3 +7433,9 @@ Hosted release readiness for this worktree revision remains open.
   a Debian trixie runtime. Both base tags resolved in the registry.
   The image includes the project licence and preserves its non-root
   entry point. Hosted image build and execution remain open.
+
+- [x] Limit the hosted remote-worker build context to the Dockerfile,
+  Cargo workspace, Rust sources and licence. An isolated extraction
+  containing only the Rust build inputs passed the locked local build
+  and worker transport check using the existing debug cache. Hosted
+  Linux release-image validation remains open.
