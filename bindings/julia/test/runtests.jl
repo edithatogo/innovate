@@ -596,6 +596,9 @@ end
         "treatment"=>[0,0,1,1], "propensities"=>[0.2,0.8,0.2,0.8])
     result = kernel_call("summarize_causal", nothing, payload)["result"]
     @test result["estimate"] ≈ -4
+    @test result["fixed_propensity_standard_error"] ≈ sqrt(20.48)
+    singleton = merge(payload, Dict("outcomes"=>[0,2], "treatment"=>[0,1], "propensities"=>[0.5,0.5]))
+    @test isnothing(kernel_call("summarize_causal", nothing, singleton)["result"]["fixed_propensity_standard_error"])
     for arm in ("treated", "control")
         diagnostics = result["weight_diagnostics"][arm]
         @test diagnostics["observations"] == 2

@@ -1333,6 +1333,12 @@ def test_discover_treatment_contrasts():
                    treatment=[0, 0, 1, 1], propensities=[0.2, 0.8, 0.2, 0.8])
     result = innovate.execute("summarize_causal", **payload)["result"]
     assert result["estimate"] == pytest.approx(-4)
+    assert result["fixed_propensity_standard_error"] == pytest.approx(20.48**0.5)
+    singleton = innovate.execute(
+        "summarize_causal", method=weighted["method"],
+        outcomes=[0, 2], treatment=[0, 1], propensities=[0.5, 0.5],
+    )["result"]
+    assert singleton["fixed_propensity_standard_error"] is None
     for arm in ("treated", "control"):
         diagnostics = result["weight_diagnostics"][arm]
         assert diagnostics["observations"] == 2

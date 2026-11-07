@@ -561,6 +561,11 @@ weighted_payload <- list(method=weighted$method, outcomes=c(0,10,2,12),
   treatment=c(0,0,1,1), propensities=c(0.2,0.8,0.2,0.8))
 weighted_result <- kernel_call("summarize_causal", payload=weighted_payload)$result
 stopifnot(isTRUE(all.equal(weighted_result$estimate, -4)))
+stopifnot(isTRUE(all.equal(weighted_result$fixed_propensity_standard_error, sqrt(20.48))))
+singleton <- modifyList(weighted_payload, list(outcomes=c(0,2), treatment=c(0,1), propensities=c(0.5,0.5)))
+singleton_result <- kernel_call("summarize_causal", payload=singleton)$result
+stopifnot("fixed_propensity_standard_error" %in% names(singleton_result),
+  is.null(singleton_result$fixed_propensity_standard_error))
 for (arm in c("treated", "control")) {
   diagnostics <- weighted_result$weight_diagnostics[[arm]]
   stopifnot(diagnostics$observations == 2,
