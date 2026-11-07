@@ -4869,3 +4869,9 @@ Hosted release readiness for this worktree revision remains open.
   assumptions and limits. The focused Python 3.15.2 grid fixture
   passed with four extreme assignments out of four for a zero
   observed mean and the expected seeded percentile endpoints.
+
+- [x] Verify the paired percentile bootstrap and exact sign-flip
+  response in Julia and installed R. With the same seed and two opposite
+  effects, both reproduced the analytic percentile endpoints and all four
+  extreme assignments. All 21 focused Julia assertions and the R grid
+  assertions passed against the rebuilt Rust FFI library.

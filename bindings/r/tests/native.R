@@ -780,3 +780,14 @@ errors <- vapply(rows, function(row) as.numeric(row$mean_standard_error), numeri
 for (i in seq_along(errors)) {
   stopifnot(isTRUE(all.equal(unlist(endpoint$path_covariance[[i]]), errors[i] * errors)))
 }
+
+comparison$include_path_covariance <- NULL
+comparison$interval_mass <- 0.9
+comparison$exact_sign_flip <- TRUE
+comparison$bootstrap <- list(draws=1000, seed=42)
+inference <- kernel_call("execute_scenario_grid", payload=list(scenarios=unname(ranked_scenarios),
+  comparisons=list(comparison)))$result$comparisons[[1]]$result
+effect <- endpoint$differences[[1]]
+stopifnot(inference$sign_flip$assignments == 4, inference$sign_flip$extreme_assignments == 4,
+  inference$sign_flip$p_value == 1, inference$bootstrap$seed == 42,
+  isTRUE(all.equal(unlist(inference$bootstrap$mean_interval), c(-effect,effect))))

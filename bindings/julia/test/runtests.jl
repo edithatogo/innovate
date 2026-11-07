@@ -829,4 +829,17 @@ end
     for (row, error) in zip(endpoint["path_covariance"], errors)
         @test row ≈ error .* errors
     end
+
+    delete!(comparison, "include_path_covariance")
+    comparison["interval_mass"] = 0.9
+    comparison["exact_sign_flip"] = true
+    comparison["bootstrap"] = Dict("draws"=>1000, "seed"=>42)
+    inference = kernel_call("execute_scenario_grid", nothing, Dict("scenarios"=>scenarios,
+        "comparisons"=>[comparison]))["result"]["comparisons"][1]["result"]
+    @test inference["sign_flip"]["assignments"] == 4
+    @test inference["sign_flip"]["extreme_assignments"] == 4
+    @test inference["sign_flip"]["p_value"] == 1
+    effect = endpoint["differences"][1]
+    @test inference["bootstrap"]["mean_interval"] ≈ [-effect,effect]
+    @test inference["bootstrap"]["seed"] == 42
 end
