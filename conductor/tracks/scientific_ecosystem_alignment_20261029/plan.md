@@ -2046,3 +2046,10 @@ the other competition models and installed binding checks remain open.
   floats. The Rust boundary regression also retains the maximum unsigned
   64-bit seed. All 38 boundary tests and focused Clippy passed. Binding
   numeric representation limits for large seeds remain to be qualified.
+
+- [x] Qualify lossless legacy seed transport across all bindings
+  (5f67e986). Python 3.15 and Julia decoded the maximum unsigned
+  64-bit seed exactly. Installed R preserves that seed as a JSON
+  integer token with kernel_call_json(request, raw = TRUE), while
+  retaining native error handling. The focused installed R regression
+  passed. Default R decoding uses ordinary R numeric types.
