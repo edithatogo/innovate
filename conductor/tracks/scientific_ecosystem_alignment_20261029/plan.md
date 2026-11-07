@@ -2901,3 +2901,8 @@ the other competition models and installed binding checks remain open.
   The isolated Python 3.15.2 environment round-tripped the payoff table
   and returned EVPI 5.641720719927868 against 5.641720719927869.
   Record bounded native evidence while retaining broader release gates.
+
+- [x] Qualify the Voiage handoff from the native Arrow scenario grid.
+  Both Bass payoff draws and the Logistic alternative now come from
+  ordered Rust scenario executions on a shared Polars grid. The installed
+  Voiage 3.1.0 EVPI still matches the analytic reference within 1e-12.
