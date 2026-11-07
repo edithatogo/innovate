@@ -7,8 +7,14 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
     let model = payload["fit_model"]
         .as_str()
         .ok_or("bootstrap requires fit_model")?;
-    if !matches!(model, "bass" | "logistic" | "gompertz" | "fisher_pry") {
-        return Err("bootstrap requires a supported scalar model");
+    let scalar = matches!(model, "bass" | "logistic" | "gompertz" | "fisher_pry");
+    if !scalar
+        && !matches!(
+            model,
+            "norton_bass" | "lotka_volterra" | "complementary_goods" | "lock_in" | "multi_product"
+        )
+    {
+        return Err("bootstrap requires a supported model");
     }
     let method = payload
         .get("method")
@@ -20,6 +26,9 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
             )
         })
         .ok_or("unknown bootstrap resampling method")?;
+    if !scalar && method == "centered_residual_resampling" {
+        return Err("multiseries bootstrap requires paired case resampling");
+    }
     let draws = payload["draws"]
         .as_u64()
         .filter(|n| (2..=200).contains(n))
@@ -58,8 +67,11 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
         .map_err(|_| "baseline fit failed")?
         .result
         .ok_or("baseline fit returned no result")?;
-    let mut event_counts = baseline["event_profile"]["candidates"]
-        .as_array()
+    let profile = ["event_profile", "launch_profile", "joint_time_profile"]
+        .into_iter()
+        .find(|key| baseline[*key].is_object());
+    let mut event_counts = profile
+        .and_then(|key| baseline[key]["candidates"].as_array())
         .map(|candidates| vec![0_u64; candidates.len()]);
     let residual_design = if method == "centered_residual_resampling" {
         if baseline["diagnostics"]["optimizer"]["converged"] != true {
@@ -125,8 +137,8 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
                 .or_default()
                 .push(value.as_f64().ok_or("fit parameter must be numeric")?);
         }
-        if let Some(counts) = &mut event_counts {
-            let index = fit["event_profile"]["selected_index"]
+        if let Some((key, counts)) = profile.zip(event_counts.as_mut()) {
+            let index = fit[key]["selected_index"]
                 .as_u64()
                 .and_then(|index| usize::try_from(index).ok())
                 .and_then(|index| counts.get_mut(index))
@@ -186,20 +198,32 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
         "interval_method":"percentile","interval_mass":interval_mass,"parameter_intervals":intervals,
         "parameter_standard_errors":standard_errors,
         "parameter_correlation":correlation(&estimates, succeeded)});
-    if let Some(counts) = event_counts {
-        let candidates = baseline["event_profile"]["candidates"]
+    if let Some((key, counts)) = profile.zip(event_counts) {
+        let profile = &baseline[key];
+        let candidates = profile["candidates"]
             .as_array()
             .expect("profile candidates");
         let selections: Vec<_> = candidates
             .iter()
             .zip(counts)
             .map(|(candidate, count)| {
-                json!({"t_event":candidate["t_event"],"count":count,
-                "frequency":(succeeded > 0).then(|| count as f64 / succeeded as f64)})
+                let mut row = json!({"count":count,
+                "frequency":(succeeded > 0).then(|| count as f64 / succeeded as f64)});
+                for field in ["t_event", "launch_time", "override_value"] {
+                    if let Some(value) = candidate.get(field) {
+                        row[field] = value.clone();
+                    }
+                }
+                row
             })
             .collect();
-        result["event_selection"] = json!({
-            "baseline":baseline["event_profile"]["selected"],
+        let output_key = match key {
+            "launch_profile" => "launch_selection",
+            "joint_time_profile" => "joint_time_selection",
+            _ => "event_selection",
+        };
+        result[output_key] = json!({
+            "baseline":profile["selected"],
             "successful_refits":succeeded,"candidates":selections
         });
     }

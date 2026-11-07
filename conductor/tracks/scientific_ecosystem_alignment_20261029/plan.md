@@ -3208,3 +3208,11 @@ the other competition models and installed binding checks remain open.
   Python 3.15.2, Julia and R agreed exactly. Twelve refits returned fit
   errors, and the 68 successful refits selected the candidates 23, 35
   and 10 times. Frequencies sum to one over successful refits.
+
+- [x] Extend paired case bootstrap to Norton–Bass and the competitive
+  ecosystem models, with shared row weights across observed series.
+  Report candidate frequencies for event, launch and joint profiles.
+  Python 3.15.2, Julia and R agreed exactly on three joint Norton–Bass
+  refits over four pairs. All selected launch 3.125 and event 2.125.
+  The scalar regression and focused Clippy passed. Broader statistical
+  calibration and multiseries residual resampling remain open.
