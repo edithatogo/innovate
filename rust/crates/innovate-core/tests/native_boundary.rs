@@ -2648,6 +2648,15 @@ fn kairos_scenario_replay_retains_scheduled_retry_clear() {
             .contains("average_degree cannot exceed num_nodes minus one")
     );
 
+    let mut beyond_horizon = closed.clone();
+    beyond_horizon["payload"]["scenarios"][0]["simulation"]["inputs"] = json!({"t":[0,13]});
+    assert!(
+        run(&beyond_horizon)["error"]["message"]
+            .as_str()
+            .unwrap()
+            .contains("network observation time exceeds the declared scenario horizon")
+    );
+
     let mut paired = request;
     let mut alternative = closed["payload"]["scenarios"][0].clone();
     alternative["id"] = json!("closed");

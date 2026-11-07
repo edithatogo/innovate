@@ -175,6 +175,21 @@ fn apply_specification(scenario: &mut Scenario) -> Result<(), &'static str> {
         .simulation
         .as_object_mut()
         .ok_or("simulation must be an object")?;
+    if matches!(spec.kind, ScenarioKind::Network { .. })
+        && simulation.get("inputs").is_some_and(|inputs| {
+            inputs
+                .get("time")
+                .or_else(|| inputs.get("t"))
+                .and_then(Value::as_array)
+                .is_some_and(|time| {
+                    time.iter()
+                        .filter_map(Value::as_f64)
+                        .any(|sample| sample > spec.time_horizon)
+                })
+        })
+    {
+        return Err("network observation time exceeds the declared scenario horizon");
+    }
     let options = simulation
         .get_mut("simulation_options")
         .and_then(Value::as_object_mut)

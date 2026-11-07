@@ -4270,3 +4270,7 @@ Hosted release readiness for this worktree revision remains open.
   imports so aligned comparisons cannot declare a blank common basis.
   The legacy artifact regression and all ten scenario-filtered Rust
   boundary tests passed.
+- [x] Enforce the declared horizon when applying a network scenario
+  specification. Observations beyond it are rejected, including
+  requests using the time alias. Observations at the horizon still
+  execute and replay. All ten scenario-filtered boundary tests passed.
