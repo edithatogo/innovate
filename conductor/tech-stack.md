@@ -14,7 +14,7 @@ Use [dated dependency candidates](dependency-candidates-20261107.md). Rust 1.99.
 
 Separate core, bindings, optional backend, build, isolated test-oracle and development dependencies. Qualify maintained numerical tools before replacing custom code. No production JAX/NumPy/BlackJAX/Mesa execution fallback; GPU acceleration must still satisfy native execution and actual hardware evidence.
 
-Python dependency management remains **uv**-first, with **nox** — Python task orchestration for repeatable local and CI sessions. Rust uses Cargo and an exact toolchain/lock; no undeclared latest or rolling Git main.
+Python dependency management remains `uv`-first, with **nox** — Python task orchestration for repeatable local and CI sessions. Rust uses Cargo and an exact toolchain/lock; no undeclared latest or rolling Git main. `scripts/sync_versions.py` remains the package-version synchronisation utility.
 
 ## Simulation and ecosystem
 
@@ -22,10 +22,13 @@ Kairos owns simulation time, events, state, resources and simulation RNG. Innova
 
 ## Documentation
 
+Astro/Starlight under `docs/astro-site` is the only documentation site.
+
 - **Site Generator**: Astro with Starlight; `docs/astro-site` is the active site.
 - **Versioned Baseline**: existing `astro` `^7.0.5`, `@astrojs/starlight` `^0.41.3`, and `@astrojs/markdown-remark` `^7.2.0` records are historical/current-manifest observations, not an instruction to freeze obsolete versions.
 - **Polyglot Plugin**: starlight-polyglot; versioned pages use starlight-versions `0.9.1`; link tooling includes starlight-links-validator `0.25.2`.
-- **Search**: `@astrojs/starlight-docsearch` `0.7.0` remains a separately qualified integration.
+- **Search**: `@astrojs/starlight-docsearch` `0.7.0` remains a separately qualified integration; `@astrojs/sitemap` supplies the sitemap integration.
+- **Migration Record**: Astro/Starlight Documentation Site Migration retains historical cutover and route evidence.
 - **Prose Linting**: Vale with Repo/ValueProse; dependency updates require their own build evidence.
 - **Build Gate**: run `pnpm build && pnpm check` in the actual docs workspace; do not claim it ran from this plan.
 - Static historical release evidence under `docs/source/_static/` remains source data, not current acceptance by itself.
@@ -33,9 +36,9 @@ Kairos owns simulation time, events, state, resources and simulation RNG. Innova
 
 ## Historical Rust ownership records
 
-`Rust Core Full Native Migration and Ownership Closure` and `Rust Core Migration Completion and Polyglot Claim Closure` are historical titles. They do not establish present full native ownership. The current source remains hybrid and the [Rust-core convergence track](tracks/rust_core_convergence_20261107/index.md) owns the remaining acceptance.
+Retain archived closure evidence under `Rust Core Full Native Migration and Ownership Closure` and `Rust Core Migration Completion and Polyglot Claim Closure`. These historical records do not establish present full native ownership. The current source remains hybrid and the [Rust-core convergence track](tracks/rust_core_convergence_20261107/index.md) owns the remaining acceptance.
 
-For historical profiling context, **cargo-flamegraph** and **DHAT** are recorded Rust profiling tools. Historical **XLA-Backed Libraries** evidence is retained as external-reference/experimental history, not permission for a supported non-Rust production engine. All performance claims require current measured evidence.
+For historical profiling context, **cargo-flamegraph** and **DHAT** are recorded Rust profiling tools. Historical **XLA-Backed Libraries** include JAX, NumPyro, BlackJAX, TensorFlow Probability and Diffrax. JAX/XLA device profilers retain their role in isolated external-reference comparisons until Rust owns a promoted native GPU execution backend. This preserves historical traceability, not permission for a supported non-Rust production engine. All performance claims require current measured evidence.
 
 ## Delivery
 
