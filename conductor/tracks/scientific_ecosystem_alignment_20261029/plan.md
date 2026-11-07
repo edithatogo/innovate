@@ -4034,3 +4034,9 @@ Hosted release readiness for this worktree revision remains open.
   parameter keys, incompatible time units and perspectives fail.
   The public Rust boundary test and Clippy passed. Arrow export
   and installed consumer qualification remain open.
+- [x] Exercise historical diffusion_v1 CSV rows through the rebuilt
+  Python 3.15.2 wheel at a5c66d41. Polars grouped both strategies and
+  their three draws in input order. Rust returned the grouped payload
+  unchanged and rejected reversing the second strategy's draws.
+  Fixture provenance and period units were supplied by the test.
+  The targeted regression and Ruff passed.
