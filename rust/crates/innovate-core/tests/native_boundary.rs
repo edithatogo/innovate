@@ -165,3 +165,24 @@ fn plain_diffusion_rates_match_analytic_reference_points() {
         assert!((r["rates"][0][0].as_f64().unwrap() - expected).abs() < 1e-10);
     }
 }
+
+#[test]
+fn bass_rate_remains_finite_when_imitation_innovation_ratio_overflows() {
+    let p = 1e-200_f64;
+    let q = 1e200_f64;
+    let elapsed = q.ln() - p.ln();
+    let result = innovate_core::KernelBinding::new()
+        .predict_model(
+            "bass",
+            innovate_core::json!({
+                "inputs":{"time":[0.,elapsed/q]},"parameters":{"p":p,"q":q,"m":1.}
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(result["rates"][0][0], p);
+    assert!((result["values"][1].as_f64().unwrap() - 0.5).abs() < 1e-11);
+    let midpoint_rate = result["rates"][1][0].as_f64().unwrap();
+    assert!((midpoint_rate / (q / 4.) - 1.).abs() < 1e-11);
+}

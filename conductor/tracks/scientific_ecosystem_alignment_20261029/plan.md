@@ -1255,3 +1255,8 @@ the other competition models and installed binding checks remain open.
   model-binding comparisons meet an absolute tolerance of 1e-10 at the
   reference points. Extreme-domain coverage remains open.
   [Fixture and results](evidence/plain-diffusion-rates-20261107).
+
+- [x] Stabilize plain Bass levels and rates when q/p exceeds the
+  representable range. The native regression checks the origin and
+  transition midpoint for p=1e-200 and q=1e200. Eleven boundary tests
+  and focused Clippy passed. Installed edge-case checks remain open.

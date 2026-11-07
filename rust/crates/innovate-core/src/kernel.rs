@@ -1265,25 +1265,29 @@ fn bass_native_response(
         ));
     }
 
-    let predictions: Vec<f64> = stable_payload
+    let scale = p.max(q);
+    let normalized_sum = p / scale + q / scale;
+    let log_sum = scale.ln() + normalized_sum.ln();
+    let log_ratio = q.ln() - p.ln();
+    let (predictions, rates): (Vec<_>, Vec<_>) = stable_payload
         .time
         .iter()
-        .map(|t| {
-            let decay = (-(p + q) * t).exp();
-            m * (1.0 - decay) / (1.0 + (q / p) * decay)
+        .map(|&t| {
+            if t == 0. {
+                return (0., [m * p]);
+            }
+            let elapsed = (scale * t) * normalized_sum;
+            if elapsed == f64::INFINITY {
+                return (m, [0.]);
+            }
+            let odds = log_ratio - elapsed;
+            let log_denominator = odds.max(0.) + (-odds.abs()).exp().ln_1p();
+            let level = (m.ln() + (-(-elapsed).exp_m1()).ln() - log_denominator).exp();
+            // Evaluate the analytic derivative without forming q/p or squaring p+q.
+            let rate = (m.ln() + 2. * log_sum - p.ln() - elapsed - 2. * log_denominator).exp();
+            (level, [rate])
         })
-        .collect();
-
-    let rates = stable_payload
-        .time
-        .iter()
-        .map(|t| {
-            let decay = (-(p + q) * t).exp();
-            let denominator = 1. + (q / p) * decay;
-            let fraction = (1. - decay) / denominator;
-            [(m * (decay / denominator)) * ((p + q * fraction) * (1. + q / p))]
-        })
-        .collect::<Vec<_>>();
+        .unzip();
     let mut result = kernel_array_payload(&predictions);
     result["rates"] = json!(rates);
 
