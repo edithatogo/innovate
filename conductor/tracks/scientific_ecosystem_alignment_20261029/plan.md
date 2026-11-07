@@ -2300,3 +2300,8 @@ the other competition models and installed binding checks remain open.
   retaining request order and each case diagnostic. The default suite ran
   all four historical corpus cases. All 54 Rust boundary tests and Clippy
   passed. Historical automation, binding and release qualification remain open.
+
+- [x] Qualify native benchmark suite and model-card lookup in the rebuilt
+  Python 3.15 wheel, Julia and installed R. All returned identical Bass
+  card and ordered suite results for Logistic, Bass and an unknown case.
+  The unknown case remained a row error while both fits succeeded.
