@@ -873,3 +873,14 @@ open.
   Python tests on 3.15.2, Julia 1.13.3 passed 225 assertions in Pkg.test,
   and installed R native conformance passed with the rebuilt Rust library.
   [Logs](evidence/norton-milestones-20261107).
+
+## Historical cannibalization level milestones
+
+- [x] Report sampled attainment of fixed baseline market fractions for historical net generation levels. (d8f454f4)
+
+The historical ODE reports the first requested sample at or above each
+fraction of the baseline market. Cannibalization can reverse net levels, so
+the reported times express sampled attainment within the requested window.
+A capacity event fixture confirms that the reference stays fixed. All 23
+multi-generation tests and focused Clippy passed. Continuous-time historical
+crossings and installed binding checks for this field remain open.
