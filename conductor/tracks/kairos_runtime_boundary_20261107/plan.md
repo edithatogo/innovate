@@ -7,6 +7,11 @@ shown together are independent checks. A named future test is an explicit output
 not an assertion that the target exists today. Stop on missing contracts, toolchain
 or ambiguous scientific assumptions; return a reproducer instead of guessing.
 
+Leaf IDs are stable labels, not execution order. The explicit `Requires` fields
+define the dependency graph: I01 precedes I00, then I02. I00 was inserted after
+review to prepare the candidate and lock without renumbering the existing leaves.
+Do not infer dependencies from numbering or document order.
+
 ## I01: Correct the native claim boundary
 
 - [ ] I01 Implement and verify this bounded outcome.
