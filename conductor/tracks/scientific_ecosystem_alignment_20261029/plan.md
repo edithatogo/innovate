@@ -3745,3 +3745,10 @@ Hosted release readiness for this worktree revision remains open.
   output template wrote distinct files and passed all three fast
   cases. An attempt to reuse a receipt path failed and preserved
   the original bytes. Ruff passed on the runner.
+- [x] Verify local two-rank MPI sharding of the scheduled policy.
+  Lotka–Volterra and Lock-in ran once each, and the combined result
+  rows exactly matched the serial policy. Kernel elapsed time by rank
+  was 7.84 s and 4.00 s, with peak RSS of 66,568,192 and 66,338,816
+  bytes on Darwin arm64. Runner source was 05d143e5 with the unchanged
+  native wheel from 958843bc. The scheduled policy selected the cases
+  locally. Actual scheduler allocation and multi-node tests remain open.
