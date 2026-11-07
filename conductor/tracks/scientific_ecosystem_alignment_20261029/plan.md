@@ -3161,3 +3161,9 @@ the other competition models and installed binding checks remain open.
   results on the nine-pair fixture, recovering launch 3.125 and event
   2.125 with RSS 8.30e-19. Both focused Rust tests and Clippy passed.
   Continuous-time search, wider timing inference and uncertainty remain open.
+
+- [x] Expose Norton–Bass launch and joint timing profiles on Python
+  Polars FitResult. A rebuilt Python 3.15.2 wheel fitted the
+  successive-generation LazyFrame, exposed all nine candidate pairs
+  and forecast from the saved state within 0.001 of the SciPy
+  reference. Both selected consumer tests and Ruff passed.

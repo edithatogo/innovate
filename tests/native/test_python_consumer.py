@@ -1029,3 +1029,34 @@ def test_logistic_event_profile_polars_fit_and_saved_split_prediction():
     forecast = fit.predict(query)
     assert forecast["id"].to_list() == ["pre", "split", "post"]
     assert forecast["prediction"].to_list() == pytest.approx(observed[11:14], abs=1e-7)
+
+
+def test_norton_joint_time_profile_polars_fit_and_forecast():
+    path = Path(__file__).parents[2] / "rust/crates/innovate-core/tests/fixtures/successive_forcing_scipy.json"
+    fixture = json.loads(path.read_text())
+    first, second = zip(*fixture["rows"], strict=True)
+    price = fixture["covariates"]["price"]
+    frame = pl.DataFrame({"time": fixture["time"], "price": price, "first": first, "second": second})
+    fit = innovate.fit(
+        "norton_bass",
+        frame.lazy(),
+        observed_columns=["first", "second"],
+        model_options={
+            **fixture["constructor_kwargs"],
+            "launch_candidates": [3, 3.125, 3.25],
+            "launch_index": 1,
+            "event_candidates": [2, 2.125, 2.25],
+            "event_index": 0,
+        },
+        fit_options={"initial_parameters": fixture["parameters"], "max_iterations": 200},
+    )
+    assert fit.event_profile is None
+    assert fit.launch_profile is None
+    profile = fit.joint_time_profile
+    assert profile is not None
+    assert len(profile["candidates"]) == 9
+    best = min((row for row in profile["candidates"] if row.get("converged")), key=lambda row: row["objective"])
+    assert (best["launch_time"], best["t_event"]) == (3.125, 2.125)
+    forecast = fit.predict(pl.DataFrame({"time": fixture["forecast_time"], "price": price[-1]}))
+    prediction_columns = [name for name in forecast.columns if name.startswith("prediction")]
+    assert forecast.select(prediction_columns).row(0) == pytest.approx(fixture["forecast_rows"][0], abs=1e-3)

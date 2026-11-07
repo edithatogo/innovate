@@ -158,6 +158,18 @@ class FitResult:
         profile = self.envelope["result"].get("event_profile")
         return dict(profile) if profile is not None else None
 
+    @property
+    def launch_profile(self) -> dict[str, Any] | None:
+        """Candidate scores for a profiled generation launch."""
+        profile = self.envelope["result"].get("launch_profile")
+        return dict(profile) if profile is not None else None
+
+    @property
+    def joint_time_profile(self) -> dict[str, Any] | None:
+        """Candidate scores for a joint launch and event fit."""
+        profile = self.envelope["result"].get("joint_time_profile")
+        return dict(profile) if profile is not None else None
+
     def predict(
         self,
         data: pl.DataFrame | pl.LazyFrame,
