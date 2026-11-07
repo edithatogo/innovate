@@ -6580,3 +6580,9 @@ Hosted release readiness for this worktree revision remains open.
   The regression passed alongside all 13 scenario boundary tests
   with incremental compilation disabled. Installed binding readback
   remains open for the new field.
+
+- [x] Verify ranking.time_basis using an adoption-area ranking through
+  a Python 3.15.2 wheel, Julia and a fresh R package installation.
+  All three returned year, reference year 2026 and the alternative
+  in first place. The wheel and the FFI library were rebuilt from
+  009d7300 with incremental compilation disabled.
