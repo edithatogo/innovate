@@ -5466,3 +5466,7 @@ Hosted release readiness for this worktree revision remains open.
   individual insufficient-match results. Any failed draw suppresses
   mixture uncertainty, and malformed inputs still reject the request.
   Nine focused Rust causal tests passed.
+
+- [x] Verify that Python, Julia and installed R preserve an insufficient
+  score draw alongside a successful draw. All three returned estimate
+  4 for the successful draw and an unset mixture standard deviation.

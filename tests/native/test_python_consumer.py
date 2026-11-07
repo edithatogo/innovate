@@ -1800,3 +1800,14 @@ def test_matching_score_refits():
     assert result["omitted_training_indices"] == [0, 4]
     assert [pair["control_index"] for pair in result["draws"][0]["pairs"]] == [0, 0, 4, 4]
     assert result["mixture_standard_deviation"] is None
+
+
+def test_matching_retains_insufficient_score_draw():
+    sensitivity = innovate.execute(
+        "summarize_causal", method="matched_treatment_contrast",
+        outcomes=[0, 4], treatment=[0, 1], scores=[0, 0], caliper=0,
+        score_draws=[[0, 0], [0, 1]], outcome_variances=[1, 1],
+    )["result"]["score_sensitivity"]
+    assert [draw["status"] for draw in sensitivity["draws"]] == ["matched", "insufficient_matches"]
+    assert sensitivity["draws"][0]["estimate"] == 4
+    assert sensitivity["mixture_standard_deviation"] is None

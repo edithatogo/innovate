@@ -902,3 +902,13 @@ stopifnot(all(unlist(score_refits$omitted_training_indices) == c(0,4)),
   all(vapply(score_refits$draws[[1]]$pairs, function(pair) pair$control_index, numeric(1)) == c(0,0,4,4)),
   "mixture_standard_deviation" %in% names(score_refits),
   is.null(score_refits$mixture_standard_deviation))
+
+insufficient_draw <- kernel_call("summarize_causal", payload=list(
+  method="matched_treatment_contrast", outcomes=c(0,4), treatment=c(0,1),
+  scores=c(0,0), caliper=0, score_draws=list(c(0,0),c(0,1)),
+  outcome_variances=c(1,1)))$result$score_sensitivity
+stopifnot(identical(vapply(insufficient_draw$draws, function(draw) draw$status, character(1)),
+    c("matched","insufficient_matches")),
+  insufficient_draw$draws[[1]]$estimate == 4,
+  "mixture_standard_deviation" %in% names(insufficient_draw),
+  is.null(insufficient_draw$mixture_standard_deviation))

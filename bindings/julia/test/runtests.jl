@@ -971,3 +971,13 @@ end
     @test [pair["control_index"] for pair in result["draws"][1]["pairs"]] == [0,0,4,4]
     @test result["mixture_standard_deviation"] === nothing
 end
+
+@testset "Matching retains insufficient score draws" begin
+    sensitivity = kernel_call("summarize_causal", nothing, Dict(
+        "method"=>"matched_treatment_contrast", "outcomes"=>[0,4], "treatment"=>[0,1],
+        "scores"=>[0,0], "caliper"=>0, "score_draws"=>[[0,0],[0,1]], "outcome_variances"=>[1,1]
+    ))["result"]["score_sensitivity"]
+    @test [draw["status"] for draw in sensitivity["draws"]] == ["matched","insufficient_matches"]
+    @test sensitivity["draws"][1]["estimate"] == 4
+    @test sensitivity["mixture_standard_deviation"] === nothing
+end
