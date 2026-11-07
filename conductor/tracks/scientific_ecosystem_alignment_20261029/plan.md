@@ -6421,3 +6421,9 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Document the native remote subprocess request and exit contract.
   The exact guide example ran against the local worker and returned
   the expected Logistic prediction.
+
+- [x] Add an explicit remote-worker container build target. The target
+  builds the locked Rust binary and runs it under an unprivileged UID
+  with stdin/stdout transport. The default Python image still uses its
+  existing build path. Docker and Podman are unavailable on this host,
+  so container build and runtime acceptance remain open.
