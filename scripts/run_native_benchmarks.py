@@ -55,6 +55,12 @@ def main() -> int:
         payload["case_ids"] = ids[rank::size]
         shard = {"rank": rank, "size": size, "case_ids": payload["case_ids"],
                  "launcher": "open_mpi" if args.mpi_shard else "slurm"}
+        if args.slurm_shard:
+            job_id = os.environ.get("SLURM_JOB_ID", "").strip()
+            step_id = os.environ.get("SLURM_STEP_ID", "").strip()
+            if not job_id or not step_id:
+                parser.error("--slurm-shard requires SLURM_JOB_ID and SLURM_STEP_ID")
+            shard.update(job_id=job_id, step_id=step_id)
     elif args.policy is not None:
         payload["ci_policy"] = args.policy
     started = perf_counter()

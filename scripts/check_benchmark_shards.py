@@ -36,6 +36,7 @@ def check(serial, shards):
         raise ValueError("the serial receipt does not cover the complete benchmark policy")
     ranks = set()
     launchers = set()
+    slurm_steps = set()
     for shard in shards:
         actual = shard["metadata"]
         config = actual["benchmark_runner"]
@@ -53,6 +54,13 @@ def check(serial, shards):
         launchers.add(launcher)
         if len(launchers) > 1:
             raise ValueError("benchmark shards must use the same launcher")
+        if launcher == "slurm":
+            step = (partition.get("job_id"), partition.get("step_id"))
+            if any(not isinstance(value, str) or not value.strip() for value in step):
+                raise ValueError("Slurm shards require job and step IDs")
+            slurm_steps.add(step)
+            if len(slurm_steps) > 1:
+                raise ValueError("Slurm shards must come from the same job and step")
         rank = partition["rank"]
         size = partition["size"]
         if (

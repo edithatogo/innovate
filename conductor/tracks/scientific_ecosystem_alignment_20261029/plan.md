@@ -3807,3 +3807,7 @@ Hosted release readiness for this worktree revision remains open.
   verification procedure. The documented runner options passed with
   simulated step variables and two receipts matching serial. Live
   Slurm execution remains open.
+- [x] Record Slurm job and step IDs and require them to agree across
+  receipts. Simulated matching tasks passed serial verification and
+  a receipt from a different step was rejected. Ruff passed.
+  Live scheduler qualification remains open.
