@@ -1,0 +1,2 @@
+ coefficient   likelihood   prediction 
+1.711566e-06 3.122059e-07 2.337579e-10 

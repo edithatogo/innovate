@@ -1513,3 +1513,9 @@ the other competition models and installed binding checks remain open.
   warmup entries for combined differencing, represented as Polars
   nulls, Julia missing values and R numeric NAs. The Python wheel also
   exercised coefficient estimation through the helper on an AR(1).
+
+- [x] Compare combined ordinary and seasonal differencing on an
+  integrated AR(1) reference. The Rust fit through installed R agrees
+  with stats::arima within 5e-6 in coefficient and 1e-6 in likelihood.
+  Fixed-coefficient prefix predictions at rows 7–40 agree within 1e-8.
+  Historical SARIMAX initialization and warmup parity remain open.
