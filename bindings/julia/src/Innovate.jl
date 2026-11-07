@@ -2,7 +2,7 @@ module Innovate
 using JSON
 using Libdl
 
-export kernel_scenario_comparisons_ipc, kernel_scenario_executions_ipc, kernel_scenario_grid_ipc, DatasetValidationError, kernel_sarima_fit, kernel_seasonal_decomposition, kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
+export export_ipc_file, kernel_scenario_comparisons_ipc, kernel_scenario_executions_ipc, kernel_scenario_grid_ipc, DatasetValidationError, kernel_sarima_fit, kernel_seasonal_decomposition, kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
     kernel_categorize_adopters, kernel_categorize_fitted_adopters, kernel_fit_batch, kernel_predict_batch, kernel_simulate_model, kernel_summarize_model, kernel_diagnose_model
 
 """A rejected dataset with its native validation report."""
@@ -43,6 +43,21 @@ kernel_scenario_comparisons_ipc(response) = scenario_output(response, :innovate_
 
 function scenario_output(response, symbol)
     request = response isa AbstractString ? response : JSON.json(response)
+    return arrow_output(symbol) do convert, data, len
+        ccall(convert, Ptr{UInt8},
+            (Cstring, Ref{Ptr{UInt8}}, Ref{Csize_t}), request, data, len)
+    end
+end
+
+"""Rewrite Arrow IPC file or stream bytes for portable file interchange."""
+function export_ipc_file(input::Vector{UInt8})
+    return arrow_output(:innovate_export_ipc_file) do convert, data, len
+        ccall(convert, Ptr{UInt8},
+            (Ptr{UInt8}, Csize_t, Ref{Ptr{UInt8}}, Ref{Csize_t}), input, length(input), data, len)
+    end
+end
+
+function arrow_output(invoke, symbol)
     handle = Libdl.dlopen(native_library())
     try
         convert = Libdl.dlsym(handle, symbol)
@@ -50,8 +65,7 @@ function scenario_output(response, symbol)
         free_text = Libdl.dlsym(handle, :innovate_free)
         data = Ref{Ptr{UInt8}}(C_NULL)
         len = Ref{Csize_t}(0)
-        failure = ccall(convert, Ptr{UInt8},
-            (Cstring, Ref{Ptr{UInt8}}, Ref{Csize_t}), request, data, len)
+        failure = invoke(convert, data, len)
         if failure != C_NULL
             text = try
                 unsafe_string(failure)

@@ -49,3 +49,10 @@ exporter. The native reader accepts IPC files and streams.
 ```python
 Path("policy-julia.arrow").write_bytes(export_ipc_file(Path("policy-polars.arrow").read_bytes()))
 ```
+
+Julia can also rewrite a file directly through Innovate.
+
+```julia
+using Innovate
+write("policy-julia.arrow", export_ipc_file(read("policy-polars.arrow")))
+```

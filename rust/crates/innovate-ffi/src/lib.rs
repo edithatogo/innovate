@@ -153,6 +153,49 @@ unsafe fn scenario_output<E: std::fmt::Display>(
     len: *mut usize,
     convert: fn(&serde_json::Value) -> Result<Vec<u8>, E>,
 ) -> *mut c_char {
+    // SAFETY: caller supplies the response and writable out parameters.
+    unsafe {
+        arrow_output(data, len, || {
+            if response.is_null() {
+                return Err("missing scenario grid response".into());
+            }
+            let response = CStr::from_ptr(response);
+            let value =
+                serde_json::from_slice(response.to_bytes()).map_err(|err| err.to_string())?;
+            convert(&value).map_err(|err| err.to_string())
+        })
+    }
+}
+
+/// Rewrite IPC file or stream bytes to a portable Arrow IPC file.
+///
+/// # Safety
+/// Input must be readable for input_len bytes. Output pointers must be writable.
+/// Release output using innovate_free_bytes or innovate_free for an error.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn innovate_export_ipc_file(
+    input: *const u8,
+    input_len: usize,
+    data: *mut *mut u8,
+    len: *mut usize,
+) -> *mut c_char {
+    // SAFETY: caller supplies input bytes and writable out parameters.
+    unsafe {
+        arrow_output(data, len, || {
+            if input.is_null() || input_len == 0 || input_len > isize::MAX as usize {
+                return Err("missing or invalid IPC input bytes".into());
+            }
+            let bytes = std::slice::from_raw_parts(input, input_len);
+            innovate_tabular::export_ipc_file(bytes).map_err(|err| err.to_string())
+        })
+    }
+}
+
+unsafe fn arrow_output(
+    data: *mut *mut u8,
+    len: *mut usize,
+    convert: impl FnOnce() -> Result<Vec<u8>, String> + std::panic::UnwindSafe,
+) -> *mut c_char {
     let error = |code: &str, message: &str| {
         owned_response(Ok(
             serde_json::json!({"error":{"code":code,"message":message}}).to_string(),
@@ -166,15 +209,7 @@ unsafe fn scenario_output<E: std::fmt::Display>(
         *data = ptr::null_mut();
         *len = 0;
     }
-    if response.is_null() {
-        return error("invalid_request", "missing scenario grid response");
-    }
-    let result = std::panic::catch_unwind(|| {
-        // SAFETY: the caller provides a readable NUL-terminated string.
-        let response = unsafe { CStr::from_ptr(response) };
-        let value = serde_json::from_slice(response.to_bytes()).map_err(|err| err.to_string())?;
-        convert(&value).map_err(|err| err.to_string())
-    });
+    let result = std::panic::catch_unwind(convert);
     match result {
         Ok(Ok(bytes)) => {
             let bytes = bytes.into_boxed_slice();
@@ -194,7 +229,7 @@ unsafe fn scenario_output<E: std::fmt::Display>(
 ///
 /// # Safety
 /// A non-null pointer and length must be the original pair returned by
-/// a scenario Arrow export, and must still be live.
+/// an Arrow export, and must still be live.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn innovate_free_bytes(data: *mut u8, len: usize) {
     if !data.is_null() {

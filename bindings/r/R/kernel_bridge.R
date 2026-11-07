@@ -165,3 +165,8 @@ kernel_sarima_fit <- function(values, order, seasonal_order = c(0L, 0L, 0L, 0L),
     values = values, order = order, seasonal_order = seasonal_order, historical = historical))$result$fitted
   vapply(fitted, function(value) if (is.null(value)) NA_real_ else value, numeric(1))
 }
+
+export_ipc_file <- function(data) {
+  if (!is.raw(data)) stop("data must be raw IPC bytes", call. = FALSE)
+  scenario_output(data, innovate_export_ipc_file_R)
+}

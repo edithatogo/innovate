@@ -52,22 +52,28 @@ SEXP innovate_scenario_grid_ipc_R(SEXP library, SEXP payload, SEXP data) {
 }
 
 static SEXP scenario_output(SEXP library, SEXP response, const char *symbol) {
-    if (TYPEOF(library) != STRSXP || XLENGTH(library) != 1 || STRING_ELT(library, 0) == NA_STRING ||
-        TYPEOF(response) != STRSXP || XLENGTH(response) != 1 || STRING_ELT(response, 0) == NA_STRING)
-        Rf_error("library and response must be scalar strings");
+    int binary = strcmp(symbol, "innovate_export_ipc_file") == 0;
+    if (TYPEOF(library) != STRSXP || XLENGTH(library) != 1 || STRING_ELT(library, 0) == NA_STRING)
+        Rf_error("library must be a scalar string");
+    if (binary ? TYPEOF(response) != RAWSXP :
+        (TYPEOF(response) != STRSXP || XLENGTH(response) != 1 || STRING_ELT(response, 0) == NA_STRING))
+        Rf_error("expected raw IPC bytes or a scalar scenario response string");
     void *handle = OPEN(CHAR(STRING_ELT(library, 0)));
     if (!handle) Rf_error("unable to load the Innovate native library");
-    char *(*convert)(const char *, unsigned char **, size_t *) =
-        (char *(*)(const char *, unsigned char **, size_t *)) SYMBOL(handle, symbol);
+    void *convert = (void *) SYMBOL(handle, symbol);
     void (*free_bytes)(unsigned char *, size_t) =
         (void (*)(unsigned char *, size_t)) SYMBOL(handle, "innovate_free_bytes");
     void (*free_text)(char *) = (void (*)(char *)) SYMBOL(handle, "innovate_free");
     if (!convert || !free_bytes || !free_text) {
-        CLOSE(handle); Rf_error("native library lacks scenario Arrow export support");
+        CLOSE(handle); Rf_error("native library lacks Arrow export support");
     }
     unsigned char *data = NULL;
     size_t len = 0;
-    char *failure = convert(CHAR(STRING_ELT(response, 0)), &data, &len);
+    char *failure = binary
+        ? ((char *(*)(const unsigned char *, size_t, unsigned char **, size_t *)) convert)
+            (RAW(response), (size_t) XLENGTH(response), &data, &len)
+        : ((char *(*)(const char *, unsigned char **, size_t *)) convert)
+            (CHAR(STRING_ELT(response, 0)), &data, &len);
     if (failure) {
         SEXP result = PROTECT(Rf_mkString(failure));
         free_text(failure);
@@ -96,7 +102,12 @@ SEXP innovate_scenario_comparisons_ipc_R(SEXP library, SEXP response) {
     return scenario_output(library, response, "innovate_scenario_comparisons_ipc");
 }
 
+SEXP innovate_export_ipc_file_R(SEXP library, SEXP input) {
+    return scenario_output(library, input, "innovate_export_ipc_file");
+}
+
 static const R_CallMethodDef methods[] = {
+    {"innovate_export_ipc_file_R", (DL_FUNC) &innovate_export_ipc_file_R, 2},
     {"innovate_call_R", (DL_FUNC) &innovate_call_R, 2},
     {"innovate_scenario_grid_ipc_R", (DL_FUNC) &innovate_scenario_grid_ipc_R, 3},
     {"innovate_scenario_executions_ipc_R", (DL_FUNC) &innovate_scenario_executions_ipc_R, 2},

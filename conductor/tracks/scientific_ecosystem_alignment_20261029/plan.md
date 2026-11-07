@@ -3090,3 +3090,9 @@ the other competition models and installed binding checks remain open.
   Int32, nullable Float64 and Unicode strings. Julia still returned
   an empty schema for the original file. The focused Rust round-trip
   and Clippy passed.
+
+- [x] Expose native IPC rewriting to Julia and R through the shared
+  Rust byte-output ABI. Julia and a fresh R installation rewrote both
+  a Polars file and a stream, and rejected malformed bytes. Python
+  Polars verified all four outputs against the qualified Python
+  exporter. Rust FFI tests and focused Clippy passed.
