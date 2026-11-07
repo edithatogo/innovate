@@ -3298,3 +3298,8 @@ the other competition models and installed binding checks remain open.
   The three fast cases returned identical ordered results at requested
   budgets of 1, 2 and 32. The focused Rust test and Clippy passed.
   Scheduler-backed traces and accelerator evidence remain open.
+
+- [x] Verify scheduled benchmark parity on a rebuilt Python 3.15.2
+  wheel. Lotka–Volterra competition and lock-in both passed at
+  requested worker budgets of one and two. The complete native
+  results and order matched exactly. This was a local execution.
