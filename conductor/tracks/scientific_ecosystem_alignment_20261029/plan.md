@@ -1967,3 +1967,11 @@ the other competition models and installed binding checks remain open.
   key returns the available families. The rebuilt Python 3.15 wheel,
   Julia and installed R all listed five families and resolved network to
   the same row. All 36 Rust boundary tests and focused Clippy passed.
+
+- [x] Restore final-adoption ranking and incremental effects (c2a533b3).
+  Scalar comparisons also accept an explicit relative margin to reproduce
+  the historical fixed-width heuristic. Bounds are labelled as a fixed
+  relative margin, with no statistical coverage claim. Python 3.15, Julia
+  and installed R agreed on an alternative score of 100 and baseline
+  bounds of 45 to 55 with a 10% margin. All 36 boundary tests and focused
+  Clippy passed.
