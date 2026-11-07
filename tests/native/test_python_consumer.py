@@ -1533,3 +1533,11 @@ def test_staggered_panel_att():
     assert balanced["balanced_event_time"] == {"horizon": 1, "included_cohorts": 1, "excluded_cohorts": 1}
     assert [row["supported_cohort_att"] for row in balanced["event_time"]] == pytest.approx([4, 2])
     assert balanced["contrasts"] == replicated["contrasts"]
+    placebo = innovate.execute(
+        "summarize_causal", **{**payload, "outcomes": [[0, 5, 7], [10, 11, 16], [0, 2, 4]],
+                               "adoption_indices": [1, 2, None]}, include_pre_trends=True,
+    )["result"]["pre_trends"]
+    assert len(placebo) == 1
+    assert placebo[0]["estimate"] == pytest.approx(1)
+    assert placebo[0]["n_control"] == 1
+    assert placebo[0]["baseline_period"] == 1

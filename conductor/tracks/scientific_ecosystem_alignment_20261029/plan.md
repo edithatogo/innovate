@@ -4761,3 +4761,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Add staggered pre-adoption placebo contrasts with a common
   cohort baseline. The Rust fixture verifies an estimate of 1 and
   excludes a control already treated by the baseline. Bindings remain open.
+
+- [x] Verify staggered placebo contrasts through rebuilt Python 3.15.2,
+  Julia and installed R. Each returned estimate 1 and exactly one control
+  still untreated at the baseline.

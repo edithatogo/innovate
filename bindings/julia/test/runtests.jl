@@ -766,6 +766,12 @@ end
     @test balanced["balanced_event_time"]["excluded_cohorts"] == 1
     @test [row["supported_cohort_att"] for row in balanced["event_time"]] ≈ [4,2]
     @test balanced["contrasts"] == rows
+    placebo = merge(payload, Dict("outcomes"=>[[0,5,7],[10,11,16],[0,2,4]],
+        "adoption_indices"=>[1,2,nothing], "include_pre_trends"=>true))
+    pre = only(kernel_call("summarize_causal", nothing, placebo)["result"]["pre_trends"])
+    @test pre["estimate"] ≈ 1
+    @test pre["n_control"] == 1
+    @test pre["baseline_period"] == 1
     @test rows[1]["estimate"] ≈ 4
     @test rows[1]["standard_error"] ≈ 1
     @test rows[2]["n_control"] == 1
