@@ -4721,3 +4721,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Summarize staggered ATT by event-time offset and cohort size.
   The Rust fixture verifies 8/3 for unequal cohort sizes, records
   unsupported cohorts and preserves null when none are supported.
+
+- [x] Verify staggered event-time aggregation through rebuilt Python
+  3.15.2, Julia and installed R. Each recovered 8/3 for unequal cohort
+  sizes and preserved unsupported cohort counts and null estimates.

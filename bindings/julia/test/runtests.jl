@@ -736,14 +736,19 @@ end
 @testset "Staggered panel ATT" begin
     payload = Dict("method"=>"staggered_panel_att", "periods"=>[0,1,2],
         "outcomes"=>[[0,5,7],[10,11,16]], "adoption_indices"=>[1,2])
-    first, second, third = kernel_call("summarize_causal", nothing, payload)["result"]["contrasts"]
+    result = kernel_call("summarize_causal", nothing, payload)["result"]
+    first, second, third = result["contrasts"]
+    @test result["event_time"][1]["unsupported_cohorts"] == 1
+    @test isnothing(result["event_time"][2]["supported_cohort_att"])
     @test first["estimate"] ≈ 4
     @test first["n_control"] == 1
     @test all(row -> isnothing(row["estimate"]) && row["n_control"] == 0, (second,third))
     @test isnothing(first["standard_error"])
     replicated = merge(payload, Dict("outcomes"=>[[0,5,7],[0,7,9],[10,12,16],[10,12,16]],
         "adoption_indices"=>[1,1,2,nothing]))
-    rows = kernel_call("summarize_causal", nothing, replicated)["result"]["contrasts"]
+    result = kernel_call("summarize_causal", nothing, replicated)["result"]
+    rows = result["contrasts"]
+    @test result["event_time"][1]["supported_cohort_att"] ≈ 8/3
     @test rows[1]["estimate"] ≈ 4
     @test rows[1]["standard_error"] ≈ 1
     @test rows[2]["n_control"] == 1

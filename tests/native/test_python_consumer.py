@@ -1490,7 +1490,11 @@ def test_balanced_panel_event_study():
 def test_staggered_panel_att():
     payload = dict(method="staggered_panel_att", periods=[0, 1, 2],
                    outcomes=[[0, 5, 7], [10, 11, 16]], adoption_indices=[1, 2])
-    first, second, third = innovate.execute("summarize_causal", **payload)["result"]["contrasts"]
+    result = innovate.execute("summarize_causal", **payload)["result"]
+    first, second, third = result["contrasts"]
+    onset, later = result["event_time"]
+    assert onset["unsupported_cohorts"] == 1
+    assert later["supported_cohort_att"] is None
     assert first["estimate"] == pytest.approx(4)
     assert first["n_control"] == 1
     assert all(row["estimate"] is None and row["n_control"] == 0 for row in (second, third))
@@ -1498,7 +1502,8 @@ def test_staggered_panel_att():
     replicated = innovate.execute(
         "summarize_causal", **{**payload, "outcomes": [[0, 5, 7], [0, 7, 9], [10, 12, 16], [10, 12, 16]],
                                "adoption_indices": [1, 1, 2, None]},
-    )["result"]["contrasts"]
-    assert replicated[0]["estimate"] == pytest.approx(4)
-    assert replicated[0]["standard_error"] == pytest.approx(1)
-    assert replicated[1]["n_control"] == 1
+    )["result"]
+    assert replicated["contrasts"][0]["estimate"] == pytest.approx(4)
+    assert replicated["contrasts"][0]["standard_error"] == pytest.approx(1)
+    assert replicated["contrasts"][1]["n_control"] == 1
+    assert replicated["event_time"][0]["supported_cohort_att"] == pytest.approx(8 / 3)
