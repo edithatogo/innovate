@@ -7293,3 +7293,12 @@ Hosted release readiness for this worktree revision remains open.
   The combined scan including Innovate 0.7.0a1 failed because that
   version is absent from PyPI. These results cover the advisory data
   used by the two scanners. Git-source and hosted acceptance remain open.
+
+- Attempted the current-source optimized Julia/R shared-library build
+  with `cargo build --release --locked -p innovate-ffi -j 2`, using the
+  Python release build's target cache. Cargo rebuilt dependencies and
+  stopped with E0786 while reading the bytemuck_derive proc-macro
+  metadata. The volume had 38 MiB available after the attempt. The
+  exact cause of the metadata failure is unconfirmed. Use a clean
+  target with sufficient space for the next build, then run both
+  installed binding suites against the resulting library.
