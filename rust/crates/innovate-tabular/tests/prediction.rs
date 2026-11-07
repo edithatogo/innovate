@@ -242,7 +242,7 @@ fn paired_ipc_preserves_order_and_rejects_reordered_draws() {
         json!({
             "scenario_id":id,"time_unit":"year","provenance":"synthetic",
             "draws":[
-                {"draw_id":9,"time":[0,1],"adoption":[0,value],"parameters":parameters},
+                {"draw_id":u64::MAX,"time":[0,1],"adoption":[0,value],"parameters":parameters},
                 {"draw_id":2,"time":[0,1],"adoption":[0,2],"parameters":parameters}
             ]
         })
@@ -252,7 +252,11 @@ fn paired_ipc_preserves_order_and_rejects_reordered_draws() {
     let frame = IpcReader::new(Cursor::new(bytes)).finish().unwrap();
     assert_eq!(frame.height(), 8);
     let draws = frame.column("draw_id").unwrap().u64().unwrap();
-    assert!(draws.into_no_null_iter().eq([9, 9, 2, 2, 9, 9, 2, 2]));
+    assert!(
+        draws
+            .into_no_null_iter()
+            .eq([u64::MAX, u64::MAX, 2, 2, u64::MAX, u64::MAX, 2, 2])
+    );
     assert_eq!(
         frame.column("adoption").unwrap().f64().unwrap().get(5),
         Some(4.0)

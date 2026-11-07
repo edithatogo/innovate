@@ -50,4 +50,10 @@ kernel_diagnose_model(model_key, payload)
 and a worker count. Adopter categorization takes aligned times and rates
 or a fitted-model payload. Preprocessing helpers provide cumulative sums,
 rolling averages, date aggregation, seasonal decomposition and SARIMA
-fitted values. Set INNOVATE_NATIVE_LIBRARY to the installed native shared library. Advanced features and native distribution packaging remain under development.}
+fitted values. For paired outcomes with full-width draw IDs, pass JSON
+text to preserve integer tokens. To read the export with Arrow in R,
+use \code{read_ipc_file(..., as_data_frame = FALSE)} and cast the
+\code{draw_id} column to Arrow UTF-8 before converting to an R vector.
+Converting the table directly to a data frame can round wide IDs.
+
+Set INNOVATE_NATIVE_LIBRARY to the installed native shared library. Advanced features and native distribution packaging remain under development.}

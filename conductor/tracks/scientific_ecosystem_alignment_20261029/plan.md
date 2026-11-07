@@ -4106,3 +4106,9 @@ Hosted release readiness for this worktree revision remains open.
   adoption rows, with missing perspectives and fixture provenance
   preserved. The macOS binary was built under R 4.3.3 and ran under
   R 4.3.0. Hosted consumer qualification remains open.
+- [x] Qualify UInt64 maximum draw identity in paired Bass Arrow export.
+  The Rust regression and installed Python, Julia and R exporters
+  preserved 18446744073709551615. Julia and R used JSON text input.
+  R Arrow 20.0.0.2 preserved the exact ID when cast to UTF-8 in the
+  Arrow table. Direct data-frame conversion rounded it. Document the
+  exact-ID read path in the R help.
