@@ -3842,3 +3842,11 @@ Hosted release readiness for this worktree revision remains open.
   benchmark step to ten minutes and require its artifact to exist
   on the existing success/failure upload path. Actionlint passed.
   GitHub showed no run for b99b35cf and no remote integration branch.
+
+## Local identifiability at extreme sensitivity scales
+
+- [x] Scale finite sensitivity columns before squaring them for local
+  rank diagnostics. Two independent columns with entries near 1e308
+  now retain full rank. An unrepresentable raw norm is null in JSON
+  while its normalized column remains usable. All eight Rust library
+  tests and focused Clippy passed. Global identifiability remains open.

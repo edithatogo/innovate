@@ -79,14 +79,25 @@ fn solve(mut a: Vec<Vec<f64>>, mut b: Vec<f64>) -> Option<Vec<f64>> {
 fn local_rank(mut columns: Vec<Vec<f64>>) -> Value {
     let n = columns.len();
     let norm = |v: &[f64]| v.iter().map(|x| x * x).sum::<f64>().sqrt();
-    let norms: Vec<_> = columns.iter().map(|c| norm(c)).collect();
-    for (c, s) in columns.iter_mut().zip(&norms) {
-        if *s > 1e-14 {
-            for x in c {
-                *x /= s;
+    let mut norms = Vec::with_capacity(n);
+    for column in &mut columns {
+        let scale = column.iter().map(|x| x.abs()).fold(0., f64::max);
+        if scale == 0. {
+            norms.push(0.);
+            continue;
+        }
+        for value in column.iter_mut() {
+            *value /= scale;
+        }
+        let scaled_norm = norm(column);
+        let magnitude = scale * scaled_norm;
+        norms.push(magnitude);
+        if magnitude > 1e-14 {
+            for value in column {
+                *value /= scaled_norm;
             }
         } else {
-            c.fill(0.0);
+            column.fill(0.);
         }
     }
     let mut diagonals = Vec::new();
@@ -114,7 +125,7 @@ fn local_rank(mut columns: Vec<Vec<f64>>) -> Value {
     let rank = diagonals.len();
     json!({"rank":rank,"parameters":n,"status":if rank==n {"local_full_rank"} else {"rank_deficient"},
         "method":"column_scaled_pivoted_qr", "relative_rank_tolerance":1e-7,
-        "qr_diagonal_ratio":if rank==n {Some(diagonals[0]/diagonals[n-1])} else {None},
+        "qr_diagonal_ratio":if rank==n && n>0 {Some(diagonals[0]/diagonals[n-1])} else {None},
         "sensitivity_column_norms":norms,
         "scope":"local transformed-parameter sensitivity; not global uniqueness or calibrated uncertainty"})
 }
@@ -368,6 +379,22 @@ pub(crate) fn linear_quantile(sorted: &[f64], probability: f64) -> f64 {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn local_rank_normalizes_large_finite_sensitivities() {
+        let report = local_rank(vec![vec![1e308, 1e308], vec![1e308, -1e308]]);
+        assert_eq!(report["rank"], 2);
+        assert_eq!(report["status"], "local_full_rank");
+        assert!(
+            report["sensitivity_column_norms"][0]
+                .as_f64()
+                .unwrap()
+                .is_finite()
+        );
+        let overflow = local_rank(vec![vec![f64::MAX, f64::MAX]]);
+        assert_eq!(overflow["rank"], 1);
+        assert!(overflow["sensitivity_column_norms"][0].is_null());
+    }
+
     #[test]
     fn unrepresentable_sensitivities_never_report_convergence() {
         let error = least_squares(
