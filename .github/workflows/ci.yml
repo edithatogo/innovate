@@ -37,7 +37,8 @@ jobs:
       - run: uv run --no-sync python scripts/check_migration.py
       - run: cargo fmt --all --check
       - run: uv run --no-sync ruff check bindings/python tests/native noxfile.py scripts/check_migration.py scripts/run_native_benchmarks.py scripts/check_benchmark_shards.py
-      - run: uv run --no-sync basedpyright
+      - run: |
+          uv run --no-sync python -c "import subprocess, sys; subprocess.check_call([sys.executable, '-m', 'basedpyright', '--pythonpath', sys.executable])"
       - name: Verify Rust and Python consumers from source distribution
         if: matrix.os == 'ubuntu-latest' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
         shell: bash

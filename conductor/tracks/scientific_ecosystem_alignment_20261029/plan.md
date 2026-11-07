@@ -7134,3 +7134,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Clear formatting and lint failures before hosted qualification.
   Cargo formatting, Ruff, Actionlint for CI and all 12 migration
   policy tests passed locally. Hosted execution remains open.
+
+- [x] Run the type checker with the selected Python interpreter.
+  A bare local invocation could not resolve Polars. The explicit
+  interpreter produced zero errors and one native-extension source
+  warning. CI now passes the uv interpreter explicitly. Actionlint passed.
