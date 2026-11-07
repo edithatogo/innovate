@@ -6501,3 +6501,7 @@ Hosted release readiness for this worktree revision remains open.
   returned nearly zero-width intervals for its unidentified rate and
   midpoint. The new regression verifies rejection and both existing
   bootstrap boundary tests passed.
+
+- [x] Verify the baseline rank-deficiency bootstrap rejection through
+  rebuilt Python, Julia and installed R. The saturated Logistic fixture
+  returned the same native diagnostic in all three bindings.
