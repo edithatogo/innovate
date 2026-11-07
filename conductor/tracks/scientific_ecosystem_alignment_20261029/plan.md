@@ -3949,3 +3949,15 @@ Hosted release readiness for this worktree revision remains open.
   Python 3.15.2, Julia and installed R. All three converged with local
   rank two and forecast all nine shares within one percentage point.
   Reused builds from 2a5d2c0e with identical runtime source.
+
+## Bass interval coverage on a fixed observation grid
+
+- [x] Run 64 paired trials on times 1 through 24 with p=0.03,
+  q=0.21, m=120, Gaussian noise SD 0.5 and 100 bootstrap draws per
+  trial and method. Nominal 90% case intervals covered 57/64
+  (mean width 1.18044, zero failed refits). Centered residual
+  intervals covered 55/64 (mean width 1.07634, 29/6400 failed
+  refits). Both returned all 64 intervals without refusal.
+  Reproduce with evidence/check-bass-bootstrap-coverage.py and the
+  installed Python 3.15.2 wheel at 2a5d2c0e. This measures one
+  synthetic design. Broader uncertainty calibration remains open.
