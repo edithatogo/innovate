@@ -37,8 +37,12 @@ for trial in range(trials):
     except NativeError as error:
         if "residual bootstrap requires a converged baseline fit" not in str(error):
             raise
+        print(f"Trial {trial}: {error}")
         baseline_failures += 1
         continue
+    baseline = result["baseline_optimizer"]
+    if not baseline["converged"]:
+        print(f"Trial {trial}: baseline stopped at {baseline['termination']}")
     succeeded = result["succeeded"]
     assert succeeded + sum(result["failure_counts"].values()) == draws
     successful_refits.append(succeeded)

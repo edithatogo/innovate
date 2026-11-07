@@ -6536,3 +6536,9 @@ Hosted release readiness for this worktree revision remains open.
   was 26/39 for capacity, 31/39 for rate and 29/39 for midpoint. Keeping
   the time grid fixed removed rank failures on this design, while
   interval calibration remained below nominal.
+
+- [x] Isolate the nonconverged Logistic baseline in the resampling
+  study. Trial 39 stopped at the damping limit with maximum scaled
+  gradient 3.34e-9. Raising the iteration budget to 600 or 1,200 did
+  not change the termination. Paired-case resampling still reported
+  intervals from its accepted refits and retained the baseline flag.
