@@ -1134,3 +1134,9 @@ the other competition models and installed binding checks remain open.
   Lotka–Volterra fixture excludes a zero-weight outlier in both outputs.
   Eighteen focused Rust tests and Clippy passed.
 - [ ] Qualify weighted competition fits in installed Python, Julia and R.
+
+- [x] Qualify weighted Lotka–Volterra in installed Python, Julia and R.
+  All three bindings excluded the same two-output outlier and returned
+  normalized weighted RSS below 1e-10. Python used the Polars fit API.
+  Other competition models still require model-specific binding evidence.
+  [Fixture and results](evidence/lotka-competition-weights-20261107).
