@@ -507,3 +507,8 @@ Historical completion labels above do not establish current full-native ownershi
   *Link: [./tracks/tobac_consumer_qualification_20261025/](./tracks/tobac_consumer_qualification_20261025/)*
   **Approved planning only; implementation not authorised.** Reuses existing capability owners; downstream proof remains pending.
   GitHub: https://github.com/edithatogo/innovate/issues/546
+
+---
+
+- [~] **Track: Research Software Registry Readiness** *(External gates pending)*
+*Link: [./tracks/research_software_registry_readiness_20260721/](./tracks/research_software_registry_readiness_20260721/)*
