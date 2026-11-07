@@ -4403,3 +4403,6 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify reciprocal edge diagnostics through Julia and installed R.
   Both accept explicitly directed reciprocal edges and identify the
   undirected duplicate with duplicate_keys:source_target.
+- [x] Flag self-loops in network edge diagnostics as incompatible
+  with Kairos network simulation. Generic datasets retain their
+  self-loop data. The focused Rust edge regression passed.

@@ -376,8 +376,13 @@ fn validate_edges(payload: &Value) -> Result<Value, &'static str> {
     let checks: Vec<_> = checks.into_iter().map(|(name, pass, message)| {
         json!({"name":name,"status":if pass {"pass"} else {"fail"},"message":message,"details":{}})
     }).collect();
+    let warnings = if labels && source.iter().zip(target).any(|(a, b)| a == b) {
+        vec!["self_loops:kairos_network"]
+    } else {
+        Vec::new()
+    };
     Ok(
-        json!({"kind":"network_edges","ok":failed.is_empty(),"checks":checks,"failed":failed,"warnings":[]}),
+        json!({"kind":"network_edges","ok":failed.is_empty(),"checks":checks,"failed":failed,"warnings":warnings}),
     )
 }
 

@@ -968,6 +968,14 @@ fn edge_diagnostics_detect_duplicate_ordered_pairs_and_negative_weights() {
             serde_json::from_str(&innovate_core::execute_json(&reciprocal.to_string())).unwrap();
         assert_eq!(response["result"]["ok"], directed);
     }
+    reciprocal["payload"]["target"] = json!(["a", "a"]);
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&reciprocal.to_string())).unwrap();
+    assert_eq!(response["result"]["ok"], true);
+    assert_eq!(
+        response["result"]["warnings"],
+        json!(["self_loops:kairos_network"])
+    );
 }
 
 #[test]
