@@ -1010,6 +1010,30 @@ fn dataset_ingestion_stamps_valid_artifacts_and_rejects_invalid_inputs() {
         run(legacy["dataset"].clone())["error"]["message"],
         "dataset content checksum does not match provenance"
     );
+    let replay = |payload| {
+        let request =
+            json!({"schema_version":"2.0","operation":"ingest_dataset","payload":payload});
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    assert_eq!(replay(json!({"artifact":legacy}))["result"], *legacy);
+    assert_eq!(
+        replay(json!({"artifact":legacy,"encoding":"rust_sorted_json_v1"}))["error"]["code"],
+        "invalid_request"
+    );
+    let mut tampered = legacy.clone();
+    tampered["dataset"]["adoption"][1] = json!(3);
+    assert_eq!(
+        replay(json!({"artifact":tampered}))["error"]["message"],
+        "dataset content checksum does not match provenance"
+    );
+    tampered["dataset"]["provenance"]["checksum"] = json!("");
+    assert_eq!(
+        replay(json!({"artifact":tampered}))["error"]["code"],
+        "invalid_request"
+    );
     let mut changed = artifact["dataset"].clone();
     changed["adoption"][1] = innovate_core::json!(3);
     assert_eq!(run(changed)["error"]["code"], "invalid_request");

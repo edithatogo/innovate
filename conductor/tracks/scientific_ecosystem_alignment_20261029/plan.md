@@ -4363,3 +4363,8 @@ Hosted release readiness for this worktree revision remains open.
   installed R against native source 7d9393ef. Both reproduced the
   Unicode artifact with its recorded encoding and rejected the
   mismatch under the Rust default.
+- [x] Accept a complete dataset artifact directly in ingest_dataset.
+  Rust uses the recorded encoding, verifies the required checksum and
+  recomputes diagnostics. The five focused Rust dataset tests passed,
+  including historical round-trip, tampering and conflicting inputs.
+  Installed-binding checks remain open.

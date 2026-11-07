@@ -392,6 +392,28 @@ fn ingestion_error(message: &str) -> Value {
 }
 
 fn ingest(payload: &Value) -> Result<Value, Value> {
+    let replay;
+    let payload = if let Some(artifact) = payload.get("artifact") {
+        if payload.get("dataset").is_some() || payload.get("encoding").is_some() {
+            return Err(ingestion_error(
+                "artifact cannot be combined with dataset or encoding",
+            ));
+        }
+        if artifact["artifact_kind"] != "innovate.dataset"
+            || !artifact["checksum_encoding"].is_string()
+            || artifact["dataset"]["provenance"]["checksum"]
+                .as_str()
+                .is_none_or(str::is_empty)
+        {
+            return Err(ingestion_error(
+                "dataset artifact requires its kind, checksum and checksum encoding",
+            ));
+        }
+        replay = json!({"dataset":artifact["dataset"],"encoding":artifact["checksum_encoding"]});
+        &replay
+    } else {
+        payload
+    };
     let mut dataset = payload["dataset"].clone();
     if !dataset["provenance"].is_object() {
         return Err(ingestion_error("ingestion requires dataset provenance"));
