@@ -4465,3 +4465,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Distinguish missing weights from negative weights in network
   validation. Null weights trigger the missingness check without a
   false bounds failure. The focused Rust edge test passed.
+- [x] Flag zero-weight edges as incompatible with the positive-weight
+  Kairos graph contract while retaining them in generic datasets.
+  The Rust regression verifies that both compatibility warnings can
+  appear together.
