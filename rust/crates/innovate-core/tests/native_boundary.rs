@@ -317,3 +317,25 @@ fn assert_stl_reference(robust: bool, reference: &str, tolerance: f64) {
         }
     }
 }
+
+#[test]
+fn stationary_sarima_filter_matches_independent_one_step_forecasts() {
+    let mut fixture: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../../conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/sarima-reference/stationary-fixed.json"
+    )).unwrap();
+    fixture["method"] = "sarima_filter".into();
+    let request = innovate_core::json!({
+        "schema_version": "2.0", "operation": "preprocess_series", "payload": fixture
+    });
+    let result: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    for field in ["fitted", "residual"] {
+        let actual = result["result"][field].as_array().unwrap();
+        let expected = fixture[field].as_array().unwrap();
+        assert_eq!(actual.len(), expected.len());
+        for (i, (a, b)) in actual.iter().zip(expected).enumerate() {
+            let error = (a.as_f64().unwrap() - b.as_f64().unwrap()).abs();
+            assert!(error < 1e-10, "{field}[{i}] error {error}");
+        }
+    }
+}

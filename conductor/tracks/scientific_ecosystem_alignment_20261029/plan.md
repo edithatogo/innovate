@@ -1465,3 +1465,11 @@ the other competition models and installed binding checks remain open.
 - [ ] Implement Rust SARIMA filtering against the fixed-coefficient
   reference, then restore parameter estimation, differenced orders,
   and fitted-value parity against the historical SARIMAX contract.
+
+- [x] Add stationary fixed-coefficient SARIMA filtering to the Rust
+  preprocessing request. Multiplicative AR/MA polynomials, stationary
+  covariance and innovations yield aligned fitted values and residuals.
+  Corrected the R oracle to use prefix forecasts because R's fitted
+  residuals are standardized by the prediction variance. The independent
+  fixture agrees within 1e-10 at all 40 observations. All 19 native
+  boundary tests and focused Clippy passed.
