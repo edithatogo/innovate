@@ -6914,3 +6914,9 @@ Hosted release readiness for this worktree revision remains open.
   resampling contract. Native aggregation labels each bucket on
   the first day of the month and fills missing months with zero.
   The focused Rust boundary test passed. Binding checks remain open.
+
+- [x] Verify month-start aggregation through the Python 3.15.2 wheel,
+  Julia and installed R at 330b9e07. All three returned January through
+  March month starts and sums [1,0,5]. The first FFI link exhausted
+  storage. Removed a reproducible test executable and the incomplete
+  link outputs before rebuilding successfully.
