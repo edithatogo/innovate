@@ -1195,3 +1195,8 @@ the other competition models and installed binding checks remain open.
   `fit_frames` and `predict_frames` orchestrate the existing native frame
   entry points in input order. The installed regression covers lazy frames,
   the failed middle fit, independent forecast lengths and identity columns.
+
+- [x] Verify the batch JSON boundary rejects malformed envelopes and
+  isolates an invalid dataset between two successful predictions. All nine
+  native boundary tests passed. Record batch fitting as bounded native in
+  the release ledger, with broader model and workload qualification open.

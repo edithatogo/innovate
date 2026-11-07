@@ -108,3 +108,30 @@ fn batch_keeps_independent_fits_errors_and_ragged_forecasts_in_order() {
         assert!((values[0].as_f64().unwrap() - 50. * (i + 1) as f64).abs() < 1e-6);
     }
 }
+
+#[test]
+fn batch_json_validates_envelope_and_isolates_bad_datasets() {
+    use innovate_core::{execute_json, json};
+    let execute = |request: serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&execute_json(&request.to_string())).unwrap()
+    };
+    let mut request = json!({
+        "schema_version":"2.0","operation":"predict_batch","model_key":"logistic",
+        "payload":{"datasets":[
+            {"inputs":{"time":[5.]},"parameters":{"L":100.,"k":1.,"x0":5.}},
+            null,
+            {"inputs":{"time":[5.,6.]},"parameters":{"L":200.,"k":1.,"x0":5.}}
+        ]}
+    });
+    let response = execute(request.clone());
+    assert!(response["error"].is_null());
+    let rows = &response["result"]["datasets"];
+    assert_eq!(rows[0]["result"]["values"], json!([50.]));
+    assert_eq!(rows[1]["error"]["code"], "invalid_request");
+    assert_eq!(rows[2]["result"]["values"].as_array().unwrap().len(), 2);
+    request["schema_version"] = json!("1.0");
+    assert_eq!(execute(request.clone())["error"]["code"], "invalid_request");
+    request["schema_version"] = json!("2.0");
+    request["payload"]["datasets"] = json!({});
+    assert_eq!(execute(request)["error"]["code"], "invalid_request");
+}
