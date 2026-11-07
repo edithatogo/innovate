@@ -3075,3 +3075,10 @@ the other competition models and installed binding checks remain open.
   elapsed time. All three reproduced the full closure simulation on
   replay. The focused Rust retry replay test also asserts resource
   accounting for its completed-service fixture.
+
+- [x] Use the oldest Polars IPC compatibility level for native scenario
+  execution and comparison files. R Arrow rejected the prior UTF-8 view
+  columns. Python 3.15.2 Polars, Julia Arrow 2.8.1 and R Arrow read both
+  rebuilt files and preserved their row counts and success flags. Both
+  Rust scenario IPC tests and focused Clippy passed. The separate Python
+  Polars file writer remains an open Julia interoperability item.

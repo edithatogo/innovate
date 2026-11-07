@@ -368,6 +368,8 @@ fn scenario_rows<'a>(response: &'a Value, field: &str) -> PolarsResult<&'a [Valu
 
 fn write_scenario_ipc(frame: &mut DataFrame) -> PolarsResult<Vec<u8>> {
     let mut bytes = Vec::new();
-    IpcWriter::new(&mut bytes).finish(frame)?;
+    IpcWriter::new(&mut bytes)
+        .with_compat_level(CompatLevel::oldest())
+        .finish(frame)?;
     Ok(bytes)
 }
