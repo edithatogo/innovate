@@ -392,7 +392,20 @@ Waiting times round up to at least one tick. Service ticks must be positive and
 at most 10^12; ticks per unit are 1–10^9, with a default of 10^6. Requested sample
 times must map into 0–10^15 ticks. Counts include initial agents. Returned
 `requests` and `completions` retain ticks/identities; agent and resource state is
-at the final sample. RNG checkpoint metadata is provenance, not resume support.
+at the final sample in a completed run.
+
+For `kairos_network`, pause with either `pause_at_tick` (a nonnegative
+integer below the horizon) or `pause_after_completions` (a positive
+integer). A paused result has `status: "paused"` and an opaque
+`checkpoint` string. Remove the pause option and pass the string as
+`simulation_options.resume_checkpoint` with the same inputs, effective
+parameters and simulation configuration. Preserve the string exactly
+when saving or transferring it. The RNG metadata alone is insufficient
+to resume a run.
+
+Python, Julia and R have exchanged checkpoints for the same native
+build on a continuous-hazard network fixture. Compatibility across
+versions requires separate qualification.
 
 Optional population-length `innovation_multipliers` and `imitation_multipliers`
 scale each susceptible agent's p and q terms. They default to one and must be

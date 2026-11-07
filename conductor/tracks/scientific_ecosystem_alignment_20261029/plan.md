@@ -6672,3 +6672,7 @@ Hosted release readiness for this worktree revision remains open.
   checkpoint bytes. Julia resumed Python's checkpoint, R resumed
   Julia's, and Python resumed R's. Each full result matched its
   uninterrupted run using the 4947d6b4 native builds.
+
+- [x] Correct the network engine guide to describe supported checkpoint
+  pause, resume and transfer. Distinguish the resumable checkpoint
+  string from RNG metadata and scope transfer evidence to a common build.
