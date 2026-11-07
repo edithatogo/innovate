@@ -3364,3 +3364,10 @@ the other competition models and installed binding checks remain open.
   dependency resolution. With no environment override it loaded
   the locked Darwin arm64 debug dylib from deps and returned the
   expected Logistic forecast. Artifact distribution remains open.
+
+- [x] Build a Python source archive at `569b33ff`, extract it outside
+  the checkout root, and build a locked CPython 3.15 Darwin arm64
+  debug wheel from the extracted source using the existing Cargo
+  target cache. An isolated wheel extraction returned the expected
+  Logistic forecast through Polars on Python 3.15.2. Twine and
+  check-wheel-contents passed. Uncached and release builds remain open.
