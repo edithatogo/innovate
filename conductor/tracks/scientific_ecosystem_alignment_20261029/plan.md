@@ -1452,4 +1452,6 @@ the other competition models and installed binding checks remain open.
   and seasonal span pairs when the low-pass span was held equal.
   Odd periods use the next strictly greater odd low-pass span in
   Innovate, while R defaults to the period itself.
-- [ ] Verify the inferred span through rebuilt Python and Julia.
+- [x] Verify the inferred span through rebuilt Python and Julia. For
+  period 5 with the default seasonal span, both runtimes agreed exactly
+  with explicit trend span 11 and differed from explicit span 13.
