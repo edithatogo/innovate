@@ -1,0 +1,108 @@
+{
+  "date": "2026-11-07",
+  "status": "bounded_local_checkpoint",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "results": {
+    "rust_tests": 71,
+    "accounting": "67 core/C ABI coverage-run plus 4 Polars",
+    "installed_python": 30,
+    "julia_assertions": 147,
+    "R": "singleton policy boundary and previous conformance pass",
+    "clippy_lint_types_docs": "pass; expected native source type warning; 163 pages",
+    "package": "installed local wheel and archive metadata pass; clean-source/platform qualification pending"
+  },
+  "coverage": {
+    "branches": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "functions": {
+      "count": 746,
+      "covered": 551,
+      "percent": 73.86058981233245
+    },
+    "instantiations": {
+      "count": 1575,
+      "covered": 639,
+      "percent": 40.57142857142857
+    },
+    "lines": {
+      "count": 6251,
+      "covered": 5125,
+      "percent": 81.98688209886417
+    },
+    "mcdc": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "regions": {
+      "count": 9977,
+      "covered": 8660,
+      "notcovered": 1317,
+      "percent": 86.79963917009121
+    }
+  },
+  "raw_log_sha256": {
+    "innovate-policy-red.log": "a2ae33c4b918c9210c5f31cece5cd3a6635e9b208b53ffb647dce7504ee528a5",
+    "innovate-policy-green.log": "a3b2842bb15aab6f0c057a3c1329090c5f7d7bc38819bd4d2ab25aa2755371b0",
+    "innovate-policy-coverage.log": "a7ea46346c79f88d15c2e7e2b79b15ba865dfc588e1b8ccadc7cd46baf301530",
+    "innovate-policy-tabular.log": "cc34ca427942e642d9e246e6281f6cc112a7d73ef8bf1345061ed1b5e494f704",
+    "innovate-policy-clippy.log": "9bee846b983b8304e879e1d207e3afa9454b49d4eb5a86f47b2710a9bc74df58",
+    "innovate-policy-lint.log": "093e91c502151b50c84f57316c544bed91098f8c2c199992d01a162d20bfbd89",
+    "innovate-policy-docs.log": "13a0bcccee504a08fab76422f0f6a70f15cf956bf76c11813118f2b87c10fb5d",
+    "innovate-policy-python.log": "6386f70d8b4e853cedfda73b508acca6b4478cf4de76ff3da1fd98e7c0c89be8",
+    "innovate-policy-r-install.log": "8bcc66b6f075dd6146b6ca006a0579b369a424d49b587fb4b5bc0350fad78c31",
+    "innovate-policy-r.log": "d58dd77226e7440535988656e5c12f75f4fd7f4519a595040510008ac7c355b3",
+    "innovate-policy-julia.log": "512f046cd2dc002d346a84835ee150245461c650304e3be3ad4b4f90095d010d",
+    "innovate-policy-policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+    "innovate-policy-release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "innovate-policy-ffi.log": "1822fa4836204826a1f2d27ab47bac902f24ac9c7c7de96ce3992b4c2ee8fcf1",
+    "innovate-policy-wheel.log": "9b78afd96dd6593a52cd0f15407f1281b45694f018889946d26ef1b3526ee2d6",
+    "innovate-policy-sdist.log": "8b36f3e450b7edbecf636480dd7d916e1b8434aefcd018f7fcb4ed3747e904b8",
+    "innovate-policy-package.log": "1880467177a29ed9974473f288b6a94cbaa9b28d7c31310381a268c8f75384ac"
+  },
+  "normalization": "Only trailing whitespace and terminal blank lines removed",
+  "evidence_sha256": {
+    "innovate-policy-policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+    "innovate-policy-red.log": "a2ae33c4b918c9210c5f31cece5cd3a6635e9b208b53ffb647dce7504ee528a5",
+    "innovate-policy-sdist.log": "8b36f3e450b7edbecf636480dd7d916e1b8434aefcd018f7fcb4ed3747e904b8",
+    "coverage-summary.json": "04bcb0a7e7f85575fa15aed9f118128e0072e3b9b67b830f0a0403be0992f76f",
+    "innovate-policy-python.log": "6386f70d8b4e853cedfda73b508acca6b4478cf4de76ff3da1fd98e7c0c89be8",
+    "julia.log": "91ff310eb484a4248797f506187f5dbf2b5356628456acc1aecbcbc6d60358f4",
+    "r.log": "d58dd77226e7440535988656e5c12f75f4fd7f4519a595040510008ac7c355b3",
+    "innovate-policy-lint.log": "093e91c502151b50c84f57316c544bed91098f8c2c199992d01a162d20bfbd89",
+    "red.log": "a2ae33c4b918c9210c5f31cece5cd3a6635e9b208b53ffb647dce7504ee528a5",
+    "innovate-policy-wheel.log": "9b78afd96dd6593a52cd0f15407f1281b45694f018889946d26ef1b3526ee2d6",
+    "innovate-policy-release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "green.log": "dd89422ae09fb051fa70d7d4f8e0b0a643de7e38010e9c304056306bb8610ea8",
+    "clippy.log": "bc3dedf823e335252ef40bc798c1e79e20848a260dad734a80248cc064d21ad9",
+    "innovate-policy-docs.log": "27d5cdecac3a8bbab39db429de289673ca1c0a5a284c8c9996554b3c80e95636",
+    "source-sha256.json": "189173c7729279ddacba85520c21abc48ecde823fae90f25f0aa6de6e4962e04",
+    "innovate-policy-coverage.log": "a7ea46346c79f88d15c2e7e2b79b15ba865dfc588e1b8ccadc7cd46baf301530",
+    "innovate-policy-r-install.log": "8bcc66b6f075dd6146b6ca006a0579b369a424d49b587fb4b5bc0350fad78c31",
+    "innovate-policy-tabular.log": "1fba44ee83c8284f718c22eef1692219ae330063ac89fd9110d13d59a8db803f",
+    "innovate-policy-julia.log": "512f046cd2dc002d346a84835ee150245461c650304e3be3ad4b4f90095d010d",
+    "innovate-policy-package.log": "d415c94467a97540ae12273d077bd1c2e47a8e3d90fb577e5e0250473fb4db9e",
+    "innovate-policy-clippy.log": "9bee846b983b8304e879e1d207e3afa9454b49d4eb5a86f47b2710a9bc74df58",
+    "innovate-policy-ffi.log": "1822fa4836204826a1f2d27ab47bac902f24ac9c7c7de96ce3992b4c2ee8fcf1",
+    "innovate-policy-green.log": "dd89422ae09fb051fa70d7d4f8e0b0a643de7e38010e9c304056306bb8610ea8",
+    "python.log": "f9852f82f66bdf1fc81da90d2189a4cbac22b1212eb9ba12a0a456b7eac39a3a",
+    "innovate-policy-r.log": "d58dd77226e7440535988656e5c12f75f4fd7f4519a595040510008ac7c355b3",
+    "innovate-policy-hooks.log": "7523d6b940ad7d7e49ea93ff33ac60ceb273c50cb6ae677030a5b65df95de21b"
+  },
+  "artifacts_sha256": {
+    "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/target/debug/libinnovate_ffi.dylib": "e444587d46febff191dc54a3cd287640f471b48e94e58dd522001ae3bd5f84ed",
+    "/tmp/innovate-policy-wheel/innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "431bb6df61be66d1af1ca627b822e729531fca4ca6256d6e1d88c40138982145",
+    "/tmp/innovate-policy-wheel/innovate-0.7.0a1.tar.gz": "3407f331930a8f795742ad7ef4be26f85636d5122d973942c0b2f14a4c641ff2"
+  },
+  "remaining": [
+    "Five unavailable model families and all full-feature qualifications",
+    "Policy/base covariate composition, inference/uncertainty and causal/scenario work",
+    "Remaining data/report/plugin/HPC and distribution/release obligations"
+  ]
+}

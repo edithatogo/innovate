@@ -86,8 +86,9 @@
     },
     {
       "key": "policy_hazard",
-      "status": "unavailable",
-      "required": true
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/policy-20261107.json"
     },
     {
       "key": "regime_switching",
@@ -129,8 +130,10 @@
     },
     {
       "key": "network_policy_diffusion",
-      "status": "pending",
-      "required": true
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/policy-20261107.json",
+      "remaining": "Full base/covariate composition, policy inference, stochastic uncertainty, causal and scenario qualification remain required"
     },
     {
       "key": "kairos_des_abm",

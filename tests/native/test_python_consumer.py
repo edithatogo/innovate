@@ -43,6 +43,7 @@ def test_capabilities_are_native_and_unavailable_features_fail_closed():
         "complementary_goods",
         "lock_in",
         "network_diffusion",
+        "policy_hazard",
     }
     assert innovate.capabilities()["supports_simulation"].all()
     assert innovate.capabilities()["supports_summarize"].all()
@@ -209,3 +210,24 @@ def test_historical_network_polars_fitting_and_forecast():
     a = fit.predict(pl.DataFrame({"time": [30.0]}))
     assert a["prediction_1"][0] == pytest.approx(bass(30, 0.03, 0.3, 100), abs=0.01)
     assert a["prediction_2"][0] == pytest.approx(bass(30, 0.02, 0.2, 200), abs=0.01)
+
+
+def test_policy_event_boundary_and_native_baseline_fit():
+    a = innovate.predict(
+        "policy_hazard",
+        pl.DataFrame({"time": [0.0, 2.0, 3.0]}),
+        {"decay": 0.5, "base_L": 100.0, "base_k": 1.0, "base_x0": 2.0},
+        model_options={"base_model": "logistic", "event_times": [2.0], "event_effects": [0.5]},
+    )
+    assert a["prediction"][1] == 75.0
+    t = [float(i) for i in range(20)]
+    y = [100 / (1 + math.exp(-0.5 * (x - 5))) for x in t]
+    fit = innovate.fit(
+        "policy_hazard",
+        pl.DataFrame({"time": t, "observed": y}),
+        model_options={"base_model": "logistic", "decay": 0.3},
+    )
+    assert fit.parameters["decay"] == 0.3
+    assert fit.predict(pl.DataFrame({"time": [20.0]}))["prediction"][0] == pytest.approx(
+        100 / (1 + math.exp(-7.5)), abs=0.001
+    )

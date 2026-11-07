@@ -325,3 +325,47 @@ ports, remaining covariate/event/inference work and distribution qualification.
 No native operation remains live; full Conductor goal remains active.
 
 Historical network source/evidence commit: `975248c8dd7bac64651eb5d609556d9fd9cba509`. All operations terminal; remaining source tasks stay active.
+
+## Historical policy-hazard continuation — in progress
+
+Same writer resumes at 99da4e78; initial checkout clean. Previous goal turn made
+progress through committed historical network qualification. Recovered policy.py
+and PolicyTimingInputs from 56d91dd7. policy.rs now reuses native scalar curve
+fit/predict operations and preserves fixed decay, independently fitted baseline,
+decaying event level multipliers, nonnegative clipping and cumulative maxima.
+This is not a calibrated survival hazard or causal effect; metadata says so.
+
+- [x] Port bounded historical policy prediction/fit/state, summaries and sample increments.
+- [x] Validate event edge cases and bounded Python/Julia/R consumers before discovery.
+- [x] Complete local coverage/review/docs/package evidence and retain remaining scope.
+
+Independent closed-form boundary/decay regression initially failed with native
+unavailability and now passes. Additional tests exercise fixed-decay baseline
+fitting and forecasts, no-time summary, negative multiplier clipping and malformed
+inputs. Source edits: policy.rs, lib.rs, kernel.rs and tests/policy.rs. Capability
+remains unadvertised and ledger unchanged pending broader validation. Next:
+inspect the exact focused test/Clippy results, add singleton event-array transport
+for R, then installed binding and current-source qualification. Full base-model
+composition/covariates, policy parameter inference, stochastic draws and causal
+validation remain required. Goal remains active.
+Focused results inspected: all four policy regressions and core all-target
+Clippy pass. No native operation remains live. Next action is binding transport
+and installed-consumer validation, not rerunning unchanged focused checks.
+
+Policy consumers now pass 30 installed Python tests, 147 Julia assertions and
+R native conformance including singleton event arrays and exact event-boundary
+prediction. Polars baseline fitting/forecast state also passes. R known-array
+handling now includes event times/effects/labels and node/covariate labels,
+preserving input maps through the existing separate covariate-map branch.
+Current-source core/C ABI coverage and workspace Clippy completed successfully;
+artifact rebuild and tests are terminal. Capability remains unadvertised pending
+final review, discovery/ledger, docs/package and evidence gates. Next action is
+inspect coverage totals, finish these gates and commit this bounded port. Full
+policy inference/covariates/stochastic and causal qualification remain required.
+
+Policy checkpoint: 71 Rust tests, 30 installed Python checks, 147 Julia assertions
+and R cases pass. Core/C ABI coverage: 81.99%. Review: policy-review-20261107.md;
+receipt: policy-20261107.json. Eleven bounded families; five remain unavailable.
+All 38 obligations remain required. Next: latent/regime, hierarchical/mixture/
+composite ports, inference/scenarios, remaining covariates/events and distribution
+qualification. No native operation remains live; full goal remains active.

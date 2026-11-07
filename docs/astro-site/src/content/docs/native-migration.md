@@ -10,7 +10,7 @@ no Python numerical fallback, pandas or xarray runtime.
 
 ## Current scope
 
-Ten native model families expose deterministic fitting, prediction, simulation,
+Eleven native model families expose deterministic fitting, prediction, simulation,
 summary and diagnostics: Bass, Logistic, Gompertz, Fisher–Pry, Norton–Bass,
 Lotka–Volterra, multi-product competition, complementary goods and lock-in. Their support remains bounded.
 Covariates, events, uncertainty, other model families and full Kairos simulation
@@ -328,3 +328,30 @@ Targeted interventions, full base-model composition/covariates, stochastic draws
 uncertainty and general scenario integration remain required migration work.
 Unknown option fields fail explicitly. This deterministic wrapper does not
 inherit the event engine's resource semantics or qualify full network parity.
+
+## Historical policy-timing wrapper
+
+`policy_hazard` reuses a scalar Bass, Logistic, Gompertz or Fisher–Pry baseline.
+Constructor options are base_model, event_times, event_effects, optional
+aligned event_labels and decay (default 0.5). Parameters use decay and base_p,
+base_q, base_m for Bass, or the corresponding base-prefixed curve parameters.
+At each event boundary and afterward, an effect contributes
+`effect * exp(-decay*(time-event_time))` to a level multiplier of one plus the
+summed contributions. Negative adjusted levels are clipped and a cumulative
+maximum is applied within the requested batch. Sample increments start at zero
+and are not time derivatives. This preserves the historical deterministic
+wrapper, not a calibrated survival hazard or causal policy effect.
+
+Fitting preserves the historical algorithm: fit the baseline to observations,
+hold decay fixed, then apply policy multipliers. Diagnostics retain the baseline
+fit and warn that adjusted predictions need not fit observations. Optional
+base_fit_options apply to that baseline; nonempty global fit_options are rejected.
+Summaries retain event times/labels, mean effect and decay without inventing
+predictions when no times are requested. Fitted state retains policy inputs.
+Native R transport preserves singleton event vectors as arrays.
+
+Full base composition/covariates, estimating policy effects or decay,
+stochastic draws, uncertainty and causal validation remain required work.
+Unknown fields and malformed event arrays fail explicitly. Negative effects,
+zero decay, pre-existing events and simultaneous events retain the analytic
+level-adjustment interpretation; no event scheduler is copied here.

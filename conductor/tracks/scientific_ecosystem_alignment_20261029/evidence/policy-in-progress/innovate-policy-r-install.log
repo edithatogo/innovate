@@ -1,0 +1,19 @@
+* installing *source* package ‘innovate.R’ ...
+** using staged installation
+** libs
+using C compiler: ‘Apple clang version 21.0.0 (clang-2100.4.1.1)’
+using SDK: ‘MacOSX27.2.sdk’
+make: Nothing to be done for `all'.
+installing to /private/tmp/innovate-r-library-20261106/00LOCK-r/00new/innovate.R/libs
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+** checking absolute paths in shared objects and dynamic libraries
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (innovate.R)

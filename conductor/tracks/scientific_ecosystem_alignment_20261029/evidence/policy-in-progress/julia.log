@@ -1,0 +1,26 @@
+Test Summary:      | Pass  Total  Time
+Native conformance |  104    104  2.0s
+Test Summary:               | Pass  Total  Time
+Five model analytic oracles |   10     10  0.2s
+Test Summary:                     | Pass  Total  Time
+Multi-generation fit and forecast |    7      7  1.0s
+Test Summary:               | Pass  Total  Time
+Competitive analytic limits |    6      6  0.2s
+Test Summary:                   | Pass  Total  Time
+Native numerical overflow guard |    1      1  0.3s
+Test Summary:        | Pass  Total  Time
+Kairos native replay |    3      3  0.1s
+Test Summary:                      | Pass  Total  Time
+ABM forcing and agent conservation |    4      4  0.1s
+Test Summary:                       | Pass  Total  Time
+Historical Logistic and initial ABM |    2      2  0.4s
+Test Summary:                        | Pass  Total  Time
+Complementary goods and network FIFO |    3      3  0.1s
+Test Summary:              | Pass  Total  Time
+Complementary analytic fit |    2      2  0.2s
+Test Summary:             | Pass  Total  Time
+Lock-in analytic forecast |    2      2  0.0s
+Test Summary:               | Pass  Total  Time
+Historical weighted network |    2      2  0.1s
+Test Summary:         | Pass  Total  Time
+Policy event boundary |    1      1  0.0s

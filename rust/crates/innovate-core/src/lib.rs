@@ -8,6 +8,7 @@ mod historical;
 mod kernel;
 mod network;
 mod numerics;
+mod policy;
 mod simulation;
 mod spillover;
 mod substitution;
