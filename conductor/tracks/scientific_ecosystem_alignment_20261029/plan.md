@@ -2764,3 +2764,7 @@ the other competition models and installed binding checks remain open.
   Active service finished at tick 6. Waiters used the new durations and
   completed at ticks 8 and 12. The scalar override was cleared. R used
   raw JSON to preserve the empty edge array.
+
+- [x] Document scheduled Kairos priorities and per-agent durations in
+  the native migration guide. Include queue tie behavior, deadline and
+  active service preservation, and scalar/vector duration precedence.

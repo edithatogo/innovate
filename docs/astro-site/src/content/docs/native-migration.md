@@ -751,6 +751,23 @@ already underway finish at their original times. The result lists the
 schedule ticks applied through the requested horizon.
 
 
+A schedule entry can replace `agent_priorities` with one signed 32-bit integer
+per agent. Waiting agents are reordered by the new priorities, with their
+original queue entry times breaking ties. Existing waiting deadlines and
+active services are preserved.
+
+Set scheduled `agent_service_ticks` to one duration per agent, each an integer
+from 1 through 10^12 ticks. It replaces an earlier scalar duration override and
+applies when a waiting or future agent starts service. Each schedule entry
+accepts one duration form, `service_ticks` or `agent_service_ticks`.
+
+```json
+[
+  {"tick": 4, "agent_priorities": [0, 0, 10]},
+  {"tick": 5, "agent_service_ticks": [2, 3, 4]}
+]
+```
+
 Set `max_wait_ticks` to a positive integer up to 10^12 to give every
 queued agent a deadline. An agent who starts service at that tick keeps
 the slot. Other expired agents appear in `abandonments` and enter `withdrawn`
