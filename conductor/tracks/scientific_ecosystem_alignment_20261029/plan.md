@@ -1681,4 +1681,6 @@ the other competition models and installed binding checks remain open.
   for levels, differences and percentage differences. The Lock-in
   fixture verifies both the changed product and a zero baseline product.
   All 24 native boundary tests and focused Clippy passed.
-- [ ] Verify the multi-product counterfactual request across bindings.
+- [x] Verify the Lock-in counterfactual through the rebuilt Python wheel,
+  Julia and installed R. Each retains both product columns, returns
+  differences of 20 and 0, and reports 20% and null respectively.
