@@ -3537,3 +3537,10 @@ Hosted release readiness for this worktree revision remains open.
   These cases extend the optimizer evidence to both signs near the
   stationarity and invertibility boundaries. Higher-order fits near
   those boundaries and cross-binding validation of these cases remain open.
+
+- [x] Verify the four near-unit-root cases through the installed Python
+  3.15.2 wheel and Julia public fitting helpers, using the same samples
+  and fitted-value reference exported from the installed R binding.
+  All 240 fitted positions per case agreed within 1e-10, with identical
+  null or missing positions. The wheel and FFI library were built at
+  63248eab. The intervening changes are Conductor evidence only.
