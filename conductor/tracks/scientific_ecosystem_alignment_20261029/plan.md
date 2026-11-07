@@ -4910,3 +4910,9 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Run the complete locked Rust core suite on 03bb7474, whose
   source matches the three local consumer runs. All 273 unit and
   integration tests passed with zero failures or ignored tests.
+
+- [x] Stabilize historical adopter categories on irregular time grids.
+  The focused Rust regression preserved the categories under both a
+  narrow translated grid and a grid whose raw endpoint span overflows.
+  Classification still weights the supplied samples. Binding
+  requalification remains open.
