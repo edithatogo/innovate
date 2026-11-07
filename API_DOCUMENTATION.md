@@ -246,3 +246,14 @@ probabilities from observed arm frequencies. It returns probabilities
 in input order and arm counts by stratum. Every stratum requires both
 arms. When those fitted probabilities feed the weighted contrast, its
 fixed-propensity standard error does not account for the fitting step.
+
+## Matched treatment contrast
+
+Call `summarize_causal` with method `matched_treatment_contrast`,
+aligned `outcomes`, binary `treatment`, scalar `scores`, and a
+nonnegative `caliper` in score units. The method matches each treated
+observation to the nearest control with replacement. Ties use the
+earliest control in input order. It returns the mean paired difference
+and zero-based pair indices. A treated observation outside the caliper
+causes the request to fail. Identification depends on the supplied score
+and the assumptions of the study design.

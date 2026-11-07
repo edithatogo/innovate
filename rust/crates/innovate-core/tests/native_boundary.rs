@@ -684,6 +684,15 @@ fn causal_summaries_match_analytic_effects() {
     adjusted.as_object_mut().unwrap().remove("estimator");
     adjusted["confounders"] = json!(["age"]);
     assert!(run(adjusted)["result"].is_null());
+    let mut matched = json!({"method":"matched_treatment_contrast",
+        "outcomes":[0,10,12,3,99],"treatment":[0,0,1,1,0],
+        "scores":[0,2,2,1,0],"caliper":1});
+    let result = run(matched.clone());
+    assert_eq!(result["result"]["estimate"], 2.5);
+    assert_eq!(result["result"]["pairs"][0]["control_index"], 1);
+    assert_eq!(result["result"]["pairs"][1]["control_index"], 0);
+    matched["caliper"] = json!(0.5);
+    assert!(run(matched)["result"].is_null());
     let mut weighted = json!({"method":"propensity_weighted_contrast",
         "outcomes":[0,10,2,12],"treatment":[0,0,1,1],"propensities":[0.2,0.8,0.2,0.8]});
     let mut fit = json!({"method":"estimate_stratum_propensities",

@@ -4565,3 +4565,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify the empirical propensity fitting and weighted ATE workflow
   through rebuilt Python 3.15.2, Julia and installed R. Each preserved
   input ordering and recovered the analytic estimate of 6.
+
+- [x] Add native scalar-score nearest-neighbour ATT with replacement.
+  The focused Rust fixture verifies 2.5, deterministic ties and caliper
+  failure. Binding qualification and matching inference remain open.

@@ -307,6 +307,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
         Some("stratified_treatment_contrast") => stratified_treatment_contrast(payload),
         Some("propensity_weighted_contrast") => propensity_weighted_contrast(payload),
         Some("estimate_stratum_propensities") => estimate_stratum_propensities(payload),
+        Some("matched_treatment_contrast") => matched_treatment_contrast(payload),
         Some("intervention_contract") => intervention_contract(payload),
         Some("policy_specification") => policy_specification(payload),
         Some("policy_evidence") => policy_evidence(payload),
@@ -739,6 +740,56 @@ fn stratified_treatment_contrast(payload: &Value) -> Result<Value, &'static str>
         "conditional_standard_error":conditional_standard_error.map(finite).transpose()?,
         "excluded_control_observations":excluded_control_observations,
         "estimand":if att { "att" } else { "ate" },"by_stratum":by_stratum}),
+    )
+}
+
+fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
+    let fields = payload
+        .as_object()
+        .ok_or("expected a matched contrast object")?;
+    if fields.keys().any(|key| {
+        !matches!(
+            key.as_str(),
+            "method" | "outcomes" | "treatment" | "scores" | "caliper"
+        )
+    }) {
+        return Err("matched contrast accepts only outcomes, treatment, scores and caliper");
+    }
+    let outcomes = series(payload, "outcomes")?;
+    let treatment = series(payload, "treatment")?;
+    let scores = series(payload, "scores")?;
+    let caliper = payload["caliper"]
+        .as_f64()
+        .filter(|&v| v >= 0.)
+        .ok_or("matching requires a nonnegative caliper")?;
+    if outcomes.len() != treatment.len()
+        || outcomes.len() != scores.len()
+        || treatment.iter().any(|&v| v != 0. && v != 1.)
+    {
+        return Err("outcomes and scores must align with binary treatment");
+    }
+    let mut controls: Vec<_> = (0..scores.len()).filter(|&i| treatment[i] == 0.).collect();
+    controls.sort_by(|&a, &b| scores[a].partial_cmp(&scores[b]).unwrap());
+    controls.dedup_by(|a, b| scores[*a] == scores[*b]);
+    let mut differences = Vec::new();
+    let mut pairs = Vec::new();
+    for i in (0..scores.len()).filter(|&i| treatment[i] == 1.) {
+        let right = controls.partition_point(|&j| scores[j] < scores[i]);
+        let (control, distance) = right
+            .checked_sub(1)
+            .into_iter()
+            .chain([right])
+            .filter_map(|position| controls.get(position).copied())
+            .map(|j| (j, (scores[i] - scores[j]).abs()))
+            .min_by(|a, b| a.1.total_cmp(&b.1).then(a.0.cmp(&b.0)))
+            .filter(|&(_, distance)| distance <= caliper)
+            .ok_or("every treated observation requires a control within the caliper")?;
+        differences.push(finite(outcomes[i] - outcomes[control])?);
+        pairs.push(json!({"treated_index":i,"control_index":control,"distance":distance}));
+    }
+    let estimate = mean(&differences).ok_or("matching requires treated observations")?;
+    Ok(
+        json!({"method":"nearest_score_with_replacement","estimand":"att","estimate":estimate,"pairs":pairs}),
     )
 }
 
