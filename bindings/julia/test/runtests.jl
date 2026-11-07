@@ -248,11 +248,13 @@ end
     start=copy(fixture["parameters"])
     start["alpha1"]=0.29
     start["beta_beta1_price"]=-0.025
-    payload=Dict("inputs"=>Dict("time"=>fixture["time"],"observed"=>fixture["rows"],"covariates"=>fixture["covariates"]),"constructor_kwargs"=>Dict("initial_values"=>fixture["initial"],"covariates"=>["price"]),"fit_options"=>Dict("initial_parameters"=>start,"max_iterations"=>150))
-    fit=kernel_fit_model("lotka_volterra",payload)["result"]
-    @test fit["diagnostics"]["optimizer"]["converged"]
-    forecast=kernel_predict_model("lotka_volterra",Dict("inputs"=>Dict("time"=>fixture["forecast_time"]),"state"=>fit["state"]))["result"]
-    @test maximum(abs.(forecast["rows"][1].-fixture["forecast_rows"][1]))<1e-5
+    for options in (Dict("initial_parameters"=>start,"max_iterations"=>150), Dict("max_iterations"=>150))
+        payload=Dict("inputs"=>Dict("time"=>fixture["time"],"observed"=>fixture["rows"],"covariates"=>fixture["covariates"]),"constructor_kwargs"=>Dict("initial_values"=>fixture["initial"],"covariates"=>["price"]),"fit_options"=>options)
+        fit=kernel_fit_model("lotka_volterra",payload)["result"]
+        @test fit["diagnostics"]["optimizer"]["converged"]
+        forecast=kernel_predict_model("lotka_volterra",Dict("inputs"=>Dict("time"=>fixture["forecast_time"]),"state"=>fit["state"]))["result"]
+        @test maximum(abs.(forecast["rows"][1].-fixture["forecast_rows"][1]))<1e-5
+    end
 end
 
 @testset "Multi product forcing layouts and conditional fit" begin

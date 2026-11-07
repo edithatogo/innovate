@@ -231,10 +231,12 @@ lv_fixture <- jsonlite::fromJSON("rust/crates/innovate-core/tests/fixtures/lotka
 lv_start <- lv_fixture$parameters
 lv_start$alpha1 <- 0.29
 lv_start$beta_beta1_price <- -0.025
-lv_payload <- list(inputs=list(time=unlist(lv_fixture$time),observed=lv_fixture$rows,covariates=list(price=unlist(lv_fixture$covariates$price))),constructor_kwargs=list(initial_values=unlist(lv_fixture$initial),covariates="price"),fit_options=list(initial_parameters=lv_start,max_iterations=150))
-lv_fit <- kernel_fit_model("lotka_volterra",lv_payload)$result
-lv_forecast <- kernel_predict_model("lotka_volterra",list(inputs=list(time=unlist(lv_fixture$forecast_time)),state=lv_fit$state))$result
-stopifnot(lv_fit$diagnostics$optimizer$converged,max(abs(unlist(lv_forecast$rows)-unlist(lv_fixture$forecast_rows)))<1e-5)
+for (lv_options in list(list(initial_parameters=lv_start,max_iterations=150),list(max_iterations=150))) {
+  lv_payload <- list(inputs=list(time=unlist(lv_fixture$time),observed=lv_fixture$rows,covariates=list(price=unlist(lv_fixture$covariates$price))),constructor_kwargs=list(initial_values=unlist(lv_fixture$initial),covariates="price"),fit_options=lv_options)
+  lv_fit <- kernel_fit_model("lotka_volterra",lv_payload)$result
+  lv_forecast <- kernel_predict_model("lotka_volterra",list(inputs=list(time=unlist(lv_fixture$forecast_time)),state=lv_fit$state))$result
+  stopifnot(lv_fit$diagnostics$optimizer$converged,max(abs(unlist(lv_forecast$rows)-unlist(lv_fixture$forecast_rows)))<1e-5)
+}
 cat("R interacting Lotka forcing fit and history passed\n")
 
 mp_fixture <- jsonlite::fromJSON(

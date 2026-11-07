@@ -991,3 +991,9 @@ the other competition models and installed binding checks remain open.
   held-out forecast to 1e-5. The rebuilt wheel passed 62 native tests, Julia
   Pkg.test passed 239 assertions, and installed R conformance passed.
   [Validation logs](evidence/complementary-automatic-starts-20261107).
+
+- [x] Qualify automatic interacting Lotka–Volterra fits in installed
+  Python, Julia and R. Both start modes converge and reproduce the
+  independent held-out forecast within 1e-5. The focused runs reuse
+  the installed builds from the complementary-goods checkpoint.
+  [Validation logs](evidence/lotka-automatic-starts-20261107).

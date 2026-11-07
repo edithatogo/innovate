@@ -538,6 +538,7 @@ def test_norton_bass_covariate_history():
         ("lotka_volterra", "lotka_forcing_scipy.json", {"alpha1": 0.29, "beta_beta1_price": -0.025}),
         ("complementary_goods", "complementary_forcing_scipy.json", {"k1": 0.29, "beta_c2_price": -0.007}),
         ("lock_in", "lock_forcing_scipy.json", {"alpha1": 0.29}),
+        ("lotka_volterra", "lotka_forcing_scipy.json", None),
         ("complementary_goods", "complementary_forcing_scipy.json", None),
     ],
 )
