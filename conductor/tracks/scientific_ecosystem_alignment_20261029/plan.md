@@ -6142,3 +6142,10 @@ Hosted release readiness for this worktree revision remains open.
   the provider provenance updated. In R, use kernel_call_json for the
   original envelopes. Re-encoding the parsed artifact through
   kernel_call failed the embedded-payload equality check.
+
+- [x] Accept exactly equal whole-number spellings of translated floats
+  when importing scenario replay artifacts. The rebuilt R bridge
+  imported and replayed the parsed prior-pin artifact via kernel_call
+  and rejected a changed market size. Rust checked that adjacent
+  integers above 2^53 remain distinct and expected integer types
+  cannot be replaced by floats.

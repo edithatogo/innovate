@@ -1664,6 +1664,35 @@ pub(crate) fn import_artifact(request: &Value) -> Value {
     )
 }
 
+// R serializes whole-valued doubles as JSON integers. Accept that spelling
+// only when translation expects a float and the integer is exactly equal.
+fn replay_payload_matches(expected: &Value, replay: &Value) -> bool {
+    if expected == replay {
+        return true;
+    }
+    match (expected, replay) {
+        (Value::Object(a), Value::Object(b)) => {
+            a.len() == b.len()
+                && a.iter().all(|(key, value)| {
+                    b.get(key)
+                        .is_some_and(|other| replay_payload_matches(value, other))
+                })
+        }
+        (Value::Array(a), Value::Array(b)) => {
+            a.len() == b.len() && a.iter().zip(b).all(|(a, b)| replay_payload_matches(a, b))
+        }
+        (Value::Number(a), Value::Number(b)) if a.is_f64() => {
+            let expected = a.as_f64().unwrap();
+            let replay = b
+                .as_i64()
+                .map(i128::from)
+                .or_else(|| b.as_u64().map(i128::from));
+            expected.fract() == 0. && replay.is_some_and(|integer| expected as i128 == integer)
+        }
+        _ => false,
+    }
+}
+
 fn validate_replay(
     original: &Value,
     artifact: &ImportedArtifact,
@@ -1719,9 +1748,24 @@ fn validate_replay(
         let mut translated = entry;
         let resolved = std::mem::replace(&mut translated.simulation, submitted.clone());
         apply_specification(&mut translated)?;
-        if translated.simulation != resolved {
+        if !replay_payload_matches(&translated.simulation, &resolved) {
             return Err("submitted simulation does not resolve to the embedded replay payload");
         }
     }
     Ok(None)
+}
+
+#[cfg(test)]
+#[test]
+fn replay_payload_accepts_only_exact_integer_spellings_of_floats() {
+    let expected = json!({"parameters": [1.0, 9_007_199_254_740_992.0]});
+    assert!(replay_payload_matches(
+        &expected,
+        &json!({"parameters": [1, 9_007_199_254_740_992_u64]})
+    ));
+    assert!(!replay_payload_matches(
+        &expected,
+        &json!({"parameters": [1, 9_007_199_254_740_993_u64]})
+    ));
+    assert!(!replay_payload_matches(&json!(1), &json!(1.0)));
 }
