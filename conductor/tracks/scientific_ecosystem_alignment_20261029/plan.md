@@ -4386,3 +4386,6 @@ Hosted release readiness for this worktree revision remains open.
   without cloning a synthetic ingestion request. Copy the returned
   dataset only after verification and diagnostics. All five focused
   Rust dataset boundary tests passed.
+- [x] Compare historical checksum encoding with CPython over a seeded
+  sample of 2,047 finite binary64 values across the exponent range.
+  The installed wheel digest matched the independent JSON/SHA-256 oracle.

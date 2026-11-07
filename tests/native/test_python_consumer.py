@@ -1,8 +1,11 @@
 """Installed consumers must exercise native code without legacy scientific packages."""
 
+import hashlib
 import importlib.util
 import json
 import math
+import random
+import struct
 from pathlib import Path
 
 import polars as pl
@@ -1222,3 +1225,12 @@ def test_legacy_dataset_artifact_reingestion_uses_recorded_encoding():
     artifact["dataset"]["adoption"][1] = 3
     with pytest.raises(innovate.NativeError, match="checksum does not match"):
         innovate.execute("ingest_dataset", artifact=artifact)
+
+
+def test_legacy_checksum_matches_python_across_float_exponents():
+    rng = random.Random(420)
+    values = [struct.unpack(">d", rng.getrandbits(64).to_bytes(8, "big"))[0] for _ in range(2048)]
+    dataset = {"values": [value for value in values if math.isfinite(value)]}
+    encoded = json.dumps(dataset, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
+    actual = innovate.execute("dataset_checksum", dataset=dataset, encoding="python_sorted_json_v1")["result"]
+    assert actual["checksum"] == hashlib.sha256(encoded).hexdigest()
