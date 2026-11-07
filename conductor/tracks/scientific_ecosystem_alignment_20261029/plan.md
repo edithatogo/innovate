@@ -4462,3 +4462,6 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Report duplicate edge keys only for actual duplicate valid pairs.
   An invalid endpoint is diagnosed independently and does not create
   a false duplicate. The focused Rust edge regression passed.
+- [x] Distinguish missing weights from negative weights in network
+  validation. Null weights trigger the missingness check without a
+  false bounds failure. The focused Rust edge test passed.

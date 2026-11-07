@@ -349,7 +349,7 @@ fn validate_edges(payload: &Value) -> Result<Value, &'static str> {
         ),
         (
             "weight_bounds",
-            weights.iter().all(|v| v.as_f64().is_some_and(|w| w >= 0.)),
+            weights.iter().filter_map(Value::as_f64).all(|w| w >= 0.),
             "edge weights must be nonnegative",
         ),
         (

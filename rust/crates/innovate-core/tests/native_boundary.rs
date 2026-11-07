@@ -985,6 +985,11 @@ fn edge_diagnostics_detect_duplicate_ordered_pairs_and_negative_weights() {
         response["result"]["warnings"],
         json!(["self_loops:kairos_network"])
     );
+    let mut missing_weight = reciprocal.clone();
+    missing_weight["payload"]["weight"][0] = serde_json::Value::Null;
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&missing_weight.to_string())).unwrap();
+    assert_eq!(response["result"]["failed"], json!(["missingness:weight"]));
     let mut dataset = reciprocal["payload"].clone();
     dataset["provenance"] =
         json!({"source":"survey","license":"CC-BY-4.0","extraction_time":"2026-11-07T00:00:00Z"});
