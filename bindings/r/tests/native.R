@@ -599,7 +599,9 @@ stopifnot(isTRUE(all.equal(matched$estimate, 2.5)),
 stopifnot(matched$control_diagnostics$unique_controls == 2,
   matched$control_diagnostics$effective_sample_size == 2)
 reused <- kernel_call("summarize_causal",
-  payload=modifyList(matching_payload, list(scores=c(0,2,2,2,0))))$result
+  payload=modifyList(matching_payload, list(scores=c(0,2,2,2,0), outcome_variances=c(1,4,1,1,1))))$result
+stopifnot("conditional_standard_error" %in% names(matched), is.null(matched$conditional_standard_error),
+  isTRUE(all.equal(reused$conditional_standard_error, sqrt(4.5))))
 stopifnot(reused$control_diagnostics$unique_controls == 1,
   reused$control_diagnostics$effective_sample_size == 1)
 matching_payload$caliper <- 0.5

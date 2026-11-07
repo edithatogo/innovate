@@ -4597,3 +4597,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Propagate supplied independent outcome variances through fixed
   matched pairs. The focused Rust fixture verifies sqrt(4.5) when two
   treated rows share a control. Binding and broader inference remain open.
+
+- [x] Verify fixed-match outcome uncertainty through rebuilt Python
+  3.15.2, Julia and installed R. The shared-control fixture returns
+  sqrt(4.5), and omitting outcome variances returns null.

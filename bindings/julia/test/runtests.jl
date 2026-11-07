@@ -634,7 +634,10 @@ end
     @test result["estimate"] ≈ 2.5
     @test [pair["control_index"] for pair in result["pairs"]] == [1,0]
     @test result["control_diagnostics"] == Dict("unique_controls"=>2, "effective_sample_size"=>2)
-    reused = kernel_call("summarize_causal", nothing, merge(payload, Dict("scores"=>[0,2,2,2,0])))["result"]
+    @test isnothing(result["conditional_standard_error"])
+    reused = kernel_call("summarize_causal", nothing,
+        merge(payload, Dict("scores"=>[0,2,2,2,0], "outcome_variances"=>[1,4,1,1,1])))["result"]
+    @test reused["conditional_standard_error"] ≈ sqrt(4.5)
     @test reused["control_diagnostics"] == Dict("unique_controls"=>1, "effective_sample_size"=>1)
     payload["caliper"] = 0.5
     partial = kernel_call("summarize_causal", nothing, merge(payload, Dict("allow_partial"=>true)))["result"]

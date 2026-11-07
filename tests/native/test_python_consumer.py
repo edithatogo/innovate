@@ -1375,7 +1375,10 @@ def test_nearest_score_matching():
     assert result["estimate"] == pytest.approx(2.5)
     assert [pair["control_index"] for pair in result["pairs"]] == [1, 0]
     assert result["control_diagnostics"] == {"unique_controls": 2, "effective_sample_size": 2}
-    reused = innovate.execute("summarize_causal", **{**payload, "scores": [0, 2, 2, 2, 0]})["result"]
+    assert result["conditional_standard_error"] is None
+    reused = innovate.execute("summarize_causal", **{**payload, "scores": [0, 2, 2, 2, 0]},
+                              outcome_variances=[1, 4, 1, 1, 1])["result"]
+    assert reused["conditional_standard_error"] == pytest.approx(4.5**0.5)
     assert reused["control_diagnostics"] == {"unique_controls": 1, "effective_sample_size": 1}
     payload["caliper"] = 0.5
     partial = innovate.execute("summarize_causal", **payload, allow_partial=True)["result"]
