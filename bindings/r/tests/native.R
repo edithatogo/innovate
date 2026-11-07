@@ -286,3 +286,30 @@ cg_forecast <- kernel_predict_model(
 stopifnot(cg_fit$diagnostics$optimizer$converged,
           max(abs(unlist(cg_forecast$rows)-unlist(cg_fixture$forecast_rows)))<1e-5)
 cat("R complementary goods forcing fit and history passed\n")
+
+li_fixture <- jsonlite::fromJSON(
+  "rust/crates/innovate-core/tests/fixtures/lock_forcing_scipy.json", simplifyVector=FALSE
+)
+li_start <- li_fixture$parameters
+li_start$alpha1 <- 0.29
+li_fit <- kernel_fit_model("lock_in", list(
+  inputs=list(time=unlist(li_fixture$time), covariates=list(price=unlist(li_fixture$covariates$price)),
+              observed=li_fixture$rows),
+  constructor_kwargs=list(initial_values=unlist(li_fixture$initial), covariates="price"),
+  fit_options=list(initial_parameters=li_start, max_iterations=200)
+))$result
+li_forecast <- kernel_predict_model(
+  "lock_in", list(inputs=list(time=unlist(li_fixture$forecast_time)), state=li_fit$state)
+)$result
+stopifnot(li_fit$diagnostics$optimizer$converged,
+          li_fit$diagnostics$structural_identifiability$parameters==14,
+          max(abs(unlist(li_forecast$rows)-unlist(li_fixture$forecast_rows)))<1e-3)
+li_parameters <- list(alpha1=0,alpha2=0,beta1=0,beta2=0,gamma1=0,gamma2=0,m=100)
+for (name in names(li_parameters)) li_parameters[[paste0("beta_",name,"_price")]] <- 0
+li_parameters$beta_m_price <- -10
+li_projected <- kernel_predict_model("lock_in", list(
+  inputs=list(time=c(0,1,2,3),covariates=list(price=c(0,1,2,0))),
+  parameters=li_parameters,constructor_kwargs=list(initial_values=c(95,0),covariates="price")
+))$result
+stopifnot(all(vapply(li_projected$rows,function(row)row[[1]],numeric(1))==c(95,90,80,95)))
+cat("R lock in forcing fit, forecast and capacity projection passed\n")

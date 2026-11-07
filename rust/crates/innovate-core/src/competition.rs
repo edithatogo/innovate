@@ -76,6 +76,19 @@ impl Model {
                 .collect(),
         )
     }
+    fn lock_in_capacity(&self, t: f64, parameters: &[f64]) -> f64 {
+        parameters[6]
+            + self.history.as_ref().map_or(0., |history| {
+                self.covariates
+                    .iter()
+                    .enumerate()
+                    .map(|(index, name)| {
+                        parameters[self.base_count * (index + 1) + 6] * history.at(name, t)
+                    })
+                    .sum::<f64>()
+            })
+    }
+
     fn derivative(&self, t: f64, y: &[f64], parameters: &[f64]) -> Vec<f64> {
         if let Some(history) = &self.history {
             let mut effective = parameters[..self.base_count].to_vec();
@@ -94,7 +107,9 @@ impl Model {
                     *parameter += coefficients[coefficient_index] * value;
                 }
             }
-            if effective.iter().any(|value| !value.is_finite()) {
+            if effective.iter().any(|value| !value.is_finite())
+                || (self.key == "lock_in" && effective[6] <= 0.)
+            {
                 return vec![f64::NAN; self.n];
             }
             self.base_derivative(y, &effective)
@@ -154,6 +169,16 @@ impl Model {
             grid.sort_by(f64::total_cmp);
             grid.dedup_by(|a, b| *a == *b);
         }
+        if self.key == "lock_in"
+            && std::iter::once(self.origin)
+                .chain(grid.iter().copied())
+                .any(|t| {
+                    let capacity = self.lock_in_capacity(t, p);
+                    !capacity.is_finite() || capacity <= 0.
+                })
+        {
+            return Err("lock-in effective capacity must stay finite and positive".into());
+        }
         let states = integrate(&grid, self.origin, &self.initial, |t, y| {
             self.derivative(t, y, p)
         })?;
@@ -162,8 +187,11 @@ impl Model {
             .map(|t| states[grid.partition_point(|v| v < t)].clone())
             .collect();
         if self.key == "lock_in" {
-            for x in rows.iter_mut().flatten() {
-                *x = x.clamp(0., p[6]);
+            for (&t, row) in time.iter().zip(&mut rows) {
+                let market = self.lock_in_capacity(t, p);
+                for value in row {
+                    *value = value.clamp(0., market);
+                }
             }
         }
         Ok(rows)
@@ -189,6 +217,7 @@ impl Model {
             "metadata":{"shape":[time.len(),self.n],"quantity":if self.key=="lotka_volterra" {"technology_share"}else{"product_level"},
             "rate_semantics":if self.key=="lock_in" {"historical RHS at clipped levels; not derivative of output clipping or gross incidence"} else {"signed derivative of each level; not gross incidence"},"warnings":warnings,
             "normalization":"separate product potentials; rows are not constrained to sum to one",
+            "projection":if self.key=="lock_in" {"historical_clip_to_current_capacity"} else {"none"},
             "coefficient_layout":if self.historical_layout {"historical"} else {"corrected"}}}),
         )
     }
@@ -245,14 +274,6 @@ fn model(
         return Err(invalid(
             op,
             "covariates must contain at most 32 distinct nonempty names",
-        ));
-    }
-    if !["lotka_volterra", "multi_product", "complementary_goods"].contains(&key.as_str())
-        && (!covariates.is_empty() || kw.contains_key("covariate_history"))
-    {
-        return Err(KernelBindingError::unsupported_native_operation(
-            op,
-            "lock-in covariate forcing remains a migration obligation",
         ));
     }
     let historical_layout = match kw.get("coefficient_layout").and_then(Value::as_str) {
@@ -489,7 +510,7 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
             .names
             .iter()
             .map(|name| {
-                if model.key == "lock_in" && name == "m" {
+                if model.key == "lock_in" && model.history.is_none() && name == "m" {
                     yscale
                 } else {
                     0.
@@ -529,7 +550,7 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
         let mut starts = Vec::new();
         if let Some(initial) = initial {
             let parameters = model.parameters(&initial, op)?;
-            if model.key == "lock_in" && parameters[6] < yscale {
+            if model.key == "lock_in" && model.history.is_none() && parameters[6] < yscale {
                 return Err(invalid(
                     op,
                     "initial market potential must be at least the maximum observed value across both series",
@@ -553,7 +574,7 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
                 .iter()
                 .enumerate()
                 .map(|(i, name)| {
-                    if model.key == "lock_in" && name == "m" {
+                    if model.key == "lock_in" && model.history.is_none() && name == "m" {
                         yscale * 1.5
                     } else if name.starts_with('m') {
                         observed
@@ -645,7 +666,7 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
             );
             d["initial_condition"] = json!({"source":if model.conditioned_initial {"first_observed_row"} else {"explicit_or_zero"},"excluded_conditioning_rows":offset,"uncertainty_propagated":false});
             if model.key == "lock_in" {
-                d["structural_identifiability"] = json!({"status":"interior_parameter_confounding","scope":"unclipped_interior_trajectories","rank_upper_bound":6,"parameters":7,"reason":"only alpha1, alpha2 and four beta/gamma-to-market combinations enter the interior polynomial RHS; clipping can add boundary information"});
+                d["structural_identifiability"] = json!({"status":"interior_parameter_confounding","scope":"unclipped_interior_trajectories","rank_upper_bound":model.names.len()-1,"parameters":model.names.len(),"reason":"a common capacity and feedback scaling preserves the unclipped interior RHS; clipping can add boundary information"});
                 d["warnings"].as_array_mut().unwrap().push(json!("Interior trajectories cannot identify free m separately from beta/gamma combinations; clipping-boundary information requires separate qualification"));
             }
             if let Some((optimizer, identifiability)) = quality {

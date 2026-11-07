@@ -306,3 +306,35 @@ end
     )["result"]
     @test maximum(abs.(forecast["rows"][1].-fixture["forecast_rows"][1])) < 1e-5
 end
+
+@testset "Lock in forcing fit and history" begin
+    fixture = Innovate.JSON.parsefile(
+        joinpath(@__DIR__, "../../../rust/crates/innovate-core/tests/fixtures/lock_forcing_scipy.json");
+        dicttype=Dict{String,Any},
+    )
+    start = copy(fixture["parameters"])
+    start["alpha1"] = 0.29
+    fit = kernel_fit_model("lock_in", Dict(
+        "inputs"=>Dict("time"=>fixture["time"], "covariates"=>fixture["covariates"], "observed"=>fixture["rows"]),
+        "constructor_kwargs"=>Dict("initial_values"=>fixture["initial"], "covariates"=>["price"]),
+        "fit_options"=>Dict("initial_parameters"=>start, "max_iterations"=>200),
+    ))["result"]
+    @test fit["diagnostics"]["optimizer"]["converged"]
+    @test fit["diagnostics"]["structural_identifiability"]["parameters"] == 14
+    forecast = kernel_predict_model(
+        "lock_in", Dict("inputs"=>Dict("time"=>fixture["forecast_time"]), "state"=>fit["state"]),
+    )["result"]
+    @test maximum(abs.(forecast["rows"][1].-fixture["forecast_rows"][1])) < 1e-3
+
+    parameters = Dict("alpha1"=>0., "alpha2"=>0., "beta1"=>0., "beta2"=>0., "gamma1"=>0., "gamma2"=>0., "m"=>100.)
+    for name in collect(keys(parameters))
+        parameters["beta_"*name*"_price"] = 0.
+    end
+    parameters["beta_m_price"] = -10.
+    result = kernel_predict_model("lock_in", Dict(
+        "inputs"=>Dict("time"=>[0.,1.,2.,3.], "covariates"=>Dict("price"=>[0.,1.,2.,0.])),
+        "parameters"=>parameters,
+        "constructor_kwargs"=>Dict("initial_values"=>[95.,0.], "covariates"=>["price"]),
+    ))["result"]
+    @test [row[1] for row in result["rows"]] == [95.,90.,80.,95.]
+end

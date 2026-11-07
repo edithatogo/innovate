@@ -306,7 +306,7 @@ Interior trajectories identify only alpha1, alpha2 and four feedback/competition
 to-market combinations. Free m is confounded with beta/gamma parameters. Native
 diagnostics explicitly warn about this structural ambiguity; a numerical full
 Jacobian rank does not qualify unique parameter recovery. Boundary information
-and calibrated uncertainty require separate qualification. Covariates/events
+and calibrated uncertainty require separate qualification. Event splits
 and broader lock-in variants remain required migration work.
 
 ## Historical deterministic network spillover
@@ -849,3 +849,35 @@ implementation had no covariate path. Analytic uncoupled growth and an
 independent interacting SciPy reference verify levels, rates, conditional fit
 and a held-out forecast. Event splits, automatic forcing-fit starts, uncertainty
 and broader scientific qualification remain required.
+
+
+### Lock-in covariates and instantaneous capacity
+
+Lock-in now uses the shared declared-control contract for all seven base
+parameters. A control named `price` adds `beta_alpha1_price`,
+`beta_alpha2_price`, `beta_beta1_price`, `beta_beta2_price`,
+`beta_gamma1_price`, `beta_gamma2_price` and `beta_m_price`.
+Controls interpolate linearly and hold their endpoint values. The effective
+capacity must remain finite and positive across the integration interval.
+
+The historical equations clip levels inside the RHS. Reported levels are also
+clipped to the capacity at each requested time. This reporting projection
+preserves the integrated state, so levels can recover when capacity rises again.
+The returned rates retain their historical meaning as the RHS at clipped levels.
+They exclude changes caused solely by the reporting projection. For example,
+constant integrated levels of 95 report 90 when capacity falls to 90, with a
+zero RHS rate. Metadata identifies this projection explicitly.
+
+Saved state retains the original initial values, time origin and forcing history.
+Conditional fitting requires complete explicit initial parameters. With forcing,
+the base m may be lower than observed levels because controls add to capacity.
+The unforced model retains its original lower bound on m. The known interior
+capacity/feedback confounding remains in fit diagnostics, with a rank upper
+bound based on the expanded parameter count. Numerical convergence alone
+cannot establish unique parameter recovery.
+
+An independent interacting DOP853 reference covers predictions, RHS rates,
+conditional fitting and a held-out forecast. Additional tests cover capacity
+decline/recovery, invalid capacity and forced fits with a small base m.
+Event splits, initial-state and control uncertainty, calibrated parameter
+inference and wider scientific qualification remain required.

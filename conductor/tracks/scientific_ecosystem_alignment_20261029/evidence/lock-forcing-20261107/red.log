@@ -1,0 +1,22 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.41s
+     Running tests/lock_in.rs (target/debug/deps/lock_in-1f2cba18df16ae89)
+
+running 1 test
+test forced_lock_in_projects_to_current_capacity_without_resetting_raw_state ... FAILED
+
+failures:
+
+---- forced_lock_in_projects_to_current_capacity_without_resetting_raw_state stdout ----
+
+thread 'forced_lock_in_projects_to_current_capacity_without_resetting_raw_state' (27741530) panicked at rust/crates/innovate-core/tests/lock_in.rs:63:80:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "unsupported_native_operation", message: "lock-in covariate forcing remains a migration obligation", operation: Some(PredictModel) }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    forced_lock_in_projects_to_current_capacity_without_resetting_raw_state
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --test lock_in`

@@ -120,8 +120,8 @@
       "key": "competitive_ecosystems",
       "status": "bounded_native",
       "required": true,
-      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/complementary-forcing-20261107.json",
-      "remaining": "Lock-in covariates, event splits, equilibrium helpers, uncertainty and wider numerical qualification remain required"
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/lock-forcing-20261107.json",
+      "remaining": "Event splits, equilibrium helpers, calibrated uncertainty and wider numerical qualification remain required"
     },
     {
       "key": "hierarchical_mixture_inference",

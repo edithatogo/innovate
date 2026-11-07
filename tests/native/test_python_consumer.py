@@ -537,6 +537,7 @@ def test_norton_bass_covariate_history():
     [
         ("lotka_volterra", "lotka_forcing_scipy.json", {"alpha1": 0.29, "beta_beta1_price": -0.025}),
         ("complementary_goods", "complementary_forcing_scipy.json", {"k1": 0.29, "beta_c2_price": -0.007}),
+        ("lock_in", "lock_forcing_scipy.json", {"alpha1": 0.29}),
     ],
 )
 def test_ecosystem_forcing_polars_fit_and_forecast(model, fixture_name, start_override):
@@ -622,3 +623,19 @@ def test_multi_product_forcing_layouts_and_polars_fit():
     assert [future["prediction_1"][0], future["prediction_2"][0]] == pytest.approx(
         fixture["cases"]["corrected"]["forecast_rows"][0], abs=1e-3
     )
+
+
+def test_lock_in_capacity_projection_recovers_retained_state():
+    parameters = dict(alpha1=0.0, alpha2=0.0, beta1=0.0, beta2=0.0, gamma1=0.0, gamma2=0.0, m=100.0)
+    parameters.update({f"beta_{name}_price": 0.0 for name in parameters})
+    parameters["beta_m_price"] = -10.0
+    result = innovate.execute(
+        "predict_model",
+        "lock_in",
+        inputs={"time": [0.0, 1.0, 2.0, 3.0], "covariates": {"price": [0.0, 1.0, 2.0, 0.0]}},
+        parameters=parameters,
+        constructor_kwargs={"initial_values": [95.0, 0.0], "covariates": ["price"]},
+    )["result"]
+    assert [row[0] for row in result["rows"]] == [95.0, 90.0, 80.0, 95.0]
+    assert result["rates"] == [[0.0, 0.0]] * 4
+    assert result["metadata"]["projection"] == "historical_clip_to_current_capacity"
