@@ -5627,3 +5627,12 @@ Hosted release readiness for this worktree revision remains open.
   layout with copied Rust test fixtures resolved that test dependency.
   The complete Julia 1.13.3 suite passed with the debug library staged
   in deps. This is a local bundle check using the existing Julia depot.
+
+- [x] Build and install the local macOS ARM64 R binary archive from
+  30a51ae5 using R 4.3.0 and the current debug Rust FFI library.
+  Archive SHA-256: 2f50fad649d4da7d0ffed16c02482dd28806ed56bbd6f3e3ab8f62b7d4240609.
+  After reclaiming generated staging copies to resolve an out-of-space
+  extraction, R CMD INSTALL into a fresh library succeeded. The full
+  R consumer suite passed with INNOVATE_NATIVE_LIBRARY unset and the
+  package path verified. Other platforms and release distribution
+  qualification remain open.
