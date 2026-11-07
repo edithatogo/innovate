@@ -3236,3 +3236,10 @@ the other competition models and installed binding checks remain open.
   exactly on twelve Logistic forecasts at three held-out times.
   Independent Logistic predictions and percentile calculations matched
   every bound within 1e-10. The focused Rust regression and Clippy passed.
+
+- [x] Verify multiseries bootstrap forecast intervals from the noisy
+  joint Norton–Bass fit. Python 3.15.2, Julia and R agreed exactly
+  for three refitted paths at time 15. The baseline matched both SciPy
+  reference levels within 0.01. Replaying each parameter draw against
+  the full covariate history and independently taking percentiles
+  reproduced both series' interval bounds within 1e-9.
