@@ -5206,3 +5206,7 @@ Hosted release readiness for this worktree revision remains open.
   passed 428 assertions across 58 test sets, and the full installed
   R native suite exited successfully. The native Rust sources match
   9ac7533f, with the R bridge installed from 2e492674.
+
+- [x] Run the locked Rust core and Polars suites at the same native
+  source revision as the checkpoint consumer milestone. All 299
+  tests passed with zero failures or ignored tests on c7538fac.
