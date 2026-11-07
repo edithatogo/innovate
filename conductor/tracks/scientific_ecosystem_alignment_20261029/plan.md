@@ -6149,3 +6149,9 @@ Hosted release readiness for this worktree revision remains open.
   and rejected a changed market size. Rust checked that adjacent
   integers above 2^53 remain distinct and expected integer types
   cannot be replaced by floats.
+
+- [x] Verify exact numeric replay validation through the Python wheel
+  and Julia. Both accepted the R-encoded artifact and rejected a
+  changed market size with the embedded replay payload diagnostic.
+  Python required a nonincremental rebuild after the first build
+  reused stale native output.
