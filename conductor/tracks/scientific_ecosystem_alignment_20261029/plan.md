@@ -3855,3 +3855,7 @@ Hosted release readiness for this worktree revision remains open.
   multi-generation and competition. All 60 selected Rust tests and
   six competition and multi-generation tests in the rebuilt Python
   3.15.2 wheel passed. This is local fit regression evidence.
+- [x] Verify the scaled-rank core in the complete Julia and freshly
+  installed R native suites at 4d0beff1. Both passed, including
+  the six-parameter Norton Bass rank assertion and extreme-domain
+  fitting rejection. Core and binding source match 9fcd4a1d.
