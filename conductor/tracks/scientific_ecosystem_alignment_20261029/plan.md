@@ -4963,3 +4963,9 @@ Hosted release readiness for this worktree revision remains open.
   22 assertions covering column order, element types, values and
   missing entries. Run evidence/check-portable-arrow.jl with the
   original file and equivalent stream as arguments.
+
+- [x] Generate the typed Arrow handoff fixtures from source with
+  evidence/generate-portable-arrow.py. Python 3.15.2 and Polars 2.1.0
+  produced a file and equivalent stream with nullable nested values,
+  empty lists, Unicode and Int32 identifiers. The Julia readback check
+  passed all eight assertions on the generated pair.
