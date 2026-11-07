@@ -6890,3 +6890,8 @@ Hosted release readiness for this worktree revision remains open.
   forecasts matched their direct results in serial and parallel.
   An intervening forecast missing its declared covariate returned
   invalid_request and no result in all three bindings.
+
+- [x] Verify batch ordering across uneven worker chunks. A 65-row
+  forecast request with distinct expected values and ten malformed
+  rows produced identical ordered responses with 1, 3 and 32
+  workers. The focused Rust batch boundary tests passed.

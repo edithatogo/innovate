@@ -142,6 +142,36 @@ fn batch_json_validates_envelope_and_isolates_bad_datasets() {
 }
 
 #[test]
+fn batch_preserves_uneven_chunks_across_worker_counts() {
+    let datasets: Vec<_> = (0..65)
+        .map(|index| {
+            if index % 7 == 0 {
+                serde_json::Value::Null
+            } else {
+                json!({"inputs":{"time":[0]},"parameters":{"L":2 * index,"k":1,"x0":0}})
+            }
+        })
+        .collect();
+    let run = |workers| -> serde_json::Value {
+        let request = json!({"schema_version":"2.0","operation":"predict_batch",
+            "model_key":"logistic","payload":{"workers":workers,"datasets":datasets}});
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let serial = run(1);
+    let rows = serial["result"]["datasets"].as_array().unwrap();
+    assert_eq!(rows.len(), 65);
+    for (index, row) in rows.iter().enumerate() {
+        if index % 7 == 0 {
+            assert_eq!(row["error"]["code"], "invalid_request");
+        } else {
+            assert_eq!(row["result"]["values"], json!([index as f64]));
+        }
+    }
+    assert_eq!(run(3), serial);
+    assert_eq!(run(32), serial);
+}
+
+#[test]
 fn plain_diffusion_rates_match_analytic_reference_points() {
     use innovate_core::{KernelBinding, json};
     for (key, parameters, time, expected) in [
