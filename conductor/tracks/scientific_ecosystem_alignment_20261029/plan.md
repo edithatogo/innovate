@@ -7099,3 +7099,10 @@ Hosted release readiness for this worktree revision remains open.
   invokes the migration verifier in the checkout before the separate
   extracted-source checks. The archive does not ship the verifier or
   ledger. This was an archive-content check.
+
+- [x] Build a locked Python 3.15.2 wheel from the extracted Maturin
+  source archive and run all packaged Python native tests against
+  that wheel. All passed on local arm64 macOS. Cargo reused the
+  checkout target cache, so this verifies source archive consumption
+  with cached build dependencies. A cold build and hosted checks
+  remain separate.
