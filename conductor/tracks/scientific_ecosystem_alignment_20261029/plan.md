@@ -7220,3 +7220,10 @@ Hosted release readiness for this worktree revision remains open.
   Require both the Python wrapper and Rust extension to resolve
   inside the isolated installation. The assertion passed on the
   local extracted wheel, and Actionlint passed. Hosted readback is open.
+
+- [x] Verify the release smoke test dependencies and install sequence.
+  The locked no-project uv dry run selected Polars and pytest. The
+  first local install ran out of space in uv's cache. Used an isolated
+  cache and target on the checkout volume after removing the temporary
+  R install. The debug wheel passed module-origin and prediction
+  checks. Hosted release artifacts remain unverified.
