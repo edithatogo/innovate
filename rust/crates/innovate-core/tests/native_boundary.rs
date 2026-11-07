@@ -453,6 +453,13 @@ fn causal_summaries_match_analytic_effects() {
     );
     assert_eq!(groups["result"]["overall_effect"], 3.);
     assert_eq!(groups["result"]["by_group"]["a"]["ci_upper"], 3.96);
+    let risk = run(json!({"method":"e_value","point_estimate":0.5}));
+    assert!((risk["result"]["e_value"].as_f64().unwrap() - (2. + 2_f64.sqrt())).abs() < 1e-12);
+    let sensitivity = run(json!({"method":"sensitivity_scenario","point_estimate":10,
+                                 "gamma":3,"direction":"negative"}));
+    assert_eq!(sensitivity["result"]["lower_bound"], 8.);
+    assert_eq!(sensitivity["result"]["upper_bound"], 10.);
+    assert_eq!(sensitivity["result"]["method"], "historical_heuristic");
     let balance = run(json!({"method":"covariate_balance","threshold":0.5,
         "treated_covariates":{"shift":[1,3],"same":[1,3],"unmatched":[2,4]},
         "control_covariates":{"shift":[0,2],"same":[1,3]}}));

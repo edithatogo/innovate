@@ -120,6 +120,36 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                       "max_effect":max,"min_effect":min,"effect_range":finite(max-min)?}),
             )
         }
+        Some("e_value") => {
+            let risk_ratio = payload["point_estimate"]
+                .as_f64()
+                .filter(|&v| v > 0.)
+                .ok_or("E-value requires a positive risk ratio")?;
+            let ratio = risk_ratio.max(risk_ratio.recip());
+            let e_value = finite(ratio + ratio.sqrt() * (ratio - 1.).sqrt())?;
+            Ok(json!({"e_value":e_value}))
+        }
+        Some("sensitivity_scenario") => {
+            let point = payload["point_estimate"]
+                .as_f64()
+                .ok_or("point_estimate must be numeric")?;
+            let gamma = payload["gamma"]
+                .as_f64()
+                .filter(|&v| v >= 1.)
+                .ok_or("gamma must be at least one")?;
+            let margin = finite(point.abs() * 0.1 * (gamma - 1.))?;
+            let (lower, upper) = match payload.get("direction").map_or(Some("both"), Value::as_str)
+            {
+                Some("both") => (point - margin, point + margin),
+                Some("positive") => (point, point + margin),
+                Some("negative") => (point - margin, point),
+                _ => return Err("direction must be both, positive or negative"),
+            };
+            Ok(
+                json!({"gamma":gamma,"point_estimate":point,"lower_bound":finite(lower)?,
+                "upper_bound":finite(upper)?,"robustness_margin":margin,"method":"historical_heuristic"}),
+            )
+        }
         Some("covariate_balance") => covariate_balance(payload),
         _ => Err("unknown causal summary method"),
     }

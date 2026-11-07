@@ -1637,3 +1637,11 @@ the other competition models and installed binding checks remain open.
 - [x] Verify covariate balance through the rebuilt Python wheel, Julia
   and installed R. All three matched the analytic pooled SMD within
   1e-12 and identified one of two covariates as balanced.
+
+- [x] Port the historical point E-value and directional sensitivity
+  scenario. The native request validates risk ratio, gamma and bias
+  direction, and labels the scenario margin as a historical heuristic.
+  Analytic reciprocal-risk and one-sided scenario checks passed with
+  all 24 Rust boundary tests and focused Clippy.
+- [ ] Port the historical paired sensitivity bounds and gamma-grid
+  summaries and verify the sensitivity requests across bindings.
