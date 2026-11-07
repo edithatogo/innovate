@@ -5161,3 +5161,7 @@ Hosted release readiness for this worktree revision remains open.
   the service duration, and the wait must match the original request.
   The malformed-completion regression and all three focused Rust
   network checkpoint tests passed.
+
+- [x] Reject network checkpoints with inconsistent waiter, cooldown
+  or active-service agent states. The regression changes a queued agent
+  to susceptible and verifies rejection. All 32 network tests passed.

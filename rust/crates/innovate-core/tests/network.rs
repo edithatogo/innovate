@@ -937,6 +937,17 @@ fn network_checkpoint_preserves_pending_service_queue_and_schedule() {
         assert!(run(payload.clone()).is_err());
     }
     payload["simulation_options"]["resume_checkpoint"] = paused["checkpoint"].clone();
+    let mut malformed = state.clone();
+    let waiting_agent = state["queue"]["waiting_since"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .position(|tick| !tick.is_null())
+        .unwrap();
+    malformed["states"][waiting_agent] = json!(0);
+    payload["simulation_options"]["resume_checkpoint"] = json!(malformed.to_string());
+    assert!(run(payload.clone()).is_err());
+
     let mut malformed = state;
     malformed["service_starts"][0]["scheduled_completion_tick"] = json!(u64::MAX);
     payload["simulation_options"]["resume_checkpoint"] = json!(malformed.to_string());

@@ -733,6 +733,12 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 graph = replacement;
             }
         }
+        if saved.states.iter().enumerate().any(|(index, &state)| {
+            (saved.queue.waiting_since[index].is_some() && state != 1)
+                || (saved.queue.retry_at[index].is_some() != (state == 4))
+        }) {
+            return Err(invalid("checkpoint queue does not match agent states"));
+        }
         for (&agent, &state) in agents.iter().zip(&saved.states) {
             context.attach(agent, state);
         }
@@ -745,7 +751,13 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 entry.schedule_completion(&mut context, agents[entry.agent]);
             }
         }
-        if pending.len() as u64 != saved.in_service {
+        if pending.len() as u64 != saved.in_service
+            || saved.states.iter().enumerate().any(|(index, &state)| {
+                state == 1
+                    && saved.queue.waiting_since[index].is_none()
+                    && !pending.contains(&index)
+            })
+        {
             return Err(invalid("invalid checkpoint service occupancy"));
         }
         rng = DeterministicStream::restore(&saved.rng)
