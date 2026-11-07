@@ -1,0 +1,1 @@
+{"inputs":{"time":[1,2,3]},"constructor_kwargs":{"t_event":2},"parameters":{"L":100,"k":0.5,"x0":2,"L_post":200,"k_post":1,"x0_post":2}}

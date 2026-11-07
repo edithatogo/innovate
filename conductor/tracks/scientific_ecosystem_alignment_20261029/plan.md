@@ -1062,5 +1062,8 @@ the other competition models and installed binding checks remain open.
   The event sample uses the post-event curve and excludes jump impulses.
   Unrepresentable derivatives serialize as null, preserving finite levels.
   Five focused Rust tests and Clippy passed.
-- [ ] Qualify the installed bindings and Polars rate column.
+- [x] Qualify the installed bindings and Polars rate column. Focused checks
+  against rebuilt native artifacts give level 100 and rate 50 at the event
+  boundary. Python also checks the fixed-control derivative.
+  [Fixture and logs](evidence/logistic-conditional-rates-20261107).
 - [ ] Extend the derivative contract to explicit time-varying control slopes.

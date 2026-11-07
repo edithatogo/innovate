@@ -142,6 +142,18 @@ def test_historical_logistic_polars_covariates_and_event_fit():
     p = {"L": 100.0, "k": 0.5, "x0": 2.0, "beta_L_price": 10.0, "beta_k_price": 0.1, "beta_x0_price": 0.2}
     a = innovate.predict("logistic", frame, p, model_options={"covariates": ["price"]})
     assert a["prediction"][1] == pytest.approx(110 / (1 + math.exp(0.72)))
+    rate = innovate.predict("logistic", frame, p, model_options={"covariates": ["price"]}, quantity="rate")
+    f = 1 / (1 + math.exp(0.72))
+    assert rate["rate"][1] == pytest.approx(110 * 0.6 * f * (1 - f))
+    event_parameters = {"L": 100, "k": 0.5, "x0": 2, "L_post": 200, "k_post": 1, "x0_post": 2}
+    boundary = innovate.predict(
+        "logistic",
+        pl.DataFrame({"time": [2.0]}),
+        event_parameters,
+        model_options={"t_event": 2.0},
+        quantity="rate",
+    )
+    assert boundary["rate"][0] == 50
     t = [float(i) for i in range(30)]
     y = [100 / (1 + math.exp(-0.5 * (x - 5))) if x < 12 else 200 / (1 + math.exp(-0.3 * (x - 18))) for x in t]
     fit = innovate.fit(
