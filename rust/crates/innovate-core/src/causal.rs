@@ -423,6 +423,7 @@ fn counterfactual_forecast(payload: &Value) -> Result<Value, &'static str> {
             .result
             .ok_or("counterfactual prediction returned no result")
     };
+    let time = series(&payload["baseline"]["inputs"], "time")?;
     let baseline = predict(payload["baseline"].clone())?;
     let counterfactual = predict(Value::Object(alternative))?;
     if baseline.get("rows").is_some() {
@@ -432,7 +433,10 @@ fn counterfactual_forecast(payload: &Value) -> Result<Value, &'static str> {
         };
         let before = rows(&baseline)?;
         let after = rows(&counterfactual)?;
-        if baseline["columns"] != counterfactual["columns"] || before.len() != after.len() {
+        if baseline["columns"] != counterfactual["columns"]
+            || before.len() != after.len()
+            || before.len() != time.len()
+        {
             return Err("counterfactual predictions must have matching rows and columns");
         }
         let (difference, percentage): (Vec<_>, Vec<_>) = before
@@ -443,15 +447,20 @@ fn counterfactual_forecast(payload: &Value) -> Result<Value, &'static str> {
             .into_iter()
             .unzip();
         return Ok(
-            json!({"columns":baseline["columns"],"baseline":before,"counterfactual":after,
+            json!({"time":time,"columns":baseline["columns"],"baseline":before,"counterfactual":after,
             "difference":difference,"percentage_difference":percentage}),
         );
     }
     let baseline = series(&baseline, "values")?;
     let counterfactual = series(&counterfactual, "values")?;
+    if baseline.len() != time.len() {
+        return Err("counterfactual predictions must align with the prediction grid");
+    }
     let (difference, percentage) = compare_values(&baseline, &counterfactual)?;
-    Ok(json!({"baseline":baseline,"counterfactual":counterfactual,
-        "difference":difference,"percentage_difference":percentage}))
+    Ok(
+        json!({"time":time,"baseline":baseline,"counterfactual":counterfactual,
+        "difference":difference,"percentage_difference":percentage}),
+    )
 }
 
 type ForecastDifference = (Vec<f64>, Vec<Option<f64>>);

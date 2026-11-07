@@ -541,6 +541,7 @@ fn causal_summaries_match_analytic_effects() {
             "parameters":{"L":100.,"k":0.5,"x0":2.,"beta_L_price":10.,"beta_k_price":0.,"beta_x0_price":0.}},
         "covariate_overrides":{"price":[2.]}}),
     );
+    assert_eq!(scenario["result"]["time"], json!([2.]));
     assert_eq!(scenario["result"]["baseline"], json!([50.]));
     assert_eq!(scenario["result"]["counterfactual"], json!([60.]));
     let mut history = json!({"method":"counterfactual_forecast","forecast_model":"lotka_volterra",
@@ -613,6 +614,7 @@ fn causal_summaries_match_analytic_effects() {
     );
     let products = &products["result"];
     assert_eq!(products["columns"].as_array().unwrap().len(), 2);
+    assert_eq!(products["time"], json!([0.]));
     assert_eq!(products["baseline"], json!([[100., 0.]]));
     assert_eq!(products["counterfactual"], json!([[120., 0.]]));
     assert_eq!(products["difference"], json!([[20., 0.]]));

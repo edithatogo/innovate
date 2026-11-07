@@ -3696,3 +3696,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Document the counterfactual prediction payload and override scopes.
   The published-guide JSON example matches the event-introduction
   payload verified in Python, Julia and R.
+- [x] Return the shared time grid with scalar and multi-product
+  counterfactual forecasts and reject mismatched row counts.
+  The causal Rust boundary fixture checks both result shapes.
+  Formatting and focused Clippy passed.
