@@ -66,6 +66,7 @@ for _ in range(400):
             else:
                 raise
             continue
+        assert result["cluster_degrees_of_freedom"] == (cluster_count - 1 if clustered else None)
         estimate = result["estimate"]
         estimates[key].append(estimate)
         distance = abs(estimate - truth)

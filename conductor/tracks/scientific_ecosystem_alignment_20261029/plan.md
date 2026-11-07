@@ -6310,3 +6310,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify cluster degrees of freedom through rebuilt Python, Julia
   and installed R. All three returned one for a two-cluster augmented
   ATE and an explicit null when cluster labels were omitted.
+
+- [x] Check returned degrees of freedom in every fitted ATE and ATT
+  trial of the Python coverage study. The independent design returned
+  null, the 80-cluster design returned 79, and the 10-cluster design
+  returned nine. All three reproduced their prior coverage counts.
