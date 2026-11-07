@@ -691,6 +691,21 @@ fn causal_summaries_match_analytic_effects() {
     assert_eq!(result["result"]["estimate"], 2.5);
     assert_eq!(result["result"]["pairs"][0]["control_index"], 1);
     assert_eq!(result["result"]["pairs"][1]["control_index"], 0);
+    assert_eq!(
+        result["result"]["control_diagnostics"]["effective_sample_size"],
+        2.
+    );
+    let mut reused = matched.clone();
+    reused["scores"][3] = json!(2);
+    let result = run(reused);
+    assert_eq!(
+        result["result"]["control_diagnostics"]["unique_controls"],
+        1
+    );
+    assert_eq!(
+        result["result"]["control_diagnostics"]["effective_sample_size"],
+        1.
+    );
     matched["caliper"] = json!(0.5);
     assert!(run(matched)["result"].is_null());
     let mut weighted = json!({"method":"propensity_weighted_contrast",

@@ -257,3 +257,8 @@ earliest control in input order. It returns the mean paired difference
 and zero-based pair indices. A treated observation outside the caliper
 causes the request to fail. Identification depends on the supplied score
 and the assumptions of the study design.
+
+The `control_diagnostics` object reports the number of unique matched
+controls and their effective sample size. A control’s normalized weight
+is its share of matched pairs. Effective sample size is the reciprocal
+of the sum of squared control weights.

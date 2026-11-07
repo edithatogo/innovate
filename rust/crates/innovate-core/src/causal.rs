@@ -777,6 +777,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     controls.dedup_by(|a, b| scores[*a] == scores[*b]);
     let mut differences = Vec::new();
     let mut pairs = Vec::new();
+    let mut control_uses = std::collections::BTreeMap::<usize, usize>::new();
     for i in (0..scores.len()).filter(|&i| treatment[i] == 1.) {
         let right = controls.partition_point(|&j| scores[j] < scores[i]);
         let (control, distance) = right
@@ -789,11 +790,18 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
             .filter(|&(_, distance)| distance <= caliper)
             .ok_or("every treated observation requires a control within the caliper")?;
         differences.push(finite(outcomes[i] - outcomes[control])?);
+        *control_uses.entry(control).or_default() += 1;
         pairs.push(json!({"treated_index":i,"control_index":control,"distance":distance}));
     }
     let estimate = mean(&differences).ok_or("matching requires treated observations")?;
+    let squared_control_weights = control_uses
+        .values()
+        .map(|&count| (count as f64 / pairs.len() as f64).powi(2))
+        .sum::<f64>();
     Ok(
-        json!({"method":"nearest_score_with_replacement","estimand":"att","estimate":estimate,"pairs":pairs}),
+        json!({"method":"nearest_score_with_replacement","estimand":"att","estimate":estimate,"pairs":pairs,
+            "control_diagnostics":{"unique_controls":control_uses.len(),
+            "effective_sample_size":1. / squared_control_weights}}),
     )
 }
 
