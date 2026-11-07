@@ -57,6 +57,12 @@ jobs:
           .venv-release/bin/twine check dist/*
           .venv-release/bin/check-wheel-contents dist/*.whl
           (cd dist && sha256sum ./*.tar.gz ./*.whl > SHA256SUMS)
+      - name: Exercise the release wheel
+        run: |
+          staging="$(mktemp -d)"
+          uv pip install --python .venv-release/bin/python --no-deps --target "$staging" dist/*.whl
+          PYTHONPATH="$staging" .venv-release/bin/python -m pytest -q \
+            tests/native/test_python_consumer.py::test_native_polars_prediction_and_row_identity
       - name: Retain validated dry-run artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:

@@ -7209,3 +7209,9 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Unset INNOVATE_NATIVE_LIBRARY before the hosted Julia and R
   conformance suites so runner configuration cannot redirect either
   suite away from the staged library. Actionlint passed.
+
+- [x] Add a release-wheel runtime smoke check to the hosted dry run.
+  Install the built wheel into an isolated target and exercise native
+  Polars prediction and row identity before retaining artifacts.
+  Actionlint passed and the smoke test passed on the local debug
+  wheel. Hosted release execution remains open.
