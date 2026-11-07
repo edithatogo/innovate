@@ -507,6 +507,10 @@ fn continuous_hazard_can_wake_from_zero_and_replays() {
     assert_eq!(result["requests"], json!([{"tick":3,"agent":0}]));
     assert_eq!(result["counts"], json!([0, 0, 0, 1]));
     assert_eq!(
+        result["metadata"]["checkpoint_scope"],
+        "RNG provenance only; simulation resume is not implemented"
+    );
+    assert_eq!(
         result,
         kernel
             .simulate_model("bass", payload)

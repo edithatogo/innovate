@@ -4988,3 +4988,11 @@ Hosted release readiness for this worktree revision remains open.
   fixture and run it through Python 3.15.2, Julia and installed R.
   Each binding reproduced the [0, 0, 0, 1] adoption counts and an
   identical simulation result from its returned replay request.
+
+- [x] Report RNG checkpoint scope consistently in Kairos network
+  output. The focused network replay test passed with the scope field.
+- [ ] Implement stateful Kairos resume. The pinned DeterministicStream
+  restores RNG position, while Innovate must persist its domain state,
+  pending service and retry events, and the outstanding hazard draw or
+  integrated budget at a pause boundary. Verify interrupted versus
+  uninterrupted trajectories before qualifying this capability.
