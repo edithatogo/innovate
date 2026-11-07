@@ -3371,3 +3371,10 @@ the other competition models and installed binding checks remain open.
   target cache. An isolated wheel extraction returned the expected
   Logistic forecast through Polars on Python 3.15.2. Twine and
   check-wheel-contents passed. Uncached and release builds remain open.
+
+- [x] Build the Python release wheel from the source archive at
+  b29505d4 with an empty Cargo target directory and locked dependencies.
+  The CPython 3.15 Darwin arm64 wheel passed Twine and
+  check-wheel-contents, and an isolated Python 3.15.2 import returned
+  the expected Logistic forecast through Polars. Wheel SHA-256
+  . Other platforms and broader release acceptance remain open.
