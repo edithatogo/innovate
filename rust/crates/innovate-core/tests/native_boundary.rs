@@ -699,8 +699,15 @@ fn causal_summaries_match_analytic_effects() {
     let rows = result["result"]["contrasts"].as_array().unwrap();
     assert_eq!(rows[0]["estimate"], 4.);
     assert_eq!(rows[0]["n_control"], 1);
+    assert_eq!(rows[0].get("standard_error"), Some(&json!(null)));
     assert_eq!(rows[1]["estimate"], serde_json::Value::Null);
     assert_eq!(rows[2]["n_control"], 0);
+    let replicated = run(json!({"method":"staggered_panel_att","periods":[0,1,2],
+        "outcomes":[[0,5,7],[0,7,9],[10,12,16],[10,12,16]],
+        "adoption_indices":[1,1,2,null]}));
+    let row = &replicated["result"]["contrasts"][0];
+    assert_eq!(row["estimate"], 4.);
+    assert!((row["standard_error"].as_f64().unwrap() - 1.).abs() < 1e-12);
     let mut augmented = json!({"method":"augmented_treatment_contrast","outcomes":[0,4],
         "treatment":[0,1],"propensities":[0.5,0.5],"treated_predictions":[2,2],
         "control_predictions":[0,0]});

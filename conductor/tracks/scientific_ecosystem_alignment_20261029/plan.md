@@ -4709,3 +4709,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify staggered cohort-period ATT through rebuilt Python 3.15.2,
   Julia and installed R. Each returned estimate 4 while the comparison
   cohort remained untreated and preserved nulls once no controls remained.
+
+- [x] Add pointwise staggered ATT uncertainty for independent units.
+  The focused Rust test verifies standard error 1 with replicated
+  arms and null for singleton arms. Binding and joint inference remain open.

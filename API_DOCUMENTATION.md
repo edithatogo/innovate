@@ -353,3 +353,7 @@ units. Each cohort uses its last pre-adoption observation as baseline
 and compares changes with units untreated through the target period.
 Rows with no eligible controls return a null estimate and zero controls.
 Interpretation requires parallel trends and no anticipation.
+
+Staggered cohort-period rows report pointwise standard errors for
+independent units. The standard error is null when either arm has
+fewer than two units. Each row uses its own eligible control set.

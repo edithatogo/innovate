@@ -342,6 +342,31 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
     }
 }
 
+fn independent_change_contrast(
+    treated: &[f64],
+    control: &[f64],
+) -> Result<(Option<f64>, Option<f64>), &'static str> {
+    let Some((treated_mean, control_mean)) = mean(treated).zip(mean(control)) else {
+        return Ok((None, None));
+    };
+    let estimate = finite(treated_mean - control_mean)?;
+    let arm_error = |changes: &[f64], average: f64| {
+        let n = changes.len() as f64;
+        let scale = 1. / (n * (n - 1.)).sqrt();
+        changes.iter().fold(0_f64, |error, &change| {
+            error.hypot(scale * change - scale * average)
+        })
+    };
+    let error = if treated.len() > 1 && control.len() > 1 {
+        Some(finite(
+            arm_error(treated, treated_mean).hypot(arm_error(control, control_mean)),
+        )?)
+    } else {
+        None
+    };
+    Ok((Some(estimate), error))
+}
+
 fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
     let periods = series(payload, "periods")?;
     let outcomes: Vec<Vec<f64>> = serde_json::from_value(payload["outcomes"].clone())
@@ -378,13 +403,10 @@ fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
                     control.push(finite(row[period] - row[baseline])?);
                 }
             }
-            let estimate = mean(&treated)
-                .zip(mean(&control))
-                .map(|(treated, control)| finite(treated - control))
-                .transpose()?;
+            let (estimate, error) = independent_change_contrast(&treated, &control)?;
             contrasts.push(
                 json!({"cohort_period":periods[cohort],"period":periods[period],
-                "baseline_period":periods[baseline],"estimate":estimate,
+                "baseline_period":periods[baseline],"estimate":estimate,"standard_error":error,
                 "n_treated":treated.len(),"n_control":control.len()}),
             );
         }
@@ -416,34 +438,18 @@ fn panel_event_study(payload: &Value) -> Result<Value, &'static str> {
     };
     let treated = parse_arm("treated")?;
     let control = parse_arm("control")?;
-    let summarize =
-        |units: &[Vec<f64>], period: usize| -> Result<(f64, Option<f64>), &'static str> {
-            let changes = units
-                .iter()
-                .map(|unit| finite(unit[period] - unit[baseline]))
-                .collect::<Result<Vec<_>, _>>()?;
-            let average = mean(&changes).unwrap();
-            let n = changes.len() as f64;
-            let error = (changes.len() > 1).then(|| {
-                let scale = 1. / (n * (n - 1.)).sqrt();
-                changes.iter().fold(0_f64, |error, &change| {
-                    error.hypot(scale * change - scale * average)
-                })
-            });
-            Ok((average, error))
-        };
+    let changes = |units: &[Vec<f64>], period: usize| {
+        units
+            .iter()
+            .map(|unit| finite(unit[period] - unit[baseline]))
+            .collect::<Result<Vec<_>, _>>()
+    };
     let mut contrasts = Vec::with_capacity(periods.len());
     for (index, period) in periods.into_iter().enumerate() {
-        let (treated_change, treated_error) = summarize(&treated, index)?;
-        let (control_change, control_error) = summarize(&control, index)?;
-        let error = treated_error
-            .zip(control_error)
-            .map(|(a, b)| finite(a.hypot(b)))
-            .transpose()?;
-        contrasts.push(
-            json!({"period":period,"estimate":finite(treated_change-control_change)?,
-            "standard_error":error,"reference":index == baseline}),
-        );
+        let (estimate, error) =
+            independent_change_contrast(&changes(&treated, index)?, &changes(&control, index)?)?;
+        contrasts.push(json!({"period":period,"estimate":estimate,
+            "standard_error":error,"reference":index == baseline}));
     }
     Ok(
         json!({"method":"balanced_panel_difference_in_differences","contrasts":contrasts,
