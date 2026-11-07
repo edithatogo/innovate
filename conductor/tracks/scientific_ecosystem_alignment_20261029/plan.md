@@ -1415,7 +1415,7 @@ the other competition models and installed binding checks remain open.
   project each agreed with their generic native entry point and
   differed from the defaults. Installed R agreed with stats::stl
   within 1.56e-11.
-- [ ] Qualify historical span, degree and jump options. The pre-migration
+- [x] Qualify historical span, degree and jump options. The pre-migration
   Python STL wrapper forwarded constructor keyword options.
 
 - [x] Add seasonal and low-pass spans to the native STL request.
@@ -1429,7 +1429,7 @@ the other competition models and installed binding checks remain open.
   R package each matched stats::stl within 1e-9 with seasonal/trend/
   low-pass spans 25/17/9 and inner/outer counts 2/3. Calls omitting both
   new options also passed in all three runtimes.
-- [ ] Qualify historical degree and jump options.
+- [x] Qualify historical degree and jump options.
 
 - [x] Implement degree 0/1 and positive jump controls for each STL
   smoother in Rust. Four mixed degree/jump configurations matched
@@ -1455,3 +1455,13 @@ the other competition models and installed binding checks remain open.
 - [x] Verify the inferred span through rebuilt Python and Julia. For
   period 5 with the default seasonal span, both runtimes agreed exactly
   with explicit trend span 11 and differed from explicit span 13.
+
+
+- [x] Capture a reproducible independent stationary SARIMA reference
+  with fixed nonseasonal and seasonal AR/MA coefficients and aligned
+  one-step fitted values. The historical Python wrapper estimated a
+  no-trend SARIMAX model and returned fitted values in input order.
+  [Reference generator and fixture](evidence/sarima-reference).
+- [ ] Implement Rust SARIMA filtering against the fixed-coefficient
+  reference, then restore parameter estimation, differenced orders,
+  and fitted-value parity against the historical SARIMAX contract.
