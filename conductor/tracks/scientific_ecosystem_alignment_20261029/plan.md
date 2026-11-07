@@ -3287,3 +3287,9 @@ the other competition models and installed binding checks remain open.
   fast cases, as did the serial run. A zero budget was rejected before
   writing output. The Rust benchmark policy test and Ruff passed.
   Scheduler-backed runtime evidence remains open.
+
+- [x] Record the requested worker budget, its source and the requested
+  policy in benchmark receipts. A local Slurm environment fixture
+  capped 64 requested CPUs at 32 workers, and a CLI run recorded two.
+  Both completed all three fast cases. Ruff passed. These receipts
+  record the worker request and source, with scheduler runtime still open.

@@ -33,6 +33,11 @@ def main() -> int:
     if args.policy is not None:
         payload["ci_policy"] = args.policy
     response = execute("run_benchmark_suite", **payload)
+    response["metadata"]["benchmark_runner"] = {
+        "requested_workers": count,
+        "worker_budget_source": "SLURM_CPUS_PER_TASK" if args.slurm_allocation else "command_line",
+        "ci_policy": args.policy,
+    }
     args.output.write_text(json.dumps(response, indent=2, allow_nan=False) + "\n", encoding="utf-8")
     result = response["result"]
     print(f"Benchmark suite: {result['succeeded']} succeeded, {result['failed']} failed")
