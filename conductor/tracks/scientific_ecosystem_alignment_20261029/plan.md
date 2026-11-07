@@ -3430,3 +3430,9 @@ the other competition models and installed binding checks remain open.
   The Darwin tabular feature tree omitted that edge, and the fresh
   release build log and release target directory contained no bincode
   compilation or artifacts. The lockfile audit warning remains open.
+
+- [x] Compare repeat Python release archives on Darwin arm64. The
+  source tarballs were byte-identical. Repackaging the same compiled
+  inputs preserved every wheel payload except the CycloneDX SBOM and
+  its RECORD entry. The SBOM differed only in timestamp and UUID.
+  Byte-identical wheels and independent build reproducibility remain open.
