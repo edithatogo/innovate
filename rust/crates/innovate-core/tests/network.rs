@@ -974,7 +974,7 @@ fn network_checkpoint_can_pause_again_at_every_completion() {
 
 #[test]
 fn network_checkpoint_continues_continuous_hazard_forcing() {
-    let mut payload = json!({
+    let payload = json!({
         "inputs":{"time":[0,2,4,6,10,20]},
         "parameters":{"p":0.8,"q":0.2,"m":6},
         "simulation_options":{"engine":"kairos_network","population":6,"seed":42,
@@ -992,13 +992,18 @@ fn network_checkpoint_continues_continuous_hazard_forcing() {
     };
     let expected = run(payload.clone());
     assert!(expected["completions"].as_array().unwrap().len() > 1);
-    payload["simulation_options"]["pause_after_completions"] = json!(1);
-    let paused = run(payload.clone());
-    assert_eq!(paused["status"], "paused");
-    payload["simulation_options"]
-        .as_object_mut()
-        .unwrap()
-        .remove("pause_after_completions");
-    payload["simulation_options"]["resume_checkpoint"] = paused["checkpoint"].clone();
-    assert_eq!(run(payload), expected);
+    for (option, boundary) in std::iter::once(("pause_after_completions", 1))
+        .chain((0..20).map(|tick| ("pause_at_tick", tick)))
+    {
+        let mut request = payload.clone();
+        request["simulation_options"][option] = json!(boundary);
+        let paused = run(request.clone());
+        assert_eq!(paused["status"], "paused", "{option}={boundary}");
+        request["simulation_options"]
+            .as_object_mut()
+            .unwrap()
+            .remove(option);
+        request["simulation_options"]["resume_checkpoint"] = paused["checkpoint"].clone();
+        assert_eq!(run(request), expected, "{option}={boundary}");
+    }
 }

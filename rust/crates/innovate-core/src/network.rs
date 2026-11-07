@@ -136,6 +136,8 @@ impl ResourceAccounting {
 #[serde(deny_unknown_fields)]
 struct NetworkCheckpoint {
     version: u32,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pause_tick: Option<u128>,
     configuration: String,
     states: Vec<u8>,
     rng: kairo_ecs_rng::RngCheckpoint,
@@ -406,8 +408,22 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 .ok_or_else(|| invalid("pause_after_completions must be a positive integer"))
         })
         .transpose()?;
+    let pause_tick = options_map
+        .remove("pause_at_tick")
+        .map(|value| {
+            value
+                .as_u64()
+                .map(u128::from)
+                .ok_or_else(|| invalid("pause_at_tick must be a nonnegative integer"))
+        })
+        .transpose()?;
+    if pause.is_some() && pause_tick.is_some() {
+        return Err(invalid(
+            "choose either pause_after_completions or pause_at_tick",
+        ));
+    }
     let resume = options_map.remove("resume_checkpoint");
-    let configuration = (pause.is_some() || resume.is_some()).then(|| {
+    let configuration = (pause.is_some() || pause_tick.is_some() || resume.is_some()).then(|| {
         let mut config = json!([
             crate::simulation::REV,
             options,
@@ -609,6 +625,9 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     let mut rng = DeterministicStream::from_run_seed(o.seed);
     let mut now = 0_u128;
     let horizon = (time.last().unwrap() * o.ticks_per_unit as f64).floor() as u128;
+    if pause_tick.is_some_and(|tick| tick >= horizon) {
+        return Err(invalid("pause_at_tick must be below the horizon"));
+    }
     let mut metrics = ResourceAccounting::default();
     let mut completed = Vec::new();
     let mut trace = Vec::new();
@@ -626,7 +645,13 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             || saved.rng.stream_id != original_rng.stream_id
             || saved.capacity > o.population as u64
             || saved.completed.len() > o.population - initial.len()
-            || saved.completed.last() != Some(&saved.now)
+            || saved.completed.last().is_some_and(|tick| *tick > saved.now)
+            || saved
+                .pause_tick
+                .map_or(saved.completed.last() != Some(&saved.now), |tick| {
+                    tick < saved.now || tick >= horizon
+                })
+            || pause_tick.is_some_and(|tick| tick <= saved.pause_tick.unwrap_or(saved.now))
             || saved.completed.windows(2).any(|pair| pair[0] > pair[1])
             || saved
                 .queue
@@ -650,7 +675,6 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 .any(|&duration| !(1..=1_000_000_000_000).contains(&duration))
             || Some(&saved.configuration) != configuration.as_ref()
             || saved.now > horizon
-            || saved.completed.is_empty()
             || pause.is_some_and(|count| count <= saved.completed.len() as u64)
             || saved.states.len() != o.population
             || saved.states.iter().any(|&state| state > 4)
@@ -747,6 +771,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         resource = queue.rebuild_waiters(&agents, &priorities);
     }
     loop {
+        let before_draw = pause_tick.map(|_| rng.checkpoint());
         let completion = context
             .scheduler
             .peek_next()
@@ -877,6 +902,17 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         } else {
             None
         };
+        if let Some(cutoff) = pause_tick {
+            let next = [completion, boundary, expiry, wake, attempt]
+                .into_iter()
+                .flatten()
+                .min();
+            if next.is_none_or(|tick| tick > cutoff) {
+                rng = DeterministicStream::restore(&before_draw.unwrap())
+                    .map_err(|_| invalid("could not restore pending network hazard draw"))?;
+                break;
+            }
+        }
         let process_completion = completion.is_some_and(|t| {
             attempt.is_none_or(|a| t <= a)
                 && boundary.is_none_or(|b| t <= b)
@@ -1049,49 +1085,53 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         metrics.peak_queue_length = metrics.peak_queue_length.max(resource.queue_length());
         metrics.peak_in_service = metrics.peak_in_service.max(in_service);
         if pause == Some(completed.len() as u64) {
-            let checkpoint = NetworkCheckpoint {
-                version: 1,
-                configuration: configuration.unwrap(),
-                states: agents
-                    .iter()
-                    .map(|agent| *context.get::<u8>(*agent).unwrap())
-                    .collect(),
-                rng: rng.checkpoint(),
-                now,
-                applied_ticks,
-                service_override,
-                capacity,
-                max_wait_ticks,
-                max_queue_length,
-                in_service,
-                queue,
-                service_starts,
-                abandoned,
-                balks,
-                retries,
-                retry_policy,
-                metrics,
-                completed,
-                trace,
-                requests,
-                innovation,
-                imitation,
-                innovation_weights,
-                imitation_weights,
-                priorities,
-                service,
-            };
-            let token = serde_json::to_string(&checkpoint)
-                .map_err(|_| invalid("network checkpoint serialization failed"))?;
-            return Ok(KernelResponse {
-                schema_version: KERNEL_SCHEMA_VERSION.into(),
-                operation: op,
-                model_key: r.model_key.clone(),
-                error: None,
-                result: Some(json!({"status":"paused","checkpoint":token})),
-                metadata: json!({"runtime":"rust_native","engine":"kairos_network"}),
-            });
+            break;
         }
+    }
+    if pause_tick.is_some() || pause == Some(completed.len() as u64) {
+        let checkpoint = NetworkCheckpoint {
+            version: 1,
+            pause_tick,
+            configuration: configuration.unwrap(),
+            states: agents
+                .iter()
+                .map(|agent| *context.get::<u8>(*agent).unwrap())
+                .collect(),
+            rng: rng.checkpoint(),
+            now,
+            applied_ticks,
+            service_override,
+            capacity,
+            max_wait_ticks,
+            max_queue_length,
+            in_service,
+            queue,
+            service_starts,
+            abandoned,
+            balks,
+            retries,
+            retry_policy,
+            metrics,
+            completed,
+            trace,
+            requests,
+            innovation,
+            imitation,
+            innovation_weights,
+            imitation_weights,
+            priorities,
+            service,
+        };
+        let token = serde_json::to_string(&checkpoint)
+            .map_err(|_| invalid("network checkpoint serialization failed"))?;
+        return Ok(KernelResponse {
+            schema_version: KERNEL_SCHEMA_VERSION.into(),
+            operation: op,
+            model_key: r.model_key.clone(),
+            error: None,
+            result: Some(json!({"status":"paused","checkpoint":token})),
+            metadata: json!({"runtime":"rust_native","engine":"kairos_network"}),
+        });
     }
     metrics.configured_slot_ticks +=
         (horizon - metrics.last_capacity_change) * u128::from(capacity);

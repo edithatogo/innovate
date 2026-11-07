@@ -5132,3 +5132,10 @@ Hosted release readiness for this worktree revision remains open.
   an adoption after a forcing change, and reproduced the uninterrupted
   results for both engines. All 16 Kairos integration tests passed.
   Binding requalification and network tick cutoffs remain open.
+
+- [x] Expose tick-based network checkpoints. The continuous hazard
+  fixture resumed from every integer tick below its horizon, including
+  before the first completion. Each resumed response matched the
+  uninterrupted result. All 32 network integration tests passed
+  before expanding the cutoff fixture, and all three checkpoint tests
+  passed with the expanded fixture. Binding qualification remains open.

@@ -501,3 +501,8 @@ includes decisions through that tick and can be returned before the
 first adoption. Use either the tick cutoff or the adoption count per
 request. To pause again by tick, supply a cutoff later than the one
 in the saved checkpoint.
+
+The network engine also accepts `pause_at_tick` below its horizon.
+It processes events through that tick and saves the state needed to
+reproduce the next hazard draw. Use either the tick cutoff or the
+completion count per request.
