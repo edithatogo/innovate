@@ -1758,4 +1758,9 @@ the other competition models and installed binding checks remain open.
   wheel preserved assumptions and estimand fields, and PyArrow read
   the Polars IPC metadata row with an Int32 confounder count.
   All 24 Rust boundary tests and focused Clippy passed.
-- [ ] Verify policy evidence in Julia and R and qualify Arrow consumers.
+- [x] Verify policy evidence through Julia and installed R. Both
+  preserve intervention metadata, the confounder list and the
+  identifying assumption. R also exercised singleton list encoding.
+- [ ] Qualify Julia and R Arrow IPC consumers. Arrow is absent from
+  the tested Julia project and R libraries. Python IPC readback is
+  recorded above.
