@@ -1706,4 +1706,7 @@ the other competition models and installed binding checks remain open.
   JSON and Markdown assumption output. The card preserves a supplied
   creation date and uses null when omitted for reproducible output.
   All 24 Rust boundary tests and focused Clippy passed.
-- [ ] Verify model-card and assumption requests through the three bindings.
+- [x] Verify model cards and assumption records through the rebuilt
+  Python wheel, Julia and installed R. All preserve the supplied date,
+  the default version and the singleton assumption. Assumption Markdown
+  retains the heading and omits the absent check description.
