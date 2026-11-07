@@ -1218,3 +1218,7 @@ def test_legacy_dataset_artifact_reingestion_uses_recorded_encoding():
     )["result"] == artifact
     with pytest.raises(innovate.NativeError, match="checksum does not match"):
         innovate.execute("ingest_dataset", dataset=artifact["dataset"])
+    assert innovate.execute("ingest_dataset", artifact=artifact)["result"] == artifact
+    artifact["dataset"]["adoption"][1] = 3
+    with pytest.raises(innovate.NativeError, match="checksum does not match"):
+        innovate.execute("ingest_dataset", artifact=artifact)

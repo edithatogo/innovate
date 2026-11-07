@@ -4375,3 +4375,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Document direct dataset artifact re-ingestion. The guide example
   reproduced the historical Unicode artifact with the rebuilt Python
   wheel extracted for the binding check.
+- [x] Retain direct artifact re-ingestion and tamper detection in the
+  packaged Python regression. The rebuilt wheel extraction passed.
