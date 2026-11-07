@@ -635,3 +635,37 @@ fn scheduled_null_clears_queue_restrictions() {
     assert_eq!(result["metadata"]["current_max_wait_ticks"], json!(null));
     assert_eq!(result["metadata"]["current_max_queue_length"], json!(null));
 }
+
+#[test]
+fn reopening_admits_priority_waiter_at_deadline() {
+    let run = |priorities| {
+        KernelBinding::new()
+            .simulate_model("bass", json!({
+                "inputs":{"time":[0.,5.,6.,7.,8.,12.]},
+                "parameters":{"p":1e12,"q":0.,"m":3.},
+                "simulation_options":{"engine":"kairos_network","population":3,"seed":42,
+                    "edges":[[0,1],[1,2]],"capacity":1,"service_ticks":5,"ticks_per_unit":1,
+                    "agent_priorities":priorities,"max_wait_ticks":4,
+                    "schedule":[{"tick":2,"capacity":0},{"tick":7,"capacity":1,"service_ticks":2}]}
+            }))
+            .unwrap()
+            .result
+            .unwrap()
+    };
+    let baseline = run([0; 3]);
+    let requests = baseline["requests"].as_array().unwrap();
+    let late = requests[2]["agent"].as_u64().unwrap() as usize;
+    let mut priorities = [0; 3];
+    priorities[late] = 10;
+    let result = run(priorities);
+    assert_eq!(result["requests"], baseline["requests"]);
+    assert_eq!(result["counts"], json!([0, 0, 1, 1, 1, 2]));
+    assert_eq!(result["completions"][0], baseline["completions"][0]);
+    assert_eq!(result["completions"][1], json!({"agent":late,"tick":9}));
+    assert_eq!(
+        result["abandonments"],
+        json!([{"agent":requests[1]["agent"],"tick":7}])
+    );
+    assert_eq!(result["metadata"]["queue_length"], 0);
+    assert_eq!(result["metadata"]["available"], 1);
+}

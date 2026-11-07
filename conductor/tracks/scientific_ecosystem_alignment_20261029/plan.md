@@ -2421,3 +2421,12 @@ the other competition models and installed binding checks remain open.
   wheel loaded with Python 3.15.2 and Julia agreed exactly. Installed R agreed
   within 1e-14 after JSON serialization. This exercises detector parity on a
   smooth curve. Scientific validation on observed regime changes remains open.
+
+- [x] Qualify the Kairos resource reopening and deadline tie. A seeded
+  three-agent network keeps active service during closure. On reopening,
+  it admits the higher-priority waiter before both deadlines expire on
+  that tick. The other waiter withdraws and capacity is released on
+  completion. All 23 Rust network tests and focused Clippy passed.
+  Python 3.15.2, Julia and installed R agreed on counts, requests,
+  completions, withdrawals and resource metadata. The test isolates
+  resource behavior with imitation disabled.
