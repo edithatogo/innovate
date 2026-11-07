@@ -723,3 +723,18 @@ Competition line coverage is 92.25 percent and core/C ABI line coverage is
 85.37 percent. Docs build 163 pages. Local package metadata and exact source
 inclusion pass. All 38 feature obligations remain required. This lane continues
 in the same isolated worktree with existing source ownership.
+
+## Historical multi-product covariate forcing
+
+- [x] Support corrected named coefficients and explicit historical indexing.
+- [x] Qualify analytic rates, independent trajectories, fits and Python/Julia/R.
+- [x] Review and retain exact local evidence and outstanding obligations.
+
+Source: 72c63338. Full local qualification passed 134 Rust core/C ABI/Polars
+tests, 44 installed Python tests, 195 Julia assertions and R conformance.
+Both coefficient layouts reproduce independent SciPy trajectories and forecasts.
+The fit regression retained its original held-out tolerance and prompted the
+shared relative objective-improvement correction. Competition line coverage is
+92.47 percent, numerical-module coverage is 96.10 percent and core/C ABI line
+coverage is 85.38 percent. Docs build 163 pages, and local package checks pass.
+All 38 feature obligations remain required. Same isolated writing lane continues.
