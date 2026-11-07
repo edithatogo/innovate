@@ -323,3 +323,5 @@ Ten bounded families; six remain unavailable. All 38 full-feature obligations
 remain required. Next: policy/latent/regime and hierarchical/mixture/composite
 ports, remaining covariate/event/inference work and distribution qualification.
 No native operation remains live; full Conductor goal remains active.
+
+Historical network source/evidence commit: `975248c8dd7bac64651eb5d609556d9fd9cba509`. All operations terminal; remaining source tasks stay active.
