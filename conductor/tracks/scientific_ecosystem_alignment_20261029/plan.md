@@ -6935,3 +6935,8 @@ Hosted release readiness for this worktree revision remains open.
   Julia and installed R using native source 66336cb5. All four cases
   matched expected labels and sums, including zero-filled quarters.
   Updated the native guide with the supported frequencies.
+
+- [x] Add an explicit fiscal_start_month option for native quarter
+  and year aggregation. The Rust boundary tests passed for a July
+  fiscal year, the June/July transition, a zero-filled year and
+  rejection of month 13. Binding readback remains open.

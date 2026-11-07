@@ -535,6 +535,21 @@ fn calendar_quarters_and_years_preserve_labels_and_gaps() {
 }
 
 #[test]
+fn fiscal_calendar_buckets_cross_calendar_years() {
+    let mut request = json!({"schema_version":"2.0","operation":"aggregate_dates",
+        "payload":{"frequency":"YE","fiscal_start_month":7,
+            "dates":["2024-06-30","2024-07-01","2026-07-01"],"values":[1,2,3]}});
+    let run = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    assert_eq!(run(&request)["result"], json!({
+        "dates":["2024-06-30","2025-06-30","2026-06-30","2027-06-30"],"values":[1.,2.,0.,3.]
+    }));
+    request["payload"]["fiscal_start_month"] = json!(13);
+    assert_eq!(run(&request)["error"]["code"], "invalid_request");
+}
+
+#[test]
 fn offset_timestamp_weekly_buckets_use_elapsed_time() {
     let request = innovate_core::json!({
         "schema_version":"2.0", "operation":"aggregate_dates",

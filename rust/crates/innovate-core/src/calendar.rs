@@ -14,6 +14,15 @@ pub(crate) fn aggregate(payload: &Value) -> Result<Value, &'static str> {
     if !["D", "W", "M", "ME", "MS", "QS", "QE", "YS", "YE"].contains(&frequency) {
         return Err("frequency must be D, W, M, ME, MS, QS, QE, YS or YE");
     }
+    let start_month = match payload.get("fiscal_start_month") {
+        None => 1,
+        Some(value) if matches!(frequency, "QS" | "QE" | "YS" | "YE") => value
+            .as_u64()
+            .filter(|month| (1..=12).contains(month))
+            .ok_or("fiscal_start_month must be an integer from 1 through 12")?
+            as u32,
+        Some(_) => return Err("fiscal_start_month requires a quarter or year frequency"),
+    };
     if dates
         .iter()
         .any(|date| date.contains('T') || date.contains(' '))
@@ -72,6 +81,7 @@ pub(crate) fn aggregate(payload: &Value) -> Result<Value, &'static str> {
             timestamps.into_iter().map(|time| time.date()).collect(),
             values,
             frequency,
+            start_month,
         );
     }
     let dates = dates
@@ -79,7 +89,7 @@ pub(crate) fn aggregate(payload: &Value) -> Result<Value, &'static str> {
         .map(|date| NaiveDate::parse_from_str(date, "%Y-%m-%d"))
         .collect::<Result<_, _>>()
         .map_err(|_| "invalid ISO calendar date")?;
-    aggregate_dates(dates, values, frequency)
+    aggregate_dates(dates, values, frequency, start_month)
 }
 
 fn add_value<K: Ord>(
@@ -99,6 +109,7 @@ fn aggregate_dates(
     dates: Vec<NaiveDate>,
     values: Vec<f64>,
     frequency: &str,
+    start_month: u32,
 ) -> Result<Value, &'static str> {
     let period_end = matches!(frequency, "M" | "ME" | "QE" | "YE");
     let months = match frequency {
@@ -115,7 +126,10 @@ fn aggregate_dates(
         let bucket = match frequency {
             "W" => first.checked_add_days(Days::new((date - first).num_days() as u64 / 7 * 7)),
             _ if months > 0 => {
-                NaiveDate::from_ymd_opt(date.year(), date.month0() / months * months + 1, 1)
+                let offset = (date.month0() + 13 - start_month) % months;
+                date.with_day(1)
+                    .expect("first day exists")
+                    .checked_sub_months(Months::new(offset))
             }
             _ => Some(date),
         }
