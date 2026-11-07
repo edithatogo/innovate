@@ -105,6 +105,28 @@ fn apply_specification(scenario: &mut Scenario) -> Result<(), &'static str> {
         .specification
         .as_ref()
         .ok_or("scenario specification is required")?;
+    if let ScenarioKind::Substitution {
+        substitution_rate, ..
+    } = &spec.kind
+    {
+        if scenario.model_key != "fixed_pool_replacement" {
+            return Err("substitution translation requires fixed_pool_replacement");
+        }
+        let simulation = scenario
+            .simulation
+            .as_object_mut()
+            .ok_or("simulation must be an object")?;
+        let parameters = json!({"initial_incumbents":spec.market_size * spec.initial_adoption,
+            "replacement_hazard":substitution_rate});
+        if simulation
+            .get("parameters")
+            .is_some_and(|value| value != &parameters)
+        {
+            return Err("replacement parameters conflict with the scenario specification");
+        }
+        simulation.insert("parameters".into(), parameters);
+        return Ok(());
+    }
     if let ScenarioKind::Competition {
         num_competitors,
         market_share_initial,
@@ -316,6 +338,66 @@ fn apply_network_specification(
     Ok(())
 }
 
+fn simulate_scenario(
+    binding: &KernelBinding,
+    scenario: &Scenario,
+) -> Result<crate::KernelResponse, crate::KernelBindingError> {
+    if scenario.model_key != "fixed_pool_replacement" {
+        return binding.simulate_model(&scenario.model_key, scenario.simulation.clone());
+    }
+    #[derive(Deserialize)]
+    #[serde(deny_unknown_fields)]
+    struct ReplacementInput {
+        inputs: ReplacementTimes,
+        parameters: ReplacementParameters,
+    }
+    #[derive(Deserialize)]
+    #[serde(deny_unknown_fields)]
+    struct ReplacementTimes {
+        #[serde(alias = "t")]
+        time: Vec<f64>,
+    }
+    #[derive(Deserialize)]
+    #[serde(deny_unknown_fields)]
+    struct ReplacementParameters {
+        initial_incumbents: f64,
+        replacement_hazard: f64,
+    }
+    let op = crate::KernelOperation::SimulateModel;
+    let invalid = |message| crate::KernelBindingError::invalid_request(op, message);
+    let input = ReplacementInput::deserialize(&scenario.simulation)
+        .map_err(|error| invalid(format!("invalid replacement payload: {error}")))?;
+    let time = input.inputs.time;
+    let pool = input.parameters.initial_incumbents;
+    let hazard = input.parameters.replacement_hazard;
+    if pool < 0.
+        || !(0. ..=1.).contains(&hazard)
+        || time.is_empty()
+        || time[0] < 0.
+        || time.windows(2).any(|pair| pair[0] >= pair[1])
+    {
+        return Err(invalid("replacement requires a nonnegative pool, hazard in [0, 1] and increasing nonnegative times".into()));
+    }
+    let rows: Vec<_> = time
+        .iter()
+        .map(|t| {
+            let exponent = -hazard * t;
+            [pool * exponent.exp(), pool * -exponent.exp_m1()]
+        })
+        .collect();
+    Ok(crate::KernelResponse {
+        schema_version: KERNEL_SCHEMA_VERSION.into(),
+        operation: op,
+        model_key: Some(scenario.model_key.clone()),
+        result: Some(
+            json!({"rows":rows,"time":time,"columns":["incumbent","entrant"],
+            "metadata":{"replacement_semantics":"constant one-way hazard per scenario time unit; fixed initial adopter pool"}}),
+        ),
+        error: None,
+        metadata: json!({"runtime":"rust_native","engine":"analytic_replacement"}),
+    })
+}
+
 pub(crate) fn execute_grid(request: &Value) -> Value {
     let envelope = |result: Value, error: Value| {
         json!({"schema_version":KERNEL_SCHEMA_VERSION,"operation":"execute_scenario_grid",
@@ -406,8 +488,7 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
                 .iter()
                 .map(|scenario| {
                     let timing = include_metadata.then(|| (SystemTime::now(), Instant::now()));
-                    let execution =
-                        binding.simulate_model(&scenario.model_key, scenario.simulation.clone());
+                    let execution = simulate_scenario(&binding, scenario);
                     let timing = timing.map(|(start, clock)| {
                         (
                             start,
@@ -802,6 +883,12 @@ pub(crate) fn discover(request: &Value) -> Value {
             if family == "competition" {
                 capability["specification_translation"] = json!({
                     "option":"apply_specifications","model_key":"multi_product"
+                });
+            }
+            if family == "substitution" {
+                capability["specification_translation"] = json!({
+                    "option":"apply_specifications","model_key":"fixed_pool_replacement",
+                    "rate_semantics":"constant one-way replacement hazard per scenario time unit"
                 });
             }
             capability

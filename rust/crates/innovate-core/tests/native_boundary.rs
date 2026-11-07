@@ -1080,7 +1080,10 @@ fn scenario_discovery_lists_and_resolves_native_families() {
         rows[1]["specification_translation"]["intervention_types"][0],
         "innovation_delta"
     );
-    assert!(rows[2].get("specification_translation").is_none());
+    assert_eq!(
+        rows[2]["specification_translation"]["model_key"],
+        "fixed_pool_replacement"
+    );
     let keys: Vec<_> = rows
         .iter()
         .map(|row| row["key"].as_str().unwrap())
@@ -1242,4 +1245,30 @@ fn competition_specification_allocates_initial_adopters_in_competitor_order() {
     request["payload"]["scenarios"][0]["simulation"]["constructor_kwargs"] =
         json!({"n_products":3});
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
+}
+
+#[test]
+fn substitution_scenario_conserves_the_adopter_pool_and_replays() {
+    let request = json!({"schema_version":"2.0","operation":"execute_scenario_grid",
+    "payload":{"apply_specifications":true,"include_execution_metadata":true,"scenarios":[{
+        "id":"replacement","model_key":"fixed_pool_replacement",
+        "specification":{"scenario_type":"substitution","name":"study","description":"",
+            "time_horizon":5,"time_unit":"year","reference_year":2026,"market_size":200,
+            "initial_adoption":0.5,"incumbent_name":"a","entrant_name":"b","substitution_rate":0.5},
+        "simulation":{"inputs":{"time":[0,2]}}
+    }]}});
+    let run = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = run(&request);
+    let row = &response["result"]["executions"][0];
+    assert_eq!(row["result"]["rows"][0], json!([100., 0.]));
+    let incumbent = row["result"]["rows"][1][0].as_f64().unwrap();
+    let entrant = row["result"]["rows"][1][1].as_f64().unwrap();
+    assert!((incumbent - 100. * (-1_f64).exp()).abs() < 1e-12);
+    assert!((incumbent + entrant - 100.).abs() < 1e-12);
+    assert_eq!(
+        run(&row["artifact"]["replay_request"])["result"]["executions"][0]["result"],
+        row["result"]
+    );
 }

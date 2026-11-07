@@ -2160,10 +2160,17 @@ the other competition models and installed binding checks remain open.
   scenario specification. Reject conflicting explicit edges, weights or
   directed mode. Replay retains generated edges. All 64 targeted Rust
   tests and focused Clippy passed. Other generators remain open.
-- [ ] Define substitution-rate dynamics before translating historical
+- [x] Define substitution-rate dynamics before translating historical
   substitution specifications. Norton-Bass exposes generation diffusion
   parameters, with no direct replacement-rate parameter.
 
 - [x] Qualify generated ring topology in Python 3.15, Julia and installed
   R. Each returned the expected four edges in order and reproduced its
   original result when replaying the resolved artifact.
+
+- [x] Add an explicit fixed_pool_replacement scenario model. Interpret
+  substitution_rate as a constant one-way replacement hazard per scenario
+  time unit. The analytic path conserves the initial adopter pool and
+  reports incumbent and entrant levels in that order. The scenario grid
+  retains resolved inputs for replay. All 43 boundary tests and Clippy
+  passed. Binding qualification and broader substitution designs remain open.
