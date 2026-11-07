@@ -1,0 +1,41 @@
+# Validation and Hardened Release Implementation Plan
+
+> For agentic workers: execute ready packets from the taskbook. Keep source rights, mathematical verification, prediction and release acceptance distinct.
+
+**Goal:** Reproducible medicines and cross-domain validation through a native hardened release and scoped publications.
+
+**Architecture:** Qualified source projections -> native models -> frozen benchmarks -> installed artefacts and truthful claims.
+
+**Tech Stack:** Rust, Polars/Arrow, existing Atlas/Hugging Face archives, isolated references and current CI.
+
+**Spec:** [spec.md](spec.md), [medicines plan](../../research/medicines-utilisation-20261107.md), [release gates](../../release-gates-20261107.md).
+
+## Global Constraints
+
+No duplicate data acquisition in Innovate. Raw-byte replay is not semantic qualification. No pandas/xarray runtime. Software publication, journal submission and data release need separate authorisation.
+
+## Review Focus
+
+As-of leakage; script/patient confusion; summary/detail double counting; correlated forecast errors; a green metadata job misrepresented as native or empirical validity.
+
+## Executable packets
+
+Read [taskbook](../../innovation-taskbook-20261107.md).
+
+- [ ] M01 — exact six-object PBS manifest and receipts.
+- [ ] M02 — source-faithful qualified Polars projection.
+- [ ] M03 — temporal mapping, panel grain and coverage.
+- [ ] M04 — generic utilisation identifiability/observation fixture.
+- [ ] M05 — frozen medicines forecasting cohort.
+- [ ] V01 — independent model-oracle registry.
+- [ ] V02 — leakage-safe benchmark runner.
+- [ ] V03 — cross-domain and early-stage validation.
+- [ ] V04 — accuracy-controlled performance evaluation.
+- [ ] Q01 — input/property/fuzz/FFI safety.
+- [ ] Q02 — actual native/no-legacy installed CI matrix.
+- [ ] Q03 — supply-chain and distributable-artifact evidence.
+- [ ] Q04 — executable scientific/docs release truth.
+- [ ] V05 — clean reproduction and distinct publication packages.
+- [ ] Q05 — beta, RC and exact-artefact stable acceptance.
+
+Complete relevant native/integrity/consumer prerequisites before promotion. Real research use supports JOSS; forecast and innovation/hype studies require their own comparative evidence. Data/venue claims remain scoped.

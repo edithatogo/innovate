@@ -468,3 +468,30 @@ This file tracks all major tracks for the project. Each track has its own detail
 ---
 - [~] **Track: Scientific ecosystem alignment (innovate)**
 *Link: [./tracks/scientific_ecosystem_alignment_20261029/](./tracks/scientific_ecosystem_alignment_20261029/)*
+
+
+---
+
+## Scientific frontier programme — 7 November 2026
+
+[Programme, dependencies and acceptance rules](./frontier-programme-20261107.md).
+These tracks are approved for planning; implementation and empirical validation remain open.
+Historical completion labels above do not establish current full-native ownership.
+
+- [ ] **Track: Scientific integrity and honest inference** *(Planned)*
+  *Link: [./tracks/scientific_integrity_20261107/](./tracks/scientific_integrity_20261107/)*
+
+- [ ] **Track: Rust-core convergence and native acceptance** *(Planned)*
+  *Link: [./tracks/rust_core_convergence_20261107/](./tracks/rust_core_convergence_20261107/)*
+
+- [ ] **Track: Empirical validation and publication** *(Planned)*
+  *Link: [./tracks/empirical_validation_publication_20261107/](./tracks/empirical_validation_publication_20261107/)*
+
+- [ ] **Track: Advanced diffusion frontier methods** *(Planned)*
+  *Link: [./tracks/advanced_diffusion_frontier_20261107/](./tracks/advanced_diffusion_frontier_20261107/)*
+
+- [ ] **Track: Ecosystem adoption-capacity and decision integration** *(Planned)*
+  *Link: [./tracks/ecosystem_decision_integration_20261107/](./tracks/ecosystem_decision_integration_20261107/)*
+
+- [ ] **Track: Healthcare hype measurement and evaluation** *(Planned)*
+  *Link: [./tracks/healthcare_hype_validation_20261107/](./tracks/healthcare_hype_validation_20261107/)*

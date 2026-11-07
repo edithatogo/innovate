@@ -1,84 +1,42 @@
-# Initial Concept
+# Innovate: modelling and predicting innovation
 
-A Python library for simplifying innovation and policy diffusion modeling.
+## Purpose and origin
 
----
+Innovate is a general scientific library for modelling and predicting innovation. It began with policy diffusion and extends that foundation to adoption, competition, substitution, expectations and hype, failure, abandonment, networks and innovation ecosystems. Medicines utilisation is a flagship application, not a restriction of the library's scope.
 
-# Product Vision
+The maintainer's 7 November 2026 clarification supersedes earlier descriptions of a Python-first library, a voluntary long-term Rust migration, and a healthcare claim-exaggeration study. Hype means the influence of attention, expectations, enthusiasm and disappointment on innovation dynamics; it does not require claims to be false or excessive.
 
-**innovate** is a comprehensive, modular Python library for modeling the diffusion, substitution, competition, and dynamics of innovations, technologies, and policies over time. It serves researchers and practitioners in economics, marketing, public policy, technology forecasting, and epidemiology.
+## Mandatory target architecture
 
-## Core Philosophy
+Rust owns supported scientific computation. Python, R, Julia and other languages are interfaces to Rust, not alternative model implementations. Polars is the tabular computation interface; Arrow/Parquet and versioned metadata provide interchange. Pandas and xarray are not supported public inputs, runtime dependencies, transitive supported-extra dependencies or hidden conversion paths in the next breaking release. Historical releases remain historical; this planning change does not claim that existing source has already migrated.
 
-- **Modularity**: Each modeling concern is isolated into focused, composable modules
-- **Extensibility**: Clear base classes enable custom model implementations
-- **Computational Performance**: Vectorized NumPy operations with optional JAX acceleration
-- **Advanced Parameterization**: Support for covariate-driven parameters, time-varying parameters, and mixture models
-- **Contract-First Portability**: The stable API, schemas, and functional kernel define the product contract before language-specific bindings
-- **Thin Language Bindings**: R, Rust, Julia, TypeScript, Go, C#, and other bindings should expose the same kernel behavior without duplicating model logic
-- **Installable Multi-Language Packages**: Binding work should progress toward idiomatic package-manager distribution for each language, including npm, crates.io, R-universe/CRAN, Julia General, versioned Go modules, and NuGet
-- **Rust Core Trajectory**: Rust is the strategic long-term core for robust, efficient, portable execution, with Python remaining the primary ergonomic research interface
+Unsupported native operations return structured errors. No Python subprocess, Mesa, NumPy/JAX mathematical implementation or host-language simulator may silently substitute for missing Rust capability. Independent Python/R/C++ references may run in isolated test-oracle environments; they are not production dependencies. Dense native arrays are appropriate inside numerical kernels; Polars need not be forced into every scalar calculation.
 
-## Target Users
+## Scientific scope
 
-- **Academic Researchers** in economics, marketing, and public policy
-- **Data Scientists** modeling technology adoption and market dynamics
-- **Policy Analysts** simulating policy diffusion and impact
-- **Forecasters** predicting innovation lifecycles and adoption curves
+- Policy, technology and product diffusion, including heterogeneous and network adoption.
+- Competition, substitution, cannibalisation, complements, entry/exit and successive generations.
+- Expectations and hype: composite-curve fitting, uncertainty, positive and negative uptake effects, feedback and repeated waves.
+- Repeat use, persistence, switching, abandonment and re-adoption when the observation model and data support them.
+- Innovation-specific strategic behaviour, market mechanisms and policy experiments, delegating general game solvers to the ecosystem's game-runtime capability.
+- Estimation, prediction, simulation, identifiability diagnostics and falsifiable model comparison for these processes.
 
-## Architecture
+General-purpose simulation infrastructure, generic equilibrium solvers, value-of-information algorithms, terminology/data acquisition and application-specific clinical or economic assumptions belong to their authoritative providers. Generic causal machinery is not a second product: use qualified adapters/oracles and honest identification contracts where innovation questions need it.
 
-The library follows a layered architecture. The current Python package provides the primary user-facing API and reference implementation, while the durable product contract is the canonical public API, capability registry, schema layer, and functional kernel. Language bindings must target that contract so behavior stays consistent across Python, R, Rust, Julia, TypeScript, Go, and C#.
+## Ownership and integration
 
-Bindings should be treated as product surfaces with CI and packaging obligations, not as examples alone. Each implemented binding needs language-native validation in CI and a publication path through its expected ecosystem package manager.
+Innovate consumes Kairos for DES/ABM execution: one native clock, state, event ordering and simulation RNG. Innovate owns innovation behaviours and model semantics. Kairos remains independently installable and does not depend on Innovate.
 
-Over time, performance-critical and portability-critical kernel components should move toward a Rust implementation. Rust should be treated as the strategic core runtime direction, not as another client binding. Python remains the preferred interactive and research-oriented interface, while Rust provides a path to stronger correctness boundaries, packaging portability, and efficient shared execution.
+Voiage can consume Innovate forecasts and joint uncertainty through an optional integration adapter and explicit economic/utility mapping. Neither core imports the other in both directions. A study or policy selected by Voiage can return as a versioned design artefact to Innovate through application orchestration; data feedback is not a dependency cycle.
 
-The current Python source layout is:
+[Paignia](https://github.com/edithatogo/paignia) owns generic Rust game representation and solver development. Its seed originates in `new-drug-reimbursement-game`; Kairos's overlapping game crates retain explicit transfer and scientific-completion obligations. The created Paignia repository and source transfer do not establish package publication or numerical qualification. Innovate must consume exact qualified artifacts, keep Kairos execution adapters optional for static games, and preserve UOGTO semantic identifiers. Innovate constructs innovation/competition games; the reimbursement application retains its institutional assumptions.
 
-```
-src/innovate/
-├── base/           # Abstract base classes for all models
-├── backends/       # NumPy/JAX computational backends
-├── diffuse/        # Single-innovation adoption curves (Bass, Gompertz, Logistic)
-├── substitute/     # Technology replacement models (Fisher-Pry, Norton-Bass)
-├── compete/        # Market share competition models
-├── hype/           # Gartner Hype Cycle simulation
-├── fail/           # Failed adoption analysis
-├── adopt/          # Adopter classification
-├── dynamics/       # System dynamics (contagion, competition, growth)
-├── abm/            # Agent-Based Modeling (Mesa integration)
-├── fitters/        # Parameter estimation and curve fitting
-├── plots/          # Visualization utilities
-├── preprocess/     # Data preprocessing utilities
-├── causal/         # Causal inference tools
-├── policy/         # Policy analysis tools
-├── reduce/         # Dimensionality reduction
-├── path_dependence/# Path dependency modeling
-├── ecosystem(s)/   # Ecosystem modeling
-└── utils/          # Shared utilities
-```
+`vop_poc_nz` is a proof of concept. Its reusable decision, perspective, equity and VOI methods belong in Voiage after verification. `tobac`, CareOps and other applications retain their scientific scenarios and evidence while promoting reusable methods to the corresponding library. Do not copy application code into a library without tests, provenance and a consumer migration.
 
-## Key Differentiators
+## Delivery status and evidence
 
-1. **Unified Framework**: Combines diffusion models, competition models, and ABM under one roof
-2. **Advanced Fitting**: Bayesian (NumPyro/BlackJAX), JAX-accelerated, and classical optimization
-3. **Rich Visualization**: Built-in plotting for diffusion curves, competition dynamics, and diagnostics
-4. **Production-Ready**: Comprehensive test suite, type hints, CI/CD, and documentation
-5. **Language-Neutral Kernel Contract**: Stable schemas and operations enable consistent bindings across Python, R, Rust, Julia, TypeScript, Go, and C#
-6. **Rust-Ready Core Architecture**: The long-term execution core is designed to migrate toward Rust without sacrificing Python usability
+Documentation: Astro/Starlight under `docs/astro-site` is the active documentation surface. Historical Sphinx material is archival, not an active documentation system.
 
-## Project Status
+The inspected source remains hybrid and contains scientific correctness risks and native gaps. This programme changes scope, ownership and executable plans, not that fact. No production-ready, full-Rust, frontier-performance or complete-data claim is made here.
 
-- **Version**: 0.5.0
-- **License**: Apache 2.0
-- **Build System**: setuptools
-- **Testing**: pytest with parallel execution, property-based testing, mutation testing
-- **Code Quality**: Ruff, MyPy, Pyright, Bandit
-- Documentation: Astro/Starlight site only. Release, registry, and migration
-  evidence remains as data artifacts under `docs/source/_static/`.
-- **Vision Status**: Conductor roadmap remediation tracks are complete and
-  archived. The full product vision still has future-state gates for full Rust
-  ownership and maintainer-managed external submissions; those gates must not
-  be described as complete until their evidence artifacts or external receipts
-  exist.
+The [programme](frontier-programme-20261107.md), [execution contract](execution-contract-20261107.md), eight current [registered tracks](tracks.md), [taskbook](innovation-taskbook-20261107.md) and [release gates](release-gates-20261107.md) govern delivery. Registration does not imply active execution: each track retains its pending work, accepted scope or explicit deferrals. Historical archived completion titles describe their recorded scope, not current scientific acceptance.
