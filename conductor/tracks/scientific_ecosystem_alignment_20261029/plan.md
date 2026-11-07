@@ -6177,3 +6177,10 @@ Hosted release readiness for this worktree revision remains open.
   suite and the installed R package's native.R suite both exited zero
   with the rebuilt Rust shared library. Hosted and scientific
   acceptance remain open.
+
+- [x] Build a CPython 3.15.2 wheel from a fresh source archive
+  extraction and a fresh Cargo target directory with the packaged
+  lock. The lock matched the checkout byte for byte. The archive
+  contained the Kairos replay and SARIMA fixtures and the updated
+  tabular and binding sources. The extracted consumer suite passed
+  against the wheel. This was a local macOS arm64 source-package check.
