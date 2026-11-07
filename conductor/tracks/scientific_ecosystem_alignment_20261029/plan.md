@@ -1784,3 +1784,11 @@ the other competition models and installed binding checks remain open.
   element types, values and nulls. The equivalent Polars-written
   files yielded empty column sets. Use the qualified Polars stream
   path for direct Julia exchange.
+
+- [x] Restore causal policy specification serialization. Both contracts
+  are validated, observation counts derive from aligned data columns or
+  survive a metadata-only round trip, and data rows stay out of the
+  exported specification. The Rust fixture checks round trip and rejects
+  a ragged dataset. All 24 boundary tests and focused Clippy passed.
+- [ ] Qualify policy specification round trips through installed bindings
+  and compare strict field validation with the historical JSON loader.

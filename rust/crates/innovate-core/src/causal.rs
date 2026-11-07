@@ -281,6 +281,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
         }
         Some("treatment_contrast") => treatment_contrast(payload),
         Some("intervention_contract") => intervention_contract(payload),
+        Some("policy_specification") => policy_specification(payload),
         Some("policy_evidence") => policy_evidence(payload),
         Some("causal_model_contract") => causal_model_contract(payload),
         Some("release_evidence") => release_evidence(payload),
@@ -802,4 +803,39 @@ fn policy_evidence(payload: &Value) -> Result<Value, &'static str> {
                 "overlap_assumption":"Assumes positive probability of treatment assignment"}
         }
     }))
+}
+
+fn policy_specification(payload: &Value) -> Result<Value, &'static str> {
+    let intervention = intervention_contract(&payload["intervention"])?;
+    let causal_model = causal_model_contract(&payload["causal_model"])?;
+    let declared = payload
+        .get("n_obs")
+        .filter(|value| !value.is_null())
+        .map(|value| value.as_u64().ok_or("n_obs must be a nonnegative integer"))
+        .transpose()?;
+    let n_obs = if let Some(data) = payload.get("data").filter(|value| !value.is_null()) {
+        let columns = data
+            .as_object()
+            .filter(|columns| !columns.is_empty())
+            .ok_or("policy data must contain named columns")?;
+        let rows = columns
+            .values()
+            .next()
+            .and_then(Value::as_array)
+            .ok_or("policy data columns must be arrays")?
+            .len();
+        if columns
+            .values()
+            .any(|column| column.as_array().is_none_or(|values| values.len() != rows))
+        {
+            return Err("policy data columns must be aligned arrays");
+        }
+        if declared.is_some_and(|count| count != rows as u64) {
+            return Err("n_obs does not match policy data");
+        }
+        Some(rows as u64)
+    } else {
+        declared
+    };
+    Ok(json!({"intervention":intervention,"causal_model":causal_model,"n_obs":n_obs}))
 }
