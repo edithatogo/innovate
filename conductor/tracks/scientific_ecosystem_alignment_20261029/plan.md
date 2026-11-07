@@ -3859,3 +3859,7 @@ Hosted release readiness for this worktree revision remains open.
   installed R native suites at 4d0beff1. Both passed, including
   the six-parameter Norton Bass rank assertion and extreme-domain
   fitting rejection. Core and binding source match 9fcd4a1d.
+- [x] Check that extreme-scale normalization preserves genuine rank
+  deficiency. Collinear columns at scales 1 and 1e308 contribute
+  one direction, while an independent 1e-20 column stays below the
+  existing sensitivity cutoff. Both Rust rank regressions passed.

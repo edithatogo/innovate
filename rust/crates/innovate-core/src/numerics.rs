@@ -396,6 +396,19 @@ mod tests {
     }
 
     #[test]
+    fn local_rank_distinguishes_collinear_columns_at_extreme_scales() {
+        let report = local_rank(vec![
+            vec![1e308, -1e308, 0.],
+            vec![1., -1., 0.],
+            vec![0., 0., 1e-20],
+        ]);
+        assert_eq!(report["rank"], 1);
+        assert_eq!(report["status"], "rank_deficient");
+        assert!(report["qr_diagonal_ratio"].is_null());
+        assert_eq!(report["sensitivity_column_norms"][2], 1e-20);
+    }
+
+    #[test]
     fn unrepresentable_sensitivities_never_report_convergence() {
         let error = least_squares(
             &[0.],
