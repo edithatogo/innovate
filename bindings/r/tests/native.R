@@ -634,3 +634,8 @@ augmented <- kernel_call("summarize_causal", payload=list(method="augmented_trea
   treated_predictions=c(2,2), control_predictions=c(0,0)))$result
 stopifnot(isTRUE(all.equal(augmented$estimate, 4)),
   isTRUE(all.equal(augmented$influence_standard_error, 2)))
+augmented_att <- kernel_call("summarize_causal", payload=list(method="augmented_treatment_contrast",
+  estimand="att", outcomes=c(1,4), treatment=c(0,1), propensities=c(0.5,0.5),
+  control_predictions=c(0,1)))$result
+stopifnot(identical(augmented_att$estimand, "att"), isTRUE(all.equal(augmented_att$estimate, 2)),
+  isTRUE(all.equal(augmented_att$influence_standard_error, 2)))

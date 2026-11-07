@@ -1414,3 +1414,9 @@ def test_augmented_treatment_contrast():
                               treated_predictions=[2, 2], control_predictions=[0, 0])["result"]
     assert result["estimate"] == pytest.approx(4)
     assert result["influence_standard_error"] == pytest.approx(2)
+    att = innovate.execute("summarize_causal", method="augmented_treatment_contrast", estimand="att",
+                           outcomes=[1, 4], treatment=[0, 1], propensities=[0.5, 0.5],
+                           control_predictions=[0, 1])["result"]
+    assert att["estimand"] == "att"
+    assert att["estimate"] == pytest.approx(2)
+    assert att["influence_standard_error"] == pytest.approx(2)

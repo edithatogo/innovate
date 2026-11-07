@@ -671,4 +671,10 @@ end
         "treated_predictions"=>[2,2], "control_predictions"=>[0,0]))["result"]
     @test result["estimate"] ≈ 4
     @test result["influence_standard_error"] ≈ 2
+    att = kernel_call("summarize_causal", nothing, Dict("method"=>"augmented_treatment_contrast",
+        "estimand"=>"att", "outcomes"=>[1,4], "treatment"=>[0,1], "propensities"=>[0.5,0.5],
+        "control_predictions"=>[0,1]))["result"]
+    @test att["estimand"] == "att"
+    @test att["estimate"] ≈ 2
+    @test att["influence_standard_error"] ≈ 2
 end
