@@ -613,3 +613,25 @@ fn scheduled_wait_deadline_applies_only_to_new_waiters() {
     );
     assert_eq!(result["metadata"]["current_max_wait_ticks"], 1);
 }
+
+#[test]
+fn scheduled_null_clears_queue_restrictions() {
+    let payload = json!({
+        "inputs":{"time":[0.,6.,12.,16.]},
+        "parameters":{"p":1e12,"q":0.,"m":3.},
+        "simulation_options":{"engine":"kairos_network","population":3,"seed":42,
+            "edges":[],"capacity":1,"service_ticks":5,"ticks_per_unit":1,
+            "max_wait_ticks":1,"max_queue_length":0,
+            "schedule":[{"tick":2,"max_wait_ticks":null,"max_queue_length":null}]}
+    });
+    let result = KernelBinding::new()
+        .simulate_model("bass", payload)
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(result["counts"], json!([0, 1, 2, 3]));
+    assert_eq!(result["balks"], json!([]));
+    assert_eq!(result["abandonments"], json!([]));
+    assert_eq!(result["metadata"]["current_max_wait_ticks"], json!(null));
+    assert_eq!(result["metadata"]["current_max_queue_length"], json!(null));
+}

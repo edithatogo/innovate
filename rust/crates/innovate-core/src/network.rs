@@ -61,12 +61,23 @@ struct Change {
     edge_weights: Option<Vec<f64>>,
     service_ticks: Option<u64>,
     capacity: Option<u64>,
-    max_wait_ticks: Option<u64>,
-    max_queue_length: Option<usize>,
+    #[serde(default, deserialize_with = "queue_policy_change")]
+    max_wait_ticks: Option<Option<u64>>,
+    #[serde(default, deserialize_with = "queue_policy_change")]
+    max_queue_length: Option<Option<usize>>,
     p: Option<f64>,
     q: Option<f64>,
     innovation_multipliers: Option<Vec<f64>>,
     imitation_multipliers: Option<Vec<f64>>,
+}
+
+// Omission leaves the policy in place. Explicit null clears the restriction.
+fn queue_policy_change<'de, D, T>(deserializer: D) -> Result<Option<Option<T>>, D::Error>
+where
+    D: serde::Deserializer<'de>,
+    T: Deserialize<'de>,
+{
+    Option::<T>::deserialize(deserializer).map(Some)
 }
 
 #[derive(Deserialize)]
@@ -344,8 +355,8 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                     .flatten()
                     .any(|values| !valid_multipliers(values))
                 || change.capacity.is_some_and(|cap| cap > o.population as u64)
-                || change.max_wait_ticks.is_some_and(|wait| !(1..=1_000_000_000_000).contains(&wait))
-                || change.max_queue_length.is_some_and(|limit| limit > o.population)
+                || change.max_wait_ticks.flatten().is_some_and(|wait| !(1..=1_000_000_000_000).contains(&wait))
+                || change.max_queue_length.flatten().is_some_and(|limit| limit > o.population)
                 || change
                     .service_ticks
                     .is_some_and(|ticks| !(1..=1_000_000_000_000).contains(&ticks))
@@ -601,8 +612,8 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 service_override = change.service_ticks;
             }
             capacity = change.capacity.unwrap_or(capacity);
-            max_wait_ticks = change.max_wait_ticks.or(max_wait_ticks);
-            max_queue_length = change.max_queue_length.or(max_queue_length);
+            max_wait_ticks = change.max_wait_ticks.unwrap_or(max_wait_ticks);
+            max_queue_length = change.max_queue_length.unwrap_or(max_queue_length);
             innovation = change.p.unwrap_or(innovation);
             imitation = change.q.unwrap_or(imitation);
             if let Some(values) = &change.innovation_multipliers {

@@ -1581,3 +1581,10 @@ the other competition models and installed binding checks remain open.
   Julia and installed R. Counts, requests, abandonments and completions
   matched exactly. The later waiter expired at tick 5 and the original
   waiter completed under its retained deadline.
+
+- [x] Allow scheduled queue policies to clear wait and length restrictions
+  with explicit null. Omitted fields retain their current values. The
+  regression clears both limits and verifies all three agents complete
+  without balking or abandonment. All 22 network tests and focused
+  Clippy passed.
+- [ ] Verify explicit null queue changes through Python, Julia and R.
