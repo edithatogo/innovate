@@ -1925,7 +1925,7 @@ the other competition models and installed binding checks remain open.
   All 33 native boundary, 9 Kairos and 22 network tests passed, as did
   focused Clippy.
 - [ ] Restore historical scenario schema and registry coverage, comparison
-  metrics, execution metadata, parallel grid execution and release parity.
+  metrics, execution metadata and release parity.
 
 - [x] Restore the five historical scenario specification shapes on native
   grid entries (e2c5f355). The optional specification is validated before
@@ -1934,3 +1934,10 @@ the other competition models and installed binding checks remain open.
   types. A network specification round-tripped through a rebuilt Python
   3.15.2 wheel, Julia and installed R. All 34 native boundary tests and
   focused Clippy passed.
+
+- [x] Restore bounded parallel scenario grids (08741eea). The optional
+  workers setting accepts integers from 1 to 32 and defaults to 1. Scenario
+  and model batches share ordered chunk scheduling. Python 3.15, Julia and
+  installed R each returned identical serial and parallel responses for a
+  seeded Kairos resource simulation alongside an unsupported-model error.
+  All 34 native boundary tests and focused Clippy passed.

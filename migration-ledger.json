@@ -201,7 +201,7 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Historical scenario registry and specification-to-model translation, comparison metrics, execution metadata, parallel grids and release parity"
+      "remaining": "Historical scenario registry and specification-to-model translation, comparison metrics, execution metadata, and release parity"
     },
     {
       "key": "explainability_sensitivity_reporting",
