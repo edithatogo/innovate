@@ -5569,3 +5569,9 @@ Hosted release readiness for this worktree revision remains open.
   took 11.54 seconds in the debug build and the negative seasonal
   likelihood difference fell to 1.28e-8. The mixed and integrated R
   references also passed. Broader qualification remains open.
+
+- [x] Enforce likelihood agreement within 3e-6 and coefficient
+  agreement within 5e-4 for both difficult seasonal reference fits.
+  The R regression check passed and the negative reference also
+  passed through Julia and rebuilt Python using the same simulated
+  values and R estimates. Broader optimizer qualification remains open.

@@ -15,6 +15,7 @@ for (root in c(0.97, -0.97)) {
   stopifnot(reference$code == 0L, length(native$fitted) == length(values))
   gain <- native$log_likelihood - as.numeric(stats::logLik(reference))
   coefficient_error <- max(abs(unlist(native$coefficients) - stats::coef(reference)))
+  stopifnot(abs(gain) < 3e-6, coefficient_error < 5e-4)
   cat(sprintf("Seasonal AR %+.2f: Rust minus R likelihood %.9g, max coefficient error %.9g\n",
     root, gain, coefficient_error))
 }
