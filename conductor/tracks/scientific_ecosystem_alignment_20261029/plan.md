@@ -4169,3 +4169,6 @@ Hosted release readiness for this worktree revision remains open.
   premature readiness during development validation. Eight policy
   regressions passed. The optimized Python release check still
   rejects the current ledger with 38 outstanding obligations.
+- [x] Reject negative adoption values at the shared paired Bass
+  validation boundary before JSON or Arrow handoff. The native
+  contract and Arrow round-trip regressions passed.

@@ -33,6 +33,12 @@ fn paired_outcomes_preserve_values_and_reject_misalignment() {
         incompatible["strategies"][1][key] = json!("different");
         assert_eq!(run(&incompatible)["error"]["code"], "invalid_request");
     }
+    let mut negative = payload.clone();
+    negative["strategies"][1]["draws"][0]["adoption"][1] = json!(-0.01);
+    assert_eq!(
+        run(&negative)["error"]["message"],
+        "paired Bass adoption values must be nonnegative"
+    );
     let mut duplicate = payload.clone();
     duplicate["strategies"][0]["draws"][0]["parameters"][1]["name"] = json!("m");
     assert_eq!(run(&duplicate)["error"]["code"], "invalid_request");

@@ -78,6 +78,9 @@ pub(crate) fn validate(payload: &Value) -> Result<Value, &'static str> {
             {
                 return Err("draws require unique IDs and aligned trajectories on one time grid");
             }
+            if draw.adoption.iter().any(|&value| value < 0.) {
+                return Err("paired Bass adoption values must be nonnegative");
+            }
             let mut units = BTreeMap::new();
             for parameter in &draw.parameters {
                 if parameter.unit.trim().is_empty()
