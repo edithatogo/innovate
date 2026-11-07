@@ -6607,3 +6607,9 @@ Hosted release readiness for this worktree revision remains open.
   multiply-add from the nearer endpoint for finite spans and retains
   weighted endpoints when subtracting the endpoints would overflow.
   Eight scenario unit tests and the public grid boundary test passed.
+
+- [x] Verify the subnormal Logistic threshold crossing through a rebuilt
+  Python 3.15.2 wheel, Julia and installed R using the native builds
+  from 5bb5fd4c. Both scenarios returned the binary64 bit pattern 2 in
+  each binding. The request payload is retained in
+  evidence/scenario-subnormal-threshold.json.
