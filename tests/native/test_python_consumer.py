@@ -1511,5 +1511,12 @@ def test_staggered_panel_att():
     shared = innovate.execute(
         "summarize_causal", **{**payload, "outcomes": [[0, 5, 5]] * 2 + [[0, 1, 6]] * 2 + [[0, 0, 0], [0, 2, 4]],
                                "adoption_indices": [1, 1, 2, 2, None, None]},
-    )["result"]["event_time"][0]
-    assert shared["standard_error"] == pytest.approx((1 / math.sqrt(48) + 1 / math.sqrt(8)) * math.sqrt(2))
+        include_event_time_covariance=True,
+    )["result"]
+    error = shared["event_time"][0]["standard_error"]
+    assert error == pytest.approx((1 / math.sqrt(48) + 1 / math.sqrt(8)) * math.sqrt(2))
+    covariance = shared["event_time_covariance"]
+    assert covariance[0] == pytest.approx([error**2, 2 * error])
+    assert covariance[1] == pytest.approx([2 * error, 4])
+    sparse = innovate.execute("summarize_causal", **payload, include_event_time_covariance=True)["result"]
+    assert sparse["event_time_covariance"] == [[None, None], [None, None]]

@@ -4737,3 +4737,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Return opt-in event-time covariance for staggered ATT. The Rust
   fixture verifies the pointwise variance on the diagonal and symmetric
   nonzero covariance across offsets. Binding and simultaneous bands remain open.
+
+- [x] Verify event-time covariance through rebuilt Python 3.15.2, Julia
+  and installed R. Each returned the analytic matrix in event-time order.
+  The Python regression also checks null entries when uncertainty is absent.
