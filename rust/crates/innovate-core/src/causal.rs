@@ -634,6 +634,17 @@ struct AssumptionDocument {
 }
 
 fn treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
+    let fields = payload
+        .as_object()
+        .ok_or("treatment contrast must be an object")?;
+    if fields.keys().any(|key| {
+        !matches!(
+            key.as_str(),
+            "method" | "outcomes" | "treatment" | "bootstrap" | "effect_modifiers"
+        )
+    }) {
+        return Err("treatment contrast supports only unadjusted differences in means");
+    }
     let outcomes = series(payload, "outcomes")?;
     let treatment = series(payload, "treatment")?;
     if outcomes.len() != treatment.len() || treatment.iter().any(|&v| v != 0. && v != 1.) {

@@ -4475,3 +4475,8 @@ Hosted release readiness for this worktree revision remains open.
   All 82 Rust boundary and 103 Python native tests passed, along with
   the complete Julia and freshly installed R native suites. The tested
   Python wrapper and extension matched the rebuilt CPython 3.15.2 wheel.
+
+- [x] Reject adjustment options in the descriptive treatment contrast.
+  Requests for matching or confounder adjustment previously returned
+  the same unadjusted result. The Rust boundary regression failed before
+  validation was added and passed after. Adjusted estimators remain open.

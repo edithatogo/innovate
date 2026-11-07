@@ -678,6 +678,12 @@ fn causal_summaries_match_analytic_effects() {
         2.
     );
     assert!(contrast["result"]["by_modifier"]["group"]["b"]["estimate"].is_null());
+    let mut adjusted = json!({"method":"treatment_contrast","outcomes":[2,5],
+        "treatment":[0,1],"estimator":"matching"});
+    assert!(run(adjusted.clone())["result"].is_null());
+    adjusted.as_object_mut().unwrap().remove("estimator");
+    adjusted["confounders"] = json!(["age"]);
+    assert!(run(adjusted)["result"].is_null());
     let bootstrap = run(json!({"method":"treatment_contrast","outcomes":[2,2,5,5],
         "treatment":[0,0,1,1],"bootstrap":{"draws":100,"seed":42}}));
     assert_eq!(bootstrap["result"]["bootstrap"]["ci_lower"], 3.);
