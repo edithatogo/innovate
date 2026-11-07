@@ -13,7 +13,18 @@ fn mean(values: &[f64]) -> Option<f64> {
         if scale == 0. {
             return 0.;
         }
-        let average = values.iter().map(|v| v / scale).sum::<f64>() / values.len() as f64;
+        let mut sum: f64 = 0.;
+        let mut correction = 0.;
+        for value in values.iter().map(|v| v / scale) {
+            let next = sum + value;
+            correction += if sum.abs() >= value.abs() {
+                (sum - next) + value
+            } else {
+                (value - next) + sum
+            };
+            sum = next;
+        }
+        let average = (sum + correction) / values.len() as f64;
         average.clamp(-1., 1.) * scale
     })
 }

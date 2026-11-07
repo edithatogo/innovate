@@ -3716,3 +3716,7 @@ Hosted release readiness for this worktree revision remains open.
   underflows. The Rust unit fixture checks both signs of the smallest
   subnormal effect and an ordinary percentage at the maximum finite
   scale. The causal boundary test and focused Clippy passed.
+- [x] Use compensated accumulation in the scaled causal outcome mean.
+  The public Rust counterfactual fixture retains the analytic effect
+  of one-third when large opposite observations surround a small
+  observation. The causal boundary test and focused Clippy passed.

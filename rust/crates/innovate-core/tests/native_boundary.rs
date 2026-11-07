@@ -508,6 +508,10 @@ fn causal_summaries_match_analytic_effects() {
     let counterfactual =
         run(json!({"method":"counterfactual","actual":[3,5],"counterfactual":[2]}));
     assert_eq!(counterfactual["result"]["percent_change"], 100.);
+    let cancellation = run(json!({"method":"counterfactual",
+        "actual":[1e16,1.,-1e16],"counterfactual":[0.]}));
+    let effect = cancellation["result"]["effect"].as_f64().unwrap();
+    assert!((effect - 1. / 3.).abs() < 1e-15);
     let event = run(json!({"method":"event_study","periods":[0,1,2],
                           "coefficients":[2,3,5],"standard_errors":[1,1,1]}));
     assert_eq!(event["result"]["post_effects"], 4.);
