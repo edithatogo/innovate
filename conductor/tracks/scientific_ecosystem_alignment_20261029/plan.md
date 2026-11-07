@@ -2352,3 +2352,9 @@ the other competition models and installed binding checks remain open.
   Complete benchmark results agreed across all three bindings. Across all
   26 samples and both nodes the maximum absolute error against the analytic
   Bass trajectories was 2.814e-12. This case uses zero spillover.
+
+- [x] Add a fixed-parameter network spillover benchmark with a weighted
+  directed graph and isolated node. Compare all three predicted paths
+  with analytic Bass and spillover values. Link the case to the model card
+  and keep it under the manual policy. Five focused Rust tests and Clippy
+  passed. Installed binding qualification remains open.

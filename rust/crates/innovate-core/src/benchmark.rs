@@ -1,7 +1,7 @@
 //! Reproducible synthetic smoke corpus and native fit/forecast runner.
 use serde_json::{Value, json};
 
-const CASES: [(&str, &str, &str); 6] = [
+const CASES: [(&str, &str, &str); 7] = [
     ("bass_smoke_adoption", "bass", "diffusion"),
     ("logistic_growth_smoke", "logistic", "diffusion"),
     ("fisher_pry_replacement_smoke", "fisher_pry", "substitution"),
@@ -13,6 +13,11 @@ const CASES: [(&str, &str, &str); 6] = [
     ("lock_in_smoke", "lock_in", "competition"),
     (
         "network_diffusion_smoke",
+        "network_diffusion",
+        "network_diffusion",
+    ),
+    (
+        "network_spillover_reference",
         "network_diffusion",
         "network_diffusion",
     ),
@@ -51,6 +56,9 @@ fn run_case(id: &str) -> Result<Value, String> {
         .iter()
         .find(|case| case.0 == id)
         .ok_or("unknown benchmark case")?;
+    if id == "network_spillover_reference" {
+        return network_spillover_reference(id, model, family);
+    }
     if model == "network_diffusion" {
         let time: Vec<f64> = (0..26).map(f64::from).collect();
         let bass = |t: f64, p: f64, q: f64, m: f64| {
@@ -107,6 +115,36 @@ fn run_case(id: &str) -> Result<Value, String> {
     )
 }
 
+fn network_spillover_reference(id: &str, model: &str, family: &str) -> Result<Value, String> {
+    let time = [0_f64, 1., 5., 20.];
+    let bass = |t: f64, p: f64, q: f64, market: f64| {
+        let decay = (-(p + q) * t).exp();
+        market * (1. - decay) / (1. + (q / p) * decay)
+    };
+    let observed: Vec<_> = time
+        .iter()
+        .map(|&t| {
+            let a = bass(t, 0.03, 0.3, 100.);
+            let b = bass(t, 0.02, 0.2, 200.);
+            let c = bass(t, 0.04, 0.4, 50.);
+            [a + 0.2 * (2. * b + c) / 3., b + 0.2 * a, c]
+        })
+        .collect();
+    let prediction = crate::KernelBinding::new().predict_model(model, json!({
+        "inputs":{"time":time},
+        "constructor_kwargs":{"base_model":"bass","adjacency":[[0.,2.,1.],[1.,0.,0.],[0.,0.,0.]],
+            "node_labels":["A","B","isolated"]},
+        "parameters":{"spillover_strength":0.2,"node_0_p":0.03,"node_0_q":0.3,"node_0_m":100.,
+            "node_1_p":0.02,"node_1_q":0.2,"node_1_m":200.,
+            "node_2_p":0.04,"node_2_q":0.4,"node_2_m":50.}
+    })).map_err(|error| format!("benchmark prediction failed: {}", error.message))?
+      .result.ok_or("benchmark prediction returned no result")?;
+    Ok(
+        json!({"case":case_descriptor(id,model,family),"time":time,"observed":observed,
+        "fit":null,"prediction":prediction,"scope":"fixed_parameter_analytic_reference"}),
+    )
+}
+
 fn fit_and_forecast(id: &str, model: &str, family: &str, payload: Value) -> Result<Value, String> {
     let time = payload["inputs"]["time"].clone();
     let observed = payload["inputs"]["observed"].clone();
@@ -151,7 +189,7 @@ fn suite(payload: &Value) -> Result<Value, String> {
             let entries = value
                 .as_array()
                 .filter(|entries| !entries.is_empty() && entries.len() <= CASES.len())
-                .ok_or("case_ids must contain one to six case IDs")?;
+                .ok_or("case_ids must contain one to seven case IDs")?;
             entries
                 .iter()
                 .map(|entry| {
@@ -190,7 +228,7 @@ fn suite(payload: &Value) -> Result<Value, String> {
     let succeeded = runs.iter().filter(|row| row["error"].is_null()).count();
     Ok(
         json!({"runs":runs,"succeeded":succeeded,"failed":runs.len()-succeeded,
-        "scope":"in_sample_synthetic_smoke"}),
+        "scope":"synthetic_benchmark_suite"}),
     )
 }
 
