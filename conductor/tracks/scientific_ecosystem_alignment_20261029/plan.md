@@ -1749,7 +1749,7 @@ the other competition models and installed binding checks remain open.
   Float64 estimates and interval bounds plus Int32 draw counts through
   Arrow IPC read by PyArrow 26. Absent intervals retain null bounds
   and zero draws.
-- [ ] Restore causal model metadata and evidence handoff, and qualify
+- [x] Restore causal model metadata and evidence handoff, and qualify
   other Arrow consumers.
 
 - [x] Restore policy metadata and causal evidence handoff using the
@@ -2721,3 +2721,9 @@ the other competition models and installed binding checks remain open.
   3.15.2, Julia and installed R. Complete results agreed exactly and
   matched both analytic alternatives within 1e-8. R used raw JSON
   to retain the empty event array.
+
+- [x] Qualify Innovate IPC file exports of the retained causal metadata
+  and treatment contrast tables. Python 3.15.2 Polars round-tripped
+  both files. Julia Arrow and R Arrow matched each existing stream
+  column for type, values and nulls. Direct Arrow.jl readback of files
+  emitted by the separate Python Polars writer remains open.
