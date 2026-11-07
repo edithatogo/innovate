@@ -4692,3 +4692,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify clustered cross-fitted ATT through rebuilt Python 3.15.2,
   Julia and installed R. Each returned ATT 4 and standard error 2
   for two clusters held intact across the training splits.
+
+- [x] Estimate balanced-panel event-study contrasts from unit outcomes.
+  The focused Rust fixture verifies a zero pretrend, reference period,
+  post-treatment contrast 4 and standard error 1. Binding checks remain open.

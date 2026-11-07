@@ -98,6 +98,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                       "effect":effect,"percent_change":percent_change}),
             )
         }
+        Some("panel_event_study") => panel_event_study(payload),
         Some("event_study") => {
             let periods = series(payload, "periods")?;
             let effects = series(payload, "coefficients")?;
@@ -338,6 +339,63 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
         Some("covariate_balance") => covariate_balance(payload),
         _ => Err("unknown causal summary method"),
     }
+}
+
+fn panel_event_study(payload: &Value) -> Result<Value, &'static str> {
+    let periods = series(payload, "periods")?;
+    let baseline = payload["baseline_index"]
+        .as_u64()
+        .and_then(|v| usize::try_from(v).ok())
+        .filter(|&index| index < periods.len())
+        .ok_or("baseline_index must identify an observed period")?;
+    if periods.len() < 2 || periods.windows(2).any(|pair| pair[0] >= pair[1]) {
+        return Err(
+            "event-study periods must be strictly increasing and contain at least two values",
+        );
+    }
+    let parse_arm = |key: &str| -> Result<Vec<Vec<f64>>, &'static str> {
+        let units: Vec<Vec<f64>> = serde_json::from_value(payload[key].clone())
+            .map_err(|_| "event-study arms must contain numeric unit rows")?;
+        if units.is_empty() || units.iter().any(|unit| unit.len() != periods.len()) {
+            return Err("each event-study arm requires nonempty unit rows aligned with periods");
+        }
+        Ok(units)
+    };
+    let treated = parse_arm("treated")?;
+    let control = parse_arm("control")?;
+    let summarize =
+        |units: &[Vec<f64>], period: usize| -> Result<(f64, Option<f64>), &'static str> {
+            let changes = units
+                .iter()
+                .map(|unit| finite(unit[period] - unit[baseline]))
+                .collect::<Result<Vec<_>, _>>()?;
+            let average = mean(&changes).unwrap();
+            let n = changes.len() as f64;
+            let error = (changes.len() > 1).then(|| {
+                let scale = 1. / (n * (n - 1.)).sqrt();
+                changes.iter().fold(0_f64, |error, &change| {
+                    error.hypot(scale * change - scale * average)
+                })
+            });
+            Ok((average, error))
+        };
+    let mut contrasts = Vec::with_capacity(periods.len());
+    for (index, period) in periods.into_iter().enumerate() {
+        let (treated_change, treated_error) = summarize(&treated, index)?;
+        let (control_change, control_error) = summarize(&control, index)?;
+        let error = treated_error
+            .zip(control_error)
+            .map(|(a, b)| finite(a.hypot(b)))
+            .transpose()?;
+        contrasts.push(
+            json!({"period":period,"estimate":finite(treated_change-control_change)?,
+            "standard_error":error,"reference":index == baseline}),
+        );
+    }
+    Ok(
+        json!({"method":"balanced_panel_difference_in_differences","contrasts":contrasts,
+        "n_treated":treated.len(),"n_control":control.len()}),
+    )
 }
 
 fn sensitivity_margin(point: f64, gamma: f64) -> Result<f64, &'static str> {

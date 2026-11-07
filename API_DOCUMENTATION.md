@@ -336,3 +336,13 @@ The cross-fitted stratum methods also accept `clusters`. Every
 cluster must belong to one fold so its outcomes stay together during
 training and validation. The augmented contrast then uses the same
 cluster labels for its standard error.
+
+## Balanced-panel event study
+
+Use `panel_event_study` with strictly increasing `periods`, a zero-based
+`baseline_index`, and `treated` and `control` matrices with one row per
+unit and one column per period. Each contrast subtracts the control
+mean change from the treated mean change relative to the baseline.
+Standard errors use independent units and are null for singleton arms.
+These are pointwise estimates for a common treatment timing design.
+Causal interpretation requires parallel trends and no anticipation.

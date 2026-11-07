@@ -684,6 +684,16 @@ fn causal_summaries_match_analytic_effects() {
     adjusted.as_object_mut().unwrap().remove("estimator");
     adjusted["confounders"] = json!(["age"]);
     assert!(run(adjusted)["result"].is_null());
+    let mut panel = json!({"method":"panel_event_study","periods":[-2,-1,0],"baseline_index":1,
+        "treated":[[1,2,7],[3,4,11]],"control":[[0,1,3],[4,5,7]]});
+    let result = run(panel.clone());
+    let contrasts = &result["result"]["contrasts"];
+    assert_eq!(contrasts[0]["estimate"], 0.);
+    assert_eq!(contrasts[1]["reference"], true);
+    assert_eq!(contrasts[2]["estimate"], 4.);
+    assert!((contrasts[2]["standard_error"].as_f64().unwrap() - 1.).abs() < 1e-12);
+    panel["periods"] = json!([-2, -2, 0]);
+    assert!(run(panel)["result"].is_null());
     let mut augmented = json!({"method":"augmented_treatment_contrast","outcomes":[0,4],
         "treatment":[0,1],"propensities":[0.5,0.5],"treated_predictions":[2,2],
         "control_predictions":[0,0]});
