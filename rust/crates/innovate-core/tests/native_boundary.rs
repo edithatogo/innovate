@@ -1338,3 +1338,25 @@ fn substitution_scenario_conserves_the_adopter_pool_and_replays() {
         row["result"]
     );
 }
+
+#[test]
+fn threshold_sensitivity_counts_equal_outcomes_and_preserves_threshold_order() {
+    let mut request = json!({"schema_version":"2.0","operation":"threshold_sensitivity",
+        "payload":{"outcome_values":[3.,-1.,3.,0.],
+            "inputs":[{"name":"adoption","metric":"level","thresholds":[3.,0.,4.]}]}});
+    let run = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = run(&request);
+    let result = &response["result"];
+    assert_eq!(
+        result["outcome_summary"],
+        json!({"min":-1.,"max":3.,"mean":1.25})
+    );
+    assert_eq!(result["rows"][0]["n_meet"], 2);
+    assert_eq!(result["rows"][0]["share_meet"], 0.5);
+    assert_eq!(result["rows"][1]["n_meet"], 3);
+    assert_eq!(result["rows"][2]["n_meet"], 0);
+    request["payload"]["outcome_values"] = json!([]);
+    assert_eq!(run(&request)["error"]["code"], "invalid_request");
+}

@@ -2219,3 +2219,8 @@ the other competition models and installed binding checks remain open.
   inputs and resolved replay requests. All three accepted intact artifacts.
   Julia and R rejected removal of the topology seed. R used raw JSON to
   preserve integer and floating-point representations through import.
+
+- [x] Restore deterministic threshold sensitivity in Rust, including
+  inclusive counts, threshold order, proportions and outcome summaries.
+  All 44 boundary tests and Clippy passed. Other report families and
+  binding qualification remain open.

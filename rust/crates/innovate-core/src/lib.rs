@@ -24,6 +24,7 @@ mod regime;
 mod sarima;
 mod scenario;
 mod seasonal;
+mod sensitivity;
 mod simulation;
 mod spillover;
 mod substitution;
@@ -46,6 +47,7 @@ pub fn execute_json(input: &str) -> String {
                 "preprocess_series"
                 | "aggregate_dates"
                 | "summarize_causal"
+                | "threshold_sensitivity"
                 | "validate_provenance"
                 | "dataset_checksum"
                 | "validate_dataset",
@@ -158,6 +160,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             return Err("analysis request requires schema 2.0");
         }
         let payload = &value["payload"];
+        if value["operation"] == "threshold_sensitivity" {
+            return sensitivity::thresholds(payload);
+        }
         if value["operation"] == "aggregate_dates" {
             return calendar::aggregate(payload);
         }
