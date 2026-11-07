@@ -39,8 +39,8 @@ end
 kernel_discover_models() = kernel_call("discover_models")["result"]
 kernel_fit_model(model, payload) = kernel_call("fit_model", model, payload)
 kernel_predict_model(model, payload) = kernel_call("predict_model", model, payload)
-kernel_fit_batch(model, datasets) = kernel_call("fit_batch", model, Dict("datasets" => datasets))["result"]["datasets"]
-kernel_predict_batch(model, datasets) = kernel_call("predict_batch", model, Dict("datasets" => datasets))["result"]["datasets"]
+kernel_fit_batch(model, datasets; workers=1) = kernel_call("fit_batch", model, Dict("datasets" => datasets, "workers" => workers))["result"]["datasets"]
+kernel_predict_batch(model, datasets; workers=1) = kernel_call("predict_batch", model, Dict("datasets" => datasets, "workers" => workers))["result"]["datasets"]
 kernel_simulate_model(model, payload) = kernel_call("simulate_model", model, payload)
 kernel_summarize_model(model, payload) = kernel_call("summarize_model", model, payload)
 kernel_diagnose_model(model, payload) = kernel_call("diagnose_model", model, payload)

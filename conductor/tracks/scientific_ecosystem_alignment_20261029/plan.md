@@ -1206,5 +1206,10 @@ the other competition models and installed binding checks remain open.
   The regression compares complete serial and parallel envelopes,
   including a failed middle dataset, and rejects an invalid worker count.
   All nine native boundary tests and focused Clippy passed.
-- [ ] Qualify parallel workloads in the installed bindings and measure
+- [x] Qualify parallel workloads in the installed bindings and measure
   throughput across representative model families.
+  Rebuilt Python, Julia and R consumers returned identical ordered serial
+  and two-worker fit results. One local debug-build timing measured 48
+  Logistic requests at 0.099/0.063 seconds and 16 forced Bass requests at
+  3.944/2.317 seconds. These are local measurements, with broader workload
+  and release qualification open. [Logs](evidence/parallel-batch-20261107).

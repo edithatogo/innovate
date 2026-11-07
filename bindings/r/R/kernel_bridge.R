@@ -46,5 +46,5 @@ kernel_simulate_model <- function(model_key, payload) kernel_call("simulate_mode
 kernel_summarize_model <- function(model_key, payload) kernel_call("summarize_model", model_key, payload)
 kernel_diagnose_model <- function(model_key, payload) kernel_call("diagnose_model", model_key, payload)
 
-kernel_fit_batch <- function(model_key, datasets) kernel_call("fit_batch", model_key, list(datasets = datasets))$result$datasets
-kernel_predict_batch <- function(model_key, datasets) kernel_call("predict_batch", model_key, list(datasets = datasets))$result$datasets
+kernel_fit_batch <- function(model_key, datasets, workers = 1L) kernel_call("fit_batch", model_key, list(datasets = datasets, workers = workers))$result$datasets
+kernel_predict_batch <- function(model_key, datasets, workers = 1L) kernel_call("predict_batch", model_key, list(datasets = datasets, workers = workers))$result$datasets
