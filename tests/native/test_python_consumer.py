@@ -47,6 +47,7 @@ def test_capabilities_are_native_and_unavailable_features_fail_closed():
         "latent_process",
         "regime_switching",
         "hierarchical",
+        "mixture",
     }
     assert innovate.capabilities()["supports_simulation"].all()
     assert innovate.capabilities()["supports_summarize"].all()
@@ -317,3 +318,46 @@ def test_centered_hierarchical_polars_group_fit_and_forecast():
     forecast = fit.predict(pl.DataFrame({"time": [30.0]}))
     assert forecast["prediction_1"][0] == pytest.approx(100 / (1 + math.exp(-9.2)), abs=0.01)
     assert forecast["prediction_2"][0] == pytest.approx(200 / (1 + math.exp(-6.3)), abs=0.01)
+
+
+def test_weighted_polars_fit_excludes_zero_weight_outlier():
+    time = [float(i) for i in range(25)]
+    y = [100 / (1 + math.exp(-0.4 * (t - 7))) for t in time]
+    y[20] = 300
+    weights = [1.0] * 25
+    weights[20] = 0.0
+    fit = innovate.fit(
+        "logistic",
+        pl.DataFrame({"time": time, "observed": y}),
+        fit_options={"weights": weights, "initial_parameters": {"L": 110.0, "k": 0.35, "x0": 8.0}},
+    )
+    assert fit.parameters["L"] == pytest.approx(100.0, abs=1e-5)
+    assert fit.diagnostics["weighting"]["positive_observations"] == 24
+
+
+def test_gaussian_mixture_polars_fit_and_forecast_state():
+    time = [i * 0.5 for i in range(50)]
+    y = [
+        100 / (1 + math.exp(-0.4 * (t - 6))) if i % 2 == 0 else 200 / (1 + math.exp(-0.3 * (t - 10)))
+        for i, t in enumerate(time)
+    ]
+    parameters = {
+        "model_0_L": 100.0,
+        "model_0_k": 0.4,
+        "model_0_x0": 6.0,
+        "model_1_L": 200.0,
+        "model_1_k": 0.3,
+        "model_1_x0": 10.0,
+        "weight_0": 0.4,
+        "weight_1": 0.6,
+        "noise_scale": 2.0,
+    }
+    fit = innovate.fit(
+        "mixture",
+        pl.DataFrame({"time": time, "observed": y}),
+        model_options={"components": ["logistic", "logistic"], "max_iter": 30, "noise_floor": 0.001},
+        fit_options={"initial_parameters": parameters},
+    )
+    assert fit.envelope["result"]["optimizer"]["converged"]
+    assert fit.parameters["model_1_L"] == pytest.approx(200.0, abs=0.05)
+    assert fit.predict(pl.DataFrame({"time": [40.0]}))["prediction"][0] > 140.0

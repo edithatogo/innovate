@@ -2,7 +2,7 @@ library(innovate.R)
 payload <- list(inputs=list(time=c(0,1,2)), parameters=list(L=100,k=1,x0=1))
 x <- kernel_predict_model("logistic", payload)
 stopifnot(x$result$values[[2]] == 50, x$metadata$runtime == "rust_native")
-stopifnot(length(kernel_discover_models()$models) == 14)
+stopifnot(length(kernel_discover_models()$models) == 15)
 error <- tryCatch(kernel_predict_model("composite", payload), error=function(e) conditionMessage(e))
 stopifnot(is.character(error), grepl("unsupported_native_operation", error))
 for (i in seq_len(100)) stopifnot(kernel_predict_model("logistic", payload)$result$values[[2]] == 50)
@@ -159,3 +159,16 @@ stopifnot(abs(a$rows[[1]][[1]]-100/(1+exp(-9.2)))<0.01,abs(a$rows[[1]][[2]]-200/
 p <- list(inputs=list(time=2,observed=list(a=50)),constructor_kwargs=list(base_model="logistic",groups="a"),parameters=list(global_L=100,global_k=1,global_x0=2,a_L=0,a_k=0,a_x0=0))
 stopifnot(kernel_diagnose_model("hierarchical",p)$result$diagnostics$metrics$RSS==0)
 cat("R hierarchical grouped state and singleton mapping passed\n")
+time <- 0:24
+y <- 100/(1+exp(-0.4*(time-7)));y[21] <- 300
+weights <- rep(1,25);weights[21] <- 0
+f <- kernel_fit_model("logistic",list(inputs=list(time=time,observed=y),fit_options=list(weights=weights,initial_parameters=list(L=110,k=0.35,x0=8))))$result
+stopifnot(abs(f$parameters$L-100)<1e-5)
+time <- seq(0,24.5,0.5)
+y <- ifelse((seq_along(time)-1)%%2==0,100/(1+exp(-0.4*(time-6))),200/(1+exp(-0.3*(time-10))))
+parameters <- list(model_0_L=100,model_0_k=0.4,model_0_x0=6,model_1_L=200,model_1_k=0.3,model_1_x0=10,weight_0=0.4,weight_1=0.6,noise_scale=2)
+f <- kernel_fit_model("mixture",list(inputs=list(time=time,observed=y),constructor_kwargs=list(components=c("logistic","logistic"),max_iter=30,noise_floor=0.001),fit_options=list(initial_parameters=parameters)))$result
+stopifnot(f$optimizer$converged,abs(f$parameters$model_1_L-200)<0.05,kernel_predict_model("mixture",list(inputs=list(time=40),state=f$state))$result$values[[1]]>140)
+p <- list(inputs=list(time=2),constructor_kwargs=list(components="logistic",weights=1,mode="historical_adoption"),parameters=list(model_0_L=100,model_0_k=1,model_0_x0=2,weight_0=1))
+stopifnot(kernel_predict_model("mixture",p)$result$values[[1]]==50)
+cat("R weighted fit, Gaussian mixture and singleton component passed\n")

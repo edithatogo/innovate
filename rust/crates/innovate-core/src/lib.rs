@@ -8,6 +8,7 @@ mod hierarchical;
 mod historical;
 mod kernel;
 mod latent;
+mod mixture;
 mod network;
 mod numerics;
 mod policy;

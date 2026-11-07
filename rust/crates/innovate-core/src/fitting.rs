@@ -11,6 +11,32 @@ fn error(message: impl Into<String>) -> KernelBindingError {
     KernelBindingError::invalid_request(KernelOperation::FitModel, message)
 }
 
+fn weights(request: &KernelRequest, n: usize) -> Result<Option<Vec<f64>>, KernelBindingError> {
+    let Some(value) = request
+        .payload
+        .get("fit_options")
+        .and_then(|v| v.get("weights"))
+    else {
+        return Ok(None);
+    };
+    let values: Vec<f64> = serde_json::from_value(value.clone())
+        .map_err(|_| error("weights must be a numeric array"))?;
+    let minimum = if request.model_key.as_deref() == Some("fisher_pry") {
+        2
+    } else {
+        3
+    };
+    if values.len() != n
+        || values.iter().any(|v| !v.is_finite() || *v < 0.)
+        || values.iter().filter(|v| **v > 0.).count() < minimum
+    {
+        return Err(error(
+            "weights must be finite nonnegative, aligned, and retain at least as many positive observations as curve parameters",
+        ));
+    }
+    Ok(Some(values))
+}
+
 pub(crate) fn options(
     request: &KernelRequest,
 ) -> Result<(Option<Value>, usize), KernelBindingError> {
@@ -22,12 +48,21 @@ pub(crate) fn options(
         .ok_or_else(|| error("fit_options must be an object"))?;
     if options
         .keys()
-        .any(|k| !["initial_parameters", "max_iterations"].contains(&k.as_str()))
+        .any(|k| !["initial_parameters", "max_iterations", "weights"].contains(&k.as_str()))
     {
         return Err(KernelBindingError::unsupported_native_operation(
             KernelOperation::FitModel,
             "unsupported native fit option",
         ));
+    }
+    if options.contains_key("weights") {
+        let input = object_section(
+            request.payload.as_object().unwrap(),
+            "inputs",
+            KernelOperation::FitModel,
+        )?;
+        let time = numeric_array_from_aliases(input, &["time", "t"], KernelOperation::FitModel)?;
+        weights(request, time.len())?;
     }
     let limit = options
         .get("max_iterations")
@@ -101,8 +136,29 @@ pub(crate) fn refine(
             "fitting needs at least {minimum} aligned, finite, nonnegative observations"
         )));
     }
-    let y_scale = observed.iter().copied().fold(0.0, f64::max).max(1e-12);
-    let t_scale = time.iter().copied().map(f64::abs).fold(1.0, f64::max);
+    let weights = weights(request, time.len())?;
+    let maximum_weight = weights
+        .as_ref()
+        .map(|w| w.iter().copied().fold(0., f64::max))
+        .unwrap_or(1.);
+    let factors: Vec<f64> = weights
+        .as_ref()
+        .map(|w| w.iter().map(|w| w.sqrt() / maximum_weight.sqrt()).collect())
+        .unwrap_or_else(|| vec![1.; time.len()]);
+    let positive_count = factors.iter().filter(|w| **w > 0.).count();
+    let y_scale = observed
+        .iter()
+        .zip(&factors)
+        .filter(|(_, w)| **w > 0.)
+        .map(|(v, _)| *v)
+        .fold(0., f64::max)
+        .max(1e-12);
+    let t_scale = time
+        .iter()
+        .zip(&factors)
+        .filter(|(_, w)| **w > 0.)
+        .map(|(v, _)| v.abs())
+        .fold(1., f64::max);
     let names: &[&str] = match model {
         "bass" => &["p", "q", "m"],
         "logistic" => &["L", "k", "x0"],
@@ -159,7 +215,7 @@ pub(crate) fn refine(
         Value::Object(parameters)
     };
     let base_state = result["state"].clone();
-    let evaluate = |theta: &[f64]| -> Result<Vec<f64>, String> {
+    let evaluate_raw = |theta: &[f64]| -> Result<Vec<f64>, String> {
         let mut state = base_state.clone();
         state["parameters"] = untransform(theta);
         let prediction = KernelBinding::new()
@@ -174,23 +230,29 @@ pub(crate) fn refine(
             .map(|v| {
                 v.as_f64()
                     .filter(|x| x.is_finite())
-                    .map(|x| x / y_scale)
                     .ok_or_else(|| "native prediction is nonfinite".into())
             })
             .collect()
     };
-    let target: Vec<_> = observed.iter().map(|x| x / y_scale).collect();
+    let evaluate = |theta: &[f64]| -> Result<Vec<f64>, String> {
+        Ok(evaluate_raw(theta)?
+            .iter()
+            .zip(&factors)
+            .map(|(x, w)| (x * w) / y_scale)
+            .collect())
+    };
+    let target: Vec<_> = observed
+        .iter()
+        .zip(&factors)
+        .map(|(x, w)| (x * w) / y_scale)
+        .collect();
     let starts = vec![
         initial_theta.clone(),
         initial_theta.iter().map(|x| x + 0.1).collect(),
         initial_theta.iter().map(|x| x - 0.1).collect(),
     ];
     let fit = least_squares(&target, &starts, evaluate, max_iterations).map_err(error)?;
-    let predictions: Vec<_> = evaluate(&fit.parameters)
-        .map_err(error)?
-        .iter()
-        .map(|x| x * y_scale)
-        .collect();
+    let predictions = evaluate_raw(&fit.parameters).map_err(error)?;
     let mut diagnostics = crate::kernel::fit_diagnostics_count(
         &time,
         &observed,
@@ -198,7 +260,20 @@ pub(crate) fn refine(
         result["model_name"].as_str().unwrap(),
         names.len() + 1,
     );
-    if observed.len() <= names.len() {
+    if weights.is_some() {
+        let weighted_rss: f64 = observed
+            .iter()
+            .zip(&predictions)
+            .zip(&factors)
+            .map(|((y, p), w)| ((y - p) * w).powi(2))
+            .sum();
+        diagnostics["weighting"] = json!({"objective":"sum(w_i * residual_i^2), normalized by maximum weight for optimization","maximum_weight":maximum_weight,"positive_observations":positive_count,"weighted_rss_normalized_by_max":weighted_rss,"weighted_rss_representable":weighted_rss.is_finite(),"rank_semantics":"weighted local Jacobian; zero-weight observations excluded"});
+        diagnostics["metrics"]["AIC"] = Value::Null;
+        diagnostics["metrics"]["BIC"] = Value::Null;
+        diagnostics["information_criteria"] = json!({"available":false,"reason":"weight precision/variance likelihood convention not qualified"});
+        diagnostics["warnings"].as_array_mut().unwrap().push(json!("descriptive residual metrics are unweighted; optimizer and local rank use supplied weights; calibrated uncertainty unavailable"));
+    }
+    if positive_count <= names.len() {
         diagnostics["metrics"]["AIC"] = Value::Null;
         diagnostics["metrics"]["BIC"] = Value::Null;
         diagnostics["information_criteria"] =

@@ -4,7 +4,7 @@ using Test, Innovate
     result = kernel_predict_model("logistic", payload)
     @test result["metadata"]["runtime"] == "rust_native"
     @test result["result"]["values"][2] == 50.0
-    @test length(kernel_discover_models()["models"]) == 14
+    @test length(kernel_discover_models()["models"]) == 15
     @test_throws ErrorException kernel_predict_model("composite", payload)
     for _ in 1:100
         @test kernel_predict_model("logistic",payload)["result"]["values"][2] == 50.0
@@ -161,4 +161,18 @@ end
     a=kernel_predict_model("hierarchical",Dict("inputs"=>Dict("time"=>[30.]),"state"=>f["state"]))["result"]
     @test isapprox(a["rows"][1][1],100/(1+exp(-9.2));atol=0.01)
     @test isapprox(a["rows"][1][2],200/(1+exp(-6.3));atol=0.01)
+end
+@testset "Weighted scalar and Gaussian mixture" begin
+    time=collect(0.:24.)
+    y=[100/(1+exp(-0.4*(t-7))) for t in time];y[21]=300
+    weights=ones(25);weights[21]=0
+    f=kernel_fit_model("logistic",Dict("inputs"=>Dict("time"=>time,"observed"=>y),"fit_options"=>Dict("weights"=>weights,"initial_parameters"=>Dict("L"=>110.,"k"=>0.35,"x0"=>8.))))["result"]
+    @test isapprox(f["parameters"]["L"],100.;atol=1e-5)
+    time=collect(0.:0.5:24.5)
+    y=[iseven(i-1) ? 100/(1+exp(-0.4*(t-6))) : 200/(1+exp(-0.3*(t-10))) for (i,t) in enumerate(time)]
+    parameters=Dict("model_0_L"=>100.,"model_0_k"=>0.4,"model_0_x0"=>6.,"model_1_L"=>200.,"model_1_k"=>0.3,"model_1_x0"=>10.,"weight_0"=>0.4,"weight_1"=>0.6,"noise_scale"=>2.)
+    f=kernel_fit_model("mixture",Dict("inputs"=>Dict("time"=>time,"observed"=>y),"constructor_kwargs"=>Dict("components"=>["logistic","logistic"],"max_iter"=>30,"noise_floor"=>0.001),"fit_options"=>Dict("initial_parameters"=>parameters)))["result"]
+    @test f["optimizer"]["converged"]
+    @test isapprox(f["parameters"]["model_1_L"],200.;atol=0.05)
+    @test kernel_predict_model("mixture",Dict("inputs"=>Dict("time"=>[40.]),"state"=>f["state"]))["result"]["values"][1]>140
 end

@@ -1,0 +1,23 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.73s
+     Running tests/mixture.rs (target/debug/deps/mixture-9dae8c581b4ea2a9)
+
+running 6 tests
+test invalid_mixture_options_weights_and_noise_fail_closed ... ok
+test mixture_prediction_and_posterior_responsibilities_match_closed_forms ... ok
+test failed_component_updates_are_rolled_back_and_never_report_convergence ... ok
+test historical_adoption_mode_preserves_normalized_level_responsibilities ... ok
+test gaussian_em_updates_likelihood_and_saves_component_state ... ok
+test gaussian_default_initialization_recovers_separated_components_without_a_warm_start ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/weighted.rs (target/debug/deps/weighted-c94ad3b2f07ff8ae)
+
+running 3 tests
+test invalid_weights_fail_and_cannot_create_unidentified_fits ... ok
+test weighted_logistic_matches_independent_scipy_reference ... ok
+test zero_weights_exclude_outliers_and_common_weight_scaling_is_invariant ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

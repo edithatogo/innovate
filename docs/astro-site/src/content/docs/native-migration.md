@@ -506,3 +506,71 @@ Group base covariates, nested base families, shrinkage and full hierarchical
 inference remain required. R preserves singleton group labels and mapped series.
 Diagnostics now compute means without overflowing sums of large constant values;
 undefined or unrepresentable total variation yields unavailable R².
+
+## Weighted scalar fits and mixtures
+
+Scalar Bass, Logistic, Gompertz and Fisher–Pry fitting accepts
+`fit_options.weights`: finite nonnegative precision weights aligned with time.
+The objective is `sum(weight * residual²)`; zero weights exclude observations.
+At least as many positive weights as curve parameters are required, and the
+weighted local Jacobian still reports numerical rank. Optimization divides
+square-root weights by the square root of their maximum for scale invariance;
+parameter scaling uses positively weighted observations. Model-specific seed
+estimation may still use the whole series; explicit `initial_parameters` remains
+available. Descriptive residual metrics are unweighted, while optimizer/rank and
+`weighting.weighted_rss_normalized_by_max` describe the weighted objective.
+AIC/BIC and calibrated uncertainty remain unavailable until precision/variance
+likelihood conventions are qualified. Independent SciPy 1.18.1 least-squares
+fixtures, zero-weight outliers and common-weight rescaling are tested.
+
+`mixture` accepts 1–16 scalar `components` (Bass, Logistic, Gompertz or Fisher–Pry),
+with optional aligned nonnegative weights summing to one. Parameters use
+`model_0_*`, `model_1_*`, etc. and `weight_0`, `weight_1`, etc. Component rows are
+retained alongside the weighted-mean `values`. Both model variants are explicit:
+
+- `gaussian_residual` (default) models each time-point observation as a Gaussian
+  mixture around the component curve values, with a shared positive
+  `noise_scale`. Responsibilities use log-sum-exp of the residual Gaussian
+  densities. M-steps use weighted native curve fits, mean responsibilities for
+  weights, and the corresponding responsibility-weighted residual variance.
+- `historical_adoption` preserves the historical adoption-level heuristic:
+  responsibilities normalize `weight * (component_prediction + 1e-9)` without
+  an observation residual. Component updates use responsibility + 1e-9 as
+  precision weights. Its objective is labelled an adoption log score, not an
+  observation likelihood, and its pre-update stopping convention is explicit.
+
+Gaussian `noise_floor` (default 1e-6, in observation units) bounds the fitted
+standard deviation. This regularization prevents variance collapse, affects the
+solution and is reported when active; it does not calibrate uncertainty.
+`max_iter` defaults to 100 (1–200), and positive `tol` defaults to 1e-6. Gaussian
+stopping compares successive log-likelihoods; historical stopping compares
+successive pre-update adoption scores. Global optimality and class
+identifiability are not established by local convergence.
+
+By default each component is initialized with a native fit to the full series;
+Gaussian mode then applies a deterministic parameter/time spread to break exact
+symmetry. JSON `component_fit_options` supplies per-component initial-fit seeds
+and iteration limits. Alternatively `fit_options.initial_parameters` supplies a
+complete mixture state as a warm start, including `noise_scale` for Gaussian
+mode. `fit_options.component_max_iterations` controls the default inner limit
+(1–2000). Initial component fits, all attempted updates and objective history
+remain inspectable. A failed/non-converged component update rolls back the entire
+iteration and reports non-convergence; a Gaussian likelihood decrease beyond
+the explicit numerical guard also rolls back. Update records identify whether
+that iteration was accepted. Zero-weight components retain their parameters.
+
+Saved state retains components, mode, weights, noise scale and numerical options.
+Python Polars, Julia and R fit and forecast through the same Rust implementation;
+R preserves singleton component/weight arrays. Summaries can omit time. Prediction
+without observations returns the weighted mean; diagnose/fit with observations
+also returns mode-specific responsibilities and objective. Residual diagnostics
+describe the mean curve, which is distinct from latent-class observation
+likelihood. Mixture AIC/BIC remain unavailable pending singularity/effective-
+degrees-of-freedom qualification. Summary calls do not infer optimizer convergence
+from saved parameters alone.
+
+This is not joint least-squares decomposition of one aggregate trajectory.
+Nested base families, component-rate helpers, stochastic draws, calibrated
+uncertainty, class-selection diagnostics, heteroscedastic models and full mixture
+inference/scientific qualification remain required. Simulation currently returns
+the deterministic weighted point path. No new native runtime dependency is added.

@@ -1,0 +1,10 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.88s
+     Running tests/weighted.rs (target/debug/deps/weighted-c94ad3b2f07ff8ae)
+
+running 2 tests
+test invalid_weights_fail_and_cannot_create_unidentified_fits ... ok
+test zero_weights_exclude_outliers_and_common_weight_scaling_is_invariant ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

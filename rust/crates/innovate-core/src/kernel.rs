@@ -262,6 +262,9 @@ impl KernelBinding {
         if request.model_key.as_deref() == Some("hierarchical") {
             return crate::hierarchical::execute(request);
         }
+        if request.model_key.as_deref() == Some("mixture") {
+            return crate::mixture::execute(request);
+        }
         validate_request(request)?;
         if request.payload.get("simulation_options").is_some() {
             return crate::simulation::execute(request);
