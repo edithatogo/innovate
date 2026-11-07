@@ -662,3 +662,12 @@ Source: 947546ab. Ten focused Rust tests, 39 installed Python
 tests, 178 Julia assertions and R conformance passed. Abandonment and capacity
 changes remain open. The pinned Kairos RenegingQueue is separate from
 PriorityResource and requires an explicit integration for wait expiry.
+
+## Kairos waiting deadlines
+
+- [x] Integrate native waiting expiry with priority service and terminal withdrawal.
+- [x] Verify deadline ties, resource accounting and Python, Julia and R traces.
+
+Source: ba7fe987. Eleven focused Rust tests, 40 installed
+Python tests, 180 Julia assertions and R conformance passed. Scheduled capacity,
+balking, optional retries and forcing interoperability remain open.
