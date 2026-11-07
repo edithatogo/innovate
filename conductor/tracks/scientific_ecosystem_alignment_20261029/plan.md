@@ -7087,3 +7087,8 @@ Hosted release readiness for this worktree revision remains open.
   existed. All ten policy tests passed, including the new qualified
   item with blank evidence. The verifier still reports 38 open
   obligations. Scientific acceptance requires review of the evidence.
+
+- [x] Enforce the Python, Julia and R binding layout in the migration
+  verifier. Require their package entry files and reject files under
+  additional language directories. The checkout and all 12 policy
+  tests passed, including missing R and an added Java binding.

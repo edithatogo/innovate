@@ -23,6 +23,20 @@ def main() -> int:
         raise ValueError("Native Maturin build backend is required")
     if project["project"]["dependencies"] != ["polars==2.1.0"]:
         raise ValueError("Polars is the only base Python runtime dependency")
+    binding_entries = {
+        "python": "innovate/__init__.py",
+        "julia": "Project.toml",
+        "r": "DESCRIPTION",
+    }
+    bindings = ROOT / "bindings"
+    for language, entry in binding_entries.items():
+        if not (bindings / language / entry).is_file():
+            raise ValueError(f"Missing required binding: {language}")
+    for directory in bindings.iterdir():
+        if directory.is_dir() and directory.name not in binding_entries and any(
+            path.is_file() for path in directory.rglob("*")
+        ):
+            raise ValueError(f"Unsupported language binding: {directory.name}")
     expected_models = {
         "bass",
         "complementary_goods",
