@@ -2358,3 +2358,8 @@ the other competition models and installed binding checks remain open.
   with analytic Bass and spillover values. Link the case to the model card
   and keep it under the manual policy. Five focused Rust tests and Clippy
   passed. Installed binding qualification remains open.
+
+- [x] Qualify the fixed-parameter weighted spillover benchmark in Python
+  3.15, Julia and installed R. Complete results agreed across bindings.
+  Across all four time points and three nodes, maximum absolute error
+  against the analytic reference was 1.422e-13.
