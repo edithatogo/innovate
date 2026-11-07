@@ -896,5 +896,6 @@ end
     balance = kernel_call("summarize_causal", nothing, payload)["result"]["covariate_balance"]
     @test balance["narrow"]["before_matching"]["standardized_mean_difference"] ≈ (-1/6)/sqrt(7/18)
     @test balance["narrow"]["standardized_mean_difference"] == 0
+    @test balance["narrow"]["before_matching"]["mean_difference"] / (upper - lower) ≈ -1/6
     @test isnothing(balance["constant"]["standardized_mean_difference"])
 end

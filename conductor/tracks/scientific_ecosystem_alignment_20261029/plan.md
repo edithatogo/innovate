@@ -5299,3 +5299,7 @@ Hosted release readiness for this worktree revision remains open.
   ordinary fixture values while the narrow unit case retains the
   one-sixth-step difference. Both causal unit tests and the focused
   causal boundary test passed.
+
+- [x] Verify the raw and standardized narrow-balance differences
+  in Python 3.15.2, Julia and installed R against rebuilt native
+  artifacts. Each binding retained the raw one-sixth-step difference.

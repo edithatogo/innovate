@@ -1409,6 +1409,7 @@ def test_matching_standardized_balance():
     assert age["standardized_mean_difference"] == pytest.approx(20 / math.sqrt(150))
     assert balance["constant"]["standardized_mean_difference"] is None
     assert balance["narrow"]["standardized_mean_difference"] == pytest.approx(0)
+    assert balance["narrow"]["before_matching"]["mean_difference"] / (adjacent - 1.5) == pytest.approx(-1 / 6)
     assert balance["narrow"]["before_matching"]["standardized_mean_difference"] == pytest.approx(
         (-1 / 6) / math.sqrt(7 / 18)
     )

@@ -843,4 +843,5 @@ balance_payload <- list(method="matched_treatment_contrast", outcomes=c(0,0,1,1,
 balance <- kernel_call("summarize_causal", payload=balance_payload)$result$covariate_balance
 stopifnot(isTRUE(all.equal(balance$narrow$before_matching$standardized_mean_difference, (-1/6)/sqrt(7/18))),
   balance$narrow$standardized_mean_difference == 0,
+  isTRUE(all.equal(balance$narrow$before_matching$mean_difference / (upper - lower), -1/6)),
   is.null(balance$constant$standardized_mean_difference))
