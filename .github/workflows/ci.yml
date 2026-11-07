@@ -36,7 +36,7 @@ jobs:
       - run: uv run --no-sync pytest tests/native
       - run: uv run --no-sync python scripts/check_migration.py
       - run: cargo fmt --all --check
-      - run: uv run --no-sync ruff check bindings/python tests/native noxfile.py scripts/check_migration.py scripts/run_native_benchmarks.py
+      - run: uv run --no-sync ruff check bindings/python tests/native noxfile.py scripts/check_migration.py scripts/run_native_benchmarks.py scripts/check_benchmark_shards.py
       - run: uv run --no-sync basedpyright
       - name: Run scheduled native benchmarks
         id: native-benchmarks
@@ -49,6 +49,24 @@ jobs:
           name: native-benchmarks
           path: native-benchmarks.json
           if-no-files-found: error
+      - name: Verify local MPI benchmark shards
+        id: mpi-benchmarks
+        if: matrix.os == 'ubuntu-latest' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+        shell: bash
+        run: |
+          mkdir mpi-benchmarks
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends openmpi-bin
+          cp native-benchmarks.json mpi-benchmarks/serial.json
+          mpirun -n 2 .venv/bin/python scripts/run_native_benchmarks.py --mpi-shard --policy scheduled --output 'mpi-benchmarks/rank-{rank}.json'
+          .venv/bin/python scripts/check_benchmark_shards.py mpi-benchmarks/serial.json mpi-benchmarks/rank-*.json
+      - name: Retain MPI benchmark receipts
+        if: always() && (steps.mpi-benchmarks.outcome == 'success' || steps.mpi-benchmarks.outcome == 'failure')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: mpi-benchmarks
+          path: mpi-benchmarks/
+          if-no-files-found: warn
   julia-r:
     runs-on: ubuntu-latest
     steps:

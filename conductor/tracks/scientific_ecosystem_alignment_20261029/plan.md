@@ -3828,3 +3828,7 @@ Hosted release readiness for this worktree revision remains open.
   errors in the rebuilt Python 3.15.2 wheel, Julia and installed R.
   All three preserved the requested order and returned successes on
   either side of the failed case with three workers at 668f374f.
+- [x] Add a scheduled and manual Ubuntu CI step for two local Open
+  MPI ranks. Verify scheduled case results against the existing serial
+  receipt and retain the rank receipts. Actionlint passed. Hosted run
+  evidence, multi-node and live Slurm qualification remain open.
