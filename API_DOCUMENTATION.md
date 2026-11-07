@@ -386,3 +386,9 @@ same cohort composition from adoption through that offset. The summary
 includes only cohorts observed with eligible controls through the horizon.
 The result reports included and excluded cohort counts. Cohort-period
 contrasts remain available for the full panel.
+
+Set `include_pre_trends` to true for cohort-specific placebo contrasts
+before the reference period. These compare each earlier outcome with
+the last pre-adoption observation, using controls that remain untreated
+through that reference period. The separate `pre_trends` array carries
+pointwise errors and does not enter the post-adoption summary.

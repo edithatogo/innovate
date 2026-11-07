@@ -702,6 +702,15 @@ fn causal_summaries_match_analytic_effects() {
     assert_eq!(rows[0].get("standard_error"), Some(&json!(null)));
     assert_eq!(rows[1]["estimate"], serde_json::Value::Null);
     assert_eq!(rows[2]["n_control"], 0);
+    let placebo = run(json!({"method":"staggered_panel_att","periods":[0,1,2],
+        "outcomes":[[0,5,7],[10,11,16],[0,2,4]],"adoption_indices":[1,2,null],
+        "include_pre_trends":true}));
+    let pre = placebo["result"]["pre_trends"].as_array().unwrap();
+    assert_eq!(pre.len(), 1);
+    assert_eq!(pre[0]["period"], 0.);
+    assert_eq!(pre[0]["baseline_period"], 1.);
+    assert_eq!(pre[0]["n_control"], 1);
+    assert_eq!(pre[0]["estimate"], 1.);
     let event_time = &result["result"]["event_time"];
     assert_eq!(event_time[0]["supported_cohort_att"], 4.);
     assert_eq!(event_time[0]["unsupported_cohorts"], 1);

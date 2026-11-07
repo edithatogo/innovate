@@ -368,6 +368,10 @@ fn independent_change_contrast(
 }
 
 fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
+    let include_pre_trends = payload
+        .get("include_pre_trends")
+        .map_or(Some(false), Value::as_bool)
+        .ok_or("include_pre_trends must be boolean")?;
     let bands = payload.get("simultaneous_bands");
     let include_covariance = payload
         .get("include_event_time_covariance")
@@ -407,31 +411,36 @@ fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
         .transpose()?;
     let cohort_count = cohorts.len();
     let mut contrasts = Vec::new();
+    let mut pre_trends = Vec::new();
     let mut by_offset = std::collections::BTreeMap::<usize, Vec<_>>::new();
     for cohort in cohorts {
         let baseline = cohort - 1;
-        for period in cohort..periods.len() {
+        let start = if include_pre_trends { 0 } else { cohort };
+        for period in (start..periods.len()).filter(|&period| period != baseline) {
             let mut treated = Vec::new();
             let mut control = Vec::new();
             for (row, &index) in outcomes.iter().zip(&adoption) {
                 if index == Some(cohort) {
                     treated.push(finite(row[period] - row[baseline])?);
-                } else if index.is_none_or(|index| index > period) {
+                } else if index.is_none_or(|index| index > period.max(baseline)) {
                     control.push(finite(row[period] - row[baseline])?);
                 }
             }
             let (estimate, error) = independent_change_contrast(&treated, &control)?;
+            let row = json!({"cohort_period":periods[cohort],"period":periods[period],
+                "baseline_period":periods[baseline],"estimate":estimate,"standard_error":error,
+                "n_treated":treated.len(),"n_control":control.len()});
+            if period < cohort {
+                pre_trends.push(row);
+                continue;
+            }
             by_offset.entry(period - cohort).or_default().push((
                 estimate,
                 treated.len(),
                 cohort,
                 control.len(),
             ));
-            contrasts.push(
-                json!({"cohort_period":periods[cohort],"period":periods[period],
-                "baseline_period":periods[baseline],"estimate":estimate,"standard_error":error,
-                "n_treated":treated.len(),"n_control":control.len()}),
-            );
+            contrasts.push(row);
         }
     }
     let balanced_cohorts = if let Some(horizon) = balanced_horizon {
@@ -533,6 +542,9 @@ fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
     }
     let mut result = json!({"method":"not_yet_treated_group_time_difference_in_differences",
         "contrasts":contrasts,"event_time":event_time});
+    if include_pre_trends {
+        result["pre_trends"] = json!(pre_trends);
+    }
     if let Some(balance) = balanced_cohorts {
         result["balanced_event_time"] = balance;
     }

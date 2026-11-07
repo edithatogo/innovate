@@ -4757,3 +4757,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify balanced event-time horizons through rebuilt Python 3.15.2,
   Julia and installed R. Each returned onset ATT 4 and next-offset ATT 2,
   excluded one cohort from the summary and preserved all cohort-period rows.
+
+- [x] Add staggered pre-adoption placebo contrasts with a common
+  cohort baseline. The Rust fixture verifies an estimate of 1 and
+  excludes a control already treated by the baseline. Bindings remain open.
