@@ -1081,8 +1081,8 @@ fn scenario_discovery_lists_and_resolves_native_families() {
 #[test]
 fn imports_legacy_scenario_artifacts_without_inventing_replay_inputs() {
     let artifact = json!({"scenario":{"scenario_type":"baseline","name":"baseline",
-        "description":"","time_horizon":5.,"time_unit":"year","reference_year":2026,
-        "market_size":100.,"initial_adoption":0.},"seed":42,"model_type":"bass",
+        "description":"","time_horizon":5,"time_unit":"year","reference_year":2026,
+        "market_size":100,"initial_adoption":0},"seed":18446744073709551615_u64,"model_type":"bass",
         "version":"0.6.0","notes":null,"timestamp":"2026-01-01T00:00:00+00:00"});
     let mut request = json!({"schema_version":"2.0","operation":"import_scenario_artifact",
         "payload":{"artifact":artifact}});
