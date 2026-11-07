@@ -6398,3 +6398,7 @@ Hosted release readiness for this worktree revision remains open.
   allowlists in native contract discovery. Validation reads the same
   lists. The Rust boundary test passed for discovery and rejection
   of unknown fields at both levels.
+
+- [x] Verify remote request field discovery through rebuilt Python,
+  Julia and installed R. All three returned the same ordered outer
+  envelope and nested kernel field lists.
