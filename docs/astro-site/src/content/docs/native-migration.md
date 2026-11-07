@@ -928,7 +928,10 @@ The `resource_metrics` totals cover tick zero through the last requested
 observation. Occupied slot-ticks include service in progress, clipped at the
 horizon. Configured slot-ticks integrate scheduled capacity over the same
 interval. Occupied slot-ticks can exceed configured slot-ticks when service
-continues through a closure. Queue wait is split into admitted, abandoned,
+continues through a closure. `over_capacity_slot_ticks` integrates service
+above scheduled capacity. `idle_slot_ticks` measures unused configured
+capacity, so occupied plus idle equals configured plus over-capacity.
+Queue wait is split into admitted, abandoned,
 and still waiting at the horizon. Balks and retry cooldown do not count as
 queue wait. The peaks `peak_queue_length` and `peak_in_service` count
 waiting agents and concurrent service after dispatch. An immediate service

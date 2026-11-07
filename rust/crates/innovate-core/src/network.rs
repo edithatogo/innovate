@@ -784,6 +784,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         "occupied_slot_ticks":occupied_slot_ticks,
         "configured_slot_ticks":configured_slot_ticks,
         "over_capacity_slot_ticks":over_capacity_slot_ticks,
+        "idle_slot_ticks":configured_slot_ticks + over_capacity_slot_ticks - occupied_slot_ticks,
         "admitted_wait_ticks":admitted_wait_ticks,
         "abandoned_wait_ticks":abandoned_wait_ticks,
         "pending_wait_ticks":pending_wait_ticks

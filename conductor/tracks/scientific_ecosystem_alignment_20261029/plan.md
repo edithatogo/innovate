@@ -4123,3 +4123,9 @@ Hosted release readiness for this worktree revision remains open.
   The capacity drop at tick three gave three excess slot-ticks,
   five occupied slot-ticks and no completions by tick six in all
   three bindings.
+- [x] Report unused configured Kairos capacity as idle slot-ticks.
+  The capacity-drop fixture retains one idle slot-tick before closure
+  even though total occupied service exceeds configured capacity.
+  The no-excess retry fixture reports two idle slot-ticks. All 29
+  network tests and the focused replay test passed. Installed binding
+  checks for the new field remain open.

@@ -2555,7 +2555,7 @@ fn kairos_scenario_replay_retains_scheduled_retry_clear() {
     assert_eq!(
         row["result"]["resource_metrics"],
         json!({
-            "horizon_ticks":12,"occupied_slot_ticks":10,"configured_slot_ticks":12,"over_capacity_slot_ticks":0,
+            "horizon_ticks":12,"occupied_slot_ticks":10,"configured_slot_ticks":12,"over_capacity_slot_ticks":0,"idle_slot_ticks":2,
             "peak_queue_length":0,"peak_in_service":1,
             "admitted_wait_ticks":0,"abandoned_wait_ticks":0,"pending_wait_ticks":0
         })
