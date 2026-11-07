@@ -1737,5 +1737,8 @@ the other competition models and installed binding checks remain open.
   and spillover fields. The validator rejects reversed times and an
   outcome window ending before intervention, including at start zero.
   All 24 Rust boundary tests and focused Clippy passed.
-- [ ] Restore causal model contract checks and qualify the policy
-  contracts in installed consumers.
+- [x] Restore causal model contract checks. High unobserved confounding
+  risk requires sensitivity analysis, and the historical case-insensitive
+  name heuristic rejects post-treatment confounder names. All 24 native
+  boundary tests and focused Clippy passed.
+- [ ] Qualify intervention and causal model contracts in installed consumers.

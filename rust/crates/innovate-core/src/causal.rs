@@ -281,6 +281,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
         }
         Some("treatment_contrast") => treatment_contrast(payload),
         Some("intervention_contract") => intervention_contract(payload),
+        Some("causal_model_contract") => causal_model_contract(payload),
         Some("release_evidence") => release_evidence(payload),
         Some("covariate_balance") => covariate_balance(payload),
         _ => Err("unknown causal summary method"),
@@ -725,6 +726,57 @@ fn intervention_contract(payload: &Value) -> Result<Value, &'static str> {
         if start > end || contract.start_time.is_some_and(|time| end < time) {
             return Err("outcome window is reversed or ends before intervention");
         }
+    }
+    Ok(json!(contract))
+}
+
+#[derive(Deserialize, Serialize)]
+struct CausalModelContract {
+    name: String,
+    treatment_variable: String,
+    outcome_variable: String,
+    confounders: Vec<String>,
+    effect_modifiers: Option<Vec<String>>,
+    #[serde(default)]
+    identifying_assumptions: std::collections::BTreeMap<String, String>,
+}
+
+fn causal_model_contract(payload: &Value) -> Result<Value, &'static str> {
+    let contract: CausalModelContract = serde_json::from_value(payload.clone())
+        .map_err(|_| "invalid causal model contract fields")?;
+    if [
+        &contract.name,
+        &contract.treatment_variable,
+        &contract.outcome_variable,
+    ]
+    .iter()
+    .any(|value| value.trim().is_empty())
+    {
+        return Err("causal model requires a name and treatment and outcome variables");
+    }
+    if contract.confounders.is_empty() || contract.confounders.iter().any(|v| v.trim().is_empty()) {
+        return Err("causal model requires named confounders");
+    }
+    for variable in &contract.confounders {
+        let name = variable.to_ascii_lowercase();
+        if ["post_treatment", "affected_", "_outcome", "post_"]
+            .iter()
+            .any(|indicator| name.contains(indicator))
+        {
+            return Err("confounder name matches a post-treatment indicator");
+        }
+    }
+    let risk = payload
+        .get("unobserved_confounding_risk")
+        .map_or(Some("unknown"), Value::as_str)
+        .filter(|value| matches!(*value, "low" | "medium" | "high" | "unknown"))
+        .ok_or("unobserved_confounding_risk must be low, medium, high or unknown")?;
+    let sensitivity = payload
+        .get("has_sensitivity_analysis")
+        .map_or(Some(false), Value::as_bool)
+        .ok_or("has_sensitivity_analysis must be boolean")?;
+    if risk == "high" && !sensitivity {
+        return Err("high risk of unobserved confounding requires sensitivity analysis");
     }
     Ok(json!(contract))
 }

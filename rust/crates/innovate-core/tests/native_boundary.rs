@@ -547,6 +547,17 @@ fn causal_summaries_match_analytic_effects() {
     );
     intervention["outcome_window"] = json!([-3, -1]);
     assert_eq!(run(intervention)["error"]["code"], "invalid_request");
+    let mut contract = json!({"method":"causal_model_contract","name":"Pilot",
+        "treatment_variable":"policy","outcome_variable":"adoption","confounders":["age"],
+        "unobserved_confounding_risk":"high"});
+    assert_eq!(run(contract.clone())["error"]["code"], "invalid_request");
+    contract["has_sensitivity_analysis"] = json!(true);
+    assert_eq!(
+        run(contract.clone())["result"]["confounders"],
+        json!(["age"])
+    );
+    contract["confounders"] = json!(["Post_Adoption"]);
+    assert_eq!(run(contract)["error"]["code"], "invalid_request");
     let risk = run(json!({"method":"e_value","point_estimate":0.5}));
     assert!((risk["result"]["e_value"].as_f64().unwrap() - (2. + 2_f64.sqrt())).abs() < 1e-12);
     let sensitivity = run(json!({"method":"sensitivity_scenario","point_estimate":10,

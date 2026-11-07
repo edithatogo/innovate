@@ -21,7 +21,8 @@ kernel_call <- function(operation, model_key = NULL, payload = list()) {
       "post_control", "actual", "counterfactual", "periods", "coefficients",
       "standard_errors", "group_labels", "effects", "gamma_range",
       "treated_outcomes", "control_outcomes", "supporting_evidence", "caveats",
-      "assumptions", "limitations", "data_sources", "outcomes", "treatment", "spillover_regions")
+      "assumptions", "limitations", "data_sources", "outcomes", "treatment", "spillover_regions",
+      "confounders", "effect_modifiers")
   }
   preserve_arrays <- function(value) {
     if (!is.list(value)) return(value)
