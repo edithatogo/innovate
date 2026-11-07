@@ -4242,3 +4242,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Expose Kairos resource comparison discovery on the network
   scenario family. Discovery identifies the option, engine, direction
   and alignment requirements. The focused Rust registry test passed.
+- [x] Verify keyed Kairos resource discovery in the rebuilt Python
+  3.15.2 wheel, Julia and installed R at 6709dd48. All expose the
+  opt-in flag, signed direction and three alignment requirements.
+  All ten scenario-filtered Rust boundary tests passed.
