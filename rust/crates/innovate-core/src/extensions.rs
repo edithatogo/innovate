@@ -185,6 +185,19 @@ pub fn invoke_registered_extension(
     if resolved["extension_point"] == "diagnostics" {
         return summarize_diagnostics(&output);
     }
+    if resolved["extension_point"] == "serialization_adapter"
+        && output.get("artifact_kind").is_none()
+        && output.get("model_type").is_some()
+    {
+        let mut response = crate::scenario::import_artifact(&json!({
+            "schema_version":crate::KERNEL_SCHEMA_VERSION,
+            "payload":{"artifact":output},
+        }));
+        if !response["error"].is_null() {
+            return Err("serialization adapter returned invalid scenario artifact");
+        }
+        return Ok(response["result"].take());
+    }
     let (payload, invalid) = if resolved["extension_point"] == "dataset_provider" {
         (
             json!({"dataset":output}),

@@ -1617,6 +1617,26 @@ fn scenario_grid_runs_in_order_and_retains_individual_errors() {
     let mut import = json!({"schema_version":"2.0","operation":"import_scenario_artifact",
         "payload":{"artifact":artifact}});
     assert_eq!(run(&import)["result"]["replay_available"], true);
+    let register = json!({"schema_version":"2.0","operation":"register_extension_manifest",
+        "payload":{"manifest":{"name":"scenario-serializer","version":"1","entrypoint":"fixture:decode",
+            "stability":"stable","extension_points":["serialization_adapter"]}}});
+    assert!(run(&register)["error"].is_null());
+    let selection = json!({"name":"scenario-serializer","expected_version":"1","extension_point":"serialization_adapter"});
+    let invoke = |artifact: &serde_json::Value| {
+        innovate_core::invoke_registered_extension(&selection, artifact, |_, artifact| {
+            Ok(artifact.clone())
+        })
+    };
+    assert_eq!(invoke(artifact).unwrap(), run(&import)["result"]);
+    let mut older = artifact.clone();
+    older["version"] = json!("0.0.1");
+    assert_eq!(invoke(&older).unwrap()["replay_available"], false);
+    older["timestamp"] = json!("invalid");
+    assert_eq!(
+        invoke(&older),
+        Err("serialization adapter returned invalid scenario artifact")
+    );
+
     let mut seeded = import.clone();
     seeded["payload"]["artifact"]["seed"] = json!(42);
     assert_eq!(run(&seeded)["error"]["code"], "invalid_request");

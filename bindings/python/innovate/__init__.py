@@ -92,6 +92,8 @@ def invoke_registered_extension(
         return execute("resolve_extension_model_aliases", aliases=output)["result"]
     if resolved["extension_point"] == "diagnostics":
         return execute("summarize_extension_diagnostics", checks=output)["result"]
+    if isinstance(output, dict) and "artifact_kind" not in output and "model_type" in output:
+        return execute("import_scenario_artifact", artifact=output)["result"]
     return execute("ingest_dataset", artifact=output)["result"]
 
 

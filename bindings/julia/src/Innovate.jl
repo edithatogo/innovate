@@ -41,7 +41,9 @@ function invoke_registered_extension(callback, selection, payload)
     if resolved["extension_point"] == "diagnostics"
         return kernel_call("summarize_extension_diagnostics", nothing, Dict("checks" => output))["result"]
     end
-    return kernel_call("ingest_dataset", nothing, Dict("artifact" => output))["result"]
+    operation = output isa AbstractDict && !haskey(output, "artifact_kind") && haskey(output, "model_type") ?
+        "import_scenario_artifact" : "ingest_dataset"
+    return kernel_call(operation, nothing, Dict("artifact" => output))["result"]
 end
 
 """Execute a scenario grid on a shared time column in Arrow IPC file or stream bytes."""

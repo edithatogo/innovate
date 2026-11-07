@@ -5754,3 +5754,9 @@ Hosted release readiness for this worktree revision remains open.
   artifact and rejected a modified observation with its old checksum.
   The first FFI link ran out of space and passed after reclaiming
   a generated test binary. Other artifact formats remain open.
+
+- [x] Support scenario envelopes from serialization callbacks through
+  the native scenario import validator. The Rust boundary test
+  preserved current-version replay availability, retained an older
+  envelope with replay disabled, and rejected an invalid timestamp.
+  Binding runtime qualification remains open.
