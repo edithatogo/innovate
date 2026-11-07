@@ -985,3 +985,9 @@ the other competition models and installed binding checks remain open.
   at their existing 200-iteration budget. Alternative base seeds were
   investigated and discarded. The explicit-start conformance checks remain
   in place, and automatic-start qualification remains open for these models.
+
+- [x] Qualify complementary-goods automatic starts in installed Python,
+  Julia and R. Both start modes converge and reproduce the independent
+  held-out forecast to 1e-5. The rebuilt wheel passed 62 native tests, Julia
+  Pkg.test passed 239 assertions, and installed R conformance passed.
+  [Validation logs](evidence/complementary-automatic-starts-20261107).

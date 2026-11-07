@@ -274,17 +274,19 @@ cg_fixture <- jsonlite::fromJSON(
 cg_start <- cg_fixture$parameters
 cg_start$k1 <- 0.29
 cg_start$beta_c2_price <- -0.007
-cg_fit <- kernel_fit_model("complementary_goods", list(
-  inputs=list(time=unlist(cg_fixture$time), covariates=list(price=unlist(cg_fixture$covariates$price)),
-              observed=cg_fixture$rows),
-  constructor_kwargs=list(initial_values=unlist(cg_fixture$initial), covariates="price"),
-  fit_options=list(initial_parameters=cg_start, max_iterations=150)
-))$result
-cg_forecast <- kernel_predict_model(
-  "complementary_goods", list(inputs=list(time=unlist(cg_fixture$forecast_time)), state=cg_fit$state)
-)$result
-stopifnot(cg_fit$diagnostics$optimizer$converged,
-          max(abs(unlist(cg_forecast$rows)-unlist(cg_fixture$forecast_rows)))<1e-5)
+for (cg_options in list(list(initial_parameters=cg_start,max_iterations=150),list(max_iterations=150))) {
+  cg_fit <- kernel_fit_model("complementary_goods", list(
+    inputs=list(time=unlist(cg_fixture$time), covariates=list(price=unlist(cg_fixture$covariates$price)),
+                observed=cg_fixture$rows),
+    constructor_kwargs=list(initial_values=unlist(cg_fixture$initial), covariates="price"),
+    fit_options=cg_options
+  ))$result
+  cg_forecast <- kernel_predict_model(
+    "complementary_goods", list(inputs=list(time=unlist(cg_fixture$forecast_time)), state=cg_fit$state)
+  )$result
+  stopifnot(cg_fit$diagnostics$optimizer$converged,
+            max(abs(unlist(cg_forecast$rows)-unlist(cg_fixture$forecast_rows)))<1e-5)
+}
 cat("R complementary goods forcing fit and history passed\n")
 
 li_fixture <- jsonlite::fromJSON(

@@ -857,15 +857,16 @@ represent inhibition during part of a scenario.
 
 Controls use linear interpolation with endpoint holds. Saved state carries
 the initial values, origin and forcing history for forecasts. An overlapping
-control value must agree with the saved history. Conditional fitting uses
-complete explicit initial parameters and reports local identifiability.
+control value must agree with the saved history. Conditional fitting accepts
+an explicit parameter map or initializes covariate slopes at zero. Fits
+report local identifiability.
 The Polars fit path reads controls from declared frame columns.
 
 This extends the original complementary-goods equations, whose historical
 implementation had no covariate path. Analytic uncoupled growth and an
 independent interacting SciPy reference verify levels, rates, conditional fit
-and a held-out forecast. Event splits, automatic forcing-fit starts, uncertainty
-and broader scientific qualification remain required.
+and a held-out forecast with both starting modes. Uncertainty and broader
+scientific qualification remain required.
 
 
 ### Lock-in covariates and instantaneous capacity

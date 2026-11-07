@@ -538,6 +538,7 @@ def test_norton_bass_covariate_history():
         ("lotka_volterra", "lotka_forcing_scipy.json", {"alpha1": 0.29, "beta_beta1_price": -0.025}),
         ("complementary_goods", "complementary_forcing_scipy.json", {"k1": 0.29, "beta_c2_price": -0.007}),
         ("lock_in", "lock_forcing_scipy.json", {"alpha1": 0.29}),
+        ("complementary_goods", "complementary_forcing_scipy.json", None),
     ],
 )
 def test_ecosystem_forcing_polars_fit_and_forecast(model, fixture_name, start_override):
@@ -552,13 +553,15 @@ def test_ecosystem_forcing_polars_fit_and_forecast(model, fixture_name, start_ov
             "second": [row[1] for row in fixture["rows"]],
         }
     )
-    start = dict(fixture["parameters"], **start_override)
+    fit_options: dict[str, object] = {"max_iterations": 150}
+    if start_override is not None:
+        fit_options["initial_parameters"] = dict(fixture["parameters"], **start_override)
     fitted = innovate.fit(
         model,
         data,
         observed_columns=["first", "second"],
         model_options={"initial_values": fixture["initial"], "covariates": ["price"]},
-        fit_options={"initial_parameters": start, "max_iterations": 150},
+        fit_options=fit_options,
     )
     assert fitted.diagnostics["optimizer"]["converged"]
     forecast = innovate.execute(
