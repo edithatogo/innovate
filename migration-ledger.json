@@ -144,8 +144,8 @@
       "key": "kairos_des_abm",
       "status": "bounded_native",
       "required": true,
-      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/scheduled-network-20261107.json",
-      "remaining": "Scheduled capacity, resource priorities and abandonment, forcing interoperability, scenarios, resume and scientific qualification remain required"
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/network-priority-20261107.json",
+      "remaining": "Scheduled capacity and abandonment, forcing interoperability, scenarios, resume and scientific qualification remain required"
     },
     {
       "key": "bayesian_inference",

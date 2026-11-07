@@ -1,0 +1,26 @@
+{
+  "status": "bounded_local_checkpoint",
+  "release_ready": false,
+  "related_evidence": [
+    "scheduled-network-20261107.json"
+  ],
+  "results": {
+    "rust_network_tests": 10,
+    "installed_python_tests": 39,
+    "julia_assertions": 178,
+    "R": "native conformance and priority payload passed",
+    "clippy": "workspace all targets passed"
+  },
+  "remaining": "Scheduled capacity, abandonment, forcing interoperability, scenarios, resume and scientific qualification",
+  "logs": {
+    "clippy.log": "c3e887f69a69b51d1b61419d8721bd8a8515847150ef60f309497ccd0f71f94c",
+    "ffi.log": "1917c755097d7544d592163299a5c053f133cf5fb33d85a6c19b6d391a2d98d1",
+    "install.log": "c6127c69e8e53d20926df157ab42dd8065192f592f4b75e5732725f43c61eff2",
+    "julia-priority.log": "89af3ccafe2e1d0caa137dc64d9b5bb0e460b996893bf925695464076bee76d6",
+    "python-priority.log": "07c2eef926162e0090994bc913805aa08a8b2cbb5b21d2c933b937a10300713f",
+    "r-install.log": "8bcc66b6f075dd6146b6ca006a0579b369a424d49b587fb4b5bc0350fad78c31",
+    "r-priority.log": "a35b355db41d57d64dafdd93a1884fb7cbc978b4a030013b4ae1ef030f7a9319",
+    "rust.log": "863219da0e61d79d153d047975690b9b51f5e270a2b275085eb89943d5827062",
+    "wheel.log": "f701376169c8ad1162061f73419c84f609e24c4855dd2ebe31fab46cac5eddec"
+  }
+}

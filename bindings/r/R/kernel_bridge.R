@@ -12,7 +12,7 @@ kernel_call <- function(operation, model_key = NULL, payload = list()) {
   if (!length(payload)) payload <- structure(list(), names = character())
   # jsonlite otherwise auto-unboxes a length-one numeric vector into a scalar.
   # Keep schema array fields as arrays while parameter/options scalars stay scalars.
-  array_fields <- c("time", "t", "observed", "y", "values", "adoption", "share", "launch_times", "initial_values", "initial_agents", "event_times", "event_effects", "event_labels", "node_labels", "covariates", "innovation_multipliers", "imitation_multipliers", "agent_service_ticks", "edge_weights", "latent_time", "latent_values", "detected_breakpoints", "groups", "components", "weights")
+  array_fields <- c("time", "t", "observed", "y", "values", "adoption", "share", "launch_times", "initial_values", "initial_agents", "event_times", "event_effects", "event_labels", "node_labels", "covariates", "innovation_multipliers", "imitation_multipliers", "agent_service_ticks", "agent_priorities", "edge_weights", "latent_time", "latent_values", "detected_breakpoints", "groups", "components", "weights")
   preserve_arrays <- function(value) {
     if (!is.list(value)) return(value)
     fields <- names(value)

@@ -435,6 +435,7 @@ def test_directed_weighted_kairos_resource():
         "edges": [[0, 1]],
         "edge_weights": [1e308],
         "initial_agents": [0],
+        "agent_priorities": [-2, 0, 3],
         "capacity": 1,
         "service_ticks": 5,
         "ticks_per_unit": 1,
@@ -449,3 +450,4 @@ def test_directed_weighted_kairos_resource():
     )["result"]
     assert result["counts"] == [1, 1, 3]
     assert [entry["tick"] for entry in result["completions"]] == [6, 9]
+    assert result["metadata"]["agent_priorities"] == [-2, 0, 3]

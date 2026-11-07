@@ -271,8 +271,10 @@ isolated nodes have zero imitation. Native simulation now permits p=0, allowing
 pure contagion seeded by initial agents. Deterministic Bass fitting/prediction
 retains its previous positive-p domain.
 
-Kairos ABMContext owns entity state and dispatch; its Resource owns the FIFO
-queue and leases. An agent becomes adopted at service completion. Pending agents
+Kairos ABMContext owns entity state and dispatch. Its PriorityResource owns the
+queue and leases. Optional population-length `agent_priorities` supplies signed
+32-bit integers. Higher values serve first among waiters, with FIFO ties. The
+default is zero for every agent. An active service always runs to completion. An agent becomes adopted at service completion. Pending agents
 do not transmit and cannot request twice. Completion events precede tied requests.
 Waiting times round up to at least one tick. Service ticks must be positive and
 at most 10^12; ticks per unit are 1–10^9, with a default of 10^6. Requested sample
@@ -284,15 +286,12 @@ Optional population-length `innovation_multipliers` and `imitation_multipliers`
 scale each susceptible agent's p and q terms. They default to one and must be
 finite and nonnegative; zero disables that hazard component. Optional
 `agent_service_ticks` overrides the scalar duration per agent, including agents
-waiting in the FIFO queue. Each duration is an integer in 1–10^12. Defaults retain
+waiting in the service queue. Each duration is an integer in 1–10^12. Defaults retain
 the homogeneous engine and RNG stream. Metadata retains the effective arrays.
 
-The network engine currently rejects covariate/event forcing, weighted/directed
-edges and arbitrary hazard functions. Dynamic networks, richer agent attributes,
-resource priorities/balking/reneging, resume and general network-model parity
-remain required migration work. A successful Bass network simulation does not
-qualify the separate `network_diffusion` model family. Python, Julia and R use
-the same versioned native request and retain the same service/adoption semantics.
+The network engine currently rejects mechanistic covariate/event forcing and
+arbitrary hazard functions. Capacity changes, abandonment and resume remain open.
+The separate `network_diffusion` family has its own scientific qualification.
 
 ## Historical lock-in
 
@@ -718,14 +717,14 @@ Set `simulation_options.directed` to true to interpret each edge as
 Optional `edge_weights` supplies one finite positive value per edge, in
 edge order. Imitation uses the completed adopters' share of incoming weight;
 isolated agents have zero imitation exposure. Pending agents still do not
-transmit and adoption still occurs at FIFO service completion. Unweighted
+transmit and adoption still occurs at service completion. Unweighted
 undirected requests retain their original simulation traces.
 
 A Kairos network can also take a `schedule` of up to 64 changes at strictly
 increasing positive integer ticks. Each change can replace the entire contact
 graph with `edges` and optional `edge_weights`, set a new `service_ticks`
 duration for subsequent service starts, or do both. Direction stays fixed
-for the run. At a shared tick, completions and their FIFO handoffs run before
+for the run. At a shared tick, completions and their queue handoffs run before
 the change. The new graph governs subsequent request draws, and services
 already underway finish at their original times. The result lists the
 schedule ticks applied through the requested horizon.

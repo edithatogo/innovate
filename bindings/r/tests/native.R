@@ -203,6 +203,8 @@ cat("R nontrivial forcing history replays without revision\n")
 
 weighted_network <- list(inputs=list(time=c(0,5,20)),parameters=list(p=0,q=1e12,m=3),simulation_options=list(engine="kairos_network",population=3,seed=42,directed=TRUE,edges=list(c(0,1)),edge_weights=1e308,initial_agents=0,capacity=1,service_ticks=5,ticks_per_unit=1))
 weighted_network$simulation_options$schedule <- list(list(tick=6,edges=list(c(1,2)),service_ticks=2))
+weighted_network$simulation_options$agent_priorities <- c(-2,0,3)
 weighted_result <- kernel_simulate_model("bass",weighted_network)$result
 stopifnot(all(unlist(weighted_result$counts)==c(1,1,3)),all(vapply(weighted_result$completions,function(e)e$tick,numeric(1))==c(6,9)))
-cat("R directed weighted Kairos resource passed\n")
+stopifnot(all(unlist(weighted_result$metadata$agent_priorities)==c(-2,0,3)))
+cat("R directed weighted Kairos resource and priorities passed\n")
