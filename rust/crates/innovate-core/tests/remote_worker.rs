@@ -74,3 +74,19 @@ fn worker_reports_a_closed_response_pipe() {
         "could not write remote response"
     );
 }
+
+#[test]
+fn worker_describes_its_transport_without_reading_input() {
+    let output = Command::new(env!("CARGO_BIN_EXE_innovate-remote-worker"))
+        .arg("--describe")
+        .stdin(Stdio::null())
+        .output()
+        .unwrap();
+    assert!(output.status.success());
+    let response: Value = serde_json::from_slice(&output.stdout).unwrap();
+    let contract = &response["result"];
+    assert_eq!(contract["worker_transport"], "stdin_stdout");
+    assert_eq!(contract["max_raw_envelope_bytes"], 2_000_000);
+    assert_eq!(contract["max_kernel_request_bytes"], 1_000_000);
+    assert_eq!(contract["identity_verification"], "caller_supplied_context");
+}

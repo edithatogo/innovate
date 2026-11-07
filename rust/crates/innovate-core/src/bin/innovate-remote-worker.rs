@@ -6,7 +6,7 @@ use std::process::ExitCode;
 const MAX_ENVELOPE_BYTES: u64 = 2_000_000;
 
 fn main() -> ExitCode {
-    match dispatch().and_then(|response| {
+    match response().and_then(|response| {
         let mut stdout = io::stdout().lock();
         writeln!(stdout, "{response}")
             .and_then(|()| stdout.flush())
@@ -17,6 +17,26 @@ fn main() -> ExitCode {
             eprintln!("{message}");
             ExitCode::FAILURE
         }
+    }
+}
+
+fn response() -> Result<String, &'static str> {
+    let mut args = std::env::args_os().skip(1);
+    match (args.next(), args.next()) {
+        (None, None) => dispatch(),
+        (Some(flag), None) if flag == "--describe" => {
+            let request = json!({
+                "schema_version": innovate_core::KERNEL_SCHEMA_VERSION,
+                "operation": "describe_remote_execution_contract",
+            });
+            let mut response: Value =
+                serde_json::from_str(&innovate_core::execute_json(&request.to_string()))
+                    .map_err(|_| "invalid native contract response")?;
+            response["result"]["worker_transport"] = json!("stdin_stdout");
+            response["result"]["max_raw_envelope_bytes"] = json!(MAX_ENVELOPE_BYTES);
+            Ok(response.to_string())
+        }
+        _ => Err("usage: innovate-remote-worker [--describe]"),
     }
 }
 

@@ -6454,3 +6454,7 @@ Hosted release readiness for this worktree revision remains open.
   extracted-source CI check. Focused locked Clippy for the worker and
   integration test passed with warnings denied. Hosted execution
   of the updated source-package step remains open.
+
+- [x] Add worker --describe for transport launchers. It returns the
+  native contract plus stdin/stdout framing and the raw byte limit,
+  without reading stdin. All four locked worker tests passed.
