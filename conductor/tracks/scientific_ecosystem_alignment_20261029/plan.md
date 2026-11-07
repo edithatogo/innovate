@@ -2323,3 +2323,9 @@ the other competition models and installed binding checks remain open.
   Julia and installed R. Complete results agreed across bindings. All ten
   historical cards resolved, and the maximum trajectory error against the
   independent lock-in reference was 2.60e-8.
+
+- [x] Add benchmark CI policy metadata and suite selection. Fast runs
+  select the three scalar cases. The two competition cases are scheduled
+  cases. Validation reports policy counts, and explicit case IDs remain
+  available as an alternative selector. The focused Rust test and Clippy
+  passed. Hosted scheduling and binding qualification remain open.

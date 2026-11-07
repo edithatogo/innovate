@@ -1674,3 +1674,35 @@ fn benchmark_validation_resolves_all_historical_case_references() {
         "native-lock-in-1"
     );
 }
+
+#[test]
+fn benchmark_ci_policy_selects_fast_cases_without_running_scheduled_fits() {
+    let run = |payload| -> serde_json::Value {
+        let request =
+            json!({"schema_version":"2.0","operation":"run_benchmark_suite","payload":payload});
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = run(json!({"ci_policy":"fast","workers":2}));
+    let rows = response["result"]["runs"].as_array().unwrap();
+    let ids: Vec<_> = rows
+        .iter()
+        .map(|row| row["case_id"].as_str().unwrap())
+        .collect();
+    assert_eq!(
+        ids,
+        [
+            "bass_smoke_adoption",
+            "logistic_growth_smoke",
+            "fisher_pry_replacement_smoke"
+        ]
+    );
+    assert_eq!(response["result"]["succeeded"], 3);
+    assert_eq!(
+        run(json!({"ci_policy":"workflow_dispatch"}))["result"]["runs"],
+        json!([])
+    );
+    assert_eq!(
+        run(json!({"ci_policy":"fast","case_ids":["bass_smoke_adoption"]}))["error"]["code"],
+        "invalid_request"
+    );
+}

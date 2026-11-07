@@ -13,9 +13,17 @@ const CASES: [(&str, &str, &str); 5] = [
     ("lock_in_smoke", "lock_in", "competition"),
 ];
 
+fn ci_policy(family: &str) -> &'static str {
+    if family == "competition" {
+        "scheduled"
+    } else {
+        "fast"
+    }
+}
+
 fn case_descriptor(id: &str, model: &str, family: &str) -> Value {
     json!({"case_id":id,"canonical_model_key":model,"family":family,
-        "dataset_version":if model == "lock_in" {"native-lock-in-1"} else {"2026.04"},"source":"synthetic"})
+        "dataset_version":if model == "lock_in" {"native-lock-in-1"} else {"2026.04"},"source":"synthetic","ci_policy":ci_policy(family)})
 }
 
 fn discover() -> Value {
@@ -99,8 +107,24 @@ fn fit_and_forecast(
 
 fn suite(payload: &Value) -> Result<Value, String> {
     let workers = crate::batch_workers(payload).ok_or("workers must be an integer in 1..=32")?;
+    let policy = match payload.get("ci_policy") {
+        None => None,
+        Some(value) => Some(
+            value
+                .as_str()
+                .filter(|policy| matches!(*policy, "fast" | "scheduled" | "workflow_dispatch"))
+                .ok_or("ci_policy must be fast, scheduled or workflow_dispatch")?,
+        ),
+    };
+    if policy.is_some() && payload.get("case_ids").is_some() {
+        return Err("select either case_ids or ci_policy".into());
+    }
     let ids: Vec<&str> = match payload.get("case_ids") {
-        None => CASES.iter().map(|case| case.0).collect(),
+        None => CASES
+            .iter()
+            .filter(|case| policy.is_none_or(|policy| ci_policy(case.2) == policy))
+            .map(|case| case.0)
+            .collect(),
         Some(value) => {
             let entries = value
                 .as_array()
@@ -190,7 +214,10 @@ fn validate_corpus() -> Result<Value, String> {
             "freshness":{"status":status,"rule":"all referenced benchmark cases must exist with dataset versions"}}));
     }
     Ok(json!({"ok":issues.is_empty(),"issues":issues,
-        "summary":{"case_count":case_versions.len(),"model_card_count":summaries.len()},
+        "summary":{"case_count":case_versions.len(),"model_card_count":summaries.len(),
+            "fast_ci_case_count":CASES.iter().filter(|case| ci_policy(case.2) == "fast").count(),
+            "scheduled_case_count":CASES.iter().filter(|case| ci_policy(case.2) == "scheduled").count(),
+            "manual_case_count":CASES.iter().filter(|case| ci_policy(case.2) == "workflow_dispatch").count()},
         "model_card_summaries":summaries}))
 }
 
