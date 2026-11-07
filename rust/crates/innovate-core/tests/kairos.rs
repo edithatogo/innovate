@@ -389,3 +389,25 @@ fn tick_pause_before_first_adoption_preserves_forced_des_and_abm() {
         assert_eq!(run(payload), expected);
     }
 }
+
+#[test]
+fn previous_provider_checkpoints_preserve_scientific_results() {
+    let cases: Vec<serde_json::Value> =
+        serde_json::from_str(include_str!("fixtures/kairos_previous_pin_replay.json")).unwrap();
+    assert_eq!(cases.len(), 3);
+    let kernel = KernelBinding::new();
+    for case in cases {
+        let run = |key: &str| {
+            kernel
+                .simulate_model("bass", case[key].clone())
+                .unwrap()
+                .result
+                .unwrap()
+        };
+        let actual = run("resume");
+        assert_eq!(actual, run("original"));
+        let mut expected = case["full"].clone();
+        expected["metadata"]["kairos_revision"] = actual["metadata"]["kairos_revision"].clone();
+        assert_eq!(actual, expected);
+    }
+}

@@ -6129,3 +6129,9 @@ Hosted release readiness for this worktree revision remains open.
   and R. Each matched its candidate uninterrupted run and the previous
   scientific output with only the reported provider revision updated.
   The locked candidate also passed all 50 Kairos and network tests.
+
+- [x] Retain prior-provider DES, ABM and network checkpoints as Rust
+  regression fixtures. The test requires exact candidate replay and
+  prior scientific output equality, allowing only the provider
+  provenance field to differ. The locked focused test passed after
+  rebuilding without incremental compilation.
