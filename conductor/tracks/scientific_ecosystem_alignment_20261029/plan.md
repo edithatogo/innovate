@@ -2710,3 +2710,9 @@ the other competition models and installed binding checks remain open.
   The first Lotka–Volterra trajectory was 0.2319693167 at baseline
   and 0.1683698760 under the replacement, matching the analytic oracle
   within 1e-8. R used the raw JSON entry point.
+
+- [x] Allow counterfactual replacement of a saved fixed parameter-event
+  schedule. An empty array removes events from the alternative only.
+  The analytic Lotka–Volterra test verifies the resulting forecast and
+  rejects an unknown event parameter through native validation.
+  Focused Rust and Clippy passed. Binding verification remains open.

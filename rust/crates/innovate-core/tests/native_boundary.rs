@@ -558,6 +558,20 @@ fn causal_summaries_match_analytic_effects() {
     }
     history["covariate_history_overrides"]["price"] = json!([0.]);
     assert_eq!(run(history)["error"]["code"], "invalid_request");
+    let mut events = json!({"method":"counterfactual_forecast","forecast_model":"lotka_volterra",
+        "baseline":{"inputs":{"time":[2.]},"state":{"model_key":"lotka_volterra",
+            "parameters":{"alpha1":0.2,"beta1":0.,"alpha2":0.1,"beta2":0.},
+            "constructor_kwargs":{"initial_values":[0.1,0.2],
+                "parameter_events":[{"time":1.,"parameters":{"alpha1":0.4}}]}}},
+        "parameter_event_override":[]});
+    let compared = run(events.clone());
+    assert!(compared["error"].is_null(), "{compared}");
+    for (key, exponent) in [("baseline", -0.6_f64), ("counterfactual", -0.4)] {
+        let expected = 1. / (1. + 9. * exponent.exp());
+        assert!((compared["result"][key][0][0].as_f64().unwrap() - expected).abs() < 1e-8);
+    }
+    events["parameter_event_override"] = json!([{"time":1.,"parameters":{"unknown":0.4}}]);
+    assert_eq!(run(events)["error"]["code"], "invalid_request");
     let products = run(
         json!({"method":"counterfactual_forecast","forecast_model":"lock_in",
         "baseline":{"inputs":{"time":[0.]},"constructor_kwargs":{"initial_values":[120.,0.]},

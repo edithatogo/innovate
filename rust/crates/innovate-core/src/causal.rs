@@ -401,6 +401,16 @@ fn counterfactual_forecast(payload: &Value) -> Result<Value, &'static str> {
             "counterfactual override names an unknown historical covariate",
         )?;
     }
+    if let Some(events) = payload.get("parameter_event_override") {
+        if !events.is_array() {
+            return Err("parameter_event_override must be an array");
+        }
+        let schedule = alternative
+            .get_mut("state")
+            .and_then(|state| state.pointer_mut("/constructor_kwargs/parameter_events"))
+            .ok_or("baseline requires a saved parameter event schedule")?;
+        *schedule = events.clone();
+    }
     let binding = crate::KernelBinding::new();
     let predict = |request| {
         binding
