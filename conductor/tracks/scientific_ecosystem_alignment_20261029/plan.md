@@ -7248,3 +7248,11 @@ Hosted release readiness for this worktree revision remains open.
   passed. Wheel SHA-256 is
   `0e0e475346cebab2ff2d281df42822504b9ca1120c73edbd3c930be410eb2e08`.
   Hosted Linux and exact release-commit execution remain open.
+
+- [x] Require the full Python native consumer suite before retaining hosted
+  release-wheel artifacts. Actionlint passed. The prior optimized macOS
+  wheel passed 115 of 119 cases against the current suite. The four
+  failures cover extreme rolling windows, cross-fitted training-arm
+  diagnostics, and two adopter-category cases. The artifact predates
+  current native fixes, including 446ee021, 59b0e856 and 4f4fba9d.
+  Full conformance requires a freshly built wheel from the current source.

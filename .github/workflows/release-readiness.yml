@@ -75,10 +75,7 @@ jobs:
               assert Path(module.__file__).resolve().is_relative_to(root), module.__file__
           PYTHON
           "$staging/bin/python" -m pytest -q \
-            tests/native/test_python_consumer.py::test_native_polars_prediction_and_row_identity \
-            tests/native/test_python_consumer.py::test_fit_roundtrip_and_native_evidence \
-            tests/native/test_python_consumer.py::test_capabilities_are_native_and_unavailable_features_fail_closed \
-            tests/native/test_python_consumer.py::test_clean_runtime_has_no_legacy_scientific_dependencies
+            tests/native/test_python_consumer.py
       - name: Retain validated dry-run artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
