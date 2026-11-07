@@ -7256,3 +7256,14 @@ Hosted release readiness for this worktree revision remains open.
   diagnostics, and two adopter-category cases. The artifact predates
   current native fixes, including 446ee021, 59b0e856 and 4f4fba9d.
   Full conformance requires a freshly built wheel from the current source.
+
+- [x] Rebuild the optimized macOS arm64 wheel from a fresh source
+  distribution at 80500bdb and run the complete Python native consumer
+  file against it. All 114 cases passed, including the four that failed
+  with the older wheel. The earlier 119-case count was incorrect.
+  The clean Python 3.15.2 environment installed Polars and pytest
+  from the cache. Disk limits required staging the wheel separately
+  and checking that both imported modules resolved there.
+  Wheel SHA-256 is
+  `3332d1ebbfb07d7665975948b3fb91d19fc2f66bd777f323098790ce5860edf2`.
+  Hosted distribution checks remain open.
