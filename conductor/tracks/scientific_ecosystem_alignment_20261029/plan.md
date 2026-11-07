@@ -6165,3 +6165,8 @@ Hosted release readiness for this worktree revision remains open.
   targets after the provider promotion and replay validation changes.
   All 136 tests passed. The release verifier still identifies 38 open
   migration and acceptance obligations.
+
+- [x] Run the full locked Rust workspace suite after the Kairos pin
+  promotion and scenario replay validation changes. All 322 tests
+  passed with incremental compilation disabled. This verifies local
+  Rust workspace behavior. Release and scientific acceptance remain open.
