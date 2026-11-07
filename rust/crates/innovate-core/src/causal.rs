@@ -1202,6 +1202,31 @@ fn stratified_treatment_contrast(payload: &Value) -> Result<Value, &'static str>
     )
 }
 
+fn standardized_balance_difference(
+    treated: &[f64],
+    control: &[f64],
+    scale: f64,
+    deviation: Option<f64>,
+) -> Option<f64> {
+    let sd = deviation?;
+    let anchor = control[0];
+    let centered_mean = |values: &[f64]| {
+        let offsets: Vec<_> = values
+            .iter()
+            .map(|&value| {
+                let difference = value - anchor;
+                if difference.is_finite() {
+                    difference / scale
+                } else {
+                    value / scale - anchor / scale
+                }
+            })
+            .collect();
+        mean(&offsets).unwrap()
+    };
+    finite((centered_mean(treated) - centered_mean(control)) / sd).ok()
+}
+
 fn pooled_scaled_deviation(treated: &[f64], control: &[f64], scale: f64) -> Option<f64> {
     if scale == 0. || treated.len() < 2 || control.len() < 2 {
         return None;
@@ -1375,9 +1400,10 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
                     }
                     let scale = values.iter().map(|value| value.abs()).fold(0., f64::max);
                     let deviation = pooled_scaled_deviation(&before_treated, &before_control, scale);
-                    let standardize = |difference: f64| {
-                        deviation.and_then(|sd| finite((difference / scale) / sd).ok())
-                    };
+                    let standardized = standardized_balance_difference(&treated, &control, scale, deviation);
+                    let before_standardized = standardized_balance_difference(
+                        &before_treated, &before_control, scale, deviation,
+                    );
                     let before_treated = mean(&before_treated).unwrap();
                     let before_control = mean(&before_control).unwrap();
                     let treated_mean = mean(&treated).unwrap();
@@ -1388,10 +1414,10 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
                         name,
                         json!({"treated_mean":treated_mean,"control_mean":control_mean,
                             "mean_difference":difference,
-                            "standardized_mean_difference":standardize(difference),
+                            "standardized_mean_difference":standardized,
                             "before_matching":{"treated_mean":before_treated,"control_mean":before_control,
                                 "mean_difference":before_difference,
-                                "standardized_mean_difference":standardize(before_difference)}}),
+                                "standardized_mean_difference":before_standardized}}),
                     ))
                 })
                 .collect::<Result<serde_json::Map<String, Value>, &'static str>>()
@@ -2226,7 +2252,7 @@ fn policy_specification(payload: &Value) -> Result<Value, &'static str> {
 
 #[cfg(test)]
 mod tests {
-    use super::pooled_scaled_deviation;
+    use super::{pooled_scaled_deviation, standardized_balance_difference};
 
     #[test]
     fn pooled_deviation_resolves_adjacent_covariate_values() {
@@ -2236,5 +2262,16 @@ mod tests {
         let deviation = pooled_scaled_deviation(&values, &values, upper).unwrap();
         let expected = (upper - lower) / upper / 2_f64.sqrt();
         assert!((deviation / expected - 1.).abs() <= 2. * f64::EPSILON);
+    }
+    #[test]
+    fn standardized_balance_resolves_difference_between_rounded_means() {
+        let lower = 1.5_f64;
+        let upper = lower.next_up();
+        let treated = [lower, lower, upper];
+        let control = [lower, upper];
+        let deviation = pooled_scaled_deviation(&treated, &control, upper);
+        let actual = standardized_balance_difference(&treated, &control, upper, deviation).unwrap();
+        let expected = (-1. / 6.) / (7_f64 / 18.).sqrt();
+        assert!((actual - expected).abs() <= 2. * f64::EPSILON);
     }
 }

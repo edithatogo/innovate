@@ -5280,3 +5280,8 @@ Hosted release readiness for this worktree revision remains open.
   regression. The rebuilt native extension returned a finite
   standardized difference for the narrow covariate and null for
   the constant covariate. The focused Python 3.15.2 test passed.
+
+- [x] Preserve narrow standardized mean differences by centering
+  both groups on the same anchor before taking their means. The
+  analytic adjacent-value numerator is one-sixth of a floating-point
+  step. Both causal unit tests and the focused boundary test passed.
