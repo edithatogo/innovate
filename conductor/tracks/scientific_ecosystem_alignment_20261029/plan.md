@@ -4147,3 +4147,7 @@ Hosted release readiness for this worktree revision remains open.
   tick six. Each binding reports one idle slot-tick, three excess
   slot-ticks, and a single completion. The affected checks passed
   locally in Python, Julia and installed R.
+- [x] Include the three external STL and SARIMA reference fixtures
+  required by the Rust boundary tests in the source distribution.
+  A fresh extraction built the locked test target in its own target
+  directory and passed the selected SARIMA and STL tests.

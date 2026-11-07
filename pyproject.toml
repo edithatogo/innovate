@@ -29,7 +29,12 @@ manifest-path = "rust/crates/innovate-python/Cargo.toml"
 python-source = "bindings/python"
 module-name = "innovate._native"
 features = ["pyo3/extension-module"]
-include = [{path = "LICENSE", format = "sdist"}]
+include = [
+    {path = "LICENSE", format = "sdist"},
+    {path = "conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/sarima-reference/historical-initialization.json", format = "sdist"},
+    {path = "conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/sarima-reference/stationary-fixed.json", format = "sdist"},
+    {path = "conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/stl-reference-20261107/reference.json", format = "sdist"},
+]
 
 [tool.pytest.ini_options]
 minversion = "9.2"
