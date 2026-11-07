@@ -2196,3 +2196,8 @@ the other competition models and installed binding checks remain open.
   to their degrees. Accept only mean degrees compatible with 1 to 32
   links per new node and retain the resolved graph for replay. All 65
   targeted Rust tests and Clippy passed. Binding qualification remains open.
+
+- [x] Qualify scale_free topology in Python 3.15, Julia and installed R.
+  All three resolved the same seven distinct edges for a five-node graph
+  with two attachments per new node and topology seed 77. Each replay
+  reproduced the original seeded contagion result exactly.
