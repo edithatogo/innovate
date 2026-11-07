@@ -1557,3 +1557,8 @@ the other competition models and installed binding checks remain open.
   search budget and now converges to a different basin with likelihood
   0.495 higher than the reference R fit. The other two likelihoods
   agree within 1e-8. All 22 boundary tests and focused Clippy passed.
+
+- [x] Verify the revised optimizer in the rebuilt Python wheel and Julia
+  against the installed R binding on the previously nonconvergent
+  ARMA(1,2) series. The public fitting helpers returned all 200 fitted
+  values and agreed within 1e-10 across runtimes.
