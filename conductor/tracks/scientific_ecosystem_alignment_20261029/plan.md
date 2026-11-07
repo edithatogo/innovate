@@ -2847,3 +2847,11 @@ the other competition models and installed binding checks remain open.
   Julia and R. All 30 refits converged on the perturbed Logistic fixture
   and complete outputs agreed exactly. The 90% capacity interval was
   [99.8197441, 100.3101662]. R used raw JSON. Repeated coverage remains open.
+
+- [x] Compare centered residual bootstrap on the same 100 noisy Logistic
+  trials and seeds as the case-bootstrap experiment. The residual method
+  refused trial 81 because its baseline did not converge. Among the 99
+  returned intervals, 85 covered L=100. Mean width was 0.69285245 and
+  201 of 9,900 refits failed. Case resampling covered 81 of 100 with
+  mean width 0.7462212. Preserve the differing denominators and report
+  baseline refusal separately. Broader calibration remains open.
