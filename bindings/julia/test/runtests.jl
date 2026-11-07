@@ -947,3 +947,14 @@ end
     @test result["match_diagnostics"]["minimum_matched_caliper_slack"] == 0
     @test result["match_diagnostics"]["minimum_runner_up_distance_gap"] == 0
 end
+
+@testset "Matching score draw mixture" begin
+    sensitivity = kernel_call("summarize_causal", nothing, Dict(
+        "method"=>"matched_treatment_contrast", "outcomes"=>[0,4,2],
+        "treatment"=>[0,1,0], "scores"=>[0,0,1], "caliper"=>0,
+        "score_draws"=>[[0,0,1],[1,0,0]], "outcome_variances"=>[0,1,6]
+    ))["result"]["score_sensitivity"]
+    @test [draw["estimate"] for draw in sensitivity["draws"]] == [4,2]
+    @test sensitivity["same_treated_subset"]
+    @test sensitivity["mixture_standard_deviation"] ≈ sqrt(5)
+end

@@ -5445,3 +5445,7 @@ Hosted release readiness for this worktree revision remains open.
   leave the mixture uncertainty unset even when both draws retain the
   same number of observations. The Rust fixture preserved effects 4
   and 6 and their distinct unmatched indices. Seven causal tests passed.
+
+- [x] Verify caller-supplied score-draw rematching and mixture uncertainty
+  through Python, Julia and installed R against rebuilt Rust libraries.
+  Each reproduced draw effects 4 and 2 and mixture spread sqrt(5).

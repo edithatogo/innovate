@@ -1776,3 +1776,14 @@ def test_matching_with_fitted_scores():
     assert result["score_uncertainty_scope"] == "conditional_on_fitted_scores_and_pairs"
     assert result["match_diagnostics"]["minimum_matched_caliper_slack"] == 0
     assert result["match_diagnostics"]["minimum_runner_up_distance_gap"] == 0
+
+
+def test_matching_score_draw_mixture():
+    sensitivity = innovate.execute(
+        "summarize_causal", method="matched_treatment_contrast",
+        outcomes=[0, 4, 2], treatment=[0, 1, 0], scores=[0, 0, 1], caliper=0,
+        score_draws=[[0, 0, 1], [1, 0, 0]], outcome_variances=[0, 1, 6],
+    )["result"]["score_sensitivity"]
+    assert [draw["estimate"] for draw in sensitivity["draws"]] == [4, 2]
+    assert sensitivity["same_treated_subset"]
+    assert sensitivity["mixture_standard_deviation"] == pytest.approx(math.sqrt(5))
