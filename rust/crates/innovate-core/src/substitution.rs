@@ -828,6 +828,22 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
         forcing_origin,
     )
     .map_err(|e| invalid(op, e))?;
+    let weights = if op == KernelOperation::FitModel {
+        crate::fitting::weights(
+            request,
+            time.len(),
+            (3 * (1 + model.covariates.len())).max(4),
+        )?
+    } else {
+        None
+    };
+    let max_weight = weights
+        .as_ref()
+        .map_or(1., |w| w.iter().copied().fold(0., f64::max));
+    let factors: Vec<_> = weights.as_ref().map_or_else(
+        || vec![1.; time.len()],
+        |w| w.iter().map(|v| v.sqrt() / max_weight.sqrt()).collect(),
+    );
     let mut optimizer = None;
     let mut identifiability = None;
     let p = if op == KernelOperation::FitModel {
@@ -837,7 +853,9 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
         let observed = observations(inputs, model.n, time.len(), op)?;
         let y_scale = observed
             .iter()
-            .flatten()
+            .zip(&factors)
+            .filter(|(_, w)| **w > 0.)
+            .flat_map(|(row, _)| row)
             .copied()
             .map(f64::abs)
             .fold(0.0, f64::max);
@@ -848,31 +866,7 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
                 "all-zero observations cannot identify diffusion parameters",
             ));
         }
-        let fit_options = payload
-            .get("fit_options")
-            .map(|v| {
-                v.as_object()
-                    .ok_or_else(|| invalid(op, "fit_options must be an object"))
-            })
-            .transpose()?;
-        if fit_options.is_some_and(|o| {
-            o.keys()
-                .any(|k| !["initial_parameters", "max_iterations"].contains(&k.as_str()))
-        }) {
-            return Err(Error::unsupported_native_operation(
-                op,
-                "unsupported fit option",
-            ));
-        }
-        let max_iterations = fit_options
-            .and_then(|o| o.get("max_iterations"))
-            .map(|v| {
-                v.as_u64()
-                    .filter(|v| *v > 0 && *v <= 2000)
-                    .ok_or_else(|| invalid(op, "max_iterations must be in 1..=2000"))
-            })
-            .transpose()?
-            .unwrap_or(300) as usize;
+        let (initial, max_iterations) = crate::fitting::scalar_options(request)?;
         let transform = |p: Vec<f64>| {
             p.iter()
                 .enumerate()
@@ -903,8 +897,8 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
                 .collect::<Vec<_>>()
         };
         let mut starts = Vec::new();
-        if let Some(v) = fit_options.and_then(|o| o.get("initial_parameters")) {
-            starts.push(transform(parameters(v, &model, op)?));
+        if let Some(v) = initial {
+            starts.push(transform(parameters(&v, &model, op)?));
         }
         for p0 in if model.history.is_none() || starts.is_empty() {
             &[0.1, 0.5, 1.0][..]
@@ -916,7 +910,9 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
                 for i in 0..model.n {
                     let max = observed
                         .iter()
-                        .map(|r| r[i].abs())
+                        .zip(&factors)
+                        .filter(|(_, w)| **w > 0.)
+                        .map(|(r, _)| r[i].abs())
                         .fold(0.0, f64::max)
                         .max(y_scale * 0.1);
                     start.extend([p0 / t_scale, q0 / t_scale, 1.2 * max]);
@@ -927,14 +923,20 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
                 starts.push(transform(start));
             }
         }
-        let target: Vec<_> = observed.iter().flatten().map(|y| y / y_scale).collect();
+        let scaled = |rows: &[Vec<f64>]| -> Vec<f64> {
+            rows.iter()
+                .zip(&factors)
+                .flat_map(|(row, w)| row.iter().map(move |x| (x * w) / y_scale))
+                .collect()
+        };
+        let target = scaled(&observed);
         let fit = least_squares(
             &target,
             &starts,
             |theta| {
                 model
                     .predict(&time, &untransform(theta))
-                    .map(|(rows, _)| rows.into_iter().flatten().map(|x| x / y_scale).collect())
+                    .map(|(rows, _)| scaled(&rows))
             },
             max_iterations,
         )
@@ -998,6 +1000,30 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
             {
                 let observed = observations(inputs, model.n, time.len(), op)?;
                 let mut d = diagnostics(&time, &observed, &predicted, "NortonBassModel", p.len());
+                if weights.is_some() {
+                    let weighted_rss: f64 = observed
+                        .iter()
+                        .zip(&predicted)
+                        .zip(&factors)
+                        .flat_map(|((observed, predicted), w)| {
+                            observed
+                                .iter()
+                                .zip(predicted)
+                                .map(move |(y, p)| (y * w - p * w).powi(2))
+                        })
+                        .sum();
+                    d["metrics"]["AIC"] = Value::Null;
+                    d["metrics"]["BIC"] = Value::Null;
+                    d["information_criteria"] =
+                        json!({"available":false,"reason":"weighted likelihood not qualified"});
+                    d["weighting"] = json!({
+                        "maximum_weight":max_weight,
+                        "positive_observations":factors.iter().filter(|w| **w > 0.).count(),
+                        "weighted_rss_normalized_by_max":weighted_rss,
+                        "rank_semantics":"weighted local Jacobian; one weight per time row across generations",
+                        "descriptive_metrics":"unweighted"
+                    });
+                }
                 if !model.events.is_empty() {
                     d["parameter_events"] = json!({"count":model.events.len(),"parameters_estimated":false,"state_reset":false});
                 }

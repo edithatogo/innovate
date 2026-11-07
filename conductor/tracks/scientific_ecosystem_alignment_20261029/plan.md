@@ -1149,3 +1149,13 @@ the other competition models and installed binding checks remain open.
   qualifies row weights with explicit starts. Automatic lock-in and
   multi-product convergence remain separate open tasks.
   [Fixtures and results](evidence/remaining-competition-weights-20261107).
+
+## Weighted Norton Bass fitting
+
+- [x] Apply one weight per time row across all generations, including
+  covariate and event fits. Positive rows determine initialization and
+  outcome scale. The independent historical fixture excludes an outlier
+  in both outputs and preserves the held-out forecast within 1e-3.
+  All 24 multi-generation Rust tests and focused Clippy passed.
+- [ ] Qualify weights for historical and successive variants in installed
+  Python, Julia and R.

@@ -768,3 +768,46 @@ fn historical_milestones_use_fixed_base_market_even_after_capacity_override() {
     assert_eq!(row["median"], 3.);
     assert_eq!(row["saturation"], 3.);
 }
+
+#[test]
+fn weighted_norton_fit_excludes_both_outputs_and_preserves_forecast() {
+    let fixture: Value =
+        serde_json::from_str(include_str!("fixtures/norton_events_scipy.json")).unwrap();
+    let mut rows = fixture["rows"].as_array().unwrap().clone();
+    let mut weights = vec![2.; rows.len()];
+    rows[5] = json!([1e100, 1e100]);
+    weights[5] = 0.;
+    let binding = KernelBinding::new();
+    let fit = binding.fit_model("norton_bass",json!({
+        "inputs":{"time":fixture["time"],"covariates":fixture["covariates"],"observed":rows},
+        "constructor_kwargs":fixture["constructor_kwargs"],
+        "fit_options":{"initial_parameters":fixture["parameters"],"weights":weights}
+    })).unwrap().result.unwrap();
+    assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
+    assert_eq!(
+        fit["diagnostics"]["weighting"]["positive_observations"],
+        rows.len() - 1
+    );
+    assert!(
+        fit["diagnostics"]["weighting"]["weighted_rss_normalized_by_max"]
+            .as_f64()
+            .unwrap()
+            < 1e-8
+    );
+    let p = binding
+        .predict_model(
+            "norton_bass",
+            json!({"inputs":{"time":fixture["forecast_time"]},"state":fit["state"]}),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    for (actual, expected) in p["rows"][0]
+        .as_array()
+        .unwrap()
+        .iter()
+        .zip(fixture["forecast_rows"][0].as_array().unwrap())
+    {
+        assert!((actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-3);
+    }
+}
