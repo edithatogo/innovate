@@ -4070,3 +4070,9 @@ Hosted release readiness for this worktree revision remains open.
   binding agreed with independent maximum likelihood on both 600-row
   fixtures within 1e-5 in coefficient and 2.33e-7 in log likelihood.
   The four existing nonseasonal cases also passed.
+- [x] Qualify simultaneous historical price replacement and event
+  removal for a Lotka–Volterra counterfactual. The analytic fixture
+  covers the event boundary, the final price knot and extrapolation.
+  All 78 Rust boundary tests passed. Python 3.15.2, Julia and installed
+  R matched the first product's analytic baseline and counterfactual
+  within 1e-8 using the existing native artifacts.

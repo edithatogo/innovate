@@ -2705,3 +2705,27 @@ fn execution_discovery_advertises_ordered_benchmark_case_selection() {
     );
     assert_eq!(result["distributed"]["status"], "unqualified");
 }
+
+#[test]
+fn counterfactual_combines_history_and_event_overrides() {
+    let response: serde_json::Value = serde_json::from_str(&innovate_core::execute_json(
+        include_str!("fixtures/counterfactual_history_events.json"),
+    ))
+    .unwrap();
+    assert!(response["error"].is_null(), "{response}");
+    let result = &response["result"];
+    assert_eq!(result["time"], json!([1.0, 2.0, 3.0]));
+    // Integrate the piecewise alpha and the linear, then constant, price.
+    for (key, integrals) in [
+        ("baseline", [0.25, 0.8, 1.4]),
+        ("counterfactual", [0.2, 0.4, 0.6]),
+    ] {
+        for (row, integral) in integrals.into_iter().enumerate() {
+            let expected = 1.0 / (1.0 + 9.0 * f64::exp(-integral));
+            assert!((result[key][row][0].as_f64().unwrap() - expected).abs() < 1e-8);
+        }
+    }
+    for row in 0..3 {
+        assert!(result["difference"][row][1].as_f64().unwrap().abs() < 1e-8);
+    }
+}
