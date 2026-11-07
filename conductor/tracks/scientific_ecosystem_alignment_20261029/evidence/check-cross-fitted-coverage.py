@@ -42,6 +42,8 @@ guarded = dict.fromkeys(methods, 0)
 covered_t = dict.fromkeys(methods, 0)
 oracle_att = []
 paired_att_gap = []
+known_propensity_att = []
+known_outcome_att = []
 for _ in range(400):
     if args.cluster_assignment:
         assigned = [int(rng.random() < p) for p in probabilities[:: len(strata) // cluster_count]]
@@ -68,7 +70,8 @@ for _ in range(400):
                 folds=folds,
                 minimum_training_arm_count=args.minimum_training_arm_count,
                 **cluster_options,
-            )["result"]["contrast"]
+            )["result"]
+            contrast = result["contrast"]
         except NativeError as error:
             if (args.weak_overlap or args.cluster_assignment) and "requires both arms" in str(error):
                 failed[key] += 1
@@ -77,19 +80,24 @@ for _ in range(400):
             else:
                 raise
             continue
-        assert result["cluster_degrees_of_freedom"] == (cluster_count - 1 if clustered else None)
-        estimate = result["estimate"]
+        assert contrast["cluster_degrees_of_freedom"] == (cluster_count - 1 if clustered else None)
+        estimate = contrast["estimate"]
         if args.cluster_assignment and key == "att":
-            oracle = execute(
-                "summarize_causal",
-                method="augmented_treatment_contrast",
-                estimand="att",
-                outcomes=outcomes,
-                treatment=treatment,
-                propensities=probabilities,
-                control_predictions=baseline,
-                **cluster_options,
-            )["result"]["estimate"]
+            def augmented(propensities, predictions):
+                return execute(
+                    "summarize_causal",
+                    method="augmented_treatment_contrast",
+                    estimand="att",
+                    outcomes=outcomes,
+                    treatment=treatment,
+                    propensities=propensities,
+                    control_predictions=predictions,
+                    **cluster_options,
+                )["result"]["estimate"]
+
+            oracle = augmented(probabilities, baseline)
+            known_propensity_att.append(augmented(probabilities, result["control_predictions"]))
+            known_outcome_att.append(augmented(result["propensities"], baseline))
             reference = sum(
                 (y - y0) if flag else (y0 - y) * p / (1 - p)
                 for y, y0, flag, p in zip(outcomes, baseline, treatment, probabilities, strict=True)
@@ -99,7 +107,7 @@ for _ in range(400):
             paired_att_gap.append(estimate - oracle)
         estimates[key].append(estimate)
         distance = abs(estimate - truth)
-        error = result["influence_standard_error"]
+        error = contrast["influence_standard_error"]
         covered[key] += distance <= 1.96 * error
         if args.few_clusters:
             covered_t[key] += distance <= 2.262157 * error
@@ -125,3 +133,5 @@ if args.cluster_assignment:
     print(f"ATT known-nuisance mean {mean(oracle_att):.6f}, "
           f"paired fitted-minus-known gap {mean(paired_att_gap):.6f}")
     assert len(oracle_att) == len(estimates["att"])
+    print(f"ATT known propensity only {mean(known_propensity_att):.6f}, "
+          f"known outcome only {mean(known_outcome_att):.6f}")

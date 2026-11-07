@@ -6336,3 +6336,10 @@ Hosted release readiness for this worktree revision remains open.
   known gap was 0.0669, isolating most of the observed gap to fitted
   nuisance inputs on this design. General cluster-assigned inference
   remains open.
+
+- [x] Substitute one known nuisance input at a time on the same
+  cluster-assigned ATT trials. The mean was 2.6355 with known
+  propensities and fitted outcomes, and 2.6662 with fitted
+  propensities and known outcomes, against 2.6754 with both fitted.
+  The observed gap was more sensitive to the propensity fit in
+  this design. This comparison leaves the native estimators intact.
