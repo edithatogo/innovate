@@ -5712,3 +5712,8 @@ Hosted release readiness for this worktree revision remains open.
   native consumer suites. The focused Python, Julia and R checks passed
   with the same checksum and invalid-output rejection. Each test removes
   its registration after execution.
+
+- [x] Verify a singleton network edge returned by an R dataset provider.
+  The binding preserved source and target IDs "001" and "1" as distinct
+  array values, kept the weight as a one-element array, and retained
+  the provenance source as a scalar. The focused installed R check passed.

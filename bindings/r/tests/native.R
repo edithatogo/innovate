@@ -938,6 +938,14 @@ local({
     artifact <- invoke_registered_extension(function(resolved, data) data, selection, dataset)
     stopifnot(isTRUE(artifact$validation$ok), artifact$dataset$provenance$checksum ==
       "fada5d71f8981fa746be73b26de45ad470fa4e74f6a7d7a48234f4f50de0a76a")
+    edges <- list(kind="network_edges", source="001", target="1", weight=0.5,
+      provenance=dataset$provenance)
+    network <- invoke_registered_extension(function(resolved, data) data, selection, edges)
+    stopifnot(isTRUE(network$validation$ok),
+      identical(network$dataset$source, list("001")),
+      identical(network$dataset$target, list("1")),
+      identical(network$dataset$weight, list(0.5)),
+      identical(network$dataset$provenance$source, "fixture"))
     failure <- tryCatch(invoke_registered_extension(function(...) list(kind="adoption"),
       selection, NULL), error=conditionMessage)
     stopifnot(grepl("requires dataset provenance", failure, fixed=TRUE))
