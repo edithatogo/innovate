@@ -3999,3 +3999,9 @@ Hosted release readiness for this worktree revision remains open.
   kinds and tick dispatched in insertion order before an empty step.
   All eleven locked Kairos tests passed. This supplies runtime evidence
   for the tie/cancel behavior in imported leaf I03.
+- [x] Exercise pinned ABM entity and RNG replay in the root workspace.
+  The fixture checks a missing component, dispatches a behavior to the
+  spawned entity, updates its component with an entity-purpose draw,
+  and verifies the same identity, value and RNG checkpoint on replay.
+  All twelve locked Kairos tests passed. This supplies runtime evidence
+  for the state and RNG portion of imported leaf I04.

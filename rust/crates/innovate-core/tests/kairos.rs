@@ -240,3 +240,31 @@ fn pinned_scheduler_dispatches_ties_in_order_and_skips_cancelled_events() {
     }
     assert!(matches!(scheduler.step(), StepOutcome::Empty));
 }
+
+#[test]
+fn pinned_abm_replays_entity_state_and_rng() {
+    use kairo_ecs_abm::ABMContext;
+    use kairo_ecs_rng::{DeterministicStream, rand_distr::Uniform};
+    use kairo_ecs_types::{EventKind, SimTime, StepOutcome};
+
+    let replay = || {
+        let mut context = ABMContext::new(42);
+        let entity = context.spawn_agent();
+        assert!(context.get::<u64>(entity).is_none());
+        assert!(context.attach(entity, 0_u64));
+        let mut rng = DeterministicStream::from_entity_purpose(42, entity, "innovate.test");
+        let value = rng.sample(Uniform::new(1_u64, 100).unwrap());
+        let tick = SimTime::from_ticks(7);
+        context.schedule_behaviour(entity, 1, tick);
+        let StepOutcome::Dispatched(event) = context.step() else {
+            panic!("expected a Kairos behavior dispatch");
+        };
+        assert_eq!(event.entity, Some(entity));
+        assert_eq!(event.kind, EventKind::Custom(1));
+        assert_eq!(event.at, tick);
+        assert!(context.attach(entity, value));
+        assert_eq!(context.get::<u64>(entity), Some(&value));
+        (entity, value, json!(rng.checkpoint()))
+    };
+    assert_eq!(replay(), replay());
+}
