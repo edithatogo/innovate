@@ -3104,6 +3104,27 @@ fn extension_dataset_provider_returns_validated_artifact() {
         )),
         Err("dataset provider returned invalid dataset")
     );
+    let mut request = request;
+    request["payload"]["manifest"]["name"] = json!("serialization-fixture");
+    request["payload"]["manifest"]["extension_points"] = json!(["serialization_adapter"]);
+    let registered: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert!(registered["error"].is_null());
+    let selection = json!({"name":"serialization-fixture","expected_version":"1","extension_point":"serialization_adapter"});
+    let roundtrip =
+        innovate_core::invoke_registered_extension(&selection, &artifact, |_, artifact| {
+            Ok(artifact.clone())
+        })
+        .unwrap();
+    assert_eq!(roundtrip, artifact);
+    let mut tampered = artifact;
+    tampered["dataset"]["adoption"][0] = json!(0);
+    assert_eq!(
+        innovate_core::invoke_registered_extension(&selection, &tampered, |_, artifact| Ok(
+            artifact.clone()
+        )),
+        Err("serialization adapter returned invalid dataset artifact")
+    );
 }
 
 #[test]

@@ -185,15 +185,23 @@ pub fn invoke_registered_extension(
     if resolved["extension_point"] == "diagnostics" {
         return summarize_diagnostics(&output);
     }
-    if resolved["extension_point"] != "dataset_provider" {
-        return Ok(output);
-    }
+    let (payload, invalid) = if resolved["extension_point"] == "dataset_provider" {
+        (
+            json!({"dataset":output}),
+            "dataset provider returned invalid dataset",
+        )
+    } else {
+        (
+            json!({"artifact":output}),
+            "serialization adapter returned invalid dataset artifact",
+        )
+    };
     let mut response = crate::dataset::ingest_request(&json!({
         "schema_version":crate::KERNEL_SCHEMA_VERSION,
-        "payload":{"dataset":output},
+        "payload":payload,
     }));
     if !response["error"].is_null() {
-        return Err("dataset provider returned invalid dataset");
+        return Err(invalid);
     }
     Ok(response["result"].take())
 }

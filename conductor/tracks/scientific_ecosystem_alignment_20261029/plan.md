@@ -5742,3 +5742,9 @@ Hosted release readiness for this worktree revision remains open.
   freshly installed R. Each resolved baseline to the native Bass
   capability and rejected an alias attempting to shadow the Bass key.
   This covers alias discovery. Custom model dispatch remains open.
+
+- [x] Revalidate dataset artifacts returned by serialization adapters
+  through the native artifact ingestion path. The Rust boundary fixture
+  round-tripped an unchanged artifact and rejected a changed adoption
+  value with the original checksum. All three extension boundary tests
+  passed. Binding qualification and other artifact formats remain open.

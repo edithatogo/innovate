@@ -78,12 +78,12 @@ def _execute_payload(operation: str, model: str | None, payload: dict[str, Any])
     return _decode(_native.execute(json.dumps(request, allow_nan=False)))
 
 
-def invoke_registered_extension[T](
-    callback: Callable[[dict[str, Any], Any], T],
+def invoke_registered_extension(
+    callback: Callable[[dict[str, Any], Any], Any],
     selection: dict[str, Any],
     payload: Any,
-) -> T | dict[str, Any]:
-    """Invoke a trusted callback and ingest dataset-provider results as artifacts."""
+) -> dict[str, Any]:
+    """Invoke a trusted callback and validate its extension-point output in Rust."""
     resolved = _execute_payload("resolve_extension_manifest", None, selection)["result"]
     output = callback(resolved, payload)
     if resolved["extension_point"] == "dataset_provider":
@@ -92,7 +92,7 @@ def invoke_registered_extension[T](
         return execute("resolve_extension_model_aliases", aliases=output)["result"]
     if resolved["extension_point"] == "diagnostics":
         return execute("summarize_extension_diagnostics", checks=output)["result"]
-    return output
+    return execute("ingest_dataset", artifact=output)["result"]
 
 
 def fit_batch(model: str, datasets: list[dict[str, Any]], *, workers: int = 1) -> list[dict[str, Any]]:

@@ -187,5 +187,5 @@ invoke_registered_extension <- function(callback, selection, payload) {
   if (identical(resolved$extension_point, "diagnostics")) {
     return(kernel_call("summarize_extension_diagnostics", payload = list(checks = output))$result)
   }
-  output
+  kernel_call("ingest_dataset", payload = list(artifact = output))$result
 }
