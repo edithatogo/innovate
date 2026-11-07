@@ -6505,3 +6505,9 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify the baseline rank-deficiency bootstrap rejection through
   rebuilt Python, Julia and installed R. The saturated Logistic fixture
   returned the same native diagnostic in all three bindings.
+
+- [x] Count converged but rank-deficient bootstrap refits separately
+  and exclude them from the empirical distributions. A Logistic
+  fixture with transition and plateau observations produced both
+  successful and rank-deficient draws. The regression verifies
+  complete accounting of 100 draws. All four selected tests passed.

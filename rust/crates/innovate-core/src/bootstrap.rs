@@ -158,6 +158,7 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
     let mut invalid_synthetic = 0;
     let mut fit_errors = 0;
     let mut nonconverged = 0;
+    let mut rank_deficient = 0;
     for _ in 0..draws {
         if let Some((fitted, observed, residuals, offset)) = &residual_design {
             let residual_range = Uniform::new(0, residuals.len()).expect("validated residual rows");
@@ -195,6 +196,10 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
         };
         if fit["diagnostics"]["optimizer"]["converged"] != true {
             nonconverged += 1;
+            continue;
+        }
+        if fit["diagnostics"]["identifiability"]["status"] == "rank_deficient" {
+            rank_deficient += 1;
             continue;
         }
         let parameters = fit["parameters"]
@@ -270,7 +275,7 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
         .collect();
     let mut result = json!({"method":method,"seed":seed,"draws":draws,
         "succeeded":succeeded,"failed":draws-succeeded,
-        "failure_counts":{"nonfinite_synthetic":invalid_synthetic,"fit_error":fit_errors,"nonconverged":nonconverged},
+        "failure_counts":{"nonfinite_synthetic":invalid_synthetic,"fit_error":fit_errors,"nonconverged":nonconverged,"rank_deficient":rank_deficient},
         "baseline_optimizer":baseline["diagnostics"]["optimizer"],
         "baseline_parameters":baseline["parameters"],"estimates":estimates,
         "interval_method":"percentile","interval_mass":interval_mass,"parameter_intervals":intervals,

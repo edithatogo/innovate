@@ -220,3 +220,34 @@ fn saturated_logistic_bootstrap_rejects_unidentified_parameters() {
         "parameter bootstrap requires a baseline fit without detected rank deficiency"
     );
 }
+
+#[test]
+fn bootstrap_counts_rank_deficient_refits_separately() {
+    let time = [-3_f64, -2., -1., 0., 100., 101., 102., 103.];
+    let observed = time.map(|t| 100. / (1. + (-t).exp()));
+    let request = json!({"schema_version":"2.0","operation":"bootstrap_fit",
+        "payload":{"fit_model":"logistic","draws":100,"seed":42,
+            "fit":{"inputs":{"time":time,"observed":observed},
+                "fit_options":{"initial_parameters":{"L":100.,"k":1.,"x0":0.}}}}
+    });
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    let fit = &response["result"];
+    assert!(
+        fit["failure_counts"]["rank_deficient"].as_u64().unwrap() > 0,
+        "{response}"
+    );
+    let succeeded = fit["succeeded"].as_u64().unwrap();
+    assert!(succeeded > 0);
+    assert_eq!(
+        fit["estimates"]["L"].as_array().unwrap().len() as u64,
+        succeeded
+    );
+    let failures: u64 = fit["failure_counts"]
+        .as_object()
+        .unwrap()
+        .values()
+        .map(|count| count.as_u64().unwrap())
+        .sum();
+    assert_eq!(succeeded + failures, 100);
+}
