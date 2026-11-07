@@ -1674,7 +1674,7 @@ def test_kairos_tick_checkpoint_resume():
             }
         expected = innovate.execute("simulate_model", "bass", **payload)["result"]
         options = payload["simulation_options"]
-        options["pause_at_tick"] = 0
+        options["pause_at_tick"] = 6
         paused = innovate.execute("simulate_model", "bass", **payload)["result"]
         assert paused["status"] == "paused"
         del options["pause_at_tick"]

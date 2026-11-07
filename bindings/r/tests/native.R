@@ -814,7 +814,7 @@ for (engine in c("kairos_des", "kairos_abm", "kairos_network")) {
     payload$simulation_options <- list(engine=engine, seed=42, population=6, ticks_per_unit=1)
   }
   expected <- kernel_simulate_model("bass", payload)$result
-  payload$simulation_options$pause_at_tick <- 0
+  payload$simulation_options$pause_at_tick <- 6
   paused <- kernel_simulate_model("bass", payload)$result
   stopifnot(identical(paused$status, "paused"))
   payload$simulation_options$pause_at_tick <- NULL

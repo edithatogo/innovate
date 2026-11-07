@@ -875,7 +875,7 @@ end
         end
         expected = kernel_simulate_model("bass", payload)["result"]
         options = payload["simulation_options"]
-        options["pause_at_tick"] = 0
+        options["pause_at_tick"] = 6
         paused = kernel_simulate_model("bass", payload)["result"]
         @test paused["status"] == "paused"
         delete!(options, "pause_at_tick")

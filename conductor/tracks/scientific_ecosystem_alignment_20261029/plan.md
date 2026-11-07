@@ -5165,3 +5165,9 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reject network checkpoints with inconsistent waiter, cooldown
   or active-service agent states. The regression changes a queued agent
   to susceptible and verifies rejection. All 32 network tests passed.
+
+- [x] Move the binding checkpoint regression to tick six to exercise
+  populated adoption history and network resource state. Python
+  3.15.2, Julia and installed R reproduced the full uninterrupted
+  result for each engine against rebuilt native artifacts. Rust
+  retains the network cutoff sweep beginning at tick zero.
