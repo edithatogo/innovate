@@ -7535,3 +7535,9 @@ Hosted release readiness for this worktree revision remains open.
   #386 and #387 to their active invocations. The previous hashes were
   verified against upstream release tags. Actionlint passed for all
   workflows. Hosted runtime and publication checks remain open.
+
+- [x] Reconcile Python dependency PRs #532 and #512. The optional
+  Arrow extra already pins PyArrow 26.0.1 within the proposed range.
+  Statsmodels, NumPyro, ndlib and Pandera are absent from the active
+  dependencies. Retain their scientific obligations in the Rust
+  migration ledger. The native development policy check passed.
