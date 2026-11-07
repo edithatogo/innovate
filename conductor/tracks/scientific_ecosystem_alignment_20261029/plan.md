@@ -4096,3 +4096,8 @@ Hosted release readiness for this worktree revision remains open.
   The installed Python wheel ran the documented paired example at time
   1 with bootstrap and sign-flip enabled. Effects were 50 and 25, the
   mean was 37.5, and the exact two-sided p-value was 0.5.
+- [x] Read the paired Bass export directly with Arrow.jl 2.8.1 in an
+  isolated offline consumer environment. Arrow.Table decoded all
+  eight columns and 24 rows and retained the missing perspective
+  values. Document the native file path in the Julia binding guide.
+  Direct readback of files written by Python Polars remains separate.

@@ -62,3 +62,15 @@ place the locked Rust shared library in its `deps` directory under the
 name `libinnovate_ffi` with the platform's shared-library extension.
 Add the staged package to a fresh project with `Pkg.develop(path=...)`
 and unset `INNOVATE_NATIVE_LIBRARY` to exercise bundled discovery.
+
+## Reading paired Bass outcomes
+
+`kernel_paired_outcomes_ipc(payload)` validates paired Bass draws and
+returns an Arrow IPC file as bytes. Read that file directly with
+`Arrow.Table`. Rows follow strategy, draw and time order. The
+`perspective` column is nullable and `parameters_json` retains each
+draw's parameter array with names, values and units.
+
+Direct readback was verified with Arrow.jl 2.8.1 on the 24-row historical
+diffusion fixture. The stream guidance above applies to files written
+directly by Python Polars.
