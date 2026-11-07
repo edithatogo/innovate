@@ -5841,3 +5841,8 @@ Hosted release readiness for this worktree revision remains open.
   field. Three simulated Slurm ranks matched serial results using the
   retained wheel. The verifier rejected a receipt changed from 32
   requested workers to 33. Real scheduler evidence remains open.
+
+- [x] Qualify Kairos slot-time accounting across 32 seeds of the
+  scheduled resource fixture. Occupied plus idle slot ticks equaled
+  configured plus over-capacity slot ticks for every seed, with both
+  idle and over-capacity intervals exercised. All 33 network tests passed.

@@ -1023,3 +1023,30 @@ fn network_checkpoint_continues_continuous_hazard_forcing() {
         assert_eq!(run(request), expected, "{option}={boundary}");
     }
 }
+
+#[test]
+fn scheduled_resource_slot_ticks_balance_across_seeds() {
+    let mut payload: serde_json::Value =
+        serde_json::from_str(include_str!("fixtures/kairos_network_checkpoint.json")).unwrap();
+    let kernel = KernelBinding::new();
+    let mut saw_over_capacity = false;
+    let mut saw_idle = false;
+    for seed in 0..32 {
+        payload["simulation_options"]["seed"] = json!(seed);
+        let result = kernel
+            .simulate_model("bass", payload.clone())
+            .unwrap()
+            .result
+            .unwrap();
+        let metrics = &result["resource_metrics"];
+        let count = |name: &str| metrics[name].as_u64().unwrap();
+        assert_eq!(
+            count("occupied_slot_ticks") + count("idle_slot_ticks"),
+            count("configured_slot_ticks") + count("over_capacity_slot_ticks"),
+            "seed {seed}"
+        );
+        saw_over_capacity |= count("over_capacity_slot_ticks") > 0;
+        saw_idle |= count("idle_slot_ticks") > 0;
+    }
+    assert!(saw_over_capacity && saw_idle);
+}
