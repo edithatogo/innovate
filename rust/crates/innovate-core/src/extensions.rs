@@ -165,3 +165,17 @@ pub(crate) fn resolve(payload: &Value) -> Result<Value, &'static str> {
     }
     Ok(json!({"manifest":manifest,"extension_point":request.extension_point}))
 }
+
+/// Resolve a registered extension and pass its manifest snapshot to a trusted host callback.
+///
+/// The registry lock is released before the callback runs. Registration changes
+/// after resolution do not invalidate the snapshot. The host selects the callable
+/// and owns its input and output contract.
+pub fn invoke_registered_extension(
+    selection: &Value,
+    input: &Value,
+    callback: impl FnOnce(&Value, &Value) -> Result<Value, &'static str>,
+) -> Result<Value, &'static str> {
+    let resolved = resolve(selection)?;
+    callback(&resolved, input)
+}

@@ -3025,6 +3025,27 @@ fn extension_registry_rejects_duplicate_registration_without_replacement() {
         resolve("1", "dataset_provider")["error"]["message"],
         "extension does not declare the requested extension point"
     );
+    let selection =
+        json!({"name":"registry-fixture","expected_version":"1","extension_point":"diagnostics"});
+    let input = json!({"value":42});
+    let invoked =
+        innovate_core::invoke_registered_extension(&selection, &input, |resolved, input| {
+            assert_eq!(
+                resolved["manifest"],
+                resolve("1", "diagnostics")["result"]["manifest"]
+            );
+            assert_eq!(resolved["extension_point"], "diagnostics");
+            Ok(input.clone())
+        });
+    assert_eq!(invoked, Ok(input.clone()));
+    let mut stale = selection;
+    stale["expected_version"] = json!("2");
+    assert!(
+        innovate_core::invoke_registered_extension(&stale, &input, |_, _| {
+            panic!("invalid selection invoked the callback")
+        })
+        .is_err()
+    );
     let remove = |version| {
         run(
             "unregister_extension_manifest",

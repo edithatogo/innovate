@@ -5680,3 +5680,10 @@ Hosted release readiness for this worktree revision remains open.
   for a consumer and rejects stale, missing and undeclared selections.
   Both Rust extension boundary tests passed after reclaiming generated
   Python debug libraries for linking. Callable execution remains open.
+
+- [x] Invoke a trusted Rust host callback using the validated extension
+  selection and manifest snapshot. The callback runs after the registry
+  lock is released, as verified by resolving the manifest again inside
+  the callback. A stale selection never invokes it. Both Rust extension
+  boundary tests passed. Binding callback APIs and per-point payload
+  contracts remain open.

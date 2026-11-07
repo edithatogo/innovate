@@ -13,6 +13,7 @@ mod dataset;
 mod events;
 mod explainability;
 mod extensions;
+pub use extensions::invoke_registered_extension;
 mod fitting;
 mod forcing;
 mod hierarchical;
