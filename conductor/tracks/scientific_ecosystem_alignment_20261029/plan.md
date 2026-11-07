@@ -4593,3 +4593,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Qualify partial caliper matching through rebuilt Python 3.15.2,
   Julia and installed R. Each returned matched_subset_att of 2 and
   excluded index 3, while the same request in strict mode failed.
+
+- [x] Propagate supplied independent outcome variances through fixed
+  matched pairs. The focused Rust fixture verifies sqrt(4.5) when two
+  treated rows share a control. Binding and broader inference remain open.

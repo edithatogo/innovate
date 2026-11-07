@@ -55,7 +55,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                  "estimands":["ate","att"],"default_estimand":"ate",
                  "uncertainty":"fixed_propensity_standard_error"},
                 {"method":"matched_treatment_contrast","adjustment":"nearest_score_with_replacement",
-                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":["allow_partial"],
+                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":["allow_partial","outcome_variances"],
                  "estimands":["att"],"default_estimand":"att"}
             ]
         })),
@@ -754,7 +754,13 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     if fields.keys().any(|key| {
         !matches!(
             key.as_str(),
-            "method" | "outcomes" | "treatment" | "scores" | "caliper" | "allow_partial"
+            "method"
+                | "outcomes"
+                | "treatment"
+                | "scores"
+                | "caliper"
+                | "allow_partial"
+                | "outcome_variances"
         )
     }) {
         return Err("matched contrast received an unsupported field");
@@ -766,6 +772,15 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     let outcomes = series(payload, "outcomes")?;
     let treatment = series(payload, "treatment")?;
     let scores = series(payload, "scores")?;
+    let outcome_variances = fields
+        .contains_key("outcome_variances")
+        .then(|| series(payload, "outcome_variances"))
+        .transpose()?;
+    if outcome_variances.as_ref().is_some_and(|values| {
+        values.len() != outcomes.len() || values.iter().any(|&variance| variance < 0.)
+    }) {
+        return Err("outcome variances must be nonnegative and align with outcomes");
+    }
     let caliper = payload["caliper"]
         .as_f64()
         .filter(|&v| v >= 0.)
@@ -783,6 +798,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     let mut pairs = Vec::new();
     let mut unmatched_treated_indices = Vec::new();
     let mut control_uses = std::collections::BTreeMap::<usize, usize>::new();
+    let mut treated_error = 0_f64;
     for i in (0..scores.len()).filter(|&i| treatment[i] == 1.) {
         let right = controls.partition_point(|&j| scores[j] < scores[i]);
         let nearest = right
@@ -802,6 +818,9 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
         };
         differences.push(finite(outcomes[i] - outcomes[control])?);
         *control_uses.entry(control).or_default() += 1;
+        if let Some(variances) = &outcome_variances {
+            treated_error = treated_error.hypot(variances[i].sqrt());
+        }
         pairs.push(json!({"treated_index":i,"control_index":control,"distance":distance}));
     }
     let estimate =
@@ -815,9 +834,18 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
         .values()
         .map(|&count| (count as f64 / pairs.len() as f64).powi(2))
         .sum::<f64>();
+    let conditional_standard_error = outcome_variances.map(|variances| {
+        let n = pairs.len() as f64;
+        control_uses
+            .iter()
+            .fold(treated_error / n, |error, (&index, &count)| {
+                error.hypot(count as f64 / n * variances[index].sqrt())
+            })
+    });
     Ok(
         json!({"method":"nearest_score_with_replacement","estimand":estimand,"estimate":estimate,"pairs":pairs,
             "unmatched_treated_indices":unmatched_treated_indices,
+            "conditional_standard_error":conditional_standard_error,
             "control_diagnostics":{"unique_controls":control_uses.len(),
             "effective_sample_size":1. / squared_control_weights}}),
     )

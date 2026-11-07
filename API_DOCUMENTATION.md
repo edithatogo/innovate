@@ -268,3 +268,9 @@ observations that match within the caliper. If any treated observations
 are dropped, the result labels the estimand `matched_subset_att` and
 lists their zero-based indices in `unmatched_treated_indices`. At least
 one match is required.
+
+Supply aligned, nonnegative `outcome_variances` to obtain a
+conditional standard error for independent outcomes with the matched
+pairs held fixed. Each reused control contributes its variance times
+the square of its total weight. Without supplied variances the field
+is null. This calculation conditions on the matching design.

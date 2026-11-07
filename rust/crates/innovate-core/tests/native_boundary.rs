@@ -697,7 +697,12 @@ fn causal_summaries_match_analytic_effects() {
     );
     let mut reused = matched.clone();
     reused["scores"][3] = json!(2);
+    reused["outcome_variances"] = json!([1, 4, 1, 1, 1]);
     let result = run(reused);
+    let error = result["result"]["conditional_standard_error"]
+        .as_f64()
+        .unwrap();
+    assert!((error - 4.5_f64.sqrt()).abs() < 1e-12);
     assert_eq!(
         result["result"]["control_diagnostics"]["unique_controls"],
         1
