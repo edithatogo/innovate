@@ -966,3 +966,13 @@ and broader independent qualification of automatic forced fits remain open.
   available one-sided difference when one probe fails, while preserving
   central differences in the interior. Full core tests and Clippy passed.
   [Validation logs](evidence/norton-automatic-starts-20261107).
+
+## Automatic starts for forced competition models
+
+- [x] Extend native competition fit starts to declared covariate slopes. (a5d2926d)
+
+The shared competition solver uses its existing base starts with zero
+covariate slopes when no explicit start is supplied. The independent
+interacting Lotka–Volterra case converges below RSS 1e-10. All 14 competition
+tests and focused Clippy passed. Independent automatic-start validation for
+the other competition models and installed binding checks remain open.
