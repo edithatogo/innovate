@@ -59,6 +59,7 @@ struct Change {
     tick: u64,
     edges: Option<Vec<[usize; 2]>>,
     edge_weights: Option<Vec<f64>>,
+    agent_service_ticks: Option<Vec<u64>>,
     service_ticks: Option<u64>,
     agent_priorities: Option<Vec<i32>>,
     capacity: Option<u64>,
@@ -265,7 +266,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         .imitation_multipliers
         .clone()
         .unwrap_or_else(|| vec![1.; o.population]);
-    let service = o
+    let mut service = o
         .agent_service_ticks
         .clone()
         .unwrap_or_else(|| vec![o.service_ticks; o.population]);
@@ -340,6 +341,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 || (change.edges.is_none()
                     && (change.edge_weights.is_some()
                         || (change.service_ticks.is_none()
+                            && change.agent_service_ticks.is_none()
                             && change.capacity.is_none()
                             && change.agent_priorities.is_none()
                             && change.max_queue_length.is_none()
@@ -357,6 +359,10 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                     .flatten()
                     .any(|values| !valid_multipliers(values))
                 || change.agent_priorities.as_ref().is_some_and(|values| values.len() != o.population)
+                || change.agent_service_ticks.as_ref().is_some_and(|values| {
+                    change.service_ticks.is_some() || values.len() != o.population
+                        || values.iter().any(|ticks| !(1..=1_000_000_000_000).contains(ticks))
+                })
                 || change.capacity.is_some_and(|cap| cap > o.population as u64)
                 || change.max_wait_ticks.flatten().is_some_and(|wait| !(1..=1_000_000_000_000).contains(&wait))
                 || change.max_queue_length.flatten().is_some_and(|limit| limit > o.population)
@@ -617,6 +623,9 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             }
             if change.service_ticks.is_some() {
                 service_override = change.service_ticks;
+            } else if let Some(values) = &change.agent_service_ticks {
+                service.clone_from(values);
+                service_override = None;
             }
             capacity = change.capacity.unwrap_or(capacity);
             max_wait_ticks = change.max_wait_ticks.unwrap_or(max_wait_ticks);

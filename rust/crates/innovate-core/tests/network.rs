@@ -715,3 +715,35 @@ fn scheduled_priorities_reorder_waiters_without_preempting_service() {
     payload["simulation_options"]["schedule"][0]["agent_priorities"] = json!([10]);
     assert!(kernel.simulate_model("bass", payload).is_err());
 }
+
+#[test]
+fn scheduled_agent_durations_replace_scalar_override_at_admission() {
+    let mut payload = json!({
+        "inputs":{"time":[0.,6.,20.]},
+        "parameters":{"p":1e12,"q":0.,"m":3.},
+        "simulation_options":{"engine":"kairos_network","population":3,"seed":42,
+            "edges":[],"capacity":1,"service_ticks":5,"ticks_per_unit":1,
+            "schedule":[{"tick":2,"service_ticks":9},{"tick":4,"agent_service_ticks":[2,3,4]}]}
+    });
+    let kernel = KernelBinding::new();
+    let result = kernel
+        .simulate_model("bass", payload.clone())
+        .unwrap()
+        .result
+        .unwrap();
+    let durations = [2, 3, 4];
+    let mut tick = 6;
+    for index in 0..3 {
+        let agent = result["requests"][index]["agent"].as_u64().unwrap() as usize;
+        if index > 0 {
+            tick += durations[agent];
+        }
+        assert_eq!(
+            result["completions"][index],
+            json!({"agent":agent,"tick":tick})
+        );
+    }
+    assert!(result["metadata"]["service_override_ticks"].is_null());
+    payload["simulation_options"]["schedule"][1]["service_ticks"] = json!(4);
+    assert!(kernel.simulate_model("bass", payload).is_err());
+}

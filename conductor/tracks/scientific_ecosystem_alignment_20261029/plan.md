@@ -2751,3 +2751,10 @@ the other competition models and installed binding checks remain open.
   Promote the later waiter at tick 4 and restore equal priority at tick 5.
   The Rust regression reproduces the original completion order and
   records both applied schedule ticks.
+
+- [x] Schedule per-agent Kairos service durations for future admissions.
+  A scheduled vector supersedes a previous scalar override. Reject a
+  schedule entry that supplies both. The regression checks that active
+  service retains its completion time and queued agents use the new
+  durations. All 25 Rust network tests and focused Clippy passed.
+  Binding verification remains open.
