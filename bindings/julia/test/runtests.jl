@@ -594,7 +594,14 @@ end
     @test weighted["required_fields"] == ["outcomes", "treatment", "propensities"]
     payload = Dict("method"=>weighted["method"], "outcomes"=>[0,10,2,12],
         "treatment"=>[0,0,1,1], "propensities"=>[0.2,0.8,0.2,0.8])
-    @test kernel_call("summarize_causal", nothing, payload)["result"]["estimate"] ≈ -4
+    result = kernel_call("summarize_causal", nothing, payload)["result"]
+    @test result["estimate"] ≈ -4
+    for arm in ("treated", "control")
+        diagnostics = result["weight_diagnostics"][arm]
+        @test diagnostics["observations"] == 2
+        @test diagnostics["maximum_normalized_weight"] ≈ 0.8
+        @test diagnostics["effective_sample_size"] ≈ 25/17
+    end
     payload["propensities"][1] = 0
     @test_throws r"strictly between zero and one" kernel_call("summarize_causal", nothing, payload)
 end

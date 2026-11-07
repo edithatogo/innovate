@@ -4536,3 +4536,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Add per-arm weight concentration diagnostics for propensity
   weighting. The focused Rust fixture verified two observations,
   maximum normalized weight 0.8 and effective sample size 25/17.
+
+- [x] Verify propensity weight concentration across rebuilt Python 3.15.2,
+  Julia and installed R. Each returned 0.8 for the largest normalized
+  weight and 25/17 for effective sample size in both arms.

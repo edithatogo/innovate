@@ -1331,7 +1331,13 @@ def test_discover_treatment_contrasts():
     assert weighted["required_fields"] == ["outcomes", "treatment", "propensities"]
     payload = dict(method=weighted["method"], outcomes=[0, 10, 2, 12],
                    treatment=[0, 0, 1, 1], propensities=[0.2, 0.8, 0.2, 0.8])
-    assert innovate.execute("summarize_causal", **payload)["result"]["estimate"] == pytest.approx(-4)
+    result = innovate.execute("summarize_causal", **payload)["result"]
+    assert result["estimate"] == pytest.approx(-4)
+    for arm in ("treated", "control"):
+        diagnostics = result["weight_diagnostics"][arm]
+        assert diagnostics["observations"] == 2
+        assert diagnostics["maximum_normalized_weight"] == pytest.approx(0.8)
+        assert diagnostics["effective_sample_size"] == pytest.approx(25 / 17)
     payload["propensities"][0] = 0
     with pytest.raises(innovate.NativeError, match="strictly between zero and one"):
         innovate.execute("summarize_causal", **payload)
