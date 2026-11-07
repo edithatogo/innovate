@@ -4087,3 +4087,8 @@ Hosted release readiness for this worktree revision remains open.
   comparison error while retaining all executions. The focused Rust
   regression verifies the selected effect against analytic Logistic
   output. Installed binding qualification for this option remains open.
+- [x] Verify selected-time paired ensembles in the rebuilt Python
+  3.15.2 wheel, Julia and installed R against native source 925da465.
+  All reported time 2 by default, effects [50, 50] at selected time 1,
+  and an invalid comparison at off-grid time 1.5 with all four
+  executions preserved. Python Arrow readback preserved row status.
