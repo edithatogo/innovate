@@ -652,3 +652,13 @@ changes and remaining historical forcing are still open.
 Source: 55c6331c. Nine focused Rust network tests, 39 Python
 tests, 177 Julia assertions and R conformance passed. Capacity changes, priority,
 abandonment, forcing interoperability and historical model extensions remain open.
+
+## Kairos resource priorities
+
+- [x] Integrate native priority service with FIFO ties and no preemption.
+- [x] Verify queue order and Python, Julia and R payloads.
+
+Source: 947546ab. Ten focused Rust tests, 39 installed Python
+tests, 178 Julia assertions and R conformance passed. Abandonment and capacity
+changes remain open. The pinned Kairos RenegingQueue is separate from
+PriorityResource and requires an explicit integration for wait expiry.
