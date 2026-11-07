@@ -1305,6 +1305,12 @@ def test_native_stratified_treatment_contrast(estimand, estimate, weight):
     assert result["estimate"] == pytest.approx(estimate)
     assert result["by_stratum"]["low"]["weight"] == pytest.approx(weight)
     assert result["conditional_standard_error"] is None
+    assert result["by_stratum"]["low"]["treated_fraction"] == pytest.approx(1 / 3)
+    if estimand == "att":
+        with_control_only = {**payload, "strata": ["control_only", *payload["strata"][1:]]}
+        overlap = innovate.execute("summarize_causal", **with_control_only)["result"]
+        assert overlap["excluded_control_observations"] == 1
+        assert overlap["estimate"] == pytest.approx(estimate)
     replicated = innovate.execute(
         "summarize_causal", method="stratified_treatment_contrast", estimand=estimand,
         outcomes=[0, 2, 4, 6, 10, 10, 12, 12], treatment=[0, 0, 1, 1] * 2,

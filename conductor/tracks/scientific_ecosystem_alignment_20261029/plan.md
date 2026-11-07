@@ -4520,3 +4520,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Report treated fractions in included strata and count controls
   excluded from the ATT target population. The focused Rust causal
   boundary test passed.
+
+- [x] Verify overlap diagnostics in Python 3.15.2, Julia and installed R.
+  All three returned a treated fraction of 1/3 and counted one excluded
+  control without changing the ATT. The focused causal tests passed.

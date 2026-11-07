@@ -568,6 +568,13 @@ end
         result = kernel_call("summarize_causal", nothing, payload)["result"]
         @test result["estimate"] ≈ estimate
         @test result["by_stratum"]["low"]["weight"] ≈ weight
+        @test result["by_stratum"]["low"]["treated_fraction"] ≈ 1/3
+        if estimand == "att"
+            with_control_only = merge(payload, Dict("strata"=>vcat("control_only", payload["strata"][2:end])))
+            overlap = kernel_call("summarize_causal", nothing, with_control_only)["result"]
+            @test overlap["excluded_control_observations"] == 1
+            @test overlap["estimate"] ≈ estimate
+        end
         @test haskey(result, "conditional_standard_error") && isnothing(result["conditional_standard_error"])
         replicated = merge(payload, Dict("outcomes"=>[0,2,4,6,10,10,12,12],
             "treatment"=>repeat([0,0,1,1],2), "strata"=>repeat(["low","high"],inner=4)))

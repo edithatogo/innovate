@@ -534,6 +534,13 @@ for (estimand in c("ate", "att")) {
   contrast <- kernel_call("summarize_causal", payload=stratified)$result
   stopifnot(isTRUE(all.equal(contrast$estimate, estimate)),
     isTRUE(all.equal(contrast$by_stratum$low$weight, weight)))
+  stopifnot(isTRUE(all.equal(contrast$by_stratum$low$treated_fraction, 1/3)))
+  if (estimand == "att") {
+    with_control_only <- stratified
+    with_control_only$strata[1] <- "control_only"
+    overlap <- kernel_call("summarize_causal", payload=with_control_only)$result
+    stopifnot(overlap$excluded_control_observations == 1, isTRUE(all.equal(overlap$estimate, estimate)))
+  }
   stopifnot("conditional_standard_error" %in% names(contrast), is.null(contrast$conditional_standard_error))
   replicated <- modifyList(stratified, list(outcomes=c(0,2,4,6,10,10,12,12),
     treatment=rep(c(0,0,1,1), 2), strata=rep(c("low","high"), each=4)))
