@@ -2259,3 +2259,7 @@ the other competition models and installed binding checks remain open.
   the combined determinism flag. Missing flags count as false and
   nonboolean flags are rejected. All 49 Rust boundary tests and focused
   Clippy passed. Installed binding qualification remains open.
+
+- [x] Qualify all four explainability summaries and ordered report
+  composition in the rebuilt Python 3.15 wheel, Julia and installed R.
+  The complete combined report matched across the three bindings.
