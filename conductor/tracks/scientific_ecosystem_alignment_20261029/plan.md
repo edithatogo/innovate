@@ -6274,3 +6274,8 @@ Hosted release readiness for this worktree revision remains open.
   reject a result when any used fold-stratum training arm is too
   small, without dropping strata or changing the estimand. The Rust
   boundary test verified default parity and both rejection cases.
+
+- [x] Verify the cross-fitted training-arm guard through rebuilt Python,
+  Julia and installed R. Both estimands returned the default result
+  with an explicit minimum of one and the same insufficient-support
+  diagnostic with a minimum of two on the asymmetric fixture.
