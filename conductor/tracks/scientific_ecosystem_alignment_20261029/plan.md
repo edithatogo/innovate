@@ -6315,3 +6315,8 @@ Hosted release readiness for this worktree revision remains open.
   trial of the Python coverage study. The independent design returned
   null, the 80-cluster design returned 79, and the 10-cluster design
   returned nine. All three reproduced their prior coverage counts.
+
+- [x] Verify Julia and installed R return one cluster degree of
+  freedom for two clusters and explicit null without clustering,
+  for both cross-fitted ATE and ATT. This complements the Python
+  coverage-study readback.
