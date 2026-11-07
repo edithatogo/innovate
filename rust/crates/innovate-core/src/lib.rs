@@ -189,7 +189,10 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
                     .and_then(|n| usize::try_from(n).ok())
                     .ok_or("seasonal decomposition requires integer period and window")
             };
-            return seasonal::decompose(&values, integer("period")?, integer("window")?);
+            let robust = payload
+                .get("robust")
+                .map_or(Ok(false), |v| v.as_bool().ok_or("robust must be boolean"))?;
+            return seasonal::decompose(&values, integer("period")?, integer("window")?, robust);
         }
         let window = match payload["method"].as_str() {
             Some("cumulative_sum") => None,

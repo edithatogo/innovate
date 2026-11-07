@@ -1332,3 +1332,10 @@ the other competition models and installed binding checks remain open.
   and R. All rebuilt consumers recover the analytic trend, seasonal and
   residual components within 1e-10. Python returns a Polars frame.
   Robust reweighting and full historical STL option parity remain open.
+
+- [x] Add opt-in robust seasonal reweighting at the Rust JSON boundary.
+  Bisquare residual weights affect both phase and trend smoothers.
+  The analytic outlier fixture keeps a 100-unit spike in the residual
+  within 0.1. All 16 native boundary tests and focused Clippy passed.
+- [ ] Expose and verify robust mode in Python, Julia and R, and qualify
+  historical STL option parity against an independent reference.

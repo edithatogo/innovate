@@ -267,3 +267,19 @@ fn seasonal_decomposition_recovers_linear_trend_and_periodic_signal() {
         assert!(result["residual"][i].as_f64().unwrap().abs() < 1e-10);
     }
 }
+
+#[test]
+fn robust_seasonal_decomposition_keeps_an_outlier_in_the_residual() {
+    let pattern = [-3., 2., 1., 0.];
+    let mut values: Vec<_> = (0..80)
+        .map(|i| 10. + i as f64 * 0.5 + pattern[i % 4])
+        .collect();
+    values[40] += 100.;
+    let request = innovate_core::json!({
+        "schema_version":"2.0","operation":"preprocess_series",
+        "payload":{"method":"seasonal_decomposition","period":4,"window":13,"values":values,"robust":true}
+    });
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert!((response["result"]["residual"][40].as_f64().unwrap() - 100.).abs() < 0.1);
+}
