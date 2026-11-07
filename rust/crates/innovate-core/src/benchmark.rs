@@ -1,7 +1,7 @@
 //! Reproducible synthetic smoke corpus and native fit/forecast runner.
 use serde_json::{Value, json};
 
-const CASES: [(&str, &str, &str); 9] = [
+const CASES: [(&str, &str, &str); 10] = [
     ("bass_smoke_adoption", "bass", "diffusion"),
     ("logistic_growth_smoke", "logistic", "diffusion"),
     ("fisher_pry_replacement_smoke", "fisher_pry", "substitution"),
@@ -23,19 +23,24 @@ const CASES: [(&str, &str, &str); 9] = [
     ),
     ("policy_hazard_reference", "policy_hazard", "policy_hazard"),
     ("policy_hazard_fit", "policy_hazard", "policy_hazard"),
+    (
+        "latent_process_reference",
+        "latent_process",
+        "latent_process",
+    ),
 ];
 
 fn ci_policy(family: &str) -> &'static str {
     match family {
         "competition" => "scheduled",
-        "network_diffusion" | "policy_hazard" => "workflow_dispatch",
+        "network_diffusion" | "policy_hazard" | "latent_process" => "workflow_dispatch",
         _ => "fast",
     }
 }
 
 fn case_descriptor(id: &str, model: &str, family: &str) -> Value {
     json!({"case_id":id,"canonical_model_key":model,"family":family,
-        "dataset_version":match model {"lock_in"=>"native-lock-in-1","network_diffusion"=>"native-network-1","policy_hazard"=>"native-policy-1",_=>"2026.04"},"source":"synthetic","ci_policy":ci_policy(family)})
+        "dataset_version":match model {"lock_in"=>"native-lock-in-1","network_diffusion"=>"native-network-1","policy_hazard"=>"native-policy-1","latent_process"=>"native-latent-1",_=>"2026.04"},"source":"synthetic","ci_policy":ci_policy(family)})
 }
 
 fn discover() -> Value {
@@ -58,6 +63,29 @@ fn run_case(id: &str) -> Result<Value, String> {
         .iter()
         .find(|case| case.0 == id)
         .ok_or("unknown benchmark case")?;
+    if id == "latent_process_reference" {
+        let time = [0_f64, 1., 2., 3., 4., 5., 6.];
+        let mut maximum = 0_f64;
+        let observed: Vec<_> = time
+            .iter()
+            .zip([2., 2., -1., -4., 1., 6., 6.])
+            .map(|(&t, offset)| {
+                maximum = maximum.max(100. / (1. + (-0.5 * (t - 3.)).exp()) + offset);
+                maximum
+            })
+            .collect();
+        return fixed_prediction(
+            id,
+            model,
+            family,
+            json!({
+                "inputs":{"time":time},
+                "constructor_kwargs":{"base_model":"logistic","latent_time":[1.,3.,5.],"latent_values":[2.,-4.,6.]},
+                "parameters":{"base_L":100.,"base_k":0.5,"base_x0":3.,"latent_smoothing":0.3,"latent_noise":2.}
+            }),
+            json!(observed),
+        );
+    }
     if id == "policy_hazard_fit" {
         let time: Vec<f64> = (0..26).map(f64::from).collect();
         let observed: Vec<_> = time
@@ -261,7 +289,7 @@ fn suite(payload: &Value) -> Result<Value, String> {
             let entries = value
                 .as_array()
                 .filter(|entries| !entries.is_empty() && entries.len() <= CASES.len())
-                .ok_or("case_ids must contain one to nine case IDs")?;
+                .ok_or("case_ids must contain one to ten case IDs")?;
             entries
                 .iter()
                 .map(|entry| {

@@ -1593,9 +1593,9 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
     };
     let discovery = run("discover_benchmark_cases", json!({}));
     let cases = discovery["result"]["cases"].as_array().unwrap();
-    assert_eq!(cases.len(), 9);
+    assert_eq!(cases.len(), 10);
     let suite = run("run_benchmark_suite", json!({"workers":2}));
-    assert_eq!(suite["result"]["succeeded"], 9, "{suite}");
+    assert_eq!(suite["result"]["succeeded"], 10, "{suite}");
     assert_eq!(suite["result"]["failed"], 0);
     let rows = suite["result"]["runs"].as_array().unwrap();
     for (case, row) in cases.iter().zip(rows) {
@@ -1681,7 +1681,10 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
                 result["fit"]["base_diagnostics"]["optimizer"]["converged"],
                 true
             );
-        } else if row["case_id"] == "policy_hazard_reference" {
+        } else if matches!(
+            row["case_id"].as_str(),
+            Some("policy_hazard_reference" | "latent_process_reference")
+        ) {
             assert!(result["fit"].is_null());
             for (actual, expected) in result["prediction"]["values"]
                 .as_array()
@@ -1722,7 +1725,7 @@ fn benchmark_validation_resolves_all_historical_case_references() {
         serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
     let report = &response["result"];
     assert_eq!(report["ok"], true);
-    assert_eq!(report["summary"]["case_count"], 9);
+    assert_eq!(report["summary"]["case_count"], 10);
     assert_eq!(
         report["model_card_summaries"]["bass"]["freshness"]["status"],
         "current"

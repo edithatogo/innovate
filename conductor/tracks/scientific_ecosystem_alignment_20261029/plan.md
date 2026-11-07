@@ -2385,3 +2385,9 @@ the other competition models and installed binding checks remain open.
   Complete fit and forecast results agreed across bindings. Decay stayed
   at 0.3 and the base fit converged. The maximum absolute trajectory error
   over 26 samples was 2.796e-12.
+
+- [x] Add a fixed-parameter latent-process benchmark and link it to the
+  native card. The analytic reference checks residual interpolation,
+  endpoint extension and cumulative adoption across seven samples. Five
+  focused Rust tests and Clippy passed. Binding and latent fitting
+  benchmark qualification remain open.
