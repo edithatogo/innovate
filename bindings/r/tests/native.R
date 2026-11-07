@@ -226,3 +226,13 @@ nb_result <- kernel_predict_model("norton_bass",nb_payload)$result
 nb_forecast <- kernel_predict_model("norton_bass",list(inputs=list(time=3),state=nb_result$state))$result
 stopifnot(abs(nb_result$rows[[3]][[1]]-30*exp(-0.3))<1e-5,abs(nb_forecast$rows[[1]][[1]]-50*exp(-0.5))<1e-5)
 cat("R Norton Bass forcing history passed\n")
+
+lv_fixture <- jsonlite::fromJSON("rust/crates/innovate-core/tests/fixtures/lotka_forcing_scipy.json",simplifyVector=FALSE)
+lv_start <- lv_fixture$parameters
+lv_start$alpha1 <- 0.29
+lv_start$beta_beta1_price <- -0.025
+lv_payload <- list(inputs=list(time=unlist(lv_fixture$time),observed=lv_fixture$rows,covariates=list(price=unlist(lv_fixture$covariates$price))),constructor_kwargs=list(initial_values=unlist(lv_fixture$initial),covariates="price"),fit_options=list(initial_parameters=lv_start,max_iterations=150))
+lv_fit <- kernel_fit_model("lotka_volterra",lv_payload)$result
+lv_forecast <- kernel_predict_model("lotka_volterra",list(inputs=list(time=unlist(lv_fixture$forecast_time)),state=lv_fit$state))$result
+stopifnot(lv_fit$diagnostics$optimizer$converged,max(abs(unlist(lv_forecast$rows)-unlist(lv_fixture$forecast_rows)))<1e-5)
+cat("R interacting Lotka forcing fit and history passed\n")

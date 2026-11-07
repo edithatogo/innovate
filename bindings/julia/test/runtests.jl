@@ -242,3 +242,15 @@ end
     forecast=kernel_predict_model("norton_bass",Dict("inputs"=>Dict("time"=>[3.]),"state"=>result["state"]))["result"]
     @test isapprox(forecast["rows"][1][1],50*exp(-0.5);atol=1e-5)
 end
+
+@testset "Interacting Lotka forcing fit and history" begin
+    fixture=Innovate.JSON.parsefile(joinpath(@__DIR__,"../../../rust/crates/innovate-core/tests/fixtures/lotka_forcing_scipy.json");dicttype=Dict{String,Any})
+    start=copy(fixture["parameters"])
+    start["alpha1"]=0.29
+    start["beta_beta1_price"]=-0.025
+    payload=Dict("inputs"=>Dict("time"=>fixture["time"],"observed"=>fixture["rows"],"covariates"=>fixture["covariates"]),"constructor_kwargs"=>Dict("initial_values"=>fixture["initial"],"covariates"=>["price"]),"fit_options"=>Dict("initial_parameters"=>start,"max_iterations"=>150))
+    fit=kernel_fit_model("lotka_volterra",payload)["result"]
+    @test fit["diagnostics"]["optimizer"]["converged"]
+    forecast=kernel_predict_model("lotka_volterra",Dict("inputs"=>Dict("time"=>fixture["forecast_time"]),"state"=>fit["state"]))["result"]
+    @test maximum(abs.(forecast["rows"][1].-fixture["forecast_rows"][1]))<1e-5
+end

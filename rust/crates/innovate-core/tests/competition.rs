@@ -203,3 +203,112 @@ fn competitive_fit_reports_limits_and_rejects_invalid_data() {
         assert_eq!(e.code, "invalid_request");
     }
 }
+
+#[test]
+fn lotka_volterra_forcing_matches_integrated_logistic_growth_and_saved_history() {
+    let request = json!({
+        "inputs":{"time":[0.,1.,2.],"covariates":{"price":[0.,1.,2.]}},
+        "parameters":{"alpha1":0.2,"beta1":0.,"alpha2":0.1,"beta2":0.,
+            "beta_alpha1_price":0.1,"beta_beta1_price":0.,
+            "beta_alpha2_price":-0.02,"beta_beta2_price":0.},
+        "constructor_kwargs":{"initial_values":[0.1,0.2],"covariates":["price"]}
+    });
+    let result = KernelBinding::new()
+        .predict_model("lotka_volterra", request)
+        .unwrap()
+        .result
+        .unwrap();
+    let expected = 1. / (1. + 9. * (-0.6_f64).exp());
+    assert!((result["rows"][2][0].as_f64().unwrap() - expected).abs() < 1e-8);
+    assert!(
+        (result["rates"][2][0].as_f64().unwrap() - 0.4 * expected * (1. - expected)).abs() < 1e-8
+    );
+    let forecast = KernelBinding::new()
+        .predict_model(
+            "lotka_volterra",
+            json!({
+                "inputs":{"time":[3.]},"state":result["state"]
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    assert!(
+        (forecast["rows"][0][0].as_f64().unwrap() - 1. / (1. + 9. * (-1.0_f64).exp())).abs() < 1e-8
+    );
+    assert!(
+        KernelBinding::new()
+            .predict_model(
+                "lotka_volterra",
+                json!({
+                    "inputs":{"time":[1.],"covariates":{"price":[0.]}}, "state":result["state"]
+                })
+            )
+            .is_err()
+    );
+}
+
+#[test]
+fn interacting_lotka_forcing_fits_independent_reference_and_forecasts() {
+    let fixture: Value =
+        serde_json::from_str(include_str!("fixtures/lotka_forcing_scipy.json")).unwrap();
+    let options = json!({"covariates":["price"],"initial_values":fixture["initial"]});
+    let payload = json!({"inputs":{"time":fixture["time"],"covariates":fixture["covariates"]},
+        "parameters":fixture["parameters"],"constructor_kwargs":options});
+    let binding = KernelBinding::new();
+    let prediction = binding
+        .predict_model("lotka_volterra", payload)
+        .unwrap()
+        .result
+        .unwrap();
+    for quantity in ["rows", "rates"] {
+        for (actual, expected) in prediction[quantity]
+            .as_array()
+            .unwrap()
+            .iter()
+            .zip(fixture[quantity].as_array().unwrap())
+        {
+            for (actual, expected) in actual
+                .as_array()
+                .unwrap()
+                .iter()
+                .zip(expected.as_array().unwrap())
+            {
+                assert!((actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-6);
+            }
+        }
+    }
+    let mut start = fixture["parameters"].clone();
+    start["alpha1"] = json!(0.29);
+    start["beta_beta1_price"] = json!(-0.025);
+    let fit = binding.fit_model("lotka_volterra",json!({
+        "inputs":{"time":fixture["time"],"covariates":fixture["covariates"],"observed":fixture["rows"]},
+        "constructor_kwargs":options,"fit_options":{"initial_parameters":start,"max_iterations":150}
+    })).unwrap().result.unwrap();
+    assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
+    assert!(fit["diagnostics"]["metrics"]["RSS"].as_f64().unwrap() < 1e-10);
+    assert_eq!(fit["parameters"].as_object().unwrap().len(), 8);
+    let forecast = binding
+        .predict_model(
+            "lotka_volterra",
+            json!({
+                "inputs":{"time":fixture["forecast_time"]},"state":fit["state"]
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    for (actual, expected) in forecast["rows"][0]
+        .as_array()
+        .unwrap()
+        .iter()
+        .zip(fixture["forecast_rows"][0].as_array().unwrap())
+    {
+        assert!((actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-5);
+    }
+    let missing_start = binding.fit_model("lotka_volterra",json!({
+        "inputs":{"time":fixture["time"],"covariates":fixture["covariates"],"observed":fixture["rows"]},
+        "constructor_kwargs":options
+    }));
+    assert!(missing_start.is_err());
+}

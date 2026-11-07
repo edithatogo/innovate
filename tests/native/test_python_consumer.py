@@ -530,3 +530,33 @@ def test_norton_bass_covariate_history():
     )["result"]
     assert result["rows"][2] == pytest.approx([100 * 0.3 * math.exp(-0.3), 100 * (1 - math.exp(-0.3))], abs=1e-5)
     assert forecast["rows"][0][0] == pytest.approx(50 * math.exp(-0.5), abs=1e-5)
+
+
+def test_lotka_forcing_polars_fit_and_forecast():
+    fixture = json.loads(
+        (Path(__file__).parents[2] / "rust/crates/innovate-core/tests/fixtures/lotka_forcing_scipy.json").read_text()
+    )
+    data = pl.DataFrame(
+        {
+            "time": fixture["time"],
+            "price": fixture["covariates"]["price"],
+            "first": [row[0] for row in fixture["rows"]],
+            "second": [row[1] for row in fixture["rows"]],
+        }
+    )
+    start = dict(fixture["parameters"], alpha1=0.29, beta_beta1_price=-0.025)
+    fitted = innovate.fit(
+        "lotka_volterra",
+        data,
+        observed_columns=["first", "second"],
+        model_options={"initial_values": fixture["initial"], "covariates": ["price"]},
+        fit_options={"initial_parameters": start, "max_iterations": 150},
+    )
+    assert fitted.diagnostics["optimizer"]["converged"]
+    forecast = innovate.execute(
+        "predict_model",
+        "lotka_volterra",
+        inputs={"time": fixture["forecast_time"]},
+        state=fitted.envelope["result"]["state"],
+    )["result"]
+    assert forecast["rows"][0] == pytest.approx(fixture["forecast_rows"][0], abs=1e-5)

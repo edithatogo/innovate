@@ -780,3 +780,25 @@ complete `initial_parameters`, including every beta coefficient. The
 `successive_generations` variant still requires its original unforced controls.
 Event splits, automatic forcing-fit initialization, uncertainty and broader
 independent fitting qualification remain open.
+
+### Historical Lotka–Volterra covariates
+
+The two-technology model accepts declared `covariates` with coefficients
+`beta_alpha1_price`, `beta_beta1_price`, `beta_alpha2_price` and
+`beta_beta2_price` for a control named `price`. Each control adds to the four
+base rates using linear interpolation and endpoint holds. Signed control
+effects and effective rates preserve the historical equations. Base rates
+remain nonnegative. Shares are integrated without output clipping.
+
+Provide an explicit `initial_time` and `initial_values`, or fit conditionally on
+the first observed row. A saved `covariate_history` must cover that initial time.
+The returned prediction `state` carries the history into later requests. New
+control knots may extend it, while overlapping values must agree with the saved
+history. The Python Polars fit path accepts declared controls as frame columns.
+Conditional fitting requires a complete named `initial_parameters` map. Each
+fit reports local identifiability and conditions on the forcing and initial state.
+
+The independent reference uses SciPy DOP853 with every control knot split into
+its own integration interval. Event splits, automatic forcing initialization,
+weighted fits, initial-state uncertainty and broader scientific qualification
+remain required work.

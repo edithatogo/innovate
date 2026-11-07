@@ -1,4 +1,5 @@
 //! Native competitive diffusion equations preserved from the pre-migration models.
+use crate::mechanistic::History;
 use crate::numerics::{integrate, least_squares};
 use crate::validation::{numeric_array, numeric_array_from_aliases, object_section, required_f64};
 use crate::{
@@ -10,6 +11,9 @@ struct Model {
     key: String,
     n: usize,
     names: Vec<String>,
+    base_count: usize,
+    covariates: Vec<String>,
+    history: Option<History>,
     origin: f64,
     initial: Vec<f64>,
     conditioned_initial: bool,
@@ -31,6 +35,10 @@ impl Model {
         if self.key == "multi_product" {
             out["n_products"] = json!(self.n);
         }
+        if let Some(history) = &self.history {
+            out["covariates"] = json!(self.covariates);
+            out["covariate_history"] = json!(history);
+        }
         out
     }
     fn parameters(&self, v: &Value, op: KernelOperation) -> Result<Vec<f64>, KernelBindingError> {
@@ -43,9 +51,9 @@ impl Model {
                 "parameters must match the model's complete named parameter set",
             ));
         }
-        self.names.iter().map(|name| {
+        self.names.iter().enumerate().map(|(index, name)| {
             let x = required_f64(p,name,op)?;
-            if !x.is_finite() || x < 0. || (name.starts_with('m') && x == 0.) {
+            if !x.is_finite() || (index < self.base_count && (x < 0. || (name.starts_with('m') && x == 0.))) {
                 return Err(invalid(op,"rates/interactions must be nonnegative; market potentials must be positive"));
             }
             Ok(x)
@@ -60,7 +68,28 @@ impl Model {
                 .collect(),
         )
     }
-    fn derivative(&self, y: &[f64], p: &[f64]) -> Vec<f64> {
+    fn derivative(&self, t: f64, y: &[f64], parameters: &[f64]) -> Vec<f64> {
+        if let Some(history) = &self.history {
+            let mut effective = parameters[..self.base_count].to_vec();
+            for (name, coefficients) in self
+                .covariates
+                .iter()
+                .zip(parameters[self.base_count..].chunks_exact(self.base_count))
+            {
+                let value = history.at(name, t);
+                for (parameter, coefficient) in effective.iter_mut().zip(coefficients) {
+                    *parameter += coefficient * value;
+                }
+            }
+            if effective.iter().any(|value| !value.is_finite()) {
+                return vec![f64::NAN; self.n];
+            }
+            self.base_derivative(y, &effective)
+        } else {
+            self.base_derivative(y, parameters)
+        }
+    }
+    fn base_derivative(&self, y: &[f64], p: &[f64]) -> Vec<f64> {
         if self.key == "lock_in" {
             let m = p[6];
             let a = y[0].clamp(0., m);
@@ -96,9 +125,26 @@ impl Model {
             .collect()
     }
     fn predict(&self, time: &[f64], p: &[f64]) -> Result<Vec<Vec<f64>>, String> {
-        let mut rows = integrate(time, self.origin, &self.initial, |_, y| {
-            self.derivative(y, p)
+        let mut grid = time.to_vec();
+        if let Some(history) = &self.history {
+            let end = *time.last().ok_or("time must not be empty")?;
+            grid.extend(
+                history
+                    .time
+                    .iter()
+                    .copied()
+                    .filter(|t| *t > self.origin && *t < end),
+            );
+            grid.sort_by(f64::total_cmp);
+            grid.dedup_by(|a, b| *a == *b);
+        }
+        let states = integrate(&grid, self.origin, &self.initial, |t, y| {
+            self.derivative(t, y, p)
         })?;
+        let mut rows: Vec<_> = time
+            .iter()
+            .map(|t| states[grid.partition_point(|v| v < t)].clone())
+            .collect();
         if self.key == "lock_in" {
             for x in rows.iter_mut().flatten() {
                 *x = x.clamp(0., p[6]);
@@ -107,7 +153,11 @@ impl Model {
         Ok(rows)
     }
     fn prediction(&self, time: &[f64], p: &[f64], rows: &[Vec<f64>]) -> Result<Value, String> {
-        let rates: Vec<_> = rows.iter().map(|y| self.derivative(y, p)).collect();
+        let rates: Vec<_> = time
+            .iter()
+            .zip(rows)
+            .map(|(&t, y)| self.derivative(t, y, p))
+            .collect();
         if rows.iter().chain(&rates).flatten().any(|x| !x.is_finite()) {
             return Err("prediction exceeded the finite numerical domain".into());
         }
@@ -146,14 +196,43 @@ fn model(
         .unwrap_or(&empty)
         .as_object()
         .ok_or_else(|| invalid(op, "constructor_kwargs must be an object"))?;
-    if kw.iter().any(|(k, v)| {
-        !(["n_products", "initial_time", "initial_values"].contains(&k.as_str())
-            || (k == "covariates" && v.as_array().is_some_and(Vec::is_empty)))
-    }) || inputs.contains_key("covariates")
-    {
+    if kw.keys().any(|key| {
+        ![
+            "n_products",
+            "initial_time",
+            "initial_values",
+            "covariates",
+            "covariate_history",
+        ]
+        .contains(&key.as_str())
+    }) {
         return Err(KernelBindingError::unsupported_native_operation(
             op,
-            "competitive covariates, events and custom options remain migration obligations",
+            "unknown competitive option",
+        ));
+    }
+    let covariates: Vec<String> = kw
+        .get("covariates")
+        .map(|value| {
+            serde_json::from_value(value.clone())
+                .map_err(|_| invalid(op, "covariates must be an array of names"))
+        })
+        .transpose()?
+        .unwrap_or_default();
+    let unique: std::collections::HashSet<_> = covariates.iter().collect();
+    if covariates.len() > 32
+        || unique.len() != covariates.len()
+        || covariates.iter().any(|name| name.trim().is_empty())
+    {
+        return Err(invalid(
+            op,
+            "covariates must contain at most 32 distinct nonempty names",
+        ));
+    }
+    if key != "lotka_volterra" && (!covariates.is_empty() || kw.contains_key("covariate_history")) {
+        return Err(KernelBindingError::unsupported_native_operation(
+            op,
+            "forcing is currently supported for Lotka Volterra only",
         ));
     }
     if ["lotka_volterra", "complementary_goods", "lock_in"].contains(&key.as_str())
@@ -268,7 +347,7 @@ fn model(
             "initial_values must match the model dimensions and nonnegative domain (shares <=1)",
         ));
     }
-    let names = if key == "lock_in" {
+    let mut names: Vec<String> = if key == "lock_in" {
         [
             "alpha1", "alpha2", "beta1", "beta2", "gamma1", "gamma2", "m",
         ]
@@ -299,10 +378,28 @@ fn model(
         }
         names
     };
+    let base_count = names.len();
+    for name in &covariates {
+        for index in 0..base_count {
+            names.push(format!("beta_{}_{}", names[index], name));
+        }
+    }
+    let history = kw
+        .get("covariate_history")
+        .map(|value| {
+            serde_json::from_value(value.clone())
+                .map_err(|_| invalid(op, "invalid covariate_history"))
+        })
+        .transpose()?;
+    let history = History::merge(history, &covariates, time, inputs.get("covariates"), origin)
+        .map_err(|e| invalid(op, e))?;
     Ok(Model {
         key,
         n,
         names,
+        base_count,
+        covariates,
+        history,
         origin,
         initial,
         conditioned_initial,
@@ -348,7 +445,9 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
             .names
             .iter()
             .map(|name| {
-                if name.starts_with('m') {
+                if name.starts_with("beta_") {
+                    1.
+                } else if name.starts_with('m') {
                     yscale
                 } else if name.starts_with("alpha_") {
                     1.
@@ -372,7 +471,14 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
             p.iter()
                 .zip(&scales)
                 .zip(&offsets)
-                .map(|((p, s), offset)| ((p - offset) / s).max(1e-12).ln())
+                .enumerate()
+                .map(|(index, ((p, s), offset))| {
+                    if index >= model.base_count {
+                        *p / s
+                    } else {
+                        ((p - offset) / s).max(1e-12).ln()
+                    }
+                })
                 .collect::<Vec<_>>()
         };
         let untransform = |theta: &[f64]| {
@@ -380,7 +486,14 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
                 .iter()
                 .zip(&scales)
                 .zip(&offsets)
-                .map(|((t, s), offset)| t.exp() * s + offset)
+                .enumerate()
+                .map(|(index, ((t, s), offset))| {
+                    if index >= model.base_count {
+                        t * s
+                    } else {
+                        t.exp() * s + offset
+                    }
+                })
                 .collect::<Vec<_>>()
         };
         let (initial, limit) = crate::fitting::options(request)?;
@@ -395,7 +508,17 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
             }
             starts.push(transform(parameters));
         }
-        for rate in [0.5, 2., 5.] {
+        if model.history.is_some() && starts.is_empty() {
+            return Err(invalid(
+                op,
+                "covariate fitting requires complete initial_parameters",
+            ));
+        }
+        for rate in if model.history.is_none() {
+            &[0.5, 2., 5.][..]
+        } else {
+            &[]
+        } {
             let p = model
                 .names
                 .iter()
@@ -465,6 +588,10 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
         op,
         KernelOperation::PredictModel | KernelOperation::SimulateModel
     ) {
+        let mut predictions = predictions;
+        if model.history.is_some() {
+            predictions["state"] = state;
+        }
         predictions
     } else {
         let mut r = json!({"model_key":model.key,"model_name":model.name(),"family":"competition","parameters":parameters,"state":state,"predictions":predictions});
