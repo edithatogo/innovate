@@ -6957,3 +6957,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Apply the native calendar output limit to occupied weekly
   buckets for date and timestamp requests. The shared accumulator
   rejects a new bucket past 100,000. Both focused Rust tests passed.
+
+- [x] Verify the weekly cap counts distinct buckets. At 100,000
+  buckets, a duplicate observation still adds to the original sum.
+  A new bucket at the same observation count fails. Both Rust
+  calendar tests passed.

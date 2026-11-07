@@ -201,6 +201,13 @@ mod tests {
         let dates: Vec<_> = (0..=MAX_PERIODS)
             .map(|week| first.checked_add_days(Days::new(week as u64 * 7)).unwrap())
             .collect();
+        let mut at_limit = dates[..MAX_PERIODS].to_vec();
+        at_limit.push(first);
+        let result = aggregate_dates(at_limit, vec![1.; MAX_PERIODS + 1], "W", 1).unwrap();
+        let values = result["values"].as_array().unwrap();
+        assert_eq!(values.len(), MAX_PERIODS);
+        assert_eq!(values[0], 2.);
+        assert_eq!(values[MAX_PERIODS - 1], 1.);
         assert_eq!(
             aggregate_dates(dates, vec![1.; MAX_PERIODS + 1], "W", 1),
             Err("calendar output exceeds 100000 periods")
