@@ -2865,3 +2865,8 @@ the other competition models and installed binding checks remain open.
   rebuilt Python 3.15 wheel. Trial 0 converged at baseline and counted
   one nonconverged refit. Trial 81 reported baseline damping_limit and
   all 100 case refits converged. Failure categories summed to each total.
+
+- [x] Verify noisy scalar bootstrap diagnostics in Julia and installed R
+  against Python 3.15. Both trials reproduced the full Python result
+  exactly, including baseline termination, failed-refit categories,
+  parameter draws and intervals. R used raw JSON.
