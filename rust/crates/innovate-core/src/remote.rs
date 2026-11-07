@@ -74,13 +74,23 @@ pub(crate) fn execute(payload: &Value) -> Result<Value, &'static str> {
             "remote execution identifiers must fit in 256 bytes and exclude control characters",
         );
     }
-    let raw = bounded_kernel_json(&payload["kernel_request"])?;
+    let kernel_request = &payload["kernel_request"];
+    let fields = kernel_request.as_object().ok_or("invalid kernel request")?;
+    if fields.keys().any(|key| {
+        !matches!(
+            key.as_str(),
+            "schema_version" | "operation" | "model_key" | "payload" | "metadata"
+        )
+    }) {
+        return Err("remote kernel request contains unsupported fields");
+    }
+    let raw = bounded_kernel_json(kernel_request)?;
     let request: KernelRequest =
         serde_json::from_slice(&raw).map_err(|_| "invalid kernel request")?;
     if request.schema_version != KERNEL_SCHEMA_VERSION {
         return Err("remote kernel request requires schema 2.0");
     }
-    let operation = &payload["kernel_request"]["operation"];
+    let operation = &kernel_request["operation"];
     let denial = if context.auth_scope != REQUIRED_SCOPE {
         Some("remote execution auth_scope does not satisfy the local policy")
     } else if context

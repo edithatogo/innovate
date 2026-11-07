@@ -6388,3 +6388,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Retain Julia and R regression coverage for the distinct-cluster
   guard and cluster degrees of freedom. Both focused suite sections
   passed for ATE and ATT against the rebuilt shared library.
+
+- [x] Reject unknown fields in the nested remote kernel request so
+  unsupported controls such as timeout_ms are not silently discarded.
+  The Rust boundary test passed for this rejection, valid prediction,
+  scope denial and operation denial. Hosted transport remains open.

@@ -3346,6 +3346,12 @@ fn in_process_remote_dispatch_applies_scope_and_operation_policy() {
         run(&malformed)["error"]["message"],
         "remote envelope contains unsupported fields"
     );
+    let mut unknown_kernel_field = request.clone();
+    unknown_kernel_field["payload"]["kernel_request"]["timeout_ms"] = json!(500);
+    assert_eq!(
+        run(&unknown_kernel_field)["error"]["message"],
+        "remote kernel request contains unsupported fields"
+    );
     request["payload"]["context"]["auth_scope"] = json!("read");
     assert_eq!(run(&request)["result"]["status"], "error");
     request["payload"]["context"]["auth_scope"] = json!("kernel:execute");
