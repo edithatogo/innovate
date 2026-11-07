@@ -331,3 +331,8 @@ Supply aligned string `clusters` to use independent-cluster inference
 for the augmented contrast. The standard error sums influence scores
 within clusters and applies the G/(G−1) variance correction for G
 clusters. At least two clusters are required. The estimate is unchanged.
+
+The cross-fitted stratum methods also accept `clusters`. Every
+cluster must belong to one fold so its outcomes stay together during
+training and validation. The augmented contrast then uses the same
+cluster labels for its standard error.

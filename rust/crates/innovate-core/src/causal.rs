@@ -63,10 +63,10 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                  "optional_fields":["estimand","clusters"],"estimands":["ate","att"],"default_estimand":"ate",
                  "uncertainty":"influence_standard_error"},
                 {"method":"cross_fitted_stratum_ate","adjustment":"cross_fitted_strata",
-                 "required_fields":["outcomes","treatment","strata","folds"],"optional_fields":[],
+                 "required_fields":["outcomes","treatment","strata","folds"],"optional_fields":["clusters"],
                  "estimands":["ate"],"default_estimand":"ate"},
                 {"method":"cross_fitted_stratum_att","adjustment":"cross_fitted_strata",
-                 "required_fields":["outcomes","treatment","strata","folds"],"optional_fields":[],
+                 "required_fields":["outcomes","treatment","strata","folds"],"optional_fields":["clusters"],
                  "estimands":["att"],"default_estimand":"att"}
             ]
         })),
@@ -1119,6 +1119,19 @@ fn cross_fitted_stratum_contrast(payload: &Value, estimand: &str) -> Result<Valu
     if !(2..=32).contains(&labels.len()) {
         return Err("cross fitting requires two to 32 folds");
     }
+    if let Some(clusters) = payload.get("clusters") {
+        let clusters: Vec<String> = serde_json::from_value(clusters.clone())
+            .map_err(|_| "clusters must contain string labels")?;
+        if clusters.len() != n || clusters.iter().any(|label| label.trim().is_empty()) {
+            return Err("cluster labels must be nonblank and align with outcomes");
+        }
+        let mut cluster_folds = std::collections::BTreeMap::new();
+        for (cluster, &fold) in clusters.iter().zip(&folds) {
+            if *cluster_folds.entry(cluster).or_insert(fold) != fold {
+                return Err("each cluster must belong to a single cross-fitting fold");
+            }
+        }
+    }
     let mut propensities = vec![0.; n];
     let mut treated_predictions = vec![0.; n];
     let mut control_predictions = vec![0.; n];
@@ -1155,6 +1168,9 @@ fn cross_fitted_stratum_contrast(payload: &Value, estimand: &str) -> Result<Valu
     });
     if estimand == "ate" {
         request["treated_predictions"] = json!(treated_predictions);
+    }
+    if let Some(clusters) = payload.get("clusters") {
+        request["clusters"] = clusters.clone();
     }
     let contrast = augmented_treatment_contrast(&request)?;
     Ok(

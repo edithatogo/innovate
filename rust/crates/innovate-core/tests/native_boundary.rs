@@ -728,6 +728,20 @@ fn causal_summaries_match_analytic_effects() {
         json!([4., 6., 6., 4.])
     );
     assert_eq!(result["result"]["contrast"]["estimate"], 4.);
+    cross_fitted["clusters"] = json!(["a", "b", "b", "a"]);
+    let result = run(cross_fitted.clone());
+    assert_eq!(result["result"]["contrast"]["cluster_count"], 2);
+    assert!(
+        (result["result"]["contrast"]["influence_standard_error"]
+            .as_f64()
+            .unwrap()
+            - 2.)
+            .abs()
+            < 1e-12
+    );
+    cross_fitted["clusters"] = json!(["a", "a", "b", "b"]);
+    assert!(run(cross_fitted.clone())["result"].is_null());
+    cross_fitted.as_object_mut().unwrap().remove("clusters");
     cross_fitted["folds"] = json!([1, 2, 1, 2]);
     assert!(run(cross_fitted)["result"].is_null());
     let mut heterogeneous = json!({"method":"cross_fitted_stratum_att",
