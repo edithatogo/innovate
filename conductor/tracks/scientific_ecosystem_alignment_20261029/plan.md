@@ -6184,3 +6184,10 @@ Hosted release readiness for this worktree revision remains open.
   contained the Kairos replay and SARIMA fixtures and the updated
   tabular and binding sources. The extracted consumer suite passed
   against the wheel. This was a local macOS arm64 source-package check.
+
+- [x] Inspect the clean-source wheel's macOS binary metadata. The
+  cp315-cp315-macosx_11_0_arm64 tag matches the extension's declared
+  Mach-O minimum macOS 11.0. Its dynamic dependencies are Apple system
+  libraries and frameworks, with no build-directory dependency paths.
+  The binary was built with SDK 27.2. Runtime validation on macOS 11
+  and hosted platform acceptance remain open.
