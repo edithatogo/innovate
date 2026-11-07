@@ -4428,3 +4428,6 @@ Hosted release readiness for this worktree revision remains open.
   pytest configuration consolidation. All 101 tests passed under
   Python 3.15.2 using the rebuilt extension in an isolated import
   directory, including policy and benchmark receipt tests.
+- [x] Run the locked Rust native boundary suite at dcd670c1 after
+  scenario and ingestion changes. All 81 tests passed, including
+  artifact replay, resource comparisons and edgeless ingestion.
