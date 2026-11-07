@@ -2961,3 +2961,8 @@ the other competition models and installed binding checks remain open.
   Logistic capacity bounds [96.1097257, 103.8902743] matched independent
   cumulative-mass quantiles. R used raw JSON. Joint interval binding
   verification and MCMC remain open.
+
+- [x] Verify joint Bayesian marginal intervals in Python 3.15, Julia and
+  installed R. All three returned identical results on the 5-by-7 grid.
+  Independently summing rows and columns reproduced the 95% bounds
+  [92,108] for L and [0.2714285714,0.8428571429] for k. R used raw JSON.
