@@ -4409,3 +4409,6 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify ingestion retains self-loop edges and regenerates their
   Kairos compatibility warning when re-ingesting the checksummed
   artifact. The focused Rust edge test passed.
+- [x] Allow aligned empty edge columns for edgeless graphs. The Rust
+  ingestion regression verifies checksum replay and rejects unequal
+  column lengths. Node identity still comes from the scenario.

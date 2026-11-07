@@ -3097,3 +3097,28 @@ fn resource_comparison_requires_resource_outputs_from_both_scenarios() {
     assert_eq!(reopening["waiting_at_horizon"], 1);
     assert_eq!(reopening["in_service_at_horizon"], 2);
 }
+
+#[test]
+fn edgeless_dataset_ingests_and_replays() {
+    let dataset = json!({"kind":"network_edges","source":[],"target":[],"weight":[],"directed":false,
+        "provenance":{"source":"synthetic","license":"CC-BY-4.0","extraction_time":"2026-11-07T00:00:00Z"}});
+    let run = |payload| {
+        let request =
+            json!({"schema_version":"2.0","operation":"ingest_dataset","payload":payload});
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    let response = run(json!({"dataset":dataset}));
+    assert!(response["error"].is_null(), "{response}");
+    let artifact = &response["result"];
+    assert_eq!(artifact["dataset"]["source"], json!([]));
+    assert_eq!(run(json!({"artifact":artifact}))["result"], *artifact);
+    let mut misaligned = dataset;
+    misaligned["target"] = json!(["a"]);
+    assert_eq!(
+        run(json!({"dataset":misaligned}))["error"]["validation"]["failed"][0],
+        "column_alignment"
+    );
+}

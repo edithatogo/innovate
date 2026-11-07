@@ -307,12 +307,7 @@ fn validate_keyed(payload: &Value, kind: &str) -> Result<Value, &'static str> {
 }
 
 fn validate_edges(payload: &Value) -> Result<Value, &'static str> {
-    let column = |key: &str| {
-        payload[key]
-            .as_array()
-            .filter(|v| !v.is_empty())
-            .ok_or("edge columns must be nonempty arrays")
-    };
+    let column = |key: &str| payload[key].as_array().ok_or("edge columns must be arrays");
     let source = column("source")?;
     let target = column("target")?;
     let weights = column("weight")?;
