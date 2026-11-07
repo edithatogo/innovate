@@ -38,6 +38,15 @@ jobs:
       - run: cargo fmt --all --check
       - run: uv run --no-sync ruff check bindings/python tests/native noxfile.py scripts/check_migration.py scripts/run_native_benchmarks.py scripts/check_benchmark_shards.py
       - run: uv run --no-sync basedpyright
+      - name: Verify native boundary tests from source distribution
+        if: matrix.os == 'ubuntu-latest' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+        shell: bash
+        run: |
+          staging="$(mktemp -d)"
+          uv run --no-sync maturin sdist --out "$staging"
+          tar -xzf "$staging"/*.tar.gz -C "$staging"
+          cd "$staging"/innovate-*/
+          cargo test --locked -p innovate-core --test native_boundary -j 2
       - name: Run scheduled native benchmarks
         id: native-benchmarks
         if: matrix.os == 'ubuntu-latest' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')

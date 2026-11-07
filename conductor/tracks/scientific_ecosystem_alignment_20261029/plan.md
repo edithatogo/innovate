@@ -4151,3 +4151,7 @@ Hosted release readiness for this worktree revision remains open.
   required by the Rust boundary tests in the source distribution.
   A fresh extraction built the locked test target in its own target
   directory and passed the selected SARIMA and STL tests.
+- [x] Run all 79 native boundary tests from the clean source extraction
+  and add the same locked check to scheduled and manually dispatched
+  Linux CI. The local suite and actionlint passed. Hosted execution of
+  the workflow remains open.
