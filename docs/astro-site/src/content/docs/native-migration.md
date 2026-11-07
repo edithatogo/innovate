@@ -1320,6 +1320,36 @@ seeds, `require_distinct_pair_seeds` can check for matching effective
 seeds within pairs and distinct seeds across pairs. The study design
 must still justify sign exchangeability.
 
+## Check treatment overlap in cross-fitted contrasts
+
+Use `cross_fitted_stratum_ate` or `cross_fitted_stratum_att` with
+outcomes, binary treatment indicators, stratum labels and fold IDs.
+For clustered observations, pass cluster labels and assign every
+observation in a cluster to the same fold.
+
+```python
+from innovate import execute
+
+result = execute(
+    "summarize_causal",
+    method="cross_fitted_stratum_ate",
+    outcomes=[1, 2, 3, 4, 5, 6],
+    treatment=[0, 0, 1, 0, 1, 1],
+    strata=["a"] * 6,
+    folds=[1, 1, 1, 2, 2, 2],
+    minimum_training_arm_count=1,
+)["result"]
+print(result["overlap"])
+```
+
+This returns a minimum training-arm count of one and held-out
+propensities ranging from one third to two thirds. The default minimum
+is one. Raising it to two rejects this request because a held-out
+stratum relies on a training arm with one observation. The guard
+rejects the full estimate without dropping any strata. Choose the
+minimum as part of the analysis design. A passing guard establishes
+only that the requested count was met.
+
 ## Counterfactual forecasts with parameter events
 
 Use the `counterfactual_forecast` method of `summarize_causal` to
