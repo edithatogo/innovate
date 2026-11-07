@@ -6683,3 +6683,8 @@ Hosted release readiness for this worktree revision remains open.
   duration at tick 8. All 693 mixed-fixture replays matched the full
   uninterrupted result in the Rust network test. The 693 unscheduled
   cases also passed. Binding readback of the mixed fixture remains open.
+
+- [x] Verify the combined continuous-hazard and scheduled-resource
+  fixture through Python 3.15.2, Julia and installed R. Each matched
+  693 complete resumed results against uninterrupted runs. Reused
+  the 4947d6b4 builds after confirming unchanged native build inputs.
