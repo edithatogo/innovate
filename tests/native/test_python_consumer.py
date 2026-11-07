@@ -1378,5 +1378,9 @@ def test_nearest_score_matching():
     reused = innovate.execute("summarize_causal", **{**payload, "scores": [0, 2, 2, 2, 0]})["result"]
     assert reused["control_diagnostics"] == {"unique_controls": 1, "effective_sample_size": 1}
     payload["caliper"] = 0.5
+    partial = innovate.execute("summarize_causal", **payload, allow_partial=True)["result"]
+    assert partial["estimand"] == "matched_subset_att"
+    assert partial["estimate"] == pytest.approx(2)
+    assert partial["unmatched_treated_indices"] == [3]
     with pytest.raises(innovate.NativeError, match="requires a control within the caliper"):
         innovate.execute("summarize_causal", **payload)

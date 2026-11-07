@@ -4589,3 +4589,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Add opt-in caliper matching for the supported treated subset.
   The focused Rust fixture preserves strict default rejection, returns
   a subset estimate of 2 and reports excluded treated index 3.
+
+- [x] Qualify partial caliper matching through rebuilt Python 3.15.2,
+  Julia and installed R. Each returned matched_subset_att of 2 and
+  excluded index 3, while the same request in strict mode failed.

@@ -603,5 +603,9 @@ reused <- kernel_call("summarize_causal",
 stopifnot(reused$control_diagnostics$unique_controls == 1,
   reused$control_diagnostics$effective_sample_size == 1)
 matching_payload$caliper <- 0.5
+partial <- kernel_call("summarize_causal",
+  payload=c(matching_payload, list(allow_partial=TRUE)))$result
+stopifnot(identical(partial$estimand, "matched_subset_att"),
+  partial$estimate == 2, identical(as.numeric(unlist(partial$unmatched_treated_indices)), 3))
 matching_error <- tryCatch({kernel_call("summarize_causal", payload=matching_payload); ""}, error=conditionMessage)
 stopifnot(grepl("requires a control within the caliper", matching_error, fixed=TRUE))

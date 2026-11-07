@@ -637,5 +637,9 @@ end
     reused = kernel_call("summarize_causal", nothing, merge(payload, Dict("scores"=>[0,2,2,2,0])))["result"]
     @test reused["control_diagnostics"] == Dict("unique_controls"=>1, "effective_sample_size"=>1)
     payload["caliper"] = 0.5
+    partial = kernel_call("summarize_causal", nothing, merge(payload, Dict("allow_partial"=>true)))["result"]
+    @test partial["estimand"] == "matched_subset_att"
+    @test partial["estimate"] ≈ 2
+    @test partial["unmatched_treated_indices"] == [3]
     @test_throws r"requires a control within the caliper" kernel_call("summarize_causal", nothing, payload)
 end
