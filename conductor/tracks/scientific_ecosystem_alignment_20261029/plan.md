@@ -3700,3 +3700,7 @@ Hosted release readiness for this worktree revision remains open.
   counterfactual forecasts and reject mismatched row counts.
   The causal Rust boundary fixture checks both result shapes.
   Formatting and focused Clippy passed.
+- [x] Verify the returned prediction grid through Python 3.15.2,
+  Julia and freshly installed R using native source 188d6f3d.
+  All three returned times 1 and 2 and two aligned rows for each
+  Lotka–Volterra trajectory. Scalar grid coverage remains in Rust.
