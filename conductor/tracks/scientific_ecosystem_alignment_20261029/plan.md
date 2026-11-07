@@ -6058,3 +6058,7 @@ Hosted release readiness for this worktree revision remains open.
   an annotated Utf8View becomes LargeUtf8 with the annotation, Unicode
   value and null intact. All 11 tabular tests passed. The binary branch
   still needs its own runtime fixture.
+
+- [x] Exercise BinaryView to LargeBinary in the Rust IPC round-trip
+  fixture. The test verifies the field annotation, non-UTF-8 bytes
+  and null through file and stream rewrites.

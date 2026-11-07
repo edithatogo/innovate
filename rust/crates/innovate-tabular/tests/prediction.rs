@@ -254,7 +254,8 @@ fn ipc_rewrite_keeps_annotations_for_compatible_field_types() {
     let values = Series::new("".into(), [Some(1_i32), None]);
     let frame = df!("duration" => [Some(1_i32), None],
         "samples" => Series::new("samples".into(), [Some(values), None]),
-        "label" => [Some("β"), None])
+        "label" => [Some("β"), None],
+        "payload" => [Some(&[0, 255, 128][..]), None])
     .unwrap();
     let compat = CompatLevel::newest();
     let mut schema = frame.schema().to_arrow(compat);
@@ -263,6 +264,12 @@ fn ipc_rewrite_keeps_annotations_for_compatible_field_types() {
     *field = field.clone().with_metadata(metadata());
     let label = schema.get_mut("label").unwrap();
     *label = label.clone().with_metadata(metadata());
+    let payload = schema.get_mut("payload").unwrap();
+    assert_eq!(
+        payload.dtype,
+        polars_arrow::datatypes::ArrowDataType::BinaryView
+    );
+    *payload = payload.clone().with_metadata(metadata());
     let LargeList(item) = &mut schema.get_mut("samples").unwrap().dtype else {
         panic!("expected a large list");
     };
@@ -274,6 +281,12 @@ fn ipc_rewrite_keeps_annotations_for_compatible_field_types() {
             polars_arrow::datatypes::ArrowDataType::LargeUtf8
         );
         assert_eq!(label.metadata.as_deref(), Some(&metadata()));
+        let payload = schema.get("payload").unwrap();
+        assert_eq!(
+            payload.dtype,
+            polars_arrow::datatypes::ArrowDataType::LargeBinary
+        );
+        assert_eq!(payload.metadata.as_deref(), Some(&metadata()));
         assert_eq!(
             schema.get("duration").unwrap().metadata.as_deref(),
             Some(&metadata())
