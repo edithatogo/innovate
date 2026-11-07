@@ -3319,3 +3319,9 @@ the other competition models and installed binding checks remain open.
   all three fast cases and reported 65,863,680 bytes. This is the
   runner process high-water mark, including imports. Ruff passed.
   Linux runtime and scheduler-backed measurements remain open.
+
+- [x] Verify benchmark receipt memory unit conversion with injected
+  process counters. The runner converted 4,096 Linux KiB to 4,194,304
+  bytes, kept the same Darwin byte count, and emitted null for the
+  unsupported Windows counter. Each fixture ran the native fast suite.
+  Lima reported no local guest. Actual Linux and scheduler runs remain open.
