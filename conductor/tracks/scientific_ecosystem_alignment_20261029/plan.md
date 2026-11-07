@@ -5194,3 +5194,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Expose raw response selection on R's structured kernel call.
   A clean package install passed the focused regression and exported
   a paused scenario directly from its native JSON as Arrow IPC.
+
+- [x] Read back the Arrow file from the installed R structured
+  raw-response helper. Arrow recovered both scenario IDs, the true
+  and false completion flags, and exact decoded equality of every
+  exported execution field, including the opaque paused checkpoint.
