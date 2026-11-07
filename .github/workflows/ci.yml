@@ -61,6 +61,9 @@ jobs:
           git archive HEAD Dockerfile Cargo.toml Cargo.lock LICENSE rust |
             docker build --target remote-worker -t innovate-remote-worker:ci -
           test "$(docker image inspect --format '{{.Config.User}}' innovate-remote-worker:ci)" = 65532:65532
+          docker run --rm --network none --read-only --cap-drop ALL \
+            --entrypoint /bin/sh innovate-remote-worker:ci -ec \
+            "test -s /usr/local/share/doc/innovate/LICENSE && ! command -v python && ! command -v python3"
           worker=(docker run --rm -i --network none --read-only --cap-drop ALL innovate-remote-worker:ci)
           "${worker[@]}" --describe |
             jq -e '.result.worker_transport == "stdin_stdout" and .result.max_raw_envelope_bytes == 2000000'

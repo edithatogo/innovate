@@ -7439,3 +7439,7 @@ Hosted release readiness for this worktree revision remains open.
   containing only the Rust build inputs passed the locked local build
   and worker transport check using the existing debug cache. Hosted
   Linux release-image validation remains open.
+
+- [x] Check the worker image for the bundled licence and absence of
+  Python executables on PATH before the hosted native protocol tests.
+  Actionlint passed. Hosted container execution remains open.
