@@ -6977,3 +6977,8 @@ Hosted release readiness for this worktree revision remains open.
   tiny window contributions at a larger scale before rounding the
   result. The minimum positive binary64 value survives a two-sample
   constant window. Both focused Rust rolling tests passed.
+
+- [x] Verify the subnormal native JSON rolling average through the
+  rebuilt Python 3.15.2 wheel, Julia and installed R. All three
+  returned null, the smallest positive binary64 value, and zero
+  for the three fixture positions at c0f25c5c.
