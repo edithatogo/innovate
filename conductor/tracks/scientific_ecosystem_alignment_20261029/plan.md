@@ -2644,3 +2644,9 @@ the other competition models and installed binding checks remain open.
   outputs. R agreed within 1e-10 on coefficients, likelihood and all
   500 fitted and residual values. This verifies transport for the
   single near-cancellation series.
+
+- [x] Isolate the automatic-start gap to the tested forced competition
+  cases. At 200 iterations, the independent unforced multi-product and
+  lock-in fixtures converge without parameter starts, with RSS below
+  1e-10. The Python 3.15.2 probe and retained Rust regression passed.
+  The forced convergence and held-out forecast gates remain open.

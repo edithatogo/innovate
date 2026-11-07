@@ -686,3 +686,39 @@ fn weighted_competition_fit_excludes_all_outputs_on_a_zero_weight_row() {
             < 1e-10
     );
 }
+
+#[test]
+fn automatic_starts_converge_on_unforced_multi_product_and_lock_in() {
+    let multi: serde_json::Value =
+        serde_json::from_str(include_str!("fixtures/competitive_scipy.json")).unwrap();
+    let lock: serde_json::Value =
+        serde_json::from_str(include_str!("fixtures/lock_in_scipy.json")).unwrap();
+    for (model, reference, options) in [
+        (
+            "multi_product",
+            &multi["cases"]["multi_product"],
+            json!({"n_products":2}),
+        ),
+        ("lock_in", &lock, json!({"initial_values":lock["initial"]})),
+    ] {
+        let fit = KernelBinding::new()
+            .fit_model(
+                model,
+                json!({
+                    "inputs":{"time":reference["time"],"observed":reference["rows"]},
+                    "constructor_kwargs":options,"fit_options":{"max_iterations":200}
+                }),
+            )
+            .unwrap()
+            .result
+            .unwrap();
+        assert_eq!(
+            fit["diagnostics"]["optimizer"]["converged"], true,
+            "{model}"
+        );
+        assert!(
+            fit["diagnostics"]["metrics"]["RSS"].as_f64().unwrap() < 1e-10,
+            "{model}"
+        );
+    }
+}
