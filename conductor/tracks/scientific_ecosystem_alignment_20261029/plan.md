@@ -2638,3 +2638,9 @@ the other competition models and installed binding checks remain open.
   one converged. Rust agreed with it within 3.20e-5 on coefficients and
   1.20e-8 on log likelihood. Six focused Rust SARIMA tests passed.
   This qualifies one realized series, with broader optimizer coverage open.
+
+- [x] Qualify the near-cancellation fixture through the Python 3.15.2
+  wheel, Julia and installed R. Python and Julia returned identical
+  outputs. R agreed within 1e-10 on coefficients, likelihood and all
+  500 fitted and residual values. This verifies transport for the
+  single near-cancellation series.
