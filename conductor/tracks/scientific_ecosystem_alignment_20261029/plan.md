@@ -5701,3 +5701,9 @@ Hosted release readiness for this worktree revision remains open.
   Rust boundary tests verified valid artifact creation and rejection
   of missing provenance. All three Rust extension tests passed.
   Binding runtime qualification and other per-point contracts remain open.
+
+- [x] Verify dataset-provider callbacks with the same adoption fixture
+  through rebuilt Python, Julia and freshly installed R. Each returned
+  a valid dataset artifact with checksum
+  fada5d71f8981fa746be73b26de45ad470fa4e74f6a7d7a48234f4f50de0a76a
+  and rejected callback output without dataset provenance.
