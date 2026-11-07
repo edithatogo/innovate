@@ -5852,3 +5852,8 @@ Hosted release readiness for this worktree revision remains open.
   abandonments, balks and pending waiters. The corresponding event
   timestamps reproduced total wait ticks, including horizon-censored
   waits. The focused Rust network test passed.
+
+- [x] Verify saved Kairos occupied slot ticks and admitted waits against
+  the checkpoint service trace before resuming. The focused fixture
+  rejected plausible but inconsistent counter edits and still replayed
+  the original checkpoint. All 33 Rust network tests passed.

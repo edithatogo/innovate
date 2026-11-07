@@ -722,6 +722,28 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 "network checkpoint is incompatible with this simulation",
             ));
         }
+        let service_totals =
+            saved
+                .service_starts
+                .iter()
+                .try_fold((0_u128, 0_u128), |(occupied, wait), entry| {
+                    Some((
+                        occupied.checked_add(
+                            entry.scheduled_completion_tick.min(horizon) - entry.tick,
+                        )?,
+                        wait.checked_add(entry.wait_ticks)?,
+                    ))
+                });
+        if service_totals
+            != Some((
+                saved.metrics.occupied_slot_ticks,
+                saved.metrics.admitted_wait_ticks,
+            ))
+        {
+            return Err(invalid(
+                "checkpoint service trace does not match resource accounting",
+            ));
+        }
         for &tick in &saved.applied_ticks {
             let Some((expected, replacement, _)) = changes.next() else {
                 return Err(invalid("invalid checkpoint schedule cursor"));

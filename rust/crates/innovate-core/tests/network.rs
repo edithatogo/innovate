@@ -930,6 +930,8 @@ fn network_checkpoint_preserves_pending_service_queue_and_schedule() {
             json!([0, null, null, null, null, null]),
         ),
         ("metrics", "occupied_slot_ticks", json!(u64::MAX)),
+        ("metrics", "occupied_slot_ticks", json!(1)),
+        ("metrics", "admitted_wait_ticks", json!(1)),
     ] {
         let mut malformed = state.clone();
         malformed[section][field] = invalid;
