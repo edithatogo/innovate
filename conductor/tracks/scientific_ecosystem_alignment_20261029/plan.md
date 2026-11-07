@@ -5470,3 +5470,10 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify that Python, Julia and installed R preserve an insufficient
   score draw alongside a successful draw. All three returned estimate
   4 for the successful draw and an unset mixture standard deviation.
+
+- [x] Generate seeded score bootstrap draws in Rust by resampling
+  training observations within fold and treatment groups. Each draw
+  shares the resample across fits and retains held-out evaluation rows
+  for rematching. Ten focused Rust tests passed, including deterministic
+  replay, changing matches and mixture output. Binding verification and
+  empirical coverage calibration remain open.

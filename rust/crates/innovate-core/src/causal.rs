@@ -55,7 +55,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                  "estimands":["ate","att"],"default_estimand":"ate",
                  "uncertainty":"fixed_propensity_standard_error"},
                 {"method":"matched_treatment_contrast","adjustment":"nearest_score_with_replacement",
-                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":["allow_partial","outcome_variances","balance_covariates","control_predictions","outcome_covariance_factors","fit_controls","score_draws","score_refit_omit_indices"],
+                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":["allow_partial","outcome_variances","balance_covariates","control_predictions","outcome_covariance_factors","fit_controls","score_draws","score_refit_omit_indices","score_bootstrap"],
                  "estimands":["att"],"default_estimand":"att",
                  "partial_estimand":"matched_subset_att",
                  "uncertainty":"conditional_standard_error",
@@ -1366,6 +1366,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
                 | "fit_scores"
                 | "score_draws"
                 | "score_refit_omit_indices"
+                | "score_bootstrap"
                 | "caliper"
                 | "allow_partial"
                 | "outcome_variances"
@@ -1675,7 +1676,15 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
                 .collect::<Result<serde_json::Map<String, Value>, &'static str>>()
         })
         .transpose()?;
-    let score_sensitivity = if let Some(indices) = fields.get("score_refit_omit_indices") {
+    let score_sensitivity = if let Some(options) = fields.get("score_bootstrap") {
+        if fields.contains_key("score_draws") || fields.contains_key("score_refit_omit_indices") {
+            return Err("score_bootstrap cannot be combined with other score draws");
+        }
+        let fit = score_fit_payload
+            .as_ref()
+            .ok_or("score_bootstrap requires fit_scores")?;
+        Some(matching_score_bootstrap(fields, fit, options, &treatment)?)
+    } else if let Some(indices) = fields.get("score_refit_omit_indices") {
         if fields.contains_key("score_draws") {
             return Err("choose either score_draws or score_refit_omit_indices");
         }
@@ -1696,7 +1705,15 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
         }
         let draws = indices
             .iter()
-            .map(|&index| Ok(cross_fit_logistic_scores(fit, Some(index))?["propensities"].take()))
+            .map(|&index| {
+                Ok(
+                        cross_fit_logistic_scores(
+                            fit,
+                            (0..outcomes.len()).filter(|&i| i != index),
+                        )?["propensities"]
+                            .take(),
+                    )
+            })
             .collect::<Result<Vec<_>, &'static str>>()?;
         let mut sensitivity = matching_score_sensitivity(fields, &Value::Array(draws))?;
         sensitivity["method"] = json!("rematch_leave_one_out_score_refits");
@@ -1727,6 +1744,53 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     )
 }
 
+fn matching_score_bootstrap(
+    fields: &serde_json::Map<String, Value>,
+    fit: &Value,
+    options: &Value,
+    treatment: &[f64],
+) -> Result<Value, &'static str> {
+    use kairo_ecs_rng::{DeterministicStream, rand_distr::Uniform};
+    #[derive(serde::Deserialize)]
+    #[serde(deny_unknown_fields)]
+    struct Options {
+        draws: usize,
+        seed: u64,
+    }
+    let options: Options = serde_json::from_value(options.clone())
+        .map_err(|_| "score_bootstrap requires draws and a nonnegative integer seed")?;
+    if !(2..=128).contains(&options.draws) {
+        return Err("score_bootstrap requires two to 128 draws");
+    }
+    let mut groups = std::collections::BTreeMap::<_, Vec<_>>::new();
+    for (index, (fold, &arm)) in fit["folds"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .zip(treatment)
+        .enumerate()
+    {
+        groups
+            .entry((fold.as_u64().unwrap(), arm == 1.))
+            .or_default()
+            .push(index);
+    }
+    let mut rng = DeterministicStream::from_run_seed(options.seed);
+    let mut draws = Vec::with_capacity(options.draws);
+    for _ in 0..options.draws {
+        let mut training = Vec::with_capacity(treatment.len());
+        for group in groups.values() {
+            let index = Uniform::new(0, group.len()).unwrap();
+            training.extend((0..group.len()).map(|_| group[rng.sample(index)]));
+        }
+        draws.push(cross_fit_logistic_scores(fit, training)?["propensities"].take());
+    }
+    let mut sensitivity = matching_score_sensitivity(fields, &Value::Array(draws))?;
+    sensitivity["method"] = json!("rematch_fold_and_treatment_stratified_score_bootstrap");
+    sensitivity["seed"] = json!(options.seed);
+    Ok(sensitivity)
+}
+
 fn matching_score_sensitivity(
     fields: &serde_json::Map<String, Value>,
     value: &Value,
@@ -1737,6 +1801,7 @@ fn matching_score_sensitivity(
         .ok_or("score_draws requires two to 128 aligned score arrays")?;
     let mut draw_fields = fields.clone();
     draw_fields.remove("score_draws");
+    draw_fields.remove("score_bootstrap");
     draw_fields.remove("score_refit_omit_indices");
     draw_fields.remove("fit_scores");
     draw_fields.remove("balance_covariates");
@@ -1830,12 +1895,15 @@ fn logistic_probability(logit: f64) -> f64 {
 }
 
 fn cross_fit_logistic_propensities(payload: &Value) -> Result<Value, &'static str> {
-    cross_fit_logistic_scores(payload, None)
+    cross_fit_logistic_scores(
+        payload,
+        0..payload["treatment"].as_array().map_or(0, Vec::len),
+    )
 }
 
 fn cross_fit_logistic_scores(
     payload: &Value,
-    omit_training: Option<usize>,
+    training_indices: impl IntoIterator<Item = usize>,
 ) -> Result<Value, &'static str> {
     let treatment = series(payload, "treatment")?;
     let rows = payload["covariates"]
@@ -1850,13 +1918,20 @@ fn cross_fit_logistic_scores(
     if !(2..=32).contains(&labels.len()) {
         return Err("cross fitting requires two to 32 folds");
     }
+    let training_indices: Vec<_> = training_indices.into_iter().collect();
     let mut propensities = vec![0.; rows.len()];
     for label in &labels {
-        let (held_out, training): (Vec<_>, Vec<_>) =
-            (0..rows.len()).partition(|&index| folds[index] == *label);
+        let held_out: Vec<_> = (0..rows.len())
+            .filter(|&index| folds[index] == *label)
+            .collect();
+        let training: Vec<_> = training_indices
+            .iter()
+            .copied()
+            .filter(|&index| folds[index] != *label)
+            .collect();
         let fit = fit_logistic_propensities(&json!({
-            "treatment":training.iter().filter(|&&i| Some(i) != omit_training).map(|&i| treatment[i]).collect::<Vec<_>>(),
-            "covariates":training.iter().filter(|&&i| Some(i) != omit_training).map(|&i| &rows[i]).collect::<Vec<_>>(),
+            "treatment":training.iter().map(|&i| treatment[i]).collect::<Vec<_>>(),
+            "covariates":training.iter().map(|&i| &rows[i]).collect::<Vec<_>>(),
             "ridge":payload["ridge"],
         }))?;
         let predicted = predict_logistic_propensities(&json!({
@@ -2781,5 +2856,24 @@ mod tests {
         assert!(sensitivity["mixture_standard_deviation"].is_null());
         payload["score_draws"][1] = serde_json::json!([0]);
         assert!(matched_treatment_contrast(&payload).is_err());
+    }
+    #[test]
+    fn matching_bootstraps_training_scores_reproducibly() {
+        let payload = serde_json::json!({
+            "outcomes": [0, 4, 2, 6, 8, 12, 10, 14],
+            "treatment": [0, 1, 0, 1, 0, 1, 0, 1], "caliper": 1,
+            "fit_scores": {"covariates": [[0], [3], [2], [5], [1], [4], [3], [6]],
+                "folds": [1, 1, 1, 1, 2, 2, 2, 2], "ridge": 1},
+            "score_bootstrap": {"draws": 8, "seed": 17},
+            "outcome_variances": vec![1; 8]
+        });
+        let result = matched_treatment_contrast(&payload).unwrap();
+        assert_eq!(matched_treatment_contrast(&payload).unwrap(), result);
+        let sensitivity = &result["score_sensitivity"];
+        assert_eq!(sensitivity["seed"], 17);
+        let draws = sensitivity["draws"].as_array().unwrap();
+        assert_eq!(draws.len(), 8);
+        assert!(draws.iter().any(|draw| draw["pairs"] != draws[0]["pairs"]));
+        assert!(sensitivity["mixture_standard_deviation"].is_number());
     }
 }
