@@ -3869,3 +3869,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Document the absolute sensitivity cutoff, zero-based excluded
   column indices and null raw norms in the migration guide. All four
   Rust fit-quality tests passed with the documented diagnostic fields.
+- [x] Report an unavailable final gradient as null when residual and
+  sensitivity products overflow and cancel to NaN. The optimizer no
+  longer masks the unavailable component as zero in its report.
+  The Rust regression, four fit-quality tests and focused Clippy passed.

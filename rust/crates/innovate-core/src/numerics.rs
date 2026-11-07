@@ -276,7 +276,9 @@ where
                 .sum::<f64>()
                 .abs()
         })
-        .fold(0.0, f64::max);
+        .try_fold(0.0_f64, |maximum, component| {
+            component.is_finite().then(|| maximum.max(component))
+        });
     let identifiability = local_rank(columns);
     Ok(LeastSquares {
         parameters,
@@ -416,6 +418,19 @@ mod tests {
         assert_eq!(report["sensitivity_column_norms"][2], 1e-20);
         assert_eq!(report["sensitivity_column_norm_cutoff"], 1e-14);
         assert_eq!(report["excluded_sensitivity_column_indices"], json!([2]));
+    }
+
+    #[test]
+    fn nonfinite_final_gradient_is_unavailable() {
+        let fit = least_squares(
+            &[-2., -2.],
+            &[vec![0.]],
+            |p| Ok(vec![p[0] * 1e308, -p[0] * 1e308]),
+            0,
+        )
+        .unwrap();
+        assert!(fit.report["gradient_max_abs"].is_null());
+        assert_eq!(fit.report["converged"], false);
     }
 
     #[test]
