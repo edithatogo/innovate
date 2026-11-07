@@ -262,6 +262,21 @@ the bootstrap excludes it and records it under
 accepted refits. Check the failure counts when interpreting those
 intervals, especially when resampling can remove transition observations.
 
+Centered residual resampling keeps the observed time grid and requires
+a converged baseline because it generates observations from that fitted
+curve. Paired case resampling can return intervals when the baseline
+optimizer stops early. Inspect `baseline_optimizer.converged` alongside
+the refit counts.
+
+The requested interval mass sets the percentile cutoffs. Empirical
+coverage also depends on the data and resampling design. In a seeded
+study with four Logistic transition observations and four plateau
+observations per dataset, nominal 95% capacity intervals covered the
+generating value in 33 of 40 paired-case datasets and 27 of 39 datasets
+with a converged residual-bootstrap baseline, using 200 draws per
+dataset. A large draw count or a low refit failure rate can coexist with
+undercoverage.
+
 For Norton–Bass and the competitive ecosystem models, paired case
 resampling applies the same sampled row weights to all observed series.
 It reports candidate counts for event, launch, or joint profiles under

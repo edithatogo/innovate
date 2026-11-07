@@ -6568,3 +6568,8 @@ Hosted release readiness for this worktree revision remains open.
   Trial 39 still failed the residual baseline gate. Increasing the draw
   count left capacity coverage below nominal in both methods on this
   design.
+
+- [x] Document bootstrap interval interpretation in the native migration
+  guide, including the two methods' baseline convergence behavior and
+  the observed capacity undercoverage at the native draw limit. The
+  calibration gate remains open.
