@@ -1941,3 +1941,14 @@ the other competition models and installed binding checks remain open.
   installed R each returned identical serial and parallel responses for a
   seeded Kairos resource simulation alongside an unsupported-model error.
   All 34 native boundary tests and focused Clippy passed.
+
+- [x] Compare scalar grid results by scenario ID (92ededf2). Optional
+  comparisons take baseline, alternative and threshold. Compare only
+  identical strictly increasing time grids with one value per sample.
+  Callers supply paths in common units. Return alternative minus baseline,
+  percentage change (null when baseline is zero), and the first sampled
+  time at or above a supplied threshold (null when never reached).
+  Grid mismatch errors preserve the executions. Python 3.15, Julia and R
+  reproduced a difference of 50 and a first alternative threshold sample
+  at time 1. All 35 Rust boundary tests and focused Clippy passed.
+- [ ] Qualify ranking, uncertainty bounds and richer comparison contracts.
