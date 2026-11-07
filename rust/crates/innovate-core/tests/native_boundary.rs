@@ -789,6 +789,31 @@ fn dataset_provenance_requires_explicit_license() {
         innovate_core::json!(["normalized"])
     );
     assert_eq!(run(" Unknown ")["error"]["code"], "invalid_request");
+    let positional = json!([
+        "survey",
+        "CC-BY-4.0",
+        "2026-11-07T00:00:00Z",
+        [],
+        "1.0",
+        "",
+        "",
+        {}
+    ]);
+    for (operation, payload) in [
+        ("validate_provenance", positional.clone()),
+        (
+            "dataset_checksum",
+            json!({"dataset":{"provenance":positional}}),
+        ),
+    ] {
+        let request = json!({"schema_version":"2.0","operation":operation,"payload":payload});
+        let response: serde_json::Value =
+            serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+        assert_eq!(
+            response["error"]["message"],
+            "dataset provenance must be an object"
+        );
+    }
 }
 
 #[test]

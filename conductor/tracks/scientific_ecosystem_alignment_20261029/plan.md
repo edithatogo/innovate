@@ -4330,3 +4330,7 @@ Hosted release readiness for this worktree revision remains open.
   extension. Polars reads the Parquet input and ingestion appends the
   load step while preserving upstream Unicode metadata and the caller's
   provenance object. The focused Python ingestion regressions passed.
+- [x] Reject positional provenance arrays before dataset checksum
+  generation. The native validation and checksum operations now
+  require named provenance fields. Existing object encoding is
+  preserved. All five dataset-filtered Rust boundary tests passed.

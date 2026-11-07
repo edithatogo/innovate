@@ -24,6 +24,9 @@ fn schema_version() -> String {
 }
 
 pub(crate) fn validate(payload: &Value) -> Result<Value, &'static str> {
+    if !payload.is_object() {
+        return Err("dataset provenance must be an object");
+    }
     let mut provenance: DatasetProvenance =
         serde_json::from_value(payload.clone()).map_err(|_| "invalid dataset provenance fields")?;
     for value in [
