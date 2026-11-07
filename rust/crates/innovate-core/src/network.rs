@@ -449,13 +449,16 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                                     .sum();
                                 imitation * imitation_weights[i] * (exposed / graph.totals[i])
                             } else {
-                                imitation
-                                    * imitation_weights[i]
-                                    * graph.incoming[i]
-                                        .iter()
-                                        .filter(|(j, _)| context.get::<u8>(agents[*j]) == Some(&2))
-                                        .count() as f64
-                                    / degree as f64
+                                let exposed = graph.incoming[i]
+                                    .iter()
+                                    .filter(|(j, _)| context.get::<u8>(agents[*j]) == Some(&2))
+                                    .count() as f64;
+                                let rate = imitation * imitation_weights[i];
+                                if o.hazard_forcing.is_some() {
+                                    rate * (exposed / degree as f64)
+                                } else {
+                                    rate * exposed / degree as f64
+                                }
                             }
                     }
                 })
@@ -478,16 +481,28 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 .min()
                 .unwrap_or(horizon);
             let end = stop as f64 / scale;
-            let innovation_sum: f64 = agent_rates(1., 0.).iter().sum();
-            let imitation_sum: f64 = agent_rates(0., 1.).iter().sum();
-            if now >= stop || (innovation_sum == 0. && imitation_sum == 0.) {
+            // Normalize each basis before summing. Large weights can have a
+            // finite effective sum once multiplied by a small coefficient.
+            let scaled_basis = |rates: Vec<f64>| {
+                let scale = rates.iter().copied().fold(0., f64::max);
+                let sum: f64 = if scale == 0. {
+                    0.
+                } else {
+                    rates.iter().map(|rate| rate / scale).sum()
+                };
+                (scale, sum)
+            };
+            let (innovation_scale, innovation_sum) = scaled_basis(agent_rates(1., 0.));
+            let (imitation_scale, imitation_sum) = scaled_basis(agent_rates(0., 1.));
+            if now >= stop || (innovation_scale == 0. && imitation_scale == 0.) {
                 None
             } else {
                 let budget: f64 = rng.sample(Exp::new(1.).expect("unit rate is positive"));
                 let event_time = forcing
                     .attempt(start, end, budget, |t| {
                         let (p, q) = forcing.coefficients(t, innovation, imitation);
-                        p * innovation_sum + q * imitation_sum
+                        (p * innovation_scale) * innovation_sum
+                            + (q * imitation_scale) * imitation_sum
                     })
                     .map_err(invalid)?;
                 if let Some(t) = event_time {

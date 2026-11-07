@@ -543,3 +543,21 @@ fn continuous_forcing_validates_effective_hazard_instead_of_unforced_total() {
         .unwrap();
     assert_eq!(result["counts"], json!([0, 2]));
 }
+
+#[test]
+fn continuous_hazard_scales_agent_weights_before_aggregation() {
+    let payload = json!({
+        "inputs":{"time":[0.,4.]},
+        "parameters":{"p":1e-296,"q":0.,"m":2.},
+        "simulation_options":{"engine":"kairos_network","population":2,"seed":42,
+            "edges":[],"capacity":2,"service_ticks":1,"ticks_per_unit":1,
+            "innovation_multipliers":[1e308,1e308],
+            "hazard_forcing":{"time":[0.],"innovation":[1.],"imitation":[1.]}}
+    });
+    let result = KernelBinding::new()
+        .simulate_model("bass", payload)
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(result["counts"], json!([0, 2]));
+}
