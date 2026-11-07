@@ -46,6 +46,7 @@ def test_capabilities_are_native_and_unavailable_features_fail_closed():
         "policy_hazard",
         "latent_process",
         "regime_switching",
+        "hierarchical",
     }
     assert innovate.capabilities()["supports_simulation"].all()
     assert innovate.capabilities()["supports_summarize"].all()
@@ -296,3 +297,23 @@ def test_fixed_time_regime_polars_fit_and_saved_forecast():
     )
     assert short.envelope["result"]["details"]["regime_count"] == 1
     assert short.predict(pl.DataFrame({"time": [2.0]}))["prediction"][0] == pytest.approx(0.5, abs=1e-8)
+
+
+def test_centered_hierarchical_polars_group_fit_and_forecast():
+    time = [float(i) for i in range(25)]
+    a = [100 / (1 + math.exp(-0.4 * (t - 7))) for t in time]
+    b = [200 / (1 + math.exp(-0.3 * (t - 9))) for t in time]
+    fit = innovate.fit(
+        "hierarchical",
+        pl.DataFrame({"time": time, "a": a, "b": b}),
+        observed_columns=["a", "b"],
+        model_options={
+            "base_model": "logistic",
+            "groups": ["a", "b"],
+            "output": "groups",
+        },
+    )
+    assert fit.parameters["global_L"] == pytest.approx(150.0, abs=0.01)
+    forecast = fit.predict(pl.DataFrame({"time": [30.0]}))
+    assert forecast["prediction_1"][0] == pytest.approx(100 / (1 + math.exp(-9.2)), abs=0.01)
+    assert forecast["prediction_2"][0] == pytest.approx(200 / (1 + math.exp(-6.3)), abs=0.01)

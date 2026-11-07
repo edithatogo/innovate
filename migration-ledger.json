@@ -35,8 +35,9 @@
     },
     {
       "key": "hierarchical",
-      "status": "unavailable",
-      "required": true
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/hierarchical-20261107.json"
     },
     {
       "key": "latent_process",

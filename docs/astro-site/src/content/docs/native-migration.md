@@ -451,3 +451,58 @@ probabilistic regime inference, other changepoint objectives/search methods,
 full nested base composition, base covariates and complete small-sample scientific
 qualification remain required. Simulation currently returns a labelled
 deterministic point path.
+
+## Hierarchical grouped point models
+
+`hierarchical` supports scalar Bass, Logistic, Gompertz or Fisher–Pry base curves
+and 1–128 unique nonempty `groups` labels. The label `global` is reserved for
+parameter names. It provides grouped point fits; partial pooling, hierarchical
+Bayesian inference and calibrated uncertainty remain required work.
+
+Grouped observations may be a JSON mapping from each label to a time-aligned
+series, or a time-by-group matrix in declared group order. Python Polars uses
+`observed_columns` to select the matrix columns. A single observed vector is a
+shared **per-group series**: fit once, set each group adjustment to zero and sum
+the resulting group curves for the aggregate. It is not interpreted as an
+already aggregated population series.
+
+Parameterization is explicit:
+
+- `historical_additive` preserves the historical grouped-data fit:
+  independently fit each group, store its absolute parameters under `group_*`,
+  and store their arithmetic means under `global_*`. Prediction uses
+  `global_* + group_*`, including the original extra mean contribution.
+- `centered` (default) stores each independent group estimate minus its global mean under
+  `group_*`. The same addition therefore recovers the independently fitted group
+  curve. This is a point-fit encoding, without shrinkage or joint inference.
+
+Shared-series fitting sets all group adjustments to zero in both variants.
+Direct parameter prediction requires all global/group keys and finite effective
+parameters valid for the chosen base curve. Global means divide before summing
+to avoid unnecessary overflow; centered subtraction can still lose precision
+for extreme parameter scale differences, so broad conditioning qualification
+remains open. Aggregate or effective-parameter overflow is an explicit error.
+
+`output="aggregate"` returns the summed `values` and individual `group_rows`.
+`output="groups"` returns time-by-group `rows` and separate `aggregate_values`;
+Python Polars preserves every group as `prediction_1`, `prediction_2`, etc.
+Saved state retains labels, parameterization and output selection. Summaries may
+omit time and report effective group parameters. Simulation currently returns
+labelled deterministic point paths; stochastic draws remain required.
+
+`fit_options` accepts common native scalar fitting options. JSON
+`base_fit_options` is an alias, and `group_fit_options` supplies a mapping of one
+option object per group for grouped observations. Conflicting common/per-group
+options are rejected. Baseline group diagnostics remain separate from wrapper
+metrics. Shared-series wrapper metrics compare the summed prediction with the
+shared observed vector, preserving the historical aggregate scoring convention.
+Grouped metrics compare each predicted group with its own series.
+
+AIC/BIC remain unavailable because effective degrees of freedom for global/group
+decomposition are unqualified. Historical adoption increments prepend the first
+sample difference; the previously failing singleton case is defined as zero.
+They are not continuous derivatives. Native Polars rate output remains unavailable.
+Group base covariates, nested base families, shrinkage and full hierarchical
+inference remain required. R preserves singleton group labels and mapped series.
+Diagnostics now compute means without overflowing sums of large constant values;
+undefined or unrepresentable total variation yields unavailable R².

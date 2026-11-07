@@ -1,0 +1,36 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.76s
+     Running tests/hierarchical.rs (target/debug/deps/hierarchical-651beef9e259285e)
+
+running 3 tests
+test shared_observations_fit_once_with_zero_group_offsets ... FAILED
+test historical_and_centered_group_predictions_retain_distinct_parameter_meanings ... FAILED
+test centered_group_fits_recover_independent_curves_and_saved_group_output ... FAILED
+
+failures:
+
+---- shared_observations_fit_once_with_zero_group_offsets stdout ----
+
+thread 'shared_observations_fit_once_with_zero_group_offsets' (26972752) panicked at rust/crates/innovate-core/tests/hierarchical.rs:47:166:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "unsupported_native_operation", message: "native model 'hierarchical' is unavailable pending migration", operation: Some(FitModel) }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- historical_and_centered_group_predictions_retain_distinct_parameter_meanings stdout ----
+
+thread 'historical_and_centered_group_predictions_retain_distinct_parameter_meanings' (26972751) panicked at rust/crates/innovate-core/tests/hierarchical.rs:7:10:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "unsupported_native_operation", message: "native model 'hierarchical' is unavailable pending migration", operation: Some(PredictModel) }
+
+---- centered_group_fits_recover_independent_curves_and_saved_group_output stdout ----
+
+thread 'centered_group_fits_recover_independent_curves_and_saved_group_output' (26972750) panicked at rust/crates/innovate-core/tests/hierarchical.rs:26:214:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "unsupported_native_operation", message: "native model 'hierarchical' is unavailable pending migration", operation: Some(FitModel) }
+
+
+failures:
+    centered_group_fits_recover_independent_curves_and_saved_group_output
+    historical_and_centered_group_predictions_retain_distinct_parameter_meanings
+    shared_observations_fit_once_with_zero_group_offsets
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --test hierarchical`

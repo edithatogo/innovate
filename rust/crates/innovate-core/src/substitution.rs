@@ -347,14 +347,19 @@ pub(crate) fn diagnostics(
     let p: Vec<_> = predicted.iter().flatten().copied().collect();
     let mut d = crate::kernel::fit_diagnostics_count(time, &y, &p, name, parameter_count + 1);
     let means: Vec<f64> = (0..n)
-        .map(|i| observed.iter().map(|r| r[i]).sum::<f64>() / observed.len() as f64)
+        .map(|i| {
+            observed
+                .iter()
+                .map(|r| r[i] / observed.len() as f64)
+                .sum::<f64>()
+        })
         .collect();
     let total: f64 = observed
         .iter()
         .flat_map(|row| row.iter().zip(&means).map(|(y, m)| (y - m).powi(2)))
         .sum();
     let rss = d["metrics"]["RSS"].as_f64().unwrap();
-    let r2 = if total > 0.0 {
+    let r2 = if total > 0.0 && total.is_finite() {
         json!(1.0 - rss / total)
     } else {
         Value::Null

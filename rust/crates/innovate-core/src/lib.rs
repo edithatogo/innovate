@@ -4,6 +4,7 @@ mod competition;
 mod contracts;
 mod fitting;
 mod forcing;
+mod hierarchical;
 mod historical;
 mod kernel;
 mod latent;

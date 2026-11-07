@@ -4,7 +4,7 @@ using Test, Innovate
     result = kernel_predict_model("logistic", payload)
     @test result["metadata"]["runtime"] == "rust_native"
     @test result["result"]["values"][2] == 50.0
-    @test length(kernel_discover_models()["models"]) == 13
+    @test length(kernel_discover_models()["models"]) == 14
     @test_throws ErrorException kernel_predict_model("composite", payload)
     for _ in 1:100
         @test kernel_predict_model("logistic",payload)["result"]["values"][2] == 50.0
@@ -152,4 +152,13 @@ end
 @testset "Short Fisher-Pry regime" begin
     f=kernel_fit_model("regime_switching",Dict("inputs"=>Dict("time"=>[0.,1.],"observed"=>[0.11920292202211755,0.2689414213699951]),"constructor_kwargs"=>Dict("base_model"=>"fisher_pry")))["result"]
     @test f["details"]["regime_count"]==1
+end
+@testset "Centered hierarchical group state" begin
+    time=collect(0.:24.)
+    y=[[100/(1+exp(-0.4*(t-7))),200/(1+exp(-0.3*(t-9)))] for t in time]
+    f=kernel_fit_model("hierarchical",Dict("inputs"=>Dict("time"=>time,"observed"=>y),"constructor_kwargs"=>Dict("base_model"=>"logistic","groups"=>["a","b"],"output"=>"groups")))["result"]
+    @test isapprox(f["parameters"]["global_L"],150.;atol=0.01)
+    a=kernel_predict_model("hierarchical",Dict("inputs"=>Dict("time"=>[30.]),"state"=>f["state"]))["result"]
+    @test isapprox(a["rows"][1][1],100/(1+exp(-9.2));atol=0.01)
+    @test isapprox(a["rows"][1][2],200/(1+exp(-6.3));atol=0.01)
 end

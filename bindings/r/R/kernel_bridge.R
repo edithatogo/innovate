@@ -12,12 +12,12 @@ kernel_call <- function(operation, model_key = NULL, payload = list()) {
   if (!length(payload)) payload <- structure(list(), names = character())
   # jsonlite otherwise auto-unboxes a length-one numeric vector into a scalar.
   # Keep schema array fields as arrays while parameter/options scalars stay scalars.
-  array_fields <- c("time", "t", "observed", "y", "values", "adoption", "share", "launch_times", "initial_values", "initial_agents", "event_times", "event_effects", "event_labels", "node_labels", "covariates", "innovation_multipliers", "imitation_multipliers", "agent_service_ticks", "latent_time", "latent_values", "detected_breakpoints")
+  array_fields <- c("time", "t", "observed", "y", "values", "adoption", "share", "launch_times", "initial_values", "initial_agents", "event_times", "event_effects", "event_labels", "node_labels", "covariates", "innovation_multipliers", "imitation_multipliers", "agent_service_ticks", "latent_time", "latent_values", "detected_breakpoints", "groups")
   preserve_arrays <- function(value) {
     if (!is.list(value)) return(value)
     fields <- names(value)
     for (i in seq_along(value)) {
-      if (!is.null(fields) && fields[[i]] == "covariates" && is.list(value[[i]]) &&
+      if (!is.null(fields) && fields[[i]] %in% c("covariates", "observed", "y") && is.list(value[[i]]) &&
           !is.null(names(value[[i]]))) {
         value[[i]] <- lapply(value[[i]], function(x) if (is.atomic(x) && !is.null(x)) I(x) else x)
       } else if (!is.null(fields) && fields[[i]] %in% array_fields &&

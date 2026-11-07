@@ -259,6 +259,9 @@ impl KernelBinding {
         if request.model_key.as_deref() == Some("regime_switching") {
             return crate::regime::execute(request);
         }
+        if request.model_key.as_deref() == Some("hierarchical") {
+            return crate::hierarchical::execute(request);
+        }
         validate_request(request)?;
         if request.payload.get("simulation_options").is_some() {
             return crate::simulation::execute(request);
@@ -327,7 +330,10 @@ pub(crate) fn fit_diagnostics_count(
     let mean_observed = if observed.is_empty() {
         0.0
     } else {
-        observed.iter().sum::<f64>() / observed.len() as f64
+        observed
+            .iter()
+            .map(|v| v / observed.len() as f64)
+            .sum::<f64>()
     };
     let ss_tot: f64 = observed
         .iter()
@@ -336,7 +342,7 @@ pub(crate) fn fit_diagnostics_count(
             delta * delta
         })
         .sum();
-    let r_squared = if ss_tot > 0.0 {
+    let r_squared = if ss_tot > 0.0 && ss_tot.is_finite() {
         1.0 - (ss_res / ss_tot)
     } else {
         f64::NAN

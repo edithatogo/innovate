@@ -1,0 +1,202 @@
+nox > Running session docs
+nox > npx --yes pnpm@12.18.0 --dir docs/astro-site build
+$ astro build
+12:16:17 [starlight-polyglot] [starlight-polyglot] Generating python documentation...
+12:16:18 [starlight-polyglot] [starlight-polyglot] ✓ python: 9 pages generated
+12:16:18 [starlight-links-validator] Invalidating content layer cache...
+12:16:25 [content] Syncing content
+12:16:30 [content] Synced content
+12:16:30 [types] Generated 11.82s
+12:16:30 [build] output: "static"
+12:16:30 [build] mode: "static"
+12:16:30 [build] directory: /Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/docs/astro-site/dist/
+12:16:30 [build] Collecting build info...
+12:16:30 [build] ✓ Completed in 12.99s.
+12:16:30 [build] Building static entrypoints...
+12:16:31 [vite] ✓ built in 517ms
+12:16:31 [vite] ✓ built in 43ms
+12:16:31 [build] Rearranging server assets...
+
+ generating static routes 
+12:16:31 [WARN] [content] The collection "i18n" does not exist or is empty. Please check your content config file for errors.
+12:16:31   ├─ /404.html12:16:31 [WARN] [content] Entry docs → 404 was not found.
+ (+18ms) 
+12:16:31   ├─ /api/python/index.html (+6ms) 
+12:16:31   ├─ /architecture/index.html (+3ms) 
+12:16:31   ├─ /architecture/adr/index.html (+9ms) 
+12:16:31   ├─ /architecture/polyglot-repo/index.html (+3ms) 
+12:16:31   ├─ /bindings/index.html (+3ms) 
+12:16:31   ├─ /bindings/csharp/index.html (+5ms) 
+12:16:31   ├─ /bindings/go/index.html (+3ms) 
+12:16:31   ├─ /bindings/julia/index.html (+3ms) 
+12:16:31   ├─ /bindings/parity/index.html (+4ms) 
+12:16:31   ├─ /bindings/rust/index.html (+2ms) 
+12:16:31   ├─ /core/index.html (+2ms) 
+12:16:31   ├─ /core/arrow-interchange/index.html (+2ms) 
+12:16:31   ├─ /core/diagnostics-contract/index.html (+2ms) 
+12:16:31   ├─ /core/kernel/index.html (+2ms) 
+12:16:31   ├─ /index.html (+2ms) 
+12:16:31   ├─ /latest/index.html (+2ms) 
+12:16:31   ├─ /latest/api/python/index.html (+3ms) 
+12:16:31   ├─ /latest/architecture/index.html (+5ms) 
+12:16:31   ├─ /latest/architecture/adr/index.html (+2ms) 
+12:16:31   ├─ /latest/architecture/polyglot-repo/index.html (+2ms) 
+12:16:31   ├─ /latest/bindings/index.html (+2ms) 
+12:16:31   ├─ /latest/bindings/csharp/index.html (+2ms) 
+12:16:31   ├─ /latest/bindings/go/index.html (+1ms) 
+12:16:31   ├─ /latest/bindings/julia/index.html (+2ms) 
+12:16:31   ├─ /latest/bindings/parity/index.html (+1ms) 
+12:16:31   ├─ /latest/bindings/rust/index.html (+1ms) 
+12:16:31   ├─ /latest/core/index.html (+2ms) 
+12:16:31   ├─ /latest/core/arrow-interchange/index.html (+2ms) 
+12:16:31   ├─ /latest/core/diagnostics-contract/index.html (+2ms) 
+12:16:31   ├─ /latest/core/kernel/index.html (+2ms) 
+12:16:31   ├─ /latest/maintainers/index.html (+2ms) 
+12:16:31   ├─ /latest/maintainers/binding-conformance/index.html (+2ms) 
+12:16:31   ├─ /latest/maintainers/compatibility/index.html (+2ms) 
+12:16:31   ├─ /latest/maintainers/deployment-readiness/index.html (+2ms) 
+12:16:31   ├─ /latest/maintainers/deprecation/index.html (+2ms) 
+12:16:31   ├─ /latest/maintainers/docsearch/index.html (+1ms) 
+12:16:31   ├─ /latest/maintainers/maintenance/index.html (+2ms) 
+12:16:31   ├─ /latest/maintainers/package-health/index.html (+2ms) 
+12:16:31   ├─ /latest/maintainers/plugins/index.html (+3ms) 
+12:16:31   ├─ /latest/maintainers/publication/index.html (+2ms) 
+12:16:31   ├─ /latest/maintainers/release-notes/index.html (+1ms) 
+12:16:31   ├─ /latest/maintainers/release-readiness/index.html (+1ms) 
+12:16:31   ├─ /latest/maintainers/runtime-logging/index.html (+1ms) 
+12:16:31   ├─ /latest/maintainers/stability/index.html (+1ms) 
+12:16:31   ├─ /latest/maintainers/support/index.html (+1ms) 
+12:16:31   ├─ /latest/migration/index.html (+1ms) 
+12:16:31   ├─ /latest/migration/archive/index.html (+1ms) 
+12:16:31   ├─ /latest/migration/redirects/index.html (+1ms) 
+12:16:31   ├─ /latest/migration/references/index.html (+1ms) 
+12:16:31   ├─ /latest/migration/validation/index.html (+2ms) 
+12:16:31   ├─ /latest/operations/index.html (+1ms) 
+12:16:31   ├─ /latest/operations/abi-compatibility/index.html (+1ms) 
+12:16:31   ├─ /latest/operations/accelerator-parallel-execution/index.html (+1ms) 
+12:16:31   ├─ /latest/operations/community-readiness/index.html (+1ms) 
+12:16:31   ├─ /latest/operations/governance/index.html (+1ms) 
+12:16:31   ├─ /latest/operations/hpc-readiness/index.html (+2ms) 
+12:16:31   ├─ /latest/operations/hpc-registry/index.html (+2ms) 
+12:16:31   ├─ /latest/operations/hpc-submission-packet/index.html (+2ms) 
+12:16:31   ├─ /latest/operations/hpc-submission-workflow/index.html (+4ms) 
+12:16:31   ├─ /latest/operations/polyglot-registry/index.html (+2ms) 
+12:16:31   ├─ /latest/operations/registry-submissions/index.html (+1ms) 
+12:16:31   ├─ /latest/operations/release-maturity/index.html (+1ms) 
+12:16:31   ├─ /latest/operations/remote-execution/index.html (+2ms) 
+12:16:31   ├─ /latest/operations/roadmap/index.html (+1ms) 
+12:16:31   ├─ /latest/operations/rust-core/index.html (+1ms) 
+12:16:31   ├─ /latest/operations/scientific-hpc/index.html (+1ms) 
+12:16:31   ├─ /latest/operations/submission-dossiers/index.html (+1ms) 
+12:16:31   ├─ /latest/operations/xla-backend/index.html (+1ms) 
+12:16:31   ├─ /latest/roadmap/dataframe-engine/index.html (+1ms) 
+12:16:31   ├─ /latest/roadmap/diagnostics-uncertainty/index.html (+1ms) 
+12:16:31   ├─ /latest/roadmap/probabilistic-inference/index.html (+1ms) 
+12:16:31   ├─ /latest/tutorials/index.html (+1ms) 
+12:16:31   ├─ /latest/tutorials/advanced-diffusion-inference/index.html (+1ms) 
+12:16:31   ├─ /latest/tutorials/advanced-runtime/index.html (+1ms) 
+12:16:31   ├─ /latest/tutorials/arrow-interchange/index.html (+1ms) 
+12:16:31   ├─ /latest/tutorials/bayesian-fitter/index.html (+1ms) 
+12:16:31   ├─ /latest/tutorials/benchmark-workflows/index.html (+1ms) 
+12:16:31   ├─ /latest/tutorials/counterfactual-analysis/index.html (+2ms) 
+12:16:31   ├─ /latest/tutorials/data-ingestion-provenance/index.html (+1ms) 
+12:16:31   ├─ /latest/tutorials/decision-reports/index.html (+1ms) 
+12:16:31   ├─ /latest/tutorials/diagnostics-contract/index.html (+3ms) 
+12:16:31   ├─ /latest/tutorials/functional-kernel-contract/index.html (+1ms) 
+12:16:31   ├─ /latest/tutorials/jax-backend/index.html (+1ms) 
+12:16:31   ├─ /latest/tutorials/kairos-simulation-adapter/index.html (+1ms) 
+12:16:31   ├─ /latest/tutorials/multi-product/index.html (+1ms) 
+12:16:31   ├─ /latest/tutorials/ndlib-integration/index.html (+1ms) 
+12:16:31   ├─ /latest/tutorials/norton-bass/index.html (+1ms) 
+12:16:31   ├─ /latest/tutorials/plugin-api-stability/index.html (+1ms) 
+12:16:31   ├─ /latest/tutorials/seasonal-data/index.html (+1ms) 
+12:16:31   ├─ /latest/user-guide/advanced-modeling/index.html (+2ms) 
+12:16:31   ├─ /latest/user-guide/backends/index.html (+1ms) 
+12:16:31   ├─ /latest/user-guide/fitting/index.html (+2ms) 
+12:16:31   ├─ /latest/user-guide/forecasting/index.html (+1ms) 
+12:16:31   ├─ /latest/user-guide/getting-started/index.html (+17ms) 
+12:16:31   ├─ /latest/user-guide/installation/index.html (+2ms) 
+12:16:31   ├─ /maintainers/index.html (+1ms) 
+12:16:31   ├─ /maintainers/binding-conformance/index.html (+1ms) 
+12:16:31   ├─ /maintainers/compatibility/index.html (+2ms) 
+12:16:31   ├─ /maintainers/deployment-readiness/index.html (+1ms) 
+12:16:31   ├─ /maintainers/deprecation/index.html (+4ms) 
+12:16:31   ├─ /maintainers/docsearch/index.html (+1ms) 
+12:16:31   ├─ /maintainers/maintenance/index.html (+2ms) 
+12:16:31   ├─ /maintainers/package-health/index.html (+1ms) 
+12:16:31   ├─ /maintainers/plugins/index.html (+1ms) 
+12:16:31   ├─ /maintainers/publication/index.html (+1ms) 
+12:16:31   ├─ /maintainers/release-notes/index.html (+1ms) 
+12:16:31   ├─ /maintainers/release-readiness/index.html (+1ms) 
+12:16:31   ├─ /maintainers/runtime-logging/index.html (+1ms) 
+12:16:31   ├─ /maintainers/stability/index.html (+1ms) 
+12:16:31   ├─ /maintainers/support/index.html (+1ms) 
+12:16:31   ├─ /migration/index.html (+1ms) 
+12:16:31   ├─ /migration/archive/index.html (+1ms) 
+12:16:31   ├─ /migration/redirects/index.html (+1ms) 
+12:16:31   ├─ /migration/references/index.html (+1ms) 
+12:16:31   ├─ /migration/validation/index.html (+1ms) 
+12:16:31   ├─ /native-migration/index.html (+1ms) 
+12:16:31   ├─ /operations/index.html (+1ms) 
+12:16:31   ├─ /operations/abi-compatibility/index.html (+1ms) 
+12:16:31   ├─ /operations/accelerator-parallel-execution/index.html (+1ms) 
+12:16:31   ├─ /operations/community-readiness/index.html (+1ms) 
+12:16:31   ├─ /operations/governance/index.html (+1ms) 
+12:16:31   ├─ /operations/hpc-readiness/index.html (+3ms) 
+12:16:31   ├─ /operations/hpc-registry/index.html (+1ms) 
+12:16:31   ├─ /operations/hpc-submission-packet/index.html (+1ms) 
+12:16:31   ├─ /operations/hpc-submission-workflow/index.html (+1ms) 
+12:16:31   ├─ /operations/polyglot-registry/index.html (+1ms) 
+12:16:31   ├─ /operations/registry-submissions/index.html (+1ms) 
+12:16:31   ├─ /operations/release-maturity/index.html (+1ms) 
+12:16:31   ├─ /operations/remote-execution/index.html (+1ms) 
+12:16:31   ├─ /operations/roadmap/index.html (+1ms) 
+12:16:31   ├─ /operations/runtime-logging/index.html (+1ms) 
+12:16:31   ├─ /operations/rust-core/index.html (+1ms) 
+12:16:31   ├─ /operations/scientific-hpc/index.html (+1ms) 
+12:16:31   ├─ /operations/submission-dossiers/index.html (+1ms) 
+12:16:31   ├─ /operations/xla-backend/index.html (+1ms) 
+12:16:31   ├─ /roadmap/dataframe-engine/index.html (+1ms) 
+12:16:31   ├─ /roadmap/diagnostics-uncertainty/index.html (+1ms) 
+12:16:31   ├─ /roadmap/probabilistic-inference/index.html (+1ms) 
+12:16:31   ├─ /tutorials/index.html (+1ms) 
+12:16:31   ├─ /tutorials/advanced-diffusion-inference/index.html (+1ms) 
+12:16:31   ├─ /tutorials/advanced-runtime/index.html (+1ms) 
+12:16:31   ├─ /tutorials/arrow-interchange/index.html (+1ms) 
+12:16:31   ├─ /tutorials/bayesian-fitter/index.html (+1ms) 
+12:16:31   ├─ /tutorials/benchmark-workflows/index.html (+3ms) 
+12:16:31   ├─ /tutorials/counterfactual-analysis/index.html (+1ms) 
+12:16:31   ├─ /tutorials/data-ingestion-provenance/index.html (+1ms) 
+12:16:31   ├─ /tutorials/decision-reports/index.html (+1ms) 
+12:16:31   ├─ /tutorials/diagnostics-contract/index.html (+1ms) 
+12:16:31   ├─ /tutorials/functional-kernel-contract/index.html (+1ms) 
+12:16:31   ├─ /tutorials/jax-backend/index.html (+1ms) 
+12:16:31   ├─ /tutorials/kairos-simulation-adapter/index.html (+1ms) 
+12:16:31   ├─ /tutorials/multi-product/index.html (+1ms) 
+12:16:31   ├─ /tutorials/ndlib-integration/index.html (+2ms) 
+12:16:31   ├─ /tutorials/norton-bass/index.html (+1ms) 
+12:16:31   ├─ /tutorials/plugin-api-stability/index.html (+1ms) 
+12:16:31   ├─ /tutorials/seasonal-data/index.html (+1ms) 
+12:16:31   ├─ /user-guide/advanced-modeling/index.html (+1ms) 
+12:16:31   ├─ /user-guide/backends/index.html (+1ms) 
+12:16:31   ├─ /user-guide/fitting/index.html (+1ms) 
+12:16:31   ├─ /user-guide/forecasting/index.html (+1ms) 
+12:16:31   ├─ /user-guide/getting-started/index.html (+4ms) 
+12:16:31   ├─ /user-guide/installation/index.html (+1ms) 
+12:16:31 ✓ Completed in 360ms.
+
+12:16:31 [build] ✓ Completed in 953ms.
+12:16:31 [starlight:pagefind] Building search index with Pagefind...
+12:16:31 [starlight:pagefind] Found 163 HTML files.
+12:16:31 [starlight:pagefind] Finished building search index in 196ms.
+
+ validating links 
+
+╭─                             ─╮
+· All internal links are valid. ·
+╰─                             ─╯
+
+12:16:31 [@astrojs/sitemap] `sitemap-index.xml` created at `dist`
+12:16:31 [build] 163 page(s) built in 14.18s
+12:16:31 [build] Complete!
+nox > Session docs was successful in 26 seconds.

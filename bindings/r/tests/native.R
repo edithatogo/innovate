@@ -2,7 +2,7 @@ library(innovate.R)
 payload <- list(inputs=list(time=c(0,1,2)), parameters=list(L=100,k=1,x0=1))
 x <- kernel_predict_model("logistic", payload)
 stopifnot(x$result$values[[2]] == 50, x$metadata$runtime == "rust_native")
-stopifnot(length(kernel_discover_models()$models) == 13)
+stopifnot(length(kernel_discover_models()$models) == 14)
 error <- tryCatch(kernel_predict_model("composite", payload), error=function(e) conditionMessage(e))
 stopifnot(is.character(error), grepl("unsupported_native_operation", error))
 for (i in seq_len(100)) stopifnot(kernel_predict_model("logistic", payload)$result$values[[2]] == 50)
@@ -150,3 +150,12 @@ cat("R fixed-time regime fit and forecast state passed\n")
 f <- kernel_fit_model("regime_switching",list(inputs=list(time=c(0,1),observed=c(0.11920292202211755,0.2689414213699951)),constructor_kwargs=list(base_model="fisher_pry")))$result
 stopifnot(f$details$regime_count==1,abs(kernel_predict_model("regime_switching",list(inputs=list(time=2),state=f$state))$result$values[[1]]-0.5)<1e-8)
 cat("R short Fisher-Pry regime and singleton detected boundary passed\n")
+time <- 0:24
+y <- list(a=100/(1+exp(-0.4*(time-7))),b=200/(1+exp(-0.3*(time-9))))
+f <- kernel_fit_model("hierarchical",list(inputs=list(time=time,observed=y),constructor_kwargs=list(base_model="logistic",groups=c("a","b"),output="groups")))$result
+stopifnot(abs(f$parameters$global_L-150)<0.01)
+a <- kernel_predict_model("hierarchical",list(inputs=list(time=30),state=f$state))$result
+stopifnot(abs(a$rows[[1]][[1]]-100/(1+exp(-9.2)))<0.01,abs(a$rows[[1]][[2]]-200/(1+exp(-6.3)))<0.01)
+p <- list(inputs=list(time=2,observed=list(a=50)),constructor_kwargs=list(base_model="logistic",groups="a"),parameters=list(global_L=100,global_k=1,global_x0=2,a_L=0,a_k=0,a_x0=0))
+stopifnot(kernel_diagnose_model("hierarchical",p)$result$diagnostics$metrics$RSS==0)
+cat("R hierarchical grouped state and singleton mapping passed\n")
