@@ -108,11 +108,13 @@ fn apply_specification(scenario: &mut Scenario) -> Result<(), &'static str> {
     if scenario.model_key != "bass"
         || !matches!(
             spec.kind,
-            ScenarioKind::Baseline | ScenarioKind::Intervention { .. }
+            ScenarioKind::Baseline
+                | ScenarioKind::Intervention { .. }
+                | ScenarioKind::Network { .. }
         )
     {
         return Err(
-            "specification translation currently supports baseline and intervention Bass scenarios",
+            "specification translation currently supports baseline, intervention and network Bass scenarios",
         );
     }
     let simulation = scenario
@@ -123,25 +125,40 @@ fn apply_specification(scenario: &mut Scenario) -> Result<(), &'static str> {
         .get_mut("simulation_options")
         .and_then(Value::as_object_mut)
         .ok_or("specification translation requires Kairos simulation_options")?;
-    if !matches!(
-        options.get("engine").and_then(Value::as_str),
-        Some("kairos_abm" | "kairos_des")
-    ) {
-        return Err("Bass scenario translation requires kairos_abm or kairos_des");
-    }
-    let population = options
-        .get("population")
-        .and_then(Value::as_u64)
-        .filter(|n| (1..=100_000).contains(n))
-        .ok_or("population must be in 1..=100000")?;
-    let initial = (spec.initial_adoption * population as f64).round() as u64;
-    if options
-        .get("initial_adopters")
-        .is_some_and(|value| value.as_u64() != Some(initial))
+    if let ScenarioKind::Network {
+        network_type,
+        num_nodes,
+        average_degree,
+    } = &spec.kind
     {
-        return Err("initial_adopters conflicts with the scenario specification");
+        apply_network_specification(
+            options,
+            network_type,
+            *num_nodes,
+            *average_degree,
+            spec.initial_adoption,
+        )?;
+    } else {
+        if !matches!(
+            options.get("engine").and_then(Value::as_str),
+            Some("kairos_abm" | "kairos_des")
+        ) {
+            return Err("baseline and intervention translation requires kairos_abm or kairos_des");
+        }
+        let population = options
+            .get("population")
+            .and_then(Value::as_u64)
+            .filter(|n| (1..=100_000).contains(n))
+            .ok_or("population must be in 1..=100000")?;
+        let initial = (spec.initial_adoption * population as f64).round() as u64;
+        if options
+            .get("initial_adopters")
+            .is_some_and(|value| value.as_u64() != Some(initial))
+        {
+            return Err("initial_adopters conflicts with the scenario specification");
+        }
+        options.insert("initial_adopters".into(), json!(initial));
     }
-    options.insert("initial_adopters".into(), json!(initial));
     if let ScenarioKind::Intervention {
         intervention_type,
         intervention_start_time,
@@ -178,6 +195,49 @@ fn apply_specification(scenario: &mut Scenario) -> Result<(), &'static str> {
         return Err("Bass market size conflicts with the scenario specification");
     }
     parameters.insert("m".into(), json!(spec.market_size));
+    Ok(())
+}
+
+fn apply_network_specification(
+    options: &mut serde_json::Map<String, Value>,
+    network_type: &str,
+    nodes: usize,
+    average_degree: f64,
+    initial_adoption: f64,
+) -> Result<(), &'static str> {
+    if network_type != "custom"
+        || options.get("engine").and_then(Value::as_str) != Some("kairos_network")
+    {
+        return Err("network translation requires custom topology and kairos_network");
+    }
+    if nodes > 1000
+        || options
+            .get("population")
+            .is_some_and(|value| value.as_u64() != Some(nodes as u64))
+    {
+        return Err("network population must match num_nodes and be in 1..=1000");
+    }
+    let edges = options
+        .get("edges")
+        .and_then(Value::as_array)
+        .ok_or("custom topology requires explicit edges")?;
+    let degree_factor = if options.get("directed").and_then(Value::as_bool) == Some(true) {
+        1.
+    } else {
+        2.
+    };
+    let degree = degree_factor * edges.len() as f64 / nodes as f64;
+    if (degree - average_degree).abs() > 1e-9 {
+        return Err("average_degree does not match the initial explicit graph");
+    }
+    let initial = (initial_adoption * nodes as f64).round() as usize;
+    let supplied = options
+        .get("initial_agents")
+        .map_or(Some(0), |value| value.as_array().map(Vec::len));
+    if supplied != Some(initial) {
+        return Err("explicit initial_agents must match the scenario's rounded adoption count");
+    }
+    options.insert("population".into(), json!(nodes));
     Ok(())
 }
 
@@ -657,6 +717,12 @@ pub(crate) fn discover(request: &Value) -> Value {
                     capability["specification_translation"]["intervention_types"] =
                         json!(["innovation_delta","imitation_delta"]);
                 }
+            }
+            if family == "network" {
+                capability["specification_translation"] = json!({
+                    "option":"apply_specifications","model_key":"bass",
+                    "engines":["kairos_network"],"network_types":["custom"]
+                });
             }
             capability
         })

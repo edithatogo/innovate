@@ -2132,3 +2132,10 @@ the other competition models and installed binding checks remain open.
   wheel, Julia and installed R. Innovation and imitation cancellations
   both held adoption at five agents through time five in Kairos ABM and
   DES. Each binding replayed all four resolved artifacts exactly.
+
+- [x] Translate custom network Bass specifications for Kairos. Derive
+  market size and node count from the specification, check initial mean
+  degree and rounded adoption count against the explicit graph and agent
+  identities, and retain resolved inputs for replay. For directed graphs,
+  average degree means average incoming degree. All 63 targeted Rust tests
+  and Clippy passed. Binding qualification and generated topology remain open.
