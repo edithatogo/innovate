@@ -69,6 +69,7 @@ pub fn execute_json(input: &str) -> String {
                 | "describe_remote_execution_contract"
                 | "bootstrap_fit"
                 | "bayesian_parameter_grid"
+                | "bayesian_metropolis"
                 | "validate_extension_manifests"
                 | "register_extension_manifest"
                 | "list_extension_manifests"
@@ -235,6 +236,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         }
         if value["operation"] == "validate_extension_manifests" {
             return extensions::validate(payload);
+        }
+        if value["operation"] == "bayesian_metropolis" {
+            return bayesian::sample(payload);
         }
         if value["operation"] == "bayesian_parameter_grid" {
             return bayesian::grid(payload);

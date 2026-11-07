@@ -40,15 +40,7 @@ pub(crate) fn grid(payload: &Value) -> Result<Value, &'static str> {
         .map_or(Some(0.95), Value::as_f64)
         .filter(|mass| *mass > 0. && *mass < 1.)
         .ok_or("credible_mass must be between zero and one")?;
-    let sigma = payload["noise_sd"]
-        .as_f64()
-        .filter(|sd| sd.is_finite() && *sd > 0.)
-        .ok_or("noise_sd must be finite and positive")?;
-    let observed: Vec<f64> = serde_json::from_value(payload["observed"].clone())
-        .map_err(|_| "observed must be a finite numeric array")?;
-    if observed.is_empty() || observed.len() > 500 || observed.iter().any(|y| !y.is_finite()) {
-        return Err("posterior requires 1 to 500 finite observations");
-    }
+    let (sigma, observed) = observations(payload)?;
     let kernel = crate::KernelBinding::new();
     let mut log_weights = Vec::with_capacity(cells);
     let stride = axes.get(1).map_or(1, |(_, grid)| grid.len());
@@ -58,22 +50,7 @@ pub(crate) fn grid(payload: &Value) -> Result<Value, &'static str> {
         if let Some((name, grid)) = axes.get(1) {
             prediction["parameters"][*name] = json!(grid[cell % stride]);
         }
-        let forecast = kernel
-            .predict_model(model, prediction.clone())
-            .map_err(|_| "prediction failed at a posterior grid point")?
-            .result
-            .ok_or("posterior prediction returned no result")?;
-        let values = forecast["values"]
-            .as_array()
-            .filter(|x| x.len() == observed.len())
-            .ok_or("posterior requires aligned scalar predictions")?;
-        let mut log_weight = 0.;
-        for (value, y) in values.iter().zip(&observed) {
-            let value = value
-                .as_f64()
-                .ok_or("posterior prediction must be numeric")?;
-            log_weight -= 0.5 * ((value - y) / sigma).powi(2);
-        }
+        let log_weight = log_likelihood(&kernel, model, &prediction, &observed, sigma)?;
         log_weights.push(log_weight);
     }
     let peak = log_weights
@@ -166,4 +143,122 @@ fn axis(payload: &Value) -> Result<(&str, Vec<f64>), &'static str> {
         return Err("posterior grid points must be distinct");
     }
     Ok((name, grid))
+}
+
+fn observations(payload: &Value) -> Result<(f64, Vec<f64>), &'static str> {
+    let sigma = payload["noise_sd"]
+        .as_f64()
+        .filter(|sd| sd.is_finite() && *sd > 0.)
+        .ok_or("noise_sd must be finite and positive")?;
+    let observed: Vec<f64> = serde_json::from_value(payload["observed"].clone())
+        .map_err(|_| "observed must be a finite numeric array")?;
+    if observed.is_empty() || observed.len() > 500 || observed.iter().any(|y| !y.is_finite()) {
+        return Err("posterior requires 1 to 500 finite observations");
+    }
+    Ok((sigma, observed))
+}
+
+fn log_likelihood(
+    kernel: &crate::KernelBinding,
+    model: &str,
+    prediction: &Value,
+    observed: &[f64],
+    sigma: f64,
+) -> Result<f64, &'static str> {
+    let forecast = kernel
+        .predict_model(model, prediction.clone())
+        .map_err(|_| "posterior prediction failed")?
+        .result
+        .ok_or("posterior prediction returned no result")?;
+    let values = forecast["values"]
+        .as_array()
+        .filter(|x| x.len() == observed.len())
+        .ok_or("posterior requires aligned scalar predictions")?;
+    let mut log_weight = 0.;
+    for (value, y) in values.iter().zip(observed) {
+        let value = value
+            .as_f64()
+            .ok_or("posterior prediction must be numeric")?;
+        log_weight -= 0.5 * ((value - y) / sigma).powi(2);
+    }
+    Ok(log_weight)
+}
+
+pub(crate) fn sample(payload: &Value) -> Result<Value, &'static str> {
+    use kairo_ecs_rng::{DeterministicStream, rand_distr::Uniform};
+
+    let model = payload["forecast_model"]
+        .as_str()
+        .ok_or("forecast_model is required")?;
+    let name = payload["parameter"]
+        .as_str()
+        .ok_or("parameter is required")?;
+    let mut prediction = payload["prediction"].clone();
+    let mut current = prediction["parameters"][name]
+        .as_f64()
+        .ok_or("initial parameter is required")?;
+    let [lower, upper]: [f64; 2] = serde_json::from_value(payload["bounds"].clone())
+        .map_err(|_| "bounds must contain two finite numbers")?;
+    if !lower.is_finite()
+        || !upper.is_finite()
+        || lower >= upper
+        || current < lower
+        || current > upper
+    {
+        return Err("initial parameter must lie inside finite increasing bounds");
+    }
+    let step = payload["proposal_step"]
+        .as_f64()
+        .filter(|step| step.is_finite() && *step > 0.)
+        .ok_or("proposal_step must be finite and positive")?;
+    let draws = payload["draws"]
+        .as_u64()
+        .filter(|n| (2..=10_000).contains(n))
+        .ok_or("draws must be between 2 and 10000")?;
+    let warmup = payload["warmup"]
+        .as_u64()
+        .filter(|n| *n <= 10_000)
+        .ok_or("warmup must be between 0 and 10000")?;
+    let seed = payload["seed"]
+        .as_u64()
+        .ok_or("seed must be an unsigned integer")?;
+    let (sigma, observed) = observations(payload)?;
+    let kernel = crate::KernelBinding::new();
+    let mut current_log = log_likelihood(&kernel, model, &prediction, &observed, sigma)?;
+    if !current_log.is_finite() {
+        return Err("initial log likelihood must be finite");
+    }
+    let mut rng = DeterministicStream::from_run_seed(seed);
+    let unit = Uniform::new(0., 1.).expect("valid uniform range");
+    let mut samples = Vec::with_capacity(draws as usize);
+    let mut accepted = 0;
+    for iteration in 0..(warmup + draws) {
+        let proposed = current + step * (2. * rng.sample(unit) - 1.);
+        if proposed.is_finite() && (lower..=upper).contains(&proposed) {
+            prediction["parameters"][name] = json!(proposed);
+            let proposed_log = log_likelihood(&kernel, model, &prediction, &observed, sigma)?;
+            let acceptance: f64 = rng.sample(unit);
+            if proposed_log.is_finite() && acceptance.ln() < proposed_log - current_log {
+                current = proposed;
+                current_log = proposed_log;
+                accepted += u64::from(iteration >= warmup);
+            }
+        }
+        if iteration >= warmup {
+            samples.push(current);
+        }
+    }
+    let mean = samples
+        .iter()
+        .map(|value| value / draws as f64)
+        .sum::<f64>();
+    if !mean.is_finite() {
+        return Err("posterior mean exceeds finite numerical domain");
+    }
+    Ok(
+        json!({"parameter":name,"samples":samples,"posterior_mean":mean,"seed":seed,
+        "draws":draws,"warmup":warmup,"accepted":accepted,"acceptance_rate":accepted as f64 / draws as f64,
+        "method":"random_walk_metropolis","prior":"uniform_within_bounds",
+        "likelihood":"independent_gaussian_known_sd"}),
+    )
 }

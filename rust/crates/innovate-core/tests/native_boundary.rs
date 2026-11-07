@@ -2271,3 +2271,19 @@ fn bayesian_joint_grid_preserves_row_major_mass() {
         assert!((actual.as_f64().unwrap() - expected / total).abs() < 1e-12);
     }
 }
+
+#[test]
+fn bayesian_metropolis_replays_and_recovers_logistic_capacity() {
+    let request = json!({"schema_version":"2.0","operation":"bayesian_metropolis",
+        "payload":{"forecast_model":"logistic","parameter":"L","bounds":[80.,120.],
+            "draws":4000,"warmup":1000,"seed":42,"proposal_step":4.,"noise_sd":1.,"observed":[50.],
+            "prediction":{"inputs":{"time":[2.]},"parameters":{"L":100.,"k":0.5,"x0":2.}}}});
+    let raw = innovate_core::execute_json(&request.to_string());
+    assert_eq!(raw, innovate_core::execute_json(&request.to_string()));
+    let response: serde_json::Value = serde_json::from_str(&raw).unwrap();
+    assert!(response["error"].is_null(), "{response}");
+    let fit = &response["result"];
+    assert_eq!(fit["samples"].as_array().unwrap().len(), 4000);
+    assert!((fit["posterior_mean"].as_f64().unwrap() - 100.).abs() < 0.25);
+    assert!((0.2..0.9).contains(&fit["acceptance_rate"].as_f64().unwrap()));
+}

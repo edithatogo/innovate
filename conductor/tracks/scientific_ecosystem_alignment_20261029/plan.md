@@ -2966,3 +2966,9 @@ the other competition models and installed binding checks remain open.
   installed R. All three returned identical results on the 5-by-7 grid.
   Independently summing rows and columns reproduced the 95% bounds
   [92,108] for L and [0.2714285714,0.8428571429] for k. R used raw JSON.
+
+- [x] Add seeded scalar random-walk Metropolis using the grid likelihood.
+  Retain repeated states on rejection and report retained acceptance.
+  A 4,000-draw Logistic chain replays exactly and recovers the known
+  posterior mean within 0.25. Three focused Rust tests and Clippy passed.
+  Joint sampling, convergence diagnostics and binding verification remain open.
