@@ -149,7 +149,7 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Local event- and tick-boundary resume, prior-pin checkpoint replay and installed binding conformance have evidence in the track plan. Broader stochastic resource and scenario qualification, hosted checks and release acceptance remain open."
+      "remaining": "Local event- and tick-boundary resume and prior-pin checkpoint replay have evidence in the track plan. Python, Julia and R each passed 64 scheduled-resource and 693 continuous-hazard replays. A continuous-hazard checkpoint also transferred between the three bindings on the same native build. Broader stochastic resource and scenario qualification, hosted checks and release acceptance remain open."
     },
     {
       "key": "bayesian_inference",
