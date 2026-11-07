@@ -1207,10 +1207,19 @@ fn pooled_scaled_deviation(treated: &[f64], control: &[f64], scale: f64) -> Opti
         return None;
     }
     let squared_deviations = |values: &[f64]| {
-        let center = mean(values).unwrap() / scale;
+        let anchor = values[0];
+        let offset = |&value: &f64| {
+            let difference = value - anchor;
+            if difference.is_finite() {
+                difference / scale
+            } else {
+                value / scale - anchor / scale
+            }
+        };
+        let center = values.iter().map(offset).sum::<f64>() / values.len() as f64;
         values
             .iter()
-            .map(|value| (value / scale - center).powi(2))
+            .map(|value| (offset(value) - center).powi(2))
             .sum::<f64>()
     };
     let deviation = ((squared_deviations(treated) + squared_deviations(control))
@@ -2213,4 +2222,19 @@ fn policy_specification(payload: &Value) -> Result<Value, &'static str> {
         declared
     };
     Ok(json!({"intervention":intervention,"causal_model":causal_model,"n_obs":n_obs}))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::pooled_scaled_deviation;
+
+    #[test]
+    fn pooled_deviation_resolves_adjacent_covariate_values() {
+        let lower = 1.5_f64;
+        let upper = lower.next_up();
+        let values = [lower, upper];
+        let deviation = pooled_scaled_deviation(&values, &values, upper).unwrap();
+        let expected = (upper - lower) / upper / 2_f64.sqrt();
+        assert!((deviation / expected - 1.).abs() <= 2. * f64::EPSILON);
+    }
 }

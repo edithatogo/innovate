@@ -5270,3 +5270,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Retain the standardized balance and constant-covariate
   cases in Python's native consumer suite. Both focused matching
   tests passed on Python 3.15.2.
+
+- [x] Preserve pooled pre-match spread for adjacent floating-point
+  values by subtracting an anchor before scaling. The Rust unit
+  regression matched the analytic spread within two machine epsilons,
+  and the focused causal boundary test passed.
