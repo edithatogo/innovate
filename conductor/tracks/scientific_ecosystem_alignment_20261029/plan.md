@@ -1926,3 +1926,11 @@ the other competition models and installed binding checks remain open.
   focused Clippy.
 - [ ] Restore historical scenario schema and registry coverage, comparison
   metrics, execution metadata, parallel grid execution and release parity.
+
+- [x] Restore the five historical scenario specification shapes on native
+  grid entries (e2c5f355). The optional specification is validated before
+  execution and returned with the row. Model execution uses the explicit
+  simulation payload. Rust tests cover valid and invalid inputs for all five
+  types. A network specification round-tripped through a rebuilt Python
+  3.15.2 wheel, Julia and installed R. All 34 native boundary tests and
+  focused Clippy passed.
