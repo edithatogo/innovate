@@ -7200,3 +7200,8 @@ Hosted release readiness for this worktree revision remains open.
   The existing matrix stages Cargo's dylib for both bindings and
   runs their native suites. Local arm64 conformance already passed.
   Actionlint passed for all workflows. Hosted readback remains open.
+
+- [x] Wire the verified R binary archive path into macOS conformance.
+  Build the archive, install it into a separate library and run the
+  existing native suite against that install. Linux and Windows use
+  their source installs. Actionlint passed. Hosted execution remains open.

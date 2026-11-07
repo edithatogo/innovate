@@ -136,7 +136,18 @@ jobs:
       - shell: bash
         run: Rscript -e 'install.packages("jsonlite", repos="https://cloud.r-project.org")'
       - run: R CMD INSTALL bindings/r
+        if: matrix.os != 'macos-latest'
         shell: bash
+      - name: Build and install the macOS R binary archive
+        if: matrix.os == 'macos-latest'
+        shell: bash
+        run: |
+          stage="$(mktemp -d)"
+          mkdir "$stage/build-lib" "$stage/installed-lib"
+          cd "$stage"
+          R CMD INSTALL --build -l "$stage/build-lib" "$GITHUB_WORKSPACE/bindings/r"
+          R CMD INSTALL -l "$stage/installed-lib" ./innovate.R_*.tgz
+          echo "R_LIBS=$stage/installed-lib" >> "$GITHUB_ENV"
       - run: Rscript bindings/r/tests/native.R
       - name: Verify R loads the Windows DLL from a Unicode path
         if: matrix.os == 'windows-latest'
