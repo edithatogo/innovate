@@ -6439,3 +6439,8 @@ Hosted release readiness for this worktree revision remains open.
   and its build plugin requires that service. The host data volume
   had under 500 MiB free. Record the verified subprocess and source
   package separately from the pending Linux container smoke check.
+
+- [x] Handle worker response write failures explicitly and reuse the
+  kernel schema version in its request wrapper. Both Rust process
+  regressions passed, and a closed stdout pipe produced exit one
+  with the expected diagnostic.

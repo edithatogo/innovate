@@ -1,16 +1,18 @@
 //! Single-request subprocess adapter for the native remote envelope.
 use serde_json::{Value, json};
-use std::io::{self, Read};
+use std::io::{self, Read, Write};
 use std::process::ExitCode;
 
 const MAX_ENVELOPE_BYTES: u64 = 2_000_000;
 
 fn main() -> ExitCode {
-    match dispatch() {
-        Ok(response) => {
-            println!("{response}");
-            ExitCode::SUCCESS
-        }
+    match dispatch().and_then(|response| {
+        let mut stdout = io::stdout().lock();
+        writeln!(stdout, "{response}")
+            .and_then(|()| stdout.flush())
+            .map_err(|_| "could not write remote response")
+    }) {
+        Ok(()) => ExitCode::SUCCESS,
         Err(message) => {
             eprintln!("{message}");
             ExitCode::FAILURE
@@ -30,7 +32,7 @@ fn dispatch() -> Result<String, &'static str> {
     let envelope: Value =
         serde_json::from_slice(&input).map_err(|_| "invalid remote envelope JSON")?;
     let request = json!({
-        "schema_version": "2.0",
+        "schema_version": innovate_core::KERNEL_SCHEMA_VERSION,
         "operation": "execute_remote_in_process",
         "payload": envelope,
     });
