@@ -4,3 +4,11 @@ nonrobust residual 8.16985368246037e-14
 robust seasonal 30.2436525197151
 robust trend 69.8325921886726
 robust residual 100.076244708388
+reference outer_iterations spike_residual spike_weight zero_weights
+0 63.8579793221489 1 0
+1 0 0 23
+2 59.177960333577 1 4
+3 0 0 25
+4 3.99781241060533 1 8
+5 0 0 25
+6 24.0145286639964 1 11

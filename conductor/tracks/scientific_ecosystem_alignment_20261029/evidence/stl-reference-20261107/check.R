@@ -27,3 +27,15 @@ for (mode in c("nonrobust", "robust")) {
     if (!robust) stopifnot(error < tolerance)
   }
 }
+
+# Inspect sensitivity of the independent result to the outer iteration count.
+cat("reference outer_iterations spike_residual spike_weight zero_weights\n")
+for (outer in 0:6) {
+  fit <- stats::stl(
+    stats::ts(values, frequency = 4), s.window = 7, t.window = 13, l.window = 5,
+    s.degree = 1, t.degree = 1, l.degree = 1, s.jump = 1, t.jump = 1, l.jump = 1,
+    inner = 5, outer = outer, robust = TRUE
+  )
+  cat(sprintf("%d %.15g %.15g %d\n", outer, fit$time.series[41, "remainder"],
+              fit$weights[41], sum(fit$weights == 0)))
+}

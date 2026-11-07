@@ -1365,3 +1365,10 @@ the other competition models and installed binding checks remain open.
   The largest nonrobust component difference was 1.57e-13. Robust maximum
   differences were 30.24 for seasonal, 69.83 for trend and 100.08 for
   residual, leaving robust parity open.
+
+- [x] Isolate the robust reference's dependence on outer iterations.
+  Across iterations 1–6, the spike weight alternates between zero and one
+  and 4–25 observations have zero weight. At five iterations R assigns
+  zero weight to the spike but reports a zero spike residual. Investigate
+  local fits with no positive weights before changing the Rust endpoint
+  convention or adopting this fixture as a robust outlier-recovery oracle.
