@@ -6082,3 +6082,9 @@ Hosted release readiness for this worktree revision remains open.
   its direct stream column by column, including values and nulls.
   Arrow.jl 2.8.1 remains the latest release. Keep the released-reader
   gate open and the candidate isolated pending upstream release.
+
+- [x] Verify file footer schema metadata on the isolated Arrow.jl 3.0
+  candidate c7b41360d41d3de0e78402734a49f2ebe0379548. It exposed the
+  Unicode provenance key from each file exported through Python, Julia
+  and R, with the expected IDs and nullable values. Released Arrow.jl
+  file metadata readback remains open.
