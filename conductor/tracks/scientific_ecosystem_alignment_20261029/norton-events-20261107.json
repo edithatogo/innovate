@@ -1,0 +1,89 @@
+{
+  "status": "bounded_local_checkpoint",
+  "base_commit": "1879a386b4f95475fbe2202c72b6c67e62505fd3",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "related_evidence": [
+    "ecosystem-events-20261107.json",
+    "norton-forcing-20261107.json"
+  ],
+  "results": {
+    "rust_tests": 146,
+    "rust_scope": "full core/C ABI coverage run plus 4 Polars tests",
+    "installed_python_tests": 53,
+    "julia_assertions": 214,
+    "R": "full conformance and independent historical Norton event fit/forecast passed",
+    "clippy": "workspace all targets passed",
+    "docs_pages": 163,
+    "hooks": "affected files passed",
+    "package": "local metadata, wheel contents and exact Rust modules/test/fixture inclusion passed"
+  },
+  "coverage": {
+    "count": 9994,
+    "covered": 8571,
+    "percent": 85.76145687412448
+  },
+  "module_coverage": {
+    "competition.rs": {
+      "count": 725,
+      "covered": 681,
+      "percent": 93.93103448275862
+    },
+    "events.rs": {
+      "count": 131,
+      "covered": 130,
+      "percent": 99.23664122137404
+    },
+    "substitution.rs": {
+      "count": 705,
+      "covered": 638,
+      "percent": 90.49645390070921
+    }
+  },
+  "oracle": {
+    "python": "3.15.2",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "method": "DOP853, split and freeze parameters at every control/event boundary, rtol=1e-12 atol=1e-13"
+  },
+  "semantics": "Shared validated persistent fixed overrides, continuous historical ODE state, covariate composition and right-hand event rates. Event times/overrides are fixed inputs.",
+  "remaining": "Successive-generation forcing/events, event inference, threshold helpers, uncertainty, branch/mutation, platform and scientific/release qualification",
+  "source_sha256": {
+    "bindings/julia/test/runtests.jl": "183ad5377a092c0a90f9b0f308afa0e493e5d4c7d03bcee2a350dc164f274e43",
+    "bindings/r/tests/native.R": "99a72fe66f9bc8578c9c9170b1112d8514d51811c3873fe2f6793b8ee86a805f",
+    "docs/astro-site/src/content/docs/native-migration.md": "c9dd4bf92d4a715b9f99e8c4162c4eb52be44ce7bfc9c26a99c2d9d7ad786a02",
+    "migration-ledger.json": "e67e82c49d73c0dec55dde5601f94beb00bc745055d0aff2f29153ebc72f8389",
+    "rust/crates/innovate-core/src/competition.rs": "286cfd34e73c8aebea3de4bbc0c45a512003de6b1f3a19d4a12c45bb71c365ca",
+    "rust/crates/innovate-core/src/discovery.json": "935a5f0ca05209f6f74e859d629356b4f7dda338e38208f21e7a695abd31ff2b",
+    "rust/crates/innovate-core/src/lib.rs": "a4ba8a237dcd4ca8854d8291a46948b1d9d4bb50975fdc9a991c1796560ad875",
+    "rust/crates/innovate-core/src/substitution.rs": "7bb197e75eb72d1a896e03e749966b3652ca398d9ba24023c49561d948f0e2fe",
+    "rust/crates/innovate-core/tests/competition.rs": "ab495115cea7d8051a39399a0af9646f7dee91c40ca99300eabf0fc8203b0bdc",
+    "rust/crates/innovate-core/tests/multi_generation.rs": "887443d9c6b78b2ef797d3389ed9dbe2bdc2bd443772fe405d2847e201033de4",
+    "tests/native/test_python_consumer.py": "b6777d81cb98e531870acf65a65170f3de4fe269694b2ab92e2e22562d88a698",
+    "rust/crates/innovate-core/src/events.rs": "bac2d9bbce8e79d5903eaf7df2cd79f545db90341c174e9696959a3002269813",
+    "rust/crates/innovate-core/tests/fixtures/norton_events_scipy.json": "fe5ef30f87b439a827a750b5a63484779952fd62a28447952a669ff0b58b574e"
+  },
+  "logs": {
+    "clippy.log": "97e8ede1752d12223e01325c67b225a18be8479a8bda9ff0a3c69145914ea844",
+    "coverage.log": "fd63fc0dac5c2bd9fb4b1cc9c39a0b234828abcf7aca5837614951fff31d3ff7",
+    "docs.log": "95a5ebb6b11f62eca8ef663c0189dda38c4bdb8927add94c27153b668a94045d",
+    "ffi.log": "4a47e6cf87218a6ca73e23c68d6ba3bb30e9f433a14ef296fe5e434f136e2f43",
+    "green.log": "a7d378b7abba6761e79f993575ac9fb14cb39e15b8bcd2fb71695e22c01f8ecd",
+    "hooks.log": "7523d6b940ad7d7e49ea93ff33ac60ceb273c50cb6ae677030a5b65df95de21b",
+    "install.log": "7c51e9c04cf499111287f4c0948eb7a4db26422e20391f55f5723132c35fa50f",
+    "julia.log": "1e9bc391e97ec45c980d71f75606ddcc329bc8a5e49ff4d3ccfbfa71ae2a3731",
+    "oracle-fit.log": "ad185c46f0157d0684ae6756c5921a5f5ea73094e81cc89f7e948f193e9ac227",
+    "package.log": "ddef18e08c0578d4f3e7b6cd162f9b829c48ffbd9c1ebc63b7ab7ad065b41b19",
+    "python.log": "3bf5ea7c2adce2a8def4d6995c21f699dd10c4eed53d65d3beca9cf0b2731e93",
+    "r.log": "728c4065a8624102b2134988ba9a81c0deeee87093afe0fe57fae4183e77f497",
+    "red.log": "6f006e9642b1d04fe145138679999fb773a5ca2580df8065ff0a0b942fc99efd",
+    "sdist.log": "25f6b37cd459a96d6a050740c8b6ab3419cee09d6dee1aca7fe1e6a0c3820bc9",
+    "tabular.log": "937bc69ec5fcd429a36d8a94ff2adace416e4e9021796ecf723236c58cfc3896",
+    "wheel.log": "3cd374bda754d245c1b626898c8301b2194c4f13cc5a14b2925d2100f543ec6b"
+  },
+  "oracle_generator_sha256": "fbef759ddf262ed94867618e212a5622870dc1db6c5ae8ef21fca73620852542",
+  "artifacts": {
+    "innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "098e15257806fa0ebe0d2466692eb07446878b9d79921a815ef794d1adf48844",
+    "innovate-0.7.0a1.tar.gz": "4d8d0539ec0b159c8ce46ca8a91aa3dfd7deec2757cff08b23561ac008febc43"
+  }
+}

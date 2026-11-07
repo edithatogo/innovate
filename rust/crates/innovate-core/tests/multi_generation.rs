@@ -325,3 +325,125 @@ fn conditional_covariate_fit_retains_all_named_coefficients() {
     assert_eq!(fit["parameters"].as_object().unwrap().len(), 6);
     assert!(fit["diagnostics"]["metrics"]["RSS"].as_f64().unwrap() < 1e-10);
 }
+
+#[test]
+fn historical_norton_events_preserve_continuous_generations_and_controls() {
+    let result = KernelBinding::new()
+        .predict_model(
+            "norton_bass",
+            json!({
+                "inputs":{"time":[0.,1.,2.],"covariates":{"price":[0.,1.,2.]}},
+                "parameters":{"p1":0.1,"q1":0.,"m1":100.,"p2":0.1,"q2":0.,"m2":100.,
+                    "beta_p1_price":0.05,"beta_q1_price":0.,"beta_m1_price":0.,
+                    "beta_p2_price":0.05,"beta_q2_price":0.,"beta_m2_price":0.},
+                "constructor_kwargs":{"n_generations":2,"covariates":["price"],
+                    "parameter_events":[{"time":1.,"parameters":{"p1":0.2,"p2":0.2}},
+                        {"time":2.,"parameters":{"beta_p1_price":0.,"beta_p2_price":0.}}]}
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    assert!((result["rows"][2][0].as_f64().unwrap() - 40. * (-0.4_f64).exp()).abs() < 1e-5);
+    assert!((result["rates"][1][1].as_f64().unwrap() - 25. * (-0.125_f64).exp()).abs() < 1e-5);
+    let forecast = KernelBinding::new()
+        .predict_model(
+            "norton_bass",
+            json!({
+                "inputs":{"time":[3.]},"state":result["state"]
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    assert!((forecast["rows"][0][0].as_f64().unwrap() - 60. * (-0.6_f64).exp()).abs() < 1e-5);
+}
+
+#[test]
+fn scalar_norton_events_bypass_closed_form_and_successive_variant_stays_explicit() {
+    let mut payload = json!({
+        "inputs":{"time":[0.,1.,2.]},
+        "parameters":{"p1":0.1,"q1":0.,"m1":100.},
+        "constructor_kwargs":{"n_generations":1,
+            "parameter_events":[{"time":0.,"parameters":{"p1":0.2}},
+                {"time":1.,"parameters":{"p1":0.}}]}
+    });
+    let result = KernelBinding::new()
+        .predict_model("norton_bass", payload.clone())
+        .unwrap()
+        .result
+        .unwrap();
+    assert!((result["rows"][2][0].as_f64().unwrap() - 100. * (1. - (-0.2_f64).exp())).abs() < 1e-6);
+    assert_eq!(result["rates"][1][0], 0.);
+    payload["constructor_kwargs"]["variant"] = json!("successive_generations");
+    assert!(
+        KernelBinding::new()
+            .predict_model("norton_bass", payload)
+            .is_err()
+    );
+}
+
+#[test]
+fn historical_norton_events_match_independent_reference_and_fit() {
+    let fixture: Value =
+        serde_json::from_str(include_str!("fixtures/norton_events_scipy.json")).unwrap();
+    let binding = KernelBinding::new();
+    let result = binding.predict_model("norton_bass",json!({
+        "inputs":{"time":fixture["time"],"covariates":fixture["covariates"]},
+        "parameters":fixture["parameters"],"constructor_kwargs":fixture["constructor_kwargs"]
+    })).unwrap().result.unwrap();
+    for quantity in ["rows", "rates"] {
+        for (actual, expected) in result[quantity]
+            .as_array()
+            .unwrap()
+            .iter()
+            .zip(fixture[quantity].as_array().unwrap())
+        {
+            for (actual, expected) in actual
+                .as_array()
+                .unwrap()
+                .iter()
+                .zip(expected.as_array().unwrap())
+            {
+                assert!(
+                    (actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-5,
+                    "{quantity}"
+                );
+            }
+        }
+    }
+    let mut start = fixture["parameters"].clone();
+    start["p1"] = json!(0.0305);
+    let fit = binding.fit_model("norton_bass",json!({
+        "inputs":{"time":fixture["time"],"covariates":fixture["covariates"],"observed":fixture["rows"]},
+        "constructor_kwargs":fixture["constructor_kwargs"],
+        "fit_options":{"initial_parameters":start,"max_iterations":200}
+    })).unwrap().result.unwrap();
+    assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
+    assert!(fit["diagnostics"]["metrics"]["RSS"].as_f64().unwrap() < 1e-8);
+    assert_eq!(
+        fit["diagnostics"]["parameter_events"]["parameters_estimated"],
+        false
+    );
+    let forecast = binding
+        .predict_model(
+            "norton_bass",
+            json!({
+                "inputs":{"time":fixture["forecast_time"]},"state":fit["state"]
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    for (actual, expected) in forecast["rows"][0]
+        .as_array()
+        .unwrap()
+        .iter()
+        .zip(fixture["forecast_rows"][0].as_array().unwrap())
+    {
+        assert!(
+            (actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-3,
+            "actual={actual} expected={expected} fit={fit}"
+        );
+    }
+}

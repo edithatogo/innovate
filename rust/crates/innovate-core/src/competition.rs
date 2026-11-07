@@ -1,20 +1,12 @@
 //! Native competitive diffusion equations preserved from the pre-migration models.
+use crate::events::ParameterEvents;
 use crate::mechanistic::History;
-use crate::numerics::{integrate, least_squares};
+use crate::numerics::least_squares;
 use crate::validation::{numeric_array, numeric_array_from_aliases, object_section, required_f64};
 use crate::{
     KERNEL_SCHEMA_VERSION, KernelBindingError, KernelOperation, KernelRequest, KernelResponse,
 };
-use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value, json};
-use std::{borrow::Cow, collections::BTreeMap};
-
-#[derive(Deserialize, Serialize)]
-#[serde(deny_unknown_fields)]
-struct ParameterEvent {
-    time: f64,
-    parameters: BTreeMap<String, f64>,
-}
 
 struct Model {
     key: String,
@@ -24,8 +16,7 @@ struct Model {
     covariates: Vec<String>,
     history: Option<History>,
     historical_layout: bool,
-    events: Vec<ParameterEvent>,
-    overrides: Vec<Vec<(usize, f64)>>,
+    events: ParameterEvents,
     origin: f64,
     initial: Vec<f64>,
     conditioned_initial: bool,
@@ -59,7 +50,7 @@ impl Model {
             }
         }
         if !self.events.is_empty() {
-            out["parameter_events"] = json!(self.events);
+            out["parameter_events"] = self.events.value();
         }
         out
     }
@@ -91,22 +82,10 @@ impl Model {
         )
     }
     fn regime(&self, t: f64) -> usize {
-        self.events.partition_point(|event| event.time <= t)
-    }
-    fn regime_parameters<'a>(&self, parameters: &'a [f64], regime: usize) -> Cow<'a, [f64]> {
-        if regime == 0 {
-            return Cow::Borrowed(parameters);
-        }
-        let mut effective = parameters.to_vec();
-        for overrides in &self.overrides[..regime] {
-            for &(index, value) in overrides {
-                effective[index] = value;
-            }
-        }
-        Cow::Owned(effective)
+        self.events.regime(t)
     }
     fn lock_in_capacity(&self, t: f64, parameters: &[f64], regime: usize) -> f64 {
-        let parameters = self.regime_parameters(parameters, regime);
+        let parameters = self.events.parameters(parameters, regime);
         parameters[6]
             + self.history.as_ref().map_or(0., |history| {
                 self.covariates
@@ -129,7 +108,7 @@ impl Model {
         parameters: &[f64],
         regime: usize,
     ) -> Vec<f64> {
-        let parameters = self.regime_parameters(parameters, regime);
+        let parameters = self.events.parameters(parameters, regime);
         if let Some(history) = &self.history {
             let mut effective = parameters[..self.base_count].to_vec();
             for (name, coefficients) in self
@@ -209,56 +188,33 @@ impl Model {
         }
         grid.extend(
             self.events
-                .iter()
-                .map(|event| event.time)
+                .times()
                 .filter(|t| *t > self.origin && *t <= end),
         );
         grid.sort_by(f64::total_cmp);
         grid.dedup_by(|a, b| *a == *b);
-        if self.key == "lock_in"
-            && std::iter::once(self.origin)
-                .chain(grid.iter().copied())
-                .any(|t| {
-                    let capacity = self.lock_in_capacity(t, p, self.regime(t));
-                    !capacity.is_finite() || capacity <= 0.
-                })
-        {
-            return Err("lock-in effective capacity must stay finite and positive".into());
-        }
-        let mut states = Vec::with_capacity(grid.len());
-        let mut start = self.origin;
-        let mut current = self.initial.clone();
-        let mut cursor = 0;
-        let mut regime = self.regime(start);
-        while cursor < grid.len() {
-            let boundary = self
-                .events
-                .get(regime)
-                .map_or(end, |event| event.time.min(end));
-            let stop = grid.partition_point(|t| *t <= boundary);
-            let interval = &grid[cursor..stop];
-            if self.key == "lock_in"
-                && std::iter::once(start)
-                    .chain(interval.iter().copied())
-                    .any(|t| {
-                        let capacity = self.lock_in_capacity(t, p, regime);
-                        !capacity.is_finite() || capacity <= 0.
-                    })
-            {
-                return Err("lock-in effective capacity must stay finite and positive".into());
+        if self.key == "lock_in" {
+            for time in std::iter::once(self.origin).chain(grid.iter().copied()) {
+                let active = self.regime(time);
+                let left = self
+                    .events
+                    .boundary_left_regime(time)
+                    .filter(|_| time > self.origin);
+                for regime in std::iter::once(active).chain(left) {
+                    let capacity = self.lock_in_capacity(time, p, regime);
+                    if !capacity.is_finite() || capacity <= 0. {
+                        return Err(
+                            "lock-in effective capacity must stay finite and positive".into()
+                        );
+                    }
+                }
             }
-            let segment = integrate(interval, start, &current, |t, y| {
+        }
+        let states = self
+            .events
+            .integrate(&grid, self.origin, &self.initial, |t, y, regime| {
                 self.derivative_in_regime(t, y, p, regime)
             })?;
-            current = segment
-                .last()
-                .ok_or("event interval has no boundary state")?
-                .clone();
-            states.extend(segment);
-            start = boundary;
-            cursor = stop;
-            regime += 1;
-        }
         let mut rows: Vec<_> = time
             .iter()
             .map(|t| states[grid.partition_point(|v| v < t)].clone())
@@ -524,45 +480,8 @@ fn model(
         .transpose()?;
     let history = History::merge(history, &covariates, time, inputs.get("covariates"), origin)
         .map_err(|e| invalid(op, e))?;
-    let events: Vec<ParameterEvent> = kw
-        .get("parameter_events")
-        .map(|value| {
-            serde_json::from_value(value.clone()).map_err(|_| {
-                invalid(
-                    op,
-                    "parameter_events must contain times and named parameter overrides",
-                )
-            })
-        })
-        .transpose()?
-        .unwrap_or_default();
-    if events.len() > 32
-        || events
-            .iter()
-            .any(|event| !event.time.is_finite() || event.time < 0. || event.parameters.is_empty())
-        || events.windows(2).any(|pair| pair[0].time >= pair[1].time)
-    {
-        return Err(invalid(
-            op,
-            "parameter_events requires at most 32 nonempty changes at finite increasing nonnegative times",
-        ));
-    }
-    let overrides = events
-        .iter()
-        .map(|event| {
-            event.parameters.iter().map(|(name, &value)| {
-                let index = names.iter().position(|candidate| candidate == name)
-                    .ok_or_else(|| invalid(op, format!("unknown event parameter '{name}'")))?;
-                let invalid_base = index < base_count
-                    && (value < 0. || (name.starts_with('m') && value == 0.));
-                if !value.is_finite() || invalid_base {
-                    return Err(invalid(op, "event base parameters must retain their physical domain and beta coefficients must be finite"));
-                }
-                Ok((index, value))
-            }).collect::<Result<Vec<_>, KernelBindingError>>()
-        })
-        .collect::<Result<Vec<_>, _>>()?;
-
+    let events = ParameterEvents::parse(kw.get("parameter_events"), &names, base_count)
+        .map_err(|error| invalid(op, error))?;
     Ok(Model {
         key,
         n,
@@ -572,7 +491,6 @@ fn model(
         history,
         historical_layout,
         events,
-        overrides,
         origin,
         initial,
         conditioned_initial,

@@ -3,6 +3,7 @@
 mod competition;
 mod composite;
 mod contracts;
+mod events;
 mod fitting;
 mod forcing;
 mod hierarchical;

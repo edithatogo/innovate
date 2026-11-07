@@ -915,3 +915,26 @@ unforced confounding rank bound. Estimating event times, estimating override
 values and calibrated intervention uncertainty remain required inference work.
 Independent DOP853 references cover two off-grid events, control composition,
 signed rates and saved-state forecasts for all four models.
+
+### Historical Norton–Bass parameter events
+
+The `legacy_cannibalization` ODE variant supports the same fixed
+`parameter_events` contract as the ecosystem models. Overrides can change
+named generation parameters such as `p1`, `q2` and `m2`, or declared
+coefficients such as `beta_q2_price`. Values persist until replaced again.
+The integrated generation levels remain continuous, and boundary rates use
+the active right-hand parameters. Control history and the complete event list
+persist in saved state for forecasts.
+
+Event validation and continuous-state segmentation now share one Rust
+implementation across the ecosystem and historical Norton–Bass models.
+Norton–Bass discovery advertises fixed-event support for its historical ODE
+variant. The unforced `successive_generations` variant retains its existing
+launch and closed-form conventions. Its forcing and event extensions remain
+required migration work.
+
+An analytic two-generation case verifies cumulative hazard, boundary rates
+and forecasts after a coefficient override. An independent interacting DOP853
+reference covers two off-grid events and a perturbed conditional fit. Event
+times and overrides are fixed inputs. Estimating them, propagating uncertainty
+and wider scientific qualification remain required.

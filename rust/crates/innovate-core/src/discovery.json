@@ -131,6 +131,7 @@
         "rust"
       ],
       "supports_covariates": true,
+      "supports_parameter_events": true,
       "supports_multivariate_output": true,
       "supports_simulation": true,
       "supports_summarize": true,

@@ -1,6 +1,7 @@
 //! Multi-generation substitution. Historical ODE and successive-generation semantics are explicit.
+use crate::events::ParameterEvents;
 use crate::mechanistic::History;
-use crate::numerics::{integrate, least_squares};
+use crate::numerics::least_squares;
 use crate::validation::{numeric_array, numeric_array_from_aliases, object_section, required_f64};
 use crate::{
     KERNEL_SCHEMA_VERSION, KernelBindingError, KernelOperation, KernelRequest, KernelResponse,
@@ -18,6 +19,7 @@ struct Model {
     initial: Vec<f64>,
     covariates: Vec<String>,
     history: Option<History>,
+    events: ParameterEvents,
 }
 fn invalid(op: KernelOperation, message: impl Into<String>) -> Error {
     Error::invalid_request(op, message)
@@ -49,6 +51,7 @@ fn options(request: &KernelRequest, inputs: &Map<String, Value>) -> Result<Model
             "initial_values",
             "covariates",
             "covariate_history",
+            "parameter_events",
         ]
         .contains(&key.as_str())
         {
@@ -195,6 +198,25 @@ fn options(request: &KernelRequest, inputs: &Map<String, Value>) -> Result<Model
                 .map_err(|_| invalid(op, "invalid covariate_history"))
         })
         .transpose()?;
+    let base_names: Vec<_> = (1..=n)
+        .flat_map(|index| ['p', 'q', 'm'].map(|name| format!("{name}{index}")))
+        .collect();
+    let mut names = base_names.clone();
+    for covariate in &covariates {
+        names.extend(
+            base_names
+                .iter()
+                .map(|name| format!("beta_{name}_{covariate}")),
+        );
+    }
+    let events = ParameterEvents::parse(kw.get("parameter_events"), &names, 3 * n)
+        .map_err(|error| invalid(op, error))?;
+    if variant != "legacy_cannibalization" && !events.is_empty() {
+        return Err(invalid(
+            op,
+            "parameter_events require legacy_cannibalization",
+        ));
+    }
     Ok(Model {
         n,
         variant,
@@ -203,6 +225,7 @@ fn options(request: &KernelRequest, inputs: &Map<String, Value>) -> Result<Model
         initial,
         covariates,
         history,
+        events,
     })
 }
 
@@ -275,9 +298,16 @@ impl Model {
             kwargs["covariates"] = json!(self.covariates);
             kwargs["covariate_history"] = json!(history);
         }
+        if !self.events.is_empty() {
+            kwargs["parameter_events"] = self.events.value();
+        }
         kwargs
     }
     fn derivative(&self, t: f64, y: &[f64], p: &[f64]) -> Vec<f64> {
+        self.derivative_in_regime(t, y, p, self.events.regime(t))
+    }
+    fn derivative_in_regime(&self, t: f64, y: &[f64], p: &[f64], regime: usize) -> Vec<f64> {
+        let p = self.events.parameters(p, regime);
         let controls: Vec<_> = self
             .history
             .iter()
@@ -308,35 +338,40 @@ impl Model {
     }
     fn predict(&self, time: &[f64], p: &[f64]) -> Result<Trajectory, String> {
         if self.variant == "legacy_cannibalization" {
-            let rows: Vec<Vec<f64>> =
-                if self.history.is_none() && self.n == 1 && self.initial[0] == 0.0 {
-                    if time.iter().any(|t| *t < self.origin) {
-                        return Err("time precedes initial_time".into());
-                    }
-                    time.iter()
-                        .map(|t| vec![p[2] * fraction(t - self.origin, p[0], p[1]).0])
-                        .collect()
-                } else {
-                    let mut grid = time.to_vec();
-                    if let Some(history) = &self.history {
-                        let end = time.last().copied().unwrap_or(self.origin);
-                        grid.extend(
-                            history
-                                .time
-                                .iter()
-                                .copied()
-                                .filter(|t| *t > self.origin && *t < end),
-                        );
-                        grid.sort_by(f64::total_cmp);
-                        grid.dedup_by(|a, b| *a == *b);
-                    }
-                    let states = integrate(&grid, self.origin, &self.initial, |t, y| {
-                        self.derivative(t, y, p)
-                    })?;
-                    time.iter()
-                        .map(|t| states[grid.partition_point(|v| v < t)].clone())
-                        .collect()
-                };
+            let rows: Vec<Vec<f64>> = if self.history.is_none()
+                && self.events.is_empty()
+                && self.n == 1
+                && self.initial[0] == 0.0
+            {
+                if time.iter().any(|t| *t < self.origin) {
+                    return Err("time precedes initial_time".into());
+                }
+                time.iter()
+                    .map(|t| vec![p[2] * fraction(t - self.origin, p[0], p[1]).0])
+                    .collect()
+            } else {
+                let mut grid = time.to_vec();
+                if let Some(history) = &self.history {
+                    let end = time.last().copied().unwrap_or(self.origin);
+                    grid.extend(
+                        history
+                            .time
+                            .iter()
+                            .copied()
+                            .filter(|t| *t > self.origin && *t < end),
+                    );
+                    grid.sort_by(f64::total_cmp);
+                    grid.dedup_by(|a, b| *a == *b);
+                }
+                let states =
+                    self.events
+                        .integrate(&grid, self.origin, &self.initial, |t, y, regime| {
+                            self.derivative_in_regime(t, y, p, regime)
+                        })?;
+                time.iter()
+                    .map(|t| states[grid.partition_point(|v| v < t)].clone())
+                    .collect()
+            };
             let rates: Vec<Vec<f64>> = time
                 .iter()
                 .zip(&rows)
@@ -388,7 +423,7 @@ impl Model {
         Ok(
             json!({"columns":(1..=self.n).map(|i|format!("series_{i}")).collect::<Vec<_>>(),"rows":rows,"rates":rates,
             "metadata":{"shape":[time.len(),self.n],"variant":self.variant,"quantity":"generation_level",
-            "rate_semantics":"signed derivative of generation level; not gross incidence", "launch_derivative":"right_hand", "warnings":warnings}}),
+            "rate_semantics":"signed derivative of generation level; not gross incidence", "launch_derivative":"right_hand", "parameter_event_semantics":"persistent fixed overrides; continuous historical ODE state; right-hand rates", "warnings":warnings}}),
         )
     }
 }
@@ -617,7 +652,7 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
     let result = match op {
         KernelOperation::PredictModel | KernelOperation::SimulateModel => {
             let mut predictions = predictions;
-            if model.history.is_some() {
+            if model.history.is_some() || !model.events.is_empty() {
                 predictions["state"] = state;
             }
             predictions
@@ -631,6 +666,9 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
                 let observed = observations(inputs, model.n, time.len(), op)?;
                 let (predicted, _) = model.predict(&time, &p).map_err(|e| invalid(op, e))?;
                 let mut d = diagnostics(&time, &observed, &predicted, "NortonBassModel", p.len());
+                if !model.events.is_empty() {
+                    d["parameter_events"] = json!({"count":model.events.len(),"parameters_estimated":false,"state_reset":false});
+                }
                 if let Some(report) = optimizer {
                     if report["converged"] != true {
                         d["warnings"]

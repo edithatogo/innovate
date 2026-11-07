@@ -449,7 +449,8 @@ fn fixed_parameter_events_split_exactly_and_use_right_hand_rates() {
                 "lotka_volterra",
                 "complementary_goods",
                 "lock_in",
-                "multi_product"
+                "multi_product",
+                "norton_bass"
             ]
             .contains(&model.key.as_str())
         );

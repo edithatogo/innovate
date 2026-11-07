@@ -697,3 +697,37 @@ def test_ecosystem_fixed_event_polars_fit():
         )
     )
     assert [future["prediction_1"][0], future["prediction_2"][0]] == pytest.approx(case["forecast_rows"][0], abs=1e-4)
+
+
+def test_norton_fixed_events_polars_fit_and_forecast():
+    fixture = json.loads(
+        (Path(__file__).parents[2] / "rust/crates/innovate-core/tests/fixtures/norton_events_scipy.json").read_text()
+    )
+    data = pl.DataFrame(
+        {
+            "time": fixture["time"],
+            "price": fixture["covariates"]["price"],
+            "first": [row[0] for row in fixture["rows"]],
+            "second": [row[1] for row in fixture["rows"]],
+        }
+    )
+    fit = innovate.fit(
+        "norton_bass",
+        data,
+        observed_columns=["first", "second"],
+        model_options=fixture["constructor_kwargs"],
+        fit_options={"initial_parameters": dict(fixture["parameters"], p1=0.0305), "max_iterations": 200},
+    )
+    assert fit.diagnostics["optimizer"]["converged"]
+    assert not fit.diagnostics["parameter_events"]["parameters_estimated"]
+    forecast = fit.predict(
+        pl.DataFrame(
+            {
+                "time": fixture["forecast_time"],
+                "price": [fixture["covariates"]["price"][-1]],
+            }
+        )
+    )
+    assert [forecast["prediction_1"][0], forecast["prediction_2"][0]] == pytest.approx(
+        fixture["forecast_rows"][0], abs=1e-3
+    )

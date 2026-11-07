@@ -1,0 +1,33 @@
+R native conformance passed
+R five-model analytic conformance passed
+R multi-generation fit, forecast, rates and single-row transport passed
+R competitive analytic limits, two-output rates and optional-null transport passed
+R installed native overflow guard passed
+R Kairos native replay passed
+R ABM covariate forcing and agent conservation passed
+R historical Logistic and initial ABM conformance passed
+R Kairos waiting deadline passed
+R complementary goods and network FIFO conformance passed
+R complementary analytic parameter recovery passed
+R singleton initial-node and pure contagion passed
+R lock-in analytic forecast passed
+R historical weighted network prediction passed
+R singleton policy event boundary passed
+R heterogeneous service and singleton transport passed
+R latent fit, saved state and singleton arrays passed
+R fixed-time regime fit and forecast state passed
+R short Fisher-Pry regime and singleton detected boundary passed
+R hierarchical grouped state and singleton mapping passed
+R weighted fit, Gaussian mixture and singleton component passed
+R composite matrix rates and singleton fitted origin passed
+R mechanistic covariates, events, history and fit passed
+R nontrivial forcing history replays without revision
+R directed weighted Kairos resource and priorities passed
+R Kairos queue limit and retry passed
+R Norton Bass forcing history passed
+R interacting Lotka forcing fit and history passed
+R multi product forcing layouts, fit and forecast passed
+R complementary goods forcing fit and history passed
+R lock in forcing fit, forecast and capacity projection passed
+R ecosystem parameter events, fit and singleton scalar time passed
+R historical Norton fixed events, fit and forecast passed
