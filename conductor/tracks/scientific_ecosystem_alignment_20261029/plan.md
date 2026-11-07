@@ -6953,3 +6953,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify the final calendar date through the rebuilt Python 3.15.2
   wheel, Julia and installed R. Month, quarter and year end each
   returned +262142-12-31 and sum 1 on native builds from 901a60bc.
+
+- [x] Apply the native calendar output limit to occupied weekly
+  buckets for date and timestamp requests. The shared accumulator
+  rejects a new bucket past 100,000. Both focused Rust tests passed.

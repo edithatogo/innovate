@@ -2,6 +2,8 @@ use chrono::{DateTime, Datelike, Days, Months, NaiveDate, NaiveDateTime, TimeDel
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
 
+const MAX_PERIODS: usize = 100_000;
+
 pub(crate) fn aggregate(payload: &Value) -> Result<Value, &'static str> {
     let dates: Vec<String> = serde_json::from_value(payload["dates"].clone())
         .map_err(|_| "dates must be an array of ISO dates or timestamps")?;
@@ -97,6 +99,9 @@ fn add_value<K: Ord>(
     bucket: K,
     value: f64,
 ) -> Result<(), &'static str> {
+    if sums.len() == MAX_PERIODS && !sums.contains_key(&bucket) {
+        return Err("calendar output exceeds 100000 periods");
+    }
     let sum = sums.entry(bucket).or_insert(0.);
     *sum += value;
     if !sum.is_finite() {
@@ -148,7 +153,7 @@ fn aggregate_dates(
         let (&mut_date, _) = sums.first_key_value().unwrap();
         let mut date = mut_date;
         loop {
-            if labels.len() == 100_000 {
+            if labels.len() == MAX_PERIODS {
                 return Err("calendar output exceeds 100000 periods");
             }
             let next = if months > 0 {
@@ -189,6 +194,18 @@ fn aggregate_dates(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn weekly_buckets_obey_period_limit() {
+        let first = NaiveDate::from_ymd_opt(2000, 1, 1).unwrap();
+        let dates: Vec<_> = (0..=MAX_PERIODS)
+            .map(|week| first.checked_add_days(Days::new(week as u64 * 7)).unwrap())
+            .collect();
+        assert_eq!(
+            aggregate_dates(dates, vec![1.; MAX_PERIODS + 1], "W", 1),
+            Err("calendar output exceeds 100000 periods")
+        );
+    }
 
     #[test]
     fn end_label_can_be_the_last_supported_date() {
