@@ -7006,3 +7006,8 @@ Hosted release readiness for this worktree revision remains open.
   the rebuilt Python 3.15.2 wheel, Julia and installed R. Every result
   retained nulls for incomplete windows and a mean within one ulp
   for the complete window, using native builds from 446ee021.
+
+- [x] Recover finite Polars rolling means on either side of a null
+  gap. The fallback restores the original incomplete-window mask.
+  The focused Python preprocessing test passed with the updated
+  wrapper and the existing native extension.

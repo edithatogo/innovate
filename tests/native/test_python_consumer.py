@@ -990,6 +990,9 @@ def test_polars_preprocessing_preserves_order_and_full_window():
         assert result.name == extreme.name
         assert result.dtype == extreme.dtype
         assert result.to_list() == [None, value, value / 2]
+    largest = float.fromhex("0x1.fffffffffffffp+1023")
+    with_gap = pl.Series("rate", [largest, largest, None, largest, largest])
+    assert innovate.rolling_average(with_gap, 2).to_list() == [None, largest, None, None, largest]
     with pytest.raises(ValueError, match="window must be positive"):
         innovate.rolling_average(series, 0)
 
