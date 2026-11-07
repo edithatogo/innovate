@@ -311,6 +311,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
         Some("stratified_treatment_contrast") => stratified_treatment_contrast(payload),
         Some("propensity_weighted_contrast") => propensity_weighted_contrast(payload),
         Some("augmented_treatment_contrast") => augmented_treatment_contrast(payload),
+        Some("cross_fitted_stratum_ate") => cross_fitted_stratum_ate(payload),
         Some("estimate_stratum_propensities") => estimate_stratum_propensities(payload),
         Some("fit_logistic_propensities") => fit_logistic_propensities(payload),
         Some("predict_logistic_propensities") => predict_logistic_propensities(payload),
@@ -1081,6 +1082,68 @@ fn estimate_stratum_propensities(payload: &Value) -> Result<Value, &'static str>
         .collect();
     Ok(
         json!({"method":"empirical_stratum_frequency","propensities":propensities,"by_stratum":by_stratum}),
+    )
+}
+
+fn cross_fitted_stratum_ate(payload: &Value) -> Result<Value, &'static str> {
+    let outcomes = series(payload, "outcomes")?;
+    let treatment = series(payload, "treatment")?;
+    let strata: Vec<String> = serde_json::from_value(payload["strata"].clone())
+        .map_err(|_| "strata must contain string labels")?;
+    let folds: Vec<u32> = serde_json::from_value(payload["folds"].clone())
+        .map_err(|_| "folds must be unsigned integer labels")?;
+    let n = outcomes.len();
+    if [treatment.len(), strata.len(), folds.len()]
+        .iter()
+        .any(|&len| len != n)
+        || strata.iter().any(|label| label.trim().is_empty())
+        || treatment.iter().any(|&v| v != 0. && v != 1.)
+    {
+        return Err(
+            "cross-fitted ATE requires aligned inputs, nonblank strata and binary treatment",
+        );
+    }
+    let labels: std::collections::BTreeSet<_> = folds.iter().copied().collect();
+    if !(2..=32).contains(&labels.len()) {
+        return Err("cross fitting requires two to 32 folds");
+    }
+    let mut propensities = vec![0.; n];
+    let mut treated_predictions = vec![0.; n];
+    let mut control_predictions = vec![0.; n];
+    for label in &labels {
+        let mut training = std::collections::BTreeMap::<&str, [Vec<f64>; 2]>::new();
+        for i in (0..n).filter(|&i| folds[i] != *label) {
+            training.entry(&strata[i]).or_default()[treatment[i] as usize].push(outcomes[i]);
+        }
+        let fitted: std::collections::BTreeMap<_, _> = training
+            .iter()
+            .filter_map(|(&stratum, [control, treated])| {
+                Some((
+                    stratum,
+                    (
+                        mean(control)?,
+                        mean(treated)?,
+                        treated.len() as f64 / (control.len() + treated.len()) as f64,
+                    ),
+                ))
+            })
+            .collect();
+        for i in (0..n).filter(|&i| folds[i] == *label) {
+            let &(control, treated, propensity) = fitted
+                .get(strata[i].as_str())
+                .ok_or("each held-out stratum requires both arms in its training complement")?;
+            control_predictions[i] = control;
+            treated_predictions[i] = treated;
+            propensities[i] = propensity;
+        }
+    }
+    let contrast = augmented_treatment_contrast(&json!({
+        "outcomes":outcomes,"treatment":treatment,"propensities":propensities,
+        "treated_predictions":treated_predictions,"control_predictions":control_predictions
+    }))?;
+    Ok(
+        json!({"contrast":contrast,"folds":folds,"propensities":propensities,
+        "treated_predictions":treated_predictions,"control_predictions":control_predictions}),
     )
 }
 

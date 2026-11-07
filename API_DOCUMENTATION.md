@@ -314,3 +314,10 @@ For `estimand="att"`, provide control predictions only. The estimate
 subtracts treatment-odds-weighted control residuals from treated
 residuals, with both totals divided by the treated count. The influence
 standard error accounts for estimating the treated fraction.
+
+Use `cross_fitted_stratum_ate` with aligned `outcomes`, binary
+`treatment`, string `strata` and unsigned integer `folds`. For each
+held-out stratum, the training complement must contain both arms.
+Rust estimates the treatment frequency and both outcome means in
+that complement, then computes augmented ATE. The response includes
+the contrast, folds and nuisance predictions in original row order.

@@ -4648,3 +4648,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify augmented ATT through rebuilt Python 3.15.2, Julia and
   installed R. Each recovered estimate 2 and influence standard error 2
   while retaining the augmented ATE assertions.
+
+- [x] Compose cross-fitted stratum nuisance estimates with augmented ATE.
+  The Rust fixture verifies complement-only outcome predictions, ATE 4
+  and failure when a training complement lacks overlap. Binding checks remain open.

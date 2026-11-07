@@ -699,6 +699,20 @@ fn causal_summaries_match_analytic_effects() {
     );
     augmented["treated_predictions"] = json!([2]);
     assert!(run(augmented)["result"].is_null());
+    let mut cross_fitted = json!({"method":"cross_fitted_stratum_ate","outcomes":[0,4,2,6],
+        "treatment":[0,1,0,1],"strata":["a","a","a","a"],"folds":[1,2,2,1]});
+    let result = run(cross_fitted.clone());
+    assert_eq!(
+        result["result"]["control_predictions"],
+        json!([2., 0., 0., 2.])
+    );
+    assert_eq!(
+        result["result"]["treated_predictions"],
+        json!([4., 6., 6., 4.])
+    );
+    assert_eq!(result["result"]["contrast"]["estimate"], 4.);
+    cross_fitted["folds"] = json!([1, 2, 1, 2]);
+    assert!(run(cross_fitted)["result"].is_null());
     let result = run(
         json!({"method":"augmented_treatment_contrast","estimand":"att",
         "outcomes":[1,4],"treatment":[0,1],"propensities":[0.5,0.5],
