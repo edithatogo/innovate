@@ -2404,3 +2404,11 @@ the other competition models and installed binding checks remain open.
   Installed R matched within 1e-14 after JSON serialization. This benchmark
   covers the synthetic fit with fixed smoothing. Broader historical-model
   qualification and richer Kairos network/resource workflows remain open.
+
+- [x] Add and qualify regime_switching_reference. The analytic reference
+  checks both logistic segments and their continuity adjustment at the
+  fixed-time boundary. All five samples matched exactly in the native result.
+  Five focused Rust tests and Clippy passed. The rebuilt Python 3.15.2 wheel
+  and Julia returned identical results, and installed R matched within 1e-14
+  after JSON serialization. Regime fitting and changepoint selection still
+  need coverage in the benchmark corpus.
