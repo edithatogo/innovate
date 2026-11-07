@@ -3395,3 +3395,11 @@ the other competition models and installed binding checks remain open.
   using the staged and installed packages with the verified Darwin
   arm64 release library and no environment override. Both passed.
   This extends the bundled smoke check to the checked-in binding suites.
+
+- [x] Reconcile local Darwin arm64 release artifact provenance.
+  The Python archive revision b29505d4 and the Julia/R build revision
+  95e243d9 differ only in this plan. The installed R and staged Julia
+  libraries match the built FFI dylib byte for byte. R binary archive
+  SHA-256 61fc91c8da5424edb4031574789411d971cbb247b1e96d33f56647cf40c21caf.
+  Development validation passed. The release gate still reports all
+  38 open obligations, and hosted distribution evidence remains open.
