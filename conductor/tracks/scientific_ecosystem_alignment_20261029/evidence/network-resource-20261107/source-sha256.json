@@ -1,0 +1,22 @@
+{
+  "Cargo.lock": "0740222c2924806af7dbe1b135036856b921a2c3c5b2db97974733277d8f306b",
+  "README.md": "28e91b02c9da51b6179aaa69029a5c58828f7aee9752ca11696f47d3c8fe98f3",
+  "bindings/julia/test/runtests.jl": "9c3f8c0df84cb516a7a048384da752b5b8f5b1e54c8fb79c6f88d4b8ddb8e952",
+  "bindings/r/R/kernel_bridge.R": "7163731378af1513e7b6a88047a289f683c8279912b3854704ddd1d597c4efb5",
+  "bindings/r/tests/native.R": "adb97b08539cbcb2674676bad24c191169df78473a4db07ba47fbc6406b8a3d5",
+  "docs/astro-site/src/content/docs/native-migration.md": "29ad726eb2f06889d704c9a84a3979c6e0b556f93b029b8dd935a89ebc968fc8",
+  "migration-ledger.json": "fae212b5c254e978e306bb26e54d8c19bf82d2b4b3c4be55baeaa0fcfbad4ddb",
+  "rust/crates/innovate-core/Cargo.toml": "1d3066a5738c171d2386588f392b4c8d15c1507d6b15a6fc3e686be2c41395ab",
+  "rust/crates/innovate-core/src/competition.rs": "94c9e39551f0450b468adad95ae410166f7d9c78107e834614f9cf09a3991a03",
+  "rust/crates/innovate-core/src/discovery.json": "c60b38eb1f6bfcb06e048e27ca6922f2e458b6aace88f1603f5bfb4796c888ab",
+  "rust/crates/innovate-core/src/kernel.rs": "b388813cd1008b39b2fbeb4aa4cef9b8d42ad0773caf6d591928ef0212053304",
+  "rust/crates/innovate-core/src/lib.rs": "2b30e137c81f2e1fd8161984be393417d667ba4bd0ba8fc4ef6decc8af1a060e",
+  "rust/crates/innovate-core/src/network.rs": "6ccf89e33a9e57b1fd083e9d2951f6739766f53ac434db90796df3b103eed9f3",
+  "rust/crates/innovate-core/src/simulation.rs": "930315f2bf2be332a708638600d9aec6a89cafa7eaa3f67e0c4db282fad81483",
+  "rust/crates/innovate-core/src/validation.rs": "dbcb337f6553b90bcd9ab419fc8e4674d113064ba7d9d4c8ca41ba7b8d5118f5",
+  "rust/crates/innovate-core/tests/complementary.rs": "6c76d669f40878b74fd55833c07d91d065a34d9afd40c002f4b9b968313cd73c",
+  "rust/crates/innovate-core/tests/fixtures/complementary_scipy.json": "a07c1e1662c518176a485d017934efc67478166188281830c516af47812c8184",
+  "rust/crates/innovate-core/tests/native_boundary.rs": "4ea6e2e6a67af6804971ed338a204d9f069e0d3dae679e9e941105e9e7e91b33",
+  "rust/crates/innovate-core/tests/network.rs": "5af4bf8098eec250de56e45e55109c99fb770cbe0e1f0d12872e33a68bd9f7ed",
+  "tests/native/test_python_consumer.py": "e28fc2299c05b3d7e273f80ca24bf240775fef50fa971f47dff6d243137b9be7"
+}

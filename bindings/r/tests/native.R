@@ -2,7 +2,7 @@ library(innovate.R)
 payload <- list(inputs=list(time=c(0,1,2)), parameters=list(L=100,k=1,x0=1))
 x <- kernel_predict_model("logistic", payload)
 stopifnot(x$result$values[[2]] == 50, x$metadata$runtime == "rust_native")
-stopifnot(length(kernel_discover_models()$models) == 7)
+stopifnot(length(kernel_discover_models()$models) == 8)
 error <- tryCatch(kernel_predict_model("latent_process", payload), error=function(e) conditionMessage(e))
 stopifnot(is.character(error), grepl("unsupported_native_operation", error))
 for (i in seq_len(100)) stopifnot(kernel_predict_model("logistic", payload)$result$values[[2]] == 50)
@@ -80,3 +80,22 @@ stopifnot(abs(historical$values[[1]]-110/(1+exp(0.72)))<1e-10)
 initial_payload <- list(inputs=list(time=c(0,20)),parameters=list(p=0.2,q=0.3,m=100),simulation_options=list(engine="kairos_abm",seed=42,population=100,initial_adopters=20))
 stopifnot(kernel_simulate_model("bass",initial_payload)$result$counts[[1]]==20)
 cat("R historical Logistic and initial ABM conformance passed\n")
+network_payload <- list(inputs=list(time=c(0,5,20)),parameters=list(p=1e12,q=0,m=3),simulation_options=list(engine="kairos_network",population=3,seed=42,edges=list(),capacity=1,service_ticks=5,ticks_per_unit=1))
+net <- kernel_simulate_model("bass",network_payload)$result
+stopifnot(all(unlist(net$counts)==c(0,0,3)),all(vapply(net$completions,function(e)e$tick,numeric(1))==c(6,11,16)))
+cg <- kernel_predict_model("complementary_goods",list(inputs=list(time=c(0,3)),parameters=list(k1=0.3,k2=0.4,c1=0,c2=0),constructor_kwargs=list(initial_values=c(0.05,0.02))))$result
+stopifnot(abs(cg$rows[[2]][[1]]-1/(1+19*exp(-0.9)))<1e-8)
+cat("R complementary goods and network FIFO conformance passed\n")
+cg_time <- 0:25
+cg_capacity <- 0.3/0.27
+cg_y <- lapply(cg_time,function(t)rep(cg_capacity/(1+(cg_capacity/0.05-1)*exp(-0.3*t)),2))
+cg_fit <- kernel_fit_model("complementary_goods",list(inputs=list(time=cg_time,observed=cg_y),fit_options=list(initial_parameters=list(k1=0.28,k2=0.28,c1=0.025,c2=0.025))))$result
+stopifnot(cg_fit$diagnostics$optimizer$converged,abs(cg_fit$parameters$c1-0.03)<1e-4)
+cat("R complementary analytic parameter recovery passed\n")
+network_payload$parameters$p <- 0
+network_payload$parameters$q <- 3
+network_payload$simulation_options$edges <- list(c(0,1),c(1,2))
+network_payload$simulation_options$initial_agents <- c(0)
+net_seeded <- kernel_simulate_model("bass",network_payload)$result
+stopifnot(net_seeded$counts[[1]]==1,net_seeded$counts[[3]]==3)
+cat("R singleton initial-node and pure contagion passed\n")

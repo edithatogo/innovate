@@ -1,0 +1,11 @@
+R native conformance passed
+R five-model analytic conformance passed
+R multi-generation fit, forecast, rates and single-row transport passed
+R competitive analytic limits, two-output rates and optional-null transport passed
+R installed native overflow guard passed
+R Kairos native replay passed
+R ABM covariate forcing and agent conservation passed
+R historical Logistic and initial ABM conformance passed
+R complementary goods and network FIFO conformance passed
+R complementary analytic parameter recovery passed
+R singleton initial-node and pure contagion passed

@@ -1236,6 +1236,7 @@ version = "0.7.0-alpha.1"
 dependencies = [
  "kairo-ecs-abm",
  "kairo-ecs-core",
+ "kairo-ecs-des",
  "kairo-ecs-rng",
  "kairo-ecs-types",
  "serde",
@@ -1379,6 +1380,17 @@ name = "kairo-ecs-core"
 version = "0.0.0"
 source = "git+https://github.com/edithatogo/kairos.git?rev=d56863505d938feb069af88a737eb7668113d14b#d56863505d938feb069af88a737eb7668113d14b"
 dependencies = [
+ "kairo-ecs-types",
+]
+
+[[package]]
+name = "kairo-ecs-des"
+version = "0.1.0"
+source = "git+https://github.com/edithatogo/kairos.git?rev=d56863505d938feb069af88a737eb7668113d14b#d56863505d938feb069af88a737eb7668113d14b"
+dependencies = [
+ "kairo-ecs-core",
+ "kairo-ecs-rng",
+ "kairo-ecs-state",
  "kairo-ecs-types",
 ]
 

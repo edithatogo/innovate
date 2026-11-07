@@ -1,0 +1,12 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.74s
+     Running tests/competition.rs (target/debug/deps/competition-f714880c04812301)
+
+running 5 tests
+test competitive_domain_and_unsupported_covariates_are_explicit_errors ... ok
+test competitive_native_odes_match_independent_scipy_and_forecast_from_saved_origin ... ok
+test competitive_fit_reports_limits_and_rejects_invalid_data ... ok
+test lotka_volterra_fits_without_seed_and_decoupled_products_match_bass ... ok
+test competitive_fits_report_quality_and_keep_the_initial_condition_for_forecasts ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.07s

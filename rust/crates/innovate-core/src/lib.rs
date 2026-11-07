@@ -6,6 +6,7 @@ mod fitting;
 mod forcing;
 mod historical;
 mod kernel;
+mod network;
 mod numerics;
 mod simulation;
 mod substitution;

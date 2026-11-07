@@ -13,6 +13,9 @@ use kairo_ecs_types::{EntityId, EventKind, ScheduleRequest, SimTime, StepOutcome
 use serde_json::{Value, json};
 pub(crate) const REV: &str = "d56863505d938feb069af88a737eb7668113d14b";
 pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBindingError> {
+    if r.payload["simulation_options"]["engine"] == "kairos_network" {
+        return crate::network::execute(r);
+    }
     let op = r.operation;
     let invalid = |s: &str| KernelBindingError::invalid_request(op, s);
     if op != KernelOperation::SimulateModel || r.model_key.as_deref() != Some("bass") {

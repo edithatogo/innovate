@@ -4,7 +4,7 @@ using Test, Innovate
     result = kernel_predict_model("logistic", payload)
     @test result["metadata"]["runtime"] == "rust_native"
     @test result["result"]["values"][2] == 50.0
-    @test length(kernel_discover_models()["models"]) == 7
+    @test length(kernel_discover_models()["models"]) == 8
     @test_throws ErrorException kernel_predict_model("latent_process", payload)
     for _ in 1:100
         @test kernel_predict_model("logistic",payload)["result"]["values"][2] == 50.0
@@ -81,4 +81,21 @@ end
     @test isapprox(kernel_predict_model("logistic",p)["result"]["values"][1],110/(1+exp(0.72));atol=1e-10)
     p=Dict("inputs"=>Dict("time"=>[0.,20.]),"parameters"=>Dict("p"=>0.2,"q"=>0.3,"m"=>100.),"simulation_options"=>Dict("engine"=>"kairos_abm","seed"=>42,"population"=>100,"initial_adopters"=>20))
     @test kernel_simulate_model("bass",p)["result"]["counts"][1]==20
+end
+@testset "Complementary goods and network FIFO" begin
+    p=Dict("inputs"=>Dict("time"=>[0.,5.,20.]),"parameters"=>Dict("p"=>1e12,"q"=>0.,"m"=>3.),"simulation_options"=>Dict("engine"=>"kairos_network","population"=>3,"seed"=>42,"edges"=>[],"capacity"=>1,"service_ticks"=>5,"ticks_per_unit"=>1))
+    a=kernel_simulate_model("bass",p)["result"]
+    @test a["counts"]==[0,0,3]
+    @test [e["tick"] for e in a["completions"]]==[6,11,16]
+    p=Dict("inputs"=>Dict("time"=>[0.,3.]),"parameters"=>Dict("k1"=>0.3,"k2"=>0.4,"c1"=>0.,"c2"=>0.),"constructor_kwargs"=>Dict("initial_values"=>[0.05,0.02]))
+    @test isapprox(kernel_predict_model("complementary_goods",p)["result"]["rows"][2][1],1/(1+19*exp(-0.9));atol=1e-8)
+end
+@testset "Complementary analytic fit" begin
+    capacity=0.3/0.27
+    time=collect(0.:25.)
+    y=[fill(capacity/(1+(capacity/0.05-1)*exp(-0.3*t)),2) for t in time]
+    p=Dict("inputs"=>Dict("time"=>time,"observed"=>y),"fit_options"=>Dict("initial_parameters"=>Dict("k1"=>0.28,"k2"=>0.28,"c1"=>0.025,"c2"=>0.025)))
+    f=kernel_fit_model("complementary_goods",p)["result"]
+    @test f["diagnostics"]["optimizer"]["converged"]
+    @test abs(f["parameters"]["c1"]-0.03)<1e-4
 end

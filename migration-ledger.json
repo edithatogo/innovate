@@ -12,8 +12,9 @@
     },
     {
       "key": "complementary_goods",
-      "status": "unavailable",
-      "required": true
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/network-resource-20261107.json"
     },
     {
       "key": "composite",
@@ -111,8 +112,8 @@
       "key": "competitive_ecosystems",
       "status": "bounded_native",
       "required": true,
-      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/native-features-20261107.json",
-      "remaining": "remaining ecosystem models, covariates/events, equilibrium and zero-capacity extensions"
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/network-resource-20261107.json",
+      "remaining": "Remaining ecosystem families and covariate/event extensions, equilibrium/zero-capacity helpers and wider numerical qualification remain required"
     },
     {
       "key": "hierarchical_mixture_inference",
@@ -133,8 +134,8 @@
       "key": "kairos_des_abm",
       "status": "bounded_native",
       "required": true,
-      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/historical-logistic-20261107.json",
-      "remaining": "Other historical models, interpolation/event fitting initialization and rate helpers; heterogeneous/network/resource ABM, scenarios and resume remain required"
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/network-resource-20261107.json",
+      "remaining": "Dynamic/directed/weighted networks, heterogeneous hazards, resource priorities/abandonment, forcing interoperability, scenarios and resume remain required"
     },
     {
       "key": "bayesian_inference",

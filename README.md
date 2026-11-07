@@ -10,7 +10,7 @@ numerical fallback. Rust is the core library, not a fourth binding.
 ## Current native scope
 
 The kernel implements bounded Bass, Logistic, Gompertz, Fisher–Pry,
-multi-generation Norton–Bass, Lotka–Volterra and multi-product competition
+multi-generation Norton–Bass, Lotka–Volterra, multi-product competition and complementary goods
 fit/predict/simulate/summary/diagnostics paths. Fitting reports numerical
 convergence and local sensitivity rank.
 These are development capabilities, not full scientific or release acceptance.

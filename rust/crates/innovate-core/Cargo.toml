@@ -14,3 +14,4 @@ kairo-ecs-core = { git = "https://github.com/edithatogo/kairos.git", rev = "d568
 kairo-ecs-rng = { git = "https://github.com/edithatogo/kairos.git", rev = "d56863505d938feb069af88a737eb7668113d14b" }
 kairo-ecs-types = { git = "https://github.com/edithatogo/kairos.git", rev = "d56863505d938feb069af88a737eb7668113d14b" }
 kairo-ecs-abm = { git = "https://github.com/edithatogo/kairos.git", rev = "d56863505d938feb069af88a737eb7668113d14b" }
+kairo-ecs-des = { git = "https://github.com/edithatogo/kairos.git", rev = "d56863505d938feb069af88a737eb7668113d14b" }

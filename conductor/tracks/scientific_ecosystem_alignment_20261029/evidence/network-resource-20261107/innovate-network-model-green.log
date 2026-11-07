@@ -1,0 +1,18 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.22s
+     Running tests/complementary.rs (target/debug/deps/complementary-82d5ebf034aeaf62)
+
+running 2 tests
+test decoupled_complementary_goods_match_logistic_and_allow_levels_above_one ... ok
+test complementary_equations_match_independent_scipy_and_fit ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
+     Running tests/network.rs (target/debug/deps/network-c8958ced4c9e63b0)
+
+running 3 tests
+test malformed_networks_resources_and_initial_nodes_are_rejected ... ok
+test fifo_service_has_exact_capacity_limited_completion_times ... ok
+test contacts_control_pure_contagion_and_replay ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

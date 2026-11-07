@@ -161,3 +161,20 @@ and rate helpers, heterogeneous/network/resource ABM, and remaining model/infere
 ports. Full scientific, platform and release qualification remain open.
 
 Source/evidence commit: `ec217253756eeed2e71e9f665ef943dc3472bffd`. No native operation remains in flight.
+
+## Complementary goods and network/resource continuation
+
+Same isolated writing lane resumes at 9a721b9, initially clean. Other writers
+and native operations retain ownership. All existing/planned features remain required.
+- [x] Port bounded complementary-goods equations through the native trajectory fitter.
+- [x] Add static Kairos-owned network agent state and FIFO resource service.
+- [x] Validate independent limits, conservation and Python/Julia/R consumers.
+- [x] Retain evidence and remaining historical/scientific/platform obligations.
+
+Evidence: network-resource-20261107.json; review: network-resource-review-20261107.md.
+57 Rust tests, 27 installed Python checks, 142 Julia assertions and R cases pass.
+Core/C ABI line coverage: 81.26%. Eight bounded native families; eight families
+remain unavailable, and all 38 full-feature obligations remain required. The
+Conductor goal stays active. Next source work: remaining historical models
+(including lock-in), covariate/event extensions and advanced inference/scenarios,
+then richer graph/resource behavior and outstanding distribution qualification.

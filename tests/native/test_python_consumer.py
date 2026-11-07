@@ -40,6 +40,7 @@ def test_capabilities_are_native_and_unavailable_features_fail_closed():
         "norton_bass",
         "lotka_volterra",
         "multi_product",
+        "complementary_goods",
     }
     assert innovate.capabilities()["supports_simulation"].all()
     assert innovate.capabilities()["supports_summarize"].all()
@@ -138,3 +139,44 @@ def test_historical_logistic_polars_covariates_and_event_fit():
     assert fit.predict(pl.DataFrame({"time": [35.0]}))["prediction"][0] == pytest.approx(
         200 / (1 + math.exp(-5.1)), abs=0.001
     )
+
+
+def test_network_resource_and_complementary_native_consumers():
+    r = innovate.execute(
+        "simulate_model",
+        "bass",
+        inputs={"time": [0.0, 5.0, 20.0]},
+        parameters={"p": 1e12, "q": 0.0, "m": 3.0},
+        simulation_options={
+            "engine": "kairos_network",
+            "population": 3,
+            "seed": 42,
+            "edges": [],
+            "capacity": 1,
+            "service_ticks": 5,
+            "ticks_per_unit": 1,
+        },
+    )["result"]
+    assert r["counts"] == [0, 0, 3]
+    assert [e["tick"] for e in r["completions"]] == [6, 11, 16]
+    a = innovate.predict(
+        "complementary_goods",
+        pl.DataFrame({"time": [0.0, 3.0]}),
+        {"k1": 0.3, "k2": 0.4, "c1": 0.0, "c2": 0.0},
+        model_options={"initial_values": [0.05, 0.02]},
+    )
+    assert a["prediction_1"][1] == pytest.approx(1 / (1 + 19 * math.exp(-0.9)), abs=1e-8)
+
+
+def test_complementary_fit_matches_symmetric_analytic_limit():
+    t = [float(i) for i in range(26)]
+    capacity = 0.3 / 0.27
+    y = [capacity / (1 + (capacity / 0.05 - 1) * math.exp(-0.3 * x)) for x in t]
+    fit = innovate.fit(
+        "complementary_goods",
+        pl.DataFrame({"time": t, "a": y, "b": y}),
+        observed_columns=["a", "b"],
+        fit_options={"initial_parameters": {"k1": 0.28, "k2": 0.28, "c1": 0.025, "c2": 0.025}},
+    )
+    assert fit.diagnostics["optimizer"]["converged"]
+    assert fit.parameters["c1"] == pytest.approx(0.03, abs=1e-4)

@@ -127,6 +127,7 @@ pub(crate) fn validate_request(request: &KernelRequest) -> Result<(), KernelBind
         "fisher_pry",
         "norton_bass",
         "lotka_volterra",
+        "complementary_goods",
         "multi_product",
     ]
     .contains(&model)
@@ -141,7 +142,14 @@ pub(crate) fn validate_request(request: &KernelRequest) -> Result<(), KernelBind
         .as_object()
         .ok_or_else(|| fail("payload must be an object"))?;
     let inputs = object_section(payload, "inputs", operation)?;
-    if ["norton_bass", "lotka_volterra", "multi_product"].contains(&model) {
+    if [
+        "norton_bass",
+        "lotka_volterra",
+        "multi_product",
+        "complementary_goods",
+    ]
+    .contains(&model)
+    {
         return Ok(());
     } // Its module validates scalar/matrix observations and generation-specific parameters.
     if payload
@@ -233,7 +241,12 @@ pub(crate) fn validate_request(request: &KernelRequest) -> Result<(), KernelBind
                 .as_f64()
                 .ok_or_else(|| fail("parameters must be numeric"))?;
             if !value.is_finite()
-                || (positive.contains(&key.as_str()) && value <= 0.0)
+                || (positive.contains(&key.as_str())
+                    && value <= 0.0
+                    && !(key == "p"
+                        && value == 0.0
+                        && operation == KernelOperation::SimulateModel
+                        && payload.contains_key("simulation_options")))
                 || (["q", "q1"].contains(&key.as_str()) && value < 0.0)
             {
                 return Err(fail("parameters are outside the model's finite domain"));

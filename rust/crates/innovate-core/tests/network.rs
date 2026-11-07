@@ -1,0 +1,91 @@
+use innovate_core::{KernelBinding, json};
+fn run(
+    edges: serde_json::Value,
+    p: f64,
+    initial: serde_json::Value,
+    capacity: u64,
+) -> serde_json::Value {
+    KernelBinding::new().simulate_model("bass",json!({"inputs":{"time":[0.,5.,20.,100.]},"parameters":{"p":p,"q":3.,"m":3.},"simulation_options":{"engine":"kairos_network","population":3,"seed":42,"edges":edges,"capacity":capacity,"service_ticks":5,"ticks_per_unit":1,"initial_agents":initial}})).unwrap().result.unwrap()
+}
+#[test]
+fn contacts_control_pure_contagion_and_replay() {
+    let a = run(json!([[0, 1], [1, 2]]), 0., json!([0]), 1);
+    assert_eq!(a, run(json!([[0, 1], [1, 2]]), 0., json!([0]), 1));
+    assert_eq!(a["counts"][3], 3);
+    assert_eq!(
+        run(json!([]), 0., json!([0]), 1)["counts"],
+        json!([1, 1, 1, 1])
+    );
+    let agents = a["agents"].as_array().unwrap();
+    assert_eq!(agents.len(), 3);
+    assert!(agents.iter().all(|a| a["state"] == "adopted"));
+    assert_eq!(a["metadata"]["queue_length"], 0);
+    assert_eq!(a["metadata"]["available"], 1);
+}
+#[test]
+fn fifo_service_has_exact_capacity_limited_completion_times() {
+    let a = run(json!([]), 1e12, json!([]), 1);
+    assert_eq!(
+        a["requests"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|e| e["agent"].clone())
+            .collect::<Vec<_>>(),
+        a["completions"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|e| e["agent"].clone())
+            .collect::<Vec<_>>()
+    );
+    assert_eq!(
+        a["completions"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|r| r["tick"].as_u64().unwrap())
+            .collect::<Vec<_>>(),
+        vec![6, 11, 16]
+    );
+    let b = run(json!([]), 1e12, json!([]), 3);
+    assert_eq!(
+        b["completions"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|r| r["tick"].as_u64().unwrap())
+            .collect::<Vec<_>>(),
+        vec![6, 7, 8]
+    );
+}
+#[test]
+fn malformed_networks_resources_and_initial_nodes_are_rejected() {
+    let base = json!({"inputs":{"time":[1.]},"parameters":{"p":0.2,"q":0.3,"m":100.},"simulation_options":{"engine":"kairos_network","population":3,"seed":42,"edges":[],"capacity":1,"service_ticks":5}});
+    for (key, value) in [
+        ("edges", json!([[0, 3]])),
+        ("edges", json!([[0, 0]])),
+        ("edges", json!([[0, 1], [1, 0]])),
+        ("capacity", json!(0)),
+        ("service_ticks", json!(0)),
+        ("initial_agents", json!([0, 0])),
+    ] {
+        let mut p = base.clone();
+        p["simulation_options"][key] = value;
+        assert!(KernelBinding::new().simulate_model("bass", p).is_err());
+    }
+}
+#[test]
+fn pending_agents_are_not_counted_as_adopted() {
+    let a=KernelBinding::new().simulate_model("bass",json!({"inputs":{"time":[5.]},"parameters":{"p":1e12,"q":0.,"m":3.},"simulation_options":{"engine":"kairos_network","population":3,"seed":42,"edges":[],"capacity":1,"service_ticks":5,"ticks_per_unit":1}})).unwrap().result.unwrap();
+    assert_eq!(a["counts"][0], 0);
+    assert_eq!(a["metadata"]["queue_length"], 2);
+    assert_eq!(a["metadata"]["available"], 0);
+    assert!(
+        a["agents"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .all(|a| a["state"] == "pending")
+    );
+}

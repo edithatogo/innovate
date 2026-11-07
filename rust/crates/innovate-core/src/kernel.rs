@@ -253,7 +253,7 @@ impl KernelBinding {
         }
         if matches!(
             request.model_key.as_deref(),
-            Some("lotka_volterra" | "multi_product")
+            Some("lotka_volterra" | "multi_product" | "complementary_goods")
         ) {
             return crate::competition::execute(request);
         }

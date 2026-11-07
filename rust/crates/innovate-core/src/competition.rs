@@ -16,7 +16,9 @@ struct Model {
 }
 impl Model {
     fn name(&self) -> &str {
-        if self.key == "lotka_volterra" {
+        if self.key == "complementary_goods" {
+            "ComplementaryGoodsModel"
+        } else if self.key == "lotka_volterra" {
             "LotkaVolterraModel"
         } else {
             "MultiProductDiffusionModel"
@@ -57,6 +59,12 @@ impl Model {
         )
     }
     fn derivative(&self, y: &[f64], p: &[f64]) -> Vec<f64> {
+        if self.key == "complementary_goods" {
+            return vec![
+                p[0] * y[0] * (1. - y[0]) + p[2] * y[0] * y[1],
+                p[1] * y[1] * (1. - y[1]) + p[3] * y[0] * y[1],
+            ];
+        }
         if self.key == "lotka_volterra" {
             return vec![
                 p[0] * y[0] * (1. - y[0]) - p[1] * y[0] * y[1],
@@ -130,7 +138,9 @@ fn model(
             "competitive covariates, events and custom options remain migration obligations",
         ));
     }
-    if key == "lotka_volterra" && kw.contains_key("n_products") {
+    if ["lotka_volterra", "complementary_goods"].contains(&key.as_str())
+        && kw.contains_key("n_products")
+    {
         return Err(invalid(op, "Lotka-Volterra has exactly two technologies"));
     }
     if p.get("state")
@@ -156,7 +166,7 @@ fn model(
         }
     }
     let observed = inputs.get("observed").or_else(|| inputs.get("y"));
-    let n = if key == "lotka_volterra" {
+    let n = if ["lotka_volterra", "complementary_goods"].contains(&key.as_str()) {
         2
     } else if let Some(n) = kw.get("n_products") {
         n.as_u64()
@@ -240,7 +250,12 @@ fn model(
             "initial_values must match the model dimensions and nonnegative domain (shares <=1)",
         ));
     }
-    let names = if key == "lotka_volterra" {
+    let names = if key == "complementary_goods" {
+        ["k1", "k2", "c1", "c2"]
+            .iter()
+            .map(|s| s.to_string())
+            .collect()
+    } else if key == "lotka_volterra" {
         ["alpha1", "beta1", "alpha2", "beta2"]
             .iter()
             .map(|s| s.to_string())
@@ -350,7 +365,10 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
                             * 1.2
                     } else if name.starts_with("alpha_") {
                         0.1
-                    } else if name.starts_with('p') || name.starts_with("beta") {
+                    } else if name.starts_with('p')
+                        || name.starts_with("beta")
+                        || name.starts_with('c')
+                    {
                         0.1 / tscale
                     } else {
                         rate / tscale

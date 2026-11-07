@@ -10,9 +10,9 @@ no Python numerical fallback, pandas or xarray runtime.
 
 ## Current scope
 
-Seven native model families expose deterministic fitting, prediction, simulation,
+Eight native model families expose deterministic fitting, prediction, simulation,
 summary and diagnostics: Bass, Logistic, Gompertz, Fisher–Pry, Norton–Bass,
-Lotka–Volterra and multi-product competition. Their support remains bounded.
+Lotka–Volterra, multi-product competition and complementary goods. Their support remains bounded.
 Covariates, events, uncertainty, other model families and full Kairos simulation
 remain required migration work. Discovery describes the executable subset;
 release stays blocked by the full model and feature ledger.
@@ -233,3 +233,51 @@ population. ABM initial adopters are selected through its separate identity
 stream and retained as adopted components. Counts include these agents at time
 zero; `result.agents` still describes the final requested time. This does not
 supply network or heterogeneous agent hazards.
+
+## Complementary goods
+
+`complementary_goods` ports the historical two-good equations:
+`dy1/dt = k1*y1*(1-y1) + c1*y1*y2`, with the symmetric second equation using
+k2 and c2. All four coefficients are nonnegative. Prediction requires explicit
+`initial_values`; fitting conditions on the first observation and retains that
+origin in fitted state. Covariates/events are still unavailable for this family.
+Levels may exceed one because positive interactions enlarge equilibrium levels;
+outputs are not clipped or normalized. Extreme interactions can cause numerical
+domain/step-budget errors. Independent SciPy trajectories, analytic limits and
+native parameter recovery validate the current bounded implementation.
+
+## Network imitation with resource service
+
+Use `simulation_options.engine="kairos_network"` with Bass parameters p/q/m:
+
+```python
+simulation_options = {
+    "engine": "kairos_network", "seed": 42, "population": 3,
+    "edges": [[0, 1], [1, 2]], "initial_agents": [0],
+    "capacity": 1, "service_ticks": 5, "ticks_per_unit": 1000000,
+}
+```
+
+Edges are unique undirected pairs of node positions, without self-loops. Agent
+records retain node order and Kairos identities. Population is 1–1000; capacity
+is 1–population. Initial agent indices are unique and already adopted. A
+susceptible node requests service at hazard `p + q*adopted_neighbors/degree`;
+isolated nodes have zero imitation. Native simulation now permits p=0, allowing
+pure contagion seeded by initial agents. Deterministic Bass fitting/prediction
+retains its previous positive-p domain.
+
+Kairos ABMContext owns entity state and dispatch; its Resource owns the FIFO
+queue and leases. An agent becomes adopted at service completion. Pending agents
+do not transmit and cannot request twice. Completion events precede tied requests.
+Waiting times round up to at least one tick. Service ticks must be positive and
+at most 10^12; ticks per unit are 1–10^9, with a default of 10^6. Requested sample
+times must map into 0–10^15 ticks. Counts include initial agents. Returned
+`requests` and `completions` retain ticks/identities; agent and resource state is
+at the final sample. RNG checkpoint metadata is provenance, not resume support.
+
+The network engine currently rejects covariate/event forcing, weighted/directed
+edges and custom agent hazards. Dynamic networks, heterogeneous agents,
+resource priorities/balking/reneging, resume and general network-model parity
+remain required migration work. A successful Bass network simulation does not
+qualify the separate `network_diffusion` model family. Python, Julia and R use
+the same versioned native request and retain the same service/adoption semantics.
