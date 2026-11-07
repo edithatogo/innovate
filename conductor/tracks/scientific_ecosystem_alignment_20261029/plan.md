@@ -5956,3 +5956,10 @@ Hosted release readiness for this worktree revision remains open.
   agreed with the refined R maximum likelihood reference within 6e-9
   in log likelihood and 1.2e-6 in coefficients. The checker records
   explicit R optimizer tolerances for reproducibility.
+
+- [x] Recover a near-cancelling ARMA(1,1) fit that exhausted the
+  coordinate search. A bounded restart with coupled AR and MA moves
+  runs when the original search fails to converge. The 800-observation
+  fixture through installed R matched the converged R reference within
+  1.6e-9 in likelihood and 2.2e-5 in coefficients. All six SARIMA
+  boundary tests passed.

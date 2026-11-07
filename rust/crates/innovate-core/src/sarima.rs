@@ -125,10 +125,13 @@ fn estimate(
     };
     let mut best = vec![0.; count];
     let initial = state_filter(values, order, seasonal_order, &best)?;
-    let mut likelihood = initial
+    let initial_likelihood = initial
         .log_likelihood
         .ok_or("SARIMA likelihood is degenerate")?;
-    let joint_moves: Vec<_> = if sp > 0 && sq > 0 && count <= 8 {
+    let mut likelihood = initial_likelihood;
+    let retry_cancellation = p == 1 && q == 1 && sp == 0 && sq == 0;
+    let search_all_pairs = sp > 0 && sq > 0 && count <= 8;
+    let joint_moves: Vec<_> = if search_all_pairs {
         (0..count)
             .flat_map(|left| (left + 1..count).map(move |right| (left, right)))
             .collect()
@@ -140,7 +143,15 @@ fn estimate(
     };
     let mut step = 0.25;
     // Refine a deterministic coordinate search over stationary and invertible models.
-    for _ in 0..2048 {
+    let sweeps = 2048;
+    for iteration in 0..(sweeps * if retry_cancellation { 2 } else { 1 }) {
+        let retry = iteration >= sweeps;
+        if iteration == sweeps {
+            // Restart with coupled moves for difficult AR/MA cancellation.
+            best.fill(0.);
+            likelihood = initial_likelihood;
+            step = 0.25;
+        }
         let base = best.clone();
         for index in 0..count {
             let original = best[index];
@@ -157,8 +168,9 @@ fn estimate(
         if best == base {
             // Search joint moves when correlated coefficients stall the coordinate sweep.
             let mut trial = base.clone();
-            for &(left, right) in &joint_moves {
-                let ratios: &[(f64, f64)] = if sp > 0 && sq > 0 && count <= 8 {
+            let pairs = if retry { &[(0, 1)][..] } else { &joint_moves };
+            for &(left, right) in pairs {
+                let ratios: &[(f64, f64)] = if search_all_pairs || retry {
                     &[(1., 1.), (1., 0.5), (0.5, 1.)]
                 } else {
                     &[(1., 1.)]
