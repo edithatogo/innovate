@@ -158,13 +158,20 @@ fn estimate(
             // Search joint moves when correlated coefficients stall the coordinate sweep.
             let mut trial = base.clone();
             for &(left, right) in &joint_moves {
-                for left_direction in [-1., 1.] {
-                    for right_direction in [-1., 1.] {
-                        trial[left] = base[left] + left_direction * step;
-                        trial[right] = base[right] + right_direction * step;
-                        if let Some(candidate) = score(&trial).filter(|v| *v > likelihood) {
-                            likelihood = candidate;
-                            best.clone_from(&trial);
+                let ratios: &[(f64, f64)] = if count <= 8 {
+                    &[(1., 1.), (1., 0.5), (0.5, 1.)]
+                } else {
+                    &[(1., 1.)]
+                };
+                for &(left_scale, right_scale) in ratios {
+                    for left_direction in [-1., 1.] {
+                        for right_direction in [-1., 1.] {
+                            trial[left] = base[left] + left_direction * left_scale * step;
+                            trial[right] = base[right] + right_direction * right_scale * step;
+                            if let Some(candidate) = score(&trial).filter(|v| *v > likelihood) {
+                                likelihood = candidate;
+                                best.clone_from(&trial);
+                            }
                         }
                     }
                 }

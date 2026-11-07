@@ -5553,3 +5553,11 @@ Hosted release readiness for this worktree revision remains open.
   likelihood shortfall fell from 0.02036 to 0.0000991 and the maximum
   coefficient error fell from 0.04254 to 0.00296. Existing mixed seasonal
   and mixed near-unit-root R checks passed. The residual gap remains open.
+
+- [x] Compare unequal paired moves for SARIMA fits of up to eight
+  coefficients. The negative seasonal likelihood shortfall fell from
+  9.91e-5 to 2.56e-6 and maximum coefficient error fell from 0.00296
+  to 0.000489. The positive case reproduced its prior result. The
+  comparison exceeded two minutes in the local debug build. Reducing
+  stationary covariance work and checking broader optimizer regressions
+  remain open.
