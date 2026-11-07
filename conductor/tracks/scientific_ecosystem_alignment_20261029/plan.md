@@ -3689,3 +3689,7 @@ Hosted release readiness for this worktree revision remains open.
   fixture verifies that adding the intervention reverses the baseline
   and alternative trajectories of the existing event-removal case.
   The Rust causal boundary test and focused Clippy passed.
+- [x] Verify event introduction with an unscheduled Lotka–Volterra
+  baseline in the rebuilt Python 3.15.2 wheel, Julia and freshly
+  installed R at native source 078feb6c. All three match the analytic
+  first-product baseline and intervention values within 1e-8.
