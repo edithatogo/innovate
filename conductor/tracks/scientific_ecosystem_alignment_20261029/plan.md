@@ -7068,3 +7068,9 @@ Hosted release readiness for this worktree revision remains open.
   near-unit AR, stationary filtering and historical initialization.
   The debug test run took 27.72 seconds. Runtime qualification on
   broader workloads remains open.
+
+- [x] Measure the expanded ARMA(1,1) search through the debug Python
+  3.15.2 wheel on the eight 500-observation fixtures. In seed/sign
+  order the elapsed seconds were 7.798, 16.328, 2.581, 6.109, 5.379,
+  3.101, 1.196 and 2.916. All likelihoods matched the binding receipt
+  within 1e-10. The debug timings do not establish a release baseline.
