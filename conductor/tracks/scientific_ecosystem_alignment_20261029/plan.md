@@ -4259,3 +4259,7 @@ Hosted release readiness for this worktree revision remains open.
   The Rust boundary rejects a zero-degree declaration with an explicit
   edge, a negative degree and a zero-degree ring. The valid custom
   graph still executes and replays.
+- [x] Reject network specifications whose average degree exceeds the
+  simple graph bound of node count minus one. This applies before
+  execution or artifact import. All ten scenario-filtered Rust
+  boundary tests passed, including a two-node degree-two rejection.

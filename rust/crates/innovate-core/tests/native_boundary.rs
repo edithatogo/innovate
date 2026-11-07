@@ -2608,6 +2608,15 @@ fn kairos_scenario_replay_retains_scheduled_retry_clear() {
     invalid["payload"]["scenarios"][0]["specification"]["network_type"] = json!("ring");
     assert_eq!(run(&invalid)["error"]["code"], "invalid_request");
 
+    invalid["payload"]["scenarios"][0]["specification"]["network_type"] = json!("custom");
+    invalid["payload"]["scenarios"][0]["specification"]["average_degree"] = json!(2);
+    assert!(
+        run(&invalid)["error"]["message"]
+            .as_str()
+            .unwrap()
+            .contains("average_degree cannot exceed num_nodes minus one")
+    );
+
     let mut paired = request;
     let mut alternative = closed["payload"]["scenarios"][0].clone();
     alternative["id"] = json!("closed");

@@ -103,6 +103,13 @@ impl ScenarioSpecification {
                     "num_nodes must be positive and average_degree must be positive except for custom graphs",
                 )
             }
+            ScenarioKind::Network {
+                num_nodes,
+                average_degree,
+                ..
+            } if *average_degree > num_nodes.saturating_sub(1) as f64 => {
+                Err("average_degree cannot exceed num_nodes minus one")
+            }
             _ => Ok(()),
         }
     }
