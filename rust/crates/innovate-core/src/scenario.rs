@@ -1067,6 +1067,13 @@ mod tests {
     }
 
     #[test]
+    fn exact_sign_flip_keeps_tied_assignments() {
+        let result = exact_sign_flip(&[-10., -6., 10.], 10.).unwrap();
+        assert_eq!(result["extreme_assignments"], 8);
+        assert_eq!(result["p_value"], 1.);
+    }
+
+    #[test]
     fn exact_sign_flip_calibrates_under_exchangeable_signs() {
         let magnitudes = [1., 2., 4., 8., 16., 32.];
         let mut p_values: Vec<_> = (0..64)
@@ -1320,7 +1327,10 @@ fn exact_sign_flip(differences: &[f64], scale: f64) -> Result<Value, &'static st
     if differences.len() > 16 {
         return Err("exact sign-flip inference supports at most 16 pairs");
     }
-    let divisor = if scale == 0. { 1. } else { scale };
+    // Scale by a power of two to avoid rounding each input differently
+    // and breaking ties between otherwise equivalent sign assignments.
+    let exponent = scale.to_bits() & f64::INFINITY.to_bits();
+    let divisor = f64::from_bits(exponent).max(f64::MIN_POSITIVE);
     let values: Vec<_> = differences.iter().map(|x| x / divisor).collect();
     let observed = values.iter().sum::<f64>().abs();
     let assignments = 1usize << values.len();

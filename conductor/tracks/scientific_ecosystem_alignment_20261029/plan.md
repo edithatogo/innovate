@@ -4882,3 +4882,9 @@ Hosted release readiness for this worktree revision remains open.
   twice. The 5% rule rejected 2 of 64 assignments (3.125%), the exact
   rate for this discrete null. All four focused Rust scenario unit
   tests passed. This fixture covers one fixed magnitude design.
+
+- [x] Preserve tied sign assignments when scaling effects for
+  enumeration. Dividing [-10, -6, 10] by its maximum magnitude
+  previously counted six extreme assignments instead of eight.
+  Power-of-two scaling recovers all eight while bounding the sum.
+  All five focused Rust scenario unit tests passed.
