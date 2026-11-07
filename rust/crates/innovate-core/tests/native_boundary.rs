@@ -460,6 +460,19 @@ fn causal_summaries_match_analytic_effects() {
     assert_eq!(sensitivity["result"]["lower_bound"], 8.);
     assert_eq!(sensitivity["result"]["upper_bound"], 10.);
     assert_eq!(sensitivity["result"]["method"], "historical_heuristic");
+    let grid = run(json!({"method":"sensitivity_grid","point_estimate":-10,"gamma_range":[3,1,2]}));
+    assert_eq!(
+        grid["result"]["results"],
+        json!([
+            {"gamma":3.,"robustness":2.},{"gamma":1.,"robustness":0.},{"gamma":2.,"robustness":1.}
+        ])
+    );
+    let paired = run(
+        json!({"method":"paired_sensitivity","treated_outcomes":[1,4],
+                           "control_outcomes":[0,1],"gamma":2}),
+    );
+    let upper = paired["result"]["upper_bound"].as_f64().unwrap();
+    assert!((upper - (2. + 2_f64.sqrt() * 2_f64.ln())).abs() < 1e-12);
     let balance = run(json!({"method":"covariate_balance","threshold":0.5,
         "treated_covariates":{"shift":[1,3],"same":[1,3],"unmatched":[2,4]},
         "control_covariates":{"shift":[0,2],"same":[1,3]}}));

@@ -137,7 +137,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                 .as_f64()
                 .filter(|&v| v >= 1.)
                 .ok_or("gamma must be at least one")?;
-            let margin = finite(point.abs() * 0.1 * (gamma - 1.))?;
+            let margin = sensitivity_margin(point, gamma)?;
             let (lower, upper) = match payload.get("direction").map_or(Some("both"), Value::as_str)
             {
                 Some("both") => (point - margin, point + margin),
@@ -150,9 +150,60 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                 "upper_bound":finite(upper)?,"robustness_margin":margin,"method":"historical_heuristic"}),
             )
         }
+        Some("sensitivity_grid") => {
+            let point = payload["point_estimate"]
+                .as_f64()
+                .ok_or("point_estimate must be numeric")?;
+            let results = series(payload, "gamma_range")?
+                .into_iter()
+                .map(|gamma| {
+                    Ok(json!({"gamma":gamma,"robustness":sensitivity_margin(point, gamma)?}))
+                })
+                .collect::<Result<Vec<_>, &'static str>>()?;
+            Ok(json!({"results":results,"method":"historical_heuristic"}))
+        }
+        Some("paired_sensitivity") => {
+            let treated = series(payload, "treated_outcomes")?;
+            let control = series(payload, "control_outcomes")?;
+            if treated.is_empty() || treated.len() != control.len() {
+                return Err("paired sensitivity requires aligned nonempty outcomes");
+            }
+            let gamma = payload["gamma"]
+                .as_f64()
+                .filter(|&value| value >= 1.)
+                .ok_or("gamma must be at least one")?;
+            let differences = treated
+                .into_iter()
+                .zip(control)
+                .map(|(treated, control)| finite(treated - control))
+                .collect::<Result<Vec<_>, _>>()?;
+            let point = mean(&differences).expect("validated pair count");
+            let scale = differences.iter().copied().map(f64::abs).fold(0., f64::max);
+            let margin = if scale == 0. {
+                0.
+            } else {
+                let squares = differences
+                    .iter()
+                    .map(|value| (value / scale - point / scale).powi(2))
+                    .sum::<f64>();
+                finite(scale * (2. * gamma.ln() * squares.sqrt() / differences.len() as f64))?
+            };
+            Ok(
+                json!({"point_estimate":point,"gamma":gamma,"matched_pairs":differences.len(),
+                "lower_bound":finite(point - margin)?,"upper_bound":finite(point + margin)?,
+                "method":"historical_paired_heuristic"}),
+            )
+        }
         Some("covariate_balance") => covariate_balance(payload),
         _ => Err("unknown causal summary method"),
     }
+}
+
+fn sensitivity_margin(point: f64, gamma: f64) -> Result<f64, &'static str> {
+    if gamma < 1. {
+        return Err("gamma must be at least one");
+    }
+    finite(point.abs() * 0.1 * (gamma - 1.))
 }
 
 fn covariate_balance(payload: &Value) -> Result<Value, &'static str> {

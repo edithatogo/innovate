@@ -1645,3 +1645,10 @@ the other competition models and installed binding checks remain open.
   all 24 Rust boundary tests and focused Clippy.
 - [ ] Port the historical paired sensitivity bounds and gamma-grid
   summaries and verify the sensitivity requests across bindings.
+
+- [x] Port the historical paired sensitivity bounds and gamma-grid
+  summaries. Both identify their outputs as heuristic. Paired bounds
+  reject misaligned arrays, and the grid preserves input order.
+  Analytic tests verify the bounds and grid values. R marshals singleton
+  arrays for these requests. All 24 boundary tests and focused Clippy
+  passed. Installed sensitivity binding validation remains open.

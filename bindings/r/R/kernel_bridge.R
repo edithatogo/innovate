@@ -19,7 +19,8 @@ kernel_call <- function(operation, model_key = NULL, payload = list()) {
   if (identical(operation, "summarize_causal")) {
     array_fields <- c(array_fields, "pre_treated", "post_treated", "pre_control",
       "post_control", "actual", "counterfactual", "periods", "coefficients",
-      "standard_errors", "group_labels", "effects")
+      "standard_errors", "group_labels", "effects", "gamma_range",
+      "treated_outcomes", "control_outcomes")
   }
   preserve_arrays <- function(value) {
     if (!is.list(value)) return(value)
