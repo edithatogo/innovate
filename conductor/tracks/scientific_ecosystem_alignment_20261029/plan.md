@@ -1710,3 +1710,10 @@ the other competition models and installed binding checks remain open.
   Python wheel, Julia and installed R. All preserve the supplied date,
   the default version and the singleton assumption. Assumption Markdown
   retains the heading and omits the absent check description.
+
+- [x] Restore the historical unadjusted treatment contrast and subgroup
+  comparisons. The response identifies the difference-in-means method
+  and reports counts and null estimates for subgroups missing either arm.
+  All 24 Rust boundary tests and focused Clippy passed.
+- [ ] Restore treatment-contrast bootstrap intervals and verify installed
+  consumers. Qualify the remaining policy contracts and Arrow handoff.

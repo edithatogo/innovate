@@ -511,6 +511,14 @@ fn causal_summaries_match_analytic_effects() {
         "supporting_evidence":["record"],"caveats":["limitation"],
         "sensitivity_analysis_conducted":true}));
     assert_eq!(documented["result"]["checks_passed"], true);
+    let contrast = run(json!({"method":"treatment_contrast","outcomes":[2,4,7,12],
+        "treatment":[0,1,0,1],"effect_modifiers":{"group":["a","a","b","c"]}}));
+    assert_eq!(contrast["result"]["overall"]["estimate"], 3.5);
+    assert_eq!(
+        contrast["result"]["by_modifier"]["group"]["a"]["estimate"],
+        2.
+    );
+    assert!(contrast["result"]["by_modifier"]["group"]["b"]["estimate"].is_null());
     let risk = run(json!({"method":"e_value","point_estimate":0.5}));
     assert!((risk["result"]["e_value"].as_f64().unwrap() - (2. + 2_f64.sqrt())).abs() < 1e-12);
     let sensitivity = run(json!({"method":"sensitivity_scenario","point_estimate":10,

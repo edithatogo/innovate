@@ -279,6 +279,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
             }
             Ok(json!({"assumption":assumption,"markdown":markdown}))
         }
+        Some("treatment_contrast") => treatment_contrast(payload),
         Some("release_evidence") => release_evidence(payload),
         Some("covariate_balance") => covariate_balance(payload),
         _ => Err("unknown causal summary method"),
@@ -532,4 +533,58 @@ struct AssumptionDocument {
     intuitive_explanation: String,
     how_checked: Option<String>,
     sensitivity_to_violation: Option<String>,
+}
+
+fn treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
+    let outcomes = series(payload, "outcomes")?;
+    let treatment = series(payload, "treatment")?;
+    if outcomes.len() != treatment.len() || treatment.iter().any(|&v| v != 0. && v != 1.) {
+        return Err("outcomes must align with binary treatment indicators");
+    }
+    let summarize = |treated: &[f64], control: &[f64]| -> Result<Value, &'static str> {
+        let estimate = match (mean(treated), mean(control)) {
+            (Some(a), Some(b)) => Some(finite(a - b)?),
+            _ => None,
+        };
+        Ok(json!({"estimate":estimate,"n_treated":treated.len(),"n_control":control.len()}))
+    };
+    let (treated, control): (Vec<_>, Vec<_>) = outcomes
+        .iter()
+        .copied()
+        .zip(&treatment)
+        .partition(|(_, flag)| **flag == 1.);
+    let treated: Vec<_> = treated.into_iter().map(|(outcome, _)| outcome).collect();
+    let control: Vec<_> = control.into_iter().map(|(outcome, _)| outcome).collect();
+    if treated.is_empty() || control.is_empty() {
+        return Err("treatment contrast requires treated and control observations");
+    }
+    let overall = summarize(&treated, &control)?;
+    let mut modifiers = serde_json::Map::new();
+    if let Some(fields) = payload.get("effect_modifiers") {
+        for (name, labels) in fields
+            .as_object()
+            .ok_or("effect_modifiers must be an object")?
+        {
+            let labels: Vec<String> = serde_json::from_value(labels.clone())
+                .map_err(|_| "effect modifiers must contain string labels")?;
+            if labels.len() != outcomes.len() {
+                return Err("effect modifier labels must align with outcomes");
+            }
+            let mut groups = std::collections::BTreeMap::<String, (Vec<f64>, Vec<f64>)>::new();
+            for ((label, &outcome), &flag) in labels.into_iter().zip(&outcomes).zip(&treatment) {
+                let (treated, control) = groups.entry(label).or_default();
+                if flag == 1. {
+                    treated.push(outcome);
+                } else {
+                    control.push(outcome);
+                }
+            }
+            let summaries = groups
+                .into_iter()
+                .map(|(label, (treated, control))| Ok((label, summarize(&treated, &control)?)))
+                .collect::<Result<serde_json::Map<_, _>, &'static str>>()?;
+            modifiers.insert(name.clone(), Value::Object(summaries));
+        }
+    }
+    Ok(json!({"method":"unadjusted_difference_in_means","overall":overall,"by_modifier":modifiers}))
 }
