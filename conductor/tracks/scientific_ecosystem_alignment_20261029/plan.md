@@ -3670,3 +3670,7 @@ Hosted release readiness for this worktree revision remains open.
   and verifies identical contrasts against the analytic trajectories.
   The causal boundary test and focused Clippy passed. Installed
   binding checks for the explicit request remain open.
+- [x] Verify the explicit Lotka–Volterra event override through the
+  rebuilt Python 3.15.2 wheel, Julia and freshly installed R. All three
+  reproduced the analytic baseline and event-free counterfactual for
+  the first product within 1e-8. R used raw JSON for the empty schedule.
