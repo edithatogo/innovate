@@ -3378,3 +3378,8 @@ the other competition models and installed binding checks remain open.
   check-wheel-contents, and an isolated Python 3.15.2 import returned
   the expected Logistic forecast through Polars. Wheel SHA-256
   a0faf2951863e87545ee0a6bc08cfa903cf8317733c9e6397c1038b223caa635. Other platforms and broader release acceptance remain open.
+
+- [x] Run all 83 Python native consumer tests against the Darwin arm64
+  release wheel built from the b29505d4 source archive. Python 3.15.2
+  passed the full native test directory in 10.11 seconds with default
+  pytest options cleared for this run. Coverage remains separate.
