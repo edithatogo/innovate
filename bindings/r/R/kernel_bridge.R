@@ -177,5 +177,9 @@ export_ipc_file <- function(data) {
 
 invoke_registered_extension <- function(callback, selection, payload) {
   resolved <- kernel_call("resolve_extension_manifest", payload = selection)$result
-  callback(resolved, payload)
+  output <- callback(resolved, payload)
+  if (identical(resolved$extension_point, "dataset_provider")) {
+    return(kernel_call("ingest_dataset", payload = list(dataset = output))$result)
+  }
+  output
 }

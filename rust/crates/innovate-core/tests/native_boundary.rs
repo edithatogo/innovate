@@ -3074,6 +3074,30 @@ fn extension_registry_rejects_duplicate_registration_without_replacement() {
 }
 
 #[test]
+fn extension_dataset_provider_returns_validated_artifact() {
+    let request = json!({"schema_version":"2.0","operation":"register_extension_manifest",
+        "payload":{"manifest":{"name":"dataset-fixture","version":"1","entrypoint":"fixture:provide",
+            "stability":"stable","extension_points":["dataset_provider"]}}});
+    let registered: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert!(registered["error"].is_null());
+    let selection = json!({"name":"dataset-fixture","expected_version":"1","extension_point":"dataset_provider"});
+    let data = json!({"kind":"adoption","time":[0,1],"adoption":[1,2],
+        "provenance":{"source":"fixture","license":"CC-BY-4.0","extraction_time":"2026-11-07T00:00:00Z"}});
+    let artifact =
+        innovate_core::invoke_registered_extension(&selection, &data, |_, data| Ok(data.clone()))
+            .unwrap();
+    assert_eq!(artifact["artifact_kind"], "innovate.dataset");
+    assert_eq!(artifact["validation"]["ok"], true);
+    assert_eq!(
+        innovate_core::invoke_registered_extension(&selection, &json!({}), |_, data| Ok(
+            data.clone()
+        )),
+        Err("dataset provider returned invalid dataset")
+    );
+}
+
+#[test]
 fn bootstrap_scalar_fit_replays_and_accounts_for_failed_draws() {
     let time: Vec<f64> = (0..12).map(f64::from).collect();
     let observed: Vec<_> = time

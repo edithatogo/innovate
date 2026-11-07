@@ -5694,3 +5694,10 @@ Hosted release readiness for this worktree revision remains open.
   three runtime checks invoked a valid callback and rejected a stale
   version before invocation. Python also rejected an extra model key.
   Per-point payload contracts and hosted qualification remain open.
+
+- [x] Route dataset-provider callback results through native ingestion
+  and return a validated dataset artifact with provenance and checksum.
+  Rust, Python, Julia and R share the existing ingestion path. The
+  Rust boundary tests verified valid artifact creation and rejection
+  of missing provenance. All three Rust extension tests passed.
+  Binding runtime qualification and other per-point contracts remain open.

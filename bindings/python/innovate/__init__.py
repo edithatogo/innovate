@@ -82,10 +82,13 @@ def invoke_registered_extension[T](
     callback: Callable[[dict[str, Any], Any], T],
     selection: dict[str, Any],
     payload: Any,
-) -> T:
-    """Resolve a registry snapshot and invoke a trusted caller-supplied callback."""
+) -> T | dict[str, Any]:
+    """Invoke a trusted callback and ingest dataset-provider results as artifacts."""
     resolved = _execute_payload("resolve_extension_manifest", None, selection)["result"]
-    return callback(resolved, payload)
+    output = callback(resolved, payload)
+    if resolved["extension_point"] == "dataset_provider":
+        return execute("ingest_dataset", dataset=output)["result"]
+    return output
 
 
 def fit_batch(model: str, datasets: list[dict[str, Any]], *, workers: int = 1) -> list[dict[str, Any]]:

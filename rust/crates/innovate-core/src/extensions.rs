@@ -170,12 +170,24 @@ pub(crate) fn resolve(payload: &Value) -> Result<Value, &'static str> {
 ///
 /// The registry lock is released before the callback runs. Registration changes
 /// after resolution do not invalidate the snapshot. The host selects the callable
-/// and owns its input and output contract.
+/// and owns its input contract. Dataset providers return a dataset that Rust
+/// ingests into a validated artifact.
 pub fn invoke_registered_extension(
     selection: &Value,
     input: &Value,
     callback: impl FnOnce(&Value, &Value) -> Result<Value, &'static str>,
 ) -> Result<Value, &'static str> {
     let resolved = resolve(selection)?;
-    callback(&resolved, input)
+    let output = callback(&resolved, input)?;
+    if resolved["extension_point"] != "dataset_provider" {
+        return Ok(output);
+    }
+    let mut response = crate::dataset::ingest_request(&json!({
+        "schema_version":crate::KERNEL_SCHEMA_VERSION,
+        "payload":{"dataset":output},
+    }));
+    if !response["error"].is_null() {
+        return Err("dataset provider returned invalid dataset");
+    }
+    Ok(response["result"].take())
 }

@@ -31,7 +31,11 @@ end
 """Resolve a registry snapshot and invoke a trusted caller-supplied callback."""
 function invoke_registered_extension(callback, selection, payload)
     resolved = kernel_call("resolve_extension_manifest", nothing, selection)["result"]
-    return callback(resolved, payload)
+    output = callback(resolved, payload)
+    if resolved["extension_point"] == "dataset_provider"
+        return kernel_call("ingest_dataset", nothing, Dict("dataset" => output))["result"]
+    end
+    return output
 end
 
 """Execute a scenario grid on a shared time column in Arrow IPC file or stream bytes."""
