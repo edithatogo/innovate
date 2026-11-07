@@ -6884,3 +6884,9 @@ Hosted release readiness for this worktree revision remains open.
   Python 3.15.2, Julia and installed R. In each binding both fits
   converged, matched direct fits and returned identical ordered
   results with one and two workers on the 8926c30c runtime.
+
+- [x] Verify forecasts from the mixed Logistic batch through Python
+  3.15.2, Julia and installed R. The event-boundary and covariate
+  forecasts matched their direct results in serial and parallel.
+  An intervening forecast missing its declared covariate returned
+  invalid_request and no result in all three bindings.
