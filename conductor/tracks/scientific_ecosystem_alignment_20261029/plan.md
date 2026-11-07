@@ -5449,3 +5449,10 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify caller-supplied score-draw rematching and mixture uncertainty
   through Python, Julia and installed R against rebuilt Rust libraries.
   Each reproduced draw effects 4 and 2 and mixture spread sqrt(5).
+
+- [x] Generate deterministic leave-one-out score refits in Rust from
+  explicit training omission indices. Each omission is shared across
+  fold fits and leaves evaluation rows in place. Rematching reports
+  per-refit pairs and estimates. These refits measure sensitivity to
+  training observations, so their mixture errors are unset. Eight
+  focused Rust causal tests passed. Binding qualification remains open.

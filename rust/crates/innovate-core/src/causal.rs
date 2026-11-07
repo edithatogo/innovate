@@ -55,7 +55,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                  "estimands":["ate","att"],"default_estimand":"ate",
                  "uncertainty":"fixed_propensity_standard_error"},
                 {"method":"matched_treatment_contrast","adjustment":"nearest_score_with_replacement",
-                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":["allow_partial","outcome_variances","balance_covariates","control_predictions","outcome_covariance_factors","fit_controls","score_draws"],
+                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":["allow_partial","outcome_variances","balance_covariates","control_predictions","outcome_covariance_factors","fit_controls","score_draws","score_refit_omit_indices"],
                  "estimands":["att"],"default_estimand":"att",
                  "partial_estimand":"matched_subset_att",
                  "uncertainty":"conditional_standard_error",
@@ -1362,6 +1362,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
                 | "scores"
                 | "fit_scores"
                 | "score_draws"
+                | "score_refit_omit_indices"
                 | "caliper"
                 | "allow_partial"
                 | "outcome_variances"
@@ -1379,7 +1380,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
         .ok_or("allow_partial must be boolean")?;
     let outcomes = series(payload, "outcomes")?;
     let treatment = series(payload, "treatment")?;
-    let score_fit = if let Some(fit) = fields.get("fit_scores") {
+    let score_fit_payload = if let Some(fit) = fields.get("fit_scores") {
         if fields.contains_key("scores") {
             return Err("choose either fit_scores or scores");
         }
@@ -1390,13 +1391,17 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
         {
             return Err("fit_scores received an unsupported field");
         }
-        Some(cross_fit_logistic_propensities(&json!({
+        Some(json!({
             "treatment": treatment, "covariates": fit.get("covariates"),
             "folds": fit.get("folds"), "ridge": fit.get("ridge"),
-        }))?)
+        }))
     } else {
         None
     };
+    let score_fit = score_fit_payload
+        .as_ref()
+        .map(cross_fit_logistic_propensities)
+        .transpose()?;
     let scores = match &score_fit {
         Some(fit) => series(fit, "propensities")?,
         None => series(payload, "scores")?,
@@ -1668,10 +1673,41 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
                 .collect::<Result<serde_json::Map<String, Value>, &'static str>>()
         })
         .transpose()?;
-    let score_sensitivity = fields
-        .get("score_draws")
-        .map(|value| matching_score_sensitivity(fields, value))
-        .transpose()?;
+    let score_sensitivity = if let Some(indices) = fields.get("score_refit_omit_indices") {
+        if fields.contains_key("score_draws") {
+            return Err("choose either score_draws or score_refit_omit_indices");
+        }
+        let fit = score_fit_payload
+            .as_ref()
+            .ok_or("score refits require fit_scores")?;
+        let indices: Vec<usize> = serde_json::from_value(indices.clone())
+            .map_err(|_| "score refits require integer omission indices")?;
+        if !(2..=128).contains(&indices.len())
+            || indices.iter().any(|&index| index >= outcomes.len())
+            || indices
+                .iter()
+                .collect::<std::collections::BTreeSet<_>>()
+                .len()
+                != indices.len()
+        {
+            return Err("score refits require two to 128 distinct in-range omission indices");
+        }
+        let draws = indices
+            .iter()
+            .map(|&index| Ok(cross_fit_logistic_scores(fit, Some(index))?["propensities"].take()))
+            .collect::<Result<Vec<_>, &'static str>>()?;
+        let mut sensitivity = matching_score_sensitivity(fields, &Value::Array(draws))?;
+        sensitivity["method"] = json!("rematch_leave_one_out_score_refits");
+        sensitivity["mixture_standard_deviation"] = Value::Null;
+        sensitivity["adjusted_mixture_standard_deviation"] = Value::Null;
+        sensitivity["omitted_training_indices"] = json!(indices);
+        Some(sensitivity)
+    } else {
+        fields
+            .get("score_draws")
+            .map(|value| matching_score_sensitivity(fields, value))
+            .transpose()?
+    };
     Ok(
         json!({"method":"nearest_score_with_replacement","estimand":estimand,"estimate":estimate,"adjusted_estimate":adjusted_estimate,"pairs":pairs,
             "unmatched_treated_indices":unmatched_treated_indices,
@@ -1699,6 +1735,7 @@ fn matching_score_sensitivity(
         .ok_or("score_draws requires two to 128 aligned score arrays")?;
     let mut draw_fields = fields.clone();
     draw_fields.remove("score_draws");
+    draw_fields.remove("score_refit_omit_indices");
     draw_fields.remove("fit_scores");
     draw_fields.remove("balance_covariates");
     let mut draw_payload = Value::Object(draw_fields);
@@ -1782,6 +1819,13 @@ fn logistic_probability(logit: f64) -> f64 {
 }
 
 fn cross_fit_logistic_propensities(payload: &Value) -> Result<Value, &'static str> {
+    cross_fit_logistic_scores(payload, None)
+}
+
+fn cross_fit_logistic_scores(
+    payload: &Value,
+    omit_training: Option<usize>,
+) -> Result<Value, &'static str> {
     let treatment = series(payload, "treatment")?;
     let rows = payload["covariates"]
         .as_array()
@@ -1800,8 +1844,8 @@ fn cross_fit_logistic_propensities(payload: &Value) -> Result<Value, &'static st
         let (held_out, training): (Vec<_>, Vec<_>) =
             (0..rows.len()).partition(|&index| folds[index] == *label);
         let fit = fit_logistic_propensities(&json!({
-            "treatment":training.iter().map(|&i| treatment[i]).collect::<Vec<_>>(),
-            "covariates":training.iter().map(|&i| &rows[i]).collect::<Vec<_>>(),
+            "treatment":training.iter().filter(|&&i| Some(i) != omit_training).map(|&i| treatment[i]).collect::<Vec<_>>(),
+            "covariates":training.iter().filter(|&&i| Some(i) != omit_training).map(|&i| &rows[i]).collect::<Vec<_>>(),
             "ridge":payload["ridge"],
         }))?;
         let predicted = predict_logistic_propensities(&json!({
@@ -2690,5 +2734,25 @@ mod tests {
         );
         assert_eq!(draws[0]["estimate"].as_f64(), Some(4.));
         assert_eq!(draws[1]["estimate"].as_f64(), Some(6.));
+    }
+    #[test]
+    fn matching_refits_scores_with_shared_training_omissions() {
+        let payload = serde_json::json!({
+            "outcomes": [0, 4, 2, 6, 8, 12, 10, 14],
+            "treatment": [0, 1, 0, 1, 0, 1, 0, 1], "caliper": 1,
+            "fit_scores": {"covariates": vec![vec![0]; 8],
+                "folds": [1, 1, 1, 1, 2, 2, 2, 2], "ridge": 1},
+            "score_refit_omit_indices": [0, 4]
+        });
+        let result = matched_treatment_contrast(&payload).unwrap();
+        let sensitivity = &result["score_sensitivity"];
+        assert_eq!(sensitivity["method"], "rematch_leave_one_out_score_refits");
+        assert_eq!(
+            sensitivity["omitted_training_indices"],
+            serde_json::json!([0, 4])
+        );
+        assert_eq!(sensitivity["draws"][0]["pairs"][0]["control_index"], 0);
+        assert_eq!(sensitivity["draws"][0]["pairs"][2]["control_index"], 4);
+        assert_eq!(sensitivity["draws"][1]["estimate"].as_f64(), Some(5.));
     }
 }
