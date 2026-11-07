@@ -587,10 +587,12 @@ end
 
 @testset "Treatment contrast discovery" begin
     result = kernel_call("summarize_causal", nothing, Dict("method"=>"describe_treatment_contrasts"))["result"]
-    descriptive, adjusted, weighted = result["contrasts"]
+    descriptive, adjusted, weighted, matching = result["contrasts"]
     @test descriptive["adjustment"] == "none"
     @test adjusted["required_fields"] == ["outcomes", "treatment", "strata"]
     @test adjusted["estimands"] == ["ate", "att"]
+    @test matching["estimands"] == ["att"]
+    @test matching["required_fields"] == ["outcomes", "treatment", "scores", "caliper"]
     @test weighted["required_fields"] == ["outcomes", "treatment", "propensities"]
     payload = Dict("method"=>weighted["method"], "outcomes"=>[0,10,2,12],
         "treatment"=>[0,0,1,1], "propensities"=>[0.2,0.8,0.2,0.8])
@@ -624,7 +626,9 @@ end
 end
 
 @testset "Nearest-score matching" begin
-    payload = Dict("method"=>"matched_treatment_contrast", "outcomes"=>[0,10,12,3,99],
+    methods = kernel_call("summarize_causal", nothing, Dict("method"=>"describe_treatment_contrasts"))["result"]["contrasts"]
+    matching = only(filter(method -> method["adjustment"] == "nearest_score_with_replacement", methods))
+    payload = Dict("method"=>matching["method"], "outcomes"=>[0,10,12,3,99],
         "treatment"=>[0,0,1,1,0], "scores"=>[0,2,2,1,0], "caliper"=>1)
     result = kernel_call("summarize_causal", nothing, payload)["result"]
     @test result["estimate"] ≈ 2.5

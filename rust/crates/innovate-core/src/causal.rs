@@ -52,7 +52,11 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                  "uncertainty":"conditional_standard_error"},
                 {"method":"propensity_weighted_contrast","adjustment":"caller_supplied_propensities",
                  "required_fields":["outcomes","treatment","propensities"],"optional_fields":["estimand"],
-                 "estimands":["ate","att"],"default_estimand":"ate"}
+                 "estimands":["ate","att"],"default_estimand":"ate",
+                 "uncertainty":"fixed_propensity_standard_error"},
+                {"method":"matched_treatment_contrast","adjustment":"nearest_score_with_replacement",
+                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":[],
+                 "estimands":["att"],"default_estimand":"att"}
             ]
         })),
         Some("pre_post") => {

@@ -1324,10 +1324,12 @@ def test_native_stratified_treatment_contrast(estimand, estimate, weight):
 
 def test_discover_treatment_contrasts():
     result = innovate.execute("summarize_causal", method="describe_treatment_contrasts")["result"]
-    descriptive, adjusted, weighted = result["contrasts"]
+    descriptive, adjusted, weighted, matching = result["contrasts"]
     assert descriptive["adjustment"] == "none"
     assert adjusted["required_fields"] == ["outcomes", "treatment", "strata"]
     assert adjusted["estimands"] == ["ate", "att"]
+    assert matching["estimands"] == ["att"]
+    assert matching["required_fields"] == ["outcomes", "treatment", "scores", "caliper"]
     assert weighted["required_fields"] == ["outcomes", "treatment", "propensities"]
     payload = dict(method=weighted["method"], outcomes=[0, 10, 2, 12],
                    treatment=[0, 0, 1, 1], propensities=[0.2, 0.8, 0.2, 0.8])
@@ -1365,7 +1367,9 @@ def test_fitted_stratum_propensity_workflow():
 
 
 def test_nearest_score_matching():
-    payload = dict(method="matched_treatment_contrast", outcomes=[0, 10, 12, 3, 99],
+    methods = innovate.execute("summarize_causal", method="describe_treatment_contrasts")["result"]["contrasts"]
+    matching = next(method for method in methods if method["adjustment"] == "nearest_score_with_replacement")
+    payload = dict(method=matching["method"], outcomes=[0, 10, 12, 3, 99],
                    treatment=[0, 0, 1, 1, 0], scores=[0, 2, 2, 1, 0], caliper=1)
     result = innovate.execute("summarize_causal", **payload)["result"]
     assert result["estimate"] == pytest.approx(2.5)

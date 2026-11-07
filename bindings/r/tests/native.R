@@ -588,7 +588,10 @@ weighted_fit <- kernel_call("summarize_causal", payload=list(method="propensity_
   outcomes=c(0,19,0,2,10,19,19), treatment=fit_treatment, propensities=fit$propensities))$result
 stopifnot(isTRUE(all.equal(weighted_fit$estimate, 6)))
 
-matching_payload <- list(method="matched_treatment_contrast", outcomes=c(0,10,12,3,99),
+matching <- contrast_methods[[4]]
+stopifnot(identical(unlist(matching$estimands), "att"),
+  identical(unlist(matching$required_fields), c("outcomes", "treatment", "scores", "caliper")))
+matching_payload <- list(method=matching$method, outcomes=c(0,10,12,3,99),
   treatment=c(0,0,1,1,0), scores=c(0,2,2,1,0), caliper=1)
 matched <- kernel_call("summarize_causal", payload=matching_payload)$result
 stopifnot(isTRUE(all.equal(matched$estimate, 2.5)),

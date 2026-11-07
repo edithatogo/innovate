@@ -4573,3 +4573,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Qualify nearest-score matching through rebuilt Python 3.15.2,
   Julia and installed R. Each returned ATT 2.5, the same zero-based
   control indices and a clear caliper failure for an unmatched row.
+
+- [x] Advertise nearest-score matching as ATT with a required caliper.
+  Python 3.15.2, Julia and installed R discovered and invoked the
+  advertised method, recovering 2.5 with deterministic matched pairs.
