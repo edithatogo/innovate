@@ -669,3 +669,38 @@ fn reopening_admits_priority_waiter_at_deadline() {
     assert_eq!(result["metadata"]["queue_length"], 0);
     assert_eq!(result["metadata"]["available"], 1);
 }
+
+#[test]
+fn scheduled_priorities_reorder_waiters_without_preempting_service() {
+    let mut payload = json!({
+        "inputs":{"time":[0.,5.,6.,11.,16.]},
+        "parameters":{"p":1e12,"q":0.,"m":3.},
+        "simulation_options":{"engine":"kairos_network","population":3,"seed":42,
+            "edges":[],"capacity":1,"service_ticks":5,"ticks_per_unit":1}
+    });
+    let kernel = KernelBinding::new();
+    let baseline = kernel
+        .simulate_model("bass", payload.clone())
+        .unwrap()
+        .result
+        .unwrap();
+    let late = baseline["requests"][2]["agent"].as_u64().unwrap() as usize;
+    let mut priorities = [0; 3];
+    priorities[late] = 10;
+    payload["simulation_options"]["schedule"] = json!([{"tick":4,"agent_priorities":priorities}]);
+    let result = kernel
+        .simulate_model("bass", payload.clone())
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(result["requests"], baseline["requests"]);
+    assert_eq!(result["completions"][0], baseline["completions"][0]);
+    assert_eq!(result["completions"][1], json!({"agent":late,"tick":11}));
+    assert_eq!(
+        result["completions"][2]["agent"],
+        baseline["requests"][1]["agent"]
+    );
+    assert_eq!(result["metadata"]["agent_priorities"], json!(priorities));
+    payload["simulation_options"]["schedule"][0]["agent_priorities"] = json!([10]);
+    assert!(kernel.simulate_model("bass", payload).is_err());
+}

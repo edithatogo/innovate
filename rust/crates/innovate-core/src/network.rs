@@ -60,6 +60,7 @@ struct Change {
     edges: Option<Vec<[usize; 2]>>,
     edge_weights: Option<Vec<f64>>,
     service_ticks: Option<u64>,
+    agent_priorities: Option<Vec<i32>>,
     capacity: Option<u64>,
     #[serde(default, deserialize_with = "queue_policy_change")]
     max_wait_ticks: Option<Option<u64>>,
@@ -268,7 +269,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         .agent_service_ticks
         .clone()
         .unwrap_or_else(|| vec![o.service_ticks; o.population]);
-    let priorities = o.agent_priorities.unwrap_or_else(|| vec![0; o.population]);
+    let mut priorities = o.agent_priorities.unwrap_or_else(|| vec![0; o.population]);
     if priorities.len() != o.population {
         return Err(invalid(
             "agent_priorities must be a population-length array of signed 32-bit integers",
@@ -340,6 +341,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                     && (change.edge_weights.is_some()
                         || (change.service_ticks.is_none()
                             && change.capacity.is_none()
+                            && change.agent_priorities.is_none()
                             && change.max_queue_length.is_none()
                             && change.max_wait_ticks.is_none()
                             && change.p.is_none()
@@ -354,6 +356,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                     .into_iter()
                     .flatten()
                     .any(|values| !valid_multipliers(values))
+                || change.agent_priorities.as_ref().is_some_and(|values| values.len() != o.population)
                 || change.capacity.is_some_and(|cap| cap > o.population as u64)
                 || change.max_wait_ticks.flatten().is_some_and(|wait| !(1..=1_000_000_000_000).contains(&wait))
                 || change.max_queue_length.flatten().is_some_and(|limit| limit > o.population)
@@ -420,6 +423,19 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         }
         counts[index] += 1;
         Some(now + u128::from(policy.delay_ticks))
+    };
+    let rebuild_waiters = |waiting_since: &[Option<u128>], priorities: &[i32]| {
+        let mut waiting: Vec<_> = waiting_since
+            .iter()
+            .enumerate()
+            .filter_map(|(index, tick)| tick.map(|tick| (tick, index)))
+            .collect();
+        waiting.sort_unstable();
+        let mut resource = PriorityResource::new("adoption_waiters", 0);
+        for (tick, index) in waiting {
+            resource.request(agents[index], priorities[index], SimTime::from_ticks(tick));
+        }
+        resource
     };
     let mut waiting_since = vec![None; o.population];
     let mut rng = DeterministicStream::from_run_seed(o.seed);
@@ -590,16 +606,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                     waiting_since[index] = None;
                 }
             }
-            let mut waiting: Vec<_> = waiting_since
-                .iter()
-                .enumerate()
-                .filter_map(|(index, tick)| tick.map(|tick| (tick, index)))
-                .collect();
-            waiting.sort_unstable();
-            resource = PriorityResource::new("adoption_waiters", 0);
-            for (tick, index) in waiting {
-                resource.request(agents[index], priorities[index], SimTime::from_ticks(tick));
-            }
+            resource = rebuild_waiters(&waiting_since, &priorities);
         } else if let Some(tick) =
             boundary.filter(|t| attempt.is_none_or(|a| *t <= a) && wake.is_none_or(|w| *t <= w))
         {
@@ -621,6 +628,10 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             }
             if let Some(values) = &change.imitation_multipliers {
                 imitation_weights.clone_from(values);
+            }
+            if let Some(values) = &change.agent_priorities {
+                priorities.clone_from(values);
+                resource = rebuild_waiters(&waiting_since, &priorities);
             }
             applied_ticks.push(tick);
         } else if let Some(tick) = wake.filter(|t| attempt.is_none_or(|a| *t <= a)) {

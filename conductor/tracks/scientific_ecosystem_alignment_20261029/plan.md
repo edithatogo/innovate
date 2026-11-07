@@ -2727,3 +2727,11 @@ the other competition models and installed binding checks remain open.
   both files. Julia Arrow and R Arrow matched each existing stream
   column for type, values and nulls. Direct Arrow.jl readback of files
   emitted by the separate Python Polars writer remains open.
+
+- [x] Schedule Kairos agent priority changes. Reorder existing waiters
+  with their original queue entry times, apply new priorities to future
+  requests, and leave active service and waiting deadlines in place.
+  The regression verifies a promoted waiter completes next, active
+  service is preserved, and malformed priority vectors fail.
+  All 24 Rust network tests and focused Clippy passed. Binding
+  qualification for this schedule field remains open.
