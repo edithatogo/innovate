@@ -191,8 +191,10 @@
     },
     {
       "key": "data_ingestion_provenance_validation",
-      "status": "pending",
-      "required": true
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Historical artifact metadata and diagnostic detail parity, broader input qualification, and release acceptance"
     },
     {
       "key": "scenario_registry_execution",

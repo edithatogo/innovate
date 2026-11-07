@@ -1842,8 +1842,8 @@ the other competition models and installed binding checks remain open.
   share bounds and denominators. The Rust fixture reports five
   independent failures in one dataset. All 28 boundary tests and
   focused Clippy passed.
-- [ ] Restore diagnostics for the other historical dataset kinds
-  and verify the installed consumers.
+- [x] Restore and verify diagnostic reports for all five historical
+  dataset kinds across installed consumers. See the cases below.
 
 - [x] Restore substitution diagnostics for aligned, rectangular share
   matrices, numeric entries, share units and total market share.
@@ -1870,15 +1870,17 @@ the other competition models and installed binding checks remain open.
   dataset artifact and report. The fixture verifies re-ingestion,
   rejection of a changed dataset with a retained checksum and rejection
   of a failed diagnostic. All 32 boundary tests and focused Clippy passed.
-- [ ] Restore local table ingestion through Polars and qualify the
-  structured artifact in Python, Julia and R.
+- [x] Restore Polars local table ingestion and qualify the structured
+  artifact handoff in Python, Julia and R on the fixtures below.
 
 - [x] Restore Python Polars local ingestion for CSV, Parquet and Arrow
   IPC. The rebuilt wheel produced the same checksummed artifact from
   all three formats and a LazyFrame for each of the five dataset kinds.
   Rust owns validation and checksums.
-- [ ] Verify structured ingestion in Julia and R and qualify provenance
-  enrichment and historical ingestion schema details.
+- [x] Verify the structured artifact in Julia and R, source provenance
+  enrichment, and schema version and product label checks.
+- [ ] Qualify historical artifact metadata and diagnostic details across
+  all kinds and retain broader input and release qualification.
 
 - [x] Verify re-ingestion of a Python-produced dataset artifact in Julia
   and installed R. Both reproduce the artifact and reject a changed
