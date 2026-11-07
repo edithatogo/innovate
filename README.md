@@ -14,9 +14,10 @@ multi-generation Norton–Bass, Lotka–Volterra and multi-product competition
 fit/predict/simulate/summary/diagnostics paths. Fitting reports numerical
 convergence and local sensitivity rank.
 These are development capabilities, not full scientific or release acceptance.
-Advanced model families, covariates, event splits, uncertainty, native Kairos
+Advanced model families, covariates, event splits, uncertainty, full Kairos
 simulation and the remaining areas in [the migration ledger](migration-ledger.json)
-still require implementation or qualification. The release gate currently fails.
+still require implementation or qualification. Bass now has a bounded native
+Kairos DES birth-process simulation with explicit seeds and tick resolution. The release gate currently fails.
 The earlier Python suite remains in Git history as migration evidence; the new
 native suite does not claim equivalent feature coverage.
 

@@ -236,6 +236,8 @@ pub struct KernelDiscoveryRecord {
     pub supports_summarize: bool,
     pub supported_operations: Vec<String>,
     pub simulation_semantics: String,
+    #[serde(default)]
+    pub simulation_engines: Vec<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

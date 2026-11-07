@@ -13,7 +13,7 @@ no Python numerical fallback, pandas or xarray runtime.
 Seven native model families expose deterministic fitting, prediction, simulation,
 summary and diagnostics: Bass, Logistic, Gompertz, Fisher–Pry, Norton–Bass,
 Lotka–Volterra and multi-product competition. Their support remains bounded.
-Covariates, events, uncertainty, other model families and native Kairos simulation
+Covariates, events, uncertainty, other model families and full Kairos simulation
 remain required migration work. Discovery describes the executable subset;
 release stays blocked by the full model and feature ledger.
 
@@ -130,3 +130,40 @@ Kairos owns scheduling, DES/ABM state and deterministic replay. Innovate retains
 diffusion fitting and diagnostics. The pre-migration source/test inventory and
 all 38 model/feature obligations remain retained in Conductor. A passing native
 subset does not replace the full scientific, platform or release gates.
+
+## Native Kairos Bass simulation
+
+`simulate_model` accepts an explicit `simulation_options` object for Bass:
+
+```python
+from innovate import execute
+import polars as pl
+
+result = execute("simulate_model", "bass",
+    inputs={"time": [0.0, 1.0, 5.0, 20.0]},
+    parameters={"p": 0.2, "q": 0.3, "m": 100.0},
+    simulation_options={"engine": "kairos_des", "seed": 42, "population": 100})
+trajectory = pl.DataFrame({"time": [0.0, 1.0, 5.0, 20.0],
+                           "adopters": result["result"]["counts"],
+                           "level": result["result"]["values"]})
+```
+
+Kairos revision `d56863505d938feb069af88a737eb7668113d14b` owns scheduler
+dispatch and the seeded random stream. Innovate supplies the scientific hazard
+`(p + q*n/N)*(N-n)` for a finite population starting with zero adopters.
+Returned levels are `m*n/N`; counts are integers. This stochastic process has a
+deterministic Bass limit as population grows; its finite-population expectation
+is not assumed to equal the deterministic curve when imitation is nonzero.
+
+Population is 1–100,000. Seed is an unsigned integer; R numeric seeds should stay
+within its exact integer range. `ticks_per_unit` defaults to 1,000,000 and accepts
+1–1,000,000,000. Waiting times round upward to at least one tick, creating a
+resolution-dependent delay. Time must be finite, nonnegative and within the
+reported tick domain. No simulation option is silently ignored. Existing calls
+without `simulation_options` retain deterministic curve semantics.
+
+The same payload works through R's `kernel_simulate_model` and Julia's
+`kernel_simulate_model`. Metadata records the immutable dependency revision,
+seed, resolution and RNG checkpoint. The checkpoint is provenance; resume,
+ABM agent state, networks, resources, interventions and general scenario replay
+remain required migration work. This port supplies aggregate adoption events.

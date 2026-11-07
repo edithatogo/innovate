@@ -24,9 +24,13 @@
         "summarize_model",
         "diagnose_model"
       ],
-      "simulation_semantics": "deterministic_curve_only",
+      "simulation_semantics": "deterministic_curve_or_finite_population_birth_process",
       "supports_rates": false,
-      "variants": []
+      "variants": [],
+      "simulation_engines": [
+        "deterministic_curve",
+        "kairos_des"
+      ]
     },
     {
       "family": "substitution",
@@ -50,7 +54,10 @@
       ],
       "simulation_semantics": "deterministic_curve_only",
       "supports_rates": false,
-      "variants": []
+      "variants": [],
+      "simulation_engines": [
+        "deterministic_curve"
+      ]
     },
     {
       "family": "diffusion",
@@ -74,7 +81,10 @@
       ],
       "simulation_semantics": "deterministic_curve_only",
       "supports_rates": false,
-      "variants": []
+      "variants": [],
+      "simulation_engines": [
+        "deterministic_curve"
+      ]
     },
     {
       "family": "diffusion",
@@ -98,7 +108,10 @@
       ],
       "simulation_semantics": "deterministic_curve_only",
       "supports_rates": false,
-      "variants": []
+      "variants": [],
+      "simulation_engines": [
+        "deterministic_curve"
+      ]
     },
     {
       "family": "substitution",
@@ -125,6 +138,9 @@
       "variants": [
         "legacy_cannibalization",
         "successive_generations"
+      ],
+      "simulation_engines": [
+        "deterministic_curve"
       ]
     },
     {
@@ -149,7 +165,10 @@
       ],
       "simulation_semantics": "deterministic_ode_only",
       "supports_rates": true,
-      "variants": []
+      "variants": [],
+      "simulation_engines": [
+        "deterministic_curve"
+      ]
     },
     {
       "family": "competition",
@@ -173,7 +192,10 @@
       ],
       "simulation_semantics": "deterministic_ode_only",
       "supports_rates": true,
-      "variants": []
+      "variants": [],
+      "simulation_engines": [
+        "deterministic_curve"
+      ]
     }
   ],
   "schema_version": "2.0"

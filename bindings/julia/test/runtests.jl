@@ -61,3 +61,10 @@ end
 @testset "Native numerical overflow guard" begin
     @test_throws r"finite numerical domain" kernel_fit_model("logistic",Dict("inputs"=>Dict("time"=>[0.,1.,2.,3.],"observed"=>fill(1e-12,4)),"fit_options"=>Dict("initial_parameters"=>Dict("L"=>1e140,"k"=>1e15,"x0"=>1.))))
 end
+@testset "Kairos native replay" begin
+    payload=Dict("inputs"=>Dict("time"=>[0.,1.,5.,20.]),"parameters"=>Dict("p"=>0.2,"q"=>0.3,"m"=>100.),"simulation_options"=>Dict("engine"=>"kairos_des","seed"=>42,"population"=>100))
+    a=kernel_simulate_model("bass",payload)
+    @test a==kernel_simulate_model("bass",payload)
+    @test a["result"]["counts"][1]==0
+    @test a["metadata"]["engine"]=="kairos_des"
+end

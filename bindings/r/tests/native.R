@@ -67,3 +67,7 @@ cat("R competitive analytic limits, two-output rates and optional-null transport
 extreme_fit <- tryCatch(kernel_fit_model("logistic",list(inputs=list(time=c(0,1,2,3),observed=rep(1e-12,4)),fit_options=list(initial_parameters=list(L=1e140,k=1e15,x0=1)))),error=function(e) conditionMessage(e))
 stopifnot(is.character(extreme_fit),grepl("finite numerical domain",extreme_fit))
 cat("R installed native overflow guard passed\n")
+kairos_payload <- list(inputs=list(time=c(0,1,5,20)), parameters=list(p=0.2,q=0.3,m=100), simulation_options=list(engine="kairos_des",seed=42,population=100))
+kairos_a <- kernel_simulate_model("bass",kairos_payload)
+stopifnot(identical(kairos_a,kernel_simulate_model("bass",kairos_payload)),kairos_a$result$counts[[1]]==0,kairos_a$metadata$engine=="kairos_des")
+cat("R Kairos native replay passed\n")

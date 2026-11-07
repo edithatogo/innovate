@@ -82,3 +82,19 @@ def test_empty_non_mapping_options_are_not_silently_treated_as_defaults():
             innovate.fit("logistic", data, model_options=invalid)
         with pytest.raises(ValueError):
             innovate.fit("logistic", data, fit_options=invalid)
+
+
+def test_native_kairos_replay_and_engine_errors():
+    payload = {
+        "inputs": {"time": [0.0, 1.0, 5.0, 20.0]},
+        "parameters": {"p": 0.2, "q": 0.3, "m": 100.0},
+        "simulation_options": {"engine": "kairos_des", "seed": 42, "population": 100},
+    }
+    a = innovate.execute("simulate_model", "bass", **payload)
+    assert a == innovate.execute("simulate_model", "bass", **payload)
+    assert a["result"]["counts"][0] == 0
+    assert a["metadata"]["engine"] == "kairos_des"
+    assert len(set(a["result"]["counts"])) > 1
+    payload["simulation_options"]["engine"] = "unknown"
+    with pytest.raises(innovate.NativeError):
+        innovate.execute("simulate_model", "bass", **payload)

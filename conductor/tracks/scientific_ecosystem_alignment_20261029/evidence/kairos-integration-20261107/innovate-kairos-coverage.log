@@ -1,0 +1,16 @@
+info: cargo-llvm-cov currently setting cfg(coverage); you can opt-out it by passing --no-cfg-coverage
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling zerocopy v0.8.63
+   Compiling autocfg v1.5.1
+   Compiling syn v3.0.9
+   Compiling libm v0.2.16
+   Compiling num-traits v0.2.19
+   Compiling rand_core v0.10.1
+   Compiling thiserror v2.0.21
+error: failed to write /tmp/innovate-coverage-target/llvm-cov-target/debug/deps/rustc5cxJ3E/lib.rmeta: No space left on device (os error 28)
+
+error: process didn't exit successfully: `rustc --crate-name zerocopy --edition=2021 /Users/doughnut/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerocopy-0.8.63/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no --cfg 'feature="simd"' --check-cfg 'cfg(docsrs,test)' --check-cfg 'cfg(feature, values("__internal_use_only_features_that_work_on_stable", "alloc", "derive", "float-nightly", "simd", "simd-nightly", "std", "zerocopy-derive"))' -C metadata=17578293ffd93bc1 -C extra-filename=-7a26a6f3e826b473 --out-dir /tmp/innovate-coverage-target/llvm-cov-target/debug/deps -C strip=debuginfo -L dependency=/tmp/innovate-coverage-target/llvm-cov-target/debug/deps --cap-lints allow --check-cfg 'cfg(no_zerocopy_simd_x86_avx12_1_89_0)' --check-cfg 'cfg(rust, values("1.89.0"))' --check-cfg 'cfg(no_zerocopy_core_error_1_81_0)' --check-cfg 'cfg(rust, values("1.81.0"))' --check-cfg 'cfg(no_zerocopy_slice_ptr_len_1_79_0)' --check-cfg 'cfg(rust, values("1.79.0"))' --check-cfg 'cfg(no_zerocopy_diagnostic_on_unimplemented_1_78_0)' --check-cfg 'cfg(rust, values("1.78.0"))' --check-cfg 'cfg(no_zerocopy_generic_bounds_in_const_fn_1_61_0)' --check-cfg 'cfg(rust, values("1.61.0"))' --check-cfg 'cfg(no_zerocopy_target_has_atomics_1_60_0)' --check-cfg 'cfg(rust, values("1.60.0"))' --check-cfg 'cfg(no_zerocopy_aarch64_simd_1_59_0)' --check-cfg 'cfg(rust, values("1.59.0"))' --check-cfg 'cfg(no_zerocopy_aarch64_simd_be_1_87_0)' --check-cfg 'cfg(rust, values("1.87.0"))' --check-cfg 'cfg(no_zerocopy_panic_in_const_and_vec_try_reserve_1_57_0)' --check-cfg 'cfg(rust, values("1.57.0"))' --check-cfg 'cfg(doc_cfg)' --check-cfg 'cfg(kani)' --check-cfg 'cfg(kani_slow)' --check-cfg 'cfg(__ZEROCOPY_INTERNAL_USE_ONLY_NIGHTLY_FEATURES_IN_TESTS)' --check-cfg 'cfg(__ZEROCOPY_INTERNAL_USE_ONLY_TOOLCHAIN, values("msrv", "stable", "nightly"))' --check-cfg 'cfg(__ZEROCOPY_INTERNAL_USE_ONLY_DEV_MODE)' --check-cfg 'cfg(coverage_nightly)' --check-cfg 'cfg(zerocopy_inline_always)' --check-cfg 'cfg(zerocopy_unstable_ptr)' --check-cfg 'cfg(zerocopy_unstable_linux)' --check-cfg 'cfg(no_fp_fmt_parse)'` (exit status: 1)
+error: could not compile `zerocopy` (lib) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: process didn't exit successfully: `/opt/homebrew/bin/cargo test --tests --manifest-path /Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/Cargo.toml --target-dir /tmp/innovate-coverage-target/llvm-cov-target --locked -p innovate-core -p innovate-ffi -j 2` (exit status: 101)

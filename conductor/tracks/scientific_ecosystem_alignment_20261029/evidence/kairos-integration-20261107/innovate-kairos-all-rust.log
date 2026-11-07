@@ -1,0 +1,13 @@
+    Blocking waiting for file lock on build directory
+   Compiling ppv-lite86 v0.2.21
+   Compiling rand_distr v0.6.0
+   Compiling rand_chacha v0.10.0
+   Compiling kairo-ecs-rng v0.0.0 (https://github.com/edithatogo/kairos.git?rev=d56863505d938feb069af88a737eb7668113d14b#d5686350)
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+error: couldn't create a temp dir: No space left on device (os error 28) at path "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/target/debug/deps/rmetaelZlRW"
+
+error: could not compile `innovate-core` (lib) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: couldn't create a temp dir: No space left on device (os error 28) at path "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/target/debug/deps/rmetaGFln3U"
+
+error: could not compile `innovate-core` (lib test) due to 1 previous error

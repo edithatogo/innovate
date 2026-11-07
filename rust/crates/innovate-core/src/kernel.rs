@@ -245,6 +245,9 @@ impl KernelBinding {
             request
         };
         validate_request(request)?;
+        if request.payload.get("simulation_options").is_some() {
+            return crate::simulation::execute(request);
+        }
         if matches!(
             request.model_key.as_deref(),
             Some("lotka_volterra" | "multi_product")

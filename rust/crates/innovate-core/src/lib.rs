@@ -5,6 +5,7 @@ mod contracts;
 mod fitting;
 mod kernel;
 mod numerics;
+mod simulation;
 mod substitution;
 mod validation;
 pub use contracts::*;

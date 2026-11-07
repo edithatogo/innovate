@@ -1,0 +1,12 @@
+Test Summary:      | Pass  Total   Time
+Native conformance |  104    104  14.0s
+Test Summary:               | Pass  Total  Time
+Five model analytic oracles |   10     10  0.3s
+Test Summary:                     | Pass  Total  Time
+Multi-generation fit and forecast |    7      7  3.1s
+Test Summary:               | Pass  Total  Time
+Competitive analytic limits |    6      6  0.5s
+Test Summary:                   | Pass  Total  Time
+Native numerical overflow guard |    1      1  0.6s
+Test Summary:        | Pass  Total  Time
+Kairos native replay |    3      3  0.2s

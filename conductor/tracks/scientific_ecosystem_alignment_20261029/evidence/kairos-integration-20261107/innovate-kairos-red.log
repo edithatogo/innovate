@@ -1,0 +1,39 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 3.67s
+     Running tests/kairos.rs (target/debug/deps/kairos-3f179b27ad0cb7a8)
+
+running 3 tests
+test unsupported_or_malformed_engines_never_silently_use_a_curve ... FAILED
+test innovation_only_ensemble_matches_binomial_mean ... FAILED
+test native_kairos_replays_and_does_not_depend_on_sampling_grid ... FAILED
+
+failures:
+
+---- unsupported_or_malformed_engines_never_silently_use_a_curve stdout ----
+
+thread 'unsupported_or_malformed_engines_never_silently_use_a_curve' (25798290) panicked at rust/crates/innovate-core/tests/kairos.rs:22:2:
+assertion failed: KernelBinding::new().simulate_model("bass",
+        json!({"inputs":{"time":[0.,1.]},"parameters":{"p":0.2,"q":0.3,"m":100.},"simulation_options":options})).is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- innovation_only_ensemble_matches_binomial_mean stdout ----
+
+thread 'innovation_only_ensemble_matches_binomial_mean' (25798288) panicked at rust/crates/innovate-core/tests/kairos.rs:15:85:
+called `Option::unwrap()` on a `None` value
+
+---- native_kairos_replays_and_does_not_depend_on_sampling_grid stdout ----
+
+thread 'native_kairos_replays_and_does_not_depend_on_sampling_grid' (25798289) panicked at rust/crates/innovate-core/tests/kairos.rs:8:2:
+assertion `left != right` failed
+  left: Null
+ right: Null
+
+
+failures:
+    innovation_only_ensemble_matches_binomial_mean
+    native_kairos_replays_and_does_not_depend_on_sampling_grid
+    unsupported_or_malformed_engines_never_silently_use_a_curve
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --test kairos`
