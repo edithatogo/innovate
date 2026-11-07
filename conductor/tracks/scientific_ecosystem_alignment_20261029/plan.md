@@ -498,3 +498,41 @@ simulation/summary behavior and model/weight state in the native contract.
 Composite, remaining inference/uncertainty/covariates/scenarios, richer Kairos
 graphs/resources and distribution/scientific qualification remain required.
 Goal active; shared main and other writing lanes untouched.
+
+## Mixture and weighted-fitting continuation
+
+Same writer resumes at 98b5bba1, clean isolated checkout, no live native operation.
+The prior goal turn made committed hierarchical progress.
+
+- [x] Add native scalar weighted least squares with finite nonnegative precision
+  weights, explicit effective sample/rank diagnostics and independent reference checks.
+- [x] Port mixture prediction/state plus historical adoption-responsibility updates;
+  qualify a residual-likelihood variant without claiming calibrated class inference.
+- [x] Validate Python/Julia/R, review, coverage, docs/package and retained ledger scope.
+
+Historical ScipyFitter curve_fit converts weights to sigma=1/sqrt(weights);
+other old optimizer branches may ignore sigma. Native weighting will use explicit
+sum-of-weighted-squared-residuals semantics consistently. No failure may silently
+become successful EM convergence; retain per-component update diagnostics. All
+38 scientific obligations remain required.
+
+Mixture/weighting source-evidence commit: `ff20e4c69e0b85f0ad1ef6366344b1cd86d1e9c0`.
+101 Rust tests, 36 installed Python, 166 Julia assertions and R conformance pass.
+Core/C ABI line coverage 84.13%; mixture 88.67%, scalar fitting 92.88%.
+Clippy, lint/types, docs (163 pages), local wheel installation and archive
+metadata/source inclusion pass. Receipt/review: mixture-20261107.json and
+mixture-review-20261107.md. Native Gaussian EM recovers separated components
+with and without a warm start. Failed updates roll back, remain recorded and
+cannot report convergence. Historical adoption responsibility mode is explicit.
+No native operation remains active.
+
+Fifteen bounded model families; composite remains unavailable. All 38 obligations
+remain required and the optimized release guard intentionally fails. Next:
+composite scalar-product ODEs, retaining interactions and parameter suffixes,
+qualifying initial-condition/origin semantics and matrix forecasts via all three
+bindings. Preserved composite.py resets zero initial state at each requested
+batch start; preserve that as an explicit historical option while supporting
+fixed-origin/stateful forecasts. Then cross-model rate/covariate/event coverage,
+inference/uncertainty/scenarios, richer Kairos networks/resources, platform and
+scientific qualification. Model-family availability never closes full-feature
+acceptance. Shared main unchanged, goal active.
