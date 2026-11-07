@@ -3103,3 +3103,11 @@ the other competition models and installed binding checks remain open.
   and recovered the reference posterior mean within 0.15. The
   development checker passed and release still lists all 38 gates,
   including Bayesian inference.
+
+- [x] Profile supplied Logistic event times by refitting both branches
+  at each candidate and selecting the lowest converged residual score.
+  Save the selected fixed split in the fitted state. Python 3.15.2,
+  Julia and R agreed exactly on the synthetic 24-observation fixture.
+  Candidate 12 recovered the true split with RSS below 1e-18 against
+  RSS above 5,000 at candidates 10 and 14. The focused Rust regression
+  and Clippy passed. Broader model and event uncertainty work remains open.

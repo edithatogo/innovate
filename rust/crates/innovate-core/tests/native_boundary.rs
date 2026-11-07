@@ -2452,3 +2452,40 @@ fn kairos_scenario_replay_retains_scheduled_retry_clear() {
         row["result"]
     );
 }
+
+#[test]
+fn historical_logistic_profiles_event_candidates_and_saves_fixed_split() {
+    let time: Vec<_> = (0..24).collect();
+    let observed: Vec<_> = time
+        .iter()
+        .map(|&t| {
+            let (l, k, x0) = if t < 12 {
+                (100., 0.5, 5.)
+            } else {
+                (200., 0.4, 17.)
+            };
+            l / (1. + (-k * (f64::from(t) - x0)).exp())
+        })
+        .collect();
+    let mut request = json!({"schema_version":"2.0","operation":"fit_model","model_key":"logistic",
+        "payload":{"inputs":{"time":time,"observed":observed},
+            "constructor_kwargs":{"event_candidates":[10,12,14]}}});
+    let execute = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = execute(&request);
+    let result = &response["result"];
+    assert_eq!(
+        result["state"]["constructor_kwargs"],
+        json!({"t_event":12.}),
+        "{response}"
+    );
+    assert!(
+        result["event_profile"]["candidates"][1]["objective"]
+            .as_f64()
+            .unwrap()
+            < 1e-10
+    );
+    request["payload"]["constructor_kwargs"]["event_candidates"] = json!([1, 12]);
+    assert!(execute(&request)["error"].is_object());
+}

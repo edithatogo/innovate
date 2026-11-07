@@ -217,6 +217,15 @@ Logistic now supports `model_options={"covariates": ["price"]}`. The Polars
 Multiple declared covariates are additive. Effective L and k must stay positive;
 all inputs and coefficients must be finite. Forecasts need future covariate values.
 
+For a fresh Logistic fit, set `event_candidates` to 2–16 strictly
+increasing times in the constructor options. Each split must have at least
+three observations on each side. The fit refits the two branches for every
+candidate, selects the converged fit with the smallest residual sum of
+squares, and keeps the earlier candidate on a tie. Weighted fits use the
+normalized weighted residual sum of squares. The fitted state stores the
+selected `t_event`, and `event_profile` reports the candidate scores and
+convergence. The search is limited to the supplied times.
+
 `t_event` selects independent pre/post curves using `L_post`, `k_post`,
 `x0_post` at and after the event. These historical curves can jump at the event;
 continuity is not imposed. If covariates and an event are combined,

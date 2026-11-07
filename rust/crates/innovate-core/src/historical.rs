@@ -22,6 +22,7 @@ pub(crate) fn selected(r: &KernelRequest) -> bool {
             .and_then(Value::as_array)
             .is_some_and(|a| !a.is_empty())
             || k.get("t_event").is_some_and(|v| !v.is_null())
+            || k.get("event_candidates").is_some()
     })
 }
 pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBindingError> {
@@ -54,6 +55,9 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         })
         .and_then(Value::as_object)
         .ok_or_else(|| error("constructor options must be an object"))?;
+    if kw.contains_key("event_candidates") {
+        return profile_event(r, kw, &time);
+    }
     if kw
         .keys()
         .any(|k| !["covariates", "t_event", "event_covariates"].contains(&k.as_str()))
@@ -446,4 +450,81 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         error: None,
         metadata: json!({"runtime":"rust_native","scope":"historical_logistic"}),
     })
+}
+
+/// Profile a discrete split by refitting the historical curve for each candidate.
+fn profile_event(
+    request: &KernelRequest,
+    options: &Map<String, Value>,
+    time: &[f64],
+) -> Result<KernelResponse, KernelBindingError> {
+    let error = |message: &str| KernelBindingError::invalid_request(request.operation, message);
+    if request.operation != KernelOperation::FitModel
+        || options.get("t_event").is_some_and(|event| !event.is_null())
+        || request.payload.get("state").is_some()
+    {
+        return Err(error(
+            "event_candidates requires a fresh fit without fixed t_event",
+        ));
+    }
+    let candidates = options["event_candidates"]
+        .as_array()
+        .filter(|values| (2..=16).contains(&values.len()))
+        .ok_or_else(|| error("event_candidates requires 2 to 16 times"))?;
+    let times = candidates
+        .iter()
+        .map(|value| {
+            value
+                .as_f64()
+                .ok_or_else(|| error("event candidates must be finite numbers"))
+        })
+        .collect::<Result<Vec<_>, _>>()?;
+    if times.windows(2).any(|pair| pair[0] >= pair[1]) {
+        return Err(error("event candidates must be strictly increasing"));
+    }
+    let mut trial = request.clone();
+    let mut fixed = options.clone();
+    fixed.remove("event_candidates");
+    let mut profile = Vec::with_capacity(times.len());
+    let mut best = None;
+    let mut best_score = f64::INFINITY;
+    for time_candidate in times {
+        let split = time.partition_point(|time| *time < time_candidate);
+        if split < 3 || time.len() - split < 3 {
+            return Err(error(
+                "each event candidate requires at least three observations per branch",
+            ));
+        }
+        fixed.insert("t_event".into(), json!(time_candidate));
+        trial.payload["constructor_kwargs"] = json!(fixed);
+        match execute(&trial) {
+            Ok(response) => {
+                let diagnostics = &response.result.as_ref().expect("fit result")["diagnostics"];
+                let weighted = diagnostics.get("weighting").is_some();
+                let score = if weighted {
+                    diagnostics["weighting"]["weighted_rss_normalized_by_max"].as_f64()
+                } else {
+                    diagnostics["metrics"]["RSS"].as_f64()
+                };
+                let converged = diagnostics["optimizer"]["converged"] == true;
+                profile.push(
+                    json!({"t_event":time_candidate,"objective":score,"converged":converged}),
+                );
+                if let Some(score) = score.filter(|score| converged && *score < best_score) {
+                    best_score = score;
+                    best = Some(response);
+                }
+            }
+            Err(failure) => {
+                profile.push(json!({"t_event":time_candidate,"error":failure.to_string()}))
+            }
+        }
+    }
+    let mut response =
+        best.ok_or_else(|| error("no event candidate produced a converged finite fit"))?;
+    response.result.as_mut().expect("fit result")["event_profile"] = json!({
+        "method":"discrete_profile_least_squares","candidates":profile,
+        "tie_break":"earliest_candidate"
+    });
+    Ok(response)
 }
