@@ -4939,3 +4939,8 @@ Hosted release readiness for this worktree revision remains open.
   weights [0, 1, 0, 1] on both the original and translated grids.
   Both focused Rust core tests and the Polars historical boundary test
   passed, including the previously qualified overflowing-span fixture.
+
+- [x] Check finite-span inclusive adopter boundaries on fe565142
+  through rebuilt Python 3.15.2 and Julia and the installed R bridge.
+  All three returned the four expected categories on both the original
+  and translated grids. Python loaded the rebuilt extension directly.
