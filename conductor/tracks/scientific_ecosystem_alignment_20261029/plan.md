@@ -7092,3 +7092,10 @@ Hosted release readiness for this worktree revision remains open.
   verifier. Require their package entry files and reject files under
   additional language directories. The checkout and all 12 policy
   tests passed, including missing R and an added Java binding.
+
+- [x] Verify the new binding layout check is scoped to the repository
+  checkout. Inspected a freshly built Maturin source archive. It
+  packages the Python binding and all Rust JSON fixtures, while CI
+  invokes the migration verifier in the checkout before the separate
+  extracted-source checks. The archive does not ship the verifier or
+  ledger. This was an archive-content check.
