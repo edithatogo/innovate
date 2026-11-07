@@ -78,10 +78,10 @@ kernel_seasonal_decomposition(values, period, trend_span=nothing; robust=false, 
         "low_pass_degree" => low_pass_degree, "low_pass_jump" => low_pass_jump))["result"]
 
 """Estimate a no-intercept SARIMA model and return fitted values with missing warmup rows."""
-kernel_sarima_fit(values, order; seasonal_order=(0, 0, 0, 0)) =
+kernel_sarima_fit(values, order; seasonal_order=(0, 0, 0, 0), historical=false) =
     map(x -> isnothing(x) ? missing : Float64(x),
         kernel_call("preprocess_series", nothing, Dict("method" => "sarima_fit",
             "values" => values, "order" => collect(order),
-            "seasonal_order" => collect(seasonal_order)))["result"]["fitted"])
+            "seasonal_order" => collect(seasonal_order), "historical" => historical))["result"]["fitted"])
 
 end

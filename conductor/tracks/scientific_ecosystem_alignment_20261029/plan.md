@@ -1537,5 +1537,9 @@ the other competition models and installed binding checks remain open.
   Both fixed-coefficient historical fixtures agree within 1e-8 at
   every observation. All 22 native boundary tests and focused Clippy
   passed.
-- [ ] Qualify historical coefficient estimation and expose the
-  initialization option through the three fitting helpers.
+- [x] Expose historical initialization in all three fitting helpers.
+  On 245 observations with ordinary and seasonal differencing, the
+  rebuilt Python wheel, Julia project and installed R package matched
+  statsmodels fitted values within 1e-4. The native Python request
+  differed by 5.42e-6 in the estimated AR coefficient and 3.97e-9 in
+  log likelihood. Broader mixed-order historical qualification remains open.

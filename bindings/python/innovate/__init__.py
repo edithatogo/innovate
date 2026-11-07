@@ -315,10 +315,11 @@ def sarima_fit(
     *,
     order: tuple[int, int, int],
     seasonal_order: tuple[int, int, int, int] = (0, 0, 0, 0),
+    historical: bool = False,
 ) -> pl.Series:
     """Estimate a no-intercept SARIMA model and return aligned fitted values.
 
-    Differencing leaves nulls at the start of the returned series.
+    Set historical=True to include the diffuse initialization predictions.
     """
     result = execute(
         "preprocess_series",
@@ -326,5 +327,6 @@ def sarima_fit(
         values=data.to_list(),
         order=order,
         seasonal_order=seasonal_order,
+        historical=historical,
     )["result"]
     return pl.Series(data.name, result["fitted"], dtype=pl.Float64)
