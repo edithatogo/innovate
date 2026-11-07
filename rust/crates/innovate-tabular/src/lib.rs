@@ -194,6 +194,15 @@ fn read_ipc(data: &[u8]) -> PolarsResult<DataFrame> {
 
 /// Encode a Polars frame as an IPC file with a leading schema message.
 pub fn export_ipc_file(data: &[u8]) -> PolarsResult<Vec<u8>> {
+    rewrite_ipc(data, false)
+}
+
+/// Encode an IPC stream with custom metadata in the leading schema.
+pub fn export_ipc_stream(data: &[u8]) -> PolarsResult<Vec<u8>> {
+    rewrite_ipc(data, true)
+}
+
+fn rewrite_ipc(data: &[u8], stream: bool) -> PolarsResult<Vec<u8>> {
     let (mut frame, metadata) = if data.starts_with(b"ARROW1") {
         let mut reader = IpcReader::new(Cursor::new(data));
         let metadata = reader.custom_metadata()?;
@@ -204,11 +213,19 @@ pub fn export_ipc_file(data: &[u8]) -> PolarsResult<Vec<u8>> {
         (reader.finish()?, metadata)
     };
     let mut bytes = Vec::new();
-    let mut writer = IpcWriter::new(&mut bytes).with_compat_level(CompatLevel::oldest());
-    if let Some(metadata) = metadata {
-        writer.set_custom_schema_metadata(metadata);
+    if stream {
+        let mut writer = IpcStreamWriter::new(&mut bytes).with_compat_level(CompatLevel::oldest());
+        if let Some(metadata) = metadata {
+            writer.set_custom_schema_metadata(metadata);
+        }
+        writer.finish(&mut frame)?;
+    } else {
+        let mut writer = IpcWriter::new(&mut bytes).with_compat_level(CompatLevel::oldest());
+        if let Some(metadata) = metadata {
+            writer.set_custom_schema_metadata(metadata);
+        }
+        writer.finish(&mut frame)?;
     }
-    writer.finish(&mut frame)?;
     Ok(bytes)
 }
 

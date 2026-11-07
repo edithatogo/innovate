@@ -236,6 +236,11 @@ fn export_ipc_file_frames_schema_and_preserves_nulls_and_types() {
         let mut reader = IpcReader::new(std::io::Cursor::new(bytes));
         assert_eq!(reader.custom_metadata().unwrap().as_ref(), Some(&metadata));
         assert_eq!(reader.finish().unwrap(), frame);
+
+        let bytes = innovate_tabular::export_ipc_stream(&input).unwrap();
+        let mut reader = IpcStreamReader::new(std::io::Cursor::new(bytes));
+        assert_eq!(reader.custom_metadata().unwrap().as_ref(), Some(&metadata));
+        assert_eq!(reader.finish().unwrap(), frame);
     }
 }
 

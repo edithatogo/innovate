@@ -2,7 +2,7 @@ module Innovate
 using JSON
 using Libdl
 
-export invoke_registered_extension, export_ipc_file, kernel_paired_outcomes_ipc, kernel_scenario_comparisons_ipc, kernel_scenario_executions_ipc, kernel_scenario_grid_ipc, DatasetValidationError, kernel_sarima_fit, kernel_seasonal_decomposition, kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
+export invoke_registered_extension, export_ipc_file, export_ipc_stream, kernel_paired_outcomes_ipc, kernel_scenario_comparisons_ipc, kernel_scenario_executions_ipc, kernel_scenario_grid_ipc, DatasetValidationError, kernel_sarima_fit, kernel_seasonal_decomposition, kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
     kernel_categorize_adopters, kernel_categorize_fitted_adopters, kernel_fit_batch, kernel_predict_batch, kernel_simulate_model, kernel_summarize_model, kernel_diagnose_model
 
 """A rejected dataset with its native validation report."""
@@ -76,6 +76,14 @@ end
 """Rewrite Arrow IPC file or stream bytes for portable file interchange."""
 function export_ipc_file(input::Vector{UInt8})
     return arrow_output(:innovate_export_ipc_file) do convert, data, len
+        ccall(convert, Ptr{UInt8},
+            (Ptr{UInt8}, Csize_t, Ref{Ptr{UInt8}}, Ref{Csize_t}), input, length(input), data, len)
+    end
+end
+
+"""Rewrite Arrow IPC file or stream bytes for portable stream interchange with schema metadata."""
+function export_ipc_stream(input::Vector{UInt8})
+    return arrow_output(:innovate_export_ipc_stream) do convert, data, len
         ccall(convert, Ptr{UInt8},
             (Ptr{UInt8}, Csize_t, Ref{Ptr{UInt8}}, Ref{Csize_t}), input, length(input), data, len)
     end

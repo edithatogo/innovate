@@ -6000,3 +6000,9 @@ Hosted release readiness for this worktree revision remains open.
   Julia reads the Unicode schema metadata, Int32 IDs and nullable
   values from the stream. Document the conversion. Direct file
   metadata readback remains open.
+
+- [x] Add a Polars-backed stream rewrite to the Rust kernel and Julia
+  binding. It puts custom schema metadata in the stream schema message.
+  The Rust round-trip fixture and Arrow.jl 2.8.1 verified file and stream
+  inputs with Unicode provenance, Int32 IDs and nullable Float64 values.
+  Direct file metadata readback remains open.

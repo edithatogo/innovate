@@ -237,6 +237,30 @@ pub unsafe extern "C" fn innovate_export_ipc_file(
     }
 }
 
+/// Rewrite IPC file or stream bytes to a portable Arrow IPC stream.
+///
+/// # Safety
+/// Input must be readable for input_len bytes. Output pointers must be writable.
+/// Release output using innovate_free_bytes or innovate_free for an error.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn innovate_export_ipc_stream(
+    input: *const u8,
+    input_len: usize,
+    data: *mut *mut u8,
+    len: *mut usize,
+) -> *mut c_char {
+    // SAFETY: caller supplies input bytes and writable out parameters.
+    unsafe {
+        arrow_output(data, len, || {
+            if input.is_null() || input_len == 0 || input_len > isize::MAX as usize {
+                return Err("missing or invalid IPC input bytes".into());
+            }
+            let bytes = std::slice::from_raw_parts(input, input_len);
+            innovate_tabular::export_ipc_stream(bytes).map_err(|err| err.to_string())
+        })
+    }
+}
+
 unsafe fn arrow_output(
     data: *mut *mut u8,
     len: *mut usize,
