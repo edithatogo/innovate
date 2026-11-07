@@ -5346,3 +5346,7 @@ Hosted release readiness for this worktree revision remains open.
   added four units of variance for a treatment-only factor, yielding
   sqrt(8.5) with reused controls. Misaligned factors were rejected.
   Binding checks and fitted-model uncertainty remain open.
+
+- [x] Verify shared outcome variation through rebuilt Python 3.15.2,
+  Julia and installed R. All three returned sqrt(8.5) for the same
+  reused-control fixture with common and treatment-only factors.
