@@ -521,6 +521,36 @@ fn continuous_hazard_can_wake_from_zero_and_replays() {
 }
 
 #[test]
+fn single_agent_request_frequency_matches_exponential_hazard() {
+    let mut payload = json!({
+        "inputs":{"time":[0,4]},
+        "parameters":{"p":0.25,"q":0,"m":1},
+        "simulation_options":{"engine":"kairos_network","population":1,
+            "edges":[],"capacity":1,"service_ticks":1,"ticks_per_unit":1}
+    });
+    let kernel = KernelBinding::new();
+    let trials = 2048;
+    let mut requests = 0;
+    for seed in 0..trials {
+        payload["simulation_options"]["seed"] = json!(seed);
+        let result = kernel
+            .simulate_model("bass", payload.clone())
+            .unwrap()
+            .result
+            .unwrap();
+        requests += result["requests"].as_array().unwrap().len();
+    }
+    // Rounding a waiting time up to a tick preserves its CDF at integer ticks.
+    let probability = 1.0 - (-1.0_f64).exp();
+    let observed = requests as f64 / trials as f64;
+    let standard_error = (probability * (1.0 - probability) / trials as f64).sqrt();
+    assert!(
+        (observed - probability).abs() < 4.0 * standard_error,
+        "{requests}/{trials}"
+    );
+}
+
+#[test]
 fn linear_hazard_clock_matches_analytic_crossing() {
     use kairo_ecs_rng::{DeterministicStream, rand_distr::Exp};
 

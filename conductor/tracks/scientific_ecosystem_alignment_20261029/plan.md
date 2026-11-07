@@ -6714,3 +6714,10 @@ Hosted release readiness for this worktree revision remains open.
   every sample. Neither binding reported a duplicate completion or
   a service completion for the initial adopter. Native builds were
   reused from 4947d6b4 after checking unchanged build inputs.
+
+- [x] Compare single-agent Kairos request frequency with the analytic
+  constant-hazard CDF. At rate 0.25 and horizon 4, tick rounding
+  preserves the probability 1 − exp(−1) of requesting by the horizon.
+  The focused Rust test passed across 2,048 fixed seeds within four
+  binomial standard errors. This checks the request clock for one
+  constant-hazard design.
