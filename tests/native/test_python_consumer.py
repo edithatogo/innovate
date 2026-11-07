@@ -1406,3 +1406,11 @@ def test_ridge_logistic_propensity_fit():
                                  folds=[9, 4, 9, 4], ridge=0.25 / math.log(3))["result"]
     low = 1 / (1 + math.sqrt(3))
     assert cross_fit["propensities"] == pytest.approx([0.1, 1 - low, 0.9, low], abs=1e-7)
+
+
+def test_augmented_treatment_contrast():
+    result = innovate.execute("summarize_causal", method="augmented_treatment_contrast",
+                              outcomes=[0, 4], treatment=[0, 1], propensities=[0.5, 0.5],
+                              treated_predictions=[2, 2], control_predictions=[0, 0])["result"]
+    assert result["estimate"] == pytest.approx(4)
+    assert result["influence_standard_error"] == pytest.approx(2)

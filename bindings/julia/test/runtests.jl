@@ -664,3 +664,11 @@ end
     low = 1 / (1 + sqrt(3))
     @test isapprox(cross_fit["propensities"], [0.1,1-low,0.9,low]; atol=1e-7)
 end
+
+@testset "Augmented treatment contrast" begin
+    result = kernel_call("summarize_causal", nothing, Dict("method"=>"augmented_treatment_contrast",
+        "outcomes"=>[0,4], "treatment"=>[0,1], "propensities"=>[0.5,0.5],
+        "treated_predictions"=>[2,2], "control_predictions"=>[0,0]))["result"]
+    @test result["estimate"] ≈ 4
+    @test result["influence_standard_error"] ≈ 2
+end

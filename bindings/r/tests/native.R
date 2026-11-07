@@ -628,3 +628,9 @@ logistic_cross_fit <- kernel_call("summarize_causal", payload=list(method="cross
   folds=c(9L,4L,9L,4L), ridge=0.25/log(3)))$result
 low <- 1 / (1 + sqrt(3))
 stopifnot(isTRUE(all.equal(unlist(logistic_cross_fit$propensities), c(0.1,1-low,0.9,low), tolerance=1e-7)))
+
+augmented <- kernel_call("summarize_causal", payload=list(method="augmented_treatment_contrast",
+  outcomes=c(0,4), treatment=c(0,1), propensities=c(0.5,0.5),
+  treated_predictions=c(2,2), control_predictions=c(0,0)))$result
+stopifnot(isTRUE(all.equal(augmented$estimate, 4)),
+  isTRUE(all.equal(augmented$influence_standard_error, 2)))
