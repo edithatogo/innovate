@@ -1327,3 +1327,8 @@ the other competition models and installed binding checks remain open.
   within 1e-10. Fifteen Rust boundary tests and focused Clippy passed.
   Robust reweighting, historical STL option parity and installed binding
   qualification remain open.
+
+- [x] Expose the bounded native seasonal decomposition in Python, Julia
+  and R. All rebuilt consumers recover the analytic trend, seasonal and
+  residual components within 1e-10. Python returns a Polars frame.
+  Robust reweighting and full historical STL option parity remain open.

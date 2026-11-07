@@ -24,10 +24,9 @@ __all__ = [
     "categorize_adopters",
     "aggregate_weekly",
     "aggregate_time_series",
-
     "cumulative_sum",
     "rolling_average",
-
+    "seasonal_decomposition",
     "capabilities",
     "execute",
     "fit",
@@ -263,3 +262,15 @@ def aggregate_time_series(
     if frequency in ("M", "ME"):
         grouped = grouped.with_columns(pl.col(time_column).dt.offset_by("1mo").dt.offset_by("-1d"))
     return grouped
+
+
+def seasonal_decomposition(data: pl.Series, *, period: int, trend_span: int) -> pl.DataFrame:
+    """Decompose evenly spaced samples with the native seasonal smoother."""
+    result = execute(
+        "preprocess_series",
+        method="seasonal_decomposition",
+        values=data.to_list(),
+        period=period,
+        window=trend_span,
+    )["result"]
+    return pl.DataFrame(result)

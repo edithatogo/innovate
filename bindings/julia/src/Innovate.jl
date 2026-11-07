@@ -2,7 +2,7 @@ module Innovate
 using JSON
 using Libdl
 
-export kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
+export kernel_seasonal_decomposition, kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
     kernel_categorize_adopters, kernel_categorize_fitted_adopters, kernel_fit_batch, kernel_predict_batch, kernel_simulate_model, kernel_summarize_model, kernel_diagnose_model
 
 function native_library()
@@ -65,5 +65,9 @@ kernel_rolling_average(values, window) = kernel_call("preprocess_series", nothin
 
 kernel_aggregate_dates(dates, values, frequency) = kernel_call("aggregate_dates", nothing,
     Dict("dates" => string.(dates), "values" => values, "frequency" => frequency))["result"]
+
+kernel_seasonal_decomposition(values, period, trend_span) = kernel_call("preprocess_series", nothing,
+    Dict("method" => "seasonal_decomposition", "values" => values, "period" => period,
+        "window" => trend_span))["result"]
 
 end

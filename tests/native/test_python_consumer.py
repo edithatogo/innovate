@@ -969,3 +969,13 @@ def test_calendar_polars_aggregation_labels_and_fills_empty_periods():
     result = innovate.aggregate_time_series(monthly, "M", ["y"])
     assert result["time"].to_list() == [date(2024, 1, 31), date(2024, 2, 29), date(2024, 3, 31)]
     assert result["y"].to_list() == [2, 0, 3]
+
+
+def test_native_seasonal_decomposition_recovers_analytic_components():
+    trend = [10 + i * 0.5 for i in range(32)]
+    seasonal = [-3, 2, 1, 0] * 8
+    values = pl.Series([t + s for t, s in zip(trend, seasonal, strict=True)])
+    result = innovate.seasonal_decomposition(values, period=4, trend_span=9)
+    assert result["trend"].to_list() == pytest.approx(trend, abs=1e-10)
+    assert result["seasonal"].to_list() == pytest.approx(seasonal, abs=1e-10)
+    assert result["residual"].abs().max() == pytest.approx(0, abs=1e-10)

@@ -75,3 +75,8 @@ kernel_aggregate_dates <- function(dates, values, frequency) {
   kernel_call("aggregate_dates", payload = list(dates = as.character(dates),
     values = values, frequency = frequency))$result
 }
+
+kernel_seasonal_decomposition <- function(values, period, trend_span) {
+  kernel_call("preprocess_series", payload = list(method = "seasonal_decomposition",
+    values = values, period = period, window = trend_span))$result
+}
