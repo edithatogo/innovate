@@ -56,6 +56,17 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                  "uncertainty":"fixed_propensity_standard_error"},
                 {"method":"matched_treatment_contrast","adjustment":"nearest_score_with_replacement",
                  "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":["allow_partial","outcome_variances"],
+                 "estimands":["att"],"default_estimand":"att"},
+                {"method":"augmented_treatment_contrast","adjustment":"caller_supplied_nuisance_predictions",
+                 "required_fields":["outcomes","treatment","propensities","control_predictions"],
+                 "required_fields_by_estimand":{"ate":["treated_predictions"],"att":[]},
+                 "optional_fields":["estimand"],"estimands":["ate","att"],"default_estimand":"ate",
+                 "uncertainty":"influence_standard_error"},
+                {"method":"cross_fitted_stratum_ate","adjustment":"cross_fitted_strata",
+                 "required_fields":["outcomes","treatment","strata","folds"],"optional_fields":[],
+                 "estimands":["ate"],"default_estimand":"ate"},
+                {"method":"cross_fitted_stratum_att","adjustment":"cross_fitted_strata",
+                 "required_fields":["outcomes","treatment","strata","folds"],"optional_fields":[],
                  "estimands":["att"],"default_estimand":"att"}
             ]
         })),

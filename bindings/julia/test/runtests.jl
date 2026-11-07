@@ -587,7 +587,7 @@ end
 
 @testset "Treatment contrast discovery" begin
     result = kernel_call("summarize_causal", nothing, Dict("method"=>"describe_treatment_contrasts"))["result"]
-    descriptive, adjusted, weighted, matching = result["contrasts"]
+    descriptive, adjusted, weighted, matching = result["contrasts"][1:4]
     @test descriptive["adjustment"] == "none"
     @test adjusted["required_fields"] == ["outcomes", "treatment", "strata"]
     @test adjusted["estimands"] == ["ate", "att"]

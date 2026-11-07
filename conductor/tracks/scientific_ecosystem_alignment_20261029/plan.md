@@ -4668,3 +4668,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify cross-fitted stratum ATE and ATT through rebuilt Python
   3.15.2, Julia and installed R. The same unequal-prevalence fixture
   returns ATE 6 and ATT 7.25 in all three bindings.
+
+- [x] Advertise augmented and cross-fitted stratum contrasts in native
+  discovery, including the ATE-only treated prediction requirement.
+  Rust metadata assertions and focused Python, Julia and R regressions passed.

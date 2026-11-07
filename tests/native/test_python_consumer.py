@@ -1324,7 +1324,7 @@ def test_native_stratified_treatment_contrast(estimand, estimate, weight):
 
 def test_discover_treatment_contrasts():
     result = innovate.execute("summarize_causal", method="describe_treatment_contrasts")["result"]
-    descriptive, adjusted, weighted, matching = result["contrasts"]
+    descriptive, adjusted, weighted, matching = result["contrasts"][:4]
     assert descriptive["adjustment"] == "none"
     assert adjusted["required_fields"] == ["outcomes", "treatment", "strata"]
     assert adjusted["estimands"] == ["ate", "att"]
