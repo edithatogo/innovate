@@ -3646,3 +3646,7 @@ Hosted release readiness for this worktree revision remains open.
   The public Rust scenario boundary returns p = 1 for effects 50 and
   -25 and p = 0.5 for effects 50 and 25. Focused Clippy passed.
   Installed Python, Julia and R validation remains open.
+- [x] Verify both sign-flip fixtures through the rebuilt Python 3.15.2
+  wheel, Julia and freshly installed R. All three returned p-values 1
+  and 0.5 for the same two Logistic comparisons. Python also verified
+  the four assignments and extreme counts of four and two.
