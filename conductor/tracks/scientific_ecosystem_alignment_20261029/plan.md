@@ -1249,3 +1249,9 @@ the other competition models and installed binding checks remain open.
   origin, Gompertz origin and Fisher–Pry midpoint. All ten boundary tests
   and focused Clippy passed. Installed checks of these three rate paths
   and extreme-domain rate qualification remain open.
+
+- [x] Verify plain Bass, Gompertz and Fisher–Pry analytic rates across rebuilt
+  Python, Julia and R bindings. Python uses the Polars rate column. All nine
+  model-binding comparisons meet an absolute tolerance of 1e-10 at the
+  reference points. Extreme-domain coverage remains open.
+  [Fixture and results](evidence/plain-diffusion-rates-20261107).

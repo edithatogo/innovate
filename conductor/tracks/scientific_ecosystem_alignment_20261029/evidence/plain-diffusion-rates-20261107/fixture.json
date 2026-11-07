@@ -1,0 +1,1 @@
+[{"model":"bass","time":[0],"parameters":{"p":0.1,"q":0.3,"m":100},"expected":10},{"model":"gompertz","time":[0],"parameters":{"a":100,"b":1,"c":0.5},"expected":18.393972058572118},{"model":"fisher_pry","time":[5],"parameters":{"alpha":2,"t0":5},"expected":0.5}]
