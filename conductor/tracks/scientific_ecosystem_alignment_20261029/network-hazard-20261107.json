@@ -1,0 +1,26 @@
+{
+  "status": "bounded_local_checkpoint",
+  "release_ready": false,
+  "related_evidence": [
+    "network-queue-policy-20261107.json"
+  ],
+  "results": {
+    "rust_network_tests": 14,
+    "installed_python_tests": 41,
+    "julia_assertions": 185,
+    "R": "conformance and scheduled hazard passed",
+    "clippy": "workspace all targets passed"
+  },
+  "semantics": "Piecewise constant p and q replace coefficients at schedule boundaries, after tied completions and expiry. Agent multipliers, queue positions and active services carry across changes.",
+  "remaining": "Continuous forcing interoperability, scenario composition, resume and scientific qualification",
+  "logs": {
+    "clippy.log": "3fce7dc5fdef2d92f2b8dcec5a328137e3bb8e553904d706409ffee8dc2675c5",
+    "ffi.log": "cf5da0f229b7eade2479914165aec55443a833a60a36553bd5deabd6d566163d",
+    "install.log": "9a05c032897c8bab53944b0aeb486432d98d2a887923bec1f0583a8bc9f3bc7a",
+    "julia.log": "f04ee2a3cc0a4326a0f65444a0522bb0c69bc700dd2e579cdebb93eda20b82a4",
+    "python.log": "8876c9830608f9c64826246c16b2934e04138061819f176caaad11a1cf8ba140",
+    "r.log": "979a88d4455fb251888fa53b61ca83d24d494bff6671b2b815ba8fd038a863c4",
+    "rust.log": "e61a0236054f28153253a7ce678acb2549a22993becba61ccc31726f6454bc6c",
+    "wheel.log": "495e6849693b5949dbd30bb5c5142dfa0175cf9fe4c29ef446ffe43db14e1c2f"
+  }
+}

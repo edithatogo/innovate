@@ -409,3 +409,36 @@ fn retry_restores_hazard_after_balking_or_expiry() {
             .is_err()
     );
 }
+
+#[test]
+fn scheduled_hazards_enable_and_disable_requests_without_interrupting_service() {
+    let mut payload = json!({
+        "inputs":{"time":[0.,2.,5.,7.,12.]},
+        "parameters":{"p":0.,"q":0.,"m":3.},
+        "simulation_options":{"engine":"kairos_network","population":3,"seed":42,
+            "edges":[[0,1]],"directed":true,"initial_agents":[0],"capacity":1,
+            "service_ticks":4,"ticks_per_unit":1,
+            "schedule":[{"tick":2,"q":1e12},{"tick":4,"q":0.},{"tick":7,"p":1e12}]}
+    });
+    let result = KernelBinding::new()
+        .simulate_model("bass", payload.clone())
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(result["counts"], json!([1, 1, 1, 2, 3]));
+    assert_eq!(
+        result["requests"],
+        json!([{"tick":3,"agent":1},{"tick":8,"agent":2}])
+    );
+    assert_eq!(
+        result["completions"],
+        json!([{"tick":7,"agent":1},{"tick":12,"agent":2}])
+    );
+    assert_eq!(result["metadata"]["current_q"], 0.);
+    payload["simulation_options"]["schedule"][2]["p"] = json!(-1.);
+    assert!(
+        KernelBinding::new()
+            .simulate_model("bass", payload)
+            .is_err()
+    );
+}

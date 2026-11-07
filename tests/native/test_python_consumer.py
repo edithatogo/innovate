@@ -439,7 +439,7 @@ def test_directed_weighted_kairos_resource():
         "capacity": 1,
         "service_ticks": 5,
         "ticks_per_unit": 1,
-        "schedule": [{"tick": 6, "edges": [[1, 2]], "service_ticks": 2, "capacity": 2}],
+        "schedule": [{"tick": 6, "edges": [[1, 2]], "service_ticks": 2, "capacity": 2, "p": 1e12, "q": 0.0}],
     }
     result = innovate.execute(
         "simulate_model",
@@ -452,6 +452,8 @@ def test_directed_weighted_kairos_resource():
     assert [entry["tick"] for entry in result["completions"]] == [6, 9]
     assert result["metadata"]["agent_priorities"] == [-2, 0, 3]
     assert result["metadata"]["current_capacity"] == 2
+    assert result["metadata"]["current_p"] == 1e12
+    assert result["metadata"]["current_q"] == 0.0
 
 
 def test_kairos_wait_expiry():
@@ -473,7 +475,6 @@ def test_kairos_wait_expiry():
     )["result"]
     assert result["counts"] == [0, 1, 2]
     assert [entry["tick"] for entry in result["abandonments"]] == [7]
-
 
 
 def test_kairos_queue_retry():

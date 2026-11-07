@@ -289,7 +289,7 @@ finite and nonnegative; zero disables that hazard component. Optional
 waiting in the service queue. Each duration is an integer in 1–10^12. Defaults retain
 the homogeneous engine and RNG stream. Metadata retains the effective arrays.
 
-The network engine currently rejects mechanistic covariate/event forcing and
+The network engine currently rejects continuous mechanistic covariate forcing and
 arbitrary hazard functions. Resume remains open.
 The separate `network_diffusion` family has its own scientific qualification.
 
@@ -753,3 +753,11 @@ balks and waiting expiry. After cooldown the agent becomes susceptible again
 and competes through the same hazard as other eligible agents. It does not
 retain its previous queue position. `retry_eligibility` records the cooldown
 end, and `requests` records all attempts, including balks.
+
+
+A scheduled change can replace either Bass hazard coefficient using `p` or
+`q`. Values must be finite and nonnegative. The new coefficient applies
+until replaced again and still uses each agent's multiplier. This supports
+piecewise constant interventions, including turning a hazard off. It leaves
+active service and queue positions intact. The result reports `current_p`
+and `current_q` at the requested horizon.

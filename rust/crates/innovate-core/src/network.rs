@@ -60,6 +60,8 @@ struct Change {
     edge_weights: Option<Vec<f64>>,
     service_ticks: Option<u64>,
     capacity: Option<u64>,
+    p: Option<f64>,
+    q: Option<f64>,
 }
 
 struct Graph {
@@ -198,8 +200,8 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     if p.len() != 3 {
         return Err(invalid("exactly p/q/m required"));
     }
-    let innovation = required_f64(p, "p", op)?;
-    let imitation = required_f64(p, "q", op)?;
+    let mut innovation = required_f64(p, "p", op)?;
+    let mut imitation = required_f64(p, "q", op)?;
     let market = required_f64(p, "m", op)?;
     let mut graph = Graph::new(
         o.population,
@@ -228,14 +230,21 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 || change.tick > 1_000_000_000_000_000
                 || (change.edges.is_none()
                     && (change.edge_weights.is_some()
-                        || (change.service_ticks.is_none() && change.capacity.is_none())))
+                        || (change.service_ticks.is_none()
+                            && change.capacity.is_none()
+                            && change.p.is_none()
+                            && change.q.is_none())))
+                || [change.p, change.q]
+                    .into_iter()
+                    .flatten()
+                    .any(|rate| !rate.is_finite() || rate < 0.)
                 || change.capacity.is_some_and(|cap| cap > o.population as u64)
                 || change
                     .service_ticks
                     .is_some_and(|ticks| !(1..=1_000_000_000_000).contains(&ticks))
             {
                 return Err(invalid(
-                    "invalid scheduled tick, graph, capacity or service duration",
+                    "invalid scheduled tick, graph, capacity, hazard or service duration",
                 ));
             }
             let replacement = change
@@ -251,12 +260,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                     .map_err(invalid)
                 })
                 .transpose()?;
-            Ok((
-                u128::from(change.tick),
-                replacement,
-                change.service_ticks,
-                change.capacity,
-            ))
+            Ok((u128::from(change.tick), replacement, change))
         })
         .collect::<Result<Vec<_>, _>>()?;
     let mut changes = changes.into_iter().peekable();
@@ -355,7 +359,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             .filter(|t| *t <= horizon);
         let boundary = changes
             .peek()
-            .map(|(tick, _, _, _)| *tick)
+            .map(|(tick, _, _)| *tick)
             .filter(|t| *t <= horizon);
         let expiry = deadlines
             .iter()
@@ -425,16 +429,17 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         } else if let Some(tick) =
             boundary.filter(|t| attempt.is_none_or(|a| *t <= a) && wake.is_none_or(|w| *t <= w))
         {
-            let (_, replacement, duration, new_capacity) =
-                changes.next().expect("boundary comes from schedule");
+            let (_, replacement, change) = changes.next().expect("boundary comes from schedule");
             now = tick;
             if let Some(replacement) = replacement {
                 graph = replacement;
             }
-            if duration.is_some() {
-                service_override = duration;
+            if change.service_ticks.is_some() {
+                service_override = change.service_ticks;
             }
-            capacity = new_capacity.unwrap_or(capacity);
+            capacity = change.capacity.unwrap_or(capacity);
+            innovation = change.p.unwrap_or(innovation);
+            imitation = change.q.unwrap_or(imitation);
             applied_ticks.push(tick);
         } else if let Some(tick) = wake.filter(|t| attempt.is_none_or(|a| *t <= a)) {
             now = tick;
@@ -533,7 +538,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         model_key: r.model_key.clone(),
         error: None,
         result: Some(
-            json!({"values":values,"counts":counts,"agents":states,"requests":requests,"completions":trace,"abandonments":abandoned,"balks":balks,"retry_eligibility":retries,"metadata":{"engine":"kairos_network","kairos_revision":crate::simulation::REV,"seed":o.seed,"population":o.population,"capacity":o.capacity,"current_capacity":capacity,"in_service":in_service,"service_ticks":o.service_ticks,"ticks_per_unit":o.ticks_per_unit,"queue_length":queue_length,"available":available,"agent_priorities":priorities,"max_wait_ticks":o.max_wait_ticks,"max_queue_length":o.max_queue_length,"innovation_multipliers":innovation_weights,"imitation_multipliers":imitation_weights,"agent_service_ticks":service,"directed":o.directed,"weighted":graph.weighted,"applied_schedule_ticks":applied_ticks,"service_override_ticks":service_override,"hazard":if graph.weighted {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted incoming weight/total incoming weight), zero imitation without incoming edges"} else {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted neighbors/degree), zero imitation at degree zero"},"resource_semantics":"Nonpreemptive priority, FIFO ties; adoption occurs at service completion; pending agents do not transmit","rng_checkpoint":rng.checkpoint()}}),
+            json!({"values":values,"counts":counts,"agents":states,"requests":requests,"completions":trace,"abandonments":abandoned,"balks":balks,"retry_eligibility":retries,"metadata":{"engine":"kairos_network","kairos_revision":crate::simulation::REV,"seed":o.seed,"population":o.population,"capacity":o.capacity,"current_capacity":capacity,"current_p":innovation,"current_q":imitation,"in_service":in_service,"service_ticks":o.service_ticks,"ticks_per_unit":o.ticks_per_unit,"queue_length":queue_length,"available":available,"agent_priorities":priorities,"max_wait_ticks":o.max_wait_ticks,"max_queue_length":o.max_queue_length,"innovation_multipliers":innovation_weights,"imitation_multipliers":imitation_weights,"agent_service_ticks":service,"directed":o.directed,"weighted":graph.weighted,"applied_schedule_ticks":applied_ticks,"service_override_ticks":service_override,"hazard":if graph.weighted {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted incoming weight/total incoming weight), zero imitation without incoming edges"} else {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted neighbors/degree), zero imitation at degree zero"},"resource_semantics":"Nonpreemptive priority, FIFO ties; adoption occurs at service completion; pending agents do not transmit","rng_checkpoint":rng.checkpoint()}}),
         ),
         metadata: json!({"runtime":"rust_native","engine":"kairos_network"}),
     })
