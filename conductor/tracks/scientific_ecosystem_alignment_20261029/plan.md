@@ -947,3 +947,13 @@ remain open.
   three bindings. The rebuilt wheel passed 59 Python native tests, Julia
   Pkg.test passed 231 assertions, and installed R conformance passed.
   [Logs and fixture](evidence/kairos-scaled-hazard-20261107).
+
+## Automatic starts for forced Norton Bass fitting
+
+- [x] Fit declared covariate coefficients without requiring user-supplied starts. (1220d258)
+
+The existing nine base starts are extended with zero beta slopes and used
+when a forced fit has no explicit start. The regression fits a historical
+trajectory without start parameters and reaches RSS below 1e-8. All 23
+multi-generation tests and focused Clippy passed. Installed consumer checks
+and broader independent qualification of automatic forced fits remain open.
