@@ -7514,3 +7514,9 @@ Hosted release readiness for this worktree revision remains open.
   identifies that context as caller-supplied. Preserve the requirement
   for trusted hosted identity and tenant isolation in the migration
   ledger. The hosted PRs remain open.
+
+- [x] Reconcile dependency PRs #523 and #488, whose target versions
+  match the active locks. PRs #490, #485, #478, #461, #434 and #396
+  target older versions than the active locks. PR #381 updates the
+  retired .NET workflow setup, absent from active workflows. The
+  hosted PRs remain open.
