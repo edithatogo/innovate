@@ -689,3 +689,9 @@ stopifnot(staggered[[1]]$estimate == 4, staggered[[1]]$n_control == 1,
   all(vapply(staggered[2:3], function(row) {
     "estimate" %in% names(row) && is.null(row$estimate) && row$n_control == 0
   }, logical(1))))
+stopifnot("standard_error" %in% names(staggered[[1]]), is.null(staggered[[1]]$standard_error))
+replicated_staggered <- kernel_call("summarize_causal", payload=list(method="staggered_panel_att",
+  periods=c(0,1,2), outcomes=matrix(c(0,5,7,0,7,9,10,12,16,10,12,16), nrow=4, byrow=TRUE),
+  adoption_indices=list(1L,1L,2L,NULL)))$result$contrasts
+stopifnot(isTRUE(all.equal(replicated_staggered[[1]]$estimate, 4)),
+  isTRUE(all.equal(replicated_staggered[[1]]$standard_error, 1)), replicated_staggered[[2]]$n_control == 1)

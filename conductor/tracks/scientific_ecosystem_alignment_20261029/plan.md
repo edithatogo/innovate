@@ -4713,3 +4713,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Add pointwise staggered ATT uncertainty for independent units.
   The focused Rust test verifies standard error 1 with replicated
   arms and null for singleton arms. Binding and joint inference remain open.
+
+- [x] Verify staggered pointwise standard errors through rebuilt Python
+  3.15.2, Julia and installed R. Each returned error 1 with replicated
+  arms, null for singleton arms, and retained the never-treated control.

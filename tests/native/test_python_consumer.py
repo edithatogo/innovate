@@ -1494,3 +1494,11 @@ def test_staggered_panel_att():
     assert first["estimate"] == pytest.approx(4)
     assert first["n_control"] == 1
     assert all(row["estimate"] is None and row["n_control"] == 0 for row in (second, third))
+    assert first["standard_error"] is None
+    replicated = innovate.execute(
+        "summarize_causal", **{**payload, "outcomes": [[0, 5, 7], [0, 7, 9], [10, 12, 16], [10, 12, 16]],
+                               "adoption_indices": [1, 1, 2, None]},
+    )["result"]["contrasts"]
+    assert replicated[0]["estimate"] == pytest.approx(4)
+    assert replicated[0]["standard_error"] == pytest.approx(1)
+    assert replicated[1]["n_control"] == 1
