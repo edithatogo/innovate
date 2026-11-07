@@ -4895,3 +4895,9 @@ Hosted release readiness for this worktree revision remains open.
   The tied-effects regression itself is exercised by the Rust unit
   test. Maturin built the wheel and Python loaded the extension
   directly from the build.
+
+- [x] Run the full Python native consumer test file against the
+  extracted macOS arm64 wheel built from 9c91630b. The repo-local
+  Python 3.15.2 imported the extension from the extracted wheel,
+  and all 101 tests passed in 58.59 seconds. Removing generated
+  Python build artifacts freed space for extraction.
