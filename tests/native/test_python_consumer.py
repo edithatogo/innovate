@@ -1739,6 +1739,20 @@ def test_adopter_classification_preserves_irregular_time_grids():
         result = innovate.execute("categorize_adopters", time=time, adoption_rate=[0, 1, 0, 1])["result"]
         assert result["category"] == ["Innovators", "Early Adopters", "Early Majority", "Late Majority"]
 
+    smallest = math.ulp(0.0)
+    for time, rates, categories in (
+        ([0, 1e-317, 1], [largest, 0, smallest], ["Early Majority", "Late Majority", "Laggards"]),
+        (
+            [-largest, 0, smallest, 2 * smallest, largest],
+            [0, 1, 0, 1, 0],
+            ["Innovators", "Early Adopters", "Early Majority", "Late Majority", "Laggards"],
+        ),
+    ):
+        result = innovate.execute("categorize_adopters", time=time, adoption_rate=rates)["result"]
+        assert result["time"] == time
+        assert result["adoption_rate"] == rates
+        assert result["category"] == categories
+
 
 def test_kairos_tick_checkpoint_resume():
     fixture = Path(__file__).parents[2] / "rust/crates/innovate-core/tests/fixtures/kairos_network_checkpoint.json"

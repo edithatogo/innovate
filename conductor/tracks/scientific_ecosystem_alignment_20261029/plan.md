@@ -6813,3 +6813,8 @@ Hosted release readiness for this worktree revision remains open.
   extreme endpoints through Python 3.15.2, Julia and installed R.
   All three returned the five expected categories in order using
   native builds from 632f6afa.
+
+- [x] Retain Python wheel regressions for both extreme adopter cases.
+  Assert that timestamps and weights round-trip exactly in addition
+  to checking the categories. The two selected adopter tests passed
+  with the 632f6afa wheel.
