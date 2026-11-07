@@ -2163,3 +2163,7 @@ the other competition models and installed binding checks remain open.
 - [ ] Define substitution-rate dynamics before translating historical
   substitution specifications. Norton-Bass exposes generation diffusion
   parameters, with no direct replacement-rate parameter.
+
+- [x] Qualify generated ring topology in Python 3.15, Julia and installed
+  R. Each returned the expected four edges in order and reproduced its
+  original result when replaying the resolved artifact.
