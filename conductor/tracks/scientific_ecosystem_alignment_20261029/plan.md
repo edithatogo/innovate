@@ -6779,3 +6779,9 @@ Hosted release readiness for this worktree revision remains open.
   weight three, but only its adopted incoming neighbor contributes
   to exposure, giving hazard q and cumulative hazard two at tick four.
   The 2,048-seed Rust check passed alongside all 37 network tests.
+
+- [x] Verify directed imitation through Python 3.15.2, Julia and
+  installed R. All 2,048 seeds agreed on request identity, timing or
+  absence and adoption counts. The 1,760 requests (85.94%) fell within
+  the test bound for the analytic 86.47%. Reused unchanged native builds
+  from 4947d6b4.
