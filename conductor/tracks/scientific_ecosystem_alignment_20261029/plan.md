@@ -1075,3 +1075,8 @@ the other competition models and installed binding checks remain open.
   The Polars API maps declared controls to explicit slope columns.
   Focused rebuilt Python, Julia and R checks all returned rate 10 for
   the same analytic case. Both Python Logistic Polars tests passed.
+
+- [x] Validate the Polars slope mapping against declared control names
+  before reading columns. The installed Python regression rejects an
+  unexpected control name and retains the analytic rate result. All four
+  native tabular tests and both focused Python Logistic tests passed.

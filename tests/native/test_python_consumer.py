@@ -861,12 +861,30 @@ def test_kairos_continuous_hazard_wakeup():
 
 def test_logistic_polars_total_rate():
     frame = pl.DataFrame({"time": [2.0], "price": [1.0], "price_slope": [2.0]})
+    parameters = {
+        "L": 200,
+        "k": 1,
+        "x0": 1.5,
+        "beta_L_price": 10,
+        "beta_k_price": 0.2,
+        "beta_x0_price": 0.5,
+    }
+    options = {"covariates": ["price"]}
     result = innovate.predict(
         "logistic",
         frame,
-        {"L": 200, "k": 1, "x0": 1.5, "beta_L_price": 10, "beta_k_price": 0.2, "beta_x0_price": 0.5},
-        model_options={"covariates": ["price"]},
+        parameters,
+        model_options=options,
         quantity="rate",
         covariate_rate_columns={"price": "price_slope"},
     )
     assert result["rate"].to_list() == [10.0]
+    with pytest.raises(ValueError, match="must match declared controls"):
+        innovate.predict(
+            "logistic",
+            frame,
+            parameters,
+            model_options=options,
+            quantity="rate",
+            covariate_rate_columns={"unexpected": "price_slope"},
+        )

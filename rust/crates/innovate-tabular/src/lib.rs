@@ -112,6 +112,14 @@ pub fn predict_with_options(
         }
         let columns = columns.as_object()
             .ok_or_else(|| polars_err!(SchemaMismatch:"covariate_rate_columns must map controls to column names"))?;
+        let controls = input["covariates"]
+            .as_object()
+            .expect("declared controls checked above");
+        if columns.len() != controls.len()
+            || columns.keys().any(|name| !controls.contains_key(name))
+        {
+            polars_bail!(SchemaMismatch:"covariate_rate_columns must match declared controls");
+        }
         let mut rates = serde_json::Map::new();
         for (name, column) in columns {
             let column = column.as_str().ok_or_else(
