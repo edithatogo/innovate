@@ -233,14 +233,22 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
                 }
                 Ok((degree, jump))
             };
+            let period = integer("period")?;
+            let seasonal_span = optional_span("seasonal_span")?;
+            let trend_span = if historical && payload["window"].is_null() {
+                if period < 2 || period > values.len() / 3 {
+                    return Err("seasonal period must leave at least three complete cycles");
+                }
+                // Historical STL chooses the smallest odd span at or above this ratio.
+                let seasonal = seasonal_span.unwrap_or(7) as f64;
+                ((1.5 * period as f64 / (1. - 1.5 / seasonal)).ceil() as usize) | 1
+            } else {
+                integer("window")?
+            };
             return seasonal::decompose(
                 &values,
-                integer("period")?,
-                (
-                    integer("window")?,
-                    optional_span("seasonal_span")?,
-                    optional_span("low_pass_span")?,
-                ),
+                period,
+                (trend_span, seasonal_span, optional_span("low_pass_span")?),
                 robust,
                 historical,
                 (inner, outer),

@@ -268,7 +268,7 @@ def seasonal_decomposition(
     data: pl.Series,
     *,
     period: int,
-    trend_span: int,
+    trend_span: int | None = None,
     robust: bool = False,
     historical: bool = False,
     inner_iterations: int = 5,
@@ -285,6 +285,7 @@ def seasonal_decomposition(
     """Decompose evenly spaced samples with the native seasonal smoother.
 
     Set historical=True to use historical STL local fit and reweighting rules.
+    In this mode, omitting trend_span derives it from period and seasonal_span.
     """
     result = execute(
         "preprocess_series",

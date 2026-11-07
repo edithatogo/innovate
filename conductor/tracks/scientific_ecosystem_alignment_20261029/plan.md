@@ -1445,3 +1445,11 @@ the other competition models and installed binding checks remain open.
   independent R reference within 2.10e-13, including 13 observations
   with a seasonal span exceeding each phase subseries. The R checker
   asserts agreement for each component and verifies output shape.
+
+- [x] Derive the historical STL trend span when omitted and expose
+  omission through the three binding signatures. The updated R helper
+  with rebuilt FFI matched stats::stl within 1e-9 across nine period
+  and seasonal span pairs when the low-pass span was held equal.
+  Odd periods use the next strictly greater odd low-pass span in
+  Innovate, while R defaults to the period itself.
+- [ ] Verify the inferred span through rebuilt Python and Julia.
