@@ -536,3 +536,49 @@ fixed-origin/stateful forecasts. Then cross-model rate/covariate/event coverage,
 inference/uncertainty/scenarios, richer Kairos networks/resources, platform and
 scientific qualification. Model-family availability never closes full-feature
 acceptance. Shared main unchanged, goal active.
+
+## Composite continuation
+
+Same writer resumes at 95766f22, clean isolated checkout; no active native operation.
+Prior turn made committed weighted-fitting/mixture progress.
+
+- [x] Port heterogeneous scalar growth ODEs, signed interactions, fixed-origin
+  forecasts and explicit historical batch resets, with matrix levels/rates and fitting.
+- [x] Qualify independent ODE/analytic references and Python/Julia/R consumers.
+- [x] Complete coverage/review/docs/package evidence and retain full feature scope.
+
+Continuation found shared weighted-option parsing also reached competitive and
+historical covariate/event fitters that do not apply weights. A new failing
+regression confirms the gap; scalar_options now alone admits weights, while
+shared options reject them explicitly. No weighted feature is silently ignored.
+Composite preserves growth_i - sum(alpha_i_j * state_j), signed off-diagonal
+coefficients and parameter suffixes. Logistic x0, Gompertz b and Fisher-Pry t0
+are absent from these ODEs; do not claim they can be inferred from trajectories.
+
+Composite source/evidence commit: `8e7fd9d35e797433611acddf698ba9c77fdbb8b7`.
+110 broad Rust tests plus one focused capacity-policy test pass; 37 installed
+Python, 170 Julia assertions and R conformance pass. Core/C ABI line coverage
+84.32%, composite 87.00%. Clippy, lint/types, docs (163 pages), wheel install
+and fresh archive metadata/exact source inclusion pass. Review/receipt:
+composite-review-20261107.md and composite-20261107.json. Capacity test was
+added after the broad run; unchanged production source/results were reused,
+with no additional focused coverage claimed. Shared weighting dispatch gap is
+fixed, with unsupported paths explicitly rejecting weights. All operations terminal.
+
+Final package output redirection hit internal-volume exhaustion. Earlier package
+logs were not treated as fresh proof; the current archive and package logs are
+under target/composite-final-artifacts and target/composite-final-evidence on the
+owned external volume, copied/hashes retained in track evidence. Prefer this
+external artifact/log route for subsequent work; no other client cache was removed.
+
+All sixteen model families now have bounded native support, with all 38 original/
+planned obligations still required and release guard intentionally failing. This
+is not full scientific or distribution acceptance. Before the next source wave,
+reconcile active Conductor guideline/workflow Python 3.14 and NumPy/JAX profiling
+references with the approved Rust/Polars/Python 3.15.2 design; preserve historical
+evidence and any explicit backend exceptions. Then extend historical Bass/Gompertz
+ODE covariates/events with fixed-history forecasts (their old prediction paths
+are not the pointwise Logistic contract), followed by richer Kairos graphs/resources
+and cross-model rate coverage, inference/uncertainty, scenario/data/reporting,
+platform/clean-source/stiff-solver and scientific qualification. Goal active;
+shared main and other writing lanes unchanged.
