@@ -2870,3 +2870,8 @@ the other competition models and installed binding checks remain open.
   against Python 3.15. Both trials reproduced the full Python result
   exactly, including baseline termination, failed-refit categories,
   parameter draws and intervals. R used raw JSON.
+
+- [x] Restore parameter standard errors as sample standard deviations
+  of converged scalar bootstrap draws. Scale before squaring and return
+  null when fewer than two draws converge. The focused Rust test
+  compares the result to the direct sample formula. Clippy passed.

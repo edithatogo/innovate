@@ -2149,6 +2149,16 @@ fn bootstrap_scalar_fit_replays_and_accounts_for_failed_draws() {
     for estimate in fit["estimates"]["L"].as_array().unwrap() {
         assert!((estimate.as_f64().unwrap() - 100.).abs() < 1e-3);
     }
+    let estimates: Vec<f64> = serde_json::from_value(fit["estimates"]["L"].clone()).unwrap();
+    let mean = estimates.iter().sum::<f64>() / estimates.len() as f64;
+    let variance = estimates
+        .iter()
+        .map(|value| (value - mean).powi(2))
+        .sum::<f64>()
+        / (estimates.len() - 1) as f64;
+    assert!(
+        (fit["parameter_standard_errors"]["L"].as_f64().unwrap() - variance.sqrt()).abs() < 1e-12
+    );
     let mut residual = request;
     residual["payload"]["method"] = json!("centered_residual_resampling");
     let response = innovate_core::execute_json(&residual.to_string());

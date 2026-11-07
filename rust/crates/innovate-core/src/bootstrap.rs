@@ -145,10 +145,33 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
             (name, bounds)
         })
         .collect();
+    let standard_errors: BTreeMap<_, _> = parameters
+        .keys()
+        .map(|name| {
+            let error = estimates
+                .get(name)
+                .filter(|values| values.len() >= 2)
+                .map(|values| {
+                    let scale = values.iter().map(|value| value.abs()).fold(0., f64::max);
+                    if scale == 0. {
+                        return 0.;
+                    }
+                    let mean =
+                        values.iter().map(|value| value / scale).sum::<f64>() / values.len() as f64;
+                    let squares = values
+                        .iter()
+                        .map(|value| (value / scale - mean).powi(2))
+                        .sum::<f64>();
+                    (squares / (values.len() - 1) as f64).sqrt() * scale
+                });
+            (name, error)
+        })
+        .collect();
     Ok(json!({"method":method,"seed":seed,"draws":draws,
         "succeeded":succeeded,"failed":draws-succeeded,
         "failure_counts":{"nonfinite_synthetic":invalid_synthetic,"fit_error":fit_errors,"nonconverged":nonconverged},
         "baseline_optimizer":baseline["diagnostics"]["optimizer"],
         "baseline_parameters":baseline["parameters"],"estimates":estimates,
-        "interval_method":"percentile","interval_mass":interval_mass,"parameter_intervals":intervals}))
+        "interval_method":"percentile","interval_mass":interval_mass,"parameter_intervals":intervals,
+        "parameter_standard_errors":standard_errors}))
 }
