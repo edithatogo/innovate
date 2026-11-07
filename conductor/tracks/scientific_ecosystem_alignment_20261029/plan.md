@@ -2741,3 +2741,8 @@ the other competition models and installed binding checks remain open.
   The active agent finished at tick 6 as before, the promoted waiter
   finished at tick 11, and the other waiter finished at tick 16. R used
   raw JSON to retain the empty edge array.
+
+- [x] Retain scheduled priorities through scenario specification
+  translation and replay. The focused Rust regression verifies the
+  effective priorities, original schedule in the replay request, and
+  exact replay result for the custom network specification.

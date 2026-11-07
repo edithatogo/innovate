@@ -1310,13 +1310,23 @@ fn custom_network_specification_checks_topology_and_initial_agents() {
             "initial_adoption":0.25,"network_type":"custom","num_nodes":4,"average_degree":0.5},
         "simulation":{"inputs":{"time":[0,5]},"parameters":{"p":0,"q":0},
             "simulation_options":{"engine":"kairos_network","seed":42,"edges":[[0,1]],
-                "initial_agents":[0],"capacity":1,"service_ticks":1}}
+                "initial_agents":[0],"capacity":1,"service_ticks":1,
+                "schedule":[{"tick":4,"agent_priorities":[0,2,0,0]}]}}
     }]}});
     let run = |request: &serde_json::Value| -> serde_json::Value {
         serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
     };
     let response = run(&request);
     let row = &response["result"]["executions"][0];
+    assert_eq!(
+        row["result"]["metadata"]["agent_priorities"],
+        json!([0, 2, 0, 0])
+    );
+    assert_eq!(
+        row["artifact"]["replay_request"]["payload"]["scenarios"][0]["simulation"]["simulation_options"]
+            ["schedule"],
+        request["payload"]["scenarios"][0]["simulation"]["simulation_options"]["schedule"]
+    );
     assert_eq!(row["result"]["counts"], json!([1, 1]));
     assert_eq!(row["result"]["values"], json!([50., 50.]));
     assert_eq!(
