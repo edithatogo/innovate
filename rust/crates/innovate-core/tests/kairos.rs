@@ -301,3 +301,31 @@ fn emitted_rng_checkpoint_restores_after_all_adoptions() {
         );
     }
 }
+
+#[test]
+fn des_checkpoint_resumes_with_original_history_and_rng() {
+    let mut payload = json!({"inputs":{"time":[0,1,2,4]},
+        "parameters":{"p":1e12,"q":0,"m":4},
+        "simulation_options":{"engine":"kairos_des","seed":42,"population":4,"ticks_per_unit":1}});
+    let kernel = KernelBinding::new();
+    let run = |payload| kernel.simulate_model("bass", payload);
+    let uninterrupted = run(payload.clone()).unwrap().result.unwrap();
+    payload["simulation_options"]["pause_after_adoptions"] = json!(1);
+    let paused = run(payload.clone()).unwrap().result.unwrap();
+    assert_eq!(paused["status"], "paused");
+    assert_eq!(paused["checkpoint"]["events"], json!([1]));
+
+    payload["simulation_options"]["pause_after_adoptions"] = json!(2);
+    payload["simulation_options"]["resume_checkpoint"] = paused["checkpoint"].clone();
+    let paused_again = run(payload.clone()).unwrap().result.unwrap();
+    assert_eq!(paused_again["checkpoint"]["events"], json!([1, 2]));
+
+    payload["simulation_options"]
+        .as_object_mut()
+        .unwrap()
+        .remove("pause_after_adoptions");
+    payload["simulation_options"]["resume_checkpoint"] = paused_again["checkpoint"].clone();
+    assert_eq!(run(payload.clone()).unwrap().result.unwrap(), uninterrupted);
+    payload["simulation_options"]["seed"] = json!(43);
+    assert!(run(payload).is_err());
+}

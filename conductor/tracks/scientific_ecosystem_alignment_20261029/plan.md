@@ -5013,3 +5013,10 @@ Hosted release readiness for this worktree revision remains open.
   The restored clock matched the uninterrupted ticks and final RNG
   checkpoint after crossing a zero-hazard interval. The focused Rust
   unit test passed. Public simulation checkpoint restore remains open.
+
+- [x] Expose event-boundary pause and resume for finite-population
+  Bass DES. The Rust fixture paused twice, then matched the complete
+  uninterrupted result and rejected a changed seed. The checkpoint
+  binds effective forcing, population, tick scale, horizon and Kairos
+  revision. Cross-binding qualification, ABM and network resume remain
+  open.

@@ -468,3 +468,18 @@ Set `exact_sign_flip` to enumerate the sign assignments of up to
 fraction of assignments whose absolute mean is at least the observed
 absolute mean. The test assumes independent pairs and exchangeable
 signs under the null.
+
+### Kairos Bass DES checkpoints
+
+Set `simulation_options.pause_after_adoptions` to the cumulative number
+of new adoptions at which to pause. If that event occurs within the
+requested horizon, the result contains `status: "paused"` and a
+`checkpoint` with the event history and Kairos RNG position. If the
+horizon is reached first, the result is the ordinary simulation output.
+
+Pass the returned checkpoint as `simulation_options.resume_checkpoint`
+with the same effective model configuration and tick horizon. Omit the
+pause option to finish, or supply a higher cumulative count to pause
+again. The completed result includes the original adoption history.
+Keep checkpoints as trusted artifacts. Version 1 supports the
+`kairos_des` Bass engine at dispatched adoption boundaries.
