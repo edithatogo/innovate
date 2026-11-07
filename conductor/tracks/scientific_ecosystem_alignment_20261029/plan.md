@@ -4524,3 +4524,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify overlap diagnostics in Python 3.15.2, Julia and installed R.
   All three returned a treated fraction of 1/3 and counted one excluded
   control without changing the ATT. The focused causal tests passed.
+
+- [x] Add normalized inverse-probability weighting for supplied propensities.
+  The Rust analytic fixture returns -4 and rejects a zero propensity.
+  Propensity estimation, uncertainty, discovery and binding checks remain open.

@@ -302,6 +302,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
         }
         Some("treatment_contrast") => treatment_contrast(payload),
         Some("stratified_treatment_contrast") => stratified_treatment_contrast(payload),
+        Some("propensity_weighted_contrast") => propensity_weighted_contrast(payload),
         Some("intervention_contract") => intervention_contract(payload),
         Some("policy_specification") => policy_specification(payload),
         Some("policy_evidence") => policy_evidence(payload),
@@ -734,6 +735,59 @@ fn stratified_treatment_contrast(payload: &Value) -> Result<Value, &'static str>
         "conditional_standard_error":conditional_standard_error.map(finite).transpose()?,
         "excluded_control_observations":excluded_control_observations,
         "estimand":if att { "att" } else { "ate" },"by_stratum":by_stratum}),
+    )
+}
+
+fn propensity_weighted_contrast(payload: &Value) -> Result<Value, &'static str> {
+    let fields = payload
+        .as_object()
+        .ok_or("expected a weighted contrast object")?;
+    if fields.keys().any(|key| {
+        !matches!(
+            key.as_str(),
+            "method" | "outcomes" | "treatment" | "propensities"
+        )
+    }) {
+        return Err(
+            "propensity weighted contrast accepts only outcomes, treatment and propensities",
+        );
+    }
+    let outcomes = series(payload, "outcomes")?;
+    let treatment = series(payload, "treatment")?;
+    let propensities = series(payload, "propensities")?;
+    if outcomes.len() != treatment.len() || outcomes.len() != propensities.len() {
+        return Err("outcomes, treatment and propensities must align");
+    }
+    let mut arms = [Vec::new(), Vec::new()];
+    for ((outcome, flag), propensity) in outcomes.into_iter().zip(treatment).zip(propensities) {
+        if propensity <= 0. || propensity >= 1. {
+            return Err("propensities must lie strictly between zero and one");
+        }
+        let (arm, probability) = match flag {
+            0. => (0, 1. - propensity),
+            1. => (1, propensity),
+            _ => return Err("treatment indicators must be binary"),
+        };
+        arms[arm].push((outcome, probability));
+    }
+    let weighted_mean = |arm: &[(f64, f64)]| -> Result<f64, &'static str> {
+        let minimum = arm
+            .iter()
+            .map(|&(_, p)| p)
+            .reduce(f64::min)
+            .ok_or("propensity weighted contrast requires both treatment arms")?;
+        let sum_weights = arm.iter().map(|&(_, p)| minimum / p).sum::<f64>();
+        finite(
+            arm.iter()
+                .map(|&(outcome, p)| (minimum / p / sum_weights) * outcome)
+                .sum(),
+        )
+    };
+    let control = weighted_mean(&arms[0])?;
+    let treated = weighted_mean(&arms[1])?;
+    Ok(
+        json!({"method":"normalized_inverse_probability_weighting","estimand":"ate",
+        "estimate":finite(treated-control)?,"treated_mean":treated,"control_mean":control}),
     )
 }
 

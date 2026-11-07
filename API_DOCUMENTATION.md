@@ -216,3 +216,12 @@ discover the supported adjustment methods, inputs and estimands.
 Each included stratum reports its observed `treated_fraction`. The
 top-level `excluded_control_observations` counts controls in strata
 outside the ATT target population.
+
+## Propensity weighted contrast
+
+Call `summarize_causal` with method `propensity_weighted_contrast` and
+aligned arrays of outcomes, binary treatment indicators and caller-supplied
+treatment propensities strictly between zero and one. The operation
+normalizes inverse probability weights separately in each arm and returns
+their weighted means and difference. This ATE point estimate requires
+valid propensities, exchangeability, positivity and consistency.
