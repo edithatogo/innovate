@@ -4215,3 +4215,8 @@ Hosted release readiness for this worktree revision remains open.
   tick resolution and horizon. The Rust fixture checks a delayed
   opening against an initially open resource and rejects mismatched
   tick resolution. Installed-binding checks remain open.
+- [x] Verify resource comparisons at a2061a52 through the rebuilt
+  Python 3.15.2 wheel, Julia and installed R. All reported a signed
+  configured-capacity difference of minus three slot-ticks and
+  rejected unequal tick resolutions while retaining all executions.
+  Python Arrow readback preserved both comparison statuses.
