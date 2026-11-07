@@ -173,6 +173,7 @@ where
             start_reports.push(json!({"termination":"nonfinite_initial_loss","initial_transformed_parameters":start}));
             continue;
         }
+        let initial_error = error;
         let mut damping = 1e-3_f64;
         let mut converged = false;
         let mut reason = "iteration_limit";
@@ -244,6 +245,7 @@ where
             "iterations": iterations,
             "converged": converged,
             "termination": reason,
+            "initial_scaled_rss": initial_error,
             "scaled_rss": error,
             "initial_transformed_parameters": start,
             "final_transformed_parameters": theta
@@ -447,6 +449,16 @@ mod tests {
             fit.report["start_reports"][1]["final_transformed_parameters"],
             json!([1.])
         );
+    }
+
+    #[test]
+    fn multistart_report_retains_initial_objective() {
+        let fit = least_squares(&[2.], &[vec![0.], vec![2.]], |p| Ok(vec![p[0]]), 12).unwrap();
+        let reports = &fit.report["start_reports"];
+        assert_eq!(reports[0]["initial_scaled_rss"], 4.);
+        assert!(reports[0]["scaled_rss"].as_f64().unwrap() < 1e-16);
+        assert_eq!(reports[1]["initial_scaled_rss"], 0.);
+        assert_eq!(reports[1]["scaled_rss"], 0.);
     }
 
     #[test]

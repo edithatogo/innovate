@@ -3894,3 +3894,7 @@ Hosted release readiness for this worktree revision remains open.
   The Rust fixture confirms that an invalid first start retains its
   coordinates and the successful second start keeps its original
   index. Both multistart tests and focused Clippy passed.
+- [x] Retain initial scaled residual loss for every finite start.
+  The analytic Rust regression distinguishes a start that improves
+  from loss four to near zero from one initialized at the optimum.
+  All three multistart tests and focused Clippy passed.
