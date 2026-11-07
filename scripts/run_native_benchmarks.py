@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import os
 from pathlib import Path
 
 from innovate import execute
@@ -10,11 +11,25 @@ from innovate import execute
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--policy", choices=("fast", "scheduled", "workflow_dispatch"))
-    parser.add_argument("--workers", type=int, default=1)
+    workers = parser.add_mutually_exclusive_group()
+    workers.add_argument("--workers", type=int)
+    workers.add_argument("--slurm-allocation", action="store_true",
+                         help="Use SLURM_CPUS_PER_TASK as the local worker budget.")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
 
-    payload = {"workers": args.workers}
+    count = args.workers if args.workers is not None else 1
+    if args.slurm_allocation:
+        allocated = os.environ.get("SLURM_CPUS_PER_TASK", "")
+        try:
+            count = int(allocated)
+        except ValueError:
+            parser.error("--slurm-allocation requires a positive integer SLURM_CPUS_PER_TASK")
+        if count < 1:
+            parser.error("--slurm-allocation requires a positive integer SLURM_CPUS_PER_TASK")
+        modes = execute("discover_execution_modes")["result"]
+        count = min(count, modes["local_cpu"]["max_workers"])
+    payload = {"workers": count}
     if args.policy is not None:
         payload["ci_policy"] = args.policy
     response = execute("run_benchmark_suite", **payload)

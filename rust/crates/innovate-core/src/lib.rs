@@ -199,7 +199,7 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         if value["operation"] == "discover_execution_modes" {
             return Ok(json!({
                 "local_cpu":{"status":"available","max_workers":MAX_BATCH_WORKERS,
-                    "operations":["fit_batch","predict_batch","execute_scenario_grid"],
+                    "operations":["fit_batch","predict_batch","execute_scenario_grid","run_benchmark_suite"],
                     "preserves_input_order":true},
                 "accelerator":{"status":"unqualified"},
                 "distributed":{"status":"unqualified"},

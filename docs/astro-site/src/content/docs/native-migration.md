@@ -1165,3 +1165,9 @@ Batch fit, batch prediction, and scenario grids accept up to 32 local
 CPU workers and return results in input order. The worker count is a
 request limit. Accelerator, distributed, and scheduler execution are
 listed as unqualified.
+
+Within a Slurm allocation, run the native benchmark runner with
+`--slurm-allocation` and an explicit `--output` path. It uses
+`SLURM_CPUS_PER_TASK` as the worker budget, capped at the native limit.
+This option consumes an existing allocation. The runner remains a
+single-process workload with local CPU workers.

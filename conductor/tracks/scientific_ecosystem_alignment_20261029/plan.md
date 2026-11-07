@@ -3281,3 +3281,9 @@ the other competition models and installed binding checks remain open.
   regressions and Clippy passed. The installed sbatch and qsub wrappers
   could not run their version probes because Docker was unavailable.
   Scheduler and accelerator qualification remain open.
+
+- [x] Let the native benchmark runner honor a Slurm task CPU budget.
+  A local test supplied SLURM_CPUS_PER_TASK=2 and completed all three
+  fast cases, as did the serial run. A zero budget was rejected before
+  writing output. The Rust benchmark policy test and Ruff passed.
+  Scheduler-backed runtime evidence remains open.
