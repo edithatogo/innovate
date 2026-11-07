@@ -3740,3 +3740,8 @@ Hosted release readiness for this worktree revision remains open.
   in its receipt. Two local ranks covered all three fast cases exactly once,
   and their combined result rows matched the serial run. Python 3.15.2 and
   Ruff passed. Multi-node, scheduler and accelerator qualification remain open.
+- [x] Expand a filename's {rank} token for MPI receipts and create
+  each receipt exclusively. Two local Open MPI ranks using one
+  output template wrote distinct files and passed all three fast
+  cases. An attempt to reuse a receipt path failed and preserved
+  the original bytes. Ruff passed on the runner.

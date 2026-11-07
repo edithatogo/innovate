@@ -18,7 +18,8 @@ def main() -> int:
     workers.add_argument("--slurm-allocation", action="store_true",
                          help="Use SLURM_CPUS_PER_TASK as the local worker budget.")
     parser.add_argument("--mpi-shard", action="store_true", help="Select cases for this Open MPI rank.")
-    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--output", type=Path, required=True,
+                        help="Receipt path. With --mpi-shard, {rank} in the filename expands to the rank.")
     args = parser.parse_args()
 
     count = args.workers if args.workers is not None else 1
@@ -68,9 +69,16 @@ def main() -> int:
         "system": system,
         "architecture": platform.machine(),
     }
+    output = args.output
     if shard is not None:
         response["metadata"]["benchmark_runner"]["mpi_shard"] = shard
-    args.output.write_text(json.dumps(response, indent=2, allow_nan=False) + "\n", encoding="utf-8")
+        output = output.with_name(output.name.replace("{rank}", str(shard["rank"])))
+    receipt = json.dumps(response, indent=2, allow_nan=False) + "\n"
+    try:
+        with output.open("x" if shard is not None else "w", encoding="utf-8") as stream:
+            stream.write(receipt)
+    except FileExistsError:
+        parser.error(f"MPI receipt already exists: {output}; use a fresh path for each rank")
     result = response["result"]
     print(f"Benchmark suite: {result['succeeded']} succeeded, {result['failed']} failed")
     return int(result["failed"] > 0 or not result["runs"])
