@@ -2,7 +2,7 @@ library(innovate.R)
 payload <- list(inputs=list(time=c(0,1,2)), parameters=list(L=100,k=1,x0=1))
 x <- kernel_predict_model("logistic", payload)
 stopifnot(x$result$values[[2]] == 50, x$metadata$runtime == "rust_native")
-stopifnot(length(kernel_discover_models()$models) == 9)
+stopifnot(length(kernel_discover_models()$models) == 10)
 error <- tryCatch(kernel_predict_model("latent_process", payload), error=function(e) conditionMessage(e))
 stopifnot(is.character(error), grepl("unsupported_native_operation", error))
 for (i in seq_len(100)) stopifnot(kernel_predict_model("logistic", payload)$result$values[[2]] == 50)
@@ -103,3 +103,6 @@ lock_params <- list(alpha1=0.3,alpha2=0.2,beta1=0,beta2=0,gamma1=0,gamma2=0,m=10
 lock_result <- kernel_predict_model("lock_in",list(inputs=list(time=c(10,20)),parameters=lock_params,constructor_kwargs=list(initial_values=c(10,0))))$result
 stopifnot(abs(lock_result$rows[[1]][[1]]-1000/(1+99*exp(-3)))<1e-5,lock_result$rows[[1]][[2]]==0)
 cat("R lock-in analytic forecast passed\n")
+network_curve <- kernel_predict_model("network_diffusion",list(inputs=list(time=c(0,3)),constructor_kwargs=list(base_model="logistic",adjacency=list(c(0,2),c(0,0)),node_labels=list("a","b")),parameters=list(spillover_strength=0.2,node_0_L=100,node_0_k=1,node_0_x0=3,node_1_L=200,node_1_k=1,node_1_x0=3)))$result
+stopifnot(abs(network_curve$rows[[2]][[1]]-70)<1e-10,network_curve$rows[[2]][[2]]==100)
+cat("R historical weighted network prediction passed\n")

@@ -42,6 +42,7 @@ def test_capabilities_are_native_and_unavailable_features_fail_closed():
         "multi_product",
         "complementary_goods",
         "lock_in",
+        "network_diffusion",
     }
     assert innovate.capabilities()["supports_simulation"].all()
     assert innovate.capabilities()["supports_summarize"].all()
@@ -190,3 +191,21 @@ def test_lock_in_installed_polars_forecast_matches_analytic_limit():
     )
     assert a["prediction_1"][0] == pytest.approx(1000 / (1 + 99 * math.exp(-3)), abs=1e-5)
     assert a["prediction_2"].to_list() == [0.0, 0.0]
+
+
+def test_historical_network_polars_fitting_and_forecast():
+    t = [float(i) for i in range(26)]
+
+    def bass(t, p, q, m):
+        d = math.exp(-(p + q) * t)
+        return m * (1 - d) / (1 + q / p * d)
+
+    fit = innovate.fit(
+        "network_diffusion",
+        pl.DataFrame({"time": t, "a": [bass(x, 0.03, 0.3, 100) for x in t], "b": [bass(x, 0.02, 0.2, 200) for x in t]}),
+        observed_columns=["a", "b"],
+        model_options={"adjacency": [[0.0, 1.0], [1.0, 0.0]], "spillover_strength": 0.0},
+    )
+    a = fit.predict(pl.DataFrame({"time": [30.0]}))
+    assert a["prediction_1"][0] == pytest.approx(bass(30, 0.03, 0.3, 100), abs=0.01)
+    assert a["prediction_2"][0] == pytest.approx(bass(30, 0.02, 0.2, 200), abs=0.01)

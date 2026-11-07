@@ -1,0 +1,12 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.22s
+     Running tests/network_diffusion.rs (target/debug/deps/network_diffusion-6a3df4b704db5f39)
+
+running 5 tests
+test graph_shape_and_unknown_options_are_rejected ... ok
+test historical_weighted_spillover_preserves_isolated_nodes_and_matrix_shape ... ok
+test historical_summary_retains_coordinates_and_graph_statistics_without_times ... ok
+test finite_high_weight_graphs_keep_finite_summary_means ... ok
+test independent_node_fits_retain_state_and_forecast ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s

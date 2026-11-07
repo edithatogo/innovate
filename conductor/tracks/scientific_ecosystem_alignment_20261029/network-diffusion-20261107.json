@@ -1,0 +1,106 @@
+{
+  "date": "2026-11-07",
+  "status": "bounded_local_checkpoint",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "results": {
+    "rust_tests": 67,
+    "accounting": "63 core/C ABI coverage-run plus 4 Polars",
+    "installed_python": 29,
+    "julia_assertions": 146,
+    "R": "weighted network prediction and previous conformance pass",
+    "clippy_lint_types_docs": "pass; expected native source type warning; 163 pages",
+    "package": "installed local wheel and archive metadata pass; clean-source/platform qualification pending"
+  },
+  "coverage": {
+    "branches": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "functions": {
+      "count": 712,
+      "covered": 527,
+      "percent": 74.01685393258427
+    },
+    "instantiations": {
+      "count": 1498,
+      "covered": 606,
+      "percent": 40.453938584779706
+    },
+    "lines": {
+      "count": 6005,
+      "covered": 4907,
+      "percent": 81.71523730224813
+    },
+    "mcdc": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "regions": {
+      "count": 9524,
+      "covered": 8256,
+      "notcovered": 1268,
+      "percent": 86.68626627467451
+    }
+  },
+  "raw_log_sha256": {
+    "innovate-network-diffusion-green.log": "9750f4397506d3f3922da9a4e90d2297e660df533c5265f627c8005c76a61ff2",
+    "innovate-spillover-mean-red.log": "877cbe89012ce14a20b19a1b01223af8a562d45f6549ac7725e874deb2f2c1d4",
+    "innovate-spillover-coverage.log": "a4e28a566c237c5f2361fe51146d324e22888731fa3de27ca34c9184d2fc55d0",
+    "innovate-spillover-tabular.log": "136d2215285819ac7d5e37bdda674ce823532ea53b587977a895d3d91bc84e29",
+    "innovate-spillover-clippy.log": "222d65b217127ebb82a35d9fc2d0c781a19afa2432346ce641ae1fbbfa10114e",
+    "innovate-spillover-lint.log": "093e91c502151b50c84f57316c544bed91098f8c2c199992d01a162d20bfbd89",
+    "innovate-spillover-docs.log": "4db3a902e2f3428abd6ca120a3b0f7312547deee2d765e9c696b66cc1662c93f",
+    "innovate-spillover-python.log": "fda7776536158844b067a1a7b0e0901147735952385eb1bd72c0aac882696a8a",
+    "innovate-spillover-r.log": "ef6b42c3f906f5acbc14724b0549a29f8afb3f0090648c87e0c39b2854394930",
+    "innovate-spillover-julia.log": "9099faeddef41ef6a1278d67354c3f3f5fa4adfb191003efb6a2e17e7c5a4c57",
+    "innovate-spillover-policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+    "innovate-spillover-release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "innovate-spillover-ffi.log": "01c4eaf6dfe5de167a6004b71152842e575778f1c1a293bf5aefcf6eefc2262b",
+    "innovate-spillover-wheel.log": "3d120b2e527dac0af5c490b897ec5adb918e07543f28c6c05f676a4b17049388",
+    "innovate-spillover-sdist.log": "3eedf0548744597963139ba90a16be18f6544896464f8d69191cebe416976552",
+    "innovate-spillover-package.log": "e54a7bdabea4eb36a41777890ec6b292f5f81e972c2a68e4ec0bbe93b126873a"
+  },
+  "normalization": "Only trailing whitespace and terminal blank lines removed",
+  "evidence_sha256": {
+    "innovate-spillover-python.log": "fda7776536158844b067a1a7b0e0901147735952385eb1bd72c0aac882696a8a",
+    "innovate-spillover-lint.log": "093e91c502151b50c84f57316c544bed91098f8c2c199992d01a162d20bfbd89",
+    "coverage-summary.json": "297a0190c31dd01645f41f6282d46c44909c1857bcc5d6e5b4a59ca4596a178f",
+    "innovate-spillover-policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+    "julia.log": "9099faeddef41ef6a1278d67354c3f3f5fa4adfb191003efb6a2e17e7c5a4c57",
+    "r.log": "ef6b42c3f906f5acbc14724b0549a29f8afb3f0090648c87e0c39b2854394930",
+    "innovate-spillover-mean-red.log": "877cbe89012ce14a20b19a1b01223af8a562d45f6549ac7725e874deb2f2c1d4",
+    "red.log": "6dbc8ab4b0aab5262f621a69bd118c3a4f27d9077885290f4e0c93a8ba802e43",
+    "innovate-spillover-release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "innovate-spillover-docs.log": "55d939c0dbf53dabef483a40481db38b8ce976ad5b3f1b3ca2400104079a939b",
+    "innovate-spillover-wheel.log": "3d120b2e527dac0af5c490b897ec5adb918e07543f28c6c05f676a4b17049388",
+    "green.log": "0409deac9dbc27601329662bee83e9ce536200141e1fb0138f03ff8c915561c5",
+    "clippy.log": "e3aea51735e1c6d7f2468cc322fcc26e8d28a6b156c7eba8eee8441468338b88",
+    "innovate-network-diffusion-green.log": "7ec2a26fc36ec711cdbe4257efb7a868a09a6ab901171cf1e232d3ede31ac1a4",
+    "source-sha256.json": "ebfac6780f679f51c85aa17717603d9785c185be9f71e690014966940c3de905",
+    "innovate-spillover-sdist.log": "3eedf0548744597963139ba90a16be18f6544896464f8d69191cebe416976552",
+    "innovate-spillover-r.log": "ef6b42c3f906f5acbc14724b0549a29f8afb3f0090648c87e0c39b2854394930",
+    "innovate-spillover-tabular.log": "61ae18919fb4ddf985b9d09b39f7d2330a846f873a061de293eac622e33df948",
+    "innovate-spillover-package.log": "a0bb1077370c380da26c913050bc1db93aff34de22a5e552c0638de25b2dd595",
+    "innovate-spillover-clippy.log": "222d65b217127ebb82a35d9fc2d0c781a19afa2432346ce641ae1fbbfa10114e",
+    "innovate-spillover-coverage.log": "a4e28a566c237c5f2361fe51146d324e22888731fa3de27ca34c9184d2fc55d0",
+    "innovate-spillover-ffi.log": "01c4eaf6dfe5de167a6004b71152842e575778f1c1a293bf5aefcf6eefc2262b",
+    "python.log": "fda7776536158844b067a1a7b0e0901147735952385eb1bd72c0aac882696a8a",
+    "innovate-spillover-julia.log": "9099faeddef41ef6a1278d67354c3f3f5fa4adfb191003efb6a2e17e7c5a4c57",
+    "innovate-spillover-hooks.log": "7523d6b940ad7d7e49ea93ff33ac60ceb273c50cb6ae677030a5b65df95de21b"
+  },
+  "artifacts_sha256": {
+    "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/target/debug/libinnovate_ffi.dylib": "358e245d5336269df35347a7d1cf0602a4030b08d1b6898ba1cfc22d037a86d5",
+    "/tmp/innovate-spillover-wheel/innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "2a46d4a46d4010a22f385a8f982f16d242c7b612db2711adb4de2237a226048b",
+    "/tmp/innovate-spillover-wheel/innovate-0.7.0a1.tar.gz": "b87838d9edce91820fe7f9329cb533363eb5526eab6873012c0c60d64de0b7aa"
+  },
+  "remaining": [
+    "Six unavailable model families and all full-feature qualifications",
+    "Full network base composition/covariates/interventions/stochastic uncertainty",
+    "Remaining inference/scenario/data/report/plugin/HPC and distribution/release work"
+  ]
+}

@@ -10,7 +10,7 @@ no Python numerical fallback, pandas or xarray runtime.
 
 ## Current scope
 
-Nine native model families expose deterministic fitting, prediction, simulation,
+Ten native model families expose deterministic fitting, prediction, simulation,
 summary and diagnostics: Bass, Logistic, Gompertz, Fisher–Pry, Norton–Bass,
 Lotka–Volterra, multi-product competition, complementary goods and lock-in. Their support remains bounded.
 Covariates, events, uncertainty, other model families and full Kairos simulation
@@ -297,3 +297,34 @@ diagnostics explicitly warn about this structural ambiguity; a numerical full
 Jacobian rank does not qualify unique parameter recovery. Boundary information
 and calibrated uncertainty require separate qualification. Covariates/events
 and broader lock-in variants remain required migration work.
+
+## Historical deterministic network spillover
+
+`network_diffusion` is a separate family from `kairos_network` event simulation.
+Constructor options include square `adjacency`, optional unique `node_labels`
+and coordinates, `base_model` (Bass by default), and spillover strength (0.15 by
+default). Adjacency diagonals are cleared. Zero-sum rows have no peer contribution;
+other rows are normalized by their sum. The native wrapper supports scalar Bass,
+Logistic, Gompertz and Fisher–Pry bases without base covariates/events.
+
+Parameters are `spillover_strength` and `node_0_p`, `node_0_q`, `node_0_m`, etc.
+for Bass, or the corresponding names for the chosen base curve. Predictions are
+base levels plus strength times row-normalized peer levels, clipped nonnegative
+and cumulatively maximized within each requested batch. This historical batch
+rule can matter for nonmonotone adjusted curves. Raw native `increments` preserve
+historical sample differences with initial zero; they are not time derivatives.
+Polars prediction columns use time_node rows. Observation orientation defaults
+to time_node; node_time and historical_auto are explicit alternatives, with
+historical_auto preferring node_time when dimensions are ambiguous.
+
+Fitting preserves the historical algorithm: nodes are fitted independently and
+spillover strength stays fixed. Adjusted training predictions may consequently
+not fit observations; diagnostics flag that limitation. Native `node_fit_options`
+can specify options per node. Nonempty global fit_options are rejected. Fitted
+state retains graph, labels, coordinates, base model and node parameters.
+No-time summaries retain graph statistics without inventing predictions.
+
+Targeted interventions, full base-model composition/covariates, stochastic draws,
+uncertainty and general scenario integration remain required migration work.
+Unknown option fields fail explicitly. This deterministic wrapper does not
+inherit the event engine's resource semantics or qualify full network parity.

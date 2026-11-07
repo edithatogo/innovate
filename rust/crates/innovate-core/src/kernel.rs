@@ -247,6 +247,9 @@ impl KernelBinding {
         if crate::historical::selected(request) {
             return crate::historical::execute(request);
         }
+        if request.model_key.as_deref() == Some("network_diffusion") {
+            return crate::spillover::execute(request);
+        }
         validate_request(request)?;
         if request.payload.get("simulation_options").is_some() {
             return crate::simulation::execute(request);

@@ -9,6 +9,7 @@ mod kernel;
 mod network;
 mod numerics;
 mod simulation;
+mod spillover;
 mod substitution;
 mod validation;
 pub use contracts::*;

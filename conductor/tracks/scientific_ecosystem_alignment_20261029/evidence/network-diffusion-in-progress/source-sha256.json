@@ -1,0 +1,13 @@
+{
+  "bindings/julia/test/runtests.jl": "5d044334fd2520b7794a8d12c46a52a0121ed32e3656070e3307886f2c7bba88",
+  "bindings/r/tests/native.R": "b19a6e8678432131468b37b7d0dd2498acdecf4560b6026d928f2abd70e566b7",
+  "docs/astro-site/src/content/docs/native-migration.md": "caa0f7da77a0c5e88765cbd3d46f5b23198f324b27582181cf426bc2bbebbf20",
+  "migration-ledger.json": "2a5bcb9ddf3c0c3a5a8825c6fb5fb7c62803f067e8a25781775482943870ffa8",
+  "rust/crates/innovate-core/src/discovery.json": "190cd21a327b8121f083849f5dd4ae14cbd6b9aaa771bf3c9a2a6311dcd80b43",
+  "rust/crates/innovate-core/src/kernel.rs": "4694799155671ba0b08141d32853b5570fb0c62ff12c52adf4d15a4b190b4e4b",
+  "rust/crates/innovate-core/src/lib.rs": "7a916af83e0302a1c7e97d12c59aedd500f05e7903d699e1bec64962380ce7fe",
+  "rust/crates/innovate-core/src/spillover.rs": "1f317e5748e5591e0c137a096c0e7ea16d24ae39a04ed9fc0fa5b69c02a15c13",
+  "rust/crates/innovate-core/tests/native_boundary.rs": "1062ca5b77d60e074bdb2fb3ff40848c777e3a38f4687ef174ee5f8ea2eca848",
+  "rust/crates/innovate-core/tests/network_diffusion.rs": "8a290aaf49b641bdaba2f29beca28ec76e36b24925d5f2e33278e37823bb08cb",
+  "tests/native/test_python_consumer.py": "7f8e221d16147d000f1d034a61e8c4df585c6964eee6e2062b05e5cf7219781f"
+}

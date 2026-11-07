@@ -249,3 +249,77 @@ model ports, covariates/events, inference/scenarios and full distribution gates.
 Goal remains active; all 38 obligations remain required.
 
 Lock-in source/evidence commit: `37300334bf7659aa68d1ed30d7f7f60e4922b1ae`. All operations terminal; next source tasks remain above.
+
+## Historical network-diffusion continuation — in progress
+
+Same writer resumes at 3b0ccdfb; initial checkout clean. Previous turn was progress
+through committed lock-in validation. Recovered models/network.py and
+NetworkDiffusionInputs from 56d91dd7. This family fits node-level base curves,
+uses row-normalized adjacency spillover, clips negatives and applies cumulative
+max over time. It is distinct from the Kairos stochastic event engine.
+
+- [x] Port bounded weighted spillover prediction, isolated-node behavior and matrix output.
+- [x] Port bounded node fitting/state, diagnostics/summary and historical rate conventions.
+- [x] Validate bounded Python/Julia/R consumers and retain evidence before advertising capability.
+
+Owned new source: rust/crates/innovate-core/tests/network_diffusion.rs.
+Independent closed-form Bass predictions define expected weighted node outputs.
+The exact test fails because network_diffusion remains unavailable. Red receipt:
+evidence/network-diffusion-in-progress/red.log. No release/capability claim or
+ledger qualification changed. No native operation remains live. Next action:
+implement the native network wrapper and pass this regression, then port fitting
+and summary/diagnostic semantics without equating this model to the event engine.
+All full-feature obligations and the Conductor goal remain active.
+
+Native historical network wrapper implemented in spillover.rs. Three focused
+regressions pass: weighted/isolated-node analytic predictions, independent node
+fitting with reusable state and held-out forecasts, and invalid graph/options.
+Core all-targets Clippy passes. Output is always time_node; inputs also accept
+node_time or explicit historical_auto. Spillover strength is held fixed and
+node fits ignore spillover, matching the historical algorithm; diagnostics warn
+that adjusted training predictions need not match observations. Historical
+sample increments are explicitly not time derivatives. Unavailable covariate,
+stochastic and unsupported base-model paths fail rather than falling back.
+
+Capability remains unadvertised pending broader review/consumer checks. Next:
+complete historical summary/coordinates and unsupported-feature accounting,
+then validate installed Python/Julia/R and current-source coverage. Targeted
+interventions, full base-model composition, covariates and stochastic uncertainty
+remain required; the old intervention setter did not actually change predict.
+Owned source edits include spillover.rs, lib.rs, kernel.rs and network tests.
+No native operation remains live; full goal remains active.
+
+Historical summary now retains coordinates, edge count/density and weighted
+average degree, strips adjacency diagonals like the original constructor, and
+supports no-time summaries without fabricating predictions. Four focused Rust
+regressions pass. Polars node fitting accepts its normal empty fit_options;
+nonempty unsupported fit options still fail explicitly. Rebuilt/installed
+consumers pass 29 Python tests, 146 Julia assertions and R conformance including
+weighted-network prediction. Workspace all-target Clippy passes. New sources
+remain owned by this lane and uncommitted; capability not yet advertised.
+
+Next: review finite graph-statistic arithmetic/unsupported feature handling,
+then discovery/ledger, current-source coverage, documentation/package checks,
+final evidence and commit. Coordinates and summary fields are covered by the
+new native regression. No native operation remains live; goal stays active.
+
+Network review found graph-average overflow from summing finite row degrees
+before division; a new regression failed before the stable-mean fix and now
+passes. Unknown payload options now fail explicitly rather than silently
+ignoring stochastic/intervention requests. Five focused network regressions
+pass. Discovery advertises the tenth bounded family with deterministic spillover
+semantics and no derivative-rate claim. Ledger receipt remains in-progress.
+Current-source coverage run: 63 core/C ABI tests pass; line coverage 81.72%.
+Workspace Clippy passes. Rebuilt installed artifacts pass 29 Python tests,
+146 Julia assertions and R conformance, including the new discovery count.
+No native operation remains live. Next: Polars native gate, docs/package/static
+checks, final immutable evidence/review and commit; then remaining six model
+families and all outstanding full-feature qualifications. Goal remains active.
+
+Network diffusion checkpoint: 67 Rust tests, 29 installed Python checks, 146 Julia
+assertions and R native cases pass. Core/C ABI line coverage: 81.72%. Review:
+network-diffusion-review-20261107.md; receipt: network-diffusion-20261107.json.
+Ten bounded families; six remain unavailable. All 38 full-feature obligations
+remain required. Next: policy/latent/regime and hierarchical/mixture/composite
+ports, remaining covariate/event/inference work and distribution qualification.
+No native operation remains live; full Conductor goal remains active.

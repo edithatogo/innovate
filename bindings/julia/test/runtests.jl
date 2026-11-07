@@ -4,7 +4,7 @@ using Test, Innovate
     result = kernel_predict_model("logistic", payload)
     @test result["metadata"]["runtime"] == "rust_native"
     @test result["result"]["values"][2] == 50.0
-    @test length(kernel_discover_models()["models"]) == 9
+    @test length(kernel_discover_models()["models"]) == 10
     @test_throws ErrorException kernel_predict_model("latent_process", payload)
     for _ in 1:100
         @test kernel_predict_model("logistic",payload)["result"]["values"][2] == 50.0
@@ -104,4 +104,10 @@ end
     a=kernel_predict_model("lock_in",p)["result"]
     @test isapprox(a["rows"][1][1],1000/(1+99*exp(-3));atol=1e-5)
     @test a["rows"][1][2]==0
+end
+@testset "Historical weighted network" begin
+    p=Dict("inputs"=>Dict("time"=>[0.,3.]),"constructor_kwargs"=>Dict("base_model"=>"logistic","adjacency"=>[[0.,2.],[0.,0.]],"node_labels"=>["a","b"]),"parameters"=>Dict("spillover_strength"=>0.2,"node_0_L"=>100.,"node_0_k"=>1.,"node_0_x0"=>3.,"node_1_L"=>200.,"node_1_k"=>1.,"node_1_x0"=>3.))
+    a=kernel_predict_model("network_diffusion",p)["result"]
+    @test isapprox(a["rows"][2][1],70.;atol=1e-10)
+    @test a["rows"][2][2]==100
 end
