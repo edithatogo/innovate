@@ -5811,3 +5811,8 @@ Hosted release readiness for this worktree revision remains open.
   library path containing a Greek character. The latest FFI link ran
   out of space, so the bridge check reused the archived macOS library.
   The Windows loader branch awaits hosted runtime evidence.
+
+- [x] Add a Windows R CI check that copies the bundled DLL into a
+  Unicode directory and executes a Logistic prediction through it.
+  Actionlint passed. No Windows compiler or runtime was available in
+  the local environment, so hosted execution remains open.
