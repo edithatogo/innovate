@@ -2435,6 +2435,13 @@ fn kairos_scenario_replay_retains_scheduled_retry_clear() {
     let row = &response["result"]["executions"][0];
     assert_eq!(row["result"]["counts"], json!([0, 1, 2]), "{response}");
     assert_eq!(row["result"]["retry_eligibility"][0]["tick"], 6);
+    assert_eq!(
+        row["result"]["resource_metrics"],
+        json!({
+            "horizon_ticks":12,"occupied_slot_ticks":10,"configured_slot_ticks":12,
+            "admitted_wait_ticks":0,"abandoned_wait_ticks":0,"pending_wait_ticks":0
+        })
+    );
     let replay = &row["artifact"]["replay_request"];
     assert_eq!(
         replay["payload"]["scenarios"][0]["simulation"]["simulation_options"]["schedule"],

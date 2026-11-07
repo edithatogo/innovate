@@ -3068,3 +3068,10 @@ the other competition models and installed binding checks remain open.
   results with five occupied slot-ticks, three configured slot-ticks,
   two abandoned wait ticks and one pending wait tick. All 27 Rust
   network tests and focused Clippy passed.
+
+- [x] Verify Kairos resource metrics through scenario replay and Arrow
+  export. Polars decoded execution files emitted through Python 3.15.2,
+  Julia and R. Rows agreed after excluding per-run timestamps and
+  elapsed time. All three reproduced the full closure simulation on
+  replay. The focused Rust retry replay test also asserts resource
+  accounting for its completed-service fixture.
