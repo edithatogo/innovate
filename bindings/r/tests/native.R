@@ -480,3 +480,16 @@ manifest <- list(name="binding-fixture", version="1", entrypoint="demo:register"
 registered <- kernel_call("register_extension_manifest", NULL, list(manifest=manifest))$result$manifest
 stopifnot(identical(registered$stability, "provisional"),
   identical(kernel_call("list_extension_manifests")$result$manifests, list(registered)))
+
+paired_parameters <- list(
+  list(name="p",unit="period^-1",value=0.03),
+  list(name="q",unit="period^-1",value=0.3),
+  list(name="m",unit="people",value=100))
+paired_draw <- list(draw_id=1,parameters=paired_parameters,time=c(0,1),adoption=c(0,1))
+paired <- list(strategies=lapply(c("control","policy"), function(id) {
+  list(scenario_id=id,time_unit="period",provenance="synthetic",draws=list(paired_draw))
+}))
+stopifnot(rawToChar(kernel_paired_outcomes_ipc(paired)[1:6]) == "ARROW1")
+paired$strategies[[1]]$draws[[1]] <- unname(paired_draw)
+paired_error <- tryCatch({kernel_paired_outcomes_ipc(paired); ""}, error=conditionMessage)
+stopifnot(grepl("must be objects", paired_error, fixed=TRUE))

@@ -506,3 +506,16 @@ end
     @test registered["stability"] == "provisional"
     @test kernel_call("list_extension_manifests")["result"]["manifests"] == [registered]
 end
+
+@testset "Paired Arrow validation" begin
+    params = [Dict("name"=>name, "unit"=>unit, "value"=>value)
+              for (name, unit, value) in [("p","period^-1",0.03), ("q","period^-1",0.3), ("m","people",100.0)]]
+    strategies = [Dict("scenario_id"=>id, "time_unit"=>"period", "provenance"=>"synthetic",
+        "draws"=>Any[Dict("draw_id"=>1, "parameters"=>params, "time"=>[0,1], "adoption"=>[0,1])])
+        for id in ["control","policy"]]
+    payload = Dict("strategies"=>strategies)
+    @test String(kernel_paired_outcomes_ipc(payload)[1:6]) == "ARROW1"
+    draw = strategies[1]["draws"][1]
+    strategies[1]["draws"][1] = [draw[key] for key in ["draw_id","parameters","time","adoption"]]
+    @test_throws r"must be objects" kernel_paired_outcomes_ipc(payload)
+end

@@ -4190,3 +4190,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Keep malformed positional draw rejection in the packaged Python
   consumer regression. The rebuilt wheel returned the validation error
   and passed the historical fixture round trip and reordered-draw checks.
+- [x] Add paired Arrow validation to the Julia and R native suites.
+  Both returned an Arrow file for valid named draws and rejected
+  positional draws through the rebuilt shared library. The affected
+  sections passed locally.
