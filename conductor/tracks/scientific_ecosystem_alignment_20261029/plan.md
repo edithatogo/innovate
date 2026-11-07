@@ -4165,3 +4165,7 @@ Hosted release readiness for this worktree revision remains open.
   The local wheel build reused Cargo artifacts. Extend scheduled and
   manually dispatched Linux CI to build and test from the extraction.
   Actionlint passed locally. Hosted execution remains open.
+- [x] Require a Boolean release readiness declaration and reject
+  premature readiness during development validation. Eight policy
+  regressions passed. The optimized Python release check still
+  rejects the current ledger with 38 outstanding obligations.

@@ -11,7 +11,16 @@ ROOT = Path(__file__).parents[2]
 
 @pytest.mark.parametrize(
     "mutation",
-    ["drop_feature", "drop_model", "make_optional", "duplicate_feature", "missing_evidence", "invalid_status"],
+    [
+        "drop_feature",
+        "drop_model",
+        "make_optional",
+        "duplicate_feature",
+        "missing_evidence",
+        "invalid_status",
+        "nonboolean_release",
+        "premature_release",
+    ],
 )
 def test_migration_policy_rejects_feature_loss(tmp_path, monkeypatch, mutation):
     spec = importlib.util.spec_from_file_location("migration_policy", ROOT / "scripts/check_migration.py")
@@ -19,7 +28,15 @@ def test_migration_policy_rejects_feature_loss(tmp_path, monkeypatch, mutation):
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     ledger = json.loads((ROOT / "migration-ledger.json").read_text())
-    if mutation == "drop_feature":
+    if mutation in {"nonboolean_release", "premature_release"}:
+        ledger["release_ready"] = "false" if mutation == "nonboolean_release" else True
+        for group in ("models", "feature_areas"):
+            for item in ledger[group]:
+                if evidence := item.get("evidence"):
+                    target = tmp_path / evidence
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_bytes((ROOT / evidence).read_bytes())
+    elif mutation == "drop_feature":
         ledger["feature_areas"].pop()
     elif mutation == "drop_model":
         ledger["models"].pop()
@@ -35,5 +52,7 @@ def test_migration_policy_rejects_feature_loss(tmp_path, monkeypatch, mutation):
     (tmp_path / "pyproject.toml").write_text((ROOT / "pyproject.toml").read_text())
     monkeypatch.setattr(module, "ROOT", tmp_path)
     monkeypatch.setattr("sys.argv", ["check_migration.py"])
-    with pytest.raises(ValueError, match="(lost|required|Missing migration evidence|Invalid migration status)"):
+    with pytest.raises(
+        ValueError, match="(lost|required|Missing migration evidence|Invalid migration status|release_ready)"
+    ):
         module.main()

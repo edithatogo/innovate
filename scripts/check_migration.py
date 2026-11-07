@@ -94,7 +94,12 @@ def main() -> int:
         for item in ledger[group]
         if item["required"] and item["status"] != "qualified"
     ]
-    if args.release and (pending or not ledger["release_ready"]):
+    release_ready = ledger.get("release_ready")
+    if not isinstance(release_ready, bool):
+        raise ValueError("release_ready must be a JSON boolean")
+    if release_ready and pending:
+        raise ValueError("release_ready requires all migration obligations to be qualified")
+    if args.release and not release_ready:
         print("Release blocked: scientific migration and acceptance remain incomplete:", ", ".join(pending))
         return 1
     print(f"Native development policy valid; {len(pending)} feature obligations still block release")
