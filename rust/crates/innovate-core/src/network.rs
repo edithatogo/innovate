@@ -49,6 +49,21 @@ impl QueueState {
         }
     }
 
+    fn rebuild_waiters(&self, agents: &[EntityId], priorities: &[i32]) -> PriorityResource {
+        let mut waiting: Vec<_> = self
+            .waiting_since
+            .iter()
+            .enumerate()
+            .filter_map(|(index, tick)| tick.map(|tick| (tick, index)))
+            .collect();
+        waiting.sort_unstable();
+        let mut resource = PriorityResource::new("adoption_waiters", 0);
+        for (tick, index) in waiting {
+            resource.request(agents[index], priorities[index], SimTime::from_ticks(tick));
+        }
+        resource
+    }
+
     fn schedule_retry(&mut self, policy: Option<Retry>, index: usize, now: u128) {
         self.retry_at[index] = policy.and_then(|policy| {
             if self.retry_counts[index] >= policy.max_retries {
@@ -498,19 +513,6 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     let mut balks = Vec::new();
     let mut retries = Vec::new();
     let mut retry_policy = o.retry;
-    let rebuild_waiters = |waiting_since: &[Option<u128>], priorities: &[i32]| {
-        let mut waiting: Vec<_> = waiting_since
-            .iter()
-            .enumerate()
-            .filter_map(|(index, tick)| tick.map(|tick| (tick, index)))
-            .collect();
-        waiting.sort_unstable();
-        let mut resource = PriorityResource::new("adoption_waiters", 0);
-        for (tick, index) in waiting {
-            resource.request(agents[index], priorities[index], SimTime::from_ticks(tick));
-        }
-        resource
-    };
     let mut rng = DeterministicStream::from_run_seed(o.seed);
     let mut now = 0_u128;
     let horizon = (time.last().unwrap() * o.ticks_per_unit as f64).floor() as u128;
@@ -696,7 +698,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                     metrics.abandoned_wait_ticks += now - queued_at;
                 }
             }
-            resource = rebuild_waiters(&queue.waiting_since, &priorities);
+            resource = queue.rebuild_waiters(&agents, &priorities);
         } else if let Some(tick) =
             boundary.filter(|t| attempt.is_none_or(|a| *t <= a) && wake.is_none_or(|w| *t <= w))
         {
@@ -731,7 +733,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             }
             if let Some(values) = &change.agent_priorities {
                 priorities.clone_from(values);
-                resource = rebuild_waiters(&queue.waiting_since, &priorities);
+                resource = queue.rebuild_waiters(&agents, &priorities);
             }
             applied_ticks.push(tick);
         } else if let Some(tick) = wake.filter(|t| attempt.is_none_or(|a| *t <= a)) {
@@ -874,6 +876,23 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn rebuilt_waiters_retain_priority_and_fifo_order() {
+        let mut context = ABMContext::new(42);
+        let agents = [
+            context.spawn_agent(),
+            context.spawn_agent(),
+            context.spawn_agent(),
+        ];
+        let mut queue = QueueState::new(agents.len());
+        queue.waiting_since = vec![Some(3), Some(1), Some(5)];
+        let mut resource = queue.rebuild_waiters(&agents, &[0, 0, 1]);
+        for index in [2, 1, 0] {
+            assert_eq!(resource.release(), Some(agents[index]));
+        }
+        assert_eq!(resource.release(), None);
+    }
 
     #[test]
     fn admission_order_reconstructs_tied_completion_order() {

@@ -5067,3 +5067,8 @@ Hosted release readiness for this worktree revision remains open.
   recorded order preserved dispatch order when two different service
   durations ended on the same tick. The focused unit test and all 29
   network integration tests passed.
+
+- [x] Verify Kairos waiter reconstruction from queue arrival times
+  and priorities. The rebuilt resource served the highest priority
+  first and preserved arrival order for equal priority. Both network
+  unit tests and all 29 network integration tests passed.
