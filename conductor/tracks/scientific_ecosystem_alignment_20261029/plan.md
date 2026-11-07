@@ -5104,3 +5104,9 @@ Hosted release readiness for this worktree revision remains open.
   inconsistent resource totals. The regression exercises a stale
   retry and an impossible occupancy total. All 30 Rust network
   integration tests passed.
+
+- [x] Verify chained network checkpoints at every completion in the
+  scheduled resource fixture. Each checkpoint continued to the next
+  completion and independently reproduced the full uninterrupted
+  response when resumed to the horizon. Both focused Rust checkpoint
+  tests passed.

@@ -940,3 +940,34 @@ fn network_checkpoint_preserves_pending_service_queue_and_schedule() {
     payload["simulation_options"]["seed"] = json!(43);
     assert!(run(payload).is_err());
 }
+
+#[test]
+fn network_checkpoint_can_pause_again_at_every_completion() {
+    let payload: serde_json::Value =
+        serde_json::from_str(include_str!("fixtures/kairos_network_checkpoint.json")).unwrap();
+    let kernel = KernelBinding::new();
+    let run = |payload| {
+        kernel
+            .simulate_model("bass", payload)
+            .unwrap()
+            .result
+            .unwrap()
+    };
+    let expected = run(payload.clone());
+    let completions = expected["completions"].as_array().unwrap().len();
+    assert!(completions > 2);
+    let mut request = payload.clone();
+    for count in 1..=completions {
+        request["simulation_options"]["pause_after_completions"] = json!(count);
+        let paused = run(request.clone());
+        assert_eq!(paused["status"], "paused", "completion {count}");
+        request["simulation_options"]["resume_checkpoint"] = paused["checkpoint"].clone();
+
+        let mut finish = request.clone();
+        finish["simulation_options"]
+            .as_object_mut()
+            .unwrap()
+            .remove("pause_after_completions");
+        assert_eq!(run(finish), expected, "completion {count}");
+    }
+}
