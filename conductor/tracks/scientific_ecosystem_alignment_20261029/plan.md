@@ -4858,3 +4858,9 @@ Hosted release readiness for this worktree revision remains open.
   pointwise standard errors now share the centering calculation.
   The focused Rust scenario unit tests passed, including agreement
   between variance and squared standard error for adjacent effects.
+
+- [x] Requalify the paired covariance centering change (d8ad3c0f)
+  through the Python 3.15.2 native extension, Julia and installed R.
+  The focused Python grid test and all 16 Julia grid assertions passed.
+  The R grid assertions exited successfully. Maturin built the wheel,
+  and the Python fixture loaded the extension directly from the build.
