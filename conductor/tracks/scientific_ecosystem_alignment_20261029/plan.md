@@ -1133,10 +1133,19 @@ the other competition models and installed binding checks remain open.
   separate from descriptive metrics. The independent interacting
   Lotka–Volterra fixture excludes a zero-weight outlier in both outputs.
   Eighteen focused Rust tests and Clippy passed.
-- [ ] Qualify weighted competition fits in installed Python, Julia and R.
+- [x] Qualify weighted competition fits in installed Python, Julia and R.
 
 - [x] Qualify weighted Lotka–Volterra in installed Python, Julia and R.
   All three bindings excluded the same two-output outlier and returned
   normalized weighted RSS below 1e-10. Python used the Polars fit API.
   Other competition models still require model-specific binding evidence.
   [Fixture and results](evidence/lotka-competition-weights-20261107).
+
+- [x] Verify weighted complementary goods, lock-in and multi-product fits
+  and held-out forecasts in all three bindings. The focused fixtures use
+  explicit reference starts and replace both observations in one zero-weight
+  row with 1e100. Every fit converged and the largest held-out absolute
+  error was below 1.5e-9. Python used Polars for fitting. This evidence
+  qualifies row weights with explicit starts. Automatic lock-in and
+  multi-product convergence remain separate open tasks.
+  [Fixtures and results](evidence/remaining-competition-weights-20261107).
