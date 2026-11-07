@@ -218,6 +218,16 @@ fn bass_rate_remains_finite_when_imitation_innovation_ratio_overflows() {
 }
 
 #[test]
+fn rolling_average_retains_subnormal_window_terms() {
+    let tiny = f64::from_bits(1);
+    let request = json!({"schema_version":"2.0","operation":"preprocess_series",
+        "payload":{"method":"rolling_average","window":2,"values":[tiny,tiny,0.]}});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert_eq!(response["result"]["values"], json!([null,tiny,0.]));
+}
+
+#[test]
 fn rolling_average_recovers_small_terms_after_large_value_exits() {
     let request = innovate_core::json!({
         "schema_version":"2.0","operation":"preprocess_series",

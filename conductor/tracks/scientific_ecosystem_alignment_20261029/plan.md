@@ -6972,3 +6972,8 @@ Hosted release readiness for this worktree revision remains open.
   locked FFI build at b78013fd. For dates and UTC timestamps, each
   accepted 100,000 buckets plus a duplicate and rejected 100,001
   distinct buckets. This matches the Python wheel evidence.
+
+- [x] Preserve subnormal terms in native rolling averages by summing
+  tiny window contributions at a larger scale before rounding the
+  result. The minimum positive binary64 value survives a two-sample
+  constant window. Both focused Rust rolling tests passed.

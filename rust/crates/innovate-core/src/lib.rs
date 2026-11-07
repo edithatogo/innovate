@@ -449,17 +449,31 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             sum = next;
             sum + correction
         };
+        // Accumulate tiny window terms before rounding them to subnormal units.
+        let mut tiny_sum = 0.;
+        let mut add_sample = |value: f64, window: Option<usize>| {
+            let Some(window) = window else { return add(value) };
+            const SCALE: f64 = (1_u64 << 52) as f64;
+            let term = value / window as f64;
+            let current = if term.abs() < f64::MIN_POSITIVE {
+                tiny_sum += (value * SCALE) / window as f64;
+                add(0.)
+            } else {
+                add(term)
+            };
+            current + tiny_sum / SCALE
+        };
         let mut output = Vec::with_capacity(values.len());
         for (index, value) in values.iter().copied().enumerate() {
             let current = if let Some(window) = window {
                 if index >= window {
-                    add(-values[index - window] / window as f64);
+                    add_sample(-values[index - window], Some(window));
                 }
-                let current = add(value / window as f64);
+                let current = add_sample(value, Some(window));
                 output.push((index >= window - 1).then_some(current));
                 current
             } else {
-                let current = add(value);
+                let current = add_sample(value, None);
                 output.push(Some(current));
                 current
             };
