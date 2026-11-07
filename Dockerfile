@@ -11,10 +11,16 @@ COPY pyproject.toml uv.lock Cargo.toml Cargo.lock README.md LICENSE ./
 COPY rust/ rust/
 COPY bindings/python/ bindings/python/
 ENV CARGO_BUILD_JOBS=2
-FROM build-source AS remote-worker-build
+FROM rust:1.99.1-slim-trixie AS remote-worker-build
+RUN apt-get update && apt-get install -y --no-install-recommends build-essential pkg-config && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+COPY Cargo.toml Cargo.lock LICENSE ./
+COPY rust/ rust/
+ENV CARGO_BUILD_JOBS=2
 RUN cargo build --locked --release -p innovate-core --bin innovate-remote-worker
 
-FROM python:3.15.2-slim AS remote-worker
+FROM debian:trixie-slim AS remote-worker
+COPY --from=remote-worker-build /app/LICENSE /usr/local/share/doc/innovate/LICENSE
 COPY --from=remote-worker-build /app/target/release/innovate-remote-worker /usr/local/bin/
 USER 65532:65532
 ENTRYPOINT ["/usr/local/bin/innovate-remote-worker"]

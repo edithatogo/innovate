@@ -7428,3 +7428,8 @@ Hosted release readiness for this worktree revision remains open.
   Maturin macOS arm64 wheel. Normalization, Twine and
   check-wheel-contents passed. This verifies compatibility with
   actual Maturin output from the earlier independent build.
+
+- [x] Define the remote worker image with Rust-only build inputs and
+  a Debian trixie runtime. Both base tags resolved in the registry.
+  The image includes the project licence and preserves its non-root
+  entry point. Hosted image build and execution remain open.
