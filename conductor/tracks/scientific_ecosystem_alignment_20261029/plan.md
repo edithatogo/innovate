@@ -7283,3 +7283,13 @@ Hosted release readiness for this worktree revision remains open.
   Source distribution SHA-256 is
   `e305328e03b198f728cd08a78fc6ac574e98cd80cd7bdfe9431a1d58a5448ee2`.
   Vulnerability coverage and hosted artifacts have separate gates.
+
+- [x] Audit the locked Rust dependencies and the Python wheel's staged
+  dependency environment. RustSec scanned 391 locked crates and exited
+  zero with an unmaintained warning for bincode 2.0.1
+  (RUSTSEC-2025-0141). Cargo.lock Git blob is
+  `ba660cbb3c24164a90a037a7ed2e7c125393436e`. Strict pip-audit
+  found no known vulnerabilities in the seven installed dependencies.
+  The combined scan including Innovate 0.7.0a1 failed because that
+  version is absent from PyPI. These results cover the advisory data
+  used by the two scanners. Git-source and hosted acceptance remain open.
