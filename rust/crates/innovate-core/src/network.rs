@@ -49,7 +49,7 @@ impl QueueState {
         }
     }
 
-    fn rebuild_waiters(&self, agents: &[EntityId], priorities: &[i32]) -> PriorityResource {
+    fn ordered_waiters(&self) -> Vec<(u128, usize)> {
         let mut waiting: Vec<_> = self
             .waiting_since
             .iter()
@@ -57,11 +57,29 @@ impl QueueState {
             .filter_map(|(index, tick)| tick.map(|tick| (tick, index)))
             .collect();
         waiting.sort_unstable();
+        waiting
+    }
+
+    fn rebuild_waiters(&self, agents: &[EntityId], priorities: &[i32]) -> PriorityResource {
         let mut resource = PriorityResource::new("adoption_waiters", 0);
-        for (tick, index) in waiting {
+        for (tick, index) in self.ordered_waiters() {
             resource.request(agents[index], priorities[index], SimTime::from_ticks(tick));
         }
         resource
+    }
+
+    fn rebuild_deadlines(&self, agents: &[EntityId]) -> RenegingQueue {
+        let mut reneging = RenegingQueue::new();
+        for (arrival, index) in self.ordered_waiters() {
+            if let Some(deadline) = self.deadlines[index] {
+                reneging.request_with_deadline(
+                    agents[index],
+                    SimTime::from_ticks(arrival),
+                    SimTime::from_ticks(deadline - arrival),
+                );
+            }
+        }
+        reneging
     }
 
     fn schedule_retry(&mut self, policy: Option<Retry>, index: usize, now: u128) {
@@ -506,7 +524,6 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     let mut max_wait_ticks = o.max_wait_ticks;
     let mut max_queue_length = o.max_queue_length;
     let mut in_service = 0_u64;
-    let mut reneging = RenegingQueue::new();
     let mut queue = QueueState::new(o.population);
     let mut service_starts = Vec::new();
     let mut abandoned = Vec::new();
@@ -679,7 +696,10 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 && wake.is_none_or(|w| *t <= w)
         }) {
             now = tick;
-            for id in reneging.expire_reneged(SimTime::from_ticks(now)) {
+            for id in queue
+                .rebuild_deadlines(&agents)
+                .expire_reneged(SimTime::from_ticks(now))
+            {
                 if queue.deadlines[id.index as usize].take().is_some() {
                     let index = id.index as usize;
                     queue.schedule_retry(retry_policy, index, now);
@@ -787,11 +807,6 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             resource.request(id, priorities[index], SimTime::from_ticks(now));
             if let Some(wait) = max_wait_ticks.filter(|_| in_service >= capacity) {
                 queue.deadlines[index] = Some(now + u128::from(wait));
-                reneging.request_with_deadline(
-                    id,
-                    SimTime::from_ticks(now),
-                    SimTime::from_ticks(u128::from(wait)),
-                );
             }
         } else {
             break;
@@ -876,6 +891,25 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn rebuilt_deadlines_keep_original_expiry_and_arrival_order() {
+        let mut context = ABMContext::new(42);
+        let agents = [
+            context.spawn_agent(),
+            context.spawn_agent(),
+            context.spawn_agent(),
+        ];
+        let mut queue = QueueState::new(agents.len());
+        queue.waiting_since = vec![Some(3), Some(1), Some(4)];
+        queue.deadlines = vec![Some(5), Some(5), None];
+        let mut deadlines = queue.rebuild_deadlines(&agents);
+        assert!(deadlines.expire_reneged(SimTime::from_ticks(4)).is_empty());
+        assert_eq!(
+            deadlines.expire_reneged(SimTime::from_ticks(5)),
+            [agents[1], agents[0]]
+        );
+    }
 
     #[test]
     fn rebuilt_waiters_retain_priority_and_fifo_order() {

@@ -5072,3 +5072,8 @@ Hosted release readiness for this worktree revision remains open.
   and priorities. The rebuilt resource served the highest priority
   first and preserved arrival order for equal priority. Both network
   unit tests and all 29 network integration tests passed.
+
+- [x] Reconstruct the Kairos reneging queue from active waiter
+  arrival times and stored deadlines. Two waiters with different
+  wait limits and a tied deadline expired in arrival order. All
+  three network unit tests and all 29 network integration tests passed.
