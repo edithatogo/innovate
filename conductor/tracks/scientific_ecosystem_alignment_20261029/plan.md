@@ -7190,3 +7190,8 @@ Hosted release readiness for this worktree revision remains open.
   byte-identical (SHA-256 e0c1dc33a8f7829d75c47100fadc944bf231a1b8b2b3936feacf0421739bcdce).
   The installed Apache licence also matched the root file. The archive
   SHA-256 was 1d1e948d8498fae7f317e2bcd55abfb5538153764d92fc7cf877923183a497f9.
+
+- [x] Run the complete R native conformance suite from the local
+  binary archive installation. All assertions passed with
+  INNOVATE_NATIVE_LIBRARY unset. This exercises bundled discovery
+  from the binary archive on arm64 macOS.
