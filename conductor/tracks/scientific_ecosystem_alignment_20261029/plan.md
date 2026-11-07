@@ -671,3 +671,12 @@ PriorityResource and requires an explicit integration for wait expiry.
 Source: ba7fe987. Eleven focused Rust tests, 40 installed
 Python tests, 180 Julia assertions and R conformance passed. Scheduled capacity,
 balking, optional retries and forcing interoperability remain open.
+
+## Scheduled Kairos service capacity
+
+- [x] Admit priority waiters on increases and preserve active services on decreases.
+- [x] Verify pause/reopen, resource accounting and Python, Julia and R payloads.
+
+Source: 265d36ef. Twelve focused Rust tests, 40 installed
+Python tests, 181 Julia assertions and R conformance passed. Balking, optional
+retries, historical model forcing and release qualification remain open.
