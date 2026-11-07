@@ -6155,3 +6155,8 @@ Hosted release readiness for this worktree revision remains open.
   changed market size with the embedded replay payload diagnostic.
   Python required a nonincremental rebuild after the first build
   reused stale native output.
+
+- [x] Guard the numeric replay fix at the public Rust scenario
+  boundary. The generated network artifact accepts market size 1
+  in place of 1.0 and rejects a changed market size of 2. All 13
+  scenario-filtered boundary tests passed.

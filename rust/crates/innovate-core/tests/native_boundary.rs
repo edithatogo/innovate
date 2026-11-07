@@ -4020,6 +4020,19 @@ fn kairos_scenario_artifact_replays_continuous_hazard_wakeup() {
         run(&row["artifact"]["replay_request"])["result"]["executions"][0]["result"],
         row["result"]
     );
+    let mut import = json!({"schema_version":"2.0","operation":"import_scenario_artifact",
+        "payload":{"artifact":row["artifact"]}});
+    let market = &mut import["payload"]["artifact"]["replay_request"]["payload"]["scenarios"][0]["simulation"]
+        ["parameters"]["m"];
+    assert_eq!(*market, json!(1.0));
+    *market = json!(1);
+    assert_eq!(run(&import)["result"]["replay_available"], true);
+    import["payload"]["artifact"]["replay_request"]["payload"]["scenarios"][0]["simulation"]["parameters"]
+        ["m"] = json!(2);
+    assert_eq!(
+        run(&import)["error"]["message"],
+        "submitted simulation does not resolve to the embedded replay payload"
+    );
 }
 
 #[test]
