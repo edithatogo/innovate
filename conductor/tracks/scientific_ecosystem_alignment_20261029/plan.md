@@ -5772,3 +5772,7 @@ Hosted release readiness for this worktree revision remains open.
   native scenario test verified the new operation returns the same
   result as direct scenario import. All three focused extension
   boundary tests also passed. Binding reruns remain open.
+
+- [x] Require exactly one artifact object for extension artifact import.
+  The native boundary test verified valid scenario import and rejection
+  of a raw dataset payload before it could enter the dataset ingester.

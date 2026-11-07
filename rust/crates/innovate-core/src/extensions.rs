@@ -221,6 +221,17 @@ fn is_scenario_artifact(artifact: &Value) -> bool {
 }
 
 pub(crate) fn import_serialized_artifact(request: &Value) -> Value {
+    if !request["payload"].as_object().is_some_and(|fields| {
+        fields.len() == 1 && fields.get("artifact").is_some_and(Value::is_object)
+    }) {
+        return json!({
+            "schema_version":crate::KERNEL_SCHEMA_VERSION,
+            "operation":"import_extension_artifact",
+            "result":null,
+            "error":{"code":"invalid_request","message":"extension import requires a single artifact object"},
+            "metadata":{"runtime":"rust_native"},
+        });
+    }
     let mut response = if is_scenario_artifact(&request["payload"]["artifact"]) {
         crate::scenario::import_artifact(request)
     } else {
