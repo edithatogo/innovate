@@ -980,11 +980,10 @@ the other competition models and installed binding checks remain open.
 - [x] Verify automatic complementary-goods fitting against the independent
   forced trajectory and held-out forecast. The explicit-start case continues
   to run with the same oracles. All four complementary tests and Clippy passed.
-- [ ] Improve automatic multi-product and lock-in starts or optimization.
-  Both independent forced fixtures returned non-converged automatic fits
-  at their existing 200-iteration budget. Alternative base seeds were
-  investigated and discarded. The explicit-start conformance checks remain
-  in place, and automatic-start qualification remains open for these models.
+- [x] Improve automatic multi-product and lock-in starts for the independent
+  forced fixtures. The covariate-aware start described below meets the
+  existing convergence and held-out accuracy gates at 200 iterations
+  through Rust, Python, Julia and R.
 
 - [x] Qualify complementary-goods automatic starts in installed Python,
   Julia and R. Both start modes converge and reproduce the independent
@@ -2666,3 +2665,9 @@ the other competition models and installed binding checks remain open.
   held-out errors 7.70e-8 and 4.06e-9. The rebuilt Python 3.15.2 wheel,
   focused Rust regression and Clippy passed. Julia and R verification
   for the new start remains open.
+
+- [x] Qualify the forced automatic starts in Julia and installed R using
+  the C ABI rebuilt from b38ea0bc. Both fixtures converged within the
+  existing 200 trajectory iterations. Held-out errors were 7.70e-8
+  and 4.06e-9 in both bindings, in line with Python 3.15.2. Automatic
+  starts with parameter events remain a separate qualification case.
