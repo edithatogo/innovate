@@ -2,6 +2,7 @@ use crate::{KERNEL_SCHEMA_VERSION, KernelBinding, batch_workers, run_ordered_chu
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use std::collections::{HashMap, HashSet};
+use std::time::{Instant, SystemTime, UNIX_EPOCH};
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -9,6 +10,7 @@ struct Scenario {
     id: String,
     model_key: String,
     simulation: Value,
+    notes: Option<String>,
     specification: Option<ScenarioSpecification>,
 }
 
@@ -115,6 +117,11 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
     let Some(workers) = batch_workers(&request["payload"]) else {
         return invalid("workers must be an integer in 1..=32");
     };
+    let include_metadata = match request["payload"].get("include_execution_metadata") {
+        None => false,
+        Some(Value::Bool(enabled)) => *enabled,
+        Some(_) => return invalid("include_execution_metadata must be a boolean"),
+    };
     let scenarios: Vec<Scenario> =
         match serde_json::from_value(request["payload"]["scenarios"].clone()) {
             Ok(scenarios) => scenarios,
@@ -151,6 +158,16 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
         if let Some(specification) = &scenario.specification {
             row["specification"] = json!(specification);
         }
+        if include_metadata {
+            row["execution_metadata"] = json!({
+                "kernel_version":env!("CARGO_PKG_VERSION"),
+                "simulation":scenario.simulation,
+                "notes":scenario.notes,
+                "kernel":null,
+                "started_at_unix_seconds":null,
+                "elapsed_seconds":null,
+            });
+        }
         row
     };
     let executions = run_ordered_chunks(
@@ -160,10 +177,32 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
             chunk
                 .iter()
                 .map(|scenario| {
-                    match binding.simulate_model(&scenario.model_key, scenario.simulation.clone()) {
-                        Ok(response) => row(scenario, response.result, Value::Null),
-                        Err(error) => row(scenario, None, json!(error)),
+                    let timing = include_metadata.then(|| (SystemTime::now(), Instant::now()));
+                    let execution =
+                        binding.simulate_model(&scenario.model_key, scenario.simulation.clone());
+                    let timing = timing.map(|(start, clock)| {
+                        (
+                            start
+                                .duration_since(UNIX_EPOCH)
+                                .ok()
+                                .map(|duration| duration.as_secs_f64()),
+                            clock.elapsed().as_secs_f64(),
+                        )
+                    });
+                    let (mut row, kernel) = match execution {
+                        Ok(response) => (
+                            row(scenario, response.result, Value::Null),
+                            response.metadata,
+                        ),
+                        Err(error) => (row(scenario, None, json!(error)), Value::Null),
+                    };
+                    if let Some((start, elapsed)) = timing {
+                        let metadata = &mut row["execution_metadata"];
+                        metadata["started_at_unix_seconds"] = json!(start);
+                        metadata["elapsed_seconds"] = json!(elapsed);
+                        metadata["kernel"] = kernel;
                     }
+                    row
                 })
                 .collect()
         },

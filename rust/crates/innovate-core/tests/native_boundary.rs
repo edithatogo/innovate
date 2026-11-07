@@ -833,6 +833,20 @@ fn scenario_grid_runs_in_order_and_retains_individual_errors() {
 
     request["payload"]["workers"] = json!(2);
     assert_eq!(run(&request), response);
+    request["payload"]["include_execution_metadata"] = json!(true);
+    request["payload"]["scenarios"][0]["notes"] = json!("baseline run");
+    let response = run(&request);
+    let rows = response["result"]["executions"].as_array().unwrap();
+    let metadata = &rows[0]["execution_metadata"];
+    assert_eq!(metadata["simulation"], simulation);
+    assert_eq!(metadata["notes"], "baseline run");
+    assert_eq!(metadata["kernel"]["runtime"], "rust_native");
+    assert!(metadata["elapsed_seconds"].as_f64().unwrap() >= 0.);
+    assert!(metadata["started_at_unix_seconds"].as_f64().unwrap() > 0.);
+    assert!(rows[1]["execution_metadata"]["kernel"].is_null());
+    request["payload"]["include_execution_metadata"] = json!("yes");
+    assert_eq!(run(&request)["error"]["code"], "invalid_request");
+    request["payload"]["include_execution_metadata"] = json!(false);
     request["payload"]["workers"] = json!(33);
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
     request["payload"]["workers"] = json!(2);
