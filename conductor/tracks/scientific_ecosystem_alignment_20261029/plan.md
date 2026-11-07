@@ -7487,3 +7487,9 @@ Hosted release readiness for this worktree revision remains open.
   package. With bundled library discovery, all three parsed responses
   matched, including limits, eligible operations and identity scope.
   This qualifies local contract parity. Hosted transport remains open.
+
+- [x] Send the same read-scoped remote request through the installed
+  optimized Python, Julia and R bindings. Each returned the same
+  unsupported_operation denial and preserved the trace ID. Only the
+  measured duration was excluded from comparison. This exercises local
+  policy enforcement with caller-supplied identity.
