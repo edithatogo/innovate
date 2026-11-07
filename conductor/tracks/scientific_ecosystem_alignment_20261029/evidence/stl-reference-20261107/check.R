@@ -39,3 +39,26 @@ for (outer in 0:6) {
   cat(sprintf("%d %.15g %.15g %d\n", outer, fit$time.series[41, "remainder"],
               fit$weights[41], sum(fit$weights == 0)))
 }
+
+cat("partial_cycle length period max_component_error\n")
+for (n in c(13L, 37L, 79L, 81L)) {
+  for (period in c(3L, 4L)) {
+    i <- seq_len(n)
+    values <- 5 + i / 4 + sin(2 * pi * i / period) + cos(i * 0.31) / 4
+    reference <- stats::stl(
+      stats::ts(values, frequency = period), s.window = 7, t.window = 13,
+      l.window = 5, s.degree = 1, t.degree = 1, l.degree = 1,
+      s.jump = 2, t.jump = 3, l.jump = 2, inner = 2, outer = 0
+    )$time.series
+    native <- innovate.R::kernel_seasonal_decomposition(
+      values, period, 13L, historical = TRUE, inner_iterations = 2L,
+      seasonal_span = 7L, low_pass_span = 5L, seasonal_jump = 2L,
+      trend_jump = 3L, low_pass_jump = 2L
+    )
+    actual <- cbind(unlist(native$seasonal), unlist(native$trend), unlist(native$residual))
+    stopifnot(identical(dim(actual), dim(reference)))
+    error <- max(abs(actual - reference))
+    stopifnot(error < tolerance)
+    cat(sprintf("%d %d %.15g\n", n, period, error))
+  }
+}

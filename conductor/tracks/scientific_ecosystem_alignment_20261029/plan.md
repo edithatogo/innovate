@@ -1439,3 +1439,9 @@ the other competition models and installed binding checks remain open.
   The rebuilt Python wheel, Julia project, and installed R package
   matched stats::stl within 6.37e-12 at seasonal/trend/low-pass degrees
   0/1/0 and jumps 2/3/5 with robust reweighting.
+
+- [x] Qualify historical STL phase alignment on series that end in a
+  partial cycle. All eight length/period combinations matched the
+  independent R reference within 2.10e-13, including 13 observations
+  with a seasonal span exceeding each phase subseries. The R checker
+  asserts agreement for each component and verifies output shape.
