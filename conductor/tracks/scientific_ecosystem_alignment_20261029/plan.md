@@ -4424,3 +4424,7 @@ Hosted release readiness for this worktree revision remains open.
   in pyproject.toml. The checkout now uses the same configuration
   as the source archive. Thirteen focused Python ingestion checks and
   seven Rust dataset checks passed.
+- [x] Run the full Python native suite via default discovery after
+  pytest configuration consolidation. All 101 tests passed under
+  Python 3.15.2 using the rebuilt extension in an isolated import
+  directory, including policy and benchmark receipt tests.
