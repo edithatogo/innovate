@@ -3911,3 +3911,7 @@ Hosted release readiness for this worktree revision remains open.
   The selected start matches the optimizer's final loss, its initial
   loss is at least as high, and both coordinate vectors match the
   fitted parameter count. All four fit-quality tests passed.
+- [x] Verify per-start initial and final loss and coordinate vectors
+  through the rebuilt Python 3.15.2 wheel, Julia and freshly installed
+  R at 2a5d2c0e. All three matched the selected start to the optimizer
+  summary on an analytic Logistic fit.
