@@ -2548,3 +2548,9 @@ the other competition models and installed binding checks remain open.
   mismatch and cross-pair reuse. All ten Kairos tests and Clippy passed.
   Seed checks validate assignment only. Binding and inference qualification
   remain open.
+
+- [x] Qualify paired seed assignment through the rebuilt Python 3.15.2
+  wheel, Julia and installed R. Each accepted matched, distinct pair
+  seeds and rejected both cross-pair reuse and within-pair mismatch.
+  All six scenario executions remained available in each response.
+  Sampling-based inference qualification remains open.
