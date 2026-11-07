@@ -5788,3 +5788,8 @@ Hosted release readiness for this worktree revision remains open.
   execute the full consumer suites, including the extension registry
   and dataset-provider checks. Actionlint and Ruff passed locally.
   Hosted results remain open.
+
+- [x] Synchronize Python native stubs with five existing IPC exports.
+  Basedpyright using repo-local Python 3.15.2 now reports zero errors
+  and one warning about the extension being absent from the source
+  directory. Ruff and Cargo formatting checks passed.
