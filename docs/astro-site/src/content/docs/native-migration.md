@@ -1186,6 +1186,22 @@ mpirun -n 2 .venv-native/bin/python scripts/run_native_benchmarks.py \
   --output "$receipt_dir/rank-{rank}.json"
 ```
 
+For an existing Slurm allocation, launch a step with a shared receipt
+directory and the same native wheel available on every task. The
+example requests two tasks and one CPU per task.
+
+```bash
+mkdir -p "$receipt_dir"
+srun --ntasks=2 --cpus-per-task=1 .venv-native/bin/python \
+  scripts/run_native_benchmarks.py --slurm-shard --slurm-allocation \
+  --policy fast --output "$receipt_dir/rank-{rank}.json"
+```
+
+Set `receipt_dir` to a fresh directory on a filesystem visible to all
+tasks. The runner uses `SLURM_PROCID` and `SLURM_STEP_NUM_TASKS` to select
+cases. This path has been exercised with simulated step variables.
+Live Slurm qualification remains open.
+
 Each receipt records its rank, world size, and selected case IDs.
 The runner refuses to overwrite rank receipts. Verify the shard set
 against a serial run of the same policy and installed build.

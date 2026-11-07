@@ -3803,3 +3803,7 @@ Hosted release readiness for this worktree revision remains open.
   Legacy MPI receipts without a launcher remain readable. A local
   two-rank MPI set passed and replacing its second rank with an
   equivalent simulated Slurm receipt failed. Ruff passed.
+- [x] Document the Slurm task launch, shared receipt path and
+  verification procedure. The documented runner options passed with
+  simulated step variables and two receipts matching serial. Live
+  Slurm execution remains open.
