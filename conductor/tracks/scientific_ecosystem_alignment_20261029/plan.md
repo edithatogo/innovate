@@ -6573,3 +6573,10 @@ Hosted release readiness for this worktree revision remains open.
   guide, including the two methods' baseline convergence behavior and
   the observed capacity undercoverage at the native draw limit. The
   calibration gate remains open.
+
+- [x] Preserve the validated time basis in scenario grid rankings. When
+  all ranked scenarios specify the same units and reference year,
+  return those fields in ranking.time_basis as in pairwise comparisons.
+  The regression passed alongside all 13 scenario boundary tests
+  with incremental compilation disabled. Installed binding readback
+  remains open for the new field.

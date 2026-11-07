@@ -1946,6 +1946,11 @@ fn scenario_grid_compares_aligned_adoption_paths() {
         "invalid_comparison"
     );
     request["payload"]["scenarios"][1]["specification"] = spec;
+    request["payload"]["rank_scenarios"] = json!(["base", "alt"]);
+    assert_eq!(
+        run(&request)["result"]["ranking"]["time_basis"],
+        json!({"time_unit":"year","reference_year":2026})
+    );
     assert_eq!(
         run(&request)["result"]["comparisons"][0]["result"]["time_basis"],
         json!({"time_unit":"year","reference_year":2026})

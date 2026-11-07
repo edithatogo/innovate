@@ -713,7 +713,7 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
                     .and_then(|metric| {
                         rank_paths(&paths, &ids, metric, &request["payload"]["rank_threshold"])
                     }) {
-                    Ok(rows) => json!({"metric":metric,"rows":rows,"error":null}),
+                    Ok(ranking) => ranking,
                     Err(message) => {
                         json!({"rows":null,"error":{"code":"invalid_ranking","message":message}})
                     }
@@ -756,11 +756,11 @@ fn rank_paths(
     ids: &[String],
     metric: &str,
     threshold: &Value,
-) -> Result<Vec<Value>, &'static str> {
+) -> Result<Value, &'static str> {
     if ids.len() < 2 || ids.iter().collect::<std::collections::HashSet<_>>().len() != ids.len() {
         return Err("ranking requires at least two distinct scenario IDs");
     }
-    common_time_basis(paths, ids.iter().map(String::as_str))?;
+    let basis = common_time_basis(paths, ids.iter().map(String::as_str))?;
     let threshold = if metric == "time_to_threshold" {
         Some(
             threshold
@@ -797,7 +797,7 @@ fn rank_paths(
         (None, None) => std::cmp::Ordering::Equal,
     });
     let mut place = 1;
-    Ok(scores
+    let rows: Vec<_> = scores
         .iter()
         .enumerate()
         .map(|(index, &(id, score))| {
@@ -806,7 +806,10 @@ fn rank_paths(
             }
             json!({"id":id,"place":score.map(|_| place),(metric):score})
         })
-        .collect())
+        .collect();
+    let mut ranking = json!({"metric":metric,"rows":rows,"error":null});
+    add_time_basis(&mut ranking, basis);
+    Ok(ranking)
 }
 
 #[derive(Deserialize)]
