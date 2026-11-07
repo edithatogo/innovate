@@ -6785,3 +6785,9 @@ Hosted release readiness for this worktree revision remains open.
   absence and adoption counts. The 1,760 requests (85.94%) fell within
   the test bound for the analytic 86.47%. Reused unchanged native builds
   from 4947d6b4.
+
+- [x] Verify serial and parallel scenario execution on the combined
+  Kairos forcing fixture. Python 3.15.2, Julia and installed R each
+  returned the same 32 full execution records in input order with
+  one and 32 workers. Python also verified effective seeds 0–31.
+  Reused unchanged native builds from 4947d6b4.
