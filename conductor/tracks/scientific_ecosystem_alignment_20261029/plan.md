@@ -6666,3 +6666,9 @@ Hosted release readiness for this worktree revision remains open.
   uninterrupted result at the first completion and ticks 0–19 across
   33 seeds. The 4947d6b4 builds were reused after confirming unchanged
   runtime, binding and Cargo inputs.
+
+- [x] Verify continuous-hazard checkpoint transfer at seed 42 and
+  tick 5. Python 3.15.2, Julia and installed R emitted identical
+  checkpoint bytes. Julia resumed Python's checkpoint, R resumed
+  Julia's, and Python resumed R's. Each full result matched its
+  uninterrupted run using the 4947d6b4 native builds.
