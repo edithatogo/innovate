@@ -406,14 +406,21 @@ fn sarima_near_unit_ar1_matches_exact_stationary_likelihood() {
 
 #[test]
 fn sarima_mixed_fits_match_independent_likelihood() {
-    for (fixture, seasonal_order) in [
+    for (fixture, seasonal_order, coefficient_tolerance) in [
         (
             include_str!("fixtures/sarima_mixed_ar1_ma1.json"),
             [0, 0, 0, 0],
+            2e-5,
         ),
         (
             include_str!("fixtures/sarima_mixed_seasonal.json"),
             [1, 0, 0, 4],
+            2e-5,
+        ),
+        (
+            include_str!("fixtures/sarima_near_cancellation.json"),
+            [0, 0, 0, 0],
+            4e-5,
         ),
     ] {
         let reference: serde_json::Value = serde_json::from_str(fixture).unwrap();
@@ -427,7 +434,10 @@ fn sarima_mixed_fits_match_independent_likelihood() {
         let expected = reference["coefficients"].as_array().unwrap();
         assert_eq!(actual.len(), expected.len());
         for (actual, expected) in actual.iter().zip(expected) {
-            assert!((actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 2e-5);
+            assert!(
+                (actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs()
+                    < coefficient_tolerance
+            );
         }
         assert!(
             (fit["log_likelihood"].as_f64().unwrap()

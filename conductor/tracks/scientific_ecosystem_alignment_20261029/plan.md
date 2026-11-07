@@ -2632,3 +2632,9 @@ the other competition models and installed binding checks remain open.
   and installed R through the native preprocessing request. Python and
   Julia agreed exactly. R agreed within 1e-10 on the coefficients,
   likelihood, and all 360 fitted and residual values.
+
+- [x] Qualify one near-cancellation ARMA(1,1) fixture on 500 observations.
+  Seed 872 uses generating AR 0.8 and MA -0.77. Of four R starts, only
+  one converged. Rust agreed with it within 3.20e-5 on coefficients and
+  1.20e-8 on log likelihood. Six focused Rust SARIMA tests passed.
+  This qualifies one realized series, with broader optimizer coverage open.
