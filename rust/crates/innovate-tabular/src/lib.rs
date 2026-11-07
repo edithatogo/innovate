@@ -194,11 +194,21 @@ fn read_ipc(data: &[u8]) -> PolarsResult<DataFrame> {
 
 /// Encode a Polars frame as an IPC file with a leading schema message.
 pub fn export_ipc_file(data: &[u8]) -> PolarsResult<Vec<u8>> {
-    let mut frame = read_ipc(data)?;
+    let (mut frame, metadata) = if data.starts_with(b"ARROW1") {
+        let mut reader = IpcReader::new(Cursor::new(data));
+        let metadata = reader.custom_metadata()?;
+        (reader.finish()?, metadata)
+    } else {
+        let mut reader = IpcStreamReader::new(Cursor::new(data));
+        let metadata = reader.custom_metadata()?;
+        (reader.finish()?, metadata)
+    };
     let mut bytes = Vec::new();
-    IpcWriter::new(&mut bytes)
-        .with_compat_level(CompatLevel::oldest())
-        .finish(&mut frame)?;
+    let mut writer = IpcWriter::new(&mut bytes).with_compat_level(CompatLevel::oldest());
+    if let Some(metadata) = metadata {
+        writer.set_custom_schema_metadata(metadata);
+    }
+    writer.finish(&mut frame)?;
     Ok(bytes)
 }
 

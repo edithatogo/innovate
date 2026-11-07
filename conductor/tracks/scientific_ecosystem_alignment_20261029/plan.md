@@ -5981,3 +5981,9 @@ Hosted release readiness for this worktree revision remains open.
   streams and, after Julia called the Rust exporter, all four rewritten
   files with matching IDs, Unicode text and nulls. Documented the
   silent failure and retained the untouched-file compatibility gate.
+
+- [x] Preserve custom Arrow schema metadata in the Rust IPC file
+  exporter for both file and stream inputs. The Polars boundary test
+  verifies a Unicode provenance value alongside nullable typed columns
+  and the leading schema message. All ten tabular boundary tests passed.
+  Field-level metadata and consumer readback remain separate checks.
