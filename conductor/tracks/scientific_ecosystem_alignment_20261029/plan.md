@@ -5219,3 +5219,8 @@ Hosted release readiness for this worktree revision remains open.
   Baseline and intervention identify adoption-count and tick pauses.
   Network identifies completion-count and tick pauses. The focused
   Rust discovery test verified the family-specific capabilities.
+
+- [x] Read native checkpoint discovery through Python 3.15.2,
+  Julia and installed R. The focused checks recovered the distinct
+  adoption and service-completion pause controls. Sequential builds
+  after cleaning generated artifacts resolved the initial disk limit.
