@@ -3850,3 +3850,8 @@ Hosted release readiness for this worktree revision remains open.
   now retain full rank. An unrepresentable raw norm is null in JSON
   while its normalized column remains usable. All eight Rust library
   tests and focused Clippy passed. Global identifiability remains open.
+- [x] Regress the scaled-rank change at native source 9fcd4a1d across
+  fitting quality, complementary goods, historical Logistic,
+  multi-generation and competition. All 60 selected Rust tests and
+  six competition and multi-generation tests in the rebuilt Python
+  3.15.2 wheel passed. This is local fit regression evidence.
