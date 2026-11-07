@@ -5139,3 +5139,9 @@ Hosted release readiness for this worktree revision remains open.
   uninterrupted result. All 32 network integration tests passed
   before expanding the cutoff fixture, and all three checkpoint tests
   passed with the expanded fixture. Binding qualification remains open.
+
+- [x] Retain tick-zero checkpoint regressions for DES, homogeneous
+  ABM and the network engine in the Python, Julia and R consumer
+  suites. The focused Python test, six Julia assertions and installed
+  R checks reproduced the uninterrupted result for every engine.
+  Python used the rebuilt native extension from the wheel build.

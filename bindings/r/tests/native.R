@@ -807,3 +807,17 @@ for (origin in c(0, 1024)) {
   stopifnot(identical(unlist(categories),
     c("Innovators", "Early Adopters", "Early Majority", "Late Majority")))
 }
+
+for (engine in c("kairos_des", "kairos_abm", "kairos_network")) {
+  payload <- jsonlite::fromJSON(fixture_path("kairos_network_checkpoint.json"), simplifyVector=FALSE)
+  if (engine != "kairos_network") {
+    payload$simulation_options <- list(engine=engine, seed=42, population=6, ticks_per_unit=1)
+  }
+  expected <- kernel_simulate_model("bass", payload)$result
+  payload$simulation_options$pause_at_tick <- 0
+  paused <- kernel_simulate_model("bass", payload)$result
+  stopifnot(identical(paused$status, "paused"))
+  payload$simulation_options$pause_at_tick <- NULL
+  payload$simulation_options$resume_checkpoint <- paused$checkpoint
+  stopifnot(identical(kernel_simulate_model("bass", payload)$result, expected))
+}

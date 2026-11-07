@@ -1662,3 +1662,21 @@ def test_adopter_classification_preserves_irregular_time_grids():
         time = list(range(origin, origin + 4))
         result = innovate.execute("categorize_adopters", time=time, adoption_rate=[0, 1, 0, 1])["result"]
         assert result["category"] == ["Innovators", "Early Adopters", "Early Majority", "Late Majority"]
+
+
+def test_kairos_tick_checkpoint_resume():
+    fixture = Path(__file__).parents[2] / "rust/crates/innovate-core/tests/fixtures/kairos_network_checkpoint.json"
+    for engine in ("kairos_des", "kairos_abm", "kairos_network"):
+        payload = json.loads(fixture.read_text())
+        if engine != "kairos_network":
+            payload["simulation_options"] = {
+                "engine": engine, "seed": 42, "population": 6, "ticks_per_unit": 1,
+            }
+        expected = innovate.execute("simulate_model", "bass", **payload)["result"]
+        options = payload["simulation_options"]
+        options["pause_at_tick"] = 0
+        paused = innovate.execute("simulate_model", "bass", **payload)["result"]
+        assert paused["status"] == "paused"
+        del options["pause_at_tick"]
+        options["resume_checkpoint"] = paused["checkpoint"]
+        assert innovate.execute("simulate_model", "bass", **payload)["result"] == expected

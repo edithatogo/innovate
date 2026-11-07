@@ -864,3 +864,22 @@ end
         @test result["category"] == ["Innovators", "Early Adopters", "Early Majority", "Late Majority"]
     end
 end
+
+@testset "Kairos tick checkpoint resume" begin
+    fixture = joinpath(@__DIR__, "../../../rust/crates/innovate-core/tests/fixtures/kairos_network_checkpoint.json")
+    for engine in ("kairos_des", "kairos_abm", "kairos_network")
+        payload = Innovate.JSON.parsefile(fixture)
+        if engine != "kairos_network"
+            payload["simulation_options"] = Dict{String,Any}(
+                "engine"=>engine, "seed"=>42, "population"=>6, "ticks_per_unit"=>1)
+        end
+        expected = kernel_simulate_model("bass", payload)["result"]
+        options = payload["simulation_options"]
+        options["pause_at_tick"] = 0
+        paused = kernel_simulate_model("bass", payload)["result"]
+        @test paused["status"] == "paused"
+        delete!(options, "pause_at_tick")
+        options["resume_checkpoint"] = paused["checkpoint"]
+        @test kernel_simulate_model("bass", payload)["result"] == expected
+    end
+end
