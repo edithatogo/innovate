@@ -286,3 +286,37 @@ pub fn scenario_grid_ipc(data: &[u8], mut payload: Value) -> PolarsResult<String
         .to_string(),
     ))
 }
+
+/// Encode the ordered execution rows of a successful grid envelope as Arrow IPC.
+/// Nested results, artifacts and errors retain their full JSON representation.
+pub fn scenario_executions_ipc(response: &Value) -> PolarsResult<Vec<u8>> {
+    if response["operation"] != "execute_scenario_grid" || !response["error"].is_null() {
+        polars_bail!(SchemaMismatch: "expected a successful scenario grid envelope");
+    }
+    let rows = response["result"]["executions"]
+        .as_array()
+        .ok_or_else(|| polars_err!(SchemaMismatch: "missing scenario execution rows"))?;
+    let mut ids = Vec::with_capacity(rows.len());
+    let mut models = Vec::with_capacity(rows.len());
+    let mut successful = Vec::with_capacity(rows.len());
+    let mut encoded = Vec::with_capacity(rows.len());
+    for row in rows {
+        ids.push(
+            row["id"]
+                .as_str()
+                .ok_or_else(|| polars_err!(SchemaMismatch: "missing scenario ID"))?,
+        );
+        models.push(
+            row["model_key"]
+                .as_str()
+                .ok_or_else(|| polars_err!(SchemaMismatch: "missing scenario model key"))?,
+        );
+        successful.push(row["error"].is_null());
+        encoded.push(row.to_string());
+    }
+    let mut frame = df!("scenario_id" => ids, "model_key" => models,
+        "successful" => successful, "execution_json" => encoded)?;
+    let mut bytes = Vec::new();
+    IpcWriter::new(&mut bytes).finish(&mut frame)?;
+    Ok(bytes)
+}

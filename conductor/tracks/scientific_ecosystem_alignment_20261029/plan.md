@@ -2086,3 +2086,10 @@ the other competition models and installed binding checks remain open.
   Both returned the analytic Logistic value of 50 and rejected malformed
   IPC from the shared fixture. The rebuilt installed R package, locked
   FFI test and focused Clippy passed. Result transport remains JSON.
+
+- [x] Export ordered scenario execution rows as Arrow IPC in Rust and
+  expose them as a Polars frame in Python. Index columns retain scenario
+  ID, model and status. The execution_json column preserves nested
+  results, artifacts and errors, including full-width seeds. Grid-level
+  comparisons remain in the JSON envelope. All seven tabular tests,
+  focused Clippy and the rebuilt Python 3.15 wheel smoke test passed.

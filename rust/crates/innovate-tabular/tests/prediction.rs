@@ -130,3 +130,38 @@ fn arrow_scenario_grid_supplies_time_and_rejects_conflicting_times() {
     assert!(innovate_tabular::scenario_grid_ipc(&bytes, payload).is_err());
     assert!(innovate_tabular::scenario_grid_ipc(&bytes, json!({"scenarios":[1]})).is_err());
 }
+
+#[test]
+fn scenario_arrow_execution_rows_preserve_nested_data_and_order() {
+    let rows = json!([
+        {"id":"a","model_key":"bass","result":{"counts":[1,2],"metadata":{"seed":u64::MAX}},"error":null},
+        {"id":"b","model_key":"unknown","result":null,"error":{"code":"unsupported_native_operation"}}
+    ]);
+    let envelope = json!({"operation":"execute_scenario_grid","error":null,
+        "result":{"executions":rows}});
+    let bytes = innovate_tabular::scenario_executions_ipc(&envelope).unwrap();
+    let frame = IpcReader::new(std::io::Cursor::new(bytes))
+        .finish()
+        .unwrap();
+    assert_eq!(
+        frame.column("scenario_id").unwrap().str().unwrap().get(0),
+        Some("a")
+    );
+    assert_eq!(
+        frame.column("successful").unwrap().bool().unwrap().get(1),
+        Some(false)
+    );
+    for (index, row) in rows.as_array().unwrap().iter().enumerate() {
+        let encoded = frame
+            .column("execution_json")
+            .unwrap()
+            .str()
+            .unwrap()
+            .get(index)
+            .unwrap();
+        assert_eq!(
+            &serde_json::from_str::<serde_json::Value>(encoded).unwrap(),
+            row
+        );
+    }
+}

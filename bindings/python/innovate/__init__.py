@@ -20,6 +20,8 @@ from . import _native
 
 __version__ = version("innovate")
 __all__ = [
+    "execute_scenario_grid",
+    "scenario_executions",
     "FitResult",
     "NativeError",
     "categorize_adopters",
@@ -92,6 +94,11 @@ def _ipc(frame: pl.DataFrame | pl.LazyFrame) -> bytes:
 def execute_scenario_grid(data: pl.DataFrame | pl.LazyFrame, **payload: Any) -> dict[str, Any]:
     """Execute scenarios on the shared time column of a Polars frame."""
     return _decode(_native.scenario_grid_ipc(_ipc(data), json.dumps(payload, allow_nan=False)))
+
+
+def scenario_executions(response: dict[str, Any]) -> pl.DataFrame:
+    """Return ordered grid execution rows, with nested fields stored as JSON."""
+    return pl.read_ipc(io.BytesIO(_native.scenario_executions_ipc(json.dumps(response, allow_nan=False))))
 
 
 def predict(

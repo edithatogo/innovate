@@ -68,6 +68,17 @@ fn scenario_grid_ipc(py: Python<'_>, data: Vec<u8>, payload: String) -> PyResult
     .map_err(PyValueError::new_err)
 }
 
+#[pyfunction]
+fn scenario_executions_ipc(py: Python<'_>, response: String) -> PyResult<Py<PyBytes>> {
+    let bytes = py
+        .detach(move || {
+            let response = serde_json::from_str(&response).map_err(|error| error.to_string())?;
+            innovate_tabular::scenario_executions_ipc(&response).map_err(|error| error.to_string())
+        })
+        .map_err(PyValueError::new_err)?;
+    Ok(PyBytes::new(py, &bytes).unbind())
+}
+
 #[pymodule]
 fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(execute, module)?)?;
@@ -75,6 +86,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(fit_ipc, module)?)?;
     module.add_function(wrap_pyfunction!(categorize_adopters_ipc, module)?)?;
     module.add_function(wrap_pyfunction!(scenario_grid_ipc, module)?)?;
+    module.add_function(wrap_pyfunction!(scenario_executions_ipc, module)?)?;
     module.add("__version__", env!("CARGO_PKG_VERSION"))?;
     Ok(())
 }
