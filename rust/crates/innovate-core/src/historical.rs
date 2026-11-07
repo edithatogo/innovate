@@ -56,7 +56,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         .and_then(Value::as_object)
         .ok_or_else(|| error("constructor options must be an object"))?;
     if kw.contains_key("event_candidates") {
-        return profile_event(r, kw, &time);
+        return profile_event(r, kw, &time, execute);
     }
     if kw
         .keys()
@@ -453,10 +453,11 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
 }
 
 /// Profile a discrete split by refitting the historical curve for each candidate.
-fn profile_event(
+pub(crate) fn profile_event(
     request: &KernelRequest,
     options: &Map<String, Value>,
     time: &[f64],
+    fit: fn(&KernelRequest) -> Result<KernelResponse, KernelBindingError>,
 ) -> Result<KernelResponse, KernelBindingError> {
     let error = |message: &str| KernelBindingError::invalid_request(request.operation, message);
     if request.operation != KernelOperation::FitModel
@@ -497,7 +498,7 @@ fn profile_event(
         }
         fixed.insert("t_event".into(), json!(time_candidate));
         trial.payload["constructor_kwargs"] = json!(fixed);
-        match execute(&trial) {
+        match fit(&trial) {
             Ok(response) => {
                 let diagnostics = &response.result.as_ref().expect("fit result")["diagnostics"];
                 let weighted = diagnostics.get("weighting").is_some();

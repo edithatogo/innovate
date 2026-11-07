@@ -186,6 +186,7 @@ pub(crate) fn selected(r: &KernelRequest) -> bool {
         })
         .is_some_and(|k| {
             k.get("prediction_mode").is_some()
+                || k.get("event_candidates").is_some()
                 || k.get("t_event").is_some_and(|v| !v.is_null())
                 || k.get("covariates")
                     .and_then(Value::as_array)
@@ -406,29 +407,6 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     {
         return Err(invalid("state model_key mismatch"));
     }
-    let mut o: Options = serde_json::from_value(
-        p.get("constructor_kwargs")
-            .or_else(|| p.get("model_kwargs"))
-            .or_else(|| p.get("state").and_then(|s| s.get("constructor_kwargs")))
-            .cloned()
-            .unwrap_or_else(|| json!({})),
-    )
-    .map_err(|e| invalid(&e.to_string()))?;
-    let mut unique = std::collections::HashSet::new();
-    if o.covariates.len() > 32
-        || o.covariates
-            .iter()
-            .any(|n| n.is_empty() || !unique.insert(n))
-        || !["ode_fixed", "ode_historical_batch"].contains(&o.prediction_mode.as_str())
-        || !["corrected", "historical"].contains(&o.coefficient_layout.as_str())
-        || !["physical", "historical"].contains(&o.effective_domain.as_str())
-        || !["raw", "cumulative_max"].contains(&o.projection.as_str())
-        || o.t_event.is_some_and(|t| !t.is_finite())
-    {
-        return Err(invalid(
-            "invalid ODE mode, declared covariates, event, layout, domain or projection",
-        ));
-    }
     let empty = Map::new();
     let input = p
         .get("inputs")
@@ -449,6 +427,33 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     if time.iter().any(|t| !t.is_finite() || *t < 0.) || time.windows(2).any(|w| w[0] >= w[1]) {
         return Err(invalid(
             "time must be finite nonnegative and strictly increasing",
+        ));
+    }
+    let options = p
+        .get("constructor_kwargs")
+        .or_else(|| p.get("model_kwargs"))
+        .or_else(|| p.get("state").and_then(|s| s.get("constructor_kwargs")));
+    if let Some(options) = options
+        .and_then(Value::as_object)
+        .filter(|options| options.contains_key("event_candidates"))
+    {
+        return crate::historical::profile_event(r, options, &time, execute);
+    }
+    let mut o: Options = serde_json::from_value(options.cloned().unwrap_or_else(|| json!({})))
+        .map_err(|e| invalid(&e.to_string()))?;
+    let mut unique = std::collections::HashSet::new();
+    if o.covariates.len() > 32
+        || o.covariates
+            .iter()
+            .any(|n| n.is_empty() || !unique.insert(n))
+        || !["ode_fixed", "ode_historical_batch"].contains(&o.prediction_mode.as_str())
+        || !["corrected", "historical"].contains(&o.coefficient_layout.as_str())
+        || !["physical", "historical"].contains(&o.effective_domain.as_str())
+        || !["raw", "cumulative_max"].contains(&o.projection.as_str())
+        || o.t_event.is_some_and(|t| !t.is_finite())
+    {
+        return Err(invalid(
+            "invalid ODE mode, declared covariates, event, layout, domain or projection",
         ));
     }
     let historical = o.prediction_mode == "ode_historical_batch";

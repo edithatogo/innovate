@@ -217,3 +217,51 @@ fn weighted_mechanistic_fit_excludes_a_zero_weight_outlier() {
             < 1e-5
     );
 }
+
+#[test]
+fn bass_and_gompertz_profile_event_candidates() {
+    let fixture: serde_json::Value =
+        serde_json::from_str(include_str!("fixtures/mechanistic_scipy.json")).unwrap();
+    let n = fixture["training_rows"].as_u64().unwrap() as usize;
+    let slice = |key: &str| json!(&fixture[key].as_array().unwrap()[..n]);
+    let bass = json!({
+        "inputs":{"time":slice("time"),"observed":slice("observed"),
+            "covariates":{"dose":slice("dose")}},
+        "constructor_kwargs":{"covariates":["dose"],"event_candidates":[9.,10.,11.]}
+    });
+    let t: Vec<_> = (0..17).map(|i| f64::from(i) * 0.5).collect();
+    let boundary = 100. * ((0.01_f64).ln() * (-0.6_f64).exp()).exp();
+    let y: Vec<_> = t
+        .iter()
+        .map(|&t| {
+            if t < 2. {
+                100. * ((0.01_f64).ln() * (-0.3 * t).exp()).exp()
+            } else {
+                200. * ((boundary / 200.).ln() * (-0.2 * (t - 2.)).exp()).exp()
+            }
+        })
+        .collect();
+    let gompertz = json!({"inputs":{"time":t,"observed":y},
+        "constructor_kwargs":{"initial_value":1.,"event_candidates":[1.5,2.,2.5]}});
+    for (model, payload, expected) in [("bass", bass, 10.), ("gompertz", gompertz, 2.)] {
+        let result = KernelBinding::new()
+            .fit_model(model, payload)
+            .unwrap()
+            .result
+            .unwrap();
+        assert_eq!(result["state"]["constructor_kwargs"]["t_event"], expected);
+        assert_eq!(
+            result["event_profile"]["candidates"]
+                .as_array()
+                .unwrap()
+                .len(),
+            3
+        );
+        assert!(
+            result["event_profile"]["candidates"][1]["objective"]
+                .as_f64()
+                .unwrap()
+                < 1e-5
+        );
+    }
+}

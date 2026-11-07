@@ -3111,3 +3111,11 @@ the other competition models and installed binding checks remain open.
   Candidate 12 recovered the true split with RSS below 1e-18 against
   RSS above 5,000 at candidates 10 and 14. The focused Rust regression
   and Clippy passed. Broader model and event uncertainty work remains open.
+
+- [x] Extend discrete event profiling to historical Bass and Gompertz.
+  Reuse fixed-event fit semantics and save the selected split and fitted
+  history. Python 3.15.2, Julia and R agreed exactly on the covariate
+  Bass and analytic Gompertz fixtures. They selected times 10 and 2,
+  respectively, with RSS below 1e-18. The Bass candidate at 11 remained
+  visible as unconverged. All 11 mechanistic Rust tests and focused
+  Clippy passed. Event uncertainty and broader model profiling remain open.
