@@ -108,6 +108,13 @@ ratio is not an SVD condition number. Full local rank does not establish global
 uniqueness, calibrated uncertainty or scientific validity. These are point
 estimates. Separate operations provide bounded Bayesian inference and bootstrap intervals.
 
+The diagnostic reports `sensitivity_column_norm_cutoff` and the
+zero-based `excluded_sensitivity_column_indices` in sensitivity
+column order. Columns at or below the absolute norm cutoff are
+excluded before the relative QR rank test. A raw column norm above
+the representable range is reported as null. The normalized column
+can still contribute to rank.
+
 ODE models use adaptive step-doubling RK4 with Richardson correction, absolute
 and relative tolerances `1e-10`, and an explicit step budget. Stiff/extreme cases
 can return numerical-domain or budget errors. Independent SciPy DOP853 fixtures,

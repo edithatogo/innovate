@@ -3866,3 +3866,6 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Report the existing absolute sensitivity norm cutoff and the
   zero-based indices of columns it excludes from local rank.
   Extreme-scale rank regressions and focused Clippy passed.
+- [x] Document the absolute sensitivity cutoff, zero-based excluded
+  column indices and null raw norms in the migration guide. All four
+  Rust fit-quality tests passed with the documented diagnostic fields.
