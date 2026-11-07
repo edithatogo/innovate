@@ -6945,3 +6945,7 @@ Hosted release readiness for this worktree revision remains open.
   through the rebuilt Python 3.15.2 wheel, Julia and installed R.
   All three matched the expected labels, boundary assignments and
   zero-filled gaps with native builds from a7426dab.
+
+- [x] Allow a period-end label at the last supported calendar date
+  even when the following period start is unrepresentable. The
+  Rust calendar unit test passed for month, quarter and year ends.

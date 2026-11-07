@@ -157,8 +157,21 @@ fn aggregate_dates(
                 date.succ_opt()
             };
             let label = if period_end {
-                next.and_then(|d| d.pred_opt())
-                    .ok_or("calendar period end outside supported date range")?
+                match next {
+                    Some(boundary) => boundary
+                        .pred_opt()
+                        .ok_or("calendar period end outside supported date range")?,
+                    None if date
+                        .checked_add_months(Months::new(months - 1))
+                        .is_some_and(|last_month| {
+                            last_month.year() == NaiveDate::MAX.year()
+                                && last_month.month() == NaiveDate::MAX.month()
+                        }) =>
+                    {
+                        NaiveDate::MAX
+                    }
+                    None => return Err("calendar period end outside supported date range"),
+                }
             } else {
                 date
             };
@@ -171,4 +184,20 @@ fn aggregate_dates(
         }
     }
     Ok(json!({"dates":labels,"values":values}))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn end_label_can_be_the_last_supported_date() {
+        for frequency in ["ME", "QE", "YE"] {
+            let result = aggregate_dates(vec![NaiveDate::MAX], vec![1.], frequency, 1).unwrap();
+            assert_eq!(
+                result,
+                json!({"dates":[NaiveDate::MAX.to_string()],"values":[1.]})
+            );
+        }
+    }
 }
