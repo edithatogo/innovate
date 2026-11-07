@@ -514,3 +514,9 @@ For exact R Arrow export of execution rows, obtain the response with
 `kernel_call(operation, payload = payload, raw = TRUE)` and pass that JSON to
 `kernel_scenario_executions_ipc`. This preserves the native JSON arrays
 and numeric representations through export.
+
+For `matched_treatment_contrast`, supply `balance_covariates` as a map
+of covariate names to numeric arrays aligned with the input outcomes.
+The response reports the treated and control means and their difference
+for each covariate over retained pairs. A reused control contributes
+once per retained pair.

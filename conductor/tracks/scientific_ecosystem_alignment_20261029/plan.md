@@ -5244,3 +5244,8 @@ Hosted release readiness for this worktree revision remains open.
   The Rust fixture matched the analytic 10 for controls with values
   0, 0 and 30, and rejected misaligned covariate arrays. Binding
   checks and broader matching inference remain open.
+
+- [x] Verify matched covariate balance through rebuilt Python 3.15.2,
+  Julia and installed R. Each returned treated mean 30, control mean
+  10 and difference 20 for the reused-control fixture. Document the
+  aligned covariate input and pair weighting.
