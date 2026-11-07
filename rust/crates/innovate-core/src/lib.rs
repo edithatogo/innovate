@@ -209,7 +209,8 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
                 return Err("positive outer_iterations require robust mode");
             }
             let optional_span = |key: &str| {
-                payload.get(key).map(|v| {
+                payload.get(key)
+                    .filter(|value| !value.is_null()).map(|v| {
                     v.as_u64()
                         .filter(|n| *n >= 3 && *n % 2 == 1 && *n <= i32::MAX as u64)
                         .map(|n| n as usize)

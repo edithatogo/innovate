@@ -273,6 +273,8 @@ def seasonal_decomposition(
     historical: bool = False,
     inner_iterations: int = 5,
     outer_iterations: int | None = None,
+    seasonal_span: int | None = None,
+    low_pass_span: int | None = None,
 ) -> pl.DataFrame:
     """Decompose evenly spaced samples with the native seasonal smoother.
 
@@ -288,5 +290,7 @@ def seasonal_decomposition(
         historical=historical,
         inner_iterations=inner_iterations,
         outer_iterations=(5 if robust else 0) if outer_iterations is None else outer_iterations,
+        seasonal_span=seasonal_span,
+        low_pass_span=low_pass_span,
     )["result"]
     return pl.DataFrame(result)

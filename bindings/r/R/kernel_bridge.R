@@ -77,8 +77,10 @@ kernel_aggregate_dates <- function(dates, values, frequency) {
 }
 
 kernel_seasonal_decomposition <- function(values, period, trend_span, robust = FALSE, historical = FALSE,
-                                          inner_iterations = 5L, outer_iterations = if (isTRUE(robust)) 5L else 0L) {
+                                          inner_iterations = 5L, outer_iterations = if (isTRUE(robust)) 5L else 0L,
+                                          seasonal_span = NULL, low_pass_span = NULL) {
   kernel_call("preprocess_series", payload = list(method = "seasonal_decomposition",
     values = values, period = period, window = trend_span, robust = robust, historical = historical,
-    inner_iterations = inner_iterations, outer_iterations = outer_iterations))$result
+    inner_iterations = inner_iterations, outer_iterations = outer_iterations,
+    seasonal_span = seasonal_span, low_pass_span = low_pass_span))$result
 }

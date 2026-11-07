@@ -1424,5 +1424,9 @@ the other competition models and installed binding checks remain open.
   spans 17/9, seasonal spans 9 and 25 matched stats::stl within 1.24e-12
   through installed R. All 18 native boundary tests and focused Clippy
   passed.
-- [ ] Expose span controls in the Python, Julia and R helpers and
-  qualify degree and jump options.
+- [x] Expose optional seasonal and low-pass spans in the Python, Julia
+  and R helpers. The rebuilt Python wheel, Julia project and installed
+  R package each matched stats::stl within 1e-9 with seasonal/trend/
+  low-pass spans 25/17/9 and inner/outer counts 2/3. Calls omitting both
+  new options also passed in all three runtimes.
+- [ ] Qualify historical degree and jump options.
