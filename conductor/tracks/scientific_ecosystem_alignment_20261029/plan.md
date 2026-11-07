@@ -3264,3 +3264,8 @@ the other competition models and installed binding checks remain open.
   Python 3.15.2 wheel retained series order and interval bounds from
   the saved native Norton–Bass response. The focused consumer test
   verified nullable Float64 bounds and Ruff passed.
+
+- [x] Qualify bootstrap forecast tables for Arrow interchange.
+  Python 3.15.2 Polars round-tripped the native Norton–Bass table and
+  the single-refit Logistic table. Julia Arrow and R Arrow preserved
+  the two series' order and the Logistic null Float64 bounds.

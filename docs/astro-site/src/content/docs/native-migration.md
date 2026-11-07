@@ -247,6 +247,11 @@ intervals in time-by-series order. These intervals describe variation
 among the refitted mean paths. Forecast failures are counted separately
 among successful fits, and fewer than two forecast draws yield null bounds.
 
+In Python, pass the bootstrap operation's `result` to
+`bootstrap_forecast_frame` to get one Polars row per time and series.
+Pass that frame to `export_ipc_file` for a file readable by Julia Arrow
+and R Arrow. Missing bounds are stored as nullable Float64 columns.
+
 
 
 Norton–Bass, Lotka–Volterra, complementary goods, lock-in and multi-product
