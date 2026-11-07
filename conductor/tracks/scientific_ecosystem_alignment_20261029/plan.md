@@ -7148,3 +7148,9 @@ Hosted release readiness for this worktree revision remains open.
   Twine and check-wheel-contents passed. The wheel includes the
   native extension and Apache-2.0 licence, with Polars 2.1.0 as its
   only base dependency. This is local artifact evidence.
+
+- [x] Inspect Mach-O dependencies of the local arm64 Python extension
+  and Julia/R FFI library. Both linked only macOS system libraries
+  and frameworks. The Python extension reports deployment target
+  11.0, consistent with the wheel tag. This is a local link audit;
+  runtime checks on older macOS versions remain open.
