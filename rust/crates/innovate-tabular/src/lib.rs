@@ -250,7 +250,7 @@ fn rewrite_ipc(data: &[u8], stream: bool) -> PolarsResult<Vec<u8>> {
     Ok(bytes)
 }
 
-fn preserve_ipc_annotations(input: &ArrowField, output: &mut ArrowField) {
+fn preserve_ipc_annotations(input: &ArrowField, output: &mut ArrowField) -> bool {
     use ArrowDataType::{
         Binary, BinaryView, FixedSizeList, LargeBinary, LargeList, LargeUtf8, List, Struct, Utf8,
         Utf8View,
@@ -265,25 +265,30 @@ fn preserve_ipc_annotations(input: &ArrowField, output: &mut ArrowField) {
                     Binary | LargeBinary | BinaryView
                 )
         );
-    if same_logical_type && input.metadata.is_some() {
-        output.metadata = input.metadata.clone();
-    }
-    match (&input.dtype, &mut output.dtype) {
+    let compatible_children = match (&input.dtype, &mut output.dtype) {
         (List(input) | LargeList(input), List(output) | LargeList(output)) => {
-            preserve_ipc_annotations(input, output);
+            preserve_ipc_annotations(input, output)
         }
         (FixedSizeList(input, a), FixedSizeList(output, b)) if a == b => {
-            preserve_ipc_annotations(input, output);
+            preserve_ipc_annotations(input, output)
         }
         (Struct(input), Struct(output)) => {
+            let mut compatible = input.len() == output.len();
             for field in output {
-                if let Some(source) = input.iter().find(|source| source.name == field.name) {
-                    preserve_ipc_annotations(source, field);
-                }
+                compatible &= input
+                    .iter()
+                    .find(|source| source.name == field.name)
+                    .is_some_and(|source| preserve_ipc_annotations(source, field));
             }
+            compatible
         }
-        _ => {}
+        _ => false,
+    };
+    let compatible = same_logical_type || compatible_children;
+    if compatible && input.metadata.is_some() {
+        output.metadata = input.metadata.clone();
     }
+    compatible
 }
 
 pub fn predict_ipc(data: &[u8], model: &str, parameters: Value) -> PolarsResult<Vec<u8>> {

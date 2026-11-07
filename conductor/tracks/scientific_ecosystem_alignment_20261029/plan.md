@@ -6062,3 +6062,9 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Exercise BinaryView to LargeBinary in the Rust IPC round-trip
   fixture. The test verifies the field annotation, non-UTF-8 bytes
   and null through file and stream rewrites.
+
+- [x] Preserve container annotations when children remain logically
+  compatible after an IPC layout conversion. The rebuilt Julia FFI
+  rewrote an annotated Arrow List to LargeList, and PyArrow verified
+  both parent and child annotations, a null element, a null list and
+  an empty list. All 11 Rust tabular boundary tests passed.
