@@ -7384,3 +7384,9 @@ Hosted release readiness for this worktree revision remains open.
   worker tests passed on macOS arm64. Used the checkout Cargo cache
   for dependencies and disabled incremental compilation to limit disk
   use. Clean-target Linux and container execution remain open.
+
+- [x] Require the hosted Linux worker container to reject malformed
+  JSON with status 1, no stdout and the expected diagnostic. The
+  corresponding native worker test passed from the source archive,
+  and Actionlint passed. Docker CLI is absent locally, so the
+  container check still needs a hosted run.

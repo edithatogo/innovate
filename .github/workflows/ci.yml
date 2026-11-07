@@ -68,6 +68,13 @@ jobs:
             jq -e '.result.kernel_response.result.values == [50]'
           printf '%s\n' "$envelope" | jq '.context.auth_scope = "read"' | "${worker[@]}" |
             jq -e '.result.kernel_response.error.code == "unsupported_operation"'
+          response="$(mktemp)"
+          diagnostic="$(mktemp)"
+          status=0
+          printf %s "{" | "${worker[@]}" >"$response" 2>"$diagnostic" || status=$?
+          test "$status" -eq 1
+          test ! -s "$response"
+          grep -Fx "invalid remote envelope JSON" "$diagnostic"
       - name: Run scheduled native benchmarks
         id: native-benchmarks
         if: matrix.os == 'ubuntu-latest' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
