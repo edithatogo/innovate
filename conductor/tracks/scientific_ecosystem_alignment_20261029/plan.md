@@ -6655,3 +6655,8 @@ Hosted release readiness for this worktree revision remains open.
   identical full results for resumed and uninterrupted runs across
   seeds 0–31 at ticks 4 and 8. Reused the 4947d6b4 native builds after
   checking that runtime source, bindings and Cargo inputs were unchanged.
+
+- [x] Extend continuous-hazard Kairos replay qualification to 33
+  seeds, including the original seed 42. For each seed, resume from
+  the first completion and from each tick 0–19. All 693 full responses
+  matched uninterrupted execution in the focused Rust network test.
