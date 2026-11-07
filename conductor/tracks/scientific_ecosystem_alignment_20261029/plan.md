@@ -5924,3 +5924,8 @@ Hosted release readiness for this worktree revision remains open.
   network scenario discovery. Discovery and pairwise aggregation share
   the field definitions. The Rust boundary test verifies the exact
   prefixed keys, and all 13 scenario-filtered boundary tests pass.
+
+- [x] Compare the ordered resource metric catalogue through the rebuilt
+  Python wheel (CPython 3.15.2), Julia 1.13.3 project and freshly
+  installed R 4.3.0 package using the rebuilt Rust FFI library.
+  All three public calls returned identical lists of 14 keys.
