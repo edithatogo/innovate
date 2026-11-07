@@ -4297,3 +4297,7 @@ Hosted release readiness for this worktree revision remains open.
   requests as signed event counts in Kairos resource comparisons.
   The focused Rust test verifies three fewer completed services when
   a resource stays closed throughout the scenario.
+- [x] Verify signed Kairos resource event counts at d87ee6ce in the
+  rebuilt Python 3.15.2 wheel, Julia and installed R. The permanently
+  closed alternative reports three fewer completions and no difference
+  in balks or abandonments. Python also verifies Arrow readback.
