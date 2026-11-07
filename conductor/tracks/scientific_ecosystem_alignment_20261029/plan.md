@@ -1660,5 +1660,9 @@ the other competition models and installed binding checks remain open.
   and verifies a 100% increase after adoption begins. A zero baseline
   produces a null percentage difference. All 24 boundary tests and
   focused Clippy passed.
-- [ ] Verify forecast comparison through installed Python, Julia and R
-  and qualify additional historical counterfactual workflows.
+- [x] Verify the Bass forecast comparison in the rebuilt Python wheel,
+  Julia and installed R. All three preserve the zero-baseline null
+  and match the analytic 100% increase at the next observation.
+  Python uses the new forecast_model payload key because model is
+  reserved by execute. Julia and R exercised the retained model key.
+- [ ] Qualify additional historical counterfactual workflows.

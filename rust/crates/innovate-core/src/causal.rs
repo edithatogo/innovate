@@ -260,7 +260,9 @@ fn covariate_balance(payload: &Value) -> Result<Value, &'static str> {
 }
 
 fn counterfactual_forecast(payload: &Value) -> Result<Value, &'static str> {
-    let model = payload["model"]
+    let model = payload
+        .get("forecast_model")
+        .unwrap_or(&payload["model"])
         .as_str()
         .ok_or("counterfactual model must be a string")?;
     let baseline = payload["baseline"]
