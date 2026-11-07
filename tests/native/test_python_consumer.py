@@ -941,3 +941,11 @@ def test_fitted_plain_curves_classify_from_native_rates(model, parameters):
     assert result["rate"].min() >= 0
     assert result["rate"].max() > 0
     assert result["category"].n_unique() >= 3
+
+
+def test_polars_preprocessing_preserves_order_and_full_window():
+    series = pl.Series("adoption", [1, 3, 5, 7])
+    assert innovate.cumulative_sum(series).to_list() == [1, 4, 9, 16]
+    assert innovate.rolling_average(series, 3).to_list() == [None, None, 3.0, 5.0]
+    with pytest.raises(ValueError, match="window must be positive"):
+        innovate.rolling_average(series, 0)

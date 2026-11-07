@@ -22,6 +22,9 @@ __all__ = [
     "FitResult",
     "NativeError",
     "categorize_adopters",
+    "cumulative_sum",
+    "rolling_average",
+
     "capabilities",
     "execute",
     "fit",
@@ -205,3 +208,15 @@ def categorize_adopters(data: pl.DataFrame | pl.LazyFrame, *, rate_column: str =
     """Append historical adopter categories using supplied nonnegative rates."""
     output = _native.categorize_adopters_ipc(_ipc(data), rate_column)
     return pl.read_ipc(io.BytesIO(output))
+
+
+def cumulative_sum(data: pl.Series) -> pl.Series:
+    """Compute the cumulative sum in the supplied sample order."""
+    return data.cum_sum()
+
+
+def rolling_average(data: pl.Series, window: int) -> pl.Series:
+    """Return trailing means after a full window of observations is available."""
+    if window < 1:
+        raise ValueError("window must be positive")
+    return data.rolling_mean(window_size=window, min_samples=window)

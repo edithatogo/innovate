@@ -1275,3 +1275,11 @@ the other competition models and installed binding checks remain open.
   the installed Python Polars API. All three regressions return aligned
   positive rate series and multiple categories. The ledger now records
   bounded native support. Broader rate-domain and grid qualification remains open.
+
+## Polars time-series preprocessing
+
+- [x] Restore cumulative sums and full-window trailing averages through
+  native Polars series operations in Python. The installed test verifies
+  sample order, warmup nulls and rejection of a zero window.
+- [ ] Restore timestamp aggregation, decomposition and seasonal model
+  preprocessing, and qualify Julia and R consumer paths.
