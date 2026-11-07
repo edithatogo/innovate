@@ -25,6 +25,7 @@ mod model_cards;
 mod network;
 mod numerics;
 mod outcome_contract;
+pub use outcome_contract::validate_paired_outcomes;
 mod policy;
 
 mod provenance;
@@ -285,7 +286,8 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             return provenance::validate(payload);
         }
         if value["operation"] == "validate_paired_outcomes" {
-            return outcome_contract::validate(payload);
+            validate_paired_outcomes(payload)?;
+            return Ok(payload.clone());
         }
 
         if value["operation"] == "summarize_causal" {

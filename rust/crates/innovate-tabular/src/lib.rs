@@ -377,14 +377,8 @@ fn write_ipc_file(frame: &mut DataFrame) -> PolarsResult<Vec<u8>> {
 /// Encode validated paired Bass trajectories in strategy, draw and time order.
 /// Parameter arrays retain their original names, values, units and order as JSON.
 pub fn paired_outcomes_ipc(payload: &Value) -> PolarsResult<Vec<u8>> {
-    let request = json!({
-        "schema_version": "2.0", "operation": "validate_paired_outcomes", "payload": payload
-    });
-    let response: Value = serde_json::from_str(&innovate_core::execute_json(&request.to_string()))
+    innovate_core::validate_paired_outcomes(payload)
         .map_err(|error| polars_err!(ComputeError: "{error}"))?;
-    if !response["error"].is_null() {
-        polars_bail!(ComputeError: "{}", response["error"]["message"]);
-    }
 
     let mut ids = Vec::new();
     let mut draws = Vec::new();
@@ -395,7 +389,7 @@ pub fn paired_outcomes_ipc(payload: &Value) -> PolarsResult<Vec<u8>> {
     let mut times = Vec::new();
     let mut adoption = Vec::new();
     // The native validator established these field types and trajectory lengths.
-    for strategy in response["result"]["strategies"].as_array().unwrap() {
+    for strategy in payload["strategies"].as_array().unwrap() {
         for draw in strategy["draws"].as_array().unwrap() {
             let parameter_json = draw["parameters"].to_string();
             let time = draw["time"].as_array().unwrap();

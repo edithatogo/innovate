@@ -27,8 +27,9 @@ struct Parameter {
     value: f64,
 }
 
-pub(crate) fn validate(payload: &Value) -> Result<Value, &'static str> {
-    let strategies: Vec<Strategy> = serde_json::from_value(payload["strategies"].clone())
+/// Validate the paired Bass payload shared by JSON and Arrow consumers.
+pub fn validate_paired_outcomes(payload: &Value) -> Result<(), &'static str> {
+    let strategies: Vec<Strategy> = Vec::deserialize(&payload["strategies"])
         .map_err(|_| "invalid paired outcome strategies")?;
     let reference = strategies
         .first()
@@ -99,5 +100,5 @@ pub(crate) fn validate(payload: &Value) -> Result<Value, &'static str> {
             }
         }
     }
-    Ok(payload.clone())
+    Ok(())
 }

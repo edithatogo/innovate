@@ -4175,3 +4175,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Exercise negative adoption through the public Rust Arrow exporter.
   The regression requires the domain error before IPC bytes are returned,
   alongside the full-width identity round trip and draw-order rejection.
+- [x] Share the Rust paired Bass validator directly with Arrow export.
+  The exporter validates the in-memory payload and writes from it
+  without serializing a kernel request or reparsing a response.
+  The core contract and all ten tabular tests passed.
