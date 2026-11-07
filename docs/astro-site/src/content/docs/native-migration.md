@@ -710,3 +710,13 @@ DOP853 fit/forecast reference pass. The explicit RK4 solver's stiff/LSODA worklo
 parity, automatic initialization, multiple events, further model families, forcing
 interoperability with richer Kairos networks, stochastic paths and full scientific
 qualification remain required. No numerical binding fallback is used.
+
+### Directed and weighted Kairos contacts
+
+Set `simulation_options.directed` to true to interpret each edge as
+`[source, target]`. Otherwise each edge contributes in both directions.
+Optional `edge_weights` supplies one finite positive value per edge, in
+edge order. Imitation uses the completed adopters' share of incoming weight;
+isolated agents have zero imitation exposure. Pending agents still do not
+transmit and adoption still occurs at FIFO service completion. Unweighted
+undirected requests retain their original simulation traces.

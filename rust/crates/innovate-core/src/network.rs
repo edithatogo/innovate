@@ -19,6 +19,10 @@ struct Options {
     seed: u64,
     population: usize,
     edges: Vec<[usize; 2]>,
+    #[serde(default)]
+    directed: bool,
+    #[serde(default)]
+    edge_weights: Option<Vec<f64>>,
     capacity: u64,
     service_ticks: u64,
     #[serde(default = "ticks")]
@@ -105,18 +109,39 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     let market = required_f64(p, "m", op)?;
     let mut adjacency = vec![Vec::new(); o.population];
     let mut unique = std::collections::HashSet::new();
-    for [a, b] in &o.edges {
-        if *a >= o.population
-            || *b >= o.population
-            || a == b
-            || !unique.insert((a.min(b), a.max(b)))
-        {
+    if o.edge_weights.as_ref().is_some_and(|weights| {
+        weights.len() != o.edges.len() || weights.iter().any(|w| !w.is_finite() || *w <= 0.)
+    }) {
+        return Err(invalid(
+            "edge_weights must contain one finite positive weight per edge",
+        ));
+    }
+    for (index, &[a, b]) in o.edges.iter().enumerate() {
+        let key = if o.directed {
+            (a, b)
+        } else {
+            (a.min(b), a.max(b))
+        };
+        if a >= o.population || b >= o.population || a == b || !unique.insert(key) {
             return Err(invalid(
-                "edges must be unique undirected non-self pairs within population",
+                "edges must be unique non-self pairs within population",
             ));
         }
-        adjacency[*a].push(*b);
-        adjacency[*b].push(*a);
+        let weight = o.edge_weights.as_ref().map_or(1., |w| w[index]);
+        adjacency[b].push((a, weight));
+        if !o.directed {
+            adjacency[a].push((b, weight));
+        }
+    }
+    let mut totals = vec![0.; o.population];
+    if o.edge_weights.is_some() {
+        for (neighbors, total) in adjacency.iter_mut().zip(&mut totals) {
+            let scale = neighbors.iter().map(|(_, w)| *w).fold(0., f64::max);
+            for (_, weight) in neighbors {
+                *weight /= scale;
+                *total += *weight;
+            }
+        }
     }
     let mut initial = std::collections::HashSet::new();
     if o.initial_agents
@@ -150,12 +175,19 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                     innovation * innovation_weights[i]
                         + if degree == 0 {
                             0.
+                        } else if o.edge_weights.is_some() {
+                            let exposed: f64 = adjacency[i]
+                                .iter()
+                                .filter(|(j, _)| context.get::<u8>(agents[*j]) == Some(&2))
+                                .map(|(_, weight)| weight)
+                                .sum();
+                            imitation * imitation_weights[i] * (exposed / totals[i])
                         } else {
                             imitation
                                 * imitation_weights[i]
                                 * adjacency[i]
                                     .iter()
-                                    .filter(|j| context.get::<u8>(agents[**j]) == Some(&2))
+                                    .filter(|(j, _)| context.get::<u8>(agents[*j]) == Some(&2))
                                     .count() as f64
                                 / degree as f64
                         }
@@ -257,7 +289,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         model_key: r.model_key.clone(),
         error: None,
         result: Some(
-            json!({"values":values,"counts":counts,"agents":states,"requests":requests,"completions":trace,"metadata":{"engine":"kairos_network","kairos_revision":crate::simulation::REV,"seed":o.seed,"population":o.population,"capacity":o.capacity,"service_ticks":o.service_ticks,"ticks_per_unit":o.ticks_per_unit,"queue_length":resource.queue_length(),"available":resource.available_count(),"innovation_multipliers":innovation_weights,"imitation_multipliers":imitation_weights,"agent_service_ticks":service,"hazard":"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted neighbors/degree), zero imitation at degree zero","resource_semantics":"FIFO; adoption occurs at service completion; pending agents do not transmit","rng_checkpoint":rng.checkpoint()}}),
+            json!({"values":values,"counts":counts,"agents":states,"requests":requests,"completions":trace,"metadata":{"engine":"kairos_network","kairos_revision":crate::simulation::REV,"seed":o.seed,"population":o.population,"capacity":o.capacity,"service_ticks":o.service_ticks,"ticks_per_unit":o.ticks_per_unit,"queue_length":resource.queue_length(),"available":resource.available_count(),"innovation_multipliers":innovation_weights,"imitation_multipliers":imitation_weights,"agent_service_ticks":service,"directed":o.directed,"weighted":o.edge_weights.is_some(),"hazard":if o.edge_weights.is_some() {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted incoming weight/total incoming weight), zero imitation without incoming edges"} else {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted neighbors/degree), zero imitation at degree zero"},"resource_semantics":"FIFO; adoption occurs at service completion; pending agents do not transmit","rng_checkpoint":rng.checkpoint()}}),
         ),
         metadata: json!({"runtime":"rust_native","engine":"kairos_network"}),
     })

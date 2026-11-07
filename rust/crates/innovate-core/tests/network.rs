@@ -157,3 +157,46 @@ fn imitation_weights_control_seeded_contagion() {
         json!([2])
     );
 }
+
+#[test]
+fn directed_weights_control_exposure_without_overflow() {
+    let mut payload = json!({"inputs":{"time":[0.,5.,20.]},
+        "parameters":{"p":0.,"q":1e12,"m":3.},
+        "simulation_options":{"engine":"kairos_network","population":3,"seed":42,
+        "edges":[[0,1],[2,1]],"directed":true,"edge_weights":[1e308,1e308],
+        "capacity":1,"service_ticks":5,"ticks_per_unit":1,"initial_agents":[0]}});
+    let run = |p| {
+        KernelBinding::new()
+            .simulate_model("bass", p)
+            .unwrap()
+            .result
+            .unwrap()
+    };
+    let a = run(payload.clone());
+    assert_eq!(a["counts"], json!([1, 1, 2]));
+    assert_eq!(a["completions"][0]["tick"], 6);
+    payload["simulation_options"]["edge_weights"] = json!([1., 1.]);
+    assert_eq!(a, run(payload.clone()));
+    payload["simulation_options"]["edge_weights"] = json!([1e-100, 1.]);
+    assert_eq!(run(payload.clone())["counts"], json!([1, 1, 1]));
+    payload["simulation_options"]["edges"] = json!([[1, 0], [2, 1]]);
+    payload["simulation_options"]["edge_weights"] = json!([1., 1.]);
+    assert_eq!(run(payload.clone())["counts"], json!([1, 1, 1]));
+    payload["simulation_options"]["edges"] = json!([[0, 1], [1, 0]]);
+    assert_eq!(run(payload.clone())["counts"], json!([1, 1, 2]));
+    payload["simulation_options"]["directed"] = json!(false);
+    assert!(
+        KernelBinding::new()
+            .simulate_model("bass", payload.clone())
+            .is_err()
+    );
+    payload["simulation_options"]["directed"] = json!(true);
+    for invalid in [json!([1.]), json!([0., 1.]), json!([-1., 1.])] {
+        payload["simulation_options"]["edge_weights"] = invalid;
+        assert!(
+            KernelBinding::new()
+                .simulate_model("bass", payload.clone())
+                .is_err()
+        );
+    }
+}

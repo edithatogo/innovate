@@ -208,3 +208,10 @@ end
     b=kernel_predict_model("bass",Dict("inputs"=>p["inputs"],"state"=>a["state"]))["result"]
     @test all(isapprox.(a["values"],b["values"];atol=1e-7))
 end
+
+@testset "Directed weighted Kairos resource" begin
+    p=Dict("inputs"=>Dict("time"=>[0.,5.,20.]),"parameters"=>Dict("p"=>0.,"q"=>1e12,"m"=>3.),"simulation_options"=>Dict("engine"=>"kairos_network","population"=>3,"seed"=>42,"directed"=>true,"edges"=>[[0,1]],"edge_weights"=>[1e308],"initial_agents"=>[0],"capacity"=>1,"service_ticks"=>5,"ticks_per_unit"=>1))
+    a=kernel_simulate_model("bass",p)["result"]
+    @test a["counts"]==[1,1,2]
+    @test a["completions"][1]["tick"]==6
+end

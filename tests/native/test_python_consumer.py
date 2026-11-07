@@ -424,3 +424,27 @@ def test_bass_mechanistic_covariate_event_fit_and_history_forecast():
     future = pl.DataFrame({"time": fixture["time"][n:], "dose": fixture["dose"][n:]})
     assert fit.predict(future)["prediction"][-1] == pytest.approx(fixture["observed"][-1], abs=0.001)
     assert fit.predict(future, quantity="rate")["rate"][-1] == pytest.approx(fixture["rates"][-1], abs=0.001)
+
+
+def test_directed_weighted_kairos_resource():
+    options = {
+        "engine": "kairos_network",
+        "population": 3,
+        "seed": 42,
+        "directed": True,
+        "edges": [[0, 1]],
+        "edge_weights": [1e308],
+        "initial_agents": [0],
+        "capacity": 1,
+        "service_ticks": 5,
+        "ticks_per_unit": 1,
+    }
+    result = innovate.execute(
+        "simulate_model",
+        "bass",
+        inputs={"time": [0.0, 5.0, 20.0]},
+        parameters={"p": 0.0, "q": 1e12, "m": 3.0},
+        simulation_options=options,
+    )["result"]
+    assert result["counts"] == [1, 1, 2]
+    assert result["completions"][0]["tick"] == 6
