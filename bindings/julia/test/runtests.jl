@@ -115,3 +115,14 @@ end
     p=Dict("inputs"=>Dict("time"=>[0.,2.,3.]),"parameters"=>Dict("decay"=>0.5,"base_L"=>100.,"base_k"=>1.,"base_x0"=>2.),"constructor_kwargs"=>Dict("base_model"=>"logistic","event_times"=>[2.],"event_effects"=>[0.5],"event_labels"=>["policy"]))
     @test kernel_predict_model("policy_hazard",p)["result"]["values"][2]==75
 end
+@testset "Heterogeneous network service" begin
+    p=Dict("inputs"=>Dict("time"=>[0.,100.]),"parameters"=>Dict("p"=>1e12,"q"=>0.,"m"=>3.),"simulation_options"=>Dict("engine"=>"kairos_network","population"=>3,"seed"=>42,"edges"=>[],"capacity"=>1,"service_ticks"=>5,"ticks_per_unit"=>1,"innovation_multipliers"=>[1.,0.,1.],"agent_service_ticks"=>[4,9,7]))
+    a=kernel_simulate_model("bass",p)["result"]
+    @test a["counts"]==[0,2]
+    expected=1
+    for (request,completion) in zip(a["requests"],a["completions"])
+        @test request["agent"]==completion["agent"]
+        expected += [4,9,7][request["agent"]+1]
+        @test completion["tick"]==expected
+    end
+end

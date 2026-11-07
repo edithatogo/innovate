@@ -275,8 +275,15 @@ times must map into 0–10^15 ticks. Counts include initial agents. Returned
 `requests` and `completions` retain ticks/identities; agent and resource state is
 at the final sample. RNG checkpoint metadata is provenance, not resume support.
 
+Optional population-length `innovation_multipliers` and `imitation_multipliers`
+scale each susceptible agent's p and q terms. They default to one and must be
+finite and nonnegative; zero disables that hazard component. Optional
+`agent_service_ticks` overrides the scalar duration per agent, including agents
+waiting in the FIFO queue. Each duration is an integer in 1–10^12. Defaults retain
+the homogeneous engine and RNG stream. Metadata retains the effective arrays.
+
 The network engine currently rejects covariate/event forcing, weighted/directed
-edges and custom agent hazards. Dynamic networks, heterogeneous agents,
+edges and arbitrary hazard functions. Dynamic networks, richer agent attributes,
 resource priorities/balking/reneging, resume and general network-model parity
 remain required migration work. A successful Bass network simulation does not
 qualify the separate `network_diffusion` model family. Python, Julia and R use

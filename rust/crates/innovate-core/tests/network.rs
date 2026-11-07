@@ -89,3 +89,71 @@ fn pending_agents_are_not_counted_as_adopted() {
             .all(|a| a["state"] == "pending")
     );
 }
+
+#[test]
+fn heterogeneous_service_uses_the_queued_agents_duration() {
+    let payload = json!({"inputs":{"time":[0.,100.]},"parameters":{"p":1e12,"q":0.,"m":3.},"simulation_options":{"engine":"kairos_network","population":3,"seed":42,"edges":[],"capacity":1,"service_ticks":5,"ticks_per_unit":1,"innovation_multipliers":[1.,0.,1.],"imitation_multipliers":[1.,1.,1.],"agent_service_ticks":[4,9,7]}});
+    let a = KernelBinding::new()
+        .simulate_model("bass", payload.clone())
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(
+        a,
+        KernelBinding::new()
+            .simulate_model("bass", payload)
+            .unwrap()
+            .result
+            .unwrap()
+    );
+    assert_eq!(a["counts"], json!([0, 2]));
+    let requests = a["requests"].as_array().unwrap();
+    let completions = a["completions"].as_array().unwrap();
+    assert_eq!(requests.len(), 2);
+    let durations = [4, 9, 7];
+    let mut expected = 1;
+    for (request, completion) in requests.iter().zip(completions) {
+        assert_eq!(request["agent"], completion["agent"]);
+        let i = request["agent"].as_u64().unwrap() as usize;
+        assert_ne!(i, 1);
+        expected += durations[i];
+        assert_eq!(completion["tick"].as_u64().unwrap(), expected);
+    }
+}
+
+#[test]
+fn heterogeneous_vectors_reject_invalid_domains() {
+    for (key, value) in [
+        ("innovation_multipliers", json!([1.])),
+        ("innovation_multipliers", json!([1., -1.])),
+        ("imitation_multipliers", json!([1., null])),
+        ("agent_service_ticks", json!([1, 0])),
+        ("agent_service_ticks", json!([1, 1000000000001_u64])),
+    ] {
+        let mut p = json!({"inputs":{"time":[1.]},"parameters":{"p":1.,"q":0.,"m":2.},"simulation_options":{"engine":"kairos_network","population":2,"seed":42,"edges":[],"capacity":1,"service_ticks":5}});
+        p["simulation_options"][key] = value;
+        assert!(KernelBinding::new().simulate_model("bass", p).is_err());
+    }
+}
+
+#[test]
+fn imitation_weights_control_seeded_contagion() {
+    let mut p = json!({"inputs":{"time":[100.]},"parameters":{"p":0.,"q":1e12,"m":2.},"simulation_options":{"engine":"kairos_network","population":2,"seed":42,"edges":[[0,1]],"initial_agents":[0],"capacity":1,"service_ticks":5,"ticks_per_unit":1,"imitation_multipliers":[1.,0.]}});
+    assert_eq!(
+        KernelBinding::new()
+            .simulate_model("bass", p.clone())
+            .unwrap()
+            .result
+            .unwrap()["counts"],
+        json!([1])
+    );
+    p["simulation_options"]["imitation_multipliers"] = json!([1., 1.]);
+    assert_eq!(
+        KernelBinding::new()
+            .simulate_model("bass", p)
+            .unwrap()
+            .result
+            .unwrap()["counts"],
+        json!([2])
+    );
+}

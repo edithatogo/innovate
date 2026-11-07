@@ -231,3 +231,29 @@ def test_policy_event_boundary_and_native_baseline_fit():
     assert fit.predict(pl.DataFrame({"time": [20.0]}))["prediction"][0] == pytest.approx(
         100 / (1 + math.exp(-7.5)), abs=0.001
     )
+
+
+def test_heterogeneous_network_service_and_hazards():
+    r = innovate.execute(
+        "simulate_model",
+        "bass",
+        inputs={"time": [0.0, 100.0]},
+        parameters={"p": 1e12, "q": 0.0, "m": 3.0},
+        simulation_options={
+            "engine": "kairos_network",
+            "population": 3,
+            "seed": 42,
+            "edges": [],
+            "capacity": 1,
+            "service_ticks": 5,
+            "ticks_per_unit": 1,
+            "innovation_multipliers": [1.0, 0.0, 1.0],
+            "agent_service_ticks": [4, 9, 7],
+        },
+    )["result"]
+    assert r["counts"] == [0, 2]
+    expected = 1
+    for request, completion in zip(r["requests"], r["completions"], strict=True):
+        assert request["agent"] == completion["agent"]
+        expected += [4, 9, 7][request["agent"]]
+        assert completion["tick"] == expected

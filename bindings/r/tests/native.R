@@ -110,3 +110,19 @@ policy_payload <- list(inputs=list(time=c(0,2,3)),parameters=list(decay=0.5,base
 policy_prediction <- kernel_predict_model("policy_hazard",policy_payload)$result
 stopifnot(policy_prediction$values[[2]]==75)
 cat("R singleton policy event boundary passed\n")
+p <- list(inputs=list(time=c(0,100)),parameters=list(p=1e12,q=0,m=3),simulation_options=list(engine="kairos_network",population=3,seed=42,edges=list(),capacity=1,service_ticks=5,ticks_per_unit=1,innovation_multipliers=c(1,0,1),agent_service_ticks=c(4,9,7)))
+a <- kernel_simulate_model("bass",p)$result
+stopifnot(identical(unlist(a$counts),c(0L,2L)))
+expected <- 1
+for (i in seq_along(a$requests)) {
+  stopifnot(a$requests[[i]]$agent == a$completions[[i]]$agent)
+  expected <- expected+c(4,9,7)[a$requests[[i]]$agent+1]
+  stopifnot(a$completions[[i]]$tick == expected)
+}
+p$simulation_options$population <- 1
+p$simulation_options$innovation_multipliers <- 1
+p$simulation_options$imitation_multipliers <- 0
+p$simulation_options$agent_service_ticks <- 4
+p$parameters$m <- 1
+stopifnot(kernel_simulate_model("bass",p)$result$counts[[2]] == 1)
+cat("R heterogeneous service and singleton transport passed\n")

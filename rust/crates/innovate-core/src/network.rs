@@ -1,4 +1,4 @@
-//! Homogeneous network adoption with Kairos agent state, dispatch and FIFO service.
+//! Heterogeneous network adoption with Kairos agent state, dispatch and FIFO service.
 use crate::validation::{numeric_array_from_aliases, object_section, required_f64};
 use crate::{
     KERNEL_SCHEMA_VERSION, KernelBindingError, KernelOperation, KernelRequest, KernelResponse,
@@ -25,6 +25,12 @@ struct Options {
     ticks_per_unit: u64,
     #[serde(default)]
     initial_agents: Vec<usize>,
+    #[serde(default)]
+    innovation_multipliers: Option<Vec<f64>>,
+    #[serde(default)]
+    imitation_multipliers: Option<Vec<f64>>,
+    #[serde(default)]
+    agent_service_ticks: Option<Vec<u64>>,
 }
 fn ticks() -> u64 {
     1000000
@@ -53,6 +59,31 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     {
         return Err(invalid(
             "invalid engine/population/capacity/service/tick bounds",
+        ));
+    }
+    let innovation_weights = o
+        .innovation_multipliers
+        .clone()
+        .unwrap_or_else(|| vec![1.; o.population]);
+    let imitation_weights = o
+        .imitation_multipliers
+        .clone()
+        .unwrap_or_else(|| vec![1.; o.population]);
+    let service = o
+        .agent_service_ticks
+        .clone()
+        .unwrap_or_else(|| vec![o.service_ticks; o.population]);
+    if innovation_weights.len() != o.population
+        || imitation_weights.len() != o.population
+        || innovation_weights
+            .iter()
+            .chain(&imitation_weights)
+            .any(|v| !v.is_finite() || *v < 0.)
+        || service.len() != o.population
+        || service.iter().any(|v| *v == 0 || *v > 1000000000000)
+    {
+        return Err(invalid(
+            "agent multipliers must be finite nonnegative population-length arrays; service ticks must be population-length integers in 1..=1000000000000",
         ));
     }
     let input = object_section(payload, "inputs", op)?;
@@ -116,11 +147,12 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                     0.
                 } else {
                     let degree = adjacency[i].len();
-                    innovation
+                    innovation * innovation_weights[i]
                         + if degree == 0 {
                             0.
                         } else {
                             imitation
+                                * imitation_weights[i]
                                 * adjacency[i]
                                     .iter()
                                     .filter(|j| context.get::<u8>(agents[**j]) == Some(&2))
@@ -169,7 +201,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 context.schedule_behaviour(
                     next,
                     2,
-                    SimTime::from_ticks(now + o.service_ticks as u128),
+                    SimTime::from_ticks(now + service[next.index as usize] as u128),
                 );
             }
         } else if let Some(at) = attempt {
@@ -199,7 +231,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 context.schedule_behaviour(
                     id,
                     2,
-                    SimTime::from_ticks(now + o.service_ticks as u128),
+                    SimTime::from_ticks(now + service[index] as u128),
                 );
             }
         } else {
@@ -225,7 +257,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         model_key: r.model_key.clone(),
         error: None,
         result: Some(
-            json!({"values":values,"counts":counts,"agents":states,"requests":requests,"completions":trace,"metadata":{"engine":"kairos_network","kairos_revision":crate::simulation::REV,"seed":o.seed,"population":o.population,"capacity":o.capacity,"service_ticks":o.service_ticks,"ticks_per_unit":o.ticks_per_unit,"queue_length":resource.queue_length(),"available":resource.available_count(),"hazard":"p + q*(adopted neighbors/degree), zero imitation at degree zero","resource_semantics":"FIFO; adoption occurs at service completion; pending agents do not transmit","rng_checkpoint":rng.checkpoint()}}),
+            json!({"values":values,"counts":counts,"agents":states,"requests":requests,"completions":trace,"metadata":{"engine":"kairos_network","kairos_revision":crate::simulation::REV,"seed":o.seed,"population":o.population,"capacity":o.capacity,"service_ticks":o.service_ticks,"ticks_per_unit":o.ticks_per_unit,"queue_length":resource.queue_length(),"available":resource.available_count(),"innovation_multipliers":innovation_weights,"imitation_multipliers":imitation_weights,"agent_service_ticks":service,"hazard":"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted neighbors/degree), zero imitation at degree zero","resource_semantics":"FIFO; adoption occurs at service completion; pending agents do not transmit","rng_checkpoint":rng.checkpoint()}}),
         ),
         metadata: json!({"runtime":"rust_native","engine":"kairos_network"}),
     })
