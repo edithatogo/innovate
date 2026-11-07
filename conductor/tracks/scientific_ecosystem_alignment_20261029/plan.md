@@ -1864,3 +1864,11 @@ the other competition models and installed binding checks remain open.
   Julia and installed R. Reports agree on valid adoption and competition
   rows, excessive total share, unsorted policy timing and negative
   edge weights. R preserves singleton columns for this operation.
+
+- [x] Connect native diagnostics and provenance verification in the
+  structured ingestion request. Successful requests return a stamped
+  dataset artifact and report. The fixture verifies re-ingestion,
+  rejection of a changed dataset with a retained checksum and rejection
+  of a failed diagnostic. All 32 boundary tests and focused Clippy passed.
+- [ ] Restore local table ingestion through Polars and qualify the
+  structured artifact in Python, Julia and R.

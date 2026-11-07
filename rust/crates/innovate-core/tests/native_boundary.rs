@@ -756,3 +756,34 @@ fn edge_diagnostics_detect_duplicate_ordered_pairs_and_negative_weights() {
         innovate_core::json!(["weight_bounds", "duplicate_keys:source_target"])
     );
 }
+
+#[test]
+fn dataset_ingestion_stamps_valid_artifacts_and_rejects_invalid_inputs() {
+    let run = |dataset| {
+        let request = innovate_core::json!({"schema_version":"2.0","operation":"ingest_dataset",
+            "payload":{"dataset":dataset}});
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    let mut data = innovate_core::json!({"kind":"adoption","time":[0,1],"adoption":[1,2],
+        "provenance":{"source":"survey","license":"CC-BY-4.0","extraction_time":"2026-11-07T00:00:00Z"}});
+    let response = run(data.clone());
+    let artifact = &response["result"];
+    assert_eq!(artifact["artifact_kind"], "innovate.dataset");
+    assert_eq!(artifact["validation"]["ok"], true);
+    assert_eq!(
+        artifact["dataset"]["provenance"]["checksum"]
+            .as_str()
+            .unwrap()
+            .len(),
+        64
+    );
+    assert_eq!(run(artifact["dataset"].clone())["result"], *artifact);
+    let mut changed = artifact["dataset"].clone();
+    changed["adoption"][1] = innovate_core::json!(3);
+    assert_eq!(run(changed)["error"]["code"], "invalid_request");
+    data["adoption"][1] = innovate_core::json!(0);
+    assert_eq!(run(data)["error"]["code"], "invalid_request");
+}

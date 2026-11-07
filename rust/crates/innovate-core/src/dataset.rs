@@ -346,3 +346,22 @@ fn validate_edges(payload: &Value) -> Result<Value, &'static str> {
         json!({"kind":"network_edges","ok":failed.is_empty(),"checks":checks,"failed":failed,"warnings":[]}),
     )
 }
+
+pub(crate) fn ingest(payload: &Value) -> Result<Value, &'static str> {
+    let mut dataset = payload["dataset"].clone();
+    if !dataset["provenance"].is_object() {
+        return Err("ingestion requires dataset provenance");
+    }
+    let digest = crate::provenance::checksum(payload)?;
+    let report = validate(&dataset)?;
+    if report["ok"] != true {
+        return Err("dataset diagnostics failed; inspect validate_dataset for details");
+    }
+    dataset["provenance"]["checksum"] = digest["checksum"].clone();
+    Ok(json!({
+        "artifact_kind":"innovate.dataset",
+        "dataset":dataset,
+        "validation":report,
+        "checksum_encoding":digest["encoding"]
+    }))
+}
