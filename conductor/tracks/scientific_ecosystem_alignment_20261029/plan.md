@@ -2918,3 +2918,8 @@ the other competition models and installed binding checks remain open.
   denials agreed exactly after excluding elapsed milliseconds, which
   were nonnegative. R used raw JSON. Hosted authentication and
   transport remain open.
+
+- [x] Restore remote execution contract discovery. Share operation,
+  scope, retention and size constants with the native in-process
+  dispatcher. Discovery identifies caller-supplied identity and
+  exposes observability fields. Focused Rust and Clippy passed.

@@ -4,6 +4,26 @@ use serde::Deserialize;
 use serde_json::{Value, json};
 use std::time::Instant;
 
+const REQUIRED_SCOPE: &str = "kernel:execute";
+const MAX_KERNEL_REQUEST_BYTES: usize = 1_000_000;
+const DATA_RETENTION: &str = "ephemeral";
+const ELIGIBLE_OPERATIONS: &[&str] = &[
+    "discover_models",
+    "predict_model",
+    "simulate_model",
+    "summarize_model",
+    "diagnose_model",
+];
+
+pub(crate) fn describe() -> Value {
+    json!({"schema_version":KERNEL_SCHEMA_VERSION,"execution_location":"in_process",
+        "runtime":"rust_native","backend":"cpu","required_auth_scope":REQUIRED_SCOPE,
+        "identity_verification":"caller_supplied_context","data_retention":DATA_RETENTION,
+        "max_kernel_request_bytes":MAX_KERNEL_REQUEST_BYTES,
+        "eligible_operations":ELIGIBLE_OPERATIONS,"local_only_by_default":["fit_model"],
+        "observability_fields":["request_id","tenant_id","principal","trace_id","operation","duration_ms","status"]})
+}
+
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 struct Context {
@@ -31,7 +51,7 @@ pub(crate) fn execute(payload: &Value) -> Result<Value, &'static str> {
     }
     let raw =
         serde_json::to_string(&payload["kernel_request"]).map_err(|_| "invalid kernel request")?;
-    if raw.len() > 1_000_000 {
+    if raw.len() > MAX_KERNEL_REQUEST_BYTES {
         return Err("remote kernel request exceeds 1000000 bytes");
     }
     let request: KernelRequest =
@@ -40,24 +60,18 @@ pub(crate) fn execute(payload: &Value) -> Result<Value, &'static str> {
         return Err("remote kernel request requires schema 2.0");
     }
     let operation = &payload["kernel_request"]["operation"];
-    let denial = if context.auth_scope != "kernel:execute" {
+    let denial = if context.auth_scope != REQUIRED_SCOPE {
         Some("remote execution auth_scope does not satisfy the local policy")
     } else if context
         .data_retention
         .as_deref()
-        .is_some_and(|retention| retention != "ephemeral")
+        .is_some_and(|retention| retention != DATA_RETENTION)
     {
         Some("local policy requires ephemeral data retention")
-    } else if !matches!(
-        operation.as_str(),
-        Some(
-            "discover_models"
-                | "predict_model"
-                | "simulate_model"
-                | "summarize_model"
-                | "diagnose_model"
-        )
-    ) {
+    } else if !operation
+        .as_str()
+        .is_some_and(|name| ELIGIBLE_OPERATIONS.contains(&name))
+    {
         Some("operation is ineligible for remote execution")
     } else {
         None
@@ -77,7 +91,7 @@ pub(crate) fn execute(payload: &Value) -> Result<Value, &'static str> {
     Ok(
         json!({"schema_version":KERNEL_SCHEMA_VERSION,"status":status,"kernel_response":kernel_response,
         "provenance":{"execution_location":"in_process","runtime":"rust_native","backend":"cpu",
-            "data_retention":"ephemeral","identity_verification":"caller_supplied_context"},
+            "data_retention":DATA_RETENTION,"identity_verification":"caller_supplied_context"},
         "observability":{"request_id":context.request_id,"tenant_id":context.tenant_id,
             "principal":context.principal,"trace_id":context.trace_id,"operation":operation,
             "duration_ms":started.elapsed().as_secs_f64()*1000.,"status":status}}),
