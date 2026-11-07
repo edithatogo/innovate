@@ -6879,3 +6879,8 @@ Hosted release readiness for this worktree revision remains open.
   fit and a covariate fit converged in the same batch with one or two
   workers and each full result matched its direct fit. The focused
   Rust test passed. Cross-binding verification remains open.
+
+- [x] Verify the mixed event-split and covariate Logistic batch through
+  Python 3.15.2, Julia and installed R. In each binding both fits
+  converged, matched direct fits and returned identical ordered
+  results with one and two workers on the 8926c30c runtime.
