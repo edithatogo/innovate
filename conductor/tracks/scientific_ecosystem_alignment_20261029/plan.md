@@ -3436,3 +3436,11 @@ the other competition models and installed binding checks remain open.
   inputs preserved every wheel payload except the CycloneDX SBOM and
   its RECORD entry. The SBOM differed only in timestamp and UUID.
   Byte-identical wheels and independent build reproducibility remain open.
+
+- [x] Repackage the Darwin arm64 Python release wheel twice with
+  SOURCE_DATE_EPOCH set to the source revision commit time. The two
+  wheels were byte-identical and retained the CycloneDX SBOM with a
+  fixed timestamp and no generated UUID. Twine and wheel-content
+  checks passed. SHA-256 b2b4bbb9881b8ce3086be5abaedab2dfc4633fbe14d737758a0372fa39647852.
+  This comparison shared the Cargo target directory. Independent
+  build reproducibility remains open.
