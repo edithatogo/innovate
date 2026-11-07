@@ -321,3 +321,8 @@ held-out stratum, the training complement must contain both arms.
 Rust estimates the treatment frequency and both outcome means in
 that complement, then computes augmented ATE. The response includes
 the contrast, folds and nuisance predictions in original row order.
+
+Use `cross_fitted_stratum_att` with the same inputs to target the
+treated population. It uses the same training-complement overlap
+rule and computes the augmented ATT from control predictions and
+propensities.

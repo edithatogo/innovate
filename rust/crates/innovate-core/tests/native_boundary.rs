@@ -713,6 +713,17 @@ fn causal_summaries_match_analytic_effects() {
     assert_eq!(result["result"]["contrast"]["estimate"], 4.);
     cross_fitted["folds"] = json!([1, 2, 1, 2]);
     assert!(run(cross_fitted)["result"].is_null());
+    let mut heterogeneous = json!({"method":"cross_fitted_stratum_att",
+        "outcomes":[0,0,2,10,19,19,19,0,0,2,10,19,19,19],
+        "treatment":[0,0,1,0,1,1,1,0,0,1,0,1,1,1],
+        "strata":["low","low","low","high","high","high","high","low","low","low","high","high","high","high"],
+        "folds":[1,1,1,1,1,1,1,2,2,2,2,2,2,2]});
+    let att = run(heterogeneous.clone());
+    assert_eq!(att["result"]["contrast"]["estimand"], "att");
+    assert!((att["result"]["contrast"]["estimate"].as_f64().unwrap() - 7.25).abs() < 1e-12);
+    heterogeneous["method"] = json!("cross_fitted_stratum_ate");
+    let ate = run(heterogeneous);
+    assert!((ate["result"]["contrast"]["estimate"].as_f64().unwrap() - 6.).abs() < 1e-12);
     let result = run(
         json!({"method":"augmented_treatment_contrast","estimand":"att",
         "outcomes":[1,4],"treatment":[0,1],"propensities":[0.5,0.5],

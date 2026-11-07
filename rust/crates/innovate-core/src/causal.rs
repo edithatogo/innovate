@@ -311,7 +311,8 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
         Some("stratified_treatment_contrast") => stratified_treatment_contrast(payload),
         Some("propensity_weighted_contrast") => propensity_weighted_contrast(payload),
         Some("augmented_treatment_contrast") => augmented_treatment_contrast(payload),
-        Some("cross_fitted_stratum_ate") => cross_fitted_stratum_ate(payload),
+        Some("cross_fitted_stratum_ate") => cross_fitted_stratum_contrast(payload, "ate"),
+        Some("cross_fitted_stratum_att") => cross_fitted_stratum_contrast(payload, "att"),
         Some("estimate_stratum_propensities") => estimate_stratum_propensities(payload),
         Some("fit_logistic_propensities") => fit_logistic_propensities(payload),
         Some("predict_logistic_propensities") => predict_logistic_propensities(payload),
@@ -1085,7 +1086,7 @@ fn estimate_stratum_propensities(payload: &Value) -> Result<Value, &'static str>
     )
 }
 
-fn cross_fitted_stratum_ate(payload: &Value) -> Result<Value, &'static str> {
+fn cross_fitted_stratum_contrast(payload: &Value, estimand: &str) -> Result<Value, &'static str> {
     let outcomes = series(payload, "outcomes")?;
     let treatment = series(payload, "treatment")?;
     let strata: Vec<String> = serde_json::from_value(payload["strata"].clone())
@@ -1100,7 +1101,7 @@ fn cross_fitted_stratum_ate(payload: &Value) -> Result<Value, &'static str> {
         || treatment.iter().any(|&v| v != 0. && v != 1.)
     {
         return Err(
-            "cross-fitted ATE requires aligned inputs, nonblank strata and binary treatment",
+            "cross-fitted contrast requires aligned inputs, nonblank strata and binary treatment",
         );
     }
     let labels: std::collections::BTreeSet<_> = folds.iter().copied().collect();
@@ -1137,10 +1138,14 @@ fn cross_fitted_stratum_ate(payload: &Value) -> Result<Value, &'static str> {
             propensities[i] = propensity;
         }
     }
-    let contrast = augmented_treatment_contrast(&json!({
+    let mut request = json!({
         "outcomes":outcomes,"treatment":treatment,"propensities":propensities,
-        "treated_predictions":treated_predictions,"control_predictions":control_predictions
-    }))?;
+        "estimand":estimand,"control_predictions":control_predictions
+    });
+    if estimand == "ate" {
+        request["treated_predictions"] = json!(treated_predictions);
+    }
+    let contrast = augmented_treatment_contrast(&request)?;
     Ok(
         json!({"contrast":contrast,"folds":folds,"propensities":propensities,
         "treated_predictions":treated_predictions,"control_predictions":control_predictions}),

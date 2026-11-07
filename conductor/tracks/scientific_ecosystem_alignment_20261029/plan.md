@@ -4660,3 +4660,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Validate cross-fitted adjustment on a synthetic two-stratum design
   with unequal treatment rates. Adjusted ATE recovers 6 while the raw
   contrast is 137/12. All 112 Python native and 82 Rust boundary tests passed.
+
+- [x] Add cross-fitted stratum ATT. The Rust two-stratum fixture
+  distinguishes ATT 7.25 from ATE 6 under unequal treatment prevalence.
+  Binding runtime qualification remains open.
