@@ -6012,3 +6012,10 @@ Hosted release readiness for this worktree revision remains open.
   returned byte-identical streams for the provenance-bearing IPC file.
   Arrow.jl read the Unicode schema metadata, IDs and nullable values
   from that stream.
+
+- [x] Isolate field annotation loss in the current IPC rewriters.
+  Through the rebuilt Python wheel, a nullable Int32 duration field
+  annotated with units=days lost that annotation across all four
+  file/stream input and output combinations. Schema provenance and
+  values survived. Documented the boundary; preserving field metadata
+  remains open.
