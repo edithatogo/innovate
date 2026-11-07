@@ -6121,3 +6121,11 @@ Hosted release readiness for this worktree revision remains open.
   resume seed. Pin promotion remains open because the existing
   checkpoint configuration digests include the provider revision.
   Qualify replay of checkpoints written by the previous pin first.
+
+- [x] Promote the tested Kairos lock and preserve the checkpoint digest
+  namespace. The consumed provider crates were unchanged between pins.
+  Checkpoints produced by the previous wheel for Bass DES, Bass ABM
+  and network resource simulation resumed in candidate Python, Julia
+  and R. Each matched its candidate uninterrupted run and the previous
+  scientific output with only the reported provider revision updated.
+  The locked candidate also passed all 50 Kairos and network tests.

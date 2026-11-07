@@ -175,7 +175,7 @@ trajectory = pl.DataFrame({"time": [0.0, 1.0, 5.0, 20.0],
                            "level": result["result"]["values"]})
 ```
 
-Kairos revision `d56863505d938feb069af88a737eb7668113d14b` owns scheduler
+Kairos revision `e76b97be2ea3712645933d903822ff6381c8883e` owns scheduler
 dispatch and the seeded random stream. Innovate supplies the scientific hazard
 `(p + q*n/N)*(N-n)` for a finite population starting with zero adopters.
 Returned levels are `m*n/N`; counts are integers. This stochastic process has a

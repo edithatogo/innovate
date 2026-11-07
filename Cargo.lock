@@ -1369,7 +1369,7 @@ dependencies = [
 [[package]]
 name = "kairo-ecs-abm"
 version = "0.1.0"
-source = "git+https://github.com/edithatogo/kairos.git?rev=d56863505d938feb069af88a737eb7668113d14b#d56863505d938feb069af88a737eb7668113d14b"
+source = "git+https://github.com/edithatogo/kairos.git?rev=e76b97be2ea3712645933d903822ff6381c8883e#e76b97be2ea3712645933d903822ff6381c8883e"
 dependencies = [
  "geo",
  "kairo-ecs-core",
@@ -1384,7 +1384,7 @@ dependencies = [
 [[package]]
 name = "kairo-ecs-core"
 version = "0.0.0"
-source = "git+https://github.com/edithatogo/kairos.git?rev=d56863505d938feb069af88a737eb7668113d14b#d56863505d938feb069af88a737eb7668113d14b"
+source = "git+https://github.com/edithatogo/kairos.git?rev=e76b97be2ea3712645933d903822ff6381c8883e#e76b97be2ea3712645933d903822ff6381c8883e"
 dependencies = [
  "kairo-ecs-types",
 ]
@@ -1392,7 +1392,7 @@ dependencies = [
 [[package]]
 name = "kairo-ecs-des"
 version = "0.1.0"
-source = "git+https://github.com/edithatogo/kairos.git?rev=d56863505d938feb069af88a737eb7668113d14b#d56863505d938feb069af88a737eb7668113d14b"
+source = "git+https://github.com/edithatogo/kairos.git?rev=e76b97be2ea3712645933d903822ff6381c8883e#e76b97be2ea3712645933d903822ff6381c8883e"
 dependencies = [
  "kairo-ecs-core",
  "kairo-ecs-rng",
@@ -1403,7 +1403,7 @@ dependencies = [
 [[package]]
 name = "kairo-ecs-rng"
 version = "0.0.0"
-source = "git+https://github.com/edithatogo/kairos.git?rev=d56863505d938feb069af88a737eb7668113d14b#d56863505d938feb069af88a737eb7668113d14b"
+source = "git+https://github.com/edithatogo/kairos.git?rev=e76b97be2ea3712645933d903822ff6381c8883e#e76b97be2ea3712645933d903822ff6381c8883e"
 dependencies = [
  "kairo-ecs-types",
  "rand",
@@ -1416,7 +1416,7 @@ dependencies = [
 [[package]]
 name = "kairo-ecs-state"
 version = "0.0.0"
-source = "git+https://github.com/edithatogo/kairos.git?rev=d56863505d938feb069af88a737eb7668113d14b#d56863505d938feb069af88a737eb7668113d14b"
+source = "git+https://github.com/edithatogo/kairos.git?rev=e76b97be2ea3712645933d903822ff6381c8883e#e76b97be2ea3712645933d903822ff6381c8883e"
 dependencies = [
  "kairo-ecs-core",
  "kairo-ecs-types",
@@ -1425,7 +1425,7 @@ dependencies = [
 [[package]]
 name = "kairo-ecs-types"
 version = "0.0.0"
-source = "git+https://github.com/edithatogo/kairos.git?rev=d56863505d938feb069af88a737eb7668113d14b#d56863505d938feb069af88a737eb7668113d14b"
+source = "git+https://github.com/edithatogo/kairos.git?rev=e76b97be2ea3712645933d903822ff6381c8883e#e76b97be2ea3712645933d903822ff6381c8883e"
 
 [[package]]
 name = "libc"

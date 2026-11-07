@@ -13,8 +13,8 @@ serde_json.workspace = true
 libm = "=0.2.16"
 sha2 = "=0.11.1"
 chrono = { version = "=0.4.45", default-features = false, features = ["std"] }
-kairo-ecs-core = { git = "https://github.com/edithatogo/kairos.git", rev = "d56863505d938feb069af88a737eb7668113d14b" }
-kairo-ecs-rng = { git = "https://github.com/edithatogo/kairos.git", rev = "d56863505d938feb069af88a737eb7668113d14b" }
-kairo-ecs-types = { git = "https://github.com/edithatogo/kairos.git", rev = "d56863505d938feb069af88a737eb7668113d14b" }
-kairo-ecs-abm = { git = "https://github.com/edithatogo/kairos.git", rev = "d56863505d938feb069af88a737eb7668113d14b" }
-kairo-ecs-des = { git = "https://github.com/edithatogo/kairos.git", rev = "d56863505d938feb069af88a737eb7668113d14b" }
+kairo-ecs-core = { git = "https://github.com/edithatogo/kairos.git", rev = "e76b97be2ea3712645933d903822ff6381c8883e" }
+kairo-ecs-rng = { git = "https://github.com/edithatogo/kairos.git", rev = "e76b97be2ea3712645933d903822ff6381c8883e" }
+kairo-ecs-types = { git = "https://github.com/edithatogo/kairos.git", rev = "e76b97be2ea3712645933d903822ff6381c8883e" }
+kairo-ecs-abm = { git = "https://github.com/edithatogo/kairos.git", rev = "e76b97be2ea3712645933d903822ff6381c8883e" }
+kairo-ecs-des = { git = "https://github.com/edithatogo/kairos.git", rev = "e76b97be2ea3712645933d903822ff6381c8883e" }

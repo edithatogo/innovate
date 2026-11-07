@@ -12,7 +12,10 @@ use kairo_ecs_rng::{
 use kairo_ecs_types::{EntityId, EventKind, ScheduleRequest, SimTime, StepOutcome};
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
-pub(crate) const REV: &str = "d56863505d938feb069af88a737eb7668113d14b";
+pub(crate) const REV: &str = "e76b97be2ea3712645933d903822ff6381c8883e";
+// The provider's scheduler, RNG and state crates are identical at these two
+// revisions. Keep the digest namespace stable so existing checkpoints replay.
+pub(crate) const CHECKPOINT_PROVIDER: &str = "d56863505d938feb069af88a737eb7668113d14b";
 struct AdoptionClock {
     rng: DeterministicStream,
     now: u128,
@@ -220,7 +223,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     }
     let resume = options.get("resume_checkpoint");
     let checkpoint_configuration = (pause.is_some() || pause_tick.is_some() || resume.is_some()).then(|| {
-        let mut configuration = json!({"kairos_revision":REV,"seed":seed,"population":population,"initial":initial,
+        let mut configuration = json!({"kairos_revision":CHECKPOINT_PROVIDER,"seed":seed,"population":population,"initial":initial,
             "ticks_per_unit":ticks,"forcing":forcing,"market_size":m,"horizon":horizon});
         if engine == "kairos_abm" {
             configuration["engine"] = json!(engine);

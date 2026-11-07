@@ -430,7 +430,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     let resume = options_map.remove("resume_checkpoint");
     let configuration = (pause.is_some() || pause_tick.is_some() || resume.is_some()).then(|| {
         let mut config = json!([
-            crate::simulation::REV,
+            crate::simulation::CHECKPOINT_PROVIDER,
             options,
             payload["inputs"],
             payload["state"]["parameters"]
