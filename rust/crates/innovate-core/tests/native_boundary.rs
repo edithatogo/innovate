@@ -734,6 +734,21 @@ fn causal_summaries_match_analytic_effects() {
     assert!((covariance[0][1].as_f64().unwrap() - 2. * se).abs() < 1e-12);
     assert_eq!(covariance[0][1], covariance[1][0]);
     assert!((onset["supported_cohort_att"].as_f64().unwrap() - 8. / 3.).abs() < 1e-12);
+    let balanced = run(json!({"method":"staggered_panel_att","periods":[0,1,2],
+        "outcomes":[[0,5,7],[0,7,9],[10,12,16],[10,12,16]],
+        "adoption_indices":[1,1,2,null],"balanced_horizon":1}));
+    assert_eq!(
+        balanced["result"]["balanced_event_time"]["excluded_cohorts"],
+        1
+    );
+    assert_eq!(
+        balanced["result"]["event_time"][0]["supported_cohort_att"],
+        4.
+    );
+    assert_eq!(
+        balanced["result"]["event_time"][1]["supported_cohort_att"],
+        2.
+    );
     assert_eq!(row["estimate"], 4.);
     assert!((row["standard_error"].as_f64().unwrap() - 1.).abs() < 1e-12);
     let mut augmented = json!({"method":"augmented_treatment_contrast","outcomes":[0,4],

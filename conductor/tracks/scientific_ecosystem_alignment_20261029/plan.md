@@ -4749,3 +4749,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify staggered simultaneous event-time bands through rebuilt
   Python 3.15.2, Julia and installed R. Each reproduced the seeded
   critical value sqrt(2) and the analytic interval endpoints.
+
+- [x] Add a balanced event-time horizon for staggered ATT. The Rust
+  fixture holds cohort composition fixed and recovers 4 at onset and
+  2 at the next offset, with one cohort excluded. Binding checks remain open.

@@ -395,6 +395,17 @@ fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
     if cohorts.is_empty() {
         return Err("staggered ATT requires at least one adoption cohort");
     }
+    let balanced_horizon = payload
+        .get("balanced_horizon")
+        .map(|value| {
+            value
+                .as_u64()
+                .and_then(|n| usize::try_from(n).ok())
+                .filter(|&n| n < periods.len() - 1)
+                .ok_or("balanced_horizon must be an observed nonnegative event-time offset")
+        })
+        .transpose()?;
+    let cohort_count = cohorts.len();
     let mut contrasts = Vec::new();
     let mut by_offset = std::collections::BTreeMap::<usize, Vec<_>>::new();
     for cohort in cohorts {
@@ -423,6 +434,25 @@ fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
             );
         }
     }
+    let balanced_cohorts = if let Some(horizon) = balanced_horizon {
+        let eligible: std::collections::BTreeSet<_> = by_offset
+            .get(&horizon)
+            .into_iter()
+            .flatten()
+            .filter_map(|&(estimate, _, cohort, _)| estimate.map(|_| cohort))
+            .collect();
+        if eligible.is_empty() {
+            return Err("no cohort has eligible controls through balanced_horizon");
+        }
+        by_offset.retain(|&offset, rows| {
+            rows.retain(|&(_, _, cohort, _)| eligible.contains(&cohort));
+            offset <= horizon
+        });
+        Some(json!({"horizon":horizon,"included_cohorts":eligible.len(),
+            "excluded_cohorts":cohort_count-eligible.len()}))
+    } else {
+        None
+    };
     let mut event_time = Vec::with_capacity(by_offset.len());
     let mut influence_rows = Vec::new();
     if (include_covariance || bands.is_some()) && by_offset.len() > 128 {
@@ -503,6 +533,9 @@ fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
     }
     let mut result = json!({"method":"not_yet_treated_group_time_difference_in_differences",
         "contrasts":contrasts,"event_time":event_time});
+    if let Some(balance) = balanced_cohorts {
+        result["balanced_event_time"] = balance;
+    }
     if let Some(options) = bands {
         result["simultaneous_bands"] =
             event_time_bands(options, &event_time, &influence_rows, outcomes.len())?;

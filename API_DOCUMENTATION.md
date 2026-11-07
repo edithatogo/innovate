@@ -380,3 +380,9 @@ max-t procedure uses the same random sign for each unit across offsets
 and returns bands for offsets with positive standard errors. Other
 offsets have null intervals. These are approximate bands under
 independent units and fixed cohort weights.
+
+Set `balanced_horizon` to a nonnegative event-time offset to keep the
+same cohort composition from adoption through that offset. The summary
+includes only cohorts observed with eligible controls through the horizon.
+The result reports included and excluded cohort counts. Cohort-period
+contrasts remain available for the full panel.
