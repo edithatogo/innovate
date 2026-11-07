@@ -5084,3 +5084,10 @@ Hosted release readiness for this worktree revision remains open.
   matched the complete uninterrupted response. A changed seed was
   rejected. Broader checkpoint validation, cross-binding checks and
   scientific qualification remain open.
+
+- [x] Qualify the shared network checkpoint fixture through the
+  extracted Python 3.15.2 wheel, Julia and installed R. Each consumer
+  paused after the first completion and restored its full result
+  exactly, including the queue, service and policy traces. The Rust
+  integration test also passed with the shared fixture. This verifies
+  round-trips within each binding.

@@ -896,15 +896,8 @@ fn heterogeneous_imitation_scales_large_coefficients_by_exposure() {
 
 #[test]
 fn network_checkpoint_preserves_pending_service_queue_and_schedule() {
-    let mut payload = json!({
-        "inputs":{"time":[0,4,6,8,12,30]},
-        "parameters":{"p":1e12,"q":0,"m":6},
-        "simulation_options":{"engine":"kairos_network","population":6,"seed":42,
-            "edges":[],"capacity":2,"service_ticks":5,"ticks_per_unit":1,
-            "max_wait_ticks":5,"retry":{"delay_ticks":2,"max_retries":2},
-            "schedule":[{"tick":4,"agent_priorities":[0,0,1,0,0,0]},
-                        {"tick":7,"capacity":1},{"tick":12,"capacity":2}]}
-    });
+    let mut payload: serde_json::Value =
+        serde_json::from_str(include_str!("fixtures/kairos_network_checkpoint.json")).unwrap();
     let kernel = KernelBinding::new();
     let run = |payload| kernel.simulate_model("bass", payload);
     let expected = run(payload.clone()).unwrap().result.unwrap();
