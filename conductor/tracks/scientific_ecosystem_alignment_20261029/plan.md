@@ -1550,3 +1550,10 @@ the other competition models and installed binding checks remain open.
   including warmup, and likelihood within 1.80e-7. The checker separates
   reference generation from native validation. Optimizer behavior
   across higher orders and difficult parameter regions remains open.
+
+- [x] Improve the SARIMA search with a joint step along the direction of
+  each coordinate sweep and allow up to 2,048 sweeps. The higher-order
+  checker covers three ARMA fits. ARMA(1,2) previously exhausted the
+  search budget and now converges to a different basin with likelihood
+  0.495 higher than the reference R fit. The other two likelihoods
+  agree within 1e-8. All 22 boundary tests and focused Clippy passed.

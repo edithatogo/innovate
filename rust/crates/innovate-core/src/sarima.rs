@@ -130,8 +130,8 @@ fn estimate(
         .ok_or("SARIMA likelihood is degenerate")?;
     let mut step = 0.25;
     // Refine a deterministic coordinate search over stationary and invertible models.
-    for _ in 0..512 {
-        let mut improved = false;
+    for _ in 0..2048 {
+        let base = best.clone();
         for index in 0..count {
             let original = best[index];
             let mut selected = original;
@@ -142,13 +142,19 @@ fn estimate(
                     selected = best[index];
                 }
             }
-            improved |= selected != original;
             best[index] = selected;
         }
-        if !improved {
+        if best == base {
             step *= 0.5;
             if step < 1e-6 {
                 return Ok(best);
+            }
+        } else {
+            // Follow the net direction of the sweep across correlated terms.
+            let candidate: Vec<_> = best.iter().zip(base).map(|(a, b)| a + (a - b)).collect();
+            if let Some(candidate_score) = score(&candidate).filter(|v| *v > likelihood) {
+                best = candidate;
+                likelihood = candidate_score;
             }
         }
     }
