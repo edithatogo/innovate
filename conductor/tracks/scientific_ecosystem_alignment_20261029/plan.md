@@ -6237,3 +6237,10 @@ Hosted release readiness for this worktree revision remains open.
   and ATT averaged 2.5973 (truth 2.6). Nominal 95% Wald coverage was
   390/400 and 386/400, respectively. The reproducible check uses the
   optimized Python wheel and independent units with good overlap.
+
+- [x] Extend cross-fitted coverage to 80 clusters of 10 observations
+  with shared Gaussian shocks. Keep each cluster in one held-out
+  fold and use cluster influence standard errors. Across 400 trials,
+  ATE and ATT averaged 2.0036 and 2.5988, with nominal 95% coverage
+  of 382/400 and 379/400. The independent case reproduced its prior
+  results. Few clusters and weak overlap remain unqualified.
