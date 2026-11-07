@@ -1080,3 +1080,14 @@ the other competition models and installed binding checks remain open.
   before reading columns. The installed Python regression rejects an
   unexpected control name and retains the analytic rate result. All four
   native tabular tests and both focused Python Logistic tests passed.
+
+## Native integration checkpoint
+
+- [x] Re-run local core, tabular, FFI and installed consumer suites after
+  the historical fit and rate changes. Rust passed 162 tests, Python
+  passed 65 tests, Julia Pkg.test passed 241 assertions, and installed R
+  conformance passed.
+  Rustfmt and Ruff passed. Basedpyright reported zero errors with the
+  repo-local interpreter and one missing native-module-source warning.
+  Migration policy reports 38 release obligations still open.
+  [Local integration results](evidence/native-integration-checkpoint-20261107).

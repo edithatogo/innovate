@@ -99,7 +99,10 @@ fn complementary_forcing_fits_independent_reference_and_forecasts() {
     let mut start = fixture["parameters"].clone();
     start["k1"] = json!(0.29);
     start["beta_c2_price"] = json!(-0.007);
-    for fit_options in [json!({"initial_parameters":start,"max_iterations":150}), json!({"max_iterations":150})] {
+    for fit_options in [
+        json!({"initial_parameters":start,"max_iterations":150}),
+        json!({"max_iterations":150}),
+    ] {
         let fit = binding.fit_model("complementary_goods",json!({
             "inputs":{"time":fixture["time"],"covariates":fixture["covariates"],"observed":fixture["rows"]},
             "constructor_kwargs":options,"fit_options":fit_options

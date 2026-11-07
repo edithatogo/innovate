@@ -140,7 +140,11 @@ fn gompertz_event_fit_holds_absent_b_and_forecasts_from_saved_origin() {
         })
         .collect();
     for (fit_options, b, b_post) in [
-        (json!({"initial_parameters":{"a":100.,"b":77.,"c":0.3,"a_post":200.,"b_post":99.,"c_post":0.18}}), 77., 99.),
+        (
+            json!({"initial_parameters":{"a":100.,"b":77.,"c":0.3,"a_post":200.,"b_post":99.,"c_post":0.18}}),
+            77.,
+            99.,
+        ),
         (json!({}), 1., 1.),
     ] {
         let f=KernelBinding::new().fit_model("gompertz",json!({"inputs":{"time":t,"observed":y},"constructor_kwargs":{"t_event":2.,"initial_value":1.},"fit_options":fit_options})).unwrap().result.unwrap();

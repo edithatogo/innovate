@@ -1,0 +1,103 @@
+     Testing Innovate
+      Status `/private/var/folders/m9/_g3wndrn04d80ys2382r700r0000gn/T/jl_LGdR7b/Project.toml`
+  [ffe8f1e4] Innovate v0.7.0-DEV `/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/bindings/julia`
+  [682c06a0] JSON v1.13.4
+  [8f399da3] Libdl v1.11.0
+  [8dfed614] Test v1.11.0
+      Status `/private/var/folders/m9/_g3wndrn04d80ys2382r700r0000gn/T/jl_LGdR7b/Manifest.toml`
+  [ffe8f1e4] Innovate v0.7.0-DEV `/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/bindings/julia`
+  [682c06a0] JSON v1.13.4
+  [69de0a69] Parsers v3.0.6
+  [aea7be01] PrecompileTools v1.3.4
+  [21216c6a] Preferences v1.6.1
+  [ec057cc2] StructUtils v2.12.0
+  [2a0f44e3] Base64 v1.11.0
+  [ade2ca70] Dates v1.11.0
+  [b77e0a4c] InteractiveUtils v1.11.0
+  [ac6e5ff7] JuliaSyntaxHighlighting v1.12.0
+  [8f399da3] Libdl v1.11.0
+  [56ddb016] Logging v1.11.0
+  [d6f4376e] Markdown v1.11.0
+  [de0858da] Printf v1.11.0
+  [9a3f8284] Random v1.11.0
+  [ea8e919c] SHA v1.0.0
+  [9e88b42a] Serialization v1.11.0
+  [f489334b] StyledStrings v1.11.0
+  [fa267f1f] TOML v1.0.3
+  [8dfed614] Test v1.11.0
+  [cf7118a7] UUIDs v1.11.0
+  [4ec0a83e] Unicode v1.11.0
+     Testing Running tests...
+Test Summary:      | Pass  Total  Time
+Native conformance |  104    104  2.4s
+Test Summary:               | Pass  Total  Time
+Five model analytic oracles |   10     10  0.2s
+Test Summary:                     | Pass  Total  Time
+Multi-generation fit and forecast |    7      7  1.3s
+Test Summary:               | Pass  Total  Time
+Competitive analytic limits |    6      6  0.2s
+Test Summary:                   | Pass  Total  Time
+Native numerical overflow guard |    1      1  0.4s
+Test Summary:        | Pass  Total  Time
+Kairos native replay |    3      3  0.1s
+Test Summary:                      | Pass  Total  Time
+ABM forcing and agent conservation |    4      4  0.1s
+Test Summary:                       | Pass  Total  Time
+Historical Logistic and initial ABM |    2      2  0.5s
+Test Summary:                        | Pass  Total  Time
+Complementary goods and network FIFO |    5      5  0.1s
+Test Summary:              | Pass  Total  Time
+Complementary analytic fit |    2      2  0.3s
+Test Summary:             | Pass  Total  Time
+Lock-in analytic forecast |    2      2  0.0s
+Test Summary:               | Pass  Total  Time
+Historical weighted network |    2      2  0.1s
+Test Summary:         | Pass  Total  Time
+Policy event boundary |    1      1  0.0s
+Test Summary:                 | Pass  Total  Time
+Heterogeneous network service |    5      5  0.1s
+Test Summary:               | Pass  Total  Time
+Latent saved residual state |    3      3  0.1s
+Test Summary:              | Pass  Total  Time
+Fixed time regime forecast |    3      3  0.1s
+Test Summary:           | Pass  Total  Time
+Short Fisher-Pry regime |    1      1  0.1s
+Test Summary:                     | Pass  Total  Time
+Centered hierarchical group state |    3      3  0.1s
+Test Summary:                        | Pass  Total  Time
+Weighted scalar and Gaussian mixture |    4      4  0.3s
+Test Summary:                            | Pass  Total  Time
+Composite native levels rates and origin |    4      4  0.3s
+Test Summary:                         | Pass  Total  Time
+Mechanistic ODE covariates and events |    4      4  0.5s
+Test Summary:           | Pass  Total  Time
+Floating forcing replay |    1      1  0.1s
+Test Summary:                     | Pass  Total  Time
+Directed weighted Kairos resource |    5      5  0.4s
+Test Summary:                | Pass  Total  Time
+Kairos queue limit and retry |    3      3  0.1s
+Test Summary:               | Pass  Total  Time
+Norton Bass forcing history |    2      2  0.1s
+Test Summary:                             | Pass  Total  Time
+Interacting Lotka forcing fit and history |    4      4  2.0s
+Test Summary:                                     | Pass  Total  Time
+Multi product forcing layouts and conditional fit |    6      6  4.4s
+Test Summary:                               | Pass  Total  Time
+Complementary goods forcing fit and history |    4      4  0.7s
+Test Summary:                   | Pass  Total  Time
+Lock in forcing fit and history |    4      4  1.2s
+Test Summary:                    | Pass  Total  Time
+Fixed ecosystem parameter events |   10     10  0.1s
+Test Summary:               | Pass  Total     Time
+Norton fixed event variants |   12     12  1m01.5s
+Test Summary:                     | Pass  Total  Time
+Norton baseline threshold summary |    3      3  0.0s
+Test Summary:           | Pass  Total  Time
+Norton forced rate peak |    5      5  0.1s
+Test Summary:                      | Pass  Total  Time
+Norton historical level milestones |    2      2  0.1s
+Test Summary:                  | Pass  Total  Time
+Scheduled Kairos agent hazards |    2      2  1.1s
+Test Summary:                   | Pass  Total  Time
+Continuous Kairos hazard wakeup |    2      2  0.1s
+     Testing Innovate tests passed

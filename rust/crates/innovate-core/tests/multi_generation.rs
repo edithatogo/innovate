@@ -325,8 +325,13 @@ fn conditional_covariate_fit_retains_all_named_coefficients() {
     assert_eq!(fit["parameters"].as_object().unwrap().len(), 6);
     assert!(fit["diagnostics"]["metrics"]["RSS"].as_f64().unwrap() < 1e-10);
     let automatic = binding
-        .fit_model("norton_bass", json!({"inputs":training,"constructor_kwargs":options}))
-        .unwrap().result.unwrap();
+        .fit_model(
+            "norton_bass",
+            json!({"inputs":training,"constructor_kwargs":options}),
+        )
+        .unwrap()
+        .result
+        .unwrap();
     assert_eq!(automatic["diagnostics"]["optimizer"]["converged"], true);
     assert!(automatic["diagnostics"]["metrics"]["RSS"].as_f64().unwrap() < 1e-8);
 }
@@ -686,19 +691,27 @@ fn threshold_summary_uses_the_named_generation_parameters() {
 #[test]
 fn forced_threshold_summary_reports_sampled_net_rate_peaks() {
     let response = KernelBinding::new()
-        .summarize_model("norton_bass", json!({
-            "inputs":{"time":[0.,1.,2.,3.]},
-            "parameters":{"p1":0.1,"q1":0.,"m1":100.,"p2":0.1,"q2":0.,"m2":100.},
-            "constructor_kwargs":{
-                "n_generations":2,"variant":"successive_generations","launch_times":[0.,4.],
-                "parameter_events":[{"time":2.,"parameters":{"p1":0.5}}]
-            }
-        }))
-        .unwrap().result.unwrap();
+        .summarize_model(
+            "norton_bass",
+            json!({
+                "inputs":{"time":[0.,1.,2.,3.]},
+                "parameters":{"p1":0.1,"q1":0.,"m1":100.,"p2":0.1,"q2":0.,"m2":100.},
+                "constructor_kwargs":{
+                    "n_generations":2,"variant":"successive_generations","launch_times":[0.,4.],
+                    "parameter_events":[{"time":2.,"parameters":{"p1":0.5}}]
+                }
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
     let trajectory = &response["threshold_diagnostics"]["trajectory"];
-    assert_eq!(trajectory["window"], json!([0.,3.]));
+    assert_eq!(trajectory["window"], json!([0., 3.]));
     assert_eq!(trajectory["generations"][0]["peak_time"], 2.);
-    assert_eq!(trajectory["generations"][0]["peak_rate"], response["predictions"]["rates"][2][0]);
+    assert_eq!(
+        trajectory["generations"][0]["peak_rate"],
+        response["predictions"]["rates"][2][0]
+    );
     assert_eq!(trajectory["generations"][1]["status"], "no_active_samples");
     let milestones = &response["threshold_diagnostics"]["intrinsic_adoption_milestones"];
     assert_eq!(milestones["generations"][1]["reference_time"], 4.);
@@ -709,15 +722,20 @@ fn forced_threshold_summary_reports_sampled_net_rate_peaks() {
 #[test]
 fn forced_successive_milestones_resolve_between_requested_samples() {
     let result = KernelBinding::new()
-        .summarize_model("norton_bass", json!({
-            "inputs":{"time":[3.,7.]},
-            "parameters":{"p1":0.1,"q1":0.,"m1":100.},
-            "constructor_kwargs":{
-                "variant":"successive_generations","launch_times":[1.],
-                "parameter_events":[{"time":2.,"parameters":{"p1":0.5,"m1":300.}}]
-            }
-        }))
-        .unwrap().result.unwrap();
+        .summarize_model(
+            "norton_bass",
+            json!({
+                "inputs":{"time":[3.,7.]},
+                "parameters":{"p1":0.1,"q1":0.,"m1":100.},
+                "constructor_kwargs":{
+                    "variant":"successive_generations","launch_times":[1.],
+                    "parameter_events":[{"time":2.,"parameters":{"p1":0.5,"m1":300.}}]
+                }
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
     let row = &result["threshold_diagnostics"]["intrinsic_adoption_milestones"]["generations"][0];
     for (key, fraction) in [("takeoff", 0.1_f64), ("median", 0.5), ("saturation", 0.9)] {
         let expected = 2. + (-(-fraction).ln_1p() - 0.1) / 0.5;
@@ -728,18 +746,23 @@ fn forced_successive_milestones_resolve_between_requested_samples() {
 #[test]
 fn historical_milestones_use_fixed_base_market_even_after_capacity_override() {
     let response = KernelBinding::new()
-        .summarize_model("norton_bass", json!({
-            "inputs":{"time":[1.,2.,3.]},
-            "parameters":{"p1":0.1,"q1":0.,"m1":100.},
-            "constructor_kwargs":{
-                "initial_time":1.,"initial_values":[12.],
-                "parameter_events":[{"time":2.,"parameters":{"m1":1000.}}]
-            }
-        }))
-        .unwrap().result.unwrap();
+        .summarize_model(
+            "norton_bass",
+            json!({
+                "inputs":{"time":[1.,2.,3.]},
+                "parameters":{"p1":0.1,"q1":0.,"m1":100.},
+                "constructor_kwargs":{
+                    "initial_time":1.,"initial_values":[12.],
+                    "parameter_events":[{"time":2.,"parameters":{"m1":1000.}}]
+                }
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
     let diagnostic = &response["threshold_diagnostics"]["net_level_milestones"];
     let row = &diagnostic["generations"][0];
-    assert_eq!(diagnostic["window"], json!([1.,3.]));
+    assert_eq!(diagnostic["window"], json!([1., 3.]));
     assert_eq!(row["reference_market"], 100.);
     assert_eq!(row["takeoff"], 1.);
     assert_eq!(row["median"], 3.);
