@@ -2875,3 +2875,8 @@ the other competition models and installed binding checks remain open.
   of converged scalar bootstrap draws. Scale before squaring and return
   null when fewer than two draws converge. The focused Rust test
   compares the result to the direct sample formula. Clippy passed.
+
+- [x] Verify bootstrap standard errors in rebuilt Python 3.15, Julia
+  and R on noisy Logistic trial 0. Complete results agreed exactly.
+  Standard errors matched Python statistics.stdev on the converged
+  draws within 1e-12 relative error. R used raw JSON.
