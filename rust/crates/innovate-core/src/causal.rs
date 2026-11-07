@@ -60,7 +60,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                 {"method":"augmented_treatment_contrast","adjustment":"caller_supplied_nuisance_predictions",
                  "required_fields":["outcomes","treatment","propensities","control_predictions"],
                  "required_fields_by_estimand":{"ate":["treated_predictions"],"att":[]},
-                 "optional_fields":["estimand"],"estimands":["ate","att"],"default_estimand":"ate",
+                 "optional_fields":["estimand","clusters"],"estimands":["ate","att"],"default_estimand":"ate",
                  "uncertainty":"influence_standard_error"},
                 {"method":"cross_fitted_stratum_ate","adjustment":"cross_fitted_strata",
                  "required_fields":["outcomes","treatment","strata","folds"],"optional_fields":[],
@@ -1177,6 +1177,7 @@ fn augmented_treatment_contrast(payload: &Value) -> Result<Value, &'static str> 
                 | "treated_predictions"
                 | "control_predictions"
                 | "estimand"
+                | "clusters"
         )
     }) {
         return Err("augmented contrast received an unsupported field");
@@ -1227,17 +1228,38 @@ fn augmented_treatment_contrast(payload: &Value) -> Result<Value, &'static str> 
     }
     let denominator = if att { mean(&treatment).unwrap() } else { 1. };
     let estimate = finite(mean(&scores).unwrap() / denominator)?;
-    let scale = 1. / (((n as f64) * ((n - 1) as f64)).sqrt() * denominator);
-    let standard_error = scores
-        .iter()
-        .zip(&treatment)
-        .fold(0_f64, |error, (&score, &flag)| {
-            let center = if att { flag * estimate } else { estimate };
-            error.hypot(scale * score - scale * center)
-        });
+    let centered_scores = scores.iter().zip(&treatment).map(|(&score, &flag)| {
+        let center = if att { flag * estimate } else { estimate };
+        let scale = 1. / (n as f64 * denominator);
+        scale * score - scale * center
+    });
+    let (standard_error, cluster_count) = if let Some(clusters) = fields.get("clusters") {
+        let labels: Vec<String> = serde_json::from_value(clusters.clone())
+            .map_err(|_| "clusters must contain string labels")?;
+        if labels.len() != n || labels.iter().any(|label| label.trim().is_empty()) {
+            return Err("cluster labels must be nonblank and align with outcomes");
+        }
+        let mut sums = std::collections::BTreeMap::<String, f64>::new();
+        for (label, score) in labels.into_iter().zip(centered_scores) {
+            *sums.entry(label).or_default() += score;
+        }
+        let count = sums.len();
+        if count < 2 {
+            return Err("cluster inference requires at least two clusters");
+        }
+        let error = sums.into_values().fold(0_f64, f64::hypot);
+        (
+            error * (count as f64 / (count - 1) as f64).sqrt(),
+            Some(count),
+        )
+    } else {
+        let error = centered_scores.fold(0_f64, f64::hypot);
+        (error * (n as f64 / (n - 1) as f64).sqrt(), None)
+    };
     Ok(
         json!({"method":"augmented_inverse_probability_weighting","estimand":if att { "att" } else { "ate" },
-        "estimate":estimate,"influence_standard_error":finite(standard_error)?,"observations":n}),
+        "estimate":estimate,"influence_standard_error":finite(standard_error)?,"observations":n,
+        "cluster_count":cluster_count}),
     )
 }
 

@@ -326,3 +326,8 @@ Use `cross_fitted_stratum_att` with the same inputs to target the
 treated population. It uses the same training-complement overlap
 rule and computes the augmented ATT from control predictions and
 propensities.
+
+Supply aligned string `clusters` to use independent-cluster inference
+for the augmented contrast. The standard error sums influence scores
+within clusters and applies the G/(G−1) variance correction for G
+clusters. At least two clusters are required. The estimate is unchanged.

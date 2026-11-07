@@ -4672,3 +4672,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Advertise augmented and cross-fitted stratum contrasts in native
   discovery, including the ATE-only treated prediction requirement.
   Rust metadata assertions and focused Python, Julia and R regressions passed.
+
+- [x] Support cluster-robust influence standard errors for augmented
+  contrasts. The focused Rust fixture verifies standard error 2 with
+  two clusters and rejects a single cluster. Binding checks remain open.
