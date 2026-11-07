@@ -3989,3 +3989,7 @@ Hosted release readiness for this worktree revision remains open.
   Julia and freshly installed R at f73933fe. The same seeded network
   reports two Kairos dispatches for one request and one completion
   in all three bindings.
+- [x] Check homogeneous ABM dispatch counts against adoption gained
+  after initialization. The existing partial and saturated population
+  fixture verifies that initial adopters contribute zero dispatches.
+  All ten locked Kairos tests passed.
