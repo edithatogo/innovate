@@ -3274,3 +3274,10 @@ the other competition models and installed binding checks remain open.
   bootstrap ledger work with the discrete timing and mean-path
   interval evidence. Development validation passed. Release still
   fails closed with all 38 required obligations, including these three.
+
+- [x] Expose native execution-mode discovery with the shared local CPU
+  worker limit and explicit unqualified accelerator, distributed and
+  scheduler modes. Python 3.15.2, Julia and R agreed. Two Rust batch
+  regressions and Clippy passed. The installed sbatch and qsub wrappers
+  could not run their version probes because Docker was unavailable.
+  Scheduler and accelerator qualification remain open.

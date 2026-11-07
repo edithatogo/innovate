@@ -64,6 +64,7 @@ pub fn execute_json(input: &str) -> String {
                 | "export_decision_report"
                 | "export_decision_report_markdown"
                 | "discover_model_cards"
+                | "discover_execution_modes"
                 | "validate_provenance"
                 | "execute_remote_in_process"
                 | "describe_remote_execution_contract"
@@ -195,6 +196,16 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             return Err("analysis request requires schema 2.0");
         }
         let payload = &value["payload"];
+        if value["operation"] == "discover_execution_modes" {
+            return Ok(json!({
+                "local_cpu":{"status":"available","max_workers":MAX_BATCH_WORKERS,
+                    "operations":["fit_batch","predict_batch","execute_scenario_grid"],
+                    "preserves_input_order":true},
+                "accelerator":{"status":"unqualified"},
+                "distributed":{"status":"unqualified"},
+                "scheduler":{"status":"unqualified"}
+            }));
+        }
         if value["operation"] == "discover_model_cards" {
             return model_cards::discover(payload);
         }
@@ -437,12 +448,14 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         "model_key":null,"result":result,"error":error,"metadata":{"runtime":"rust_native"}})
 }
 
+const MAX_BATCH_WORKERS: u64 = 32;
+
 fn batch_workers(payload: &serde_json::Value) -> Option<usize> {
     match payload.get("workers") {
         None => Some(1),
         Some(value) => value
             .as_u64()
-            .filter(|n| (1..=32).contains(n))
+            .filter(|n| (1..=MAX_BATCH_WORKERS).contains(n))
             .map(|n| n as usize),
     }
 }

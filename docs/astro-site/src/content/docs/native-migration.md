@@ -1157,3 +1157,11 @@ successive generations and the integration origin for historical generations.
 Zero rates retain the historical zero values with a degenerate status.
 These are baseline heuristics. Thresholds under forcing, interactions and
 interventions require separate trajectory analysis.
+
+## Execution modes
+
+Call `discover_execution_modes` to inspect the native execution modes.
+Batch fit, batch prediction, and scenario grids accept up to 32 local
+CPU workers and return results in input order. The worker count is a
+request limit. Accelerator, distributed, and scheduler execution are
+listed as unqualified.
