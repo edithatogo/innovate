@@ -460,3 +460,41 @@ and group forecasts, while qualifying statistical limitations explicitly.
 Then mixture/composite, inference/uncertainty/scenarios, remaining covariates
 and richer Kairos graphs/resources, distribution and scientific qualification.
 Full goal remains active; shared main and other writing lanes remain untouched.
+
+## Hierarchical continuation
+
+Same writer resumes at 59efbae0, clean isolated checkout, no live native operation.
+The previous turn made committed regime-switching progress.
+
+- [x] Port shared/group-series fitting, global/group parameter aggregation and
+  forecasts; preserve historical additive behavior and explicitly qualify a centered variant.
+- [x] Validate aggregate/group Polars forecasts and saved Python/Julia/R state.
+- [x] Complete local coverage/review/docs/package evidence and ledger update.
+
+Preserved hierarchical.py fits each group independently, averages parameters
+into global values, then adds those globals to each absolute group estimate at
+prediction time. Shared observations instead fit once and set group adjustments
+to zero. Preserve that historical distinction without calling it partial pooling
+or Bayesian inference; an explicit centered parameterization will recover the
+independently fitted group curves. All remaining obligations stay required.
+
+Hierarchical source/evidence commit: `73146b8bea10eb0edbe611ef7fe4881c2fecbe9e`.
+92 Rust tests, 34 installed Python, 162 Julia assertions and R conformance pass.
+Core/C ABI line coverage 83.41%, hierarchical module 86.28%. Clippy, lint/types,
+docs (163 pages), wheel installation and archive metadata/source inclusion pass.
+Receipt/review: hierarchical-20261107.json and hierarchical-review-20261107.md.
+Centered is the redesigned API default; historical_additive is explicit and
+retained. A failing large-constant R² test drove stable mean/undefined-variation
+handling in shared diagnostics. No native operation remains active.
+
+Fourteen bounded families; mixture and composite remain unavailable. All 38
+obligations remain required, optimized release guard intentionally fails. Next:
+mixture source uses an adoption-level responsibility heuristic with weighted
+component fits and normalized weights. Port weighted scalar least squares and
+qualify that historical variant explicitly; do not present adoption-level
+responsibilities as a calibrated latent-class likelihood. Gaussian likelihood
+mixtures and complete inference remain required. Preserve component-rate helpers,
+simulation/summary behavior and model/weight state in the native contract.
+Composite, remaining inference/uncertainty/covariates/scenarios, richer Kairos
+graphs/resources and distribution/scientific qualification remain required.
+Goal active; shared main and other writing lanes untouched.
