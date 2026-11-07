@@ -264,7 +264,7 @@ def aggregate_time_series(
     return grouped
 
 
-def seasonal_decomposition(data: pl.Series, *, period: int, trend_span: int) -> pl.DataFrame:
+def seasonal_decomposition(data: pl.Series, *, period: int, trend_span: int, robust: bool = False) -> pl.DataFrame:
     """Decompose evenly spaced samples with the native seasonal smoother."""
     result = execute(
         "preprocess_series",
@@ -272,5 +272,6 @@ def seasonal_decomposition(data: pl.Series, *, period: int, trend_span: int) -> 
         values=data.to_list(),
         period=period,
         window=trend_span,
+        robust=robust,
     )["result"]
     return pl.DataFrame(result)

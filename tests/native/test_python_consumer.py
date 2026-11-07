@@ -979,3 +979,10 @@ def test_native_seasonal_decomposition_recovers_analytic_components():
     assert result["trend"].to_list() == pytest.approx(trend, abs=1e-10)
     assert result["seasonal"].to_list() == pytest.approx(seasonal, abs=1e-10)
     assert result["residual"].abs().max() == pytest.approx(0, abs=1e-10)
+
+
+def test_robust_native_seasonal_decomposition_isolates_outlier():
+    values = [10 + i * 0.5 + (-3, 2, 1, 0)[i % 4] for i in range(80)]
+    values[40] += 100
+    result = innovate.seasonal_decomposition(pl.Series(values), period=4, trend_span=13, robust=True)
+    assert result["residual"][40] == pytest.approx(100, abs=0.1)

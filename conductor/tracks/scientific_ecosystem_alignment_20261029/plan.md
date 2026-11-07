@@ -1337,5 +1337,7 @@ the other competition models and installed binding checks remain open.
   Bisquare residual weights affect both phase and trend smoothers.
   The analytic outlier fixture keeps a 100-unit spike in the residual
   within 0.1. All 16 native boundary tests and focused Clippy passed.
-- [ ] Expose and verify robust mode in Python, Julia and R, and qualify
+- [x] Expose and verify robust mode in Python, Julia and R. Each rebuilt
+  binding retained the 100-unit spike within 0.1 in the residual.
+- [ ] Qualify
   historical STL option parity against an independent reference.

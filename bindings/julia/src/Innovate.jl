@@ -66,8 +66,8 @@ kernel_rolling_average(values, window) = kernel_call("preprocess_series", nothin
 kernel_aggregate_dates(dates, values, frequency) = kernel_call("aggregate_dates", nothing,
     Dict("dates" => string.(dates), "values" => values, "frequency" => frequency))["result"]
 
-kernel_seasonal_decomposition(values, period, trend_span) = kernel_call("preprocess_series", nothing,
+kernel_seasonal_decomposition(values, period, trend_span; robust=false) = kernel_call("preprocess_series", nothing,
     Dict("method" => "seasonal_decomposition", "values" => values, "period" => period,
-        "window" => trend_span))["result"]
+        "window" => trend_span, "robust" => robust))["result"]
 
 end
