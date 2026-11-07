@@ -2650,3 +2650,10 @@ the other competition models and installed binding checks remain open.
   lock-in fixtures converge without parameter starts, with RSS below
   1e-10. The Python 3.15.2 probe and retained Rust regression passed.
   The forced convergence and held-out forecast gates remain open.
+
+- [x] Test direction-preserving scaling for oversized least-squares
+  steps on both forced competition fixtures. The rebuilt Python 3.15.2
+  wheel used the existing 200-iteration budget and forecast oracle.
+  Neither fit converged. Maximum held-out errors were 0.22728 for
+  multi-product and 0.08580 for lock-in, both above 1e-3. Discard the
+  experimental solver change. Forced initialization remains open.
