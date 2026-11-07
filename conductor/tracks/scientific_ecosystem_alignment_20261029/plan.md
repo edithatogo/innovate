@@ -2280,3 +2280,9 @@ the other competition models and installed binding checks remain open.
   Python 3.15 wheel, Julia and installed R. Both complete output objects
   matched across bindings. Each rejected a causal claim without an
   identification assumption. Release parity remains open.
+
+- [x] Restore model-card discovery with all ten historical benchmark
+  blueprints alongside the current Rust model capabilities. Historical
+  case IDs are descriptive evidence and do not imply a native benchmark
+  run. All 52 Rust boundary tests and Clippy passed. Corpus, runner,
+  additional cards and binding qualification remain open.

@@ -1531,3 +1531,39 @@ fn decision_report_markdown_preserves_boundaries_and_escapes_user_text() {
     request["payload"]["claims"][0]["claim_type"] = json!("causal");
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn model_cards_distinguish_native_capabilities_from_historical_benchmarks() {
+    let run = |payload| -> serde_json::Value {
+        let request =
+            json!({"schema_version":"2.0","operation":"discover_model_cards","payload":payload});
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let result = run(json!({"key":"bass"}));
+    let card = &result["result"]["cards"][0];
+    assert_eq!(
+        card["native_capability"]["supported_backends"],
+        json!(["rust"])
+    );
+    assert_eq!(
+        card["historical_benchmark_card"]["benchmark_case_ids"],
+        json!(["bass_smoke_adoption"])
+    );
+    let result = run(json!({}));
+    let cards = result["result"]["cards"].as_array().unwrap();
+    assert_eq!(
+        cards.len(),
+        KernelBinding::new().discover_models_native().models.len()
+    );
+    assert_eq!(
+        cards
+            .iter()
+            .filter(|card| card["historical_benchmark_card"].is_object())
+            .count(),
+        10
+    );
+    assert_eq!(
+        run(json!({"key":"unknown"}))["error"]["code"],
+        "invalid_request"
+    );
+}

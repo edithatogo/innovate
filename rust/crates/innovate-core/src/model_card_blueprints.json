@@ -1,0 +1,290 @@
+{
+  "bass": {
+    "assumptions": [
+      "Adoption is cumulative and monotonic.",
+      "Innovation and imitation effects are sufficient to explain uptake.",
+      "The benchmark corpus is synthetic and reproducible."
+    ],
+    "benchmark_case_ids": [
+      "bass_smoke_adoption"
+    ],
+    "diagnostics": [
+      "r2",
+      "rmse",
+      "residual_analysis"
+    ],
+    "inputs": [
+      "time",
+      "observed cumulative adoption"
+    ],
+    "limitations": [
+      "Does not capture network structure or policy shocks."
+    ],
+    "model_name": "BassModel",
+    "outputs": [
+      "fitted parameters",
+      "predicted cumulative adoption",
+      "fit metrics"
+    ],
+    "summary": "Core diffusion baseline for cumulative adoption curves."
+  },
+  "complementary_goods": {
+    "assumptions": [
+      "Complementarity effects are evaluated on synthetic deterministic cases.",
+      "Benchmark outputs should remain comparable across runs.",
+      "The model family exposes stable summary fields."
+    ],
+    "benchmark_case_ids": [
+      "lotka_volterra_competition_smoke"
+    ],
+    "diagnostics": [
+      "r2",
+      "rmse",
+      "residual_analysis"
+    ],
+    "inputs": [
+      "time",
+      "observed focal share"
+    ],
+    "limitations": [
+      "Not all ecosystem effects are represented in the benchmark corpus."
+    ],
+    "model_name": "ComplementaryGoodsModel",
+    "outputs": [
+      "fitted parameters",
+      "predicted focal share",
+      "fit metrics"
+    ],
+    "summary": "Stable ecosystem model for interdependent adoption trajectories."
+  },
+  "composite": {
+    "assumptions": [
+      "Component diffusion processes can be combined reproducibly.",
+      "Synthetic cases are used to compare stable outputs.",
+      "Benchmark behavior should be deterministic across runs."
+    ],
+    "benchmark_case_ids": [
+      "fisher_pry_replacement_smoke"
+    ],
+    "diagnostics": [
+      "r2",
+      "rmse",
+      "residual_analysis"
+    ],
+    "inputs": [
+      "time",
+      "observed market share"
+    ],
+    "limitations": [
+      "Representation is limited to the benchmarked substitution proxy."
+    ],
+    "model_name": "CompositeDiffusionModel",
+    "outputs": [
+      "fitted parameters",
+      "predicted market share",
+      "fit metrics"
+    ],
+    "summary": "Composable substitution baseline for stable diffusion comparisons."
+  },
+  "fisher_pry": {
+    "assumptions": [
+      "The benchmark target is a bounded share process.",
+      "Substitution is represented as a smooth transition.",
+      "Synthetic data is used for reproducibility."
+    ],
+    "benchmark_case_ids": [
+      "fisher_pry_replacement_smoke"
+    ],
+    "diagnostics": [
+      "r2",
+      "rmse",
+      "residual_analysis"
+    ],
+    "inputs": [
+      "time",
+      "observed market share"
+    ],
+    "limitations": [
+      "Not a structural model of competition or policy diffusion."
+    ],
+    "model_name": "FisherPryModel",
+    "outputs": [
+      "fitted parameters",
+      "predicted market share",
+      "fit metrics"
+    ],
+    "summary": "Replacement-share baseline for substitution dynamics."
+  },
+  "gompertz": {
+    "assumptions": [
+      "Adoption growth is asymmetric around the inflection point.",
+      "Synthetic observations are stable across runs.",
+      "The benchmark corpus is intended for reproducible smoke tests."
+    ],
+    "benchmark_case_ids": [
+      "logistic_growth_smoke"
+    ],
+    "diagnostics": [
+      "r2",
+      "rmse",
+      "residual_analysis"
+    ],
+    "inputs": [
+      "time",
+      "observed cumulative adoption"
+    ],
+    "limitations": [
+      "Does not encode exogenous network or policy effects."
+    ],
+    "model_name": "GompertzModel",
+    "outputs": [
+      "fitted parameters",
+      "predicted cumulative adoption",
+      "fit metrics"
+    ],
+    "summary": "Asymmetric growth baseline for adoption curves with early acceleration."
+  },
+  "lock_in": {
+    "assumptions": [
+      "Intrinsic growth rates and network effects are constant.",
+      "Negative influence from competitor is proportional to its adoption."
+    ],
+    "benchmark_case_ids": [
+      "lock_in_smoke"
+    ],
+    "diagnostics": [
+      "r2",
+      "rmse"
+    ],
+    "inputs": [
+      "time",
+      "observed adoption share for each technology"
+    ],
+    "limitations": [
+      "Simplified two-technology model; does not capture multi-technology dynamics."
+    ],
+    "model_name": "LockInModel",
+    "outputs": [
+      "fitted parameters",
+      "predicted adoption trajectories",
+      "equilibrium shares"
+    ],
+    "summary": "Path dependence and lock-in between competing technologies with network effects."
+  },
+  "logistic": {
+    "assumptions": [
+      "The underlying process follows a single smooth inflection.",
+      "Observed values are reproducible and monotonic.",
+      "Synthetic benchmark cases provide deterministic comparisons."
+    ],
+    "benchmark_case_ids": [
+      "logistic_growth_smoke"
+    ],
+    "diagnostics": [
+      "r2",
+      "rmse",
+      "residual_analysis"
+    ],
+    "inputs": [
+      "time",
+      "observed cumulative adoption"
+    ],
+    "limitations": [
+      "Not designed to represent network or policy mechanisms."
+    ],
+    "model_name": "LogisticModel",
+    "outputs": [
+      "fitted parameters",
+      "predicted cumulative adoption",
+      "fit metrics"
+    ],
+    "summary": "Smooth S-curve baseline for adoption and growth comparison."
+  },
+  "lotka_volterra": {
+    "assumptions": [
+      "Competition can be summarized by a stable focal-share benchmark.",
+      "Synthetic cases are reproducible and deterministic.",
+      "The benchmark corpus emphasizes comparable outputs."
+    ],
+    "benchmark_case_ids": [
+      "lotka_volterra_competition_smoke"
+    ],
+    "diagnostics": [
+      "r2",
+      "rmse",
+      "residual_analysis"
+    ],
+    "inputs": [
+      "time",
+      "observed focal share"
+    ],
+    "limitations": [
+      "Not a full structural market simulation."
+    ],
+    "model_name": "LotkaVolterraModel",
+    "outputs": [
+      "fitted parameters",
+      "predicted focal share",
+      "fit metrics"
+    ],
+    "summary": "Competition baseline for interacting adoption trajectories."
+  },
+  "multi_product": {
+    "assumptions": [
+      "The focal competition process is deterministic in the benchmark corpus.",
+      "Stable outputs are computed from reproducible synthetic cases.",
+      "Multi-product comparisons can be summarized consistently."
+    ],
+    "benchmark_case_ids": [
+      "lotka_volterra_competition_smoke"
+    ],
+    "diagnostics": [
+      "r2",
+      "rmse",
+      "residual_analysis"
+    ],
+    "inputs": [
+      "time",
+      "observed focal share"
+    ],
+    "limitations": [
+      "Does not capture unobserved strategic shocks."
+    ],
+    "model_name": "MultiProductDiffusionModel",
+    "outputs": [
+      "fitted parameters",
+      "predicted focal share",
+      "fit metrics"
+    ],
+    "summary": "Core competition model for comparing multiple product trajectories."
+  },
+  "norton_bass": {
+    "assumptions": [
+      "Replacement follows a structured cumulative share process.",
+      "Synthetic benchmark cases remain deterministic.",
+      "The model is evaluated on reproducible substitution scenarios."
+    ],
+    "benchmark_case_ids": [
+      "fisher_pry_replacement_smoke"
+    ],
+    "diagnostics": [
+      "r2",
+      "rmse",
+      "residual_analysis"
+    ],
+    "inputs": [
+      "time",
+      "observed market share"
+    ],
+    "limitations": [
+      "Does not explicitly model network topology."
+    ],
+    "model_name": "NortonBassModel",
+    "outputs": [
+      "fitted parameters",
+      "predicted market share",
+      "fit metrics"
+    ],
+    "summary": "Substitution model for multi-phase replacement and diffusion."
+  }
+}

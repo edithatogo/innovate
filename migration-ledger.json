@@ -212,8 +212,10 @@
     },
     {
       "key": "benchmark_model_cards",
-      "status": "pending",
-      "required": true
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Native benchmark corpus and runner, card coverage for additional models, binding and release qualification"
     },
     {
       "key": "plugin_contracts",

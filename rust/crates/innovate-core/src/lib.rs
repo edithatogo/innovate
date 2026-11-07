@@ -17,6 +17,7 @@ mod kernel;
 mod latent;
 mod mechanistic;
 mod mixture;
+mod model_cards;
 mod network;
 mod numerics;
 mod policy;
@@ -57,6 +58,7 @@ pub fn execute_json(input: &str) -> String {
                 | "combine_report_blocks"
                 | "export_decision_report"
                 | "export_decision_report_markdown"
+                | "discover_model_cards"
                 | "validate_provenance"
                 | "dataset_checksum"
                 | "validate_dataset",
@@ -169,6 +171,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             return Err("analysis request requires schema 2.0");
         }
         let payload = &value["payload"];
+        if value["operation"] == "discover_model_cards" {
+            return model_cards::discover(payload);
+        }
         if value["operation"] == "export_decision_report_markdown" {
             return report::export_markdown(payload);
         }
