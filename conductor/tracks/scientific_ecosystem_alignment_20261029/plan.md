@@ -7346,3 +7346,10 @@ Hosted release readiness for this worktree revision remains open.
   and Voiage. Replicated draws encode the weights for Voiage 3.1.0.
   The preferred strategy switched as expected and EVPI matched the
   analytic reference (3.7317144196428957) using the optimized wheel.
+
+- [x] Include the installed Innovate and Voiage RECORD digests and the
+  loaded Rust extension digest in the Arrow qualification receipt.
+  Require the extension to resolve alongside the verified wrapper.
+  Both EVPI cases passed in the installed Python 3.15.2 environment,
+  and Ruff passed. These digests identify installed metadata and the
+  loaded binary. They do not attest a Voiage archive or hosted build.

@@ -16,11 +16,13 @@ from voiage.methods.basic import evpi
 from voiage.schema import ValueArray
 
 import innovate
+from innovate import _native
 
 
 def qualify() -> dict[str, object]:
     if sys.version_info[:3] != (3, 15, 2):
         raise ValueError("qualification requires repo-local Python 3.15.2")
+    record_hashes = {}
     for name, module in (("innovate", innovate), ("voiage", voiage)):
         dist = distribution(name)
         init = Path(dist.locate_file(f"{name}/__init__.py")).resolve()
@@ -28,6 +30,15 @@ def qualify() -> dict[str, object]:
             raise ValueError(f"{name} is not an installed wheel")
         if init != Path(module.__file__).resolve():
             raise ValueError(f"{name} import origin is shadowed")
+        record = dist.read_text("RECORD")
+        if not record:
+            raise ValueError(f"{name} wheel has no installed RECORD")
+        record_hashes[name] = hashlib.sha256(record.encode()).hexdigest()
+    native_path = Path(_native.__file__).resolve()
+    if native_path.parent != Path(innovate.__file__).resolve().parent:
+        raise ValueError("Innovate native extension import origin is shadowed")
+    with native_path.open("rb") as native_binary:
+        native_sha256 = hashlib.file_digest(native_binary, "sha256").hexdigest()
     rates = (0.01, 0.08)
     scenarios = [
         {
@@ -88,6 +99,8 @@ def qualify() -> dict[str, object]:
         "innovate": version("innovate"),
         "voiage": version("voiage"),
         "polars": pl.__version__,
+        "installed_record_sha256": record_hashes,
+        "innovate_native_sha256": native_sha256,
         "arrow_ipc_sha256": hashlib.sha256(data).hexdigest(),
         "reference_evpi": expected,
         "installed_evpi": observed,
