@@ -1519,3 +1519,13 @@ the other competition models and installed binding checks remain open.
   with stats::arima within 5e-6 in coefficient and 1e-6 in likelihood.
   Fixed-coefficient prefix predictions at rows 7–40 agree within 1e-8.
   Historical SARIMAX initialization and warmup parity remain open.
+
+- [x] Capture the historical SARIMAX initialization reference at fixed
+  coefficients for combined differencing, with and without an AR term.
+  Statsmodels 0.14.6 returns finite fitted values in the four likelihood
+  burn rows, where the native conditional path currently returns null.
+  The reference uses the retained historical environment only to
+  generate evidence.
+- [ ] Implement historical SARIMAX initialization semantics and compare
+  every fitted value against the two fixtures before qualifying the
+  estimated historical path.
