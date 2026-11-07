@@ -604,20 +604,15 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
             }
             starts.push(transform(parameters));
         }
-        if model.history.is_some() && starts.is_empty() {
-            return Err(invalid(
-                op,
-                "covariate fitting requires complete initial_parameters",
-            ));
-        }
-        for rate in if model.history.is_none() {
+        for rate in if model.history.is_none() || starts.is_empty() {
             &[0.5, 2., 5.][..]
         } else {
             &[]
         } {
-            let p = model
+            let mut p: Vec<_> = model
                 .names
                 .iter()
+                .take(model.base_count)
                 .enumerate()
                 .map(|(i, name)| {
                     if model.key == "lock_in"
@@ -651,6 +646,7 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
                     }
                 })
                 .collect();
+            p.resize(model.names.len(), 0.);
             starts.push(transform(p));
         }
         let target: Vec<_> = observed.iter().flatten().map(|x| x / yscale).collect();

@@ -306,11 +306,13 @@ fn interacting_lotka_forcing_fits_independent_reference_and_forecasts() {
     {
         assert!((actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-5);
     }
-    let missing_start = binding.fit_model("lotka_volterra",json!({
+    let automatic = binding.fit_model("lotka_volterra",json!({
         "inputs":{"time":fixture["time"],"covariates":fixture["covariates"],"observed":fixture["rows"]},
         "constructor_kwargs":options
     }));
-    assert!(missing_start.is_err());
+    let fit = automatic.unwrap().result.unwrap();
+    assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
+    assert!(fit["diagnostics"]["metrics"]["RSS"].as_f64().unwrap() < 1e-10);
 }
 
 #[test]
