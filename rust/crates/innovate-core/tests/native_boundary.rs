@@ -1072,6 +1072,11 @@ fn scenario_discovery_lists_and_resolves_native_families() {
     };
     let response = run(&request);
     let rows = response["result"]["scenarios"].as_array().unwrap();
+    assert_eq!(
+        rows[0]["specification_translation"]["engines"],
+        json!(["kairos_abm", "kairos_des"])
+    );
+    assert!(rows[1].get("specification_translation").is_none());
     let keys: Vec<_> = rows
         .iter()
         .map(|row| row["key"].as_str().unwrap())

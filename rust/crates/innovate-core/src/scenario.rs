@@ -613,9 +613,16 @@ pub(crate) fn discover(request: &Value) -> Value {
         .into_iter()
         .filter(|family| key.is_none_or(|key| key == *family))
         .map(|family| {
-            json!({"key":family,"scenario_type":family,"stability":"experimental",
+            let mut capability = json!({"key":family,"scenario_type":family,"stability":"experimental",
                 "operation":"execute_scenario_grid","execution_input":"explicit_simulation_payload",
-                "transport":"json","bindings":["rust","python","julia","r"]})
+                "transport":"json","bindings":["rust","python","julia","r"]});
+            if family == "baseline" {
+                capability["specification_translation"] = json!({
+                    "option":"apply_specifications","model_key":"bass",
+                    "engines":["kairos_abm","kairos_des"]
+                });
+            }
+            capability
         })
         .collect();
     envelope(json!({"scenarios":scenarios}), Value::Null)

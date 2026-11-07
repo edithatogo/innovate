@@ -2113,3 +2113,9 @@ the other competition models and installed binding checks remain open.
   fail. Replay stores resolved inputs. All 49 targeted Rust tests and
   Clippy passed. Other scenario families and binding qualification remain
   open.
+
+- [x] Advertise opt-in Bass baseline translation in native discovery.
+  Python 3.15, Julia and installed R verified both Kairos ABM and DES:
+  25% initial adoption in 20 agents gave five initial adopters and
+  50 adoption units in a market of 200. All 39 boundary tests and
+  focused Clippy passed. Other families remain open.
