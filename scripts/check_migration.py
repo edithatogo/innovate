@@ -89,6 +89,8 @@ def main() -> int:
             resolved = (ROOT / evidence_path).resolve()
             if evidence_path.is_absolute() or not resolved.is_relative_to(ROOT.resolve()) or not resolved.is_file():
                 raise ValueError(f"Invalid migration evidence for {item['key']}: {evidence}")
+            if not resolved.read_bytes().strip():
+                raise ValueError(f"Empty migration evidence for {item['key']}: {evidence}")
 
     pending = [
         item["key"]

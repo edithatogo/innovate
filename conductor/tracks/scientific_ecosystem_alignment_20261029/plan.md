@@ -7081,3 +7081,9 @@ Hosted release readiness for this worktree revision remains open.
   deferred because the checkout volume had 331 MiB free and no
   release cache. This measurement covers the Rust regression, not
   installed release artifacts.
+
+- [x] Reject empty or whitespace-only migration evidence files.
+  The release checker previously accepted a file solely because it
+  existed. All ten policy tests passed, including the new qualified
+  item with blank evidence. The verifier still reports 38 open
+  obligations. Scientific acceptance requires review of the evidence.
