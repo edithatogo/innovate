@@ -1975,3 +1975,13 @@ the other competition models and installed binding checks remain open.
   and installed R agreed on an alternative score of 100 and baseline
   bounds of 45 to 55 with a 10% margin. All 36 boundary tests and focused
   Clippy passed.
+
+- [x] Summarize paired replicate effects (a8bee915). A comparison can
+  supply pairs of unique scenario IDs and an interval_mass in (0, 1).
+  Successful scalar paths must share the same time grid and use common
+  units. The result includes final-sample differences, the median and a
+  central empirical interval using linear quantiles. Callers design and
+  seed the replicates. These quantiles describe observed effects.
+  Python 3.15, Julia and installed R agreed on [-6.25, 31.25] for the
+  two-pair analytic fixture. All 37 boundary tests and focused Clippy passed.
+- [ ] Qualify stochastic ensemble design and sampling-based inference.
