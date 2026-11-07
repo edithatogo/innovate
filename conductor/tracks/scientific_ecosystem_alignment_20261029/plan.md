@@ -1031,4 +1031,9 @@ the other competition models and installed binding checks remain open.
   and retain explicit caller values when provided. Both starting modes
   pass the existing held-out forecast checks for forced Bass and fixed-event
   Gompertz. All nine mechanistic tests and focused Clippy passed.
-- [ ] Qualify the automatic path in installed Python, Julia and R.
+- [x] Qualify the automatic path in installed Python, Julia and R.
+  The focused checks use a rebuilt wheel and FFI library. All three bindings
+  converged without explicit starts and reproduced the held-out forced Bass
+  and fixed-event Gompertz reference values within 0.001. The Gompertz checks
+  also verify the default unused shape parameters.
+  [Validation logs](evidence/mechanistic-automatic-starts-20261107).

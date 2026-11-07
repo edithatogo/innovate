@@ -403,7 +403,8 @@ def test_composite_polars_levels_rates_and_fitted_origin():
     assert fit.predict(pl.DataFrame({"time": [30.0]}))["prediction"][0] > 99.5
 
 
-def test_bass_mechanistic_covariate_event_fit_and_history_forecast():
+@pytest.mark.parametrize("explicit_start", [True, False])
+def test_bass_mechanistic_covariate_event_fit_and_history_forecast(explicit_start):
     fixture = json.loads(
         (
             Path(__file__).resolve().parents[2] / "rust/crates/innovate-core/tests/fixtures/mechanistic_scipy.json"
@@ -416,7 +417,7 @@ def test_bass_mechanistic_covariate_event_fit_and_history_forecast():
         "bass",
         pl.DataFrame({"time": fixture["time"][:n], "observed": fixture["observed"][:n], "dose": fixture["dose"][:n]}),
         model_options={"covariates": ["dose"], "t_event": 10.0},
-        fit_options={"initial_parameters": parameters},
+        fit_options={"initial_parameters": parameters} if explicit_start else None,
     )
     assert fit.diagnostics["optimizer"]["converged"]
     replay = fit.predict(pl.DataFrame({"time": fixture["time"][:n], "dose": fixture["dose"][:n]}))
