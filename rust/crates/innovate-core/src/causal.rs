@@ -62,7 +62,8 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                  "uncertainty_requires":["outcome_variances"],
                  "uncertainty_assumptions":["fixed_matched_pairs","independent_outcomes"],
                  "correlated_uncertainty_option":"outcome_covariance_factors",
-                 "alternative_to_scores":"fit_scores"},
+                 "alternative_to_scores":"fit_scores",
+                 "fitted_score_uncertainty":"conditional_on_fitted_scores_and_pairs"},
                 {"method":"augmented_treatment_contrast","adjustment":"caller_supplied_nuisance_predictions",
                  "required_fields":["outcomes","treatment","propensities","control_predictions"],
                  "required_fields_by_estimand":{"ate":["treated_predictions"],"att":[]},
@@ -1653,9 +1654,11 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
             "unmatched_treated_indices":unmatched_treated_indices,
             "conditional_standard_error":conditional_standard_error,"uncertainty_model":uncertainty_model,
             "covariate_balance":balance,"score_fit":score_fit,
+            "score_uncertainty_scope":score_fit.as_ref().map(|_| "conditional_on_fitted_scores_and_pairs"),
             "outcome_weights":outcome_weights,"adjusted_outcome_weights":adjusted_outcome_weights,
             "adjusted_standard_error":adjusted_standard_error,
             "match_diagnostics":{"caliper":caliper,"max_score_distance":max_score_distance,
+                "minimum_matched_caliper_slack":caliper - max_score_distance,
                 "matched_treated_fraction":pairs.len() as f64 / (pairs.len() + unmatched_treated_indices.len()) as f64},
             "control_diagnostics":{"unique_controls":control_uses.len(),
             "effective_sample_size":1. / squared_control_weights}}),
@@ -2525,6 +2528,21 @@ mod tests {
             serde_json::json!([0.5, 0.5, 0.5, 0.5])
         );
         assert_eq!(result["estimate"].as_f64(), Some(5.));
+        assert_eq!(
+            result["match_diagnostics"]["minimum_matched_caliper_slack"].as_f64(),
+            Some(0.)
+        );
+        assert_eq!(
+            result["score_uncertainty_scope"],
+            "conditional_on_fitted_scores_and_pairs"
+        );
+        payload["caliper"] = serde_json::json!(0.25);
+        let result = matched_treatment_contrast(&payload).unwrap();
+        assert_eq!(
+            result["match_diagnostics"]["minimum_matched_caliper_slack"].as_f64(),
+            Some(0.25)
+        );
+
         payload["scores"] = serde_json::json!([0, 0, 0, 0]);
         assert_eq!(
             matched_treatment_contrast(&payload),

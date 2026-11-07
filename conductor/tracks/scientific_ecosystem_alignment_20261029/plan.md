@@ -5408,3 +5408,9 @@ Hosted release readiness for this worktree revision remains open.
   3.15.2 and the Julia and installed R bindings against a rebuilt Rust
   FFI library. Each reproduced a matched estimate of 5 and four held-out
   propensity scores of 0.5. These fixtures exercise the binding contract.
+
+- [x] Report the scope of uncertainty for fitted-score matching and
+  the minimum distance from an accepted match to the caliper boundary.
+  The Rust fixture verified zero slack at the cutoff and positive slack
+  after widening it. Propagation of score-estimation uncertainty remains
+  open.
