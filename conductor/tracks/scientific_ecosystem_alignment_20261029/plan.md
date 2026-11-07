@@ -4118,3 +4118,8 @@ Hosted release readiness for this worktree revision remains open.
   capacity falls to zero. The clipped fixture reports three excess
   slot-ticks and the retry replay reports zero. All 29 network tests
   and the focused replay test passed. Installed binding checks remain open.
+- [x] Verify the over-capacity resource metric at native source
+  1c4680cf in the rebuilt Python 3.15.2 wheel, Julia and installed R.
+  The capacity drop at tick three gave three excess slot-ticks,
+  five occupied slot-ticks and no completions by tick six in all
+  three bindings.
