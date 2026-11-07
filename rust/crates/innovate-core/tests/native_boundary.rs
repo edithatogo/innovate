@@ -2491,6 +2491,7 @@ fn historical_logistic_profiles_event_candidates_and_saves_fixed_split() {
             "method":"centered_residual_resampling","forecast_inputs":{"time":[24,25]}}}));
     let forecast = &bootstrap["result"]["forecast"];
     assert_eq!(forecast["succeeded"], 3);
+    assert_eq!(forecast["columns"], json!(["prediction"]));
     assert_eq!(forecast["failed"], 0);
     assert!(forecast["pointwise_intervals"][1][0][0].is_number());
     let selection = &bootstrap["result"]["event_selection"];

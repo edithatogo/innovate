@@ -3243,3 +3243,9 @@ the other competition models and installed binding checks remain open.
   reference levels within 0.01. Replaying each parameter draw against
   the full covariate history and independently taking percentiles
   reproduced both series' interval bounds within 1e-9.
+
+- [x] Carry forecast column identities into bootstrap intervals and
+  require refitted forecasts to match the baseline column order.
+  Python 3.15.2, Julia and R agreed on Norton–Bass series_1 and
+  series_2 with identical values and intervals to the prior fixture.
+  The focused Rust scalar regression and Clippy passed.
