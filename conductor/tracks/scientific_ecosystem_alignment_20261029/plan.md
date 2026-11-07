@@ -1717,3 +1717,10 @@ the other competition models and installed binding checks remain open.
   All 24 Rust boundary tests and focused Clippy passed.
 - [ ] Restore treatment-contrast bootstrap intervals and verify installed
   consumers. Qualify the remaining policy contracts and Arrow handoff.
+
+- [x] Add deterministic stratified percentile bootstrap intervals for
+  unadjusted treatment contrasts. Resampling within each arm keeps the
+  observed arm sizes and avoids empty arms. The historical pooled
+  resampling scheme remains a separate parity obligation. All 24
+  native boundary tests and focused Clippy passed.
+- [ ] Verify treatment contrasts and bootstrap intervals across bindings.

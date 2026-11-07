@@ -519,6 +519,14 @@ fn causal_summaries_match_analytic_effects() {
         2.
     );
     assert!(contrast["result"]["by_modifier"]["group"]["b"]["estimate"].is_null());
+    let bootstrap = run(json!({"method":"treatment_contrast","outcomes":[2,2,5,5],
+        "treatment":[0,0,1,1],"bootstrap":{"draws":100,"seed":42}}));
+    assert_eq!(bootstrap["result"]["bootstrap"]["ci_lower"], 3.);
+    assert_eq!(bootstrap["result"]["bootstrap"]["ci_upper"], 3.);
+    assert_eq!(
+        bootstrap["result"]["bootstrap"]["method"],
+        "stratified_percentile"
+    );
     let risk = run(json!({"method":"e_value","point_estimate":0.5}));
     assert!((risk["result"]["e_value"].as_f64().unwrap() - (2. + 2_f64.sqrt())).abs() < 1e-12);
     let sensitivity = run(json!({"method":"sensitivity_scenario","point_estimate":10,

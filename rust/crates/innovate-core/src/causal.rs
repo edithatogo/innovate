@@ -559,6 +559,10 @@ fn treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
         return Err("treatment contrast requires treated and control observations");
     }
     let overall = summarize(&treated, &control)?;
+    let bootstrap = payload
+        .get("bootstrap")
+        .map(|options| bootstrap_contrast(&treated, &control, options))
+        .transpose()?;
     let mut modifiers = serde_json::Map::new();
     if let Some(fields) = payload.get("effect_modifiers") {
         for (name, labels) in fields
@@ -586,5 +590,60 @@ fn treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
             modifiers.insert(name.clone(), Value::Object(summaries));
         }
     }
-    Ok(json!({"method":"unadjusted_difference_in_means","overall":overall,"by_modifier":modifiers}))
+    Ok(
+        json!({"method":"unadjusted_difference_in_means","overall":overall,"by_modifier":modifiers,"bootstrap":bootstrap}),
+    )
+}
+
+fn bootstrap_contrast(
+    treated: &[f64],
+    control: &[f64],
+    options: &Value,
+) -> Result<Value, &'static str> {
+    use kairo_ecs_rng::{DeterministicStream, rand_distr::Uniform};
+
+    let draws = options["draws"]
+        .as_u64()
+        .filter(|n| (2..=10_000).contains(n))
+        .ok_or("bootstrap draws must be between 2 and 10000")? as usize;
+    let seed = options["seed"]
+        .as_u64()
+        .ok_or("bootstrap requires a nonnegative integer seed")?;
+    let confidence = options
+        .get("confidence")
+        .map_or(Some(0.95), Value::as_f64)
+        .filter(|&level| level > 0. && level < 1.)
+        .ok_or("bootstrap confidence must be between zero and one")?;
+    if (treated.len() + control.len()) > 10_000_000 / draws {
+        return Err("bootstrap workload exceeds 10000000 sampled outcomes");
+    }
+    let mut rng = DeterministicStream::from_run_seed(seed);
+    let treated_index = Uniform::new(0, treated.len()).map_err(|_| "empty treated arm")?;
+    let control_index = Uniform::new(0, control.len()).map_err(|_| "empty control arm")?;
+    let mut sample_mean = |values: &[f64], index| {
+        let sample: Vec<_> = (0..values.len())
+            .map(|_| values[rng.sample(index)])
+            .collect();
+        mean(&sample).expect("bootstrap arm is nonempty")
+    };
+    let mut estimates = Vec::with_capacity(draws);
+    for _ in 0..draws {
+        estimates.push(finite(
+            sample_mean(treated, treated_index) - sample_mean(control, control_index),
+        )?);
+    }
+    estimates.sort_by(f64::total_cmp);
+    let percentile = |probability: f64| {
+        let index = probability * (draws - 1) as f64;
+        let lower = index.floor() as usize;
+        let upper = index.ceil() as usize;
+        let fraction = index.fract();
+        (1. - fraction) * estimates[lower] + fraction * estimates[upper]
+    };
+    let tail = (1. - confidence) / 2.;
+    Ok(
+        json!({"method":"stratified_percentile","seed":seed,"n_bootstrap":draws,
+        "confidence":confidence,"ci_lower":finite(percentile(tail))?,
+        "ci_upper":finite(percentile(1. - tail))?}),
+    )
 }
