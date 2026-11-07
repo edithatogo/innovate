@@ -369,3 +369,5 @@ receipt: policy-20261107.json. Eleven bounded families; five remain unavailable.
 All 38 obligations remain required. Next: latent/regime, hierarchical/mixture/
 composite ports, inference/scenarios, remaining covariates/events and distribution
 qualification. No native operation remains live; full goal remains active.
+
+Policy source/evidence commit: `34a85b209efc7b2187f0948b0f319bfd07701907`. All operations terminal; remaining source tasks stay active.
