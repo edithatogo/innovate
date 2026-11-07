@@ -152,6 +152,12 @@ class FitResult:
     def diagnostics(self) -> dict[str, Any]:
         return dict(self.envelope["result"]["diagnostics"])
 
+    @property
+    def event_profile(self) -> dict[str, Any] | None:
+        """Candidate scores and convergence for a profiled event fit."""
+        profile = self.envelope["result"].get("event_profile")
+        return dict(profile) if profile is not None else None
+
     def predict(
         self,
         data: pl.DataFrame | pl.LazyFrame,

@@ -1007,3 +1007,22 @@ def test_ingest_local_ipc_stream_preserves_dataset_and_provenance(tmp_path, suff
     if suffix == ".arrow":
         frame.write_ipc(path)
         assert innovate.ingest_local(path, "adoption", provenance=provenance) == artifact
+
+
+def test_logistic_event_profile_polars_fit_and_saved_split_prediction():
+    time = list(range(24))
+    observed = [
+        100 / (1 + math.exp(-0.5 * (t - 5)))
+        if t < 12
+        else 200 / (1 + math.exp(-0.4 * (t - 17)))
+        for t in time
+    ]
+    frame = pl.DataFrame({"time": time, "observed": observed})
+    fit = innovate.fit("logistic", frame.lazy(), model_options={"event_candidates": [10, 12, 14]})
+    profile = fit.event_profile
+    assert profile is not None
+    assert min(profile["candidates"], key=lambda row: row["objective"])["t_event"] == 12
+    query = pl.DataFrame({"time": [11, 12, 13], "id": ["pre", "split", "post"]})
+    forecast = fit.predict(query)
+    assert forecast["id"].to_list() == ["pre", "split", "post"]
+    assert forecast["prediction"].to_list() == pytest.approx(observed[11:14], abs=1e-7)

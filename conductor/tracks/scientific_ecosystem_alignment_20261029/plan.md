@@ -3126,3 +3126,9 @@ the other competition models and installed binding checks remain open.
   3.15.2, Julia and R agreed exactly on the Logistic fixture with
   eight zero-weight rows, excluding time 10 and recovering time 12.
   The focused Rust regression and Clippy passed.
+
+- [x] Exercise historical event profiling through the installed Python
+  Polars API. Expose candidate diagnostics as FitResult.event_profile.
+  A rebuilt Python 3.15.2 wheel fitted a LazyFrame, recovered the split
+  at 12, and predicted both branches and the boundary through the saved
+  fit while preserving row IDs. The focused consumer regression passed.
