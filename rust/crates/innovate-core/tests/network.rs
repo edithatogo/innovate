@@ -1111,3 +1111,42 @@ fn scheduled_resource_slot_ticks_balance_across_seeds() {
     }
     assert!(saw_pending);
 }
+
+#[test]
+fn checkpoint_preserves_schedule_change_tied_with_completion() {
+    let mut payload = json!({
+        "inputs":{"time":[0,6,20]},
+        "parameters":{"p":1e12,"q":0,"m":3},
+        "simulation_options":{"engine":"kairos_network","population":3,"seed":42,
+            "edges":[],"capacity":1,"service_ticks":5,"ticks_per_unit":1,
+            "schedule":[{"tick":6,"capacity":2}]}
+    });
+    let kernel = KernelBinding::new();
+    let run = |payload| {
+        kernel
+            .simulate_model("bass", payload)
+            .unwrap()
+            .result
+            .unwrap()
+    };
+    let expected = run(payload.clone());
+    assert_eq!(expected["completions"][0]["tick"], 6);
+    for (pause_option, value, expected_changes) in [
+        ("pause_after_completions", 1, json!([])),
+        ("pause_at_tick", 6, json!([6])),
+    ] {
+        payload["simulation_options"][pause_option] = json!(value);
+        let paused = run(payload.clone());
+        let saved: serde_json::Value =
+            serde_json::from_str(paused["checkpoint"].as_str().unwrap()).unwrap();
+        assert_eq!(saved["applied_ticks"], expected_changes);
+        let options = payload["simulation_options"].as_object_mut().unwrap();
+        options.remove(pause_option);
+        options.insert("resume_checkpoint".into(), paused["checkpoint"].clone());
+        assert_eq!(run(payload.clone()), expected);
+        payload["simulation_options"]
+            .as_object_mut()
+            .unwrap()
+            .remove("resume_checkpoint");
+    }
+}

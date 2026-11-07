@@ -5872,3 +5872,8 @@ Hosted release readiness for this worktree revision remains open.
   Completion pauses still permit a pending change at the same tick.
   Tick pauses require changes through the cutoff. The truncated cursor
   fixture was rejected and all 33 Rust network tests passed.
+
+- [x] Verify checkpoint replay when service completion and a capacity
+  change both occur at tick 6. A completion-count pause leaves the
+  capacity change pending, while a tick pause records it as applied.
+  Both resumed runs matched uninterrupted execution in the Rust fixture.
