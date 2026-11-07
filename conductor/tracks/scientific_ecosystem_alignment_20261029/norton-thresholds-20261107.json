@@ -1,0 +1,7 @@
+{
+  "status": "bounded_local_checkpoint",
+  "release_ready": false,
+  "related_evidence": ["successive-forcing-20261107.json"],
+  "results": {"focused_rust_tests": 20, "core_clippy": "passed"},
+  "scope": "Historical baseline threshold formulas using corrected one-based named parameters. The historical half-life label denotes inflection time. Forced trajectory thresholds and cross-binding qualification of this new field remain open."
+}

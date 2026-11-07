@@ -283,6 +283,53 @@ fn fraction(t: f64, p: f64, q: f64) -> (f64, f64) {
     (f, (p + q * f) * (1.0 - f))
 }
 impl Model {
+    fn threshold_diagnostics(&self, parameters: &[f64]) -> Value {
+        let generations: Vec<_> = (0..self.n)
+            .map(|index| {
+                let innovation = parameters[3 * index];
+                let imitation = parameters[3 * index + 1];
+                let (peak, takeoff, saturation) = if innovation > 0. && imitation > 0. {
+                    let scale = innovation.max(imitation);
+                    let normalized_sum = innovation / scale + imitation / scale;
+                    let log_ratio = imitation.ln() - innovation.ln();
+                    let duration = |numerator: f64| (numerator / normalized_sum) / scale;
+                    (
+                        duration(log_ratio),
+                        duration(log_ratio - 9_f64.ln()).max(0.),
+                        duration(log_ratio + 9_f64.ln()),
+                    )
+                } else {
+                    (0., 0., 0.)
+                };
+                json!({
+                    "generation": index + 1,
+                    "reference_time": if self.variant == "successive_generations" {
+                        self.launches[index]
+                    } else {
+                        self.origin
+                    },
+                    "half_life": peak,
+                    "takeoff": takeoff,
+                    "saturation": saturation,
+                    "status": if innovation == 0. || imitation == 0. {
+                        "degenerate_rates"
+                    } else if [peak, takeoff, saturation].iter().any(|value| !value.is_finite()) {
+                        "outside_finite_domain"
+                    } else {
+                        "available"
+                    }
+                })
+            })
+            .collect();
+        json!({
+            "method": "historical_bass_threshold_heuristic",
+            "scope": "unforced_base_parameters",
+            "time_basis": "elapsed_from_reference_time",
+            "half_life_semantics": "historical label for unconstrained Bass inflection offset",
+            "generations": generations
+        })
+    }
+
     fn kwargs(&self) -> Value {
         let mut kwargs = json!({"n_generations":self.n,"variant":self.variant,"launch_times":self.launches,"initial_time":self.origin,"initial_values":self.initial});
         if let Some(history) = &self.history {
@@ -811,6 +858,7 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
         }
         _ => {
             let mut result = json!({"model_key":"norton_bass","model_name":"NortonBassModel","family":"substitution","parameters":parameter_value(&p, &model),"state":state,"predictions":predictions});
+            result["threshold_diagnostics"] = model.threshold_diagnostics(&p);
             if op != KernelOperation::SummarizeModel
                 || inputs.contains_key("observed")
                 || inputs.contains_key("y")

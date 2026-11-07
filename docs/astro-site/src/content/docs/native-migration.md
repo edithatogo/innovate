@@ -970,3 +970,15 @@ directly with DOP853, while Rust integrates log survival. It covers an off-grid
 launch, two events, conditional fitting and a held-out forecast. Launch times
 and interventions remain fixed inputs. Their inference, calibrated uncertainty,
 automatic initialization and wider scientific qualification remain required.
+
+### Norton–Bass threshold summaries
+
+The native summarize, diagnose and fit responses include
+`threshold_diagnostics` for each generation. These offsets use the named
+base innovation and imitation rates. The historical `half_life` label
+denotes the Bass inflection offset. Takeoff clips at zero, and saturation
+retains its signed historical offset. The reference time is the launch for
+successive generations and the integration origin for historical generations.
+Zero rates retain the historical zero values with a degenerate status.
+These are baseline heuristics. Thresholds under forcing, interactions and
+interventions require separate trajectory analysis.

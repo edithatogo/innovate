@@ -661,3 +661,21 @@ fn capacity_event_uses_each_intervals_active_control_derivative() {
     assert!((result["rows"][1][0].as_f64().unwrap() - 100. * (1. - (-0.1_f64).exp())).abs() < 1e-6);
     assert!((result["rates"][1][0].as_f64().unwrap() - 10. * (-0.1_f64).exp()).abs() < 1e-6);
 }
+
+#[test]
+fn threshold_summary_uses_the_named_generation_parameters() {
+    let response = KernelBinding::new()
+        .summarize_model("norton_bass", json!({
+            "inputs":{"time":[0.]},
+            "parameters":{"p1":0.1,"q1":0.9,"m1":100.,"p2":0.2,"q2":0.,"m2":50.},
+            "constructor_kwargs":{"n_generations":2,"variant":"successive_generations","launch_times":[0.,4.]}
+        }))
+        .unwrap().result.unwrap();
+    let rows = &response["threshold_diagnostics"]["generations"];
+    assert_eq!(rows[0]["generation"], 1);
+    assert!((rows[0]["half_life"].as_f64().unwrap() - 9_f64.ln()).abs() < 1e-12);
+    assert!(rows[0]["takeoff"].as_f64().unwrap().abs() < 1e-12);
+    assert_eq!(rows[1]["reference_time"], 4.);
+    assert_eq!(rows[1]["status"], "degenerate_rates");
+    assert_eq!(rows[1]["saturation"], 0.);
+}
