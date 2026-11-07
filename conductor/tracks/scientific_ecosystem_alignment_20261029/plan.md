@@ -3249,3 +3249,9 @@ the other competition models and installed binding checks remain open.
   Python 3.15.2, Julia and R agreed on Norton–Bass series_1 and
   series_2 with identical values and intervals to the prior fixture.
   The focused Rust scalar regression and Clippy passed.
+
+- [x] Verify the minimum bootstrap forecast sample count. Python
+  3.15.2, Julia and R agreed on the noisy Logistic fixture with two
+  residual draws. Every bound matched independent linear interpolation
+  within 1e-10. A Python paired-case run with seed 42 had one successful
+  refit and returned a null interval, as documented.
