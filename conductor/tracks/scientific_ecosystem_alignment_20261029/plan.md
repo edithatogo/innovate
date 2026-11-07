@@ -5308,3 +5308,7 @@ Hosted release readiness for this worktree revision remains open.
   The Rust fixture preserved the unadjusted ATT of 2.5 and recovered
   an adjusted ATT of 2. It also rejected misaligned predictions.
   Binding checks and fitted-model inference remain open.
+
+- [x] Verify fixed-prediction adjusted matching through rebuilt
+  Python 3.15.2, Julia and installed R. Each preserved the unadjusted
+  estimate of 2.5 and returned the analytic adjusted estimate of 2.
