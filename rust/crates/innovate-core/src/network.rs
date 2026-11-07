@@ -9,7 +9,7 @@ use kairo_ecs_rng::{
     DeterministicStream,
     rand_distr::{Exp, Uniform},
 };
-use kairo_ecs_types::{EventKind, SimTime, StepOutcome};
+use kairo_ecs_types::{EntityId, EventKind, SimTime, StepOutcome};
 use serde::Deserialize;
 use serde_json::json;
 #[derive(serde::Serialize)]
@@ -20,6 +20,16 @@ struct ServiceStart {
     wait_ticks: u128,
     service_ticks: u64,
     scheduled_completion_tick: u128,
+}
+
+impl ServiceStart {
+    fn schedule_completion(&self, context: &mut ABMContext, agent: EntityId) {
+        context.schedule_behaviour(
+            agent,
+            2,
+            SimTime::from_ticks(self.scheduled_completion_tick),
+        );
+    }
 }
 
 struct QueueState {
@@ -797,15 +807,16 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             let completion_tick = now + u128::from(duration);
             metrics.occupied_slot_ticks += completion_tick.min(horizon) - now;
             metrics.admitted_wait_ticks += now - queued_at;
-            service_starts.push(ServiceStart {
+            let admission = ServiceStart {
                 agent: index,
                 tick: now,
                 request_tick: queued_at,
                 wait_ticks: now - queued_at,
                 service_ticks: duration,
                 scheduled_completion_tick: completion_tick,
-            });
-            context.schedule_behaviour(next, 2, SimTime::from_ticks(completion_tick));
+            };
+            admission.schedule_completion(&mut context, next);
+            service_starts.push(admission);
             metrics.record_over_capacity(now, in_service, capacity);
             in_service += 1;
         }
@@ -858,4 +869,43 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         ),
         metadata: json!({"runtime":"rust_native","engine":"kairos_network"}),
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn admission_order_reconstructs_tied_completion_order() {
+        let mut context = ABMContext::new(42);
+        let agents = [context.spawn_agent(), context.spawn_agent()];
+        let admissions = [
+            ServiceStart {
+                agent: 1,
+                tick: 1,
+                request_tick: 1,
+                wait_ticks: 0,
+                service_ticks: 4,
+                scheduled_completion_tick: 5,
+            },
+            ServiceStart {
+                agent: 0,
+                tick: 3,
+                request_tick: 3,
+                wait_ticks: 0,
+                service_ticks: 2,
+                scheduled_completion_tick: 5,
+            },
+        ];
+        for admission in &admissions {
+            admission.schedule_completion(&mut context, agents[admission.agent]);
+        }
+        for admission in &admissions {
+            let StepOutcome::Dispatched(event) = context.step() else {
+                panic!("expected pending completion");
+            };
+            assert_eq!(event.entity, Some(agents[admission.agent]));
+            assert_eq!(event.at.ticks(), admission.scheduled_completion_tick);
+        }
+    }
 }

@@ -5061,3 +5061,9 @@ Hosted release readiness for this worktree revision remains open.
   start tick and scheduled completion tick. Admission order can be
   used to reconstruct pending Kairos completions at a pause boundary.
   All 29 network tests passed with the existing result fields.
+
+- [x] Verify reconstruction of tied Kairos completion order from
+  network service admissions. Re-enqueueing admissions in their
+  recorded order preserved dispatch order when two different service
+  durations ended on the same tick. The focused unit test and all 29
+  network integration tests passed.
