@@ -56,3 +56,21 @@ fn worker_rejects_invalid_framing_without_writing_a_response() {
         assert_eq!(String::from_utf8(output.stderr).unwrap().trim(), diagnostic);
     }
 }
+
+#[test]
+fn worker_reports_a_closed_response_pipe() {
+    let mut child = Command::new(env!("CARGO_BIN_EXE_innovate-remote-worker"))
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .unwrap();
+    drop(child.stdout.take().unwrap());
+    child.stdin.take().unwrap().write_all(b"{}").unwrap();
+    let output = child.wait_with_output().unwrap();
+    assert_eq!(output.status.code(), Some(1));
+    assert_eq!(
+        String::from_utf8(output.stderr).unwrap().trim(),
+        "could not write remote response"
+    );
+}

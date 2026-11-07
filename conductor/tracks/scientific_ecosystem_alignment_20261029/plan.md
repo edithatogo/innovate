@@ -6444,3 +6444,8 @@ Hosted release readiness for this worktree revision remains open.
   kernel schema version in its request wrapper. Both Rust process
   regressions passed, and a closed stdout pipe produced exit one
   with the expected diagnostic.
+
+- [x] Retain the closed-response-pipe case in the worker process suite.
+  The child reports a write failure and exits one when its caller
+  closes stdout before submitting a request. All three process
+  regressions passed.
