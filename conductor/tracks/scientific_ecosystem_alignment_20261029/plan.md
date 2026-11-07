@@ -6920,3 +6920,8 @@ Hosted release readiness for this worktree revision remains open.
   March month starts and sums [1,0,5]. The first FFI link exhausted
   storage. Removed a reproducible test executable and the incomplete
   link outputs before rebuilding successfully.
+
+- [x] Document native date bucketing, including month-start labels
+  and UTC conversion. The Python wheel verified that local midnight
+  on March 1 at +01:00 lands in the February bucket, while UTC midnight
+  lands in March.

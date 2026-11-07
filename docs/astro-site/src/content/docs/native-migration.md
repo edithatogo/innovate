@@ -92,6 +92,20 @@ Conditional fit statistics exclude the initial observation used to set that
 state, and do not propagate its measurement uncertainty. Covariates, events,
 equilibrium helpers and complete original feature parity remain open.
 
+## Calendar aggregation
+
+Use `aggregate_dates` with aligned `dates` and `values` arrays and a
+`frequency` of `D`, `W`, `M`, `ME`, or `MS`. Daily and monthly
+aggregation fills missing periods between the first and last observed
+buckets with zero. Use `MS` for month-start labels or `M` and `ME`
+for month-end labels. Weekly aggregation uses seven-day windows
+anchored to the earliest observation and returns occupied buckets.
+
+Use ISO calendar dates, naive timestamps, or offset timestamps
+consistently within a request. Offset timestamps are converted to UTC
+before bucketing. For example, `2024-03-01T00:00:00+01:00` falls in
+February when aggregated at month start.
+
 ## Adopter categories
 
 Use `categorize_adopters` with strictly increasing finite timestamps
