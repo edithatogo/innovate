@@ -7481,3 +7481,9 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify the optimized worker accepts a valid envelope at exactly
   2,000,000 raw bytes and rejects an input one byte over. All five
   optimized worker tests and the formatting check passed.
+
+- [x] Compare the full remote execution contract returned by the
+  optimized Python wheel, staged Julia package and installed R binary
+  package. With bundled library discovery, all three parsed responses
+  matched, including limits, eligible operations and identity scope.
+  This qualifies local contract parity. Hosted transport remains open.
