@@ -1178,12 +1178,21 @@ fn compare_ensemble(
     comparison: &EnsembleComparison,
 ) -> Result<Value, &'static str> {
     let mass = comparison.interval_mass;
+    let resource_metric = comparison
+        .evaluation_metric
+        .as_deref()
+        .and_then(|metric| metric.strip_prefix("resource."));
+    if resource_metric.is_some() && comparison.evaluation_time.is_some() {
+        return Err("resource metrics cannot be combined with evaluation_time");
+    }
+    let mut resource_basis = None;
     let compare_area = match comparison.evaluation_metric.as_deref() {
         None => false,
         Some("adoption_area") if comparison.evaluation_time.is_none() => true,
         Some("adoption_area") => {
             return Err("adoption_area cannot be combined with evaluation_time");
         }
+        Some(_) if resource_metric.is_some() => false,
         Some(_) => return Err("unknown ensemble evaluation metric"),
     };
     if mass <= 0. || mass >= 1. || comparison.pairs.len() < 2 {
@@ -1255,7 +1264,28 @@ fn compare_ensemble(
                 .ok_or("evaluation_time must match a sample on the shared time grid")?,
             None => time.len() - 1,
         };
-        let difference = if compare_area {
+        let difference = if let Some(metric) = resource_metric {
+            let totals = compare_resource_totals(
+                paths[pair.baseline.as_str()].1,
+                paths[pair.alternative.as_str()].1,
+            )?;
+            let units = (
+                totals["ticks_per_unit"].clone(),
+                totals["horizon_ticks"].clone(),
+            );
+            if resource_basis.as_ref().is_some_and(|basis| basis != &units) {
+                return Err(
+                    "resource ensemble requires matching tick resolution and horizon across pairs",
+                );
+            }
+            resource_basis = Some(units);
+            if matches!(metric, "ticks_per_unit" | "horizon_ticks") {
+                return Err("unknown ensemble resource metric");
+            }
+            totals[metric]
+                .as_f64()
+                .ok_or("unknown ensemble resource metric")?
+        } else if compare_area {
             let differences: Vec<_> = alternative
                 .iter()
                 .zip(&baseline)
@@ -1279,7 +1309,9 @@ fn compare_ensemble(
     let mut sorted = differences.clone();
     sorted.sort_unstable_by(f64::total_cmp);
     let tail = (1. - mass) / 2.;
-    let method = if compare_area {
+    let method = if resource_metric.is_some() {
+        "paired_empirical_resource_difference"
+    } else if compare_area {
         "paired_empirical_adoption_area_difference"
     } else if comparison.evaluation_time.is_some() {
         "paired_empirical_sample_difference"
@@ -1291,6 +1323,11 @@ fn compare_ensemble(
         "mean_difference":mean,"mean_standard_error":standard_error,
         "standard_error_assumption":"independent replicate pairs",
         "median_difference":linear_quantile(&sorted, 0.5),"empirical_interval":[linear_quantile(&sorted, tail),linear_quantile(&sorted, 1.-tail)]});
+    if let Some((ticks_per_unit, horizon_ticks)) = resource_basis {
+        result["resource_metric"] = json!(resource_metric);
+        result["ticks_per_unit"] = ticks_per_unit;
+        result["horizon_ticks"] = horizon_ticks;
+    }
     if compare_area {
         let time = grid.as_ref().unwrap();
         result["evaluation_horizon"] = json!([time[0], time[time.len() - 1]]);
@@ -1492,6 +1529,7 @@ pub(crate) fn discover(request: &Value) -> Value {
                 });
                 capability["resource_comparison"] = json!({
                     "option":"compare_resources","engine":"kairos_network",
+                    "ensemble_evaluation_metric":"resource.<metric>",
                     "difference":"alternative_minus_baseline",
                     "requires":["shared_observation_grid","shared_tick_resolution","shared_horizon"]
                 });

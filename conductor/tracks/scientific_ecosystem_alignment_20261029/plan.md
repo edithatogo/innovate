@@ -5882,3 +5882,10 @@ Hosted release readiness for this worktree revision remains open.
   service ends and adopted-agent state. Reject duplicate service
   starts and inconsistent public completion traces. All 34 Rust
   network tests passed, including the altered completion timestamp.
+
+- [x] Support paired Kairos resource ensemble inference via
+  evaluation_metric=resource.<metric>. Require matching tick units
+  and horizons across pairs. The two-seed Rust fixture recovered
+  configured slot differences of -3 and -3 with zero standard error.
+  All 13 focused scenario boundary tests passed. Binding and broader
+  stochastic resource qualification remain open.

@@ -3834,6 +3834,18 @@ fn resource_comparison_requires_resource_outputs_from_both_scenarios() {
         .as_array_mut()
         .unwrap()
         .push(json!({"baseline":"base","alternative":"retry_closed","compare_resources":true}));
+    for (index, id) in [(0, "base_repeat"), (1, "closed_repeat")] {
+        let mut repeat = payload["scenarios"][index].clone();
+        repeat["id"] = json!(id);
+        repeat["simulation"]["simulation_options"]["seed"] = json!(43);
+        payload["scenarios"].as_array_mut().unwrap().push(repeat);
+    }
+    payload["comparisons"].as_array_mut().unwrap().push(json!({
+        "pairs":[{"baseline":"base","alternative":"closed"},
+                 {"baseline":"base_repeat","alternative":"closed_repeat"}],
+        "require_distinct_pair_seeds":true,"interval_mass":0.9,
+        "evaluation_metric":"resource.configured_slot_ticks"
+    }));
     let request =
         json!({"schema_version":"2.0","operation":"execute_scenario_grid","payload":payload});
     let response: serde_json::Value =
@@ -3841,6 +3853,10 @@ fn resource_comparison_requires_resource_outputs_from_both_scenarios() {
     let result = &response["result"];
     assert!(result["executions"][2]["error"].is_null(), "{response}");
     let rows = result["comparisons"].as_array().unwrap();
+    let ensemble = &rows.last().unwrap()["result"];
+    assert_eq!(ensemble["resource_metric"], "configured_slot_ticks");
+    assert_eq!(ensemble["differences"], json!([-3., -3.]));
+    assert_eq!(ensemble["mean_standard_error"], 0.);
     assert_eq!(
         rows[0]["result"]["resource_differences"]["configured_slot_ticks"],
         -3
