@@ -218,4 +218,12 @@ fn export_ipc_file_frames_schema_and_preserves_nulls_and_types() {
         .finish()
         .unwrap();
     assert_eq!(decoded, frame);
+
+    let mut source_file = Vec::new();
+    IpcWriter::new(&mut source_file).finish(&mut frame).unwrap();
+    let rewritten = innovate_tabular::export_ipc_file(&source_file).unwrap();
+    let decoded = IpcReader::new(std::io::Cursor::new(rewritten))
+        .finish()
+        .unwrap();
+    assert_eq!(decoded, frame);
 }

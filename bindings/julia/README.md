@@ -42,3 +42,10 @@ from innovate import export_ipc_file, policy_metadata_frame
 
 Path("policy.arrow").write_bytes(export_ipc_file(policy_metadata_frame(result)))
 ```
+
+For an existing file emitted by Polars, pass its bytes through the same
+exporter. The native reader accepts IPC files and streams.
+
+```python
+Path("policy-julia.arrow").write_bytes(export_ipc_file(Path("policy-polars.arrow").read_bytes()))
+```

@@ -3082,3 +3082,11 @@ the other competition models and installed binding checks remain open.
   rebuilt files and preserved their row counts and success flags. Both
   Rust scenario IPC tests and focused Clippy passed. The separate Python
   Polars file writer remains an open Julia interoperability item.
+
+- [x] Expose IPC byte rewriting through Python's export_ipc_file.
+  A rebuilt Python 3.15.2 wheel rewrote an existing Polars-written
+  IPC file and accepted stream, eager and lazy inputs. Python Polars,
+  Julia Arrow 2.8.1 and R Arrow read the resulting files and preserved
+  Int32, nullable Float64 and Unicode strings. Julia still returned
+  an empty schema for the original file. The focused Rust round-trip
+  and Clippy passed.
