@@ -5525,3 +5525,10 @@ Hosted release readiness for this worktree revision remains open.
   The Rust fixture canceled a common loading and recovered adjusted
   mixture spread sqrt(6), with raw spread still sqrt(5). Eleven causal
   tests passed. Binding checks and coverage with these factors remain open.
+
+- [x] Verify independent prediction covariance through rebuilt Python,
+  Julia and installed R using the analytic sqrt(6) adjusted and sqrt(5)
+  raw fixture. Repeat the paired estimated-control simulation with
+  the known slope-error loading x/sqrt(5). Coverage was 473/500
+  compared with 451/500 when the predictions were treated as fixed.
+  This evidence is limited to the specified independent Gaussian fit.
