@@ -55,6 +55,9 @@ pub fn execute_json(input: &str) -> String {
             Some("ingest_dataset") => return dataset::ingest_request(&value).to_string(),
             Some("execute_scenario_grid") => return scenario::execute_grid(&value).to_string(),
             Some("discover_scenarios") => return scenario::discover(&value).to_string(),
+            Some("import_scenario_artifact") => {
+                return scenario::import_artifact(&value).to_string();
+            }
             Some("categorize_adopters") => return execute_adopters_json(&value).to_string(),
             _ => {}
         }

@@ -559,3 +559,49 @@ pub(crate) fn discover(request: &Value) -> Value {
         .collect();
     envelope(json!({"scenarios":scenarios}), Value::Null)
 }
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+struct LegacyArtifact {
+    scenario: ScenarioSpecification,
+    seed: i128,
+    model_type: String,
+    version: String,
+    notes: Option<String>,
+    timestamp: String,
+}
+
+pub(crate) fn import_artifact(request: &Value) -> Value {
+    let envelope = |result: Value, error: Value| {
+        json!({"schema_version":KERNEL_SCHEMA_VERSION,"operation":"import_scenario_artifact",
+            "result":result,"error":error,"metadata":{"runtime":"rust_native"}})
+    };
+    let invalid = |message: &str| {
+        envelope(
+            Value::Null,
+            json!({"code":"invalid_request","message":message}),
+        )
+    };
+    if request["schema_version"] != KERNEL_SCHEMA_VERSION {
+        return invalid("import_scenario_artifact requires schema 2.0");
+    }
+    let artifact: LegacyArtifact =
+        match serde_json::from_value(request["payload"]["artifact"].clone()) {
+            Ok(artifact) => artifact,
+            Err(error) => return invalid(&format!("invalid legacy artifact: {error}")),
+        };
+    if let Err(message) = artifact.scenario.validate() {
+        return invalid(message);
+    }
+    if artifact.model_type.trim().is_empty() || artifact.version.trim().is_empty() {
+        return invalid("legacy artifact requires nonblank model_type and version");
+    }
+    if chrono::DateTime::parse_from_rfc3339(&artifact.timestamp).is_err() {
+        return invalid("legacy artifact timestamp must be RFC 3339 with a time offset");
+    }
+    envelope(
+        json!({"artifact":artifact,"format":"legacy_scenario_envelope",
+        "replay_available":false,"replay_reason":"legacy artifact has no simulation payload"}),
+        Value::Null,
+    )
+}

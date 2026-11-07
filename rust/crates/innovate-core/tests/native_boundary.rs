@@ -1077,3 +1077,21 @@ fn scenario_discovery_lists_and_resolves_native_families() {
     request["payload"]["key"] = json!("missing");
     assert_eq!(run(&request)["error"]["code"], "unknown_scenario");
 }
+
+#[test]
+fn imports_legacy_scenario_artifacts_without_inventing_replay_inputs() {
+    let artifact = json!({"scenario":{"scenario_type":"baseline","name":"baseline",
+        "description":"","time_horizon":5.,"time_unit":"year","reference_year":2026,
+        "market_size":100.,"initial_adoption":0.},"seed":42,"model_type":"bass",
+        "version":"0.6.0","notes":null,"timestamp":"2026-01-01T00:00:00+00:00"});
+    let mut request = json!({"schema_version":"2.0","operation":"import_scenario_artifact",
+        "payload":{"artifact":artifact}});
+    let run = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = run(&request);
+    assert_eq!(response["result"]["artifact"], artifact);
+    assert_eq!(response["result"]["replay_available"], false);
+    request["payload"]["artifact"]["timestamp"] = json!("2026-01-01");
+    assert_eq!(run(&request)["error"]["code"], "invalid_request");
+}
