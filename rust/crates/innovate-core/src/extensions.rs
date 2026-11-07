@@ -54,16 +54,21 @@ fn normalize(manifest: &mut Manifest) -> Result<(), &'static str> {
     }
     .into();
     if manifest.extension_points.is_empty()
-        || manifest.extension_points.iter().any(|point| {
-            !matches!(
-                point.as_str(),
-                "dataset_provider" | "diagnostics" | "model_registry" | "serialization_adapter"
-            )
-        })
+        || manifest
+            .extension_points
+            .iter()
+            .any(|point| !recognized_point(point))
     {
         return Err("extension points must be nonempty and recognized");
     }
     Ok(())
+}
+
+fn recognized_point(point: &str) -> bool {
+    matches!(
+        point,
+        "dataset_provider" | "diagnostics" | "model_registry" | "serialization_adapter"
+    )
 }
 
 pub(crate) fn register(payload: &Value) -> Result<Value, &'static str> {
@@ -81,9 +86,24 @@ pub(crate) fn register(payload: &Value) -> Result<Value, &'static str> {
     Ok(result)
 }
 
-pub(crate) fn registered() -> Result<Value, &'static str> {
+pub(crate) fn registered(payload: &Value) -> Result<Value, &'static str> {
     let registry = REGISTRY
         .lock()
         .map_err(|_| "extension registry unavailable")?;
-    Ok(json!({"manifests":registry.values().collect::<Vec<_>>()}))
+    let point = payload
+        .get("extension_point")
+        .map(|point| {
+            point
+                .as_str()
+                .filter(|point| recognized_point(point))
+                .ok_or("unknown extension point")
+        })
+        .transpose()?;
+    let manifests: Vec<_> = registry
+        .values()
+        .filter(|manifest| {
+            point.is_none_or(|point| manifest.extension_points.iter().any(|value| value == point))
+        })
+        .collect();
+    Ok(json!({"manifests":manifests}))
 }

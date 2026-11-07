@@ -5657,3 +5657,8 @@ Hosted release readiness for this worktree revision remains open.
   bytes and rejects excess bytes introduced by JSON escaping. The remote
   dispatch boundary test also passed. Hosted transport must separately
   enforce limits before decoding requests.
+
+- [x] Filter native registry discovery by a recognized extension point.
+  Unfiltered listing still returns all registered manifests. The Rust
+  boundary checks covered inclusion, exclusion, invalid point rejection,
+  and duplicate registration. Extension execution remains open.

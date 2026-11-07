@@ -253,7 +253,7 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             return extensions::register(payload);
         }
         if value["operation"] == "list_extension_manifests" {
-            return extensions::registered();
+            return extensions::registered(payload);
         }
         if value["operation"] == "validate_extension_manifests" {
             return extensions::validate(payload);

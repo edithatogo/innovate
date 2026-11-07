@@ -2982,6 +2982,31 @@ fn extension_registry_rejects_duplicate_registration_without_replacement() {
             .unwrap()
             .contains(&result["result"]["manifest"])
     );
+    let diagnostics = run(
+        "list_extension_manifests",
+        json!({"extension_point":"diagnostics"}),
+    );
+    assert!(
+        diagnostics["result"]["manifests"]
+            .as_array()
+            .unwrap()
+            .contains(&result["result"]["manifest"])
+    );
+    let datasets = run(
+        "list_extension_manifests",
+        json!({"extension_point":"dataset_provider"}),
+    );
+    assert!(
+        !datasets["result"]["manifests"]
+            .as_array()
+            .unwrap()
+            .contains(&result["result"]["manifest"])
+    );
+    let invalid = run(
+        "list_extension_manifests",
+        json!({"extension_point":"unknown"}),
+    );
+    assert_eq!(invalid["error"]["message"], "unknown extension point");
 }
 
 #[test]
