@@ -75,7 +75,10 @@ jobs:
               assert Path(module.__file__).resolve().is_relative_to(root), module.__file__
           PYTHON
           "$staging/bin/python" -m pytest -q \
-            tests/native/test_python_consumer.py
+            tests/native/test_python_consumer.py \
+            tests/native/test_competition.py \
+            tests/native/test_multi_generation.py \
+            tests/native/test_paired_outcomes.py
       - name: Retain validated dry-run artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:

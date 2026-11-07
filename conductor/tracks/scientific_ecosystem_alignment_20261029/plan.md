@@ -7267,3 +7267,8 @@ Hosted release readiness for this worktree revision remains open.
   Wheel SHA-256 is
   `3332d1ebbfb07d7665975948b3fb91d19fc2f66bd777f323098790ce5860edf2`.
   Hosted distribution checks remain open.
+
+- [x] Run the competition, multi-generation and paired-outcome tests
+  against the same staged optimized Python wheel. All seven tests
+  passed, bringing local installed-consumer coverage to 121 cases.
+  Added these files to the hosted dry run. Actionlint passed.
