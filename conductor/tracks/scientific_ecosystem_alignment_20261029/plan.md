@@ -1761,6 +1761,11 @@ the other competition models and installed binding checks remain open.
 - [x] Verify policy evidence through Julia and installed R. Both
   preserve intervention metadata, the confounder list and the
   identifying assumption. R also exercised singleton list encoding.
-- [ ] Qualify Julia and R Arrow IPC consumers. Arrow is absent from
-  the tested Julia project and R libraries. Python IPC readback is
-  recorded above.
+- [x] Verify the Polars policy metadata and treatment contrast IPC
+  streams in Julia 1.13.3 with Arrow 2.8.1 in an isolated project.
+  Use write_ipc_stream with uncompressed output and the oldest Polars
+  compatibility level. The reader preserves Int32 counts, Float64
+  estimates, metadata strings, and missing interval bounds.
+- [ ] Qualify the R Arrow IPC consumer and investigate Arrow.jl file
+  compatibility. Arrow.jl returned empty column sets for the Polars
+  IPC files even with compression disabled and oldest compatibility.
