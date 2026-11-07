@@ -5428,3 +5428,9 @@ Hosted release readiness for this worktree revision remains open.
   gap when two controls have the same fitted score. All three passed
   against rebuilt libraries. Local disk capacity required reusing the
   FFI build space for the Python link after the Julia and R checks.
+
+- [x] Propagate caller-supplied joint score draws through native
+  rematching. Preserve each draw's estimate, pairs and treated coverage
+  so changes in the target subset remain visible. The Rust fixture
+  recovered effects 4 and 2 after switching the selected control.
+  Native score draw generation and binding qualification remain open.

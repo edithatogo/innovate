@@ -55,7 +55,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                  "estimands":["ate","att"],"default_estimand":"ate",
                  "uncertainty":"fixed_propensity_standard_error"},
                 {"method":"matched_treatment_contrast","adjustment":"nearest_score_with_replacement",
-                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":["allow_partial","outcome_variances","balance_covariates","control_predictions","outcome_covariance_factors","fit_controls"],
+                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":["allow_partial","outcome_variances","balance_covariates","control_predictions","outcome_covariance_factors","fit_controls","score_draws"],
                  "estimands":["att"],"default_estimand":"att",
                  "partial_estimand":"matched_subset_att",
                  "uncertainty":"conditional_standard_error",
@@ -1361,6 +1361,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
                 | "treatment"
                 | "scores"
                 | "fit_scores"
+                | "score_draws"
                 | "caliper"
                 | "allow_partial"
                 | "outcome_variances"
@@ -1667,11 +1668,15 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
                 .collect::<Result<serde_json::Map<String, Value>, &'static str>>()
         })
         .transpose()?;
+    let score_sensitivity = fields
+        .get("score_draws")
+        .map(|value| matching_score_sensitivity(fields, value))
+        .transpose()?;
     Ok(
         json!({"method":"nearest_score_with_replacement","estimand":estimand,"estimate":estimate,"adjusted_estimate":adjusted_estimate,"pairs":pairs,
             "unmatched_treated_indices":unmatched_treated_indices,
             "conditional_standard_error":conditional_standard_error,"uncertainty_model":uncertainty_model,
-            "covariate_balance":balance,"score_fit":score_fit,
+            "covariate_balance":balance,"score_fit":score_fit,"score_sensitivity":score_sensitivity,
             "score_uncertainty_scope":score_fit.as_ref().map(|_| "conditional_on_fitted_scores_and_pairs"),
             "outcome_weights":outcome_weights,"adjusted_outcome_weights":adjusted_outcome_weights,
             "adjusted_standard_error":adjusted_standard_error,
@@ -1682,6 +1687,34 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
             "control_diagnostics":{"unique_controls":control_uses.len(),
             "effective_sample_size":1. / squared_control_weights}}),
     )
+}
+
+fn matching_score_sensitivity(
+    fields: &serde_json::Map<String, Value>,
+    value: &Value,
+) -> Result<Value, &'static str> {
+    let draws = value
+        .as_array()
+        .filter(|draws| (2..=128).contains(&draws.len()))
+        .ok_or("score_draws requires two to 128 aligned score arrays")?;
+    let mut draw_fields = fields.clone();
+    draw_fields.remove("score_draws");
+    draw_fields.remove("fit_scores");
+    draw_fields.remove("balance_covariates");
+    let mut draw_payload = Value::Object(draw_fields);
+    let mut results = Vec::with_capacity(draws.len());
+    for scores in draws {
+        draw_payload["scores"] = scores.clone();
+        let result = matched_treatment_contrast(&draw_payload)?;
+        results.push(json!({
+            "estimate": result["estimate"],
+            "adjusted_estimate": result["adjusted_estimate"],
+            "estimand": result["estimand"],
+            "unmatched_treated_indices": result["unmatched_treated_indices"],
+            "pairs": result["pairs"],
+        }));
+    }
+    Ok(json!({"method": "rematch_caller_supplied_score_draws", "draws": results}))
 }
 
 fn score_propensities(payload: &Value) -> Result<Value, &'static str> {
@@ -2583,5 +2616,19 @@ mod tests {
         assert_eq!(gap(&payload), Some(0.));
         payload["scores"] = serde_json::json!([0, 1, 2]);
         assert_eq!(gap(&payload), Some(0.));
+    }
+    #[test]
+    fn matching_rematches_score_draws_in_order() {
+        let payload = serde_json::json!({
+            "outcomes": [0, 4, 2], "treatment": [0, 1, 0],
+            "caliper": 0, "scores": [0, 0, 1],
+            "score_draws": [[0, 0, 1], [1, 0, 0]]
+        });
+        let result = matched_treatment_contrast(&payload).unwrap();
+        assert_eq!(result["estimate"].as_f64(), Some(4.));
+        let draws = &result["score_sensitivity"]["draws"];
+        assert_eq!(draws[0]["estimate"].as_f64(), Some(4.));
+        assert_eq!(draws[1]["estimate"].as_f64(), Some(2.));
+        assert_eq!(draws[1]["pairs"][0]["control_index"].as_u64(), Some(2));
     }
 }
