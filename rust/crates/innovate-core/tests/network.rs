@@ -701,6 +701,17 @@ fn scheduled_priorities_reorder_waiters_without_preempting_service() {
         baseline["requests"][1]["agent"]
     );
     assert_eq!(result["metadata"]["agent_priorities"], json!(priorities));
+    payload["simulation_options"]["schedule"] = json!([
+        {"tick":4,"agent_priorities":priorities},
+        {"tick":5,"agent_priorities":[0,0,0]}
+    ]);
+    let tied = kernel
+        .simulate_model("bass", payload.clone())
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(tied["completions"], baseline["completions"]);
+    assert_eq!(tied["metadata"]["applied_schedule_ticks"], json!([4, 5]));
     payload["simulation_options"]["schedule"][0]["agent_priorities"] = json!([10]);
     assert!(kernel.simulate_model("bass", payload).is_err());
 }

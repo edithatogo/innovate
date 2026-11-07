@@ -2746,3 +2746,8 @@ the other competition models and installed binding checks remain open.
   translation and replay. The focused Rust regression verifies the
   effective priorities, original schedule in the replay request, and
   exact replay result for the custom network specification.
+
+- [x] Verify FIFO ties after successive Kairos priority changes.
+  Promote the later waiter at tick 4 and restore equal priority at tick 5.
+  The Rust regression reproduces the original completion order and
+  records both applied schedule ticks.
