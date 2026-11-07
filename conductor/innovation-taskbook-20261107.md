@@ -268,32 +268,34 @@ Command: `uv run pytest tests/validation/test_medicines_protocol.py -q`.
 ## Game-runtime boundary — advanced_diffusion_frontier_20261107
 
 ### G01 — Inventory and consolidate generic game ownership
-Dependencies: none. Provider: `new-drug-reimbursement-game`, coordinate Kairos track110 S01–S04. Inspect `crates/uogto-game-core`, `crates/uogto-game-solve`, and Kairos `crates/kairo-ecs-game-{theory,ontology}`; create provider `docs/architecture/game-runtime-extraction.md` and duplicate-owner tests.
-Interface: one authoritative GameSpec/Policy/Solution contract; UOGTO is semantic validation; Kairos owns execution only; no second scheduler.
-Test: static solver dependency graph contains no application or mandatory simulator; each existing advertised algorithm maps to one owner and an accepted/unsupported/migration state; no completion obligation disappears.
-Command: provider `cargo test --workspace --locked` plus a checked-in ownership-graph test introduced with this task.
-- [ ] Inventory callers before moving code; document retained adapters and exact extraction boundary; review and commit. A new repository is not evidence of extraction.
+Dependencies: none. Provider: `edithatogo/paignia`, with seed transfer from `new-drug-reimbursement-game` and T17.01-T17.17 reconciliation pending. Coordinate Kairos track110 S01-S04. Inspect `crates/paignia-core`, `crates/paignia-solve` (historically `uogto-game-*`) and Kairos `crates/kairo-ecs-game-{theory,ontology}`; extend provider `extraction-manifest.json`, `docs/architecture/paignia-transfer-map.md` and existing guards rather than duplicate inventories.
+Interface: one authoritative GameSpec/Policy/Solution contract; UOGTO supplies semantic validation; Kairos owns execution; no second scheduler.
+Test: static graph contains no application or mandatory simulator/ontology runtime; every advertised method has one owner and explicit accepted/unsupported/migration state; no obligation disappears.
+Command: provider `cargo test --workspace --locked` plus its ownership-graph test.
+- [ ] Inventory callers before moving code; retain compatible adapters/provenance, review and commit; repository creation is not extraction evidence.
 
-### G02 — Independently consumable solver slice
-Dependencies: G01, R08. Provider files: `crates/uogto-game-core`, `crates/uogto-game-solve`; create `crates/uogto-game-solve/tests/solver_oracles.rs` and installed consumer fixtures.
-Interface: `solve_finite_game(&GameSpec,&SolveConfig)->Result<Solution,SolveError>` reports algorithm, supported scope, residual/exploitability and selection among multiple equilibria.
-Test: analytic backward induction, strict dominance, matching pennies, coordination/multiple equilibria, rectangular and unsupported games; CE incentive inequalities checked independently; algorithm-specific unsupported inputs fail. Complete one algorithm per reviewed slice.
-Command: provider `cargo test --locked -p uogto-game-solve --test solver_oracles`.
-- [ ] Use isolated Gambit/OpenSpiel reference outputs, not production dependency; qualify reimbursement and Innovate installed consumers; review and commit before generic-library promotion.
+### G02 — Independently consumable solver slice and honest solution contract
+Dependencies: G01, R08. Paignia files: `crates/paignia-core`, `crates/paignia-solve`; future `crates/paignia-solve/tests/solver_oracles.rs` and installed-consumer fixtures. Use the exact transferred artifact, not an assumed registry release.
+Interface: `solve_finite_game(&GameSpec,&SolveConfig)->Result<Solution,SolveError>` reports game class, information structure, solution concept, algorithm/version, status, tolerance, residual/exploitability, selection rule and completeness claim. Separate one-found, exhaustive-within-declared-scope, approximate and behavioural results.
+Test: named independent cases per claimed algorithm. Backward induction uses supported trees; pure-Nash enumeration covers dominance, coordination and matching pennies with zero pure equilibria. Mixed-Nash, CE constraints and CFR/exploitability gate only those claimed methods; unfinished methods retain T17.04-.07/S01-S04 obligations and explicit unsupported status. Test rectangular/invalid games and incomplete catalogues. Noisy-choice/inertia/adaptive-learning predictions require their own model labels and empirical tests, not a Nash label.
+Command: provider `cargo test --locked -p paignia-solve --test solver_oracles`.
+- [ ] Use isolated Gambit/OpenSpiel references; qualify reimbursement and Innovate installed consumers; one algorithm per reviewed slice.
 
-### G03 — Optional dynamic execution adapter
-Dependencies: G02, E01. Provider creates `crates/uogto-game-kairos/{Cargo.toml,src/lib.rs,tests/replay.rs}`; Innovate creates `crates/innovate-games/{Cargo.toml,src/lib.rs}`.
-Interface: game actions/observations dispatch through Kairos public APIs; stateless solving is independent, repeated-game world state lives in Kairos.
-Test: no duplicate clock/RNG; same seed/action history reproduces trajectory; disabled adapter does not build Kairos; unsupported information sets rejected rather than mapped to a special-case game.
-Command: provider `cargo test --locked -p uogto-game-kairos --test replay`; Innovate installed-adapter smoke.
-- [ ] Red/green adapter, record immutable provider pin and public API, review and commit.
+For Innovate's static consumer, create `crates/innovate-games/Cargo.toml`, `src/lib.rs`, `tests/static_provider.rs` under that crate and root workspace/lock entries in a separate leaf of at most five files. The qualified core/solver does not require Kairos. An actual innovation-game test checks algorithm identity, unsupported cases and result semantics; run `cargo test --locked -p innovate-games --test static_provider`. This establishes A08's adapter; G03 extends it only for optional execution.
 
-### G04 — Strategic innovation research cases
-Dependencies: A08, G03, V02. Create `validation/competition/protocol.json`, `validation/competition/run.py`, `tests/validation/test_competition_protocol.py`.
-Interface: prespecified cases for launch timing, price/quality competition, switching costs, cannibalisation and optional investment/learning; distinguish equilibrium selection assumptions.
-Test: replicate a named published/analytic special case before extension; payoff/price transformations preserve stated invariants; counterfactual differences include uncertainty and multiple-equilibrium sensitivity.
-Command: `uv run pytest tests/validation/test_competition_protocol.py -q` then native solver/model jobs.
-- [ ] Audit literature and available code/licence per case; no claim an established method lacks software until documented; review and commit comparative results.
+### G03 — Optional dynamic adapter and lawful policy observation
+Dependencies: G02, E01. Paignia owns optional `crates/paignia-kairos/{Cargo.toml,src/lib.rs,tests/replay.rs}`; Innovate adds an optional execution feature to the existing G02 adapter. Reuse T17.08/.14/.15/.17 and current Kairos observation/RNG contracts.
+Interface: game actions/observations use Kairos public APIs; policy inputs contain permitted observations/legal actions/identity only, never full world references. Static algorithms accept explicit RNG configuration independently of Kairos.
+Test: same lawful observation in two hidden states yields identical policy input/action under matched policy randomness. Opponent-private data, leaked action masks and future events must fail. Solver exploration must not alter paired exogenous simulation streams. One clock/state/RNG, deterministic replay and disabled-feature closure tests remain required; unsupported information sets fail explicitly.
+Command: provider `cargo test --locked -p paignia-kairos --test replay`, mapped T17 observation/RNG targets and Innovate installed-adapter smoke.
+- [ ] Red/green adapter at public boundaries, immutable provider pin and trace evidence, review and commit. Offline game inspection does not grant live policies that access.
+
+### G04 — Static and dynamic strategic innovation research cases
+Dependencies: static cases require A08, G02, V02. Only cases requiring dynamic execution additionally require G03. Create `validation/competition/protocol.json`, `validation/competition/run.py`, `tests/validation/test_competition_protocol.py`.
+Interface: launch timing, price/quality, switching, cannibalisation and optional investment/learning cases declare game class, information structure, equilibrium/behavioural interpretation and execution requirement.
+Test: replicate a published/analytic special case before extension; justify payoff transformations; preserve multiplicity/selection sensitivity. Static cases run with Kairos absent; dynamic cases fail readiness without qualified G03. Do not treat solver restart frequencies as behavioural probabilities.
+Command: `uv run pytest tests/validation/test_competition_protocol.py -q` then native jobs.
+- [ ] Audit literature and existing code/licence per case, report static/dynamic results separately and retain unfinished obligations. Pending dynamic work does not block a scoped static result, I10 runtime-only qualification or close the whole packet.
 
 ## Ecosystem integration — ecosystem_decision_integration_20261107
 
