@@ -4781,3 +4781,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify shuffled long-panel ATT through rebuilt Python 3.15.2,
   Julia and installed R. Each returned sorted unit labels and ATT 4.
   The Python fixture used Polars columns and checked duplicate rejection.
+
+- [x] Expose a Polars DataFrame and LazyFrame entry point for staggered
+  ATT. The focused Python test verifies equality with the native column
+  request, including labels and cohort-period results.

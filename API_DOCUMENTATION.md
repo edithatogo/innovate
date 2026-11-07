@@ -404,3 +404,8 @@ Adoption dates must identify observed periods, with null for never
 treated. The operation sorts periods, rejects duplicate or missing
 unit-period rows, and returns the sorted `unit_order`. It accepts the
 same inference options as the matrix operation.
+
+Python callers can pass a Polars DataFrame or LazyFrame to
+`staggered_att_polars(frame, adoption_times, **options)`. The frame
+must contain `unit_ids`, `time` and `outcomes`. The function returns
+the native staggered result, including cohort and event-time summaries.

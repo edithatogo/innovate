@@ -1557,6 +1557,8 @@ def test_staggered_long_panel_att():
                               **payload, adoption_times={"a": 20, "z": 30})["result"]
     assert result["unit_order"] == ["a", "z"]
     assert result["contrasts"][0]["estimate"] == pytest.approx(4)
+    assert innovate.staggered_att_polars(frame, {"a": 20, "z": 30}) == result
+    assert innovate.staggered_att_polars(frame.lazy(), {"a": 20, "z": 30}) == result
     payload["time"][0] = 10
     with pytest.raises(innovate.NativeError, match="duplicate unit and period"):
         innovate.execute("summarize_causal", method="staggered_long_panel_att",

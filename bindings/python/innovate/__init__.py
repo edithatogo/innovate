@@ -20,6 +20,7 @@ from . import _native
 
 __version__ = version("innovate")
 __all__ = [
+    "staggered_att_polars",
     "execute_scenario_grid",
     "export_ipc_file",
     "scenario_executions",
@@ -441,6 +442,24 @@ def policy_metadata_frame(result: dict[str, Any]) -> pl.DataFrame:
             "n_confounders": pl.Int32,
         },
     )
+
+
+def staggered_att_polars(
+    frame: pl.DataFrame | pl.LazyFrame,
+    adoption_times: dict[str, float | None],
+    **options: Any,
+) -> dict[str, Any]:
+    """Estimate staggered ATT from Polars unit_ids, time and outcomes columns."""
+    panel = frame.select("unit_ids", "time", "outcomes")
+    if isinstance(panel, pl.LazyFrame):
+        panel = panel.collect()
+    return execute(
+        "summarize_causal",
+        method="staggered_long_panel_att",
+        **panel.to_dict(as_series=False),
+        adoption_times=adoption_times,
+        **options,
+    )["result"]
 
 
 def ingest_polars(
