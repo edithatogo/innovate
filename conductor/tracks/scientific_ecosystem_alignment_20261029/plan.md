@@ -2923,3 +2923,8 @@ the other competition models and installed binding checks remain open.
   scope, retention and size constants with the native in-process
   dispatcher. Discovery identifies caller-supplied identity and
   exposes observability fields. Focused Rust and Clippy passed.
+
+- [x] Verify remote contract discovery in rebuilt Python 3.15, Julia
+  and R. Results agreed exactly on five eligible operations, a 1 MB
+  limit and caller-supplied identity. Mark the local adapter bounded
+  native in the migration ledger. Hosted qualification remains open.
