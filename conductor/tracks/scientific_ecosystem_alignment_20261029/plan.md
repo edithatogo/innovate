@@ -698,3 +698,14 @@ interoperability, historical model extensions and release qualification remain o
 Source: 040ed666. Fourteen focused Rust tests, 41 installed
 Python tests, 185 Julia assertions and R conformance passed. Continuous forcing
 interoperability, historical model extensions and release qualification remain open.
+
+## Historical Norton Bass covariate forcing
+
+- [x] Preserve additive per-generation coefficients and shared saved control history.
+- [x] Verify analytic generation levels/rates, forecast replay and conditional fit.
+- [x] Qualify Python, Julia and R and retain forcing limitations.
+
+Source: d8d14ea5. Twenty-six unique focused Rust tests,
+42 installed Python tests, 187 Julia assertions, R conformance and 163-page
+documentation build passed. Successive-generation forcing, events, automatic
+fit starts, uncertainty and scientific/release qualification remain open.
