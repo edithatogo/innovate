@@ -2453,3 +2453,11 @@ the other competition models and installed binding checks remain open.
   tests and Clippy passed. The rebuilt Python 3.15.2 wheel and Julia
   returned identical results. Installed R agreed within 1e-14 after
   serialization. This case uses informed starts and deterministic samples.
+
+- [x] Add and qualify composite_reference. Compare independent Bass and
+  logistic trajectories with closed-form predictions at four times.
+  Maximum absolute error across eight component values was 4.448e-9.
+  Five focused Rust tests and Clippy passed. The rebuilt Python 3.15.2
+  wheel and Julia agreed exactly. Installed R agreed within 1e-14 after
+  serialization. The reference uses fixed initial values and zero coupling.
+  Coupled cases and fitting remain open in the benchmark corpus.

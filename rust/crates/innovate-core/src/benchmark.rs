@@ -1,7 +1,7 @@
 //! Reproducible synthetic smoke corpus and native fit/forecast runner.
 use serde_json::{Value, json};
 
-const CASES: [(&str, &str, &str); 16] = [
+const CASES: [(&str, &str, &str); 17] = [
     ("bass_smoke_adoption", "bass", "diffusion"),
     ("logistic_growth_smoke", "logistic", "diffusion"),
     ("fisher_pry_replacement_smoke", "fisher_pry", "substitution"),
@@ -34,20 +34,21 @@ const CASES: [(&str, &str, &str); 16] = [
     ("hierarchical_group_fit", "hierarchical", "hierarchical"),
     ("mixture_reference", "mixture", "mixture"),
     ("mixture_gaussian_fit", "mixture", "mixture"),
+    ("composite_reference", "composite", "composite"),
 ];
 
 fn ci_policy(family: &str) -> &'static str {
     match family {
         "competition" => "scheduled",
         "network_diffusion" | "policy_hazard" | "latent_process" | "regime" | "hierarchical"
-        | "mixture" => "workflow_dispatch",
+        | "mixture" | "composite" => "workflow_dispatch",
         _ => "fast",
     }
 }
 
 fn case_descriptor(id: &str, model: &str, family: &str) -> Value {
     json!({"case_id":id,"canonical_model_key":model,"family":family,
-        "dataset_version":match model {"lock_in"=>"native-lock-in-1","network_diffusion"=>"native-network-1","policy_hazard"=>"native-policy-1","latent_process"=>"native-latent-1","regime_switching"=>"native-regime-1","hierarchical"=>"native-hierarchical-1","mixture"=>"native-mixture-1",_=>"2026.04"},"source":"synthetic","ci_policy":ci_policy(family)})
+        "dataset_version":match model {"lock_in"=>"native-lock-in-1","network_diffusion"=>"native-network-1","policy_hazard"=>"native-policy-1","latent_process"=>"native-latent-1","regime_switching"=>"native-regime-1","hierarchical"=>"native-hierarchical-1","mixture"=>"native-mixture-1","composite"=>"native-composite-1",_=>"2026.04"},"source":"synthetic","ci_policy":ci_policy(family)})
 }
 
 fn discover() -> Value {
@@ -70,6 +71,31 @@ fn run_case(id: &str) -> Result<Value, String> {
         .iter()
         .find(|case| case.0 == id)
         .ok_or("unknown benchmark case")?;
+    if id == "composite_reference" {
+        let time = [0_f64, 3., 10., 20.];
+        let observed: Vec<_> = time
+            .iter()
+            .map(|&t| {
+                let decay = (-0.38 * t).exp();
+                [
+                    100. * (1. - decay) / (1. + 0.35 / 0.03 * decay),
+                    200. / (1. + 19. * (-0.4 * t).exp()),
+                ]
+            })
+            .collect();
+        return fixed_prediction(
+            id,
+            model,
+            family,
+            json!({
+                "inputs":{"time":time},
+                "constructor_kwargs":{"components":["bass","logistic"],"initial_values":[0.,10.]},
+                "parameters":{"p_1":0.03,"q_1":0.35,"m_1":100.,
+                    "L_2":200.,"k_2":0.4,"x0_2":99.,"alpha_1_2":0.,"alpha_2_1":0.}
+            }),
+            json!(observed),
+        );
+    }
     if id == "mixture_gaussian_fit" {
         let time: Vec<_> = (0..50).map(|i| f64::from(i) * 0.5).collect();
         let observed: Vec<_> = time

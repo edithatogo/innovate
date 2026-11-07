@@ -57,6 +57,11 @@ fn native_description(key: &str) -> Option<Value> {
             "Grouped point fits do not perform partial pooling or Bayesian inference.",
             "hierarchical",
         ),
+        "composite" => (
+            "Integrates adoption curves with optional coupling between components.",
+            "The independent reference uses zero coupling and fixed initial values.",
+            "composite",
+        ),
         "mixture" => (
             "Combines component trajectories using native mixture weights.",
             "Native simulation uses deterministic weighted paths.",
@@ -65,5 +70,5 @@ fn native_description(key: &str) -> Option<Value> {
         _ => return None,
     };
     Some(json!({"summary":summary,"limitations":[limitation],
-        "native_test_target":reference,"benchmark_case_ids":match key { "network_diffusion" => vec!["network_diffusion_smoke", "network_spillover_reference"], "policy_hazard" => vec!["policy_hazard_reference", "policy_hazard_fit"], "latent_process" => vec!["latent_process_reference", "latent_process_fit"], "regime_switching" => vec!["regime_switching_reference", "regime_switching_fit"], "hierarchical" => vec!["hierarchical_group_fit"], "mixture" => vec!["mixture_reference", "mixture_gaussian_fit"], _ => vec![] }}))
+        "native_test_target":reference,"benchmark_case_ids":match key { "network_diffusion" => vec!["network_diffusion_smoke", "network_spillover_reference"], "policy_hazard" => vec!["policy_hazard_reference", "policy_hazard_fit"], "latent_process" => vec!["latent_process_reference", "latent_process_fit"], "regime_switching" => vec!["regime_switching_reference", "regime_switching_fit"], "hierarchical" => vec!["hierarchical_group_fit"], "mixture" => vec!["mixture_reference", "mixture_gaussian_fit"], "composite" => vec!["composite_reference"], _ => vec![] }}))
 }
