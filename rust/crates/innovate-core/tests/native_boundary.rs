@@ -1593,9 +1593,9 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
     };
     let discovery = run("discover_benchmark_cases", json!({}));
     let cases = discovery["result"]["cases"].as_array().unwrap();
-    assert_eq!(cases.len(), 15);
+    assert_eq!(cases.len(), 16);
     let suite = run("run_benchmark_suite", json!({"workers":2}));
-    assert_eq!(suite["result"]["succeeded"], 15, "{suite}");
+    assert_eq!(suite["result"]["succeeded"], 16, "{suite}");
     assert_eq!(suite["result"]["failed"], 0);
     let rows = suite["result"]["runs"].as_array().unwrap();
     for (case, row) in cases.iter().zip(rows) {
@@ -1616,7 +1616,12 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
             result["prediction"][key].as_array().unwrap().len(),
             sample_count
         );
-        if key == "values" && row["case_id"] != "latent_process_fit" {
+        if key == "values"
+            && !matches!(
+                row["case_id"].as_str(),
+                Some("latent_process_fit" | "mixture_gaussian_fit")
+            )
+        {
             let observed = result["observed"].as_array().unwrap();
             for (prediction, reference) in result["prediction"][key]
                 .as_array()
@@ -1629,6 +1634,20 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
                     (prediction.as_f64().unwrap() - reference).abs()
                         < 1e-5 * reference.abs().max(1.)
                 );
+            }
+        }
+        if row["case_id"] == "mixture_gaussian_fit" {
+            let fit = &result["fit"];
+            assert_eq!(fit["optimizer"]["converged"], true);
+            assert_eq!(fit["predictions"]["values"], result["prediction"]["values"]);
+            let history = fit["optimizer"]["objective_history"].as_array().unwrap();
+            assert!(
+                history
+                    .windows(2)
+                    .all(|pair| pair[1].as_f64().unwrap() + 1e-8 >= pair[0].as_f64().unwrap())
+            );
+            for (key, expected) in [("model_0_L", 100.), ("model_1_L", 200.), ("weight_0", 0.5)] {
+                assert!((fit["parameters"][key].as_f64().unwrap() - expected).abs() < 0.01);
             }
         }
         if row["case_id"] == "hierarchical_group_fit" {
@@ -1787,7 +1806,7 @@ fn benchmark_validation_resolves_all_historical_case_references() {
         serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
     let report = &response["result"];
     assert_eq!(report["ok"], true);
-    assert_eq!(report["summary"]["case_count"], 15);
+    assert_eq!(report["summary"]["case_count"], 16);
     assert_eq!(
         report["model_card_summaries"]["bass"]["freshness"]["status"],
         "current"

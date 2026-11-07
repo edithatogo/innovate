@@ -2445,3 +2445,11 @@ the other competition models and installed binding checks remain open.
   Clippy passed. The rebuilt Python 3.15.2 wheel and Julia returned identical
   results, and installed R agreed within 1e-14 after serialization.
   Gaussian mixture fitting remains open in the benchmark corpus.
+
+- [x] Add and qualify mixture_gaussian_fit. Fit 50 alternating synthetic
+  observations from two logistic components with perturbed capacity starts.
+  The benchmark verifies likelihood monotonicity, capacity and weight
+  recovery, and exact saved-state prediction replay. Five focused Rust
+  tests and Clippy passed. The rebuilt Python 3.15.2 wheel and Julia
+  returned identical results. Installed R agreed within 1e-14 after
+  serialization. This case uses informed starts and deterministic samples.

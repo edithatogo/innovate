@@ -1,7 +1,7 @@
 //! Reproducible synthetic smoke corpus and native fit/forecast runner.
 use serde_json::{Value, json};
 
-const CASES: [(&str, &str, &str); 15] = [
+const CASES: [(&str, &str, &str); 16] = [
     ("bass_smoke_adoption", "bass", "diffusion"),
     ("logistic_growth_smoke", "logistic", "diffusion"),
     ("fisher_pry_replacement_smoke", "fisher_pry", "substitution"),
@@ -33,6 +33,7 @@ const CASES: [(&str, &str, &str); 15] = [
     ("regime_switching_fit", "regime_switching", "regime"),
     ("hierarchical_group_fit", "hierarchical", "hierarchical"),
     ("mixture_reference", "mixture", "mixture"),
+    ("mixture_gaussian_fit", "mixture", "mixture"),
 ];
 
 fn ci_policy(family: &str) -> &'static str {
@@ -69,6 +70,32 @@ fn run_case(id: &str) -> Result<Value, String> {
         .iter()
         .find(|case| case.0 == id)
         .ok_or("unknown benchmark case")?;
+    if id == "mixture_gaussian_fit" {
+        let time: Vec<_> = (0..50).map(|i| f64::from(i) * 0.5).collect();
+        let observed: Vec<_> = time
+            .iter()
+            .enumerate()
+            .map(|(i, &t)| {
+                if i % 2 == 0 {
+                    100. / (1. + (-0.4 * (t - 6.)).exp())
+                } else {
+                    200. / (1. + (-0.3 * (t - 10.)).exp())
+                }
+            })
+            .collect();
+        return fit_and_forecast(
+            id,
+            model,
+            family,
+            json!({
+                "inputs":{"time":time,"observed":observed},
+                "constructor_kwargs":{"components":["logistic","logistic"],"max_iter":30,"noise_floor":0.001},
+                "fit_options":{"initial_parameters":{"model_0_L":98.,"model_0_k":0.4,"model_0_x0":6.,
+                    "model_1_L":202.,"model_1_k":0.3,"model_1_x0":10.,
+                    "weight_0":0.4,"weight_1":0.6,"noise_scale":2.}}
+            }),
+        );
+    }
     if id == "mixture_reference" {
         let time = [0_f64, 4., 6., 10., 16.];
         let observed: Vec<_> = time
