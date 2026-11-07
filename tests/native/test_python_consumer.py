@@ -1582,3 +1582,10 @@ def test_scenario_grid_ranking():
     first, second, third = area["executions"][1]["result"]["values"]
     assert area["ranking"]["metric"] == "adoption_area"
     assert area["ranking"]["rows"][0]["adoption_area"] == pytest.approx((first + second) / 2 + second + third)
+    threshold = innovate.execute("execute_scenario_grid", scenarios=scenarios,
+                                 rank_scenarios=["tie", "base", "alt"], rank_metric="time_to_threshold",
+                                 rank_threshold=150)["result"]["ranking"]["rows"]
+    expected_crossing = 2 + 2 * (150 - second) / (third - second)
+    assert [(row["id"], row["place"]) for row in threshold] == [("tie", 1), ("alt", 1), ("base", None)]
+    assert threshold[0]["time_to_threshold"] == pytest.approx(expected_crossing)
+    assert threshold[2]["time_to_threshold"] is None

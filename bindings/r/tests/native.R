@@ -753,3 +753,9 @@ area <- kernel_call("execute_scenario_grid", payload=list(scenarios=unname(ranke
 path <- unlist(area$executions[[2]]$result$values)
 stopifnot(identical(area$ranking$metric, "adoption_area"),
   isTRUE(all.equal(area$ranking$rows[[1]]$adoption_area, (path[1]+path[2])/2 + path[2]+path[3])))
+threshold <- kernel_call("execute_scenario_grid", payload=list(scenarios=unname(ranked_scenarios),
+  rank_scenarios=c("tie","base","alt"), rank_metric="time_to_threshold", rank_threshold=150))$result$ranking$rows
+stopifnot(identical(vapply(threshold, function(row) row$id, character(1)), c("tie","alt","base")),
+  threshold[[1]]$place == 1, threshold[[2]]$place == 1, is.null(threshold[[3]]$place),
+  isTRUE(all.equal(threshold[[1]]$time_to_threshold, 2+2*(150-path[2])/(path[3]-path[2]))),
+  is.null(threshold[[3]]$time_to_threshold))

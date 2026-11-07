@@ -4811,3 +4811,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Rank scenario grids by interpolated time to a shared threshold.
   The Rust regression verifies tied crossings and null ranks for paths
   that never cross. Binding qualification remains open.
+
+- [x] Verify threshold ranking through rebuilt Python 3.15.2, Julia
+  and installed R. All three recovered the interpolated crossing,
+  shared first place and null time and place for the unreached path.

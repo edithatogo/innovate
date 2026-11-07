@@ -802,4 +802,9 @@ end
     first, second, third = area["executions"][2]["result"]["values"]
     @test area["ranking"]["metric"] == "adoption_area"
     @test area["ranking"]["rows"][1]["adoption_area"] ≈ (first + second)/2 + second + third
+    threshold = kernel_call("execute_scenario_grid", nothing, Dict("scenarios"=>scenarios,
+        "rank_scenarios"=>["tie","base","alt"], "rank_metric"=>"time_to_threshold", "rank_threshold"=>150))["result"]["ranking"]["rows"]
+    @test [(row["id"],row["place"]) for row in threshold] == [("tie",1),("alt",1),("base",nothing)]
+    @test threshold[1]["time_to_threshold"] ≈ 2 + 2*(150-second)/(third-second)
+    @test isnothing(threshold[3]["time_to_threshold"])
 end
