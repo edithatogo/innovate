@@ -5040,3 +5040,9 @@ Hosted release readiness for this worktree revision remains open.
   of adopters. Duplicate susceptible indices were rejected. All 15
   Kairos Rust integration tests passed. Binding and network resume
   qualification remain open.
+
+- [x] Round-trip homogeneous ABM checkpoints through Python 3.15.2,
+  Julia and installed R. R's numeric JSON path could not preserve
+  the identity RNG stream ID. The checkpoint now carries the identity
+  RNG record as an opaque JSON string. Each binding reproduced the
+  full uninterrupted result. The three Rust checkpoint tests passed.

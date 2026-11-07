@@ -34,7 +34,7 @@ struct AdoptionCheckpoint {
 #[serde(deny_unknown_fields)]
 struct AgentCheckpoint {
     susceptible: Vec<usize>,
-    rng: RngCheckpoint,
+    rng: String,
 }
 
 impl AdoptionClock {
@@ -247,11 +247,13 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         }
         match (abm.as_mut(), saved.agents) {
             (Some(context), Some(saved_agents)) => {
+                let saved_rng: RngCheckpoint = serde_json::from_str(&saved_agents.rng)
+                    .map_err(|_| invalid("invalid checkpoint identity RNG state"))?;
                 let stream = identity_rng.checkpoint();
                 if saved_agents.susceptible.len() as u64
                     != population - initial - saved_events.len() as u64
-                    || saved_agents.rng.seed != stream.seed
-                    || saved_agents.rng.stream_id != stream.stream_id
+                    || saved_rng.seed != stream.seed
+                    || saved_rng.stream_id != stream.stream_id
                 {
                     return Err(invalid("invalid checkpoint agent state"));
                 }
@@ -268,7 +270,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 for (&agent, adopted) in agents.iter().zip(is_adopted) {
                     context.attach(agent, adopted);
                 }
-                identity_rng = DeterministicStream::restore(&saved_agents.rng)
+                identity_rng = DeterministicStream::restore(&saved_rng)
                     .map_err(|_| invalid("invalid checkpoint identity RNG state"))?;
             }
             (None, None) => {}
@@ -339,7 +341,8 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                     .iter()
                     .map(|agent| agent.index as usize)
                     .collect(),
-                rng: identity_rng.checkpoint(),
+                rng: serde_json::to_string(&identity_rng.checkpoint())
+                    .expect("Kairos RNG checkpoints are serializable"),
             }),
         };
         return Ok(KernelResponse {
