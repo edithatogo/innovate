@@ -3462,3 +3462,10 @@ the other competition models and installed binding checks remain open.
 - [x] Add wheel SBOM normalization regressions for differing source
   roots, deterministic output, refreshed RECORD digests and signed
   input rejection. Both Python 3.15.2 tests and Ruff passed.
+
+- [x] Wire fixed-epoch source-archive builds and unsigned wheel SBOM
+  normalization into the PyPI and TestPyPI workflow definitions.
+  Build with locked inputs, normalize before package validation, and
+  check wheel contents before publishing. Actionlint and both normalizer
+  regressions passed. Hosted execution remains unverified and the
+  scientific release gate still precedes packaging.
