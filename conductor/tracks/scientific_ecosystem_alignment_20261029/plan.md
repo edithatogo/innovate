@@ -4495,3 +4495,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Add the treated-population estimand to native stratum standardization.
   The focused Rust regression verifies an ATT of 7.25, omission of
   control-only strata, and rejection of treated strata without controls.
+
+- [x] Verify both stratified estimands through rebuilt CPython 3.15.2,
+  Julia and installed R. The treated-population contrast was 7.25 with
+  a low-stratum weight of 1/4. Each binding rejected a treated stratum
+  without controls. Builds were staged sequentially to fit local disk space.

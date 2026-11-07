@@ -1290,16 +1290,20 @@ def test_network_ingestion_retains_kairos_incompatible_edges(tmp_path, local_csv
     assert innovate.execute("ingest_dataset", artifact=artifact)["result"] == artifact
 
 
-def test_native_stratified_treatment_contrast():
+@pytest.mark.parametrize(
+    ("estimand", "estimate", "weight"), [("ate", 6, 3 / 7), ("att", 7.25, 1 / 4)]
+)
+def test_native_stratified_treatment_contrast(estimand, estimate, weight):
     payload = {
         "method": "stratified_treatment_contrast",
+        "estimand": estimand,
         "outcomes": [0, 0, 2, 10, 19, 19, 19],
         "treatment": [0, 0, 1, 0, 1, 1, 1],
         "strata": ["low"] * 3 + ["high"] * 4,
     }
     result = innovate.execute("summarize_causal", **payload)["result"]
-    assert result["estimate"] == pytest.approx(6)
-    assert result["by_stratum"]["low"]["weight"] == pytest.approx(3 / 7)
+    assert result["estimate"] == pytest.approx(estimate)
+    assert result["by_stratum"]["low"]["weight"] == pytest.approx(weight)
     payload["strata"][-1] = "unsupported"
     with pytest.raises(innovate.NativeError, match="each stratum requires treated and control observations"):
         innovate.execute("summarize_causal", **payload)

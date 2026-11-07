@@ -560,12 +560,15 @@ end
 end
 
 @testset "Stratified treatment contrast" begin
-    payload = Dict("method"=>"stratified_treatment_contrast",
-        "outcomes"=>[0,0,2,10,19,19,19], "treatment"=>[0,0,1,0,1,1,1],
-        "strata"=>vcat(fill("low",3), fill("high",4)))
-    result = kernel_call("summarize_causal", nothing, payload)["result"]
-    @test result["estimate"] ≈ 6
-    @test result["by_stratum"]["low"]["weight"] ≈ 3/7
-    payload["strata"][end] = "unsupported"
-    @test_throws r"each stratum requires treated and control observations" kernel_call("summarize_causal", nothing, payload)
+    for (estimand, estimate, weight) in [("ate", 6, 3/7), ("att", 7.25, 1/4)]
+        payload = Dict("method"=>"stratified_treatment_contrast",
+            "outcomes"=>[0,0,2,10,19,19,19], "treatment"=>[0,0,1,0,1,1,1],
+            "strata"=>vcat(fill("low",3), fill("high",4)))
+        payload["estimand"] = estimand
+        result = kernel_call("summarize_causal", nothing, payload)["result"]
+        @test result["estimate"] ≈ estimate
+        @test result["by_stratum"]["low"]["weight"] ≈ weight
+        payload["strata"][end] = "unsupported"
+        @test_throws r"each stratum requires treated and control observations" kernel_call("summarize_causal", nothing, payload)
+    end
 end
