@@ -4,6 +4,32 @@ Date: 8 November 2026. Status: planning incorporated; implementation and scienti
 acceptance pending. Owners remain I07 and the PR570 G01–G04/A08 programme. This
 addendum does not take over PR570, alter its branch or qualify a native consumer.
 
+## Parallel-owner reconciliation
+
+Read the [shared reconciliation](https://github.com/edithatogo/paignia/blob/87b4bda345b85310e85239d4845b0f85bf1c6439/docs/integrations/parallel-plan-reconciliation-20261108.md)
+and the current [PR #570](https://github.com/edithatogo/innovate/pull/570). Its 52
+packets and broad innovation/policy-diffusion, competition, substitution and hype
+programme remain authoritative; medicines and the pilot here are applications,
+not a narrower product definition. Its new supported scientific core targets Rust
+and Polars/Arrow without a host-compute or pandas/xarray fallback; this note does
+not claim current hybrid source already meets that target.
+
+G02 admits a qualified static game adapter. A08 and static G04 do not depend on
+optional G03 dynamic execution. I10 remains independent of optional I07. Paignia
+is the provider: its bounded native seed merged in PR #2 at
+`12b22ce7571b9c590405bf53c2c1c5862b49cd64`; released artifacts and real-consumer
+qualification remain separate. T17.10 is the selected second application's
+receipt, not another local provider task. Conditional Voiage feedback uses
+versioned study/policy artifacts through application orchestration, never reverse
+core imports. Existing provider pins and the #570 branch are untouched.
+
+Reuse Voiage's O01–O08 paired-input contracts and SI tests. Parameter/model,
+measurement, simulation-replicate and solver identities must survive export.
+The shared one-parameter-state noise control A=[-1,1], B=[1,-1] has parameter
+EVPI zero, not one; Voiage owns that arithmetic and Innovate owns truthful inputs.
+Forecast fit, causal intervention evidence and equilibrium assumptions remain
+separate. Source links here are planning references, not dependency pins.
+
 ## Independent boundaries
 
 Innovate owns adoption/diffusion/incentive models, inference and diagnostics.
