@@ -66,7 +66,7 @@ jobs:
             "test -s /usr/local/share/doc/innovate/LICENSE && ! command -v python && ! command -v python3"
           worker=(docker run --rm -i --network none --read-only --cap-drop ALL innovate-remote-worker:ci)
           "${worker[@]}" --describe |
-            jq -e '.result.worker_transport == "stdin_stdout" and .result.max_raw_envelope_bytes == 2000000'
+            jq -e '.result.worker_transport == "stdin_stdout" and .result.max_raw_envelope_bytes == 2000000 and .result.identity_verification == "caller_supplied_context"'
           envelope='{"schema_version":"2.0","context":{"request_id":"ci","tenant_id":"test","principal":"fixture","auth_scope":"kernel:execute"},"kernel_request":{"schema_version":"2.0","operation":"predict_model","model_key":"logistic","payload":{"inputs":{"time":[1]},"parameters":{"L":100,"k":1,"x0":1}}}}'
           printf '%s\n' "$envelope" | "${worker[@]}" |
             jq -e '.result.kernel_response.result.values == [50]'

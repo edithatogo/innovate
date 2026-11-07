@@ -7448,3 +7448,8 @@ Hosted release readiness for this worktree revision remains open.
   optimized macOS arm64 build at 34937fde. All passed, covering
   transport discovery, policy denials, invalid framing and a closed
   response pipe. Hosted transport and tenant isolation remain open.
+
+- [x] Verify the worker advertises caller-supplied identity context in
+  the hosted container contract check. The assertion passed against
+  the local optimized worker, and Actionlint passed. Authenticated
+  transport and tenant isolation remain open.
