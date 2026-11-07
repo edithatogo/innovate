@@ -6758,3 +6758,9 @@ Hosted release readiness for this worktree revision remains open.
   neighbor weight three reduces exposure from one half to one quarter.
   The focused Rust test passed the probability bound across 2,048
   seeds for each design and still verified no premature adoption.
+
+- [x] Verify weighted imitation through Python 3.15.2, Julia and
+  installed R. All 2,048 seeds agreed on requesting agent, timing
+  or absence and unchanged adoption counts. The 770 requests
+  (37.60%) fell within the test bound for the analytic 39.35%.
+  Reused the unchanged 4947d6b4 native builds.
