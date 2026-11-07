@@ -980,7 +980,7 @@ fn edge_diagnostics_detect_duplicate_ordered_pairs_and_negative_weights() {
     invalid["payload"]["source"][1] = json!(" ");
     let response: serde_json::Value =
         serde_json::from_str(&innovate_core::execute_json(&invalid.to_string())).unwrap();
-    assert_eq!(response["result"]["failed"][0], "identifier_labels");
+    assert_eq!(response["result"]["failed"], json!(["identifier_labels"]));
     assert_eq!(
         response["result"]["warnings"],
         json!(["self_loops:kairos_network"])

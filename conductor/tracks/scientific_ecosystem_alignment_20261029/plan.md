@@ -4459,3 +4459,6 @@ Hosted release readiness for this worktree revision remains open.
   eight focused Rust dataset tests passed.
 - [x] Report a validly labelled self-loop even when another edge has
   invalid endpoints. The focused Rust test verifies both diagnostics.
+- [x] Report duplicate edge keys only for actual duplicate valid pairs.
+  An invalid endpoint is diagnosed independently and does not create
+  a false duplicate. The focused Rust edge regression passed.
