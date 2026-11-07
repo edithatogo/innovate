@@ -6660,3 +6660,9 @@ Hosted release readiness for this worktree revision remains open.
   seeds, including the original seed 42. For each seed, resume from
   the first completion and from each tick 0–19. All 693 full responses
   matched uninterrupted execution in the focused Rust network test.
+
+- [x] Verify all 693 continuous-hazard checkpoint replays through
+  Python 3.15.2, Julia and installed R. Each binding matched the full
+  uninterrupted result at the first completion and ticks 0–19 across
+  33 seeds. The 4947d6b4 builds were reused after confirming unchanged
+  runtime, binding and Cargo inputs.
