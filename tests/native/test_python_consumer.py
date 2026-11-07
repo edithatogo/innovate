@@ -1389,6 +1389,22 @@ def test_nearest_score_matching():
         innovate.execute("summarize_causal", **payload)
 
 
+def test_matching_with_cross_fitted_control_predictions():
+    observations = {"outcomes": [0, 4, 2, 6], "treatment": [0, 1, 0, 1]}
+    fitted = innovate.execute(
+        "summarize_causal", method="cross_fitted_stratum_ate",
+        strata=["a"] * 4, folds=[1, 2, 2, 1], **observations,
+    )["result"]
+    matched = innovate.execute(
+        "summarize_causal", method="matched_treatment_contrast",
+        scores=[0, 0, 1, 0], caliper=0,
+        control_predictions=fitted["control_predictions"], **observations,
+    )["result"]
+    assert matched["estimate"] == 5
+    assert matched["adjusted_estimate"] == 6
+    assert matched["conditional_standard_error"] is None
+
+
 def test_matching_standardized_balance():
     adjacent = math.nextafter(1.5, math.inf)
     balance = innovate.execute(

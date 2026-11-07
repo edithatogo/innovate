@@ -5318,3 +5318,7 @@ Hosted release readiness for this worktree revision remains open.
   returned row-aligned predictions and recovered an adjusted effect
   of 6 from an unadjusted effect of 5. Fitted-model uncertainty remains
   open.
+
+- [x] Retain a Python consumer regression for the cross-fitted
+  control prediction handoff. The native workflow reproduced the
+  analytic unadjusted and adjusted effects without supplied variances.
