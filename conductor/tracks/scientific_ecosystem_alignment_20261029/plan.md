@@ -7402,3 +7402,9 @@ Hosted release readiness for this worktree revision remains open.
   `4bdc29ddced4739baf77b910d6d97fdeaeeef889c80348bb9fa3d701c2085f62`.
   This establishes same-checkout source archive repeatability.
   Independent optimized wheel reproducibility remains open.
+
+- [x] Build the 0ce226b7 source archive from a clean detached worktree
+  with the same Maturin and SOURCE_DATE_EPOCH. It matched the earlier
+  archives byte for byte. This verifies checkout-path independence on
+  the same host. The temporary worktree was removed after comparison.
+  Optimized wheel reproducibility remains open.
