@@ -1748,6 +1748,19 @@ fn scenario_grid_compares_aligned_adoption_paths() {
     assert_eq!(rows[1]["place"], 1);
     assert!(rows[2]["time_to_threshold"].is_null());
     assert!(rows[2]["place"].is_null());
+    ranked["payload"]["rank_threshold"] = json!(1_000.);
+    let unreached = run(&ranked);
+    let rows = unreached["result"]["ranking"]["rows"].as_array().unwrap();
+    assert_eq!(
+        rows.iter()
+            .map(|row| row["id"].as_str().unwrap())
+            .collect::<Vec<_>>(),
+        ["tie", "base", "alt"]
+    );
+    assert!(
+        rows.iter()
+            .all(|row| row["place"].is_null() && row["time_to_threshold"].is_null())
+    );
     ranked["payload"]["rank_scenarios"] = json!(["base", "missing"]);
     let invalid = run(&ranked);
     assert_eq!(

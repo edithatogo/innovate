@@ -5575,3 +5575,9 @@ Hosted release readiness for this worktree revision remains open.
   The R regression check passed and the negative reference also
   passed through Julia and rebuilt Python using the same simulated
   values and R estimates. Broader optimizer qualification remains open.
+
+- [x] Qualify time-to-threshold ranking when no scenario reaches the
+  threshold. The Rust boundary check retained input order and null
+  scores and places for all three scenarios. All 13 focused scenario
+  tests passed. Direct untouched Polars file readback in Arrow.jl
+  remains open alongside the existing native rewrite path.
