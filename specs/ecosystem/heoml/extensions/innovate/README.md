@@ -70,3 +70,10 @@ perspective, when supplied, belongs to downstream HEOR metadata and must
 agree across compared strategies. The historical CSV fixture alone
 cannot verify these declarations. Innovate supplies adoption outcomes,
 the HEOR producer supplies economic values, and Voiage performs VOI.
+
+Call `validate_paired_outcomes` with a schema 2.0 kernel request. Its
+payload contains `strategies`, each with `scenario_id`, `time_unit`,
+`provenance` as a nonblank string, optional `perspective`, and ordered
+`draws`. Each draw has an unsigned `draw_id`, aligned `time` and
+`adoption` arrays, and `parameters` entries with `name`, `unit` and
+numeric `value`. The validator returns the supplied payload on success.

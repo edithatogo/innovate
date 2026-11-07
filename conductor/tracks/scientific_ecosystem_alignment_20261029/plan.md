@@ -4028,3 +4028,9 @@ Hosted release readiness for this worktree revision remains open.
   identity, strategy-specific parameter values, shared units and
   downstream perspective ownership. The fixture does not establish
   runtime exporter acceptance. Executable negative cases remain open.
+- [x] Implement the bounded I08/I08b paired Bass validation boundary
+  in the migrated core. A two-strategy, three-draw synthetic request
+  round-trips unchanged. Missing or reordered draws, duplicate
+  parameter keys, incompatible time units and perspectives fail.
+  The public Rust boundary test and Clippy passed. Arrow export
+  and installed consumer qualification remain open.

@@ -24,7 +24,9 @@ mod mixture;
 mod model_cards;
 mod network;
 mod numerics;
+mod outcome_contract;
 mod policy;
+
 mod provenance;
 mod regime;
 mod remote;
@@ -55,6 +57,7 @@ pub fn execute_json(input: &str) -> String {
                 "preprocess_series"
                 | "aggregate_dates"
                 | "summarize_causal"
+                | "validate_paired_outcomes"
                 | "threshold_sensitivity"
                 | "parameter_sensitivity"
                 | "assumption_sensitivity"
@@ -281,6 +284,10 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         if value["operation"] == "validate_provenance" {
             return provenance::validate(payload);
         }
+        if value["operation"] == "validate_paired_outcomes" {
+            return outcome_contract::validate(payload);
+        }
+
         if value["operation"] == "summarize_causal" {
             return causal::summarize(payload);
         }
