@@ -824,7 +824,7 @@ fn causal_summaries_match_analytic_effects() {
     assert_eq!(result["result"]["contrast"]["estimate"], 4.);
     assert_eq!(
         result["result"]["overlap"],
-        json!({"min_training_arm_count":1,"min_propensity":0.5,"max_propensity":0.5})
+        json!({"min_training_arm_count":1,"min_training_arm_clusters":null,"min_propensity":0.5,"max_propensity":0.5})
     );
     let mut guarded = cross_fitted.clone();
     guarded["minimum_training_arm_count"] = json!(1);
@@ -873,7 +873,11 @@ fn causal_summaries_match_analytic_effects() {
     cross_fitted["clusters"] = json!(["a", "b", "b", "a"]);
     let result = run(cross_fitted.clone());
     assert_eq!(result["result"]["contrast"]["cluster_count"], 2);
-    assert_eq!(result["result"]["contrast"]["cluster_degrees_of_freedom"], 1);
+    assert_eq!(result["result"]["overlap"]["min_training_arm_clusters"], 1);
+    assert_eq!(
+        result["result"]["contrast"]["cluster_degrees_of_freedom"],
+        1
+    );
     assert!(
         (result["result"]["contrast"]["influence_standard_error"]
             .as_f64()
@@ -1140,7 +1144,12 @@ fn causal_summaries_match_analytic_effects() {
         );
         assert_eq!(
             method["overlap_diagnostics"],
-            json!(["min_training_arm_count", "min_propensity", "max_propensity"])
+            json!([
+                "min_training_arm_count",
+                "min_training_arm_clusters",
+                "min_propensity",
+                "max_propensity"
+            ])
         );
     }
     let result = run(stratified.clone());

@@ -71,11 +71,11 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                  "uncertainty":"influence_standard_error"},
                 {"method":"cross_fitted_stratum_ate","adjustment":"cross_fitted_strata",
                  "required_fields":["outcomes","treatment","strata","folds"],"optional_fields":["clusters","minimum_training_arm_count"],
-                 "overlap_diagnostics":["min_training_arm_count","min_propensity","max_propensity"],
+                 "overlap_diagnostics":["min_training_arm_count","min_training_arm_clusters","min_propensity","max_propensity"],
                  "estimands":["ate"],"default_estimand":"ate"},
                 {"method":"cross_fitted_stratum_att","adjustment":"cross_fitted_strata",
                  "required_fields":["outcomes","treatment","strata","folds"],"optional_fields":["clusters","minimum_training_arm_count"],
-                 "overlap_diagnostics":["min_training_arm_count","min_propensity","max_propensity"],
+                 "overlap_diagnostics":["min_training_arm_count","min_training_arm_clusters","min_propensity","max_propensity"],
                  "estimands":["att"],"default_estimand":"att"}
             ]
         })),
@@ -2187,7 +2187,7 @@ fn cross_fitted_stratum_contrast(payload: &Value, estimand: &str) -> Result<Valu
     if !(2..=32).contains(&labels.len()) {
         return Err("cross fitting requires two to 32 folds");
     }
-    if let Some(clusters) = payload.get("clusters") {
+    let clusters = if let Some(clusters) = payload.get("clusters") {
         let clusters: Vec<String> = serde_json::from_value(clusters.clone())
             .map_err(|_| "clusters must contain string labels")?;
         if clusters.len() != n || clusters.iter().any(|label| label.trim().is_empty()) {
@@ -2199,16 +2199,26 @@ fn cross_fitted_stratum_contrast(payload: &Value, estimand: &str) -> Result<Valu
                 return Err("each cluster must belong to a single cross-fitting fold");
             }
         }
-    }
+        Some(clusters)
+    } else {
+        None
+    };
     let mut propensities = vec![0.; n];
     let mut treated_predictions = vec![0.; n];
     let mut control_predictions = vec![0.; n];
     let mut min_training_arm_count = usize::MAX;
+    let mut min_training_arm_clusters = None;
     let mut min_propensity: f64 = 1.;
     let mut max_propensity: f64 = 0.;
     for label in &labels {
         let mut training = std::collections::BTreeMap::<&str, [Vec<f64>; 2]>::new();
+        let mut training_clusters =
+            std::collections::BTreeMap::<&str, [std::collections::BTreeSet<&str>; 2]>::new();
         for i in (0..n).filter(|&i| folds[i] != *label) {
+            if let Some(clusters) = &clusters {
+                training_clusters.entry(&strata[i]).or_default()[treatment[i] as usize]
+                    .insert(&clusters[i]);
+            }
             training.entry(&strata[i]).or_default()[treatment[i] as usize].push(outcomes[i]);
         }
         let fitted: std::collections::BTreeMap<_, _> = training
@@ -2233,6 +2243,12 @@ fn cross_fitted_stratum_contrast(payload: &Value, estimand: &str) -> Result<Valu
             treated_predictions[i] = treated;
             propensities[i] = propensity;
             min_training_arm_count = min_training_arm_count.min(arm_count);
+            if let Some([control, treated]) = training_clusters.get(strata[i].as_str()) {
+                let count = control.len().min(treated.len());
+                min_training_arm_clusters = Some(
+                    min_training_arm_clusters.map_or(count, |previous: usize| previous.min(count)),
+                );
+            }
             min_propensity = min_propensity.min(propensity);
             max_propensity = max_propensity.max(propensity);
         }
@@ -2255,6 +2271,7 @@ fn cross_fitted_stratum_contrast(payload: &Value, estimand: &str) -> Result<Valu
         json!({"contrast":contrast,"folds":folds,"propensities":propensities,
         "treated_predictions":treated_predictions,"control_predictions":control_predictions,
         "overlap":{"min_training_arm_count":min_training_arm_count,
+            "min_training_arm_clusters":min_training_arm_clusters,
             "min_propensity":min_propensity,"max_propensity":max_propensity}}),
     )
 }

@@ -6343,3 +6343,9 @@ Hosted release readiness for this worktree revision remains open.
   propensities and known outcomes, against 2.6754 with both fitted.
   The observed gap was more sensitive to the propensity fit in
   this design. This comparison leaves the native estimators intact.
+
+- [x] Report the minimum number of distinct clusters in either
+  training arm across used fold-stratum fits. The diagnostic is null
+  without cluster labels and appears in ATE and ATT discovery.
+  The Rust causal boundary test verified clustered and unclustered
+  results. Binding readback remains open.
