@@ -1849,3 +1849,8 @@ the other competition models and installed binding checks remain open.
   matrices, numeric entries, share units and total market share.
   The Rust regression rejects a combined share above one even when
   each product share is valid. All 29 boundary tests and focused Clippy passed.
+
+- [x] Restore competition panel and policy timing diagnostics. Time can
+  repeat across distinct units, products or event labels. Composite
+  key duplicates fail and unsorted policy events warn. All 30 native
+  boundary tests and focused Clippy passed.

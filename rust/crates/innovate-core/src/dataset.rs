@@ -2,6 +2,9 @@ use serde_json::{Value, json};
 
 pub(crate) fn validate(payload: &Value) -> Result<Value, &'static str> {
     let kind = payload["kind"].as_str().unwrap_or("");
+    if matches!(kind, "competition" | "policy_timing") {
+        return validate_keyed(payload, kind);
+    }
     if !matches!(kind, "adoption" | "substitution") {
         return Err("unsupported dataset diagnostic kind");
     }
@@ -158,4 +161,118 @@ fn substitution(payload: &Value, shares: &[Value], check: &mut impl FnMut(&str, 
             "row share sums must not exceed one",
         );
     }
+}
+
+fn validate_keyed(payload: &Value, kind: &str) -> Result<Value, &'static str> {
+    let competition = kind == "competition";
+    let (time_key, value_key, id_keys, duplicate_key, units, default_unit) = if competition {
+        (
+            "time",
+            "value",
+            &["unit_id", "product_id"][..],
+            "time_unit_product",
+            &["count", "share", "rate", "currency"][..],
+            "count",
+        )
+    } else {
+        (
+            "event_times",
+            "event_effects",
+            &["event_labels"][..],
+            "event_time_label",
+            &["effect", "rate", "count"][..],
+            "effect",
+        )
+    };
+    let column = |key: &str| {
+        payload[key]
+            .as_array()
+            .filter(|v| !v.is_empty())
+            .ok_or("dataset columns must be nonempty arrays")
+    };
+    let time = column(time_key)?;
+    let values = column(value_key)?;
+    let ids: Vec<_> = id_keys
+        .iter()
+        .map(|key| column(key))
+        .collect::<Result<_, _>>()?;
+    let mut checks = Vec::new();
+    let mut failed = Vec::new();
+    let mut warnings = Vec::new();
+    let mut check = |name: &str, status: &str, message: &str| {
+        checks.push(json!({"name":name,"status":status,"message":message,"details":{}}));
+        match status {
+            "fail" => failed.push(name.to_owned()),
+            "warn" => warnings.push(name.to_owned()),
+            _ => {}
+        }
+    };
+    let status = |pass| if pass { "pass" } else { "fail" };
+    let aligned = time.len() == values.len() && ids.iter().all(|v| v.len() == time.len());
+    check(
+        "column_alignment",
+        status(aligned),
+        "dataset columns must have the same length",
+    );
+    let times = time.iter().map(Value::as_f64).collect::<Option<Vec<_>>>();
+    check(
+        &format!("missingness:{time_key}"),
+        status(times.is_some()),
+        "time observations must be numeric",
+    );
+    check(
+        &format!("missingness:{value_key}"),
+        status(values.iter().all(Value::is_number)),
+        "outcome observations must be numeric",
+    );
+    let labels: Option<Vec<Vec<&str>>> = ids
+        .iter()
+        .map(|column| {
+            column
+                .iter()
+                .map(|v| v.as_str().filter(|s| !s.trim().is_empty()))
+                .collect()
+        })
+        .collect();
+    check(
+        "identifier_labels",
+        status(labels.is_some()),
+        "identifiers must be nonempty strings",
+    );
+    let unit = payload
+        .get("unit")
+        .map_or(Some(default_unit), Value::as_str);
+    check(
+        &format!("unit_compatibility:{kind}"),
+        status(unit.is_some_and(|u| units.contains(&u))),
+        "dataset unit must be compatible with its kind",
+    );
+    if let Some(times) = times {
+        if !competition {
+            check(
+                "event_time_order",
+                if times.windows(2).all(|pair| pair[0] <= pair[1]) {
+                    "pass"
+                } else {
+                    "warn"
+                },
+                "unsorted event times may be reordered by consumers",
+            );
+        }
+        if let Some(labels) = labels.filter(|_| aligned) {
+            let mut seen = std::collections::HashSet::new();
+            let unique = times.iter().enumerate().all(|(i, &time)| {
+                let bits = if time == 0. { 0 } else { time.to_bits() };
+                seen.insert((bits, labels[0][i], competition.then(|| labels[1][i])))
+            });
+            check(
+                &format!("duplicate_keys:{duplicate_key}"),
+                status(unique),
+                "dataset keys must be unique",
+            );
+        }
+    }
+    Ok(
+        json!({"kind":kind,"ok":failed.is_empty(),"checks":checks,"failed":failed,"warnings":warnings}),
+    )
 }

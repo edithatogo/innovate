@@ -717,3 +717,29 @@ fn substitution_diagnostics_check_joint_market_share() {
         innovate_core::json!(["share_sum"])
     );
 }
+
+#[test]
+fn panel_and_policy_diagnostics_distinguish_keys_from_event_order() {
+    let run = |payload| {
+        let request = innovate_core::json!({"schema_version":"2.0","operation":"validate_dataset","payload":payload});
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    let panel = run(innovate_core::json!({"kind":"competition","time":[0,0,0],
+        "value":[1,2,3],"unit_id":["a","a","a"],"product_id":["x","y","x"]}));
+    assert_eq!(
+        panel["result"]["failed"],
+        innovate_core::json!(["duplicate_keys:time_unit_product"])
+    );
+    let events = run(
+        innovate_core::json!({"kind":"policy_timing","event_times":[2,1,1],
+        "event_effects":[1,2,3],"event_labels":["x","x","y"]}),
+    );
+    assert_eq!(events["result"]["ok"], true);
+    assert_eq!(
+        events["result"]["warnings"],
+        innovate_core::json!(["event_time_order"])
+    );
+}
