@@ -797,3 +797,19 @@ substitution coverage is 90.50 percent and competition coverage is 93.93 percent
 Core/C ABI coverage is 85.76 percent. Docs build 163 pages and local package
 checks pass. Successive-generation forcing/events, event inference, uncertainty
 and scientific/release qualification remain required. Same lane continues.
+
+## Successive generation forcing and events
+
+- [x] Integrate launched Bass fractions with controls and fixed interventions.
+- [x] Include time-varying capacity derivatives and explicit output-jump semantics.
+- [x] Verify independent trajectories, fits, forecasts and Python/Julia/R.
+
+Source: 418a600b. Full local qualification passed 152 Rust core/C ABI/Polars
+tests, 54 installed Python tests, 217 Julia assertions and R conformance.
+Independent fraction-space reference, perturbed fit and held-out forecast pass.
+Finite-scale, first-launch history and event-boundary regressions are retained.
+Substitution line coverage is 91.33 percent, mechanistic coverage is 90.68
+percent and core/C ABI line coverage is 85.89 percent. Docs build 163 pages
+and local package checks pass. Launch/event inference, threshold helpers,
+uncertainty and scientific/release qualification remain required. Same lane
+continues.
