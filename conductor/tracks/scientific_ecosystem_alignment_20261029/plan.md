@@ -2374,3 +2374,9 @@ the other competition models and installed binding checks remain open.
   Julia and installed R. Full results agreed across bindings. All five
   predictions matched the analytic reference exactly on this host. This
   qualifies fixed-parameter prediction, with fitting coverage still open.
+
+- [x] Add policy_hazard_fit to the native corpus and card. Fit a synthetic
+  Bass path through the policy wrapper, keep the supplied decay fixed,
+  and check convergence and trajectory recovery from saved state. Five
+  focused Rust tests and Clippy passed. Binding qualification and
+  estimation of intervention effects remain open.

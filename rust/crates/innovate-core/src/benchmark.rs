@@ -1,7 +1,7 @@
 //! Reproducible synthetic smoke corpus and native fit/forecast runner.
 use serde_json::{Value, json};
 
-const CASES: [(&str, &str, &str); 8] = [
+const CASES: [(&str, &str, &str); 9] = [
     ("bass_smoke_adoption", "bass", "diffusion"),
     ("logistic_growth_smoke", "logistic", "diffusion"),
     ("fisher_pry_replacement_smoke", "fisher_pry", "substitution"),
@@ -22,6 +22,7 @@ const CASES: [(&str, &str, &str); 8] = [
         "network_diffusion",
     ),
     ("policy_hazard_reference", "policy_hazard", "policy_hazard"),
+    ("policy_hazard_fit", "policy_hazard", "policy_hazard"),
 ];
 
 fn ci_policy(family: &str) -> &'static str {
@@ -57,6 +58,25 @@ fn run_case(id: &str) -> Result<Value, String> {
         .iter()
         .find(|case| case.0 == id)
         .ok_or("unknown benchmark case")?;
+    if id == "policy_hazard_fit" {
+        let time: Vec<f64> = (0..26).map(f64::from).collect();
+        let observed: Vec<_> = time
+            .iter()
+            .map(|&t| {
+                let decay = (-0.33 * t).exp();
+                100. * (1. - decay) / (1. + 10. * decay)
+            })
+            .collect();
+        return fit_and_forecast(
+            id,
+            model,
+            family,
+            json!({
+                "inputs":{"time":time,"observed":observed},
+                "constructor_kwargs":{"base_model":"bass","decay":0.3}
+            }),
+        );
+    }
     if id == "policy_hazard_reference" {
         return policy_hazard_reference(id, model, family);
     }
@@ -241,7 +261,7 @@ fn suite(payload: &Value) -> Result<Value, String> {
             let entries = value
                 .as_array()
                 .filter(|entries| !entries.is_empty() && entries.len() <= CASES.len())
-                .ok_or("case_ids must contain one to eight case IDs")?;
+                .ok_or("case_ids must contain one to nine case IDs")?;
             entries
                 .iter()
                 .map(|entry| {
