@@ -70,10 +70,12 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                  "optional_fields":["estimand","clusters"],"estimands":["ate","att"],"default_estimand":"ate",
                  "uncertainty":"influence_standard_error"},
                 {"method":"cross_fitted_stratum_ate","adjustment":"cross_fitted_strata",
-                 "required_fields":["outcomes","treatment","strata","folds"],"optional_fields":["clusters"],
+                 "required_fields":["outcomes","treatment","strata","folds"],"optional_fields":["clusters","minimum_training_arm_count"],
+                 "overlap_diagnostics":["min_training_arm_count","min_propensity","max_propensity"],
                  "estimands":["ate"],"default_estimand":"ate"},
                 {"method":"cross_fitted_stratum_att","adjustment":"cross_fitted_strata",
-                 "required_fields":["outcomes","treatment","strata","folds"],"optional_fields":["clusters"],
+                 "required_fields":["outcomes","treatment","strata","folds"],"optional_fields":["clusters","minimum_training_arm_count"],
+                 "overlap_diagnostics":["min_training_arm_count","min_propensity","max_propensity"],
                  "estimands":["att"],"default_estimand":"att"}
             ]
         })),

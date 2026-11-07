@@ -1126,6 +1126,16 @@ fn causal_summaries_match_analytic_effects() {
     assert_eq!(methods[4]["required_fields_by_estimand"]["att"], json!([]));
     assert_eq!(methods[5]["method"], "cross_fitted_stratum_ate");
     assert_eq!(methods[6]["method"], "cross_fitted_stratum_att");
+    for method in &methods[5..7] {
+        assert_eq!(
+            method["optional_fields"],
+            json!(["clusters", "minimum_training_arm_count"])
+        );
+        assert_eq!(
+            method["overlap_diagnostics"],
+            json!(["min_training_arm_count", "min_propensity", "max_propensity"])
+        );
+    }
     let result = run(stratified.clone());
     assert!((result["result"]["estimate"].as_f64().unwrap() - 6.0).abs() < 1e-12);
     assert_eq!(result["result"]["by_stratum"]["low"]["n_control"], 2);

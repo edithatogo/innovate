@@ -6279,3 +6279,8 @@ Hosted release readiness for this worktree revision remains open.
   Julia and installed R. Both estimands returned the default result
   with an explicit minimum of one and the same insufficient-support
   diagnostic with a minimum of two on the asymmetric fixture.
+
+- [x] Advertise minimum_training_arm_count and the three overlap
+  diagnostic names in native causal method discovery for both
+  cross-fitted estimands. The Rust causal boundary test verifies
+  both discovery entries.
