@@ -7173,3 +7173,7 @@ Hosted release readiness for this worktree revision remains open.
   expected relative path and reran successfully with
   INNOVATE_NATIVE_LIBRARY unset. This qualifies the staged test
   layout and local runtime. Hosted package checks remain open.
+
+- [x] Document the staged Julia conformance layout verified in
+  872bc723. Include the shared Rust fixture directory and the
+  bundled-library test command.

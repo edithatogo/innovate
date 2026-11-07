@@ -83,6 +83,20 @@ name produced by Cargo, such as `libinnovate_ffi.so` or `innovate_ffi.dll`.
 Add the staged package to a fresh project with `Pkg.develop(path=...)`
 and unset `INNOVATE_NATIVE_LIBRARY` to exercise bundled discovery.
 
+To run the full native conformance suite in staging, preserve the
+repository-relative layout. Stage `bindings/julia` and
+`rust/crates/innovate-core/tests/fixtures` under the same root, then
+run the following from that root after placing the library in
+`bindings/julia/deps`.
+
+```sh
+unset INNOVATE_NATIVE_LIBRARY
+julia --project=bindings/julia bindings/julia/test/runtests.jl
+```
+
+The fixtures supply independent reference data for the tests. Runtime
+calls use the staged package and shared library.
+
 ## Reading paired Bass outcomes
 
 `kernel_paired_outcomes_ipc(payload)` validates paired Bass draws and
