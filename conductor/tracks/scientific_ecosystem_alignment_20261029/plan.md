@@ -5668,3 +5668,9 @@ Hosted release readiness for this worktree revision remains open.
   re-registration with a new version and rejection of a stale version.
   The check is atomic under the registry lock and compares versions.
   Hosted lifecycle and extension execution remain open.
+
+- [x] Verify the in-process extension lifecycle through rebuilt Python,
+  Julia and installed R. All three rejected stale version removal,
+  listed the surviving version by extension point, removed it with
+  the current version, and returned false on retry. The first FFI link
+  ran out of space and succeeded after reclaiming generated test binaries.
