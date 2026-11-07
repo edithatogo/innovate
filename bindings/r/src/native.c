@@ -4,12 +4,21 @@
 #include <R_ext/Rdynload.h>
 #ifdef _WIN32
 #include <windows.h>
-#define OPEN(path) LoadLibraryA(path)
+static void *open_native_library(SEXP path) {
+    const char *utf8 = Rf_translateCharUTF8(path);
+    int length = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, utf8, -1, NULL, 0);
+    if (!length) Rf_error("invalid UTF-8 library path");
+    wchar_t *wide = (wchar_t *) R_alloc((size_t) length, sizeof(wchar_t));
+    if (!MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, utf8, -1, wide, length))
+        Rf_error("unable to convert native library path");
+    return LoadLibraryW(wide);
+}
+#define OPEN(path) open_native_library(path)
 #define SYMBOL(handle, name) GetProcAddress(handle, name)
 #define CLOSE(handle) FreeLibrary(handle)
 #else
 #include <dlfcn.h>
-#define OPEN(path) dlopen(path, RTLD_NOW | RTLD_LOCAL)
+#define OPEN(path) dlopen(Rf_translateCharUTF8(path), RTLD_NOW | RTLD_LOCAL)
 #define SYMBOL(handle, name) dlsym(handle, name)
 #define CLOSE(handle) dlclose(handle)
 #endif
@@ -18,11 +27,11 @@ static SEXP call_kernel(SEXP library, SEXP request, SEXP data) {
     if (TYPEOF(library) != STRSXP || XLENGTH(library) != 1 || STRING_ELT(library, 0) == NA_STRING ||
         TYPEOF(request) != STRSXP || XLENGTH(request) != 1 || STRING_ELT(request, 0) == NA_STRING)
         Rf_error("library and request must be scalar strings");
-    void *handle = OPEN(CHAR(STRING_ELT(library, 0)));
+    void *handle = OPEN(STRING_ELT(library, 0));
     if (!handle) Rf_error("unable to load the Innovate native library");
     void (*release)(char *) = (void (*)(char *)) SYMBOL(handle, "innovate_free");
     if (!release) { CLOSE(handle); Rf_error("incompatible Innovate native ABI"); }
-    const char *text = CHAR(STRING_ELT(request, 0));
+    const char *text = Rf_translateCharUTF8(STRING_ELT(request, 0));
     char *response;
     if (data == R_NilValue) {
         char *(*call)(const char *) = (char *(*)(const char *)) SYMBOL(handle, "innovate_call");
@@ -35,7 +44,7 @@ static SEXP call_kernel(SEXP library, SEXP request, SEXP data) {
         response = call(RAW(data), (size_t) XLENGTH(data), text);
     }
     if (!response) { CLOSE(handle); Rf_error("native response allocation failed"); }
-    SEXP result = PROTECT(Rf_mkString(response));
+    SEXP result = PROTECT(Rf_ScalarString(Rf_mkCharCE(response, CE_UTF8)));
     release(response);
     CLOSE(handle);
     UNPROTECT(1);
@@ -58,7 +67,7 @@ static SEXP scenario_output(SEXP library, SEXP response, const char *symbol) {
     if (binary ? TYPEOF(response) != RAWSXP :
         (TYPEOF(response) != STRSXP || XLENGTH(response) != 1 || STRING_ELT(response, 0) == NA_STRING))
         Rf_error("expected raw IPC bytes or a scalar scenario response string");
-    void *handle = OPEN(CHAR(STRING_ELT(library, 0)));
+    void *handle = OPEN(STRING_ELT(library, 0));
     if (!handle) Rf_error("unable to load the Innovate native library");
     void *convert = (void *) SYMBOL(handle, symbol);
     void (*free_bytes)(unsigned char *, size_t) =
@@ -73,9 +82,9 @@ static SEXP scenario_output(SEXP library, SEXP response, const char *symbol) {
         ? ((char *(*)(const unsigned char *, size_t, unsigned char **, size_t *)) convert)
             (RAW(response), (size_t) XLENGTH(response), &data, &len)
         : ((char *(*)(const char *, unsigned char **, size_t *)) convert)
-            (CHAR(STRING_ELT(response, 0)), &data, &len);
+            (Rf_translateCharUTF8(STRING_ELT(response, 0)), &data, &len);
     if (failure) {
-        SEXP result = PROTECT(Rf_mkString(failure));
+        SEXP result = PROTECT(Rf_ScalarString(Rf_mkCharCE(failure, CE_UTF8)));
         free_text(failure);
         CLOSE(handle);
         UNPROTECT(1);

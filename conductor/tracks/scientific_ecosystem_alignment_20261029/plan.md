@@ -5804,3 +5804,10 @@ Hosted release readiness for this worktree revision remains open.
   packages and runs the suites without an override. Actionlint and
   local override precedence checks passed. Bundled discovery on the
   Linux and Windows hosted runners remains to be verified.
+
+- [x] Marshal R native requests and responses as UTF-8 and use the
+  Windows wide-character loader for native library paths. A fresh
+  macOS R installation preserved Unicode manifest fields using a
+  library path containing a Greek character. The latest FFI link ran
+  out of space, so the bridge check reused the archived macOS library.
+  The Windows loader branch awaits hosted runtime evidence.
