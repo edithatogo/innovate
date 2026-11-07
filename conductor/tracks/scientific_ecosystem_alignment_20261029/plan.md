@@ -2587,3 +2587,11 @@ the other competition models and installed binding checks remain open.
   The nominal 90% interval covered 172/200 (86%). Mean effect was
   1.3140625 versus 1.306755628635 analytically. Both services completed
   in 2,841 of 6,400 alternative runs. Broader calibration remains open.
+
+- [x] Replicate the feedback-chain coverage experiment with 500 new
+  trials each at 32 and 64 pairs. Both sizes use pair seed
+  60000+64*trial+pair and 1,000 bootstrap draws at seed 100000+trial.
+  Coverage was 452/500 (90.4%) and 445/500 (89.0%), respectively.
+  Mean interval widths were 0.38998125 and 0.281396875. The earlier
+  86% result did not recur with new seeds at 32 pairs. The two sizes
+  share their first 32 pairs per trial. Broader calibration is open.
