@@ -901,6 +901,10 @@ fn causal_summaries_match_analytic_effects() {
     let mut correlated = reused.clone();
     correlated["outcome_covariance_factors"] = json!([[7, 7, 7, 7, 7], [0, 0, 2, 2, 0]]);
     let correlated_result = run(correlated.clone());
+    assert_eq!(
+        correlated_result["result"]["uncertainty_model"],
+        json!({"model":"diagonal_plus_factors","factor_count":2})
+    );
     let se = correlated_result["result"]["conditional_standard_error"]
         .as_f64()
         .unwrap();
@@ -908,6 +912,10 @@ fn causal_summaries_match_analytic_effects() {
     correlated["outcome_covariance_factors"] = json!([[1, 2]]);
     assert!(run(correlated)["result"].is_null());
     let result = run(reused);
+    assert_eq!(
+        result["result"]["uncertainty_model"],
+        json!({"model":"independent_outcomes","factor_count":0})
+    );
     assert_eq!(
         result["result"]["outcome_weights"],
         json!([[2, 0.5], [3, 0.5], [1, -1.]])

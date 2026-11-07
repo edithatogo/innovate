@@ -1415,6 +1415,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
         .map(|&count| (count as f64 / pairs.len() as f64).powi(2))
         .sum::<f64>();
     let conditional_standard_error = outcome_variances
+        .as_ref()
         .map(|variances| {
             let mut error = outcome_weights
                 .iter()
@@ -1433,6 +1434,12 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
             finite(error)
         })
         .transpose()?;
+    let uncertainty_model = outcome_variances
+        .as_ref()
+        .map(|_| match &covariance_factors {
+            Some(factors) => json!({"model":"diagonal_plus_factors","factor_count":factors.len()}),
+            None => json!({"model":"independent_outcomes","factor_count":0}),
+        });
     let balance = balance_covariates
         .map(|columns| {
             columns
@@ -1484,7 +1491,8 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     Ok(
         json!({"method":"nearest_score_with_replacement","estimand":estimand,"estimate":estimate,"adjusted_estimate":adjusted_estimate,"pairs":pairs,
             "unmatched_treated_indices":unmatched_treated_indices,
-            "conditional_standard_error":conditional_standard_error,"covariate_balance":balance,
+            "conditional_standard_error":conditional_standard_error,"uncertainty_model":uncertainty_model,
+            "covariate_balance":balance,
             "outcome_weights":outcome_weights,
             "match_diagnostics":{"caliper":caliper,"max_score_distance":max_score_distance,
                 "matched_treated_fraction":pairs.len() as f64 / (pairs.len() + unmatched_treated_indices.len()) as f64},

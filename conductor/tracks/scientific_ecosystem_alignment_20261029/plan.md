@@ -5350,3 +5350,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify shared outcome variation through rebuilt Python 3.15.2,
   Julia and installed R. All three returned sqrt(8.5) for the same
   reused-control fixture with common and treatment-only factors.
+
+- [x] Identify the matched conditional uncertainty model and factor
+  count in the result. The focused Rust fixture distinguishes the
+  independent and two-factor cases while retaining both analytic errors.
