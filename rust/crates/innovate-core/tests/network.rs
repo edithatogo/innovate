@@ -66,7 +66,7 @@ fn malformed_networks_resources_and_initial_nodes_are_rejected() {
         ("edges", json!([[0, 3]])),
         ("edges", json!([[0, 0]])),
         ("edges", json!([[0, 1], [1, 0]])),
-        ("capacity", json!(0)),
+        ("capacity", json!(-1)),
         ("service_ticks", json!(0)),
         ("initial_agents", json!([0, 0])),
     ] {
@@ -350,6 +350,14 @@ fn scheduled_capacity_pauses_admission_and_reopens_waiting_service() {
     assert_eq!(paused["metadata"]["current_capacity"], 0);
     assert_eq!(paused["metadata"]["available"], 0);
     assert_eq!(paused["metadata"]["queue_length"], 2);
+    let mut closed = payload.clone();
+    closed["inputs"]["time"] = json!([0., 6., 7., 9., 11.]);
+    closed["simulation_options"]["capacity"] = json!(0);
+    closed["simulation_options"]["schedule"] = json!([{"tick":7,"capacity":2,"service_ticks":2}]);
+    let reopened = run(closed);
+    assert_eq!(reopened["counts"], json!([0, 0, 0, 2, 3]));
+    assert_eq!(reopened["service_starts"][0]["tick"], 7);
+    assert_eq!(reopened["resource_metrics"]["over_capacity_slot_ticks"], 0);
     payload["simulation_options"]["schedule"][1]["capacity"] = json!(4);
     assert!(
         KernelBinding::new()

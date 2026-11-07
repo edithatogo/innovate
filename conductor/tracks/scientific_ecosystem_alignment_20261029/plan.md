@@ -4194,3 +4194,8 @@ Hosted release readiness for this worktree revision remains open.
   Both returned an Arrow file for valid named draws and rejected
   positional draws through the rebuilt shared library. The affected
   sections passed locally.
+- [x] Allow Kairos network resources to start closed. A seeded
+  three-agent queue waits until two slots open at tick seven, then
+  completes two services at tick nine and the final service at tick
+  eleven. Negative and out-of-range capacities remain invalid.
+  All 29 network tests passed. Installed-binding checks remain open.

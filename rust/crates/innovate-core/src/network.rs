@@ -248,7 +248,6 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         || o.population > 1000
         || o.max_wait_ticks
             .is_some_and(|ticks| !(1..=1_000_000_000_000).contains(&ticks))
-        || o.capacity == 0
         || o.capacity > o.population as u64
         || o.service_ticks == 0
         || o.service_ticks > 1000000000000
