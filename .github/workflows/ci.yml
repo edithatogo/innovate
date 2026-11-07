@@ -51,6 +51,17 @@ jobs:
           CARGO_BUILD_JOBS=2 "$GITHUB_WORKSPACE/.venv/bin/maturin" build --locked -i "$python" -o "$staging/wheel"
           uv pip install --python "$python" --no-deps --target "$staging/installed" "$staging"/wheel/*.whl
           PYTHONPATH="$staging/installed" "$python" -m pytest tests/native
+      - name: Verify the native remote worker container
+        if: matrix.os == 'ubuntu-latest' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+        timeout-minutes: 15
+        shell: bash
+        run: |
+          git archive HEAD Dockerfile pyproject.toml uv.lock Cargo.toml Cargo.lock README.md LICENSE rust bindings/python |
+            docker build --target remote-worker -t innovate-remote-worker:ci -
+          docker run --rm -i --network none --read-only --cap-drop ALL innovate-remote-worker:ci <<'JSON' |
+          {"schema_version":"2.0","context":{"request_id":"ci","tenant_id":"test","principal":"fixture","auth_scope":"kernel:execute"},"kernel_request":{"schema_version":"2.0","operation":"predict_model","model_key":"logistic","payload":{"inputs":{"time":[1]},"parameters":{"L":100,"k":1,"x0":1}}}}
+          JSON
+            jq -e '.result.kernel_response.result.values == [50]'
       - name: Run scheduled native benchmarks
         id: native-benchmarks
         if: matrix.os == 'ubuntu-latest' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')

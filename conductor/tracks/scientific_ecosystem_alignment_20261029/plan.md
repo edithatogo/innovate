@@ -6427,3 +6427,9 @@ Hosted release readiness for this worktree revision remains open.
   with stdin/stdout transport. The default Python image still uses its
   existing build path. Docker and Podman are unavailable on this host,
   so container build and runtime acceptance remain open.
+
+- [x] Add a scheduled and manually dispatched Linux CI smoke check
+  for the remote worker image. It builds from tracked source and
+  runs a native prediction with networking disabled, a read-only
+  filesystem and dropped capabilities. Workflow YAML and shell syntax
+  were checked locally. Hosted execution remains open.
