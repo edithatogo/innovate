@@ -2318,3 +2318,8 @@ the other competition models and installed binding checks remain open.
   within 1e-5. All ten historical cards now resolve to five corpus cases.
   Four focused benchmark tests and Clippy passed. Scheduling, wider card
   coverage and release qualification remain open.
+
+- [x] Qualify the lock-in smoke case and corpus freshness in Python 3.15,
+  Julia and installed R. Complete results agreed across bindings. All ten
+  historical cards resolved, and the maximum trajectory error against the
+  independent lock-in reference was 2.60e-8.
