@@ -89,6 +89,11 @@ def _ipc(frame: pl.DataFrame | pl.LazyFrame) -> bytes:
     return frame.write_ipc(None).getvalue()
 
 
+def execute_scenario_grid(data: pl.DataFrame | pl.LazyFrame, **payload: Any) -> dict[str, Any]:
+    """Execute scenarios on the shared time column of a Polars frame."""
+    return _decode(_native.scenario_grid_ipc(_ipc(data), json.dumps(payload, allow_nan=False)))
+
+
 def predict(
     model: str,
     data: pl.DataFrame | pl.LazyFrame,

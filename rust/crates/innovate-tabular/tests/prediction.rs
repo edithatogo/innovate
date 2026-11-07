@@ -60,7 +60,6 @@ fn invalid_quantities_and_input_types_fail_without_silent_defaults() {
     for options in [
         json!({"quantity":false}),
         json!({"quantity":"incidence"}),
-        json!({"quantity":"rate"}),
         json!({"unknown":true}),
         json!([]),
     ] {
@@ -112,4 +111,22 @@ fn adopter_categories_use_historical_inclusive_boundaries() {
     assert_eq!(result.column("id").unwrap(), frame.column("id").unwrap());
     let negative = df!("time" => [0., 1.], "adoption_rate" => [-1., 2.]).unwrap();
     assert!(innovate_tabular::categorize_adopters(negative, "adoption_rate").is_err());
+}
+
+#[test]
+fn arrow_scenario_grid_supplies_time_and_rejects_conflicting_times() {
+    let mut frame = df!("time" => [0., 1.]).unwrap();
+    let mut bytes = Vec::new();
+    IpcWriter::new(&mut bytes).finish(&mut frame).unwrap();
+    let mut payload = json!({"scenarios":[{"id":"base","model_key":"logistic",
+        "simulation":{"parameters":{"L":100.,"k":1.,"x0":1.}}}]});
+    let response = innovate_tabular::scenario_grid_ipc(&bytes, payload.clone()).unwrap();
+    let response: serde_json::Value = serde_json::from_str(&response).unwrap();
+    assert_eq!(
+        response["result"]["executions"][0]["result"]["values"][1],
+        50.
+    );
+    payload["scenarios"][0]["simulation"]["inputs"] = json!({"t":[2.]});
+    assert!(innovate_tabular::scenario_grid_ipc(&bytes, payload).is_err());
+    assert!(innovate_tabular::scenario_grid_ipc(&bytes, json!({"scenarios":[1]})).is_err());
 }

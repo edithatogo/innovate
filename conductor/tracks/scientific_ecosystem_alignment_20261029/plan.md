@@ -2072,3 +2072,12 @@ the other competition models and installed binding checks remain open.
   A recorded seed requires a matching unsigned integer in replay
   options. Deterministic artifacts may omit the seed from both places.
   All 48 Rust boundary and Kairos tests and focused Clippy passed.
+
+- [x] Execute a scenario grid on a shared Arrow IPC time column in Rust
+  and from Python Polars DataFrame or LazyFrame inputs. Reuse the native
+  time validator and reject ambiguous JSON time inputs. Results retain
+  the JSON grid envelope for heterogeneous outputs. The rebuilt Python
+  3.15 wheel returned the analytic Logistic value of 50. All six tabular
+  tests and focused Clippy passed after removing a stale assertion that
+  treated the supported rate quantity as invalid.
+- [ ] Qualify scenario Arrow result transport and Julia and R consumers.

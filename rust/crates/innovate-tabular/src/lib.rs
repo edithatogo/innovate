@@ -256,3 +256,33 @@ pub fn categorize_adopters_ipc(data: &[u8], rate_column: &str) -> PolarsResult<V
     IpcWriter::new(&mut bytes).finish(&mut output)?;
     Ok(bytes)
 }
+
+/// Execute a scenario grid with one shared time column from an Arrow IPC file.
+pub fn scenario_grid_ipc(data: &[u8], mut payload: Value) -> PolarsResult<String> {
+    let frame = IpcReader::new(Cursor::new(data)).finish()?;
+    let time = inputs(&frame, &[])?;
+    let Some(scenarios) = payload.get_mut("scenarios").and_then(Value::as_array_mut) else {
+        polars_bail!(SchemaMismatch: "scenario grid requires a scenarios array");
+    };
+    for scenario in scenarios {
+        let Some(simulation) = scenario
+            .get_mut("simulation")
+            .and_then(Value::as_object_mut)
+        else {
+            polars_bail!(SchemaMismatch: "scenario simulation must be an object");
+        };
+        let inputs = simulation.entry("inputs").or_insert_with(|| json!({}));
+        let Some(inputs) = inputs.as_object_mut() else {
+            polars_bail!(SchemaMismatch: "scenario inputs must be an object");
+        };
+        if inputs.contains_key("time") || inputs.contains_key("t") {
+            polars_bail!(SchemaMismatch: "scenario time must come from the Arrow time column");
+        }
+        inputs.insert("time".into(), time["time"].clone());
+    }
+    Ok(innovate_core::execute_json(
+        &json!({"schema_version":innovate_core::KERNEL_SCHEMA_VERSION,
+            "operation":"execute_scenario_grid","payload":payload})
+        .to_string(),
+    ))
+}
