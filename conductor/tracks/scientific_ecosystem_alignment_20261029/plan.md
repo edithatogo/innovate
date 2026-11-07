@@ -5816,3 +5816,9 @@ Hosted release readiness for this worktree revision remains open.
   Unicode directory and executes a Logistic prediction through it.
   Actionlint passed. No Windows compiler or runtime was available in
   the local environment, so hosted execution remains open.
+
+- [x] Verify the fast benchmark policy at one case per Open MPI rank
+  using Open MPI 5.0.11 and the retained Python 3.15.2 wheel from
+  46f48aeb. Three local ranks exactly reproduced the serial result.
+  The receipt verifier rejected a duplicate rank. Slurm and multi-node
+  qualification remain open.
