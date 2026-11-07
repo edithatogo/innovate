@@ -1494,3 +1494,10 @@ the other competition models and installed binding checks remain open.
   likelihood conditional on the warmup observations. Degenerate
   likelihoods return null while fitted values remain available.
   All 20 native boundary tests and focused Clippy passed.
+
+- [x] Add native SARIMA coefficient estimation using deterministic
+  coordinate search and the concentrated likelihood. The AR(1) estimate
+  matches R within 2e-6 and its log likelihood within 1e-9. All 21 native
+  boundary tests and focused Clippy passed.
+- [ ] Qualify mixed seasonal AR/MA estimation and optimizer robustness,
+  then expose fitting through Python, Julia and R convenience APIs.

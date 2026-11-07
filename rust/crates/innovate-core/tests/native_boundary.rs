@@ -363,3 +363,21 @@ fn sarima_combined_differencing_preserves_observation_alignment() {
         innovate_core::json!([null, null, null, null, 8., 6., 8., 11., 19., 11., 24., 2.])
     );
 }
+
+#[test]
+fn sarima_fit_matches_independent_ar1_maximum_likelihood() {
+    let fixture: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../../conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/sarima-reference/stationary-fixed.json"
+    )).unwrap();
+    let request = innovate_core::json!({
+        "schema_version":"2.0", "operation":"preprocess_series",
+        "payload":{"method":"sarima_fit","order":[1,0,0],"seasonal_order":[0,0,0,0],
+                   "values":fixture["values"]}
+    });
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    let result = &response["result"];
+    // R stats::arima, method = "ML", include.mean = FALSE.
+    assert!((result["coefficients"][0].as_f64().unwrap() - 0.8077160397020451).abs() < 2e-6);
+    assert!((result["log_likelihood"].as_f64().unwrap() + 27.279117220748503).abs() < 1e-9);
+}

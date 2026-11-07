@@ -38,7 +38,7 @@ pub(crate) fn filter(
     values: &[f64],
     order: [usize; 3],
     seasonal_order: [usize; 4],
-    coefficients: &[f64],
+    coefficients: Option<&[f64]>,
 ) -> Result<serde_json::Value, &'static str> {
     let [p, d, q] = order;
     let [sp, sd, sq, period] = seasonal_order;
@@ -57,11 +57,21 @@ pub(crate) fn filter(
         }
         differences.truncate(differences.len() - lag);
     }
+    let order = [p, 0, q];
+    let seasonal_order = [sp, 0, sq, period];
+    let estimated;
+    let coefficients = match coefficients {
+        Some(coefficients) => coefficients,
+        None => {
+            estimated = estimate(&differences, order, seasonal_order)?;
+            &estimated
+        }
+    };
     let FilterOutput {
         predictions,
         innovations,
         log_likelihood,
-    } = stationary_filter(&differences, [p, 0, q], [sp, 0, sq, period], coefficients)?;
+    } = stationary_filter(&differences, order, seasonal_order, coefficients)?;
     let mut fitted = vec![None; warmup];
     let mut residual = vec![None; warmup];
     for ((&observed, differenced), (prediction, innovation)) in values[warmup..]
@@ -77,8 +87,59 @@ pub(crate) fn filter(
         residual.push(Some(innovation));
     }
     Ok(
-        serde_json::json!({"fitted": fitted, "residual": residual, "log_likelihood": log_likelihood}),
+        serde_json::json!({"fitted": fitted, "residual": residual, "log_likelihood": log_likelihood, "coefficients": coefficients}),
     )
+}
+
+fn estimate(
+    values: &[f64],
+    order: [usize; 3],
+    seasonal_order: [usize; 4],
+) -> Result<Vec<f64>, &'static str> {
+    let [p, _, q] = order;
+    let [sp, _, sq, _] = seasonal_order;
+    let count = [p, q, sp, sq].into_iter().try_fold(0usize, usize::checked_add)
+        .filter(|count| *count <= 64 && *count < values.len())
+        .ok_or("SARIMA estimation requires more observations than coefficients and at most 64 coefficients")?;
+    let score = |coefficients: &[f64]| {
+        let invertible = |terms: &[f64]| stationary(&terms.iter().map(|v| -v).collect::<Vec<_>>());
+        if !invertible(&coefficients[p..p + q]) || !invertible(&coefficients[p + q + sp..]) {
+            return None;
+        }
+        stationary_filter(values, order, seasonal_order, coefficients)
+            .ok()?
+            .log_likelihood
+    };
+    let mut best = vec![0.; count];
+    let initial = stationary_filter(values, order, seasonal_order, &best)?;
+    let mut likelihood = initial
+        .log_likelihood
+        .ok_or("SARIMA likelihood is degenerate")?;
+    let mut step = 0.25;
+    // Refine a deterministic coordinate search over stationary and invertible models.
+    for _ in 0..512 {
+        let mut improved = false;
+        for index in 0..count {
+            let original = best[index];
+            let mut selected = original;
+            for direction in [-1., 1.] {
+                best[index] = original + direction * step;
+                if let Some(candidate) = score(&best).filter(|v| *v > likelihood) {
+                    likelihood = candidate;
+                    selected = best[index];
+                }
+            }
+            improved |= selected != original;
+            best[index] = selected;
+        }
+        if !improved {
+            step *= 0.5;
+            if step < 1e-6 {
+                return Ok(best);
+            }
+        }
+    }
+    Err("SARIMA parameter estimation did not converge")
 }
 
 struct FilterOutput {

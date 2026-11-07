@@ -183,14 +183,23 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
                 .ok_or("LOESS requires an integer window")?;
             return Ok(json!({"values":seasonal::loess_trend(&values, span)?}));
         }
-        if payload["method"] == "sarima_filter" {
+        if matches!(
+            payload["method"].as_str(),
+            Some("sarima_filter" | "sarima_fit")
+        ) {
             let order = serde_json::from_value(payload["order"].clone())
                 .map_err(|_| "SARIMA order must contain three nonnegative integers")?;
             let seasonal_order = serde_json::from_value(payload["seasonal_order"].clone())
                 .map_err(|_| "SARIMA seasonal_order must contain four nonnegative integers")?;
-            let coefficients: Vec<f64> = serde_json::from_value(payload["coefficients"].clone())
-                .map_err(|_| "SARIMA coefficients must be a numeric array")?;
-            return sarima::filter(&values, order, seasonal_order, &coefficients);
+            let coefficients: Option<Vec<f64>> = if payload["method"] == "sarima_fit" {
+                None
+            } else {
+                Some(
+                    serde_json::from_value(payload["coefficients"].clone())
+                        .map_err(|_| "SARIMA coefficients must be a numeric array")?,
+                )
+            };
+            return sarima::filter(&values, order, seasonal_order, coefficients.as_deref());
         }
         if payload["method"] == "seasonal_decomposition" {
             let integer = |key: &str| {
