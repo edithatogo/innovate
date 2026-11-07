@@ -1,5 +1,6 @@
 """Validate the historical diffusion fixture through the installed kernel."""
 
+from copy import deepcopy
 from pathlib import Path
 
 import polars as pl
@@ -40,6 +41,12 @@ def test_historical_draws_round_trip_and_reject_reordering():
     exported = innovate.paired_outcomes({"strategies": strategies})
     keys = ["scenario_id", "draw_id", "time", "adoption"]
     assert exported.select(keys).rows() == trajectories.select(keys).rows()
+
+    malformed = deepcopy(strategies)
+    draw = malformed[0]["draws"][0]
+    malformed[0]["draws"][0] = [draw["draw_id"], draw["parameters"], draw["time"], draw["adoption"]]
+    with pytest.raises(ValueError, match="must be objects"):
+        innovate.paired_outcomes({"strategies": malformed})
 
     strategies[1]["draws"].reverse()
     with pytest.raises(ValueError, match="matching ordered draw IDs"):

@@ -4187,3 +4187,6 @@ Hosted release readiness for this worktree revision remains open.
   could reach the Arrow writer without named fields. The exporter
   now rejects the positional draw with a validation error. The
   focused Rust contract and IPC tests passed.
+- [x] Keep malformed positional draw rejection in the packaged Python
+  consumer regression. The rebuilt wheel returned the validation error
+  and passed the historical fixture round trip and reordered-draw checks.
