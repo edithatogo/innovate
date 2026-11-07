@@ -469,7 +469,7 @@ def ingest_local(
     unit: str | None = None,
     directed: bool = False,
 ) -> dict[str, Any]:
-    """Read a local CSV, Parquet or Arrow IPC file and validate it in Rust."""
+    """Read local CSV, Parquet, or Arrow IPC data and validate it in Rust."""
     path = Path(path)
     if not path.is_file():
         raise FileNotFoundError(path)
@@ -479,7 +479,11 @@ def ingest_local(
     elif file_format in {"parquet", "pq"}:
         frame = pl.read_parquet(path)
     elif file_format in {"arrow", "feather", "ipc"}:
-        frame = pl.read_ipc(path)
+        with path.open("rb") as source:
+            is_file = source.read(6) == b"ARROW1"
+        frame = pl.read_ipc(path) if is_file else pl.read_ipc_stream(path)
+    elif file_format in {"stream", "ipc_stream"}:
+        frame = pl.read_ipc_stream(path)
     else:
         raise ValueError(f"unsupported local format: {file_format}")
     file_provenance = {

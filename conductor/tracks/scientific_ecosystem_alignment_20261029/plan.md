@@ -2500,3 +2500,9 @@ the other competition models and installed binding checks remain open.
   Int32 counts, nullable Float64 and Unicode strings. All nine Rust
   tabular tests and focused Clippy passed. Direct Arrow.jl readback of
   files written by the Python Polars writer remains an upstream gap.
+
+- [x] Accept local Arrow IPC streams in Python ingestion. Detect file versus
+  stream framing for shared Arrow extensions and allow explicit stream
+  suffixes. Two focused tests against the rebuilt Python 3.15.2 wheel
+  passed. With the same path and rows, file and stream inputs produce
+  the same validated, checksummed Rust artifact.

@@ -986,3 +986,24 @@ def test_robust_native_seasonal_decomposition_isolates_outlier():
     values[40] += 100
     result = innovate.seasonal_decomposition(pl.Series(values), period=4, trend_span=13, robust=True)
     assert result["residual"][40] == pytest.approx(100, abs=0.1)
+
+
+@pytest.mark.parametrize("suffix", [".arrow", ".ipc_stream"])
+def test_ingest_local_ipc_stream_preserves_dataset_and_provenance(tmp_path, suffix):
+    path = tmp_path / f"adoption{suffix}"
+    frame = pl.DataFrame({"time": [0.0, 1.0], "adoption": [1.0, 2.0]})
+    provenance = {
+        "source": "synthetic",
+        "license": "CC-BY-4.0",
+        "extraction_time": "2026-11-07T00:00:00Z",
+    }
+    frame.write_ipc_stream(path)
+    artifact = innovate.ingest_local(path, "adoption", provenance=provenance)
+    dataset = artifact["dataset"]
+    assert artifact["validation"]["ok"]
+    assert dataset["adoption"] == [1.0, 2.0]
+    assert dataset["provenance"]["extra"]["format"] == suffix[1:]
+    assert innovate.execute("ingest_dataset", dataset=dataset)["result"] == artifact
+    if suffix == ".arrow":
+        frame.write_ipc(path)
+        assert innovate.ingest_local(path, "adoption", provenance=provenance) == artifact
