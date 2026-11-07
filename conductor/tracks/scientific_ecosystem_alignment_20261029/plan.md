@@ -1213,3 +1213,9 @@ the other competition models and installed binding checks remain open.
   Logistic requests at 0.099/0.063 seconds and 16 forced Bass requests at
   3.944/2.317 seconds. These are local measurements, with broader workload
   and release qualification open. [Logs](evidence/parallel-batch-20261107).
+
+- [x] Handle worker startup failures without losing batch ordering. A
+  chunk whose worker could not start runs inline. A worker panic produces
+  one structured error per affected dataset, and other chunks retain
+  their results. All nine native boundary tests and focused Clippy passed.
+  The operating-system failure paths were reviewed but not fault-injected.
