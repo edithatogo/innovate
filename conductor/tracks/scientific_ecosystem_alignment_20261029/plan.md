@@ -1771,9 +1771,12 @@ the other competition models and installed binding checks remain open.
   uncompressed oldest-compatibility Polars files, and the PyArrow files.
   All preserved metadata, Int32 counts, Float64 estimates and null bounds.
   The Arrow binary reports that it was built under R 4.3.3.
-- [ ] Investigate Arrow.jl file compatibility. Arrow.jl returned empty
-  column sets for the Polars IPC files even with compression disabled
-  and oldest compatibility.
+- [x] Trace the Arrow.jl 2.8.1 file read failure to its message iterator.
+  After the eight-byte file header it expects a continuation marker
+  and stops on the first Polars metadata word (0x00000004). The PyArrow
+  file and the Polars stream start their messages with 0xffffffff.
+  Document the qualified stream handoff in the Julia binding README.
+- [ ] Direct Polars IPC file compatibility in Arrow.jl remains open.
 
 - [x] Isolate the Julia IPC file issue to the tested writer path.
   PyArrow 26 rewrote each qualified Polars stream to an IPC file.

@@ -7,3 +7,28 @@ Only bounded native capabilities are currently exposed. Advanced features and
 installed native distribution bundles remain open in the root migration ledger.
 The JSON request schema is 2.0. Inputs are borrowed for the call; the wrapper
 copies response text and releases the Rust-owned result exactly once.
+
+## Reading causal Arrow exports
+
+Use an Arrow IPC stream when handing a Python Polars causal result to Julia.
+For example, given the result of a native `policy_evidence` request in Python:
+
+```python
+import polars as pl
+from innovate import policy_metadata_frame
+
+policy_metadata_frame(result).write_ipc_stream(
+    "policy.arrow", compression="uncompressed", compat_level=pl.CompatLevel.oldest()
+)
+```
+
+In a Julia consumer environment with Arrow.jl installed:
+
+```julia
+using Arrow
+metadata = Arrow.Table("policy.arrow")
+```
+
+The same stream settings work with `treatment_contrast_frame`. Arrow.jl
+2.8.1 returned no columns for the tested Polars IPC file format. It read
+the equivalent IPC stream and the file produced by PyArrow 26.
