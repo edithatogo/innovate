@@ -1311,7 +1311,7 @@ fn custom_network_specification_checks_topology_and_initial_agents() {
         "simulation":{"inputs":{"time":[0,5]},"parameters":{"p":0,"q":0},
             "simulation_options":{"engine":"kairos_network","seed":42,"edges":[[0,1]],
                 "initial_agents":[0],"capacity":1,"service_ticks":1,
-                "schedule":[{"tick":4,"agent_priorities":[0,2,0,0]}]}}
+                "schedule":[{"tick":4,"agent_priorities":[0,2,0,0],"agent_service_ticks":[1,2,3,4]}]}}
     }]}});
     let run = |request: &serde_json::Value| -> serde_json::Value {
         serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
@@ -1321,6 +1321,10 @@ fn custom_network_specification_checks_topology_and_initial_agents() {
     assert_eq!(
         row["result"]["metadata"]["agent_priorities"],
         json!([0, 2, 0, 0])
+    );
+    assert_eq!(
+        row["result"]["metadata"]["agent_service_ticks"],
+        json!([1, 2, 3, 4])
     );
     assert_eq!(
         row["artifact"]["replay_request"]["payload"]["scenarios"][0]["simulation"]["simulation_options"]

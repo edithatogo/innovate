@@ -2768,3 +2768,7 @@ the other competition models and installed binding checks remain open.
 - [x] Document scheduled Kairos priorities and per-agent durations in
   the native migration guide. Include queue tie behavior, deadline and
   active service preservation, and scalar/vector duration precedence.
+
+- [x] Verify scenario translation and replay retain scheduled per-agent
+  durations alongside priorities. The focused Rust test confirms the
+  effective duration vector, retained schedule and exact replay result.
