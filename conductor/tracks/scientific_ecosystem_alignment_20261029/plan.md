@@ -5894,3 +5894,12 @@ Hosted release readiness for this worktree revision remains open.
   Python, Julia and freshly installed R. Each returned differences
   [-3,-3], zero standard error and an 11-tick horizon using the
   same four scenarios and two distinct matched seeds.
+
+- [x] Compare paired occupied-slot inference with an exact one-agent
+  reference. At horizon 5 and innovation rate 0.2, changing service
+  from two to four ticks adds one slot tick for arrivals by tick 2
+  and another for arrivals by tick 1. The analytic mean is 0.5109492.
+  The rebuilt Python consumer ran 200 trials of 32 matched seeds
+  (32*trial+pair), with 1000 bootstrap draws seeded by 10000+trial.
+  Mean estimated effect was 0.48984375 and nominal 90% intervals
+  covered in 180/200 trials. Broader resource designs remain open.
