@@ -28,9 +28,13 @@ pub fn classify_adopters(time: &[f64], rates: &[f64]) -> Result<Vec<&'static str
         span
     };
     let scaled_time = |t: f64| (t * prescale - origin) / scale;
+    // Binary scaling avoids rounding exact weighted-moment boundaries
+    // merely because the largest rate is not a power of two.
+    let rate_exponent = max_rate.to_bits() & f64::INFINITY.to_bits();
+    let rate_scale = f64::from_bits(rate_exponent).max(f64::MIN_POSITIVE);
     let points = weighted_samples
         .clone()
-        .map(|(&t, rate)| (scaled_time(t), rate / max_rate));
+        .map(|(&t, rate)| (scaled_time(t), rate / rate_scale));
     let total: f64 = points.clone().map(|(_, weight)| weight).sum();
     let mean = points.clone().map(|(t, weight)| t * weight).sum::<f64>() / total;
     let variance = points
@@ -40,9 +44,9 @@ pub fn classify_adopters(time: &[f64], rates: &[f64]) -> Result<Vec<&'static str
         / total;
     let sd = if variance < f64::MIN_POSITIVE {
         // Square-root weights retain dispersion even when variance underflows.
-        let root_max_rate = max_rate.sqrt();
+        let root_rate_scale = rate_scale.sqrt();
         weighted_samples
-            .map(|(&t, rate)| (scaled_time(t) - mean) * (rate.sqrt() / root_max_rate))
+            .map(|(&t, rate)| (scaled_time(t) - mean) * (rate.sqrt() / root_rate_scale))
             .fold(0.0_f64, f64::hypot)
             / total.sqrt()
     } else {
@@ -71,6 +75,20 @@ pub fn classify_adopters(time: &[f64], rates: &[f64]) -> Result<Vec<&'static str
 #[cfg(test)]
 mod tests {
     use super::classify_adopters;
+
+    #[test]
+    fn nonbinary_rate_maximum_preserves_exact_category_ties() {
+        assert_eq!(
+            classify_adopters(&[0., 1., 2., 3., 4.], &[0., 3., 3., 1., 1.]).unwrap(),
+            [
+                "Innovators",
+                "Early Adopters",
+                "Early Majority",
+                "Late Majority",
+                "Laggards"
+            ]
+        );
+    }
 
     #[test]
     fn zero_weight_extremes_do_not_compress_weighted_time_grid() {

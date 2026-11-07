@@ -6829,3 +6829,9 @@ Hosted release readiness for this worktree revision remains open.
   for the historical weighted-moment rule at 8,192 timestamps across
   512 seeded irregular grids. All labels matched through the Python
   wheel. The three focused adopter tests passed.
+
+- [x] Fix a historical inclusive-boundary discrepancy found by
+  enumerating small integer rate vectors. Weights [0,3,3,1,1] on
+  times 0–4 give exact mean 2 and variance 1. Binary rate scaling
+  preserves those ties for this fixture. All five Rust adopter tests
+  passed. Full enumeration and binding requalification remain open.
