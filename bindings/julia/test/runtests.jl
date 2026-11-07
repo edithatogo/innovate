@@ -722,3 +722,13 @@ end
     @test clustered["cluster_count"] == 2
     @test clustered["influence_standard_error"] ≈ 2
 end
+
+@testset "Balanced-panel event study" begin
+    payload = Dict("method"=>"panel_event_study", "periods"=>[-2,-1,0], "baseline_index"=>1,
+        "treated"=>[[1,2,7],[3,4,11]], "control"=>[[0,1,3],[4,5,7]])
+    pre, reference, post = kernel_call("summarize_causal", nothing, payload)["result"]["contrasts"]
+    @test pre["estimate"] == 0
+    @test reference["reference"]
+    @test post["estimate"] ≈ 4
+    @test post["standard_error"] ≈ 1
+end

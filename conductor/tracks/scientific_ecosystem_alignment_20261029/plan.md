@@ -4696,3 +4696,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Estimate balanced-panel event-study contrasts from unit outcomes.
   The focused Rust fixture verifies a zero pretrend, reference period,
   post-treatment contrast 4 and standard error 1. Binding checks remain open.
+
+- [x] Verify balanced-panel event study through rebuilt Python 3.15.2,
+  Julia and installed R. All three preserved unit-by-period ordering,
+  flagged the reference period and returned estimate 4 and error 1.

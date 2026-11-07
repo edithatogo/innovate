@@ -1475,3 +1475,13 @@ def test_clustered_augmented_treatment_contrast():
     assert clustered["influence_standard_error"] == pytest.approx(2)
     with pytest.raises(innovate.NativeError, match="requires at least two clusters"):
         innovate.execute("summarize_causal", **payload, clusters=["a"] * 4)
+
+
+def test_balanced_panel_event_study():
+    payload = dict(method="panel_event_study", periods=[-2, -1, 0], baseline_index=1,
+                   treated=[[1, 2, 7], [3, 4, 11]], control=[[0, 1, 3], [4, 5, 7]])
+    pre, reference, post = innovate.execute("summarize_causal", **payload)["result"]["contrasts"]
+    assert pre["estimate"] == pytest.approx(0)
+    assert reference["reference"] is True
+    assert post["estimate"] == pytest.approx(4)
+    assert post["standard_error"] == pytest.approx(1)

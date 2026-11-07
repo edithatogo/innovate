@@ -675,3 +675,9 @@ clustered <- kernel_call("summarize_causal",
   payload=c(cluster_payload, list(clusters=c("a","b","a","b"))))$result
 stopifnot(clustered$estimate == independent$estimate, clustered$estimate == 4,
   clustered$cluster_count == 2, isTRUE(all.equal(clustered$influence_standard_error, 2)))
+
+panel_event <- kernel_call("summarize_causal", payload=list(method="panel_event_study",
+  periods=c(-2,-1,0), baseline_index=1L, treated=matrix(c(1,2,7,3,4,11), nrow=2, byrow=TRUE),
+  control=matrix(c(0,1,3,4,5,7), nrow=2, byrow=TRUE)))$result$contrasts
+stopifnot(panel_event[[1]]$estimate == 0, isTRUE(panel_event[[2]]$reference),
+  isTRUE(all.equal(panel_event[[3]]$estimate, 4)), isTRUE(all.equal(panel_event[[3]]$standard_error, 1)))
