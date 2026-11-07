@@ -390,3 +390,12 @@ milestones <- forced_summary$intrinsic_adoption_milestones$generations[[1]]
 stopifnot(abs(milestones$median-(2+(log(2)-0.2)/0.5))<1e-7,
           is.null(milestones$saturation))
 cat("R Norton forced rate peak and milestones passed\n")
+
+historical <- kernel_summarize_model("norton_bass", list(
+  inputs=list(time=c(1,2,3)),parameters=list(p1=0.1,q1=0,m1=100),
+  constructor_kwargs=list(initial_time=1,initial_values=12,
+    parameter_events=list(list(time=2,parameters=list(m1=1000))))
+))$result$threshold_diagnostics$net_level_milestones$generations[[1]]
+stopifnot(historical$reference_market==100,historical$takeoff==1,
+          historical$median==3,historical$saturation==3)
+cat("R Norton historical level milestones passed\n")

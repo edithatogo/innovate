@@ -884,3 +884,10 @@ the reported times express sampled attainment within the requested window.
 A capacity event fixture confirms that the reference stays fixed. All 23
 multi-generation tests and focused Clippy passed. Continuous-time historical
 crossings and installed binding checks for this field remain open.
+
+- [x] Validate sampled historical level milestones in installed Python, Julia and R.
+  All three consumers preserved the 100-unit baseline through the 1,000-unit
+  capacity event and returned the expected sample times. The rebuilt wheel
+  passed 57 Python native tests, Julia Pkg.test passed 227 assertions, and
+  the installed R package passed native conformance.
+  [Logs](evidence/norton-historical-milestones-20261107).

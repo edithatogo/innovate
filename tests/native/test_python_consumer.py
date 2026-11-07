@@ -767,3 +767,25 @@ def test_norton_forced_rate_peak():
     row = milestones["generations"][0]
     assert row["median"] == pytest.approx(2 + (math.log(2) - 0.2) / 0.5)
     assert row["saturation"] is None
+
+
+def test_norton_historical_level_milestones():
+    result = innovate.execute(
+        "summarize_model",
+        "norton_bass",
+        inputs={"time": [1.0, 2.0, 3.0]},
+        parameters={"p1": 0.1, "q1": 0.0, "m1": 100.0},
+        constructor_kwargs={
+            "initial_time": 1.0,
+            "initial_values": [12.0],
+            "parameter_events": [{"time": 2.0, "parameters": {"m1": 1000.0}}],
+        },
+    )["result"]
+    row = result["threshold_diagnostics"]["net_level_milestones"]["generations"][0]
+    assert row == {
+        "generation": 1,
+        "reference_market": 100.0,
+        "takeoff": 1.0,
+        "median": 3.0,
+        "saturation": 3.0,
+    }

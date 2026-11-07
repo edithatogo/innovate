@@ -418,3 +418,15 @@ end
     @test milestones["median"] ≈ 2 + (log(2) - 0.2) / 0.5
     @test milestones["saturation"] === nothing
 end
+
+@testset "Norton historical level milestones" begin
+    result = kernel_summarize_model("norton_bass", Dict(
+        "inputs"=>Dict("time"=>[1.,2.,3.]),
+        "parameters"=>Dict("p1"=>0.1,"q1"=>0.,"m1"=>100.),
+        "constructor_kwargs"=>Dict("initial_time"=>1.,"initial_values"=>[12.],
+            "parameter_events"=>[Dict("time"=>2.,"parameters"=>Dict("m1"=>1000.))]),
+    ))["result"]
+    row = only(result["threshold_diagnostics"]["net_level_milestones"]["generations"])
+    @test row["reference_market"] == 100.
+    @test [row[k] for k in ("takeoff", "median", "saturation")] == [1.,3.,3.]
+end
