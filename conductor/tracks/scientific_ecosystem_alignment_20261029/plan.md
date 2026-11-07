@@ -3216,3 +3216,10 @@ the other competition models and installed binding checks remain open.
   refits over four pairs. All selected launch 3.125 and event 2.125.
   The scalar regression and focused Clippy passed. Broader statistical
   calibration and multiseries residual resampling remain open.
+
+- [x] Support centered multiseries residual bootstrap. Draw residuals
+  by row after centering each series, and retain any conditioning
+  observation. Python 3.15.2, Julia and R agreed exactly on three
+  noisy Norton–Bass joint profile refits. Parameter estimates varied,
+  and all refits selected launch 3.125 and event 2.125. The scalar
+  regression and focused Clippy passed. Calibration remains open.

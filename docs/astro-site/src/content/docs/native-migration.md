@@ -237,7 +237,9 @@ For Norton–Bass and the competitive ecosystem models, paired case
 resampling applies the same sampled row weights to all observed series.
 It reports candidate counts for event, launch, or joint profiles under
 `event_selection`, `launch_selection`, or `joint_time_selection`.
-Centered residual resampling is available for scalar fits.
+Centered residual resampling centers each series and samples the entire
+residual row together. If the first observed row sets the initial
+condition, it is retained and excluded from the residual pool.
 
 
 Norton–Bass, Lotka–Volterra, complementary goods, lock-in and multi-product

@@ -1,4 +1,4 @@
-//! Case and centered residual resampling for scalar model fits.
+//! Case and centered residual resampling for native model fits.
 use kairo_ecs_rng::{DeterministicStream, rand_distr::Uniform};
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
@@ -26,9 +26,6 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
             )
         })
         .ok_or("unknown bootstrap resampling method")?;
-    if !scalar && method == "centered_residual_resampling" {
-        return Err("multiseries bootstrap requires paired case resampling");
-    }
     let draws = payload["draws"]
         .as_u64()
         .filter(|n| (2..=200).contains(n))
@@ -77,17 +74,39 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
         if baseline["diagnostics"]["optimizer"]["converged"] != true {
             return Err("residual bootstrap requires a converged baseline fit");
         }
-        let fitted: Vec<f64> = serde_json::from_value(baseline["predictions"]["values"].clone())
-            .map_err(|_| "residual bootstrap requires scalar fitted values")?;
-        let observed: Vec<f64> = serde_json::from_value(fit["inputs"]["observed"].clone())
-            .map_err(|_| "residual bootstrap requires inputs.observed")?;
-        if fitted.len() != time.len() || observed.len() != time.len() {
-            return Err("residual bootstrap requires aligned fitted and observed values");
+        let rows = |value: &Value| -> Result<Vec<Vec<f64>>, &'static str> {
+            if scalar {
+                serde_json::from_value::<Vec<f64>>(value.clone())
+                    .map(|values| values.into_iter().map(|value| vec![value]).collect())
+            } else {
+                serde_json::from_value(value.clone())
+            }
+            .map_err(|_| "residual bootstrap requires numeric observed and fitted rows")
+        };
+        let fitted = rows(&baseline["predictions"][if scalar { "values" } else { "rows" }])?;
+        let observed = rows(&fit["inputs"]["observed"])?;
+        let width = fitted.first().map_or(0, Vec::len);
+        if width == 0
+            || fitted.len() != time.len()
+            || observed.len() != time.len()
+            || fitted.iter().chain(&observed).any(|row| row.len() != width)
+        {
+            return Err("residual bootstrap requires aligned fitted and observed rows");
         }
-        let mut residuals: Vec<_> = observed.iter().zip(&fitted).map(|(y, f)| y - f).collect();
-        let mean = residuals.iter().map(|r| r / time.len() as f64).sum::<f64>();
-        residuals.iter_mut().for_each(|r| *r -= mean);
-        Some((fitted, residuals))
+        let offset = usize::from(
+            baseline["diagnostics"]["initial_condition"]["excluded_conditioning_rows"] == 1,
+        );
+        let n = (time.len() - offset) as f64;
+        let mut residuals: Vec<Vec<f64>> = observed[offset..]
+            .iter()
+            .zip(&fitted[offset..])
+            .map(|(y, f)| y.iter().zip(f).map(|(y, f)| y - f).collect())
+            .collect();
+        for col in 0..width {
+            let mean = residuals.iter().map(|r| r[col] / n).sum::<f64>();
+            residuals.iter_mut().for_each(|r| r[col] -= mean);
+        }
+        Some((fitted, observed, residuals, offset))
     } else {
         None
     };
@@ -99,16 +118,25 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
     let mut fit_errors = 0;
     let mut nonconverged = 0;
     for _ in 0..draws {
-        if let Some((fitted, residuals)) = &residual_design {
-            let synthetic: Vec<_> = fitted
-                .iter()
-                .map(|f| f + residuals[rng.sample(range)])
-                .collect();
-            if synthetic.iter().any(|value| !value.is_finite()) {
+        if let Some((fitted, observed, residuals, offset)) = &residual_design {
+            let residual_range = Uniform::new(0, residuals.len()).expect("validated residual rows");
+            let mut synthetic = observed[..*offset].to_vec();
+            synthetic.extend(fitted[*offset..].iter().map(|f| {
+                let residual = &residuals[rng.sample(residual_range)];
+                f.iter()
+                    .zip(residual)
+                    .map(|(f, r)| f + r)
+                    .collect::<Vec<_>>()
+            }));
+            if synthetic.iter().flatten().any(|value| !value.is_finite()) {
                 invalid_synthetic += 1;
                 continue;
             }
-            sample["inputs"]["observed"] = json!(synthetic);
+            sample["inputs"]["observed"] = if scalar {
+                json!(synthetic.into_iter().flatten().collect::<Vec<_>>())
+            } else {
+                json!(synthetic)
+            };
         } else {
             let mut weights = vec![0; time.len()];
             for _ in time {
