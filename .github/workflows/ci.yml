@@ -36,8 +36,19 @@ jobs:
       - run: uv run --no-sync pytest tests/native
       - run: uv run --no-sync python scripts/check_migration.py
       - run: cargo fmt --all --check
-      - run: uv run --no-sync ruff check bindings/python tests/native noxfile.py scripts/check_migration.py
+      - run: uv run --no-sync ruff check bindings/python tests/native noxfile.py scripts/check_migration.py scripts/run_native_benchmarks.py
       - run: uv run --no-sync basedpyright
+      - name: Run scheduled native benchmarks
+        id: native-benchmarks
+        if: matrix.os == 'ubuntu-latest' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+        run: uv run --no-sync python scripts/run_native_benchmarks.py --policy scheduled --workers 2 --output native-benchmarks.json
+      - name: Retain native benchmark results
+        if: always() && (steps.native-benchmarks.outcome == 'success' || steps.native-benchmarks.outcome == 'failure')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: native-benchmarks
+          path: native-benchmarks.json
+          if-no-files-found: error
   julia-r:
     runs-on: ubuntu-latest
     steps:

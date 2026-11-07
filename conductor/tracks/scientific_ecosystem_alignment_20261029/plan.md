@@ -2329,3 +2329,9 @@ the other competition models and installed binding checks remain open.
   cases. Validation reports policy counts, and explicit case IDs remain
   available as an alternative selector. The focused Rust test and Clippy
   passed. Hosted scheduling and binding qualification remain open.
+
+- [x] Wire scheduled and manually dispatched Ubuntu CI to the native
+  scheduled benchmark policy and retain the JSON report as a workflow
+  artifact. Existing test gates remain enabled. The repo-local Python
+  3.15 CLI ran both scheduled cases successfully from a rebuilt wheel.
+  Actionlint and Ruff passed. Hosted execution remains unverified.
