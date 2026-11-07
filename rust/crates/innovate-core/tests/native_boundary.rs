@@ -962,6 +962,16 @@ fn scenario_grid_compares_aligned_adoption_paths() {
         row["relative_margin_bounds"]["baseline"][0],
         baseline - baseline * 0.1
     );
+    assert_eq!(row["ranking"]["baseline_place"], 2);
+    assert_eq!(row["ranking"]["alternative_place"], 1);
+    assert_eq!(row["ranking"]["tie"], false);
+    let mut tied = request.clone();
+    tied["payload"]["scenarios"][1]["simulation"]["parameters"]["L"] = json!(100.);
+    let tied = run(&tied);
+    let ranking = &tied["result"]["comparisons"][0]["result"]["ranking"];
+    assert_eq!(ranking["baseline_place"], 1);
+    assert_eq!(ranking["alternative_place"], 1);
+    assert_eq!(ranking["tie"], true);
     request["payload"]["comparisons"][0]["relative_margin"] = json!(1.1);
     assert_eq!(
         run(&request)["result"]["comparisons"][0]["error"]["code"],

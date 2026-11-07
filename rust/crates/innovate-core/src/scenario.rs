@@ -785,7 +785,10 @@ fn compare_paths(
     let last = time.len() - 1;
     let (baseline_final, alternative_final) = (baseline[last], alternative[last]);
     result["ranking"] = json!({"metric":"final_adoption",
-        "baseline_rank":baseline_final,"alternative_rank":alternative_final});
+        "baseline_rank":baseline_final,"alternative_rank":alternative_final,
+        "baseline_place":1 + usize::from(baseline_final < alternative_final),
+        "alternative_place":1 + usize::from(alternative_final < baseline_final),
+        "tie":baseline_final == alternative_final});
     result["incremental_effect"] = json!({"baseline_value":baseline_final,
         "alternative_value":alternative_final,"absolute_increase":difference[last],
         "relative_increase_percent":percentage_change[last]});

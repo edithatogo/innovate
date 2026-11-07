@@ -2516,3 +2516,9 @@ the other competition models and installed binding checks remain open.
   suites. Focused checks passed for valid artifacts and structured
   monotonicity errors. Julia also verified exact re-ingestion of the
   stamped artifact. The Python local-stream checks are recorded above.
+
+- [x] Add ordinal placement to pairwise final-adoption comparisons.
+  Higher final adoption places first and equal values share first place.
+  Historical score fields remain available for existing consumers.
+  The focused Rust boundary test verifies the ordered and tied cases.
+  Clippy passed. Installed binding qualification for placement remains open.
