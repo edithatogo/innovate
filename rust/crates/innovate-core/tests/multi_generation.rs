@@ -846,3 +846,35 @@ fn norton_bass_profiles_one_event_and_retains_other_events() {
     payload["constructor_kwargs"]["event_index"] = json!(2);
     assert!(kernel.fit_model("norton_bass", payload).is_err());
 }
+
+#[test]
+fn norton_bass_profiles_later_launch_and_preserves_events() {
+    let fixture: Value =
+        serde_json::from_str(include_str!("fixtures/successive_forcing_scipy.json")).unwrap();
+    let mut options = fixture["constructor_kwargs"].clone();
+    options["launch_candidates"] = json!([3., 3.125, 3.25]);
+    options["launch_index"] = json!(1);
+    let payload = json!({
+        "inputs":{"time":fixture["time"],"covariates":fixture["covariates"],"observed":fixture["rows"]},
+        "constructor_kwargs":options,
+        "fit_options":{"initial_parameters":fixture["parameters"],"max_iterations":200}
+    });
+    let result = KernelBinding::new()
+        .fit_model("norton_bass", payload)
+        .unwrap()
+        .result
+        .unwrap();
+    let state = &result["state"]["constructor_kwargs"];
+    assert_eq!(state["launch_times"], json!([0., 3.125]));
+    assert_eq!(
+        state["parameter_events"],
+        fixture["constructor_kwargs"]["parameter_events"]
+    );
+    assert_eq!(result["launch_profile"]["launch_index"], 1);
+    assert!(
+        result["launch_profile"]["candidates"][1]["objective"]
+            .as_f64()
+            .unwrap()
+            < 1e-8
+    );
+}

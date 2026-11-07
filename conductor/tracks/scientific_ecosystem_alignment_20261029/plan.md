@@ -3147,3 +3147,10 @@ the other competition models and installed binding checks remain open.
   with RSS 2.94e-14 while retaining the event at 5.375. The focused
   Rust regression and Clippy passed. Joint event and launch inference
   and uncertainty remain open.
+
+- [x] Profile a later Norton–Bass launch in successive-generation
+  fits. Retain the selected launch and the unchanged parameter events
+  in fitted state. Python 3.15.2, Julia and R agreed exactly on the
+  independent forcing fixture, selecting 3.125 with RSS 8.30e-19.
+  Both focused profile tests and Clippy passed. Joint launch/event
+  inference and uncertainty remain open.

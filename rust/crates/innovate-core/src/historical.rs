@@ -465,29 +465,61 @@ pub(crate) fn profile_event(
         || request.payload.get("state").is_some()
     {
         return Err(error(
-            "event_candidates requires a fresh fit without fixed t_event",
+            "profiling requires a fresh fit without fixed t_event",
         ));
     }
-    let candidates = options["event_candidates"]
+    let launch = options.contains_key("launch_candidates");
+    if launch
+        && (options.contains_key("event_candidates")
+            || options.get("variant").and_then(Value::as_str) != Some("successive_generations"))
+    {
+        return Err(error(
+            "launch profiling requires successive_generations and no event candidates",
+        ));
+    }
+    let (candidate_key, time_key, profile_key) = if launch {
+        ("launch_candidates", "launch_time", "launch_profile")
+    } else {
+        ("event_candidates", "t_event", "event_profile")
+    };
+    let candidates = options[candidate_key]
         .as_array()
         .filter(|values| (2..=16).contains(&values.len()))
-        .ok_or_else(|| error("event_candidates requires 2 to 16 times"))?;
+        .ok_or_else(|| error("profiling requires 2 to 16 candidate times"))?;
     let times = candidates
         .iter()
         .map(|value| {
             value
                 .as_f64()
-                .ok_or_else(|| error("event candidates must be finite numbers"))
+                .ok_or_else(|| error("candidate times must be finite numbers"))
         })
         .collect::<Result<Vec<_>, _>>()?;
     if times.windows(2).any(|pair| pair[0] >= pair[1]) {
-        return Err(error("event candidates must be strictly increasing"));
+        return Err(error("candidate times must be strictly increasing"));
     }
     let weights = crate::fitting::weights(request, time.len(), 6)?;
     let mut trial = request.clone();
     let mut fixed = options.clone();
-    fixed.remove("event_candidates");
-    let event_index = if request.model_key.as_deref() == Some("norton_bass") {
+    fixed.remove(candidate_key);
+    let launch_index = if launch {
+        let index = fixed
+            .remove("launch_index")
+            .and_then(|index| index.as_u64())
+            .and_then(|index| usize::try_from(index).ok())
+            .filter(|index| *index > 0)
+            .ok_or_else(|| error("launch_index must select a later generation"))?;
+        if fixed
+            .get("launch_times")
+            .and_then(|times| times.get(index))
+            .is_none()
+        {
+            return Err(error("launch_index must select an existing launch time"));
+        }
+        Some(index)
+    } else {
+        None
+    };
+    let event_index = if !launch && request.model_key.as_deref() == Some("norton_bass") {
         let index = fixed
             .remove("event_index")
             .and_then(|index| index.as_u64())
@@ -519,12 +551,16 @@ pub(crate) fn profile_event(
         if let Some(weights) = &weights {
             let positive = |weights: &[f64]| weights.iter().filter(|weight| **weight > 0.).count();
             if positive(&weights[..split]) < 3 || positive(&weights[split..]) < 3 {
-                profile.push(json!({"t_event":time_candidate,
+                profile.push(json!({(time_key):time_candidate,
                     "error":"fewer than three positive-weight observations on a branch"}));
                 continue;
             }
         }
-        if let Some(index) = event_index {
+        if let Some(index) = launch_index {
+            fixed
+                .get_mut("launch_times")
+                .expect("validated launch list")[index] = json!(time_candidate);
+        } else if let Some(index) = event_index {
             fixed
                 .get_mut("parameter_events")
                 .expect("validated event list")[index]["time"] = json!(time_candidate);
@@ -543,7 +579,7 @@ pub(crate) fn profile_event(
                 };
                 let converged = diagnostics["optimizer"]["converged"] == true;
                 profile.push(
-                    json!({"t_event":time_candidate,"objective":score,"converged":converged}),
+                    json!({(time_key):time_candidate,"objective":score,"converged":converged}),
                 );
                 if let Some(score) = score.filter(|score| converged && *score < best_score) {
                     best_score = score;
@@ -551,19 +587,20 @@ pub(crate) fn profile_event(
                 }
             }
             Err(failure) => {
-                profile.push(json!({"t_event":time_candidate,"error":failure.to_string()}))
+                profile.push(json!({(time_key):time_candidate,"error":failure.to_string()}))
             }
         }
     }
-    let mut response =
-        best.ok_or_else(|| error("no event candidate produced a converged finite fit"))?;
-    response.result.as_mut().expect("fit result")["event_profile"] = json!({
+    let mut response = best.ok_or_else(|| error("no candidate produced a converged finite fit"))?;
+    response.result.as_mut().expect("fit result")[profile_key] = json!({
         "method":"discrete_profile_least_squares","candidates":profile,
         "tie_break":"earliest_candidate"
     });
     if let Some(index) = event_index {
-        response.result.as_mut().expect("fit result")["event_profile"]["event_index"] =
-            json!(index);
+        response.result.as_mut().expect("fit result")[profile_key]["event_index"] = json!(index);
+    }
+    if let Some(index) = launch_index {
+        response.result.as_mut().expect("fit result")[profile_key]["launch_index"] = json!(index);
     }
     Ok(response)
 }
