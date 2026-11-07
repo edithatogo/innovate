@@ -687,6 +687,11 @@ fn causal_summaries_match_analytic_effects() {
     let mut stratified = json!({"method":"stratified_treatment_contrast",
         "outcomes":[0,0,2,10,19,19,19],"treatment":[0,0,1,0,1,1,1],
         "strata":["low","low","low","high","high","high","high"]});
+    let discovery = run(json!({"method":"describe_treatment_contrasts"}));
+    let methods = discovery["result"]["contrasts"].as_array().unwrap();
+    assert_eq!(methods[0]["adjustment"], "none");
+    assert_eq!(methods[1]["method"], stratified["method"]);
+    assert_eq!(methods[1]["estimands"], json!(["ate", "att"]));
     let result = run(stratified.clone());
     assert!((result["result"]["estimate"].as_f64().unwrap() - 6.0).abs() < 1e-12);
     assert_eq!(result["result"]["by_stratum"]["low"]["n_control"], 2);

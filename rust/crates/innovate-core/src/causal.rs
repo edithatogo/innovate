@@ -42,6 +42,16 @@ fn finite(value: f64) -> Result<f64, &'static str> {
 
 pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
     match payload["method"].as_str() {
+        Some("describe_treatment_contrasts") => Ok(json!({
+            "contrasts":[
+                {"method":"treatment_contrast","adjustment":"none",
+                 "required_fields":["outcomes","treatment"],"optional_fields":["bootstrap","effect_modifiers"]},
+                {"method":"stratified_treatment_contrast","adjustment":"caller_supplied_strata",
+                 "required_fields":["outcomes","treatment","strata"],"optional_fields":["estimand"],
+                 "estimands":["ate","att"],"default_estimand":"ate",
+                 "uncertainty":"conditional_standard_error"}
+            ]
+        })),
         Some("pre_post") => {
             let pre_treated = outcome_mean(payload, "pre_treated")?;
             let post_treated = outcome_mean(payload, "post_treated")?;

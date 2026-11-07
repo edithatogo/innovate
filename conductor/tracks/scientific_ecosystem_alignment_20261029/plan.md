@@ -4509,3 +4509,6 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify stratified conditional standard errors through rebuilt
   Python 3.15.2, Julia and installed R. Both estimands returned the
   analytic sqrt(0.5) with replicated arms and null with singleton arms.
+
+- [x] Expose native treatment contrast discovery with separate unadjusted
+  and stratified capabilities. The focused Rust boundary test passed.

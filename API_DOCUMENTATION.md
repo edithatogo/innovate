@@ -209,3 +209,6 @@ The `conditional_standard_error` assumes independent observations and
 holds the stratum weights fixed. It combines the two arm sample variances
 divided by their respective arm sizes, with squared stratum weights.
 It is null when an included arm has only one observation.
+
+Call `summarize_causal` with method `describe_treatment_contrasts` to
+discover the supported adjustment methods, inputs and estimands.
