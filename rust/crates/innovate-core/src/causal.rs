@@ -232,6 +232,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
             )
         }
         Some("counterfactual_forecast") => counterfactual_forecast(payload),
+        Some("release_evidence") => release_evidence(payload),
         Some("covariate_balance") => covariate_balance(payload),
         _ => Err("unknown causal summary method"),
     }
@@ -413,4 +414,46 @@ fn apply_overrides(
         *baseline.get_mut(key).ok_or(unknown)? = value.clone();
     }
     Ok(())
+}
+
+fn release_evidence(payload: &Value) -> Result<Value, &'static str> {
+    let claim = payload["claim"]
+        .as_str()
+        .filter(|v| !v.trim().is_empty())
+        .ok_or("claim must be a nonempty string")?;
+    let entries = |key: &str| {
+        payload.get(key).map_or(Ok(Vec::new()), |value| {
+            serde_json::from_value::<Vec<String>>(value.clone())
+                .map_err(|_| "evidence and caveats must be arrays of strings")
+        })
+    };
+    let evidence = entries("supporting_evidence")?;
+    let caveats = entries("caveats")?;
+    let level = payload
+        .get("evidence_level")
+        .map_or(Some("medium"), Value::as_str)
+        .filter(|v| matches!(*v, "low" | "medium" | "high"))
+        .ok_or("evidence_level must be low, medium or high")?;
+    let sensitivity = payload
+        .get("sensitivity_analysis_conducted")
+        .map_or(Some(false), Value::as_bool)
+        .ok_or("sensitivity_analysis_conducted must be boolean")?;
+    let mut issues = Vec::new();
+    if evidence.iter().all(|v| v.trim().is_empty()) {
+        issues.push("No supporting evidence provided");
+    }
+    if caveats.iter().all(|v| v.trim().is_empty()) {
+        issues.push("No caveats documented");
+    }
+    if level == "low" {
+        issues.push("Evidence level is low - requires external review");
+    }
+    if level == "medium" && !sensitivity {
+        issues.push("Sensitivity analysis recommended for medium-confidence claims");
+    }
+    Ok(
+        json!({"claim":claim,"supporting_evidence":evidence,"caveats":caveats,
+        "sensitivity_analysis_conducted":sensitivity,"evidence_level":level,
+        "checks_passed":issues.is_empty(),"issues":issues}),
+    )
 }

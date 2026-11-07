@@ -488,6 +488,14 @@ fn causal_summaries_match_analytic_effects() {
     let reversed = run(json!({"method":"uncertainty_interval","estimand":"ATE",
         "point_estimate":0,"ci_lower":1,"ci_upper":-1}));
     assert_eq!(reversed["error"]["code"], "invalid_request");
+    let evidence = run(json!({"method":"release_evidence","claim":"Effect changed",
+        "supporting_evidence":["record"],"caveats":["limitation"]}));
+    assert_eq!(evidence["result"]["checks_passed"], false);
+    assert_eq!(evidence["result"]["issues"].as_array().unwrap().len(), 1);
+    let documented = run(json!({"method":"release_evidence","claim":"Effect changed",
+        "supporting_evidence":["record"],"caveats":["limitation"],
+        "sensitivity_analysis_conducted":true}));
+    assert_eq!(documented["result"]["checks_passed"], true);
     let risk = run(json!({"method":"e_value","point_estimate":0.5}));
     assert!((risk["result"]["e_value"].as_f64().unwrap() - (2. + 2_f64.sqrt())).abs() < 1e-12);
     let sensitivity = run(json!({"method":"sensitivity_scenario","point_estimate":10,

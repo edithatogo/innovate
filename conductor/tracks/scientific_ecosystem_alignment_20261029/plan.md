@@ -1693,3 +1693,10 @@ the other competition models and installed binding checks remain open.
 - [x] Verify interval summaries through the rebuilt Python wheel, Julia
   and installed R. All three report width 3.92 and approximate standard
   error 1, retain the bootstrap count, and include zero at the boundary.
+
+- [x] Port historical causal evidence checks for supporting records,
+  caveats, evidence level and sensitivity analysis. The result reports
+  checklist status and issues. External release approval remains a
+  separate decision. All 24 Rust boundary tests and focused Clippy passed.
+- [ ] Verify evidence checks through Python, Julia and R and restore
+  the remaining historical model-card reporting fields.
