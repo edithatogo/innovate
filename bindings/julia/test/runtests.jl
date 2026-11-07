@@ -4,8 +4,8 @@ using Test, Innovate
     result = kernel_predict_model("logistic", payload)
     @test result["metadata"]["runtime"] == "rust_native"
     @test result["result"]["values"][2] == 50.0
-    @test length(kernel_discover_models()["models"]) == 11
-    @test_throws ErrorException kernel_predict_model("latent_process", payload)
+    @test length(kernel_discover_models()["models"]) == 12
+    @test_throws ErrorException kernel_predict_model("composite", payload)
     for _ in 1:100
         @test kernel_predict_model("logistic",payload)["result"]["values"][2] == 50.0
     end
@@ -125,4 +125,17 @@ end
         expected += [4,9,7][request["agent"]+1]
         @test completion["tick"]==expected
     end
+end
+@testset "Latent saved residual state" begin
+    p=Dict("inputs"=>Dict("time"=>[0.,2.,4.]),"parameters"=>Dict("base_L"=>100.,"base_k"=>1.,"base_x0"=>2.,"latent_smoothing"=>0.3,"latent_noise"=>0.),"constructor_kwargs"=>Dict("base_model"=>"logistic","latent_time"=>[0.,4.],"latent_values"=>[2.,6.]))
+    a=kernel_predict_model("latent_process",p)["result"]
+    @test a["values"][2]==54.
+    time=collect(0.:20.)
+    y=[100/(1+exp(-0.5*(t-8)))+2+0.1*sin(t) for t in time]
+    f=kernel_fit_model("latent_process",Dict("inputs"=>Dict("time"=>time,"observed"=>y),"constructor_kwargs"=>Dict("base_model"=>"logistic","smoothing"=>0.4)))["result"]
+    @test length(f["state"]["constructor_kwargs"]["latent_values"])==21
+    q=f["parameters"]
+    expected=q["base_L"]/(1+exp(-q["base_k"]*(30-q["base_x0"])))+f["state"]["constructor_kwargs"]["latent_values"][end]
+    a=kernel_predict_model("latent_process",Dict("inputs"=>Dict("time"=>[30.]),"state"=>f["state"]))["result"]
+    @test isapprox(a["values"][1],expected;atol=1e-10)
 end

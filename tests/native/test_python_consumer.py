@@ -44,11 +44,12 @@ def test_capabilities_are_native_and_unavailable_features_fail_closed():
         "lock_in",
         "network_diffusion",
         "policy_hazard",
+        "latent_process",
     }
     assert innovate.capabilities()["supports_simulation"].all()
     assert innovate.capabilities()["supports_summarize"].all()
     with pytest.raises(innovate.NativeError, match="unsupported_native_operation"):
-        innovate.execute("predict_model", "latent_process", inputs={"time": [0.0]})
+        innovate.execute("predict_model", "composite", inputs={"time": [0.0]})
 
 
 def test_clean_runtime_has_no_legacy_scientific_dependencies():
@@ -257,3 +258,19 @@ def test_heterogeneous_network_service_and_hazards():
         assert request["agent"] == completion["agent"]
         expected += [4, 9, 7][request["agent"]]
         assert completion["tick"] == expected
+
+
+def test_latent_polars_fit_preserves_residual_state():
+    time = [float(i) for i in range(21)]
+    observed = [100 / (1 + math.exp(-0.5 * (t - 8))) + 2 + 0.1 * math.sin(t) for t in time]
+    fit = innovate.fit(
+        "latent_process",
+        pl.DataFrame({"time": time, "observed": observed}),
+        model_options={"base_model": "logistic", "smoothing": 0.4},
+    )
+    state = fit.envelope["result"]["state"]
+    assert len(state["constructor_kwargs"]["latent_values"]) == len(time)
+    p = fit.parameters
+    expected = p["base_L"] / (1 + math.exp(-p["base_k"] * (30 - p["base_x0"])))
+    expected += state["constructor_kwargs"]["latent_values"][-1]
+    assert fit.predict(pl.DataFrame({"time": [30.0]}))["prediction"][0] == pytest.approx(expected, abs=1e-10)

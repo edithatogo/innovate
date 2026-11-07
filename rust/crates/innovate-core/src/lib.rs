@@ -6,6 +6,7 @@ mod fitting;
 mod forcing;
 mod historical;
 mod kernel;
+mod latent;
 mod network;
 mod numerics;
 mod policy;

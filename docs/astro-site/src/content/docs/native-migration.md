@@ -362,3 +362,39 @@ stochastic draws, uncertainty and causal validation remain required work.
 Unknown fields and malformed event arrays fail explicitly. Negative effects,
 zero decay, pre-existing events and simultaneous events retain the analytic
 level-adjustment interpretation; no event scheduler is copied here.
+
+## Historical latent residual process
+
+`latent_process` supports a scalar Bass, Logistic, Gompertz or Fisher–Pry base
+curve. Native baseline least-squares fitting runs first; smoothing is held fixed
+(`constructor_kwargs.smoothing`, default 0.3, domain [0,1]). The first latent
+value is the first residual; subsequent values are
+`smoothing * residual + (1 - smoothing) * previous_latent`. `latent_noise` is the
+sample standard deviation of baseline residuals with one degree of freedom
+removed. This is the historical residual proxy, not probabilistic state-space
+inference or calibrated forecast uncertainty.
+
+Saved state retains `base_*` parameters, `latent_smoothing`, `latent_noise` and
+constructor arrays `latent_time`/`latent_values`. The arrays must be finite,
+aligned and strictly increasing in time, with finite interval spans. Forecasts
+linearly interpolate latent offsets and extend the first/last offsets outside
+the fitted range; no latent arrays gives zero offset. Fit requests estimate new
+latent arrays and reject supplied saved arrays. `base_fit_options` accepts native
+base-fitting options on the JSON route. General wrapper `fit_options` must be
+empty because smoothing and noise are not jointly optimized.
+
+Predictions add baseline and offset, clip below zero and take the cumulative
+maximum within each requested batch. Consequently, separate forecast batches
+may differ from one combined batch if an earlier adjusted value was larger.
+`increments` preserves historical sample differences, including the unusual
+singleton behavior of returning the level; it is not a continuous derivative.
+The simulation operation currently returns the deterministic point path with
+explicit metadata. Noise draws, uncertainty, arbitrary nested base models,
+base covariates and complete state-space inference remain required work.
+
+Python `FitResult.predict` carries saved residual arrays through Polars. Julia
+and R consume the same versioned state; R preserves even singleton latent arrays.
+Summaries can omit time, and diagnostics warn about in-sample residual smoothing.
+
+Adjusted-fit AIC/BIC are unavailable until effective degrees of freedom for the
+residual smoother are qualified. Baseline optimizer diagnostics remain separate.

@@ -40,8 +40,9 @@
     },
     {
       "key": "latent_process",
-      "status": "unavailable",
-      "required": true
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/latent-20261107.json"
     },
     {
       "key": "lock_in",

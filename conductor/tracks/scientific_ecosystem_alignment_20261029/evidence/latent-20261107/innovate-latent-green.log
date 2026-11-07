@@ -1,0 +1,13 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.44s
+     Running tests/latent.rs (target/debug/deps/latent-0c052168686d8f25)
+
+running 5 tests
+test invalid_latent_arrays_and_parameter_domains_fail ... ok
+test saved_latent_state_interpolates_and_extends_endpoints ... ok
+test latent_invalid_parameters_unsupported_options_and_overflow_fail ... ok
+test latent_summary_clipping_and_singleton_increment_preserve_history ... ok
+test fitted_latent_state_matches_independent_residual_recursion_and_forecast ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

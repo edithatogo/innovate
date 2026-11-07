@@ -2,8 +2,8 @@ library(innovate.R)
 payload <- list(inputs=list(time=c(0,1,2)), parameters=list(L=100,k=1,x0=1))
 x <- kernel_predict_model("logistic", payload)
 stopifnot(x$result$values[[2]] == 50, x$metadata$runtime == "rust_native")
-stopifnot(length(kernel_discover_models()$models) == 11)
-error <- tryCatch(kernel_predict_model("latent_process", payload), error=function(e) conditionMessage(e))
+stopifnot(length(kernel_discover_models()$models) == 12)
+error <- tryCatch(kernel_predict_model("composite", payload), error=function(e) conditionMessage(e))
 stopifnot(is.character(error), grepl("unsupported_native_operation", error))
 for (i in seq_len(100)) stopifnot(kernel_predict_model("logistic", payload)$result$values[[2]] == 50)
 cat("R native conformance passed\n")
@@ -126,3 +126,16 @@ p$simulation_options$agent_service_ticks <- 4
 p$parameters$m <- 1
 stopifnot(kernel_simulate_model("bass",p)$result$counts[[2]] == 1)
 cat("R heterogeneous service and singleton transport passed\n")
+p <- list(inputs=list(time=c(0,2,4)),parameters=list(base_L=100,base_k=1,base_x0=2,latent_smoothing=0.3,latent_noise=0),constructor_kwargs=list(base_model="logistic",latent_time=c(0,4),latent_values=c(2,6)))
+stopifnot(kernel_predict_model("latent_process",p)$result$values[[2]]==54)
+p$constructor_kwargs$latent_time <- 0
+p$constructor_kwargs$latent_values <- 2
+stopifnot(kernel_predict_model("latent_process",p)$result$values[[2]]==52)
+time <- 0:20
+y <- 100/(1+exp(-0.5*(time-8)))+2+0.1*sin(time)
+f <- kernel_fit_model("latent_process",list(inputs=list(time=time,observed=y),constructor_kwargs=list(base_model="logistic",smoothing=0.4)))$result
+stopifnot(length(f$state$constructor_kwargs$latent_values)==21)
+q <- f$parameters
+expected <- q$base_L/(1+exp(-q$base_k*(30-q$base_x0)))+tail(unlist(f$state$constructor_kwargs$latent_values),1)
+stopifnot(abs(kernel_predict_model("latent_process",list(inputs=list(time=30),state=f$state))$result$values[[1]]-expected)<1e-10)
+cat("R latent fit, saved state and singleton arrays passed\n")

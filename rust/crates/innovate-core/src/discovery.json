@@ -306,6 +306,33 @@
       "simulation_engines": [
         "deterministic_curve"
       ]
+    },
+    {
+      "family": "latent_process",
+      "import_path": "innovate_core",
+      "key": "latent_process",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": false,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_smoothed_residual_path_only",
+      "supports_rates": false,
+      "variants": [],
+      "simulation_engines": [
+        "deterministic_curve"
+      ]
     }
   ],
   "schema_version": "2.0"
