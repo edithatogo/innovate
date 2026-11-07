@@ -401,3 +401,17 @@ end
     @test row["half_life"] ≈ log(9)
     @test row["saturation"] ≈ 2log(9)
 end
+
+@testset "Norton forced rate peak" begin
+    result = kernel_summarize_model("norton_bass", Dict(
+        "inputs"=>Dict("time"=>[0.,1.,2.,3.]),
+        "parameters"=>Dict("p1"=>0.1,"q1"=>0.,"m1"=>100.),
+        "constructor_kwargs"=>Dict("variant"=>"successive_generations",
+            "parameter_events"=>[Dict("time"=>2.,"parameters"=>Dict("p1"=>0.5))]),
+    ))["result"]
+    trajectory = result["threshold_diagnostics"]["trajectory"]
+    row = only(trajectory["generations"])
+    @test trajectory["window"] == [0.,3.]
+    @test row["peak_time"] == 2.
+    @test row["peak_rate"] ≈ 50exp(-0.2)
+end

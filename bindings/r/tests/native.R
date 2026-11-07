@@ -376,3 +376,13 @@ stopifnot(threshold_summary$reference_time==4,
           abs(threshold_summary$half_life-log(9))<1e-12,
           abs(threshold_summary$saturation-2*log(9))<1e-12)
 cat("R Norton baseline threshold summary passed\n")
+
+peak_summary <- kernel_summarize_model("norton_bass", list(
+  inputs=list(time=c(0,1,2,3)),parameters=list(p1=0.1,q1=0,m1=100),
+  constructor_kwargs=list(variant="successive_generations",
+    parameter_events=list(list(time=2,parameters=list(p1=0.5))))
+))$result$threshold_diagnostics$trajectory
+peak <- peak_summary$generations[[1]]
+stopifnot(all(unlist(peak_summary$window)==c(0,3)),peak$peak_time==2,
+          abs(peak$peak_rate-50*exp(-0.2))<1e-6)
+cat("R Norton forced rate peak passed\n")

@@ -838,3 +838,12 @@ fixture verifies the right-hand rate at the event and excludes generations
 whose launches follow the reporting window. Continuous-time peak location,
 takeoff and saturation under forcing, and installed binding checks for the
 trajectory field remain open.
+
+- [x] Validate the forced trajectory peak through the installed language APIs.
+  The fixed event raises the adoption rate to 50 exp(-0.2) at time 2.
+  Python 3.15.2 passed 56 native tests, Julia 1.13.3 passed 223 assertions
+  using the checked-in manifest and direct test entry point, and the installed
+  R package passed native conformance. Julia's Pkg.test sandbox could resolve
+  only JSON through 1.12.2 against the required 1.13.4, including with
+  re-resolution disabled. The package-runner gate remains open.
+  [Logs](evidence/norton-forced-peak-20261107).

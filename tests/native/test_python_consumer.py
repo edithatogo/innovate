@@ -746,3 +746,20 @@ def test_norton_baseline_threshold_summary():
     assert row["reference_time"] == 4.0
     assert row["half_life"] == pytest.approx(math.log(9))
     assert row["saturation"] == pytest.approx(2 * math.log(9))
+
+
+def test_norton_forced_rate_peak():
+    result = innovate.execute(
+        "summarize_model",
+        "norton_bass",
+        inputs={"time": [0.0, 1.0, 2.0, 3.0]},
+        parameters={"p1": 0.1, "q1": 0.0, "m1": 100.0},
+        constructor_kwargs={
+            "variant": "successive_generations",
+            "parameter_events": [{"time": 2.0, "parameters": {"p1": 0.5}}],
+        },
+    )["result"]
+    trajectory = result["threshold_diagnostics"]["trajectory"]
+    assert trajectory["window"] == [0.0, 3.0]
+    assert trajectory["generations"][0]["peak_time"] == 2.0
+    assert trajectory["generations"][0]["peak_rate"] == pytest.approx(50 * math.exp(-0.2))
