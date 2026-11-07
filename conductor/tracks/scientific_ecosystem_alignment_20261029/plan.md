@@ -847,3 +847,9 @@ trajectory field remain open.
   only JSON through 1.12.2 against the required 1.13.4, including with
   re-resolution disabled. The package-runner gate remains open.
   [Logs](evidence/norton-forced-peak-20261107).
+
+- [x] Requalify the Julia package test runner with the checked-in manifest.
+  Julia 1.13.3 passed `Pkg.instantiate(); Pkg.test()` in a fresh repo-local
+  depot with General installed from the package server. The sandbox selected
+  JSON 1.13.4 and passed all 223 assertions. The earlier failure used a stale
+  General snapshot. [Package runner receipt](evidence/norton-forced-peak-20261107/julia-clean-pkg-test.log).
