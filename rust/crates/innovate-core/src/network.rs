@@ -125,6 +125,11 @@ struct ResourceAccounting {
 }
 
 impl ResourceAccounting {
+    fn record_capacity_change(&mut self, tick: u128, capacity: u64) {
+        self.configured_slot_ticks += (tick - self.last_capacity_change) * u128::from(capacity);
+        self.last_capacity_change = tick;
+    }
+
     fn record_over_capacity(&mut self, tick: u128, in_service: u64, capacity: u64) {
         self.over_capacity_slot_ticks +=
             (tick - self.last_resource_change) * u128::from(in_service.saturating_sub(capacity));
@@ -744,8 +749,10 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 "checkpoint service trace does not match resource accounting",
             ));
         }
+        let mut restored_capacity = o.capacity;
+        let mut restored_capacity_accounting = ResourceAccounting::default();
         for &tick in &saved.applied_ticks {
-            let Some((expected, replacement, _)) = changes.next() else {
+            let Some((expected, replacement, change)) = changes.next() else {
                 return Err(invalid("invalid checkpoint schedule cursor"));
             };
             if tick != expected || tick > saved.now {
@@ -754,6 +761,20 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             if let Some(replacement) = replacement {
                 graph = replacement;
             }
+            if let Some(next_capacity) = change.capacity {
+                restored_capacity_accounting.record_capacity_change(tick, restored_capacity);
+                restored_capacity = next_capacity;
+            }
+        }
+        if saved.capacity != restored_capacity
+            || saved.metrics.configured_slot_ticks
+                != restored_capacity_accounting.configured_slot_ticks
+            || saved.metrics.last_capacity_change
+                != restored_capacity_accounting.last_capacity_change
+        {
+            return Err(invalid(
+                "checkpoint capacity schedule does not match resource accounting",
+            ));
         }
         if saved.states.iter().enumerate().any(|(index, &state)| {
             (saved.queue.waiting_since[index].is_some() && state != 1)
@@ -1019,9 +1040,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             }
             retry_policy = change.retry.unwrap_or(retry_policy);
             if let Some(new_capacity) = change.capacity {
-                metrics.configured_slot_ticks +=
-                    (now - metrics.last_capacity_change) * u128::from(capacity);
-                metrics.last_capacity_change = now;
+                metrics.record_capacity_change(now, capacity);
                 metrics.record_over_capacity(now, in_service, capacity);
                 capacity = new_capacity;
             }

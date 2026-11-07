@@ -5857,3 +5857,8 @@ Hosted release readiness for this worktree revision remains open.
   the checkpoint service trace before resuming. The focused fixture
   rejected plausible but inconsistent counter edits and still replayed
   the original checkpoint. All 33 Rust network tests passed.
+
+- [x] Reconstruct current capacity, the last capacity change and
+  configured slot ticks from the applied schedule before resuming
+  Kairos network checkpoints. Tampered accounting fields were rejected.
+  All 33 Rust network tests passed.
