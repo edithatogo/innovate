@@ -5210,3 +5210,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Run the locked Rust core and Polars suites at the same native
   source revision as the checkpoint consumer milestone. All 299
   tests passed with zero failures or ignored tests on c7538fac.
+
+- [x] Pass locked all-target Clippy for the Rust core and Polars
+  crates with warnings denied. Use fixed-size chunks in the exact
+  sign-flip calibration test. The focused test and formatting passed.

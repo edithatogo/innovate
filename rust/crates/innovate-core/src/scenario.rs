@@ -1101,7 +1101,7 @@ mod tests {
             })
             .collect();
         p_values.sort_unstable_by(f64::total_cmp);
-        for (rank, pair) in p_values.chunks_exact(2).enumerate() {
+        for (rank, pair) in p_values.as_chunks::<2>().0.iter().enumerate() {
             assert_eq!(pair, &[((rank + 1) as f64) / 32.; 2]);
         }
         assert_eq!(p_values.iter().filter(|&&p| p <= 0.05).count(), 2);
