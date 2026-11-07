@@ -2053,3 +2053,11 @@ the other competition models and installed binding checks remain open.
   integer token with kernel_call_json(request, raw = TRUE), while
   retaining native error handling. The focused installed R regression
   passed. Default R decoding uses ordinary R numeric types.
+
+- [x] Import native scenario artifacts and check replay compatibility
+  (3681c8a8). Matching schema and kernel versions permit replay of
+  the embedded request. Changed versions retain the artifact with a
+  replay-unavailable reason. Inconsistent envelope and replay metadata
+  produce an invalid request. Python 3.15, Julia and R verified the
+  same-version and changed-version cases. All 38 Rust boundary tests
+  and focused Clippy passed. Numerical parity across releases remains open.
