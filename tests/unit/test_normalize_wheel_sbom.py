@@ -13,10 +13,12 @@ RECORD = "example.dist-info/RECORD"
 SBOM = "example.dist-info/sboms/example.cyclonedx.json"
 
 
-def make_wheel(path, root, *, signed=False):
+def make_wheel(path, root, *, signed=False, corrupt=False):
     with ZipFile(path, "w") as wheel:
-        wheel.writestr(ZipInfo(SBOM), json.dumps({"bom-ref": root.as_uri() + "/Cargo.toml"}))
-        wheel.writestr(ZipInfo(RECORD), f"{SBOM},old,0\n{RECORD},,\n")
+        payload = json.dumps({"bom-ref": root.as_uri() + "/Cargo.toml"}).encode()
+        digest = base64.urlsafe_b64encode(hashlib.sha256(payload).digest()).decode().rstrip("=")
+        wheel.writestr(ZipInfo(SBOM), payload + (b" " if corrupt else b""))
+        wheel.writestr(ZipInfo(RECORD), f"{SBOM},sha256={digest},{len(payload)}\n{RECORD},,\n")
         if signed:
             wheel.writestr(ZipInfo(RECORD + ".jws"), "signature")
 
@@ -46,5 +48,14 @@ def test_signed_wheel_is_rejected_without_writing(tmp_path):
     output = tmp_path / "normalized.whl"
     make_wheel(original, tmp_path, signed=True)
     with pytest.raises(ValueError, match="unsigned wheel"):
+        normalize(original, tmp_path, output)
+    assert not output.exists()
+
+
+def test_corrupt_payload_is_rejected_without_writing(tmp_path):
+    original = tmp_path / "corrupt.whl"
+    output = tmp_path / "normalized.whl"
+    make_wheel(original, tmp_path, corrupt=True)
+    with pytest.raises(ValueError, match="invalid RECORD digest or size"):
         normalize(original, tmp_path, output)
     assert not output.exists()

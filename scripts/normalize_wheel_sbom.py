@@ -10,6 +10,11 @@ from pathlib import Path
 from zipfile import ZipFile
 
 
+def record_fields(data: bytes) -> list[str]:
+    digest = base64.urlsafe_b64encode(hashlib.sha256(data).digest()).rstrip(b"=").decode("ascii")
+    return [f"sha256={digest}", str(len(data))]
+
+
 def normalize(wheel: Path, source_root: Path, output: Path) -> None:
     if wheel.resolve() == output.resolve():
         raise ValueError("output must be separate from the original wheel")
@@ -33,13 +38,19 @@ def normalize(wheel: Path, source_root: Path, output: Path) -> None:
         if not changes:
             raise ValueError("no matching source-root references in wheel SBOMs")
         rows = list(csv.reader(io.StringIO(source.read(record).decode("utf-8"))))
+        if any(len(row) != 3 for row in rows) or len(rows) != len(names) or {row[0] for row in rows} != set(names):
+            raise ValueError("RECORD must list each wheel member exactly once")
         for row in rows:
-            if row[0] in changes:
-                data = changes[row[0]]
-                digest = base64.urlsafe_b64encode(hashlib.sha256(data).digest()).rstrip(b"=").decode("ascii")
-                row[1:] = [f"sha256={digest}", str(len(data))]
-        if not changes.keys() <= {row[0] for row in rows}:
-            raise ValueError("SBOM is missing from RECORD")
+            name, recorded_digest, recorded_size = row
+            if name == record:
+                if recorded_digest or recorded_size:
+                    raise ValueError("RECORD must not hash itself")
+                continue
+            original = source.read(name)
+            if [recorded_digest, recorded_size] != record_fields(original):
+                raise ValueError(f"invalid RECORD digest or size for {name}")
+            if name in changes:
+                row[1:] = record_fields(changes[name])
         buffer = io.StringIO()
         csv.writer(buffer, lineterminator="\n").writerows(rows)
         changes[record] = buffer.getvalue().encode("utf-8")

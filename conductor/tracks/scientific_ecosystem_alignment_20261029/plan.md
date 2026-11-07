@@ -7419,3 +7419,7 @@ Hosted release readiness for this worktree revision remains open.
   Every ZIP member appeared exactly once in RECORD. All eight payload
   SHA-256 digests and sizes matched, including the normalized SBOM.
   RECORD itself had empty digest and size fields as required.
+
+- [x] Validate every input wheel member against RECORD before normalizing
+  its SBOM. A corrupted payload now fails before output is created.
+  The three focused tests and Ruff passed under Python 3.15.2.
