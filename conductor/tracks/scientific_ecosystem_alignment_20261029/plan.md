@@ -5587,3 +5587,10 @@ Hosted release readiness for this worktree revision remains open.
   calculation is shared by scenario ranking and ensemble comparison.
   The Rust fixture also verified rejection of an unrepresentable area.
   Six scenario unit tests and 13 scenario boundary tests passed.
+
+- [x] Preserve subnormal adoption-area contributions across long time
+  intervals by scaling the interval before halving the adoption sum.
+  Six focused Rust scenario tests passed. The migration ledger retains
+  the scenario registry at bounded native status, with cross-version
+  replay and release parity still open. The verifier reports 38 open
+  release obligations.

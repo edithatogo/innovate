@@ -1067,6 +1067,11 @@ mod tests {
     fn adoption_area_preserves_finite_extreme_trapezoids() {
         let tiny = f64::from_bits(1);
         assert_eq!(adoption_area(&[0., 1.], &[tiny, tiny]), Ok(tiny));
+        assert_eq!(adoption_area(&[0., 2.], &[0., tiny]), Ok(tiny));
+        assert_eq!(
+            adoption_area(&[-f64::MAX, f64::MAX], &[0., tiny]),
+            Ok(f64::MAX * tiny)
+        );
         let result = adoption_area(&[-f64::MAX, f64::MAX], &[0.25, 0.25]);
         assert_eq!(result, Ok(f64::MAX * 0.5));
         assert!(adoption_area(&[-f64::MAX, f64::MAX], &[1., 1.]).is_err());
@@ -1141,12 +1146,21 @@ fn adoption_area(time: &[f64], values: &[f64]) -> Result<f64, &'static str> {
         .zip(values.windows(2))
         .map(|(t, y)| {
             let sum = y[0] + y[1];
+            let width = t[1] - t[0];
+            if sum.is_subnormal() && width >= 2. {
+                // Scale the time span first so an odd subnormal sum keeps its low bit.
+                let half_width = if width.is_finite() {
+                    width * 0.5
+                } else {
+                    t[1] * 0.5 - t[0] * 0.5
+                };
+                return half_width * sum;
+            }
             let height = if sum.is_finite() {
                 sum * 0.5
             } else {
                 0.5 * y[0] + 0.5 * y[1]
             };
-            let width = t[1] - t[0];
             if width.is_finite() {
                 width * height
             } else {
