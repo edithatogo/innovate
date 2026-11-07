@@ -6752,3 +6752,9 @@ Hosted release readiness for this worktree revision remains open.
   or absence, agent identity and unchanged adoption counts. The
   1,273 requests (62.16%) agree with the 63.21% analytic probability
   within the Rust test's bound. Reused unchanged 4947d6b4 builds.
+
+- [x] Add an analytic weighted imitation case to the Kairos network
+  suite. Giving the adopted neighbor weight one and the unadopted
+  neighbor weight three reduces exposure from one half to one quarter.
+  The focused Rust test passed the probability bound across 2,048
+  seeds for each design and still verified no premature adoption.
