@@ -881,3 +881,5 @@ fitted_scores <- kernel_call("summarize_causal", payload=list(
   fit_scores=list(covariates=rep(list(list(0)),4), folds=c(1,1,2,2), ridge=1)))$result
 stopifnot(fitted_scores$estimate == 5,
   identical(unlist(fitted_scores$score_fit$propensities), rep(0.5,4)))
+stopifnot(fitted_scores$score_uncertainty_scope == "conditional_on_fitted_scores_and_pairs",
+  fitted_scores$match_diagnostics$minimum_matched_caliper_slack == 0)

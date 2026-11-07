@@ -5414,3 +5414,7 @@ Hosted release readiness for this worktree revision remains open.
   The Rust fixture verified zero slack at the cutoff and positive slack
   after widening it. Propagation of score-estimation uncertainty remains
   open.
+
+- [x] Verify fitted-score uncertainty scope and zero caliper slack in
+  the Python, Julia and installed R consumers against rebuilt native
+  libraries. The fitted-control covariance fixture also passed in each.
