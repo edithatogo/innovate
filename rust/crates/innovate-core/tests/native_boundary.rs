@@ -229,3 +229,21 @@ fn calendar_aggregation_fills_days_and_months_but_skips_empty_weeks() {
         "invalid_request"
     );
 }
+
+#[test]
+fn loess_trend_recovers_linear_values_at_interior_and_edges() {
+    let request = innovate_core::json!({
+        "schema_version":"2.0","operation":"preprocess_series",
+        "payload":{"method":"loess_trend","window":5,"values":[1.,3.,5.,7.,9.,11.,13.]}
+    });
+    let result: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    for (index, estimate) in result["result"]["values"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .enumerate()
+    {
+        assert!((estimate.as_f64().unwrap() - (1. + 2. * index as f64)).abs() < 1e-12);
+    }
+}

@@ -1314,3 +1314,9 @@ the other competition models and installed binding checks remain open.
   date and omit empty periods. Installed Julia and R checks match the
   leap-year Polars fixture. Thirteen Rust boundary tests and Clippy passed.
   Datetime and timezone-aware aggregation in these bindings remains open.
+
+- [x] Implement a native local-linear tricube smoother on evenly spaced
+  samples as a building block for seasonal decomposition. The boundary
+  fixture reproduces a linear series at its edges and interior. Fourteen
+  native boundary tests and focused Clippy passed. STL seasonal subseries,
+  low-pass filtering and robust iterations remain open.

@@ -18,6 +18,7 @@ mod network;
 mod numerics;
 mod policy;
 mod regime;
+mod seasonal;
 mod simulation;
 mod spillover;
 mod substitution;
@@ -174,6 +175,13 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         }
         let values = serde_json::from_value::<Vec<f64>>(payload["values"].clone())
             .map_err(|_| "preprocess_series requires a numeric values array")?;
+        if payload["method"] == "loess_trend" {
+            let span = payload["window"]
+                .as_u64()
+                .and_then(|n| usize::try_from(n).ok())
+                .ok_or("LOESS requires an integer window")?;
+            return Ok(json!({"values":seasonal::loess_trend(&values, span)?}));
+        }
         let window = match payload["method"].as_str() {
             Some("cumulative_sum") => None,
             Some("rolling_average") => Some(
