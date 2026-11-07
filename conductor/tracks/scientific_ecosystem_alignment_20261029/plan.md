@@ -2806,3 +2806,8 @@ the other competition models and installed binding checks remain open.
   path and R retains a loaded DLL reference. The retained lifecycle
   tests passed on macOS against Julia and freshly installed R. Hosted
   Linux and Windows runtime evidence remains open.
+
+- [x] Classify plugin contracts as bounded native in the migration ledger.
+  Manifest validation and the process-local registry have macOS binding
+  evidence. Hosted lifecycle and extension-point execution remain open.
+  Development policy passes and all 38 required obligations still gate release.

@@ -219,8 +219,10 @@
     },
     {
       "key": "plugin_contracts",
-      "status": "pending",
-      "required": true
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Hosted lifecycle verification on Linux and Windows, extension-point execution contracts, and release acceptance"
     },
     {
       "key": "remote_execution",
