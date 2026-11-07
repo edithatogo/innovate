@@ -1,0 +1,14 @@
+{
+  "bindings/julia/test/runtests.jl": "254ab553a4ede61b00da4b5d14f4c19575ecd8df7dc5109dbd80b802046f53cd",
+  "bindings/r/tests/native.R": "8be1b5fd778605e03835eb73735ea0831d3c190486c735277c44c3c4f94569d0",
+  "docs/astro-site/src/content/docs/native-migration.md": "2f2fde575f7ed25cc6e7fb47bb6d6cec73af21327700dd0115b4d6dd0e57a861",
+  "migration-ledger.json": "cc158d0e1107f8dd49b459dad8722a12e3bf4657624b4981a886fc69e3c8e48c",
+  "rust/crates/innovate-core/src/competition.rs": "f22f6afa32298ab0a55bfd3b34cc2fc565f9c739cdc9ebc9303cd56e972cdd31",
+  "rust/crates/innovate-core/src/discovery.json": "f3676e57695fc151c00ca9758ef10a318c81b99e8ee352a8d1384ef677288f2e",
+  "rust/crates/innovate-core/src/kernel.rs": "b052a61fe267ddbb100c9c93f0706f9d3b26175c3ed54e06edaedc41039ae5a7",
+  "rust/crates/innovate-core/src/validation.rs": "cb3d8fd2f978b7076627af185f4725e4a2b0de3f3b8dfcc156c7fb4e8664554c",
+  "rust/crates/innovate-core/tests/fixtures/lock_in_scipy.json": "e7e988eb5e24fed45a514270a2d8e8e1aaa94291399e4f825478a9529039854c",
+  "rust/crates/innovate-core/tests/lock_in.rs": "98dde47ba2b004a052095ac519767ac9f26317242b524ec4e5e4359c1b0901af",
+  "rust/crates/innovate-core/tests/native_boundary.rs": "2f8ead774e5eede565cb8c9823fc9ed087c22d5e113adf6bf4d17e14d582021d",
+  "tests/native/test_python_consumer.py": "77cf7db6c506e0f8fb7ea576a71cdd6bb23c79965ea70f62b65e0cb97931bc38"
+}

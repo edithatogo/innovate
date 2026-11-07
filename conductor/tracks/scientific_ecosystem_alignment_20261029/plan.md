@@ -180,3 +180,70 @@ Conductor goal stays active. Next source work: remaining historical models
 then richer graph/resource behavior and outstanding distribution qualification.
 
 Source/evidence commit: `a07932b5bf2e845c4f4d217ade2b5899b97bb351`. No native operation remains in flight.
+
+## Lock-in continuation — in progress
+
+Same writing lane resumes at 9ca4088; initial checkout was clean. Previous goal
+turn was progress (committed source and native evidence). This turn recovered
+LockInModel equations from 56d91dd7, generated an independent SciPy DOP853 fixture
+on selected Python 3.15.2, and confirmed the new regression fails specifically
+because native lock_in is unavailable. Owned uncommitted paths: tests/lock_in.rs
+and tests/fixtures/lock_in_scipy.json under innovate-core, plus this track's record.
+
+- [x] Port bounded lock-in with separate historical RHS-state and output clipping.
+- [x] Qualify bounded fitting, rates/forecast semantics and three binding consumers.
+
+Red receipt: evidence/lock-in-in-progress/red.log. This is intentional TDD red
+state, not a passing native checkpoint. The model remains unavailable in the
+ledger/discovery; no feature or release acceptance changed. No native operation
+remains live. Next action: implement lock-in in the native trajectory engine,
+then run the exact regression before expanding validation. Goal remains active.
+
+Lock-in implementation progress: native dispatch, parameter validation,
+historical RHS clipping and output clipping are implemented. Three focused
+regressions pass: independent DOP853 trajectories, output clipping and fitted
+trajectory recovery with an explicit interior structural-identifiability warning.
+Free market potential is confounded with feedback/competition coefficients in
+interior trajectories; boundary information is not qualified by these tests.
+Discovery/ledger acceptance remains unchanged pending binding and broader gates.
+Owned source edits are competition.rs, kernel.rs and validation.rs plus the
+lock-in tests/fixture and this record. No native operation remains live. Next:
+forecast/rate semantics, installed Python/Julia/R validation and evidence review.
+
+Lock-in binding progress: the four focused Rust regressions pass, including an
+independent held-out decoupled logistic limit and explicit historical rate
+labeling. Rebuilt/installed Python wheel: 28 native tests pass. R native cases
+and Julia's 144 assertions pass, including the lock-in analytic forecast. These
+are local bounded results; discovery/ledger promotion and full current-head
+coverage/review/packaging gates remain next. Owned edits also include the three
+binding test files. No native mutation or external publication occurred.
+
+Lock-in discovery now advertises the ninth bounded family. Current rebuilt
+artifacts pass 61 Rust tests (57 core/C ABI coverage-run plus 4 Polars), 28
+installed Python checks, 144 Julia assertions and R native cases. Workspace
+Clippy and package metadata pass. Core/C ABI line coverage: 81.43%. Development
+policy still reports all 38 full-feature obligations as release blockers.
+Receipt lock-in-20261107.json is explicitly in-progress, not final acceptance.
+Next review fix: preserve the historical fitting bound m >= max(observed) and
+its max-series initializer; then finish documentation/static/evidence checks
+and commit this owned packet. Existing tests/fixtures remain the oracle. No
+native operation remains live; the Conductor goal remains active.
+
+Market-bound review fix: a new regression reproduced acceptance of an initial m
+below the second series' maximum. Lock-in now rejects that seed, transforms m as
+max(observed)+positive offset during optimization, and initializes m at 1.5 times
+the maximum across both series. Five focused lock-in regressions and workspace
+Clippy pass. Receipts: evidence/lock-in-in-progress/bound-{red,green}.log.
+Earlier full coverage/artifact totals precede this fix and are not current-head
+acceptance. Rebuild is running in exec session 46008; coverage in session 73818.
+These are verified live handles, not inferred waits. Next action: poll these
+handles, install/test the resulting wheel and C ABI consumers, then finalize
+review/evidence and commit. Do not restart merely because observation times out.
+
+Lock-in local checkpoint: 62 Rust tests, 28 installed Python checks, 144 Julia
+assertions and R post-bound native cases pass. Core/C ABI coverage: 81.48%.
+Review: lock-in-review-20261107.md. Fresh postbound logs supersede the disk-failed
+attempt; previous stale logs are not final acceptance. No native operation remains
+live. Nine bounded families; seven remain unavailable. Next: remaining historical
+model ports, covariates/events, inference/scenarios and full distribution gates.
+Goal remains active; all 38 obligations remain required.

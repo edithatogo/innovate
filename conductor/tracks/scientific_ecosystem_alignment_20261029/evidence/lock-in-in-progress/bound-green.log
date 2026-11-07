@@ -1,0 +1,12 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.53s
+     Running tests/lock_in.rs (target/debug/deps/lock_in-21fad6a433f8cc39)
+
+running 5 tests
+test lock_in_fitter_rejects_initial_market_below_either_observed_series ... ok
+test historical_lock_in_clips_reported_levels ... ok
+test historical_lock_in_matches_independent_ode_reference ... ok
+test lock_in_forecasts_from_saved_origin_and_labels_historical_rates ... ok
+test lock_in_fitting_preserves_trajectories_and_reports_structural_ambiguity ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.84s

@@ -10,9 +10,9 @@ no Python numerical fallback, pandas or xarray runtime.
 
 ## Current scope
 
-Eight native model families expose deterministic fitting, prediction, simulation,
+Nine native model families expose deterministic fitting, prediction, simulation,
 summary and diagnostics: Bass, Logistic, Gompertz, Fisher–Pry, Norton–Bass,
-Lotka–Volterra, multi-product competition and complementary goods. Their support remains bounded.
+Lotka–Volterra, multi-product competition, complementary goods and lock-in. Their support remains bounded.
 Covariates, events, uncertainty, other model families and full Kairos simulation
 remain required migration work. Discovery describes the executable subset;
 release stays blocked by the full model and feature ledger.
@@ -281,3 +281,19 @@ resource priorities/balking/reneging, resume and general network-model parity
 remain required migration work. A successful Bass network simulation does not
 qualify the separate `network_diffusion` model family. Python, Julia and R use
 the same versioned native request and retain the same service/adoption semantics.
+
+## Historical lock-in
+
+`lock_in` uses alpha1/alpha2, beta1/beta2, gamma1/gamma2 and positive market
+potential m. Predictions require initial_values, with initial_time defaulting to
+zero. Fitted states retain their conditioning origin. The historical equations
+clip each state to [0,m] before evaluating the RHS and clip reported trajectories
+to the same range. Reported rates are the historical RHS evaluated at reported
+levels, not derivatives of output clipping. No simplex constraint is imposed.
+
+Interior trajectories identify only alpha1, alpha2 and four feedback/competition
+to-market combinations. Free m is confounded with beta/gamma parameters. Native
+diagnostics explicitly warn about this structural ambiguity; a numerical full
+Jacobian rank does not qualify unique parameter recovery. Boundary information
+and calibrated uncertainty require separate qualification. Covariates/events
+and broader lock-in variants remain required migration work.

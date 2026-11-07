@@ -16,7 +16,9 @@ struct Model {
 }
 impl Model {
     fn name(&self) -> &str {
-        if self.key == "complementary_goods" {
+        if self.key == "lock_in" {
+            "LockInModel"
+        } else if self.key == "complementary_goods" {
             "ComplementaryGoodsModel"
         } else if self.key == "lotka_volterra" {
             "LotkaVolterraModel"
@@ -59,6 +61,16 @@ impl Model {
         )
     }
     fn derivative(&self, y: &[f64], p: &[f64]) -> Vec<f64> {
+        if self.key == "lock_in" {
+            let m = p[6];
+            let a = y[0].clamp(0., m);
+            let b = y[1].clamp(0., m);
+            return vec![
+                p[0] * a * (1. - (a + b) / m) + p[2] * a * a / m - p[4] * a * b / m,
+                p[1] * b * (1. - (a + b) / m) + p[3] * b * b / m - p[5] * b * a / m,
+            ];
+        }
+
         if self.key == "complementary_goods" {
             return vec![
                 p[0] * y[0] * (1. - y[0]) + p[2] * y[0] * y[1],
@@ -84,9 +96,15 @@ impl Model {
             .collect()
     }
     fn predict(&self, time: &[f64], p: &[f64]) -> Result<Vec<Vec<f64>>, String> {
-        integrate(time, self.origin, &self.initial, |_, y| {
+        let mut rows = integrate(time, self.origin, &self.initial, |_, y| {
             self.derivative(y, p)
-        })
+        })?;
+        if self.key == "lock_in" {
+            for x in rows.iter_mut().flatten() {
+                *x = x.clamp(0., p[6]);
+            }
+        }
+        Ok(rows)
     }
     fn prediction(&self, time: &[f64], p: &[f64], rows: &[Vec<f64>]) -> Result<Value, String> {
         let rates: Vec<_> = rows.iter().map(|y| self.derivative(y, p)).collect();
@@ -103,7 +121,7 @@ impl Model {
         Ok(
             json!({"columns":(1..=self.n).map(|i|format!("series_{i}")).collect::<Vec<_>>(),"rows":rows,"rates":rates,
             "metadata":{"shape":[time.len(),self.n],"quantity":if self.key=="lotka_volterra" {"technology_share"}else{"product_level"},
-            "rate_semantics":"signed derivative of each level; not gross incidence","warnings":warnings,
+            "rate_semantics":if self.key=="lock_in" {"historical RHS at clipped levels; not derivative of output clipping or gross incidence"} else {"signed derivative of each level; not gross incidence"},"warnings":warnings,
             "normalization":"separate product potentials; rows are not constrained to sum to one"}}),
         )
     }
@@ -138,7 +156,7 @@ fn model(
             "competitive covariates, events and custom options remain migration obligations",
         ));
     }
-    if ["lotka_volterra", "complementary_goods"].contains(&key.as_str())
+    if ["lotka_volterra", "complementary_goods", "lock_in"].contains(&key.as_str())
         && kw.contains_key("n_products")
     {
         return Err(invalid(op, "Lotka-Volterra has exactly two technologies"));
@@ -166,7 +184,7 @@ fn model(
         }
     }
     let observed = inputs.get("observed").or_else(|| inputs.get("y"));
-    let n = if ["lotka_volterra", "complementary_goods"].contains(&key.as_str()) {
+    let n = if ["lotka_volterra", "complementary_goods", "lock_in"].contains(&key.as_str()) {
         2
     } else if let Some(n) = kw.get("n_products") {
         n.as_u64()
@@ -250,7 +268,14 @@ fn model(
             "initial_values must match the model dimensions and nonnegative domain (shares <=1)",
         ));
     }
-    let names = if key == "complementary_goods" {
+    let names = if key == "lock_in" {
+        [
+            "alpha1", "alpha2", "beta1", "beta2", "gamma1", "gamma2", "m",
+        ]
+        .iter()
+        .map(|s| s.to_string())
+        .collect()
+    } else if key == "complementary_goods" {
         ["k1", "k2", "c1", "c2"]
             .iter()
             .map(|s| s.to_string())
@@ -332,23 +357,43 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
                 }
             })
             .collect();
+        let offsets: Vec<f64> = model
+            .names
+            .iter()
+            .map(|name| {
+                if model.key == "lock_in" && name == "m" {
+                    yscale
+                } else {
+                    0.
+                }
+            })
+            .collect();
         let transform = |p: Vec<f64>| {
             p.iter()
                 .zip(&scales)
-                .map(|(p, s)| (p / s).max(1e-12).ln())
+                .zip(&offsets)
+                .map(|((p, s), offset)| ((p - offset) / s).max(1e-12).ln())
                 .collect::<Vec<_>>()
         };
         let untransform = |theta: &[f64]| {
             theta
                 .iter()
                 .zip(&scales)
-                .map(|(t, s)| t.exp() * s)
+                .zip(&offsets)
+                .map(|((t, s), offset)| t.exp() * s + offset)
                 .collect::<Vec<_>>()
         };
         let (initial, limit) = crate::fitting::options(request)?;
         let mut starts = Vec::new();
         if let Some(initial) = initial {
-            starts.push(transform(model.parameters(&initial, op)?));
+            let parameters = model.parameters(&initial, op)?;
+            if model.key == "lock_in" && parameters[6] < yscale {
+                return Err(invalid(
+                    op,
+                    "initial market potential must be at least the maximum observed value across both series",
+                ));
+            }
+            starts.push(transform(parameters));
         }
         for rate in [0.5, 2., 5.] {
             let p = model
@@ -356,10 +401,18 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
                 .iter()
                 .enumerate()
                 .map(|(i, name)| {
-                    if name.starts_with('m') {
+                    if model.key == "lock_in" && name == "m" {
+                        yscale * 1.5
+                    } else if name.starts_with('m') {
                         observed
                             .iter()
-                            .map(|r| r[i - 2 * model.n])
+                            .map(|r| {
+                                r[if model.key == "lock_in" {
+                                    0
+                                } else {
+                                    i - 2 * model.n
+                                }]
+                            })
                             .fold(0., f64::max)
                             .max(yscale * 0.1)
                             * 1.2
@@ -435,6 +488,10 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
                 model.names.len(),
             );
             d["initial_condition"] = json!({"source":if model.conditioned_initial {"first_observed_row"} else {"explicit_or_zero"},"excluded_conditioning_rows":offset,"uncertainty_propagated":false});
+            if model.key == "lock_in" {
+                d["structural_identifiability"] = json!({"status":"interior_parameter_confounding","scope":"unclipped_interior_trajectories","rank_upper_bound":6,"parameters":7,"reason":"only alpha1, alpha2 and four beta/gamma-to-market combinations enter the interior polynomial RHS; clipping can add boundary information"});
+                d["warnings"].as_array_mut().unwrap().push(json!("Interior trajectories cannot identify free m separately from beta/gamma combinations; clipping-boundary information requires separate qualification"));
+            }
             if let Some((optimizer, identifiability)) = quality {
                 if optimizer["converged"] != true {
                     d["warnings"]

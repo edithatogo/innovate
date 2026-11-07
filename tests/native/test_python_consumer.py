@@ -41,6 +41,7 @@ def test_capabilities_are_native_and_unavailable_features_fail_closed():
         "lotka_volterra",
         "multi_product",
         "complementary_goods",
+        "lock_in",
     }
     assert innovate.capabilities()["supports_simulation"].all()
     assert innovate.capabilities()["supports_summarize"].all()
@@ -180,3 +181,12 @@ def test_complementary_fit_matches_symmetric_analytic_limit():
     )
     assert fit.diagnostics["optimizer"]["converged"]
     assert fit.parameters["c1"] == pytest.approx(0.03, abs=1e-4)
+
+
+def test_lock_in_installed_polars_forecast_matches_analytic_limit():
+    p = {"alpha1": 0.3, "alpha2": 0.2, "beta1": 0.0, "beta2": 0.0, "gamma1": 0.0, "gamma2": 0.0, "m": 1000.0}
+    a = innovate.predict(
+        "lock_in", pl.DataFrame({"time": [10.0, 20.0]}), p, model_options={"initial_values": [10.0, 0.0]}
+    )
+    assert a["prediction_1"][0] == pytest.approx(1000 / (1 + 99 * math.exp(-3)), abs=1e-5)
+    assert a["prediction_2"].to_list() == [0.0, 0.0]

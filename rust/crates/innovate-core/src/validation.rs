@@ -128,6 +128,7 @@ pub(crate) fn validate_request(request: &KernelRequest) -> Result<(), KernelBind
         "norton_bass",
         "lotka_volterra",
         "complementary_goods",
+        "lock_in",
         "multi_product",
     ]
     .contains(&model)
@@ -147,6 +148,7 @@ pub(crate) fn validate_request(request: &KernelRequest) -> Result<(), KernelBind
         "lotka_volterra",
         "multi_product",
         "complementary_goods",
+        "lock_in",
     ]
     .contains(&model)
     {

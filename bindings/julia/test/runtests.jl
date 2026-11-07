@@ -4,7 +4,7 @@ using Test, Innovate
     result = kernel_predict_model("logistic", payload)
     @test result["metadata"]["runtime"] == "rust_native"
     @test result["result"]["values"][2] == 50.0
-    @test length(kernel_discover_models()["models"]) == 8
+    @test length(kernel_discover_models()["models"]) == 9
     @test_throws ErrorException kernel_predict_model("latent_process", payload)
     for _ in 1:100
         @test kernel_predict_model("logistic",payload)["result"]["values"][2] == 50.0
@@ -98,4 +98,10 @@ end
     f=kernel_fit_model("complementary_goods",p)["result"]
     @test f["diagnostics"]["optimizer"]["converged"]
     @test abs(f["parameters"]["c1"]-0.03)<1e-4
+end
+@testset "Lock-in analytic forecast" begin
+    p=Dict("inputs"=>Dict("time"=>[10.,20.]),"parameters"=>Dict("alpha1"=>0.3,"alpha2"=>0.2,"beta1"=>0.,"beta2"=>0.,"gamma1"=>0.,"gamma2"=>0.,"m"=>1000.),"constructor_kwargs"=>Dict("initial_values"=>[10.,0.]))
+    a=kernel_predict_model("lock_in",p)["result"]
+    @test isapprox(a["rows"][1][1],1000/(1+99*exp(-3));atol=1e-5)
+    @test a["rows"][1][2]==0
 end
