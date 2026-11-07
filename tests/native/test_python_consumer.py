@@ -1429,3 +1429,19 @@ def test_cross_fitted_stratum_ate():
     assert result["control_predictions"] == [2, 0, 0, 2]
     assert result["treated_predictions"] == [4, 6, 6, 4]
     assert result["contrast"]["estimate"] == pytest.approx(4)
+
+
+def test_cross_fitted_stratum_ate_adjusts_for_unequal_treatment_prevalence():
+    outcomes = [0, 0, 2, 10, 19, 19, 19] * 2
+    treatment = [0, 0, 1, 0, 1, 1, 1] * 2
+    strata = (["low"] * 3 + ["high"] * 4) * 2
+    result = innovate.execute(
+        "summarize_causal", method="cross_fitted_stratum_ate", outcomes=outcomes,
+        treatment=treatment, strata=strata, folds=[1] * 7 + [2] * 7,
+    )["result"]
+    assert result["propensities"] == pytest.approx(([1 / 3] * 3 + [3 / 4] * 4) * 2)
+    assert result["contrast"]["estimate"] == pytest.approx(6)
+    unadjusted = innovate.execute(
+        "summarize_causal", method="treatment_contrast", outcomes=outcomes, treatment=treatment,
+    )["result"]
+    assert unadjusted["overall"]["estimate"] == pytest.approx(137 / 12)

@@ -4656,3 +4656,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify cross-fitted stratum ATE through rebuilt Python 3.15.2,
   Julia and installed R. Each reproduced both sets of held-out
   predictions in input order and the augmented estimate of 4.
+
+- [x] Validate cross-fitted adjustment on a synthetic two-stratum design
+  with unequal treatment rates. Adjusted ATE recovers 6 while the raw
+  contrast is 137/12. All 112 Python native and 82 Rust boundary tests passed.
