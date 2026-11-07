@@ -517,3 +517,10 @@ for (i in seq_along(shortened$scenarios)) {
 }
 short_totals <- kernel_call("execute_scenario_grid", payload=shortened)$result$comparisons[[1]]$result$resource_differences
 stopifnot(short_totals$waiting_at_horizon == 1, short_totals$in_service_at_horizon == 2)
+
+edge_dataset <- list(kind="network_edges", source=c("a","a"), target=c("a","b"), weight=c(1,0),
+  provenance=list(source="synthetic", license="CC-BY-4.0", extraction_time="2026-11-07T00:00:00Z"))
+edge_response <- kernel_call("ingest_dataset", payload=list(dataset=edge_dataset))
+stopifnot(identical(as.numeric(unlist(edge_response$result$dataset$weight)), c(1,0)),
+  identical(unlist(edge_response$result$validation$warnings),
+            c("self_loops:kairos_network", "zero_weights:kairos_network")))

@@ -4469,3 +4469,9 @@ Hosted release readiness for this worktree revision remains open.
   Kairos graph contract while retaining them in generic datasets.
   The Rust regression verifies that both compatibility warnings can
   appear together.
+- [x] Qualify retention of zero-weight edges and Kairos compatibility
+  warnings through Python Polars and CSV ingestion, Julia and installed R.
+  Python and Julia also reproduced the checksummed artifact on replay.
+  All 82 Rust boundary and 103 Python native tests passed, along with
+  the complete Julia and freshly installed R native suites. The tested
+  Python wrapper and extension matched the rebuilt CPython 3.15.2 wheel.

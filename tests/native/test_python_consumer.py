@@ -1270,3 +1270,21 @@ def test_edgeless_network_dataset_round_trips(tmp_path, local_csv):
         artifact = innovate.ingest_polars(frame, "network_edges", provenance=provenance)
     assert artifact["dataset"]["source"] == artifact["dataset"]["target"] == artifact["dataset"]["weight"] == []
     assert innovate.execute("ingest_dataset", artifact=artifact)["result"] == artifact
+
+@pytest.mark.parametrize("local_csv", [False, True])
+def test_network_ingestion_retains_kairos_incompatible_edges(tmp_path, local_csv):
+    provenance = {
+        "source": "synthetic",
+        "license": "CC-BY-4.0",
+        "extraction_time": "2026-11-07T00:00:00Z",
+    }
+    frame = pl.DataFrame({"source": ["a", "a"], "target": ["a", "b"], "weight": [1.0, 0.0]})
+    if local_csv:
+        path = tmp_path / "edges.csv"
+        frame.write_csv(path)
+        artifact = innovate.ingest_local(path, "network_edges", provenance=provenance)
+    else:
+        artifact = innovate.ingest_polars(frame, "network_edges", provenance=provenance)
+    assert artifact["dataset"]["weight"] == [1.0, 0.0]
+    assert artifact["validation"]["warnings"] == ["self_loops:kairos_network", "zero_weights:kairos_network"]
+    assert innovate.execute("ingest_dataset", artifact=artifact)["result"] == artifact

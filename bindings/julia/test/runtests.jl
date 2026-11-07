@@ -547,3 +547,14 @@ end
     @test totals["waiting_at_horizon"] == 1
     @test totals["in_service_at_horizon"] == 2
 end
+
+@testset "Network ingestion retains Kairos compatibility warnings" begin
+    dataset = Dict("kind"=>"network_edges", "source"=>["a","a"],
+        "target"=>["a","b"], "weight"=>[1.0,0.0],
+        "provenance"=>Dict("source"=>"synthetic", "license"=>"CC-BY-4.0",
+            "extraction_time"=>"2026-11-07T00:00:00Z"))
+    artifact = kernel_call("ingest_dataset", nothing, Dict("dataset"=>dataset))["result"]
+    @test artifact["dataset"]["weight"] == [1.0,0.0]
+    @test artifact["validation"]["warnings"] == ["self_loops:kairos_network","zero_weights:kairos_network"]
+    @test kernel_call("ingest_dataset", nothing, Dict("artifact"=>artifact))["result"] == artifact
+end
