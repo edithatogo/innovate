@@ -6478,3 +6478,8 @@ Hosted release readiness for this worktree revision remains open.
   1,422 advisories and exited zero with the existing unmaintained
   bincode 2.0.1 warning. The locked inverse dependency tree across
   all targets still contains no active bincode path.
+
+- [x] Add a RustSec advisory audit to hosted security CI using the
+  locally verified Cargo Audit 0.22.2. Scan the committed lock and
+  preserve the scanner exit status and warnings. Local workflow
+  validation passed. Hosted audit execution remains open.
