@@ -1236,6 +1236,18 @@ fn custom_network_specification_checks_topology_and_initial_agents() {
             .get("topology_seed")
             .is_none()
     );
+    assert_eq!(
+        row["artifact"]["submitted_simulation"],
+        metadata["submitted_simulation"]
+    );
+    let mut import = json!({"schema_version":"2.0","operation":"import_scenario_artifact",
+        "payload":{"artifact":row["artifact"]}});
+    assert_eq!(run(&import)["result"]["replay_available"], true);
+    import["payload"]["artifact"]["submitted_simulation"]["simulation_options"]
+        .as_object_mut()
+        .unwrap()
+        .remove("topology_seed");
+    assert_eq!(run(&import)["error"]["code"], "invalid_request");
     let replay = &row["artifact"]["replay_request"];
     let edges = replay["payload"]["scenarios"][0]["simulation"]["simulation_options"]["edges"]
         .as_array()

@@ -624,6 +624,9 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
                                         "notes":scenario.notes
                                     }]}},
                             });
+                            if let Some(submitted) = &scenario.submitted_simulation {
+                                row["artifact"]["submitted_simulation"] = submitted.clone();
+                            }
                         }
                     }
                     row
@@ -1008,6 +1011,7 @@ struct ImportedArtifact {
     _notes: Option<String>,
     timestamp: String,
     replay_request: Option<Value>,
+    submitted_simulation: Option<Value>,
 }
 
 pub(crate) fn import_artifact(request: &Value) -> Value {
@@ -1047,8 +1051,13 @@ pub(crate) fn import_artifact(request: &Value) -> Value {
         };
         ("native_scenario_envelope", reason)
     } else {
-        if artifact.scenario.is_none() || artifact.seed.is_none() {
-            return invalid("legacy artifact requires scenario and seed");
+        if artifact.scenario.is_none()
+            || artifact.seed.is_none()
+            || artifact.submitted_simulation.is_some()
+        {
+            return invalid(
+                "legacy artifact requires scenario and seed and cannot include submitted simulation inputs",
+            );
         }
         (
             "legacy_scenario_envelope",
@@ -1102,6 +1111,16 @@ fn validate_replay(
     if !seed_matches {
         return Err("artifact replay seed does not match the envelope");
     }
-    Ok((artifact.version != env!("CARGO_PKG_VERSION"))
-        .then_some("artifact was created by a different kernel version"))
+    if artifact.version != env!("CARGO_PKG_VERSION") {
+        return Ok(Some("artifact was created by a different kernel version"));
+    }
+    if let Some(submitted) = &artifact.submitted_simulation {
+        let mut translated = entry;
+        let resolved = std::mem::replace(&mut translated.simulation, submitted.clone());
+        apply_specification(&mut translated)?;
+        if translated.simulation != resolved {
+            return Err("submitted simulation does not resolve to the embedded replay payload");
+        }
+    }
+    Ok(None)
 }

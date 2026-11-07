@@ -2207,3 +2207,9 @@ the other competition models and installed binding checks remain open.
   verifies that the topology seed is retained in submitted_simulation
   and excluded from the resolved kernel payload. All 43 boundary tests
   and Clippy passed.
+
+- [x] Preserve submitted inputs inside standalone translated artifacts.
+  Same-version import regenerates the resolved request and checks exact
+  JSON value agreement. The regression rejects a missing topology seed.
+  Keep JSON numeric types intact during transport, using raw R JSON where
+  needed. All 43 Rust boundary tests and focused Clippy passed.
