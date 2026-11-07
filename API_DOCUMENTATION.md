@@ -392,3 +392,8 @@ before the reference period. These compare each earlier outcome with
 the last pre-adoption observation, using controls that remain untreated
 through that reference period. The separate `pre_trends` array carries
 pointwise errors and does not enter the post-adoption summary.
+
+Set `control_group` to `never_treated` to use only units with null
+adoption indices for all contrasts and uncertainty calculations.
+The default `not_yet_treated` also uses units that adopt after the
+comparison period.

@@ -368,6 +368,14 @@ fn independent_change_contrast(
 }
 
 fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
+    let never_treated_only = match payload.get("control_group").map(Value::as_str) {
+        None | Some(Some("not_yet_treated")) => false,
+        Some(Some("never_treated")) => true,
+        _ => return Err("control_group must be not_yet_treated or never_treated"),
+    };
+    let eligible_control = |index: Option<usize>, period| {
+        index.is_none_or(|index| !never_treated_only && index > period)
+    };
     let include_pre_trends = payload
         .get("include_pre_trends")
         .map_or(Some(false), Value::as_bool)
@@ -422,7 +430,7 @@ fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
             for (row, &index) in outcomes.iter().zip(&adoption) {
                 if index == Some(cohort) {
                     treated.push(finite(row[period] - row[baseline])?);
-                } else if index.is_none_or(|index| index > period.max(baseline)) {
+                } else if eligible_control(index, period.max(baseline)) {
                     control.push(finite(row[period] - row[baseline])?);
                 }
             }
@@ -506,7 +514,7 @@ fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
                             if is_treated {
                                 index == Some(cohort)
                             } else {
-                                index.is_none_or(|index| index > period)
+                                eligible_control(index, period)
                             }
                         })
                         .map(|(i, _)| i)
@@ -540,7 +548,12 @@ fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
             "supported_cohorts":supported_cohorts,"unsupported_cohorts":rows.len()-supported_cohorts,
             "supported_treated_units":supported_units}));
     }
-    let mut result = json!({"method":"not_yet_treated_group_time_difference_in_differences",
+    let method = if never_treated_only {
+        "never_treated_group_time_difference_in_differences"
+    } else {
+        "not_yet_treated_group_time_difference_in_differences"
+    };
+    let mut result = json!({"method":method,
         "contrasts":contrasts,"event_time":event_time});
     if include_pre_trends {
         result["pre_trends"] = json!(pre_trends);
