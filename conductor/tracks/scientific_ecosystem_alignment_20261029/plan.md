@@ -5262,3 +5262,7 @@ Hosted release readiness for this worktree revision remains open.
   matching with a shared pooled pre-match denominator. The analytic
   Rust fixture matched 15/sqrt(150) and 20/sqrt(150), and returned
   null for a constant covariate. Binding qualification remains open.
+
+- [x] Verify standardized balance in rebuilt Python 3.15.2, Julia
+  and installed R. All three recovered the two analytic standardized
+  values and a null standardized difference for the constant covariate.
