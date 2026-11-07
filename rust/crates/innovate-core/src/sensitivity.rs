@@ -181,3 +181,57 @@ pub(crate) fn assumptions(payload: &Value) -> Result<Value, &'static str> {
         "outcome":"final_scalar_prediction"}),
     )
 }
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct TimingRequest {
+    model_key: String,
+    prediction: Value,
+    inputs: Vec<Timing>,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct Timing {
+    name: String,
+    offsets: Vec<f64>,
+}
+
+pub(crate) fn timing(payload: &Value) -> Result<Value, &'static str> {
+    let request = TimingRequest::deserialize(payload)
+        .map_err(|_| "timing sensitivity requires model_key, prediction and named offsets")?;
+    let mut alternatives = Vec::with_capacity(request.inputs.len());
+    for input in &request.inputs {
+        let baseline = request.prediction["constructor_kwargs"][&input.name]
+            .as_f64()
+            .filter(|time| *time >= 0.)
+            .ok_or("timing sensitivity requires an explicit nonnegative baseline time")?;
+        let times: Vec<_> = input
+            .offsets
+            .iter()
+            .map(|offset| baseline + offset)
+            .collect();
+        if times.iter().any(|time| !time.is_finite() || *time < 0.) {
+            return Err("intervention times must be finite and nonnegative");
+        }
+        alternatives.push(json!({"name":input.name,"alternatives":times}));
+    }
+    let summary = assumptions(&json!({"model_key":request.model_key,
+        "prediction":request.prediction,"inputs":alternatives}))?;
+    let offsets = request.inputs.iter().flat_map(|input| &input.offsets);
+    let rows: Vec<_> = summary["rows"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .zip(offsets)
+        .map(|(row, offset)| {
+            json!({"intervention":row["assumption"],"baseline_time":row["baseline"],
+            "offset":offset,"time":row["alternative"],"baseline_outcome":row["baseline_outcome"],
+            "outcome":row["outcome"],"absolute_change":row["absolute_change"]})
+        })
+        .collect();
+    Ok(
+        json!({"kind":"intervention_timing","rows":rows,"deterministic":true,
+        "outcome":"final_scalar_prediction"}),
+    )
+}

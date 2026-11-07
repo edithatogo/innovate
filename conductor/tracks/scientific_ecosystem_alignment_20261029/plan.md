@@ -2236,3 +2236,9 @@ the other competition models and installed binding checks remain open.
   The Logistic fixture moves an event across the final observation and
   checks both pre-event and post-event outcomes. All 46 Rust boundary
   tests and focused Clippy passed. Binding qualification remains open.
+
+- [x] Restore intervention timing sensitivity for explicit scalar time
+  options. Evaluate signed offsets against a fixed baseline and return
+  times, outcomes and absolute changes. Reject negative or nonfinite
+  times. All 47 Rust boundary tests and focused Clippy passed. Binding
+  qualification remains open.

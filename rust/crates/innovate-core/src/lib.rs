@@ -50,6 +50,7 @@ pub fn execute_json(input: &str) -> String {
                 | "threshold_sensitivity"
                 | "parameter_sensitivity"
                 | "assumption_sensitivity"
+                | "intervention_timing"
                 | "validate_provenance"
                 | "dataset_checksum"
                 | "validate_dataset",
@@ -167,6 +168,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         }
         if value["operation"] == "assumption_sensitivity" {
             return sensitivity::assumptions(payload);
+        }
+        if value["operation"] == "intervention_timing" {
+            return sensitivity::timing(payload);
         }
         if value["operation"] == "parameter_sensitivity" {
             return sensitivity::perturb_parameters(payload);

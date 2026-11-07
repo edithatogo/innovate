@@ -1395,3 +1395,23 @@ fn assumption_sensitivity_evaluates_explicit_event_options() {
     request["payload"]["inputs"][0]["name"] = json!("unknown");
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn timing_sensitivity_applies_offsets_to_the_same_baseline() {
+    let mut request = json!({"schema_version":"2.0","operation":"intervention_timing",
+        "payload":{"model_key":"logistic","prediction":{"inputs":{"time":[2.]},
+            "parameters":{"L":100.,"k":1.,"x0":2.,"L_post":200.,"k_post":1.,"x0_post":2.},
+            "constructor_kwargs":{"t_event":2.}},
+            "inputs":[{"name":"t_event","offsets":[1.,-1.,0.]}]}});
+    let run = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = run(&request);
+    let rows = response["result"]["rows"].as_array().unwrap();
+    assert_eq!(rows[0]["time"], 3.);
+    assert_eq!(rows[0]["absolute_change"], -50.);
+    assert_eq!(rows[1]["time"], 1.);
+    assert_eq!(rows[2]["absolute_change"], 0.);
+    request["payload"]["inputs"][0]["offsets"] = json!([-3.]);
+    assert_eq!(run(&request)["error"]["code"], "invalid_request");
+}
