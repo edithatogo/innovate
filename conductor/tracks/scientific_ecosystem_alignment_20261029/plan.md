@@ -3898,3 +3898,8 @@ Hosted release readiness for this worktree revision remains open.
   The analytic Rust regression distinguishes a start that improves
   from loss four to near zero from one initialized at the optimum.
   All three multistart tests and focused Clippy passed.
+- [x] Preserve the prediction error on starts rejected before iteration.
+  The multistart fixture verifies the reason and original index.
+  An attempted fallback after invalid sensitivities failed the existing
+  extreme-seed fit-quality gate, so the committed change is diagnostic
+  only. Three multistart tests, four fit-quality tests and Clippy passed.

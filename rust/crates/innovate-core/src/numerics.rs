@@ -164,9 +164,13 @@ where
     let mut selected_start = 0;
     for (index, start) in starts.iter().enumerate() {
         let mut theta = start.clone();
-        let Ok(mut prediction) = evaluate(&theta) else {
-            start_reports.push(json!({"termination":"invalid_initial_prediction","initial_transformed_parameters":start}));
-            continue;
+        let mut prediction = match evaluate(&theta) {
+            Ok(prediction) => prediction,
+            Err(error) => {
+                start_reports.push(json!({"termination":"invalid_initial_prediction",
+                    "initial_transformed_parameters":start,"error":error}));
+                continue;
+            }
         };
         let mut error = loss(&prediction);
         if !error.is_finite() {
@@ -479,6 +483,7 @@ mod tests {
         let reports = &fit.report["start_reports"];
         assert_eq!(fit.report["selected_start_index"], 1);
         assert_eq!(reports[0]["termination"], "invalid_initial_prediction");
+        assert_eq!(reports[0]["error"], "negative start");
         assert_eq!(reports[0]["initial_transformed_parameters"], json!([-2.]));
         assert_eq!(reports[1]["initial_transformed_parameters"], json!([1.]));
     }
