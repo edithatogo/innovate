@@ -1715,8 +1715,8 @@ the other competition models and installed binding checks remain open.
   comparisons. The response identifies the difference-in-means method
   and reports counts and null estimates for subgroups missing either arm.
   All 24 Rust boundary tests and focused Clippy passed.
-- [ ] Restore treatment-contrast bootstrap intervals and verify installed
-  consumers. Qualify the remaining policy contracts and Arrow handoff.
+- [x] Restore treatment-contrast bootstrap intervals and verify installed
+  consumers. Policy contracts and Arrow handoff are tracked separately below.
 
 - [x] Add deterministic stratified percentile bootstrap intervals for
   unadjusted treatment contrasts. Resampling within each arm keeps the
@@ -1790,7 +1790,7 @@ the other competition models and installed binding checks remain open.
   survive a metadata-only round trip, and data rows stay out of the
   exported specification. The Rust fixture checks round trip and rejects
   a ragged dataset. All 24 boundary tests and focused Clippy passed.
-- [ ] Qualify policy specification round trips through installed bindings
+- [x] Qualify policy specification round trips through installed bindings
   and compare strict field validation with the historical JSON loader.
 
 - [x] Reject unknown nested fields in policy specification imports,
@@ -1808,7 +1808,7 @@ the other competition models and installed binding checks remain open.
   normalizes required text and rejects unknown license markers and
   unsupported provenance schemas. All 25 boundary tests and focused
   Clippy passed.
-- [ ] Restore content checksum verification, ingestion and dataset
+- [x] Restore content checksum verification, ingestion and dataset
   diagnostics, then qualify installed Python, Julia and R consumers.
 
 - [x] Compute and verify SHA-256 dataset digests over sorted Rust JSON.
@@ -1816,7 +1816,7 @@ the other competition models and installed binding checks remain open.
   The boundary test checks an independent digest and rejects a changed
   data value under a retained checksum. All 26 tests and focused
   Clippy passed. The direct dependency reuses locked sha2 0.11.1.
-- [ ] Qualify historical Python digest compatibility for non-ASCII
+- [x] Qualify historical Python digest compatibility for non-ASCII
   strings and numeric encodings, and verify installed consumers.
 
 - [x] Add an explicit historical Python JSON checksum encoding for
