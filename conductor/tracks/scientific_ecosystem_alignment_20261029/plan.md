@@ -3469,3 +3469,10 @@ the other competition models and installed binding checks remain open.
   check wheel contents before publishing. Actionlint and both normalizer
   regressions passed. Hosted execution remains unverified and the
   scientific release gate still precedes packaging.
+
+- [x] Share the release wheel build between both publication workflows
+  and the scheduled/manual release-readiness lane. The read-only lane
+  builds and validates packages independently of the scientific gate.
+  Publication retains the scientific gate and all three paths pin the
+  Rust toolchain. Actionlint, ShellCheck and the normalizer tests passed.
+  Hosted execution remains open.

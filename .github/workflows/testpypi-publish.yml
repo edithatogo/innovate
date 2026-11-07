@@ -61,31 +61,15 @@ jobs:
       - name: Require complete native scientific migration
         run: .venv-release/bin/python scripts/check_migration.py --release
 
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
+        with:
+          toolchain: 1.99.1
+
       - name: Install dependencies
         run: UV_PROJECT_ENVIRONMENT=.venv-release uv sync --locked --no-install-project --python .venv-release/bin/python
 
       - name: Build package with normalized SBOM
-        shell: bash
-        run: |
-          set -euo pipefail
-          SOURCE_DATE_EPOCH="$(git show -s --format=%ct HEAD)"
-          export SOURCE_DATE_EPOCH
-          python="$PWD/.venv-release/bin/python"
-          maturin="$PWD/.venv-release/bin/maturin"
-          staging="$(mktemp -d)"
-          trap 'rm -rf "$staging"' EXIT
-          "$maturin" sdist --out dist
-          mkdir "$staging/source"
-          tar -xzf dist/innovate-*.tar.gz -C "$staging/source"
-          source_root=("$staging"/source/innovate-*)
-          test "${#source_root[@]}" -eq 1
-          (
-            cd "${source_root[0]}"
-            "$maturin" build --release --locked -i "$python" --out "$staging/wheels"
-          )
-          for wheel in "$staging"/wheels/*.whl; do
-            "$python" scripts/normalize_wheel_sbom.py "$wheel" "${source_root[0]}" "dist/${wheel##*/}"
-          done
+        run: bash scripts/build_release_wheel.sh
 
       - name: Validate package metadata and wheel contents
         run: |

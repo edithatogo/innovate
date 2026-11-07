@@ -43,14 +43,16 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Document scheduled or manual release lane
-        run: |
-          printf '%s\n' \
-            'This scheduled or manual release lane owns expensive checks.' \
-            'Mutation sampling, package dry-runs, compatibility sweeps, and external audit refreshes stay out of fast PR checks.'
-
-      - name: Upload release lane note
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
         with:
-          name: release-lane-checks
-          path: .github/workflows/release-readiness.yml
+          toolchain: 1.99.1
+      - run: uv venv .venv-release --python 3.15.2
+      - run: UV_PROJECT_ENVIRONMENT=.venv-release uv sync --locked --no-install-project --python .venv-release/bin/python
+      - name: Validate release packaging without publishing
+        env:
+          CARGO_BUILD_JOBS: '2'
+        run: |
+          bash scripts/build_release_wheel.sh
+          .venv-release/bin/twine check dist/*
+          .venv-release/bin/check-wheel-contents dist/*.whl
