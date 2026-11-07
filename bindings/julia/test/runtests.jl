@@ -920,3 +920,17 @@ end
     @test matched["conditional_standard_error"] ≈ sqrt(8.5)
     @test matched["uncertainty_model"] == Dict("model"=>"diagonal_plus_factors", "factor_count"=>2)
 end
+
+@testset "Fitted matching covariance" begin
+    result = kernel_call("summarize_causal", nothing, Dict(
+        "method"=>"matched_treatment_contrast", "outcomes"=>[0,4,2,6],
+        "treatment"=>[0,1,0,1], "scores"=>[0,0,1,0], "caliper"=>0,
+        "outcome_variances"=>ones(4),
+        "outcome_covariance_factors"=>[fill(7,4), [0,2,0,2]],
+        "fit_controls"=>Dict("strata"=>fill("a",4), "folds"=>[1,2,2,1])))["result"]
+    @test result["estimate"] == 5
+    @test result["adjusted_estimate"] == 6
+    @test result["adjusted_outcome_weights"] == [[0,-1.5],[1,0.5],[2,0.5],[3,0.5]]
+    @test result["conditional_standard_error"] ≈ sqrt(5.5)
+    @test result["adjusted_standard_error"] ≈ sqrt(7)
+end

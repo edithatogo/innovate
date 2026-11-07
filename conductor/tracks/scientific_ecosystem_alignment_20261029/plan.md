@@ -5391,3 +5391,8 @@ Hosted release readiness for this worktree revision remains open.
   on Python 3.15.2. The fixed-design fixture checked analytic outcome
   weights, cancellation of a common covariance loading, and propagation
   of a treated-only loading into both effect standard errors.
+
+- [x] Verify the same fixed-design fitted-matching covariance fixture
+  through Julia and the installed R binding against a rebuilt Rust FFI
+  library. Both bindings reproduced the Python estimates, outcome weights
+  and standard errors.

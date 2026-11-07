@@ -862,3 +862,15 @@ correlated <- kernel_call("summarize_causal", payload=correlated_payload)$result
 stopifnot(isTRUE(all.equal(correlated$conditional_standard_error, sqrt(8.5))),
   correlated$uncertainty_model$model == "diagonal_plus_factors",
   correlated$uncertainty_model$factor_count == 2)
+
+fitted_covariance <- kernel_call("summarize_causal", payload=list(
+  method="matched_treatment_contrast", outcomes=c(0,4,2,6),
+  treatment=c(0,1,0,1), scores=c(0,0,1,0), caliper=0,
+  outcome_variances=rep(1,4),
+  outcome_covariance_factors=list(rep(7,4), c(0,2,0,2)),
+  fit_controls=list(strata=rep("a",4), folds=c(1,2,2,1))))$result
+stopifnot(fitted_covariance$estimate == 5, fitted_covariance$adjusted_estimate == 6,
+  identical(as.numeric(unlist(fitted_covariance$adjusted_outcome_weights)),
+    c(0,-1.5,1,0.5,2,0.5,3,0.5)),
+  isTRUE(all.equal(fitted_covariance$conditional_standard_error, sqrt(5.5))),
+  isTRUE(all.equal(fitted_covariance$adjusted_standard_error, sqrt(7))))
