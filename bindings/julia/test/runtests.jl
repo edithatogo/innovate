@@ -612,3 +612,13 @@ end
     payload["propensities"][1] = 0
     @test_throws r"strictly between zero and one" kernel_call("summarize_causal", nothing, payload)
 end
+
+@testset "Fitted stratum propensity workflow" begin
+    treatment = [0,1,0,1,0,1,1]
+    fit = kernel_call("summarize_causal", nothing, Dict("method"=>"estimate_stratum_propensities",
+        "treatment"=>treatment, "strata"=>["low","high","low","low","high","high","high"]))["result"]
+    @test fit["propensities"] ≈ [1/3,0.75,1/3,1/3,0.75,0.75,0.75]
+    weighted = kernel_call("summarize_causal", nothing, Dict("method"=>"propensity_weighted_contrast",
+        "outcomes"=>[0,19,0,2,10,19,19], "treatment"=>treatment, "propensities"=>fit["propensities"]))["result"]
+    @test weighted["estimate"] ≈ 6
+end

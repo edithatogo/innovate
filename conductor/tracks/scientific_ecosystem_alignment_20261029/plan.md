@@ -4561,3 +4561,7 @@ Hosted release readiness for this worktree revision remains open.
   The Rust regression checks input ordering, rejects absent overlap,
   and verifies that feeding the fitted probabilities into weighted ATE
   recovers the stratified estimate of 6. Binding qualification remains open.
+
+- [x] Verify the empirical propensity fitting and weighted ATE workflow
+  through rebuilt Python 3.15.2, Julia and installed R. Each preserved
+  input ordering and recovered the analytic estimate of 6.

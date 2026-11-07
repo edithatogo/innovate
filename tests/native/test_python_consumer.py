@@ -1351,3 +1351,14 @@ def test_discover_treatment_contrasts():
     payload["propensities"][0] = 0
     with pytest.raises(innovate.NativeError, match="strictly between zero and one"):
         innovate.execute("summarize_causal", **payload)
+
+
+def test_fitted_stratum_propensity_workflow():
+    treatment = [0, 1, 0, 1, 0, 1, 1]
+    fit = innovate.execute("summarize_causal", method="estimate_stratum_propensities",
+                           treatment=treatment, strata=["low", "high", "low", "low", "high", "high", "high"])["result"]
+    assert fit["propensities"] == pytest.approx([1/3, 0.75, 1/3, 1/3, 0.75, 0.75, 0.75])
+    weighted = innovate.execute("summarize_causal", method="propensity_weighted_contrast",
+                                outcomes=[0, 19, 0, 2, 10, 19, 19], treatment=treatment,
+                                propensities=fit["propensities"])["result"]
+    assert weighted["estimate"] == pytest.approx(6)

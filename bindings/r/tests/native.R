@@ -579,3 +579,11 @@ stopifnot(isTRUE(all.equal(att$estimate, -41/17)),
 weighted_payload$propensities[1] <- 0
 weighted_error <- tryCatch({kernel_call("summarize_causal", payload=weighted_payload); ""}, error=conditionMessage)
 stopifnot(grepl("strictly between zero and one", weighted_error, fixed=TRUE))
+
+fit_treatment <- c(0,1,0,1,0,1,1)
+fit <- kernel_call("summarize_causal", payload=list(method="estimate_stratum_propensities",
+  treatment=fit_treatment, strata=c("low","high","low","low","high","high","high")))$result
+stopifnot(isTRUE(all.equal(unlist(fit$propensities), c(1/3,0.75,1/3,1/3,0.75,0.75,0.75))))
+weighted_fit <- kernel_call("summarize_causal", payload=list(method="propensity_weighted_contrast",
+  outcomes=c(0,19,0,2,10,19,19), treatment=fit_treatment, propensities=fit$propensities))$result
+stopifnot(isTRUE(all.equal(weighted_fit$estimate, 6)))
