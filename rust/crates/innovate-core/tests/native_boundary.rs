@@ -3027,7 +3027,7 @@ fn extension_registry_rejects_duplicate_registration_without_replacement() {
     );
     let selection =
         json!({"name":"registry-fixture","expected_version":"1","extension_point":"diagnostics"});
-    let input = json!({"value":42});
+    let input = json!([{"name":"convergence","status":"fail","message":"iteration limit"}]);
     let invoked =
         innovate_core::invoke_registered_extension(&selection, &input, |resolved, input| {
             assert_eq!(
@@ -3036,8 +3036,17 @@ fn extension_registry_rejects_duplicate_registration_without_replacement() {
             );
             assert_eq!(resolved["extension_point"], "diagnostics");
             Ok(input.clone())
-        });
-    assert_eq!(invoked, Ok(input.clone()));
+        })
+        .unwrap();
+    assert_eq!(invoked["ok"], false);
+    assert_eq!(invoked["failed"], json!(["convergence"]));
+    assert_eq!(invoked["checks"], input);
+    assert!(
+        innovate_core::invoke_registered_extension(&selection, &input, |_, input| Ok(json!([
+            input[0], input[0]
+        ])))
+        .is_err()
+    );
     let mut stale = selection;
     stale["expected_version"] = json!("2");
     assert!(

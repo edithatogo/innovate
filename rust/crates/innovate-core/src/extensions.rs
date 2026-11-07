@@ -179,6 +179,9 @@ pub fn invoke_registered_extension(
 ) -> Result<Value, &'static str> {
     let resolved = resolve(selection)?;
     let output = callback(&resolved, input)?;
+    if resolved["extension_point"] == "diagnostics" {
+        return summarize_diagnostics(&output);
+    }
     if resolved["extension_point"] != "dataset_provider" {
         return Ok(output);
     }
@@ -190,4 +193,34 @@ pub fn invoke_registered_extension(
         return Err("dataset provider returned invalid dataset");
     }
     Ok(response["result"].take())
+}
+
+pub(crate) fn summarize_diagnostics(output: &Value) -> Result<Value, &'static str> {
+    #[derive(Deserialize, Serialize)]
+    #[serde(deny_unknown_fields)]
+    struct Check {
+        name: String,
+        status: String,
+        message: String,
+    }
+    let checks: Vec<Check> = Vec::deserialize(output)
+        .map_err(|_| "extension diagnostics must return an array of checks")?;
+    let mut names = HashSet::new();
+    if checks.is_empty()
+        || checks.iter().any(|check| {
+            check.name.trim().is_empty()
+                || !names.insert(check.name.as_str())
+                || !matches!(check.status.as_str(), "pass" | "fail")
+        })
+    {
+        return Err(
+            "extension diagnostics require unique nonblank check names and pass or fail status",
+        );
+    }
+    let failed: Vec<_> = checks
+        .iter()
+        .filter(|check| check.status == "fail")
+        .map(|check| &check.name)
+        .collect();
+    Ok(json!({"ok":failed.is_empty(),"checks":checks,"failed":failed}))
 }

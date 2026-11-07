@@ -5717,3 +5717,9 @@ Hosted release readiness for this worktree revision remains open.
   The binding preserved source and target IDs "001" and "1" as distinct
   array values, kept the weight as a one-element array, and retained
   the provenance source as a scalar. The focused installed R check passed.
+
+- [x] Define diagnostics callback output as an ordered array of named
+  pass or fail checks with messages. Rust derives the aggregate status
+  and failed names and rejects duplicate check names. The callback APIs
+  use the same Rust contract. Three focused Rust extension tests passed.
+  Binding runtime qualification for diagnostics remains open.

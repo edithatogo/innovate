@@ -35,6 +35,9 @@ function invoke_registered_extension(callback, selection, payload)
     if resolved["extension_point"] == "dataset_provider"
         return kernel_call("ingest_dataset", nothing, Dict("dataset" => output))["result"]
     end
+    if resolved["extension_point"] == "diagnostics"
+        return kernel_call("summarize_extension_diagnostics", nothing, Dict("checks" => output))["result"]
+    end
     return output
 end
 
