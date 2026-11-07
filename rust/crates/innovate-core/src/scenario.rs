@@ -1,7 +1,7 @@
 use crate::{KERNEL_SCHEMA_VERSION, KernelBinding, batch_workers, run_ordered_chunks};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -137,6 +137,13 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
             return invalid(&format!("scenario '{}': {message}", scenario.id));
         }
     }
+    let comparisons: Option<Vec<Comparison>> = match request["payload"].get("comparisons") {
+        None => None,
+        Some(value) => match serde_json::from_value(value.clone()) {
+            Ok(comparisons) => Some(comparisons),
+            Err(error) => return invalid(&format!("invalid comparison list: {error}")),
+        },
+    };
     let binding = KernelBinding::new();
     let row = |scenario: &Scenario, result: Option<Value>, error: Value| {
         let mut row =
@@ -168,5 +175,70 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
             )
         },
     );
-    envelope(json!({"executions":executions}), Value::Null)
+    let mut result = json!({"executions":executions});
+    if let Some(comparisons) = comparisons {
+        let paths: HashMap<_, _> = scenarios
+            .iter()
+            .zip(&executions)
+            .map(|(scenario, row)| (scenario.id.as_str(), (scenario, &row["result"])))
+            .collect();
+        let rows: Vec<_> = comparisons.iter().map(|comparison| {
+            let outcome = compare_paths(&paths, comparison);
+            let (result, error) = match outcome {
+                Ok(result) => (result, Value::Null),
+                Err(message) => (Value::Null, json!({"code":"invalid_comparison","message":message})),
+            };
+            json!({"baseline":comparison.baseline,"alternative":comparison.alternative,"result":result,"error":error})
+        }).collect();
+        result["comparisons"] = json!(rows);
+    }
+    envelope(result, Value::Null)
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct Comparison {
+    baseline: String,
+    alternative: String,
+    threshold: Option<f64>,
+}
+
+fn compare_paths(
+    paths: &HashMap<&str, (&Scenario, &Value)>,
+    comparison: &Comparison,
+) -> Result<Value, &'static str> {
+    let path = |id: &str| {
+        let (scenario, result) = paths.get(id).ok_or("unknown scenario ID")?;
+        let inputs = &scenario.simulation["inputs"];
+        let time = inputs.get("time").unwrap_or(&inputs["t"]);
+        let time: Vec<f64> = serde_json::from_value(time.clone())
+            .map_err(|_| "comparison requires a numeric time grid")?;
+        let values: Vec<f64> = serde_json::from_value(result["values"].clone())
+            .map_err(|_| "comparison requires a successful scalar simulation")?;
+        if time.is_empty()
+            || time.len() != values.len()
+            || time.windows(2).any(|pair| pair[0] >= pair[1])
+        {
+            return Err("comparison requires one value per strictly increasing sample time");
+        }
+        Ok((time, values))
+    };
+    let (time, baseline) = path(&comparison.baseline)?;
+    let (alternative_time, alternative) = path(&comparison.alternative)?;
+    if time != alternative_time {
+        return Err("scenario comparisons require identical time grids");
+    }
+    let (difference, percentage_change) = crate::causal::compare_values(&baseline, &alternative)?;
+    let mut result =
+        json!({"time":time,"difference":difference,"percentage_change":percentage_change});
+    if let Some(threshold) = comparison.threshold {
+        let first_sample = |values: &[f64]| {
+            time.iter()
+                .zip(values)
+                .find_map(|(&t, &value)| (value >= threshold).then_some(t))
+        };
+        result["threshold_timing"] =
+            json!({"baseline":first_sample(&baseline),"alternative":first_sample(&alternative)});
+    }
+    Ok(result)
 }

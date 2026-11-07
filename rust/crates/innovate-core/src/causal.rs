@@ -428,7 +428,7 @@ fn counterfactual_forecast(payload: &Value) -> Result<Value, &'static str> {
 
 type ForecastDifference = (Vec<f64>, Vec<Option<f64>>);
 
-fn compare_values(
+pub(crate) fn compare_values(
     baseline: &[f64],
     counterfactual: &[f64],
 ) -> Result<ForecastDifference, &'static str> {

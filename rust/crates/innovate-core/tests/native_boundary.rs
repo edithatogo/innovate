@@ -895,3 +895,32 @@ fn scenario_grid_validates_and_retains_historical_specs() {
         assert_eq!(run(&request)["error"]["code"], "invalid_request");
     }
 }
+
+#[test]
+fn scenario_grid_compares_aligned_adoption_paths() {
+    let mut request = json!({"schema_version":"2.0","operation":"execute_scenario_grid",
+        "payload":{"scenarios":[
+            {"id":"base","model_key":"logistic","simulation":{"inputs":{"time":[1.,2.]},
+                "parameters":{"L":100.,"k":1.,"x0":1.}}},
+            {"id":"alt","model_key":"logistic","simulation":{"inputs":{"time":[1.,2.]},
+                "parameters":{"L":200.,"k":1.,"x0":1.}}}],
+            "comparisons":[{"baseline":"base","alternative":"alt","threshold":75.}]}});
+    let run = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = run(&request);
+    let row = &response["result"]["comparisons"][0]["result"];
+    assert_eq!(row["difference"][0], 50.);
+    assert_eq!(
+        row["threshold_timing"],
+        json!({"baseline":null,"alternative":1.})
+    );
+
+    request["payload"]["scenarios"][1]["simulation"]["inputs"]["time"] = json!([1., 3.]);
+    let response = run(&request);
+    assert_eq!(
+        response["result"]["comparisons"][0]["error"]["code"],
+        "invalid_comparison"
+    );
+    assert!(response["result"]["executions"][1]["result"].is_object());
+}
