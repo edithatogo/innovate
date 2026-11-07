@@ -3390,3 +3390,8 @@ the other competition models and installed binding checks remain open.
   a binary archive installed into a second library. Both produced the
   expected Logistic forecast with the environment override unset.
   Shared library SHA-256 e81de7d01b8f8a56095313efcfae1e254df47c4cd302c3b90207612722b84876. Other platforms and distribution gates remain open.
+
+- [x] Run the complete Julia binding suite and R native test script
+  using the staged and installed packages with the verified Darwin
+  arm64 release library and no environment override. Both passed.
+  This extends the bundled smoke check to the checked-in binding suites.
