@@ -1173,11 +1173,26 @@ fn gompertz_predict_native_response(
     let c = required_f64(parameters, "c", operation)?;
     let predictions = gompertz_prediction_series(&time, a, b, c);
 
+    let rates = time
+        .iter()
+        .zip(&predictions)
+        .map(|(t, level)| {
+            let z = b * (-c * t).exp();
+            [if z == f64::INFINITY {
+                0.
+            } else {
+                (level * z) * c
+            }]
+        })
+        .collect::<Vec<_>>();
+    let mut result = kernel_array_payload(&predictions);
+    result["rates"] = json!(rates);
+
     Ok(KernelResponse {
         schema_version: KERNEL_SCHEMA_VERSION.to_string(),
         operation,
         model_key: None,
-        result: Some(kernel_array_payload(&predictions)),
+        result: Some(result),
         error: None,
         metadata: json!({
             "model_key": model_key,
@@ -1259,11 +1274,24 @@ fn bass_native_response(
         })
         .collect();
 
+    let rates = stable_payload
+        .time
+        .iter()
+        .map(|t| {
+            let decay = (-(p + q) * t).exp();
+            let denominator = 1. + (q / p) * decay;
+            let fraction = (1. - decay) / denominator;
+            [(m * (decay / denominator)) * ((p + q * fraction) * (1. + q / p))]
+        })
+        .collect::<Vec<_>>();
+    let mut result = kernel_array_payload(&predictions);
+    result["rates"] = json!(rates);
+
     Ok(KernelResponse {
         schema_version: KERNEL_SCHEMA_VERSION.to_string(),
         operation,
         model_key: None,
-        result: Some(kernel_array_payload(&predictions)),
+        result: Some(result),
         error: None,
         metadata: json!({
             "model_key": model_key,
@@ -1854,11 +1882,22 @@ fn fisher_pry_predict_native_response(
         .map(|t| 1.0 / (1.0 + (-alpha * (t - t0)).exp()))
         .collect();
 
+    let rates = time
+        .iter()
+        .map(|t| {
+            let tail = (-(alpha * (t - t0)).abs()).exp();
+            let denominator = 1. + tail;
+            [(tail / denominator) * (alpha / denominator)]
+        })
+        .collect::<Vec<_>>();
+    let mut result = kernel_array_payload(&predictions);
+    result["rates"] = json!(rates);
+
     Ok(KernelResponse {
         schema_version: KERNEL_SCHEMA_VERSION.to_string(),
         operation,
         model_key: None,
-        result: Some(kernel_array_payload(&predictions)),
+        result: Some(result),
         error: None,
         metadata: json!({
             "model_key": model_key,

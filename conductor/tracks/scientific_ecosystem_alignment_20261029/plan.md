@@ -1243,3 +1243,9 @@ the other competition models and installed binding checks remain open.
   Both consumers fit a Logistic curve, predict native rates, and
   reproduce the analytic midpoint rate of 25 and endpoint categories.
   Both reject prediction outputs with multiple rate series.
+
+- [x] Add analytic rates to plain Bass, Gompertz and Fisher–Pry predictions.
+  The native boundary regression verifies reference rates at the Bass
+  origin, Gompertz origin and Fisher–Pry midpoint. All ten boundary tests
+  and focused Clippy passed. Installed checks of these three rate paths
+  and extreme-domain rate qualification remain open.

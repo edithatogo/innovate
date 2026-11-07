@@ -140,3 +140,28 @@ fn batch_json_validates_envelope_and_isolates_bad_datasets() {
     request["payload"]["datasets"] = json!({});
     assert_eq!(execute(request)["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn plain_diffusion_rates_match_analytic_reference_points() {
+    use innovate_core::{KernelBinding, json};
+    for (key, parameters, time, expected) in [
+        ("bass", json!({"p":0.1,"q":0.3,"m":100.}), 0., 10.),
+        (
+            "gompertz",
+            json!({"a":100.,"b":1.,"c":0.5}),
+            0.,
+            50. / std::f64::consts::E,
+        ),
+        ("fisher_pry", json!({"alpha":2.,"t0":5.}), 5., 0.5),
+    ] {
+        let r = KernelBinding::new()
+            .predict_model(
+                key,
+                json!({"inputs":{"time":[time]},"parameters":parameters}),
+            )
+            .unwrap()
+            .result
+            .unwrap();
+        assert!((r["rates"][0][0].as_f64().unwrap() - expected).abs() < 1e-10);
+    }
+}
