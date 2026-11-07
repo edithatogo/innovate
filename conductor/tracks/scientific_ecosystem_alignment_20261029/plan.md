@@ -3358,3 +3358,9 @@ the other competition models and installed binding checks remain open.
   install its archive into a second library, and unset the environment
   override. R 4.3.0 resolved the bundled dylib and returned the expected
   Logistic forecast. Release builds and other platforms remain open.
+
+- [x] Verify local Julia bundled-library discovery. Julia 1.13.3
+  developed the staged package in an empty project with offline
+  dependency resolution. With no environment override it loaded
+  the locked Darwin arm64 debug dylib from deps and returned the
+  expected Logistic forecast. Artifact distribution remains open.
