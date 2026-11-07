@@ -1050,4 +1050,8 @@ the other competition models and installed binding checks remain open.
   at zero. Explicit starts use their existing path.
 - [x] Exercise both start modes against the event forecast and independent
   additive covariate fixtures. Five Rust tests and focused Clippy passed.
-- [ ] Qualify automatic starts in installed Python, Julia and R.
+- [x] Qualify automatic starts in installed Python, Julia and R.
+  Focused checks against the rebuilt wheel and FFI verified convergence,
+  event forecast accuracy within 0.001, and recovery of the additive
+  capacity slope within 0.001 in all three languages.
+  [Fixtures and results](evidence/logistic-automatic-starts-20261107).
