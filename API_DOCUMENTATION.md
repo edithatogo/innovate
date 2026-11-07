@@ -397,3 +397,10 @@ Set `control_group` to `never_treated` to use only units with null
 adoption indices for all contrasts and uncertainty calculations.
 The default `not_yet_treated` also uses units that adopt after the
 comparison period.
+
+Use `staggered_long_panel_att` for aligned `unit_ids`, `time` and
+`outcomes` columns and an `adoption_times` map keyed by unit label.
+Adoption dates must identify observed periods, with null for never
+treated. The operation sorts periods, rejects duplicate or missing
+unit-period rows, and returns the sorted `unit_order`. It accepts the
+same inference options as the matrix operation.

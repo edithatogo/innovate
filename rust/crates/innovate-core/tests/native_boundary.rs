@@ -716,6 +716,14 @@ fn causal_summaries_match_analytic_effects() {
         "control_group":"never_treated"}));
     assert_eq!(never["result"]["contrasts"][0]["n_control"], 1);
     assert_eq!(never["result"]["contrasts"][0]["estimate"], 3.);
+    let mut long = json!({"method":"staggered_long_panel_att",
+        "unit_ids":["z","a","z","a","a","z"],"time":[20,10,10,30,20,30],
+        "outcomes":[11,0,10,7,5,16],"adoption_times":{"a":20,"z":30}});
+    let result = run(long.clone());
+    assert_eq!(result["result"]["unit_order"], json!(["a", "z"]));
+    assert_eq!(result["result"]["contrasts"][0]["estimate"], 4.);
+    long["time"][0] = json!(10);
+    assert!(run(long)["result"].is_null());
     let event_time = &result["result"]["event_time"];
     assert_eq!(event_time[0]["supported_cohort_att"], 4.);
     assert_eq!(event_time[0]["unsupported_cohorts"], 1);

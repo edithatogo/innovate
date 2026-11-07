@@ -100,6 +100,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
         }
         Some("panel_event_study") => panel_event_study(payload),
         Some("staggered_panel_att") => staggered_panel_att(payload),
+        Some("staggered_long_panel_att") => staggered_long_panel_att(payload),
         Some("event_study") => {
             let periods = series(payload, "periods")?;
             let effects = series(payload, "coefficients")?;
@@ -365,6 +366,79 @@ fn independent_change_contrast(
         None
     };
     Ok((Some(estimate), error))
+}
+
+fn staggered_long_panel_att(payload: &Value) -> Result<Value, &'static str> {
+    let unit_ids: Vec<String> = serde_json::from_value(payload["unit_ids"].clone())
+        .map_err(|_| "unit_ids must contain string labels")?;
+    let time = series(payload, "time")?;
+    let outcomes = series(payload, "outcomes")?;
+    let adoption = payload["adoption_times"]
+        .as_object()
+        .ok_or("adoption_times must map unit labels to periods or null")?;
+    if time.is_empty()
+        || time.len() != unit_ids.len()
+        || time.len() != outcomes.len()
+        || unit_ids.iter().any(|label| label.trim().is_empty())
+    {
+        return Err("long panel columns must be nonempty and aligned with nonblank unit labels");
+    }
+    let mut periods = time.clone();
+    periods.sort_by(|a, b| a.partial_cmp(b).unwrap());
+    periods.dedup();
+    let unit_count = unit_ids
+        .iter()
+        .collect::<std::collections::BTreeSet<_>>()
+        .len();
+    if unit_count.checked_mul(periods.len()) != Some(time.len()) {
+        return Err("long panel requires every unit at every period");
+    }
+    let index_of =
+        |period: f64| periods.binary_search_by(|value| value.partial_cmp(&period).unwrap());
+    let mut units = std::collections::BTreeMap::<String, Vec<Option<f64>>>::new();
+    for ((unit, period), outcome) in unit_ids.into_iter().zip(time).zip(outcomes) {
+        let row = units
+            .entry(unit)
+            .or_insert_with(|| vec![None; periods.len()]);
+        if row[index_of(period).unwrap()].replace(outcome).is_some() {
+            return Err("duplicate unit and period in long panel");
+        }
+    }
+    if adoption.len() != units.len() {
+        return Err("adoption_times must cover exactly the panel units");
+    }
+    let mut matrix = Vec::new();
+    let mut indices = Vec::new();
+    for (unit, row) in &units {
+        matrix.push(
+            row.iter()
+                .copied()
+                .collect::<Option<Vec<_>>>()
+                .ok_or("long panel requires every unit at every period")?,
+        );
+        let value = adoption
+            .get(unit)
+            .ok_or("adoption_times must cover exactly the panel units")?;
+        indices.push(if value.is_null() {
+            None
+        } else {
+            Some(
+                index_of(
+                    value
+                        .as_f64()
+                        .ok_or("adoption times must be numeric or null")?,
+                )
+                .map_err(|_| "adoption time must identify an observed period")?,
+            )
+        });
+    }
+    let mut request = payload.clone();
+    request["periods"] = json!(periods);
+    request["outcomes"] = json!(matrix);
+    request["adoption_indices"] = json!(indices);
+    let mut result = staggered_panel_att(&request)?;
+    result["unit_order"] = json!(units.keys().collect::<Vec<_>>());
+    Ok(result)
 }
 
 fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {

@@ -4773,3 +4773,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify both staggered control selections through rebuilt Python
   3.15.2, Julia and installed R. Each returned onset ATT 3.5 with two
   not-yet-treated controls and ATT 3 with one never-treated control.
+
+- [x] Accept labeled long-format panels for staggered ATT. The Rust
+  fixture sorts shuffled rows, returns the expected estimate of 4 and
+  rejects duplicate unit-period keys. Binding validation remains open.
