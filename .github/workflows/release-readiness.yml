@@ -60,8 +60,10 @@ jobs:
       - name: Exercise the release wheel
         run: |
           staging="$(mktemp -d)"
-          uv pip install --python .venv-release/bin/python --no-deps --target "$staging" dist/*.whl
-          PYTHONPATH="$staging" .venv-release/bin/python - "$staging" <<'PYTHON'
+          uv venv "$staging" --python .venv-release/bin/python
+          uv pip install --python "$staging/bin/python" dist/*.whl pytest==9.2.0
+          uv pip check --python "$staging/bin/python"
+          "$staging/bin/python" - "$staging" <<'PYTHON'
           import sys
           from pathlib import Path
 
@@ -72,10 +74,11 @@ jobs:
           for module in (innovate, _native):
               assert Path(module.__file__).resolve().is_relative_to(root), module.__file__
           PYTHON
-          PYTHONPATH="$staging" .venv-release/bin/python -m pytest -q \
+          "$staging/bin/python" -m pytest -q \
             tests/native/test_python_consumer.py::test_native_polars_prediction_and_row_identity \
             tests/native/test_python_consumer.py::test_fit_roundtrip_and_native_evidence \
-            tests/native/test_python_consumer.py::test_capabilities_are_native_and_unavailable_features_fail_closed
+            tests/native/test_python_consumer.py::test_capabilities_are_native_and_unavailable_features_fail_closed \
+            tests/native/test_python_consumer.py::test_clean_runtime_has_no_legacy_scientific_dependencies
       - name: Retain validated dry-run artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:

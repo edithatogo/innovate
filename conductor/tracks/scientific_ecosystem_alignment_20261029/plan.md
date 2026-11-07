@@ -7232,3 +7232,10 @@ Hosted release readiness for this worktree revision remains open.
   prediction, and explicit rejection of unavailable capabilities.
   Actionlint and all three selected tests passed against the local
   installed debug wheel. Hosted release-wheel execution remains open.
+
+- [x] Configure release-wheel validation to resolve the wheel's declared
+  runtime dependencies in a separate environment, check installed metadata,
+  and assert that legacy scientific packages are absent. Actionlint and the
+  four selected tests passed using the existing local debug-wheel install.
+  A fresh local installation ran out of disk space while extracting Polars.
+  Fresh installation and hosted release-wheel validation remain open.
