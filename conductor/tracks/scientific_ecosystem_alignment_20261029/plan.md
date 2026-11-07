@@ -7530,3 +7530,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Apply the exact Release Please pin from PR #385 and pass
   Actionlint. PRs #388 and #389 target action invocations absent
   from the migration workflows. The hosted PRs remain open.
+
+- [x] Apply the workflow action pins from PRs #380, #382, #383, #384,
+  #386 and #387 to their active invocations. The previous hashes were
+  verified against upstream release tags. Actionlint passed for all
+  workflows. Hosted runtime and publication checks remain open.
