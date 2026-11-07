@@ -442,3 +442,35 @@ fn scheduled_hazards_enable_and_disable_requests_without_interrupting_service() 
             .is_err()
     );
 }
+
+#[test]
+fn schedule_retargets_innovation_without_resetting_service() {
+    let mut payload = json!({
+        "inputs":{"time":[0.,2.,5.,8.]},
+        "parameters":{"p":1e12,"q":0.,"m":2.},
+        "simulation_options":{"engine":"kairos_network","population":2,"seed":42,
+            "edges":[],"capacity":1,"service_ticks":4,"ticks_per_unit":1,
+            "innovation_multipliers":[1.,0.],
+            "schedule":[{"tick":2,"innovation_multipliers":[0.,1.]}]}
+    });
+    let result = KernelBinding::new()
+        .simulate_model("bass", payload.clone())
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(
+        result["requests"],
+        json!([{"tick":1,"agent":0},{"tick":3,"agent":1}])
+    );
+    assert_eq!(result["completions"][0], json!({"tick":5,"agent":0}));
+    assert_eq!(
+        result["metadata"]["innovation_multipliers"],
+        json!([0., 1.])
+    );
+    payload["simulation_options"]["schedule"][0]["innovation_multipliers"] = json!([1.]);
+    assert!(
+        KernelBinding::new()
+            .simulate_model("bass", payload)
+            .is_err()
+    );
+}

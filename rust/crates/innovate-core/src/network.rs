@@ -62,6 +62,8 @@ struct Change {
     capacity: Option<u64>,
     p: Option<f64>,
     q: Option<f64>,
+    innovation_multipliers: Option<Vec<f64>>,
+    imitation_multipliers: Option<Vec<f64>>,
 }
 
 struct Graph {
@@ -155,11 +157,11 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     {
         return Err(invalid("invalid queue length or retry policy"));
     }
-    let innovation_weights = o
+    let mut innovation_weights = o
         .innovation_multipliers
         .clone()
         .unwrap_or_else(|| vec![1.; o.population]);
-    let imitation_weights = o
+    let mut imitation_weights = o
         .imitation_multipliers
         .clone()
         .unwrap_or_else(|| vec![1.; o.population]);
@@ -173,12 +175,11 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             "agent_priorities must be a population-length array of signed 32-bit integers",
         ));
     }
-    if innovation_weights.len() != o.population
-        || imitation_weights.len() != o.population
-        || innovation_weights
-            .iter()
-            .chain(&imitation_weights)
-            .any(|v| !v.is_finite() || *v < 0.)
+    let valid_multipliers = |values: &[f64]| {
+        values.len() == o.population && values.iter().all(|v| v.is_finite() && *v >= 0.)
+    };
+    if !valid_multipliers(&innovation_weights)
+        || !valid_multipliers(&imitation_weights)
         || service.len() != o.population
         || service.iter().any(|v| *v == 0 || *v > 1000000000000)
     {
@@ -233,18 +234,24 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                         || (change.service_ticks.is_none()
                             && change.capacity.is_none()
                             && change.p.is_none()
-                            && change.q.is_none())))
+                            && change.q.is_none()
+                            && change.innovation_multipliers.is_none()
+                            && change.imitation_multipliers.is_none())))
                 || [change.p, change.q]
                     .into_iter()
                     .flatten()
                     .any(|rate| !rate.is_finite() || rate < 0.)
+                || [change.innovation_multipliers.as_deref(), change.imitation_multipliers.as_deref()]
+                    .into_iter()
+                    .flatten()
+                    .any(|values| !valid_multipliers(values))
                 || change.capacity.is_some_and(|cap| cap > o.population as u64)
                 || change
                     .service_ticks
                     .is_some_and(|ticks| !(1..=1_000_000_000_000).contains(&ticks))
             {
                 return Err(invalid(
-                    "invalid scheduled tick, graph, capacity, hazard or service duration",
+                    "invalid scheduled tick, graph, capacity, hazard, agent multipliers or service duration",
                 ));
             }
             let replacement = change
@@ -440,6 +447,12 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             capacity = change.capacity.unwrap_or(capacity);
             innovation = change.p.unwrap_or(innovation);
             imitation = change.q.unwrap_or(imitation);
+            if let Some(values) = &change.innovation_multipliers {
+                innovation_weights.clone_from(values);
+            }
+            if let Some(values) = &change.imitation_multipliers {
+                imitation_weights.clone_from(values);
+            }
             applied_ticks.push(tick);
         } else if let Some(tick) = wake.filter(|t| attempt.is_none_or(|a| *t <= a)) {
             now = tick;

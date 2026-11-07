@@ -762,6 +762,13 @@ piecewise constant interventions, including turning a hazard off. It leaves
 active service and queue positions intact. The result reports `current_p`
 and `current_q` at the requested horizon.
 
+A change can independently replace `innovation_multipliers` or
+`imitation_multipliers`. Each replacement contains one finite nonnegative
+value per agent in agent-index order. The active vectors are returned in
+simulation metadata. Changes apply to subsequent adoption attempts, including
+after retry cooldown, while existing requests keep their place in service or
+in the queue.
+
 ### Historical Norton–Bass covariates
 
 The `legacy_cannibalization` variant accepts declared `covariates` and named
