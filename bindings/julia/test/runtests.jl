@@ -481,3 +481,10 @@ end
     @test error.code == "invalid_request"
     @test error.validation["failed"] == ["monotonicity:adoption"]
 end
+
+@testset "Offset timestamp aggregation" begin
+    dates = ["2026-11-08T10:00:00+10:00", "2026-11-01T00:00:00Z", "2026-11-07T23:59:59.999Z"]
+    result = kernel_aggregate_dates(dates, [4.,1.,2.], "W")
+    @test result["dates"] == ["2026-11-01T00:00:00Z", "2026-11-08T00:00:00Z"]
+    @test result["values"] == [3.,4.]
+end

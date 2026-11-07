@@ -458,3 +458,8 @@ diagnostic <- tryCatch(kernel_call("ingest_dataset", NULL, list(dataset=dataset)
 stopifnot(inherits(diagnostic, "innovate_dataset_validation_error"),
   identical(diagnostic$code, "invalid_request"),
   identical(unlist(diagnostic$validation$failed), "monotonicity:adoption"))
+
+timestamps <- c("2026-11-08T10:00:00+10:00", "2026-11-01T00:00:00Z", "2026-11-07T23:59:59.999Z")
+weekly <- kernel_aggregate_dates(timestamps, c(4,1,2), "W")
+stopifnot(identical(unlist(weekly$dates), c("2026-11-01T00:00:00Z", "2026-11-08T00:00:00Z")),
+  identical(as.numeric(unlist(weekly$values)), c(3,4)))

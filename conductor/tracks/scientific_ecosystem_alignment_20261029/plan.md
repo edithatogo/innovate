@@ -1281,7 +1281,7 @@ the other competition models and installed binding checks remain open.
 - [x] Restore cumulative sums and full-window trailing averages through
   native Polars series operations in Python. The installed test verifies
   sample order, warmup nulls and rejection of a zero window.
-- [ ] Restore timestamp aggregation, decomposition and seasonal model
+- [x] Restore timestamp aggregation, decomposition and seasonal model
   preprocessing, and qualify Julia and R consumer paths.
 
 - [x] Restore historical weekly sums in Polars with fixed 168-hour
@@ -2601,3 +2601,8 @@ the other competition models and installed binding checks remain open.
   3.15 interpreter and a built Innovate wheel. It reproduced 452/500
   and 445/500 coverage and emits the analytic effect and mean interval
   widths as JSON. Ruff formatting and lint passed.
+
+- [x] Retain the offset-aware weekly boundary fixture in the Julia and
+  R suites. Both focused binding checks passed. Nine focused Rust
+  preprocessing regressions passed. Broader SARIMA optimizer
+  qualification remains tracked separately above.
