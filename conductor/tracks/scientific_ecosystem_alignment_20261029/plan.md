@@ -3525,3 +3525,15 @@ Hosted release readiness for this worktree revision remains open.
   passed. The weighted fixture reproduced adoption counts 1 and 2
   and completion at tick 2 in the rebuilt Python 3.15.2 wheel,
   Julia and freshly installed R.
+
+## Near-unit-root SARIMA qualification
+
+- [x] Compare four 240-observation AR(1) and MA(1) fits generated with
+  coefficients +0.985 and -0.985 against independent R maximum
+  likelihood. The installed R binding's Rust coefficients agreed
+  within 8e-6 and likelihoods within 8e-7. The negative MA estimate
+  stayed invertible at -0.999998093. Reproduce with
+  `evidence/sarima-reference/check-near-unit-root.R`.
+  These cases extend the optimizer evidence to both signs near the
+  stationarity and invertibility boundaries. Higher-order fits near
+  those boundaries and cross-binding validation of these cases remain open.
