@@ -2939,3 +2939,9 @@ the other competition models and installed binding checks remain open.
   Julia and installed R. All 401 posterior masses and grid coordinates
   agreed exactly. The normalized Logistic capacity posterior recovered
   mean 100 and variance 4 within 1e-10. R used raw JSON.
+
+- [x] Extend native Bayesian quadrature to two distinct parameter axes.
+  Cap joint grids at 10,000 cells and return row-major posterior mass,
+  axis coordinates, shape and marginal means. A 5-by-7 Logistic fixture
+  matches independently computed Gaussian weights within 1e-12. Both
+  focused tests and Clippy passed. Joint binding checks and MCMC remain open.

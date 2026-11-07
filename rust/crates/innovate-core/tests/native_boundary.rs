@@ -2237,3 +2237,33 @@ fn bayesian_logistic_capacity_grid_matches_symmetric_gaussian_reference() {
         .sum();
     assert!((variance - 4.).abs() < 1e-10);
 }
+
+#[test]
+fn bayesian_joint_grid_preserves_row_major_mass() {
+    let request = json!({"schema_version":"2.0","operation":"bayesian_parameter_grid",
+        "payload":{"forecast_model":"logistic","axes":[
+            {"parameter":"L","bounds":[80.,120.],"points":5},
+            {"parameter":"k","bounds":[0.1,0.9],"points":7}],
+            "noise_sd":2.,"observed":[50.,62.],
+            "prediction":{"inputs":{"time":[2.,3.]},"parameters":{"L":100.,"k":0.5,"x0":2.}}}});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert!(response["error"].is_null(), "{response}");
+    let result = &response["result"];
+    assert_eq!(result["shape"], json!([5, 7]));
+    let mass = result["posterior_mass"].as_array().unwrap();
+    let mut weights = Vec::new();
+    for i in 0..5 {
+        let capacity = 84. + 8. * f64::from(i);
+        for j in 0..7 {
+            let k = 0.1 + 0.8 * (f64::from(j) + 0.5) / 7.;
+            let residuals = [capacity / 2. - 50., capacity / (1. + (-k).exp()) - 62.];
+            weights.push((-residuals.iter().map(|x| x * x).sum::<f64>() / 8.).exp());
+        }
+    }
+    let total = weights.iter().sum::<f64>();
+    assert_eq!(mass.len(), weights.len());
+    for (actual, expected) in mass.iter().zip(weights) {
+        assert!((actual.as_f64().unwrap() - expected / total).abs() < 1e-12);
+    }
+}
