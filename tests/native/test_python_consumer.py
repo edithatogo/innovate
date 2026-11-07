@@ -98,3 +98,22 @@ def test_native_kairos_replay_and_engine_errors():
     payload["simulation_options"]["engine"] = "unknown"
     with pytest.raises(innovate.NativeError):
         innovate.execute("simulate_model", "bass", **payload)
+
+
+def test_kairos_abm_forcing_retains_agents_and_restarts_adoption():
+    r = innovate.execute(
+        "simulate_model",
+        "bass",
+        inputs={"time": [0.0, 1.0, 3.0, 5.0]},
+        parameters={"p": 0.2, "q": 0.3, "m": 100.0},
+        simulation_options={
+            "engine": "kairos_abm",
+            "seed": 42,
+            "population": 100,
+            "covariate": {"time": [0.0, 3.0], "values": [-1.0, 0.0], "beta_p": 0.2, "beta_q": 0.3},
+        },
+    )["result"]
+    assert r["counts"][:3] == [0, 0, 0]
+    assert r["counts"][3] > 0
+    assert len(r["agents"]) == 100
+    assert sum(a["adopted"] for a in r["agents"]) == r["counts"][-1]

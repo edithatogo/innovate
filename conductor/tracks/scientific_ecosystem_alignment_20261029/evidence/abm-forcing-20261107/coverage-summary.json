@@ -1,0 +1,109 @@
+{
+  "totals": {
+    "branches": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "functions": {
+      "count": 551,
+      "covered": 414,
+      "percent": 75.1361161524501
+    },
+    "instantiations": {
+      "count": 1168,
+      "covered": 483,
+      "percent": 41.3527397260274
+    },
+    "lines": {
+      "count": 4924,
+      "covered": 3948,
+      "percent": 80.17871649065799
+    },
+    "mcdc": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "regions": {
+      "count": 7657,
+      "covered": 6614,
+      "notcovered": 1043,
+      "percent": 86.37847721039572
+    }
+  },
+  "changed_modules": {
+    "forcing.rs": {
+      "branches": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "mcdc": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "functions": {
+        "count": 18,
+        "covered": 17,
+        "percent": 94.44444444444444
+      },
+      "instantiations": {
+        "count": 36,
+        "covered": 17,
+        "percent": 47.22222222222222
+      },
+      "lines": {
+        "count": 96,
+        "covered": 90,
+        "percent": 93.75
+      },
+      "regions": {
+        "count": 142,
+        "covered": 135,
+        "notcovered": 7,
+        "percent": 95.07042253521126
+      }
+    },
+    "simulation.rs": {
+      "branches": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "mcdc": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "functions": {
+        "count": 24,
+        "covered": 19,
+        "percent": 79.16666666666666
+      },
+      "instantiations": {
+        "count": 48,
+        "covered": 19,
+        "percent": 39.58333333333333
+      },
+      "lines": {
+        "count": 194,
+        "covered": 179,
+        "percent": 92.26804123711341
+      },
+      "regions": {
+        "count": 370,
+        "covered": 345,
+        "notcovered": 25,
+        "percent": 93.24324324324324
+      }
+    }
+  }
+}

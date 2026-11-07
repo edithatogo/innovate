@@ -68,3 +68,11 @@ end
     @test a["result"]["counts"][1]==0
     @test a["metadata"]["engine"]=="kairos_des"
 end
+@testset "ABM forcing and agent conservation" begin
+    payload=Dict("inputs"=>Dict("time"=>[0.,1.,3.,5.]),"parameters"=>Dict("p"=>0.2,"q"=>0.3,"m"=>100.),"simulation_options"=>Dict("engine"=>"kairos_abm","seed"=>42,"population"=>100,"covariate"=>Dict("time"=>[0.,3.],"values"=>[-1.,0.],"beta_p"=>0.2,"beta_q"=>0.3)))
+    a=kernel_simulate_model("bass",payload)["result"]
+    @test a["counts"][1:3]==[0,0,0]
+    @test a["counts"][4]>0
+    @test length(a["agents"])==100
+    @test count(x->x["adopted"],a["agents"])==a["counts"][4]
+end

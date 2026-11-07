@@ -167,3 +167,38 @@ The same payload works through R's `kernel_simulate_model` and Julia's
 seed, resolution and RNG checkpoint. The checkpoint is provenance; resume,
 ABM agent state, networks, resources, interventions and general scenario replay
 remain required migration work. This port supplies aggregate adoption events.
+
+## Kairos ABM, covariates and timed events
+
+Use `simulation_options.engine="kairos_abm"` for Kairos-owned entity identities,
+component state and event dispatch. Agents are exchangeable in this homogeneous
+Bass port; a separate Kairos identity stream selects susceptible agents without
+changing the DES timing stream. `result.agents` contains each entity's index,
+generation and adoption state at the last requested time. Networks, heterogeneous
+agent hazards, resource queues and resumable checkpoints remain required work.
+
+Both native simulation engines accept this bounded forcing contract:
+
+```python
+simulation_options = {
+    "engine": "kairos_abm", "seed": 42, "population": 100,
+    "covariate": {"time": [0.0, 3.0], "values": [-1.0, 0.0],
+                  "beta_p": 0.2, "beta_q": 0.3},
+    "events": [{"time": 6.0, "delta_p": 0.1, "delta_q": 0.0}],
+}
+```
+
+The covariate is right-continuous and piecewise constant, starting at time zero;
+its last value persists. Rates are `p + beta_p*x + sum(delta_p)` and
+`q + beta_q*x + sum(delta_q)` over events up to the current time. Effective rates
+must remain finite and nonnegative. Zero pressure pauses adoption until a later
+change. Covariate boundaries and event times round upward to ticks and precede
+tied adoption events. Distinct change times that collide at the chosen tick
+resolution are rejected. Waiting times are resampled at rate boundaries using
+the exponential distribution's memorylessness. Adding boundaries can therefore
+change seeded trajectories even if the resulting distributions agree.
+
+This simulation contract does not replace the historical model-specific linear
+covariate interpolation, fitting, market-potential effects or event-split curves.
+Those ports remain required. Python, Julia and R accept the same JSON payload;
+Polars can construct trajectory tables from returned native counts and levels.
