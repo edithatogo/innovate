@@ -4420,3 +4420,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify header-only local CSV ingestion for edgeless networks.
   Both the CSV and in-memory Polars cases preserve empty edge columns
   and reproduce the artifact on replay.
+- [x] Remove the legacy pytest.ini that shadowed the native settings
+  in pyproject.toml. The checkout now uses the same configuration
+  as the source archive. Thirteen focused Python ingestion checks and
+  seven Rust dataset checks passed.
