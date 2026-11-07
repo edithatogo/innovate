@@ -4023,3 +4023,8 @@ Hosted release readiness for this worktree revision remains open.
   Python 3.15.2, Julia and installed R returned counts [0, 1] and
   one dispatch, and all three rejected the unknown engine.
   Reused f73933fe artifacts with identical runtime source.
+- [x] Derive the paired-outcome oracle for imported I08 from the
+  documented diffusion_v1 fixture. Record ordered draw and time
+  identity, strategy-specific parameter values, shared units and
+  downstream perspective ownership. The fixture does not establish
+  runtime exporter acceptance. Executable negative cases remain open.
