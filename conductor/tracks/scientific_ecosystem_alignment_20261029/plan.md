@@ -5418,3 +5418,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify fitted-score uncertainty scope and zero caliper slack in
   the Python, Julia and installed R consumers against rebuilt native
   libraries. The fitted-control covariance fixture also passed in each.
+
+- [x] Report the minimum gap between the chosen control and its nearest
+  alternative across accepted pairs, alongside the caliper slack. Rust
+  tests verified positive separation and zero separation for duplicate
+  scores and equidistant controls. This is a score sensitivity diagnostic.

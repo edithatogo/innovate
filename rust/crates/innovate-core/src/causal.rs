@@ -1472,7 +1472,14 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     }
     let mut controls: Vec<_> = (0..scores.len()).filter(|&i| treatment[i] == 0.).collect();
     controls.sort_by(|&a, &b| scores[a].partial_cmp(&scores[b]).unwrap());
-    controls.dedup_by(|a, b| scores[*a] == scores[*b]);
+    let mut tied_controls = std::collections::BTreeSet::new();
+    controls.dedup_by(|a, b| {
+        let tied = scores[*a] == scores[*b];
+        if tied {
+            tied_controls.insert(*b);
+        }
+        tied
+    });
     let mut differences = Vec::new();
     #[derive(Serialize)]
     struct MatchPair {
@@ -1484,6 +1491,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     let mut unmatched_treated_indices = Vec::new();
     let mut control_uses = std::collections::BTreeMap::<usize, usize>::new();
     let mut max_score_distance = 0_f64;
+    let mut minimum_runner_up_gap = f64::INFINITY;
     for i in (0..scores.len()).filter(|&i| treatment[i] == 1.) {
         let right = controls.partition_point(|&j| scores[j] < scores[i]);
         let nearest = right
@@ -1502,6 +1510,16 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
             continue;
         };
         max_score_distance = max_score_distance.max(distance);
+        let gap = if tied_controls.contains(&control) {
+            0.
+        } else {
+            controls[right.saturating_sub(2)..(right + 2).min(controls.len())]
+                .iter()
+                .filter(|&&j| j != control)
+                .map(|&j| (scores[i] - scores[j]).abs() - distance)
+                .fold(f64::INFINITY, f64::min)
+        };
+        minimum_runner_up_gap = minimum_runner_up_gap.min(gap);
         differences.push(finite(outcomes[i] - outcomes[control])?);
         *control_uses.entry(control).or_default() += 1;
         pairs.push(MatchPair {
@@ -1659,6 +1677,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
             "adjusted_standard_error":adjusted_standard_error,
             "match_diagnostics":{"caliper":caliper,"max_score_distance":max_score_distance,
                 "minimum_matched_caliper_slack":caliper - max_score_distance,
+                "minimum_runner_up_distance_gap":finite(minimum_runner_up_gap).ok(),
                 "matched_treated_fraction":pairs.len() as f64 / (pairs.len() + unmatched_treated_indices.len()) as f64},
             "control_diagnostics":{"unique_controls":control_uses.len(),
             "effective_sample_size":1. / squared_control_weights}}),
@@ -2548,5 +2567,21 @@ mod tests {
             matched_treatment_contrast(&payload),
             Err("choose either fit_scores or scores")
         );
+    }
+    #[test]
+    fn matching_reports_runner_up_distance_gap() {
+        let mut payload = serde_json::json!({
+            "outcomes": [0, 4, 2], "treatment": [0, 1, 0], "caliper": 1,
+            "scores": [0, 1, 3]
+        });
+        let gap = |payload: &serde_json::Value| {
+            matched_treatment_contrast(payload).unwrap()["match_diagnostics"]
+                ["minimum_runner_up_distance_gap"].as_f64()
+        };
+        assert_eq!(gap(&payload), Some(1.));
+        payload["scores"] = serde_json::json!([0, 1, 0]);
+        assert_eq!(gap(&payload), Some(0.));
+        payload["scores"] = serde_json::json!([0, 1, 2]);
+        assert_eq!(gap(&payload), Some(0.));
     }
 }
