@@ -7021,3 +7021,11 @@ Hosted release readiness for this worktree revision remains open.
   Python 3.15.2 wheel and reconcile the preprocessing ledger.
   The focused test passed for overflow, subnormal values, null gaps
   and NaN gaps. Broader historical parity and SARIMA remain open.
+
+- [x] Measure mixed near-cancellation ARMA(1,1) search across four
+  seeds and both root signs using installed R. The negative-root
+  seed 17 case had native log likelihood 1.170058 below R ML, with
+  native AR/MA near 0.106/−0.069 and R near −0.994/0.987. This
+  identifies a concrete optimizer gap. The diagnostic script
+  check-cancellation-starts.R also shows that a single generating-root
+  R start can return a lower likelihood than native on other seeds.
