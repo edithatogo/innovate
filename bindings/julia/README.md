@@ -59,7 +59,7 @@ write("policy-julia.arrow", export_ipc_file(read("policy-polars.arrow")))
 
 For local bundled-library testing, stage a copy of the Julia package and
 place the locked Rust shared library in its `deps` directory under the
-name `libinnovate_ffi` with the platform's shared-library extension.
+name produced by Cargo, such as `libinnovate_ffi.so` or `innovate_ffi.dll`.
 Add the staged package to a fresh project with `Pkg.develop(path=...)`
 and unset `INNOVATE_NATIVE_LIBRARY` to exercise bundled discovery.
 

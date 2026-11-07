@@ -15,7 +15,12 @@ end
 Base.showerror(io::IO, err::DatasetValidationError) = print(io, err.code, ": ", err.message)
 
 function native_library()
-    path = get(ENV, "INNOVATE_NATIVE_LIBRARY", joinpath(@__DIR__, "..", "deps", "libinnovate_ffi." * Libdl.dlext))
+    bundled = joinpath(@__DIR__, "..", "deps", "libinnovate_ffi." * Libdl.dlext)
+    if Sys.iswindows()
+        cargo_dll = joinpath(@__DIR__, "..", "deps", "innovate_ffi.dll")
+        bundled = isfile(cargo_dll) ? cargo_dll : bundled
+    end
+    path = get(ENV, "INNOVATE_NATIVE_LIBRARY", bundled)
     isfile(path) || error("Install the native library or set INNOVATE_NATIVE_LIBRARY")
     return abspath(path)
 end

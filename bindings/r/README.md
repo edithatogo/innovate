@@ -17,3 +17,6 @@ directory. Place `libinnovate_ffi.dylib` in the staged package's
 binary archive into a fresh R library and unset `INNOVATE_NATIVE_LIBRARY`
 to exercise installed-library discovery. The binary is specific to its
 platform and architecture.
+
+On Windows, stage Cargo's `innovate_ffi.dll` in `inst/lib` for bundled
+discovery. Linux bundles use `libinnovate_ffi.so` in the same directory.

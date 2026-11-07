@@ -3,6 +3,10 @@ native_library <- function() {
   supplied <- Sys.getenv("INNOVATE_NATIVE_LIBRARY", "")
   if (nzchar(supplied)) return(normalizePath(supplied, mustWork = TRUE))
   suffix <- if (Sys.info()[["sysname"]] == "Darwin") ".dylib" else .Platform$dynlib.ext
+  if (.Platform$OS.type == "windows") {
+    cargo_dll <- system.file("lib", "innovate_ffi.dll", package = "innovate.R")
+    if (nzchar(cargo_dll)) return(cargo_dll)
+  }
   found <- system.file("lib", paste0("libinnovate_ffi", suffix), package = "innovate.R")
   if (!nzchar(found)) stop("Install the native library or set INNOVATE_NATIVE_LIBRARY", call. = FALSE)
   found

@@ -5798,3 +5798,9 @@ Hosted release readiness for this worktree revision remains open.
   the extension ledger with the verified local callback contracts.
   Clippy passed after reclaiming generated Python debug libraries.
   The development policy check passed with 38 release obligations open.
+
+- [x] Discover Cargo's unprefixed Windows DLL in bundled Julia and R
+  packages. The CI matrix now stages the platform library into both
+  packages and runs the suites without an override. Actionlint and
+  local override precedence checks passed. Bundled discovery on the
+  Linux and Windows hosted runners remains to be verified.

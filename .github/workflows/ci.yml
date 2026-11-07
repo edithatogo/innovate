@@ -100,18 +100,22 @@ jobs:
         with:
           toolchain: 1.99.1
       - run: cargo build --locked -p innovate-ffi -j 2
+      - name: Stage native library in both bindings
+        shell: bash
+        env:
+          NATIVE_LIBRARY: ${{ matrix.native-library }}
+        run: |
+          mkdir -p bindings/julia/deps bindings/r/inst/lib
+          cp "target/debug/$NATIVE_LIBRARY" bindings/julia/deps/
+          cp "target/debug/$NATIVE_LIBRARY" bindings/r/inst/lib/
       - uses: julia-actions/setup-julia@4c0cb0fce8556fdb04a90347310e5db8b1f98fb9
         with:
           version: '1.13'
       - shell: bash
         run: julia --project=bindings/julia -e 'using Pkg; Pkg.instantiate(); Pkg.test()'
-        env:
-          INNOVATE_NATIVE_LIBRARY: ${{ github.workspace }}/target/debug/${{ matrix.native-library }}
       - uses: r-lib/actions/setup-r@d3c5be51b12e724e68f33216ca3c148b66d5f0b6
       - shell: bash
         run: Rscript -e 'install.packages("jsonlite", repos="https://cloud.r-project.org")'
       - run: R CMD INSTALL bindings/r
         shell: bash
       - run: Rscript bindings/r/tests/native.R
-        env:
-          INNOVATE_NATIVE_LIBRARY: ${{ github.workspace }}/target/debug/${{ matrix.native-library }}
