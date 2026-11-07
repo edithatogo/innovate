@@ -2139,3 +2139,8 @@ the other competition models and installed binding checks remain open.
   identities, and retain resolved inputs for replay. For directed graphs,
   average degree means average incoming degree. All 63 targeted Rust tests
   and Clippy passed. Binding qualification and generated topology remain open.
+
+- [x] Qualify custom network specification translation in Python 3.15,
+  Julia and installed R. A four-node graph with one edge and one initial
+  adopter returned 50 adoption units in a market of 200. All three
+  bindings replayed the resolved artifact to an identical result.
