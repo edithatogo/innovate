@@ -18,6 +18,7 @@ mod mixture;
 mod network;
 mod numerics;
 mod policy;
+mod provenance;
 mod regime;
 mod sarima;
 mod seasonal;
@@ -39,7 +40,12 @@ pub fn execute_json(input: &str) -> String {
     {
         match value["operation"].as_str() {
             Some("fit_batch" | "predict_batch") => return execute_batch_json(value).to_string(),
-            Some("preprocess_series" | "aggregate_dates" | "summarize_causal") => {
+            Some(
+                "preprocess_series"
+                | "aggregate_dates"
+                | "summarize_causal"
+                | "validate_provenance",
+            ) => {
                 return execute_preprocessing_json(&value).to_string();
             }
             Some("categorize_adopters") => return execute_adopters_json(&value).to_string(),
@@ -174,6 +180,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         let payload = &value["payload"];
         if value["operation"] == "aggregate_dates" {
             return calendar::aggregate(payload);
+        }
+        if value["operation"] == "validate_provenance" {
+            return provenance::validate(payload);
         }
         if value["operation"] == "summarize_causal" {
             return causal::summarize(payload);

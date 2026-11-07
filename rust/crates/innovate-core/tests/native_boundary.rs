@@ -609,3 +609,25 @@ fn causal_summaries_match_analytic_effects() {
     );
     assert_eq!(invalid["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn dataset_provenance_requires_explicit_license() {
+    let run = |license| {
+        let request = innovate_core::json!({"schema_version":"2.0","operation":"validate_provenance",
+            "payload":{"source":" survey ","license":license,"extraction_time":"2026-11-07T00:00:00Z",
+                "transform_steps":[" normalized "]}
+        });
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    let accepted = run(" CC-BY-4.0 ");
+    assert_eq!(accepted["result"]["source"], "survey");
+    assert_eq!(accepted["result"]["license"], "CC-BY-4.0");
+    assert_eq!(
+        accepted["result"]["transform_steps"],
+        innovate_core::json!(["normalized"])
+    );
+    assert_eq!(run(" Unknown ")["error"]["code"], "invalid_request");
+}

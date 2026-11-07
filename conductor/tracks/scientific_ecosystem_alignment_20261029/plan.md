@@ -1801,3 +1801,12 @@ the other competition models and installed binding checks remain open.
 - [x] Verify policy specification round trips in the rebuilt Python
   wheel and Julia. Each retains the one-observation count, omits raw
   data, and rejects an unknown nested causal model field.
+
+## Dataset ingestion and provenance
+
+- [x] Restore provenance record validation in Rust. The native request
+  normalizes required text and rejects unknown license markers and
+  unsupported provenance schemas. All 25 boundary tests and focused
+  Clippy passed.
+- [ ] Restore content checksum verification, ingestion and dataset
+  diagnostics, then qualify installed Python, Julia and R consumers.
