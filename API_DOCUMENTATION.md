@@ -511,6 +511,6 @@ In the Arrow scenario execution export, `successful` denotes a
 completed execution without an error. A paused row retains its
 checkpoint and status in `execution_json`.
 For exact R Arrow export of execution rows, obtain the response with
-`kernel_call_json(request, raw = TRUE)` and pass that JSON directly to
+`kernel_call(operation, payload = payload, raw = TRUE)` and pass that JSON to
 `kernel_scenario_executions_ipc`. This preserves the native JSON arrays
 and numeric representations through export.

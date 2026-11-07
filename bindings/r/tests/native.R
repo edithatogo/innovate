@@ -824,3 +824,13 @@ for (engine in c("kairos_des", "kairos_abm", "kairos_network")) {
     payload$simulation_options$resume_checkpoint <- NULL
   }
 }
+
+simulation <- jsonlite::fromJSON(fixture_path("kairos_network_checkpoint.json"), simplifyVector=FALSE)
+paused <- simulation
+paused$simulation_options$pause_at_tick <- 6
+scenarios <- list(list(id="complete", model_key="bass", simulation=simulation),
+                  list(id="paused", model_key="bass", simulation=paused))
+response_json <- kernel_call("execute_scenario_grid", payload=list(scenarios=scenarios), raw=TRUE)
+response <- jsonlite::fromJSON(response_json, simplifyVector=FALSE)
+stopifnot(is.character(response_json), identical(response$result$executions[[2]]$result$status, "paused"),
+  rawToChar(kernel_scenario_executions_ipc(response_json)[1:6]) == "ARROW1")

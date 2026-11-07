@@ -8,7 +8,7 @@ native_library <- function() {
   found
 }
 
-kernel_call <- function(operation, model_key = NULL, payload = list()) {
+kernel_call <- function(operation, model_key = NULL, payload = list(), raw = FALSE) {
   if (!length(payload)) payload <- structure(list(), names = character())
   # jsonlite otherwise auto-unboxes a length-one numeric vector into a scalar.
   # Keep schema array fields as arrays while parameter/options scalars stay scalars.
@@ -52,7 +52,7 @@ kernel_call <- function(operation, model_key = NULL, payload = list()) {
   payload <- preserve_arrays(payload)
   request <- jsonlite::toJSON(list(schema_version = "2.0", operation = operation,
     model_key = model_key, payload = payload), auto_unbox = TRUE, null = "null", digits = I(17))
-  kernel_call_json(request)
+  kernel_call_json(request, raw = raw)
 }
 
 # Send an existing JSON envelope without re-encoding numbers or arrays.

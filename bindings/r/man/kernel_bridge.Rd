@@ -23,7 +23,7 @@
 \title{Invoke the Innovate Rust kernel}
 \description{Native schema 2.0 requests with structured errors. No Python runtime is required.}
 \usage{
-kernel_call(operation, model_key = NULL, payload = list())
+kernel_call(operation, model_key = NULL, payload = list(), raw = FALSE)
 kernel_call_json(request, raw = FALSE)
 kernel_scenario_grid_ipc(data, payload)
 kernel_scenario_executions_ipc(response)

@@ -5190,3 +5190,7 @@ Hosted release readiness for this worktree revision remains open.
   checkpoint content. Exact equality of all R row fields required
   passing the native JSON response directly because re-encoding the
   decoded R list changed its representation.
+
+- [x] Expose raw response selection on R's structured kernel call.
+  A clean package install passed the focused regression and exported
+  a paused scenario directly from its native JSON as Arrow IPC.
