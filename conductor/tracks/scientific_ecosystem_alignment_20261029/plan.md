@@ -4266,3 +4266,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Exercise network degree bounds during legacy scenario artifact
   import. The focused Rust test preserves a zero-degree custom artifact
   without inventing replay inputs and rejects degree two on two nodes.
+- [x] Reject blank time units in scenario specifications and artifact
+  imports so aligned comparisons cannot declare a blank common basis.
+  The legacy artifact regression and all ten scenario-filtered Rust
+  boundary tests passed.

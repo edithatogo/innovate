@@ -61,6 +61,9 @@ impl ScenarioSpecification {
         if self.time_horizon <= 0. || self.market_size <= 0. {
             return Err("time_horizon and market_size must be positive");
         }
+        if self.time_unit.trim().is_empty() {
+            return Err("time_unit must be nonblank");
+        }
         if !(0. ..=1.).contains(&self.initial_adoption) {
             return Err("initial_adoption must be in [0, 1]");
         }

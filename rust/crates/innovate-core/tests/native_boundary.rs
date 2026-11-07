@@ -1374,6 +1374,12 @@ fn imports_legacy_scenario_artifacts_without_inventing_replay_inputs() {
         "average_degree cannot exceed num_nodes minus one"
     );
 
+    let mut blank_unit = request.clone();
+    blank_unit["payload"]["artifact"]["scenario"]["time_unit"] = json!(" ");
+    assert_eq!(
+        run(&blank_unit)["error"]["message"],
+        "time_unit must be nonblank"
+    );
     request["payload"]["artifact"]["timestamp"] = json!("2026-01-01");
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
 }
