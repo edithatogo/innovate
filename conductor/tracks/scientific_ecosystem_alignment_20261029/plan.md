@@ -1872,3 +1872,10 @@ the other competition models and installed binding checks remain open.
   of a failed diagnostic. All 32 boundary tests and focused Clippy passed.
 - [ ] Restore local table ingestion through Polars and qualify the
   structured artifact in Python, Julia and R.
+
+- [x] Restore Python Polars local ingestion for CSV, Parquet and Arrow
+  IPC. The rebuilt wheel produced the same checksummed artifact from
+  all three formats and a LazyFrame for each of the five dataset kinds.
+  Rust owns validation and checksums.
+- [ ] Verify structured ingestion in Julia and R and qualify provenance
+  enrichment and historical ingestion schema details.

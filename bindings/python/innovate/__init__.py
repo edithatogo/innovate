@@ -11,6 +11,7 @@ import json
 from collections.abc import Iterable
 from dataclasses import dataclass
 from importlib.metadata import version
+from pathlib import Path
 from typing import Any
 
 import polars as pl
@@ -30,6 +31,8 @@ __all__ = [
     "sarima_fit",
     "treatment_contrast_frame",
     "policy_metadata_frame",
+    "ingest_polars",
+    "ingest_local",
     "capabilities",
     "execute",
     "fit",
@@ -365,3 +368,93 @@ def policy_metadata_frame(result: dict[str, Any]) -> pl.DataFrame:
             "n_confounders": pl.Int32,
         },
     )
+
+
+def ingest_polars(
+    frame: pl.DataFrame | pl.LazyFrame,
+    kind: str,
+    *,
+    provenance: dict[str, Any],
+    unit: str | None = None,
+    directed: bool = False,
+) -> dict[str, Any]:
+    """Convert a Polars table into a validated, checksummed dataset artifact."""
+    if isinstance(frame, pl.LazyFrame):
+        frame = frame.collect()
+    dataset: dict[str, Any] = {"kind": kind, "schema_version": "1.0", "provenance": provenance}
+    if unit is not None:
+        dataset["unit"] = unit
+
+    def column(name: str, dtype: type[pl.DataType]) -> list[Any]:
+        if name not in frame.columns:
+            raise ValueError(f"missing required column: {name}")
+        return frame[name].cast(dtype).to_list()
+
+    if kind == "adoption":
+        dataset.update(time=column("time", pl.Float64), adoption=column("adoption", pl.Float64))
+        if "denominator" in frame.columns:
+            dataset["denominator"] = column("denominator", pl.Float64)
+    elif kind == "substitution":
+        shares = [name for name in frame.columns if name.startswith("share")]
+        if not shares:
+            raise ValueError("substitution requires share columns")
+        dataset.update(
+            time=column("time", pl.Float64),
+            share=frame.select(pl.col(shares).cast(pl.Float64)).rows(),
+            product_labels=[
+                name.removeprefix("share").lstrip("_") or f"product_{index}"
+                for index, name in enumerate(shares)
+            ],
+        )
+    elif kind == "competition":
+        dataset.update(
+            time=column("time", pl.Float64),
+            value=column("value", pl.Float64),
+            unit_id=column("unit_id", pl.String),
+            product_id=column("product_id", pl.String),
+        )
+    elif kind == "policy_timing":
+        dataset.update(
+            event_times=column("event_times", pl.Float64),
+            event_effects=column("event_effects", pl.Float64),
+            event_labels=(
+                column("event_labels", pl.String)
+                if "event_labels" in frame.columns
+                else [f"event_{i}" for i in range(frame.height)]
+            ),
+        )
+    elif kind == "network_edges":
+        dataset.update(
+            source=column("source", pl.String),
+            target=column("target", pl.String),
+            weight=column("weight", pl.Float64) if "weight" in frame.columns else [1.0] * frame.height,
+            directed=directed,
+        )
+    else:
+        raise ValueError(f"unsupported dataset kind: {kind}")
+    return execute("ingest_dataset", dataset=dataset)["result"]
+
+
+def ingest_local(
+    path: str | Path,
+    kind: str,
+    *,
+    provenance: dict[str, Any],
+    format: str | None = None,
+    unit: str | None = None,
+    directed: bool = False,
+) -> dict[str, Any]:
+    """Read a local CSV, Parquet or Arrow IPC file and validate it in Rust."""
+    path = Path(path)
+    if not path.is_file():
+        raise FileNotFoundError(path)
+    file_format = (format or path.suffix).lstrip(".").lower()
+    if file_format in {"csv", "txt"}:
+        frame = pl.read_csv(path)
+    elif file_format in {"parquet", "pq"}:
+        frame = pl.read_parquet(path)
+    elif file_format in {"arrow", "feather", "ipc"}:
+        frame = pl.read_ipc(path)
+    else:
+        raise ValueError(f"unsupported local format: {file_format}")
+    return ingest_polars(frame, kind, provenance=provenance, unit=unit, directed=directed)
