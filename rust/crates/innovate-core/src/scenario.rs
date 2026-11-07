@@ -688,6 +688,8 @@ struct Comparison {
     #[serde(default)]
     interpolate_threshold: bool,
     relative_margin: Option<f64>,
+    #[serde(default)]
+    compare_resources: bool,
 }
 
 type ScenarioPaths<'a> = HashMap<&'a str, (&'a Scenario, &'a Value)>;
@@ -793,6 +795,11 @@ fn compare_paths(
     let mut result =
         json!({"time":time,"difference":difference,"percentage_change":percentage_change});
     add_time_basis(&mut result, basis);
+    if comparison.compare_resources {
+        let baseline = paths[comparison.baseline.as_str()].1;
+        let alternative = paths[comparison.alternative.as_str()].1;
+        result["resource_differences"] = compare_resource_totals(baseline, alternative)?;
+    }
     let last = time.len() - 1;
     let (baseline_final, alternative_final) = (baseline[last], alternative[last]);
     result["ranking"] = json!({"metric":"final_adoption",
@@ -843,6 +850,35 @@ fn compare_paths(
                 "baseline":crossing(&baseline),"alternative":crossing(&alternative)
             });
         }
+    }
+    Ok(result)
+}
+
+fn compare_resource_totals(baseline: &Value, alternative: &Value) -> Result<Value, &'static str> {
+    let baseline_metrics = &baseline["resource_metrics"];
+    let alternative_metrics = &alternative["resource_metrics"];
+    if !baseline_metrics.is_object() || !alternative_metrics.is_object() {
+        return Err("resource comparison requires two Kairos network resource results");
+    }
+    let ticks_per_unit = &baseline["metadata"]["ticks_per_unit"];
+    if ticks_per_unit != &alternative["metadata"]["ticks_per_unit"]
+        || baseline_metrics["horizon_ticks"] != alternative_metrics["horizon_ticks"]
+    {
+        return Err("resource comparison requires matching tick resolution and horizon");
+    }
+    let mut result = json!({"ticks_per_unit":ticks_per_unit,
+        "horizon_ticks":baseline_metrics["horizon_ticks"]});
+    for key in [
+        "occupied_slot_ticks",
+        "configured_slot_ticks",
+        "idle_slot_ticks",
+        "over_capacity_slot_ticks",
+        "admitted_wait_ticks",
+        "abandoned_wait_ticks",
+        "pending_wait_ticks",
+    ] {
+        let read = |metrics: &Value| metrics[key].as_i64().ok_or("invalid resource metric");
+        result[key] = json!(read(alternative_metrics)? - read(baseline_metrics)?);
     }
     Ok(result)
 }

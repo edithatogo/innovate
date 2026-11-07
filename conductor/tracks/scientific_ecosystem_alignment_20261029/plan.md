@@ -4209,3 +4209,9 @@ Hosted release readiness for this worktree revision remains open.
   specification and its generated replay request. The replay retains
   explicit zero capacity and reproduces the complete simulation result
   after opening two slots. The focused Rust boundary test passed.
+- [x] Add opt-in resource differences to paired Kairos scenario
+  comparisons. Signed differences use alternative minus baseline for
+  capacity, service and waiting totals. Comparisons require aligned
+  tick resolution and horizon. The Rust fixture checks a delayed
+  opening against an initially open resource and rejects mismatched
+  tick resolution. Installed-binding checks remain open.

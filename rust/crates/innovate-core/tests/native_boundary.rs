@@ -2570,7 +2570,7 @@ fn kairos_scenario_replay_retains_scheduled_retry_clear() {
         row["result"]
     );
 
-    let mut closed = request;
+    let mut closed = request.clone();
     let options = &mut closed["payload"]["scenarios"][0]["simulation"]["simulation_options"];
     options["capacity"] = json!(0);
     options["schedule"] = json!([{"tick":7,"capacity":2,"service_ticks":2}]);
@@ -2586,6 +2586,29 @@ fn kairos_scenario_replay_retains_scheduled_retry_clear() {
     assert_eq!(
         run(replay)["result"]["executions"][0]["result"],
         row["result"]
+    );
+
+    let mut paired = request;
+    let mut alternative = closed["payload"]["scenarios"][0].clone();
+    alternative["id"] = json!("closed");
+    paired["payload"]["scenarios"]
+        .as_array_mut()
+        .unwrap()
+        .push(alternative);
+    paired["payload"]["comparisons"] =
+        json!([{"baseline":"retry","alternative":"closed","compare_resources":true}]);
+    let response = run(&paired);
+    let totals = &response["result"]["comparisons"][0]["result"]["resource_differences"];
+    assert_eq!(totals["horizon_ticks"], 12);
+    assert_eq!(totals["occupied_slot_ticks"], -6);
+    assert_eq!(totals["configured_slot_ticks"], -2);
+    assert_eq!(totals["idle_slot_ticks"], 4);
+    paired["payload"]["scenarios"][1]["simulation"]["simulation_options"]["ticks_per_unit"] =
+        json!(2);
+    let response = run(&paired);
+    assert_eq!(
+        response["result"]["comparisons"][0]["error"]["message"],
+        "resource comparison requires matching tick resolution and horizon"
     );
 }
 
