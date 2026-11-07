@@ -1176,3 +1176,8 @@ the other competition models and installed binding checks remain open.
   evidence. Refresh the remaining work for forcing, substitution, competition
   and Kairos based on the native checkpoints. Development policy and four
   mutation tests passed. The release check still rejects all 38 open obligations.
+
+- [x] Validate ledger status values and require existing repository-local
+  evidence files for bounded and qualified entries. All six policy
+  regression cases and the live ledger check passed. The 38 release
+  obligations remain open.

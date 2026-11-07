@@ -73,6 +73,21 @@ def main() -> int:
         items = ledger[group]
         if len(items) != len({item["key"] for item in items}) or any(item["required"] is not True for item in items):
             raise ValueError("Every unique model and feature obligation must remain required")
+    for group in ("models", "feature_areas"):
+        for item in ledger[group]:
+            status = item.get("status")
+            if status not in ("pending", "bounded_native", "qualified"):
+                raise ValueError(f"Invalid migration status for {item['key']}")
+            evidence = item.get("evidence")
+            if evidence is None and status == "pending":
+                continue
+            if not isinstance(evidence, str) or not evidence:
+                raise ValueError(f"Missing migration evidence for {item['key']}")
+            evidence_path = Path(evidence)
+            resolved = (ROOT / evidence_path).resolve()
+            if evidence_path.is_absolute() or not resolved.is_relative_to(ROOT.resolve()) or not resolved.is_file():
+                raise ValueError(f"Invalid migration evidence for {item['key']}: {evidence}")
+
     pending = [
         item["key"]
         for group in ("models", "feature_areas")
