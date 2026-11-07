@@ -6490,3 +6490,8 @@ Hosted release readiness for this worktree revision remains open.
   of three, excludes the rate and midpoint columns and returns a
   point estimate. All Rust fit-quality tests passed. Global
   identifiability and calibrated uncertainty remain open.
+
+- [x] Verify the saturated Logistic rank fixture through Python,
+  Julia and installed R. All three reported rank one, excluded
+  rate and midpoint sensitivity columns and labelled uncertainty
+  as a point estimate.
