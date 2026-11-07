@@ -689,3 +689,12 @@ retries, historical model forcing and release qualification remain open.
 Source: 769602e5. Thirteen focused Rust tests, 41 installed
 Python tests, 184 Julia assertions and R conformance passed. Forcing
 interoperability, historical model extensions and release qualification remain open.
+
+## Kairos piecewise constant hazard interventions
+
+- [x] Replace Bass p/q at schedule boundaries while preserving in-flight service.
+- [x] Verify zero-hazard wakeup, shutoff and cross-binding schedule behavior.
+
+Source: 040ed666. Fourteen focused Rust tests, 41 installed
+Python tests, 185 Julia assertions and R conformance passed. Continuous forcing
+interoperability, historical model extensions and release qualification remain open.
