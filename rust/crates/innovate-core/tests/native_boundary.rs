@@ -702,10 +702,20 @@ fn causal_summaries_match_analytic_effects() {
     assert_eq!(rows[0].get("standard_error"), Some(&json!(null)));
     assert_eq!(rows[1]["estimate"], serde_json::Value::Null);
     assert_eq!(rows[2]["n_control"], 0);
+    let event_time = &result["result"]["event_time"];
+    assert_eq!(event_time[0]["supported_cohort_att"], 4.);
+    assert_eq!(event_time[0]["unsupported_cohorts"], 1);
+    assert_eq!(
+        event_time[1]["supported_cohort_att"],
+        serde_json::Value::Null
+    );
     let replicated = run(json!({"method":"staggered_panel_att","periods":[0,1,2],
         "outcomes":[[0,5,7],[0,7,9],[10,12,16],[10,12,16]],
         "adoption_indices":[1,1,2,null]}));
     let row = &replicated["result"]["contrasts"][0];
+    let onset = &replicated["result"]["event_time"][0];
+    assert_eq!(onset["supported_treated_units"], 3);
+    assert!((onset["supported_cohort_att"].as_f64().unwrap() - 8. / 3.).abs() < 1e-12);
     assert_eq!(row["estimate"], 4.);
     assert!((row["standard_error"].as_f64().unwrap() - 1.).abs() < 1e-12);
     let mut augmented = json!({"method":"augmented_treatment_contrast","outcomes":[0,4],

@@ -357,3 +357,9 @@ Interpretation requires parallel trends and no anticipation.
 Staggered cohort-period rows report pointwise standard errors for
 independent units. The standard error is null when either arm has
 fewer than two units. Each row uses its own eligible control set.
+
+The `event_time` summary groups cohort estimates by the number of
+observed period steps since adoption. It weights supported cohorts
+by their treated counts and reports how many cohorts lack controls.
+A step with no supported cohorts has a null estimate. The summary
+does not report joint uncertainty across cohort-period estimates.

@@ -4717,3 +4717,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify staggered pointwise standard errors through rebuilt Python
   3.15.2, Julia and installed R. Each returned error 1 with replicated
   arms, null for singleton arms, and retained the never-treated control.
+
+- [x] Summarize staggered ATT by event-time offset and cohort size.
+  The Rust fixture verifies 8/3 for unequal cohort sizes, records
+  unsupported cohorts and preserves null when none are supported.
