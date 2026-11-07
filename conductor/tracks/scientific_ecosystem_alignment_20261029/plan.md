@@ -7227,3 +7227,8 @@ Hosted release readiness for this worktree revision remains open.
   cache and target on the checkout volume after removing the temporary
   R install. The debug wheel passed module-origin and prediction
   checks. Hosted release artifacts remain unverified.
+
+- [x] Extend release-wheel smoke coverage to native fitting, saved-fit
+  prediction, and explicit rejection of unavailable capabilities.
+  Actionlint and all three selected tests passed against the local
+  installed debug wheel. Hosted release-wheel execution remains open.
