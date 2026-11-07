@@ -831,6 +831,11 @@ fn scenario_grid_runs_in_order_and_retains_individual_errors() {
     assert_eq!(rows[2]["id"], "repeat");
     assert_eq!(rows[0]["result"], rows[2]["result"]);
 
+    request["payload"]["workers"] = json!(2);
+    assert_eq!(run(&request), response);
+    request["payload"]["workers"] = json!(33);
+    assert_eq!(run(&request)["error"]["code"], "invalid_request");
+    request["payload"]["workers"] = json!(2);
     request["payload"]["scenarios"][1]["id"] = json!("baseline");
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
 }

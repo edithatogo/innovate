@@ -1,4 +1,4 @@
-use crate::{KERNEL_SCHEMA_VERSION, KernelBinding};
+use crate::{KERNEL_SCHEMA_VERSION, KernelBinding, batch_workers, run_ordered_chunks};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use std::collections::HashSet;
@@ -112,6 +112,9 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
     if request["schema_version"] != KERNEL_SCHEMA_VERSION {
         return invalid("execute_scenario_grid requires schema 2.0");
     }
+    let Some(workers) = batch_workers(&request["payload"]) else {
+        return invalid("workers must be an integer in 1..=32");
+    };
     let scenarios: Vec<Scenario> =
         match serde_json::from_value(request["payload"]["scenarios"].clone()) {
             Ok(scenarios) => scenarios,
@@ -135,20 +138,35 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
         }
     }
     let binding = KernelBinding::new();
-    let executions: Vec<_> = scenarios
-        .into_iter()
-        .map(|scenario| {
-            let execution = binding.simulate_model(&scenario.model_key, scenario.simulation);
-            let (result, error) = match execution {
-                Ok(response) => (response.result, Value::Null),
-                Err(error) => (None, json!(error)),
-            };
-            let mut row = json!({"id":scenario.id,"model_key":scenario.model_key,"result":result,"error":error});
-            if let Some(specification) = scenario.specification {
-                row["specification"] = json!(specification);
-            }
-            row
-        })
-        .collect();
+    let row = |scenario: &Scenario, result: Option<Value>, error: Value| {
+        let mut row =
+            json!({"id":scenario.id,"model_key":scenario.model_key,"result":result,"error":error});
+        if let Some(specification) = &scenario.specification {
+            row["specification"] = json!(specification);
+        }
+        row
+    };
+    let executions = run_ordered_chunks(
+        &scenarios,
+        workers,
+        |chunk| {
+            chunk
+                .iter()
+                .map(|scenario| {
+                    match binding.simulate_model(&scenario.model_key, scenario.simulation.clone()) {
+                        Ok(response) => row(scenario, response.result, Value::Null),
+                        Err(error) => row(scenario, None, json!(error)),
+                    }
+                })
+                .collect()
+        },
+        |scenario| {
+            row(
+                scenario,
+                None,
+                json!({"code":"batch_worker_panicked","message":"Native scenario worker failed"}),
+            )
+        },
+    );
     envelope(json!({"executions":executions}), Value::Null)
 }

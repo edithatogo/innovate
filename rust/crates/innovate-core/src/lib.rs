@@ -90,12 +90,8 @@ fn execute_batch_json(value: serde_json::Value) -> serde_json::Value {
     if value["schema_version"] != KERNEL_SCHEMA_VERSION {
         return invalid();
     }
-    let workers = match value["payload"].get("workers") {
-        None => 1,
-        Some(workers) => match workers.as_u64().filter(|n| (1..=32).contains(n)) {
-            Some(n) => n as usize,
-            None => return invalid(),
-        },
+    let Some(workers) = batch_workers(&value["payload"]) else {
+        return invalid();
     };
     let binding = KernelBinding::new();
     let run = |batch: &[serde_json::Value]| {
@@ -105,43 +101,17 @@ fn execute_batch_json(value: serde_json::Value) -> serde_json::Value {
             binding.predict_batch(model_key, batch.iter().cloned())
         }
     };
-    let results = if workers == 1 || datasets.len() <= 1 {
-        run(datasets)
-    } else {
-        std::thread::scope(|scope| {
-            let chunks = datasets.chunks(datasets.len().div_ceil(workers));
-            let jobs: Vec<_> = chunks
-                .map(|chunk| {
-                    let worker =
-                        std::thread::Builder::new().spawn_scoped(scope, move || run(chunk));
-                    (chunk, worker)
-                })
-                .collect();
-            jobs.into_iter()
-                .flat_map(|(chunk, worker)| match worker {
-                    Ok(worker) => worker.join().unwrap_or_else(|_| {
-                        let operation = if operation == "fit_batch" {
-                            KernelOperation::FitModel
-                        } else {
-                            KernelOperation::PredictModel
-                        };
-                        (0..chunk.len())
-                            .map(|_| {
-                                Err(KernelBindingError {
-                                    code: "batch_worker_panicked".into(),
-                                    message: "Native batch worker failed".into(),
-                                    operation: Some(operation),
-                                })
-                            })
-                            .collect()
-                    }),
-                    // Thread creation can fail under process resource limits.
-                    // This chunk has not started, so it is safe to run inline.
-                    Err(_) => run(chunk),
-                })
-                .collect()
+    let results = run_ordered_chunks(datasets, workers, run, |_| {
+        Err(KernelBindingError {
+            code: "batch_worker_panicked".into(),
+            message: "Native batch worker failed".into(),
+            operation: Some(if operation == "fit_batch" {
+                KernelOperation::FitModel
+            } else {
+                KernelOperation::PredictModel
+            }),
         })
-    };
+    });
     let rows: Vec<_> = results
         .into_iter()
         .map(|result| match result {
@@ -364,4 +334,44 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
     };
     json!({"schema_version":KERNEL_SCHEMA_VERSION,"operation":value["operation"],
         "model_key":null,"result":result,"error":error,"metadata":{"runtime":"rust_native"}})
+}
+
+fn batch_workers(payload: &serde_json::Value) -> Option<usize> {
+    match payload.get("workers") {
+        None => Some(1),
+        Some(value) => value
+            .as_u64()
+            .filter(|n| (1..=32).contains(n))
+            .map(|n| n as usize),
+    }
+}
+
+fn run_ordered_chunks<T: Sync, R: Send>(
+    inputs: &[T],
+    workers: usize,
+    run: impl Fn(&[T]) -> Vec<R> + Sync,
+    worker_failed: impl Fn(&T) -> R,
+) -> Vec<R> {
+    if workers == 1 || inputs.len() <= 1 {
+        return run(inputs);
+    }
+    std::thread::scope(|scope| {
+        let run = &run;
+        let jobs: Vec<_> = inputs
+            .chunks(inputs.len().div_ceil(workers))
+            .map(|chunk| {
+                let worker = std::thread::Builder::new().spawn_scoped(scope, move || run(chunk));
+                (chunk, worker)
+            })
+            .collect();
+        jobs.into_iter()
+            .flat_map(|(chunk, worker)| match worker {
+                Ok(worker) => worker
+                    .join()
+                    .unwrap_or_else(|_| chunk.iter().map(&worker_failed).collect()),
+                // This chunk never started and can safely execute inline.
+                Err(_) => run(chunk),
+            })
+            .collect()
+    })
 }
