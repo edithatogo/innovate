@@ -1643,12 +1643,14 @@ the other competition models and installed binding checks remain open.
   direction, and labels the scenario margin as a historical heuristic.
   Analytic reciprocal-risk and one-sided scenario checks passed with
   all 24 Rust boundary tests and focused Clippy.
-- [ ] Port the historical paired sensitivity bounds and gamma-grid
-  summaries and verify the sensitivity requests across bindings.
+- [x] Port paired and grid sensitivity and verify all four sensitivity
+  requests in the rebuilt Python wheel, Julia and installed R. Each
+  matched the analytic one-pair bound, singleton gamma-grid result,
+  directional scenario and reciprocal-risk E-value.
 
 - [x] Port the historical paired sensitivity bounds and gamma-grid
   summaries. Both identify their outputs as heuristic. Paired bounds
   reject misaligned arrays, and the grid preserves input order.
   Analytic tests verify the bounds and grid values. R marshals singleton
   arrays for these requests. All 24 boundary tests and focused Clippy
-  passed. Installed sensitivity binding validation remains open.
+  passed. Installed sensitivity validation is recorded above.
