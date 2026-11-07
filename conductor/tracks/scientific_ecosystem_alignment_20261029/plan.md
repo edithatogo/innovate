@@ -7302,3 +7302,13 @@ Hosted release readiness for this worktree revision remains open.
   exact cause of the metadata failure is unconfirmed. Use a clean
   target with sufficient space for the next build, then run both
   installed binding suites against the resulting library.
+
+- [x] Run current-source Julia and R conformance against the same
+  locked macOS arm64 debug library from e233554b. Removed only this
+  checkout's regenerable debug incremental cache to make build space.
+  Julia 1.13.3 passed 469 assertions in 68 test sets. The complete
+  installed-package R 4.3.0 script exited zero. Both runners selected
+  the freshly built library through INNOVATE_NATIVE_LIBRARY.
+  Library SHA-256 is
+  `0c9fa617589c78b52395f6dad84c31841ffdc9dc4049513c6a881b8a9a8e96a7`.
+  Optimized and bundled-artifact validation for this source remains open.
