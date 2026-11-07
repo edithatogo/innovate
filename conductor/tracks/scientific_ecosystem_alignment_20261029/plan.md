@@ -6306,3 +6306,7 @@ Hosted release readiness for this worktree revision remains open.
   on clustered augmented and cross-fitted contrasts. It equals the
   number of clusters minus one and is null without clusters. The Rust
   boundary test verified one degree of freedom for two clusters.
+
+- [x] Verify cluster degrees of freedom through rebuilt Python, Julia
+  and installed R. All three returned one for a two-cluster augmented
+  ATE and an explicit null when cluster labels were omitted.
