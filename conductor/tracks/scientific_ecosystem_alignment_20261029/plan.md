@@ -941,3 +941,9 @@ remain open.
   without overflowing the intermediate basis sum. All 19 Rust network
   tests and focused Clippy passed. Binding evidence for this edge case
   remains open.
+
+- [x] Requalify heterogeneous hazard scaling in installed Python, Julia and R.
+  The same large-weight fixture returned adoption counts of [0, 2] in all
+  three bindings. The rebuilt wheel passed 59 Python native tests, Julia
+  Pkg.test passed 231 assertions, and installed R conformance passed.
+  [Logs and fixture](evidence/kairos-scaled-hazard-20261107).

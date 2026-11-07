@@ -1,0 +1,1 @@
+{"inputs":{"time":[0,4]},"parameters":{"p":1e-296,"q":0,"m":2},"simulation_options":{"engine":"kairos_network","population":2,"seed":42,"edges":[],"capacity":2,"service_ticks":1,"ticks_per_unit":1,"innovation_multipliers":[1e308,1e308],"hazard_forcing":{"time":[0],"innovation":[1],"imitation":[1]}}}
