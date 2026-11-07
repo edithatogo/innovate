@@ -2412,3 +2412,12 @@ the other competition models and installed binding checks remain open.
   and Julia returned identical results, and installed R matched within 1e-14
   after JSON serialization. Regime fitting and changepoint selection still
   need coverage in the benchmark corpus.
+
+- [x] Add and qualify regime_switching_fit. The synthetic logistic trajectory
+  reproduces the existing independent detector fixture's breakpoint sequence,
+  selects index 5 for the two-segment fit, and replays the fixed-time forecast
+  from saved state. Maximum absolute trajectory error was 2.963e-11 over 30
+  samples. Five focused Rust tests, formatting and Clippy passed. The rebuilt
+  wheel loaded with Python 3.15.2 and Julia agreed exactly. Installed R agreed
+  within 1e-14 after JSON serialization. This exercises detector parity on a
+  smooth curve. Scientific validation on observed regime changes remains open.
