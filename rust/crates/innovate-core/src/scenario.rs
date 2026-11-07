@@ -1054,7 +1054,16 @@ fn interpolated_crossing(time: &[f64], values: &[f64], threshold: f64) -> Option
         return Some(time[index]);
     }
     let fraction = threshold_fraction(values[index - 1], threshold, values[index]);
-    Some(time[index - 1] * (1. - fraction) + time[index] * fraction)
+    let lower = time[index - 1];
+    let upper = time[index];
+    let span = upper - lower;
+    Some(if !span.is_finite() {
+        lower * (1. - fraction) + upper * fraction
+    } else if fraction <= 0.5 {
+        fraction.mul_add(span, lower)
+    } else {
+        (1. - fraction).mul_add(-span, upper)
+    })
 }
 
 fn threshold_fraction(lower: f64, threshold: f64, upper: f64) -> f64 {
@@ -1083,6 +1092,19 @@ mod tests {
         );
         assert!(super::exact_resource_effect(exact + 1).is_err());
         assert!(super::exact_resource_effect(-exact - 1).is_err());
+    }
+
+    #[test]
+    fn threshold_crossing_preserves_subnormal_time_and_overflowing_spans() {
+        let tiny = f64::from_bits(1);
+        assert_eq!(
+            super::interpolated_crossing(&[tiny, 2. * tiny], &[0., 2.], 1.),
+            Some(2. * tiny)
+        );
+        assert_eq!(
+            super::interpolated_crossing(&[-f64::MAX, f64::MAX], &[0., 2.], 1.),
+            Some(0.)
+        );
     }
 
     #[test]

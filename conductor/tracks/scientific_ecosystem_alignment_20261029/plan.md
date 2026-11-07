@@ -6601,3 +6601,9 @@ Hosted release readiness for this worktree revision remains open.
   requirements, score direction, interpolation, ties, and the verified
   threshold and time-basis fields. The release verifier still reports
   38 open model and feature obligations.
+
+- [x] Preserve threshold interpolation on subnormal time grids. The
+  shared ranking and comparison calculation now uses a fused
+  multiply-add from the nearer endpoint for finite spans and retains
+  weighted endpoints when subtracting the endpoints would overflow.
+  Eight scenario unit tests and the public grid boundary test passed.
