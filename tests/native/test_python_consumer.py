@@ -1412,6 +1412,21 @@ def test_matching_with_cross_fitted_control_predictions():
     assert matched["conditional_standard_error"] is None
 
 
+def test_matching_propagates_fitted_control_uncertainty():
+    result = innovate.execute(
+        "summarize_causal", method="matched_treatment_contrast",
+        outcomes=[0, 4, 2, 6], treatment=[0, 1, 0, 1],
+        scores=[0, 0, 1, 0], caliper=0, outcome_variances=[1] * 4,
+        outcome_covariance_factors=[[7] * 4, [0, 2, 0, 2]],
+        fit_controls={"strata": ["a"] * 4, "folds": [1, 2, 2, 1]},
+    )["result"]
+    assert result["estimate"] == 5
+    assert result["adjusted_estimate"] == 6
+    assert result["adjusted_outcome_weights"] == [[0, -1.5], [1, 0.5], [2, 0.5], [3, 0.5]]
+    assert result["conditional_standard_error"] == pytest.approx(math.sqrt(5.5))
+    assert result["adjusted_standard_error"] == pytest.approx(math.sqrt(7))
+
+
 def test_matching_standardized_balance():
     adjacent = math.nextafter(1.5, math.inf)
     balance = innovate.execute(

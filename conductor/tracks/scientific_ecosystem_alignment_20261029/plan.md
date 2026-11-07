@@ -5386,3 +5386,8 @@ Hosted release readiness for this worktree revision remains open.
   shared shift cancels despite fractional-weight rounding. The Rust
   unit fixture canceled a maximum-magnitude common loading. All three
   causal unit tests and the focused causal boundary test passed.
+
+- [x] Verify fitted-control outcome uncertainty in the Python consumer
+  on Python 3.15.2. The fixed-design fixture checked analytic outcome
+  weights, cancellation of a common covariance loading, and propagation
+  of a treated-only loading into both effect standard errors.
