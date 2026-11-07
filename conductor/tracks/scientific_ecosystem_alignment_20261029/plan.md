@@ -6808,3 +6808,8 @@ Hosted release readiness for this worktree revision remains open.
   weighted grid. Still classify all timestamps. Four Rust adopter
   tests passed, including a subnormal grid bracketed by ±MAX.
   Binding verification of the new case remains open.
+
+- [x] Verify the subnormal adopter grid bracketed by zero-weight
+  extreme endpoints through Python 3.15.2, Julia and installed R.
+  All three returned the five expected categories in order using
+  native builds from 632f6afa.
