@@ -3201,3 +3201,10 @@ the other competition models and installed binding checks remain open.
   selected time 12 in all 12 successful refits, with exact agreement
   across Python 3.15.2, Julia and R. Focused Rust tests and Clippy
   passed. Frequencies describe stability on the candidate grid.
+
+- [x] Verify paired-case event-selection frequencies when resampling
+  loses branch support. Slice the noisy Logistic residual fixture to
+  times 7–17 and use candidates 11, 12 and 13 with seed 42 and 80 draws.
+  Python 3.15.2, Julia and R agreed exactly. Twelve refits returned fit
+  errors, and the 68 successful refits selected the candidates 23, 35
+  and 10 times. Frequencies sum to one over successful refits.
