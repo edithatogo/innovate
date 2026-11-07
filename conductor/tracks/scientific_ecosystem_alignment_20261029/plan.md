@@ -1562,3 +1562,9 @@ the other competition models and installed binding checks remain open.
   against the installed R binding on the previously nonconvergent
   ARMA(1,2) series. The public fitting helpers returned all 200 fitted
   values and agreed within 1e-10 across runtimes.
+
+- [x] Schedule Kairos waiting queue limits. Reducing a limit to zero
+  preserves an existing waiter and blocks later arrivals while service
+  is full. The result reports the effective limit alongside the initial
+  limit. All 20 network tests and focused Clippy passed.
+- [ ] Verify scheduled queue limits through installed Python, Julia and R.
