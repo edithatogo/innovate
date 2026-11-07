@@ -1,0 +1,14 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 9.62s
+     Running tests/regime.rs (target/debug/deps/regime-8a716c32e7c247b4)
+
+running 6 tests
+test two_point_fisher_pry_fit_is_identified_but_has_no_residual_degrees_of_freedom ... ok
+test malformed_regime_state_and_options_fail_closed ... ok
+test historical_index_split_retains_batch_dependent_offset_and_singletons ... ok
+test fixed_time_switch_is_continuous_and_does_not_reset_on_forecast_batches ... ok
+test fitted_regimes_retain_fixed_boundary_and_segment_parameters ... ok
+test automatic_detection_and_short_single_regime_are_explicit ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+

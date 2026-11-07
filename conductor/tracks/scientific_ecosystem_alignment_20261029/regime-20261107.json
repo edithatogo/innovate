@@ -1,0 +1,114 @@
+{
+  "date": "2026-11-07",
+  "status": "bounded_local_checkpoint",
+  "base_commit": "9dfd112333af4aea9bc2735e6d2d334fb2c91a76",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "results": {
+    "rust_tests": 86,
+    "accounting": "82 core/C ABI plus 4 Polars",
+    "installed_python": 33,
+    "julia_assertions": 159,
+    "R": "native conformance, fixed-time regime forecast/state and short Fisher-Pry pass",
+    "clippy_lint_types_docs": "pass; expected native source type warning; 163 pages",
+    "package": "installed local wheel, archive metadata and exact new-source inclusion pass; clean-source/platform/hosted qualification pending"
+  },
+  "oracle": {
+    "ruptures": "1.1.10",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "python": "3.15.2 (main, Oct 26 2026, 13:59:33) [Clang 23.1.3 ]",
+    "method": "Pelt(model=l2,min_size=2,jump=5).predict(pen=3)",
+    "reference": "https://centre-borelli.github.io/ruptures-docs/code-reference/detection/pelt-reference/"
+  },
+  "coverage": {
+    "branches": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "functions": {
+      "count": 839,
+      "covered": 621,
+      "percent": 74.01668653158522
+    },
+    "instantiations": {
+      "count": 1771,
+      "covered": 721,
+      "percent": 40.71146245059288
+    },
+    "lines": {
+      "count": 7031,
+      "covered": 5851,
+      "percent": 83.21718105532642
+    },
+    "mcdc": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "regions": {
+      "count": 11329,
+      "covered": 9908,
+      "notcovered": 1421,
+      "percent": 87.45696884102745
+    }
+  },
+  "regime_lines": {
+    "count": 428,
+    "covered": 381,
+    "percent": 89.01869158878505
+  },
+  "raw_log_sha256": {
+    "innovate-regime-lint.log": "e37475fef327dd610aeb9f98ad258540963312e946790c9e865d553324c25917",
+    "innovate-regime-sdist.log": "28c36217f199a778c7ca786836f0ae616b8e531705ba518baf434f7946c612ec",
+    "innovate-regime-wheel.log": "e3e9e504ff59c6d6fa7722cd994d7fab60f2559a124b9b57ab2d6085479f4edf",
+    "innovate-regime-clippy.log": "d68798dad1519623286edc03fbe76252d1203b8d8e7a1b696f316236d6cfd5f4",
+    "innovate-regime-ffi.log": "c2d0276f11a9d7df888ced5f6c8077e7d4baf2a410ebeb1d15f08d3ff2f20047",
+    "innovate-regime-final-hooks.log": "c196e73e95a17320abf847cd78fc86258f3b41948d406572d3aad069b679e7df",
+    "innovate-regime-install.log": "14efff782c594a4b109f4a408377b5c52b28148c582505b36d3902ca2e53b80d",
+    "innovate-regime-docs.log": "065b96893cb5b03fca1a89cae3e053d60b9743aa4f4ad72eacd2b14e38dbc22b",
+    "innovate-regime-focused.log": "f618d96709e2cdbe63f0a32d301209a4633f97dbd28d7217d3d99e94fca0e0f4",
+    "innovate-regime-package.log": "e8a10f1742d76d10d5a3747245bcc54d49114e9da9299588baa219f0d00778c7",
+    "innovate-regime-short-red.log": "22f7463805c78de765dd8f5d4d65d45d2e01c1d0970a8b0cc3f29e005e2a5b3f",
+    "innovate-regime-tabular.log": "88f530f010c496cf597d6fbd6ee0808215eaa981ddcd4a36723e5bedc70822e6",
+    "innovate-regime-hooks.log": "7523d6b940ad7d7e49ea93ff33ac60ceb273c50cb6ae677030a5b65df95de21b",
+    "innovate-regime-coverage-pre-time-selector.log": "369e1c6663bd5d7ccf2416b9429093c70638d0972048f3a7b0292dc7fac900f8",
+    "innovate-regime-time-red.log": "4f43a0e8f1594546712677ab66fe5a6fde06f8b78d4c8e4469cae89e143251ad",
+    "innovate-regime-oracle-install.log": "9b2290a194f6c3224278db0f674ea7b60ab94314af60322746001f26e7db7fff",
+    "innovate-regime-clippy-focused.log": "af01a679a0b6174f3f00f0887697c8e87323f134cfc605ea6e33b34d15ca309a",
+    "innovate-regime-policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+    "innovate-regime-julia.log": "19d58b3ccaff57af7771107c4c2c51300430d4839aaa672f4e3935d691154322",
+    "innovate-regime-red.log": "95a64dcbadfaeb36f12868f0cc4b3f9bbd2e27c72a771e0a0c0d449e3dcad699",
+    "innovate-regime-r.log": "b2677ba5079340582f970530351db6689250f528a8e559bfcfe72b7b7d3dd928",
+    "innovate-regime-python.log": "cb27fd7f42b6d224dfa05db3fc71777af0a383bcb32d6cfe1be44ebfcab22739",
+    "innovate-regime-release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "innovate-regime-coverage.log": "7b1d0f920c0ac32174ddcbf4865fbd0b702ad31b4c0486686e51af6579fac2e3",
+    "innovate-regime-r-install.log": "8bcc66b6f075dd6146b6ca006a0579b369a424d49b587fb4b5bc0350fad78c31",
+    "innovate-regime-green.log": "c415bf8be5e698f8abb3e16ddd07e621fc900b649738a65df75a1f0b7458b8be"
+  },
+  "source_sha256": {
+    "bindings/julia/test/runtests.jl": "7cb3dead77fe82e274d4d3e00ff0bfdb3d7ea36567734f8cd3a6aef268293647",
+    "bindings/r/R/kernel_bridge.R": "16dfc0ef420fc52a9f86b06356d606f3fc2c70de1b8a0cc3e64ea535bf8578c5",
+    "bindings/r/tests/native.R": "caf9c7cd34b5801323a738c8f32bc1a643d09fb965d272b58e0e22c8a2a119a7",
+    "docs/astro-site/src/content/docs/native-migration.md": "3562fe03d05a072f06c273db9130e2984fe6cc539761accccd308d7c2ceb7d1c",
+    "migration-ledger.json": "a394e08e04455cbe36e9ae54b9953756de5dff86415743519c97c40cdaa62fdc",
+    "rust/crates/innovate-core/src/discovery.json": "27794d597431cb62ae0e164010110f9ad3807433a4cbc46b80c408e7d278a57f",
+    "rust/crates/innovate-core/src/fitting.rs": "93331bf188ec5d25922d07258ffd3588206fdff83c15f1608f67e4de36037448",
+    "rust/crates/innovate-core/src/kernel.rs": "34b900edfaaba4f6f5e4aa555acccce6efba167866a55a9f73d95b0e5b50b10a",
+    "rust/crates/innovate-core/src/lib.rs": "744e8a3ac43e7e2f036713b330fdda59751724a4ea629442b4a4efae5b138923",
+    "rust/crates/innovate-core/src/validation.rs": "bec145881e55a69f5cd390c14e0d4fd3587da1d79c3317fb637a52a26fd87e6b",
+    "rust/crates/innovate-core/tests/native_boundary.rs": "858d2322d5e87dcdd869b063d7bef09c126d4ada9fdfabd1faceb183118fe006",
+    "tests/native/test_python_consumer.py": "6f6c13489f596361cb9b2a8d9db574a5e8a74715f63616605f85a409e910d0df",
+    "rust/crates/innovate-core/src/regime.rs": "fc55ea87bbca2b642fbbee7c09582a738883aa2c26e1bf58a9729f7ce98b7c58",
+    "rust/crates/innovate-core/tests/regime.rs": "459cda556e6cfb67668b7804a78242b56fb463315612ea7c9664a4150e56b622",
+    "rust/crates/innovate-core/tests/fixtures/regime_ruptures.json": "26160cd109c95d15c17ca05688fb5471f03c87253d375d5dceec963b968d91a2"
+  },
+  "artifact_sha256": {
+    "/tmp/innovate-regime-wheel/innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "9a7265059a3c104a6206df476e6e85ef045bff3a329439cda53d0d9ccf7d15ba",
+    "/tmp/innovate-regime-wheel/innovate-0.7.0a1.tar.gz": "46db95b7ed32f4d285c23cb51b8755d32e7734717ffddf214b15ad0c641c1f7f",
+    "target/debug/libinnovate_ffi.dylib": "f70814afd2fd3ba9b24b149b0d16a707b4762da02c3dae10452bdcaae6842280"
+  }
+}

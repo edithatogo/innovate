@@ -218,8 +218,13 @@ pub(crate) fn validate_request(request: &KernelRequest) -> Result<(), KernelBind
                     "observations must be finite, nonnegative and aligned with time",
                 ));
             }
-            if operation == KernelOperation::FitModel && time.len() < 4 {
-                return Err(fail("fitting requires at least four observations"));
+            if operation == KernelOperation::FitModel {
+                let minimum = if model == "fisher_pry" { 2 } else { 4 };
+                if time.len() < minimum {
+                    return Err(fail(&format!(
+                        "fitting requires at least {minimum} observations"
+                    )));
+                }
             }
         }
     }

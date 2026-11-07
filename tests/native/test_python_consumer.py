@@ -45,6 +45,7 @@ def test_capabilities_are_native_and_unavailable_features_fail_closed():
         "network_diffusion",
         "policy_hazard",
         "latent_process",
+        "regime_switching",
     }
     assert innovate.capabilities()["supports_simulation"].all()
     assert innovate.capabilities()["supports_summarize"].all()
@@ -274,3 +275,24 @@ def test_latent_polars_fit_preserves_residual_state():
     expected = p["base_L"] / (1 + math.exp(-p["base_k"] * (30 - p["base_x0"])))
     expected += state["constructor_kwargs"]["latent_values"][-1]
     assert fit.predict(pl.DataFrame({"time": [30.0]}))["prediction"][0] == pytest.approx(expected, abs=1e-10)
+
+
+def test_fixed_time_regime_polars_fit_and_saved_forecast():
+    time = [float(i) for i in range(30)]
+    observed = [100 / (1 + math.exp(-0.4 * (t - 6))) if t < 15 else 200 / (1 + math.exp(-0.3 * (t - 18))) for t in time]
+    fit = innovate.fit(
+        "regime_switching",
+        pl.DataFrame({"time": time, "observed": observed}),
+        model_options={"base_model": "logistic", "prediction_mode": "fixed_time", "split_index": 15},
+    )
+    assert fit.envelope["result"]["state"]["constructor_kwargs"]["split_time"] == 15.0
+    assert fit.parameters["regime_1_k"] == pytest.approx(0.3, abs=0.001)
+    combined = fit.predict(pl.DataFrame({"time": [20.0, 30.0, 40.0]}))["prediction"].to_list()
+    assert fit.predict(pl.DataFrame({"time": [40.0]}))["prediction"][0] == combined[-1]
+    short = innovate.fit(
+        "regime_switching",
+        pl.DataFrame({"time": [0.0, 1.0], "observed": [0.11920292202211755, 0.2689414213699951]}),
+        model_options={"base_model": "fisher_pry"},
+    )
+    assert short.envelope["result"]["details"]["regime_count"] == 1
+    assert short.predict(pl.DataFrame({"time": [2.0]}))["prediction"][0] == pytest.approx(0.5, abs=1e-8)

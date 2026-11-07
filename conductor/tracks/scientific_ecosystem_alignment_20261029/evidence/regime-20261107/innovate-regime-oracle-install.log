@@ -1,0 +1,16 @@
+Using CPython 3.15.2 interpreter at: .venv-native/bin/python
+Creating virtual environment at: .venv-regime-oracle
+Activate with: source .venv-regime-oracle/bin/activate
+Using Python 3.15.2 environment at: .venv-regime-oracle
+Resolved 3 packages in 1.21s
+Downloading scipy (19.5MiB)
+Downloading numpy (5.2MiB)
+   Building ruptures==1.1.10
+ Downloaded numpy
+ Downloaded scipy
+      Built ruptures==1.1.10
+Prepared 3 packages in 12.66s
+Installed 3 packages in 31ms
+ + numpy==2.5.4
+ + ruptures==1.1.10
+ + scipy==1.18.1

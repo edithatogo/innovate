@@ -93,8 +93,9 @@
     },
     {
       "key": "regime_switching",
-      "status": "unavailable",
-      "required": true
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/regime-20261107.json"
     }
   ],
   "feature_areas": [

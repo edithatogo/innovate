@@ -398,3 +398,56 @@ Summaries can omit time, and diagnostics warn about in-sample residual smoothing
 
 Adjusted-fit AIC/BIC are unavailable until effective degrees of freedom for the
 residual smoother are qualified. Baseline optimizer diagnostics remain separate.
+
+## Regime-switching diffusion
+
+`regime_switching` fits independent scalar Bass, Logistic, Gompertz or Fisher–Pry
+curves before a continuity adjustment. Constructor `split_index` explicitly
+selects a zero-based boundary inside the observed series. Alternatively,
+`split_time` selects the first observation at or after that time and retains the
+exact time for fixed-time continuity, including boundaries between samples.
+Do not supply both; each must leave observations on both sides. Without either, native
+unpruned dynamic programming minimizes penalized L2 segment error on a grid:
+`detector_penalty=3`, `detector_jump=5`, minimum segment length two. It selects
+the first detected boundary, with midpoint fallback when no valid interior
+boundary is detected. This independently implemented grid objective aligns with
+the historical [ruptures Pelt defaults](https://centre-borelli.github.io/ruptures-docs/code-reference/detection/pelt-reference/).
+Fixtures from ruptures 1.1.10 qualify constant, multiple-step, off-grid, short,
+trend, small-step and smooth-curve cases; universal floating-point/tie or PELT performance
+parity is not asserted. Native detection supports at most 2000 observations;
+provide an explicit split for larger fits. Jump is 1–2000 and penalty positive.
+
+Prediction mode is explicit:
+
+- `historical_index` (default) applies the fitted boundary index to each requested
+  batch. At the boundary, the second curve is shifted to equal the preceding
+  first-curve sample. If the index reaches the penultimate batch position, only
+  the first curve is used. This preserves the historical batch dependence.
+- `fixed_time` uses saved `split_time`, shifting the second curve to equal the
+  first curve at that exact time. Samples at or after the boundary use the second
+  curve. Use this mode for forecasts that retain the same time-based switch
+  across batches. Direct parameter requests must supply `split_time`.
+
+Both modes clip below zero and take a batch cumulative maximum. Saved state
+includes all regime parameters, boundary index/time, regime count, detector
+configuration/breakpoints and residual sample deviation. Segments with fewer
+than two observations are omitted; if neither segment remains, fit the whole
+series as one regime. Each retained base fit still enforces its own numerical
+and domain requirements. Fisher–Pry now allows two interior share observations
+for an identified point fit, while reporting no residual degrees of freedom and
+unavailable information criteria. Other scalar fit minima remain four.
+
+Optional JSON `regime_fit_options` provides one native fit-option object per
+retained regime; `base_fit_options` applies common options. Do not supply both.
+General `fit_options` must be empty because boundary selection is separate.
+Adjusted-fit AIC/BIC remain unavailable until split-selection degrees of freedom
+are qualified. Segment optimizer diagnostics remain separate: continuity-adjusted
+predictions need not fit the observations. The residual deviation is not
+calibrated uncertainty. Sample increments preserve the historical singleton
+return-level behavior, not a derivative. Summaries may omit time.
+
+Python Polars, Julia and R retain the same state and boundary. Stochastic draws,
+probabilistic regime inference, other changepoint objectives/search methods,
+full nested base composition, base covariates and complete small-sample scientific
+qualification remain required. Simulation currently returns a labelled
+deterministic point path.

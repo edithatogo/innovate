@@ -35,7 +35,7 @@ fn dispatch_rejects_unknown_schema_versions() {
 #[test]
 fn discovery_does_not_advertise_unported_models() {
     let models = KernelBinding::new().discover_models().unwrap().models;
-    assert_eq!(models.len(), 12);
+    assert_eq!(models.len(), 13);
     assert!(models.iter().all(|m| m.supported_backends == ["rust"]));
 }
 

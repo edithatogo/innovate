@@ -10,6 +10,7 @@ mod latent;
 mod network;
 mod numerics;
 mod policy;
+mod regime;
 mod simulation;
 mod spillover;
 mod substitution;

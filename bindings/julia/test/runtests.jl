@@ -4,7 +4,7 @@ using Test, Innovate
     result = kernel_predict_model("logistic", payload)
     @test result["metadata"]["runtime"] == "rust_native"
     @test result["result"]["values"][2] == 50.0
-    @test length(kernel_discover_models()["models"]) == 12
+    @test length(kernel_discover_models()["models"]) == 13
     @test_throws ErrorException kernel_predict_model("composite", payload)
     for _ in 1:100
         @test kernel_predict_model("logistic",payload)["result"]["values"][2] == 50.0
@@ -138,4 +138,18 @@ end
     expected=q["base_L"]/(1+exp(-q["base_k"]*(30-q["base_x0"])))+f["state"]["constructor_kwargs"]["latent_values"][end]
     a=kernel_predict_model("latent_process",Dict("inputs"=>Dict("time"=>[30.]),"state"=>f["state"]))["result"]
     @test isapprox(a["values"][1],expected;atol=1e-10)
+end
+@testset "Fixed time regime forecast" begin
+    time=collect(0.:29.)
+    y=[t<15 ? 100/(1+exp(-0.4*(t-6))) : 200/(1+exp(-0.3*(t-18))) for t in time]
+    f=kernel_fit_model("regime_switching",Dict("inputs"=>Dict("time"=>time,"observed"=>y),"constructor_kwargs"=>Dict("base_model"=>"logistic","prediction_mode"=>"fixed_time","split_index"=>15)))["result"]
+    @test f["state"]["constructor_kwargs"]["split_time"]==15
+    @test isapprox(f["parameters"]["regime_1_k"],0.3;atol=0.001)
+    a=kernel_predict_model("regime_switching",Dict("inputs"=>Dict("time"=>[20.,30.,40.]),"state"=>f["state"]))["result"]
+    b=kernel_predict_model("regime_switching",Dict("inputs"=>Dict("time"=>[40.]),"state"=>f["state"]))["result"]
+    @test a["values"][end]==b["values"][1]
+end
+@testset "Short Fisher-Pry regime" begin
+    f=kernel_fit_model("regime_switching",Dict("inputs"=>Dict("time"=>[0.,1.],"observed"=>[0.11920292202211755,0.2689414213699951]),"constructor_kwargs"=>Dict("base_model"=>"fisher_pry")))["result"]
+    @test f["details"]["regime_count"]==1
 end

@@ -1,0 +1,101 @@
+    Blocking waiting for file lock on build directory
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 10.62s
+     Running unittests src/lib.rs (target/debug/deps/innovate_core-15f01e785edb4220)
+
+running 1 test
+test regime::tests::native_grid_matches_independent_ruptures_fixtures ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/competition.rs (target/debug/deps/competition-b4fdc8a4a3e695a4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+     Running tests/complementary.rs (target/debug/deps/complementary-82d5ebf034aeaf62)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/fit_quality.rs (target/debug/deps/fit_quality-1190676da8bfda01)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/historical_logistic.rs (target/debug/deps/historical_logistic-3a32f19425a37fd3)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+     Running tests/kairos.rs (target/debug/deps/kairos-434d5bc29bf2250e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 9 filtered out; finished in 0.00s
+
+     Running tests/latent.rs (target/debug/deps/latent-0c052168686d8f25)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+     Running tests/lock_in.rs (target/debug/deps/lock_in-21fad6a433f8cc39)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+     Running tests/model_oracles.rs (target/debug/deps/model_oracles-d1629fd20f88d91d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/multi_generation.rs (target/debug/deps/multi_generation-0f5a024451284583)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.00s
+
+     Running tests/native_boundary.rs (target/debug/deps/native_boundary-2cd1b783beebb90f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.00s
+
+     Running tests/network.rs (target/debug/deps/network-c8958ced4c9e63b0)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/network_diffusion.rs (target/debug/deps/network_diffusion-6a3df4b704db5f39)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+     Running tests/policy.rs (target/debug/deps/policy-c882367887e86b96)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/regime.rs (target/debug/deps/regime-8a716c32e7c247b4)
+
+running 1 test
+test fitted_regimes_retain_fixed_boundary_and_segment_parameters ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.01s
+
+     Running tests/scientific_contract.rs (target/debug/deps/scientific_contract-552ca5cfb4817fad)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+

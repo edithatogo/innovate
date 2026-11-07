@@ -2,7 +2,7 @@ library(innovate.R)
 payload <- list(inputs=list(time=c(0,1,2)), parameters=list(L=100,k=1,x0=1))
 x <- kernel_predict_model("logistic", payload)
 stopifnot(x$result$values[[2]] == 50, x$metadata$runtime == "rust_native")
-stopifnot(length(kernel_discover_models()$models) == 12)
+stopifnot(length(kernel_discover_models()$models) == 13)
 error <- tryCatch(kernel_predict_model("composite", payload), error=function(e) conditionMessage(e))
 stopifnot(is.character(error), grepl("unsupported_native_operation", error))
 for (i in seq_len(100)) stopifnot(kernel_predict_model("logistic", payload)$result$values[[2]] == 50)
@@ -139,3 +139,14 @@ q <- f$parameters
 expected <- q$base_L/(1+exp(-q$base_k*(30-q$base_x0)))+tail(unlist(f$state$constructor_kwargs$latent_values),1)
 stopifnot(abs(kernel_predict_model("latent_process",list(inputs=list(time=30),state=f$state))$result$values[[1]]-expected)<1e-10)
 cat("R latent fit, saved state and singleton arrays passed\n")
+time <- 0:29
+y <- ifelse(time<15,100/(1+exp(-0.4*(time-6))),200/(1+exp(-0.3*(time-18))))
+f <- kernel_fit_model("regime_switching",list(inputs=list(time=time,observed=y),constructor_kwargs=list(base_model="logistic",prediction_mode="fixed_time",split_index=15)))$result
+stopifnot(f$state$constructor_kwargs$split_time==15,abs(f$parameters$regime_1_k-0.3)<0.001)
+a <- kernel_predict_model("regime_switching",list(inputs=list(time=c(20,30,40)),state=f$state))$result
+b <- kernel_predict_model("regime_switching",list(inputs=list(time=40),state=f$state))$result
+stopifnot(a$values[[3]]==b$values[[1]])
+cat("R fixed-time regime fit and forecast state passed\n")
+f <- kernel_fit_model("regime_switching",list(inputs=list(time=c(0,1),observed=c(0.11920292202211755,0.2689414213699951)),constructor_kwargs=list(base_model="fisher_pry")))$result
+stopifnot(f$details$regime_count==1,abs(kernel_predict_model("regime_switching",list(inputs=list(time=2),state=f$state))$result$values[[1]]-0.5)<1e-8)
+cat("R short Fisher-Pry regime and singleton detected boundary passed\n")

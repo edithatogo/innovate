@@ -92,13 +92,14 @@ pub(crate) fn refine(
     let time = numeric_array_from_aliases(input, &["time", "t"], op)?;
     let observed =
         numeric_array_from_aliases(input, &["observed", "y", "values", "adoption", "share"], op)?;
+    let minimum = if model == "fisher_pry" { 2 } else { 4 };
     if observed.len() != time.len()
-        || time.len() < 4
+        || time.len() < minimum
         || observed.iter().any(|x| !x.is_finite() || *x < 0.0)
     {
-        return Err(error(
-            "fitting needs at least four aligned, finite, nonnegative observations",
-        ));
+        return Err(error(format!(
+            "fitting needs at least {minimum} aligned, finite, nonnegative observations"
+        )));
     }
     let y_scale = observed.iter().copied().fold(0.0, f64::max).max(1e-12);
     let t_scale = time.iter().copied().map(f64::abs).fold(1.0, f64::max);
@@ -197,6 +198,13 @@ pub(crate) fn refine(
         result["model_name"].as_str().unwrap(),
         names.len() + 1,
     );
+    if observed.len() <= names.len() {
+        diagnostics["metrics"]["AIC"] = Value::Null;
+        diagnostics["metrics"]["BIC"] = Value::Null;
+        diagnostics["information_criteria"] =
+            json!({"available":false,"reason":"no residual degrees of freedom"});
+        diagnostics["warnings"].as_array_mut().unwrap().push(json!("point fit has no residual degrees of freedom; residual variance and forecast uncertainty are unqualified"));
+    }
     if fit.report["converged"] != true {
         diagnostics["warnings"]
             .as_array_mut()
