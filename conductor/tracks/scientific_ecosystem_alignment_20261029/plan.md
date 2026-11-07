@@ -2855,3 +2855,8 @@ the other competition models and installed binding checks remain open.
   201 of 9,900 refits failed. Case resampling covered 81 of 100 with
   mean width 0.7462212. Preserve the differing denominators and report
   baseline refusal separately. Broader calibration remains open.
+
+- [x] Expose baseline optimizer diagnostics and categorize failed scalar
+  bootstrap draws as nonfinite synthetic samples, fit errors, or
+  nonconverged refits. The focused Rust replay regression verifies
+  that categories sum to the existing failed count. Clippy passed.

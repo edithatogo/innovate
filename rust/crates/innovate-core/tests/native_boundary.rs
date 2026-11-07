@@ -2133,6 +2133,14 @@ fn bootstrap_scalar_fit_replays_and_accounts_for_failed_draws() {
     let succeeded = fit["succeeded"].as_u64().unwrap();
     assert!(succeeded > 0);
     assert_eq!(succeeded + fit["failed"].as_u64().unwrap(), 8);
+    assert_eq!(fit["baseline_optimizer"]["converged"], true);
+    let failure_counts: u64 = fit["failure_counts"]
+        .as_object()
+        .unwrap()
+        .values()
+        .map(|count| count.as_u64().unwrap())
+        .sum();
+    assert_eq!(failure_counts, fit["failed"].as_u64().unwrap());
     assert_eq!(fit["interval_method"], "percentile");
     assert_eq!(fit["interval_mass"], 0.95);
     for bound in fit["parameter_intervals"]["L"].as_array().unwrap() {

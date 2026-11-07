@@ -80,6 +80,9 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
     let mut rng = DeterministicStream::from_run_seed(seed);
     let mut estimates = BTreeMap::<String, Vec<f64>>::new();
     let mut succeeded = 0;
+    let mut invalid_synthetic = 0;
+    let mut fit_errors = 0;
+    let mut nonconverged = 0;
     for _ in 0..draws {
         if let Some((fitted, residuals)) = &residual_design {
             let synthetic: Vec<_> = fitted
@@ -87,6 +90,7 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
                 .map(|f| f + residuals[rng.sample(range)])
                 .collect();
             if synthetic.iter().any(|value| !value.is_finite()) {
+                invalid_synthetic += 1;
                 continue;
             }
             sample["inputs"]["observed"] = json!(synthetic);
@@ -102,9 +106,11 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
             .ok()
             .and_then(|fit| fit.result)
         else {
+            fit_errors += 1;
             continue;
         };
         if fit["diagnostics"]["optimizer"]["converged"] != true {
+            nonconverged += 1;
             continue;
         }
         let parameters = fit["parameters"]
@@ -141,6 +147,8 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
         .collect();
     Ok(json!({"method":method,"seed":seed,"draws":draws,
         "succeeded":succeeded,"failed":draws-succeeded,
+        "failure_counts":{"nonfinite_synthetic":invalid_synthetic,"fit_error":fit_errors,"nonconverged":nonconverged},
+        "baseline_optimizer":baseline["diagnostics"]["optimizer"],
         "baseline_parameters":baseline["parameters"],"estimates":estimates,
         "interval_method":"percentile","interval_mass":interval_mass,"parameter_intervals":intervals}))
 }
