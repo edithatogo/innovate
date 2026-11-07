@@ -709,3 +709,17 @@ Source: d8d14ea5. Twenty-six unique focused Rust tests,
 42 installed Python tests, 187 Julia assertions, R conformance and 163-page
 documentation build passed. Successive-generation forcing, events, automatic
 fit starts, uncertainty and scientific/release qualification remain open.
+
+## Historical Lotka Volterra covariate forcing
+
+- [x] Preserve named additive growth/competition controls and saved history.
+- [x] Qualify analytic and independent references, fitting and all three bindings.
+- [x] Review and retain limitations and completion evidence.
+
+Source: 072206f5. Full local qualification passed 131 Rust core/C ABI/Polars
+tests, 43 installed Python tests, 189 Julia assertions and R conformance.
+The interacting SciPy reference, perturbed-start fit and held-out forecast pass.
+Competition line coverage is 92.25 percent and core/C ABI line coverage is
+85.37 percent. Docs build 163 pages. Local package metadata and exact source
+inclusion pass. All 38 feature obligations remain required. This lane continues
+in the same isolated worktree with existing source ownership.
