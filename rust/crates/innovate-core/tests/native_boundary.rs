@@ -404,3 +404,21 @@ fn historical_sarima_retains_sarimax_initial_predictions() {
         }
     }
 }
+
+#[test]
+fn offset_timestamp_weekly_buckets_use_elapsed_time() {
+    let request = innovate_core::json!({
+        "schema_version":"2.0", "operation":"aggregate_dates",
+        "payload":{"frequency":"W","dates":[
+            "2026-11-08T10:00:00+10:00","2026-11-01T00:00:00Z","2026-11-07T23:59:59.999Z"
+        ],"values":[4,1,2]}
+    });
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert_eq!(
+        response["result"],
+        innovate_core::json!({
+            "dates":["2026-11-01T00:00:00Z","2026-11-08T00:00:00Z"],"values":[3.,4.]
+        })
+    );
+}

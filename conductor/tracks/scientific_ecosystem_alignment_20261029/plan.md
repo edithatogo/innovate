@@ -1595,3 +1595,12 @@ the other competition models and installed binding checks remain open.
   wheel, Julia and installed R. All three agree on adoption counts,
   request and completion traces, no balks or abandonments, and null
   effective wait and queue limits.
+
+- [x] Extend the Rust calendar request to ISO timestamps. Offset-aware
+  inputs use UTC for calendar boundaries and weekly labels. Naive inputs
+  retain wall-clock times. Weekly buckets use elapsed 168-hour intervals
+  from the earliest instant. Mixed offset and naive inputs are rejected.
+  The exact weekly boundary fixture, 23 native tests and focused Clippy
+  passed.
+- [ ] Qualify timestamp aggregation through Julia and R, including
+  explicit offset handling and consumer formatting.
