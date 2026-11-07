@@ -1,0 +1,6 @@
+nonrobust seasonal 9.37028232783632e-14
+nonrobust trend 1.56319401867222e-13
+nonrobust residual 8.16985368246037e-14
+robust seasonal 30.2436525197151
+robust trend 69.8325921886726
+robust residual 100.076244708388

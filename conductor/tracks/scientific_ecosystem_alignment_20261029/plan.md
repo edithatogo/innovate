@@ -1359,3 +1359,9 @@ the other competition models and installed binding checks remain open.
   the independent robust discrepancy. Robust mode retains its prior
   endpoint convention pending parity work. Seventeen Rust boundary tests
   and focused Clippy passed.
+
+- [x] Reproduce the independent fixture with the checked-in R checker and
+  compare it against the rebuilt Rust library through installed innovate.R.
+  The largest nonrobust component difference was 1.57e-13. Robust maximum
+  differences were 30.24 for seasonal, 69.83 for trend and 100.08 for
+  residual, leaving robust parity open.
