@@ -1049,7 +1049,7 @@ fn threshold_fraction(lower: f64, threshold: f64, upper: f64) -> f64 {
 
 #[cfg(test)]
 mod tests {
-    use super::{ensemble_moments, threshold_fraction};
+    use super::{centered_offsets, ensemble_moments, threshold_fraction};
 
     #[test]
     fn ensemble_standard_error_resolves_adjacent_effects() {
@@ -1057,6 +1057,10 @@ mod tests {
         let upper = lower.next_up();
         let (_, error) = ensemble_moments(&[lower, upper], upper);
         assert!((error / ((upper - lower) / 2.) - 1.).abs() <= 2. * f64::EPSILON);
+        let variance = centered_offsets(&[lower, upper], upper)
+            .map(|offset| ((offset / 2_f64.sqrt()) * upper).powi(2))
+            .sum::<f64>();
+        assert!((variance / error.powi(2) - 1.).abs() <= 4. * f64::EPSILON);
         let (mean, error) = ensemble_moments(&[-f64::MAX, f64::MAX], f64::MAX);
         assert_eq!(mean, 0.);
         assert_eq!(error, f64::MAX);
@@ -1219,17 +1223,8 @@ fn compare_ensemble(
             .iter()
             .map(|values| {
                 let scale = values.iter().map(|x| x.abs()).fold(0., f64::max);
-                let (mean, _) = ensemble_moments(values, scale);
-                values
-                    .iter()
-                    .map(|&value| {
-                        let residual = value - mean;
-                        if residual.is_finite() {
-                            residual / divisor
-                        } else {
-                            value / divisor - mean / divisor
-                        }
-                    })
+                centered_offsets(values, scale)
+                    .map(|offset| (offset / divisor) * scale)
                     .collect()
             })
             .collect();
@@ -1275,9 +1270,17 @@ fn ensemble_moments(differences: &[f64], scale: f64) -> (f64, f64) {
     }
     let n = differences.len() as f64;
     let mean = differences.iter().map(|x| x / scale).sum::<f64>() / n;
-    // Center before scaling when possible to retain differences of a few ULPs.
+    let squares = centered_offsets(differences, scale)
+        .map(|offset| offset.powi(2))
+        .sum::<f64>();
+    (mean * scale, (squares / (n * (n - 1.))).sqrt() * scale)
+}
+
+fn centered_offsets(differences: &[f64], scale: f64) -> impl Iterator<Item = f64> + '_ {
+    // Subtract the anchor before scaling to retain differences of a few ULPs.
+    let scale = if scale == 0. { 1. } else { scale };
     let anchor = differences[0];
-    let offset = |&x: &f64| {
+    let offset = move |&x: &f64| {
         let delta = x - anchor;
         if delta.is_finite() {
             delta / scale
@@ -1285,12 +1288,8 @@ fn ensemble_moments(differences: &[f64], scale: f64) -> (f64, f64) {
             x / scale - anchor / scale
         }
     };
-    let center = differences.iter().map(offset).sum::<f64>() / n;
-    let squares = differences
-        .iter()
-        .map(|x| (offset(x) - center).powi(2))
-        .sum::<f64>();
-    (mean * scale, (squares / (n * (n - 1.))).sqrt() * scale)
+    let center = differences.iter().map(offset).sum::<f64>() / differences.len() as f64;
+    differences.iter().map(move |x| offset(x) - center)
 }
 
 fn exact_sign_flip(differences: &[f64], scale: f64) -> Result<Value, &'static str> {

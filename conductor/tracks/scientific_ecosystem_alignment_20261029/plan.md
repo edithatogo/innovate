@@ -4852,3 +4852,9 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Document paired covariance axes, estimator, diagonal and
   over-limit behavior in the public API reference. The pointwise
   empirical intervals describe the observed replicate effects.
+
+- [x] Center paired covariance on anchored differences to retain
+  variation between adjacent floating-point effects. Covariance and
+  pointwise standard errors now share the centering calculation.
+  The focused Rust scenario unit tests passed, including agreement
+  between variance and squared standard error for adjacent effects.
