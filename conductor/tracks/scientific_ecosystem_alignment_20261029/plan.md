@@ -935,3 +935,9 @@ remain open.
   adoption counts of [0, 2]. The rebuilt wheel passed 59 native tests, Julia
   Pkg.test passed 231 assertions, and installed R native conformance passed.
   [Logs and fixture](evidence/kairos-effective-hazard-20261107).
+
+- [x] Normalize heterogeneous hazard bases before aggregation. (2b89ea03)
+  Two 1e308 agent weights now compose with an attenuating coefficient
+  without overflowing the intermediate basis sum. All 19 Rust network
+  tests and focused Clippy passed. Binding evidence for this edge case
+  remains open.
