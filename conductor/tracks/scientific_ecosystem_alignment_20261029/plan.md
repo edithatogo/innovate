@@ -7372,3 +7372,9 @@ Hosted release readiness for this worktree revision remains open.
   record the archive SHA-256. The current optimized wheel passed,
   and an older wheel with the same version was rejected. Ruff and
   Actionlint passed. Hosted execution remains open.
+
+- [x] Verify the extracted 80500bdb source distribution contains the
+  fixtures for all four bundled Python consumer files. Running from
+  the extracted tree against the optimized wheel built from that
+  archive passed all 121 tests on macOS arm64. Hosted extraction and
+  Linux native execution remain open.
