@@ -918,13 +918,31 @@ fn scenario_grid_compares_aligned_adoption_paths() {
                 "parameters":{"L":100.,"k":1.,"x0":1.}}},
             {"id":"alt","model_key":"logistic","simulation":{"inputs":{"time":[1.,2.]},
                 "parameters":{"L":200.,"k":1.,"x0":1.}}}],
-            "comparisons":[{"baseline":"base","alternative":"alt","threshold":75.}]}});
+            "comparisons":[{"baseline":"base","alternative":"alt","threshold":75.,"relative_margin":0.1}]}});
     let run = |request: &serde_json::Value| -> serde_json::Value {
         serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
     };
     let response = run(&request);
     let row = &response["result"]["comparisons"][0]["result"];
     assert_eq!(row["difference"][0], 50.);
+    let baseline = row["ranking"]["baseline_rank"].as_f64().unwrap();
+    assert_eq!(row["ranking"]["metric"], "final_adoption");
+    assert_eq!(row["ranking"]["alternative_rank"], baseline * 2.);
+    assert_eq!(row["incremental_effect"]["absolute_increase"], baseline);
+    assert_eq!(
+        row["relative_margin_bounds"]["method"],
+        "fixed_relative_margin"
+    );
+    assert_eq!(
+        row["relative_margin_bounds"]["baseline"][0],
+        baseline - baseline * 0.1
+    );
+    request["payload"]["comparisons"][0]["relative_margin"] = json!(1.1);
+    assert_eq!(
+        run(&request)["result"]["comparisons"][0]["error"]["code"],
+        "invalid_comparison"
+    );
+    request["payload"]["comparisons"][0]["relative_margin"] = json!(0.1);
     assert_eq!(
         row["threshold_timing"],
         json!({"baseline":null,"alternative":1.})

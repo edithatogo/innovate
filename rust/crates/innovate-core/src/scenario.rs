@@ -240,6 +240,7 @@ struct Comparison {
     baseline: String,
     alternative: String,
     threshold: Option<f64>,
+    relative_margin: Option<f64>,
 }
 
 fn compare_paths(
@@ -270,6 +271,29 @@ fn compare_paths(
     let (difference, percentage_change) = crate::causal::compare_values(&baseline, &alternative)?;
     let mut result =
         json!({"time":time,"difference":difference,"percentage_change":percentage_change});
+    let last = time.len() - 1;
+    let (baseline_final, alternative_final) = (baseline[last], alternative[last]);
+    result["ranking"] = json!({"metric":"final_adoption",
+        "baseline_rank":baseline_final,"alternative_rank":alternative_final});
+    result["incremental_effect"] = json!({"baseline_value":baseline_final,
+        "alternative_value":alternative_final,"absolute_increase":difference[last],
+        "relative_increase_percent":percentage_change[last]});
+    if let Some(margin) = comparison.relative_margin {
+        if !(0. ..=1.).contains(&margin) {
+            return Err("relative_margin must be in [0, 1]");
+        }
+        let bounds = |value: f64| {
+            let delta = value * margin;
+            let upper = value + delta;
+            if value < 0. || !upper.is_finite() {
+                return Err("relative margin bounds require nonnegative values and finite bounds");
+            }
+            Ok([(value - delta).max(0.), upper])
+        };
+        result["relative_margin_bounds"] = json!({"method":"fixed_relative_margin",
+            "relative_margin":margin,"baseline":bounds(baseline_final)?,
+            "alternative":bounds(alternative_final)?});
+    }
     if let Some(threshold) = comparison.threshold {
         let first_sample = |values: &[f64]| {
             time.iter()
