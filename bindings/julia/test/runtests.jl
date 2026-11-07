@@ -389,3 +389,15 @@ end
         @test maximum(abs.(forecast["rows"][1].-fixture["forecast_rows"][1])) < 1e-3
     end
 end
+
+@testset "Norton baseline threshold summary" begin
+    result = kernel_summarize_model("norton_bass", Dict(
+        "inputs"=>Dict("time"=>[4.]),
+        "parameters"=>Dict("p1"=>0.1,"q1"=>0.9,"m1"=>100.),
+        "constructor_kwargs"=>Dict("variant"=>"successive_generations","launch_times"=>[4.]),
+    ))["result"]
+    row = only(result["threshold_diagnostics"]["generations"])
+    @test row["reference_time"] == 4.
+    @test row["half_life"] ≈ log(9)
+    @test row["saturation"] ≈ 2log(9)
+end

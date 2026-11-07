@@ -732,3 +732,17 @@ def test_norton_event_variants_polars_fit_and_forecast(fixture_name):
     assert [forecast["prediction_1"][0], forecast["prediction_2"][0]] == pytest.approx(
         fixture["forecast_rows"][0], abs=1e-3
     )
+
+
+def test_norton_baseline_threshold_summary():
+    result = innovate.execute(
+        "summarize_model",
+        "norton_bass",
+        inputs={"time": [4.0]},
+        parameters={"p1": 0.1, "q1": 0.9, "m1": 100.0},
+        constructor_kwargs={"variant": "successive_generations", "launch_times": [4.0]},
+    )["result"]
+    row = result["threshold_diagnostics"]["generations"][0]
+    assert row["reference_time"] == 4.0
+    assert row["half_life"] == pytest.approx(math.log(9))
+    assert row["saturation"] == pytest.approx(2 * math.log(9))

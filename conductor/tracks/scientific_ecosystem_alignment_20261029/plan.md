@@ -822,3 +822,9 @@ continues.
 Twenty focused Rust tests and core Clippy passed. Baseline offsets retain the
 historical inflection label and mark degenerate rates explicitly. Forced
 thresholds and cross-binding qualification of this new field remain open.
+
+- [x] Qualify the threshold field in installed Python, Julia and R.
+
+The full native binding suites passed with 55 Python tests, 220 Julia assertions
+and R conformance. The summary test checks the launch reference time, inflection
+offset and saturation through each binding. Forced-trajectory analysis remains open.

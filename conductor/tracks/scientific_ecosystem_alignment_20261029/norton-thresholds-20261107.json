@@ -1,7 +1,25 @@
 {
   "status": "bounded_local_checkpoint",
   "release_ready": false,
-  "related_evidence": ["successive-forcing-20261107.json"],
-  "results": {"focused_rust_tests": 20, "core_clippy": "passed"},
-  "scope": "Historical baseline threshold formulas using corrected one-based named parameters. The historical half-life label denotes inflection time. Forced trajectory thresholds and cross-binding qualification of this new field remain open."
+  "related_evidence": [
+    "successive-forcing-20261107.json"
+  ],
+  "results": {
+    "focused_rust_tests": 20,
+    "core_clippy": "passed",
+    "installed_python_tests": 55,
+    "julia_assertions": 220,
+    "R": "full native conformance and baseline threshold summary passed"
+  },
+  "scope": "Historical baseline threshold formulas using corrected one-based named parameters. The historical half-life label denotes inflection time. Forced trajectory thresholds remain open.",
+  "logs": {
+    "clippy.log": "45377a255ed3abc61eb425bcf315309f60dd30e7cbbe80a2c84ffab3c1408e8a",
+    "ffi.log": "592bb27686dbd2eb39fcb894a31662c55c490c502e05243af83c3c34b2f0acae",
+    "install.log": "50868e209780ea27b79b91fe15b4a227b44c736809eec5965366bcea2dd04282",
+    "julia.log": "e76326bca9a9ebff7e8400b5845af8d5d6ac74f4cfe0f4c8537cb41027de924f",
+    "python.log": "3a3ed778ecbb161232a9a064caf28fab082c2fe632ff7439eec160feb5317278",
+    "r.log": "e7896659271e1cff9d8635563055713ef90bd82ed888dba1dbb58d9f0049ca5a",
+    "rust.log": "bdc44ac3cc98b10fe200b307e25cb5c16b5e362f860de240bfc03e0ea7e74334",
+    "wheel.log": "301a091bec262c26210259590ebb815961f9630703e8c9aadb3e4a8138b5dad5"
+  }
 }

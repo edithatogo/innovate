@@ -367,3 +367,12 @@ for (fixture_name in c("norton_events_scipy.json","successive_forcing_scipy.json
             max(abs(unlist(nb_event_forecast$rows)-unlist(nb_event_fixture$forecast_rows)))<1e-3)
 }
 cat("R Norton event variants, fit and forecast passed\n")
+
+threshold_summary <- kernel_summarize_model("norton_bass", list(
+  inputs=list(time=4),parameters=list(p1=0.1,q1=0.9,m1=100),
+  constructor_kwargs=list(variant="successive_generations",launch_times=4)
+))$result$threshold_diagnostics$generations[[1]]
+stopifnot(threshold_summary$reference_time==4,
+          abs(threshold_summary$half_life-log(9))<1e-12,
+          abs(threshold_summary$saturation-2*log(9))<1e-12)
+cat("R Norton baseline threshold summary passed\n")
