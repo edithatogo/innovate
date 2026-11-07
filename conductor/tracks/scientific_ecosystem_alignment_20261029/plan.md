@@ -3654,3 +3654,7 @@ Hosted release readiness for this worktree revision remains open.
   two-to-sixteen-pair limit and inference assumptions in the native
   migration guide. The example uses the two-pair case already checked
   in all three bindings.
+- [x] Verify the sign-flip workload boundary in the public Rust API.
+  Sixteen zero-effect pairs count all 65,536 assignments as ties
+  and return p = 1. Seventeen pairs return invalid_comparison while
+  retaining all scenario executions. The targeted test and Clippy passed.

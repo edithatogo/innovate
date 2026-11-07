@@ -2567,3 +2567,36 @@ fn adoption_ingestion_rejects_negative_counts_and_rates() {
         );
     }
 }
+
+#[test]
+fn exact_sign_flip_bounds_work_and_counts_zero_ties() {
+    let scenarios: Vec<_> = (0..34)
+        .map(|id| {
+            json!({"id":id.to_string(),"model_key":"logistic",
+                "simulation":{"inputs":{"time":[1.]},
+                "parameters":{"L":100.,"k":1.,"x0":1.}}})
+        })
+        .collect();
+    let comparison = |count: usize| {
+        let pairs: Vec<_> = (0..count)
+            .map(|i| json!({"baseline":(2*i).to_string(),"alternative":(2*i+1).to_string()}))
+            .collect();
+        json!({"pairs":pairs,"interval_mass":0.95,"exact_sign_flip":true})
+    };
+    let request = json!({"schema_version":"2.0","operation":"execute_scenario_grid",
+        "payload":{"scenarios":scenarios,"comparisons":[comparison(16),comparison(17)]}});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    let result = &response["result"];
+    assert_eq!(result["executions"].as_array().unwrap().len(), 34);
+    let comparisons = &result["comparisons"];
+    let sign_flip = &comparisons[0]["result"]["sign_flip"];
+    assert_eq!(sign_flip["assignments"], 65536);
+    assert_eq!(sign_flip["extreme_assignments"], 65536);
+    assert_eq!(sign_flip["p_value"], 1.);
+    assert_eq!(comparisons[1]["error"]["code"], "invalid_comparison");
+    assert_eq!(
+        comparisons[1]["error"]["message"],
+        "exact sign-flip inference supports at most 16 pairs"
+    );
+}
