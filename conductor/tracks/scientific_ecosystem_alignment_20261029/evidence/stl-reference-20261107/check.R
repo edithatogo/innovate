@@ -15,7 +15,7 @@ for (mode in c("nonrobust", "robust")) {
     s.degree = 1, t.degree = 1, l.degree = 1, s.jump = 1, t.jump = 1, l.jump = 1,
     inner = 5, outer = if (robust) 5 else 0, robust = robust
   )$time.series
-  native <- innovate.R::kernel_seasonal_decomposition(values, 4, 13, robust)
+  native <- innovate.R::kernel_seasonal_decomposition(values, 4, 13, robust, historical = robust)
   for (component in colnames(reference)) {
     expected <- reference[, component]
     stopifnot(max(abs(expected - fixture$reference[[mode]][[component]])) < tolerance)
@@ -24,7 +24,7 @@ for (mode in c("nonrobust", "robust")) {
     stopifnot(length(actual) == length(expected), all(is.finite(actual)))
     error <- max(abs(actual - expected))
     cat(sprintf("%s %s %.15g\n", mode, field, error))
-    if (!robust) stopifnot(error < tolerance)
+    stopifnot(error < if (robust) 1e-9 else tolerance)
   }
 }
 

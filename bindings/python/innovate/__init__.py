@@ -264,8 +264,13 @@ def aggregate_time_series(
     return grouped
 
 
-def seasonal_decomposition(data: pl.Series, *, period: int, trend_span: int, robust: bool = False) -> pl.DataFrame:
-    """Decompose evenly spaced samples with the native seasonal smoother."""
+def seasonal_decomposition(
+    data: pl.Series, *, period: int, trend_span: int, robust: bool = False, historical: bool = False
+) -> pl.DataFrame:
+    """Decompose evenly spaced samples with the native seasonal smoother.
+
+    Set historical=True to use historical STL local fit and reweighting rules.
+    """
     result = execute(
         "preprocess_series",
         method="seasonal_decomposition",
@@ -273,5 +278,6 @@ def seasonal_decomposition(data: pl.Series, *, period: int, trend_span: int, rob
         period=period,
         window=trend_span,
         robust=robust,
+        historical=historical,
     )["result"]
     return pl.DataFrame(result)

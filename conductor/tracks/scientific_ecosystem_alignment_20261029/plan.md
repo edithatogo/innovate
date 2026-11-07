@@ -1400,5 +1400,7 @@ the other competition models and installed binding checks remain open.
   preprocessing request (`historical: true`). The robust independent
   fixture passes within 1e-9, and the default analytic spike-recovery
   test still passes. All 18 native boundary tests passed.
-- [ ] Expose historical STL mode in Python, Julia and R, verify installed
-  binding parity, and qualify the remaining historical STL options.
+- [x] Expose historical STL mode in Python, Julia and R. The installed
+  Python wheel (CPython 3.15.2), Julia project (1.13.3), and installed R
+  package (4.3.0) each match the robust reference within 1e-9.
+- [ ] Qualify the remaining historical STL options.
