@@ -56,11 +56,15 @@ kernel_call <- function(operation, model_key = NULL, payload = list()) {
 }
 
 # Send an existing JSON envelope without re-encoding numbers or arrays.
-kernel_call_json <- function(request) {
+kernel_call_json <- function(request, raw = FALSE) {
   if (!is.character(request) || length(request) != 1L || is.na(request)) {
     stop("request must be a single JSON string", call. = FALSE)
   }
-  response <- jsonlite::fromJSON(.Call(innovate_call_R, native_library(), request), simplifyVector = FALSE)
+  if (!is.logical(raw) || length(raw) != 1L || is.na(raw)) {
+    stop("raw must be a single logical value", call. = FALSE)
+  }
+  response_json <- .Call(innovate_call_R, native_library(), request)
+  response <- jsonlite::fromJSON(response_json, simplifyVector = FALSE)
   if (!is.null(response$error)) {
     details <- response$error
     message <- sprintf("%s: %s", details$code, details$message)
@@ -70,7 +74,7 @@ kernel_call_json <- function(request) {
     }
     stop(message, call. = FALSE)
   }
-  response
+  if (raw) response_json else response
 }
 
 kernel_discover_models <- function() kernel_call("discover_models")$result

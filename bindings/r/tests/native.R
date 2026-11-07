@@ -432,3 +432,17 @@ cat("R continuous Kairos hazard wakeup passed\n")
 rolling <- kernel_rolling_average(c(1e100, 1, 3), 2L)
 stopifnot(is.null(rolling[[1]]), abs(rolling[[2]] / 5e99 - 1) < 1e-14, rolling[[3]] == 2)
 cat("R compensated rolling average passed\n")
+
+legacy_request <- paste0(
+  '{"schema_version":"2.0","operation":"import_scenario_artifact","payload":{"artifact":',
+  '{"scenario":{"scenario_type":"baseline","name":"legacy","description":"","time_horizon":5,',
+  '"time_unit":"year","reference_year":2026,"market_size":100,"initial_adoption":0},',
+  '"seed":18446744073709551615,"model_type":"bass","version":"0.6.0","notes":null,',
+  '"timestamp":"2026-01-01T00:00:00+00:00"}}}'
+)
+legacy_raw <- kernel_call_json(legacy_request, raw = TRUE)
+stopifnot(is.character(legacy_raw), grepl('"seed":18446744073709551615', legacy_raw, fixed = TRUE))
+stopifnot(!kernel_call_json(legacy_request)$result$replay_available)
+legacy_invalid <- sub("2026-01-01T00:00:00+00:00", "bad", legacy_request, fixed = TRUE)
+legacy_error <- tryCatch(kernel_call_json(legacy_invalid, raw = TRUE), error = conditionMessage)
+stopifnot(grepl("invalid_request", legacy_error, fixed = TRUE))
