@@ -1587,4 +1587,7 @@ the other competition models and installed binding checks remain open.
   regression clears both limits and verifies all three agents complete
   without balking or abandonment. All 22 network tests and focused
   Clippy passed.
-- [ ] Verify explicit null queue changes through Python, Julia and R.
+- [x] Verify explicit null queue changes through the rebuilt Python
+  wheel, Julia and installed R. All three agree on adoption counts,
+  request and completion traces, no balks or abandonments, and null
+  effective wait and queue limits.
