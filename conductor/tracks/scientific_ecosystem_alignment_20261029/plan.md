@@ -2269,3 +2269,9 @@ the other competition models and installed binding checks remain open.
   counts, and enforce historical claim wording and causal assumption
   checks. The title is also checked for unsupported wording. All 50 Rust
   boundary tests and Clippy passed. Markdown and binding tests remain open.
+
+- [x] Restore Rust Markdown decision report export from the validated JSON
+  contract. Include claim boundaries, evidence references, optional blocks
+  and claim-safety metadata. Escape Markdown control characters in user
+  text and render line breaks as spaces. All 51 Rust boundary tests and
+  Clippy passed. Binding verification and release parity remain open.

@@ -56,6 +56,7 @@ pub fn execute_json(input: &str) -> String {
                 | "summarize_explainability"
                 | "combine_report_blocks"
                 | "export_decision_report"
+                | "export_decision_report_markdown"
                 | "validate_provenance"
                 | "dataset_checksum"
                 | "validate_dataset",
@@ -168,6 +169,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             return Err("analysis request requires schema 2.0");
         }
         let payload = &value["payload"];
+        if value["operation"] == "export_decision_report_markdown" {
+            return report::export_markdown(payload);
+        }
         if value["operation"] == "export_decision_report" {
             return report::export(payload);
         }

@@ -1511,3 +1511,23 @@ fn decision_report_exports_claim_boundaries_and_rejects_unsupported_wording() {
     payload["claims"][0]["statement"] = json!("You should implement this policy.");
     assert_eq!(run(payload)["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn decision_report_markdown_preserves_boundaries_and_escapes_user_text() {
+    let mut request = json!({"schema_version":"2.0","operation":"export_decision_report_markdown",
+        "payload":{"title":"Policy scenario","workflow":"policy","claims":[
+            {"claim_type":"simulation","statement":"Scenario <example>","evidence_refs":["case-1"]}],
+            "diagnostics":{"score":1}}});
+    let run = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = run(&request);
+    let markdown = response["result"]["markdown"].as_str().unwrap();
+    assert!(markdown.starts_with("# Policy scenario\n\n"));
+    assert!(markdown.contains("Scenario \\<example\\>"));
+    assert!(markdown.contains("**Evidence references**\n\n- case-1"));
+    assert!(markdown.contains("## Diagnostics\n\n```json"));
+    assert!(markdown.contains("Recommendations allowed `false`"));
+    request["payload"]["claims"][0]["claim_type"] = json!("causal");
+    assert_eq!(run(&request)["error"]["code"], "invalid_request");
+}

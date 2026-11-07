@@ -143,3 +143,94 @@ pub(crate) fn export(payload: &Value) -> Result<Value, &'static str> {
         "forbidden_phrase_policy":"fail_closed"});
     Ok(output)
 }
+
+pub(crate) fn export_markdown(payload: &Value) -> Result<Value, &'static str> {
+    use std::fmt::Write;
+
+    let report = export(payload)?;
+    let mut markdown = String::new();
+    let text = |value: &Value| {
+        let mut escaped = String::new();
+        for ch in value.as_str().unwrap_or_default().chars() {
+            match ch {
+                '\r' | '\n' => escaped.push(' '),
+                '\\' | '`' | '*' | '_' | '{' | '}' | '[' | ']' | '<' | '>' | '#' | '!' | '|'
+                | '&' => {
+                    escaped.push('\\');
+                    escaped.push(ch);
+                }
+                _ => escaped.push(ch),
+            }
+        }
+        escaped
+    };
+    writeln!(markdown, "# {}\n", text(&report["title"])).unwrap();
+    writeln!(markdown, "**Workflow** `{}`  ", text(&report["workflow"])).unwrap();
+    writeln!(markdown, "**Schema** `{SCHEMA}`  ").unwrap();
+    writeln!(markdown, "**Recommendations** Outside report scope\n").unwrap();
+    writeln!(
+        markdown,
+        "## Interpretation\n\n{}\n",
+        text(&report["interpretation"])
+    )
+    .unwrap();
+    writeln!(markdown, "## Claims\n").unwrap();
+
+    let write_notes = |markdown: &mut String, label: &str, items: &Value| {
+        if let Some(items) = items.as_array().filter(|items| !items.is_empty()) {
+            writeln!(markdown, "{label}\n").unwrap();
+            for item in items {
+                writeln!(markdown, "- {}", text(item)).unwrap();
+            }
+            writeln!(markdown).unwrap();
+        }
+    };
+    for claim in report["claims"].as_array().unwrap() {
+        writeln!(
+            markdown,
+            "### {} claim\n\n{}\n",
+            text(&claim["claim_type"]),
+            text(&claim["statement"])
+        )
+        .unwrap();
+        writeln!(
+            markdown,
+            "*Interpretation boundary* {}\n",
+            text(&claim["interpretation"])
+        )
+        .unwrap();
+        write_notes(&mut markdown, "**Assumptions**", &claim["assumptions"]);
+        write_notes(&mut markdown, "**Limitations**", &claim["limitations"]);
+        write_notes(
+            &mut markdown,
+            "**Evidence references**",
+            &claim["evidence_refs"],
+        );
+    }
+    write_notes(
+        &mut markdown,
+        "## Report assumptions",
+        &report["assumptions"],
+    );
+    write_notes(&mut markdown, "## Limitations", &report["limitations"]);
+    for (key, heading) in [
+        ("diagnostics", "Diagnostics"),
+        ("uncertainty", "Uncertainty"),
+        ("sensitivity", "Sensitivity"),
+        ("explainability", "Explainability"),
+    ] {
+        let section = &report[key];
+        if section
+            .as_object()
+            .is_some_and(|section| !section.is_empty())
+        {
+            let json = serde_json::to_string_pretty(section)
+                .map_err(|_| "cannot render report section")?;
+            writeln!(markdown, "## {heading}\n\n```json\n{json}\n```\n").unwrap();
+        }
+    }
+    let safety = &report["claim_safety"];
+    writeln!(markdown, "## Claim safety\n\n- Causal claims present `{}`\n- Recommendations allowed `false`\n- Forbidden-phrase policy `fail_closed`",
+        safety["contains_causal_claims"]).unwrap();
+    Ok(json!({"markdown":markdown,"schema_version":SCHEMA}))
+}
