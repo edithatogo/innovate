@@ -5903,3 +5903,14 @@ Hosted release readiness for this worktree revision remains open.
   (32*trial+pair), with 1000 bootstrap draws seeded by 10000+trial.
   Mean estimated effect was 0.48984375 and nominal 90% intervals
   covered in 180/200 trials. Broader resource designs remain open.
+
+- [x] Check a two-agent capacity contrast against an exact discrete
+  reference. With p=0.2, q=0, three service ticks and horizon 5,
+  compare capacity two against one. The first request has geometric
+  probability 1-exp(-0.4) per tick. A second request before the first
+  completion has geometric probability 1-exp(-0.2) per tick. Sum
+  the difference in horizon-clipped service time over first request
+  ticks 1 through 5 and second delays 1 and 2. The exact effect is
+  0.3082172 slot ticks. With the same 200-trial, 32-pair bootstrap
+  design and rebuilt Python consumer as the one-agent check, the
+  mean was 0.29765625 and nominal 90% coverage was 171/200.
