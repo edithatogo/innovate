@@ -4112,3 +4112,9 @@ Hosted release readiness for this worktree revision remains open.
   R Arrow 20.0.0.2 preserved the exact ID when cast to UTF-8 in the
   Arrow table. Direct data-frame conversion rounded it. Document the
   exact-ID read path in the R help.
+- [x] Report over-capacity slot-ticks for Kairos network resources.
+  Integrate active service above scheduled capacity through the
+  horizon, including nonpreemptive service that continues after
+  capacity falls to zero. The clipped fixture reports three excess
+  slot-ticks and the retry replay reports zero. All 29 network tests
+  and the focused replay test passed. Installed binding checks remain open.

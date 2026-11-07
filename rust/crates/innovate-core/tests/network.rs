@@ -817,7 +817,7 @@ fn resource_metrics_clip_service_and_queue_wait_at_horizon() {
     assert_eq!(
         result["resource_metrics"],
         json!({
-            "horizon_ticks":6,"occupied_slot_ticks":5,"configured_slot_ticks":3,
+            "horizon_ticks":6,"occupied_slot_ticks":5,"configured_slot_ticks":3,"over_capacity_slot_ticks":3,
             "peak_queue_length":1,"peak_in_service":1,
             "admitted_wait_ticks":0,"abandoned_wait_ticks":2,"pending_wait_ticks":1
         })
