@@ -891,3 +891,13 @@ crossings and installed binding checks for this field remain open.
   passed 57 Python native tests, Julia Pkg.test passed 227 assertions, and
   the installed R package passed native conformance.
   [Logs](evidence/norton-historical-milestones-20261107).
+
+## Scheduled heterogeneous Kairos hazards
+
+- [x] Allow schedule boundaries to replace agent-specific innovation and imitation multipliers independently. (6f84a75b)
+
+The native fixture moves innovation eligibility to a second agent at a
+schedule boundary while preserving the first agent's completion time.
+Malformed vector lengths are rejected. All 15 Rust network tests and focused
+Clippy passed. Installed binding checks and continuous covariate hazard
+integration remain open.
