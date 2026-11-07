@@ -62,3 +62,11 @@ kernel_categorize_fitted_adopters <- function(model_key, payload) {
   if (is.null(time)) time <- payload$inputs$t
   kernel_categorize_adopters(time, unlist(rates, use.names = FALSE))
 }
+
+kernel_cumulative_sum <- function(values) {
+  kernel_call("preprocess_series", payload = list(method = "cumulative_sum", values = values))$result$values
+}
+
+kernel_rolling_average <- function(values, window) {
+  kernel_call("preprocess_series", payload = list(method = "rolling_average", values = values, window = window))$result$values
+}

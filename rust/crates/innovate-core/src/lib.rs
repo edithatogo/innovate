@@ -35,6 +35,7 @@ pub fn execute_json(input: &str) -> String {
     {
         match value["operation"].as_str() {
             Some("fit_batch" | "predict_batch") => return execute_batch_json(value).to_string(),
+            Some("preprocess_series") => return execute_preprocessing_json(&value).to_string(),
             Some("categorize_adopters") => return execute_adopters_json(&value).to_string(),
             _ => {}
         }
@@ -156,5 +157,54 @@ fn execute_adopters_json(value: &serde_json::Value) -> serde_json::Value {
         ),
     };
     json!({"schema_version":KERNEL_SCHEMA_VERSION,"operation":"categorize_adopters",
+        "model_key":null,"result":result,"error":error,"metadata":{"runtime":"rust_native"}})
+}
+
+fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
+    let result = (|| {
+        if value["schema_version"] != KERNEL_SCHEMA_VERSION {
+            return Err("preprocess_series requires schema 2.0");
+        }
+        let payload = &value["payload"];
+        let values = serde_json::from_value::<Vec<f64>>(payload["values"].clone())
+            .map_err(|_| "preprocess_series requires a numeric values array")?;
+        let window = match payload["method"].as_str() {
+            Some("cumulative_sum") => None,
+            Some("rolling_average") => Some(
+                payload["window"]
+                    .as_u64()
+                    .and_then(|n| usize::try_from(n).ok())
+                    .filter(|n| *n > 0)
+                    .ok_or("window must be a positive integer")?,
+            ),
+            _ => return Err("unknown preprocessing method"),
+        };
+        let mut sum = 0.;
+        let mut output = Vec::with_capacity(values.len());
+        for (index, value) in values.iter().copied().enumerate() {
+            if let Some(window) = window {
+                if index >= window {
+                    sum -= values[index - window] / window as f64;
+                }
+                sum += value / window as f64;
+                output.push((index >= window - 1).then_some(sum));
+            } else {
+                sum += value;
+                output.push(Some(sum));
+            }
+            if !sum.is_finite() {
+                return Err("preprocessing result exceeded the finite numerical domain");
+            }
+        }
+        Ok(json!({"values":output}))
+    })();
+    let (result, error) = match result {
+        Ok(result) => (result, serde_json::Value::Null),
+        Err(message) => (
+            serde_json::Value::Null,
+            json!({"code":"invalid_request","message":message}),
+        ),
+    };
+    json!({"schema_version":KERNEL_SCHEMA_VERSION,"operation":"preprocess_series",
         "model_key":null,"result":result,"error":error,"metadata":{"runtime":"rust_native"}})
 }

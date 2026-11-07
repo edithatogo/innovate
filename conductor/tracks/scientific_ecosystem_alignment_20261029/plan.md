@@ -1294,3 +1294,8 @@ the other competition models and installed binding checks remain open.
   while weekly aggregation retains its first-observation anchor and
   omits empty weeks. Both installed aggregation tests passed, including
   the leap-year month-end label. Seasonal preprocessing remains open.
+
+- [x] Expose native cumulative sums and full-window trailing averages for
+  finite numeric arrays in Julia and R. Both installed consumers match
+  the Python Polars example, including two null warmup positions.
+  Focused Rust Clippy passed. Calendar and seasonal consumer paths remain open.
