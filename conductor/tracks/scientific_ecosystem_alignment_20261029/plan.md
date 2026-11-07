@@ -2614,3 +2614,10 @@ the other competition models and installed binding checks remain open.
   0.999775, so the independent reference maximizes the exact concentrated
   Gaussian likelihood with R optimize. Five focused Rust tests passed.
   Broader difficult mixed-order optimizer cases remain open.
+
+- [x] Qualify a mixed-sign stationary ARMA(1,1) fit on 350 observations.
+  The fixture uses R arima.sim with seed 419, AR 0.87 and MA -0.65.
+  R stats::arima converged with exact ML and no mean. Rust matched
+  estimated coefficients within 8.16e-6 and likelihood within 9.26e-8.
+  Six focused Rust SARIMA tests and Clippy passed. Broader mixed
+  seasonal and near-cancellation cases remain open.
