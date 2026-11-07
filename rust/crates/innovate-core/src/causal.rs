@@ -638,12 +638,21 @@ fn stratified_treatment_contrast(payload: &Value) -> Result<Value, &'static str>
     let fields = payload
         .as_object()
         .ok_or("expected a stratified contrast object")?;
-    if fields
-        .keys()
-        .any(|key| !matches!(key.as_str(), "method" | "outcomes" | "treatment" | "strata"))
-    {
-        return Err("stratified treatment contrast accepts only outcomes, treatment and strata");
+    if fields.keys().any(|key| {
+        !matches!(
+            key.as_str(),
+            "method" | "outcomes" | "treatment" | "strata" | "estimand"
+        )
+    }) {
+        return Err(
+            "stratified treatment contrast accepts only outcomes, treatment, strata and estimand",
+        );
     }
+    let att = match fields.get("estimand").map(Value::as_str) {
+        None | Some(Some("ate")) => false,
+        Some(Some("att")) => true,
+        _ => return Err("stratified contrast estimand must be ate or att"),
+    };
     let outcomes = series(payload, "outcomes")?;
     let treatment = series(payload, "treatment")?;
     let strata: Vec<String> = serde_json::from_value(payload["strata"].clone())
@@ -651,7 +660,11 @@ fn stratified_treatment_contrast(payload: &Value) -> Result<Value, &'static str>
     if outcomes.is_empty() || outcomes.len() != treatment.len() || outcomes.len() != strata.len() {
         return Err("outcomes, treatment and strata must be nonempty and aligned");
     }
-    let population = outcomes.len();
+    let population = if att {
+        treatment.iter().filter(|&&flag| flag == 1.).count()
+    } else {
+        outcomes.len()
+    };
     let mut groups = std::collections::BTreeMap::<String, (Vec<f64>, Vec<f64>)>::new();
     for ((label, outcome), flag) in strata.into_iter().zip(outcomes).zip(treatment) {
         if label.trim().is_empty() {
@@ -666,12 +679,23 @@ fn stratified_treatment_contrast(payload: &Value) -> Result<Value, &'static str>
     }
     let mut estimate = 0.;
     let mut by_stratum = serde_json::Map::new();
+    if population == 0 {
+        return Err("ATT requires treated observations");
+    }
     for (label, (treated, control)) in groups {
+        if att && treated.is_empty() {
+            continue;
+        }
         let (Some(treated_mean), Some(control_mean)) = (mean(&treated), mean(&control)) else {
             return Err("each stratum requires treated and control observations");
         };
         let difference = finite(treated_mean - control_mean)?;
-        let weight = (treated.len() + control.len()) as f64 / population as f64;
+        let count = if att {
+            treated.len()
+        } else {
+            treated.len() + control.len()
+        };
+        let weight = count as f64 / population as f64;
         estimate += weight * difference;
         by_stratum.insert(
             label,
@@ -681,7 +705,7 @@ fn stratified_treatment_contrast(payload: &Value) -> Result<Value, &'static str>
     }
     Ok(
         json!({"method":"empirical_stratum_standardization","estimate":finite(estimate)?,
-        "by_stratum":by_stratum}),
+        "estimand":if att { "att" } else { "ate" },"by_stratum":by_stratum}),
     )
 }
 

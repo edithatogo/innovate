@@ -199,3 +199,8 @@ difference by its share of the supplied sample. The response also
 reports each stratum’s weight and arm counts. Every stratum requires
 both arms. Strata must be supplied by the caller. Causal interpretation
 requires exchangeability within strata, positivity and consistency.
+
+Set `estimand` to `att` to weight strata by their share of treated
+observations. Control-only strata are omitted, and each stratum with
+treated observations requires controls. The default `ate` uses the full
+sample as described above.

@@ -690,6 +690,18 @@ fn causal_summaries_match_analytic_effects() {
     let result = run(stratified.clone());
     assert!((result["result"]["estimate"].as_f64().unwrap() - 6.0).abs() < 1e-12);
     assert_eq!(result["result"]["by_stratum"]["low"]["n_control"], 2);
+    let mut att = stratified.clone();
+    att["estimand"] = json!("att");
+    let result = run(att.clone());
+    assert!((result["result"]["estimate"].as_f64().unwrap() - 7.25).abs() < 1e-12);
+    assert_eq!(result["result"]["by_stratum"]["low"]["weight"], 0.25);
+    att["strata"][0] = json!("control_only");
+    assert_eq!(
+        run(att.clone())["result"]["estimate"],
+        result["result"]["estimate"]
+    );
+    att["strata"][6] = json!("treated_only");
+    assert!(run(att)["result"].is_null());
     stratified["strata"][6] = json!("unsupported");
     assert!(run(stratified)["result"].is_null());
     let bootstrap = run(json!({"method":"treatment_contrast","outcomes":[2,2,5,5],

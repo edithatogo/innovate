@@ -4491,3 +4491,7 @@ Hosted release readiness for this worktree revision remains open.
   with a low-stratum weight of 3/7 and rejected a stratum missing one arm.
   The wheel and C ABI library were rebuilt locally with stripping disabled
   after the default linker invocation exhausted disk space.
+
+- [x] Add the treated-population estimand to native stratum standardization.
+  The focused Rust regression verifies an ATT of 7.25, omission of
+  control-only strata, and rejection of treated strata without controls.
