@@ -1367,3 +1367,9 @@ verified = execute("ingest_dataset", artifact=artifact)["result"]
 This works for artifacts recorded with either `python_sorted_json_v1`
 or `rust_sorted_json_v1`. For a bare dataset, pass `dataset` and an optional
 `encoding`. The default for a bare dataset is `rust_sorted_json_v1`.
+
+For datasets without a checksum, ingestion assigns omitted policy event
+labels as `event_0`, `event_1`, and so on, and fills omitted network edge
+weights with `1.0` before calculating the digest. For checksummed inputs,
+preserve the generated fields and their JSON numeric types. Removing a
+field causes checksum verification to fail.

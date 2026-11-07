@@ -4451,3 +4451,6 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify checksummed datasets supplied without an artifact envelope
   also reject removed labels or weights. Defaults apply only when the
   incoming dataset supplies no checksum. The focused Rust test passed.
+- [x] Document default normalization before checksumming and strict
+  verification of checksummed inputs. All eight focused dataset tests
+  passed against the documented behavior.
