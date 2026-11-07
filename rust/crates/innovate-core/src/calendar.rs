@@ -11,8 +11,8 @@ pub(crate) fn aggregate(payload: &Value) -> Result<Value, &'static str> {
         return Err("dates and values must be aligned");
     }
     let frequency = payload["frequency"].as_str().unwrap_or("");
-    if !["D", "W", "M", "ME"].contains(&frequency) {
-        return Err("frequency must be D, W, M or ME");
+    if !["D", "W", "M", "ME", "MS"].contains(&frequency) {
+        return Err("frequency must be D, W, M, ME or MS");
     }
     if dates
         .iter()
@@ -100,7 +100,8 @@ fn aggregate_dates(
     values: Vec<f64>,
     frequency: &str,
 ) -> Result<Value, &'static str> {
-    let monthly = matches!(frequency, "M" | "ME");
+    let month_end = matches!(frequency, "M" | "ME");
+    let monthly = month_end || frequency == "MS";
     let Some(&first) = dates.iter().min() else {
         return Ok(json!({"dates":[],"values":[]}));
     };
@@ -108,7 +109,7 @@ fn aggregate_dates(
     for (date, value) in dates.into_iter().zip(values) {
         let bucket = match frequency {
             "W" => first.checked_add_days(Days::new((date - first).num_days() as u64 / 7 * 7)),
-            "M" | "ME" => date.with_day(1),
+            "M" | "ME" | "MS" => date.with_day(1),
             _ => Some(date),
         }
         .ok_or("calendar bucket outside supported date range")?;
@@ -134,7 +135,7 @@ fn aggregate_dates(
             } else {
                 date.succ_opt()
             };
-            let label = if monthly {
+            let label = if month_end {
                 next.and_then(|d| d.pred_opt())
                     .ok_or("month end outside supported date range")?
             } else {

@@ -6909,3 +6909,8 @@ Hosted release readiness for this worktree revision remains open.
   during collection. The installed-wheel regression retains the
   column error and still returns the subsequent lazy frame forecast
   with the same values and row identity.
+
+- [x] Restore month-start aggregation (MS) from the historical
+  resampling contract. Native aggregation labels each bucket on
+  the first day of the month and fills missing months with zero.
+  The focused Rust boundary test passed. Binding checks remain open.

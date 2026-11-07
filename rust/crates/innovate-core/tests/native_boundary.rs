@@ -507,6 +507,18 @@ fn historical_sarima_retains_sarimax_initial_predictions() {
 }
 
 #[test]
+fn month_start_aggregation_preserves_empty_months() {
+    let request = json!({"schema_version":"2.0","operation":"aggregate_dates",
+        "payload":{"frequency":"MS","dates":["2024-03-15","2024-01-31","2024-03-01"],
+            "values":[3,1,2]}});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert_eq!(response["result"], json!({
+        "dates":["2024-01-01","2024-02-01","2024-03-01"],"values":[1.,0.,5.]
+    }));
+}
+
+#[test]
 fn offset_timestamp_weekly_buckets_use_elapsed_time() {
     let request = innovate_core::json!({
         "schema_version":"2.0", "operation":"aggregate_dates",
