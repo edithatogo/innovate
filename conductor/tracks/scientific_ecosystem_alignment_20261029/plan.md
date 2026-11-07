@@ -3925,3 +3925,7 @@ Hosted release readiness for this worktree revision remains open.
   through Python 3.15.2, Julia and installed R. All three reported
   local rank three and nine predictions within one adoption unit.
   Reused native builds at 2a5d2c0e with identical runtime source.
+- [x] Extend the deterministic held-out trajectory fixture to Gompertz.
+  The Rust fit converged at local rank three and forecast nine later
+  observations within one adoption unit of the analytic curve.
+  All six fit-quality tests passed.
