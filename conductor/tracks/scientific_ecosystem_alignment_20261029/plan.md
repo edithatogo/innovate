@@ -5253,3 +5253,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Report the original group means alongside matched balance.
   The Rust reused-control fixture showed the covariate mean difference
   increasing from 15 before matching to 20 after matching.
+
+- [x] Verify pre-match and matched covariate means through rebuilt
+  Python 3.15.2, Julia and installed R. All three recovered the
+  increase in the analytic fixture's mean difference from 15 to 20.
