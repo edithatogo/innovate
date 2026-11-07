@@ -144,7 +144,7 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
             return invalid(&format!("scenario '{}': {message}", scenario.id));
         }
     }
-    let comparisons: Option<Vec<Comparison>> = match request["payload"].get("comparisons") {
+    let comparisons: Option<Vec<ComparisonRequest>> = match request["payload"].get("comparisons") {
         None => None,
         Some(value) => match serde_json::from_value(value.clone()) {
             Ok(comparisons) => Some(comparisons),
@@ -221,14 +221,31 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
             .zip(&executions)
             .map(|(scenario, row)| (scenario.id.as_str(), (scenario, &row["result"])))
             .collect();
-        let rows: Vec<_> = comparisons.iter().map(|comparison| {
-            let outcome = compare_paths(&paths, comparison);
-            let (result, error) = match outcome {
-                Ok(result) => (result, Value::Null),
-                Err(message) => (Value::Null, json!({"code":"invalid_comparison","message":message})),
-            };
-            json!({"baseline":comparison.baseline,"alternative":comparison.alternative,"result":result,"error":error})
-        }).collect();
+        let rows: Vec<_> = comparisons
+            .iter()
+            .map(|comparison| {
+                let (mut row, outcome) = match comparison {
+                    ComparisonRequest::Pair(pair) => (
+                        json!({"baseline":pair.baseline,"alternative":pair.alternative}),
+                        compare_paths(&paths, pair),
+                    ),
+                    ComparisonRequest::Ensemble(ensemble) => (
+                        json!({"pairs":ensemble.pairs}),
+                        compare_ensemble(&paths, ensemble),
+                    ),
+                };
+                let (result, error) = match outcome {
+                    Ok(result) => (result, Value::Null),
+                    Err(message) => (
+                        Value::Null,
+                        json!({"code":"invalid_comparison","message":message}),
+                    ),
+                };
+                row["result"] = result;
+                row["error"] = error;
+                row
+            })
+            .collect();
         result["comparisons"] = json!(rows);
     }
     envelope(result, Value::Null)
@@ -243,28 +260,52 @@ struct Comparison {
     relative_margin: Option<f64>,
 }
 
+type ScenarioPaths<'a> = HashMap<&'a str, (&'a Scenario, &'a Value)>;
+
+#[derive(Deserialize)]
+#[serde(untagged)]
+enum ComparisonRequest {
+    Pair(Comparison),
+    Ensemble(EnsembleComparison),
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct EnsembleComparison {
+    pairs: Vec<ReplicatePair>,
+    interval_mass: f64,
+}
+
+#[derive(Deserialize, serde::Serialize)]
+#[serde(deny_unknown_fields)]
+struct ReplicatePair {
+    baseline: String,
+    alternative: String,
+}
+
+fn scalar_path(paths: &ScenarioPaths<'_>, id: &str) -> Result<(Vec<f64>, Vec<f64>), &'static str> {
+    let (scenario, result) = paths.get(id).ok_or("unknown scenario ID")?;
+    let inputs = &scenario.simulation["inputs"];
+    let time = inputs.get("time").unwrap_or(&inputs["t"]);
+    let time: Vec<f64> = serde_json::from_value(time.clone())
+        .map_err(|_| "comparison requires a numeric time grid")?;
+    let values: Vec<f64> = serde_json::from_value(result["values"].clone())
+        .map_err(|_| "comparison requires a successful scalar simulation")?;
+    if time.is_empty()
+        || time.len() != values.len()
+        || time.windows(2).any(|pair| pair[0] >= pair[1])
+    {
+        return Err("comparison requires one value per strictly increasing sample time");
+    }
+    Ok((time, values))
+}
+
 fn compare_paths(
-    paths: &HashMap<&str, (&Scenario, &Value)>,
+    paths: &ScenarioPaths<'_>,
     comparison: &Comparison,
 ) -> Result<Value, &'static str> {
-    let path = |id: &str| {
-        let (scenario, result) = paths.get(id).ok_or("unknown scenario ID")?;
-        let inputs = &scenario.simulation["inputs"];
-        let time = inputs.get("time").unwrap_or(&inputs["t"]);
-        let time: Vec<f64> = serde_json::from_value(time.clone())
-            .map_err(|_| "comparison requires a numeric time grid")?;
-        let values: Vec<f64> = serde_json::from_value(result["values"].clone())
-            .map_err(|_| "comparison requires a successful scalar simulation")?;
-        if time.is_empty()
-            || time.len() != values.len()
-            || time.windows(2).any(|pair| pair[0] >= pair[1])
-        {
-            return Err("comparison requires one value per strictly increasing sample time");
-        }
-        Ok((time, values))
-    };
-    let (time, baseline) = path(&comparison.baseline)?;
-    let (alternative_time, alternative) = path(&comparison.alternative)?;
+    let (time, baseline) = scalar_path(paths, &comparison.baseline)?;
+    let (alternative_time, alternative) = scalar_path(paths, &comparison.alternative)?;
     if time != alternative_time {
         return Err("scenario comparisons require identical time grids");
     }
@@ -304,6 +345,49 @@ fn compare_paths(
             json!({"baseline":first_sample(&baseline),"alternative":first_sample(&alternative)});
     }
     Ok(result)
+}
+
+fn compare_ensemble(
+    paths: &ScenarioPaths<'_>,
+    comparison: &EnsembleComparison,
+) -> Result<Value, &'static str> {
+    let mass = comparison.interval_mass;
+    if mass <= 0. || mass >= 1. || comparison.pairs.len() < 2 {
+        return Err("ensemble requires at least two pairs and interval_mass in (0, 1)");
+    }
+    let mut used = HashSet::new();
+    let mut grid = None;
+    let mut differences = Vec::with_capacity(comparison.pairs.len());
+    for pair in &comparison.pairs {
+        if !used.insert(&pair.baseline) || !used.insert(&pair.alternative) {
+            return Err("each scenario ID can appear only once per ensemble");
+        }
+        let (time, baseline) = scalar_path(paths, &pair.baseline)?;
+        let (alternative_time, alternative) = scalar_path(paths, &pair.alternative)?;
+        if time != alternative_time || grid.as_ref().is_some_and(|expected| expected != &time) {
+            return Err("ensemble comparisons require identical time grids across all replicates");
+        }
+        let last = time.len() - 1;
+        grid.get_or_insert(time);
+        let difference = alternative[last] - baseline[last];
+        if !difference.is_finite() {
+            return Err("ensemble difference must be finite");
+        }
+        differences.push(difference);
+    }
+    let mut sorted = differences.clone();
+    sorted.sort_unstable_by(f64::total_cmp);
+    let quantile = |probability: f64| {
+        let rank = probability * (sorted.len() - 1) as f64;
+        sorted[rank.floor() as usize] * (1. - rank.fract())
+            + sorted[rank.ceil() as usize] * rank.fract()
+    };
+    let tail = (1. - mass) / 2.;
+    Ok(
+        json!({"method":"paired_empirical_final_difference","quantile_method":"linear",
+        "pair_count":differences.len(),"differences":differences,"interval_mass":mass,
+        "median_difference":quantile(0.5),"empirical_interval":[quantile(tail),quantile(1.-tail)]}),
+    )
 }
 
 const SCENARIO_FAMILIES: [&str; 5] = [

@@ -958,6 +958,34 @@ fn scenario_grid_compares_aligned_adoption_paths() {
 }
 
 #[test]
+fn scenario_grid_summarizes_paired_ensemble_differences() {
+    let simulations: Vec<_> = [("a", 100.), ("b", 200.), ("c", 300.), ("d", 250.)]
+        .into_iter()
+        .map(|(id, limit)| {
+            json!({"id":id,"model_key":"logistic",
+            "simulation":{"inputs":{"time":[1.]},"parameters":{"L":limit,"k":1.,"x0":1.}}})
+        })
+        .collect();
+    let mut request = json!({"schema_version":"2.0","operation":"execute_scenario_grid",
+        "payload":{"workers":2,"scenarios":simulations,
+            "comparisons":[{"pairs":[{"baseline":"a","alternative":"b"},
+                {"baseline":"c","alternative":"d"}],"interval_mass":0.5}]}});
+    let run = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = run(&request);
+    let outcome = &response["result"]["comparisons"][0]["result"];
+    assert_eq!(outcome["pair_count"], 2);
+    assert_eq!(outcome["median_difference"], 12.5);
+    assert_eq!(outcome["empirical_interval"], json!([-6.25, 31.25]));
+    request["payload"]["comparisons"][0]["pairs"][1]["baseline"] = json!("a");
+    assert_eq!(
+        run(&request)["result"]["comparisons"][0]["error"]["code"],
+        "invalid_comparison"
+    );
+}
+
+#[test]
 fn scenario_discovery_lists_and_resolves_native_families() {
     let mut request = json!({"schema_version":"2.0","operation":"discover_scenarios","payload":{}});
     let run = |request: &serde_json::Value| -> serde_json::Value {
