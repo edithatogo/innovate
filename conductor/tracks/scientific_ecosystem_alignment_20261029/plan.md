@@ -6862,3 +6862,9 @@ Hosted release readiness for this worktree revision remains open.
   and 32 returned identical ordered results and the same malformed
   middle-row error. Both valid rows matched direct fits. Reused the
   8926c30c native runtime sources.
+
+- [x] Qualify parallel ragged forecast batches for the five historical
+  oracle models. Worker settings 1 and 32 matched full results,
+  preserved the malformed middle-row error and matched direct fitted
+  predictions. The test reads both scalar values and Norton–Bass
+  generation rows. The focused Rust oracle passed.

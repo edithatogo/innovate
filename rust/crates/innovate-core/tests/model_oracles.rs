@@ -85,6 +85,21 @@ fn five_model_prediction_simulation_and_fitted_forecast_oracles() {
             .unwrap()
             .result
             .unwrap();
+        let forecast_batch = |workers| -> serde_json::Value {
+            let request = json!({"schema_version":"2.0","operation":"predict_batch","model_key":model,
+                "payload":{"workers":workers,"datasets":[
+                    {"inputs":{"time":time},"state":fit["state"]},
+                    null,
+                    {"inputs":{"time":&time[..3]},"state":fit["state"]}
+                ]}});
+            serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+        };
+        let serial = forecast_batch(1);
+        let rows = &serial["result"]["datasets"];
+        assert_eq!(rows[0]["result"], predicted, "{model}");
+        assert!(rows[1]["error"].is_object(), "{model}");
+        assert_eq!(numbers(&rows[2]["result"]), numbers(&predicted)[..3], "{model}");
+        assert_eq!(forecast_batch(32), serial, "{model}");
         for (got, want) in numbers(&predicted).iter().zip(&observed) {
             assert!(
                 (got - want).abs() < 1.0,
