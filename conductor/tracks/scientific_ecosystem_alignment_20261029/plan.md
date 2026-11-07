@@ -3761,3 +3761,8 @@ Hosted release readiness for this worktree revision remains open.
   run used the native wheel from 958843bc and runner at c6bb97b7.
   Local sharding now covers all three policies. Hosted scheduler,
   multi-node and accelerator qualification remain open.
+- [x] Reconcile the accelerator/HPC ledger with the verified native
+  CPU benchmark sharding across all three policies. Record bounded
+  native status and retain multi-node, scheduler, accelerator and
+  release obligations. Development policy passes. The release check
+  continues to block all 38 open obligations, including accelerator/HPC.

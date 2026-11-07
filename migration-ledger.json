@@ -237,8 +237,10 @@
     },
     {
       "key": "accelerator_hpc",
-      "status": "pending",
-      "required": true
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Local Open MPI case sharding is verified. Multi-node execution, scheduler-backed allocation, accelerator implementation and qualification, and release acceptance remain open."
     },
     {
       "key": "voiage_arrow_handoff",
