@@ -2517,3 +2517,24 @@ fn historical_logistic_profiles_event_candidates_and_saves_fixed_split() {
     request["payload"]["constructor_kwargs"]["event_candidates"] = json!([1, 12]);
     assert!(execute(&request)["error"].is_object());
 }
+
+#[test]
+fn bootstrap_reports_null_forecast_interval_with_one_successful_refit() {
+    let request = json!({"schema_version":"2.0","operation":"bootstrap_fit",
+        "payload":{"fit_model":"logistic","draws":2,"seed":42,
+            "forecast_inputs":{"time":[18]},
+            "fit":{"constructor_kwargs":{"event_candidates":[11,12,13]},
+                "inputs":{"time":[7,8,9,10,11,12,13,14,15,16,17],
+                    "observed":[73.10585786300048,81.85744761936435,87.97970779778824,
+                        92.41418199787564,95.35741268224332,23.740584404423508,
+                        33.5963229732151,46.39504330019646,61.9051037744775,
+                        80.2624679775096,100.1]}}}});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert!(response["error"].is_null(), "{response}");
+    let result = &response["result"];
+    assert_eq!(result["failure_counts"]["fit_error"], 1);
+    assert_eq!(result["forecast"]["succeeded"], 1);
+    assert_eq!(result["forecast"]["failed"], 0);
+    assert_eq!(result["forecast"]["pointwise_intervals"], json!([[null]]));
+}

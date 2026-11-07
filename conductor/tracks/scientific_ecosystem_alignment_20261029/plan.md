@@ -3255,3 +3255,7 @@ the other competition models and installed binding checks remain open.
   residual draws. Every bound matched independent linear interpolation
   within 1e-10. A Python paired-case run with seed 42 had one successful
   refit and returned a null interval, as documented.
+
+- [x] Add a native regression for a paired-case Logistic bootstrap
+  with one failed fit and one successful forecast. The Rust test
+  confirms a null interval and zero forecast failures.
