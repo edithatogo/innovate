@@ -12,6 +12,16 @@ use kairo_ecs_rng::{
 use kairo_ecs_types::{EventKind, SimTime, StepOutcome};
 use serde::Deserialize;
 use serde_json::json;
+#[derive(serde::Serialize)]
+struct ServiceStart {
+    agent: usize,
+    tick: u128,
+    request_tick: u128,
+    wait_ticks: u128,
+    service_ticks: u64,
+    scheduled_completion_tick: u128,
+}
+
 struct QueueState {
     waiting_since: Vec<Option<u128>>,
     deadlines: Vec<Option<u128>>,
@@ -787,9 +797,14 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             let completion_tick = now + u128::from(duration);
             metrics.occupied_slot_ticks += completion_tick.min(horizon) - now;
             metrics.admitted_wait_ticks += now - queued_at;
-            service_starts.push(json!({"agent":next.index,"tick":now,
-                "request_tick":queued_at,"wait_ticks":now-queued_at,
-                "service_ticks":duration,"scheduled_completion_tick":completion_tick}));
+            service_starts.push(ServiceStart {
+                agent: index,
+                tick: now,
+                request_tick: queued_at,
+                wait_ticks: now - queued_at,
+                service_ticks: duration,
+                scheduled_completion_tick: completion_tick,
+            });
             context.schedule_behaviour(next, 2, SimTime::from_ticks(completion_tick));
             metrics.record_over_capacity(now, in_service, capacity);
             in_service += 1;

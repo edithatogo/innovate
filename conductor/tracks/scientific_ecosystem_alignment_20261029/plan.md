@@ -5056,3 +5056,8 @@ Hosted release readiness for this worktree revision remains open.
   Queue arrival times, active deadlines, retry wake ticks and retry
   counts now share one owner. Kairos still orders and admits waiters.
   All 29 Rust network integration tests passed.
+
+- [x] Store network service admissions as typed records with agent,
+  start tick and scheduled completion tick. Admission order can be
+  used to reconstruct pending Kairos completions at a pause boundary.
+  All 29 network tests passed with the existing result fields.
