@@ -35,6 +35,11 @@ pub(crate) fn grid(payload: &Value) -> Result<Value, &'static str> {
     if cells > 10_000 {
         return Err("posterior grid exceeds 10000 cells");
     }
+    let credible_mass = payload
+        .get("credible_mass")
+        .map_or(Some(0.95), Value::as_f64)
+        .filter(|mass| *mass > 0. && *mass < 1.)
+        .ok_or("credible_mass must be between zero and one")?;
     let sigma = payload["noise_sd"]
         .as_f64()
         .filter(|sd| sd.is_finite() && *sd > 0.)
@@ -86,24 +91,39 @@ pub(crate) fn grid(payload: &Value) -> Result<Value, &'static str> {
     weights.iter_mut().for_each(|weight| *weight /= total);
     let mut result = json!({"posterior_mass":weights,
         "method":"midpoint_grid_quadrature","prior":"uniform_within_bounds","likelihood":"independent_gaussian_known_sd"});
-    let means: Vec<_> = axes
-        .iter()
-        .enumerate()
-        .map(|(axis, (_, grid))| {
-            weights
-                .iter()
-                .enumerate()
-                .map(|(cell, weight)| {
-                    let index = if axis == 0 {
-                        cell / stride
-                    } else {
-                        cell % stride
-                    };
-                    grid[index] * weight
+    let mut means = Vec::with_capacity(axes.len());
+    let mut intervals = Vec::with_capacity(axes.len());
+    let tail = (1. - credible_mass) / 2.;
+    for (axis, (_, grid)) in axes.iter().enumerate() {
+        let mut marginal = vec![0.; grid.len()];
+        for (cell, weight) in weights.iter().enumerate() {
+            let index = if axis == 0 {
+                cell / stride
+            } else {
+                cell % stride
+            };
+            marginal[index] += weight;
+        }
+        means.push(
+            grid.iter()
+                .zip(&marginal)
+                .map(|(value, mass)| value * mass)
+                .sum::<f64>(),
+        );
+        let quantile = |probability| {
+            let mut cumulative = 0.;
+            grid.iter()
+                .zip(&marginal)
+                .find_map(|(value, mass)| {
+                    cumulative += mass;
+                    (cumulative >= probability).then_some(*value)
                 })
-                .sum::<f64>()
-        })
-        .collect();
+                .unwrap_or(grid[grid.len() - 1])
+        };
+        intervals.push([quantile(tail), quantile(1. - tail)]);
+    }
+    result["credible_mass"] = json!(credible_mass);
+    result["interval_method"] = json!("equal_tail_discrete_grid");
     if means.iter().any(|mean| !mean.is_finite()) {
         return Err("posterior mean exceeds finite numerical domain");
     }
@@ -111,6 +131,7 @@ pub(crate) fn grid(payload: &Value) -> Result<Value, &'static str> {
         result["parameter"] = json!(axes[0].0);
         result["grid"] = json!(axes[0].1);
         result["posterior_mean"] = json!(means[0]);
+        result["credible_interval"] = json!(intervals[0]);
     } else {
         result["axes"] = json!(
             axes.iter()
@@ -119,6 +140,7 @@ pub(crate) fn grid(payload: &Value) -> Result<Value, &'static str> {
         );
         result["shape"] = json!([axes[0].1.len(), stride]);
         result["posterior_means"] = json!(means);
+        result["credible_intervals"] = json!(intervals);
     }
     Ok(result)
 }

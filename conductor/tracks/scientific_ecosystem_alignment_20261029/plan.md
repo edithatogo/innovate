@@ -2950,3 +2950,8 @@ the other competition models and installed binding checks remain open.
   and installed R. All three returned identical row-major masses and
   marginal means for the 5-by-7 Logistic grid. An independent formula
   matched every mass and both means within 1e-12. R used raw JSON.
+
+- [x] Return equal-tail credible intervals from discrete posterior
+  grid marginals. Default to 95% and accept an explicit credible mass.
+  The Logistic capacity interval agrees with the normal oracle to
+  within one grid step. Both focused Rust tests and Clippy passed.

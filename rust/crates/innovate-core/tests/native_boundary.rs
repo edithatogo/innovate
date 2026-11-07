@@ -2230,6 +2230,10 @@ fn bayesian_logistic_capacity_grid_matches_symmetric_gaussian_reference() {
     let grid: Vec<f64> = serde_json::from_value(fit["grid"].clone()).unwrap();
     assert!((mass.iter().sum::<f64>() - 1.).abs() < 1e-12);
     assert!((fit["posterior_mean"].as_f64().unwrap() - 100.).abs() < 1e-10);
+    let interval = fit["credible_interval"].as_array().unwrap();
+    assert_eq!(fit["credible_mass"], 0.95);
+    assert!((interval[0].as_f64().unwrap() - 96.080072).abs() < 0.1);
+    assert!((interval[1].as_f64().unwrap() - 103.919928).abs() < 0.1);
     let variance: f64 = grid
         .iter()
         .zip(mass)
