@@ -457,4 +457,9 @@ def ingest_local(
         frame = pl.read_ipc(path)
     else:
         raise ValueError(f"unsupported local format: {file_format}")
-    return ingest_polars(frame, kind, provenance=provenance, unit=unit, directed=directed)
+    file_provenance = {
+        **provenance,
+        "transform_steps": [*provenance.get("transform_steps", []), f"load:{path.name}"],
+        "extra": {**provenance.get("extra", {}), "path": str(path), "format": file_format},
+    }
+    return ingest_polars(frame, kind, provenance=file_provenance, unit=unit, directed=directed)

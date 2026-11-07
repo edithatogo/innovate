@@ -1885,3 +1885,9 @@ the other competition models and installed binding checks remain open.
   value under its retained checksum. R exposes kernel_call_json to keep
   the original numeric tokens because list serialization can rewrite
   whole-valued floats as integers.
+
+- [x] Restore local source provenance enrichment. The Python loader
+  adds a load step and records the supplied path and normalized format,
+  preserving caller metadata. CSV and Parquet reads with equal rows now
+  carry different digests because their provenance differs. The rebuilt
+  wheel verified both digests through the Rust checksum operation.
