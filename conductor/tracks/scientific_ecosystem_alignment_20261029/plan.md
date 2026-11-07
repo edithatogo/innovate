@@ -6349,3 +6349,8 @@ Hosted release readiness for this worktree revision remains open.
   without cluster labels and appears in ATE and ATT discovery.
   The Rust causal boundary test verified clustered and unclustered
   results. Binding readback remains open.
+
+- [x] Verify distinct training-cluster support through rebuilt Python,
+  Julia and installed R. Both cross-fitted estimands reported a
+  minimum of two training rows but only one distinct cluster in
+  the repeated-cluster fixture.
