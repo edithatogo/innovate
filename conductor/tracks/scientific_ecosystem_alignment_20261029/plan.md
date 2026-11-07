@@ -5539,3 +5539,10 @@ Hosted release readiness for this worktree revision remains open.
   through installed R agreed with stats::arima within 1e-6 in both cases.
   The reproducible checker is check-mixed-near-unit-root.R. The release
   verifier still reports 38 open obligations.
+
+- [x] Reproduce a seasonal optimizer gap with a mixed
+  SARIMA(1,0,1)(1,0,1)[4] reference. With seasonal AR +0.97, Rust
+  exceeded the R likelihood by 1.77e-6. With seasonal AR -0.97,
+  Rust was lower by 0.02036 and maximum coefficient deviation was
+  0.04254. Both R fits converged. The comparison script is
+  compare-seasonal-boundaries.R. Optimizer qualification remains open.
