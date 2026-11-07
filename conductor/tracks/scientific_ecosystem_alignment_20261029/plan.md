@@ -111,9 +111,9 @@ Same chat and writing checkout resume at ab7b3a3a; checkout is clean. Ownership
 remains Rust modules, bindings/tests and this track. Remote Kairos HEAD readback
 is d56863505d938feb069af88a737eb7668113d14b. Other checkouts remain untouched.
 
-- [x] Connect Kairos scheduling/RNG to a bounded native finite-population Bass birth process.
-- [x] Validate replay, analytic limits, sampling invariance and invalid options.
-- [x] Validate installed Python, Julia and R consumers; update evidence and ledger (kairos-integration-20261107.json).
+- [x] Connect Kairos scheduling/RNG to a bounded native finite-population Bass birth process. 5953b38
+- [x] Validate replay, analytic limits, sampling invariance and invalid options. 5953b38
+- [x] Validate installed Python, Julia and R consumers; update evidence and ledger (kairos-integration-20261107.json). 5953b38
 - [ ] Continue ABM, covariates and remaining full-feature obligations.
 
 Local continuation: 41 Rust tests, 23 installed Python checks, 131 Julia assertions
@@ -121,3 +121,5 @@ and R native conformance pass. Review: kairos-review-20261107.md. Full migration
 remains active. Next source task: ABM agent/state integration and covariate/event
 ports, retaining all remaining model/inference obligations. Disk exhaustion was
 resolved for these checks by removing owned build caches; storage remains tight.
+
+Source/evidence commit: `5953b385cea165e8e0f327f27ebed920004b002d`. No native operation remains in flight.
