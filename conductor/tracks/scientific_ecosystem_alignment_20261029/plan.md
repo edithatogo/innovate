@@ -3816,3 +3816,7 @@ Hosted release readiness for this worktree revision remains open.
   step and reject a matching case from another step. The installed Python
   3.15.2 test and Ruff passed. No local Slurm executable or Lima guest
   was available for live allocation evidence.
+- [x] Expose native benchmark catalog and ordered case selection in
+  execution-mode discovery for external launchers. Rust discovery and
+  policy boundary tests passed. Scheduler, accelerator and distributed
+  kernel qualification remain open.

@@ -2676,3 +2676,25 @@ fn exact_sign_flip_bounds_work_and_counts_zero_ties() {
         "exact sign-flip inference supports at most 16 pairs"
     );
 }
+
+#[test]
+fn execution_discovery_advertises_ordered_benchmark_case_selection() {
+    let request =
+        json!({"schema_version":"2.0","operation":"discover_execution_modes","payload":{}});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    let result = &response["result"];
+    assert_eq!(
+        result["benchmark_case_selection"]["catalog_operation"],
+        "discover_benchmark_cases"
+    );
+    assert_eq!(
+        result["benchmark_case_selection"]["explicit_case_ids"],
+        true
+    );
+    assert_eq!(
+        result["benchmark_case_selection"]["preserves_case_order"],
+        true
+    );
+    assert_eq!(result["distributed"]["status"], "unqualified");
+}

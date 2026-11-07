@@ -201,6 +201,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
                 "local_cpu":{"status":"available","max_workers":MAX_BATCH_WORKERS,
                     "operations":["fit_batch","predict_batch","execute_scenario_grid","run_benchmark_suite"],
                     "preserves_input_order":true},
+                "benchmark_case_selection":{"operation":"run_benchmark_suite",
+                    "catalog_operation":"discover_benchmark_cases",
+                    "explicit_case_ids":true,"preserves_case_order":true},
                 "accelerator":{"status":"unqualified"},
                 "distributed":{"status":"unqualified"},
                 "scheduler":{"status":"unqualified"}
