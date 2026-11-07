@@ -3336,3 +3336,8 @@ the other competition models and installed binding checks remain open.
 - [x] Run the full locked Rust workspace suite at `c68ac300`. All 254
   tests passed across the core, FFI and Polars crates. This verifies
   the local workspace suite. The release acceptance gates remain open.
+
+- [x] Run the full Python native consumer test directory against a
+  freshly built locked wheel at `0941cfe1`. Python 3.15.2 passed all
+  83 tests, with repository default pytest options cleared for the
+  focused directory run. Coverage and release gates remain separate.
