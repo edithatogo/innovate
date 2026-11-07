@@ -3308,3 +3308,8 @@ the other competition models and installed binding checks remain open.
   Julia and R. With two requested local workers, Lotka–Volterra
   competition and lock-in completed in the same order and produced
   identical native results across the three bindings.
+
+- [x] Record elapsed kernel-call time and runtime platform in native
+  benchmark receipts. A local Python 3.15.2 Darwin arm64 run completed
+  all three fast cases and recorded a positive duration. Ruff passed.
+  Scheduler traces, memory measurements and accelerator evidence remain open.

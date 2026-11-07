@@ -3,7 +3,9 @@
 import argparse
 import json
 import os
+import platform
 from pathlib import Path
+from time import perf_counter
 
 from innovate import execute
 
@@ -32,11 +34,16 @@ def main() -> int:
     payload = {"workers": count}
     if args.policy is not None:
         payload["ci_policy"] = args.policy
+    started = perf_counter()
     response = execute("run_benchmark_suite", **payload)
     response["metadata"]["benchmark_runner"] = {
         "requested_workers": count,
         "worker_budget_source": "SLURM_CPUS_PER_TASK" if args.slurm_allocation else "command_line",
         "ci_policy": args.policy,
+        "kernel_elapsed_seconds": perf_counter() - started,
+        "python_version": platform.python_version(),
+        "system": platform.system(),
+        "architecture": platform.machine(),
     }
     args.output.write_text(json.dumps(response, indent=2, allow_nan=False) + "\n", encoding="utf-8")
     result = response["result"]
