@@ -8,6 +8,7 @@ mod composite;
 mod contracts;
 mod dataset;
 mod events;
+mod explainability;
 mod fitting;
 mod forcing;
 mod hierarchical;
@@ -51,6 +52,7 @@ pub fn execute_json(input: &str) -> String {
                 | "parameter_sensitivity"
                 | "assumption_sensitivity"
                 | "intervention_timing"
+                | "summarize_explainability"
                 | "validate_provenance"
                 | "dataset_checksum"
                 | "validate_dataset",
@@ -163,6 +165,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             return Err("analysis request requires schema 2.0");
         }
         let payload = &value["payload"];
+        if value["operation"] == "summarize_explainability" {
+            return explainability::summarize(payload);
+        }
         if value["operation"] == "threshold_sensitivity" {
             return sensitivity::thresholds(payload);
         }

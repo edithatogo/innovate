@@ -208,7 +208,7 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Other sensitivity and explainability summaries, binding qualification and release parity"
+      "remaining": "Combined reports, explainability binding qualification and release parity"
     },
     {
       "key": "benchmark_model_cards",

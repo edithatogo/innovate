@@ -1415,3 +1415,38 @@ fn timing_sensitivity_applies_offsets_to_the_same_baseline() {
     request["payload"]["inputs"][0]["offsets"] = json!([-3.]);
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn native_explainability_restores_four_descriptive_summaries() {
+    let run = |payload| -> serde_json::Value {
+        let request = json!({"schema_version":"2.0","operation":"summarize_explainability","payload":payload});
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let drivers = run(
+        json!({"method":"adoption_drivers","drivers":{"price":-1,"access":3},
+        "baseline_adoption":10,"scenario_adoption":18}),
+    );
+    assert_eq!(
+        drivers["result"]["contributions"]["access"]["contribution"],
+        6.
+    );
+    let competition = run(
+        json!({"method":"competition_effects","product_shares":{"a":0.5,"b":0.25},
+        "focal_product":"a"}),
+    );
+    assert_eq!(competition["result"]["lead"], 0.25);
+    let substitution = run(
+        json!({"method":"substitution_thresholds","shares":[0.,0.5,0.25],
+        "thresholds":[0.5,0.75]}),
+    );
+    assert_eq!(substitution["result"]["crossings"][0]["first_index"], 1);
+    assert!(substitution["result"]["crossings"][1]["first_index"].is_null());
+    let policy =
+        run(json!({"method":"policy_components","components":{"b":-3,"a":3},"total_effect":2}));
+    assert_eq!(policy["result"]["dominant_component"], "a");
+    assert_eq!(policy["result"]["residual"], 2.);
+    assert_eq!(
+        run(json!({"method":"policy_components","components":{}}))["error"]["code"],
+        "invalid_request"
+    );
+}

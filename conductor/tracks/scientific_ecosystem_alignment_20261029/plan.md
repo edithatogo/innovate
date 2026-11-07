@@ -2247,3 +2247,9 @@ the other competition models and installed binding checks remain open.
   sensitivity in the rebuilt Python 3.15 wheel, Julia and installed R.
   All four full result objects agreed across bindings and matched the
   inclusive threshold counts and analytic Logistic outcomes.
+
+- [x] Restore the four native explainability summaries: weighted adoption
+  contributions, focal competition pressure, first substitution threshold
+  indices and policy decomposition. Equal-magnitude policy components
+  resolve by name for deterministic JSON-object transport. All 48 boundary
+  tests and Clippy passed. Binding and combined-report qualification remain open.
