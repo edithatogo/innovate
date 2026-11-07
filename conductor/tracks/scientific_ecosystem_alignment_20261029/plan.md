@@ -6694,3 +6694,9 @@ Hosted release readiness for this worktree revision remains open.
   slots from the fixture schedule. Occupied, idle, configured and
   over-capacity slot ticks matched for all 32 seeds at three horizons
   (96 runs). The focused Rust network test passed.
+
+- [x] Recompute the four slot-time totals for the combined
+  continuous-hazard and scheduled-resource fixture. Through the
+  Python 3.15.2 wheel, the tick-by-tick sum of configured capacity
+  and active service intervals matched all totals for 33 seeds at
+  horizons 4, 8 and 20 (99 runs), including both schedule boundaries.
