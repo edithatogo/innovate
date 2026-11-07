@@ -2800,3 +2800,9 @@ the other competition models and installed binding checks remain open.
   same normalized manifest on a subsequent call. Julia and R release
   their native library handles after calls, so persistence on loaders
   that unload the library remains a separate portability gate.
+
+- [x] Retain native loader references across Julia and R JSON calls for
+  process-local extension registration. Julia caches by resolved library
+  path and R retains a loaded DLL reference. The retained lifecycle
+  tests passed on macOS against Julia and freshly installed R. Hosted
+  Linux and Windows runtime evidence remains open.

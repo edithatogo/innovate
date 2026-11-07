@@ -63,7 +63,11 @@ kernel_call_json <- function(request, raw = FALSE) {
   if (!is.logical(raw) || length(raw) != 1L || is.na(raw)) {
     stop("raw must be a single logical value", call. = FALSE)
   }
-  decode_kernel_response(.Call(innovate_call_R, native_library(), request), raw)
+  library <- native_library()
+  # Hold a loader reference across JSON calls for the Rust registry.
+  paths <- vapply(getLoadedDLLs(), function(info) info[["path"]], character(1))
+  if (!library %in% paths) dyn.load(library, local = TRUE, now = TRUE)
+  decode_kernel_response(.Call(innovate_call_R, library, request), raw)
 }
 
 kernel_scenario_grid_ipc <- function(data, payload) {

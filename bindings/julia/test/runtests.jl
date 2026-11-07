@@ -488,3 +488,11 @@ end
     @test result["dates"] == ["2026-11-01T00:00:00Z", "2026-11-08T00:00:00Z"]
     @test result["values"] == [3.,4.]
 end
+
+@testset "Process-local extension registry" begin
+    manifest = Dict("name"=>"binding-fixture", "version"=>"1", "entrypoint"=>"demo:register",
+        "stability"=>"beta", "extension_points"=>["diagnostics"])
+    registered = kernel_call("register_extension_manifest", nothing, Dict("manifest"=>manifest))["result"]["manifest"]
+    @test registered["stability"] == "provisional"
+    @test kernel_call("list_extension_manifests")["result"]["manifests"] == [registered]
+end

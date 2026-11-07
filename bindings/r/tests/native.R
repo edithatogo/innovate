@@ -463,3 +463,9 @@ timestamps <- c("2026-11-08T10:00:00+10:00", "2026-11-01T00:00:00Z", "2026-11-07
 weekly <- kernel_aggregate_dates(timestamps, c(4,1,2), "W")
 stopifnot(identical(unlist(weekly$dates), c("2026-11-01T00:00:00Z", "2026-11-08T00:00:00Z")),
   identical(as.numeric(unlist(weekly$values)), c(3,4)))
+
+manifest <- list(name="binding-fixture", version="1", entrypoint="demo:register",
+  stability="beta", extension_points=list("diagnostics"))
+registered <- kernel_call("register_extension_manifest", NULL, list(manifest=manifest))$result$manifest
+stopifnot(identical(registered$stability, "provisional"),
+  identical(kernel_call("list_extension_manifests")$result$manifests, list(registered)))

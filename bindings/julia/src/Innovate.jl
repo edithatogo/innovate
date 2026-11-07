@@ -72,29 +72,32 @@ function scenario_output(response, symbol)
     end
 end
 
+const native_handles = Dict{String,Ptr{Cvoid}}()
+const native_handles_lock = ReentrantLock()
+
 function with_native_response(invoke)
-    handle = Libdl.dlopen(native_library())
-    try
-        release = Libdl.dlsym(handle, :innovate_free)
-        response = invoke(handle)
-        response == C_NULL && error("Native response allocation failed")
-        text = try
-            unsafe_string(response)
-        finally
-            ccall(release, Cvoid, (Ptr{UInt8},), response)
-        end
-        result = JSON.parse(text; dicttype=Dict{String,Any})
-        if get(result, "error", nothing) !== nothing
-            details = result["error"]
-            if haskey(details, "validation")
-                throw(DatasetValidationError(details["code"], details["message"], details["validation"]))
-            end
-            error(string(details["code"], ": ", details["message"]))
-        end
-        return result
-    finally
-        Libdl.dlclose(handle)
+    path = native_library()
+    # Keep process-local Rust state alive across JSON calls.
+    handle = lock(native_handles_lock) do
+        get!(() -> Libdl.dlopen(path), native_handles, path)
     end
+    release = Libdl.dlsym(handle, :innovate_free)
+    response = invoke(handle)
+    response == C_NULL && error("Native response allocation failed")
+    text = try
+        unsafe_string(response)
+    finally
+        ccall(release, Cvoid, (Ptr{UInt8},), response)
+    end
+    result = JSON.parse(text; dicttype=Dict{String,Any})
+    if get(result, "error", nothing) !== nothing
+        details = result["error"]
+        if haskey(details, "validation")
+            throw(DatasetValidationError(details["code"], details["message"], details["validation"]))
+        end
+        error(string(details["code"], ": ", details["message"]))
+    end
+    return result
 end
 
 kernel_discover_models() = kernel_call("discover_models")["result"]
