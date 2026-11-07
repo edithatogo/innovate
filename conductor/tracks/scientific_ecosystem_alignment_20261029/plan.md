@@ -4133,3 +4133,8 @@ Hosted release readiness for this worktree revision remains open.
   Python 3.15.2 wheel, Julia and installed R. Each reported one idle
   slot-tick and verified that occupied plus idle equals configured
   plus over-capacity in the scheduled closure fixture.
+- [x] Run the local regression gate at 0bf80a22. The locked Rust
+  workspace passed 280 tests. The native Python suite passed against
+  the installed 3.15.2 wheel, and the Julia and installed R native
+  suites passed against the matching local shared library. Migration
+  development policy passed with 38 open release obligations.
