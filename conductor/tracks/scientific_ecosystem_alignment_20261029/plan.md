@@ -1602,5 +1602,7 @@ the other competition models and installed binding checks remain open.
   from the earliest instant. Mixed offset and naive inputs are rejected.
   The exact weekly boundary fixture, 23 native tests and focused Clippy
   passed.
-- [ ] Qualify timestamp aggregation through Julia and R, including
-  explicit offset handling and consumer formatting.
+- [x] Qualify weekly timestamp aggregation in Julia and installed R.
+  Both matched the exact boundary fixture with explicit offsets.
+  Julia DateTime retains wall time, and R POSIXt is formatted in UTC
+  with microsecond precision before dispatch.

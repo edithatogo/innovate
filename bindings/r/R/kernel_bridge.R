@@ -75,6 +75,9 @@ kernel_rolling_average <- function(values, window) {
 }
 
 kernel_aggregate_dates <- function(dates, values, frequency) {
+  if (inherits(dates, "POSIXt")) {
+    dates <- format(dates, "%Y-%m-%dT%H:%M:%OS6Z", tz = "UTC")
+  }
   kernel_call("aggregate_dates", payload = list(dates = as.character(dates),
     values = values, frequency = frequency))$result
 }
