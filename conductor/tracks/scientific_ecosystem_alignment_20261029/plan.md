@@ -4092,3 +4092,7 @@ Hosted release readiness for this worktree revision remains open.
   All reported time 2 by default, effects [50, 50] at selected time 1,
   and an invalid comparison at off-grid time 1.5 with all four
   executions preserved. Python Arrow readback preserved row status.
+- [x] Document selected-time ensemble evaluation in the native guide.
+  The installed Python wheel ran the documented paired example at time
+  1 with bootstrap and sign-flip enabled. Effects were 50 and 25, the
+  mean was 37.5, and the exact two-sided p-value was 0.5.

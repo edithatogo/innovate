@@ -1259,7 +1259,13 @@ same grid.
 
 Use two to sixteen pairs, with each scenario ID appearing once in the
 comparison. The scalar paths must share a time grid and use comparable
-units. The test uses alternative minus baseline at the final sample.
+units. By default, the test uses alternative minus baseline at the
+final sample. Set `"evaluation_time": 1` to evaluate at time 1 when it
+appears on the shared grid. The mean, empirical interval, and any
+requested bootstrap or sign-flip results all use effects at that
+sample. The response reports the actual sample as
+`result.evaluation_time`. An off-grid time returns
+`invalid_comparison` for that row and preserves the scenario executions.
 
 The comparison's `result.sign_flip` reports the number of assignments
 enumerated, the number with an absolute sum at least as large as the
