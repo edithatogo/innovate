@@ -6483,3 +6483,10 @@ Hosted release readiness for this worktree revision remains open.
   locally verified Cargo Audit 0.22.2. Scan the committed lock and
   preserve the scanner exit status and warnings. Local workflow
   validation passed. Hosted audit execution remains open.
+
+- [x] Qualify local rank reporting for a saturated Logistic fit.
+  With eight plateau observations and a far-earlier initial midpoint,
+  the native fit reports one identifiable sensitivity direction out
+  of three, excludes the rate and midpoint columns and returns a
+  point estimate. All Rust fit-quality tests passed. Global
+  identifiability and calibrated uncertainty remain open.

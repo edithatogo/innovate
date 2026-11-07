@@ -177,3 +177,29 @@ fn assert_held_out_trajectory(model: &str, truth: impl Fn(f64) -> f64) {
         );
     }
 }
+
+#[test]
+fn saturated_logistic_fit_reports_unidentified_rate_and_midpoint() {
+    let time: Vec<_> = (0..8).collect();
+    let fit = KernelBinding::new()
+        .fit_model(
+            "logistic",
+            json!({
+                "inputs":{"time":time,"observed":vec![100.;8]},
+                "fit_options":{"initial_parameters":{"L":100.,"k":1.,"x0":-100.}}
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    let diagnostics = &fit["diagnostics"];
+    let sensitivity = &diagnostics["identifiability"];
+    assert_eq!(sensitivity["status"], "rank_deficient");
+    assert_eq!(sensitivity["rank"], 1);
+    assert_eq!(sensitivity["parameters"], 3);
+    assert_eq!(
+        sensitivity["excluded_sensitivity_column_indices"],
+        json!([1, 2])
+    );
+    assert_eq!(diagnostics["uncertainty"]["report_type"], "point_estimate");
+}
