@@ -619,3 +619,7 @@ stopifnot(isTRUE(all.equal(unlist(logistic_fit$propensities), c(0.25,0.75), tole
 logistic_prediction <- kernel_call("summarize_causal", payload=list(method="predict_logistic_propensities",
   fit=logistic_fit, covariates=matrix(c(0,2,-2), ncol=1)))$result
 stopifnot(isTRUE(all.equal(unlist(logistic_prediction$propensities), c(0.5,0.75,0.25), tolerance=1e-7)))
+logistic_score <- kernel_call("summarize_causal", payload=list(method="score_propensities",
+  treatment=c(0,1,0), propensities=logistic_prediction$propensities))$result
+stopifnot(isTRUE(all.equal(logistic_score$brier_score, 0.125, tolerance=1e-7)),
+  isTRUE(all.equal(logistic_score$log_loss, -(log(0.5) + 2 * log(0.75)) / 3, tolerance=1e-7)))

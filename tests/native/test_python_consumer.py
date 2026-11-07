@@ -1397,3 +1397,7 @@ def test_ridge_logistic_propensity_fit():
     prediction = innovate.execute("summarize_causal", method="predict_logistic_propensities",
                                   fit=fit, covariates=[[0], [2], [-2]])["result"]
     assert prediction["propensities"] == pytest.approx([0.5, 0.75, 0.25], abs=1e-7)
+    score = innovate.execute("summarize_causal", method="score_propensities",
+                             treatment=[0, 1, 0], propensities=prediction["propensities"])["result"]
+    assert score["brier_score"] == pytest.approx(0.125)
+    assert score["log_loss"] == pytest.approx(-(math.log(0.5) + 2 * math.log(0.75)) / 3)

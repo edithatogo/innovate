@@ -655,4 +655,8 @@ end
     prediction = kernel_call("summarize_causal", nothing, Dict("method"=>"predict_logistic_propensities",
         "fit"=>fit, "covariates"=>[[0],[2],[-2]]))["result"]
     @test isapprox(prediction["propensities"], [0.5,0.75,0.25]; atol=1e-7)
+    score = kernel_call("summarize_causal", nothing, Dict("method"=>"score_propensities",
+        "treatment"=>[0,1,0], "propensities"=>prediction["propensities"]))["result"]
+    @test isapprox(score["brier_score"], 0.125; atol=1e-7)
+    @test isapprox(score["log_loss"], -(log(0.5) + 2 * log(0.75)) / 3; atol=1e-7)
 end
