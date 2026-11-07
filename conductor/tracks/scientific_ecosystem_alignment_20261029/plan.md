@@ -4640,3 +4640,7 @@ Hosted release readiness for this worktree revision remains open.
 
 - [x] Verify augmented ATE through rebuilt Python 3.15.2, Julia and
   installed R. Each recovered estimate 4 and influence standard error 2.
+
+- [x] Add augmented ATT using supplied control predictions and
+  propensities. The focused Rust fixture verifies estimate 2 and
+  influence standard error 2. Binding qualification remains open.

@@ -1097,6 +1097,7 @@ fn augmented_treatment_contrast(payload: &Value) -> Result<Value, &'static str> 
                 | "propensities"
                 | "treated_predictions"
                 | "control_predictions"
+                | "estimand"
         )
     }) {
         return Err("augmented contrast received an unsupported field");
@@ -1104,17 +1105,23 @@ fn augmented_treatment_contrast(payload: &Value) -> Result<Value, &'static str> 
     let outcomes = series(payload, "outcomes")?;
     let treatment = series(payload, "treatment")?;
     let propensities = series(payload, "propensities")?;
-    let treated = series(payload, "treated_predictions")?;
+    let att = match fields.get("estimand").map(Value::as_str) {
+        None | Some(Some("ate")) => false,
+        Some(Some("att")) => true,
+        _ => return Err("augmented contrast estimand must be ate or att"),
+    };
+    if att && fields.contains_key("treated_predictions") {
+        return Err("augmented ATT requires only control outcome predictions");
+    }
+    let treated = (!att)
+        .then(|| series(payload, "treated_predictions"))
+        .transpose()?;
     let control = series(payload, "control_predictions")?;
     let n = outcomes.len();
-    if [
-        treatment.len(),
-        propensities.len(),
-        treated.len(),
-        control.len(),
-    ]
-    .iter()
-    .any(|&len| len != n)
+    if [treatment.len(), propensities.len(), control.len()]
+        .iter()
+        .any(|&len| len != n)
+        || treated.as_ref().is_some_and(|values| values.len() != n)
         || !treatment.contains(&0.)
         || !treatment.contains(&1.)
     {
@@ -1126,20 +1133,31 @@ fn augmented_treatment_contrast(payload: &Value) -> Result<Value, &'static str> 
         if !(0. < probability && probability < 1.) {
             return Err("propensities must lie strictly between zero and one");
         }
-        let correction = match treatment[i] {
-            0. => (control[i] - outcomes[i]) / (1. - probability),
-            1. => (outcomes[i] - treated[i]) / probability,
+        let score = match (&treated, treatment[i]) {
+            (Some(predictions), 0.) => {
+                predictions[i] - control[i] + (control[i] - outcomes[i]) / (1. - probability)
+            }
+            (Some(predictions), 1.) => {
+                predictions[i] - control[i] + (outcomes[i] - predictions[i]) / probability
+            }
+            (None, 0.) => (control[i] - outcomes[i]) * (probability / (1. - probability)),
+            (None, 1.) => outcomes[i] - control[i],
             _ => return Err("treatment indicators must be binary"),
         };
-        scores.push(finite(treated[i] - control[i] + correction)?);
+        scores.push(finite(score)?);
     }
-    let estimate = mean(&scores).ok_or("augmented contrast requires observations")?;
-    let scale = 1. / ((n as f64) * ((n - 1) as f64)).sqrt();
-    let standard_error = scores.iter().fold(0_f64, |error, &score| {
-        error.hypot(scale * score - scale * estimate)
-    });
+    let denominator = if att { mean(&treatment).unwrap() } else { 1. };
+    let estimate = finite(mean(&scores).unwrap() / denominator)?;
+    let scale = 1. / (((n as f64) * ((n - 1) as f64)).sqrt() * denominator);
+    let standard_error = scores
+        .iter()
+        .zip(&treatment)
+        .fold(0_f64, |error, (&score, &flag)| {
+            let center = if att { flag * estimate } else { estimate };
+            error.hypot(scale * score - scale * center)
+        });
     Ok(
-        json!({"method":"augmented_inverse_probability_weighting","estimand":"ate",
+        json!({"method":"augmented_inverse_probability_weighting","estimand":if att { "att" } else { "ate" },
         "estimate":estimate,"influence_standard_error":finite(standard_error)?,"observations":n}),
     )
 }

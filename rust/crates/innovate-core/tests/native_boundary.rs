@@ -699,6 +699,20 @@ fn causal_summaries_match_analytic_effects() {
     );
     augmented["treated_predictions"] = json!([2]);
     assert!(run(augmented)["result"].is_null());
+    let result = run(
+        json!({"method":"augmented_treatment_contrast","estimand":"att",
+        "outcomes":[1,4],"treatment":[0,1],"propensities":[0.5,0.5],
+        "control_predictions":[0,1]}),
+    );
+    assert_eq!(result["result"]["estimate"], 2.);
+    assert!(
+        (result["result"]["influence_standard_error"]
+            .as_f64()
+            .unwrap()
+            - 2.)
+            .abs()
+            < 1e-12
+    );
     let mut matched = json!({"method":"matched_treatment_contrast",
         "outcomes":[0,10,12,3,99],"treatment":[0,0,1,1,0],
         "scores":[0,2,2,1,0],"caliper":1});

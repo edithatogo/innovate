@@ -309,3 +309,8 @@ For independent rows with suitably estimated nuisance predictions,
 the influence standard error is the sample standard deviation of
 these scores divided by the square root of the sample size. Supply
 out-of-fold predictions when fitting nuisance models on the same data.
+
+For `estimand="att"`, provide control predictions only. The estimate
+subtracts treatment-odds-weighted control residuals from treated
+residuals, with both totals divided by the treated count. The influence
+standard error accounts for estimating the treated fraction.
