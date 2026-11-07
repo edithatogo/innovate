@@ -4500,3 +4500,8 @@ Hosted release readiness for this worktree revision remains open.
   Julia and installed R. The treated-population contrast was 7.25 with
   a low-stratum weight of 1/4. Each binding rejected a treated stratum
   without controls. Builds were staged sequentially to fit local disk space.
+
+- [x] Report conditional standard errors for stratified contrasts with
+  independent observations and fixed weights. The analytic Rust fixture
+  verifies squared weighting across strata and a null result for a
+  singleton arm. Binding runtime checks remain open for this field.

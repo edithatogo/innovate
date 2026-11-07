@@ -690,6 +690,17 @@ fn causal_summaries_match_analytic_effects() {
     let result = run(stratified.clone());
     assert!((result["result"]["estimate"].as_f64().unwrap() - 6.0).abs() < 1e-12);
     assert_eq!(result["result"]["by_stratum"]["low"]["n_control"], 2);
+    assert_eq!(
+        result["result"].get("conditional_standard_error"),
+        Some(&json!(null))
+    );
+    let replicated = run(json!({"method":"stratified_treatment_contrast",
+        "outcomes":[0,2,4,6,10,10,12,12],"treatment":[0,0,1,1,0,0,1,1],
+        "strata":["low","low","low","low","high","high","high","high"]}));
+    let error = replicated["result"]["conditional_standard_error"]
+        .as_f64()
+        .unwrap();
+    assert!((error - 0.5 * 2_f64.sqrt()).abs() < 1e-12);
     let mut att = stratified.clone();
     att["estimand"] = json!("att");
     let result = run(att.clone());

@@ -678,6 +678,7 @@ fn stratified_treatment_contrast(payload: &Value) -> Result<Value, &'static str>
         }
     }
     let mut estimate = 0.;
+    let mut conditional_standard_error = Some(0_f64);
     let mut by_stratum = serde_json::Map::new();
     if population == 0 {
         return Err("ATT requires treated observations");
@@ -697,6 +698,18 @@ fn stratified_treatment_contrast(payload: &Value) -> Result<Value, &'static str>
         };
         let weight = count as f64 / population as f64;
         estimate += weight * difference;
+        for (arm, arm_mean) in [(&treated, treated_mean), (&control, control_mean)] {
+            if arm.len() < 2 {
+                conditional_standard_error = None;
+            }
+            if let Some(error) = &mut conditional_standard_error {
+                let count = arm.len() as f64;
+                let scale = weight / (count * (count - 1.)).sqrt();
+                for &outcome in arm {
+                    *error = error.hypot(scale * outcome - scale * arm_mean);
+                }
+            }
+        }
         by_stratum.insert(
             label,
             json!({"estimate":difference,"weight":weight,
@@ -705,6 +718,7 @@ fn stratified_treatment_contrast(payload: &Value) -> Result<Value, &'static str>
     }
     Ok(
         json!({"method":"empirical_stratum_standardization","estimate":finite(estimate)?,
+        "conditional_standard_error":conditional_standard_error.map(finite).transpose()?,
         "estimand":if att { "att" } else { "ate" },"by_stratum":by_stratum}),
     )
 }

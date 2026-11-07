@@ -204,3 +204,8 @@ Set `estimand` to `att` to weight strata by their share of treated
 observations. Control-only strata are omitted, and each stratum with
 treated observations requires controls. The default `ate` uses the full
 sample as described above.
+
+The `conditional_standard_error` assumes independent observations and
+holds the stratum weights fixed. It combines the two arm sample variances
+divided by their respective arm sizes, with squared stratum weights.
+It is null when an included arm has only one observation.
