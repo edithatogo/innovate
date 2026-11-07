@@ -2294,3 +2294,9 @@ the other competition models and installed binding checks remain open.
   curves. The competition case verifies execution and output shape. All
   53 Rust boundary tests and Clippy passed. Suite automation, bindings
   and release qualification remain open.
+
+- [x] Restore native smoke-suite execution with optional ordered case IDs
+  and bounded workers. Report successful and failed cases separately while
+  retaining request order and each case diagnostic. The default suite ran
+  all four historical corpus cases. All 54 Rust boundary tests and Clippy
+  passed. Historical automation, binding and release qualification remain open.

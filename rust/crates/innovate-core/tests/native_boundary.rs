@@ -1577,10 +1577,13 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
     let discovery = run("discover_benchmark_cases", json!({}));
     let cases = discovery["result"]["cases"].as_array().unwrap();
     assert_eq!(cases.len(), 4);
-    for case in cases {
-        let response = run("run_benchmark_case", json!({"case_id":case["case_id"]}));
-        assert!(response["error"].is_null(), "{response}");
-        let result = &response["result"];
+    let suite = run("run_benchmark_suite", json!({"workers":2}));
+    assert_eq!(suite["result"]["succeeded"], 4, "{suite}");
+    assert_eq!(suite["result"]["failed"], 0);
+    let rows = suite["result"]["runs"].as_array().unwrap();
+    for (case, row) in cases.iter().zip(rows) {
+        assert_eq!(row["case_id"], case["case_id"]);
+        let result = &row["result"];
         assert_eq!(&result["case"], case);
         assert_eq!(result["observed"].as_array().unwrap().len(), 12);
         let key = if case["family"] == "competition" {
@@ -1606,4 +1609,22 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
         }
         assert!(result["fit"]["diagnostics"].is_object());
     }
+}
+
+#[test]
+fn benchmark_suite_retains_failures_in_request_order() {
+    let request = json!({"schema_version":"2.0","operation":"run_benchmark_suite",
+        "payload":{"case_ids":["missing","logistic_growth_smoke"],"workers":2}});
+    let result: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert_eq!(result["result"]["failed"], 1);
+    assert_eq!(result["result"]["succeeded"], 1);
+    assert_eq!(
+        result["result"]["runs"][0]["error"]["code"],
+        "benchmark_case_failed"
+    );
+    assert_eq!(
+        result["result"]["runs"][1]["case_id"],
+        "logistic_growth_smoke"
+    );
 }

@@ -29,6 +29,10 @@ fn run(payload: &Value) -> Result<Value, String> {
     let id = payload["case_id"]
         .as_str()
         .ok_or("benchmark requires case_id")?;
+    run_case(id)
+}
+
+fn run_case(id: &str) -> Result<Value, String> {
     let &(id, model, family) = CASES
         .iter()
         .find(|case| case.0 == id)
@@ -64,12 +68,65 @@ fn run(payload: &Value) -> Result<Value, String> {
     )
 }
 
+fn suite(payload: &Value) -> Result<Value, String> {
+    let workers = crate::batch_workers(payload).ok_or("workers must be an integer in 1..=32")?;
+    let ids: Vec<&str> = match payload.get("case_ids") {
+        None => CASES.iter().map(|case| case.0).collect(),
+        Some(value) => {
+            let entries = value
+                .as_array()
+                .filter(|entries| !entries.is_empty() && entries.len() <= CASES.len())
+                .ok_or("case_ids must contain one to four case IDs")?;
+            entries
+                .iter()
+                .map(|entry| {
+                    entry
+                        .as_str()
+                        .filter(|id| !id.trim().is_empty())
+                        .ok_or("case IDs must be nonblank strings")
+                })
+                .collect::<Result<_, _>>()?
+        }
+    };
+    if ids.iter().collect::<std::collections::HashSet<_>>().len() != ids.len() {
+        return Err("benchmark case IDs must be unique".into());
+    }
+    let error_row = |id: &str, code: &str, message: &str| json!({"case_id":id,"result":null,"error":{"code":code,"message":message}});
+    let runs = crate::run_ordered_chunks(
+        &ids,
+        workers,
+        |chunk| {
+            chunk
+                .iter()
+                .map(|id| match run_case(id) {
+                    Ok(result) => json!({"case_id":id,"result":result,"error":null}),
+                    Err(message) => error_row(id, "benchmark_case_failed", &message),
+                })
+                .collect()
+        },
+        |id| {
+            error_row(
+                id,
+                "batch_worker_panicked",
+                "native benchmark worker failed",
+            )
+        },
+    );
+    let succeeded = runs.iter().filter(|row| row["error"].is_null()).count();
+    Ok(
+        json!({"runs":runs,"succeeded":succeeded,"failed":runs.len()-succeeded,
+        "scope":"in_sample_synthetic_smoke"}),
+    )
+}
+
 pub(crate) fn execute(request: &Value) -> Value {
     let operation = &request["operation"];
     let result = if request["schema_version"] != crate::KERNEL_SCHEMA_VERSION {
         Err("benchmark request requires schema 2.0".into())
     } else if operation == "discover_benchmark_cases" {
         Ok(discover())
+    } else if operation == "run_benchmark_suite" {
+        suite(&request["payload"])
     } else {
         run(&request["payload"])
     };
