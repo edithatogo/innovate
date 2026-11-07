@@ -6511,3 +6511,8 @@ Hosted release readiness for this worktree revision remains open.
   fixture with transition and plateau observations produced both
   successful and rank-deficient draws. The regression verifies
   complete accounting of 100 draws. All four selected tests passed.
+
+- [x] Verify rank-deficient bootstrap draw accounting through rebuilt
+  Python, Julia and installed R. The same seeded Logistic fixture
+  reported 88 successful draws, 12 rank-deficient draws and zero
+  failures in every other category across all three bindings.
