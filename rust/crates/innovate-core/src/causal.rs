@@ -1349,6 +1349,9 @@ fn weighted_outcome_contrast(
     )
 }
 
+const INCOMPLETE_MATCH: &str = "every treated observation requires a control within the caliper";
+const EMPTY_MATCH: &str = "matching requires at least one matched treated observation";
+
 fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     let fields = payload
         .as_object()
@@ -1510,7 +1513,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
             .filter(|&(_, distance)| distance <= caliper);
         let Some((control, distance)) = nearest else {
             if !allow_partial {
-                return Err("every treated observation requires a control within the caliper");
+                return Err(INCOMPLETE_MATCH);
             }
             unmatched_treated_indices.push(i);
             continue;
@@ -1534,8 +1537,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
             distance,
         });
     }
-    let estimate =
-        mean(&differences).ok_or("matching requires at least one matched treated observation")?;
+    let estimate = mean(&differences).ok_or(EMPTY_MATCH)?;
     let mut adjusted_estimate = control_predictions
         .map(|predictions| {
             let adjusted: Vec<_> = pairs
@@ -1742,8 +1744,16 @@ fn matching_score_sensitivity(
     let mut results = Vec::with_capacity(draws.len());
     for scores in draws {
         draw_payload["scores"] = scores.clone();
-        let result = matched_treatment_contrast(&draw_payload)?;
+        let result = match matched_treatment_contrast(&draw_payload) {
+            Ok(result) => result,
+            Err(reason @ (INCOMPLETE_MATCH | EMPTY_MATCH)) => {
+                results.push(json!({"status": "insufficient_matches", "reason": reason}));
+                continue;
+            }
+            Err(error) => return Err(error),
+        };
         results.push(json!({
+            "status": "matched",
             "estimate": result["estimate"],
             "adjusted_estimate": result["adjusted_estimate"],
             "estimand": result["estimand"],
@@ -1753,9 +1763,10 @@ fn matching_score_sensitivity(
             "adjusted_standard_error": result["adjusted_standard_error"],
         }));
     }
-    let same_treated_subset = results
-        .iter()
-        .all(|draw| draw["unmatched_treated_indices"] == results[0]["unmatched_treated_indices"]);
+    let same_treated_subset = results.iter().all(|draw| {
+        draw["status"] == "matched"
+            && draw["unmatched_treated_indices"] == results[0]["unmatched_treated_indices"]
+    });
     let spread = |estimate: &str, error: &str| -> Option<f64> {
         if !same_treated_subset {
             return None;
@@ -2754,5 +2765,21 @@ mod tests {
         assert_eq!(sensitivity["draws"][0]["pairs"][0]["control_index"], 0);
         assert_eq!(sensitivity["draws"][0]["pairs"][2]["control_index"], 4);
         assert_eq!(sensitivity["draws"][1]["estimate"].as_f64(), Some(5.));
+    }
+    #[test]
+    fn matching_retains_draws_without_eligible_pairs() {
+        let mut payload = serde_json::json!({
+            "outcomes": [0, 4], "treatment": [0, 1], "caliper": 0,
+            "scores": [0, 0], "score_draws": [[0, 0], [0, 1]],
+            "outcome_variances": [1, 1], "allow_partial": true
+        });
+        let result = matched_treatment_contrast(&payload).unwrap();
+        let sensitivity = &result["score_sensitivity"];
+        assert_eq!(sensitivity["draws"][0]["estimate"].as_f64(), Some(4.));
+        assert_eq!(sensitivity["draws"][1]["status"], "insufficient_matches");
+        assert_eq!(sensitivity["same_treated_subset"], false);
+        assert!(sensitivity["mixture_standard_deviation"].is_null());
+        payload["score_draws"][1] = serde_json::json!([0]);
+        assert!(matched_treatment_contrast(&payload).is_err());
     }
 }

@@ -5461,3 +5461,8 @@ Hosted release readiness for this worktree revision remains open.
   against rebuilt native libraries. Each preserved the omitted training
   indices and the rematched control indices while leaving the mixture
   standard deviation unset even with supplied outcome variances.
+
+- [x] Retain rematches that fail the caliper coverage requirement as
+  individual insufficient-match results. Any failed draw suppresses
+  mixture uncertainty, and malformed inputs still reject the request.
+  Nine focused Rust causal tests passed.
