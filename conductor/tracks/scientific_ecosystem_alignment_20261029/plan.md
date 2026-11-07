@@ -6769,3 +6769,7 @@ Hosted release readiness for this worktree revision remains open.
   pure-contagion path with service completion and onward transmission.
   Across 128 seeds, scaling both weights by 2^−1000 or 2^1000 preserved
   the entire result in all 256 comparisons. The focused Rust test passed.
+
+- [x] Verify common edge-weight scaling through Python 3.15.2, Julia
+  and installed R. Each binding passed all 256 full-response comparisons
+  on the three-node fixture. Reused unchanged 4947d6b4 native builds.
