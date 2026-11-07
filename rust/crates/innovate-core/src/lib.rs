@@ -26,6 +26,7 @@ mod numerics;
 mod policy;
 mod provenance;
 mod regime;
+mod remote;
 mod report;
 mod sarima;
 mod scenario;
@@ -63,6 +64,7 @@ pub fn execute_json(input: &str) -> String {
                 | "export_decision_report_markdown"
                 | "discover_model_cards"
                 | "validate_provenance"
+                | "execute_remote_in_process"
                 | "bootstrap_fit"
                 | "validate_extension_manifests"
                 | "register_extension_manifest"
@@ -233,6 +235,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         }
         if value["operation"] == "bootstrap_fit" {
             return bootstrap::fit(payload);
+        }
+        if value["operation"] == "execute_remote_in_process" {
+            return remote::execute(payload);
         }
         if value["operation"] == "validate_provenance" {
             return provenance::validate(payload);

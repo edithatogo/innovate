@@ -2906,3 +2906,9 @@ the other competition models and installed binding checks remain open.
   Both Bass payoff draws and the Logistic alternative now come from
   ordered Rust scenario executions on a shared Polars grid. The installed
   Voiage 3.1.0 EVPI still matches the analytic reference within 1e-12.
+
+- [x] Restore the remote execution envelope through a Rust in-process
+  adapter. Validate both schemas, request size, scope label, retention
+  and operation eligibility before dispatch. Return native provenance
+  and correlation metadata. The scope is caller supplied. Focused
+  Rust and Clippy passed. Binding and hosted transport remain open.

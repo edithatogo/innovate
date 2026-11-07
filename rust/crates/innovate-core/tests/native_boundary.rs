@@ -2173,3 +2173,33 @@ fn bootstrap_scalar_fit_replays_and_accounts_for_failed_draws() {
         assert!((bound.as_f64().unwrap() - 100.).abs() < 1e-3);
     }
 }
+
+#[test]
+fn in_process_remote_dispatch_applies_scope_and_operation_policy() {
+    let mut request = json!({"schema_version":"2.0","operation":"execute_remote_in_process",
+        "payload":{"schema_version":"2.0","context":{"request_id":"request","tenant_id":"tenant",
+            "principal":"synthetic","auth_scope":"kernel:execute","trace_id":"trace"},
+            "kernel_request":{"schema_version":"2.0","operation":"predict_model","model_key":"logistic",
+            "payload":{"inputs":{"time":[1.]},"parameters":{"L":100.,"k":1.,"x0":1.}}}}});
+    let run = |request: &serde_json::Value| {
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    let response = run(&request);
+    assert_eq!(response["result"]["status"], "ok");
+    assert_eq!(
+        response["result"]["kernel_response"]["result"]["values"],
+        json!([50.])
+    );
+    assert_eq!(response["result"]["observability"]["trace_id"], "trace");
+    request["payload"]["context"]["auth_scope"] = json!("read");
+    assert_eq!(run(&request)["result"]["status"], "error");
+    request["payload"]["context"]["auth_scope"] = json!("kernel:execute");
+    request["payload"]["kernel_request"]["operation"] = json!("fit_model");
+    assert_eq!(
+        run(&request)["result"]["kernel_response"]["error"]["code"],
+        "unsupported_operation"
+    );
+}
