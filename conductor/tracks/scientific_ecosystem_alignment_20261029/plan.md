@@ -5776,3 +5776,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Require exactly one artifact object for extension artifact import.
   The native boundary test verified valid scenario import and rejection
   of a raw dataset payload before it could enter the dataset ingester.
+
+- [x] Verify centralized extension artifact import through rebuilt
+  Python, Julia and freshly installed R. All three round-tripped the
+  dataset artifact, imported a current scenario envelope with replay
+  available, and rejected an unsigned dataset from a serializer.
