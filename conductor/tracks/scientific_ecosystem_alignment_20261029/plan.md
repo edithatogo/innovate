@@ -4205,3 +4205,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Document initially closed Kairos resources in the native guide.
   The installed Python wheel ran the guide's JSON options and matched
   the documented completion ticks 9, 9 and 11.
+- [x] Verify initially closed Kairos resources through a scenario
+  specification and its generated replay request. The replay retains
+  explicit zero capacity and reproduces the complete simulation result
+  after opening two slots. The focused Rust boundary test passed.

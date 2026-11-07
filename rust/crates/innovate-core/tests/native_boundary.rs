@@ -2569,6 +2569,24 @@ fn kairos_scenario_replay_retains_scheduled_retry_clear() {
         run(replay)["result"]["executions"][0]["result"],
         row["result"]
     );
+
+    let mut closed = request;
+    let options = &mut closed["payload"]["scenarios"][0]["simulation"]["simulation_options"];
+    options["capacity"] = json!(0);
+    options["schedule"] = json!([{"tick":7,"capacity":2,"service_ticks":2}]);
+    options.as_object_mut().unwrap().remove("max_queue_length");
+    let response = run(&closed);
+    let row = &response["result"]["executions"][0];
+    assert_eq!(row["result"]["counts"], json!([0, 0, 2]), "{response}");
+    let replay = &row["artifact"]["replay_request"];
+    assert_eq!(
+        replay["payload"]["scenarios"][0]["simulation"]["simulation_options"]["capacity"],
+        0
+    );
+    assert_eq!(
+        run(replay)["result"]["executions"][0]["result"],
+        row["result"]
+    );
 }
 
 #[test]
