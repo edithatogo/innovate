@@ -283,3 +283,8 @@ column by its maximum absolute value. The intercept is unpenalized.
 The result contains fitted probabilities in input order, the intercept
 followed by scaled slopes, column scales and the iteration count.
 A fit that fails to converge returns an error.
+
+Call `summarize_causal` with method `predict_logistic_propensities`,
+the saved `fit` result and a new `covariates` row matrix. Prediction
+uses the original column scales and coefficients. Columns must follow
+the training order. Probabilities are returned in prediction-row order.

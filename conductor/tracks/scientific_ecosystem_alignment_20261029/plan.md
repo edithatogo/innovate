@@ -4609,3 +4609,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify ridge logistic propensity fitting through rebuilt Python
   3.15.2, Julia and installed R. All three preserved the single-column
   matrix and recovered probabilities 0.25 and 0.75 with scale 2.
+
+- [x] Score held-out covariate rows with saved ridge logistic fits.
+  The focused Rust test recovers 0.5, 0.75 and 0.25 in requested order
+  and rejects an invalid saved scale. Binding validation remains open.

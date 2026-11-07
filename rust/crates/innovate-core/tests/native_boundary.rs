@@ -725,6 +725,19 @@ fn causal_summaries_match_analytic_effects() {
     let mut logistic = json!({"method":"fit_logistic_propensities",
         "treatment":[0,1],"covariates":[[-2],[2]],"ridge":0.25 / 3_f64.ln()});
     let fitted = run(logistic.clone());
+    let mut prediction = json!({"method":"predict_logistic_propensities",
+        "fit":fitted["result"],"covariates":[[0],[2],[-2]]});
+    let predicted = run(prediction.clone());
+    for (p, expected) in predicted["result"]["propensities"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .zip([0.5, 0.75, 0.25])
+    {
+        assert!((p.as_f64().unwrap() - expected).abs() < 1e-7);
+    }
+    prediction["fit"]["covariate_scales"] = json!([0]);
+    assert!(run(prediction)["result"].is_null());
     let fitted = fitted["result"]["propensities"].as_array().unwrap();
     assert!((fitted[0].as_f64().unwrap() - 0.25).abs() < 1e-7);
     assert!((fitted[1].as_f64().unwrap() - 0.75).abs() < 1e-7);

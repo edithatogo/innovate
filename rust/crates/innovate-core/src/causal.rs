@@ -312,6 +312,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
         Some("propensity_weighted_contrast") => propensity_weighted_contrast(payload),
         Some("estimate_stratum_propensities") => estimate_stratum_propensities(payload),
         Some("fit_logistic_propensities") => fit_logistic_propensities(payload),
+        Some("predict_logistic_propensities") => predict_logistic_propensities(payload),
         Some("matched_treatment_contrast") => matched_treatment_contrast(payload),
         Some("intervention_contract") => intervention_contract(payload),
         Some("policy_specification") => policy_specification(payload),
@@ -852,6 +853,52 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     )
 }
 
+fn logistic_probability(logit: f64) -> f64 {
+    if logit >= 0. {
+        1. / (1. + (-logit).exp())
+    } else {
+        let exp = logit.exp();
+        exp / (1. + exp)
+    }
+}
+
+fn predict_logistic_propensities(payload: &Value) -> Result<Value, &'static str> {
+    let fit = &payload["fit"];
+    if fit["method"] != "ridge_logistic" {
+        return Err("prediction requires a ridge logistic fit");
+    }
+    let coefficients = series(fit, "scaled_coefficients")?;
+    let scales = series(fit, "covariate_scales")?;
+    let rows: Vec<Vec<f64>> = serde_json::from_value(payload["covariates"].clone())
+        .map_err(|_| "covariates must be a numeric row matrix")?;
+    if scales.is_empty()
+        || scales.iter().any(|&s| s <= 0.)
+        || coefficients.len() != scales.len() + 1
+        || rows.is_empty()
+        || rows.iter().any(|row| row.len() != scales.len())
+    {
+        return Err("prediction requires valid fit scales and aligned covariates");
+    }
+    let propensities = rows
+        .iter()
+        .map(|row| {
+            let logit = row
+                .iter()
+                .zip(&scales)
+                .zip(&coefficients[1..])
+                .fold(coefficients[0], |value, ((x, scale), slope)| {
+                    value + (x / scale) * slope
+                });
+            let probability = logistic_probability(finite(logit)?);
+            if !(0. < probability && probability < 1.) {
+                return Err("predicted propensities must lie strictly between zero and one");
+            }
+            Ok(probability)
+        })
+        .collect::<Result<Vec<_>, _>>()?;
+    Ok(json!({"method":"ridge_logistic","propensities":propensities}))
+}
+
 fn fit_logistic_propensities(payload: &Value) -> Result<Value, &'static str> {
     let treatment = series(payload, "treatment")?;
     let rows: Vec<Vec<f64>> = serde_json::from_value(payload["covariates"].clone())
@@ -898,12 +945,7 @@ fn fit_logistic_propensities(payload: &Value) -> Result<Value, &'static str> {
         gradient.fill(0.);
         for ((row, &target), probability) in design.iter().zip(&treatment).zip(&mut propensities) {
             let logit: f64 = row.iter().zip(&coefficients).map(|(x, b)| x * b).sum();
-            *probability = if logit >= 0. {
-                1. / (1. + (-logit).exp())
-            } else {
-                let exp = logit.exp();
-                exp / (1. + exp)
-            };
+            *probability = logistic_probability(logit);
             let residual = (*probability - target) / n;
             for (component, x) in gradient.iter_mut().zip(row) {
                 *component += residual * x;
