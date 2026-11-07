@@ -2369,3 +2369,8 @@ the other competition models and installed binding checks remain open.
   boundaries, exponential decay and the cumulative maximum against an
   analytic Logistic reference. Five focused Rust tests and Clippy passed.
   Binding qualification and benchmark fitting coverage remain open.
+
+- [x] Qualify policy_hazard_reference in the rebuilt Python 3.15 wheel,
+  Julia and installed R. Full results agreed across bindings. All five
+  predictions matched the analytic reference exactly on this host. This
+  qualifies fixed-parameter prediction, with fitting coverage still open.
