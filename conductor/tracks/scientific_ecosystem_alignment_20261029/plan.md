@@ -7117,3 +7117,10 @@ Hosted release readiness for this worktree revision remains open.
   Innovate core, tabular and Python manifests resolved inside the
   archive. This verifies lockfile and workspace resolution using
   the local dependency cache. Cold compilation remains open.
+
+- [x] Compile the Rust core from the extracted Maturin archive with
+  an empty Cargo target directory, a locked offline dependency cache,
+  one build job and debug information disabled. The arm64 macOS build
+  took 37.08 seconds and used 278 MiB. Removed that temporary target
+  after verification. Cold compilation of the full Polars wheel and
+  hosted Linux checks remain open.
