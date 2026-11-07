@@ -3303,3 +3303,8 @@ the other competition models and installed binding checks remain open.
   wheel. Lotka–Volterra competition and lock-in both passed at
   requested worker budgets of one and two. The complete native
   results and order matched exactly. This was a local execution.
+
+- [x] Verify the scheduled benchmark policy across Python 3.15.2,
+  Julia and R. With two requested local workers, Lotka–Volterra
+  competition and lock-in completed in the same order and produced
+  identical native results across the three bindings.
