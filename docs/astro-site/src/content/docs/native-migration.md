@@ -574,3 +574,65 @@ Nested base families, component-rate helpers, stochastic draws, calibrated
 uncertainty, class-selection diagnostics, heteroscedastic models and full mixture
 inference/scientific qualification remain required. Simulation currently returns
 the deterministic weighted point path. No new native runtime dependency is added.
+
+## Composite growth ODEs
+
+`composite` combines 1–16 scalar Bass, Logistic, Gompertz or Fisher–Pry growth
+ODEs with signed off-diagonal linear interactions:
+`dy_i/dt = growth_i(y_i) - sum(alpha_i_j * y_j)`. Parameter names retain one-based
+suffixes (`p_1`, `m_1`, `L_2`, etc.) and `alpha_1_2`, `alpha_2_1`, etc. Positive
+interaction coefficients subtract peer levels; negative coefficients stimulate
+growth. No row/share normalization or nonnegative output clipping is applied.
+Negative levels remain visible with a warning, and rates are the signed ODE RHS.
+
+Origin behavior is explicit:
+
+- `fixed` (default) uses a retained initial time/state. Prediction defaults to
+  time zero and zero state. Fit without explicit initial values conditions on
+  the first observed row at that row's time, excludes it from the fit objective
+  and diagnostic counts, and retains that state for forecasts. An explicit
+  `initial_time` must equal that first time when state is inferred.
+- `historical_batch` preserves zero initial state at each requested batch start.
+  It rejects explicit initial time/values and intentionally resets forecasts.
+  Singleton batches return their well-defined zero initial row.
+
+Explicit initial values must be finite nonnegative and match component count;
+initial time must be finite nonnegative and no later than sampled times. Stored
+fixed state permits forecast batches to start later without resetting adoption.
+Matrix observations and predictions use time-by-product order. Python Polars
+preserves all level/rate columns; Julia and R consume identical native state.
+
+The ODEs differ from their scalar closed forms: Logistic `x0`, Gompertz `b` and
+Fisher–Pry `t0` do not enter the growth RHS. Those named parameters are retained
+but held fixed during fitting and listed as structurally absent. Gompertz uses
+zero own-growth when its current level is nonpositive, preserving the historical
+boundary rule. The native Fisher–Pry adapter applies `alpha * y * (1-y)`;
+the old generic composite call did not match that Python method's signature.
+Zero-initialized Logistic/Gompertz/Fisher–Pry components have no own-growth until
+an external interaction or explicit initial condition seeds adoption.
+
+Fitting optimizes active positive growth coefficients/capacities and signed
+interactions through native least squares. Local rank diagnostics cover active
+parameters. `fit_options.initial_parameters` supplies the complete named
+state. Capacity bounds default to `positive`, allowing stimulated trajectories
+to exceed an intrinsic capacity. `capacity_bounds="historical_observed"` retains
+the old observed-maximum capacity floors. Optional zero-diagonal square `alpha`
+is a fitting seed; complete parameter values govern prediction. Midpoints and
+other absent parameters retain their supplied seed (or native
+heuristic) and are not estimated. Initial-condition uncertainty is not propagated.
+Composite information criteria remain unavailable pending conditional/structural
+degrees-of-freedom qualification. Rank covers active ODE parameters only.
+
+The solver is the shared adaptive step-doubling RK4 with Richardson correction,
+absolute/relative tolerances 1e-10 and a 200000-step budget. Nonfinite trajectories
+or budget/step failures are explicit errors. Closed-form decoupled cases and an
+independent SciPy DOP853 heterogeneous signed-interaction reference pass. Full
+stiff-system/BDF workload parity, nested models, covariates/events, uncertainty,
+stochastic paths, weighted composite fitting and scientific qualification remain
+required. Simulation currently returns the deterministic ODE path.
+
+Scalar precision weighting remains restricted to the four plain scalar fitters.
+Competitive and historical covariate/event fitters reject that option until they
+apply it; the shared-parser regression checks that weights cannot be ignored.
+All sixteen model families now have bounded native support. Every original and
+planned feature remains a release obligation, and the ledger still blocks release.

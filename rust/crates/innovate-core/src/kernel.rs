@@ -92,7 +92,7 @@ impl KernelBinding {
         if request.model_key.as_deref() == Some("norton_bass") {
             return crate::substitution::execute(request);
         }
-        let (initial, max_iterations) = crate::fitting::options(request)?;
+        let (initial, max_iterations) = crate::fitting::scalar_options(request)?;
         let mut seed_request = request.clone();
         if let Some(payload) = seed_request.payload.as_object_mut() {
             payload.remove("fit_options");
@@ -264,6 +264,9 @@ impl KernelBinding {
         }
         if request.model_key.as_deref() == Some("mixture") {
             return crate::mixture::execute(request);
+        }
+        if request.model_key.as_deref() == Some("composite") {
+            return crate::composite::execute(request);
         }
         validate_request(request)?;
         if request.payload.get("simulation_options").is_some() {

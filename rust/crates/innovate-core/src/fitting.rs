@@ -40,16 +40,29 @@ fn weights(request: &KernelRequest, n: usize) -> Result<Option<Vec<f64>>, Kernel
 pub(crate) fn options(
     request: &KernelRequest,
 ) -> Result<(Option<Value>, usize), KernelBindingError> {
+    parse_options(request, false)
+}
+
+pub(crate) fn scalar_options(
+    request: &KernelRequest,
+) -> Result<(Option<Value>, usize), KernelBindingError> {
+    parse_options(request, true)
+}
+
+fn parse_options(
+    request: &KernelRequest,
+    allow_weights: bool,
+) -> Result<(Option<Value>, usize), KernelBindingError> {
     let Some(options) = request.payload.get("fit_options") else {
         return Ok((None, 300));
     };
     let options = options
         .as_object()
         .ok_or_else(|| error("fit_options must be an object"))?;
-    if options
-        .keys()
-        .any(|k| !["initial_parameters", "max_iterations", "weights"].contains(&k.as_str()))
-    {
+    if options.keys().any(|k| {
+        !["initial_parameters", "max_iterations"].contains(&k.as_str())
+            && !(allow_weights && k == "weights")
+    }) {
         return Err(KernelBindingError::unsupported_native_operation(
             KernelOperation::FitModel,
             "unsupported native fit option",

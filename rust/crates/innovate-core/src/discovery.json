@@ -1,7 +1,7 @@
 {
   "metadata": {
     "runtime": "rust_native",
-    "scope": "Native scalar and multivariate deterministic fitting/prediction. Covariates, events and unported model families remain unavailable."
+    "scope": "Bounded Rust-native scalar, multivariate ODE, wrapper and mixture kernels. Model-specific extensions are explicit; full scientific migration and release qualification remain incomplete."
   },
   "models": [
     {
@@ -419,6 +419,36 @@
       "variants": [
         "gaussian_residual",
         "historical_adoption"
+      ],
+      "simulation_engines": [
+        "deterministic_curve"
+      ]
+    },
+    {
+      "family": "composite",
+      "import_path": "innovate_core",
+      "key": "composite",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": true,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_coupled_growth_ODE_only",
+      "supports_rates": true,
+      "variants": [
+        "fixed",
+        "historical_batch"
       ],
       "simulation_engines": [
         "deterministic_curve"

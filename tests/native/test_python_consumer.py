@@ -48,11 +48,19 @@ def test_capabilities_are_native_and_unavailable_features_fail_closed():
         "regime_switching",
         "hierarchical",
         "mixture",
+        "composite",
     }
     assert innovate.capabilities()["supports_simulation"].all()
     assert innovate.capabilities()["supports_summarize"].all()
     with pytest.raises(innovate.NativeError, match="unsupported_native_operation"):
-        innovate.execute("predict_model", "composite", inputs={"time": [0.0]})
+        innovate.execute("predict_model", "not_a_model", inputs={"time": [0.0]})
+    with pytest.raises(innovate.NativeError, match="unsupported_native_operation"):
+        innovate.execute(
+            "predict_model",
+            "bass",
+            inputs={"time": [0.0], "covariates": {"price": [1.0]}},
+            parameters={"p": 0.03, "q": 0.35, "m": 100.0},
+        )
 
 
 def test_clean_runtime_has_no_legacy_scientific_dependencies():
@@ -361,3 +369,33 @@ def test_gaussian_mixture_polars_fit_and_forecast_state():
     assert fit.envelope["result"]["optimizer"]["converged"]
     assert fit.parameters["model_1_L"] == pytest.approx(200.0, abs=0.05)
     assert fit.predict(pl.DataFrame({"time": [40.0]}))["prediction"][0] > 140.0
+
+
+def test_composite_polars_levels_rates_and_fitted_origin():
+    frame = pl.DataFrame({"time": [0.0, 3.0, 10.0, 20.0]})
+    parameters = {
+        "p_1": 0.03,
+        "q_1": 0.35,
+        "m_1": 100.0,
+        "L_2": 200.0,
+        "k_2": 0.4,
+        "x0_2": 99.0,
+        "alpha_1_2": 0.0,
+        "alpha_2_1": 0.0,
+    }
+    options = {"components": ["bass", "logistic"], "initial_values": [0.0, 10.0]}
+    levels = innovate.predict("composite", frame, parameters, model_options=options)
+    logistic = 200 / (1 + 19 * math.exp(-4))
+    assert levels["prediction_2"][2] == pytest.approx(logistic, abs=1e-6)
+    rates = innovate.predict("composite", frame, parameters, model_options=options, quantity="rate")
+    assert rates["rate_2"][2] == pytest.approx(0.4 * logistic * (1 - logistic / 200), abs=1e-6)
+    time = [float(i) for i in range(25)]
+    y = [100 * (1 - math.exp(-0.38 * t)) / (1 + 0.35 / 0.03 * math.exp(-0.38 * t)) for t in time]
+    fit = innovate.fit(
+        "composite",
+        pl.DataFrame({"time": time, "observed": y}),
+        model_options={"components": ["bass"]},
+        fit_options={"initial_parameters": {"p_1": 0.025, "q_1": 0.32, "m_1": 110.0}},
+    )
+    assert fit.diagnostics["optimizer"]["converged"]
+    assert fit.predict(pl.DataFrame({"time": [30.0]}))["prediction"][0] > 99.5

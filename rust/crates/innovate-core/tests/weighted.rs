@@ -73,3 +73,15 @@ fn weighted_logistic_matches_independent_scipy_reference() {
             < 1e-6
     );
 }
+
+#[test]
+fn non_scalar_and_event_fitters_reject_weights_until_they_apply_them() {
+    let p = json!({"inputs":{"time":[0.,1.,2.,3.],"observed":[[1.,1.],[2.,2.],[3.,3.],[4.,4.]]},"constructor_kwargs":{"n_products":2},"fit_options":{"weights":[1.,1.,1.,1.]}});
+    let error = KernelBinding::new()
+        .fit_model("multi_product", p)
+        .unwrap_err();
+    assert_eq!(error.code, "unsupported_native_operation");
+    let p = json!({"inputs":{"time":[0.,1.,2.,3.,4.,5.],"observed":[1.,2.,3.,4.,5.,6.]},"constructor_kwargs":{"t_event":3.},"fit_options":{"weights":[1.,1.,1.,1.,1.,1.],"initial_parameters":{"L":10.,"k":0.5,"x0":3.,"L_post":20.,"k_post":0.5,"x0_post":5.}}});
+    let error = KernelBinding::new().fit_model("logistic", p).unwrap_err();
+    assert_eq!(error.code, "unsupported_native_operation");
+}

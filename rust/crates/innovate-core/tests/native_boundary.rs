@@ -15,9 +15,9 @@ fn dispatch_is_native_without_a_python_launcher() {
 }
 
 #[test]
-fn unavailable_models_never_fall_back_to_python() {
+fn unknown_models_never_fall_back_to_python() {
     let error = KernelBinding::new()
-        .predict_model("composite", json!({}))
+        .predict_model("not_a_model", json!({}))
         .unwrap_err();
     assert_eq!(error.code, "unsupported_native_operation");
 }
@@ -35,7 +35,7 @@ fn dispatch_rejects_unknown_schema_versions() {
 #[test]
 fn discovery_does_not_advertise_unported_models() {
     let models = KernelBinding::new().discover_models().unwrap().models;
-    assert_eq!(models.len(), 15);
+    assert_eq!(models.len(), 16);
     assert!(models.iter().all(|m| m.supported_backends == ["rust"]));
 }
 
@@ -68,4 +68,10 @@ fn direct_parameter_payloads_work_for_bass_and_reject_ambiguous_state() {
             )
             .is_err()
     );
+}
+
+#[test]
+fn unavailable_covariates_never_fall_back_after_all_model_families_are_ported() {
+    let error=KernelBinding::new().predict_model("bass",json!({"inputs":{"time":[0.],"covariates":{"price":[1.]}},"parameters":{"p":0.03,"q":0.35,"m":100.}})).unwrap_err();
+    assert_eq!(error.code, "unsupported_native_operation");
 }

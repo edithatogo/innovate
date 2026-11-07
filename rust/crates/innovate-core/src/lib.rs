@@ -1,6 +1,7 @@
 //! Rust-owned diffusion fitting, prediction, diagnostics and execution contracts.
 #![forbid(unsafe_code)]
 mod competition;
+mod composite;
 mod contracts;
 mod fitting;
 mod forcing;

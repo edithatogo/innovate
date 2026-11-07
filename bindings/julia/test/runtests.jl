@@ -4,8 +4,8 @@ using Test, Innovate
     result = kernel_predict_model("logistic", payload)
     @test result["metadata"]["runtime"] == "rust_native"
     @test result["result"]["values"][2] == 50.0
-    @test length(kernel_discover_models()["models"]) == 15
-    @test_throws ErrorException kernel_predict_model("composite", payload)
+    @test length(kernel_discover_models()["models"]) == 16
+    @test_throws ErrorException kernel_predict_model("not_a_model", payload)
     for _ in 1:100
         @test kernel_predict_model("logistic",payload)["result"]["values"][2] == 50.0
     end
@@ -175,4 +175,16 @@ end
     @test f["optimizer"]["converged"]
     @test isapprox(f["parameters"]["model_1_L"],200.;atol=0.05)
     @test kernel_predict_model("mixture",Dict("inputs"=>Dict("time"=>[40.]),"state"=>f["state"]))["result"]["values"][1]>140
+end
+@testset "Composite native levels rates and origin" begin
+    p=Dict("inputs"=>Dict("time"=>[0.,3.,10.,20.]),"constructor_kwargs"=>Dict("components"=>["bass","logistic"],"initial_values"=>[0.,10.]),"parameters"=>Dict("p_1"=>0.03,"q_1"=>0.35,"m_1"=>100.,"L_2"=>200.,"k_2"=>0.4,"x0_2"=>99.,"alpha_1_2"=>0.,"alpha_2_1"=>0.))
+    a=kernel_predict_model("composite",p)["result"]
+    logistic=200/(1+19*exp(-4))
+    @test isapprox(a["rows"][3][2],logistic;atol=1e-6)
+    @test isapprox(a["rates"][3][2],0.4*logistic*(1-logistic/200);atol=1e-6)
+    time=collect(0.:24.)
+    y=[100*(1-exp(-0.38*t))/(1+0.35/0.03*exp(-0.38*t)) for t in time]
+    f=kernel_fit_model("composite",Dict("inputs"=>Dict("time"=>time,"observed"=>y),"constructor_kwargs"=>Dict("components"=>["bass"]),"fit_options"=>Dict("initial_parameters"=>Dict("p_1"=>0.025,"q_1"=>0.32,"m_1"=>110.))))["result"]
+    @test f["diagnostics"]["optimizer"]["converged"]
+    @test kernel_predict_model("composite",Dict("inputs"=>Dict("time"=>[30.]),"state"=>f["state"]))["result"]["rows"][1][1]>99.5
 end

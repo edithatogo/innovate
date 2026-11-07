@@ -2,8 +2,8 @@ library(innovate.R)
 payload <- list(inputs=list(time=c(0,1,2)), parameters=list(L=100,k=1,x0=1))
 x <- kernel_predict_model("logistic", payload)
 stopifnot(x$result$values[[2]] == 50, x$metadata$runtime == "rust_native")
-stopifnot(length(kernel_discover_models()$models) == 15)
-error <- tryCatch(kernel_predict_model("composite", payload), error=function(e) conditionMessage(e))
+stopifnot(length(kernel_discover_models()$models) == 16)
+error <- tryCatch(kernel_predict_model("not_a_model", payload), error=function(e) conditionMessage(e))
 stopifnot(is.character(error), grepl("unsupported_native_operation", error))
 for (i in seq_len(100)) stopifnot(kernel_predict_model("logistic", payload)$result$values[[2]] == 50)
 cat("R native conformance passed\n")
@@ -172,3 +172,12 @@ stopifnot(f$optimizer$converged,abs(f$parameters$model_1_L-200)<0.05,kernel_pred
 p <- list(inputs=list(time=2),constructor_kwargs=list(components="logistic",weights=1,mode="historical_adoption"),parameters=list(model_0_L=100,model_0_k=1,model_0_x0=2,weight_0=1))
 stopifnot(kernel_predict_model("mixture",p)$result$values[[1]]==50)
 cat("R weighted fit, Gaussian mixture and singleton component passed\n")
+p <- list(inputs=list(time=c(0,3,10,20)),constructor_kwargs=list(components=c("bass","logistic"),initial_values=c(0,10)),parameters=list(p_1=0.03,q_1=0.35,m_1=100,L_2=200,k_2=0.4,x0_2=99,alpha_1_2=0,alpha_2_1=0))
+a <- kernel_predict_model("composite",p)$result
+logistic <- 200/(1+19*exp(-4))
+stopifnot(abs(a$rows[[3]][[2]]-logistic)<1e-6,abs(a$rates[[3]][[2]]-0.4*logistic*(1-logistic/200))<1e-6)
+time <- 0:24
+y <- 100*(1-exp(-0.38*time))/(1+0.35/0.03*exp(-0.38*time))
+f <- kernel_fit_model("composite",list(inputs=list(time=time,observed=y),constructor_kwargs=list(components="bass"),fit_options=list(initial_parameters=list(p_1=0.025,q_1=0.32,m_1=110))))$result
+stopifnot(f$diagnostics$optimizer$converged,kernel_predict_model("composite",list(inputs=list(time=30),state=f$state))$result$rows[[1]][[1]]>99.5)
+cat("R composite matrix rates and singleton fitted origin passed\n")
