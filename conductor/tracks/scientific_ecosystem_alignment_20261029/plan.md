@@ -5793,3 +5793,8 @@ Hosted release readiness for this worktree revision remains open.
   Basedpyright using repo-local Python 3.15.2 now reports zero errors
   and one warning about the extension being absent from the source
   directory. Ruff and Cargo formatting checks passed.
+
+- [x] Run all-target Rust core Clippy with warnings denied and reconcile
+  the extension ledger with the verified local callback contracts.
+  Clippy passed after reclaiming generated Python debug libraries.
+  The development policy check passed with 38 release obligations open.
