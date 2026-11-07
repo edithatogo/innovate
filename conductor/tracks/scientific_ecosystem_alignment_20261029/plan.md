@@ -2522,3 +2522,8 @@ the other competition models and installed binding checks remain open.
   Historical score fields remain available for existing consumers.
   The focused Rust boundary test verifies the ordered and tied cases.
   Clippy passed. Installed binding qualification for placement remains open.
+
+- [x] Qualify pairwise placement in the rebuilt Python 3.15.2 wheel,
+  Julia and installed R. All three returned places 2 and 1 for unequal
+  final adoption, and shared first place with the tie flag for equal
+  values. Historical final-adoption scores matched the analytic values.
