@@ -1798,4 +1798,6 @@ the other competition models and installed binding checks remain open.
   round-trips a one-observation specification, preserving the count
   without including data columns in the export. All 24 Rust boundary
   tests and focused Clippy passed.
-- [ ] Verify policy specification round trips in rebuilt Python and Julia.
+- [x] Verify policy specification round trips in the rebuilt Python
+  wheel and Julia. Each retains the one-observation count, omits raw
+  data, and rejects an unknown nested causal model field.
