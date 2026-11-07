@@ -128,7 +128,7 @@ fn estimate(
     let mut likelihood = initial
         .log_likelihood
         .ok_or("SARIMA likelihood is degenerate")?;
-    let joint_moves: Vec<_> = if count <= 8 {
+    let joint_moves: Vec<_> = if sp > 0 && sq > 0 && count <= 8 {
         (0..count)
             .flat_map(|left| (left + 1..count).map(move |right| (left, right)))
             .collect()
@@ -158,7 +158,7 @@ fn estimate(
             // Search joint moves when correlated coefficients stall the coordinate sweep.
             let mut trial = base.clone();
             for &(left, right) in &joint_moves {
-                let ratios: &[(f64, f64)] = if count <= 8 {
+                let ratios: &[(f64, f64)] = if sp > 0 && sq > 0 && count <= 8 {
                     &[(1., 1.), (1., 0.5), (0.5, 1.)]
                 } else {
                     &[(1., 1.)]
@@ -195,6 +195,50 @@ fn estimate(
         }
     }
     Err("SARIMA parameter estimation did not converge")
+}
+
+fn stationary_covariance(phi: &[f64], noise: &[f64]) -> Result<Vec<f64>, &'static str> {
+    let n = phi.len();
+    let mut power = vec![0.; n * n];
+    let mut covariance = vec![0.; n * n];
+    for i in 0..n {
+        power[i * n] = phi[i];
+        if i + 1 < n {
+            power[i * n + i + 1] = 1.;
+        }
+        for j in 0..n {
+            covariance[i * n + j] = noise[i] * noise[j];
+        }
+    }
+    let multiply = |left: &[f64], right: &[f64]| {
+        let mut product = vec![0.; n * n];
+        for i in 0..n {
+            for k in 0..n {
+                let scale = left[i * n + k];
+                for j in 0..n {
+                    product[i * n + j] += scale * right[k * n + j];
+                }
+            }
+        }
+        product
+    };
+    // Each step doubles the number of innovation terms in the covariance sum.
+    for _ in 0..64 {
+        let transpose: Vec<_> = (0..n * n).map(|i| power[(i % n) * n + i / n]).collect();
+        let increment = multiply(&multiply(&power, &covariance), &transpose);
+        let converged = increment.iter().all(|value| value.abs() <= 1e-14);
+        for (value, addition) in covariance.iter_mut().zip(increment) {
+            *value += addition;
+        }
+        if covariance.iter().any(|value| !value.is_finite()) {
+            return Err("SARIMA stationary covariance diverged");
+        }
+        if converged {
+            return Ok(covariance);
+        }
+        power = multiply(&power, &power);
+    }
+    Err("SARIMA stationary covariance did not converge")
 }
 
 struct FilterOutput {
@@ -256,39 +300,7 @@ fn state_filter(
         .collect();
     let noise: Vec<_> = (0..n).map(|i| ma.get(i).copied().unwrap_or(0.)).collect();
 
-    // T has phi in its first column and ones on the superdiagonal.
-    let propagate = |cov: &[f64], next: &mut [f64]| {
-        let at = |i, j| if i < n && j < n { cov[i * n + j] } else { 0. };
-        for i in 0..n {
-            for j in 0..n {
-                next[i * n + j] = phi[i] * phi[j] * cov[0]
-                    + phi[i] * at(0, j + 1)
-                    + phi[j] * at(i + 1, 0)
-                    + at(i + 1, j + 1)
-                    + noise[i] * noise[j];
-            }
-        }
-    };
-    let mut covariance = vec![0.; n * n];
-    let mut next = covariance.clone();
-    let mut converged = false;
-    for _ in 0..10_000 {
-        propagate(&covariance, &mut next);
-        if next.iter().any(|v| !v.is_finite()) {
-            return Err("SARIMA stationary covariance diverged");
-        }
-        converged = next
-            .iter()
-            .zip(&covariance)
-            .all(|(a, b)| (a - b).abs() <= 1e-14);
-        std::mem::swap(&mut covariance, &mut next);
-        if converged {
-            break;
-        }
-    }
-    if !converged {
-        return Err("SARIMA stationary covariance did not converge");
-    }
+    let covariance = stationary_covariance(&phi, &noise)?;
 
     let burn = d + sd * period;
     let stationary_size = n;

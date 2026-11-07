@@ -5561,3 +5561,11 @@ Hosted release readiness for this worktree revision remains open.
   comparison exceeded two minutes in the local debug build. Reducing
   stationary covariance work and checking broader optimizer regressions
   remain open.
+
+- [x] Double the stationary covariance summation horizon per iteration
+  and restrict the expanded paired search to small models with both
+  seasonal AR and MA terms. All six focused Rust SARIMA tests passed
+  at their existing tolerances. The rebuilt R boundary comparison
+  took 11.54 seconds in the debug build and the negative seasonal
+  likelihood difference fell to 1.28e-8. The mixed and integrated R
+  references also passed. Broader qualification remains open.
