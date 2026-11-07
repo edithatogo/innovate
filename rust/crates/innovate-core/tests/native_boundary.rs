@@ -938,3 +938,31 @@ fn scenario_grid_compares_aligned_adoption_paths() {
     );
     assert!(response["result"]["executions"][1]["result"].is_object());
 }
+
+#[test]
+fn scenario_discovery_lists_and_resolves_native_families() {
+    let mut request = json!({"schema_version":"2.0","operation":"discover_scenarios","payload":{}});
+    let run = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = run(&request);
+    let rows = response["result"]["scenarios"].as_array().unwrap();
+    let keys: Vec<_> = rows
+        .iter()
+        .map(|row| row["key"].as_str().unwrap())
+        .collect();
+    assert_eq!(
+        keys,
+        [
+            "baseline",
+            "intervention",
+            "substitution",
+            "competition",
+            "network"
+        ]
+    );
+    request["payload"]["key"] = json!("network");
+    assert_eq!(run(&request)["result"]["scenarios"], json!([rows[4]]));
+    request["payload"]["key"] = json!("missing");
+    assert_eq!(run(&request)["error"]["code"], "unknown_scenario");
+}

@@ -281,3 +281,51 @@ fn compare_paths(
     }
     Ok(result)
 }
+
+const SCENARIO_FAMILIES: [&str; 5] = [
+    "baseline",
+    "intervention",
+    "substitution",
+    "competition",
+    "network",
+];
+
+pub(crate) fn discover(request: &Value) -> Value {
+    let envelope = |result: Value, error: Value| {
+        json!({"schema_version":KERNEL_SCHEMA_VERSION,"operation":"discover_scenarios",
+            "result":result,"error":error,"metadata":{"runtime":"rust_native"}})
+    };
+    let invalid = |message: &str| {
+        envelope(
+            Value::Null,
+            json!({"code":"invalid_request","message":message}),
+        )
+    };
+    if request["schema_version"] != KERNEL_SCHEMA_VERSION {
+        return invalid("discover_scenarios requires schema 2.0");
+    }
+    let key = match request["payload"].get("key") {
+        None => None,
+        Some(Value::String(key)) if !key.trim().is_empty() => Some(key.as_str()),
+        Some(_) => return invalid("scenario key must be a nonblank string"),
+    };
+    if let Some(key) = key
+        && !SCENARIO_FAMILIES.contains(&key)
+    {
+        return envelope(
+            Value::Null,
+            json!({"code":"unknown_scenario",
+            "message":format!("unknown scenario family '{key}'"),"available":SCENARIO_FAMILIES}),
+        );
+    }
+    let scenarios: Vec<_> = SCENARIO_FAMILIES
+        .into_iter()
+        .filter(|family| key.is_none_or(|key| key == *family))
+        .map(|family| {
+            json!({"key":family,"scenario_type":family,"stability":"experimental",
+                "operation":"execute_scenario_grid","execution_input":"explicit_simulation_payload",
+                "transport":"json","bindings":["rust","python","julia","r"]})
+        })
+        .collect();
+    envelope(json!({"scenarios":scenarios}), Value::Null)
+}
