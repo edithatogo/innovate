@@ -1854,3 +1854,10 @@ the other competition models and installed binding checks remain open.
   repeat across distinct units, products or event labels. Composite
   key duplicates fail and unsorted policy events warn. All 30 native
   boundary tests and focused Clippy passed.
+
+- [x] Restore network edge dataset diagnostics for endpoints, ordered
+  duplicate pairs, units, and nonnegative numeric weights. The fixture
+  catches both a duplicate ordered pair and a negative weight while
+  allowing the reverse pair. All 31 native boundary tests and focused
+  Clippy passed.
+- [ ] Verify all five dataset report kinds in installed consumers.

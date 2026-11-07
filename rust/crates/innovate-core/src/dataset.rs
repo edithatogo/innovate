@@ -2,6 +2,9 @@ use serde_json::{Value, json};
 
 pub(crate) fn validate(payload: &Value) -> Result<Value, &'static str> {
     let kind = payload["kind"].as_str().unwrap_or("");
+    if kind == "network_edges" {
+        return validate_edges(payload);
+    }
     if matches!(kind, "competition" | "policy_timing") {
         return validate_keyed(payload, kind);
     }
@@ -274,5 +277,72 @@ fn validate_keyed(payload: &Value, kind: &str) -> Result<Value, &'static str> {
     }
     Ok(
         json!({"kind":kind,"ok":failed.is_empty(),"checks":checks,"failed":failed,"warnings":warnings}),
+    )
+}
+
+fn validate_edges(payload: &Value) -> Result<Value, &'static str> {
+    let column = |key: &str| {
+        payload[key]
+            .as_array()
+            .filter(|v| !v.is_empty())
+            .ok_or("edge columns must be nonempty arrays")
+    };
+    let source = column("source")?;
+    let target = column("target")?;
+    let weights = column("weight")?;
+    let aligned = source.len() == target.len() && source.len() == weights.len();
+    let labels = source
+        .iter()
+        .chain(target)
+        .all(|v| v.as_str().is_some_and(|s| !s.trim().is_empty()));
+    let mut seen = std::collections::HashSet::new();
+    let unique = aligned
+        && labels
+        && source
+            .iter()
+            .zip(target)
+            .all(|(a, b)| seen.insert((a.as_str(), b.as_str())));
+    let unit = payload.get("unit").map_or(Some("weight"), Value::as_str);
+    let checks = [
+        (
+            "column_alignment",
+            aligned,
+            "edge columns must have the same length",
+        ),
+        (
+            "identifier_labels",
+            labels,
+            "edge endpoints must be nonempty strings",
+        ),
+        (
+            "missingness:weight",
+            weights.iter().all(Value::is_number),
+            "edge weights must be numeric",
+        ),
+        (
+            "weight_bounds",
+            weights.iter().all(|v| v.as_f64().is_some_and(|w| w >= 0.)),
+            "edge weights must be nonnegative",
+        ),
+        (
+            "duplicate_keys:source_target",
+            unique,
+            "ordered source and target pairs must be unique",
+        ),
+        (
+            "unit_compatibility:network_edges",
+            matches!(unit, Some("weight" | "count" | "rate")),
+            "network edge unit must be weight, count or rate",
+        ),
+    ];
+    let failed: Vec<_> = checks
+        .iter()
+        .filter_map(|&(name, pass, _)| (!pass).then_some(name))
+        .collect();
+    let checks: Vec<_> = checks.into_iter().map(|(name, pass, message)| {
+        json!({"name":name,"status":if pass {"pass"} else {"fail"},"message":message,"details":{}})
+    }).collect();
+    Ok(
+        json!({"kind":"network_edges","ok":failed.is_empty(),"checks":checks,"failed":failed,"warnings":[]}),
     )
 }

@@ -743,3 +743,16 @@ fn panel_and_policy_diagnostics_distinguish_keys_from_event_order() {
         innovate_core::json!(["event_time_order"])
     );
 }
+
+#[test]
+fn edge_diagnostics_detect_duplicate_ordered_pairs_and_negative_weights() {
+    let request = innovate_core::json!({"schema_version":"2.0","operation":"validate_dataset",
+        "payload":{"kind":"network_edges","source":["a","b","a"],"target":["b","a","b"],
+            "weight":[1,0,-1]}});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert_eq!(
+        response["result"]["failed"],
+        innovate_core::json!(["weight_bounds", "duplicate_keys:source_target"])
+    );
+}
