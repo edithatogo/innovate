@@ -163,7 +163,7 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Broader model coverage, calibration of parameter and mean-path intervals and event selection frequencies, and release acceptance"
+      "remaining": "Broader model coverage, calibration of parameter and mean-path intervals and event selection frequencies, and release acceptance. The sparse-transition Logistic study shows capacity undercoverage with both resampling methods at 200 draws. The residual method also rejects the trial 39 baseline despite agreement with the independent fit."
     },
     {
       "key": "batch_fitting",
