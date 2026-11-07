@@ -22,7 +22,7 @@ Target components: `crates/innovate-core`, `crates/innovate-data`, `crates/innov
 |---|---|---|
 | Innovation dynamics, observation models, fit/predict and innovation-specific game construction | Innovate | Consumes native Kairos and optional generic game runtime; exports uncertainty-preserving forecasts. |
 | Simulation clock/events/state/resources/RNG/replay | Kairos | No reverse dependency on Innovate or applications; no host substitute. |
-| Generic game definitions, equilibrium/regret/learning algorithms | One extracted game-runtime library | Reconcile `uogto-game-core`, `uogto-game-solve` and Kairos game crates before promotion; static solvers need no simulator. |
+| Generic game definitions, equilibrium/regret/learning algorithms | Paignia | Transfer the renamed `paignia-core`/`paignia-solve` seed from the reimbursement incubator and reconcile Kairos game crates before qualification; static solvers need no simulator. |
 | Semantic game vocabulary/conformance | UOGTO | Semantic dependency, not an equilibrium implementation. |
 | VOI, perspective/equity/decision evaluation and generic VOP capability | Voiage | Optional Innovate consumer adapter; application supplies utility/economic mapping. |
 | Spline surrogate fitting/replay | MARS | Optional, measured decision-preservation gate. |
@@ -30,7 +30,7 @@ Target components: `crates/innovate-core`, `crates/innovate-data`, `crates/innov
 | NZ proof of concept | vop_poc_nz | Empirical scenarios/tutorials; reusable methods promoted to Voiage. |
 | Tobacco, reimbursement and healthcare operational studies | tobac / new-drug-reimbursement-game / careops-sim | Domain assumptions and validation; generic capabilities move upstream. |
 
-The additional library is a consolidation/extraction of an existing game-runtime incubator, not a new economics umbrella or generic orchestration framework. Its name/repository can be settled at extraction; the existing `uogto-game-*` crate names are the starting point. No new repository is created by this planning change.
+**Paignia** is the chosen library name and [its repository](https://github.com/edithatogo/paignia) has been created. Seed transfer from `new-drug-reimbursement-game` is pending qualification; `paignia-core`/`paignia-solve` replace the seed's former `uogto-game-*` IDs without rewriting historical receipts. Repository creation and source movement do not establish package publication or scientific acceptance. Provider T17 retains its seventeen task IDs through the transfer; application games and valuation remain with their application owners.
 
 ## Existing six tracks, revised rather than duplicated
 

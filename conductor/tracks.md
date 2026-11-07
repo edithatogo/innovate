@@ -2,6 +2,9 @@
 
 This file tracks all major tracks for the project. Each track has its own detailed plan in its respective folder.
 
+- [ ] **Track: Kairos native consumer and domain boundary** *(Proposed; implementation pending)*
+  *Link: [./tracks/kairos_runtime_boundary_20261107/](./tracks/kairos_runtime_boundary_20261107/)*
+
 - [x] **Track: SOTA Infrastructure Overhaul** *(Completed)*
   *Link: [./archive/sota_infrastructure_overhaul_20260411/](./archive/sota_infrastructure_overhaul_20260411/)*
 

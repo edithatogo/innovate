@@ -28,4 +28,8 @@ Read [taskbook](../../innovation-taskbook-20261107.md).
 - [ ] E04 — VOP capability audit, Voiage promotion and POC consumer migration.
 - [ ] E05 — application-promotion ledger and optional surrogate acceptance.
 
-Coordinate G01–G04 with Kairos track110 S01–S04 and the existing medicines-game incubator. Provider PRs must pass before the installed-consumer task closes.
+Coordinate G01–G04 with Kairos track110 S01–S04 and Paignia's transferred T17
+provider work, preserving the reimbursement incubator's provenance. Provider
+PRs and exact artifacts must pass before the installed-consumer task closes.
+G02/A08/static G04 remain independent of G03's optional dynamic execution;
+I07 game acceptance does not become an I10 native-runtime prerequisite.

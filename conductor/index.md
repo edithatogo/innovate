@@ -1,5 +1,8 @@
 # Project Context
 
+[Native Kairos consumer and domain-boundary track](tracks/kairos_runtime_boundary_20261107/index.md)
+refines the existing ecosystem alignment without changing provider pins.
+
 ## Definition
 - [Product purpose and mandatory architecture](product.md)
 - [Product Guidelines](product-guidelines.md)
