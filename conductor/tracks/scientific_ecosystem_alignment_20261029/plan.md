@@ -3451,3 +3451,10 @@ the other competition models and installed binding checks remain open.
   and its RECORD entry. Substituting the extraction root in ten
   SBOM references yielded identical JSON. Build-path-independent
   archive bytes and publication qualification remain open.
+
+- [x] Normalize source-root URIs in unsigned wheel SBOMs while
+  preserving the SBOM and updating RECORD. The two independently
+  built fixed-epoch Darwin arm64 wheels became byte-identical.
+  All RECORD hashes and sizes verified, the local build path was
+  absent, and Twine, wheel-content, Ruff and a Polars forecast passed.
+  Hosted packaging and publication integration remain open.
