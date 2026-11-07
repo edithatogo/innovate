@@ -4996,3 +4996,9 @@ Hosted release readiness for this worktree revision remains open.
   pending service and retry events, and the outstanding hazard draw or
   integrated budget at a pause boundary. Verify interrupted versus
   uninterrupted trajectories before qualifying this capability.
+
+- [x] Verify the emitted finite-population DES RNG checkpoint restores
+  through the pinned Kairos API. After four adoptions the restored
+  checkpoint and next four draws exactly matched a stream advanced
+  through the corresponding four hazard distributions. The focused
+  Rust integration test passed.

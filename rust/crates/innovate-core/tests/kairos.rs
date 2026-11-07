@@ -268,3 +268,36 @@ fn pinned_abm_replays_entity_state_and_rng() {
     };
     assert_eq!(replay(), replay());
 }
+
+#[test]
+fn emitted_rng_checkpoint_restores_after_all_adoptions() {
+    use kairo_ecs_rng::{DeterministicStream, RngCheckpoint, rand_distr::Exp};
+
+    let response = KernelBinding::new()
+        .simulate_model(
+            "bass",
+            json!({"inputs":{"time":[0.,4.]},
+                "parameters":{"p":1e12,"q":0.,"m":4.},
+                "simulation_options":{"engine":"kairos_des","seed":42,
+                    "population":4,"ticks_per_unit":1}}),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(response["counts"], json!([0, 4]));
+    let checkpoint: RngCheckpoint =
+        serde_json::from_value(response["metadata"]["rng_checkpoint"].clone()).unwrap();
+    let mut restored = DeterministicStream::restore(&checkpoint).unwrap();
+    let mut reference = DeterministicStream::from_run_seed(42);
+    for remaining in (1..=4).rev() {
+        reference.sample(Exp::new(1e12 * f64::from(remaining)).unwrap());
+    }
+    assert_eq!(restored.checkpoint(), reference.checkpoint());
+    for _ in 0..4 {
+        let distribution = Exp::new(1.).unwrap();
+        assert_eq!(
+            restored.sample(distribution),
+            reference.sample(distribution)
+        );
+    }
+}
