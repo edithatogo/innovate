@@ -244,7 +244,8 @@ where
             "iterations": iterations,
             "converged": converged,
             "termination": reason,
-            "scaled_rss": error
+            "scaled_rss": error,
+            "final_transformed_parameters": theta
         }));
         if best.as_ref().is_none_or(|b| error < b.error) {
             selected_start = index;
@@ -437,6 +438,14 @@ mod tests {
         assert_eq!(fit.parameters, [-1.]);
         assert_eq!(fit.report["converged_starts"], 2);
         assert_eq!(fit.report["alternative_start_scaled_rss_gap"], 0.);
+        assert_eq!(
+            fit.report["start_reports"][0]["final_transformed_parameters"],
+            json!([-1.])
+        );
+        assert_eq!(
+            fit.report["start_reports"][1]["final_transformed_parameters"],
+            json!([1.])
+        );
     }
 
     #[test]

@@ -3883,3 +3883,9 @@ Hosted release readiness for this worktree revision remains open.
   Python 3.15.2, Julia and freshly installed R at 32b007c0. Each
   converged-start count matched its per-start records and each
   alternative loss gap was nonnegative.
+- [x] Expose final optimizer coordinates for each finite start.
+  The symmetric Rust fixture now reports the distinct coordinates
+  -1 and 1 alongside their identical objectives. The multistart
+  regression, four fit-quality tests and focused Clippy passed.
+  These are internal transformed coordinates. Global identifiability
+  remains open.
