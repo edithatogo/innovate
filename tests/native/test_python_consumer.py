@@ -984,6 +984,12 @@ def test_polars_preprocessing_preserves_order_and_full_window():
     series = pl.Series("adoption", [1, 3, 5, 7])
     assert innovate.cumulative_sum(series).to_list() == [1, 4, 9, 16]
     assert innovate.rolling_average(series, 3).to_list() == [None, None, 3.0, 5.0]
+    for value in (float.fromhex("0x1.fffffffffffffp+1023"), math.ulp(0.0)):
+        extreme = pl.Series("rate", [value, value, 0.0])
+        result = innovate.rolling_average(extreme, 2)
+        assert result.name == extreme.name
+        assert result.dtype == extreme.dtype
+        assert result.to_list() == [None, value, value / 2]
     with pytest.raises(ValueError, match="window must be positive"):
         innovate.rolling_average(series, 0)
 

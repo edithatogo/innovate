@@ -6989,3 +6989,8 @@ Hosted release readiness for this worktree revision remains open.
   Verified the maximum and minimum positive binary64 fixtures, series
   name preservation and a null-containing window with the source
   wrapper and existing native extension.
+
+- [x] Retain installed-wheel checks for extreme Polars rolling
+  averages. The rebuilt wheel passed the focused preprocessing test,
+  preserving the series name, dtype and expected values at both
+  binary64 extremes.
