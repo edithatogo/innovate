@@ -2185,3 +2185,8 @@ the other competition models and installed binding checks remain open.
   exact edge count from mean degree. Store sorted resolved edges in replay
   requests. All 65 Rust boundary and network tests and Clippy passed.
   Cross-binding qualification and other topology families remain open.
+
+- [x] Qualify seeded random fixed-edge graphs in Python 3.15, Julia and
+  installed R. Topology seed 77 produced edges (0,1), (0,2), (0,3) and
+  (1,2) in all three. Resolved replay requests agreed across bindings and
+  each replay reproduced its original seeded contagion result exactly.
