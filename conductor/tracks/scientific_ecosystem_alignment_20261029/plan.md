@@ -2716,3 +2716,8 @@ the other competition models and installed binding checks remain open.
   The analytic Lotka–Volterra test verifies the resulting forecast and
   rejects an unknown event parameter through native validation.
   Focused Rust and Clippy passed. Binding verification remains open.
+
+- [x] Qualify event-schedule replacement and removal through Python
+  3.15.2, Julia and installed R. Complete results agreed exactly and
+  matched both analytic alternatives within 1e-8. R used raw JSON
+  to retain the empty event array.
