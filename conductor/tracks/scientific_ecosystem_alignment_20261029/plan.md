@@ -2972,3 +2972,9 @@ the other competition models and installed binding checks remain open.
   A 4,000-draw Logistic chain replays exactly and recovers the known
   posterior mean within 0.25. Three focused Rust tests and Clippy passed.
   Joint sampling, convergence diagnostics and binding verification remain open.
+
+- [x] Verify seeded scalar Metropolis through a rebuilt Python 3.15.2
+  wheel, Julia and freshly installed R using the rebuilt Rust library.
+  The full results agreed exactly on the 4,000 retained Logistic draws,
+  posterior mean 100.13797081088984 and 2,543 acceptances (0.63575).
+  R used raw JSON. Joint sampling and convergence diagnostics remain open.
