@@ -1,7 +1,7 @@
 //! Reproducible synthetic smoke corpus and native fit/forecast runner.
 use serde_json::{Value, json};
 
-const CASES: [(&str, &str, &str); 13] = [
+const CASES: [(&str, &str, &str); 14] = [
     ("bass_smoke_adoption", "bass", "diffusion"),
     ("logistic_growth_smoke", "logistic", "diffusion"),
     ("fisher_pry_replacement_smoke", "fisher_pry", "substitution"),
@@ -31,19 +31,22 @@ const CASES: [(&str, &str, &str); 13] = [
     ("latent_process_fit", "latent_process", "latent_process"),
     ("regime_switching_reference", "regime_switching", "regime"),
     ("regime_switching_fit", "regime_switching", "regime"),
+    ("hierarchical_group_fit", "hierarchical", "hierarchical"),
 ];
 
 fn ci_policy(family: &str) -> &'static str {
     match family {
         "competition" => "scheduled",
-        "network_diffusion" | "policy_hazard" | "latent_process" | "regime" => "workflow_dispatch",
+        "network_diffusion" | "policy_hazard" | "latent_process" | "regime" | "hierarchical" => {
+            "workflow_dispatch"
+        }
         _ => "fast",
     }
 }
 
 fn case_descriptor(id: &str, model: &str, family: &str) -> Value {
     json!({"case_id":id,"canonical_model_key":model,"family":family,
-        "dataset_version":match model {"lock_in"=>"native-lock-in-1","network_diffusion"=>"native-network-1","policy_hazard"=>"native-policy-1","latent_process"=>"native-latent-1","regime_switching"=>"native-regime-1",_=>"2026.04"},"source":"synthetic","ci_policy":ci_policy(family)})
+        "dataset_version":match model {"lock_in"=>"native-lock-in-1","network_diffusion"=>"native-network-1","policy_hazard"=>"native-policy-1","latent_process"=>"native-latent-1","regime_switching"=>"native-regime-1","hierarchical"=>"native-hierarchical-1",_=>"2026.04"},"source":"synthetic","ci_policy":ci_policy(family)})
 }
 
 fn discover() -> Value {
@@ -66,6 +69,27 @@ fn run_case(id: &str) -> Result<Value, String> {
         .iter()
         .find(|case| case.0 == id)
         .ok_or("unknown benchmark case")?;
+    if id == "hierarchical_group_fit" {
+        let time: Vec<f64> = (0..25).map(f64::from).collect();
+        let observed: Vec<_> = time
+            .iter()
+            .map(|&t| {
+                [
+                    100. / (1. + (-0.4 * (t - 7.)).exp()),
+                    200. / (1. + (-0.3 * (t - 9.)).exp()),
+                ]
+            })
+            .collect();
+        return fit_and_forecast(
+            id,
+            model,
+            family,
+            json!({
+                "inputs":{"time":time,"observed":observed},
+                "constructor_kwargs":{"base_model":"logistic","groups":["a","b"],"output":"groups"}
+            }),
+        );
+    }
     if id == "regime_switching_fit" {
         let time: Vec<f64> = (0..30).map(f64::from).collect();
         let observed: Vec<_> = time

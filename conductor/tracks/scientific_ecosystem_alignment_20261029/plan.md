@@ -2430,3 +2430,11 @@ the other competition models and installed binding checks remain open.
   Python 3.15.2, Julia and installed R agreed on counts, requests,
   completions, withdrawals and resource metadata. The test isolates
   resource behavior with imitation disabled.
+
+- [x] Add and qualify hierarchical_group_fit. Fit two synthetic logistic
+  groups and compare saved-state forecasts and the aggregate to analytic
+  trajectories. Maximum group error was 2.125e-12 across 50 values. Five
+  focused Rust tests and Clippy passed. Python 3.15.2 and Julia returned
+  identical results. Installed R agreed within 1e-14 after serialization.
+  This exercises independent group fits with centered offsets. Partial
+  pooling and uncertainty remain separate obligations.
