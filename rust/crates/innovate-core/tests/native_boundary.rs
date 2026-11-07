@@ -1593,9 +1593,9 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
     };
     let discovery = run("discover_benchmark_cases", json!({}));
     let cases = discovery["result"]["cases"].as_array().unwrap();
-    assert_eq!(cases.len(), 10);
+    assert_eq!(cases.len(), 11);
     let suite = run("run_benchmark_suite", json!({"workers":2}));
-    assert_eq!(suite["result"]["succeeded"], 10, "{suite}");
+    assert_eq!(suite["result"]["succeeded"], 11, "{suite}");
     assert_eq!(suite["result"]["failed"], 0);
     let rows = suite["result"]["runs"].as_array().unwrap();
     for (case, row) in cases.iter().zip(rows) {
@@ -1616,7 +1616,7 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
             result["prediction"][key].as_array().unwrap().len(),
             sample_count
         );
-        if key == "values" {
+        if key == "values" && row["case_id"] != "latent_process_fit" {
             let observed = result["observed"].as_array().unwrap();
             for (prediction, reference) in result["prediction"][key]
                 .as_array()
@@ -1675,6 +1675,36 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
                     );
                 }
             }
+        } else if row["case_id"] == "latent_process_fit" {
+            let fit = &result["fit"];
+            let params = &fit["parameters"];
+            let limit = params["base_L"].as_f64().unwrap();
+            let rate = params["base_k"].as_f64().unwrap();
+            let center = params["base_x0"].as_f64().unwrap();
+            let mut previous = None;
+            let mut maximum = 0_f64;
+            for (i, time) in result["time"].as_array().unwrap().iter().enumerate() {
+                let baseline = limit / (1. + (-rate * (time.as_f64().unwrap() - center)).exp());
+                let residual = result["observed"][i].as_f64().unwrap() - baseline;
+                let smooth = previous.map_or(residual, |last| 0.4 * residual + 0.6 * last);
+                previous = Some(smooth);
+                assert!(
+                    (fit["state"]["constructor_kwargs"]["latent_values"][i]
+                        .as_f64()
+                        .unwrap()
+                        - smooth)
+                        .abs()
+                        < 1e-10
+                );
+                maximum = maximum.max(baseline + smooth);
+                assert!(
+                    (result["prediction"]["values"][i].as_f64().unwrap() - maximum).abs() < 1e-10
+                );
+            }
+            assert_eq!(
+                fit["diagnostics"]["information_criteria"]["available"],
+                false
+            );
         } else if row["case_id"] == "policy_hazard_fit" {
             assert_eq!(result["fit"]["parameters"]["decay"], 0.3);
             assert_eq!(
@@ -1725,7 +1755,7 @@ fn benchmark_validation_resolves_all_historical_case_references() {
         serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
     let report = &response["result"];
     assert_eq!(report["ok"], true);
-    assert_eq!(report["summary"]["case_count"], 10);
+    assert_eq!(report["summary"]["case_count"], 11);
     assert_eq!(
         report["model_card_summaries"]["bass"]["freshness"]["status"],
         "current"

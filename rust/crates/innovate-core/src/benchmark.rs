@@ -1,7 +1,7 @@
 //! Reproducible synthetic smoke corpus and native fit/forecast runner.
 use serde_json::{Value, json};
 
-const CASES: [(&str, &str, &str); 10] = [
+const CASES: [(&str, &str, &str); 11] = [
     ("bass_smoke_adoption", "bass", "diffusion"),
     ("logistic_growth_smoke", "logistic", "diffusion"),
     ("fisher_pry_replacement_smoke", "fisher_pry", "substitution"),
@@ -28,6 +28,7 @@ const CASES: [(&str, &str, &str); 10] = [
         "latent_process",
         "latent_process",
     ),
+    ("latent_process_fit", "latent_process", "latent_process"),
 ];
 
 fn ci_policy(family: &str) -> &'static str {
@@ -63,6 +64,22 @@ fn run_case(id: &str) -> Result<Value, String> {
         .iter()
         .find(|case| case.0 == id)
         .ok_or("unknown benchmark case")?;
+    if id == "latent_process_fit" {
+        let time: Vec<f64> = (0..21).map(f64::from).collect();
+        let observed: Vec<_> = time
+            .iter()
+            .map(|&t| 100. / (1. + (-0.5 * (t - 8.)).exp()) + 2. + 0.1 * t.sin())
+            .collect();
+        return fit_and_forecast(
+            id,
+            model,
+            family,
+            json!({
+                "inputs":{"time":time,"observed":observed},
+                "constructor_kwargs":{"base_model":"logistic","smoothing":0.4}
+            }),
+        );
+    }
     if id == "latent_process_reference" {
         let time = [0_f64, 1., 2., 3., 4., 5., 6.];
         let mut maximum = 0_f64;
@@ -289,7 +306,7 @@ fn suite(payload: &Value) -> Result<Value, String> {
             let entries = value
                 .as_array()
                 .filter(|entries| !entries.is_empty() && entries.len() <= CASES.len())
-                .ok_or("case_ids must contain one to ten case IDs")?;
+                .ok_or("case_ids must contain one to eleven case IDs")?;
             entries
                 .iter()
                 .map(|entry| {
