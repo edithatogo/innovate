@@ -16,6 +16,11 @@ kernel_call <- function(operation, model_key = NULL, payload = list()) {
   if (identical(operation, "preprocess_series") && identical(payload$method, "sarima_filter")) {
     array_fields <- c(array_fields, "coefficients")
   }
+  if (identical(operation, "summarize_causal")) {
+    array_fields <- c(array_fields, "pre_treated", "post_treated", "pre_control",
+      "post_control", "actual", "counterfactual", "periods", "coefficients",
+      "standard_errors", "group_labels", "effects")
+  }
   preserve_arrays <- function(value) {
     if (!is.list(value)) return(value)
     fields <- names(value)

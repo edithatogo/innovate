@@ -1621,5 +1621,9 @@ the other competition models and installed binding checks remain open.
   pre/post differences, counterfactual percent change, missing
   pre-event summaries and subgroup intervals. Duplicate group labels
   are rejected. All 24 boundary tests and focused Clippy passed.
-- [ ] Qualify installed Python, Julia and R consumers and reconcile
-  the causal analysis ledger with the full historical and planned scope.
+- [x] Verify all four summaries through the rebuilt Python wheel,
+  Julia and installed R. The checks cover singleton arrays, a missing
+  pre-event result, and the analytic subgroup interval. R preserves
+  singleton arrays for this operation. Record bounded native status
+  in the migration ledger.
+- [ ] Qualify the broader historical and planned causal workflows.
