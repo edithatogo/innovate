@@ -5285,3 +5285,7 @@ Hosted release readiness for this worktree revision remains open.
   both groups on the same anchor before taking their means. The
   analytic adjacent-value numerator is one-sixth of a floating-point
   step. Both causal unit tests and the focused boundary test passed.
+
+- [x] Verify the narrow standardized balance numerator through the
+  rebuilt Python 3.15.2 extension. The focused consumer test checks
+  the analytic nonzero pre-match value and zero matched value.
