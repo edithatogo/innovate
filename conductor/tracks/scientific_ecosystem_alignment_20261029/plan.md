@@ -4040,3 +4040,8 @@ Hosted release readiness for this worktree revision remains open.
   unchanged and rejected reversing the second strategy's draws.
   Fixture provenance and period units were supplied by the test.
   The targeted regression and Ruff passed.
+- [x] Run the historical paired Bass payload through Julia and installed R
+  against the local Rust FFI. Both returned the original JSON payload and
+  rejected a reversed draw sequence with `invalid_request`. R comparison
+  used parsed JSON equality, preserving array order and ignoring object key
+  order. This verifies the JSON bridge. Arrow export remains open.
