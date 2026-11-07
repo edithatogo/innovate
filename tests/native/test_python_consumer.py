@@ -1143,6 +1143,7 @@ def test_kairos_resource_comparison_arrow_preserves_signed_totals():
     success, failure = map(json.loads, frame["comparison_json"])
     metrics = success["result"]["resource_differences"]
     assert metrics["configured_slot_ticks"] == -3
+    assert metrics["peak_in_service"] == 1
     assert metrics["horizon_ticks"] == 11
     assert metrics["ticks_per_unit"] == 1
     assert failure["error"]["code"] == "invalid_comparison"

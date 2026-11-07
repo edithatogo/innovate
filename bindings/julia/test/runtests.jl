@@ -529,6 +529,7 @@ end
     success, failure = result["comparisons"]
     totals = success["result"]["resource_differences"]
     @test totals["configured_slot_ticks"] == -3
+    @test totals["peak_in_service"] == 1
     @test totals["horizon_ticks"] == 11
     @test totals["ticks_per_unit"] == 1
     @test failure["error"]["code"] == "invalid_comparison"

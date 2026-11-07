@@ -4289,3 +4289,7 @@ Hosted release readiness for this worktree revision remains open.
   resource comparisons. These differences are agent counts. The
   focused Rust regression verifies one additional concurrent service
   for the two-slot reopening alternative.
+- [x] Retain the peak concurrent service difference in the binding
+  regression suites. The rebuilt Python 3.15.2 wheel, Julia and installed
+  R all reported one additional concurrent service for the alternative.
+  Python verified the value after Arrow export.

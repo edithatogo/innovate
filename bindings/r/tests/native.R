@@ -501,5 +501,6 @@ resource_result <- kernel_call_json(resource_request)$result
 resource_rows <- resource_result$comparisons
 resource_totals <- resource_rows[[1]]$result$resource_differences
 stopifnot(length(resource_result$executions) == 3, resource_totals$configured_slot_ticks == -3,
+          resource_totals$peak_in_service == 1,
           resource_totals$horizon_ticks == 11, resource_totals$ticks_per_unit == 1,
           resource_rows[[2]]$error$code == "invalid_comparison", is.null(resource_rows[[2]]$result))
