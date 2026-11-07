@@ -4978,3 +4978,8 @@ Hosted release readiness for this worktree revision remains open.
 
 - [x] Retain the contradictory-ledger regression in the migration
   policy suite. All nine cases passed under repo-local Python 3.15.2.
+
+- [x] Qualify continuous Kairos hazard forcing through a translated
+  network scenario and its saved replay request. The Rust regression
+  passed with a request at tick 3, adoption at tick 4 and an identical
+  replay result. Replay starts from the original request and seed.
