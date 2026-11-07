@@ -6467,3 +6467,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Run the locked Rust workspace suite after the causal overlap
   and remote worker changes. All 326 tests passed, and workspace
   formatting passed. Hosted and scientific acceptance remain open.
+
+- [x] Run the full native binding suites with the causal guard and
+  remote request discovery changes. Python passed 130 tests from
+  the rebuilt wheel, and the Julia and installed R suites exited
+  zero against the rebuilt shared library.
