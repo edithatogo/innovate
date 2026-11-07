@@ -659,4 +659,8 @@ end
         "treatment"=>[0,1,0], "propensities"=>prediction["propensities"]))["result"]
     @test isapprox(score["brier_score"], 0.125; atol=1e-7)
     @test isapprox(score["log_loss"], -(log(0.5) + 2 * log(0.75)) / 3; atol=1e-7)
+    cross_fit = kernel_call("summarize_causal", nothing, Dict("method"=>"cross_fit_logistic_propensities",
+        "treatment"=>[0,1,1,0], "covariates"=>[[-2],[1],[2],[-1]], "folds"=>[9,4,9,4], "ridge"=>0.25/log(3)))["result"]
+    low = 1 / (1 + sqrt(3))
+    @test isapprox(cross_fit["propensities"], [0.1,1-low,0.9,low]; atol=1e-7)
 end

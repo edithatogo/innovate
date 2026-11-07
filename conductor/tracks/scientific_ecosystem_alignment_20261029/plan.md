@@ -4629,3 +4629,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Cross-fit ridge logistic propensities with caller-supplied folds.
   The Rust fixture verifies input order and rejection of a split that
   leaves a training complement with only one treatment arm.
+
+- [x] Verify cross-fitted propensities through rebuilt Python 3.15.2,
+  Julia and installed R. An interleaved fixture with different fold
+  scales verifies complement-only scaling and original row order.

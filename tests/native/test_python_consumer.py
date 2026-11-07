@@ -1401,3 +1401,8 @@ def test_ridge_logistic_propensity_fit():
                              treatment=[0, 1, 0], propensities=prediction["propensities"])["result"]
     assert score["brier_score"] == pytest.approx(0.125)
     assert score["log_loss"] == pytest.approx(-(math.log(0.5) + 2 * math.log(0.75)) / 3)
+    cross_fit = innovate.execute("summarize_causal", method="cross_fit_logistic_propensities",
+                                 treatment=[0, 1, 1, 0], covariates=[[-2], [1], [2], [-1]],
+                                 folds=[9, 4, 9, 4], ridge=0.25 / math.log(3))["result"]
+    low = 1 / (1 + math.sqrt(3))
+    assert cross_fit["propensities"] == pytest.approx([0.1, 1 - low, 0.9, low], abs=1e-7)

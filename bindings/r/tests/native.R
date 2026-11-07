@@ -623,3 +623,8 @@ logistic_score <- kernel_call("summarize_causal", payload=list(method="score_pro
   treatment=c(0,1,0), propensities=logistic_prediction$propensities))$result
 stopifnot(isTRUE(all.equal(logistic_score$brier_score, 0.125, tolerance=1e-7)),
   isTRUE(all.equal(logistic_score$log_loss, -(log(0.5) + 2 * log(0.75)) / 3, tolerance=1e-7)))
+logistic_cross_fit <- kernel_call("summarize_causal", payload=list(method="cross_fit_logistic_propensities",
+  treatment=c(0,1,1,0), covariates=matrix(c(-2,1,2,-1), ncol=1),
+  folds=c(9L,4L,9L,4L), ridge=0.25/log(3)))$result
+low <- 1 / (1 + sqrt(3))
+stopifnot(isTRUE(all.equal(unlist(logistic_cross_fit$propensities), c(0.1,1-low,0.9,low), tolerance=1e-7)))
