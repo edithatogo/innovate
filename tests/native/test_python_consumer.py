@@ -910,3 +910,14 @@ def test_polars_batch_keeps_errors_state_and_ragged_frames():
     assert first["prediction"][0] == pytest.approx(50)
     assert last["prediction"][0] == pytest.approx(100)
     assert last["id"].to_list() == ["second", "third"]
+
+
+def test_fitted_logistic_adopter_categories_use_native_rates():
+    time = list(range(21))
+    observed = [100 / (1 + math.exp(-(t - 10))) for t in time]
+    fitted = innovate.fit("logistic", pl.DataFrame({"time": time, "observed": observed}))
+    result = fitted.categorize_adopters(pl.DataFrame({"time": time, "id": time}))
+    assert result["rate"][10] == pytest.approx(25)
+    assert result["category"][0] == "Innovators"
+    assert result["category"][-1] == "Laggards"
+    assert result["id"].to_list() == time

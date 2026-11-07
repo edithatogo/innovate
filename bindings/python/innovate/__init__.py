@@ -133,6 +133,10 @@ class FitResult:
             covariate_rate_columns=covariate_rate_columns,
         )
 
+    def categorize_adopters(self, data: pl.DataFrame | pl.LazyFrame) -> pl.DataFrame:
+        """Classify a single nonnegative native rate series on the supplied grid."""
+        return categorize_adopters(self.predict(data, quantity="rate"), rate_column="rate")
+
 
 def fit(
     model: str,

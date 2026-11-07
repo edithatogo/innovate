@@ -1231,3 +1231,10 @@ the other competition models and installed binding checks remain open.
   bindings returned the five historical labels on the extreme-weight fixture.
 - [ ] Connect the
   fitted model adoption-rate path where scientifically valid.
+
+- [x] Connect Python fitted single-series models to native adopter
+  classification and expose the plain Logistic analytic derivative.
+  The installed Polars regression verifies the midpoint rate and
+  category endpoints while retaining identity columns.
+- [ ] Qualify model-derived rates for other plain diffusion curves and
+  connect fitted-state classification in Julia and R.

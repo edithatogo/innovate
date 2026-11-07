@@ -1046,6 +1046,15 @@ fn logistic_native_response(
         .map(|t| l / (1.0 + (-k * (t - x0)).exp()))
         .collect();
 
+    let rates: Vec<_> = time
+        .iter()
+        .map(|t| {
+            let tail = (-(k * (t - x0)).abs()).exp();
+            let denominator = 1. + tail;
+            [(l * tail / denominator) * (k / denominator)]
+        })
+        .collect();
+
     Ok(KernelResponse {
         schema_version: KERNEL_SCHEMA_VERSION.to_string(),
         operation,
@@ -1054,6 +1063,7 @@ fn logistic_native_response(
             "shape": [predictions.len()],
             "dtype": "float64",
             "values": predictions,
+            "rates": rates,
             "metadata": {
                 "shape": [time.len()]
             }
