@@ -2137,6 +2137,16 @@ fn estimate_stratum_propensities(payload: &Value) -> Result<Value, &'static str>
 }
 
 fn cross_fitted_stratum_contrast(payload: &Value, estimand: &str) -> Result<Value, &'static str> {
+    let required_arm_count = payload
+        .get("minimum_training_arm_count")
+        .map(|value| {
+            value
+                .as_u64()
+                .filter(|&count| count > 0)
+                .ok_or("minimum_training_arm_count must be a positive integer")
+        })
+        .transpose()?
+        .unwrap_or(1);
     let outcomes = series(payload, "outcomes")?;
     let treatment = series(payload, "treatment")?;
     let strata: Vec<String> = serde_json::from_value(payload["strata"].clone())
@@ -2207,6 +2217,9 @@ fn cross_fitted_stratum_contrast(payload: &Value, estimand: &str) -> Result<Valu
             min_propensity = min_propensity.min(propensity);
             max_propensity = max_propensity.max(propensity);
         }
+    }
+    if (min_training_arm_count as u64) < required_arm_count {
+        return Err("a held-out stratum falls below minimum_training_arm_count");
     }
     let mut request = json!({
         "outcomes":outcomes,"treatment":treatment,"propensities":propensities,

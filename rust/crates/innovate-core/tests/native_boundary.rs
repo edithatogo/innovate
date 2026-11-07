@@ -826,6 +826,19 @@ fn causal_summaries_match_analytic_effects() {
         result["result"]["overlap"],
         json!({"min_training_arm_count":1,"min_propensity":0.5,"max_propensity":0.5})
     );
+    let mut guarded = cross_fitted.clone();
+    guarded["minimum_training_arm_count"] = json!(1);
+    assert_eq!(run(guarded.clone())["result"], result["result"]);
+    guarded["minimum_training_arm_count"] = json!(2);
+    assert_eq!(
+        run(guarded.clone())["error"]["message"],
+        "a held-out stratum falls below minimum_training_arm_count"
+    );
+    guarded["minimum_training_arm_count"] = json!(0);
+    assert_eq!(
+        run(guarded)["error"]["message"],
+        "minimum_training_arm_count must be a positive integer"
+    );
     let matched_with_fitted_controls = run(json!({
         "method":"matched_treatment_contrast",
         "outcomes":cross_fitted["outcomes"],"treatment":cross_fitted["treatment"],

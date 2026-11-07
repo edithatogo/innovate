@@ -6268,3 +6268,9 @@ Hosted release readiness for this worktree revision remains open.
   Python wheel and the Julia and installed R bindings. Both ATE and
   ATT reported one observation in the smallest training arm and a
   held-out propensity range of [1/3, 2/3] for the asymmetric fixture.
+
+- [x] Add an optional minimum_training_arm_count guard for cross-fitted
+  ATE and ATT. The default is one. Higher caller-selected thresholds
+  reject a result when any used fold-stratum training arm is too
+  small, without dropping strata or changing the estimand. The Rust
+  boundary test verified default parity and both rejection cases.
