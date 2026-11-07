@@ -5760,3 +5760,9 @@ Hosted release readiness for this worktree revision remains open.
   preserved current-version replay availability, retained an older
   envelope with replay disabled, and rejected an invalid timestamp.
   Binding runtime qualification remains open.
+
+- [x] Verify scenario serialization callbacks through rebuilt Python,
+  Julia and freshly installed R. Each imported a freshly generated
+  one-time-point Logistic artifact with replay available and imported
+  the same envelope tagged 0.0.1 with replay unavailable. This verifies
+  version gating. Cross-version replay itself remains open.
