@@ -3608,3 +3608,12 @@ Hosted release readiness for this worktree revision remains open.
   binding builds are from 7d9677b1, which has identical native and binding
   source. The development migration policy passes and the release gate
   still rejects 38 open scientific and acceptance obligations.
+
+## Scenario threshold interpolation precision
+
+- [x] Preserve narrow floating-point brackets in linear crossing times.
+  A threshold one representable value above 1.5 and one below the upper
+  sample previously interpolated at two-thirds of the interval instead
+  of its midpoint. Use direct differences when the span is finite and
+  retain scaled arithmetic for overflowing spans. Both precision tests,
+  nine scenario boundary tests, formatting and focused Clippy passed.

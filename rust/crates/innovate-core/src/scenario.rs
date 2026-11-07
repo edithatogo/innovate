@@ -829,9 +829,7 @@ fn compare_paths(
                 }
                 let lower = values[index - 1];
                 let upper = values[index];
-                let scale = lower.abs().max(upper.abs());
-                let fraction =
-                    (threshold / scale - lower / scale) / (upper / scale - lower / scale);
+                let fraction = threshold_fraction(lower, threshold, upper);
                 Some(time[index - 1] * (1. - fraction) + time[index] * fraction)
             };
             result["interpolated_threshold_timing"] = json!({
@@ -841,6 +839,34 @@ fn compare_paths(
         }
     }
     Ok(result)
+}
+
+fn threshold_fraction(lower: f64, threshold: f64, upper: f64) -> f64 {
+    let span = upper - lower;
+    if span.is_finite() {
+        return (threshold - lower) / span;
+    }
+
+    let scale = lower.abs().max(upper.abs());
+    (threshold / scale - lower / scale) / (upper / scale - lower / scale)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::threshold_fraction;
+
+    #[test]
+    fn threshold_fraction_preserves_a_narrow_bracket() {
+        let lower = 1.5_f64;
+        let threshold = lower.next_up();
+        let upper = threshold.next_up();
+        assert_eq!(threshold_fraction(lower, threshold, upper), 0.5);
+    }
+
+    #[test]
+    fn threshold_fraction_handles_an_overflowing_span() {
+        assert_eq!(threshold_fraction(-f64::MAX, 0., f64::MAX), 0.5);
+    }
 }
 
 fn compare_ensemble(
