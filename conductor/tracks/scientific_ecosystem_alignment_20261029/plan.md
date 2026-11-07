@@ -2178,3 +2178,10 @@ the other competition models and installed binding checks remain open.
 - [x] Qualify fixed-pool substitution in Python 3.15, Julia and installed R.
   All three matched the analytic incumbent level of 100 exp(-1), conserved
   the pool of 100 and replayed the resolved artifact exactly.
+
+- [x] Generate seeded random fixed-edge networks for Kairos scenarios.
+  Uniformly sample distinct undirected edges without replacement using
+  topology_seed, independently of the simulation seed. Require a feasible
+  exact edge count from mean degree. Store sorted resolved edges in replay
+  requests. All 65 Rust boundary and network tests and Clippy passed.
+  Cross-binding qualification and other topology families remain open.

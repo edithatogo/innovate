@@ -1216,6 +1216,28 @@ fn custom_network_specification_checks_topology_and_initial_agents() {
         run(replay)["result"]["executions"][0]["result"],
         row["result"]
     );
+    let mut random = ring;
+    let scenario = &mut random["payload"]["scenarios"][0];
+    scenario["specification"]["network_type"] = json!("random_fixed_edges");
+    scenario["simulation"]["simulation_options"]["topology_seed"] = json!(77);
+    let response = run(&random);
+    let row = &response["result"]["executions"][0];
+    let replay = &row["artifact"]["replay_request"];
+    let edges = replay["payload"]["scenarios"][0]["simulation"]["simulation_options"]["edges"]
+        .as_array()
+        .unwrap();
+    assert_eq!(edges.len(), 4);
+    assert!(edges.windows(2).all(|pair| pair[0] != pair[1]));
+    assert_eq!(
+        run(&random)["result"]["executions"][0]["artifact"]["replay_request"],
+        *replay
+    );
+    assert_eq!(
+        run(replay)["result"]["executions"][0]["result"],
+        row["result"]
+    );
+    random["payload"]["scenarios"][0]["specification"]["average_degree"] = json!(2.1);
+    assert_eq!(run(&random)["error"]["code"], "invalid_request");
     request["payload"]["scenarios"][0]["specification"]["average_degree"] = json!(1);
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
 }

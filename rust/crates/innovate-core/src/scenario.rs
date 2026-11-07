@@ -286,10 +286,10 @@ fn apply_network_specification(
     average_degree: f64,
     initial_adoption: f64,
 ) -> Result<(), &'static str> {
-    if !matches!(network_type, "custom" | "ring")
+    if !matches!(network_type, "custom" | "ring" | "random_fixed_edges")
         || options.get("engine").and_then(Value::as_str) != Some("kairos_network")
     {
-        return Err("network translation requires custom or ring topology and kairos_network");
+        return Err("network translation requires a supported topology and kairos_network");
     }
     if nodes > 1000
         || options
@@ -314,6 +314,31 @@ fn apply_network_specification(
         let edges: Vec<_> = (0..nodes).map(|node| [node, (node + 1) % nodes]).collect();
         options.insert("edges".into(), json!(edges));
     }
+    if network_type == "random_fixed_edges" {
+        if options.contains_key("edges")
+            || options.contains_key("edge_weights")
+            || options
+                .get("directed")
+                .is_some_and(|value| value.as_bool() != Some(false))
+        {
+            return Err(
+                "random_fixed_edges requires undirected mode without explicit edges or weights",
+            );
+        }
+        let seed = options
+            .remove("topology_seed")
+            .and_then(|value| value.as_u64())
+            .ok_or("random_fixed_edges requires an unsigned topology_seed")?;
+        let edge_count = (average_degree * nodes as f64 / 2.).round() as usize;
+        let max_edges = nodes * (nodes - 1) / 2;
+        if edge_count == 0
+            || edge_count > max_edges
+            || (2. * edge_count as f64 / nodes as f64 - average_degree).abs() > 1e-9
+        {
+            return Err("average_degree must specify a feasible whole number of undirected edges");
+        }
+        options.insert("edges".into(), json!(random_edges(nodes, edge_count, seed)));
+    }
     let edges = options
         .get("edges")
         .and_then(Value::as_array)
@@ -336,6 +361,23 @@ fn apply_network_specification(
     }
     options.insert("population".into(), json!(nodes));
     Ok(())
+}
+
+fn random_edges(nodes: usize, count: usize, seed: u64) -> Vec<[usize; 2]> {
+    use kairo_ecs_rng::{DeterministicStream, rand_distr::Uniform};
+
+    let mut candidates: Vec<_> = (0..nodes)
+        .flat_map(|a| ((a + 1)..nodes).map(move |b| [a, b]))
+        .collect();
+    let mut rng = DeterministicStream::from_run_seed(seed);
+    for i in 0..count {
+        let range = Uniform::new(i, candidates.len()).expect("a candidate remains");
+        let index = rng.sample(range);
+        candidates.swap(i, index);
+    }
+    candidates.truncate(count);
+    candidates.sort_unstable();
+    candidates
 }
 
 fn simulate_scenario(
@@ -877,7 +919,7 @@ pub(crate) fn discover(request: &Value) -> Value {
             if family == "network" {
                 capability["specification_translation"] = json!({
                     "option":"apply_specifications","model_key":"bass",
-                    "engines":["kairos_network"],"network_types":["custom","ring"]
+                    "engines":["kairos_network"],"network_types":["custom","ring","random_fixed_edges"]
                 });
             }
             if family == "competition" {
