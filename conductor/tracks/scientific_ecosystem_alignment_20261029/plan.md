@@ -6463,3 +6463,7 @@ Hosted release readiness for this worktree revision remains open.
   contract, successful prediction and rejection of a read-only scope.
   Parsed the workflow and validated its shell syntax locally. The
   image-specific checks still require a hosted run.
+
+- [x] Run the locked Rust workspace suite after the causal overlap
+  and remote worker changes. All 326 tests passed, and workspace
+  formatting passed. Hosted and scientific acceptance remain open.
