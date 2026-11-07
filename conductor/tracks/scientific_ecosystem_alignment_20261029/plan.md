@@ -6198,3 +6198,9 @@ Hosted release readiness for this worktree revision remains open.
   directories. Shell syntax and a staging test passed using real sdist
   generation with wheel build and normalization stubs. Hosted release
   build qualification remains open.
+
+- [x] Run the real release wheel script from fresh staged source and
+  a fresh Cargo target. The locked optimized macOS arm64 build and
+  SBOM normalization completed. The output contained both the wheel
+  and source archive, and the extracted CPython 3.15 wheel returned
+  the expected native Logistic prediction. Hosted acceptance remains open.
