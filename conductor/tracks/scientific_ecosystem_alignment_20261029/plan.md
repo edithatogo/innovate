@@ -1501,3 +1501,9 @@ the other competition models and installed binding checks remain open.
   boundary tests and focused Clippy passed.
 - [ ] Qualify mixed seasonal AR/MA estimation and optimizer robustness,
   then expose fitting through Python, Julia and R convenience APIs.
+
+- [x] Compare a mixed SARIMA(1,0,1)(1,0,1)[4] likelihood fit on 240
+  simulated observations with R maximum likelihood. The installed R
+  bridge ran the Rust estimator and the reproducible checker verifies
+  coefficient agreement within 5e-4 and log likelihood within 1e-6.
+  Broader optimizer and differenced initialization qualification remain open.
