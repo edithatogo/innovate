@@ -813,3 +813,12 @@ percent and core/C ABI line coverage is 85.89 percent. Docs build 163 pages
 and local package checks pass. Launch/event inference, threshold helpers,
 uncertainty and scientific/release qualification remain required. Same lane
 continues.
+
+## Norton Bass baseline thresholds
+
+- [x] Restore the historical baseline formulas with the correct named rates.
+- [x] Verify summary transport and the substitution regression suite.
+
+Twenty focused Rust tests and core Clippy passed. Baseline offsets retain the
+historical inflection label and mark degenerate rates explicitly. Forced
+thresholds and cross-binding qualification of this new field remain open.
