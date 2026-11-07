@@ -1063,6 +1063,25 @@ fn scheduled_resource_slot_ticks_balance_across_seeds() {
             .unwrap()
             .result
             .unwrap();
+        for tick in [4, 8] {
+            let mut request = payload.clone();
+            request["simulation_options"]["pause_at_tick"] = json!(tick);
+            let paused = kernel
+                .simulate_model("bass", request)
+                .unwrap()
+                .result
+                .unwrap();
+            assert_eq!(paused["status"], "paused", "seed {seed}, tick {tick}");
+
+            let mut request = payload.clone();
+            request["simulation_options"]["resume_checkpoint"] = paused["checkpoint"].clone();
+            let resumed = kernel
+                .simulate_model("bass", request)
+                .unwrap()
+                .result
+                .unwrap();
+            assert_eq!(resumed, result, "seed {seed}, tick {tick}");
+        }
         let metrics = &result["resource_metrics"];
         let count = |name: &str| metrics[name].as_u64().unwrap();
         assert_eq!(

@@ -6643,3 +6643,9 @@ Hosted release readiness for this worktree revision remains open.
   wheel, Julia and installed R with native builds from 4947d6b4.
   All three returned the same invalid_comparison message naming the
   missing alternative, a null comparison, and all three executions.
+
+- [x] Extend scheduled Kairos resource replay coverage across 32
+  seeds. Pause at ticks 4 and 8 on the scheduled resource fixture and
+  compare the complete resumed response with its uninterrupted run.
+  All 64 comparisons matched, including the event traces and resource
+  metrics. The existing slot and queue conservation checks also passed.
