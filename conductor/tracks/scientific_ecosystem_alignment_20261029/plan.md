@@ -2575,3 +2575,15 @@ the other competition models and installed binding checks remain open.
   200 trials (91.5%). Grand mean was 0.62421875 versus the analytic
   0.6132589765. Mean interval width was 0.271390625. Coverage with
   multiple completions and feedback remains open.
+
+- [x] Measure bootstrap coverage with multiple completions and feedback.
+  Use a directed 0→1→2 chain with agent 0 adopted at time zero, no
+  innovation, imitation 0 versus 0.5, one slot, service time one and
+  horizon five at 1,000 ticks per unit. Each completion exposes the next
+  agent. The analytic mean sums P(G₁ ≤ 4000) and P(G₁+G₂ ≤ 3000) for
+  independent geometric delays with success probability 1-exp(-0.0005).
+  Run 200 trials of 32 pairs, seed 40000+32*trial+pair, and 1,000 draws
+  at seed 50000+trial using the Python 3.15.2 wheel from f9f21916.
+  The nominal 90% interval covered 172/200 (86%). Mean effect was
+  1.3140625 versus 1.306755628635 analytically. Both services completed
+  in 2,841 of 6,400 alternative runs. Broader calibration remains open.
