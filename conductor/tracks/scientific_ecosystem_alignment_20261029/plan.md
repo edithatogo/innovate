@@ -2880,3 +2880,8 @@ the other competition models and installed binding checks remain open.
   and R on noisy Logistic trial 0. Complete results agreed exactly.
   Standard errors matched Python statistics.stdev on the converged
   draws within 1e-12 relative error. R used raw JSON.
+
+- [x] Restore the bootstrap parameter Pearson correlation matrix.
+  Constant columns yield null entries. Fewer than two parameters or
+  draws yield a null matrix. Signed and constant-column unit checks,
+  the native bootstrap regression, and Clippy across Rust tests passed.

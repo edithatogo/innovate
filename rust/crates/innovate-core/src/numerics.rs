@@ -359,6 +359,12 @@ where
     Ok(rows)
 }
 
+pub(crate) fn linear_quantile(sorted: &[f64], probability: f64) -> f64 {
+    let rank = probability * (sorted.len() - 1) as f64;
+    sorted[rank.floor() as usize] * (1. - rank.fract())
+        + sorted[rank.ceil() as usize] * rank.fract()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -380,10 +386,4 @@ mod tests {
         .unwrap();
         assert!(error.contains("finite numerical domain"));
     }
-}
-
-pub(crate) fn linear_quantile(sorted: &[f64], probability: f64) -> f64 {
-    let rank = probability * (sorted.len() - 1) as f64;
-    sorted[rank.floor() as usize] * (1. - rank.fract())
-        + sorted[rank.ceil() as usize] * rank.fract()
 }

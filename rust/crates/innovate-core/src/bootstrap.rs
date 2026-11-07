@@ -173,5 +173,69 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
         "baseline_optimizer":baseline["diagnostics"]["optimizer"],
         "baseline_parameters":baseline["parameters"],"estimates":estimates,
         "interval_method":"percentile","interval_mass":interval_mass,"parameter_intervals":intervals,
-        "parameter_standard_errors":standard_errors}))
+        "parameter_standard_errors":standard_errors,
+        "parameter_correlation":correlation(&estimates, succeeded)}))
+}
+
+fn correlation(estimates: &BTreeMap<String, Vec<f64>>, draws: u64) -> Value {
+    if draws < 2 || estimates.len() < 2 {
+        return Value::Null;
+    }
+    let columns: BTreeMap<_, _> = estimates
+        .iter()
+        .map(|(name, values)| {
+            let scale = values.iter().map(|value| value.abs()).fold(0., f64::max);
+            let centered = (scale > 0.)
+                .then(|| {
+                    let origin = values[0] / scale;
+                    let mut column: Vec<_> = values.iter().map(|v| v / scale - origin).collect();
+                    let mean = column.iter().sum::<f64>() / draws as f64;
+                    column.iter_mut().for_each(|v| *v -= mean);
+                    let norm = column.iter().map(|v| v.powi(2)).sum::<f64>().sqrt();
+                    (norm > 0.).then(|| column.into_iter().map(|v| v / norm).collect::<Vec<_>>())
+                })
+                .flatten();
+            (name, centered)
+        })
+        .collect();
+    let matrix: BTreeMap<_, _> = columns
+        .iter()
+        .map(|(name, left)| {
+            let row: BTreeMap<_, _> = columns
+                .iter()
+                .map(|(other, right)| {
+                    let coefficient = left.as_ref().zip(right.as_ref()).map(|(left, right)| {
+                        left.iter()
+                            .zip(right)
+                            .map(|(a, b)| a * b)
+                            .sum::<f64>()
+                            .clamp(-1., 1.)
+                    });
+                    (*other, coefficient)
+                })
+                .collect();
+            (*name, row)
+        })
+        .collect();
+    json!(matrix)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn correlation_handles_signed_and_constant_columns() {
+        let draws = BTreeMap::from([
+            ("a".into(), vec![1., 2., 3.]),
+            ("b".into(), vec![3., 2., 1.]),
+            ("constant".into(), vec![7.; 3]),
+        ]);
+        let matrix = correlation(&draws, 3);
+        assert!((matrix["a"]["a"].as_f64().unwrap() - 1.).abs() < 1e-14);
+        assert!((matrix["a"]["b"].as_f64().unwrap() + 1.).abs() < 1e-14);
+        assert_eq!(matrix["a"]["b"], matrix["b"]["a"]);
+        assert!(matrix["a"]["constant"].is_null());
+        assert!(correlation(&draws, 1).is_null());
+    }
 }
