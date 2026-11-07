@@ -2033,3 +2033,10 @@ the other competition models and installed binding checks remain open.
   artifact to an identical result. All 37 boundary tests and focused
   Clippy passed. Legacy artifact import and cross-version replay remain
   open.
+
+- [x] Import legacy scenario artifact envelopes (bd0dd498). Validate the
+  historical specification and offset-bearing timestamp, preserve model,
+  version, seed and notes, and report replay unavailable when the
+  original envelope has no simulation payload. Python 3.15, Julia and R
+  round-tripped the same legacy Bass artifact. All 38 Rust boundary tests
+  and focused Clippy passed. Cross-version replay qualification remains open.
