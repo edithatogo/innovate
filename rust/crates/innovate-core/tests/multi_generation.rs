@@ -324,6 +324,11 @@ fn conditional_covariate_fit_retains_all_named_coefficients() {
     assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
     assert_eq!(fit["parameters"].as_object().unwrap().len(), 6);
     assert!(fit["diagnostics"]["metrics"]["RSS"].as_f64().unwrap() < 1e-10);
+    let automatic = binding
+        .fit_model("norton_bass", json!({"inputs":training,"constructor_kwargs":options}))
+        .unwrap().result.unwrap();
+    assert_eq!(automatic["diagnostics"]["optimizer"]["converged"], true);
+    assert!(automatic["diagnostics"]["metrics"]["RSS"].as_f64().unwrap() < 1e-8);
 }
 
 #[test]

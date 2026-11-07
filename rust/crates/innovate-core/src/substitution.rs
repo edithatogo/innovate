@@ -906,13 +906,7 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
         if let Some(v) = fit_options.and_then(|o| o.get("initial_parameters")) {
             starts.push(transform(parameters(v, &model, op)?));
         }
-        if model.history.is_some() && starts.is_empty() {
-            return Err(invalid(
-                op,
-                "covariate fitting requires complete initial_parameters",
-            ));
-        }
-        for p0 in if model.history.is_none() {
+        for p0 in if model.history.is_none() || starts.is_empty() {
             &[0.1, 0.5, 1.0][..]
         } else {
             &[]
@@ -927,6 +921,9 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
                         .max(y_scale * 0.1);
                     start.extend([p0 / t_scale, q0 / t_scale, 1.2 * max]);
                 }
+                // Zero slopes seed a valid unforced trajectory, while the
+                // optimizer remains free to estimate every declared slope.
+                start.resize(3 * model.n * (1 + model.covariates.len()), 0.);
                 starts.push(transform(start));
             }
         }

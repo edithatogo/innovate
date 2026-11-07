@@ -791,11 +791,12 @@ Controls use the same linearly interpolated `covariate_history` as mechanistic
 Bass and Gompertz. History must cover the initial time. Outside its grid,
 endpoint values hold. The returned `state` carries the history for later
 forecasts, and overlapping input values must agree with that saved history.
-Integration includes all control knots. Conditional least squares requires
-complete `initial_parameters`, including every beta coefficient. The
+Integration includes all control knots. Without explicit initial parameters,
+least squares starts from a grid of base coefficients with all beta slopes
+initially zero and estimates the declared slopes. An explicit start must
+include every beta coefficient. The
 `successive_generations` variant has the fraction-space forcing semantics
-described below. Event inference, automatic forcing-fit initialization,
-uncertainty and broader independent fitting qualification remain open.
+described below. Event inference, uncertainty and broader independent fitting qualification remain open.
 
 ### Historical Lotka–Volterra covariates
 
@@ -985,7 +986,7 @@ an endpoint-held forecast. The independent reference integrates fractions
 directly with DOP853, while Rust integrates log survival. It covers an off-grid
 launch, two events, conditional fitting and a held-out forecast. Launch times
 and interventions remain fixed inputs. Their inference, calibrated uncertainty,
-automatic initialization and wider scientific qualification remain required.
+and wider scientific qualification remain required.
 
 ### Norton–Bass threshold summaries
 
