@@ -1,4 +1,4 @@
-"""Verify MPI benchmark receipts against a serial receipt from the same build."""
+"""Verify sharded benchmark receipts against a serial receipt from the same build."""
 
 import argparse
 import hashlib
@@ -35,6 +35,7 @@ def check(serial, shards):
     if [row["case_id"] for row in expected] != case_ids:
         raise ValueError("the serial receipt does not cover the complete benchmark policy")
     ranks = set()
+    launchers = set()
     for shard in shards:
         actual = shard["metadata"]
         config = actual["benchmark_runner"]
@@ -45,6 +46,13 @@ def check(serial, shards):
         ):
             raise ValueError("shards must match the serial kernel version, extension digest and policy")
         partition = config["mpi_shard"]
+        # Receipts before Slurm support were always produced by Open MPI.
+        launcher = partition.get("launcher", "open_mpi")
+        if launcher not in ("open_mpi", "slurm"):
+            raise ValueError("unknown benchmark shard launcher")
+        launchers.add(launcher)
+        if len(launchers) > 1:
+            raise ValueError("benchmark shards must use the same launcher")
         rank = partition["rank"]
         size = partition["size"]
         if (
@@ -54,11 +62,11 @@ def check(serial, shards):
             or not 0 <= rank < size
             or rank in ranks
         ):
-            raise ValueError("missing, duplicate or invalid MPI rank")
+            raise ValueError("missing, duplicate or invalid shard rank")
         ranks.add(rank)
         rows = checked_runs(shard)
         if rows != expected[rank :: len(shards)] or partition["case_ids"] != [row["case_id"] for row in rows]:
-            raise ValueError("MPI rank case IDs or results differ from the serial partition")
+            raise ValueError("shard rank case IDs or results differ from the serial partition")
 
 
 def main():
@@ -70,7 +78,7 @@ def main():
         check(json.loads(args.serial.read_text()), [json.loads(path.read_text()) for path in args.shards])
     except (OSError, KeyError, TypeError, ValueError) as exc:
         parser.error(str(exc))
-    print(f"Verified {len(args.shards)} MPI rank receipts against serial results")
+    print(f"Verified {len(args.shards)} shard rank receipts against serial results")
 
 
 if __name__ == "__main__":

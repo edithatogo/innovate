@@ -3799,3 +3799,7 @@ Hosted release readiness for this worktree revision remains open.
   budget. Injected Slurm step variables covered all three fast cases
   with two tasks and matched the serial receipt. Ruff passed.
   The local host has no srun executable. Live Slurm qualification remains open.
+- [x] Reject mixed launchers in benchmark receipt verification.
+  Legacy MPI receipts without a launcher remain readable. A local
+  two-rank MPI set passed and replacing its second rank with an
+  equivalent simulated Slurm receipt failed. Ruff passed.
