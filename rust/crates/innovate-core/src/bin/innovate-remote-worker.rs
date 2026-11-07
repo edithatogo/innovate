@@ -1,4 +1,5 @@
 //! Single-request subprocess adapter for the native remote envelope.
+use serde::de::{Deserialize, Deserializer, Error, MapAccess, SeqAccess, Visitor};
 use serde_json::{Value, json};
 use std::io::{self, Read, Write};
 use std::process::ExitCode;
@@ -49,7 +50,7 @@ fn dispatch() -> Result<String, &'static str> {
     if input.len() as u64 > MAX_ENVELOPE_BYTES {
         return Err("remote envelope exceeds 2000000 bytes");
     }
-    let envelope: Value =
+    let UniqueJson(envelope) =
         serde_json::from_slice(&input).map_err(|_| "invalid remote envelope JSON")?;
     let request = json!({
         "schema_version": innovate_core::KERNEL_SCHEMA_VERSION,
@@ -57,4 +58,66 @@ fn dispatch() -> Result<String, &'static str> {
         "payload": envelope,
     });
     Ok(innovate_core::execute_json(&request.to_string()))
+}
+
+// Preserve JSON values while rejecting ambiguous object keys before dispatch.
+struct UniqueJson(Value);
+
+impl<'de> Deserialize<'de> for UniqueJson {
+    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        deserializer.deserialize_any(UniqueJsonVisitor).map(Self)
+    }
+}
+
+struct UniqueJsonVisitor;
+
+impl<'de> Visitor<'de> for UniqueJsonVisitor {
+    type Value = Value;
+
+    fn expecting(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        formatter.write_str("JSON with unique object keys")
+    }
+
+    fn visit_map<M: MapAccess<'de>>(self, mut map: M) -> Result<Value, M::Error> {
+        let mut object = serde_json::Map::new();
+        while let Some(key) = map.next_key::<String>()? {
+            if object.contains_key(&key) {
+                return Err(M::Error::custom("duplicate JSON object key"));
+            }
+            object.insert(key, map.next_value::<UniqueJson>()?.0);
+        }
+        Ok(Value::Object(object))
+    }
+
+    fn visit_seq<S: SeqAccess<'de>>(self, mut seq: S) -> Result<Value, S::Error> {
+        let mut array = Vec::new();
+        while let Some(UniqueJson(value)) = seq.next_element()? {
+            array.push(value);
+        }
+        Ok(Value::Array(array))
+    }
+
+    fn visit_unit<E: Error>(self) -> Result<Value, E> {
+        Ok(Value::Null)
+    }
+
+    fn visit_bool<E: Error>(self, value: bool) -> Result<Value, E> {
+        Ok(Value::from(value))
+    }
+
+    fn visit_i64<E: Error>(self, value: i64) -> Result<Value, E> {
+        Ok(Value::from(value))
+    }
+
+    fn visit_u64<E: Error>(self, value: u64) -> Result<Value, E> {
+        Ok(Value::from(value))
+    }
+
+    fn visit_f64<E: Error>(self, value: f64) -> Result<Value, E> {
+        Ok(Value::from(value))
+    }
+
+    fn visit_str<E: Error>(self, value: &str) -> Result<Value, E> {
+        Ok(Value::from(value))
+    }
 }

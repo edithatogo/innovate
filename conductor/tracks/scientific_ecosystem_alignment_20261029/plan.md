@@ -7463,3 +7463,8 @@ Hosted release readiness for this worktree revision remains open.
   tenant IDs over the byte limit, and control characters in principal
   or trace IDs. The focused release-profile test passed. The debug
   cache selected an older test binary and ran zero matching tests.
+
+- [x] Reject duplicate JSON object keys before worker dispatch, including
+  duplicate auth_scope fields and repeated envelope context. Rejection
+  preserves the malformed-input exit code and empty stdout. All five
+  optimized worker tests and the formatting check passed.

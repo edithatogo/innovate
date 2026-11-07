@@ -54,6 +54,14 @@ fn worker_rejects_invalid_framing_without_writing_a_response() {
     for (input, diagnostic) in [
         (b"{".to_vec(), "invalid remote envelope JSON"),
         (
+            br#"{"context":{"auth_scope":"read","auth_scope":"kernel:execute"}}"#.to_vec(),
+            "invalid remote envelope JSON",
+        ),
+        (
+            br#"{"context":{},"context":{}}"#.to_vec(),
+            "invalid remote envelope JSON",
+        ),
+        (
             vec![b' '; 2_000_001],
             "remote envelope exceeds 2000000 bytes",
         ),
