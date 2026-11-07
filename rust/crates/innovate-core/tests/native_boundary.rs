@@ -899,6 +899,10 @@ fn causal_summaries_match_analytic_effects() {
     bad_balance["balance_covariates"]["age"] = json!([1]);
     assert!(run(bad_balance)["result"].is_null());
     let result = run(reused);
+    assert_eq!(
+        result["result"]["outcome_weights"],
+        json!([[2, 0.5], [3, 0.5], [1, -1.]])
+    );
     let age = &result["result"]["covariate_balance"]["age"];
     assert_eq!(age["treated_mean"], 35.);
     assert_eq!(age["control_mean"], 20.);

@@ -5327,3 +5327,7 @@ Hosted release readiness for this worktree revision remains open.
   The installed consumers recovered the unadjusted effect of 5 and
   adjusted effect of 6, with null conditional uncertainty when
   outcome variances were absent.
+
+- [x] Expose sparse outcome coefficients for matched ATT. The
+  focused Rust fixture verified two treated weights of 0.5 and a
+  reused control weight of -1. Binding checks remain open.

@@ -1386,6 +1386,16 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     } else {
         "matched_subset_att"
     };
+    let pair_count = pairs.len() as f64;
+    let outcome_weights: Vec<_> = pairs
+        .iter()
+        .map(|pair| (pair.treated_index, 1. / pair_count))
+        .chain(
+            control_uses
+                .iter()
+                .map(|(&index, &count)| (index, -(count as f64) / pair_count)),
+        )
+        .collect();
     let squared_control_weights = control_uses
         .values()
         .map(|&count| (count as f64 / pairs.len() as f64).powi(2))
@@ -1450,6 +1460,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
         json!({"method":"nearest_score_with_replacement","estimand":estimand,"estimate":estimate,"adjusted_estimate":adjusted_estimate,"pairs":pairs,
             "unmatched_treated_indices":unmatched_treated_indices,
             "conditional_standard_error":conditional_standard_error,"covariate_balance":balance,
+            "outcome_weights":outcome_weights,
             "match_diagnostics":{"caliper":caliper,"max_score_distance":max_score_distance,
                 "matched_treated_fraction":pairs.len() as f64 / (pairs.len() + unmatched_treated_indices.len()) as f64},
             "control_diagnostics":{"unique_controls":control_uses.len(),

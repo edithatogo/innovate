@@ -536,3 +536,8 @@ predictions and matches as fixed.
 The `cross_fitted_stratum_ate` and `cross_fitted_stratum_att` responses
 include row-aligned `control_predictions` that can be passed to matched
 adjustment. The matching request still takes caller-supplied scores.
+
+The sparse `outcome_weights` rows contain a zero-based input index
+and its coefficient in the unadjusted estimate. Each matched
+treated observation contributes one pair's weight. Each control
+contributes the negative sum of its reuse weights.
