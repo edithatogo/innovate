@@ -888,7 +888,15 @@ fn causal_summaries_match_analytic_effects() {
     cancelling["outcome_variances"] = json!([0, 0, 0, 0, 0]);
     cancelling["outcome_covariance_factors"] =
         json!([[-f64::MAX, f64::MAX, -f64::MAX, f64::MAX, 0.]]);
-    assert_eq!(run(cancelling)["result"]["conditional_standard_error"], 0.);
+    assert_eq!(
+        run(cancelling.clone())["result"]["conditional_standard_error"],
+        0.
+    );
+    cancelling["outcome_covariance_factors"] =
+        json!([[-f64::MAX, -f64::MAX, f64::MAX, f64::MAX, 0.]]);
+    let overflow = run(cancelling);
+    assert!(overflow["result"].is_null());
+    assert_eq!(overflow["error"]["code"], "invalid_request");
     let mut adjusted = matched.clone();
     adjusted["control_predictions"] = json!([0, 0, 0, 1, 0]);
     let adjusted_result = run(adjusted.clone());

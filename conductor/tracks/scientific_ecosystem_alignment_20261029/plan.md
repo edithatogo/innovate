@@ -5366,3 +5366,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Compute the covariance factor contrast before rescaling to
   outcome units. The Rust boundary fixture canceled opposing
   maximum-magnitude loadings and returned zero conditional error.
+
+- [x] Verify that extreme covariance loadings cancel when the
+  contrast is finite and return a typed invalid request when the
+  actual standard error overflows. The focused Rust test passed.
