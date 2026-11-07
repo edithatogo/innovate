@@ -3167,3 +3167,8 @@ the other competition models and installed binding checks remain open.
   successive-generation LazyFrame, exposed all nine candidate pairs
   and forecast from the saved state within 0.001 of the SciPy
   reference. Both selected consumer tests and Ruff passed.
+
+- [x] Verify held-out forecasting from each binding's saved joint
+  Norton–Bass timing fit. Python 3.15.2, Julia and R returned identical
+  generation forecasts using the retained forcing history. Both
+  generations matched the independent SciPy fixture within 7.5e-10.
