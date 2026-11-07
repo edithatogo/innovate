@@ -1824,8 +1824,11 @@ the other competition models and installed binding checks remain open.
   keys and surrogate pairs, DEL, signed zero, integer versus float
   spelling, and exponent formatting. Rust encoding remains the default.
   All 27 native boundary tests and focused Clippy passed.
-- [ ] Qualify broader float spelling and verify stored historical
-  digests through the installed consumers.
+- [x] Verify a stored CPython dataset digest in the rebuilt Python
+  wheel, Julia and installed R. The same fixture contains fractional
+  numbers and Unicode text. All three accept the retained digest and
+  reject the same changed numeric value. Broader float encoding is
+  covered by the sampled native comparison below.
 
 - [x] Correct decimal midpoint rounding in Python-compatible dataset
   digests. A seeded raw-bit sample found six disagreements in the
