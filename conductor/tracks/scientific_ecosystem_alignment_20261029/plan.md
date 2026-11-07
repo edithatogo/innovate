@@ -4815,3 +4815,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify threshold ranking through rebuilt Python 3.15.2, Julia
   and installed R. All three recovered the interpolated crossing,
   shared first place and null time and place for the unreached path.
+
+- [x] Compare paired ensembles by integrated adoption difference.
+  Four Rust scenario grid tests passed, including the analytic area
+  and rejection of an area request with a single evaluation time.

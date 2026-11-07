@@ -772,14 +772,8 @@ fn rank_paths(
         }
         let score = match metric {
             "final_adoption" => values.last().copied(),
-            "adoption_area" if time.len() > 1 => Some(
-                time.windows(2)
-                    .zip(values.windows(2))
-                    .map(|(t, y)| (t[1] - t[0]) * (0.5 * y[0] + 0.5 * y[1]))
-                    .sum(),
-            ),
+            "adoption_area" => Some(adoption_area(&time, &values)?),
             "time_to_threshold" => interpolated_crossing(&time, &values, threshold.unwrap()),
-            "adoption_area" => return Err("adoption area requires at least two observations"),
             _ => return Err("unknown scenario ranking metric"),
         };
         if score.is_some_and(|value| !value.is_finite()) {
@@ -838,6 +832,7 @@ struct EnsembleComparison {
     require_distinct_pair_seeds: bool,
     interval_mass: f64,
     evaluation_time: Option<f64>,
+    evaluation_metric: Option<String>,
     bootstrap: Option<EnsembleBootstrap>,
     #[serde(default)]
     exact_sign_flip: bool,
@@ -1077,11 +1072,33 @@ mod tests {
     }
 }
 
+fn adoption_area(time: &[f64], values: &[f64]) -> Result<f64, &'static str> {
+    if time.len() < 2 {
+        return Err("adoption area requires at least two observations");
+    }
+    let area = time
+        .windows(2)
+        .zip(values.windows(2))
+        .map(|(t, y)| (t[1] - t[0]) * (0.5 * y[0] + 0.5 * y[1]))
+        .sum::<f64>();
+    area.is_finite()
+        .then_some(area)
+        .ok_or("adoption area exceeded finite numerical domain")
+}
+
 fn compare_ensemble(
     paths: &ScenarioPaths<'_>,
     comparison: &EnsembleComparison,
 ) -> Result<Value, &'static str> {
     let mass = comparison.interval_mass;
+    let compare_area = match comparison.evaluation_metric.as_deref() {
+        None => false,
+        Some("adoption_area") if comparison.evaluation_time.is_none() => true,
+        Some("adoption_area") => {
+            return Err("adoption_area cannot be combined with evaluation_time");
+        }
+        Some(_) => return Err("unknown ensemble evaluation metric"),
+    };
     if mass <= 0. || mass >= 1. || comparison.pairs.len() < 2 {
         return Err("ensemble requires at least two pairs and interval_mass in (0, 1)");
     }
@@ -1129,9 +1146,18 @@ fn compare_ensemble(
                 .ok_or("evaluation_time must match a sample on the shared time grid")?,
             None => time.len() - 1,
         };
-        endpoint = Some(time[index]);
+        let difference = if compare_area {
+            let differences: Vec<_> = alternative
+                .iter()
+                .zip(&baseline)
+                .map(|(a, b)| a - b)
+                .collect();
+            adoption_area(&time, &differences)?
+        } else {
+            endpoint = Some(time[index]);
+            alternative[index] - baseline[index]
+        };
         grid.get_or_insert(time);
-        let difference = alternative[index] - baseline[index];
         if !difference.is_finite() {
             return Err("ensemble difference must be finite");
         }
@@ -1144,7 +1170,9 @@ fn compare_ensemble(
     let mut sorted = differences.clone();
     sorted.sort_unstable_by(f64::total_cmp);
     let tail = (1. - mass) / 2.;
-    let method = if comparison.evaluation_time.is_some() {
+    let method = if compare_area {
+        "paired_empirical_adoption_area_difference"
+    } else if comparison.evaluation_time.is_some() {
         "paired_empirical_sample_difference"
     } else {
         "paired_empirical_final_difference"
@@ -1154,6 +1182,10 @@ fn compare_ensemble(
         "mean_difference":mean,"mean_standard_error":standard_error,
         "standard_error_assumption":"independent replicate pairs",
         "median_difference":linear_quantile(&sorted, 0.5),"empirical_interval":[linear_quantile(&sorted, tail),linear_quantile(&sorted, 1.-tail)]});
+    if compare_area {
+        let time = grid.as_ref().unwrap();
+        result["evaluation_horizon"] = json!([time[0], time[time.len() - 1]]);
+    }
     if comparison.exact_sign_flip {
         result["sign_flip"] = exact_sign_flip(&differences, scale)?;
     }

@@ -427,3 +427,9 @@ Set `rank_metric` to `time_to_threshold` and supply a numeric
 `rank_threshold` to rank earlier crossings first. Crossing times use
 linear interpolation between adjacent samples. Paths that never
 reach the threshold are listed last with null times and places.
+
+Set `evaluation_metric="adoption_area"` on a paired ensemble
+comparison to integrate each alternative-minus-baseline path over
+the common horizon before computing the empirical summary. The
+response includes `evaluation_horizon`. This metric and
+`evaluation_time` are mutually exclusive.

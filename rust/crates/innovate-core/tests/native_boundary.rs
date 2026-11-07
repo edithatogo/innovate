@@ -1763,6 +1763,24 @@ fn scenario_grid_summarizes_paired_ensemble_differences() {
     let outcome = &response["result"]["comparisons"][0]["result"];
     assert_eq!(outcome["pair_count"], 2);
     assert_eq!(outcome["evaluation_time"], 1.);
+    let mut area = request.clone();
+    area["payload"]["comparisons"][0]["evaluation_metric"] = json!("adoption_area");
+    let result = run(&area);
+    let comparison = &result["result"]["comparisons"][0]["result"];
+    assert_eq!(comparison["evaluation_horizon"], json!([0., 1.]));
+    let paths = &result["result"]["executions"];
+    let value = |scenario: usize, period: usize| {
+        paths[scenario]["result"]["values"][period]
+            .as_f64()
+            .unwrap()
+    };
+    let expected = ((value(1, 0) - value(0, 0)) + (value(1, 1) - value(0, 1))) / 2.;
+    assert_eq!(comparison["differences"][0], expected);
+    area["payload"]["comparisons"][0]["evaluation_time"] = json!(0.);
+    assert_eq!(
+        run(&area)["result"]["comparisons"][0]["error"]["code"],
+        "invalid_comparison"
+    );
     let mut sampled = request.clone();
     sampled["payload"]["comparisons"][0]["evaluation_time"] = json!(0.);
     let selected = run(&sampled);
