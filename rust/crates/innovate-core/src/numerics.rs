@@ -279,13 +279,23 @@ where
         .try_fold(0.0_f64, |maximum, component| {
             component.is_finite().then(|| maximum.max(component))
         });
+    let converged_starts = start_reports
+        .iter()
+        .filter(|report| report["converged"] == true)
+        .count();
+    let alternative_loss = start_reports
+        .iter()
+        .enumerate()
+        .filter(|(index, _)| *index != selected_start)
+        .filter_map(|(_, report)| report["scaled_rss"].as_f64())
+        .min_by(f64::total_cmp);
     let identifiability = local_rank(columns);
     Ok(LeastSquares {
         parameters,
         identifiability,
         report: json!({"method":"deterministic_multistart_damped_least_squares",
         "converged":converged,"termination":reason,"iterations":iterations,"max_iterations":max_iterations,
-        "starts":starts.len(),"start_reports":start_reports,"selected_start_index":selected_start,"scaled_rss":error,"gradient_max_abs":gradient,
+        "starts":starts.len(),"converged_starts":converged_starts,"alternative_start_scaled_rss_gap":alternative_loss.map(|loss| loss - error),"start_reports":start_reports,"selected_start_index":selected_start,"scaled_rss":error,"gradient_max_abs":gradient,
         "interpretation":"numerical termination only; not a global optimum or statistical acceptance"}),
     })
 }
@@ -418,6 +428,15 @@ mod tests {
         assert_eq!(report["sensitivity_column_norms"][2], 1e-20);
         assert_eq!(report["sensitivity_column_norm_cutoff"], 1e-14);
         assert_eq!(report["excluded_sensitivity_column_indices"], json!([2]));
+    }
+
+    #[test]
+    fn multistart_report_distinguishes_equal_objectives() {
+        let fit =
+            least_squares(&[1.], &[vec![-1.], vec![1.]], |p| Ok(vec![p[0].powi(2)]), 4).unwrap();
+        assert_eq!(fit.parameters, [-1.]);
+        assert_eq!(fit.report["converged_starts"], 2);
+        assert_eq!(fit.report["alternative_start_scaled_rss_gap"], 0.);
     }
 
     #[test]

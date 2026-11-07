@@ -3873,3 +3873,9 @@ Hosted release readiness for this worktree revision remains open.
   sensitivity products overflow and cancel to NaN. The optimizer no
   longer masks the unavailable component as zero in its report.
   The Rust regression, four fit-quality tests and focused Clippy passed.
+- [x] Report the number of converged starts and the scaled residual
+  loss gap to the best other finite start. A symmetric objective
+  converges at two different parameters with gap zero. The Rust
+  regression, four fit-quality tests and focused Clippy passed.
+  A zero gap describes the tested objectives. Global uniqueness
+  remains a separate scientific obligation.
