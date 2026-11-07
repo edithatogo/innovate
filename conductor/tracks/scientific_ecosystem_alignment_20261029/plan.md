@@ -7195,3 +7195,8 @@ Hosted release readiness for this worktree revision remains open.
   binary archive installation. All assertions passed with
   INNOVATE_NATIVE_LIBRARY unset. This exercises bundled discovery
   from the binary archive on arm64 macOS.
+
+- [x] Add macOS to hosted Julia and R bundled-library conformance.
+  The existing matrix stages Cargo's dylib for both bindings and
+  runs their native suites. Local arm64 conformance already passed.
+  Actionlint passed for all workflows. Hosted readback remains open.

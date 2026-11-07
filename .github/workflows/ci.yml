@@ -106,6 +106,8 @@ jobs:
         include:
           - os: ubuntu-latest
             native-library: libinnovate_ffi.so
+          - os: macos-latest
+            native-library: libinnovate_ffi.dylib
           - os: windows-latest
             native-library: innovate_ffi.dll
     runs-on: ${{ matrix.os }}
