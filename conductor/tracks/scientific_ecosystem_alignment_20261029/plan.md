@@ -3132,3 +3132,10 @@ the other competition models and installed binding checks remain open.
   A rebuilt Python 3.15.2 wheel fitted a LazyFrame, recovered the split
   at 12, and predicted both branches and the boundary through the saved
   fit while preserving row IDs. The focused consumer regression passed.
+
+- [x] Verify held-out Bass forecasts from an event-profile fit with
+  retained covariate history. Python 3.15.2, Julia and R produced
+  identical levels and rates at eight unseen times and matched the
+  independent SciPy fixture within 0.001. The Python Polars consumer
+  regression now covers candidate selection, training replay and
+  held-out prediction alongside fixed-split fits. Four selected tests passed.

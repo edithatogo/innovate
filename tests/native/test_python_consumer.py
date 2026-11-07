@@ -415,8 +415,8 @@ def test_composite_polars_levels_rates_and_fitted_origin():
     assert fit.predict(pl.DataFrame({"time": [30.0]}))["prediction"][0] > 99.5
 
 
-@pytest.mark.parametrize("explicit_start", [True, False])
-def test_bass_mechanistic_covariate_event_fit_and_history_forecast(explicit_start):
+@pytest.mark.parametrize("explicit_start, profile_event", [(True, False), (False, False), (False, True)])
+def test_bass_mechanistic_covariate_event_fit_and_history_forecast(explicit_start, profile_event):
     fixture = json.loads(
         (
             Path(__file__).resolve().parents[2] / "rust/crates/innovate-core/tests/fixtures/mechanistic_scipy.json"
@@ -425,12 +425,15 @@ def test_bass_mechanistic_covariate_event_fit_and_history_forecast(explicit_star
     n = fixture["training_rows"]
     parameters = fixture["parameters"].copy()
     parameters["beta_p_dose"] = 0.004
+    event_options = {"event_candidates": [9.0, 10.0, 11.0]} if profile_event else {"t_event": 10.0}
     fit = innovate.fit(
         "bass",
         pl.DataFrame({"time": fixture["time"][:n], "observed": fixture["observed"][:n], "dose": fixture["dose"][:n]}),
-        model_options={"covariates": ["dose"], "t_event": 10.0},
+        model_options={"covariates": ["dose"], **event_options},
         fit_options={"initial_parameters": parameters} if explicit_start else None,
     )
+    assert (fit.event_profile is not None) == profile_event
+    assert fit.envelope["result"]["state"]["constructor_kwargs"]["t_event"] == 10.0
     assert fit.diagnostics["optimizer"]["converged"]
     replay = fit.predict(pl.DataFrame({"time": fixture["time"][:n], "dose": fixture["dose"][:n]}))
     assert replay["prediction"].to_list() == pytest.approx(fit.envelope["result"]["predictions"]["values"], abs=1e-7)
