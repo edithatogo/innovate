@@ -7016,3 +7016,8 @@ Hosted release readiness for this worktree revision remains open.
   Restrict repaired values to complete finite windows and preserve
   the original outputs elsewhere. The focused Python preprocessing
   test passed with the updated wrapper and existing native extension.
+
+- [x] Verify the Polars rolling recovery fixtures in the rebuilt
+  Python 3.15.2 wheel and reconcile the preprocessing ledger.
+  The focused test passed for overflow, subnormal values, null gaps
+  and NaN gaps. Broader historical parity and SARIMA remain open.
