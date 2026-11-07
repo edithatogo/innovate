@@ -802,6 +802,14 @@ completion tick. A service that extends beyond the simulation horizon
 appears in this trace. The `completions` trace records observed completions
 through the horizon.
 
+The `resource_metrics` totals cover tick zero through the last requested
+observation. Occupied slot-ticks include service in progress, clipped at the
+horizon. Configured slot-ticks integrate scheduled capacity over the same
+interval. Occupied slot-ticks can exceed configured slot-ticks when service
+continues through a closure. Queue wait is split into admitted, abandoned,
+and still waiting at the horizon. Balks and retry cooldown do not count as
+queue wait.
+
 
 A scheduled change can replace either Bass hazard coefficient using `p` or
 `q`. Values must be finite and nonnegative. The new coefficient applies

@@ -3060,3 +3060,11 @@ the other competition models and installed binding checks remain open.
   fixture produced starts at ticks 1, 6 and 8 and waits of 0, 3 and 3
   ticks. Python 3.15.2, Julia and R agreed exactly. All 26 Rust network
   tests and focused Clippy passed.
+
+- [x] Report Kairos occupied and configured slot-ticks, and split
+  queue wait into admitted, abandoned and pending totals. Clip
+  occupancy and pending waits to the observation horizon. On a
+  closure fixture, Python 3.15.2, Julia and R returned identical
+  results with five occupied slot-ticks, three configured slot-ticks,
+  two abandoned wait ticks and one pending wait tick. All 27 Rust
+  network tests and focused Clippy passed.

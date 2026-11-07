@@ -457,6 +457,11 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     let mut rng = DeterministicStream::from_run_seed(o.seed);
     let mut now = 0_u128;
     let horizon = (time.last().unwrap() * o.ticks_per_unit as f64).floor() as u128;
+    let mut occupied_slot_ticks = 0;
+    let mut configured_slot_ticks = 0;
+    let mut last_capacity_change = 0;
+    let mut admitted_wait_ticks = 0;
+    let mut abandoned_wait_ticks = 0;
     let mut completed = Vec::new();
     let mut trace = Vec::new();
     let mut requests = Vec::new();
@@ -619,7 +624,10 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                         },
                     );
                     abandoned.push(json!({"tick":now,"agent":id.index}));
-                    waiting_since[index] = None;
+                    let queued_at = waiting_since[index]
+                        .take()
+                        .ok_or_else(|| invalid("expired agent has no queue entry"))?;
+                    abandoned_wait_ticks += now - queued_at;
                 }
             }
             resource = rebuild_waiters(&waiting_since, &priorities);
@@ -638,7 +646,11 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 service_override = None;
             }
             retry_policy = change.retry.unwrap_or(retry_policy);
-            capacity = change.capacity.unwrap_or(capacity);
+            if let Some(new_capacity) = change.capacity {
+                configured_slot_ticks += (now - last_capacity_change) * u128::from(capacity);
+                last_capacity_change = now;
+                capacity = new_capacity;
+            }
             max_wait_ticks = change.max_wait_ticks.unwrap_or(max_wait_ticks);
             max_queue_length = change.max_queue_length.unwrap_or(max_queue_length);
             innovation = change.p.unwrap_or(innovation);
@@ -725,6 +737,8 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             deadlines[index] = None;
             let duration = service_override.unwrap_or(service[index]);
             let completion_tick = now + u128::from(duration);
+            occupied_slot_ticks += completion_tick.min(horizon) - now;
+            admitted_wait_ticks += now - queued_at;
             service_starts.push(json!({"agent":next.index,"tick":now,
                 "request_tick":queued_at,"wait_ticks":now-queued_at,
                 "service_ticks":duration,"scheduled_completion_tick":completion_tick}));
@@ -732,6 +746,20 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             in_service += 1;
         }
     }
+    configured_slot_ticks += (horizon - last_capacity_change) * u128::from(capacity);
+    let pending_wait_ticks: u128 = waiting_since
+        .iter()
+        .flatten()
+        .map(|tick| horizon - tick)
+        .sum();
+    let resource_metrics = json!({
+        "horizon_ticks":horizon,
+        "occupied_slot_ticks":occupied_slot_ticks,
+        "configured_slot_ticks":configured_slot_ticks,
+        "admitted_wait_ticks":admitted_wait_ticks,
+        "abandoned_wait_ticks":abandoned_wait_ticks,
+        "pending_wait_ticks":pending_wait_ticks
+    });
     let queue_length = resource.queue_length();
     let available = capacity.saturating_sub(in_service);
     let counts: Vec<_> = time
@@ -753,7 +781,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         model_key: r.model_key.clone(),
         error: None,
         result: Some(
-            json!({"values":values,"counts":counts,"agents":states,"requests":requests,"completions":trace,"service_starts":service_starts,"abandonments":abandoned,"balks":balks,"retry_eligibility":retries,"metadata":{"engine":"kairos_network","kairos_revision":crate::simulation::REV,"seed":o.seed,"population":o.population,"capacity":o.capacity,"current_capacity":capacity,"current_p":innovation,"current_q":imitation,"in_service":in_service,"service_ticks":o.service_ticks,"ticks_per_unit":o.ticks_per_unit,"queue_length":queue_length,"available":available,"agent_priorities":priorities,"max_wait_ticks":o.max_wait_ticks,"current_max_wait_ticks":max_wait_ticks,"max_queue_length":o.max_queue_length,"current_max_queue_length":max_queue_length,"innovation_multipliers":innovation_weights,"imitation_multipliers":imitation_weights,"agent_service_ticks":service,"directed":o.directed,"weighted":graph.weighted,"applied_schedule_ticks":applied_ticks,"service_override_ticks":service_override,"hazard":if graph.weighted {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted incoming weight/total incoming weight), zero imitation without incoming edges"} else {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted neighbors/degree), zero imitation at degree zero"},"resource_semantics":"Nonpreemptive priority, FIFO ties; adoption occurs at service completion; pending agents do not transmit","rng_checkpoint":rng.checkpoint()}}),
+            json!({"values":values,"counts":counts,"agents":states,"requests":requests,"completions":trace,"service_starts":service_starts,"resource_metrics":resource_metrics,"abandonments":abandoned,"balks":balks,"retry_eligibility":retries,"metadata":{"engine":"kairos_network","kairos_revision":crate::simulation::REV,"seed":o.seed,"population":o.population,"capacity":o.capacity,"current_capacity":capacity,"current_p":innovation,"current_q":imitation,"in_service":in_service,"service_ticks":o.service_ticks,"ticks_per_unit":o.ticks_per_unit,"queue_length":queue_length,"available":available,"agent_priorities":priorities,"max_wait_ticks":o.max_wait_ticks,"current_max_wait_ticks":max_wait_ticks,"max_queue_length":o.max_queue_length,"current_max_queue_length":max_queue_length,"innovation_multipliers":innovation_weights,"imitation_multipliers":imitation_weights,"agent_service_ticks":service,"directed":o.directed,"weighted":graph.weighted,"applied_schedule_ticks":applied_ticks,"service_override_ticks":service_override,"hazard":if graph.weighted {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted incoming weight/total incoming weight), zero imitation without incoming edges"} else {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted neighbors/degree), zero imitation at degree zero"},"resource_semantics":"Nonpreemptive priority, FIFO ties; adoption occurs at service completion; pending agents do not transmit","rng_checkpoint":rng.checkpoint()}}),
         ),
         metadata: json!({"runtime":"rust_native","engine":"kairos_network"}),
     })

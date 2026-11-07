@@ -797,3 +797,31 @@ fn scheduled_retry_preserves_pending_wake_after_policy_clears() {
     payload["simulation_options"]["schedule"][0]["retry"]["delay_ticks"] = json!(0);
     assert!(kernel.simulate_model("bass", payload).is_err());
 }
+
+#[test]
+fn resource_metrics_clip_service_and_queue_wait_at_horizon() {
+    let result = KernelBinding::new()
+        .simulate_model(
+            "bass",
+            json!({
+                "inputs":{"time":[0,6]},
+                "parameters":{"p":1e12,"q":0,"m":3},
+                "simulation_options":{"engine":"kairos_network","population":3,"seed":42,
+                    "edges":[],"capacity":1,"service_ticks":8,"ticks_per_unit":1,
+                    "max_wait_ticks":2,"schedule":[{"tick":3,"capacity":0}]}
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(
+        result["resource_metrics"],
+        json!({
+            "horizon_ticks":6,"occupied_slot_ticks":5,"configured_slot_ticks":3,
+            "admitted_wait_ticks":0,"abandoned_wait_ticks":2,"pending_wait_ticks":1
+        })
+    );
+    assert_eq!(result["completions"], json!([]));
+    assert_eq!(result["metadata"]["in_service"], 1);
+    assert_eq!(result["metadata"]["queue_length"], 1);
+}
