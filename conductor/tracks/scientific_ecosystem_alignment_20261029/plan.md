@@ -5229,3 +5229,7 @@ Hosted release readiness for this worktree revision remains open.
   fixed-match uncertainty through causal discovery. The focused Rust
   test verified the required outcome variances and independence
   assumptions. Broader matching inference remains open.
+
+- [x] Report the caliper, largest retained score distance and matched
+  treated fraction. The focused Rust causal test verified full matching
+  and partial matching with half the treated observations retained.

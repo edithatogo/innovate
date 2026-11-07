@@ -1253,6 +1253,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     let mut pairs = Vec::new();
     let mut unmatched_treated_indices = Vec::new();
     let mut control_uses = std::collections::BTreeMap::<usize, usize>::new();
+    let mut max_score_distance = 0_f64;
     let mut treated_error = 0_f64;
     for i in (0..scores.len()).filter(|&i| treatment[i] == 1.) {
         let right = controls.partition_point(|&j| scores[j] < scores[i]);
@@ -1271,6 +1272,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
             unmatched_treated_indices.push(i);
             continue;
         };
+        max_score_distance = max_score_distance.max(distance);
         differences.push(finite(outcomes[i] - outcomes[control])?);
         *control_uses.entry(control).or_default() += 1;
         if let Some(variances) = &outcome_variances {
@@ -1301,6 +1303,8 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
         json!({"method":"nearest_score_with_replacement","estimand":estimand,"estimate":estimate,"pairs":pairs,
             "unmatched_treated_indices":unmatched_treated_indices,
             "conditional_standard_error":conditional_standard_error,
+            "match_diagnostics":{"caliper":caliper,"max_score_distance":max_score_distance,
+                "matched_treated_fraction":pairs.len() as f64 / (pairs.len() + unmatched_treated_indices.len()) as f64},
             "control_diagnostics":{"unique_controls":control_uses.len(),
             "effective_sample_size":1. / squared_control_weights}}),
     )

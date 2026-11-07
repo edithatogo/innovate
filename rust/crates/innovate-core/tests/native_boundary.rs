@@ -863,6 +863,10 @@ fn causal_summaries_match_analytic_effects() {
         "scores":[0,2,2,1,0],"caliper":1});
     let result = run(matched.clone());
     assert_eq!(result["result"]["estimate"], 2.5);
+    assert_eq!(
+        result["result"]["match_diagnostics"],
+        json!({"caliper":1.,"max_score_distance":1.,"matched_treated_fraction":1.})
+    );
     assert_eq!(result["result"]["pairs"][0]["control_index"], 1);
     assert_eq!(result["result"]["pairs"][1]["control_index"], 0);
     assert_eq!(
@@ -889,6 +893,10 @@ fn causal_summaries_match_analytic_effects() {
     assert!(run(matched.clone())["result"].is_null());
     matched["allow_partial"] = json!(true);
     let result = run(matched);
+    assert_eq!(
+        result["result"]["match_diagnostics"],
+        json!({"caliper":0.5,"max_score_distance":0.,"matched_treated_fraction":0.5})
+    );
     assert_eq!(result["result"]["estimand"], "matched_subset_att");
     assert_eq!(result["result"]["estimate"], 2.);
     assert_eq!(result["result"]["unmatched_treated_indices"], json!([3]));
