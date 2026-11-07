@@ -344,6 +344,12 @@ fn scheduled_capacity_pauses_admission_and_reopens_waiting_service() {
     assert_eq!(result["counts"], json!([0, 0, 1, 1, 1, 3]));
     assert_eq!(result["metadata"]["current_capacity"], 2);
     assert_eq!(result["metadata"]["available"], 2);
+    let mut sparse = payload.clone();
+    sparse["inputs"]["time"] = json!([0., 6., 9.]);
+    let sparse = run(sparse);
+    assert_eq!(sparse["counts"], json!([0, 1, 3]));
+    assert_eq!(sparse["completions"], result["completions"]);
+    assert_eq!(sparse["resource_metrics"], result["resource_metrics"]);
     payload["inputs"]["time"] = json!([5.]);
     let paused = run(payload.clone());
     assert_eq!(paused["metadata"]["in_service"], 1);

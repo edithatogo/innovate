@@ -4281,3 +4281,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify declared network horizon errors at 3b57be07 through
   the rebuilt Python 3.15.2 wheel, Julia and installed R. Each rejects
   an observation at time 11 when the declared horizon is 10.
+- [x] Verify that sparse observations preserve resource completions
+  and totals across scheduled closure and reopening at a fixed horizon.
+  All 29 network and 12 Kairos tests passed. The public kernel requires
+  a strictly increasing observation grid.
