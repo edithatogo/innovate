@@ -2545,3 +2545,17 @@ fn bootstrap_reports_null_forecast_interval_with_one_successful_refit() {
     assert_eq!(result["forecast"]["failed"], 0);
     assert_eq!(result["forecast"]["pointwise_intervals"], json!([[null]]));
 }
+
+#[test]
+fn adoption_ingestion_rejects_negative_counts_and_rates() {
+    for unit in ["count", "rate"] {
+        let request = json!({"schema_version":"2.0","operation":"validate_dataset",
+            "payload":{"kind":"adoption","time":[0,1],"adoption":[-2,1],"unit":unit}});
+        let response: serde_json::Value =
+            serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+        assert_eq!(
+            response["result"]["failed"],
+            json!(["nonnegative:adoption"])
+        );
+    }
+}

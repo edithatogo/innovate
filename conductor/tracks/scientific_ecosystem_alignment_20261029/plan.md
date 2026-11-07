@@ -3587,3 +3587,11 @@ Hosted release readiness for this worktree revision remains open.
   numeric-looking strings retain their spelling through checksum
   re-ingestion, and a missing identifier fails the Rust identifier
   diagnostic. All three cases passed on Python 3.15.2.
+
+## Adoption dataset domain validation
+
+- [x] Reject negative adoption counts and rates at the shared Rust
+  dataset boundary. The monotone negative fixture passed diagnostics
+  before the fix and now reports nonnegative:adoption. All 75 native
+  boundary tests and focused Clippy passed. Installed binding validation
+  for this diagnostic remains open.

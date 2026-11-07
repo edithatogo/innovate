@@ -100,6 +100,13 @@ pub(crate) fn validate(payload: &Value) -> Result<Value, &'static str> {
             adoption.windows(2).all(|pair| pair[1] - pair[0] >= -1e-12),
             "adoption must be nondecreasing",
         );
+        if matches!(unit, Some("count" | "rate")) {
+            check(
+                "nonnegative:adoption",
+                adoption.iter().all(|&value| value >= 0.),
+                "adoption counts and rates must be nonnegative",
+            );
+        }
         if unit == Some("share") {
             check(
                 "share_bounds:adoption",
