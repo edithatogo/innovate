@@ -732,16 +732,24 @@ fn scheduled_agent_durations_replace_scalar_override_at_admission() {
         .result
         .unwrap();
     let durations = [2, 3, 4];
-    let mut tick = 6;
+    let mut start = 1;
     for index in 0..3 {
-        let agent = result["requests"][index]["agent"].as_u64().unwrap() as usize;
-        if index > 0 {
-            tick += durations[agent];
-        }
+        let request = &result["requests"][index];
+        let agent = request["agent"].as_u64().unwrap() as usize;
+        let requested = request["tick"].as_u64().unwrap();
+        let duration = if index == 0 { 5 } else { durations[agent] };
+        let completion = start + duration;
+        assert_eq!(
+            result["service_starts"][index],
+            json!({"agent":agent,"tick":start,"request_tick":requested,
+                "wait_ticks":start-requested,"service_ticks":duration,
+                "scheduled_completion_tick":completion})
+        );
         assert_eq!(
             result["completions"][index],
-            json!({"agent":agent,"tick":tick})
+            json!({"agent":agent,"tick":completion})
         );
+        start = completion;
     }
     assert!(result["metadata"]["service_override_ticks"].is_null());
     payload["simulation_options"]["schedule"][1]["service_ticks"] = json!(4);

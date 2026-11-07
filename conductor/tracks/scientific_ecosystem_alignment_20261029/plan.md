@@ -3054,3 +3054,9 @@ the other competition models and installed binding checks remain open.
   Python 3.15.2, Julia and R agreed on the replay request and reproduced
   the full simulation result, including the wake at tick 6 and second
   completion at tick 12. Document replacement and pending-wake semantics.
+
+- [x] Trace Kairos service admissions with request time, queue wait,
+  assigned duration and scheduled completion. The scheduled-duration
+  fixture produced starts at ticks 1, 6 and 8 and waits of 0, 3 and 3
+  ticks. Python 3.15.2, Julia and R agreed exactly. All 26 Rust network
+  tests and focused Clippy passed.

@@ -796,6 +796,12 @@ A schedule entry can replace `retry` with a new delay and budget or set
 `"retry": null` to disable future retries. The budget counts retries already
 scheduled for each agent. A pending retry keeps its original wake tick.
 
+The `service_starts` trace records each admitted agent, admission tick,
+request tick, wait in ticks, assigned service duration and scheduled
+completion tick. A service that extends beyond the simulation horizon
+appears in this trace. The `completions` trace records observed completions
+through the horizon.
+
 
 A scheduled change can replace either Bass hazard coefficient using `p` or
 `q`. Values must be finite and nonnegative. The new coefficient applies
