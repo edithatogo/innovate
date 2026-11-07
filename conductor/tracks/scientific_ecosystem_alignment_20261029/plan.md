@@ -5494,3 +5494,10 @@ Hosted release readiness for this worktree revision remains open.
   (mean error 3.3803). The second arm deliberately has poor overlap.
   The mixture spread does not account for bias from poor overlap.
   General calibration and scientific acceptance remain open.
+
+- [x] Repeat the poor-overlap experiment using the true fixed control
+  predictions (twice each covariate value). Mean error fell from 3.3803
+  to -0.0334 over the same 500 replications. Fixed predictions are
+  deterministic offsets, so propagate each rematch's existing outcome
+  variance into its adjusted standard error and the adjusted mixture.
+  The analytic fixture verified adjusted spread 2. Ten causal tests passed.

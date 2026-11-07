@@ -1540,6 +1540,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     }
     let estimate = mean(&differences).ok_or(EMPTY_MATCH)?;
     let mut adjusted_estimate = control_predictions
+        .as_ref()
         .map(|predictions| {
             let adjusted: Vec<_> = pairs
                 .iter()
@@ -1622,6 +1623,12 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
             finite(error)
         })
         .transpose()?;
+    // Caller-supplied predictions are fixed offsets in the outcome contrast.
+    let adjusted_standard_error = if control_predictions.is_some() {
+        conditional_standard_error
+    } else {
+        adjusted_standard_error
+    };
     let uncertainty_model = outcome_variances
         .as_ref()
         .map(|_| match &covariance_factors {
@@ -2782,7 +2789,7 @@ mod tests {
             "outcomes": [0, 4, 2], "treatment": [0, 1, 0],
             "caliper": 0, "scores": [0, 0, 1],
             "score_draws": [[0, 0, 1], [1, 0, 0]],
-            "outcome_variances": [0, 1, 6]
+            "outcome_variances": [0, 1, 6], "control_predictions": [0, 0, 2]
         });
         let result = matched_treatment_contrast(&payload).unwrap();
         assert_eq!(result["estimate"].as_f64(), Some(4.));
@@ -2796,6 +2803,10 @@ mod tests {
             .as_f64()
             .unwrap();
         assert!((spread - 5_f64.sqrt()).abs() < 1e-14);
+        let adjusted_spread = result["score_sensitivity"]["adjusted_mixture_standard_deviation"]
+            .as_f64()
+            .unwrap();
+        assert!((adjusted_spread - 2.).abs() < 1e-14);
         assert_eq!(draws[1]["pairs"][0]["control_index"].as_u64(), Some(2));
     }
     #[test]
