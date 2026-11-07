@@ -4785,3 +4785,9 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Expose a Polars DataFrame and LazyFrame entry point for staggered
   ATT. The focused Python test verifies equality with the native column
   request, including labels and cohort-period results.
+
+- [x] Build a fresh macOS CPython 3.15 wheel with the Polars entry point.
+  Verified Python 3.15.2 imported both wrapper and extension from the
+  extracted wheel. All three focused panel tests passed, including eager
+  and lazy Polars frames. Extraction required reclaiming the local Python
+  build cache after the first attempt exhausted disk space.
