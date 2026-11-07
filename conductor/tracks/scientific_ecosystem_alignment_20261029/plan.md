@@ -6320,3 +6320,11 @@ Hosted release readiness for this worktree revision remains open.
   freedom for two clusters and explicit null without clustering,
   for both cross-fitted ATE and ATT. This complements the Python
   coverage-study readback.
+
+- [x] Stress-test cross-fitted intervals with treatment assigned to
+  entire clusters. With 80 equal clusters and stratum probabilities
+  0.2 and 0.8, two of 400 trials lacked a training arm. Among the
+  remaining 398, normal intervals covered in 384 ATE and 378 ATT
+  trials. ATE averaged 2.0322 against 2.0. ATT averaged 2.6754
+  against 2.6 and missed the prior 0.04 bias tolerance. Cluster-assigned
+  ATT point-estimate qualification remains open.

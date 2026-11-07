@@ -11,10 +11,13 @@ parser.add_argument("--clustered", action="store_true")
 parser.add_argument("--few-clusters", action="store_true", help="Compare normal and t(9) intervals")
 parser.add_argument("--weak-overlap", action="store_true")
 parser.add_argument("--minimum-training-arm-count", type=int, default=1)
+parser.add_argument("--cluster-assignment", action="store_true")
 args = parser.parse_args()
+if args.cluster_assignment and (args.few_clusters or args.weak_overlap):
+    parser.error("cluster assignment uses the 80-cluster design with good overlap")
 if args.minimum_training_arm_count < 1:
     parser.error("minimum training arm count must be positive")
-clustered = args.clustered or args.few_clusters
+clustered = args.clustered or args.few_clusters or args.cluster_assignment
 cluster_count = 10 if args.few_clusters else 80
 rng = Random(912)
 strata = ["low", "high"] * 400
@@ -26,9 +29,11 @@ if clustered:
 else:
     cluster_options = {}
 low_probability = 0.01 if args.weak_overlap else 0.2
-probabilities = [low_probability, 1 - low_probability] * 400
-baseline = [0.0, 4.0] * 400
-effects = [1.0, 3.0] * 400
+if args.cluster_assignment:
+    strata = ["high" if cluster % 2 else "low" for cluster in cluster_ids]
+probabilities = [low_probability if stratum == "low" else 1 - low_probability for stratum in strata]
+baseline = [0.0 if stratum == "low" else 4.0 for stratum in strata]
+effects = [1.0 if stratum == "low" else 3.0 for stratum in strata]
 methods = {"ate": 2.0, "att": 3 - 2 * low_probability}
 estimates = {key: [] for key in methods}
 covered = dict.fromkeys(methods, 0)
@@ -36,7 +41,11 @@ failed = dict.fromkeys(methods, 0)
 guarded = dict.fromkeys(methods, 0)
 covered_t = dict.fromkeys(methods, 0)
 for _ in range(400):
-    treatment = [int(rng.random() < p) for p in probabilities]
+    if args.cluster_assignment:
+        assigned = [int(rng.random() < p) for p in probabilities[:: len(strata) // cluster_count]]
+        treatment = [assigned[cluster] for cluster in cluster_ids]
+    else:
+        treatment = [int(rng.random() < p) for p in probabilities]
     if clustered:
         shocks = [rng.gauss(0, 2) for _ in range(cluster_count)]
         offsets = [shocks[cluster] for cluster in cluster_ids]
@@ -59,7 +68,7 @@ for _ in range(400):
                 **cluster_options,
             )["result"]["contrast"]
         except NativeError as error:
-            if args.weak_overlap and "requires both arms" in str(error):
+            if (args.weak_overlap or args.cluster_assignment) and "requires both arms" in str(error):
                 failed[key] += 1
             elif args.weak_overlap and "falls below minimum_training_arm_count" in str(error):
                 guarded[key] += 1
@@ -82,6 +91,9 @@ for key, truth in methods.items():
           f"missing-arm failures {failed[key]}/400, guard rejections {guarded[key]}/400")
     if args.weak_overlap:
         assert 0 < failed[key] < 400
+        continue
+    if args.cluster_assignment:
+        assert successful + failed[key] + guarded[key] == 400
         continue
     assert abs(average - truth) < 0.04
     if args.few_clusters:
