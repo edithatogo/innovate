@@ -3929,3 +3929,7 @@ Hosted release readiness for this worktree revision remains open.
   The Rust fit converged at local rank three and forecast nine later
   observations within one adoption unit of the analytic curve.
   All six fit-quality tests passed.
+- [x] Verify the perturbed Gompertz fit and saved-state holdout through
+  Python 3.15.2, Julia and installed R. All three converged with local
+  rank three and forecast all nine held-out values within one adoption
+  unit. Reused builds from 2a5d2c0e with identical runtime source.
