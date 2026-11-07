@@ -7143,3 +7143,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Run locked Clippy with warnings denied on the Rust core library
   and the native boundary, model oracle, Kairos network and historical
   Logistic test targets. All selected targets passed at 73863a7c.
+
+- [x] Check the local arm64 macOS Python wheel metadata and contents.
+  Twine and check-wheel-contents passed. The wheel includes the
+  native extension and Apache-2.0 licence, with Polars 2.1.0 as its
+  only base dependency. This is local artifact evidence.
