@@ -3965,3 +3965,17 @@ Hosted release readiness for this worktree revision remains open.
   and 40 using the same 64 trials. Case resampling covered 55, 57
   and 57 trials. Centered residual resampling covered 56, 57 and 55.
   All 64 intervals were available at each time with no forecast failures.
+
+## Kairos runtime boundary reconciliation
+
+- [x] Cross-check the imported Kairos plan against the active Rust
+  workspace at 86e00aed. The historical Python claim adapter and
+  bindings/rust manifest named by I01–I02 are absent from this branch.
+  Cargo resolves Kairos core, DES, ABM, RNG and types through
+  innovate-core at d56863505d938feb069af88a737eb7668113d14b.
+  Simulation and network code dispatch real scheduler or context
+  events and use the pinned deterministic streams. The locked Kairos
+  and network suites passed 10 and 29 tests, respectively.
+  Use the root workspace and these runtime tests when mapping the
+  imported acceptance criteria. Its remaining leaves retain their
+  dependency and ownership gates.
