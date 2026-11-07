@@ -819,7 +819,9 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
         .or_else(|| payload.get("model_kwargs"))
         .and_then(Value::as_object)
         .filter(|options| {
-            options.contains_key("event_candidates") || options.contains_key("launch_candidates")
+            options.contains_key("event_candidates")
+                || options.contains_key("event_override_candidates")
+                || options.contains_key("launch_candidates")
         })
     {
         return crate::historical::profile_event(request, options, &time, execute);

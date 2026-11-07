@@ -827,3 +827,28 @@ fn ecosystem_models_profile_parameter_event_times() {
         );
     }
 }
+
+#[test]
+fn lotka_volterra_profiles_event_time_and_override() {
+    let fixture: Value =
+        serde_json::from_str(include_str!("fixtures/ecosystem_events_scipy.json")).unwrap();
+    let case = &fixture["cases"]["lotka_volterra"];
+    let mut options = case["constructor_kwargs"].clone();
+    options["event_candidates"] = json!([2., 2.125]);
+    options["event_index"] = json!(0);
+    options["event_override_parameter"] = json!("alpha1");
+    options["event_override_candidates"] = json!([0.35, 0.4, 0.45]);
+    let result = KernelBinding::new().fit_model("lotka_volterra", json!({
+        "inputs":{"time":fixture["time"],"covariates":fixture["covariates"],"observed":case["rows"]},
+        "constructor_kwargs":options,
+        "fit_options":{"initial_parameters":case["parameters"],"max_iterations":200}
+    })).unwrap().result.unwrap();
+    assert_eq!(
+        result["state"]["constructor_kwargs"]["parameter_events"],
+        case["constructor_kwargs"]["parameter_events"]
+    );
+    let profile = &result["event_profile"];
+    assert_eq!(profile["override_parameter"], "alpha1");
+    assert_eq!(profile["candidates"].as_array().unwrap().len(), 6);
+    assert!(profile["candidates"][4]["objective"].as_f64().unwrap() < 1e-8);
+}

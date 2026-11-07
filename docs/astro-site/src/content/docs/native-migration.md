@@ -233,6 +233,13 @@ into `parameter_events`. The fitter varies that event's time while preserving
 its overrides and the other events. The selected event
 list is stored in the fitted state.
 
+To profile an existing override, add `event_override_parameter` and
+`event_override_candidates` alongside `event_index`. Supply a time list
+as well to fit the event time and override together. The fit evaluates
+at most 16 total combinations and records the winning override in
+the fitted event list. The optimizer diagnostics describe each
+conditional base fit. The profile records the override search.
+
 For successive-generation Norton–Bass, use `launch_candidates` with a
 zero-based `launch_index` greater than zero to profile one later launch.
 The selected launch is stored in `launch_times`, and the candidate

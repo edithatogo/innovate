@@ -515,7 +515,10 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
         .get("constructor_kwargs")
         .or_else(|| payload.get("model_kwargs"))
         .and_then(Value::as_object)
-        .filter(|options| options.contains_key("event_candidates"))
+        .filter(|options| {
+            options.contains_key("event_candidates")
+                || options.contains_key("event_override_candidates")
+        })
     {
         return crate::historical::profile_event(request, options, &time, execute);
     }

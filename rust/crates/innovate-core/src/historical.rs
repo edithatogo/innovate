@@ -470,6 +470,7 @@ pub(crate) fn profile_event(
     }
     let launch = options.contains_key("launch_candidates");
     let event = options.contains_key("event_candidates");
+    let override_profile = options.contains_key("event_override_candidates");
     let joint = launch && event;
     if launch && options.get("variant").and_then(Value::as_str) != Some("successive_generations") {
         return Err(error("launch profiling requires successive_generations"));
@@ -507,9 +508,16 @@ pub(crate) fn profile_event(
     } else {
         vec![None]
     };
-    let trials = launches.len() * events.len();
+    let overrides = if override_profile {
+        parse_times("event_override_candidates")?
+    } else {
+        vec![None]
+    };
+    let trials = launches.len() * events.len() * overrides.len();
     if trials > 16 {
-        return Err(error("joint profiling allows at most 16 candidate pairs"));
+        return Err(error(
+            "joint profiling allows at most 16 candidate combinations",
+        ));
     }
     let weights = crate::fitting::weights(request, time.len(), 6)?;
     let mut trial = request.clone();
@@ -534,7 +542,7 @@ pub(crate) fn profile_event(
     } else {
         None
     };
-    let event_index = if event
+    let event_index = if (event || override_profile)
         && matches!(
             request.model_key.as_deref(),
             Some(
@@ -561,19 +569,43 @@ pub(crate) fn profile_event(
     } else {
         None
     };
+    let override_parameter = if override_profile {
+        fixed.remove("event_override_candidates");
+        let name = fixed
+            .remove("event_override_parameter")
+            .and_then(|value| value.as_str().map(str::to_owned))
+            .ok_or_else(|| error("event_override_parameter is required"))?;
+        let index =
+            event_index.ok_or_else(|| error("override profiling requires an indexed event"))?;
+        if fixed["parameter_events"][index]["parameters"]
+            .get(&name)
+            .is_none()
+        {
+            return Err(error(
+                "event_override_parameter must select an existing override",
+            ));
+        }
+        Some(name)
+    } else {
+        None
+    };
     let mut profile = Vec::with_capacity(trials);
     let mut best = None;
     let mut best_score = f64::INFINITY;
     let pairs = launches
         .into_iter()
         .flat_map(|launch| events.iter().map(move |event| (launch, *event)));
-    for (launch_time, event_time) in pairs {
+    let candidates = pairs.flat_map(|pair| overrides.iter().map(move |value| (pair, *value)));
+    for ((launch_time, event_time), override_value) in candidates {
         let mut row = Map::new();
         if let Some(t) = launch_time {
             row.insert("launch_time".into(), json!(t));
         }
         if let Some(t) = event_time {
             row.insert("t_event".into(), json!(t));
+        }
+        if let Some(value) = override_value {
+            row.insert("override_value".into(), json!(value));
         }
         let mut insufficient_weight = false;
         for time_candidate in [launch_time, event_time].into_iter().flatten() {
@@ -612,6 +644,12 @@ pub(crate) fn profile_event(
                 fixed.insert("t_event".into(), json!(t));
             }
         }
+        if let Some((name, value)) = override_parameter.as_ref().zip(override_value) {
+            let index = event_index.expect("validated override event");
+            fixed
+                .get_mut("parameter_events")
+                .expect("validated event list")[index]["parameters"][name] = json!(value);
+        }
         trial.payload["constructor_kwargs"] = json!(fixed);
         match fit(&trial) {
             Ok(response) => {
@@ -646,6 +684,12 @@ pub(crate) fn profile_event(
     }
     if let Some(index) = launch_index {
         response.result.as_mut().expect("fit result")[profile_key]["launch_index"] = json!(index);
+    }
+    if let Some(name) = override_parameter {
+        response.result.as_mut().expect("fit result")[profile_key]["override_parameter"] =
+            json!(name);
+        response.result.as_mut().expect("fit result")[profile_key]["tie_break"] =
+            json!("earliest_launch_then_event_then_lowest_override");
     }
     Ok(response)
 }

@@ -3179,3 +3179,9 @@ the other competition models and installed binding checks remain open.
   cases, recovering the first event at 2.125 while retaining the
   other event. Winning residual sums of squares were below 7e-18.
   The focused Rust test and Clippy passed. Overrides are held fixed.
+
+- [x] Profile one existing indexed event override at fixed or candidate
+  event times. The six-combination Lotka–Volterra fixture recovered
+  time 2.125 and alpha1 override 0.4 with RSS 2.26e-20. Python 3.15.2,
+  Julia and R agreed exactly. The focused Rust regression and Clippy
+  passed. Continuous override estimation and uncertainty remain open.
