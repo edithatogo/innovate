@@ -5919,3 +5919,8 @@ Hosted release readiness for this worktree revision remains open.
   tick difference to floating point would change its value. The Rust
   unit fixture covered both signs around 2^53 and retained exactly
   representable effects above that threshold. Seven scenario tests passed.
+
+- [x] Advertise the 14 accepted paired resource ensemble metric keys in
+  network scenario discovery. Discovery and pairwise aggregation share
+  the field definitions. The Rust boundary test verifies the exact
+  prefixed keys, and all 13 scenario-filtered boundary tests pass.

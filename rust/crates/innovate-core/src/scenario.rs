@@ -983,6 +983,27 @@ fn compare_paths(
     Ok(result)
 }
 
+const RESOURCE_TOTAL_FIELDS: &[&str] = &[
+    "occupied_slot_ticks",
+    "configured_slot_ticks",
+    "idle_slot_ticks",
+    "over_capacity_slot_ticks",
+    "admitted_wait_ticks",
+    "abandoned_wait_ticks",
+    "pending_wait_ticks",
+    "peak_queue_length",
+    "peak_in_service",
+];
+const RESOURCE_TRACE_FIELDS: &[(&str, &str)] = &[
+    ("completions", "completed_services"),
+    ("balks", "balked_requests"),
+    ("abandonments", "abandoned_requests"),
+];
+const RESOURCE_TERMINAL_FIELDS: &[(&str, &str)] = &[
+    ("queue_length", "waiting_at_horizon"),
+    ("in_service", "in_service_at_horizon"),
+];
+
 fn compare_resource_totals(baseline: &Value, alternative: &Value) -> Result<Value, &'static str> {
     let baseline_metrics = &baseline["resource_metrics"];
     let alternative_metrics = &alternative["resource_metrics"];
@@ -997,25 +1018,11 @@ fn compare_resource_totals(baseline: &Value, alternative: &Value) -> Result<Valu
     }
     let mut result = json!({"ticks_per_unit":ticks_per_unit,
         "horizon_ticks":baseline_metrics["horizon_ticks"]});
-    for key in [
-        "occupied_slot_ticks",
-        "configured_slot_ticks",
-        "idle_slot_ticks",
-        "over_capacity_slot_ticks",
-        "admitted_wait_ticks",
-        "abandoned_wait_ticks",
-        "pending_wait_ticks",
-        "peak_queue_length",
-        "peak_in_service",
-    ] {
+    for &key in RESOURCE_TOTAL_FIELDS {
         let read = |metrics: &Value| metrics[key].as_i64().ok_or("invalid resource metric");
         result[key] = json!(read(alternative_metrics)? - read(baseline_metrics)?);
     }
-    for (field, metric) in [
-        ("completions", "completed_services"),
-        ("balks", "balked_requests"),
-        ("abandonments", "abandoned_requests"),
-    ] {
+    for &(field, metric) in RESOURCE_TRACE_FIELDS {
         let count = |outcome: &Value| {
             outcome[field]
                 .as_array()
@@ -1024,10 +1031,7 @@ fn compare_resource_totals(baseline: &Value, alternative: &Value) -> Result<Valu
         };
         result[metric] = json!(count(alternative)? - count(baseline)?);
     }
-    for (field, metric) in [
-        ("queue_length", "waiting_at_horizon"),
-        ("in_service", "in_service_at_horizon"),
-    ] {
+    for &(field, metric) in RESOURCE_TERMINAL_FIELDS {
         let count = |outcome: &Value| {
             outcome["metadata"][field]
                 .as_i64()
@@ -1551,6 +1555,9 @@ pub(crate) fn discover(request: &Value) -> Value {
                 capability["resource_comparison"] = json!({
                     "option":"compare_resources","engine":"kairos_network",
                     "ensemble_evaluation_metric":"resource.<metric>",
+                    "ensemble_metrics":RESOURCE_TOTAL_FIELDS.iter().copied()
+                        .chain(RESOURCE_TRACE_FIELDS.iter().chain(RESOURCE_TERMINAL_FIELDS).map(|&(_, metric)| metric))
+                        .map(|metric| format!("resource.{metric}")).collect::<Vec<_>>(),
                     "difference":"alternative_minus_baseline",
                     "requires":["shared_observation_grid","shared_tick_resolution","shared_horizon"]
                 });

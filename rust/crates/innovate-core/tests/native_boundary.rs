@@ -2060,6 +2060,25 @@ fn scenario_discovery_lists_and_resolves_native_families() {
     );
     assert!(rows[2].get("checkpoint_resume").is_none());
     assert!(rows[0].get("resource_comparison").is_none());
+    assert_eq!(
+        rows[4]["resource_comparison"]["ensemble_metrics"],
+        json!([
+            "resource.occupied_slot_ticks",
+            "resource.configured_slot_ticks",
+            "resource.idle_slot_ticks",
+            "resource.over_capacity_slot_ticks",
+            "resource.admitted_wait_ticks",
+            "resource.abandoned_wait_ticks",
+            "resource.pending_wait_ticks",
+            "resource.peak_queue_length",
+            "resource.peak_in_service",
+            "resource.completed_services",
+            "resource.balked_requests",
+            "resource.abandoned_requests",
+            "resource.waiting_at_horizon",
+            "resource.in_service_at_horizon"
+        ])
+    );
     let keys: Vec<_> = rows
         .iter()
         .map(|row| row["key"].as_str().unwrap())
