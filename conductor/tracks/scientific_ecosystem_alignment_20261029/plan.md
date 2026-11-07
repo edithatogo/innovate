@@ -1985,3 +1985,12 @@ the other competition models and installed binding checks remain open.
   Python 3.15, Julia and installed R agreed on [-6.25, 31.25] for the
   two-pair analytic fixture. All 37 boundary tests and focused Clippy passed.
 - [ ] Qualify stochastic ensemble design and sampling-based inference.
+
+- [x] Qualify a seeded Kairos ABM scenario ensemble against the
+  innovation-only binomial mean (15b8ee5f). For 128 pairs of 100 agents,
+  the observed mean final effect was 63.25 versus the analytic 63.21.
+  Serial and four-worker Rust responses were identical. Python 3.15,
+  Julia and installed R reproduced every paired difference and both
+  empirical bounds (approximately 56 to 73). The R comparison used
+  17-digit formatting to preserve decoded numeric precision.
+  All 10 Kairos tests and focused Clippy passed.
