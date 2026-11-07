@@ -2783,3 +2783,8 @@ the other competition models and installed binding checks remain open.
   validate the four historical extension points, and reject duplicate
   names in a submitted registry. Focused Rust and Clippy passed.
   Persistent registration and installed binding checks remain open.
+
+- [x] Qualify native extension manifest validation in the rebuilt
+  Python 3.15 wheel, Julia and installed R. All three returned identical
+  normalized manifests, including the provisional tier and empty requires
+  array. R used the raw JSON entry point. Registry lifecycle remains open.
