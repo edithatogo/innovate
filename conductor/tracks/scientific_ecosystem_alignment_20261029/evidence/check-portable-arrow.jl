@@ -1,11 +1,16 @@
-using Arrow, Innovate, Test
+using Arrow, Test
 
-length(ARGS) == 2 || error("Supply a Polars IPC file and an equivalent IPC stream")
-source, stream = read.(ARGS)
+direct = length(ARGS) == 3 && ARGS[1] == "--direct"
+(direct || length(ARGS) == 2) ||
+    error("Usage: check-portable-arrow.jl [--direct] FILE STREAM")
+source, stream = read.(ARGS[end-1:end])
+if !direct
+    using Innovate
+end
 
 @testset "Portable Polars IPC handoff" begin
     expected = Arrow.Table(stream)
-    portable = Arrow.Table(export_ipc_file(source))
+    portable = Arrow.Table(direct ? source : export_ipc_file(source))
     columns = propertynames(expected)
     @test !isempty(columns)
     @test propertynames(portable) == columns

@@ -6088,3 +6088,10 @@ Hosted release readiness for this worktree revision remains open.
   Unicode provenance key from each file exported through Python, Julia
   and R, with the expected IDs and nullable values. Released Arrow.jl
   file metadata readback remains open.
+
+- [x] Add a direct mode to the reproducible Julia IPC checker. Generate
+  the nested fixture with generate-portable-arrow.py and run
+  check-portable-arrow.jl --direct FILE STREAM under the candidate or
+  released Arrow.jl environment. The 3.0 candidate passed all eight
+  checks, and released 2.8.1 failed the column-name comparison. The
+  default native rewrite mode passed all eight checks on 2.8.1.
