@@ -7106,3 +7106,8 @@ Hosted release readiness for this worktree revision remains open.
   checkout target cache, so this verifies source archive consumption
   with cached build dependencies. A cold build and hosted checks
   remain separate.
+
+- [x] Run the locked Rust native boundary and remote-worker suites
+  from the extracted Maturin source archive on arm64 macOS. All 91
+  boundary and four worker tests passed. The command reused the
+  checkout target cache. Hosted Linux and cold-build checks remain open.
