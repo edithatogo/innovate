@@ -5506,3 +5506,15 @@ Hosted release readiness for this worktree revision remains open.
   Julia and installed R. Each returned adjusted mixture spread 2
   and unadjusted spread sqrt(5). Focused refit, insufficient-draw
   and seeded bootstrap checks also passed in all three consumers.
+
+- [x] Measure coverage with independently estimated control predictions.
+  Repeat the 500 slope-2 replications above using the same evaluation
+  outcomes and score seeds. For each replication fit an intercept and
+  slope to four independent control outcomes at covariates [0,1,2,3],
+  generated with slope 2 and unit Gaussian noise from random.Random(122).
+  Use the fitted slope times evaluation covariate as the prediction
+  because the common intercept cancels. With intervals centered on the
+  mean adjusted effect and half-width 1.96 times adjusted mixture spread,
+  true predictions covered 477/500 (mean error -0.0334). Estimated
+  predictions treated as fixed covered 451/500 (mean error -0.0202).
+  Propagation of prediction-fit covariance remains open.
