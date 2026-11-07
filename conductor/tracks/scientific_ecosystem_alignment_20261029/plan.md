@@ -5889,3 +5889,8 @@ Hosted release readiness for this worktree revision remains open.
   configured slot differences of -3 and -3 with zero standard error.
   All 13 focused scenario boundary tests passed. Binding and broader
   stochastic resource qualification remain open.
+
+- [x] Verify the paired configured-slot ensemble through rebuilt
+  Python, Julia and freshly installed R. Each returned differences
+  [-3,-3], zero standard error and an 11-tick horizon using the
+  same four scenarios and two distinct matched seeds.
