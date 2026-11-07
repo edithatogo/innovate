@@ -1634,4 +1634,6 @@ the other competition models and installed binding checks remain open.
   score is retained. Compared groups require at least two observations.
   The analytic fixture verifies the pooled variance and threshold
   counts. All 24 Rust boundary tests and focused Clippy passed.
-- [ ] Verify covariate balance through installed Python, Julia and R.
+- [x] Verify covariate balance through the rebuilt Python wheel, Julia
+  and installed R. All three matched the analytic pooled SMD within
+  1e-12 and identified one of two covariates as balanced.
