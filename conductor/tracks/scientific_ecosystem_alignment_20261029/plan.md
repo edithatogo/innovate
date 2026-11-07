@@ -6824,3 +6824,8 @@ Hosted release readiness for this worktree revision remains open.
   preserves IDs, timestamps and rates on both fixtures. The first
   link ran out of disk space. Reclaimed the discarded experimental
   Logistic wheel and extension, then reran successfully.
+
+- [x] Compare native adopter categories with an exact rational oracle
+  for the historical weighted-moment rule at 8,192 timestamps across
+  512 seeded irregular grids. All labels matched through the Python
+  wheel. The three focused adopter tests passed.

@@ -6,6 +6,7 @@ import json
 import math
 import random
 import struct
+from fractions import Fraction
 from pathlib import Path
 
 import polars as pl
@@ -1752,6 +1753,33 @@ def test_adopter_classification_preserves_irregular_time_grids():
         assert result["time"] == time
         assert result["adoption_rate"] == rates
         assert result["category"] == categories
+
+
+def test_adopter_classification_matches_exact_weighted_moments():
+    rng = random.Random(401)
+    for trial in range(512):
+        time = sorted(rng.sample(range(-300, 301), 16))
+        rates = [rng.randrange(31) for _ in time]
+        total = sum(rates)
+        mean = Fraction(sum(t * w for t, w in zip(time, rates, strict=True)), total)
+        variance = sum((t - mean) ** 2 * w for t, w in zip(time, rates, strict=True)) / total
+
+        expected = []
+        for t in time:
+            delta = t - mean
+            squared = delta**2
+            if delta <= 0 and squared >= 4 * variance:
+                expected.append("Innovators")
+            elif delta <= 0 and squared >= variance:
+                expected.append("Early Adopters")
+            elif delta <= 0:
+                expected.append("Early Majority")
+            elif squared <= variance:
+                expected.append("Late Majority")
+            else:
+                expected.append("Laggards")
+        result = innovate.execute("categorize_adopters", time=time, adoption_rate=rates)["result"]
+        assert result["category"] == expected, trial
 
 
 def test_kairos_tick_checkpoint_resume():
