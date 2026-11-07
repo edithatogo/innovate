@@ -5581,3 +5581,9 @@ Hosted release readiness for this worktree revision remains open.
   scores and places for all three scenarios. All 13 focused scenario
   tests passed. Direct untouched Polars file readback in Arrow.jl
   remains open alongside the existing native rewrite path.
+
+- [x] Preserve finite adoption areas when midpoint terms would
+  individually underflow or the raw time span would overflow. This
+  calculation is shared by scenario ranking and ensemble comparison.
+  The Rust fixture also verified rejection of an unrepresentable area.
+  Six scenario unit tests and 13 scenario boundary tests passed.

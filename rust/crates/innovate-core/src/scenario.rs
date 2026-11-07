@@ -1059,7 +1059,18 @@ fn threshold_fraction(lower: f64, threshold: f64, upper: f64) -> f64 {
 
 #[cfg(test)]
 mod tests {
-    use super::{centered_offsets, ensemble_moments, exact_sign_flip, threshold_fraction};
+    use super::{
+        adoption_area, centered_offsets, ensemble_moments, exact_sign_flip, threshold_fraction,
+    };
+
+    #[test]
+    fn adoption_area_preserves_finite_extreme_trapezoids() {
+        let tiny = f64::from_bits(1);
+        assert_eq!(adoption_area(&[0., 1.], &[tiny, tiny]), Ok(tiny));
+        let result = adoption_area(&[-f64::MAX, f64::MAX], &[0.25, 0.25]);
+        assert_eq!(result, Ok(f64::MAX * 0.5));
+        assert!(adoption_area(&[-f64::MAX, f64::MAX], &[1., 1.]).is_err());
+    }
 
     #[test]
     fn ensemble_standard_error_resolves_adjacent_effects() {
@@ -1128,7 +1139,20 @@ fn adoption_area(time: &[f64], values: &[f64]) -> Result<f64, &'static str> {
     let area = time
         .windows(2)
         .zip(values.windows(2))
-        .map(|(t, y)| (t[1] - t[0]) * (0.5 * y[0] + 0.5 * y[1]))
+        .map(|(t, y)| {
+            let sum = y[0] + y[1];
+            let height = if sum.is_finite() {
+                sum * 0.5
+            } else {
+                0.5 * y[0] + 0.5 * y[1]
+            };
+            let width = t[1] - t[0];
+            if width.is_finite() {
+                width * height
+            } else {
+                t[1] * height - t[0] * height
+            }
+        })
         .sum::<f64>();
     area.is_finite()
         .then_some(area)
