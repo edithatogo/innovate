@@ -6688,3 +6688,9 @@ Hosted release readiness for this worktree revision remains open.
   fixture through Python 3.15.2, Julia and installed R. Each matched
   693 complete resumed results against uninterrupted runs. Reused
   the 4947d6b4 builds after confirming unchanged native build inputs.
+
+- [x] Check Kairos resource accounting against a tick-by-tick oracle.
+  Reconstruct active slots from service-start intervals and configured
+  slots from the fixture schedule. Occupied, idle, configured and
+  over-capacity slot ticks matched for all 32 seeds at three horizons
+  (96 runs). The focused Rust network test passed.

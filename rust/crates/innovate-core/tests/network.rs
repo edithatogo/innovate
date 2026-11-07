@@ -1049,7 +1049,10 @@ fn network_checkpoint_continues_continuous_hazard_forcing() {
                 let mut request = payload.clone();
                 request["simulation_options"][option] = json!(boundary);
                 let paused = run(request.clone());
-                assert_eq!(paused["status"], "paused", "seed {seed}, {option}={boundary}");
+                assert_eq!(
+                    paused["status"], "paused",
+                    "seed {seed}, {option}={boundary}"
+                );
                 request["simulation_options"]
                     .as_object_mut()
                     .unwrap()
@@ -1125,6 +1128,36 @@ fn scheduled_resource_slot_ticks_balance_across_seeds() {
             };
             let pending = result["metadata"]["queue_length"].as_u64().unwrap();
             let metrics = &result["resource_metrics"];
+            let mut configured = 0;
+            let mut occupied = 0;
+            let mut idle = 0;
+            let mut over_capacity = 0;
+            for tick in 0..horizon {
+                let capacity: u64 = if (7..12).contains(&tick) { 1 } else { 2 };
+                let active = trace("service_starts")
+                    .iter()
+                    .filter(|start| {
+                        start["tick"].as_u64().unwrap() <= tick
+                            && tick < start["scheduled_completion_tick"].as_u64().unwrap()
+                    })
+                    .count() as u64;
+                configured += capacity;
+                occupied += active;
+                idle += capacity.saturating_sub(active);
+                over_capacity += active.saturating_sub(capacity);
+            }
+            for (key, expected) in [
+                ("configured_slot_ticks", configured),
+                ("occupied_slot_ticks", occupied),
+                ("idle_slot_ticks", idle),
+                ("over_capacity_slot_ticks", over_capacity),
+            ] {
+                assert_eq!(
+                    metrics[key], expected,
+                    "seed {seed}, horizon {horizon}: {key}"
+                );
+            }
+
             let waits: u64 = [
                 "admitted_wait_ticks",
                 "abandoned_wait_ticks",
