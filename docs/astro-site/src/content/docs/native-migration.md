@@ -1260,6 +1260,22 @@ version, and native extension digest. The worker budget applies per rank. Local 
 qualified both fast and scheduled case selections. Multi-node
 execution and scheduler allocation still require qualification.
 
+## Comparing Kairos resource use
+
+Add a pair like this to an `execute_scenario_grid` request with two
+successful Kairos network scenarios.
+
+```json
+{"baseline": "base", "alternative": "closed", "compare_resources": true}
+```
+
+The pair must share an observation grid, tick resolution and horizon.
+`result.resource_differences` reports alternative minus baseline for
+configured, occupied, idle and over-capacity slot-ticks and for admitted,
+abandoned and pending wait ticks. The object also reports the shared
+`ticks_per_unit` and `horizon_ticks`. A mismatch returns
+`invalid_comparison` for that pair while retaining the scenario executions.
+
 ## Exact sign-flip inference for paired scenarios
 
 Add this comparison to the `comparisons` array in an

@@ -4220,3 +4220,6 @@ Hosted release readiness for this worktree revision remains open.
   configured-capacity difference of minus three slot-ticks and
   rejected unequal tick resolutions while retaining all executions.
   Python Arrow readback preserved both comparison statuses.
+- [x] Document the opt-in Kairos resource comparison and signed units
+  in the native guide. The documented pair ran through the installed
+  wheel and returned the verified minus-three configured slot-ticks.
