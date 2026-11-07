@@ -3332,3 +3332,7 @@ the other competition models and installed binding checks remain open.
   recorded 14.06 s and 66,322,432 bytes, and 9.25 s and 66,895,872 bytes,
   respectively. These are individual local observations. Scheduler and
   accelerator comparisons remain open.
+
+- [x] Run the full locked Rust workspace suite at `c68ac300`. All 254
+  tests passed across the core, FFI and Polars crates. This verifies
+  the local workspace suite. The release acceptance gates remain open.
