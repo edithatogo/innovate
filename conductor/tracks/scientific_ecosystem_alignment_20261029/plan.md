@@ -4725,3 +4725,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify staggered event-time aggregation through rebuilt Python
   3.15.2, Julia and installed R. Each recovered 8/3 for unequal cohort
   sizes and preserved unsupported cohort counts and null estimates.
+
+- [x] Report event-time standard errors that account for reused units.
+  The Rust fixture verifies the shared-control covariance contribution
+  and null for singleton arms. Binding and simultaneous inference remain open.

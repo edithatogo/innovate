@@ -391,7 +391,7 @@ fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
         return Err("staggered ATT requires at least one adoption cohort");
     }
     let mut contrasts = Vec::new();
-    let mut by_offset = std::collections::BTreeMap::<usize, Vec<(Option<f64>, usize)>>::new();
+    let mut by_offset = std::collections::BTreeMap::<usize, Vec<_>>::new();
     for cohort in cohorts {
         let baseline = cohort - 1;
         for period in cohort..periods.len() {
@@ -405,10 +405,12 @@ fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
                 }
             }
             let (estimate, error) = independent_change_contrast(&treated, &control)?;
-            by_offset
-                .entry(period - cohort)
-                .or_default()
-                .push((estimate, treated.len()));
+            by_offset.entry(period - cohort).or_default().push((
+                estimate,
+                treated.len(),
+                cohort,
+                control.len(),
+            ));
             contrasts.push(
                 json!({"cohort_period":periods[cohort],"period":periods[period],
                 "baseline_period":periods[baseline],"estimate":estimate,"standard_error":error,
@@ -420,25 +422,66 @@ fn staggered_panel_att(payload: &Value) -> Result<Value, &'static str> {
     for (period_offset, rows) in by_offset {
         let supported_units: usize = rows
             .iter()
-            .filter(|(estimate, _)| estimate.is_some())
-            .map(|(_, count)| count)
+            .filter(|(estimate, ..)| estimate.is_some())
+            .map(|(_, count, ..)| count)
             .sum();
         let supported_cohorts = rows
             .iter()
-            .filter(|(estimate, _)| estimate.is_some())
+            .filter(|(estimate, ..)| estimate.is_some())
             .count();
         let estimate = (supported_units > 0)
             .then(|| {
                 finite(
                     rows.iter()
-                        .filter_map(|(estimate, count)| {
+                        .filter_map(|(estimate, count, ..)| {
                             estimate.map(|value| value * (*count as f64 / supported_units as f64))
                         })
                         .sum(),
                 )
             })
             .transpose()?;
+        let standard_error = if supported_cohorts > 0
+            && rows.iter().all(|&(estimate, treated, _, control)| {
+                estimate.is_none() || (treated > 1 && control > 1)
+            }) {
+            let mut influence = vec![0.; outcomes.len()];
+            for &(_, treated, cohort, control) in
+                rows.iter().filter(|(estimate, ..)| estimate.is_some())
+            {
+                let period = cohort + period_offset;
+                let baseline = cohort - 1;
+                for (is_treated, count, sign) in [(true, treated, 1.), (false, control, -1.)] {
+                    let members: Vec<_> = adoption
+                        .iter()
+                        .enumerate()
+                        .filter(|&(_, &index)| {
+                            if is_treated {
+                                index == Some(cohort)
+                            } else {
+                                index.is_none_or(|index| index > period)
+                            }
+                        })
+                        .map(|(i, _)| i)
+                        .collect();
+                    let changes: Vec<_> = members
+                        .iter()
+                        .map(|&i| outcomes[i][period] - outcomes[i][baseline])
+                        .collect();
+                    let center = mean(&changes).unwrap();
+                    let count = count as f64;
+                    let scale = sign * (treated as f64 / supported_units as f64)
+                        / (count * (count - 1.)).sqrt();
+                    for (&i, change) in members.iter().zip(changes) {
+                        influence[i] += scale * change - scale * center;
+                    }
+                }
+            }
+            Some(finite(influence.into_iter().fold(0_f64, f64::hypot))?)
+        } else {
+            None
+        };
         event_time.push(json!({"period_offset":period_offset,"supported_cohort_att":estimate,
+            "standard_error":standard_error,
             "supported_cohorts":supported_cohorts,"unsupported_cohorts":rows.len()-supported_cohorts,
             "supported_treated_units":supported_units}));
     }

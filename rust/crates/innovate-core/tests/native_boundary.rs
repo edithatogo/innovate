@@ -715,6 +715,15 @@ fn causal_summaries_match_analytic_effects() {
     let row = &replicated["result"]["contrasts"][0];
     let onset = &replicated["result"]["event_time"][0];
     assert_eq!(onset["supported_treated_units"], 3);
+    assert_eq!(onset.get("standard_error"), Some(&json!(null)));
+    let shared = run(json!({"method":"staggered_panel_att","periods":[0,1,2],
+        "outcomes":[[0,5,5],[0,5,5],[0,1,6],[0,1,6],[0,0,0],[0,2,4]],
+        "adoption_indices":[1,1,2,2,null,null]}));
+    let se = shared["result"]["event_time"][0]["standard_error"]
+        .as_f64()
+        .unwrap();
+    let expected = (1. / 48_f64.sqrt() + 1. / 8_f64.sqrt()) * 2_f64.sqrt();
+    assert!((se - expected).abs() < 1e-12);
     assert!((onset["supported_cohort_att"].as_f64().unwrap() - 8. / 3.).abs() < 1e-12);
     assert_eq!(row["estimate"], 4.);
     assert!((row["standard_error"].as_f64().unwrap() - 1.).abs() < 1e-12);

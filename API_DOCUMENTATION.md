@@ -363,3 +363,9 @@ observed period steps since adoption. It weights supported cohorts
 by their treated counts and reports how many cohorts lack controls.
 A step with no supported cohorts has a null estimate. The summary
 does not report joint uncertainty across cohort-period estimates.
+
+Each event-time row also reports a pointwise standard error for
+independent units and fixed cohort weights. Contributions from the
+same unit are summed before squaring, including when a unit appears
+in multiple comparison sets. The standard error is null if any
+contributing cohort has a singleton arm.
