@@ -1732,3 +1732,10 @@ the other competition models and installed binding checks remain open.
   percentiles. Fewer than two valid draws produce null interval bounds.
   The seeded fixture verifies replay, draw accounting and the analytic
   interval. All 24 native boundary tests and focused Clippy passed.
+
+- [x] Restore intervention contracts with comparator, timing, rollout
+  and spillover fields. The validator rejects reversed times and an
+  outcome window ending before intervention, including at start zero.
+  All 24 Rust boundary tests and focused Clippy passed.
+- [ ] Restore causal model contract checks and qualify the policy
+  contracts in installed consumers.

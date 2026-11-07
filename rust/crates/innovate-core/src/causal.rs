@@ -280,6 +280,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
             Ok(json!({"assumption":assumption,"markdown":markdown}))
         }
         Some("treatment_contrast") => treatment_contrast(payload),
+        Some("intervention_contract") => intervention_contract(payload),
         Some("release_evidence") => release_evidence(payload),
         Some("covariate_balance") => covariate_balance(payload),
         _ => Err("unknown causal summary method"),
@@ -679,4 +680,51 @@ fn bootstrap_contrast(
         "valid_draws":estimates.len(),"empty_arm_draws":draws - estimates.len(),
         "confidence":confidence,"ci_lower":percentile(tail)?,
         "ci_upper":percentile(1. - tail)?}))
+}
+
+#[derive(Deserialize, Serialize)]
+struct InterventionContract {
+    name: String,
+    timing: String,
+    comparator: String,
+    start_time: Option<i64>,
+    end_time: Option<i64>,
+    rollout_schedule: Option<std::collections::BTreeMap<String, f64>>,
+    spillover_regions: Option<Vec<String>>,
+    spillover_strength: Option<f64>,
+}
+
+fn intervention_contract(payload: &Value) -> Result<Value, &'static str> {
+    let contract: InterventionContract = serde_json::from_value(payload.clone())
+        .map_err(|_| "invalid intervention contract fields")?;
+    if contract.name.trim().is_empty() || contract.comparator.trim().is_empty() {
+        return Err("intervention requires a name and comparator");
+    }
+    if !matches!(
+        contract.timing.as_str(),
+        "post" | "pre" | "staggered" | "event-study"
+    ) {
+        return Err("unsupported intervention timing");
+    }
+    if contract
+        .start_time
+        .zip(contract.end_time)
+        .is_some_and(|(start, end)| start > end)
+    {
+        return Err("intervention times must be ordered");
+    }
+    if contract
+        .spillover_strength
+        .is_some_and(|value| !(0. ..=1.).contains(&value))
+    {
+        return Err("spillover strength must be between zero and one");
+    }
+    if let Some(window) = payload.get("outcome_window") {
+        let [start, end]: [i64; 2] = serde_json::from_value(window.clone())
+            .map_err(|_| "outcome_window must contain two integers")?;
+        if start > end || contract.start_time.is_some_and(|time| end < time) {
+            return Err("outcome window is reversed or ends before intervention");
+        }
+    }
+    Ok(json!(contract))
 }

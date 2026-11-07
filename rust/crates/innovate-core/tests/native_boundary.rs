@@ -538,6 +538,15 @@ fn causal_summaries_match_analytic_effects() {
     let discarded = draws["empty_arm_draws"].as_u64().unwrap();
     assert!(discarded > 0);
     assert_eq!(discarded + draws["valid_draws"].as_u64().unwrap(), 100);
+    let mut intervention = json!({"method":"intervention_contract","name":"Pilot",
+        "timing":"staggered","comparator":"control","start_time":0,"end_time":4,
+        "outcome_window":[-1,4],"rollout_schedule":{"region_a":1},"spillover_strength":0.2});
+    assert_eq!(
+        run(intervention.clone())["result"]["rollout_schedule"]["region_a"],
+        1.
+    );
+    intervention["outcome_window"] = json!([-3, -1]);
+    assert_eq!(run(intervention)["error"]["code"], "invalid_request");
     let risk = run(json!({"method":"e_value","point_estimate":0.5}));
     assert!((risk["result"]["e_value"].as_f64().unwrap() - (2. + 2_f64.sqrt())).abs() < 1e-12);
     let sensitivity = run(json!({"method":"sensitivity_scenario","point_estimate":10,
