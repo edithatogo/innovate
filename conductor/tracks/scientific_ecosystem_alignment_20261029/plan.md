@@ -7139,3 +7139,7 @@ Hosted release readiness for this worktree revision remains open.
   A bare local invocation could not resolve Polars. The explicit
   interpreter produced zero errors and one native-extension source
   warning. CI now passes the uv interpreter explicitly. Actionlint passed.
+
+- [x] Run locked Clippy with warnings denied on the Rust core library
+  and the native boundary, model oracle, Kairos network and historical
+  Logistic test targets. All selected targets passed at 73863a7c.
