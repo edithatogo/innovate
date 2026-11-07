@@ -997,3 +997,13 @@ the other competition models and installed binding checks remain open.
   independent held-out forecast within 1e-5. The focused runs reuse
   the installed builds from the complementary-goods checkpoint.
   [Validation logs](evidence/lotka-automatic-starts-20261107).
+
+- [x] Isolate automatic-start termination from held-out forecast accuracy.
+  At 500 iterations both fixtures still report the iteration limit. Lock-in
+  reaches the existing 1e-3 forecast tolerance (maximum error 5.06e-4),
+  while multi-product misses it (maximum error 0.1383) despite low training
+  RSS. These results were obtained through the installed Python native API
+  with the checked-in independent fixtures and no explicit starting values.
+  The convergence and forecast gates remain open. Keep the current defaults
+  and tolerances while improving initialization or optimizer behavior.
+  [Reproduction and results](evidence/competition-start-diagnostics-20261107).

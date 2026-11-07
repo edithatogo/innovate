@@ -1,0 +1,16 @@
+{
+  "model": "multi_product",
+  "optimizer": {
+    "converged": false,
+    "gradient_max_abs": 2.2117572466854143e-06,
+    "interpretation": "numerical termination only; not a global optimum or statistical acceptance",
+    "iterations": 500,
+    "max_iterations": 500,
+    "method": "deterministic_multistart_damped_least_squares",
+    "scaled_rss": 3.1084680072397104e-10,
+    "starts": 3,
+    "termination": "iteration_limit"
+  },
+  "rss": 3.3208889903625834e-06,
+  "forecast_max_absolute_error": 0.13829088222495045
+}

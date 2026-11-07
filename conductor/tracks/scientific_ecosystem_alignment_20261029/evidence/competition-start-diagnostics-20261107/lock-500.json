@@ -1,0 +1,16 @@
+{
+  "model": "lock_in",
+  "optimizer": {
+    "converged": false,
+    "gradient_max_abs": 1.175985871503378e-06,
+    "interpretation": "numerical termination only; not a global optimum or statistical acceptance",
+    "iterations": 500,
+    "max_iterations": 500,
+    "method": "deterministic_multistart_damped_least_squares",
+    "scaled_rss": 4.617264528362309e-13,
+    "starts": 3,
+    "termination": "iteration_limit"
+  },
+  "rss": 1.7319999085394245e-09,
+  "forecast_max_absolute_error": 0.0005060370211680265
+}
