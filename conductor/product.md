@@ -35,6 +35,8 @@ Generic game representation/solution is incubated in `new-drug-reimbursement-gam
 
 ## Delivery status and evidence
 
+Documentation: Astro/Starlight under `docs/astro-site` is the active documentation surface. Historical Sphinx material is archival, not an active documentation system.
+
 The inspected source remains hybrid and contains scientific correctness risks and native gaps. This programme changes scope, ownership and executable plans, not that fact. No production-ready, full-Rust, frontier-performance or complete-data claim is made here.
 
 The [programme](frontier-programme-20261107.md), [execution contract](execution-contract-20261107.md), six active tracks, [taskbook](innovation-taskbook-20261107.md) and [release gates](release-gates-20261107.md) govern delivery. Historical archived completion titles describe their recorded scope, not current scientific acceptance.
