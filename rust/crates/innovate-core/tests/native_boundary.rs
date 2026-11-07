@@ -711,7 +711,15 @@ fn causal_summaries_match_analytic_effects() {
     let result = run(att.clone());
     assert!((result["result"]["estimate"].as_f64().unwrap() - 7.25).abs() < 1e-12);
     assert_eq!(result["result"]["by_stratum"]["low"]["weight"], 0.25);
+    assert_eq!(
+        result["result"]["by_stratum"]["low"]["treated_fraction"],
+        1. / 3.
+    );
     att["strata"][0] = json!("control_only");
+    assert_eq!(
+        run(att.clone())["result"]["excluded_control_observations"],
+        1
+    );
     assert_eq!(
         run(att.clone())["result"]["estimate"],
         result["result"]["estimate"]

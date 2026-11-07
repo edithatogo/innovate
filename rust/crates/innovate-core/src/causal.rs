@@ -690,11 +690,13 @@ fn stratified_treatment_contrast(payload: &Value) -> Result<Value, &'static str>
     let mut estimate = 0.;
     let mut conditional_standard_error = Some(0_f64);
     let mut by_stratum = serde_json::Map::new();
+    let mut excluded_control_observations = 0;
     if population == 0 {
         return Err("ATT requires treated observations");
     }
     for (label, (treated, control)) in groups {
         if att && treated.is_empty() {
+            excluded_control_observations += control.len();
             continue;
         }
         let (Some(treated_mean), Some(control_mean)) = (mean(&treated), mean(&control)) else {
@@ -723,12 +725,14 @@ fn stratified_treatment_contrast(payload: &Value) -> Result<Value, &'static str>
         by_stratum.insert(
             label,
             json!({"estimate":difference,"weight":weight,
-            "n_treated":treated.len(),"n_control":control.len()}),
+            "n_treated":treated.len(),"n_control":control.len(),
+            "treated_fraction":treated.len() as f64 / (treated.len() + control.len()) as f64}),
         );
     }
     Ok(
         json!({"method":"empirical_stratum_standardization","estimate":finite(estimate)?,
         "conditional_standard_error":conditional_standard_error.map(finite).transpose()?,
+        "excluded_control_observations":excluded_control_observations,
         "estimand":if att { "att" } else { "ate" },"by_stratum":by_stratum}),
     )
 }

@@ -212,3 +212,7 @@ It is null when an included arm has only one observation.
 
 Call `summarize_causal` with method `describe_treatment_contrasts` to
 discover the supported adjustment methods, inputs and estimands.
+
+Each included stratum reports its observed `treated_fraction`. The
+top-level `excluded_control_observations` counts controls in strata
+outside the ATT target population.

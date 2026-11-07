@@ -4516,3 +4516,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify treatment contrast discovery through rebuilt Python 3.15.2,
   Julia and installed R. Each returned the unadjusted method and the
   stratified method’s required inputs and ATE/ATT estimands.
+
+- [x] Report treated fractions in included strata and count controls
+  excluded from the ATT target population. The focused Rust causal
+  boundary test passed.
