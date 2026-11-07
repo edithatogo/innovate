@@ -3582,3 +3582,8 @@ Hosted release readiness for this worktree revision remains open.
   The rebuilt Python 3.15.2 wheel passed all three selected ingestion
   tests and Ruff passed. Julia and installed R re-ingested the network
   artifact with its original identifiers and checksum.
+- [x] Extend installed-wheel CSV ingestion regression coverage to
+  competition IDs and policy labels. Across all three dataset kinds,
+  numeric-looking strings retain their spelling through checksum
+  re-ingestion, and a missing identifier fails the Rust identifier
+  diagnostic. All three cases passed on Python 3.15.2.

@@ -1084,16 +1084,30 @@ def test_bootstrap_forecast_frame_preserves_series_and_null_bounds():
     assert frame.schema["lower"] == pl.Float64
 
 
-def test_csv_network_ingestion_preserves_distinct_textual_ids(tmp_path):
-    path = tmp_path / "network.csv"
-    path.write_text("source,target,weight\n001,002,1\n1,002,2\n")
+@pytest.mark.parametrize(
+    ("kind", "csv", "expected"),
+    [
+        ("network_edges", "source,target,weight\n001,002,1\n1,002,2\n",
+         {"source": ["001", "1"], "target": ["002", "002"], "weight": [1.0, 2.0]}),
+        ("competition", "time,value,unit_id,product_id\n0,1,001,002\n0,2,1,002\n",
+         {"unit_id": ["001", "1"], "product_id": ["002", "002"]}),
+        ("policy_timing", "event_times,event_effects,event_labels\n0,1,001\n0,2,1\n",
+         {"event_labels": ["001", "1"]}),
+    ],
+)
+def test_csv_ingestion_preserves_distinct_textual_ids(tmp_path, kind, csv, expected):
+    path = tmp_path / f"{kind}.csv"
+    path.write_text(csv)
     provenance = {
         "source": "synthetic",
         "license": "CC-BY-4.0",
         "extraction_time": "2026-11-07T00:00:00Z",
     }
-    artifact = innovate.ingest_local(path, "network_edges", provenance=provenance)
-    assert artifact["dataset"]["source"] == ["001", "1"]
-    assert artifact["dataset"]["target"] == ["002", "002"]
-    assert artifact["dataset"]["weight"] == [1.0, 2.0]
+    artifact = innovate.ingest_local(path, kind, provenance=provenance)
+    assert {key: artifact["dataset"][key] for key in expected} == expected
     assert innovate.execute("ingest_dataset", dataset=artifact["dataset"])["result"] == artifact
+
+    path.write_text(csv.replace(",001,", ",,").replace(",001\n", ",\n").replace("\n001,", "\n,"))
+    with pytest.raises(innovate.NativeError) as exc:
+        innovate.ingest_local(path, kind, provenance=provenance)
+    assert "identifier_labels" in exc.value.validation["failed"]
