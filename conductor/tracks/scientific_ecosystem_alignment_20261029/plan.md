@@ -166,10 +166,10 @@ Source/evidence commit: `ec217253756eeed2e71e9f665ef943dc3472bffd`. No native op
 
 Same isolated writing lane resumes at 9a721b9, initially clean. Other writers
 and native operations retain ownership. All existing/planned features remain required.
-- [x] Port bounded complementary-goods equations through the native trajectory fitter.
-- [x] Add static Kairos-owned network agent state and FIFO resource service.
-- [x] Validate independent limits, conservation and Python/Julia/R consumers.
-- [x] Retain evidence and remaining historical/scientific/platform obligations.
+- [x] Port bounded complementary-goods equations through the native trajectory fitter. a07932b
+- [x] Add static Kairos-owned network agent state and FIFO resource service. a07932b
+- [x] Validate independent limits, conservation and Python/Julia/R consumers. a07932b
+- [x] Retain evidence and remaining historical/scientific/platform obligations. a07932b
 
 Evidence: network-resource-20261107.json; review: network-resource-review-20261107.md.
 57 Rust tests, 27 installed Python checks, 142 Julia assertions and R cases pass.
@@ -178,3 +178,5 @@ remain unavailable, and all 38 full-feature obligations remain required. The
 Conductor goal stays active. Next source work: remaining historical models
 (including lock-in), covariate/event extensions and advanced inference/scenarios,
 then richer graph/resource behavior and outstanding distribution qualification.
+
+Source/evidence commit: `a07932b5bf2e845c4f4d217ade2b5899b97bb351`. No native operation remains in flight.
