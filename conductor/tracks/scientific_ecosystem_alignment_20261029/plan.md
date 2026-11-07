@@ -6613,3 +6613,8 @@ Hosted release readiness for this worktree revision remains open.
   from 5bb5fd4c. Both scenarios returned the binary64 bit pattern 2 in
   each binding. The request payload is retained in
   evidence/scenario-subnormal-threshold.json.
+
+- [x] Verify that an ensemble comparison rejects an incomplete pair
+  and preserves individual execution results. The focused Rust
+  boundary test injected an unsupported model into the second pair
+  and confirmed that no partial ensemble estimate was returned.

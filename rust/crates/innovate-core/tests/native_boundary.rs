@@ -1998,6 +1998,17 @@ fn scenario_grid_summarizes_paired_ensemble_differences() {
     let outcome = &response["result"]["comparisons"][0]["result"];
     assert_eq!(outcome["pair_count"], 2);
     assert_eq!(outcome["evaluation_time"], 1.);
+    let mut failed_pair = request.clone();
+    failed_pair["payload"]["scenarios"][3]["model_key"] = json!("unknown_model");
+    let failed_response = run(&failed_pair);
+    let failed_result = &failed_response["result"];
+    assert_eq!(
+        failed_result["comparisons"][0]["error"]["code"],
+        "invalid_comparison"
+    );
+    assert!(failed_result["comparisons"][0]["result"].is_null());
+    assert!(failed_result["executions"][0]["error"].is_null());
+    assert!(failed_result["executions"][3]["error"].is_object());
     let mut path_request = request.clone();
     path_request["payload"]["comparisons"][0]["include_path_summary"] = json!(true);
     path_request["payload"]["comparisons"][0]["include_path_covariance"] = json!(true);
