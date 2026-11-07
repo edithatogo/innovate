@@ -844,6 +844,17 @@ fn scenario_grid_runs_in_order_and_retains_individual_errors() {
     assert!(metadata["elapsed_seconds"].as_f64().unwrap() >= 0.);
     assert!(metadata["started_at_unix_seconds"].as_f64().unwrap() > 0.);
     assert!(rows[1]["execution_metadata"]["kernel"].is_null());
+    let artifact = &rows[0]["artifact"];
+    assert_eq!(artifact["model_type"], "logistic");
+    assert_eq!(artifact["notes"], "baseline run");
+    assert!(artifact["timestamp"].as_str().unwrap().ends_with("+00:00"));
+    assert!(artifact["seed"].is_null());
+    assert!(rows[1].get("artifact").is_none());
+    let replay = run(&artifact["replay_request"]);
+    assert_eq!(
+        replay["result"]["executions"][0]["result"],
+        rows[0]["result"]
+    );
     request["payload"]["include_execution_metadata"] = json!("yes");
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
     request["payload"]["include_execution_metadata"] = json!(false);

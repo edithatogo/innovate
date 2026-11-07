@@ -182,10 +182,7 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
                         binding.simulate_model(&scenario.model_key, scenario.simulation.clone());
                     let timing = timing.map(|(start, clock)| {
                         (
-                            start
-                                .duration_since(UNIX_EPOCH)
-                                .ok()
-                                .map(|duration| duration.as_secs_f64()),
+                            start,
                             clock.elapsed().as_secs_f64(),
                         )
                     });
@@ -198,9 +195,28 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
                     };
                     if let Some((start, elapsed)) = timing {
                         let metadata = &mut row["execution_metadata"];
-                        metadata["started_at_unix_seconds"] = json!(start);
+                        metadata["started_at_unix_seconds"] = json!(
+                            start.duration_since(UNIX_EPOCH).ok().map(|duration| duration.as_secs_f64())
+                        );
                         metadata["elapsed_seconds"] = json!(elapsed);
                         metadata["kernel"] = kernel;
+                        if row["error"].is_null() {
+                            let timestamp = chrono::DateTime::<chrono::Utc>::from(start).to_rfc3339();
+                            row["artifact"] = json!({
+                                "scenario":scenario.specification,
+                                "seed":row["result"]["metadata"]["seed"],
+                                "model_type":scenario.model_key,
+                                "version":env!("CARGO_PKG_VERSION"),
+                                "notes":scenario.notes,
+                                "timestamp":timestamp,
+                                "replay_request":{"schema_version":KERNEL_SCHEMA_VERSION,
+                                    "operation":"execute_scenario_grid","payload":{"scenarios":[{
+                                        "id":scenario.id,"model_key":scenario.model_key,
+                                        "simulation":scenario.simulation,"specification":scenario.specification,
+                                        "notes":scenario.notes
+                                    }]}},
+                            });
+                        }
                     }
                     row
                 })
