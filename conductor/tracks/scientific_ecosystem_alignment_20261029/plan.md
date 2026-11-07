@@ -6472,3 +6472,9 @@ Hosted release readiness for this worktree revision remains open.
   remote request discovery changes. Python passed 130 tests from
   the rebuilt wheel, and the Julia and installed R suites exited
   zero against the rebuilt shared library.
+
+- [x] Refresh the RustSec audit after the Kairos promotion and Polars
+  feature changes. Cargo Audit scanned 391 lock entries against
+  1,422 advisories and exited zero with the existing unmaintained
+  bincode 2.0.1 warning. The locked inverse dependency tree across
+  all targets still contains no active bincode path.
