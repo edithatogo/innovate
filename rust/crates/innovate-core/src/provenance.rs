@@ -98,9 +98,13 @@ pub(crate) fn checksum(payload: &Value) -> Result<Value, &'static str> {
         .as_ref()
         .and_then(Value::as_str)
         .filter(|v| !v.is_empty())
-        && !actual.eq_ignore_ascii_case(expected)
     {
-        return Err("dataset content checksum does not match provenance");
+        if expected.len() != 64 || !expected.bytes().all(|byte| byte.is_ascii_hexdigit()) {
+            return Err("dataset provenance checksum must be a 64-digit SHA-256 hex string");
+        }
+        if !actual.eq_ignore_ascii_case(expected) {
+            return Err("dataset content checksum does not match provenance");
+        }
     }
     Ok(json!({"checksum":actual,"algorithm":"sha256","encoding":encoding}))
 }

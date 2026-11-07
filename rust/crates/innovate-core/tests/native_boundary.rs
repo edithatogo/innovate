@@ -834,7 +834,12 @@ fn dataset_digest_detects_data_changes_but_ignores_extraction_timestamp() {
         "source":"survey","license":"CC-BY-4.0","extraction_time":"2026-11-07T00:00:00Z"}});
     let digest = run(dataset.clone())["result"]["checksum"].clone();
     assert!(digest.is_string());
-    dataset["provenance"]["checksum"] = digest.clone();
+    dataset["provenance"]["checksum"] = json!("not-a-digest");
+    assert_eq!(
+        run(dataset.clone())["error"]["message"],
+        "dataset provenance checksum must be a 64-digit SHA-256 hex string"
+    );
+    dataset["provenance"]["checksum"] = json!(digest.as_str().unwrap().to_ascii_uppercase());
     dataset["provenance"]["extraction_time"] = innovate_core::json!("2026-11-08T00:00:00Z");
     assert_eq!(run(dataset.clone())["result"]["checksum"], digest);
     dataset["values"][1] = innovate_core::json!(3);

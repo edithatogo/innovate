@@ -4340,3 +4340,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify malformed provenance checksum errors through Julia and
   installed R with the rebuilt Rust library. Both returned
   invalid_request with the named-object requirement.
+- [x] Distinguish malformed provenance digests from content checksum
+  mismatches. A supplied nonempty digest must be 64 hexadecimal
+  characters. Uppercase SHA-256 remains valid. All five focused Rust
+  dataset tests passed, including timestamp and tamper behavior.
