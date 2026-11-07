@@ -86,6 +86,7 @@ cat("R historical Logistic and initial ABM conformance passed\n")
 network_payload <- list(inputs=list(time=c(0,5,20)),parameters=list(p=1e12,q=0,m=3),simulation_options=list(engine="kairos_network",population=3,seed=42,edges=list(),capacity=1,service_ticks=5,ticks_per_unit=1))
 net <- kernel_simulate_model("bass",network_payload)$result
 stopifnot(net$resource_metrics$peak_queue_length == 2, net$resource_metrics$peak_in_service == 1)
+stopifnot(net$resource_metrics$idle_slot_ticks == 5, net$resource_metrics$over_capacity_slot_ticks == 0)
 stopifnot(all(unlist(net$counts)==c(0,0,3)),all(vapply(net$completions,function(e)e$tick,numeric(1))==c(6,11,16)))
 wait_payload <- network_payload
 wait_payload$simulation_options$max_wait_ticks <- 4

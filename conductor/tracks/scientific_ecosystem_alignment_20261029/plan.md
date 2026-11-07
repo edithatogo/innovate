@@ -4138,3 +4138,7 @@ Hosted release readiness for this worktree revision remains open.
   the installed 3.15.2 wheel, and the Julia and installed R native
   suites passed against the matching local shared library. Migration
   development policy passed with 38 open release obligations.
+- [x] Retain idle and over-capacity assertions in the Python, Julia and
+  R native suites that CI invokes. The fixed-capacity FIFO fixture
+  reports five idle and zero excess slot-ticks in each binding.
+  The affected sections passed locally with the installed artifacts.
