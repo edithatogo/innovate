@@ -2885,3 +2885,8 @@ the other competition models and installed binding checks remain open.
   Constant columns yield null entries. Fewer than two parameters or
   draws yield a null matrix. Signed and constant-column unit checks,
   the native bootstrap regression, and Clippy across Rust tests passed.
+
+- [x] Verify scalar bootstrap parameter correlations in rebuilt Python
+  3.15, Julia and R. All three returned identical results on noisy
+  Logistic trial 0 with 99 converged draws. Every matrix entry matched
+  Python statistics.correlation within 1e-12 absolute error. R used raw JSON.
