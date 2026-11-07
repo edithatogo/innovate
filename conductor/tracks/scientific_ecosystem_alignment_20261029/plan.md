@@ -2016,3 +2016,11 @@ the other competition models and installed binding checks remain open.
   Python 3.15, Julia and installed R reproduced [12.5, 50] with
   seed 42 and 1,000 resamples. All 47 targeted Rust tests and focused
   Clippy passed. Broader coverage and stochastic designs remain open.
+
+- [x] Check paired percentile resampling against a finite exact
+  distribution (16623e59). Effects of -25 and 50 yield four equally
+  likely ordered bootstrap means of -25, 12.5, 12.5 and 50. The seeded
+  10,000-draw run recovered the central 90% endpoints of -25 and 50.
+  Identical effects of 50 produced a point interval. The focused Rust
+  regression and Clippy passed. This checks conditional resampling
+  behavior. Repeated-sampling coverage remains open.
