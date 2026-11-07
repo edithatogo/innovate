@@ -2563,3 +2563,15 @@ the other competition models and installed binding checks remain open.
   the analytic effect of 12.6424111766 in 176 of 200 trials (88%). Mean
   estimated effect was 12.609375 and mean interval width was 1.2284765625.
   Coverage for interacting or resource-constrained designs remains open.
+
+- [x] Measure bootstrap coverage for capacity-constrained contagion.
+  The Python 3.15.2 wheel from f9f21916 ran 200 trials of 32 matched-seed
+  pairs on a star with one adopted hub and 19 leaves, p=0 in both arms,
+  q=0 versus 0.05, capacity one, service time four, horizon five and
+  1,000 ticks per unit. At most one new adoption can complete. The
+  first request has total rate 0.95, so the analytic effect is
+  1-exp(-0.95). Pair seeds were 20000+32*trial+pair, with 1,000 bootstrap
+  draws at seed 30000+trial. The nominal 90% interval covered 183 of
+  200 trials (91.5%). Grand mean was 0.62421875 versus the analytic
+  0.6132589765. Mean interval width was 0.271390625. Coverage with
+  multiple completions and feedback remains open.
