@@ -165,12 +165,12 @@ where
     for (index, start) in starts.iter().enumerate() {
         let mut theta = start.clone();
         let Ok(mut prediction) = evaluate(&theta) else {
-            start_reports.push(json!({"termination":"invalid_initial_prediction"}));
+            start_reports.push(json!({"termination":"invalid_initial_prediction","initial_transformed_parameters":start}));
             continue;
         };
         let mut error = loss(&prediction);
         if !error.is_finite() {
-            start_reports.push(json!({"termination":"nonfinite_initial_loss"}));
+            start_reports.push(json!({"termination":"nonfinite_initial_loss","initial_transformed_parameters":start}));
             continue;
         }
         let mut damping = 1e-3_f64;
@@ -245,6 +245,7 @@ where
             "converged": converged,
             "termination": reason,
             "scaled_rss": error,
+            "initial_transformed_parameters": start,
             "final_transformed_parameters": theta
         }));
         if best.as_ref().is_none_or(|b| error < b.error) {
@@ -446,6 +447,28 @@ mod tests {
             fit.report["start_reports"][1]["final_transformed_parameters"],
             json!([1.])
         );
+    }
+
+    #[test]
+    fn multistart_report_retains_rejected_start_coordinates() {
+        let fit = least_squares(
+            &[1.],
+            &[vec![-2.], vec![1.]],
+            |p| {
+                if p[0] < 0. {
+                    Err("negative start".into())
+                } else {
+                    Ok(vec![p[0]])
+                }
+            },
+            4,
+        )
+        .unwrap();
+        let reports = &fit.report["start_reports"];
+        assert_eq!(fit.report["selected_start_index"], 1);
+        assert_eq!(reports[0]["termination"], "invalid_initial_prediction");
+        assert_eq!(reports[0]["initial_transformed_parameters"], json!([-2.]));
+        assert_eq!(reports[1]["initial_transformed_parameters"], json!([1.]));
     }
 
     #[test]

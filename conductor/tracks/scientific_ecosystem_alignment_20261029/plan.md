@@ -3889,3 +3889,8 @@ Hosted release readiness for this worktree revision remains open.
   regression, four fit-quality tests and focused Clippy passed.
   These are internal transformed coordinates. Global identifiability
   remains open.
+- [x] Retain initial transformed coordinates for every attempted
+  optimizer start, including starts rejected before iteration.
+  The Rust fixture confirms that an invalid first start retains its
+  coordinates and the successful second start keeps its original
+  index. Both multistart tests and focused Clippy passed.
