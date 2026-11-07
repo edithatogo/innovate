@@ -6393,3 +6393,8 @@ Hosted release readiness for this worktree revision remains open.
   unsupported controls such as timeout_ms are not silently discarded.
   The Rust boundary test passed for this rejection, valid prediction,
   scope denial and operation denial. Hosted transport remains open.
+
+- [x] Publish the remote envelope and nested kernel request field
+  allowlists in native contract discovery. Validation reads the same
+  lists. The Rust boundary test passed for discovery and rejection
+  of unknown fields at both levels.

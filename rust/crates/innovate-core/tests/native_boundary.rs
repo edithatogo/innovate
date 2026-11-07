@@ -3318,6 +3318,20 @@ fn in_process_remote_dispatch_applies_scope_and_operation_policy() {
     let contract =
         run(&json!({"schema_version":"2.0","operation":"describe_remote_execution_contract"}));
     let contract = &contract["result"];
+    assert_eq!(
+        contract["envelope_fields"],
+        json!(["schema_version", "context", "kernel_request"])
+    );
+    assert_eq!(
+        contract["kernel_request_fields"],
+        json!([
+            "schema_version",
+            "operation",
+            "model_key",
+            "payload",
+            "metadata"
+        ])
+    );
     assert_eq!(contract["max_kernel_request_bytes"], 1_000_000);
     assert_eq!(contract["identity_verification"], "caller_supplied_context");
     assert_eq!(contract["local_only_by_default"], json!(["fit_model"]));

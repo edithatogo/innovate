@@ -8,6 +8,14 @@ const REQUIRED_SCOPE: &str = "kernel:execute";
 const MAX_KERNEL_REQUEST_BYTES: usize = 1_000_000;
 const MAX_CONTEXT_IDENTIFIER_BYTES: usize = 256;
 const DATA_RETENTION: &str = "ephemeral";
+const ENVELOPE_FIELDS: &[&str] = &["schema_version", "context", "kernel_request"];
+const KERNEL_REQUEST_FIELDS: &[&str] = &[
+    "schema_version",
+    "operation",
+    "model_key",
+    "payload",
+    "metadata",
+];
 const ELIGIBLE_OPERATIONS: &[&str] = &[
     "discover_models",
     "predict_model",
@@ -22,6 +30,7 @@ pub(crate) fn describe() -> Value {
         "identity_verification":"caller_supplied_context","data_retention":DATA_RETENTION,
         "max_kernel_request_bytes":MAX_KERNEL_REQUEST_BYTES,
         "max_context_identifier_bytes":MAX_CONTEXT_IDENTIFIER_BYTES,
+        "envelope_fields":ENVELOPE_FIELDS,"kernel_request_fields":KERNEL_REQUEST_FIELDS,
         "eligible_operations":ELIGIBLE_OPERATIONS,"local_only_by_default":["fit_model"],
         "observability_fields":["request_id","tenant_id","principal","trace_id","operation","duration_ms","status"]})
 }
@@ -44,12 +53,9 @@ pub(crate) fn execute(payload: &Value) -> Result<Value, &'static str> {
         return Err("remote envelope requires schema 2.0");
     }
     if payload.as_object().is_none_or(|fields| {
-        fields.keys().any(|key| {
-            !matches!(
-                key.as_str(),
-                "schema_version" | "context" | "kernel_request"
-            )
-        })
+        fields
+            .keys()
+            .any(|key| !ENVELOPE_FIELDS.contains(&key.as_str()))
     }) {
         return Err("remote envelope contains unsupported fields");
     }
@@ -76,12 +82,10 @@ pub(crate) fn execute(payload: &Value) -> Result<Value, &'static str> {
     }
     let kernel_request = &payload["kernel_request"];
     let fields = kernel_request.as_object().ok_or("invalid kernel request")?;
-    if fields.keys().any(|key| {
-        !matches!(
-            key.as_str(),
-            "schema_version" | "operation" | "model_key" | "payload" | "metadata"
-        )
-    }) {
+    if fields
+        .keys()
+        .any(|key| !KERNEL_REQUEST_FIELDS.contains(&key.as_str()))
+    {
         return Err("remote kernel request contains unsupported fields");
     }
     let raw = bounded_kernel_json(kernel_request)?;
