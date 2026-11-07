@@ -1698,5 +1698,8 @@ the other competition models and installed binding checks remain open.
   caveats, evidence level and sensitivity analysis. The result reports
   checklist status and issues. External release approval remains a
   separate decision. All 24 Rust boundary tests and focused Clippy passed.
-- [ ] Verify evidence checks through Python, Julia and R and restore
-  the remaining historical model-card reporting fields.
+- [x] Verify evidence checks through the rebuilt Python wheel, Julia
+  and installed R. All three report one issue for the medium-evidence
+  fixture without sensitivity analysis and pass when it is recorded.
+  R also exercised singleton evidence and caveat arrays.
+- [ ] Restore the remaining historical model-card reporting fields.
