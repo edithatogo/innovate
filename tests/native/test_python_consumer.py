@@ -1389,6 +1389,22 @@ def test_nearest_score_matching():
         innovate.execute("summarize_causal", **payload)
 
 
+def test_matching_standardized_balance():
+    balance = innovate.execute(
+        "summarize_causal",
+        method="matched_treatment_contrast",
+        outcomes=[0, 0, 1, 1, 1],
+        treatment=[0, 0, 1, 1, 1],
+        scores=[0, 1, 0, 0, 1],
+        caliper=0,
+        balance_covariates={"age": [0, 30, 30, 30, 30], "constant": [1] * 5},
+    )["result"]["covariate_balance"]
+    age = balance["age"]
+    assert age["before_matching"]["standardized_mean_difference"] == pytest.approx(15 / math.sqrt(150))
+    assert age["standardized_mean_difference"] == pytest.approx(20 / math.sqrt(150))
+    assert balance["constant"]["standardized_mean_difference"] is None
+
+
 def test_ridge_logistic_propensity_fit():
     fit = innovate.execute("summarize_causal", method="fit_logistic_propensities",
                            treatment=[0, 1], covariates=[[-2], [2]], ridge=0.25 / math.log(3))["result"]

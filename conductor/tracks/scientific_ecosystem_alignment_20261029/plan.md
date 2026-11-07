@@ -5266,3 +5266,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify standardized balance in rebuilt Python 3.15.2, Julia
   and installed R. All three recovered the two analytic standardized
   values and a null standardized difference for the constant covariate.
+
+- [x] Retain the standardized balance and constant-covariate
+  cases in Python's native consumer suite. Both focused matching
+  tests passed on Python 3.15.2.
