@@ -5289,3 +5289,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify the narrow standardized balance numerator through the
   rebuilt Python 3.15.2 extension. The focused consumer test checks
   the analytic nonzero pre-match value and zero matched value.
+
+- [x] Retain the analytic narrow standardized balance case in Julia
+  and R. Against rebuilt FFI, both matched the nonzero pre-match
+  value, zero post-match value and null constant-covariate result.

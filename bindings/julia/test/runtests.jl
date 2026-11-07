@@ -886,3 +886,15 @@ end
         end
     end
 end
+
+@testset "Narrow matched balance" begin
+    lower = 1.5
+    upper = nextfloat(lower)
+    payload = Dict("method"=>"matched_treatment_contrast", "outcomes"=>[0,0,1,1,1],
+        "treatment"=>[0,0,1,1,1], "scores"=>[0,1,0,0,1], "caliper"=>0,
+        "balance_covariates"=>Dict("narrow"=>[lower,upper,lower,upper,lower], "constant"=>ones(5)))
+    balance = kernel_call("summarize_causal", nothing, payload)["result"]["covariate_balance"]
+    @test balance["narrow"]["before_matching"]["standardized_mean_difference"] ≈ (-1/6)/sqrt(7/18)
+    @test balance["narrow"]["standardized_mean_difference"] == 0
+    @test isnothing(balance["constant"]["standardized_mean_difference"])
+end

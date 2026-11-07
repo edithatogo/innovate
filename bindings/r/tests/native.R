@@ -834,3 +834,13 @@ response_json <- kernel_call("execute_scenario_grid", payload=list(scenarios=sce
 response <- jsonlite::fromJSON(response_json, simplifyVector=FALSE)
 stopifnot(is.character(response_json), identical(response$result$executions[[2]]$result$status, "paused"),
   rawToChar(kernel_scenario_executions_ipc(response_json)[1:6]) == "ARROW1")
+
+lower <- 1.5
+upper <- lower + .Machine$double.eps
+balance_payload <- list(method="matched_treatment_contrast", outcomes=c(0,0,1,1,1),
+  treatment=c(0,0,1,1,1), scores=c(0,1,0,0,1), caliper=0,
+  balance_covariates=list(narrow=c(lower,upper,lower,upper,lower), constant=rep(1,5)))
+balance <- kernel_call("summarize_causal", payload=balance_payload)$result$covariate_balance
+stopifnot(isTRUE(all.equal(balance$narrow$before_matching$standardized_mean_difference, (-1/6)/sqrt(7/18))),
+  balance$narrow$standardized_mean_difference == 0,
+  is.null(balance$constant$standardized_mean_difference))
