@@ -2945,3 +2945,8 @@ the other competition models and installed binding checks remain open.
   axis coordinates, shape and marginal means. A 5-by-7 Logistic fixture
   matches independently computed Gaussian weights within 1e-12. Both
   focused tests and Clippy passed. Joint binding checks and MCMC remain open.
+
+- [x] Verify two-axis Bayesian quadrature in rebuilt Python 3.15, Julia
+  and installed R. All three returned identical row-major masses and
+  marginal means for the 5-by-7 Logistic grid. An independent formula
+  matched every mass and both means within 1e-12. R used raw JSON.
