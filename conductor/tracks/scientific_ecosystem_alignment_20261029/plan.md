@@ -6250,3 +6250,10 @@ Hosted release readiness for this worktree revision remains open.
   of 368/400 for ATE and 366/400 for ATT. Applying a t(9) critical
   value to the returned standard errors gave 380/400 and 381/400.
   This is a synthetic comparison with caller-computed intervals.
+
+- [x] Stress-test cross-fitted stratum contrasts at true propensities
+  0.01 and 0.99. In 103/400 trials the native kernel rejected a
+  training complement missing one arm. Among 297 successful trials,
+  ATE averaged 2.0673 (truth 2) and ATT 3.0536 (truth 2.98).
+  Nominal 95% coverage conditional on success was 286/297 and
+  276/297 respectively. Weak-overlap inference remains unqualified.

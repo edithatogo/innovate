@@ -4,11 +4,12 @@ import argparse
 from random import Random
 from statistics import mean
 
-from innovate import execute
+from innovate import NativeError, execute
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--clustered", action="store_true")
 parser.add_argument("--few-clusters", action="store_true", help="Compare normal and t(9) intervals")
+parser.add_argument("--weak-overlap", action="store_true")
 args = parser.parse_args()
 clustered = args.clustered or args.few_clusters
 cluster_count = 10 if args.few_clusters else 80
@@ -21,12 +22,14 @@ if clustered:
     cluster_options = {"clusters": [str(cluster) for cluster in cluster_ids]}
 else:
     cluster_options = {}
-probabilities = [0.2, 0.8] * 400
+low_probability = 0.01 if args.weak_overlap else 0.2
+probabilities = [low_probability, 1 - low_probability] * 400
 baseline = [0.0, 4.0] * 400
 effects = [1.0, 3.0] * 400
-methods = {"ate": 2.0, "att": 2.6}
+methods = {"ate": 2.0, "att": 3 - 2 * low_probability}
 estimates = {key: [] for key in methods}
 covered = dict.fromkeys(methods, 0)
+failed = dict.fromkeys(methods, 0)
 covered_t = dict.fromkeys(methods, 0)
 for _ in range(400):
     treatment = [int(rng.random() < p) for p in probabilities]
@@ -40,15 +43,21 @@ for _ in range(400):
         for base, effect, flag, offset in zip(baseline, effects, treatment, offsets, strict=True)
     ]
     for key, truth in methods.items():
-        result = execute(
-            "summarize_causal",
-            method=f"cross_fitted_stratum_{key}",
-            outcomes=outcomes,
-            treatment=treatment,
-            strata=strata,
-            folds=folds,
-            **cluster_options,
-        )["result"]["contrast"]
+        try:
+            result = execute(
+                "summarize_causal",
+                method=f"cross_fitted_stratum_{key}",
+                outcomes=outcomes,
+                treatment=treatment,
+                strata=strata,
+                folds=folds,
+                **cluster_options,
+            )["result"]["contrast"]
+        except NativeError as error:
+            if not args.weak_overlap or "requires both arms" not in str(error):
+                raise
+            failed[key] += 1
+            continue
         estimate = result["estimate"]
         estimates[key].append(estimate)
         distance = abs(estimate - truth)
@@ -59,7 +68,12 @@ for _ in range(400):
 
 for key, truth in methods.items():
     average = mean(estimates[key])
-    print(f"{key}: mean {average:.6f}, 95% coverage {covered[key]}/400")
+    successful = len(estimates[key])
+    print(f"{key}: mean {average:.6f}, 95% coverage {covered[key]}/{successful}, "
+          f"missing-arm failures {failed[key]}/400")
+    if args.weak_overlap:
+        assert 0 < failed[key] < 400
+        continue
     assert abs(average - truth) < 0.04
     if args.few_clusters:
         print(f"{key}: t(9) coverage {covered_t[key]}/400")
