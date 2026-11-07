@@ -3879,3 +3879,7 @@ Hosted release readiness for this worktree revision remains open.
   regression, four fit-quality tests and focused Clippy passed.
   A zero gap describes the tested objectives. Global uniqueness
   remains a separate scientific obligation.
+- [x] Verify the multistart fields on an analytic Logistic fit in
+  Python 3.15.2, Julia and freshly installed R at 32b007c0. Each
+  converged-start count matched its per-start records and each
+  alternative loss gap was nonnegative.
