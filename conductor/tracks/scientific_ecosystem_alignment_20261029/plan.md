@@ -5600,3 +5600,10 @@ Hosted release readiness for this worktree revision remains open.
   injected request-level model key, preserves same-version replay, and
   still classifies different kernel versions as unavailable. All 13
   scenario boundary tests passed. Cross-version replay remains open.
+
+- [x] Run the Rust core integration milestone across all test targets.
+  The initial run found stale exact-object matching assertions. Update
+  both to assert the new caliper slack and runner-up gap as well as the
+  original fields. All 301 unit and integration tests passed across
+  the initial and resumed runs. Development policy validation passed
+  with 38 release obligations still open.
