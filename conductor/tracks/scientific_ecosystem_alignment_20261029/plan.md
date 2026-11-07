@@ -1037,3 +1037,8 @@ the other competition models and installed binding checks remain open.
   and fixed-event Gompertz reference values within 0.001. The Gompertz checks
   also verify the default unused shape parameters.
   [Validation logs](evidence/mechanistic-automatic-starts-20261107).
+
+- [x] Update the migration guide with the verified automatic mechanistic and
+  Lotka–Volterra fit contracts and the per-start diagnostic fields.
+  The documentation build generated 163 pages, validated internal links,
+  and included the new diagnostic field in the rendered migration page.

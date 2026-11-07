@@ -700,13 +700,18 @@ underlying ODE RHS at raw state, not derivatives of a projected report. Request
 Polars `quantity="rate"` only with the ODE variant; the plain scalar rate API
 remains separately unqualified.
 
-Advanced fitting requires complete `fit_options.initial_parameters`, optimizes
-active coefficients with native least squares, and retains local rank/convergence
-reports. Information criteria and calibrated uncertainty remain unavailable;
+Mechanistic fitting estimates active coefficients with native least squares
+and reports local rank and convergence. Without `fit_options.initial_parameters`,
+it scales starting capacities to the observed levels, tries a deterministic
+rate grid, and starts covariate slopes at zero. An explicit start must supply
+the complete parameter map. The unused Gompertz shape parameters default to
+one for automatic starts and retain their supplied values for explicit starts.
+The optimizer reports each start's outcome in `start_reports` and identifies
+the selected entry with `selected_start_index`, a zero-based index. Information criteria and calibrated uncertainty remain unavailable;
 precision weights are explicitly rejected by this variant until implemented.
 Closed-form Bass/Gompertz forcing/event cases and a separately integrated SciPy
 DOP853 fit/forecast reference pass. The explicit RK4 solver's stiff/LSODA workload
-parity, automatic initialization, multiple events, further model families, forcing
+parity, multiple events, further model families, forcing
 interoperability with richer Kairos networks, stochastic paths and full scientific
 qualification remain required. No numerical binding fallback is used.
 
@@ -812,12 +817,13 @@ the first observed row. A saved `covariate_history` must cover that initial time
 The returned prediction `state` carries the history into later requests. New
 control knots may extend it, while overlapping values must agree with the saved
 history. The Python Polars fit path accepts declared controls as frame columns.
-Conditional fitting requires a complete named `initial_parameters` map. Each
+Conditional fitting accepts a complete named `initial_parameters` map or
+starts from a deterministic base rate grid with zero covariate slopes. Each
 fit reports local identifiability and conditions on the forcing and initial state.
 
 The independent reference uses SciPy DOP853 with every control knot split into
-its own integration interval. Event splits, automatic forcing initialization,
-weighted fits, initial-state uncertainty and broader scientific qualification
+its own integration interval. Weighted fits, initial-state uncertainty and
+broader scientific qualification
 remain required work.
 
 ### Historical multi-product covariates
