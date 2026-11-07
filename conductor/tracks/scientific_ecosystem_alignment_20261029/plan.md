@@ -3325,3 +3325,10 @@ the other competition models and installed binding checks remain open.
   bytes, kept the same Darwin byte count, and emitted null for the
   unsupported Windows counter. Each fixture ran the native fast suite.
   Lima reported no local guest. Actual Linux and scheduler runs remain open.
+
+- [x] Capture local scheduled workload timing and process RSS receipts
+  on Darwin arm64 with Python 3.15.2. One and two requested workers
+  returned identical native results for both cases. The single runs
+  recorded 14.06 s and 66,322,432 bytes, and 9.25 s and 66,895,872 bytes,
+  respectively. These are individual local observations. Scheduler and
+  accelerator comparisons remain open.
