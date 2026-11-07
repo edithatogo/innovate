@@ -2912,3 +2912,9 @@ the other competition models and installed binding checks remain open.
   and operation eligibility before dispatch. Return native provenance
   and correlation metadata. The scope is caller supplied. Focused
   Rust and Clippy passed. Binding and hosted transport remain open.
+
+- [x] Verify the in-process remote execution envelope in rebuilt Python
+  3.15, Julia and installed R. The native prediction and both policy
+  denials agreed exactly after excluding elapsed milliseconds, which
+  were nonnegative. R used raw JSON. Hosted authentication and
+  transport remain open.
