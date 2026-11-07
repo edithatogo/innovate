@@ -3341,3 +3341,7 @@ the other competition models and installed binding checks remain open.
   freshly built locked wheel at `0941cfe1`. Python 3.15.2 passed all
   83 tests, with repository default pytest options cleared for the
   focused directory run. Coverage and release gates remain separate.
+
+- [x] Run the Julia binding suite and freshly installed R native
+  test script at `e86679c5` against the rebuilt locked Rust FFI library.
+  Both suites exited successfully. Package release gates remain open.
