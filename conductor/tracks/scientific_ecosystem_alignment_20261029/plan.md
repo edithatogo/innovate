@@ -7541,3 +7541,10 @@ Hosted release readiness for this worktree revision remains open.
   Statsmodels, NumPyro, ndlib and Pandera are absent from the active
   dependencies. Retain their scientific obligations in the Rust
   migration ledger. The native development policy check passed.
+
+- The clean merge previews for pr-94 and resolve/pr-160 add tests
+  for retired Python APIs. Preserve their behavioral requirements
+  for the native replacements. PR #94 checks stability aliases and
+  unknown-tier rejection. PR #160 checks empirical interval output,
+  confidence bounds, and input length validation. Native interval
+  calibration remains open under calibration_identifiability.
