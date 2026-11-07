@@ -7359,3 +7359,10 @@ Hosted release readiness for this worktree revision remains open.
   retain a separate qualification receipt. Actionlint, dependency
   consistency and the installed local consumer passed. Hosted
   resolution and execution remain open.
+
+- [x] Verify binary-only dependency resolution for Voiage 3.1.0 and
+  Polars 2.1.0 on CPython 3.15.2, x86_64 manylinux 2.28. The uv dry
+  run resolved 29 packages, including NumPy, SciPy, PyArrow and
+  scikit-learn. The default cache ran out of space, so the successful
+  run used a checkout-local cache. This checks Linux wheel availability.
+  Hosted installation and execution remain open.
