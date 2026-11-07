@@ -94,9 +94,14 @@ impl ScenarioSpecification {
             ScenarioKind::Network {
                 num_nodes,
                 average_degree,
-                ..
-            } if *num_nodes == 0 || *average_degree <= 0. => {
-                Err("num_nodes and average_degree must be positive")
+                network_type,
+            } if *num_nodes == 0
+                || *average_degree < 0.
+                || (*average_degree == 0. && network_type != "custom") =>
+            {
+                Err(
+                    "num_nodes must be positive and average_degree must be positive except for custom graphs",
+                )
             }
             _ => Ok(()),
         }

@@ -2576,8 +2576,10 @@ fn kairos_scenario_replay_retains_scheduled_retry_clear() {
     );
 
     let mut closed = request.clone();
+    closed["payload"]["scenarios"][0]["specification"]["average_degree"] = json!(0);
     let options = &mut closed["payload"]["scenarios"][0]["simulation"]["simulation_options"];
     options["capacity"] = json!(0);
+    options["edges"] = json!([]);
     options["schedule"] = json!([{"tick":7,"capacity":2,"service_ticks":2}]);
     options.as_object_mut().unwrap().remove("max_queue_length");
     let response = run(&closed);

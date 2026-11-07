@@ -4246,3 +4246,8 @@ Hosted release readiness for this worktree revision remains open.
   3.15.2 wheel, Julia and installed R at 6709dd48. All expose the
   opt-in flag, signed direction and three alignment requirements.
   All ten scenario-filtered Rust boundary tests passed.
+- [x] Allow custom network specifications with zero average degree
+  and an empty explicit edge list. This lets scenarios isolate
+  resource effects from imitation. The initially closed scenario
+  replays with zero degree, and all ten scenario-filtered Rust
+  boundary tests passed. Installed-binding verification remains open.
