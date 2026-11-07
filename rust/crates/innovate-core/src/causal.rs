@@ -55,7 +55,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                  "estimands":["ate","att"],"default_estimand":"ate",
                  "uncertainty":"fixed_propensity_standard_error"},
                 {"method":"matched_treatment_contrast","adjustment":"nearest_score_with_replacement",
-                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":["allow_partial","outcome_variances"],
+                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":["allow_partial","outcome_variances","balance_covariates"],
                  "estimands":["att"],"default_estimand":"att",
                  "partial_estimand":"matched_subset_att",
                  "uncertainty":"conditional_standard_error",
@@ -1216,6 +1216,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
                 | "caliper"
                 | "allow_partial"
                 | "outcome_variances"
+                | "balance_covariates"
         )
     }) {
         return Err("matched contrast received an unsupported field");
@@ -1236,6 +1237,21 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     }) {
         return Err("outcome variances must be nonnegative and align with outcomes");
     }
+    let balance_covariates: Option<std::collections::BTreeMap<String, Vec<f64>>> = fields
+        .get("balance_covariates")
+        .map(|value| {
+            serde_json::from_value(value.clone())
+                .map_err(|_| "balance_covariates must contain named numeric arrays")
+        })
+        .transpose()?;
+    if balance_covariates.as_ref().is_some_and(|columns| {
+        columns.is_empty()
+            || columns
+                .iter()
+                .any(|(name, values)| name.trim().is_empty() || values.len() != outcomes.len())
+    }) {
+        return Err("balance covariates must have nonblank names and align with outcomes");
+    }
     let caliper = payload["caliper"]
         .as_f64()
         .filter(|&v| v >= 0.)
@@ -1250,6 +1266,12 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     controls.sort_by(|&a, &b| scores[a].partial_cmp(&scores[b]).unwrap());
     controls.dedup_by(|a, b| scores[*a] == scores[*b]);
     let mut differences = Vec::new();
+    #[derive(Serialize)]
+    struct MatchPair {
+        treated_index: usize,
+        control_index: usize,
+        distance: f64,
+    }
     let mut pairs = Vec::new();
     let mut unmatched_treated_indices = Vec::new();
     let mut control_uses = std::collections::BTreeMap::<usize, usize>::new();
@@ -1278,7 +1300,11 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
         if let Some(variances) = &outcome_variances {
             treated_error = treated_error.hypot(variances[i].sqrt());
         }
-        pairs.push(json!({"treated_index":i,"control_index":control,"distance":distance}));
+        pairs.push(MatchPair {
+            treated_index: i,
+            control_index: control,
+            distance,
+        });
     }
     let estimate =
         mean(&differences).ok_or("matching requires at least one matched treated observation")?;
@@ -1299,10 +1325,34 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
                 error.hypot(count as f64 / n * variances[index].sqrt())
             })
     });
+    let balance = balance_covariates
+        .map(|columns| {
+            columns
+                .into_iter()
+                .map(|(name, values)| {
+                    let treated: Vec<_> = pairs
+                        .iter()
+                        .map(|pair| values[pair.treated_index])
+                        .collect();
+                    let control: Vec<_> = pairs
+                        .iter()
+                        .map(|pair| values[pair.control_index])
+                        .collect();
+                    let treated_mean = mean(&treated).unwrap();
+                    let control_mean = mean(&control).unwrap();
+                    Ok((
+                        name,
+                        json!({"treated_mean":treated_mean,"control_mean":control_mean,
+                "mean_difference":finite(treated_mean - control_mean)?}),
+                    ))
+                })
+                .collect::<Result<serde_json::Map<String, Value>, &'static str>>()
+        })
+        .transpose()?;
     Ok(
         json!({"method":"nearest_score_with_replacement","estimand":estimand,"estimate":estimate,"pairs":pairs,
             "unmatched_treated_indices":unmatched_treated_indices,
-            "conditional_standard_error":conditional_standard_error,
+            "conditional_standard_error":conditional_standard_error,"covariate_balance":balance,
             "match_diagnostics":{"caliper":caliper,"max_score_distance":max_score_distance,
                 "matched_treated_fraction":pairs.len() as f64 / (pairs.len() + unmatched_treated_indices.len()) as f64},
             "control_diagnostics":{"unique_controls":control_uses.len(),

@@ -5238,3 +5238,9 @@ Hosted release readiness for this worktree revision remains open.
   3.15.2, Julia and installed R. All three returned a caliper of
   0.5, maximum retained distance zero and matched treated fraction
   0.5 on the same partial ATT fixture.
+
+- [x] Report optional named covariate means and differences over
+  retained matched pairs. Reused controls contribute once per pair.
+  The Rust fixture matched the analytic 10 for controls with values
+  0, 0 and 30, and rejected misaligned covariate arrays. Binding
+  checks and broader matching inference remain open.

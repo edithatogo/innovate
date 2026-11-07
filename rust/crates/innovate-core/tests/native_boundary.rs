@@ -876,7 +876,15 @@ fn causal_summaries_match_analytic_effects() {
     let mut reused = matched.clone();
     reused["scores"][3] = json!(2);
     reused["outcome_variances"] = json!([1, 4, 1, 1, 1]);
+    reused["balance_covariates"] = json!({"age":[10,20,30,40,50]});
+    let mut bad_balance = reused.clone();
+    bad_balance["balance_covariates"]["age"] = json!([1]);
+    assert!(run(bad_balance)["result"].is_null());
     let result = run(reused);
+    assert_eq!(
+        result["result"]["covariate_balance"]["age"],
+        json!({"treated_mean":35.,"control_mean":20.,"mean_difference":15.})
+    );
     let error = result["result"]["conditional_standard_error"]
         .as_f64()
         .unwrap();
@@ -888,6 +896,13 @@ fn causal_summaries_match_analytic_effects() {
     assert_eq!(
         result["result"]["control_diagnostics"]["effective_sample_size"],
         1.
+    );
+    let balance = run(json!({"method":"matched_treatment_contrast",
+        "outcomes":[0,0,1,1,1],"treatment":[0,0,1,1,1],
+        "scores":[0,1,0,0,1],"caliper":0,"balance_covariates":{"age":[0,30,30,30,30]}}));
+    assert_eq!(
+        balance["result"]["covariate_balance"]["age"],
+        json!({"treated_mean":30.,"control_mean":10.,"mean_difference":20.})
     );
     matched["caliper"] = json!(0.5);
     assert!(run(matched.clone())["result"].is_null());
