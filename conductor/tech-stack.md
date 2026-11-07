@@ -54,7 +54,7 @@
   captures memory evidence for promoted native slices.
 - **GPU Profiling**: JAX/XLA device profilers remain the GPU evidence source
   until Rust owns a promoted native GPU execution backend.
-- **Rust Ownership Boundary**: the remaining ownership gap is tracked as archived closure evidence under `Rust Core Full Native Migration and Ownership Closure`; the earlier Rust Core Migration Completion and Polyglot Claim Closure track remains prior closure evidence.
+- **Rust Ownership Boundary**: archived closure records describe bounded historical work, not complete present-day native ownership. The current source remains hybrid; the [Rust-core convergence track](tracks/rust_core_convergence_20261107/index.md) defines remaining native acceptance without superseding the scientific alignment owner's pins or gates.
 
 ### CI/CD
 - GitHub Actions (CI, docs deployment, package publishing)
@@ -79,3 +79,18 @@ innovate/
 
 Python 3.15.1 and Arrow 26/Polars 2.1 are being qualified against the full
 resolved graph. This is not a completed native migration or Kairos pin advance.
+
+## Approved target architecture — 7 November 2026
+
+The user requires a Rust core. The planned structure is a binding-independent
+`crates/innovate-core`, `crates/innovate-arrow`, optional `crates/innovate-kairos`,
+and direct native binding adapters. These paths are a target, not an assertion
+that the crates exist today. Python remains a research interface; external
+Python inference backends must be labelled and cannot count as native delivery.
+
+Separate core, binding, backend, build, test-oracle and tooling dependencies.
+Qualify maintained optimisation/ODE/inference candidates before adoption; no
+version pins change in this planning update. Align scientific artefacts with
+repository-standards and Voiage while retaining independent numerical oracles.
+See the [programme](frontier-programme-20261107.md) for ownership, evidence gates,
+research sequencing and limits on current claims.

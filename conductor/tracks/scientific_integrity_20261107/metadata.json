@@ -1,0 +1,13 @@
+{
+  "track_id": "scientific_integrity_20261107",
+  "type": "fix",
+  "status": "new",
+  "approved": true,
+  "approval_scope": "planning",
+  "repository": "innovate",
+  "created_at": "2026-11-07",
+  "updated_at": "2026-11-07",
+  "priority": "P0",
+  "depends_on": [],
+  "implementation_started": false
+}
