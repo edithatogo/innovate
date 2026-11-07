@@ -6378,3 +6378,9 @@ Hosted release readiness for this worktree revision remains open.
   were -0.0136 and -0.0160, so the reduction seen with seed 912 did
   not replicate. Conditional ATT coverage was 375/395 and 363/381.
   The guard enforces support, with no general bias reduction established.
+
+- [x] Retain the cross-fitted cluster guard in Python consumer
+  regression coverage. The test checks both estimands, including
+  cluster support, degrees of freedom and insufficient-support errors.
+  All 18 selected causal consumer tests passed against the rebuilt
+  wheel.
