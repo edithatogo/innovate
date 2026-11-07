@@ -1610,3 +1610,27 @@ def test_scenario_grid_ranking():
     errors = [row["mean_standard_error"] for row in rows]
     for row, error in zip(endpoint["path_covariance"], errors, strict=True):
         assert row == pytest.approx([error * other for other in errors])
+
+    for scenario in scenarios:
+        scenario["simulation"]["inputs"]["time"] = list(range(128))
+    boundary = innovate.execute("execute_scenario_grid", scenarios=scenarios,
+                                  comparisons=[comparison])["result"]["comparisons"][0]["result"]
+    assert len(boundary["path_covariance"]) == 128
+    assert all(len(row) == 128 for row in boundary["path_covariance"])
+
+    for scenario in scenarios:
+        scenario["simulation"]["inputs"]["time"] = list(range(129))
+    rejected = innovate.execute("execute_scenario_grid", scenarios=scenarios,
+                                 comparisons=[comparison])["result"]["comparisons"][0]
+    assert rejected["result"] is None
+    assert rejected["error"] == {
+        "code": "invalid_comparison",
+        "message": "ensemble path covariance supports at most 128 sample times",
+    }
+
+    comparison.pop("include_path_covariance")
+    comparison["include_path_summary"] = True
+    summary = innovate.execute("execute_scenario_grid", scenarios=scenarios,
+                                 comparisons=[comparison])["result"]["comparisons"][0]["result"]
+    assert len(summary["path_summary"]["rows"]) == 129
+    assert "path_covariance" not in summary

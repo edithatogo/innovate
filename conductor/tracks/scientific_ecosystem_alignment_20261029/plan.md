@@ -4843,3 +4843,8 @@ Hosted release readiness for this worktree revision remains open.
   package assertions passed against rebuilt native libraries. The Python
   wheel built successfully. The runtime check loaded the build artifact
   directly after wheel extraction ran out of disk space.
+
+- [x] Verify the covariance size boundary through Python 3.15.2.
+  The focused grid test accepts a 128 × 128 matrix, returns a typed
+  comparison error at 129 sample times, and still returns all 129
+  pointwise rows when covariance is disabled.
