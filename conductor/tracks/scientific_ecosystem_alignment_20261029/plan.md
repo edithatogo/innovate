@@ -6073,3 +6073,12 @@ Hosted release readiness for this worktree revision remains open.
   rebuilt Python wheel and R binding. Both produced streams identical
   to the Julia stream already checked for parent and child metadata,
   null elements, null lists and empty lists.
+
+- [x] Qualify direct reads of the untouched Polars IPC fixtures against
+  the Arrow.jl 3.0 development candidate in
+  [upstream PR #609](https://github.com/apache/arrow-julia/pull/609)
+  at c7b41360d41d3de0e78402734a49f2ebe0379548. On Julia 1.13.3 it
+  read all four writer variants and matched the nested file against
+  its direct stream column by column, including values and nulls.
+  Arrow.jl 2.8.1 remains the latest release. Keep the released-reader
+  gate open and the candidate isolated pending upstream release.
