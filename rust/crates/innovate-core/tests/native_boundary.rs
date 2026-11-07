@@ -1082,6 +1082,22 @@ fn scenario_grid_compares_aligned_adoption_paths() {
     assert_eq!(crossing["alternative"], 1.);
     assert!((crossing["baseline"].as_f64().unwrap() - (1. + 10. / (baseline - 50.))).abs() < 1e-12);
 
+    let mut missing_threshold = request.clone();
+    let comparison = missing_threshold["payload"]["comparisons"][0]
+        .as_object_mut()
+        .unwrap();
+    comparison.remove("threshold");
+    comparison.insert("interpolate_threshold".into(), json!(true));
+    let rejected = run(&missing_threshold);
+    assert_eq!(
+        rejected["result"]["executions"].as_array().unwrap().len(),
+        2
+    );
+    assert_eq!(
+        rejected["result"]["comparisons"][0]["error"]["message"],
+        "interpolate_threshold requires a threshold"
+    );
+
     let mut tied = request.clone();
     tied["payload"]["scenarios"][1]["simulation"]["parameters"]["L"] = json!(100.);
     let tied = run(&tied);

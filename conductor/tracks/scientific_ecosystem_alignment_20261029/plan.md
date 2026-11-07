@@ -3658,3 +3658,8 @@ Hosted release readiness for this worktree revision remains open.
   Sixteen zero-effect pairs count all 65,536 assignments as ties
   and return p = 1. Seventeen pairs return invalid_comparison while
   retaining all scenario executions. The targeted test and Clippy passed.
+
+- [x] Reject scenario comparisons that request threshold interpolation
+  without a threshold. The Rust boundary returns a comparison error
+  and retains the scenario executions. The targeted test and Clippy
+  passed.

@@ -773,6 +773,9 @@ fn compare_paths(
     paths: &ScenarioPaths<'_>,
     comparison: &Comparison,
 ) -> Result<Value, &'static str> {
+    if comparison.interpolate_threshold && comparison.threshold.is_none() {
+        return Err("interpolate_threshold requires a threshold");
+    }
     let basis = common_time_basis(
         paths,
         [
