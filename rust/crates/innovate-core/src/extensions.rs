@@ -107,3 +107,32 @@ pub(crate) fn registered(payload: &Value) -> Result<Value, &'static str> {
         .collect();
     Ok(json!({"manifests":manifests}))
 }
+
+pub(crate) fn unregister(payload: &Value) -> Result<Value, &'static str> {
+    #[derive(Deserialize)]
+    #[serde(deny_unknown_fields)]
+    struct Removal {
+        name: String,
+        expected_version: String,
+    }
+
+    let removal = Removal::deserialize(payload)
+        .map_err(|_| "extension removal requires name and expected_version")?;
+    if removal.name.trim().is_empty() || removal.expected_version.trim().is_empty() {
+        return Err("extension removal requires nonblank name and expected_version");
+    }
+    let mut registry = REGISTRY
+        .lock()
+        .map_err(|_| "extension registry unavailable")?;
+    match registry.entry(removal.name) {
+        std::collections::btree_map::Entry::Occupied(entry) => {
+            if entry.get().version != removal.expected_version {
+                return Err("registered extension version does not match expected_version");
+            }
+            Ok(json!({"removed":true,"manifest":entry.remove()}))
+        }
+        std::collections::btree_map::Entry::Vacant(_) => {
+            Ok(json!({"removed":false,"manifest":null}))
+        }
+    }
+}

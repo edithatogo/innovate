@@ -5662,3 +5662,9 @@ Hosted release readiness for this worktree revision remains open.
   Unfiltered listing still returns all registered manifests. The Rust
   boundary checks covered inclusion, exclusion, invalid point rejection,
   and duplicate registration. Extension execution remains open.
+
+- [x] Add version-checked removal to the in-process native extension
+  registry. Rust boundary tests verified removal, retry after removal,
+  re-registration with a new version and rejection of a stale version.
+  The check is atomic under the registry lock and compares versions.
+  Hosted lifecycle and extension execution remain open.

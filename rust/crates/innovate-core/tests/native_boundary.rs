@@ -3007,6 +3007,26 @@ fn extension_registry_rejects_duplicate_registration_without_replacement() {
         json!({"extension_point":"unknown"}),
     );
     assert_eq!(invalid["error"]["message"], "unknown extension point");
+    let remove = |version| {
+        run(
+            "unregister_extension_manifest",
+            json!({"name":"registry-fixture","expected_version":version}),
+        )
+    };
+    assert_eq!(
+        remove("2")["error"]["message"],
+        "registered extension version does not match expected_version"
+    );
+    let removed = remove("1");
+    assert_eq!(removed["result"]["removed"], true);
+    assert_eq!(removed["result"]["manifest"], result["result"]["manifest"]);
+    assert_eq!(remove("1")["result"]["removed"], false);
+    assert_eq!(
+        run("register_extension_manifest", json!({"manifest":manifest}))["result"]["manifest"]["version"],
+        "2"
+    );
+    assert_eq!(remove("1")["error"]["code"], "invalid_request");
+    assert_eq!(remove("2")["result"]["removed"], true);
 }
 
 #[test]

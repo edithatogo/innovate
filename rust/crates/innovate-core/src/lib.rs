@@ -80,6 +80,7 @@ pub fn execute_json(input: &str) -> String {
                 | "bayesian_effective_sample_size"
                 | "validate_extension_manifests"
                 | "register_extension_manifest"
+                | "unregister_extension_manifest"
                 | "list_extension_manifests"
                 | "dataset_checksum"
                 | "validate_dataset",
@@ -251,6 +252,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         }
         if value["operation"] == "register_extension_manifest" {
             return extensions::register(payload);
+        }
+        if value["operation"] == "unregister_extension_manifest" {
+            return extensions::unregister(payload);
         }
         if value["operation"] == "list_extension_manifests" {
             return extensions::registered(payload);
