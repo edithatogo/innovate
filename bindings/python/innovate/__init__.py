@@ -21,6 +21,7 @@ from . import _native
 __version__ = version("innovate")
 __all__ = [
     "execute_scenario_grid",
+    "export_ipc_file",
     "scenario_executions",
     "scenario_comparisons",
     "FitResult",
@@ -90,6 +91,11 @@ def _ipc(frame: pl.DataFrame | pl.LazyFrame) -> bytes:
     if not isinstance(frame, pl.DataFrame):
         raise TypeError("expected a Polars DataFrame or LazyFrame")
     return frame.write_ipc(None).getvalue()
+
+
+def export_ipc_file(data: pl.DataFrame | pl.LazyFrame) -> bytes:
+    """Encode a Polars frame as Arrow IPC file bytes with a leading schema message."""
+    return _native.export_ipc_file(_ipc(data))
 
 
 def execute_scenario_grid(data: pl.DataFrame | pl.LazyFrame, **payload: Any) -> dict[str, Any]:

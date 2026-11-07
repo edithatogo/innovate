@@ -2493,3 +2493,10 @@ the other competition models and installed binding checks remain open.
   Arrow.jl 2.8.1 still returns no columns for the Python Polars IPC file,
   while it reads both the Polars stream and the tested Rust-written file.
   Direct Python Polars file readback in Arrow.jl remains open.
+
+- [x] Provide a Polars-backed file handoff via Python export_ipc_file.
+  The Rust writer emits a leading schema message. Python 3.15.2 Polars,
+  Julia Arrow.jl 2.8.1 and R Arrow read the exported file and preserved
+  Int32 counts, nullable Float64 and Unicode strings. All nine Rust
+  tabular tests and focused Clippy passed. Direct Arrow.jl readback of
+  files written by the Python Polars writer remains an upstream gap.

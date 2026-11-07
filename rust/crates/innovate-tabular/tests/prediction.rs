@@ -203,3 +203,19 @@ fn scenario_arrow_comparisons_preserve_pair_and_ensemble_rows() {
         );
     }
 }
+
+#[test]
+fn export_ipc_file_frames_schema_and_preserves_nulls_and_types() {
+    let mut frame =
+        df!("n" => [1_i32, 2], "value" => [Some(2.), None], "name" => ["a", "β"]).unwrap();
+    let mut stream = Vec::new();
+    IpcStreamWriter::new(&mut stream)
+        .finish(&mut frame)
+        .unwrap();
+    let bytes = innovate_tabular::export_ipc_file(&stream).unwrap();
+    assert_eq!(&bytes[..12], b"ARROW1\0\0\xff\xff\xff\xff");
+    let decoded = IpcReader::new(std::io::Cursor::new(bytes))
+        .finish()
+        .unwrap();
+    assert_eq!(decoded, frame);
+}

@@ -192,6 +192,16 @@ fn read_ipc(data: &[u8]) -> PolarsResult<DataFrame> {
     }
 }
 
+/// Encode a Polars frame as an IPC file with a leading schema message.
+pub fn export_ipc_file(data: &[u8]) -> PolarsResult<Vec<u8>> {
+    let mut frame = read_ipc(data)?;
+    let mut bytes = Vec::new();
+    IpcWriter::new(&mut bytes)
+        .with_compat_level(CompatLevel::oldest())
+        .finish(&mut frame)?;
+    Ok(bytes)
+}
+
 pub fn predict_ipc(data: &[u8], model: &str, parameters: Value) -> PolarsResult<Vec<u8>> {
     predict_ipc_with_options(data, model, parameters, json!({}))
 }

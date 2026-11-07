@@ -32,3 +32,13 @@ metadata = Arrow.Table("policy.arrow")
 The same stream settings work with `treatment_contrast_frame`. Arrow.jl
 2.8.1 returned no columns for the tested Polars IPC file format. It read
 the equivalent IPC stream and the file produced by PyArrow 26.
+
+For a file handoff, use Innovate's Polars-backed IPC writer. It emits the
+leading schema message that Arrow.jl 2.8.1 expects.
+
+```python
+from pathlib import Path
+from innovate import export_ipc_file, policy_metadata_frame
+
+Path("policy.arrow").write_bytes(export_ipc_file(policy_metadata_frame(result)))
+```
