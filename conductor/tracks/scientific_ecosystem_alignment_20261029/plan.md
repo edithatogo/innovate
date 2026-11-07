@@ -7520,3 +7520,9 @@ Hosted release readiness for this worktree revision remains open.
   target older versions than the active locks. PR #381 updates the
   retired .NET workflow setup, absent from active workflows. The
   hosted PRs remain open.
+
+- [x] Reconcile ABM randomness PRs #460, #446, #444, #435, #423, #422,
+  #410 and #379. Their changes apply only to retired Python ABM files.
+  Keep seeded Kairos simulation streams so checkpoints can replay.
+  All 17 optimized Kairos tests passed, including replay and ensemble
+  checks. Hosted PR status is separate.
