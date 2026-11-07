@@ -2486,6 +2486,15 @@ fn historical_logistic_profiles_event_candidates_and_saves_fixed_split() {
             .unwrap()
             < 1e-10
     );
+    let bootstrap = execute(&json!({"schema_version":"2.0","operation":"bootstrap_fit",
+        "payload":{"fit_model":"logistic","fit":request["payload"],"draws":3,"seed":42,
+            "method":"centered_residual_resampling"}}));
+    let selection = &bootstrap["result"]["event_selection"];
+    assert_eq!(selection["successful_refits"], 3);
+    assert_eq!(
+        selection["candidates"][1],
+        json!({"t_event":12.,"count":3,"frequency":1.})
+    );
     let weights: Vec<_> = (0..24).map(|i| if i < 8 { 0 } else { 1 }).collect();
     request["payload"]["fit_options"] = json!({"weights":weights});
     let weighted = execute(&request);

@@ -3195,3 +3195,9 @@ the other competition models and installed binding checks remain open.
   profiles. Python 3.15.2, Julia and R agreed on the Lotka–Volterra
   event and override selection. The Rust regression, two Python Polars
   profile consumer tests and focused Clippy passed.
+
+- [x] Report event selection counts and frequencies from scalar
+  bootstrap refits. The seeded noisy Logistic residual fixture
+  selected time 12 in all 12 successful refits, with exact agreement
+  across Python 3.15.2, Julia and R. Focused Rust tests and Clippy
+  passed. Frequencies describe stability on the candidate grid.

@@ -227,6 +227,12 @@ fewer than three positive-weight observations on either side. The fitted state s
 selected `t_event`, and `event_profile` reports the candidate scores and
 convergence. Each profile includes the winning row as `selected` and
 its zero-based `selected_index`. The search is limited to the supplied times.
+For scalar event-profile fits, `bootstrap_fit` repeats the candidate
+search on each resample. Its `event_selection` reports the baseline
+selection and each candidate's count and frequency among converged
+refits. These frequencies describe selection stability on the supplied
+grid. They are separate from the percentile intervals on curve parameters.
+
 
 Norton–Bass, Lotka–Volterra, complementary goods, lock-in and multi-product
 fits accept the same candidate list with a zero-based `event_index`

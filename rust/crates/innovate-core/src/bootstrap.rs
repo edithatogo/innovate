@@ -58,6 +58,9 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
         .map_err(|_| "baseline fit failed")?
         .result
         .ok_or("baseline fit returned no result")?;
+    let mut event_counts = baseline["event_profile"]["candidates"]
+        .as_array()
+        .map(|candidates| vec![0_u64; candidates.len()]);
     let residual_design = if method == "centered_residual_resampling" {
         if baseline["diagnostics"]["optimizer"]["converged"] != true {
             return Err("residual bootstrap requires a converged baseline fit");
@@ -122,6 +125,14 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
                 .or_default()
                 .push(value.as_f64().ok_or("fit parameter must be numeric")?);
         }
+        if let Some(counts) = &mut event_counts {
+            let index = fit["event_profile"]["selected_index"]
+                .as_u64()
+                .and_then(|index| usize::try_from(index).ok())
+                .and_then(|index| counts.get_mut(index))
+                .ok_or("bootstrap refit did not select a valid event candidate")?;
+            *index += 1;
+        }
         succeeded += 1;
     }
     let tail = (1. - interval_mass) / 2.;
@@ -167,14 +178,32 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
             (name, error)
         })
         .collect();
-    Ok(json!({"method":method,"seed":seed,"draws":draws,
+    let mut result = json!({"method":method,"seed":seed,"draws":draws,
         "succeeded":succeeded,"failed":draws-succeeded,
         "failure_counts":{"nonfinite_synthetic":invalid_synthetic,"fit_error":fit_errors,"nonconverged":nonconverged},
         "baseline_optimizer":baseline["diagnostics"]["optimizer"],
         "baseline_parameters":baseline["parameters"],"estimates":estimates,
         "interval_method":"percentile","interval_mass":interval_mass,"parameter_intervals":intervals,
         "parameter_standard_errors":standard_errors,
-        "parameter_correlation":correlation(&estimates, succeeded)}))
+        "parameter_correlation":correlation(&estimates, succeeded)});
+    if let Some(counts) = event_counts {
+        let candidates = baseline["event_profile"]["candidates"]
+            .as_array()
+            .expect("profile candidates");
+        let selections: Vec<_> = candidates
+            .iter()
+            .zip(counts)
+            .map(|(candidate, count)| {
+                json!({"t_event":candidate["t_event"],"count":count,
+                "frequency":(succeeded > 0).then(|| count as f64 / succeeded as f64)})
+            })
+            .collect();
+        result["event_selection"] = json!({
+            "baseline":baseline["event_profile"]["selected"],
+            "successful_refits":succeeded,"candidates":selections
+        });
+    }
+    Ok(result)
 }
 
 fn correlation(estimates: &BTreeMap<String, Vec<f64>>, draws: u64) -> Value {
