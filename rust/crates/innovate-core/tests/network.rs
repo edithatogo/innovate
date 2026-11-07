@@ -923,6 +923,20 @@ fn network_checkpoint_preserves_pending_service_queue_and_schedule() {
     assert_eq!(run(payload.clone()).unwrap().result.unwrap(), expected);
     payload["parameters"]["p"] = json!(1_000_000_000_000_u64);
     assert_eq!(run(payload.clone()).unwrap().result.unwrap(), expected);
+    for (section, field, invalid) in [
+        (
+            "queue",
+            "retry_at",
+            json!([0, null, null, null, null, null]),
+        ),
+        ("metrics", "occupied_slot_ticks", json!(u64::MAX)),
+    ] {
+        let mut malformed = state.clone();
+        malformed[section][field] = invalid;
+        payload["simulation_options"]["resume_checkpoint"] = json!(malformed.to_string());
+        assert!(run(payload.clone()).is_err());
+    }
+    payload["simulation_options"]["resume_checkpoint"] = paused["checkpoint"].clone();
     payload["simulation_options"]["seed"] = json!(43);
     assert!(run(payload).is_err());
 }

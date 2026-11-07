@@ -619,7 +619,35 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             .ok_or_else(|| invalid("network checkpoint must be a string"))?;
         let saved: NetworkCheckpoint = serde_json::from_str(token)
             .map_err(|_| invalid("invalid network checkpoint format"))?;
+        let max_slot_ticks = horizon * o.population as u128;
+        let original_rng = rng.checkpoint();
         if saved.version != 1
+            || saved.rng.seed != original_rng.seed
+            || saved.rng.stream_id != original_rng.stream_id
+            || saved.capacity > o.population as u64
+            || saved.completed.len() > o.population - initial.len()
+            || saved.completed.last() != Some(&saved.now)
+            || saved.completed.windows(2).any(|pair| pair[0] > pair[1])
+            || saved
+                .queue
+                .retry_at
+                .iter()
+                .flatten()
+                .any(|&tick| tick < saved.now)
+            || [
+                saved.metrics.occupied_slot_ticks,
+                saved.metrics.over_capacity_slot_ticks,
+                saved.metrics.configured_slot_ticks,
+                saved.metrics.admitted_wait_ticks,
+                saved.metrics.abandoned_wait_ticks,
+            ]
+            .into_iter()
+            .any(|total| total > max_slot_ticks * 256)
+            || saved
+                .service
+                .iter()
+                .chain(saved.service_override.iter())
+                .any(|&duration| !(1..=1_000_000_000_000).contains(&duration))
             || Some(&saved.configuration) != configuration.as_ref()
             || saved.now > horizon
             || saved.completed.is_empty()
@@ -656,7 +684,9 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 .iter()
                 .zip(&saved.queue.waiting_since)
                 .any(|(deadline, arrival)| {
-                    deadline.is_some_and(|end| arrival.is_none_or(|start| end < start))
+                    deadline.is_some_and(|end| {
+                        end < saved.now || arrival.is_none_or(|start| end < start)
+                    })
                 })
         {
             return Err(invalid(
@@ -1072,6 +1102,9 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         .map(|tick| horizon - tick)
         .sum();
     metrics.record_over_capacity(horizon, in_service, capacity);
+    let idle_slot_ticks = (metrics.configured_slot_ticks + metrics.over_capacity_slot_ticks)
+        .checked_sub(metrics.occupied_slot_ticks)
+        .ok_or_else(|| invalid("inconsistent network resource accounting"))?;
     let resource_metrics = json!({
         "horizon_ticks":horizon,
         "peak_queue_length":metrics.peak_queue_length,
@@ -1079,7 +1112,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         "occupied_slot_ticks":metrics.occupied_slot_ticks,
         "configured_slot_ticks":metrics.configured_slot_ticks,
         "over_capacity_slot_ticks":metrics.over_capacity_slot_ticks,
-        "idle_slot_ticks":metrics.configured_slot_ticks + metrics.over_capacity_slot_ticks - metrics.occupied_slot_ticks,
+        "idle_slot_ticks":idle_slot_ticks,
         "admitted_wait_ticks":metrics.admitted_wait_ticks,
         "abandoned_wait_ticks":metrics.abandoned_wait_ticks,
         "pending_wait_ticks":pending_wait_ticks

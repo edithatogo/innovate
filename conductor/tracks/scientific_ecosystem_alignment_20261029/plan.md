@@ -5098,3 +5098,9 @@ Hosted release readiness for this worktree revision remains open.
   JSON floats within the binary64 safe-integer range for fingerprinting.
   Both consumers then reproduced their uninterrupted result, and the
   focused Rust regression passed with the alternate numeric encoding.
+
+- [x] Reject network checkpoints with backward retry or deadline
+  ticks, incompatible RNG streams, invalid service durations or
+  inconsistent resource totals. The regression exercises a stale
+  retry and an impossible occupancy total. All 30 Rust network
+  integration tests passed.
