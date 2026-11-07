@@ -4457,3 +4457,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reuse the normalized dataset when stamping an ingestion artifact.
   Inputs with no defaults stay borrowed through verification. All
   eight focused Rust dataset tests passed.
+- [x] Report a validly labelled self-loop even when another edge has
+  invalid endpoints. The focused Rust test verifies both diagnostics.
