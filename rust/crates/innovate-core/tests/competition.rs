@@ -792,3 +792,38 @@ fn forced_automatic_starts_converge_and_recover_held_out_trajectories() {
         }
     }
 }
+
+#[test]
+fn ecosystem_models_profile_parameter_event_times() {
+    let fixture: Value =
+        serde_json::from_str(include_str!("fixtures/ecosystem_events_scipy.json")).unwrap();
+    for model in [
+        "lotka_volterra",
+        "complementary_goods",
+        "lock_in",
+        "multi_product",
+    ] {
+        let case = &fixture["cases"][model];
+        let mut options = case["constructor_kwargs"].clone();
+        let target = options["parameter_events"][0]["time"].as_f64().unwrap();
+        options["event_candidates"] = json!([target - 0.125, target, target + 0.125]);
+        options["event_index"] = json!(0);
+        let result = KernelBinding::new().fit_model(model, json!({
+            "inputs":{"time":fixture["time"],"covariates":fixture["covariates"],"observed":case["rows"]},
+            "constructor_kwargs":options,
+            "fit_options":{"initial_parameters":case["parameters"],"max_iterations":200}
+        })).unwrap().result.unwrap();
+        assert_eq!(
+            result["state"]["constructor_kwargs"]["parameter_events"],
+            case["constructor_kwargs"]["parameter_events"],
+            "{model}"
+        );
+        assert_eq!(result["event_profile"]["event_index"], 0);
+        assert!(
+            result["event_profile"]["candidates"][1]["objective"]
+                .as_f64()
+                .unwrap()
+                < 1e-8
+        );
+    }
+}

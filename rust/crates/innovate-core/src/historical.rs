@@ -534,14 +534,22 @@ pub(crate) fn profile_event(
     } else {
         None
     };
-    let event_index = if event && request.model_key.as_deref() == Some("norton_bass") {
+    let event_index = if event
+        && matches!(
+            request.model_key.as_deref(),
+            Some(
+                "norton_bass"
+                    | "lotka_volterra"
+                    | "complementary_goods"
+                    | "lock_in"
+                    | "multi_product"
+            )
+        ) {
         let index = fixed
             .remove("event_index")
             .and_then(|index| index.as_u64())
             .and_then(|index| usize::try_from(index).ok())
-            .ok_or_else(|| {
-                error("Norton–Bass event profiling requires a zero-based event_index")
-            })?;
+            .ok_or_else(|| error("Parameter event profiling requires a zero-based event_index"))?;
         if !fixed
             .get("parameter_events")
             .and_then(|events| events.get(index))

@@ -511,6 +511,14 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
             "time must be finite, nonnegative and strictly increasing",
         ));
     }
+    if let Some(options) = payload
+        .get("constructor_kwargs")
+        .or_else(|| payload.get("model_kwargs"))
+        .and_then(Value::as_object)
+        .filter(|options| options.contains_key("event_candidates"))
+    {
+        return crate::historical::profile_event(request, options, &time, execute);
+    }
     let model = model(request, inputs, &time)?;
     let minimum_rows = model.names.len().div_ceil(model.n).max(4);
     let weights = if op == KernelOperation::FitModel {

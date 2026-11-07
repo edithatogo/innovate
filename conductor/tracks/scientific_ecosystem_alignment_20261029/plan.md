@@ -3172,3 +3172,10 @@ the other competition models and installed binding checks remain open.
   Norton–Bass timing fit. Python 3.15.2, Julia and R returned identical
   generation forecasts using the retained forcing history. Both
   generations matched the independent SciPy fixture within 7.5e-10.
+
+- [x] Extend indexed parameter-event profiling to Lotka–Volterra,
+  complementary goods, lock-in and multi-product models. Python
+  3.15.2, Julia and R agreed exactly on all four independent SciPy
+  cases, recovering the first event at 2.125 while retaining the
+  other event. Winning residual sums of squares were below 7e-18.
+  The focused Rust test and Clippy passed. Overrides are held fixed.
