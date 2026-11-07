@@ -198,7 +198,7 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Broader input qualification beyond the five cross-binding artifact fixtures, and release acceptance"
+      "remaining": "Local dataset ingestion, direct checksum replay, and edgeless graph artifacts have cross-binding evidence. Broader input qualification, hosted distribution checks and release acceptance remain open."
     },
     {
       "key": "scenario_registry_execution",
