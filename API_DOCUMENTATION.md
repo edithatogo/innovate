@@ -233,3 +233,9 @@ size is the reciprocal of the sum of squared normalized weights.
 The default `estimand` is `ate`. Set `estimand` to `att` to give
 treated observations equal weight and weight controls by their treatment
 odds, p/(1−p), before normalizing within each arm.
+
+The `fixed_propensity_standard_error` is a sandwich standard error
+for independent observations and a fixed propensity function. It
+combines squared weighted residuals with an arm-specific n/(n−1)
+correction. It is null when either arm has fewer than two observations.
+Uncertainty from fitting the propensity function requires separate inference.

@@ -4548,3 +4548,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Qualify supplied-propensity ATT through rebuilt Python 3.15.2,
   Julia and installed R. All three advertised both estimands and
   returned -41/17 with a maximum treated weight of 0.5.
+
+- [x] Add a fixed-propensity sandwich standard error to normalized
+  weighting. The focused Rust test verified sqrt(20.48) and null for
+  singleton arms. Binding validation and fitted-propensity inference remain open.

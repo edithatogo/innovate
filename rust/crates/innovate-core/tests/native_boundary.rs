@@ -688,6 +688,16 @@ fn causal_summaries_match_analytic_effects() {
         "outcomes":[0,10,2,12],"treatment":[0,0,1,1],"propensities":[0.2,0.8,0.2,0.8]});
     let result = run(weighted.clone());
     assert!((result["result"]["estimate"].as_f64().unwrap() + 4.).abs() < 1e-12);
+    let error = result["result"]["fixed_propensity_standard_error"]
+        .as_f64()
+        .unwrap();
+    assert!((error - 20.48_f64.sqrt()).abs() < 1e-12);
+    let singleton = run(json!({"method":"propensity_weighted_contrast",
+        "outcomes":[0,2],"treatment":[0,1],"propensities":[0.5,0.5]}));
+    assert_eq!(
+        singleton["result"].get("fixed_propensity_standard_error"),
+        Some(&json!(null))
+    );
     for arm in ["control", "treated"] {
         let diagnostics = &result["result"]["weight_diagnostics"][arm];
         assert_eq!(diagnostics["observations"], 2);

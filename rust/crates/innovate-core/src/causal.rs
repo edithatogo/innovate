@@ -780,7 +780,7 @@ fn propensity_weighted_contrast(payload: &Value) -> Result<Value, &'static str> 
         };
         arms[arm].push((outcome, log_weight));
     }
-    let summarize_arm = |arm: &[(f64, f64)]| -> Result<(f64, Value), &'static str> {
+    let summarize_arm = |arm: &[(f64, f64)]| -> Result<(f64, Option<f64>, Value), &'static str> {
         let maximum = arm
             .iter()
             .map(|&(_, p)| p)
@@ -794,8 +794,17 @@ fn propensity_weighted_contrast(payload: &Value) -> Result<Value, &'static str> 
             weighted_mean += weight * outcome;
             squared_weights += weight * weight;
         }
+        let standard_error = (arm.len() > 1).then(|| {
+            let correction = (arm.len() as f64 / (arm.len() - 1) as f64).sqrt();
+            correction
+                * arm.iter().fold(0_f64, |error, &(outcome, log_weight)| {
+                    let weight = (log_weight - maximum).exp() / sum_weights;
+                    error.hypot(weight * outcome - weight * weighted_mean)
+                })
+        });
         Ok((
             finite(weighted_mean)?,
+            standard_error,
             json!({
                 "observations":arm.len(),
                 "effective_sample_size":1. / squared_weights,
@@ -803,11 +812,16 @@ fn propensity_weighted_contrast(payload: &Value) -> Result<Value, &'static str> 
             }),
         ))
     };
-    let (control, control_diagnostics) = summarize_arm(&arms[0])?;
-    let (treated, treated_diagnostics) = summarize_arm(&arms[1])?;
+    let (control, control_error, control_diagnostics) = summarize_arm(&arms[0])?;
+    let (treated, treated_error, treated_diagnostics) = summarize_arm(&arms[1])?;
+    let standard_error = treated_error
+        .zip(control_error)
+        .map(|(a, b)| finite(a.hypot(b)))
+        .transpose()?;
     Ok(
         json!({"method":"normalized_inverse_probability_weighting","estimand":estimand,
         "estimate":finite(treated-control)?,"treated_mean":treated,"control_mean":control,
+        "fixed_propensity_standard_error":standard_error,
         "weight_diagnostics":{"treated":treated_diagnostics,"control":control_diagnostics}}),
     )
 }
