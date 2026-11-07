@@ -1118,4 +1118,8 @@ the other competition models and installed binding checks remain open.
   initialization. The analytic event fixture excludes an interior outlier
   of 1e100 and preserves the held-out forecast within 0.001. All eleven
   focused Rust tests and Clippy passed.
-- [ ] Qualify installed Python, Julia and R weighted historical Logistic fits.
+- [x] Qualify installed Python, Julia and R weighted historical Logistic fits.
+  Focused rebuilt native checks report convergence, 29 positive rows and
+  null AIC. Each held-out forecast meets the 0.001 analytic tolerance.
+  Python uses the Polars fit and forecast entry points.
+  [Fixture and results](evidence/historical-logistic-weights-20261107).
