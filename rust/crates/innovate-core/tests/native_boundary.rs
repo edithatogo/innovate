@@ -806,3 +806,31 @@ fn dataset_ingestion_stamps_valid_artifacts_and_rejects_invalid_inputs() {
         innovate_core::json!(["monotonicity:adoption"])
     );
 }
+
+#[test]
+fn scenario_grid_runs_in_order_and_retains_individual_errors() {
+    let simulation = json!({
+        "inputs":{"time":[1.]},
+        "parameters":{"L":100.,"k":1.,"x0":1.}
+    });
+    let mut request = json!({
+        "schema_version":"2.0","operation":"execute_scenario_grid",
+        "payload":{"scenarios":[
+            {"id":"baseline","model_key":"logistic","simulation":simulation},
+            {"id":"broken","model_key":"unknown","simulation":{}},
+            {"id":"repeat","model_key":"logistic","simulation":simulation}
+        ]}
+    });
+    let run = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = run(&request);
+    let rows = response["result"]["executions"].as_array().unwrap();
+    assert_eq!(rows[0]["result"]["values"][0], 50.);
+    assert_eq!(rows[1]["error"]["code"], "unsupported_native_operation");
+    assert_eq!(rows[2]["id"], "repeat");
+    assert_eq!(rows[0]["result"], rows[2]["result"]);
+
+    request["payload"]["scenarios"][1]["id"] = json!("baseline");
+    assert_eq!(run(&request)["error"]["code"], "invalid_request");
+}

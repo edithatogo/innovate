@@ -22,6 +22,7 @@ mod policy;
 mod provenance;
 mod regime;
 mod sarima;
+mod scenario;
 mod seasonal;
 mod simulation;
 mod spillover;
@@ -52,6 +53,7 @@ pub fn execute_json(input: &str) -> String {
                 return execute_preprocessing_json(&value).to_string();
             }
             Some("ingest_dataset") => return dataset::ingest_request(&value).to_string(),
+            Some("execute_scenario_grid") => return scenario::execute_grid(&value).to_string(),
             Some("categorize_adopters") => return execute_adopters_json(&value).to_string(),
             _ => {}
         }

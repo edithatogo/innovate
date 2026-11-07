@@ -1910,3 +1910,19 @@ the other competition models and installed binding checks remain open.
   innovate_dataset_validation_error for failed reports. Both bindings
   retain the native invalid_request code and the failed monotonicity
   check on the same rejected dataset used in Python.
+
+## Native scenario grid execution
+
+- [x] Execute an ordered grid of model simulations through the Rust kernel.
+  Send schema 2.0 with operation `execute_scenario_grid` and
+  `payload.scenarios`. Each entry supplies a unique nonblank `id`,
+  `model_key` and ordinary `simulation` payload. Results and model errors
+  stay with their scenario IDs. The kernel runs sequentially and reuses
+  the simulation payload's seed for stochastic engines.
+- [x] Verify the scenario grid in the rebuilt CPython 3.15.2 wheel, Julia
+  and freshly installed R. The same seeded Bass network with one resource
+  slot returned completion ticks 6, 11 and 16 through each binding.
+  All 33 native boundary, 9 Kairos and 22 network tests passed, as did
+  focused Clippy.
+- [ ] Restore historical scenario schema and registry coverage, comparison
+  metrics, execution metadata, parallel grid execution and release parity.
