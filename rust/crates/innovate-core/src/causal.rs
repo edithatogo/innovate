@@ -2174,6 +2174,9 @@ fn cross_fitted_stratum_contrast(payload: &Value, estimand: &str) -> Result<Valu
     let mut propensities = vec![0.; n];
     let mut treated_predictions = vec![0.; n];
     let mut control_predictions = vec![0.; n];
+    let mut min_training_arm_count = usize::MAX;
+    let mut min_propensity: f64 = 1.;
+    let mut max_propensity: f64 = 0.;
     for label in &labels {
         let mut training = std::collections::BTreeMap::<&str, [Vec<f64>; 2]>::new();
         for i in (0..n).filter(|&i| folds[i] != *label) {
@@ -2188,17 +2191,21 @@ fn cross_fitted_stratum_contrast(payload: &Value, estimand: &str) -> Result<Valu
                         mean(control)?,
                         mean(treated)?,
                         treated.len() as f64 / (control.len() + treated.len()) as f64,
+                        control.len().min(treated.len()),
                     ),
                 ))
             })
             .collect();
         for i in (0..n).filter(|&i| folds[i] == *label) {
-            let &(control, treated, propensity) = fitted
+            let &(control, treated, propensity, arm_count) = fitted
                 .get(strata[i].as_str())
                 .ok_or("each held-out stratum requires both arms in its training complement")?;
             control_predictions[i] = control;
             treated_predictions[i] = treated;
             propensities[i] = propensity;
+            min_training_arm_count = min_training_arm_count.min(arm_count);
+            min_propensity = min_propensity.min(propensity);
+            max_propensity = max_propensity.max(propensity);
         }
     }
     let mut request = json!({
@@ -2214,7 +2221,9 @@ fn cross_fitted_stratum_contrast(payload: &Value, estimand: &str) -> Result<Valu
     let contrast = augmented_treatment_contrast(&request)?;
     Ok(
         json!({"contrast":contrast,"folds":folds,"propensities":propensities,
-        "treated_predictions":treated_predictions,"control_predictions":control_predictions}),
+        "treated_predictions":treated_predictions,"control_predictions":control_predictions,
+        "overlap":{"min_training_arm_count":min_training_arm_count,
+            "min_propensity":min_propensity,"max_propensity":max_propensity}}),
     )
 }
 

@@ -6257,3 +6257,9 @@ Hosted release readiness for this worktree revision remains open.
   ATE averaged 2.0673 (truth 2) and ATT 3.0536 (truth 2.98).
   Nominal 95% coverage conditional on success was 286/297 and
   276/297 respectively. Weak-overlap inference remains unqualified.
+
+- [x] Return cross-fitted overlap diagnostics for ATE and ATT. Report
+  the smallest training-arm count across used fold-stratum fits and
+  the held-out propensity range. The analytic Rust boundary fixture
+  verified a minimum arm count of one and a propensity range of
+  [0.5, 0.5]. Weak-overlap interval qualification remains open.

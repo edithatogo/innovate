@@ -822,6 +822,10 @@ fn causal_summaries_match_analytic_effects() {
         json!([4., 6., 6., 4.])
     );
     assert_eq!(result["result"]["contrast"]["estimate"], 4.);
+    assert_eq!(
+        result["result"]["overlap"],
+        json!({"min_training_arm_count":1,"min_propensity":0.5,"max_propensity":0.5})
+    );
     let matched_with_fitted_controls = run(json!({
         "method":"matched_treatment_contrast",
         "outcomes":cross_fitted["outcomes"],"treatment":cross_fitted["treatment"],
