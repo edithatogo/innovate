@@ -40,6 +40,7 @@ struct Options {
     max_wait_ticks: Option<u64>,
     max_queue_length: Option<usize>,
     retry: Option<Retry>,
+    hazard_forcing: Option<HazardForcing>,
 
     #[serde(default)]
     schedule: Vec<Change>,
@@ -64,6 +65,91 @@ struct Change {
     q: Option<f64>,
     innovation_multipliers: Option<Vec<f64>>,
     imitation_multipliers: Option<Vec<f64>>,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct HazardForcing {
+    time: Vec<f64>,
+    innovation: Vec<f64>,
+    imitation: Vec<f64>,
+}
+
+impl HazardForcing {
+    fn valid(&self) -> bool {
+        (1..=4096).contains(&self.time.len())
+            && self.time[0] == 0.
+            && self.time.iter().all(|t| t.is_finite())
+            && self.time.windows(2).all(|w| w[0] < w[1])
+            && [&self.innovation, &self.imitation]
+                .into_iter()
+                .all(|values| {
+                    values.len() == self.time.len()
+                        && values.iter().all(|v| v.is_finite() && *v >= 0.)
+                })
+    }
+
+    fn coefficients(&self, t: f64, p: f64, q: f64) -> (f64, f64) {
+        let next = self.time.partition_point(|point| *point <= t);
+        let prev = next - 1;
+        let interpolate = |values: &[f64]| {
+            if next == self.time.len() {
+                values[prev]
+            } else {
+                let f = (t - self.time[prev]) / (self.time[next] - self.time[prev]);
+                (1. - f) * values[prev] + f * values[next]
+            }
+        };
+        (
+            p * interpolate(&self.innovation),
+            q * interpolate(&self.imitation),
+        )
+    }
+
+    fn attempt(
+        &self,
+        start: f64,
+        end: f64,
+        mut budget: f64,
+        total: impl Fn(f64) -> f64,
+    ) -> Result<Option<f64>, &'static str> {
+        let mut left = start;
+        let mut initial = total(left);
+        for right in self
+            .time
+            .iter()
+            .copied()
+            .filter(|t| *t > start && *t < end)
+            .chain(std::iter::once(end))
+        {
+            let final_rate = total(right);
+            if !initial.is_finite() || !final_rate.is_finite() {
+                return Err("forced network hazard exceeded finite domain");
+            }
+            let width = right - left;
+            let integral = |f: f64| {
+                let rate = (1. - f) * initial + f * final_rate;
+                initial.midpoint(rate) * (width * f)
+            };
+            let area = integral(1.);
+            if area > 0. && budget <= area {
+                let (mut low, mut high) = (0_f64, 1_f64);
+                for _ in 0..52 {
+                    let mid = low.midpoint(high);
+                    if integral(mid) < budget {
+                        low = mid;
+                    } else {
+                        high = mid;
+                    }
+                }
+                return Ok(Some(left + high * width));
+            }
+            budget -= area;
+            left = right;
+            initial = final_rate;
+        }
+        Ok(None)
+    }
 }
 
 struct Graph {
@@ -185,6 +271,14 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     {
         return Err(invalid(
             "agent multipliers must be finite nonnegative population-length arrays; service ticks must be population-length integers in 1..=1000000000000",
+        ));
+    }
+    if o.hazard_forcing
+        .as_ref()
+        .is_some_and(|forcing| !forcing.valid())
+    {
+        return Err(invalid(
+            "hazard_forcing requires 1..=4096 increasing finite times starting at zero and finite nonnegative innovation/imitation multipliers",
         ));
     }
     let input = object_section(payload, "inputs", op)?;
@@ -316,49 +410,6 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     let mut trace = Vec::new();
     let mut requests = Vec::new();
     loop {
-        let rates: Vec<_> = (0..o.population)
-            .map(|i| {
-                if context.get::<u8>(agents[i]) != Some(&0) {
-                    0.
-                } else {
-                    let degree = graph.incoming[i].len();
-                    innovation * innovation_weights[i]
-                        + if degree == 0 {
-                            0.
-                        } else if graph.weighted {
-                            let exposed: f64 = graph.incoming[i]
-                                .iter()
-                                .filter(|(j, _)| context.get::<u8>(agents[*j]) == Some(&2))
-                                .map(|(_, weight)| weight)
-                                .sum();
-                            imitation * imitation_weights[i] * (exposed / graph.totals[i])
-                        } else {
-                            imitation
-                                * imitation_weights[i]
-                                * graph.incoming[i]
-                                    .iter()
-                                    .filter(|(j, _)| context.get::<u8>(agents[*j]) == Some(&2))
-                                    .count() as f64
-                                / degree as f64
-                        }
-                }
-            })
-            .collect();
-        let total: f64 = rates.iter().sum();
-        if !total.is_finite() {
-            return Err(invalid("network hazard exceeded finite domain"));
-        }
-        let attempt = if total > 0. {
-            let delay: f64 = rng.sample(Exp::new(total).map_err(|_| invalid("invalid hazard"))?);
-            let delta = (delay * o.ticks_per_unit as f64).ceil().max(1.);
-            if delta.is_finite() && delta <= horizon.saturating_sub(now) as f64 {
-                Some(now + delta as u128)
-            } else {
-                None
-            }
-        } else {
-            None
-        };
         let completion = context
             .scheduler
             .peek_next()
@@ -380,6 +431,85 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             .copied()
             .min()
             .filter(|t| *t <= horizon);
+        let agent_rates = |innovation: f64, imitation: f64| -> Vec<f64> {
+            (0..o.population)
+                .map(|i| {
+                    if context.get::<u8>(agents[i]) != Some(&0) {
+                        0.
+                    } else {
+                        let degree = graph.incoming[i].len();
+                        innovation * innovation_weights[i]
+                            + if degree == 0 {
+                                0.
+                            } else if graph.weighted {
+                                let exposed: f64 = graph.incoming[i]
+                                    .iter()
+                                    .filter(|(j, _)| context.get::<u8>(agents[*j]) == Some(&2))
+                                    .map(|(_, weight)| weight)
+                                    .sum();
+                                imitation * imitation_weights[i] * (exposed / graph.totals[i])
+                            } else {
+                                imitation
+                                    * imitation_weights[i]
+                                    * graph.incoming[i]
+                                        .iter()
+                                        .filter(|(j, _)| context.get::<u8>(agents[*j]) == Some(&2))
+                                        .count() as f64
+                                    / degree as f64
+                            }
+                    }
+                })
+                .collect()
+        };
+        let mut rates = agent_rates(innovation, imitation);
+        let mut total: f64 = rates.iter().sum();
+        if !total.is_finite() {
+            return Err(invalid("network hazard exceeded finite domain"));
+        }
+        let attempt = if let Some(forcing) = &o.hazard_forcing {
+            let scale = o.ticks_per_unit as f64;
+            let start = now as f64 / scale;
+            let stop = [completion, boundary, expiry, wake]
+                .into_iter()
+                .flatten()
+                .min()
+                .unwrap_or(horizon);
+            let end = stop as f64 / scale;
+            let innovation_sum: f64 = agent_rates(1., 0.).iter().sum();
+            let imitation_sum: f64 = agent_rates(0., 1.).iter().sum();
+            if now >= stop || (innovation_sum == 0. && imitation_sum == 0.) {
+                None
+            } else {
+                let budget: f64 = rng.sample(Exp::new(1.).expect("unit rate is positive"));
+                let event_time = forcing
+                    .attempt(start, end, budget, |t| {
+                        let (p, q) = forcing.coefficients(t, innovation, imitation);
+                        p * innovation_sum + q * imitation_sum
+                    })
+                    .map_err(invalid)?;
+                if let Some(t) = event_time {
+                    let (p, q) = forcing.coefficients(t, innovation, imitation);
+                    rates = agent_rates(p, q);
+                    total = rates.iter().sum();
+                    if !total.is_finite() || total <= 0. {
+                        return Err(invalid(
+                            "forced selection hazard outside finite positive domain",
+                        ));
+                    }
+                }
+                event_time.map(|t| ((t * scale).ceil() as u128).max(now + 1).min(horizon))
+            }
+        } else if total > 0. {
+            let delay: f64 = rng.sample(Exp::new(total).map_err(|_| invalid("invalid hazard"))?);
+            let delta = (delay * o.ticks_per_unit as f64).ceil().max(1.);
+            if delta.is_finite() && delta <= horizon.saturating_sub(now) as f64 {
+                Some(now + delta as u128)
+            } else {
+                None
+            }
+        } else {
+            None
+        };
         let process_completion = completion.is_some_and(|t| {
             attempt.is_none_or(|a| t <= a)
                 && boundary.is_none_or(|b| t <= b)

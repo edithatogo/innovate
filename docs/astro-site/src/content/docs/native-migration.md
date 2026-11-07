@@ -769,6 +769,15 @@ simulation metadata. Changes apply to subsequent adoption attempts, including
 after retry cooldown, while existing requests keep their place in service or
 in the queue.
 
+For continuous forcing, set `hazard_forcing` with aligned `time`,
+`innovation` and `imitation` arrays. Times are in model units, start at zero
+and increase strictly. The nonnegative factors interpolate linearly and hold
+their last values beyond the final knot. They multiply the active scheduled
+Bass coefficients and compose with agent multipliers. The simulator integrates
+the total hazard up to the next deterministic event, selects the requesting
+agent at the continuous crossing time, and rounds dispatch up to a Kairos
+tick. Existing deterministic events retain precedence on tick ties.
+
 ### Historical Norton–Bass covariates
 
 The `legacy_cannibalization` variant accepts declared `covariates` and named

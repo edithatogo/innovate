@@ -474,3 +474,30 @@ fn schedule_retargets_innovation_without_resetting_service() {
             .is_err()
     );
 }
+
+#[test]
+fn continuous_hazard_can_wake_from_zero_and_replays() {
+    let payload = json!({
+        "inputs":{"time":[0.,2.,3.,4.]},
+        "parameters":{"p":1e12,"q":0.,"m":1.},
+        "simulation_options":{"engine":"kairos_network","population":1,"seed":42,
+            "edges":[],"capacity":1,"service_ticks":1,"ticks_per_unit":1,
+            "hazard_forcing":{"time":[0.,2.,3.],"innovation":[0.,0.,1.],"imitation":[1.,1.,1.]}}
+    });
+    let kernel = KernelBinding::new();
+    let result = kernel
+        .simulate_model("bass", payload.clone())
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(result["requests"], json!([{"tick":3,"agent":0}]));
+    assert_eq!(result["counts"], json!([0, 0, 0, 1]));
+    assert_eq!(
+        result,
+        kernel
+            .simulate_model("bass", payload)
+            .unwrap()
+            .result
+            .unwrap()
+    );
+}
