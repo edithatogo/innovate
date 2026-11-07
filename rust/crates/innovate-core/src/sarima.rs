@@ -130,6 +130,20 @@ fn estimate(
         .ok_or("SARIMA likelihood is degenerate")?;
     let mut likelihood = initial_likelihood;
     let retry_cancellation = p == 1 && q == 1 && sp == 0 && sq == 0;
+    if retry_cancellation {
+        // Probe both near-cancellation ridges before local refinement.
+        for sign in [-1., 1.] {
+            for (ar, ma) in [(0.95, 0.93), (0.98, 0.96), (0.995, 0.985)] {
+                let candidate = [sign * ar, -sign * ma];
+                if let Some(candidate_score) = score(&candidate).filter(|v| *v > likelihood) {
+                    best.copy_from_slice(&candidate);
+                    likelihood = candidate_score;
+                }
+            }
+        }
+    }
+    let restart = best.clone();
+    let restart_likelihood = likelihood;
     let search_all_pairs = sp > 0 && sq > 0 && count <= 8;
     let joint_moves: Vec<_> = if search_all_pairs {
         (0..count)
@@ -141,72 +155,88 @@ fn estimate(
             .flat_map(|terms| (terms.start..terms.end.saturating_sub(1)).map(|i| (i, i + 1)))
             .collect()
     };
-    let mut step = 0.25;
-    // Refine a deterministic coordinate search over stationary and invertible models.
-    let sweeps = 2048;
-    for iteration in 0..(sweeps * if retry_cancellation { 2 } else { 1 }) {
-        let retry = iteration >= sweeps;
-        if iteration == sweeps {
-            // Restart with coupled moves for difficult AR/MA cancellation.
-            best.fill(0.);
-            likelihood = initial_likelihood;
-            step = 0.25;
-        }
-        let base = best.clone();
-        for index in 0..count {
-            let original = best[index];
-            let mut selected = original;
-            for direction in [-1., 1.] {
-                best[index] = original + direction * step;
-                if let Some(candidate) = score(&best).filter(|v| *v > likelihood) {
-                    likelihood = candidate;
-                    selected = best[index];
-                }
+    let refine = |start: Vec<f64>, start_likelihood| {
+        let mut best = start.clone();
+        let mut likelihood = start_likelihood;
+        let mut step = 0.25;
+        // Refine a deterministic coordinate search over stationary and invertible models.
+        let sweeps = 2048;
+        for iteration in 0..(sweeps * if retry_cancellation { 2 } else { 1 }) {
+            let retry = iteration >= sweeps;
+            if iteration == sweeps {
+                // Restart with coupled moves for difficult AR/MA cancellation.
+                best.clone_from(&start);
+                likelihood = start_likelihood;
+                step = 0.25;
             }
-            best[index] = selected;
-        }
-        if best == base {
-            // Search joint moves when correlated coefficients stall the coordinate sweep.
-            let mut trial = base.clone();
-            let pairs = if retry { &[(0, 1)][..] } else { &joint_moves };
-            for &(left, right) in pairs {
-                let ratios: &[(f64, f64)] = if search_all_pairs || retry {
-                    &[(1., 1.), (1., 0.5), (0.5, 1.)]
-                } else {
-                    &[(1., 1.)]
-                };
-                for &(left_scale, right_scale) in ratios {
-                    for left_direction in [-1., 1.] {
-                        for right_direction in [-1., 1.] {
-                            trial[left] = base[left] + left_direction * left_scale * step;
-                            trial[right] = base[right] + right_direction * right_scale * step;
-                            if let Some(candidate) = score(&trial).filter(|v| *v > likelihood) {
-                                likelihood = candidate;
-                                best.clone_from(&trial);
+            let base = best.clone();
+            for index in 0..count {
+                let original = best[index];
+                let mut selected = original;
+                for direction in [-1., 1.] {
+                    best[index] = original + direction * step;
+                    if let Some(candidate) = score(&best).filter(|v| *v > likelihood) {
+                        likelihood = candidate;
+                        selected = best[index];
+                    }
+                }
+                best[index] = selected;
+            }
+            if best == base {
+                // Search joint moves when correlated coefficients stall the coordinate sweep.
+                let mut trial = base.clone();
+                let pairs = if retry { &[(0, 1)][..] } else { &joint_moves };
+                for &(left, right) in pairs {
+                    let ratios: &[(f64, f64)] = if search_all_pairs || retry {
+                        &[(1., 1.), (1., 0.5), (0.5, 1.)]
+                    } else {
+                        &[(1., 1.)]
+                    };
+                    for &(left_scale, right_scale) in ratios {
+                        for left_direction in [-1., 1.] {
+                            for right_direction in [-1., 1.] {
+                                trial[left] = base[left] + left_direction * left_scale * step;
+                                trial[right] = base[right] + right_direction * right_scale * step;
+                                if let Some(candidate) = score(&trial).filter(|v| *v > likelihood) {
+                                    likelihood = candidate;
+                                    best.clone_from(&trial);
+                                }
                             }
                         }
                     }
+                    trial[left] = base[left];
+                    trial[right] = base[right];
                 }
-                trial[left] = base[left];
-                trial[right] = base[right];
-            }
-            if best != base {
-                continue;
-            }
-            step *= 0.5;
-            if step < 1e-6 {
-                return Ok(best);
-            }
-        } else {
-            // Follow the net direction of the sweep across correlated terms.
-            let candidate: Vec<_> = best.iter().zip(base).map(|(a, b)| a + (a - b)).collect();
-            if let Some(candidate_score) = score(&candidate).filter(|v| *v > likelihood) {
-                best = candidate;
-                likelihood = candidate_score;
+                if best != base {
+                    continue;
+                }
+                step *= 0.5;
+                if step < 1e-6 {
+                    return Some((best, likelihood));
+                }
+            } else {
+                // Follow the net direction of the sweep across correlated terms.
+                let candidate: Vec<_> = best.iter().zip(base).map(|(a, b)| a + (a - b)).collect();
+                if let Some(candidate_score) = score(&candidate).filter(|v| *v > likelihood) {
+                    best = candidate;
+                    likelihood = candidate_score;
+                }
             }
         }
-    }
-    Err("SARIMA parameter estimation did not converge")
+        None
+    };
+    let origin_fit = refine(vec![0.; count], initial_likelihood);
+    let ridge_fit = if restart_likelihood > initial_likelihood {
+        refine(restart, restart_likelihood)
+    } else {
+        None
+    };
+    origin_fit
+        .into_iter()
+        .chain(ridge_fit)
+        .max_by(|a, b| a.1.total_cmp(&b.1))
+        .map(|(parameters, _)| parameters)
+        .ok_or("SARIMA parameter estimation did not converge")
 }
 
 fn stationary_covariance(phi: &[f64], noise: &[f64]) -> Result<Vec<f64>, &'static str> {

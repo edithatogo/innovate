@@ -19,6 +19,7 @@ for (seed in c(17L, 42L, 123L, 987L)) {
     )
     stopifnot(reference$code == 0L, is.finite(native$log_likelihood))
     gap <- native$log_likelihood - as.numeric(stats::logLik(reference))
+    stopifnot(gap > -1e-6)
     cat(sprintf("seed=%d sign=%+d native-minus-reference=%.9g\n", seed, sign, gap))
   }
 }

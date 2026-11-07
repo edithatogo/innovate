@@ -7029,3 +7029,11 @@ Hosted release readiness for this worktree revision remains open.
   identifies a concrete optimizer gap. The diagnostic script
   check-cancellation-starts.R also shows that a single generating-root
   R start can return a lower likelihood than native on other seeds.
+
+- [x] Probe both ARMA(1,1) near-cancellation ridges and refine the best
+  probe separately from the original zero start. Keep the higher
+  converged likelihood. The installed R comparison reduced the
+  negative-root seed 17 gap from 1.170058 to 5.18e-8 and retained the
+  previous higher-likelihood solutions on the positive-root cases.
+  All eight comparisons were within 1e-6 or above the single-start R
+  reference. Python and Julia checks of these cases remain open.
