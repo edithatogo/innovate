@@ -5322,3 +5322,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Retain a Python consumer regression for the cross-fitted
   control prediction handoff. The native workflow reproduced the
   analytic unadjusted and adjusted effects without supplied variances.
+
+- [x] Retain the fitted-control matching workflow in Julia and R.
+  The installed consumers recovered the unadjusted effect of 5 and
+  adjusted effect of 6, with null conditional uncertainty when
+  outcome variances were absent.

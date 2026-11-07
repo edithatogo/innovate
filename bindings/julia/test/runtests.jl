@@ -899,3 +899,15 @@ end
     @test balance["narrow"]["before_matching"]["mean_difference"] / (upper - lower) ≈ -1/6
     @test isnothing(balance["constant"]["standardized_mean_difference"])
 end
+
+@testset "Matching with cross-fitted controls" begin
+    observations = Dict("outcomes"=>[0,4,2,6], "treatment"=>[0,1,0,1])
+    fit = kernel_call("summarize_causal", nothing, merge(observations, Dict(
+        "method"=>"cross_fitted_stratum_ate", "strata"=>fill("a",4), "folds"=>[1,2,2,1])))["result"]
+    matched = kernel_call("summarize_causal", nothing, merge(observations, Dict(
+        "method"=>"matched_treatment_contrast", "scores"=>[0,0,1,0], "caliper"=>0,
+        "control_predictions"=>fit["control_predictions"])))["result"]
+    @test matched["estimate"] == 5
+    @test matched["adjusted_estimate"] == 6
+    @test isnothing(matched["conditional_standard_error"])
+end

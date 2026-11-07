@@ -845,3 +845,12 @@ stopifnot(isTRUE(all.equal(balance$narrow$before_matching$standardized_mean_diff
   balance$narrow$standardized_mean_difference == 0,
   isTRUE(all.equal(balance$narrow$before_matching$mean_difference / (upper - lower), -1/6)),
   is.null(balance$constant$standardized_mean_difference))
+
+observations <- list(outcomes=c(0,4,2,6), treatment=c(0,1,0,1))
+fit <- kernel_call("summarize_causal", payload=c(observations, list(
+  method="cross_fitted_stratum_ate", strata=rep("a",4), folds=c(1,2,2,1))))$result
+matched <- kernel_call("summarize_causal", payload=c(observations, list(
+  method="matched_treatment_contrast", scores=c(0,0,1,0), caliper=0,
+  control_predictions=fit$control_predictions)))$result
+stopifnot(matched$estimate == 5, matched$adjusted_estimate == 6,
+  is.null(matched$conditional_standard_error))
