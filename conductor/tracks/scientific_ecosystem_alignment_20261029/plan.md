@@ -5477,3 +5477,7 @@ Hosted release readiness for this worktree revision remains open.
   for rematching. Ten focused Rust tests passed, including deterministic
   replay, changing matches and mixture output. Binding verification and
   empirical coverage calibration remain open.
+
+- [x] Verify seeded score bootstrap through rebuilt Python, Julia and
+  installed R consumers. Each replayed all eight draws with seed 17 and
+  returned positive mixture spread. Empirical coverage remains open.

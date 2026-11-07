@@ -912,3 +912,16 @@ stopifnot(identical(vapply(insufficient_draw$draws, function(draw) draw$status, 
   insufficient_draw$draws[[1]]$estimate == 4,
   "mixture_standard_deviation" %in% names(insufficient_draw),
   is.null(insufficient_draw$mixture_standard_deviation))
+
+bootstrap_payload <- list(method="matched_treatment_contrast", outcomes=c(0,4,2,6,8,12,10,14),
+  treatment=rep(c(0,1),4), caliper=1, outcome_variances=rep(1,8),
+  fit_scores=list(covariates=lapply(c(0,3,2,5,1,4,3,6), list),
+    folds=rep(c(1,2), each=4), ridge=1),
+  score_bootstrap=list(draws=8, seed=17))
+run_score_bootstrap <- function() {
+  kernel_call("summarize_causal", payload=bootstrap_payload)$result$score_sensitivity
+}
+score_bootstrap <- run_score_bootstrap()
+stopifnot(identical(score_bootstrap, run_score_bootstrap()),
+  score_bootstrap$seed == 17, length(score_bootstrap$draws) == 8,
+  score_bootstrap$mixture_standard_deviation > 0)

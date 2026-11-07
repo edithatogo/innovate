@@ -981,3 +981,16 @@ end
     @test sensitivity["draws"][1]["estimate"] == 4
     @test sensitivity["mixture_standard_deviation"] === nothing
 end
+
+@testset "Matching score bootstrap" begin
+    payload = Dict("method"=>"matched_treatment_contrast", "outcomes"=>[0,4,2,6,8,12,10,14],
+        "treatment"=>repeat([0,1],4), "caliper"=>1, "outcome_variances"=>ones(8),
+        "fit_scores"=>Dict("covariates"=>[[x] for x in [0,3,2,5,1,4,3,6]],
+            "folds"=>[1,1,1,1,2,2,2,2], "ridge"=>1),
+        "score_bootstrap"=>Dict("draws"=>8, "seed"=>17))
+    run() = kernel_call("summarize_causal", nothing, payload)["result"]["score_sensitivity"]
+    result = run()
+    @test result == run()
+    @test result["seed"] == 17 && length(result["draws"]) == 8
+    @test result["mixture_standard_deviation"] > 0
+end

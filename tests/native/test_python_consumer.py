@@ -1811,3 +1811,16 @@ def test_matching_retains_insufficient_score_draw():
     assert [draw["status"] for draw in sensitivity["draws"]] == ["matched", "insufficient_matches"]
     assert sensitivity["draws"][0]["estimate"] == 4
     assert sensitivity["mixture_standard_deviation"] is None
+
+
+def test_matching_score_bootstrap():
+    payload = dict(method="matched_treatment_contrast",
+        outcomes=[0, 4, 2, 6, 8, 12, 10, 14], treatment=[0, 1] * 4,
+        caliper=1, outcome_variances=[1] * 8,
+        fit_scores={"covariates": [[0], [3], [2], [5], [1], [4], [3], [6]],
+                    "folds": [1] * 4 + [2] * 4, "ridge": 1},
+        score_bootstrap={"draws": 8, "seed": 17})
+    result = innovate.execute("summarize_causal", **payload)["result"]["score_sensitivity"]
+    assert result == innovate.execute("summarize_causal", **payload)["result"]["score_sensitivity"]
+    assert result["seed"] == 17 and len(result["draws"]) == 8
+    assert result["mixture_standard_deviation"] > 0
