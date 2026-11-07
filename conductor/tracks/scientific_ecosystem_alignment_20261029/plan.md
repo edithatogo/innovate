@@ -6160,3 +6160,8 @@ Hosted release readiness for this worktree revision remains open.
   boundary. The generated network artifact accepts market size 1
   in place of 1.0 and rejects a changed market size of 2. All 13
   scenario-filtered boundary tests passed.
+
+- [x] Run the combined locked Kairos, network and native boundary
+  targets after the provider promotion and replay validation changes.
+  All 136 tests passed. The release verifier still identifies 38 open
+  migration and acceptance obligations.
