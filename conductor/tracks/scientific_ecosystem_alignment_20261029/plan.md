@@ -7074,3 +7074,10 @@ Hosted release readiness for this worktree revision remains open.
   order the elapsed seconds were 7.798, 16.328, 2.581, 6.109, 5.379,
   3.101, 1.196 and 2.916. All likelihoods matched the binding receipt
   within 1e-10. The debug timings do not establish a release baseline.
+
+- [x] Measure the mixed SARIMA likelihood regression with core-only
+  optimization (opt-level 3) and the existing dev dependencies. The
+  optimized check passed in 2.33 seconds. A full release build was
+  deferred because the checkout volume had 331 MiB free and no
+  release cache. This measurement covers the Rust regression, not
+  installed release artifacts.
