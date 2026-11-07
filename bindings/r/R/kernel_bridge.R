@@ -24,9 +24,9 @@ kernel_call <- function(operation, model_key = NULL, payload = list()) {
       "assumptions", "limitations", "data_sources", "outcomes", "treatment", "spillover_regions",
       "confounders", "effect_modifiers")
   }
-  if (identical(operation, "validate_dataset")) {
+  if (operation %in% c("validate_dataset", "ingest_dataset")) {
     array_fields <- c(array_fields, "denominator", "value", "unit_id", "product_id",
-      "source", "target", "weight")
+      "target", "weight", "product_labels", "transform_steps")
   }
   preserve_arrays <- function(value) {
     if (!is.list(value)) return(value)
@@ -39,7 +39,8 @@ kernel_call <- function(operation, model_key = NULL, payload = list()) {
            fields[[i]] == "data")) && is.list(value[[i]]) &&
           !is.null(names(value[[i]]))) {
         value[[i]] <- lapply(value[[i]], function(x) if (is.atomic(x) && !is.null(x)) I(x) else x)
-      } else if (!is.null(fields) && fields[[i]] %in% array_fields &&
+      } else if (!is.null(fields) && (fields[[i]] %in% array_fields ||
+          (fields[[i]] == "source" && identical(value$kind, "network_edges"))) &&
           is.atomic(value[[i]]) && !is.null(value[[i]]) && !is.matrix(value[[i]])) {
         value[[i]] <- I(value[[i]])
       } else {

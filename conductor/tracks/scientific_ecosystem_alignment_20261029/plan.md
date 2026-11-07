@@ -1891,3 +1891,9 @@ the other competition models and installed binding checks remain open.
   preserving caller metadata. CSV and Parquet reads with equal rows now
   carry different digests because their provenance differs. The rebuilt
   wheel verified both digests through the Rust checksum operation.
+
+- [x] Enforce dataset schema 1.0 when explicitly supplied and validate
+  substitution product labels against the share matrix width. Installed
+  R verifies singleton substitution and edge artifacts, including the
+  distinction between the edge source column and provenance source.
+  All 32 Rust boundary tests and focused Clippy passed.

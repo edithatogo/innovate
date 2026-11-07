@@ -716,6 +716,20 @@ fn substitution_diagnostics_check_joint_market_share() {
         response["result"]["failed"],
         innovate_core::json!(["share_sum"])
     );
+    let mut labelled = request;
+    labelled["payload"]["product_labels"] = innovate_core::json!(["only_one"]);
+    let result: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&labelled.to_string())).unwrap();
+    assert!(
+        result["result"]["failed"]
+            .as_array()
+            .unwrap()
+            .contains(&innovate_core::json!("product_labels"))
+    );
+    labelled["payload"]["schema_version"] = innovate_core::json!("9.0");
+    let result: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&labelled.to_string())).unwrap();
+    assert_eq!(result["error"]["code"], "invalid_request");
 }
 
 #[test]

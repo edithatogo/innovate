@@ -1,6 +1,12 @@
 use serde_json::{Value, json};
 
 pub(crate) fn validate(payload: &Value) -> Result<Value, &'static str> {
+    if payload
+        .get("schema_version")
+        .is_some_and(|version| version != "1.0")
+    {
+        return Err("unsupported dataset schema version");
+    }
     let kind = payload["kind"].as_str().unwrap_or("");
     if kind == "network_edges" {
         return validate_edges(payload);
@@ -139,6 +145,19 @@ fn substitution(payload: &Value, shares: &[Value], check: &mut impl FnMut(&str, 
     );
     if !rectangular {
         return;
+    }
+    if let Some(labels) = payload.get("product_labels") {
+        let valid = labels.as_array().is_some_and(|labels| {
+            labels.len() == width
+                && labels
+                    .iter()
+                    .all(|label| label.as_str().is_some_and(|text| !text.trim().is_empty()))
+        });
+        check(
+            "product_labels",
+            valid,
+            "product labels must align with share columns",
+        );
     }
     let rows = shares.iter().filter_map(Value::as_array);
     let complete = rows.clone().flatten().all(Value::is_number);
