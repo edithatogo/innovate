@@ -118,6 +118,28 @@ impl ScenarioSpecification {
     }
 }
 
+fn validate_network_horizon(scenario: &Scenario) -> Result<(), &'static str> {
+    let Some(spec) = &scenario.specification else {
+        return Ok(());
+    };
+    if matches!(spec.kind, ScenarioKind::Network { .. })
+        && scenario.simulation.get("inputs").is_some_and(|inputs| {
+            inputs
+                .get("time")
+                .or_else(|| inputs.get("t"))
+                .and_then(Value::as_array)
+                .is_some_and(|time| {
+                    time.iter()
+                        .filter_map(Value::as_f64)
+                        .any(|sample| sample > spec.time_horizon)
+                })
+        })
+    {
+        return Err("network observation time exceeds the declared scenario horizon");
+    }
+    Ok(())
+}
+
 fn apply_specification(scenario: &mut Scenario) -> Result<(), &'static str> {
     let spec = scenario
         .specification
@@ -175,21 +197,6 @@ fn apply_specification(scenario: &mut Scenario) -> Result<(), &'static str> {
         .simulation
         .as_object_mut()
         .ok_or("simulation must be an object")?;
-    if matches!(spec.kind, ScenarioKind::Network { .. })
-        && simulation.get("inputs").is_some_and(|inputs| {
-            inputs
-                .get("time")
-                .or_else(|| inputs.get("t"))
-                .and_then(Value::as_array)
-                .is_some_and(|time| {
-                    time.iter()
-                        .filter_map(Value::as_f64)
-                        .any(|sample| sample > spec.time_horizon)
-                })
-        })
-    {
-        return Err("network observation time exceeds the declared scenario horizon");
-    }
     let options = simulation
         .get_mut("simulation_options")
         .and_then(Value::as_object_mut)
@@ -568,6 +575,9 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
         if let Some(specification) = &scenario.specification
             && let Err(message) = specification.validate()
         {
+            return invalid(&format!("scenario '{}': {message}", scenario.id));
+        }
+        if let Err(message) = validate_network_horizon(scenario) {
             return invalid(&format!("scenario '{}': {message}", scenario.id));
         }
     }
@@ -1310,6 +1320,7 @@ fn validate_replay(
     {
         return Err("artifact replay scenario does not match the envelope");
     }
+    validate_network_horizon(&entry)?;
     let seed_matches = match entry.simulation["simulation_options"].get("seed") {
         Some(seed) => seed.is_u64() && seed == &original["seed"],
         None => artifact.seed.is_none(),

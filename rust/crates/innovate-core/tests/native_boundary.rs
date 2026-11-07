@@ -2657,6 +2657,18 @@ fn kairos_scenario_replay_retains_scheduled_retry_clear() {
             .contains("network observation time exceeds the declared scenario horizon")
     );
 
+    let mut artifact = row["artifact"].clone();
+    artifact["replay_request"]["payload"]["scenarios"][0]["simulation"]["inputs"]["time"] =
+        json!([0, 13]);
+    let replay = &artifact["replay_request"];
+    assert_eq!(run(replay)["error"]["code"], "invalid_request");
+    let import = json!({"schema_version":"2.0","operation":"import_scenario_artifact",
+        "payload":{"artifact":artifact}});
+    assert_eq!(
+        run(&import)["error"]["message"],
+        "network observation time exceeds the declared scenario horizon"
+    );
+
     let mut paired = request;
     let mut alternative = closed["payload"]["scenarios"][0].clone();
     alternative["id"] = json!("closed");

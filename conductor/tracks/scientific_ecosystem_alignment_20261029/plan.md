@@ -4274,3 +4274,7 @@ Hosted release readiness for this worktree revision remains open.
   specification. Observations beyond it are rejected, including
   requests using the time alias. Observations at the horizon still
   execute and replay. All ten scenario-filtered boundary tests passed.
+- [x] Apply the declared network horizon to resolved scenario requests
+  and artifact replay validation. A replay with observations beyond
+  its declared horizon fails both direct execution and import. All
+  ten scenario-filtered boundary tests passed.
