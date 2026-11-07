@@ -118,15 +118,15 @@ jobs:
       - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
         with:
           toolchain: 1.99.1
-      - run: cargo build --locked -p innovate-ffi -j 2
+      - run: cargo build --release --locked -p innovate-ffi -j 2
       - name: Stage native library in both bindings
         shell: bash
         env:
           NATIVE_LIBRARY: ${{ matrix.native-library }}
         run: |
           mkdir -p bindings/julia/deps bindings/r/inst/lib
-          cp "target/debug/$NATIVE_LIBRARY" bindings/julia/deps/
-          cp "target/debug/$NATIVE_LIBRARY" bindings/r/inst/lib/
+          cp "target/release/$NATIVE_LIBRARY" bindings/julia/deps/
+          cp "target/release/$NATIVE_LIBRARY" bindings/r/inst/lib/
       - uses: julia-actions/setup-julia@4c0cb0fce8556fdb04a90347310e5db8b1f98fb9
         with:
           version: '1.13'

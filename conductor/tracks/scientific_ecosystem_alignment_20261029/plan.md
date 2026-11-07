@@ -7327,3 +7327,8 @@ Hosted release readiness for this worktree revision remains open.
   Library SHA-256 is
   `113f75e3e0962381af0e7017f18c427dace8bd5d43ac1ffcfb75b8a39fff983f`.
   Hosted distribution acceptance remains open.
+
+- [x] Build and stage the optimized Rust FFI library in the hosted
+  Julia and R matrix on Linux, macOS and Windows. Actionlint passed.
+  The optimized macOS artifact passed both local suites. Hosted
+  execution remains open.
