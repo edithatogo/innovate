@@ -6,6 +6,7 @@ import json
 import os
 import platform
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from time import perf_counter
 
 from innovate import _native, execute
@@ -91,11 +92,17 @@ def main() -> int:
         response["metadata"]["benchmark_runner"]["mpi_shard"] = shard
         output = output.with_name(output.name.replace("{rank}", str(shard["rank"])))
     receipt = json.dumps(response, indent=2, allow_nan=False) + "\n"
-    try:
-        with output.open("x" if shard is not None else "w", encoding="utf-8") as stream:
-            stream.write(receipt)
-    except FileExistsError:
-        parser.error(f"Shard receipt already exists: {output}; use a fresh path for each rank")
+    if shard is None:
+        output.write_text(receipt, encoding="utf-8")
+    else:
+        try:
+            # A same-filesystem hard link publishes the complete file without replacing an existing rank.
+            with TemporaryDirectory(prefix=".innovate-receipt-", dir=output.parent) as staging:
+                staged = Path(staging) / "receipt.json"
+                staged.write_text(receipt, encoding="utf-8")
+                os.link(staged, output)
+        except FileExistsError:
+            parser.error(f"Shard receipt already exists: {output}; use a fresh path for each rank")
     result = response["result"]
     print(f"Benchmark suite: {result['succeeded']} succeeded, {result['failed']} failed")
     return int(result["failed"] > 0 or not result["runs"])

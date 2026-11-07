@@ -5822,3 +5822,10 @@ Hosted release readiness for this worktree revision remains open.
   46f48aeb. Three local ranks exactly reproduced the serial result.
   The receipt verifier rejected a duplicate rank. Slurm and multi-node
   qualification remain open.
+
+- [x] Publish each benchmark shard receipt only after its JSON is
+  complete, using a same-filesystem hard link with no replacement.
+  Three local Open MPI ranks matched serial output with the retained
+  wheel. A repeated rank preserved the existing receipt digest, and
+  staging directories were removed. Filesystems must support hard
+  links. Scheduler-backed and multi-node verification remain open.
