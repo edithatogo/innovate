@@ -1266,3 +1266,7 @@ the other competition models and installed binding checks remain open.
   rate q/4 within 1e-11 (absolute for level, relative for rate).
   Python and Julia reproduce the origin rate exactly. R's JSON round trip
   differs by 4.44e-16 relative and passes the 1e-11 rate tolerance.
+
+- [x] Route Python adopter frames through Arrow IPC and the Rust Polars
+  classifier. The rebuilt wheel passes the fitted Logistic regression,
+  including the rate and preserved identity column.

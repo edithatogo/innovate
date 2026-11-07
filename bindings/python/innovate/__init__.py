@@ -203,8 +203,5 @@ def predict_frames(
 
 def categorize_adopters(data: pl.DataFrame | pl.LazyFrame, *, rate_column: str = "adoption_rate") -> pl.DataFrame:
     """Append historical adopter categories using supplied nonnegative rates."""
-    frame = data.collect() if isinstance(data, pl.LazyFrame) else data
-    if "category" in frame.columns:
-        raise ValueError("category column already exists")
-    result = execute("categorize_adopters", time=frame["time"].to_list(), adoption_rate=frame[rate_column].to_list())
-    return frame.with_columns(pl.Series("category", result["result"]["category"]))
+    output = _native.categorize_adopters_ipc(_ipc(data), rate_column)
+    return pl.read_ipc(io.BytesIO(output))

@@ -44,11 +44,27 @@ fn fit_ipc(
     .map_err(PyValueError::new_err)
 }
 
+#[pyfunction]
+fn categorize_adopters_ipc(
+    py: Python<'_>,
+    data: Vec<u8>,
+    rate_column: String,
+) -> PyResult<Py<PyBytes>> {
+    let output = py
+        .detach(move || {
+            innovate_tabular::categorize_adopters_ipc(&data, &rate_column)
+                .map_err(|e| e.to_string())
+        })
+        .map_err(PyValueError::new_err)?;
+    Ok(PyBytes::new(py, &output).unbind())
+}
+
 #[pymodule]
 fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(execute, module)?)?;
     module.add_function(wrap_pyfunction!(predict_ipc, module)?)?;
     module.add_function(wrap_pyfunction!(fit_ipc, module)?)?;
+    module.add_function(wrap_pyfunction!(categorize_adopters_ipc, module)?)?;
     module.add("__version__", env!("CARGO_PKG_VERSION"))?;
     Ok(())
 }

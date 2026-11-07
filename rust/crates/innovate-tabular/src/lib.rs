@@ -248,3 +248,11 @@ pub fn categorize_adopters(mut frame: DataFrame, rate_column: &str) -> PolarsRes
     frame.with_column(Series::new("category".into(), categories).into())?;
     Ok(frame)
 }
+
+pub fn categorize_adopters_ipc(data: &[u8], rate_column: &str) -> PolarsResult<Vec<u8>> {
+    let frame = IpcReader::new(Cursor::new(data)).finish()?;
+    let mut output = categorize_adopters(frame, rate_column)?;
+    let mut bytes = Vec::new();
+    IpcWriter::new(&mut bytes).finish(&mut output)?;
+    Ok(bytes)
+}
