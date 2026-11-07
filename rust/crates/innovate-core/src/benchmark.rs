@@ -1,7 +1,7 @@
 //! Reproducible synthetic smoke corpus and native fit/forecast runner.
 use serde_json::{Value, json};
 
-const CASES: [(&str, &str, &str); 19] = [
+const CASES: [(&str, &str, &str); 20] = [
     ("bass_smoke_adoption", "bass", "diffusion"),
     ("logistic_growth_smoke", "logistic", "diffusion"),
     ("fisher_pry_replacement_smoke", "fisher_pry", "substitution"),
@@ -36,6 +36,7 @@ const CASES: [(&str, &str, &str); 19] = [
     ("mixture_gaussian_fit", "mixture", "mixture"),
     ("composite_reference", "composite", "composite"),
     ("composite_fit", "composite", "composite"),
+    ("composite_coupled_fit", "composite", "composite"),
     ("composite_coupled_reference", "composite", "composite"),
 ];
 
@@ -73,6 +74,23 @@ fn run_case(id: &str) -> Result<Value, String> {
         .iter()
         .find(|case| case.0 == id)
         .ok_or("unknown benchmark case")?;
+    if id == "composite_coupled_fit" {
+        let fixture: Value =
+            serde_json::from_str(include_str!("../tests/fixtures/composite_coupled.json"))
+                .expect("embedded independent coupled trajectory");
+        let time: Vec<f64> = (0..25).map(f64::from).collect();
+        return fit_and_forecast(
+            id,
+            model,
+            family,
+            json!({
+                "inputs":{"time":time,"observed":fixture["rows"]},
+                "constructor_kwargs":{"components":["logistic","logistic"]},
+                "fit_options":{"initial_parameters":{"L_1":95.,"k_1":0.38,"x0_1":0.,
+                    "L_2":175.,"k_2":0.3,"x0_2":0.,"alpha_1_2":0.01,"alpha_2_1":-0.02}}
+            }),
+        );
+    }
     if id == "composite_fit" {
         let time: Vec<f64> = (0..25).map(f64::from).collect();
         let observed: Vec<_> = time

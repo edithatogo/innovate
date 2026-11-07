@@ -2477,3 +2477,11 @@ the other competition models and installed binding checks remain open.
   The rebuilt Python 3.15.2 wheel and Julia returned identical results.
   Installed R agreed within 1e-14 after serialization. Joint estimation
   of coupled components remains open.
+
+- [x] Qualify composite_coupled_fit against a separate fixed-step RK4
+  reference. Fit both logistic components and both signed interactions
+  from perturbed starts. All active parameters recovered within 1e-5
+  and saved-state prediction error across 50 values was at most 2.587e-9.
+  Five focused Rust tests and Clippy passed. Python 3.15.2 and Julia
+  results were identical. Installed R agreed within 1e-14 after JSON
+  serialization. This is a noiseless, informed-start benchmark.

@@ -1593,9 +1593,9 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
     };
     let discovery = run("discover_benchmark_cases", json!({}));
     let cases = discovery["result"]["cases"].as_array().unwrap();
-    assert_eq!(cases.len(), 19);
+    assert_eq!(cases.len(), 20);
     let suite = run("run_benchmark_suite", json!({"workers":2}));
-    assert_eq!(suite["result"]["succeeded"], 19, "{suite}");
+    assert_eq!(suite["result"]["succeeded"], 20, "{suite}");
     assert_eq!(suite["result"]["failed"], 0);
     let rows = suite["result"]["runs"].as_array().unwrap();
     for (case, row) in cases.iter().zip(rows) {
@@ -1635,6 +1635,33 @@ fn native_benchmark_runs_the_historical_synthetic_corpus() {
                         < 1e-5 * reference.abs().max(1.)
                 );
             }
+        }
+        if row["case_id"] == "composite_coupled_fit" {
+            let fit = &result["fit"];
+            assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
+            let reference: serde_json::Value =
+                serde_json::from_str(include_str!("fixtures/composite_coupled.json")).unwrap();
+            for (key, expected) in reference["parameters"].as_object().unwrap() {
+                assert!(
+                    (fit["parameters"][key].as_f64().unwrap() - expected.as_f64().unwrap()).abs()
+                        < 1e-5,
+                    "{key}: {fit}"
+                );
+            }
+            for (actual, expected) in result["prediction"]["rows"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .zip(reference["rows"].as_array().unwrap())
+            {
+                for index in 0..2 {
+                    assert!(
+                        (actual[index].as_f64().unwrap() - expected[index].as_f64().unwrap()).abs()
+                            < 1e-5
+                    );
+                }
+            }
+            continue;
         }
         if row["case_id"] == "composite_fit" {
             let fit = &result["fit"];
@@ -1847,7 +1874,7 @@ fn benchmark_validation_resolves_all_historical_case_references() {
         serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
     let report = &response["result"];
     assert_eq!(report["ok"], true);
-    assert_eq!(report["summary"]["case_count"], 19);
+    assert_eq!(report["summary"]["case_count"], 20);
     assert_eq!(
         report["model_card_summaries"]["bass"]["freshness"]["status"],
         "current"
