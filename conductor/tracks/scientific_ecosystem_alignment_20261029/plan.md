@@ -3832,3 +3832,8 @@ Hosted release readiness for this worktree revision remains open.
   MPI ranks. Verify scheduled case results against the existing serial
   receipt and retain the rank receipts. Actionlint passed. Hosted run
   evidence, multi-node and live Slurm qualification remain open.
+- [x] Rehearse the scheduled CI benchmark sequence on Darwin arm64.
+  The two-worker serial run passed both scheduled cases. Two Open MPI
+  ranks passed one case each, and the current verifier matched both
+  receipts against serial. The wheel from 668f374f matches the native
+  source at b99b35cf. Hosted Ubuntu execution remains open.
