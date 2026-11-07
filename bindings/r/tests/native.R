@@ -524,3 +524,12 @@ edge_response <- kernel_call("ingest_dataset", payload=list(dataset=edge_dataset
 stopifnot(identical(as.numeric(unlist(edge_response$result$dataset$weight)), c(1,0)),
   identical(unlist(edge_response$result$validation$warnings),
             c("self_loops:kairos_network", "zero_weights:kairos_network")))
+
+stratified <- list(method="stratified_treatment_contrast", outcomes=c(0,0,2,10,19,19,19),
+  treatment=c(0,0,1,0,1,1,1), strata=rep(c("low","high"), c(3,4)))
+contrast <- kernel_call("summarize_causal", payload=stratified)$result
+stopifnot(isTRUE(all.equal(contrast$estimate, 6)),
+  isTRUE(all.equal(contrast$by_stratum$low$weight, 3/7)))
+stratified$strata[7] <- "unsupported"
+contrast_error <- tryCatch({kernel_call("summarize_causal", payload=stratified); ""}, error=conditionMessage)
+stopifnot(grepl("each stratum requires treated and control observations", contrast_error, fixed=TRUE))

@@ -4485,3 +4485,9 @@ Hosted release readiness for this worktree revision remains open.
   sample weights. The unequal-size analytic fixture returns 6, and
   strata without both arms fail explicitly. All 82 Rust boundary tests
   passed. Binding runtime qualification and broader estimators remain open.
+
+- [x] Qualify empirical stratum standardization through CPython 3.15.2,
+  Julia and installed R. Each binding returned the analytic contrast of 6
+  with a low-stratum weight of 3/7 and rejected a stratum missing one arm.
+  The wheel and C ABI library were rebuilt locally with stripping disabled
+  after the default linker invocation exhausted disk space.

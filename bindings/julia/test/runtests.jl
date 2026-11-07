@@ -558,3 +558,14 @@ end
     @test artifact["validation"]["warnings"] == ["self_loops:kairos_network","zero_weights:kairos_network"]
     @test kernel_call("ingest_dataset", nothing, Dict("artifact"=>artifact))["result"] == artifact
 end
+
+@testset "Stratified treatment contrast" begin
+    payload = Dict("method"=>"stratified_treatment_contrast",
+        "outcomes"=>[0,0,2,10,19,19,19], "treatment"=>[0,0,1,0,1,1,1],
+        "strata"=>vcat(fill("low",3), fill("high",4)))
+    result = kernel_call("summarize_causal", nothing, payload)["result"]
+    @test result["estimate"] ≈ 6
+    @test result["by_stratum"]["low"]["weight"] ≈ 3/7
+    payload["strata"][end] = "unsupported"
+    @test_throws r"each stratum requires treated and control observations" kernel_call("summarize_causal", nothing, payload)
+end
