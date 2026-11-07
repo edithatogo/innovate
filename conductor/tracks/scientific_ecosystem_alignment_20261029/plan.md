@@ -1613,3 +1613,13 @@ the other competition models and installed binding checks remain open.
   bindings returned daily sums 2/0/3 with the missing day filled and
   month-end sums 2/3 labelled February 29 and March 31. Julia used
   offset-bearing ISO strings and R used Brisbane POSIXct inputs.
+
+## Native causal evaluation
+
+- [x] Port the four historical descriptive summaries to the Rust
+  `summarize_causal` request. The analytic boundary test covers
+  pre/post differences, counterfactual percent change, missing
+  pre-event summaries and subgroup intervals. Duplicate group labels
+  are rejected. All 24 boundary tests and focused Clippy passed.
+- [ ] Qualify installed Python, Julia and R consumers and reconcile
+  the causal analysis ledger with the full historical and planned scope.

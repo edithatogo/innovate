@@ -2,6 +2,7 @@
 #![forbid(unsafe_code)]
 mod adopters;
 mod calendar;
+mod causal;
 mod competition;
 mod composite;
 mod contracts;
@@ -38,7 +39,7 @@ pub fn execute_json(input: &str) -> String {
     {
         match value["operation"].as_str() {
             Some("fit_batch" | "predict_batch") => return execute_batch_json(value).to_string(),
-            Some("preprocess_series" | "aggregate_dates") => {
+            Some("preprocess_series" | "aggregate_dates" | "summarize_causal") => {
                 return execute_preprocessing_json(&value).to_string();
             }
             Some("categorize_adopters") => return execute_adopters_json(&value).to_string(),
@@ -168,11 +169,14 @@ fn execute_adopters_json(value: &serde_json::Value) -> serde_json::Value {
 fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
     let result = (|| {
         if value["schema_version"] != KERNEL_SCHEMA_VERSION {
-            return Err("preprocess_series requires schema 2.0");
+            return Err("analysis request requires schema 2.0");
         }
         let payload = &value["payload"];
         if value["operation"] == "aggregate_dates" {
             return calendar::aggregate(payload);
+        }
+        if value["operation"] == "summarize_causal" {
+            return causal::summarize(payload);
         }
         let values = serde_json::from_value::<Vec<f64>>(payload["values"].clone())
             .map_err(|_| "preprocess_series requires a numeric values array")?;

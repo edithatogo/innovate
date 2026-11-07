@@ -422,3 +422,40 @@ fn offset_timestamp_weekly_buckets_use_elapsed_time() {
         })
     );
 }
+
+#[test]
+fn causal_summaries_match_analytic_effects() {
+    use innovate_core::json;
+    let run = |payload| {
+        let request =
+            json!({"schema_version":"2.0","operation":"summarize_causal","payload":payload});
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    let did = run(
+        json!({"method":"pre_post","pre_treated":[1,3],"post_treated":[7,9],
+                        "pre_control":[2],"post_control":[5]}),
+    );
+    assert_eq!(did["result"]["diff_in_diff"], 3.);
+    let counterfactual =
+        run(json!({"method":"counterfactual","actual":[3,5],"counterfactual":[2]}));
+    assert_eq!(counterfactual["result"]["percent_change"], 100.);
+    let event = run(json!({"method":"event_study","periods":[0,1,2],
+                          "coefficients":[2,3,5],"standard_errors":[1,1,1]}));
+    assert_eq!(event["result"]["post_effects"], 4.);
+    assert_eq!(event["result"]["event_period_coef"], 2.);
+    assert!(event["result"]["pre_trend"].is_null());
+    let groups = run(
+        json!({"method":"heterogeneous_effects","group_labels":["a","b"],
+                           "effects":[2,4],"standard_errors":[1,0]}),
+    );
+    assert_eq!(groups["result"]["overall_effect"], 3.);
+    assert_eq!(groups["result"]["by_group"]["a"]["ci_upper"], 3.96);
+    let invalid = run(
+        json!({"method":"heterogeneous_effects","group_labels":["a","a"],
+                            "effects":[2,4],"standard_errors":[1,0]}),
+    );
+    assert_eq!(invalid["error"]["code"], "invalid_request");
+}
