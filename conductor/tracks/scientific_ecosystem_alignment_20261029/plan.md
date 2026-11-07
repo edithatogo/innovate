@@ -4831,3 +4831,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify paired path summaries through rebuilt Python 3.15.2, Julia
   and installed R. All three preserved sample order and matched the
   endpoint mean, standard error and empirical interval at the last sample.
+
+- [x] Report paired path mean covariance in sample order. All four
+  focused Rust scenario tests passed. The fixture verifies the endpoint
+  variance and symmetric nonzero covariance. Binding checks remain open.

@@ -1765,10 +1765,17 @@ fn scenario_grid_summarizes_paired_ensemble_differences() {
     assert_eq!(outcome["evaluation_time"], 1.);
     let mut path_request = request.clone();
     path_request["payload"]["comparisons"][0]["include_path_summary"] = json!(true);
+    path_request["payload"]["comparisons"][0]["include_path_covariance"] = json!(true);
     let path_result = run(&path_request);
     let rows = &path_result["result"]["comparisons"][0]["result"]["path_summary"]["rows"];
     assert_eq!(rows[0]["time"], 0.);
     assert_eq!(rows[1]["time"], 1.);
+    let covariance = &path_result["result"]["comparisons"][0]["result"]["path_covariance"];
+    let first_error = rows[0]["mean_standard_error"].as_f64().unwrap();
+    let last_error = rows[1]["mean_standard_error"].as_f64().unwrap();
+    assert!((covariance[1][1].as_f64().unwrap() - last_error.powi(2)).abs() < 1e-10);
+    assert!((covariance[0][1].as_f64().unwrap() - first_error * last_error).abs() < 1e-10);
+    assert_eq!(covariance[0][1], covariance[1][0]);
     for field in [
         "mean_difference",
         "mean_standard_error",

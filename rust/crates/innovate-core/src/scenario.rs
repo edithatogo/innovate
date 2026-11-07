@@ -835,6 +835,8 @@ struct EnsembleComparison {
     evaluation_metric: Option<String>,
     #[serde(default)]
     include_path_summary: bool,
+    #[serde(default)]
+    include_path_covariance: bool,
     bootstrap: Option<EnsembleBootstrap>,
     #[serde(default)]
     exact_sign_flip: bool,
@@ -1117,6 +1119,7 @@ fn compare_ensemble(
     let mut endpoint = None;
     let mut differences = Vec::with_capacity(comparison.pairs.len());
     let mut path_differences = Vec::<Vec<f64>>::new();
+    let summarize_path = comparison.include_path_summary || comparison.include_path_covariance;
     for pair in &comparison.pairs {
         if !used.insert(&pair.baseline) || !used.insert(&pair.alternative) {
             return Err("each scenario ID can appear only once per ensemble");
@@ -1126,7 +1129,10 @@ fn compare_ensemble(
         if time != alternative_time || grid.as_ref().is_some_and(|expected| expected != &time) {
             return Err("ensemble comparisons require identical time grids across all replicates");
         }
-        if comparison.include_path_summary {
+        if summarize_path {
+            if comparison.include_path_covariance && time.len() > 128 {
+                return Err("ensemble path covariance supports at most 128 sample times");
+            }
             if time.len() > 1_000_000 / comparison.pairs.len() {
                 return Err("ensemble path summary exceeds 1000000 paired samples");
             }
@@ -1206,7 +1212,41 @@ fn compare_ensemble(
         let time = grid.as_ref().unwrap();
         result["evaluation_horizon"] = json!([time[0], time[time.len() - 1]]);
     }
-    if comparison.include_path_summary {
+    if comparison.include_path_covariance {
+        let count = differences.len() as f64;
+        let divisor = (count * (count - 1.)).sqrt();
+        let centered: Vec<Vec<f64>> = path_differences
+            .iter()
+            .map(|values| {
+                let scale = values.iter().map(|x| x.abs()).fold(0., f64::max);
+                let (mean, _) = ensemble_moments(values, scale);
+                values
+                    .iter()
+                    .map(|&value| {
+                        let residual = value - mean;
+                        if residual.is_finite() {
+                            residual / divisor
+                        } else {
+                            value / divisor - mean / divisor
+                        }
+                    })
+                    .collect()
+            })
+            .collect();
+        let mut covariance = vec![vec![0.; centered.len()]; centered.len()];
+        for (i, left) in centered.iter().enumerate() {
+            for (j, right) in centered.iter().enumerate().take(i + 1) {
+                let value = left.iter().zip(right).map(|(a, b)| a * b).sum::<f64>();
+                if !value.is_finite() {
+                    return Err("ensemble path covariance exceeded finite numerical domain");
+                }
+                covariance[i][j] = value;
+                covariance[j][i] = value;
+            }
+        }
+        result["path_covariance"] = json!(covariance);
+    }
+    if summarize_path {
         let rows: Vec<_> = grid.as_ref().unwrap().iter().zip(path_differences).map(|(&time, mut values)| {
             let scale = values.iter().map(|x| x.abs()).fold(0., f64::max);
             let (mean, error) = ensemble_moments(&values, scale);

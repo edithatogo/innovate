@@ -438,3 +438,8 @@ Set `include_path_summary` on a paired ensemble comparison to obtain
 the mean difference, standard error and empirical interval at each
 shared sample time. These are pointwise summaries. The request is
 limited to one million pair-by-time samples.
+
+Set `include_path_covariance` to return the covariance matrix of the
+paired mean differences and the associated path summary. The matrix
+follows sample order and uses the same independent-pair assumption as
+the pointwise standard errors. It supports up to 128 sample times.
