@@ -929,3 +929,9 @@ remain open.
 - [x] Validate effective hazards without evaluating the unused unforced sum. (286bf0be)
   The regression uses a finite attenuated hazard whose unforced population
   sum would overflow. All 18 Rust network tests and focused Clippy passed.
+
+- [x] Requalify the effective-hazard fix in installed Python, Julia and R.
+  All three bindings ran the same overflow regression fixture and returned
+  adoption counts of [0, 2]. The rebuilt wheel passed 59 native tests, Julia
+  Pkg.test passed 231 assertions, and installed R native conformance passed.
+  [Logs and fixture](evidence/kairos-effective-hazard-20261107).
