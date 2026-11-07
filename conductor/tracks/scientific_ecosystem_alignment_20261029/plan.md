@@ -6895,3 +6895,8 @@ Hosted release readiness for this worktree revision remains open.
   forecast request with distinct expected values and ten malformed
   rows produced identical ordered responses with 1, 3 and 32
   workers. The focused Rust batch boundary tests passed.
+
+- [x] Verify the 65-row uneven forecast batch in Python 3.15.2,
+  Julia and installed R. Each binding preserved the 55 expected
+  forecasts and ten invalid-request positions with 1, 3 and 32
+  workers. Reused unchanged 8926c30c native builds.

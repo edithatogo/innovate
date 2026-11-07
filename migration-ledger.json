@@ -170,7 +170,7 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Broader model and workload qualification, including parallel batch execution"
+      "remaining": "Parallel fitting and ragged forecasts for five historical model families, mixed Logistic event and covariate batches, and uneven forecast chunks have local Python, Julia and R evidence. Broader model and workload qualification and release acceptance remain open."
     },
     {
       "key": "preprocessing",
