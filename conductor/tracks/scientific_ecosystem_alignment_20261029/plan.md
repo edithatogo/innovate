@@ -738,3 +738,17 @@ shared relative objective-improvement correction. Competition line coverage is
 92.47 percent, numerical-module coverage is 96.10 percent and core/C ABI line
 coverage is 85.38 percent. Docs build 163 pages, and local package checks pass.
 All 38 feature obligations remain required. Same isolated writing lane continues.
+
+## Complementary goods covariate extension
+
+- [x] Extend the shared forcing contract to intrinsic growth and complementarity.
+- [x] Verify analytic/independent references, conditional fitting and bindings.
+- [x] Retain review and scientific/release limitations.
+
+Source: 95f3aeb3. Local qualification passed 24 affected Rust and bridge tests,
+45 installed Python tests, 197 Julia assertions and R conformance. The analytic
+and independent interacting references, perturbed conditional fit and held-out
+forecast pass. Competition line coverage is 92.47 percent from focused tests.
+The unchanged optimizer retains prior full-suite evidence. Docs build 163 pages
+and local package checks pass. Lock-in forcing, event splits, uncertainty and
+scientific/release qualification remain required. Same isolated lane continues.
