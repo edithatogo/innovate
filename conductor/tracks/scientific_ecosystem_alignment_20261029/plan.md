@@ -3735,3 +3735,8 @@ Hosted release readiness for this worktree revision remains open.
   of 66,060,288 and 66,289,664 bytes. This verifies rank-local
   execution and separate receipt output. Cross-rank computation,
   scheduler allocation and accelerator qualification remain open.
+- [x] Add opt-in Open MPI benchmark sharding using native case discovery.
+  Each rank executes its disjoint slice and records rank, size and case IDs
+  in its receipt. Two local ranks covered all three fast cases exactly once,
+  and their combined result rows matched the serial run. Python 3.15.2 and
+  Ruff passed. Multi-node, scheduler and accelerator qualification remain open.

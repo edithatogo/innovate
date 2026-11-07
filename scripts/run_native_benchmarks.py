@@ -17,6 +17,7 @@ def main() -> int:
     workers.add_argument("--workers", type=int)
     workers.add_argument("--slurm-allocation", action="store_true",
                          help="Use SLURM_CPUS_PER_TASK as the local worker budget.")
+    parser.add_argument("--mpi-shard", action="store_true", help="Select cases for this Open MPI rank.")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
 
@@ -32,7 +33,20 @@ def main() -> int:
         modes = execute("discover_execution_modes")["result"]
         count = min(count, modes["local_cpu"]["max_workers"])
     payload = {"workers": count}
-    if args.policy is not None:
+    shard = None
+    if args.mpi_shard:
+        try:
+            rank = int(os.environ["OMPI_COMM_WORLD_RANK"])
+            size = int(os.environ["OMPI_COMM_WORLD_SIZE"])
+        except (KeyError, ValueError):
+            parser.error("--mpi-shard requires Open MPI rank and size")
+        cases = execute("discover_benchmark_cases")["result"]["cases"]
+        ids = [case["case_id"] for case in cases if args.policy is None or case["ci_policy"] == args.policy]
+        if not (0 <= rank < size <= len(ids)):
+            parser.error("--mpi-shard requires a valid rank and at least one case per rank")
+        payload["case_ids"] = ids[rank::size]
+        shard = {"rank": rank, "size": size, "case_ids": payload["case_ids"]}
+    elif args.policy is not None:
         payload["ci_policy"] = args.policy
     started = perf_counter()
     response = execute("run_benchmark_suite", **payload)
@@ -54,6 +68,8 @@ def main() -> int:
         "system": system,
         "architecture": platform.machine(),
     }
+    if shard is not None:
+        response["metadata"]["benchmark_runner"]["mpi_shard"] = shard
     args.output.write_text(json.dumps(response, indent=2, allow_nan=False) + "\n", encoding="utf-8")
     result = response["result"]
     print(f"Benchmark suite: {result['succeeded']} succeeded, {result['failed']} failed")
