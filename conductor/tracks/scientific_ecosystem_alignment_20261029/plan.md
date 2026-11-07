@@ -3556,3 +3556,9 @@ Hosted release readiness for this worktree revision remains open.
   The six Rust SARIMA boundary tests, focused Clippy and the existing
   three higher-order R comparisons passed. Python and Julia checks
   of the new second-order cases remain open.
+
+- [x] Verify both signs of the AR(2) and MA(2) boundary fixtures through
+  the Python 3.15.2 wheel built from c0cb9f11 and the Julia fitting
+  helper using the FFI library from the same source. All 300 fitted
+  positions per case match the installed R binding within 1e-10,
+  including agreement on missing positions.
