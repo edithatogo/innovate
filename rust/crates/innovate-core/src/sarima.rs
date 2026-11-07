@@ -145,6 +145,26 @@ fn estimate(
             best[index] = selected;
         }
         if best == base {
+            // Opposite changes to adjacent MA terms can improve likelihood
+            // along an invertibility boundary where individual moves stall.
+            let mut trial = base.clone();
+            for terms in [p..p + q, p + q + sp..count] {
+                for index in terms.start..terms.end.saturating_sub(1) {
+                    for direction in [-1., 1.] {
+                        trial[index] = base[index] + direction * step;
+                        trial[index + 1] = base[index + 1] - direction * step;
+                        if let Some(candidate) = score(&trial).filter(|v| *v > likelihood) {
+                            likelihood = candidate;
+                            best.clone_from(&trial);
+                        }
+                    }
+                    trial[index] = base[index];
+                    trial[index + 1] = base[index + 1];
+                }
+            }
+            if best != base {
+                continue;
+            }
             step *= 0.5;
             if step < 1e-6 {
                 return Ok(best);

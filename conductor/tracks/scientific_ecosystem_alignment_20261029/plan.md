@@ -3544,3 +3544,15 @@ Hosted release readiness for this worktree revision remains open.
   All 240 fitted positions per case agreed within 1e-10, with identical
   null or missing positions. The wheel and FFI library were built at
   63248eab. The intervening changes are Conductor evidence only.
+
+- [x] Qualify second-order AR and MA fits near positive and negative
+  unit roots against R maximum likelihood. The positive-root MA(2)
+  fixture exposed a coordinate-search stall along the invertibility
+  boundary, with likelihood 0.193 below R. When an individual sweep
+  stalls, test opposing moves in adjacent MA terms before reducing
+  the step. The repaired fixture agrees within 6e-8 and the other
+  three within 8e-7. Reproduce with
+  `evidence/sarima-reference/check-second-order-boundary.R`.
+  The six Rust SARIMA boundary tests, focused Clippy and the existing
+  three higher-order R comparisons passed. Python and Julia checks
+  of the new second-order cases remain open.
