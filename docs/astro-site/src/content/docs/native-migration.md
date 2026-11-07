@@ -222,7 +222,8 @@ increasing times in the constructor options. Each split must have at least
 three observations on each side. The fit refits the model for every
 candidate, selects the converged fit with the smallest residual sum of
 squares, and keeps the earlier candidate on a tie. Weighted fits use the
-normalized weighted residual sum of squares. The fitted state stores the
+normalized weighted residual sum of squares and skip candidates with
+fewer than three positive-weight observations on either side. The fitted state stores the
 selected `t_event`, and `event_profile` reports the candidate scores and
 convergence. The search is limited to the supplied times.
 

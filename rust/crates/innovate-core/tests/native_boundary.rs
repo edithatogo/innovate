@@ -2486,6 +2486,20 @@ fn historical_logistic_profiles_event_candidates_and_saves_fixed_split() {
             .unwrap()
             < 1e-10
     );
+    let weights: Vec<_> = (0..24).map(|i| if i < 8 { 0 } else { 1 }).collect();
+    request["payload"]["fit_options"] = json!({"weights":weights});
+    let weighted = execute(&request);
+    assert_eq!(
+        weighted["result"]["state"]["constructor_kwargs"]["t_event"],
+        12.
+    );
+    assert!(weighted["result"]["event_profile"]["candidates"][0]["error"].is_string());
+    assert!(
+        weighted["result"]["event_profile"]["candidates"][1]["objective"]
+            .as_f64()
+            .unwrap()
+            < 1e-10
+    );
     request["payload"]["constructor_kwargs"]["event_candidates"] = json!([1, 12]);
     assert!(execute(&request)["error"].is_object());
 }

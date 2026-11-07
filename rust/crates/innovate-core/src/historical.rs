@@ -483,6 +483,7 @@ pub(crate) fn profile_event(
     if times.windows(2).any(|pair| pair[0] >= pair[1]) {
         return Err(error("event candidates must be strictly increasing"));
     }
+    let weights = crate::fitting::weights(request, time.len(), 6)?;
     let mut trial = request.clone();
     let mut fixed = options.clone();
     fixed.remove("event_candidates");
@@ -495,6 +496,14 @@ pub(crate) fn profile_event(
             return Err(error(
                 "each event candidate requires at least three observations per branch",
             ));
+        }
+        if let Some(weights) = &weights {
+            let positive = |weights: &[f64]| weights.iter().filter(|weight| **weight > 0.).count();
+            if positive(&weights[..split]) < 3 || positive(&weights[split..]) < 3 {
+                profile.push(json!({"t_event":time_candidate,
+                    "error":"fewer than three positive-weight observations on a branch"}));
+                continue;
+            }
         }
         fixed.insert("t_event".into(), json!(time_candidate));
         trial.payload["constructor_kwargs"] = json!(fixed);

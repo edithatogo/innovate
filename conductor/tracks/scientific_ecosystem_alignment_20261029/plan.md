@@ -3119,3 +3119,10 @@ the other competition models and installed binding checks remain open.
   respectively, with RSS below 1e-18. The Bass candidate at 11 remained
   visible as unconverged. All 11 mechanistic Rust tests and focused
   Clippy passed. Event uncertainty and broader model profiling remain open.
+
+- [x] Require branch-level observation support for weighted event
+  profiling. Candidates with fewer than three positive-weight rows on
+  either branch are reported and excluded from selection. Python
+  3.15.2, Julia and R agreed exactly on the Logistic fixture with
+  eight zero-weight rows, excluding time 10 and recovering time 12.
+  The focused Rust regression and Clippy passed.
