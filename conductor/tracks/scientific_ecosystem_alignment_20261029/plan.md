@@ -5303,3 +5303,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify the raw and standardized narrow-balance differences
   in Python 3.15.2, Julia and installed R against rebuilt native
   artifacts. Each binding retained the raw one-sixth-step difference.
+
+- [x] Add fixed-prediction adjustment to nearest-score matching.
+  The Rust fixture preserved the unadjusted ATT of 2.5 and recovered
+  an adjusted ATT of 2. It also rejected misaligned predictions.
+  Binding checks and fitted-model inference remain open.

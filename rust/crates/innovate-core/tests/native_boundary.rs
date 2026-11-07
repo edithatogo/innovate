@@ -873,6 +873,13 @@ fn causal_summaries_match_analytic_effects() {
         result["result"]["control_diagnostics"]["effective_sample_size"],
         2.
     );
+    let mut adjusted = matched.clone();
+    adjusted["control_predictions"] = json!([0, 0, 0, 1, 0]);
+    let adjusted_result = run(adjusted.clone());
+    assert_eq!(adjusted_result["result"]["estimate"], 2.5);
+    assert_eq!(adjusted_result["result"]["adjusted_estimate"], 2.);
+    adjusted["control_predictions"] = json!([0]);
+    assert!(run(adjusted)["result"].is_null());
     let mut reused = matched.clone();
     reused["scores"][3] = json!(2);
     reused["outcome_variances"] = json!([1, 4, 1, 1, 1]);

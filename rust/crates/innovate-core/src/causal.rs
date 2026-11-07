@@ -55,7 +55,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                  "estimands":["ate","att"],"default_estimand":"ate",
                  "uncertainty":"fixed_propensity_standard_error"},
                 {"method":"matched_treatment_contrast","adjustment":"nearest_score_with_replacement",
-                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":["allow_partial","outcome_variances","balance_covariates"],
+                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":["allow_partial","outcome_variances","balance_covariates","control_predictions"],
                  "estimands":["att"],"default_estimand":"att",
                  "partial_estimand":"matched_subset_att",
                  "uncertainty":"conditional_standard_error",
@@ -1265,6 +1265,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
                 | "allow_partial"
                 | "outcome_variances"
                 | "balance_covariates"
+                | "control_predictions"
         )
     }) {
         return Err("matched contrast received an unsupported field");
@@ -1284,6 +1285,16 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
         values.len() != outcomes.len() || values.iter().any(|&variance| variance < 0.)
     }) {
         return Err("outcome variances must be nonnegative and align with outcomes");
+    }
+    let control_predictions = fields
+        .contains_key("control_predictions")
+        .then(|| series(payload, "control_predictions"))
+        .transpose()?;
+    if control_predictions
+        .as_ref()
+        .is_some_and(|values| values.len() != outcomes.len())
+    {
+        return Err("control predictions must align with outcomes");
     }
     let balance_covariates: Option<std::collections::BTreeMap<String, Vec<f64>>> = fields
         .get("balance_covariates")
@@ -1356,6 +1367,20 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     }
     let estimate =
         mean(&differences).ok_or("matching requires at least one matched treated observation")?;
+    let adjusted_estimate = control_predictions
+        .map(|predictions| {
+            let adjusted: Vec<_> = pairs
+                .iter()
+                .zip(&differences)
+                .map(|(pair, &difference)| {
+                    let adjustment =
+                        finite(predictions[pair.treated_index] - predictions[pair.control_index])?;
+                    finite(difference - adjustment)
+                })
+                .collect::<Result<_, _>>()?;
+            Ok::<_, &'static str>(mean(&adjusted).unwrap())
+        })
+        .transpose()?;
     let estimand = if unmatched_treated_indices.is_empty() {
         "att"
     } else {
@@ -1422,7 +1447,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
         })
         .transpose()?;
     Ok(
-        json!({"method":"nearest_score_with_replacement","estimand":estimand,"estimate":estimate,"pairs":pairs,
+        json!({"method":"nearest_score_with_replacement","estimand":estimand,"estimate":estimate,"adjusted_estimate":adjusted_estimate,"pairs":pairs,
             "unmatched_treated_indices":unmatched_treated_indices,
             "conditional_standard_error":conditional_standard_error,"covariate_balance":balance,
             "match_diagnostics":{"caliper":caliper,"max_score_distance":max_score_distance,

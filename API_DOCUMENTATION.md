@@ -526,3 +526,9 @@ Both standardized mean differences divide the signed difference by
 the same pooled pre-match sample standard deviation. The standardized
 values are null when either original group has fewer than two rows,
 the pooled spread is zero, or the result exceeds the finite range.
+
+Optional `control_predictions` supplies one control outcome prediction
+per input row. The `adjusted_estimate` averages the observed paired
+differences minus the corresponding prediction differences over the
+same retained pairs. The conditional standard error treats the
+predictions and matches as fixed.
