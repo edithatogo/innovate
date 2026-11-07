@@ -1684,3 +1684,10 @@ the other competition models and installed binding checks remain open.
 - [x] Verify the Lock-in counterfactual through the rebuilt Python wheel,
   Julia and installed R. Each retains both product columns, returns
   differences of 20 and 0, and reports 20% and null respectively.
+
+- [x] Restore uncertainty metadata summaries. The native request
+  preserves the supplied interval and estimand, reports its width and
+  approximate standard error under a 95% normal interval, and records
+  whether it excludes zero. The fixture checks a bound at zero and
+  rejects reversed bounds. All 24 boundary tests and focused Clippy passed.
+- [ ] Verify interval summaries through Python, Julia and R.

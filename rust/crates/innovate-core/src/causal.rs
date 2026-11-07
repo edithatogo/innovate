@@ -120,6 +120,43 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                       "max_effect":max,"min_effect":min,"effect_range":finite(max-min)?}),
             )
         }
+        Some("uncertainty_interval") => {
+            let number = |key: &str| {
+                payload[key]
+                    .as_f64()
+                    .ok_or("interval fields must be numeric")
+            };
+            let lower = number("ci_lower")?;
+            let upper = number("ci_upper")?;
+            let point = number("point_estimate")?;
+            if lower > upper {
+                return Err("confidence interval bounds must be ordered");
+            }
+            let estimand = payload["estimand"]
+                .as_str()
+                .filter(|v| !v.is_empty())
+                .ok_or("estimand must be a nonempty string")?;
+            let method = payload
+                .get("interval_method")
+                .map_or(Some("bootstrap"), Value::as_str)
+                .filter(|v| !v.is_empty())
+                .ok_or("interval_method must be a nonempty string")?;
+            let n_bootstrap = payload
+                .get("n_bootstrap")
+                .filter(|v| !v.is_null())
+                .map(|v| {
+                    v.as_u64()
+                        .filter(|&n| n > 0)
+                        .ok_or("n_bootstrap must be a positive integer")
+                })
+                .transpose()?;
+            let width = finite(upper - lower)?;
+            Ok(
+                json!({"estimand":estimand,"point_estimate":point,"ci_lower":lower,
+                "ci_upper":upper,"method":method,"n_bootstrap":n_bootstrap,
+                "ci_width":width,"se":width / 3.92,"excludes_zero":lower > 0. || upper < 0.}),
+            )
+        }
         Some("e_value") => {
             let risk_ratio = payload["point_estimate"]
                 .as_f64()

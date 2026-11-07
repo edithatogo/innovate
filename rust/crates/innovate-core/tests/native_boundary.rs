@@ -480,6 +480,14 @@ fn causal_summaries_match_analytic_effects() {
     assert_eq!(products["counterfactual"], json!([[120., 0.]]));
     assert_eq!(products["difference"], json!([[20., 0.]]));
     assert_eq!(products["percentage_difference"], json!([[20., null]]));
+    let interval = run(json!({"method":"uncertainty_interval","estimand":"ATE",
+        "point_estimate":1.96,"ci_lower":0,"ci_upper":3.92,"n_bootstrap":1000}));
+    assert_eq!(interval["result"]["se"], 1.);
+    assert_eq!(interval["result"]["excludes_zero"], false);
+    assert_eq!(interval["result"]["n_bootstrap"], 1000);
+    let reversed = run(json!({"method":"uncertainty_interval","estimand":"ATE",
+        "point_estimate":0,"ci_lower":1,"ci_upper":-1}));
+    assert_eq!(reversed["error"]["code"], "invalid_request");
     let risk = run(json!({"method":"e_value","point_estimate":0.5}));
     assert!((risk["result"]["e_value"].as_f64().unwrap() - (2. + 2_f64.sqrt())).abs() < 1e-12);
     let sensitivity = run(json!({"method":"sensitivity_scenario","point_estimate":10,
