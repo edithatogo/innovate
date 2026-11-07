@@ -337,14 +337,89 @@ pub(crate) fn split_rhat(payload: &Value) -> Result<Value, &'static str> {
         })
         .collect::<Result<Vec<_>, _>>()?;
     let half = draws / 2;
-    let n = half as f64;
-    let splits = chains
+    let splits: Vec<_> = chains
         .iter()
-        .flat_map(|chain| [&chain[..half], &chain[draws - half..]]);
-    let mut means = Vec::with_capacity(2 * chains.len());
-    let mut variances = Vec::with_capacity(2 * chains.len());
+        .flat_map(|chain| [&chain[..half], &chain[draws - half..]])
+        .collect();
+    let method = payload
+        .get("method")
+        .map_or(Some("classical_split_rhat"), Value::as_str);
+    let result = match method {
+        Some("classical_split_rhat") => {
+            let rhat = split_rhat_moments(&splits)?;
+            json!({"method":"classical_split_rhat","rhat":rhat,
+                "status": if rhat.is_some() {"computed"} else {"zero_within_split_variance"}})
+        }
+        Some("rank_normalized_split_rhat") => {
+            let pooled: Vec<_> = splits
+                .iter()
+                .flat_map(|split| split.iter().copied())
+                .collect();
+            let bulk = ranked_rhat(&pooled, half)?;
+            let mut sorted = pooled.clone();
+            sorted.sort_unstable_by(f64::total_cmp);
+            let middle = sorted.len() / 2;
+            let median = sorted[middle - 1].midpoint(sorted[middle]);
+            let folded: Vec<_> = pooled.iter().map(|value| (value - median).abs()).collect();
+            if folded.iter().any(|value| !value.is_finite()) {
+                return Err("folded draws exceed finite numerical domain");
+            }
+            let tail = ranked_rhat(&folded, half)?;
+            let rhat = bulk.zip(tail).map(|(bulk, tail)| bulk.max(tail));
+            json!({"method":"rank_normalized_split_rhat","rhat":rhat,
+                "bulk_rhat":bulk,"folded_rhat":tail,
+                "status":if rhat.is_some() {"computed"} else {"zero_within_split_variance"}})
+        }
+        _ => return Err("unknown split R-hat method"),
+    };
+    let mut result = result;
+    result["chains"] = json!(chains.len());
+    result["draws_per_chain"] = json!(draws);
+    result["draws_per_split"] = json!(half);
+    Ok(result)
+}
+
+fn ranked_rhat(values: &[f64], half: usize) -> Result<Option<f64>, &'static str> {
+    let mut order: Vec<_> = (0..values.len()).collect();
+    order.sort_unstable_by(|a, b| values[*a].total_cmp(&values[*b]));
+    let mut scores = vec![0.; values.len()];
+    let mut start = 0;
+    while start < order.len() {
+        let mut end = start + 1;
+        while end < order.len() && values[order[start]] == values[order[end]] {
+            end += 1;
+        }
+        let rank = (start + 1 + end) as f64 / 2.;
+        let probability = (rank - 0.375) / (values.len() as f64 + 0.25);
+        let score = normal_quantile(probability);
+        for index in &order[start..end] {
+            scores[*index] = score;
+        }
+        start = end;
+    }
+    split_rhat_moments(&scores.chunks_exact(half).collect::<Vec<_>>())
+}
+
+fn normal_quantile(probability: f64) -> f64 {
+    // The bounded draw counts keep the Blom probabilities inside Phi(±8).
+    let (mut low, mut high) = (-8_f64, 8_f64);
+    for _ in 0..48 {
+        let middle = low.midpoint(high);
+        if 0.5 * libm::erfc(-middle / std::f64::consts::SQRT_2) < probability {
+            low = middle;
+        } else {
+            high = middle;
+        }
+    }
+    low.midpoint(high)
+}
+
+fn split_rhat_moments(splits: &[&[f64]]) -> Result<Option<f64>, &'static str> {
+    let n = splits[0].len() as f64;
+    let mut means = Vec::with_capacity(splits.len());
+    let mut variances = Vec::with_capacity(splits.len());
     // Shift before computing moments to retain precision for chains far from zero.
-    let origin = chains[0][0];
+    let origin = splits[0][0];
     for split in splits {
         let mean = split.iter().map(|value| (value - origin) / n).sum::<f64>();
         let variance = split
@@ -364,17 +439,12 @@ pub(crate) fn split_rhat(payload: &Value) -> Result<Value, &'static str> {
     if !within.is_finite() || !between_per_draw.is_finite() {
         return Err("split R-hat moments exceed finite numerical domain");
     }
-    let (rhat, status) = if within == 0. {
-        (None, "zero_within_split_variance")
-    } else {
-        let rhat = ((n - 1.) / n + between_per_draw / within).sqrt();
-        if !rhat.is_finite() {
-            return Err("split R-hat exceeds finite numerical domain");
-        }
-        (Some(rhat), "computed")
-    };
-    Ok(
-        json!({"method":"classical_split_rhat","rhat":rhat,"status":status,
-        "chains":chains.len(),"draws_per_chain":draws,"draws_per_split":half}),
-    )
+    if within == 0. {
+        return Ok(None);
+    }
+    let rhat = ((n - 1.) / n + between_per_draw / within).sqrt();
+    if !rhat.is_finite() {
+        return Err("split R-hat exceeds finite numerical domain");
+    }
+    Ok(Some(rhat))
 }

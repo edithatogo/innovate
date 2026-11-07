@@ -1240,6 +1240,7 @@ dependencies = [
  "kairo-ecs-des",
  "kairo-ecs-rng",
  "kairo-ecs-types",
+ "libm",
  "serde",
  "serde_json",
  "sha2",

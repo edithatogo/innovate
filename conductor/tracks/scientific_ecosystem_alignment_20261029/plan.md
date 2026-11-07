@@ -2994,3 +2994,11 @@ the other competition models and installed binding checks remain open.
   exactly on the drifting five-draw fixture and matched sqrt(19/6).
   Five focused Rust tests and Clippy passed. Rank-normalized folded
   diagnostics and effective sample size remain open.
+
+- [x] Add rank-normalized split and folded R-hat as an explicit method.
+  Fold around the median of the retained split draws and report the
+  maximum when both components are defined. On an odd-length scale
+  mismatch fixture with ties, Python 3.15.2, Julia and R agreed exactly.
+  The folded value 1.975023797027019 matched an independent base-R
+  rank and normal-quantile calculation within 1e-12. Six focused Rust
+  tests and Clippy passed. Effective sample size remains open.

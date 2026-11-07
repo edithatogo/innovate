@@ -2331,3 +2331,17 @@ fn bayesian_classical_split_rhat_detects_drift_and_stuck_chains() {
     assert!(stuck["result"]["rhat"].is_null());
     assert!(diagnose(json!([[0, 0, 0, 0], [0, 0, 0]]))["error"].is_object());
 }
+
+#[test]
+fn bayesian_ranked_split_rhat_detects_chain_scale_difference() {
+    let request = json!({"schema_version":"2.0","operation":"bayesian_split_rhat",
+        "payload":{"method":"rank_normalized_split_rhat",
+            "chains":[[-2,0,0,2,999,-2,0,0,2],[-20,-10,10,20,999,-20,-10,10,20]]}});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    let result = &response["result"];
+    assert!((result["bulk_rhat"].as_f64().unwrap() - 0.75_f64.sqrt()).abs() < 1e-12);
+    // Independent R oracle using rank(), qnorm(), and sample variances.
+    assert!((result["folded_rhat"].as_f64().unwrap() - 1.97502379702702).abs() < 1e-12);
+    assert_eq!(result["rhat"], result["folded_rhat"]);
+}
