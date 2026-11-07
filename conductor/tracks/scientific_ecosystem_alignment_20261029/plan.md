@@ -5481,3 +5481,16 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify seeded score bootstrap through rebuilt Python, Julia and
   installed R consumers. Each replayed all eight draws with seed 17 and
   returned positive mixture spread. Empirical coverage remains open.
+
+- [x] Measure synthetic coverage of a normal interval centered on the
+  mean rematched effect with half-width 1.96 times the mixture spread.
+  With fixed covariates [0,3,2,5,1,4,3,6], alternating treatment,
+  contiguous four-row folds, ridge 1 and caliper 1, generate outcomes
+  as 2*treatment + slope*covariate + independent unit Gaussian noise.
+  Use Python random.Random(721) continuously across both slope arms,
+  500 replications per arm, unit outcome variances, and 32 native
+  bootstrap draws seeded by zero-based replication index. Coverage
+  was 486/500 with slope 0 (mean error 0.0263) and 58/500 with slope 2
+  (mean error 3.3803). The second arm deliberately has poor overlap.
+  The mixture spread does not account for bias from poor overlap.
+  General calibration and scientific acceptance remain open.
