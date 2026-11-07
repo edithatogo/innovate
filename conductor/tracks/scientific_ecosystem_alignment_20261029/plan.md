@@ -3223,3 +3223,9 @@ the other competition models and installed binding checks remain open.
   noisy Norton–Bass joint profile refits. Parameter estimates varied,
   and all refits selected launch 3.125 and event 2.125. The scalar
   regression and focused Clippy passed. Calibration remains open.
+
+- [x] Expose the residual pool size and conditioned row count.
+  A noisy Lotka–Volterra fit derived its initial condition from the
+  first observed row. Python 3.15.2, Julia and R agreed exactly on
+  all four refits with one conditioned row and 50 residual pool rows.
+  The scalar regression and focused Clippy passed.

@@ -226,6 +226,9 @@ pub(crate) fn fit(payload: &Value) -> Result<Value, &'static str> {
         "interval_method":"percentile","interval_mass":interval_mass,"parameter_intervals":intervals,
         "parameter_standard_errors":standard_errors,
         "parameter_correlation":correlation(&estimates, succeeded)});
+    if let Some((_, _, residuals, offset)) = &residual_design {
+        result["residual_design"] = json!({"pool_rows":residuals.len(),"conditioning_rows":offset});
+    }
     if let Some((key, counts)) = profile.zip(event_counts) {
         let profile = &baseline[key];
         let candidates = profile["candidates"]
