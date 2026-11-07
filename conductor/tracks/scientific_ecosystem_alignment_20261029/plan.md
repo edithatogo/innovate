@@ -5969,3 +5969,8 @@ Hosted release readiness for this worktree revision remains open.
   input, serialized at 17 significant digits, yielded identical
   coefficients, all 800 fitted values and log likelihood across the
   three public entry points.
+
+- [x] Add the 800-observation cancellation recovery to the Rust
+  likelihood regression suite. The fixture stores the independent
+  converged R coefficients and likelihood. The mixed-fit test passes
+  with tolerances of 3e-5 in coefficients and 2e-7 in likelihood.

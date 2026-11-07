@@ -422,6 +422,11 @@ fn sarima_mixed_fits_match_independent_likelihood() {
             [0, 0, 0, 0],
             4e-5,
         ),
+        (
+            include_str!("fixtures/sarima_joint_cancellation.json"),
+            [0, 0, 0, 0],
+            3e-5,
+        ),
     ] {
         let reference: serde_json::Value = serde_json::from_str(fixture).unwrap();
         let request = json!({"schema_version":"2.0","operation":"preprocess_series",
