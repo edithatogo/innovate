@@ -5179,3 +5179,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Distinguish paused executions in Arrow scenario exports.
   The focused Rust Polars test preserved the checkpoint and row order
   while marking only the completed execution successful.
+
+- [x] Verify a mixed completed and paused Kairos scenario export in
+  Python Polars. The extracted Python 3.15.2 wheel preserved both
+  execution rows and the checkpoint exactly, with success flags
+  true and false respectively. The focused consumer test passed.

@@ -1682,3 +1682,20 @@ def test_kairos_tick_checkpoint_resume():
             options["resume_checkpoint"] = paused["checkpoint"]
             assert innovate.execute("simulate_model", "bass", **payload)["result"] == expected
             del options["resume_checkpoint"]
+
+
+def test_paused_scenario_polars_export_preserves_checkpoint():
+    fixture = Path(__file__).parents[2] / "rust/crates/innovate-core/tests/fixtures/kairos_network_checkpoint.json"
+    simulation = json.loads(fixture.read_text())
+    paused = {
+        **simulation,
+        "simulation_options": {**simulation["simulation_options"], "pause_at_tick": 6},
+    }
+    response = innovate.execute("execute_scenario_grid", scenarios=[
+        {"id": "complete", "model_key": "bass", "simulation": simulation},
+        {"id": "paused", "model_key": "bass", "simulation": paused},
+    ])
+    frame = innovate.scenario_executions(response)
+    assert frame["scenario_id"].to_list() == ["complete", "paused"]
+    assert frame["successful"].to_list() == [True, False]
+    assert [json.loads(row) for row in frame["execution_json"]] == response["result"]["executions"]
