@@ -6856,3 +6856,9 @@ Hosted release readiness for this worktree revision remains open.
   the intervening malformed dataset in order at worker settings
   1 and 32. Each valid batch fit matched its direct fit. The Rust
   oracle test passed. Cross-binding batch checks remain open.
+
+- [x] Verify five historical scalar fit_batch fixtures through Python
+  3.15.2, Julia and installed R. In each binding, worker settings 1
+  and 32 returned identical ordered results and the same malformed
+  middle-row error. Both valid rows matched direct fits. Reused the
+  8926c30c native runtime sources.
