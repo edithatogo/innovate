@@ -26,5 +26,13 @@ manifest feature edits and public semantic contracts are specialist integration
 leaves. No pin or runtime change is made by this registration. Existing scientific
 alignment and PR570 retain ownership of broader Rust-core/scientific changes.
 
+The runtime consumer receipt is independent of the optional game profile and
+solver qualification. I10 retains every native, replay, installed-consumer and
+paired-outcome prerequisite while I07 remains separately pending. A static
+game can be qualified against its solver/profile without dynamic execution;
+claims about simulated games additionally require native adapter evidence.
+Neither receipt completes the other scope or closes unfinished work in this
+track or the [PR570 game programme](https://github.com/edithatogo/innovate/pull/570).
+
 Routine leaf evidence is a diff and focused result, with one review at a coherent
 public/numerical/replay milestone. No per-leaf approval board or duplicate dossier.

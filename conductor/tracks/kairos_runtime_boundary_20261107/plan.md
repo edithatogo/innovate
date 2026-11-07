@@ -12,6 +12,16 @@ define the dependency graph: I01 precedes I00, then I02. I00 was inserted after
 review to prepare the candidate and lock without renumbering the existing leaves.
 Do not infer dependencies from numbering or document order.
 
+The I10 receipt covers the native runtime consumer only. Optional game profile
+I07 stays pending independently and does not block that receipt or a release
+that claims no game capability. Game integration follows the existing
+[PR570 G01–G04/A08 programme](https://github.com/edithatogo/innovate/pull/570)
+and the game provider's T17 handoff; this track does not take over that branch.
+A game claim needs its accepted profile and real solver-consumer evidence, with
+native replay additionally required for dynamic execution. Static game acceptance
+does not require the dynamic adapter. Keep the whole track open while I07 is
+unfinished; a scoped runtime receipt must not mark optional game work complete.
+
 ## I01: Correct the native claim boundary
 
 - [ ] I01 Implement and verify this bounded outcome.
@@ -106,7 +116,7 @@ Files: `specs/ecosystem/uogto/innovate-game-profile.md`.
 
 Check: `python scripts/conductor_registry_hygiene.py --json`.
 
-Acceptance: Declare diffusion/adoption players/actions/information/payoffs and model assumptions, map UOGTO IDs and solver capability/results. No generic solver in Innovate and no mandatory Kairos dependency for static games. Registry hygiene is structural only; require a real game fixture in follow-on leaves.
+Acceptance: Declare diffusion/adoption players/actions/information/payoffs and model assumptions, map UOGTO IDs and solver capability/results. No generic solver in Innovate and no mandatory Kairos dependency for static games. Registry hygiene is structural only; require a real game fixture in follow-on leaves. This optional profile has its own game-acceptance scope and is not an I10 runtime prerequisite.
 
 ## I08: Add a distinguishing paired-outcome regression
 
@@ -148,13 +158,13 @@ Acceptance: New targets: real installed Rust dispatch outside checkout, seeded r
 
 - [ ] I10 Implement and verify this bounded outcome.
 
-Executor: specialist. Requires: I01–I09.
+Executor: specialist. Requires: I00, I01, I02, I03, I04, I05, I06, I08, I08b and I09.
 
 Files: `conductor/tracks/kairos_runtime_boundary_20261107/acceptance.md`.
 
 Check: `python scripts/conductor_registry_hygiene.py --json; cargo test --locked --manifest-path bindings/rust/Cargo.toml`.
 
-Acceptance: One contract/native integration review; record actual checks and unsupported scopes. Promote only the exact I00 candidate manifest/lock already exercised by the consumer gates after acceptance; no release or broader scientific promotion.
+Acceptance: One contract/native integration review of the runtime-only scope; record actual checks and unsupported scopes, including the separate status of I07. Promote only the exact I00 candidate manifest/lock already exercised by the consumer gates after acceptance; no release, game acceptance or broader scientific promotion. Optional game availability is not a prerequisite for this receipt.
 
 ## Proportional closeout
 
