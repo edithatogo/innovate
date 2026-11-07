@@ -1599,3 +1599,11 @@ def test_scenario_grid_ranking():
     expected = area["ranking"]["rows"][0]["adoption_area"] / 2
     assert paired["differences"] == pytest.approx([expected, -expected])
     assert paired["mean_difference"] == pytest.approx(0)
+    comparison.pop("evaluation_metric")
+    comparison["include_path_summary"] = True
+    endpoint = innovate.execute("execute_scenario_grid", scenarios=scenarios,
+                                 comparisons=[comparison])["result"]["comparisons"][0]["result"]
+    rows = endpoint["path_summary"]["rows"]
+    assert [row["time"] for row in rows] == [1, 2, 4]
+    for field in ("mean_difference", "mean_standard_error", "empirical_interval"):
+        assert rows[-1][field] == endpoint[field]

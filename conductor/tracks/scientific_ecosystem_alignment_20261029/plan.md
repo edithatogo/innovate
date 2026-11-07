@@ -4827,3 +4827,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Report pointwise paired ensemble path uncertainty. Four Rust
   scenario-grid tests passed, including equality with the existing
   endpoint summary at the final sample. Binding checks remain open.
+
+- [x] Verify paired path summaries through rebuilt Python 3.15.2, Julia
+  and installed R. All three preserved sample order and matched the
+  endpoint mean, standard error and empirical interval at the last sample.

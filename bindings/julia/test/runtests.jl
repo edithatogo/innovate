@@ -816,4 +816,13 @@ end
     @test paired["evaluation_horizon"] == [1,4]
     @test paired["differences"] ≈ [expected,-expected]
     @test paired["mean_difference"] == 0
+    delete!(comparison, "evaluation_metric")
+    comparison["include_path_summary"] = true
+    endpoint = kernel_call("execute_scenario_grid", nothing, Dict("scenarios"=>scenarios,
+        "comparisons"=>[comparison]))["result"]["comparisons"][1]["result"]
+    rows = endpoint["path_summary"]["rows"]
+    @test [row["time"] for row in rows] == [1,2,4]
+    for field in ("mean_difference","mean_standard_error","empirical_interval")
+        @test rows[end][field] == endpoint[field]
+    end
 end
