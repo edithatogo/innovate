@@ -4309,3 +4309,6 @@ Hosted release readiness for this worktree revision remains open.
   retried agent. The closed no-queue alternative produced six extra
   balk events across three agents with one retry each and no extra
   abandonments. The focused Rust regression passed.
+- [x] Compare agents waiting and in service at the shared horizon.
+  The focused Rust scenario test ends at reopening and verifies
+  one additional waiter and two additional agents in service.

@@ -935,6 +935,17 @@ fn compare_resource_totals(baseline: &Value, alternative: &Value) -> Result<Valu
         };
         result[metric] = json!(count(alternative)? - count(baseline)?);
     }
+    for (field, metric) in [
+        ("queue_length", "waiting_at_horizon"),
+        ("in_service", "in_service_at_horizon"),
+    ] {
+        let count = |outcome: &Value| {
+            outcome["metadata"][field]
+                .as_i64()
+                .ok_or("invalid terminal resource count")
+        };
+        result[metric] = json!(count(alternative)? - count(baseline)?);
+    }
     Ok(result)
 }
 

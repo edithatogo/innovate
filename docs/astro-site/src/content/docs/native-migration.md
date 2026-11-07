@@ -1274,7 +1274,8 @@ The pair must share an observation grid, tick resolution and horizon.
 configured, occupied, idle and over-capacity slot-ticks and for admitted,
 abandoned and pending wait ticks. It reports differences in peak queue
 length and peak concurrent service as agent counts, and differences in completed
-services, balked requests and abandoned requests as event counts. The object
+services, balked requests and abandoned requests as event counts. It also
+compares the numbers waiting and in service at the horizon. The object
 also reports the shared
 `ticks_per_unit` and `horizon_ticks`. A mismatch returns
 `invalid_comparison` for that pair while retaining the scenario executions.

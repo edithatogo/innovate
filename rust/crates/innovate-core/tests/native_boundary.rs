@@ -2961,7 +2961,19 @@ fn resource_comparison_requires_resource_outputs_from_both_scenarios() {
     assert_eq!(closed["balked_requests"], 2);
     assert_eq!(closed["abandoned_requests"], 1);
     assert_eq!(closed["abandoned_wait_ticks"], 5);
+    assert_eq!(closed["waiting_at_horizon"], 0);
+    assert_eq!(closed["in_service_at_horizon"], 0);
     let retried = &rows[4]["result"]["resource_differences"];
     assert_eq!(retried["balked_requests"], 6);
     assert_eq!(retried["abandoned_requests"], 0);
+
+    let mut short = request;
+    for scenario in short["payload"]["scenarios"].as_array_mut().unwrap() {
+        scenario["simulation"]["inputs"]["time"] = json!([0, 7]);
+    }
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&short.to_string())).unwrap();
+    let reopening = &response["result"]["comparisons"][0]["result"]["resource_differences"];
+    assert_eq!(reopening["waiting_at_horizon"], 1);
+    assert_eq!(reopening["in_service_at_horizon"], 2);
 }
