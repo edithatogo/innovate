@@ -5950,3 +5950,9 @@ Hosted release readiness for this worktree revision remains open.
   exactly matching coefficients, log likelihood and 401 fitted
   positions, including the initial null. The Python Polars helper
   reproduced the fitted series with explicit Float64 input.
+
+- [x] Compare mixed ARMA(1,1) fits near both MA invertibility boundaries
+  through installed R. For 600 samples with AR 0.35 and MA ±0.98, Rust
+  agreed with the refined R maximum likelihood reference within 6e-9
+  in log likelihood and 1.2e-6 in coefficients. The checker records
+  explicit R optimizer tolerances for reproducibility.
