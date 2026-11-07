@@ -7011,3 +7011,8 @@ Hosted release readiness for this worktree revision remains open.
   gap. The fallback restores the original incomplete-window mask.
   The focused Python preprocessing test passed with the updated
   wrapper and the existing native extension.
+
+- [x] Repair finite Polars rolling windows around non-finite samples.
+  Restrict repaired values to complete finite windows and preserve
+  the original outputs elsewhere. The focused Python preprocessing
+  test passed with the updated wrapper and existing native extension.

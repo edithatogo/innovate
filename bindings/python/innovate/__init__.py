@@ -307,11 +307,16 @@ def rolling_average(data: pl.Series, window: int) -> pl.Series:
     if window < 1:
         raise ValueError("window must be positive")
     result = data.rolling_mean(window_size=window, min_samples=window)
-    if not result.is_finite().all() and data.is_finite().all():
-        # A finite mean can overflow Polars' intermediate window sum.
-        values = execute("preprocess_series", method="rolling_average", window=window, values=data.fill_null(0).to_list())
-        repaired = pl.Series(data.name, values["result"]["values"], dtype=result.dtype)
-        return repaired.set(result.is_null(), None)
+    if not result.is_finite().all():
+        # Only repair complete windows of finite samples. Leave Polars'
+        # null and non-finite input behavior intact for other windows.
+        finite = data.is_finite().fill_null(False)
+        complete = finite.cast(pl.UInt32).rolling_sum(window, min_samples=window) == window
+        if (complete & ~result.is_finite()).any():
+            safe = data.fill_null(0).set(~finite, 0)
+            values = execute("preprocess_series", method="rolling_average", window=window, values=safe.to_list())
+            repaired = pl.Series(data.name, values["result"]["values"], dtype=result.dtype)
+            return repaired.zip_with(complete.fill_null(False), result)
     return result
 
 
