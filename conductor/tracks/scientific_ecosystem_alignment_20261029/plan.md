@@ -4875,3 +4875,10 @@ Hosted release readiness for this worktree revision remains open.
   effects, both reproduced the analytic percentile endpoints and all four
   extreme assignments. All 21 focused Julia assertions and the R grid
   assertions passed against the rebuilt Rust FFI library.
+
+- [x] Verify finite-sample sign-flip calibration under independent,
+  equiprobable signs. Across all 64 sign patterns for six distinct
+  powers-of-two magnitudes, each attainable two-sided p-value occurred
+  twice. The 5% rule rejected 2 of 64 assignments (3.125%), the exact
+  rate for this discrete null. All four focused Rust scenario unit
+  tests passed. This fixture covers one fixed magnitude design.

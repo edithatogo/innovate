@@ -1049,7 +1049,7 @@ fn threshold_fraction(lower: f64, threshold: f64, upper: f64) -> f64 {
 
 #[cfg(test)]
 mod tests {
-    use super::{centered_offsets, ensemble_moments, threshold_fraction};
+    use super::{centered_offsets, ensemble_moments, exact_sign_flip, threshold_fraction};
 
     #[test]
     fn ensemble_standard_error_resolves_adjacent_effects() {
@@ -1064,6 +1064,30 @@ mod tests {
         let (mean, error) = ensemble_moments(&[-f64::MAX, f64::MAX], f64::MAX);
         assert_eq!(mean, 0.);
         assert_eq!(error, f64::MAX);
+    }
+
+    #[test]
+    fn exact_sign_flip_calibrates_under_exchangeable_signs() {
+        let magnitudes = [1., 2., 4., 8., 16., 32.];
+        let mut p_values: Vec<_> = (0..64)
+            .map(|assignment| {
+                let effects = magnitudes.map(|magnitude| {
+                    if assignment & magnitude as usize == 0 {
+                        magnitude
+                    } else {
+                        -magnitude
+                    }
+                });
+                exact_sign_flip(&effects, 32.).unwrap()["p_value"]
+                    .as_f64()
+                    .unwrap()
+            })
+            .collect();
+        p_values.sort_unstable_by(f64::total_cmp);
+        for (rank, pair) in p_values.chunks_exact(2).enumerate() {
+            assert_eq!(pair, &[((rank + 1) as f64) / 32.; 2]);
+        }
+        assert_eq!(p_values.iter().filter(|&&p| p <= 0.05).count(), 2);
     }
 
     #[test]
