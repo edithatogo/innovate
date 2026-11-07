@@ -7239,3 +7239,12 @@ Hosted release readiness for this worktree revision remains open.
   four selected tests passed using the existing local debug-wheel install.
   A fresh local installation ran out of disk space while extracting Polars.
   Fresh installation and hosted release-wheel validation remain open.
+
+- [x] Verify a fresh local install of the optimized arm64 macOS wheel
+  built from the source distribution. A new Python 3.15.2 environment
+  resolved eight packages from the existing uv cache, including the
+  wheel's declared Polars 2.1.0 dependency and pytest. Dependency
+  consistency, wrapper and extension origins, and all four smoke tests
+  passed. Wheel SHA-256 is
+  `0e0e475346cebab2ff2d281df42822504b9ca1120c73edbd3c930be410eb2e08`.
+  Hosted Linux and exact release-commit execution remain open.
