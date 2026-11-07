@@ -6068,3 +6068,8 @@ Hosted release readiness for this worktree revision remains open.
   rewrote an annotated Arrow List to LargeList, and PyArrow verified
   both parent and child annotations, a null element, a null list and
   an empty list. All 11 Rust tabular boundary tests passed.
+
+- [x] Verify annotated List to LargeList conversion through the
+  rebuilt Python wheel and R binding. Both produced streams identical
+  to the Julia stream already checked for parent and child metadata,
+  null elements, null lists and empty lists.
