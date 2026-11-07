@@ -692,10 +692,15 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             .any(|len| len != o.population)
             || saved.metrics.last_capacity_change > saved.now
             || saved.metrics.last_resource_change > saved.now
-            || saved
-                .service_starts
-                .iter()
-                .any(|entry| entry.agent >= o.population)
+            || saved.service_starts.iter().any(|entry| {
+                entry.agent >= o.population
+                    || entry.tick > saved.now
+                    || entry.request_tick > entry.tick
+                    || entry.wait_ticks != entry.tick - entry.request_tick
+                    || !(1..=1_000_000_000_000).contains(&entry.service_ticks)
+                    || entry.scheduled_completion_tick
+                        != entry.tick + u128::from(entry.service_ticks)
+            })
             || saved
                 .queue
                 .waiting_since

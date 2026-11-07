@@ -5155,3 +5155,9 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify the saved paused scenario request reproduces the
   identical checkpoint string before continuing. The focused Rust
   boundary regression passed for continuous network forcing.
+
+- [x] Validate recorded service admissions before restoring network
+  checkpoints. The completion tick must equal the admission tick plus
+  the service duration, and the wait must match the original request.
+  The malformed-completion regression and all three focused Rust
+  network checkpoint tests passed.
