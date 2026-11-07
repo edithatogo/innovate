@@ -4431,3 +4431,6 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Run the locked Rust native boundary suite at dcd670c1 after
   scenario and ingestion changes. All 81 tests passed, including
   artifact replay, resource comparisons and edgeless ingestion.
+- [x] Run the complete Julia and installed R native suites at 4bb81f78.
+  Both passed with the shared library rebuilt from the current Rust
+  source. Temporary files were staged on the repository volume.
