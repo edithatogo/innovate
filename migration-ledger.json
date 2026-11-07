@@ -201,7 +201,7 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Remaining scenario specification-to-model translation and binding qualification, stochastic ensemble design and bootstrap coverage qualification, cross-version replay qualification, and release parity"
+      "remaining": "Broader topology and substitution designs, stochastic ensemble design and bootstrap coverage qualification, cross-version replay qualification, and release parity"
     },
     {
       "key": "explainability_sensitivity_reporting",

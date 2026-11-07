@@ -2174,3 +2174,7 @@ the other competition models and installed binding checks remain open.
   reports incumbent and entrant levels in that order. The scenario grid
   retains resolved inputs for replay. All 43 boundary tests and Clippy
   passed. Binding qualification and broader substitution designs remain open.
+
+- [x] Qualify fixed-pool substitution in Python 3.15, Julia and installed R.
+  All three matched the analytic incumbent level of 100 exp(-1), conserved
+  the pool of 100 and replayed the resolved artifact exactly.
