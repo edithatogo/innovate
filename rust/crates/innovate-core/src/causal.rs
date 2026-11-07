@@ -272,18 +272,31 @@ fn counterfactual_forecast(payload: &Value) -> Result<Value, &'static str> {
         .get("parameters")
         .and_then(Value::as_object)
         .ok_or("baseline requires explicit model parameters")?;
-    let overrides = payload["parameter_overrides"]
-        .as_object()
-        .ok_or("parameter_overrides must be an object")?;
-    let mut changed = parameters.clone();
-    for (key, value) in overrides {
-        let parameter = changed
-            .get_mut(key)
-            .ok_or("counterfactual override names an unknown parameter")?;
-        *parameter = value.clone();
-    }
     let mut alternative = baseline.clone();
-    alternative.insert("parameters".into(), Value::Object(changed));
+    if let Some(overrides) = payload.get("parameter_overrides") {
+        let mut changed = parameters.clone();
+        apply_overrides(
+            &mut changed,
+            overrides,
+            "counterfactual override names an unknown parameter",
+        )?;
+        alternative.insert("parameters".into(), Value::Object(changed));
+    }
+    if let Some(overrides) = payload.get("covariate_overrides") {
+        let inputs = alternative
+            .get_mut("inputs")
+            .and_then(Value::as_object_mut)
+            .ok_or("baseline requires prediction inputs")?;
+        let covariates = inputs
+            .get_mut("covariates")
+            .and_then(Value::as_object_mut)
+            .ok_or("baseline requires named covariates for a covariate override")?;
+        apply_overrides(
+            covariates,
+            overrides,
+            "counterfactual override names an unknown covariate",
+        )?;
+    }
     let binding = crate::KernelBinding::new();
     let predict = |request| {
         let result = binding
@@ -316,4 +329,18 @@ fn counterfactual_forecast(payload: &Value) -> Result<Value, &'static str> {
         .collect::<Result<_, _>>()?;
     Ok(json!({"baseline":baseline,"counterfactual":counterfactual,
         "difference":difference,"percentage_difference":percentage}))
+}
+
+fn apply_overrides(
+    baseline: &mut serde_json::Map<String, Value>,
+    overrides: &Value,
+    unknown: &'static str,
+) -> Result<(), &'static str> {
+    for (key, value) in overrides
+        .as_object()
+        .ok_or("counterfactual overrides must be an object")?
+    {
+        *baseline.get_mut(key).ok_or(unknown)? = value.clone();
+    }
+    Ok(())
 }

@@ -459,6 +459,15 @@ fn causal_summaries_match_analytic_effects() {
     let forecast = &forecast["result"];
     assert!(forecast["percentage_difference"][0].is_null());
     assert!((forecast["percentage_difference"][1].as_f64().unwrap() - 100.).abs() < 1e-10);
+    let scenario = run(
+        json!({"method":"counterfactual_forecast","forecast_model":"logistic",
+        "baseline":{"inputs":{"time":[2.],"covariates":{"price":[0.]}},
+            "constructor_kwargs":{"covariates":["price"]},
+            "parameters":{"L":100.,"k":0.5,"x0":2.,"beta_L_price":10.,"beta_k_price":0.,"beta_x0_price":0.}},
+        "covariate_overrides":{"price":[2.]}}),
+    );
+    assert_eq!(scenario["result"]["baseline"], json!([50.]));
+    assert_eq!(scenario["result"]["counterfactual"], json!([60.]));
     let risk = run(json!({"method":"e_value","point_estimate":0.5}));
     assert!((risk["result"]["e_value"].as_f64().unwrap() - (2. + 2_f64.sqrt())).abs() < 1e-12);
     let sensitivity = run(json!({"method":"sensitivity_scenario","point_estimate":10,

@@ -28,7 +28,7 @@ kernel_call <- function(operation, model_key = NULL, payload = list()) {
     for (i in seq_along(value)) {
       # Event times and named overrides are scalars, unlike observation times.
       if (!is.null(fields) && fields[[i]] == "parameter_events") next
-      if (!is.null(fields) && fields[[i]] %in% c("covariates", "observed", "y", "values") && is.list(value[[i]]) &&
+      if (!is.null(fields) && fields[[i]] %in% c("covariates", "covariate_overrides", "observed", "y", "values") && is.list(value[[i]]) &&
           !is.null(names(value[[i]]))) {
         value[[i]] <- lapply(value[[i]], function(x) if (is.atomic(x) && !is.null(x)) I(x) else x)
       } else if (!is.null(fields) && fields[[i]] %in% array_fields &&

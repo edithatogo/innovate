@@ -1666,3 +1666,9 @@ the other competition models and installed binding checks remain open.
   Python uses the new forecast_model payload key because model is
   reserved by execute. Julia and R exercised the retained model key.
 - [ ] Qualify additional historical counterfactual workflows.
+
+- [x] Support counterfactual replacement of named covariate trajectories
+  on the baseline prediction grid. The Logistic fixture changes only
+  price and moves the midpoint prediction from 50 to 60. All 24 Rust
+  boundary tests and focused Clippy passed.
+- [ ] Verify covariate overrides through installed Python, Julia and R.
