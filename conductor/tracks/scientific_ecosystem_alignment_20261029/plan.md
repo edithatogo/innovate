@@ -1690,4 +1690,6 @@ the other competition models and installed binding checks remain open.
   approximate standard error under a 95% normal interval, and records
   whether it excludes zero. The fixture checks a bound at zero and
   rejects reversed bounds. All 24 boundary tests and focused Clippy passed.
-- [ ] Verify interval summaries through Python, Julia and R.
+- [x] Verify interval summaries through the rebuilt Python wheel, Julia
+  and installed R. All three report width 3.92 and approximate standard
+  error 1, retain the bootstrap count, and include zero at the boundary.
