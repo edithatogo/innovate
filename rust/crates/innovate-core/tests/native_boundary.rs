@@ -817,6 +817,17 @@ fn causal_summaries_match_analytic_effects() {
         json!([4., 6., 6., 4.])
     );
     assert_eq!(result["result"]["contrast"]["estimate"], 4.);
+    let matched_with_fitted_controls = run(json!({
+        "method":"matched_treatment_contrast",
+        "outcomes":cross_fitted["outcomes"],"treatment":cross_fitted["treatment"],
+        "scores":[0,0,1,0],"caliper":0,
+        "control_predictions":result["result"]["control_predictions"]
+    }));
+    assert_eq!(matched_with_fitted_controls["result"]["estimate"], 5.);
+    assert_eq!(
+        matched_with_fitted_controls["result"]["adjusted_estimate"],
+        6.
+    );
     cross_fitted["clusters"] = json!(["a", "b", "b", "a"]);
     let result = run(cross_fitted.clone());
     assert_eq!(result["result"]["contrast"]["cluster_count"], 2);

@@ -532,3 +532,7 @@ per input row. The `adjusted_estimate` averages the observed paired
 differences minus the corresponding prediction differences over the
 same retained pairs. The conditional standard error treats the
 predictions and matches as fixed.
+
+The `cross_fitted_stratum_ate` and `cross_fitted_stratum_att` responses
+include row-aligned `control_predictions` that can be passed to matched
+adjustment. The matching request still takes caller-supplied scores.

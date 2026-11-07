@@ -5312,3 +5312,9 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify fixed-prediction adjusted matching through rebuilt
   Python 3.15.2, Julia and installed R. Each preserved the unadjusted
   estimate of 2.5 and returned the analytic adjusted estimate of 2.
+
+- [x] Compose native cross-fitted stratum control predictions with
+  adjusted matching. The focused Rust boundary fixture reused the
+  returned row-aligned predictions and recovered an adjusted effect
+  of 6 from an unadjusted effect of 5. Fitted-model uncertainty remains
+  open.
