@@ -131,13 +131,23 @@ fn noisy_bass_fit_recovers_the_held_out_trajectory() {
     });
 }
 
+#[test]
+fn noisy_fisher_pry_fit_recovers_the_held_out_share() {
+    assert_held_out_trajectory("fisher_pry", |t| 1. / (1. + (-0.3 * (t - 12.)).exp()));
+}
+
 fn assert_held_out_trajectory(model: &str, truth: impl Fn(f64) -> f64) {
     let time: Vec<_> = (0..31).map(f64::from).collect();
+    let (rank, tolerance) = if model == "fisher_pry" {
+        (2, 0.01)
+    } else {
+        (3, 1.)
+    };
     let errors = [0.8, -1.1, 0.4, -0.6, 1.3, -0.3];
     let observed: Vec<_> = time[..22]
         .iter()
         .enumerate()
-        .map(|(i, &t)| truth(t) + errors[i % errors.len()])
+        .map(|(i, &t)| truth(t) + tolerance * errors[i % errors.len()])
         .collect();
     let binding = KernelBinding::new();
     let fit = binding
@@ -149,7 +159,7 @@ fn assert_held_out_trajectory(model: &str, truth: impl Fn(f64) -> f64) {
         .result
         .unwrap();
     assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
-    assert_eq!(fit["diagnostics"]["identifiability"]["rank"], 3);
+    assert_eq!(fit["diagnostics"]["identifiability"]["rank"], rank);
     let prediction = binding
         .predict_model(
             model,
@@ -162,7 +172,7 @@ fn assert_held_out_trajectory(model: &str, truth: impl Fn(f64) -> f64) {
     assert_eq!(predictions.len(), 9);
     for (&t, value) in time[22..].iter().zip(predictions) {
         assert!(
-            (value.as_f64().unwrap() - truth(t)).abs() < 1.,
+            (value.as_f64().unwrap() - truth(t)).abs() < tolerance,
             "{t}: {value}"
         );
     }
