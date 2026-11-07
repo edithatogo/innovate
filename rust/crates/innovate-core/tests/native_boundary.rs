@@ -3627,17 +3627,7 @@ fn dataset_ingestion_defaults_match_explicit_values() {
 
 #[test]
 fn kairos_scenario_artifact_replays_continuous_hazard_wakeup() {
-    let request = json!({"schema_version":"2.0","operation":"execute_scenario_grid",
-    "payload":{"apply_specifications":true,"include_execution_metadata":true,"scenarios":[{
-        "id":"wake","model_key":"bass",
-        "specification":{"scenario_type":"network","name":"wake","description":"",
-            "time_horizon":4,"time_unit":"year","reference_year":2026,"market_size":1,
-            "initial_adoption":0,"network_type":"custom","num_nodes":1,"average_degree":0},
-        "simulation":{"inputs":{"time":[0,2,3,4]},"parameters":{"p":1e12,"q":0},
-            "simulation_options":{"engine":"kairos_network","seed":42,"edges":[],
-                "capacity":1,"service_ticks":1,"ticks_per_unit":1,
-                "hazard_forcing":{"time":[0,2,3],"innovation":[0,0,1],"imitation":[1,1,1]}}}
-    }]}});
+    let request = serde_json::from_str(include_str!("fixtures/kairos_hazard_replay.json")).unwrap();
     let run = |request: &serde_json::Value| -> serde_json::Value {
         serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
     };

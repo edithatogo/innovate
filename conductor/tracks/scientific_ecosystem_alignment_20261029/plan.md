@@ -4983,3 +4983,8 @@ Hosted release readiness for this worktree revision remains open.
   network scenario and its saved replay request. The Rust regression
   passed with a request at tick 3, adoption at tick 4 and an identical
   replay result. Replay starts from the original request and seed.
+
+- [x] Share the Kairos hazard replay request as a Rust integration
+  fixture and run it through Python 3.15.2, Julia and installed R.
+  Each binding reproduced the [0, 0, 0, 1] adoption counts and an
+  identical simulation result from its returned replay request.
