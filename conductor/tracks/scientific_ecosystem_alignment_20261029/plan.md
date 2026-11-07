@@ -4969,3 +4969,9 @@ Hosted release readiness for this worktree revision remains open.
   produced a file and equivalent stream with nullable nested values,
   empty lists, Unicode and Int32 identifiers. The Julia readback check
   passed all eight assertions on the generated pair.
+
+- [x] Reject contradictory migration ledger entries that claim
+  qualification while recording remaining work. A synthetic complete
+  ledger passed the release check and the same ledger with one open
+  qualification item was rejected. The real development ledger passed
+  validation and the release check still returned 1 for 38 obligations.

@@ -78,6 +78,8 @@ def main() -> int:
             status = item.get("status")
             if status not in ("pending", "bounded_native", "qualified"):
                 raise ValueError(f"Invalid migration status for {item['key']}")
+            if status == "qualified" and item.get("remaining"):
+                raise ValueError(f"Qualified migration obligation still has remaining work: {item['key']}")
             evidence = item.get("evidence")
             if evidence is None and status == "pending":
                 continue
