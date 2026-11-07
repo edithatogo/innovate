@@ -6591,3 +6591,8 @@ Hosted release readiness for this worktree revision remains open.
   time-to-threshold rankings, including when no scenario crosses it.
   The focused Rust grid test verifies both reached and unreached
   thresholds. Binding readback of the new field remains open.
+
+- [x] Verify ranking.threshold through the rebuilt Python 3.15.2 wheel,
+  Julia and the installed R wrapper. For the common threshold of 1,000,
+  all three returned the threshold and null scores and places for both
+  paths. The wheel and FFI library were rebuilt from 8b9c4fa0.
