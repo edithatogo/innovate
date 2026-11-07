@@ -549,3 +549,11 @@ Each loading vector adds its outer product to the outcome covariance
 and contributes the square of its mean paired loading difference to
 the conditional variance. Matches, loadings and any control
 predictions are treated as fixed.
+
+Alternatively, `fit_controls` accepts aligned `strata` and `folds`.
+For each retained row, its control prediction is the mean control
+outcome in its stratum outside its fold. The result provides
+`adjusted_outcome_weights` and, when outcome variances are supplied,
+`adjusted_standard_error`. These weights account for outcomes reused
+to fit the control means and apply to any supplied covariance factors.
+Scores, matches, strata and folds are held fixed.

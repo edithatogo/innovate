@@ -828,6 +828,20 @@ fn causal_summaries_match_analytic_effects() {
         matched_with_fitted_controls["result"]["adjusted_estimate"],
         6.
     );
+    let mut fitted_matching = json!({"method":"matched_treatment_contrast",
+        "outcomes":cross_fitted["outcomes"],"treatment":cross_fitted["treatment"],
+        "scores":[0,0,1,0],"caliper":0,"outcome_variances":[1,1,1,1],
+        "fit_controls":{"strata":cross_fitted["strata"],"folds":cross_fitted["folds"]}});
+    let fitted_result = run(fitted_matching.clone());
+    let fit = &fitted_result["result"];
+    assert_eq!(fit["adjusted_estimate"], 6.);
+    assert_eq!(
+        fit["adjusted_outcome_weights"],
+        json!([[0, -1.5], [1, 0.5], [2, 0.5], [3, 0.5]])
+    );
+    assert!((fit["adjusted_standard_error"].as_f64().unwrap() - 3_f64.sqrt()).abs() < 1e-12);
+    fitted_matching["fit_controls"]["strata"][1] = json!("unsupported");
+    assert!(run(fitted_matching)["result"].is_null());
     cross_fitted["clusters"] = json!(["a", "b", "b", "a"]);
     let result = run(cross_fitted.clone());
     assert_eq!(result["result"]["contrast"]["cluster_count"], 2);

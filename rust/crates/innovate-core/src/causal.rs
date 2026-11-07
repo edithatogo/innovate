@@ -55,7 +55,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                  "estimands":["ate","att"],"default_estimand":"ate",
                  "uncertainty":"fixed_propensity_standard_error"},
                 {"method":"matched_treatment_contrast","adjustment":"nearest_score_with_replacement",
-                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":["allow_partial","outcome_variances","balance_covariates","control_predictions","outcome_covariance_factors"],
+                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":["allow_partial","outcome_variances","balance_covariates","control_predictions","outcome_covariance_factors","fit_controls"],
                  "estimands":["att"],"default_estimand":"att",
                  "partial_estimand":"matched_subset_att",
                  "uncertainty":"conditional_standard_error",
@@ -1251,6 +1251,91 @@ fn pooled_scaled_deviation(treated: &[f64], control: &[f64], scale: f64) -> Opti
     (deviation > 0.).then_some(deviation)
 }
 
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct MatchingControlFit {
+    strata: Vec<String>,
+    folds: Vec<u32>,
+}
+
+fn fitted_matching_weights(
+    fit: &MatchingControlFit,
+    treatment: &[f64],
+    weights: &[(usize, f64)],
+) -> Result<Vec<(usize, f64)>, &'static str> {
+    let n = treatment.len();
+    if fit.strata.len() != n
+        || fit.folds.len() != n
+        || fit.strata.iter().any(|label| label.trim().is_empty())
+    {
+        return Err("control fit strata and folds must align with outcomes");
+    }
+    let fold_count = fit
+        .folds
+        .iter()
+        .collect::<std::collections::BTreeSet<_>>()
+        .len();
+    if !(2..=32).contains(&fold_count) {
+        return Err("control fitting requires two to 32 folds");
+    }
+    let mut controls = std::collections::BTreeMap::<&str, Vec<usize>>::new();
+    for (index, &indicator) in treatment.iter().enumerate() {
+        if indicator == 0. {
+            controls.entry(&fit.strata[index]).or_default().push(index);
+        }
+    }
+    let mut correction = std::collections::BTreeMap::<(&str, u32), f64>::new();
+    let mut adjusted = vec![0.; n];
+    for &(index, weight) in weights {
+        adjusted[index] = weight;
+        *correction
+            .entry((&fit.strata[index], fit.folds[index]))
+            .or_default() -= weight;
+    }
+    for ((stratum, fold), total) in correction {
+        let eligible = || {
+            controls
+                .get(stratum)
+                .into_iter()
+                .flatten()
+                .copied()
+                .filter(|&index| fit.folds[index] != fold)
+        };
+        let count = eligible().count();
+        if count == 0 {
+            return Err("each matched row requires training controls in its stratum");
+        }
+        for index in eligible() {
+            adjusted[index] += total / count as f64;
+        }
+    }
+    Ok(adjusted
+        .into_iter()
+        .enumerate()
+        .filter(|&(_, weight)| weight != 0.)
+        .collect())
+}
+
+fn weighted_outcome_contrast(
+    values: &[f64],
+    weights: &[(usize, f64)],
+) -> Result<f64, &'static str> {
+    let scale = weights
+        .iter()
+        .map(|&(index, _)| values[index].abs())
+        .fold(0., f64::max);
+    if scale == 0. {
+        return Ok(0.);
+    }
+    finite(
+        weights
+            .iter()
+            .map(|&(index, weight)| weight * (values[index] / scale))
+            .sum::<f64>()
+            * scale,
+    )
+}
+
 fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     let fields = payload
         .as_object()
@@ -1267,6 +1352,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
                 | "outcome_variances"
                 | "balance_covariates"
                 | "control_predictions"
+                | "fit_controls"
                 | "outcome_covariance_factors"
         )
     }) {
@@ -1313,6 +1399,16 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
         .is_some_and(|values| values.len() != outcomes.len())
     {
         return Err("control predictions must align with outcomes");
+    }
+    let fit_controls: Option<MatchingControlFit> = fields
+        .get("fit_controls")
+        .map(|value| {
+            serde_json::from_value(value.clone())
+                .map_err(|_| "fit_controls requires strata and folds")
+        })
+        .transpose()?;
+    if fit_controls.is_some() && control_predictions.is_some() {
+        return Err("choose either fit_controls or control_predictions");
     }
     let balance_covariates: Option<std::collections::BTreeMap<String, Vec<f64>>> = fields
         .get("balance_covariates")
@@ -1381,7 +1477,7 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     }
     let estimate =
         mean(&differences).ok_or("matching requires at least one matched treated observation")?;
-    let adjusted_estimate = control_predictions
+    let mut adjusted_estimate = control_predictions
         .map(|predictions| {
             let adjusted: Vec<_> = pairs
                 .iter()
@@ -1410,6 +1506,26 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
                 .map(|(&index, &count)| (index, -(count as f64) / pair_count)),
         )
         .collect();
+    let adjusted_outcome_weights = fit_controls
+        .as_ref()
+        .map(|fit| fitted_matching_weights(fit, &treatment, &outcome_weights))
+        .transpose()?;
+    if let Some(weights) = &adjusted_outcome_weights {
+        adjusted_estimate = Some(weighted_outcome_contrast(&outcomes, weights)?);
+    }
+    let adjusted_standard_error = adjusted_outcome_weights
+        .as_ref()
+        .zip(outcome_variances.as_ref())
+        .map(|(weights, variances)| {
+            let mut error = weights.iter().fold(0_f64, |error, &(index, weight)| {
+                error.hypot(weight * variances[index].sqrt())
+            });
+            for factor in covariance_factors.iter().flatten() {
+                error = error.hypot(weighted_outcome_contrast(factor, weights)?);
+            }
+            finite(error)
+        })
+        .transpose()?;
     let squared_control_weights = control_uses
         .values()
         .map(|&count| (count as f64 / pairs.len() as f64).powi(2))
@@ -1503,7 +1619,8 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
             "unmatched_treated_indices":unmatched_treated_indices,
             "conditional_standard_error":conditional_standard_error,"uncertainty_model":uncertainty_model,
             "covariate_balance":balance,
-            "outcome_weights":outcome_weights,
+            "outcome_weights":outcome_weights,"adjusted_outcome_weights":adjusted_outcome_weights,
+            "adjusted_standard_error":adjusted_standard_error,
             "match_diagnostics":{"caliper":caliper,"max_score_distance":max_score_distance,
                 "matched_treated_fraction":pairs.len() as f64 / (pairs.len() + unmatched_treated_indices.len()) as f64},
             "control_diagnostics":{"unique_controls":control_uses.len(),

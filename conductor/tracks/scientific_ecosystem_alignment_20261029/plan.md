@@ -5370,3 +5370,10 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify that extreme covariance loadings cancel when the
   contrast is finite and return a typed invalid request when the
   actual standard error overflows. The focused Rust test passed.
+
+- [x] Propagate fitted stratum control-mean uncertainty through
+  adjusted matching with fixed scores, folds and pairs. The Rust
+  boundary fixture recovered adjusted effect 6 and standard error
+  sqrt(3) from its analytic outcome coefficients, and rejected an
+  unsupported training stratum. Binding validation and uncertainty
+  from estimated scores remain open.
