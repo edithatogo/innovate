@@ -10,9 +10,11 @@ fn weighted_loess(
     extend: bool,
     historical: bool,
 ) -> Result<Vec<f64>, &'static str> {
-    if span < 3 || span > values.len() {
+    if span < 3 || (!historical && span > values.len()) {
         return Err("LOESS span must be between three and the series length");
     }
+    let extra_radius = span.saturating_sub(values.len()) / 2;
+    let span = span.min(values.len());
     let scale = values.iter().copied().map(f64::abs).fold(0., f64::max);
     if scale == 0. {
         return Ok(vec![0.; values.len() + 2 * usize::from(extend)]);
@@ -24,7 +26,8 @@ fn weighted_loess(
             let start = start.min(values.len() - span);
             let radius = index
                 .abs_diff(start as isize)
-                .max(index.abs_diff((start + span - 1) as isize)) as f64;
+                .max(index.abs_diff((start + span - 1) as isize)) as f64
+                + extra_radius as f64;
             let (mut weight, mut x_sum, mut y_sum, mut xx, mut xy) = (0., 0., 0., 0., 0.);
             for (offset, value) in values[start..start + span].iter().enumerate() {
                 let x = ((start + offset) as f64 - index as f64) / radius;
@@ -93,7 +96,7 @@ fn weighted_loess(
 pub(crate) fn decompose(
     values: &[f64],
     period: usize,
-    trend_span: usize,
+    spans: (usize, Option<usize>, Option<usize>),
     robust: bool,
     historical: bool,
     iterations: (usize, usize),
@@ -101,6 +104,7 @@ pub(crate) fn decompose(
     if period < 2 || period > values.len() / 3 {
         return Err("seasonal period must leave at least three complete cycles");
     }
+    let (trend_span, seasonal_span, low_pass_span) = spans;
     let (inner_iterations, outer_iterations) = iterations;
     let extrapolate = robust && !historical;
     let mut trend = vec![0.; values.len()];
@@ -122,7 +126,8 @@ pub(crate) fn decompose(
                     .collect();
                 let smooth = weighted_loess(
                     &samples,
-                    samples.len().min(7),
+                    seasonal_span
+                        .unwrap_or_else(|| if historical { 7 } else { samples.len().min(7) }),
                     Some(&phase_weights),
                     !extrapolate,
                     historical,
@@ -143,8 +148,8 @@ pub(crate) fn decompose(
                     .collect()
             };
             let low = moving_average(&moving_average(&moving_average(&cycle, period), period), 3);
-            let low_span = (period + 1) | 1;
-            let low = loess_trend(&low, low_span)?;
+            let low_span = low_pass_span.unwrap_or((period + 1) | 1);
+            let low = weighted_loess(&low, low_span, None, false, historical)?;
             for (i, (season, low)) in seasonal.iter_mut().zip(low).enumerate() {
                 *season = cycle[i + period] - low;
             }

@@ -1417,3 +1417,12 @@ the other competition models and installed binding checks remain open.
   within 1.56e-11.
 - [ ] Qualify historical span, degree and jump options. The pre-migration
   Python STL wrapper forwarded constructor keyword options.
+
+- [x] Add seasonal and low-pass spans to the native STL request.
+  Historical mode allows spans longer than the local subseries and
+  expands the regression radius accordingly. With trend/low-pass
+  spans 17/9, seasonal spans 9 and 25 matched stats::stl within 1.24e-12
+  through installed R. All 18 native boundary tests and focused Clippy
+  passed.
+- [ ] Expose span controls in the Python, Julia and R helpers and
+  qualify degree and jump options.

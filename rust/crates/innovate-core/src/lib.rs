@@ -208,10 +208,22 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             if !robust && outer > 0 {
                 return Err("positive outer_iterations require robust mode");
             }
+            let optional_span = |key: &str| {
+                payload.get(key).map(|v| {
+                    v.as_u64()
+                        .filter(|n| *n >= 3 && *n % 2 == 1 && *n <= i32::MAX as u64)
+                        .map(|n| n as usize)
+                        .ok_or("seasonal_span and low_pass_span must be odd integers of at least three")
+                }).transpose()
+            };
             return seasonal::decompose(
                 &values,
                 integer("period")?,
-                integer("window")?,
+                (
+                    integer("window")?,
+                    optional_span("seasonal_span")?,
+                    optional_span("low_pass_span")?,
+                ),
                 robust,
                 historical,
                 (inner, outer),
