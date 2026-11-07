@@ -4368,3 +4368,7 @@ Hosted release readiness for this worktree revision remains open.
   recomputes diagnostics. The five focused Rust dataset tests passed,
   including historical round-trip, tampering and conflicting inputs.
   Installed-binding checks remain open.
+- [x] Verify direct dataset artifact re-ingestion at f0ddba9f in
+  Python 3.15.2, Julia and installed R. All reproduced the legacy
+  artifact and rejected modified adoption data. Python imported
+  the rebuilt wheel from an isolated extraction after disk exhaustion.
