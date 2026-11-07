@@ -3937,3 +3937,7 @@ Hosted release readiness for this worktree revision remains open.
   adoption curve. The fit converged with local rank three and nine
   held-out predictions within one adoption unit. All seven Rust
   fit-quality tests and formatting passed.
+- [x] Verify the perturbed Bass fit and saved-state holdout through
+  Python 3.15.2, Julia and installed R. All three converged with local
+  rank three and forecast all nine held-out values within one adoption
+  unit. Reused builds from 2a5d2c0e with identical runtime source.
