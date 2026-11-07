@@ -6542,3 +6542,11 @@ Hosted release readiness for this worktree revision remains open.
   gradient 3.34e-9. Raising the iteration budget to 600 or 1,200 did
   not change the termination. Paired-case resampling still reported
   intervals from its accepted refits and retained the baseline flag.
+
+- [x] Cross-check trial 39 against an independent analytic-Jacobian
+  least-squares fit using the original seeded observations. The native
+  fit reproduced the damping limit and matched the reference to
+  5.42e-20 in scaled residual sum of squares and 1.04e-9 in maximum
+  absolute coefficient difference. This isolates a termination
+  discrepancy on this fixture. Bootstrap acceptance and calibration
+  remain open.
