@@ -1288,3 +1288,9 @@ the other competition models and installed binding checks remain open.
   left-closed buckets anchored at the earliest timestamp. The installed
   regression uses unsorted dates, an exact boundary and an empty week.
   Daily and monthly aggregation and seasonal preprocessing remain open.
+
+- [x] Restore daily and month-end Polars aggregation. Calendar periods
+  between the first and last observations are filled with zero sums,
+  while weekly aggregation retains its first-observation anchor and
+  omits empty weeks. Both installed aggregation tests passed, including
+  the leap-year month-end label. Seasonal preprocessing remains open.

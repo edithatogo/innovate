@@ -958,3 +958,14 @@ def test_weekly_polars_aggregation_uses_first_timestamp_and_omits_empty_weeks():
     result = innovate.aggregate_weekly(pl.DataFrame({"time": days, "y": [3, 1, 2, 4]}).lazy(), ["y"])
     assert result["time"].to_list() == [date(2026, 1, d) for d in (6, 13, 27)]
     assert result["y"].to_list() == [3, 3, 4]
+
+
+def test_calendar_polars_aggregation_labels_and_fills_empty_periods():
+    from datetime import date
+
+    daily = pl.DataFrame({"time": [date(2026, 1, 3), date(2026, 1, 1)], "y": [3, 1]})
+    assert innovate.aggregate_time_series(daily, "D", ["y"])["y"].to_list() == [1, 0, 3]
+    monthly = pl.DataFrame({"time": [date(2024, 1, 2), date(2024, 3, 31)], "y": [2, 3]})
+    result = innovate.aggregate_time_series(monthly, "M", ["y"])
+    assert result["time"].to_list() == [date(2024, 1, 31), date(2024, 2, 29), date(2024, 3, 31)]
+    assert result["y"].to_list() == [2, 0, 3]

@@ -23,6 +23,7 @@ __all__ = [
     "NativeError",
     "categorize_adopters",
     "aggregate_weekly",
+    "aggregate_time_series",
 
     "cumulative_sum",
     "rolling_average",
@@ -228,18 +229,37 @@ def aggregate_weekly(
     data: pl.DataFrame | pl.LazyFrame, value_columns: list[str], *, time_column: str = "time"
 ) -> pl.DataFrame:
     """Sum numeric columns in fixed seven-day windows anchored at the first timestamp."""
+    return aggregate_time_series(data, "W", value_columns, time_column=time_column)
+
+
+def aggregate_time_series(
+    data: pl.DataFrame | pl.LazyFrame, frequency: str, value_columns: list[str], *, time_column: str = "time"
+) -> pl.DataFrame:
+    """Sum daily, anchored weekly, or calendar month-end observations."""
+    periods = {"D": "1d", "W": "168h", "M": "1mo", "ME": "1mo"}
+    if frequency not in periods:
+        raise ValueError("frequency must be D, W, M or ME")
     frame = data.collect() if isinstance(data, pl.LazyFrame) else data
     timestamps = frame[time_column]
     if not timestamps.dtype.is_temporal() or timestamps.dtype.base_type() not in (pl.Date, pl.Datetime):
-        raise ValueError("weekly aggregation requires Date or Datetime timestamps")
+        raise ValueError("aggregation requires Date or Datetime timestamps")
     if timestamps.null_count():
-        raise ValueError("weekly aggregation timestamps must not contain nulls")
+        raise ValueError("aggregation timestamps must not contain nulls")
     if not value_columns or len(set(value_columns)) != len(value_columns):
         raise ValueError("value_columns must contain distinct numeric columns")
     if any(not frame[name].dtype.is_numeric() for name in value_columns):
-        raise ValueError("weekly aggregation values must be numeric")
-    return (
+        raise ValueError("aggregation values must be numeric")
+    every = periods[frequency]
+    grouped = (
         frame.sort(time_column)
-        .group_by_dynamic(time_column, every="168h", start_by="datapoint", closed="left")
+        .group_by_dynamic(
+            time_column, every=every, start_by="datapoint" if frequency == "W" else "window", closed="left"
+        )
         .agg(pl.col(value_columns).sum())
     )
+    if frequency == "W" or grouped.is_empty():
+        return grouped
+    grouped = grouped.upsample(time_column, every=every).with_columns(pl.col(value_columns).fill_null(0))
+    if frequency in ("M", "ME"):
+        grouped = grouped.with_columns(pl.col(time_column).dt.offset_by("1mo").dt.offset_by("-1d"))
+    return grouped
