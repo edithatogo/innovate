@@ -7472,3 +7472,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify duplicate worker keys are rejected after Unicode escape
   decoding and inside objects nested in arrays. The complete optimized
   worker suite passed, including successful native dispatch.
+
+- [x] Add duplicate-context rejection to the hosted worker check.
+  Actionlint passed and the optimized local worker suite covered
+  the same payload. No remote migration branch or PR exists yet,
+  so hosted execution of this revision remains open.
