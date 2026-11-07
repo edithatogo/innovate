@@ -3444,3 +3444,10 @@ the other competition models and installed binding checks remain open.
   checks passed. SHA-256 b2b4bbb9881b8ce3086be5abaedab2dfc4633fbe14d737758a0372fa39647852.
   This comparison shared the Cargo target directory. Independent
   build reproducibility remains open.
+
+- [x] Compare an independent fixed-epoch Darwin arm64 wheel build
+  from a fresh extraction and empty Cargo target. The compiled
+  extension and all wheel members matched except the CycloneDX SBOM
+  and its RECORD entry. Substituting the extraction root in ten
+  SBOM references yielded identical JSON. Build-path-independent
+  archive bytes and publication qualification remain open.
