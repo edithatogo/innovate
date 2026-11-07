@@ -7378,3 +7378,9 @@ Hosted release readiness for this worktree revision remains open.
   the extracted tree against the optimized wheel built from that
   archive passed all 121 tests on macOS arm64. Hosted extraction and
   Linux native execution remain open.
+
+- [x] Run the locked Rust native boundary and remote-worker tests from
+  the extracted 80500bdb source archive. All 91 boundary and four
+  worker tests passed on macOS arm64. Used the checkout Cargo cache
+  for dependencies and disabled incremental compilation to limit disk
+  use. Clean-target Linux and container execution remain open.
