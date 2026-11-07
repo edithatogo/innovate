@@ -177,7 +177,7 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Month-start and fiscal quarter/year aggregation, weekly output bounds, and extreme native rolling windows have Python, Julia and R evidence. The Python Polars helper also has installed-wheel coverage around overflow and null or NaN gaps. Broader historical preprocessing parity, difficult SARIMA optimizer cases, and release acceptance."
+      "remaining": "Month-start and fiscal quarter/year aggregation, weekly output bounds, and extreme native rolling windows have Python, Julia and R evidence. The Python Polars helper also has installed-wheel coverage around overflow and null or NaN gaps. Eight near-cancellation ARMA(1,1) cases matched a five-start R likelihood reference and agreed through Python, Julia and R. Broader historical preprocessing parity, SARIMA qualification beyond these fixtures, installed release performance, and release acceptance remain open."
     },
     {
       "key": "causal_analysis",
