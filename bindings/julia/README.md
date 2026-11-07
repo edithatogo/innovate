@@ -31,7 +31,11 @@ metadata = Arrow.Table("policy.arrow")
 
 The same stream settings work with `treatment_contrast_frame`. Arrow.jl
 2.8.1 returned no columns for the tested Polars IPC file format. It read
-the equivalent IPC stream and the file produced by PyArrow 26.
+the equivalent IPC stream and the file produced by PyArrow 26. With
+Python Polars 2.1.0, the empty result reproduced at both compatibility
+levels and with both default and one-row batches. Check the expected
+column names after opening a file because the reader can return an
+empty table without raising an error.
 
 For a file handoff, use Innovate's Polars-backed IPC writer. It emits the
 leading schema message that Arrow.jl 2.8.1 expects.

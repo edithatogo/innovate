@@ -5974,3 +5974,10 @@ Hosted release readiness for this worktree revision remains open.
   likelihood regression suite. The fixture stores the independent
   converged R coefficients and likelihood. The mixed-fit test passes
   with tolerances of 3e-5 in coefficients and 2e-7 in likelihood.
+
+- [x] Reproduce the Arrow.jl 2.8.1 silent empty table on Python Polars
+  2.1.0 files at both compatibility levels, with default and one-row
+  batches. Polars itself read all four files. Arrow.jl read both direct
+  streams and, after Julia called the Rust exporter, all four rewritten
+  files with matching IDs, Unicode text and nulls. Documented the
+  silent failure and retained the untouched-file compatibility gate.
