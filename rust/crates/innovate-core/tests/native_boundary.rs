@@ -75,3 +75,36 @@ fn undeclared_covariates_never_fall_back_after_all_model_families_are_ported() {
     let error=KernelBinding::new().predict_model("bass",json!({"inputs":{"time":[0.],"covariates":{"price":[1.]}},"parameters":{"p":0.03,"q":0.35,"m":100.}})).unwrap_err();
     assert_eq!(error.code, "unsupported_native_operation");
 }
+
+#[test]
+fn batch_keeps_independent_fits_errors_and_ragged_forecasts_in_order() {
+    use innovate_core::{KernelBinding, json};
+    let binding = KernelBinding::new();
+    let datasets = [100., 200.].map(|capacity| {
+        let time: Vec<_> = (0..20).map(f64::from).collect();
+        let observed: Vec<_> = time
+            .iter()
+            .map(|&t| capacity / (1. + (-(t - 5.)).exp()))
+            .collect();
+        json!({"inputs":{"time":time,"observed":observed}})
+    });
+    let fits = binding.fit_batch(
+        "logistic",
+        [datasets[0].clone(), json!({}), datasets[1].clone()],
+    );
+    assert!(fits[1].is_err());
+    let forecasts = binding.predict_batch(
+        "logistic",
+        [0, 2].map(|index| {
+            let fit = fits[index].as_ref().unwrap().result.as_ref().unwrap();
+            let time = if index == 0 { vec![5.] } else { vec![5., 6.] };
+            json!({"inputs":{"time":time},"state":fit["state"]})
+        }),
+    );
+    for (i, forecast) in forecasts.into_iter().enumerate() {
+        let forecast = forecast.unwrap().result.unwrap();
+        let values = forecast["values"].as_array().unwrap();
+        assert_eq!(values.len(), i + 1);
+        assert!((values[0].as_f64().unwrap() - 50. * (i + 1) as f64).abs() < 1e-6);
+    }
+}

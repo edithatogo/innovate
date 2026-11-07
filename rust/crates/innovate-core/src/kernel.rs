@@ -85,6 +85,30 @@ impl KernelBinding {
         self.invoke(&request)
     }
 
+    /// Fits independent datasets in input order, retaining each fit's state or error.
+    pub fn fit_batch(
+        &self,
+        model_key: &str,
+        datasets: impl IntoIterator<Item = Value>,
+    ) -> Vec<Result<KernelResponse, KernelBindingError>> {
+        datasets
+            .into_iter()
+            .map(|payload| self.fit_model(model_key, payload))
+            .collect()
+    }
+
+    /// Predicts independently for each payload and its fitted state.
+    pub fn predict_batch(
+        &self,
+        model_key: &str,
+        datasets: impl IntoIterator<Item = Value>,
+    ) -> Vec<Result<KernelResponse, KernelBindingError>> {
+        datasets
+            .into_iter()
+            .map(|payload| self.predict_model(model_key, payload))
+            .collect()
+    }
+
     fn fit_model_native(
         &self,
         request: &KernelRequest,

@@ -1181,3 +1181,11 @@ the other competition models and installed binding checks remain open.
   evidence files for bounded and qualified entries. All six policy
   regression cases and the live ledger check passed. The 38 release
   obligations remain open.
+
+## Native batch fitting and forecasting
+
+- [x] Restore independent batch fitting and prediction at the Rust kernel
+  boundary. Preserve input order and each fit state or structured error.
+  Forecast grids may have different lengths. All eight native boundary
+  tests passed, including a failed middle fit and two distinct forecasts.
+- [ ] Expose the native batch contract through Python, Julia, R and Polars.
