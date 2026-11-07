@@ -698,3 +698,14 @@ end
         @test result["estimate"] ≈ estimate
     end
 end
+
+@testset "Clustered augmented contrast" begin
+    payload = Dict("method"=>"augmented_treatment_contrast", "outcomes"=>[0,4,0,4],
+        "treatment"=>[0,1,0,1], "propensities"=>fill(0.5,4),
+        "treated_predictions"=>fill(2,4), "control_predictions"=>fill(0,4))
+    independent = kernel_call("summarize_causal", nothing, payload)["result"]
+    clustered = kernel_call("summarize_causal", nothing, merge(payload, Dict("clusters"=>["a","b","a","b"])))["result"]
+    @test clustered["estimate"] == independent["estimate"] == 4
+    @test clustered["cluster_count"] == 2
+    @test clustered["influence_standard_error"] ≈ 2
+end

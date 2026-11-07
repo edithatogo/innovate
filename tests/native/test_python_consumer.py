@@ -1451,3 +1451,16 @@ def test_cross_fitted_stratum_ate_adjusts_for_unequal_treatment_prevalence():
     )["result"]
     assert att["contrast"]["estimand"] == "att"
     assert att["contrast"]["estimate"] == pytest.approx(7.25)
+
+
+def test_clustered_augmented_treatment_contrast():
+    payload = dict(method="augmented_treatment_contrast", outcomes=[0, 4] * 2,
+                   treatment=[0, 1] * 2, propensities=[0.5] * 4,
+                   treated_predictions=[2] * 4, control_predictions=[0] * 4)
+    independent = innovate.execute("summarize_causal", **payload)["result"]
+    clustered = innovate.execute("summarize_causal", **payload, clusters=["a", "b"] * 2)["result"]
+    assert clustered["estimate"] == independent["estimate"] == pytest.approx(4)
+    assert clustered["cluster_count"] == 2
+    assert clustered["influence_standard_error"] == pytest.approx(2)
+    with pytest.raises(innovate.NativeError, match="requires at least two clusters"):
+        innovate.execute("summarize_causal", **payload, clusters=["a"] * 4)

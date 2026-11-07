@@ -655,3 +655,12 @@ for (estimand in c("ate", "att")) {
   stopifnot(identical(contrast$estimand, estimand),
     isTRUE(all.equal(contrast$estimate, if (estimand == "ate") 6 else 7.25)))
 }
+
+cluster_payload <- list(method="augmented_treatment_contrast", outcomes=c(0,4,0,4),
+  treatment=c(0,1,0,1), propensities=rep(0.5,4),
+  treated_predictions=rep(2,4), control_predictions=rep(0,4))
+independent <- kernel_call("summarize_causal", payload=cluster_payload)$result
+clustered <- kernel_call("summarize_causal",
+  payload=c(cluster_payload, list(clusters=c("a","b","a","b"))))$result
+stopifnot(clustered$estimate == independent$estimate, clustered$estimate == 4,
+  clustered$cluster_count == 2, isTRUE(all.equal(clustered$influence_standard_error, 2)))

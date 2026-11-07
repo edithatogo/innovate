@@ -4676,3 +4676,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Support cluster-robust influence standard errors for augmented
   contrasts. The focused Rust fixture verifies standard error 2 with
   two clusters and rejects a single cluster. Binding checks remain open.
+
+- [x] Verify clustered augmented ATE through rebuilt Python 3.15.2,
+  Julia and installed R. All three returned two clusters, standard
+  error 2 and the same point estimate of 4 as independent-row inference.
