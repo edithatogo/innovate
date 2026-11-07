@@ -311,6 +311,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
         Some("stratified_treatment_contrast") => stratified_treatment_contrast(payload),
         Some("propensity_weighted_contrast") => propensity_weighted_contrast(payload),
         Some("estimate_stratum_propensities") => estimate_stratum_propensities(payload),
+        Some("fit_logistic_propensities") => fit_logistic_propensities(payload),
         Some("matched_treatment_contrast") => matched_treatment_contrast(payload),
         Some("intervention_contract") => intervention_contract(payload),
         Some("policy_specification") => policy_specification(payload),
@@ -849,6 +850,82 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
             "control_diagnostics":{"unique_controls":control_uses.len(),
             "effective_sample_size":1. / squared_control_weights}}),
     )
+}
+
+fn fit_logistic_propensities(payload: &Value) -> Result<Value, &'static str> {
+    let treatment = series(payload, "treatment")?;
+    let rows: Vec<Vec<f64>> = serde_json::from_value(payload["covariates"].clone())
+        .map_err(|_| "covariates must be a numeric row matrix")?;
+    let width = rows.first().map_or(0, Vec::len);
+    let penalty = payload["ridge"]
+        .as_f64()
+        .filter(|&v| v > 0.)
+        .ok_or("logistic propensity fit requires positive ridge")?;
+    if width == 0
+        || rows.len() != treatment.len()
+        || rows.iter().any(|row| row.len() != width)
+        || treatment.iter().any(|&v| v != 0. && v != 1.)
+        || !treatment.contains(&0.)
+        || !treatment.contains(&1.)
+    {
+        return Err("logistic propensity fit requires aligned covariates and both binary arms");
+    }
+    let mut scales = vec![0_f64; width];
+    for row in &rows {
+        for (scale, value) in scales.iter_mut().zip(row) {
+            *scale = scale.max(value.abs());
+        }
+    }
+    for scale in &mut scales {
+        if *scale == 0. {
+            *scale = 1.;
+        }
+    }
+    let design: Vec<Vec<f64>> = rows
+        .iter()
+        .map(|row| {
+            std::iter::once(1.)
+                .chain(row.iter().zip(&scales).map(|(x, s)| x / s))
+                .collect()
+        })
+        .collect();
+    let mut coefficients = vec![0.; width + 1];
+    let mut gradient = vec![0.; width + 1];
+    let mut propensities = vec![0.; rows.len()];
+    let n = rows.len() as f64;
+    let step = 1. / (0.25 * (width + 1) as f64 + penalty);
+    for iteration in 0..10_000 {
+        gradient.fill(0.);
+        for ((row, &target), probability) in design.iter().zip(&treatment).zip(&mut propensities) {
+            let logit: f64 = row.iter().zip(&coefficients).map(|(x, b)| x * b).sum();
+            *probability = if logit >= 0. {
+                1. / (1. + (-logit).exp())
+            } else {
+                let exp = logit.exp();
+                exp / (1. + exp)
+            };
+            let residual = (*probability - target) / n;
+            for (component, x) in gradient.iter_mut().zip(row) {
+                *component += residual * x;
+            }
+        }
+        for (component, coefficient) in gradient[1..].iter_mut().zip(&coefficients[1..]) {
+            *component += penalty * coefficient;
+        }
+        if gradient.iter().all(|g| g.abs() <= 1e-8) {
+            if propensities.iter().any(|&p| !(0. < p && p < 1.)) {
+                return Err("fitted propensities must lie strictly between zero and one");
+            }
+            return Ok(
+                json!({"method":"ridge_logistic","propensities":propensities,
+                "scaled_coefficients":coefficients,"covariate_scales":scales,"iterations":iteration}),
+            );
+        }
+        for (coefficient, component) in coefficients.iter_mut().zip(&gradient) {
+            *coefficient -= step * component;
+        }
+    }
+    Err("logistic propensity fit did not converge")
 }
 
 fn estimate_stratum_propensities(payload: &Value) -> Result<Value, &'static str> {

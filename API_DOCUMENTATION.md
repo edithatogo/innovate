@@ -274,3 +274,12 @@ conditional standard error for independent outcomes with the matched
 pairs held fixed. Each reused control contributes its variance times
 the square of its total weight. Without supplied variances the field
 is null. This calculation conditions on the matching design.
+
+For numeric covariates, call `summarize_causal` with method
+`fit_logistic_propensities`, binary `treatment`, a row matrix
+`covariates`, and positive `ridge`. The fit minimizes mean logistic
+loss plus ridge times half the squared slope norm after scaling each
+column by its maximum absolute value. The intercept is unpenalized.
+The result contains fitted probabilities in input order, the intercept
+followed by scaled slopes, column scales and the iteration count.
+A fit that fails to converge returns an error.

@@ -722,6 +722,14 @@ fn causal_summaries_match_analytic_effects() {
         "outcomes":[0,10,2,12],"treatment":[0,0,1,1],"propensities":[0.2,0.8,0.2,0.8]});
     let mut fit = json!({"method":"estimate_stratum_propensities",
         "treatment":[0,1,0,1,0,1,1],"strata":["low","high","low","low","high","high","high"]});
+    let mut logistic = json!({"method":"fit_logistic_propensities",
+        "treatment":[0,1],"covariates":[[-2],[2]],"ridge":0.25 / 3_f64.ln()});
+    let fitted = run(logistic.clone());
+    let fitted = fitted["result"]["propensities"].as_array().unwrap();
+    assert!((fitted[0].as_f64().unwrap() - 0.25).abs() < 1e-7);
+    assert!((fitted[1].as_f64().unwrap() - 0.75).abs() < 1e-7);
+    logistic["treatment"] = json!([1, 1]);
+    assert!(run(logistic)["result"].is_null());
     let result = run(fit.clone());
     assert_eq!(
         result["result"]["propensities"],

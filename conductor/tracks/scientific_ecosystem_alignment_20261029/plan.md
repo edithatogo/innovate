@@ -4601,3 +4601,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify fixed-match outcome uncertainty through rebuilt Python
   3.15.2, Julia and installed R. The shared-control fixture returns
   sqrt(4.5), and omitting outcome variances returns null.
+
+- [x] Fit ridge logistic treatment propensities for numeric covariates.
+  The Rust fixture verifies analytic probabilities 0.25 and 0.75 and
+  rejects a single treatment arm. Binding checks and fitted inference remain open.
