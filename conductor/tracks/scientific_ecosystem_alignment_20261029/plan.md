@@ -2595,3 +2595,9 @@ the other competition models and installed binding checks remain open.
   Mean interval widths were 0.38998125 and 0.281396875. The earlier
   86% result did not recur with new seeds at 32 pairs. The two sizes
   share their first 32 pairs per trial. Broader calibration is open.
+
+- [x] Retain the repeatable feedback-chain coverage experiment in
+  scripts/qualify_kairos_coverage.py. Run it with the qualified Python
+  3.15 interpreter and a built Innovate wheel. It reproduced 452/500
+  and 445/500 coverage and emits the analytic effect and mean interval
+  widths as JSON. Ruff formatting and lint passed.
