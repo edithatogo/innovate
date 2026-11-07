@@ -5199,3 +5199,10 @@ Hosted release readiness for this worktree revision remains open.
   raw-response helper. Arrow recovered both scenario IDs, the true
   and false completion flags, and exact decoded equality of every
   exported execution field, including the opaque paused checkpoint.
+
+- [x] Run the local consumer suites at the checkpoint and Arrow
+  milestone. The extracted Python 3.15.2 wheel passed the full
+  native consumer and migration policy files (113 tests). Julia
+  passed 428 assertions across 58 test sets, and the full installed
+  R native suite exited successfully. The native Rust sources match
+  9ac7533f, with the R bridge installed from 2e492674.
