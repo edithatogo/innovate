@@ -1,0 +1,118 @@
+{
+  "scenarios": [
+    {
+      "id": "base",
+      "model_key": "bass",
+      "simulation": {
+        "inputs": {
+          "time": [
+            0,
+            6,
+            7,
+            9,
+            11
+          ]
+        },
+        "parameters": {
+          "p": 1000000000000,
+          "q": 0,
+          "m": 3
+        },
+        "simulation_options": {
+          "engine": "kairos_network",
+          "population": 3,
+          "seed": 42,
+          "edges": [],
+          "capacity": 1,
+          "service_ticks": 2,
+          "ticks_per_unit": 1,
+          "schedule": []
+        }
+      }
+    },
+    {
+      "id": "closed",
+      "model_key": "bass",
+      "simulation": {
+        "inputs": {
+          "time": [
+            0,
+            6,
+            7,
+            9,
+            11
+          ]
+        },
+        "parameters": {
+          "p": 1000000000000,
+          "q": 0,
+          "m": 3
+        },
+        "simulation_options": {
+          "engine": "kairos_network",
+          "population": 3,
+          "seed": 42,
+          "edges": [],
+          "capacity": 0,
+          "service_ticks": 5,
+          "ticks_per_unit": 1,
+          "schedule": [
+            {
+              "tick": 7,
+              "capacity": 2,
+              "service_ticks": 2
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "bad",
+      "model_key": "bass",
+      "simulation": {
+        "inputs": {
+          "time": [
+            0,
+            6,
+            7,
+            9,
+            11
+          ]
+        },
+        "parameters": {
+          "p": 1000000000000,
+          "q": 0,
+          "m": 3
+        },
+        "simulation_options": {
+          "engine": "kairos_network",
+          "population": 3,
+          "seed": 42,
+          "edges": [],
+          "capacity": 0,
+          "service_ticks": 5,
+          "ticks_per_unit": 2,
+          "schedule": [
+            {
+              "tick": 7,
+              "capacity": 2,
+              "service_ticks": 2
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "baseline": "base",
+      "alternative": "closed",
+      "compare_resources": true
+    },
+    {
+      "baseline": "base",
+      "alternative": "bad",
+      "compare_resources": true
+    }
+  ]
+}

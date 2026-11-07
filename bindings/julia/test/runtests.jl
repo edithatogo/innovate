@@ -519,3 +519,18 @@ end
     strategies[1]["draws"][1] = [draw[key] for key in ["draw_id","parameters","time","adoption"]]
     @test_throws r"must be objects" kernel_paired_outcomes_ipc(payload)
 end
+
+@testset "Kairos resource comparisons" begin
+    fixture = joinpath(@__DIR__, "../../../rust/crates/innovate-core/tests/fixtures/kairos_resource_comparisons.json")
+    payload = Innovate.JSON.parsefile(fixture)
+    response = kernel_call("execute_scenario_grid", nothing, payload)
+    result = response["result"]
+    @test length(result["executions"]) == 3
+    success, failure = result["comparisons"]
+    totals = success["result"]["resource_differences"]
+    @test totals["configured_slot_ticks"] == -3
+    @test totals["horizon_ticks"] == 11
+    @test totals["ticks_per_unit"] == 1
+    @test failure["error"]["code"] == "invalid_comparison"
+    @test isnothing(failure["result"])
+end

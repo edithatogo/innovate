@@ -4235,3 +4235,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify the Kairos comparison fixture ships in the source archive.
   Both focused Rust and Python tests passed from a fresh extraction,
   using the existing Cargo target directory and matching installed wheel.
+- [x] Add signed resource comparison checks to the Julia and R native
+  suites. Julia reads the shared Rust fixture. R ships an identical
+  fixture under its package tests. Both focused checks preserved the
+  negative capacity difference and rejected the incompatible pair.

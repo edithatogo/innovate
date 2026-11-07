@@ -493,3 +493,13 @@ stopifnot(rawToChar(kernel_paired_outcomes_ipc(paired)[1:6]) == "ARROW1")
 paired$strategies[[1]]$draws[[1]] <- unname(paired_draw)
 paired_error <- tryCatch({kernel_paired_outcomes_ipc(paired); ""}, error=conditionMessage)
 stopifnot(grepl("must be objects", paired_error, fixed=TRUE))
+
+resource_payload <- paste(readLines(fixture_path("kairos_resource_comparisons.json")), collapse="\n")
+resource_request <- paste0('{"schema_version":"2.0","operation":"execute_scenario_grid","payload":',
+                           resource_payload, "}")
+resource_result <- kernel_call_json(resource_request)$result
+resource_rows <- resource_result$comparisons
+resource_totals <- resource_rows[[1]]$result$resource_differences
+stopifnot(length(resource_result$executions) == 3, resource_totals$configured_slot_ticks == -3,
+          resource_totals$horizon_ticks == 11, resource_totals$ticks_per_unit == 1,
+          resource_rows[[2]]$error$code == "invalid_comparison", is.null(resource_rows[[2]]$result))
