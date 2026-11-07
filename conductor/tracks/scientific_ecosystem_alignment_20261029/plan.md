@@ -782,3 +782,18 @@ Competition line coverage is 93.91 percent and core/C ABI coverage is 85.60
 percent. Docs build 163 pages and local package checks pass. Event-time/override
 inference, other families, uncertainty and scientific/release qualification
 remain required. All 38 obligations remain open. Same isolated lane continues.
+
+## Shared fixed events and historical Norton Bass
+
+- [x] Reuse fixed-event validation and segmented integration for substitution.
+- [x] Verify analytic generations, controls, fitting and saved-state forecasts.
+- [x] Validate Python/Julia/R and retain successive-generation/inference gaps.
+
+Source: 8ffe2a2e. Full local qualification passed 146 Rust core/C ABI/Polars
+tests, 53 installed Python tests, 214 Julia assertions and R conformance.
+Analytic generations, independent event/control trajectories, perturbed fitting
+and a held-out forecast pass. Shared event line coverage is 99.24 percent,
+substitution coverage is 90.50 percent and competition coverage is 93.93 percent.
+Core/C ABI coverage is 85.76 percent. Docs build 163 pages and local package
+checks pass. Successive-generation forcing/events, event inference, uncertainty
+and scientific/release qualification remain required. Same lane continues.
