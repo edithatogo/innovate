@@ -1227,10 +1227,13 @@ def test_legacy_dataset_artifact_reingestion_uses_recorded_encoding():
         innovate.execute("ingest_dataset", artifact=artifact)
 
 
-def test_legacy_checksum_matches_python_across_float_exponents():
+def test_legacy_checksum_matches_python_across_numeric_and_unicode_domains():
     rng = random.Random(420)
     values = [struct.unpack(">d", rng.getrandbits(64).to_bytes(8, "big"))[0] for _ in range(2048)]
-    dataset = {"values": [value for value in values if math.isfinite(value)]}
+    dataset = {
+        "values": [value for value in values if math.isfinite(value)],
+        "keys": {"😀": 2**64 - 1, "\ue000": -(2**63), "é": [2**53 + 1, -0.0]},
+    }
     encoded = json.dumps(dataset, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
     actual = innovate.execute("dataset_checksum", dataset=dataset, encoding="python_sorted_json_v1")["result"]
     assert actual["checksum"] == hashlib.sha256(encoded).hexdigest()

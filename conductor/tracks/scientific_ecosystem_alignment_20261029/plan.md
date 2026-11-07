@@ -4389,3 +4389,6 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Compare historical checksum encoding with CPython over a seeded
   sample of 2,047 finite binary64 values across the exponent range.
   The installed wheel digest matched the independent JSON/SHA-256 oracle.
+- [x] Extend the historical checksum oracle with signed and unsigned
+  integer extremes and nested Unicode keys spanning the BMP and
+  supplementary planes. The packaged Python regression passed.
