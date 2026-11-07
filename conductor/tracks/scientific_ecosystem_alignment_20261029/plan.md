@@ -4901,3 +4901,8 @@ Hosted release readiness for this worktree revision remains open.
   Python 3.15.2 imported the extension from the extracted wheel,
   and all 101 tests passed in 58.59 seconds. Removing generated
   Python build artifacts freed space for extraction.
+
+- [x] Run the complete Julia and installed R native consumer files
+  against the rebuilt Rust FFI library from 9c91630b. Both runners
+  exited successfully. Together with the extracted Python wheel run,
+  this covers the three local consumer suites on the same native source.
