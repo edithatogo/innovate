@@ -843,6 +843,7 @@ fn unweighted_imitation_preserves_finite_hazard_at_large_rates() {
         .unwrap()
         .result
         .unwrap();
+    assert_eq!(result["metadata"]["kairos_dispatched_events"], 2);
     assert_eq!(result["counts"], json!([2, 3]));
     assert_eq!(result["completions"], json!([{"tick":2,"agent":2}]));
 }

@@ -3979,3 +3979,9 @@ Hosted release readiness for this worktree revision remains open.
   Use the root workspace and these runtime tests when mapping the
   imported acceptance criteria. Its remaining leaves retain their
   dependency and ownership gates.
+- [x] Report actual Kairos dispatch counts in simulation metadata.
+  Homogeneous DES and ABM count adoption dispatches. Network ABM
+  counts dispatched requests and completions, including requests
+  that subsequently balk. Initial adopters do not count as dispatches.
+  The single-adoption network fixture reports two dispatched events.
+  All 39 locked Kairos and network tests passed.
