@@ -1013,3 +1013,12 @@ the other competition models and installed binding checks remain open.
   selected loss is the lowest reported loss. All 14 competition tests and
   focused Clippy passed. Automatic multi-product and lock-in convergence
   remain open.
+
+- [x] Verify per-start diagnostics in the three installed bindings and
+  compare the unresolved 200-iteration automatic fits. The interacting
+  Lotka–Volterra case reports three converged starts in Python, Julia and R,
+  each selecting the minimum reported loss. All three starts hit the
+  iteration limit in both multi-product and lock-in. Multi-product
+  selects index 2 and lock-in selects index 1. These focused checks use
+  rebuilt Python and Rust FFI artifacts.
+  [Per-start results](evidence/competition-start-reports-20261107).
