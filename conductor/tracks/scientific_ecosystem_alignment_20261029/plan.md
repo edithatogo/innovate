@@ -2842,3 +2842,8 @@ the other competition models and installed binding checks remain open.
   retain the original time grid, and count failed synthetic refits.
   Focused Rust replay and interval checks and Clippy passed. This
   method assumes exchangeable residuals. Coverage and bindings remain open.
+
+- [x] Verify fixed-grid residual bootstrap through rebuilt Python 3.15,
+  Julia and R. All 30 refits converged on the perturbed Logistic fixture
+  and complete outputs agreed exactly. The 90% capacity interval was
+  [99.8197441, 100.3101662]. R used raw JSON. Repeated coverage remains open.
