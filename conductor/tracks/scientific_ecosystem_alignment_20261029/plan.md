@@ -3293,3 +3293,8 @@ the other competition models and installed binding checks remain open.
   capped 64 requested CPUs at 32 workers, and a CLI run recorded two.
   Both completed all three fast cases. Ruff passed. These receipts
   record the worker request and source, with scheduler runtime still open.
+
+- [x] Assert exact local benchmark parity across worker budgets.
+  The three fast cases returned identical ordered results at requested
+  budgets of 1, 2 and 32. The focused Rust test and Clippy passed.
+  Scheduler-backed traces and accelerator evidence remain open.

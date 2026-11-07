@@ -2056,6 +2056,12 @@ fn benchmark_ci_policy_selects_fast_cases_without_running_scheduled_fits() {
             "fisher_pry_replacement_smoke"
         ]
     );
+    for workers in [1, 32] {
+        assert_eq!(
+            run(json!({"ci_policy":"fast","workers":workers}))["result"],
+            response["result"]
+        );
+    }
     assert_eq!(response["result"]["succeeded"], 3);
     assert_eq!(
         run(json!({"ci_policy":"workflow_dispatch"}))["result"]["runs"][0]["case_id"],
