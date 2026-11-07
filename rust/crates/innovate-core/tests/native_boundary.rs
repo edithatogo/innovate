@@ -1847,6 +1847,7 @@ fn scenario_grid_compares_aligned_adoption_paths() {
     ranked["payload"]["rank_metric"] = json!("time_to_threshold");
     ranked["payload"]["rank_threshold"] = json!(75.);
     let threshold = run(&ranked);
+    assert_eq!(threshold["result"]["ranking"]["threshold"], 75.);
     let rows = &threshold["result"]["ranking"]["rows"];
     assert_eq!(rows[0]["time_to_threshold"], 1.);
     assert_eq!(rows[1]["place"], 1);
@@ -1854,6 +1855,7 @@ fn scenario_grid_compares_aligned_adoption_paths() {
     assert!(rows[2]["place"].is_null());
     ranked["payload"]["rank_threshold"] = json!(1_000.);
     let unreached = run(&ranked);
+    assert_eq!(unreached["result"]["ranking"]["threshold"], 1_000.);
     let rows = unreached["result"]["ranking"]["rows"].as_array().unwrap();
     assert_eq!(
         rows.iter()

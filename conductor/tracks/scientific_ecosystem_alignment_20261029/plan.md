@@ -6586,3 +6586,8 @@ Hosted release readiness for this worktree revision remains open.
   All three returned year, reference year 2026 and the alternative
   in first place. The wheel and the FFI library were rebuilt from
   009d7300 with incremental compilation disabled.
+
+- [x] Include the requested adoption threshold in successful
+  time-to-threshold rankings, including when no scenario crosses it.
+  The focused Rust grid test verifies both reached and unreached
+  thresholds. Binding readback of the new field remains open.

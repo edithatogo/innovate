@@ -808,6 +808,9 @@ fn rank_paths(
         })
         .collect();
     let mut ranking = json!({"metric":metric,"rows":rows,"error":null});
+    if let Some(threshold) = threshold {
+        ranking["threshold"] = json!(threshold);
+    }
     add_time_basis(&mut ranking, basis);
     Ok(ranking)
 }
