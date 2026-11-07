@@ -11,7 +11,11 @@ fn error(message: impl Into<String>) -> KernelBindingError {
     KernelBindingError::invalid_request(KernelOperation::FitModel, message)
 }
 
-fn weights(request: &KernelRequest, n: usize) -> Result<Option<Vec<f64>>, KernelBindingError> {
+pub(crate) fn weights(
+    request: &KernelRequest,
+    n: usize,
+    minimum: usize,
+) -> Result<Option<Vec<f64>>, KernelBindingError> {
     let Some(value) = request
         .payload
         .get("fit_options")
@@ -21,11 +25,6 @@ fn weights(request: &KernelRequest, n: usize) -> Result<Option<Vec<f64>>, Kernel
     };
     let values: Vec<f64> = serde_json::from_value(value.clone())
         .map_err(|_| error("weights must be a numeric array"))?;
-    let minimum = if request.model_key.as_deref() == Some("fisher_pry") {
-        2
-    } else {
-        3
-    };
     if values.len() != n
         || values.iter().any(|v| !v.is_finite() || *v < 0.)
         || values.iter().filter(|v| **v > 0.).count() < minimum
@@ -35,6 +34,14 @@ fn weights(request: &KernelRequest, n: usize) -> Result<Option<Vec<f64>>, Kernel
         ));
     }
     Ok(Some(values))
+}
+
+fn scalar_minimum(request: &KernelRequest) -> usize {
+    if request.model_key.as_deref() == Some("fisher_pry") {
+        2
+    } else {
+        3
+    }
 }
 
 pub(crate) fn options(
@@ -75,7 +82,7 @@ fn parse_options(
             KernelOperation::FitModel,
         )?;
         let time = numeric_array_from_aliases(input, &["time", "t"], KernelOperation::FitModel)?;
-        weights(request, time.len())?;
+        weights(request, time.len(), scalar_minimum(request))?;
     }
     let limit = options
         .get("max_iterations")
@@ -149,7 +156,7 @@ pub(crate) fn refine(
             "fitting needs at least {minimum} aligned, finite, nonnegative observations"
         )));
     }
-    let weights = weights(request, time.len())?;
+    let weights = weights(request, time.len(), scalar_minimum(request))?;
     let maximum_weight = weights
         .as_ref()
         .map(|w| w.iter().copied().fold(0., f64::max))

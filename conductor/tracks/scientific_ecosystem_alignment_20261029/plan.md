@@ -1091,3 +1091,11 @@ the other competition models and installed binding checks remain open.
   repo-local interpreter and one missing native-module-source warning.
   Migration policy reports 38 release obligations still open.
   [Local integration results](evidence/native-integration-checkpoint-20261107).
+
+## Weighted mechanistic diffusion fitting
+
+- [x] Apply normalized observation weights to mechanistic Bass and Gompertz
+  residuals and their local Jacobian. Report weighted loss separately from
+  descriptive metrics. The independent forced Bass fixture fits despite a
+  zero-weight outlier of 1e100. Fourteen Rust tests and focused Clippy passed.
+- [ ] Qualify weighted mechanistic fits in installed Python, Julia and R.

@@ -182,3 +182,38 @@ fn signed_zero_control_and_query_times_are_the_same_boundary() {
     assert_eq!(a["values"], json!([0.]));
     assert!((a["rates"][0][0].as_f64().unwrap() - 11.).abs() < 1e-10);
 }
+
+#[test]
+fn weighted_mechanistic_fit_excludes_a_zero_weight_outlier() {
+    let f: serde_json::Value =
+        serde_json::from_str(include_str!("fixtures/mechanistic_scipy.json")).unwrap();
+    let n = f["training_rows"].as_u64().unwrap() as usize;
+    let mut observed = f["observed"].as_array().unwrap()[..n].to_vec();
+    observed[12] = json!(1e100);
+    let mut weights = vec![2.; n];
+    weights[12] = 0.;
+    let result = KernelBinding::new()
+        .fit_model(
+            "bass",
+            json!({
+                "inputs":{"time":&f["time"].as_array().unwrap()[..n],"observed":observed,
+                    "covariates":{"dose":&f["dose"].as_array().unwrap()[..n]}},
+                "constructor_kwargs":{"covariates":["dose"],"t_event":10.},
+                "fit_options":{"weights":weights}
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(result["diagnostics"]["optimizer"]["converged"], true);
+    assert_eq!(
+        result["diagnostics"]["weighting"]["positive_observations"],
+        n - 1
+    );
+    assert!(
+        result["diagnostics"]["weighting"]["weighted_rss_normalized_by_max"]
+            .as_f64()
+            .unwrap()
+            < 1e-5
+    );
+}

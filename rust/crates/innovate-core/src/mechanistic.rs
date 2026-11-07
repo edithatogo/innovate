@@ -545,14 +545,32 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         .filter(|(_, s)| !s.unused)
         .map(|(i, _)| i)
         .collect();
+    let weights = if op == KernelOperation::FitModel {
+        crate::fitting::weights(r, time.len(), active.len().max(4))?
+    } else {
+        None
+    };
+    let max_weight = weights
+        .as_ref()
+        .map_or(1., |w| w.iter().copied().fold(0., f64::max));
+    let factors: Vec<_> = weights.as_ref().map_or_else(
+        || vec![1.; time.len()],
+        |w| w.iter().map(|v| v.sqrt() / max_weight.sqrt()).collect(),
+    );
     let mut quality = None;
     let parameters = if op == KernelOperation::FitModel {
         let y = observed.as_ref().unwrap();
         if time.len() < 4 {
             return Err(invalid("ODE fitting needs at least four observations"));
         }
-        let (initial, limit) = crate::fitting::options(r)?;
-        let ys = y.iter().copied().fold(0., f64::max).max(1e-12);
+        let (initial, limit) = crate::fitting::scalar_options(r)?;
+        let ys = y
+            .iter()
+            .zip(&factors)
+            .filter(|(_, w)| **w > 0.)
+            .map(|(v, _)| *v)
+            .fold(0., f64::max)
+            .max(1e-12);
         let ts = (time.last().unwrap() - origin).max(1.);
         let automatic_seed = |rate: f64| -> Vec<f64> {
             model
@@ -620,7 +638,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 .map(|rate| transform(&automatic_seed(rate)))
                 .collect()
         };
-        let target: Vec<_> = y.iter().map(|v| v / ys).collect();
+        let target: Vec<_> = y.iter().zip(&factors).map(|(v, w)| (v * w) / ys).collect();
         let fit = least_squares(
             &target,
             &starts,
@@ -630,9 +648,10 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                     .as_array()
                     .unwrap()
                     .iter()
-                    .map(|v| {
+                    .zip(&factors)
+                    .map(|(v, w)| {
                         v.as_f64()
-                            .map(|v| v / ys)
+                            .map(|v| (v * w) / ys)
                             .ok_or_else(|| "nonfinite ODE prediction".into())
                     })
                     .collect()
@@ -695,6 +714,21 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             d["metrics"]["AIC"] = Value::Null;
             d["metrics"]["BIC"] = Value::Null;
             d["information_criteria"] = json!({"available":false,"reason":"conditional forcing/initial-state and projection likelihood require qualification"});
+            if weights.is_some() {
+                let weighted_rss: f64 = y
+                    .iter()
+                    .zip(&predicted)
+                    .zip(&factors)
+                    .map(|((y, prediction), factor)| (y * factor - prediction * factor).powi(2))
+                    .sum();
+                d["weighting"] = json!({
+                    "maximum_weight": max_weight,
+                    "positive_observations": factors.iter().filter(|factor| **factor > 0.).count(),
+                    "weighted_rss_normalized_by_max": weighted_rss,
+                    "rank_semantics": "weighted local Jacobian; zero-weight residuals excluded",
+                    "descriptive_metrics": "unweighted"
+                });
+            }
             d["structural_identifiability"] =
                 json!({"absent_from_rhs":absent,"absent_parameters_held_fixed":true});
             d["warnings"].as_array_mut().unwrap().push(json!("Forcing history and initial condition are treated as fixed; their uncertainty is not propagated. Gompertz b/beta_b terms do not enter the ODE. Projection and historical coefficient layout are explicit conventions."));

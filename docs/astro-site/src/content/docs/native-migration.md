@@ -716,7 +716,11 @@ the complete parameter map. The unused Gompertz shape parameters default to
 one for automatic starts and retain their supplied values for explicit starts.
 The optimizer reports each start's outcome in `start_reports` and identifies
 the selected entry with `selected_start_index`, a zero-based index. Information criteria and calibrated uncertainty remain unavailable;
-precision weights are explicitly rejected by this variant until implemented.
+`fit_options.weights` accepts one finite nonnegative weight per observation
+and requires at least four positive rows and at least as many positive rows
+as active parameters. Zero weights exclude residuals from the objective.
+The fit still conditions on its initial state. Descriptive metrics remain
+unweighted, and the weighted objective and local rank have separate diagnostics.
 Closed-form Bass/Gompertz forcing/event cases and a separately integrated SciPy
 DOP853 fit/forecast reference pass. The explicit RK4 solver's stiff/LSODA workload
 parity, multiple events, further model families, forcing
