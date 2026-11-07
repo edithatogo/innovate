@@ -4065,3 +4065,8 @@ Hosted release readiness for this worktree revision remains open.
   offset, matching the independent rational-arithmetic oracle to
   1e-12. This qualifies one consumer example. A production valuation
   adapter and supported-version matrix remain open.
+- [x] Extend the near-unit-root SARIMA checker to seasonal MA at
+  period four with generating coefficients ±0.95. The installed R
+  binding agreed with independent maximum likelihood on both 600-row
+  fixtures within 1e-5 in coefficient and 2.33e-7 in log likelihood.
+  The four existing nonseasonal cases also passed.
