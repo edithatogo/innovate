@@ -3458,3 +3458,7 @@ the other competition models and installed binding checks remain open.
   All RECORD hashes and sizes verified, the local build path was
   absent, and Twine, wheel-content, Ruff and a Polars forecast passed.
   Hosted packaging and publication integration remain open.
+
+- [x] Add wheel SBOM normalization regressions for differing source
+  roots, deterministic output, refreshed RECORD digests and signed
+  input rejection. Both Python 3.15.2 tests and Ruff passed.
