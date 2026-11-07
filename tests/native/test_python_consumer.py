@@ -1198,3 +1198,23 @@ def test_dataset_checksum_rejects_positional_provenance():
     with pytest.raises(innovate.NativeError, match="dataset provenance must be an object") as exc:
         innovate.execute("dataset_checksum", dataset={"provenance": positional})
     assert exc.value.code == "invalid_request"
+
+
+def test_legacy_dataset_artifact_reingestion_uses_recorded_encoding():
+    dataset = {
+        "kind": "adoption",
+        "time": [0, 1],
+        "adoption": [1, 2],
+        "provenance": {
+            "source": "survey α",
+            "license": "CC-BY-4.0",
+            "extraction_time": "2026-11-07T00:00:00Z",
+        },
+    }
+    artifact = innovate.execute("ingest_dataset", dataset=dataset, encoding="python_sorted_json_v1")["result"]
+    assert artifact["checksum_encoding"] == "python_sorted_json_v1"
+    assert innovate.execute(
+        "ingest_dataset", dataset=artifact["dataset"], encoding=artifact["checksum_encoding"]
+    )["result"] == artifact
+    with pytest.raises(innovate.NativeError, match="checksum does not match"):
+        innovate.execute("ingest_dataset", dataset=artifact["dataset"])

@@ -4355,3 +4355,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Document re-ingestion with the artifact's recorded checksum
   encoding. The guide example reproduced a Unicode artifact using
   python_sorted_json_v1 through the installed Python wheel.
+- [x] Retain historical checksum re-ingestion in the packaged Python
+  suite. The Unicode fixture reproduces its artifact with the recorded
+  Python encoding and rejects a checksum mismatch under the default.
+  The focused test and Ruff passed using the existing native wheel.
