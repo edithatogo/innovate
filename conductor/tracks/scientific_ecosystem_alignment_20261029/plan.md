@@ -6849,3 +6849,10 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Document adopter classification in the native guide. Explain
   sample weighting on irregular grids, inclusive historical boundaries,
   zero-weight samples, and the Polars and JSON entry points.
+
+- [x] Qualify parallel fit_batch for the five historical scalar
+  oracle fixtures. Bass, Logistic, Gompertz, Fisher–Pry and
+  single-generation Norton–Bass each preserved the valid fits and
+  the intervening malformed dataset in order at worker settings
+  1 and 32. Each valid batch fit matched its direct fit. The Rust
+  oracle test passed. Cross-binding batch checks remain open.
