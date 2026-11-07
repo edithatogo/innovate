@@ -5723,3 +5723,10 @@ Hosted release readiness for this worktree revision remains open.
   and failed names and rejects duplicate check names. The callback APIs
   use the same Rust contract. Three focused Rust extension tests passed.
   Binding runtime qualification for diagnostics remains open.
+
+- [x] Verify diagnostics callbacks through rebuilt Python, Julia and
+  freshly installed R. Each preserved the ordered checks, returned
+  failed name b and ok=false, and rejected duplicate names. The R
+  assertion compares JSON object fields independently of field order.
+  The first FFI link ran out of space and passed after reclaiming a
+  generated test binary.
