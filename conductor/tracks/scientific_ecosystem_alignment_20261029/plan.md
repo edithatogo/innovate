@@ -2627,3 +2627,8 @@ the other competition models and installed binding checks remain open.
   -0.45 and seasonal AR 0.4. Rust matches estimated coefficients
   within 1.41e-5 and log likelihood within 8.67e-10. Six focused Rust
   SARIMA tests and Clippy passed. Near-cancellation remains open.
+
+- [x] Qualify the mixed seasonal SARIMA fixture in Python 3.15.2, Julia
+  and installed R through the native preprocessing request. Python and
+  Julia agreed exactly. R agreed within 1e-10 on the coefficients,
+  likelihood, and all 360 fitted and residual values.
