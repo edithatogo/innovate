@@ -277,6 +277,14 @@ fn paired_ipc_preserves_order_and_rejects_reordered_draws() {
         serde_json::from_str::<serde_json::Value>(encoded).unwrap(),
         parameters
     );
+    let mut negative = payload.clone();
+    negative["strategies"][1]["draws"][0]["adoption"][1] = json!(-0.01);
+    assert!(
+        paired_outcomes_ipc(&negative)
+            .unwrap_err()
+            .to_string()
+            .contains("paired Bass adoption values must be nonnegative")
+    );
     payload["strategies"][1]["draws"]
         .as_array_mut()
         .unwrap()

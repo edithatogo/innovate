@@ -4172,3 +4172,6 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reject negative adoption values at the shared paired Bass
   validation boundary before JSON or Arrow handoff. The native
   contract and Arrow round-trip regressions passed.
+- [x] Exercise negative adoption through the public Rust Arrow exporter.
+  The regression requires the domain error before IPC bytes are returned,
+  alongside the full-width identity round trip and draw-order rejection.
