@@ -3961,3 +3961,7 @@ Hosted release readiness for this worktree revision remains open.
   Reproduce with evidence/check-bass-bootstrap-coverage.py and the
   installed Python 3.15.2 wheel at 2a5d2c0e. This measures one
   synthetic design. Broader uncertainty calibration remains open.
+- [x] Measure pointwise Bass mean-trajectory coverage at times 25, 30
+  and 40 using the same 64 trials. Case resampling covered 55, 57
+  and 57 trials. Centered residual resampling covered 56, 57 and 55.
+  All 64 intervals were available at each time with no forecast failures.
