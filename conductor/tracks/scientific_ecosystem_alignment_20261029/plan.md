@@ -1741,4 +1741,6 @@ the other competition models and installed binding checks remain open.
   risk requires sensitivity analysis, and the historical case-insensitive
   name heuristic rejects post-treatment confounder names. All 24 native
   boundary tests and focused Clippy passed.
-- [ ] Qualify intervention and causal model contracts in installed consumers.
+- [x] Qualify both policy contracts in the rebuilt Python wheel, Julia
+  and installed R. Each retained the singleton spillover and confounder
+  lists and rejected high risk without sensitivity analysis.
