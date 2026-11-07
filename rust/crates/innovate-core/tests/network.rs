@@ -508,7 +508,7 @@ fn continuous_hazard_can_wake_from_zero_and_replays() {
     assert_eq!(result["counts"], json!([0, 0, 0, 1]));
     assert_eq!(
         result["metadata"]["checkpoint_scope"],
-        "RNG provenance only; simulation resume is not implemented"
+        "RNG provenance only; use the network completion checkpoint for simulation resume"
     );
     assert_eq!(
         result,
@@ -892,4 +892,42 @@ fn heterogeneous_imitation_scales_large_coefficients_by_exposure() {
         assert_eq!(result["counts"], json!([1, 2]));
         assert_eq!(result["completions"], json!([{"tick":2,"agent":2}]));
     }
+}
+
+#[test]
+fn network_checkpoint_preserves_pending_service_queue_and_schedule() {
+    let mut payload = json!({
+        "inputs":{"time":[0,4,6,8,12,30]},
+        "parameters":{"p":1e12,"q":0,"m":6},
+        "simulation_options":{"engine":"kairos_network","population":6,"seed":42,
+            "edges":[],"capacity":2,"service_ticks":5,"ticks_per_unit":1,
+            "max_wait_ticks":5,"retry":{"delay_ticks":2,"max_retries":2},
+            "schedule":[{"tick":4,"agent_priorities":[0,0,1,0,0,0]},
+                        {"tick":7,"capacity":1},{"tick":12,"capacity":2}]}
+    });
+    let kernel = KernelBinding::new();
+    let run = |payload| kernel.simulate_model("bass", payload);
+    let expected = run(payload.clone()).unwrap().result.unwrap();
+    payload["simulation_options"]["pause_after_completions"] = json!(1);
+    let paused = run(payload.clone()).unwrap().result.unwrap();
+    assert_eq!(paused["status"], "paused");
+    let state: serde_json::Value =
+        serde_json::from_str(paused["checkpoint"].as_str().unwrap()).unwrap();
+    assert_eq!(state["in_service"], 2);
+    assert!(
+        state["queue"]["waiting_since"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|tick| !tick.is_null())
+    );
+
+    payload["simulation_options"]
+        .as_object_mut()
+        .unwrap()
+        .remove("pause_after_completions");
+    payload["simulation_options"]["resume_checkpoint"] = paused["checkpoint"].clone();
+    assert_eq!(run(payload.clone()).unwrap().result.unwrap(), expected);
+    payload["simulation_options"]["seed"] = json!(43);
+    assert!(run(payload).is_err());
 }

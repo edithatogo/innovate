@@ -487,3 +487,10 @@ boundaries. ABM checkpoints also retain the ordered susceptible agents
 and identity RNG state.
 Event ticks in the checkpoint are decimal strings to preserve their
 full integer precision across JSON consumers.
+
+For `kairos_network`, use `pause_after_completions` to pause after a
+cumulative number of service completions and any resulting admissions.
+Keep the returned checkpoint string intact and supply it as
+`resume_checkpoint` with the original network request and time grid.
+Omit the pause option to finish. The checkpoint preserves pending
+service, waiting deadlines, retry state and resource accounting.

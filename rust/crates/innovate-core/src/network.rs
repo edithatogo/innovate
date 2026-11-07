@@ -10,9 +10,10 @@ use kairo_ecs_rng::{
     rand_distr::{Exp, Uniform},
 };
 use kairo_ecs_types::{EntityId, EventKind, SimTime, StepOutcome};
-use serde::Deserialize;
-use serde_json::json;
-#[derive(serde::Serialize)]
+use serde::{Deserialize, Serialize};
+use serde_json::{Value, json};
+use sha2::{Digest, Sha256};
+#[derive(Deserialize, Serialize)]
 struct ServiceStart {
     agent: usize,
     tick: u128,
@@ -32,6 +33,7 @@ impl ServiceStart {
     }
 }
 
+#[derive(Deserialize, Serialize)]
 struct QueueState {
     waiting_since: Vec<Option<u128>>,
     deadlines: Vec<Option<u128>>,
@@ -93,7 +95,7 @@ impl QueueState {
     }
 }
 
-#[derive(Default)]
+#[derive(Default, Deserialize, Serialize)]
 struct ResourceAccounting {
     occupied_slot_ticks: u128,
     over_capacity_slot_ticks: u128,
@@ -112,6 +114,38 @@ impl ResourceAccounting {
             (tick - self.last_resource_change) * u128::from(in_service.saturating_sub(capacity));
         self.last_resource_change = tick;
     }
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+struct NetworkCheckpoint {
+    version: u32,
+    configuration: String,
+    states: Vec<u8>,
+    rng: kairo_ecs_rng::RngCheckpoint,
+    now: u128,
+    applied_ticks: Vec<u128>,
+    service_override: Option<u64>,
+    capacity: u64,
+    max_wait_ticks: Option<u64>,
+    max_queue_length: Option<usize>,
+    in_service: u64,
+    queue: QueueState,
+    service_starts: Vec<ServiceStart>,
+    abandoned: Vec<Value>,
+    balks: Vec<Value>,
+    retries: Vec<Value>,
+    retry_policy: Option<Retry>,
+    metrics: ResourceAccounting,
+    completed: Vec<u128>,
+    trace: Vec<Value>,
+    requests: Vec<Value>,
+    innovation: f64,
+    imitation: f64,
+    innovation_weights: Vec<f64>,
+    imitation_weights: Vec<f64>,
+    priorities: Vec<i32>,
+    service: Vec<u64>,
 }
 
 #[derive(Deserialize)]
@@ -148,7 +182,7 @@ struct Options {
     schedule: Vec<Change>,
 }
 
-#[derive(Clone, Copy, Deserialize)]
+#[derive(Clone, Copy, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 struct Retry {
     delay_ticks: u64,
@@ -343,8 +377,33 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         .payload
         .as_object()
         .ok_or_else(|| invalid("payload must be an object"))?;
-    let o: Options = serde_json::from_value(payload["simulation_options"].clone())
-        .map_err(|e| invalid(&e.to_string()))?;
+    let mut options = payload["simulation_options"].clone();
+    let options_map = options
+        .as_object_mut()
+        .ok_or_else(|| invalid("network simulation options must be an object"))?;
+    let pause = options_map
+        .remove("pause_after_completions")
+        .map(|value| {
+            value
+                .as_u64()
+                .filter(|&count| count > 0)
+                .ok_or_else(|| invalid("pause_after_completions must be a positive integer"))
+        })
+        .transpose()?;
+    let resume = options_map.remove("resume_checkpoint");
+    let configuration = (pause.is_some() || resume.is_some()).then(|| {
+        let config = json!([
+            crate::simulation::REV,
+            options,
+            payload["inputs"],
+            payload["state"]["parameters"]
+        ]);
+        Sha256::digest(config.to_string())
+            .iter()
+            .map(|byte| format!("{byte:02x}"))
+            .collect::<String>()
+    });
+    let o: Options = serde_json::from_value(options).map_err(|e| invalid(&e.to_string()))?;
     if o.engine != "kairos_network"
         || o.population == 0
         || o.population > 1000
@@ -537,6 +596,109 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     let mut completed = Vec::new();
     let mut trace = Vec::new();
     let mut requests = Vec::new();
+    if let Some(token) = resume {
+        let token = token
+            .as_str()
+            .ok_or_else(|| invalid("network checkpoint must be a string"))?;
+        let saved: NetworkCheckpoint = serde_json::from_str(token)
+            .map_err(|_| invalid("invalid network checkpoint format"))?;
+        if saved.version != 1
+            || Some(&saved.configuration) != configuration.as_ref()
+            || saved.now > horizon
+            || saved.completed.is_empty()
+            || pause.is_some_and(|count| count <= saved.completed.len() as u64)
+            || saved.states.len() != o.population
+            || saved.states.iter().any(|&state| state > 4)
+            || [
+                saved.queue.waiting_since.len(),
+                saved.queue.deadlines.len(),
+                saved.queue.retry_at.len(),
+                saved.queue.retry_counts.len(),
+                saved.priorities.len(),
+                saved.service.len(),
+                saved.innovation_weights.len(),
+                saved.imitation_weights.len(),
+            ]
+            .into_iter()
+            .any(|len| len != o.population)
+            || saved.metrics.last_capacity_change > saved.now
+            || saved.metrics.last_resource_change > saved.now
+            || saved
+                .service_starts
+                .iter()
+                .any(|entry| entry.agent >= o.population)
+            || saved
+                .queue
+                .waiting_since
+                .iter()
+                .flatten()
+                .any(|&tick| tick > saved.now)
+            || saved
+                .queue
+                .deadlines
+                .iter()
+                .zip(&saved.queue.waiting_since)
+                .any(|(deadline, arrival)| {
+                    deadline.is_some_and(|end| arrival.is_none_or(|start| end < start))
+                })
+        {
+            return Err(invalid(
+                "network checkpoint is incompatible with this simulation",
+            ));
+        }
+        for &tick in &saved.applied_ticks {
+            let Some((expected, replacement, _)) = changes.next() else {
+                return Err(invalid("invalid checkpoint schedule cursor"));
+            };
+            if tick != expected || tick > saved.now {
+                return Err(invalid("invalid checkpoint schedule cursor"));
+            }
+            if let Some(replacement) = replacement {
+                graph = replacement;
+            }
+        }
+        for (&agent, &state) in agents.iter().zip(&saved.states) {
+            context.attach(agent, state);
+        }
+        let mut pending = std::collections::HashSet::new();
+        for entry in &saved.service_starts {
+            if saved.states[entry.agent] == 1 && saved.queue.waiting_since[entry.agent].is_none() {
+                if entry.scheduled_completion_tick < saved.now || !pending.insert(entry.agent) {
+                    return Err(invalid("invalid checkpoint pending completion"));
+                }
+                entry.schedule_completion(&mut context, agents[entry.agent]);
+            }
+        }
+        if pending.len() as u64 != saved.in_service {
+            return Err(invalid("invalid checkpoint service occupancy"));
+        }
+        rng = DeterministicStream::restore(&saved.rng)
+            .map_err(|_| invalid("invalid checkpoint RNG state"))?;
+        now = saved.now;
+        applied_ticks = saved.applied_ticks;
+        service_override = saved.service_override;
+        capacity = saved.capacity;
+        max_wait_ticks = saved.max_wait_ticks;
+        max_queue_length = saved.max_queue_length;
+        in_service = saved.in_service;
+        queue = saved.queue;
+        service_starts = saved.service_starts;
+        abandoned = saved.abandoned;
+        balks = saved.balks;
+        retries = saved.retries;
+        retry_policy = saved.retry_policy;
+        metrics = saved.metrics;
+        completed = saved.completed;
+        trace = saved.trace;
+        requests = saved.requests;
+        innovation = saved.innovation;
+        imitation = saved.imitation;
+        innovation_weights = saved.innovation_weights;
+        imitation_weights = saved.imitation_weights;
+        priorities = saved.priorities;
+        service = saved.service;
+        resource = queue.rebuild_waiters(&agents, &priorities);
+    }
     loop {
         let completion = context
             .scheduler
@@ -839,6 +1001,50 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         }
         metrics.peak_queue_length = metrics.peak_queue_length.max(resource.queue_length());
         metrics.peak_in_service = metrics.peak_in_service.max(in_service);
+        if pause == Some(completed.len() as u64) {
+            let checkpoint = NetworkCheckpoint {
+                version: 1,
+                configuration: configuration.unwrap(),
+                states: agents
+                    .iter()
+                    .map(|agent| *context.get::<u8>(*agent).unwrap())
+                    .collect(),
+                rng: rng.checkpoint(),
+                now,
+                applied_ticks,
+                service_override,
+                capacity,
+                max_wait_ticks,
+                max_queue_length,
+                in_service,
+                queue,
+                service_starts,
+                abandoned,
+                balks,
+                retries,
+                retry_policy,
+                metrics,
+                completed,
+                trace,
+                requests,
+                innovation,
+                imitation,
+                innovation_weights,
+                imitation_weights,
+                priorities,
+                service,
+            };
+            let token = serde_json::to_string(&checkpoint)
+                .map_err(|_| invalid("network checkpoint serialization failed"))?;
+            return Ok(KernelResponse {
+                schema_version: KERNEL_SCHEMA_VERSION.into(),
+                operation: op,
+                model_key: r.model_key.clone(),
+                error: None,
+                result: Some(json!({"status":"paused","checkpoint":token})),
+                metadata: json!({"runtime":"rust_native","engine":"kairos_network"}),
+            });
+        }
     }
     metrics.configured_slot_ticks +=
         (horizon - metrics.last_capacity_change) * u128::from(capacity);
@@ -882,7 +1088,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         model_key: r.model_key.clone(),
         error: None,
         result: Some(
-            json!({"values":values,"counts":counts,"agents":states,"requests":requests,"completions":trace,"service_starts":service_starts,"resource_metrics":resource_metrics,"abandonments":abandoned,"balks":balks,"retry_eligibility":retries,"metadata":{"engine":"kairos_network","kairos_revision":crate::simulation::REV,"seed":o.seed,"population":o.population,"capacity":o.capacity,"current_capacity":capacity,"current_p":innovation,"current_q":imitation,"in_service":in_service,"service_ticks":o.service_ticks,"ticks_per_unit":o.ticks_per_unit,"queue_length":queue_length,"available":available,"agent_priorities":priorities,"max_wait_ticks":o.max_wait_ticks,"current_max_wait_ticks":max_wait_ticks,"max_queue_length":o.max_queue_length,"current_max_queue_length":max_queue_length,"innovation_multipliers":innovation_weights,"imitation_multipliers":imitation_weights,"agent_service_ticks":service,"directed":o.directed,"weighted":graph.weighted,"applied_schedule_ticks":applied_ticks,"service_override_ticks":service_override,"hazard":if graph.weighted {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted incoming weight/total incoming weight), zero imitation without incoming edges"} else {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted neighbors/degree), zero imitation at degree zero"},"resource_semantics":"Nonpreemptive priority, FIFO ties; adoption occurs at service completion; pending agents do not transmit","kairos_dispatched_events":requests.len() + trace.len(),"rng_checkpoint":rng.checkpoint(),"checkpoint_scope":"RNG provenance only; simulation resume is not implemented"}}),
+            json!({"values":values,"counts":counts,"agents":states,"requests":requests,"completions":trace,"service_starts":service_starts,"resource_metrics":resource_metrics,"abandonments":abandoned,"balks":balks,"retry_eligibility":retries,"metadata":{"engine":"kairos_network","kairos_revision":crate::simulation::REV,"seed":o.seed,"population":o.population,"capacity":o.capacity,"current_capacity":capacity,"current_p":innovation,"current_q":imitation,"in_service":in_service,"service_ticks":o.service_ticks,"ticks_per_unit":o.ticks_per_unit,"queue_length":queue_length,"available":available,"agent_priorities":priorities,"max_wait_ticks":o.max_wait_ticks,"current_max_wait_ticks":max_wait_ticks,"max_queue_length":o.max_queue_length,"current_max_queue_length":max_queue_length,"innovation_multipliers":innovation_weights,"imitation_multipliers":imitation_weights,"agent_service_ticks":service,"directed":o.directed,"weighted":graph.weighted,"applied_schedule_ticks":applied_ticks,"service_override_ticks":service_override,"hazard":if graph.weighted {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted incoming weight/total incoming weight), zero imitation without incoming edges"} else {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted neighbors/degree), zero imitation at degree zero"},"resource_semantics":"Nonpreemptive priority, FIFO ties; adoption occurs at service completion; pending agents do not transmit","kairos_dispatched_events":requests.len() + trace.len(),"rng_checkpoint":rng.checkpoint(),"checkpoint_scope":"RNG provenance only; use the network completion checkpoint for simulation resume"}}),
         ),
         metadata: json!({"runtime":"rust_native","engine":"kairos_network"}),
     })

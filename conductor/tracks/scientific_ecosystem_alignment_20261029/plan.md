@@ -5077,3 +5077,10 @@ Hosted release readiness for this worktree revision remains open.
   arrival times and stored deadlines. Two waiters with different
   wait limits and a tied deadline expired in arrival order. All
   three network unit tests and all 29 network integration tests passed.
+
+- [x] Implement network pause and resume at service completion
+  boundaries. The focused Rust test paused with two services active
+  and waiters queued, restored pending events and policy state, and
+  matched the complete uninterrupted response. A changed seed was
+  rejected. Broader checkpoint validation, cross-binding checks and
+  scientific qualification remain open.
