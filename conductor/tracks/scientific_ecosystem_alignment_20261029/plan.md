@@ -5377,3 +5377,7 @@ Hosted release readiness for this worktree revision remains open.
   sqrt(3) from its analytic outcome coefficients, and rejected an
   unsupported training stratum. Binding validation and uncertainty
   from estimated scores remain open.
+
+- [x] Verify fitted-stratum matching through rebuilt Python 3.15.2,
+  Julia and installed R. All three returned adjusted effect 6 and
+  adjusted standard error sqrt(3) with the same fixed matching design.
