@@ -2822,3 +2822,9 @@ the other competition models and installed binding checks remain open.
   Default to 95% mass, accept an explicit mass in (0,1), and return null
   for parameters with fewer than two converged draws. Reuse the scenario
   quantile implementation. Focused Rust and Clippy passed.
+
+- [x] Verify scalar bootstrap through rebuilt Python 3.15, Julia and R.
+  The seeded Logistic fixture converged on all eight draws and returned
+  identical parameter draws and 90% percentile bounds in all bindings.
+  The capacity interval collapsed to 100.000000000053 on noiseless data.
+  R used raw JSON. Sampling coverage remains open.
