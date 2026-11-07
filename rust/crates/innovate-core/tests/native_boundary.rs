@@ -684,6 +684,21 @@ fn causal_summaries_match_analytic_effects() {
     adjusted.as_object_mut().unwrap().remove("estimator");
     adjusted["confounders"] = json!(["age"]);
     assert!(run(adjusted)["result"].is_null());
+    let mut augmented = json!({"method":"augmented_treatment_contrast","outcomes":[0,4],
+        "treatment":[0,1],"propensities":[0.5,0.5],"treated_predictions":[2,2],
+        "control_predictions":[0,0]});
+    let result = run(augmented.clone());
+    assert_eq!(result["result"]["estimate"], 4.);
+    assert!(
+        (result["result"]["influence_standard_error"]
+            .as_f64()
+            .unwrap()
+            - 2.)
+            .abs()
+            < 1e-12
+    );
+    augmented["treated_predictions"] = json!([2]);
+    assert!(run(augmented)["result"].is_null());
     let mut matched = json!({"method":"matched_treatment_contrast",
         "outcomes":[0,10,12,3,99],"treatment":[0,0,1,1,0],
         "scores":[0,2,2,1,0],"caliper":1});

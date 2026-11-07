@@ -4633,3 +4633,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify cross-fitted propensities through rebuilt Python 3.15.2,
   Julia and installed R. An interleaved fixture with different fold
   scales verifies complement-only scaling and original row order.
+
+- [x] Add augmented inverse-probability weighted ATE with supplied
+  nuisance predictions. The Rust fixture verifies the residual correction,
+  an estimate of 4, standard error 2 and rejection of misaligned inputs.

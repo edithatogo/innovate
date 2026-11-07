@@ -298,3 +298,14 @@ aligned unsigned integer `folds` labels. Each of the two to 32 folds
 is scored using coefficients and scales fitted on its complement.
 The result preserves row order. Every training complement requires
 both treatment arms. The caller supplies the split design.
+
+## Augmented treatment contrast
+
+Use `augmented_treatment_contrast` with aligned outcomes, binary
+treatment, propensities in (0, 1), and treated and control predictions
+for every observation. The ATE averages the predicted differences
+plus inverse-probability-weighted observed-arm residual corrections.
+For independent rows with suitably estimated nuisance predictions,
+the influence standard error is the sample standard deviation of
+these scores divided by the square root of the sample size. Supply
+out-of-fold predictions when fitting nuisance models on the same data.

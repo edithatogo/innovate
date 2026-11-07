@@ -310,6 +310,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
         Some("treatment_contrast") => treatment_contrast(payload),
         Some("stratified_treatment_contrast") => stratified_treatment_contrast(payload),
         Some("propensity_weighted_contrast") => propensity_weighted_contrast(payload),
+        Some("augmented_treatment_contrast") => augmented_treatment_contrast(payload),
         Some("estimate_stratum_propensities") => estimate_stratum_propensities(payload),
         Some("fit_logistic_propensities") => fit_logistic_propensities(payload),
         Some("predict_logistic_propensities") => predict_logistic_propensities(payload),
@@ -1080,6 +1081,66 @@ fn estimate_stratum_propensities(payload: &Value) -> Result<Value, &'static str>
         .collect();
     Ok(
         json!({"method":"empirical_stratum_frequency","propensities":propensities,"by_stratum":by_stratum}),
+    )
+}
+
+fn augmented_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
+    let fields = payload
+        .as_object()
+        .ok_or("expected an augmented contrast object")?;
+    if fields.keys().any(|key| {
+        !matches!(
+            key.as_str(),
+            "method"
+                | "outcomes"
+                | "treatment"
+                | "propensities"
+                | "treated_predictions"
+                | "control_predictions"
+        )
+    }) {
+        return Err("augmented contrast received an unsupported field");
+    }
+    let outcomes = series(payload, "outcomes")?;
+    let treatment = series(payload, "treatment")?;
+    let propensities = series(payload, "propensities")?;
+    let treated = series(payload, "treated_predictions")?;
+    let control = series(payload, "control_predictions")?;
+    let n = outcomes.len();
+    if [
+        treatment.len(),
+        propensities.len(),
+        treated.len(),
+        control.len(),
+    ]
+    .iter()
+    .any(|&len| len != n)
+        || !treatment.contains(&0.)
+        || !treatment.contains(&1.)
+    {
+        return Err("augmented contrast requires aligned inputs and both treatment arms");
+    }
+    let mut scores = Vec::with_capacity(n);
+    for i in 0..n {
+        let probability = propensities[i];
+        if !(0. < probability && probability < 1.) {
+            return Err("propensities must lie strictly between zero and one");
+        }
+        let correction = match treatment[i] {
+            0. => (control[i] - outcomes[i]) / (1. - probability),
+            1. => (outcomes[i] - treated[i]) / probability,
+            _ => return Err("treatment indicators must be binary"),
+        };
+        scores.push(finite(treated[i] - control[i] + correction)?);
+    }
+    let estimate = mean(&scores).ok_or("augmented contrast requires observations")?;
+    let scale = 1. / ((n as f64) * ((n - 1) as f64)).sqrt();
+    let standard_error = scores.iter().fold(0_f64, |error, &score| {
+        error.hypot(scale * score - scale * estimate)
+    });
+    Ok(
+        json!({"method":"augmented_inverse_probability_weighting","estimand":"ate",
+        "estimate":estimate,"influence_standard_error":finite(standard_error)?,"observations":n}),
     )
 }
 
