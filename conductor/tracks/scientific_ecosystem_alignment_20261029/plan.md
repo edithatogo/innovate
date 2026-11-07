@@ -1299,3 +1299,7 @@ the other competition models and installed binding checks remain open.
   finite numeric arrays in Julia and R. Both installed consumers match
   the Python Polars example, including two null warmup positions.
   Focused Rust Clippy passed. Calendar and seasonal consumer paths remain open.
+
+- [x] Use compensated accumulation for native preprocessing. The
+  rolling-window regression recovers the average of [1, 3] after 1e100
+  leaves the window. All twelve native boundary tests passed.

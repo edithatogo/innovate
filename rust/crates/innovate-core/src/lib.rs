@@ -179,20 +179,33 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             ),
             _ => return Err("unknown preprocessing method"),
         };
-        let mut sum = 0.;
+        let mut sum: f64 = 0.;
+        let mut correction = 0.;
+        let mut add = |term: f64| {
+            let next = sum + term;
+            correction += if sum.abs() >= term.abs() {
+                (sum - next) + term
+            } else {
+                (term - next) + sum
+            };
+            sum = next;
+            sum + correction
+        };
         let mut output = Vec::with_capacity(values.len());
         for (index, value) in values.iter().copied().enumerate() {
-            if let Some(window) = window {
+            let current = if let Some(window) = window {
                 if index >= window {
-                    sum -= values[index - window] / window as f64;
+                    add(-values[index - window] / window as f64);
                 }
-                sum += value / window as f64;
-                output.push((index >= window - 1).then_some(sum));
+                let current = add(value / window as f64);
+                output.push((index >= window - 1).then_some(current));
+                current
             } else {
-                sum += value;
-                output.push(Some(sum));
-            }
-            if !sum.is_finite() {
+                let current = add(value);
+                output.push(Some(current));
+                current
+            };
+            if !current.is_finite() {
                 return Err("preprocessing result exceeded the finite numerical domain");
             }
         }

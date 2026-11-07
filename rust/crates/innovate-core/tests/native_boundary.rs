@@ -186,3 +186,17 @@ fn bass_rate_remains_finite_when_imitation_innovation_ratio_overflows() {
     let midpoint_rate = result["rates"][1][0].as_f64().unwrap();
     assert!((midpoint_rate / (q / 4.) - 1.).abs() < 1e-11);
 }
+
+#[test]
+fn rolling_average_recovers_small_terms_after_large_value_exits() {
+    let request = innovate_core::json!({
+        "schema_version":"2.0","operation":"preprocess_series",
+        "payload":{"method":"rolling_average","window":2,"values":[1e100,1.,3.]}
+    });
+    let result: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert_eq!(
+        result["result"]["values"],
+        innovate_core::json!([null, 5e99, 2.])
+    );
+}
