@@ -3383,3 +3383,10 @@ the other competition models and installed binding checks remain open.
   release wheel built from the b29505d4 source archive. Python 3.15.2
   passed the full native test directory in 10.11 seconds with default
   pytest options cleared for this run. Coverage remains separate.
+
+- [x] Verify bundled Julia and R consumers with the locked Darwin arm64
+  optimized Rust FFI library at 95e243d9. Julia 1.13.3 loaded the library
+  from the staged package in a fresh project. R 4.3.0 loaded it from
+  a binary archive installed into a second library. Both produced the
+  expected Logistic forecast with the environment override unset.
+  Shared library SHA-256 e81de7d01b8f8a56095313efcfae1e254df47c4cd302c3b90207612722b84876. Other platforms and distribution gates remain open.
