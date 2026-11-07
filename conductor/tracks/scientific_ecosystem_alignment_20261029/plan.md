@@ -7062,3 +7062,9 @@ Hosted release readiness for this worktree revision remains open.
   Python 3.15.2 wheel and Julia against the installed R binding.
   Coefficients, fitted values, residuals and likelihoods matched within
   1e-10, with identical missing positions, using source 75222e1f.
+
+- [x] Re-run the six Rust SARIMA boundary regressions after expanding
+  the cancellation search. All passed, including mixed likelihood,
+  near-unit AR, stationary filtering and historical initialization.
+  The debug test run took 27.72 seconds. Runtime qualification on
+  broader workloads remains open.
