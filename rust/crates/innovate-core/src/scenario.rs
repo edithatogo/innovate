@@ -274,6 +274,14 @@ enum ComparisonRequest {
 struct EnsembleComparison {
     pairs: Vec<ReplicatePair>,
     interval_mass: f64,
+    bootstrap: Option<EnsembleBootstrap>,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct EnsembleBootstrap {
+    draws: usize,
+    seed: u64,
 }
 
 #[derive(Deserialize, serde::Serialize)]
@@ -436,19 +444,56 @@ fn compare_ensemble(
     };
     let mut sorted = differences.clone();
     sorted.sort_unstable_by(f64::total_cmp);
-    let quantile = |probability: f64| {
-        let rank = probability * (sorted.len() - 1) as f64;
-        sorted[rank.floor() as usize] * (1. - rank.fract())
-            + sorted[rank.ceil() as usize] * rank.fract()
-    };
     let tail = (1. - mass) / 2.;
     let mut result = json!({"method":"paired_empirical_final_difference","quantile_method":"linear",
         "pair_count":differences.len(),"differences":differences,"interval_mass":mass,
         "mean_difference":mean,"mean_standard_error":standard_error,
         "standard_error_assumption":"independent replicate pairs",
-        "median_difference":quantile(0.5),"empirical_interval":[quantile(tail),quantile(1.-tail)]});
+        "median_difference":linear_quantile(&sorted, 0.5),"empirical_interval":[linear_quantile(&sorted, tail),linear_quantile(&sorted, 1.-tail)]});
+    if let Some(options) = &comparison.bootstrap {
+        result["bootstrap"] = bootstrap_mean(&differences, options, scale, mass)?;
+    }
     add_time_basis(&mut result, basis);
     Ok(result)
+}
+
+fn linear_quantile(sorted: &[f64], probability: f64) -> f64 {
+    let rank = probability * (sorted.len() - 1) as f64;
+    sorted[rank.floor() as usize] * (1. - rank.fract())
+        + sorted[rank.ceil() as usize] * rank.fract()
+}
+
+fn bootstrap_mean(
+    differences: &[f64],
+    options: &EnsembleBootstrap,
+    scale: f64,
+    mass: f64,
+) -> Result<Value, &'static str> {
+    use kairo_ecs_rng::{DeterministicStream, rand_distr::Uniform};
+
+    if !(2..=10_000).contains(&options.draws) {
+        return Err("bootstrap draws must be between 2 and 10000");
+    }
+    if differences.len() > 10_000_000 / options.draws {
+        return Err("bootstrap workload exceeds 10000000 sampled pairs");
+    }
+    let mut rng = DeterministicStream::from_run_seed(options.seed);
+    let index = Uniform::new(0, differences.len()).map_err(|_| "empty paired sample")?;
+    let divisor = if scale == 0. { 1. } else { scale };
+    let scaled: Vec<_> = differences.iter().map(|value| value / divisor).collect();
+    let mut means: Vec<_> = (0..options.draws)
+        .map(|_| {
+            let sum: f64 = (0..scaled.len()).map(|_| scaled[rng.sample(index)]).sum();
+            (sum / scaled.len() as f64) * divisor
+        })
+        .collect();
+    means.sort_unstable_by(f64::total_cmp);
+    let tail = (1. - mass) / 2.;
+    Ok(
+        json!({"method":"paired_percentile","seed":options.seed,"draws":options.draws,
+        "interval_mass":mass,"assumption":"independent replicate pairs",
+        "mean_interval":[linear_quantile(&means, tail),linear_quantile(&means, 1.-tail)]}),
+    )
 }
 
 const SCENARIO_FAMILIES: [&str; 5] = [
