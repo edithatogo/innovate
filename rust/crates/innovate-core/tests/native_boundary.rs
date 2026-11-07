@@ -2925,6 +2925,15 @@ fn resource_comparison_requires_resource_outputs_from_both_scenarios() {
         .as_array_mut()
         .unwrap()
         .push(json!({"baseline":"base","alternative":"never_open","compare_resources":true}));
+    let mut retry = payload["scenarios"][3].clone();
+    retry["id"] = json!("retry_closed");
+    retry["simulation"]["simulation_options"]["max_queue_length"] = json!(0);
+    retry["simulation"]["simulation_options"]["retry"] = json!({"delay_ticks":1,"max_retries":1});
+    payload["scenarios"].as_array_mut().unwrap().push(retry);
+    payload["comparisons"]
+        .as_array_mut()
+        .unwrap()
+        .push(json!({"baseline":"base","alternative":"retry_closed","compare_resources":true}));
     let request =
         json!({"schema_version":"2.0","operation":"execute_scenario_grid","payload":payload});
     let response: serde_json::Value =
@@ -2952,4 +2961,7 @@ fn resource_comparison_requires_resource_outputs_from_both_scenarios() {
     assert_eq!(closed["balked_requests"], 2);
     assert_eq!(closed["abandoned_requests"], 1);
     assert_eq!(closed["abandoned_wait_ticks"], 5);
+    let retried = &rows[4]["result"]["resource_differences"];
+    assert_eq!(retried["balked_requests"], 6);
+    assert_eq!(retried["abandoned_requests"], 0);
 }

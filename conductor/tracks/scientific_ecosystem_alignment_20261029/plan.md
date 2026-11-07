@@ -4305,3 +4305,7 @@ Hosted release readiness for this worktree revision remains open.
   comparison regression. A closed resource with one queue place
   produces two extra balks, one extra abandonment and five extra
   abandoned wait ticks compared with the open baseline.
+- [x] Verify resource comparison counts repeated requests from a
+  retried agent. The closed no-queue alternative produced six extra
+  balk events across three agents with one retry each and no extra
+  abandonments. The focused Rust regression passed.
