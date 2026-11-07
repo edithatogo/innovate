@@ -587,3 +587,29 @@ fn scheduled_queue_limit_preserves_waiters_and_blocks_new_entries() {
     );
     assert_eq!(result["metadata"]["current_max_queue_length"], 0);
 }
+
+#[test]
+fn scheduled_wait_deadline_applies_only_to_new_waiters() {
+    let payload = json!({
+        "inputs":{"time":[0.,6.,12.]},
+        "parameters":{"p":1e12,"q":0.,"m":3.},
+        "simulation_options":{"engine":"kairos_network","population":3,"seed":42,
+            "edges":[],"capacity":1,"service_ticks":5,"ticks_per_unit":1,
+            "max_wait_ticks":10,"schedule":[{"tick":3,"max_wait_ticks":1}]}
+    });
+    let result = KernelBinding::new()
+        .simulate_model("bass", payload)
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(result["counts"], json!([0, 1, 2]));
+    assert_eq!(
+        result["abandonments"],
+        json!([{"tick":5,"agent":result["requests"][2]["agent"]}])
+    );
+    assert_eq!(
+        result["completions"][1]["agent"],
+        result["requests"][1]["agent"]
+    );
+    assert_eq!(result["metadata"]["current_max_wait_ticks"], 1);
+}

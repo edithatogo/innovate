@@ -1572,3 +1572,9 @@ the other competition models and installed binding checks remain open.
   counts, requests, balks and completions. The later arrival balked
   at tick 4, the existing waiter completed, and the effective
   queue limit was zero.
+
+- [x] Schedule Kairos wait deadlines for new waiters. Existing waiters
+  retain their assigned deadlines. A regression shows a later arrival
+  expiring at tick 5 under the new limit while the earlier waiter is
+  admitted. All 21 network tests and focused Clippy passed.
+- [ ] Verify scheduled wait deadlines through Python, Julia and R.
