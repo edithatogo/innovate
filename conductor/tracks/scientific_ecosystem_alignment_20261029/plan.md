@@ -5748,3 +5748,9 @@ Hosted release readiness for this worktree revision remains open.
   round-tripped an unchanged artifact and rejected a changed adoption
   value with the original checksum. All three extension boundary tests
   passed. Binding qualification and other artifact formats remain open.
+
+- [x] Verify dataset serialization callbacks through rebuilt Python,
+  Julia and freshly installed R. Each reproduced an unchanged
+  artifact and rejected a modified observation with its old checksum.
+  The first FFI link ran out of space and passed after reclaiming
+  a generated test binary. Other artifact formats remain open.
