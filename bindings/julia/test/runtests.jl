@@ -577,3 +577,11 @@ end
         @test_throws r"each stratum requires treated and control observations" kernel_call("summarize_causal", nothing, payload)
     end
 end
+
+@testset "Treatment contrast discovery" begin
+    result = kernel_call("summarize_causal", nothing, Dict("method"=>"describe_treatment_contrasts"))["result"]
+    descriptive, adjusted = result["contrasts"]
+    @test descriptive["adjustment"] == "none"
+    @test adjusted["required_fields"] == ["outcomes", "treatment", "strata"]
+    @test adjusted["estimands"] == ["ate", "att"]
+end

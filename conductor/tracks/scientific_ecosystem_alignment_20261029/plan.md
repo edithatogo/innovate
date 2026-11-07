@@ -4512,3 +4512,7 @@ Hosted release readiness for this worktree revision remains open.
 
 - [x] Expose native treatment contrast discovery with separate unadjusted
   and stratified capabilities. The focused Rust boundary test passed.
+
+- [x] Verify treatment contrast discovery through rebuilt Python 3.15.2,
+  Julia and installed R. Each returned the unadjusted method and the
+  stratified method’s required inputs and ATE/ATT estimands.

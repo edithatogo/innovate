@@ -543,3 +543,8 @@ for (estimand in c("ate", "att")) {
   contrast_error <- tryCatch({kernel_call("summarize_causal", payload=stratified); ""}, error=conditionMessage)
   stopifnot(grepl("each stratum requires treated and control observations", contrast_error, fixed=TRUE))
 }
+
+contrast_methods <- kernel_call("summarize_causal", payload=list(method="describe_treatment_contrasts"))$result$contrasts
+stopifnot(identical(contrast_methods[[1]]$adjustment, "none"),
+  identical(unlist(contrast_methods[[2]]$required_fields), c("outcomes", "treatment", "strata")),
+  identical(unlist(contrast_methods[[2]]$estimands), c("ate", "att")))

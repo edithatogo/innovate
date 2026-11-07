@@ -1314,3 +1314,11 @@ def test_native_stratified_treatment_contrast(estimand, estimate, weight):
     payload["strata"][-1] = "unsupported"
     with pytest.raises(innovate.NativeError, match="each stratum requires treated and control observations"):
         innovate.execute("summarize_causal", **payload)
+
+
+def test_discover_treatment_contrasts():
+    result = innovate.execute("summarize_causal", method="describe_treatment_contrasts")["result"]
+    descriptive, adjusted = result["contrasts"]
+    assert descriptive["adjustment"] == "none"
+    assert adjusted["required_fields"] == ["outcomes", "treatment", "strata"]
+    assert adjusted["estimands"] == ["ate", "att"]
