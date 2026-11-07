@@ -7205,3 +7205,7 @@ Hosted release readiness for this worktree revision remains open.
   Build the archive, install it into a separate library and run the
   existing native suite against that install. Linux and Windows use
   their source installs. Actionlint passed. Hosted execution remains open.
+
+- [x] Unset INNOVATE_NATIVE_LIBRARY before the hosted Julia and R
+  conformance suites so runner configuration cannot redirect either
+  suite away from the staged library. Actionlint passed.

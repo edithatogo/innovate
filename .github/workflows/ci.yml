@@ -131,7 +131,9 @@ jobs:
         with:
           version: '1.13'
       - shell: bash
-        run: julia --project=bindings/julia -e 'using Pkg; Pkg.instantiate(); Pkg.test()'
+        run: |
+          unset INNOVATE_NATIVE_LIBRARY
+          julia --project=bindings/julia -e 'using Pkg; Pkg.instantiate(); Pkg.test()'
       - uses: r-lib/actions/setup-r@d3c5be51b12e724e68f33216ca3c148b66d5f0b6
       - shell: bash
         run: Rscript -e 'install.packages("jsonlite", repos="https://cloud.r-project.org")'
@@ -148,7 +150,10 @@ jobs:
           R CMD INSTALL --build -l "$stage/build-lib" "$GITHUB_WORKSPACE/bindings/r"
           R CMD INSTALL -l "$stage/installed-lib" ./innovate.R_*.tgz
           echo "R_LIBS=$stage/installed-lib" >> "$GITHUB_ENV"
-      - run: Rscript bindings/r/tests/native.R
+      - shell: bash
+        run: |
+          unset INNOVATE_NATIVE_LIBRARY
+          Rscript bindings/r/tests/native.R
       - name: Verify R loads the Windows DLL from a Unicode path
         if: matrix.os == 'windows-latest'
         shell: bash
