@@ -291,6 +291,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
             Ok(json!({"assumption":assumption,"markdown":markdown}))
         }
         Some("treatment_contrast") => treatment_contrast(payload),
+        Some("stratified_treatment_contrast") => stratified_treatment_contrast(payload),
         Some("intervention_contract") => intervention_contract(payload),
         Some("policy_specification") => policy_specification(payload),
         Some("policy_evidence") => policy_evidence(payload),
@@ -631,6 +632,57 @@ struct AssumptionDocument {
     intuitive_explanation: String,
     how_checked: Option<String>,
     sensitivity_to_violation: Option<String>,
+}
+
+fn stratified_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
+    let fields = payload
+        .as_object()
+        .ok_or("expected a stratified contrast object")?;
+    if fields
+        .keys()
+        .any(|key| !matches!(key.as_str(), "method" | "outcomes" | "treatment" | "strata"))
+    {
+        return Err("stratified treatment contrast accepts only outcomes, treatment and strata");
+    }
+    let outcomes = series(payload, "outcomes")?;
+    let treatment = series(payload, "treatment")?;
+    let strata: Vec<String> = serde_json::from_value(payload["strata"].clone())
+        .map_err(|_| "strata must contain string labels")?;
+    if outcomes.is_empty() || outcomes.len() != treatment.len() || outcomes.len() != strata.len() {
+        return Err("outcomes, treatment and strata must be nonempty and aligned");
+    }
+    let population = outcomes.len();
+    let mut groups = std::collections::BTreeMap::<String, (Vec<f64>, Vec<f64>)>::new();
+    for ((label, outcome), flag) in strata.into_iter().zip(outcomes).zip(treatment) {
+        if label.trim().is_empty() {
+            return Err("stratum labels must be nonblank");
+        }
+        let (treated, control) = groups.entry(label).or_default();
+        match flag {
+            1. => treated.push(outcome),
+            0. => control.push(outcome),
+            _ => return Err("treatment indicators must be binary"),
+        }
+    }
+    let mut estimate = 0.;
+    let mut by_stratum = serde_json::Map::new();
+    for (label, (treated, control)) in groups {
+        let (Some(treated_mean), Some(control_mean)) = (mean(&treated), mean(&control)) else {
+            return Err("each stratum requires treated and control observations");
+        };
+        let difference = finite(treated_mean - control_mean)?;
+        let weight = (treated.len() + control.len()) as f64 / population as f64;
+        estimate += weight * difference;
+        by_stratum.insert(
+            label,
+            json!({"estimate":difference,"weight":weight,
+            "n_treated":treated.len(),"n_control":control.len()}),
+        );
+    }
+    Ok(
+        json!({"method":"empirical_stratum_standardization","estimate":finite(estimate)?,
+        "by_stratum":by_stratum}),
+    )
 }
 
 fn treatment_contrast(payload: &Value) -> Result<Value, &'static str> {

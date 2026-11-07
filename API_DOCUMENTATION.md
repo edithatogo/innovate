@@ -189,3 +189,13 @@ class NewModel(DiffusionModel):
         # Implement params setter
         pass
 ```
+
+## Stratified treatment contrast
+
+Call `summarize_causal` with method `stratified_treatment_contrast` and
+aligned arrays `outcomes`, `treatment` (0 or 1), and `strata` (nonblank
+string labels). The point estimate weights each within-stratum mean
+difference by its share of the supplied sample. The response also
+reports each stratum’s weight and arm counts. Every stratum requires
+both arms. Strata must be supplied by the caller. Causal interpretation
+requires exchangeability within strata, positivity and consistency.

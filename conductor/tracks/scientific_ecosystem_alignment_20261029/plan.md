@@ -4480,3 +4480,8 @@ Hosted release readiness for this worktree revision remains open.
   Requests for matching or confounder adjustment previously returned
   the same unadjusted result. The Rust boundary regression failed before
   validation was added and passed after. Adjusted estimators remain open.
+
+- [x] Add native empirical stratum standardization with arm counts and
+  sample weights. The unequal-size analytic fixture returns 6, and
+  strata without both arms fail explicitly. All 82 Rust boundary tests
+  passed. Binding runtime qualification and broader estimators remain open.

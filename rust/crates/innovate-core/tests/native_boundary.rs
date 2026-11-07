@@ -684,6 +684,14 @@ fn causal_summaries_match_analytic_effects() {
     adjusted.as_object_mut().unwrap().remove("estimator");
     adjusted["confounders"] = json!(["age"]);
     assert!(run(adjusted)["result"].is_null());
+    let mut stratified = json!({"method":"stratified_treatment_contrast",
+        "outcomes":[0,0,2,10,19,19,19],"treatment":[0,0,1,0,1,1,1],
+        "strata":["low","low","low","high","high","high","high"]});
+    let result = run(stratified.clone());
+    assert!((result["result"]["estimate"].as_f64().unwrap() - 6.0).abs() < 1e-12);
+    assert_eq!(result["result"]["by_stratum"]["low"]["n_control"], 2);
+    stratified["strata"][6] = json!("unsupported");
+    assert!(run(stratified)["result"].is_null());
     let bootstrap = run(json!({"method":"treatment_contrast","outcomes":[2,2,5,5],
         "treatment":[0,0,1,1],"bootstrap":{"draws":100,"seed":42}}));
     assert_eq!(bootstrap["result"]["bootstrap"]["ci_lower"], 3.);
