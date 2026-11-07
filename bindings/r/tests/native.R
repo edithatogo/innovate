@@ -399,3 +399,14 @@ historical <- kernel_summarize_model("norton_bass", list(
 stopifnot(historical$reference_market==100,historical$takeoff==1,
           historical$median==3,historical$saturation==3)
 cat("R Norton historical level milestones passed\n")
+
+scheduled_agents <- kernel_simulate_model("bass", list(
+  inputs=list(time=c(0,2,5,8)),parameters=list(p=1e12,q=0,m=2),
+  simulation_options=list(engine="kairos_network",population=2,seed=42,edges=list(),
+    capacity=1,service_ticks=4,ticks_per_unit=1,innovation_multipliers=c(1,0),
+    schedule=list(list(tick=2,innovation_multipliers=c(0,1))))
+))$result
+stopifnot(all(vapply(scheduled_agents$requests,function(x) x$tick,numeric(1))==c(1,3)),
+          all(vapply(scheduled_agents$requests,function(x) x$agent,numeric(1))==c(0,1)),
+          scheduled_agents$completions[[1]]$tick==5,scheduled_agents$completions[[1]]$agent==0)
+cat("R scheduled Kairos agent hazards passed\n")

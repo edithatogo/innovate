@@ -430,3 +430,13 @@ end
     @test row["reference_market"] == 100.
     @test [row[k] for k in ("takeoff", "median", "saturation")] == [1.,3.,3.]
 end
+
+@testset "Scheduled Kairos agent hazards" begin
+    options = Dict("engine"=>"kairos_network","population"=>2,"seed"=>42,"edges"=>[],
+        "capacity"=>1,"service_ticks"=>4,"ticks_per_unit"=>1,"innovation_multipliers"=>[1,0],
+        "schedule"=>[Dict("tick"=>2,"innovation_multipliers"=>[0,1])])
+    result = kernel_simulate_model("bass", Dict("inputs"=>Dict("time"=>[0,2,5,8]),
+        "parameters"=>Dict("p"=>1e12,"q"=>0,"m"=>2),"simulation_options"=>options))["result"]
+    @test result["requests"] == [Dict("tick"=>1,"agent"=>0),Dict("tick"=>3,"agent"=>1)]
+    @test first(result["completions"]) == Dict("tick"=>5,"agent"=>0)
+end

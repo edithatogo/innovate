@@ -901,3 +901,9 @@ schedule boundary while preserving the first agent's completion time.
 Malformed vector lengths are rejected. All 15 Rust network tests and focused
 Clippy passed. Installed binding checks and continuous covariate hazard
 integration remain open.
+
+- [x] Qualify scheduled heterogeneous hazards in installed Python, Julia and R.
+  The fixture verifies the two request identities and ticks and the first
+  uninterrupted completion. The rebuilt wheel passed 58 Python native tests,
+  Julia Pkg.test passed 229 assertions, and installed R conformance passed.
+  [Logs](evidence/kairos-agent-hazards-20261107).
