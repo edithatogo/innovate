@@ -2380,3 +2380,8 @@ the other competition models and installed binding checks remain open.
   and check convergence and trajectory recovery from saved state. Five
   focused Rust tests and Clippy passed. Binding qualification and
   estimation of intervention effects remain open.
+
+- [x] Qualify policy_hazard_fit in Python 3.15, Julia and installed R.
+  Complete fit and forecast results agreed across bindings. Decay stayed
+  at 0.3 and the base fit converged. The maximum absolute trajectory error
+  over 26 samples was 2.796e-12.
