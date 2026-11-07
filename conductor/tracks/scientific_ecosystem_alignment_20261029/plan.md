@@ -5934,3 +5934,12 @@ Hosted release readiness for this worktree revision remains open.
   ensemble. The Rust boundary fixture checks all 14 against the direct
   comparison on a seeded two-pair schedule and verifies zero standard
   error for identical effects across the two pairs.
+
+- [x] Compare integrated ARMA(1,1) fits near both AR boundaries through
+  installed R using 400 increments per series. For generating AR
+  coefficients +0.98 and -0.98 with MA 0.55, Rust matched the R
+  maximum likelihood fit on observed first differences within 1.1e-7
+  in log likelihood and 3.3e-6 in coefficients. Fitting the integrated
+  levels directly in R produced a 3.9e-5 likelihood discrepancy in the
+  positive case. The checker uses the differenced reference to match
+  Rust's conditional likelihood definition.
