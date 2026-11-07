@@ -58,10 +58,14 @@ jobs:
         run: |
           git archive HEAD Dockerfile pyproject.toml uv.lock Cargo.toml Cargo.lock README.md LICENSE rust bindings/python |
             docker build --target remote-worker -t innovate-remote-worker:ci -
-          docker run --rm -i --network none --read-only --cap-drop ALL innovate-remote-worker:ci <<'JSON' |
-          {"schema_version":"2.0","context":{"request_id":"ci","tenant_id":"test","principal":"fixture","auth_scope":"kernel:execute"},"kernel_request":{"schema_version":"2.0","operation":"predict_model","model_key":"logistic","payload":{"inputs":{"time":[1]},"parameters":{"L":100,"k":1,"x0":1}}}}
-          JSON
+          worker=(docker run --rm -i --network none --read-only --cap-drop ALL innovate-remote-worker:ci)
+          "${worker[@]}" --describe |
+            jq -e '.result.worker_transport == "stdin_stdout" and .result.max_raw_envelope_bytes == 2000000'
+          envelope='{"schema_version":"2.0","context":{"request_id":"ci","tenant_id":"test","principal":"fixture","auth_scope":"kernel:execute"},"kernel_request":{"schema_version":"2.0","operation":"predict_model","model_key":"logistic","payload":{"inputs":{"time":[1]},"parameters":{"L":100,"k":1,"x0":1}}}}'
+          printf '%s\n' "$envelope" | "${worker[@]}" |
             jq -e '.result.kernel_response.result.values == [50]'
+          printf '%s\n' "$envelope" | jq '.context.auth_scope = "read"' | "${worker[@]}" |
+            jq -e '.result.kernel_response.error.code == "unsupported_operation"'
       - name: Run scheduled native benchmarks
         id: native-benchmarks
         if: matrix.os == 'ubuntu-latest' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')

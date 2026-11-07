@@ -6458,3 +6458,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Add worker --describe for transport launchers. It returns the
   native contract plus stdin/stdout framing and the raw byte limit,
   without reading stdin. All four locked worker tests passed.
+
+- [x] Extend the Linux worker image smoke step to check the executable
+  contract, successful prediction and rejection of a read-only scope.
+  Parsed the workflow and validated its shell syntax locally. The
+  image-specific checks still require a hosted run.
