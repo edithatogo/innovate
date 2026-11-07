@@ -884,6 +884,11 @@ fn causal_summaries_match_analytic_effects() {
         result["result"]["control_diagnostics"]["effective_sample_size"],
         2.
     );
+    let mut cancelling = matched.clone();
+    cancelling["outcome_variances"] = json!([0, 0, 0, 0, 0]);
+    cancelling["outcome_covariance_factors"] =
+        json!([[-f64::MAX, f64::MAX, -f64::MAX, f64::MAX, 0.]]);
+    assert_eq!(run(cancelling)["result"]["conditional_standard_error"], 0.);
     let mut adjusted = matched.clone();
     adjusted["control_predictions"] = json!([0, 0, 0, 1, 0]);
     let adjusted_result = run(adjusted.clone());

@@ -5362,3 +5362,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Retain the correlated matching fixture in Julia and R.
   Both installed consumers recovered sqrt(8.5) and identified
   the two-factor covariance model with rebuilt FFI.
+
+- [x] Compute the covariance factor contrast before rescaling to
+  outcome units. The Rust boundary fixture canceled opposing
+  maximum-magnitude loadings and returned zero conditional error.

@@ -1424,11 +1424,21 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
                 });
             if let Some(factors) = &covariance_factors {
                 for factor in factors {
-                    let effects: Vec<_> = pairs
+                    let treated: Vec<_> = pairs
                         .iter()
-                        .map(|pair| finite(factor[pair.treated_index] - factor[pair.control_index]))
-                        .collect::<Result<_, _>>()?;
-                    error = error.hypot(mean(&effects).unwrap());
+                        .map(|pair| factor[pair.treated_index])
+                        .collect();
+                    let control: Vec<_> = pairs
+                        .iter()
+                        .map(|pair| factor[pair.control_index])
+                        .collect();
+                    let scale = treated
+                        .iter()
+                        .chain(&control)
+                        .map(|value| value.abs())
+                        .fold(0., f64::max);
+                    let loading = scaled_balance_difference(&treated, &control, scale) * scale;
+                    error = error.hypot(loading);
                 }
             }
             finite(error)
