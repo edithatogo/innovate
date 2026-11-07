@@ -2554,3 +2554,12 @@ the other competition models and installed binding checks remain open.
   seeds and rejected both cross-pair reuse and within-pair mismatch.
   All six scenario executions remained available in each response.
   Sampling-based inference qualification remains open.
+
+- [x] Measure repeated-sampling coverage for an innovation-only Kairos ABM
+  design using the Python 3.15.2 wheel from f9f21916. Run 200 trials of 32
+  paired runs with 20 agents, baseline p=0, alternative p=0.2, q=0 and
+  horizon 5. Assign pair seed 32*trial+pair and use 1,000 bootstrap draws
+  with seed 10000+trial. The nominal 90% paired percentile interval covered
+  the analytic effect of 12.6424111766 in 176 of 200 trials (88%). Mean
+  estimated effect was 12.609375 and mean interval width was 1.2284765625.
+  Coverage for interacting or resource-constrained designs remains open.
