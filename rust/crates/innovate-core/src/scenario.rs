@@ -1064,6 +1064,18 @@ mod tests {
     };
 
     #[test]
+    fn resource_inference_rejects_unrepresentable_integer_effects() {
+        let exact = 1_i64 << 53;
+        assert_eq!(super::exact_resource_effect(exact), Ok(exact as f64));
+        assert_eq!(
+            super::exact_resource_effect(exact + 2),
+            Ok((exact + 2) as f64)
+        );
+        assert!(super::exact_resource_effect(exact + 1).is_err());
+        assert!(super::exact_resource_effect(-exact - 1).is_err());
+    }
+
+    #[test]
     fn adoption_area_preserves_finite_extreme_trapezoids() {
         let tiny = f64::from_bits(1);
         assert_eq!(adoption_area(&[0., 1.], &[tiny, tiny]), Ok(tiny));
@@ -1171,6 +1183,14 @@ fn adoption_area(time: &[f64], values: &[f64]) -> Result<f64, &'static str> {
     area.is_finite()
         .then_some(area)
         .ok_or("adoption area exceeded finite numerical domain")
+}
+
+fn exact_resource_effect(difference: i64) -> Result<f64, &'static str> {
+    let effect = difference as f64;
+    if effect as i128 != i128::from(difference) {
+        return Err("ensemble resource difference cannot be represented exactly");
+    }
+    Ok(effect)
 }
 
 fn compare_ensemble(
@@ -1282,9 +1302,10 @@ fn compare_ensemble(
             if matches!(metric, "ticks_per_unit" | "horizon_ticks") {
                 return Err("unknown ensemble resource metric");
             }
-            totals[metric]
-                .as_f64()
-                .ok_or("unknown ensemble resource metric")?
+            let difference = totals[metric]
+                .as_i64()
+                .ok_or("unknown ensemble resource metric")?;
+            exact_resource_effect(difference)?
         } else if compare_area {
             let differences: Vec<_> = alternative
                 .iter()

@@ -5914,3 +5914,8 @@ Hosted release readiness for this worktree revision remains open.
   0.3082172 slot ticks. With the same 200-trial, 32-pair bootstrap
   design and rebuilt Python consumer as the one-agent check, the
   mean was 0.29765625 and nominal 90% coverage was 171/200.
+
+- [x] Reject a paired resource effect when converting its integer
+  tick difference to floating point would change its value. The Rust
+  unit fixture covered both signs around 2^53 and retained exactly
+  representable effects above that threshold. Seven scenario tests passed.
