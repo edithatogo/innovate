@@ -6026,3 +6026,10 @@ Hosted release readiness for this worktree revision remains open.
   passed, including nullable Int32 durations with a units annotation
   through file and stream exports. Nested and type-changing annotation
   fidelity and rebuilt binding readback remain open.
+
+- [x] Verify top-level IPC field annotations through the rebuilt Python
+  wheel and Julia and R wrappers using the rebuilt Rust library.
+  PyArrow confirmed the exact input schema, schema provenance, field
+  units and nullable Int32 values in the Python file and in all three
+  stream outputs. Arrow.jl exposed units=days on the duration column
+  from the Julia stream.
