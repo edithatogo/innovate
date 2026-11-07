@@ -7177,3 +7177,10 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Document the staged Julia conformance layout verified in
   872bc723. Include the shared Rust fixture directory and the
   bundled-library test command.
+
+- [x] Build and install the local arm64 R binary archive. The archive
+  includes the package descriptor, Apache licence and native library.
+  The first installation ran out of space during extraction. Removed
+  the earlier temporary source install and set TMPDIR to the staging
+  volume. A fresh binary install then passed the month-start smoke
+  check with INNOVATE_NATIVE_LIBRARY unset.
