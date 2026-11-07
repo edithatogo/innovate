@@ -142,3 +142,45 @@ fn abm_initial_adoption_is_conserved_at_zero_and_saturation() {
         );
     }
 }
+
+#[test]
+fn scenario_ensemble_replays_and_recovers_innovation_mean() {
+    let replicates = 128;
+    let mut scenarios = Vec::new();
+    let mut pairs = Vec::new();
+    for seed in 0..replicates {
+        let baseline = format!("baseline-{seed}");
+        let alternative = format!("alternative-{seed}");
+        for (id, innovation) in [(&baseline, 0.), (&alternative, 0.2)] {
+            scenarios.push(json!({"id":id,"model_key":"bass","simulation":{
+                "inputs":{"time":[0.,5.]},"parameters":{"p":innovation,"q":0.,"m":100.},
+                "simulation_options":{"engine":"kairos_abm","seed":seed,"population":100}
+            }}));
+        }
+        pairs.push(json!({"baseline":baseline,"alternative":alternative}));
+    }
+    let mut request = json!({"schema_version":"2.0","operation":"execute_scenario_grid",
+        "payload":{"workers":4,"scenarios":scenarios,
+            "comparisons":[{"pairs":pairs,"interval_mass":0.9}]}});
+    let run = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = run(&request);
+    request["payload"]["workers"] = json!(1);
+    assert_eq!(run(&request), response);
+    let summary = &response["result"]["comparisons"][0]["result"];
+    let differences = summary["differences"].as_array().unwrap();
+    assert_eq!(differences.len(), replicates);
+    let mean = differences
+        .iter()
+        .map(|value| value.as_f64().unwrap())
+        .sum::<f64>()
+        / replicates as f64;
+    // With no imitation, the adoption count is approximately binomial.
+    // This tolerance is wider than three standard errors for this ensemble.
+    let expected = 100. * (1. - (-1_f64).exp());
+    assert!(
+        (mean - expected).abs() < 1.5,
+        "mean: {mean}, expected: {expected}"
+    );
+}
