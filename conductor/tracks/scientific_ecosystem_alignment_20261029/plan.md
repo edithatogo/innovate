@@ -4888,3 +4888,10 @@ Hosted release readiness for this worktree revision remains open.
   previously counted six extreme assignments instead of eight.
   Power-of-two scaling recovers all eight while bounding the sum.
   All five focused Rust scenario unit tests passed.
+
+- [x] Rerun paired inference binding checks on 9c91630b. The
+  focused Python 3.15 grid test, all 21 Julia assertions and the
+  installed R grid assertions passed with rebuilt native libraries.
+  The tied-effects regression itself is exercised by the Rust unit
+  test. Maturin built the wheel and Python loaded the extension
+  directly from the build.
