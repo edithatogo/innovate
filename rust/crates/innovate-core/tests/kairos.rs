@@ -209,3 +209,34 @@ fn scenario_ensemble_replays_and_recovers_innovation_mean() {
         "mean: {mean}, expected: {expected}"
     );
 }
+
+#[test]
+fn pinned_scheduler_dispatches_ties_in_order_and_skips_cancelled_events() {
+    use kairo_ecs_core::Scheduler;
+    use kairo_ecs_types::{EventKind, ScheduleRequest, SimTime, StepOutcome};
+
+    let mut scheduler = Scheduler::new();
+    let tick = SimTime::from_ticks(12);
+    let mut schedule = |kind| {
+        scheduler.schedule(ScheduleRequest {
+            at: tick,
+            priority: 0,
+            entity: None,
+            kind: EventKind::Custom(kind),
+        })
+    };
+    let first = schedule(1);
+    let cancelled = schedule(2);
+    let last = schedule(3);
+    assert!(scheduler.cancel(cancelled));
+
+    for (id, kind) in [(first, 1), (last, 3)] {
+        let StepOutcome::Dispatched(event) = scheduler.step() else {
+            panic!("expected Kairos to dispatch event {kind}");
+        };
+        assert_eq!(event.id, id);
+        assert_eq!(event.at, tick);
+        assert_eq!(event.kind, EventKind::Custom(kind));
+    }
+    assert!(matches!(scheduler.step(), StepOutcome::Empty));
+}

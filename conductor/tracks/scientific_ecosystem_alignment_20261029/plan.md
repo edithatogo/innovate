@@ -3993,3 +3993,9 @@ Hosted release readiness for this worktree revision remains open.
   after initialization. The existing partial and saturated population
   fixture verifies that initial adopters contribute zero dispatches.
   All ten locked Kairos tests passed.
+- [x] Exercise equal-tick dispatch and cancellation directly through the
+  pinned Kairos scheduler in the root workspace. Three tied events
+  were scheduled, the middle one cancelled, and the remaining IDs,
+  kinds and tick dispatched in insertion order before an empty step.
+  All eleven locked Kairos tests passed. This supplies runtime evidence
+  for the tie/cancel behavior in imported leaf I03.
