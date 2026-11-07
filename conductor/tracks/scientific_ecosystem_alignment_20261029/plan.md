@@ -6521,3 +6521,11 @@ Hosted release readiness for this worktree revision remains open.
   and the accepted-refit basis of bootstrap intervals and event
   frequencies. Both selected Python bootstrap tests passed against
   the rebuilt wheel.
+
+- [x] Measure Logistic parameter bootstrap coverage with four
+  transition and four plateau observations plus Gaussian noise.
+  Across 40 seeded trials of 32 draws, 37 of 1,280 refits were
+  rank-deficient and the mean accepted count was 30.75. All 40
+  trials returned intervals, and each parameter was covered in
+  34 trials at nominal 95% mass. This limited study shows
+  undercoverage on the tested design; calibration remains open.
