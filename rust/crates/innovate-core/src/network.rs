@@ -461,7 +461,10 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 })
                 .collect()
         };
-        let mut rates = agent_rates(innovation, imitation);
+        let mut rates = Vec::new();
+        if o.hazard_forcing.is_none() {
+            rates = agent_rates(innovation, imitation);
+        }
         let mut total: f64 = rates.iter().sum();
         if !total.is_finite() {
             return Err(invalid("network hazard exceeded finite domain"));

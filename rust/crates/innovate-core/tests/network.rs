@@ -526,3 +526,20 @@ fn linear_hazard_clock_matches_analytic_crossing() {
     assert_eq!(result["requests"], json!([{"tick":44,"agent":0}]));
     assert_eq!(result["counts"], json!([0, 0, 0, 1]));
 }
+
+#[test]
+fn continuous_forcing_validates_effective_hazard_instead_of_unforced_total() {
+    let payload = json!({
+        "inputs":{"time":[0.,4.]},
+        "parameters":{"p":1e308,"q":0.,"m":2.},
+        "simulation_options":{"engine":"kairos_network","population":2,"seed":42,
+            "edges":[],"capacity":2,"service_ticks":1,"ticks_per_unit":1,
+            "hazard_forcing":{"time":[0.],"innovation":[1e-296],"imitation":[1.]}}
+    });
+    let result = KernelBinding::new()
+        .simulate_model("bass", payload)
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(result["counts"], json!([0, 2]));
+}
