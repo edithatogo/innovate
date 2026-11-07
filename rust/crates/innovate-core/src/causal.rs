@@ -2668,4 +2668,27 @@ mod tests {
         assert!((spread - 5_f64.sqrt()).abs() < 1e-14);
         assert_eq!(draws[1]["pairs"][0]["control_index"].as_u64(), Some(2));
     }
+    #[test]
+    fn matching_does_not_pool_draws_with_different_treated_subsets() {
+        let payload = serde_json::json!({
+            "outcomes": [0, 4, 6], "treatment": [0, 1, 1],
+            "caliper": 0, "scores": [0, 0, 0], "allow_partial": true,
+            "score_draws": [[0, 0, 1], [0, 1, 0]], "outcome_variances": [1, 1, 1]
+        });
+        let result = matched_treatment_contrast(&payload).unwrap();
+        let sensitivity = &result["score_sensitivity"];
+        assert_eq!(sensitivity["same_treated_subset"], false);
+        assert!(sensitivity["mixture_standard_deviation"].is_null());
+        let draws = &sensitivity["draws"];
+        assert_eq!(
+            draws[0]["unmatched_treated_indices"],
+            serde_json::json!([2])
+        );
+        assert_eq!(
+            draws[1]["unmatched_treated_indices"],
+            serde_json::json!([1])
+        );
+        assert_eq!(draws[0]["estimate"].as_f64(), Some(4.));
+        assert_eq!(draws[1]["estimate"].as_f64(), Some(6.));
+    }
 }

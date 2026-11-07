@@ -5440,3 +5440,8 @@ Hosted release readiness for this worktree revision remains open.
   same treated subset and supply conditional errors. The analytic
   fixture combined between-draw variance 1 and mean conditional
   variance 4 to recover sqrt(5). Six focused Rust causal tests passed.
+
+- [x] Verify that score draws matching different treated observations
+  leave the mixture uncertainty unset even when both draws retain the
+  same number of observations. The Rust fixture preserved effects 4
+  and 6 and their distinct unmatched indices. Seven causal tests passed.
