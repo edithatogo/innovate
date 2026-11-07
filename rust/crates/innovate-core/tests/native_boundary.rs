@@ -2414,3 +2414,34 @@ fn bayesian_gaussian_prior_combines_with_gaussian_likelihood() {
     request["payload"]["gaussian_priors"] = json!({"k":{"mean":0.5,"sd":1}});
     assert!(execute(&request)["error"].is_object());
 }
+
+#[test]
+fn kairos_scenario_replay_retains_scheduled_retry_clear() {
+    let request = json!({"schema_version":"2.0","operation":"execute_scenario_grid",
+    "payload":{"apply_specifications":true,"include_execution_metadata":true,"scenarios":[{
+        "id":"retry","model_key":"bass",
+        "specification":{"scenario_type":"network","name":"retry","description":"",
+            "time_horizon":12,"time_unit":"year","reference_year":2026,"market_size":2,
+            "initial_adoption":0,"network_type":"custom","num_nodes":2,"average_degree":1},
+        "simulation":{"inputs":{"time":[0,6,12]},"parameters":{"p":1e12,"q":0},
+            "simulation_options":{"engine":"kairos_network","seed":42,"edges":[[0,1]],
+                "capacity":1,"service_ticks":5,"ticks_per_unit":1,"max_queue_length":0,
+                "retry":{"delay_ticks":4,"max_retries":1},"schedule":[{"tick":3,"retry":null}]}}
+    }]}});
+    let run = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = run(&request);
+    let row = &response["result"]["executions"][0];
+    assert_eq!(row["result"]["counts"], json!([0, 1, 2]), "{response}");
+    assert_eq!(row["result"]["retry_eligibility"][0]["tick"], 6);
+    let replay = &row["artifact"]["replay_request"];
+    assert_eq!(
+        replay["payload"]["scenarios"][0]["simulation"]["simulation_options"]["schedule"],
+        json!([{"tick":3,"retry":null}])
+    );
+    assert_eq!(
+        run(replay)["result"]["executions"][0]["result"],
+        row["result"]
+    );
+}

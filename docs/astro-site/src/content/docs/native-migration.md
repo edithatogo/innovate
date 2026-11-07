@@ -792,6 +792,10 @@ and competes through the same hazard as other eligible agents. It does not
 retain its previous queue position. `retry_eligibility` records the cooldown
 end, and `requests` records all attempts, including balks.
 
+A schedule entry can replace `retry` with a new delay and budget or set
+`"retry": null` to disable future retries. The budget counts retries already
+scheduled for each agent. A pending retry keeps its original wake tick.
+
 
 A scheduled change can replace either Bass hazard coefficient using `p` or
 `q`. Values must be finite and nonnegative. The new coefficient applies

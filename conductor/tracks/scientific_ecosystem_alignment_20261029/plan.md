@@ -3048,3 +3048,9 @@ the other competition models and installed binding checks remain open.
   original time. Python 3.15.2, Julia and R agreed exactly on a cleared
   policy fixture with a wake at tick 6 and completion at tick 12.
   All 26 Rust network tests and focused Clippy passed.
+
+- [x] Verify scheduled Kairos retry clearing through custom network
+  scenario translation and artifact replay. The Rust regression passed.
+  Python 3.15.2, Julia and R agreed on the replay request and reproduced
+  the full simulation result, including the wake at tick 6 and second
+  completion at tick 12. Document replacement and pending-wake semantics.
