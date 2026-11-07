@@ -2794,3 +2794,9 @@ the other competition models and installed binding checks remain open.
   returns a name-ordered snapshot, and rejects duplicate registration
   without replacing the first manifest. Two focused tests and Clippy
   passed. Installed registration lifecycle checks remain open.
+
+- [x] Verify process-local registration and listing on macOS through the
+  rebuilt Python 3.15 wheel, Julia and installed R. Each returns the
+  same normalized manifest on a subsequent call. Julia and R release
+  their native library handles after calls, so persistence on loaders
+  that unload the library remains a separate portability gate.
