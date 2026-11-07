@@ -262,3 +262,9 @@ The `control_diagnostics` object reports the number of unique matched
 controls and their effective sample size. A control’s normalized weight
 is its share of matched pairs. Effective sample size is the reciprocal
 of the sum of squared control weights.
+
+Set `allow_partial` to true to estimate the contrast over treated
+observations that match within the caliper. If any treated observations
+are dropped, the result labels the estimand `matched_subset_att` and
+lists their zero-based indices in `unmatched_treated_indices`. At least
+one match is required.

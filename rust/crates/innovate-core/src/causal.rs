@@ -55,7 +55,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                  "estimands":["ate","att"],"default_estimand":"ate",
                  "uncertainty":"fixed_propensity_standard_error"},
                 {"method":"matched_treatment_contrast","adjustment":"nearest_score_with_replacement",
-                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":[],
+                 "required_fields":["outcomes","treatment","scores","caliper"],"optional_fields":["allow_partial"],
                  "estimands":["att"],"default_estimand":"att"}
             ]
         })),
@@ -754,11 +754,15 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     if fields.keys().any(|key| {
         !matches!(
             key.as_str(),
-            "method" | "outcomes" | "treatment" | "scores" | "caliper"
+            "method" | "outcomes" | "treatment" | "scores" | "caliper" | "allow_partial"
         )
     }) {
-        return Err("matched contrast accepts only outcomes, treatment, scores and caliper");
+        return Err("matched contrast received an unsupported field");
     }
+    let allow_partial = fields
+        .get("allow_partial")
+        .map_or(Some(false), Value::as_bool)
+        .ok_or("allow_partial must be boolean")?;
     let outcomes = series(payload, "outcomes")?;
     let treatment = series(payload, "treatment")?;
     let scores = series(payload, "scores")?;
@@ -777,29 +781,43 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
     controls.dedup_by(|a, b| scores[*a] == scores[*b]);
     let mut differences = Vec::new();
     let mut pairs = Vec::new();
+    let mut unmatched_treated_indices = Vec::new();
     let mut control_uses = std::collections::BTreeMap::<usize, usize>::new();
     for i in (0..scores.len()).filter(|&i| treatment[i] == 1.) {
         let right = controls.partition_point(|&j| scores[j] < scores[i]);
-        let (control, distance) = right
+        let nearest = right
             .checked_sub(1)
             .into_iter()
             .chain([right])
             .filter_map(|position| controls.get(position).copied())
             .map(|j| (j, (scores[i] - scores[j]).abs()))
             .min_by(|a, b| a.1.total_cmp(&b.1).then(a.0.cmp(&b.0)))
-            .filter(|&(_, distance)| distance <= caliper)
-            .ok_or("every treated observation requires a control within the caliper")?;
+            .filter(|&(_, distance)| distance <= caliper);
+        let Some((control, distance)) = nearest else {
+            if !allow_partial {
+                return Err("every treated observation requires a control within the caliper");
+            }
+            unmatched_treated_indices.push(i);
+            continue;
+        };
         differences.push(finite(outcomes[i] - outcomes[control])?);
         *control_uses.entry(control).or_default() += 1;
         pairs.push(json!({"treated_index":i,"control_index":control,"distance":distance}));
     }
-    let estimate = mean(&differences).ok_or("matching requires treated observations")?;
+    let estimate =
+        mean(&differences).ok_or("matching requires at least one matched treated observation")?;
+    let estimand = if unmatched_treated_indices.is_empty() {
+        "att"
+    } else {
+        "matched_subset_att"
+    };
     let squared_control_weights = control_uses
         .values()
         .map(|&count| (count as f64 / pairs.len() as f64).powi(2))
         .sum::<f64>();
     Ok(
-        json!({"method":"nearest_score_with_replacement","estimand":"att","estimate":estimate,"pairs":pairs,
+        json!({"method":"nearest_score_with_replacement","estimand":estimand,"estimate":estimate,"pairs":pairs,
+            "unmatched_treated_indices":unmatched_treated_indices,
             "control_diagnostics":{"unique_controls":control_uses.len(),
             "effective_sample_size":1. / squared_control_weights}}),
     )

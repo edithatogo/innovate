@@ -4585,3 +4585,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify matched-control concentration through rebuilt Python 3.15.2,
   Julia and installed R. Two distinct controls gave effective sample
   size two, while one reused control gave effective sample size one.
+
+- [x] Add opt-in caliper matching for the supported treated subset.
+  The focused Rust fixture preserves strict default rejection, returns
+  a subset estimate of 2 and reports excluded treated index 3.

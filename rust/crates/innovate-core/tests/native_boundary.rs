@@ -707,7 +707,12 @@ fn causal_summaries_match_analytic_effects() {
         1.
     );
     matched["caliper"] = json!(0.5);
-    assert!(run(matched)["result"].is_null());
+    assert!(run(matched.clone())["result"].is_null());
+    matched["allow_partial"] = json!(true);
+    let result = run(matched);
+    assert_eq!(result["result"]["estimand"], "matched_subset_att");
+    assert_eq!(result["result"]["estimate"], 2.);
+    assert_eq!(result["result"]["unmatched_treated_indices"], json!([3]));
     let mut weighted = json!({"method":"propensity_weighted_contrast",
         "outcomes":[0,10,2,12],"treatment":[0,0,1,1],"propensities":[0.2,0.8,0.2,0.8]});
     let mut fit = json!({"method":"estimate_stratum_propensities",
