@@ -504,3 +504,10 @@ stopifnot(length(resource_result$executions) == 3, resource_totals$configured_sl
           resource_totals$peak_in_service == 1,
           resource_totals$horizon_ticks == 11, resource_totals$ticks_per_unit == 1,
           resource_rows[[2]]$error$code == "invalid_comparison", is.null(resource_rows[[2]]$result))
+
+shortened <- jsonlite::fromJSON(resource_payload, simplifyVector=FALSE)
+for (i in seq_along(shortened$scenarios)) {
+  shortened$scenarios[[i]]$simulation$inputs$time <- c(0, 7)
+}
+short_totals <- kernel_call("execute_scenario_grid", payload=shortened)$result$comparisons[[1]]$result$resource_differences
+stopifnot(short_totals$waiting_at_horizon == 1, short_totals$in_service_at_horizon == 2)

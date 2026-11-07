@@ -534,4 +534,12 @@ end
     @test totals["ticks_per_unit"] == 1
     @test failure["error"]["code"] == "invalid_comparison"
     @test isnothing(failure["result"])
+
+    for scenario in payload["scenarios"]
+        scenario["simulation"]["inputs"]["time"] = [0, 7]
+    end
+    shortened = kernel_call("execute_scenario_grid", nothing, payload)
+    totals = shortened["result"]["comparisons"][1]["result"]["resource_differences"]
+    @test totals["waiting_at_horizon"] == 1
+    @test totals["in_service_at_horizon"] == 2
 end

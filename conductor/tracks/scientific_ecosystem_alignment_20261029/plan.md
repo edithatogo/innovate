@@ -4319,3 +4319,6 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Retain horizon queue and service counts in the packaged Python
   Arrow regression. At reopening the exported comparison preserves
   one additional waiter and two additional agents in service.
+- [x] Retain horizon resource count assertions in Julia and R native
+  tests. Both shorten the existing fixture to tick seven and verify
+  one additional waiter and two additional agents in service.
