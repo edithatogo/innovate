@@ -1589,3 +1589,13 @@ def test_scenario_grid_ranking():
     assert [(row["id"], row["place"]) for row in threshold] == [("tie", 1), ("alt", 1), ("base", None)]
     assert threshold[0]["time_to_threshold"] == pytest.approx(expected_crossing)
     assert threshold[2]["time_to_threshold"] is None
+    scenarios.append({**scenarios[0], "id": "base2"})
+    comparison = {"pairs": [{"baseline": "base", "alternative": "alt"},
+                            {"baseline": "tie", "alternative": "base2"}],
+                  "interval_mass": 0.5, "evaluation_metric": "adoption_area"}
+    paired = innovate.execute("execute_scenario_grid", scenarios=scenarios,
+                              comparisons=[comparison])["result"]["comparisons"][0]["result"]
+    assert paired["evaluation_horizon"] == [1, 4]
+    expected = area["ranking"]["rows"][0]["adoption_area"] / 2
+    assert paired["differences"] == pytest.approx([expected, -expected])
+    assert paired["mean_difference"] == pytest.approx(0)

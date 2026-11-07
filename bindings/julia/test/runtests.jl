@@ -807,4 +807,13 @@ end
     @test [(row["id"],row["place"]) for row in threshold] == [("tie",1),("alt",1),("base",nothing)]
     @test threshold[1]["time_to_threshold"] ≈ 2 + 2*(150-second)/(third-second)
     @test isnothing(threshold[3]["time_to_threshold"])
+    push!(scenarios, merge(scenarios[1], Dict("id"=>"base2")))
+    comparison = Dict("pairs"=>[Dict("baseline"=>"base","alternative"=>"alt"),
+        Dict("baseline"=>"tie","alternative"=>"base2")], "interval_mass"=>0.5, "evaluation_metric"=>"adoption_area")
+    paired = kernel_call("execute_scenario_grid", nothing, Dict("scenarios"=>scenarios,
+        "comparisons"=>[comparison]))["result"]["comparisons"][1]["result"]
+    expected = area["ranking"]["rows"][1]["adoption_area"]/2
+    @test paired["evaluation_horizon"] == [1,4]
+    @test paired["differences"] ≈ [expected,-expected]
+    @test paired["mean_difference"] == 0
 end

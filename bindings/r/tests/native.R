@@ -759,3 +759,11 @@ stopifnot(identical(vapply(threshold, function(row) row$id, character(1)), c("ti
   threshold[[1]]$place == 1, threshold[[2]]$place == 1, is.null(threshold[[3]]$place),
   isTRUE(all.equal(threshold[[1]]$time_to_threshold, 2+2*(150-path[2])/(path[3]-path[2]))),
   is.null(threshold[[3]]$time_to_threshold))
+ranked_scenarios[[4]] <- modifyList(ranked_scenarios[[1]], list(id="base2"))
+comparison <- list(pairs=list(list(baseline="base",alternative="alt"),
+  list(baseline="tie",alternative="base2")), interval_mass=0.5, evaluation_metric="adoption_area")
+paired <- kernel_call("execute_scenario_grid", payload=list(scenarios=unname(ranked_scenarios),
+  comparisons=list(comparison)))$result$comparisons[[1]]$result
+expected <- area$ranking$rows[[1]]$adoption_area/2
+stopifnot(isTRUE(all.equal(unlist(paired$evaluation_horizon), c(1,4))),
+  isTRUE(all.equal(unlist(paired$differences), c(expected,-expected))), paired$mean_difference == 0)

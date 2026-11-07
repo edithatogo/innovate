@@ -4819,3 +4819,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Compare paired ensembles by integrated adoption difference.
   Four Rust scenario grid tests passed, including the analytic area
   and rejection of an area request with a single evaluation time.
+
+- [x] Verify paired adoption-area comparisons through rebuilt Python
+  3.15.2, Julia and installed R. All three reproduced opposite area
+  differences, a zero mean and the shared evaluation horizon.
