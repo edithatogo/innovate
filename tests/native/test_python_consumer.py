@@ -1600,10 +1600,13 @@ def test_scenario_grid_ranking():
     assert paired["differences"] == pytest.approx([expected, -expected])
     assert paired["mean_difference"] == pytest.approx(0)
     comparison.pop("evaluation_metric")
-    comparison["include_path_summary"] = True
+    comparison["include_path_covariance"] = True
     endpoint = innovate.execute("execute_scenario_grid", scenarios=scenarios,
                                  comparisons=[comparison])["result"]["comparisons"][0]["result"]
     rows = endpoint["path_summary"]["rows"]
     assert [row["time"] for row in rows] == [1, 2, 4]
     for field in ("mean_difference", "mean_standard_error", "empirical_interval"):
         assert rows[-1][field] == endpoint[field]
+    errors = [row["mean_standard_error"] for row in rows]
+    for row, error in zip(endpoint["path_covariance"], errors, strict=True):
+        assert row == pytest.approx([error * other for other in errors])

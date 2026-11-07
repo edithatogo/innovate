@@ -4835,3 +4835,11 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Report paired path mean covariance in sample order. All four
   focused Rust scenario tests passed. The fixture verifies the endpoint
   variance and symmetric nonzero covariance. Binding checks remain open.
+
+- [x] Verify paired path covariance through Python 3.15.2, Julia and R.
+  The grid ranking fixtures compare the complete matrix with the outer
+  product of pointwise standard errors for two opposite paired paths.
+  The focused Python test, all 16 Julia assertions and the installed R
+  package assertions passed against rebuilt native libraries. The Python
+  wheel built successfully. The runtime check loaded the build artifact
+  directly after wheel extraction ran out of disk space.

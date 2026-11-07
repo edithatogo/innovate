@@ -768,11 +768,15 @@ expected <- area$ranking$rows[[1]]$adoption_area/2
 stopifnot(isTRUE(all.equal(unlist(paired$evaluation_horizon), c(1,4))),
   isTRUE(all.equal(unlist(paired$differences), c(expected,-expected))), paired$mean_difference == 0)
 comparison$evaluation_metric <- NULL
-comparison$include_path_summary <- TRUE
+comparison$include_path_covariance <- TRUE
 endpoint <- kernel_call("execute_scenario_grid", payload=list(scenarios=unname(ranked_scenarios),
   comparisons=list(comparison)))$result$comparisons[[1]]$result
 rows <- endpoint$path_summary$rows
 stopifnot(all(vapply(rows, function(row) as.numeric(row$time), numeric(1)) == c(1,2,4)))
 for (field in c("mean_difference","mean_standard_error","empirical_interval")) {
   stopifnot(identical(rows[[3]][[field]], endpoint[[field]]))
+}
+errors <- vapply(rows, function(row) as.numeric(row$mean_standard_error), numeric(1))
+for (i in seq_along(errors)) {
+  stopifnot(isTRUE(all.equal(unlist(endpoint$path_covariance[[i]]), errors[i] * errors)))
 }
