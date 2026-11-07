@@ -2934,3 +2934,8 @@ the other competition models and installed binding checks remain open.
   and independent Gaussian observation errors at known noise scale.
   The Logistic capacity fixture recovers mean 100 and variance 4.
   Focused Rust and Clippy passed. Joint inference and binding checks remain open.
+
+- [x] Verify Bayesian parameter quadrature through rebuilt Python 3.15,
+  Julia and installed R. All 401 posterior masses and grid coordinates
+  agreed exactly. The normalized Logistic capacity posterior recovered
+  mean 100 and variance 4 within 1e-10. R used raw JSON.
