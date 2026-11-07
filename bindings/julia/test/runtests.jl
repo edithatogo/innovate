@@ -633,6 +633,9 @@ end
     result = kernel_call("summarize_causal", nothing, payload)["result"]
     @test result["estimate"] ≈ 2.5
     @test [pair["control_index"] for pair in result["pairs"]] == [1,0]
+    @test result["control_diagnostics"] == Dict("unique_controls"=>2, "effective_sample_size"=>2)
+    reused = kernel_call("summarize_causal", nothing, merge(payload, Dict("scores"=>[0,2,2,2,0])))["result"]
+    @test reused["control_diagnostics"] == Dict("unique_controls"=>1, "effective_sample_size"=>1)
     payload["caliper"] = 0.5
     @test_throws r"requires a control within the caliper" kernel_call("summarize_causal", nothing, payload)
 end

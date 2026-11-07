@@ -4581,3 +4581,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Report unique controls and effective control sample size for
   nearest-score matching. The Rust fixture checks both distinct and
   reused controls. Binding qualification and matching inference remain open.
+
+- [x] Verify matched-control concentration through rebuilt Python 3.15.2,
+  Julia and installed R. Two distinct controls gave effective sample
+  size two, while one reused control gave effective sample size one.

@@ -596,6 +596,12 @@ matching_payload <- list(method=matching$method, outcomes=c(0,10,12,3,99),
 matched <- kernel_call("summarize_causal", payload=matching_payload)$result
 stopifnot(isTRUE(all.equal(matched$estimate, 2.5)),
   all(vapply(matched$pairs, function(pair) as.numeric(pair$control_index), numeric(1)) == c(1,0)))
+stopifnot(matched$control_diagnostics$unique_controls == 2,
+  matched$control_diagnostics$effective_sample_size == 2)
+reused <- kernel_call("summarize_causal",
+  payload=modifyList(matching_payload, list(scores=c(0,2,2,2,0))))$result
+stopifnot(reused$control_diagnostics$unique_controls == 1,
+  reused$control_diagnostics$effective_sample_size == 1)
 matching_payload$caliper <- 0.5
 matching_error <- tryCatch({kernel_call("summarize_causal", payload=matching_payload); ""}, error=conditionMessage)
 stopifnot(grepl("requires a control within the caliper", matching_error, fixed=TRUE))
