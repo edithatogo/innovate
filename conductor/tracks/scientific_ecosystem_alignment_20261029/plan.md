@@ -4991,11 +4991,15 @@ Hosted release readiness for this worktree revision remains open.
 
 - [x] Report RNG checkpoint scope consistently in Kairos network
   output. The focused network replay test passed with the scope field.
-- [ ] Implement stateful Kairos resume. The pinned DeterministicStream
-  restores RNG position, while Innovate must persist its domain state,
-  pending service and retry events, and the outstanding hazard draw or
-  integrated budget at a pause boundary. Verify interrupted versus
-  uninterrupted trajectories before qualifying this capability.
+- [x] Implement stateful Kairos resume at dispatched adoption or
+  service-completion boundaries. The Bass DES, homogeneous ABM and
+  network checkpoint tests compare resumed and uninterrupted outcomes.
+  The network checkpoint restores pending services, retries, deadlines,
+  policy state and accounting. Python, Julia and R passed the scoped
+  round-trip fixtures recorded below.
+- [ ] Qualify time-based pauses between dispatched events, including
+  an outstanding hazard draw or integrated budget. Broader scenario
+  and scientific qualification remains open.
 
 - [x] Verify the emitted finite-population DES RNG checkpoint restores
   through the pinned Kairos API. After four adoptions the restored
