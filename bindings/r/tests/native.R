@@ -726,3 +726,11 @@ placebo <- kernel_call("summarize_causal", payload=list(method="staggered_panel_
   adoption_indices=list(1L,2L,NULL), include_pre_trends=TRUE))$result$pre_trends
 stopifnot(length(placebo) == 1, placebo[[1]]$n_control == 1, placebo[[1]]$baseline_period == 1,
   isTRUE(all.equal(placebo[[1]]$estimate, 1)))
+for (group in c("not_yet_treated", "never_treated")) {
+  result <- kernel_call("summarize_causal", payload=list(method="staggered_panel_att",
+    periods=c(0,1,2), outcomes=matrix(c(0,5,7,10,11,16,0,2,4), nrow=3, byrow=TRUE),
+    adoption_indices=list(1L,2L,NULL), control_group=group))$result$contrasts[[1]]
+  never <- group == "never_treated"
+  stopifnot(result$n_control == if (never) 1 else 2,
+    isTRUE(all.equal(result$estimate, if (never) 3 else 3.5)))
+}

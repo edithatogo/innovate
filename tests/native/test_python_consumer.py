@@ -1541,3 +1541,9 @@ def test_staggered_panel_att():
     assert placebo[0]["estimate"] == pytest.approx(1)
     assert placebo[0]["n_control"] == 1
     assert placebo[0]["baseline_period"] == 1
+    comparator = {**payload, "outcomes": [[0, 5, 7], [10, 11, 16], [0, 2, 4]],
+                  "adoption_indices": [1, 2, None]}
+    for group, count, estimate in [("not_yet_treated", 2, 3.5), ("never_treated", 1, 3)]:
+        onset = innovate.execute("summarize_causal", **comparator, control_group=group)["result"]["contrasts"][0]
+        assert onset["n_control"] == count
+        assert onset["estimate"] == pytest.approx(estimate)

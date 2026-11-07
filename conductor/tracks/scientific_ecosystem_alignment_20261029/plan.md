@@ -4769,3 +4769,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Support a never-treated comparator for staggered contrasts and
   their inference. The focused Rust fixture verifies onset ATT 3 with
   one eligible control. Binding runtime checks remain open.
+
+- [x] Verify both staggered control selections through rebuilt Python
+  3.15.2, Julia and installed R. Each returned onset ATT 3.5 with two
+  not-yet-treated controls and ATT 3 with one never-treated control.

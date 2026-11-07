@@ -772,6 +772,11 @@ end
     @test pre["estimate"] ≈ 1
     @test pre["n_control"] == 1
     @test pre["baseline_period"] == 1
+    for (group, count, estimate) in [("not_yet_treated",2,3.5), ("never_treated",1,3)]
+        onset = kernel_call("summarize_causal", nothing, merge(placebo, Dict("control_group"=>group)))["result"]["contrasts"][1]
+        @test onset["n_control"] == count
+        @test onset["estimate"] ≈ estimate
+    end
     @test rows[1]["estimate"] ≈ 4
     @test rows[1]["standard_error"] ≈ 1
     @test rows[2]["n_control"] == 1
