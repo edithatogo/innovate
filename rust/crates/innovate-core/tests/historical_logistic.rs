@@ -11,6 +11,10 @@ fn historical_logistic_covariates_and_event_boundary_match_closed_forms() {
     }
     let r=KernelBinding::new().predict_model("logistic",json!({"inputs":{"time":[1.,2.,3.]},"parameters":{"L":100.,"k":0.5,"x0":2.,"L_post":200.,"k_post":1.,"x0_post":2.},"constructor_kwargs":{"t_event":2.}})).unwrap().result.unwrap();
     assert_eq!(r["values"][1], 100.);
+    assert_eq!(r["rates"][1][0], 50.);
+    let fixed_covariate_rate =
+        110. * 0.6 * (1. + (0.72_f64).exp()).recip() * (1. + (-0.72_f64).exp()).recip();
+    assert!((a["rates"][1][0].as_f64().unwrap() - fixed_covariate_rate).abs() < 1e-10);
 }
 #[test]
 fn historical_event_fit_forecasts_and_reports_rank() {
@@ -25,7 +29,10 @@ fn historical_event_fit_forecasts_and_reports_rank() {
             }
         })
         .collect();
-    for fit_options in [json!({"initial_parameters":{"L":110.,"k":0.4,"x0":6.,"L_post":220.,"k_post":0.4,"x0_post":17.}}), json!({})] {
+    for fit_options in [
+        json!({"initial_parameters":{"L":110.,"k":0.4,"x0":6.,"L_post":220.,"k_post":0.4,"x0_post":17.}}),
+        json!({}),
+    ] {
         let fit=KernelBinding::new().fit_model("logistic",json!({"inputs":{"time":time,"observed":observed},"constructor_kwargs":{"t_event":12.},"fit_options":fit_options})).unwrap().result.unwrap();
         assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
         assert_eq!(fit["diagnostics"]["identifiability"]["rank"], 6);
@@ -84,7 +91,10 @@ fn additive_covariate_fit_recovers_independent_curve() {
         .zip(&x)
         .map(|(t, x)| (100. + 10. * x) / (1. + (-(0.4 + 0.02 * x) * (t - (10. + 0.1 * x))).exp()))
         .collect();
-    for fit_options in [json!({"initial_parameters":{"L":110.,"k":0.3,"x0":9.,"beta_L_x":8.,"beta_k_x":0.,"beta_x0_x":0.}}), json!({})] {
+    for fit_options in [
+        json!({"initial_parameters":{"L":110.,"k":0.3,"x0":9.,"beta_L_x":8.,"beta_k_x":0.,"beta_x0_x":0.}}),
+        json!({}),
+    ] {
         let f=KernelBinding::new().fit_model("logistic",json!({"inputs":{"time":t,"observed":y,"covariates":{"x":x}},"constructor_kwargs":{"covariates":["x"]},"fit_options":fit_options})).unwrap().result.unwrap();
         assert_eq!(f["diagnostics"]["optimizer"]["converged"], true);
         assert_eq!(f["diagnostics"]["identifiability"]["rank"], 6);

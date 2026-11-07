@@ -160,34 +160,31 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             })
             .collect()
     };
-    let predict = |p: &[f64]| -> Result<Vec<f64>, String> {
-        time.iter()
-            .enumerate()
-            .map(|(i, t)| {
-                let post = event.is_some_and(|e| *t >= e);
-                let offset = if post { 3 } else { 0 };
-                let mut a = [p[offset], p[offset + 1], p[offset + 2]];
-                if event.is_none() || mode == "additive" {
-                    let start = if event.is_some() { 6 } else { 3 };
-                    for (j, x) in series.iter().enumerate() {
-                        for k in 0..3 {
-                            a[k] += p[start + 3 * j + k] * x[i];
-                        }
-                    }
+    let point = |p: &[f64], i: usize, t: f64| -> Result<(f64, f64), String> {
+        let post = event.is_some_and(|e| t >= e);
+        let offset = if post { 3 } else { 0 };
+        let mut a = [p[offset], p[offset + 1], p[offset + 2]];
+        if event.is_none() || mode == "additive" {
+            let start = if event.is_some() { 6 } else { 3 };
+            for (j, x) in series.iter().enumerate() {
+                for k in 0..3 {
+                    a[k] += p[start + 3 * j + k] * x[i];
                 }
-                if a.iter().any(|x| !x.is_finite()) || a[0] <= 0. || a[1] <= 0. {
-                    return Err("effective L/k must stay positive and finite".into());
-                }
-                let z = a[1] * (t - a[2]);
-                let f = if z >= 0. {
-                    1. / (1. + (-z).exp())
-                } else {
-                    let e = z.exp();
-                    e / (1. + e)
-                };
-                Ok(a[0] * f)
-            })
-            .collect()
+            }
+        }
+        if a.iter().any(|x| !x.is_finite()) || a[0] <= 0. || a[1] <= 0. {
+            return Err("effective L/k must stay positive and finite".into());
+        }
+        let z = a[1] * (t - a[2]);
+        let tail = (-z.abs()).exp();
+        let denominator = 1. + tail;
+        let fraction = if z >= 0. {
+            1. / denominator
+        } else {
+            tail / denominator
+        };
+        let slope = (a[0] * tail / denominator) * (a[1] / denominator);
+        Ok((a[0] * fraction, slope))
     };
     let mut quality = None;
     let params = if op == KernelOperation::FitModel {
@@ -269,7 +266,13 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         let fit = crate::numerics::least_squares(
             &observed.iter().map(|y| y / ys).collect::<Vec<_>>(),
             &starts,
-            |v| predict(&untransform(v)).map(|p| p.iter().map(|x| x / ys).collect()),
+            |v| {
+                let p = untransform(v);
+                time.iter()
+                    .enumerate()
+                    .map(|(i, &t)| point(&p, i, t).map(|(y, _)| y / ys))
+                    .collect()
+            },
             limit,
         )
         .map_err(|e| error(&e))?;
@@ -285,13 +288,20 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 .ok_or_else(|| error("parameters required"))?,
         )?
     };
-    let values = predict(&params).map_err(|e| error(&e))?;
+    let (values, rates): (Vec<_>, Vec<_>) = time
+        .iter()
+        .enumerate()
+        .map(|(i, &t)| point(&params, i, t).map(|(y, rate)| (y, [rate])))
+        .collect::<Result<Vec<_>, _>>()
+        .map_err(|e| error(&e))?
+        .into_iter()
+        .unzip();
     let parameters: Map<_, _> = names
         .iter()
         .cloned()
         .zip(params.iter().map(|v| json!(v)))
         .collect();
-    let predictions = json!({"values":values,"shape":[time.len()],"dtype":"float64","metadata":{"event_boundary":"post_at_t_event","event_covariates":mode,"covariate_semantics":"pointwise additive parameters"}});
+    let predictions = json!({"values":values,"rates":rates,"shape":[time.len()],"dtype":"float64","metadata":{"event_boundary":"post_at_t_event","event_covariates":mode,"covariate_semantics":"pointwise additive parameters","rate_semantics":"time derivative holding covariates fixed; post-event branch at the boundary, excluding jump impulses","nonfinite_rate":"null"}});
     let state = json!({"model_key":"logistic","model_name":"LogisticModel","parameters":parameters,"constructor_kwargs":kw,"predict_kwargs":{}});
     let result = if matches!(
         op,

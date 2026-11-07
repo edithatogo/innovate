@@ -1055,3 +1055,12 @@ the other competition models and installed binding checks remain open.
   event forecast accuracy within 0.001, and recovery of the additive
   capacity slope within 0.001 in all three languages.
   [Fixtures and results](evidence/logistic-automatic-starts-20261107).
+
+## Historical Logistic conditional adoption rates
+
+- [x] Expose analytic time derivatives holding pointwise controls fixed.
+  The event sample uses the post-event curve and excludes jump impulses.
+  Unrepresentable derivatives serialize as null, preserving finite levels.
+  Five focused Rust tests and Clippy passed.
+- [ ] Qualify the installed bindings and Polars rate column.
+- [ ] Extend the derivative contract to explicit time-varying control slopes.
