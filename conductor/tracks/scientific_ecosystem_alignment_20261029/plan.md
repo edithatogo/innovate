@@ -1810,3 +1810,11 @@ the other competition models and installed binding checks remain open.
   Clippy passed.
 - [ ] Restore content checksum verification, ingestion and dataset
   diagnostics, then qualify installed Python, Julia and R consumers.
+
+- [x] Compute and verify SHA-256 dataset digests over sorted Rust JSON.
+  Provenance extraction time and the checksum itself are excluded.
+  The boundary test checks an independent digest and rejects a changed
+  data value under a retained checksum. All 26 tests and focused
+  Clippy passed. The direct dependency reuses locked sha2 0.11.1.
+- [ ] Qualify historical Python digest compatibility for non-ASCII
+  strings and numeric encodings, and verify installed consumers.

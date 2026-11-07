@@ -44,7 +44,8 @@ pub fn execute_json(input: &str) -> String {
                 "preprocess_series"
                 | "aggregate_dates"
                 | "summarize_causal"
-                | "validate_provenance",
+                | "validate_provenance"
+                | "dataset_checksum",
             ) => {
                 return execute_preprocessing_json(&value).to_string();
             }
@@ -180,6 +181,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         let payload = &value["payload"];
         if value["operation"] == "aggregate_dates" {
             return calendar::aggregate(payload);
+        }
+        if value["operation"] == "dataset_checksum" {
+            return provenance::checksum(payload);
         }
         if value["operation"] == "validate_provenance" {
             return provenance::validate(payload);

@@ -631,3 +631,28 @@ fn dataset_provenance_requires_explicit_license() {
     );
     assert_eq!(run(" Unknown ")["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn dataset_digest_detects_data_changes_but_ignores_extraction_timestamp() {
+    let run = |dataset| {
+        let request = innovate_core::json!({"schema_version":"2.0","operation":"dataset_checksum",
+            "payload":{"dataset":dataset}});
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    assert_eq!(
+        run(innovate_core::json!({"values":[1,2]}))["result"]["checksum"],
+        "54fc94706765042e92a6c74fefd93f0134252a9a9ff81fea085dbd55b8227037"
+    );
+    let mut dataset = innovate_core::json!({"values":[1,2],"provenance":{
+        "source":"survey","license":"CC-BY-4.0","extraction_time":"2026-11-07T00:00:00Z"}});
+    let digest = run(dataset.clone())["result"]["checksum"].clone();
+    assert!(digest.is_string());
+    dataset["provenance"]["checksum"] = digest.clone();
+    dataset["provenance"]["extraction_time"] = innovate_core::json!("2026-11-08T00:00:00Z");
+    assert_eq!(run(dataset.clone())["result"]["checksum"], digest);
+    dataset["values"][1] = innovate_core::json!(3);
+    assert_eq!(run(dataset)["error"]["code"], "invalid_request");
+}
