@@ -4848,3 +4848,7 @@ Hosted release readiness for this worktree revision remains open.
   The focused grid test accepts a 128 × 128 matrix, returns a typed
   comparison error at 129 sample times, and still returns all 129
   pointwise rows when covariance is disabled.
+
+- [x] Document paired covariance axes, estimator, diagonal and
+  over-limit behavior in the public API reference. The pointwise
+  empirical intervals describe the observed replicate effects.

@@ -443,3 +443,15 @@ Set `include_path_covariance` to return the covariance matrix of the
 paired mean differences and the associated path summary. The matrix
 follows sample order and uses the same independent-pair assumption as
 the pointwise standard errors. It supports up to 128 sample times.
+
+Both matrix axes use the times in `path_summary.rows`. For `n`
+replicate pairs, entry `[i][j]` is the sample covariance of the paired
+effects at times `i` and `j`, divided by `n`. Each diagonal entry
+therefore equals the square of that time's `mean_standard_error` up
+to floating-point rounding. The empirical intervals describe the
+observed paired effects at each time. Simultaneous
+confidence bands for the mean path require a separate inference procedure.
+
+If a covariance request exceeds 128 samples, its comparison row
+returns `invalid_comparison`. For a longer path, request
+`include_path_summary` alone, subject to the pair-by-time limit.
