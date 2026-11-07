@@ -112,3 +112,42 @@ fn excessive_initial_parameter_scale_is_a_structured_error_not_false_convergence
     assert_eq!(e.code, "invalid_request");
     assert!(e.message.contains("finite numerical domain"));
 }
+
+#[test]
+fn noisy_logistic_fit_recovers_the_held_out_trajectory() {
+    let time: Vec<_> = (0..31).map(f64::from).collect();
+    let truth = |t: f64| 120. / (1. + (-0.38 * (t - 12.)).exp());
+    let errors = [0.8, -1.1, 0.4, -0.6, 1.3, -0.3];
+    let observed: Vec<_> = time[..22]
+        .iter()
+        .enumerate()
+        .map(|(i, &t)| truth(t) + errors[i % errors.len()])
+        .collect();
+    let binding = KernelBinding::new();
+    let fit = binding
+        .fit_model(
+            "logistic",
+            json!({"inputs":{"time":time[..22],"observed":observed}}),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
+    assert_eq!(fit["diagnostics"]["identifiability"]["rank"], 3);
+    let prediction = binding
+        .predict_model(
+            "logistic",
+            json!({"inputs":{"time":time[22..]},"state":fit["state"]}),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    let predictions = prediction["values"].as_array().unwrap();
+    assert_eq!(predictions.len(), 9);
+    for (&t, value) in time[22..].iter().zip(predictions) {
+        assert!(
+            (value.as_f64().unwrap() - truth(t)).abs() < 1.,
+            "{t}: {value}"
+        );
+    }
+}

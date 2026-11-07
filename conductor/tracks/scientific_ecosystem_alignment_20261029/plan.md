@@ -3915,3 +3915,9 @@ Hosted release readiness for this worktree revision remains open.
   through the rebuilt Python 3.15.2 wheel, Julia and freshly installed
   R at 2a5d2c0e. All three matched the selected start to the optimizer
   summary on an analytic Logistic fit.
+- [x] Qualify held-out Logistic forecasts from a perturbed training
+  trajectory. The Rust fit converged with local rank three on 22
+  training observations. Saved-state predictions at nine later
+  times were within one adoption unit of the analytic trajectory.
+  All five fit-quality tests and focused Clippy passed. This is
+  point-forecast evidence for one deterministic perturbation fixture.
