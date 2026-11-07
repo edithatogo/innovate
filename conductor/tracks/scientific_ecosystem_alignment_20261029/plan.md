@@ -3708,3 +3708,7 @@ Hosted release readiness for this worktree revision remains open.
   model aliases at the Rust boundary. This prevents a misspelled
   intervention field from silently producing an unchanged trajectory.
   The causal boundary test, formatting and focused Clippy passed.
+- [x] Verify a misspelled counterfactual parameter override through the
+  rebuilt Python 3.15.2 wheel, Julia and freshly installed R at
+  5c5c9a2b. All three surfaced the native unknown-field error.
+  The conflicting-alias regression is verified at the Rust boundary.
