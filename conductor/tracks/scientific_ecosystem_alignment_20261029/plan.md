@@ -828,3 +828,13 @@ thresholds and cross-binding qualification of this new field remain open.
 The full native binding suites passed with 55 Python tests, 220 Julia assertions
 and R conformance. The summary test checks the launch reference time, inflection
 offset and saturation through each binding. Forced-trajectory analysis remains open.
+
+## Norton Bass trajectory rate peaks
+
+- [x] Report per-generation sampled net adoption rate peaks under forcing, with the analysis window and event-side convention explicit. (c38b6ad7)
+
+All 21 native multi-generation tests and focused Clippy passed. The event
+fixture verifies the right-hand rate at the event and excludes generations
+whose launches follow the reporting window. Continuous-time peak location,
+takeoff and saturation under forcing, and installed binding checks for the
+trajectory field remain open.
