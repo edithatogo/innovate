@@ -5737,3 +5737,8 @@ Hosted release readiness for this worktree revision remains open.
   The focused Rust unit test passed. Python, Julia and R route callback
   output through the shared operation. Binding checks and custom model
   dispatch remain open.
+
+- [x] Verify model registry callbacks through rebuilt Python, Julia and
+  freshly installed R. Each resolved baseline to the native Bass
+  capability and rejected an alias attempting to shadow the Bass key.
+  This covers alias discovery. Custom model dispatch remains open.
