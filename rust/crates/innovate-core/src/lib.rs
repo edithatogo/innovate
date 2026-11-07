@@ -192,7 +192,16 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             let robust = payload
                 .get("robust")
                 .map_or(Ok(false), |v| v.as_bool().ok_or("robust must be boolean"))?;
-            return seasonal::decompose(&values, integer("period")?, integer("window")?, robust);
+            let historical = payload.get("historical").map_or(Ok(false), |v| {
+                v.as_bool().ok_or("historical must be boolean")
+            })?;
+            return seasonal::decompose(
+                &values,
+                integer("period")?,
+                integer("window")?,
+                robust,
+                historical,
+            );
         }
         let window = match payload["method"].as_str() {
             Some("cumulative_sum") => None,

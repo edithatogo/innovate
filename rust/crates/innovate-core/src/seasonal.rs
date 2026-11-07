@@ -1,6 +1,6 @@
 /// Local linear regression on an evenly spaced sample grid.
 pub(crate) fn loess_trend(values: &[f64], span: usize) -> Result<Vec<f64>, &'static str> {
-    weighted_loess(values, span, None, false)
+    weighted_loess(values, span, None, false, false)
 }
 
 fn weighted_loess(
@@ -8,6 +8,7 @@ fn weighted_loess(
     span: usize,
     robustness: Option<&[f64]>,
     extend: bool,
+    historical: bool,
 ) -> Result<Vec<f64>, &'static str> {
     if span < 3 || span > values.len() {
         return Err("LOESS span must be between three and the series length");
@@ -37,9 +38,17 @@ fn weighted_loess(
                 xy += w * x * y;
             }
             let determinant = weight * xx - x_sum * x_sum;
-            let intercept = if determinant > 0. {
+            let spread_floor = if historical {
+                0.001 * (values.len() - 1) as f64 / radius
+            } else {
+                0.
+            };
+            let intercept = if determinant > (weight * spread_floor).powi(2) {
                 (xx * y_sum - x_sum * xy) / determinant
             } else if weight == 0. {
+                if historical {
+                    return Ok(None);
+                }
                 let nearest = robustness
                     .into_iter()
                     .flatten()
@@ -50,17 +59,35 @@ fn weighted_loess(
                         index.clamp(0, values.len() as isize - 1) as usize,
                         |(i, _)| i,
                     );
-                return Ok(values[nearest]);
+                return Ok(Some(values[nearest]));
             } else {
                 y_sum / weight
             };
             let estimate = intercept * scale;
             estimate
                 .is_finite()
-                .then_some(estimate)
+                .then_some(Some(estimate))
                 .ok_or("LOESS estimate exceeded finite numerical domain")
         })
-        .collect()
+        .collect::<Result<Vec<_>, _>>()
+        .map(|estimates| {
+            let offset = usize::from(extend);
+            let interior: Vec<_> = estimates[offset..offset + values.len()]
+                .iter()
+                .zip(values)
+                .map(|(estimate, value)| estimate.unwrap_or(*value))
+                .collect();
+            if !extend {
+                return interior;
+            }
+            let last = values.len() - 1;
+            std::iter::once(estimates[0].unwrap_or(interior[0]))
+                .chain(interior.iter().copied())
+                .chain(std::iter::once(
+                    estimates[last + 2].unwrap_or(interior[last]),
+                ))
+                .collect()
+        })
 }
 
 pub(crate) fn decompose(
@@ -68,10 +95,12 @@ pub(crate) fn decompose(
     period: usize,
     trend_span: usize,
     robust: bool,
+    historical: bool,
 ) -> Result<serde_json::Value, &'static str> {
     if period < 2 || period > values.len() / 3 {
         return Err("seasonal period must leave at least three complete cycles");
     }
+    let extrapolate = robust && !historical;
     let mut trend = vec![0.; values.len()];
     let mut seasonal = vec![0.; values.len()];
     let mut weights = vec![1.; values.len()];
@@ -93,12 +122,11 @@ pub(crate) fn decompose(
                     &samples,
                     samples.len().min(7),
                     Some(&phase_weights),
-                    !robust,
+                    !extrapolate,
+                    historical,
                 )?;
-                let offset = usize::from(robust);
-                if robust {
-                    // Keep the robust endpoint convention while reweighting
-                    // behavior is qualified against independent references.
+                let offset = usize::from(extrapolate);
+                if extrapolate {
                     cycle[phase] = 2. * smooth[0] - smooth[1];
                     let n = smooth.len();
                     cycle[phase + (n + 1) * period] = 2. * smooth[n - 1] - smooth[n - 2];
@@ -119,26 +147,42 @@ pub(crate) fn decompose(
                 *season = cycle[i + period] - low;
             }
             let adjusted: Vec<_> = values.iter().zip(&seasonal).map(|(y, s)| y - s).collect();
-            trend = weighted_loess(&adjusted, trend_span, Some(&weights), false)?;
+            trend = weighted_loess(&adjusted, trend_span, Some(&weights), false, historical)?;
         }
         if robust && pass < 5 {
             let absolute: Vec<_> = values
                 .iter()
                 .zip(&trend)
                 .zip(&seasonal)
-                .map(|((y, t), s)| (y - t - s).abs())
+                .map(|((y, t), s)| {
+                    if historical {
+                        (y - (t + s)).abs()
+                    } else {
+                        (y - t - s).abs()
+                    }
+                })
                 .collect();
             let mut ordered = absolute.clone();
             ordered.sort_by(f64::total_cmp);
             let middle = ordered.len() / 2;
             let median = ordered[(ordered.len() - 1) / 2].midpoint(ordered[middle]);
             let scale = values.iter().copied().map(f64::abs).fold(0., f64::max);
-            let cutoff = (6. * median).max(32. * f64::EPSILON * scale);
-            if cutoff == 0. {
+            let cutoff = if historical {
+                6. * median
+            } else {
+                (6. * median).max(32. * f64::EPSILON * scale)
+            };
+            if cutoff == 0. && !historical {
                 break;
             }
             for (weight, residual) in weights.iter_mut().zip(absolute) {
-                *weight = (1. - (residual / cutoff).min(1.).powi(2)).powi(2);
+                *weight = if historical && residual <= 0.001 * cutoff {
+                    1.
+                } else if historical && residual > 0.999 * cutoff {
+                    0.
+                } else {
+                    (1. - (residual / cutoff).min(1.).powi(2)).powi(2)
+                };
             }
         }
     }

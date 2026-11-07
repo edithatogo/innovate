@@ -1395,3 +1395,10 @@ the other competition models and installed binding checks remain open.
   default. Restored the default. Add explicit historical compatibility
   semantics so both the independent parity fixture and the analytic
   spike-recovery test can be enforced.
+
+- [x] Implement explicit historical STL fit semantics in the Rust
+  preprocessing request (`historical: true`). The robust independent
+  fixture passes within 1e-9, and the default analytic spike-recovery
+  test still passes. All 18 native boundary tests passed.
+- [ ] Expose historical STL mode in Python, Julia and R, verify installed
+  binding parity, and qualify the remaining historical STL options.
