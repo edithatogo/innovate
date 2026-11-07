@@ -1430,3 +1430,10 @@ the other competition models and installed binding checks remain open.
   low-pass spans 25/17/9 and inner/outer counts 2/3. Calls omitting both
   new options also passed in all three runtimes.
 - [ ] Qualify historical degree and jump options.
+
+- [x] Implement degree 0/1 and positive jump controls for each STL
+  smoother in Rust. Four mixed degree/jump configurations matched
+  stats::stl through installed R within 6.37e-12, including off-grid
+  terminal points. All 18 native boundary tests and focused Clippy passed.
+- [ ] Expose degree and jump controls in the three binding helpers and
+  validate each against the independent reference.

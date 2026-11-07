@@ -217,6 +217,22 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
                         .ok_or("seasonal_span and low_pass_span must be odd integers of at least three")
                 }).transpose()
             };
+            let smoother = |degree, jump| {
+                let degree = if payload[degree].is_null() {
+                    1
+                } else {
+                    integer(degree)?
+                };
+                let jump = if payload[jump].is_null() {
+                    1
+                } else {
+                    integer(jump)?
+                };
+                if degree > 1 || jump == 0 {
+                    return Err("STL degree must be zero or one and jump must be positive");
+                }
+                Ok((degree, jump))
+            };
             return seasonal::decompose(
                 &values,
                 integer("period")?,
@@ -228,6 +244,11 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
                 robust,
                 historical,
                 (inner, outer),
+                [
+                    smoother("seasonal_degree", "seasonal_jump")?,
+                    smoother("trend_degree", "trend_jump")?,
+                    smoother("low_pass_degree", "low_pass_jump")?,
+                ],
             );
         }
         let window = match payload["method"].as_str() {

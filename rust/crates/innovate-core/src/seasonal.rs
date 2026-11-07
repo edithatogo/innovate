@@ -1,6 +1,6 @@
 /// Local linear regression on an evenly spaced sample grid.
 pub(crate) fn loess_trend(values: &[f64], span: usize) -> Result<Vec<f64>, &'static str> {
-    weighted_loess(values, span, None, false, false)
+    weighted_loess(values, span, None, false, false, (1, 1))
 }
 
 fn weighted_loess(
@@ -9,6 +9,7 @@ fn weighted_loess(
     robustness: Option<&[f64]>,
     extend: bool,
     historical: bool,
+    (degree, jump): (usize, usize),
 ) -> Result<Vec<f64>, &'static str> {
     if span < 3 || (!historical && span > values.len()) {
         return Err("LOESS span must be between three and the series length");
@@ -20,77 +21,90 @@ fn weighted_loess(
         return Ok(vec![0.; values.len() + 2 * usize::from(extend)]);
     }
     let extension = isize::from(extend);
-    (-extension..values.len() as isize + extension)
-        .map(|index| {
-            let start = (index - (span / 2) as isize).max(0) as usize;
-            let start = start.min(values.len() - span);
-            let radius = index
-                .abs_diff(start as isize)
-                .max(index.abs_diff((start + span - 1) as isize)) as f64
-                + extra_radius as f64;
-            let (mut weight, mut x_sum, mut y_sum, mut xx, mut xy) = (0., 0., 0., 0., 0.);
-            for (offset, value) in values[start..start + span].iter().enumerate() {
-                let x = ((start + offset) as f64 - index as f64) / radius;
-                let y = value / scale;
-                let w =
-                    (1. - x.abs().powi(3)).powi(3) * robustness.map_or(1., |w| w[start + offset]);
-                weight += w;
-                x_sum += w * x;
-                y_sum += w * y;
-                xx += w * x * x;
-                xy += w * x * y;
+    let last = values.len() - 1;
+    let jump = jump.min(last);
+    let estimate = |index: isize, window_center: isize| {
+        let start = (window_center - (span / 2) as isize).max(0) as usize;
+        let start = start.min(values.len() - span);
+        let radius = index
+            .abs_diff(start as isize)
+            .max(index.abs_diff((start + span - 1) as isize)) as f64
+            + extra_radius as f64;
+        let (mut weight, mut x_sum, mut y_sum, mut xx, mut xy) = (0., 0., 0., 0., 0.);
+        for (offset, value) in values[start..start + span].iter().enumerate() {
+            let x = ((start + offset) as f64 - index as f64) / radius;
+            let y = value / scale;
+            let w = (1. - x.abs().powi(3)).powi(3) * robustness.map_or(1., |w| w[start + offset]);
+            weight += w;
+            x_sum += w * x;
+            y_sum += w * y;
+            xx += w * x * x;
+            xy += w * x * y;
+        }
+        let determinant = weight * xx - x_sum * x_sum;
+        let spread_floor = if historical {
+            0.001 * (values.len() - 1) as f64 / radius
+        } else {
+            0.
+        };
+        let intercept = if degree == 1 && determinant > (weight * spread_floor).powi(2) {
+            (xx * y_sum - x_sum * xy) / determinant
+        } else if weight == 0. {
+            if historical {
+                return Ok(None);
             }
-            let determinant = weight * xx - x_sum * x_sum;
-            let spread_floor = if historical {
-                0.001 * (values.len() - 1) as f64 / radius
-            } else {
-                0.
-            };
-            let intercept = if determinant > (weight * spread_floor).powi(2) {
-                (xx * y_sum - x_sum * xy) / determinant
-            } else if weight == 0. {
-                if historical {
-                    return Ok(None);
-                }
-                let nearest = robustness
-                    .into_iter()
-                    .flatten()
-                    .enumerate()
-                    .filter(|(_, w)| **w > 0.)
-                    .min_by_key(|(i, _)| (*i as isize).abs_diff(index))
-                    .map_or(
-                        index.clamp(0, values.len() as isize - 1) as usize,
-                        |(i, _)| i,
-                    );
-                return Ok(Some(values[nearest]));
-            } else {
-                y_sum / weight
-            };
-            let estimate = intercept * scale;
-            estimate
-                .is_finite()
-                .then_some(Some(estimate))
-                .ok_or("LOESS estimate exceeded finite numerical domain")
-        })
-        .collect::<Result<Vec<_>, _>>()
-        .map(|estimates| {
-            let offset = usize::from(extend);
-            let interior: Vec<_> = estimates[offset..offset + values.len()]
-                .iter()
-                .zip(values)
-                .map(|(estimate, value)| estimate.unwrap_or(*value))
-                .collect();
-            if !extend {
-                return interior;
+            let nearest = robustness
+                .into_iter()
+                .flatten()
+                .enumerate()
+                .filter(|(_, w)| **w > 0.)
+                .min_by_key(|(i, _)| (*i as isize).abs_diff(index))
+                .map_or(
+                    index.clamp(0, values.len() as isize - 1) as usize,
+                    |(i, _)| i,
+                );
+            return Ok(Some(values[nearest]));
+        } else {
+            y_sum / weight
+        };
+        let estimate = intercept * scale;
+        estimate
+            .is_finite()
+            .then_some(Some(estimate))
+            .ok_or("LOESS estimate exceeded finite numerical domain")
+    };
+    let mut interior = vec![0.; values.len()];
+    let mut previous = 0;
+    for index in (0..=last)
+        .step_by(jump)
+        .chain((!last.is_multiple_of(jump)).then_some(last))
+    {
+        // Historical STL fits the final off-grid point with the previous window.
+        let center = if historical && index == last && !last.is_multiple_of(jump) {
+            previous
+        } else {
+            index
+        };
+        let right = estimate(index as isize, center as isize)?.unwrap_or(values[index]);
+        let left = interior[previous];
+        if index > previous + 1 {
+            for (offset, value) in interior[previous + 1..index].iter_mut().enumerate() {
+                *value = left + (right - left) * (offset + 1) as f64 / (index - previous) as f64;
             }
-            let last = values.len() - 1;
-            std::iter::once(estimates[0].unwrap_or(interior[0]))
-                .chain(interior.iter().copied())
-                .chain(std::iter::once(
-                    estimates[last + 2].unwrap_or(interior[last]),
-                ))
-                .collect()
-        })
+        }
+        interior[index] = right;
+        previous = index;
+    }
+    if !extend {
+        return Ok(interior);
+    }
+    let first = estimate(-extension, -extension)?.unwrap_or(interior[0]);
+    let end = values.len() as isize;
+    let end = estimate(end, end)?.unwrap_or(interior[last]);
+    Ok(std::iter::once(first)
+        .chain(interior)
+        .chain(std::iter::once(end))
+        .collect())
 }
 
 pub(crate) fn decompose(
@@ -100,10 +114,12 @@ pub(crate) fn decompose(
     robust: bool,
     historical: bool,
     iterations: (usize, usize),
+    smoothers: [(usize, usize); 3],
 ) -> Result<serde_json::Value, &'static str> {
     if period < 2 || period > values.len() / 3 {
         return Err("seasonal period must leave at least three complete cycles");
     }
+    let [seasonal_smoother, trend_smoother, low_smoother] = smoothers;
     let (trend_span, seasonal_span, low_pass_span) = spans;
     let (inner_iterations, outer_iterations) = iterations;
     let extrapolate = robust && !historical;
@@ -131,6 +147,7 @@ pub(crate) fn decompose(
                     Some(&phase_weights),
                     !extrapolate,
                     historical,
+                    seasonal_smoother,
                 )?;
                 let offset = usize::from(extrapolate);
                 if extrapolate {
@@ -149,12 +166,19 @@ pub(crate) fn decompose(
             };
             let low = moving_average(&moving_average(&moving_average(&cycle, period), period), 3);
             let low_span = low_pass_span.unwrap_or((period + 1) | 1);
-            let low = weighted_loess(&low, low_span, None, false, historical)?;
+            let low = weighted_loess(&low, low_span, None, false, historical, low_smoother)?;
             for (i, (season, low)) in seasonal.iter_mut().zip(low).enumerate() {
                 *season = cycle[i + period] - low;
             }
             let adjusted: Vec<_> = values.iter().zip(&seasonal).map(|(y, s)| y - s).collect();
-            trend = weighted_loess(&adjusted, trend_span, Some(&weights), false, historical)?;
+            trend = weighted_loess(
+                &adjusted,
+                trend_span,
+                Some(&weights),
+                false,
+                historical,
+                trend_smoother,
+            )?;
         }
         if pass < outer_iterations {
             let absolute: Vec<_> = values
