@@ -185,10 +185,7 @@ pub fn invoke_registered_extension(
     if resolved["extension_point"] == "diagnostics" {
         return summarize_diagnostics(&output);
     }
-    if resolved["extension_point"] == "serialization_adapter"
-        && output.get("artifact_kind").is_none()
-        && output.get("model_type").is_some()
-    {
+    if resolved["extension_point"] == "serialization_adapter" && is_scenario_artifact(&output) {
         let mut response = crate::scenario::import_artifact(&json!({
             "schema_version":crate::KERNEL_SCHEMA_VERSION,
             "payload":{"artifact":output},
@@ -217,6 +214,20 @@ pub fn invoke_registered_extension(
         return Err(invalid);
     }
     Ok(response["result"].take())
+}
+
+fn is_scenario_artifact(artifact: &Value) -> bool {
+    artifact.get("artifact_kind").is_none() && artifact.get("model_type").is_some()
+}
+
+pub(crate) fn import_serialized_artifact(request: &Value) -> Value {
+    let mut response = if is_scenario_artifact(&request["payload"]["artifact"]) {
+        crate::scenario::import_artifact(request)
+    } else {
+        crate::dataset::ingest_request(request)
+    };
+    response["operation"] = json!("import_extension_artifact");
+    response
 }
 
 pub(crate) fn summarize_diagnostics(output: &Value) -> Result<Value, &'static str> {

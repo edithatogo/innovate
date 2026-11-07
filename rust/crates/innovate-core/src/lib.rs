@@ -102,6 +102,9 @@ pub fn execute_json(input: &str) -> String {
                 return benchmark::execute(&value).to_string();
             }
             Some("discover_scenarios") => return scenario::discover(&value).to_string(),
+            Some("import_extension_artifact") => {
+                return extensions::import_serialized_artifact(&value).to_string();
+            }
             Some("import_scenario_artifact") => {
                 return scenario::import_artifact(&value).to_string();
             }

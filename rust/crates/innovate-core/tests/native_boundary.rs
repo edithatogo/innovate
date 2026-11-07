@@ -1628,6 +1628,11 @@ fn scenario_grid_runs_in_order_and_retains_individual_errors() {
         })
     };
     assert_eq!(invoke(artifact).unwrap(), run(&import)["result"]);
+    let mut extension_import = import.clone();
+    extension_import["operation"] = json!("import_extension_artifact");
+    let response = run(&extension_import);
+    assert_eq!(response["operation"], "import_extension_artifact");
+    assert_eq!(response["result"], run(&import)["result"]);
     let mut older = artifact.clone();
     older["version"] = json!("0.0.1");
     assert_eq!(invoke(&older).unwrap()["replay_available"], false);

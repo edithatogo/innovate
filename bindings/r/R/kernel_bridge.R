@@ -187,7 +187,5 @@ invoke_registered_extension <- function(callback, selection, payload) {
   if (identical(resolved$extension_point, "diagnostics")) {
     return(kernel_call("summarize_extension_diagnostics", payload = list(checks = output))$result)
   }
-  operation <- if (is.list(output) && !"artifact_kind" %in% names(output) &&
-    "model_type" %in% names(output)) "import_scenario_artifact" else "ingest_dataset"
-  kernel_call(operation, payload = list(artifact = output))$result
+  kernel_call("import_extension_artifact", payload = list(artifact = output))$result
 }

@@ -5766,3 +5766,9 @@ Hosted release readiness for this worktree revision remains open.
   one-time-point Logistic artifact with replay available and imported
   the same envelope tagged 0.0.1 with replay unavailable. This verifies
   version gating. Cross-version replay itself remains open.
+
+- [x] Centralize serialization adapter format detection in Rust and
+  route Python, Julia and R through import_extension_artifact. The
+  native scenario test verified the new operation returns the same
+  result as direct scenario import. All three focused extension
+  boundary tests also passed. Binding reruns remain open.
