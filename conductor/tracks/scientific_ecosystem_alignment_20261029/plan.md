@@ -4232,3 +4232,6 @@ Hosted release readiness for this worktree revision remains open.
   but cannot supply resource totals. The resource comparison fails
   independently while the ordinary comparison succeeds. The focused
   boundary regression passed.
+- [x] Verify the Kairos comparison fixture ships in the source archive.
+  Both focused Rust and Python tests passed from a fresh extraction,
+  using the existing Cargo target directory and matching installed wheel.
