@@ -4251,3 +4251,7 @@ Hosted release readiness for this worktree revision remains open.
   resource effects from imitation. The initially closed scenario
   replays with zero degree, and all ten scenario-filtered Rust
   boundary tests passed. Installed-binding verification remains open.
+- [x] Verify zero-degree custom network specification and replay at
+  28d0278a through the rebuilt Python 3.15.2 wheel, Julia and installed
+  R. All returned counts [0, 0, 0, 2, 3] and reproduced the complete
+  simulation result from the generated replay request.
