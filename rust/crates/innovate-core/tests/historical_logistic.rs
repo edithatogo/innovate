@@ -101,3 +101,36 @@ fn additive_covariate_fit_recovers_independent_curve() {
         assert!((f["parameters"]["beta_L_x"].as_f64().unwrap() - 10.).abs() < 0.001);
     }
 }
+
+#[test]
+fn logistic_total_rate_includes_control_slopes_and_event_policy() {
+    let mut payload = json!({
+        "inputs":{"time":[2.,3.],"covariates":{"price":[1.,1.]},"covariate_rates":{"price":[2.,2.]}},
+        "constructor_kwargs":{"covariates":["price"],"t_event":2.,"event_covariates":"additive"},
+        "parameters":{"L":100.,"k":0.5,"x0":2.,"L_post":200.,"k_post":1.,"x0_post":1.5,
+            "beta_L_price":10.,"beta_k_price":0.2,"beta_x0_price":0.5}
+    });
+    let binding = KernelBinding::new();
+    let result = binding
+        .predict_model("logistic", payload.clone())
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(result["values"][0], 105.);
+    assert_eq!(result["rates"][0][0], 10.);
+    let f = 1. / (1. + (-1.2_f64).exp());
+    let expected = 20. * f + 210. * f * (1. - f) * 0.4;
+    assert!((result["rates"][1][0].as_f64().unwrap() - expected).abs() < 1e-10);
+    payload["constructor_kwargs"]["event_covariates"] = json!("historical_ignored");
+    let result = binding
+        .predict_model("logistic", payload.clone())
+        .unwrap()
+        .result
+        .unwrap();
+    let fraction = 1. / (1. + (-0.5_f64).exp());
+    assert!(
+        (result["rates"][0][0].as_f64().unwrap() - 200. * fraction * (1. - fraction)).abs() < 1e-10
+    );
+    payload["inputs"]["covariate_rates"] = json!({"price":[1.]});
+    assert!(binding.predict_model("logistic", payload).is_err());
+}

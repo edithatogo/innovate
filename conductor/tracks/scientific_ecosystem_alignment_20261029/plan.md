@@ -1066,4 +1066,9 @@ the other competition models and installed binding checks remain open.
   against rebuilt native artifacts give level 100 and rate 50 at the event
   boundary. Python also checks the fixed-control derivative.
   [Fixture and logs](evidence/logistic-conditional-rates-20261107).
-- [ ] Extend the derivative contract to explicit time-varying control slopes.
+- [x] Extend the native JSON derivative contract to explicit time-varying
+  control slopes. The chain rule includes capacity, growth and midpoint
+  effects in the active event branch. Six Rust tests and focused Clippy
+  passed.
+- [ ] Qualify total rates in installed bindings and expose control slopes
+  through the Polars frame path.

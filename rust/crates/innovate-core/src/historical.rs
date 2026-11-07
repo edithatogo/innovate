@@ -140,6 +140,28 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             "covariate arrays must be finite and aligned with time",
         ));
     }
+    let control_slopes = input
+        .get("covariate_rates")
+        .map(|value| {
+            let rates = value
+                .as_object()
+                .filter(|rates| {
+                    rates.len() == cov.len() && cov.iter().all(|name| rates.contains_key(name))
+                })
+                .ok_or_else(|| error("covariate_rates must match declared names"))?;
+            cov.iter()
+                .map(|name| {
+                    let values = numeric_array(&rates[name], name, op)?;
+                    if values.len() != time.len() || values.iter().any(|value| !value.is_finite()) {
+                        return Err(error(
+                            "covariate_rates must be finite and aligned with time",
+                        ));
+                    }
+                    Ok(values)
+                })
+                .collect::<Result<Vec<_>, _>>()
+        })
+        .transpose()?;
     let parse = |v: &Value| -> Result<Vec<f64>, KernelBindingError> {
         let p = v
             .as_object()
@@ -164,11 +186,17 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         let post = event.is_some_and(|e| t >= e);
         let offset = if post { 3 } else { 0 };
         let mut a = [p[offset], p[offset + 1], p[offset + 2]];
-        if event.is_none() || mode == "additive" {
+        let mut derivative = [0.; 3];
+        let apply_controls = event.is_none() || mode == "additive";
+        if apply_controls {
             let start = if event.is_some() { 6 } else { 3 };
             for (j, x) in series.iter().enumerate() {
                 for k in 0..3 {
-                    a[k] += p[start + 3 * j + k] * x[i];
+                    let beta = p[start + 3 * j + k];
+                    a[k] += beta * x[i];
+                    if let Some(slopes) = &control_slopes {
+                        derivative[k] += beta * slopes[j][i];
+                    }
                 }
             }
         }
@@ -184,6 +212,12 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             tail / denominator
         };
         let slope = (a[0] * tail / denominator) * (a[1] / denominator);
+        let slope = if apply_controls && control_slopes.is_some() {
+            let dz = derivative[1] * (t - a[2]) + a[1] * (1. - derivative[2]);
+            derivative[0] * fraction + (a[0] * tail / denominator) * (dz / denominator)
+        } else {
+            slope
+        };
         Ok((a[0] * fraction, slope))
     };
     let mut quality = None;
@@ -301,7 +335,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         .cloned()
         .zip(params.iter().map(|v| json!(v)))
         .collect();
-    let predictions = json!({"values":values,"rates":rates,"shape":[time.len()],"dtype":"float64","metadata":{"event_boundary":"post_at_t_event","event_covariates":mode,"covariate_semantics":"pointwise additive parameters","rate_semantics":"time derivative holding covariates fixed; post-event branch at the boundary, excluding jump impulses","nonfinite_rate":"null"}});
+    let predictions = json!({"values":values,"rates":rates,"shape":[time.len()],"dtype":"float64","metadata":{"event_boundary":"post_at_t_event","event_covariates":mode,"covariate_semantics":"pointwise additive parameters","rate_semantics":if control_slopes.is_some() && (event.is_none() || mode == "additive") {"time derivative with supplied covariate rates; post-event branch at the boundary, excluding jump impulses"} else {"time derivative holding covariates fixed; post-event branch at the boundary, excluding jump impulses"},"nonfinite_rate":"null"}});
     let state = json!({"model_key":"logistic","model_name":"LogisticModel","parameters":parameters,"constructor_kwargs":kw,"predict_kwargs":{}});
     let result = if matches!(
         op,
