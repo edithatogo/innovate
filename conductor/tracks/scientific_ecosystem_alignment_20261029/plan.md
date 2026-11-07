@@ -4417,3 +4417,6 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify the edgeless Polars path with a rebuilt Python 3.15.2 binding.
   Staging on the repository volume allowed wheel assembly. The focused
   regression imported the rebuilt extension and verified artifact replay.
+- [x] Verify header-only local CSV ingestion for edgeless networks.
+  Both the CSV and in-memory Polars cases preserve empty edge columns
+  and reproduce the artifact on replay.

@@ -1253,16 +1253,20 @@ def test_polars_ingestion_distinguishes_directed_and_undirected_edges():
     assert exc.value.validation["failed"] == ["duplicate_keys:source_target"]
 
 
-def test_edgeless_polars_dataset_round_trips():
+@pytest.mark.parametrize("local_csv", [False, True])
+def test_edgeless_network_dataset_round_trips(tmp_path, local_csv):
+    provenance = {
+        "source": "synthetic",
+        "license": "CC-BY-4.0",
+        "extraction_time": "2026-11-07T00:00:00Z",
+    }
     frame = pl.DataFrame(schema={"source": pl.String, "target": pl.String})
-    artifact = innovate.ingest_polars(
-        frame,
-        "network_edges",
-        provenance={
-            "source": "synthetic",
-            "license": "CC-BY-4.0",
-            "extraction_time": "2026-11-07T00:00:00Z",
-        },
-    )
+    if local_csv:
+        path = tmp_path / "edges.csv"
+        frame.write_csv(path)
+        artifact = innovate.ingest_local(path, "network_edges", provenance=provenance)
+        assert artifact["dataset"]["provenance"]["extra"]["format"] == "csv"
+    else:
+        artifact = innovate.ingest_polars(frame, "network_edges", provenance=provenance)
     assert artifact["dataset"]["source"] == artifact["dataset"]["target"] == artifact["dataset"]["weight"] == []
     assert innovate.execute("ingest_dataset", artifact=artifact)["result"] == artifact
