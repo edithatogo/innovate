@@ -6727,3 +6727,11 @@ Hosted release readiness for this worktree revision remains open.
   ticks, giving cumulative hazard one at the horizon. Both the
   constant and ramped designs passed the analytic CDF check across
   2,048 fixed seeds each in the focused Rust test.
+
+- [x] Verify the single-agent request-time distributions through
+  Python 3.15.2, Julia and installed R. Across 2,048 seeds per design,
+  counts for no request and ticks 1–4 were [775, 427, 343, 307, 196]
+  for constant hazard and [775, 102, 325, 423, 423] for linear forcing
+  in all three bindings. Python verified all eight cumulative
+  frequencies within four binomial standard errors of the analytic
+  CDF. Reused the unchanged 4947d6b4 native builds.
