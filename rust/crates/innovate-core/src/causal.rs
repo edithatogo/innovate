@@ -313,6 +313,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
         Some("estimate_stratum_propensities") => estimate_stratum_propensities(payload),
         Some("fit_logistic_propensities") => fit_logistic_propensities(payload),
         Some("predict_logistic_propensities") => predict_logistic_propensities(payload),
+        Some("score_propensities") => score_propensities(payload),
         Some("matched_treatment_contrast") => matched_treatment_contrast(payload),
         Some("intervention_contract") => intervention_contract(payload),
         Some("policy_specification") => policy_specification(payload),
@@ -850,6 +851,32 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
             "conditional_standard_error":conditional_standard_error,
             "control_diagnostics":{"unique_controls":control_uses.len(),
             "effective_sample_size":1. / squared_control_weights}}),
+    )
+}
+
+fn score_propensities(payload: &Value) -> Result<Value, &'static str> {
+    let treatment = series(payload, "treatment")?;
+    let probabilities = series(payload, "propensities")?;
+    if treatment.is_empty() || treatment.len() != probabilities.len() {
+        return Err("propensity scoring requires nonempty aligned treatment and propensities");
+    }
+    let mut brier = 0.;
+    let mut log_loss = 0.;
+    for (&target, &probability) in treatment.iter().zip(&probabilities) {
+        if !(0. < probability && probability < 1.) {
+            return Err("propensities must lie strictly between zero and one");
+        }
+        log_loss -= match target {
+            0. => (-probability).ln_1p(),
+            1. => probability.ln(),
+            _ => return Err("treatment indicators must be binary"),
+        };
+        brier += (probability - target).powi(2);
+    }
+    let n = treatment.len() as f64;
+    Ok(
+        json!({"observations":treatment.len(),"brier_score":brier/n,"log_loss":log_loss/n,
+        "observed_treated_fraction":mean(&treatment),"mean_propensity":mean(&probabilities)}),
     )
 }
 

@@ -728,6 +728,14 @@ fn causal_summaries_match_analytic_effects() {
     let mut prediction = json!({"method":"predict_logistic_propensities",
         "fit":fitted["result"],"covariates":[[0],[2],[-2]]});
     let predicted = run(prediction.clone());
+    let mut scoring = json!({"method":"score_propensities","treatment":[0,1,0],
+        "propensities":predicted["result"]["propensities"]});
+    let scored = run(scoring.clone());
+    assert!((scored["result"]["brier_score"].as_f64().unwrap() - 0.125).abs() < 1e-7);
+    let expected_loss = -(0.5_f64.ln() + 2. * 0.75_f64.ln()) / 3.;
+    assert!((scored["result"]["log_loss"].as_f64().unwrap() - expected_loss).abs() < 1e-7);
+    scoring["propensities"][0] = json!(1);
+    assert!(run(scoring)["result"].is_null());
     for (p, expected) in predicted["result"]["propensities"]
         .as_array()
         .unwrap()

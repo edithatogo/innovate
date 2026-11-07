@@ -4617,3 +4617,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify saved logistic propensity fit replay through rebuilt Python
   3.15.2, Julia and installed R. Each returned 0.5, 0.75 and 0.25 in
   the requested held-out row order.
+
+- [x] Score held-out propensity predictions using Brier score and log
+  loss. The Rust test verifies analytic values and rejects boundary
+  probabilities. Binding runtime checks remain open.

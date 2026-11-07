@@ -288,3 +288,7 @@ Call `summarize_causal` with method `predict_logistic_propensities`,
 the saved `fit` result and a new `covariates` row matrix. Prediction
 uses the original column scales and coefficients. Columns must follow
 the training order. Probabilities are returned in prediction-row order.
+
+Use `score_propensities` with held-out binary `treatment` and aligned
+`propensities` in (0, 1). It reports mean Brier score, mean log loss,
+the observed treatment fraction and the mean predicted probability.
