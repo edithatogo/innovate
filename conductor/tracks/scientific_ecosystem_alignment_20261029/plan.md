@@ -3824,3 +3824,7 @@ Hosted release readiness for this worktree revision remains open.
   an unknown case between two valid cases selected in reverse catalog
   order. The native response retained the error in its input position
   and matched both successful rows to the policy run.
+- [x] Verify explicit benchmark ordering and isolated unknown-case
+  errors in the rebuilt Python 3.15.2 wheel, Julia and installed R.
+  All three preserved the requested order and returned successes on
+  either side of the failed case with three workers at 668f374f.
