@@ -4347,3 +4347,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reject malformed supplied dataset digests before sorting,
   serializing or hashing content. The five focused Rust dataset
   tests passed, including valid uppercase digest and tamper checks.
+- [x] Verify historical checksum encoding through dataset ingestion.
+  A Unicode provenance fixture distinguishes the legacy Python digest
+  from the Rust default. Re-ingestion reproduces the legacy artifact
+  with the recorded encoding and rejects the mismatched default.
+  All five focused Rust dataset tests passed.

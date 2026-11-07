@@ -971,7 +971,7 @@ fn dataset_ingestion_stamps_valid_artifacts_and_rejects_invalid_inputs() {
         .unwrap()
     };
     let mut data = innovate_core::json!({"kind":"adoption","time":[0,1],"adoption":[1,2],
-        "provenance":{"source":"survey","license":"CC-BY-4.0","extraction_time":"2026-11-07T00:00:00Z"}});
+        "provenance":{"source":"survey α","license":"CC-BY-4.0","extraction_time":"2026-11-07T00:00:00Z"}});
     let response = run(data.clone());
     let artifact = &response["result"];
     assert_eq!(artifact["artifact_kind"], "innovate.dataset");
@@ -984,6 +984,32 @@ fn dataset_ingestion_stamps_valid_artifacts_and_rejects_invalid_inputs() {
         64
     );
     assert_eq!(run(artifact["dataset"].clone())["result"], *artifact);
+    let ingest_with_encoding = |dataset: &serde_json::Value, encoding: &str| {
+        let request = json!({"schema_version":"2.0","operation":"ingest_dataset",
+            "payload":{"dataset":dataset,"encoding":encoding}});
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    let legacy = ingest_with_encoding(&data, "python_sorted_json_v1");
+    let legacy = &legacy["result"];
+    assert_eq!(legacy["checksum_encoding"], "python_sorted_json_v1");
+    assert_ne!(
+        legacy["dataset"]["provenance"]["checksum"],
+        artifact["dataset"]["provenance"]["checksum"]
+    );
+    assert_eq!(
+        ingest_with_encoding(
+            &legacy["dataset"],
+            legacy["checksum_encoding"].as_str().unwrap()
+        )["result"],
+        *legacy
+    );
+    assert_eq!(
+        run(legacy["dataset"].clone())["error"]["message"],
+        "dataset content checksum does not match provenance"
+    );
     let mut changed = artifact["dataset"].clone();
     changed["adoption"][1] = innovate_core::json!(3);
     assert_eq!(run(changed)["error"]["code"], "invalid_request");
