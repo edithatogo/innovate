@@ -3424,3 +3424,9 @@ the other competition models and installed binding checks remain open.
   and retained the bincode unmaintained warning RUSTSEC-2025-0141.
   Cargo tree showed no reverse dependency in the all-features,
   all-targets workspace graph. Broader supply-chain gates remain open.
+
+- [x] Trace the bincode warning to pinned Polars. Cargo metadata
+  retains bincode 2.0.1 under the optional polars-utils serde feature.
+  The Darwin tabular feature tree omitted that edge, and the fresh
+  release build log and release target directory contained no bincode
+  compilation or artifacts. The lockfile audit warning remains open.
