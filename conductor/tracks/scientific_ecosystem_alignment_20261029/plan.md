@@ -4395,3 +4395,8 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Validate reversed duplicate edges when directed is explicitly false.
   Directed datasets retain reciprocal edges, and legacy datasets without
   the flag retain ordered keys. The focused Rust edge test passed.
+- [x] Verify Polars ingestion preserves directed reciprocal edges and
+  rejects undirected duplicates with structured diagnostics. The
+  focused Python test passed against the rebuilt native extension.
+  Wheel assembly hit the internal disk limit, so the check used an
+  isolated import directory on the repository volume.

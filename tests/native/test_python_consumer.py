@@ -1237,3 +1237,17 @@ def test_legacy_checksum_matches_python_across_numeric_and_unicode_domains():
     encoded = json.dumps(dataset, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
     actual = innovate.execute("dataset_checksum", dataset=dataset, encoding="python_sorted_json_v1")["result"]
     assert actual["checksum"] == hashlib.sha256(encoded).hexdigest()
+
+
+def test_polars_ingestion_distinguishes_directed_and_undirected_edges():
+    frame = pl.DataFrame({"source": ["a", "b"], "target": ["b", "a"]})
+    provenance = {
+        "source": "synthetic",
+        "license": "CC-BY-4.0",
+        "extraction_time": "2026-11-07T00:00:00Z",
+    }
+    artifact = innovate.ingest_polars(frame, "network_edges", provenance=provenance, directed=True)
+    assert artifact["dataset"]["directed"] is True
+    with pytest.raises(innovate.NativeError, match="dataset diagnostics failed") as exc:
+        innovate.ingest_polars(frame, "network_edges", provenance=provenance, directed=False)
+    assert exc.value.validation["failed"] == ["duplicate_keys:source_target"]
