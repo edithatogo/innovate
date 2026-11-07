@@ -2,7 +2,7 @@ module Innovate
 using JSON
 using Libdl
 
-export kernel_seasonal_decomposition, kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
+export kernel_sarima_fit, kernel_seasonal_decomposition, kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
     kernel_categorize_adopters, kernel_categorize_fitted_adopters, kernel_fit_batch, kernel_predict_batch, kernel_simulate_model, kernel_summarize_model, kernel_diagnose_model
 
 function native_library()
@@ -76,5 +76,12 @@ kernel_seasonal_decomposition(values, period, trend_span=nothing; robust=false, 
         "seasonal_degree" => seasonal_degree, "seasonal_jump" => seasonal_jump,
         "trend_degree" => trend_degree, "trend_jump" => trend_jump,
         "low_pass_degree" => low_pass_degree, "low_pass_jump" => low_pass_jump))["result"]
+
+"""Estimate a no-intercept SARIMA model and return fitted values with missing warmup rows."""
+kernel_sarima_fit(values, order; seasonal_order=(0, 0, 0, 0)) =
+    map(x -> isnothing(x) ? missing : Float64(x),
+        kernel_call("preprocess_series", nothing, Dict("method" => "sarima_fit",
+            "values" => values, "order" => collect(order),
+            "seasonal_order" => collect(seasonal_order)))["result"]["fitted"])
 
 end

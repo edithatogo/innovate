@@ -93,3 +93,9 @@ kernel_seasonal_decomposition <- function(values, period, trend_span = NULL, rob
     trend_degree = trend_degree, trend_jump = trend_jump,
     low_pass_degree = low_pass_degree, low_pass_jump = low_pass_jump))$result
 }
+
+kernel_sarima_fit <- function(values, order, seasonal_order = c(0L, 0L, 0L, 0L)) {
+  fitted <- kernel_call("preprocess_series", payload = list(method = "sarima_fit",
+    values = values, order = order, seasonal_order = seasonal_order))$result$fitted
+  vapply(fitted, function(value) if (is.null(value)) NA_real_ else value, numeric(1))
+}

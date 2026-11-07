@@ -27,6 +27,7 @@ __all__ = [
     "cumulative_sum",
     "rolling_average",
     "seasonal_decomposition",
+    "sarima_fit",
     "capabilities",
     "execute",
     "fit",
@@ -307,3 +308,23 @@ def seasonal_decomposition(
         low_pass_jump=low_pass_jump,
     )["result"]
     return pl.DataFrame(result)
+
+
+def sarima_fit(
+    data: pl.Series,
+    *,
+    order: tuple[int, int, int],
+    seasonal_order: tuple[int, int, int, int] = (0, 0, 0, 0),
+) -> pl.Series:
+    """Estimate a no-intercept SARIMA model and return aligned fitted values.
+
+    Differencing leaves nulls at the start of the returned series.
+    """
+    result = execute(
+        "preprocess_series",
+        method="sarima_fit",
+        values=data.to_list(),
+        order=order,
+        seasonal_order=seasonal_order,
+    )["result"]
+    return pl.Series(data.name, result["fitted"], dtype=pl.Float64)

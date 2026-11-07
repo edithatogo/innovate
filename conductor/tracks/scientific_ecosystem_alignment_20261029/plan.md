@@ -1507,3 +1507,9 @@ the other competition models and installed binding checks remain open.
   bridge ran the Rust estimator and the reproducible checker verifies
   coefficient agreement within 5e-4 and log likelihood within 1e-6.
   Broader optimizer and differenced initialization qualification remain open.
+
+- [x] Expose native SARIMA fitting through Python, Julia and R helpers.
+  Installed runtime checks retained the observation scale and four
+  warmup entries for combined differencing, represented as Polars
+  nulls, Julia missing values and R numeric NAs. The Python wheel also
+  exercised coefficient estimation through the helper on an AR(1).
