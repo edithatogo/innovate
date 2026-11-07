@@ -3679,3 +3679,8 @@ Hosted release readiness for this worktree revision remains open.
   results for explicit and saved-state forecasts against the analytic
   contrast. The causal boundary test and focused Clippy passed.
   Installed binding checks for explicit histories remain open.
+- [x] Verify the explicit Lotka–Volterra covariate history override in
+  the rebuilt Python 3.15.2 wheel, Julia and freshly installed R using
+  native source 8436bf99. All three matched the analytic first-product
+  baseline and zero-price-history counterfactual within 1e-8. R used
+  raw JSON to preserve the single forecast observation and covariate name.
