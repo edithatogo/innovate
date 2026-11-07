@@ -1229,14 +1229,14 @@ the other competition models and installed binding checks remain open.
   overflow. All five tabular tests and Clippy passed.
 - [x] Expose classification through Python, Julia and R. All installed
   bindings returned the five historical labels on the extreme-weight fixture.
-- [ ] Connect the
+- [x] Connect the
   fitted model adoption-rate path where scientifically valid.
 
 - [x] Connect Python fitted single-series models to native adopter
   classification and expose the plain Logistic analytic derivative.
   The installed Polars regression verifies the midpoint rate and
   category endpoints while retaining identity columns.
-- [ ] Qualify model-derived rates for other plain diffusion curves and
+- [x] Qualify model-derived rates for other plain diffusion curves and
   connect fitted-state classification in Julia and R.
 
 - [x] Connect fitted-state classification in installed Julia and R.
@@ -1270,3 +1270,8 @@ the other competition models and installed binding checks remain open.
 - [x] Route Python adopter frames through Arrow IPC and the Rust Polars
   classifier. The rebuilt wheel passes the fitted Logistic regression,
   including the rate and preserved identity column.
+
+- [x] Exercise fitted Bass, Gompertz and Fisher–Pry classification through
+  the installed Python Polars API. All three regressions return aligned
+  positive rate series and multiple categories. The ledger now records
+  bounded native support. Broader rate-domain and grid qualification remains open.

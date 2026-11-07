@@ -180,8 +180,10 @@
     },
     {
       "key": "adopter_classification",
-      "status": "pending",
-      "required": true
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Broader rate-domain and sampling-grid qualification"
     },
     {
       "key": "data_ingestion_provenance_validation",

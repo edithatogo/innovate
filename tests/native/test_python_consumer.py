@@ -921,3 +921,23 @@ def test_fitted_logistic_adopter_categories_use_native_rates():
     assert result["category"][0] == "Innovators"
     assert result["category"][-1] == "Laggards"
     assert result["id"].to_list() == time
+
+
+@pytest.mark.parametrize(
+    ("model", "parameters"),
+    [
+        ("bass", {"p": 0.03, "q": 0.3, "m": 100.0}),
+        ("gompertz", {"a": 100.0, "b": 4.0, "c": 0.3}),
+        ("fisher_pry", {"alpha": 0.5, "t0": 10.0}),
+    ],
+)
+def test_fitted_plain_curves_classify_from_native_rates(model, parameters):
+    time = list(range(31))
+    frame = pl.DataFrame({"time": time})
+    observed = innovate.predict(model, frame, parameters).rename({"prediction": "observed"})
+    fitted = innovate.fit(model, observed, fit_options={"initial_parameters": parameters})
+    result = fitted.categorize_adopters(frame)
+    assert result.height == len(time)
+    assert result["rate"].min() >= 0
+    assert result["rate"].max() > 0
+    assert result["category"].n_unique() >= 3
