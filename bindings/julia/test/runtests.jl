@@ -686,3 +686,15 @@ end
     @test result["treated_predictions"] == [4,6,6,4]
     @test result["contrast"]["estimate"] ≈ 4
 end
+
+@testset "Cross-fitted stratum estimands" begin
+    payload = Dict{String,Any}("outcomes"=>repeat([0,0,2,10,19,19,19],2),
+        "treatment"=>repeat([0,0,1,0,1,1,1],2), "strata"=>repeat(vcat(fill("low",3),fill("high",4)),2),
+        "folds"=>repeat([1,2],inner=7))
+    for (estimand, estimate) in [("ate",6), ("att",7.25)]
+        payload["method"] = "cross_fitted_stratum_" * estimand
+        result = kernel_call("summarize_causal", nothing, payload)["result"]["contrast"]
+        @test result["estimand"] == estimand
+        @test result["estimate"] ≈ estimate
+    end
+end

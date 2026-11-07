@@ -4664,3 +4664,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Add cross-fitted stratum ATT. The Rust two-stratum fixture
   distinguishes ATT 7.25 from ATE 6 under unequal treatment prevalence.
   Binding runtime qualification remains open.
+
+- [x] Verify cross-fitted stratum ATE and ATT through rebuilt Python
+  3.15.2, Julia and installed R. The same unequal-prevalence fixture
+  returns ATE 6 and ATT 7.25 in all three bindings.

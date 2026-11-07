@@ -645,3 +645,13 @@ stratum_ate <- kernel_call("summarize_causal", payload=list(method="cross_fitted
 stopifnot(isTRUE(all.equal(unlist(stratum_ate$control_predictions), c(2,0,0,2))),
   isTRUE(all.equal(unlist(stratum_ate$treated_predictions), c(4,6,6,4))),
   isTRUE(all.equal(stratum_ate$contrast$estimate, 4)))
+
+stratum_payload <- list(outcomes=rep(c(0,0,2,10,19,19,19),2),
+  treatment=rep(c(0,0,1,0,1,1,1),2), strata=rep(c(rep("low",3),rep("high",4)),2),
+  folds=rep(c(1L,2L), each=7))
+for (estimand in c("ate", "att")) {
+  stratum_payload$method <- paste0("cross_fitted_stratum_", estimand)
+  contrast <- kernel_call("summarize_causal", payload=stratum_payload)$result$contrast
+  stopifnot(identical(contrast$estimand, estimand),
+    isTRUE(all.equal(contrast$estimate, if (estimand == "ate") 6 else 7.25)))
+}

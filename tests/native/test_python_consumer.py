@@ -1445,3 +1445,9 @@ def test_cross_fitted_stratum_ate_adjusts_for_unequal_treatment_prevalence():
         "summarize_causal", method="treatment_contrast", outcomes=outcomes, treatment=treatment,
     )["result"]
     assert unadjusted["overall"]["estimate"] == pytest.approx(137 / 12)
+    att = innovate.execute(
+        "summarize_causal", method="cross_fitted_stratum_att", outcomes=outcomes,
+        treatment=treatment, strata=strata, folds=[1] * 7 + [2] * 7,
+    )["result"]
+    assert att["contrast"]["estimand"] == "att"
+    assert att["contrast"]["estimate"] == pytest.approx(7.25)
