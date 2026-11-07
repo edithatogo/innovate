@@ -6791,3 +6791,9 @@ Hosted release readiness for this worktree revision remains open.
   returned the same 32 full execution records in input order with
   one and 32 workers. Python also verified effective seeds 0–31.
   Reused unchanged native builds from 4947d6b4.
+
+- [x] Preserve adopter-category dispersion when weighted variance
+  underflows. Use square-root weights and a norm for subnormal or
+  zero variance. The regression distinguishes an intermediate time
+  within one standard deviation even with the widest finite rate
+  ratio. All three Rust adopter unit tests passed.

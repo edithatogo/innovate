@@ -33,12 +33,22 @@ pub fn classify_adopters(time: &[f64], rates: &[f64]) -> Result<Vec<&'static str
         .map(|(&t, rate)| (scaled_time(t), rate / max_rate));
     let total: f64 = points.clone().map(|(_, weight)| weight).sum();
     let mean = points.clone().map(|(t, weight)| t * weight).sum::<f64>() / total;
-    let sd = (points
+    let variance = points
         .clone()
         .map(|(t, weight)| (t - mean).powi(2) * weight)
         .sum::<f64>()
-        / total)
-        .sqrt();
+        / total;
+    let sd = if variance < f64::MIN_POSITIVE {
+        // Square-root weights retain dispersion even when variance underflows.
+        let root_max_rate = max_rate.sqrt();
+        time.iter()
+            .zip(rates)
+            .map(|(&t, rate)| (scaled_time(t) - mean) * (rate.sqrt() / root_max_rate))
+            .fold(0.0_f64, f64::hypot)
+            / total.sqrt()
+    } else {
+        variance.sqrt()
+    };
     let categories: Vec<_> = points
         .map(|(t, _)| {
             if t <= mean - 2. * sd {
@@ -60,6 +70,14 @@ pub fn classify_adopters(time: &[f64], rates: &[f64]) -> Result<Vec<&'static str
 #[cfg(test)]
 mod tests {
     use super::classify_adopters;
+
+    #[test]
+    fn categories_preserve_variance_for_extreme_rate_ratios() {
+        assert_eq!(
+            classify_adopters(&[0., 1e-317, 1.], &[f64::MAX, 0., f64::from_bits(1)]).unwrap(),
+            ["Early Majority", "Late Majority", "Laggards"]
+        );
+    }
 
     #[test]
     fn categories_include_exact_boundaries_on_nonbinary_span() {
