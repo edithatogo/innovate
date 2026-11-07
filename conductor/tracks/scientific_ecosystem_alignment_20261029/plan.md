@@ -3185,3 +3185,8 @@ the other competition models and installed binding checks remain open.
   time 2.125 and alpha1 override 0.4 with RSS 2.26e-20. Python 3.15.2,
   Julia and R agreed exactly. The focused Rust regression and Clippy
   passed. Continuous override estimation and uncertainty remain open.
+
+- [x] Verify forecasts from each binding's saved Lotka–Volterra
+  event-time and override fit. Python 3.15.2, Julia and R returned
+  identical results using retained covariate history, and both
+  held-out series matched the independent SciPy fixture within 3e-11.
