@@ -4956,3 +4956,10 @@ Hosted release readiness for this worktree revision remains open.
   this fixture, and malformed input raised an error. All five focused
   Julia assertions passed. Direct Arrow.jl readback of an untouched
   Python Polars file remains open.
+
+- [x] Retain a runnable Julia typed readback check for portable
+  Polars IPC. With Arrow.jl 2.8.1, rewritten policy metadata and
+  treatment contrast files matched their stream references across
+  22 assertions covering column order, element types, values and
+  missing entries. Run evidence/check-portable-arrow.jl with the
+  original file and equivalent stream as arguments.
