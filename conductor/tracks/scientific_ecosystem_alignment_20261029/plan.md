@@ -3863,3 +3863,6 @@ Hosted release readiness for this worktree revision remains open.
   deficiency. Collinear columns at scales 1 and 1e308 contribute
   one direction, while an independent 1e-20 column stays below the
   existing sensitivity cutoff. Both Rust rank regressions passed.
+- [x] Report the existing absolute sensitivity norm cutoff and the
+  zero-based indices of columns it excludes from local rank.
+  Extreme-scale rank regressions and focused Clippy passed.

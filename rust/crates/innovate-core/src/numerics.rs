@@ -77,6 +77,7 @@ fn solve(mut a: Vec<Vec<f64>>, mut b: Vec<f64>) -> Option<Vec<f64>> {
 }
 
 fn local_rank(mut columns: Vec<Vec<f64>>) -> Value {
+    const MIN_COLUMN_NORM: f64 = 1e-14;
     let n = columns.len();
     let norm = |v: &[f64]| v.iter().map(|x| x * x).sum::<f64>().sqrt();
     let mut norms = Vec::with_capacity(n);
@@ -92,7 +93,7 @@ fn local_rank(mut columns: Vec<Vec<f64>>) -> Value {
         let scaled_norm = norm(column);
         let magnitude = scale * scaled_norm;
         norms.push(magnitude);
-        if magnitude > 1e-14 {
+        if magnitude > MIN_COLUMN_NORM {
             for value in column {
                 *value /= scaled_norm;
             }
@@ -123,10 +124,17 @@ fn local_rank(mut columns: Vec<Vec<f64>>) -> Value {
         }
     }
     let rank = diagonals.len();
+    let excluded: Vec<_> = norms
+        .iter()
+        .enumerate()
+        .filter_map(|(index, &norm)| (norm <= MIN_COLUMN_NORM).then_some(index))
+        .collect();
     json!({"rank":rank,"parameters":n,"status":if rank==n {"local_full_rank"} else {"rank_deficient"},
         "method":"column_scaled_pivoted_qr", "relative_rank_tolerance":1e-7,
         "qr_diagonal_ratio":if rank==n && n>0 {Some(diagonals[0]/diagonals[n-1])} else {None},
         "sensitivity_column_norms":norms,
+        "sensitivity_column_norm_cutoff":MIN_COLUMN_NORM,
+        "excluded_sensitivity_column_indices":excluded,
         "scope":"local transformed-parameter sensitivity; not global uniqueness or calibrated uncertainty"})
 }
 
@@ -406,6 +414,8 @@ mod tests {
         assert_eq!(report["status"], "rank_deficient");
         assert!(report["qr_diagonal_ratio"].is_null());
         assert_eq!(report["sensitivity_column_norms"][2], 1e-20);
+        assert_eq!(report["sensitivity_column_norm_cutoff"], 1e-14);
+        assert_eq!(report["excluded_sensitivity_column_indices"], json!([2]));
     }
 
     #[test]
