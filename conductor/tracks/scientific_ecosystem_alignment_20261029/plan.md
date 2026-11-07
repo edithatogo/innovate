@@ -767,3 +767,18 @@ Competition line coverage is 93.31 percent from focused tests. Docs build 163
 pages and local package checks pass. Rates retain the clipped RHS convention,
 and structural confounding remains explicit. Events, uncertainty, automatic
 starts and scientific/release qualification remain required. Same lane continues.
+
+## Fixed parameter events for ecosystem ODEs
+
+- [x] Add validated persistent parameter overrides with continuous integrated state.
+- [x] Verify exact boundaries, covariate composition and capacity projection.
+- [x] Qualify independent references and Python/Julia/R, retaining inference gaps.
+
+Source: 59a95e1b. Full local qualification passed 143 Rust core/C ABI/Polars
+tests, 52 installed Python tests, 211 Julia assertions and R conformance.
+Independent off-grid event references pass for all four model families.
+Discovery advertises this contract. R event times retain scalar serialization.
+Competition line coverage is 93.91 percent and core/C ABI coverage is 85.60
+percent. Docs build 163 pages and local package checks pass. Event-time/override
+inference, other families, uncertainty and scientific/release qualification
+remain required. All 38 obligations remain open. Same isolated lane continues.
