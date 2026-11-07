@@ -462,3 +462,22 @@ end
 @testset "Compensated rolling average" begin
     @test kernel_rolling_average([1e100, 1., 3.], 2) == [nothing, 5e99, 2.]
 end
+
+@testset "Dataset ingestion diagnostics" begin
+    dataset = Dict("kind"=>"adoption", "time"=>[0.,1.], "adoption"=>[1.,2.],
+        "provenance"=>Dict("source"=>"synthetic", "license"=>"CC-BY-4.0",
+            "extraction_time"=>"2026-11-07T00:00:00Z"))
+    result = kernel_call("ingest_dataset", nothing, Dict("dataset"=>dataset))["result"]
+    @test result["validation"]["ok"]
+    @test kernel_call("ingest_dataset", nothing, Dict("dataset"=>result["dataset"]))["result"] == result
+    dataset["adoption"] = [1.,0.]
+    error = try
+        kernel_call("ingest_dataset", nothing, Dict("dataset"=>dataset))
+        nothing
+    catch exception
+        exception
+    end
+    @test error isa DatasetValidationError
+    @test error.code == "invalid_request"
+    @test error.validation["failed"] == ["monotonicity:adoption"]
+end

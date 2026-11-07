@@ -446,3 +446,15 @@ stopifnot(!kernel_call_json(legacy_request)$result$replay_available)
 legacy_invalid <- sub("2026-01-01T00:00:00+00:00", "bad", legacy_request, fixed = TRUE)
 legacy_error <- tryCatch(kernel_call_json(legacy_invalid, raw = TRUE), error = conditionMessage)
 stopifnot(grepl("invalid_request", legacy_error, fixed = TRUE))
+
+dataset <- list(kind="adoption", time=c(0,1), adoption=c(1,2),
+  provenance=list(source="synthetic", license="CC-BY-4.0",
+    extraction_time="2026-11-07T00:00:00Z"))
+artifact <- kernel_call("ingest_dataset", NULL, list(dataset=dataset))$result
+stopifnot(isTRUE(artifact$validation$ok), nchar(artifact$dataset$provenance$checksum) == 64)
+dataset$adoption <- c(1,0)
+diagnostic <- tryCatch(kernel_call("ingest_dataset", NULL, list(dataset=dataset)),
+  innovate_dataset_validation_error=identity)
+stopifnot(inherits(diagnostic, "innovate_dataset_validation_error"),
+  identical(diagnostic$code, "invalid_request"),
+  identical(unlist(diagnostic$validation$failed), "monotonicity:adoption"))

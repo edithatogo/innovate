@@ -2506,3 +2506,8 @@ the other competition models and installed binding checks remain open.
   suffixes. Two focused tests against the rebuilt Python 3.15.2 wheel
   passed. With the same path and rows, file and stream inputs produce
   the same validated, checksummed Rust artifact.
+
+- [x] Retain Julia and R ingestion validation regressions in the binding
+  suites. Focused checks passed for valid artifacts and structured
+  monotonicity errors. Julia also verified exact re-ingestion of the
+  stamped artifact. The Python local-stream checks are recorded above.
