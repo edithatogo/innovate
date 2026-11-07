@@ -136,3 +136,32 @@ pub(crate) fn unregister(payload: &Value) -> Result<Value, &'static str> {
         }
     }
 }
+
+pub(crate) fn resolve(payload: &Value) -> Result<Value, &'static str> {
+    #[derive(Deserialize)]
+    #[serde(deny_unknown_fields)]
+    struct Resolution {
+        name: String,
+        expected_version: String,
+        extension_point: String,
+    }
+
+    let request = Resolution::deserialize(payload)
+        .map_err(|_| "extension resolution requires name, expected_version and extension_point")?;
+    if !recognized_point(&request.extension_point) {
+        return Err("unknown extension point");
+    }
+    let registry = REGISTRY
+        .lock()
+        .map_err(|_| "extension registry unavailable")?;
+    let manifest = registry
+        .get(&request.name)
+        .ok_or("extension is not registered")?;
+    if manifest.version != request.expected_version {
+        return Err("registered extension version does not match expected_version");
+    }
+    if !manifest.extension_points.contains(&request.extension_point) {
+        return Err("extension does not declare the requested extension point");
+    }
+    Ok(json!({"manifest":manifest,"extension_point":request.extension_point}))
+}

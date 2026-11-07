@@ -82,6 +82,7 @@ pub fn execute_json(input: &str) -> String {
                 | "register_extension_manifest"
                 | "unregister_extension_manifest"
                 | "list_extension_manifests"
+                | "resolve_extension_manifest"
                 | "dataset_checksum"
                 | "validate_dataset",
             ) => {
@@ -255,6 +256,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         }
         if value["operation"] == "unregister_extension_manifest" {
             return extensions::unregister(payload);
+        }
+        if value["operation"] == "resolve_extension_manifest" {
+            return extensions::resolve(payload);
         }
         if value["operation"] == "list_extension_manifests" {
             return extensions::registered(payload);

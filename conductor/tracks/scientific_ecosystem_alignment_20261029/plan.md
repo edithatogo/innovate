@@ -5674,3 +5674,9 @@ Hosted release readiness for this worktree revision remains open.
   listed the surviving version by extension point, removed it with
   the current version, and returned false on retry. The first FFI link
   ran out of space and succeeded after reclaiming generated test binaries.
+
+- [x] Resolve a registered native extension by name, expected version
+  and declared extension point. The lookup returns a manifest snapshot
+  for a consumer and rejects stale, missing and undeclared selections.
+  Both Rust extension boundary tests passed after reclaiming generated
+  Python debug libraries for linking. Callable execution remains open.
