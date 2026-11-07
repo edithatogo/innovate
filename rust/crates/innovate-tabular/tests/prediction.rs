@@ -249,13 +249,31 @@ fn ipc_rewrite_keeps_annotations_for_unchanged_field_types() {
     use polars_arrow::io::ipc::write::{StreamWriter, WriteOptions};
     use std::io::Cursor;
 
-    let frame = df!("duration" => [Some(1_i32), None]).unwrap();
+    use polars_arrow::datatypes::ArrowDataType::LargeList;
+
+    let values = Series::new("".into(), [Some(1_i32), None]);
+    let frame = df!("duration" => [Some(1_i32), None],
+        "samples" => Series::new("samples".into(), [Some(values), None]))
+    .unwrap();
     let compat = CompatLevel::oldest();
     let mut schema = frame.schema().to_arrow(compat);
     let field = schema.get_mut("duration").unwrap();
-    *field = field
-        .clone()
-        .with_metadata([("units".into(), "days".into())].into_iter().collect());
+    let metadata = || [("units".into(), "days".into())].into_iter().collect();
+    *field = field.clone().with_metadata(metadata());
+    let LargeList(item) = &mut schema.get_mut("samples").unwrap().dtype else {
+        panic!("expected a large list");
+    };
+    **item = item.clone().with_metadata(metadata());
+    let assert_annotations = |schema: &ArrowSchema| {
+        assert_eq!(
+            schema.get("duration").unwrap().metadata.as_deref(),
+            Some(&metadata())
+        );
+        let LargeList(item) = &schema.get("samples").unwrap().dtype else {
+            panic!("expected a large list");
+        };
+        assert_eq!(item.metadata.as_deref(), Some(&metadata()));
+    };
     let mut source = Vec::new();
     let mut writer = StreamWriter::new(&mut source, WriteOptions { compression: None });
     writer.start(&schema, None).unwrap();
@@ -266,17 +284,11 @@ fn ipc_rewrite_keeps_annotations_for_unchanged_field_types() {
 
     let file = innovate_tabular::export_ipc_file(&source).unwrap();
     let mut reader = IpcReader::new(Cursor::new(&file));
-    assert_eq!(
-        reader.schema().unwrap().get("duration"),
-        schema.get("duration")
-    );
+    assert_annotations(&reader.schema().unwrap());
     for input in [source, file] {
         let stream = innovate_tabular::export_ipc_stream(&input).unwrap();
         let mut reader = IpcStreamReader::new(Cursor::new(stream));
-        assert_eq!(
-            reader.arrow_schema().unwrap().get("duration"),
-            schema.get("duration")
-        );
+        assert_annotations(&reader.arrow_schema().unwrap());
         assert_eq!(reader.finish().unwrap(), frame);
     }
 }

@@ -6033,3 +6033,9 @@ Hosted release readiness for this worktree revision remains open.
   units and nullable Int32 values in the Python file and in all three
   stream outputs. Arrow.jl exposed units=days on the duration column
   from the Julia stream.
+
+- [x] Traverse list and struct children when restoring IPC annotations.
+  The Rust fixture preserves the units annotation on a nullable Int32
+  list child alongside null list and element values in file and stream
+  output. All 11 Rust tabular boundary tests passed. Struct and
+  fixed-size list consumer readback remain to be qualified.

@@ -2,6 +2,7 @@
 #![forbid(unsafe_code)]
 use innovate_core::{KernelBinding, KernelRequest, json};
 use polars::prelude::*;
+use polars_arrow::datatypes::ArrowDataType;
 use polars_arrow::io::ipc::write::{FileWriter, StreamWriter, WriteOptions};
 use serde_json::Value;
 use std::io::Cursor;
@@ -218,11 +219,8 @@ fn rewrite_ipc(data: &[u8], stream: bool) -> PolarsResult<Vec<u8>> {
     let compat = CompatLevel::oldest();
     let mut schema = frame.schema().to_arrow(compat);
     for (name, field) in schema.iter_mut() {
-        if let Some(input) = input_schema.get(name.as_str())
-            && input.dtype == field.dtype
-            && input.metadata.is_some()
-        {
-            field.metadata = input.metadata.clone();
+        if let Some(input) = input_schema.get(name.as_str()) {
+            preserve_ipc_annotations(input, field);
         }
     }
     frame.align_chunks_par();
@@ -250,6 +248,30 @@ fn rewrite_ipc(data: &[u8], stream: bool) -> PolarsResult<Vec<u8>> {
         writer.finish()?;
     }
     Ok(bytes)
+}
+
+fn preserve_ipc_annotations(input: &ArrowField, output: &mut ArrowField) {
+    use ArrowDataType::{FixedSizeList, LargeList, List, Struct};
+
+    if input.dtype == output.dtype && input.metadata.is_some() {
+        output.metadata = input.metadata.clone();
+    }
+    match (&input.dtype, &mut output.dtype) {
+        (List(input) | LargeList(input), List(output) | LargeList(output)) => {
+            preserve_ipc_annotations(input, output);
+        }
+        (FixedSizeList(input, a), FixedSizeList(output, b)) if a == b => {
+            preserve_ipc_annotations(input, output);
+        }
+        (Struct(input), Struct(output)) => {
+            for field in output {
+                if let Some(source) = input.iter().find(|source| source.name == field.name) {
+                    preserve_ipc_annotations(source, field);
+                }
+            }
+        }
+        _ => {}
+    }
 }
 
 pub fn predict_ipc(data: &[u8], model: &str, parameters: Value) -> PolarsResult<Vec<u8>> {
