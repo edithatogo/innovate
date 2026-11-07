@@ -215,10 +215,11 @@ end
 
 @testset "Directed weighted Kairos resource" begin
     p=Dict("inputs"=>Dict("time"=>[0.,5.,20.]),"parameters"=>Dict("p"=>0.,"q"=>1e12,"m"=>3.),"simulation_options"=>Dict("engine"=>"kairos_network","population"=>3,"seed"=>42,"directed"=>true,"edges"=>[[0,1]],"edge_weights"=>[1e308],"initial_agents"=>[0],"capacity"=>1,"service_ticks"=>5,"ticks_per_unit"=>1))
-    p["simulation_options"]["schedule"] = [Dict("tick"=>6,"edges"=>[[1,2]],"service_ticks"=>2)]
+    p["simulation_options"]["schedule"] = [Dict("tick"=>6,"edges"=>[[1,2]],"service_ticks"=>2,"capacity"=>2)]
     p["simulation_options"]["agent_priorities"] = [-2,0,3]
     a=kernel_simulate_model("bass",p)["result"]
     @test a["metadata"]["agent_priorities"]==[-2,0,3]
+    @test a["metadata"]["current_capacity"]==2
     @test a["counts"]==[1,1,3]
     @test [entry["tick"] for entry in a["completions"]]==[6,9]
 end

@@ -323,3 +323,37 @@ fn waiting_deadline_withdraws_only_agents_that_miss_service() {
             .is_err()
     );
 }
+
+#[test]
+fn scheduled_capacity_pauses_admission_and_reopens_waiting_service() {
+    let mut payload = json!({
+        "inputs":{"time":[0.,5.,6.,7.,8.,9.]},
+        "parameters":{"p":1e12,"q":0.,"m":3.},
+        "simulation_options":{"engine":"kairos_network","population":3,"seed":42,
+            "edges":[],"capacity":1,"service_ticks":5,"ticks_per_unit":1,
+            "schedule":[{"tick":2,"capacity":0},{"tick":7,"capacity":2,"service_ticks":2}]}
+    });
+    let run = |p| {
+        KernelBinding::new()
+            .simulate_model("bass", p)
+            .unwrap()
+            .result
+            .unwrap()
+    };
+    let result = run(payload.clone());
+    assert_eq!(result["counts"], json!([0, 0, 1, 1, 1, 3]));
+    assert_eq!(result["metadata"]["current_capacity"], 2);
+    assert_eq!(result["metadata"]["available"], 2);
+    payload["inputs"]["time"] = json!([5.]);
+    let paused = run(payload.clone());
+    assert_eq!(paused["metadata"]["in_service"], 1);
+    assert_eq!(paused["metadata"]["current_capacity"], 0);
+    assert_eq!(paused["metadata"]["available"], 0);
+    assert_eq!(paused["metadata"]["queue_length"], 2);
+    payload["simulation_options"]["schedule"][1]["capacity"] = json!(4);
+    assert!(
+        KernelBinding::new()
+            .simulate_model("bass", payload)
+            .is_err()
+    );
+}

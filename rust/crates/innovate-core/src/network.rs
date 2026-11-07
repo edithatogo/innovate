@@ -49,6 +49,7 @@ struct Change {
     edges: Option<Vec<[usize; 2]>>,
     edge_weights: Option<Vec<f64>>,
     service_ticks: Option<u64>,
+    capacity: Option<u64>,
 }
 
 struct Graph {
@@ -208,12 +209,16 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             if change.tick == 0
                 || change.tick > 1_000_000_000_000_000
                 || (change.edges.is_none()
-                    && (change.edge_weights.is_some() || change.service_ticks.is_none()))
+                    && (change.edge_weights.is_some()
+                        || (change.service_ticks.is_none() && change.capacity.is_none())))
+                || change.capacity.is_some_and(|cap| cap > o.population as u64)
                 || change
                     .service_ticks
                     .is_some_and(|ticks| !(1..=1_000_000_000_000).contains(&ticks))
             {
-                return Err(invalid("invalid scheduled tick, graph or service duration"));
+                return Err(invalid(
+                    "invalid scheduled tick, graph, capacity or service duration",
+                ));
             }
             let replacement = change
                 .edges
@@ -228,7 +233,12 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                     .map_err(invalid)
                 })
                 .transpose()?;
-            Ok((u128::from(change.tick), replacement, change.service_ticks))
+            Ok((
+                u128::from(change.tick),
+                replacement,
+                change.service_ticks,
+                change.capacity,
+            ))
         })
         .collect::<Result<Vec<_>, _>>()?;
     let mut changes = changes.into_iter().peekable();
@@ -249,7 +259,11 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             id
         })
         .collect();
-    let mut resource = PriorityResource::new("adoption_service", o.capacity);
+    // Kairos orders waiters. Admission is separate because its priority resource
+    // has fixed capacity and active work must survive a capacity decrease.
+    let mut resource = PriorityResource::new("adoption_waiters", 0);
+    let mut capacity = o.capacity;
+    let mut in_service = 0_u64;
     let mut reneging = RenegingQueue::new();
     let mut deadlines = vec![None; o.population];
     let mut abandoned = Vec::new();
@@ -311,7 +325,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             .filter(|t| *t <= horizon);
         let boundary = changes
             .peek()
-            .map(|(tick, _, _)| *tick)
+            .map(|(tick, _, _, _)| *tick)
             .filter(|t| *t <= horizon);
         let expiry = deadlines
             .iter()
@@ -338,23 +352,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             context.attach(id, 2_u8);
             completed.push(now);
             trace.push(json!({"tick":now,"agent":id.index}));
-            while let Some(next) = resource.release() {
-                let index = next.index as usize;
-                // The pinned priority resource has no queue removal API.
-                if context.get::<u8>(next) == Some(&3) {
-                    withdrawn_in_queue -= 1;
-                    continue;
-                }
-                deadlines[index] = None;
-                context.schedule_behaviour(
-                    next,
-                    2,
-                    SimTime::from_ticks(
-                        now + u128::from(service_override.unwrap_or(service[index])),
-                    ),
-                );
-                break;
-            }
+            in_service -= 1;
         } else if let Some(tick) =
             expiry.filter(|t| boundary.is_none_or(|b| *t <= b) && attempt.is_none_or(|a| *t <= a))
         {
@@ -367,7 +365,8 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                 }
             }
         } else if let Some(tick) = boundary.filter(|t| attempt.is_none_or(|a| *t <= a)) {
-            let (_, replacement, duration) = changes.next().expect("boundary comes from schedule");
+            let (_, replacement, duration, new_capacity) =
+                changes.next().expect("boundary comes from schedule");
             now = tick;
             if let Some(replacement) = replacement {
                 graph = replacement;
@@ -375,6 +374,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             if duration.is_some() {
                 service_override = duration;
             }
+            capacity = new_capacity.unwrap_or(capacity);
             applied_ticks.push(tick);
         } else if let Some(at) = attempt {
             now = at;
@@ -399,15 +399,8 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             }
             requests.push(json!({"tick":now,"agent":id.index}));
             context.attach(id, 1_u8);
-            if resource.request(id, priorities[index], SimTime::from_ticks(now)) {
-                context.schedule_behaviour(
-                    id,
-                    2,
-                    SimTime::from_ticks(
-                        now + u128::from(service_override.unwrap_or(service[index])),
-                    ),
-                );
-            } else if let Some(wait) = o.max_wait_ticks {
+            resource.request(id, priorities[index], SimTime::from_ticks(now));
+            if let Some(wait) = o.max_wait_ticks.filter(|_| in_service >= capacity) {
                 deadlines[index] = Some(now + u128::from(wait));
                 reneging.request_with_deadline(
                     id,
@@ -418,10 +411,27 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         } else {
             break;
         }
+        while in_service < capacity {
+            let Some(next) = resource.release() else {
+                break;
+            };
+            let index = next.index as usize;
+            // The pinned priority resource has no queue removal API.
+            if context.get::<u8>(next) == Some(&3) {
+                withdrawn_in_queue -= 1;
+                continue;
+            }
+            deadlines[index] = None;
+            context.schedule_behaviour(
+                next,
+                2,
+                SimTime::from_ticks(now + u128::from(service_override.unwrap_or(service[index]))),
+            );
+            in_service += 1;
+        }
     }
     let queue_length = resource.queue_length() - withdrawn_in_queue;
-    let in_service = requests.len() - trace.len() - abandoned.len() - queue_length;
-    let available = o.capacity - in_service as u64;
+    let available = capacity.saturating_sub(in_service);
     let counts: Vec<_> = time
         .iter()
         .map(|t| {
@@ -441,7 +451,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         model_key: r.model_key.clone(),
         error: None,
         result: Some(
-            json!({"values":values,"counts":counts,"agents":states,"requests":requests,"completions":trace,"abandonments":abandoned,"metadata":{"engine":"kairos_network","kairos_revision":crate::simulation::REV,"seed":o.seed,"population":o.population,"capacity":o.capacity,"service_ticks":o.service_ticks,"ticks_per_unit":o.ticks_per_unit,"queue_length":queue_length,"available":available,"agent_priorities":priorities,"max_wait_ticks":o.max_wait_ticks,"innovation_multipliers":innovation_weights,"imitation_multipliers":imitation_weights,"agent_service_ticks":service,"directed":o.directed,"weighted":graph.weighted,"applied_schedule_ticks":applied_ticks,"service_override_ticks":service_override,"hazard":if graph.weighted {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted incoming weight/total incoming weight), zero imitation without incoming edges"} else {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted neighbors/degree), zero imitation at degree zero"},"resource_semantics":"Nonpreemptive priority, FIFO ties; adoption occurs at service completion; pending agents do not transmit","rng_checkpoint":rng.checkpoint()}}),
+            json!({"values":values,"counts":counts,"agents":states,"requests":requests,"completions":trace,"abandonments":abandoned,"metadata":{"engine":"kairos_network","kairos_revision":crate::simulation::REV,"seed":o.seed,"population":o.population,"capacity":o.capacity,"current_capacity":capacity,"in_service":in_service,"service_ticks":o.service_ticks,"ticks_per_unit":o.ticks_per_unit,"queue_length":queue_length,"available":available,"agent_priorities":priorities,"max_wait_ticks":o.max_wait_ticks,"innovation_multipliers":innovation_weights,"imitation_multipliers":imitation_weights,"agent_service_ticks":service,"directed":o.directed,"weighted":graph.weighted,"applied_schedule_ticks":applied_ticks,"service_override_ticks":service_override,"hazard":if graph.weighted {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted incoming weight/total incoming weight), zero imitation without incoming edges"} else {"p*innovation_multiplier[i] + q*imitation_multiplier[i]*(adopted neighbors/degree), zero imitation at degree zero"},"resource_semantics":"Nonpreemptive priority, FIFO ties; adoption occurs at service completion; pending agents do not transmit","rng_checkpoint":rng.checkpoint()}}),
         ),
         metadata: json!({"runtime":"rust_native","engine":"kairos_network"}),
     })

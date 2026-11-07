@@ -272,8 +272,8 @@ pure contagion seeded by initial agents. Deterministic Bass fitting/prediction
 retains its previous positive-p domain.
 
 Kairos ABMContext owns entity state and dispatch. Its PriorityResource owns the
-queue and leases. Optional population-length `agent_priorities` supplies signed
-32-bit integers. Higher values serve first among waiters, with FIFO ties. The
+waiting order. Innovate controls admission and the active service count.
+Optional population-length `agent_priorities` supplies signed 32-bit integers. Higher values serve first among waiters, with FIFO ties. The
 default is zero for every agent. An active service always runs to completion. An agent becomes adopted at service completion. Pending agents
 do not transmit and cannot request twice. Completion events precede tied requests.
 Waiting times round up to at least one tick. Service ticks must be positive and
@@ -290,7 +290,7 @@ waiting in the service queue. Each duration is an integer in 1–10^12. Defaults
 the homogeneous engine and RNG stream. Metadata retains the effective arrays.
 
 The network engine currently rejects mechanistic covariate/event forcing and
-arbitrary hazard functions. Capacity changes and resume remain open.
+arbitrary hazard functions. Resume remains open.
 The separate `network_diffusion` family has its own scientific qualification.
 
 ## Historical lock-in
@@ -735,3 +735,12 @@ queued agent a deadline. An agent who starts service at that tick keeps
 the slot. Other expired agents leave permanently, appear in `abandonments`
 and finish in the `withdrawn` state. They neither transmit nor request
 again. Without a deadline, agents keep waiting for service.
+
+
+A schedule change may also set `capacity` between zero and the population.
+An increase immediately admits eligible waiters in priority order. A decrease
+allows active services to finish and pauses admissions while occupancy meets
+or exceeds the new limit. At a shared tick, existing completion handoffs
+and waiting deadlines are processed before the scheduled capacity change.
+The result reports the initial `capacity`, `current_capacity`,
+`in_service`, and nonnegative `available` slots.
