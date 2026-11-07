@@ -6558,3 +6558,13 @@ Hosted release readiness for this worktree revision remains open.
   the same damping limit and reference gaps on trial 39. The
   experimental comparison was removed. A change to termination needs
   evidence beyond avoiding cancellation in the total loss.
+
+- [x] Repeat the sparse Logistic coverage study at the native limit of
+  200 draws on the same 40 datasets. Paired case resampling covered
+  capacity, rate and midpoint in 33, 37 and 38 of 40 trials respectively
+  at nominal 95% mass. It excluded 261 of 8,000 refits for rank
+  deficiency. Centered residual resampling covered the three parameters
+  in 27, 31 and 31 of 39 trials, with zero rank failures in 7,800 refits.
+  Trial 39 still failed the residual baseline gate. Increasing the draw
+  count left capacity coverage below nominal in both methods on this
+  design.

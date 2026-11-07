@@ -10,11 +10,12 @@ from innovate import NativeError, execute
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--method", choices=("paired_case_resampling", "centered_residual_resampling"),
                     default="paired_case_resampling")
+parser.add_argument("--draws", type=int, default=32)
 args = parser.parse_args()
 rng = Random(272)
 time = [-3, -2, -1, 0, 100, 101, 102, 103]
 truth = {"L": 100, "k": 1, "x0": 0}
-trials, draws = 40, 32
+trials, draws = 40, args.draws
 covered = dict.fromkeys(truth, 0)
 available = dict.fromkeys(truth, 0)
 successful_refits = []
