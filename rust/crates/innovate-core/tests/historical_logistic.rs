@@ -50,6 +50,51 @@ fn historical_event_fit_forecasts_and_reports_rank() {
     }
 }
 #[test]
+fn batch_fits_keep_event_and_covariate_state_separate() {
+    let time: Vec<_> = (0..30).map(f64::from).collect();
+    let x: Vec<_> = time.iter().map(|t| (t * 0.7).sin()).collect();
+    let covariate: Vec<_> = time
+        .iter()
+        .zip(&x)
+        .map(|(&t, &x)| (100. + 10. * x) / (1. + (-0.5 * (t - 5.)).exp()))
+        .collect();
+    let event: Vec<_> = time
+        .iter()
+        .map(|&t| {
+            if t < 12. {
+                100. / (1. + (-0.5 * (t - 5.)).exp())
+            } else {
+                200. / (1. + (-0.3 * (t - 18.)).exp())
+            }
+        })
+        .collect();
+    let datasets = [
+        json!({"inputs":{"time":time,"observed":event},"constructor_kwargs":{"t_event":12.}}),
+        json!({"inputs":{"time":time,"observed":covariate,"covariates":{"x":x}},
+            "constructor_kwargs":{"covariates":["x"]},
+            "fit_options":{"initial_parameters":{"L":100.,"k":0.5,"x0":5.,
+                "beta_L_x":10.,"beta_k_x":0.,"beta_x0_x":0.}}}),
+    ];
+    let batch = |workers| -> serde_json::Value {
+        let request = json!({"schema_version":"2.0","operation":"fit_batch","model_key":"logistic",
+            "payload":{"workers":workers,"datasets":datasets}});
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let serial = batch(1);
+    assert_eq!(batch(2), serial);
+    let binding = KernelBinding::new();
+    for (index, dataset) in datasets.into_iter().enumerate() {
+        let direct = binding
+            .fit_model("logistic", dataset)
+            .unwrap()
+            .result
+            .unwrap();
+        assert_eq!(direct["diagnostics"]["optimizer"]["converged"], true);
+        assert_eq!(serial["result"]["datasets"][index]["result"], direct);
+    }
+}
+
+#[test]
 fn historical_event_covariate_policy_is_explicit() {
     let mut p = json!({"inputs":{"time":[2.],"covariates":{"price":[1.]}},"constructor_kwargs":{"t_event":2.,"covariates":["price"]},"parameters":{"L":100.,"k":1.,"x0":2.,"L_post":200.,"k_post":1.,"x0_post":2.,"beta_L_price":20.,"beta_k_price":0.,"beta_x0_price":0.}});
     let a = KernelBinding::new()

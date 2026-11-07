@@ -6874,3 +6874,8 @@ Hosted release readiness for this worktree revision remains open.
   identical results at worker settings 1 and 32, retained the middle
   error, and matched direct forecasts on both time grids. Reused the
   unchanged 8926c30c native runtime sources.
+
+- [x] Verify heterogeneous Logistic batch configuration. An event-split
+  fit and a covariate fit converged in the same batch with one or two
+  workers and each full result matched its direct fit. The focused
+  Rust test passed. Cross-binding verification remains open.
