@@ -36,13 +36,22 @@ def main() -> int:
         payload["ci_policy"] = args.policy
     started = perf_counter()
     response = execute("run_benchmark_suite", **payload)
+    elapsed = perf_counter() - started
+    system = platform.system()
+    peak_rss_bytes = None
+    if system in {"Darwin", "Linux"}:
+        import resource
+
+        peak_rss = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+        peak_rss_bytes = peak_rss if system == "Darwin" else peak_rss * 1024
     response["metadata"]["benchmark_runner"] = {
         "requested_workers": count,
         "worker_budget_source": "SLURM_CPUS_PER_TASK" if args.slurm_allocation else "command_line",
         "ci_policy": args.policy,
-        "kernel_elapsed_seconds": perf_counter() - started,
+        "kernel_elapsed_seconds": elapsed,
+        "process_peak_rss_bytes": peak_rss_bytes,
         "python_version": platform.python_version(),
-        "system": platform.system(),
+        "system": system,
         "architecture": platform.machine(),
     }
     args.output.write_text(json.dumps(response, indent=2, allow_nan=False) + "\n", encoding="utf-8")

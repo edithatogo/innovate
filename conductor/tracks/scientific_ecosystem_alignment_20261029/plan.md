@@ -3313,3 +3313,9 @@ the other competition models and installed binding checks remain open.
   benchmark receipts. A local Python 3.15.2 Darwin arm64 run completed
   all three fast cases and recorded a positive duration. Ruff passed.
   Scheduler traces, memory measurements and accelerator evidence remain open.
+
+- [x] Record benchmark process peak resident memory in bytes on
+  Darwin and Linux. The local Python 3.15.2 Darwin arm64 run passed
+  all three fast cases and reported 65,863,680 bytes. This is the
+  runner process high-water mark, including imports. Ruff passed.
+  Linux runtime and scheduler-backed measurements remain open.
