@@ -6900,3 +6900,7 @@ Hosted release readiness for this worktree revision remains open.
   Julia and installed R. Each binding preserved the 55 expected
   forecasts and ten invalid-request positions with 1, 3 and 32
   workers. Reused unchanged 8926c30c native builds.
+
+- [x] Document the native batch contract and the Polars frame helpers.
+  The guide's ragged forecast example passed through the Python
+  wheel's public predict_batch helper.

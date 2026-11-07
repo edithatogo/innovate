@@ -1256,6 +1256,34 @@ Zero rates retain the historical zero values with a degenerate status.
 These are baseline heuristics. Thresholds under forcing, interactions and
 interventions require separate trajectory analysis.
 
+## Batch fitting and forecasting
+
+A native `fit_batch` or `predict_batch` request has one model key and
+an ordered list of datasets. Each dataset carries its own inputs and
+options or fitted state. Forecast grids can have different lengths.
+The response has one row per input, with a result on success or an
+error for that dataset.
+
+```python
+from innovate import predict_batch
+
+rows = predict_batch(
+    "logistic",
+    [
+        {"inputs": {"time": [0, 1]}, "parameters": {"L": 100, "k": 1, "x0": 0}},
+        {"inputs": {"time": [0]}, "parameters": {"L": 200, "k": 1, "x0": 0}},
+    ],
+    workers=2,
+)
+assert rows[0]["result"]["values"][0] == 50
+assert rows[1]["result"]["values"] == [100]
+```
+
+Julia and R can call these operations through `kernel_call` with
+`datasets` and optional `workers` in the payload. Python callers
+working with Polars frames can use `fit_frames` and `predict_frames`
+to apply the native frame entry points in input order.
+
 ## Scenario grid rankings
 
 In `execute_scenario_grid`, pass `rank_scenarios` with at least two
