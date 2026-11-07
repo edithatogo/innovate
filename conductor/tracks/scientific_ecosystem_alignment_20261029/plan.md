@@ -3595,3 +3595,7 @@ Hosted release readiness for this worktree revision remains open.
   before the fix and now reports nonnegative:adoption. All 75 native
   boundary tests and focused Clippy passed. Installed binding validation
   for this diagnostic remains open.
+- [x] Verify count and rate failures through the Python 3.15.2 wheel,
+  Julia and freshly installed R using native builds from 7d9677b1.
+  Both fixtures returned nonnegative:adoption as the sole failed
+  diagnostic in each binding's structured ingestion error.
