@@ -2860,3 +2860,8 @@ the other competition models and installed binding checks remain open.
   bootstrap draws as nonfinite synthetic samples, fit errors, or
   nonconverged refits. The focused Rust replay regression verifies
   that categories sum to the existing failed count. Clippy passed.
+
+- [x] Exercise bootstrap diagnostics on noisy trials 0 and 81 in the
+  rebuilt Python 3.15 wheel. Trial 0 converged at baseline and counted
+  one nonconverged refit. Trial 81 reported baseline damping_limit and
+  all 100 case refits converged. Failure categories summed to each total.
