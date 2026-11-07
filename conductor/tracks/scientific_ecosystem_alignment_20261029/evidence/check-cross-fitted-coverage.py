@@ -12,6 +12,7 @@ parser.add_argument("--few-clusters", action="store_true", help="Compare normal 
 parser.add_argument("--weak-overlap", action="store_true")
 parser.add_argument("--minimum-training-arm-count", type=int, default=1)
 parser.add_argument("--cluster-assignment", action="store_true")
+parser.add_argument("--minimum-training-arm-clusters", type=int)
 args = parser.parse_args()
 if args.cluster_assignment and (args.few_clusters or args.weak_overlap):
     parser.error("cluster assignment uses the 80-cluster design with good overlap")
@@ -28,6 +29,10 @@ if clustered:
     cluster_options = {"clusters": [str(cluster) for cluster in cluster_ids]}
 else:
     cluster_options = {}
+if args.minimum_training_arm_clusters is not None:
+    if not clustered or args.minimum_training_arm_clusters < 1:
+        parser.error("minimum training arm clusters requires clustering and a positive count")
+    cluster_options["minimum_training_arm_clusters"] = args.minimum_training_arm_clusters
 low_probability = 0.01 if args.weak_overlap else 0.2
 if args.cluster_assignment:
     strata = ["high" if cluster % 2 else "low" for cluster in cluster_ids]
@@ -75,7 +80,7 @@ for _ in range(400):
         except NativeError as error:
             if (args.weak_overlap or args.cluster_assignment) and "requires both arms" in str(error):
                 failed[key] += 1
-            elif args.weak_overlap and "falls below minimum_training_arm_count" in str(error):
+            elif (args.weak_overlap or args.cluster_assignment) and "falls below minimum_training_arm_" in str(error):
                 guarded[key] += 1
             else:
                 raise
@@ -92,7 +97,7 @@ for _ in range(400):
                     treatment=treatment,
                     propensities=propensities,
                     control_predictions=predictions,
-                    **cluster_options,
+                    clusters=cluster_options["clusters"],
                 )["result"]["estimate"]
 
             oracle = augmented(probabilities, baseline)

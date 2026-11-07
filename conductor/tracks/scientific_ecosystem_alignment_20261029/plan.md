@@ -6365,3 +6365,10 @@ Hosted release readiness for this worktree revision remains open.
   installed R. Both estimands accepted a minimum of one and rejected
   two when the smallest arm had two rows from one cluster. Document
   the difference between row-count and distinct-cluster requirements.
+
+- [x] Evaluate a minimum of two distinct clusters per training arm in
+  the 80-cluster assignment study. The guard rejected 13 trials in
+  addition to two missing-arm failures. Among 385 retained trials,
+  ATE averaged 2.0157 and ATT 2.6221. The paired fitted-minus-known
+  ATT gap fell to 0.0158, with conditional normal coverage 366/385.
+  This documents the selection trade-off for one design.
