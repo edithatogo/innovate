@@ -518,7 +518,12 @@ end
         "draws"=>Any[Dict("draw_id"=>1, "parameters"=>params, "time"=>[0,1], "adoption"=>[0,1])])
         for id in ["control","policy"]]
     payload = Dict("strategies"=>strategies)
-    @test String(kernel_paired_outcomes_ipc(payload)[1:6]) == "ARROW1"
+    source = kernel_paired_outcomes_ipc(payload)
+    @test String(source[1:6]) == "ARROW1"
+    portable = export_ipc_file(source)
+    @test portable[1:12] == UInt8[0x41,0x52,0x52,0x4f,0x57,0x31,0,0,0xff,0xff,0xff,0xff]
+    @test export_ipc_file(portable) == portable
+    @test_throws ErrorException export_ipc_file(UInt8[0x41,0x52])
     draw = strategies[1]["draws"][1]
     strategies[1]["draws"][1] = [draw[key] for key in ["draw_id","parameters","time","adoption"]]
     @test_throws r"must be objects" kernel_paired_outcomes_ipc(payload)

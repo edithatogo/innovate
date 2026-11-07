@@ -4949,3 +4949,10 @@ Hosted release readiness for this worktree revision remains open.
   native consumer suites. The focused Python, Julia and installed R
   checks passed for the original and translated grids and retained
   the adjacent and overflowing timestamp checks.
+
+- [x] Exercise the Julia IPC rewrite wrapper in the native consumer
+  suite. The paired outcome file rewrote with the expected leading
+  continuation marker, a second rewrite produced identical bytes for
+  this fixture, and malformed input raised an error. All five focused
+  Julia assertions passed. Direct Arrow.jl readback of an untouched
+  Python Polars file remains open.
