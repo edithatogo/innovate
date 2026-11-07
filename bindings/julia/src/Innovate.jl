@@ -28,7 +28,7 @@ function kernel_call(operation::AbstractString, model_key=nothing, payload=Dict{
         Ptr{UInt8}, (Cstring,), request))
 end
 
-"""Execute a scenario grid on a shared time column in Arrow IPC file bytes."""
+"""Execute a scenario grid on a shared time column in Arrow IPC file or stream bytes."""
 function kernel_scenario_grid_ipc(data::Vector{UInt8}, payload)
     request = JSON.json(payload)
     return with_native_response(handle -> ccall(Libdl.dlsym(handle, :innovate_scenario_grid_ipc),

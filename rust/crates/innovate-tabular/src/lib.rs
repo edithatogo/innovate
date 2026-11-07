@@ -184,6 +184,14 @@ pub fn predict_with_options(
     Ok(frame)
 }
 
+fn read_ipc(data: &[u8]) -> PolarsResult<DataFrame> {
+    if data.starts_with(b"ARROW1") {
+        IpcReader::new(Cursor::new(data)).finish()
+    } else {
+        IpcStreamReader::new(Cursor::new(data)).finish()
+    }
+}
+
 pub fn predict_ipc(data: &[u8], model: &str, parameters: Value) -> PolarsResult<Vec<u8>> {
     predict_ipc_with_options(data, model, parameters, json!({}))
 }
@@ -194,7 +202,7 @@ pub fn predict_ipc_with_options(
     parameters: Value,
     options: Value,
 ) -> PolarsResult<Vec<u8>> {
-    let frame = IpcReader::new(Cursor::new(data)).finish()?;
+    let frame = read_ipc(data)?;
     let mut output = predict_with_options(frame, model, parameters, options)?;
     let mut bytes = Vec::new();
     IpcWriter::new(&mut bytes).finish(&mut output)?;
@@ -206,7 +214,7 @@ pub fn fit_ipc(data: &[u8], model: &str) -> PolarsResult<String> {
 }
 
 pub fn fit_ipc_with_options(data: &[u8], model: &str, options: Value) -> PolarsResult<String> {
-    let frame = IpcReader::new(Cursor::new(data)).finish()?;
+    let frame = read_ipc(data)?;
     let options = options
         .as_object()
         .ok_or_else(|| polars_err!(SchemaMismatch:"options must be an object"))?;
@@ -250,16 +258,16 @@ pub fn categorize_adopters(mut frame: DataFrame, rate_column: &str) -> PolarsRes
 }
 
 pub fn categorize_adopters_ipc(data: &[u8], rate_column: &str) -> PolarsResult<Vec<u8>> {
-    let frame = IpcReader::new(Cursor::new(data)).finish()?;
+    let frame = read_ipc(data)?;
     let mut output = categorize_adopters(frame, rate_column)?;
     let mut bytes = Vec::new();
     IpcWriter::new(&mut bytes).finish(&mut output)?;
     Ok(bytes)
 }
 
-/// Execute a scenario grid with one shared time column from an Arrow IPC file.
+/// Execute a scenario grid with one shared time column from Arrow IPC file or stream bytes.
 pub fn scenario_grid_ipc(data: &[u8], mut payload: Value) -> PolarsResult<String> {
-    let frame = IpcReader::new(Cursor::new(data)).finish()?;
+    let frame = read_ipc(data)?;
     let time = inputs(&frame, &[])?;
     let Some(scenarios) = payload.get_mut("scenarios").and_then(Value::as_array_mut) else {
         polars_bail!(SchemaMismatch: "scenario grid requires a scenarios array");

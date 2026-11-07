@@ -121,6 +121,15 @@ fn arrow_scenario_grid_supplies_time_and_rejects_conflicting_times() {
     let mut payload = json!({"scenarios":[{"id":"base","model_key":"logistic",
         "simulation":{"parameters":{"L":100.,"k":1.,"x0":1.}}}]});
     let response = innovate_tabular::scenario_grid_ipc(&bytes, payload.clone()).unwrap();
+    let mut stream = Vec::new();
+    IpcStreamWriter::new(&mut stream)
+        .finish(&mut frame)
+        .unwrap();
+    assert_eq!(
+        innovate_tabular::scenario_grid_ipc(&stream, payload.clone()).unwrap(),
+        response
+    );
+    assert!(innovate_tabular::scenario_grid_ipc(b"invalid IPC", payload.clone()).is_err());
     let response: serde_json::Value = serde_json::from_str(&response).unwrap();
     assert_eq!(
         response["result"]["executions"][0]["result"]["values"][1],

@@ -2485,3 +2485,11 @@ the other competition models and installed binding checks remain open.
   Five focused Rust tests and Clippy passed. Python 3.15.2 and Julia
   results were identical. Installed R agreed within 1e-14 after JSON
   serialization. This is a noiseless, informed-start benchmark.
+
+- [x] Accept Arrow IPC streams at the native Polars input boundary alongside
+  files. A Polars 2.1.0 stream supplied the same scenario time grid through
+  the rebuilt Python 3.15.2 extension, Julia and installed R. All eight
+  tabular tests and focused Clippy passed. A separate read confirmed
+  Arrow.jl 2.8.1 still returns no columns for the Python Polars IPC file,
+  while it reads both the Polars stream and the tested Rust-written file.
+  Direct Python Polars file readback in Arrow.jl remains open.
