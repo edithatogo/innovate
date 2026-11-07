@@ -5613,3 +5613,10 @@ Hosted release readiness for this worktree revision remains open.
   All 112 tests passed in 60.65 seconds. The debug extension was loaded
   through the worktree test environment. Clean distribution evidence
   and the corresponding full Julia and R runs remain separate gates.
+
+- [x] Run the complete Julia and R native consumer files against the
+  debug Rust FFI library rebuilt from 1ace9cfb. Both exited zero.
+  The first R invocation used a stale installed package and stopped
+  at the paired-outcomes IPC helper. A fresh R CMD INSTALL into an
+  isolated library resolved the mismatch and the full rerun passed.
+  This qualifies the worktree bindings with an explicit FFI path.
