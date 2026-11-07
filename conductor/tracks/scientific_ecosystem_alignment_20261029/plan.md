@@ -395,3 +395,30 @@ review: heterogeneous-review-20261107.md. No native operation remains active.
 Next source task: historical latent-process smoothing/state/interpolation port,
 then regime/hierarchical/mixture/composite and richer graphs/resources. All 38
 obligations remain required, release guard still fails intentionally, goal active.
+
+## Historical latent-process continuation
+
+Same writing lane resumes at 3773d3f6, clean isolated checkout; no live native
+operation. Previous goal turn made committed, verified Kairos progress.
+
+- [x] Port historical latent residual smoothing, endpoint interpolation, state,
+  forecasts, diagnostics, summaries and sample increments without statistical overclaims.
+- [x] Qualify installed Python/Julia/R transport including saved latent arrays.
+- [x] Review, record source-bound evidence and retain every remaining obligation.
+
+Latent source/evidence commit: `bfce5a1830581a2dd341d5a57105f7a0bc60f3fe`.
+79 Rust tests, 32 installed Python, 155 Julia assertions and R pass. Core/C ABI
+line coverage 82.83%, latent module 91.75%; Clippy, lint/types, docs and package
+metadata pass. Receipt/review: latent-20261107.json and latent-review-20261107.md.
+All operations terminal. Twelve bounded native families, four unavailable; all
+38 obligations remain required and release guard fails intentionally.
+
+Next: regime-switching. Preserved advanced.py uses a detected split index applied
+to each requested prediction batch, plus a continuity offset between regimes;
+short batches can therefore use only the first regime. Qualify that historical
+variant explicitly and consider a separately named fixed-time variant for
+consistent forecasts; do not silently erase historical semantics. Automatic
+changepoint detection and both segment estimators need native qualification.
+Hierarchical/mixture/composite, uncertainty/inference, covariates/events, richer
+Kairos graph/resource behavior and distribution qualification remain required.
+Goal remains active; no main integration, push or hosted acceptance asserted.
