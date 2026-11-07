@@ -41,6 +41,16 @@ def execute(operation: str, model: str | None = None, **payload: Any) -> dict[st
     return _decode(_native.execute(json.dumps(request, allow_nan=False)))
 
 
+def fit_batch(model: str, datasets: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Fit independent native payloads and return ordered results or errors."""
+    return execute("fit_batch", model, datasets=datasets)["result"]["datasets"]
+
+
+def predict_batch(model: str, datasets: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Predict on independent grids using the state in each payload."""
+    return execute("predict_batch", model, datasets=datasets)["result"]["datasets"]
+
+
 def capabilities() -> pl.DataFrame:
     """Return currently implemented native models, with bounded support metadata."""
     return pl.DataFrame(execute("discover_models")["result"]["models"])

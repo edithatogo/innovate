@@ -1188,4 +1188,7 @@ the other competition models and installed binding checks remain open.
   boundary. Preserve input order and each fit state or structured error.
   Forecast grids may have different lengths. All eight native boundary
   tests passed, including a failed middle fit and two distinct forecasts.
-- [ ] Expose the native batch contract through Python, Julia, R and Polars.
+- [x] Expose native JSON batch fitting and forecasting through Python, Julia
+  and R. Focused rebuilt checks preserve the failed middle fit and return
+  forecasts on independent grids.
+- [ ] Expose batch operations through the Polars frame API.
