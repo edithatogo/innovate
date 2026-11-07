@@ -1600,6 +1600,33 @@ fn scenario_grid_compares_aligned_adoption_paths() {
     let run = |request: &serde_json::Value| -> serde_json::Value {
         serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
     };
+    let mut ranked = request.clone();
+    let mut tie = ranked["payload"]["scenarios"][1].clone();
+    tie["id"] = json!("tie");
+    ranked["payload"]["scenarios"]
+        .as_array_mut()
+        .unwrap()
+        .push(tie);
+    ranked["payload"]["rank_scenarios"] = json!(["tie", "base", "alt"]);
+    let ranked_result = run(&ranked);
+    let ranks = ranked_result["result"]["ranking"]["rows"]
+        .as_array()
+        .unwrap();
+    assert_eq!(
+        ranks.iter().map(|row| &row["id"]).collect::<Vec<_>>(),
+        vec![&json!("tie"), &json!("alt"), &json!("base")]
+    );
+    assert_eq!(
+        ranks.iter().map(|row| &row["place"]).collect::<Vec<_>>(),
+        vec![&json!(1), &json!(1), &json!(3)]
+    );
+    ranked["payload"]["rank_scenarios"] = json!(["base", "missing"]);
+    let invalid = run(&ranked);
+    assert_eq!(
+        invalid["result"]["ranking"]["error"]["code"],
+        "invalid_ranking"
+    );
+    assert_eq!(invalid["result"]["executions"].as_array().unwrap().len(), 3);
     let response = run(&request);
     let row = &response["result"]["comparisons"][0]["result"];
     assert_eq!(row["difference"][0], 50.);

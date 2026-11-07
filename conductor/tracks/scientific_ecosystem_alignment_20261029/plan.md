@@ -4791,3 +4791,7 @@ Hosted release readiness for this worktree revision remains open.
   extracted wheel. All three focused panel tests passed, including eager
   and lazy Polars frames. Extraction required reclaiming the local Python
   build cache after the first attempt exhausted disk space.
+
+- [x] Rank selected scenario grid paths by final adoption. The Rust
+  boundary test verifies stable ties, places 1/1/3 and isolation of an
+  invalid ranking from the executions. Binding checks remain open.

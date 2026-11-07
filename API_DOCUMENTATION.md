@@ -409,3 +409,11 @@ Python callers can pass a Polars DataFrame or LazyFrame to
 `staggered_att_polars(frame, adoption_times, **options)`. The frame
 must contain `unit_ids`, `time` and `outcomes`. The function returns
 the native staggered result, including cohort and event-time summaries.
+
+## Scenario grid ranking
+
+Supply `rank_scenarios` to `execute_scenario_grid` with at least two
+distinct scenario IDs. Scalar paths must share the same time grid and
+time basis. The result ranks final adoption in descending order.
+Ties share a place and retain request order. A ranking error leaves
+the scenario executions and pair comparisons available.

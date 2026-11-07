@@ -598,6 +598,13 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
             Err(error) => return invalid(&format!("invalid comparison list: {error}")),
         },
     };
+    let ranking: Option<Vec<String>> = match request["payload"].get("rank_scenarios") {
+        None => None,
+        Some(value) => match serde_json::from_value(value.clone()) {
+            Ok(ids) => Some(ids),
+            Err(_) => return invalid("rank_scenarios must contain scenario IDs"),
+        },
+    };
     let binding = KernelBinding::new();
     let row = |scenario: &Scenario, result: Option<Value>, error: Value| {
         let mut row =
@@ -683,40 +690,79 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
         },
     );
     let mut result = json!({"executions":executions});
-    if let Some(comparisons) = comparisons {
+    if comparisons.is_some() || ranking.is_some() {
         let paths: HashMap<_, _> = scenarios
             .iter()
             .zip(&executions)
             .map(|(scenario, row)| (scenario.id.as_str(), (scenario, &row["result"])))
             .collect();
-        let rows: Vec<_> = comparisons
-            .iter()
-            .map(|comparison| {
-                let (mut row, outcome) = match comparison {
-                    ComparisonRequest::Pair(pair) => (
-                        json!({"baseline":pair.baseline,"alternative":pair.alternative}),
-                        compare_paths(&paths, pair),
-                    ),
-                    ComparisonRequest::Ensemble(ensemble) => (
-                        json!({"pairs":ensemble.pairs}),
-                        compare_ensemble(&paths, ensemble),
-                    ),
-                };
-                let (result, error) = match outcome {
-                    Ok(result) => (result, Value::Null),
-                    Err(message) => (
-                        Value::Null,
-                        json!({"code":"invalid_comparison","message":message}),
-                    ),
-                };
-                row["result"] = result;
-                row["error"] = error;
-                row
-            })
-            .collect();
-        result["comparisons"] = json!(rows);
+        if let Some(ids) = ranking {
+            result["ranking"] = match rank_paths(&paths, &ids) {
+                Ok(rows) => json!({"metric":"final_adoption","rows":rows,"error":null}),
+                Err(message) => {
+                    json!({"rows":null,"error":{"code":"invalid_ranking","message":message}})
+                }
+            };
+        }
+        if let Some(comparisons) = comparisons {
+            let rows: Vec<_> = comparisons
+                .iter()
+                .map(|comparison| {
+                    let (mut row, outcome) = match comparison {
+                        ComparisonRequest::Pair(pair) => (
+                            json!({"baseline":pair.baseline,"alternative":pair.alternative}),
+                            compare_paths(&paths, pair),
+                        ),
+                        ComparisonRequest::Ensemble(ensemble) => (
+                            json!({"pairs":ensemble.pairs}),
+                            compare_ensemble(&paths, ensemble),
+                        ),
+                    };
+                    let (result, error) = match outcome {
+                        Ok(result) => (result, Value::Null),
+                        Err(message) => (
+                            Value::Null,
+                            json!({"code":"invalid_comparison","message":message}),
+                        ),
+                    };
+                    row["result"] = result;
+                    row["error"] = error;
+                    row
+                })
+                .collect();
+            result["comparisons"] = json!(rows);
+        }
     }
     envelope(result, Value::Null)
+}
+
+fn rank_paths(paths: &ScenarioPaths<'_>, ids: &[String]) -> Result<Vec<Value>, &'static str> {
+    if ids.len() < 2 || ids.iter().collect::<std::collections::HashSet<_>>().len() != ids.len() {
+        return Err("ranking requires at least two distinct scenario IDs");
+    }
+    common_time_basis(paths, ids.iter().map(String::as_str))?;
+    let mut grid = None;
+    let mut scores = Vec::with_capacity(ids.len());
+    for id in ids {
+        let (time, values) = scalar_path(paths, id)?;
+        if grid.as_ref().is_some_and(|expected| expected != &time) {
+            return Err("scenario ranking requires identical time grids");
+        }
+        grid = Some(time);
+        scores.push((id, *values.last().unwrap()));
+    }
+    scores.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
+    let mut place = 1;
+    Ok(scores
+        .iter()
+        .enumerate()
+        .map(|(index, &(id, score))| {
+            if index > 0 && scores[index - 1].1 != score {
+                place = index + 1;
+            }
+            json!({"id":id,"place":place,"final_adoption":score})
+        })
+        .collect())
 }
 
 #[derive(Deserialize)]
