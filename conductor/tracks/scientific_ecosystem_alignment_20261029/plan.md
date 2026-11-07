@@ -6204,3 +6204,8 @@ Hosted release readiness for this worktree revision remains open.
   SBOM normalization completed. The output contained both the wheel
   and source archive, and the extracted CPython 3.15 wheel returned
   the expected native Logistic prediction. Hosted acceptance remains open.
+
+- [x] Run all 130 Python native tests against the optimized macOS
+  arm64 wheel produced by the staged release script after SBOM
+  normalization. All passed on the local CPython 3.15.2 runtime.
+  Hosted platform and scientific acceptance remain open.
