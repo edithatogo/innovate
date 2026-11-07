@@ -468,6 +468,18 @@ fn causal_summaries_match_analytic_effects() {
     );
     assert_eq!(scenario["result"]["baseline"], json!([50.]));
     assert_eq!(scenario["result"]["counterfactual"], json!([60.]));
+    let products = run(
+        json!({"method":"counterfactual_forecast","forecast_model":"lock_in",
+        "baseline":{"inputs":{"time":[0.]},"constructor_kwargs":{"initial_values":[120.,0.]},
+            "parameters":{"alpha1":0.3,"alpha2":0.2,"beta1":0.1,"beta2":0.1,"gamma1":0.1,"gamma2":0.1,"m":100.}},
+        "parameter_overrides":{"m":200.}}),
+    );
+    let products = &products["result"];
+    assert_eq!(products["columns"].as_array().unwrap().len(), 2);
+    assert_eq!(products["baseline"], json!([[100., 0.]]));
+    assert_eq!(products["counterfactual"], json!([[120., 0.]]));
+    assert_eq!(products["difference"], json!([[20., 0.]]));
+    assert_eq!(products["percentage_difference"], json!([[20., null]]));
     let risk = run(json!({"method":"e_value","point_estimate":0.5}));
     assert!((risk["result"]["e_value"].as_f64().unwrap() - (2. + 2_f64.sqrt())).abs() < 1e-12);
     let sensitivity = run(json!({"method":"sensitivity_scenario","point_estimate":10,

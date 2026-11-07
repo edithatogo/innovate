@@ -299,21 +299,55 @@ fn counterfactual_forecast(payload: &Value) -> Result<Value, &'static str> {
     }
     let binding = crate::KernelBinding::new();
     let predict = |request| {
-        let result = binding
+        binding
             .predict_model(model, request)
             .map_err(|_| "counterfactual model prediction failed validation")?
             .result
-            .ok_or("counterfactual prediction returned no result")?;
-        series(&result, "values")
+            .ok_or("counterfactual prediction returned no result")
     };
     let baseline = predict(payload["baseline"].clone())?;
     let counterfactual = predict(Value::Object(alternative))?;
+    if baseline.get("rows").is_some() {
+        let rows = |result: &Value| {
+            serde_json::from_value::<Vec<Vec<f64>>>(result["rows"].clone())
+                .map_err(|_| "counterfactual prediction rows must be numeric arrays")
+        };
+        let before = rows(&baseline)?;
+        let after = rows(&counterfactual)?;
+        if baseline["columns"] != counterfactual["columns"] || before.len() != after.len() {
+            return Err("counterfactual predictions must have matching rows and columns");
+        }
+        let (difference, percentage): (Vec<_>, Vec<_>) = before
+            .iter()
+            .zip(&after)
+            .map(|(a, b)| compare_values(a, b))
+            .collect::<Result<Vec<_>, _>>()?
+            .into_iter()
+            .unzip();
+        return Ok(
+            json!({"columns":baseline["columns"],"baseline":before,"counterfactual":after,
+            "difference":difference,"percentage_difference":percentage}),
+        );
+    }
+    let baseline = series(&baseline, "values")?;
+    let counterfactual = series(&counterfactual, "values")?;
+    let (difference, percentage) = compare_values(&baseline, &counterfactual)?;
+    Ok(json!({"baseline":baseline,"counterfactual":counterfactual,
+        "difference":difference,"percentage_difference":percentage}))
+}
+
+type ForecastDifference = (Vec<f64>, Vec<Option<f64>>);
+
+fn compare_values(
+    baseline: &[f64],
+    counterfactual: &[f64],
+) -> Result<ForecastDifference, &'static str> {
     if baseline.len() != counterfactual.len() {
         return Err("counterfactual predictions must have the same length as baseline");
     }
     let difference: Vec<_> = baseline
         .iter()
-        .zip(&counterfactual)
+        .zip(counterfactual)
         .map(|(before, after)| finite(after - before))
         .collect::<Result<_, _>>()?;
     let percentage: Vec<_> = baseline
@@ -327,8 +361,7 @@ fn counterfactual_forecast(payload: &Value) -> Result<Value, &'static str> {
             }
         })
         .collect::<Result<_, _>>()?;
-    Ok(json!({"baseline":baseline,"counterfactual":counterfactual,
-        "difference":difference,"percentage_difference":percentage}))
+    Ok((difference, percentage))
 }
 
 fn apply_overrides(
