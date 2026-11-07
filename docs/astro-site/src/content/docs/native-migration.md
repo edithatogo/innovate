@@ -225,11 +225,12 @@ event branch ignores covariates. Metadata records that mode; fit diagnostics war
 that its coefficients are unidentifiable. Select `event_covariates="additive"`
 to apply the same covariate coefficients to both segments in the redesigned API.
 
-Advanced fits currently require complete `fit_options.initial_parameters`,
-including post-event and covariate coefficients. Rust reports convergence and
-local rank; rank deficiency does not establish parameter uniqueness. Default
-initialization, analytic time-varying adoption-rate helpers and the other models'
-historical interpolation/event semantics remain required migration work. This
+Advanced fits accept complete `fit_options.initial_parameters` or generate
+starts from the observed levels and time span of each event segment. Automatic
+starts set covariate coefficients to zero. Rust reports convergence and local
+rank. Rank deficiency limits parameter identification. Analytic time-varying
+adoption-rate helpers and the other models' historical interpolation and event
+semantics remain migration work. This
 port preserves the Logistic pointwise curve contract; it is not an ODE forcing
 or interpolation rule. Historical source: pre-migration commit `56d91dd7`.
 

@@ -201,10 +201,6 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             ));
         }
         let (initial, limit) = crate::fitting::options(r)?;
-        let initial = initial.ok_or_else(|| {
-            error("advanced Logistic fitting requires explicit initial_parameters")
-        })?;
-        let initial = parse(&initial)?;
         let ys = observed.iter().copied().fold(0_f64, f64::max).max(1e-12);
         let ts = time.iter().copied().map(f64::abs).fold(1_f64, f64::max);
         let scale: Vec<_> = names
@@ -220,17 +216,50 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
             })
             .collect();
         let positive = |i: usize| ["L", "k", "L_post", "k_post"].contains(&names[i].as_str());
-        let start: Vec<_> = initial
-            .iter()
-            .enumerate()
-            .map(|(i, v)| {
-                if positive(i) {
-                    (v / scale[i]).ln()
-                } else {
-                    v / scale[i]
-                }
-            })
-            .collect();
+        let transform = |parameters: &[f64]| {
+            parameters
+                .iter()
+                .enumerate()
+                .map(|(i, v)| {
+                    if positive(i) {
+                        (v / scale[i]).ln()
+                    } else {
+                        v / scale[i]
+                    }
+                })
+                .collect::<Vec<_>>()
+        };
+        let starts = if let Some(initial) = initial {
+            vec![transform(&parse(&initial)?)]
+        } else {
+            let segment = |times: &[f64], levels: &[f64], rate: f64| {
+                let capacity = levels.iter().copied().fold(0., f64::max).max(ys * 0.1) * 1.1;
+                let midpoint = times
+                    .iter()
+                    .zip(levels)
+                    .min_by(|(_, a), (_, b)| {
+                        ((*a - capacity * 0.5).abs()).total_cmp(&((*b - capacity * 0.5).abs()))
+                    })
+                    .map_or(time[0], |(&t, _)| t);
+                let span = times
+                    .first()
+                    .zip(times.last())
+                    .map_or(ts, |(first, last)| (last - first).max(1.));
+                [capacity, rate / span, midpoint]
+            };
+            let split = event.map_or(time.len(), |e| time.partition_point(|t| *t < e));
+            [2., 5., 10.]
+                .into_iter()
+                .map(|rate| {
+                    let mut p = segment(&time[..split], &observed[..split], rate).to_vec();
+                    if event.is_some() {
+                        p.extend(segment(&time[split..], &observed[split..], rate));
+                    }
+                    p.resize(names.len(), 0.);
+                    transform(&p)
+                })
+                .collect()
+        };
         let untransform = |v: &[f64]| {
             v.iter()
                 .enumerate()
@@ -239,7 +268,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
         };
         let fit = crate::numerics::least_squares(
             &observed.iter().map(|y| y / ys).collect::<Vec<_>>(),
-            &[start],
+            &starts,
             |v| predict(&untransform(v)).map(|p| p.iter().map(|x| x / ys).collect()),
             limit,
         )

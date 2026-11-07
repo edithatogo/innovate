@@ -25,20 +25,22 @@ fn historical_event_fit_forecasts_and_reports_rank() {
             }
         })
         .collect();
-    let fit=KernelBinding::new().fit_model("logistic",json!({"inputs":{"time":time,"observed":observed},"constructor_kwargs":{"t_event":12.},"fit_options":{"initial_parameters":{"L":110.,"k":0.4,"x0":6.,"L_post":220.,"k_post":0.4,"x0_post":17.}}})).unwrap().result.unwrap();
-    assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
-    assert_eq!(fit["diagnostics"]["identifiability"]["rank"], 6);
-    let a = KernelBinding::new()
-        .predict_model(
-            "logistic",
-            json!({"inputs":{"time":[35.]},"state":fit["state"]}),
-        )
-        .unwrap()
-        .result
-        .unwrap();
-    assert!(
-        (a["values"][0].as_f64().unwrap() - 200. / (1. + (-0.3_f64 * 17.).exp())).abs() < 0.001
-    );
+    for fit_options in [json!({"initial_parameters":{"L":110.,"k":0.4,"x0":6.,"L_post":220.,"k_post":0.4,"x0_post":17.}}), json!({})] {
+        let fit=KernelBinding::new().fit_model("logistic",json!({"inputs":{"time":time,"observed":observed},"constructor_kwargs":{"t_event":12.},"fit_options":fit_options})).unwrap().result.unwrap();
+        assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
+        assert_eq!(fit["diagnostics"]["identifiability"]["rank"], 6);
+        let a = KernelBinding::new()
+            .predict_model(
+                "logistic",
+                json!({"inputs":{"time":[35.]},"state":fit["state"]}),
+            )
+            .unwrap()
+            .result
+            .unwrap();
+        assert!(
+            (a["values"][0].as_f64().unwrap() - 200. / (1. + (-0.3_f64 * 17.).exp())).abs() < 0.001
+        );
+    }
 }
 #[test]
 fn historical_event_covariate_policy_is_explicit() {
@@ -82,8 +84,10 @@ fn additive_covariate_fit_recovers_independent_curve() {
         .zip(&x)
         .map(|(t, x)| (100. + 10. * x) / (1. + (-(0.4 + 0.02 * x) * (t - (10. + 0.1 * x))).exp()))
         .collect();
-    let f=KernelBinding::new().fit_model("logistic",json!({"inputs":{"time":t,"observed":y,"covariates":{"x":x}},"constructor_kwargs":{"covariates":["x"]},"fit_options":{"initial_parameters":{"L":110.,"k":0.3,"x0":9.,"beta_L_x":8.,"beta_k_x":0.,"beta_x0_x":0.}}})).unwrap().result.unwrap();
-    assert_eq!(f["diagnostics"]["optimizer"]["converged"], true);
-    assert_eq!(f["diagnostics"]["identifiability"]["rank"], 6);
-    assert!((f["parameters"]["beta_L_x"].as_f64().unwrap() - 10.).abs() < 0.001);
+    for fit_options in [json!({"initial_parameters":{"L":110.,"k":0.3,"x0":9.,"beta_L_x":8.,"beta_k_x":0.,"beta_x0_x":0.}}), json!({})] {
+        let f=KernelBinding::new().fit_model("logistic",json!({"inputs":{"time":t,"observed":y,"covariates":{"x":x}},"constructor_kwargs":{"covariates":["x"]},"fit_options":fit_options})).unwrap().result.unwrap();
+        assert_eq!(f["diagnostics"]["optimizer"]["converged"], true);
+        assert_eq!(f["diagnostics"]["identifiability"]["rank"], 6);
+        assert!((f["parameters"]["beta_L_x"].as_f64().unwrap() - 10.).abs() < 0.001);
+    }
 }

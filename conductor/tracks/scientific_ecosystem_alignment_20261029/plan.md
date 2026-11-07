@@ -1042,3 +1042,12 @@ the other competition models and installed binding checks remain open.
   Lotka–Volterra fit contracts and the per-start diagnostic fields.
   The documentation build generated 163 pages, validated internal links,
   and included the new diagnostic field in the rendered migration page.
+
+## Automatic historical Logistic fit starts
+
+- [x] Seed historical Logistic fits from observed capacity, midpoint and a
+  deterministic rate grid for each event segment. Covariate slopes start
+  at zero. Explicit starts use their existing path.
+- [x] Exercise both start modes against the event forecast and independent
+  additive covariate fixtures. Five Rust tests and focused Clippy passed.
+- [ ] Qualify automatic starts in installed Python, Julia and R.
