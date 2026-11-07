@@ -6113,3 +6113,11 @@ Hosted release readiness for this worktree revision remains open.
   After clearing generated Innovate core build caches to recover from a
   full disk, the locked retry passed 16 Kairos and 34 network tests.
   Installed-consumer acceptance remains required before pin promotion.
+
+- [x] Verify candidate e76b97be through the rebuilt CPython 3.15.2 wheel,
+  Julia project and installed R wrapper with the candidate shared
+  library. Both Bass engines paused after one adoption and replayed to
+  their uninterrupted results, and all consumers rejected the changed
+  resume seed. Pin promotion remains open because the existing
+  checkpoint configuration digests include the provider revision.
+  Qualify replay of checkpoints written by the previous pin first.
