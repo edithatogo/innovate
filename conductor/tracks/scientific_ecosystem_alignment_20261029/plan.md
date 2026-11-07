@@ -1123,3 +1123,14 @@ the other competition models and installed binding checks remain open.
   null AIC. Each held-out forecast meets the 0.001 analytic tolerance.
   Python uses the Polars fit and forecast entry points.
   [Fixture and results](evidence/historical-logistic-weights-20261107).
+
+## Weighted competition fitting
+
+- [x] Apply one weight per time row to all series in the shared competition
+  solver. Positive rows set the outcome scale and automatic capacity
+  starts. A row that supplies the conditioned initial state is excluded
+  from the weighted residual objective. Weighted local rank and loss are
+  separate from descriptive metrics. The independent interacting
+  Lotka–Volterra fixture excludes a zero-weight outlier in both outputs.
+  Eighteen focused Rust tests and Clippy passed.
+- [ ] Qualify weighted competition fits in installed Python, Julia and R.

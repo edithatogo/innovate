@@ -512,6 +512,28 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
         ));
     }
     let model = model(request, inputs, &time)?;
+    let minimum_rows = model.names.len().div_ceil(model.n).max(4);
+    let weights = if op == KernelOperation::FitModel {
+        crate::fitting::weights(request, time.len(), minimum_rows)?
+    } else {
+        None
+    };
+    let max_weight = weights
+        .as_ref()
+        .map_or(1., |w| w.iter().copied().fold(0., f64::max));
+    let mut factors: Vec<_> = weights.as_ref().map_or_else(
+        || vec![1.; time.len()],
+        |w| w.iter().map(|v| v.sqrt() / max_weight.sqrt()).collect(),
+    );
+    if weights.is_some() && model.conditioned_initial && time[0] == model.origin {
+        factors[0] = 0.;
+        if factors.iter().filter(|w| **w > 0.).count() < minimum_rows {
+            return Err(invalid(
+                op,
+                "insufficient positive-weight rows after initial-state conditioning",
+            ));
+        }
+    }
     let mut quality = None;
     let params = if op == KernelOperation::FitModel {
         if time.len() < 4 {
@@ -524,7 +546,13 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
                 "competitive fitting requires nonnegative observations",
             ));
         }
-        let yscale = observed.iter().flatten().copied().fold(0., f64::max);
+        let yscale = observed
+            .iter()
+            .zip(&factors)
+            .filter(|(_, w)| **w > 0.)
+            .flat_map(|(row, _)| row)
+            .copied()
+            .fold(0., f64::max);
         if yscale == 0. {
             return Err(invalid(
                 op,
@@ -588,7 +616,7 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
                 })
                 .collect::<Vec<_>>()
         };
-        let (initial, limit) = crate::fitting::options(request)?;
+        let (initial, limit) = crate::fitting::scalar_options(request)?;
         let mut starts = Vec::new();
         if let Some(initial) = initial {
             let parameters = model.parameters(&initial, op)?;
@@ -624,7 +652,9 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
                     } else if name.starts_with('m') {
                         observed
                             .iter()
-                            .map(|r| {
+                            .zip(&factors)
+                            .filter(|(_, w)| **w > 0.)
+                            .map(|(r, _)| {
                                 r[if model.key == "lock_in" {
                                     0
                                 } else {
@@ -649,14 +679,20 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
             p.resize(model.names.len(), 0.);
             starts.push(transform(p));
         }
-        let target: Vec<_> = observed.iter().flatten().map(|x| x / yscale).collect();
+        let scaled = |rows: &[Vec<f64>]| -> Vec<f64> {
+            rows.iter()
+                .zip(&factors)
+                .flat_map(|(row, w)| row.iter().map(move |x| (x * w) / yscale))
+                .collect()
+        };
+        let target = scaled(&observed);
         let fit = least_squares(
             &target,
             &starts,
             |theta| {
                 model
                     .predict(&time, &untransform(theta))
-                    .map(|r| r.into_iter().flatten().map(|x| x / yscale).collect())
+                    .map(|r| scaled(&r))
             },
             limit,
         )
@@ -710,6 +746,30 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
                 model.name(),
                 model.names.len(),
             );
+            if weights.is_some() {
+                let weighted_rss: f64 = observed
+                    .iter()
+                    .zip(&rows)
+                    .zip(&factors)
+                    .flat_map(|((observed, predicted), w)| {
+                        observed
+                            .iter()
+                            .zip(predicted)
+                            .map(move |(y, p)| (y * w - p * w).powi(2))
+                    })
+                    .sum();
+                d["metrics"]["AIC"] = Value::Null;
+                d["metrics"]["BIC"] = Value::Null;
+                d["information_criteria"] =
+                    json!({"available":false,"reason":"weighted likelihood not qualified"});
+                d["weighting"] = json!({
+                    "maximum_weight":max_weight,
+                    "positive_observations":factors.iter().filter(|w| **w > 0.).count(),
+                    "weighted_rss_normalized_by_max":weighted_rss,
+                    "rank_semantics":"weighted local Jacobian; one weight per time row across all series",
+                    "descriptive_metrics":"unweighted"
+                });
+            }
             d["initial_condition"] = json!({"source":if model.conditioned_initial {"first_observed_row"} else {"explicit_or_zero"},"excluded_conditioning_rows":offset,"uncertainty_propagated":false});
             if model.key == "lock_in" && model.events.is_empty() {
                 d["structural_identifiability"] = json!({"status":"interior_parameter_confounding","scope":"unclipped_interior_trajectories","rank_upper_bound":model.names.len()-1,"parameters":model.names.len(),"reason":"a common capacity and feedback scaling preserves the unclipped interior RHS; clipping can add boundary information"});

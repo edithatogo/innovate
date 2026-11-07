@@ -654,3 +654,35 @@ fn ecosystem_events_match_independent_references_and_conditional_fit() {
         }
     }
 }
+
+#[test]
+fn weighted_competition_fit_excludes_all_outputs_on_a_zero_weight_row() {
+    let f: Value = serde_json::from_str(include_str!("fixtures/lotka_forcing_scipy.json")).unwrap();
+    let mut observed = f["rows"].as_array().unwrap().clone();
+    observed[5] = json!([1e100, 1e100]);
+    let mut weights = vec![2.; observed.len()];
+    weights[5] = 0.;
+    let fit = KernelBinding::new()
+        .fit_model(
+            "lotka_volterra",
+            json!({
+                "inputs":{"time":f["time"],"observed":observed,"covariates":f["covariates"]},
+                "constructor_kwargs":{"covariates":["price"],"initial_values":f["initial"]},
+                "fit_options":{"weights":weights}
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    assert_eq!(fit["diagnostics"]["optimizer"]["converged"], true);
+    assert_eq!(
+        fit["diagnostics"]["weighting"]["positive_observations"],
+        observed.len() - 1
+    );
+    assert!(
+        fit["diagnostics"]["weighting"]["weighted_rss_normalized_by_max"]
+            .as_f64()
+            .unwrap()
+            < 1e-10
+    );
+}
