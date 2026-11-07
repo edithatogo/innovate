@@ -1818,3 +1818,11 @@ the other competition models and installed binding checks remain open.
   Clippy passed. The direct dependency reuses locked sha2 0.11.1.
 - [ ] Qualify historical Python digest compatibility for non-ASCII
   strings and numeric encodings, and verify installed consumers.
+
+- [x] Add an explicit historical Python JSON checksum encoding for
+  finite JSON datasets. The fixture matches CPython 3.15.2 for Unicode
+  keys and surrogate pairs, DEL, signed zero, integer versus float
+  spelling, and exponent formatting. Rust encoding remains the default.
+  All 27 native boundary tests and focused Clippy passed.
+- [ ] Qualify broader float spelling and verify stored historical
+  digests through the installed consumers.

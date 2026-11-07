@@ -656,3 +656,19 @@ fn dataset_digest_detects_data_changes_but_ignores_extraction_timestamp() {
     dataset["values"][1] = innovate_core::json!(3);
     assert_eq!(run(dataset)["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn historical_dataset_digest_matches_python_json_fixture() {
+    let request = innovate_core::json!({
+        "schema_version":"2.0","operation":"dataset_checksum",
+        "payload":{"encoding":"python_sorted_json_v1","dataset":{
+            "é":"😀","values":[1,1.0,-0.0,1e-7,1e16,1e-4],"del":"\u{7f}"
+        }}
+    });
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert_eq!(
+        response["result"]["checksum"],
+        "3655f262bf58ebfcf91ccacfcd757a2584eb6b99b5461efbff2b277c7b223cb1"
+    );
+}

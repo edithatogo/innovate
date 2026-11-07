@@ -72,8 +72,21 @@ pub(crate) fn checksum(payload: &Value) -> Result<Value, &'static str> {
         None
     };
     content.sort_all_objects();
-    let bytes =
-        serde_json::to_vec(&content).map_err(|_| "dataset checksum serialization failed")?;
+    let encoding = payload
+        .get("encoding")
+        .map_or(Some("rust_sorted_json_v1"), Value::as_str);
+    let (bytes, encoding) = match encoding {
+        Some("rust_sorted_json_v1") => (
+            serde_json::to_vec(&content).map_err(|_| "dataset checksum serialization failed")?,
+            "rust_sorted_json_v1",
+        ),
+        Some("python_sorted_json_v1") => {
+            let mut output = String::new();
+            python_json(&content, &mut output);
+            (output.into_bytes(), "python_sorted_json_v1")
+        }
+        _ => return Err("unsupported dataset checksum encoding"),
+    };
     let actual = Sha256::digest(bytes)
         .iter()
         .map(|byte| format!("{byte:02x}"))
@@ -86,5 +99,53 @@ pub(crate) fn checksum(payload: &Value) -> Result<Value, &'static str> {
     {
         return Err("dataset content checksum does not match provenance");
     }
-    Ok(json!({"checksum":actual,"algorithm":"sha256","encoding":"rust_sorted_json_v1"}))
+    Ok(json!({"checksum":actual,"algorithm":"sha256","encoding":encoding}))
+}
+
+fn python_json(value: &Value, output: &mut String) {
+    use std::fmt::Write as _;
+
+    match value {
+        Value::String(text) => {
+            for unit in json!(text).to_string().encode_utf16() {
+                if unit < 127 {
+                    output.push(char::from_u32(u32::from(unit)).expect("ASCII code unit"));
+                } else {
+                    write!(output, "\\u{unit:04x}").expect("writing to String");
+                }
+            }
+        }
+        Value::Number(number) if number.is_f64() => {
+            let repr = format!("{:?}", number.as_f64().expect("floating-point number"));
+            if let Some((mantissa, exponent)) = repr.split_once('e') {
+                let exponent: i32 = exponent.parse().expect("formatted exponent");
+                write!(output, "{mantissa}e{exponent:+03}").expect("writing to String");
+            } else {
+                output.push_str(&repr);
+            }
+        }
+        Value::Array(values) => {
+            output.push('[');
+            for (index, item) in values.iter().enumerate() {
+                if index > 0 {
+                    output.push(',');
+                }
+                python_json(item, output);
+            }
+            output.push(']');
+        }
+        Value::Object(fields) => {
+            output.push('{');
+            for (index, (key, item)) in fields.iter().enumerate() {
+                if index > 0 {
+                    output.push(',');
+                }
+                python_json(&json!(key), output);
+                output.push(':');
+                python_json(item, output);
+            }
+            output.push('}');
+        }
+        _ => output.push_str(&value.to_string()),
+    }
 }
