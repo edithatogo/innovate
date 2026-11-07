@@ -1049,4 +1049,49 @@ fn scheduled_resource_slot_ticks_balance_across_seeds() {
         saw_idle |= count("idle_slot_ticks") > 0;
     }
     assert!(saw_over_capacity && saw_idle);
+
+    let mut saw_pending = false;
+    for horizon in [4, 8, 30] {
+        payload["inputs"]["time"] = json!([0, horizon]);
+        for seed in 0..32 {
+            payload["simulation_options"]["seed"] = json!(seed);
+            let result = kernel
+                .simulate_model("bass", payload.clone())
+                .unwrap()
+                .result
+                .unwrap();
+            let trace = |key: &str| result[key].as_array().unwrap();
+            let sum_ticks = |key| {
+                trace(key)
+                    .iter()
+                    .map(|event| event["tick"].as_u64().unwrap())
+                    .sum::<u64>()
+            };
+            let pending = result["metadata"]["queue_length"].as_u64().unwrap();
+            let metrics = &result["resource_metrics"];
+            let waits: u64 = [
+                "admitted_wait_ticks",
+                "abandoned_wait_ticks",
+                "pending_wait_ticks",
+            ]
+            .iter()
+            .map(|key| metrics[key].as_u64().unwrap())
+            .sum();
+            assert_eq!(
+                trace("requests").len() as u64,
+                (trace("service_starts").len() + trace("abandonments").len() + trace("balks").len())
+                    as u64
+                    + pending
+            );
+            assert_eq!(
+                sum_ticks("requests") + waits,
+                sum_ticks("service_starts")
+                    + sum_ticks("abandonments")
+                    + sum_ticks("balks")
+                    + horizon * pending
+            );
+            saw_pending |= metrics["pending_wait_ticks"].as_u64().unwrap() > 0;
+        }
+    }
+    assert!(saw_pending);
 }

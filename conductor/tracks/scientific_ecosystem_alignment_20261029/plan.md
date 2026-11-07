@@ -5846,3 +5846,9 @@ Hosted release readiness for this worktree revision remains open.
   scheduled resource fixture. Occupied plus idle slot ticks equaled
   configured plus over-capacity slot ticks for every seed, with both
   idle and over-capacity intervals exercised. All 33 network tests passed.
+
+- [x] Reconcile Kairos queue waits against public event history across
+  32 seeds at each of three horizons. Request counts matched starts,
+  abandonments, balks and pending waiters. The corresponding event
+  timestamps reproduced total wait ticks, including horizon-censored
+  waits. The focused Rust network test passed.
