@@ -2534,3 +2534,9 @@ the other competition models and installed binding checks remain open.
   at or above the threshold reports its first sample, and a path that
   never reaches it reports null. The focused Rust comparison test and
   Clippy passed. Binding qualification for this option remains open.
+
+- [x] Qualify interpolated threshold timing through the rebuilt Python
+  3.15.2 wheel, Julia and installed R. All three matched the analytic
+  crossing between samples, returned the first sample for a path
+  already above threshold, and returned null for unreached thresholds.
+  The existing sampled timing agreed across the three bindings.
