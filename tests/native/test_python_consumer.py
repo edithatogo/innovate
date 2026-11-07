@@ -1431,6 +1431,12 @@ def test_cross_fitted_stratum_ate():
     clustered = innovate.execute("summarize_causal", **payload, clusters=["a", "b", "b", "a"])["result"]["contrast"]
     assert clustered["cluster_count"] == 2
     assert clustered["influence_standard_error"] == pytest.approx(2)
+    att_payload = {**payload, "method": "cross_fitted_stratum_att"}
+    att = innovate.execute("summarize_causal", **att_payload, clusters=["a", "b", "b", "a"])["result"]["contrast"]
+    assert att["estimand"] == "att"
+    assert att["estimate"] == pytest.approx(4)
+    assert att["cluster_count"] == 2
+    assert att["influence_standard_error"] == pytest.approx(2)
     with pytest.raises(innovate.NativeError, match="single cross-fitting fold"):
         innovate.execute("summarize_causal", **payload, clusters=["a", "a", "b", "b"])
     assert result["contrast"]["estimate"] == pytest.approx(4)

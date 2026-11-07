@@ -689,6 +689,12 @@ end
     clustered = kernel_call("summarize_causal", nothing, payload)["result"]["contrast"]
     @test clustered["cluster_count"] == 2
     @test clustered["influence_standard_error"] ≈ 2
+    att = kernel_call("summarize_causal", nothing,
+        merge(payload, Dict("method"=>"cross_fitted_stratum_att")))["result"]["contrast"]
+    @test att["estimand"] == "att"
+    @test att["estimate"] ≈ 4
+    @test att["cluster_count"] == 2
+    @test att["influence_standard_error"] ≈ 2
     payload["clusters"] = ["a","a","b","b"]
     @test_throws r"single cross-fitting fold" kernel_call("summarize_causal", nothing, payload)
     @test result["contrast"]["estimate"] ≈ 4

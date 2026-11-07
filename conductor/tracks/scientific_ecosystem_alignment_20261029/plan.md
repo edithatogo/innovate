@@ -4688,3 +4688,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify clustered cross-fitted ATE through rebuilt Python 3.15.2,
   Julia and installed R. Each returned standard error 2 and rejected
   clusters assigned to more than one fold.
+
+- [x] Verify clustered cross-fitted ATT through rebuilt Python 3.15.2,
+  Julia and installed R. Each returned ATT 4 and standard error 2
+  for two clusters held intact across the training splits.
