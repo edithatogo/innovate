@@ -2391,3 +2391,8 @@ the other competition models and installed binding checks remain open.
   endpoint extension and cumulative adoption across seven samples. Five
   focused Rust tests and Clippy passed. Binding and latent fitting
   benchmark qualification remain open.
+
+- [x] Qualify latent_process_reference in the rebuilt Python 3.15 wheel,
+  Julia and installed R. Complete benchmark results agreed across the
+  three bindings and all seven predictions matched the analytic reference
+  exactly on this host. Latent fitting benchmark coverage remains open.
