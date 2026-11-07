@@ -2735,3 +2735,9 @@ the other competition models and installed binding checks remain open.
   service is preserved, and malformed priority vectors fail.
   All 24 Rust network tests and focused Clippy passed. Binding
   qualification for this schedule field remains open.
+
+- [x] Qualify scheduled agent priorities through the rebuilt Python 3.15
+  wheel, Julia and installed R. Complete network results agreed exactly.
+  The active agent finished at tick 6 as before, the promoted waiter
+  finished at tick 11, and the other waiter finished at tick 16. R used
+  raw JSON to retain the empty edge array.
