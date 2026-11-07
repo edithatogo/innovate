@@ -1338,12 +1338,25 @@ fn matched_treatment_contrast(payload: &Value) -> Result<Value, &'static str> {
                         .iter()
                         .map(|pair| values[pair.control_index])
                         .collect();
+                    let mut before_treated = Vec::new();
+                    let mut before_control = Vec::new();
+                    for (&value, &indicator) in values.iter().zip(&treatment) {
+                        if indicator == 1. {
+                            before_treated.push(value);
+                        } else {
+                            before_control.push(value);
+                        }
+                    }
+                    let before_treated = mean(&before_treated).unwrap();
+                    let before_control = mean(&before_control).unwrap();
                     let treated_mean = mean(&treated).unwrap();
                     let control_mean = mean(&control).unwrap();
                     Ok((
                         name,
                         json!({"treated_mean":treated_mean,"control_mean":control_mean,
-                "mean_difference":finite(treated_mean - control_mean)?}),
+                "mean_difference":finite(treated_mean - control_mean)?,
+                "before_matching":{"treated_mean":before_treated,"control_mean":before_control,
+                    "mean_difference":finite(before_treated - before_control)?}}),
                     ))
                 })
                 .collect::<Result<serde_json::Map<String, Value>, &'static str>>()

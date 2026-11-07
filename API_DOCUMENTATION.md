@@ -520,3 +520,5 @@ of covariate names to numeric arrays aligned with the input outcomes.
 The response reports the treated and control means and their difference
 for each covariate over retained pairs. A reused control contributes
 once per retained pair.
+Each covariate also includes `before_matching` means and their
+difference over the original treatment and control groups.

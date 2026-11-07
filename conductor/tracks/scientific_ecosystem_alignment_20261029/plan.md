@@ -5249,3 +5249,7 @@ Hosted release readiness for this worktree revision remains open.
   Julia and installed R. Each returned treated mean 30, control mean
   10 and difference 20 for the reused-control fixture. Document the
   aligned covariate input and pair weighting.
+
+- [x] Report the original group means alongside matched balance.
+  The Rust reused-control fixture showed the covariate mean difference
+  increasing from 15 before matching to 20 after matching.

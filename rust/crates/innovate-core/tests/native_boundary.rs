@@ -883,7 +883,8 @@ fn causal_summaries_match_analytic_effects() {
     let result = run(reused);
     assert_eq!(
         result["result"]["covariate_balance"]["age"],
-        json!({"treated_mean":35.,"control_mean":20.,"mean_difference":15.})
+        json!({"treated_mean":35.,"control_mean":20.,"mean_difference":15.,
+            "before_matching":{"treated_mean":35.,"control_mean":80./3.,"mean_difference":35.-80./3.}})
     );
     let error = result["result"]["conditional_standard_error"]
         .as_f64()
@@ -902,7 +903,8 @@ fn causal_summaries_match_analytic_effects() {
         "scores":[0,1,0,0,1],"caliper":0,"balance_covariates":{"age":[0,30,30,30,30]}}));
     assert_eq!(
         balance["result"]["covariate_balance"]["age"],
-        json!({"treated_mean":30.,"control_mean":10.,"mean_difference":20.})
+        json!({"treated_mean":30.,"control_mean":10.,"mean_difference":20.,
+            "before_matching":{"treated_mean":30.,"control_mean":15.,"mean_difference":15.}})
     );
     matched["caliper"] = json!(0.5);
     assert!(run(matched.clone())["result"].is_null());
