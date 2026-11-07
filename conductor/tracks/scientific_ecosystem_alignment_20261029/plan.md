@@ -6797,3 +6797,8 @@ Hosted release readiness for this worktree revision remains open.
   zero variance. The regression distinguishes an intermediate time
   within one standard deviation even with the widest finite rate
   ratio. All three Rust adopter unit tests passed.
+
+- [x] Verify extreme rate-ratio classification through the rebuilt
+  Python 3.15.2 wheel, Julia and installed R. All three returned Early
+  Majority, Late Majority and Laggards for the same fixture using
+  native builds from 0dcce9aa.
