@@ -5110,3 +5110,8 @@ Hosted release readiness for this worktree revision remains open.
   completion and independently reproduced the full uninterrupted
   response when resumed to the horizon. Both focused Rust checkpoint
   tests passed.
+
+- [x] Verify network checkpoint continuation with a continuous hazard
+  ramp and nonzero imitation on a six-agent graph. The resumed run
+  matched the uninterrupted event traces, resource accounting and RNG
+  state. All three focused Rust network checkpoint tests passed.

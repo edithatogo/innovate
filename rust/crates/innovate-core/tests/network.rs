@@ -971,3 +971,34 @@ fn network_checkpoint_can_pause_again_at_every_completion() {
         assert_eq!(run(finish), expected, "completion {count}");
     }
 }
+
+#[test]
+fn network_checkpoint_continues_continuous_hazard_forcing() {
+    let mut payload = json!({
+        "inputs":{"time":[0,2,4,6,10,20]},
+        "parameters":{"p":0.8,"q":0.2,"m":6},
+        "simulation_options":{"engine":"kairos_network","population":6,"seed":42,
+            "edges":[[0,1],[1,2],[2,3],[3,4],[4,5]],"capacity":2,
+            "service_ticks":3,"ticks_per_unit":1,
+            "hazard_forcing":{"time":[0,2,6,10],"innovation":[0,0,2,1],"imitation":[1,1,2,1]}}
+    });
+    let kernel = KernelBinding::new();
+    let run = |payload| {
+        kernel
+            .simulate_model("bass", payload)
+            .unwrap()
+            .result
+            .unwrap()
+    };
+    let expected = run(payload.clone());
+    assert!(expected["completions"].as_array().unwrap().len() > 1);
+    payload["simulation_options"]["pause_after_completions"] = json!(1);
+    let paused = run(payload.clone());
+    assert_eq!(paused["status"], "paused");
+    payload["simulation_options"]
+        .as_object_mut()
+        .unwrap()
+        .remove("pause_after_completions");
+    payload["simulation_options"]["resume_checkpoint"] = paused["checkpoint"].clone();
+    assert_eq!(run(payload), expected);
+}
