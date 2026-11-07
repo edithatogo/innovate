@@ -740,3 +740,11 @@ long_panel <- kernel_call("summarize_causal", payload=list(method="staggered_lon
   outcomes=c(11,0,10,7,5,16), adoption_times=list(a=20,z=30)))$result
 stopifnot(identical(unlist(long_panel$unit_order), c("a","z")),
   isTRUE(all.equal(long_panel$contrasts[[1]]$estimate, 4)))
+
+ranked_scenarios <- Map(function(id, capacity) list(id=id, model_key="logistic",
+  simulation=list(inputs=list(time=c(1,2)), parameters=list(L=capacity,k=1,x0=1))),
+  c("base","alt","tie"), c(100,200,200))
+ranking <- kernel_call("execute_scenario_grid", payload=list(scenarios=unname(ranked_scenarios),
+  rank_scenarios=c("tie","base","alt")))$result$ranking$rows
+stopifnot(identical(vapply(ranking, function(row) row$id, character(1)), c("tie","alt","base")),
+  all(vapply(ranking, function(row) as.numeric(row$place), numeric(1)) == c(1,1,3)))

@@ -789,3 +789,12 @@ end
     @test result["unit_order"] == ["a","z"]
     @test result["contrasts"][1]["estimate"] ≈ 4
 end
+
+@testset "Scenario grid ranking" begin
+    scenarios = [Dict("id"=>id, "model_key"=>"logistic", "simulation"=>Dict(
+        "inputs"=>Dict("time"=>[1,2]), "parameters"=>Dict("L"=>capacity,"k"=>1,"x0"=>1)))
+        for (id,capacity) in [("base",100),("alt",200),("tie",200)]]
+    result = kernel_call("execute_scenario_grid", nothing,
+        Dict("scenarios"=>scenarios, "rank_scenarios"=>["tie","base","alt"]))["result"]
+    @test [(row["id"],row["place"]) for row in result["ranking"]["rows"]] == [("tie",1),("alt",1),("base",3)]
+end

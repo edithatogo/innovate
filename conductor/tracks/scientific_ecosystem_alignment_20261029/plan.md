@@ -4795,3 +4795,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Rank selected scenario grid paths by final adoption. The Rust
   boundary test verifies stable ties, places 1/1/3 and isolation of an
   invalid ranking from the executions. Binding checks remain open.
+
+- [x] Verify scenario grid ranking through rebuilt Python 3.15.2, Julia
+  and installed R. All three returned the same tied scenario order and
+  places 1, 1 and 3.

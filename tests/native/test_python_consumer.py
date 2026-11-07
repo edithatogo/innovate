@@ -1563,3 +1563,17 @@ def test_staggered_long_panel_att():
     with pytest.raises(innovate.NativeError, match="duplicate unit and period"):
         innovate.execute("summarize_causal", method="staggered_long_panel_att",
                          **payload, adoption_times={"a": 20, "z": 30})
+
+
+def test_scenario_grid_ranking():
+    scenarios = [
+        {"id": key, "model_key": "logistic", "simulation": {
+            "inputs": {"time": [1, 2]}, "parameters": {"L": capacity, "k": 1, "x0": 1},
+        }}
+        for key, capacity in [("base", 100), ("alt", 200), ("tie", 200)]
+    ]
+    result = innovate.execute("execute_scenario_grid", scenarios=scenarios,
+                              rank_scenarios=["tie", "base", "alt"])["result"]
+    assert [(row["id"], row["place"]) for row in result["ranking"]["rows"]] == [(
+        "tie", 1), ("alt", 1), ("base", 3),
+    ]
