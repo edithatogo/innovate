@@ -106,32 +106,36 @@
       "key": "covariates_and_events",
       "status": "bounded_native",
       "required": true,
-      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/ecosystem-events-20261107.json",
-      "remaining": "Other model forcing, event time/override inference, automatic initialization, weighted conditional fits, stiff solver parity, Kairos forcing interoperability, uncertainty, scenarios and resume remain required"
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Other model forcing, event time and override inference, automatic multi-product and lock-in convergence, stiff solver parity, uncertainty, scenarios and resume"
     },
     {
       "key": "multi_generation_substitution",
       "status": "bounded_native",
       "required": true,
-      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/norton-thresholds-20261107.json",
-      "remaining": "Launch/event inference, forced-trajectory thresholds, uncertainty, full parity and broader numerical qualification"
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Launch and event inference, continuous-time historical crossings and peak location, uncertainty, full parity and broader numerical qualification"
     },
     {
       "key": "competitive_ecosystems",
       "status": "bounded_native",
       "required": true,
-      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/ecosystem-events-20261107.json",
-      "remaining": "Event inference, equilibrium helpers, calibrated uncertainty and wider numerical qualification remain required"
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Automatic multi-product and lock-in convergence, event inference, equilibrium helpers, calibrated uncertainty and wider numerical qualification"
     },
     {
       "key": "hierarchical_mixture_inference",
-      "status": "pending",
-      "required": true
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/hierarchical-20261107.json",
+      "remaining": "Full hierarchical and mixture inference parity and calibrated uncertainty"
     },
     {
       "key": "latent_regime_models",
-      "status": "pending",
-      "required": true
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/latent-20261107.json",
+      "remaining": "Full latent and regime inference parity and calibrated uncertainty"
     },
     {
       "key": "network_policy_diffusion",
@@ -144,8 +148,8 @@
       "key": "kairos_des_abm",
       "status": "bounded_native",
       "required": true,
-      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/network-hazard-20261107.json",
-      "remaining": "Continuous forcing interoperability, scenarios, resume and scientific qualification remain required"
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/kairos-continuous-hazards-20261107/julia.log",
+      "remaining": "Scenario integration, resume and broader scientific qualification"
     },
     {
       "key": "bayesian_inference",

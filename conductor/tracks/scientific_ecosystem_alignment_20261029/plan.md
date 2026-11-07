@@ -1169,3 +1169,10 @@ the other competition models and installed binding checks remain open.
   model coverage, row-wise weighting and initial-state conditioning.
   The site built 163 pages with all internal links valid, and the
   rendered guide contains the updated multi-output contract.
+
+## Release ledger reconciliation
+
+- [x] Update the ledger with bounded hierarchical/mixture and latent/regime
+  evidence. Refresh the remaining work for forcing, substitution, competition
+  and Kairos based on the native checkpoints. Development policy and four
+  mutation tests passed. The release check still rejects all 38 open obligations.
