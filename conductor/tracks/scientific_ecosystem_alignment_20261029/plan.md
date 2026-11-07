@@ -3837,3 +3837,8 @@ Hosted release readiness for this worktree revision remains open.
   ranks passed one case each, and the current verifier matched both
   receipts against serial. The wheel from 668f374f matches the native
   source at b99b35cf. Hosted Ubuntu execution remains open.
+- [x] Retain the serial reference before Open MPI setup and record
+  the launcher version with the rank receipts. Bound the hosted
+  benchmark step to ten minutes and require its artifact to exist
+  on the existing success/failure upload path. Actionlint passed.
+  GitHub showed no run for b99b35cf and no remote integration branch.

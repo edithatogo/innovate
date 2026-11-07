@@ -52,12 +52,14 @@ jobs:
       - name: Verify local MPI benchmark shards
         id: mpi-benchmarks
         if: matrix.os == 'ubuntu-latest' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+        timeout-minutes: 10
         shell: bash
         run: |
           mkdir mpi-benchmarks
+          cp native-benchmarks.json mpi-benchmarks/serial.json
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends openmpi-bin
-          cp native-benchmarks.json mpi-benchmarks/serial.json
+          mpirun --version > mpi-benchmarks/launcher-version.txt
           mpirun -n 2 .venv/bin/python scripts/run_native_benchmarks.py --mpi-shard --policy scheduled --output 'mpi-benchmarks/rank-{rank}.json'
           .venv/bin/python scripts/check_benchmark_shards.py mpi-benchmarks/serial.json mpi-benchmarks/rank-*.json
       - name: Retain MPI benchmark receipts
@@ -66,7 +68,7 @@ jobs:
         with:
           name: mpi-benchmarks
           path: mpi-benchmarks/
-          if-no-files-found: warn
+          if-no-files-found: error
   julia-r:
     runs-on: ubuntu-latest
     steps:
