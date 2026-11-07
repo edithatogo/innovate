@@ -2928,3 +2928,9 @@ the other competition models and installed binding checks remain open.
   and R. Results agreed exactly on five eligible operations, a 1 MB
   limit and caller-supplied identity. Mark the local adapter bounded
   native in the migration ledger. Hosted qualification remains open.
+
+- [x] Add native one-parameter Bayesian posterior quadrature.
+  Evaluate the native scalar predictor with a bounded uniform prior
+  and independent Gaussian observation errors at known noise scale.
+  The Logistic capacity fixture recovers mean 100 and variance 4.
+  Focused Rust and Clippy passed. Joint inference and binding checks remain open.

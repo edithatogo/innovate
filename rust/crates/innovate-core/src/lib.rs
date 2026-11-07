@@ -1,6 +1,7 @@
 //! Rust-owned diffusion fitting, prediction, diagnostics and execution contracts.
 #![forbid(unsafe_code)]
 mod adopters;
+mod bayesian;
 mod benchmark;
 mod bootstrap;
 mod calendar;
@@ -67,6 +68,7 @@ pub fn execute_json(input: &str) -> String {
                 | "execute_remote_in_process"
                 | "describe_remote_execution_contract"
                 | "bootstrap_fit"
+                | "bayesian_parameter_grid"
                 | "validate_extension_manifests"
                 | "register_extension_manifest"
                 | "list_extension_manifests"
@@ -233,6 +235,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         }
         if value["operation"] == "validate_extension_manifests" {
             return extensions::validate(payload);
+        }
+        if value["operation"] == "bayesian_parameter_grid" {
+            return bayesian::grid(payload);
         }
         if value["operation"] == "bootstrap_fit" {
             return bootstrap::fit(payload);

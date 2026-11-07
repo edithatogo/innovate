@@ -2215,3 +2215,25 @@ fn in_process_remote_dispatch_applies_scope_and_operation_policy() {
         "unsupported_operation"
     );
 }
+
+#[test]
+fn bayesian_logistic_capacity_grid_matches_symmetric_gaussian_reference() {
+    let request = json!({"schema_version":"2.0","operation":"bayesian_parameter_grid",
+        "payload":{"forecast_model":"logistic","parameter":"L","bounds":[80.,120.],
+            "points":401,"noise_sd":1.,"observed":[50.],
+            "prediction":{"inputs":{"time":[2.]},"parameters":{"L":100.,"k":0.5,"x0":2.}}}});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert!(response["error"].is_null(), "{response}");
+    let fit = &response["result"];
+    let mass: Vec<f64> = serde_json::from_value(fit["posterior_mass"].clone()).unwrap();
+    let grid: Vec<f64> = serde_json::from_value(fit["grid"].clone()).unwrap();
+    assert!((mass.iter().sum::<f64>() - 1.).abs() < 1e-12);
+    assert!((fit["posterior_mean"].as_f64().unwrap() - 100.).abs() < 1e-10);
+    let variance: f64 = grid
+        .iter()
+        .zip(mass)
+        .map(|(x, p)| p * (x - 100.).powi(2))
+        .sum();
+    assert!((variance - 4.).abs() < 1e-10);
+}
