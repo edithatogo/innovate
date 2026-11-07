@@ -2347,3 +2347,8 @@ the other competition models and installed binding checks remain open.
   and resolve its dataset version in corpus validation. Classify it as
   manual. Five focused Rust tests and Clippy passed. Nonzero spillover
   benchmark coverage and installed binding qualification remain open.
+
+- [x] Qualify network_diffusion_smoke in Python 3.15, Julia and installed R.
+  Complete benchmark results agreed across all three bindings. Across all
+  26 samples and both nodes the maximum absolute error against the analytic
+  Bass trajectories was 2.814e-12. This case uses zero spillover.
