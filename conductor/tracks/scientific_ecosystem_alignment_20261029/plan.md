@@ -5456,3 +5456,8 @@ Hosted release readiness for this worktree revision remains open.
   per-refit pairs and estimates. These refits measure sensitivity to
   training observations, so their mixture errors are unset. Eight
   focused Rust causal tests passed. Binding qualification remains open.
+
+- [x] Verify leave-one-out score refits in Python, Julia and installed R
+  against rebuilt native libraries. Each preserved the omitted training
+  indices and the rematched control indices while leaving the mixture
+  standard deviation unset even with supplied outcome variances.

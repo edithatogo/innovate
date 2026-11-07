@@ -892,3 +892,13 @@ score_mixture <- kernel_call("summarize_causal", payload=list(
 stopifnot(all(vapply(score_mixture$draws, function(draw) draw$estimate, numeric(1)) == c(4,2)),
   isTRUE(score_mixture$same_treated_subset),
   isTRUE(all.equal(score_mixture$mixture_standard_deviation, sqrt(5))))
+
+score_refits <- kernel_call("summarize_causal", payload=list(
+  method="matched_treatment_contrast", outcomes=c(0,4,2,6,8,12,10,14),
+  treatment=rep(c(0,1),4), caliper=1, outcome_variances=rep(1,8),
+  fit_scores=list(covariates=rep(list(list(0)),8), folds=rep(c(1,2), each=4), ridge=1),
+  score_refit_omit_indices=c(0,4)))$result$score_sensitivity
+stopifnot(all(unlist(score_refits$omitted_training_indices) == c(0,4)),
+  all(vapply(score_refits$draws[[1]]$pairs, function(pair) pair$control_index, numeric(1)) == c(0,0,4,4)),
+  "mixture_standard_deviation" %in% names(score_refits),
+  is.null(score_refits$mixture_standard_deviation))

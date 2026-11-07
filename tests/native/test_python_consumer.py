@@ -1787,3 +1787,16 @@ def test_matching_score_draw_mixture():
     assert [draw["estimate"] for draw in sensitivity["draws"]] == [4, 2]
     assert sensitivity["same_treated_subset"]
     assert sensitivity["mixture_standard_deviation"] == pytest.approx(math.sqrt(5))
+
+
+def test_matching_score_refits():
+    result = innovate.execute(
+        "summarize_causal", method="matched_treatment_contrast",
+        outcomes=[0, 4, 2, 6, 8, 12, 10, 14], treatment=[0, 1] * 4,
+        caliper=1, outcome_variances=[1] * 8,
+        fit_scores={"covariates": [[0]] * 8, "folds": [1] * 4 + [2] * 4, "ridge": 1},
+        score_refit_omit_indices=[0, 4],
+    )["result"]["score_sensitivity"]
+    assert result["omitted_training_indices"] == [0, 4]
+    assert [pair["control_index"] for pair in result["draws"][0]["pairs"]] == [0, 0, 4, 4]
+    assert result["mixture_standard_deviation"] is None

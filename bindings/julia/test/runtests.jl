@@ -958,3 +958,16 @@ end
     @test sensitivity["same_treated_subset"]
     @test sensitivity["mixture_standard_deviation"] ≈ sqrt(5)
 end
+
+@testset "Matching score refits" begin
+    result = kernel_call("summarize_causal", nothing, Dict(
+        "method"=>"matched_treatment_contrast", "outcomes"=>[0,4,2,6,8,12,10,14],
+        "treatment"=>repeat([0,1],4), "caliper"=>1, "outcome_variances"=>ones(8),
+        "fit_scores"=>Dict("covariates"=>[[0] for _ in 1:8],
+            "folds"=>[1,1,1,1,2,2,2,2], "ridge"=>1),
+        "score_refit_omit_indices"=>[0,4]
+    ))["result"]["score_sensitivity"]
+    @test result["omitted_training_indices"] == [0,4]
+    @test [pair["control_index"] for pair in result["draws"][1]["pairs"]] == [0,0,4,4]
+    @test result["mixture_standard_deviation"] === nothing
+end
