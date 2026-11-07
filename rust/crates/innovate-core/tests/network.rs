@@ -614,6 +614,34 @@ fn seeded_contagion_request_frequency_matches_imitation_exposure() {
 }
 
 #[test]
+fn weighted_contagion_is_invariant_to_common_edge_weight_scale() {
+    let payload = json!({
+        "inputs":{"time":[0,4,8,20]},
+        "parameters":{"p":0,"q":0.5,"m":3},
+        "simulation_options":{"engine":"kairos_network","population":3,
+            "initial_agents":[0],"edges":[[0,1],[1,2]],"edge_weights":[1,3],
+            "capacity":1,"service_ticks":2,"ticks_per_unit":1}
+    });
+    let kernel = KernelBinding::new();
+    let run = |request| {
+        kernel
+            .simulate_model("bass", request)
+            .unwrap()
+            .result
+            .unwrap()
+    };
+    for seed in 0..128 {
+        let mut request = payload.clone();
+        request["simulation_options"]["seed"] = json!(seed);
+        let expected = run(request.clone());
+        for scale in [2.0_f64.powi(-1000), 2.0_f64.powi(1000)] {
+            request["simulation_options"]["edge_weights"] = json!([scale, 3. * scale]);
+            assert_eq!(run(request.clone()), expected, "seed {seed}, scale {scale}");
+        }
+    }
+}
+
+#[test]
 fn linear_hazard_clock_matches_analytic_crossing() {
     use kairo_ecs_rng::{DeterministicStream, rand_distr::Exp};
 

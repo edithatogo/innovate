@@ -6764,3 +6764,8 @@ Hosted release readiness for this worktree revision remains open.
   or absence and unchanged adoption counts. The 770 requests
   (37.60%) fell within the test bound for the analytic 39.35%.
   Reused the unchanged 4947d6b4 native builds.
+
+- [x] Verify common edge-weight scaling invariance on a three-node
+  pure-contagion path with service completion and onward transmission.
+  Across 128 seeds, scaling both weights by 2^−1000 or 2^1000 preserved
+  the entire result in all 256 comparisons. The focused Rust test passed.
