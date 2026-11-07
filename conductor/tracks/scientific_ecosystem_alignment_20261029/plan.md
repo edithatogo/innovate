@@ -4444,3 +4444,7 @@ Hosted release readiness for this worktree revision remains open.
   R used raw JSON for the edge replay to preserve the 1.0 token.
 - [x] Verify that omitted and explicit policy labels or unit edge
   weights yield identical artifacts and checksums in Rust.
+- [x] Keep artifact verification byte-sensitive to removed defaulted
+  fields. Ingestion fills omitted fields for bare datasets only.
+  Removing labels or weights from a checksummed artifact now fails
+  verification. All eight focused Rust dataset tests passed.

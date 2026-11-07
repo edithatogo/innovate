@@ -423,8 +423,8 @@ fn ingest(payload: &Value) -> Result<Value, Value> {
     if !dataset["provenance"].is_object() {
         return Err(ingestion_error("ingestion requires dataset provenance"));
     }
-    let default = match dataset["kind"].as_str() {
-        Some("policy_timing") if dataset.get("event_labels").is_none() => {
+    let default = match (payload.get("artifact").is_none(), dataset["kind"].as_str()) {
+        (true, Some("policy_timing")) if dataset.get("event_labels").is_none() => {
             dataset["event_times"].as_array().map(|times| {
                 (
                     "event_labels",
@@ -436,7 +436,7 @@ fn ingest(payload: &Value) -> Result<Value, Value> {
                 )
             })
         }
-        Some("network_edges") if dataset.get("weight").is_none() => dataset["source"]
+        (true, Some("network_edges")) if dataset.get("weight").is_none() => dataset["source"]
             .as_array()
             .map(|source| ("weight", json!(vec![1.0; source.len()]))),
         _ => None,
