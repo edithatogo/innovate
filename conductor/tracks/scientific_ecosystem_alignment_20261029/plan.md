@@ -3617,3 +3617,9 @@ Hosted release readiness for this worktree revision remains open.
   of its midpoint. Use direct differences when the span is finite and
   retain scaled arithmetic for overflowing spans. Both precision tests,
   nine scenario boundary tests, formatting and focused Clippy passed.
+- [x] Verify the narrow bracket through the public scenario grid in the
+  rebuilt Python 3.15.2 wheel, Julia and freshly installed R. A Logistic
+  path with samples 1.5 and 1.5000000000000004 crossed the intermediate
+  threshold at time 0.5 in every binding. Julia and R also confirmed
+  the first sampled crossing remains time 1. R used raw request JSON
+  to preserve the threshold token.
