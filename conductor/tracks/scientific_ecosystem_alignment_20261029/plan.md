@@ -7887,3 +7887,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify hosted source-built Linux packaging and Voiage qualification at b701302f. Release dry-run job 128597996434 passed clean wheel installation, package tests and Voiage 3.1.0 ordinary and weighted EVPI reference checks. Downloaded artifacts matched SHA256SUMS and source digest 38ed3f924b29c12c82e569f2dde3a74351ad752895adb8895eb189991ac596d8. The separate readiness job correctly failed on open release obligations.
 
 - [x] Verify hosted macOS Julia and R bundled-library conformance on b701302f. Dispatch job 128598111958 passed Julia with the staged release FFI and R from a freshly installed macOS binary archive, both with INNOVATE_NATIVE_LIBRARY unset. The optional live OECD checks were disabled.
+
+- [x] Verify hosted CodeQL Rust, Python, Actions and JavaScript/TypeScript analyses on b701302f (run 42436857340). RustSec and Python quality also passed on that revision (run 42436861682). The default-setup Go and C# jobs again found no source on the migration branch, so the aggregate CodeQL check is neutral. Main still requires its existing language coverage.
