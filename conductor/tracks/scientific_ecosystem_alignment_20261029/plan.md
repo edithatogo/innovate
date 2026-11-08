@@ -7943,3 +7943,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Refine historical Norton–Bass net-level milestones inside the first requested sample bracket using native trajectory bisection. The original sampled milestones remain available, and already-met levels report the window start. All 26 locked release multi-generation tests passed, including analytic crossings after a capacity event. Crossings missed by the requested grid and continuous peak search remain open.
 
 - [x] Verify historical Norton–Bass refined crossings through Python, Julia and R. Focused consumer checks passed against the locked b1eccb07 wheel and FFI on macOS arm64, preserving sampled results and matching both post-event analytic crossing times within 1e-7.
+
+- [x] Search for historical Norton–Bass transient crossings between requested samples using a bounded probe grid augmented with event and covariate times. All 27 locked Rust multi-generation tests passed, including a three-generation SciPy fixture with a takeoff crossing missed by both requested endpoints. Excursions between probes and continuous peak search remain open.

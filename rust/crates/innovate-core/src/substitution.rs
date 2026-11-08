@@ -336,6 +336,27 @@ impl Model {
         levels: &[Vec<f64>],
         p: &[f64],
     ) -> Result<Value, String> {
+        const PROBE_INTERVALS: usize = 128;
+        let start = time[0];
+        let end = time[time.len() - 1];
+        let mut grid = time.to_vec();
+        grid.extend((1..PROBE_INTERVALS).map(|i| {
+            let fraction = i as f64 / PROBE_INTERVALS as f64;
+            start * (1. - fraction) + end * fraction
+        }));
+        grid.extend(self.events.times().filter(|t| *t > start && *t < end));
+        if let Some(history) = &self.history {
+            grid.extend(
+                history
+                    .time
+                    .iter()
+                    .copied()
+                    .filter(|t| *t > start && *t < end),
+            );
+        }
+        grid.sort_by(f64::total_cmp);
+        grid.dedup_by(|a, b| *a == *b);
+        let (probe_levels, _) = self.predict(&grid, p)?;
         let mut generations = Vec::with_capacity(self.n);
         for index in 0..self.n {
             let reference_market = p[3 * index + 2];
@@ -345,11 +366,11 @@ impl Model {
                 let target = reference_market * fraction;
                 let sample = levels.iter().position(|row| row[index] >= target);
                 row[name] = json!(sample.map(|i| time[i]));
-                refined[name] = match sample {
+                refined[name] = match probe_levels.iter().position(|row| row[index] >= target) {
                     None => Value::Null,
                     Some(0) => json!(time[0]),
                     Some(i) => {
-                        let (mut lower, mut upper) = (time[i - 1], time[i]);
+                        let (mut lower, mut upper) = (grid[i - 1], grid[i]);
                         for _ in 0..40 {
                             let midpoint = lower.midpoint(upper);
                             if midpoint == lower || midpoint == upper {
@@ -372,7 +393,7 @@ impl Model {
         Ok(json!({
             "quantity": "net_generation_level",
             "method": "first_requested_sample_at_or_above_fixed_baseline_market_fraction",
-            "refinement_method": "bisection_of_first_sample_bracket",
+            "refinement_method": "bisection_of_first_probe_bracket",
             "time_basis": "absolute_model_time",
             "window": [time.first(), time.last()],
             "fractions": {"takeoff": 0.1, "median": 0.5, "saturation": 0.9},

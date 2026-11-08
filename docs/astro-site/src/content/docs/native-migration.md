@@ -1581,3 +1581,9 @@ and local identifiability. Fitting supports 2 to 8 products with at least
 `n + 2` time points. Supply all three guesses for a single start, or omit them to try three
 capacity scales with observation-derived innovation rates. The solver reports
 the termination status and local identifiability of the selected fit.
+
+Historical Norton–Bass summaries retain requested-sample milestones and expose
+`refined_crossings` for the same fixed baseline market fractions. The search
+adds 128 uniform intervals across the requested window, plus event times and
+covariate knots, then bisects the first detected upward bracket. Excursions
+shorter than the probe spacing can still be missed.

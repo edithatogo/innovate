@@ -899,3 +899,25 @@ fn norton_bass_profiles_later_launch_and_preserves_events() {
     assert_eq!(profile["candidates"].as_array().unwrap().len(), 9);
     assert!(profile["candidates"][4]["objective"].as_f64().unwrap() < 1e-8);
 }
+
+#[test]
+fn historical_milestones_find_transient_crossing_between_requested_samples() {
+    let fixture: Value =
+        serde_json::from_str(include_str!("fixtures/norton_legacy_scipy.json")).unwrap();
+    let result = KernelBinding::new()
+        .summarize_model(
+            "norton_bass",
+            json!({
+                "inputs":{"time":[0.,25.]},"parameters":fixture["parameters"],
+                "constructor_kwargs":fixture["constructor_kwargs"]
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    let row = &result["threshold_diagnostics"]["net_level_milestones"]["generations"][0];
+    assert!(row["takeoff"].is_null());
+    let crossing = row["refined_crossings"]["takeoff"].as_f64().unwrap();
+    assert!(crossing > 2.2 && crossing < 5.);
+    assert!(row["refined_crossings"]["median"].is_null());
+}
