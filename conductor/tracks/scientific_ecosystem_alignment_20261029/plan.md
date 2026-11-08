@@ -8038,3 +8038,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify hosted Security and Quality on 05e8ad3c. Run 42445474031 passed Python quality, RustSec, Dependency Review, Secret Scan, and workflow policy lint. Release readiness run 42445474021 failed on the migration ledger as designed while required scientific obligations remain open. The separate platform binding matrix is still running.
 
 - [x] Verify hosted Binding Conformance run 42445473947 and the macOS Julia and R job 128623390521 on 05e8ad3c. Both passed. The macOS job built the locked FFI, ran the Julia tests, built and installed the R binary archive, and ran the native R tests. The other five matrix jobs were still in progress.
+
+- [x] Diagnose the C# and Go CodeQL failures on 05e8ad3c. Hosted run 42445469735 reports no C# source files and no processable Go code. The commit tree contains no tracked .cs or .go files. GitHub CodeQL default setup still lists both languages for the repository. Align its language list with the source cutover while retaining analysis of the remaining languages.
