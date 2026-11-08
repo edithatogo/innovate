@@ -7978,3 +7978,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reconcile sixteen Python and docs dependency PR tips into local migration history using the lockfile comparisons above. The merge preserves the verified migration source tree. Hosted dispositions remain open.
 
 - [x] Reconcile #542, #539, #538, #537, #531, #515 and #484 locally. Each changes only the removed TypeScript binding package manifest or lock. The ancestry merge preserves the migration tree, including the separately maintained docs dependencies.
+
+- [x] Reconcile grouped dependency PRs #532 and #512 locally. Optional PyArrow 26.0.1 satisfies the proposed range in #532. Statsmodels, NumPyro, NDlib and Pandera are absent from the active manifest and lock. The merge preserves the verified dependency tree.
