@@ -1148,3 +1148,14 @@ end
         @test kernel_call("predict_competition_interaction_matrix", nothing, payload)["result"]["r_squared"] == expected
     end
 end
+
+@testset "Historical interaction-matrix fit" begin
+    time = collect(0:0.5:11.5)
+    observed = [[50 * (1 - exp(-0.1 * t)), 100 * (1 - exp(-0.2 * t))] for t in time]
+    result = kernel_call("fit_competition_interaction_matrix", nothing, Dict(
+        "time" => time, "p" => [0.11, 0.19], "q" => [[0.001, -0.001], [0.001, 0.001]],
+        "market_potentials" => [49, 101], "observed" => observed))["result"]
+    @test result["predictions"]["r_squared"] > 0.999999
+    @test result["identifiability"]["rank"] == 8
+    @test isapprox(result["parameters"]["market_potentials"], [50, 100]; atol=0.1, rtol=0)
+end

@@ -7931,3 +7931,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify historical pooled scoring in the Python, Julia and R conformance suites. The locked 1b3a3c77 wheel and shared library returned R-squared of -5 for pooled nonconstant observations and zero for constant observations on macOS arm64.
 
 - [x] Add bounded Rust fitting for the historical signed interaction matrix, reusing the native predictor and least-squares diagnostics. All five focused historical competition tests passed, including recovery from perturbed guesses against an analytic two-product trajectory with full local rank. Automatic starts, broader fitting qualification and binding checks remain open.
+
+- [x] Verify historical interaction-matrix fitting through the locked 4699a2cd wheel and shared library. Python 3.15.2, Julia and installed R passed their focused conformance cases on macOS arm64, recovering both market potentials within 0.1 with pooled R-squared above 0.999999 and local rank eight.

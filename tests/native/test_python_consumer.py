@@ -2298,3 +2298,19 @@ def test_historical_interaction_matrix_pooled_score():
     for observed, expected in [([[1, 2], [3, 4]], -5), ([[0.1, 0.1], [0.1, 0.1]], 0)]:
         result = innovate.execute("predict_competition_interaction_matrix", observed=observed, **payload)["result"]
         assert result["r_squared"] == expected
+
+
+def test_historical_interaction_matrix_fit():
+    time = [i / 2 for i in range(24)]
+    observed = [[50 * (1 - math.exp(-0.1 * t)), 100 * (1 - math.exp(-0.2 * t))] for t in time]
+    result = innovate.execute(
+        "fit_competition_interaction_matrix",
+        time=time,
+        p=[0.11, 0.19],
+        q=[[0.001, -0.001], [0.001, 0.001]],
+        market_potentials=[49, 101],
+        observed=observed,
+    )["result"]
+    assert result["predictions"]["r_squared"] > 0.999999
+    assert result["identifiability"]["rank"] == 8
+    assert result["parameters"]["market_potentials"] == pytest.approx([50, 100], abs=0.1)

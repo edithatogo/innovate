@@ -1086,3 +1086,12 @@ pooled_score <- kernel_call("predict_competition_interaction_matrix", payload=sc
 score_payload$observed <- matrix(0.1, 2, 2)
 constant_score <- kernel_call("predict_competition_interaction_matrix", payload=score_payload)$result$r_squared
 stopifnot(pooled_score == -5, constant_score == 0)
+
+fit_time <- seq(0, 11.5, by=0.5)
+fit_observed <- cbind(50 * (1 - exp(-0.1 * fit_time)), 100 * (1 - exp(-0.2 * fit_time)))
+interaction_fit <- kernel_call("fit_competition_interaction_matrix", payload=list(
+  time=fit_time, p=c(0.11, 0.19), q=matrix(c(0.001, -0.001, 0.001, 0.001), nrow=2, byrow=TRUE),
+  market_potentials=c(49, 101), observed=fit_observed))$result
+stopifnot(interaction_fit$predictions$r_squared > 0.999999,
+          interaction_fit$identifiability$rank == 8,
+          all(abs(unlist(interaction_fit$parameters$market_potentials) - c(50, 100)) < 0.1))
