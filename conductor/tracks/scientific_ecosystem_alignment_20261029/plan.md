@@ -7869,3 +7869,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Record hosted Python quality on dac899e0. GitHub Actions job 128594389788 passed Ruff, formatting, security, type and native binding tests. Separately, the full local tests/native suite passed 150 tests with live OECD enabled against the installed 55ef5f5a wheel. The local source includes subsequent tests and formatting. The hosted platform matrix is tracked separately.
 
 - [x] Verify hosted Linux Julia and R conformance on PR #575 head dac899e05f8e3f6b3d929a867921084f9e5108aa. GitHub Actions job 128594465491 built the locked release FFI, staged the library for both bindings, installed the R package, and passed both suites with INNOVATE_NATIVE_LIBRARY unset. The opt-in live OECD test was not enabled in this hosted run.
+
+- [x] Record terminal hosted contract and security runs for PR #575 head dac899e0. Binding Conformance run 42435849194 and Security and Quality run 42435849225 both concluded success. The latter includes dependency review, secret scan, RustSec, workflow policy and the native Python quality gate. Cross-platform distribution and release readiness remain separate.
