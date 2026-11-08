@@ -8008,3 +8008,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reconcile stability enum coverage from PR #437. The focused locked Rust release boundary test passed for every historical alias, all canonical tiers, lifecycle guidance and rejection of an unknown tier.
 
 - [x] Reconcile PR #448. GitHub reports an empty PR diff and the historical head has the same tree as its parent. The PR records a SciPy fitter review with no source changes to port.
+
+- [x] Verify the causal policy import regressions from PR #417 in the locked Rust release boundary. Both nested sections reject unknown fields and numeric timing is rejected independently of invalid start time. PR #417 remains open for separate workflow and dependency review because its diff also removes security checks and downgrades locked dependencies.
