@@ -921,3 +921,18 @@ fn historical_interaction_matrix_predicts_levels_and_instantaneous_rates() {
         }
     }
 }
+
+#[test]
+fn historical_interaction_matrix_scores_pooled_observations() {
+    let mut request = json!({"schema_version":"2.0","operation":"predict_competition_interaction_matrix",
+        "payload":{"time":[0,1],"p":[0,0],"q":[[0,0],[0,0]],"market_potentials":[50,100],
+        "observed":[[1,2],[3,4]]}});
+    let run = |request: &Value| {
+        serde_json::from_str::<Value>(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    assert_eq!(run(&request)["result"]["r_squared"], -5.);
+    request["payload"]["observed"] = json!([[0.1, 0.1], [0.1, 0.1]]);
+    assert_eq!(run(&request)["result"]["r_squared"], 0.);
+    request["payload"]["observed"] = json!([[1, 2]]);
+    assert_eq!(run(&request)["error"]["code"], "invalid_request");
+}

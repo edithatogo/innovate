@@ -1566,7 +1566,9 @@ Call `predict_competition_interaction_matrix` through the JSON envelope with
 square signed interaction matrix `q`. Row `i`, column `j` gives the
 coefficient of product `j`'s adoption share in product `i`'s rate.
 The prediction starts at zero adoption at the first supplied time and returns
-`rows` and instantaneous `rates` in time-by-product order.
+`rows` and instantaneous `rates` in time-by-product order. Optional
+`observed` values in the same shape and product order add a pooled
+`r_squared` across all times and products. Constant observations score zero.
 
 `competition_cross_elasticity` accepts the same inputs and preserves the
 historical first-product seed of `1e-6`. It returns the historical

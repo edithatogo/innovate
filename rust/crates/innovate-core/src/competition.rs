@@ -1000,7 +1000,42 @@ pub(crate) fn interaction_matrix(
         {
             return Err("interaction matrix trajectory exceeds the finite numerical domain");
         }
-        return Ok(json!({"time":time,"rows":path,"rates":rates,"axis_order":["time","product"]}));
+        let mut result =
+            json!({"time":time,"rows":path,"rates":rates,"axis_order":["time","product"]});
+        if let Some(observed) = payload.get("observed") {
+            let observed: Vec<Vec<f64>> = serde_json::from_value(observed.clone())
+                .map_err(|_| "observed must be a numeric time-by-product matrix")?;
+            if observed.len() != time.len() || observed.iter().any(|row| row.len() != n) {
+                return Err("observed must align with time and product dimensions");
+            }
+            let count = (time.len() * n) as f64;
+            let mean = observed
+                .iter()
+                .flatten()
+                .map(|value| value / count)
+                .sum::<f64>();
+            let total = observed
+                .iter()
+                .flatten()
+                .map(|value| (value - mean).powi(2))
+                .sum::<f64>();
+            let residual = observed
+                .iter()
+                .flatten()
+                .zip(path.iter().flatten())
+                .map(|(actual, predicted)| (actual - predicted).powi(2))
+                .sum::<f64>();
+            let constant = observed
+                .iter()
+                .flatten()
+                .all(|value| *value == observed[0][0]);
+            let score = if constant { 0. } else { 1. - residual / total };
+            if !constant && (!total.is_finite() || !score.is_finite()) {
+                return Err("interaction matrix score exceeds the finite numerical domain");
+            }
+            result["r_squared"] = json!(score);
+        }
+        return Ok(result);
     }
     let elasticity: Vec<Vec<f64>> = (0..n)
         .map(|i| {
