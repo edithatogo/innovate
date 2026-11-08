@@ -7957,3 +7957,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify hosted Julia and R on Linux and macOS at PR #575 head 768e9df2. CI run 42442059067 jobs 128613245937 and 128613246177 passed, covering the historical competition and Norton–Bass refinements. Windows and the hosted Python matrix remain pending on this revision.
 
 - [x] Recheck open planning PR ancestry after fetching origin. PR #574 (fedb0114), #560 (8605f3be), #557 (ca9e6740) and #547 (f85da2f8) are ancestors of the migration branch. Their hosted dispositions remain open. The migration branch contains current origin/main at 3c09cc05.
+
+- [x] Verify hosted Linux Python at PR #575 head 768e9df2. Job 128613246270 passed the locked Rust gate and reported 157 Python tests passed and one skipped. The development policy check passed and reported 38 outstanding release obligations.
