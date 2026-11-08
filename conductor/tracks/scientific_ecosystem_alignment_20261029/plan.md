@@ -7576,3 +7576,10 @@ Hosted release readiness for this worktree revision remains open.
   R conformance. The focused blocks passed against the rebuilt
   optimized library via the explicit library override. The full
   hosted binding matrix remains unverified.
+
+- [x] Build and install the optimized macOS arm64 wheel from bd656373.
+  Verified wrapper and extension origins in the isolated install. All
+  122 release consumer cases passed on Python 3.15.2, including the
+  empirical interval regression. Raw Maturin wheel SHA-256 is
+  `cb3817a3993aac91cd0aac319ebb390a64ba9dd3a8efa2a28c0e483ee065f453`.
+  Hosted and source-distribution release validation remain open.
