@@ -1200,3 +1200,11 @@ end
     @test isapprox(peak["peak_time"], log(15) / 0.32; atol=1e-5, rtol=0)
     @test isapprox(peak["peak_rate"], 100 * 0.32^2 / 1.2; atol=1e-8, rtol=0)
 end
+
+@testset "Bounded policy document import" begin
+    document = """{"intervention":{"name":"Pilot","timing":"post","comparator":"control"},"causal_model":{"name":"Evaluation","treatment_variable":"policy","outcome_variable":"adoption","confounders":["age"]}}"""
+    run(document) = kernel_call("summarize_causal", nothing,
+        Dict("method" => "import_policy_specification", "document" => document))
+    @test run(document)["result"]["intervention"]["name"] == "Pilot"
+    @test_throws r"exceeds 1 MiB" run(repeat("é", 524289))
+end

@@ -1125,3 +1125,13 @@ refined_peak <- kernel_summarize_model("norton_bass", list(
 ))$result$threshold_diagnostics$refined_rate_peaks$generations[[1]]
 stopifnot(abs(refined_peak$peak_time - log(15) / 0.32) < 1e-5,
           abs(refined_peak$peak_rate - 100 * 0.32^2 / 1.2) < 1e-8)
+
+policy_document <- '{"intervention":{"name":"Pilot","timing":"post","comparator":"control"},"causal_model":{"name":"Evaluation","treatment_variable":"policy","outcome_variable":"adoption","confounders":["age"]}}'
+import_policy_document <- function(document) kernel_call("summarize_causal",
+  payload=list(method="import_policy_specification", document=document))
+stopifnot(import_policy_document(policy_document)$result$intervention$name == "Pilot")
+policy_import_error <- tryCatch({
+  import_policy_document(strrep("\u00e9", 524289L))
+  ""
+}, error=conditionMessage)
+stopifnot(grepl("exceeds 1 MiB", policy_import_error))

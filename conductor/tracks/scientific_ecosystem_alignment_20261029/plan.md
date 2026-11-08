@@ -7984,3 +7984,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reconcile remote authorization PRs #449, #445 and #378. Native dispatch requires caller-supplied context and checks the explicit scope against its fixed required policy, without supplying authority on the caller’s behalf. Focused boundary and subprocess tests passed. Hosted identity verification remains open.
 
 - [x] Restore bounded policy document import for #420. The Rust summarize_causal import_policy_specification method rejects non-string and over-1-MiB documents before parsing their JSON, then reuses native policy contract validation. The focused release test passed. Installed binding validation remains open.
+
+- [x] Verify bounded policy document import through Julia and installed R on macOS arm64 with the same locked release FFI. Both accepted a valid document and rejected a multibyte document exceeding 1 MiB. Python wheel and hosted checks remain open.
