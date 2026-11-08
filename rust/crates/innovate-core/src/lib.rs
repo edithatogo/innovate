@@ -85,6 +85,7 @@ pub fn execute_json(input: &str) -> String {
                 | "summarize_causal"
                 | "compose_regime_ensemble"
                 | "summarize_competition_equilibrium"
+                | "competition_cross_elasticity"
                 | "validate_paired_outcomes"
                 | "threshold_sensitivity"
                 | "parameter_sensitivity"
@@ -396,6 +397,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             return Ok(payload.clone());
         }
 
+        if value["operation"] == "competition_cross_elasticity" {
+            return competition::cross_elasticity(payload);
+        }
         if value["operation"] == "summarize_competition_equilibrium" {
             return competition::summarize_equilibrium(&value["model_key"], payload);
         }

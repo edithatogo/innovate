@@ -881,3 +881,21 @@ fn historical_competition_equilibrium_summaries_match_closed_forms() {
         "invalid_request"
     );
 }
+
+#[test]
+fn historical_cross_elasticity_matches_independent_exponential_path() {
+    let mut request = json!({"schema_version":"2.0","operation":"competition_cross_elasticity","payload":{
+        "time":[0,1,2],"p":[0.1,0.2],"q":[[0,0.4],[0,0]],"market_potentials":[50,100]}});
+    let run = |request: &Value| {
+        serde_json::from_str::<Value>(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = run(&request);
+    let output = &response["result"]["elasticity"];
+    for (index, time) in [0_f64, 1., 2.].into_iter().enumerate() {
+        let expected = 0.4 * 100. * (1. - (-0.2 * time).exp()) / (50. + 1e-10);
+        assert!((output[0][index].as_f64().unwrap() - expected).abs() < 1e-8);
+        assert_eq!(output[1][index], 0.);
+    }
+    request["payload"]["q"] = json!([[0, 0.4]]);
+    assert_eq!(run(&request)["error"]["code"], "invalid_request");
+}

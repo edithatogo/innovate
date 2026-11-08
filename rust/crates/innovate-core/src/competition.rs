@@ -934,3 +934,69 @@ pub(crate) fn summarize_equilibrium(model: &Value, payload: &Value) -> Result<Va
         _ => Err("equilibrium summaries support multi_product and lotka_volterra"),
     }
 }
+
+pub(crate) fn cross_elasticity(payload: &Value) -> Result<Value, &'static str> {
+    let vector = |key: &str| {
+        serde_json::from_value::<Vec<f64>>(payload[key].clone())
+            .map_err(|_| "cross-elasticity requires numeric time, p and market_potentials arrays")
+    };
+    let time = vector("time")?;
+    let p = vector("p")?;
+    let market = vector("market_potentials")?;
+    let q: Vec<Vec<f64>> =
+        serde_json::from_value(payload["q"].clone()).map_err(|_| "q must be a numeric matrix")?;
+    let n = p.len();
+    if !(2..=64).contains(&n)
+        || market.len() != n
+        || q.len() != n
+        || q.iter().any(|row| row.len() != n)
+        || p.iter().any(|v| *v < 0.)
+        || market.iter().any(|v| *v <= 0.)
+    {
+        return Err(
+            "cross-elasticity requires 2 to 64 aligned products, nonnegative p and positive market potentials",
+        );
+    }
+    if time.is_empty() || time[0] < 0. || time.windows(2).any(|pair| pair[1] <= pair[0]) {
+        return Err("cross-elasticity requires nonnegative, strictly increasing time");
+    }
+    let mut initial = vec![0.; n];
+    initial[0] = 1e-6;
+    let path = crate::numerics::integrate(&time, time[0], &initial, |_, levels| {
+        let shares: Vec<_> = levels
+            .iter()
+            .zip(&market)
+            .map(|(level, market)| (level / market).min(1.))
+            .collect();
+        (0..n)
+            .map(|i| {
+                let imitation = q[i]
+                    .iter()
+                    .zip(&shares)
+                    .map(|(coefficient, share)| coefficient * share)
+                    .sum::<f64>();
+                (p[i] + imitation) * (market[i] - levels[i]).max(0.)
+            })
+            .collect()
+    })
+    .map_err(|_| "cross-elasticity trajectory integration failed")?;
+    let elasticity: Vec<Vec<f64>> = (0..n)
+        .map(|i| {
+            path.iter()
+                .map(|levels| {
+                    (0..n)
+                        .filter(|j| *j != i)
+                        .map(|j| q[i][j].abs() * (levels[j] / (market[i] + 1e-10)))
+                        .sum()
+                })
+                .collect()
+        })
+        .collect();
+    if elasticity.iter().flatten().any(|value| !value.is_finite()) {
+        return Err("cross-elasticity proxy exceeds the finite numerical domain");
+    }
+    Ok(
+        json!({"time":time,"elasticity":elasticity,"axis_order":["product","time"],
+        "method":"historical_cross_elasticity_proxy"}),
+    )
+}

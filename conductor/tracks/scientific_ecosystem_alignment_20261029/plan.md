@@ -7915,3 +7915,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify the historical equilibrium operation through installed Python, Julia and freshly installed R on macOS arm64. All three select the model through the common model_key envelope and passed their focused checks. R preserves a single market potential as an array. The locked Rust closed-form regression also passed.
 
 - [x] Run the full locked release competition suite after the equilibrium envelope change. All 20 Rust tests passed, covering the historical summaries and existing competition, forcing and event behavior. Installed binding checks are recorded above; hosted validation of this source remains open.
+
+- [x] Port historical competition cross-elasticity to Rust. The operation integrates the historical interaction matrix equations and reports the absolute-coefficient proxy in product-by-time order. The locked test passed against a closed-form independent competitor trajectory and rejects malformed matrix shapes. Installed binding qualification remains open.
