@@ -8026,3 +8026,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify the explicit remote authorization scope regression from PR #416. The locked Rust release test confirms a missing scope fails context validation, an incorrect scope is denied, and an explicit permitted scope dispatches an eligible operation.
 
 - [x] Reconcile the historical heads of PRs #416 and #417 after porting the policy import and explicit authorization regressions. Retain the seeded Kairos replay contract, current lockfiles and native security workflows. The remaining historical changes include retired runtime dependencies, workflow removals, lockfile downgrades and older release evidence. The integration merge records ancestry and retains the migration tree.
+
+- [x] Verify reconciled revision 05e8ad3c with the full locked offline Rust release workspace. All 371 offline tests passed, and the opt-in public OECD SDMX test passed separately. Hosted binding matrix 42445474132 is still running on this revision.
+
+- [x] Build the locked release FFI from 05e8ad3c and run the full local Julia and R native suites on macOS arm64. Both passed. Julia loaded the explicitly selected FFI and R used a fresh temporary package installation with that same FFI. Hosted platform coverage remains separate.
