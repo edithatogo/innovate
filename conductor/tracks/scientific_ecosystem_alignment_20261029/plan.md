@@ -7820,7 +7820,7 @@ Hosted release readiness for this worktree revision remains open.
 ### Remaining historical branch contracts
 
 - [ ] Port #87 OECD dataset retrieval. The native dataset validation and extension provider operations currently have no built-in OECD transport. Preserve dimension selection, explicit date ranges, the 1960–2020 default and upstream error propagation, with Polars-compatible tabular output. Qualify the current OECD SDMX endpoint before live verification.
-- [ ] Reconcile #80 residual visualization. Preserve time/residual, ACF and PACF outputs and configurable lags. Define the boundary between Rust diagnostic data and presentation in the supported bindings before replacing the historical Matplotlib wrapper.
+- [x] Reconcile #80 with shared Rust residual series and SVG export. Python, Julia and R focused tests passed on macOS arm64, including ACF-only mode and analytic correlation values. A rasterized sample showed all three panels. The export uses an explicit Durbin–Levinson PACF estimator and returns SVG for the caller to display.
 - [x] Reconcile #156 with the native diagnostics_artifact_tables operation. The focused locked release test verifies declared column order, singleton row shape, missing and irregular rows, metadata, and skipping non-tabular artifacts. Installed binding and downstream Polars verification remain open.
 - [x] Reconcile #98 with native list_advanced_capabilities. The focused locked release test verifies alphabetical keys, registered native routes, stability and dependencies. Streaming update is explicitly pending and requires a native port. Installed binding checks remain open.
 

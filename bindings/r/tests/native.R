@@ -1010,3 +1010,9 @@ updated <- kernel_call(streaming[[1]]$operation, payload=list(
   new_time=list(3), new_observed=list(6)))$result
 stopifnot(all(unlist(updated$mean) == c(2,4,6)),
           updated$diagnostics$growth_rate == 0.5)
+
+residual_svg <- kernel_call("render_residual_diagnostics_svg", payload=list(
+  time=c(1,2,3,4), residuals=c(-1,1,-1,1), config=list(lags=2, acf_only=TRUE)))$result
+stopifnot(identical(unlist(residual_svg$series$acf), c(1,-0.75,0.5)),
+          startsWith(residual_svg$svg, "<svg"),
+          !grepl("Partial autocorrelation", residual_svg$svg))

@@ -2047,3 +2047,15 @@ def test_streaming_update_and_capability_discovery():
     )["result"]
     assert result["mean"] == [2, 4, 6]
     assert result["diagnostics"]["growth_rate"] == 0.5
+
+
+def test_residual_svg_export():
+    result = innovate.execute(
+        "render_residual_diagnostics_svg",
+        time=[1, 2, 3, 4],
+        residuals=[-1, 1, -1, 1],
+        config={"lags": 2, "acf_only": True},
+    )["result"]
+    assert result["series"]["acf"] == [1, -0.75, 0.5]
+    assert "<svg" in result["svg"]
+    assert "Partial autocorrelation" not in result["svg"]

@@ -1080,3 +1080,12 @@ end
     @test result["mean"] == [2, 4, 6]
     @test result["diagnostics"]["growth_rate"] == 0.5
 end
+
+@testset "Residual SVG export" begin
+    payload = Dict("time" => [1, 2, 3, 4], "residuals" => [-1, 1, -1, 1],
+        "config" => Dict("lags" => 2, "acf_only" => true))
+    result = kernel_call("render_residual_diagnostics_svg", nothing, payload)["result"]
+    @test result["series"]["acf"] == [1, -0.75, 0.5]
+    @test startswith(result["svg"], "<svg")
+    @test !occursin("Partial autocorrelation", result["svg"])
+end
