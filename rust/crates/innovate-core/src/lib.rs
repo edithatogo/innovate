@@ -15,6 +15,7 @@ mod ensemble;
 mod events;
 mod explainability;
 mod extensions;
+mod residuals;
 mod streaming;
 pub use extensions::invoke_registered_extension;
 mod fitting;
@@ -111,6 +112,7 @@ pub fn execute_json(input: &str) -> String {
                 | "resolve_extension_manifest"
                 | "summarize_extension_diagnostics"
                 | "diagnostics_artifact_tables"
+                | "residual_diagnostic_series"
                 | "resolve_extension_model_aliases"
                 | "dataset_checksum"
                 | "validate_dataset" => execute_preprocessing_json(&value).to_string(),
@@ -326,6 +328,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         }
         if value["operation"] == "resolve_extension_model_aliases" {
             return extensions::resolve_model_aliases(&payload["aliases"]);
+        }
+        if value["operation"] == "residual_diagnostic_series" {
+            return residuals::residual_series(payload);
         }
         if value["operation"] == "diagnostics_artifact_tables" {
             return diagnostics_artifact_tables(payload);

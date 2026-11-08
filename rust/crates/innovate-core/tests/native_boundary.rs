@@ -4564,3 +4564,22 @@ fn streaming_update_appends_cumulative_observations() {
     request["payload"]["new_time"] = json!([1]);
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn residual_diagnostics_return_analytic_acf_and_pacf() {
+    let mut request = json!({"schema_version":"2.0","operation":"residual_diagnostic_series","payload":{
+        "time":[1,2,3,4],"residuals":[-1,1,-1,1],"lags":2}});
+    let run = |request: &serde_json::Value| {
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    let result = run(&request);
+    assert_eq!(result["result"]["acf"], json!([1., -0.75, 0.5]));
+    assert!((result["result"]["pacf"][2].as_f64().unwrap() + 1. / 7.).abs() < 1e-12);
+    request["payload"]["residuals"] = json!([1, 1, 1, 1]);
+    assert_eq!(run(&request)["result"]["pacf"], json!([1., null, null]));
+    request["payload"]["lags"] = json!(1025);
+    assert_eq!(run(&request)["error"]["code"], "invalid_request");
+}
