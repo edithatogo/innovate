@@ -143,7 +143,15 @@ fn gaussian_default_initialization_recovers_separated_components_without_a_warm_
         })
         .collect();
     let f=KernelBinding::new().fit_model("mixture",json!({"inputs":{"time":t,"observed":y},"constructor_kwargs":{"components":["logistic","logistic"],"noise_floor":0.001}})).unwrap().result.unwrap();
-    assert_eq!(f["optimizer"]["converged"], true, "{}", f["optimizer"]);
+    assert_eq!(
+        f["optimizer"]["converged"],
+        true,
+        "optimizer: {}; final update: {:?}",
+        f["optimizer"],
+        f["component_updates"]
+            .as_array()
+            .and_then(|updates| updates.last())
+    );
     let mut capacities = [
         f["parameters"]["model_0_L"].as_f64().unwrap(),
         f["parameters"]["model_1_L"].as_f64().unwrap(),
