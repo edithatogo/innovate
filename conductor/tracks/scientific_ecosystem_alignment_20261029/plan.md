@@ -7555,3 +7555,9 @@ Hosted release readiness for this worktree revision remains open.
   holdout rows can affect width. The optimized boundary test passed
   for exact bounds, invalid confidence and mismatched arrays.
   Installed binding and independent predictive calibration remain open.
+
+- [x] Verify empirical interval bounds through Julia and R against a
+  freshly built optimized FFI library. Both returned the expected
+  arrays using the explicit library override. The combined Python/FFI
+  build ran out of disk space, and the single-package FFI retry
+  succeeded. Python validation remains open for this operation.
