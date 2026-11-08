@@ -28,6 +28,9 @@ kernel_call <- function(operation, model_key = NULL, payload = list(), raw = FAL
       "assumptions", "limitations", "data_sources", "outcomes", "treatment", "spillover_regions",
       "confounders", "effect_modifiers")
   }
+  if (identical(operation, "summarize_causal") && identical(payload$method, "policy_scenario")) {
+    array_fields <- c(array_fields, "baseline", "intervention", "assumptions")
+  }
   if (operation %in% c("validate_dataset", "ingest_dataset")) {
     array_fields <- c(array_fields, "denominator", "value", "unit_id", "product_id",
       "target", "weight", "product_labels", "transform_steps")

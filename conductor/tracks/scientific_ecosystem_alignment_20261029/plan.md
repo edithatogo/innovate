@@ -7773,3 +7773,8 @@ Hosted release readiness for this worktree revision remains open.
   reports the signed sum and final lift, and retains assumptions,
   covariates and optional forecast errors. The optimized boundary
   test passed. Installed binding verification remains open.
+
+- [x] Preserve singleton baseline, intervention and assumption arrays
+  in R policy scenario requests. The focused serialization check
+  passed. The optimized FFI rebuild stopped while writing the core
+  archive because the volume ran out of space. Runtime checks remain open.
