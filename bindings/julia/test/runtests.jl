@@ -1101,3 +1101,13 @@ if get(ENV, "INNOVATE_TEST_LIVE_OECD", "") == "1"
         @test any(line -> occursin(r",2023-0[23],", line), lines[2:end])
     end
 end
+
+@testset "Historical competition equilibrium" begin
+    operation = "summarize_competition_equilibrium"
+    shares = kernel_call(operation, "multi_product", Dict(
+        "market_potentials" => [100, 300]))["result"]
+    @test shares["shares"] == Dict("product_0" => 0.25, "product_1" => 0.75)
+    @test !shares["interaction_adjusted"]
+    boundary = kernel_call(operation, "lotka_volterra")["result"]
+    @test (boundary["N1_eq"], boundary["N2_eq"]) == (1000, 0)
+end

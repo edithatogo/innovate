@@ -42,6 +42,9 @@ kernel_call <- function(operation, model_key = NULL, payload = list(), raw = FAL
   if (identical(operation, "compose_regime_ensemble")) {
     array_fields <- c(array_fields, "assumptions")
   }
+  if (identical(operation, "summarize_competition_equilibrium")) {
+    array_fields <- c(array_fields, "market_potentials")
+  }
   if (operation %in% c("residual_diagnostic_series", "render_residual_diagnostics_svg")) {
     array_fields <- c(array_fields, "residuals")
   }

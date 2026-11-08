@@ -881,8 +881,8 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
     })
 }
 
-pub(crate) fn summarize_equilibrium(payload: &Value) -> Result<Value, &'static str> {
-    match payload["model"].as_str() {
+pub(crate) fn summarize_equilibrium(model: &Value, payload: &Value) -> Result<Value, &'static str> {
+    match model.as_str() {
         Some("multi_product") => {
             let potentials: Vec<f64> = serde_json::from_value(payload["market_potentials"].clone())
                 .map_err(|_| "market_potentials must be an array of positive numbers")?;

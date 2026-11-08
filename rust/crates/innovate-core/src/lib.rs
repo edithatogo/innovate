@@ -397,7 +397,7 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         }
 
         if value["operation"] == "summarize_competition_equilibrium" {
-            return competition::summarize_equilibrium(payload);
+            return competition::summarize_equilibrium(&value["model_key"], payload);
         }
         if value["operation"] == "compose_regime_ensemble" {
             return ensemble::compose(payload);

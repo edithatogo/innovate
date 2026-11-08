@@ -1038,3 +1038,16 @@ stopifnot(singleton_regime$mean[[1]] == 3,
           identical(singleton_regime$metadata$assumptions, list("aligned")))
 singleton_residual <- kernel_call("residual_diagnostic_series", payload=list(time=1, residuals=2))$result
 stopifnot(singleton_residual$residuals[[1]] == 2, singleton_residual$acf[[1]] == 1)
+
+equilibrium_operation <- "summarize_competition_equilibrium"
+potential_shares <- kernel_call(equilibrium_operation,
+  model_key="multi_product", payload=list(market_potentials=c(100,300)))$result
+boundary_equilibrium <- kernel_call(equilibrium_operation,
+  model_key="lotka_volterra")$result
+stopifnot(potential_shares$shares$product_0 == 0.25,
+          potential_shares$shares$product_1 == 0.75,
+          identical(potential_shares$interaction_adjusted, FALSE),
+          boundary_equilibrium$N1_eq == 1000, boundary_equilibrium$N2_eq == 0)
+singleton_potential <- kernel_call(equilibrium_operation, model_key="multi_product",
+  payload=list(market_potentials=100))$result
+stopifnot(singleton_potential$shares$product_0 == 1)

@@ -2248,3 +2248,12 @@ def test_live_oecd_fetch_returns_polars_observations():
     assert observations.height > 0
     assert set(observations["TIME_PERIOD"]) <= {"2023-02", "2023-03"}
     assert observations.schema["OBS_VALUE"] == pl.Float64
+
+
+def test_competition_equilibrium_summaries():
+    operation = "summarize_competition_equilibrium"
+    shares = innovate.execute(operation, model="multi_product", market_potentials=[100, 300])["result"]
+    assert shares["shares"] == {"product_0": 0.25, "product_1": 0.75}
+    assert shares["interaction_adjusted"] is False
+    boundary = innovate.execute(operation, model="lotka_volterra")["result"]
+    assert (boundary["N1_eq"], boundary["N2_eq"]) == (1000, 0)
