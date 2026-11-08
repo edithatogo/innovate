@@ -7889,3 +7889,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify hosted macOS Julia and R bundled-library conformance on b701302f. Dispatch job 128598111958 passed Julia with the staged release FFI and R from a freshly installed macOS binary archive, both with INNOVATE_NATIVE_LIBRARY unset. The optional live OECD checks were disabled.
 
 - [x] Verify hosted CodeQL Rust, Python, Actions and JavaScript/TypeScript analyses on b701302f (run 42436857340). RustSec and Python quality also passed on that revision (run 42436861682). The default-setup Go and C# jobs again found no source on the migration branch, so the aggregate CodeQL check is neutral. Main still requires its existing language coverage.
+
+- [x] Verify the Windows Unicode DLL smoke repair on b701302f. PR #575 job 128597445227 passed bundled Julia and installed R conformance and the standalone R script loading the DLL from a Unicode directory.
