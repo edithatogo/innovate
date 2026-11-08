@@ -7571,3 +7571,8 @@ Hosted release readiness for this worktree revision remains open.
   consumer suite used by the release-wheel job. The focused test
   passed with the staged optimized extension. A fresh wheel and
   hosted execution still need verification.
+
+- [x] Add empirical interval bounds and holdout coverage to Julia and
+  R conformance. The focused blocks passed against the rebuilt
+  optimized library via the explicit library override. The full
+  hosted binding matrix remains unverified.

@@ -962,3 +962,11 @@ local({
   }, finally=kernel_call("unregister_extension_manifest",
     payload=list(name=selection$name, expected_version="1")))
 })
+
+intervals <- kernel_call("calibrate_prediction_intervals", payload = list(
+  time = 1:3, observed = c(11, 18, 35), predicted = c(10, 20, 30),
+  confidence = 0.5, holdout = c(0, 1, 0)
+))$result
+stopifnot(all(unlist(intervals$lower) == c(8, 18, 28)),
+          all(unlist(intervals$upper) == c(12, 22, 32)),
+          intervals$diagnostics$holdout_coverage == 1)

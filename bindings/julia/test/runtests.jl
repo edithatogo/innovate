@@ -1024,3 +1024,13 @@ end
             Dict("name"=>selection["name"], "expected_version"=>"1"))
     end
 end
+
+@testset "Empirical prediction intervals" begin
+    result = kernel_call("calibrate_prediction_intervals", nothing, Dict(
+        "time" => [1, 2, 3], "observed" => [11, 18, 35],
+        "predicted" => [10, 20, 30], "confidence" => 0.5, "holdout" => [0, 1, 0],
+    ))["result"]
+    @test result["lower"] == [8, 18, 28]
+    @test result["upper"] == [12, 22, 32]
+    @test result["diagnostics"]["holdout_coverage"] == 1.0
+end
