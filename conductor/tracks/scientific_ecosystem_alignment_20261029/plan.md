@@ -8024,3 +8024,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify the missing intervention name regression from PR #416. The Rust policy document import rejects the malformed document. The focused locked release boundary test passed.
 
 - [x] Verify the explicit remote authorization scope regression from PR #416. The locked Rust release test confirms a missing scope fails context validation, an incorrect scope is denied, and an explicit permitted scope dispatches an eligible operation.
+
+- [x] Reconcile the historical heads of PRs #416 and #417 after porting the policy import and explicit authorization regressions. Retain the seeded Kairos replay contract, current lockfiles and native security workflows. The remaining historical changes include retired runtime dependencies, workflow removals, lockfile downgrades and older release evidence. The integration merge records ancestry and retains the migration tree.
