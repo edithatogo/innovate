@@ -7980,3 +7980,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reconcile #542, #539, #538, #537, #531, #515 and #484 locally. Each changes only the removed TypeScript binding package manifest or lock. The ancestry merge preserves the migration tree, including the separately maintained docs dependencies.
 
 - [x] Reconcile grouped dependency PRs #532 and #512 locally. Optional PyArrow 26.0.1 satisfies the proposed range in #532. Statsmodels, NumPyro, NDlib and Pandera are absent from the active manifest and lock. The merge preserves the verified dependency tree.
+
+- [x] Reconcile remote authorization PRs #449, #445 and #378. Native dispatch requires caller-supplied context and checks the explicit scope against its fixed required policy, without supplying authority on the caller’s behalf. Focused boundary and subprocess tests passed. Hosted identity verification remains open.
