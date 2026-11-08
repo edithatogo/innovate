@@ -8016,3 +8016,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reconcile historical Bass recovery PRs #452, #442, #425, #409 and #376. Each changes only the retired recovery tests. The native regression verifies that one binding rejects missing and invalid parameters and then returns all three predictions against the closed-form Bass curve. All eight locked release scientific contract tests passed.
 
 - [x] Reconcile PR #408. The Rust ensemble accumulates each path with its normalized weight into one output vector, avoiding a map lookup for each regime at each time point. The focused locked release boundary test passed. Runtime performance was not measured.
+
+- [x] Reconcile PR #440. Its changes are confined to historical probabilistic tests. The native Bayesian grid regression verifies the response schema and rejects a missing forecast model with an actionable error. The former optional Python backend installation error has no equivalent in this native operation. The focused locked release test passed.
