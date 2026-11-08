@@ -1026,3 +1026,15 @@ if (identical(Sys.getenv("INNOVATE_TEST_LIVE_OECD"), "1")) {
             all(observations$TIME_PERIOD %in% c("2023-02", "2023-03")),
             is.numeric(observations$OBS_VALUE))
 }
+
+singleton_stream <- kernel_call("update_streaming_forecast", payload=list(
+  previous_time=1, previous_observed=2, new_time=2, new_observed=3,
+  assumptions="one incoming sample"))$result
+stopifnot(all(unlist(singleton_stream$mean) == c(2,3)),
+          identical(singleton_stream$metadata$assumptions, list("one incoming sample")))
+singleton_regime <- kernel_call("compose_regime_ensemble", payload=list(
+  time=1, predictions=list(a=2,b=4), assumptions="aligned"))$result
+stopifnot(singleton_regime$mean[[1]] == 3,
+          identical(singleton_regime$metadata$assumptions, list("aligned")))
+singleton_residual <- kernel_call("residual_diagnostic_series", payload=list(time=1, residuals=2))$result
+stopifnot(singleton_residual$residuals[[1]] == 2, singleton_residual$acf[[1]] == 1)

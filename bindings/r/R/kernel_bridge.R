@@ -35,6 +35,16 @@ kernel_call <- function(operation, model_key = NULL, payload = list(), raw = FAL
     array_fields <- c(array_fields, "denominator", "value", "unit_id", "product_id",
       "target", "weight", "product_labels", "transform_steps")
   }
+  if (identical(operation, "update_streaming_forecast")) {
+    array_fields <- c(array_fields, "previous_time", "previous_observed",
+      "new_time", "new_observed", "assumptions")
+  }
+  if (identical(operation, "compose_regime_ensemble")) {
+    array_fields <- c(array_fields, "assumptions")
+  }
+  if (operation %in% c("residual_diagnostic_series", "render_residual_diagnostics_svg")) {
+    array_fields <- c(array_fields, "residuals")
+  }
   preserve_arrays <- function(value) {
     if (!is.list(value)) return(value)
     fields <- names(value)
@@ -42,6 +52,7 @@ kernel_call <- function(operation, model_key = NULL, payload = list(), raw = FAL
       # Event times and named overrides are scalars, unlike observation times.
       if (!is.null(fields) && fields[[i]] == "parameter_events") next
       if (!is.null(fields) && (fields[[i]] %in% c("covariates", "covariate_overrides", "effect_modifiers", "observed", "y", "values") ||
+          (identical(operation, "compose_regime_ensemble") && fields[[i]] == "predictions") ||
           (identical(operation, "summarize_causal") && identical(payload$method, "policy_specification") &&
            fields[[i]] == "data")) && is.list(value[[i]]) &&
           !is.null(names(value[[i]]))) {
