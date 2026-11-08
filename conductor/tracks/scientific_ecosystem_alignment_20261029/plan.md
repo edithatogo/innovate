@@ -7895,3 +7895,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Repair the Windows Gaussian mixture rollback identified in job 128597445143. A stalled component start won by approximately 1.3e-18 RSS over a converged start. The least-squares selector now prefers an already converged candidate only when the objective difference is within eight floating-point epsilons of the objective scale. Convergence thresholds and rollback criteria are preserved. All 17 locked debug mixture and fit-quality tests passed locally. Windows CI remains pending.
 
 - [x] Verify the Linux dispatch-only source, container and MPI gates at b701302f. Job 128598111993 passed the extracted-source Rust and Python consumers, restricted non-root worker container smoke, and single-node Open MPI shard verification. Hosted transport, multi-node scheduling, accelerator qualification and release acceptance remain open.
+
+- [x] Run the full locked local Rust release workspace on 77a0e4bf after the converged-start tie fix. All 360 offline tests passed, and the one opt-in live OECD test passed separately. Hosted matrix run 42438532976 remains in progress.
