@@ -8002,3 +8002,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reconcile Mesa RNG PRs #460, #446, #444, #435, #423, #422, #410 and #379. Their executable changes or lint annotations target only removed Mesa modules. Kairos uses seeded simulation randomness for replay. The locked release Kairos and network replay tests passed. Broader PR #416 remains separate.
 
 - [x] Reconcile performance PRs #424, #412 and #375. The Rust competition model iterates time and state together for derivatives and uses a fixed parameter-prefix array. All locked release competition tests passed. No cross-runtime speed comparison was performed.
+
+- [x] Reconcile Bayesian mapping PRs #438, #419 and #411. The changes target retired NumPy-to-dictionary extraction. Rust emits ordered parameter draws and posterior masses directly. All focused locked release Bayesian boundary tests passed. Relative runtime performance was not measured.
