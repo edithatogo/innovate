@@ -7588,3 +7588,8 @@ Hosted release readiness for this worktree revision remains open.
   operation. The optimized boundary test passed, including duplicate
   time rejection. The debug cache selected a stale binary and ran
   zero matching tests.
+
+- [x] Verify empirical interval diagnostics at the finite float limit.
+  Opposite maximum-magnitude residuals returned a zero mean and
+  finite maximum RMSE. A residual subtraction that exceeds the float
+  domain returned invalid_request. The optimized boundary test passed.
