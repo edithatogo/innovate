@@ -7741,3 +7741,9 @@ Hosted release readiness for this worktree revision remains open.
   binding manifests. The current migration guard carries forward
   missing, altered and stale-source evidence rejection. Preserve the
   archived plans and current dependency tooling.
+
+- [x] Verify that native ordered scenario execution preserves outputs
+  and per-scenario errors with two workers, covering the parallel-grid
+  intent of PRs #175 and #289. Their branch histories also contain
+  separate operation-discovery, causal or legacy engine changes, which
+  require their own dispositions before branch reconciliation.
