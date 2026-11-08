@@ -7905,3 +7905,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify R singleton streaming observations, regime predictions, assumptions and residuals through a fresh ecd8359a installation. The complete R conformance script passed with live OECD enabled against the locked macOS arm64 FFI library containing the optimizer fix. Hosted R jobs on 77a0e4bf predate the singleton transport change.
 
 - [x] Verify hosted Security and Quality and Binding Conformance on optimizer revision 77a0e4bf. Runs 42438532987 and 42438532994 concluded success. The PR platform matrix and separately dispatched packaging lane remain distinct gates.
+
+- [x] Verify hosted Linux clean-source packaging and installed Voiage on optimizer revision 77a0e4bf. Job 128604228955 passed. Downloaded wheel and source archive matched SHA256SUMS, the receipt matched the wheel hash, and source digest `fb7f1d32b1a78bc301d45d5895af951bc75b3ccfc151ced90a85f437dd670791` matched the exact commit tree. Ordinary and weighted EVPI matched the independent references. The separate release readiness check remains red.
