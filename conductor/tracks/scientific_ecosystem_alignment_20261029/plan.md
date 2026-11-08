@@ -8000,3 +8000,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reconcile historical discovery and schema error tests #451, #441 and #439. Locked release tests confirm an unknown model-card key returns a structured native error and both malformed and unsupported schema versions are rejected. Python exception chaining was specific to the retired registry.
 
 - [x] Reconcile Mesa RNG PRs #460, #446, #444, #435, #423, #422, #410 and #379. Their executable changes or lint annotations target only removed Mesa modules. Kairos uses seeded simulation randomness for replay. The locked release Kairos and network replay tests passed. Broader PR #416 remains separate.
+
+- [x] Reconcile performance PRs #424, #412 and #375. The Rust competition model iterates time and state together for derivatives and uses a fixed parameter-prefix array. All locked release competition tests passed. No cross-runtime speed comparison was performed.
