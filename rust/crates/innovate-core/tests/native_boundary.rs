@@ -4325,4 +4325,7 @@ fn empirical_intervals_keep_legacy_width_and_reject_invalid_inputs() {
     request["payload"]["confidence"] = json!(0.5);
     request["payload"]["predicted"] = json!([10, 20]);
     assert_eq!(execute(&request)["error"]["code"], "invalid_request");
+    request["payload"]["predicted"] = json!([10, 20, 30]);
+    request["payload"]["time"] = json!([1, 1, 3]);
+    assert_eq!(execute(&request)["error"]["code"], "invalid_request");
 }

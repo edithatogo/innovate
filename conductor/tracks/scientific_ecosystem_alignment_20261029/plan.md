@@ -7583,3 +7583,8 @@ Hosted release readiness for this worktree revision remains open.
   empirical interval regression. Raw Maturin wheel SHA-256 is
   `cb3817a3993aac91cd0aac319ebb390a64ba9dd3a8efa2a28c0e483ee065f453`.
   Hosted and source-distribution release validation remain open.
+
+- [x] Enforce finite, strictly increasing time in the Rust interval
+  operation. The optimized boundary test passed, including duplicate
+  time rejection. The debug cache selected a stale binary and ran
+  zero matching tests.

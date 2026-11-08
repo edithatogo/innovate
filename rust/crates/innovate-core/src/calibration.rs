@@ -32,6 +32,11 @@ pub(crate) fn intervals(payload: &Value) -> Result<Value, &'static str> {
     {
         return Err("calibration arrays must have matching nonzero lengths");
     }
+    if r.time.iter().any(|time| !time.is_finite())
+        || r.time.windows(2).any(|pair| pair[0] >= pair[1])
+    {
+        return Err("time must be finite and strictly increasing");
+    }
     let residuals: Vec<_> = r
         .observed
         .iter()
