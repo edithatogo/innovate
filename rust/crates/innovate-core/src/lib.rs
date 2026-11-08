@@ -11,6 +11,7 @@ mod competition;
 mod composite;
 mod contracts;
 mod dataset;
+mod ensemble;
 mod events;
 mod explainability;
 mod extensions;
@@ -78,6 +79,7 @@ pub fn execute_json(input: &str) -> String {
                 | "calibrate_prediction_intervals"
                 | "aggregate_dates"
                 | "summarize_causal"
+                | "compose_regime_ensemble"
                 | "validate_paired_outcomes"
                 | "threshold_sensitivity"
                 | "parameter_sensitivity"
@@ -321,6 +323,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             return Ok(payload.clone());
         }
 
+        if value["operation"] == "compose_regime_ensemble" {
+            return ensemble::compose(payload);
+        }
         if value["operation"] == "summarize_causal" {
             return causal::summarize(payload);
         }

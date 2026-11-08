@@ -4459,3 +4459,26 @@ fn policy_scenario_compares_supplied_paths_and_keeps_metadata() {
     payload["baseline"] = json!([10, 20]);
     assert_eq!(run(&payload)["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn regime_ensemble_normalizes_weights_and_validates_alignment() {
+    let mut request = json!({"schema_version":"2.0","operation":"compose_regime_ensemble",
+        "payload":{"time":[1,2],"predictions":{"a":[1,2],"b":[3,4]},"weights":{"a":1,"b":3},
+            "observed":[2.5,3.5],"assumptions":["shared time grid"]}});
+    let run = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let result = run(&request);
+    assert_eq!(result["result"]["mean"], json!([2.5, 3.5]));
+    assert_eq!(result["result"]["diagnostics"]["rmse"], 0.);
+    assert_eq!(
+        result["result"]["metadata"]["assumptions"],
+        json!(["shared time grid"])
+    );
+    request["payload"]["weights"] = serde_json::Value::Null;
+    assert_eq!(run(&request)["result"]["mean"], json!([2., 3.]));
+    for weights in [json!({"a":1,"c":1}), json!({"a":0,"b":0})] {
+        request["payload"]["weights"] = weights;
+        assert_eq!(run(&request)["error"]["code"], "invalid_request");
+    }
+}
