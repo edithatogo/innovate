@@ -4704,4 +4704,16 @@ fn policy_document_import_bounds_and_validates_json() {
         assert_eq!(run(document)["error"]["message"], message);
     }
     assert_eq!(run(json!("[]"))["error"]["code"], "invalid_request");
+    let mut specification: serde_json::Value = serde_json::from_str(&document).unwrap();
+    specification["__class__"] = json!("unrecognized");
+    assert_eq!(
+        run(json!(specification.to_string()))["error"]["message"],
+        "policy specification document contains unknown fields"
+    );
+    specification.as_object_mut().unwrap().remove("__class__");
+    specification["causal_model"]["__class__"] = json!("unrecognized");
+    assert_eq!(
+        run(json!(specification.to_string()))["error"]["message"],
+        "policy specification contains unknown contract fields"
+    );
 }

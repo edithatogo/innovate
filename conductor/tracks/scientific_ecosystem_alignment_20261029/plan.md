@@ -7988,3 +7988,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify bounded policy document import through Julia and installed R on macOS arm64 with the same locked release FFI. Both accepted a valid document and rejected a multibyte document exceeding 1 MiB. Python wheel and hosted checks remain open.
 
 - [x] Verify bounded policy document import in the installed locked CPython 3.15.2 release wheel on macOS arm64. The focused test passed for a valid policy and a multibyte document over the byte limit. Ruff passed. Hosted validation remains open.
+
+- [x] Reconcile #418 policy validation experiments through the Rust importer. Reject extra fields at the document and nested contract levels. The focused locked release test passed for both injection cases alongside valid and oversized documents.

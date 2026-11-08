@@ -2840,6 +2840,17 @@ fn import_policy_specification(payload: &Value) -> Result<Value, &'static str> {
     }
     let specification: Value =
         serde_json::from_str(document).map_err(|_| "invalid policy specification JSON")?;
+    let fields = specification
+        .as_object()
+        .ok_or("policy specification document must contain an object")?;
+    if fields.keys().any(|key| {
+        !matches!(
+            key.as_str(),
+            "intervention" | "causal_model" | "n_obs" | "data"
+        )
+    }) {
+        return Err("policy specification document contains unknown fields");
+    }
     policy_specification(&specification)
 }
 
