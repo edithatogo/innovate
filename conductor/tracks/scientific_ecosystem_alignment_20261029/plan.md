@@ -7945,3 +7945,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify historical Norton–Bass refined crossings through Python, Julia and R. Focused consumer checks passed against the locked b1eccb07 wheel and FFI on macOS arm64, preserving sampled results and matching both post-event analytic crossing times within 1e-7.
 
 - [x] Search for historical Norton–Bass transient crossings between requested samples using a bounded probe grid augmented with event and covariate times. All 27 locked Rust multi-generation tests passed, including a three-generation SciPy fixture with a takeoff crossing missed by both requested endpoints. Excursions between probes and continuous peak search remain open.
+
+- [x] Verify transient historical Norton–Bass milestone detection through the locked 655b3cb7 wheel and FFI. Python, Julia and R passed the same three-generation fixture on macOS arm64. Each detected the first-generation takeoff between requested endpoints and preserved null for the sampled takeoff and unreached refined median.

@@ -1109,3 +1109,13 @@ auto_fit <- kernel_call("fit_competition_interaction_matrix",
   payload=list(time=auto_time, observed=auto_observed))$result
 stopifnot(auto_fit$predictions$r_squared > 0.999999,
           abs(auto_fit$parameters$q[[1]][[2]] + 0.05) < 0.005)
+
+transient <- kernel_summarize_model("norton_bass", list(
+  inputs=list(time=c(0,25)),
+  parameters=list(p1=0.03,q1=0.2,m1=1000,p2=0.02,q2=0.3,m2=1500,p3=0.04,q3=0.25,m3=600),
+  constructor_kwargs=list(n_generations=3,initial_values=c(1e-6,0,0))
+))$result$threshold_diagnostics$net_level_milestones$generations[[1]]
+stopifnot(is.null(transient$takeoff),
+          transient$refined_crossings$takeoff > 2.2,
+          transient$refined_crossings$takeoff < 5,
+          is.null(transient$refined_crossings$median))

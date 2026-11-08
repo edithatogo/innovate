@@ -1177,3 +1177,16 @@ end
     @test result["predictions"]["r_squared"] > 0.999999
     @test isapprox(result["parameters"]["q"][1][2], -0.05; atol=0.005, rtol=0)
 end
+
+@testset "Norton historical transient crossing" begin
+    result = kernel_summarize_model("norton_bass", Dict(
+        "inputs" => Dict("time" => [0, 25]),
+        "parameters" => Dict("p1"=>0.03,"q1"=>0.2,"m1"=>1000,"p2"=>0.02,"q2"=>0.3,
+            "m2"=>1500,"p3"=>0.04,"q3"=>0.25,"m3"=>600),
+        "constructor_kwargs" => Dict("n_generations"=>3,"initial_values"=>[1e-6,0,0])
+    ))["result"]
+    row = first(result["threshold_diagnostics"]["net_level_milestones"]["generations"])
+    @test isnothing(row["takeoff"])
+    @test 2.2 < row["refined_crossings"]["takeoff"] < 5
+    @test isnothing(row["refined_crossings"]["median"])
+end

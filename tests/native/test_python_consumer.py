@@ -2330,3 +2330,27 @@ def test_historical_interaction_matrix_automatic_fit():
     result = innovate.execute("fit_competition_interaction_matrix", time=time, observed=observed)["result"]
     assert result["predictions"]["r_squared"] > 0.999999
     assert result["parameters"]["q"][0][1] == pytest.approx(-0.05, abs=0.005, rel=0)
+
+
+def test_norton_historical_transient_crossing():
+    result = innovate.execute(
+        "summarize_model",
+        "norton_bass",
+        inputs={"time": [0, 25]},
+        parameters={
+            "p1": 0.03,
+            "q1": 0.2,
+            "m1": 1000,
+            "p2": 0.02,
+            "q2": 0.3,
+            "m2": 1500,
+            "p3": 0.04,
+            "q3": 0.25,
+            "m3": 600,
+        },
+        constructor_kwargs={"n_generations": 3, "initial_values": [1e-6, 0, 0]},
+    )["result"]
+    row = result["threshold_diagnostics"]["net_level_milestones"]["generations"][0]
+    assert row["takeoff"] is None
+    assert 2.2 < row["refined_crossings"]["takeoff"] < 5
+    assert row["refined_crossings"]["median"] is None
