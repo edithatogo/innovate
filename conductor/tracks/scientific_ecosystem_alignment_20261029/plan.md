@@ -8022,3 +8022,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reconcile PRs #377 and #436. The SciPy-only FitContext refactor maps to the existing Rust KernelRequest and native fitting options. The historical Kairos adapter row enumeration and Bayesian array comment apply to removed Python implementations. Native joint-grid and sampling tests passed. Relative performance was not measured.
 
 - [x] Verify the missing intervention name regression from PR #416. The Rust policy document import rejects the malformed document. The focused locked release boundary test passed.
+
+- [x] Verify the explicit remote authorization scope regression from PR #416. The locked Rust release test confirms a missing scope fails context validation, an incorrect scope is denied, and an explicit permitted scope dispatches an eligible operation.

@@ -3558,6 +3558,15 @@ fn in_process_remote_dispatch_applies_scope_and_operation_policy() {
         run(&unknown_kernel_field)["error"]["message"],
         "remote kernel request contains unsupported fields"
     );
+    let mut missing_scope = request.clone();
+    missing_scope["payload"]["context"]
+        .as_object_mut()
+        .unwrap()
+        .remove("auth_scope");
+    assert_eq!(
+        run(&missing_scope)["error"]["message"],
+        "invalid remote execution context"
+    );
     request["payload"]["context"]["auth_scope"] = json!("read");
     assert_eq!(run(&request)["result"]["status"], "error");
     request["payload"]["context"]["auth_scope"] = json!("kernel:execute");
