@@ -7757,3 +7757,8 @@ Hosted release readiness for this worktree revision remains open.
   optimized FFI library using an explicit library path. Both returned
   the same 53 unique operation names in the same order. R list
   serialization was flattened for comparison with Julia’s array.
+
+- [x] Verify the installed optimized Python wheel exposes the same
+  53 ordered operation names as the rebuilt Julia and R library.
+  The Python extension resolved from the isolated wheel install.
+  Hosted distribution validation remains open.
