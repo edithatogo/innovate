@@ -1,0 +1,15 @@
+   Compiling geo v0.33.1
+   Compiling petgraph v0.8.3
+   Compiling kairo-ecs-abm v0.1.0 (https://github.com/edithatogo/kairos.git?rev=d56863505d938feb069af88a737eb7668113d14b#d5686350)
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+   Compiling innovate-tabular v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-tabular)
+    Finished `test` profile [unoptimized] target(s) in 10.56s
+     Running tests/prediction.rs (target/debug/deps/prediction-10e00f42cb7d96e8)
+
+running 4 tests
+test prediction_preserves_identity_and_adds_native_values ... ok
+test invalid_time_contract_fails_in_rust ... ok
+test invalid_quantities_and_input_types_fail_without_silent_defaults ... ok
+test multivariate_predictions_and_signed_rates_preserve_all_columns ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s

@@ -1,0 +1,45 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 3.78s
+     Running tests/mechanistic.rs (target/debug/deps/mechanistic-00570a964e0093e4)
+
+running 9 tests
+test forcing_numbers_survive_exact_json_round_trip ... ok
+test signed_zero_control_and_query_times_are_the_same_boundary ... ok
+test invalid_forcing_and_historical_revisions_fail_explicitly ... ok
+test gompertz_event_has_continuous_state_and_right_hand_rate ... ok
+test gompertz_linear_rate_covariate_matches_exact_solution_and_ignores_b_terms ... ok
+test bass_linear_innovation_covariate_and_saved_history_match_exact_solution ... ok
+test explicit_legacy_layout_and_origin_are_not_silent_new_defaults ... ok
+test gompertz_event_fit_holds_absent_b_and_forecasts_from_saved_origin ... ok
+test bass_covariate_event_fit_matches_independent_reference_and_retains_history ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
+
+     Running tests/multi_generation.rs (target/debug/deps/multi_generation-fe12158b80170882)
+
+running 9 tests
+test unknown_generation_parameters_and_nonfinite_domains_do_not_silently_disappear ... ok
+test invalid_shapes_parameters_and_unknown_options_are_rejected ... ok
+test successive_generation_closed_form_launches_and_conservation ... ok
+test covariate_history_drives_both_historical_generations_and_replays ... ok
+test legacy_origin_is_explicit_and_forecast_batching_does_not_reset_state ... ok
+test legacy_three_generation_ode_matches_independent_scipy_oracle ... ok
+test convergence_limits_and_unobserved_generations_are_reported_without_overclaiming ... ok
+test multi_output_fit_reports_convergence_and_predicts_held_out_times ... ok
+test legacy_fit_recovers_independent_ode_fixture_and_rates_keep_their_sign ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.31s
+
+     Running tests/native_boundary.rs (target/debug/deps/native_boundary-ab434355497941ab)
+
+running 7 tests
+test empty_model_is_a_structured_error_not_a_panic ... ok
+test dispatch_rejects_unknown_schema_versions ... ok
+test unknown_models_never_fall_back_to_python ... ok
+test undeclared_covariates_never_fall_back_after_all_model_families_are_ported ... ok
+test discovery_does_not_advertise_unported_models ... ok
+test dispatch_is_native_without_a_python_launcher ... ok
+test direct_parameter_payloads_work_for_bass_and_reject_ambiguous_state ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

@@ -1,0 +1,29 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.33s
+     Running tests/mixture.rs (target/debug/deps/mixture-9dae8c581b4ea2a9)
+
+running 2 tests
+test gaussian_em_updates_likelihood_and_saves_component_state ... FAILED
+test mixture_prediction_and_posterior_responsibilities_match_closed_forms ... FAILED
+
+failures:
+
+---- gaussian_em_updates_likelihood_and_saves_component_state stdout ----
+
+thread 'gaussian_em_updates_likelihood_and_saves_component_state' (27100683) panicked at rust/crates/innovate-core/tests/mixture.rs:29:219:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "unsupported_native_operation", message: "native model 'mixture' is unavailable pending migration", operation: Some(FitModel) }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- mixture_prediction_and_posterior_responsibilities_match_closed_forms stdout ----
+
+thread 'mixture_prediction_and_posterior_responsibilities_match_closed_forms' (27100684) panicked at rust/crates/innovate-core/tests/mixture.rs:7:182:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "unsupported_native_operation", message: "native model 'mixture' is unavailable pending migration", operation: Some(PredictModel) }
+
+
+failures:
+    gaussian_em_updates_likelihood_and_saves_component_state
+    mixture_prediction_and_posterior_responsibilities_match_closed_forms
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --test mixture`

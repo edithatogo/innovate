@@ -1,169 +1,54 @@
-# Contributing to innovate
+# Contributing to Innovate
 
-Thank you for your interest in contributing to the `innovate` library! This document outlines the process for contributing.
+The 0.7 development line moves scientific computation into Rust, tables into
+Polars, and exposes only Python, Julia and R bindings. Read README.md and
+migration-ledger.json before adding a capability. All existing and planned
+features remain required; a temporarily unavailable feature is not a retired requirement.
 
-## Code of Conduct
+## Environment
 
-This project and everyone participating in it is governed by our [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
+Use Rust 1.99.1 and an explicitly selected repo-local Python 3.15.2 environment:
 
-## How Can I Contribute?
-
-### Reporting Bugs
-
-- Use the issue tracker to report bugs
-- Follow the provided issue template
-- Include a clear description, steps to reproduce, and expected vs actual behavior
-
-### Suggesting Features
-
-- Use the issue tracker to suggest features
-- Explain the use case and potential implementation approach
-- Consider the library's scope and design philosophy
-
-### Code Contributions
-
-#### Development Setup
-
-1. Fork the repository
-2. Clone your fork: `git clone https://github.com/yourusername/innovate.git`
-3. Install dependencies with uv: `uv sync --all-extras`
-4. Install pre-commit hooks: `uv run pre-commit install`
-
-If you are using Codex with the repo-managed Conductor workflow, sync the project-owned skills into your Codex home:
-
-```bash
-uv run python scripts/sync_codex_skills.py
+```sh
+uv venv .venv-native --python 3.15.2
+export UV_PROJECT_ENVIRONMENT="$PWD/.venv-native"
+uv sync --locked --python 3.15.2
+.venv-native/bin/python -c 'import sys; print(sys.version, sys.prefix)'
 ```
 
-#### Pull Request Process
+Keep other writers, environments and in-flight native operations intact. Use a
+separate branch/worktree for parallel work. The repository integrator owns shared
+promotion and hook installation; existing hooks remain enabled. The local hook
+runner checks the selected interpreter's actual version before invoking tools.
 
-1. Create a new branch: `git checkout -b feature/your-feature-name`
-2. Add your changes and tests
-3. Run the verified local quality gates listed below
-4. Add documentation as needed
-5. Run pre-commit: `uv run pre-commit run --all-files`
-6. Create the pull request
+## Development checks
 
-### Style Guidelines
-
-#### Code Style
-- Follow PEP 8 style guide
-- Use Ruff for linting and formatting
-- Use type hints for all public methods/functions
-- Write docstrings using numpy documentation style
-
-#### Test Guidelines
-- Add unit tests for new functionality
-- Treat coverage as a diagnostic signal unless a task explicitly raises a threshold
-- Follow the existing test patterns
-- Test edge cases and error conditions
-
-#### Documentation
-- Update docstrings to reflect changes
-- Add examples where appropriate
-- Keep README updated
-- Add comprehensive API documentation
-
-## Development Workflow
-
-### Testing
-Run all tests with:
-```bash
-CI=true uv run python -m pytest
+```sh
+.venv-native/bin/nox -s lint types tests native
+.venv-native/bin/python scripts/check_migration.py
+.venv-native/bin/python scripts/sync_versions.py --check
 ```
 
-Run the required CI unit gate locally:
-```bash
-CI=true uv run python -m pytest tests/unit/ \
-  --ignore=tests/unit/test_bayesian_fitter_robust.py \
-  --ignore=tests/unit/test_blackjax_fitter.py \
-  --ignore=tests/unit/test_dynamics_competition_direct.py \
-  --ignore=tests/unit/test_dynamics_contagion_direct.py \
-  --ignore=tests/unit/test_categorization.py \
-  --ignore=tests/unit/test_path_dependence.py \
-  --ignore=tests/unit/test_preprocess.py \
-  --ignore=tests/unit/test_plots_diagnostics.py \
-  --ignore=tests/unit/test_plots_network.py \
-  --ignore=tests/unit/test_advanced_functionality_comprehensive.py \
-  --ignore=tests/unit/test_curve_fitter.py \
-  --ignore=tests/unit/test_fitters.py \
-  --ignore=tests/unit/test_batched_fitter.py \
-  --cov=innovate \
-  --cov-report=term-missing \
-  --cov-fail-under=0 \
-  --tb=short \
-  -q
-```
+During edits, select affected pytest files/nodes and Cargo tests. Keep pytest's
+cache and use `--lf --last-failed-no-failures=none` only for rerunning known
+failures. No selected tests means no new verification. Do not add global retries
+or skips. Run clean-package, installed-consumer and integration gates at coherent
+milestones. The historical Python suite is preserved in Git and its path/hash
+inventory; current native tests do not replace its feature acceptance obligations.
 
-Run tests with a coverage report for inspection:
-```bash
-CI=true uv run python -m pytest --cov=innovate --cov-report=html
-```
+For the documentation site, use Node 26 and pnpm 12.18.0. Set
+`STARLIGHT_POLYGLOT_PYTHON` to the selected environment's Python executable.
+Keep the lockfile, package release-age policy and recorded compatibility exceptions.
 
-### Linting and Formatting
-The project uses Ruff for all linting and formatting, enforced via pre-commit hooks:
-```bash
-uv run ruff check .        # Lint
-uv run ruff format .       # Format
-uv run ruff check . --fix  # Auto-fix
-```
+## Scientific changes and review
 
-### Codex Skill Sync
+Rust owns validation, numeric algorithms and capability reporting. Bindings adapt
+transport only. Tests should use independent analytic/reference oracles and cover
+failure boundaries. Unavailable methods must fail explicitly. Document parameter,
+time, output and uncertainty semantics, not just successful calls.
 
-The autonomous Conductor workflow for this repository is defined by the vendored skill copies in `.codex/skills/`. Refresh your local Codex installation from the repo whenever those files change:
-
-```bash
-uv run python scripts/sync_codex_skills.py
-```
-
-To inspect what would be installed without modifying your Codex home:
-
-```bash
-uv run python scripts/sync_codex_skills.py --dry-run
-```
-
-The repo-managed bundle includes the project setup, status, revert, new-track, implementation, and review skills, so the full Conductor surface is reproducible from source control.
-
-Type checking:
-```bash
-uv run basedpyright \
-  src/innovate/__init__.py \
-  src/innovate/backend.py \
-  src/innovate/backends/__init__.py \
-  src/innovate/capabilities.py \
-  src/innovate/diffuse/__init__.py \
-  src/innovate/substitute/__init__.py \
-  src/innovate/ecosystem/__init__.py
-```
-
-Package and docs smoke checks:
-```bash
-uv build
-pnpm --dir docs/astro-site install --frozen-lockfile
-pnpm --dir docs/astro-site build
-```
-
-## Project Structure
-
-- `src/innovate/`: Main source code
-  - `diffuse/`: Single innovation diffusion models
-  - `compete/`: Competition models
-  - `substitute/`: Substitution models
-  - `hype/`: Hype cycle models
-  - `base/`: Base classes
-  - `fitters/`: Parameter fitting algorithms
-  - `dynamics/`: Dynamics models (contagion, competition)
-  - `utils/`: Utility functions
-- `tests/`: Test files
-- `examples/`: Example notebooks and scripts
-- `docs/`: Documentation
-
-## Getting Help
-
-- Open an issue for technical questions
-- Check existing issues and pull requests for similar problems
-- Contact maintainers if you need clarification
-
-## Acknowledgements
-
-Thank you to all our contributors! Your efforts help improve the library for everyone.
+Project-owned code uses Apache-2.0; preserve third-party licences and notices.
+Follow CODE_OF_CONDUCT.md. Report bugs with the model, schema, environment, minimal
+input and expected behavior, excluding private data and credentials. Use scoped
+commits and cite retained evidence in the Conductor track. The migration release
+gate must remain closed until every required feature and distribution gate passes.

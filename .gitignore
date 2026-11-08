@@ -40,3 +40,18 @@ package-lock.json
 *.swo
 *~
 .DS_Store
+
+# Isolated native migration environments and build outputs
+.venv-native/
+target/
+
+.venv-voiage/
+bindings/r/src/*.o
+bindings/r/src/*.so
+bindings/r/src/*.dll
+bindings/r/src/*.dylib
+
+.venv-docs/
+.venv-policy/
+.venv-release/
+.venv-dashboard/

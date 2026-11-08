@@ -1,0 +1,22 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.00s
+     Running tests/native_boundary.rs (/tmp/innovate-scientific-core-target/debug/deps/native_boundary-0b59fde7db288410)
+
+running 1 test
+test direct_parameter_payloads_work_for_bass_and_reject_ambiguous_state ... FAILED
+
+failures:
+
+---- direct_parameter_payloads_work_for_bass_and_reject_ambiguous_state stdout ----
+
+thread 'direct_parameter_payloads_work_for_bass_and_reject_ambiguous_state' (24585650) panicked at rust/crates/innovate-core/tests/native_boundary.rs:55:110:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "invalid_request", message: "state section must be an object", operation: Some(PredictModel) }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    direct_parameter_payloads_work_for_bass_and_reject_ambiguous_state
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --test native_boundary`

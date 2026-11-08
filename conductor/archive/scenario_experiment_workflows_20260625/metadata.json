@@ -4,5 +4,15 @@
   "status": "completed",
   "created_at": "2026-06-25T11:45:00Z",
   "updated_at": "2026-06-25T11:45:00Z",
-  "description": "Create scenario experiment workflow APIs for comparing diffusion, substitution, competition, and policy interventions with reproducible artifacts."
+  "description": "Create scenario experiment workflow APIs for comparing diffusion, substitution, competition, and policy interventions with reproducible artifacts.",
+  "reconciled_at": "2026-11-06",
+  "reconciliation_record": "reconciliation-20261106.md",
+  "completion_scope": "implementation_archived",
+  "acceptance_status": "manual_verification_pending",
+  "pending_manual_verifications": [
+    1,
+    2,
+    3,
+    4
+  ]
 }

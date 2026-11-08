@@ -1,0 +1,15 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.31s
+     Running tests/composite.rs (target/debug/deps/composite-0b8379adeaffe82b)
+
+running 7 tests
+test composite_invalid_shapes_origins_domains_and_unknown_options_fail ... ok
+test signed_negative_levels_are_returned_and_fisher_pry_ode_has_a_native_adapter ... ok
+test independent_composite_growth_matches_closed_forms_and_rhs_rates ... ok
+test historical_batch_reset_is_explicit_and_fixed_origin_batches_match ... ok
+test heterogeneous_signed_interactions_match_independent_scipy_and_absent_parameters_stay_fixed ... ok
+test composite_fit_retains_conditioned_initial_state_and_forecasts_from_origin ... ok
+test coupled_fit_estimates_signed_interactions_and_reports_absent_parameters ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.81s
+

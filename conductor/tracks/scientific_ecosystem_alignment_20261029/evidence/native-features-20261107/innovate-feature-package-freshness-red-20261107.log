@@ -1,0 +1,8 @@
+Pre-guard native wheel returned error: None
+Pre-guard optimizer: {'converged': True, 'gradient_max_abs': 3.67749164503174e-10, 'initialization': 'user_parameters', 'interpretation': 'numerical termination only; not a global optimum or statistical acceptance', 'iterations': 41, 'max_iterations': 300, 'method': 'deterministic_multistart_damped_least_squares', 'scaled_rss': 1.0, 'starts': 3, 'termination': 'gradient_or_residual_tolerance'}
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    assert r.get('error') is not None, 'Expected finite-domain error, old wheel accepted overflowing sensitivities'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Expected finite-domain error, old wheel accepted overflowing sensitivities
+Exit code: 1

@@ -1,0 +1,23 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.61s
+     Running tests/network.rs (target/debug/deps/network-c8958ced4c9e63b0)
+
+running 2 tests
+test heterogeneous_vectors_reject_invalid_domains ... ok
+test heterogeneous_service_uses_the_queued_agents_duration ... FAILED
+
+failures:
+
+---- heterogeneous_service_uses_the_queued_agents_duration stdout ----
+
+thread 'heterogeneous_service_uses_the_queued_agents_duration' (26620293) panicked at rust/crates/innovate-core/tests/network.rs:96:71:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "invalid_request", message: "unknown field `agent_service_ticks`, expected one of `engine`, `seed`, `population`, `edges`, `capacity`, `service_ticks`, `ticks_per_unit`, `initial_agents`", operation: Some(SimulateModel) }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    heterogeneous_service_uses_the_queued_agents_duration
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --test network`

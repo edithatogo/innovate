@@ -1,0 +1,13 @@
+    Fetching advisory database from `https://github.com/RustSec/advisory-db.git`
+      Loaded 1422 security advisories (from /Users/doughnut/.cargo/advisory-db)
+    Updating crates.io index
+    Scanning Cargo.lock for vulnerabilities (391 crate dependencies)
+Crate:     bincode
+Version:   2.0.1
+Warning:   unmaintained
+Title:     Bincode is unmaintained
+Date:      2025-12-16
+ID:        RUSTSEC-2025-0141
+URL:       https://rustsec.org/advisories/RUSTSEC-2025-0141
+
+warning: 1 allowed warning found

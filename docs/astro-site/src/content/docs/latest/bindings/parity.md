@@ -4,6 +4,11 @@ description: Evidence-backed parity status for supported language bindings.
 slug: latest/bindings/parity
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 # Binding parity
 
 Innovate treats Python as the canonical reference surface and keeps Rust, R,

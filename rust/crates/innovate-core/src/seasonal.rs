@@ -1,0 +1,235 @@
+/// Local linear regression on an evenly spaced sample grid.
+pub(crate) fn loess_trend(values: &[f64], span: usize) -> Result<Vec<f64>, &'static str> {
+    weighted_loess(values, span, None, false, false, (1, 1))
+}
+
+fn weighted_loess(
+    values: &[f64],
+    span: usize,
+    robustness: Option<&[f64]>,
+    extend: bool,
+    historical: bool,
+    (degree, jump): (usize, usize),
+) -> Result<Vec<f64>, &'static str> {
+    if span < 3 || (!historical && span > values.len()) {
+        return Err("LOESS span must be between three and the series length");
+    }
+    let extra_radius = span.saturating_sub(values.len()) / 2;
+    let span = span.min(values.len());
+    let scale = values.iter().copied().map(f64::abs).fold(0., f64::max);
+    if scale == 0. {
+        return Ok(vec![0.; values.len() + 2 * usize::from(extend)]);
+    }
+    let extension = isize::from(extend);
+    let last = values.len() - 1;
+    let jump = jump.min(last);
+    let estimate = |index: isize, window_center: isize| {
+        let start = (window_center - (span / 2) as isize).max(0) as usize;
+        let start = start.min(values.len() - span);
+        let radius = index
+            .abs_diff(start as isize)
+            .max(index.abs_diff((start + span - 1) as isize)) as f64
+            + extra_radius as f64;
+        let (mut weight, mut x_sum, mut y_sum, mut xx, mut xy) = (0., 0., 0., 0., 0.);
+        for (offset, value) in values[start..start + span].iter().enumerate() {
+            let x = ((start + offset) as f64 - index as f64) / radius;
+            let y = value / scale;
+            let w = (1. - x.abs().powi(3)).powi(3) * robustness.map_or(1., |w| w[start + offset]);
+            weight += w;
+            x_sum += w * x;
+            y_sum += w * y;
+            xx += w * x * x;
+            xy += w * x * y;
+        }
+        let determinant = weight * xx - x_sum * x_sum;
+        let spread_floor = if historical {
+            0.001 * (values.len() - 1) as f64 / radius
+        } else {
+            0.
+        };
+        let intercept = if degree == 1 && determinant > (weight * spread_floor).powi(2) {
+            (xx * y_sum - x_sum * xy) / determinant
+        } else if weight == 0. {
+            if historical {
+                return Ok(None);
+            }
+            let nearest = robustness
+                .into_iter()
+                .flatten()
+                .enumerate()
+                .filter(|(_, w)| **w > 0.)
+                .min_by_key(|(i, _)| (*i as isize).abs_diff(index))
+                .map_or(
+                    index.clamp(0, values.len() as isize - 1) as usize,
+                    |(i, _)| i,
+                );
+            return Ok(Some(values[nearest]));
+        } else {
+            y_sum / weight
+        };
+        let estimate = intercept * scale;
+        estimate
+            .is_finite()
+            .then_some(Some(estimate))
+            .ok_or("LOESS estimate exceeded finite numerical domain")
+    };
+    let mut interior = vec![0.; values.len()];
+    let mut previous = 0;
+    for index in (0..=last)
+        .step_by(jump)
+        .chain((!last.is_multiple_of(jump)).then_some(last))
+    {
+        // Historical STL fits the final off-grid point with the previous window.
+        let center = if historical && index == last && !last.is_multiple_of(jump) {
+            previous
+        } else {
+            index
+        };
+        let right = estimate(index as isize, center as isize)?.unwrap_or(values[index]);
+        let left = interior[previous];
+        if index > previous + 1 {
+            for (offset, value) in interior[previous + 1..index].iter_mut().enumerate() {
+                *value = left + (right - left) * (offset + 1) as f64 / (index - previous) as f64;
+            }
+        }
+        interior[index] = right;
+        previous = index;
+    }
+    if !extend {
+        return Ok(interior);
+    }
+    let first = estimate(-extension, -extension)?.unwrap_or(interior[0]);
+    let end = values.len() as isize;
+    let end = estimate(end, end)?.unwrap_or(interior[last]);
+    Ok(std::iter::once(first)
+        .chain(interior)
+        .chain(std::iter::once(end))
+        .collect())
+}
+
+pub(crate) fn decompose(
+    values: &[f64],
+    period: usize,
+    spans: (usize, Option<usize>, Option<usize>),
+    robust: bool,
+    historical: bool,
+    iterations: (usize, usize),
+    smoothers: [(usize, usize); 3],
+) -> Result<serde_json::Value, &'static str> {
+    if period < 2 || period > values.len() / 3 {
+        return Err("seasonal period must leave at least three complete cycles");
+    }
+    let [seasonal_smoother, trend_smoother, low_smoother] = smoothers;
+    let (trend_span, seasonal_span, low_pass_span) = spans;
+    let (inner_iterations, outer_iterations) = iterations;
+    let extrapolate = robust && !historical;
+    let mut trend = vec![0.; values.len()];
+    let mut seasonal = vec![0.; values.len()];
+    let mut weights = vec![1.; values.len()];
+    for pass in 0..=outer_iterations {
+        for _ in 0..inner_iterations {
+            let mut cycle = vec![0.; values.len() + 2 * period];
+            for phase in 0..period {
+                let samples: Vec<_> = (phase..values.len())
+                    .step_by(period)
+                    .map(|i| values[i] - trend[i])
+                    .collect();
+                let phase_weights: Vec<_> = weights
+                    .iter()
+                    .skip(phase)
+                    .step_by(period)
+                    .copied()
+                    .collect();
+                let smooth = weighted_loess(
+                    &samples,
+                    seasonal_span
+                        .unwrap_or_else(|| if historical { 7 } else { samples.len().min(7) }),
+                    Some(&phase_weights),
+                    !extrapolate,
+                    historical,
+                    seasonal_smoother,
+                )?;
+                let offset = usize::from(extrapolate);
+                if extrapolate {
+                    cycle[phase] = 2. * smooth[0] - smooth[1];
+                    let n = smooth.len();
+                    cycle[phase + (n + 1) * period] = 2. * smooth[n - 1] - smooth[n - 2];
+                }
+                for (j, value) in smooth.into_iter().enumerate() {
+                    cycle[phase + (j + offset) * period] = value;
+                }
+            }
+            let moving_average = |data: &[f64], span: usize| -> Vec<f64> {
+                data.windows(span)
+                    .map(|window| window.iter().map(|v| v / span as f64).sum())
+                    .collect()
+            };
+            let low = moving_average(&moving_average(&moving_average(&cycle, period), period), 3);
+            let low_span = low_pass_span.unwrap_or((period + 1) | 1);
+            let low = weighted_loess(&low, low_span, None, false, historical, low_smoother)?;
+            for (i, (season, low)) in seasonal.iter_mut().zip(low).enumerate() {
+                *season = cycle[i + period] - low;
+            }
+            let adjusted: Vec<_> = values.iter().zip(&seasonal).map(|(y, s)| y - s).collect();
+            trend = weighted_loess(
+                &adjusted,
+                trend_span,
+                Some(&weights),
+                false,
+                historical,
+                trend_smoother,
+            )?;
+        }
+        if pass < outer_iterations {
+            let absolute: Vec<_> = values
+                .iter()
+                .zip(&trend)
+                .zip(&seasonal)
+                .map(|((y, t), s)| {
+                    if historical {
+                        (y - (t + s)).abs()
+                    } else {
+                        (y - t - s).abs()
+                    }
+                })
+                .collect();
+            let mut ordered = absolute.clone();
+            ordered.sort_by(f64::total_cmp);
+            let middle = ordered.len() / 2;
+            let median = ordered[(ordered.len() - 1) / 2].midpoint(ordered[middle]);
+            let scale = values.iter().copied().map(f64::abs).fold(0., f64::max);
+            let cutoff = if historical {
+                6. * median
+            } else {
+                (6. * median).max(32. * f64::EPSILON * scale)
+            };
+            if cutoff == 0. && !historical {
+                break;
+            }
+            for (weight, residual) in weights.iter_mut().zip(absolute) {
+                *weight = if historical && residual <= 0.001 * cutoff {
+                    1.
+                } else if historical && residual > 0.999 * cutoff {
+                    0.
+                } else {
+                    (1. - (residual / cutoff).min(1.).powi(2)).powi(2)
+                };
+            }
+        }
+    }
+    let residual: Vec<_> = values
+        .iter()
+        .zip(&trend)
+        .zip(&seasonal)
+        .map(|((y, t), s)| y - t - s)
+        .collect();
+    if trend
+        .iter()
+        .chain(&seasonal)
+        .chain(&residual)
+        .any(|value| !value.is_finite())
+    {
+        return Err("seasonal decomposition exceeded finite numerical domain");
+    }
+    Ok(serde_json::json!({"trend":trend,"seasonal":seasonal,"residual":residual}))
+}

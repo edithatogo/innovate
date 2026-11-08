@@ -1,0 +1,21 @@
+[package]
+name = "innovate-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Rust-owned innovation diffusion scientific kernel"
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+reqwest = { version = "=0.13.5", default-features = false, features = ["blocking", "rustls"] }
+libm = "=0.2.16"
+sha2 = "=0.11.1"
+chrono = { version = "=0.4.45", default-features = false, features = ["std"] }
+kairo-ecs-core = { git = "https://github.com/edithatogo/kairos.git", rev = "e76b97be2ea3712645933d903822ff6381c8883e" }
+kairo-ecs-rng = { git = "https://github.com/edithatogo/kairos.git", rev = "e76b97be2ea3712645933d903822ff6381c8883e" }
+kairo-ecs-types = { git = "https://github.com/edithatogo/kairos.git", rev = "e76b97be2ea3712645933d903822ff6381c8883e" }
+kairo-ecs-abm = { git = "https://github.com/edithatogo/kairos.git", rev = "e76b97be2ea3712645933d903822ff6381c8883e" }
+kairo-ecs-des = { git = "https://github.com/edithatogo/kairos.git", rev = "e76b97be2ea3712645933d903822ff6381c8883e" }

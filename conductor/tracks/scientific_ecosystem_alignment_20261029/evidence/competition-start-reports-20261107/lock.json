@@ -1,0 +1,37 @@
+{
+  "model": "lock_in",
+  "optimizer": {
+    "converged": false,
+    "gradient_max_abs": 6.969887627804383e-05,
+    "interpretation": "numerical termination only; not a global optimum or statistical acceptance",
+    "iterations": 200,
+    "max_iterations": 200,
+    "method": "deterministic_multistart_damped_least_squares",
+    "scaled_rss": 7.448076620701058e-09,
+    "selected_start_index": 1,
+    "start_reports": [
+      {
+        "converged": false,
+        "iterations": 200,
+        "scaled_rss": 6.262168703696137e-06,
+        "termination": "iteration_limit"
+      },
+      {
+        "converged": false,
+        "iterations": 200,
+        "scaled_rss": 7.448076620701058e-09,
+        "termination": "iteration_limit"
+      },
+      {
+        "converged": false,
+        "iterations": 200,
+        "scaled_rss": 1.6299970633306286e-06,
+        "termination": "iteration_limit"
+      }
+    ],
+    "starts": 3,
+    "termination": "iteration_limit"
+  },
+  "rss": 2.793876752529707e-05,
+  "forecast_max_absolute_error": 0.06040957578844086
+}

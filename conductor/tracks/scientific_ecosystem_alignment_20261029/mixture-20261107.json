@@ -1,0 +1,115 @@
+{
+  "date": "2026-11-07",
+  "status": "bounded_local_checkpoint",
+  "base_commit": "98b5bba186898f2b2efa912b3df74b165d58c1a8",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "results": {
+    "rust_tests": 101,
+    "accounting": "97 core/C ABI plus 4 Polars",
+    "installed_python": 36,
+    "julia_assertions": 166,
+    "R": "native conformance, weighted scalar/Gaussian EM state and singleton component arrays pass",
+    "clippy_lint_types_docs": "pass; expected native source type warning; 163 pages",
+    "package": "installed local wheel and archive metadata/exact source inclusion pass; clean-source/platform/hosted qualification pending"
+  },
+  "weighted_oracle": {
+    "python": "3.15.2 (main, Oct 26 2026, 13:59:33) [Clang 23.1.3 ]",
+    "scipy": "1.18.1",
+    "numpy": "2.5.4",
+    "method": "least_squares sqrt(weight) residual, independent direct logistic"
+  },
+  "coverage": {
+    "branches": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "functions": {
+      "count": 999,
+      "covered": 737,
+      "percent": 73.77377377377378
+    },
+    "instantiations": {
+      "count": 2103,
+      "covered": 849,
+      "percent": 40.37089871611983
+    },
+    "lines": {
+      "count": 8116,
+      "covered": 6828,
+      "percent": 84.13011335633317
+    },
+    "mcdc": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "regions": {
+      "count": 13261,
+      "covered": 11631,
+      "notcovered": 1630,
+      "percent": 87.70831762310534
+    }
+  },
+  "module_lines": {
+    "mixture.rs": {
+      "count": 609,
+      "covered": 540,
+      "percent": 88.66995073891626
+    },
+    "fitting.rs": {
+      "count": 309,
+      "covered": 287,
+      "percent": 92.88025889967638
+    }
+  },
+  "raw_log_sha256": {
+    "innovate-mixture-red.log": "8e5c2b45afb9e258aebac1ade2c56207b55a787ccb0094059d4b6c578b520742",
+    "innovate-mixture-release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "innovate-mixture-sdist.log": "89de71c3f69c20a13c5d5cc20bbd9a440862c3788340340a0c5287b100559076",
+    "innovate-mixture-clippy-focused.log": "0fec01ab2a3a71fe0e2ed2df508e9a623cc4127ee904e1ba6b94aad26b75ae58",
+    "innovate-mixture-wheel.log": "308d5be2f85181c14f427c32443d1a4af2b677e97949f7c3af9db8815a70e6f5",
+    "innovate-mixture-docs.log": "98362e15560ada21c2acdfaa1eb1fafd354daed69436ca7bcf253c4d9e97db49",
+    "innovate-mixture-r-install.log": "8bcc66b6f075dd6146b6ca006a0579b369a424d49b587fb4b5bc0350fad78c31",
+    "innovate-mixture-r.log": "47539670954bf2b145708bfddfd7b5ae656b66f8d857a937686bc29b806dcd55",
+    "innovate-mixture-python.log": "12a9a4a8915fb8d2bb5b4227220247cde267c1a0620203589fe47280d5be4a7f",
+    "innovate-mixture-lint.log": "093e91c502151b50c84f57316c544bed91098f8c2c199992d01a162d20bfbd89",
+    "innovate-mixture-hooks.log": "7523d6b940ad7d7e49ea93ff33ac60ceb273c50cb6ae677030a5b65df95de21b",
+    "innovate-mixture-weighted-green.log": "266ea04ba6e2168ae6afe7388dfb1e52e5f9c1214f99a052250bdd3407c34ba0",
+    "innovate-mixture-policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+    "innovate-mixture-weighted-red.log": "db7a1c706519dec47e96d47d75bd61eb4830db7aeb2af2adf115dde95129b4b0",
+    "innovate-mixture-julia.log": "0f719932ba15ab2784573b268b48467d2fd7963fe7af90ce0c699406a0aa69d2",
+    "innovate-mixture-ffi.log": "abb5377bc003b0f19900575f3b2a6d807f9aee7485b0dc98a0e14e956280823b",
+    "innovate-mixture-clippy.log": "f559500e1de68a8204be1edfa661ad2ebdffe418cd2072b12c694bb8afb55a3e",
+    "innovate-mixture-tabular.log": "6895698b7e0db771bf9c8ae35160ad6624721a83596efe036fdc02d98a46db29",
+    "innovate-mixture-focused.log": "e480fbc7ddf31783de84f2572e747fc4472a29446b7b3fb31fcf6bc655b9502d",
+    "innovate-mixture-package.log": "e97e9b5f9bd7a9715fa616431afbb24cf975866d2531fea7e0fc759d3d0e096b",
+    "innovate-mixture-coverage.log": "0c07ff0472a225714833dff3564256333729d91bb7c81b272268af1a9fa7920c",
+    "innovate-mixture-install.log": "d3f87cd4d89a1d96f52e93f47803a95bca8c10245379ff60991d5f8da06080f6"
+  },
+  "source_sha256": {
+    "bindings/julia/test/runtests.jl": "d19550737c6c7a322b7593fa71fff80e44a04c89b88ad894d7347766b8ca3e74",
+    "bindings/r/R/kernel_bridge.R": "78b0affe757cf4af9abc49dd82d9efc1bc012119e8cb76438bb2320c8504ecc2",
+    "bindings/r/tests/native.R": "d468e190c6748d0314cc308d091ea37e494adb0c4f7dd13f2663711a8850b99c",
+    "docs/astro-site/src/content/docs/native-migration.md": "6bdcd0371ea3584fa42a348e9e4be109648058ca52d154a87d4c45b4db54584b",
+    "migration-ledger.json": "09e0e19c891e70663168f5e9faabe6043a2e6e8286585ac043589e869aa2e03a",
+    "rust/crates/innovate-core/src/discovery.json": "23b5c3d394f23d2a26edb7a5a45442b02d615dcb41ed559a9bcdfafacfb3e0bf",
+    "rust/crates/innovate-core/src/fitting.rs": "a7efc555bdf6f0ad5fc09f2e5ecd19b1946d2c704ec3d7526c4b19b73ef6c77a",
+    "rust/crates/innovate-core/src/kernel.rs": "afe6a27e29e9aa95d3ba038dd11b3df8599f5c7ca08a1612eaf037cfaae89bb8",
+    "rust/crates/innovate-core/src/lib.rs": "317562729fd4d6596180b8ea222d749e6729dcd60912886e41509054e15a2d1b",
+    "rust/crates/innovate-core/tests/native_boundary.rs": "094a42acd82f5d8657dab6d2fc9ddba88cd6eaf32c7887264fd6400a1fb37fb0",
+    "tests/native/test_python_consumer.py": "3e42bff56dd57c93a92a1ebec7122eb74d9163ff7a97f84af42acc6b7f32f881",
+    "rust/crates/innovate-core/src/mixture.rs": "163b02f66ec92a10338330263e6e3807cefe464c6087e9a007c8c895a790104b",
+    "rust/crates/innovate-core/tests/mixture.rs": "3826676f5fbb4020cf43afd81315ae9333d6ae2122a96be81b8bc6210fcaaeb9",
+    "rust/crates/innovate-core/tests/weighted.rs": "0b64605060b84b0838155479083fd20d62fc862e5c700d73e75beba031ff1645",
+    "rust/crates/innovate-core/tests/fixtures/weighted_scipy.json": "38c1c7c844bbbc6ee68bab3e15bc2370fedba07e85d3425f516d6538f4480d55"
+  },
+  "artifact_sha256": {
+    "/tmp/innovate-mixture-wheel/innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "3590191418bb72b9c8ee0a92a3563207b67846344d395f8d738d71d725ff79ce",
+    "/tmp/innovate-mixture-wheel/innovate-0.7.0a1.tar.gz": "44b1d6f9802ae4569f98a4f4634410b79c50381d76025a31c2cc8e27610225c2",
+    "target/debug/libinnovate_ffi.dylib": "3312ca2ec84227bb0433fd780c7bcf44d325d2b5690d9287469eb5c5c6731a6e"
+  }
+}

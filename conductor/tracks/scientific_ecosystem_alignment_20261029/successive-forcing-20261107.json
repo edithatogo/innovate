@@ -1,0 +1,92 @@
+{
+  "status": "bounded_local_checkpoint",
+  "base_commit": "c4f52f2403c0b2bab2200b650c96656f694668d3",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "related_evidence": [
+    "norton-events-20261107.json",
+    "norton-forcing-20261107.json",
+    "ecosystem-events-20261107.json"
+  ],
+  "results": {
+    "rust_tests": 152,
+    "rust_scope": "full core/C ABI coverage run plus 4 Polars tests",
+    "installed_python_tests": 54,
+    "julia_assertions": 217,
+    "R": "full conformance and both Norton event variant fits/forecasts passed",
+    "clippy": "workspace all targets passed",
+    "docs_pages": 163,
+    "hooks": "affected files passed",
+    "package": "local metadata, wheel contents and exact Rust modules/test/fixture inclusion passed"
+  },
+  "coverage": {
+    "count": 10173,
+    "covered": 8738,
+    "percent": 85.89403322520397
+  },
+  "module_coverage": {
+    "mechanistic.rs": {
+      "count": 644,
+      "covered": 584,
+      "percent": 90.6832298136646
+    },
+    "substitution.rs": {
+      "count": 854,
+      "covered": 780,
+      "percent": 91.33489461358315
+    }
+  },
+  "oracle": {
+    "python": "3.15.2",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "method": "Direct Bass fractions with DOP853, frozen launch/event regimes, control knots, rtol=1e-12 atol=1e-13"
+  },
+  "semantics": "Continuous launched Bass fractions with time-varying controls and fixed overrides. Capacity changes can jump reported levels; right-hand rates include capacity slopes and exclude impulses.",
+  "regressions": [
+    "slope-red.log",
+    "launch-red.log",
+    "event-slope-red.log",
+    "focused-final.log"
+  ],
+  "remaining": "Launch/event inference, threshold helpers, automatic starts, uncertainty, branch/mutation, platform and scientific/release qualification",
+  "source_sha256": {
+    "bindings/julia/test/runtests.jl": "95ffc3f94d9e8f42cc4a1d6fa0b88fb6eb205b0491cee185d5b38404e4983606",
+    "bindings/r/tests/native.R": "c2513f967ff6df683eee0871b435a9ee471a9540fe01e787689ceeb1548bc0bf",
+    "docs/astro-site/src/content/docs/native-migration.md": "17475250bc5f09636200797f8cec577356aea20958d7ea70455e0b7ff984e0df",
+    "migration-ledger.json": "e9fc7dd2eca2e0799c7aee66265dc2fcc87039a2e29dee73ffddcef5d6e6b997",
+    "rust/crates/innovate-core/src/mechanistic.rs": "d81beafb9a2b6c01bc4eeda7754f87c965d9f574555248c6f59c4b6884b51ae8",
+    "rust/crates/innovate-core/src/substitution.rs": "a93611d2fab9d82f7e0fc7a011dc683acb75360b44d99b2df114772c795d2f4d",
+    "rust/crates/innovate-core/tests/multi_generation.rs": "c5772461ae3ff1a97a5a5d026b65abfe29466aeba5aa0e8b187818b1c543a69f",
+    "tests/native/test_python_consumer.py": "c207722adad9b15049de78853cdc0f7d4de36116cadb391dba7fca95ee480f9e",
+    "rust/crates/innovate-core/tests/fixtures/successive_forcing_scipy.json": "f693eb1ab39ac02df07636a2f45a1506a927487dc60c1a8b60c03b9f2f57694e"
+  },
+  "logs": {
+    "clippy.log": "7afa4c1f762a79882f1a72227bb547934cad139591b10a2ee899547ac8a0633f",
+    "coverage.log": "a3cb673673ca0a3757ca4f05182ce72e8b89f355e13dbc2725c30817b6a5e26a",
+    "docs.log": "15ca35a80ae3547ad2ebf4511fd3f2cae48767baaf9b0319463f3a697ce7c1e3",
+    "event-slope-red.log": "89fbf4b5c198b7828eb009b2e7ba2896305bd716c2266bff114dca0482235ee4",
+    "ffi.log": "ff10e2b336192300650e49e547dc8a9265611e1a61bfae4a934afe44d2cb133a",
+    "focused-final.log": "569b932fa0870aaea5a4603d502ef47459f3825e3e6b9a393ee46a73275d19b1",
+    "green.log": "ee109f1dd658f8811b42ebb44deb535fa41c2017cfec24dfcd148978cd3316d6",
+    "hooks.log": "7523d6b940ad7d7e49ea93ff33ac60ceb273c50cb6ae677030a5b65df95de21b",
+    "install.log": "60459ccdf312697046629502893c91f4fc97e40027aa2082d0a7f28232afffe3",
+    "julia.log": "49a03b70dd0f84ba4084b34b12471ae504e1bf4293549bc5b5229cb07b1aa060",
+    "launch-red.log": "3f1da386d2a1d823ab6723a08ccba76facc4d882e887d225ed2acd057a2d8996",
+    "oracle-fit.log": "aa3f7dba9731e2ebf09f177590d0f39db424aadc882f787c87df745d11e413bd",
+    "package.log": "20ea2a55db505d76785c522e924332249ec4d2c278203276d766c8cb64029d38",
+    "python.log": "3a105b429c566a6ab228658f80ae3094d2be8b3cd71c1dc02ddbcc5dceba360f",
+    "r.log": "01bdf8a79084a3556e60238fface4dbdd8e19f0b1eb340838efd8ddb544b318c",
+    "red.log": "1726b7c7c3f76ba906a2022f709aaf873191ccc07e256f082e58038675344abc",
+    "sdist.log": "6422bdfe4d35b3b218a0490686191203e4fb381a1a611e241db149071c464f85",
+    "slope-green.log": "6b92d1d2c2c79e38d9dc40644be37cd61c94160d3810011d4f8f8f2c373f49fa",
+    "slope-red.log": "374db61f112e61c3761c48747d470d6d792abe990859a0ca5c5a1cd181cdc082",
+    "tabular.log": "ba6cc28ca6a2d3011eea0596d2e60ad539726c580483b8ecd2a6dfda30b48a5f",
+    "wheel.log": "50989d3d90a2670796330cd842248ef2e25d402bb93840c786213df5eadbef73"
+  },
+  "oracle_generator_sha256": "12b3870ad5c845c04ab2ee0542d488cc4a34a186501e8e484eb90ba496540897",
+  "artifacts": {
+    "innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "8b222011a4fb627e9eb5e941c5ddd9977f4dc2be486dab220932712f4ae5bc2a",
+    "innovate-0.7.0a1.tar.gz": "c3f77cdee3138fd758089aece60e800d4dfd0a2a5d57036b872f154b79cde211"
+  }
+}

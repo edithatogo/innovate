@@ -1,0 +1,23 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.75s
+     Running tests/weighted.rs (target/debug/deps/weighted-c94ad3b2f07ff8ae)
+
+running 2 tests
+test invalid_weights_fail_and_cannot_create_unidentified_fits ... ok
+test zero_weights_exclude_outliers_and_common_weight_scaling_is_invariant ... FAILED
+
+failures:
+
+---- zero_weights_exclude_outliers_and_common_weight_scaling_is_invariant stdout ----
+
+thread 'zero_weights_exclude_outliers_and_common_weight_scaling_is_invariant' (27086154) panicked at rust/crates/innovate-core/tests/weighted.rs:15:10:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "unsupported_native_operation", message: "unsupported native fit option", operation: Some(FitModel) }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    zero_weights_exclude_outliers_and_common_weight_scaling_is_invariant
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --test weighted`

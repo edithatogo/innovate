@@ -1,282 +1,197 @@
 module Innovate
-
 using JSON
+using Libdl
 
-export kernel_repo_root,
-    kernel_bindings_root,
-    kernel_python_command,
-    kernel_bridge_script,
-    kernel_schema_version,
-    kernel_request,
-    kernel_call,
-    kernel_response_to_julia,
-    KernelBridgeError,
-    kernel_discover_models,
-    kernel_fit_model,
-    kernel_predict_model,
-    kernel_simulate_model,
-    kernel_summarize_model,
-    kernel_diagnose_model,
-    kernel_extract_diagnostics
+export invoke_registered_extension, export_ipc_file, export_ipc_stream, kernel_paired_outcomes_ipc, kernel_scenario_comparisons_ipc, kernel_scenario_executions_ipc, kernel_scenario_grid_ipc, DatasetValidationError, kernel_sarima_fit, kernel_seasonal_decomposition, kernel_aggregate_dates, kernel_cumulative_sum, kernel_rolling_average, kernel_call, kernel_discover_models, kernel_fit_model, kernel_predict_model,
+    kernel_categorize_adopters, kernel_categorize_fitted_adopters, kernel_fit_batch, kernel_predict_batch, kernel_simulate_model, kernel_summarize_model, kernel_diagnose_model
 
-const _KERNEL_SCHEMA_VERSION = "1.0"
-
-"""Stable error payload returned by the Julia bridge."""
-struct KernelBridgeError <: Exception
+"""A rejected dataset with its native validation report."""
+struct DatasetValidationError <: Exception
     code::String
     message::String
-    operation::String
-    details::Dict{String,Any}
-    retryable::Bool
-    response::Dict{String,Any}
+    validation::Dict{String,Any}
 end
 
-Base.showerror(io::IO, error::KernelBridgeError) = print(
-    io,
-    "Kernel bridge error ($(error.code)) for operation '$(error.operation)': $(error.message)",
-)
+Base.showerror(io::IO, err::DatasetValidationError) = print(io, err.code, ": ", err.message)
 
-"""Return the repository root that contains the shared kernel and bindings."""
-function _kernel_repo_root_from(start_path::AbstractString)
-    current = normpath(start_path)
-    while true
-        if isfile(joinpath(current, "src", "innovate", "kernel.py")) &&
-           isfile(joinpath(current, "bindings", "julia", "Project.toml"))
-            return current
-        end
+function native_library()
+    bundled = joinpath(@__DIR__, "..", "deps", "libinnovate_ffi." * Libdl.dlext)
+    if Sys.iswindows()
+        cargo_dll = joinpath(@__DIR__, "..", "deps", "innovate_ffi.dll")
+        bundled = isfile(cargo_dll) ? cargo_dll : bundled
+    end
+    path = get(ENV, "INNOVATE_NATIVE_LIBRARY", bundled)
+    isfile(path) || error("Install the native library or set INNOVATE_NATIVE_LIBRARY")
+    return abspath(path)
+end
 
-        parent = normpath(joinpath(current, ".."))
-        if parent == current
-            return nothing
-        end
-        current = parent
+"""Execute in Rust; returned native memory is released exactly once."""
+function kernel_call(operation::AbstractString, model_key=nothing, payload=Dict{String,Any}())
+    request = JSON.json(Dict("schema_version" => "2.0", "operation" => operation,
+        "model_key" => model_key, "payload" => payload))
+    return with_native_response(handle -> ccall(Libdl.dlsym(handle, :innovate_call),
+        Ptr{UInt8}, (Cstring,), request))
+end
+
+"""Resolve a registry snapshot and invoke a trusted caller-supplied callback."""
+function invoke_registered_extension(callback, selection, payload)
+    resolved = kernel_call("resolve_extension_manifest", nothing, selection)["result"]
+    output = callback(resolved, payload)
+    if resolved["extension_point"] == "dataset_provider"
+        return kernel_call("ingest_dataset", nothing, Dict("dataset" => output))["result"]
+    end
+    if resolved["extension_point"] == "model_registry"
+        return kernel_call("resolve_extension_model_aliases", nothing, Dict("aliases" => output))["result"]
+    end
+    if resolved["extension_point"] == "diagnostics"
+        return kernel_call("summarize_extension_diagnostics", nothing, Dict("checks" => output))["result"]
+    end
+    return kernel_call("import_extension_artifact", nothing, Dict("artifact" => output))["result"]
+end
+
+"""Execute a scenario grid on a shared time column in Arrow IPC file or stream bytes."""
+function kernel_scenario_grid_ipc(data::Vector{UInt8}, payload)
+    request = JSON.json(payload)
+    return with_native_response(handle -> ccall(Libdl.dlsym(handle, :innovate_scenario_grid_ipc),
+        Ptr{UInt8}, (Ptr{UInt8}, Csize_t, Cstring), data, length(data), request))
+end
+
+"""Encode ordered scenario execution rows as Arrow IPC file bytes."""
+kernel_scenario_executions_ipc(response) = scenario_output(response, :innovate_scenario_executions_ipc)
+
+"""Encode ordered scenario comparison rows as Arrow IPC file bytes."""
+kernel_scenario_comparisons_ipc(response) = scenario_output(response, :innovate_scenario_comparisons_ipc)
+
+"""Validate paired Bass trajectories and return Arrow IPC file bytes."""
+kernel_paired_outcomes_ipc(payload) = scenario_output(payload, :innovate_paired_outcomes_ipc)
+
+function scenario_output(response, symbol)
+    request = response isa AbstractString ? response : JSON.json(response)
+    return arrow_output(symbol) do convert, data, len
+        ccall(convert, Ptr{UInt8},
+            (Cstring, Ref{Ptr{UInt8}}, Ref{Csize_t}), request, data, len)
     end
 end
 
-kernel_repo_root_or_nothing() = _kernel_repo_root_from(@__DIR__)
-
-function kernel_repo_root()
-    repo_root = kernel_repo_root_or_nothing()
-    repo_root === nothing && throw(ArgumentError(
-        "Julia checkout root not found; set INNOVATE_PYTHON_COMMAND and install the Python innovate package for installed-package use.",
-    ))
-    return repo_root
-end
-
-"""Return the Julia bindings package root."""
-kernel_bindings_root() = normpath(joinpath(@__DIR__, ".."))
-
-"""Return the Python launcher used by the Julia bindings."""
-function kernel_python_command()
-    command = get(ENV, "INNOVATE_PYTHON_COMMAND", "")
-    if !isempty(command)
-        return command
+"""Rewrite Arrow IPC file or stream bytes for portable file interchange."""
+function export_ipc_file(input::Vector{UInt8})
+    return arrow_output(:innovate_export_ipc_file) do convert, data, len
+        ccall(convert, Ptr{UInt8},
+            (Ptr{UInt8}, Csize_t, Ref{Ptr{UInt8}}, Ref{Csize_t}), input, length(input), data, len)
     end
-
-    return kernel_repo_root_or_nothing() === nothing ? (Sys.iswindows() ? "python" : "python3") : "uv run python"
 end
 
-"""Return the path to the Python kernel bridge entrypoint."""
-kernel_bridge_script() = joinpath(kernel_bindings_root(), "inst", "python", "kernel_bridge.py")
-
-"""Return the schema version exposed by the kernel contract."""
-kernel_schema_version() = _KERNEL_SCHEMA_VERSION
-
-function _jsonify(value)
-    if value === nothing || value isa Bool || value isa Number || value isa AbstractString
-        return value
-    elseif value isa AbstractDict
-        return Dict{String,Any}(String(key) => _jsonify(item) for (key, item) in value)
-    elseif value isa NamedTuple
-        return Dict{String,Any}(String(key) => _jsonify(item) for (key, item) in pairs(value))
-    elseif value isa AbstractVector
-        return [_jsonify(item) for item in value]
-    elseif value isa Tuple
-        return [_jsonify(item) for item in value]
+"""Rewrite Arrow IPC file or stream bytes for portable stream interchange with schema metadata."""
+function export_ipc_stream(input::Vector{UInt8})
+    return arrow_output(:innovate_export_ipc_stream) do convert, data, len
+        ccall(convert, Ptr{UInt8},
+            (Ptr{UInt8}, Csize_t, Ref{Ptr{UInt8}}, Ref{Csize_t}), input, length(input), data, len)
     end
-
-    return value
 end
 
-"""Create a kernel request envelope."""
-function kernel_request(;
-    operation::AbstractString,
-    model_key::AbstractString = "",
-    payload = Dict{String,Any}(),
-    metadata = Dict{String,Any}(),
-    schema_version::AbstractString = kernel_schema_version(),
-)
-    operation_text = String(operation)
-    model_key_text = String(model_key)
-    if isempty(operation_text)
-        throw(ArgumentError("kernel_request() requires a non-empty operation"))
-    end
-    if operation_text != "discover_models" && isempty(model_key_text)
-        throw(ArgumentError("Kernel operation '$operation_text' requires a model_key"))
-    end
-
-    return Dict{String,Any}(
-        "schema_version" => String(schema_version),
-        "operation" => operation_text,
-        "model_key" => isempty(model_key_text) ? nothing : model_key_text,
-        "payload" => _jsonify(payload),
-        "metadata" => _jsonify(metadata),
-    )
-end
-
-function _kernel_bridge_command()
-    command = Base.shell_split(kernel_python_command())
-    isempty(command) && throw(ArgumentError("INNOVATE_PYTHON_COMMAND must not be empty"))
-    return command
-end
-
-function _kernel_bridge_raw_command(request_path::AbstractString, response_path::AbstractString)
-    command = _kernel_bridge_command()
-    return Cmd(vcat(command, [kernel_bridge_script(), request_path, response_path]))
-end
-
-"""Invoke the Python kernel bridge and return the raw JSON response."""
-function kernel_call(request::AbstractDict)
-    request_path = tempname() * ".json"
-    response_path = tempname() * ".json"
-    repo_root = kernel_repo_root_or_nothing()
-
+function arrow_output(invoke, symbol)
+    handle = Libdl.dlopen(native_library())
     try
-        open(request_path, "w") do io
-            write(io, JSON.json(_jsonify(request)))
-        end
-
-        if repo_root === nothing
-            run(_kernel_bridge_raw_command(request_path, response_path))
-        else
-            repo_pythonpath = joinpath(repo_root, "src")
-            existing_pythonpath = get(ENV, "PYTHONPATH", "")
-            merged_pythonpath = isempty(existing_pythonpath) ? repo_pythonpath : string(
-                repo_pythonpath,
-                Sys.iswindows() ? ";" : ":",
-                existing_pythonpath,
-            )
-
-            withenv("PYTHONPATH" => merged_pythonpath) do
-                cd(repo_root) do
-                    run(_kernel_bridge_raw_command(request_path, response_path))
-                end
+        convert = Libdl.dlsym(handle, symbol)
+        free_bytes = Libdl.dlsym(handle, :innovate_free_bytes)
+        free_text = Libdl.dlsym(handle, :innovate_free)
+        data = Ref{Ptr{UInt8}}(C_NULL)
+        len = Ref{Csize_t}(0)
+        failure = invoke(convert, data, len)
+        if failure != C_NULL
+            text = try
+                unsafe_string(failure)
+            finally
+                ccall(free_text, Cvoid, (Ptr{UInt8},), failure)
             end
+            details = JSON.parse(text)["error"]
+            error(string(details["code"], ": ", details["message"]))
         end
-
-        return JSON.parsefile(response_path)
+        data[] == C_NULL && error("Native Arrow response allocation failed")
+        try
+            return copy(unsafe_wrap(Vector{UInt8}, data[], Int(len[])))
+        finally
+            ccall(free_bytes, Cvoid, (Ptr{UInt8}, Csize_t), data[], len[])
+        end
     finally
-        if isfile(request_path)
-            rm(request_path; force = true)
+        Libdl.dlclose(handle)
+    end
+end
+
+const native_handles = Dict{String,Ptr{Cvoid}}()
+const native_handles_lock = ReentrantLock()
+
+function with_native_response(invoke)
+    path = native_library()
+    # Keep process-local Rust state alive across JSON calls.
+    handle = lock(native_handles_lock) do
+        get!(() -> Libdl.dlopen(path), native_handles, path)
+    end
+    release = Libdl.dlsym(handle, :innovate_free)
+    response = invoke(handle)
+    response == C_NULL && error("Native response allocation failed")
+    text = try
+        unsafe_string(response)
+    finally
+        ccall(release, Cvoid, (Ptr{UInt8},), response)
+    end
+    result = JSON.parse(text; dicttype=Dict{String,Any})
+    if get(result, "error", nothing) !== nothing
+        details = result["error"]
+        if haskey(details, "validation")
+            throw(DatasetValidationError(details["code"], details["message"], details["validation"]))
         end
-        if isfile(response_path)
-            rm(response_path; force = true)
-        end
+        error(string(details["code"], ": ", details["message"]))
     end
+    return result
 end
 
-function _json_value_to_julia(value)
-    if value === nothing || value isa Bool || value isa Number || value isa AbstractString
-        return value
-    elseif value isa AbstractDict
-        return Dict{String,Any}(String(key) => _json_value_to_julia(item) for (key, item) in value)
-    elseif value isa AbstractVector
-        return [_json_value_to_julia(item) for item in value]
-    end
+kernel_discover_models() = kernel_call("discover_models")["result"]
+kernel_fit_model(model, payload) = kernel_call("fit_model", model, payload)
+kernel_predict_model(model, payload) = kernel_call("predict_model", model, payload)
+kernel_fit_batch(model, datasets; workers=1) = kernel_call("fit_batch", model, Dict("datasets" => datasets, "workers" => workers))["result"]["datasets"]
+kernel_predict_batch(model, datasets; workers=1) = kernel_call("predict_batch", model, Dict("datasets" => datasets, "workers" => workers))["result"]["datasets"]
+kernel_simulate_model(model, payload) = kernel_call("simulate_model", model, payload)
+kernel_summarize_model(model, payload) = kernel_call("summarize_model", model, payload)
+kernel_diagnose_model(model, payload) = kernel_call("diagnose_model", model, payload)
+kernel_categorize_adopters(time, rates) = kernel_call("categorize_adopters", nothing,
+    Dict("time" => time, "adoption_rate" => rates))["result"]
 
-    return value
+"""Classify one native rate series using a fitted-state prediction payload."""
+function kernel_categorize_fitted_adopters(model, payload)
+    prediction = kernel_predict_model(model, payload)["result"]
+    rates = get(prediction, "rates", nothing)
+    rates isa AbstractVector && all(row -> row isa AbstractVector && length(row) == 1, rates) ||
+        throw(ArgumentError("adopter classification requires one native rate per time"))
+    inputs = payload["inputs"]
+    time = haskey(inputs, "time") ? inputs["time"] : inputs["t"]
+    return kernel_categorize_adopters(time, only.(rates))
 end
 
-function _decode_array_payload(value::AbstractDict)
-    shape = Tuple(Int.(value["shape"]))
-    values = Float64.(_json_value_to_julia.(value["values"]))
-    if isempty(shape)
-        return values
-    end
-    return reshape(values, shape)
-end
+kernel_cumulative_sum(values) = kernel_call("preprocess_series", nothing,
+    Dict("method" => "cumulative_sum", "values" => values))["result"]["values"]
+kernel_rolling_average(values, window) = kernel_call("preprocess_series", nothing,
+    Dict("method" => "rolling_average", "values" => values, "window" => window))["result"]["values"]
 
-function _decode_table_payload(value::AbstractDict)
-    columns = String.(value["columns"])
-    rows = value["rows"]
-    names = Tuple(Symbol.(columns))
-    return [
-        NamedTuple{names}(Tuple(_json_value_to_julia.(row)))
-        for row in rows
-    ]
-end
+kernel_aggregate_dates(dates, values, frequency) = kernel_call("aggregate_dates", nothing,
+    Dict("dates" => string.(dates), "values" => values, "frequency" => frequency))["result"]
 
-function _decode_discovery_response(value::AbstractDict)
-    return [_json_value_to_julia(record) for record in value["models"]]
-end
+kernel_seasonal_decomposition(values, period, trend_span=nothing; robust=false, historical=false,
+    inner_iterations=5, outer_iterations=robust ? 5 : 0, seasonal_span=nothing, low_pass_span=nothing,
+    seasonal_degree=1, seasonal_jump=1, trend_degree=1, trend_jump=1, low_pass_degree=1, low_pass_jump=1) = kernel_call("preprocess_series", nothing,
+    Dict("method" => "seasonal_decomposition", "values" => values, "period" => period,
+        "window" => trend_span, "robust" => robust, "historical" => historical,
+        "inner_iterations" => inner_iterations, "outer_iterations" => outer_iterations,
+        "seasonal_span" => seasonal_span, "low_pass_span" => low_pass_span,
+        "seasonal_degree" => seasonal_degree, "seasonal_jump" => seasonal_jump,
+        "trend_degree" => trend_degree, "trend_jump" => trend_jump,
+        "low_pass_degree" => low_pass_degree, "low_pass_jump" => low_pass_jump))["result"]
 
-"""Normalize a response value into a Julia-friendly structure."""
-function kernel_response_to_julia(value)
-    if value === nothing
-        return nothing
-    elseif value isa AbstractDict
-        if haskey(value, "error") && !isnothing(value["error"])
-            error = value["error"]
-            operation_value = get(error, "operation", nothing)
-            operation = operation_value === nothing ? String(get(value, "operation", "discover_models")) : String(operation_value)
-            details_source = get(error, "details", Dict{String,Any}())
-            response = Dict{String,Any}(String(key) => _json_value_to_julia(item) for (key, item) in value)
-            throw(
-                KernelBridgeError(
-                    String(error["code"]),
-                    String(error["message"]),
-                    operation,
-                    details_source isa AbstractDict ? Dict{String,Any}(String(key) => _json_value_to_julia(item) for (key, item) in details_source) : Dict{String,Any}(),
-                    Bool(get(error, "retryable", false)),
-                    response,
-                ),
-            )
-        end
-
-        if haskey(value, "shape") && haskey(value, "dtype") && haskey(value, "values")
-            return _decode_array_payload(value)
-        elseif haskey(value, "columns") && haskey(value, "rows")
-            return _decode_table_payload(value)
-        elseif haskey(value, "models") && haskey(value, "schema_version") && !haskey(value, "operation")
-            return _decode_discovery_response(value)
-        elseif haskey(value, "operation") && haskey(value, "result") && !isnothing(value["result"])
-            return kernel_response_to_julia(value["result"])
-        end
-
-        return Dict{String,Any}(String(key) => _json_value_to_julia(item) for (key, item) in value)
-    elseif value isa AbstractVector
-        return [_json_value_to_julia(item) for item in value]
-    end
-
-    return value
-end
-
-"""Discover stable kernel models."""
-kernel_discover_models() = kernel_response_to_julia(kernel_call(kernel_request(operation = "discover_models")))
-
-"""Fit a kernel model."""
-kernel_fit_model(request::AbstractDict) = kernel_response_to_julia(kernel_call(request))
-
-"""Predict from a kernel model."""
-kernel_predict_model(request::AbstractDict) = kernel_response_to_julia(kernel_call(request))
-
-"""Simulate a kernel model."""
-kernel_simulate_model(request::AbstractDict) = kernel_response_to_julia(kernel_call(request))
-
-"""Summarize a kernel model."""
-kernel_summarize_model(request::AbstractDict) = kernel_response_to_julia(kernel_call(request))
-
-"""Diagnose a kernel model."""
-kernel_diagnose_model(request::AbstractDict) = kernel_response_to_julia(kernel_call(request))
-
-"""Extract diagnostics from a result envelope."""
-function kernel_extract_diagnostics(result)
-    if result isa AbstractDict && haskey(result, "diagnostics")
-        return result["diagnostics"]
-    elseif result isa NamedTuple && hasproperty(result, :diagnostics)
-        return getproperty(result, :diagnostics)
-    end
-    return nothing
-end
+"""Estimate a no-intercept SARIMA model and return fitted values with missing warmup rows."""
+kernel_sarima_fit(values, order; seasonal_order=(0, 0, 0, 0), historical=false) =
+    map(x -> isnothing(x) ? missing : Float64(x),
+        kernel_call("preprocess_series", nothing, Dict("method" => "sarima_fit",
+            "values" => values, "order" => collect(order),
+            "seasonal_order" => collect(seasonal_order), "historical" => historical))["result"]["fitted"])
 
 end

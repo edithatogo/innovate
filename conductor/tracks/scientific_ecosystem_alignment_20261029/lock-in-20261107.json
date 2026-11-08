@@ -1,0 +1,111 @@
+{
+  "date": "2026-11-07",
+  "status": "bounded_local_checkpoint",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "results": {
+    "rust_tests": 62,
+    "accounting": "58 core/C ABI coverage-run plus 4 Polars",
+    "installed_python": 28,
+    "julia_assertions": 144,
+    "R": "postbound native conformance passed",
+    "clippy_lint_types_docs": "passed; expected native source type warning; 163 pages",
+    "package": "local installed wheel and archive metadata pass; clean-source/platform qualification pending"
+  },
+  "coverage": {
+    "branches": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "functions": {
+      "count": 645,
+      "covered": 484,
+      "percent": 75.03875968992249
+    },
+    "instantiations": {
+      "count": 1385,
+      "covered": 581,
+      "percent": 41.94945848375451
+    },
+    "lines": {
+      "count": 5595,
+      "covered": 4559,
+      "percent": 81.4834673815907
+    },
+    "mcdc": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "regions": {
+      "count": 8821,
+      "covered": 7662,
+      "notcovered": 1159,
+      "percent": 86.86090012470241
+    }
+  },
+  "raw_log_sha256": {
+    "innovate-lock-in-bound-red.log": "661237212f3fa459d66736607f3edbd0015c7259ba922b2e61c645a53a288f58",
+    "innovate-lock-in-bound-green.log": "1dce4a7c08b6dcb3916392382fbf6385748d9c126ecf83352a219eff1c77fcb3",
+    "innovate-lock-in-coverage.log": "c7ea3274de075a0b7135046dbc8d8fcddcc1b6aa1b26773a085205fd8d04b50e",
+    "innovate-lock-in-tabular.log": "53f57f18f66a01ed3b4f31c77020003617f2d52b9745e88637bc261a14868649",
+    "innovate-lock-in-clippy.log": "eb6a803c8758bb4e454a05e6fde53fd3beb74d0459286beff537d40e11ebcb4b",
+    "innovate-lock-in-lint.log": "093e91c502151b50c84f57316c544bed91098f8c2c199992d01a162d20bfbd89",
+    "innovate-lock-in-docs.log": "1dea5f59560999ecca0c8c5222ecc92408c0715c630dae864caf46012d1fb93c",
+    "innovate-lock-in-policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+    "innovate-lock-in-release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "innovate-lock-in-postbound-python.log": "4f0b4b12e4b6bd78fd95951f7344d722bf079877ee895c11f985599693a9a190",
+    "innovate-lock-in-postbound-r.log": "1e9d6c2de618082daba7c42a245924cb1eb05f23aaffb222aafb1cc52885be0e",
+    "innovate-lock-in-postbound-julia.log": "842478500797b58380461078709533f75255e05de77615200ff8badd3705919d",
+    "innovate-lock-in-postbound-package.log": "eb4121a35e9876b2b5483bf50564a12b63d3525c9f334553e18c78dee285d3c7",
+    "innovate-lock-in-postbound-sdist.log": "f162867d2edefc87b89bf3a034feb72fb15899956c3c91114422cc447ae7be68",
+    "innovate-lock-in-wheel.log": "f3f38c59a2f0b7b9b206ff4b0270a043224ac0e539ea6b8712bc5983595c76b0",
+    "innovate-lock-in-ffi.log": "ff10e2b336192300650e49e547dc8a9265611e1a61bfae4a934afe44d2cb133a"
+  },
+  "normalization": "Only trailing whitespace and terminal blank lines removed",
+  "evidence_sha256": {
+    "innovate-lock-in-wheel.log": "f3f38c59a2f0b7b9b206ff4b0270a043224ac0e539ea6b8712bc5983595c76b0",
+    "innovate-lock-in-bound-red.log": "661237212f3fa459d66736607f3edbd0015c7259ba922b2e61c645a53a288f58",
+    "innovate-lock-in-postbound-package.log": "542b5920b293adb86fbbc391af8a17a9bb47317549d670e6faa64f44e14d32ea",
+    "coverage-summary.json": "63f05aa97e80b02956d4999f725516e0e6150eddbe2a41789b8ef7ae35663392",
+    "innovate-lock-in-docs.log": "b5165cc94edcb93f2c0db2602986cc062348d3c46f7eb04427c96d942ade513a",
+    "julia.log": "369cd36c806098f4097bc6d37efaed27c58dee3b9448b0cb3929e023ee8a53dd",
+    "innovate-lock-in-postbound-python.log": "4f0b4b12e4b6bd78fd95951f7344d722bf079877ee895c11f985599693a9a190",
+    "r.log": "1e9d6c2de618082daba7c42a245924cb1eb05f23aaffb222aafb1cc52885be0e",
+    "bound-green.log": "2a5993faed36b9840b4f647a6d3910d21f2e427dd6c6bfe0dc40869debf7a4d5",
+    "innovate-lock-in-coverage.log": "c7ea3274de075a0b7135046dbc8d8fcddcc1b6aa1b26773a085205fd8d04b50e",
+    "red.log": "2ca5bf3b59750407f666a6497ecdf998d31e89ca0f881400085fea19d84d3c0b",
+    "innovate-lock-in-postbound-sdist.log": "f162867d2edefc87b89bf3a034feb72fb15899956c3c91114422cc447ae7be68",
+    "innovate-lock-in-policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+    "innovate-lock-in-python.log": "d0d2f60f3f4bc8d9600a1218083f68940c99a11f0fef21660aff682b88f7939c",
+    "innovate-lock-in-lint.log": "093e91c502151b50c84f57316c544bed91098f8c2c199992d01a162d20bfbd89",
+    "innovate-lock-in-release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "green.log": "b409b9dc3bd1db28cbd8d72debbe30789c66d47df15d5ccc7624f5b1d28f3c90",
+    "innovate-lock-in-ffi.log": "ff10e2b336192300650e49e547dc8a9265611e1a61bfae4a934afe44d2cb133a",
+    "source-sha256.json": "6db1a6da5789e057d95860611fdf64b960d162421557e1e703ce3d0b5570c935",
+    "innovate-lock-in-tabular.log": "2b112171132d85ae7bf491024bcb99822aa93676d77c139d81e212c34c73d14c",
+    "innovate-lock-in-julia.log": "b15266a8e7a3e412b6740337e6ab7785690f6a23d5e875e8b9c7d858e7691c37",
+    "innovate-lock-in-postbound-r.log": "1e9d6c2de618082daba7c42a245924cb1eb05f23aaffb222aafb1cc52885be0e",
+    "innovate-lock-in-postbound-julia.log": "842478500797b58380461078709533f75255e05de77615200ff8badd3705919d",
+    "innovate-lock-in-package.log": "542b5920b293adb86fbbc391af8a17a9bb47317549d670e6faa64f44e14d32ea",
+    "innovate-lock-in-bound-green.log": "2a5993faed36b9840b4f647a6d3910d21f2e427dd6c6bfe0dc40869debf7a4d5",
+    "innovate-lock-in-clippy.log": "eb6a803c8758bb4e454a05e6fde53fd3beb74d0459286beff537d40e11ebcb4b",
+    "python.log": "a9ef4d15cfeb5ca56d2ec2d52b751b01677a01376dd7f409a06af9cebecaa1c2",
+    "innovate-lock-in-r.log": "1e9d6c2de618082daba7c42a245924cb1eb05f23aaffb222aafb1cc52885be0e",
+    "bound-red.log": "661237212f3fa459d66736607f3edbd0015c7259ba922b2e61c645a53a288f58",
+    "innovate-lock-in-hooks.log": "7523d6b940ad7d7e49ea93ff33ac60ceb273c50cb6ae677030a5b65df95de21b"
+  },
+  "artifacts_sha256": {
+    "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/target/debug/libinnovate_ffi.dylib": "c769c8bedb67e973b6d60acb6791a953c8679fae163a0098f9cc939fe779bdb4",
+    "/tmp/innovate-lock-in-wheel/innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "75e307c5646d70cb6e1571d6ac974e0eb90ea10b4885a6fb5535748c067a23e9",
+    "/tmp/innovate-lock-in-wheel/innovate-0.7.0a1.tar.gz": "369cde95561ec01451cabb0a4b43056af98daa271a01117035ab601b60410c51"
+  },
+  "remaining": [
+    "Seven unavailable model families and all full-feature qualifications",
+    "Other historical covariates/events, inference/uncertainty and ecosystem tasks",
+    "Richer network/resources, distribution and full release gates"
+  ]
+}

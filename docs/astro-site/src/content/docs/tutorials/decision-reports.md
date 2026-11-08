@@ -3,6 +3,11 @@ title: Explainability, Sensitivity, and Decision Reports
 description: Claim-safe decision reports with sensitivity analysis and explainability summaries.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 # Explainability, Sensitivity, and Decision Reports
 
 Decision reports help researchers and policy analysts interpret model outcomes

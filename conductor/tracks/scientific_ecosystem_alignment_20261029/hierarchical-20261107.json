@@ -1,0 +1,100 @@
+{
+  "date": "2026-11-07",
+  "status": "bounded_local_checkpoint",
+  "base_commit": "59efbae0c164747663463e34cfb7160423dd261d",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "results": {
+    "rust_tests": 92,
+    "accounting": "88 core/C ABI plus 4 Polars",
+    "installed_python": 34,
+    "julia_assertions": 162,
+    "R": "native conformance, default-centered hierarchy, group state and singleton mappings pass",
+    "clippy_lint_types_docs": "pass; expected native source type warning; 163 pages",
+    "package": "installed local wheel and source archive metadata/source inclusion pass; clean-source/platform/hosted qualification pending"
+  },
+  "coverage": {
+    "branches": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "functions": {
+      "count": 900,
+      "covered": 663,
+      "percent": 73.66666666666667
+    },
+    "instantiations": {
+      "count": 1899,
+      "covered": 769,
+      "percent": 40.49499736703528
+    },
+    "lines": {
+      "count": 7422,
+      "covered": 6191,
+      "percent": 83.41417407706815
+    },
+    "mcdc": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "regions": {
+      "count": 12022,
+      "covered": 10509,
+      "notcovered": 1513,
+      "percent": 87.41473964398601
+    }
+  },
+  "hierarchical_lines": {
+    "count": 379,
+    "covered": 327,
+    "percent": 86.2796833773087
+  },
+  "raw_log_sha256": {
+    "innovate-hierarchical-hooks.log": "7523d6b940ad7d7e49ea93ff33ac60ceb273c50cb6ae677030a5b65df95de21b",
+    "innovate-hierarchical-numerics-red.log": "11b1a4d3ac5830dc9ffc166f7f057abc9c49d45c40ef6c4ed3378fdddab0b8ba",
+    "innovate-hierarchical-docs.log": "cc31a0dbd854b454b7f70c80760e76fe389623f1229c1826c785cfb08db4e341",
+    "innovate-hierarchical-clippy-focused.log": "4a6addf6854dd40bd96106342bc59ddc1ec4822ecf7de023bc872c40fae6d5f4",
+    "innovate-hierarchical-r.log": "7b0a4d1355526f6ebdf8afd0a4010cd62769d13d8d4116c8fd49514f0f7b523d",
+    "innovate-hierarchical-r-install.log": "8bcc66b6f075dd6146b6ca006a0579b369a424d49b587fb4b5bc0350fad78c31",
+    "innovate-hierarchical-release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "innovate-hierarchical-policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+    "innovate-hierarchical-lint.log": "093e91c502151b50c84f57316c544bed91098f8c2c199992d01a162d20bfbd89",
+    "innovate-hierarchical-python.log": "1e6b4fbe33d23cc880df779e2dd0330dd0359555faab7d7943e31674e2319fe8",
+    "innovate-hierarchical-coverage-pre-default.log": "79106cfe294698efc3efa01f3d224c5e1ebfbebfdbe5a32bbd6a8b869c4ec5dd",
+    "innovate-hierarchical-red.log": "511f469d2677a3a9b26a293a65cd948418a8901596eec9f21e54ddab69be8b6a",
+    "innovate-hierarchical-wheel.log": "2770830b1bbe0afdc0c5313ddf5da00beb6343031f691a8686aec9eb5bfccfc0",
+    "innovate-hierarchical-sdist.log": "5a13a9fb55ce35e3f701dda5c598abc5662a4395af72a53a06188d893df64d7c",
+    "innovate-hierarchical-tabular.log": "bd8194bff0098d915233ccf014537dff8354e2681cbe7f5daafe7c2c8ca30f11",
+    "innovate-hierarchical-focused.log": "b860c264064e050f1d7e1a8d58e8b3abed317b9a71c5f245b64580e08778ed4e",
+    "innovate-hierarchical-package.log": "d39d34832481141a1b2afb0336bff24ca8b41c9ca279488a00ab1f4ebf9a8544",
+    "innovate-hierarchical-install.log": "3a93ec7a74ffa7192b068e97bee9554e8b2db406fa1f2abf9e29cddb721cf065",
+    "innovate-hierarchical-coverage.log": "eb2aff0c3c3e51585c6783c980ecbb9d9542a35bee6cba831b24ab4fbced23f3",
+    "innovate-hierarchical-clippy.log": "b4b73886471bc416a0a95deded9988444ab7acc9ba89a6c23b05ac8fa25f12d5",
+    "innovate-hierarchical-ffi.log": "87b29de37eafc7b9af421d521d8d45b354e70beac8b02696520410d5e50b8523",
+    "innovate-hierarchical-julia.log": "9c86061e74c30dfc798f2616b4d59750d918ab07cf3cf391d87461a30c888f4e"
+  },
+  "source_sha256": {
+    "bindings/julia/test/runtests.jl": "e9c710d5faeabe31b963ecc139747999aade9fdf7191fef25e092b82dcfa66ac",
+    "bindings/r/R/kernel_bridge.R": "162183427210ffe9eee51748b62b2b519bcdff2fac492f67b771ce27df849235",
+    "bindings/r/tests/native.R": "fc18bc0c6533d0c18b5c52f0b879868ca3b9a439affb27ad09a51343d6526139",
+    "docs/astro-site/src/content/docs/native-migration.md": "bbe9c37c4932f9d31fcd5ddafaa0746bed4d3f2ff44d524ec372a1f97977a89b",
+    "migration-ledger.json": "3021c9b540a25bcf19e3beb6afda69f49fade52014aecaab2fac3f5cab96baf4",
+    "rust/crates/innovate-core/src/discovery.json": "1ec632cdb8152ab300051ecdaa9c61cdbb63cfc43cfaea8a2a277e5dea7e7158",
+    "rust/crates/innovate-core/src/kernel.rs": "38e62690e866b2580c0690f3cef47b268d3b9ac15990a3bed5a7ad145216547c",
+    "rust/crates/innovate-core/src/lib.rs": "8e27b2284d134e0c11b663cbb7c1f21a1e641dc52c4031b9fa30f660be420314",
+    "rust/crates/innovate-core/src/substitution.rs": "4ccac506761276682e9c6d97c8f5ee43024e8b17c3baf7a8e3e21b6f96516b2e",
+    "rust/crates/innovate-core/tests/native_boundary.rs": "fcf8d0eef768a068104c47f6c967f7bea8958b7d0ec51bd095d8917b58c1da16",
+    "tests/native/test_python_consumer.py": "3ddc1e779d16c16eccd890640a4735cd808c1798956c5a3e2239597b5e3771fa",
+    "rust/crates/innovate-core/src/hierarchical.rs": "fc1b28a77e08aa6cb3ec5ee42a2b7c47bce2f85f496136123da0090c5098eff6",
+    "rust/crates/innovate-core/tests/hierarchical.rs": "858db3cce7a77d3731c896ed654e468408a1c88192d1d816099864950f31e666"
+  },
+  "artifact_sha256": {
+    "/tmp/innovate-hierarchical-wheel/innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "4550d0fdea0c6e17c98f77bc361aa7aa19dd1330348932db367595733ab9da57",
+    "/tmp/innovate-hierarchical-wheel/innovate-0.7.0a1.tar.gz": "29f8048ef25f458ba2affb11c50336d9441b11429563e8ad6e1ea800cc59b8b9",
+    "target/debug/libinnovate_ffi.dylib": "7c65e60b4a4a4ec6df93f1b4ac3090f98ca750b3ca56bb9881808b6354dbf648"
+  }
+}

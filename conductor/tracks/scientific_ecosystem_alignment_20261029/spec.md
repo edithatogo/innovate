@@ -1,7 +1,7 @@
 # innovate delivery contract
 
 Approved by user on 29 October 2026. This bounded track implements the
-[coordinated programme](https://github.com/edithatogo/repository-standards/tree/codex/scientific-ecosystem-alignment-20261029/conductor/tracks/scientific_ecosystem_alignment_20261029); it does not replace existing native
+[coordinated programme](https://github.com/edithatogo/repository-standards/tree/7874f05132447c77f681fbca7ad5394066564aaf/conductor/tracks/scientific_ecosystem_alignment_20261029); it does not replace existing native
 acceptance or other active track owners.
 
 - Qualify Python 3.15.1 and current Arrow/Polars dependency candidates.
@@ -14,3 +14,13 @@ Acceptance requires exact-source numerical and consumer tests, measured builds,
 agent correctness/security review, fixes and repository integration. Planning or
 static source checks are not native acceptance. Existing promises are retained
 until a versioned migration passes; no paid execution or public release implied.
+
+## User-authorised scope expansion — 6 November 2026
+
+The user now requests a Rust-owned library, latest qualified dependencies,
+Polars without pandas/xarray, and only Python/Julia/R bindings. API redesign
+and interim feature unavailability are allowed; all current and planned
+scientific features remain required in the final library. This supersedes the
+original interim API-preservation restriction above. The detailed migration
+plan, feature-source inventory and root migration ledger govern this proposal.
+No main integration, public release, native deployment or acceptance is implied.

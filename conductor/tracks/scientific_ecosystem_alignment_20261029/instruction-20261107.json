@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-07",
+  "status": "documentation_checkpoint",
+  "base_commit": "f1828333259638d9f0b6fe75ed09ceb7fdf5330b",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "results": {
+    "runtime": "repo-local Python 3.15.2 verified; Rust/Cargo verified",
+    "documentation": "163 pages; internal links valid",
+    "hooks_consistency_policy": "pass",
+    "release_guard": "fails intentionally even with Python -O",
+    "numerical_evidence": "unchanged-source receipts from 8e7fd9d3 reused; no new numerical/coverage or package qualification"
+  },
+  "source_sha256": {
+    "README.md": "71def59d4150b53757d87f8934424f54aa8620b85b0aba1738dcd6e2197064e8",
+    "conductor/product-guidelines.md": "b12c8b970e99b57e0fbb00e3b37795ffa414b50250efc51a0947603467d927c3",
+    "conductor/workflow.md": "927cdf6dcaf5eb80fa8ea1f54598b015a7ac906f24f83c882243c8da571a85aa",
+    "conductor/code_styleguides/python.md": "6c23a12ea362e5863164ae748cb40c9a33bbd3b58cc095125f9de7a553826b2d",
+    "docs/astro-site/src/content/docs/native-migration.md": "7aae78c9adc4888ec24fc87084d32b0125f51a28900e7117c3b1134b8edc1d56"
+  },
+  "log_sha256": {
+    "release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "docs.log": "70246ddf8d3787223e44403a811b95f26721112046407548f1542bdb813a7780",
+    "consistency.log": "cfe53df1ca11f0655171b558f33fcb767c9e58e605806f49b164aa28ededbd5a",
+    "rust.log": "cf23c3dd104b3d61d18b39c667e7840ca28368369533b98b5fbe804e0c8d2c93",
+    "runtime.log": "eb7317ee17fd9da65202c3eb70d987641026a0abc1953d513c8d8ce26a27c4bd",
+    "nox-sessions.log": "a30e7398b676f62c6472e2b464f42c3885dfffea9b88fb063c9a42d8be7d3399",
+    "hooks.log": "64a71921b62b2ab4220693c9a0b66f2557e7e0ab230dea949a67dcde0ae639f7",
+    "policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a"
+  }
+}

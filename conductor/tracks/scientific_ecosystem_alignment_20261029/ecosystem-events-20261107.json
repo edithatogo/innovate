@@ -1,0 +1,84 @@
+{
+  "status": "bounded_local_checkpoint",
+  "base_commit": "136d230b597a285395ada139ed9a2df4ab33dc28",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "related_evidence": [
+    "lock-forcing-20261107.json",
+    "multi-forcing-20261107.json",
+    "mechanistic-20261107.json"
+  ],
+  "results": {
+    "rust_tests": 143,
+    "rust_scope": "full core/C ABI coverage run plus 4 Polars tests",
+    "installed_python_tests": 52,
+    "julia_assertions": 211,
+    "R": "full conformance, four fixed-event model forecasts, conditional fit and singleton scalar time passed",
+    "clippy": "workspace all targets passed",
+    "docs_pages": 163,
+    "hooks": "final affected files passed",
+    "package": "local metadata, wheel contents and exact Rust module/contract/test/fixture inclusion passed",
+    "release_policy": "expected failure with all 38 obligations required"
+  },
+  "coverage": {
+    "count": 9905,
+    "covered": 8479,
+    "percent": 85.6032306915699
+  },
+  "competition_coverage": {
+    "count": 804,
+    "covered": 755,
+    "percent": 93.90547263681593
+  },
+  "oracle": {
+    "python": "3.15.2",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "method": "DOP853, split and freeze parameters at every control/event boundary, rtol=1e-12 atol=1e-13"
+  },
+  "semantics": "Persistent fixed parameter overrides with continuous integrated state, shared control history and right-hand event rates. Event times and overrides are not estimated. Eventful lock-in requires event-specific structural analysis.",
+  "remaining": "Other model families, event-time/override inference, automatic starts, uncertainty, branch/mutation, platform and scientific/release qualification",
+  "source_sha256": {
+    "bindings/julia/test/runtests.jl": "a14cc7478fdf7d7197ee447a68a8e5f53d156734058e5a1f37cb6b46cbc8b384",
+    "bindings/r/R/kernel_bridge.R": "f3d11e70b838f37a8c1df87db00a4918e71a314f44e2751dec9e91b9110d2468",
+    "bindings/r/tests/native.R": "1be05ea5a1818b0fe80e6c4210ec03f435a33ca97b3d720a4ed0c48f119405a1",
+    "docs/astro-site/src/content/docs/native-migration.md": "11aac5f7a802d8366c3650285ddee615fac08162543706ff0f488fefdedc0718",
+    "migration-ledger.json": "3a5915507058c64b899cfe602050ae7c3106c42a83e9523348a93e9a018cef6a",
+    "rust/crates/innovate-core/src/competition.rs": "e56d84a520fcea7cad3401b0cea4c8034c76fff63973c5380fec3c9fe5ba954f",
+    "rust/crates/innovate-core/src/contracts.rs": "1a55343046744285d0a21074d8eb3258b991a149ba0d4c620a97ddcc6ae124b4",
+    "rust/crates/innovate-core/src/discovery.json": "8fad9b4a2394e884196d2acd473cb13ba375fa593ac4f5008793879df47a26e1",
+    "rust/crates/innovate-core/tests/competition.rs": "9543347a4281c8bb3bb5bbbc210c7d0c75271a77dda918f783d9518e9bc43bdf",
+    "tests/native/test_python_consumer.py": "037d9a04ce11ebcc57ea30901058c2b39149cbf5eb0e9578a2d922d1395e1ce0",
+    "rust/crates/innovate-core/tests/fixtures/ecosystem_events_scipy.json": "01cce7001e9b6f39dc5d620a1b7d7f7694d6c60ebc72ffad6f35b17f7247bfd2"
+  },
+  "logs": {
+    "clippy.log": "bb10531f86e6124b577e09ddc8055641cf8eea6a8660122aa7ee1d5f98bf7f6f",
+    "coverage.log": "03bfed912ff9c32e3ed9d8e04de2580dea8674b6e456c53fc54aef0fa2ac3e4f",
+    "docs.log": "52246422233e3f50fb798400fe33eb0b9fe67a84d9b2d50873aa33606f7c7d24",
+    "ffi-final.log": "d21469c023478cabf0feb174dbf90145e6e47b133c3628a010abbb772f214507",
+    "ffi.log": "d0947ace2ea84004e3ecd48700901fa5f83a7b7e3b5cbed340068dddcd9bb348",
+    "green.log": "8ecf3120dbde7bc50b9222e1485104b175c154cb1c35a249f431b6ed26f1e59e",
+    "hooks-final.log": "7523d6b940ad7d7e49ea93ff33ac60ceb273c50cb6ae677030a5b65df95de21b",
+    "hooks.log": "7523d6b940ad7d7e49ea93ff33ac60ceb273c50cb6ae677030a5b65df95de21b",
+    "install.log": "dd9d791ee79c7e31cc0c278eaa3fee8c0605f85a4cb777acb6e4a7a2cede3b03",
+    "julia.log": "1ace1808cc2233c22f5a4ea3aedc2f4bf76833309bd44d95d881bd4dda289105",
+    "oracle-fit.log": "ce48cbb946b2edca1dc505cb11c680ac7d927d49f15f8975aa77229cbda03c07",
+    "package.log": "ceb45d4b767f48c6c5600b4d4558e51b0816abfbf34771ae86b905ab02df61f1",
+    "python.log": "4cf2124032e464147e816ec20702b3b32e3647b01af12dd56f695de26cf6f779",
+    "r-install.log": "8bcc66b6f075dd6146b6ca006a0579b369a424d49b587fb4b5bc0350fad78c31",
+    "r-red.log": "e6077eb0af37f5d9fbcf42f7b88142d1a1de116088e0859d54a2bec24db48ce9",
+    "r-single-green.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "r.log": "e58d649e7ff74f7e38649af3df808d16e101c1f5ee9c0599da9894c09f2fb7b6",
+    "red.log": "ef6dc4b7edcd9769edfffdb09a15d71924dbb1f67b63969e1da6413ba242ca09",
+    "release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "rust.log": "cc4470faf5ad0d90a191bc9727c73d6c9f9778846701228e24e0958fa9b83c57",
+    "sdist.log": "2f0267d856fe6474021f941a760320b5aae00301f9d926da98e905e9dd7c15d7",
+    "tabular.log": "9b214f6c0edb56f2a532d8b92e266682eec402d8b7133601993e770578c02ed2",
+    "wheel.log": "9b7f1ba6bdcba5c7a64a056e41c4bb9d23b1649d29fc24344832a9ab911fe9ab"
+  },
+  "oracle_generator_sha256": "6dbc1a78b2bbc0a9e7e520bc17b25ecf7fc5f67b0f99f9c7445d07f286f3ff51",
+  "artifacts": {
+    "innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "3e47aba743a7b49a9564689353c84305244d48c9eb6f542b90a38afa4ebbd586",
+    "innovate-0.7.0a1.tar.gz": "86c1c75c024b3e79f4c2701202759af785fa24bad1830c1cb9d458f4e13488c3"
+  }
+}

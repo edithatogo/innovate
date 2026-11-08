@@ -14,7 +14,7 @@ Policy/technology diffusion, adoption, competition, substitution, complements, e
 
 Chosen: a binding-independent Rust core, Polars data layer, Arrow interchange and optional native adapters. Rejected: a Python-first kernel with selected Rust speedups; a monolith containing a second scheduler, VOI engine and game solver; and a wholesale rewrite without independent reference tests. Incremental native extraction preserves scientific references while retiring unsupported production paths.
 
-Target components: `crates/innovate-core`, `crates/innovate-data`, `crates/innovate-arrow`, optional `crates/innovate-kairos`, optional `crates/innovate-games`, and direct bindings. These paths are proposed until corresponding tasks pass. Rust compiled to native or Wasm counts as Rust execution only for the capabilities actually qualified.
+Target components: `crates/innovate-core`, `crates/innovate-data`, `crates/innovate-arrow`, optional `crates/innovate-kairos`, optional `crates/innovate-games`, and direct bindings. These paths are proposed until corresponding tasks pass. Python, Julia and R are the supported bindings. Native execution claims require runtime evidence for the specific capability.
 
 ## Directed ownership
 

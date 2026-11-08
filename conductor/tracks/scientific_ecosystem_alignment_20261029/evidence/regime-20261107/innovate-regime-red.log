@@ -1,0 +1,36 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.47s
+     Running tests/regime.rs (target/debug/deps/regime-8a716c32e7c247b4)
+
+running 3 tests
+test fitted_regimes_retain_fixed_boundary_and_segment_parameters ... FAILED
+test fixed_time_switch_is_continuous_and_does_not_reset_on_forecast_batches ... FAILED
+test historical_index_split_retains_batch_dependent_offset_and_singletons ... FAILED
+
+failures:
+
+---- fitted_regimes_retain_fixed_boundary_and_segment_parameters stdout ----
+
+thread 'fitted_regimes_retain_fixed_boundary_and_segment_parameters' (26768746) panicked at rust/crates/innovate-core/tests/regime.rs:56:202:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "unsupported_native_operation", message: "native model 'regime_switching' is unavailable pending migration", operation: Some(FitModel) }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- fixed_time_switch_is_continuous_and_does_not_reset_on_forecast_batches stdout ----
+
+thread 'fixed_time_switch_is_continuous_and_does_not_reset_on_forecast_batches' (26768747) panicked at rust/crates/innovate-core/tests/regime.rs:30:10:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "unsupported_native_operation", message: "native model 'regime_switching' is unavailable pending migration", operation: Some(PredictModel) }
+
+---- historical_index_split_retains_batch_dependent_offset_and_singletons stdout ----
+
+thread 'historical_index_split_retains_batch_dependent_offset_and_singletons' (26768748) panicked at rust/crates/innovate-core/tests/regime.rs:10:10:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "unsupported_native_operation", message: "native model 'regime_switching' is unavailable pending migration", operation: Some(PredictModel) }
+
+
+failures:
+    fitted_regimes_retain_fixed_boundary_and_segment_parameters
+    fixed_time_switch_is_continuous_and_does_not_reset_on_forecast_batches
+    historical_index_split_retains_batch_dependent_offset_and_singletons
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --test regime`

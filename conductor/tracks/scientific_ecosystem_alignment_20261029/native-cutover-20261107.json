@@ -1,0 +1,130 @@
+{
+  "date": "2026-11-07",
+  "pre_migration_commit": "56d91dd716747900465ce2d1dc8c0231aa8a337b",
+  "branch": "codex/reconcile-scientific-20261106",
+  "chat": "01a1b0dc-206d-7e31-9f61-544eb5cc16b5",
+  "worktree": "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106",
+  "scope": "Breaking Rust/Polars development cutover; all current/planned scientific features remain required",
+  "full_migration_complete": false,
+  "release_ready": false,
+  "versions": {
+    "python": "Python 3.15.2",
+    "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)",
+    "cargo": "cargo 1.99.1 (5f94df478 2026-08-27) (Homebrew)",
+    "julia": "julia version 1.13.3",
+    "R": "Rscript (R) version 4.3.0 (2023-04-21)",
+    "node": "v26.13.0"
+  },
+  "artifacts_sha256": {
+    "innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "ebf5ff7f54100032fd95a92f1e6035128eb584496d8bd2530d39682be37b3b73",
+    "innovate-0.7.0a1.tar.gz": "3baf87d98b4dcd5d659db7973ac7bda7635f456c19c6b5796f0b2906253e3467",
+    "libinnovate_ffi.dylib": "d3439b95a2b0ed94a480503afa3cddc90091239ebd00e351368e54d6924e3d24"
+  },
+  "results": {
+    "rust_tests": 17,
+    "python_installed_tests": 10,
+    "julia_assertions": 114,
+    "r": "Installed package native calls, schema, error boundaries, 100 repeat calls and five analytic models pass",
+    "voiage": "Installed 3.1.0 synthetic CPU EVPI handoff through Polars 2.1.0/Arrow IPC passes",
+    "rust_clippy": "pass -D warnings, workspace all targets",
+    "python_types": "0 errors; expected missing source warning for native extension",
+    "hooks": "Targeted hook selection passed; notebook hook had no selected notebook",
+    "docs": "163 pages, internal links valid; Astro check 0 errors/warnings",
+    "package": "Wheel rebuilt from unpacked sdist; Twine and check-wheel-contents pass; Apache-2.0 and sole Polars base requirement verified",
+    "cargo_audit": "0 vulnerabilities; unsuppressed RUSTSEC-2025-0141 bincode unmaintained warning",
+    "pip_audit": "0 known vulnerabilities in audited dependencies; unpublished local innovate package skipped",
+    "workflow_audit": "2 pre-existing dangerous-trigger findings (ci-gate-monitor and tagbot); selected release cache findings fixed; no general security clearance",
+    "release_guard": "Expected failure with all 38 obligations incomplete, including under Python -O"
+  },
+  "coverage": {
+    "branches": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "functions": {
+      "count": 318,
+      "covered": 197,
+      "percent": 61.94968553459119
+    },
+    "instantiations": {
+      "count": 653,
+      "covered": 205,
+      "percent": 31.393568147013784
+    },
+    "lines": {
+      "count": 3418,
+      "covered": 2444,
+      "percent": 71.50380339379754
+    },
+    "mcdc": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "regions": {
+      "count": 4952,
+      "covered": 4002,
+      "notcovered": 950,
+      "percent": 80.81583198707592
+    }
+  },
+  "boundaries": [
+    "5 bounded model families only; no full scientific parity",
+    "11 registry families and 22 feature areas remain incomplete",
+    "Native Kairos integration at current upstream remains unimplemented; prior retained-pin smoke is historical evidence only",
+    "R/Julia tabular IPC and bundled distributions remain open",
+    "Linux/Windows/containers/Conda/hosted CI/HPC not qualified here",
+    "Core/C ABI line coverage 71.50%, below historical 80% release threshold; no branch/mutation claim",
+    "No public push, main integration, registry publication, external message or native activation"
+  ],
+  "evidence_files": {
+    "coverage-summary.json": "7c63310d3af8cee99c32d44206dbfc98143ebe5d554655a28f8c20c758c49993",
+    "innovate-clippy-final-20261107.log": "6771f27715499cb073f7007581d90245ec20150817b3fa9ce222e74d497424c3",
+    "innovate-criteria-red-20261107.log": "5a11c36f44f4d9fc70b2f42e82236edf4dc486f7a7321733cfb5a0034609d2cf",
+    "innovate-direct-parameters-red-20261107.log": "a51488dd2e46bc4678467bfdd50674a4c4c2ee0325ae5f7c1bf470a957430ff0",
+    "innovate-doc-build-final-20261107.log": "a97b8c78629b6bce281ddbd1af2ff39fd7982fa59b6283b11576cb838efe81fa",
+    "innovate-doc-check-fixed-20261107.log": "9e6ace7e018137593f55644c36623204c87d9ad88f373779a054ef37499d90b4",
+    "innovate-hooks-final-20261107.log": "f365fbff497a029c0b531372c042a9ebac8dba1bd55c782914437170f2840950",
+    "innovate-julia-native-final-20261107.log": "01eb4e9adbc1412a78a9b56a7eceea6d0343c83116f9633eaf8410ef0d9bd9ea",
+    "innovate-model-oracles-20261107.log": "98c655514856858c44a676b45e1b1825c4ed675c17663a092a959183535afab0",
+    "innovate-package-final-20261107.log": "cf12364c2a8fced3dcf55f253de897161202d2572c6c36a079b35a9aea71e24e",
+    "innovate-package-metadata-final-20261107.log": "a3671f642ceff92e61de057fa96935d8e7e037a48537fd73daca38b3733d23eb",
+    "innovate-python-audit-final-20261107.json": "fb4bd40f080bfca3dff1835a8aaa65faa95423bb98f9cc900c46bbf90a29fbab",
+    "innovate-python-audit-final-20261107.log": "15950a68a7ed99c59779717acefdceb3f69cfd31bde67d2c954f2a3cea4d7955",
+    "innovate-python-native-final-20261107.log": "32d230258ef05aeaaf5ac978a3e3db9e482171ec6785c3ec8978935250bd825c",
+    "innovate-python-origin-final-20261107.log": "188529528ea528f61256f329ae80dc3a0a5a2feb309ddd12b54c1010c70e85f9",
+    "innovate-r-install-final-20261107.log": "8bcc66b6f075dd6146b6ca006a0579b369a424d49b587fb4b5bc0350fad78c31",
+    "innovate-r-native-final-20261107.log": "65157437c5e1f33caeb1123ef227570334ca0bb311ec7445d32d65ad02da4e71",
+    "innovate-release-gate-final-20261107.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "innovate-rust-final-20261107.log": "ebdb99bb30eb09a785b241382215a49aee80d6fbc81cd58c16a577e34690e2b1",
+    "innovate-source-cargo-audit-final-20261107.json": "1507e3b480a38a018e8c0b17a53b1814e0bda9a7bbb955497f924dd80e696d9b",
+    "innovate-voiage-native-final-20261107.json": "677317b98fe7f8673edfb99bc712e6fa1a6781622ca4889ced06889d1c5b2322",
+    "innovate-workflow-security-final-20261107.json": "60250196bac61507f44fe0b96b0c134237ea9559d3735f5be91a9dcd938ec957",
+    "source-sha256.json": "f0ace5489e3d33677796df95ce76097e49018afd5f760b5993ecea299d0d1c14"
+  },
+  "log_retention": {
+    "normalisation": "Retained text logs have trailing horizontal whitespace and terminal blank lines removed. Original raw SHA-256 is recorded below; original local logs remain under /tmp. No result text or numbers were changed.",
+    "raw_sha256": {
+      "innovate-direct-parameters-red-20261107.log": "a51488dd2e46bc4678467bfdd50674a4c4c2ee0325ae5f7c1bf470a957430ff0",
+      "innovate-hooks-final-20261107.log": "f365fbff497a029c0b531372c042a9ebac8dba1bd55c782914437170f2840950",
+      "innovate-release-gate-final-20261107.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+      "innovate-r-install-final-20261107.log": "8bcc66b6f075dd6146b6ca006a0579b369a424d49b587fb4b5bc0350fad78c31",
+      "innovate-rust-final-20261107.log": "3a5f3302f75edbcefe81c558ad7106ebbf0b7b8f40b7a5112f27463e37e06597",
+      "innovate-criteria-red-20261107.log": "5a11c36f44f4d9fc70b2f42e82236edf4dc486f7a7321733cfb5a0034609d2cf",
+      "innovate-r-native-final-20261107.log": "65157437c5e1f33caeb1123ef227570334ca0bb311ec7445d32d65ad02da4e71",
+      "innovate-doc-build-final-20261107.log": "7876dc1767f6edfbdc2019a2e9196e3c7a3120144c0a703d2b9a0cb0c1073998",
+      "innovate-model-oracles-20261107.log": "98c655514856858c44a676b45e1b1825c4ed675c17663a092a959183535afab0",
+      "innovate-package-final-20261107.log": "cf12364c2a8fced3dcf55f253de897161202d2572c6c36a079b35a9aea71e24e",
+      "innovate-clippy-final-20261107.log": "6771f27715499cb073f7007581d90245ec20150817b3fa9ce222e74d497424c3",
+      "innovate-julia-native-final-20261107.log": "01eb4e9adbc1412a78a9b56a7eceea6d0343c83116f9633eaf8410ef0d9bd9ea",
+      "innovate-python-audit-final-20261107.log": "15950a68a7ed99c59779717acefdceb3f69cfd31bde67d2c954f2a3cea4d7955",
+      "innovate-doc-check-fixed-20261107.log": "95ff13e7045598e868eea842819040ed6f33381e26a84fa460b540986c83b74d",
+      "innovate-python-native-final-20261107.log": "32d230258ef05aeaaf5ac978a3e3db9e482171ec6785c3ec8978935250bd825c",
+      "innovate-package-metadata-final-20261107.log": "28e15ccb35eede2e63a9a0417dd4a8f6af25e95a92c30111f7c674f4ba9b76d3",
+      "innovate-python-origin-final-20261107.log": "f5c6c01fdbcda7862d128a3bce730a2d9bd20db1bc000e1dc7731dfb0f4bd583"
+    }
+  }
+}

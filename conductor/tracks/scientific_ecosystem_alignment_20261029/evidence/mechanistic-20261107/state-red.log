@@ -1,0 +1,22 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 0.56s
+     Running tests/mechanistic.rs (target/debug/deps/mechanistic-85b38a54bea36259)
+
+running 1 test
+test bass_linear_innovation_covariate_and_saved_history_match_exact_solution ... FAILED
+
+failures:
+
+---- bass_linear_innovation_covariate_and_saved_history_match_exact_solution stdout ----
+
+thread 'bass_linear_innovation_covariate_and_saved_history_match_exact_solution' (27379925) panicked at rust/crates/innovate-core/tests/mechanistic.rs:25:14:
+called `Option::unwrap()` on a `None` value
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    bass_linear_innovation_covariate_and_saved_history_match_exact_solution
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --test mechanistic`

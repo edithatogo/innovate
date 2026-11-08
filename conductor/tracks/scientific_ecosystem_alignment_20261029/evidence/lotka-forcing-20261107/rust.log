@@ -1,0 +1,33 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 4.80s
+     Running tests/competition.rs (target/debug/deps/competition-695326af62d00e43)
+
+running 6 tests
+test competitive_domain_and_unsupported_covariates_are_explicit_errors ... ok
+test lotka_volterra_forcing_matches_integrated_logistic_growth_and_saved_history ... ok
+test competitive_native_odes_match_independent_scipy_and_forecast_from_saved_origin ... ok
+test competitive_fit_reports_limits_and_rejects_invalid_data ... ok
+test lotka_volterra_fits_without_seed_and_decoupled_products_match_bass ... ok
+test competitive_fits_report_quality_and_keep_the_initial_condition_for_forecasts ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.03s
+
+     Running tests/complementary.rs (target/debug/deps/complementary-3160ac30bf185f7f)
+
+running 2 tests
+test decoupled_complementary_goods_match_logistic_and_allow_levels_above_one ... ok
+test complementary_equations_match_independent_scipy_and_fit ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
+     Running tests/lock_in.rs (target/debug/deps/lock_in-1f2cba18df16ae89)
+
+running 5 tests
+test lock_in_fitter_rejects_initial_market_below_either_observed_series ... ok
+test historical_lock_in_clips_reported_levels ... ok
+test historical_lock_in_matches_independent_ode_reference ... ok
+test lock_in_forecasts_from_saved_origin_and_labels_historical_rates ... ok
+test lock_in_fitting_preserves_trajectories_and_reports_structural_ambiguity ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.84s
+

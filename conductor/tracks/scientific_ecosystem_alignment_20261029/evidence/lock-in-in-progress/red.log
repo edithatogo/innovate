@@ -1,0 +1,22 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 0.77s
+     Running tests/lock_in.rs (target/debug/deps/lock_in-21fad6a433f8cc39)
+
+running 1 test
+test historical_lock_in_matches_independent_ode_reference ... FAILED
+
+failures:
+
+---- historical_lock_in_matches_independent_ode_reference stdout ----
+
+thread 'historical_lock_in_matches_independent_ode_reference' (26346020) panicked at rust/crates/innovate-core/tests/lock_in.rs:5:173:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "unsupported_native_operation", message: "native model 'lock_in' is unavailable pending migration", operation: Some(PredictModel) }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    historical_lock_in_matches_independent_ode_reference
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --test lock_in`

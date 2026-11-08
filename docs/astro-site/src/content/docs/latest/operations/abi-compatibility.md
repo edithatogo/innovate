@@ -4,6 +4,11 @@ description: Native and binary boundary strategy for the packaging stack.
 slug: latest/operations/abi-compatibility
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 # ABI and Binary Compatibility Strategy
 
 This strategy defines how Innovate can add native implementations and packaged

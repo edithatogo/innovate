@@ -1,0 +1,36 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.24s
+     Running tests/composite.rs (target/debug/deps/composite-0b8379adeaffe82b)
+
+running 3 tests
+test independent_composite_growth_matches_closed_forms_and_rhs_rates ... FAILED
+test composite_fit_retains_conditioned_initial_state_and_forecasts_from_origin ... FAILED
+test historical_batch_reset_is_explicit_and_fixed_origin_batches_match ... FAILED
+
+failures:
+
+---- independent_composite_growth_matches_closed_forms_and_rhs_rates stdout ----
+
+thread 'independent_composite_growth_matches_closed_forms_and_rhs_rates' (27217301) panicked at rust/crates/innovate-core/tests/composite.rs:5:283:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "unsupported_native_operation", message: "native model 'composite' is unavailable pending migration", operation: Some(PredictModel) }
+
+---- composite_fit_retains_conditioned_initial_state_and_forecasts_from_origin stdout ----
+
+thread 'composite_fit_retains_conditioned_initial_state_and_forecasts_from_origin' (27217299) panicked at rust/crates/innovate-core/tests/composite.rs:28:218:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "unsupported_native_operation", message: "native model 'composite' is unavailable pending migration", operation: Some(FitModel) }
+
+---- historical_batch_reset_is_explicit_and_fixed_origin_batches_match stdout ----
+
+thread 'historical_batch_reset_is_explicit_and_fixed_origin_batches_match' (27217300) panicked at rust/crates/innovate-core/tests/composite.rs:53:10:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "unsupported_native_operation", message: "native model 'composite' is unavailable pending migration", operation: Some(PredictModel) }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    composite_fit_retains_conditioned_initial_state_and_forecasts_from_origin
+    historical_batch_reset_is_explicit_and_fixed_origin_batches_match
+    independent_composite_growth_matches_closed_forms_and_rhs_rates
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --test composite`

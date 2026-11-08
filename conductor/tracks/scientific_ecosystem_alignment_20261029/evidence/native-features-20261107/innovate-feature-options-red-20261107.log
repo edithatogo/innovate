@@ -1,0 +1,10 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____ test_empty_non_mapping_options_are_not_silently_treated_as_defaults ______
+tests/native/test_python_consumer.py:79: in test_empty_non_mapping_options_are_not_silently_treated_as_defaults
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+=========================== short test summary info ============================
+FAILED tests/native/test_python_consumer.py::test_empty_non_mapping_options_are_not_silently_treated_as_defaults
+1 failed in 0.17s

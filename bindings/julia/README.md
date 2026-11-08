@@ -1,71 +1,110 @@
-# innovate Julia bindings
+# Innovate JULIA native binding
 
-This package is the Julia-facing adapter over the Python `innovate` functional kernel. Promoted
-native slices execute in the shared kernel contract, unsupported promoted payloads return explicit
-native errors, and bridge fallback remains available only for explicitly non-native model families.
+This 0.7 development package invokes the Rust C ABI, without Python. Build the
+core with `cargo build --locked -p innovate-ffi` from the repository root and set
+`INNOVATE_NATIVE_LIBRARY` to the absolute shared-library path under `target/debug`.
+Only bounded native capabilities are currently exposed. Advanced features and
+installed native distribution bundles remain open in the root migration ledger.
+The JSON request schema is 2.0. Inputs are borrowed for the call; the wrapper
+copies response text and releases the Rust-owned result exactly once.
 
-## Installation
+## Reading causal Arrow exports
 
-For checkout development:
+Use an Arrow IPC stream when handing a Python Polars causal result to Julia.
+For example, given the result of a native `policy_evidence` request in Python:
 
-```bash
-julia --project=bindings/julia -e 'using Pkg; Pkg.instantiate()'
+```python
+import polars as pl
+from innovate import policy_metadata_frame
+
+policy_metadata_frame(result).write_ipc_stream(
+    "policy.arrow", compression="uncompressed", compat_level=pl.CompatLevel.oldest()
+)
+```
+
+In a Julia consumer environment with Arrow.jl installed:
+
+```julia
+using Arrow
+metadata = Arrow.Table("policy.arrow")
+```
+
+The same stream settings work with `treatment_contrast_frame`. Arrow.jl
+2.8.1 returned no columns for the tested Polars IPC file format. It read
+the equivalent IPC stream and the file produced by PyArrow 26. With
+Python Polars 2.1.0, the empty result reproduced at both compatibility
+levels and with both default and one-row batches. Check the expected
+column names after opening a file because the reader can return an
+empty table without raising an error.
+
+For a file handoff, use Innovate's Polars-backed IPC writer. It emits the
+leading schema message that Arrow.jl 2.8.1 expects.
+
+```python
+from pathlib import Path
+from innovate import export_ipc_file, policy_metadata_frame
+
+Path("policy.arrow").write_bytes(export_ipc_file(policy_metadata_frame(result)))
+```
+
+For an existing file emitted by Polars, pass its bytes through the same
+exporter. The native reader accepts IPC files and streams.
+
+```python
+Path("policy-julia.arrow").write_bytes(export_ipc_file(Path("policy-polars.arrow").read_bytes()))
+```
+
+Julia can also rewrite a file directly through Innovate.
+
+```julia
+using Innovate
+write("policy-julia.arrow", export_ipc_file(read("policy-polars.arrow")))
+```
+
+Use the native stream exporter when Julia needs custom schema metadata.
+Arrow.jl 2.8.1 reads the leading schema. The file exporter stores custom
+schema metadata in the footer, while the stream exporter puts it in the
+leading message. Both exporters preserve schema-level metadata.
+Column-level annotations such as field units survive when the Arrow
+field type stays the same. For fields whose type changes during
+compatibility conversion, carry required annotations as explicit
+data or schema-level metadata.
+
+```julia
+using Innovate, Arrow
+
+table = Arrow.Table(export_ipc_stream(read("policy-julia.arrow")))
+metadata = Arrow.getmetadata(table)
+```
+
+For local bundled-library testing, stage a copy of the Julia package and
+place the locked Rust shared library in its `deps` directory under the
+name produced by Cargo, such as `libinnovate_ffi.so` or `innovate_ffi.dll`.
+Add the staged package to a fresh project with `Pkg.develop(path=...)`
+and unset `INNOVATE_NATIVE_LIBRARY` to exercise bundled discovery.
+
+To run the full native conformance suite in staging, preserve the
+repository-relative layout. Stage `bindings/julia` and
+`rust/crates/innovate-core/tests/fixtures` under the same root, then
+run the following from that root after placing the library in
+`bindings/julia/deps`.
+
+```sh
+unset INNOVATE_NATIVE_LIBRARY
 julia --project=bindings/julia bindings/julia/test/runtests.jl
 ```
 
-## Invocation path
+The fixtures supply independent reference data for the tests. Runtime
+calls use the staged package and shared library.
 
-The Julia package resolves the bridge entrypoint at `inst/python/kernel_bridge.py` and keeps the
-runtime boundary thin. The package shells out to the Python kernel bridge for explicitly
-non-native model families instead of duplicating model logic in Julia.
+## Reading paired Bass outcomes
 
-## Current scaffold
+`kernel_paired_outcomes_ipc(payload)` validates paired Bass draws and
+returns an Arrow IPC file as bytes. Read that file directly with
+`Arrow.Table`. Rows follow strategy, draw and time order. The
+`perspective` column is nullable and `parameters_json` retains each
+draw's parameter array with names, values and units.
 
-- Package metadata in `Project.toml`
-- Julia module in `src/Innovate.jl`
-- Contract and wrapper tests under `test/`
-- A Python bridge entrypoint under `inst/python/`
-- Stable operations for discovery, fit, predict, simulate, summarize, and diagnose
-- Schema-compatibility drift checks in `test/schema_compatibility.jl`
-
-## Backend expectations
-
-- Julia 1.12 or newer is required.
-- In a repository checkout the bridge uses `uv run python` by default.
-- In an installed-package context the bridge uses the configured Python launcher from
-  `INNOVATE_PYTHON_COMMAND`, or `python3` if no override is set.
-- The Julia package only prepends `PYTHONPATH` with the repository `src/` directory when a
-  checkout is detected.
-- Native promoted slices do not silently fall back to Python; only explicitly non-native
-  families use the bridge.
-
-## Checkout example
-
-```julia
-include(joinpath(@__DIR__, "src", "Innovate.jl"))
-
-using .Innovate
-
-request = kernel_request(operation = "discover_models")
-schema_version = kernel_schema_version()
-models = kernel_discover_models()
-```
-
-Installed-package usage is validated by the smoke test in `test/installed_package_smoke.jl`.
-
-## Compatibility
-
-The Julia bindings are intentionally thin and contract-driven. The Julia schema version is kept in
-lockstep with the Python kernel version, and the automated test suite fails if the versions drift.
-
-## Registry readiness
-
-Julia General registration from this monorepo uses:
-
-```text
-@JuliaRegistrator register subdir=bindings/julia
-```
-
-The package includes local license metadata and dependency compatibility bounds. Registry readiness
-is validated by an installed-package smoke test that can run the bridge against a configured Python
-environment with the Python `innovate` package available.
+Direct readback was verified with Arrow.jl 2.8.1 on the 24-row historical
+diffusion fixture. The stream guidance above applies to files written
+directly by Python Polars.

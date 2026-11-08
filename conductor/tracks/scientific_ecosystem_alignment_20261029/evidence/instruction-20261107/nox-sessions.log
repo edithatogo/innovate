@@ -1,0 +1,19 @@
+Native development gates; full scientific migration remains separately blocked.
+
+Sessions defined in /Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/noxfile.py:
+
+* lint
+* types
+* tests
+* native
+* package
+- release_readiness
+- docs
+- binding_conformance
+- release_supply_chain
+- release_reproducibility
+- security
+- version_sync
+- dependency_dashboard
+
+sessions marked with * are selected, sessions marked with - are skipped.

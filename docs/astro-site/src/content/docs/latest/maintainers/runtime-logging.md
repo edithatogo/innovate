@@ -4,6 +4,11 @@ description: Runtime observability and runtime diagnostic logging policy.
 slug: latest/maintainers/runtime-logging
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 # Runtime Logging and Instrumentation
 
 The repository does not use a custom logging framework. Runtime code should use

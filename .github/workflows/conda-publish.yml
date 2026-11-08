@@ -19,17 +19,25 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
 
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
+        with:
+          enable-cache: false
+      - name: Enforce native migration acceptance before Conda publication
+        run: |
+          uv venv .venv-release --python 3.15.2
+          .venv-release/bin/python scripts/check_migration.py --release
+
       - name: Set up conda environment
         uses: conda-incubator/setup-miniconda@8ee1f361103df19b6f8c8655fd3967a8ecb162d5
         with:
           auto-update-conda: true
-          python-version: "3.15.1"
+          python-version: "3.15.2"
           channels: conda-forge,defaults
           channel-priority: strict
 
       - name: Build conda package
         shell: bash -l {0}
-        run: conda build .
+        run: conda build conda.recipe
 
       - name: Publish to Anaconda
         shell: bash -l {0}
@@ -37,5 +45,5 @@ jobs:
           ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
         run: |
           conda install anaconda-client
-          package_path="$(conda build . --output)"
+          package_path="$(conda build conda.recipe --output)"
           anaconda -t "$ANACONDA_API_TOKEN" upload --user edithatogo --label main "$package_path"

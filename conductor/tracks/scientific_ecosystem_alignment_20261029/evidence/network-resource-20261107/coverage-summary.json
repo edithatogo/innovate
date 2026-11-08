@@ -1,0 +1,72 @@
+{
+  "totals": {
+    "branches": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "functions": {
+      "count": 643,
+      "covered": 482,
+      "percent": 74.9611197511664
+    },
+    "instantiations": {
+      "count": 1378,
+      "covered": 576,
+      "percent": 41.799709724238035
+    },
+    "lines": {
+      "count": 5539,
+      "covered": 4501,
+      "percent": 81.2601552626828
+    },
+    "mcdc": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "regions": {
+      "count": 8738,
+      "covered": 7578,
+      "notcovered": 1160,
+      "percent": 86.72465094987412
+    }
+  },
+  "network": {
+    "branches": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0.0
+    },
+    "mcdc": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0.0
+    },
+    "functions": {
+      "count": 26,
+      "covered": 17,
+      "percent": 65.38461538461539
+    },
+    "instantiations": {
+      "count": 52,
+      "covered": 17,
+      "percent": 32.69230769230769
+    },
+    "lines": {
+      "count": 209,
+      "covered": 191,
+      "percent": 91.38755980861244
+    },
+    "regions": {
+      "count": 400,
+      "covered": 362,
+      "notcovered": 38,
+      "percent": 90.5
+    }
+  }
+}

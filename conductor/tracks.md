@@ -432,7 +432,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [x] **Track: Scenario Experiment Workflows** *(Completed)*
+- [x] **Track: Scenario Experiment Workflows** *(Implementation archived; four manual verifications pending)*
 *Link: [./archive/scenario_experiment_workflows_20260625/](./archive/scenario_experiment_workflows_20260625/)*
 
 ---
@@ -495,3 +495,20 @@ Historical completion labels above do not establish current full-native ownershi
 
 - [ ] **Track: Healthcare hype measurement and evaluation** *(Planned)*
   *Link: [./tracks/healthcare_hype_validation_20261107/](./tracks/healthcare_hype_validation_20261107/)*
+
+---
+- [ ] **Track: voiage alignment follow-ups (innovate)**
+  *Link: [./tracks/voiage_alignment_followups_20261030/](./tracks/voiage_alignment_followups_20261030/)*
+  Planned; awaiting owner approval. [Issue #559](https://github.com/edithatogo/innovate/issues/559).
+
+---
+
+- [ ] **Track: tobac uptake and diffusion consumer qualification**
+  *Link: [./tracks/tobac_consumer_qualification_20261025/](./tracks/tobac_consumer_qualification_20261025/)*
+  **Approved planning only; implementation not authorised.** Reuses existing capability owners; downstream proof remains pending.
+  GitHub: https://github.com/edithatogo/innovate/issues/546
+
+---
+
+- [~] **Track: Research Software Registry Readiness** *(External gates pending)*
+*Link: [./tracks/research_software_registry_readiness_20260721/](./tracks/research_software_registry_readiness_20260721/)*

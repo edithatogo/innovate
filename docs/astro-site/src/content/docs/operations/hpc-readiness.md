@@ -3,6 +3,11 @@ title: HPC Packaging and Registry Readiness
 description: Deployment and packaging evidence before HPC registry action.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 # HPC Packaging and Registry Readiness
 
 The HPC readiness page defines packaging artifacts and evidence requirements for Spack, EasyBuild, HPSF, and E4S.

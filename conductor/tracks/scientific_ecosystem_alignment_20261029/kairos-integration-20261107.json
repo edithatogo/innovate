@@ -1,0 +1,148 @@
+{
+  "date": "2026-11-07",
+  "base_commit": "ab7b3a3a",
+  "scope": "Bounded native Bass birth-process DES; full migration remains open",
+  "kairos_revision": "d56863505d938feb069af88a737eb7668113d14b",
+  "release_ready": false,
+  "results": {
+    "rust_tests": 41,
+    "installed_python_tests": 23,
+    "julia_assertions": 131,
+    "r": "Native replay and all prior native conformance cases pass",
+    "clippy": "workspace all targets -D warnings pass",
+    "lint_types": "pass; expected native source warning",
+    "docs": "163 pages, internal links valid",
+    "package": "local wheel installed/tested; sdist and Twine/check-wheel metadata checks pass; clean-source rebuild pending",
+    "audit": "No vulnerability findings; existing unsuppressed bincode unmaintained warning"
+  },
+  "coverage": {
+    "totals": {
+      "branches": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0
+      },
+      "functions": {
+        "count": 526,
+        "covered": 392,
+        "percent": 74.52471482889734
+      },
+      "instantiations": {
+        "count": 1118,
+        "covered": 461,
+        "percent": 41.234347048300535
+      },
+      "lines": {
+        "count": 4755,
+        "covered": 3788,
+        "percent": 79.66351209253418
+      },
+      "mcdc": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0
+      },
+      "regions": {
+        "count": 7374,
+        "covered": 6345,
+        "notcovered": 1029,
+        "percent": 86.04556550040684
+      }
+    },
+    "simulation": {
+      "branches": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "mcdc": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "functions": {
+        "count": 17,
+        "covered": 14,
+        "percent": 82.35294117647058
+      },
+      "instantiations": {
+        "count": 34,
+        "covered": 14,
+        "percent": 41.17647058823529
+      },
+      "lines": {
+        "count": 121,
+        "covered": 109,
+        "percent": 90.08264462809917
+      },
+      "regions": {
+        "count": 229,
+        "covered": 211,
+        "notcovered": 18,
+        "percent": 92.13973799126637
+      }
+    }
+  },
+  "all_38_feature_obligations_required": true,
+  "artifact_sha256": {
+    "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/target/debug/libinnovate_ffi.dylib": "8d8a6700543e1e73ca4fd42871739958263bfca579c4f2249671cc74efc31498",
+    "/tmp/innovate-kairos-wheel/innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "85e24316d7327793b27895eb2e9b7ba6637943a1809ec872e8fb980332712e49",
+    "/tmp/innovate-kairos-wheel/innovate-0.7.0a1.tar.gz": "c37adc722d94402f078369128994504f82ce2f25b05a3a1226b965abaaf90832"
+  },
+  "evidence_sha256": {
+    "innovate-kairos-audit.log": "a845007c9c6cad1d0d9db1971459ae58c3045d6f928da112d752cbbeaf539bcb",
+    "innovate-kairos-wheel.log": "fce76ab7230e1818cff91dce8034e22ffb4c86253e2a21c4ad1a73a7171f8e82",
+    "coverage-summary.json": "cd27e82ee84f739ef6cd7e1edadbb60d6cb5aaff106946346a317b70c0f0f4e3",
+    "innovate-kairos-policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+    "innovate-kairos-sdist.log": "54bf3846cf96583558912026f1566684d5e86615d2d8ba57a6215f63d7165a1e",
+    "innovate-kairos-release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "innovate-kairos-all-rust.log": "d82df7e116bf4694ec901259716d369423980f302d2b4a1578c8e806cf187414",
+    "innovate-kairos-coverage.log": "291c97b6eb46c97bc3b30798cd1788a39102dfe880d8f9de7d87c8d166cadb50",
+    "innovate-kairos-python.log": "d443dcfab0c9344dff599177399e5add5769bca01046bd35b6621e81269da5bb",
+    "innovate-kairos-all-rust-retry.log": "254ceb9e82d16b01dc264ef4b983e53b92edbc8c60da7c60e2b46fbf5983d06b",
+    "innovate-kairos-coverage-retry.log": "b378a144866e39f6098fabd7dfb83d7977c1c28e9a644c3028b73370d6ec1cd1",
+    "source-sha256.json": "4701f36c4631554465b8f491a5176a610d319125e82f14c0b15dded1a8b8437f",
+    "innovate-kairos-clippy.log": "a8974fd8406fca8dc50195e0b5fee7f3a2c7bf4321bce10ed4ba0966659b4ccf",
+    "innovate-kairos-r.log": "63d7cd99392a66311b3b42290f781d994ae74f600b567bd25de77b005301076f",
+    "innovate-kairos-julia.log": "dcb6ed7aa1e6944379f159af0925ba9b8dfc33e05cb2ed4d3c0b38f276131e75",
+    "innovate-kairos-lint.log": "093e91c502151b50c84f57316c544bed91098f8c2c199992d01a162d20bfbd89",
+    "innovate-kairos-package.log": "aa1a5097b7d3a3364b4ad7609c899fdb650cbf152e4889d62013c8d1ffecf2fa",
+    "innovate-kairos-wheel-retry.log": "dd56e876f377836c11e4e74ce189fb9d6ab30485dedff8409e3c57c46314a91e",
+    "innovate-kairos-green.log": "f83138ab1f84370249bfc20d8fd62274d49a1c747190db498b1025e6f7a81da6",
+    "innovate-kairos-red.log": "9cf1a52b5b91683395ead5ec0b8b2d4bbd417da5a1c82536065c4203c1109652",
+    "innovate-kairos-docs.log": "814872acff4f71c7b5f491ad9497981e1a57343a64f28686af4acdeb395ddce5",
+    "innovate-kairos-hooks.log": "58ab2103f6b66d1ab99712ba14eb58a4d1c65f4022870e4c188e96bdab9cc72e"
+  },
+  "raw_log_sha256": {
+    "innovate-kairos-red.log": "9cf1a52b5b91683395ead5ec0b8b2d4bbd417da5a1c82536065c4203c1109652",
+    "innovate-kairos-green.log": "0cb14e0693fa493162e99da97e9f8b74151b7af414e277326a6b2d1bb78a1ac6",
+    "innovate-kairos-clippy.log": "a8974fd8406fca8dc50195e0b5fee7f3a2c7bf4321bce10ed4ba0966659b4ccf",
+    "innovate-kairos-wheel.log": "00aa90ef6483ea936114402a311a8fae5d107dcde275896f98ddeced44d8dd27",
+    "innovate-kairos-wheel-retry.log": "dd56e876f377836c11e4e74ce189fb9d6ab30485dedff8409e3c57c46314a91e",
+    "innovate-kairos-all-rust.log": "d82df7e116bf4694ec901259716d369423980f302d2b4a1578c8e806cf187414",
+    "innovate-kairos-all-rust-retry.log": "2ae73c28eeed18f7446c11b0f535f3c83138db22561e79dae124949635fa98da",
+    "innovate-kairos-python.log": "d443dcfab0c9344dff599177399e5add5769bca01046bd35b6621e81269da5bb",
+    "innovate-kairos-r.log": "63d7cd99392a66311b3b42290f781d994ae74f600b567bd25de77b005301076f",
+    "innovate-kairos-julia.log": "dcb6ed7aa1e6944379f159af0925ba9b8dfc33e05cb2ed4d3c0b38f276131e75",
+    "innovate-kairos-audit.log": "a845007c9c6cad1d0d9db1971459ae58c3045d6f928da112d752cbbeaf539bcb",
+    "innovate-kairos-coverage.log": "291c97b6eb46c97bc3b30798cd1788a39102dfe880d8f9de7d87c8d166cadb50",
+    "innovate-kairos-coverage-retry.log": "b378a144866e39f6098fabd7dfb83d7977c1c28e9a644c3028b73370d6ec1cd1",
+    "innovate-kairos-lint.log": "093e91c502151b50c84f57316c544bed91098f8c2c199992d01a162d20bfbd89",
+    "innovate-kairos-docs.log": "555e07269438c543ac01b9a08e9cb23718fd16e817b35bba9f321643aa4e335f",
+    "innovate-kairos-policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+    "innovate-kairos-release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "innovate-kairos-sdist.log": "54bf3846cf96583558912026f1566684d5e86615d2d8ba57a6215f63d7165a1e",
+    "innovate-kairos-package.log": "492fe7909f98fa77dc0c76709b92d7bf62df4f3c2dc93869c11ed1a653bf0ed2"
+  },
+  "log_normalization": "Trailing horizontal whitespace/terminal blank lines removed only",
+  "limits": [
+    "Finite population, zero initial adopters and tick-rounding bias",
+    "ABM/network/resource/intervention/resume and full scenario parity pending",
+    "Overall coverage below 80%; platform/hosted/clean-package qualification pending",
+    "No main merge, publication or external/native tenant mutation"
+  ]
+}

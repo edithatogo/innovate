@@ -1,0 +1,121 @@
+{
+  "date": "2026-11-07",
+  "status": "bounded_local_checkpoint",
+  "base_commit": "95766f22dda49842dc65dbc2150c3a4c67d78db3",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "results": {
+    "rust_tests": 111,
+    "accounting": "110 broad gate tests (106 core/C ABI plus 4 Polars) plus 1 later focused capacity-policy regression; unchanged production source reused",
+    "installed_python": 37,
+    "julia_assertions": 170,
+    "R": "native conformance, composite matrix/rates and singleton fixed-origin fits pass",
+    "clippy_lint_types_docs": "pass; expected native source type warning; 163 pages",
+    "package": "installed local wheel and fresh external-volume archive metadata/exact source inclusion pass; clean-source/platform/hosted qualification pending"
+  },
+  "oracle": {
+    "python": "3.15.2 (main, Oct 26 2026, 13:59:33) [Clang 23.1.3 ]",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "method": "independent direct RHS DOP853 rtol1e-12 atol1e-13"
+  },
+  "coverage": {
+    "branches": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "functions": {
+      "count": 1073,
+      "covered": 798,
+      "percent": 74.37092264678472
+    },
+    "instantiations": {
+      "count": 2280,
+      "covered": 939,
+      "percent": 41.184210526315795
+    },
+    "lines": {
+      "count": 8631,
+      "covered": 7278,
+      "percent": 84.3239485575252
+    },
+    "mcdc": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "regions": {
+      "count": 14151,
+      "covered": 12420,
+      "notcovered": 1731,
+      "percent": 87.76764892940429
+    }
+  },
+  "coverage_scope": "broad unchanged-source measurement before final added capacity test; no additional focused coverage claimed",
+  "composite_lines": {
+    "count": 500,
+    "covered": 435,
+    "percent": 87.0
+  },
+  "packaging_recovery": {
+    "reason": "internal-volume output redirection failed; regenerated and validated on owned external volume",
+    "current_evidence": [
+      "final-sdist.log",
+      "final-package.log"
+    ],
+    "superseded_packaging_logs": [
+      "innovate-composite-sdist.log",
+      "innovate-composite-package.log"
+    ]
+  },
+  "raw_log_sha256": {
+    "innovate-composite-tabular.log": "0b3c0c0b1b12524e2b9773af03ff9f4c0652ab3c74c825787c715d95437f39dd",
+    "innovate-composite-julia.log": "90564c232346822efde08702b2d046e0ec6e8db6b8e2678b04b38ef650feaaf6",
+    "innovate-composite-red.log": "75fb2e0948481b4fa65f5fd9094038ae5143576bf9b31492f1d6e648db8a84ad",
+    "innovate-composite-clippy.log": "bb64e5415c16ec40da62a0473b8ce1360543bc2d4e1d5d67d1830020a2a40180",
+    "innovate-composite-package.log": "ff60ba614c3a661d957a8ca407afa6422c0cbf68bd9099b45a5f6971f2e35eb4",
+    "innovate-composite-clippy-focused.log": "887c05280735de40ce442913e39df2a489f87da3eba1d89792b37d7e5ca5815c",
+    "innovate-composite-focused.log": "c766ccac96279a943fa247066f2e74f8967367a0875a19d760e881d932835b36",
+    "innovate-composite-install.log": "93ce30b4ee2a835040cba3fc9cf8ffc0bef45373ef5e295fb0a221f388588df1",
+    "innovate-composite-capacity.log": "05c0c59577367cde2bb178fddffc46964e118d5cb44da4f909e450393e575b9e",
+    "innovate-composite-weight-dispatch-green.log": "356e33ce902d3a38c621910a34a37699059a699f1e995b487b0367a2f22bf7bc",
+    "innovate-composite-coverage.log": "ce9c5e67c9d37d439b07d144c16010cdaa6271d7c24b09c4c9af41efbd19fbc8",
+    "innovate-composite-sdist.log": "d292e115b22e457918990140c2612058308f1c18a04f97f663c0a3d2576d7906",
+    "innovate-composite-r.log": "4c56d81fd6aafcba41fc2e01f3e323500b2d74fafdba4fe204a8ea3b65e4cb98",
+    "innovate-composite-ffi.log": "6cfa6da5dfb3648cc6fc444cc71c2066d4adc499df0dcca9ba4cf0f6ff695a9e",
+    "innovate-composite-python.log": "498e6947c683cfc4d9d8dd6500f7bced1426c92501b2b6f938049aa6eb2024c6",
+    "innovate-composite-policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+    "innovate-composite-wheel.log": "eb0fcb11f6942addef944f88f5ddfb35a786e47503de14ea98196e31bbba5f7b",
+    "innovate-composite-docs.log": "745c69d22422915be9c4ed1d4695390f45b18e3e03eb747ef6abaf402db5c402",
+    "innovate-composite-weight-dispatch-red.log": "c00a09a71597b670e285e70bea25d6e42e19e1ea094dd6205249a6705867bd0e",
+    "innovate-composite-release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "innovate-composite-lint.log": "093e91c502151b50c84f57316c544bed91098f8c2c199992d01a162d20bfbd89",
+    "innovate-composite-hooks.log": "7523d6b940ad7d7e49ea93ff33ac60ceb273c50cb6ae677030a5b65df95de21b",
+    "final-sdist.log": "74522a6c799835566a19830de41753d17147ae79637401f83c045f0ce891dae3",
+    "final-package.log": "14cac5d02f83766728aad100e2fff945abc8ec0d70a11811cdc8c82e3971dcf8"
+  },
+  "source_sha256": {
+    "bindings/julia/test/runtests.jl": "24b476d6b097a6ba91e0063fc1de0d8488e3b7df3691f2612231c7bb42e637cf",
+    "bindings/r/tests/native.R": "ed63fcf15d126fea94cce60a3235267b12911aa0710d80f541ccbf04ab6ea9d2",
+    "docs/astro-site/src/content/docs/native-migration.md": "118a37eaac62f99657e425db3e257e69e79708a75b1096d0ab03ae0043722c71",
+    "migration-ledger.json": "0bc99811266d4c7e36b6d3303f9c5b09e30582431b6b64392c97f437766c4020",
+    "rust/crates/innovate-core/src/discovery.json": "397f731bbc3f348e1f1d82e053343a2209bdc7ac5b77fc37ea3b6b7eef53eb01",
+    "rust/crates/innovate-core/src/fitting.rs": "b1093740b3ba80c93aa5889791aa739e94f2e3b3b2c4ebdb653f6ad7e014dee6",
+    "rust/crates/innovate-core/src/kernel.rs": "d143f97c3c2d5b165da12c2eda5ab32f7df6319bc8ebbad10b3e20a3f954c0c2",
+    "rust/crates/innovate-core/src/lib.rs": "694a97e8e0fff3f4d75d793fc7f414feee827cba956ef178e51fa7219debadeb",
+    "rust/crates/innovate-core/tests/native_boundary.rs": "2bf564d157a8ea1c8109e32475336565e0492d9c1e692cdca4e8a8956d39a3f9",
+    "rust/crates/innovate-core/tests/weighted.rs": "2933924bd6774c04435ebbf79a3213d9d38365175d06335a824ed9ac129551ed",
+    "tests/native/test_python_consumer.py": "61051b1752bf4851a6e8b453696ce7cfc391d0e7d21e7facf35afcef09e54c66",
+    "rust/crates/innovate-core/src/composite.rs": "4c13419a9d6aff6fff97e8e0868f7eab9334d9a0485549cc7e1b389904680625",
+    "rust/crates/innovate-core/tests/composite.rs": "38ec9328071b4d2f003cbbbe11ebb198817d7284b14650a447133aa97cb627f5",
+    "rust/crates/innovate-core/tests/fixtures/composite_scipy.json": "03e1408efc7c9ed7a742ed8ad0eb02a5e1ba925c93cddcd63450991f6b25b8ac"
+  },
+  "artifact_sha256": {
+    "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/target/composite-final-artifacts/innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "6464eb6325c9d00b6babd8e3c6d0cbe9c192b1375f73f9ab8dd6c899361a7305",
+    "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/target/composite-final-artifacts/innovate-0.7.0a1.tar.gz": "25c142ec0612f2867fd3d7d8b3eb58e82bd5c692b091d31d8f46e19cfcdc53d8",
+    "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/target/debug/libinnovate_ffi.dylib": "033500de4dfd096089d808b1df9b208ce01b75a4ae9840ceee6e199f96aa7511"
+  }
+}

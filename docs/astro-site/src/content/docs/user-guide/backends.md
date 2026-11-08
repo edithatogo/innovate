@@ -3,6 +3,11 @@ title: Backends
 description: Using Innovate's multi-backend architecture for different computation environments.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 Innovate's multi-backend architecture allows you to choose the most appropriate numerical backend for your workload, from lightweight CPU computation to GPU-accelerated simulation.
 
 ## Available Backends

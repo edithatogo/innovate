@@ -3,6 +3,11 @@ title: C# Bindings
 description: Provisional .NET thin adapter over the shared kernel contract.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 The C# bindings are a provisional thin adapter over the stable `innovate`
 kernel contract. The C# layer does not reimplement model behavior; it builds
 typed request objects, invokes the shared kernel bridge, and converts responses

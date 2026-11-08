@@ -1,8 +1,5 @@
 # Project Context
 
-[Native Kairos consumer and domain-boundary track](tracks/kairos_runtime_boundary_20261107/index.md)
-refines the existing ecosystem alignment without changing provider pins.
-
 ## Definition
 - [Product purpose and mandatory architecture](product.md)
 - [Product Guidelines](product-guidelines.md)
@@ -15,6 +12,7 @@ refines the existing ecosystem alignment without changing provider pins.
 - [Granular innovation taskbook](innovation-taskbook-20261107.md)
 
 ## Management
+- [Native Kairos consumer and domain boundary](tracks/kairos_runtime_boundary_20261107/index.md)
 - [Tracks Registry](tracks.md)
 - [Tracks Directory](tracks/)
 - [Revised innovation programme](frontier-programme-20261107.md)
@@ -29,3 +27,7 @@ refines the existing ecosystem alignment without changing provider pins.
 
 ## Hygiene
 Run `python scripts/conductor_registry_hygiene.py --json`. Planning, implementation, native execution, scientific validity and release acceptance remain distinct states.
+
+## Approved planning on implementation hold
+
+- [tobac uptake and diffusion consumer qualification](./tracks/tobac_consumer_qualification_20261025/index.md): no implementation or automatic progression authorised.

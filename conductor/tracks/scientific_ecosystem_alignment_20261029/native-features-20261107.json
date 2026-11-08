@@ -1,0 +1,461 @@
+{
+  "date": "2026-11-07",
+  "base_commit": "2e0b993021140bcb5fdc70f4c03521542fb829be",
+  "pre_migration_source": "56d91dd716747900465ce2d1dc8c0231aa8a337b",
+  "worktree": "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106",
+  "branch": "codex/reconcile-scientific-20261106",
+  "chat": "01a1b0dc-206d-7e31-9f61-544eb5cc16b5",
+  "full_migration_complete": false,
+  "release_ready": false,
+  "required_model_obligations": 16,
+  "required_feature_obligations": 22,
+  "bounded_native_models": 7,
+  "results": {
+    "rust_tests": 37,
+    "rust_test_accounting": "32 core + 1 C ABI in final coverage run, plus 4 unchanged Polars tests in retained native run",
+    "python_installed_tests": 22,
+    "julia_assertions": 128,
+    "R": "Installed native package: analytic scalar/competitive cases, multi-generation fitting/forecasts/rates, single-element and optional-null transport, numerical overflow failure and repeated calls passed",
+    "clippy": "workspace/all-targets -D warnings passed",
+    "python_lint_types": "passed; 0 type errors, expected missing source warning for native extension",
+    "docs": "163 pages; internal links valid",
+    "package": "wheel from extracted source distribution, rebuilt project crates with cached dependency artifacts; Twine and check-wheel-contents passed",
+    "release_guard": "Expected failure, including Python -O; all 38 obligations remain required",
+    "feature_preservation": "4 fault-injection tests reject model/feature removal, optionalization and duplicate identity",
+    "hooks": "All applicable hooks pass; no hook installation or bypass"
+  },
+  "coverage": {
+    "totals": {
+      "branches": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0
+      },
+      "functions": {
+        "count": 509,
+        "covered": 375,
+        "percent": 73.6738703339882
+      },
+      "instantiations": {
+        "count": 1081,
+        "covered": 443,
+        "percent": 40.98057354301572
+      },
+      "lines": {
+        "count": 4631,
+        "covered": 3658,
+        "percent": 78.98941913193694
+      },
+      "mcdc": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0
+      },
+      "regions": {
+        "count": 7140,
+        "covered": 6109,
+        "notcovered": 1031,
+        "percent": 85.56022408963585
+      }
+    },
+    "files": {
+      "rust/crates/innovate-core/src/competition.rs": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "mcdc": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "functions": {
+          "count": 67,
+          "covered": 57,
+          "percent": 85.07462686567165
+        },
+        "instantiations": {
+          "count": 135,
+          "covered": 57,
+          "percent": 42.22222222222222
+        },
+        "lines": {
+          "count": 441,
+          "covered": 401,
+          "percent": 90.9297052154195
+        },
+        "regions": {
+          "count": 743,
+          "covered": 677,
+          "notcovered": 66,
+          "percent": 91.1170928667564
+        }
+      },
+      "rust/crates/innovate-core/src/contracts.rs": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "mcdc": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "functions": {
+          "count": 41,
+          "covered": 21,
+          "percent": 51.21951219512195
+        },
+        "instantiations": {
+          "count": 94,
+          "covered": 28,
+          "percent": 29.78723404255319
+        },
+        "lines": {
+          "count": 332,
+          "covered": 202,
+          "percent": 60.8433734939759
+        },
+        "regions": {
+          "count": 406,
+          "covered": 247,
+          "notcovered": 159,
+          "percent": 60.83743842364532
+        }
+      },
+      "rust/crates/innovate-core/src/fitting.rs": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "mcdc": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "functions": {
+          "count": 28,
+          "covered": 22,
+          "percent": 78.57142857142857
+        },
+        "instantiations": {
+          "count": 57,
+          "covered": 23,
+          "percent": 40.350877192982445
+        },
+        "lines": {
+          "count": 219,
+          "covered": 199,
+          "percent": 90.8675799086758
+        },
+        "regions": {
+          "count": 374,
+          "covered": 342,
+          "notcovered": 32,
+          "percent": 91.44385026737967
+        }
+      },
+      "rust/crates/innovate-core/src/kernel.rs": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "mcdc": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "functions": {
+          "count": 207,
+          "covered": 135,
+          "percent": 65.21739130434783
+        },
+        "instantiations": {
+          "count": 426,
+          "covered": 143,
+          "percent": 33.568075117370896
+        },
+        "lines": {
+          "count": 2462,
+          "covered": 1796,
+          "percent": 72.94882209585703
+        },
+        "regions": {
+          "count": 3624,
+          "covered": 3017,
+          "notcovered": 607,
+          "percent": 83.2505518763797
+        }
+      },
+      "rust/crates/innovate-core/src/lib.rs": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "mcdc": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "functions": {
+          "count": 1,
+          "covered": 1,
+          "percent": 100.0
+        },
+        "instantiations": {
+          "count": 2,
+          "covered": 1,
+          "percent": 50.0
+        },
+        "lines": {
+          "count": 12,
+          "covered": 9,
+          "percent": 75.0
+        },
+        "regions": {
+          "count": 37,
+          "covered": 28,
+          "notcovered": 9,
+          "percent": 75.67567567567568
+        }
+      },
+      "rust/crates/innovate-core/src/numerics.rs": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "mcdc": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "functions": {
+          "count": 39,
+          "covered": 39,
+          "percent": 100.0
+        },
+        "instantiations": {
+          "count": 119,
+          "covered": 90,
+          "percent": 75.63025210084034
+        },
+        "lines": {
+          "count": 333,
+          "covered": 319,
+          "percent": 95.7957957957958
+        },
+        "regions": {
+          "count": 591,
+          "covered": 571,
+          "notcovered": 20,
+          "percent": 96.61590524534687
+        }
+      },
+      "rust/crates/innovate-core/src/substitution.rs": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "mcdc": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "functions": {
+          "count": 85,
+          "covered": 69,
+          "percent": 81.17647058823529
+        },
+        "instantiations": {
+          "count": 171,
+          "covered": 70,
+          "percent": 40.93567251461988
+        },
+        "lines": {
+          "count": 547,
+          "covered": 488,
+          "percent": 89.21389396709324
+        },
+        "regions": {
+          "count": 952,
+          "covered": 871,
+          "notcovered": 81,
+          "percent": 91.49159663865547
+        }
+      },
+      "rust/crates/innovate-core/src/validation.rs": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "mcdc": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "functions": {
+          "count": 36,
+          "covered": 27,
+          "percent": 75.0
+        },
+        "instantiations": {
+          "count": 72,
+          "covered": 27,
+          "percent": 37.5
+        },
+        "lines": {
+          "count": 245,
+          "covered": 207,
+          "percent": 84.48979591836735
+        },
+        "regions": {
+          "count": 347,
+          "covered": 294,
+          "notcovered": 53,
+          "percent": 84.72622478386167
+        }
+      },
+      "rust/crates/innovate-ffi/src/lib.rs": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "mcdc": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "functions": {
+          "count": 5,
+          "covered": 4,
+          "percent": 80.0
+        },
+        "instantiations": {
+          "count": 5,
+          "covered": 4,
+          "percent": 80.0
+        },
+        "lines": {
+          "count": 40,
+          "covered": 37,
+          "percent": 92.5
+        },
+        "regions": {
+          "count": 66,
+          "covered": 62,
+          "notcovered": 4,
+          "percent": 93.93939393939394
+        }
+      }
+    }
+  },
+  "source_archive_rebuild": {
+    "extracted_directory": "/tmp/innovate-features-sdist-final-20261107/innovate-0.7.0a1",
+    "cache_issue": "First archive rebuild reused an older extension. Extracted Rust source mtimes were refreshed without changing bytes, forcing all three project crates to recompile. Final installed overflow regression and R/Julia equivalents passed.",
+    "proof": "Old native wheel accepted overflowing sensitivities; final installed wheel returns invalid_request with finite numerical domain. Red/green receipts retained.",
+    "cold_build": false
+  },
+  "artifact_sha256": {
+    "/tmp/innovate-features-20261107/innovate-0.7.0a1.tar.gz": "9c2167c8de5e5d55852538c83a68faad9eef043faba939371f7bdcce70dbfb0a",
+    "/tmp/innovate-features-sdist-final-20261107/wheels/innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "b836c63053bde7b0cca61c55f3c50eadab74d7c56bffa1ab31c297fac9598e67",
+    "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/target/debug/libinnovate_ffi.dylib": "8ac370040056d87a73d0cc5c8f28da284157d6073fb22b01dd4f8792f577335e"
+  },
+  "reused_evidence": {
+    "dependency_and_voiage": "native-cutover-20261107.json; dependency manifests and locks unchanged in this continuation; no new audit or Voiage runtime claim"
+  },
+  "boundaries": [
+    "All original/planned model and feature obligations remain required; bounded support is not qualified full parity",
+    "Covariates/events and original model helpers remain unported",
+    "9 model families remain unavailable; 7 have bounded native support",
+    "Current Kairos native integration remains unimplemented",
+    "R/Julia tabular IPC and distributable native bundles remain open",
+    "Overall core/C ABI coverage below 80%; no branch/mutation/cross-platform/hosted acceptance",
+    "No main merge, push, external publication, authentication or native tenant mutation"
+  ],
+  "evidence_files": {
+    "coverage-summary.json": "d50a0b395c1182b17a6e74a3c0878a3d2522217d41c8e98c89ea83a6856dcb7b",
+    "innovate-competition-red-20261107.log": "4258b1fc4e121a19076b9d1ae4d7baa594586a9c5947389523be055f4158591e",
+    "innovate-feature-clippy-20261107.log": "51de5217f2dbcf9c0c71b1c13b0c000f3387cb054739ea23567ba3d59da9a3be",
+    "innovate-feature-docs-20261107.log": "597af7c36de80a67e05de0a3cc30c60bf75d7e8b8c7217fd4ef811e8424cac1e",
+    "innovate-feature-julia-20261107.log": "6c7cddeea7ea1dfe3235b8004eab47d12d612aa8bfe465f172e92a4f44aa01c2",
+    "innovate-feature-options-green-20261107.log": "8707f6d4c96754710bf0a62f35c31285b102588e841b88c1f9f5d0aae715dadd",
+    "innovate-feature-options-red-20261107.log": "941a0cb8e527d02de3d5c6e0c7e7063ae452edc0226eb1aed7ecee39c93d519e",
+    "innovate-feature-package-freshness-green-20261107.log": "93c97c10af4fc8b54296201243c032c5e8295479ca6b4adc06019033d6f9e282",
+    "innovate-feature-package-freshness-red-20261107.log": "aded622c033375fcdb640a06f82e1a854f4d732c3ecc9bb2e7de7fcc153c4f1b",
+    "innovate-feature-preservation-tests-20261107.log": "7256316818e0211d1c4dc30d19c5b69dd944b4f7c923e409b47993643d15fb98",
+    "innovate-feature-r-20261107.log": "fca131d039a21cecf42d72f62d90ef9e9856c5e443d79ea38ee2ae4fed9db14f",
+    "innovate-feature-r-install-20261107.log": "8bcc66b6f075dd6146b6ca006a0579b369a424d49b587fb4b5bc0350fad78c31",
+    "innovate-feature-rust-20261107.log": "60c22df930acc0bb001b91fd182476fb3c1a566c13aa5d3e3e5e2840beaf7808",
+    "innovate-features-clean-package-20261107.log": "f497c82a4b35101b06ce1a81ba3fa1ee8e762318bd9195d9c27300ec22e49bc6",
+    "innovate-features-coverage-final-20261107.log": "b3f6326a12ee5f291f9775b467466cf2d00f04fb90ca112d40c22cd68a0e92b9",
+    "innovate-features-hooks-20261107.log": "4ffcc8b73307cb354ec5f7274366fd85835d2471f3c289757c16c7947181bd1b",
+    "innovate-features-lint-final-20261107.log": "093e91c502151b50c84f57316c544bed91098f8c2c199992d01a162d20bfbd89",
+    "innovate-features-package-metadata-20261107.log": "ace45e8f9670e1657c417b54241453901ba15bdb1900be991025218c34b2c880",
+    "innovate-features-policy-20261107.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+    "innovate-features-python-clean-20261107.log": "1b22e9d7fba13077ba0ac444948c906fa79e9c84b5cb4887f71e33a2e456ed8d",
+    "innovate-features-release-20261107.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "innovate-features-sdist-20261107.log": "2e565705cdcaffdc89610553d4b8cc387e939b888bb4cf0157ada348cdb4882a",
+    "innovate-fit-quality-red-20261107.log": "eab39b55da6c1d3dc912c322c9aaa0325fd2749b26454382409dc51a094d4a9d",
+    "innovate-multigen-python-red-20261107.log": "2bf4057d86b8e249a0696116dffe0b5fe017abc2370a65136d2bdc5741c3d137",
+    "innovate-multigen-red-20261107.log": "b1603f3e47e1e4d58f319b74284bd28c4c543fca9d6489f2edd59a2a5e3a9e8e",
+    "source-sha256.json": "0144aff365ee0724c6d8e379f851cbd123cf4d762f7129306686d49f511febf3"
+  },
+  "log_retention": {
+    "normalization": "Trailing horizontal whitespace and terminal blank lines removed; result text unchanged",
+    "raw_sha256": {
+      "innovate-multigen-red-20261107.log": "b1603f3e47e1e4d58f319b74284bd28c4c543fca9d6489f2edd59a2a5e3a9e8e",
+      "innovate-multigen-python-red-20261107.log": "2bf4057d86b8e249a0696116dffe0b5fe017abc2370a65136d2bdc5741c3d137",
+      "innovate-fit-quality-red-20261107.log": "eab39b55da6c1d3dc912c322c9aaa0325fd2749b26454382409dc51a094d4a9d",
+      "innovate-competition-red-20261107.log": "4258b1fc4e121a19076b9d1ae4d7baa594586a9c5947389523be055f4158591e",
+      "innovate-feature-package-freshness-red-20261107.log": "aded622c033375fcdb640a06f82e1a854f4d732c3ecc9bb2e7de7fcc153c4f1b",
+      "innovate-feature-package-freshness-green-20261107.log": "93c97c10af4fc8b54296201243c032c5e8295479ca6b4adc06019033d6f9e282",
+      "innovate-feature-rust-20261107.log": "605676e839ee841e9c2299ef38a8abd6a3227e7c78e9a6e42f1dbf8be45b785e",
+      "innovate-feature-clippy-20261107.log": "51de5217f2dbcf9c0c71b1c13b0c000f3387cb054739ea23567ba3d59da9a3be",
+      "innovate-features-coverage-final-20261107.log": "b3f6326a12ee5f291f9775b467466cf2d00f04fb90ca112d40c22cd68a0e92b9",
+      "innovate-features-python-clean-20261107.log": "1b22e9d7fba13077ba0ac444948c906fa79e9c84b5cb4887f71e33a2e456ed8d",
+      "innovate-feature-r-install-20261107.log": "8bcc66b6f075dd6146b6ca006a0579b369a424d49b587fb4b5bc0350fad78c31",
+      "innovate-feature-r-20261107.log": "fca131d039a21cecf42d72f62d90ef9e9856c5e443d79ea38ee2ae4fed9db14f",
+      "innovate-feature-julia-20261107.log": "6c7cddeea7ea1dfe3235b8004eab47d12d612aa8bfe465f172e92a4f44aa01c2",
+      "innovate-features-lint-final-20261107.log": "093e91c502151b50c84f57316c544bed91098f8c2c199992d01a162d20bfbd89",
+      "innovate-feature-docs-20261107.log": "2fb7d4d19bf49f49f59c96d9f5f2e4681aa1357c2002774efa7857502be928a1",
+      "innovate-features-clean-package-20261107.log": "f497c82a4b35101b06ce1a81ba3fa1ee8e762318bd9195d9c27300ec22e49bc6",
+      "innovate-features-sdist-20261107.log": "2e565705cdcaffdc89610553d4b8cc387e939b888bb4cf0157ada348cdb4882a",
+      "innovate-features-package-metadata-20261107.log": "7813b0570ceed365d88258cb2aaa260cc9d0dd757ae9d647a9c39b2d465ca7ac",
+      "innovate-features-policy-20261107.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+      "innovate-features-release-20261107.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+      "innovate-feature-preservation-tests-20261107.log": "7256316818e0211d1c4dc30d19c5b69dd944b4f7c923e409b47993643d15fb98",
+      "innovate-features-hooks-20261107.log": "4ffcc8b73307cb354ec5f7274366fd85835d2471f3c289757c16c7947181bd1b",
+      "innovate-feature-options-red-20261107.log": "941a0cb8e527d02de3d5c6e0c7e7063ae452edc0226eb1aed7ecee39c93d519e",
+      "innovate-feature-options-green-20261107.log": "8707f6d4c96754710bf0a62f35c31285b102588e841b88c1f9f5d0aae715dadd"
+    }
+  }
+}

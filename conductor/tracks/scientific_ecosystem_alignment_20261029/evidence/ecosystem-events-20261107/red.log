@@ -1,0 +1,22 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.54s
+     Running tests/competition.rs (target/debug/deps/competition-695326af62d00e43)
+
+running 1 test
+test fixed_parameter_events_split_exactly_and_use_right_hand_rates ... FAILED
+
+failures:
+
+---- fixed_parameter_events_split_exactly_and_use_right_hand_rates stdout ----
+
+thread 'fixed_parameter_events_split_exactly_and_use_right_hand_rates' (27758027) panicked at rust/crates/innovate-core/tests/competition.rs:451:79:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "unsupported_native_operation", message: "unknown competitive option", operation: Some(PredictModel) }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    fixed_parameter_events_split_exactly_and_use_right_hand_rates
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --test competition`

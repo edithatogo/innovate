@@ -1,0 +1,18 @@
+    Checking thiserror v2.0.21
+    Checking zerocopy v0.8.63
+    Checking rand v0.10.3
+    Checking ppv-lite86 v0.2.21
+    Checking serde v1.0.229
+    Checking rand_chacha v0.10.0
+    Checking rand_distr v0.6.0
+    Checking hashbrown v0.17.1 (https://github.com/pola-rs/hashbrown?rev=d76a6f81abd8f388676aff15068236a8d21c7e1a#d76a6f81)
+    Checking hashbrown v0.15.5
+    Checking indexmap v2.14.2
+    Checking geo-types v0.7.20
+    Checking kairo-ecs-rng v0.0.0 (https://github.com/edithatogo/kairos.git?rev=d56863505d938feb069af88a737eb7668113d14b#d5686350)
+    Checking geo v0.33.1
+    Checking petgraph v0.8.3
+    Checking kairo-ecs-abm v0.1.0 (https://github.com/edithatogo/kairos.git?rev=d56863505d938feb069af88a737eb7668113d14b#d5686350)
+    Checking kairo-ecs-des v0.1.0 (https://github.com/edithatogo/kairos.git?rev=d56863505d938feb069af88a737eb7668113d14b#d5686350)
+    Checking innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `dev` profile [unoptimized] target(s) in 9.54s

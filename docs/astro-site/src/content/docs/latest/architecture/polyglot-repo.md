@@ -4,6 +4,11 @@ description: Documentation and ownership map for the current repository layout.
 slug: latest/architecture/polyglot-repo
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 # Polyglot Repository and Documentation Architecture
 
 This page is the navigation and ownership map for the polyglot `innovate`

@@ -52,15 +52,17 @@ jobs:
 
       - name: Install uv
         uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
+        with:
+          enable-cache: false
 
       - name: Set up Python
-        run: uv python install 3.15.1
+        run: uv venv .venv-release --python 3.15.2
 
       - name: Verify release version matches the tag
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          expected=$(uv run --no-project --python 3.15.1 python -c 'import tomllib; from pathlib import Path; print("v" + tomllib.loads(Path("pyproject.toml").read_text())["project"]["version"])')
+          expected=$(.venv-release/bin/python -c 'import tomllib; from pathlib import Path; print("v" + tomllib.loads(Path("pyproject.toml").read_text())["project"]["version"])')
           if [[ "$GITHUB_REF_NAME" != "$expected" ]]; then
             echo "Expected release tag $expected, got $GITHUB_REF_NAME" >&2
             exit 1
@@ -72,14 +74,23 @@ jobs:
             gh api "repos/$GITHUB_REPOSITORY/compare/$commit...main" --jq .status | grep -Ex 'ahead|identical'
           fi
 
+      - name: Require complete native scientific migration
+        run: .venv-release/bin/python scripts/check_migration.py --release
+
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
+        with:
+          toolchain: 1.99.1
+
       - name: Install dependencies
-        run: uv sync
+        run: UV_PROJECT_ENVIRONMENT=.venv-release uv sync --locked --no-install-project --python .venv-release/bin/python
 
-      - name: Build package
-        run: uv build
+      - name: Build package with normalized SBOM
+        run: bash scripts/build_release_wheel.sh
 
-      - name: Validate package metadata
-        run: uv run twine check dist/*
+      - name: Validate package metadata and wheel contents
+        run: |
+          .venv-release/bin/twine check dist/*
+          .venv-release/bin/check-wheel-contents dist/*.whl
 
       - name: Publish package to PyPI
-        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b
+        uses: pypa/gh-action-pypi-publish@ba38be9e461d3875417946c167d0b5f3d385a247

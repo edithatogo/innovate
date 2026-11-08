@@ -1,0 +1,69 @@
+{
+  "status": "bounded_local_checkpoint",
+  "base_commit": "9d7b9da1ce85900ceb4d434a7c968c5b4a7c5b2c",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "related_evidence": [
+    "complementary-forcing-20261107.json",
+    "multi-forcing-20261107.json",
+    "lock-in-20261107.json"
+  ],
+  "results": {
+    "focused_rust_tests": 27,
+    "rust_scope": "competitive, complementary, lock-in and C ABI/Polars tests",
+    "installed_python_tests": 47,
+    "julia_assertions": 201,
+    "R": "full conformance, independent lock-in fit/forecast and capacity recovery passed",
+    "clippy": "workspace all targets passed",
+    "docs_pages": 163,
+    "hooks": "affected files passed",
+    "package": "local metadata, wheel contents and exact Rust module/test/fixture inclusion passed"
+  },
+  "competition_coverage": {
+    "count": 673,
+    "covered": 628,
+    "percent": 93.31352154531946
+  },
+  "oracle": {
+    "python": "3.15.2",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "method": "DOP853, split at every control knot, rtol=1e-12 atol=1e-13"
+  },
+  "semantics": "Reported rows clip to current capacity while the integrated trajectory persists. Rates retain the historical clipped RHS. Forced fitting constrains base m positive, while unforced fitting retains its observed-market lower bound.",
+  "remaining": "Events, initialization, uncertainty, branch/mutation, platform and scientific/release qualification",
+  "source_sha256": {
+    "bindings/julia/test/runtests.jl": "c7a78b2f08231f3aadcf7b28d716b9067dacb2094ecae46774bac25de31b5e6b",
+    "bindings/r/tests/native.R": "dfe0bdb7f2d8c808d465f8269aebbfcfa78c2d680310bbedc168633cbe1dd683",
+    "docs/astro-site/src/content/docs/native-migration.md": "50fe44d0abd8e4418e1cfdd5377c109454a3918972734b20d01166734b9aa7b0",
+    "migration-ledger.json": "1935c1207f9320190252866bfe12941d71c5c57cec85a7ca59b6dc27edbb28e6",
+    "rust/crates/innovate-core/src/competition.rs": "f962ad9120481e353a1cd4b37fd0e3472b07ab9967cf7b27824d228ef692d8cd",
+    "rust/crates/innovate-core/src/discovery.json": "087da6554afc63237b1f8bcf2eefe0e37b0c0af32bb992fadaac98e9fe78e03e",
+    "rust/crates/innovate-core/tests/lock_in.rs": "010521538b9fd49569026096e24d409f2eabaf710dabc8c26bc8e98500af7b74",
+    "tests/native/test_python_consumer.py": "8d3cd5911de003696e2bbe6874333d0ec719677e8df8ca510be147d129da4564",
+    "rust/crates/innovate-core/tests/fixtures/lock_forcing_scipy.json": "b595b4d5f7787318ccf31534d851c62112f1c76c99a12835308d32da897d4237"
+  },
+  "logs": {
+    "bridges.log": "3ae228b45512af4cede05b89ec934b7871e716583c06527940128ca395c340f1",
+    "clippy.log": "f0212097abec09560542dfa49654b9d19441343ef589865c362292bc4c6dd767",
+    "coverage.log": "1848264caaa6b9a8814a039ba9a044b407518c0b8966ac685ed1aa949e2b90bd",
+    "docs.log": "3f9fe1b045a1eeb472c138408e3ce0750afb6f3d1561b928bef3483ceb6b0a25",
+    "ffi.log": "4b2e528e26420a7ef5a5dda37c8369f01b442c01b8ccd3cd05bddd5ac2c900b3",
+    "hooks.log": "7523d6b940ad7d7e49ea93ff33ac60ceb273c50cb6ae677030a5b65df95de21b",
+    "install.log": "9cce0eb43b9851f96ff3a9fa24884849b00e9b49712ba0f5d84719b2822febc9",
+    "julia.log": "298703dca852b587c00a51f184cfec82608238be0f1f8f7026ffdf0de7fd0637",
+    "oracle-fit.log": "99c1325771748363e0fe46fcb43596e4b63fd739e2af8197e1a2c438dae6d07d",
+    "package.log": "943c99960bf30bc1caeff023b86d4fd41f6bc3de2553ce7eb09599412f761a9b",
+    "python.log": "325b7cf7b0d6ead544ebb7e833a08009fa10cf90ce29b8f9021e2ede461488f5",
+    "r.log": "f3cb9513c2bac4e303ce9b91bc7732533977889a5b7010243509e3974c67d78a",
+    "red.log": "c74606dff6941e0c54f99bf7ae986b23aea6d0fcd7fe0458929654dcff4ea4a3",
+    "rust.log": "b0770426bf615ad909f19ebaf2d7c5a148c0ffb852fdb3dd46065910d40d89b2",
+    "sdist.log": "4c9b61c4a457209eff2784267666e810d64fe7538c3af9de1cad6a18b27259cf",
+    "wheel.log": "44f9f110a811e11469e5d27e16603380390cccf5efdaa8794486ca0726ebb7c2"
+  },
+  "oracle_generator_sha256": "28ac888a1b83e9f4e9ece6cfae624ef8e94d16da946cbc43329026fc384718f4",
+  "artifacts": {
+    "innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "81be31cb072eb904f61c8ab37ce717dbe053b9c99f40ca1c7d0ead84de6c9880",
+    "innovate-0.7.0a1.tar.gz": "ec3d85ab4fe7929c7c2c94e3ee4e3d449b947c8f1fd8fc68aefa7ffdfacfe346"
+  }
+}

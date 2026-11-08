@@ -1,273 +1,236 @@
-KERNEL_SCHEMA_VERSION <- "1.0"
+# Thin native binding. Scientific computation and validation belong to Rust.
+native_library <- function() {
+  supplied <- Sys.getenv("INNOVATE_NATIVE_LIBRARY", "")
+  if (nzchar(supplied)) return(normalizePath(supplied, mustWork = TRUE))
+  suffix <- if (Sys.info()[["sysname"]] == "Darwin") ".dylib" else .Platform$dynlib.ext
+  if (.Platform$OS.type == "windows") {
+    cargo_dll <- system.file("lib", "innovate_ffi.dll", package = "innovate.R")
+    if (nzchar(cargo_dll)) return(cargo_dll)
+  }
+  found <- system.file("lib", paste0("libinnovate_ffi", suffix), package = "innovate.R")
+  if (!nzchar(found)) stop("Install the native library or set INNOVATE_NATIVE_LIBRARY", call. = FALSE)
+  found
+}
 
-kernel_repo_root <- function() {
-  for (start in normalizePath(c(getwd(), file.path(getwd(), "innovate")), mustWork = FALSE)) {
-    candidate <- start
-    repeat {
-      if (
-        dir.exists(file.path(candidate, "src")) &&
-          file.exists(file.path(candidate, "bindings", "r", "DESCRIPTION"))
-      ) {
-        return(candidate)
+kernel_call <- function(operation, model_key = NULL, payload = list(), raw = FALSE) {
+  if (!length(payload)) payload <- structure(list(), names = character())
+  # jsonlite otherwise auto-unboxes a length-one numeric vector into a scalar.
+  # Keep schema array fields as arrays while parameter/options scalars stay scalars.
+  array_fields <- c("time", "dates", "adoption_rate", "t", "observed", "y", "values", "adoption", "share", "launch_times", "initial_values", "initial_agents", "event_times", "event_effects", "event_labels", "node_labels", "covariates", "innovation_multipliers", "imitation_multipliers", "agent_service_ticks", "agent_priorities", "edge_weights", "latent_time", "latent_values", "detected_breakpoints", "groups", "components", "weights")
+  if (identical(operation, "preprocess_series") && identical(payload$method, "sarima_filter")) {
+    array_fields <- c(array_fields, "coefficients")
+  }
+  if (identical(operation, "summarize_causal")) {
+    array_fields <- c(array_fields, "pre_treated", "post_treated", "pre_control",
+      "post_control", "actual", "counterfactual", "periods", "coefficients",
+      "standard_errors", "group_labels", "effects", "gamma_range",
+      "treated_outcomes", "control_outcomes", "supporting_evidence", "caveats",
+      "assumptions", "limitations", "data_sources", "outcomes", "treatment", "spillover_regions",
+      "confounders", "effect_modifiers")
+  }
+  if (identical(operation, "summarize_causal") && identical(payload$method, "policy_scenario")) {
+    array_fields <- c(array_fields, "baseline", "intervention", "assumptions")
+  }
+  if (operation %in% c("validate_dataset", "ingest_dataset")) {
+    array_fields <- c(array_fields, "denominator", "value", "unit_id", "product_id",
+      "target", "weight", "product_labels", "transform_steps")
+  }
+  if (identical(operation, "update_streaming_forecast")) {
+    array_fields <- c(array_fields, "previous_time", "previous_observed",
+      "new_time", "new_observed", "assumptions")
+  }
+  if (identical(operation, "compose_regime_ensemble")) {
+    array_fields <- c(array_fields, "assumptions")
+  }
+  if (identical(operation, "summarize_competition_equilibrium")) {
+    array_fields <- c(array_fields, "market_potentials")
+  }
+  if (operation %in% c("residual_diagnostic_series", "render_residual_diagnostics_svg")) {
+    array_fields <- c(array_fields, "residuals")
+  }
+  preserve_arrays <- function(value) {
+    if (!is.list(value)) return(value)
+    fields <- names(value)
+    for (i in seq_along(value)) {
+      # Event times and named overrides are scalars, unlike observation times.
+      if (!is.null(fields) && fields[[i]] == "parameter_events") next
+      if (!is.null(fields) && (fields[[i]] %in% c("covariates", "covariate_overrides", "effect_modifiers", "observed", "y", "values") ||
+          (identical(operation, "compose_regime_ensemble") && fields[[i]] == "predictions") ||
+          (identical(operation, "summarize_causal") && identical(payload$method, "policy_specification") &&
+           fields[[i]] == "data")) && is.list(value[[i]]) &&
+          !is.null(names(value[[i]]))) {
+        value[[i]] <- lapply(value[[i]], function(x) if (is.atomic(x) && !is.null(x)) I(x) else x)
+      } else if (!is.null(fields) && (fields[[i]] %in% array_fields ||
+          (fields[[i]] == "source" && identical(value$kind, "network_edges"))) &&
+          is.atomic(value[[i]]) && !is.null(value[[i]]) && !is.matrix(value[[i]])) {
+        value[[i]] <- I(value[[i]])
+      } else {
+        value[i] <- list(preserve_arrays(value[[i]]))
       }
+    }
+    value
+  }
+  payload <- preserve_arrays(payload)
+  request <- jsonlite::toJSON(list(schema_version = "2.0", operation = operation,
+    model_key = model_key, payload = payload), auto_unbox = TRUE, null = "null", digits = I(17))
+  kernel_call_json(request, raw = raw)
+}
 
-      parent <- dirname(candidate)
-      if (identical(parent, candidate)) {
-        break
+# Send an existing JSON envelope without re-encoding numbers or arrays.
+kernel_call_json <- function(request, raw = FALSE) {
+  if (!is.character(request) || length(request) != 1L || is.na(request)) {
+    stop("request must be a single JSON string", call. = FALSE)
+  }
+  if (!is.logical(raw) || length(raw) != 1L || is.na(raw)) {
+    stop("raw must be a single logical value", call. = FALSE)
+  }
+  library <- native_library()
+  # Hold a loader reference across JSON calls for the Rust registry.
+  paths <- vapply(getLoadedDLLs(), function(info) info[["path"]], character(1))
+  if (!library %in% paths) dyn.load(library, local = TRUE, now = TRUE)
+  decode_kernel_response(.Call(innovate_call_R, library, request), raw)
+}
+
+kernel_scenario_grid_ipc <- function(data, payload) {
+  request <- jsonlite::toJSON(payload, auto_unbox = TRUE, null = "null", digits = I(17))
+  decode_kernel_response(.Call(innovate_scenario_grid_ipc_R, native_library(), request, data))
+}
+
+kernel_scenario_executions_ipc <- function(response) {
+  scenario_output(response, innovate_scenario_executions_ipc_R)
+}
+
+kernel_scenario_comparisons_ipc <- function(response) {
+  scenario_output(response, innovate_scenario_comparisons_ipc_R)
+}
+
+kernel_paired_outcomes_ipc <- function(payload) {
+  # Preserve trajectory arrays without changing scalar draw IDs or parameter values.
+  if (is.list(payload) && is.list(payload[["strategies"]])) {
+    for (i in seq_along(payload[["strategies"]])) {
+      strategy <- payload[["strategies"]][[i]]
+      if (!is.list(strategy) || !is.list(strategy[["draws"]])) next
+      for (j in seq_along(strategy[["draws"]])) {
+        draw <- strategy[["draws"]][[j]]
+        if (!is.list(draw)) next
+        for (field in c("time", "adoption")) {
+          value <- draw[[field]]
+          if (is.atomic(value) && length(value) == 1L && is.null(dim(value))) {
+            draw[[field]] <- I(value)
+          }
+        }
+        strategy[["draws"]][[j]] <- draw
       }
-      candidate <- parent
+      payload[["strategies"]][[i]] <- strategy
     }
   }
-
-  stop("Unable to locate the innovate repository root", call. = FALSE)
+  scenario_output(payload, innovate_paired_outcomes_ipc_R)
 }
 
-kernel_repo_root_or_null <- function() {
-  tryCatch(kernel_repo_root(), error = function(err) NULL)
+scenario_output <- function(response, symbol) {
+  if (is.list(response)) {
+    response <- jsonlite::toJSON(response, auto_unbox = TRUE, null = "null", digits = I(17))
+  }
+  output <- .Call(symbol, native_library(), response)
+  if (is.raw(output)) output else decode_kernel_response(output)
 }
 
-kernel_bindings_root <- function() {
-  repo_root <- kernel_repo_root_or_null()
-  if (!is.null(repo_root)) {
-    return(file.path(repo_root, "bindings", "r"))
-  }
-
-  installed_root <- system.file(package = "innovate.R")
-  if (nzchar(installed_root)) {
-    return(installed_root)
-  }
-
-  stop("Unable to locate the innovate.R package root", call. = FALSE)
-}
-
-kernel_python_command <- function() {
-  command <- Sys.getenv("INNOVATE_PYTHON_COMMAND", "uv")
-  if (nzchar(Sys.which(command))) {
-    return(command)
-  }
-  if (command != "python3" && nzchar(Sys.which("python3"))) {
-    return("python3")
-  }
-  stop("Unable to locate a Python launcher for the kernel bridge", call. = FALSE)
-}
-
-kernel_bridge_script <- function() {
-  installed_script <- system.file("python", "kernel_bridge.py", package = "innovate.R")
-  if (nzchar(installed_script)) {
-    return(installed_script)
-  }
-
-  file.path(kernel_bindings_root(), "inst", "python", "kernel_bridge.py")
-}
-
-kernel_request <- function(operation, model_key = NULL, payload = list(), metadata = list(), schema_version = KERNEL_SCHEMA_VERSION) {
-  if (!is.character(operation) || length(operation) != 1L || !nzchar(operation)) {
-    stop("kernel_request() requires a non-empty operation", call. = FALSE)
-  }
-
-  if (operation != "discover_models" && (is.null(model_key) || !nzchar(model_key))) {
-    stop(sprintf("Kernel operation '%s' requires a model_key", operation), call. = FALSE)
-  }
-
-  list(
-    schema_version = schema_version,
-    operation = operation,
-    model_key = model_key,
-    payload = payload,
-    metadata = metadata
-  )
-}
-
-kernel_call <- function(request) {
-  request_path <- tempfile("innovate-kernel-request-", fileext = ".json")
-  response_path <- tempfile("innovate-kernel-response-", fileext = ".json")
-  old_wd <- getwd()
-  on.exit({
-    setwd(old_wd)
-    if (file.exists(request_path)) {
-      unlink(request_path)
-    }
-    if (file.exists(response_path)) {
-      unlink(response_path)
-    }
-  }, add = TRUE)
-
-  jsonlite::write_json(request, request_path, auto_unbox = TRUE, null = "null", digits = NA, pretty = TRUE)
-
-  command <- kernel_python_command()
-  args <- if (identical(command, "uv")) {
-    c("run", "python", shQuote(kernel_bridge_script()), shQuote(request_path), shQuote(response_path))
-  } else {
-    c(shQuote(kernel_bridge_script()), shQuote(request_path), shQuote(response_path))
-  }
-
-  repo_root <- kernel_repo_root_or_null()
-  env <- character()
-  if (!is.null(repo_root)) {
-    src_path <- file.path(repo_root, "src")
-    existing_pythonpath <- Sys.getenv("PYTHONPATH")
-    pythonpath <- if (nzchar(existing_pythonpath)) {
-      paste(src_path, existing_pythonpath, sep = .Platform$path.sep)
-    } else {
-      src_path
-    }
-    env <- c(paste0("PYTHONPATH=", pythonpath))
-  }
-  output <- system2(command, args = args, stdout = TRUE, stderr = TRUE, env = env)
-  status <- attr(output, "status")
-  if (!is.null(status) && status != 0L) {
-    stop(paste(output, collapse = "\n"), call. = FALSE)
-  }
-
-  jsonlite::fromJSON(response_path, simplifyVector = FALSE)
-}
-
-kernel_error_to_condition <- function(error, response = NULL) {
-  message <- if (is.list(error) && !is.null(error$message)) error$message else "Unknown kernel error"
-  condition <- structure(
-    list(
-      message = message,
-      error = error,
-      response = response
-    ),
-    class = c("innovate_kernel_error", "error", "condition")
-  )
-  stop(condition)
-}
-
-kernel_table_to_r <- function(result) {
-  columns <- result$columns
-  rows <- result$rows
-  if (length(rows) == 0L) {
-    return(stats::setNames(data.frame(matrix(ncol = length(columns), nrow = 0L)), columns))
-  }
-
-  column_values <- lapply(seq_along(columns), function(index) {
-    vapply(rows, function(row) row[[index]], FUN.VALUE = rows[[1]][[index]])
-  })
-  names(column_values) <- columns
-  as.data.frame(column_values, stringsAsFactors = FALSE, optional = TRUE)
-}
-
-kernel_array_to_r <- function(result) {
-  values <- unlist(result$values, use.names = FALSE)
-  shape <- as.integer(unlist(result$shape, use.names = FALSE))
-  if (length(shape) == 0L) {
-    return(values)
-  }
-  array(values, dim = shape)
-}
-
-kernel_discovery_to_r <- function(response) {
-  models <- response$models
-  if (length(models) == 0L) {
-    return(data.frame())
-  }
-
-  data.frame(
-    schema_version = rep(response$schema_version, length(models)),
-    key = vapply(models, function(model) model$key, character(1L)),
-    family = vapply(models, function(model) model$family, character(1L)),
-    import_path = vapply(models, function(model) model$import_path, character(1L)),
-    stability = vapply(models, function(model) model$stability, character(1L)),
-    supports_covariates = vapply(models, function(model) isTRUE(model$supports_covariates), logical(1L)),
-    supports_multivariate_output = vapply(models, function(model) isTRUE(model$supports_multivariate_output), logical(1L)),
-    supported_backends = vapply(models, function(model) paste(unlist(model$supported_backends, use.names = FALSE), collapse = ", "), character(1L)),
-    optional_dependencies = vapply(models, function(model) paste(unlist(model$optional_dependencies, use.names = FALSE), collapse = ", "), character(1L)),
-    supports_simulation = vapply(models, function(model) isTRUE(model$supports_simulation), logical(1L)),
-    supports_summarize = vapply(models, function(model) isTRUE(model$supports_summarize), logical(1L)),
-    stringsAsFactors = FALSE
-  )
-}
-
-kernel_value_to_r <- function(value) {
-  if (is.null(value)) {
-    return(NULL)
-  }
-  if (!is.list(value)) {
-    return(value)
-  }
-  if (all(c("columns", "rows") %in% names(value))) {
-    return(kernel_table_to_r(value))
-  }
-  if (all(c("shape", "dtype", "values") %in% names(value))) {
-    return(kernel_array_to_r(value))
-  }
-  if (!is.null(value$models) && !is.null(value$schema_version) && is.null(value$operation)) {
-    return(kernel_discovery_to_r(value))
-  }
-  if (!is.null(value$error) && !is.null(value$operation)) {
-    return(kernel_response_to_r(value))
-  }
-
-  lapply(value, kernel_value_to_r)
-}
-
-kernel_response_to_r <- function(response) {
-  if (!is.list(response)) {
-    stop("Kernel responses must be lists", call. = FALSE)
-  }
-
+decode_kernel_response <- function(response_json, raw = FALSE) {
+  response <- jsonlite::fromJSON(response_json, simplifyVector = FALSE)
   if (!is.null(response$error)) {
-    kernel_error_to_condition(response$error, response = response)
+    details <- response$error
+    message <- sprintf("%s: %s", details$code, details$message)
+    if (!is.null(details$validation)) {
+      stop(errorCondition(message, class = "innovate_dataset_validation_error",
+        code = details$code, validation = details$validation))
+    }
+    stop(message, call. = FALSE)
   }
+  if (raw) response_json else response
+}
 
-  if (!is.null(response$operation) && !is.null(response$result)) {
-    result <- kernel_value_to_r(response$result)
-    attr(result, "kernel_operation") <- response$operation
-    attr(result, "kernel_schema_version") <- response$schema_version
-    attr(result, "kernel_metadata") <- response$metadata
-    return(result)
+kernel_discover_models <- function() kernel_call("discover_models")$result
+kernel_fit_model <- function(model_key, payload) kernel_call("fit_model", model_key, payload)
+kernel_predict_model <- function(model_key, payload) kernel_call("predict_model", model_key, payload)
+kernel_simulate_model <- function(model_key, payload) kernel_call("simulate_model", model_key, payload)
+kernel_summarize_model <- function(model_key, payload) kernel_call("summarize_model", model_key, payload)
+kernel_diagnose_model <- function(model_key, payload) kernel_call("diagnose_model", model_key, payload)
+
+kernel_fit_batch <- function(model_key, datasets, workers = 1L) kernel_call("fit_batch", model_key, list(datasets = datasets, workers = workers))$result$datasets
+kernel_predict_batch <- function(model_key, datasets, workers = 1L) kernel_call("predict_batch", model_key, list(datasets = datasets, workers = workers))$result$datasets
+
+kernel_categorize_adopters <- function(time, rates) {
+  kernel_call("categorize_adopters", payload = list(time = time, adoption_rate = rates))$result
+}
+
+kernel_categorize_fitted_adopters <- function(model_key, payload) {
+  rates <- kernel_predict_model(model_key, payload)$result$rates
+  if (is.null(rates) || !all(lengths(rates) == 1L)) {
+    stop("adopter classification requires one native rate per time", call. = FALSE)
   }
+  time <- payload$inputs$time
+  if (is.null(time)) time <- payload$inputs$t
+  kernel_categorize_adopters(time, unlist(rates, use.names = FALSE))
+}
 
-  if (!is.null(response$models) && !is.null(response$schema_version)) {
-    return(kernel_discovery_to_r(response))
+kernel_cumulative_sum <- function(values) {
+  kernel_call("preprocess_series", payload = list(method = "cumulative_sum", values = values))$result$values
+}
+
+kernel_rolling_average <- function(values, window) {
+  kernel_call("preprocess_series", payload = list(method = "rolling_average", values = values, window = window))$result$values
+}
+
+kernel_aggregate_dates <- function(dates, values, frequency) {
+  if (inherits(dates, "POSIXt")) {
+    dates <- format(dates, "%Y-%m-%dT%H:%M:%OS6Z", tz = "UTC")
   }
-
-  kernel_value_to_r(response)
+  kernel_call("aggregate_dates", payload = list(dates = as.character(dates),
+    values = values, frequency = frequency))$result
 }
 
-kernel_schema_version <- function() {
-  KERNEL_SCHEMA_VERSION
+kernel_seasonal_decomposition <- function(values, period, trend_span = NULL, robust = FALSE, historical = FALSE,
+                                          inner_iterations = 5L, outer_iterations = if (isTRUE(robust)) 5L else 0L,
+                                          seasonal_span = NULL, low_pass_span = NULL,
+                                          seasonal_degree = 1L, seasonal_jump = 1L,
+                                          trend_degree = 1L, trend_jump = 1L,
+                                          low_pass_degree = 1L, low_pass_jump = 1L) {
+  kernel_call("preprocess_series", payload = list(method = "seasonal_decomposition",
+    values = values, period = period, window = trend_span, robust = robust, historical = historical,
+    inner_iterations = inner_iterations, outer_iterations = outer_iterations,
+    seasonal_span = seasonal_span, low_pass_span = low_pass_span,
+    seasonal_degree = seasonal_degree, seasonal_jump = seasonal_jump,
+    trend_degree = trend_degree, trend_jump = trend_jump,
+    low_pass_degree = low_pass_degree, low_pass_jump = low_pass_jump))$result
 }
 
-kernel_discover_models <- function() {
-  kernel_response_to_r(kernel_call(kernel_request(operation = "discover_models")))
+kernel_sarima_fit <- function(values, order, seasonal_order = c(0L, 0L, 0L, 0L), historical = FALSE) {
+  fitted <- kernel_call("preprocess_series", payload = list(method = "sarima_fit",
+    values = values, order = order, seasonal_order = seasonal_order, historical = historical))$result$fitted
+  vapply(fitted, function(value) if (is.null(value)) NA_real_ else value, numeric(1))
 }
 
-kernel_fit_model <- function(request) {
-  kernel_response_to_r(kernel_call(request))
+export_ipc_file <- function(data) {
+  if (!is.raw(data)) stop("data must be raw IPC bytes", call. = FALSE)
+  scenario_output(data, innovate_export_ipc_file_R)
 }
 
-kernel_predict_model <- function(request) {
-  kernel_response_to_r(kernel_call(request))
+export_ipc_stream <- function(data) {
+  if (!is.raw(data)) stop("data must be raw IPC bytes", call. = FALSE)
+  scenario_output(data, innovate_export_ipc_stream_R)
 }
 
-kernel_simulate_model <- function(request) {
-  kernel_response_to_r(kernel_call(request))
-}
-
-kernel_summarize_model <- function(request) {
-  kernel_response_to_r(kernel_call(request))
-}
-
-kernel_diagnose_model <- function(request) {
-  kernel_response_to_r(kernel_call(request))
-}
-
-kernel_extract_diagnostics <- function(result) {
-  if (!is.list(result)) {
-    stop("Diagnostics can only be extracted from list-like kernel results", call. = FALSE)
+invoke_registered_extension <- function(callback, selection, payload) {
+  resolved <- kernel_call("resolve_extension_manifest", payload = selection)$result
+  output <- callback(resolved, payload)
+  if (identical(resolved$extension_point, "dataset_provider")) {
+    return(kernel_call("ingest_dataset", payload = list(dataset = output))$result)
   }
-
-  if (!is.null(result$diagnostics)) {
-    return(result$diagnostics)
+  if (identical(resolved$extension_point, "model_registry")) {
+    return(kernel_call("resolve_extension_model_aliases", payload = list(aliases = output))$result)
   }
-
-  diagnostics <- attr(result, "kernel_diagnostics", exact = TRUE)
-  if (!is.null(diagnostics)) {
-    return(diagnostics)
+  if (identical(resolved$extension_point, "diagnostics")) {
+    return(kernel_call("summarize_extension_diagnostics", payload = list(checks = output))$result)
   }
-
-  stop("Kernel result does not expose diagnostics", call. = FALSE)
+  kernel_call("import_extension_artifact", payload = list(artifact = output))$result
 }

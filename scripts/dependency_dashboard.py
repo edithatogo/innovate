@@ -43,24 +43,17 @@ CHECKS: tuple[Check, ...] = (
         required_tools=("pnpm",),
     ),
     Check(
-        ecosystem="typescript-binding",
-        check_id="npm-outdated-typescript-binding",
-        command=["npm", "outdated", "--json"],
-        cwd=ROOT / "bindings/typescript",
-        required_tools=("npm",),
-    ),
-    Check(
         ecosystem="rust",
         check_id="cargo-update-dry-run",
         command=["cargo", "update", "--dry-run"],
-        cwd=ROOT / "bindings/rust",
+        cwd=ROOT,
         required_tools=("cargo",),
     ),
     Check(
         ecosystem="rust",
         check_id="cargo-outdated",
         command=["cargo", "outdated", "--root-deps-only", "--exit-code", "1"],
-        cwd=ROOT / "bindings/rust",
+        cwd=ROOT,
         required_tools=("cargo", "cargo-outdated"),
     ),
     Check(
@@ -98,26 +91,6 @@ CHECKS: tuple[Check, ...] = (
         ],
         cwd=ROOT,
         required_tools=("julia",),
-    ),
-    Check(
-        ecosystem="dotnet-binding",
-        check_id="dotnet-outdated-runtime-package",
-        command=["dotnet", "list", "bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj", "package", "--outdated"],
-        cwd=ROOT,
-        required_tools=("dotnet",),
-    ),
-    Check(
-        ecosystem="dotnet-binding",
-        check_id="dotnet-outdated-test-package",
-        command=[
-            "dotnet",
-            "list",
-            "bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj",
-            "package",
-            "--outdated",
-        ],
-        cwd=ROOT,
-        required_tools=("dotnet",),
     ),
 )
 

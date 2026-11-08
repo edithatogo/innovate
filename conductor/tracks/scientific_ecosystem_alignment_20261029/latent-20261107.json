@@ -1,0 +1,99 @@
+{
+  "date": "2026-11-07",
+  "status": "bounded_local_checkpoint",
+  "base_commit": "3773d3f6badfec02f9972513b98c3a701336c13a",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "results": {
+    "rust_tests": 79,
+    "accounting": "75 core/C ABI plus 4 Polars",
+    "installed_python": 32,
+    "julia_assertions": 155,
+    "R": "native conformance, latent fit/state and singleton arrays pass",
+    "clippy_lint_types_docs": "pass; expected native source type warning; 163 pages",
+    "package": "installed local wheel and source archive metadata pass; clean-source/platform/hosted qualification pending"
+  },
+  "coverage": {
+    "branches": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "functions": {
+      "count": 789,
+      "covered": 586,
+      "percent": 74.27122940430925
+    },
+    "instantiations": {
+      "count": 1670,
+      "covered": 681,
+      "percent": 40.778443113772454
+    },
+    "lines": {
+      "count": 6587,
+      "covered": 5456,
+      "percent": 82.82981630484288
+    },
+    "mcdc": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "regions": {
+      "count": 10546,
+      "covered": 9209,
+      "notcovered": 1337,
+      "percent": 87.32220747202732
+    }
+  },
+  "latent_lines": {
+    "count": 303,
+    "covered": 278,
+    "percent": 91.74917491749174
+  },
+  "raw_log_sha256": {
+    "innovate-latent-release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "innovate-latent-red.log": "e5f49fe5a8994e3744495f9c89f008467c168b930e70a706f28d571adbe36dbb",
+    "innovate-latent-coverage.log": "487f6c46e07b54db342c87f83e7b1987b70b0a9ee4f7e60d5b9ac926a9025170",
+    "innovate-latent-coverage-initial.log": "48a236378687ab8a585c2072e945efc3ba50a1b04787fc20062d7bd88d6b7ac2",
+    "innovate-latent-julia.log": "2486f0fefc4e7fb825bcdc3ed693d4008211e76ca4d3f193dcc0f8e7c69a2a1f",
+    "innovate-latent-r-install.log": "8bcc66b6f075dd6146b6ca006a0579b369a424d49b587fb4b5bc0350fad78c31",
+    "innovate-latent-clippy.log": "82dfaf31cb408e202a3010517602c16ae87167ecf8de2bae37517c415bdd3bd0",
+    "innovate-latent-green.log": "e5f04c2995c9f6581451a72a8a668bce00cb2953297e0d8637f47105f4d2a7f7",
+    "innovate-latent-wheel.log": "b8bbd8304058ab7d620aa8e1cdabbcea60f4283112f2c0aff21d83de0826273b",
+    "innovate-latent-boundary.log": "50d4ec92c820acada2dfb9ee5b83eb0e938fbb2c1c801da9799cb6c74b03c396",
+    "innovate-latent-sdist.log": "c4f2d260914776ecc0becec38b1bd9bea47f5ab032fbf211d2e1eb42cf6fad33",
+    "innovate-latent-docs.log": "5d633f46bba7a6e3c411995924d5f81da665dc36161ae55fb36c121e5a8c559b",
+    "innovate-latent-ffi.log": "ef0b6ede00e7c53060e7061b41fd9c112e9c609248c99afcb172252b8d57246a",
+    "innovate-latent-hooks.log": "7523d6b940ad7d7e49ea93ff33ac60ceb273c50cb6ae677030a5b65df95de21b",
+    "innovate-latent-tabular.log": "412c692e3b7fe2bae919026b6e8253f9131287e9ee2feaba49964ed9069caecf",
+    "innovate-latent-r.log": "0b42eaa6d692f77c46f2447ed8b42e2d124e1b11f91d5355a9080ec1da860000",
+    "innovate-latent-install.log": "e5a2baa3932668c33946bd2fdff19b32849a79413d7465b115a67d450eb81e15",
+    "innovate-latent-lint.log": "093e91c502151b50c84f57316c544bed91098f8c2c199992d01a162d20bfbd89",
+    "innovate-latent-policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+    "innovate-latent-clippy-focused.log": "1ff8ee2073d324142d4a4be5ea364e843ed41ad409ae3c963060946c5d07c73c",
+    "innovate-latent-package.log": "5a064229d89098da9c3ed1a62134c6c521ed13b94456f095f2f987a9a0f26a16",
+    "innovate-latent-python.log": "5cba8a0d336f6301764b9e7cb54d2168880bd1238a4afa7c45b0666fad715409"
+  },
+  "source_sha256": {
+    "bindings/julia/test/runtests.jl": "8c666bc9eae519848cdfc51246c7c085d99006092f09c975df174c03862474d2",
+    "bindings/r/R/kernel_bridge.R": "f0754476ce00624e5a16b480df726051d8bc120b12b4e682be42e074a73c3aeb",
+    "bindings/r/tests/native.R": "026191bde9d122b1a5e47f98c5f8c3ab84551c0baad09f340a3d3681fb325e95",
+    "docs/astro-site/src/content/docs/native-migration.md": "642451308e0734373046b9c66d29278e20ec6bdcf4a678e6072cb70f5562c0da",
+    "migration-ledger.json": "43d857726a461cad6597ca630a9f4839c3e722b7093cdab412564419049c6246",
+    "rust/crates/innovate-core/src/discovery.json": "27d9f7f5d977d1275ea6cc67f424d80fbef8183d91a29f71f201f8d757462bcd",
+    "rust/crates/innovate-core/src/kernel.rs": "5c4707154d163511eead89f3dac5e93c41eb9935182bc013967642f6f33fa948",
+    "rust/crates/innovate-core/src/lib.rs": "ec335a81ecd7ce853e229f19d37bb86acd8150ce674d7934c2b48b0775eb74a5",
+    "rust/crates/innovate-core/tests/native_boundary.rs": "6c9a5e16dda4059a43f947a07a4191d60b62d7a48c1371ef2dd6e112da320d03",
+    "tests/native/test_python_consumer.py": "e50a5d56d9b0effedb0accd57365b6c6f477f11b22f1d207ac5179c8d67e8164",
+    "rust/crates/innovate-core/src/latent.rs": "828a526f84156a674123a07f033d32d6158cf956441542adc8d6210ee23b4ba0",
+    "rust/crates/innovate-core/tests/latent.rs": "adbb9c883706b6f7b6a81f048218e6e9783a1eac3d3e9263360a780a0dae25bf"
+  },
+  "artifact_sha256": {
+    "/tmp/innovate-latent-wheel/innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "04d77884d8f0b7116784d53de2ef70d93635582d9c7b73904c2ca586cb30be0f",
+    "/tmp/innovate-latent-wheel/innovate-0.7.0a1.tar.gz": "bd721d2ade995853c126d8d52d894f43080c8453ee8209e5b85d94f9df9e875d",
+    "target/debug/libinnovate_ffi.dylib": "11cea4eb01c6294a04e9ee5ab875abc01c4ae61de2431ab20ea246a01a57a887"
+  }
+}

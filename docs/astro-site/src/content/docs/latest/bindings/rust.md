@@ -3,6 +3,11 @@ title: Rust Bindings
 description: Rust crate adapter and native-operation fallback boundaries.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 The Rust bindings provide a thin adapter over the shared `innovate` kernel. They
 expose a Rust-facing request and response surface for stable kernel operations
 while keeping Python reference semantics authoritative. Native Rust execution is

@@ -1,0 +1,166 @@
+info: cargo-llvm-cov currently setting cfg(coverage); you can opt-out it by passing --no-cfg-coverage
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+   Compiling innovate-ffi v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-ffi)
+    Finished `test` profile [unoptimized] target(s) in 12.01s
+     Running unittests src/lib.rs (target/abm-coverage/llvm-cov-target/debug/deps/innovate_core-3492a7a39a5f93e7)
+
+running 1 test
+test numerics::tests::unrepresentable_sensitivities_never_report_convergence ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/competition.rs (target/abm-coverage/llvm-cov-target/debug/deps/competition-5723d724d75c23c1)
+
+running 5 tests
+test competitive_domain_and_unsupported_covariates_are_explicit_errors ... ok
+test competitive_native_odes_match_independent_scipy_and_forecast_from_saved_origin ... ok
+test competitive_fit_reports_limits_and_rejects_invalid_data ... ok
+test lotka_volterra_fits_without_seed_and_decoupled_products_match_bass ... ok
+test competitive_fits_report_quality_and_keep_the_initial_condition_for_forecasts ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.92s
+
+     Running tests/complementary.rs (target/abm-coverage/llvm-cov-target/debug/deps/complementary-49ece321b05ee00f)
+
+running 2 tests
+test decoupled_complementary_goods_match_logistic_and_allow_levels_above_one ... ok
+test complementary_equations_match_independent_scipy_and_fit ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.29s
+
+     Running tests/fit_quality.rs (target/abm-coverage/llvm-cov-target/debug/deps/fit_quality-bd48ca9a3b64d9ad)
+
+running 4 tests
+test custom_seeds_cannot_bypass_option_or_observation_validation ... ok
+test excessive_initial_parameter_scale_is_a_structured_error_not_false_convergence ... ok
+test custom_initial_parameters_and_iteration_limits_are_honored ... ok
+test scalar_native_models_report_actual_optimizer_termination_and_local_rank ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/historical_logistic.rs (target/abm-coverage/llvm-cov-target/debug/deps/historical_logistic-9d22a3aff21dfd82)
+
+running 5 tests
+test historical_logistic_covariates_and_event_boundary_match_closed_forms ... ok
+test historical_event_covariate_policy_is_explicit ... ok
+test advanced_shapes_and_options_fail_clearly ... ok
+test historical_event_fit_forecasts_and_reports_rank ... ok
+test additive_covariate_fit_recovers_independent_curve ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/kairos.rs (target/abm-coverage/llvm-cov-target/debug/deps/kairos-b1253d0543b0d4e8)
+
+running 9 tests
+test unsupported_or_malformed_engines_never_silently_use_a_curve ... ok
+test finite_domain_and_option_guards_are_enforced ... ok
+test malformed_forcing_and_colliding_boundaries_are_errors ... ok
+test abm_agents_are_conserved_replayable_and_match_homogeneous_des ... ok
+test native_kairos_replays_and_does_not_depend_on_sampling_grid ... ok
+test covariates_and_events_can_pause_and_restart_pressure ... ok
+test abm_initial_adoption_is_conserved_at_zero_and_saturation ... ok
+test innovation_only_ensemble_matches_binomial_mean ... ok
+test forced_innovation_ensemble_matches_integrated_hazard ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/lock_in.rs (target/abm-coverage/llvm-cov-target/debug/deps/lock_in-fb84b7c69fab949e)
+
+running 5 tests
+test historical_lock_in_clips_reported_levels ... ok
+test lock_in_fitter_rejects_initial_market_below_either_observed_series ... ok
+test historical_lock_in_matches_independent_ode_reference ... ok
+test lock_in_forecasts_from_saved_origin_and_labels_historical_rates ... ok
+test lock_in_fitting_preserves_trajectories_and_reports_structural_ambiguity ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.84s
+
+     Running tests/model_oracles.rs (target/abm-coverage/llvm-cov-target/debug/deps/model_oracles-cef158205fa70d26)
+
+running 1 test
+test five_model_prediction_simulation_and_fitted_forecast_oracles ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/multi_generation.rs (target/abm-coverage/llvm-cov-target/debug/deps/multi_generation-b7cad6356020a6b5)
+
+running 8 tests
+test unknown_generation_parameters_and_nonfinite_domains_do_not_silently_disappear ... ok
+test invalid_shapes_parameters_and_unknown_options_are_rejected ... ok
+test successive_generation_closed_form_launches_and_conservation ... ok
+test legacy_origin_is_explicit_and_forecast_batching_does_not_reset_state ... ok
+test legacy_three_generation_ode_matches_independent_scipy_oracle ... ok
+test convergence_limits_and_unobserved_generations_are_reported_without_overclaiming ... ok
+test multi_output_fit_reports_convergence_and_predicts_held_out_times ... ok
+test legacy_fit_recovers_independent_ode_fixture_and_rates_keep_their_sign ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 15.69s
+
+     Running tests/native_boundary.rs (target/abm-coverage/llvm-cov-target/debug/deps/native_boundary-c9a45d283bdc4e72)
+
+running 6 tests
+test dispatch_rejects_unknown_schema_versions ... ok
+test empty_model_is_a_structured_error_not_a_panic ... ok
+test unavailable_models_never_fall_back_to_python ... ok
+test discovery_does_not_advertise_unported_models ... ok
+test dispatch_is_native_without_a_python_launcher ... ok
+test direct_parameter_payloads_work_for_bass_and_reject_ambiguous_state ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/network.rs (target/abm-coverage/llvm-cov-target/debug/deps/network-689b7afd0adc196b)
+
+running 7 tests
+test heterogeneous_vectors_reject_invalid_domains ... ok
+test pending_agents_are_not_counted_as_adopted ... ok
+test malformed_networks_resources_and_initial_nodes_are_rejected ... ok
+test fifo_service_has_exact_capacity_limited_completion_times ... ok
+test contacts_control_pure_contagion_and_replay ... ok
+test imitation_weights_control_seeded_contagion ... ok
+test heterogeneous_service_uses_the_queued_agents_duration ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/network_diffusion.rs (target/abm-coverage/llvm-cov-target/debug/deps/network_diffusion-4a6be21cf47ad99b)
+
+running 5 tests
+test historical_summary_retains_coordinates_and_graph_statistics_without_times ... ok
+test historical_weighted_spillover_preserves_isolated_nodes_and_matrix_shape ... ok
+test graph_shape_and_unknown_options_are_rejected ... ok
+test finite_high_weight_graphs_keep_finite_summary_means ... ok
+test independent_node_fits_retain_state_and_forecast ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/policy.rs (target/abm-coverage/llvm-cov-target/debug/deps/policy-9ccc708b0e2d6745)
+
+running 4 tests
+test no_time_policy_summary_retains_events_and_clips_negative_multipliers ... ok
+test invalid_event_shapes_decay_and_unknown_fields_fail ... ok
+test policy_events_use_exact_boundaries_decay_and_historical_cumulative_max ... ok
+test historical_policy_fit_holds_decay_and_preserves_forecast_state ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/scientific_contract.rs (target/abm-coverage/llvm-cov-target/debug/deps/scientific_contract-facd4c8416e6ab35)
+
+running 7 tests
+test bass_forecasts_use_absolute_time_without_needing_the_origin_in_every_batch ... ok
+test gompertz_uses_all_three_parameters ... ok
+test invalid_parameters_and_unsorted_times_fail_before_computation ... ok
+test diagnostics_do_not_fabricate_uncomputed_significance_tests ... ok
+test bass_fit_recovers_parameters_on_irregular_times_and_rescaled_units ... ok
+test information_criteria_use_consistent_gaussian_parameter_counts ... ok
+test native_fits_recover_synthetic_logistic_and_gompertz_parameters ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/lib.rs (target/abm-coverage/llvm-cov-target/debug/deps/innovate_ffi-f1365ccc4545d26e)
+
+running 1 test
+test tests::invalid_null_utf8_and_valid_requests_are_owned_and_released ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+    Finished report saved to /tmp/innovate-heterogeneous-coverage.json

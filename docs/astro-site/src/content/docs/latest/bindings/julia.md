@@ -3,6 +3,11 @@ title: Julia Bindings
 description: Julia package adapter over the shared kernel bridge.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 The Julia bindings expose the stable `innovate` kernel through a thin adapter
 layer. The Julia package does not reimplement model behavior; it shells out to
 the shared Python kernel bridge and normalizes the results into Julia-friendly

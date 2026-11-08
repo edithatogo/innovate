@@ -1,0 +1,17 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 0.56s
+     Running tests/network.rs (target/debug/deps/network-38f2f2a4df910663)
+
+running 9 tests
+test malformed_networks_resources_and_initial_nodes_are_rejected ... ok
+test pending_agents_are_not_counted_as_adopted ... ok
+test heterogeneous_vectors_reject_invalid_domains ... ok
+test imitation_weights_control_seeded_contagion ... ok
+test fifo_service_has_exact_capacity_limited_completion_times ... ok
+test heterogeneous_service_uses_the_queued_agents_duration ... ok
+test scheduled_graph_and_service_changes_take_effect_at_boundaries ... ok
+test contacts_control_pure_contagion_and_replay ... ok
+test directed_weights_control_exposure_without_overflow ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

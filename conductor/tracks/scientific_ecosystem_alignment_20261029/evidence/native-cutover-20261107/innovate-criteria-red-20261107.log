@@ -1,0 +1,28 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.26s
+     Running tests/scientific_contract.rs (/tmp/innovate-scientific-core-target/debug/deps/scientific_contract-54168ddb70ad91bb)
+
+running 7 tests
+test invalid_parameters_and_unsorted_times_fail_before_computation ... ok
+test bass_forecasts_use_absolute_time_without_needing_the_origin_in_every_batch ... ok
+test diagnostics_do_not_fabricate_uncomputed_significance_tests ... ok
+test gompertz_uses_all_three_parameters ... ok
+test information_criteria_use_consistent_gaussian_parameter_counts ... FAILED
+test native_fits_recover_synthetic_logistic_and_gompertz_parameters ... ok
+test bass_fit_recovers_parameters_on_irregular_times_and_rescaled_units ... ok
+
+failures:
+
+---- information_criteria_use_consistent_gaussian_parameter_counts stdout ----
+
+thread 'information_criteria_use_consistent_gaussian_parameter_counts' (24541580) panicked at rust/crates/innovate-core/tests/scientific_contract.rs:149:13:
+fisher_pry: {"AIC":-318.5218048732529,"BIC":-314.3437151223592,"MAE":0.0003010264113433926,"MSE":1.767274052387736e-7,"R-squared":0.9999989101867193,"RMSE":0.00042038958745284545,"RSS":3.7112755100142452e-6,"R_squared":0.9999989101867193}
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    information_criteria_use_consistent_gaussian_parameter_counts
+
+test result: FAILED. 6 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --test scientific_contract`

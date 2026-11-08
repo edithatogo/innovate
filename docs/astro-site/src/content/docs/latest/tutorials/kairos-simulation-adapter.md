@@ -3,6 +3,11 @@ title: Kairos Simulation Adapter
 description: Deterministic DES/ABM simulation contracts, telemetry, and legacy Mesa/NDLib migration policy.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 # Kairos Simulation Adapter
 
 Innovate's supported agent-based and discrete-event simulation path is the

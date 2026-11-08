@@ -1,0 +1,37 @@
+{
+  "model": "multi_product",
+  "optimizer": {
+    "converged": false,
+    "gradient_max_abs": 6.20183923363388e-07,
+    "interpretation": "numerical termination only; not a global optimum or statistical acceptance",
+    "iterations": 200,
+    "max_iterations": 200,
+    "method": "deterministic_multistart_damped_least_squares",
+    "scaled_rss": 1.0145511700175009e-09,
+    "selected_start_index": 2,
+    "start_reports": [
+      {
+        "converged": false,
+        "iterations": 200,
+        "scaled_rss": 6.582224391779683e-08,
+        "termination": "iteration_limit"
+      },
+      {
+        "converged": false,
+        "iterations": 200,
+        "scaled_rss": 2.034339027243225e-08,
+        "termination": "iteration_limit"
+      },
+      {
+        "converged": false,
+        "iterations": 200,
+        "scaled_rss": 1.0145511700175009e-09,
+        "termination": "iteration_limit"
+      }
+    ],
+    "starts": 3,
+    "termination": "iteration_limit"
+  },
+  "rss": 1.0838817716088867e-05,
+  "forecast_max_absolute_error": 0.22727687555355658
+}

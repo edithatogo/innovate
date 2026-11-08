@@ -1,0 +1,16 @@
+[package]
+name = "innovate-ffi"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+innovate-core.workspace = true
+innovate-tabular = { path = "../innovate-tabular" }
+serde_json.workspace = true

@@ -29,29 +29,11 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Set up Python
-        run: uv python install 3.15.1
+      - name: Select isolated release checker
+        run: uv venv .venv-release --python 3.15.2
 
-      - name: Install dependencies
-        run: uv sync --python 3.15.1
-
-      - name: Generate supply-chain evidence
-        run: uv run nox -s release_supply_chain
-
-      - name: Generate reproducibility evidence
-        run: uv run nox -s release_reproducibility
-
-      - name: Generate release-readiness report
-        run: uv run nox -s release_readiness
-
-      - name: Upload release-readiness-report
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: release-readiness-report
-          path: |
-            docs/source/_static/release_readiness/readiness-report.json
-            docs/source/_static/release_readiness/evidence/*.json
-          if-no-files-found: error
+      - name: Require complete native migration
+        run: .venv-release/bin/python scripts/check_migration.py --release
 
   release-lane-checks:
     runs-on: ubuntu-latest
@@ -61,14 +43,67 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Document scheduled or manual release lane
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
+        with:
+          toolchain: 1.99.1
+      - run: uv venv .venv-release --python 3.15.2
+      - run: UV_PROJECT_ENVIRONMENT=.venv-release uv sync --locked --no-install-project --python .venv-release/bin/python
+      - name: Verify release policy and wheel SBOM normalization
+        run: .venv-release/bin/python -m pytest tests/unit/test_normalize_wheel_sbom.py tests/native/test_migration_policy.py
+      - name: Validate release packaging without publishing
+        env:
+          CARGO_BUILD_JOBS: '2'
         run: |
-          printf '%s\n' \
-            'This scheduled or manual release lane owns expensive checks.' \
-            'Mutation sampling, package dry-runs, compatibility sweeps, and external audit refreshes stay out of fast PR checks.'
+          source_digest="$(.venv-release/bin/python scripts/check_migration.py --source-digest)"
+          bash scripts/build_release_wheel.sh
+          .venv-release/bin/twine check dist/*
+          .venv-release/bin/check-wheel-contents dist/*.whl
+          test "$(.venv-release/bin/python scripts/check_migration.py --source-digest)" = "$source_digest"
+          printf "%s\n" "$source_digest" > dist/SOURCE_SHA256
+          (cd dist && sha256sum ./*.tar.gz ./*.whl > SHA256SUMS)
+      - name: Exercise the release wheel
+        run: |
+          staging="$(mktemp -d)"
+          uv venv "$staging" --python .venv-release/bin/python
+          uv pip install --python "$staging/bin/python" dist/*.whl pytest==9.2.0
+          uv pip check --python "$staging/bin/python"
+          "$staging/bin/python" - "$staging" <<'PYTHON'
+          import sys
+          from pathlib import Path
 
-      - name: Upload release lane note
+          import innovate
+          from innovate import _native
+
+          root = Path(sys.argv[1]).resolve()
+          for module in (innovate, _native):
+              assert Path(module.__file__).resolve().is_relative_to(root), module.__file__
+          PYTHON
+          "$staging/bin/python" -m pytest -q \
+            tests/native/test_python_consumer.py \
+            tests/native/test_competition.py \
+            tests/native/test_multi_generation.py \
+            tests/native/test_paired_outcomes.py
+      - name: Retain validated dry-run artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: release-lane-checks
-          path: .github/workflows/release-readiness.yml
+          name: python-release-dry-run-${{ github.sha }}
+          path: |
+            dist/*.tar.gz
+            dist/*.whl
+            dist/SHA256SUMS
+            dist/SOURCE_SHA256
+          if-no-files-found: error
+      - name: Qualify the installed Voiage consumer
+        run: |
+          consumer="$(mktemp -d)"
+          uv venv "$consumer" --python .venv-release/bin/python
+          uv pip install --only-binary :all: --python "$consumer/bin/python" dist/*.whl voiage==3.1.0
+          uv pip check --python "$consumer/bin/python"
+          "$consumer/bin/python" scripts/qualify_voiage_arrow.py --wheel dist/*.whl > dist/voiage-qualification.json
+      - name: Retain Voiage qualification receipt
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: voiage-qualification-${{ github.sha }}
+          path: dist/voiage-qualification.json
+          if-no-files-found: error

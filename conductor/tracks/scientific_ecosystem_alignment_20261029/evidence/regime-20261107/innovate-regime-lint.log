@@ -1,0 +1,16 @@
+nox > Running session lint
+nox > /Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/.venv-native/bin/ruff check bindings/python tests/native noxfile.py scripts/check_migration.py
+All checks passed!
+nox > /Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/.venv-native/bin/ruff format --check bindings/python tests/native noxfile.py scripts/check_migration.py
+7 files already formatted
+nox > cargo fmt --all --check
+nox > Session lint was successful in a second.
+nox > Running session types
+nox > /Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/.venv-native/bin/basedpyright --pythonpath /Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/.venv-native/bin/python
+/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/bindings/python/innovate/__init__.py
+  /Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/bindings/python/innovate/__init__.py:17:15 - warning: Import "._native" could not be resolved from source (reportMissingModuleSource)
+0 errors, 1 warning, 0 notes
+nox > Session types was successful in 4 seconds.
+nox > Ran 2 sessions in 6 seconds:
+nox > * lint: success, took a second
+nox > * types: success, took 4 seconds

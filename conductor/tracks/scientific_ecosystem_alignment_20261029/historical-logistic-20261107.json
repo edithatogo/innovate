@@ -1,0 +1,148 @@
+{
+  "date": "2026-11-07",
+  "base_commit": "84eca121",
+  "historical_source": "56d91dd716747900465ce2d1dc8c0231aa8a337b",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "scope": "Bounded historical Logistic covariates/event curves, explicit-initialized fits and Kairos initial adopters",
+  "results": {
+    "rust_tests": 51,
+    "rust_accounting": "47 core/FFI coverage-run tests plus 4 Polars tests",
+    "installed_python_tests": 25,
+    "julia_assertions": 137,
+    "R": "Installed package historical covariate and initial ABM conformance plus previous native cases pass",
+    "clippy_lint_types": "pass; expected native missing-source type warning",
+    "docs": "163 pages and internal links pass",
+    "package": "local installed wheel and source archive metadata pass; clean-source rebuild pending"
+  },
+  "coverage": {
+    "totals": {
+      "branches": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0
+      },
+      "functions": {
+        "count": 616,
+        "covered": 464,
+        "percent": 75.32467532467533
+      },
+      "instantiations": {
+        "count": 1318,
+        "covered": 552,
+        "percent": 41.88163884673748
+      },
+      "lines": {
+        "count": 5299,
+        "covered": 4279,
+        "percent": 80.7510851103982
+      },
+      "mcdc": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0
+      },
+      "regions": {
+        "count": 8306,
+        "covered": 7184,
+        "notcovered": 1122,
+        "percent": 86.4916927522273
+      }
+    },
+    "historical_module": {
+      "branches": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "mcdc": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "functions": {
+        "count": 61,
+        "covered": 48,
+        "percent": 78.68852459016394
+      },
+      "instantiations": {
+        "count": 122,
+        "covered": 48,
+        "percent": 39.34426229508197
+      },
+      "lines": {
+        "count": 350,
+        "covered": 308,
+        "percent": 88.0
+      },
+      "regions": {
+        "count": 604,
+        "covered": 531,
+        "notcovered": 73,
+        "percent": 87.91390728476821
+      }
+    }
+  },
+  "artifacts_sha256": {
+    "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/target/debug/libinnovate_ffi.dylib": "2b37f1c86c298394d9ce07024dd76f5b01023a310f4fc57cbe541cd7a0921bd2",
+    "/tmp/innovate-historical-wheel/innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "3076bc3ae6e7629df299ea68dd3f7706dd5af5a3f5761775383de4d0f2fe6b76",
+    "/tmp/innovate-historical-wheel/innovate-0.7.0a1.tar.gz": "d4a8fd95c59b0132765b09c51cdd804db0aa2030a97a6c902f5a66f8b918f82c"
+  },
+  "evidence_sha256": {
+    "innovate-historical-clippy.log": "7ccfa310717d2037b01786b36c3659253b12733ac5d8c333f3d24dcf1c73e0fe",
+    "coverage-summary.json": "546df35658b1bcfd505803764ca91d3efdbfe237eea95fbbf30d3944c5cc6310",
+    "innovate-historical-lint.log": "093e91c502151b50c84f57316c544bed91098f8c2c199992d01a162d20bfbd89",
+    "innovate-historical-ffi.log": "33a5ab1399a6776211bf13740e514d25313d79ae396a96028da9d183c7de2a72",
+    "innovate-historical-green.log": "0a31fe97471226f55934c5920988ca3822afd2ea12e31fe63e883e3b00d6c76c",
+    "innovate-historical-r.log": "54f36d1e6097c956dcaf815afe036e73a4d846585a5c175b7acc4e69feb2485f",
+    "innovate-historical-tabular.log": "0666d64c15d5773c0267c64103eca0e362f029ee2314b3d6424bae3365621fee",
+    "innovate-historical-docs.log": "55e619645e02f5656f623913d7af1c9be0d7ede29582f5f663c5a26d96e16086",
+    "innovate-historical-julia.log": "239370b71059a6c00b5f46f8fd133302aee135b093e236dfbddb3502e4b3beae",
+    "innovate-historical-r-install.log": "8bcc66b6f075dd6146b6ca006a0579b369a424d49b587fb4b5bc0350fad78c31",
+    "source-sha256.json": "f5398fadd0db4fc7b85a2851519b31aeb4d0c690efa2143c8c8eea0e9912f447",
+    "innovate-historical-coverage.log": "c3e809a4e80250b79877f66ebdf8199db2e44c756cc040ee4a5dd332413363b6",
+    "innovate-historical-package.log": "c0792edbff3d00863113e59100659a44d81ca8f00fdd9be5787d22dc0c310b24",
+    "innovate-historical-r-red.log": "e9add87746f78d3e0b6e8040ee24718aab1fd4213c462ca94a0e78c7f04bab3d",
+    "innovate-historical-release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "innovate-historical-red.log": "41564ed71bfd9d9fcdb4b6f367d787459dd6ae18782a5622856e68b37804fb86",
+    "innovate-historical-policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+    "innovate-historical-python.log": "5b46e3ce8f1a28bfb08d11817d0be0a0d4ac965caf945f247c4f4b748f8b1dbe",
+    "innovate-historical-native.log": "b063701737eb14ad1a45a9a5c9ece3ac8fa382737a49f21e6e05d3bb259c94fd",
+    "innovate-historical-sdist.log": "ce16590390b4ca698b0ca99dcb36a0b61a0ad6a5e07e8a2827a2ae5235280140",
+    "innovate-historical-wheel.log": "cc42fda3d4bd661c41247ae54248af7d5b53a418d2500aed1983d5d92bbcfed8",
+    "innovate-historical-hooks.log": "7523d6b940ad7d7e49ea93ff33ac60ceb273c50cb6ae677030a5b65df95de21b"
+  },
+  "raw_log_sha256": {
+    "innovate-historical-red.log": "41564ed71bfd9d9fcdb4b6f367d787459dd6ae18782a5622856e68b37804fb86",
+    "innovate-historical-green.log": "fc5b02da7537eb488ee48d07d75af8f41b66b1fca45da91c19aa6a007b7fad56",
+    "innovate-historical-native.log": "3df6fb9c96f5a0f7650858a88a70583308fc8af4e633b56cbf9fd970a48ebde7",
+    "innovate-historical-r-red.log": "e9add87746f78d3e0b6e8040ee24718aab1fd4213c462ca94a0e78c7f04bab3d",
+    "innovate-historical-r-install.log": "8bcc66b6f075dd6146b6ca006a0579b369a424d49b587fb4b5bc0350fad78c31",
+    "innovate-historical-r.log": "54f36d1e6097c956dcaf815afe036e73a4d846585a5c175b7acc4e69feb2485f",
+    "innovate-historical-julia.log": "239370b71059a6c00b5f46f8fd133302aee135b093e236dfbddb3502e4b3beae",
+    "innovate-historical-python.log": "5b46e3ce8f1a28bfb08d11817d0be0a0d4ac965caf945f247c4f4b748f8b1dbe",
+    "innovate-historical-coverage.log": "c3e809a4e80250b79877f66ebdf8199db2e44c756cc040ee4a5dd332413363b6",
+    "innovate-historical-tabular.log": "df9913baf724b3c94701b1b2ff87c6e4b6964599e98791b71fad8ea75b16ba38",
+    "innovate-historical-clippy.log": "7ccfa310717d2037b01786b36c3659253b12733ac5d8c333f3d24dcf1c73e0fe",
+    "innovate-historical-lint.log": "093e91c502151b50c84f57316c544bed91098f8c2c199992d01a162d20bfbd89",
+    "innovate-historical-docs.log": "310ebb7f152a82d0eee6a28315d1b2281ac0775dc76d453c1419916128ac74cc",
+    "innovate-historical-policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+    "innovate-historical-release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "innovate-historical-wheel.log": "cc42fda3d4bd661c41247ae54248af7d5b53a418d2500aed1983d5d92bbcfed8",
+    "innovate-historical-ffi.log": "33a5ab1399a6776211bf13740e514d25313d79ae396a96028da9d183c7de2a72",
+    "innovate-historical-sdist.log": "ce16590390b4ca698b0ca99dcb36a0b61a0ad6a5e07e8a2827a2ae5235280140",
+    "innovate-historical-package.log": "268cfd1a776214999e97718b183d40863eeb81c8a93785c3054b802d4166e910"
+  },
+  "normalization": "Only trailing horizontal whitespace and terminal blank lines removed",
+  "reused_dependency_audit": "abm-forcing-20261107.json (unchanged dependency graph; existing bincode maintenance warning)",
+  "remaining": [
+    "Other historical models and interpolation/event contracts",
+    "Advanced default initialization and adoption-rate helpers",
+    "Heterogeneous/network/resource ABM and resume",
+    "All remaining inference, scenario, data, reporting, HPC and platform/release obligations"
+  ]
+}

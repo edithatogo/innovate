@@ -23,7 +23,7 @@
   },
   "claims": {
     "promoted_bridge": false,
-    "kairos_smoke_ready": true,
+    "kairos_smoke_ready": false,
     "mesa_base_required": false,
     "ndlib_base_required": false
   },
@@ -37,6 +37,7 @@
   ],
   "notes": [
     "Release readiness must not claim promoted FFI/UniFFI/Diplomat bridges without smoke promotion.",
-    "Legacy ABM examples require innovate[legacy-abm]."
+    "Legacy ABM examples require innovate[legacy-abm].",
+    "6 November 2026: source/example presence is not native Python dispatch. Native Rust example results are scoped separately in conductor/tracks/scientific_ecosystem_alignment_20261029/kairos-native-20261106.json."
   ]
 }

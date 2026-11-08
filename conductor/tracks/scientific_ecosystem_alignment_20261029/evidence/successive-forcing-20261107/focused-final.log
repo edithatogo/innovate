@@ -1,0 +1,27 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 2.61s
+     Running tests/multi_generation.rs (target/debug/deps/multi_generation-fe12158b80170882)
+
+running 19 tests
+test invalid_shapes_parameters_and_unknown_options_are_rejected ... ok
+test capacity_event_uses_each_intervals_active_control_derivative ... ok
+test capacity_rate_scaling_avoids_unrepresentable_intermediate_control_slopes ... ok
+test covariate_history_drives_both_historical_generations_and_replays ... ok
+test historical_norton_events_preserve_continuous_generations_and_controls ... ok
+test legacy_origin_is_explicit_and_forecast_batching_does_not_reset_state ... ok
+test successive_capacity_events_jump_levels_and_invalid_hazards_are_rejected ... ok
+test legacy_three_generation_ode_matches_independent_scipy_oracle ... ok
+test scalar_norton_events_extend_to_both_variants ... ok
+test successive_control_history_can_start_at_the_first_launch ... ok
+test successive_generation_closed_form_launches_and_conservation ... ok
+test successive_controls_include_capacity_slopes_and_launch_rates ... ok
+test unknown_generation_parameters_and_nonfinite_domains_do_not_silently_disappear ... ok
+test convergence_limits_and_unobserved_generations_are_reported_without_overclaiming ... ok
+test multi_output_fit_reports_convergence_and_predicts_held_out_times ... ok
+test conditional_covariate_fit_retains_all_named_coefficients ... ok
+test successive_forcing_matches_independent_fraction_reference_and_fit ... ok
+test historical_norton_events_match_independent_reference_and_fit ... ok
+test legacy_fit_recovers_independent_ode_fixture_and_rates_keep_their_sign ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.44s
+

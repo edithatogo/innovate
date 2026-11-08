@@ -1,8 +1,6 @@
 name: CI
-
 permissions:
   contents: read
-
 on:
   push:
     branches: [work, main]
@@ -11,169 +9,130 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 6 * * 1"
-
-# Cancel in-progress runs for the same branch
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}-v2
+  group: ${{ github.workflow }}-${{ github.ref }}-native
   cancel-in-progress: true
-
 jobs:
-  prose-lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
-
-      - name: Run Vale
-        uses: vale-cli/vale-action@d89dee975228ae261d22c15adcd03578634d429c
-        with:
-          files: README.md,docs,conductor,specs
-          separator: ","
-          vale_flags: "--minAlertLevel=suggestion"
-
-  # -----------------------------------------------------------------------
-  # Test Matrix
-  # -----------------------------------------------------------------------
-  unit-tests-base:
-    runs-on: ubuntu-latest
-    timeout-minutes: 35
+  native-python:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.15.1"]
-        include:
-          - python-version: "3.15.1"
-            pytest-extra-args: >-
-              --ignore=tests/unit/test_benchmark_runner.py
-              --ignore=tests/unit/test_benchmark_suite.py
-              --ignore=tests/unit/test_mixture_comprehensive.py
-              --ignore=tests/unit/test_network_policy_diffusion.py
-              --ignore=tests/unit/test_specific_modules_coverage.py
-
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
         with:
           persist-credentials: false
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
         with:
-          enable-cache: true
-
-      - name: Set up Python ${{ matrix.python-version }}
-        run: uv python install ${{ matrix.python-version }}
-
-      - name: Install dependencies
-        run: uv sync --python ${{ matrix.python-version }}
-
-      - name: Install package
-        run: uv pip install -e .
-
-      - name: Run required unit gate
-        run: |
-          CI=true uv run --python ${{ matrix.python-version }} python -m pytest tests/unit/ -m "not optional_backend" \
-            --ignore=tests/unit/test_bayesian_fitter_robust.py \
-            --ignore=tests/unit/test_blackjax_fitter.py \
-            --ignore=tests/unit/test_dynamics_competition_direct.py \
-            --ignore=tests/unit/test_dynamics_contagion_direct.py \
-            --ignore=tests/unit/test_categorization.py \
-            --ignore=tests/unit/test_path_dependence.py \
-            --ignore=tests/unit/test_preprocess.py \
-            --ignore=tests/unit/test_plots_diagnostics.py \
-            --ignore=tests/unit/test_plots_network.py \
-            --ignore=tests/unit/test_advanced_functionality_comprehensive.py \
-            --ignore=tests/unit/test_curve_fitter.py \
-            ${{ matrix.pytest-extra-args }} \
-            --cov=innovate \
-            --cov-report=xml \
-            --cov-report=term-missing \
-            --cov-fail-under=0 \
-            --tb=short \
-            -q
+          toolchain: 1.99.1
+          components: rustfmt, clippy
+      - run: uv sync --locked --python 3.15.2
         env:
-          JAX_PLATFORM_NAME: cpu
-
-      - name: Upload coverage to Codecov
-        if: matrix.python-version == '3.15.1'
-        uses: codecov/codecov-action@0fb7174895f61a3b6b78fc075e0cd60383518dac
-        with:
-          files: ./coverage.xml
-          fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
-
-  optional-backend-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
-        with:
-          enable-cache: true
-
-      - name: Set up Python
-        run: uv python install 3.15.1
-
-      - name: Install HDF5 headers for the Python 3.15 h5py source build
-        run: sudo apt-get update && sudo apt-get install -y libhdf5-dev pkg-config
-
-      - name: Install optional backend dependencies
-        run: uv sync --extra jax --extra bayesian
-
-      - name: Install package
-        run: uv pip install -e .
-
-      - name: Run optional backend unit gate
+          CARGO_BUILD_JOBS: '2'
+      - run: uv run --no-sync python -c "import sys; assert sys.version_info[:3] == (3, 15, 2)"
+      - run: cargo test --locked -p innovate-core -p innovate-tabular -p innovate-ffi -j 2
+      - run: uv run --no-sync pytest tests/native
+      - run: uv run --no-sync python scripts/check_migration.py
+      - run: cargo fmt --all --check
+      - run: uv run --no-sync ruff check bindings/python tests/native noxfile.py scripts/check_migration.py scripts/run_native_benchmarks.py scripts/check_benchmark_shards.py
+      - run: |
+          uv run --no-sync python -c "import subprocess, sys; subprocess.check_call([sys.executable, '-m', 'basedpyright', '--pythonpath', sys.executable])"
+      - name: Verify Rust and Python consumers from source distribution
+        if: matrix.os == 'ubuntu-latest' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+        shell: bash
         run: |
-          CI=true uv run python -m pytest tests/unit/ \
-            -m optional_backend \
-            --cov=innovate \
-            --cov-report=xml \
-            --cov-report=term-missing \
-            --cov-fail-under=0 \
-            --tb=short \
-            -q
-        env:
-          JAX_PLATFORM_NAME: cpu
-
-  # -----------------------------------------------------------------------
-  # Lint & Format
-  # -----------------------------------------------------------------------
+          staging="$(mktemp -d)"
+          uv run --no-sync maturin sdist --out "$staging"
+          tar -xzf "$staging"/*.tar.gz -C "$staging"
+          cd "$staging"/innovate-*/
+          export CARGO_TARGET_DIR="$staging/target"
+          cargo test --locked -p innovate-core --test native_boundary --test remote_worker -j 2
+          python="$GITHUB_WORKSPACE/.venv/bin/python"
+          CARGO_BUILD_JOBS=2 "$GITHUB_WORKSPACE/.venv/bin/maturin" build --locked -i "$python" -o "$staging/wheel"
+          uv pip install --python "$python" --no-deps --target "$staging/installed" "$staging"/wheel/*.whl
+          PYTHONPATH="$staging/installed" "$python" -m pytest tests/native
+      - name: Verify the native remote worker container
+        if: matrix.os == 'ubuntu-latest' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+        timeout-minutes: 15
+        shell: bash
+        run: |
+          git archive HEAD Dockerfile Cargo.toml Cargo.lock LICENSE rust |
+            docker build --target remote-worker -t innovate-remote-worker:ci -
+          test "$(docker image inspect --format '{{.Config.User}}' innovate-remote-worker:ci)" = 65532:65532
+          docker run --rm --network none --read-only --cap-drop ALL \
+            --entrypoint /bin/sh innovate-remote-worker:ci -ec \
+            "test -s /usr/local/share/doc/innovate/LICENSE && ! command -v python && ! command -v python3"
+          worker=(docker run --rm -i --network none --read-only --cap-drop ALL innovate-remote-worker:ci)
+          "${worker[@]}" --describe |
+            jq -e '.result.worker_transport == "stdin_stdout" and .result.max_raw_envelope_bytes == 2000000 and .result.identity_verification == "caller_supplied_context"'
+          envelope='{"schema_version":"2.0","context":{"request_id":"ci","tenant_id":"test","principal":"fixture","auth_scope":"kernel:execute"},"kernel_request":{"schema_version":"2.0","operation":"predict_model","model_key":"logistic","payload":{"inputs":{"time":[1]},"parameters":{"L":100,"k":1,"x0":1}}}}'
+          printf '%s\n' "$envelope" | "${worker[@]}" |
+            jq -e '.result.kernel_response.result.values == [50]'
+          printf '%s\n' "$envelope" | jq '.context.auth_scope = "read"' | "${worker[@]}" |
+            jq -e '.result.kernel_response.error.code == "unsupported_operation"'
+          response="$(mktemp)"
+          diagnostic="$(mktemp)"
+          for malformed in "{" "{\"context\":{},\"context\":{}}"; do
+            status=0
+            printf %s "$malformed" | "${worker[@]}" >"$response" 2>"$diagnostic" || status=$?
+            test "$status" -eq 1
+            test ! -s "$response"
+            grep -Fx "invalid remote envelope JSON" "$diagnostic"
+          done
+      - name: Run scheduled native benchmarks
+        id: native-benchmarks
+        if: matrix.os == 'ubuntu-latest' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+        run: uv run --no-sync python scripts/run_native_benchmarks.py --policy scheduled --workers 2 --output native-benchmarks.json
+      - name: Retain native benchmark results
+        if: always() && (steps.native-benchmarks.outcome == 'success' || steps.native-benchmarks.outcome == 'failure')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: native-benchmarks
+          path: native-benchmarks.json
+          if-no-files-found: error
+      - name: Verify local MPI benchmark shards
+        id: mpi-benchmarks
+        if: matrix.os == 'ubuntu-latest' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+        timeout-minutes: 10
+        shell: bash
+        run: |
+          mkdir mpi-benchmarks
+          cp native-benchmarks.json mpi-benchmarks/serial.json
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends openmpi-bin
+          mpirun --version > mpi-benchmarks/launcher-version.txt
+          mpirun -n 2 .venv/bin/python scripts/run_native_benchmarks.py --mpi-shard --policy scheduled --output 'mpi-benchmarks/rank-{rank}.json'
+          .venv/bin/python scripts/check_benchmark_shards.py mpi-benchmarks/serial.json mpi-benchmarks/rank-*.json
+      - name: Retain MPI benchmark receipts
+        if: always() && (steps.mpi-benchmarks.outcome == 'success' || steps.mpi-benchmarks.outcome == 'failure')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: mpi-benchmarks
+          path: mpi-benchmarks/
+          if-no-files-found: error
   lint:
+    needs: native-python
+    if: always()
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
+      - name: Require the native matrix, including Rust formatting and Python lint
+        env:
+          RESULT: ${{ needs.native-python.result }}
+        run: test "$RESULT" = success
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
-
-      - name: Set up Python
-        run: uv python install 3.15.1
-
-      - name: Install dependencies
-        run: uv sync
-
-      - name: Run Ruff linter
-        run: uv run ruff check .
-
-      - name: Run Ruff format check
-        run: uv run ruff format --check .
-
-      - name: Validate nox session registry
-        run: uv run nox --list
-
-      - name: Verify release version synchronization
-        run: uv run python scripts/sync_versions.py --check
-
-      - name: Run actionlint
-        run: |
-          bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
-          ./actionlint -color
+  unit-tests-base:
+    # The branch protection context retains its old name. Tests run on 3.15.2.
+    name: unit-tests-base (3.15.1)
+    needs: native-python
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require native Rust and Python tests on every platform
+        env:
+          RESULT: ${{ needs.native-python.result }}
+        run: test "$RESULT" = success
 
   package:
     runs-on: ubuntu-latest
@@ -181,549 +140,94 @@ jobs:
       - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
         with:
           persist-credentials: false
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
-
-      - name: Set up Python
-        run: uv python install 3.15.1
-
-      - name: Install dependencies
-        run: uv sync
-
-      - name: Build package
-        run: uv build
-
-      - name: Validate Python package metadata
-        run: uv run twine check dist/*
-
-      - name: Validate Python wheel contents
-        run: uv run check-wheel-contents dist/*.whl
-
-      - name: Validate Python sdist excludes generated caches
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
+        with:
+          toolchain: 1.99.1
+      - run: uv sync --locked --no-install-project --python 3.15.2
+      - run: .venv/bin/python -c "import sys; assert sys.version_info[:3] == (3, 15, 2)"
+      - name: Build the wheel from the source distribution and validate both
+        env:
+          CARGO_BUILD_JOBS: '2'
         run: |
-          if tar -tzf dist/*.tar.gz | grep -E '(^|/)([.]ruff_cache|__pycache__|.*[.]pyc)'; then
+          bash scripts/build_release_wheel.sh .venv
+          .venv/bin/twine check dist/*
+          .venv/bin/check-wheel-contents dist/*.whl
+          tar -tzf dist/*.tar.gz > "$RUNNER_TEMP/sdist-contents"
+          if grep -E '(^|/)([.]ruff_cache|__pycache__|.*[.]pyc)' "$RUNNER_TEMP/sdist-contents"; then
             echo "Generated cache files must not be included in the Python sdist."
             exit 1
           fi
 
-  docs-smoke:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: docs/astro-site
-    steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa
-        with:
-          version: 9.15.9
-
-      - name: Set up Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
-        with:
-          node-version: "22"
-          cache: "pnpm"
-          cache-dependency-path: docs/astro-site/pnpm-lock.yaml
-
-      - name: Set up Python
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
-        with:
-          python-version: "3.15.1"
-
-      - name: Install Python documentation extractor
-        run: python -m pip install griffe
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build docs smoke target
-        run: pnpm build
-
-  rust-bindings:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        rust-version: ["1.99.1", "stable"]
-    steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
-
-      - name: Set up Python
-        run: uv python install 3.15.1
-
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
-        with:
-          toolchain: ${{ matrix.rust-version }}
-          components: rustfmt, clippy
-
-      - name: Check Rust formatting
-        working-directory: bindings/rust
-        run: cargo fmt --check
-
-      - name: Run Rust clippy
-        working-directory: bindings/rust
-        run: cargo clippy --all-targets --all-features -- -D warnings
-
-      - name: Run Rust binding tests
-        working-directory: bindings/rust
-        run: cargo test
-
-      - name: Package Rust crate
-        working-directory: bindings/rust
-        run: |
-          # Repo-first Kairos git deps are not crates.io-publishable yet.
-          if grep -Eq 'kairo-ecs-.*git = "https://github.com/edithatogo/kairos' Cargo.toml; then
-            echo "Skipping cargo package while unpublished Kairos git dependencies are present."
-            exit 0
-          fi
-          cargo package
-
-  rust-benchmarks:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
-
-      - name: Set up Python
-        run: uv python install 3.15.1
-
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
-
-      - name: Validate Rust migration inventory
-        working-directory: bindings/rust
-        run: |
-          test -s inst/discovery_manifest.json
-          python3 -m json.tool inst/discovery_manifest.json >/tmp/innovate-rs-discovery-manifest.json
-          find ../../docs/source/_static \
-            -type f \( -name "rust_core_*inventory*.json" -o -name "rust_core_*dossier*.json" \) \
-            -print >/tmp/innovate-rs-core-json-files.txt
-          test -s /tmp/innovate-rs-core-json-files.txt
-          while IFS= read -r file; do
-            python3 -m json.tool "$file" >/dev/null
-          done </tmp/innovate-rs-core-json-files.txt
-
-      - name: Check Rust benchmark and profiling targets compile
-        working-directory: bindings/rust
-        run: cargo check --benches --examples
-
-      - name: Check Rust benchmark harness compiles
-        working-directory: bindings/rust
-        run: cargo bench --bench native_kernel --no-run
-
-      - name: Check Rust memory profiler compiles
-        working-directory: bindings/rust
-        run: cargo check --example profile_memory_native_kernels
-
-      - name: Validate Rust profiling package contents
-        working-directory: bindings/rust
-        run: |
-          if grep -Eq 'kairo-ecs-.*git = "https://github.com/edithatogo/kairos' Cargo.toml; then
-            echo "Validating package include paths from Cargo.toml (cargo package blocked by Kairos git deps)."
-            test -f benches/native_kernel.rs
-            test -f examples/profile_memory_native_kernels.rs
-            test -f inst/discovery_manifest.json
-            test -f scripts/profile_native_kernels.sh
-            test -f scripts/profile_memory_native_kernels.sh
-            exit 0
-          fi
-          cargo package --list | tee /tmp/innovate-rs-benchmark-package-files.txt
-          grep -F "benches/native_kernel.rs" /tmp/innovate-rs-benchmark-package-files.txt
-          grep -F "examples/profile_memory_native_kernels.rs" /tmp/innovate-rs-benchmark-package-files.txt
-          grep -F "inst/discovery_manifest.json" /tmp/innovate-rs-benchmark-package-files.txt
-          grep -F "scripts/profile_native_kernels.sh" /tmp/innovate-rs-benchmark-package-files.txt
-          grep -F "scripts/profile_memory_native_kernels.sh" /tmp/innovate-rs-benchmark-package-files.txt
-
-  typescript-bindings:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: ["26"]
-    steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
-
-      - name: Set up Python
-        run: uv python install 3.15.1
-
-      - name: Set up Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: npm
-          cache-dependency-path: bindings/typescript/package-lock.json
-
-      - name: Install TypeScript dependencies
-        working-directory: bindings/typescript
-        run: npm ci
-
-      - name: Check TypeScript schema compatibility
-        working-directory: bindings/typescript
-        run: npm run schema:check
-
-      - name: Type-check TypeScript bindings
-        working-directory: bindings/typescript
-        run: npm run typecheck
-
-      - name: Run TypeScript binding tests
-        working-directory: bindings/typescript
-        run: npm test
-
-      - name: Validate npm package contents
-        working-directory: bindings/typescript
-        run: npm pack --dry-run
-
-  go-bindings:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        go-version: ["1.25.x", "1.26.x"]
-    steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
-
-      - name: Set up Python
-        run: uv python install 3.15.1
-
-      - name: Set up Go
-        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16
-        with:
-          go-version: ${{ matrix.go-version }}
-
-      - name: Run Go binding tests
-        working-directory: bindings/go
-        run: go test ./...
-
-      - name: Run Go vet
-        working-directory: bindings/go
-        run: go vet ./...
-
-      - name: Validate Go module path
-        working-directory: bindings/go
-        run: test "$(go list -m)" = "github.com/edithatogo/innovate/bindings/go"
-
-  julia-bindings:
-    runs-on: ubuntu-latest
-    continue-on-error: ${{ matrix.julia-version == 'nightly' }}
-    strategy:
-      fail-fast: false
-      matrix:
-        julia-version: ["1.12", "nightly"]
-    steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
-
-      - name: Set up Python
-        run: uv python install 3.15.1
-
-      - name: Set up Julia
-        uses: julia-actions/setup-julia@4c0cb0fce8556fdb04a90347310e5db8b1f98fb9
-        with:
-          version: ${{ matrix.julia-version }}
-
-      - name: Instantiate Julia binding project
-        run: julia --project=bindings/julia -e 'using Pkg; Pkg.instantiate()'
-
-      - name: Run Julia binding tests
-        run: julia --project=bindings/julia bindings/julia/test/runtests.jl
-
-      - name: Run Julia installed-package smoke
-        if: matrix.julia-version == '1.12'
-        env:
-          INNOVATE_JULIA_RUN_BRIDGE_SMOKE: "true"
-          INNOVATE_JULIA_RUN_INSTALLED_PACKAGE_SMOKE: "true"
-          INNOVATE_PYTHON_COMMAND: "uv run --directory ${{ github.workspace }} python"
-        run: |
-          tmpdir="$(mktemp -d)"
-          cp -R bindings/julia "$tmpdir/Innovate"
-          rm -f "$tmpdir/Innovate/Manifest.toml"
-          cd "$tmpdir/Innovate"
-          julia --project=. -e 'using Pkg; Pkg.instantiate(); Pkg.test()'
-
-  r-bindings:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
-
-      - name: Set up Python
-        run: uv python install 3.15.1
-
-      - name: Set up R
-        uses: r-lib/actions/setup-r@d3c5be51b12e724e68f33216ca3c148b66d5f0b6
-
-      - name: Set up TinyTeX for R manual PDF
-        uses: r-lib/actions/setup-tinytex@d3c5be51b12e724e68f33216ca3c148b66d5f0b6
-
-      - name: Set up Pandoc for R vignettes
-        uses: r-lib/actions/setup-pandoc@d3c5be51b12e724e68f33216ca3c148b66d5f0b6
-
-      - name: Install R binding dependencies
-        run: |
-          Rscript -e 'repos <- Sys.getenv("RSPM", "https://cloud.r-project.org"); packages <- c("jsonlite", "knitr", "rmarkdown"); install.packages(packages, repos = repos); missing <- packages[!vapply(packages, requireNamespace, logical(1), quietly = TRUE)]; if (length(missing)) stop("Missing R packages: ", paste(missing, collapse = ", "))'
-
-      - name: Read R package metadata
-        id: r_metadata
-        run: |
-          Rscript -e 'd <- read.dcf("bindings/r/DESCRIPTION")[1, ]; cat("package=", d[["Package"]], "\nversion=", d[["Version"]], "\n", sep = "")' >> "$GITHUB_OUTPUT"
-
-      - name: Run R binding tests
-        env:
-          INNOVATE_RUN_INTEGRATION_TESTS: "true"
-        run: Rscript bindings/r/tests/run.R
-
-      - name: Build R source package
-        run: R CMD build bindings/r
-
-      - name: Build R manual PDF
-        run: |
-          mkdir -p artifacts/r-manual
-          R CMD Rd2pdf --no-preview \
-            --output="artifacts/r-manual/${{ steps.r_metadata.outputs.package }}_${{ steps.r_metadata.outputs.version }}_manual.pdf" \
-            bindings/r
-          test -s "artifacts/r-manual/${{ steps.r_metadata.outputs.package }}_${{ steps.r_metadata.outputs.version }}_manual.pdf"
-
-      - name: Upload R manual PDF artifact
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: r-manual-${{ steps.r_metadata.outputs.package }}-${{ steps.r_metadata.outputs.version }}
-          path: artifacts/r-manual/${{ steps.r_metadata.outputs.package }}_${{ steps.r_metadata.outputs.version }}_manual.pdf
-
-      - name: Check R source package
-        run: R CMD check --as-cran --no-manual innovate.R_*.tar.gz
-
-  csharp-bindings:
-    runs-on: ubuntu-latest
+  julia-r:
     strategy:
       fail-fast: false
       matrix:
         include:
-          - dotnet-version: "10.0.x"
-            target-framework: "net10.0"
-          - dotnet-version: "11.0.x"
-            target-framework: "net11.0"
+          - os: ubuntu-latest
+            native-library: libinnovate_ffi.so
+          - os: macos-latest
+            native-library: libinnovate_ffi.dylib
+          - os: windows-latest
+            native-library: innovate_ffi.dll
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
         with:
           persist-credentials: false
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
-
-      - name: Set up Python
-        run: uv python install 3.15.1
-
-      - name: Install Python dependencies
-        run: uv sync
-
-      - name: Set up .NET ${{ matrix.dotnet-version }}
-        uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
         with:
-          dotnet-version: ${{ matrix.dotnet-version }}
-
-      - name: Restore C# binding dependencies
-        run: dotnet restore bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj -p:TargetFrameworks=${{ matrix.target-framework }}
-
-      - name: Test C# bindings
-        run: dotnet test bindings/csharp/Innovate.Kernel.Tests/Innovate.Kernel.Tests.csproj --configuration Release --framework ${{ matrix.target-framework }} -p:TargetFrameworks=${{ matrix.target-framework }}
-
-      - name: Pack C# binding
-        run: dotnet pack bindings/csharp/Innovate.Kernel/Innovate.Kernel.csproj --configuration Release --output bindings/csharp/artifacts/${{ matrix.target-framework }} -p:TargetFrameworks=${{ matrix.target-framework }} -p:ContinuousIntegrationBuild=true
-
-  # -----------------------------------------------------------------------
-  # Type Checking
-  # -----------------------------------------------------------------------
-  type-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
-
-      - name: Set up Python
-        run: uv python install 3.15.1
-
-      - name: Install dependencies
-        run: uv sync
-
-      - name: Run basedpyright strict (verified public API surface)
+          toolchain: 1.99.1
+      - run: cargo build --release --locked -p innovate-ffi -j 2
+      - name: Stage native library in both bindings
+        shell: bash
+        env:
+          NATIVE_LIBRARY: ${{ matrix.native-library }}
         run: |
-          uv run basedpyright --warnings \
-            src/innovate/__init__.py \
-            src/innovate/backend.py \
-            src/innovate/backends/__init__.py \
-            src/innovate/capabilities.py \
-            src/innovate/diffuse/__init__.py \
-            src/innovate/substitute/__init__.py \
-            src/innovate/ecosystem/__init__.py
-
-  # -----------------------------------------------------------------------
-  # Optional Extended Suites
-  # -----------------------------------------------------------------------
-  integration-tests:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
-    steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+          mkdir -p bindings/julia/deps bindings/r/inst/lib
+          cp "target/release/$NATIVE_LIBRARY" bindings/julia/deps/
+          cp "target/release/$NATIVE_LIBRARY" bindings/r/inst/lib/
+      - uses: julia-actions/setup-julia@fa02766e078afaaf09b14210362cee14137e6a32
         with:
-          persist-credentials: false
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
-
-      - name: Set up Python
-        run: uv python install 3.15.1
-
-      - name: Install dependencies
-        run: uv sync --extra jax
-
-      - name: Run integration tests
-        run: CI=true uv run python -m pytest tests/integration/ -m integration --tb=short -q
-        env:
-          JAX_PLATFORM_NAME: cpu
-
-  e2e-tests:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
-    steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
-
-      - name: Set up Python
-        run: uv python install 3.15.1
-
-      - name: Install dependencies
-        run: uv sync --extra jax
-
-      - name: Run e2e tests
-        run: CI=true uv run python -m pytest tests/e2e/ -m e2e --tb=short -q
-        env:
-          JAX_PLATFORM_NAME: cpu
-
-  security:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
-    steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
-
-      - name: Set up Python
-        run: uv python install 3.15.1
-
-      - name: Install dependencies
-        run: uv sync
-
-      - name: Run Bandit security scan
-        run: uv run bandit -r src/innovate -c pyproject.toml
-
-      - name: Run pip-audit vulnerability scan
-        run: uv run pip-audit --strict
-
-  # -----------------------------------------------------------------------
-  # Benchmarks (optional, triggered on demand)
-  # -----------------------------------------------------------------------
-  benchmarks:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
-    steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
-
-      - name: Set up Python
-        run: uv python install 3.15.1
-
-      - name: Install dependencies
-        run: uv sync --extra jax
-
-      - name: Install package
-        run: uv pip install -e .
-
-      - name: Run Scalene profiling
-        run: uv run scalene src/innovate --cli --reduced-profile
-
-      - name: Run pytest benchmarks
-        run: uv run pytest --benchmark-only --benchmark-json=benchmark.json
-
-      - name: Upload benchmark results
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: benchmark-results
-          path: benchmark.json
-
-  # -----------------------------------------------------------------------
-  # Mutation Testing (weekly schedule)
-  # -----------------------------------------------------------------------
-  mutation-testing:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'schedule'
-    steps:
-      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
-        with:
-          persist-credentials: false
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
-
-      - name: Set up Python
-        run: uv python install 3.15.1
-
-      - name: Install dependencies
-        run: uv sync
-
-      - name: Install package
-        run: uv pip install -e .
-
-      - name: Run mutmut
-        run: uv run mutmut run
-        env:
-          JAX_PLATFORM_NAME: cpu
-
-      - name: Show mutmut results
-        run: uv run mutmut results
+          version: '1.13'
+      - shell: bash
+        run: |
+          unset INNOVATE_NATIVE_LIBRARY
+          julia --project=bindings/julia -e 'using Pkg; Pkg.instantiate(); Pkg.test()'
+      - uses: r-lib/actions/setup-r@d3c5be51b12e724e68f33216ca3c148b66d5f0b6
+      - shell: bash
+        run: Rscript -e 'install.packages("jsonlite", repos="https://cloud.r-project.org")'
+      - run: R CMD INSTALL bindings/r
+        if: matrix.os != 'macos-latest'
+        shell: bash
+      - name: Build and install the macOS R binary archive
+        if: matrix.os == 'macos-latest'
+        shell: bash
+        run: |
+          stage="$(mktemp -d)"
+          mkdir "$stage/build-lib" "$stage/installed-lib"
+          cd "$stage"
+          R CMD INSTALL --build -l "$stage/build-lib" "$GITHUB_WORKSPACE/bindings/r"
+          R CMD INSTALL -l "$stage/installed-lib" ./innovate.R_*.tgz
+          echo "R_LIBS=$stage/installed-lib" >> "$GITHUB_ENV"
+      - shell: bash
+        run: |
+          unset INNOVATE_NATIVE_LIBRARY
+          Rscript bindings/r/tests/native.R
+      - name: Verify R loads the Windows DLL from a Unicode path
+        if: matrix.os == 'windows-latest'
+        shell: bash
+        run: |
+          cat > "${RUNNER_TEMP}/innovate-unicode-dll.R" <<'RSCRIPT'
+            library(innovate.R)
+            source <- system.file("lib", "innovate_ffi.dll", package = "innovate.R", mustWork = TRUE)
+            directory <- file.path(tempdir(), "innovate-\u6e2c\u8a66")
+            stopifnot(dir.create(directory))
+            target <- file.path(directory, basename(source))
+            stopifnot(file.copy(source, target))
+            Sys.setenv(INNOVATE_NATIVE_LIBRARY = target)
+            result <- kernel_predict_model("logistic",
+              list(inputs = list(time = 1), parameters = list(L = 100, k = 1, x0 = 1)))
+            stopifnot(result[["result"]][["values"]][[1]] == 50)
+          RSCRIPT
+          Rscript "${RUNNER_TEMP}/innovate-unicode-dll.R"

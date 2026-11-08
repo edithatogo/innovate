@@ -29,7 +29,7 @@ Innovate consumes Kairos for DES/ABM execution: one native clock, state, event o
 
 Voiage can consume Innovate forecasts and joint uncertainty through an optional integration adapter and explicit economic/utility mapping. Neither core imports the other in both directions. A study or policy selected by Voiage can return as a versioned design artefact to Innovate through application orchestration; data feedback is not a dependency cycle.
 
-[Paignia](https://github.com/edithatogo/paignia) owns generic Rust game representation and solver development. Its seed originates in `new-drug-reimbursement-game`; Kairos's overlapping game crates retain explicit transfer and scientific-completion obligations. The created Paignia repository and source transfer do not establish package publication or numerical qualification. Innovate must consume exact qualified artifacts, keep Kairos execution adapters optional for static games, and preserve UOGTO semantic identifiers. Innovate constructs innovation/competition games; the reimbursement application retains its institutional assumptions.
+Generic game representation/solution is incubated in `new-drug-reimbursement-game` and overlaps Kairos's existing game crates. Consolidate it into one independently consumable Rust game-runtime capability, keeping Kairos execution adapters optional and UOGTO semantic identifiers explicit. Innovate constructs innovation/competition games; the reimbursement application supplies its own institutional assumptions.
 
 `vop_poc_nz` is a proof of concept. Its reusable decision, perspective, equity and VOI methods belong in Voiage after verification. `tobac`, CareOps and other applications retain their scientific scenarios and evidence while promoting reusable methods to the corresponding library. Do not copy application code into a library without tests, provenance and a consumer migration.
 
@@ -37,6 +37,6 @@ Voiage can consume Innovate forecasts and joint uncertainty through an optional 
 
 Documentation: Astro/Starlight under `docs/astro-site` is the active documentation surface. Historical Sphinx material is archival, not an active documentation system.
 
-The inspected source remains hybrid and contains scientific correctness risks and native gaps. This programme changes scope, ownership and executable plans, not that fact. No production-ready, full-Rust, frontier-performance or complete-data claim is made here.
+The 0.7 development branch has a bounded Rust/Polars runtime with Python, Julia and R bindings only. All current and planned capabilities remain obligations in the [active migration plan](tracks/scientific_ecosystem_alignment_20261029/migration-plan.md) and [feature ledger](../migration-ledger.json). Project-owned code uses Apache-2.0.
 
-The [programme](frontier-programme-20261107.md), [execution contract](execution-contract-20261107.md), eight current [registered tracks](tracks.md), [taskbook](innovation-taskbook-20261107.md) and [release gates](release-gates-20261107.md) govern delivery. Registration does not imply active execution: each track retains its pending work, accepted scope or explicit deferrals. Historical archived completion titles describe their recorded scope, not current scientific acceptance.
+The [programme](frontier-programme-20261107.md), [execution contract](execution-contract-20261107.md), six active tracks, [taskbook](innovation-taskbook-20261107.md) and [release gates](release-gates-20261107.md) govern delivery. Historical archived completion titles describe their recorded scope, not current scientific acceptance.

@@ -1,0 +1,14 @@
+{
+  "bindings/julia/test/runtests.jl": "dbf7d5d7b3016504aba90f4e542e443744db2df18109f5592a117ad17bf15b05",
+  "bindings/r/R/kernel_bridge.R": "4beddf736cfcfc7a8dac0ba03fdd8c398d81ed3af9edf5156eb961b5b800986a",
+  "bindings/r/tests/native.R": "4edf2a7547ed5322acf0cafa2a7bb146f02d6c6657a4e07616e38334cf026cc2",
+  "docs/astro-site/src/content/docs/native-migration.md": "3445d928401da37c03fc99169ecfb68d1279db7d68321ba1973a414c14922f97",
+  "migration-ledger.json": "e0ffae732954f76734d2a13621b53eaee0b4ebbd7b395b1382149a6ab2221007",
+  "rust/crates/innovate-core/src/discovery.json": "1d2e817ce158dd1d06725f76607ce825445f79c2f5bc4fabbaa7cdb64df185f7",
+  "rust/crates/innovate-core/src/kernel.rs": "b3f080ce18b97ec467cccf4a5941e2618b6611d1b7b7e22eb1131cddddac5f5e",
+  "rust/crates/innovate-core/src/lib.rs": "f38dbe096463964afa7b3a1b987bd5dc26263671266d8e3e6e15788326600dfe",
+  "rust/crates/innovate-core/src/policy.rs": "f02c32b95e8c76baef3cd3886dfd58ca4d12fef074aa56940b6b228bd35a6105",
+  "rust/crates/innovate-core/tests/native_boundary.rs": "d3c19253718cc326eb01d6284d433ce4e3fee65ba90562f383f8dccd8c4af065",
+  "rust/crates/innovate-core/tests/policy.rs": "976e34d5a960d582ba58c314bafbfc8b844d73c374af43cb1d31c6fe615f0d1b",
+  "tests/native/test_python_consumer.py": "e272c4159e9a52ffc971e6a4c9024ef7ecede56f93d9f3d3b981a7356da5c701"
+}

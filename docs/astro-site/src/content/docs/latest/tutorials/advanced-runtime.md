@@ -3,6 +3,11 @@ title: Advanced runtime workflows
 description: Ensemble, policy, streaming, calibration, and accelerator-aware advanced runtime workflows.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 Advanced runtime workflows are opt-in surfaces for production analytics and
 forecast evaluation. They return stable `AdvancedResult` payloads where the
 contract is promoted, and explicit experimental metadata where evidence is still

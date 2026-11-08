@@ -1,0 +1,508 @@
+//! Finite-population Bass pure-birth process. Kairos owns time, dispatch and RNG.
+use crate::validation::{numeric_array_from_aliases, object_section, required_f64};
+use crate::{
+    KERNEL_SCHEMA_VERSION, KernelBindingError, KernelOperation, KernelRequest, KernelResponse,
+};
+use kairo_ecs_abm::ABMContext;
+use kairo_ecs_core::Scheduler;
+use kairo_ecs_rng::{
+    DeterministicStream, RngCheckpoint,
+    rand_distr::{Exp, Uniform},
+};
+use kairo_ecs_types::{EntityId, EventKind, ScheduleRequest, SimTime, StepOutcome};
+use serde_json::{Value, json};
+use sha2::{Digest, Sha256};
+pub(crate) const REV: &str = "e76b97be2ea3712645933d903822ff6381c8883e";
+// The provider's scheduler, RNG and state crates are identical at these two
+// revisions. Keep the digest namespace stable so existing checkpoints replay.
+pub(crate) const CHECKPOINT_PROVIDER: &str = "d56863505d938feb069af88a737eb7668113d14b";
+struct AdoptionClock {
+    rng: DeterministicStream,
+    now: u128,
+    forcing_index: usize,
+}
+
+#[derive(serde::Deserialize, serde::Serialize)]
+#[serde(deny_unknown_fields)]
+struct AdoptionCheckpoint {
+    version: u32,
+    configuration: String,
+    events: Vec<String>,
+    rng: RngCheckpoint,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    agents: Option<AgentCheckpoint>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    cutoff: Option<TickCutoff>,
+}
+
+#[derive(serde::Deserialize, serde::Serialize)]
+#[serde(deny_unknown_fields)]
+struct TickCutoff {
+    requested_tick: String,
+    clock_tick: String,
+}
+
+#[derive(serde::Deserialize, serde::Serialize)]
+#[serde(deny_unknown_fields)]
+struct AgentCheckpoint {
+    susceptible: Vec<usize>,
+    rng: String,
+}
+
+impl AdoptionClock {
+    fn next_adoption(
+        &mut self,
+        forcing: &[(u128, f64, f64)],
+        adopted: u64,
+        population: u64,
+        ticks: u64,
+        horizon: u128,
+        pause_tick: Option<u128>,
+    ) -> Result<Option<u128>, &'static str> {
+        loop {
+            let (_, p, q) = forcing[self.forcing_index];
+            let next = forcing.get(self.forcing_index + 1).map(|row| row.0);
+            let rate = (p + q * adopted as f64 / population as f64) * (population - adopted) as f64;
+            if !rate.is_finite() {
+                return Err("simulation hazard exceeded finite domain");
+            }
+            let before_draw = pause_tick.map(|_| self.rng.checkpoint());
+            let delta = if rate == 0. {
+                f64::INFINITY
+            } else {
+                let delay: f64 = self
+                    .rng
+                    .sample(Exp::new(rate).map_err(|_| "invalid simulation hazard")?);
+                (delay * ticks as f64).ceil().max(1.)
+            };
+            let boundary = next
+                .filter(|tick| *tick <= horizon && delta >= tick.saturating_sub(self.now) as f64);
+            if let Some(pause_tick) = pause_tick {
+                let cutoff = pause_tick.saturating_sub(self.now);
+                let crosses_pause =
+                    boundary.map_or(delta > cutoff as f64, |tick| tick > pause_tick);
+                if crosses_pause {
+                    self.rng = DeterministicStream::restore(&before_draw.unwrap())
+                        .map_err(|_| "could not restore the pending hazard draw")?;
+                    return Ok(None);
+                }
+            }
+            if let Some(boundary) = boundary {
+                self.now = boundary;
+                self.forcing_index += 1;
+                continue;
+            }
+            if !delta.is_finite() || delta > horizon.saturating_sub(self.now) as f64 {
+                return Ok(None);
+            }
+            self.now += delta as u128;
+            return Ok(Some(self.now));
+        }
+    }
+}
+
+pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBindingError> {
+    if r.payload["simulation_options"]["engine"] == "kairos_network" {
+        return crate::network::execute(r);
+    }
+    let op = r.operation;
+    let invalid = |s: &str| KernelBindingError::invalid_request(op, s);
+    if op != KernelOperation::SimulateModel || r.model_key.as_deref() != Some("bass") {
+        return Err(KernelBindingError::unsupported_native_operation(
+            op,
+            "Kairos execution currently supports Bass simulate_model only",
+        ));
+    }
+    let payload = r
+        .payload
+        .as_object()
+        .ok_or_else(|| invalid("payload must be an object"))?;
+    let options = object_section(payload, "simulation_options", op)?;
+    if options.keys().any(|k| {
+        ![
+            "engine",
+            "population",
+            "seed",
+            "ticks_per_unit",
+            "initial_adopters",
+            "covariate",
+            "events",
+            "pause_after_adoptions",
+            "pause_at_tick",
+            "resume_checkpoint",
+        ]
+        .contains(&k.as_str())
+    }) || !matches!(
+        options.get("engine").and_then(Value::as_str),
+        Some("kairos_des" | "kairos_abm")
+    ) {
+        return Err(invalid("unknown simulation engine or option"));
+    }
+    let engine = options["engine"].as_str().unwrap();
+    let seed = options
+        .get("seed")
+        .and_then(Value::as_u64)
+        .ok_or_else(|| invalid("seed must be an unsigned integer"))?;
+    let population = options
+        .get("population")
+        .and_then(Value::as_u64)
+        .filter(|n| *n > 0 && *n <= 100000)
+        .ok_or_else(|| invalid("population must be in 1..=100000"))?;
+    let initial = options
+        .get("initial_adopters")
+        .map(|v| {
+            v.as_u64()
+                .filter(|n| *n <= population)
+                .ok_or_else(|| invalid("initial_adopters must be in 0..=population"))
+        })
+        .transpose()?
+        .unwrap_or(0);
+    let ticks = options
+        .get("ticks_per_unit")
+        .map(|v| {
+            v.as_u64()
+                .filter(|n| *n > 0 && *n <= 1000000000)
+                .ok_or_else(|| invalid("ticks_per_unit must be in 1..=1000000000"))
+        })
+        .transpose()?
+        .unwrap_or(1000000);
+    let input = object_section(payload, "inputs", op)?;
+    let time = numeric_array_from_aliases(input, &["time", "t"], op)?;
+    if time
+        .iter()
+        .any(|t| !t.is_finite() || *t < 0. || *t * ticks as f64 > u64::MAX as f64 / 2.)
+    {
+        return Err(invalid(
+            "simulation time exceeds the nonnegative finite tick domain",
+        ));
+    }
+    let parameters = payload
+        .get("state")
+        .and_then(|s| s.get("parameters"))
+        .and_then(Value::as_object)
+        .ok_or_else(|| invalid("parameters required"))?;
+    if parameters.len() != 3 {
+        return Err(invalid("Bass simulation requires exactly p, q and m"));
+    }
+    let p = required_f64(parameters, "p", op)?;
+    let q = required_f64(parameters, "q", op)?;
+    let m = required_f64(parameters, "m", op)?;
+    let forcing =
+        crate::forcing::schedule(options.get("covariate"), options.get("events"), ticks, p, q)
+            .map_err(|e| invalid(&e))?;
+    let horizon = (*time.last().unwrap() * ticks as f64).floor() as u128;
+    let pause = options
+        .get("pause_after_adoptions")
+        .map(|value| {
+            value
+                .as_u64()
+                .filter(|&count| count > 0 && count < population - initial)
+                .ok_or_else(|| {
+                    invalid(
+                        "pause_after_adoptions must be between zero and the remaining population",
+                    )
+                })
+        })
+        .transpose()?;
+    let pause_tick = options
+        .get("pause_at_tick")
+        .map(|value| {
+            value
+                .as_u64()
+                .map(u128::from)
+                .filter(|&tick| tick < horizon)
+                .ok_or_else(|| {
+                    invalid("pause_at_tick must be a nonnegative integer below the horizon")
+                })
+        })
+        .transpose()?;
+    if pause.is_some() && pause_tick.is_some() {
+        return Err(invalid(
+            "choose either pause_after_adoptions or pause_at_tick",
+        ));
+    }
+    let resume = options.get("resume_checkpoint");
+    let checkpoint_configuration = (pause.is_some() || pause_tick.is_some() || resume.is_some()).then(|| {
+        let mut configuration = json!({"kairos_revision":CHECKPOINT_PROVIDER,"seed":seed,"population":population,"initial":initial,
+            "ticks_per_unit":ticks,"forcing":forcing,"market_size":m,"horizon":horizon});
+        if engine == "kairos_abm" {
+            configuration["engine"] = json!(engine);
+        }
+        Sha256::digest(configuration.to_string()).iter().map(|byte| format!("{byte:02x}")).collect()
+    });
+    let mut scheduler = Scheduler::new();
+    let mut abm = (engine == "kairos_abm").then(|| ABMContext::new(seed));
+    let agents: Vec<_> = if let Some(context) = abm.as_mut() {
+        (0..population)
+            .map(|_| {
+                let id = context.spawn_agent();
+                context.attach(id, false);
+                id
+            })
+            .collect()
+    } else {
+        vec![]
+    };
+    let mut susceptible = agents.clone();
+    let mut identity_rng = DeterministicStream::from_entity_purpose(
+        seed,
+        EntityId::new(0, 0),
+        "innovate.adoption_identity",
+    );
+    if let Some(context) = abm.as_mut() {
+        for _ in 0..initial {
+            let agent = susceptible.swap_remove(identity_rng.sample(
+                Uniform::new(0, susceptible.len()).map_err(|_| invalid("empty population"))?,
+            ));
+            context.attach(agent, true);
+        }
+    }
+    let mut clock = AdoptionClock {
+        rng: DeterministicStream::from_run_seed(seed),
+        now: 0,
+        forcing_index: 0,
+    };
+    let mut events = Vec::new();
+    if let Some(resume) = resume {
+        let saved: AdoptionCheckpoint = serde_json::from_value(resume.clone())
+            .map_err(|_| invalid("invalid adoption checkpoint format"))?;
+        let saved_events = saved
+            .events
+            .iter()
+            .map(|tick| tick.parse::<u64>())
+            .collect::<Result<Vec<_>, _>>()
+            .map_err(|_| invalid("invalid adoption checkpoint event tick"))?;
+        let last_event = saved_events.last().copied().map_or(0, u128::from);
+        let (clock_tick, saved_tick) = if let Some(cutoff) = saved.cutoff {
+            let parse = |tick: &str| {
+                tick.parse::<u64>()
+                    .map(u128::from)
+                    .map_err(|_| invalid("invalid adoption checkpoint cutoff"))
+            };
+            (parse(&cutoff.clock_tick)?, parse(&cutoff.requested_tick)?)
+        } else {
+            if saved_events.is_empty() || saved_events.len() as u64 >= population - initial {
+                return Err(invalid("invalid adoption checkpoint event count"));
+            }
+            (last_event, last_event)
+        };
+        if saved.version != 1
+            || Some(&saved.configuration) != checkpoint_configuration.as_ref()
+            || saved_events.len() as u64 > population - initial
+            || saved_events.first() == Some(&0)
+            || clock_tick < last_event
+            || saved_tick < clock_tick
+            || saved_tick > horizon
+            || pause_tick.is_some_and(|tick| tick <= saved_tick)
+            || saved_events.windows(2).any(|pair| pair[0] >= pair[1])
+            || pause.is_some_and(|count| count <= saved_events.len() as u64)
+            || saved.rng.seed != clock.rng.checkpoint().seed
+            || saved.rng.stream_id != clock.rng.checkpoint().stream_id
+        {
+            return Err(invalid(
+                "adoption checkpoint is incompatible with this simulation",
+            ));
+        }
+        match (abm.as_mut(), saved.agents) {
+            (Some(context), Some(saved_agents)) => {
+                let saved_rng: RngCheckpoint = serde_json::from_str(&saved_agents.rng)
+                    .map_err(|_| invalid("invalid checkpoint identity RNG state"))?;
+                let stream = identity_rng.checkpoint();
+                if saved_agents.susceptible.len() as u64
+                    != population - initial - saved_events.len() as u64
+                    || saved_rng.seed != stream.seed
+                    || saved_rng.stream_id != stream.stream_id
+                {
+                    return Err(invalid("invalid checkpoint agent state"));
+                }
+                let mut is_adopted = vec![true; agents.len()];
+                susceptible.clear();
+                for index in saved_agents.susceptible {
+                    let available = is_adopted
+                        .get_mut(index)
+                        .filter(|available| **available)
+                        .ok_or_else(|| invalid("invalid checkpoint susceptible index"))?;
+                    *available = false;
+                    susceptible.push(agents[index]);
+                }
+                for (&agent, adopted) in agents.iter().zip(is_adopted) {
+                    context.attach(agent, adopted);
+                }
+                identity_rng = DeterministicStream::restore(&saved_rng)
+                    .map_err(|_| invalid("invalid checkpoint identity RNG state"))?;
+            }
+            (None, None) => {}
+            _ => return Err(invalid("checkpoint agent state does not match engine")),
+        }
+        events.extend(saved_events.into_iter().map(u128::from));
+        clock.now = clock_tick;
+        clock.forcing_index = forcing.partition_point(|row| row.0 <= clock.now) - 1;
+        clock.rng = DeterministicStream::restore(&saved.rng)
+            .map_err(|_| invalid("invalid adoption checkpoint RNG state"))?;
+    }
+    for adopted in initial + events.len() as u64..population {
+        let Some(now) = clock
+            .next_adoption(&forcing, adopted, population, ticks, horizon, pause_tick)
+            .map_err(invalid)?
+        else {
+            break;
+        };
+        let outcome = if let Some(context) = abm.as_mut() {
+            let agent = susceptible.swap_remove(
+                identity_rng.sample(
+                    Uniform::new(0, susceptible.len())
+                        .map_err(|_| invalid("empty susceptible population"))?,
+                ),
+            );
+            context.schedule_behaviour(agent, 1, SimTime::from_ticks(now));
+            context.step()
+        } else {
+            scheduler.schedule(ScheduleRequest {
+                at: SimTime::from_ticks(now),
+                priority: 0,
+                entity: None,
+                kind: EventKind::Custom(1),
+            });
+            scheduler.step()
+        };
+        match outcome {
+            StepOutcome::Dispatched(event) => {
+                if let Some(context) = abm.as_mut() {
+                    let id = event
+                        .entity
+                        .ok_or_else(|| invalid("Kairos lost agent identity"))?;
+                    if context.get::<bool>(id) != Some(&false) {
+                        return Err(invalid("agent adoption state is inconsistent"));
+                    }
+                    context.attach(id, true);
+                }
+                events.push(event.at.ticks());
+                if pause == Some(events.len() as u64) {
+                    break;
+                }
+            }
+            _ => {
+                return Err(invalid(
+                    "Kairos dispatch did not return the scheduled adoption",
+                ));
+            }
+        }
+    }
+    if pause_tick.is_some() || pause == Some(events.len() as u64) {
+        let checkpoint = AdoptionCheckpoint {
+            version: 1,
+            configuration: checkpoint_configuration.unwrap(),
+            cutoff: pause_tick.map(|tick| TickCutoff {
+                requested_tick: tick.to_string(),
+                clock_tick: clock.now.to_string(),
+            }),
+            events: events.into_iter().map(|tick| tick.to_string()).collect(),
+            rng: clock.rng.checkpoint(),
+            agents: abm.as_ref().map(|_| AgentCheckpoint {
+                susceptible: susceptible
+                    .iter()
+                    .map(|agent| agent.index as usize)
+                    .collect(),
+                rng: serde_json::to_string(&identity_rng.checkpoint())
+                    .expect("Kairos RNG checkpoints are serializable"),
+            }),
+        };
+        return Ok(KernelResponse {
+            schema_version: KERNEL_SCHEMA_VERSION.into(),
+            operation: op,
+            model_key: r.model_key.clone(),
+            result: Some(json!({"status":"paused","checkpoint":checkpoint})),
+            error: None,
+            metadata: json!({"runtime":"rust_native","engine":engine}),
+        });
+    }
+    let counts: Vec<_> = time
+        .iter()
+        .map(|t| {
+            events.partition_point(|e| *e <= (*t * ticks as f64).floor() as u128) as u64 + initial
+        })
+        .collect();
+    let values: Vec<_> = counts
+        .iter()
+        .map(|n| m * (*n as f64 / population as f64))
+        .collect();
+    let mut result = json!({"values":values,"counts":counts,"shape":[time.len()],"dtype":"float64","metadata":{"engine":engine,"kairos_revision":REV,"seed":seed,"population":population,"ticks_per_unit":ticks,"quantity":"adopted_level","process":"finite_population_bass_pure_birth","hazard":"(p + q*n/N)*(N-n)","time_quantization":"waiting times rounded up to at least one tick","forcing":forcing,"forcing_semantics":"right-continuous additive covariate and event deltas; boundaries precede tied adoption events","initial_adopters":initial,"kairos_dispatched_events":events.len(),"rng_checkpoint":clock.rng.checkpoint(),"checkpoint_scope":"RNG provenance only; use the event-boundary checkpoint for simulation resume"}});
+    if let Some(context) = abm.as_ref() {
+        result["agents"]=json!(agents.iter().map(|id|json!({"index":id.index,"generation":id.generation,"adopted":context.get::<bool>(*id).copied().unwrap_or(false)})).collect::<Vec<_>>());
+        result["metadata"]["agent_semantics"] = json!(
+            "exchangeable homogeneous agents; identities sampled independently of event timing"
+        );
+    }
+    Ok(KernelResponse {
+        schema_version: KERNEL_SCHEMA_VERSION.into(),
+        operation: op,
+        model_key: r.model_key.clone(),
+        result: Some(result),
+        error: None,
+        metadata: json!({"runtime":"rust_native","engine":engine}),
+    })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn clock_pause_preserves_the_draw_before_a_future_forcing_boundary() {
+        let forcing = [(0, 0., 0.), (2, 1e-5, 0.), (5, 1e12, 0.)];
+        let start = || AdoptionClock {
+            rng: DeterministicStream::from_run_seed(42),
+            now: 0,
+            forcing_index: 0,
+        };
+        let mut paused = start();
+        assert_eq!(
+            paused
+                .next_adoption(&forcing, 0, 4, 1, 10, Some(3))
+                .unwrap(),
+            None
+        );
+        assert_eq!(paused.now, 2);
+        let mut uninterrupted = start();
+        let expected = uninterrupted
+            .next_adoption(&forcing, 0, 4, 1, 10, None)
+            .unwrap();
+        assert_eq!(expected, Some(6));
+        assert_eq!(
+            paused.next_adoption(&forcing, 0, 4, 1, 10, None).unwrap(),
+            expected
+        );
+        assert_eq!(paused.rng.checkpoint(), uninterrupted.rng.checkpoint());
+    }
+
+    #[test]
+    fn adoption_clock_continues_across_a_serialized_event_boundary() {
+        let forcing = [(0, 1e12, 0.), (2, 0., 0.), (5, 1e12, 0.)];
+        let mut clock = AdoptionClock {
+            rng: DeterministicStream::from_run_seed(42),
+            now: 0,
+            forcing_index: 0,
+        };
+        let next = |clock: &mut AdoptionClock, adopted| {
+            clock
+                .next_adoption(&forcing, adopted, 4, 1, 10, None)
+                .unwrap()
+        };
+        assert_eq!(next(&mut clock, 0), Some(1));
+        assert_eq!(next(&mut clock, 1), Some(6));
+
+        let bytes =
+            serde_json::to_vec(&(clock.now, clock.forcing_index, clock.rng.checkpoint())).unwrap();
+        let (now, forcing_index, checkpoint) = serde_json::from_slice(&bytes).unwrap();
+        let mut restored = AdoptionClock {
+            rng: DeterministicStream::restore(&checkpoint).unwrap(),
+            now,
+            forcing_index,
+        };
+        for adopted in 2..4 {
+            assert_eq!(next(&mut restored, adopted), next(&mut clock, adopted));
+        }
+        assert_eq!(restored.now, 8);
+        assert_eq!(restored.rng.checkpoint(), clock.rng.checkpoint());
+    }
+}

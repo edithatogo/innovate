@@ -1,0 +1,73 @@
+{
+  "status": "bounded_local_checkpoint",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "related_evidence": [
+    "historical-logistic-20261107.json"
+  ],
+  "results": {
+    "rust_tests": 120,
+    "python_tests": 38,
+    "julia_assertions": 175,
+    "R": "native conformance passed",
+    "docs_pages": 163,
+    "package": "local wheel and source metadata; exact mechanistic module/test/fixture inclusion"
+  },
+  "coverage": {
+    "count": 9237,
+    "covered": 7837,
+    "percent": 84.84356392768215
+  },
+  "mechanistic_coverage": {
+    "count": 603,
+    "covered": 547,
+    "percent": 90.71310116086235
+  },
+  "logs": {
+    "clippy-focused.log": "ce4b3d9d1c23b7e1012a5e26f47fd776c6a8575bae3fca1028c5d76a664ac9e6",
+    "clippy.log": "fb96e3462114ca9b90be0a7e4c320998e6b6f73107c60bcdb7c51693a69385fb",
+    "coverage.log": "e9385bf343d880a7df4c2c6c490442a2325391bb90a7fdbb377fae01bc8d4296",
+    "docs.log": "921da45cb45c92313ec1023244d818af197f57714b9a872616574507b1a95af3",
+    "ffi.log": "cb38fff3d8ce8ce7eca81fca21ca7b7d6e4e0bee3c17bc6c1bf5d06a23dc0a1f",
+    "float-red.log": "b1f9f58b1623c0bd8e1000586d6f08e756f0444a69e69078525e16ab63c20ae4",
+    "focused.log": "3c9a301891687382dc17afa6eeab222707a9eaef620fc8d5ebe7ec1b7771291c",
+    "install.log": "36a25bea56a1dab28d3a7045428739b30377346d47b3c11f062f302dd23d2b4c",
+    "julia.log": "929871ea91e34013ad44cfb0ea42b05e82dda87a9c6e735f75417fa012e898b3",
+    "lint.log": "36873ce5f70ffaa8d9d6bd17335d3ef034ef6d1521150353172c1d9d7164bf5a",
+    "package.log": "474635114d82c3d86066dd988971b190ca78e17f4702e82dc0da5fb489426968",
+    "python-replay-green.log": "423b1d0e014eb1eab96f4420f7b344c2615be505dd574b756ac884826ca74f2d",
+    "python-replay.log": "c31ecfa77057db6f0d071cb82449d31a1fcdc845a2809a7f2072b5f35916ca3f",
+    "python.log": "8e0dd3e259f68c193f05e3e04acef6407a9ed36e5124438d9f9a04fbd0db33db",
+    "r-install.log": "8bcc66b6f075dd6146b6ca006a0579b369a424d49b587fb4b5bc0350fad78c31",
+    "r-singleton-green.log": "9cd060b68117092a6b1ccb9b3d06420f2d2503292ccf7054e04ec8f450e1fbd1",
+    "r-singleton-red.log": "dcec6a25ef2ac67d4abf3578517399275d61690ea861deb850b88bdb62891a09",
+    "r.log": "7328397e9166fb9c7aa502d251de4c7c84cfe689f8125b379b79f47e4a5682b8",
+    "sdist.log": "7985a4cedc0401e80a576a693044666e88d401527d02ca010728aead632998ac",
+    "serde-features-before.log": "a7252d9543dc14930305d3d4eeeeafa13a821d2debe722dcab432d44aa88cc2a",
+    "signed-zero-red.log": "bb630937603d2a9b5e5569d01d86d4f491a284de9d66488e7dbac55a36bdc246",
+    "state-red.log": "126e2e79b5c56aaf33359c2b9f58870e988c58210273dfeb8dab8cec219d2b74",
+    "tabular.log": "edea2118061a6975af9a061c0f91cd769c5710107119d30adb4d82c656290be1",
+    "wheel.log": "0f87fd0594f9b9ac4b2290b725061c2902dfee31082e0c0a7fd51c532948a623"
+  },
+  "artifacts": {
+    "innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "a826ed180e440f13411bf41e4cfb078285a1c3627f99e1af02d1eb6989c7720e",
+    "innovate-0.7.0a1.tar.gz": "1f4e0fa982d2969e4d732ff3c0bab570436aaa3edb696c11e0a18e061918bbba"
+  },
+  "source_sha256": {
+    "rust/crates/innovate-core/src/mechanistic.rs": "ef1474cb711180816bb9ee9a1c94399a704b11e998b0eaa75c3480a418929024",
+    "rust/crates/innovate-core/tests/fixtures/mechanistic_scipy.json": "987230064c32fe7252711ebe732afa0ff6c5bd5a52a0bf98dd36091d24380853",
+    "rust/crates/innovate-core/tests/mechanistic.rs": "555cd7f0463eafdba5b39f92763577f42f5bae673e2724dbafd53cf621b21a7f",
+    "Cargo.toml": "f765c618a8062bed9765eab6a22ed817868ee17944a6f240dddff6e929842cfc",
+    "README.md": "09e1b1d02d111761349102df0f80bc895125fdc9dba568011192e72c333dd60e",
+    "bindings/julia/test/runtests.jl": "d2a9f66c9010a9a7861a4b01144304d309741938598c61bc52696b3dc3aaef13",
+    "bindings/r/R/kernel_bridge.R": "1e28e9990ae6d2f4f7a7a6e04c37d0ce9ce5eb1d4b62d67bde006f4943be43a5",
+    "bindings/r/tests/native.R": "99f3fe2d3d05e94e64465d0734e94c03955e82094878c81aa4e0ed02bc928445",
+    "docs/astro-site/src/content/docs/native-migration.md": "ca5450769548bf7fe32828af71cde714577db9de221c885401eaae95199101cb",
+    "migration-ledger.json": "01e4206bff7b68ea1e66577832941994d74ddc3c6cc45b19b5b7b195ef81ab92",
+    "rust/crates/innovate-core/src/discovery.json": "a0e709d32ffd15c7a915573228e90e9f5e16713f209e95a08f0f35a33057bad9",
+    "rust/crates/innovate-core/src/kernel.rs": "6833b699d691966682c607e80995cfbcb08c51712c946c35ea023bcc3b7206ff",
+    "rust/crates/innovate-core/src/lib.rs": "c48f97e0a2305baf5b8d5d841824633f1df94aa32a8e9b1c1c0765459aa8fe7a",
+    "rust/crates/innovate-core/tests/native_boundary.rs": "f2e8043983ace09d446ca85807672c370d11b3a04d31516f08c3c85acc832b27",
+    "tests/native/test_python_consumer.py": "786bcd066b30224aafbab366836da5c89cc4f427c61b86ef5b108e342f2e155f"
+  }
+}

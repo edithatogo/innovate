@@ -1,0 +1,25 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+   Compiling innovate-tabular v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-tabular)
+    Finished `test` profile [unoptimized] target(s) in 8.61s
+     Running unittests src/lib.rs (target/debug/deps/innovate_tabular-0fd0adb72735b136)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/prediction.rs (target/debug/deps/prediction-3f2451fc97a27bc8)
+
+running 4 tests
+test prediction_preserves_identity_and_adds_native_values ... ok
+test invalid_time_contract_fails_in_rust ... ok
+test invalid_quantities_and_input_types_fail_without_silent_defaults ... ok
+test multivariate_predictions_and_signed_rates_preserve_all_columns ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+   Doc-tests innovate_tabular
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

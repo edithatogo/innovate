@@ -1,0 +1,135 @@
+{
+  "pypi:polars": {
+    "version": "2.1.0",
+    "requires_python": ">=3.11",
+    "url": "https://pypi.org/pypi/polars/json"
+  },
+  "pypi:maturin": {
+    "version": "1.16.0",
+    "requires_python": ">=3.7",
+    "url": "https://pypi.org/pypi/maturin/json"
+  },
+  "pypi:pytest": {
+    "version": "9.2.0",
+    "requires_python": ">=3.10",
+    "url": "https://pypi.org/pypi/pytest/json"
+  },
+  "pypi:pytest-cov": {
+    "version": "7.1.0",
+    "requires_python": ">=3.9",
+    "url": "https://pypi.org/pypi/pytest-cov/json"
+  },
+  "pypi:ruff": {
+    "version": "0.17.4",
+    "requires_python": ">=3.7",
+    "url": "https://pypi.org/pypi/ruff/json"
+  },
+  "pypi:basedpyright": {
+    "version": "1.40.2",
+    "requires_python": ">=3.10",
+    "url": "https://pypi.org/pypi/basedpyright/json"
+  },
+  "pypi:nox": {
+    "version": "2026.10.20",
+    "requires_python": ">=3.10",
+    "url": "https://pypi.org/pypi/nox/json"
+  },
+  "pypi:hypothesis": {
+    "version": "6.170.15",
+    "requires_python": ">=3.11",
+    "url": "https://pypi.org/pypi/hypothesis/json"
+  },
+  "pypi:pyarrow": {
+    "version": "26.0.1",
+    "requires_python": ">=3.11",
+    "url": "https://pypi.org/pypi/pyarrow/json"
+  },
+  "crate:polars": {
+    "version": "0.55.2",
+    "url": "https://crates.io/api/v1/crates/polars"
+  },
+  "crate:pyo3": {
+    "version": "0.30.1",
+    "url": "https://crates.io/api/v1/crates/pyo3"
+  },
+  "crate:serde": {
+    "version": "1.0.229",
+    "url": "https://crates.io/api/v1/crates/serde"
+  },
+  "crate:serde_json": {
+    "version": "1.0.154",
+    "url": "https://crates.io/api/v1/crates/serde_json"
+  },
+  "crate:thiserror": {
+    "version": "2.0.21",
+    "url": "https://crates.io/api/v1/crates/thiserror"
+  },
+  "crate:tracing": {
+    "version": "0.1.44",
+    "url": "https://crates.io/api/v1/crates/tracing"
+  },
+  "crate:criterion": {
+    "version": "0.8.2",
+    "url": "https://crates.io/api/v1/crates/criterion"
+  },
+  "crate:libc": {
+    "version": "0.2.191",
+    "url": "https://crates.io/api/v1/crates/libc"
+  },
+  "documentation_exception": {
+    "package": "typescript",
+    "latest": "7.0.2",
+    "selected": "6.0.3",
+    "reason": "Latest @astrojs/check 0.9.12 declares TypeScript ^5 || ^6; Volar 2.4.30 requires <7. pnpm reports peer incompatibility for 7.0.2. 6.0.3 is the latest supported 6.x release.",
+    "scope": "documentation tooling only; no TypeScript library binding"
+  },
+  "documentation_age_guard": {
+    "manager": "pnpm 12.18.0",
+    "minimum_release_age_minutes": 1440,
+    "strict": true,
+    "selected": {
+      "astro": "7.4.5",
+      "@astrojs/markdown-remark": "7.3.5"
+    },
+    "latest_held": {
+      "astro": "7.4.7",
+      "@astrojs/markdown-remark": "7.3.6"
+    },
+    "reason": "Current release-age policy rejected newest direct and transitive releases; fresh resolution preserved the guard. No exclusions retained."
+  },
+  "rust_feature_audit": {
+    "original_cargo_lock_sha256": "43dd05cdbf91c7337c0ad38b2550a723b6e33cc6dfbf85aa295fb104eeb2cd27",
+    "findings": [
+      "RUSTSEC-2026-0194",
+      "RUSTSEC-2026-0195"
+    ],
+    "path": "Polars lazy/parquet features \u2192 object_store 0.13.2 \u2192 quick-xml 0.39.4",
+    "action": "Remove unused Rust lazy/parquet features; native code currently uses in-memory DataFrame/IPC only. Python LazyFrames still collect explicitly at the execution boundary. Native Parquet and lazy execution remain future feature obligations; do not suppress advisories.",
+    "outcome": "Feature narrowing alone did not remove the vulnerable dependency; do not count that attempt as remediation."
+  },
+  "polars_source_candidate": {
+    "repository": "https://github.com/pola-rs/polars",
+    "revision": "2d74c435e83b86dc2cf6b71ec6c7b4bd67a4042d",
+    "manifest_version": "0.55.1",
+    "reason": "Latest inspected upstream source advances object_store to 0.14.2 with patched quick-xml. Qualified against bounded native tests, installed macOS Python/R/Julia consumers and selected Voiage handoff; full migration/platform acceptance remains open.",
+    "hashbrown_patch": "d76a6f81abd8f388676aff15068236a8d21c7e1a",
+    "audit": {
+      "vulnerabilities": 0,
+      "warnings": [
+        "RUSTSEC-2025-0141: bincode 2.0.1 unmaintained"
+      ],
+      "suppressed_advisories": []
+    }
+  },
+  "documentation_wasm_compatibility": {
+    "selected": "@emnapi/runtime 1.11.3",
+    "reason": "Match latest stable @emnapi/core 1.11.3 required by @astrojs/astro2tsx 0.1.3. Automatically selected 2.0.0-beta.2 failed setLastError/deleteEnv; stable matching runtime passed astro check."
+  },
+  "tooling": {
+    "pre-commit": "4.7.0",
+    "pre-commit-hooks": "6.0.0",
+    "codespell": "2.4.3",
+    "nbstripout": "0.9.1",
+    "scope": "Repo-local Python 3.15.2; targeted hook checks passed; no shared hook installation."
+  }
+}

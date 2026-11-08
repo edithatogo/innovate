@@ -1,0 +1,16 @@
+{
+  "Cargo.lock": "8adefbc32a8a4678dc4de226fac4a27894ec4416290da7a13fe5c8936cf649d2",
+  "README.md": "d95dbdfe19627d337a9451f1e4ebfb6b6d3d1b8149a341971aa53586d2dc8178",
+  "bindings/julia/test/runtests.jl": "5c0973c8f5a926e654a4235eb2e3c900a08fcb3a8f99b1e714d850c7f44c50fd",
+  "bindings/r/tests/native.R": "98488ccda59079d9bfcc0eecfa73611b4423dbf7fa979ebab6d542dd4ba07abd",
+  "docs/astro-site/src/content/docs/native-migration.md": "970131d63daf001abfbc2081e7750e247a93cea0f78e1bab14642eb6e5070b10",
+  "migration-ledger.json": "33cc3fae08b181f1be40183ccedb0cd84b090bf897c4f3e25228900e31db80e2",
+  "rust/crates/innovate-core/Cargo.toml": "6d76bc0c54e8b759c8e7167b341aa60326668c96ec6fe2f13bd393135cbd56c3",
+  "rust/crates/innovate-core/src/contracts.rs": "fa5c02f3779df6efd10271b15895387b801a17b57e41dd19f02f85a70e4f06c1",
+  "rust/crates/innovate-core/src/discovery.json": "a174203c3c5dff3ad65a52d3507550746cfb9979d0716e697d74f4eba82ab004",
+  "rust/crates/innovate-core/src/kernel.rs": "7edf9e7232ebb961bb4d60e7ed1a5da105ddd4611ea6c982e9bf4703e8a066be",
+  "rust/crates/innovate-core/src/lib.rs": "c557523e17b6e40f1338aa4fe068a6e8d7b472aa3642f6f9f2b1b69f40c2fc4e",
+  "rust/crates/innovate-core/src/simulation.rs": "f9a9444a0d7abad11a6d54df6af582ef7f3861f44ea5639f579d2203cf6beb8d",
+  "rust/crates/innovate-core/tests/kairos.rs": "b60ac7375c094429cd7a482d8a628ed9dbe95208c1d80d5b5de0e4edd997533e",
+  "tests/native/test_python_consumer.py": "132b7ce5af09b0ed15b18eec1bce4c2cd4ec02bf3d21c19454bd308b870295fa"
+}

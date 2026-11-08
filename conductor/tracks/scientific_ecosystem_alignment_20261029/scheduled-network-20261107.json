@@ -1,0 +1,25 @@
+{
+  "status": "bounded_local_checkpoint",
+  "release_ready": false,
+  "related_evidence": [
+    "directed-network-20261107.json"
+  ],
+  "results": {
+    "rust_network_tests": 9,
+    "installed_python_tests": 39,
+    "julia_assertions": 177,
+    "R": "conformance and scheduled contact/service case passed",
+    "clippy": "workspace all targets passed"
+  },
+  "semantics": "Completion and FIFO handoff precede a coincident change. Scheduled boundaries discard the tentative request draw and resample under the active graph. The duration override applies to subsequent service starts.",
+  "logs": {
+    "clippy.log": "e9db4994bcf43101207e5ee2ceb5157766ef73d548473ca2ed51024bf344f301",
+    "ffi.log": "8351ba12c74960d12e3631d79d248dbee51b0f97fe395110db961909f9111bfa",
+    "install.log": "77c0cb7ce0365c9f2897a7e64252380a2b508a17ad6b20eacb220a8f1b0c854a",
+    "julia-scheduled.log": "e70c6c8b1e55d02474815fe616c3c2a09e8a234d52a2fb5512b8191065aada3f",
+    "python-scheduled.log": "07c2eef926162e0090994bc913805aa08a8b2cbb5b21d2c933b937a10300713f",
+    "r-scheduled.log": "44f470a53f5c981a2ed81a73a711745d1a9ac4e16ad53aa278b3d7c3f5b1f62f",
+    "rust.log": "6c162ccbbaf1531917df9ab62d8f4f52e8bcf1fe5dd42ee728511599eafedb57",
+    "wheel.log": "98077bde4ba7219dc33b7c2c6364f9d7fdfd9825570b8a31ce600ac9b2e531e8"
+  }
+}

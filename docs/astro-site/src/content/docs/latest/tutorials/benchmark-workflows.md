@@ -3,6 +3,11 @@ title: Benchmark Workflows and Model Cards
 description: Reproducible benchmark corpus, model cards, promotion dossiers, and opt-in timing evidence.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 The benchmark suite provides a stable, machine-readable way to compare the
 canonical model families shipped with `innovate`. It keeps the benchmark corpus,
 model cards, and evaluation outputs synchronized so the library can be used for

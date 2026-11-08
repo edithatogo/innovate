@@ -47,3 +47,8 @@
 - [x] Task: Run conductor-review, push, and monitor CI [0bf9385]
     - [x] Apply review fixes, push, and monitor GitHub Actions until green or blocked.
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Review, Push, and CI' (Protocol in workflow.md)
+
+## Evidence reconciliation — 6 November 2026
+
+See [the reconciliation record](reconciliation-20261106.md). Historical
+implementation/checkpoint claims are not fresh native or human acceptance.

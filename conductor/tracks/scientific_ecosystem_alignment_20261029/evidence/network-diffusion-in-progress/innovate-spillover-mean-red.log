@@ -1,0 +1,24 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 0.58s
+     Running tests/network_diffusion.rs (target/debug/deps/network_diffusion-6a3df4b704db5f39)
+
+running 1 test
+test finite_high_weight_graphs_keep_finite_summary_means ... FAILED
+
+failures:
+
+---- finite_high_weight_graphs_keep_finite_summary_means stdout ----
+
+thread 'finite_high_weight_graphs_keep_finite_summary_means' (26479943) panicked at rust/crates/innovate-core/tests/network_diffusion.rs:73:5:
+assertion `left == right` failed
+  left: None
+ right: Some(1e308)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    finite_high_weight_graphs_keep_finite_summary_means
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --test network_diffusion`

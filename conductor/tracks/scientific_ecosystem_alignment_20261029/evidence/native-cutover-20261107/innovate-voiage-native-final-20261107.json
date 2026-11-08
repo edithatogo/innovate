@@ -1,0 +1,10 @@
+{
+  "python": "3.15.2",
+  "innovate": "0.7.0a1",
+  "voiage": "3.1.0",
+  "polars": "2.1.0",
+  "arrow_ipc_sha256": "15e6262a3b840afbe7c22069715b5a1b49d80413482f234538e3a6c31aa74ada",
+  "reference_evpi": 5.6417207199278705,
+  "installed_evpi": 5.641720719927868,
+  "scope": "Synthetic CPU scenario handoff only; not full scientific/HPC/clinical acceptance"
+}

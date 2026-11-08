@@ -1,0 +1,14 @@
+$ astro check
+00:40:36 [starlight-polyglot] [starlight-polyglot] Generating python documentation...
+00:40:36 [starlight-polyglot] [starlight-polyglot] ✓ python: 9 pages generated
+00:40:36 [vite] Re-optimizing dependencies because lockfile has changed
+00:40:37 [content] Syncing content
+00:40:37 [content] Astro config changed
+00:40:37 [content] Clearing content store
+00:40:39 [content] Synced content
+00:40:39 [types] Generated 2.37s
+00:40:39 [check] Getting diagnostics for Astro files in /Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/docs/astro-site...
+Result (3 files):
+- 0 errors
+- 0 warnings
+- 0 hints

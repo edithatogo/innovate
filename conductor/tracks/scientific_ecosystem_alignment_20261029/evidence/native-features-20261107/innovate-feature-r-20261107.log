@@ -1,0 +1,5 @@
+R native conformance passed
+R five-model analytic conformance passed
+R multi-generation fit, forecast, rates and single-row transport passed
+R competitive analytic limits, two-output rates and optional-null transport passed
+R installed native overflow guard passed

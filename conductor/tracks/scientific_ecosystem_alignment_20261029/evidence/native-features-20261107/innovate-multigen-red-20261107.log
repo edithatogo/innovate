@@ -1,0 +1,37 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 2.56s
+     Running tests/multi_generation.rs (/tmp/innovate-scientific-core-target/debug/deps/multi_generation-56cc179664bbc4c8)
+
+running 4 tests
+test multi_output_fit_reports_convergence_and_predicts_held_out_times ... FAILED
+test successive_generation_closed_form_launches_and_conservation ... FAILED
+test legacy_three_generation_ode_matches_independent_scipy_oracle ... FAILED
+test invalid_shapes_parameters_and_unknown_options_are_rejected ... ok
+
+failures:
+
+---- multi_output_fit_reports_convergence_and_predicts_held_out_times stdout ----
+
+thread 'multi_output_fit_reports_convergence_and_predicts_held_out_times' (25387065) panicked at rust/crates/innovate-core/tests/multi_generation.rs:47:140:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "invalid_request", message: "observed must contain only numbers", operation: Some(FitModel) }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- successive_generation_closed_form_launches_and_conservation stdout ----
+
+thread 'successive_generation_closed_form_launches_and_conservation' (25387066) panicked at rust/crates/innovate-core/tests/multi_generation.rs:30:74:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "unsupported_native_operation", message: "native Norton-Bass execution currently supports a single generation only", operation: Some(PredictModel) }
+
+---- legacy_three_generation_ode_matches_independent_scipy_oracle stdout ----
+
+thread 'legacy_three_generation_ode_matches_independent_scipy_oracle' (25387064) panicked at rust/crates/innovate-core/tests/multi_generation.rs:18:76:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "unsupported_native_operation", message: "native Norton-Bass execution currently supports a single generation only", operation: Some(PredictModel) }
+
+
+failures:
+    legacy_three_generation_ode_matches_independent_scipy_oracle
+    multi_output_fit_reports_convergence_and_predicts_held_out_times
+    successive_generation_closed_form_launches_and_conservation
+
+test result: FAILED. 1 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --test multi_generation`

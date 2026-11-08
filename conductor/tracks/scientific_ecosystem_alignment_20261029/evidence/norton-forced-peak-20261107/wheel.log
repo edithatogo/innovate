@@ -1,0 +1,10 @@
+🍹 Building a mixed python/rust project
+🐍 Found CPython 3.15 at /Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/.venv-native/bin/python
+🔗 Found pyo3 bindings
+📡 Using build options features from pyproject.toml
+💻 Using `MACOSX_DEPLOYMENT_TARGET=11.0` for aarch64-apple-darwin by default
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+   Compiling innovate-tabular v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-tabular)
+   Compiling innovate-python v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-python)
+    Finished `dev` profile [unoptimized] target(s) in 6.44s
+📦 Built wheel for CPython 3.15 to target/forced-peak/wheels/innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl

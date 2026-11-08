@@ -4,5 +4,7 @@
   "status": "completed",
   "created_at": "2026-06-25T11:32:58Z",
   "updated_at": "2026-06-25T11:32:58Z",
-  "description": "Prove or complete Rust-native ownership for canonical operations, payloads, model families, and fallback exceptions before release claims."
+  "description": "Prove or complete Rust-native ownership for canonical operations, payloads, model families, and fallback exceptions before release claims.",
+  "reconciled_at": "2026-11-06",
+  "reconciliation_record": "reconciliation-20261106.md"
 }

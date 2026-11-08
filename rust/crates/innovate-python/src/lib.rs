@@ -1,0 +1,136 @@
+use pyo3::exceptions::PyValueError;
+use pyo3::prelude::*;
+use pyo3::types::PyBytes;
+
+#[pyfunction]
+fn export_ipc_file(py: Python<'_>, data: Vec<u8>) -> PyResult<Py<PyBytes>> {
+    let bytes = py
+        .detach(move || innovate_tabular::export_ipc_file(&data).map_err(|error| error.to_string()))
+        .map_err(PyValueError::new_err)?;
+    Ok(PyBytes::new(py, &bytes).unbind())
+}
+
+#[pyfunction]
+fn export_ipc_stream(py: Python<'_>, data: Vec<u8>) -> PyResult<Py<PyBytes>> {
+    let bytes = py
+        .detach(move || {
+            innovate_tabular::export_ipc_stream(&data).map_err(|error| error.to_string())
+        })
+        .map_err(PyValueError::new_err)?;
+    Ok(PyBytes::new(py, &bytes).unbind())
+}
+
+#[pyfunction]
+fn execute(py: Python<'_>, request: String) -> String {
+    py.detach(move || innovate_core::execute_json(&request))
+}
+
+#[pyfunction]
+#[pyo3(signature=(data, model, parameters, options=None))]
+fn predict_ipc(
+    py: Python<'_>,
+    data: Vec<u8>,
+    model: String,
+    parameters: String,
+    options: Option<String>,
+) -> PyResult<Py<PyBytes>> {
+    let output = py
+        .detach(move || {
+            let parameters = serde_json::from_str(&parameters).map_err(|e| e.to_string())?;
+            let options = serde_json::from_str(options.as_deref().unwrap_or("{}"))
+                .map_err(|e| e.to_string())?;
+            innovate_tabular::predict_ipc_with_options(&data, &model, parameters, options)
+                .map_err(|e| e.to_string())
+        })
+        .map_err(PyValueError::new_err)?;
+    Ok(PyBytes::new(py, &output).unbind())
+}
+
+#[pyfunction]
+#[pyo3(signature=(data, model, options=None))]
+fn fit_ipc(
+    py: Python<'_>,
+    data: Vec<u8>,
+    model: String,
+    options: Option<String>,
+) -> PyResult<String> {
+    py.detach(move || {
+        let options =
+            serde_json::from_str(options.as_deref().unwrap_or("{}")).map_err(|e| e.to_string())?;
+        innovate_tabular::fit_ipc_with_options(&data, &model, options).map_err(|e| e.to_string())
+    })
+    .map_err(PyValueError::new_err)
+}
+
+#[pyfunction]
+fn categorize_adopters_ipc(
+    py: Python<'_>,
+    data: Vec<u8>,
+    rate_column: String,
+) -> PyResult<Py<PyBytes>> {
+    let output = py
+        .detach(move || {
+            innovate_tabular::categorize_adopters_ipc(&data, &rate_column)
+                .map_err(|e| e.to_string())
+        })
+        .map_err(PyValueError::new_err)?;
+    Ok(PyBytes::new(py, &output).unbind())
+}
+
+#[pyfunction]
+fn scenario_grid_ipc(py: Python<'_>, data: Vec<u8>, payload: String) -> PyResult<String> {
+    py.detach(move || {
+        let payload = serde_json::from_str(&payload).map_err(|e| e.to_string())?;
+        innovate_tabular::scenario_grid_ipc(&data, payload).map_err(|e| e.to_string())
+    })
+    .map_err(PyValueError::new_err)
+}
+
+#[pyfunction]
+fn scenario_executions_ipc(py: Python<'_>, response: String) -> PyResult<Py<PyBytes>> {
+    let bytes = py
+        .detach(move || {
+            let response = serde_json::from_str(&response).map_err(|error| error.to_string())?;
+            innovate_tabular::scenario_executions_ipc(&response).map_err(|error| error.to_string())
+        })
+        .map_err(PyValueError::new_err)?;
+    Ok(PyBytes::new(py, &bytes).unbind())
+}
+
+#[pyfunction]
+fn scenario_comparisons_ipc(py: Python<'_>, response: String) -> PyResult<Py<PyBytes>> {
+    let bytes = py
+        .detach(move || {
+            let response = serde_json::from_str(&response).map_err(|error| error.to_string())?;
+            innovate_tabular::scenario_comparisons_ipc(&response).map_err(|error| error.to_string())
+        })
+        .map_err(PyValueError::new_err)?;
+    Ok(PyBytes::new(py, &bytes).unbind())
+}
+
+#[pyfunction]
+fn paired_outcomes_ipc(py: Python<'_>, payload: String) -> PyResult<Py<PyBytes>> {
+    let bytes = py
+        .detach(move || {
+            let payload = serde_json::from_str(&payload).map_err(|error| error.to_string())?;
+            innovate_tabular::paired_outcomes_ipc(&payload).map_err(|error| error.to_string())
+        })
+        .map_err(PyValueError::new_err)?;
+    Ok(PyBytes::new(py, &bytes).unbind())
+}
+
+#[pymodule]
+fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(execute, module)?)?;
+    module.add_function(wrap_pyfunction!(export_ipc_file, module)?)?;
+    module.add_function(wrap_pyfunction!(export_ipc_stream, module)?)?;
+    module.add_function(wrap_pyfunction!(predict_ipc, module)?)?;
+    module.add_function(wrap_pyfunction!(fit_ipc, module)?)?;
+    module.add_function(wrap_pyfunction!(categorize_adopters_ipc, module)?)?;
+    module.add_function(wrap_pyfunction!(scenario_grid_ipc, module)?)?;
+    module.add_function(wrap_pyfunction!(scenario_executions_ipc, module)?)?;
+    module.add_function(wrap_pyfunction!(scenario_comparisons_ipc, module)?)?;
+    module.add_function(wrap_pyfunction!(paired_outcomes_ipc, module)?)?;
+    module.add("__version__", env!("CARGO_PKG_VERSION"))?;
+    Ok(())
+}

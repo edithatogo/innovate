@@ -1,0 +1,28 @@
+{
+  "status": "bounded_local_checkpoint",
+  "release_ready": false,
+  "related_evidence": [
+    "network-resource-20261107.json",
+    "mechanistic-20261107.json"
+  ],
+  "results": {
+    "rust_network_tests": 8,
+    "installed_python_tests": 39,
+    "julia_assertions": 177,
+    "R": "conformance passed",
+    "clippy": "workspace all targets passed"
+  },
+  "remaining": "Scheduled graph and resource changes, priority and abandonment, checkpoints, forcing interoperability and scientific parity",
+  "logs": {
+    "clippy.log": "dd6200825bca65a60d0994f3bc8a8db3738818c8c4319d7b509e7cfb15d7c37d",
+    "ffi.log": "cf5da0f229b7eade2479914165aec55443a833a60a36553bd5deabd6d566163d",
+    "install.log": "e033551f862676b0d56aa50dfdbdfccbf72364364bc1988dffde0b1b607f1cbc",
+    "julia.log": "354c9fc01eccb615de1e088897884b6357f196d1096718bba47120aa1cf428b6",
+    "python.log": "07c2eef926162e0090994bc913805aa08a8b2cbb5b21d2c933b937a10300713f",
+    "r-install.log": "8bcc66b6f075dd6146b6ca006a0579b369a424d49b587fb4b5bc0350fad78c31",
+    "r.log": "44f470a53f5c981a2ed81a73a711745d1a9ac4e16ad53aa278b3d7c3f5b1f62f",
+    "rust.log": "61cda696bf3abed2fd7affc8e18dab524c3ef327f8aa1ef72758d67bca23273c",
+    "wheel.log": "c514366573816c0fa24aa81f0804ddac7d82e77b172dc3967fec78c734d8bd52"
+  },
+  "wheel_sha256": "5524a4bda528f81bff2aee0ea1c9cc8f24484cd69f6fbed293081f333a860b55"
+}

@@ -1,0 +1,14 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.58s
+     Running tests/native_boundary.rs (target/debug/deps/native_boundary-2cd1b783beebb90f)
+
+running 6 tests
+test dispatch_rejects_unknown_schema_versions ... ok
+test empty_model_is_a_structured_error_not_a_panic ... ok
+test unavailable_models_never_fall_back_to_python ... ok
+test discovery_does_not_advertise_unported_models ... ok
+test dispatch_is_native_without_a_python_launcher ... ok
+test direct_parameter_payloads_work_for_bass_and_reject_ambiguous_state ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

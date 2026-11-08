@@ -3,6 +3,11 @@ title: Handling Seasonal Data with Diffusion Models
 description: Decomposing time series to isolate diffusion trends from seasonal patterns.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 Real-world data often exhibits seasonality, which can violate the assumptions of simple diffusion models. This tutorial demonstrates how to use the `innovate` library in combination with `statsmodels` to handle seasonal data by decomposing a time series into its trend, seasonal, and residual components.
 
 ## Introduction to seasonal decomposition

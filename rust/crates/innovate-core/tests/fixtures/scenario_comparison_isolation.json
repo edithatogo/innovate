@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0",
+  "operation": "execute_scenario_grid",
+  "payload": {
+    "workers": 2,
+    "scenarios": [
+      {"id":"base","model_key":"logistic","simulation":{"inputs":{"time":[1,2]},"parameters":{"L":100,"k":1,"x0":1}}},
+      {"id":"bad","model_key":"logistic","simulation":{"inputs":{"time":[1,2]},"parameters":{"L":100,"k":0,"x0":1}}},
+      {"id":"alt","model_key":"logistic","simulation":{"inputs":{"time":[1,2]},"parameters":{"L":200,"k":1,"x0":1}}}
+    ],
+    "comparisons": [
+      {"baseline":"base","alternative":"bad"},
+      {"baseline":"base","alternative":"alt","relative_margin":0.1},
+      {"baseline":"alt","alternative":"base","relative_margin":0.1}
+    ]
+  }
+}

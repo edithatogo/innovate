@@ -3,6 +3,11 @@ title: Community Submission Readiness
 description: Scientific reviewer-facing readiness dossier for community targets.
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 # Community Submission Readiness
 
 This page maps evidence readiness for scientific targets and ties each target to repository artifacts.

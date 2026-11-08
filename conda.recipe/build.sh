@@ -1,4 +1,4 @@
 #!/bin/bash
-
-$PYTHON -m pip install . --no-deps -vv
-$PYTHON -m pip install jitcdde
+set -euo pipefail
+"$PYTHON" scripts/check_migration.py --release
+"$PYTHON" -m pip install . --no-deps --no-build-isolation -vv

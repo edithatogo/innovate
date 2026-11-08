@@ -1,0 +1,14 @@
+[package]
+name = "innovate-tabular"
+description = "Polars and Arrow IPC boundary for the Innovate Rust core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+innovate-core.workspace = true
+serde_json.workspace = true
+polars = { git = "https://github.com/pola-rs/polars.git", rev = "2d74c435e83b86dc2cf6b71ec6c7b4bd67a4042d", default-features = false, features = ["dtype-array", "dtype-struct", "ipc", "ipc_streaming"] }
+polars-arrow = { git = "https://github.com/pola-rs/polars.git", rev = "2d74c435e83b86dc2cf6b71ec6c7b4bd67a4042d", default-features = false }

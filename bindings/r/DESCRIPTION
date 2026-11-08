@@ -1,20 +1,20 @@
 Package: innovate.R
 Title: R Bindings Over the Functional Kernel
-Version: 0.6.0
+Version: 0.7.0.9000
 Authors@R: c(
     person("Dylan", "Mordaunt", email = "dylan.mordaunt@vuw.ac.nz", role = c("aut", "cre"))
   )
-Description: Provides thin R bindings for the Innovate functional kernel.
-    The package constructs versioned JSON request envelopes, invokes the shared
-    Python bridge, and converts kernel responses into R-native objects.
-License: Apache License (>= 2)
+Description: Thin native bindings to the Rust-owned Innovate scientific kernel.
+    Shared versioned requests expose fitting, prediction and diagnostics without
+    a Python interpreter. Unported capabilities return structured native errors.
+License: Apache License (== 2.0)
 Encoding: UTF-8
 URL: https://github.com/edithatogo/innovate
 BugReports: https://github.com/edithatogo/innovate/issues
-SystemRequirements: Python (>= 3.10) with the innovate Python package
-NeedsCompilation: no
+SystemRequirements: Innovate native Rust library (0.7.0-alpha.1)
+NeedsCompilation: yes
 Imports:
-    jsonlite
+    jsonlite (>= 2.0.0)
 Suggests:
     knitr,
     rmarkdown

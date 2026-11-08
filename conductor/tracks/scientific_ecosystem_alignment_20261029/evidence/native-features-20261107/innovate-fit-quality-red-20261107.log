@@ -1,0 +1,31 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.56s
+     Running tests/fit_quality.rs (/tmp/innovate-scientific-core-target/debug/deps/fit_quality-c0d463367fa345fc)
+
+running 2 tests
+test custom_initial_parameters_and_iteration_limits_are_honored ... FAILED
+test scalar_native_models_report_actual_optimizer_termination_and_local_rank ... FAILED
+
+failures:
+
+---- custom_initial_parameters_and_iteration_limits_are_honored stdout ----
+
+thread 'custom_initial_parameters_and_iteration_limits_are_honored' (25499294) panicked at rust/crates/innovate-core/tests/fit_quality.rs:25:95:
+called `Result::unwrap()` on an `Err` value: KernelBindingError { code: "unsupported_native_operation", message: "native logistic fitting currently supports simple fitted states without covariates, events, or custom fitter options", operation: Some(FitModel) }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- scalar_native_models_report_actual_optimizer_termination_and_local_rank stdout ----
+
+thread 'scalar_native_models_report_actual_optimizer_termination_and_local_rank' (25499295) panicked at rust/crates/innovate-core/tests/fit_quality.rs:14:9:
+assertion `left == right` failed: bass: {"diagnostics":{"comparison_family":"fitted","information_criteria":{"assumption":"iid_gaussian_residuals","convention":"n_log_rss_over_n_plus_penalty; common_gaussian_constant_omitted","parameter_count_including_variance":4,"undefined_when_zero_rss":true},"metrics":{"AIC":-1356.9483626506608,"BIC":-1352.072859351188,"MAE":1.176871933239454e-12,"MSE":1.9427562764981187e-24,"R-squared":1.0,"RMSE":1.3938279221260128e-12,"RSS":4.8568906912452964e-23,"R_squared":1.0},"model_name":"BassModel","provenance":"deterministic","residual_analysis":{"breusch_pagan_p":null,"durbin_watson":0.14825019664307038,"max_abs_residual":2.7782220968219917e-12,"mean_residual":-3.736744247362367e-13,"residual_autocorrelation":[1.0,0.0,0.0],"residuals":[0.0,-9.379164112033322e-13,-1.8260948309034575e-12,-2.502886786714953e-12,-2.7782220968219917e-12,-2.547295707699959e-12,-1.7763568394002505e-12,-6.892264536872972e-13,4.334310688136611e-13,1.2931877790833823e-12,1.7621459846850485e-12,1.8758328224066645e-12,1.7337242752546445e-12,1.3500311979441904e-12,9.237055564881302e-13,5.258016244624741e-13,1.4210854715202004e-13,-1.8474111129762605e-13,-4.547473508864641e-13,-6.679101716144942e-13,-7.958078640513122e-13,-9.663381206337363e-13,-1.0231815394945443e-12,-1.1084466677857563e-12,-1.1226575225009583e-12],"shapiro_wilk_p":null,"significance_tests":"not_implemented","standardized_residuals":[0.2782791150839554,-0.42019670144165994,-1.0816321337575836,-1.5856459331823172,-1.7906909172002536,-1.6187177047981134,-1.0445917495478918,-0.23499478039320132,0.6010596060541261,1.2413291045359403,1.5905670127987481,1.6752307481351862,1.5694010789646384,1.2836609722041594,0.966171964692516,0.6698488910149822,0.3841087842545032,0.14070054516224328,-0.060375826261797494,-0.21912033001761916,-0.3143670322711122,-0.4413626352757695,-0.48369450294398864,-0.5471923044463173,-0.557775271363372],"std_residual":1.3428044164345607e-12},"residuals":[0.0,-9.379164112033322e-13,-1.8260948309034575e-12,-2.502886786714953e-12,-2.7782220968219917e-12,-2.547295707699959e-12,-1.7763568394002505e-12,-6.892264536872972e-13,4.334310688136611e-13,1.2931877790833823e-12,1.7621459846850485e-12,1.8758328224066645e-12,1.7337242752546445e-12,1.3500311979441904e-12,9.237055564881302e-13,5.258016244624741e-13,1.4210854715202004e-13,-1.8474111129762605e-13,-4.547473508864641e-13,-6.679101716144942e-13,-7.958078640513122e-13,-9.663381206337363e-13,-1.0231815394945443e-12,-1.1084466677857563e-12,-1.1226575225009583e-12],"support_level":"supported","uncertainty":{"provenance":"deterministic","report_type":"point_estimate","support_level":"supported"},"warnings":[]},"family":"diffusion","model_key":"bass","model_name":"BassModel","parameters":{"m":100.0000000000013,"p":0.030000000000008836,"q":0.34999999999993125},"predictions":{"dtype":"float64","metadata":{"shape":[25]},"shape":[25],"values":[0.0,3.5211082775520914,8.245425061160491,14.376433604549764,21.99796159455862,30.981476691600026,40.929619701358796,51.21253996983604,61.11168579039145,70.00984428356445,77.52856210409604,83.55672813729994,88.18960432184177,91.63568105962396,94.13717449677775,95.92100578104412,97.17700390024389,98.05346134575746,98.66124937901611,99.08089728794403,99.36977448569964,99.56822073681492,99.70435111825826,99.79764293572266,99.86153422552033]},"state":{"constructor_kwargs":{},"model_key":"bass","model_name":"BassModel","parameters":{"m":100.0000000000013,"p":0.030000000000008836,"q":0.34999999999993125},"predict_kwargs":{}}}
+  left: Null
+ right: true
+
+
+failures:
+    custom_initial_parameters_and_iteration_limits_are_honored
+    scalar_native_models_report_actual_optimizer_termination_and_local_rank
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --test fit_quality`

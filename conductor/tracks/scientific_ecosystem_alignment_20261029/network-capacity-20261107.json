@@ -1,0 +1,26 @@
+{
+  "status": "bounded_local_checkpoint",
+  "release_ready": false,
+  "related_evidence": [
+    "network-abandonment-20261107.json"
+  ],
+  "results": {
+    "rust_network_tests": 12,
+    "installed_python_tests": 40,
+    "julia_assertions": 181,
+    "R": "native conformance and scheduled capacity passed",
+    "clippy": "workspace all targets passed"
+  },
+  "semantics": "Kairos orders waiters. Innovate controls admission and retains active service on capacity decreases. Completions and expiry precede scheduled changes at the same tick.",
+  "remaining": "Balking, optional retries, forcing interoperability, scenarios, resume and scientific qualification",
+  "logs": {
+    "clippy.log": "80fa8b7bf342a09798d38ace051f1bbaea82436e2f881032c21c1f4ee8811cb5",
+    "ffi.log": "ef04ef239d96ff8cf2ecb8d06c8441cfe6dfddac590e803b2b897af0c71387fa",
+    "install.log": "41a3aa72cbf46f016e358299c394381e4872e81811bec3ac6874458772725417",
+    "julia-final.log": "564e21ce90d5dadd92c98a223b746d7e6820dc2c1b76a93c23bae6ec22ce6c48",
+    "python-final.log": "b1caae85ec31d08a00b70488af9cc30676ea609b8012c2800620e199adf3bcb2",
+    "r-final.log": "1d273b68bf6ddb63cb1e51f44becda602ec047969b7b3835f34f056c88ed1231",
+    "rust.log": "6c1c6c9f93b56fed51cb727be01d3eeb5af0d8d1b062522d5097e8868e307212",
+    "wheel.log": "f0bd6326160d6d8aa1768d2279ff2f7d4198180a89b98430ef1db44309655253"
+  }
+}

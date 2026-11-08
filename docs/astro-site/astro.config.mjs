@@ -28,7 +28,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Innovate',
-      description: 'A Python library for simplifying innovation/policy diffusion modelling.',
+      description: 'Rust-native innovation diffusion modelling with Polars.',
       customCss: ['./src/styles/custom.css'],
       editLink: {
         baseUrl: 'https://github.com/edithatogo/innovate/edit/main/docs/astro-site/src/content/docs/',
@@ -44,13 +44,13 @@ export default defineConfig({
         starlightLinksValidator(),
         ...docSearchPlugins,
         starlightVersions({
-          current: { label: 'Current' },
-          versions: [{ slug: 'latest', label: 'Latest' }],
+          current: { label: '0.7 Development' },
+          versions: [{ slug: 'latest', label: '0.6 Reference' }],
         }),
         polyglot({
           python: {
-            entryPoints: ['../../src/innovate'],
-            pythonExecutable: process.env.STARLIGHT_POLYGLOT_PYTHON ?? 'python',
+            entryPoints: ['../../bindings/python/innovate'],
+            pythonExecutable: process.env.STARLIGHT_POLYGLOT_PYTHON ?? '../../.venv-native/bin/python',
             output: 'api/python',
           },
         }),

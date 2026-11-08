@@ -2,9 +2,9 @@
 
 ## Mandatory target: Rust scientific core and Polars
 
-The maintainer's 7 November 2026 direction replaces the Python-first migration trajectory. Supported scientific model evaluation, inference and simulation execute Rust. Python/R/Julia/other interfaces marshal native calls, configure jobs and present results. Missing native capability returns an explicit error.
+The maintainer's 7 November 2026 direction replaces the Python-first migration trajectory. Supported scientific model evaluation, inference and simulation execute Rust. Python, Julia and R bindings marshal native calls, configure jobs and present results. Missing native capability returns an explicit error.
 
-Polars is the supported tabular computation surface; Arrow/Parquet plus typed metadata is the interchange boundary. Pandas/xarray APIs, production imports, hidden conversions and transitive supported-extra dependencies are retired in the next breaking release. Separate external test-oracle environments may use established scientific packages, but are unreachable from production dispatch. The current source remains hybrid until the migration tasks pass; this policy is not a claim that the code has already changed.
+Polars is the supported tabular computation surface; Arrow/Parquet plus typed metadata is the interchange boundary. Pandas/xarray APIs, production imports, hidden conversions and transitive supported-extra dependencies are retired in the next breaking release. Separate external test-oracle environments may use established scientific packages, but are unreachable from production dispatch. The development branch has a bounded native runtime. Release qualification is tracked in the migration ledger.
 
 Target paths: `crates/innovate-core`, `crates/innovate-data`, `crates/innovate-arrow`, optional `crates/innovate-kairos` and `crates/innovate-games`, direct Python/PyO3 and versioned native FFI bindings. Minimal numerical kernels may use native dense arrays; they need not materialise a dataframe.
 
@@ -32,11 +32,10 @@ Astro/Starlight under `docs/astro-site` is the only documentation site.
 - **Prose Linting**: Vale with Repo/ValueProse; dependency updates require their own build evidence.
 - **Build Gate**: run `pnpm build && pnpm check` in the actual docs workspace; do not claim it ran from this plan.
 - Static historical release evidence under `docs/source/_static/` remains source data, not current acceptance by itself.
-- **TypeScript Binding Toolchain**: existing Node.js 26, TypeScript `^6.0.3`, Vitest `^4.1.9` and `@types/node` `^26.0.0` declarations must be reconciled with qualified current candidates before release.
 
 ## Historical Rust ownership records
 
-Retain archived closure evidence under `Rust Core Full Native Migration and Ownership Closure` and `Rust Core Migration Completion and Polyglot Claim Closure`. These historical records do not establish present full native ownership. The current source remains hybrid and the [Rust-core convergence track](tracks/rust_core_convergence_20261107/index.md) owns the remaining acceptance.
+Retain archived closure evidence under `Rust Core Full Native Migration and Ownership Closure` and `Rust Core Migration Completion and Polyglot Claim Closure`. These historical records do not establish present full native ownership. The [Rust-core convergence track](tracks/rust_core_convergence_20261107/index.md) owns the remaining acceptance.
 
 For historical profiling context, **cargo-flamegraph** and **DHAT** are recorded Rust profiling tools. Historical **XLA-Backed Libraries** include JAX, NumPyro, BlackJAX, TensorFlow Probability and Diffrax. JAX/XLA device profilers retain their role in isolated external-reference comparisons until Rust owns a promoted native GPU execution backend. This preserves historical traceability, not permission for a supported non-Rust production engine. All performance claims require current measured evidence.
 

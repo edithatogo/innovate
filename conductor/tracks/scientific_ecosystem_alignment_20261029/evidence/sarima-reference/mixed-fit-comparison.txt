@@ -1,0 +1,2 @@
+maximum coefficient error 0.000207323820195
+log likelihood error 5.51654522951e-07

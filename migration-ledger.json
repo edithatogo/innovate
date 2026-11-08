@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "source_commit": "56d91dd716747900465ce2d1dc8c0231aa8a337b",
+  "release_ready": false,
+  "policy": "All existing and planned scientific features are required. Unavailability is temporary and never counts as completed migration.",
+  "models": [
+    {
+      "key": "bass",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/native-features-20261107.json"
+    },
+    {
+      "key": "complementary_goods",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/complementary-forcing-20261107.json"
+    },
+    {
+      "key": "composite",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/composite-20261107.json"
+    },
+    {
+      "key": "fisher_pry",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/native-features-20261107.json"
+    },
+    {
+      "key": "gompertz",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/native-features-20261107.json"
+    },
+    {
+      "key": "hierarchical",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/hierarchical-20261107.json"
+    },
+    {
+      "key": "latent_process",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/latent-20261107.json"
+    },
+    {
+      "key": "lock_in",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/lock-in-20261107.json"
+    },
+    {
+      "key": "logistic",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/historical-logistic-20261107.json"
+    },
+    {
+      "key": "lotka_volterra",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/native-features-20261107.json"
+    },
+    {
+      "key": "mixture",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/mixture-20261107.json"
+    },
+    {
+      "key": "multi_product",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/native-features-20261107.json"
+    },
+    {
+      "key": "network_diffusion",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/network-diffusion-20261107.json"
+    },
+    {
+      "key": "norton_bass",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/native-features-20261107.json"
+    },
+    {
+      "key": "policy_hazard",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/policy-20261107.json"
+    },
+    {
+      "key": "regime_switching",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/regime-20261107.json"
+    }
+  ],
+  "feature_areas": [
+    {
+      "key": "covariates_and_events",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Broader model forcing, continuous event time and override inference, optimizer robustness, stiff solver parity, uncertainty calibration, scenarios and resume"
+    },
+    {
+      "key": "multi_generation_substitution",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Continuous launch and event inference beyond supplied candidates, global qualification of historical crossings and rate peaks beyond the bounded probe search, uncertainty calibration, full parity and broader numerical qualification"
+    },
+    {
+      "key": "competitive_ecosystems",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Unforced and selected forced or fixed-event multi-product and lock-in starts converge on independent fixtures. Historical signed interaction-matrix prediction, scoring, cross-elasticity and bounded fitting have local Python, Julia and R evidence. Broader initialization robustness, larger interaction-matrix fits, event inference beyond supplied candidates, broader interaction-adjusted equilibrium analysis, calibrated uncertainty and wider numerical qualification remain open."
+    },
+    {
+      "key": "hierarchical_mixture_inference",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/hierarchical-20261107.json",
+      "remaining": "Full hierarchical and mixture inference parity and calibrated uncertainty"
+    },
+    {
+      "key": "latent_regime_models",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/latent-20261107.json",
+      "remaining": "Full latent and regime inference parity and calibrated uncertainty"
+    },
+    {
+      "key": "network_policy_diffusion",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/policy-20261107.json",
+      "remaining": "Full base/covariate composition, policy inference, stochastic uncertainty, causal and scenario qualification remain required"
+    },
+    {
+      "key": "kairos_des_abm",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Local event- and tick-boundary resume and prior-pin checkpoint replay have evidence in the track plan. Python, Julia and R each passed 64 scheduled-resource and 693 continuous-hazard replays. A continuous-hazard checkpoint also transferred between the three bindings on the same native build. Broader stochastic resource and scenario qualification, hosted checks and release acceptance remain open."
+    },
+    {
+      "key": "bayesian_inference",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Broader model, prior and likelihood calibration, historical workflow parity and release acceptance"
+    },
+    {
+      "key": "bootstrap_uncertainty",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Broader model coverage, calibration of parameter and mean-path intervals and event selection frequencies, and release acceptance. The sparse-transition Logistic study shows capacity undercoverage with both resampling methods at 200 draws. The residual method also rejects the trial 39 baseline despite agreement with the independent fit."
+    },
+    {
+      "key": "batch_fitting",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Parallel fitting and ragged forecasts for five historical model families, mixed Logistic event and covariate batches, and uneven forecast chunks have local Python, Julia and R evidence. Broader model and workload qualification and release acceptance remain open."
+    },
+    {
+      "key": "preprocessing",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Month-start and fiscal quarter/year aggregation, weekly output bounds, and extreme native rolling windows have Python, Julia and R evidence. The Python Polars helper also has installed-wheel coverage around overflow and null or NaN gaps. Eight near-cancellation ARMA(1,1) cases matched a five-start R likelihood reference and agreed through Python, Julia and R. Broader historical preprocessing parity, SARIMA qualification beyond these fixtures, installed release performance, and release acceptance remain open."
+    },
+    {
+      "key": "causal_analysis",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Qualify broader propensity model validation and fitted inference, matching inference and forest estimators, uncertainty and scientific acceptance"
+    },
+    {
+      "key": "adopter_classification",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Independent Rust regression covers 2,744 cases on two irregular grids across four common rate scales. Broader grid shapes, heterogeneous rate extremes, and release binding qualification remain open."
+    },
+    {
+      "key": "data_ingestion_provenance_validation",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Local dataset ingestion, direct checksum replay, and edgeless graph artifacts have cross-binding evidence. Broader input qualification, hosted distribution checks and release acceptance remain open."
+    },
+    {
+      "key": "scenario_registry_execution",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Broader topology and substitution designs, broader stochastic design and calibration beyond the qualified Kairos fixtures, cross-version replay qualification, and release parity"
+    },
+    {
+      "key": "explainability_sensitivity_reporting",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Decision report release parity and clean distribution qualification"
+    },
+    {
+      "key": "benchmark_model_cards",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Broader benchmark corpus, observed-data scientific validation, and hosted release qualification"
+    },
+    {
+      "key": "plugin_contracts",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Hosted lifecycle verification on Linux and Windows, custom model dispatch, broader diagnostics and serialization contracts, and release acceptance"
+    },
+    {
+      "key": "remote_execution",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "The locked subprocess and source-package tests passed locally. The restricted worker container smoke check passed on hosted Linux. Hosted transport, authenticated identity and tenant isolation, operational observability, and release acceptance remain open."
+    },
+    {
+      "key": "accelerator_hpc",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Open MPI case sharding is verified locally and on a hosted single-node Linux runner. Multi-node execution, scheduler-backed allocation, accelerator implementation and qualification, and release acceptance remain open."
+    },
+    {
+      "key": "voiage_arrow_handoff",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Hosted Linux source-built wheel passed the Voiage 3.1.0 ordinary and weighted EVPI handoff. Broader decision workflows and release acceptance remain open."
+    },
+    {
+      "key": "calibration_identifiability",
+      "status": "bounded_native",
+      "required": true,
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Historical empirical and split-conformal intervals run in Rust with local Python, Julia and R evidence. Fitted-forecast coverage, global identifiability and broader noisy-data and extreme-domain validation remain open."
+    }
+  ]
+}

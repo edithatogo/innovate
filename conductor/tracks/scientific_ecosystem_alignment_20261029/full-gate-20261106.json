@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-06",
+  "command": "uv run --locked --python .venv/bin/python nox -s lint types tests docs package",
+  "first_attempt": {
+    "log_path": "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-kairos-vzlyra5z/full-gate.log",
+    "sha256": "b535c27df20bd0ccac35fb020fca86e4225344ea8b83b18107cb87db5e28b606",
+    "reported_outcomes_without_terminal_summary": 1405,
+    "exit_code": 138,
+    "terminal_unit_summary": false,
+    "reason": "Unexplained process termination; no cause established."
+  },
+  "second_attempt": {
+    "log_path": "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-kairos-vzlyra5z/full-gate-second.log",
+    "sha256": "8bb6780c0d2918ad1292bab8184b2d9542520b849d7072f2d5e3c6bd55c91e58",
+    "reported_outcomes_without_terminal_summary": 1405,
+    "exit_code": 1,
+    "unit_exit_code": 143,
+    "unit_stop_reason": "Owner sent SIGTERM to this lane pytest after observed elapsed 15:08, enforcing approximately 15-minute bound; no children remained.",
+    "terminal_unit_summary": false
+  },
+  "sessions": {
+    "lint": "pass",
+    "types": "pass",
+    "tests": "incomplete_budget_stop",
+    "docs": "pass: 162 pages, internal links valid",
+    "package": "pass: wheel and sdist built; twine and wheel contents pass"
+  },
+  "collection": {
+    "selected": 1536,
+    "total": 1541,
+    "deselected": 5,
+    "exit_code": 0,
+    "next_unreported_node_if_collection_order_is_preserved": "tests/unit/test_specific_modules_coverage.py::TestFitterCoverage::test_bootstrap_fitter_basic",
+    "not_a_failing_test_assertion": true
+  },
+  "source_environment": {
+    "python": "3.15.1",
+    "uv_pip_check": "164 packages compatible"
+  },
+  "full_gate_passed": false
+}

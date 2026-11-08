@@ -1,0 +1,75 @@
+{
+  "status": "bounded_local_checkpoint",
+  "base_commit": "b3a5953793ac9bd797dd8c407f6b44f1c7709b39",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "related_evidence": [
+    "norton-forcing-20261107.json",
+    "mechanistic-20261107.json",
+    "network-resource-20261107.json"
+  ],
+  "results": {
+    "rust_tests": 131,
+    "rust_scope": "core and C ABI full coverage run plus 4 Polars tests",
+    "installed_python_tests": 43,
+    "julia_assertions": 189,
+    "R": "full native conformance including independent Lotka forcing fit and forecast passed",
+    "clippy": "workspace all targets passed",
+    "hooks": "affected files passed",
+    "docs_pages": 163,
+    "package": "local wheel/source metadata, wheel contents and exact Rust module/test/fixture inclusion passed"
+  },
+  "oracle": {
+    "python": "3.15.2",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "method": "DOP853, split at every control knot, rtol=1e-12 atol=1e-13"
+  },
+  "coverage": {
+    "count": 9733,
+    "covered": 8309,
+    "percent": 85.36936196445085
+  },
+  "competition_coverage": {
+    "count": 632,
+    "covered": 583,
+    "percent": 92.24683544303798
+  },
+  "remaining": "Other ecosystem forcing, event splits, automatic starts, weights, uncertainty, branch/mutation, platform and scientific/release qualification",
+  "source_sha256": {
+    "bindings/julia/test/runtests.jl": "99f84e86f2689e6af0972830511406903fc1df45a73e0da82840cac6c32df589",
+    "bindings/r/tests/native.R": "31d3a8b069341f4ecd3aaa610df40247f2212aa5e37a12884ae4a8067591484e",
+    "docs/astro-site/src/content/docs/native-migration.md": "dd2ef8d43ee937893eef5e91974d1002b2ad9f5f702306333f4a8d6b4b3d48f1",
+    "migration-ledger.json": "6eacf7854753fe7bd8cbec2755b3d7a521c10e2916e652b971cda318a1312f0a",
+    "rust/crates/innovate-core/src/competition.rs": "3d1a07f122b06de56833c57d9faf2858061226ea2441e1825fdf57116a29fbf2",
+    "rust/crates/innovate-core/src/discovery.json": "002cb88710809fd613cddf28877b82d8a0782bcac1e25f4a0071c3a93bbae74c",
+    "rust/crates/innovate-core/tests/competition.rs": "ce8dfd2570da80c9563c16d386280dd9d785217a81461337d98daed38eef4b84",
+    "tests/native/test_python_consumer.py": "c341e837eddb53d95fc39b0557074245160e096368e92025ded8f26506303b2a",
+    "rust/crates/innovate-core/tests/fixtures/lotka_forcing_scipy.json": "73e14fde264dfc55fdbabcc59d4898947ab0038e1ef4c5c7e3b00b2904419801"
+  },
+  "logs": {
+    "clippy.log": "59edc514dc47b6f4e557d07bbc5c9efcaf3174d397b326ee767b7fa8fa2bc745",
+    "coverage.log": "d634fb7cc5664f5cb936d4e517d3bcd1f9b4b78da0f56559a39d7bb6b48ecfba",
+    "docs.log": "73d1eb35fdf125937f07d07ba97efa36bbc4e437c6b76fbed2d03a32ec704c89",
+    "ffi.log": "885af48135f92a1a8f5b374c17de4987d002f8cee2d1f5b4d4c7624500c0056b",
+    "hooks.log": "7523d6b940ad7d7e49ea93ff33ac60ceb273c50cb6ae677030a5b65df95de21b",
+    "install.log": "d243fdb74dc8098801c995b73b14de10e10d073cd2c581a46c2820c9136aa22c",
+    "julia.log": "17d6ddfee912c326ec6a3557046c7be96f8e366196210b6fd253a1484ac12a5b",
+    "oracle-fit.log": "371ae2b17ac03f710f5e0567d31e21399b0912e8fef0f8828902cce2674137ec",
+    "package.log": "d7c587dc4bc1e924f68f68a21119ab3619cccf276e279f1e8278ebe29ff688b9",
+    "python.log": "986dbc9a5d6b6525242d1315dd44f9f5e97162596004680091f1927df955e4ea",
+    "r.log": "c00dc01d20baa7a2623ae94b143c44e5c3dd61465d80034e5bde8fc1064d1395",
+    "red.log": "2f5570d28c1f7300b2058472bb3787777142c459e456aa2fc2529d7865c8aaa9",
+    "release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "rust.log": "2c2263eaeca202ecd69d0302e0001e8a064ef49ddeafe108ffe289093b1e26ca",
+    "sdist.log": "9415f0b88c10abaa22215a0a2ed6fea5475d65fb2f28613add7d40c8e765d4e3",
+    "tabular.log": "c98bc94c6f9080eec3e5f648fbee35fe969211c77e27e475b6034a5f0b63bb24",
+    "wheel.log": "e3f80f4183165d21ad4d85a13afa6bacb6b9af471c7d66f3f125e85d0cb67c6c",
+    "oracle-lint.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+  },
+  "artifacts": {
+    "innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "8c6aa5e279a8f01355852f9071d8678f87e8d75500fc7018fb53832e7299936d",
+    "innovate-0.7.0a1.tar.gz": "1a1ca63cd2b33b55be9e85594c07408a0ebeb6cc81fbbcc16c0db4df5cede9c2"
+  },
+  "oracle_generator_sha256": "34a9a9f0c4ce7c8503c43e3ff1f2c31e5e54b6aaee19899ed06dddf3f92233dc"
+}

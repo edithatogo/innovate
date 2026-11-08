@@ -1,0 +1,172 @@
+"""Fail closed on feature loss and native migration release claims."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import subprocess
+import sys
+import tomllib
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+SOURCE_PATHS = (
+    ".github/workflows",
+    ".python-version",
+    "bindings",
+    "rust",
+    "scripts",
+    "specs",
+    "tests",
+    "Cargo.toml",
+    "Cargo.lock",
+    "Dockerfile",
+    "LICENSE",
+    "README.md",
+    "pyproject.toml",
+    "uv.lock",
+)
+
+
+def release_source_digest() -> str:
+    def git(*args: str) -> bytes:
+        return subprocess.check_output(["git", *args], cwd=ROOT)
+
+    if git("status", "--porcelain", "--untracked-files=normal", "--", *SOURCE_PATHS):
+        raise ValueError("Release evidence requires clean source inputs")
+    entries = git("ls-tree", "-r", "-z", "HEAD", "--", *SOURCE_PATHS)
+    if not entries:
+        raise ValueError("Release source inventory is empty")
+    return hashlib.sha256(entries).hexdigest()
+
+
+def main() -> int:
+    if sys.version_info[:3] != (3, 15, 2):
+        raise ValueError("Use the selected repo-local Python 3.15.2 interpreter")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--release", action="store_true")
+    parser.add_argument("--source-digest", action="store_true")
+    args = parser.parse_args()
+    if args.source_digest:
+        print(release_source_digest())
+        return 0
+    ledger = json.loads((ROOT / "migration-ledger.json").read_text())
+    project = tomllib.loads((ROOT / "pyproject.toml").read_text())
+    if project["build-system"]["build-backend"] != "maturin":
+        raise ValueError("Native Maturin build backend is required")
+    if project["project"]["dependencies"] != ["polars==2.1.0"]:
+        raise ValueError("Polars is the only base Python runtime dependency")
+    binding_entries = {
+        "python": "innovate/__init__.py",
+        "julia": "Project.toml",
+        "r": "DESCRIPTION",
+    }
+    bindings = ROOT / "bindings"
+    for language, entry in binding_entries.items():
+        if not (bindings / language / entry).is_file():
+            raise ValueError(f"Missing required binding: {language}")
+    for directory in bindings.iterdir():
+        if (
+            directory.is_dir()
+            and directory.name not in binding_entries
+            and any(path.is_file() for path in directory.rglob("*"))
+        ):
+            raise ValueError(f"Unsupported language binding: {directory.name}")
+    expected_models = {
+        "bass",
+        "complementary_goods",
+        "composite",
+        "fisher_pry",
+        "gompertz",
+        "hierarchical",
+        "latent_process",
+        "lock_in",
+        "logistic",
+        "lotka_volterra",
+        "mixture",
+        "multi_product",
+        "network_diffusion",
+        "norton_bass",
+        "policy_hazard",
+        "regime_switching",
+    }
+    if {m["key"] for m in ledger["models"]} != expected_models:
+        raise ValueError("Migration ledger lost a required scientific model")
+    expected_features = {
+        "covariates_and_events",
+        "multi_generation_substitution",
+        "competitive_ecosystems",
+        "hierarchical_mixture_inference",
+        "latent_regime_models",
+        "network_policy_diffusion",
+        "kairos_des_abm",
+        "bayesian_inference",
+        "bootstrap_uncertainty",
+        "batch_fitting",
+        "preprocessing",
+        "causal_analysis",
+        "adopter_classification",
+        "data_ingestion_provenance_validation",
+        "scenario_registry_execution",
+        "explainability_sensitivity_reporting",
+        "benchmark_model_cards",
+        "plugin_contracts",
+        "remote_execution",
+        "accelerator_hpc",
+        "voiage_arrow_handoff",
+        "calibration_identifiability",
+    }
+    if {f["key"] for f in ledger["feature_areas"]} != expected_features:
+        raise ValueError("Migration ledger lost a required current or planned feature area")
+    for group in ("models", "feature_areas"):
+        items = ledger[group]
+        if len(items) != len({item["key"] for item in items}) or any(item["required"] is not True for item in items):
+            raise ValueError("Every unique model and feature obligation must remain required")
+    for group in ("models", "feature_areas"):
+        for item in ledger[group]:
+            status = item.get("status")
+            if status not in ("pending", "bounded_native", "qualified"):
+                raise ValueError(f"Invalid migration status for {item['key']}")
+            if status == "qualified" and item.get("remaining"):
+                raise ValueError(f"Qualified migration obligation still has remaining work: {item['key']}")
+            evidence = item.get("evidence")
+            if evidence is None and status == "pending":
+                continue
+            if not isinstance(evidence, str) or not evidence:
+                raise ValueError(f"Missing migration evidence for {item['key']}")
+            evidence_path = Path(evidence)
+            resolved = (ROOT / evidence_path).resolve()
+            if evidence_path.is_absolute() or not resolved.is_relative_to(ROOT.resolve()) or not resolved.is_file():
+                raise ValueError(f"Invalid migration evidence for {item['key']}: {evidence}")
+            evidence_bytes = resolved.read_bytes()
+            if not evidence_bytes.strip():
+                raise ValueError(f"Empty migration evidence for {item['key']}: {evidence}")
+            if status == "qualified" and item.get("evidence_sha256") != hashlib.sha256(evidence_bytes).hexdigest():
+                raise ValueError(f"Qualified migration evidence digest is missing or mismatched for {item['key']}")
+
+    pending = [
+        item["key"]
+        for group in ("models", "feature_areas")
+        for item in ledger[group]
+        if item["required"] and item["status"] != "qualified"
+    ]
+    release_ready = ledger.get("release_ready")
+    if not isinstance(release_ready, bool):
+        raise ValueError("release_ready must be a JSON boolean")
+    if release_ready and pending:
+        raise ValueError("release_ready requires all migration obligations to be qualified")
+    if args.release and release_ready:
+        if ledger.get("qualified_source_sha256") != release_source_digest():
+            raise ValueError("Qualified evidence does not match the release source digest")
+    if args.release and not release_ready:
+        print("Release blocked: scientific migration and acceptance remain incomplete:", ", ".join(pending))
+        return 1
+    print(f"Native development policy valid; {len(pending)} feature obligations still block release")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

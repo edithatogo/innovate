@@ -1,0 +1,27 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 1.07s
+     Running tests/hierarchical.rs (target/debug/deps/hierarchical-651beef9e259285e)
+
+running 6 tests
+test invalid_groups_parameters_and_observation_shapes_fail_closed ... ok
+test historical_and_centered_group_predictions_retain_distinct_parameter_meanings ... ok
+test large_constant_diagnostics_do_not_invent_explained_variation ... FAILED
+test shared_observations_fit_once_with_zero_group_offsets ... ok
+test centered_group_fits_recover_independent_curves_and_saved_group_output ... ok
+test historical_group_mapping_keeps_absolute_estimates_and_adds_global_means ... ok
+
+failures:
+
+---- large_constant_diagnostics_do_not_invent_explained_variation stdout ----
+
+thread 'large_constant_diagnostics_do_not_invent_explained_variation' (27004325) panicked at rust/crates/innovate-core/tests/hierarchical.rs:162:5:
+assertion failed: d["diagnostics"]["metrics"]["R_squared"].is_null()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    large_constant_diagnostics_do_not_invent_explained_variation
+
+test result: FAILED. 5 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p innovate-core --test hierarchical`

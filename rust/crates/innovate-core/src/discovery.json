@@ -1,0 +1,470 @@
+{
+  "metadata": {
+    "runtime": "rust_native",
+    "scope": "Bounded Rust-native scalar, multivariate ODE, wrapper and mixture kernels. Model-specific extensions are explicit; full scientific migration and release qualification remain incomplete."
+  },
+  "models": [
+    {
+      "family": "diffusion",
+      "import_path": "innovate_core",
+      "key": "bass",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": true,
+      "supports_multivariate_output": false,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_curve_or_finite_population_DES_ABM",
+      "supports_rates": false,
+      "variants": [
+        "ode_fixed",
+        "ode_historical_batch"
+      ],
+      "simulation_engines": [
+        "deterministic_curve",
+        "kairos_des",
+        "kairos_abm",
+        "kairos_network"
+      ]
+    },
+    {
+      "family": "substitution",
+      "import_path": "innovate_core",
+      "key": "fisher_pry",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": false,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_curve_only",
+      "supports_rates": false,
+      "variants": [],
+      "simulation_engines": [
+        "deterministic_curve"
+      ]
+    },
+    {
+      "family": "diffusion",
+      "import_path": "innovate_core",
+      "key": "gompertz",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": true,
+      "supports_multivariate_output": false,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_curve_only",
+      "supports_rates": false,
+      "variants": [
+        "ode_fixed",
+        "ode_historical_batch"
+      ],
+      "simulation_engines": [
+        "deterministic_curve"
+      ]
+    },
+    {
+      "family": "diffusion",
+      "import_path": "innovate_core",
+      "key": "logistic",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": true,
+      "supports_multivariate_output": false,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_curve_only",
+      "supports_rates": false,
+      "variants": [],
+      "simulation_engines": [
+        "deterministic_curve"
+      ]
+    },
+    {
+      "family": "substitution",
+      "import_path": "innovate_core",
+      "key": "norton_bass",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": true,
+      "supports_parameter_events": true,
+      "supports_multivariate_output": true,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_curve_only",
+      "supports_rates": true,
+      "variants": [
+        "legacy_cannibalization",
+        "successive_generations"
+      ],
+      "simulation_engines": [
+        "deterministic_curve"
+      ]
+    },
+    {
+      "family": "competition",
+      "import_path": "innovate_core",
+      "key": "lotka_volterra",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": true,
+      "supports_multivariate_output": true,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_ode_only",
+      "supports_rates": true,
+      "variants": [],
+      "simulation_engines": [
+        "deterministic_curve"
+      ],
+      "supports_parameter_events": true
+    },
+    {
+      "family": "competition",
+      "import_path": "innovate_core",
+      "key": "multi_product",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": true,
+      "supports_multivariate_output": true,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_ode_only",
+      "supports_rates": true,
+      "variants": [],
+      "simulation_engines": [
+        "deterministic_curve"
+      ],
+      "supports_parameter_events": true
+    },
+    {
+      "family": "competition",
+      "import_path": "innovate_core",
+      "key": "complementary_goods",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": true,
+      "supports_multivariate_output": true,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_ode_only",
+      "supports_rates": true,
+      "variants": [],
+      "simulation_engines": [
+        "deterministic_curve"
+      ],
+      "supports_parameter_events": true
+    },
+    {
+      "family": "competition",
+      "import_path": "innovate_core",
+      "key": "lock_in",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": true,
+      "supports_multivariate_output": true,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_ode_only",
+      "supports_rates": true,
+      "variants": [],
+      "simulation_engines": [
+        "deterministic_curve"
+      ],
+      "supports_parameter_events": true
+    },
+    {
+      "family": "network_diffusion",
+      "import_path": "innovate_core",
+      "key": "network_diffusion",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": true,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_spillover_only",
+      "supports_rates": false,
+      "variants": [],
+      "simulation_engines": [
+        "deterministic_curve"
+      ]
+    },
+    {
+      "family": "policy_hazard",
+      "import_path": "innovate_core",
+      "key": "policy_hazard",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": false,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_policy_level_multiplier_only",
+      "supports_rates": false,
+      "variants": [],
+      "simulation_engines": [
+        "deterministic_curve"
+      ]
+    },
+    {
+      "family": "latent_process",
+      "import_path": "innovate_core",
+      "key": "latent_process",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": false,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_smoothed_residual_path_only",
+      "supports_rates": false,
+      "variants": [],
+      "simulation_engines": [
+        "deterministic_curve"
+      ]
+    },
+    {
+      "family": "regime_switching",
+      "import_path": "innovate_core",
+      "key": "regime_switching",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": false,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_piecewise_curves_only",
+      "supports_rates": false,
+      "variants": [
+        "historical_index",
+        "fixed_time"
+      ],
+      "simulation_engines": [
+        "deterministic_curve"
+      ]
+    },
+    {
+      "family": "hierarchical",
+      "import_path": "innovate_core",
+      "key": "hierarchical",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": true,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_group_point_curves_only",
+      "supports_rates": false,
+      "variants": [
+        "historical_additive",
+        "centered"
+      ],
+      "simulation_engines": [
+        "deterministic_curve"
+      ]
+    },
+    {
+      "family": "mixture",
+      "import_path": "innovate_core",
+      "key": "mixture",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": false,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_weighted_point_curves_only",
+      "supports_rates": false,
+      "variants": [
+        "gaussian_residual",
+        "historical_adoption"
+      ],
+      "simulation_engines": [
+        "deterministic_curve"
+      ]
+    },
+    {
+      "family": "composite",
+      "import_path": "innovate_core",
+      "key": "composite",
+      "optional_dependencies": [],
+      "stability": "experimental",
+      "supported_backends": [
+        "rust"
+      ],
+      "supports_covariates": false,
+      "supports_multivariate_output": true,
+      "supports_simulation": true,
+      "supports_summarize": true,
+      "supported_operations": [
+        "fit_model",
+        "predict_model",
+        "simulate_model",
+        "summarize_model",
+        "diagnose_model"
+      ],
+      "simulation_semantics": "deterministic_coupled_growth_ODE_only",
+      "supports_rates": true,
+      "variants": [
+        "fixed",
+        "historical_batch"
+      ],
+      "simulation_engines": [
+        "deterministic_curve"
+      ]
+    }
+  ],
+  "schema_version": "2.0"
+}

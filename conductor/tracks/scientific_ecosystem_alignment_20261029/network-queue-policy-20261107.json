@@ -1,0 +1,26 @@
+{
+  "status": "bounded_local_checkpoint",
+  "release_ready": false,
+  "related_evidence": [
+    "network-capacity-20261107.json"
+  ],
+  "results": {
+    "rust_network_tests": 13,
+    "installed_python_tests": 41,
+    "julia_assertions": 184,
+    "R": "native conformance and queue limit/retry passed",
+    "clippy": "workspace all targets passed"
+  },
+  "semantics": "A full waiting queue causes a balk only when immediate service is unavailable. A bounded cooldown restores susceptibility after either balk or expiry. On expiry the native priority queue is reconstructed from current waiters in arrival order because the pinned resource has no removal API.",
+  "remaining": "Forcing interoperability, scenarios, resume and scientific qualification",
+  "logs": {
+    "clippy.log": "30fbf5b7a2cbce4ca100529292bb8adf51db0963a7d23cc2305b1de6e57e97a2",
+    "ffi.log": "ff10e2b336192300650e49e547dc8a9265611e1a61bfae4a934afe44d2cb133a",
+    "install.log": "244f645553906244a39ce640514abbb12ea49de7db6f2a6dc15c5cefaae9ff6c",
+    "julia-final.log": "bb6fed4e7b3c39fdaee0b91cfd806360db5062d8cc9f52a6a62c84d0fe1e1128",
+    "python-final.log": "8876c9830608f9c64826246c16b2934e04138061819f176caaad11a1cf8ba140",
+    "r-final.log": "979a88d4455fb251888fa53b61ca83d24d494bff6671b2b815ba8fd038a863c4",
+    "rust.log": "c0a9ccb99b0c4b239693d681767631085d011c19fcb60bd73d83732307859682",
+    "wheel.log": "8598937ab8053098dab7ec10b7f26d8169753486ffe26783ced4d0cdc6ebc88a"
+  }
+}

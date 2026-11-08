@@ -4,6 +4,11 @@ description: Detailed installation instructions for Innovate and its backends.
 slug: latest/user-guide/installation
 ---
 
+:::caution[Pre-0.7 reference]
+This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
+:::
+
+
 Innovate supports multiple installation methods and runtime environments.
 
 ## System Requirements

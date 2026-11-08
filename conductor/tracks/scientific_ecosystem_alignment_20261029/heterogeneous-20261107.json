@@ -1,0 +1,86 @@
+{
+  "date": "2026-11-07",
+  "status": "bounded_local_checkpoint",
+  "base_commit": "20b0f6676d96e8e62704d655d5be82404192097d",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "results": {
+    "rust_tests": 74,
+    "accounting": "70 core/C ABI plus 4 Polars",
+    "installed_python": 31,
+    "julia_assertions": 152,
+    "R": "native conformance, heterogeneous service and singleton arrays pass",
+    "clippy_lint_types_docs": "pass; expected native source type warning; 163 pages",
+    "package": "installed local wheel; clean-source/platform/hosted qualification pending"
+  },
+  "coverage": {
+    "branches": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "functions": {
+      "count": 751,
+      "covered": 557,
+      "percent": 74.16777629826898
+    },
+    "instantiations": {
+      "count": 1585,
+      "covered": 645,
+      "percent": 40.694006309148264
+    },
+    "lines": {
+      "count": 6281,
+      "covered": 5156,
+      "percent": 82.08883935679032
+    },
+    "mcdc": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "regions": {
+      "count": 10020,
+      "covered": 8706,
+      "notcovered": 1314,
+      "percent": 86.88622754491017
+    }
+  },
+  "raw_log_sha256": {
+    "innovate-heterogeneous-ffi.log": "75976cac05fafc18074f3ec2926fcd59ec0d03432bb191d5b347d17cfde44e04",
+    "innovate-heterogeneous-julia.log": "336c530e622a1ba46652ac7468060d6f2ffb719ac9d03315a416cb58bf374ecf",
+    "innovate-heterogeneous-coverage.log": "0798915ac939ac6d721d44d9b27aa1b1a073a7d98695d67906b8e1449afa93e7",
+    "innovate-heterogeneous-package.log": "f3f7230aa2f0d707ae021fbf5fd4d927c27548796b45a23d3c5685e4b65ed353",
+    "innovate-heterogeneous-clippy.log": "a292a3abdefa1244d41bc599c7d96a405b917fb6c91688d95ed1d48e67b7a74b",
+    "innovate-heterogeneous-install.log": "09e56e0f67d318a468f6b0db7f5159de8215a617a95fe2a83c4148fa63d05dcf",
+    "innovate-heterogeneous-r.log": "f92d3f147260f00d472c7a6bd400ac2cb9d8281d69b1c74ba14869dc99c2b5ac",
+    "innovate-heterogeneous-green.log": "b16892e5786ff28c58f8781385124a22ecf7ba3eba62fd7eb2487ce0eefabb63",
+    "innovate-heterogeneous-tabular.log": "7b219649f87d2aa7e5ed037ed1a18376484486b6983b5d64f5066579bae174d7",
+    "innovate-heterogeneous-docs.log": "39d43140f0a55c5260b14b4df35aadfd987e556a220cd9d6984d3e611a75d623",
+    "innovate-heterogeneous-sdist.log": "8326db517ee8dd3f75001b6f9be81486c474875328cb56a1a6d5be250ba6b378",
+    "innovate-heterogeneous-release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "innovate-heterogeneous-red.log": "f0d25bc3d10f08ed2482f59ef5ede2778c17f51e5f297a7272e6425f488641e9",
+    "innovate-heterogeneous-wheel.log": "044eaa8ac215ffac32e2f00bd8d7220e60d82310ed168d6002f24dc996866519",
+    "innovate-heterogeneous-lint.log": "97e8a031338dcd9a3f980745d66ae706326b82b7bd9005ff8c110efaf1f02947",
+    "innovate-heterogeneous-r-install.log": "8bcc66b6f075dd6146b6ca006a0579b369a424d49b587fb4b5bc0350fad78c31",
+    "innovate-heterogeneous-python.log": "1b8f208de3636df279448e40805982570c4351601ce5723301928feea7d343cf",
+    "innovate-heterogeneous-hooks.log": "7523d6b940ad7d7e49ea93ff33ac60ceb273c50cb6ae677030a5b65df95de21b",
+    "innovate-heterogeneous-policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a"
+  },
+  "source_sha256": {
+    "bindings/julia/test/runtests.jl": "8f6bf233aab3a447bbee013f0ef64b13c405b2d793a9bd022ef3a380588476e2",
+    "bindings/r/R/kernel_bridge.R": "939a26f049dc15d9778f88d1419c5bdc2662b865414b22ccb5bd2ef082a60d1e",
+    "bindings/r/tests/native.R": "342058b8e5161976f6437805f3843034db98d4db02898237fd0c392fdd0c263e",
+    "docs/astro-site/src/content/docs/native-migration.md": "62cf4aa6cc46b76cc6077be4fbe3edb346ba623710b3fdbe88154291c28bcb3a",
+    "rust/crates/innovate-core/src/network.rs": "8ad3436e4d2656cc6e43aa1b5a86f3f47e404d898109efa60a76014c9c5f1344",
+    "rust/crates/innovate-core/tests/network.rs": "bea0d16d0116be12dd2fe9fcc23a991c2d691232c825ac0ae4e8053f4d258f22",
+    "tests/native/test_python_consumer.py": "01e732a593307cb0953c81dd27c75e46d37b591cb16665144ed05a4609ea9474"
+  },
+  "artifact_sha256": {
+    "/tmp/innovate-heterogeneous-wheel/innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "8ef966bed3899c793cb52ca768c0a8e1556ec2225c88bc35ffe0f1ec2d8685ed",
+    "/tmp/innovate-heterogeneous-wheel/innovate-0.7.0a1.tar.gz": "39a83bede97049bbb07322d3b26a6e0681e8c58c4f9e291a72c200edffbe43c7",
+    "target/debug/libinnovate_ffi.dylib": "55044ee5ea80eb52925212674db935aa6b1f8a6065efbbe6247fc4ed79148e92"
+  }
+}

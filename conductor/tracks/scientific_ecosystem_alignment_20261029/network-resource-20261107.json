@@ -1,0 +1,153 @@
+{
+  "date": "2026-11-07",
+  "base_commit": "9a721b9",
+  "historical_source": "56d91dd716747900465ce2d1dc8c0231aa8a337b",
+  "kairos_revision": "d56863505d938feb069af88a737eb7668113d14b",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "bounded_native_families": 8,
+  "scope": "Complementary-goods trajectories/fitting and static network adoption with Kairos FIFO service",
+  "results": {
+    "rust_tests": 57,
+    "rust_accounting": "53 core/C ABI coverage-run tests plus 4 Polars tests",
+    "installed_python_tests": 27,
+    "julia_assertions": 142,
+    "R": "native network FIFO, seeded contagion, singleton node arrays and complementary analytic fit plus previous conformance pass",
+    "clippy_lint_types": "pass; expected native missing-source type warning",
+    "docs": "163 pages; internal links valid",
+    "package": "installed local wheel and source archive metadata pass; clean-source/platform rebuild pending",
+    "audit": "No vulnerabilities; existing unsuppressed bincode maintenance warning"
+  },
+  "coverage": {
+    "totals": {
+      "branches": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0
+      },
+      "functions": {
+        "count": 643,
+        "covered": 482,
+        "percent": 74.9611197511664
+      },
+      "instantiations": {
+        "count": 1378,
+        "covered": 576,
+        "percent": 41.799709724238035
+      },
+      "lines": {
+        "count": 5539,
+        "covered": 4501,
+        "percent": 81.2601552626828
+      },
+      "mcdc": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0
+      },
+      "regions": {
+        "count": 8738,
+        "covered": 7578,
+        "notcovered": 1160,
+        "percent": 86.72465094987412
+      }
+    },
+    "network": {
+      "branches": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "mcdc": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0.0
+      },
+      "functions": {
+        "count": 26,
+        "covered": 17,
+        "percent": 65.38461538461539
+      },
+      "instantiations": {
+        "count": 52,
+        "covered": 17,
+        "percent": 32.69230769230769
+      },
+      "lines": {
+        "count": 209,
+        "covered": 191,
+        "percent": 91.38755980861244
+      },
+      "regions": {
+        "count": 400,
+        "covered": 362,
+        "notcovered": 38,
+        "percent": 90.5
+      }
+    }
+  },
+  "artifacts_sha256": {
+    "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/target/debug/libinnovate_ffi.dylib": "fbcf59ca2c146811fbb72fb020b89711e0c8a48ad42cde3d1f8a372bd768fa1b",
+    "/tmp/innovate-network-wheel/innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "463a5ddb56f07ab12228876661ab8e93b76f2dd2785f42e10d3daa5530d7d5d4",
+    "/tmp/innovate-network-wheel/innovate-0.7.0a1.tar.gz": "7c271bc63e67e8f621f333363474c286fe3a5369085351bace8a28ba48aed959"
+  },
+  "evidence_sha256": {
+    "innovate-network-coverage.log": "700f84d22429c87508976c03e764585d896d01167c4d1d28ca53b6b6e8b42d1c",
+    "innovate-network-release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "innovate-network-ffi.log": "9f177c1ce19b90b580e30bcfbdcfa6b713c1173746f58fcb38231a361b91c559",
+    "innovate-network-r.log": "6ea817f8b651fe56054fde7d4a79a8e163bf138f30da52dbc5c80a35636b7b0d",
+    "innovate-network-model-green.log": "9291a814792de3f7c07234e9a093b70dc899377d1bcd39bb6dd73898082b007b",
+    "coverage-summary.json": "c4fbe59d5a2c1bfe2a74d5d4769a9cc8d252c42a9d36bddead1a79c9d71a07a3",
+    "innovate-network-build.log": "5bf3a01f6ecf57bdba3ca29b6a87f4b6b93d85e882107a2babfde76094ce113b",
+    "innovate-network-wheel.log": "49d529585f0d1947dceeed4a235381f71454c16032fd5e247857199f0cf597a4",
+    "innovate-network-audit.log": "2a3822b88830419fcb1fe46412c38a64aeeb4ccdd5d42c1cffc56b6f0905ced2",
+    "innovate-network-model.log": "36266fc14ee5b801177487ef727c90e0f3b662bb65646802983d845a50fb47bb",
+    "innovate-network-python.log": "c928e9e29de35844914a845abb82814181cde66b946df016acae4c7380ebe09f",
+    "innovate-network-sdist.log": "93853dd12046b5d6b3606dcbc5a9bde0b801f01e8d1b6bb2738b5e1ff94c8e85",
+    "source-sha256.json": "f1d76c78255ad561aacea74299dde6f0baf9982a4f7415c9fae9301de6bff1d5",
+    "innovate-network-policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+    "innovate-network-green.log": "41167139872f5b8c4d9a5ed7d2d545050d36aaa6f7f1c26edd096cdb53baa731",
+    "innovate-network-docs.log": "3ecafb38ff2d2b77b4926a8cd75a35da891536ed7196dc464ac323ffc773e8c0",
+    "innovate-network-tabular.log": "3db71326ab351c5caeb92e88393642c6570cac86853db5afd21d0bed10aa14a2",
+    "innovate-network-clippy.log": "547540b1e4aca875be79c3736b2053dbf9d82ada0a06a44a607951b56230a643",
+    "innovate-network-r-install.log": "8bcc66b6f075dd6146b6ca006a0579b369a424d49b587fb4b5bc0350fad78c31",
+    "innovate-network-lint.log": "36873ce5f70ffaa8d9d6bd17335d3ef034ef6d1521150353172c1d9d7164bf5a",
+    "innovate-network-package.log": "dda2865f20556d3f05599e3c6d3e013dd7db2fd2706e92c3a95fac1a54bdb1e2",
+    "innovate-network-julia.log": "42f39bcd0fb8c2b664e4aefb4b144d7e59985c77a36ba618b389b3cd28b201d6",
+    "innovate-network-hooks.log": "58ab2103f6b66d1ab99712ba14eb58a4d1c65f4022870e4c188e96bdab9cc72e"
+  },
+  "raw_log_sha256": {
+    "innovate-network-model.log": "2abf999b8b8b6797ad6a576d1ba3c4ea08605d1d07e16e9b8f1a4df67216ab0e",
+    "innovate-network-model-green.log": "2452d28159143e58b824531502f9d28c58c3f9a56efbf2357af2d438b79df747",
+    "innovate-network-green.log": "f7580dd4883f452bc5c01e5f47258fae5a8f8d77b5f26a1ca9259836eeb7e93c",
+    "innovate-network-build.log": "e48c00a8d84733496d12e8290f74fbddc6da78624bdbd6a66a0fb3030674cefd",
+    "innovate-network-coverage.log": "700f84d22429c87508976c03e764585d896d01167c4d1d28ca53b6b6e8b42d1c",
+    "innovate-network-tabular.log": "61230ea2e35a282a66d2121e11e2791156504efb0fdf0531210d30b94102b816",
+    "innovate-network-python.log": "c928e9e29de35844914a845abb82814181cde66b946df016acae4c7380ebe09f",
+    "innovate-network-r-install.log": "8bcc66b6f075dd6146b6ca006a0579b369a424d49b587fb4b5bc0350fad78c31",
+    "innovate-network-r.log": "6ea817f8b651fe56054fde7d4a79a8e163bf138f30da52dbc5c80a35636b7b0d",
+    "innovate-network-julia.log": "42f39bcd0fb8c2b664e4aefb4b144d7e59985c77a36ba618b389b3cd28b201d6",
+    "innovate-network-clippy.log": "547540b1e4aca875be79c3736b2053dbf9d82ada0a06a44a607951b56230a643",
+    "innovate-network-audit.log": "2a3822b88830419fcb1fe46412c38a64aeeb4ccdd5d42c1cffc56b6f0905ced2",
+    "innovate-network-lint.log": "36873ce5f70ffaa8d9d6bd17335d3ef034ef6d1521150353172c1d9d7164bf5a",
+    "innovate-network-docs.log": "9d19a689bb773664d8028c580ed373048be69a3f26b24b278603a3ee69e6ebd6",
+    "innovate-network-policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+    "innovate-network-release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "innovate-network-ffi.log": "9f177c1ce19b90b580e30bcfbdcfa6b713c1173746f58fcb38231a361b91c559",
+    "innovate-network-wheel.log": "49d529585f0d1947dceeed4a235381f71454c16032fd5e247857199f0cf597a4",
+    "innovate-network-sdist.log": "93853dd12046b5d6b3606dcbc5a9bde0b801f01e8d1b6bb2738b5e1ff94c8e85",
+    "innovate-network-package.log": "12f9c11cc83fb7b30991c7ad7fc0a9c49f36e63bc22204ab33a8c1b14bb7baf1"
+  },
+  "normalization": "Only trailing horizontal whitespace and terminal blank lines removed",
+  "remaining": [
+    "Eight unavailable model families; all full-feature parity obligations",
+    "Historical covariates/events, inference/uncertainty and scenario/data/report/plugin/HPC ports",
+    "Dynamic/directed/weighted/heterogeneous networks and richer resource semantics/resume",
+    "Clean-source/platform/hosted distribution and full scientific qualification"
+  ],
+  "integration": "Isolated source proposal; no main merge, push or publication"
+}

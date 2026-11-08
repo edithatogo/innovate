@@ -1,0 +1,189 @@
+{
+  "date": "2026-11-07",
+  "base_commit": "3cc10543",
+  "kairos_revision": "d56863505d938feb069af88a737eb7668113d14b",
+  "scope": "Homogeneous Kairos ABM and simulation-only additive covariate/event forcing",
+  "release_ready": false,
+  "all_38_obligations_required": true,
+  "results": {
+    "rust_tests": 45,
+    "rust_accounting": "41 core/C ABI tests in coverage, 4 Polars native tests",
+    "python_installed_tests": 24,
+    "julia_assertions": 135,
+    "R": "prior conformance plus ABM covariate forcing/conservation passed",
+    "lint_types_clippy": "passed; expected native missing-source type warning",
+    "docs": "163 pages; internal links valid",
+    "package": "installed local wheel, source archive and Twine/check-wheel metadata pass; clean-source rebuild pending",
+    "audit": "No vulnerabilities; existing unsuppressed bincode maintenance warning"
+  },
+  "coverage": {
+    "totals": {
+      "branches": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0
+      },
+      "functions": {
+        "count": 551,
+        "covered": 414,
+        "percent": 75.1361161524501
+      },
+      "instantiations": {
+        "count": 1168,
+        "covered": 483,
+        "percent": 41.3527397260274
+      },
+      "lines": {
+        "count": 4924,
+        "covered": 3948,
+        "percent": 80.17871649065799
+      },
+      "mcdc": {
+        "count": 0,
+        "covered": 0,
+        "notcovered": 0,
+        "percent": 0
+      },
+      "regions": {
+        "count": 7657,
+        "covered": 6614,
+        "notcovered": 1043,
+        "percent": 86.37847721039572
+      }
+    },
+    "changed_modules": {
+      "forcing.rs": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "mcdc": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "functions": {
+          "count": 18,
+          "covered": 17,
+          "percent": 94.44444444444444
+        },
+        "instantiations": {
+          "count": 36,
+          "covered": 17,
+          "percent": 47.22222222222222
+        },
+        "lines": {
+          "count": 96,
+          "covered": 90,
+          "percent": 93.75
+        },
+        "regions": {
+          "count": 142,
+          "covered": 135,
+          "notcovered": 7,
+          "percent": 95.07042253521126
+        }
+      },
+      "simulation.rs": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "mcdc": {
+          "count": 0,
+          "covered": 0,
+          "notcovered": 0,
+          "percent": 0.0
+        },
+        "functions": {
+          "count": 24,
+          "covered": 19,
+          "percent": 79.16666666666666
+        },
+        "instantiations": {
+          "count": 48,
+          "covered": 19,
+          "percent": 39.58333333333333
+        },
+        "lines": {
+          "count": 194,
+          "covered": 179,
+          "percent": 92.26804123711341
+        },
+        "regions": {
+          "count": 370,
+          "covered": 345,
+          "notcovered": 25,
+          "percent": 93.24324324324324
+        }
+      }
+    }
+  },
+  "remaining": [
+    "Historical covariate interpolation/fitting, market effects and event splits",
+    "Heterogeneous/network/resource ABM and simulation resume",
+    "Nine unavailable model families and remaining inference/scenario/data/report/plugin/HPC obligations",
+    "Clean-source/platform/hosted distribution and full scientific qualification"
+  ],
+  "artifacts_sha256": {
+    "/Volumes/PortableSSD/GitHub/.codex-worktrees/innovate-reconcile-scientific-20261106/target/debug/libinnovate_ffi.dylib": "2175c32fc890e4df7bce1ee61955a59c08edc233ecfc958f82ff4d49dc1e7f75",
+    "/tmp/innovate-abm-wheel/innovate-0.7.0a1-cp315-cp315-macosx_11_0_arm64.whl": "9b12755056eaeea986c770caeba0597520adbb1784d6a2009d4d0ec8a3c3ae58",
+    "/tmp/innovate-abm-wheel/innovate-0.7.0a1.tar.gz": "dc95401844fbf38fa8913b56e926092c01163d2ada1d44619df63f31281f8d8b"
+  },
+  "evidence_sha256": {
+    "innovate-abm-release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "innovate-abm-sdist.log": "b6526d83cc84f76f084b2c988e2369cfbf87d8fa48feae2364dc7fb031ff0780",
+    "coverage-summary.json": "6fedc1d110ff1d9628ef7de5f09492d74bb981054fd7748a5ed78a8107488b8a",
+    "innovate-abm-coverage.log": "b01c2a572ff77e4651da71c0c1cc0b0bd27622d04793fa8546a45a6e96693cff",
+    "innovate-abm-audit.log": "3f1d5492f94fc438ac53a7dcfb80effb4bd598bb691a6865e55d33e2ebbd3937",
+    "innovate-abm-wheel.log": "364d81f9658c1844d82909fd23304cd62cc1073cad6cbeac10998dc8055e4bc1",
+    "innovate-abm-forcing.log": "3f25de37a1b44e1a69eb2a512d80da1d70cdbeb2f2738523a56a9fe6f2894e86",
+    "innovate-abm-ffi.log": "ffeddb207d139c6167bda98012d599499bb7e112e1e11ba7969cc9146ec8e96a",
+    "innovate-abm-clippy.log": "963be9fad699c983ee874eb3909f848baf1ed54440155db146638d39ea98f854",
+    "source-sha256.json": "9a473490a6af360b54e2a983bf8323e82e06be1cc111f211a9da90e1a13b038f",
+    "innovate-abm-julia.log": "96efe1dad58780de5d2fdfb971ff68cfb959b98a06750c63b0ddafd91e080b62",
+    "innovate-abm-lint.log": "093e91c502151b50c84f57316c544bed91098f8c2c199992d01a162d20bfbd89",
+    "innovate-abm-core.log": "e3e80cd68469f281a731aeec8e27665609486bd34569d9e7824c0cc280f678ae",
+    "innovate-abm-policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+    "innovate-abm-tabular.log": "fed30b432a3d1aba6edded5d7f1cfa43d2f4289f2b013ec51f611980a5fe69a5",
+    "innovate-abm-python.log": "86cf97106ad884265c4c42f820bc3be00c0026db64942966feeaee7a48d32b81",
+    "innovate-abm-r.log": "9c30c89caacce95706125ca6dd84885ea701efd1491c908b8220f65b2d907110",
+    "innovate-abm-green.log": "37f18338dc492536e63eb93c9597fa7d91e0dc24034e49570844a26d1f005d4c",
+    "innovate-abm-docs.log": "185ad9352a2e8d788c49601cf4b60b984e32c34ce72bd443013c17f025a7a238",
+    "innovate-abm-package.log": "9d7799a398c367ec7987579827105ba4389dc02100723000a57a0aa3057e6c58",
+    "innovate-abm-red.log": "dfd1528c0795e9751b0477b065ee5b5bbd4534e363129fd30b271e5b98a235d5",
+    "innovate-abm-hooks.log": "58ab2103f6b66d1ab99712ba14eb58a4d1c65f4022870e4c188e96bdab9cc72e"
+  },
+  "raw_log_sha256": {
+    "innovate-abm-red.log": "dfd1528c0795e9751b0477b065ee5b5bbd4534e363129fd30b271e5b98a235d5",
+    "innovate-abm-green.log": "d2ef39703b8e77a515ac00963671ba9e4115a5b3153fce988a47ebfa8c65c6e1",
+    "innovate-abm-forcing.log": "6c182f5bbae149966d114200eca37f73770ceb5a2020823d537ff9b0b6e666ab",
+    "innovate-abm-core.log": "375554ad2898b72ccdcb7e472810d5d700920725f653e17db0bd7566dac9cde3",
+    "innovate-abm-tabular.log": "eaca304e19c46e801798affaf34240c9f4987fda0378e2f508ef08ee78ce996f",
+    "innovate-abm-python.log": "86cf97106ad884265c4c42f820bc3be00c0026db64942966feeaee7a48d32b81",
+    "innovate-abm-r.log": "9c30c89caacce95706125ca6dd84885ea701efd1491c908b8220f65b2d907110",
+    "innovate-abm-julia.log": "96efe1dad58780de5d2fdfb971ff68cfb959b98a06750c63b0ddafd91e080b62",
+    "innovate-abm-coverage.log": "b01c2a572ff77e4651da71c0c1cc0b0bd27622d04793fa8546a45a6e96693cff",
+    "innovate-abm-clippy.log": "963be9fad699c983ee874eb3909f848baf1ed54440155db146638d39ea98f854",
+    "innovate-abm-audit.log": "3f1d5492f94fc438ac53a7dcfb80effb4bd598bb691a6865e55d33e2ebbd3937",
+    "innovate-abm-lint.log": "093e91c502151b50c84f57316c544bed91098f8c2c199992d01a162d20bfbd89",
+    "innovate-abm-docs.log": "2ba292dc2d3692ee22cf4cab7bbeb962eb3788340512e3d1a42ea17a3f9050c7",
+    "innovate-abm-policy.log": "b960481f28a1dd63f5987babbdb5d4bc1795b15cc51541c8ab968ca1632b421a",
+    "innovate-abm-release.log": "c12b8ab1bc6baecf5e69f9779053299e495cc52c26aeac6c582f5789deea83d9",
+    "innovate-abm-wheel.log": "364d81f9658c1844d82909fd23304cd62cc1073cad6cbeac10998dc8055e4bc1",
+    "innovate-abm-ffi.log": "ffeddb207d139c6167bda98012d599499bb7e112e1e11ba7969cc9146ec8e96a",
+    "innovate-abm-sdist.log": "b6526d83cc84f76f084b2c988e2369cfbf87d8fa48feae2364dc7fb031ff0780",
+    "innovate-abm-package.log": "ef0081d3f6e4ba85921d74bd3704adde6b5207feb25a42663c44047e971159a7"
+  },
+  "log_normalization": "Only trailing horizontal whitespace and terminal blank lines removed",
+  "active_tracks": [
+    "scientific_ecosystem_alignment_20261029"
+  ],
+  "integration": "Isolated source proposal; no main merge, push, hosted run or publication"
+}
