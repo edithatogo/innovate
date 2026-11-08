@@ -233,14 +233,14 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "The locked subprocess and source-package tests passed locally. The worker container smoke check awaits a Linux runner. Hosted transport, authenticated identity and tenant isolation, operational observability, and release acceptance remain open."
+      "remaining": "The locked subprocess and source-package tests passed locally. The restricted worker container smoke check passed on hosted Linux. Hosted transport, authenticated identity and tenant isolation, operational observability, and release acceptance remain open."
     },
     {
       "key": "accelerator_hpc",
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Local Open MPI case sharding is verified. Multi-node execution, scheduler-backed allocation, accelerator implementation and qualification, and release acceptance remain open."
+      "remaining": "Open MPI case sharding is verified locally and on a hosted single-node Linux runner. Multi-node execution, scheduler-backed allocation, accelerator implementation and qualification, and release acceptance remain open."
     },
     {
       "key": "voiage_arrow_handoff",
