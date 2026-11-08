@@ -1079,3 +1079,10 @@ for (i in seq_along(interaction_time)) {
             isTRUE(all.equal(unlist(interaction$rates[[i]]),
                              c((0.05 + 0.05 * survival) * remaining, 20 * survival), tolerance=1e-8)))
 }
+
+score_payload <- list(time=c(0, 1), p=c(0, 0), q=matrix(0, 2, 2), market_potentials=c(50, 100))
+score_payload$observed <- matrix(c(1, 2, 3, 4), nrow=2, byrow=TRUE)
+pooled_score <- kernel_call("predict_competition_interaction_matrix", payload=score_payload)$result$r_squared
+score_payload$observed <- matrix(0.1, 2, 2)
+constant_score <- kernel_call("predict_competition_interaction_matrix", payload=score_payload)$result$r_squared
+stopifnot(pooled_score == -5, constant_score == 0)

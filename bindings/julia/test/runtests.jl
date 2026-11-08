@@ -1139,3 +1139,12 @@ end
         @test isapprox(result["rates"][index], [(0.05 + 0.05 * survival) * remaining, 20 * survival]; atol=1e-6, rtol=0)
     end
 end
+
+@testset "Historical interaction-matrix pooled score" begin
+    payload = Dict{String,Any}("time" => [0, 1], "p" => [0, 0],
+        "q" => [[0, 0], [0, 0]], "market_potentials" => [50, 100])
+    for (observed, expected) in (([[1, 2], [3, 4]], -5), ([[0.1, 0.1], [0.1, 0.1]], 0))
+        payload["observed"] = observed
+        @test kernel_call("predict_competition_interaction_matrix", nothing, payload)["result"]["r_squared"] == expected
+    end
+end

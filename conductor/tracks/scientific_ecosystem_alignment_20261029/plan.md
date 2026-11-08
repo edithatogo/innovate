@@ -7927,3 +7927,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify the historical signed interaction-matrix prediction through the CPython 3.15.2 wheel, Julia and installed R on macOS arm64. The consumer suites now assert levels, rates and axis order against the closed-form negative-interaction trajectory. R exercised native matrix encoding. The wheel and shared library were built from 9bbdc552 with the locked Rust dependencies.
 
 - [x] Port pooled historical interaction-matrix scoring. An aligned observed matrix adds R-squared across all time-product cells, with zero for constant observations and an explicit error for mismatched dimensions. All four locked historical competition tests passed. Binding-level scoring checks remain open.
+
+- [x] Verify historical pooled scoring in the Python, Julia and R conformance suites. The locked 1b3a3c77 wheel and shared library returned R-squared of -5 for pooled nonconstant observations and zero for constant observations on macOS arm64.

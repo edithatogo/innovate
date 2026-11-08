@@ -2291,3 +2291,10 @@ def test_historical_interaction_matrix_prediction():
         remaining = 50 * math.exp(-0.05 * elapsed - 0.25 * (1 - survival))
         assert levels == pytest.approx([50 - remaining, 100 * (1 - survival)], abs=1e-6, rel=0)
         assert rates == pytest.approx([(0.05 + 0.05 * survival) * remaining, 20 * survival], abs=1e-6, rel=0)
+
+
+def test_historical_interaction_matrix_pooled_score():
+    payload = {"time": [0, 1], "p": [0, 0], "q": [[0, 0], [0, 0]], "market_potentials": [50, 100]}
+    for observed, expected in [([[1, 2], [3, 4]], -5), ([[0.1, 0.1], [0.1, 0.1]], 0)]:
+        result = innovate.execute("predict_competition_interaction_matrix", observed=observed, **payload)["result"]
+        assert result["r_squared"] == expected
