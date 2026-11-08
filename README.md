@@ -35,6 +35,43 @@ LazyFrames collect at the native execution boundary. R/Julia currently expose
 the versioned JSON contract through a native C ABI. Their tabular IPC adapters
 and distributable native-library bundles remain open.
 
+## Native workflow discovery
+
+Call `list_advanced_capabilities` through Python's `innovate.execute` or the
+Julia and R `kernel_call` wrappers. The response lists the operation, stability,
+and incremental or uncertainty support for each workflow.
+
+Use `compose_regime_ensemble` to combine aligned forecasts by regime. Supply
+`time`, a mapping of `predictions`, and optional `weights` and `observed` arrays.
+Use `update_streaming_forecast` to append aligned cumulative observations with
+`previous_time`, `previous_observed`, `new_time`, and `new_observed`.
+The response contains the combined series and the growth since the previous state.
+
+Call `render_residual_diagnostics_svg` with `time` and `residuals` to export
+the residual, ACF, and PACF panels. The optional `config` accepts `title`,
+`lags`, `acf_only`, `figsize` in inches, and a color for each panel.
+
+## OECD observations
+
+Use the agency and dataflow identifier and the ordered dimension key from
+the OECD Data Explorer API query builder. Python returns a Polars DataFrame
+with string period codes and nullable floating-point observations.
+
+```python
+from innovate import fetch_oecd_dataset
+
+observations = fetch_oecd_dataset(
+    "OECD.SDD.STES,DSD_STES@DF_CLI",
+    ".M.LI...AA...H",
+    start_date="2023-02",
+    end_date="2023-03",
+)
+```
+
+In Julia and R, call `fetch_oecd_dataset` through `kernel_call` with the same
+payload fields. The native result contains CSV and the request metadata.
+Omitted dates default to 1960 and 2020.
+
 ## Development
 
 Use Rust/Cargo 1.99.1 and repo-local Python 3.15.2. Keep any earlier environment
