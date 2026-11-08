@@ -7709,3 +7709,8 @@ Hosted release readiness for this worktree revision remains open.
   into the active migration checker tests. Missing files and references
   outside the repository fail closed. All 14 policy cases and Ruff
   passed. Freshness and dependency inventory reconciliation remain open.
+
+- [x] Run the migration policy regressions alongside the SBOM checks
+  before hosted dry-run packaging. All 17 cases passed locally, as
+  did Actionlint. The checker requires nonempty evidence within the
+  checkout. Evidence freshness against release source remains open.
