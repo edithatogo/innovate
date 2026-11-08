@@ -8030,3 +8030,7 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify reconciled revision 05e8ad3c with the full locked offline Rust release workspace. All 371 offline tests passed, and the opt-in public OECD SDMX test passed separately. Hosted binding matrix 42445474132 is still running on this revision.
 
 - [x] Build the locked release FFI from 05e8ad3c and run the full local Julia and R native suites on macOS arm64. Both passed. Julia loaded the explicitly selected FFI and R used a fresh temporary package installation with that same FFI. Hosted platform coverage remains separate.
+
+- [x] Build the locked CPython 3.15.2 release wheel from 05e8ad3c on macOS arm64 and run tests/native against the extracted wheel. All 158 offline tests passed. The public OECD endpoint test was skipped by its normal opt-in condition.
+
+- [x] Run the opt-in live OECD Python consumer test against the same 05e8ad3c wheel. The returned Polars table had the expected dates and floating-point observation column.
