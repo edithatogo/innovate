@@ -112,6 +112,53 @@ jobs:
           name: mpi-benchmarks
           path: mpi-benchmarks/
           if-no-files-found: error
+  lint:
+    needs: native-python
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require the native matrix, including Rust formatting and Python lint
+        env:
+          RESULT: ${{ needs.native-python.result }}
+        run: test "$RESULT" = success
+
+  unit-tests-base:
+    # The branch protection context retains its old name. Tests run on 3.15.2.
+    name: unit-tests-base (3.15.1)
+    needs: native-python
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require native Rust and Python tests on every platform
+        env:
+          RESULT: ${{ needs.native-python.result }}
+        run: test "$RESULT" = success
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
+        with:
+          toolchain: 1.99.1
+      - run: uv sync --locked --no-install-project --python 3.15.2
+      - run: .venv/bin/python -c "import sys; assert sys.version_info[:3] == (3, 15, 2)"
+      - name: Build the wheel from the source distribution and validate both
+        env:
+          CARGO_BUILD_JOBS: '2'
+        run: |
+          bash scripts/build_release_wheel.sh .venv
+          .venv/bin/twine check dist/*
+          .venv/bin/check-wheel-contents dist/*.whl
+          tar -tzf dist/*.tar.gz > "$RUNNER_TEMP/sdist-contents"
+          if grep -E '(^|/)([.]ruff_cache|__pycache__|.*[.]pyc)' "$RUNNER_TEMP/sdist-contents"; then
+            echo "Generated cache files must not be included in the Python sdist."
+            exit 1
+          fi
+
   julia-r:
     strategy:
       fail-fast: false
