@@ -7693,3 +7693,8 @@ Hosted release readiness for this worktree revision remains open.
   The focused test passed. Reconcile pr-94 and resolve/pr-160 using
   the native replacements. The original pr-160 branch also proposes
   a hook and documentation evidence and needs separate review.
+
+- [x] Reconcile the original pr-160 branch after porting its interval
+  tests. Its standalone hook targets retired Python files. Its docs
+  receipt predates the existing receipt by one day. Preserve the newer
+  historical record and current hook configuration.
