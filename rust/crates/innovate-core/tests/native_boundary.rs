@@ -25,11 +25,13 @@ fn unknown_models_never_fall_back_to_python() {
 #[test]
 fn dispatch_rejects_unknown_schema_versions() {
     let mut request = KernelRequest::discover_models();
-    request.schema_version = "999".into();
-    assert_eq!(
-        KernelBinding::new().invoke(&request).unwrap_err().code,
-        "invalid_request"
-    );
+    for version in ["999", "invalid"] {
+        request.schema_version = version.into();
+        assert_eq!(
+            KernelBinding::new().invoke(&request).unwrap_err().code,
+            "invalid_request"
+        );
+    }
 }
 
 #[test]
@@ -37,6 +39,16 @@ fn discovery_does_not_advertise_unported_models() {
     let models = KernelBinding::new().discover_models().unwrap().models;
     assert_eq!(models.len(), 16);
     assert!(models.iter().all(|m| m.supported_backends == ["rust"]));
+    let request = json!({"schema_version":"2.0","operation":"discover_model_cards",
+        "payload":{"key":"invalid_model_key_123"}});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert_eq!(response["error"]["code"], "invalid_request");
+    assert_eq!(
+        response["error"]["message"],
+        "unknown native model card key"
+    );
+    assert!(response["result"].is_null());
 }
 
 #[test]
