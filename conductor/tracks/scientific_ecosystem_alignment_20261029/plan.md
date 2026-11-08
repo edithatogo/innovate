@@ -7953,3 +7953,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify the refined Norton–Bass peak through Python, Julia and R on macOS arm64. Each consumer passed the closed-form Bass reference with peak time within 1e-5 and peak rate within 1e-8 using the locked eef0ea90 build.
 
 - [x] Run the full offline Python consumer, Julia and installed R conformance suites on macOS arm64 with the locked eef0ea90 wheel and FFI and fe04ed4d tests. All three passed, including the historical competition and Norton–Bass additions. The live OECD case was outside this offline run.
+
+- [x] Verify hosted Julia and R on Linux and macOS at PR #575 head 768e9df2. CI run 42442059067 jobs 128613245937 and 128613246177 passed, covering the historical competition and Norton–Bass refinements. Windows and the hosted Python matrix remain pending on this revision.
