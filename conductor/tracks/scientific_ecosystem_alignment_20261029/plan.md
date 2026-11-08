@@ -8042,3 +8042,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Diagnose the C# and Go CodeQL failures on 05e8ad3c. Hosted run 42445469735 reports no C# source files and no processable Go code. The commit tree contains no tracked .cs or .go files. GitHub CodeQL default setup still lists both languages for the repository. Align its language list with the source cutover while retaining analysis of the remaining languages.
 
 - [x] Verify hosted Linux Julia and R on 05e8ad3c. Job 128623390447 passed the locked FFI build, staged the shared library in both bindings, and ran the native Julia and R tests.
+
+- [x] Verify hosted Linux Python on 05e8ad3c. Job 128623390731 passed the locked Rust checks and native Python consumer tests.
