@@ -4716,4 +4716,16 @@ fn policy_document_import_bounds_and_validates_json() {
         run(json!(specification.to_string()))["error"]["message"],
         "policy specification contains unknown contract fields"
     );
+    let mut specification: serde_json::Value = serde_json::from_str(&document).unwrap();
+    specification["intervention"]["start_time"] = json!("2020");
+    assert_eq!(
+        run(json!(specification.to_string()))["error"]["message"],
+        "invalid intervention contract fields"
+    );
+    specification["intervention"]["start_time"] = json!(2020);
+    specification["causal_model"]["confounders"] = json!([7]);
+    assert_eq!(
+        run(json!(specification.to_string()))["error"]["message"],
+        "invalid causal model contract fields"
+    );
 }

@@ -7990,3 +7990,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify bounded policy document import in the installed locked CPython 3.15.2 release wheel on macOS arm64. The focused test passed for a valid policy and a multibyte document over the byte limit. Ruff passed. Hosted validation remains open.
 
 - [x] Reconcile #418 policy validation experiments through the Rust importer. Reject extra fields at the document and nested contract levels. The focused locked release test passed for both injection cases alongside valid and oversized documents.
+
+- [x] Verify strict nested field types in the policy importer. The focused locked release test rejects numeric confounder names and string intervention times without coercion. All 104 offline boundary tests passed on the same production source before the assertions were added. PR #417 contains broader changes beyond its formatting title and remains under review.
