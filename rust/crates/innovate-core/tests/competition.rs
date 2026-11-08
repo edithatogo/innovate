@@ -899,3 +899,25 @@ fn historical_cross_elasticity_matches_independent_exponential_path() {
     request["payload"]["q"] = json!([[0, 0.4]]);
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn historical_interaction_matrix_predicts_levels_and_instantaneous_rates() {
+    let request = json!({"schema_version":"2.0","operation":"predict_competition_interaction_matrix",
+        "payload":{"time":[3,4,5],"p":[0.1,0.2],"q":[[0,-0.05],[0,0]],"market_potentials":[50,100]}});
+    let response: Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    let result = &response["result"];
+    assert_eq!(result["axis_order"], json!(["time", "product"]));
+    for (index, elapsed) in [0_f64, 1., 2.].into_iter().enumerate() {
+        let survival = (-0.2 * elapsed).exp();
+        let force = 0.1 - 0.05 * (1. - survival);
+        let remaining = 50. * (-0.05 * elapsed - 0.25 * (1. - survival)).exp();
+        for (product, level, rate) in [
+            (0, 50. - remaining, force * remaining),
+            (1, 100. * (1. - survival), 20. * survival),
+        ] {
+            assert!((result["rows"][index][product].as_f64().unwrap() - level).abs() < 1e-6);
+            assert!((result["rates"][index][product].as_f64().unwrap() - rate).abs() < 1e-6);
+        }
+    }
+}

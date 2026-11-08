@@ -935,10 +935,13 @@ pub(crate) fn summarize_equilibrium(model: &Value, payload: &Value) -> Result<Va
     }
 }
 
-pub(crate) fn cross_elasticity(payload: &Value) -> Result<Value, &'static str> {
+pub(crate) fn interaction_matrix(
+    payload: &Value,
+    elasticity_only: bool,
+) -> Result<Value, &'static str> {
     let vector = |key: &str| {
         serde_json::from_value::<Vec<f64>>(payload[key].clone())
-            .map_err(|_| "cross-elasticity requires numeric time, p and market_potentials arrays")
+            .map_err(|_| "interaction matrix requires numeric time, p and market_potentials arrays")
     };
     let time = vector("time")?;
     let p = vector("p")?;
@@ -954,15 +957,17 @@ pub(crate) fn cross_elasticity(payload: &Value) -> Result<Value, &'static str> {
         || market.iter().any(|v| *v <= 0.)
     {
         return Err(
-            "cross-elasticity requires 2 to 64 aligned products, nonnegative p and positive market potentials",
+            "interaction matrix requires 2 to 64 aligned products, nonnegative p and positive market potentials",
         );
     }
     if time.is_empty() || time[0] < 0. || time.windows(2).any(|pair| pair[1] <= pair[0]) {
-        return Err("cross-elasticity requires nonnegative, strictly increasing time");
+        return Err("interaction matrix requires nonnegative, strictly increasing time");
     }
     let mut initial = vec![0.; n];
-    initial[0] = 1e-6;
-    let path = crate::numerics::integrate(&time, time[0], &initial, |_, levels| {
+    if elasticity_only {
+        initial[0] = 1e-6;
+    }
+    let derivative = |_: f64, levels: &[f64]| {
         let shares: Vec<_> = levels
             .iter()
             .zip(&market)
@@ -978,8 +983,25 @@ pub(crate) fn cross_elasticity(payload: &Value) -> Result<Value, &'static str> {
                 (p[i] + imitation) * (market[i] - levels[i]).max(0.)
             })
             .collect()
-    })
-    .map_err(|_| "cross-elasticity trajectory integration failed")?;
+    };
+    let path = crate::numerics::integrate(&time, time[0], &initial, derivative)
+        .map_err(|_| "interaction matrix trajectory integration failed")?;
+    if !elasticity_only {
+        let rates: Vec<_> = time
+            .iter()
+            .zip(&path)
+            .map(|(&t, levels)| derivative(t, levels))
+            .collect();
+        if path
+            .iter()
+            .chain(&rates)
+            .flatten()
+            .any(|value| !value.is_finite())
+        {
+            return Err("interaction matrix trajectory exceeds the finite numerical domain");
+        }
+        return Ok(json!({"time":time,"rows":path,"rates":rates,"axis_order":["time","product"]}));
+    }
     let elasticity: Vec<Vec<f64>> = (0..n)
         .map(|i| {
             path.iter()

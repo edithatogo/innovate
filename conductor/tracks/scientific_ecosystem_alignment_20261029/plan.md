@@ -7921,3 +7921,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify the historical cross-elasticity operation through the extracted CPython 3.15.2 wheel, Julia and the installed R package on macOS arm64. Both native shared-library callers and the Python wheel returned the expected product-by-time values within 1e-7 against the closed-form independent competitor trajectory, including an exactly zero second row. Source tested: edb1e8ef.
 
 - [x] Add the closed-form historical cross-elasticity check to the Python, Julia and R conformance suites. The focused pytest node, Julia testset and R assertions passed against the edb1e8ef wheel and shared library on macOS arm64.
+
+- [x] Port zero-origin historical interaction-matrix prediction and instantaneous rates to Rust using the same signed matrix equations as the seeded cross-elasticity proxy. The closed-form negative-interaction oracle and all 22 locked release competition tests passed. The JSON operation and axis ordering are documented. Installed binding validation of the new operation remains open.

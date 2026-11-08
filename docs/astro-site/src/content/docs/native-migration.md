@@ -1558,3 +1558,16 @@ labels as `event_0`, `event_1`, and so on, and fills omitted network edge
 weights with `1.0` before calculating the digest. For checksummed inputs,
 preserve the generated fields and their JSON numeric types. Removing a
 field causes checksum verification to fail.
+
+### Historical interaction-matrix competition
+
+Call `predict_competition_interaction_matrix` through the JSON envelope with
+`time`, `p`, `q`, and `market_potentials`. Supply 2 to 64 products and a
+square signed interaction matrix `q`. Row `i`, column `j` gives the
+coefficient of product `j`'s adoption share in product `i`'s rate.
+The prediction starts at zero adoption at the first supplied time and returns
+`rows` and instantaneous `rates` in time-by-product order.
+
+`competition_cross_elasticity` accepts the same inputs and preserves the
+historical first-product seed of `1e-6`. It returns the historical
+absolute-coefficient proxy in product-by-time order.
