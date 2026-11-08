@@ -8010,3 +8010,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reconcile PR #448. GitHub reports an empty PR diff and the historical head has the same tree as its parent. The PR records a SciPy fitter review with no source changes to port.
 
 - [x] Verify the causal policy import regressions from PR #417 in the locked Rust release boundary. Both nested sections reject unknown fields and numeric timing is rejected independently of invalid start time. PR #417 remains open for separate workflow and dependency review because its diff also removes security checks and downgrades locked dependencies.
+
+- [x] Reconcile PR #450, whose head tree equals its parent and whose GitHub diff is empty. Review the ABM source changes in PR #416 separately from its wider diff. Its Mesa agent placement and adoption draws use operating-system entropy. The native Kairos simulation retains explicit seeds, and the locked release network checkpoint test verified replay and resume equivalence. PR #416 remains open for review of the other changes.
