@@ -7678,3 +7678,8 @@ Hosted release readiness for this worktree revision remains open.
   lifecycle guidance. The optimized boundary test passed for mixed
   case and whitespace aliases and unknown-tier rejection. Installed
   binding verification remains open for this operation.
+
+- [x] Verify stability lifecycle guidance through Julia and R using
+  the rebuilt optimized FFI library. Both returned identical
+  provisional guidance for the Beta alias. The check used an explicit
+  library path. Python wheel verification remains open.
