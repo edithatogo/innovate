@@ -8014,3 +8014,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reconcile PR #450, whose head tree equals its parent and whose GitHub diff is empty. Review the ABM source changes in PR #416 separately from its wider diff. Its Mesa agent placement and adoption draws use operating-system entropy. The native Kairos simulation retains explicit seeds, and the locked release network checkpoint test verified replay and resume equivalence. PR #416 remains open for review of the other changes.
 
 - [x] Reconcile historical Bass recovery PRs #452, #442, #425, #409 and #376. Each changes only the retired recovery tests. The native regression verifies that one binding rejects missing and invalid parameters and then returns all three predictions against the closed-form Bass curve. All eight locked release scientific contract tests passed.
+
+- [x] Reconcile PR #408. The Rust ensemble accumulates each path with its normalized weight into one output vector, avoiding a map lookup for each regime at each time point. The focused locked release boundary test passed. Runtime performance was not measured.

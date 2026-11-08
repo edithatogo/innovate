@@ -29,14 +29,12 @@ pub(crate) fn compose(payload: &Value) -> Result<Value, &'static str> {
     for weight in weights.values_mut() {
         *weight /= total;
     }
-    let mean: Vec<f64> = (0..time.len())
-        .map(|i| {
-            predictions
-                .iter()
-                .map(|(key, path)| path[i] * weights[key])
-                .sum()
-        })
-        .collect();
+    let mut mean = vec![0.; time.len()];
+    for (path, weight) in predictions.values().zip(weights.values()) {
+        for (average, value) in mean.iter_mut().zip(path) {
+            *average += value * weight;
+        }
+    }
     if mean.iter().any(|value| !value.is_finite()) {
         return Err("ensemble predictions exceed the finite numerical domain");
     }
