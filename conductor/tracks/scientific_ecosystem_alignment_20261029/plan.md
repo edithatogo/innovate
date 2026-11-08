@@ -7734,3 +7734,10 @@ Hosted release readiness for this worktree revision remains open.
   temporary Git repository. Matching source passed. A later committed
   source edit invalidated the same receipts. All 16 policy tests and
   Ruff passed. The live ledger remains subject to the real evidence gates.
+
+- [x] Reconcile the historical dependency modernization branch. The
+  active dashboard covers the root Rust workspace, Python, Julia, R and
+  the documentation frontend. The old inventory targeted retired
+  binding manifests. The current migration guard carries forward
+  missing, altered and stale-source evidence rejection. Preserve the
+  archived plans and current dependency tooling.
