@@ -253,8 +253,8 @@
       "key": "calibration_identifiability",
       "status": "bounded_native",
       "required": true,
-      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/native-features-20261107.json",
-      "remaining": "global identifiability, calibrated uncertainty, broader noisy-data and extreme-domain validation"
+      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
+      "remaining": "Historical empirical intervals run in Rust with local Python, Julia and R evidence. Independent predictive calibration, global identifiability and broader noisy-data and extreme-domain validation remain open."
     }
   ]
 }

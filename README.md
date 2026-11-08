@@ -75,6 +75,13 @@ recovery and independent ODE fixtures are tested. Local rank does not establish
 global identifiability or calibrated uncertainty. See the
 [native scientific conventions and examples](docs/astro-site/src/content/docs/native-migration.md).
 
+The Rust operation `calibrate_prediction_intervals` accepts aligned `time`,
+`observed` and `predicted` arrays, optional `confidence` (default 0.8), and an
+optional numeric `holdout` mask. It returns symmetric empirical bounds and
+descriptive coverage. Selected holdout observations can widen the interval,
+so their reported coverage cannot serve as an independent predictive check.
+Use `innovate.execute` in Python and `kernel_call` in Julia or R.
+
 Voiage owns VOI/economic analysis; Innovate hands off adoption/scenario tables
 through Polars/Arrow. Kairos owns event scheduling, DES/ABM state and deterministic
 replay. [The migration plan](conductor/tracks/scientific_ecosystem_alignment_20261029/migration-plan.md)
