@@ -7851,3 +7851,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Add opt-in live OECD checks in Python, Julia and R using INNOVATE_TEST_LIVE_OECD=1. Julia and R source parsing and Python lint passed. The optimized shared library build stopped at E0786 on a non-Mach-O bytemuck_derive artifact with 37 MiB free. Installed live execution remains open.
 
 - [x] Qualify live OECD binding retrieval at 55ef5f5a on macOS arm64. Cargo reclaimed 8.3 GiB of regenerable debug artifacts in the migration checkout and rebuilt the locked release FFI. Full Julia and installed R suites passed with live retrieval enabled and the FFI selected explicitly. The freshly installed CPython 3.15.2 release wheel passed both focused OECD tests. Hosted platform validation remains open.
+
+- [x] Complete the ordinary locked Cargo release boundary suite after moving two truncated generated executables out of its cache. All 103 offline tests passed and the opt-in live OECD test passed separately. The full installed CPython 3.15.2 consumer file passed 126 tests with OECD live enabled. These are local macOS arm64 results; the release checker still lists 38 outstanding obligations.
