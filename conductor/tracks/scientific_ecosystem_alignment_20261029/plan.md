@@ -7897,3 +7897,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify the Linux dispatch-only source, container and MPI gates at b701302f. Job 128598111993 passed the extracted-source Rust and Python consumers, restricted non-root worker container smoke, and single-node Open MPI shard verification. Hosted transport, multi-node scheduling, accelerator qualification and release acceptance remain open.
 
 - [x] Run the full locked local Rust release workspace on 77a0e4bf after the converged-start tie fix. All 360 offline tests passed, and the one opt-in live OECD test passed separately. Hosted matrix run 42438532976 remains in progress.
+
+- [x] Build and install the locked macOS arm64 wheel containing the 77a0e4bf optimizer tie fix. All 150 Python native tests passed with live OECD enabled on CPython 3.15.2. Wheel SHA-256: `d94a2cd06d1c040c1c9bb31ffe544e4dfe9dded7612d6dd629813819f55dd488`. Windows hosted verification remains open.
