@@ -7970,3 +7970,5 @@ Hosted release readiness for this worktree revision remains open.
 
 - [x] Verify hosted source packaging and Voiage at 768e9df2. Dry-run job 128616021792 passed. Downloaded wheel and sdist match SHA256SUMS, source digest 2e1fd28c8522bc2cfd69eff0bc3550e7253b7434c060034664a6ba6ecee3c7d8 matches the local source tree, and the Voiage receipt matches the wheel hash and both EVPI references. The separate release gate still fails.
 - [x] Compare standalone Python dependency PRs with the migration lock. #562, #545, #544, #485 and #434 are exceeded by the locked msgpack, virtualenv, filelock, pip and cryptography versions. #523 matches locked urllib3. Tornado and Pillow from #563 and #543 are absent from the migration lock. Hosted PR dispositions remain open.
+
+- [x] Compare docs dependency PRs #550, #549, #548, #490, #488, #478, #461 and #396 with the active frozen pnpm lock. It resolves Markdown Remark 7.3.5, Astro 7.4.5, Astro Check 0.9.12, Starlight 0.42.9, DocSearch 0.8.0, Versions 0.10.2 and Links Validator 0.27.0, meeting or exceeding all eight proposed targets. Hosted docs build 42442059076 passed at 768e9df2. Hosted PR disposition remains open.
