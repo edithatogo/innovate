@@ -7974,3 +7974,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Compare docs dependency PRs #550, #549, #548, #490, #488, #478, #461 and #396 with the active frozen pnpm lock. It resolves Markdown Remark 7.3.5, Astro 7.4.5, Astro Check 0.9.12, Starlight 0.42.9, DocSearch 0.8.0, Versions 0.10.2 and Links Validator 0.27.0, meeting or exceeding all eight proposed targets. Hosted docs build 42442059076 passed at 768e9df2. Hosted PR disposition remains open.
 
 - [x] Reconcile GitHub Actions dependency PRs #380–#389 into local migration history. Seven proposed immutable pins exactly match retained workflow pins. The Vale, setup-python and setup-dotnet jobs are absent from the active workflow tree, which uses uv for Python and has retired .NET bindings. The merge preserved the migration tree byte for byte. Hosted PR disposition remains open.
+
+- [x] Reconcile sixteen Python and docs dependency PR tips into local migration history using the lockfile comparisons above. The merge preserves the verified migration source tree. Hosted dispositions remain open.
