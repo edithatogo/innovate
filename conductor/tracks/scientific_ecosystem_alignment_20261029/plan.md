@@ -7687,3 +7687,9 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify stability guidance and unknown-tier rejection in the
   installed optimized Python macOS arm64 wheel. The focused consumer
   test and Ruff passed. Hosted distribution validation remains open.
+
+- [x] Carry the remaining PR #160 invalid confidence, observed-length
+  and holdout-length cases into the optimized Rust boundary test.
+  The focused test passed. Reconcile pr-94 and resolve/pr-160 using
+  the native replacements. The original pr-160 branch also proposes
+  a hook and documentation evidence and needs separate review.
