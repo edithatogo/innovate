@@ -266,6 +266,10 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
                     None,
                     true,
                 ),
+                ("competition_interaction_prediction", "competition", "provisional", "predict_competition_interaction_matrix", None, false),
+                ("competition_interaction_fitting", "competition", "provisional", "fit_competition_interaction_matrix", None, false),
+                ("competition_cross_elasticity", "competition", "provisional", "competition_cross_elasticity", None, false),
+                ("competition_equilibrium", "competition", "provisional", "summarize_competition_equilibrium", None, false),
             ]
             .map(
                 |(key, family, stability, operation, method, supports_uncertainty)| {

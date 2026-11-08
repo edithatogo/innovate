@@ -7937,3 +7937,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Add automatic starting values for historical signed interaction-matrix fitting. Fits with observations only try three capacity scales with early-adoption estimates. All six focused Rust competition tests passed, including recovery of a negative interaction within 0.005 of its analytic value. Cross-binding automatic-start checks remain open.
 
 - [x] Verify automatic historical interaction-matrix fitting in Python, Julia and R. The locked 622d1994 wheel and shared library passed the observation-only signed-interaction fixture on macOS arm64, with pooled R-squared above 0.999999 and a negative coefficient within 0.005 of its analytic value.
+
+- [x] Register historical competition prediction, fitting, cross-elasticity and equilibrium as provisional native discovery routes. The locked boundary test verified that each advertised operation is executable through the kernel route catalog. Updated the migration ledger with the bounded cross-language evidence. The development policy check passed and all 38 release obligations remain required.

@@ -4527,7 +4527,11 @@ fn advanced_capability_discovery_reports_ordered_native_routes() {
             "policy_scenario",
             "regime_ensemble",
             "streaming_update",
-            "uncertainty_calibration"
+            "uncertainty_calibration",
+            "competition_interaction_prediction",
+            "competition_interaction_fitting",
+            "competition_cross_elasticity",
+            "competition_equilibrium",
         ]
     );
     let operations = run("list_kernel_operations");
