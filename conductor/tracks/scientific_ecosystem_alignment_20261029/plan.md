@@ -7660,3 +7660,10 @@ Hosted release readiness for this worktree revision remains open.
   overlapping windows are dependent and the calibration horizons differ
   from the evaluation horizon. Treat these as exploratory time-series
   results, with exchangeable coverage qualification still open.
+
+- [x] Match calibration and evaluation horizons on uspop. Refit at
+  each expanding origin and forecast one decade ahead. Calibrate on
+  1880–1920 and evaluate on 1930–1970. At nominal 80%, coverage was
+  0/5 logistic, 2/5 Gompertz and 2/5 Bass. Half-widths were 2.255,
+  4.468 and 5.412 million respectively. This removes the horizon
+  mismatch, but the expanding fits and ordered scores are dependent.
