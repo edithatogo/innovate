@@ -8046,3 +8046,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify hosted Linux Python on 05e8ad3c. Job 128623390731 passed the locked Rust checks and native Python consumer tests.
 
 - [x] Verify hosted macOS Python and Windows Julia and R on 05e8ad3c. Jobs 128623390652 and 128623390734 passed, including the Python consumer suite and the R Unicode-path DLL loading check. Windows Python remained in progress.
+
+- [x] Extend local adopter classification qualification on 1b97bb8f. A standalone Rust harness compared the production classifier on time grid [-1, 0, 2, 5, 9, 12] with weights [0, a, b, 0, c, 0], where a, b and c independently range from 1 through 7. All 343 cases matched the integer-moment oracle, which compares the sign and squared magnitude of tW minus the weighted time sum against the variance numerator and its quadruple. Broader release qualification remains open.
