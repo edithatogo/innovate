@@ -55,9 +55,12 @@ jobs:
         env:
           CARGO_BUILD_JOBS: '2'
         run: |
+          source_digest="$(.venv-release/bin/python scripts/check_migration.py --source-digest)"
           bash scripts/build_release_wheel.sh
           .venv-release/bin/twine check dist/*
           .venv-release/bin/check-wheel-contents dist/*.whl
+          test "$(.venv-release/bin/python scripts/check_migration.py --source-digest)" = "$source_digest"
+          printf "%s\n" "$source_digest" > dist/SOURCE_SHA256
           (cd dist && sha256sum ./*.tar.gz ./*.whl > SHA256SUMS)
       - name: Exercise the release wheel
         run: |
@@ -89,6 +92,7 @@ jobs:
             dist/*.tar.gz
             dist/*.whl
             dist/SHA256SUMS
+            dist/SOURCE_SHA256
           if-no-files-found: error
       - name: Qualify the installed Voiage consumer
         run: |

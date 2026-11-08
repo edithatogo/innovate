@@ -7724,3 +7724,8 @@ Hosted release readiness for this worktree revision remains open.
   runtime, packaging, workflow and test inputs. The digest excludes
   ledger and Conductor receipts to avoid self-reference. The checker
   rejects dirty scoped inputs. All 16 policy tests and Ruff passed.
+
+- [x] Retain the scoped source digest alongside artifact checksums in
+  the hosted release dry run. Verify the digest before and after
+  packaging. The Voiage receipt identifies the same wheel by its
+  archive digest. Actionlint passed. Hosted execution remains open.
