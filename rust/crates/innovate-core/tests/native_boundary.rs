@@ -4612,3 +4612,29 @@ fn residual_svg_contains_configured_panels_and_escapes_title() {
             .contains("Partial autocorrelation")
     );
 }
+
+#[test]
+fn oecd_request_preserves_dimensions_and_date_defaults() {
+    let mut request = json!({"schema_version":"2.0","operation":"build_oecd_dataset_request","payload":{
+        "dataset_id":"OECD.SDD.STES,DSD_STES@DF_CLI","dimension_key":".M.LI...AA...H"}});
+    let run = |request: &serde_json::Value| {
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    assert_eq!(
+        run(&request)["result"]["url"],
+        "https://sdmx.oecd.org/public/rest/data/OECD.SDD.STES,DSD_STES@DF_CLI/.M.LI...AA...H?startPeriod=1960&endPeriod=2020&dimensionAtObservation=AllDimensions&format=csvfile"
+    );
+    request["payload"]["start_date"] = json!("2023-02");
+    request["payload"]["end_date"] = json!("2023-03");
+    assert!(
+        run(&request)["result"]["url"]
+            .as_str()
+            .unwrap()
+            .contains("startPeriod=2023-02&endPeriod=2023-03")
+    );
+    request["payload"]["dimension_key"] = json!("?injected=true");
+    assert_eq!(run(&request)["error"]["code"], "invalid_request");
+}

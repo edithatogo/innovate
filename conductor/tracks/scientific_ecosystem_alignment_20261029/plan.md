@@ -7837,3 +7837,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Add native SVG rendering for #80 residual diagnostics. The locked release tests passed for analytic values, rendered panel structure, ACF-only selection and escaped titles. SVG export uses a shared Rust renderer. Historical color and figure size configuration and binding checks remain open.
 
 - [x] Preserve figure size, per-panel colors and configured lags in native residual SVG. The renderer converts inches at 96 pixels per inch and accepts hex, alphabetic SVG colors and historical C0–C9 palette indices. Both locked release residual tests passed. Visual and installed binding verification remain open.
+
+- [x] Build validated OECD SDMX CSV requests in Rust for #87. The focused locked release test passed for ordered dimension keys, historical default dates, explicit dates and query injection rejection. A bounded live request for February–March 2023 returned a CSV header and 44 observations. Native HTTP retrieval and Polars ingestion remain open.

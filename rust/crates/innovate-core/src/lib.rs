@@ -15,6 +15,7 @@ mod ensemble;
 mod events;
 mod explainability;
 mod extensions;
+mod oecd;
 mod residuals;
 mod streaming;
 pub use extensions::invoke_registered_extension;
@@ -116,6 +117,7 @@ pub fn execute_json(input: &str) -> String {
                 | "render_residual_diagnostics_svg"
                 | "resolve_extension_model_aliases"
                 | "dataset_checksum"
+                | "build_oecd_dataset_request"
                 | "validate_dataset" => execute_preprocessing_json(&value).to_string(),
             "ingest_dataset" => dataset::ingest_request(&value).to_string(),
             "execute_scenario_grid" => scenario::execute_grid(&value).to_string(),
@@ -332,6 +334,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         }
         if value["operation"] == "render_residual_diagnostics_svg" {
             return residuals::render_svg(payload);
+        }
+        if value["operation"] == "build_oecd_dataset_request" {
+            return oecd::request(payload);
         }
         if value["operation"] == "residual_diagnostic_series" {
             return residuals::residual_series(payload);
