@@ -992,3 +992,12 @@ regime_ensemble <- kernel_call("compose_regime_ensemble", payload=list(
   weights=list(a=1, b=3), observed=c(2.5,3.5)))$result
 stopifnot(identical(unlist(regime_ensemble$mean), c(2.5,3.5)),
           regime_ensemble$diagnostics$rmse == 0)
+
+diagnostics_tables <- kernel_call("diagnostics_artifact_tables", payload=list(artifacts=list(
+  ordered=list(columns=c("z","a"), rows=list(list(a=1,z=2), list(a=3), FALSE)),
+  single=list(columns=list("value"), rows=list(list(value=4), list()))
+)))$result$tables
+stopifnot(identical(unlist(diagnostics_tables$ordered$columns), c("z","a")),
+          identical(diagnostics_tables$ordered$rows[[2]], list(NULL, 3L)),
+          identical(diagnostics_tables$ordered$rows[[3]], list(NULL, NULL)),
+          identical(diagnostics_tables$single$rows[[2]], list(NULL)))

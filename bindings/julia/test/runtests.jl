@@ -1059,3 +1059,13 @@ end
     @test result["mean"] == [2.5, 3.5]
     @test result["diagnostics"]["rmse"] == 0
 end
+
+@testset "Diagnostics artifact tables" begin
+    artifact = Dict("columns" => ["z", "a"], "rows" => [Dict("a" => 1, "z" => 2), Dict("a" => 3), false])
+    single = Dict("columns" => ["value"], "rows" => [Dict("value" => 4), Dict()])
+    payload = Dict("artifacts" => Dict("ordered" => artifact, "single" => single))
+    tables = kernel_call("diagnostics_artifact_tables", nothing, payload)["result"]["tables"]
+    @test tables["ordered"]["columns"] == ["z", "a"]
+    @test tables["ordered"]["rows"] == [[2, 1], [nothing, 3], [nothing, nothing]]
+    @test tables["single"]["rows"] == [[4], [nothing]]
+end
