@@ -854,3 +854,27 @@ fn lotka_volterra_profiles_event_time_and_override() {
     assert_eq!(profile["candidates"].as_array().unwrap().len(), 6);
     assert!(profile["candidates"][4]["objective"].as_f64().unwrap() < 1e-8);
 }
+
+#[test]
+fn historical_competition_equilibrium_summaries_match_closed_forms() {
+    let run = |payload| {
+        let request = json!({"schema_version":"2.0","operation":"summarize_competition_equilibrium","payload":payload});
+        serde_json::from_str::<Value>(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let shares = run(json!({"model":"multi_product","market_potentials":[1e308,1e308]}));
+    assert_eq!(
+        shares["result"]["shares"],
+        json!({"product_0":0.5,"product_1":0.5})
+    );
+    let coexist = run(json!({"model":"lotka_volterra","carrying_capacity_1":120,
+        "carrying_capacity_2":90,"competition_coeff_12":0.5,"competition_coeff_21":0.25}));
+    assert_eq!(coexist["result"]["N1_eq"], 75. / 0.875);
+    assert_eq!(coexist["result"]["N2_eq"], 60. / 0.875);
+    let boundary = run(json!({"model":"lotka_volterra"}));
+    assert_eq!(boundary["result"]["N1_eq"], 1000.);
+    assert_eq!(boundary["result"]["boundary_fallback"], true);
+    assert_eq!(
+        run(json!({"model":"multi_product","market_potentials":[0]}))["error"]["code"],
+        "invalid_request"
+    );
+}

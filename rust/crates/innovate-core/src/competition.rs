@@ -880,3 +880,57 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, KernelB
         metadata: json!({"model_key":model.key,"model_name":model.name(),"family":"competition","runtime":"rust_native"}),
     })
 }
+
+pub(crate) fn summarize_equilibrium(payload: &Value) -> Result<Value, &'static str> {
+    match payload["model"].as_str() {
+        Some("multi_product") => {
+            let potentials: Vec<f64> = serde_json::from_value(payload["market_potentials"].clone())
+                .map_err(|_| "market_potentials must be an array of positive numbers")?;
+            if potentials.is_empty() || potentials.iter().any(|value| *value <= 0.) {
+                return Err("market_potentials must be an array of positive numbers");
+            }
+            let scale = potentials.iter().copied().fold(0., f64::max);
+            let total = potentials.iter().map(|value| value / scale).sum::<f64>();
+            let shares: Map<_, _> = potentials
+                .iter()
+                .enumerate()
+                .map(|(index, value)| (format!("product_{index}"), json!((value / scale) / total)))
+                .collect();
+            Ok(
+                json!({"model":"multi_product","method":"historical_market_potential_shares",
+                "shares":shares,"interaction_adjusted":false}),
+            )
+        }
+        Some("lotka_volterra") => {
+            let read = |key: &str, default| {
+                if payload[key].is_null() {
+                    return Ok(default);
+                }
+                payload[key].as_f64().filter(|value| *value >= 0.).ok_or(
+                    "equilibrium capacities and competition coefficients must be nonnegative",
+                )
+            };
+            let k1 = read("carrying_capacity_1", 1000.)?;
+            let k2 = read("carrying_capacity_2", 1000.)?;
+            let a12 = read("competition_coeff_12", 1.)?;
+            let a21 = read("competition_coeff_21", 1.)?;
+            let determinant = 1. - a12 * a21;
+            let (n1, n2) = if determinant <= 0. {
+                (k1, 0.)
+            } else {
+                (
+                    ((k1 - a12 * k2) / determinant).max(0.),
+                    ((k2 - a21 * k1) / determinant).max(0.),
+                )
+            };
+            if !n1.is_finite() || !n2.is_finite() {
+                return Err("equilibrium population exceeds the finite numerical domain");
+            }
+            Ok(
+                json!({"model":"lotka_volterra","method":"historical_capacity_equilibrium",
+                "N1_eq":n1,"N2_eq":n2,"boundary_fallback":determinant <= 0.}),
+            )
+        }
+        _ => Err("equilibrium summaries support multi_product and lotka_volterra"),
+    }
+}
