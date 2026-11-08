@@ -2836,7 +2836,9 @@ fn policy_specification(payload: &Value) -> Result<Value, &'static str> {
         ("intervention", &intervention),
         ("causal_model", &causal_model),
     ] {
-        let supplied = payload[key].as_object().expect("validated policy contract");
+        let supplied = payload[key]
+            .as_object()
+            .ok_or("policy specification contracts must be objects")?;
         if supplied.keys().any(|field| normalized.get(field).is_none()) {
             return Err("policy specification contains unknown contract fields");
         }

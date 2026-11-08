@@ -1377,6 +1377,9 @@ fn causal_summaries_match_analytic_effects() {
     let mut unknown = specification.clone();
     unknown["intervention"]["typo"] = json!(true);
     assert_eq!(run(unknown)["error"]["code"], "invalid_request");
+    let mut positional = specification.clone();
+    positional["causal_model"] = json!(["Evaluation", "policy", "adoption", ["age"], null, {}]);
+    assert_eq!(run(positional)["error"]["code"], "invalid_request");
     specification["data"]["age"] = json!([20]);
     assert_eq!(run(specification)["error"]["code"], "invalid_request");
     let risk = run(json!({"method":"e_value","point_estimate":0.5}));
