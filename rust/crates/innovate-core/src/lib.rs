@@ -91,6 +91,7 @@ pub fn execute_json(input: &str) -> String {
                 | "export_decision_report_markdown"
                 | "discover_model_cards"
                 | "discover_execution_modes"
+                | "list_advanced_capabilities"
                 | "validate_provenance"
                 | "execute_remote_in_process"
                 | "describe_remote_execution_contract"
@@ -216,6 +217,45 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             return Err("analysis request requires schema 2.0");
         }
         let payload = &value["payload"];
+        if value["operation"] == "list_advanced_capabilities" {
+            let capabilities = [
+                (
+                    "policy_scenario",
+                    "policy",
+                    "stable",
+                    "summarize_causal",
+                    Some("policy_scenario"),
+                    false,
+                ),
+                (
+                    "regime_ensemble",
+                    "ensemble",
+                    "provisional",
+                    "compose_regime_ensemble",
+                    None,
+                    false,
+                ),
+                (
+                    "uncertainty_calibration",
+                    "uncertainty",
+                    "stable",
+                    "calibrate_prediction_intervals",
+                    None,
+                    true,
+                ),
+            ]
+            .map(
+                |(key, family, stability, operation, method, supports_uncertainty)| {
+                    json!({
+                        "key":key,"family":family,"stability":stability,
+                        "operation":operation,"method":method,"result_schema":KERNEL_SCHEMA_VERSION,
+                        "optional_dependencies":[],"supported_backends":["rust_native"],
+                        "supports_incremental":false,"supports_uncertainty":supports_uncertainty
+                    })
+                },
+            );
+            return Ok(json!({"capabilities":capabilities,"pending":["streaming_update"]}));
+        }
         if value["operation"] == "discover_execution_modes" {
             return Ok(json!({
                 "local_cpu":{"status":"available","max_workers":MAX_BATCH_WORKERS,

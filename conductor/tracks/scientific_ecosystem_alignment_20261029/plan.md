@@ -7822,7 +7822,7 @@ Hosted release readiness for this worktree revision remains open.
 - [ ] Port #87 OECD dataset retrieval. The native dataset validation and extension provider operations currently have no built-in OECD transport. Preserve dimension selection, explicit date ranges, the 1960–2020 default and upstream error propagation, with Polars-compatible tabular output. Qualify the current OECD SDMX endpoint before live verification.
 - [ ] Reconcile #80 residual visualization. Preserve time/residual, ACF and PACF outputs and configurable lags. Define the boundary between Rust diagnostic data and presentation in the supported bindings before replacing the historical Matplotlib wrapper.
 - [x] Reconcile #156 with the native diagnostics_artifact_tables operation. The focused locked release test verifies declared column order, singleton row shape, missing and irregular rows, metadata, and skipping non-tabular artifacts. Installed binding and downstream Polars verification remain open.
-- [ ] Reconcile #98 advanced capability discovery. Verify deterministic alphabetical capability keys and machine-readable stability and dependencies. Native operation discovery alone does not cover this contract.
+- [x] Reconcile #98 with native list_advanced_capabilities. The focused locked release test verifies alphabetical keys, registered native routes, stability and dependencies. Streaming update is explicitly pending and requires a native port. Installed binding checks remain open.
 
 - [x] Verify #156 diagnostics tables from the installed macOS arm64 release wheel on CPython 3.15.2. The focused consumer test passed with Polars 2.1.0, preserving column order, singleton rows and null cells. Julia and R operation checks remain open.
 

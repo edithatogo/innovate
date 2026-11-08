@@ -4503,3 +4503,41 @@ fn diagnostics_artifacts_preserve_columns_and_missing_values() {
     assert_eq!(tables["ordered"]["metadata"]["model_name"], "bass");
     assert!(tables.get("summary").is_none());
 }
+
+#[test]
+fn advanced_capability_discovery_reports_ordered_native_routes() {
+    let run = |operation| {
+        let request = json!({"schema_version":"2.0","operation":operation});
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    let result = &run("list_advanced_capabilities")["result"];
+    let entries = result["capabilities"].as_array().unwrap();
+    let keys: Vec<_> = entries
+        .iter()
+        .map(|item| item["key"].as_str().unwrap())
+        .collect();
+    assert_eq!(
+        keys,
+        [
+            "policy_scenario",
+            "regime_ensemble",
+            "uncertainty_calibration"
+        ]
+    );
+    let operations = run("list_kernel_operations");
+    for entry in entries {
+        assert!(
+            operations["result"]["operations"]
+                .as_array()
+                .unwrap()
+                .contains(&entry["operation"])
+        );
+        assert_eq!(entry["supported_backends"], json!(["rust_native"]));
+        assert_eq!(entry["optional_dependencies"], json!([]));
+    }
+    assert_eq!(entries[1]["stability"], "provisional");
+    assert_eq!(result["pending"], json!(["streaming_update"]));
+}
