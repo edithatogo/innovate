@@ -7623,3 +7623,10 @@ Hosted release readiness for this worktree revision remains open.
   and update the calibration ledger. The full Python release consumer
   suite passed all 123 cases against the isolated optimized macOS wheel.
   Fitted-forecast and hosted qualification remain open.
+
+- [x] Exercise split conformal intervals on an independently fitted
+  logistic forecast in the installed Python wheel. Fit on the first
+  20 rows, calibrate on three later rows, and evaluate on a separate
+  synthetic outlier. The Rust width and bounds matched the independent
+  order-statistic calculation. The focused test and Ruff passed.
+  This synthetic case does not establish empirical forecast coverage.

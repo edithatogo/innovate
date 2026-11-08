@@ -1953,3 +1953,27 @@ def test_split_conformal_prediction_intervals():
     )["result"]
     assert result["metadata"]["interval_half_width"] == 2.0
     assert result["diagnostics"]["holdout_coverage"] == 0.0
+
+
+def test_split_conformal_calibrates_an_independently_fitted_forecast():
+    time = list(range(24))
+    curve = [100.0 / (1.0 + math.exp(-0.6 * (t - 8))) for t in time]
+    fit = innovate.fit("logistic", pl.DataFrame({"time": time[:20], "observed": curve[:20]}))
+    forecast_time = time[20:]
+    predicted = fit.predict(pl.DataFrame({"time": forecast_time}))["prediction"].to_list()
+    observed = [value + offset for value, offset in zip(curve[20:], [1, -2, 3, 10], strict=True)]
+    # Three calibration scores at 50% confidence select the second order statistic.
+    reference_width = sorted(abs(observed[i] - predicted[i]) for i in range(3))[1]
+    result = innovate.execute(
+        "calibrate_prediction_intervals",
+        time=forecast_time,
+        observed=observed,
+        predicted=predicted,
+        confidence=0.5,
+        holdout=[0, 0, 0, 1],
+        method="split_conformal",
+    )["result"]
+    assert result["metadata"]["interval_half_width"] == reference_width
+    assert result["lower"] == pytest.approx([value - reference_width for value in predicted])
+    assert result["upper"] == pytest.approx([value + reference_width for value in predicted])
+    assert result["diagnostics"]["holdout_coverage"] == 0.0
