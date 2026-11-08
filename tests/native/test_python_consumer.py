@@ -2272,3 +2272,22 @@ def test_historical_competition_cross_elasticity():
     expected = [40 * (1 - math.exp(-0.2 * t)) / (50 + 1e-10) for t in time]
     assert first == pytest.approx(expected, abs=1e-7, rel=0)
     assert second == [0, 0, 0]
+
+
+def test_historical_interaction_matrix_prediction():
+    time = [3, 4, 5]
+    result = innovate.execute(
+        "predict_competition_interaction_matrix",
+        time=time,
+        p=[0.1, 0.2],
+        q=[[0, -0.05], [0, 0]],
+        market_potentials=[50, 100],
+    )["result"]
+    assert result["axis_order"] == ["time", "product"]
+    assert result["time"] == time
+    for t, levels, rates in zip(time, result["rows"], result["rates"], strict=True):
+        elapsed = t - time[0]
+        survival = math.exp(-0.2 * elapsed)
+        remaining = 50 * math.exp(-0.05 * elapsed - 0.25 * (1 - survival))
+        assert levels == pytest.approx([50 - remaining, 100 * (1 - survival)], abs=1e-6, rel=0)
+        assert rates == pytest.approx([(0.05 + 0.05 * survival) * remaining, 20 * survival], abs=1e-6, rel=0)

@@ -1061,3 +1061,21 @@ stopifnot(length(elasticity) == 2,
           length(elasticity[[1]]) == length(elasticity_time),
           all(abs(unlist(elasticity[[1]]) - expected_elasticity) < 1e-7),
           identical(as.numeric(unlist(elasticity[[2]])), c(0, 0, 0)))
+
+interaction_time <- c(3, 4, 5)
+interaction <- kernel_call("predict_competition_interaction_matrix", payload=list(
+  time=interaction_time, p=c(0.1, 0.2), q=matrix(c(0, 0, -0.05, 0), nrow=2),
+  market_potentials=c(50, 100)))$result
+stopifnot(identical(unlist(interaction$axis_order), c("time", "product")),
+          all(unlist(interaction$time) == interaction_time),
+          length(interaction$rows) == length(interaction_time),
+          length(interaction$rates) == length(interaction_time))
+for (i in seq_along(interaction_time)) {
+  elapsed <- interaction_time[i] - interaction_time[1]
+  survival <- exp(-0.2 * elapsed)
+  remaining <- 50 * exp(-0.05 * elapsed - 0.25 * (1 - survival))
+  stopifnot(isTRUE(all.equal(unlist(interaction$rows[[i]]),
+                             c(50 - remaining, 100 * (1 - survival)), tolerance=1e-8)),
+            isTRUE(all.equal(unlist(interaction$rates[[i]]),
+                             c((0.05 + 0.05 * survival) * remaining, 20 * survival), tolerance=1e-8)))
+}

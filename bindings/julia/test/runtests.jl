@@ -1123,3 +1123,19 @@ end
     @test isapprox(first, expected; atol=1e-7, rtol=0)
     @test second == [0, 0, 0]
 end
+
+@testset "Historical interaction-matrix prediction" begin
+    time = [3, 4, 5]
+    result = kernel_call("predict_competition_interaction_matrix", nothing, Dict(
+        "time" => time, "p" => [0.1, 0.2], "q" => [[0, -0.05], [0, 0]],
+        "market_potentials" => [50, 100]))["result"]
+    @test result["axis_order"] == ["time", "product"]
+    @test result["time"] == time
+    @test length(result["rows"]) == length(result["rates"]) == length(time)
+    for (index, elapsed) in enumerate(time .- first(time))
+        survival = exp(-0.2 * elapsed)
+        remaining = 50 * exp(-0.05 * elapsed - 0.25 * (1 - survival))
+        @test isapprox(result["rows"][index], [50 - remaining, 100 * (1 - survival)]; atol=1e-6, rtol=0)
+        @test isapprox(result["rates"][index], [(0.05 + 0.05 * survival) * remaining, 20 * survival]; atol=1e-6, rtol=0)
+    end
+end
