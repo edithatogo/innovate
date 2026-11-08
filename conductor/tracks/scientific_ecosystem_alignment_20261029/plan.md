@@ -7982,3 +7982,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reconcile grouped dependency PRs #532 and #512 locally. Optional PyArrow 26.0.1 satisfies the proposed range in #532. Statsmodels, NumPyro, NDlib and Pandera are absent from the active manifest and lock. The merge preserves the verified dependency tree.
 
 - [x] Reconcile remote authorization PRs #449, #445 and #378. Native dispatch requires caller-supplied context and checks the explicit scope against its fixed required policy, without supplying authority on the caller’s behalf. Focused boundary and subprocess tests passed. Hosted identity verification remains open.
+
+- [x] Restore bounded policy document import for #420. The Rust summarize_causal import_policy_specification method rejects non-string and over-1-MiB documents before parsing their JSON, then reuses native policy contract validation. The focused release test passed. Installed binding validation remains open.

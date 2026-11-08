@@ -4669,3 +4669,39 @@ fn oecd_fetch_returns_csv_from_live_endpoint() {
     assert!(lines.next().unwrap().contains("TIME_PERIOD,OBS_VALUE"));
     assert!(lines.any(|row| row.contains(",2023-02,") || row.contains(",2023-03,")));
 }
+
+#[test]
+fn policy_document_import_bounds_and_validates_json() {
+    let document = json!({
+        "intervention":{"name":"Pilot","timing":"post","comparator":"control"},
+        "causal_model":{"name":"Evaluation","treatment_variable":"policy",
+            "outcome_variable":"adoption","confounders":["age"]}
+    })
+    .to_string();
+    let run = |document: serde_json::Value| {
+        let request = json!({"schema_version":"2.0","operation":"summarize_causal",
+            "payload":{"method":"import_policy_specification","document":document}});
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    assert_eq!(
+        run(json!(document))["result"]["intervention"]["name"],
+        "Pilot"
+    );
+    for (document, message) in [
+        (
+            json!({}),
+            "policy specification document must be a JSON string",
+        ),
+        (json!("{"), "invalid policy specification JSON"),
+        (
+            json!("é".repeat(524_289)),
+            "policy specification document exceeds 1 MiB",
+        ),
+    ] {
+        assert_eq!(run(document)["error"]["message"], message);
+    }
+    assert_eq!(run(json!("[]"))["error"]["code"], "invalid_request");
+}

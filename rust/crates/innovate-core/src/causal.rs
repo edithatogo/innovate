@@ -345,6 +345,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
         Some("matched_treatment_contrast") => matched_treatment_contrast(payload),
         Some("intervention_contract") => intervention_contract(payload),
         Some("policy_specification") => policy_specification(payload),
+        Some("import_policy_specification") => import_policy_specification(payload),
         Some("policy_evidence") => policy_evidence(payload),
         Some("causal_model_contract") => causal_model_contract(payload),
         Some("release_evidence") => release_evidence(payload),
@@ -2827,6 +2828,19 @@ fn policy_evidence(payload: &Value) -> Result<Value, &'static str> {
                 "overlap_assumption":"Assumes positive probability of treatment assignment"}
         }
     }))
+}
+
+fn import_policy_specification(payload: &Value) -> Result<Value, &'static str> {
+    const MAX_DOCUMENT_BYTES: usize = 1_048_576;
+    let document = payload["document"]
+        .as_str()
+        .ok_or("policy specification document must be a JSON string")?;
+    if document.len() > MAX_DOCUMENT_BYTES {
+        return Err("policy specification document exceeds 1 MiB");
+    }
+    let specification: Value =
+        serde_json::from_str(document).map_err(|_| "invalid policy specification JSON")?;
+    policy_specification(&specification)
 }
 
 fn policy_specification(payload: &Value) -> Result<Value, &'static str> {
