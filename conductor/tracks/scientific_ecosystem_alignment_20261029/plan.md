@@ -7994,3 +7994,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify strict nested field types in the policy importer. The focused locked release test rejects numeric confounder names and string intervention times without coercion. All 104 offline boundary tests passed on the same production source before the assertions were added. PR #417 contains broader changes beyond its formatting title and remains under review.
 
 - [x] Verify strict policy document fields in Julia and installed R. Both focused checks passed on macOS arm64 using the same rebuilt locked release FFI, including rejection of an extra top-level field.
+
+- [x] Verify strict imported policy fields in the installed 439ff4a0 macOS arm64 wheel. All 159 Python native tests passed with live OECD enabled on CPython 3.15.2, including the new unknown-field assertion. Ruff and formatting checks passed.

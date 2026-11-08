@@ -2384,3 +2384,9 @@ def test_import_policy_specification_bounds_document_bytes():
     assert result["result"]["intervention"]["name"] == "Pilot"
     with pytest.raises(innovate.NativeError, match="exceeds 1 MiB"):
         innovate.execute("summarize_causal", method="import_policy_specification", document="é" * 524_289)
+    with pytest.raises(innovate.NativeError, match="document contains unknown fields"):
+        innovate.execute(
+            "summarize_causal",
+            method="import_policy_specification",
+            document=json.dumps({**json.loads(document), "extra": True}),
+        )
