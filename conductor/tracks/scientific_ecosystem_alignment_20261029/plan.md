@@ -7875,3 +7875,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Repair the Windows Unicode DLL smoke command after job 128594465391 exited 139 at Rscript startup. The full Windows Julia and installed R suites passed before that step. Pass the same assertions through a script file to avoid multiline command-line quoting on Windows. Actionlint and R parsing passed locally. Hosted execution of the repair remains open.
 
 - [x] Record hosted Python on Linux and macOS for PR #575 head dac899e0. Jobs 128594465475 and 128594465564 passed Python 3.15.2, the locked Rust test gate, tests/native, migration development policy, formatting, Ruff and BasedPyright. Dispatch-only source distribution, container and MPI checks did not run in those jobs.
+
+- [x] Verify the mixture assertion diagnostic change locally at b701302f. All six locked release-mode mixture tests passed on macOS arm64, including Gaussian default initialization and rollback on failed component updates. Windows debug-mode regression details remain pending in hosted CI run 42436861869.
