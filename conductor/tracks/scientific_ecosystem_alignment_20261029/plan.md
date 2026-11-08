@@ -8044,3 +8044,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify hosted Linux Julia and R on 05e8ad3c. Job 128623390447 passed the locked FFI build, staged the shared library in both bindings, and ran the native Julia and R tests.
 
 - [x] Verify hosted Linux Python on 05e8ad3c. Job 128623390731 passed the locked Rust checks and native Python consumer tests.
+
+- [x] Verify hosted macOS Python and Windows Julia and R on 05e8ad3c. Jobs 128623390652 and 128623390734 passed, including the Python consumer suite and the R Unicode-path DLL loading check. Windows Python remained in progress.
