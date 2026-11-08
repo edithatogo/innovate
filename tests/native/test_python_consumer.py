@@ -2017,3 +2017,18 @@ def test_compose_regime_ensemble():
     )
     assert response["result"]["mean"] == [2.5, 3.5]
     assert response["result"]["diagnostics"]["rmse"] == 0
+
+
+def test_diagnostics_artifact_tables_preserve_polars_shape():
+    tables = innovate.execute(
+        "diagnostics_artifact_tables",
+        artifacts={
+            "ordered": {"columns": ["z", "a"], "rows": [{"a": 1, "z": 2}, {"a": 3}, False]},
+            "single": {"columns": ["value"], "rows": [{"value": 4}, {}]},
+        },
+    )["result"]["tables"]
+    ordered = pl.DataFrame(tables["ordered"]["rows"], schema=tables["ordered"]["columns"], orient="row")
+    single = pl.DataFrame(tables["single"]["rows"], schema=tables["single"]["columns"], orient="row")
+    assert ordered.columns == ["z", "a"]
+    assert ordered.rows() == [(2, 1), (None, 3), (None, None)]
+    assert single.rows() == [(4,), (None,)]
