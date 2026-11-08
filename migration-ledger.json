@@ -121,7 +121,7 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Automatic multi-product and lock-in convergence, event inference, equilibrium helpers, calibrated uncertainty and wider numerical qualification"
+      "remaining": "Unforced and selected forced or fixed-event multi-product and lock-in starts converge on independent fixtures. Broader initialization robustness, event inference beyond supplied candidates, equilibrium helpers, calibrated uncertainty and wider numerical qualification remain open."
     },
     {
       "key": "hierarchical_mixture_inference",
