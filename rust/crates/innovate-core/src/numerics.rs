@@ -159,9 +159,9 @@ where
             f64::INFINITY
         }
     };
-    let mut best: Option<Candidate> = None;
+    let mut best: Option<(usize, Candidate)> = None;
+    let mut best_converged: Option<(usize, Candidate)> = None;
     let mut start_reports = Vec::with_capacity(starts.len());
-    let mut selected_start = 0;
     for (index, start) in starts.iter().enumerate() {
         let mut theta = start.clone();
         let mut prediction = match evaluate(&theta) {
@@ -254,18 +254,42 @@ where
             "initial_transformed_parameters": start,
             "final_transformed_parameters": theta
         }));
-        if best.as_ref().is_none_or(|b| error < b.error) {
-            selected_start = index;
-            best = Some(Candidate {
-                error,
-                parameters: theta,
-                predictions: prediction,
-                iterations,
-                converged,
-                reason,
-            });
+        let slot = if converged {
+            &mut best_converged
+        } else {
+            &mut best
+        };
+        if slot
+            .as_ref()
+            .is_none_or(|(_, candidate)| error < candidate.error)
+        {
+            *slot = Some((
+                index,
+                Candidate {
+                    error,
+                    parameters: theta,
+                    predictions: prediction,
+                    iterations,
+                    converged,
+                    reason,
+                },
+            ));
         }
     }
+    // A difference at floating-point resolution is insufficient to prefer
+    // a stalled start over one that met the optimizer's termination criteria.
+    let best = match (best, best_converged) {
+        (Some(stalled), Some(converged)) => {
+            let roundoff = 8. * f64::EPSILON * stalled.1.error.max(converged.1.error);
+            Some(if converged.1.error - stalled.1.error <= roundoff {
+                converged
+            } else {
+                stalled
+            })
+        }
+        (stalled, converged) => stalled.or(converged),
+    };
+    let (selected_start, best) = best.ok_or("no finite optimizer candidate")?;
     let Candidate {
         error,
         parameters,
@@ -273,7 +297,7 @@ where
         iterations,
         converged,
         reason,
-    } = best.ok_or("no finite optimizer candidate")?;
+    } = best;
     let columns = jacobian(&parameters, &predictions, &evaluate)?;
     let gradient = columns
         .iter()

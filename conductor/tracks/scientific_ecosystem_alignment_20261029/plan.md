@@ -7891,3 +7891,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify hosted CodeQL Rust, Python, Actions and JavaScript/TypeScript analyses on b701302f (run 42436857340). RustSec and Python quality also passed on that revision (run 42436861682). The default-setup Go and C# jobs again found no source on the migration branch, so the aggregate CodeQL check is neutral. Main still requires its existing language coverage.
 
 - [x] Verify the Windows Unicode DLL smoke repair on b701302f. PR #575 job 128597445227 passed bundled Julia and installed R conformance and the standalone R script loading the DLL from a Unicode directory.
+
+- [x] Repair the Windows Gaussian mixture rollback identified in job 128597445143. A stalled component start won by approximately 1.3e-18 RSS over a converged start. The least-squares selector now prefers an already converged candidate only when the objective difference is within eight floating-point epsilons of the objective scale. Convergence thresholds and rollback criteria are preserved. All 17 locked debug mixture and fit-quality tests passed locally. Windows CI remains pending.
