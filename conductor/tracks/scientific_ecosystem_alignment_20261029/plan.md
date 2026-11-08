@@ -7865,3 +7865,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Diagnose draft PR #575 CodeQL failures at dac899e0. GitHub default setup selected Go and C#. The exact job logs report no Go code and no C# source files, and the migration tree has neither language. Current main still has 20 matching source/project paths, so retain its coverage until cutover and requalify default setup after integration. The first binding matrix was cancelled after the replacement revision was pushed. The replacement matrix remains in progress.
 
 - [x] Verify OECD transport failure semantics with local HTTP fixtures. Two locked release tests passed for HTTP 429, refused redirects, oversized responses and invalid UTF-8. The live service remains covered separately.
+
+- [x] Record hosted Python quality on dac899e0. GitHub Actions job 128594389788 passed Ruff, formatting, security, type and native binding tests. Separately, the full local tests/native suite passed 150 tests with live OECD enabled against the installed 55ef5f5a wheel. The local source includes subsequent tests and formatting. The hosted platform matrix is tracked separately.
