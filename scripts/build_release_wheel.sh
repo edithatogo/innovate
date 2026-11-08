@@ -9,7 +9,7 @@ mkdir -p "$output"
 output="$(cd "$output" && pwd)"
 python="$environment/bin/python"
 maturin="$environment/bin/maturin"
-staging="$(mktemp -d)"
+staging="$(mktemp -d "${TMPDIR:-/tmp}/innovate-release.XXXXXX")"
 trap 'rm -rf "$staging"' EXIT
 mkdir "$staging/sdist" "$staging/source"
 "$maturin" sdist --out "$staging/sdist"
