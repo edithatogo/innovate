@@ -835,7 +835,12 @@ def test_norton_historical_level_milestones():
         },
     )["result"]
     row = result["threshold_diagnostics"]["net_level_milestones"]["generations"][0]
-    assert row == {
+    at_event = 100 - 88 * math.exp(-0.1)
+    assert row["refined_crossings"]["takeoff"] == 1
+    for name, target in [("median", 50), ("saturation", 90)]:
+        expected = 2 - math.log((1000 - target) / (1000 - at_event)) / 0.1
+        assert row["refined_crossings"][name] == pytest.approx(expected, abs=1e-7, rel=0)
+    assert {k: v for k, v in row.items() if k != "refined_crossings"} == {
         "generation": 1,
         "reference_market": 100.0,
         "takeoff": 1.0,

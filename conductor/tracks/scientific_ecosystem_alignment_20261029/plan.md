@@ -7941,3 +7941,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Register historical competition prediction, fitting, cross-elasticity and equilibrium as provisional native discovery routes. The locked boundary test verified that each advertised operation is executable through the kernel route catalog. Updated the migration ledger with the bounded cross-language evidence. The development policy check passed and all 38 release obligations remain required.
 
 - [x] Refine historical Norton–Bass net-level milestones inside the first requested sample bracket using native trajectory bisection. The original sampled milestones remain available, and already-met levels report the window start. All 26 locked release multi-generation tests passed, including analytic crossings after a capacity event. Crossings missed by the requested grid and continuous peak search remain open.
+
+- [x] Verify historical Norton–Bass refined crossings through Python, Julia and R. Focused consumer checks passed against the locked b1eccb07 wheel and FFI on macOS arm64, preserving sampled results and matching both post-event analytic crossing times within 1e-7.

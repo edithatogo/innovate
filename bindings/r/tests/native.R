@@ -416,6 +416,11 @@ historical <- kernel_summarize_model("norton_bass", list(
 ))$result$threshold_diagnostics$net_level_milestones$generations[[1]]
 stopifnot(historical$reference_market==100,historical$takeoff==1,
           historical$median==3,historical$saturation==3)
+at_event <- 100 - 88 * exp(-0.1)
+expected_crossings <- 2 - log((1000 - c(50, 90)) / (1000 - at_event)) / 0.1
+stopifnot(historical$refined_crossings$takeoff == 1,
+          all(abs(unlist(historical$refined_crossings[c("median", "saturation")]) -
+                  expected_crossings) < 1e-7))
 cat("R Norton historical level milestones passed\n")
 
 scheduled_agents <- kernel_simulate_model("bass", list(

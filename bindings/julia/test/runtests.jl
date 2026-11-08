@@ -447,6 +447,12 @@ end
     row = only(result["threshold_diagnostics"]["net_level_milestones"]["generations"])
     @test row["reference_market"] == 100.
     @test [row[k] for k in ("takeoff", "median", "saturation")] == [1.,3.,3.]
+    at_event = 100 - 88 * exp(-0.1)
+    @test row["refined_crossings"]["takeoff"] == 1
+    for (name, target) in (("median", 50), ("saturation", 90))
+        expected = 2 - log((1000 - target) / (1000 - at_event)) / 0.1
+        @test isapprox(row["refined_crossings"][name], expected; atol=1e-7, rtol=0)
+    end
 end
 
 @testset "Scheduled Kairos agent hazards" begin
