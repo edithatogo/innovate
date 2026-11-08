@@ -7951,3 +7951,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Add between-sample Norton–Bass rate peak refinement for both variants. The native diagnostic searches next to the best probe, samples both sides of event and launch boundaries, and excludes jump impulses. All 28 locked multi-generation tests passed, including the closed-form Bass peak time and rate. Narrow peaks outside the selected bracket and binding qualification remain open.
 
 - [x] Verify the refined Norton–Bass peak through Python, Julia and R on macOS arm64. Each consumer passed the closed-form Bass reference with peak time within 1e-5 and peak rate within 1e-8 using the locked eef0ea90 build.
+
+- [x] Run the full offline Python consumer, Julia and installed R conformance suites on macOS arm64 with the locked eef0ea90 wheel and FFI and fe04ed4d tests. All three passed, including the historical competition and Norton–Bass additions. The live OECD case was outside this offline run.
