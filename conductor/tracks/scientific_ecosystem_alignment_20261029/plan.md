@@ -7566,3 +7566,8 @@ Hosted release readiness for this worktree revision remains open.
   extension and tracked wrapper with existing wheel metadata. Direct
   Cargo linking required macOS dynamic lookup flags for Python symbols.
   A fresh installed wheel for this operation remains open.
+
+- [x] Add empirical interval bounds and holdout coverage to the Python
+  consumer suite used by the release-wheel job. The focused test
+  passed with the staged optimized extension. A fresh wheel and
+  hosted execution still need verification.

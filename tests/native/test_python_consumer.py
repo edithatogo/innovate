@@ -1923,3 +1923,19 @@ def test_extension_dataset_provider():
             innovate.invoke_registered_extension(lambda *_: {"kind": "adoption"}, selection, None)
     finally:
         innovate.execute("unregister_extension_manifest", name=selection["name"], expected_version="1")
+
+
+def test_empirical_prediction_intervals():
+    response = innovate.execute(
+        "calibrate_prediction_intervals",
+        time=[1, 2, 3],
+        observed=[11, 18, 35],
+        predicted=[10, 20, 30],
+        confidence=0.5,
+        holdout=[0, 1, 0],
+    )
+    result = response["result"]
+    assert response["metadata"]["runtime"] == "rust_native"
+    assert result["lower"] == [8, 18, 28]
+    assert result["upper"] == [12, 22, 32]
+    assert result["diagnostics"]["holdout_coverage"] == 1.0
