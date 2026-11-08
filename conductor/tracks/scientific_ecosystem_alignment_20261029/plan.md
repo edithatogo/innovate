@@ -7998,3 +7998,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify strict imported policy fields in the installed 439ff4a0 macOS arm64 wheel. All 159 Python native tests passed with live OECD enabled on CPython 3.15.2, including the new unknown-field assertion. Ruff and formatting checks passed.
 
 - [x] Reconcile historical discovery and schema error tests #451, #441 and #439. Locked release tests confirm an unknown model-card key returns a structured native error and both malformed and unsupported schema versions are rejected. Python exception chaining was specific to the retired registry.
+
+- [x] Reconcile Mesa RNG PRs #460, #446, #444, #435, #423, #422, #410 and #379. Their executable changes or lint annotations target only removed Mesa modules. Kairos uses seeded simulation randomness for replay. The locked release Kairos and network replay tests passed. Broader PR #416 remains separate.
