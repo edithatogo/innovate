@@ -7961,3 +7961,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify hosted Linux Python at PR #575 head 768e9df2. Job 128613246270 passed the locked Rust gate and reported 157 Python tests passed and one skipped. The development policy check passed and reported 38 outstanding release obligations.
 
 - [x] Run the full offline locked Rust release workspace with the 768e9df2 Rust source. The run completed with 369 passed, 1 ignored. Hosted macOS Python and Windows Julia/R jobs 128613246132 and 128613246248 also passed on 768e9df2. Hosted Windows Python and release packaging are tracked separately.
+
+- [x] Run the opt-in live OECD Rust test with the locked 768e9df2 Rust source. The test passed, complementing the offline workspace run on the same Rust source.
