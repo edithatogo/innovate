@@ -7698,3 +7698,9 @@ Hosted release readiness for this worktree revision remains open.
   tests. Its standalone hook targets retired Python files. Its docs
   receipt predates the existing receipt by one day. Preserve the newer
   historical record and current hook configuration.
+
+- [x] Reconcile the historical security-quality-harness branch. Retain
+  the active dependency review, Scorecard, secret scan, workflow lint
+  and Python quality checks, plus the Rust advisory job. The older
+  Python 3.14 commands and suppressions target retired code. Actionlint
+  and the native development policy check passed.
