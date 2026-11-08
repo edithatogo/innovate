@@ -8050,3 +8050,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Extend local adopter classification qualification on 1b97bb8f. A standalone Rust harness compared the production classifier on time grid [-1, 0, 2, 5, 9, 12] with weights [0, a, b, 0, c, 0], where a, b and c independently range from 1 through 7. All 343 cases matched the integer-moment oracle, which compares the sign and squared magnitude of tW minus the weighted time sum against the variance numerator and its quadruple. Broader release qualification remains open.
 
 - [x] Extend the 343 independently checked irregular-grid adopter cases with three common rate scales. All 1,029 cases preserved their category assignments when scaled by the smallest positive subnormal, the smallest positive normal, or 2^1021. The standalone Rust run exercised the production classifier locally. Broader release qualification remains open.
+
+- [x] Retain the irregular-grid integer-moment oracle as a Rust regression. It checks all 1,372 unscaled and scaled cases directly against the oracle. All six adopter module tests passed with rustc.
