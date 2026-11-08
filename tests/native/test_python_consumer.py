@@ -1977,3 +1977,11 @@ def test_split_conformal_calibrates_an_independently_fitted_forecast():
     assert result["lower"] == pytest.approx([value - reference_width for value in predicted])
     assert result["upper"] == pytest.approx([value + reference_width for value in predicted])
     assert result["diagnostics"]["holdout_coverage"] == 0.0
+
+
+def test_stability_tier_guidance():
+    result = innovate.execute("describe_stability_tier", stability=" Beta ")["result"]
+    assert result["stability"] == "provisional"
+    assert "active iteration" in result["guidance"]
+    with pytest.raises(innovate.NativeError, match="unknown extension stability tier"):
+        innovate.execute("describe_stability_tier", stability="unknown")

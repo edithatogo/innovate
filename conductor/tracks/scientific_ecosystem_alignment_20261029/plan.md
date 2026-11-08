@@ -7683,3 +7683,7 @@ Hosted release readiness for this worktree revision remains open.
   the rebuilt optimized FFI library. Both returned identical
   provisional guidance for the Beta alias. The check used an explicit
   library path. Python wheel verification remains open.
+
+- [x] Verify stability guidance and unknown-tier rejection in the
+  installed optimized Python macOS arm64 wheel. The focused consumer
+  test and Ruff passed. Hosted distribution validation remains open.
