@@ -80,6 +80,13 @@ The Rust operation `calibrate_prediction_intervals` accepts aligned `time`,
 optional numeric `holdout` mask. It returns symmetric empirical bounds and
 descriptive coverage. Selected holdout observations can widen the interval,
 so their reported coverage cannot serve as an independent predictive check.
+Set `method="split_conformal"` to calibrate width on rows where `holdout`
+is zero and evaluate coverage on the remaining rows. Supply both groups and
+predictions from a model fitted independently of them. The mode rejects a
+confidence level that would require an infinite interval at the available
+calibration sample size. Marginal coverage depends on exchangeable scores,
+which requires particular care for time series.
+
 Use `innovate.execute` in Python and `kernel_call` in Julia or R.
 
 Voiage owns VOI/economic analysis; Innovate hands off adoption/scenario tables

@@ -254,7 +254,7 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Historical empirical intervals run in Rust with local Python, Julia and R evidence. Independent predictive calibration, global identifiability and broader noisy-data and extreme-domain validation remain open."
+      "remaining": "Historical empirical and split-conformal intervals run in Rust with local Python, Julia and R evidence. Fitted-forecast coverage, global identifiability and broader noisy-data and extreme-domain validation remain open."
     }
   ]
 }

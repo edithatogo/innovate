@@ -7618,3 +7618,8 @@ Hosted release readiness for this worktree revision remains open.
   matched the install. Raw wheel SHA-256 is
   `2a2e928292a9afaf04e489e7474dad7684d153b0fbb7a54401ca49f4dccfdd4c`.
   Hosted validation remains open.
+
+- [x] Document split conformal inputs, finite-rank limits and assumptions
+  and update the calibration ledger. The full Python release consumer
+  suite passed all 123 cases against the isolated optimized macOS wheel.
+  Fitted-forecast and hosted qualification remain open.
