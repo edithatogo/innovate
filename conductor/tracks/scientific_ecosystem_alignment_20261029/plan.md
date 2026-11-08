@@ -7883,3 +7883,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify the current PR source against the locked release Kairos, network and scientific-contract suites on macOS arm64. All 61 cases passed, including checkpoint replay, resource accounting, stochastic hazard reference comparisons and covariate/event handling. This covers the pinned Kairos provider and current fixtures. Broader scientific acceptance remains open.
 
 - [x] Verify the local remote-worker contract rejects fetch_oecd_dataset before dispatch. The locked release boundary regression passed. OECD networking remains exposed through the direct binding API, outside the remote worker request schema.
+
+- [x] Verify hosted source-built Linux packaging and Voiage qualification at b701302f. Release dry-run job 128597996434 passed clean wheel installation, package tests and Voiage 3.1.0 ordinary and weighted EVPI reference checks. Downloaded artifacts matched SHA256SUMS and source digest 38ed3f924b29c12c82e569f2dde3a74351ad752895adb8895eb189991ac596d8. The separate readiness job correctly failed on open release obligations.

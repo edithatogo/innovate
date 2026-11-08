@@ -247,7 +247,7 @@
       "status": "bounded_native",
       "required": true,
       "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Broader decision workflows, hosted consumer qualification and release acceptance"
+      "remaining": "Hosted Linux source-built wheel passed the Voiage 3.1.0 ordinary and weighted EVPI handoff. Broader decision workflows and release acceptance remain open."
     },
     {
       "key": "calibration_identifiability",
