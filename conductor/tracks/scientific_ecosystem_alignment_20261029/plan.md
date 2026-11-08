@@ -7976,3 +7976,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reconcile GitHub Actions dependency PRs #380–#389 into local migration history. Seven proposed immutable pins exactly match retained workflow pins. The Vale, setup-python and setup-dotnet jobs are absent from the active workflow tree, which uses uv for Python and has retired .NET bindings. The merge preserved the migration tree byte for byte. Hosted PR disposition remains open.
 
 - [x] Reconcile sixteen Python and docs dependency PR tips into local migration history using the lockfile comparisons above. The merge preserves the verified migration source tree. Hosted dispositions remain open.
+
+- [x] Reconcile #542, #539, #538, #537, #531, #515 and #484 locally. Each changes only the removed TypeScript binding package manifest or lock. The ancestry merge preserves the migration tree, including the separately maintained docs dependencies.
