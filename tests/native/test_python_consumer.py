@@ -2314,3 +2314,14 @@ def test_historical_interaction_matrix_fit():
     assert result["predictions"]["r_squared"] > 0.999999
     assert result["identifiability"]["rank"] == 8
     assert result["parameters"]["market_potentials"] == pytest.approx([50, 100], abs=0.1)
+
+
+def test_historical_interaction_matrix_automatic_fit():
+    time = [i / 2 for i in range(32)]
+    survival = [math.exp(-0.2 * t) for t in time]
+    observed = [
+        [50 * (1 - math.exp(-0.05 * t - 0.25 * (1 - s))), 100 * (1 - s)] for t, s in zip(time, survival, strict=True)
+    ]
+    result = innovate.execute("fit_competition_interaction_matrix", time=time, observed=observed)["result"]
+    assert result["predictions"]["r_squared"] > 0.999999
+    assert result["parameters"]["q"][0][1] == pytest.approx(-0.05, abs=0.005, rel=0)

@@ -1159,3 +1159,15 @@ end
     @test result["identifiability"]["rank"] == 8
     @test isapprox(result["parameters"]["market_potentials"], [50, 100]; atol=0.1, rtol=0)
 end
+
+@testset "Historical interaction-matrix automatic fit" begin
+    time = collect(0:0.5:15.5)
+    observed = map(time) do t
+        survival = exp(-0.2 * t)
+        [50 * (1 - exp(-0.05 * t - 0.25 * (1 - survival))), 100 * (1 - survival)]
+    end
+    result = kernel_call("fit_competition_interaction_matrix", nothing,
+        Dict("time" => time, "observed" => observed))["result"]
+    @test result["predictions"]["r_squared"] > 0.999999
+    @test isapprox(result["parameters"]["q"][1][2], -0.05; atol=0.005, rtol=0)
+end

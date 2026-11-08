@@ -1095,3 +1095,12 @@ interaction_fit <- kernel_call("fit_competition_interaction_matrix", payload=lis
 stopifnot(interaction_fit$predictions$r_squared > 0.999999,
           interaction_fit$identifiability$rank == 8,
           all(abs(unlist(interaction_fit$parameters$market_potentials) - c(50, 100)) < 0.1))
+
+auto_time <- seq(0, 15.5, by=0.5)
+auto_survival <- exp(-0.2 * auto_time)
+auto_observed <- cbind(50 * (1 - exp(-0.05 * auto_time - 0.25 * (1 - auto_survival))),
+                       100 * (1 - auto_survival))
+auto_fit <- kernel_call("fit_competition_interaction_matrix",
+  payload=list(time=auto_time, observed=auto_observed))$result
+stopifnot(auto_fit$predictions$r_squared > 0.999999,
+          abs(auto_fit$parameters$q[[1]][[2]] + 0.05) < 0.005)

@@ -7935,3 +7935,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify historical interaction-matrix fitting through the locked 4699a2cd wheel and shared library. Python 3.15.2, Julia and installed R passed their focused conformance cases on macOS arm64, recovering both market potentials within 0.1 with pooled R-squared above 0.999999 and local rank eight.
 
 - [x] Add automatic starting values for historical signed interaction-matrix fitting. Fits with observations only try three capacity scales with early-adoption estimates. All six focused Rust competition tests passed, including recovery of a negative interaction within 0.005 of its analytic value. Cross-binding automatic-start checks remain open.
+
+- [x] Verify automatic historical interaction-matrix fitting in Python, Julia and R. The locked 622d1994 wheel and shared library passed the observation-only signed-interaction fixture on macOS arm64, with pooled R-squared above 0.999999 and a negative coefficient within 0.005 of its analytic value.
