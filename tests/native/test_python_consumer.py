@@ -2032,3 +2032,18 @@ def test_diagnostics_artifact_tables_preserve_polars_shape():
     assert ordered.columns == ["z", "a"]
     assert ordered.rows() == [(2, 1), (None, 3), (None, None)]
     assert single.rows() == [(4,), (None,)]
+
+
+def test_streaming_update_and_capability_discovery():
+    capabilities = innovate.execute("list_advanced_capabilities")["result"]["capabilities"]
+    streaming = next(item for item in capabilities if item["key"] == "streaming_update")
+    assert streaming["supports_incremental"] is True
+    result = innovate.execute(
+        streaming["operation"],
+        previous_time=[1, 2],
+        previous_observed=[2, 4],
+        new_time=[3],
+        new_observed=[6],
+    )["result"]
+    assert result["mean"] == [2, 4, 6]
+    assert result["diagnostics"]["growth_rate"] == 0.5

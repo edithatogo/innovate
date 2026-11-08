@@ -7829,3 +7829,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify #156 diagnostics table transport through Julia and installed R using the same locked release FFI library via INNOVATE_NATIVE_LIBRARY. The focused tests passed for ordered columns, irregular rows and singleton null cells.
 
 - [x] Port historical streaming updates to update_streaming_forecast and advertise the incremental capability. The Rust operation appends aligned cumulative observations, preserves assumptions and emits the updated state and growth diagnostics. It rejects out-of-order times and declining observations. All 99 locked release-mode boundary tests passed. Installed Python, Julia and R validation remains open.
+
+- [x] Verify capability discovery and streaming updates in the installed CPython 3.15.2 wheel, Julia and installed R on macOS arm64. All three discovered the incremental route, appended one observation, returned [2, 4, 6] and reported 0.5 growth. Julia and R used the same locked release FFI artifact via INNOVATE_NATIVE_LIBRARY. Hosted platform checks remain open.

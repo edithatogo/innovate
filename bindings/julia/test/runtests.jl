@@ -1069,3 +1069,14 @@ end
     @test tables["ordered"]["rows"] == [[2, 1], [nothing, 3], [nothing, nothing]]
     @test tables["single"]["rows"] == [[4], [nothing]]
 end
+
+@testset "Streaming update and capability discovery" begin
+    capabilities = kernel_call("list_advanced_capabilities", nothing, Dict())["result"]["capabilities"]
+    streaming = only(filter(item -> item["key"] == "streaming_update", capabilities))
+    @test streaming["supports_incremental"]
+    payload = Dict("previous_time" => [1, 2], "previous_observed" => [2, 4],
+        "new_time" => [3], "new_observed" => [6])
+    result = kernel_call(streaming["operation"], nothing, payload)["result"]
+    @test result["mean"] == [2, 4, 6]
+    @test result["diagnostics"]["growth_rate"] == 0.5
+end

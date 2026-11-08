@@ -1001,3 +1001,12 @@ stopifnot(identical(unlist(diagnostics_tables$ordered$columns), c("z","a")),
           identical(diagnostics_tables$ordered$rows[[2]], list(NULL, 3L)),
           identical(diagnostics_tables$ordered$rows[[3]], list(NULL, NULL)),
           identical(diagnostics_tables$single$rows[[2]], list(NULL)))
+
+capabilities <- kernel_call("list_advanced_capabilities")$result$capabilities
+streaming <- Filter(function(item) item$key == "streaming_update", capabilities)
+stopifnot(length(streaming) == 1L, isTRUE(streaming[[1]]$supports_incremental))
+updated <- kernel_call(streaming[[1]]$operation, payload=list(
+  previous_time=c(1,2), previous_observed=c(2,4),
+  new_time=list(3), new_observed=list(6)))$result
+stopifnot(all(unlist(updated$mean) == c(2,4,6)),
+          updated$diagnostics$growth_rate == 0.5)
