@@ -7929,3 +7929,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Port pooled historical interaction-matrix scoring. An aligned observed matrix adds R-squared across all time-product cells, with zero for constant observations and an explicit error for mismatched dimensions. All four locked historical competition tests passed. Binding-level scoring checks remain open.
 
 - [x] Verify historical pooled scoring in the Python, Julia and R conformance suites. The locked 1b3a3c77 wheel and shared library returned R-squared of -5 for pooled nonconstant observations and zero for constant observations on macOS arm64.
+
+- [x] Add bounded Rust fitting for the historical signed interaction matrix, reusing the native predictor and least-squares diagnostics. All five focused historical competition tests passed, including recovery from perturbed guesses against an analytic two-product trajectory with full local rank. Automatic starts, broader fitting qualification and binding checks remain open.

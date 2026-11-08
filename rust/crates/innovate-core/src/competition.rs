@@ -935,9 +935,28 @@ pub(crate) fn summarize_equilibrium(model: &Value, payload: &Value) -> Result<Va
     }
 }
 
+fn interaction_derivative(levels: &[f64], p: &[f64], q: &[Vec<f64>], market: &[f64]) -> Vec<f64> {
+    let n = p.len();
+    let shares: Vec<_> = levels
+        .iter()
+        .zip(market)
+        .map(|(level, market)| (level / market).min(1.))
+        .collect();
+    (0..n)
+        .map(|i| {
+            let imitation = q[i]
+                .iter()
+                .zip(&shares)
+                .map(|(coefficient, share)| coefficient * share)
+                .sum::<f64>();
+            (p[i] + imitation) * (market[i] - levels[i]).max(0.)
+        })
+        .collect()
+}
+
 pub(crate) fn interaction_matrix(
     payload: &Value,
-    elasticity_only: bool,
+    operation: &Value,
 ) -> Result<Value, &'static str> {
     let vector = |key: &str| {
         serde_json::from_value::<Vec<f64>>(payload[key].clone())
@@ -963,27 +982,15 @@ pub(crate) fn interaction_matrix(
     if time.is_empty() || time[0] < 0. || time.windows(2).any(|pair| pair[1] <= pair[0]) {
         return Err("interaction matrix requires nonnegative, strictly increasing time");
     }
+    let elasticity_only = operation == "competition_cross_elasticity";
     let mut initial = vec![0.; n];
+    if operation == "fit_competition_interaction_matrix" {
+        return fit_interaction_matrix(payload, &time, &p, &q, &market, &initial);
+    }
     if elasticity_only {
         initial[0] = 1e-6;
     }
-    let derivative = |_: f64, levels: &[f64]| {
-        let shares: Vec<_> = levels
-            .iter()
-            .zip(&market)
-            .map(|(level, market)| (level / market).min(1.))
-            .collect();
-        (0..n)
-            .map(|i| {
-                let imitation = q[i]
-                    .iter()
-                    .zip(&shares)
-                    .map(|(coefficient, share)| coefficient * share)
-                    .sum::<f64>();
-                (p[i] + imitation) * (market[i] - levels[i]).max(0.)
-            })
-            .collect()
-    };
+    let derivative = |_: f64, levels: &[f64]| interaction_derivative(levels, &p, &q, &market);
     let path = crate::numerics::integrate(&time, time[0], &initial, derivative)
         .map_err(|_| "interaction matrix trajectory integration failed")?;
     if !elasticity_only {
@@ -1056,4 +1063,80 @@ pub(crate) fn interaction_matrix(
         json!({"time":time,"elasticity":elasticity,"axis_order":["product","time"],
         "method":"historical_cross_elasticity_proxy"}),
     )
+}
+
+fn fit_interaction_matrix(
+    payload: &Value,
+    time: &[f64],
+    p: &[f64],
+    q: &[Vec<f64>],
+    market: &[f64],
+    initial: &[f64],
+) -> Result<Value, &'static str> {
+    let n = p.len();
+    if n > 8 || time.len() < n + 2 {
+        return Err(
+            "interaction matrix fitting requires 2 to 8 products and at least n+2 time points",
+        );
+    }
+    let observed: Vec<Vec<f64>> = serde_json::from_value(payload["observed"].clone())
+        .map_err(|_| "observed must be a numeric time-by-product matrix")?;
+    if observed.len() != time.len() || observed.iter().any(|row| row.len() != n) {
+        return Err("observed must align with time and product dimensions");
+    }
+    let target: Vec<_> = observed.into_iter().flatten().collect();
+    let scale = target
+        .iter()
+        .fold(1_f64, |scale, value| scale.max(value.abs()));
+    let target: Vec<_> = target.iter().map(|value| value / scale).collect();
+    let start: Vec<_> = p
+        .iter()
+        .map(|value| value.max(1e-8).ln())
+        .chain(q.iter().flatten().copied())
+        .chain(market.iter().map(|value| value.ln()))
+        .collect();
+    let decode = |theta: &[f64]| {
+        let p: Vec<_> = theta[..n].iter().map(|value| value.exp()).collect();
+        let q: Vec<_> = theta[n..n + n * n]
+            .chunks_exact(n)
+            .map(<[f64]>::to_vec)
+            .collect();
+        let market: Vec<_> = theta[n + n * n..].iter().map(|value| value.exp()).collect();
+        (p, q, market)
+    };
+    let fit = least_squares(
+        &target,
+        &[start],
+        |theta| {
+            let (p, q, market) = decode(theta);
+            if p.iter()
+                .chain(&market)
+                .any(|value| !value.is_finite() || *value <= 0.)
+            {
+                return Err("interaction matrix trial left the finite positive domain".into());
+            }
+            crate::numerics::integrate(time, time[0], initial, |_, levels| {
+                interaction_derivative(levels, &p, &q, &market)
+            })
+            .map(|rows| {
+                rows.into_iter()
+                    .flatten()
+                    .map(|value| value / scale)
+                    .collect()
+            })
+        },
+        120,
+    )
+    .map_err(|_| "interaction matrix fitting failed")?;
+    let (p, q, market) = decode(&fit.parameters);
+    let parameters = json!({"p":p,"q":q,"market_potentials":market});
+    let mut prediction_payload = parameters.clone();
+    prediction_payload["time"] = json!(time);
+    prediction_payload["observed"] = payload["observed"].clone();
+    let predictions = interaction_matrix(
+        &prediction_payload,
+        &json!("predict_competition_interaction_matrix"),
+    )?;
+    Ok(json!({"parameters":parameters,"predictions":predictions,
+        "fit_quality":fit.report,"identifiability":fit.identifiability}))
 }

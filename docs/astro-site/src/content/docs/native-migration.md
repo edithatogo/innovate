@@ -1573,3 +1573,10 @@ The prediction starts at zero adoption at the first supplied time and returns
 `competition_cross_elasticity` accepts the same inputs and preserves the
 historical first-product seed of `1e-6`. It returns the historical
 absolute-coefficient proxy in product-by-time order.
+
+`fit_competition_interaction_matrix` uses the same payload with required
+`observed` rows and treats `p`, `q`, and `market_potentials` as initial
+parameter guesses. It returns fitted parameters, predictions, solver diagnostics,
+and local identifiability. Fitting supports 2 to 8 products with at least
+`n + 2` time points. The solver uses one supplied start and reports its
+termination status.

@@ -936,3 +936,31 @@ fn historical_interaction_matrix_scores_pooled_observations() {
     request["payload"]["observed"] = json!([[1, 2]]);
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn historical_interaction_matrix_fit_recovers_independent_trajectory() {
+    let time: Vec<_> = (0..24).map(|i| i as f64 * 0.5).collect();
+    let observed: Vec<_> = time
+        .iter()
+        .map(|t| {
+            [
+                50. * (1. - (-0.1 * t).exp()),
+                100. * (1. - (-0.2 * t).exp()),
+            ]
+        })
+        .collect();
+    let request = json!({"schema_version":"2.0","operation":"fit_competition_interaction_matrix",
+        "payload":{"time":time,"p":[0.11,0.19],"q":[[0.001,-0.001],[0.001,0.001]],
+        "market_potentials":[49,101],"observed":observed}});
+    let response: Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    let result = &response["result"];
+    assert!(
+        result["predictions"]["r_squared"]
+            .as_f64()
+            .unwrap_or_default()
+            > 0.999999,
+        "{response}"
+    );
+    assert_eq!(result["identifiability"]["rank"], 8);
+}
