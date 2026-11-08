@@ -3230,6 +3230,20 @@ fn extension_manifest_validation_normalizes_tiers_and_rejects_duplicate_names() 
     let response: serde_json::Value =
         serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
     assert_eq!(response["error"]["code"], "invalid_request");
+    for (field, value) in [
+        ("name", json!(" ")),
+        ("version", json!("")),
+        ("entrypoint", json!("example")),
+        ("extension_points", json!([])),
+    ] {
+        let mut invalid = manifest.clone();
+        invalid[field] = value;
+        assert_eq!(
+            run(json!([invalid]))["error"]["code"],
+            "invalid_request",
+            "{field}"
+        );
+    }
     let mut invalid = manifest;
     invalid["extension_points"] = json!(["unknown"]);
     assert_eq!(run(json!([invalid]))["error"]["code"], "invalid_request");

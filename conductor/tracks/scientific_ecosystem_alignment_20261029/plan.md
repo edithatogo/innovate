@@ -7790,3 +7790,5 @@ Hosted release readiness for this worktree revision remains open.
   consumer suite. The optimized macOS arm64 wheel returned the expected
   differences, total and relative lift. The focused test and Ruff
   passed. Hosted validation remains open.
+
+- [x] Reconcile PR #288 and its resolution branch. Native manifest tests cover blank names, empty versions, malformed entrypoints and empty extension points. Native discovery exercises the fixed Rust model registry. The policy scenario comparison is covered through Python, Julia and R as recorded above. The legacy JAX and pandas tests target retired interfaces. All 95 locked release-mode native boundary tests passed.
