@@ -7667,3 +7667,8 @@ Hosted release readiness for this worktree revision remains open.
   0/5 logistic, 2/5 Gompertz and 2/5 Bass. Half-widths were 2.255,
   4.468 and 5.412 million respectively. This removes the horizon
   mismatch, but the expanding fits and ordered scores are dependent.
+
+- [x] Retain the matched-horizon uspop reproducer at
+  `evidence/check-uspop-interval-coverage.py`. Run it with an installed
+  Innovate wheel and Rscript on PATH. It reads the built-in dataset
+  and reproduced all three half-widths and coverage results.
