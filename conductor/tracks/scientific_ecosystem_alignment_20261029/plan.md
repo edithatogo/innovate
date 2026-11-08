@@ -8004,3 +8004,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reconcile performance PRs #424, #412 and #375. The Rust competition model iterates time and state together for derivatives and uses a fixed parameter-prefix array. All locked release competition tests passed. No cross-runtime speed comparison was performed.
 
 - [x] Reconcile Bayesian mapping PRs #438, #419 and #411. The changes target retired NumPy-to-dictionary extraction. Rust emits ordered parameter draws and posterior masses directly. All focused locked release Bayesian boundary tests passed. Relative runtime performance was not measured.
+
+- [x] Reconcile stability enum coverage from PR #437. The focused locked Rust release boundary test passed for every historical alias, all canonical tiers, lifecycle guidance and rejection of an unknown tier.

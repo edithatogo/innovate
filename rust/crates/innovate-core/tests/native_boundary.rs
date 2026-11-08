@@ -3232,6 +3232,10 @@ fn extension_manifest_validation_normalizes_tiers_and_rejects_duplicate_names() 
     );
     for (alias, expected) in [
         (" STABLE ", "stable"),
+        ("stable", "stable"),
+        ("provisional", "provisional"),
+        ("internal", "internal"),
+        ("experimental", "provisional"),
         (" BETA ", "provisional"),
         (" InTeRnAl-OnLy ", "internal"),
     ] {
