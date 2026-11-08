@@ -7819,7 +7819,7 @@ Hosted release readiness for this worktree revision remains open.
 
 ### Remaining historical branch contracts
 
-- [ ] Port #87 OECD dataset retrieval. The native dataset validation and extension provider operations currently have no built-in OECD transport. Preserve dimension selection, explicit date ranges, the 1960–2020 default and upstream error propagation, with Polars-compatible tabular output. Qualify the current OECD SDMX endpoint before live verification.
+- [x] Port #87 OECD dataset retrieval. The Rust transport supports ordered SDMX dimensions, explicit periods and the 1960–2020 default. Python returns a Polars DataFrame, and Julia and R receive CSV from the same native operation. Live checks passed in all three bindings.
 - [x] Reconcile #80 with shared Rust residual series and SVG export. Python, Julia and R focused tests passed on macOS arm64, including ACF-only mode and analytic correlation values. A rasterized sample showed all three panels. The export uses an explicit Durbin–Levinson PACF estimator and returns SVG for the caller to display.
 - [x] Reconcile #156 with the native diagnostics_artifact_tables operation. The focused locked release test verifies declared column order, singleton row shape, missing and irregular rows, metadata, and skipping non-tabular artifacts. Installed binding and downstream Polars verification remain open.
 - [x] Reconcile #98 with native list_advanced_capabilities. The focused locked release test verifies alphabetical keys, registered native routes, stability and dependencies. Streaming update is explicitly pending and requires a native port. Installed binding checks remain open.
@@ -7849,3 +7849,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Run the complete locked, optimized Cargo-built Rust boundary executable for the OECD transport revision. The test executable was built using cargo rustc with a test-only strip=none override and run directly. All 103 offline tests passed and the separately selected live OECD test passed. The worker binary still emitted an ENOSPC warning during stripping. Installed binding checks remain open.
 
 - [x] Add opt-in live OECD checks in Python, Julia and R using INNOVATE_TEST_LIVE_OECD=1. Julia and R source parsing and Python lint passed. The optimized shared library build stopped at E0786 on a non-Mach-O bytemuck_derive artifact with 37 MiB free. Installed live execution remains open.
+
+- [x] Qualify live OECD binding retrieval at 55ef5f5a on macOS arm64. Cargo reclaimed 8.3 GiB of regenerable debug artifacts in the migration checkout and rebuilt the locked release FFI. Full Julia and installed R suites passed with live retrieval enabled and the FFI selected explicitly. The freshly installed CPython 3.15.2 release wheel passed both focused OECD tests. Hosted platform validation remains open.
