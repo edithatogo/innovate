@@ -1,5 +1,6 @@
 """Incomplete native support cannot silently retire an existing feature."""
 
+import hashlib
 import importlib.util
 import json
 import subprocess
@@ -137,3 +138,29 @@ def test_release_source_digest_tracks_source_and_excludes_receipts(tmp_path, mon
     git("add", "Cargo.toml")
     git("commit", "-m", "Second source")
     assert module.release_source_digest() != first
+
+    for entry in ("python/innovate/__init__.py", "julia/Project.toml", "r/DESCRIPTION"):
+        path = tmp_path / "bindings" / entry
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.touch()
+    (tmp_path / "pyproject.toml").write_bytes((ROOT / "pyproject.toml").read_bytes())
+    git("add", "bindings", "pyproject.toml")
+    git("commit", "-m", "Add binding inputs")
+
+    receipt = b"synthetic qualification evidence"
+    (tmp_path / "receipt.md").write_bytes(receipt)
+    ledger = json.loads((ROOT / "migration-ledger.json").read_text())
+    for group in ("models", "feature_areas"):
+        for item in ledger[group]:
+            item.pop("remaining", None)
+            item.update(status="qualified", evidence="receipt.md", evidence_sha256=hashlib.sha256(receipt).hexdigest())
+    ledger.update(release_ready=True, qualified_source_sha256=module.release_source_digest())
+    (tmp_path / "migration-ledger.json").write_text(json.dumps(ledger))
+    monkeypatch.setattr("sys.argv", ["check_migration.py", "--release"])
+    assert module.main() == 0
+
+    source.write_text("third")
+    git("add", "Cargo.toml")
+    git("commit", "-m", "Change release source")
+    with pytest.raises(ValueError, match="does not match the release source digest"):
+        module.main()

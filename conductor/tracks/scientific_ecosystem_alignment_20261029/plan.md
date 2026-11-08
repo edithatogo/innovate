@@ -7729,3 +7729,8 @@ Hosted release readiness for this worktree revision remains open.
   the hosted release dry run. Verify the digest before and after
   packaging. The Voiage receipt identifies the same wheel by its
   archive digest. Actionlint passed. Hosted execution remains open.
+
+- [x] Exercise the release gate with synthetic qualified receipts in a
+  temporary Git repository. Matching source passed. A later committed
+  source edit invalidated the same receipts. All 16 policy tests and
+  Ruff passed. The live ledger remains subject to the real evidence gates.
