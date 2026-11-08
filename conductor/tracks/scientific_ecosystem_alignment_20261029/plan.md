@@ -7792,3 +7792,5 @@ Hosted release readiness for this worktree revision remains open.
   passed. Hosted validation remains open.
 
 - [x] Reconcile PR #288 and its resolution branch. Native manifest tests cover blank names, empty versions, malformed entrypoints and empty extension points. Native discovery exercises the fixed Rust model registry. The policy scenario comparison is covered through Python, Julia and R as recorded above. The legacy JAX and pandas tests target retired interfaces. All 95 locked release-mode native boundary tests passed.
+
+- [x] Reconcile historical PR branches #118, #121 and #142. Their tests exercise optional dataframe engine discovery, availability and unsupported-engine selection. Those APIs were removed when Polars became the sole dataframe engine. PR #142 also refreshes a generated docs verification receipt tied to the older source tree. Preserve the branch ancestry with the current Rust/Polars tree.
