@@ -1089,3 +1089,15 @@ end
     @test startswith(result["svg"], "<svg")
     @test !occursin("Partial autocorrelation", result["svg"])
 end
+
+if get(ENV, "INNOVATE_TEST_LIVE_OECD", "") == "1"
+    @testset "Live OECD SDMX retrieval" begin
+        payload = Dict("dataset_id" => "OECD.SDD.STES,DSD_STES@DF_CLI",
+            "dimension_key" => ".M.LI...AA...H", "start_date" => "2023-02", "end_date" => "2023-03")
+        result = kernel_call("fetch_oecd_dataset", nothing, payload)["result"]
+        @test result["request"]["provider"] == "OECD"
+        lines = split(result["csv"], '\n'; keepempty=false)
+        @test occursin("TIME_PERIOD,OBS_VALUE", first(lines))
+        @test any(line -> occursin(r",2023-0[23],", line), lines[2:end])
+    end
+end

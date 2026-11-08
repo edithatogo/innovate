@@ -7847,3 +7847,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify native OECD transport against the live public endpoint. The exact Cargo-built locked release core was linked into the optimized boundary test on the system volume with stripping disabled, after rust-objcopy reported ENOSPC during stripping. Both offline OECD cases and the opt-in live CSV case passed. Ordinary Cargo release test linking and installed binding checks remain open.
 
 - [x] Run the complete locked, optimized Cargo-built Rust boundary executable for the OECD transport revision. The test executable was built using cargo rustc with a test-only strip=none override and run directly. All 103 offline tests passed and the separately selected live OECD test passed. The worker binary still emitted an ENOSPC warning during stripping. Installed binding checks remain open.
+
+- [x] Add opt-in live OECD checks in Python, Julia and R using INNOVATE_TEST_LIVE_OECD=1. Julia and R source parsing and Python lint passed. The optimized shared library build stopped at E0786 on a non-Mach-O bytemuck_derive artifact with 37 MiB free. Installed live execution remains open.

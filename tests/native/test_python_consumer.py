@@ -4,6 +4,7 @@ import hashlib
 import importlib.util
 import json
 import math
+import os
 import random
 import struct
 from fractions import Fraction
@@ -2072,3 +2073,13 @@ def test_oecd_csv_ingestion_preserves_period_codes(monkeypatch):
     frame = innovate.fetch_oecd_dataset("OECD.SDD.STES,DSD_STES@DF_CLI", ".M.LI...AA...H")
     assert frame["TIME_PERIOD"].to_list() == ["2020", "2021"]
     assert frame["OBS_VALUE"].to_list() == [1.5, None]
+
+
+@pytest.mark.skipif(os.getenv("INNOVATE_TEST_LIVE_OECD") != "1", reason="requires the live OECD SDMX endpoint")
+def test_live_oecd_fetch_returns_polars_observations():
+    observations = innovate.fetch_oecd_dataset(
+        "OECD.SDD.STES,DSD_STES@DF_CLI", ".M.LI...AA...H", start_date="2023-02", end_date="2023-03"
+    )
+    assert observations.height > 0
+    assert set(observations["TIME_PERIOD"]) <= {"2023-02", "2023-03"}
+    assert observations.schema["OBS_VALUE"] == pl.Float64

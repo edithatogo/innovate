@@ -1016,3 +1016,13 @@ residual_svg <- kernel_call("render_residual_diagnostics_svg", payload=list(
 stopifnot(identical(unlist(residual_svg$series$acf), c(1,-0.75,0.5)),
           startsWith(residual_svg$svg, "<svg"),
           !grepl("Partial autocorrelation", residual_svg$svg))
+
+if (identical(Sys.getenv("INNOVATE_TEST_LIVE_OECD"), "1")) {
+  oecd <- kernel_call("fetch_oecd_dataset", payload=list(
+    dataset_id="OECD.SDD.STES,DSD_STES@DF_CLI", dimension_key=".M.LI...AA...H",
+    start_date="2023-02", end_date="2023-03"))$result
+  observations <- utils::read.csv(text=oecd$csv)
+  stopifnot(identical(oecd$request$provider, "OECD"), nrow(observations) > 0L,
+            all(observations$TIME_PERIOD %in% c("2023-02", "2023-03")),
+            is.numeric(observations$OBS_VALUE))
+}
