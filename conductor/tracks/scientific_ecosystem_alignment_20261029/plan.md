@@ -7992,3 +7992,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reconcile #418 policy validation experiments through the Rust importer. Reject extra fields at the document and nested contract levels. The focused locked release test passed for both injection cases alongside valid and oversized documents.
 
 - [x] Verify strict nested field types in the policy importer. The focused locked release test rejects numeric confounder names and string intervention times without coercion. All 104 offline boundary tests passed on the same production source before the assertions were added. PR #417 contains broader changes beyond its formatting title and remains under review.
+
+- [x] Verify strict policy document fields in Julia and installed R. Both focused checks passed on macOS arm64 using the same rebuilt locked release FFI, including rejection of an extra top-level field.

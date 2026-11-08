@@ -1135,3 +1135,8 @@ policy_import_error <- tryCatch({
   ""
 }, error=conditionMessage)
 stopifnot(grepl("exceeds 1 MiB", policy_import_error))
+policy_import_error <- tryCatch({
+  import_policy_document(paste0('{"extra":true,', substring(policy_document, 2L)))
+  ""
+}, error=conditionMessage)
+stopifnot(grepl("document contains unknown fields", policy_import_error))

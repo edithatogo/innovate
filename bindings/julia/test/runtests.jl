@@ -1207,4 +1207,5 @@ end
         Dict("method" => "import_policy_specification", "document" => document))
     @test run(document)["result"]["intervention"]["name"] == "Pilot"
     @test_throws r"exceeds 1 MiB" run(repeat("é", 524289))
+    @test_throws r"document contains unknown fields" run("{\"extra\":true," * document[2:end])
 end
