@@ -7593,3 +7593,11 @@ Hosted release readiness for this worktree revision remains open.
   Opposite maximum-magnitude residuals returned a zero mean and
   finite maximum RMSE. A residual subtraction that exceeds the float
   domain returned invalid_request. The optimized boundary test passed.
+
+- [x] Add opt-in split conformal intervals in Rust. The explicit holdout
+  mask separates calibration and evaluation rows. Width uses the
+  finite-sample rank ceil((n+1)*confidence) on calibration residuals.
+  Both optimized tests passed, including invariant width when evaluation
+  outcomes change and rejection when the requested rank is unavailable.
+  Exchangeability, independent fitting and installed-binding checks
+  remain separate acceptance requirements.

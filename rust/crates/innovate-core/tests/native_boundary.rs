@@ -4336,3 +4336,22 @@ fn empirical_intervals_keep_legacy_width_and_reject_invalid_inputs() {
     request["payload"]["predicted"] = json!([-f64::MAX, 0]);
     assert_eq!(execute(&request)["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn split_conformal_intervals_exclude_evaluation_residuals() {
+    let mut request = json!({"schema_version":"2.0","operation":"calibrate_prediction_intervals",
+        "payload":{"time":[1,2,3,4],"observed":[11,12,13,100],"predicted":[10,10,10,10],
+            "confidence":0.5,"holdout":[0,0,0,1],"method":"split_conformal"}});
+    let execute = |request: &serde_json::Value| -> serde_json::Value {
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let response = execute(&request);
+    assert_eq!(response["result"]["metadata"]["interval_half_width"], 2.0);
+    assert_eq!(response["result"]["diagnostics"]["holdout_coverage"], 0.0);
+    request["payload"]["observed"][3] = json!(11);
+    let response = execute(&request);
+    assert_eq!(response["result"]["metadata"]["interval_half_width"], 2.0);
+    assert_eq!(response["result"]["diagnostics"]["holdout_coverage"], 1.0);
+    request["payload"]["confidence"] = json!(0.9);
+    assert_eq!(execute(&request)["error"]["code"], "invalid_request");
+}
