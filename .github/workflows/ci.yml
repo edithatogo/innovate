@@ -171,7 +171,7 @@ jobs:
         if: matrix.os == 'windows-latest'
         shell: bash
         run: |
-          Rscript -e '
+          cat > "${RUNNER_TEMP}/innovate-unicode-dll.R" <<'RSCRIPT'
             library(innovate.R)
             source <- system.file("lib", "innovate_ffi.dll", package = "innovate.R", mustWork = TRUE)
             directory <- file.path(tempdir(), "innovate-\u6e2c\u8a66")
@@ -182,4 +182,5 @@ jobs:
             result <- kernel_predict_model("logistic",
               list(inputs = list(time = 1), parameters = list(L = 100, k = 1, x0 = 1)))
             stopifnot(result[["result"]][["values"]][[1]] == 50)
-          '
+          RSCRIPT
+          Rscript "${RUNNER_TEMP}/innovate-unicode-dll.R"

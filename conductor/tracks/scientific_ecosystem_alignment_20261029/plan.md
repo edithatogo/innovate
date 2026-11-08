@@ -7871,3 +7871,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify hosted Linux Julia and R conformance on PR #575 head dac899e05f8e3f6b3d929a867921084f9e5108aa. GitHub Actions job 128594465491 built the locked release FFI, staged the library for both bindings, installed the R package, and passed both suites with INNOVATE_NATIVE_LIBRARY unset. The opt-in live OECD test was not enabled in this hosted run.
 
 - [x] Record terminal hosted contract and security runs for PR #575 head dac899e0. Binding Conformance run 42435849194 and Security and Quality run 42435849225 both concluded success. The latter includes dependency review, secret scan, RustSec, workflow policy and the native Python quality gate. Cross-platform distribution and release readiness remain separate.
+
+- [x] Repair the Windows Unicode DLL smoke command after job 128594465391 exited 139 at Rscript startup. The full Windows Julia and installed R suites passed before that step. Pass the same assertions through a script file to avoid multiline command-line quoting on Windows. Actionlint and R parsing passed locally. Hosted execution of the repair remains open.
