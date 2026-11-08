@@ -7767,3 +7767,9 @@ Hosted release readiness for this worktree revision remains open.
   tip. The verified Rust replacements cover ordered parallel scenario
   execution and operation discovery across all three bindings. Legacy
   dataframe engine switching is superseded by the Polars runtime.
+
+- [x] Port PR #288’s supplied policy scenario path comparison to
+  summarize_causal(method="policy_scenario"). It validates alignment,
+  reports the signed sum and final lift, and retains assumptions,
+  covariates and optional forecast errors. The optimized boundary
+  test passed. Installed binding verification remains open.

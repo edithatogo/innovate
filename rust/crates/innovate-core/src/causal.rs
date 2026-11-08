@@ -283,6 +283,7 @@ pub(crate) fn summarize(payload: &Value) -> Result<Value, &'static str> {
                 "method":"historical_paired_heuristic"}),
             )
         }
+        Some("policy_scenario") => policy_scenario(payload),
         Some("counterfactual_forecast") => counterfactual_forecast(payload),
         Some("model_card") => {
             let card: ModelCard = serde_json::from_value(payload.clone())
@@ -838,6 +839,78 @@ fn covariate_balance(payload: &Value) -> Result<Value, &'static str> {
         "all_balanced":balanced == values.len(),
         "max_smd":values.iter().copied().fold(0.,f64::max),
         "mean_smd":mean(&values).unwrap_or(0.)}),
+    )
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct PolicyScenario {
+    time: Vec<f64>,
+    baseline: Vec<f64>,
+    intervention: Vec<f64>,
+    observed: Option<Vec<f64>>,
+    scenario_name: Option<String>,
+    #[serde(default)]
+    assumptions: Vec<String>,
+    #[serde(default)]
+    covariates: std::collections::BTreeMap<String, Vec<f64>>,
+}
+
+fn policy_scenario(payload: &Value) -> Result<Value, &'static str> {
+    let mut input = payload.clone();
+    input
+        .as_object_mut()
+        .ok_or("expected a policy scenario object")?
+        .remove("method");
+    let r: PolicyScenario = serde_json::from_value(input).map_err(|_| "invalid policy scenario")?;
+    let n = r.time.len();
+    if n == 0
+        || r.baseline.len() != n
+        || r.intervention.len() != n
+        || r.observed.as_ref().is_some_and(|v| v.len() != n)
+        || r.covariates.values().any(|v| v.len() != n)
+    {
+        return Err("policy scenario arrays must align with nonempty time");
+    }
+    if r.time.windows(2).any(|pair| pair[0] >= pair[1]) {
+        return Err("policy scenario time must be strictly increasing");
+    }
+    let residuals = |actual: &[f64], forecast: &[f64]| {
+        actual
+            .iter()
+            .zip(forecast)
+            .map(|(a, f)| finite(a - f))
+            .collect::<Result<Vec<_>, _>>()
+    };
+    let difference = residuals(&r.intervention, &r.baseline)?;
+    let effect = finite(mean(&difference).unwrap() * n as f64)?;
+    let final_baseline = r.baseline[n - 1];
+    let lift = if final_baseline == 0.0 {
+        None
+    } else {
+        Some(finite(difference[n - 1] / final_baseline)?)
+    };
+    let mut diagnostics = json!({});
+    if let Some(observed) = &r.observed {
+        for (name, predicted) in [("baseline", &r.baseline), ("intervention", &r.intervention)] {
+            let absolute: Vec<_> = residuals(observed, predicted)?
+                .into_iter()
+                .map(f64::abs)
+                .collect();
+            let scale = absolute.iter().copied().fold(f64::MIN_POSITIVE, f64::max);
+            let rmse = (absolute.iter().map(|v| (v / scale).powi(2)).sum::<f64>() / n as f64)
+                .sqrt()
+                * scale;
+            diagnostics[format!("{name}_mae")] = json!(mean(&absolute).unwrap());
+            diagnostics[format!("{name}_rmse")] = json!(rmse);
+        }
+    }
+    Ok(
+        json!({"workflow":"policy_scenario","backend":"cpu","time":r.time,"mean":r.intervention,
+        "difference":difference,"metadata":{"scenario_name":r.scenario_name,"baseline":r.baseline,
+        "incremental_effect":effect,"relative_lift_final":lift,"assumptions":r.assumptions,
+        "covariates":r.covariates,"scope":"descriptive comparison of supplied paths"},
+        "diagnostics":diagnostics}),
     )
 }
 

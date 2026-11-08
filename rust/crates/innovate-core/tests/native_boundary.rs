@@ -4418,3 +4418,27 @@ fn kernel_operation_discovery_lists_unique_native_routes() {
         assert!(names.contains(name));
     }
 }
+
+#[test]
+fn policy_scenario_compares_supplied_paths_and_keeps_metadata() {
+    let mut payload = json!({"method":"policy_scenario","time":[1,2,3],
+        "baseline":[10,20,30],"intervention":[10,25,45],"observed":[10,25,45],
+        "scenario_name":"test_scenario","assumptions":["a1"],"covariates":{"cov1":[0.1,0.2,0.3]}});
+    let run = |payload: &serde_json::Value| -> serde_json::Value {
+        let request =
+            json!({"schema_version":"2.0","operation":"summarize_causal","payload":payload});
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap()
+    };
+    let result = run(&payload);
+    assert_eq!(result["result"]["metadata"]["incremental_effect"], 20.0);
+    assert_eq!(result["result"]["metadata"]["relative_lift_final"], 0.5);
+    assert_eq!(
+        result["result"]["metadata"]["covariates"],
+        payload["covariates"]
+    );
+    assert_eq!(result["result"]["diagnostics"]["intervention_rmse"], 0.0);
+    payload["baseline"][2] = json!(0);
+    assert!(run(&payload)["result"]["metadata"]["relative_lift_final"].is_null());
+    payload["baseline"] = json!([10, 20]);
+    assert_eq!(run(&payload)["error"]["code"], "invalid_request");
+}
