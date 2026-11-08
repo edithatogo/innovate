@@ -7879,3 +7879,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify the mixture assertion diagnostic change locally at b701302f. All six locked release-mode mixture tests passed on macOS arm64, including Gaussian default initialization and rollback on failed component updates. Windows debug-mode regression details remain pending in hosted CI run 42436861869.
 
 - [x] Run the failing Windows Gaussian recovery fixture in an unoptimized macOS arm64 build with the same locked dependencies. It passed locally, so the failure does not reproduce merely by disabling optimization. The hosted Windows component diagnostics remain the next evidence needed.
+
+- [x] Verify the current PR source against the locked release Kairos, network and scientific-contract suites on macOS arm64. All 61 cases passed, including checkpoint replay, resource accounting, stochastic hazard reference comparisons and covariate/event handling. This covers the pinned Kairos provider and current fixtures. Broader scientific acceptance remains open.
