@@ -7842,7 +7842,7 @@ Hosted release readiness for this worktree revision remains open.
 
 - [x] Verify Python OECD CSV conversion against a fixture with a missing observation. Polars retains period codes as strings and observations as nullable floats. This used a source overlay with mocked transport. The native transport build moved past aws-lc-sys after redirecting TMPDIR, then exhausted workspace space writing rustls metadata. Live Rust fetch and installed bindings remain open.
 
-- [ ] Qualify the native OECD transport and run its opt-in live test. Reclaimed 114 MiB from five disposable wheel installations while retaining the original archives. The locked build compiled TLS and the Rust core, then failed to link the remote worker with ENOSPC. Two subsequent runs produced a truncated, non-executable boundary artifact. The Python CSV fixture result remains valid. Live Rust retrieval and installed binding evidence are pending.
+- [x] Qualify the native OECD transport and run its opt-in live test. The initial build hit ENOSPC. The repaired release cache later passed ordinary Cargo tests, live OECD retrieval and local Python, Julia and R verification, as recorded below.
 
 - [x] Verify native OECD transport against the live public endpoint. The exact Cargo-built locked release core was linked into the optimized boundary test on the system volume with stripping disabled, after rust-objcopy reported ENOSPC during stripping. Both offline OECD cases and the opt-in live CSV case passed. Ordinary Cargo release test linking and installed binding checks remain open.
 
@@ -7859,3 +7859,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Build the macOS arm64 release wheel from the extracted sdist and validate both artifacts with Twine and the wheel contents checker. The first pass compiled but exhausted the system volume while writing the wheel because BSD mktemp selected its default location. The release script now uses the configured TMPDIR explicitly, and the repeat passed with cached build products.
 
 - [x] Fix the first hosted Python quality failure by setting Ruff’s first-party source root and formatting the two files flagged by the formatter. Ruff, formatting, Bandit and BasedPyright passed locally. The clean environment installed the source-built wheel and passed 133 tests with live OECD enabled. These package results predate the formatting-only changes.
+
+- [x] Run the installed Voiage 3.1.0 Arrow consumer against the sdist-built macOS arm64 wheel on CPython 3.15.2. The clean environment passed dependency checks, and ordinary and weighted EVPI matched the independent references. Local receipt SHA-256: `280167245010b34f9ef2ea66d2be257f48497b012a9ab8c3e142042da4dd40ae`. Hosted consumer qualification remains open.
