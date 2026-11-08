@@ -7747,3 +7747,8 @@ Hosted release readiness for this worktree revision remains open.
   intent of PRs #175 and #289. Their branch histories also contain
   separate operation-discovery, causal or legacy engine changes, which
   require their own dispositions before branch reconciliation.
+
+- [x] Restore kernel operation discovery from PR #289 through Rust.
+  Generate JSON operation names from the same routes used for dispatch.
+  All 94 optimized native boundary tests passed. Installed binding
+  verification remains open for the discovery operation.

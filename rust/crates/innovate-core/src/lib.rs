@@ -54,10 +54,27 @@ pub fn execute_json(input: &str) -> String {
     if result.is_err()
         && let Ok(value) = serde_json::from_str::<serde_json::Value>(input)
     {
-        match value["operation"].as_str() {
-            Some("fit_batch" | "predict_batch") => return execute_batch_json(value).to_string(),
-            Some(
-                "preprocess_series"
+        // Keep discovery and dispatch derived from the same JSON routes.
+        macro_rules! dispatch {
+            ($($($operation:literal)|+ => $response:expr),+ $(,)?) => {
+                match value["operation"].as_str() {
+                    $(Some($($operation)|+) => return $response,)+
+                    Some("list_kernel_operations") if value["schema_version"] == KERNEL_SCHEMA_VERSION => {
+                        use KernelOperation::*;
+                        let typed = [DiscoverModels, FitModel, PredictModel, SimulateModel, SummarizeModel, DiagnoseModel];
+                        let operations: Vec<_> = typed.into_iter().map(KernelOperation::as_str)
+                            .chain([$($($operation,)+)+ "list_kernel_operations"]).collect();
+                        return json!({"schema_version":KERNEL_SCHEMA_VERSION,"operation":"list_kernel_operations",
+                            "model_key":null,"result":{"operations":operations},"error":null,
+                            "metadata":{"runtime":"rust_native"}}).to_string();
+                    }
+                    _ => {}
+                }
+            };
+        }
+        dispatch! {
+            "fit_batch" | "predict_batch" => execute_batch_json(value).to_string(),
+            "preprocess_series"
                 | "calibrate_prediction_intervals"
                 | "aggregate_dates"
                 | "summarize_causal"
@@ -90,29 +107,14 @@ pub fn execute_json(input: &str) -> String {
                 | "summarize_extension_diagnostics"
                 | "resolve_extension_model_aliases"
                 | "dataset_checksum"
-                | "validate_dataset",
-            ) => {
-                return execute_preprocessing_json(&value).to_string();
-            }
-            Some("ingest_dataset") => return dataset::ingest_request(&value).to_string(),
-            Some("execute_scenario_grid") => return scenario::execute_grid(&value).to_string(),
-            Some(
-                "discover_benchmark_cases"
-                | "run_benchmark_case"
-                | "run_benchmark_suite"
-                | "validate_benchmark_corpus",
-            ) => {
-                return benchmark::execute(&value).to_string();
-            }
-            Some("discover_scenarios") => return scenario::discover(&value).to_string(),
-            Some("import_extension_artifact") => {
-                return extensions::import_serialized_artifact(&value).to_string();
-            }
-            Some("import_scenario_artifact") => {
-                return scenario::import_artifact(&value).to_string();
-            }
-            Some("categorize_adopters") => return execute_adopters_json(&value).to_string(),
-            _ => {}
+                | "validate_dataset" => execute_preprocessing_json(&value).to_string(),
+            "ingest_dataset" => dataset::ingest_request(&value).to_string(),
+            "execute_scenario_grid" => scenario::execute_grid(&value).to_string(),
+            "discover_benchmark_cases" | "run_benchmark_case" | "run_benchmark_suite" | "validate_benchmark_corpus" => benchmark::execute(&value).to_string(),
+            "discover_scenarios" => scenario::discover(&value).to_string(),
+            "import_extension_artifact" => extensions::import_serialized_artifact(&value).to_string(),
+            "import_scenario_artifact" => scenario::import_artifact(&value).to_string(),
+            "categorize_adopters" => execute_adopters_json(&value).to_string(),
         }
     }
     let response = match result {

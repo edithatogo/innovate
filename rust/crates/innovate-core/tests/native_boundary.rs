@@ -4398,3 +4398,23 @@ fn split_conformal_intervals_exclude_evaluation_residuals() {
         assert_eq!(covered, expected_covered);
     }
 }
+
+#[test]
+fn kernel_operation_discovery_lists_unique_native_routes() {
+    let request = json!({"schema_version":"2.0","operation":"list_kernel_operations"});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert!(response["error"].is_null());
+    let operations = response["result"]["operations"].as_array().unwrap();
+    let names: std::collections::HashSet<_> =
+        operations.iter().map(|v| v.as_str().unwrap()).collect();
+    assert_eq!(names.len(), operations.len());
+    for name in [
+        "fit_model",
+        "list_kernel_operations",
+        "execute_scenario_grid",
+        "calibrate_prediction_intervals",
+    ] {
+        assert!(names.contains(name));
+    }
+}
