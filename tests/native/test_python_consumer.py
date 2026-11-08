@@ -2354,3 +2354,15 @@ def test_norton_historical_transient_crossing():
     assert row["takeoff"] is None
     assert 2.2 < row["refined_crossings"]["takeoff"] < 5
     assert row["refined_crossings"]["median"] is None
+
+
+def test_norton_refined_rate_peak():
+    result = innovate.execute(
+        "summarize_model",
+        "norton_bass",
+        inputs={"time": [0, 20]},
+        parameters={"p1": 0.02, "q1": 0.3, "m1": 100},
+    )["result"]
+    peak = result["threshold_diagnostics"]["refined_rate_peaks"]["generations"][0]
+    assert peak["peak_time"] == pytest.approx(math.log(15) / 0.32, abs=1e-5, rel=0)
+    assert peak["peak_rate"] == pytest.approx(100 * 0.32**2 / 1.2, abs=1e-8, rel=0)

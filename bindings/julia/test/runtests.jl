@@ -1190,3 +1190,13 @@ end
     @test 2.2 < row["refined_crossings"]["takeoff"] < 5
     @test isnothing(row["refined_crossings"]["median"])
 end
+
+@testset "Norton refined rate peak" begin
+    result = kernel_summarize_model("norton_bass", Dict(
+        "inputs" => Dict("time" => [0, 20]),
+        "parameters" => Dict("p1" => 0.02, "q1" => 0.3, "m1" => 100)
+    ))["result"]
+    peak = only(result["threshold_diagnostics"]["refined_rate_peaks"]["generations"])
+    @test isapprox(peak["peak_time"], log(15) / 0.32; atol=1e-5, rtol=0)
+    @test isapprox(peak["peak_rate"], 100 * 0.32^2 / 1.2; atol=1e-8, rtol=0)
+end

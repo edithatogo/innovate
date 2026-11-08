@@ -1587,3 +1587,8 @@ Historical Norton–Bass summaries retain requested-sample milestones and expose
 adds 128 uniform intervals across the requested window, plus event times and
 covariate knots, then bisects the first detected upward bracket. Excursions
 shorter than the probe spacing can still be missed.
+
+`refined_rate_peaks` reports the best signed rate found on the probe grid and
+in the two adjacent intervals. Event and launch boundaries are evaluated from
+both sides where they fall inside the window. The rate excludes instantaneous
+jump effects. The search can miss narrow peaks outside the selected intervals.

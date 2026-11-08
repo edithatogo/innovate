@@ -1119,3 +1119,9 @@ stopifnot(is.null(transient$takeoff),
           transient$refined_crossings$takeoff > 2.2,
           transient$refined_crossings$takeoff < 5,
           is.null(transient$refined_crossings$median))
+
+refined_peak <- kernel_summarize_model("norton_bass", list(
+  inputs=list(time=c(0,20)), parameters=list(p1=0.02,q1=0.3,m1=100)
+))$result$threshold_diagnostics$refined_rate_peaks$generations[[1]]
+stopifnot(abs(refined_peak$peak_time - log(15) / 0.32) < 1e-5,
+          abs(refined_peak$peak_rate - 100 * 0.32^2 / 1.2) < 1e-8)
