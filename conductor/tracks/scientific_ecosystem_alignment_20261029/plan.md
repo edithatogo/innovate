@@ -7630,3 +7630,12 @@ Hosted release readiness for this worktree revision remains open.
   synthetic outlier. The Rust width and bounds matched the independent
   order-statistic calculation. The focused test and Ruff passed.
   This synthetic case does not establish empirical forecast coverage.
+
+- [x] Measure one chronological split on the US decennial population
+  series from R 4.3.0 datasets::uspop (millions). With the installed
+  optimized Python wheel, fit logistic on 1790–1870, calibrate on
+  1880–1920 and evaluate 1930–1970, using decade indices 0–18. At
+  nominal 80% the width was 4.643837 million and only two of five
+  evaluation points were covered. The 1960 and 1970 errors grew as
+  the forecast approached its fitted capacity. This single ordered
+  split does not establish exchangeability or general coverage.
