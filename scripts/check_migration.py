@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import subprocess
 import sys
 import tomllib
 from pathlib import Path
@@ -12,12 +13,46 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
+SOURCE_PATHS = (
+    ".github/workflows",
+    ".python-version",
+    "bindings",
+    "rust",
+    "scripts",
+    "specs",
+    "tests",
+    "Cargo.toml",
+    "Cargo.lock",
+    "Dockerfile",
+    "LICENSE",
+    "README.md",
+    "pyproject.toml",
+    "uv.lock",
+)
+
+
+def release_source_digest() -> str:
+    def git(*args: str) -> bytes:
+        return subprocess.check_output(["git", *args], cwd=ROOT)
+
+    if git("status", "--porcelain", "--untracked-files=normal", "--", *SOURCE_PATHS):
+        raise ValueError("Release evidence requires clean source inputs")
+    entries = git("ls-tree", "-r", "-z", "HEAD", "--", *SOURCE_PATHS)
+    if not entries:
+        raise ValueError("Release source inventory is empty")
+    return hashlib.sha256(entries).hexdigest()
+
+
 def main() -> int:
     if sys.version_info[:3] != (3, 15, 2):
         raise ValueError("Use the selected repo-local Python 3.15.2 interpreter")
     parser = argparse.ArgumentParser()
     parser.add_argument("--release", action="store_true")
+    parser.add_argument("--source-digest", action="store_true")
     args = parser.parse_args()
+    if args.source_digest:
+        print(release_source_digest())
+        return 0
     ledger = json.loads((ROOT / "migration-ledger.json").read_text())
     project = tomllib.loads((ROOT / "pyproject.toml").read_text())
     if project["build-system"]["build-backend"] != "maturin":
@@ -34,8 +69,10 @@ def main() -> int:
         if not (bindings / language / entry).is_file():
             raise ValueError(f"Missing required binding: {language}")
     for directory in bindings.iterdir():
-        if directory.is_dir() and directory.name not in binding_entries and any(
-            path.is_file() for path in directory.rglob("*")
+        if (
+            directory.is_dir()
+            and directory.name not in binding_entries
+            and any(path.is_file() for path in directory.rglob("*"))
         ):
             raise ValueError(f"Unsupported language binding: {directory.name}")
     expected_models = {
@@ -121,6 +158,9 @@ def main() -> int:
         raise ValueError("release_ready must be a JSON boolean")
     if release_ready and pending:
         raise ValueError("release_ready requires all migration obligations to be qualified")
+    if args.release and release_ready:
+        if ledger.get("qualified_source_sha256") != release_source_digest():
+            raise ValueError("Qualified evidence does not match the release source digest")
     if args.release and not release_ready:
         print("Release blocked: scientific migration and acceptance remain incomplete:", ", ".join(pending))
         return 1

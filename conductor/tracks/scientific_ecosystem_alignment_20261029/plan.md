@@ -7719,3 +7719,8 @@ Hosted release readiness for this worktree revision remains open.
   This detects missing or changed evidence digests. All 15 policy tests
   passed. The digest establishes receipt integrity. It does not establish
   that a receipt covers the release source or passes a scientific gate.
+
+- [x] Require release-ready evidence to match a digest of committed
+  runtime, packaging, workflow and test inputs. The digest excludes
+  ledger and Conductor receipts to avoid self-reference. The checker
+  rejects dirty scoped inputs. All 16 policy tests and Ruff passed.

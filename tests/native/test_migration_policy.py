@@ -2,6 +2,7 @@
 
 import importlib.util
 import json
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -93,3 +94,46 @@ def test_migration_policy_rejects_feature_loss(tmp_path, monkeypatch, mutation):
         expected = "Qualified migration evidence digest is missing or mismatched"
     with pytest.raises(ValueError, match=expected):
         module.main()
+
+
+def test_release_source_digest_tracks_source_and_excludes_receipts(tmp_path, monkeypatch):
+    spec = importlib.util.spec_from_file_location("migration_policy", ROOT / "scripts/check_migration.py")
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    monkeypatch.setattr(module, "ROOT", tmp_path)
+
+    def git(*args):
+        subprocess.run(
+            [
+                "git",
+                "-c",
+                "user.name=Test",
+                "-c",
+                "user.email=test@example.invalid",
+                "-c",
+                "commit.gpgsign=false",
+                "-c",
+                "core.hooksPath=/dev/null",
+                *args,
+            ],
+            cwd=tmp_path,
+            check=True,
+            capture_output=True,
+        )
+
+    git("init")
+    source = tmp_path / "Cargo.toml"
+    source.write_text("first")
+    git("add", "Cargo.toml")
+    git("commit", "-m", "First source")
+    first = module.release_source_digest()
+    (tmp_path / "migration-ledger.json").write_text("{}")
+    assert module.release_source_digest() == first
+
+    source.write_text("second")
+    with pytest.raises(ValueError, match="clean source inputs"):
+        module.release_source_digest()
+    git("add", "Cargo.toml")
+    git("commit", "-m", "Second source")
+    assert module.release_source_digest() != first
