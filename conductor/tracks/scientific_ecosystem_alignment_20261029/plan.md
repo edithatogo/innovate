@@ -7857,3 +7857,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Run the full locked Rust release workspace at 5b2b6dc4 with the repaired release cache. The offline run completed with 358 passed, 0 failed, 1 ignored. The live OECD case was verified separately on the same source. The development migration checker passed, and 38 release obligations remain open.
 
 - [x] Build the macOS arm64 release wheel from the extracted sdist and validate both artifacts with Twine and the wheel contents checker. The first pass compiled but exhausted the system volume while writing the wheel because BSD mktemp selected its default location. The release script now uses the configured TMPDIR explicitly, and the repeat passed with cached build products.
+
+- [x] Fix the first hosted Python quality failure by setting Ruff’s first-party source root and formatting the two files flagged by the formatter. Ruff, formatting, Bandit and BasedPyright passed locally. The clean environment installed the source-built wheel and passed 133 tests with live OECD enabled. These package results predate the formatting-only changes.

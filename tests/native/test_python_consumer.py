@@ -1238,9 +1238,12 @@ def test_legacy_dataset_artifact_reingestion_uses_recorded_encoding():
     }
     artifact = innovate.execute("ingest_dataset", dataset=dataset, encoding="python_sorted_json_v1")["result"]
     assert artifact["checksum_encoding"] == "python_sorted_json_v1"
-    assert innovate.execute(
-        "ingest_dataset", dataset=artifact["dataset"], encoding=artifact["checksum_encoding"]
-    )["result"] == artifact
+    assert (
+        innovate.execute("ingest_dataset", dataset=artifact["dataset"], encoding=artifact["checksum_encoding"])[
+            "result"
+        ]
+        == artifact
+    )
     with pytest.raises(innovate.NativeError, match="checksum does not match"):
         innovate.execute("ingest_dataset", dataset=artifact["dataset"])
     assert innovate.execute("ingest_dataset", artifact=artifact)["result"] == artifact
@@ -1293,6 +1296,7 @@ def test_edgeless_network_dataset_round_trips(tmp_path, local_csv):
     assert artifact["dataset"]["source"] == artifact["dataset"]["target"] == artifact["dataset"]["weight"] == []
     assert innovate.execute("ingest_dataset", artifact=artifact)["result"] == artifact
 
+
 @pytest.mark.parametrize("local_csv", [False, True])
 def test_network_ingestion_retains_kairos_incompatible_edges(tmp_path, local_csv):
     provenance = {
@@ -1312,9 +1316,7 @@ def test_network_ingestion_retains_kairos_incompatible_edges(tmp_path, local_csv
     assert innovate.execute("ingest_dataset", artifact=artifact)["result"] == artifact
 
 
-@pytest.mark.parametrize(
-    ("estimand", "estimate", "weight"), [("ate", 6, 3 / 7), ("att", 7.25, 1 / 4)]
-)
+@pytest.mark.parametrize(("estimand", "estimate", "weight"), [("ate", 6, 3 / 7), ("att", 7.25, 1 / 4)])
 def test_native_stratified_treatment_contrast(estimand, estimate, weight):
     payload = {
         "method": "stratified_treatment_contrast",
@@ -1334,8 +1336,11 @@ def test_native_stratified_treatment_contrast(estimand, estimate, weight):
         assert overlap["excluded_control_observations"] == 1
         assert overlap["estimate"] == pytest.approx(estimate)
     replicated = innovate.execute(
-        "summarize_causal", method="stratified_treatment_contrast", estimand=estimand,
-        outcomes=[0, 2, 4, 6, 10, 10, 12, 12], treatment=[0, 0, 1, 1] * 2,
+        "summarize_causal",
+        method="stratified_treatment_contrast",
+        estimand=estimand,
+        outcomes=[0, 2, 4, 6, 10, 10, 12, 12],
+        treatment=[0, 0, 1, 1] * 2,
         strata=["low"] * 4 + ["high"] * 4,
     )["result"]
     assert replicated["conditional_standard_error"] == pytest.approx(2**-0.5)
@@ -1353,14 +1358,18 @@ def test_discover_treatment_contrasts():
     assert matching["estimands"] == ["att"]
     assert matching["required_fields"] == ["outcomes", "treatment", "scores", "caliper"]
     assert weighted["required_fields"] == ["outcomes", "treatment", "propensities"]
-    payload = dict(method=weighted["method"], outcomes=[0, 10, 2, 12],
-                   treatment=[0, 0, 1, 1], propensities=[0.2, 0.8, 0.2, 0.8])
+    payload = dict(
+        method=weighted["method"], outcomes=[0, 10, 2, 12], treatment=[0, 0, 1, 1], propensities=[0.2, 0.8, 0.2, 0.8]
+    )
     result = innovate.execute("summarize_causal", **payload)["result"]
     assert result["estimate"] == pytest.approx(-4)
     assert result["fixed_propensity_standard_error"] == pytest.approx(20.48**0.5)
     singleton = innovate.execute(
-        "summarize_causal", method=weighted["method"],
-        outcomes=[0, 2], treatment=[0, 1], propensities=[0.5, 0.5],
+        "summarize_causal",
+        method=weighted["method"],
+        outcomes=[0, 2],
+        treatment=[0, 1],
+        propensities=[0.5, 0.5],
     )["result"]
     assert singleton["fixed_propensity_standard_error"] is None
     for arm in ("treated", "control"):
@@ -1379,31 +1388,46 @@ def test_discover_treatment_contrasts():
 
 def test_fitted_stratum_propensity_workflow():
     treatment = [0, 1, 0, 1, 0, 1, 1]
-    fit = innovate.execute("summarize_causal", method="estimate_stratum_propensities",
-                           treatment=treatment, strata=["low", "high", "low", "low", "high", "high", "high"])["result"]
-    assert fit["propensities"] == pytest.approx([1/3, 0.75, 1/3, 1/3, 0.75, 0.75, 0.75])
-    weighted = innovate.execute("summarize_causal", method="propensity_weighted_contrast",
-                                outcomes=[0, 19, 0, 2, 10, 19, 19], treatment=treatment,
-                                propensities=fit["propensities"])["result"]
+    fit = innovate.execute(
+        "summarize_causal",
+        method="estimate_stratum_propensities",
+        treatment=treatment,
+        strata=["low", "high", "low", "low", "high", "high", "high"],
+    )["result"]
+    assert fit["propensities"] == pytest.approx([1 / 3, 0.75, 1 / 3, 1 / 3, 0.75, 0.75, 0.75])
+    weighted = innovate.execute(
+        "summarize_causal",
+        method="propensity_weighted_contrast",
+        outcomes=[0, 19, 0, 2, 10, 19, 19],
+        treatment=treatment,
+        propensities=fit["propensities"],
+    )["result"]
     assert weighted["estimate"] == pytest.approx(6)
 
 
 def test_nearest_score_matching():
     methods = innovate.execute("summarize_causal", method="describe_treatment_contrasts")["result"]["contrasts"]
     matching = next(method for method in methods if method["adjustment"] == "nearest_score_with_replacement")
-    payload = dict(method=matching["method"], outcomes=[0, 10, 12, 3, 99],
-                   treatment=[0, 0, 1, 1, 0], scores=[0, 2, 2, 1, 0], caliper=1)
+    payload = dict(
+        method=matching["method"],
+        outcomes=[0, 10, 12, 3, 99],
+        treatment=[0, 0, 1, 1, 0],
+        scores=[0, 2, 2, 1, 0],
+        caliper=1,
+    )
     result = innovate.execute("summarize_causal", **payload)["result"]
     assert result["estimate"] == pytest.approx(2.5)
     assert [pair["control_index"] for pair in result["pairs"]] == [1, 0]
     assert result["control_diagnostics"] == {"unique_controls": 2, "effective_sample_size": 2}
     assert result["conditional_standard_error"] is None
-    reused = innovate.execute("summarize_causal", **{**payload, "scores": [0, 2, 2, 2, 0]},
-                              outcome_variances=[1, 4, 1, 1, 1])["result"]
+    reused = innovate.execute(
+        "summarize_causal", **{**payload, "scores": [0, 2, 2, 2, 0]}, outcome_variances=[1, 4, 1, 1, 1]
+    )["result"]
     assert reused["conditional_standard_error"] == pytest.approx(4.5**0.5)
     assert reused["control_diagnostics"] == {"unique_controls": 1, "effective_sample_size": 1}
     correlated = innovate.execute(
-        "summarize_causal", **{**payload, "scores": [0, 2, 2, 2, 0]},
+        "summarize_causal",
+        **{**payload, "scores": [0, 2, 2, 2, 0]},
         outcome_variances=[1, 4, 1, 1, 1],
         outcome_covariance_factors=[[7] * 5, [0, 0, 2, 2, 0]],
     )["result"]
@@ -1421,13 +1445,19 @@ def test_nearest_score_matching():
 def test_matching_with_cross_fitted_control_predictions():
     observations = {"outcomes": [0, 4, 2, 6], "treatment": [0, 1, 0, 1]}
     fitted = innovate.execute(
-        "summarize_causal", method="cross_fitted_stratum_ate",
-        strata=["a"] * 4, folds=[1, 2, 2, 1], **observations,
+        "summarize_causal",
+        method="cross_fitted_stratum_ate",
+        strata=["a"] * 4,
+        folds=[1, 2, 2, 1],
+        **observations,
     )["result"]
     matched = innovate.execute(
-        "summarize_causal", method="matched_treatment_contrast",
-        scores=[0, 0, 1, 0], caliper=0,
-        control_predictions=fitted["control_predictions"], **observations,
+        "summarize_causal",
+        method="matched_treatment_contrast",
+        scores=[0, 0, 1, 0],
+        caliper=0,
+        control_predictions=fitted["control_predictions"],
+        **observations,
     )["result"]
     assert matched["estimate"] == 5
     assert matched["adjusted_estimate"] == 6
@@ -1436,9 +1466,13 @@ def test_matching_with_cross_fitted_control_predictions():
 
 def test_matching_propagates_fitted_control_uncertainty():
     result = innovate.execute(
-        "summarize_causal", method="matched_treatment_contrast",
-        outcomes=[0, 4, 2, 6], treatment=[0, 1, 0, 1],
-        scores=[0, 0, 1, 0], caliper=0, outcome_variances=[1] * 4,
+        "summarize_causal",
+        method="matched_treatment_contrast",
+        outcomes=[0, 4, 2, 6],
+        treatment=[0, 1, 0, 1],
+        scores=[0, 0, 1, 0],
+        caliper=0,
+        outcome_variances=[1] * 4,
         outcome_covariance_factors=[[7] * 4, [0, 2, 0, 2]],
         fit_controls={"strata": ["a"] * 4, "folds": [1, 2, 2, 1]},
     )["result"]
@@ -1476,41 +1510,70 @@ def test_matching_standardized_balance():
 
 
 def test_ridge_logistic_propensity_fit():
-    fit = innovate.execute("summarize_causal", method="fit_logistic_propensities",
-                           treatment=[0, 1], covariates=[[-2], [2]], ridge=0.25 / math.log(3))["result"]
+    fit = innovate.execute(
+        "summarize_causal",
+        method="fit_logistic_propensities",
+        treatment=[0, 1],
+        covariates=[[-2], [2]],
+        ridge=0.25 / math.log(3),
+    )["result"]
     assert fit["propensities"] == pytest.approx([0.25, 0.75], abs=1e-7)
     assert fit["covariate_scales"] == [2]
-    prediction = innovate.execute("summarize_causal", method="predict_logistic_propensities",
-                                  fit=fit, covariates=[[0], [2], [-2]])["result"]
+    prediction = innovate.execute(
+        "summarize_causal", method="predict_logistic_propensities", fit=fit, covariates=[[0], [2], [-2]]
+    )["result"]
     assert prediction["propensities"] == pytest.approx([0.5, 0.75, 0.25], abs=1e-7)
-    score = innovate.execute("summarize_causal", method="score_propensities",
-                             treatment=[0, 1, 0], propensities=prediction["propensities"])["result"]
+    score = innovate.execute(
+        "summarize_causal", method="score_propensities", treatment=[0, 1, 0], propensities=prediction["propensities"]
+    )["result"]
     assert score["brier_score"] == pytest.approx(0.125)
     assert score["log_loss"] == pytest.approx(-(math.log(0.5) + 2 * math.log(0.75)) / 3)
-    cross_fit = innovate.execute("summarize_causal", method="cross_fit_logistic_propensities",
-                                 treatment=[0, 1, 1, 0], covariates=[[-2], [1], [2], [-1]],
-                                 folds=[9, 4, 9, 4], ridge=0.25 / math.log(3))["result"]
+    cross_fit = innovate.execute(
+        "summarize_causal",
+        method="cross_fit_logistic_propensities",
+        treatment=[0, 1, 1, 0],
+        covariates=[[-2], [1], [2], [-1]],
+        folds=[9, 4, 9, 4],
+        ridge=0.25 / math.log(3),
+    )["result"]
     low = 1 / (1 + math.sqrt(3))
     assert cross_fit["propensities"] == pytest.approx([0.1, 1 - low, 0.9, low], abs=1e-7)
 
 
 def test_augmented_treatment_contrast():
-    result = innovate.execute("summarize_causal", method="augmented_treatment_contrast",
-                              outcomes=[0, 4], treatment=[0, 1], propensities=[0.5, 0.5],
-                              treated_predictions=[2, 2], control_predictions=[0, 0])["result"]
+    result = innovate.execute(
+        "summarize_causal",
+        method="augmented_treatment_contrast",
+        outcomes=[0, 4],
+        treatment=[0, 1],
+        propensities=[0.5, 0.5],
+        treated_predictions=[2, 2],
+        control_predictions=[0, 0],
+    )["result"]
     assert result["estimate"] == pytest.approx(4)
     assert result["influence_standard_error"] == pytest.approx(2)
-    att = innovate.execute("summarize_causal", method="augmented_treatment_contrast", estimand="att",
-                           outcomes=[1, 4], treatment=[0, 1], propensities=[0.5, 0.5],
-                           control_predictions=[0, 1])["result"]
+    att = innovate.execute(
+        "summarize_causal",
+        method="augmented_treatment_contrast",
+        estimand="att",
+        outcomes=[1, 4],
+        treatment=[0, 1],
+        propensities=[0.5, 0.5],
+        control_predictions=[0, 1],
+    )["result"]
     assert att["estimand"] == "att"
     assert att["estimate"] == pytest.approx(2)
     assert att["influence_standard_error"] == pytest.approx(2)
 
 
 def test_cross_fitted_stratum_ate():
-    payload = dict(method="cross_fitted_stratum_ate", outcomes=[0, 4, 2, 6],
-                   treatment=[0, 1, 0, 1], strata=["a"] * 4, folds=[1, 2, 2, 1])
+    payload = dict(
+        method="cross_fitted_stratum_ate",
+        outcomes=[0, 4, 2, 6],
+        treatment=[0, 1, 0, 1],
+        strata=["a"] * 4,
+        folds=[1, 2, 2, 1],
+    )
     result = innovate.execute("summarize_causal", **payload)["result"]
     assert result["control_predictions"] == [2, 0, 0, 2]
     assert result["treated_predictions"] == [4, 6, 6, 4]
@@ -1525,14 +1588,19 @@ def test_cross_fitted_stratum_ate():
     assert att["influence_standard_error"] == pytest.approx(2)
     for options in (payload, att_payload):
         result_with_guard = innovate.execute(
-            "summarize_causal", **options, clusters=["a", "b", "b", "a"],
-            minimum_training_arm_count=1, minimum_training_arm_clusters=1,
+            "summarize_causal",
+            **options,
+            clusters=["a", "b", "b", "a"],
+            minimum_training_arm_count=1,
+            minimum_training_arm_clusters=1,
         )["result"]
         assert result_with_guard["overlap"]["min_training_arm_clusters"] == 1
         assert result_with_guard["contrast"]["cluster_degrees_of_freedom"] == 1
         with pytest.raises(innovate.NativeError, match="falls below minimum_training_arm_clusters"):
             innovate.execute(
-                "summarize_causal", **options, clusters=["a", "b", "b", "a"],
+                "summarize_causal",
+                **options,
+                clusters=["a", "b", "b", "a"],
                 minimum_training_arm_clusters=2,
             )
     with pytest.raises(innovate.NativeError, match="single cross-fitting fold"):
@@ -1545,27 +1613,43 @@ def test_cross_fitted_stratum_ate_adjusts_for_unequal_treatment_prevalence():
     treatment = [0, 0, 1, 0, 1, 1, 1] * 2
     strata = (["low"] * 3 + ["high"] * 4) * 2
     result = innovate.execute(
-        "summarize_causal", method="cross_fitted_stratum_ate", outcomes=outcomes,
-        treatment=treatment, strata=strata, folds=[1] * 7 + [2] * 7,
+        "summarize_causal",
+        method="cross_fitted_stratum_ate",
+        outcomes=outcomes,
+        treatment=treatment,
+        strata=strata,
+        folds=[1] * 7 + [2] * 7,
     )["result"]
     assert result["propensities"] == pytest.approx(([1 / 3] * 3 + [3 / 4] * 4) * 2)
     assert result["contrast"]["estimate"] == pytest.approx(6)
     unadjusted = innovate.execute(
-        "summarize_causal", method="treatment_contrast", outcomes=outcomes, treatment=treatment,
+        "summarize_causal",
+        method="treatment_contrast",
+        outcomes=outcomes,
+        treatment=treatment,
     )["result"]
     assert unadjusted["overall"]["estimate"] == pytest.approx(137 / 12)
     att = innovate.execute(
-        "summarize_causal", method="cross_fitted_stratum_att", outcomes=outcomes,
-        treatment=treatment, strata=strata, folds=[1] * 7 + [2] * 7,
+        "summarize_causal",
+        method="cross_fitted_stratum_att",
+        outcomes=outcomes,
+        treatment=treatment,
+        strata=strata,
+        folds=[1] * 7 + [2] * 7,
     )["result"]
     assert att["contrast"]["estimand"] == "att"
     assert att["contrast"]["estimate"] == pytest.approx(7.25)
 
 
 def test_clustered_augmented_treatment_contrast():
-    payload = dict(method="augmented_treatment_contrast", outcomes=[0, 4] * 2,
-                   treatment=[0, 1] * 2, propensities=[0.5] * 4,
-                   treated_predictions=[2] * 4, control_predictions=[0] * 4)
+    payload = dict(
+        method="augmented_treatment_contrast",
+        outcomes=[0, 4] * 2,
+        treatment=[0, 1] * 2,
+        propensities=[0.5] * 4,
+        treated_predictions=[2] * 4,
+        control_predictions=[0] * 4,
+    )
     independent = innovate.execute("summarize_causal", **payload)["result"]
     clustered = innovate.execute("summarize_causal", **payload, clusters=["a", "b"] * 2)["result"]
     assert clustered["estimate"] == independent["estimate"] == pytest.approx(4)
@@ -1576,8 +1660,13 @@ def test_clustered_augmented_treatment_contrast():
 
 
 def test_balanced_panel_event_study():
-    payload = dict(method="panel_event_study", periods=[-2, -1, 0], baseline_index=1,
-                   treated=[[1, 2, 7], [3, 4, 11]], control=[[0, 1, 3], [4, 5, 7]])
+    payload = dict(
+        method="panel_event_study",
+        periods=[-2, -1, 0],
+        baseline_index=1,
+        treated=[[1, 2, 7], [3, 4, 11]],
+        control=[[0, 1, 3], [4, 5, 7]],
+    )
     pre, reference, post = innovate.execute("summarize_causal", **payload)["result"]["contrasts"]
     assert pre["estimate"] == pytest.approx(0)
     assert reference["reference"] is True
@@ -1586,8 +1675,9 @@ def test_balanced_panel_event_study():
 
 
 def test_staggered_panel_att():
-    payload = dict(method="staggered_panel_att", periods=[0, 1, 2],
-                   outcomes=[[0, 5, 7], [10, 11, 16]], adoption_indices=[1, 2])
+    payload = dict(
+        method="staggered_panel_att", periods=[0, 1, 2], outcomes=[[0, 5, 7], [10, 11, 16]], adoption_indices=[1, 2]
+    )
     result = innovate.execute("summarize_causal", **payload)["result"]
     first, second, third = result["contrasts"]
     onset, later = result["event_time"]
@@ -1598,8 +1688,12 @@ def test_staggered_panel_att():
     assert all(row["estimate"] is None and row["n_control"] == 0 for row in (second, third))
     assert first["standard_error"] is None
     replicated = innovate.execute(
-        "summarize_causal", **{**payload, "outcomes": [[0, 5, 7], [0, 7, 9], [10, 12, 16], [10, 12, 16]],
-                               "adoption_indices": [1, 1, 2, None]},
+        "summarize_causal",
+        **{
+            **payload,
+            "outcomes": [[0, 5, 7], [0, 7, 9], [10, 12, 16], [10, 12, 16]],
+            "adoption_indices": [1, 1, 2, None],
+        },
     )["result"]
     assert replicated["contrasts"][0]["estimate"] == pytest.approx(4)
     assert replicated["contrasts"][0]["standard_error"] == pytest.approx(1)
@@ -1607,8 +1701,12 @@ def test_staggered_panel_att():
     assert replicated["event_time"][0]["supported_cohort_att"] == pytest.approx(8 / 3)
     assert replicated["event_time"][0]["standard_error"] is None
     shared = innovate.execute(
-        "summarize_causal", **{**payload, "outcomes": [[0, 5, 5]] * 2 + [[0, 1, 6]] * 2 + [[0, 0, 0], [0, 2, 4]],
-                               "adoption_indices": [1, 1, 2, 2, None, None]},
+        "summarize_causal",
+        **{
+            **payload,
+            "outcomes": [[0, 5, 5]] * 2 + [[0, 1, 6]] * 2 + [[0, 0, 0], [0, 2, 4]],
+            "adoption_indices": [1, 1, 2, 2, None, None],
+        },
         include_event_time_covariance=True,
         simultaneous_bands={"draws": 100, "seed": 7},
     )["result"]
@@ -1625,22 +1723,27 @@ def test_staggered_panel_att():
     sparse = innovate.execute("summarize_causal", **payload, include_event_time_covariance=True)["result"]
     assert sparse["event_time_covariance"] == [[None, None], [None, None]]
     balanced = innovate.execute(
-        "summarize_causal", **{**payload, "outcomes": [[0, 5, 7], [0, 7, 9], [10, 12, 16], [10, 12, 16]],
-                               "adoption_indices": [1, 1, 2, None]}, balanced_horizon=1,
+        "summarize_causal",
+        **{
+            **payload,
+            "outcomes": [[0, 5, 7], [0, 7, 9], [10, 12, 16], [10, 12, 16]],
+            "adoption_indices": [1, 1, 2, None],
+        },
+        balanced_horizon=1,
     )["result"]
     assert balanced["balanced_event_time"] == {"horizon": 1, "included_cohorts": 1, "excluded_cohorts": 1}
     assert [row["supported_cohort_att"] for row in balanced["event_time"]] == pytest.approx([4, 2])
     assert balanced["contrasts"] == replicated["contrasts"]
     placebo = innovate.execute(
-        "summarize_causal", **{**payload, "outcomes": [[0, 5, 7], [10, 11, 16], [0, 2, 4]],
-                               "adoption_indices": [1, 2, None]}, include_pre_trends=True,
+        "summarize_causal",
+        **{**payload, "outcomes": [[0, 5, 7], [10, 11, 16], [0, 2, 4]], "adoption_indices": [1, 2, None]},
+        include_pre_trends=True,
     )["result"]["pre_trends"]
     assert len(placebo) == 1
     assert placebo[0]["estimate"] == pytest.approx(1)
     assert placebo[0]["n_control"] == 1
     assert placebo[0]["baseline_period"] == 1
-    comparator = {**payload, "outcomes": [[0, 5, 7], [10, 11, 16], [0, 2, 4]],
-                  "adoption_indices": [1, 2, None]}
+    comparator = {**payload, "outcomes": [[0, 5, 7], [10, 11, 16], [0, 2, 4]], "adoption_indices": [1, 2, None]}
     for group, count, estimate in [("not_yet_treated", 2, 3.5), ("never_treated", 1, 3)]:
         onset = innovate.execute("summarize_causal", **comparator, control_group=group)["result"]["contrasts"][0]
         assert onset["n_control"] == count
@@ -1648,59 +1751,83 @@ def test_staggered_panel_att():
 
 
 def test_staggered_long_panel_att():
-    frame = pl.DataFrame({"unit_ids": ["z", "a", "z", "a", "a", "z"],
-                          "time": [20, 10, 10, 30, 20, 30], "outcomes": [11, 0, 10, 7, 5, 16]})
+    frame = pl.DataFrame(
+        {
+            "unit_ids": ["z", "a", "z", "a", "a", "z"],
+            "time": [20, 10, 10, 30, 20, 30],
+            "outcomes": [11, 0, 10, 7, 5, 16],
+        }
+    )
     payload = frame.to_dict(as_series=False)
-    result = innovate.execute("summarize_causal", method="staggered_long_panel_att",
-                              **payload, adoption_times={"a": 20, "z": 30})["result"]
+    result = innovate.execute(
+        "summarize_causal", method="staggered_long_panel_att", **payload, adoption_times={"a": 20, "z": 30}
+    )["result"]
     assert result["unit_order"] == ["a", "z"]
     assert result["contrasts"][0]["estimate"] == pytest.approx(4)
     assert innovate.staggered_att_polars(frame, {"a": 20, "z": 30}) == result
     assert innovate.staggered_att_polars(frame.lazy(), {"a": 20, "z": 30}) == result
     payload["time"][0] = 10
     with pytest.raises(innovate.NativeError, match="duplicate unit and period"):
-        innovate.execute("summarize_causal", method="staggered_long_panel_att",
-                         **payload, adoption_times={"a": 20, "z": 30})
+        innovate.execute(
+            "summarize_causal", method="staggered_long_panel_att", **payload, adoption_times={"a": 20, "z": 30}
+        )
 
 
 def test_scenario_grid_ranking():
     scenarios = [
-        {"id": key, "model_key": "logistic", "simulation": {
-            "inputs": {"time": [1, 2, 4]}, "parameters": {"L": capacity, "k": 1, "x0": 1},
-        }}
+        {
+            "id": key,
+            "model_key": "logistic",
+            "simulation": {
+                "inputs": {"time": [1, 2, 4]},
+                "parameters": {"L": capacity, "k": 1, "x0": 1},
+            },
+        }
         for key, capacity in [("base", 100), ("alt", 200), ("tie", 200)]
     ]
-    result = innovate.execute("execute_scenario_grid", scenarios=scenarios,
-                              rank_scenarios=["tie", "base", "alt"])["result"]
-    assert [(row["id"], row["place"]) for row in result["ranking"]["rows"]] == [(
-        "tie", 1), ("alt", 1), ("base", 3),
+    result = innovate.execute("execute_scenario_grid", scenarios=scenarios, rank_scenarios=["tie", "base", "alt"])[
+        "result"
     ]
-    area = innovate.execute("execute_scenario_grid", scenarios=scenarios,
-                            rank_scenarios=["tie", "base", "alt"], rank_metric="adoption_area")["result"]
+    assert [(row["id"], row["place"]) for row in result["ranking"]["rows"]] == [
+        ("tie", 1),
+        ("alt", 1),
+        ("base", 3),
+    ]
+    area = innovate.execute(
+        "execute_scenario_grid", scenarios=scenarios, rank_scenarios=["tie", "base", "alt"], rank_metric="adoption_area"
+    )["result"]
     first, second, third = area["executions"][1]["result"]["values"]
     assert area["ranking"]["metric"] == "adoption_area"
     assert area["ranking"]["rows"][0]["adoption_area"] == pytest.approx((first + second) / 2 + second + third)
-    threshold = innovate.execute("execute_scenario_grid", scenarios=scenarios,
-                                 rank_scenarios=["tie", "base", "alt"], rank_metric="time_to_threshold",
-                                 rank_threshold=150)["result"]["ranking"]["rows"]
+    threshold = innovate.execute(
+        "execute_scenario_grid",
+        scenarios=scenarios,
+        rank_scenarios=["tie", "base", "alt"],
+        rank_metric="time_to_threshold",
+        rank_threshold=150,
+    )["result"]["ranking"]["rows"]
     expected_crossing = 2 + 2 * (150 - second) / (third - second)
     assert [(row["id"], row["place"]) for row in threshold] == [("tie", 1), ("alt", 1), ("base", None)]
     assert threshold[0]["time_to_threshold"] == pytest.approx(expected_crossing)
     assert threshold[2]["time_to_threshold"] is None
     scenarios.append({**scenarios[0], "id": "base2"})
-    comparison = {"pairs": [{"baseline": "base", "alternative": "alt"},
-                            {"baseline": "tie", "alternative": "base2"}],
-                  "interval_mass": 0.5, "evaluation_metric": "adoption_area"}
-    paired = innovate.execute("execute_scenario_grid", scenarios=scenarios,
-                              comparisons=[comparison])["result"]["comparisons"][0]["result"]
+    comparison = {
+        "pairs": [{"baseline": "base", "alternative": "alt"}, {"baseline": "tie", "alternative": "base2"}],
+        "interval_mass": 0.5,
+        "evaluation_metric": "adoption_area",
+    }
+    paired = innovate.execute("execute_scenario_grid", scenarios=scenarios, comparisons=[comparison])["result"][
+        "comparisons"
+    ][0]["result"]
     assert paired["evaluation_horizon"] == [1, 4]
     expected = area["ranking"]["rows"][0]["adoption_area"] / 2
     assert paired["differences"] == pytest.approx([expected, -expected])
     assert paired["mean_difference"] == pytest.approx(0)
     comparison.pop("evaluation_metric")
     comparison["include_path_covariance"] = True
-    endpoint = innovate.execute("execute_scenario_grid", scenarios=scenarios,
-                                 comparisons=[comparison])["result"]["comparisons"][0]["result"]
+    endpoint = innovate.execute("execute_scenario_grid", scenarios=scenarios, comparisons=[comparison])["result"][
+        "comparisons"
+    ][0]["result"]
     rows = endpoint["path_summary"]["rows"]
     assert [row["time"] for row in rows] == [1, 2, 4]
     for field in ("mean_difference", "mean_standard_error", "empirical_interval"):
@@ -1711,15 +1838,17 @@ def test_scenario_grid_ranking():
 
     for scenario in scenarios:
         scenario["simulation"]["inputs"]["time"] = list(range(128))
-    boundary = innovate.execute("execute_scenario_grid", scenarios=scenarios,
-                                  comparisons=[comparison])["result"]["comparisons"][0]["result"]
+    boundary = innovate.execute("execute_scenario_grid", scenarios=scenarios, comparisons=[comparison])["result"][
+        "comparisons"
+    ][0]["result"]
     assert len(boundary["path_covariance"]) == 128
     assert all(len(row) == 128 for row in boundary["path_covariance"])
 
     for scenario in scenarios:
         scenario["simulation"]["inputs"]["time"] = list(range(129))
-    rejected = innovate.execute("execute_scenario_grid", scenarios=scenarios,
-                                 comparisons=[comparison])["result"]["comparisons"][0]
+    rejected = innovate.execute("execute_scenario_grid", scenarios=scenarios, comparisons=[comparison])["result"][
+        "comparisons"
+    ][0]
     assert rejected["result"] is None
     assert rejected["error"] == {
         "code": "invalid_comparison",
@@ -1728,16 +1857,17 @@ def test_scenario_grid_ranking():
 
     comparison.pop("include_path_covariance")
     comparison["include_path_summary"] = True
-    summary = innovate.execute("execute_scenario_grid", scenarios=scenarios,
-                                 comparisons=[comparison])["result"]["comparisons"][0]["result"]
+    summary = innovate.execute("execute_scenario_grid", scenarios=scenarios, comparisons=[comparison])["result"][
+        "comparisons"
+    ][0]["result"]
     assert len(summary["path_summary"]["rows"]) == 129
     assert "path_covariance" not in summary
 
     comparison.pop("include_path_summary")
-    comparison.update(interval_mass=0.9, exact_sign_flip=True,
-                      bootstrap={"draws": 1000, "seed": 42})
-    inference = innovate.execute("execute_scenario_grid", scenarios=scenarios,
-                                   comparisons=[comparison])["result"]["comparisons"][0]["result"]
+    comparison.update(interval_mass=0.9, exact_sign_flip=True, bootstrap={"draws": 1000, "seed": 42})
+    inference = innovate.execute("execute_scenario_grid", scenarios=scenarios, comparisons=[comparison])["result"][
+        "comparisons"
+    ][0]["result"]
     assert inference["sign_flip"]["assignments"] == 4
     assert inference["sign_flip"]["extreme_assignments"] == 4
     assert inference["sign_flip"]["p_value"] == 1
@@ -1778,10 +1908,7 @@ def test_adopter_classification_preserves_irregular_time_grids():
 
 def test_adopter_classification_matches_exact_weighted_moments():
     rng = random.Random(401)
-    cases = [
-        (sorted(rng.sample(range(-300, 301), 16)), [rng.randrange(31) for _ in range(16)])
-        for _ in range(512)
-    ]
+    cases = [(sorted(rng.sample(range(-300, 301), 16)), [rng.randrange(31) for _ in range(16)]) for _ in range(512)]
     cases.extend((list(range(5)), weights) for weights in product(range(5), repeat=5) if any(weights))
     for time, rates in cases:
         total = sum(rates)
@@ -1812,7 +1939,10 @@ def test_kairos_tick_checkpoint_resume():
         payload = json.loads(fixture.read_text())
         if engine != "kairos_network":
             payload["simulation_options"] = {
-                "engine": engine, "seed": 42, "population": 6, "ticks_per_unit": 1,
+                "engine": engine,
+                "seed": 42,
+                "population": 6,
+                "ticks_per_unit": 1,
             }
         expected = innovate.execute("simulate_model", "bass", **payload)["result"]
         options = payload["simulation_options"]
@@ -1833,10 +1963,13 @@ def test_paused_scenario_polars_export_preserves_checkpoint():
         **simulation,
         "simulation_options": {**simulation["simulation_options"], "pause_at_tick": 6},
     }
-    response = innovate.execute("execute_scenario_grid", scenarios=[
-        {"id": "complete", "model_key": "bass", "simulation": simulation},
-        {"id": "paused", "model_key": "bass", "simulation": paused},
-    ])
+    response = innovate.execute(
+        "execute_scenario_grid",
+        scenarios=[
+            {"id": "complete", "model_key": "bass", "simulation": simulation},
+            {"id": "paused", "model_key": "bass", "simulation": paused},
+        ],
+    )
     frame = innovate.scenario_executions(response)
     assert frame["scenario_id"].to_list() == ["complete", "paused"]
     assert frame["successful"].to_list() == [True, False]
@@ -1845,8 +1978,11 @@ def test_paused_scenario_polars_export_preserves_checkpoint():
 
 def test_matching_with_fitted_scores():
     result = innovate.execute(
-        "summarize_causal", method="matched_treatment_contrast",
-        outcomes=[0, 4, 2, 6], treatment=[0, 1, 0, 1], caliper=0,
+        "summarize_causal",
+        method="matched_treatment_contrast",
+        outcomes=[0, 4, 2, 6],
+        treatment=[0, 1, 0, 1],
+        caliper=0,
         fit_scores={"covariates": [[0]] * 4, "folds": [1, 1, 2, 2], "ridge": 1},
     )["result"]
     assert result["estimate"] == 5
@@ -1858,9 +1994,14 @@ def test_matching_with_fitted_scores():
 
 def test_matching_score_draw_mixture():
     sensitivity = innovate.execute(
-        "summarize_causal", method="matched_treatment_contrast",
-        outcomes=[0, 4, 2], treatment=[0, 1, 0], scores=[0, 0, 1], caliper=0,
-        score_draws=[[0, 0, 1], [1, 0, 0]], outcome_variances=[0, 1, 6],
+        "summarize_causal",
+        method="matched_treatment_contrast",
+        outcomes=[0, 4, 2],
+        treatment=[0, 1, 0],
+        scores=[0, 0, 1],
+        caliper=0,
+        score_draws=[[0, 0, 1], [1, 0, 0]],
+        outcome_variances=[0, 1, 6],
         control_predictions=[0, 0, 2],
     )["result"]["score_sensitivity"]
     assert [draw["estimate"] for draw in sensitivity["draws"]] == [4, 2]
@@ -1871,9 +2012,12 @@ def test_matching_score_draw_mixture():
 
 def test_matching_score_refits():
     result = innovate.execute(
-        "summarize_causal", method="matched_treatment_contrast",
-        outcomes=[0, 4, 2, 6, 8, 12, 10, 14], treatment=[0, 1] * 4,
-        caliper=1, outcome_variances=[1] * 8,
+        "summarize_causal",
+        method="matched_treatment_contrast",
+        outcomes=[0, 4, 2, 6, 8, 12, 10, 14],
+        treatment=[0, 1] * 4,
+        caliper=1,
+        outcome_variances=[1] * 8,
         fit_scores={"covariates": [[0]] * 8, "folds": [1] * 4 + [2] * 4, "ridge": 1},
         score_refit_omit_indices=[0, 4],
     )["result"]["score_sensitivity"]
@@ -1884,9 +2028,14 @@ def test_matching_score_refits():
 
 def test_matching_retains_insufficient_score_draw():
     sensitivity = innovate.execute(
-        "summarize_causal", method="matched_treatment_contrast",
-        outcomes=[0, 4], treatment=[0, 1], scores=[0, 0], caliper=0,
-        score_draws=[[0, 0], [0, 1]], outcome_variances=[1, 1],
+        "summarize_causal",
+        method="matched_treatment_contrast",
+        outcomes=[0, 4],
+        treatment=[0, 1],
+        scores=[0, 0],
+        caliper=0,
+        score_draws=[[0, 0], [0, 1]],
+        outcome_variances=[1, 1],
     )["result"]["score_sensitivity"]
     assert [draw["status"] for draw in sensitivity["draws"]] == ["matched", "insufficient_matches"]
     assert sensitivity["draws"][0]["estimate"] == 4
@@ -1894,12 +2043,15 @@ def test_matching_retains_insufficient_score_draw():
 
 
 def test_matching_score_bootstrap():
-    payload = dict(method="matched_treatment_contrast",
-        outcomes=[0, 4, 2, 6, 8, 12, 10, 14], treatment=[0, 1] * 4,
-        caliper=1, outcome_variances=[1] * 8,
-        fit_scores={"covariates": [[0], [3], [2], [5], [1], [4], [3], [6]],
-                    "folds": [1] * 4 + [2] * 4, "ridge": 1},
-        score_bootstrap={"draws": 8, "seed": 17})
+    payload = dict(
+        method="matched_treatment_contrast",
+        outcomes=[0, 4, 2, 6, 8, 12, 10, 14],
+        treatment=[0, 1] * 4,
+        caliper=1,
+        outcome_variances=[1] * 8,
+        fit_scores={"covariates": [[0], [3], [2], [5], [1], [4], [3], [6]], "folds": [1] * 4 + [2] * 4, "ridge": 1},
+        score_bootstrap={"draws": 8, "seed": 17},
+    )
     result = innovate.execute("summarize_causal", **payload)["result"]["score_sensitivity"]
     assert result == innovate.execute("summarize_causal", **payload)["result"]["score_sensitivity"]
     assert result["seed"] == 17 and len(result["draws"]) == 8
@@ -1908,13 +2060,23 @@ def test_matching_score_bootstrap():
 
 def test_extension_dataset_provider():
     selection = dict(name="provider-fixture", expected_version="1", extension_point="dataset_provider")
-    innovate.execute("register_extension_manifest", manifest=dict(
-        name=selection["name"], version="1", entrypoint="fixture:provide",
-        stability="stable", extension_points=["dataset_provider"],
-    ))
+    innovate.execute(
+        "register_extension_manifest",
+        manifest=dict(
+            name=selection["name"],
+            version="1",
+            entrypoint="fixture:provide",
+            stability="stable",
+            extension_points=["dataset_provider"],
+        ),
+    )
     try:
-        dataset = dict(kind="adoption", time=[0, 1], adoption=[1, 2],
-            provenance=dict(source="fixture", license="CC-BY-4.0", extraction_time="2026-11-07T00:00:00Z"))
+        dataset = dict(
+            kind="adoption",
+            time=[0, 1],
+            adoption=[1, 2],
+            provenance=dict(source="fixture", license="CC-BY-4.0", extraction_time="2026-11-07T00:00:00Z"),
+        )
         artifact = innovate.invoke_registered_extension(lambda _, data: data, selection, dataset)
         assert artifact["validation"]["ok"]
         assert artifact["dataset"]["provenance"]["checksum"] == (
@@ -1990,8 +2152,11 @@ def test_stability_tier_guidance():
 
 def test_policy_scenario_compares_supplied_paths():
     result = innovate.execute(
-        "summarize_causal", method="policy_scenario", time=[1, 2, 3],
-        baseline=[10, 20, 30], intervention=[10, 25, 45],
+        "summarize_causal",
+        method="policy_scenario",
+        time=[1, 2, 3],
+        baseline=[10, 20, 30],
+        intervention=[10, 25, 45],
     )["result"]
     assert result["difference"] == [0, 5, 15]
     assert result["metadata"]["incremental_effect"] == 20

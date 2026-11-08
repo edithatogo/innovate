@@ -551,8 +551,7 @@ def ingest_polars(
             time=column("time", pl.Float64),
             share=frame.select(pl.col(shares).cast(pl.Float64)).rows(),
             product_labels=[
-                name.removeprefix("share").lstrip("_") or f"product_{index}"
-                for index, name in enumerate(shares)
+                name.removeprefix("share").lstrip("_") or f"product_{index}" for index, name in enumerate(shares)
             ],
         )
     elif kind == "competition":
