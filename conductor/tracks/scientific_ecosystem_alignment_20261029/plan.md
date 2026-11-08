@@ -7611,3 +7611,10 @@ Hosted release readiness for this worktree revision remains open.
   focused cases passed against the rebuilt optimized FFI library
   using the explicit library override. Python wheel verification
   and the full hosted binding matrix remain open.
+
+- [x] Add split conformal coverage to the Python release consumer suite.
+  Both interval methods passed from the isolated optimized macOS arm64
+  wheel install under Python 3.15.2. Wrapper and extension origins
+  matched the install. Raw wheel SHA-256 is
+  `2a2e928292a9afaf04e489e7474dad7684d153b0fbb7a54401ca49f4dccfdd4c`.
+  Hosted validation remains open.
