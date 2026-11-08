@@ -7907,3 +7907,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify hosted Security and Quality and Binding Conformance on optimizer revision 77a0e4bf. Runs 42438532987 and 42438532994 concluded success. The PR platform matrix and separately dispatched packaging lane remain distinct gates.
 
 - [x] Verify hosted Linux clean-source packaging and installed Voiage on optimizer revision 77a0e4bf. Job 128604228955 passed. Downloaded wheel and source archive matched SHA256SUMS, the receipt matched the wheel hash, and source digest `fb7f1d32b1a78bc301d45d5895af951bc75b3ccfc151ced90a85f437dd670791` matched the exact commit tree. Ordinary and weighted EVPI matched the independent references. The separate release readiness check remains red.
+
+- [x] Verify the optimizer tie fix on hosted Windows. Job 128602572801 passed the Gaussian default-initialization recovery test and the full native Python suite. All six Linux, macOS and Windows jobs in matrix 42438532976 passed on 77a0e4bf. The queued singleton R and deterministic optimizer regression commits require their own hosted run.
