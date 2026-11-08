@@ -15,6 +15,7 @@ mod ensemble;
 mod events;
 mod explainability;
 mod extensions;
+mod streaming;
 pub use extensions::invoke_registered_extension;
 mod fitting;
 mod forcing;
@@ -92,6 +93,7 @@ pub fn execute_json(input: &str) -> String {
                 | "discover_model_cards"
                 | "discover_execution_modes"
                 | "list_advanced_capabilities"
+                | "update_streaming_forecast"
                 | "validate_provenance"
                 | "execute_remote_in_process"
                 | "describe_remote_execution_contract"
@@ -217,6 +219,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
             return Err("analysis request requires schema 2.0");
         }
         let payload = &value["payload"];
+        if value["operation"] == "update_streaming_forecast" {
+            return streaming::update(payload);
+        }
         if value["operation"] == "list_advanced_capabilities" {
             let capabilities = [
                 (
@@ -236,6 +241,14 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
                     false,
                 ),
                 (
+                    "streaming_update",
+                    "streaming",
+                    "provisional",
+                    "update_streaming_forecast",
+                    None,
+                    false,
+                ),
+                (
                     "uncertainty_calibration",
                     "uncertainty",
                     "stable",
@@ -250,11 +263,11 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
                         "key":key,"family":family,"stability":stability,
                         "operation":operation,"method":method,"result_schema":KERNEL_SCHEMA_VERSION,
                         "optional_dependencies":[],"supported_backends":["rust_native"],
-                        "supports_incremental":false,"supports_uncertainty":supports_uncertainty
+                        "supports_incremental":key == "streaming_update","supports_uncertainty":supports_uncertainty
                     })
                 },
             );
-            return Ok(json!({"capabilities":capabilities,"pending":["streaming_update"]}));
+            return Ok(json!({"capabilities":capabilities,"pending":[]}));
         }
         if value["operation"] == "discover_execution_modes" {
             return Ok(json!({

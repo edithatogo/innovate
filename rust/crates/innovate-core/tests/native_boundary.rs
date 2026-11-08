@@ -4524,6 +4524,7 @@ fn advanced_capability_discovery_reports_ordered_native_routes() {
         [
             "policy_scenario",
             "regime_ensemble",
+            "streaming_update",
             "uncertainty_calibration"
         ]
     );
@@ -4539,5 +4540,27 @@ fn advanced_capability_discovery_reports_ordered_native_routes() {
         assert_eq!(entry["optional_dependencies"], json!([]));
     }
     assert_eq!(entries[1]["stability"], "provisional");
-    assert_eq!(result["pending"], json!(["streaming_update"]));
+    assert_eq!(entries[2]["supports_incremental"], true);
+    assert_eq!(result["pending"], json!([]));
+}
+
+#[test]
+fn streaming_update_appends_cumulative_observations() {
+    let mut request = json!({"schema_version":"2.0","operation":"update_streaming_forecast","payload":{
+        "previous_time":[1,2],"previous_observed":[2,4],"new_time":[3],"new_observed":[6]}});
+    let run = |request: &serde_json::Value| {
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    let result = run(&request);
+    assert_eq!(result["result"]["mean"], json!([2., 4., 6.]));
+    assert_eq!(result["result"]["metadata"]["state"]["total_count"], 3);
+    assert_eq!(result["result"]["diagnostics"]["growth_rate"], 0.5);
+    request["payload"]["new_observed"] = json!([3]);
+    assert_eq!(run(&request)["error"]["code"], "invalid_request");
+    request["payload"]["new_observed"] = json!([6]);
+    request["payload"]["new_time"] = json!([1]);
+    assert_eq!(run(&request)["error"]["code"], "invalid_request");
 }

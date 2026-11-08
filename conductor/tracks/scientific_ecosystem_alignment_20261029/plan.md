@@ -7827,3 +7827,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify #156 diagnostics tables from the installed macOS arm64 release wheel on CPython 3.15.2. The focused consumer test passed with Polars 2.1.0, preserving column order, singleton rows and null cells. Julia and R operation checks remain open.
 
 - [x] Verify #156 diagnostics table transport through Julia and installed R using the same locked release FFI library via INNOVATE_NATIVE_LIBRARY. The focused tests passed for ordered columns, irregular rows and singleton null cells.
+
+- [x] Port historical streaming updates to update_streaming_forecast and advertise the incremental capability. The Rust operation appends aligned cumulative observations, preserves assumptions and emits the updated state and growth diagnostics. It rejects out-of-order times and declining observations. All 99 locked release-mode boundary tests passed. Installed Python, Julia and R validation remains open.
