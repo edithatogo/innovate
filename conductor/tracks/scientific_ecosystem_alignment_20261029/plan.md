@@ -7833,3 +7833,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify capability discovery and streaming updates in the installed CPython 3.15.2 wheel, Julia and installed R on macOS arm64. All three discovered the incremental route, appended one observation, returned [2, 4, 6] and reported 0.5 growth. Julia and R used the same locked release FFI artifact via INNOVATE_NATIVE_LIBRARY. Hosted platform checks remain open.
 
 - [x] Implement the Rust data layer for #80 with residual_diagnostic_series. Returns aligned time and residuals, configurable lags, biased ACF and Durbin–Levinson PACF. The locked release test passed for analytic lag values, constant-series nulls and invalid lag limits. Plot rendering and installed binding checks remain open.
+
+- [x] Add native SVG rendering for #80 residual diagnostics. The locked release tests passed for analytic values, rendered panel structure, ACF-only selection and escaped titles. SVG export uses a shared Rust renderer. Historical color and figure size configuration and binding checks remain open.

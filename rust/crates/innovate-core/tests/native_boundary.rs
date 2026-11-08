@@ -4583,3 +4583,28 @@ fn residual_diagnostics_return_analytic_acf_and_pacf() {
     request["payload"]["lags"] = json!(1025);
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn residual_svg_contains_configured_panels_and_escapes_title() {
+    let mut request = json!({"schema_version":"2.0","operation":"render_residual_diagnostics_svg","payload":{
+        "time":[1,2,3,4],"residuals":[-1,1,-1,1],"lags":2,"config":{"title":"A < B & C"}}});
+    let run = |request: &serde_json::Value| {
+        serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
+            &request.to_string(),
+        ))
+        .unwrap()
+    };
+    let result = run(&request);
+    let svg = result["result"]["svg"].as_str().unwrap();
+    assert!(svg.starts_with("<svg"));
+    assert!(svg.contains("A &lt; B &amp; C"));
+    assert!(svg.contains("Partial autocorrelation"));
+    assert_eq!(svg.matches("<circle").count(), 4);
+    request["payload"]["config"]["acf_only"] = json!(true);
+    assert!(
+        !run(&request)["result"]["svg"]
+            .as_str()
+            .unwrap()
+            .contains("Partial autocorrelation")
+    );
+}

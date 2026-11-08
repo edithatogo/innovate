@@ -113,6 +113,7 @@ pub fn execute_json(input: &str) -> String {
                 | "summarize_extension_diagnostics"
                 | "diagnostics_artifact_tables"
                 | "residual_diagnostic_series"
+                | "render_residual_diagnostics_svg"
                 | "resolve_extension_model_aliases"
                 | "dataset_checksum"
                 | "validate_dataset" => execute_preprocessing_json(&value).to_string(),
@@ -328,6 +329,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         }
         if value["operation"] == "resolve_extension_model_aliases" {
             return extensions::resolve_model_aliases(&payload["aliases"]);
+        }
+        if value["operation"] == "render_residual_diagnostics_svg" {
+            return residuals::render_svg(payload);
         }
         if value["operation"] == "residual_diagnostic_series" {
             return residuals::residual_series(payload);
