@@ -7963,3 +7963,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Run the full offline locked Rust release workspace with the 768e9df2 Rust source. The run completed with 369 passed, 1 ignored. Hosted macOS Python and Windows Julia/R jobs 128613246132 and 128613246248 also passed on 768e9df2. Hosted Windows Python and release packaging are tracked separately.
 
 - [x] Run the opt-in live OECD Rust test with the locked 768e9df2 Rust source. The test passed, complementing the offline workspace run on the same Rust source.
+
+- [x] Verify all six hosted binding matrix jobs on PR #575 head 768e9df2. Run 42442059067 concluded success, including Windows Python job 128613246143 and the Windows R Unicode DLL smoke in job 128613246248. Hosted release packaging and scientific release acceptance remain separate.
