@@ -7986,3 +7986,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Restore bounded policy document import for #420. The Rust summarize_causal import_policy_specification method rejects non-string and over-1-MiB documents before parsing their JSON, then reuses native policy contract validation. The focused release test passed. Installed binding validation remains open.
 
 - [x] Verify bounded policy document import through Julia and installed R on macOS arm64 with the same locked release FFI. Both accepted a valid document and rejected a multibyte document exceeding 1 MiB. Python wheel and hosted checks remain open.
+
+- [x] Verify bounded policy document import in the installed locked CPython 3.15.2 release wheel on macOS arm64. The focused test passed for a valid policy and a multibyte document over the byte limit. Ruff passed. Hosted validation remains open.

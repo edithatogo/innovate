@@ -2366,3 +2366,21 @@ def test_norton_refined_rate_peak():
     peak = result["threshold_diagnostics"]["refined_rate_peaks"]["generations"][0]
     assert peak["peak_time"] == pytest.approx(math.log(15) / 0.32, abs=1e-5, rel=0)
     assert peak["peak_rate"] == pytest.approx(100 * 0.32**2 / 1.2, abs=1e-8, rel=0)
+
+
+def test_import_policy_specification_bounds_document_bytes():
+    document = json.dumps(
+        {
+            "intervention": {"name": "Pilot", "timing": "post", "comparator": "control"},
+            "causal_model": {
+                "name": "Evaluation",
+                "treatment_variable": "policy",
+                "outcome_variable": "adoption",
+                "confounders": ["age"],
+            },
+        }
+    )
+    result = innovate.execute("summarize_causal", method="import_policy_specification", document=document)
+    assert result["result"]["intervention"]["name"] == "Pilot"
+    with pytest.raises(innovate.NativeError, match="exceeds 1 MiB"):
+        innovate.execute("summarize_causal", method="import_policy_specification", document="é" * 524_289)
