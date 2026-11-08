@@ -7646,3 +7646,9 @@ Hosted release readiness for this worktree revision remains open.
   and 37.820 million respectively. Half-widths were 4.644, 33.865
   and 3.507 million. This exploratory comparison kept the original
   split fixed. It does not qualify model selection or broader coverage.
+
+- [x] Compare an ordinary least-squares linear trend on the same uspop
+  split, using only the original nine fitting points. At nominal 80%,
+  the half-width was 49.806 million, evaluation coverage 0/5 and MAE
+  88.710 million. The interval calculation used the installed Rust
+  binding. This comparator leaves the original split and data fixed.
