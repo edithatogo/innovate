@@ -7903,3 +7903,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Verify full Julia and installed R conformance with the 77a0e4bf optimizer tie fix and live OECD enabled on macOS arm64. Both selected the same locked release FFI using INNOVATE_NATIVE_LIBRARY. Library SHA-256: `befd82f5d7523fa6a5a3dffd794353ceb8d81a4d0f123ec33ec6c8e4c0d11625`. Hosted validation of this revision remains separate.
 
 - [x] Verify R singleton streaming observations, regime predictions, assumptions and residuals through a fresh ecd8359a installation. The complete R conformance script passed with live OECD enabled against the locked macOS arm64 FFI library containing the optimizer fix. Hosted R jobs on 77a0e4bf predate the singleton transport change.
+
+- [x] Verify hosted Security and Quality and Binding Conformance on optimizer revision 77a0e4bf. Runs 42438532987 and 42438532994 concluded success. The PR platform matrix and separately dispatched packaging lane remain distinct gates.
