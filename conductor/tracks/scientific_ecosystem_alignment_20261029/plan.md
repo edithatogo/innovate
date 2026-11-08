@@ -7881,3 +7881,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Run the failing Windows Gaussian recovery fixture in an unoptimized macOS arm64 build with the same locked dependencies. It passed locally, so the failure does not reproduce merely by disabling optimization. The hosted Windows component diagnostics remain the next evidence needed.
 
 - [x] Verify the current PR source against the locked release Kairos, network and scientific-contract suites on macOS arm64. All 61 cases passed, including checkpoint replay, resource accounting, stochastic hazard reference comparisons and covariate/event handling. This covers the pinned Kairos provider and current fixtures. Broader scientific acceptance remains open.
+
+- [x] Verify the local remote-worker contract rejects fetch_oecd_dataset before dispatch. The locked release boundary regression passed. OECD networking remains exposed through the direct binding API, outside the remote worker request schema.

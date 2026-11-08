@@ -3550,6 +3550,8 @@ fn in_process_remote_dispatch_applies_scope_and_operation_policy() {
         run(&request)["result"]["kernel_response"]["error"]["code"],
         "unsupported_operation"
     );
+    request["payload"]["kernel_request"]["operation"] = json!("fetch_oecd_dataset");
+    assert_eq!(run(&request)["error"]["message"], "invalid kernel request");
 }
 
 #[test]
