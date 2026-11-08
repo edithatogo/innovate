@@ -429,6 +429,31 @@ pub(crate) fn linear_quantile(sorted: &[f64], probability: f64) -> f64 {
 }
 
 #[cfg(test)]
+#[test]
+fn converged_start_wins_only_within_objective_roundoff() {
+    for (offset, expected_convergence) in [(f64::EPSILON, true), (1e-6, false)] {
+        let evaluate = |theta: &[f64]| {
+            let x = theta[0];
+            if x.abs() < 0.1 {
+                Ok(vec![1. + offset])
+            } else if (x - 1.).abs() < 0.1 {
+                Ok(vec![x])
+            } else {
+                Err("outside the test domains".into())
+            }
+        };
+        for starts in [[vec![0.], vec![1.]], [vec![1.], vec![0.]]] {
+            let fit = least_squares(&[0.], &starts, evaluate, 1).unwrap();
+            assert_eq!(fit.report["converged"], expected_convergence);
+            assert_eq!(
+                fit.parameters,
+                vec![if expected_convergence { 0. } else { 1. }]
+            );
+        }
+    }
+}
+
+#[cfg(test)]
 mod tests {
     use super::*;
     #[test]
