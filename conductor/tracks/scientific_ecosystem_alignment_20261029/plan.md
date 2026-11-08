@@ -7959,3 +7959,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Recheck open planning PR ancestry after fetching origin. PR #574 (fedb0114), #560 (8605f3be), #557 (ca9e6740) and #547 (f85da2f8) are ancestors of the migration branch. Their hosted dispositions remain open. The migration branch contains current origin/main at 3c09cc05.
 
 - [x] Verify hosted Linux Python at PR #575 head 768e9df2. Job 128613246270 passed the locked Rust gate and reported 157 Python tests passed and one skipped. The development policy check passed and reported 38 outstanding release obligations.
+
+- [x] Run the full offline locked Rust release workspace with the 768e9df2 Rust source. The run completed with 369 passed, 1 ignored. Hosted macOS Python and Windows Julia/R jobs 128613246132 and 128613246248 also passed on 768e9df2. Hosted Windows Python and release packaging are tracked separately.
