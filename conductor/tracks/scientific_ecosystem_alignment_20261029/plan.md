@@ -7561,3 +7561,8 @@ Hosted release readiness for this worktree revision remains open.
   arrays using the explicit library override. The combined Python/FFI
   build ran out of disk space, and the single-package FFI retry
   succeeded. Python validation remains open for this operation.
+
+- [x] Verify Python 3.15.2 interval bounds using the staged optimized
+  extension and tracked wrapper with existing wheel metadata. Direct
+  Cargo linking required macOS dynamic lookup flags for Python symbols.
+  A fresh installed wheel for this operation remains open.
