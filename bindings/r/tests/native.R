@@ -502,6 +502,12 @@ paired <- list(strategies=lapply(c("control","policy"), function(id) {
   list(scenario_id=id,time_unit="period",provenance="synthetic",draws=list(paired_draw))
 }))
 stopifnot(rawToChar(kernel_paired_outcomes_ipc(paired)[1:6]) == "ARROW1")
+singleton_paired <- paired
+for (i in seq_along(singleton_paired$strategies)) {
+  singleton_paired$strategies[[i]]$draws[[1]]$time <- 0
+  singleton_paired$strategies[[i]]$draws[[1]]$adoption <- i - 1
+}
+stopifnot(rawToChar(kernel_paired_outcomes_ipc(singleton_paired)[1:6]) == "ARROW1")
 paired$strategies[[1]]$draws[[1]] <- unname(paired_draw)
 paired_error <- tryCatch({kernel_paired_outcomes_ipc(paired); ""}, error=conditionMessage)
 stopifnot(grepl("must be objects", paired_error, fixed=TRUE))

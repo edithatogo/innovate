@@ -105,6 +105,25 @@ kernel_scenario_comparisons_ipc <- function(response) {
 }
 
 kernel_paired_outcomes_ipc <- function(payload) {
+  # Preserve trajectory arrays without changing scalar draw IDs or parameter values.
+  if (is.list(payload) && is.list(payload[["strategies"]])) {
+    for (i in seq_along(payload[["strategies"]])) {
+      strategy <- payload[["strategies"]][[i]]
+      if (!is.list(strategy) || !is.list(strategy[["draws"]])) next
+      for (j in seq_along(strategy[["draws"]])) {
+        draw <- strategy[["draws"]][[j]]
+        if (!is.list(draw)) next
+        for (field in c("time", "adoption")) {
+          value <- draw[[field]]
+          if (is.atomic(value) && length(value) == 1L && is.null(dim(value))) {
+            draw[[field]] <- I(value)
+          }
+        }
+        strategy[["draws"]][[j]] <- draw
+      }
+      payload[["strategies"]][[i]] <- strategy
+    }
+  }
   scenario_output(payload, innovate_paired_outcomes_ipc_R)
 }
 
