@@ -7652,3 +7652,11 @@ Hosted release readiness for this worktree revision remains open.
   the half-width was 49.806 million, evaluation coverage 0/5 and MAE
   88.710 million. The interval calculation used the installed Rust
   binding. This comparator leaves the original split and data fixed.
+
+- [x] Repeat the uspop comparison over five expanding fitting windows
+  of 9–13 decades. Each fit forecasts six decades, calibrates on the
+  first five and evaluates the sixth at nominal 80%. Logistic covered
+  1930 and 1940, Gompertz covered 1960, and Bass covered none. The
+  overlapping windows are dependent and the calibration horizons differ
+  from the evaluation horizon. Treat these as exploratory time-series
+  results, with exchangeable coverage qualification still open.
