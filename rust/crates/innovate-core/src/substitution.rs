@@ -330,12 +330,7 @@ impl Model {
         })
     }
 
-    fn net_level_milestones(
-        &self,
-        time: &[f64],
-        levels: &[Vec<f64>],
-        p: &[f64],
-    ) -> Result<Value, String> {
+    fn diagnostic_grid(&self, time: &[f64]) -> Vec<f64> {
         const PROBE_INTERVALS: usize = 128;
         let start = time[0];
         let end = time[time.len() - 1];
@@ -356,6 +351,16 @@ impl Model {
         }
         grid.sort_by(f64::total_cmp);
         grid.dedup_by(|a, b| *a == *b);
+        grid
+    }
+
+    fn net_level_milestones(
+        &self,
+        time: &[f64],
+        levels: &[Vec<f64>],
+        p: &[f64],
+    ) -> Result<Value, String> {
+        let grid = self.diagnostic_grid(time);
         let (probe_levels, _) = self.predict(&grid, p)?;
         let mut generations = Vec::with_capacity(self.n);
         for index in 0..self.n {
@@ -434,6 +439,67 @@ impl Model {
             "window": [time.first(), time.last()],
             "generations": generations
         })
+    }
+
+    fn refine_rate_peaks(&self, time: &[f64], p: &[f64]) -> Result<Value, String> {
+        let mut grid = self.diagnostic_grid(time);
+        let start = time[0];
+        let end = time[time.len() - 1];
+        for boundary in self.events.times().chain(self.launches.iter().copied()) {
+            if boundary > start && boundary <= end {
+                grid.extend([boundary.next_down().max(start), boundary]);
+            }
+        }
+        grid.sort_by(f64::total_cmp);
+        grid.dedup_by(|a, b| *a == *b);
+        let (_, rates) = self.predict(&grid, p)?;
+        let mut peaks = Vec::with_capacity(self.n);
+        for index in 0..self.n {
+            let reference = if self.variant == "successive_generations" {
+                self.launches[index]
+            } else {
+                self.origin
+            };
+            let best = (0..grid.len())
+                .filter(|&i| grid[i] >= reference)
+                .reduce(|best, i| {
+                    if rates[i][index] > rates[best][index] {
+                        i
+                    } else {
+                        best
+                    }
+                });
+            let Some(best) = best else {
+                peaks.push(Value::Null);
+                continue;
+            };
+            let mut peak = (grid[best], rates[best][index]);
+            for interval in best.saturating_sub(1)..(best + 1).min(grid.len() - 1) {
+                let (mut lower, mut upper) = (grid[interval].max(reference), grid[interval + 1]);
+                for _ in 0..32 {
+                    let a = lower + (upper - lower) / 3.;
+                    let b = upper - (upper - lower) / 3.;
+                    if a <= lower || b >= upper || a >= b {
+                        break;
+                    }
+                    let (_, rates) = self.predict(&[a, b], p)?;
+                    let (ra, rb) = (rates[0][index], rates[1][index]);
+                    for candidate in [(a, ra), (b, rb)] {
+                        if candidate.1 > peak.1 || (candidate.1 == peak.1 && candidate.0 < peak.0) {
+                            peak = candidate;
+                        }
+                    }
+                    if ra < rb {
+                        lower = a;
+                    } else {
+                        upper = b;
+                    }
+                }
+            }
+            peaks.push(json!({"generation":index+1,"peak_time":peak.0,"peak_rate":peak.1}));
+        }
+        Ok(json!({"method":"local_search_adjacent_to_best_probe",
+            "event_side":"one_sided_excluding_jump_impulses","generations":peaks}))
     }
 
     fn kwargs(&self) -> Value {
@@ -1035,6 +1101,9 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
                 result["threshold_diagnostics"]["trajectory"] =
                     model.trajectory_rate_peaks(&time, &rates);
             }
+            result["threshold_diagnostics"]["refined_rate_peaks"] = model
+                .refine_rate_peaks(&time, &p)
+                .map_err(|e| invalid(op, e))?;
             if model.variant == "legacy_cannibalization" {
                 result["threshold_diagnostics"]["net_level_milestones"] = model
                     .net_level_milestones(&time, &predicted, &p)

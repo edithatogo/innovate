@@ -921,3 +921,21 @@ fn historical_milestones_find_transient_crossing_between_requested_samples() {
     assert!(crossing > 2.2 && crossing < 5.);
     assert!(row["refined_crossings"]["median"].is_null());
 }
+
+#[test]
+fn refined_rate_peak_matches_closed_form_bass_inflection() {
+    let result = KernelBinding::new()
+        .summarize_model(
+            "norton_bass",
+            json!({
+                "inputs":{"time":[0.,20.]},
+                "parameters":{"p1":0.02,"q1":0.3,"m1":100.}
+            }),
+        )
+        .unwrap()
+        .result
+        .unwrap();
+    let peak = &result["threshold_diagnostics"]["refined_rate_peaks"]["generations"][0];
+    assert!((peak["peak_time"].as_f64().unwrap() - 15_f64.ln() / 0.32).abs() < 1e-5);
+    assert!((peak["peak_rate"].as_f64().unwrap() - 100. * 0.32_f64.powi(2) / 1.2).abs() < 1e-8);
+}
