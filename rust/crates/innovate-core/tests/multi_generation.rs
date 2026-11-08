@@ -767,6 +767,13 @@ fn historical_milestones_use_fixed_base_market_even_after_capacity_override() {
     assert_eq!(row["takeoff"], 1.);
     assert_eq!(row["median"], 3.);
     assert_eq!(row["saturation"], 3.);
+    let at_event = 100. - 88. * (-0.1_f64).exp();
+    assert_eq!(row["refined_crossings"]["takeoff"], 1.);
+    for (name, target) in [("median", 50.), ("saturation", 90.)] {
+        let expected = 2. - ((1000. - target) / (1000. - at_event)).ln() / 0.1;
+        let crossing = row["refined_crossings"][name].as_f64().unwrap();
+        assert!((crossing - expected).abs() < 1e-7);
+    }
 }
 
 #[test]

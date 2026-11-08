@@ -330,33 +330,54 @@ impl Model {
         })
     }
 
-    fn net_level_milestones(&self, time: &[f64], levels: &[Vec<f64>], p: &[f64]) -> Value {
-        let generations: Vec<_> = (0..self.n)
-            .map(|index| {
-                let reference_market = p[3 * index + 2];
-                let first_sample = |fraction| {
-                    let target = reference_market * fraction;
-                    time.iter()
-                        .zip(levels)
-                        .find_map(|(&t, row)| (row[index] >= target).then_some(t))
+    fn net_level_milestones(
+        &self,
+        time: &[f64],
+        levels: &[Vec<f64>],
+        p: &[f64],
+    ) -> Result<Value, String> {
+        let mut generations = Vec::with_capacity(self.n);
+        for index in 0..self.n {
+            let reference_market = p[3 * index + 2];
+            let mut row = json!({"generation":index + 1,"reference_market":reference_market});
+            let mut refined = json!({});
+            for (name, fraction) in [("takeoff", 0.1), ("median", 0.5), ("saturation", 0.9)] {
+                let target = reference_market * fraction;
+                let sample = levels.iter().position(|row| row[index] >= target);
+                row[name] = json!(sample.map(|i| time[i]));
+                refined[name] = match sample {
+                    None => Value::Null,
+                    Some(0) => json!(time[0]),
+                    Some(i) => {
+                        let (mut lower, mut upper) = (time[i - 1], time[i]);
+                        for _ in 0..40 {
+                            let midpoint = lower.midpoint(upper);
+                            if midpoint == lower || midpoint == upper {
+                                break;
+                            }
+                            let (levels, _) = self.predict(&[midpoint], p)?;
+                            if levels[0][index] >= target {
+                                upper = midpoint;
+                            } else {
+                                lower = midpoint;
+                            }
+                        }
+                        json!(upper)
+                    }
                 };
-                json!({
-                    "generation": index + 1,
-                    "reference_market": reference_market,
-                    "takeoff": first_sample(0.1_f64),
-                    "median": first_sample(0.5),
-                    "saturation": first_sample(0.9)
-                })
-            })
-            .collect();
-        json!({
+            }
+            row["refined_crossings"] = refined;
+            generations.push(row);
+        }
+        Ok(json!({
             "quantity": "net_generation_level",
             "method": "first_requested_sample_at_or_above_fixed_baseline_market_fraction",
+            "refinement_method": "bisection_of_first_sample_bracket",
             "time_basis": "absolute_model_time",
             "window": [time.first(), time.last()],
             "fractions": {"takeoff": 0.1, "median": 0.5, "saturation": 0.9},
             "generations": generations
-        })
+        }))
     }
 
     fn trajectory_rate_peaks(&self, time: &[f64], rates: &[Vec<f64>]) -> Value {
@@ -994,8 +1015,9 @@ pub(crate) fn execute(request: &KernelRequest) -> Result<KernelResponse, Error> 
                     model.trajectory_rate_peaks(&time, &rates);
             }
             if model.variant == "legacy_cannibalization" {
-                result["threshold_diagnostics"]["net_level_milestones"] =
-                    model.net_level_milestones(&time, &predicted, &p);
+                result["threshold_diagnostics"]["net_level_milestones"] = model
+                    .net_level_milestones(&time, &predicted, &p)
+                    .map_err(|e| invalid(op, e))?;
             }
             if !milestones.is_empty() {
                 result["threshold_diagnostics"]["intrinsic_adoption_milestones"] = json!({
