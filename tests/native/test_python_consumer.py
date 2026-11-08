@@ -2005,3 +2005,15 @@ def test_policy_specification_rejects_positional_contracts():
             intervention={"name": "Pilot", "timing": "post", "comparator": "control"},
             causal_model=["Evaluation", "policy", "adoption", ["age"], None, {}],
         )
+
+
+def test_compose_regime_ensemble():
+    response = innovate.execute(
+        "compose_regime_ensemble",
+        time=[1, 2],
+        predictions={"a": [1, 2], "b": [3, 4]},
+        weights={"a": 1, "b": 3},
+        observed=[2.5, 3.5],
+    )
+    assert response["result"]["mean"] == [2.5, 3.5]
+    assert response["result"]["diagnostics"]["rmse"] == 0

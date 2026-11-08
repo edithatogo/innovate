@@ -986,3 +986,9 @@ positional_error <- tryCatch({
   ""
 }, error=conditionMessage)
 stopifnot(grepl("invalid_request", positional_error))
+
+regime_ensemble <- kernel_call("compose_regime_ensemble", payload=list(
+  time=c(1,2), predictions=list(a=c(1,2), b=c(3,4)),
+  weights=list(a=1, b=3), observed=c(2.5,3.5)))$result
+stopifnot(identical(unlist(regime_ensemble$mean), c(2.5,3.5)),
+          regime_ensemble$diagnostics$rmse == 0)

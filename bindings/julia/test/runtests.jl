@@ -1051,3 +1051,11 @@ end
         "causal_model" => ["Evaluation", "policy", "adoption", ["age"], nothing, Dict()])
     @test_throws r"invalid_request" kernel_call("summarize_causal", nothing, payload)
 end
+
+@testset "Weighted regime ensemble" begin
+    payload = Dict("time" => [1, 2], "predictions" => Dict("a" => [1, 2], "b" => [3, 4]),
+        "weights" => Dict("a" => 1, "b" => 3), "observed" => [2.5, 3.5])
+    result = kernel_call("compose_regime_ensemble", nothing, payload)["result"]
+    @test result["mean"] == [2.5, 3.5]
+    @test result["diagnostics"]["rmse"] == 0
+end
