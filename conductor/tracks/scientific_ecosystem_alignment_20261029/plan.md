@@ -7778,3 +7778,10 @@ Hosted release readiness for this worktree revision remains open.
   in R policy scenario requests. The focused serialization check
   passed. The optimized FFI rebuild stopped while writing the core
   archive because the volume ran out of space. Runtime checks remain open.
+
+- [x] Verify policy scenario comparison through Julia and a fresh R
+  source install against the rebuilt optimized FFI library. Both
+  returned the expected total and lift. R also passed the singleton
+  zero-baseline case. Four verified duplicate extension extracts
+  were removed to make room, retaining their wheel archives.
+  Python wheel verification remains open for this operation.
