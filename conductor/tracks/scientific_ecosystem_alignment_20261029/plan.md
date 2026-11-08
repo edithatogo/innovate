@@ -7816,3 +7816,10 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reconcile historical branches #76, #86 and #97. The legacy Composite cleanup and Python exception fixes apply to removed source and test modules. The #76 Python floor change is superseded by the active Python 3.15 requirement. The #97 backend detection tests exercise optional JAX and Rust selection, superseded by the required Rust runtime. Preserve the three branch tips in the migration history.
 
 - [x] Reconcile historical optimization branches #78, #81 and #85. Rust network diffusion implements node prediction and fitted state directly, replacing Python BatchedFitter and parameter-dictionary traversal. Rust competitive prediction already collects per-time derivatives directly into output rows. Locked release tests passed for network diffusion (5) and competition (19), including independent numerical references. These checks verify behavior; no cross-runtime speed comparison was performed.
+
+### Remaining historical branch contracts
+
+- [ ] Port #87 OECD dataset retrieval. The native dataset validation and extension provider operations currently have no built-in OECD transport. Preserve dimension selection, explicit date ranges, the 1960–2020 default and upstream error propagation, with Polars-compatible tabular output. Qualify the current OECD SDMX endpoint before live verification.
+- [ ] Reconcile #80 residual visualization. Preserve time/residual, ACF and PACF outputs and configurable lags. Define the boundary between Rust diagnostic data and presentation in the supported bindings before replacing the historical Matplotlib wrapper.
+- [ ] Reconcile #156 diagnostics artifact conversion. Preserve declared column order, single-column row shape and nulls for missing keys or irregular rows in the native tabular contract.
+- [ ] Reconcile #98 advanced capability discovery. Verify deterministic alphabetical capability keys and machine-readable stability and dependencies. Native operation discovery alone does not cover this contract.
