@@ -189,3 +189,29 @@ fn information_criteria_use_consistent_gaussian_parameter_counts() {
         }
     }
 }
+
+#[test]
+fn bass_prediction_recovers_after_rejected_parameters() {
+    let binding = KernelBinding::new();
+    let predict = |parameters| {
+        binding.invoke(&KernelRequest::predict_model(
+            "bass",
+            json!({"inputs":{"time":[1.0,2.0,3.0]},"parameters":parameters}),
+        ))
+    };
+    for parameters in [json!({}), json!({"p":-0.03,"q":0.38,"m":1000.0})] {
+        assert!(predict(parameters).is_err());
+    }
+    let result = predict(json!({"p":0.03,"q":0.38,"m":1000.0}))
+        .unwrap()
+        .result
+        .unwrap();
+    let values = result["values"].as_array().unwrap();
+    assert_eq!(values.len(), 3);
+    for (index, value) in values.iter().enumerate() {
+        let time = (index + 1) as f64;
+        let decay = (-0.41 * time).exp();
+        let expected = 1000.0 * (1.0 - decay) / (1.0 + 0.38 / 0.03 * decay);
+        assert!((value.as_f64().unwrap() - expected).abs() < 1e-10);
+    }
+}
