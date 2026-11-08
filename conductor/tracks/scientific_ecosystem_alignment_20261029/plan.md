@@ -8052,3 +8052,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Extend the 343 independently checked irregular-grid adopter cases with three common rate scales. All 1,029 cases preserved their category assignments when scaled by the smallest positive subnormal, the smallest positive normal, or 2^1021. The standalone Rust run exercised the production classifier locally. Broader release qualification remains open.
 
 - [x] Retain the irregular-grid integer-moment oracle as a Rust regression. It checks all 1,372 unscaled and scaled cases directly against the oracle. All six adopter module tests passed with rustc.
+
+- [x] Extend the adopter oracle to a second irregular grid with different zero-weight sample positions. All six Rust module tests passed, including 2,744 oracle comparisons across both grids and four rate scales.

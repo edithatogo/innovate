@@ -152,35 +152,36 @@ mod tests {
 
     #[test]
     fn irregular_grid_matches_integer_moments_across_rate_scales() {
-        let time = [-1., 0., 2., 5., 9., 12.];
-        for a in 1..=7 {
-            for b in 1..=7 {
-                for c in 1..=7 {
-                    let weight = f64::from(a + b + c);
-                    let moment = f64::from(2 * b + 9 * c);
-                    let variance = f64::from(4 * b + 81 * c) * weight - moment * moment;
-                    let expected = time.map(|sample| {
-                        let delta = sample * weight - moment;
-                        let squared = delta * delta;
-                        if delta < 0. && squared >= 4. * variance {
-                            "Innovators"
-                        } else if delta < 0. && squared >= variance {
-                            "Early Adopters"
-                        } else if delta <= 0. {
-                            "Early Majority"
-                        } else if squared <= variance {
-                            "Late Majority"
-                        } else {
-                            "Laggards"
+        for time in [[-1., 0., 2., 5., 9., 12.], [-8., 0., 2., 3., 9., 16.]] {
+            for a in 1..=7 {
+                for b in 1..=7 {
+                    for c in 1..=7 {
+                        let weight = f64::from(a + b + c);
+                        let moment = f64::from(2 * b + 9 * c);
+                        let variance = f64::from(4 * b + 81 * c) * weight - moment * moment;
+                        let expected = time.map(|sample| {
+                            let delta = sample * weight - moment;
+                            let squared = delta * delta;
+                            if delta < 0. && squared >= 4. * variance {
+                                "Innovators"
+                            } else if delta < 0. && squared >= variance {
+                                "Early Adopters"
+                            } else if delta <= 0. {
+                                "Early Majority"
+                            } else if squared <= variance {
+                                "Late Majority"
+                            } else {
+                                "Laggards"
+                            }
+                        });
+                        let rates = [0., f64::from(a), f64::from(b), 0., f64::from(c), 0.];
+                        for scale in [1., f64::from_bits(1), f64::MIN_POSITIVE, 2_f64.powi(1021)] {
+                            assert_eq!(
+                                classify_adopters(&time, &rates.map(|rate| rate * scale)).unwrap(),
+                                expected,
+                                "weights {a}, {b}, {c}, scale {scale}"
+                            );
                         }
-                    });
-                    let rates = [0., f64::from(a), f64::from(b), 0., f64::from(c), 0.];
-                    for scale in [1., f64::from_bits(1), f64::MIN_POSITIVE, 2_f64.powi(1021)] {
-                        assert_eq!(
-                            classify_adopters(&time, &rates.map(|rate| rate * scale)).unwrap(),
-                            expected,
-                            "weights {a}, {b}, {c}, scale {scale}"
-                        );
                     }
                 }
             }
