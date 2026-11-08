@@ -7762,3 +7762,8 @@ Hosted release readiness for this worktree revision remains open.
   53 ordered operation names as the rebuilt Julia and R library.
   The Python extension resolved from the isolated wheel install.
   Hosted distribution validation remains open.
+
+- [x] Reconcile pr-289, resolve/pr-289 and its duplicate resolve/more
+  tip. The verified Rust replacements cover ordered parallel scenario
+  execution and operation discovery across all three bindings. Legacy
+  dataframe engine switching is superseded by the Polars runtime.
