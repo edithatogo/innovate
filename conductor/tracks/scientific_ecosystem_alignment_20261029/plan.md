@@ -8020,3 +8020,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reconcile PR #440. Its changes are confined to historical probabilistic tests. The native Bayesian grid regression verifies the response schema and rejects a missing forecast model with an actionable error. The former optional Python backend installation error has no equivalent in this native operation. The focused locked release test passed.
 
 - [x] Reconcile PRs #377 and #436. The SciPy-only FitContext refactor maps to the existing Rust KernelRequest and native fitting options. The historical Kairos adapter row enumeration and Bayesian array comment apply to removed Python implementations. Native joint-grid and sampling tests passed. Relative performance was not measured.
+
+- [x] Verify the missing intervention name regression from PR #416. The Rust policy document import rejects the malformed document. The focused locked release boundary test passed.

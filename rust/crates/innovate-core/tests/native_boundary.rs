@@ -4746,6 +4746,15 @@ fn policy_document_import_bounds_and_validates_json() {
             .unwrap()
             .remove("__class__");
     }
+    let mut missing_name = specification.clone();
+    missing_name["intervention"]
+        .as_object_mut()
+        .unwrap()
+        .remove("name");
+    assert_eq!(
+        run(json!(missing_name.to_string()))["error"]["message"],
+        "invalid intervention contract fields"
+    );
     specification["intervention"]["timing"] = json!(123);
     assert_eq!(
         run(json!(specification.to_string()))["error"]["message"],
