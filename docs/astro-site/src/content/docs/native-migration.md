@@ -1578,5 +1578,6 @@ absolute-coefficient proxy in product-by-time order.
 `observed` rows and treats `p`, `q`, and `market_potentials` as initial
 parameter guesses. It returns fitted parameters, predictions, solver diagnostics,
 and local identifiability. Fitting supports 2 to 8 products with at least
-`n + 2` time points. The solver uses one supplied start and reports its
-termination status.
+`n + 2` time points. Supply all three guesses for a single start, or omit them to try three
+capacity scales with observation-derived innovation rates. The solver reports
+the termination status and local identifiability of the selected fit.

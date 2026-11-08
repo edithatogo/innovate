@@ -7933,3 +7933,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Add bounded Rust fitting for the historical signed interaction matrix, reusing the native predictor and least-squares diagnostics. All five focused historical competition tests passed, including recovery from perturbed guesses against an analytic two-product trajectory with full local rank. Automatic starts, broader fitting qualification and binding checks remain open.
 
 - [x] Verify historical interaction-matrix fitting through the locked 4699a2cd wheel and shared library. Python 3.15.2, Julia and installed R passed their focused conformance cases on macOS arm64, recovering both market potentials within 0.1 with pooled R-squared above 0.999999 and local rank eight.
+
+- [x] Add automatic starting values for historical signed interaction-matrix fitting. Fits with observations only try three capacity scales with early-adoption estimates. All six focused Rust competition tests passed, including recovery of a negative interaction within 0.005 of its analytic value. Cross-binding automatic-start checks remain open.

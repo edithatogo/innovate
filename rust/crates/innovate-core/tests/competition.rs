@@ -964,3 +964,32 @@ fn historical_interaction_matrix_fit_recovers_independent_trajectory() {
     );
     assert_eq!(result["identifiability"]["rank"], 8);
 }
+
+#[test]
+fn historical_interaction_matrix_automatic_starts_recover_signed_trajectory() {
+    let time: Vec<_> = (0..32).map(|i| i as f64 * 0.5).collect();
+    let observed: Vec<_> = time
+        .iter()
+        .map(|t| {
+            let survival = (-0.2 * t).exp();
+            let remaining = 50. * (-0.05 * t - 0.25 * (1. - survival)).exp();
+            [50. - remaining, 100. * (1. - survival)]
+        })
+        .collect();
+    let request = json!({"schema_version":"2.0","operation":"fit_competition_interaction_matrix",
+        "payload":{"time":time,"observed":observed}});
+    let response: Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    let result = &response["result"];
+    assert!(
+        result["predictions"]["r_squared"]
+            .as_f64()
+            .unwrap_or_default()
+            > 0.999999,
+        "{response}"
+    );
+    assert!(
+        (result["parameters"]["q"][0][1].as_f64().unwrap() + 0.05).abs() < 0.005,
+        "{response}"
+    );
+}
