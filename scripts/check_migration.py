@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 import tomllib
@@ -103,8 +104,11 @@ def main() -> int:
             resolved = (ROOT / evidence_path).resolve()
             if evidence_path.is_absolute() or not resolved.is_relative_to(ROOT.resolve()) or not resolved.is_file():
                 raise ValueError(f"Invalid migration evidence for {item['key']}: {evidence}")
-            if not resolved.read_bytes().strip():
+            evidence_bytes = resolved.read_bytes()
+            if not evidence_bytes.strip():
                 raise ValueError(f"Empty migration evidence for {item['key']}: {evidence}")
+            if status == "qualified" and item.get("evidence_sha256") != hashlib.sha256(evidence_bytes).hexdigest():
+                raise ValueError(f"Qualified migration evidence digest is missing or mismatched for {item['key']}")
 
     pending = [
         item["key"]

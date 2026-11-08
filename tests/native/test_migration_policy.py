@@ -22,6 +22,7 @@ ROOT = Path(__file__).parents[2]
         "missing_binding",
         "unsupported_binding",
         "empty_evidence",
+        "changed_qualified_evidence",
         "invalid_status",
         "qualified_with_remaining_work",
         "nonboolean_release",
@@ -69,6 +70,9 @@ def test_migration_policy_rejects_feature_loss(tmp_path, monkeypatch, mutation):
     elif mutation == "empty_evidence":
         ledger["models"][0].update(status="qualified", evidence="empty.md")
         (tmp_path / "empty.md").write_text(" \n")
+    elif mutation == "changed_qualified_evidence":
+        ledger["models"][0].update(status="qualified", evidence="receipt.md", evidence_sha256="0" * 64)
+        (tmp_path / "receipt.md").write_text("changed receipt")
     elif mutation == "qualified_with_remaining_work":
         ledger["models"][0].update(status="qualified", remaining="Scientific parity open")
     elif mutation == "invalid_status":
@@ -85,5 +89,7 @@ def test_migration_policy_rejects_feature_loss(tmp_path, monkeypatch, mutation):
     )
     if mutation == "qualified_with_remaining_work":
         expected = "Qualified migration obligation still has remaining work"
+    if mutation == "changed_qualified_evidence":
+        expected = "Qualified migration evidence digest is missing or mismatched"
     with pytest.raises(ValueError, match=expected):
         module.main()

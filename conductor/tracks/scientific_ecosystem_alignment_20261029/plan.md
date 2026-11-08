@@ -7714,3 +7714,8 @@ Hosted release readiness for this worktree revision remains open.
   before hosted dry-run packaging. All 17 cases passed locally, as
   did Actionlint. The checker requires nonempty evidence within the
   checkout. Evidence freshness against release source remains open.
+
+- [x] Require a matching evidence_sha256 for qualified migration entries.
+  This detects missing or changed evidence digests. All 15 policy tests
+  passed. The digest establishes receipt integrity. It does not establish
+  that a receipt covers the release source or passes a scientific gate.
