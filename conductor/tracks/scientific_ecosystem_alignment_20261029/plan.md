@@ -7606,3 +7606,8 @@ Hosted release readiness for this worktree revision remains open.
   scores. The optimized Rust test matched exact rank coverage at
   25%, 50% and 75%. This checks the exchangeable rank calculation
   with fixed predictions. Empirical forecast validation remains open.
+
+- [x] Add split conformal conformance cases to Julia and R. Both
+  focused cases passed against the rebuilt optimized FFI library
+  using the explicit library override. Python wheel verification
+  and the full hosted binding matrix remain open.

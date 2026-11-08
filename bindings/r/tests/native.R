@@ -970,3 +970,10 @@ intervals <- kernel_call("calibrate_prediction_intervals", payload = list(
 stopifnot(all(unlist(intervals$lower) == c(8, 18, 28)),
           all(unlist(intervals$upper) == c(12, 22, 32)),
           intervals$diagnostics$holdout_coverage == 1)
+
+split_intervals <- kernel_call("calibrate_prediction_intervals", payload = list(
+  time = 1:4, observed = c(11, 12, 13, 100), predicted = rep(10, 4),
+  confidence = 0.5, holdout = c(0, 0, 0, 1), method = "split_conformal"
+))$result
+stopifnot(split_intervals$metadata$interval_half_width == 2,
+          split_intervals$diagnostics$holdout_coverage == 0)

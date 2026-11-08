@@ -1034,3 +1034,13 @@ end
     @test result["upper"] == [12, 22, 32]
     @test result["diagnostics"]["holdout_coverage"] == 1.0
 end
+
+@testset "Split conformal prediction intervals" begin
+    result = kernel_call("calibrate_prediction_intervals", nothing, Dict(
+        "time" => [1, 2, 3, 4], "observed" => [11, 12, 13, 100],
+        "predicted" => [10, 10, 10, 10], "confidence" => 0.5,
+        "holdout" => [0, 0, 0, 1], "method" => "split_conformal",
+    ))["result"]
+    @test result["metadata"]["interval_half_width"] == 2.0
+    @test result["diagnostics"]["holdout_coverage"] == 0.0
+end
