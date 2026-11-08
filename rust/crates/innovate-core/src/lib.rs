@@ -107,6 +107,7 @@ pub fn execute_json(input: &str) -> String {
                 | "list_extension_manifests"
                 | "resolve_extension_manifest"
                 | "summarize_extension_diagnostics"
+                | "diagnostics_artifact_tables"
                 | "resolve_extension_model_aliases"
                 | "dataset_checksum"
                 | "validate_dataset" => execute_preprocessing_json(&value).to_string(),
@@ -272,6 +273,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         }
         if value["operation"] == "resolve_extension_model_aliases" {
             return extensions::resolve_model_aliases(&payload["aliases"]);
+        }
+        if value["operation"] == "diagnostics_artifact_tables" {
+            return diagnostics_artifact_tables(payload);
         }
         if value["operation"] == "summarize_extension_diagnostics" {
             return extensions::summarize_diagnostics(&payload["checks"]);
@@ -558,4 +562,42 @@ fn run_ordered_chunks<T: Sync, R: Send>(
             })
             .collect()
     })
+}
+
+fn diagnostics_artifact_tables(
+    payload: &serde_json::Value,
+) -> Result<serde_json::Value, &'static str> {
+    let artifacts = payload["artifacts"]
+        .as_object()
+        .ok_or("artifacts must be an object")?;
+    let mut tables = serde_json::Map::new();
+    for (name, artifact) in artifacts {
+        let (Some(columns), Some(rows)) =
+            (artifact["columns"].as_array(), artifact["rows"].as_array())
+        else {
+            continue;
+        };
+        if columns.is_empty() {
+            continue;
+        }
+        let columns = columns
+            .iter()
+            .map(|column| column.as_str().ok_or("column names must be strings"))
+            .collect::<Result<Vec<_>, _>>()?;
+        let rows: Vec<Vec<_>> = rows
+            .iter()
+            .map(|row| {
+                columns
+                    .iter()
+                    .map(|&column| row.get(column).cloned().unwrap_or_default())
+                    .collect()
+            })
+            .collect();
+        tables.insert(name.clone(), json!({"columns":columns,"rows":rows,"metadata":{
+            "diagnostics_artifact":name,"diagnostics_artifact_kind":artifact["kind"].as_str().unwrap_or_default(),
+            "diagnostics_artifact_schema_version":payload["schema_version"],
+            "model_name":payload["model_name"],"support_level":payload["support_level"]
+        }}));
+    }
+    Ok(json!({"tables":tables}))
 }

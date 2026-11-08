@@ -4482,3 +4482,24 @@ fn regime_ensemble_normalizes_weights_and_validates_alignment() {
         assert_eq!(run(&request)["error"]["code"], "invalid_request");
     }
 }
+
+#[test]
+fn diagnostics_artifacts_preserve_columns_and_missing_values() {
+    let request = json!({"schema_version":"2.0","operation":"diagnostics_artifact_tables","payload":{
+    "schema_version":"1.0","model_name":"bass","support_level":"supported","artifacts":{
+        "ordered":{"kind":"residuals","columns":["z","a"],"rows":[{"a":1,"z":2},{"a":3},false]},
+        "single":{"columns":["value"],"rows":[{"value":4},{}]},
+        "summary":{"value":2}
+    }}});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    let tables = &response["result"]["tables"];
+    assert_eq!(tables["ordered"]["columns"], json!(["z", "a"]));
+    assert_eq!(
+        tables["ordered"]["rows"],
+        json!([[2, 1], [null, 3], [null, null]])
+    );
+    assert_eq!(tables["single"]["rows"], json!([[4], [null]]));
+    assert_eq!(tables["ordered"]["metadata"]["model_name"], "bass");
+    assert!(tables.get("summary").is_none());
+}
