@@ -41,6 +41,7 @@ __all__ = [
     "policy_metadata_frame",
     "ingest_polars",
     "ingest_local",
+    "fetch_oecd_dataset",
     "capabilities",
     "execute",
     "invoke_registered_extension",
@@ -127,6 +128,23 @@ def export_ipc_file(data: pl.DataFrame | pl.LazyFrame | bytes) -> bytes:
 def export_ipc_stream(data: pl.DataFrame | pl.LazyFrame | bytes) -> bytes:
     """Export a Polars frame or IPC file or stream bytes as a stream carrying schema metadata."""
     return _native.export_ipc_stream(data if isinstance(data, bytes) else _ipc(data))
+
+
+def fetch_oecd_dataset(
+    dataset_id: str, dimension_key: str, *, start_date: str = "1960", end_date: str = "2020"
+) -> pl.DataFrame:
+    """Fetch OECD SDMX observations using the dataset's ordered dimension key."""
+    result = execute(
+        "fetch_oecd_dataset",
+        dataset_id=dataset_id,
+        dimension_key=dimension_key,
+        start_date=start_date,
+        end_date=end_date,
+    )["result"]
+    return pl.read_csv(
+        io.BytesIO(result["csv"].encode("utf-8")),
+        schema_overrides={"TIME_PERIOD": pl.String, "OBS_VALUE": pl.Float64},
+    )
 
 
 def execute_scenario_grid(data: pl.DataFrame | pl.LazyFrame, **payload: Any) -> dict[str, Any]:

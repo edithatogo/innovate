@@ -45,3 +45,58 @@ pub(crate) fn request(payload: &Value) -> Result<Value, &'static str> {
     );
     Ok(json!({"url":url,"provider":"OECD","format":"sdmx_csv","start_date":start,"end_date":end}))
 }
+
+pub(crate) fn fetch(value: &Value) -> Value {
+    let (result, error) = if value["schema_version"] != crate::KERNEL_SCHEMA_VERSION {
+        (
+            Value::Null,
+            json!({"code":"invalid_request","message":"OECD requests require schema 2.0"}),
+        )
+    } else {
+        match request(&value["payload"]) {
+            Err(message) => (
+                Value::Null,
+                json!({"code":"invalid_request","message":message}),
+            ),
+            Ok(metadata) => match download(metadata["url"].as_str().unwrap()) {
+                Ok(csv) => (json!({"request":metadata,"csv":csv}), Value::Null),
+                Err(message) => (
+                    Value::Null,
+                    json!({"code":"upstream_error","message":message}),
+                ),
+            },
+        }
+    };
+    json!({"schema_version":crate::KERNEL_SCHEMA_VERSION,"operation":"fetch_oecd_dataset",
+        "model_key":null,"result":result,"error":error,"metadata":{"runtime":"rust_native"}})
+}
+
+fn download(url: &str) -> Result<String, String> {
+    use std::{io::Read, time::Duration};
+
+    const MAX_BYTES: u64 = 16 * 1024 * 1024;
+    let client = reqwest::blocking::Client::builder()
+        .timeout(Duration::from_secs(30))
+        .redirect(reqwest::redirect::Policy::none())
+        .build()
+        .map_err(|error| error.to_string())?;
+    let response = client.get(url).send().map_err(|error| error.to_string())?;
+    if !response.status().is_success() {
+        return Err(format!("OECD returned HTTP {}", response.status()));
+    }
+    if response
+        .content_length()
+        .is_some_and(|size| size > MAX_BYTES)
+    {
+        return Err("OECD response exceeds 16 MiB".into());
+    }
+    let mut bytes = Vec::new();
+    response
+        .take(MAX_BYTES + 1)
+        .read_to_end(&mut bytes)
+        .map_err(|error| error.to_string())?;
+    if bytes.len() as u64 > MAX_BYTES {
+        return Err("OECD response exceeds 16 MiB".into());
+    }
+    String::from_utf8(bytes).map_err(|_| "OECD response is not UTF-8".into())
+}

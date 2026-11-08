@@ -10,6 +10,7 @@ description = "Rust-owned innovation diffusion scientific kernel"
 [dependencies]
 serde.workspace = true
 serde_json.workspace = true
+reqwest = { version = "=0.13.5", default-features = false, features = ["blocking", "rustls"] }
 libm = "=0.2.16"
 sha2 = "=0.11.1"
 chrono = { version = "=0.4.45", default-features = false, features = ["std"] }

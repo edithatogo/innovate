@@ -2059,3 +2059,16 @@ def test_residual_svg_export():
     assert result["series"]["acf"] == [1, -0.75, 0.5]
     assert "<svg" in result["svg"]
     assert "Partial autocorrelation" not in result["svg"]
+
+
+def test_oecd_csv_ingestion_preserves_period_codes(monkeypatch):
+    def fetch(operation, **payload):
+        assert operation == "fetch_oecd_dataset"
+        assert payload["start_date"] == "1960"
+        assert payload["end_date"] == "2020"
+        return {"result": {"csv": "REF_AREA,TIME_PERIOD,OBS_VALUE\nAUS,2020,1.5\nAUS,2021,\n"}}
+
+    monkeypatch.setattr(innovate, "execute", fetch)
+    frame = innovate.fetch_oecd_dataset("OECD.SDD.STES,DSD_STES@DF_CLI", ".M.LI...AA...H")
+    assert frame["TIME_PERIOD"].to_list() == ["2020", "2021"]
+    assert frame["OBS_VALUE"].to_list() == [1.5, None]

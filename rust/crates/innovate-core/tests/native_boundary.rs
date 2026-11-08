@@ -4638,3 +4638,28 @@ fn oecd_request_preserves_dimensions_and_date_defaults() {
     request["payload"]["dimension_key"] = json!("?injected=true");
     assert_eq!(run(&request)["error"]["code"], "invalid_request");
 }
+
+#[test]
+fn oecd_fetch_rejects_invalid_requests_before_network_access() {
+    let request = json!({"schema_version":"2.0","operation":"fetch_oecd_dataset","payload":{
+        "dataset_id":"OECD.SDD.STES,DSD_STES@DF_CLI","dimension_key":"?injected=true"}});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert_eq!(response["error"]["code"], "invalid_request");
+    assert!(response["result"].is_null());
+}
+
+#[test]
+#[ignore = "requires the live public OECD SDMX endpoint"]
+fn oecd_fetch_returns_csv_from_live_endpoint() {
+    let request = json!({"schema_version":"2.0","operation":"fetch_oecd_dataset","payload":{
+        "dataset_id":"OECD.SDD.STES,DSD_STES@DF_CLI","dimension_key":".M.LI...AA...H",
+        "start_date":"2023-02","end_date":"2023-03"}});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert!(response["error"].is_null(), "{}", response["error"]);
+    let csv = response["result"]["csv"].as_str().unwrap();
+    let mut lines = csv.lines();
+    assert!(lines.next().unwrap().contains("TIME_PERIOD,OBS_VALUE"));
+    assert!(lines.any(|row| row.contains(",2023-02,") || row.contains(",2023-03,")));
+}

@@ -78,6 +78,7 @@ pub fn execute_json(input: &str) -> String {
         }
         dispatch! {
             "fit_batch" | "predict_batch" => execute_batch_json(value).to_string(),
+            "fetch_oecd_dataset" => oecd::fetch(&value).to_string(),
             "preprocess_series"
                 | "calibrate_prediction_intervals"
                 | "aggregate_dates"
