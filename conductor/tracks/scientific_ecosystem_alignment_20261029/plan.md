@@ -7913,3 +7913,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Port historical competition summaries to summarize_competition_equilibrium. The native operation distinguishes multi-product market-potential shares from interaction-adjusted equilibrium, and preserves the historical Lotka–Volterra capacity solution and boundary convention. The locked Rust closed-form test passed, including overflow-safe share normalization. Installed binding checks and broader interaction-adjusted analysis remain open.
 
 - [x] Verify the historical equilibrium operation through installed Python, Julia and freshly installed R on macOS arm64. All three select the model through the common model_key envelope and passed their focused checks. R preserves a single market potential as an array. The locked Rust closed-form regression also passed.
+
+- [x] Run the full locked release competition suite after the equilibrium envelope change. All 20 Rust tests passed, covering the historical summaries and existing competition, forcing and event behavior. Installed binding checks are recorded above; hosted validation of this source remains open.
