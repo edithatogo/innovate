@@ -7601,3 +7601,8 @@ Hosted release readiness for this worktree revision remains open.
   outcomes change and rejection when the requested rank is unavailable.
   Exchangeability, independent fitting and installed-binding checks
   remain separate acceptance requirements.
+
+- [x] Enumerate all four single-row evaluation splits for distinct
+  scores. The optimized Rust test matched exact rank coverage at
+  25%, 50% and 75%. This checks the exchangeable rank calculation
+  with fixed predictions. Empirical forecast validation remains open.

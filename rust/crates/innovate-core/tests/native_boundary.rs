@@ -4354,4 +4354,19 @@ fn split_conformal_intervals_exclude_evaluation_residuals() {
     assert_eq!(response["result"]["diagnostics"]["holdout_coverage"], 1.0);
     request["payload"]["confidence"] = json!(0.9);
     assert_eq!(execute(&request)["error"]["code"], "invalid_request");
+    // Each distinct score is equally likely to be the held-out score.
+    request["payload"]["observed"] = json!([11, 12, 13, 14]);
+    for (confidence, expected_covered) in [(0.25, 1), (0.5, 2), (0.75, 3)] {
+        request["payload"]["confidence"] = json!(confidence);
+        let mut covered = 0;
+        for held_out in 0..4 {
+            let mut mask = [0; 4];
+            mask[held_out] = 1;
+            request["payload"]["holdout"] = json!(mask);
+            let result = execute(&request);
+            assert!(result["error"].is_null());
+            covered += usize::from(result["result"]["diagnostics"]["holdout_coverage"] == 1.0);
+        }
+        assert_eq!(covered, expected_covered);
+    }
 }
