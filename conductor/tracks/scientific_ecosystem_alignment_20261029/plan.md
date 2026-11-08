@@ -7639,3 +7639,10 @@ Hosted release readiness for this worktree revision remains open.
   evaluation points were covered. The 1960 and 1970 errors grew as
   the forecast approached its fitted capacity. This single ordered
   split does not establish exchangeability or general coverage.
+
+- [x] Compare logistic, Gompertz and Bass on the same chronological
+  uspop split at nominal 80% using the installed optimized wheel.
+  Evaluation coverage was 2/5, 0/5 and 0/5, with MAE 12.139, 127.219
+  and 37.820 million respectively. Half-widths were 4.644, 33.865
+  and 3.507 million. This exploratory comparison kept the original
+  split fixed. It does not qualify model selection or broader coverage.
