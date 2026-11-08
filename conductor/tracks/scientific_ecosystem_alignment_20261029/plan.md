@@ -7919,3 +7919,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Port historical competition cross-elasticity to Rust. The operation integrates the historical interaction matrix equations and reports the absolute-coefficient proxy in product-by-time order. The locked test passed against a closed-form independent competitor trajectory and rejects malformed matrix shapes. Installed binding qualification remains open.
 
 - [x] Verify the historical cross-elasticity operation through the extracted CPython 3.15.2 wheel, Julia and the installed R package on macOS arm64. Both native shared-library callers and the Python wheel returned the expected product-by-time values within 1e-7 against the closed-form independent competitor trajectory, including an exactly zero second row. Source tested: edb1e8ef.
+
+- [x] Add the closed-form historical cross-elasticity check to the Python, Julia and R conformance suites. The focused pytest node, Julia testset and R assertions passed against the edb1e8ef wheel and shared library on macOS arm64.

@@ -2257,3 +2257,18 @@ def test_competition_equilibrium_summaries():
     assert shares["interaction_adjusted"] is False
     boundary = innovate.execute(operation, model="lotka_volterra")["result"]
     assert (boundary["N1_eq"], boundary["N2_eq"]) == (1000, 0)
+
+
+def test_historical_competition_cross_elasticity():
+    time = [0, 1, 2]
+    result = innovate.execute(
+        "competition_cross_elasticity",
+        time=time,
+        p=[0.1, 0.2],
+        q=[[0, 0.4], [0, 0]],
+        market_potentials=[50, 100],
+    )["result"]
+    first, second = result["elasticity"]
+    expected = [40 * (1 - math.exp(-0.2 * t)) / (50 + 1e-10) for t in time]
+    assert first == pytest.approx(expected, abs=1e-7, rel=0)
+    assert second == [0, 0, 0]

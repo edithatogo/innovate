@@ -1111,3 +1111,15 @@ end
     boundary = kernel_call(operation, "lotka_volterra")["result"]
     @test (boundary["N1_eq"], boundary["N2_eq"]) == (1000, 0)
 end
+
+@testset "Historical competition cross-elasticity" begin
+    time = [0, 1, 2]
+    result = kernel_call("competition_cross_elasticity", nothing, Dict(
+        "time" => time, "p" => [0.1, 0.2], "q" => [[0, 0.4], [0, 0]],
+        "market_potentials" => [50, 100]))["result"]
+    @test length(result["elasticity"]) == 2
+    first, second = result["elasticity"]
+    expected = 40 .* (1 .- exp.(-0.2 .* time)) ./ (50 + 1e-10)
+    @test isapprox(first, expected; atol=1e-7, rtol=0)
+    @test second == [0, 0, 0]
+end

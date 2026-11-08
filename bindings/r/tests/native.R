@@ -1051,3 +1051,13 @@ stopifnot(potential_shares$shares$product_0 == 0.25,
 singleton_potential <- kernel_call(equilibrium_operation, model_key="multi_product",
   payload=list(market_potentials=100))$result
 stopifnot(singleton_potential$shares$product_0 == 1)
+
+elasticity_time <- c(0, 1, 2)
+elasticity <- kernel_call("competition_cross_elasticity", payload=list(
+  time=elasticity_time, p=c(0.1, 0.2), q=list(c(0, 0.4), c(0, 0)),
+  market_potentials=c(50, 100)))$result$elasticity
+expected_elasticity <- 40 * (1 - exp(-0.2 * elasticity_time)) / (50 + 1e-10)
+stopifnot(length(elasticity) == 2,
+          length(elasticity[[1]]) == length(elasticity_time),
+          all(abs(unlist(elasticity[[1]]) - expected_elasticity) < 1e-7),
+          identical(as.numeric(unlist(elasticity[[2]])), c(0, 0, 0)))
