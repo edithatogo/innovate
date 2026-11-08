@@ -7899,3 +7899,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Run the full locked local Rust release workspace on 77a0e4bf after the converged-start tie fix. All 360 offline tests passed, and the one opt-in live OECD test passed separately. Hosted matrix run 42438532976 remains in progress.
 
 - [x] Build and install the locked macOS arm64 wheel containing the 77a0e4bf optimizer tie fix. All 150 Python native tests passed with live OECD enabled on CPython 3.15.2. Wheel SHA-256: `d94a2cd06d1c040c1c9bb31ffe544e4dfe9dded7612d6dd629813819f55dd488`. Windows hosted verification remains open.
+
+- [x] Verify full Julia and installed R conformance with the 77a0e4bf optimizer tie fix and live OECD enabled on macOS arm64. Both selected the same locked release FFI using INNOVATE_NATIVE_LIBRARY. Library SHA-256: `befd82f5d7523fa6a5a3dffd794353ceb8d81a4d0f123ec33ec6c8e4c0d11625`. Hosted validation of this revision remains separate.
