@@ -1985,3 +1985,13 @@ def test_stability_tier_guidance():
     assert "active iteration" in result["guidance"]
     with pytest.raises(innovate.NativeError, match="unknown extension stability tier"):
         innovate.execute("describe_stability_tier", stability="unknown")
+
+
+def test_policy_scenario_compares_supplied_paths():
+    result = innovate.execute(
+        "summarize_causal", method="policy_scenario", time=[1, 2, 3],
+        baseline=[10, 20, 30], intervention=[10, 25, 45],
+    )["result"]
+    assert result["difference"] == [0, 5, 15]
+    assert result["metadata"]["incremental_effect"] == 20
+    assert result["metadata"]["relative_lift_final"] == 0.5

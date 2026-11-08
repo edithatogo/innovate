@@ -7785,3 +7785,8 @@ Hosted release readiness for this worktree revision remains open.
   zero-baseline case. Four verified duplicate extension extracts
   were removed to make room, retaining their wheel archives.
   Python wheel verification remains open for this operation.
+
+- [x] Add supplied policy scenario comparison to the Python release
+  consumer suite. The optimized macOS arm64 wheel returned the expected
+  differences, total and relative lift. The focused test and Ruff
+  passed. Hosted validation remains open.
