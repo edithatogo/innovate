@@ -46,13 +46,7 @@ fn normalize(manifest: &mut Manifest) -> Result<(), &'static str> {
     {
         return Err("extension entrypoint must have module:callable form");
     }
-    manifest.stability = match manifest.stability.trim().to_ascii_lowercase().as_str() {
-        "stable" => "stable",
-        "beta" | "experimental" | "provisional" => "provisional",
-        "internal" | "internal-only" => "internal",
-        _ => return Err("unknown extension stability tier"),
-    }
-    .into();
+    manifest.stability = normalize_stability(&manifest.stability)?.into();
     if manifest.extension_points.is_empty()
         || manifest
             .extension_points
@@ -62,6 +56,32 @@ fn normalize(manifest: &mut Manifest) -> Result<(), &'static str> {
         return Err("extension points must be nonempty and recognized");
     }
     Ok(())
+}
+
+fn normalize_stability(value: &str) -> Result<&'static str, &'static str> {
+    match value.trim().to_ascii_lowercase().as_str() {
+        "stable" => Ok("stable"),
+        "beta" | "experimental" | "provisional" => Ok("provisional"),
+        "internal" | "internal-only" => Ok("internal"),
+        _ => Err("unknown extension stability tier"),
+    }
+}
+
+pub(crate) fn describe_stability(payload: &Value) -> Result<Value, &'static str> {
+    let value = payload["stability"]
+        .as_str()
+        .ok_or("stability must be a string")?;
+    let tier = normalize_stability(value)?;
+    let guidance = match tier {
+        "stable" => {
+            "Stable surfaces are versioned public contract points. Deprecation requires a documented migration window."
+        }
+        "provisional" => {
+            "Provisional surfaces are intended for active iteration. Promotion requires compatibility and coverage evidence. Removal or reshaping requires advance notice."
+        }
+        _ => "Internal surfaces are implementation details and may change without notice.",
+    };
+    Ok(json!({"stability":tier,"guidance":guidance}))
 }
 
 fn recognized_point(point: &str) -> bool {

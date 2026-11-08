@@ -3215,6 +3215,21 @@ fn extension_manifest_validation_normalizes_tiers_and_rejects_duplicate_names() 
         run(json!([manifest, manifest]))["error"]["code"],
         "invalid_request"
     );
+    for (alias, expected) in [
+        (" STABLE ", "stable"),
+        (" BETA ", "provisional"),
+        (" InTeRnAl-OnLy ", "internal"),
+    ] {
+        let request = json!({"schema_version":"2.0","operation":"describe_stability_tier","payload":{"stability":alias}});
+        let response: serde_json::Value =
+            serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+        assert_eq!(response["result"]["stability"], expected);
+        assert!(!response["result"]["guidance"].as_str().unwrap().is_empty());
+    }
+    let request = json!({"schema_version":"2.0","operation":"describe_stability_tier","payload":{"stability":"unknown"}});
+    let response: serde_json::Value =
+        serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+    assert_eq!(response["error"]["code"], "invalid_request");
     let mut invalid = manifest;
     invalid["extension_points"] = json!(["unknown"]);
     assert_eq!(run(json!([invalid]))["error"]["code"], "invalid_request");

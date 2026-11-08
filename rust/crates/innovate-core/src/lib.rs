@@ -81,6 +81,7 @@ pub fn execute_json(input: &str) -> String {
                 | "bayesian_metropolis_chains"
                 | "bayesian_split_rhat"
                 | "bayesian_effective_sample_size"
+                | "describe_stability_tier"
                 | "validate_extension_manifests"
                 | "register_extension_manifest"
                 | "unregister_extension_manifest"
@@ -276,6 +277,9 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         }
         if value["operation"] == "list_extension_manifests" {
             return extensions::registered(payload);
+        }
+        if value["operation"] == "describe_stability_tier" {
+            return extensions::describe_stability(payload);
         }
         if value["operation"] == "validate_extension_manifests" {
             return extensions::validate(payload);

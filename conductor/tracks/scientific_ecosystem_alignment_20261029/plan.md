@@ -7672,3 +7672,9 @@ Hosted release readiness for this worktree revision remains open.
   `evidence/check-uspop-interval-coverage.py`. Run it with an installed
   Innovate wheel and Rscript on PATH. It reads the built-in dataset
   and reproduced all three half-widths and coverage results.
+
+- [x] Port PR #94 stability-tier behavior to shared Rust dispatch.
+  describe_stability_tier reuses manifest normalization and returns
+  lifecycle guidance. The optimized boundary test passed for mixed
+  case and whitespace aliases and unknown-tier rejection. Installed
+  binding verification remains open for this operation.
