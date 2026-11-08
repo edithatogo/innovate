@@ -100,3 +100,51 @@ fn download(url: &str) -> Result<String, String> {
     }
     String::from_utf8(bytes).map_err(|_| "OECD response is not UTF-8".into())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::download;
+    use std::io::{Read, Write};
+    use std::net::TcpListener;
+    use std::thread;
+
+    fn serve(response: &'static [u8]) -> Result<String, String> {
+        let listener = TcpListener::bind(("127.0.0.1", 0)).unwrap();
+        let address = listener.local_addr().unwrap();
+        let server = thread::spawn(move || {
+            let (mut stream, _) = listener.accept().unwrap();
+            let mut request = Vec::new();
+            while !request.ends_with(b"\r\n\r\n") {
+                let mut byte = [0];
+                stream.read_exact(&mut byte).unwrap();
+                request.push(byte[0]);
+            }
+            stream.write_all(response).unwrap();
+        });
+        let result = download(&format!("http://{address}/data"));
+        server.join().unwrap();
+        result
+    }
+
+    #[test]
+    fn reports_upstream_http_errors_and_does_not_follow_redirects() {
+        for (response, status) in [
+            (&b"HTTP/1.1 429 Too Many Requests\r\nContent-Length: 0\r\n\r\n"[..], "429"),
+            (&b"HTTP/1.1 302 Found\r\nLocation: http://127.0.0.1:1/\r\nContent-Length: 0\r\n\r\n"[..], "302"),
+        ] {
+            assert!(serve(response).unwrap_err().contains(status));
+        }
+    }
+
+    #[test]
+    fn rejects_oversized_and_invalid_utf8_responses() {
+        assert_eq!(
+            serve(b"HTTP/1.1 200 OK\r\nContent-Length: 16777217\r\n\r\n").unwrap_err(),
+            "OECD response exceeds 16 MiB"
+        );
+        assert_eq!(
+            serve(b"HTTP/1.1 200 OK\r\nContent-Length: 1\r\n\r\n\xff").unwrap_err(),
+            "OECD response is not UTF-8"
+        );
+    }
+}
