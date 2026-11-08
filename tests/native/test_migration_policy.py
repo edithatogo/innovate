@@ -17,6 +17,8 @@ ROOT = Path(__file__).parents[2]
         "make_optional",
         "duplicate_feature",
         "missing_evidence",
+        "missing_evidence_file",
+        "outside_evidence_root",
         "missing_binding",
         "unsupported_binding",
         "empty_evidence",
@@ -58,6 +60,12 @@ def test_migration_policy_rejects_feature_loss(tmp_path, monkeypatch, mutation):
         (path / "pom.xml").touch()
     elif mutation == "missing_evidence":
         del ledger["models"][0]["evidence"]
+    elif mutation == "missing_evidence_file":
+        ledger["models"][0]["evidence"] = "missing.md"
+    elif mutation == "outside_evidence_root":
+        outside = tmp_path.parent / "outside.md"
+        outside.write_text("external evidence")
+        ledger["models"][0]["evidence"] = "../outside.md"
     elif mutation == "empty_evidence":
         ledger["models"][0].update(status="qualified", evidence="empty.md")
         (tmp_path / "empty.md").write_text(" \n")
@@ -72,7 +80,7 @@ def test_migration_policy_rejects_feature_loss(tmp_path, monkeypatch, mutation):
     monkeypatch.setattr(module, "ROOT", tmp_path)
     monkeypatch.setattr("sys.argv", ["check_migration.py"])
     expected = (
-        "(lost|required|Missing migration evidence|Empty migration evidence|"
+        "(lost|required|Missing migration evidence|Invalid migration evidence|Empty migration evidence|"
         "Invalid migration status|release_ready|Missing required binding|Unsupported language binding)"
     )
     if mutation == "qualified_with_remaining_work":

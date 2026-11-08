@@ -7704,3 +7704,8 @@ Hosted release readiness for this worktree revision remains open.
   and Python quality checks, plus the Rust advisory job. The older
   Python 3.14 commands and suppressions target retired code. Actionlint
   and the native development policy check passed.
+
+- [x] Carry the dependency-modernization branch’s missing-evidence guard
+  into the active migration checker tests. Missing files and references
+  outside the repository fail closed. All 14 policy cases and Ruff
+  passed. Freshness and dependency inventory reconciliation remain open.
