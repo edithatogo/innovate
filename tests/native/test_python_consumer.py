@@ -1995,3 +1995,13 @@ def test_policy_scenario_compares_supplied_paths():
     assert result["difference"] == [0, 5, 15]
     assert result["metadata"]["incremental_effect"] == 20
     assert result["metadata"]["relative_lift_final"] == 0.5
+
+
+def test_policy_specification_rejects_positional_contracts():
+    with pytest.raises(innovate.NativeError, match="policy specification contracts must be objects"):
+        innovate.execute(
+            "summarize_causal",
+            method="policy_specification",
+            intervention={"name": "Pilot", "timing": "post", "comparator": "control"},
+            causal_model=["Evaluation", "policy", "adoption", ["age"], None, {}],
+        )

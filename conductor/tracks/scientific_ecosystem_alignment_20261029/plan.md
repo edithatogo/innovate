@@ -7804,3 +7804,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Reconcile historical PR branch #169. The native policy specification rejects positional contract arrays with invalid_request. Serde could decode those arrays as structs, making the previous object assertion panic. The locked release-mode causal regression and four policy-filtered boundary tests passed. Installed binding validation of this revision remains open.
 
 - [x] Verify the causal policy positional-contract rejection through Julia and the installed R package. Both full conformance suites passed with the new regression using the same locked release FFI library (SHA-256 `c2ce7cf1bb39bc988f42c5c3d7f9da46f23a46a978461ebaf47391531eb4e1a0`). Library selection used INNOVATE_NATIVE_LIBRARY. Python wheel and bundled distribution validation of this change remain open.
+
+- [x] Verify the positional causal contract regression from an installed, locked release macOS arm64 wheel on repo-local CPython 3.15.2. The consumer imported from the wheel installation and both focused policy tests passed. Wheel SHA-256: `aa66b1f9d0017ae76691ae67e3a39e7a2db120bb8e0be5e6edb952b18ce9ed30`.
