@@ -4587,7 +4587,7 @@ fn residual_diagnostics_return_analytic_acf_and_pacf() {
 #[test]
 fn residual_svg_contains_configured_panels_and_escapes_title() {
     let mut request = json!({"schema_version":"2.0","operation":"render_residual_diagnostics_svg","payload":{
-        "time":[1,2,3,4],"residuals":[-1,1,-1,1],"lags":2,"config":{"title":"A < B & C"}}});
+        "time":[1,2,3,4],"residuals":[-1,1,-1,1],"config":{"title":"A < B & C","lags":2,"figsize":[8,4],"color_residuals":"#123456","color_acf":"C3"}}});
     let run = |request: &serde_json::Value| {
         serde_json::from_str::<serde_json::Value>(&innovate_core::execute_json(
             &request.to_string(),
@@ -4600,6 +4600,10 @@ fn residual_svg_contains_configured_panels_and_escapes_title() {
     assert!(svg.contains("A &lt; B &amp; C"));
     assert!(svg.contains("Partial autocorrelation"));
     assert_eq!(svg.matches("<circle").count(), 4);
+    assert!(svg.contains(r#"width="768" height="384""#));
+    assert!(svg.contains(r##"fill="#123456""##));
+    assert!(svg.contains(r##"stroke="#d62728""##));
+    assert_eq!(result["result"]["series"]["lags"], json!([0, 1, 2]));
     request["payload"]["config"]["acf_only"] = json!(true);
     assert!(
         !run(&request)["result"]["svg"]

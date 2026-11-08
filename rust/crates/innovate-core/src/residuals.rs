@@ -71,10 +71,31 @@ pub(crate) fn residual_series(payload: &Value) -> Result<Value, &'static str> {
 
 pub(crate) fn render_svg(payload: &Value) -> Result<Value, &'static str> {
     use std::fmt::Write;
-    let series = residual_series(payload)?;
     let config = &payload["config"];
+    let mut request = payload.clone();
+    if request["lags"].is_null() && !config["lags"].is_null() {
+        request["lags"] = config["lags"].clone();
+    }
+    let series = residual_series(&request)?;
     let acf_only = config["acf_only"].as_bool().unwrap_or(false);
     let height = if acf_only { 320 } else { 460 };
+    let (display_width, display_height) = if config["figsize"].is_null() {
+        (640., f64::from(height))
+    } else {
+        let (width, explicit_height): (f64, Option<f64>) =
+            serde_json::from_value(config["figsize"].clone())
+                .map_err(|_| "figsize must contain width and optional height in inches")?;
+        let display_width = width * 96.;
+        let display_height =
+            explicit_height.map_or(display_width * f64::from(height) / 640., |h| h * 96.);
+        if [display_width, display_height]
+            .iter()
+            .any(|value| !(1. ..=16384.).contains(value))
+        {
+            return Err("figure dimensions must be between 1 and 16384 pixels");
+        }
+        (display_width, display_height)
+    };
     let title = config["title"]
         .as_str()
         .unwrap_or("Residual diagnostics")
@@ -82,7 +103,7 @@ pub(crate) fn render_svg(payload: &Value) -> Result<Value, &'static str> {
         .replace('<', "&lt;")
         .replace('>', "&gt;");
     let mut svg = format!(
-        r#"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 {height}" role="img"><title>{title}</title><text x="32" y="24">{title}</text>"#
+        r#"<svg xmlns="http://www.w3.org/2000/svg" width="{display_width}" height="{display_height}" viewBox="0 0 640 {height}" role="img"><title>{title}</title><text x="32" y="24">{title}</text>"#
     );
     for (panel, (key, label, x_key)) in [
         ("residuals", "Residuals over time", "time"),
@@ -93,6 +114,16 @@ pub(crate) fn render_svg(payload: &Value) -> Result<Value, &'static str> {
     .take(if acf_only { 2 } else { 3 })
     .enumerate()
     {
+        let color_key = ["color_residuals", "color_acf", "color_pacf"][panel];
+        let color = if config[color_key].is_null() {
+            ["#1f77b4", "#ff7f0e", "#2ca02c"][panel]
+        } else {
+            plot_color(
+                config[color_key]
+                    .as_str()
+                    .ok_or("plot colors must be strings")?,
+            )?
+        };
         let top = 48. + 140. * panel as f64;
         let xs = series[x_key].as_array().unwrap();
         let ys = series[key].as_array().unwrap();
@@ -126,15 +157,11 @@ pub(crate) fn render_svg(payload: &Value) -> Result<Value, &'static str> {
                 if panel == 0 {
                     write!(
                         svg,
-                        r#"<circle cx="{x:.2}" cy="{y:.2}" r="2" fill="steelblue"/>"#
+                        r#"<circle cx="{x:.2}" cy="{y:.2}" r="2" fill="{color}"/>"#
                     )
                     .unwrap();
                 } else {
-                    write!(
-                        svg,
-                        r#"<path d="M{x:.2} {mid}V{y:.2}" stroke="steelblue"/>"#
-                    )
-                    .unwrap();
+                    write!(svg, r#"<path d="M{x:.2} {mid}V{y:.2}" stroke="{color}"/>"#).unwrap();
                 }
             }
         }
@@ -142,4 +169,20 @@ pub(crate) fn render_svg(payload: &Value) -> Result<Value, &'static str> {
     }
     svg.push_str("</svg>");
     Ok(json!({"format":"svg","svg":svg,"series":series}))
+}
+
+fn plot_color(color: &str) -> Result<&str, &'static str> {
+    if let [b'C', index @ b'0'..=b'9'] = color.as_bytes() {
+        return Ok([
+            "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f",
+            "#bcbd22", "#17becf",
+        ][usize::from(index - b'0')]);
+    }
+    if color.strip_prefix('#').is_some_and(|hex| {
+        matches!(hex.len(), 3 | 4 | 6 | 8) && hex.bytes().all(|digit| digit.is_ascii_hexdigit())
+    }) || (!color.is_empty() && color.bytes().all(|letter| letter.is_ascii_alphabetic()))
+    {
+        return Ok(color);
+    }
+    Err("plot colors must be SVG color names, hex codes or palette indices C0 through C9")
 }

@@ -7835,3 +7835,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Implement the Rust data layer for #80 with residual_diagnostic_series. Returns aligned time and residuals, configurable lags, biased ACF and Durbin–Levinson PACF. The locked release test passed for analytic lag values, constant-series nulls and invalid lag limits. Plot rendering and installed binding checks remain open.
 
 - [x] Add native SVG rendering for #80 residual diagnostics. The locked release tests passed for analytic values, rendered panel structure, ACF-only selection and escaped titles. SVG export uses a shared Rust renderer. Historical color and figure size configuration and binding checks remain open.
+
+- [x] Preserve figure size, per-panel colors and configured lags in native residual SVG. The renderer converts inches at 96 pixels per inch and accepts hex, alphabetic SVG colors and historical C0–C9 palette indices. Both locked release residual tests passed. Visual and installed binding verification remain open.
