@@ -7752,3 +7752,8 @@ Hosted release readiness for this worktree revision remains open.
   Generate JSON operation names from the same routes used for dispatch.
   All 94 optimized native boundary tests passed. Installed binding
   verification remains open for the discovery operation.
+
+- [x] Verify Julia and R operation discovery against the rebuilt
+  optimized FFI library using an explicit library path. Both returned
+  the same 53 unique operation names in the same order. R list
+  serialization was flattened for comparison with Julia’s array.
