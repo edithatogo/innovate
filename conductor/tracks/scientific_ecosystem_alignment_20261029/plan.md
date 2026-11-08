@@ -8034,3 +8034,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Build the locked CPython 3.15.2 release wheel from 05e8ad3c on macOS arm64 and run tests/native against the extracted wheel. All 158 offline tests passed. The public OECD endpoint test was skipped by its normal opt-in condition.
 
 - [x] Run the opt-in live OECD Python consumer test against the same 05e8ad3c wheel. The returned Polars table had the expected dates and floating-point observation column.
+
+- [x] Verify hosted Security and Quality on 05e8ad3c. Run 42445474031 passed Python quality, RustSec, Dependency Review, Secret Scan, and workflow policy lint. Release readiness run 42445474021 failed on the migration ledger as designed while required scientific obligations remain open. The separate platform binding matrix is still running.
