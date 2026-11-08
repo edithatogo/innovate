@@ -8036,3 +8036,5 @@ Hosted release readiness for this worktree revision remains open.
 - [x] Run the opt-in live OECD Python consumer test against the same 05e8ad3c wheel. The returned Polars table had the expected dates and floating-point observation column.
 
 - [x] Verify hosted Security and Quality on 05e8ad3c. Run 42445474031 passed Python quality, RustSec, Dependency Review, Secret Scan, and workflow policy lint. Release readiness run 42445474021 failed on the migration ledger as designed while required scientific obligations remain open. The separate platform binding matrix is still running.
+
+- [x] Verify hosted Binding Conformance run 42445473947 and the macOS Julia and R job 128623390521 on 05e8ad3c. Both passed. The macOS job built the locked FFI, ran the Julia tests, built and installed the R binary archive, and ran the native R tests. The other five matrix jobs were still in progress.
