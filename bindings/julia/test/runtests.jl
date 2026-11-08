@@ -1044,3 +1044,10 @@ end
     @test result["metadata"]["interval_half_width"] == 2.0
     @test result["diagnostics"]["holdout_coverage"] == 0.0
 end
+
+@testset "Policy specification rejects positional contracts" begin
+    payload = Dict("method" => "policy_specification",
+        "intervention" => Dict("name" => "Pilot", "timing" => "post", "comparator" => "control"),
+        "causal_model" => ["Evaluation", "policy", "adoption", ["age"], nothing, Dict()])
+    @test_throws r"invalid_request" kernel_call("summarize_causal", nothing, payload)
+end

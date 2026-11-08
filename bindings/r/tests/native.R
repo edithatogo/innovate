@@ -977,3 +977,12 @@ split_intervals <- kernel_call("calibrate_prediction_intervals", payload = list(
 ))$result
 stopifnot(split_intervals$metadata$interval_half_width == 2,
           split_intervals$diagnostics$holdout_coverage == 0)
+
+positional_policy <- list(method="policy_specification",
+  intervention=list(name="Pilot", timing="post", comparator="control"),
+  causal_model=list("Evaluation", "policy", "adoption", list("age"), NULL, structure(list(), names=character())))
+positional_error <- tryCatch({
+  kernel_call("summarize_causal", payload=positional_policy)
+  ""
+}, error=conditionMessage)
+stopifnot(grepl("invalid_request", positional_error))
