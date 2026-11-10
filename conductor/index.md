@@ -31,3 +31,4 @@ Run `python scripts/conductor_registry_hygiene.py --json`. Planning, implementat
 ## Approved planning on implementation hold
 
 - [tobac uptake and diffusion consumer qualification](./tracks/tobac_consumer_qualification_20261025/index.md): no implementation or automatic progression authorised.
+- [Semi-Markov tunnel states and competing-risks hazard kernels for tobac](./tracks/semi_markov_competing_risks_20261110/index.md): planned co-design track for competing-risks transition generators, duration-dependent relapse/excess-risk decay kernels, and Polars cohort interchange (`tobac` BF3 / F02 / F04).
