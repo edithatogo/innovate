@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2
       - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
         with:
           toolchain: 1.99.1
@@ -140,7 +140,7 @@ jobs:
       - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2
       - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
         with:
           toolchain: 1.99.1
@@ -187,14 +187,14 @@ jobs:
           mkdir -p bindings/julia/deps bindings/r/inst/lib
           cp "target/release/$NATIVE_LIBRARY" bindings/julia/deps/
           cp "target/release/$NATIVE_LIBRARY" bindings/r/inst/lib/
-      - uses: julia-actions/setup-julia@fa02766e078afaaf09b14210362cee14137e6a32
+      - uses: julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687
         with:
           version: '1.13'
       - shell: bash
         run: |
           unset INNOVATE_NATIVE_LIBRARY
           julia --project=bindings/julia -e 'using Pkg; Pkg.instantiate(); Pkg.test()'
-      - uses: r-lib/actions/setup-r@d3c5be51b12e724e68f33216ca3c148b66d5f0b6
+      - uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05
       - shell: bash
         run: Rscript -e 'install.packages("jsonlite", repos="https://cloud.r-project.org")'
       - run: R CMD INSTALL bindings/r

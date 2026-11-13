@@ -370,6 +370,7 @@ Interface: a clean-user command reproduces declared tables/figures from rights-p
 Test: missing/changed input fails; reported values match computation; no private source redistributed; AI assistance and exact software/data versions disclosed; unrelated studies are not duplicate publications.
 Command: `uv run pytest tests/validation/test_reproduction_bundle.py -q` and the recorded clean-environment reproduction command.
 - [ ] Separate JOSS software, forecasting, innovation/hype and decision/data outputs; verify current venue rules; review and commit. External submission remains a separately authorised action.
+- [ ] Apply the [V05 manuscript checkpoint](tracks/empirical_validation_publication_20261107/plan.md#v05-manuscript-checkpoint) to each paper-specific manifest and exact edition.
 
 ## Hardening and release — empirical_validation_publication_20261107
 
