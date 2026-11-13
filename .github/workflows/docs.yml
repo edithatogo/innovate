@@ -43,7 +43,7 @@ jobs:
           cache-dependency-path: docs/astro-site/pnpm-lock.yaml
 
       - name: Install uv
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2
       - name: Install isolated Python documentation extractor
         run: |
           uv venv ../../.venv-docs --python 3.15.2
