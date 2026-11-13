@@ -5,8 +5,8 @@
     ":dependencyDashboard",
     ":semanticCommits"
   ],
-  "baseBranches": ["main"],
-  "schedule": ["every Monday"],
+  "baseBranchPatterns": ["main"],
+  "schedule": ["* * * * 1"],
   "prCreation": "immediate",
   "prHourlyLimit": 5,
   "prConcurrentLimit": 10,
