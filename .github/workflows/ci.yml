@@ -187,7 +187,7 @@ jobs:
           mkdir -p bindings/julia/deps bindings/r/inst/lib
           cp "target/release/$NATIVE_LIBRARY" bindings/julia/deps/
           cp "target/release/$NATIVE_LIBRARY" bindings/r/inst/lib/
-      - uses: julia-actions/setup-julia@fa02766e078afaaf09b14210362cee14137e6a32
+      - uses: julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687
         with:
           version: '1.13'
       - shell: bash
