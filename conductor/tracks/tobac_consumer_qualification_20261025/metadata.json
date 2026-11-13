@@ -9,7 +9,7 @@
   "implementation_authorized": false,
   "implementation_state": "not_started",
   "approval_scope": "Conductor registration only; user explicitly prohibited implementation",
-  "master_track": "https://github.com/edithatogo/tobac/tree/codex/ecosystem-planning-20261025/conductor/tracks/scientific_ecosystem_20261025",
+  "master_track": "https://github.com/edithatogo/tobac/blob/main/conductor/archive/scientific_ecosystem_20261025/index.md",
   "github_issue": "https://github.com/edithatogo/innovate/issues/546",
   "existing_work": [
     "conductor/archive/functional_kernel_contract_20260415/",

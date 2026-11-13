@@ -1,7 +1,7 @@
 # tobac uptake and diffusion consumer qualification
 
 **Approved planning only; implementation NOT authorised.**
-Base: `83d556ba4995fd5f5238f4953e9a8af34976f464`. [Master track](https://github.com/edithatogo/tobac/tree/codex/ecosystem-planning-20261025/conductor/tracks/scientific_ecosystem_20261025).
+Base: `83d556ba4995fd5f5238f4953e9a8af34976f464`. [Master track](https://github.com/edithatogo/tobac/blob/main/conductor/archive/scientific_ecosystem_20261025/index.md).
 
 ## Scope
 

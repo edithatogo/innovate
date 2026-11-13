@@ -6,7 +6,8 @@
 - [Plan](plan.md)
 - [Metadata and authority](metadata.json)
 - [Semi-Markov tunnel states and competing-risks hazard kernels](../semi_markov_competing_risks_20261110/index.md)
-- [Master track](https://github.com/edithatogo/tobac/tree/codex/ecosystem-planning-20261025/conductor/tracks/scientific_ecosystem_20261025)
+- [Master track](https://github.com/edithatogo/tobac/blob/main/conductor/archive/scientific_ecosystem_20261025/index.md)
+- [Innovate registration in PR #577](https://github.com/edithatogo/innovate/pull/577)
 
 Registration changes no runtime, dependency, workflow or native binding.
 
