@@ -1,0 +1,1571 @@
+{
+  "historical_native_commit": "3681c8a820e7f3f852ff7429687ba3997cbcae3f",
+  "historical_native_lock_sha256": "2d828a578f4b623907ef78105e28051168c96095a50657df56d8c279587e5d98",
+  "historical_raw_response_sha256": "d6494efcc947ac9109edcb0015bcbe576036a07e6dd8c1ce61ec7d130cfe460c",
+  "legacy_tag_commit": "3459f4528c11ceba8d1e5840d3da852dfb8d58bd",
+  "legacy": [
+    {
+      "scenario": {
+        "scenario_type": "baseline",
+        "name": "Historical",
+        "description": "v0.6 tagged schema",
+        "time_horizon": 5.0,
+        "time_unit": "years",
+        "reference_year": 2026,
+        "market_size": 200.0,
+        "initial_adoption": 0.25
+      },
+      "seed": 18446744073709551615,
+      "model_type": "bass",
+      "version": "0.6.0",
+      "notes": "tagged source",
+      "timestamp": "2026-01-01T00:00:00+00:00"
+    },
+    {
+      "scenario": {
+        "scenario_type": "intervention",
+        "name": "Historical",
+        "description": "v0.6 tagged schema",
+        "time_horizon": 5.0,
+        "time_unit": "years",
+        "reference_year": 2026,
+        "market_size": 200.0,
+        "initial_adoption": 0.25,
+        "intervention_type": "subsidy",
+        "intervention_start_time": 2.0,
+        "intervention_magnitude": 0.1
+      },
+      "seed": 18446744073709551615,
+      "model_type": "bass",
+      "version": "0.6.0",
+      "notes": "tagged source",
+      "timestamp": "2026-01-01T00:00:00+00:00"
+    },
+    {
+      "scenario": {
+        "scenario_type": "substitution",
+        "name": "Historical",
+        "description": "v0.6 tagged schema",
+        "time_horizon": 5.0,
+        "time_unit": "years",
+        "reference_year": 2026,
+        "market_size": 200.0,
+        "initial_adoption": 0.25,
+        "incumbent_name": "A",
+        "entrant_name": "B",
+        "substitution_rate": 0.5
+      },
+      "seed": 18446744073709551615,
+      "model_type": "bass",
+      "version": "0.6.0",
+      "notes": "tagged source",
+      "timestamp": "2026-01-01T00:00:00+00:00"
+    },
+    {
+      "scenario": {
+        "scenario_type": "competition",
+        "name": "Historical",
+        "description": "v0.6 tagged schema",
+        "time_horizon": 5.0,
+        "time_unit": "years",
+        "reference_year": 2026,
+        "market_size": 200.0,
+        "initial_adoption": 0.25,
+        "num_competitors": 2,
+        "competitor_names": [
+          "A",
+          "B"
+        ],
+        "market_share_initial": [
+          0.25,
+          0.75
+        ]
+      },
+      "seed": 18446744073709551615,
+      "model_type": "bass",
+      "version": "0.6.0",
+      "notes": "tagged source",
+      "timestamp": "2026-01-01T00:00:00+00:00"
+    },
+    {
+      "scenario": {
+        "scenario_type": "network",
+        "name": "Historical",
+        "description": "v0.6 tagged schema",
+        "time_horizon": 5.0,
+        "time_unit": "years",
+        "reference_year": 2026,
+        "market_size": 200.0,
+        "initial_adoption": 0.25,
+        "network_type": "random",
+        "num_nodes": 4,
+        "average_degree": 1.0
+      },
+      "seed": 18446744073709551615,
+      "model_type": "bass",
+      "version": "0.6.0",
+      "notes": "tagged source",
+      "timestamp": "2026-01-01T00:00:00+00:00"
+    }
+  ],
+  "native": [
+    {
+      "id": "logistic",
+      "artifact": {
+        "model_type": "logistic",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "logistic",
+                "model_key": "logistic",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      1.0
+                    ]
+                  },
+                  "parameters": {
+                    "L": 100.0,
+                    "k": 1.0,
+                    "x0": 1.0
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": null,
+        "timestamp": "2026-11-13T10:49:39.369791+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          50.0
+        ]
+      },
+      "historical_result_sha256": "9e7df2178b29feaa59544b2a69e221d21d97163f0333cddaabaae9abf2282f52"
+    },
+    {
+      "id": "kairos_des-0-0",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "kairos_des-0-0",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      1.0,
+                      5.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 100.0,
+                    "p": 0.2,
+                    "q": 0.0
+                  },
+                  "simulation_options": {
+                    "engine": "kairos_des",
+                    "population": 100,
+                    "seed": 0,
+                    "ticks_per_unit": 1000000
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 0,
+        "timestamp": "2026-11-13T10:49:39.370013+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          0.0,
+          16.0,
+          62.0
+        ],
+        "counts": [
+          0,
+          16,
+          62
+        ]
+      },
+      "historical_result_sha256": "230d0c290c004ff5359bc2e823687443a3d77b80e7a03fc96625f338e5b7048a"
+    },
+    {
+      "id": "kairos_des-0-0.3",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "kairos_des-0-0.3",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      1.0,
+                      5.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 100.0,
+                    "p": 0.2,
+                    "q": 0.3
+                  },
+                  "simulation_options": {
+                    "engine": "kairos_des",
+                    "population": 100,
+                    "seed": 0,
+                    "ticks_per_unit": 1000000
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 0,
+        "timestamp": "2026-11-13T10:49:39.370099+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          0.0,
+          17.0,
+          81.0
+        ],
+        "counts": [
+          0,
+          17,
+          81
+        ]
+      },
+      "historical_result_sha256": "8290e1410fa0b7950a6e70cf01112896d41774ab514a24865272623419add51a"
+    },
+    {
+      "id": "kairos_des-1-0",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "kairos_des-1-0",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      1.0,
+                      5.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 100.0,
+                    "p": 0.2,
+                    "q": 0.0
+                  },
+                  "simulation_options": {
+                    "engine": "kairos_des",
+                    "population": 100,
+                    "seed": 1,
+                    "ticks_per_unit": 1000000
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 1,
+        "timestamp": "2026-11-13T10:49:39.370121+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          0.0,
+          19.0,
+          56.00000000000001
+        ],
+        "counts": [
+          0,
+          19,
+          56
+        ]
+      },
+      "historical_result_sha256": "976795f6d4ba54f6210031e74052ae0d7fb211663d97df92db75476928b0a865"
+    },
+    {
+      "id": "kairos_des-1-0.3",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "kairos_des-1-0.3",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      1.0,
+                      5.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 100.0,
+                    "p": 0.2,
+                    "q": 0.3
+                  },
+                  "simulation_options": {
+                    "engine": "kairos_des",
+                    "population": 100,
+                    "seed": 1,
+                    "ticks_per_unit": 1000000
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 1,
+        "timestamp": "2026-11-13T10:49:39.370139+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          0.0,
+          21.0,
+          74.0
+        ],
+        "counts": [
+          0,
+          21,
+          74
+        ]
+      },
+      "historical_result_sha256": "0ecf3c2584453887eed096507aafd2c0e50baea6f77f201162c06149fab533da"
+    },
+    {
+      "id": "kairos_des-42-0",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "kairos_des-42-0",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      1.0,
+                      5.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 100.0,
+                    "p": 0.2,
+                    "q": 0.0
+                  },
+                  "simulation_options": {
+                    "engine": "kairos_des",
+                    "population": 100,
+                    "seed": 42,
+                    "ticks_per_unit": 1000000
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 42,
+        "timestamp": "2026-11-13T10:49:39.370158+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          0.0,
+          24.0,
+          65.0
+        ],
+        "counts": [
+          0,
+          24,
+          65
+        ]
+      },
+      "historical_result_sha256": "e985fef53ae325418299be335e17e5c9eda5bc425070a88b38fccf598817f441"
+    },
+    {
+      "id": "kairos_des-42-0.3",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "kairos_des-42-0.3",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      1.0,
+                      5.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 100.0,
+                    "p": 0.2,
+                    "q": 0.3
+                  },
+                  "simulation_options": {
+                    "engine": "kairos_des",
+                    "population": 100,
+                    "seed": 42,
+                    "ticks_per_unit": 1000000
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 42,
+        "timestamp": "2026-11-13T10:49:39.370178+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          0.0,
+          27.0,
+          82.0
+        ],
+        "counts": [
+          0,
+          27,
+          82
+        ]
+      },
+      "historical_result_sha256": "d83009f6970024b72615eb57e5d650feea5eee7bfd11722f8d11b8221653a512"
+    },
+    {
+      "id": "kairos_des-99-0",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "kairos_des-99-0",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      1.0,
+                      5.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 100.0,
+                    "p": 0.2,
+                    "q": 0.0
+                  },
+                  "simulation_options": {
+                    "engine": "kairos_des",
+                    "population": 100,
+                    "seed": 99,
+                    "ticks_per_unit": 1000000
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 99,
+        "timestamp": "2026-11-13T10:49:39.370199+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          0.0,
+          10.0,
+          60.0
+        ],
+        "counts": [
+          0,
+          10,
+          60
+        ]
+      },
+      "historical_result_sha256": "38231fbd8f5ca2a0b47e4a71b3693beb5a69da7b20361060ad6d71269e9ad610"
+    },
+    {
+      "id": "kairos_des-99-0.3",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "kairos_des-99-0.3",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      1.0,
+                      5.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 100.0,
+                    "p": 0.2,
+                    "q": 0.3
+                  },
+                  "simulation_options": {
+                    "engine": "kairos_des",
+                    "population": 100,
+                    "seed": 99,
+                    "ticks_per_unit": 1000000
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 99,
+        "timestamp": "2026-11-13T10:49:39.370215+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          0.0,
+          11.0,
+          80.0
+        ],
+        "counts": [
+          0,
+          11,
+          80
+        ]
+      },
+      "historical_result_sha256": "4372d4df30129b8643c596ad2c8c931f533cbad7c73af83e482be974ff6d42e1"
+    },
+    {
+      "id": "kairos_des-65535-0",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "kairos_des-65535-0",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      1.0,
+                      5.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 100.0,
+                    "p": 0.2,
+                    "q": 0.0
+                  },
+                  "simulation_options": {
+                    "engine": "kairos_des",
+                    "population": 100,
+                    "seed": 65535,
+                    "ticks_per_unit": 1000000
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 65535,
+        "timestamp": "2026-11-13T10:49:39.370234+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          0.0,
+          17.0,
+          62.0
+        ],
+        "counts": [
+          0,
+          17,
+          62
+        ]
+      },
+      "historical_result_sha256": "7eac94c635e45d207b90aeec89e2ac2e3e92c1182e301b1bce8c3a6478ba13d7"
+    },
+    {
+      "id": "kairos_des-65535-0.3",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "kairos_des-65535-0.3",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      1.0,
+                      5.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 100.0,
+                    "p": 0.2,
+                    "q": 0.3
+                  },
+                  "simulation_options": {
+                    "engine": "kairos_des",
+                    "population": 100,
+                    "seed": 65535,
+                    "ticks_per_unit": 1000000
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 65535,
+        "timestamp": "2026-11-13T10:49:39.370254+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          0.0,
+          19.0,
+          83.0
+        ],
+        "counts": [
+          0,
+          19,
+          83
+        ]
+      },
+      "historical_result_sha256": "249f47cbe9176db01e2d1c239def72923a9d968ccd8bbc584192c7718a0fada1"
+    },
+    {
+      "id": "kairos_abm-0-0",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "kairos_abm-0-0",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      1.0,
+                      5.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 100.0,
+                    "p": 0.2,
+                    "q": 0.0
+                  },
+                  "simulation_options": {
+                    "engine": "kairos_abm",
+                    "population": 100,
+                    "seed": 0,
+                    "ticks_per_unit": 1000000
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 0,
+        "timestamp": "2026-11-13T10:49:39.370272+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          0.0,
+          16.0,
+          62.0
+        ],
+        "counts": [
+          0,
+          16,
+          62
+        ]
+      },
+      "historical_result_sha256": "9e6537f775d4b55821e0580962bdf63682d711c5a6f8932773b7bdf5d15a9fd0"
+    },
+    {
+      "id": "kairos_abm-0-0.3",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "kairos_abm-0-0.3",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      1.0,
+                      5.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 100.0,
+                    "p": 0.2,
+                    "q": 0.3
+                  },
+                  "simulation_options": {
+                    "engine": "kairos_abm",
+                    "population": 100,
+                    "seed": 0,
+                    "ticks_per_unit": 1000000
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 0,
+        "timestamp": "2026-11-13T10:49:39.370375+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          0.0,
+          17.0,
+          81.0
+        ],
+        "counts": [
+          0,
+          17,
+          81
+        ]
+      },
+      "historical_result_sha256": "f00c07d624a5ae4bb8ae1c5c266dc0ffee34f0ee03573976e0be64e94a1fe7fe"
+    },
+    {
+      "id": "kairos_abm-1-0",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "kairos_abm-1-0",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      1.0,
+                      5.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 100.0,
+                    "p": 0.2,
+                    "q": 0.0
+                  },
+                  "simulation_options": {
+                    "engine": "kairos_abm",
+                    "population": 100,
+                    "seed": 1,
+                    "ticks_per_unit": 1000000
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 1,
+        "timestamp": "2026-11-13T10:49:39.370452+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          0.0,
+          19.0,
+          56.00000000000001
+        ],
+        "counts": [
+          0,
+          19,
+          56
+        ]
+      },
+      "historical_result_sha256": "f227358c622c4e7e4089f4aa1cd551f72c28f98796645780d27ee8de107ff9f5"
+    },
+    {
+      "id": "kairos_abm-1-0.3",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "kairos_abm-1-0.3",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      1.0,
+                      5.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 100.0,
+                    "p": 0.2,
+                    "q": 0.3
+                  },
+                  "simulation_options": {
+                    "engine": "kairos_abm",
+                    "population": 100,
+                    "seed": 1,
+                    "ticks_per_unit": 1000000
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 1,
+        "timestamp": "2026-11-13T10:49:39.370525+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          0.0,
+          21.0,
+          74.0
+        ],
+        "counts": [
+          0,
+          21,
+          74
+        ]
+      },
+      "historical_result_sha256": "c4346981f47f38f8387b77c0d305cb54d97c8a89280a993482f62431fe96f495"
+    },
+    {
+      "id": "kairos_abm-42-0",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "kairos_abm-42-0",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      1.0,
+                      5.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 100.0,
+                    "p": 0.2,
+                    "q": 0.0
+                  },
+                  "simulation_options": {
+                    "engine": "kairos_abm",
+                    "population": 100,
+                    "seed": 42,
+                    "ticks_per_unit": 1000000
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 42,
+        "timestamp": "2026-11-13T10:49:39.370596+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          0.0,
+          24.0,
+          65.0
+        ],
+        "counts": [
+          0,
+          24,
+          65
+        ]
+      },
+      "historical_result_sha256": "1686d75ab353c1ca2a90e43808fe2f23a9475a9c2788c737965bbbfcf762b463"
+    },
+    {
+      "id": "kairos_abm-42-0.3",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "kairos_abm-42-0.3",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      1.0,
+                      5.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 100.0,
+                    "p": 0.2,
+                    "q": 0.3
+                  },
+                  "simulation_options": {
+                    "engine": "kairos_abm",
+                    "population": 100,
+                    "seed": 42,
+                    "ticks_per_unit": 1000000
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 42,
+        "timestamp": "2026-11-13T10:49:39.370666+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          0.0,
+          27.0,
+          82.0
+        ],
+        "counts": [
+          0,
+          27,
+          82
+        ]
+      },
+      "historical_result_sha256": "de0d63fa7f325fbe3d05279ef59e13cf5c1fa42d3b06846dc004d4820ea1c3cc"
+    },
+    {
+      "id": "kairos_abm-99-0",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "kairos_abm-99-0",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      1.0,
+                      5.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 100.0,
+                    "p": 0.2,
+                    "q": 0.0
+                  },
+                  "simulation_options": {
+                    "engine": "kairos_abm",
+                    "population": 100,
+                    "seed": 99,
+                    "ticks_per_unit": 1000000
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 99,
+        "timestamp": "2026-11-13T10:49:39.370735+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          0.0,
+          10.0,
+          60.0
+        ],
+        "counts": [
+          0,
+          10,
+          60
+        ]
+      },
+      "historical_result_sha256": "4ac568b69b40a2f399b91f93f459da898670cbe81046b35ccc6505e48e35cc81"
+    },
+    {
+      "id": "kairos_abm-99-0.3",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "kairos_abm-99-0.3",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      1.0,
+                      5.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 100.0,
+                    "p": 0.2,
+                    "q": 0.3
+                  },
+                  "simulation_options": {
+                    "engine": "kairos_abm",
+                    "population": 100,
+                    "seed": 99,
+                    "ticks_per_unit": 1000000
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 99,
+        "timestamp": "2026-11-13T10:49:39.370802+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          0.0,
+          11.0,
+          80.0
+        ],
+        "counts": [
+          0,
+          11,
+          80
+        ]
+      },
+      "historical_result_sha256": "b06e4622f2feda78b166372509e0f860a04fe23437f1641850b7280ec46416aa"
+    },
+    {
+      "id": "kairos_abm-65535-0",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "kairos_abm-65535-0",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      1.0,
+                      5.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 100.0,
+                    "p": 0.2,
+                    "q": 0.0
+                  },
+                  "simulation_options": {
+                    "engine": "kairos_abm",
+                    "population": 100,
+                    "seed": 65535,
+                    "ticks_per_unit": 1000000
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 65535,
+        "timestamp": "2026-11-13T10:49:39.370874+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          0.0,
+          17.0,
+          62.0
+        ],
+        "counts": [
+          0,
+          17,
+          62
+        ]
+      },
+      "historical_result_sha256": "3b37f619248f665d520d411b2df20c2d8783a6b4afb308146c4e8eea5bc003e3"
+    },
+    {
+      "id": "kairos_abm-65535-0.3",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "kairos_abm-65535-0.3",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      1.0,
+                      5.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 100.0,
+                    "p": 0.2,
+                    "q": 0.3
+                  },
+                  "simulation_options": {
+                    "engine": "kairos_abm",
+                    "population": 100,
+                    "seed": 65535,
+                    "ticks_per_unit": 1000000
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 65535,
+        "timestamp": "2026-11-13T10:49:39.370942+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          0.0,
+          19.0,
+          83.0
+        ],
+        "counts": [
+          0,
+          19,
+          83
+        ]
+      },
+      "historical_result_sha256": "312611e53fbcad9c6e47efac4e8beef8ada28bbf93bad1a46644962a8ec7361a"
+    },
+    {
+      "id": "chain",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "chain",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      5.0,
+                      20.0,
+                      100.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 3.0,
+                    "p": 0.0,
+                    "q": 3.0
+                  },
+                  "simulation_options": {
+                    "capacity": 1,
+                    "edges": [
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        1,
+                        2
+                      ]
+                    ],
+                    "engine": "kairos_network",
+                    "initial_agents": [
+                      0
+                    ],
+                    "population": 3,
+                    "seed": 42,
+                    "service_ticks": 5,
+                    "ticks_per_unit": 1
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 42,
+        "timestamp": "2026-11-13T10:49:39.371015+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          1.0,
+          1.0,
+          3.0,
+          3.0
+        ],
+        "counts": [
+          1,
+          1,
+          3,
+          3
+        ],
+        "requests": [
+          {
+            "agent": 1,
+            "tick": 2
+          },
+          {
+            "agent": 2,
+            "tick": 8
+          }
+        ],
+        "completions": [
+          {
+            "agent": 1,
+            "tick": 7
+          },
+          {
+            "agent": 2,
+            "tick": 13
+          }
+        ]
+      },
+      "historical_result_sha256": "2920e2d550a6afe9e7ef2a5cc7d42ec8dd207e8aae30feba1faefe91f4c9bb83"
+    },
+    {
+      "id": "edgeless",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "edgeless",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      5.0,
+                      20.0,
+                      100.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 3.0,
+                    "p": 0.0,
+                    "q": 3.0
+                  },
+                  "simulation_options": {
+                    "capacity": 1,
+                    "edges": [],
+                    "engine": "kairos_network",
+                    "initial_agents": [
+                      0
+                    ],
+                    "population": 3,
+                    "seed": 42,
+                    "service_ticks": 5,
+                    "ticks_per_unit": 1
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 42,
+        "timestamp": "2026-11-13T10:49:39.371075+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "counts": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "requests": [],
+        "completions": []
+      },
+      "historical_result_sha256": "2903d4c0c9d97e9d83c1f7b92cd6bfedf9515ca7190fe741b3e7a2edb046efee"
+    },
+    {
+      "id": "directed-weighted",
+      "artifact": {
+        "model_type": "bass",
+        "notes": null,
+        "replay_request": {
+          "operation": "execute_scenario_grid",
+          "payload": {
+            "scenarios": [
+              {
+                "id": "directed-weighted",
+                "model_key": "bass",
+                "notes": null,
+                "simulation": {
+                  "inputs": {
+                    "time": [
+                      0.0,
+                      5.0,
+                      20.0
+                    ]
+                  },
+                  "parameters": {
+                    "m": 3.0,
+                    "p": 0.0,
+                    "q": 1000000000000.0
+                  },
+                  "simulation_options": {
+                    "capacity": 1,
+                    "directed": true,
+                    "edge_weights": [
+                      1e+308,
+                      1e+308
+                    ],
+                    "edges": [
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        2,
+                        1
+                      ]
+                    ],
+                    "engine": "kairos_network",
+                    "initial_agents": [
+                      0
+                    ],
+                    "population": 3,
+                    "seed": 42,
+                    "service_ticks": 5,
+                    "ticks_per_unit": 1
+                  }
+                },
+                "specification": null
+              }
+            ]
+          },
+          "schema_version": "2.0"
+        },
+        "scenario": null,
+        "seed": 42,
+        "timestamp": "2026-11-13T10:49:39.371096+00:00",
+        "version": "0.7.0-alpha.1"
+      },
+      "expected": {
+        "values": [
+          1.0,
+          1.0,
+          2.0
+        ],
+        "counts": [
+          1,
+          1,
+          2
+        ],
+        "requests": [
+          {
+            "agent": 1,
+            "tick": 1
+          }
+        ],
+        "completions": [
+          {
+            "agent": 1,
+            "tick": 6
+          }
+        ]
+      },
+      "historical_result_sha256": "826105c398c6f0fa579e02494c943ccee2edc393c245e0cae034339e47c43d8b"
+    }
+  ]
+}
