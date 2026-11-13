@@ -510,5 +510,10 @@ Historical completion labels above do not establish current full-native ownershi
 
 ---
 
+- [ ] **Track: Semi-Markov tunnel states and competing-risks hazard kernels for tobac** *(Planned)*
+  *Link: [./tracks/semi_markov_competing_risks_20261110/](./tracks/semi_markov_competing_risks_20261110/)*
+
+---
+
 - [~] **Track: Research Software Registry Readiness** *(External gates pending)*
 *Link: [./tracks/research_software_registry_readiness_20260721/](./tracks/research_software_registry_readiness_20260721/)*
