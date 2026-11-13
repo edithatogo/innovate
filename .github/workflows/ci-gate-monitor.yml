@@ -21,18 +21,18 @@ jobs:
           script: |
             const { owner, repo } = context.repo;
             const run = context.payload.workflow_run;
-            const branch = run.head_branch || run.head_branch;
+            const branch = run.head_branch;
+            const title = `🚨 ${run.name} failed on ${branch}`;
 
-            // Search for existing open issues about this failure
-            const issues = await github.rest.issues.listForRepo({
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
               owner,
               repo,
               labels: ['ci-failure'],
               state: 'open'
             });
 
-            const existingIssue = issues.data.find(issue =>
-              issue.title.includes(`CI failed on ${branch}`)
+            const existingIssue = issues.find(issue =>
+              !issue.pull_request && issue.title === title
             );
 
             if (existingIssue) {
@@ -49,7 +49,7 @@ jobs:
               const { data: issue } = await github.rest.issues.create({
                 owner,
                 repo,
-                title: `🚨 CI failed on ${branch}`,
+                title,
                 body: `## CI Failure Report\n\n- **Workflow:** ${run.name}\n- **Branch:** ${branch}\n- **Run URL:** ${run.html_url}\n- **Conclusion:** ${run.conclusion}\n- **Triggered by:** ${run.event}\n\n### Next Steps\n1. Check the [workflow run logs](${run.html_url})\n2. Identify the failing job\n3. Fix the issue and push a new commit\n\ncc: @${run.head_commit?.author?.username || 'maintainer'}`,
                 labels: ['ci-failure', 'bug']
               });
