@@ -1307,6 +1307,9 @@ to apply the native frame entry points in input order.
 
 ## Scenario grid rankings
 
+For a complete grid with policy, competition, and substitution examples, see
+[Scenario experiment workflows](/innovate/tutorials/scenario-experiment-workflows/).
+
 In `execute_scenario_grid`, pass `rank_scenarios` with at least two
 distinct scenario IDs. Each selected scenario must return a completed
 scalar path on the same strictly increasing time grid. When supplied,
