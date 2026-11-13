@@ -39,3 +39,12 @@ Read [taskbook](../../innovation-taskbook-20261107.md).
 - [ ] Q05 — beta, RC and exact-artefact stable acceptance.
 
 Complete relevant native/integrity/consumer prerequisites before promotion. Real research use supports JOSS; forecast and innovation/hype studies require their own comparative evidence. Data/venue claims remain scoped.
+
+## V05 manuscript checkpoint
+
+- [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.
+- [ ] Reconcile the claim register and applicable subgroup display priorities against frozen analysis outputs before final prose. Record all affected claim dispositions and confirm that the supplement and workbook preserve reportable results.
+- [ ] At the exact-edition review, record role-based decisions, unresolved objections and whether each affected claim can proceed, must narrow or must stop. Keep the reproduction receipt, scientific acceptance, author approval and publication authority separate.
+- [ ] For DOCX delivery, enumerate every final paper and supplement file, including clean, tracked, review and journal variants. Apply the maintained manuscript DOCX delivery skill at `~/.codex/skills/manuscript-docx-delivery/SKILL.md`. Run its read-only `scripts/validate.sh --report NEW_RECEIPT.json ALL_FINAL_DOCX_PATHS` after the last save, metadata scrub, Compare or packaging edit. A qualified repository equivalent may be used.
+- [ ] Require zero errors in ZIP/CRC, XML, internal relationship and Microsoft Open XML schema and semantic checks on each final file. Record SHA-256, tool and runtime identity, and diagnostics in a new receipt. Verify every file against its recorded hash immediately before delivery. Changed bytes, missing evidence or tools, exceptions and nonzero results block delivery. Retain failed receipts and repair a versioned copy before revalidation.
+- [ ] Verify content and property fidelity, including fields, comments, tracked revisions and repeating table headers. Inspect the rendered output of every final page and retain any required native Word evidence separately. Structural validity, fidelity, rendering, native Word verification, scientific acceptance, privacy, author approval and submission authority each have their own evidence.
